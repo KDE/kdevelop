@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>Benutzerhandbuch zu KDevelop: Der Dialogeditor</TITLE>
+<TITLE>Benutzerhandbuch zu KDevelop: Verwendung des QT Designers in Ihrem Projekt</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,203 +18,68 @@
  <A HREF="index-10.html">Zurück</A>
  <A HREF="index.html#toc11">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="Der Dialogeditor"></A> <A NAME="s11">11. Der Dialogeditor</A></H3>
+<H3><A NAME="Der Dialogeditor"></A> <A NAME="s11">11. Verwendung des QT Designers in Ihrem Projekt</A></H3>
 
-<P>Der in KDevelop integrierte Dialog Editor ermöglicht die einfache graphische Konstruktion von Widgets und Dialogen für die Verwendung in Ihren Applikationen. Sie 
-können Ihren Dialog, so wie der Benutzer ihn sehen wird, direkt am Bildschirm kontrollieren. Nachdem Sie Ihr Projekt mit dem KAppWizard gestartet haben, ist die Verwendung 
-des Dialog Editors ist normalerweise der erste Schritt, in dem Sie das Hauptfenster, die interaktiven Dialoge und, nach Beendigung der graphischen Arbeiten, den Code 
-erzeugen. Auf diese Art und Weise, enthält Ihr Projekt die als "schwierig" angesehenen Teile, deren Implementierung normalerweise eine längere Zeit in Anspruch nimmt. 
-Der "Rest" der Arbeit ist dann die Implementierung der Funktionalität in den generierten Code. Dieses Kapitel behandelt die Verwendung des Dialogeditors zur Erzeugung 
-der Widgets, sowie Hinweise zur Vorgehensweise in dem Falle, daß Sie während des weiteren Entwicklungsprozesses erkennen, daß Ihre Widgets Korrekturen oder zusätzliche 
-Eigenschaften  benötigen.
-<P>Sie können den Dialogeditor entweder durch Wahl des Editors im "Ansicht"-Menü oder über das Icon in der Werkzeugleiste starten. Der Wechsel zum Projekteditor erfolgt 
-entweder durch Wahl von "Quellcodeeditor" aus dem Menü "Ansicht" des Dialogeditors oder wiederum über das Icon in der Werkzeugleiste.
-<P>Wie hilft Ihnen das Interface des Dialogeditors noch? Hauptsächlich dadurch, daß sein Erscheinungsbild fast vollständig dem des Projekteditors entspricht, dies ermöglicht eine 
-sehr kurze Eingewöhnungszeit und da er vollständig mit der Projektverwaltung interagiert, können Sie im Dialogeditor bleiben, wenn Sie den Erstellungsprozeß kontrollieren 
-wollen. Aktionen die einen Wechsel zu KDevelop erfordern, tun dies automatisch, wie zum Beispiel der Zugriff auf den Dokumentationsbrowser. Wählen Sie einfach ein 
-Menükommando, und KDevelop reagiert entsprechend.
-<P>Die folgenden Kapitel geben eine Übersicht über das Dialogeditorinterface, darüber wie ein neuer Dialog erzeugt wird und wie man die Eigenschaften der Kind-Widgets, die Ihr 
-Dialog enthält, einstellt.
+<P>Der Qt Designer erlaube die Einfache Konstruktion von Widgets und Dialogen, die Ihre Anwendung verwendet in jeglicher,
+grafischer Hinsicht. Die sehen direkt das Aussehen Ihres Dialoges, wie er dem Benutzer präsentiert wird. Das Benutzen des
+Designer ist normalerweise der erste Schritt, den Sie nach der Erstellung Ihres Projektes mit dem KappWizard
+ausführen, um die Hauptansicht, die Benutzer-Abfrage-Dialoge und, nachdem die grafische Arbeit erledigt ist, die Code-Generierung
+zu erstellen. Auf diesem Weg wird Ihr Projekt all die Teile, die gewöhnlich als "schwierig" und mit langer
+Entwicklungszeit versehen angesehen werden, enthalten. Der dann verbleibende "Rest" Ihrer Arbeit ist die Implementierung der
+Funktionalität des generierten Codes. Dieses Kapitel behandelt die Frage, wie Sie den dialog editor verwenden um Ihre
+Projekt-Widgets zu erstellen ebenso, wie auch was in dem Fall zu tun ist, daß Sie während des weiteren Entwicklungsprozesses
+die Notwendigkeit für Korrekturen oder Erweiterungen Ihrer widgets sehen.
+<P>Sie können zum Designer entweder durch die Auswahl "Dialog Editor" im "Ansicht"-Menü oder durch das entsprechende
+Werkzeugleisten-Icon umschalten. Wenn Sie fertig sind, schließen Sie einfach das Designer-Fenster.
+<P>Die folgenden Abschnitte geben Ihnen einen Überblick über  das Interface des Designers, wie Sie einen neuen Dialog erstmals
+erstellen und wie Sie die Eigenschaften der Fensterelemente ihres Dialoges einstellen sollten. Sie sollten sich hierzu noch
+<A HREF="http://doc.trolltech.com/designer/book1.html">Designer tutorial von Trolltech</A>  ansehen, welches
+ebenfalls offline im Dokumentations-Browser von KDevelop vorhanden ist.
 <P>
-<H3><A NAME="ss11.1">11.1 Das Aussehen des Dialogeditors</A>
+<H3><A NAME="ss11.1">11.1 Erstellen eines neuen Dialoges mit dem Designer</A>
 </H3>
 
+<P>Wenn Sie einen neuen Dialog erstellen wollen, fügen Sie einfach eine neue Designer-Datei hinzu. Verwenden Sie hierzu aus der
+Menüleiste Datei -> Neu. In der Auswahlbox wählen Sie hierzu "QT Designer Datei" und geben einen Namen ein, z.B. ktestdlg.ui.
+Die.ui-Datei ist der Ort, in welchem der Designer die Informationen über den Dialog abspeichert. Jetzt startet der Designer und
+fragt Sie, welche Schablone Sie für Ihre Klasse verwenden wollen. Für dieses Beispiel wählen wir "QDialog". Der Designer zeigt
+Ihnen nun ein leeres Formular, benannt "Form1" und den Property Editor. Zuerst geben wir unserem Dialog einen lesbaren
+Namen, daher klicken wir auf den Hintergrund des Formulars und geben den Namen im "name" Eigenschaftsfeld statt "Form1" ein. Aus
+Gründen der Konsistenz sollte man die Klasse so benennen, wie die Datei in der sie gespeichert ist (oder umgekehrt), daher nennen
+wir es KTestDlg.
+Um mit dem Designer vertraut zu werden, empfehlen wir das 
+<A HREF="http://doc.trolltech.com/designer/book1.html">Designer handbook</A> zu lesen. Es enthält wichtige Informationen über die Benutzung der Designer Oberfläche und den Konzepten
+hinter Signals und Slots, wie sie im Designer verwendet werden.
 <P>
-<H4>Die Hauptansicht</H4>
+<H4>Exkursion: Wie aus ui Dateien Quellcode wird</H4>
 
-<P>Die Haupansicht des Dialogeditors ist logisch unterteilt in:
-<UL>
-<LI>Den Widget Tabulator, der die "Widgets", "Dialoge" und "Elemente" Tabs enthält. Beschreibungen finden Sie unter 
-<A HREF="#Widgets hinzufügen">Widgets hinzufügen</A>.</LI>
-<LI>Den Widget-Editor, der die Editieransicht zur Erstellungen Ihrer Dialoge representiert. Siehe 
-<A HREF="#Der Widget Editor">Der Widget Editor</A>.</LI>
-<LI>Das Eigenschaften-Fenster, das eine Liste der Eigenschaften und ihrer Werte in Abhängigkeit vom zur Zeit gewählten Widget enthält.. 
-Lesen Sie 
-<A HREF="#Eigenschaften einstellen">Eigenschaften einstellen</A> um Informationen zum Einstellen des Widgetaussehens und -verhaltens zu erhalten.</LI>
-</UL>
+<P>Der Designer speichert die Dialog-Klassen in einem XML-kompatiblen Format. Wie bekommen wir also eine C++-Datei aus einer
+Designer-Datei ? Antwort: KDevelop kümmert sich darum ! Es fügt die .ui Datei dem Makefile hinzu, welches dann dafür sorgt. daß
+eine Header- und eine Quellcode-Datei beim Kompilieren erstellt wird. Daher können Sie sie einfach verwenden, ohne sich
+wirklich um den Quellcode kümmern zu müssen.
+<P>Da die Dateien bei jedem Kompiliervorgang neu erstellt werden, können Sie Ihren Code nicht direkt in den generierten Dateien
+implementieren, sondern müssen davon ableiten. Lesen Sie den nächsten Abschnitt um zu lernen, wie das funktioniert.
 <P>
-<H4>Unterschiede zur Menüleiste, Werkzeugleiste und Statusleiste von KDevelop</H4>
-
-<P>Im Dialogeditormodus ändert KDevelop die Menüleiste, Werkzeugleiste und Statusleiste leicht ab, um die Funktionalität, die Sie zum Erstellen von Widgets benötigen, 
-bereitzustellen:
 <P>
-<H4>Menüleiste</H4>
-
-<P><B>"Datei"-Menü:</B> "Öffnen" ermöglicht das Öffnen einer Dialogdefinitionsdatei.
-<P><B>"Ansicht"-Menü:</B> Ersetzt "Baumansicht" durch "Widgetsansicht", ermöglicht ein/auschalten der Widgets Tabulatoren; fügt die "Eigenschaften-Ansicht" hinzu und ermöglicht
-ein/auschalten dieser Ansicht; fügt "Gitter" hinzu, damit Sie die Gittergröße in horizontalen und vertikalen Pixeln angeben können.
-<P><B>"Erstellen"-Menü:</B> Ersetzt "Datei kompilieren" durch  "Quellen erzeugen". Dies ermöglicht das Erzeugen der Quellen für Ihren Dialog.
-<P>
-<H4>Werkzeugleiste</H4>
-
-<P>Die Werkzeugleiste enthält ein neues Icon für "Neuen Dialog" sowie eine Ersetzung von "Datei kompilieren" durch  "Quellen erzeugen".
-<P>
-<H4>Statusleiste</H4>
-
-<P>Die Statusleiste stellt Informationen über das aktuell gewählte Widget zur Verfügung, insbesondere eine Anzeige der X und Y Werte im Koordinatensystem. Hilfe zur 
-Statusleiste steht in gleicher Weise wie im Projekt-Editiermodus zur Verfügung.
-<P>Während Sie die Widgetgröße ändern, zeigt die Statusleiste immer die aktuelle Höhe und Breite des gewählten Widgets an.
-<P>
-<H3><A NAME="ss11.2">11.2 Erzeugen eines neuen Dialoges</A>
+<H3><A NAME="ss11.2">11.2 Verwenden des neuen Dialoges in KDevelop</A>
 </H3>
 
-<P>Nachdem Sie Ihr Projektgerüst erstellt haben, haben Sie eine lauffähige Anwendung gemäß Ihrer Voreinstellungen. Da KDevelop die Projekttypen KDE und QT zur Verfügung 
-stellt, erkennt der Dialog Editor dies und bietet <EM>die</EM> Widgets an, die in der verwendeten Bibliothek vorhanden sind. Um Zeit zu sparen, sollten Sie bereits ein Design 
-im Kopf haben, das die beabsichtigten Aktionen ermöglicht. Lesen Sie zum Widget Design auch das 
-<A HREF="programming/index-6.html">KDevelop Programming Handbook</A>.
-<P>Zum Erzeugen eines neuen Dialogs, wählen Sie "Neu" aus dem "Datei"-Menü oder wählen Sie "Neu" aus dem Kontextmenü im
-"Dialoge"-Tab. Der "neue Datei" Dialog, in dem Sie das Element Qt/KDE Dialog(*.kdevdlg) wählen können, erscheint. Geben Sie den
-Dateinamen für Ihren Dialog ein. In dieser Datei wird Ihr Layout gespeichert. Dann drücken Sie OK und Ihr neuer Dialog erscheint.
-Wenn Sie den Dialog fertig bearbeitet haben, wählen Sie "Alle Quellen erzeugen" aus dem "Erstellen"-Menü. Der Dialog zur
-Erzeugung der Widgetquellen wird angezeigt. Dort müssen Sie KDevelop die nötigen Informationen zu Basisklasse, Quelldateinamen und
-Ziel geben.
+<P>Als Nächstes erstellen wir eine Klasse in KDevelop, welche von der Klasse, die wir mit dem Designer erstellt haben, abgeleitet
+ist. Aus dem  "Projekt"-Menü wählen Sie "Neue Klasse". Geben Sie "KTest" als Klassenname an. Wir leiten von KTestDlg ab, geben Sie
+"KTestDlg" in "Basisklasse" ein. Da QDiallog (die Basisklasse Ihres Dialogs) von QWidget abgeleitet ist, müssen Sie noch
+"QWidget-Childklasse erzeugen" auswählen. Dies sind alle Informationen, die KDevelop benötigt. Wenn Sie "OK" auswählen, erstellt
+KDevelop zwei Dateien, "ktest.cpp" und "ktest.h", welche die "KTest"-Klasse beinhaltet, wie von "KTestDlg" abgeleitet ist.
+Beachten Sie, daß die "#include"-Anweisung für "ktestdlg.h" bereits durch KDevelop eingefügt wurde. Nun können Sie all Ihre
+Funktionen implementieren und die Klasse innerhalb Ihres Projektes verwenden.
 <P>
-<H4>Dialog Klasse</H4>
-
-<P>Die Dialog Klasse die Sie auswählen können, ist die Klasse, die Ihr neues Widget erbt, das technisch gesehen selbst durch eine Klasse repräsentiert wird.
-Sie haben die folgenden Möglichkeiten:
-<OL>
-<LI><B>QWidget:</B> Die Basisklasse für alle interaktiven Widgets die von QT bereitgestellt werden. Verwendet für Hauptansichten und top-level Widgets.</LI>
-<LI><B>QFrame:</B> Erbt QWidget und wird für viele Widgets als Basisklasse verwendet. Sie ist sinnvoll für Widgets, die zusätzlich zu den QWidget Methoden eine QFrame 
-Funktionalität aufweisen sollen.</LI>
-<LI><B>Eigene:</B> Erbt eine eigene Klasse die in "Eigene Eigenschaften" angegeben werden muß. Dies könnte eine schon erstellte Klasse Ihres Projektes oder aus den 
-Bibliotheken sein.</LI>
-<LI><B>QDialog:</B> Die Basisklasse für Dialoge die Sie für Benutzerinteraktion verwenden würden, wie Einstellen von Eigenschaften oder Ändern von Werten.</LI>
-<LI><B>QTabDialog:</B> Erbt QDialog und stellt einen Dialog mit vordefinierten Knöpfen und Tabs zu Verfügung, den Sie über die Widgets, die Sie erzeugen, anbieten.</LI>
-</OL>
-<P><B>Eigene Eigenschaften</B>
-<P>Für die Vererbung einer eigenen Klasse, wie im Dialog Klassen Feld ausgewählt, müssen Sie einen Klassennamen unter "Eigene Klasse" angeben. Der Dialogeditor verwendet 
-diesen Namen für die Codeerzeugung, deshalb müssen Sie ebenfalls das Feld "Eigene Header" mit dem Namen der Headerdatei der Klasse ausfüllen.
-<P>
-<H4>Dateien</H4>
-
-<P>Im "Dateien" Abschnitt müssen Sie die spezifischen Informationen für das Widget eingeben. Dies sind der Klassenname (z.B. KColorSelectDlg für einen Dialog, der die Farbe 
-für einen Stift wählt), die Header, C++ und die Data Dateinamen. Wenn Sie den Klassennamen eingeben, werden die Dateinamen automatisch eingetragen, Sie können diese 
-Namen jedoch natürlich auch ändern.
-<P>Nun, was ist mit den Dateien? Wenn Sie mit der visuellen Konstruktion des Widgets fertig sind, müssen Sie die Dateien erzeugen, die die Implementation Ihres Widgets enthalten. 
-Da dies eine Klasse sein wird, ist der Dialog existent, sobald eine Headerdatei mit der entsprechenden Klassendeklaration existiert, eine C++ Datei, welche die Methoden und 
-Slots Ihres Widgets implementiert. Die Data Datei enthält eine Funktion <EM>initDialog()</EM>, die vom Konstruktor Ihres Widgets aufgerufen wird. Diese Datei sollte nicht verändert 
-werden, da sie den vom Dialogeditor erzeugten Code enthält, um Ihr Widget auf dem Bildschirm anzuzeigen. Wenn Sie jemals Werte ändern müssen, sollten Sie dies im 
-Konstruktor tun oder Sie müssen sich sicher sein, daß der Dialog nicht mehr geändert wird, da die Data Datei jedesmal überschrieben wird, wenn der Code für Ihr Widget neu erzeugt 
-wird. Die Header- und C++ Dateien enthalten Abschnitte, in die der Dialogeditor hineinschreibt; diese Abschnitte sind durch Kommentare gekennzeichnet. Nach der 
-Dateierstellung können Sie beliebige Werte und Einstellungen außerhalb dieser Abschnitte ändern; andernfalls verlieren Sie Ihre Änderungen bei der nächsten Coderzeugung.
-<P>
-<H4>Zielpfad</H4>
-
-<P>Zur Erzeugung der Widget Quellen, muß der Dialogeditor wissen, wo diese Dateien erstellt werden sollen. Standardmäßig wird als Zielverzeichnis das aktuelle 
-Projekt-Unterverzeichnis, das auch die bereits existierenden Quellen enthält, gewählt.
-<P>Nachdem Sie "OK" gedrückt haben, wird mit Ihren Standardwerten generiert, und es wird ein leerer Widgetkonstruktor geöffnet. Sie können dann sofort Ihr eigenes Widget 
-erstellen. Denken Sie daran, daß der Dialogeditor zur Zeit nur statische Widgets ohne Geometriemanagment unterstützt. Sollten Sie dies für Ihr Widget benötigen, müssen Sie 
-sich mit den Klassen vertraut machen, die QT hierfür bereitstellt, eine neue Klasse mit dem Klassengenerator erzeugen und Ihr Widget von Hand schreiben. Weitere 
-Informationen erhalten Sie im 
-<A HREF="programming/index.html">KDevelop Programming Handbook</A>.
-<P>
-<H3><A NAME="Widgets hinzufügen"></A> <A NAME="ss11.3">11.3 Widgets hinzufügen</A>
+<H3><A NAME="ss11.3">11.3 Umgang mit virtuellen Slots</A>
 </H3>
 
-<P>Nach der Angabe der Dialog oder Widget Klassen- und Dateinamen, sind Sie nun bereit Ihr Widget zu erstellen und es mit Inhalt zu füllen. Das Hinzufügen von 
-low-level Widgets ist sehr einfach. Wählen Sie einfach das Widget, das Sie hinzufügen wollen aus dem Widget Tabulator durch einfaches Anklicken aus. Das Widget wird 
-in der linken, oberen Ecke des aktuell gewählten Hauptwidgets abgelegt. Ein hinzugefügtes Widget erhält eine Standardgröße von 100x30 Pixeln. Zum Bewegen, aktivieren Sie 
-den Zeichenrahmen des Widgets durch einfaches Anklicken. Der Rahmen wird dunkelgrau dargestellt und enthält Zugpunkte an jeder Ecke und in der Mitte jeder Kante. Ein 
-Kreuz-Cursor zeigt an, daß das Widget bewegt werden kann. Zum Bewegen, halten Sie die Maustaste im Rahmen gedrückt und bewegen Sie den Rahmen zur gewünschten 
-Stelle.
-<P>Zur Größenänderung, aktivieren Sie den Rahmen und ziehen das Widget an den Zugpunkten auf die gewünschte Größe. Klicken Sie dazu den Zugpunkt mit der rechten 
-Maustaste an. Ein Doppelpfeil zeigt Ihnen jeweils die mögliche Richtung an.
-<P>Weiterhin enthält der Widgeteditor eine ganze Reihe von Kontextmenüs, die Ihnen bei der Arbeit helfen. Sie sind für jedes Element im Widgettabulator erhältlich und zeigen 
-jeweils den Klassennamen des Widgets und eine kurze Beschreibung.
-Über einem ausgewählten Widget im Widgeteditor, zeigt das Kontextmenü den Klassennamen und bietet folgende Möglichkeiten:
+<P>Wenn Sie virtuelle Slots neu implementieren wollen, benutzen Sie das Menü auf der rechten Maustaste und wählen Sie "Slot
+hinzufügen" oder benutzen Sie den Klassen-Generator rechts von der Methoden-Auswahlbox in der Werkzeugleiste von KDevelop.
+<P>Beachte: Rufen Sie NICHT die zu Grunde liegende, virtuelle Funktion (z.B. KTestDlg::slotCancel()) in der überschreibenden Methode
+auf !
 <P>
-<UL>
-<LI>Nach vorne</LI>
-<LI>Nach hinten</LI>
-<LI>Ganz nach vorne</LI>
-<LI>Ganz nach hinten</LI>
-<LI>Ausschneiden</LI>
-<LI>Löschen</LI>
-<LI>Kopieren</LI>
-<LI>Einfügen</LI>
-<LI>Hilfe</LI>
-</UL>
-<P>Nachdem Sie Größe und Position eingestellt haben, können Sie die Voreinstellungen im Einstellungen-Fenster editieren.
-<P>
-<H4>Der Widget Tabulator</H4>
-
-<P>Der Widget Tab präsentiert die verfügbaren Widgets, die Sie auf dem Dialog plazieren können. Wenn Sie Information zu einem bestimmten Widget erhalten wollen, 
-drücken Sie die rechte Maustaste über dem Widget Icon und wählen Sie Schnellhilfe. Denken Sie daran, daß der Dialogeditor automatisch erkennt, ob Sie ein 
-nur-Qt oder KDE Projekt erzeugt haben. Dies verhindert die Verwendung von KDE Widgets in einer reinen Qt Anwendung.
-<P>Nachdem Sie ein Widget ausgewählt haben, wird es mit Standardgrößen und -werten auf dem Editorfenster abgelegt und mit einem Rahmen als gewählt markiert. Zur 
-Größenänderung, aktivieren Sie den Rahmen und ziehen das Widget an den Zugpunkten auf die gewünschte Größe. Klicken Sie dazu den Zugpunkt mit der rechten 
-Maustaste an und halten Sie die Taste gedrückt. Ein Doppelpfeil zeigt Ihnen jeweils die mögliche Richtung an. Während Sie die Größe ändern, werden die aktuellen 
-X und Y Werte der Position in der Statusleiste angezeigt.
-<P>
-<H4>Der Dialoge Tabulator</H4>
-
-<P>Der Dialoge Tabulator dient dazu, die Dialoge Ihres Projektes mit einem Mausklick zu öffnen. Da die Struktur der Dialoge in einer *.kdevdlg Datei im gleichen Verzeichnis, das 
-auch die erzeugten Dateien enthält, gespeichert ist, werden nur die Dialogdefinitionsdateien angezeigt. Achten Sie auch darauf, diese Dateien nicht zu löschen.
-<P>Bei Auswahl eines Dialoges, wird der Zustand angezeigt, in dem er zuletzt im Widgeteditor gespeichert wurde.
-<P>
-<H4>Der Elemente Tabulator</H4>
-
-<P>Der Elemente Tabulator gibt Ihnen eine hierarchische Übersicht über die zur Zeit im Dialog vorhandenen Widgets. Das bedeutet, daß, da der Hintergrund den Vater aller 
-Widgets im Dialog repräsentiert, er am Kopf des Baumes angezeigt wird. Die Kinder des Hauptdialoges werden dann in der nächsten Baumebene angezeigt.
-<P>Durch Auswahl eines Elementes wird es im Editorfenster markiert und seine Eigenschaften werden im Widgeteigenschaftenfenster angezeigt. Die Verwendung der 
-Elementeansicht ist manchmal wichtig, wenn das Verhalten eines Widgets von der Eltern - Kind Beziehung abhängt. Weitere Informationen finden Sie im 
-<A HREF="programming/index-6.html">KDevelop Programming Handbook</A>.
-<P>
-<H3><A NAME="Der Widget Editor"></A> <A NAME="ss11.4">11.4 Der Widget Editor</A>
-</H3>
-
-<P>Der Widget Editor ist die Hauptansicht, die in der Mitte plaziert ist und in der Sie Ihre Widgets konstruieren. Nach dem Hinzufügen von Elementen, können sie ausgewählt, 
-in der Größe verändert sowie dorthin bewegt werden, wo Sie sie haben möchten. Für alle Elemente stehen Popupmenüs zur Verfügung, die schnellen Zugriff auf Funktionen 
-wie Ausschneiden, Kopieren und Einfügen ermöglichen.
-<P>
-<H3><A NAME="Eigenschaften einstellen"></A> <A NAME="ss11.5">11.5 Eigenschaften einstellen</A>
-</H3>
-
-<P>Das Fenster "Widgeteigenschaften" auf der rechten Seite ist der Ort, an dem Sie das Standardverhalten Ihres Widgets und seiner Elemente einstellen. Es zeigt die 
-voreingestelllten Werte für jedes ausgewählte Element sofort an; ändern der Werte ruft sofort Änderungen in der Editoransicht hervor, z.B. das Benennen von Labeln oder 
-Knöpfen.
-<P>Zur Trennung bestimmter Werte nach ihrem Effekt, enthält das Eigenschaftenfenster vier Ordner; die Auswahl eines Ordners zeigt alle Werte für diese Gruppe von 
-Einstellungen. Die möglichen Werte werden weiter unten beschrieben. Denken Sie daran, daß die möglichen Eigenschaften vom Widget abhängen, so haben z.B. Label und 
-Knöpfe eine Einstellungen für ihren Namen auf dem Bildschirm, während Zeilentextfelder Einstellungen für Methoden wie <EM>setText()</EM> besitzen.
-<P>Für eine komplette Liste der möglichen Werte pro Element, sollten Sie sich die Klassenreferenz des Widgets ansehen, in der erklärt wird, welche Methoden verwendet 
-werden und welche Werte möglich sind. Machen Sie sich klar, daß die meisten Werte in QWidget implementiert sind und von allen erbenden Widgets verwendet werden. 
-Denken Sie außerdem daran, daß der fertige Code keine Methodenaufrufe enthält, die nicht vom Benutzer verändert werden und benutzen Sie deshalb die Standardwerte, wie 
-sie von den Konstruktoren vorgegeben werden.
-<P>Eine vollständige Liste der unterstützten Eigenschaften, die im Eigenschaftenfenster eingestellt werden können, finden Sie im 
-<A HREF="programming/index-6.html">KDevelop Programming Handbook</A>.
-<P>
-<H3><A NAME="ss11.6">11.6 Dateien erzeugen</A>
-</H3>
-
-<P>Nachdem Sie ein Widget erzeugt haben, müssen Sie den Sourcecode erstellen, damit Sie es in Ihrem Projekt verwenden können. Dies wird entweder durch Wahl von 
-"Quellen erzeugen" aus dem "Erstellen"-Menü oder mit Hilfe des entsprechenden Icons in der Dialogeditor-Werkzeugleiste erreicht. Die Makedateien werden automatisch 
-aktualisiert, damit das neue Widget beim Kompilieren berücksichtigt wird. Daher können Sie nach dem Aufruf von "Quellen erzeugen", das Projekt aus dem Dialogeditor heraus 
-neu erstellen. Das Ausgabefenster erscheint, wie im Projekteditormodus, unterhalb des Widgeteditors.
-<P>Jetzt, da Ihr Projekt ein neues Widget enthält, ist es Ihre Aufgabe als Programmierer, den verwendeten Slots Funktionalität zu implementieren und wenn nötig weitere Methoden, 
-die Sie benötigen mögen, hinzuzufügen.
-<P>Informationen zur Implementation der Widgetfunktionen erhalten Sie im 
-<A HREF="programming/index-6.html">KDevelop Programming Handbook</A>.
 <P>
 <P ALIGN="RIGHT">
 

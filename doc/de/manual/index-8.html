@@ -139,36 +139,29 @@ Makefile.am außerhalb des Schreibbereichs gemäß den von Ihnen benötigten Einstel
 Entwicklungswerkzeuge wie unter Anforderungen beschrieben.
 <P>Für KDE Anwendungen stehen sechs Projekttypen zur Verfügung :
 <UL>
-<LI>Mini: Erzeugt eine KDE Applikation mit leerem Hauptwidget.</LI>
-<LI>Normal: Erzeugt eine KDE-Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
-Doc/View Modell. </LI>
-<LI>Normal-OpenGL: Erzeugt eine KDE-Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
-Doc/View Modell. Zusätzlich OpenGL(tm) (Mesa3D) Unterstützung.</LI>
-<LI>KDE 2 Normal: Erzeugt eine KDE-2 Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
-Doc/View Modell. </LI>
+<LI>KDE 2 Normal: Erzeugt eine KDE-2 Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das
+Doc/View Modell.</LI>
 <LI>KDE 2 Mini: Erzeugt eine KDE-2 Applikation mit leerem Hauptwidget.</LI>
-<LI>KDE 2 MDI: Erzeugt eine KDE-2 MDI (Multiple Document Interface) Applikation mit Session-Management, Menüleiste, Werkzeugleiste, 
+<LI>KDE 2 MDI: Erzeugt eine KDE-2 MDI (Multiple Document Interface) Applikation mit Session-Management, Menüleiste, Werkzeugleiste,
 Statusleiste und Unterstützung für das Doc/View Modell.</LI>
 </UL>
 <P>
 <P>Wenn Sie keine Abhängigkeiten zu den KDE Bibliotheken wünschen, können Sie eine der vier Qt Anwendungen wählen:
 <UL>
-<LI>Normal: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich 
-Unterstützung für ein rudimentäres Doc/View-Modell.</LI>
-<LI>QT 2.x SDI: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich 
+<LI>QT 2.x SDI: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich
 Unterstützung für ein Single Document-view Interface (SDI) Modell.</LI>
-<LI>QT 2.1 MDI: Erzeugt eine Qt-2.1 Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, 
+<LI>QT 2.1 MDI: Erzeugt eine Qt-2.1 Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält,
 einschließlich Unterstützung für ein Multiple Document Interface (MDI) Modell.</LI>
-<LI>QextMDI: Erzeugt eine auf der QextMDI Bibliothek und Qt2.0x basierende MDI Anwendung. Ermöglicht das Umschalten zwischen den beiden 
+<LI>QextMDI: Erzeugt eine auf der QextMDI Bibliothek und Qt2.0x basierende MDI Anwendung. Ermöglicht das Umschalten zwischen den beiden
 Modi Toplevel und Kind-Frame. Benötigt QextMDI. Mehr Informationen erhalten Sie auf
 <A HREF="http://www.geocities.com/gigafalk/qextmdi.htm">http://www.geocities.com/gigafalk/qextmdi.htm</A>.</LI>
 </UL>
 <P>Weiterhin bietet der Applikations-Wizard eine Schablone, um GNOME-konforme Applikationen mit der GTK+ C-Bibliothek zu erstellen, die
 standardmäßig schon ein Hauptfenster mit Menüleiste, Werkzeugleiste und Statuszeile enthält.
-<P>Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an. 
+<P>Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an.
 <P>Außerdem können Sie ein völlig leeres Projekt erzeugen, um beispielsweise mit bereits vorhandene Projekten zu arbeiten.
-<P>Der Wizard fragt Sie nach dem Projektnamen, Version und dem Verzeichnis in dem das Projekt erstellt werden soll. Außerdem können Sie Ihren 
-Namen und Ihre EMail Adresse angeben. Diese werden in den Header und cpp Schablonen am Anfang Ihrer Quelldateien eingetragen und werden 
+<P>Der Wizard fragt Sie nach dem Projektnamen, Version und dem Verzeichnis in dem das Projekt erstellt werden soll. Außerdem können Sie Ihren
+Namen und Ihre EMail Adresse angeben. Diese werden in den Header und cpp Schablonen am Anfang Ihrer Quelldateien eingetragen und werden
 außerdem für die Einträge in die -lsm Datei verwendet.
 <P>Zum Hinzufügen der Revisionskontrolle zu Ihrem Projekt, lesen Sie bitte das Kapitel 
 <A HREF="index-13.html#CVS Integration">CVS Integration</A>.
@@ -176,121 +169,121 @@ außerdem für die Einträge in die -lsm Datei verwendet.
 <H3><A NAME="ss8.3">8.3 Öffnen und Schließen von Projekten</A>
 </H3>
 
-<P>KDevelop ist standardmäßig so eingestellt, daß das zuletzt geöffnete Projekt beim Start geladen wird. Dies ermöglicht einen schnellen Start, aber 
-möglicherweise wollen Sie es ändern, so daß die Entwicklungsumgebung ohne ein Projekt gestartet wird. Zum Ändern des Standardverhaltens 
+<P>KDevelop ist standardmäßig so eingestellt, daß das zuletzt geöffnete Projekt beim Start geladen wird. Dies ermöglicht einen schnellen Start, aber
+möglicherweise wollen Sie es ändern, so daß die Entwicklungsumgebung ohne ein Projekt gestartet wird. Zum Ändern des Standardverhaltens
 schalten Sie 'Letztes Projekt Laden' im 
 <A HREF="index-14.html#KDevelop Setup">KDevelop Setup</A> Dialog aus.
 <P>Zum Öffnen eines anderen Projekts wählen Sie "Öffnen" aus dem Projektmenü oder drücken den "Projekt öffnen" Schalter auf der Werkzeugleiste. Im
-Falle, daß Sie schon ein Projekt geöffnet haben, wird dieses geschlossen. Wenn Ihr aktuelles Projekt nicht gesicherte Dateien enthält, werden Sie 
-gefragt ob Sie diese Dateien speichern wollen. Sie können sich dann entscheiden, welche Dateien gesichert werden sollen und welche nicht, oder 
+Falle, daß Sie schon ein Projekt geöffnet haben, wird dieses geschlossen. Wenn Ihr aktuelles Projekt nicht gesicherte Dateien enthält, werden Sie
+gefragt ob Sie diese Dateien speichern wollen. Sie können sich dann entscheiden, welche Dateien gesichert werden sollen und welche nicht, oder
 Sie können alle Dateien auf einmal speichern.
-<P>Sie erhalten einen "Projekt öffnen" Dialog, in dem Sie zu dem Verzeichnis wechseln können, das Ihre zu ladende Projektdatei enthält. KDevelop 
-Projektdateien haben einen <EM>*.kdevprj</EM> Mimetypen der auch durch ein Projekt Icon dargestellt wird. Wählen Sie die Projektdatei und betätigen Sie 
-"Öffnen". Wenn ein Projekt geladen wird, scannt der Klassenbrowser alle Dateien und baut den Klassenbaum auf, so daß Sie sofort mit der Arbeit 
+<P>Sie erhalten einen "Projekt öffnen" Dialog, in dem Sie zu dem Verzeichnis wechseln können, das Ihre zu ladende Projektdatei enthält. KDevelop
+Projektdateien haben einen <EM>*.kdevprj</EM> Mimetypen der auch durch ein Projekt Icon dargestellt wird. Wählen Sie die Projektdatei und betätigen Sie
+"Öffnen". Wenn ein Projekt geladen wird, scannt der Klassenbrowser alle Dateien und baut den Klassenbaum auf, so daß Sie sofort mit der Arbeit
 beginnen können, indem Sie den Klassenbrowser benutzen.
-<P>Eine weitere komfortable Möglichkeit ein Projekt zu öffnen, besteht darin, es im KFM, dem KDE Datei Manager anzuwählen. Dies startet 
-KDevelop  zusammen mit dem gewählten Projekt. Sie könnten es genausogut von der Kommandozeile starten, indem Sie eingeben 
+<P>Eine weitere komfortable Möglichkeit ein Projekt zu öffnen, besteht darin, es im KFM, dem KDE Datei Manager anzuwählen. Dies startet
+KDevelop  zusammen mit dem gewählten Projekt. Sie könnten es genausogut von der Kommandozeile starten, indem Sie eingeben
 <CODE>kdevelop projektname.kdevprj</CODE>.
-<P>Wenn Sie KDevelop schließen, wird Ihre Projektdatei automatisch gespeichert und die Entwicklungsumgebung stellt fest, ob irgendwelche 
-Projektdateien verändert wurden. Sie werden dann gefragt, ob Sie die Änderungen speichern wollen. Die verfügbaren Optionen sind die gleichen wie 
+<P>Wenn Sie KDevelop schließen, wird Ihre Projektdatei automatisch gespeichert und die Entwicklungsumgebung stellt fest, ob irgendwelche
+Projektdateien verändert wurden. Sie werden dann gefragt, ob Sie die Änderungen speichern wollen. Die verfügbaren Optionen sind die gleichen wie
 beim Schließen eines Projekts.
 <P>
 <H3><A NAME="ss8.4">8.4 Bearbeiten eines Projekts</A>
 </H3>
 
-<P>Nachem Sie ein Projekt mit dem KAppWizard erstellt haben, werden Soe normalerweise das Projekt erweitern, indem Sie Quelldateien, Klassen, 
-Pixmaps, Bilder und was immer Ihr Projekt benötigt, hinzufügen. Nun, editieren eines Projektes bedeutet, daß Sie das Standardprojekt nach der 
-Erstellung mit Hilfe von Menüs und Dialogen Ihren Anforderungen gemäß verändern können. Der nächste Abschnitt beschreibt deshalb, wie Sie 
-bereits existierende Dateien und Klassen hinzufügen und wie Sie neue Dateien erstellen können. Dies ist notwendig um Ihr Projekt zu erstellen, wird 
-aber nicht dem End-User beim Installieren helfen. Deshalb beschreibt der Abschnitt 
-<A HREF="#Setzen der Projekt Optionen">Setzen der Projekt Optionen</A>, wie Sie die Dateieigenschaften, insbesondere für zusätzliche Dateien, die 
-installiert werden sollen, setzen können. Dies betrifft z.B. Dokumentationen oder Pixmaps. Eine weitere Arbeit bei der Wartung Ihres Programms ist das 
-Hinzufügen von Übersetzungen, die die Internationalisierung unterstützen. Dies wird in 
+<P>Nachem Sie ein Projekt mit dem KAppWizard erstellt haben, werden Soe normalerweise das Projekt erweitern, indem Sie Quelldateien, Klassen,
+Pixmaps, Bilder und was immer Ihr Projekt benötigt, hinzufügen. Nun, editieren eines Projektes bedeutet, daß Sie das Standardprojekt nach der
+Erstellung mit Hilfe von Menüs und Dialogen Ihren Anforderungen gemäß verändern können. Der nächste Abschnitt beschreibt deshalb, wie Sie
+bereits existierende Dateien und Klassen hinzufügen und wie Sie neue Dateien erstellen können. Dies ist notwendig um Ihr Projekt zu erstellen, wird
+aber nicht dem End-User beim Installieren helfen. Deshalb beschreibt der Abschnitt
+<A HREF="#Setzen der Projekt Optionen">Setzen der Projekt Optionen</A>, wie Sie die Dateieigenschaften, insbesondere für zusätzliche Dateien, die
+installiert werden sollen, setzen können. Dies betrifft z.B. Dokumentationen oder Pixmaps. Eine weitere Arbeit bei der Wartung Ihres Programms ist das
+Hinzufügen von Übersetzungen, die die Internationalisierung unterstützen. Dies wird in
 <A HREF="#Übersetzung hinzufügen">Übersetzung hinzufügen</A> beschrieben.
 <P>
-<A HREF="#Erweitern der Projekt Dokumentation">Erweitern der Projekt Dokumentation</A> behandelt Fragen, wie ein guter Satz an Dokumentationen 
-für Online Hilfe erstellt werden kann, die dem Endbenutzer die Verwendung Ihres Produktes ermöglicht und Ihn in die Lage versetzt, sich bei Problemen 
+<A HREF="#Erweitern der Projekt Dokumentation">Erweitern der Projekt Dokumentation</A> behandelt Fragen, wie ein guter Satz an Dokumentationen
+für Online Hilfe erstellt werden kann, die dem Endbenutzer die Verwendung Ihres Produktes ermöglicht und Ihn in die Lage versetzt, sich bei Problemen
 selbst helfen zu können.
 <P>Schließlich wird im Abschnitt 
-<A HREF="#Projekt Hacking">Projekt Hacking</A> beschrieben, wie Sie das KDevelop Projektmanagment in bestimmten 
+<A HREF="#Projekt Hacking">Projekt Hacking</A> beschrieben, wie Sie das KDevelop Projektmanagment in bestimmten
 Fällen umgehen können.
 <P>
 <H4><A NAME="Hinzufügen und Entfernen von Dateien und Klassen"></A> Hinzufügen und Entfernen von Dateien und Klassen</H4>
 
-<P>Das Hinzufügen neuer Dateien wird oft benötigt, wenn Sie Ihre Klassenimplementationsdatei in mehrere Dateien aufteilen wollen. Dann ist es nötig eine neue Datei zu erzeugen, 
-die den Teil der Implementation enthält, den Sie  auslagern wollen. Sie können dies erreichen, indem Sie "Neu" aus dem Dateimenü wählen, wodurch der "Datei-Neu" Dialog 
-aufgerufen wird. Dies gibt Ihnen die Möglichkeit, den Dateitypen, den Namen und Speicherort anzugeben. Während Sie den Dateinamen angeben, fügt KDevelop automatisch 
-eine Erweiterung hinzu, Sie können diese Erweiterung jedoch auch noch Ihren Bedürfnissen anpassen. Außerdem können Sie die Vorlagendatei für Quelldateien einbinden, so 
-daß Sie den Kopf nicht von Hand in Ihre Datei kopieren müssen. Des weiteren können Sie entscheiden, ob die Datei dem Projekt hinzugefügt werden soll oder nicht. Denken 
+<P>Das Hinzufügen neuer Dateien wird oft benötigt, wenn Sie Ihre Klassenimplementationsdatei in mehrere Dateien aufteilen wollen. Dann ist es nötig eine neue Datei zu erzeugen,
+die den Teil der Implementation enthält, den Sie  auslagern wollen. Sie können dies erreichen, indem Sie "Neu" aus dem Dateimenü wählen, wodurch der "Datei-Neu" Dialog
+aufgerufen wird. Dies gibt Ihnen die Möglichkeit, den Dateitypen, den Namen und Speicherort anzugeben. Während Sie den Dateinamen angeben, fügt KDevelop automatisch
+eine Erweiterung hinzu, Sie können diese Erweiterung jedoch auch noch Ihren Bedürfnissen anpassen. Außerdem können Sie die Vorlagendatei für Quelldateien einbinden, so
+daß Sie den Kopf nicht von Hand in Ihre Datei kopieren müssen. Des weiteren können Sie entscheiden, ob die Datei dem Projekt hinzugefügt werden soll oder nicht. Denken
 Sie daran, daß dies nichts mit der späteren Installation zu tun hat; diese Konfiguration erfolgt später innerhalb der Dateivoreinstellungen.
-<P>Nachdem die neue Datei erzeugt wurde, werden sowohl die Projektdatei, als auch die zugehörigen Makefile.am's aktualisiert. Zum Hinzufügen einer kompletten Klasse, können 
+<P>Nachdem die neue Datei erzeugt wurde, werden sowohl die Projektdatei, als auch die zugehörigen Makefile.am's aktualisiert. Zum Hinzufügen einer kompletten Klasse, können
 Sie mit Hilfe des Klassengenerators eine neue Klasse konstruieren. Dieser wird durch Wahl von "Neue Klasse" aus dem Projektmenü aufgerufen.
-<P>Im Falle, daß Sie ein existierendes Projekt haben und bestimmte Klassen hinzufügen wollen, die Sie in Ihrem Projekt wiederverwenden wollen, wählen Sie "Vorhandene Datei(en) 
-hinzufügen..." aus dem Projektmenü. In dem erscheinenden Dialog können Sie wählen, welche Dateien Sie hinzufügen wollen und welches das Zielverzeichnis sein soll. 
-Denken Sie daran, daß die Dateien in das Zielverzeichnis kopiert und dem Projekt hinzugefügt werden. Sie sollten nach dem Hinzufügen Make aufrufen, damit Ihre Dateien dem 
-Erstellungsprozeß hinzugefügt werden. Für den Fall, daß Sie z.B. Pixmaps hinzufügen wollen, die später durch den Endbenutzer installiert werden sollen, sollten Sie die Dateieigenschaften 
+<P>Im Falle, daß Sie ein existierendes Projekt haben und bestimmte Klassen hinzufügen wollen, die Sie in Ihrem Projekt wiederverwenden wollen, wählen Sie "Vorhandene Datei(en)
+hinzufügen..." aus dem Projektmenü. In dem erscheinenden Dialog können Sie wählen, welche Dateien Sie hinzufügen wollen und welches das Zielverzeichnis sein soll.
+Denken Sie daran, daß die Dateien in das Zielverzeichnis kopiert und dem Projekt hinzugefügt werden. Sie sollten nach dem Hinzufügen Make aufrufen, damit Ihre Dateien dem
+Erstellungsprozeß hinzugefügt werden. Für den Fall, daß Sie z.B. Pixmaps hinzufügen wollen, die später durch den Endbenutzer installiert werden sollen, sollten Sie die Dateieigenschaften
 anpassen und den Installationspfad angeben (siehe 
 <A HREF="#Setzen der Projekt Optionen">Setzen der Projekt Optionen</A>).
-<P>Um Dateien dem Projekt hinzuzufügen, die sich bereits im Projektverzeichnis befinden, wechseln Sie in die RFV Ansicht, in der Sie zugehörige Dateien an Hand des Icons 
-ausmachen können. Wählen Sie die hinzuzufügende Datei und betätigen Sie die rechte Maustaste um das Popup-Menü zu öffnen. Dann wählen Sie "Datei zum Projekt 
+<P>Um Dateien dem Projekt hinzuzufügen, die sich bereits im Projektverzeichnis befinden, wechseln Sie in die RFV Ansicht, in der Sie zugehörige Dateien an Hand des Icons
+ausmachen können. Wählen Sie die hinzuzufügende Datei und betätigen Sie die rechte Maustaste um das Popup-Menü zu öffnen. Dann wählen Sie "Datei zum Projekt
 hinzufügen...".
-<P>Sie können auch Dateien vom Projekt entfernen. Dies wird dann nötig, wenn Sie nicht die vom KAppWizard vorgenerierten Dateien verwenden wollen. Beim Entfernen von 
-Dateien haben Sie zusätzlich die Möglichkeit, die Datei komplett von der Festplatte zu entfernen. Zum Entfernen vom Projekt, wählen Sie die Datei im LFV oder im RFV, drücken 
+<P>Sie können auch Dateien vom Projekt entfernen. Dies wird dann nötig, wenn Sie nicht die vom KAppWizard vorgenerierten Dateien verwenden wollen. Beim Entfernen von
+Dateien haben Sie zusätzlich die Möglichkeit, die Datei komplett von der Festplatte zu entfernen. Zum Entfernen vom Projekt, wählen Sie die Datei im LFV oder im RFV, drücken
 die rechte Maustaste und wählen "Datei vom Projekt entfernen...". Zum Löschen der Datei wählen Sie "Datei von der Festplatte entfernen...".
 <P>
 <H4><A NAME="Setzen der Projekt Optionen"></A> Setzen der Projekt Optionen</H4>
 
-<P>Auf den Dateieigenschaftendialog kann über das Projektmenu oder innerhalb des LFV mit einem Klick der rechten Maustaste zugegriffen werden. Er zeigt die Projektdateien 
-in Gruppen, so wie sie auch im LFV angeordnet sind und zeigt die Dateieigenschaften wie Größe, Dateityp, ob die Datei zum Projekt gehört sowie den Pfad, in den die Datei 
-durch das make install Kommando des Endnutzers installiert wird. Es ist wichtig, diesen Pfad für Dokumentationsdateien und Pixmaps anzugeben, Sie müssen diese Pfade also 
+<P>Auf den Dateieigenschaftendialog kann über das Projektmenu oder innerhalb des LFV mit einem Klick der rechten Maustaste zugegriffen werden. Er zeigt die Projektdateien
+in Gruppen, so wie sie auch im LFV angeordnet sind und zeigt die Dateieigenschaften wie Größe, Dateityp, ob die Datei zum Projekt gehört sowie den Pfad, in den die Datei
+durch das make install Kommando des Endnutzers installiert wird. Es ist wichtig, diesen Pfad für Dokumentationsdateien und Pixmaps anzugeben, Sie müssen diese Pfade also
 hier einstellen. Für Standard KDE Pfad Makros sollten Sie in Ihrer Makefile.am nachsehen, wo diese Makros aufgeführt sind.
 <P>
 <H4><A NAME="Übersetzung hinzufügen"></A> Übersetzung hinzufügen</H4>
 
-<P>Da KDE die Konfiguration Ihres Desktops und des Verhaltens Ihrer Anwendungen ermöglicht, haben Sie auch die Möglichkeit die Sprache, die Ihre Anwendung verwendet 
-zu wählen. Dies betrifft die Verwendung der Online-Dokumentation genauso wie das gesamte Aussehen Ihrer Applikation. In Bezug auf die Dokummentationsdateien scheint dies 
-ein triviales Unterfangen zu sein. Sie würden ein Unterverzeichnis mit dem Kürzel der jeweiligen Sprache im <CODE>docs</CODE> Verzeichnis Ihres Projektes anlegen, z.B <CODE></CODE>de/ für 
-Deutsch und die englische Dokumentation in dieses Verzeichnis kopieren. Dann würden Sie die Dokumentation erzeugen und alle Projekt Optionen bezüglich der 
-Installationsverzeichnisse setzen. Dann könnten Sie damit beginnen die sgml Datei zu übersetzen und die Dokumentation neu zu erzeugen. Das ist alles. Für die Anwendung 
-selber scheint dies ein wenig schwieriger zu sein. Wir wollen deshalb hier erklären, wie man die Internationalisierung unterstützt und wie man die Sprachen die man unterstützen 
+<P>Da KDE die Konfiguration Ihres Desktops und des Verhaltens Ihrer Anwendungen ermöglicht, haben Sie auch die Möglichkeit die Sprache, die Ihre Anwendung verwendet
+zu wählen. Dies betrifft die Verwendung der Online-Dokumentation genauso wie das gesamte Aussehen Ihrer Applikation. In Bezug auf die Dokummentationsdateien scheint dies
+ein triviales Unterfangen zu sein. Sie würden ein Unterverzeichnis mit dem Kürzel der jeweiligen Sprache im <CODE>docs</CODE> Verzeichnis Ihres Projektes anlegen, z.B <CODE></CODE>de/ für
+Deutsch und die englische Dokumentation in dieses Verzeichnis kopieren. Dann würden Sie die Dokumentation erzeugen und alle Projekt Optionen bezüglich der
+Installationsverzeichnisse setzen. Dann könnten Sie damit beginnen die sgml Datei zu übersetzen und die Dokumentation neu zu erzeugen. Das ist alles. Für die Anwendung
+selber scheint dies ein wenig schwieriger zu sein. Wir wollen deshalb hier erklären, wie man die Internationalisierung unterstützt und wie man die Sprachen die man unterstützen
 möchte einbindet.
-<P>Zuerst müssen Sie alle in Ihrer Anwendung sichtbaren Zeichenketten, die also auf Balken oder in Menüs erscheinen, in einem <CODE>i18n()</CODE> Makro einschließen. Dieses Makro 
-wird durch die Funktion <CODE>klocale->translate()</CODE> aus der KLocale Klasse ersetzt ist aber wesentlich einfacher zu verwenden. Da das Makro in der <CODE>kapp.h</CODE> Includedatei 
-definiert ist, müssen Sie Ihrer Quelldatei ein <CODE>#include &lt;kapp.h&gt;</CODE> hinzufügen. Es sollte auch erwähnt werden, daß obwohl <CODE>i18n()</CODE> ein Makro ist und Sie deshalb 
-denken, Sie könnten die Originalfunktion verwenden, dies nicht funktionieren wird. Das liegt daran, daß die Zeichenketten, die übersetzt werden sollen, aus den Quelldateien 
-ausgelesen und in der Übersetzungsdatei der Anwendung gespeichert werden (&lt;IhreApp&gt;.pot im /po Unterverzeichnis). Dies wird vom xgettext Programm gemacht, welches 
-mit <CODE>make messages</CODE> aus Ihrem Projektverzeichnis heraus aufgerufen wird. Da xgettext das <CODE>i18n()</CODE> Makro benötigt, wird Sie die Verwendung der Originalfunktion  nicht zum 
+<P>Zuerst müssen Sie alle in Ihrer Anwendung sichtbaren Zeichenketten, die also auf Balken oder in Menüs erscheinen, in einem <CODE>i18n()</CODE> Makro einschließen. Dieses Makro
+wird durch die Funktion <CODE>klocale->translate()</CODE> aus der KLocale Klasse ersetzt ist aber wesentlich einfacher zu verwenden. Da das Makro in der <CODE>kapp.h</CODE> Includedatei
+definiert ist, müssen Sie Ihrer Quelldatei ein <CODE>#include &lt;kapp.h&gt;</CODE> hinzufügen. Es sollte auch erwähnt werden, daß obwohl <CODE>i18n()</CODE> ein Makro ist und Sie deshalb
+denken, Sie könnten die Originalfunktion verwenden, dies nicht funktionieren wird. Das liegt daran, daß die Zeichenketten, die übersetzt werden sollen, aus den Quelldateien
+ausgelesen und in der Übersetzungsdatei der Anwendung gespeichert werden (&lt;IhreApp&gt;.pot im /po Unterverzeichnis). Dies wird vom xgettext Programm gemacht, welches
+mit <CODE>make messages</CODE> aus Ihrem Projektverzeichnis heraus aufgerufen wird. Da xgettext das <CODE>i18n()</CODE> Makro benötigt, wird Sie die Verwendung der Originalfunktion  nicht zum
 Ziel führen.
-<P>Für die Übersetzungen selbst, müssen Sie zunächst die message Datei erzeugen, die alle vom <CODE>i18n()</CODE> Makro eingeschlossenen Zeichenketten aus Ihrem Quellcode enthält. 
-Dies wird durch Auswahl von "Meldungen erstellen und verbinden" aus dem Projektmenü erreicht. Dann müssen die Sprachen, die Ihr Projekt unterstützen soll, hinzugefügt 
-werden. Dazu wählen Sie "Neue Übersetzung hinzufügen..." aus dem Projektmenü. Dies öffnet den Sprachauswahldialog. Wählen Sie eine Sprache und bestätigen Sie mit OK. 
-Es wird eine ASCII Datei erzeugt, die Einträge für den Dateinamen und die Zeilennummer des Vorkommens der Zeichenkette enthält. Sie sehen dann jeweils eine <CODE>msgid</CODE> 
-Zeile, die die zu übersetzende Zeichenkette enthält, gefolg von einer <CODE>msgstr</CODE> Zeile. Die <CODE>msgstr</CODE> Zeile ist leer, bis auf Einträge, die bereits von den KDE Bibliotheken 
+<P>Für die Übersetzungen selbst, müssen Sie zunächst die message Datei erzeugen, die alle vom <CODE>i18n()</CODE> Makro eingeschlossenen Zeichenketten aus Ihrem Quellcode enthält.
+Dies wird durch Auswahl von "Meldungen erstellen und verbinden" aus dem Projektmenü erreicht. Dann müssen die Sprachen, die Ihr Projekt unterstützen soll, hinzugefügt
+werden. Dazu wählen Sie "Neue Übersetzung hinzufügen..." aus dem Projektmenü. Dies öffnet den Sprachauswahldialog. Wählen Sie eine Sprache und bestätigen Sie mit OK.
+Es wird eine ASCII Datei erzeugt, die Einträge für den Dateinamen und die Zeilennummer des Vorkommens der Zeichenkette enthält. Sie sehen dann jeweils eine <CODE>msgid</CODE>
+Zeile, die die zu übersetzende Zeichenkette enthält, gefolg von einer <CODE>msgstr</CODE> Zeile. Die <CODE>msgstr</CODE> Zeile ist leer, bis auf Einträge, die bereits von den KDE Bibliotheken
 bereitgestellt werden. Die leeren Zeilen müssen von Ihnen mit der entsprechenden Übersetzung ausgefüllt werden.
-<P>Sie könnten die Übersetzungen von Hand schreiben. Das KDE-SDK bietet jedoch auch das Programm KTranslator, welches die Dateien bereits auf Ihrem System installierter 
+<P>Sie könnten die Übersetzungen von Hand schreiben. Das KDE-SDK bietet jedoch auch das Programm KTranslator, welches die Dateien bereits auf Ihrem System installierter
 Programme liest, so daß Sie bereits übersetzte Zeichenketten wiederverwenden können.
-<P>Um auf KTranslator zuzugreifen, wählen Sie am einfachsten eine &lt;Sprache&gt;.po Datei aus dem /po Verzeichnis entweder in LFV oder RFV. Dies öffnet KTranslator und 
-ermöglicht es, auf einfache die Übersetzung durchzuführen. Denken Sie daran das Sie KTranslator konfigurieren müssen, damit der Autorenname, sowie Sprache und Zieldatei 
+<P>Um auf KTranslator zuzugreifen, wählen Sie am einfachsten eine &lt;Sprache&gt;.po Datei aus dem /po Verzeichnis entweder in LFV oder RFV. Dies öffnet KTranslator und
+ermöglicht es, auf einfache die Übersetzung durchzuführen. Denken Sie daran das Sie KTranslator konfigurieren müssen, damit der Autorenname, sowie Sprache und Zieldatei
 korrekt gesetzt sind. Standardmäßig öffnet KTranslator nur die Übersetzungsdatei.
-<P>Für alle Übersetzungen verwendet <CODE>make</CODE> das Programm <CODE>msgfmt</CODE> für die Formatierungen Ihrer in der ausführbaren Datei verwendeten Meldungen, Sie brauchen sich darüber 
+<P>Für alle Übersetzungen verwendet <CODE>make</CODE> das Programm <CODE>msgfmt</CODE> für die Formatierungen Ihrer in der ausführbaren Datei verwendeten Meldungen, Sie brauchen sich darüber
 aber keine Gedanken zu machen; dies wird alles von KDevelop automatisch gemacht.
 <P>
 <P>Weitere Informationen zur Unterstützung der Internationalisierung finden Sie auf 
-<A HREF="http://www.kde.org">http://www.kde.org</A>; eine Menge Leute machen 
+<A HREF="http://www.kde.org">http://www.kde.org</A>; eine Menge Leute machen
 Übersetzungen für Sie. Sie finden dort auch eine Liste mit EMail Adressen der Übersetzer, denen Sie schreiben könnten und die Ihnen dabei helfen können. Lesen Sie
 auch  
 <A HREF="index-11.html#Der Dialogeditor">Der Dialogeditor</A> und 
-<A HREF="programming/index-11.html">The KDevelop Programming Handbook</A> 
+<A HREF="programming/index-11.html">The KDevelop Programming Handbook</A>
 wo Fragen der Internationalisierung auch wieder behandelt werden.
 <P>
 <H4><A NAME="Erweitern der Projekt Dokumentation"></A> Erweitern der Projekt Dokumentation</H4>
 
-<P>Alle mit KDevelop erstellten Projekte enthalten eine vorkonfigurierte Dokumentation, die bereits Standardkapitel zu Installation, Projektname und Version, sowie Autorname und 
-Emailadresse beinhaltet. Da KDevelop SGML Schablonen verwendet, ist es sehr einfach die Dokumentation zu einem kompletten Hilfesystem zu erweitern. Alles was Sie dazu 
-tun müssen, ist die sgml Datei, die sich in docs/en unter dem Namen index.sgml befindet, zu editieren. Die Referenz Dokumentation Ihres sgml-tools Paketes kann dem 
+<P>Alle mit KDevelop erstellten Projekte enthalten eine vorkonfigurierte Dokumentation, die bereits Standardkapitel zu Installation, Projektname und Version, sowie Autorname und
+Emailadresse beinhaltet. Da KDevelop SGML Schablonen verwendet, ist es sehr einfach die Dokumentation zu einem kompletten Hilfesystem zu erweitern. Alles was Sie dazu
+tun müssen, ist die sgml Datei, die sich in docs/en unter dem Namen index.sgml befindet, zu editieren. Die Referenz Dokumentation Ihres sgml-tools Paketes kann dem
 Hilfebrowser hinzugefügt werden, erlaubt direkten Zugriff auf spezielle Tags und enthält eine kurze Beschreibung, wie die Dokumentation zu erweitern ist.
-SGML hat eine Reihe von Vorteilen und KDE macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt 
-die typische Dokumentation im KDE Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu  
+SGML hat eine Reihe von Vorteilen und KDE macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt
+die typische Dokumentation im KDE Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu
 erzeugen, die Ihre Applikation beinhaltet. Wenn Sie die Dokumentation mit ksgml2html erzeugen wollen, installieren Sie dieses Programm und rufen "Benutzerhandbuch erstellen" 
 aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü 
 oder das entsprechende Icon aus der DOC Baumansicht wählen. Dadurch können Sie direkt in KDevelop durch die Dokumentation browsen und haben so eine bessere 
@@ -329,7 +322,7 @@ verwenden, die so nicht eingebunden werden. Dann müssen Sie Ihr Projekt mit Hilf
 <H3><A NAME="ss8.6">8.6 Externe Projekte</A>
 </H3>
 
-<P>Existierende Projekte können in KDevelop Projekte konvertiert werden, indem sie "Neu" aus dem Projektmenü und anschließend "Eigenes Projekt" wählen. Der folgende 
+<P>Existierende Projekte können in KDevelop Projekte konvertiert werden, indem sie "Neu" aus dem Projektmenü und anschließend "Eigenes Projekt" wählen. Der folgende
 Dialog erstellt eine leere Projektdatei mit dem Projektnamen, Versionsnummer und Typinformation, sowie Ihrem Namen und Ihrer EMailadresse. Kopieren Sie dann alle Ihre 
 Kompilations- und Konstruktionsdateien in das neue Projektverzeichnis und wählen Sie "Dateien hinzufügen" aus dem Projektmenü. Die ausgewählten Dateien werden in Ihr 
 Projektverzeichnis kopiert und die Makefile.am's werden aktualisiert. Bitte ändern Sie alle Makefile.am Einträge, die vor der Konvertierung schon bestanden, gemäß den 

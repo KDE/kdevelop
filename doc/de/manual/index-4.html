@@ -69,30 +69,35 @@ Umgebung zur objektorientierten Applikationsentwickung unter Unix-Systemen biete
 Programmierumgebung und dem Dialogeditor; außerdem sind alle Programme, die zum Design von Applikationen hilfreich sein können, auf die
 ein oder andere Weise eingebettet.
 <P>
-<H4>Programmierumgebung und Dialogeditor</H4>
+<H4>Programmierumgebung und der Qt Designer</H4>
 
 <P>
 <P>
 <H4>Die Programmierumgebung</H4>
 
-<P>Die Programmierumgebung ist die Benutzerschnittstelle, die KDevelop zur Erzeugung und Verwaltung von Projekten zur Verfügung stellt und
-die implizit viele andere Werkzeuge benutzt, indem sie die Verwendung für den Benutzer vereinfacht. Der integrierte Editor und
-Hilfebrowser als auch der Klassenbrowser reduzieren die Menge an Arbeit, die ein Entwicklungsprozeß dem Programmierer abnötigt. Die
-einfache Benutzung macht das schreiben von Applikationen für Unix eine Freude an sich und wird sich in kürzeren Release-Zyklen und
-besseren Entwickungen niederschlagen. Von hier aus beherrschen Sie Ihr Projekt in all seinen Details, halten die Übersicht über Ihre
-Klassen und macht die Verwendung zusätzlicher Konsolen überflüssig, genauso wie die Intergrierung aller Benutzeroberflächen darin
-resultiert, das Sie nur mit einem Fenster unter X arbeiten müssen und nicht gleichzeitig mehrere auf Ihrem Desktop im Auge behalten
-müssen.
+<P>The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
+many other tools by simplifying their use. It's built-in Editor and Helpbrowser as well as the Class Browser reduce the amount of
+work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
+on it's own and will probably result in shorter release cycles and better development improvements. From here, you're managing
+your project throughout all its details, keep the overview over your classes and don't have to use additional consoles for your
+work, as well as the integration of all user interfaces results in the fact that you only have to work with one window under X and
+don't have to watch for several ones spread all over your desktop.
 <P>
-<H4>Der Dialogeditor</H4>
+<P>
+<H4>Qt's Designer</H4>
 
-<P>Der in KDevelop integrierte Dialogeditor bietet einen einfachen Weg, Benutzerschnittstellen unter Verwendung der Qt und
-KDE Bibliotheken zu erstellen und deren direkter Transfer in C++ Code, der dem Projekt automatisch hinzugefügt wird. Da der
-Dialogeditor vollständig in die gewohnte Benutzeroberfläche eingebettet ist, stehen Ihnen die gleichen Befehle wie im Programmiermodus
-zu Verfügung. Dies erlaubt z.B. die Konstruktion eines Dialogs, die Generierung des Ausgabecodes und des sofortigen Tests im Programm
-durch die Verfügbarkeit der Make-Kommandos und Sie können gleichzeitig die Compilerausgabe kontrollieren ohne in den Programmiermodus
-zu wechseln. Eine Detailliertere Beschreibung finden Sie im Kapitel 
-<A HREF="index-11.html#Der Dialogeditor">Der Dialogeditor</A>.
+<P>In its current release, KDevelop makes use of the Qt Designer for all KDE 2.0/Qt 2.x project templates.
+Mind that the Designer has to be included in your PATH variable to be automatically called from within
+KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic as well to generate
+C++ output from your .ui files created with Designer. KDevelop takes care of automatically adding .ui files
+to Makefile.am under the _SOURCES line while dependencies are automatically resolved by the am_edit script.
+<P>However, KDevelop comes with a converter script (kdlgdesinger) that helps you port existing
+*.kdevdlg files created with KDevelop´s internal dialogeditor to *.ui files that can be processed
+with the Qt desinger. you can find it in the "tools" subdirectory of your kdevelop installation.
+<P>Note that can add native support for KDE in Qt Designer by reconfiguring Qt with the "-kde" switch
+once KDE has been installed. After recompiling Qt's tools directory, you will get a Designer
+that has native support for most of the KDE widgets and integrates seamlessly into KDE in concerns
+of look and feel.
 <P>
 <P>
 <H4>KAppWizard und die Klassenwerkzeuge</H4>
@@ -221,19 +226,17 @@ benötigen Sie meist die einfachen widgets. Ein Dialog besteht grob gesagt aus ei
 Kombination die Schnittstelle bilden und sind technisch gesehen aus C++ Code, der in einer Klasse, die von QWidget oder einer
 spezialisierteren Dialogklasse, die von QWidget abgeleitet ist, implementiert wird. Das Programm, das das Widget benutzt braucht
 deshalb nur ein Objekt der Klasse- das ist fast alles, was Sie zur Benutzung von Dialogen oder Ansichten verstehen müssen.
-<P>Der Dialogeditor von KDevelop bietet einen schönen und angenehmen Weg, Dialoge und Benutzerschnittstellen visuell zu konstruieren,
-anstatt die Dialoge über puren C++ Code zu kombinieren- dies ist der harte Weg, Schnittstellen zu erstellen. Wechseln Sie zum
-Dialogeditor durch Auswahl des entsprechenden Eintrags im "Ansicht"-Menü (oder durch die Werkzeugleisten-Schaltfläche). Sie können
-sehen, das KDevelop sein Aussehen verändert, das jedoch die Menüleiste und die Werkzeugleiste sehr ähnlich sind. Dies macht es sehr
-einfach, zwischen den Arbeitsmodi zu wechseln und Sie werden sich nach einer gewissen Zeit in beiden sehr wohl fühlen. Dort können Sie
-Ihre Ansichten un dialoge konstruieren, wie Sie möchten und alle verfügbaren Einstellungen an den Elementen vornehmen, die die Ansicht
-enthält. Wenn Sie fertig sind, wählen Sie "Quellen erzeugen" aus dem "Bauen"-Menü; der Dialogeditor und das Projektmanagement werden
-sich dann um den Rest kümmern. Sie können testen, ob alles richtig durchgeführt wurde, indem Sie "Erstellen" oder "Ausführen"
-auswählen; dies wird Ihre Applikation inklusive der neuen Quelldateien erstellen. Aber erwarten Sie nicht, das die Dialoge schon sofort
-nutzbar sind- das ist eine Sache der Implementierung wie Sie der Entwickler gewohnt ist. Seien Sie nicht besorgt- es ist nicht sehr
-schwer. Um mehr Information zur Erstellung von Dialogen zu erhalten, schlagen Sie unter 
-<A HREF="index-11.html#Der Dialogeditor">Der Dialgoeditor</A> nach, Beispiele und Richtlinien finden Sie im 
-<A HREF="programming-6.html">KDevelop Programmierhandbuch</A>.
+<P>The Qt Designer coming with Qt can be used to easily create dialogs and user interfaces. You can use the "Switch to Qt Designer"
+button from KDevelop's menubar. This will bring up the Designer where you can create a new dialog. You can also choose an existing
+.ui file from the fileview and KDevelop will bring up the Designer with your dialog. You can add dialogs easily by adding a new .ui file from
+the File menu.
+The Designer creates .ui files which contain an xml description of the class. Once you added the file to your project, KDevelop will take
+care that it is included in your Makefile. The build system will automatically create the header- and implementation files for you.
+Now all you have to do to either create a new class that inherits the dialog class and implement functionality or use the dialog directly.
+Thus, using the Designer to create dialogs has a clear advantage: Code and layout are scrictly seperated, allowing you to change the
+design of your dialog without rewriting one line of code. This way you can concentrate on what's really important: the actual coding process.
+For futher information on the Designer's concepts read the Qt Designer handbook which can also be found in KDevelops docview.
+<P>
 <P>
 <H4>Einbinden neuer Elemente</H4>
 

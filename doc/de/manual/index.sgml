@@ -2,11 +2,11 @@
 <book>
 <titlepag>
 <title>Benutzerhandbuch zu KDevelop
-<subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.2
+<subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.4
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" >
 <newline>Übersetzung: Ralf Funken <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">
 <inst>The KDevelop Team
-<date>Version 3.0 , Mär 21,2000
+<date>Version 1.4 , Feb 12,2001
 <abstract>
 Dieses Handbuch ist Teil der KDevelop Integrierten Entwicklungsumgebung und ist daher ebenso unter der GNU General Public License
 lizensiert; siehe <ref id="Copyright" name="Copyright">.
@@ -16,7 +16,7 @@ lizensiert; siehe <ref id="Copyright" name="Copyright">.
 <chapt>Einführung
 <p>
 Da alles auf Erden seine Mode hat, scheint die heutige Computerwelt immer mehr zur Benutzung freier Software auch für kommerzielle
-Zwecke zu tendieren. Man ist sich mittlerweile einig, daß Linux (genauso wie andere Projekte wie der Webserver, die Scriptsprache 
+Zwecke zu tendieren. Man ist sich mittlerweile einig, daß Linux (genauso wie andere Projekte wie der Webserver, die Scriptsprache
 Perl und die GNU Tools), beweist, das freie Software qualitativ genauso gut sein kann wie kommerzielle Software. Doch trotz
 der Qualität hat der Endbenuzter immer noch unter den kryptischen Kommandos vieler Unix-Systeme zu leiden. Damit Linux weiter blühen
 kann, braucht es Applikationen, sowohl freie als auch kommerzielle, die einfach zu benutzen sind.
@@ -60,22 +60,68 @@ die Online-Dokumentation überall innerhalb der Entwicklungsumgebung.
 
 <sect>Neuerungen
 <p>
-Version 1.2 kommt mit dem meist benötigten Funktionen zur C/C++ Entwicklung. Während der Entwicklungsphase von
-KDevelop machte das Projekt große Fortschritte seit der Release von Version 1.0. Wir glauben, das die aktuelle 
-Version,die Entwicklern die Umgebung bietet, die sie brauchen, als die letzte Releaseversion für KDE 1.x angesehen werden kann.
+Version 1.4 kommt mit dem meist benötigten Funktionen zur C/C++ Entwicklung. Während der Entwicklungsphase von
+KDevelop machte das Projekt große Fortschritte seit der Release von Version 1.0, gefolgt von der Release der Versionen 1.1 und 1.2;
+die Versionsreihe basierend auf den KDE 1.x und Qt 1.4x Bibliotheken endete mit der Version 1.3 im Dezember 2000.
+Die jetzige Version ist eine Portierung der Version 1.3 auf KDE 2.1 mit erweiterter Funktionalität.
 
 Verbesserungen wurden in den folgenden Bereichen durchgeführt:
 
+<bf>KDevelop 1.2:</bf>
 <itemize>
-<item>schneller Klassenparser und -browser mit graphischer Klassenansicht und Dialog-basierter Bearbeitung von 
+<item>schneller Klassenparser und -browser mit graphischer Klassenansicht und Dialog-basierter Bearbeitung von
 Membern und Klassen,
-<item>CVS-Unterstützung für die meist benötigten Funktionen wie hinzufügen, entfernen, aktualisieren und 
+<item>CVS-Unterstützung für die meist benötigten Funktionen wie hinzufügen, entfernen, aktualisieren und
 übertragen von Dateien und Verzeichnissen,
-<item>Aktualisierte und erweiterte Dokumentation, die nun fünf Handbücher umfaßt und mit KDevelop geliefert 
+<item>Aktualisierte und erweiterte Dokumentation, die nun fünf Handbücher umfaßt und mit KDevelop geliefert
 wird,
 <item>fehlerbereinigter Klassenparser, Dialogeditor und Fehlerfinder,
-<item>Verbesserte Dokumentationsansicht, der Ihnen sofort den Zugang zur Klassendokumentation bis zu jeder 
+<item>Verbesserte Dokumentationsansicht, der Ihnen sofort den Zugang zur Klassendokumentation bis zu jeder
 Methode von Klassen bietet.
+</itemize>
+
+<bf>KDevelop 1.3:</bf>
+
+<itemize>
+<item>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction
+class and the configure script searches
+for the <bf>uic</bf> which processes Qt Designer files
+<item>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also
+using the uic for desinger files
+<item>support for the new <bf>Qt Designer</bf> in KDE 2.0/Qt-2.2.x projects.
+<item>the new <bf>Qt Linguist</bf> and its tools coming with it to create internationalization files
+for Qt applications is fully supported. The handling of internationalization is done the same way as
+for KDE project with KDevelop, just that you have to use tr() instead of i18(). Create an example Qt
+application to see the details. Also mind that all Qt utilities have to be in your $PATH variable,
+usually this is $QTDIR/bin.
+<item>all KDE 2.0 and Qt 2.2.x templates make use of KDE´s
+autoconf/automake system, this enables developers to convert their automatic configuration system to
+KDE easily if they decide to use KDE features for their application.
+<item>KDevelop ships with three additional scripts to make your life easier; these are installed in
+$prefix/bin (usually $KDEDIR/bin):
+	<itemize>
+	<item><bf>extractrc:</bf> this is a script that is originally located in the KDE CVS module kdesdk
+(KDE Software Development Kit). It is called automatically for creating the pot-file of your
+application and extracts the strings from your XML resource file that is used to build the GUI in
+KDE 2.0 applications
+	<item><bf>kimport:</bf> kimport is a perl script that enables you to create a *.kdevprj (KDevelp
+Project File) from almost any automake/autoconf compatible already existing project. Usage: go to
+your project directory and call kimport &gt; &lt;yourprojectname&gt;.kdevprj. This will redirect the
+output to a projectfile that you can load into KDevelop.
+	<item><bf>kdevdlg2ui:</bf> converts an existing *.kdevdlg file that has been created with
+KDevelop´s Dialogeditor into a *.ui file that can be edited with Qt´s Designer.
+	</itemize>
+<item>several bugfixes regarding bugs in the
+kwrite code and KDevelop itself </itemize>
+
+<bf>KDevelop 1.4:</bf>
+
+<itemize>
+<item>porting over to KDE 2.1. KDevelop is now a true KDE 2.x application and ships with KDE 2.1
+<item>removal of KDE 1.x templates and the internal dialogeditor. Graphical user interface design is now based on using Qt Designer only.
+<item>improved functionality in regards to the classbrowser such as providing the "grep" function over the class-tree and autocompletion in the browser toolbar
+that allows easy selection of classes, methods and member attributes as well as global functions, attributes and structs.
+<item>overall GUI enhancements like geometry-managed dialogs; usage of KDE 2´s new dialog classes and dockwidgets.
 </itemize>
 
 Kommentare und Verbesserungsvorschläge zur IDE und ihrer Dokumentation sind willkommen.
@@ -100,7 +146,8 @@ Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
 <item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
 <item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und Linker Flags und der Projekteinstellungen.
 <item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop Klassenbrowser benutzen.
-<item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen C++ Code erzeugt.
+<item>Chapter <ref id="Verwendung des QT Designers in Ihrem Projekt" name="Der Dialogeditor"> beschreibt Ihnen wie sie den
+Qt Desinger in Zusammenarbeit mit KDevelop verwenden um grafische Oberflächen ihres Programms zu gestalten.
 <item>Kapitel <ref id="Der interne Debugger" name="Der interne Debugger">, gibt eine Übersicht über die Einstellungen zum Debuggen und die Verwendung des internen Debugggers.
 <item>Kapitel <ref id="CVS Integration" name="CVS Integration">, erkärt, wie die Revisions-Kontrollsysteme CVS und RCS mit Ihrem KDevelop Projekt verwendet werden.
 <item>Kapitel <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur Benutzung von KDevelop vornehmen.
@@ -133,6 +180,20 @@ umfangreichen Handbücher, die zu KDevelop gehören oder damit ausgeliefert werden
 Wissen in das Projekt eingebracht, das sich heute als eines der vielversprechendsten Produkte für Linux/Unix Entwickler
 präsentieren kann, um es noch stabiler und auf andere Unices portierbar zu machen.
 
+After the 1.2 release on May 4th, we continued fixing several bugs while working on a 2.0 version using the KDE 2.0
+API and the latest technologies KDE 2.0 offers. Since the release of Qt-2.2.0 brought Qt´s Designer for constructing
+user interfaces which also supports KDE widgets, the Designer is about to replace KDevelop´s own dialog editor as it offers
+dynamic layout management and directly connecting widgets. To support using the Designer within KDevelop, the templates and KDevelop
+have been updated to make easy use of it while working on a KDE 2.0 or Qt 2.2.x project.
+
+The 1.3 release marked another milestone. It was the last version that needed KDE 1.x libraries to run and was much anticipated through the offers it made towards
+development for the new KDE 2.0 platform when it was released on December 11th, 2000.
+
+Since then John Birch and I decided that we really would like to have a KDE 2.x version of our "baby", KDevelop. We took the time and made it- by the end of 2000,
+we roughly had the functionality to say we were almost ready. While KDE 2.1 was short to come out early 2001, we decided to ship KDevelop with the base KDE distribution
+as this version will make many new KDE developers happy to start working on a great API on a free system to develop software for.
+
+
 <sect>Gedruckte Versionen
 <p>
 Eine gedruckte Version der kompletten KDevelop Dokumentation ist als Buch unter dem Titel <bf>Developing
@@ -158,9 +219,9 @@ zum Einblick in den Entwicklungsfortschritt des KDevelop Teams. Außerdem bieten 
 KDevelop benötigt werden wie KDoc und KDbg.
 
 Wenn Sie Probleme mit der Compilierung oder Benutzung von KDevelop haben, lesen Sie bitte das Kapitel
- <ref id="Fragen und Antworten" name="Fragen und Antworten"> dieses Handbuchs oder die FAQ-Datei, die im KDevelop-Paket 
-enthalten ist. Sollte Ihr Problem nicht behandelt sein, tragen Sie sich in die KDevelop Mailingliste 
-<htmlurl url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name ="kdevelop-request@barney.cs.uni-potsdam.de"> ein, 
+ <ref id="Fragen und Antworten" name="Fragen und Antworten"> dieses Handbuchs oder die FAQ-Datei, die im KDevelop-Paket
+enthalten ist. Sollte Ihr Problem nicht behandelt sein, tragen Sie sich in die KDevelop Mailingliste
+<htmlurl url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name ="kdevelop-request@barney.cs.uni-potsdam.de"> ein,
 indem Sie eine Email mit leerer Kopfzeile und "subscribe ihrer-email-addresse" als Inhalt an obige Adresse senden.
 Anfragen und Problemberichte sollten sich jedoch nur auf die Benutzung der KDevelop Entwicklungsumgebung beziehen und nicht auf ein
 Implementierungsproblem, das bei der Codierung Ihrer eigenen Applikation entstanden ist.
@@ -190,8 +251,8 @@ name="http://www.gnu.org">
 <item>automake 1.2, erhältlich auf <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
 <item>flex 2.5.4,
 <item>GNU gettext, erhältlich auf <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>Qt 1.42, erhältlich auf  <htmlurl url="http://www.troll.no" name="http://www.troll.no">
-<item><idx/KDE/ 1.1.x, erhältlich auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">
+<item>Qt 2.2.x, erhältlich auf <url url="http://www.trolltech.com">
+<item><idx/KDE/ 2.1, erhältlich auf <url url="http://www.kde.org">
 </itemize>
 <p>
 <bf>Optional:</bf>
@@ -205,16 +266,16 @@ name="http://glimpse.cs.arizona.edu">
 (erhältlich auf <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">)
 <item>KDbg, erhältlich auf <htmlurl url="http://members.telecom.at/~johsixt/kdbg.html"
 name="http://members.telecom.at/~johsixt/kdbg.html">
+<item><idx/Qt Designer and uic/ which come along with Qt 2.2.x.
 <item>KIconEdit (erhältlich auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
 </itemize>
 
-KDevelop wurde getestet mit SuSE Linux 5.2 auf einem AMD K6 200 mit 64 MB RAM und FreeBSD 3.0-Release, SuSE Linux 6.0 auf Intel Pentium
-200 MMX, 128 MB Ram.
+KDevelop wurde getestet mit SuSE Linux 7.0.
 
 Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive enscript als Pakete oder
 RPM's, so daß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
 
-<bf>Dokumentation:</bf>	
+<bf>Dokumentation:</bf>
 
 Um die <idx/KDE/ Bibliotheks-Dokumentation zu erstellen, benötigen Sie das kdelibs Paket im Quellcode, wie es vom KDE Projekt
 bereitgestellt wird oder in den Quellpaketen ihrer Distribution enthalten ist und <bf/KDoc/ (enthalten im <idx/KDE-SDK/).
@@ -234,7 +295,7 @@ Um KDevelop auf Ihrem System zu compilieren und installieren, geben Sie folgende
 	&percnt make
 
 	(als root)
-	
+
 	&percnt make install
 </verb></tscreen>
 
@@ -250,7 +311,7 @@ Um KDevelop CVS Snapshots zu compilieren, geben Sie folgendes ein:
 	&percnt make
 
 	Wechseln Sie auf <tt/root/ und geben Sie ein:
-	
+
 	&percnt make install
 </verb></tscreen>
 
@@ -271,7 +332,7 @@ Unter anderen Winow-Managern öffnen Sie eine Konsole und geben ein:
 
 Um KDevelop mit einem bestehenden Projekt zu starten, wechseln Sie in das Projekt-Verzeichnis und geben ein:
 
-<tscreen><verb> 	
+<tscreen><verb>
 &percnt kdevelop  &lt;yourProject&gt;.kdevprj
 </verb></tscreen>
 
@@ -614,28 +675,36 @@ Umgebung zur objektorientierten Applikationsentwickung unter Unix-Systemen biete
 Programmierumgebung und dem Dialogeditor; außerdem sind alle Programme, die zum Design von Applikationen hilfreich sein können, auf die
 ein oder andere Weise eingebettet.
 
-<sect1>Programmierumgebung und Dialogeditor
+<sect1>Programmierumgebung und der Qt Designer
 <p>
 
 <sect2>Die Programmierumgebung
 <p>
-Die Programmierumgebung ist die Benutzerschnittstelle, die KDevelop zur Erzeugung und Verwaltung von Projekten zur Verfügung stellt und
-die implizit viele andere Werkzeuge benutzt, indem sie die Verwendung für den Benutzer vereinfacht. Der integrierte Editor und
-Hilfebrowser als auch der Klassenbrowser reduzieren die Menge an Arbeit, die ein Entwicklungsprozeß dem Programmierer abnötigt. Die
-einfache Benutzung macht das schreiben von Applikationen für Unix eine Freude an sich und wird sich in kürzeren Release-Zyklen und
-besseren Entwickungen niederschlagen. Von hier aus beherrschen Sie Ihr Projekt in all seinen Details, halten die Übersicht über Ihre
-Klassen und macht die Verwendung zusätzlicher Konsolen überflüssig, genauso wie die Intergrierung aller Benutzeroberflächen darin
-resultiert, das Sie nur mit einem Fenster unter X arbeiten müssen und nicht gleichzeitig mehrere auf Ihrem Desktop im Auge behalten
-müssen.
+The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
+many other tools by simplifying their use. It's built-in Editor and <idx/Helpbrowser/ as well as the Class Browser reduce the amount of
+work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
+on it's own and will probably result in shorter release cycles and better development improvements. From here, you're managing
+your project throughout all its details, keep the overview over your <idx/classes/ and don't have to use additional consoles for your
+work, as well as the integration of all user interfaces results in the fact that you only have to work with one window under X and
+don't have to watch for several ones spread all over your desktop.
 
-<sect2>Der Dialogeditor
+
+<sect2>Qt's Designer
 <p>
-Der in KDevelop integrierte Dialogeditor bietet einen einfachen Weg, Benutzerschnittstellen unter Verwendung der <idx/Qt/ und
-<idx/KDE/ Bibliotheken zu erstellen und deren direkter Transfer in C++ Code, der dem Projekt automatisch hinzugefügt wird. Da der
-Dialogeditor vollständig in die gewohnte Benutzeroberfläche eingebettet ist, stehen Ihnen die gleichen Befehle wie im Programmiermodus
-zu Verfügung. Dies erlaubt z.B. die Konstruktion eines Dialogs, die Generierung des Ausgabecodes und des sofortigen Tests im Programm
-durch die Verfügbarkeit der Make-Kommandos und Sie können gleichzeitig die Compilerausgabe kontrollieren ohne in den Programmiermodus
-zu wechseln. Eine Detailliertere Beschreibung finden Sie im Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">.
+In its current release, KDevelop makes use of the Qt Designer for all KDE 2.0/Qt 2.x project templates.
+Mind that the Designer has to be included in your PATH variable to be automatically called from within
+KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic as well to generate
+C++ output from your .ui files created with Designer. KDevelop takes care of automatically adding .ui files
+to Makefile.am under the _SOURCES line while dependencies are automatically resolved by the am_edit script.
+
+However, KDevelop comes with a converter script (kdlgdesinger) that helps you port existing
+*.kdevdlg files created with KDevelop´s internal dialogeditor to *.ui files that can be processed
+with the Qt desinger. you can find it in the "tools" subdirectory of your kdevelop installation.
+
+Note that can add native support for KDE in Qt Designer by reconfiguring Qt with the "-kde" switch
+once KDE has been installed. After recompiling Qt's tools directory, you will get a Designer
+that has native support for most of the KDE widgets and integrates seamlessly into KDE in concerns
+of look and feel.
 
 
 <sect1>KAppWizard und die Klassenwerkzeuge
@@ -771,18 +840,17 @@ Kombination die Schnittstelle bilden und sind technisch gesehen aus C++ Code, de
 spezialisierteren Dialogklasse, die von QWidget abgeleitet ist, implementiert wird. Das Programm, das das Widget benutzt braucht
 deshalb nur ein Objekt der Klasse- das ist fast alles, was Sie zur Benutzung von Dialogen oder Ansichten verstehen müssen.
 
-Der Dialogeditor von KDevelop bietet einen schönen und angenehmen Weg, Dialoge und Benutzerschnittstellen visuell zu konstruieren,
-anstatt die Dialoge über puren C++ Code zu kombinieren- dies ist der harte Weg, Schnittstellen zu erstellen. Wechseln Sie zum
-Dialogeditor durch Auswahl des entsprechenden Eintrags im "Ansicht"-Menü (oder durch die Werkzeugleisten-Schaltfläche). Sie können
-sehen, das KDevelop sein Aussehen verändert, das jedoch die Menüleiste und die Werkzeugleiste sehr ähnlich sind. Dies macht es sehr
-einfach, zwischen den Arbeitsmodi zu wechseln und Sie werden sich nach einer gewissen Zeit in beiden sehr wohl fühlen. Dort können Sie
-Ihre Ansichten un dialoge konstruieren, wie Sie möchten und alle verfügbaren Einstellungen an den Elementen vornehmen, die die Ansicht
-enthält. Wenn Sie fertig sind, wählen Sie "Quellen erzeugen" aus dem "Bauen"-Menü; der Dialogeditor und das Projektmanagement werden
-sich dann um den Rest kümmern. Sie können testen, ob alles richtig durchgeführt wurde, indem Sie "Erstellen" oder "Ausführen"
-auswählen; dies wird Ihre Applikation inklusive der neuen Quelldateien erstellen. Aber erwarten Sie nicht, das die Dialoge schon sofort
-nutzbar sind- das ist eine Sache der Implementierung wie Sie der Entwickler gewohnt ist. Seien Sie nicht besorgt- es ist nicht sehr
-schwer. Um mehr Information zur Erstellung von Dialogen zu erhalten, schlagen Sie unter <ref id="Der Dialogeditor" name="Der
-Dialgoeditor"> nach, Beispiele und Richtlinien finden Sie im <htmlurl url="programming-6.html" name="KDevelop Programmierhandbuch">.
+The <idx/Qt Designer/ coming with Qt can be used to easily create dialogs and user interfaces. You can use the "Switch to Qt Designer"
+button from KDevelop's menubar. This will bring up the Designer where you can create a new dialog. You can also choose an existing
+.ui file from the fileview and KDevelop will bring up the Designer with your dialog. You can add dialogs easily by adding a new .ui file from
+the File menu.
+The Designer creates .ui files which contain an xml description of the class. Once you added the file to your project, KDevelop will take
+care that it is included in your Makefile. The build system will automatically create the header- and implementation files for you.
+Now all you have to do to either create a new class that inherits the dialog class and implement functionality or use the dialog directly.
+Thus, using the Designer to create dialogs has a clear advantage: Code and layout are scrictly seperated, allowing you to change the
+design of your dialog without rewriting one line of code. This way you can concentrate on what's really important: the actual coding process.
+For futher information on the Designer's concepts read the Qt Designer handbook which can also be found in KDevelops docview.
+
 
 <sect2>Einbinden neuer Elemente
 <p>
@@ -945,7 +1013,7 @@ Quellcodes. Auf diese folgt das Dokumentationsfenster, das eine HTML-Formate anz
 zur Arbeit mit externen Programmen wie KIconedit oder KDbg, die in die Entwicklungsumgebung eingebettet sind. Jedes Werkzeug, das registriert ist,
 können Sie über das "Werkzeuge" Menü aufrufen; die Registrierung von weiteren Programmen können Sie über einen Konfigurationsdialog
 vornehmen (sehen Sie <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration">). Eine Beschreibung der Editorfunktionen finden Sie
-im Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, zum Hilfebrowser schlagen Sie bitte 
+im Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, zum Hilfebrowser schlagen Sie bitte
 <ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
 
 <sect>Der Klassenbrowser und die Dateiansichten
@@ -953,7 +1021,7 @@ im Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, zu
 
 <sect1>Die Klassenansicht
 <p>
-Die Klassenansicht (CV, Class Viewer) zeigt alle Klassen Ihres Projekts als auch globale Funktionen und Variablen an. Das Öffnen des
+Die Klassenansicht (Klassen) zeigt alle Klassen Ihres Projekts als auch globale Funktionen und Variablen an. Das Öffnen des
 Baumes zeigt Ihnen dann die Memberfunktionen und Mitglieder der Klasse mit Symbolen für Attribute (private, protected und public,
 Signale und Slots),  sodaß Sie die Eigenschaften der Members visuell ohne ein Durchsuchen der Headerdatei erkennen können. Die Auswahl
 einer Klasse öffnet die zugehörige Header-Datei, die die Klasse enthält, und setzt den Cursor an den Anfang der Klassendeklaration.
@@ -963,7 +1031,7 @@ weiterhin Kontextmenüs, die Ihnen spezialisiertere Operationen erlauben, sehen S
 Klassenbrowser">.
 <sect1>Die Logische Dateiansicht
 <p>
-Die Logische Dateiansicht (LFV, Logical File Viewer) erlaubt das Sortieren von Dateien mittles Filtern in Gruppen. Individuelle Gruppen
+Die Logische Dateiansicht (Gruppen) erlaubt das Sortieren von Dateien mittles Filtern in Gruppen. Individuelle Gruppen
 können über den Eintrag "Eigenschaften" im Projektmenü hinzugefügt werden oder einem rechten Mausklick über der Baumansicht. Dies
 erlaubt einen spezialisierteren Zugriff auf Dateien, da nur Projektdateien angezeigt werden. Nach Ihrem Mime-Typ werden die Dateien
 durch die entsprechenden Programme geöffnet. Sie werden daher den LFV benutzen, um schnellen Zugriff auf z.B. Pixmaps zu haben- dies
@@ -971,15 +1039,15 @@ wird Ihnen KIconedit (falls auf Ihrem System installiert) im Werkzeuge-Fenster s
 
 <sect1>Die Aktuelle Dateiansicht
 <p>
-Die Aktuelle Dateiansicht (RFV, Real File Viewer) zeigt das Projektverzeichnis mit allen Dateien an, sodaß Sie auch
+Die Aktuelle Dateiansicht (Dateien) zeigt das Projektverzeichnis mit allen Dateien an, sodaß Sie auch
 nicht-Projektdateien bearbeiten können wie Makefile.am's. Popup Menüs bieten ebenfalls Funktionen wie das hinzufügen, entfernen oder
 löschen von Dateien.
 
 <sect1>Der Dokumentationsbaum
 <p>
-Der Dokumentationsbaum (DOC) zeigt alle verfügbaren HTML-basierten Dokumentationen als Bücher an. Die Auswahl eines Buches öffnet Ihnen
-die erste Seite im Browser-Fenster. Über dem Ordner "Andere" bietet Ihnen ein Popup-Menü die Konfiguration von zusätzlichen
-Dokumentation im HTML-Format an.
+Der Dokumentationsbaum (Bücher) zeigt alle verfügbaren HTML-basierten Dokumentationen als Bücher an. Die Auswahl eines Buches
+öffnet Ihnen die erste Seite im Browser-Fenster. Über dem Ordner "Andere" bietet Ihnen ein Popup-Menü die Konfiguration von
+zusätzlichen Dokumentation im HTML-Format an.
 
 <sect>Ausgabefenster
 <p>
@@ -1143,7 +1211,7 @@ kann, rufen Sie nochmals Autoconf auf, um das configure-Skript zu erstellen.<p>
 Das Werkzeuge-Menü enthält standardmäßig die Einträge für folgende Programme, falls diese installiert sind: KDbg, KIconEdit und
 KTranslator. Diese werden durch das KDevelop Installationsprogramm geprüft und in dieser Reihenfolge eingefügt. Der Aufruf eines
 Programms öffnet das "Werkzeuge"-Fenster und startet das Programm innerhalb dieses Fensters. Die Programme können Sie über den
-"Werkzeuge" Eintrag des Einstellungen-Menüs konfigurieren; lesen Sie dazu 
+"Werkzeuge" Eintrag des Einstellungen-Menüs konfigurieren; lesen Sie dazu
 <ref id="Konfiguration des &dquot;Werkzeuge&dquot; Menüs" name="Konfiguration des &dquot;Werkzeuge&dquot; Menüs">.
 
 <sect1>Anpassen von KDevelop
@@ -1211,7 +1279,7 @@ Browser die gefundene Textstelle markiert an. Mit F3 (Weitersuchen) können Sie d
 <item><bf/Suche nach Hilfe zu.../Öffnet den "Suche nach Hilfe zu..." Dialog, in dem Sie nach einem spezifischen Ausdruck suchen
 können.
 <p>
-<item><bf/<idx/Das Benutzerhandbuch zu KDevelop/ <idx/F1// Öffnet das Benutzerhandbuch zu KDevelop (Dieses 
+<item><bf/<idx/Das Benutzerhandbuch zu KDevelop/ <idx/F1// Öffnet das Benutzerhandbuch zu KDevelop (Dieses
 Handbuch). <p>
 <item><bf/<idx/Das KDevelop Programmier-Handbuch//
 Öffnet die <htmlurl url="programming/index.html" name="KDevelop Programmier-Handbuch">
@@ -1317,7 +1385,7 @@ Dokumentation zu durchsuchen.
 <sect>Tastenbefehle
 <p>
 Dieser Abschnitt behandelt die vordefinierten als auch die Standard-Konfiguration der Schnelltasten für Kommandos, die Sie in der
-KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Ändern der Tastaturkürzel" name="Ändern der Tastaturkürzel">. 
+KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Ändern der Tastaturkürzel" name="Ändern der Tastaturkürzel">.
 <sect1>Tastaturbelegung für Textbearbeitung
 <p>
 
@@ -2318,28 +2386,21 @@ Entwicklungswerkzeuge wie unter Anforderungen beschrieben.
 
 Für KDE Anwendungen stehen sechs Projekttypen zur Verfügung :
 <itemize>
-<item>Mini: Erzeugt eine KDE Applikation mit leerem Hauptwidget.
-<item>Normal: Erzeugt eine KDE-Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
-Doc/View Modell. 
-<item>Normal-OpenGL: Erzeugt eine KDE-Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
-Doc/View Modell. Zusätzlich OpenGL(tm) (Mesa3D) Unterstützung.
-<item>KDE 2 Normal: Erzeugt eine KDE-2 Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
-Doc/View Modell. 
+<item>KDE 2 Normal: Erzeugt eine KDE-2 Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das
+Doc/View Modell.
 <item>KDE 2 Mini: Erzeugt eine KDE-2 Applikation mit leerem Hauptwidget.
-<item>KDE 2 MDI: Erzeugt eine KDE-2 MDI (Multiple Document Interface) Applikation mit Session-Management, Menüleiste, Werkzeugleiste, 
+<item>KDE 2 MDI: Erzeugt eine KDE-2 MDI (Multiple Document Interface) Applikation mit Session-Management, Menüleiste, Werkzeugleiste,
 Statusleiste und Unterstützung für das Doc/View Modell.
 </itemize>
 <p>
 
 Wenn Sie keine Abhängigkeiten zu den KDE Bibliotheken wünschen, können Sie eine der vier Qt Anwendungen wählen:
 <itemize>
-<item>Normal: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich 
-Unterstützung für ein rudimentäres Doc/View-Modell.
-<item>QT 2.x SDI: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich 
+<item>QT 2.x SDI: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich
 Unterstützung für ein Single Document-view Interface (SDI) Modell.
-<item>QT 2.1 MDI: Erzeugt eine Qt-2.1 Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, 
+<item>QT 2.1 MDI: Erzeugt eine Qt-2.1 Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält,
 einschließlich Unterstützung für ein Multiple Document Interface (MDI) Modell.
-<item>QextMDI: Erzeugt eine auf der QextMDI Bibliothek und Qt2.0x basierende MDI Anwendung. Ermöglicht das Umschalten zwischen den beiden 
+<item>QextMDI: Erzeugt eine auf der QextMDI Bibliothek und Qt2.0x basierende MDI Anwendung. Ermöglicht das Umschalten zwischen den beiden
 Modi Toplevel und Kind-Frame. Benötigt QextMDI. Mehr Informationen erhalten Sie auf
 <htmlurl url="http://www.geocities.com/gigafalk/qextmdi.htm" name="http://www.geocities.com/gigafalk/qextmdi.htm">.
 </itemize>
@@ -2347,141 +2408,141 @@ Modi Toplevel und Kind-Frame. Benötigt QextMDI. Mehr Informationen erhalten Sie 
 Weiterhin bietet der Applikations-Wizard eine Schablone, um GNOME-konforme Applikationen mit der GTK+ C-Bibliothek zu erstellen, die
 standardmäßig schon ein Hauptfenster mit Menüleiste, Werkzeugleiste und Statuszeile enthält.
 
-Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an. 
+Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an.
 
 Außerdem können Sie ein völlig leeres Projekt erzeugen, um beispielsweise mit bereits vorhandene Projekten zu arbeiten.
 
-Der Wizard fragt Sie nach dem Projektnamen, Version und dem Verzeichnis in dem das Projekt erstellt werden soll. Außerdem können Sie Ihren 
-Namen und Ihre EMail Adresse angeben. Diese werden in den Header und cpp Schablonen am Anfang Ihrer Quelldateien eingetragen und werden 
+Der Wizard fragt Sie nach dem Projektnamen, Version und dem Verzeichnis in dem das Projekt erstellt werden soll. Außerdem können Sie Ihren
+Namen und Ihre EMail Adresse angeben. Diese werden in den Header und cpp Schablonen am Anfang Ihrer Quelldateien eingetragen und werden
 außerdem für die Einträge in die -lsm Datei verwendet.
 
 Zum Hinzufügen der Revisionskontrolle zu Ihrem Projekt, lesen Sie bitte das Kapitel <ref id="CVS Integration" name="CVS Integration">.
 
 <sect>Öffnen und Schließen von Projekten
 <p>
-KDevelop ist standardmäßig so eingestellt, daß das zuletzt geöffnete Projekt beim Start geladen wird. Dies ermöglicht einen schnellen Start, aber 
-möglicherweise wollen Sie es ändern, so daß die Entwicklungsumgebung ohne ein Projekt gestartet wird. Zum Ändern des Standardverhaltens 
+KDevelop ist standardmäßig so eingestellt, daß das zuletzt geöffnete Projekt beim Start geladen wird. Dies ermöglicht einen schnellen Start, aber
+möglicherweise wollen Sie es ändern, so daß die Entwicklungsumgebung ohne ein Projekt gestartet wird. Zum Ändern des Standardverhaltens
 schalten Sie 'Letztes Projekt Laden' im <ref id="KDevelop Setup" name="KDevelop Setup"> Dialog aus.
 
 Zum Öffnen eines anderen Projekts wählen Sie "Öffnen" aus dem Projektmenü oder drücken den "Projekt öffnen" Schalter auf der Werkzeugleiste. Im
-Falle, daß Sie schon ein Projekt geöffnet haben, wird dieses geschlossen. Wenn Ihr aktuelles Projekt nicht gesicherte Dateien enthält, werden Sie 
-gefragt ob Sie diese Dateien speichern wollen. Sie können sich dann entscheiden, welche Dateien gesichert werden sollen und welche nicht, oder 
+Falle, daß Sie schon ein Projekt geöffnet haben, wird dieses geschlossen. Wenn Ihr aktuelles Projekt nicht gesicherte Dateien enthält, werden Sie
+gefragt ob Sie diese Dateien speichern wollen. Sie können sich dann entscheiden, welche Dateien gesichert werden sollen und welche nicht, oder
 Sie können alle Dateien auf einmal speichern.
 
-Sie erhalten einen "Projekt öffnen" Dialog, in dem Sie zu dem Verzeichnis wechseln können, das Ihre zu ladende Projektdatei enthält. KDevelop 
-Projektdateien haben einen <em/*.kdevprj/ Mimetypen der auch durch ein Projekt Icon dargestellt wird. Wählen Sie die Projektdatei und betätigen Sie 
-"Öffnen". Wenn ein Projekt geladen wird, scannt der Klassenbrowser alle Dateien und baut den Klassenbaum auf, so daß Sie sofort mit der Arbeit 
+Sie erhalten einen "Projekt öffnen" Dialog, in dem Sie zu dem Verzeichnis wechseln können, das Ihre zu ladende Projektdatei enthält. KDevelop
+Projektdateien haben einen <em/*.kdevprj/ Mimetypen der auch durch ein Projekt Icon dargestellt wird. Wählen Sie die Projektdatei und betätigen Sie
+"Öffnen". Wenn ein Projekt geladen wird, scannt der Klassenbrowser alle Dateien und baut den Klassenbaum auf, so daß Sie sofort mit der Arbeit
 beginnen können, indem Sie den Klassenbrowser benutzen.
 
-Eine weitere komfortable Möglichkeit ein Projekt zu öffnen, besteht darin, es im KFM, dem <idx/KDE/ Datei Manager anzuwählen. Dies startet 
-KDevelop  zusammen mit dem gewählten Projekt. Sie könnten es genausogut von der Kommandozeile starten, indem Sie eingeben 
+Eine weitere komfortable Möglichkeit ein Projekt zu öffnen, besteht darin, es im KFM, dem <idx/KDE/ Datei Manager anzuwählen. Dies startet
+KDevelop  zusammen mit dem gewählten Projekt. Sie könnten es genausogut von der Kommandozeile starten, indem Sie eingeben
 <tt/kdevelop projektname.kdevprj/.
 
-Wenn Sie KDevelop schließen, wird Ihre Projektdatei automatisch gespeichert und die Entwicklungsumgebung stellt fest, ob irgendwelche 
-Projektdateien verändert wurden. Sie werden dann gefragt, ob Sie die Änderungen speichern wollen. Die verfügbaren Optionen sind die gleichen wie 
+Wenn Sie KDevelop schließen, wird Ihre Projektdatei automatisch gespeichert und die Entwicklungsumgebung stellt fest, ob irgendwelche
+Projektdateien verändert wurden. Sie werden dann gefragt, ob Sie die Änderungen speichern wollen. Die verfügbaren Optionen sind die gleichen wie
 beim Schließen eines Projekts.
 
 <sect>Bearbeiten eines Projekts
 <p>
-Nachem Sie ein Projekt mit dem KAppWizard erstellt haben, werden Soe normalerweise das Projekt erweitern, indem Sie Quelldateien, Klassen, 
-Pixmaps, Bilder und was immer Ihr Projekt benötigt, hinzufügen. Nun, editieren eines Projektes bedeutet, daß Sie das Standardprojekt nach der 
-Erstellung mit Hilfe von Menüs und Dialogen Ihren Anforderungen gemäß verändern können. Der nächste Abschnitt beschreibt deshalb, wie Sie 
-bereits existierende Dateien und Klassen hinzufügen und wie Sie neue Dateien erstellen können. Dies ist notwendig um Ihr Projekt zu erstellen, wird 
-aber nicht dem End-User beim Installieren helfen. Deshalb beschreibt der Abschnitt 
-<ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen">, wie Sie die Dateieigenschaften, insbesondere für zusätzliche Dateien, die 
-installiert werden sollen, setzen können. Dies betrifft z.B. Dokumentationen oder Pixmaps. Eine weitere Arbeit bei der Wartung Ihres Programms ist das 
-Hinzufügen von Übersetzungen, die die Internationalisierung unterstützen. Dies wird in 
+Nachem Sie ein Projekt mit dem KAppWizard erstellt haben, werden Soe normalerweise das Projekt erweitern, indem Sie Quelldateien, Klassen,
+Pixmaps, Bilder und was immer Ihr Projekt benötigt, hinzufügen. Nun, editieren eines Projektes bedeutet, daß Sie das Standardprojekt nach der
+Erstellung mit Hilfe von Menüs und Dialogen Ihren Anforderungen gemäß verändern können. Der nächste Abschnitt beschreibt deshalb, wie Sie
+bereits existierende Dateien und Klassen hinzufügen und wie Sie neue Dateien erstellen können. Dies ist notwendig um Ihr Projekt zu erstellen, wird
+aber nicht dem End-User beim Installieren helfen. Deshalb beschreibt der Abschnitt
+<ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen">, wie Sie die Dateieigenschaften, insbesondere für zusätzliche Dateien, die
+installiert werden sollen, setzen können. Dies betrifft z.B. Dokumentationen oder Pixmaps. Eine weitere Arbeit bei der Wartung Ihres Programms ist das
+Hinzufügen von Übersetzungen, die die Internationalisierung unterstützen. Dies wird in
 <ref id="Übersetzung hinzufügen" name="Übersetzung hinzufügen"> beschrieben.
 
-<ref id="Erweitern der Projekt Dokumentation" name="Erweitern der Projekt Dokumentation"> behandelt Fragen, wie ein guter Satz an Dokumentationen 
-für Online Hilfe erstellt werden kann, die dem Endbenutzer die Verwendung Ihres Produktes ermöglicht und Ihn in die Lage versetzt, sich bei Problemen 
+<ref id="Erweitern der Projekt Dokumentation" name="Erweitern der Projekt Dokumentation"> behandelt Fragen, wie ein guter Satz an Dokumentationen
+für Online Hilfe erstellt werden kann, die dem Endbenutzer die Verwendung Ihres Produktes ermöglicht und Ihn in die Lage versetzt, sich bei Problemen
 selbst helfen zu können.
 
-Schließlich wird im Abschnitt <ref id="Projekt Hacking" name="Projekt Hacking"> beschrieben, wie Sie das KDevelop Projektmanagment in bestimmten 
+Schließlich wird im Abschnitt <ref id="Projekt Hacking" name="Projekt Hacking"> beschrieben, wie Sie das KDevelop Projektmanagment in bestimmten
 Fällen umgehen können.
 
 <sect1>Hinzufügen und Entfernen von Dateien und Klassen<label id="Hinzufügen und Entfernen von Dateien und Klassen">
 <p>
-Das Hinzufügen neuer Dateien wird oft benötigt, wenn Sie Ihre Klassenimplementationsdatei in mehrere Dateien aufteilen wollen. Dann ist es nötig eine neue Datei zu erzeugen, 
-die den Teil der Implementation enthält, den Sie  auslagern wollen. Sie können dies erreichen, indem Sie "Neu" aus dem Dateimenü wählen, wodurch der "Datei-Neu" Dialog 
-aufgerufen wird. Dies gibt Ihnen die Möglichkeit, den Dateitypen, den Namen und Speicherort anzugeben. Während Sie den Dateinamen angeben, fügt KDevelop automatisch 
-eine Erweiterung hinzu, Sie können diese Erweiterung jedoch auch noch Ihren Bedürfnissen anpassen. Außerdem können Sie die Vorlagendatei für Quelldateien einbinden, so 
-daß Sie den Kopf nicht von Hand in Ihre Datei kopieren müssen. Des weiteren können Sie entscheiden, ob die Datei dem Projekt hinzugefügt werden soll oder nicht. Denken 
+Das Hinzufügen neuer Dateien wird oft benötigt, wenn Sie Ihre Klassenimplementationsdatei in mehrere Dateien aufteilen wollen. Dann ist es nötig eine neue Datei zu erzeugen,
+die den Teil der Implementation enthält, den Sie  auslagern wollen. Sie können dies erreichen, indem Sie "Neu" aus dem Dateimenü wählen, wodurch der "Datei-Neu" Dialog
+aufgerufen wird. Dies gibt Ihnen die Möglichkeit, den Dateitypen, den Namen und Speicherort anzugeben. Während Sie den Dateinamen angeben, fügt KDevelop automatisch
+eine Erweiterung hinzu, Sie können diese Erweiterung jedoch auch noch Ihren Bedürfnissen anpassen. Außerdem können Sie die Vorlagendatei für Quelldateien einbinden, so
+daß Sie den Kopf nicht von Hand in Ihre Datei kopieren müssen. Des weiteren können Sie entscheiden, ob die Datei dem Projekt hinzugefügt werden soll oder nicht. Denken
 Sie daran, daß dies nichts mit der späteren Installation zu tun hat; diese Konfiguration erfolgt später innerhalb der Dateivoreinstellungen.
 
-Nachdem die neue Datei erzeugt wurde, werden sowohl die Projektdatei, als auch die zugehörigen Makefile.am's aktualisiert. Zum Hinzufügen einer kompletten Klasse, können 
+Nachdem die neue Datei erzeugt wurde, werden sowohl die Projektdatei, als auch die zugehörigen Makefile.am's aktualisiert. Zum Hinzufügen einer kompletten Klasse, können
 Sie mit Hilfe des Klassengenerators eine neue Klasse konstruieren. Dieser wird durch Wahl von "Neue Klasse" aus dem Projektmenü aufgerufen.
 
-Im Falle, daß Sie ein existierendes Projekt haben und bestimmte Klassen hinzufügen wollen, die Sie in Ihrem Projekt wiederverwenden wollen, wählen Sie "Vorhandene Datei(en) 
-hinzufügen..." aus dem Projektmenü. In dem erscheinenden Dialog können Sie wählen, welche Dateien Sie hinzufügen wollen und welches das Zielverzeichnis sein soll. 
-Denken Sie daran, daß die Dateien in das Zielverzeichnis kopiert und dem Projekt hinzugefügt werden. Sie sollten nach dem Hinzufügen Make aufrufen, damit Ihre Dateien dem 
-Erstellungsprozeß hinzugefügt werden. Für den Fall, daß Sie z.B. Pixmaps hinzufügen wollen, die später durch den Endbenutzer installiert werden sollen, sollten Sie die Dateieigenschaften 
+Im Falle, daß Sie ein existierendes Projekt haben und bestimmte Klassen hinzufügen wollen, die Sie in Ihrem Projekt wiederverwenden wollen, wählen Sie "Vorhandene Datei(en)
+hinzufügen..." aus dem Projektmenü. In dem erscheinenden Dialog können Sie wählen, welche Dateien Sie hinzufügen wollen und welches das Zielverzeichnis sein soll.
+Denken Sie daran, daß die Dateien in das Zielverzeichnis kopiert und dem Projekt hinzugefügt werden. Sie sollten nach dem Hinzufügen Make aufrufen, damit Ihre Dateien dem
+Erstellungsprozeß hinzugefügt werden. Für den Fall, daß Sie z.B. Pixmaps hinzufügen wollen, die später durch den Endbenutzer installiert werden sollen, sollten Sie die Dateieigenschaften
 anpassen und den Installationspfad angeben (siehe <ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen">).
 
-Um Dateien dem Projekt hinzuzufügen, die sich bereits im Projektverzeichnis befinden, wechseln Sie in die RFV Ansicht, in der Sie zugehörige Dateien an Hand des Icons 
-ausmachen können. Wählen Sie die hinzuzufügende Datei und betätigen Sie die rechte Maustaste um das Popup-Menü zu öffnen. Dann wählen Sie "Datei zum Projekt 
+Um Dateien dem Projekt hinzuzufügen, die sich bereits im Projektverzeichnis befinden, wechseln Sie in die RFV Ansicht, in der Sie zugehörige Dateien an Hand des Icons
+ausmachen können. Wählen Sie die hinzuzufügende Datei und betätigen Sie die rechte Maustaste um das Popup-Menü zu öffnen. Dann wählen Sie "Datei zum Projekt
 hinzufügen...".
 
-Sie können auch Dateien vom Projekt entfernen. Dies wird dann nötig, wenn Sie nicht die vom KAppWizard vorgenerierten Dateien verwenden wollen. Beim Entfernen von 
-Dateien haben Sie zusätzlich die Möglichkeit, die Datei komplett von der Festplatte zu entfernen. Zum Entfernen vom Projekt, wählen Sie die Datei im LFV oder im RFV, drücken 
+Sie können auch Dateien vom Projekt entfernen. Dies wird dann nötig, wenn Sie nicht die vom KAppWizard vorgenerierten Dateien verwenden wollen. Beim Entfernen von
+Dateien haben Sie zusätzlich die Möglichkeit, die Datei komplett von der Festplatte zu entfernen. Zum Entfernen vom Projekt, wählen Sie die Datei im LFV oder im RFV, drücken
 die rechte Maustaste und wählen "Datei vom Projekt entfernen...". Zum Löschen der Datei wählen Sie "Datei von der Festplatte entfernen...".
 
 <sect1>Setzen der Projekt Optionen<label id="Setzen der Projekt Optionen">
 <p>
-Auf den Dateieigenschaftendialog kann über das Projektmenu oder innerhalb des LFV mit einem Klick der rechten Maustaste zugegriffen werden. Er zeigt die Projektdateien 
-in Gruppen, so wie sie auch im LFV angeordnet sind und zeigt die Dateieigenschaften wie Größe, Dateityp, ob die Datei zum Projekt gehört sowie den Pfad, in den die Datei 
-durch das make install Kommando des Endnutzers installiert wird. Es ist wichtig, diesen Pfad für Dokumentationsdateien und Pixmaps anzugeben, Sie müssen diese Pfade also 
+Auf den Dateieigenschaftendialog kann über das Projektmenu oder innerhalb des LFV mit einem Klick der rechten Maustaste zugegriffen werden. Er zeigt die Projektdateien
+in Gruppen, so wie sie auch im LFV angeordnet sind und zeigt die Dateieigenschaften wie Größe, Dateityp, ob die Datei zum Projekt gehört sowie den Pfad, in den die Datei
+durch das make install Kommando des Endnutzers installiert wird. Es ist wichtig, diesen Pfad für Dokumentationsdateien und Pixmaps anzugeben, Sie müssen diese Pfade also
 hier einstellen. Für Standard <idx/KDE/ Pfad Makros sollten Sie in Ihrer Makefile.am nachsehen, wo diese Makros aufgeführt sind.
 
 <sect1>Übersetzung hinzufügen<label id="Übersetzung hinzufügen">
 <p>
-Da <idx/KDE/ die Konfiguration Ihres Desktops und des Verhaltens Ihrer Anwendungen ermöglicht, haben Sie auch die Möglichkeit die Sprache, die Ihre Anwendung verwendet 
-zu wählen. Dies betrifft die Verwendung der Online-Dokumentation genauso wie das gesamte Aussehen Ihrer Applikation. In Bezug auf die Dokummentationsdateien scheint dies 
-ein triviales Unterfangen zu sein. Sie würden ein Unterverzeichnis mit dem Kürzel der jeweiligen Sprache im <tt/docs/ Verzeichnis Ihres Projektes anlegen, z.B <tt//de/ für 
-Deutsch und die englische Dokumentation in dieses Verzeichnis kopieren. Dann würden Sie die Dokumentation erzeugen und alle Projekt Optionen bezüglich der 
-Installationsverzeichnisse setzen. Dann könnten Sie damit beginnen die sgml Datei zu übersetzen und die Dokumentation neu zu erzeugen. Das ist alles. Für die Anwendung 
-selber scheint dies ein wenig schwieriger zu sein. Wir wollen deshalb hier erklären, wie man die Internationalisierung unterstützt und wie man die Sprachen die man unterstützen 
+Da <idx/KDE/ die Konfiguration Ihres Desktops und des Verhaltens Ihrer Anwendungen ermöglicht, haben Sie auch die Möglichkeit die Sprache, die Ihre Anwendung verwendet
+zu wählen. Dies betrifft die Verwendung der Online-Dokumentation genauso wie das gesamte Aussehen Ihrer Applikation. In Bezug auf die Dokummentationsdateien scheint dies
+ein triviales Unterfangen zu sein. Sie würden ein Unterverzeichnis mit dem Kürzel der jeweiligen Sprache im <tt/docs/ Verzeichnis Ihres Projektes anlegen, z.B <tt//de/ für
+Deutsch und die englische Dokumentation in dieses Verzeichnis kopieren. Dann würden Sie die Dokumentation erzeugen und alle Projekt Optionen bezüglich der
+Installationsverzeichnisse setzen. Dann könnten Sie damit beginnen die sgml Datei zu übersetzen und die Dokumentation neu zu erzeugen. Das ist alles. Für die Anwendung
+selber scheint dies ein wenig schwieriger zu sein. Wir wollen deshalb hier erklären, wie man die Internationalisierung unterstützt und wie man die Sprachen die man unterstützen
 möchte einbindet.
 
-Zuerst müssen Sie alle in Ihrer Anwendung sichtbaren Zeichenketten, die also auf Balken oder in Menüs erscheinen, in einem <tt/i18n()/ Makro einschließen. Dieses Makro 
-wird durch die Funktion <tt/klocale->translate()/ aus der KLocale Klasse ersetzt ist aber wesentlich einfacher zu verwenden. Da das Makro in der <tt/kapp.h/ Includedatei 
-definiert ist, müssen Sie Ihrer Quelldatei ein <tt/#include &lt;kapp.h&gt;/ hinzufügen. Es sollte auch erwähnt werden, daß obwohl <tt/i18n()/ ein Makro ist und Sie deshalb 
-denken, Sie könnten die Originalfunktion verwenden, dies nicht funktionieren wird. Das liegt daran, daß die Zeichenketten, die übersetzt werden sollen, aus den Quelldateien 
-ausgelesen und in der Übersetzungsdatei der Anwendung gespeichert werden (&lt;IhreApp&gt;.pot im /po Unterverzeichnis). Dies wird vom xgettext Programm gemacht, welches 
-mit <tt/make messages/ aus Ihrem Projektverzeichnis heraus aufgerufen wird. Da xgettext das <tt/i18n()/ Makro benötigt, wird Sie die Verwendung der Originalfunktion  nicht zum 
+Zuerst müssen Sie alle in Ihrer Anwendung sichtbaren Zeichenketten, die also auf Balken oder in Menüs erscheinen, in einem <tt/i18n()/ Makro einschließen. Dieses Makro
+wird durch die Funktion <tt/klocale->translate()/ aus der KLocale Klasse ersetzt ist aber wesentlich einfacher zu verwenden. Da das Makro in der <tt/kapp.h/ Includedatei
+definiert ist, müssen Sie Ihrer Quelldatei ein <tt/#include &lt;kapp.h&gt;/ hinzufügen. Es sollte auch erwähnt werden, daß obwohl <tt/i18n()/ ein Makro ist und Sie deshalb
+denken, Sie könnten die Originalfunktion verwenden, dies nicht funktionieren wird. Das liegt daran, daß die Zeichenketten, die übersetzt werden sollen, aus den Quelldateien
+ausgelesen und in der Übersetzungsdatei der Anwendung gespeichert werden (&lt;IhreApp&gt;.pot im /po Unterverzeichnis). Dies wird vom xgettext Programm gemacht, welches
+mit <tt/make messages/ aus Ihrem Projektverzeichnis heraus aufgerufen wird. Da xgettext das <tt/i18n()/ Makro benötigt, wird Sie die Verwendung der Originalfunktion  nicht zum
 Ziel führen.
 
-Für die Übersetzungen selbst, müssen Sie zunächst die message Datei erzeugen, die alle vom <tt/i18n()/ Makro eingeschlossenen Zeichenketten aus Ihrem Quellcode enthält. 
-Dies wird durch Auswahl von "Meldungen erstellen und verbinden" aus dem Projektmenü erreicht. Dann müssen die Sprachen, die Ihr Projekt unterstützen soll, hinzugefügt 
-werden. Dazu wählen Sie "Neue Übersetzung hinzufügen..." aus dem Projektmenü. Dies öffnet den Sprachauswahldialog. Wählen Sie eine Sprache und bestätigen Sie mit OK. 
-Es wird eine ASCII Datei erzeugt, die Einträge für den Dateinamen und die Zeilennummer des Vorkommens der Zeichenkette enthält. Sie sehen dann jeweils eine <tt/msgid/ 
-Zeile, die die zu übersetzende Zeichenkette enthält, gefolg von einer <tt/msgstr/ Zeile. Die <tt/msgstr/ Zeile ist leer, bis auf Einträge, die bereits von den <idx/KDE Bibliotheken/ 
+Für die Übersetzungen selbst, müssen Sie zunächst die message Datei erzeugen, die alle vom <tt/i18n()/ Makro eingeschlossenen Zeichenketten aus Ihrem Quellcode enthält.
+Dies wird durch Auswahl von "Meldungen erstellen und verbinden" aus dem Projektmenü erreicht. Dann müssen die Sprachen, die Ihr Projekt unterstützen soll, hinzugefügt
+werden. Dazu wählen Sie "Neue Übersetzung hinzufügen..." aus dem Projektmenü. Dies öffnet den Sprachauswahldialog. Wählen Sie eine Sprache und bestätigen Sie mit OK.
+Es wird eine ASCII Datei erzeugt, die Einträge für den Dateinamen und die Zeilennummer des Vorkommens der Zeichenkette enthält. Sie sehen dann jeweils eine <tt/msgid/
+Zeile, die die zu übersetzende Zeichenkette enthält, gefolg von einer <tt/msgstr/ Zeile. Die <tt/msgstr/ Zeile ist leer, bis auf Einträge, die bereits von den <idx/KDE Bibliotheken/
 bereitgestellt werden. Die leeren Zeilen müssen von Ihnen mit der entsprechenden Übersetzung ausgefüllt werden.
 
-Sie könnten die Übersetzungen von Hand schreiben. Das <idx/KDE-SDK/ bietet jedoch auch das Programm KTranslator, welches die Dateien bereits auf Ihrem System installierter 
+Sie könnten die Übersetzungen von Hand schreiben. Das <idx/KDE-SDK/ bietet jedoch auch das Programm KTranslator, welches die Dateien bereits auf Ihrem System installierter
 Programme liest, so daß Sie bereits übersetzte Zeichenketten wiederverwenden können.
 
-Um auf KTranslator zuzugreifen, wählen Sie am einfachsten eine &lt;Sprache&gt;.po Datei aus dem /po Verzeichnis entweder in LFV oder RFV. Dies öffnet KTranslator und 
-ermöglicht es, auf einfache die Übersetzung durchzuführen. Denken Sie daran das Sie KTranslator konfigurieren müssen, damit der Autorenname, sowie Sprache und Zieldatei 
+Um auf KTranslator zuzugreifen, wählen Sie am einfachsten eine &lt;Sprache&gt;.po Datei aus dem /po Verzeichnis entweder in LFV oder RFV. Dies öffnet KTranslator und
+ermöglicht es, auf einfache die Übersetzung durchzuführen. Denken Sie daran das Sie KTranslator konfigurieren müssen, damit der Autorenname, sowie Sprache und Zieldatei
 korrekt gesetzt sind. Standardmäßig öffnet KTranslator nur die Übersetzungsdatei.
 
-Für alle Übersetzungen verwendet <tt/make/ das Programm <tt/msgfmt/ für die Formatierungen Ihrer in der ausführbaren Datei verwendeten Meldungen, Sie brauchen sich darüber 
+Für alle Übersetzungen verwendet <tt/make/ das Programm <tt/msgfmt/ für die Formatierungen Ihrer in der ausführbaren Datei verwendeten Meldungen, Sie brauchen sich darüber
 aber keine Gedanken zu machen; dies wird alles von KDevelop automatisch gemacht.
 
 
-Weitere Informationen zur Unterstützung der Internationalisierung finden Sie auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">; eine Menge Leute machen 
+Weitere Informationen zur Unterstützung der Internationalisierung finden Sie auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">; eine Menge Leute machen
 Übersetzungen für Sie. Sie finden dort auch eine Liste mit EMail Adressen der Übersetzer, denen Sie schreiben könnten und die Ihnen dabei helfen können. Lesen Sie
-auch  <ref id="Der Dialogeditor" name="Der Dialogeditor"> und <htmlurl url="programming/index-11.html" name="The KDevelop Programming Handbook"> 
+auch  <ref id="Der Dialogeditor" name="Der Dialogeditor"> und <htmlurl url="programming/index-11.html" name="The KDevelop Programming Handbook">
 wo Fragen der Internationalisierung auch wieder behandelt werden.
 
 <sect1>Erweitern der Projekt Dokumentation<label id="Erweitern der Projekt Dokumentation">
 <p>
-Alle mit KDevelop erstellten Projekte enthalten eine vorkonfigurierte Dokumentation, die bereits Standardkapitel zu Installation, Projektname und Version, sowie Autorname und 
-Emailadresse beinhaltet. Da KDevelop SGML Schablonen verwendet, ist es sehr einfach die Dokumentation zu einem kompletten Hilfesystem zu erweitern. Alles was Sie dazu 
-tun müssen, ist die sgml Datei, die sich in docs/en unter dem Namen index.sgml befindet, zu editieren. Die Referenz Dokumentation Ihres sgml-tools Paketes kann dem 
+Alle mit KDevelop erstellten Projekte enthalten eine vorkonfigurierte Dokumentation, die bereits Standardkapitel zu Installation, Projektname und Version, sowie Autorname und
+Emailadresse beinhaltet. Da KDevelop SGML Schablonen verwendet, ist es sehr einfach die Dokumentation zu einem kompletten Hilfesystem zu erweitern. Alles was Sie dazu
+tun müssen, ist die sgml Datei, die sich in docs/en unter dem Namen index.sgml befindet, zu editieren. Die Referenz Dokumentation Ihres sgml-tools Paketes kann dem
 Hilfebrowser hinzugefügt werden, erlaubt direkten Zugriff auf spezielle Tags und enthält eine kurze Beschreibung, wie die Dokumentation zu erweitern ist.
-SGML hat eine Reihe von Vorteilen und <idx/KDE/ macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt 
-die typische Dokumentation im <idx/KDE/ Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu  
+SGML hat eine Reihe von Vorteilen und <idx/KDE/ macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt
+die typische Dokumentation im <idx/KDE/ Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu
 erzeugen, die Ihre Applikation beinhaltet. Wenn Sie die Dokumentation mit ksgml2html erzeugen wollen, installieren Sie dieses Programm und rufen "Benutzerhandbuch erstellen" 
 aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü 
 oder das entsprechende Icon aus der DOC Baumansicht wählen. Dadurch können Sie direkt in KDevelop durch die Dokumentation browsen und haben so eine bessere 
@@ -2518,7 +2579,7 @@ verwenden, die so nicht eingebunden werden. Dann müssen Sie Ihr Projekt mit Hilf
 
 <sect>Externe Projekte
 <p>
-Existierende Projekte können in KDevelop Projekte konvertiert werden, indem sie "Neu" aus dem Projektmenü und anschließend "Eigenes Projekt" wählen. Der folgende 
+Existierende Projekte können in KDevelop Projekte konvertiert werden, indem sie "Neu" aus dem Projektmenü und anschließend "Eigenes Projekt" wählen. Der folgende
 Dialog erstellt eine leere Projektdatei mit dem Projektnamen, Versionsnummer und Typinformation, sowie Ihrem Namen und Ihrer EMailadresse. Kopieren Sie dann alle Ihre 
 Kompilations- und Konstruktionsdateien in das neue Projektverzeichnis und wählen Sie "Dateien hinzufügen" aus dem Projektmenü. Die ausgewählten Dateien werden in Ihr 
 Projektverzeichnis kopiert und die Makefile.am's werden aktualisiert. Bitte ändern Sie alle Makefile.am Einträge, die vor der Konvertierung schon bestanden, gemäß den 
@@ -2653,7 +2714,7 @@ signed zu unsigned umgewandelt wird.
 <tag/-Wstrict-prototypes/ Warne, wenn eine Funktion ohne Argumenttypen deklariert oder definiert wird. (Eine Funktionsdefinition 
 im alten Stil ist ohne Warnung erlaubt, wenn vorher eine Deklaration steht, die die Argumenttypen deklariert.)
 <p>
-<tag/-Wmissing-prototypes/Warne, wenn eine globale Funktion ohne vorherige Prototypdeklaration definiert wird (auch wenn die 
+<tag/-Wmissing-prototypes/Warne, wenn eine globale Funktion ohne vorherige Prototypdeklaration definiert wird (auch wenn die
 Def. selbst einen Prototyp enthält). Benutzen Sie diese Option, um globale Funktionen zu finden, die nicht in Headerdateien 
 deklariert sind.
 <p>
@@ -2661,7 +2722,7 @@ deklariert sind.
 selbst einen Prototyp enthält. Benutzen Sie diese Option, um globale Funktionen zu finden, die nicht in Headerdateien deklariert 
 sind.
 <p>
-<tag/-Wredundant-decls/Warne, wenn etwas mehr als einmal in demselben Sichtbarkeitsbereich deklariert wurde (auch in Fällen, 
+<tag/-Wredundant-decls/Warne, wenn etwas mehr als einmal in demselben Sichtbarkeitsbereich deklariert wurde (auch in Fällen,
 wo die mehrfache Deklaration gültig ist und nichts ändert).
 <p>
 <tag/-Wnested-externs/Warne, wenn eine <em/extern/ Deklaration in einer Funktion angetroffen wird.
@@ -2743,7 +2804,7 @@ die Optionen ein- oder ausschalten können. Die verfügbaren Einstellungen sind:
 <descrip>
 <tag/Debug Informationen ausgeben/Es werden zusätzliche Debugginginformationen ausgegeben. Diese Informationen sagen Ihnen 
 welche Dateien für die Neuerstellung in Betracht gezogen werden, welche Datei-Zeiten verglichen werden und mit welchem 
-Ergebnis, welche Dateien tatsächlich neu erstellt werden müssen, welche impliziten Regeln in Betracht kommen und welche 
+Ergebnis, welche Dateien tatsächlich neu erstellt werden müssen, welche impliziten Regeln in Betracht kommen und welche
 angewendet werden... Alles was interessant ist um zu sehen, wie make entscheidet was zu tun ist.
 
 <tag/Nach Fehlern fortfahren/Arbeite soweit möglich nach Fehlern weiter. Während das Ziel bei dem der Fehler auftrat und von 
@@ -2922,231 +2983,87 @@ das Hinzufügen einer Methode wird die Methodendeklaration und der Implementation
 sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, so daß Sie nur die Methode anspringen
 müssen, um den auszuführenden Code einzugeben.
 
-<chapt>Der Dialogeditor<label id="Der Dialogeditor">
+<chapt>Verwendung des QT Designers in Ihrem Projekt<label id="Der Dialogeditor">
 <p>
-Der in KDevelop integrierte Dialog Editor ermöglicht die einfache graphische Konstruktion von Widgets und Dialogen für die Verwendung in Ihren Applikationen. Sie 
-können Ihren Dialog, so wie der Benutzer ihn sehen wird, direkt am Bildschirm kontrollieren. Nachdem Sie Ihr Projekt mit dem KAppWizard gestartet haben, ist die Verwendung 
-des Dialog Editors ist normalerweise der erste Schritt, in dem Sie das Hauptfenster, die interaktiven Dialoge und, nach Beendigung der graphischen Arbeiten, den Code 
-erzeugen. Auf diese Art und Weise, enthält Ihr Projekt die als "schwierig" angesehenen Teile, deren Implementierung normalerweise eine längere Zeit in Anspruch nimmt. 
-Der "Rest" der Arbeit ist dann die Implementierung der Funktionalität in den generierten Code. Dieses Kapitel behandelt die Verwendung des Dialogeditors zur Erzeugung 
-der Widgets, sowie Hinweise zur Vorgehensweise in dem Falle, daß Sie während des weiteren Entwicklungsprozesses erkennen, daß Ihre Widgets Korrekturen oder zusätzliche 
-Eigenschaften  benötigen.
+Der <idx/Qt Designer/ erlaube die Einfache Konstruktion von <idx/Widgets/ und Dialogen, die Ihre Anwendung verwendet in jeglicher,
+grafischer Hinsicht. Die sehen direkt das Aussehen Ihres Dialoges, wie er dem Benutzer präsentiert wird. Das Benutzen des
+<idx/Designer/ ist normalerweise der erste Schritt, den Sie nach der Erstellung Ihres Projektes mit dem <idx/KappWizard/
+ausführen, um die Hauptansicht, die Benutzer-Abfrage-Dialoge und, nachdem die grafische Arbeit erledigt ist, die Code-Generierung
+zu erstellen. Auf diesem Weg wird Ihr Projekt all die Teile, die gewöhnlich als "schwierig" und mit langer
+Entwicklungszeit versehen angesehen werden, enthalten. Der dann verbleibende "Rest" Ihrer Arbeit ist die Implementierung der
+Funktionalität des generierten Codes. Dieses Kapitel behandelt die Frage, wie Sie den <idx/dialog editor/ verwenden um Ihre
+Projekt-<idx/Widgets/ zu erstellen ebenso, wie auch was in dem Fall zu tun ist, daß Sie während des weiteren Entwicklungsprozesses
+die Notwendigkeit für Korrekturen oder Erweiterungen Ihrer <idx/widgets/ sehen.
 
-Sie können den Dialogeditor entweder durch Wahl des Editors im "Ansicht"-Menü oder über das Icon in der Werkzeugleiste starten. Der Wechsel zum Projekteditor erfolgt 
-entweder durch Wahl von "Quellcodeeditor" aus dem Menü "Ansicht" des Dialogeditors oder wiederum über das Icon in der Werkzeugleiste.
+Sie können zum <idx/Designer/ entweder durch die Auswahl "Dialog Editor" im "<idx/Ansicht/"-Menü oder durch das entsprechende
+Werkzeugleisten-Icon umschalten. Wenn Sie fertig sind, schließen Sie einfach das Designer-Fenster.
 
-Wie hilft Ihnen das Interface des Dialogeditors noch? Hauptsächlich dadurch, daß sein Erscheinungsbild fast vollständig dem des Projekteditors entspricht, dies ermöglicht eine 
-sehr kurze Eingewöhnungszeit und da er vollständig mit der Projektverwaltung interagiert, können Sie im Dialogeditor bleiben, wenn Sie den Erstellungsprozeß kontrollieren 
-wollen. Aktionen die einen Wechsel zu KDevelop erfordern, tun dies automatisch, wie zum Beispiel der Zugriff auf den Dokumentationsbrowser. Wählen Sie einfach ein 
-Menükommando, und KDevelop reagiert entsprechend.
+Die folgenden Abschnitte geben Ihnen einen Überblick über  das Interface des <idx/Designers/, wie Sie einen neuen Dialog erstmals
+erstellen und wie Sie die Eigenschaften der Fensterelemente ihres Dialoges einstellen sollten. Sie sollten sich hierzu noch
+<htmlurl url="http://doc.trolltech.com/designer/book1.html" name="Designer tutorial von Trolltech">  ansehen, welches
+ebenfalls offline im Dokumentations-Browser von KDevelop vorhanden ist.
 
-Die folgenden Kapitel geben eine Übersicht über das Dialogeditorinterface, darüber wie ein neuer Dialog erzeugt wird und wie man die Eigenschaften der Kind-Widgets, die Ihr 
-Dialog enthält, einstellt.
-
-<sect>Das Aussehen des Dialogeditors
+<sect>Erstellen eines neuen Dialoges mit dem Designer
 <p>
-<sect1>Die Hauptansicht
+Wenn Sie einen neuen Dialog erstellen wollen, fügen Sie einfach eine neue Designer-Datei hinzu. Verwenden Sie hierzu aus der
+Menüleiste Datei -> Neu. In der Auswahlbox wählen Sie hierzu "QT Designer Datei" und geben einen Namen ein, z.B. ktestdlg.ui.
+Die.ui-Datei ist der Ort, in welchem der Designer die Informationen über den Dialog abspeichert. Jetzt startet der Designer und
+fragt Sie, welche Schablone Sie für Ihre Klasse verwenden wollen. Für dieses Beispiel wählen wir "QDialog". Der Designer zeigt
+Ihnen nun ein leeres Formular, benannt "Form1" und den <idx/Property Editor/. Zuerst geben wir unserem Dialog einen lesbaren
+Namen, daher klicken wir auf den Hintergrund des Formulars und geben den Namen im "name" Eigenschaftsfeld statt "Form1" ein. Aus
+Gründen der Konsistenz sollte man die Klasse so benennen, wie die Datei in der sie gespeichert ist (oder umgekehrt), daher nennen
+wir es KTestDlg.
+Um mit dem Designer vertraut zu werden, empfehlen wir das <htmlurl url="http://doc.trolltech.com/designer/book1.html"
+name="Designer handbook"> zu lesen. Es enthält wichtige Informationen über die Benutzung der Designer Oberfläche und den Konzepten
+hinter Signals und Slots, wie sie im Designer verwendet werden.
+
+<sect1>Exkursion: Wie aus ui Dateien Quellcode wird
 <p>
-Die Haupansicht des Dialogeditors ist logisch unterteilt in:
-<itemize>
-<item>Den Widget Tabulator, der die "Widgets", "Dialoge" und "Elemente" Tabs enthält. Beschreibungen finden Sie unter 
-<ref id="Widgets hinzufügen" name="Widgets hinzufügen">.
-<item>Den Widget-Editor, der die Editieransicht zur Erstellungen Ihrer Dialoge representiert. Siehe <ref id="Der Widget Editor" name="Der Widget Editor">.
-<item>Das Eigenschaften-Fenster, das eine Liste der Eigenschaften und ihrer Werte in Abhängigkeit vom zur Zeit gewählten Widget enthält.. 
-Lesen Sie <ref id="Eigenschaften einstellen" name="Eigenschaften einstellen"> um Informationen zum Einstellen des Widgetaussehens und -verhaltens zu erhalten.
-</itemize>
+Der Designer speichert die Dialog-Klassen in einem XML-kompatiblen Format. Wie bekommen wir also eine C++-Datei aus einer
+Designer-Datei ? Antwort: KDevelop kümmert sich darum ! Es fügt die .ui Datei dem Makefile hinzu, welches dann dafür sorgt. daß
+eine Header- und eine Quellcode-Datei beim Kompilieren erstellt wird. Daher können Sie sie einfach verwenden, ohne sich
+wirklich um den Quellcode kümmern zu müssen.
 
-<sect1>Unterschiede zur Menüleiste, Werkzeugleiste und Statusleiste von KDevelop
+Da die Dateien bei jedem Kompiliervorgang neu erstellt werden, können Sie Ihren Code nicht direkt in den generierten Dateien
+implementieren, sondern müssen davon ableiten. Lesen Sie den nächsten Abschnitt um zu lernen, wie das funktioniert.
+
+
+<sect>Verwenden des neuen Dialoges in KDevelop
 <p>
-Im Dialogeditormodus ändert KDevelop die Menüleiste, Werkzeugleiste und Statusleiste leicht ab, um die Funktionalität, die Sie zum Erstellen von Widgets benötigen, 
-bereitzustellen:
+Als Nächstes erstellen wir eine Klasse in KDevelop, welche von der Klasse, die wir mit dem Designer erstellt haben, abgeleitet
+ist. Aus dem  "Projekt"-Menü wählen Sie "Neue Klasse". Geben Sie "KTest" als Klassenname an. Wir leiten von KTestDlg ab, geben Sie
+"KTestDlg" in "Basisklasse" ein. Da QDiallog (die Basisklasse Ihres Dialogs) von QWidget abgeleitet ist, müssen Sie noch
+"QWidget-Childklasse erzeugen" auswählen. Dies sind alle Informationen, die KDevelop benötigt. Wenn Sie "OK" auswählen, erstellt
+KDevelop zwei Dateien, "ktest.cpp" und "ktest.h", welche die "KTest"-Klasse beinhaltet, wie von "KTestDlg" abgeleitet ist.
+Beachten Sie, daß die "#include"-Anweisung für "ktestdlg.h" bereits durch KDevelop eingefügt wurde. Nun können Sie all Ihre
+Funktionen implementieren und die Klasse innerhalb Ihres Projektes verwenden.
 
-<sect2>Menüleiste
+<sect>Umgang mit virtuellen Slots
 <p>
-<bf/<idx/"Datei"-Menü/:/ "Öffnen" ermöglicht das Öffnen einer Dialogdefinitionsdatei.
+Wenn Sie virtuelle Slots neu implementieren wollen, benutzen Sie das Menü auf der rechten Maustaste und wählen Sie "Slot
+hinzufügen" oder benutzen Sie den Klassen-Generator rechts von der Methoden-Auswahlbox in der Werkzeugleiste von KDevelop.
 
-<bf/"Ansicht"-Menü:/ Ersetzt "Baumansicht" durch "Widgetsansicht", ermöglicht ein/auschalten der Widgets Tabulatoren; fügt die "Eigenschaften-Ansicht" hinzu und ermöglicht
-ein/auschalten dieser Ansicht; fügt "Gitter" hinzu, damit Sie die Gittergröße in horizontalen und vertikalen Pixeln angeben können.
+Beachte: Rufen Sie NICHT die zu Grunde liegende, virtuelle Funktion (z.B. KTestDlg::slotCancel()) in der überschreibenden Methode
+auf !
 
-<bf/"Erstellen"-Menü:/ Ersetzt "Datei kompilieren" durch  "Quellen erzeugen". Dies ermöglicht das Erzeugen der Quellen für Ihren Dialog.
-
-<sect2>Werkzeugleiste
-<p>
-Die Werkzeugleiste enthält ein neues Icon für "Neuen Dialog" sowie eine Ersetzung von "Datei kompilieren" durch  "Quellen erzeugen".
-
-<sect2>Statusleiste
-<p>
-Die Statusleiste stellt Informationen über das aktuell gewählte Widget zur Verfügung, insbesondere eine Anzeige der X und Y Werte im Koordinatensystem. Hilfe zur 
-Statusleiste steht in gleicher Weise wie im Projekt-Editiermodus zur Verfügung.
-
-Während Sie die Widgetgröße ändern, zeigt die Statusleiste immer die aktuelle Höhe und Breite des gewählten Widgets an.
-
-<sect>Erzeugen eines neuen Dialoges
-<p>
-Nachdem Sie Ihr Projektgerüst erstellt haben, haben Sie eine lauffähige Anwendung gemäß Ihrer Voreinstellungen. Da KDevelop die Projekttypen KDE und QT zur Verfügung 
-stellt, erkennt der Dialog Editor dies und bietet <em/die/ Widgets an, die in der verwendeten Bibliothek vorhanden sind. Um Zeit zu sparen, sollten Sie bereits ein Design 
-im Kopf haben, das die beabsichtigten Aktionen ermöglicht. Lesen Sie zum Widget Design auch das <htmlurl url="programming/index-6.html" name="KDevelop Programming Handbook">.
-
-Zum Erzeugen eines neuen Dialogs, wählen Sie "Neu" aus dem "Datei"-Menü oder wählen Sie "Neu" aus dem Kontextmenü im
-"Dialoge"-Tab. Der "neue Datei" Dialog, in dem Sie das Element Qt/KDE Dialog(*.kdevdlg) wählen können, erscheint. Geben Sie den
-Dateinamen für Ihren Dialog ein. In dieser Datei wird Ihr Layout gespeichert. Dann drücken Sie OK und Ihr neuer Dialog erscheint.
-Wenn Sie den Dialog fertig bearbeitet haben, wählen Sie "Alle Quellen erzeugen" aus dem "Erstellen"-Menü. Der Dialog zur
-Erzeugung der Widgetquellen wird angezeigt. Dort müssen Sie KDevelop die nötigen Informationen zu Basisklasse, Quelldateinamen und
-Ziel geben.
-
-<sect1>Dialog Klasse
-<p>
-Die Dialog Klasse die Sie auswählen können, ist die Klasse, die Ihr neues Widget erbt, das technisch gesehen selbst durch eine Klasse repräsentiert wird.
-Sie haben die folgenden Möglichkeiten:
-<enum>
-<item><bf/QWidget:/ Die Basisklasse für alle interaktiven Widgets die von QT bereitgestellt werden. Verwendet für Hauptansichten und top-level Widgets.
-<item><bf/QFrame:/ Erbt QWidget und wird für viele Widgets als Basisklasse verwendet. Sie ist sinnvoll für Widgets, die zusätzlich zu den QWidget Methoden eine QFrame 
-Funktionalität aufweisen sollen.
-<item><bf/Eigene:/ Erbt eine eigene Klasse die in "Eigene Eigenschaften" angegeben werden muß. Dies könnte eine schon erstellte Klasse Ihres Projektes oder aus den 
-Bibliotheken sein.
-<item><bf/QDialog:/ Die Basisklasse für Dialoge die Sie für Benutzerinteraktion verwenden würden, wie Einstellen von Eigenschaften oder Ändern von Werten.
-<item><bf/QTabDialog:/ Erbt QDialog und stellt einen Dialog mit vordefinierten Knöpfen und Tabs zu Verfügung, den Sie über die Widgets, die Sie erzeugen, anbieten.
-</enum>
-
-<bf/Eigene Eigenschaften/
-
-Für die Vererbung einer eigenen Klasse, wie im Dialog Klassen Feld ausgewählt, müssen Sie einen Klassennamen unter "Eigene Klasse" angeben. Der Dialogeditor verwendet 
-diesen Namen für die Codeerzeugung, deshalb müssen Sie ebenfalls das Feld "Eigene Header" mit dem Namen der Headerdatei der Klasse ausfüllen.
-
-<sect1>Dateien
-<p>
-Im "Dateien" Abschnitt müssen Sie die spezifischen Informationen für das Widget eingeben. Dies sind der Klassenname (z.B. KColorSelectDlg für einen Dialog, der die Farbe 
-für einen Stift wählt), die Header, C++ und die Data Dateinamen. Wenn Sie den Klassennamen eingeben, werden die Dateinamen automatisch eingetragen, Sie können diese 
-Namen jedoch natürlich auch ändern.
-
-Nun, was ist mit den Dateien? Wenn Sie mit der visuellen Konstruktion des Widgets fertig sind, müssen Sie die Dateien erzeugen, die die Implementation Ihres Widgets enthalten. 
-Da dies eine Klasse sein wird, ist der Dialog existent, sobald eine Headerdatei mit der entsprechenden Klassendeklaration existiert, eine C++ Datei, welche die Methoden und 
-Slots Ihres Widgets implementiert. Die Data Datei enthält eine Funktion <em/initDialog()/, die vom Konstruktor Ihres Widgets aufgerufen wird. Diese Datei sollte nicht verändert 
-werden, da sie den vom Dialogeditor erzeugten Code enthält, um Ihr Widget auf dem Bildschirm anzuzeigen. Wenn Sie jemals Werte ändern müssen, sollten Sie dies im 
-Konstruktor tun oder Sie müssen sich sicher sein, daß der Dialog nicht mehr geändert wird, da die Data Datei jedesmal überschrieben wird, wenn der Code für Ihr Widget neu erzeugt 
-wird. Die Header- und C++ Dateien enthalten Abschnitte, in die der Dialogeditor hineinschreibt; diese Abschnitte sind durch Kommentare gekennzeichnet. Nach der 
-Dateierstellung können Sie beliebige Werte und Einstellungen außerhalb dieser Abschnitte ändern; andernfalls verlieren Sie Ihre Änderungen bei der nächsten Coderzeugung.
-
-<sect1>Zielpfad
-<p>
-Zur Erzeugung der Widget Quellen, muß der Dialogeditor wissen, wo diese Dateien erstellt werden sollen. Standardmäßig wird als Zielverzeichnis das aktuelle 
-Projekt-Unterverzeichnis, das auch die bereits existierenden Quellen enthält, gewählt.
-
-Nachdem Sie "OK" gedrückt haben, wird mit Ihren Standardwerten generiert, und es wird ein leerer Widgetkonstruktor geöffnet. Sie können dann sofort Ihr eigenes Widget 
-erstellen. Denken Sie daran, daß der Dialogeditor zur Zeit nur statische Widgets ohne Geometriemanagment unterstützt. Sollten Sie dies für Ihr Widget benötigen, müssen Sie 
-sich mit den Klassen vertraut machen, die QT hierfür bereitstellt, eine neue Klasse mit dem Klassengenerator erzeugen und Ihr Widget von Hand schreiben. Weitere 
-Informationen erhalten Sie im <htmlurl url="programming/index.html" name="KDevelop Programming Handbook">.
-
-<sect>Widgets hinzufügen<label id="Widgets hinzufügen">
-<p>
-Nach der Angabe der Dialog oder Widget Klassen- und Dateinamen, sind Sie nun bereit Ihr Widget zu erstellen und es mit Inhalt zu füllen. Das Hinzufügen von 
-low-level Widgets ist sehr einfach. Wählen Sie einfach das Widget, das Sie hinzufügen wollen aus dem Widget Tabulator durch einfaches Anklicken aus. Das Widget wird 
-in der linken, oberen Ecke des aktuell gewählten Hauptwidgets abgelegt. Ein hinzugefügtes Widget erhält eine Standardgröße von 100x30 Pixeln. Zum Bewegen, aktivieren Sie 
-den Zeichenrahmen des Widgets durch einfaches Anklicken. Der Rahmen wird dunkelgrau dargestellt und enthält Zugpunkte an jeder Ecke und in der Mitte jeder Kante. Ein 
-Kreuz-Cursor zeigt an, daß das Widget bewegt werden kann. Zum Bewegen, halten Sie die Maustaste im Rahmen gedrückt und bewegen Sie den Rahmen zur gewünschten 
-Stelle.
-
-Zur Größenänderung, aktivieren Sie den Rahmen und ziehen das Widget an den Zugpunkten auf die gewünschte Größe. Klicken Sie dazu den Zugpunkt mit der rechten 
-Maustaste an. Ein Doppelpfeil zeigt Ihnen jeweils die mögliche Richtung an.
-
-Weiterhin enthält der Widgeteditor eine ganze Reihe von Kontextmenüs, die Ihnen bei der Arbeit helfen. Sie sind für jedes Element im Widgettabulator erhältlich und zeigen 
-jeweils den Klassennamen des Widgets und eine kurze Beschreibung.
-Über einem ausgewählten Widget im Widgeteditor, zeigt das Kontextmenü den Klassennamen und bietet folgende Möglichkeiten:
-
-<itemize>
-<item>Nach vorne
-<item>Nach hinten
-<item>Ganz nach vorne
-<item>Ganz nach hinten
-<item>Ausschneiden
-<item>Löschen
-<item>Kopieren
-<item>Einfügen
-<item>Hilfe
-</itemize>
-
-Nachdem Sie Größe und Position eingestellt haben, können Sie die Voreinstellungen im Einstellungen-Fenster editieren.
-
-<sect1>Der Widget Tabulator
-<p>
-Der Widget Tab präsentiert die verfügbaren Widgets, die Sie auf dem Dialog plazieren können. Wenn Sie Information zu einem bestimmten Widget erhalten wollen, 
-drücken Sie die rechte Maustaste über dem Widget Icon und wählen Sie Schnellhilfe. Denken Sie daran, daß der Dialogeditor automatisch erkennt, ob Sie ein 
-nur-Qt oder KDE Projekt erzeugt haben. Dies verhindert die Verwendung von KDE Widgets in einer reinen Qt Anwendung.
-
-Nachdem Sie ein Widget ausgewählt haben, wird es mit Standardgrößen und -werten auf dem Editorfenster abgelegt und mit einem Rahmen als gewählt markiert. Zur 
-Größenänderung, aktivieren Sie den Rahmen und ziehen das Widget an den Zugpunkten auf die gewünschte Größe. Klicken Sie dazu den Zugpunkt mit der rechten 
-Maustaste an und halten Sie die Taste gedrückt. Ein Doppelpfeil zeigt Ihnen jeweils die mögliche Richtung an. Während Sie die Größe ändern, werden die aktuellen 
-X und Y Werte der Position in der Statusleiste angezeigt.
-
-<sect1>Der Dialoge Tabulator
-<p>
-Der Dialoge Tabulator dient dazu, die Dialoge Ihres Projektes mit einem Mausklick zu öffnen. Da die Struktur der Dialoge in einer *.kdevdlg Datei im gleichen Verzeichnis, das 
-auch die erzeugten Dateien enthält, gespeichert ist, werden nur die Dialogdefinitionsdateien angezeigt. Achten Sie auch darauf, diese Dateien nicht zu löschen.
-
-Bei Auswahl eines Dialoges, wird der Zustand angezeigt, in dem er zuletzt im Widgeteditor gespeichert wurde.
-
-<sect1>Der Elemente Tabulator
-<p>
-Der Elemente Tabulator gibt Ihnen eine hierarchische Übersicht über die zur Zeit im Dialog vorhandenen Widgets. Das bedeutet, daß, da der Hintergrund den Vater aller 
-Widgets im Dialog repräsentiert, er am Kopf des Baumes angezeigt wird. Die Kinder des Hauptdialoges werden dann in der nächsten Baumebene angezeigt.
-
-Durch Auswahl eines Elementes wird es im Editorfenster markiert und seine Eigenschaften werden im Widgeteigenschaftenfenster angezeigt. Die Verwendung der 
-Elementeansicht ist manchmal wichtig, wenn das Verhalten eines Widgets von der Eltern - Kind Beziehung abhängt. Weitere Informationen finden Sie im 
-<htmlurl url="programming/index-6.html" name="KDevelop Programming Handbook">.
-
-<sect>Der Widget Editor<label id="Der Widget Editor">
-<p>
-Der Widget Editor ist die Hauptansicht, die in der Mitte plaziert ist und in der Sie Ihre Widgets konstruieren. Nach dem Hinzufügen von Elementen, können sie ausgewählt, 
-in der Größe verändert sowie dorthin bewegt werden, wo Sie sie haben möchten. Für alle Elemente stehen Popupmenüs zur Verfügung, die schnellen Zugriff auf Funktionen 
-wie Ausschneiden, Kopieren und Einfügen ermöglichen.
-
-<sect>Eigenschaften einstellen<label id="Eigenschaften einstellen">
-<p>
-Das Fenster "Widgeteigenschaften" auf der rechten Seite ist der Ort, an dem Sie das Standardverhalten Ihres Widgets und seiner Elemente einstellen. Es zeigt die 
-voreingestelllten Werte für jedes ausgewählte Element sofort an; ändern der Werte ruft sofort Änderungen in der Editoransicht hervor, z.B. das Benennen von Labeln oder 
-Knöpfen.
-
-Zur Trennung bestimmter Werte nach ihrem Effekt, enthält das Eigenschaftenfenster vier Ordner; die Auswahl eines Ordners zeigt alle Werte für diese Gruppe von 
-Einstellungen. Die möglichen Werte werden weiter unten beschrieben. Denken Sie daran, daß die möglichen Eigenschaften vom Widget abhängen, so haben z.B. Label und 
-Knöpfe eine Einstellungen für ihren Namen auf dem Bildschirm, während Zeilentextfelder Einstellungen für Methoden wie <em/setText()/ besitzen.
-
-Für eine komplette Liste der möglichen Werte pro Element, sollten Sie sich die Klassenreferenz des Widgets ansehen, in der erklärt wird, welche Methoden verwendet 
-werden und welche Werte möglich sind. Machen Sie sich klar, daß die meisten Werte in QWidget implementiert sind und von allen erbenden Widgets verwendet werden. 
-Denken Sie außerdem daran, daß der fertige Code keine Methodenaufrufe enthält, die nicht vom Benutzer verändert werden und benutzen Sie deshalb die Standardwerte, wie 
-sie von den Konstruktoren vorgegeben werden.
-
-Eine vollständige Liste der unterstützten Eigenschaften, die im Eigenschaftenfenster eingestellt werden können, finden Sie im 
-<htmlurl url="programming/index-6.html" name="KDevelop Programming Handbook">.
-
-<sect>Dateien erzeugen
-<p>
-Nachdem Sie ein Widget erzeugt haben, müssen Sie den Sourcecode erstellen, damit Sie es in Ihrem Projekt verwenden können. Dies wird entweder durch Wahl von 
-"Quellen erzeugen" aus dem "Erstellen"-Menü oder mit Hilfe des entsprechenden Icons in der Dialogeditor-Werkzeugleiste erreicht. Die Makedateien werden automatisch 
-aktualisiert, damit das neue Widget beim Kompilieren berücksichtigt wird. Daher können Sie nach dem Aufruf von "Quellen erzeugen", das Projekt aus dem Dialogeditor heraus 
-neu erstellen. Das Ausgabefenster erscheint, wie im Projekteditormodus, unterhalb des Widgeteditors.
-
-Jetzt, da Ihr Projekt ein neues Widget enthält, ist es Ihre Aufgabe als Programmierer, den verwendeten Slots Funktionalität zu implementieren und wenn nötig weitere Methoden, 
-die Sie benötigen mögen, hinzuzufügen.
-
-Informationen zur Implementation der Widgetfunktionen erhalten Sie im <htmlurl url="programming/index-6.html" name="KDevelop Programming Handbook">.
 
 <chapt>Der interne Debugger<label id="Der interne Debugger">
 <sect>Einstellungen
 <p>
 
-Standardmäßig verwendet KDevelop den internen Debugger. Dies kann unter "Einstellungen" geändert werden. Wählen Sie 
+Standardmäßig verwendet KDevelop den internen Debugger. Dies kann unter "Einstellungen" geändert werden. Wählen Sie
 "KDevelop setup" und dann "Debugger" .
 
-Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben 
+Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben
 Sie den Namen des externen Debuggers ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
 
 Bei Auswahl des internen Debuggers erhalten Sie eine Anzahl zusätzlicher Optionen aus denen Sie auswählen können:
 <p>
 <itemize>
-<item>Zeige static members: Die Anzeige von statischen Elementen verlangsamt gdb bei der Datenenerzeugung in kde und qt. Die 
-"Signatur" der Daten auf die sich QString und friend-Funktionen verlassen, könnte verändert werden. Wenn Sie jedoch diese Werte 
+<item>Zeige static members: Die Anzeige von statischen Elementen verlangsamt gdb bei der Datenenerzeugung in kde und qt. Die
+"Signatur" der Daten auf die sich QString und friend-Funktionen verlassen, könnte verändert werden. Wenn Sie jedoch diese Werte
 debuggen müssen, markieren Sie die Option
-<item>Zeige Teil-Namen an: Bei der Anzeige von disassembliertem Code können Sie sich Teil-Namen der Methoden anzeigen lassen. 
+<item>Zeige Teil-Namen an: Bei der Anzeige von disassembliertem Code können Sie sich Teil-Namen der Methoden anzeigen lassen.
 Vollständige Namen sind jedoch einfacher zu lesen.
 <item>BPs beim Laden von Bibliotheken setzen: Hiermit wird versucht "schwebende" Breakpoints beim Laden von Bibliotheken zu
 setzen. Wenn GDB eine Bibliothek die mittels "dlopen" geladen werden soll noch nicht kennt, weigert er sich Unterbrechungen in 
@@ -3725,26 +3642,37 @@ make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
 `/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/KDevelop_actual_snapshot/kdevelop-0.3'
 make: *** [all-recursive-am] Error 2
 </verb></tscreen>
-<bf>A:</bf> Wenn Sie die SuSE rpm´s von KDE-1.1 haben, müssen Sie die kdelibs ohne den Patch von SuSE rekompilieren und sie 
+<bf>A:</bf> Wenn Sie die SuSE rpm´s von KDE-1.1 haben, müssen Sie die kdelibs ohne den Patch von SuSE rekompilieren und sie
 erneut installieren oder Sie besorgen sich ein aktuelleres rpm der kdelibs von <htmlurl url="ftp://ftp.suse.com" name="ftp://ftp.suse.com">
+
+<bf>F:</bf> Configure meldet, daß die QT-Version nicht zwischen 1.44 und 2.00 liegt
+
+<bf>A:</bf> Sie haben wahrscheinlich QT 2.xx auf Ihrem System installiert und das verwirrt configure. Um KDevelop zu kompilieren
+sollten Sie QRDIR auf das korrekte Verzeichnis stellen.
+
+<bf>F:</bf> Configure meldet, eine winzige KDE-Anwendung könne nicht kompiliert werden. Eine Untersuchung von config.log ergab,
+das die Bibliothek libXext nicht gefunden wurde.
+
+<bf>A:</bf> Installieren Sie das Paket xdevel
+
 
 <sect>Fragen zur Verwendung
 <p>
 <bf>F:</bf> KDevelop erlaubt mir nicht die Verwendung  der Entfernen Taste (oder das Löschen von markiertem Text mit Rückschritt).
 
-<bf>A:</bf>  Verwenden Sie "Einstellungen"->"Editor" und schalten Sie "Beim Eingeben löschen" ein, dann funktionieren Backspace 
+<bf>A:</bf>  Verwenden Sie "Einstellungen"->"Editor" und schalten Sie "Beim Eingeben löschen" ein, dann funktionieren Backspace
 und Entfernen.
 
 
 <bf>F:</bf> Werden Dateien automatisch hinzugefügt und kompiliert, wenn ich sie einem Projekt hinzufüge?
 
-<bf>A:</bf> Ja, sie werden in Makefile.am eingetragen und wenn Sie "Alles neu erstellen" wählen dem Projekt hinzugefügt (./configure 
+<bf>A:</bf> Ja, sie werden in Makefile.am eingetragen und wenn Sie "Alles neu erstellen" wählen dem Projekt hinzugefügt (./configure
 aktualisiert die Makedateien).
 
 <bf>F:</bf> Nachdem ich eine Datei entfernt habe, bekomme ich seltsame Linker Meldungen. Was ist falsch an meinem Projekt?
 
-<bf>A:</bf> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der 
-automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte 
+<bf>A:</bf> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der
+automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte
 *.moc.cpp Datei vorhanden und kompiliert. Entfernen Sie die entsprechende *.moc.cpp Datei und erstellen Sie Ihr Projekt neu.
 
 <bf>F:</bf> Configure beschwert sich darüber, daß es eine kleine KDE Anwendung nicht ausführen kann. Eine Untersuchung der
@@ -3776,6 +3704,48 @@ chmod 755 kdevelop1
 
 Sie können nun KDevelop 1.x unter KDE 2 ausführen, indem Sie kdevelop1 aufrufen. Zum Erstellen von KDE 2 Anwendungen mit KDevelop
 1.x, müssen Sie den korrekten Pfad im KDevelop-Setup eingeben, auch wenn Sie KDevelop unter KDE 2 ausführen !
+
+<bf>F:</bf> Ich verwende eine KDevelop 1.4 Version welches bereits KDE2 verwendet. Hier ist kein Dialog Editor mehr vorhanden, wie
+kann ich meine Dialoge erstellen ?
+
+<bf>A:</bf> Seit KDevelop 1.4 wird der QT Designer zur Erstellung von Dialogen verwendet. Aber nicht nur das Wekzeug hat sich
+geändert, sondern auch die Art wie Dialoge in KDevelop designed und verwendet werden. Um einen neuen Dialog zu erstellen verwenden
+Sie Neu aus dem Datei-Menü und erstellen Sie eine neue QT designer (*.ui) Datei. Nun wird der QT Designer geöffnet und Sie können
+Ihren Dialog entwickeln. ACHTUNG: viele QT-Pakete (*.deb,*.rpm) sind ohne Unterstützung von KDE-Elementen kompiliert. Sie
+benötigen diese Unterstützung um z.B. KListView oder andere KDE-Elemente in Ihren Dialogen verwenden zu können. Nach dem Erstellen
+Ihres Dialoges verwenden Sie eine hiervon abgeleitete Klasse.
+
+<bf>F:</bf> Ich habe die QT-2.2.x Pakete von ftp.jde.org und ich kann keine KDE-Elemente im Designer verwenden. Wie kann ich die
+bekommen ?
+<bf>A:</bf> Sie müssen QT mit ./configure -kde als zusätzliche Option neu kompilieren. Vergessen Sie nicht, $KDEDIR und $QTDIR auf
+die entsprechenden Verzeichnisse zeigen zu lassen. Danach gibt es im Designer eine neue Option KDE im tools-Menü.
+
+<bf>F:</bf> Ich verwende RedHat Linux mit KDevelop und have versucht, die QT-Bibliothek mit -kde neu zu kompilieren um den
+Designer mit KDE-Elementen verwenden zu können aber configure sagt $KDEDIR enthielte keine gültige KDE-Installation ?
+
+<bf>A:</bf> RedHat verwendet eine nicht standard-konforme Verzeichnisaufteilung. Der Normalfall wäre, daß die Bibliotheken in
+$KDEDIR/libs, ausführbare Dateien in §KDEDIR/bin und Include-Dateien in $KDEDIR/include stehen. RedHat verwendet /usr als $KDEDIR
+aber $KDEDIR/include/kde als Verzeichnis für Include-Dateien. Daher kann configure von QT die korrekten Verzeichnisse nicht
+ermitteln. Es versucht dcopserver im Verzeichnis der ausführbaren Dateien und die Include-Dateien im Include-Verzeichnis zu
+finden. Wenn Sie also /usr als $KDEDIR verwenden, kann configure die Include-Dateien nicht finden. Eine mögliche Lösung hierfür
+wäre es, ein Verzeichnis /usr/local/kde anzulegen und Symbolische Links nach /usr/bin und /usr/include/kde in diesem
+"Pseude"-KDE-Verzeichnis anzulegen. Dann exportieren Sie KDEDIR=/usr/local/kde und führen ein ./configure -kde aus. Nach der
+Neuerstellung haben Sie KDE-Einträge im tools-Menü ihres QT-Designers.
+
+<bf>F:</bf> Gibt es ein HOWTO darüber, wie man mit QT-Designer Dialogen arbeitet ?
+
+<bf>A:</bf> Ja, es gibt ein hervorragendes Tutorial auf http://women.kde.org/docs/tut_kdevelop/
+
+<bf>F:</bf> Ich habe htdig installiert aber es gibt kein htsearch ?
+
+<bf>A:</bf> Auf z.B. RedHat-Systemen wird htsearch direkt im /cgi-bin Verzeichnis von Apache abgelegt. Sie können einen
+Symbolischen Link in /usr/bin anlegen oder einfach den Pfad zu ~/.bashrc hinzufügen.
+
+<bf>F:</bf> Ich habe htdig, htmerge und htsearch, bekomme aber eine Fehlermeldung, daß die Konfigurationsdatei nicht gefunden
+wurde oder ungültig ist ?
+
+<bf>A:</bf> Lesen Sie die README.htdig Datei im Quellverzeichnis und erstellen sie eine htdig.conf-Datei. Dann kopieren Sie diese
+in $KDEDIR/share/apps/kdevelop/tools. Jetzt können SIe aus dem Setup-Menü von Kdevelop heraus den Suchindex erstellen.
 
 <chapt>Autoren
 <p>

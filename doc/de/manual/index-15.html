@@ -136,22 +136,29 @@ make: *** [all-recursive-am] Error 2
 </PRE>
 </CODE></BLOCKQUOTE>
 
-<B>A:</B> Wenn Sie die SuSE rpm´s von KDE-1.1 haben, müssen Sie die kdelibs ohne den Patch von SuSE rekompilieren und sie 
+<B>A:</B> Wenn Sie die SuSE rpm´s von KDE-1.1 haben, müssen Sie die kdelibs ohne den Patch von SuSE rekompilieren und sie
 erneut installieren oder Sie besorgen sich ein aktuelleres rpm der kdelibs von 
-<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P>
+<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P><B>F:</B> Configure meldet, daß die QT-Version nicht zwischen 1.44 und 2.00 liegt
+<P><B>A:</B> Sie haben wahrscheinlich QT 2.xx auf Ihrem System installiert und das verwirrt configure. Um KDevelop zu kompilieren
+sollten Sie QRDIR auf das korrekte Verzeichnis stellen.
+<P><B>F:</B> Configure meldet, eine winzige KDE-Anwendung könne nicht kompiliert werden. Eine Untersuchung von config.log ergab,
+das die Bibliothek libXext nicht gefunden wurde.
+<P><B>A:</B> Installieren Sie das Paket xdevel
+<P>
+<P>
 <H3><A NAME="ss15.4">15.4 Fragen zur Verwendung</A>
 </H3>
 
 <P><B>F:</B> KDevelop erlaubt mir nicht die Verwendung  der Entfernen Taste (oder das Löschen von markiertem Text mit Rückschritt).
-<P><B>A:</B>  Verwenden Sie "Einstellungen"->"Editor" und schalten Sie "Beim Eingeben löschen" ein, dann funktionieren Backspace 
+<P><B>A:</B>  Verwenden Sie "Einstellungen"->"Editor" und schalten Sie "Beim Eingeben löschen" ein, dann funktionieren Backspace
 und Entfernen.
 <P>
 <P><B>F:</B> Werden Dateien automatisch hinzugefügt und kompiliert, wenn ich sie einem Projekt hinzufüge?
-<P><B>A:</B> Ja, sie werden in Makefile.am eingetragen und wenn Sie "Alles neu erstellen" wählen dem Projekt hinzugefügt (./configure 
+<P><B>A:</B> Ja, sie werden in Makefile.am eingetragen und wenn Sie "Alles neu erstellen" wählen dem Projekt hinzugefügt (./configure
 aktualisiert die Makedateien).
 <P><B>F:</B> Nachdem ich eine Datei entfernt habe, bekomme ich seltsame Linker Meldungen. Was ist falsch an meinem Projekt?
-<P><B>A:</B> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der 
-automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte 
+<P><B>A:</B> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der
+automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte
 *.moc.cpp Datei vorhanden und kompiliert. Entfernen Sie die entsprechende *.moc.cpp Datei und erstellen Sie Ihr Projekt neu.
 <P><B>F:</B> Configure beschwert sich darüber, daß es eine kleine KDE Anwendung nicht ausführen kann. Eine Untersuchung der
 config.log zeigt, daß die Bibliothek libXext nicht gefunden wird.
@@ -175,6 +182,37 @@ exec /opt/kde/bin/kdevelop
 <P>chmod 755 kdevelop1
 <P>Sie können nun KDevelop 1.x unter KDE 2 ausführen, indem Sie kdevelop1 aufrufen. Zum Erstellen von KDE 2 Anwendungen mit KDevelop
 1.x, müssen Sie den korrekten Pfad im KDevelop-Setup eingeben, auch wenn Sie KDevelop unter KDE 2 ausführen !
+<P><B>F:</B> Ich verwende eine KDevelop 1.4 Version welches bereits KDE2 verwendet. Hier ist kein Dialog Editor mehr vorhanden, wie
+kann ich meine Dialoge erstellen ?
+<P><B>A:</B> Seit KDevelop 1.4 wird der QT Designer zur Erstellung von Dialogen verwendet. Aber nicht nur das Wekzeug hat sich
+geändert, sondern auch die Art wie Dialoge in KDevelop designed und verwendet werden. Um einen neuen Dialog zu erstellen verwenden
+Sie Neu aus dem Datei-Menü und erstellen Sie eine neue QT designer (*.ui) Datei. Nun wird der QT Designer geöffnet und Sie können
+Ihren Dialog entwickeln. ACHTUNG: viele QT-Pakete (*.deb,*.rpm) sind ohne Unterstützung von KDE-Elementen kompiliert. Sie
+benötigen diese Unterstützung um z.B. KListView oder andere KDE-Elemente in Ihren Dialogen verwenden zu können. Nach dem Erstellen
+Ihres Dialoges verwenden Sie eine hiervon abgeleitete Klasse.
+<P><B>F:</B> Ich habe die QT-2.2.x Pakete von ftp.jde.org und ich kann keine KDE-Elemente im Designer verwenden. Wie kann ich die
+bekommen ?
+<B>A:</B> Sie müssen QT mit ./configure -kde als zusätzliche Option neu kompilieren. Vergessen Sie nicht, $KDEDIR und $QTDIR auf
+die entsprechenden Verzeichnisse zeigen zu lassen. Danach gibt es im Designer eine neue Option KDE im tools-Menü.
+<P><B>F:</B> Ich verwende RedHat Linux mit KDevelop und have versucht, die QT-Bibliothek mit -kde neu zu kompilieren um den
+Designer mit KDE-Elementen verwenden zu können aber configure sagt $KDEDIR enthielte keine gültige KDE-Installation ?
+<P><B>A:</B> RedHat verwendet eine nicht standard-konforme Verzeichnisaufteilung. Der Normalfall wäre, daß die Bibliotheken in
+$KDEDIR/libs, ausführbare Dateien in §KDEDIR/bin und Include-Dateien in $KDEDIR/include stehen. RedHat verwendet /usr als $KDEDIR
+aber $KDEDIR/include/kde als Verzeichnis für Include-Dateien. Daher kann configure von QT die korrekten Verzeichnisse nicht
+ermitteln. Es versucht dcopserver im Verzeichnis der ausführbaren Dateien und die Include-Dateien im Include-Verzeichnis zu
+finden. Wenn Sie also /usr als $KDEDIR verwenden, kann configure die Include-Dateien nicht finden. Eine mögliche Lösung hierfür
+wäre es, ein Verzeichnis /usr/local/kde anzulegen und Symbolische Links nach /usr/bin und /usr/include/kde in diesem
+"Pseude"-KDE-Verzeichnis anzulegen. Dann exportieren Sie KDEDIR=/usr/local/kde und führen ein ./configure -kde aus. Nach der
+Neuerstellung haben Sie KDE-Einträge im tools-Menü ihres QT-Designers.
+<P><B>F:</B> Gibt es ein HOWTO darüber, wie man mit QT-Designer Dialogen arbeitet ?
+<P><B>A:</B> Ja, es gibt ein hervorragendes Tutorial auf http://women.kde.org/docs/tut_kdevelop/
+<P><B>F:</B> Ich habe htdig installiert aber es gibt kein htsearch ?
+<P><B>A:</B> Auf z.B. RedHat-Systemen wird htsearch direkt im /cgi-bin Verzeichnis von Apache abgelegt. Sie können einen
+Symbolischen Link in /usr/bin anlegen oder einfach den Pfad zu &nbsp;/.bashrc hinzufügen.
+<P><B>F:</B> Ich habe htdig, htmerge und htsearch, bekomme aber eine Fehlermeldung, daß die Konfigurationsdatei nicht gefunden
+wurde oder ungültig ist ?
+<P><B>A:</B> Lesen Sie die README.htdig Datei im Quellverzeichnis und erstellen sie eine htdig.conf-Datei. Dann kopieren Sie diese
+in $KDEDIR/share/apps/kdevelop/tools. Jetzt können SIe aus dem Setup-Menü von Kdevelop heraus den Suchindex erstellen.
 <P>
 <P ALIGN="RIGHT">
 

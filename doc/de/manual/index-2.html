@@ -33,9 +33,9 @@ von KDevelop sein wollen. Für gewöhnlich sind die Snapshots jedoch nicht zur Pro
 zum Einblick in den Entwicklungsfortschritt des KDevelop Teams. Außerdem bieten wir verschiedene Software von dritter Seite an, die von
 KDevelop benötigt werden wie KDoc und KDbg.
 <P>Wenn Sie Probleme mit der Compilierung oder Benutzung von KDevelop haben, lesen Sie bitte das Kapitel
-<A HREF="index-15.html#Fragen und Antworten">Fragen und Antworten</A> dieses Handbuchs oder die FAQ-Datei, die im KDevelop-Paket 
-enthalten ist. Sollte Ihr Problem nicht behandelt sein, tragen Sie sich in die KDevelop Mailingliste 
-<A HREF="mailto:kdevelop-request@barney.cs.uni-potsdam.de">kdevelop-request@barney.cs.uni-potsdam.de</A> ein, 
+<A HREF="index-15.html#Fragen und Antworten">Fragen und Antworten</A> dieses Handbuchs oder die FAQ-Datei, die im KDevelop-Paket
+enthalten ist. Sollte Ihr Problem nicht behandelt sein, tragen Sie sich in die KDevelop Mailingliste
+<A HREF="mailto:kdevelop-request@barney.cs.uni-potsdam.de">kdevelop-request@barney.cs.uni-potsdam.de</A> ein,
 indem Sie eine Email mit leerer Kopfzeile und "subscribe ihrer-email-addresse" als Inhalt an obige Adresse senden.
 Anfragen und Problemberichte sollten sich jedoch nur auf die Benutzung der KDevelop Entwicklungsumgebung beziehen und nicht auf ein
 Implementierungsproblem, das bei der Codierung Ihrer eigenen Applikation entstanden ist.
@@ -68,9 +68,9 @@ meisten Plattformen als Pakete enthalten sind und daher einfach zu installieren 
 <LI>flex 2.5.4,</LI>
 <LI>GNU gettext, erhältlich auf 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>Qt 1.42, erhältlich auf  
-<A HREF="http://www.troll.no">http://www.troll.no</A></LI>
-<LI>KDE 1.1.x, erhältlich auf 
+<LI>Qt 2.2.x, erhältlich auf 
+<A HREF="http://www.trolltech.com">http://www.trolltech.com</A></LI>
+<LI>KDE 2.1, erhältlich auf 
 <A HREF="http://www.kde.org">http://www.kde.org</A></LI>
 </UL>
 <P><B>Optional:</B>
@@ -86,14 +86,14 @@ meisten Plattformen als Pakete enthalten sind und daher einfach zu installieren 
 <A HREF="http://developer.kde.org">http://developer.kde.org</A>)</LI>
 <LI>KDbg, erhältlich auf 
 <A HREF="http://members.telecom.at/~johsixt/kdbg.html">http://members.telecom.at/~johsixt/kdbg.html</A></LI>
+<LI>Qt Designer and uic which come along with Qt 2.2.x.</LI>
 <LI>KIconEdit (erhältlich auf 
 <A HREF="http://www.kde.org">http://www.kde.org</A>)</LI>
 </UL>
-<P>KDevelop wurde getestet mit SuSE Linux 5.2 auf einem AMD K6 200 mit 64 MB RAM und FreeBSD 3.0-Release, SuSE Linux 6.0 auf Intel Pentium
-200 MMX, 128 MB Ram.
+<P>KDevelop wurde getestet mit SuSE Linux 7.0.
 <P>Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive enscript als Pakete oder
 RPM's, so daß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
-<P><B>Dokumentation:</B>        
+<P><B>Dokumentation:</B>
 <P>Um die KDE Bibliotheks-Dokumentation zu erstellen, benötigen Sie das kdelibs Paket im Quellcode, wie es vom KDE Projekt
 bereitgestellt wird oder in den Quellpaketen ihrer Distribution enthalten ist und <B>KDoc</B> (enthalten im KDE-SDK).
 <P>Zusätzlich bieten wir eine C/C++ Referenz auf unserer Homepage auf 
@@ -113,7 +113,7 @@ Sie das Paket erhalten können, und beschreibt den Installationsvorgang.
         % make
 
         (als root)
-        
+
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -129,7 +129,7 @@ Sie das Paket erhalten können, und beschreibt den Installationsvorgang.
         % make
 
         Wechseln Sie auf &lt;tt/root/ und geben Sie ein:
-        
+
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -153,7 +153,6 @@ KDE Dateimanager (kfm) auswählen.
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
-        
 % kdevelop  &lt;yourProject&gt;.kdevprj
 </PRE>
 </CODE></BLOCKQUOTE>
