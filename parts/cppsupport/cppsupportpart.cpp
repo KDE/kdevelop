@@ -12,6 +12,10 @@
  ***************************************************************************/
 
 #include "cppsupportpart.h"
+#include "problemreporter.h"
+#include "lexer.h"
+#include "parser.h"
+#include "driver.h"
 
 #include <qdir.h>
 #include <qdom.h>
@@ -89,6 +93,10 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(activePartChanged(KParts::Part*)));
 
+    m_problemReporter = new ProblemReporter( this );
+    topLevel( )->embedOutputView( m_problemReporter, i18n("Problems") );
+
+
     KAction *action;
 
     action = new KAction(i18n("Switch Header/Implementation"), Key_F12,
@@ -148,19 +156,21 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
             else
                 slotEnableCodeHinting( true, true );
         }
-    } 
+    }
 }
 
 
 CppSupportPart::~CppSupportPart()
 {
     topLevel( )->removeView( m_pCHWidget );
+    topLevel( )->removeView( m_problemReporter );
 
     delete m_pParser;
     delete m_pCompletion;
 
     delete m_pCCParser;
     delete m_pCHWidget;
+    delete m_problemReporter;
 }
 
 // daniel
@@ -192,7 +202,7 @@ void
 CppSupportPart::slotEnablePersistantClassStore( bool setEnable )
 {
     kdDebug( 9007 ) << "slotEnablePersistantClassStore setEnable = " << setEnable << endl;
-    
+
     QString pcsFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
 
     if( setEnable ){
@@ -246,7 +256,7 @@ void
 CppSupportPart::slotChangedPreParsingPath( )
 {
     kdDebug( 9007 ) << "slotChangedPreParsingPath" << endl;
-    
+
     // we just use this slot to avoid doubling of code
     slotEnablePreParsing( true );
 }
@@ -341,20 +351,20 @@ CppSupportPart::projectClosed( )
     if( enablePCS == true ){
 	QString pcsFile = project( )->projectDirectory( ) + "/" +
 	                  project( )->projectName( ) +
-	                  pcsFileExt( );	
+	                  pcsFileExt( );
 
-	// saving project classstore - code completion cs is automatically saved on creation time	
+	// saving project classstore - code completion cs is automatically saved on creation time
         if( !classStore( )->storeAll( pcsFile ) )
             kdDebug( 9007 ) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
 
     delete m_pParser;
-    delete m_pCCParser;    
+    delete m_pCCParser;
     delete m_pCompletion;
 
     m_pParser     = 0;
     m_pCCParser   = 0;
-    m_pCompletion = 0;        
+    m_pCompletion = 0;
 }
 
 
@@ -680,13 +690,13 @@ void CppSupportPart::addAttribute(const QString &className)
 QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 {
     QString str;
-    
+
     if( !pm->comment().isEmpty() ) {
         str += "\t/**\n\t";
         str += pm->comment().replace( QRegExp("\n"), "\n\t" );
         str += "\n\t*/\n";
     }
-        
+
     str += "\t";
 
     if (pm->isVirtual())
@@ -706,7 +716,7 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
         str += " = 0";
 
     str += ";\n";
-    
+
     return str;
 }
 
@@ -717,7 +727,7 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
         return QString();
 
     QString str = "\n";
-    
+
     if( !pm->comment().isEmpty() )
         str += "/**\n" + pm->comment() + "\n*/\n";
 
@@ -741,13 +751,13 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
 QString CppSupportPart::asHeaderCode(ParsedAttribute *pa)
 {
     QString str;
-    
+
     if( !pa->comment().isEmpty() ) {
         str += "\t/**\n\t";
         str += pa->comment().replace( QRegExp("\n"), "\n\t" );
         str += "\n\t*/\n";
     }
-        
+
     str += "\t";
 
     if (pa->isConst())
@@ -805,13 +815,13 @@ CppSupportPart::initialParse( )
 
     if( enablePP == true  )
 	bCreatePreParsePCS = !restorePreParsedClassStore( ccClassStore( ), pcsFile + ppFileExt( ) );
-    
+
     if( bCreateProjectPCS == true  )
 	createProjectPCS( pcsFile + pcsFileExt( ) );
 
     if( bCreatePreParsePCS == true )
         createPreParsePCS( pcsFile + ppFileExt( ) );
-	
+
     showMemUsage( );
 }
 
@@ -840,10 +850,10 @@ CppSupportPart::restorePreParsedClassStore( ClassStore* cs, const QString fileTo
 
     topLevel( )->statusBar( )->removeWidget( label );
     delete label;
-    
+
     kapp->restoreOverrideCursor( );
     topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
-    
+
     return success;
 }
 
@@ -878,15 +888,15 @@ CppSupportPart::parseProject( )
 
     kdDebug( 9007 ) << "updating sourceinfo" << endl;
     emit updatedSourceInfo( );
-    
+
     topLevel( )->statusBar( )->removeWidget( bar );
     delete bar;
     topLevel( )->statusBar( )->removeWidget( label );
     delete label;
 
     kapp->restoreOverrideCursor( );
-    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );    
-    
+    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+
     return true;
 }
 
@@ -896,16 +906,16 @@ CppSupportPart::createProjectPCS( const QString fileToSave )
 {
     if( !parseProject( ) )
 	return false;
-    
+
     topLevel( )->statusBar( )->message( i18n( "Saving Project File: %1" )
-                			.arg( fileToSave ) );    
+                			.arg( fileToSave ) );
     if( !classStore( )->storeAll( fileToSave ) ){
 	// KMessageBox for user ?
         kdDebug( 9007 ) << "failed saving file '" << fileToSave << "'" << endl;
     }
 
     topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
-    
+
     return true;
 }
 
@@ -936,7 +946,7 @@ CppSupportPart::createPreParsePCS( const QString fileToSave )
                          .namedItem( "cppsupportpart" ).toElement( )
                          .namedItem( "classstore" ).toElement( )
                          .namedItem( "preparsing" ).toElement( )
-                         .firstChild( ).toElement( );	
+                         .firstChild( ).toElement( );
 
     label->setText( i18n( "Preparsing" ) );
 
@@ -968,7 +978,7 @@ CppSupportPart::createPreParsePCS( const QString fileToSave )
 
     label->setText( i18n( "Saving File for CodeCompletion: %1" )
                     .arg( fileToSave ) );
-		    
+
     if( !ccClassStore( )->storeAll( fileToSave ) ) {
 	// KMessageBox for user ?
         kdDebug( 9007 ) << "failed saving file " << fileToSave << endl;
@@ -981,8 +991,8 @@ CppSupportPart::createPreParsePCS( const QString fileToSave )
 
     kapp->restoreOverrideCursor( );
     topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
-    
-    // could be overridden later if file operations fail    
+
+    // could be overridden later if file operations fail
     return true;
 }
 
@@ -1029,6 +1039,18 @@ CppSupportPart::parseDirectory( const QString &startDir, bool withSubDir,
     }
 
     label->setText( "" );
+}
+
+void CppSupportPart::parseContents( const QString& contents,
+                                    const QString& fileName )
+{
+    CppSupport::Driver driver;
+    CppSupport::Lexer lexer;
+    lexer.setSource( contents );
+
+    CppSupport::Parser parser( m_problemReporter, &driver, &lexer );
+    parser.setFileName( fileName );
+    parser.parseTranslationUnit();
 }
 
 #include "cppsupportpart.moc"

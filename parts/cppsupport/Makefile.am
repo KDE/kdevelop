@@ -23,9 +23,15 @@ libkdevcppsupport_la_SOURCES = cppsupportpart.cpp \
 			       cppcodecompletion.cpp \
 			       cppccparser.cpp \
 			       parsedvariable.cpp \
-			       scope.cpp\
+			       scope.cpp \
 			       simpleparser.cpp \
-			       kdevregexp.cpp
+			       kdevregexp.cpp \
+			       problemreporter.cpp \
+			       driver.cpp \
+			       errors.cpp \
+			       lexer.cpp \
+			       parser.cpp
+
 
 EXTRA_DIST = tokenizer.l tokenizer-cc.l
 DISTCLEANFILES = tokenizer.cpp

@@ -1,3 +1,6 @@
+2002-09-17 Roberto Raggi <raggi@cli.di.unipi.it>
+	* Added problem reporter to c++ support
+	
 2002-09-05 Harald Fernengel <harry@kdevelop.org>
 	* Added notification configuration dialog and notifications
 	  for finished processes (off by default)
