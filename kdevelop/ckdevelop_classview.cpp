@@ -576,6 +576,8 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
         aMethod = aContainer->getMethodByNameAndArg( itemName );
       if(!aMethod)
         aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+      if(!aMethod)
+        aMethod = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
@@ -634,8 +636,10 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
     case THPRIVATE_METHOD:
       if( aContainer != NULL )
         aAttr = aContainer->getMethodByNameAndArg( itemName );
-      if(!aAttr)
+      if(!aAttr && aContainer !=NULL)
         aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+      if(!aAttr && aContainer != NULL )
+        aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
@@ -777,7 +781,16 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
       methodCombo->insertItem(SmallIcon("CVprivate_slot"), str );
 
   }
+  for( aClass->signalIterator.toFirst();
+       aClass->signalIterator.current();
+       ++aClass->signalIterator )
+  {
+    aClass->signalIterator.current()->asString( str );
+    methodCombo->insertItem(SmallIcon("CVpublic_signal"), str );
+  }
+
   lb->sort();
+
 
   lb->setAutoUpdate( true );
 
