@@ -48,6 +48,7 @@
 #include "gdbparser.h"
 #include "debuggerconfigwidget.h"
 
+#include <iostream>
 
 typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
@@ -63,6 +64,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     statusBarIndicator = new QLabel(" ", topLevel()->statusBar());
     statusBarIndicator->setFixedWidth(15);
     topLevel()->statusBar()->addWidget(statusBarIndicator, 0, true);
+    statusBarIndicator->show();
     
     //
     // Setup widgets and dbgcontroller
@@ -151,46 +153,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "before this, or you can interrupt the program "
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
-
-    action = new KAction(i18n("Examine Core File"), "core", 0,
-                         this, SLOT(slotExamineCore()),
-                         actionCollection(), "debug_core");
-    action->setStatusText( i18n("Loads a core file into the debugger") );
-    action->setWhatsThis( i18n("Examine core file\n\n"
-                               "This loads a core file, which is typically created "
-                               "after the application has crashed e.g. with a "
-                               "segmentation fault. The core file contains an "
-                               "image of the program memory at the time it crashed, "
-                               "allowing you a post-mortem analysis.") );
-
-    action = new KAction(i18n("Attach to Process"), "connect_creating", 0,
-                         this, SLOT(slotAttachProcess()),
-                         actionCollection(), "debug_attach");
-    action->setStatusText( i18n("Attaches the debugger to a running process") );
-
-    action = new KAction(i18n("Sto&p"), "stop", 0,
-                         this, SLOT(slotStop()),
-                         actionCollection(), "debug_stop");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Kills the executable and exits the debugger") );
-
+    
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
     action->setEnabled(false);
     action->setStatusText( i18n("Interrupts the application") );
     
-    action = new KAction(i18n("&Continue"), "dbgrun", 0,
-                         this, SLOT(slotContinue()),
-                         actionCollection(), "debug_cont");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Continues the application execution") );
-    action->setWhatsThis( i18n("Continue application execution\n\n"
-                               "Continues the execution of your application in the "
-                               "debugger. This only has affect when the application "
-                               "has been halted by the debugger (i.e. a breakpoint has "
-                               "been activated or the interrupt was pressed).") );
-
     action = new KAction(i18n("Run to &Cursor"), "dbgrunto", 0,
                          this, SLOT(slotRunToCursor()),
                          actionCollection(), "debug_runtocursor");
@@ -249,6 +218,22 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setEnabled(false);
     action->setStatusText( i18n("Various views into the application") );
     
+    action = new KAction(i18n("Examine Core File"), "core", 0,
+                         this, SLOT(slotExamineCore()),
+                         actionCollection(), "debug_core");
+    action->setStatusText( i18n("Loads a core file into the debugger") );
+    action->setWhatsThis( i18n("Examine core file\n\n"
+                               "This loads a core file, which is typically created "
+                               "after the application has crashed e.g. with a "
+                               "segmentation fault. The core file contains an "
+                               "image of the program memory at the time it crashed, "
+                               "allowing you a post-mortem analysis.") );
+
+    action = new KAction(i18n("Attach to Process"), "connect_creating", 0,
+                         this, SLOT(slotAttachProcess()),
+                         actionCollection(), "debug_attach");
+    action->setStatusText( i18n("Attaches the debugger to a running process") );
+    
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( partController(), SIGNAL(loadedFile(const QString &)),
@@ -262,6 +247,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(stopButtonClicked()),
+             this, SLOT(slotStop()) );
+
+    setupController();
 }
 
 
@@ -380,6 +369,9 @@ void DebuggerPart::setupController()
              this,             SLOT(slotApplReceivedStdout(const char*)));
     connect( controller,       SIGNAL(ttyStderr(const char*)),
              this,             SLOT(slotApplReceivedStderr(const char*)));
+             
+    connect( controller,       SIGNAL(rawData(const QString&)),
+             this,             SLOT(slotRawData(const QString&)) );
 }
 
 
@@ -388,9 +380,17 @@ void DebuggerPart::startDebugger()
     core()->running(this, true);
 
     KActionCollection *ac = actionCollection();
-    ac->action("debug_stop")->setEnabled(true);
+    ac->action("debug_run")->setText( i18n("&Continue") );
+    ac->action("debug_run")->setIcon( "dbgrun" );
+    ac->action("debug_run")->setStatusText( i18n("Continues the application execution") );
+    ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
+                               "Continues the execution of your application in the "
+                               "debugger. This only has affect when the application "
+                               "has been halted by the debugger (i.e. a breakpoint has "
+                               "been activated or the interrupt was pressed).") );
+    ac->action("debug_core")->setEnabled(false);
+    ac->action("debug_attach")->setEnabled(false);
     ac->action("debug_pause")->setEnabled(true);
-    ac->action("debug_cont")->setEnabled(true);
     ac->action("debug_runtocursor")->setEnabled(true);
     ac->action("debug_stepover")->setEnabled(true);
     ac->action("debug_stepoverinst")->setEnabled(true);
@@ -410,7 +410,6 @@ void DebuggerPart::startDebugger()
         floatingToolBar->show();
     }
 
-    setupController();
     QString program;
     if (project())
         program = project()->projectDirectory() + "/" + project()->mainProgram();
@@ -418,24 +417,62 @@ void DebuggerPart::startDebugger()
     breakpointWidget->slotSetPendingBPs();
 }
 
+void DebuggerPart::stopDebugger()
+{
+    controller->slotStop();
+    debugger()->clearExecutionPoint();
+    
+    delete floatingToolBar;
+    floatingToolBar = 0;
+    
+    breakpointWidget->reset();
+    framestackWidget->clear();
+    variableWidget->clear();
+    disassembleWidget->clear();
+    disassembleWidget->slotActivate(false);
+    
+    variableWidget->setEnabled(false);
+    framestackWidget->setEnabled(false);
+    disassembleWidget->setEnabled(false);
+    
+    KActionCollection *ac = actionCollection();
+    ac->action("debug_run")->setText( i18n("&Start") );
+    ac->action("debug_run")->setIcon( "1rightarrow" );
+    ac->action("debug_run")->setStatusText( i18n("Runs the program in the debugger") );
+    ac->action("debug_run")->setWhatsThis( i18n("Start in debugger\n\n"
+                               "Starts the debugger with the project's main "
+                               "executable. You may set some breakpoints "
+                               "before this, or you can interrupt the program "
+                               "while it is running, in order to get information "
+                               "about variables, frame stack, and so on.") );
+    ac->action("debug_core")->setEnabled(true);
+    ac->action("debug_attach")->setEnabled(true);
+    ac->action("debug_pause")->setEnabled(false);
+    ac->action("debug_runtocursor")->setEnabled(false);
+    ac->action("debug_stepover")->setEnabled(false);
+    ac->action("debug_stepoverinst")->setEnabled(false);
+    ac->action("debug_stepinto")->setEnabled(false);
+    ac->action("debug_stepintoinst")->setEnabled(false);
+    ac->action("debug_stepout")->setEnabled(false);
+    ac->action("debug_memview")->setEnabled(false);
+    
+    core()->running(this, false);
+}
 
 void DebuggerPart::slotRun()
 {
-    if (controller)
-        slotStop();
-
-    topLevel()->statusBar()->message(i18n("Debugging program"), 1000);
-    
-    startDebugger();
+    if( controller->stateIsOn( s_dbgNotStarted ) ) {
+      topLevel()->statusBar()->message(i18n("Debugging program"), 1000);
+      startDebugger();
+    } else {
+      topLevel()->statusBar()->message(i18n("Continuing program"), 1000);
+    }
     controller->slotRun();
 }
 
 
 void DebuggerPart::slotExamineCore()
 {
-    if (controller)
-        slotStop();
-
     topLevel()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
 
     QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
@@ -452,9 +489,6 @@ void DebuggerPart::slotExamineCore()
 
 void DebuggerPart::slotAttachProcess()
 {
-    if (controller)
-        slotStop();
-
     topLevel()->statusBar()->message(i18n("Choose a process to attach to..."), 1000);
 
     Dbg_PS_Dialog dlg;
@@ -471,46 +505,14 @@ void DebuggerPart::slotAttachProcess()
 
 void DebuggerPart::slotStop()
 {
-    core()->running(this, false);
-
-    KActionCollection *ac = actionCollection();
-    ac->action("debug_stop")->setEnabled(false);
-    ac->action("debug_pause")->setEnabled(false);
-    ac->action("debug_cont")->setEnabled(false);
-    ac->action("debug_runtocursor")->setEnabled(false);
-    ac->action("debug_stepover")->setEnabled(false);
-    ac->action("debug_stepoverinst")->setEnabled(false);
-    ac->action("debug_stepinto")->setEnabled(false);
-    ac->action("debug_stepintoinst")->setEnabled(false);
-    ac->action("debug_stepout")->setEnabled(false);
-    ac->action("debug_memview")->setEnabled(false);
-
-    variableWidget->setEnabled(false);
-    framestackWidget->setEnabled(false);
-    disassembleWidget->setEnabled(false);
-
-    breakpointWidget->reset();
-    framestackWidget->clear();
-    variableWidget->clear();
-    disassembleWidget->clear();
-    disassembleWidget->slotActivate(false);
-
-    debugger()->clearExecutionPoint();
-    delete floatingToolBar;
-    floatingToolBar = 0;
-
+    if( !controller->stateIsOn( s_dbgNotStarted ) && !controller->stateIsOn( s_shuttingDown ) )
+        stopDebugger();
 }
 
 
 void DebuggerPart::slotPause()
 {
     controller->slotBreakInto();
-}
-
-
-void DebuggerPart::slotContinue()
-{
-    controller->slotRun();
 }
 
 
@@ -602,26 +604,24 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 void DebuggerPart::slotStatus(const QString &msg, int state)
 {
     QString stateIndicator("P");    // default to "paused"
-    
-    if (state & s_appBusy) {
+        
+    if (state & s_dbgNotStarted) {
+        stateIndicator = " ";
+    } else if (state & s_appBusy) {
         stateIndicator = "A";
         debugger()->clearExecutionPoint();
-    }
-    
-    if (state & (s_dbgNotStarted|s_appNotStarted))
-        stateIndicator = " ";
-    
-    if (state & s_programExited) {
+    } else if (state & s_programExited) {
         stateIndicator = "E";
-        debugger()->clearExecutionPoint();
+        slotStop();
     }
     
     // And now? :-)
-    kdDebug(9012) << "Debugger state: " << stateIndicator << endl;
+    kdDebug(9012) << "Debugger state: " << stateIndicator << ": " << endl;
+    kdDebug(9012) << "   " << msg << endl;
+    
     statusBarIndicator->setText(stateIndicator);
-
     if (!msg.isEmpty())
-        topLevel()->statusBar()->message(msg, 1000);
+        topLevel()->statusBar()->message(msg, 3000);
 }
 
 
@@ -647,6 +647,11 @@ void DebuggerPart::slotApplReceivedStdout(const char *buf)
 void DebuggerPart::slotApplReceivedStderr(const char *buf)
 {
     appFrontend()->insertStderrLine(QString::fromLatin1(buf));
+}
+
+void DebuggerPart::slotRawData( const QString& data )
+{
+    std::cout << data.local8Bit();
 }
 
 #include "debuggerpart.moc"

@@ -41,13 +41,9 @@
 #include <stdlib.h>
 using namespace std;
 
-#ifndef _NDEBUG
-#define DBG_MONITOR
-#endif
-
 #if defined(DBG_MONITOR)
   #define GDB_MONITOR
-  #define DBG_DISPLAY(X)          {kdDebug(9012) << QString(X) << endl;}
+  #define DBG_DISPLAY(X)          {emit rawData((QString("\n")+QString(X)));}
 #else
   #define DBG_DISPLAY(X)          {;}
 #endif
@@ -75,7 +71,7 @@ using namespace std;
 //              dependent on this reflecting the correct state. For instance,
 //              if the app is busy but we don't think so, then we lose control
 //              of the app. The only way to get out of these situations is to
-//              delete (stop) the controller.
+//              delete (stop) the controller.rawData
 // currentFrame_
 //            - Holds the frame number where and locals/variable information will
 //              go to
@@ -157,11 +153,11 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
       config_dbgShell_(),
       config_programArgs_()
 {
-    config_displayStaticMembers_  = DomUtil::readEntry(projectDom, "/kdevdebugger/display/staticmembers");
-    config_asmDemangle_           = !DomUtil::readEntry(projectDom, "/kdevdebugger/display/manglednames");
-    config_breakOnLoadingLibrary_ = DomUtil::readEntry(projectDom, "/kdevdebugger/general/breakonloadinglibs");
-    config_forceBPSet_            = DomUtil::readEntry(projectDom, "/kdevdebugger/general/allowforcedbpset");
-    config_dbgTerminal_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/separatetty");
+    config_displayStaticMembers_  = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/staticmembers", false);
+    config_asmDemangle_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/demanglenames", true);
+    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/breakonloadinglibs", false);
+    config_forceBPSet_            = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/allowforcedbpset", false);
+    config_dbgTerminal_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/separatetty", false);
     config_gdbPath_               = DomUtil::readEntry(projectDom, "/kdevdebugger/general/gdbpath");
     config_dbgShell_              = DomUtil::readEntry(projectDom, "/kdevdebugger/general/dbgshell");
     config_programArgs_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/programargs");
@@ -187,51 +183,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
 // shutdown.
 GDBController::~GDBController()
 {
-    setStateOn(s_shuttingDown);
-    destroyCmds();
-    
-    if (dbgProcess_) {
-        setStateOn(s_silent);
-        pauseApp();
-        setStateOn(s_waitTimer);
-        
-        QTimer *timer;
-        
-        timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(slotAbortTimedEvent()) );
-        
-        if (stateIsOn(s_attached)) { 
-            queueCmd(new GDBCommand("detach", NOTRUNCMD, NOTINFOCMD, DETACH));
-            timer->start(3000, TRUE);
-            DBG_DISPLAY("<attached wait>\n");
-            while (stateIsOn(s_waitTimer)) {
-                if (!stateIsOn(s_attached))
-                    break;
-                kapp->processEvents(20);
-            }
-        }
-        
-        setStateOn(s_waitTimer|s_appBusy);
-        const char *quit="quit\n";
-        dbgProcess_->writeStdin(quit, strlen(quit));
-        GDB_DISPLAY(quit)
-        timer->start(3000, TRUE);
-        DBG_DISPLAY("<quit wait>\n");
-        while (stateIsOn(s_waitTimer)) {
-            if (stateIsOn(s_programExited))
-                break;
-            kapp->processEvents(20);
-        }
-        
-        // We cannot wait forever.
-        if (stateIsOn(s_shuttingDown))
-            dbgProcess_->kill(SIGKILL);
-    }
-    
-    delete tty_; tty_ = 0;
     delete[] gdbOutput_;
-    
-    emit dbgStatus (i18n("Debugger stopped"), state_);
 }
 
 // **************************************************************************
@@ -239,13 +191,13 @@ GDBController::~GDBController()
 void GDBController::reConfig()
 {
     bool old_displayStatic        = config_displayStaticMembers_;
-    config_displayStaticMembers_  = DomUtil::readEntry(dom, "/kdevdebugger/display/staticmembers");
+    config_displayStaticMembers_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers");
     
     bool old_asmDemangle  = config_asmDemangle_;
-    config_asmDemangle_   = !DomUtil::readEntry(dom, "/kdevdebugger/display/manglednames");
+    config_asmDemangle_   = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames");
     
     bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-    config_breakOnLoadingLibrary_ = DomUtil::readEntry(dom, "/kdevdebugger/general/breakonloadinglibs");
+    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs");
     
     if (( old_displayStatic           != config_displayStaticMembers_   ||
           old_asmDemangle             != config_asmDemangle_            ||
@@ -437,7 +389,7 @@ void GDBController::actOnProgramPause(const QString &msg)
 // all other commands are disabled.
 void GDBController::programNoApp(const QString &msg, bool msgBox)
 {
-    state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
+    state_ = (s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown)));
     destroyCmds();
     emit dbgStatus (msg, state_);
     
@@ -1221,6 +1173,59 @@ void GDBController::slotStart(const QString &application)
 
 // **************************************************************************
 
+void GDBController::slotStop()
+{
+    setStateOn(s_shuttingDown);
+    destroyCmds();
+    
+    if (dbgProcess_) {
+        setStateOn(s_silent);
+        pauseApp();
+        setStateOn(s_waitTimer);
+        
+        QTimer *timer;
+        
+        timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(slotAbortTimedEvent()) );
+        
+        if (stateIsOn(s_attached)) { 
+            queueCmd(new GDBCommand("detach", NOTRUNCMD, NOTINFOCMD, DETACH));
+            timer->start(3000, TRUE);
+            DBG_DISPLAY("<attached wait>\n");
+            while (stateIsOn(s_waitTimer)) {
+                if (!stateIsOn(s_attached))
+                    break;
+                kapp->processEvents(20);
+            }
+        }
+        
+        setStateOn(s_waitTimer|s_appBusy);
+        const char *quit="quit\n";
+        dbgProcess_->writeStdin(quit, strlen(quit));
+        GDB_DISPLAY(quit)
+        timer->start(3000, TRUE);
+        DBG_DISPLAY("<quit wait>\n");
+        while (stateIsOn(s_waitTimer)) {
+            if (stateIsOn(s_programExited))
+                break;
+            kapp->processEvents(20);
+        }
+        
+        // We cannot wait forever.
+        if (!stateIsOn(s_programExited))
+            dbgProcess_->kill(SIGKILL);
+    }
+    
+    delete dbgProcess_; dbgProcess_ = 0;
+    delete tty_; tty_ = 0;
+    
+    state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
+    
+    emit dbgStatus (i18n("Debugger stopped"), state_);
+}
+
+// **************************************************************************
+
 void GDBController::slotCoreFile(const QString &coreFile)
 {
     setStateOff(s_silent);
@@ -1640,7 +1645,7 @@ void GDBController::slotDbgWroteStdin(KProcess *)
 void GDBController::slotDbgProcessExited(KProcess*)
 {
     destroyCmds();
-    state_ = s_appNotStarted|s_programExited|(state_&s_viewLocals);
+    state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);
     
     GDB_DISPLAY(QString("\n(gdb) Process exited"));

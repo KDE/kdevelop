@@ -24,15 +24,15 @@ DebuggerConfigWidget::DebuggerConfigWidget(QDomDocument &projectDom, QWidget *pa
     QFontMetrics fm(programArgs_edit->fontMetrics());
     programArgs_edit->setMinimumWidth(fm.width('X')*30);
  
-    programArgs_edit->setText(DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
-    gdbPath_edit->setText(DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
-    debuggingShell_edit->setText(DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell"));
+    programArgs_edit->setText(             DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
+    gdbPath_edit->setText(                 DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
+    debuggingShell_edit->setText(          DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell"));
 
-    displayStaticMembers_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers"));
-    asmDemangle_box->setChecked(!DomUtil::readBoolEntry(dom, "/kdevdebugger/display/manglednames"));
-    breakOnLoadingLibrary_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs"));
-    dbgTerminal_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty"));
-    enableFloatingToolBar_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar"));
+    displayStaticMembers_box->setChecked(  DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers", false));
+    asmDemangle_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames", true));
+    breakOnLoadingLibrary_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", false));
+    dbgTerminal_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false));
+    enableFloatingToolBar_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", false));
     // ??? DomUtil::readEntry(dom, "/kdevdebugger/general/allowforcedbpset");
 
     resize(sizeHint());
@@ -50,7 +50,7 @@ void DebuggerConfigWidget::accept()
     DomUtil::writeEntry(dom, "/kdevdebugger/general/dbgshell", debuggingShell_edit->text());
 
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/staticmembers", displayStaticMembers_box->isChecked());
-    DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/manglednames", asmDemangle_box->isChecked());
+    DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/demanglenames", asmDemangle_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", breakOnLoadingLibrary_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/separatetty", dbgTerminal_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", enableFloatingToolBar_box->isChecked());

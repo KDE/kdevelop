@@ -1,3 +1,12 @@
+2002-06-11  John Firebaugh  <jfirebaugh@kde.org>
+        Debugger bugfixes:
+        * Use core stop button and signal
+        * Actually shut down gdb when stopping
+        * Do the right thing when the program exits
+        * Load the config settings correctly
+        * Don't show application output in external konsole by default
+        * Use same menu item for start/continue
+
 2002-06-10  John Firebaugh  <jfirebaugh@kde.org>
         * New breakpoints widget. Uses KListView.
         * Breakpoints should sync with document much better now.

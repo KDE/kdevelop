@@ -49,7 +49,6 @@ private slots:
     void slotAttachProcess();
     void slotStop();
     void slotPause();
-    void slotContinue();
     void slotRunToCursor();
     void slotStepOver();
     void slotStepOverInstruction();
@@ -64,9 +63,11 @@ private slots:
     void slotGotoSource(const QString &fileName, int lineNum);
     void slotApplReceivedStdout(const char *buf);
     void slotApplReceivedStderr(const char *buf);
+    void slotRawData( const QString& );
 
 private:
     void startDebugger();
+    void stopDebugger();
     void setupController();
     
     QGuardedPtr<VariableWidget> variableWidget;

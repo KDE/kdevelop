@@ -60,6 +60,8 @@ public:
     virtual ~DbgController();
     virtual void reConfig()                                                 = 0;
     
+    virtual bool stateIsOn( int state )                                     = 0;
+    
 protected:
     virtual void queueCmd(DbgCommand *cmd, bool executeNext)                = 0;
     virtual char *parse(char *str)                                          = 0;
@@ -68,6 +70,8 @@ public slots:
     virtual void slotStart(const QString &application)                      = 0;
     virtual void slotCoreFile(const QString &coreFile)                      = 0;
     virtual void slotAttachTo(int pid)                                      = 0;
+    
+    virtual void slotStop()                                                 = 0;
     
     virtual void slotRun()                                                  = 0;
     virtual void slotRunUntil(const QString &fileName, int lineNum)         = 0;
