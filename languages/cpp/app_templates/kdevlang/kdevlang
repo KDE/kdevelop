@@ -1,7 +1,0 @@
-# KDE Config File
-[General]
-Name=KDevelop Language Support Plugin (Standalone build)
-Category=C++/KDevelop/
-Comment=This generates a language support plugin for KDevelop, to be built outside of the KDevelop source tree.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC_part.cpp

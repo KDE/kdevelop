@@ -1,9 +1,0 @@
-# KDE Config File
-[General]
-Name=KDevelop Part (Standalone build)
-Name[fr]=Un composant logiciel pour KDevelop (indépendant de KDevelop)
-Category=C++/KDevelop/
-Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
-Comment[fr]=Génère un composant logiciel du type « KPart » pour KDevelop, qui devra être compilé en dehors de l'arborescence des sources de KDevelop.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC_part.cpp
