@@ -14,6 +14,7 @@
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -84,12 +85,13 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
 {
     m_base = new PartExplorerFormBase( this, "partexplorerformbase", 0 );
     m_resultsList = new ResultsList( m_base );
-    m_resultsList->addColumn( tr2i18n( "Property" ) );
-    m_resultsList->addColumn( tr2i18n( "Type" ) );
-    m_resultsList->addColumn( tr2i18n( "Value" ) );
+    m_resultsList->addColumn( i18n( "Property" ) );
+    m_resultsList->addColumn( i18n( "Type" ) );
+    m_resultsList->addColumn( i18n( "Value" ) );
     m_resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
         (QSizePolicy::SizeType)3, 0, 0,
         m_resultsList->sizePolicy().hasHeightForWidth() ) );
+    QWhatsThis::add( m_resultsList, i18n("<h2>Matching services</h2>Results (if any) are shows grouped by matching service name") );
     m_base->layout()->add( m_resultsList );
     setMainWidget( m_base );
 
