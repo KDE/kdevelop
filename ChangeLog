@@ -1,3 +1,6 @@
+2004-01-21 Andras Mantia <amantia@kde.org>
+    * Fix clear all breakpoints functionality
+    
 2004-01-21 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added ConfigWidgetProxy class to lib/util and initially implemented demand loading of config pages for DocTreeViewPart.
 
