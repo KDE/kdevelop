@@ -21,13 +21,22 @@
 #include "docbrowserview.h"
 #include <khtmlview.h>
 
-DocBrowserView::DocBrowserView(QWidget* parent,char* name) : QextMdiChildView(name){
+DocBrowserView::DocBrowserView(QWidget* parent,char* name) :
+  QextMdiChildView(name),
+  browser(0)
+{
   browser = new CDocBrowser(this,name);
 }
 
 void DocBrowserView::resizeEvent (QResizeEvent *e){
 //  QextMdiChildView::resizeEvent(e);
-  KHTMLView* view=browser->view();
-  view->resize(e->size());
+
+  // Need to check if this really exists yet as the constructor can
+  // call resize before "new"ing the CDocBrowser
+  if (browser)
+  {
+    if (KHTMLView* view=browser->view())
+      view->resize(e->size());
+  }
 //  browser->resize(e->size());
 }
