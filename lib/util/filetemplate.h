@@ -23,6 +23,7 @@
 #include <qstring.h>
 
 class KDevPlugin;
+class QDomDocument;
 
 /**
 @file filetemplate.h
@@ -42,24 +43,34 @@ public:
         Custom     /**<Checks for templates in custom directories. This usually means that 
                        full paths are given for FileTemplate methods.*/
     } Policy;
+
     /**
      * @return Whether a template with the given name
      * exists in the current project. File templates
      * are stored in the "templates" subdirectory of a project or in application shared dirs.
      */
     static bool exists(KDevPlugin *part, const QString &name, Policy p = Default);
+    
     /**
      * Reads a template with the given name (e.g. "cpp")
      * and makes variable substitutions (like $AUTHOR$ etc.)
      * in it. The resulting string is returned.
      */
     static QString read(KDevPlugin *part, const QString &name, Policy p = Default);
+
     /**
      * Reads a template with the given URL
      * and makes variable substitutions (like $AUTHOR$ etc.)
      * in it. The resulting string is returned.
      */
     static QString readFile(KDevPlugin *part, const QString &fileName);
+
+    /**
+     * Makes variable substitutions on a text, based on a specified QDomDocument 
+     * describing a KDevelop project file. The resulting string is returned.
+     */
+    static QString makeSubstitutions(QDomDocument &dom, const QString &text);
+
     /**
      * Copies a file template with the given name to the
      * file with the name dest and - while copying -

@@ -50,7 +50,6 @@ QString FileTemplate::read(KDevPlugin *part, const QString &name, Policy p)
     return readFile(part, fullPathForName(part, name, p) );
 }
 
-
 QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
 {
     QDomDocument &dom = *part->projectDom();
@@ -61,12 +60,18 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
     QTextStream stream(&f);
     QString str = stream.read();
 
+    return makeSubstitutions( dom, str );
+}
+
+QString FileTemplate::makeSubstitutions( QDomDocument & dom, const QString & text )
+{
     QString author = DomUtil::readEntry(dom, "/general/author");
     QString email = DomUtil::readEntry(dom, "/general/email");
     QString version = DomUtil::readEntry(dom, "/general/version");
     QString date = QDate::currentDate().toString();
     QString year = QString::number(QDate::currentDate().year());
 
+    QString str = text;
     str.replace(QRegExp("\\$EMAIL\\$"),email);
     str.replace(QRegExp("\\$AUTHOR\\$"),author);
     str.replace(QRegExp("\\$VERSION\\$"),version);
