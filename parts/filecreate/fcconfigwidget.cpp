@@ -68,6 +68,7 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
     m_globalfiletypes.setAutoDelete(true);
     m_projectfiletypes.setAutoDelete(true);
     m_projectfiletemplates.setAutoDelete(true);
+    connect( fctemplates_view, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), this, SLOT( edittemplate_button_clicked() ) );
 }
 
 FCConfigWidget::~FCConfigWidget()
