@@ -18,6 +18,7 @@
 #include <qstylesheet.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
+#include <qclipboard.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -215,11 +216,21 @@ bool MakeWidget::isRunning()
 
 void MakeWidget::copy()
 {
-  //int pf=0, inf=0, pt=0, nto=0;
-  //getSelection(&pf, &inf, &pt, &nto);
-  //qDebug("getSelection %d %d %d %d", pf, inf, pt, nto);
-  //qDebug("selected text %s", selectedText().latin1());
-  QTextEdit::copy();
+  int parafrom=0, indexfrom=0, parato=0, indexto=0;
+  getSelection(&parafrom, &indexfrom, &parato, &indexto);
+  if(parafrom < 0 || indexfrom < 0 || parato < 0 || indexto < 0)
+    QTextEdit::copy();
+  
+  QString selection;
+  for(int i = parafrom; i<=parato; i++)
+    selection += text(i) + "\n";
+  
+  selection.remove(0, indexfrom);
+  int removeend = text(parato).length() - indexto;
+
+  selection.remove((selection.length()-1) - removeend, removeend);
+
+  kapp->clipboard()->setText(selection, QClipboard::Clipboard);
 }
 
 void MakeWidget::nextError()
