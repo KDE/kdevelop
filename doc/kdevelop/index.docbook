@@ -19,6 +19,9 @@
   <!ENTITY Microsoft "<application>Microsoft</application>">
   <!ENTITY Windows "<application>Windows</application>">
   <!ENTITY Mac "<application>Mac</application>">
+  <!ENTITY kde "<acronym>KDE</acronym>">
+  <!ENTITY qt "<acronym>Qt</acronym>">
+  <!ENTITY qte "<application>Qt/embedded</application>">
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -27,7 +30,7 @@
 <book lang="&language;">
 
 <bookinfo>
-  <title>&kdevelop; Documentation</title>
+  <title>&kdevelop; User Manual</title>
 
   <date>2002-11-25</date>
   <releaseinfo>3.0</releaseinfo>
@@ -90,7 +93,7 @@
 <title>Overview: Development on UNIX</title>
 
 <sect1 id="history">
-<title>Some Historical Remarks</title>
+<title>Some historical remarks</title>
 
 <para>
 From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
@@ -106,7 +109,7 @@ As time has gone by, both worlds have evolved. While C is still used mainly as a
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-scripting-languages">
-<title>Contemporary Scripting Languages</title>
+<title>Contemporary scripting languages</title>
 <para>
 In the scripting area, there has been a shift away from the shell, which suffers from portability concerns, to languages which unify all commonly needed functionality in their standard libraries, while still being able to interface to the outside through pipes when necessary.
 </para>
@@ -134,23 +137,23 @@ All these scripting languages have in common that they are widely portable betwe
 &php; was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content in the web.
 </para>
 </sect2>
-</sect1> <!-- ovwScriptL -->
+</sect1> <!-- unixdev-scripting-languages -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-dcop">
-<title>The DCOP Interface</title>
+<title>The DCOP interface</title>
 
 <para>
 Another evolution on UNIX-like scripting is the <emphasis>DCOP</emphasis> protocol. DCOP stands for <emphasis>Desktop COmmunikation Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional UNIX pipe mechanism.
 </para>
-<para>Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables e.g. a KDE programm to send messages to another KDE program, or receive data from it for its own purposes.
+<para>Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables e.g. a &kde; programm to send messages to another &kde; program, or receive data from it for its own purposes.
 </para>
 <para>
 There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly. Yet it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
 </para>
 <para>
-For more information, see <citetitle>The DCOP Desktop COmmunication Protocol library</citetitle> API reference of the KDE dcop library.
+For more information, see <citetitle>The DCOP Desktop COmmunication Protocol library</citetitle> API reference of the &kde; dcop library.
 </para>
 </sect1> <!--  unixdev-dcop -->
 
@@ -189,7 +192,7 @@ To accomplish this, the basic tools you need are
 When you have a large project consisting of possibly hundreds of source code files, the process of compiling may become quite laborsome. You do not want to recompile all files each time you have changed only some of them. Instead, you only want to compile those files which are affected by the changes. In general, it is not obvious which these are. When you e.g. change a function prototype in a header file, you need to compile every file which includes this header file.
 </para>
 <sect2 id="unixdev-buildsystems-make">
-<title>The Make Process</title>
+<title>The make process</title>
 <para>
 A tool which takes care of recompilations is <command>make</command>. It keeps track of all work using a set of <emphasis>rules</emphasis> which describe what to do in case some piece of information (usually a source or object code file) was changed. All rules belonging to a certain project are stored in a so-called <filename>Makefile</filename> which is processed by <command>make</command> any time you want to update your work.
 </para>
@@ -211,30 +214,45 @@ Each rule consists of several building blocks, namely
 Basically the <command>make</command> command will read the rules one after another, check each file in the dependency list of a given target and make this target anew if any one of these files has changed, using the commands listed in that rule.
 </para>
 <para>
-There are several additional possibilities to control such a make process, and a <filename>Makefile</filename> can thus grow very complex. We cannot go into the details here. However, we recommend that you make yourself accustomed to the syntax of <command>make</command>. Even if you do not normally use it directly, an understanding of the fundamentals of the build system can be useful. See the <ulink url="info://make/Top"> <citetitle>GNU Make Manual</citetitle></ulink> for more information.
+There are several additional possibilities to control such a make process, and a <filename>Makefile</filename> can thus grow very complex. We cannot go into the details here. However, we recommend that you make yourself accustomed to the syntax of <command>make</command>. Even if you do not normally use it directly, an understanding of the fundamentals of the build system can be useful. See the <ulink url="info://make/Top"> <citetitle>GNU Make Manual</citetitle></ulink> for more information. </para>
+<para>
+For more &kdevelop; specific detail see the <link  linkend="projectmanagement">Building and Project Management</link> chapter of this manual.
 </para>
-</sect2></sect1> <!-- unixdev-buildsystems -->
+<para>
+There are some tutorials available:
+<itemizedlist>
+  <listitem><para>A short <ulink url="http://www.kdevelop.org/index.html?filename=tutorial_autoconf.html">autoconf tutorial</ulink> written by Christopher W. Curtis available on the KDevelop home page. It concentrates on some basic steps to modify a <filename>Makefile</filename>.
+  </para></listitem>
+  <listitem><para>
+  A more detailed tutorial can be found at <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual_toc.html"></ulink>. This is part of a greater set of tutorials on <citetitle>Developing software with GNU</citetitle>.
+  </para></listitem>
+</itemizedlist>
+</para>
+</sect2>
+
+</sect1> <!-- unixdev-buildsystems -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-guidevelopment">
-<title>GUI Development</title>
+<title>GUI development</title>
 
 <para>
-Application developers become even more encumbered by having to not only create program libraries and logic, but also provide a easy to use custom built user interface that is both intuitive and functional.  Most programmers receive little to no training in GUI development, and as a result user interfaces are <ulink url="http://www.rha.com/ui_hall_of_shame.htm">poorly designed</ulink>.
+Application developers become even more encumbered by having to not only create program libraries and logic, but also provide an easy to use custom built user interface that is both intuitive and functional.  Most programmers receive little to no training in GUI development, and as a result user interfaces are <ulink url="http://www.rha.com/ui_hall_of_shame.htm">poorly designed</ulink>.
 </para>
 <para>
 During the years some common design principles have evolved. It is strongly advised to adhere to them. This way your user interfaces will retain a common look and feel that the users of your application will gratefully appreciate.
 </para>
 <para>
-For KDE GUI development there is a style guide available. It is found in the <ulink url="http://developer.kde.org/documentation/standards/kde/style/basics/index.html">KDE User Interface Guidelines</ulink> on the KDE Developer's Corner page.
+For &kde; GUI development there is a style guide available. It is found in the <ulink url="http://developer.kde.org/documentation/standards/kde/style/basics/index.html">&kde; User Interface Guidelines</ulink> on the &kde; Developer's Corner page.
 </para>
+
 </sect1> <!-- unixdev-guidevelopment -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-ide">
-<title>Integrating Concepts and Tools: The IDE</title>
+<title>Integrating concepts and tools: the IDE</title>
 
 <para>
 There are separate tools available for almost any step in the programming process - planning, editing, managing files and compilation processes, debugging, documentation and the like. But once the projects grow the programming process will most likely become quite cumbersome.
@@ -246,80 +264,399 @@ Much repetitive work has to be done when designing, compiling, and debugging a p
 To more easily accomplish such a scheme, <emphasis>Integrated Development Environments</emphasis> (IDE) were devised. Such an IDE integrates all templates, tools, and scripts which are needed in the development process into one single environment.
 </para>
 <para>
-For the KDE platform &kdevelop; is such an IDE. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
+For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
 </para>
 </sect1> <!-- unixdev-ide -->
+
 </chapter> <!-- unixdev -->
 
 <!-- ====================================================================== -->
 
-<chapter id="kdevelopoverview">
-<title>&kdevelop; Overview</title>
+<chapter id="kdevelopinstall">
+<title>Installing &kdevelop;</title>
 
 <sect1 id="howto">
-<title>How to obtain KDevelop</title>
+<title>How to obtain &kdevelop;</title>
+
 <para>
-&kdevelop; can be found via the project home page at <ulink url="http://www.kdevelop.org">
-http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">KDE ftp site</ulink>
-&kdevelop; is also available from many different Linux distributions.
+&kdevelop; can be found via the project home page at <ulink url="http://www.kdevelop.org"> http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">&kde; ftp site</ulink> &kdevelop; is also available from many different Linux distributions.
 </para>
 
-<para>
-Anonymous CVS repository snapshots are also available.  The module name is <emphasis>kdevelop</emphasis>. 
-See the instructions on the <ulink url="http://developer.kde.org/source/anoncvs.html">KDE website</ulink> 
-for details on how to obtain the &kdevelop; source code.
-</para> 
+<sect2 id="howto-cvs">
+<title>Get daily &kdevelop; snapshots from &CVS;</title>
 
-</sect1>
+<para>Anonymous &CVS; repository snapshots are available.  The module name is <emphasis>kdevelop</emphasis> at <filename class="directory">:pserver:anonymous@anoncvs.kde.org:/home/kde</filename>.
+</para>
+
+<sect3 id="howto-cvs-co">
+<title>Initial &CVS; checkout</title>
+
+<para>
+To obtain an initial version of &kdevelop; you must download it (this is a so-called <emphasis>checkout</emphasis> operation) from anonymous &CVS;. Just follow these steps. (We assume you want to put your &kdevelop; copy into the <filename class="directory">kde3src</filename> directory.)
+</para>
+
+<simplelist>
+  <member>
+    <prompt>~&gt; </prompt>
+    <userinput>mkdir kde3src</userinput>
+  </member>
+  <member>
+    <prompt>~&gt; </prompt>
+    <userinput>cd kde3src</userinput>
+  </member>
+  <member>
+    <prompt>~/kde3src&gt; </prompt>
+    <userinput>cvs -z3 -d :pserver:anonymous@anoncvs.kde.org:/home/kde co kdevelop</userinput>
+  </member>
+  <member>
+    <prompt>~/kde3src&gt; </prompt>
+    <userinput>cd kdevelop</userinput>
+  </member>
+</simplelist>
+<para>
+Now you may compile your &kdevelop; version as shown in the <link linkend="compileandinstall">&kdevelop; Compilation and Installation</link> chapter.
+</para>
+<para>
+<emphasis>Note:</emphasis> Once you successfully checked out your &kdevelop; version, you may keep up with the changes using the update procedure shown in the next section. <emphasis>Please do not checkout every time you want to keep your &kdevelop; up to date!</emphasis>
+</para>
+</sect3>
+
+<sect3 id="howto-cvs-up">
+<title>Keeping your &CVS; copy actual</title>
+
+<para>
+After you checked out (and successfully compiled) &kdevelop; from CVS as shown above, you'll want to keep it up to date in order to get all the patches. Follow these steps. (We again assume you have put your &kdevelop; copy into the <filename class="directory">kde3src</filename> directory.)
+</para>
+<para>
+Note the <command>up</command> (= <emphasis>update</emphasis>) command instead of the <command>co</command> (which stands for <emphasis>checkout</emphasis>).
+</para>
+
+<simplelist>
+  <member>
+    <prompt>~&gt; </prompt>
+    <userinput>cd kde3src</userinput>
+  </member>
+  <member>
+    <prompt>~/kde3src&gt; </prompt>
+    <userinput>cvs -z3 -d :pserver:anonymous@anoncvs.kde.org:/home/kde up kdevelop</userinput>
+  </member>
+  <member>
+    <prompt>~/kde3src&gt; </prompt>
+    <userinput>cd kdevelop</userinput>
+  </member>
+</simplelist>
+
+<para>
+<emphasis>Note:</emphasis> Keep an eye on the messages &CVS; produces during the update sequence. The exact steps in the compilation sequence depend on this.
+</para>
+<para>
+Now you can compile a new &kdevelop; version as shown in the <link linkend="compileandinstall-make-cvs">Special &CVS; compilation considerations</link> chapter.
+</para>
+</sect3>
+
+</sect2>
+
+</sect1> <!-- howto -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="requirements">
-<title>&kdevelop; Requirements</title>
+<title>&kdevelop; requirements</title>
 <para>
-In order to successfully compile and use &kdevelop;, you need the following programs and libraries which
-are available on most platforms as distribution packages and thereby can be installed easily.
+In order to successfully compile and use &kdevelop;, you need the following programs and libraries. They are available on most platforms as distribution packages and thereby can be installed easily.
 </para>
 
 <itemizedlist>
 <title>Required:</title>
-<listitem><para>gcc/g++ 2.95, 3.1, 3.2 (or compatible)</para></listitem>
-<listitem><para>GNU make (or compatible)</para></listitem>
-<listitem><para>perl 5.004</para></listitem>
-<listitem><para>autoconf 2.54 or greater</para></listitem>
-<listitem><para>automake 1.6.2 or greater</para></listitem>
-<listitem><para>flex 2.5.4</para></listitem>
-<listitem><para>Qt 3.0.3 or greater</para></listitem>
-<listitem><para>KDE 3.0.4 or greater</para></listitem>
+  <listitem><para><application>gcc/g++</application> 2.95, 3.1, 3.2 (or compatible)</para></listitem>
+  <listitem><para><application>GNU make</application> (or compatible)</para></listitem>
+  <listitem><para><application>perl</application> 5.004</para></listitem>
+  <listitem><para><application>autoconf</application> 2.54 or greater</para></listitem>
+  <listitem><para><application>automake</application> 1.6.2 or greater</para></listitem>
+  <listitem><para><application>flex</application> 2.5.4</para></listitem>
+  <listitem><para><application>Qt</application> 3.0.3 or greater</para></listitem>
+  <listitem><para><application>KDE</application> 3.0.4 or greater</para></listitem>
 </itemizedlist>
 
 <itemizedlist>
 <title>Optional:</title>
-<listitem><para>dot, from <ulink url="http://www.graphviz.org">www.graphviz.org</ulink></para></listitem>
+  <listitem><para>
+  <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This allows you to navigate in a graphical view of your classes' dependencies.
+  </para></listitem>
+  <listitem><para>
+  The <application>doxygen</application> documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
+  </para></listitem>
+  <listitem><para>
+  Any other compiler and/or tool in case you want to develop for another language/platform than <acronym>C++</acronym>/&kde; or use some special facility.
+  </para></listitem>
 </itemizedlist>
 
-</sect1>
+<para>
+<emphasis>Note 1:</emphasis> You can circumvent the need for &autoconf; >= 2.52 and &automake; >= 1.6.1. Just remove the <filename class="directory">admin</filename> directory in your &kdevelop; installation directory and type
+</para>
+<para>
+<prompt>(your-kdevelop-directory)&gt; </prompt>
+<userinput>ln -s $KDEDIR/share/apps/kdelibs/admin admin</userinput>
+</para>
+<para>
+at the console. This causes &kdevelop; to use the standard settings in the &kde; <filename class="directory">admin</filename> directory instead.
+</para>
+
+<para>
+<emphasis>Note 2:</emphasis> Be careful <emphasis>not to mix &qt; versions</emphasis>. Always link &kdevelop; to the same &qt; version your &kde; library was compiled. Otherwise you will most likely experience <emphasis>very strange</emphasis> behaviours.
+</para>
+
+</sect1> <!-- requirements -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="compileandinstall">
-<title>&kdevelop; Compilation and Installation</title>
-<para>
-In order to compile and install &kdevelop; on your system, type the following in the base directory
-of the &kdevelop; distribution:
-</para>
-<!-- kbuildsycoca -->
-</sect1>
+<title>&kdevelop; compilation and installation</title>
 
-</chapter>
+<sect2 id="compileandinstall-preliminaries">
+<title>Preliminary steps</title>
+
+<para>
+Before entering the compile sequence you must make sure all libraries and tools are available to the make system. To accomplish this some environment variables need to be properly set. The actual steps to be performed depend on the console shell you use.
+</para>
+<para>
+<emphasis>Note:</emphasis> To avoid typing in all the statements that set the necessary environment variables every time you want to compile, you should put them in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file. That way the environment variables will be properly set every time you start the shell.
+</para>
+
+<sect3 id="compileandinstall-preliminaries-bash">
+<title>bash shell</title>
+
+<para>
+If you use the bash shell add the following lines:
+</para>
+<screen>
+export KDEDIR=(where-your-kde3-is)
+export QTDIR=(where-your-qt-library-is)
+export LD_LIBRARY_PATH=$QTDIR/lib:$KDEDIR/lib:$LD_LIBRARY_PATH
+export LIBRARY_PATH=$QTDIR/lib:$KDEDIR/lib:$LIBRARY_PATH
+export PATH=$QTDIR/bin:$KDEDIR/bin:$PATH
+</screen>
+</sect3>
+
+<sect3 id="compileandinstall-preliminaries-tcsh">
+<title>tcsh shell</title>
+
+<para>
+If you use the tcsh shell add the following lines:
+</para>
+<screen>
+setenv KDEDIR (where-your-kde3-is)
+setenv QTDIR (where-your-qt-library-is)
+setenv LD_LIBRARY_PATH $QTDIR/lib:$KDEDIR/lib:$LD_LIBRARY_PATH
+setenv LIBRARY_PATH $QTDIR/lib:$KDEDIR/lib:$LIBRARY_PATH
+setenv PATH $QTDIR/bin:$KDEDIR/bin:$PATH
+</screen>
+</sect3>
+
+</sect2>
+
+<sect2 id="compileandinstall-make">
+<title>Compile &kdevelop;</title>
+
+<para>
+<emphasis>Note:</emphasis> In the following discussion we assume that you have put your &kdevelop; sources in the <filename class="directory">~/kde3src/kdevelop</filename> directory.
+</para>
+
+<sect3 id="compileandinstall-make-cvs">
+<title>Special &CVS; compilation considerations</title>
+
+<para>
+In case you use a &kdevelop; snapshot from &CVS; the initial compilation steps depend on whether you just did a complete checkout or only updated the source.
+</para>
+
+<formalpara id="compileandinstall-make-cvs-co">
+<title>After a CVS checkout</title>
+<para>
+You should initialize the make system after a fresh checkout. The same is true every time you need to start over from scratch. (Note that you must have access to the &CVS; repository for the clean-up.) Type:
+</para>
+</formalpara>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make -f admin/Makefile.common cvs-clean</userinput>
+</para>
+<para>
+and then <emphasis>all</emphasis> of the following steps.
+</para>
+
+<formalpara id="compileandinstall-make-cvs-up">
+<title>After a CVS update</title>
+<para>
+The next step depends on the output of the &CVS; update sequence. If you got something like (note the U marker to the left):
+<screen>
+U /some_directory_path/Makefile.am
+</screen>
+or if you just did a full checkout, you must do:
+</para>
+</formalpara>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make -f Makefile.cvs</userinput>
+</para>
+<para>
+before you proceed with <emphasis>all</emphasis> of the following steps.
+</para>
+</sect3>
+
+<sect3 id="compileandinstall-make-basic">
+<title>Basic <command>make</command> command sequence</title>
+
+<para>
+Once the basic make system is set up this way you must decide on the type of the &kdevelop; system you want to use. This is done in the following configure step which buids the actual <filename>Makefile</filename> the <command>make</command> command will use.
+</para>
+<para>
+<emphasis>Note:</emphasis> You may drop the <option>--prefix</option> option in the following <command>configure</command> command lines if you want &kdevelop; be installed in the default &kde; directory. See the <link linkend="compileandinstall-options">Some notes on <command>configure</command> options</link> chapter for this.
+</para>
+
+<formalpara>
+<title>A debug-compiled version</title>
+<para>
+If you want to keep track of what your &kdevelop; application does at run-time you may buid a debug-compiled version. Just command <command>configure</command> to do so:
+</para>
+</formalpara>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>./configure --enable-debug=full
+                         --prefix=(where-your-kde3-is)</userinput>
+</para>
+
+<formalpara>
+<title>A release-compiled version</title>
+<para>
+If you just only want to run &kdevelop; a (smaller and faster running) release version suffices. <command>configure</command> defaults to this.
+</para>
+</formalpara>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>./configure --prefix=(where-your-kde3-is)</userinput>
+</para>
+
+<formalpara>
+<title>Make and install &kdevelop;</title>
+<para>
+<command>configure</command> will check the sytem and build a <filename>Makefile</filename> according to what it found. The <command>make</command> command will use this <filename>Makefile</filename> by default. Thus
+</para>
+</formalpara>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make</userinput>
+</para>
+<para>
+suffices. If necessary, now gain root user rights by
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>su</userinput>
+</para>
+<para>
+and entering the root password. Then install the application:
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make install</userinput>
+</para>
+<para>
+That was all. If you installed &kdevelop; in the default &kde; directory you can now run the <acronym>IDE</acronym>. Otherwise some additional steps will be necessary as shown in the following chapter.
+</para>
+
+</sect3>
+</sect2>
+
+<sect2 id="compileandinstall-options">
+<title>Some notes on <command>configure</command> options</title>
+
+<sect3>
+<title>Non-default installation directory</title>
+
+<para>
+By default <command>configure</command> prepares the <acronym>IDE</acronym> to be installed in the default &kde; directory. This is necessary because &kdevelop; assumes direct access to some tools and parts which reside there. If want to use your own installation directory, you must tell <command>configure</command> this by the <option>--prefix</option>:
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>./configure --prefix=(where-your-kde3-is)</userinput>
+</para>
+<para>
+There is a caveat if you do so. You must provide a means for &kdevelop; to access the needed tools and parts in the &kde; directory. (You can still use the IDE, but with very restrained capabilities.) You have to use a shell where the following commands must be executed before you can start &kdevelop; at the shell prompt.
+</para>
+<para>
+(<emphasis>Note the plural:</emphasis> KDEDIRS, not just KDEDIR)
+</para>
+<simplelist>
+  <member>
+    <prompt>(your-kdevelop-directory)&gt; </prompt>
+    <userinput>export KDEDIRS=/usr/local/kde:/opt/kde3</userinput>
+  </member>
+  <member>
+    <prompt>(your-kdevelop-directory)&gt; </prompt>
+    <userinput>kbuildsycoca</userinput>
+  </member>
+</simplelist>
+<para>
+In a tcsh shell you must set the environment variables using:
+</para>
+<para>
+    <prompt>(your-kdevelop-directory)&gt; </prompt>
+    <userinput>setenv KDEDIRS /usr/local/kde:/opt/kde3</userinput>
+</para>
+</sect3>
+
+<sect3>
+<title>Other options</title>
+<!-- *** other configuration options -->
+<para>
+<emphasis>(... to be written ...)</emphasis>
+</para>
+</sect3>
+</sect2>
+
+</sect1> <!-- compileandinstall -->
+
+</chapter> <!-- kdevelopinstall -->
 
 <!-- ====================================================================== -->
 
-<chapter id="userinterface">
-<title>Overview: &kdevelop;'s Features</title>
+<chapter id="kdevelopoverview">
+<title>Overview: &kdevelop;'s features</title>
+
+<para>
+&kdevelop; integrates a lot of tools, scripts, and templates in a common user interface. Basically it consists of
+<itemizedlist>
+  <listitem><para>
+  several <link  linkend="uimodes-overview">user interface modes</link> from which you can select the look and feel of the workspace,
+  </para></listitem>
+  <listitem><para>
+  an <link linkend="appwizard">Application Wizard</link> which aids you in setting up a new project,
+  </para></listitem>
+  <listitem><para>
+  several <link linkend="makesystems">Project Management Systems</link> which aid in building and managing your project,
+  </para></listitem>
+  <listitem><para>
+  several <link linkend="parts">Plugin Parts</link>, extensible modules which can be loaded at runtime and on demand.  This allows you to only turn on those features you really need.
+  </para></listitem>
+  <listitem><para>
+  some <link linkend="editing">Editing tools</link> to easily work on your program texts
+  </para></listitem>
+  <listitem><para>
+  various <link linkend="filebrowsers">File Browsers</link> providing you different views on your file system,
+  </para></listitem>
+  <listitem><para>
+  various <link linkend="classbrowser">Class Browsers</link> to aid you in maintaining the classes and their relationships of your object-oriented programming project,
+  </para></listitem>
+  <listitem><para>
+  a <link linkend="debugger">Debugger Interface</link> to find and remove program errors from within &kdevelop;, and
+  </para></listitem>
+  <listitem><para>
+  a set of other diagnosis, documentation, and optimization helper tools.
+  </para></listitem>
+</itemizedlist>
+</para>
 
 <sect1 id="uimodes-overview">
-<title>Availabe User Interface Modes</title>
+<title>Availabe user interface modes</title>
 
 <para>
 &kdevelop; offers developers four separate user interface modes (click on the mode name to view an example):
@@ -380,125 +717,13 @@ To maximize space, there is a full-screen window mode available which expands th
 <!-- ### Expand this: menus, short commands, toolbar icons -->
 </sect2>
 
-</sect1>
+</sect1> <!-- uimodes-overview -->
 
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="parts">
-<title>Plugin Parts</title>
-
-<para>
-&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
-</para>
-
-<para>
-Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
-</para>
-
-<para>
-Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
-</para>
-
-<para>
-Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
-</para>
-
-<table id="table-project-parts">
-<title>Project Management Parts in &kdevelop;</title>
-
-<tgroup cols="2"><tbody>
-<row>
-  <entry>antproject</entry>
-  <entry>ANT Project Manager (Java applications)</entry>
-</row>
-<row>
-  <entry>autoproject</entry>
-  <entry>Automake Project Manager</entry>
-</row>
-<row>
-  <entry>customproject</entry>
-  <entry>Custom Project Manager</entry>
-</row>
-<row>
-  <entry>trollproject</entry>
-  <entry>QMake based Project Manager</entry>
-</row>
-</tbody></tgroup>
-</table>
-
-<table id="table-global-parts">
-<title>Global Parts in &kdevelop;</title>
-
-<tgroup cols="2"><tbody>
-<row><entry>Part Name</entry><entry>Description</entry></row>
-<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
-<row><entry>history</entry><entry></entry></row>
-<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
-<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
-<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
-<row><entry>openwith</entry><entry></entry></row>
-<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
-<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
-<row><entry>texttools</entry><entry>Additional text tools</entry></row>
-<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
-<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
-<row><entry>cvs</entry><entry>CVS Support</entry></row>
-<row><entry>tools</entry><entry></entry></row>
-<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
-<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
-<row><entry>filter</entry><entry></entry></row>
-<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
-</tbody></tgroup>
-</table>
-
-<table>
-<title>Language Support Parts in &kdevelop;</title>
-<tgroup cols="2">
-<tbody>
-<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
-<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
-<row><entry>javasupport</entry><entry>Support for Java</entry></row>
-<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
-<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
-<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
-</tbody></tgroup>
-</table>
-
-<table>
-<title>Project Specific Parts in &kdevelop;</title>
-<tgroup cols="2"><tbody>
-<row><entry>astyle</entry><entry></entry></row>
-<row><entry>buglist</entry><entry></entry></row>
-<row><entry>classview</entry><entry>Classview Manager</entry></row>
-<row><entry>ctags</entry><entry></entry></row>
-<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
-<row><entry>diff</entry><entry></entry></row>
-<row><entry>distpart</entry><entry></entry></row>
-<row><entry>doxygen</entry><entry></entry></row>
-<row><entry>fileview</entry><entry></entry></row>
-<row><entry>javadebugger</entry><entry></entry></row>
-<row><entry>manager</entry><entry></entry></row>
-<row><entry>nedit</entry><entry></entry></row>
-<row><entry>outputviews</entry><entry></entry></row>
-<row><entry>perforce</entry><entry></entry></row>
-<row><entry>qeditor</entry><entry></entry></row>
-<row><entry>scripting</entry><entry></entry></row>
-<row><entry>scriptproject</entry><entry></entry></row>
-<row><entry>sourcenav</entry><entry></entry></row>
-<row><entry>svn</entry><entry></entry></row>
-<row><entry>visualboyadvance</entry><entry></entry></row>
-<row><entry>windowmenu</entry><entry></entry></row>
-</tbody></tgroup>
-</table>
-
-
-</sect1>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="makesystems">
-<title>Project Management Systems</title>
+<title>Project management systems</title>
 
 <para>
 Globally, a project will rely on some form of project management system.  &kdevelop; offers four <emphasis>project management systems</emphasis> the programmer can select from when creating a new project.
@@ -511,7 +736,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
   <link linkend="qmake-project">QMake projects</link> use the trolltech QMake project manager.
   </para></listitem>
   <listitem><para>
-  <link linkend="ant-project">ANT projects</link> use the Apache ANT project manager for Jave development.
+  <link linkend="ant-project">ANT projects</link> use the Apache ANT project manager for Java development.
   </para></listitem>
   <listitem><para>
   <link linkend="custom-project">Custom projects</link> require you to maintain your own <filename>Makefiles</filename>.
@@ -520,7 +745,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
 </para>
 
 <sect2 id="makesystems-distribution">
-<title>How to Distribute Your Application</title>
+<title>How to distribute your application</title>
 
 <para>
 The distribution of your applications does not require the end-user to have anything different installed other than
@@ -548,7 +773,7 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 </sect2>
 
 <sect2 id="automake-project">
-<title>Automake Project</title>
+<title>Automake project</title>
 
 <para>
 Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers to use the GNU standard development tools. They provide
@@ -564,10 +789,10 @@ Projects created with &kdevelop;'s Automake Project Manager make it very easy fo
 </sect2>
 
 <sect2 id="qmake-project">
-<title>QMake Project</title>
+<title>QMake project</title>
 
 <para>
-For developers who enjoy the flexibility and feel of Qt's qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the GUI.
+For developers who enjoy the flexibility and feel of &qt;'s qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the GUI.
 </para>
 <para>
 For more information on the QMake project manager see the <citetitle>qmake User Guide</citetitle> which should be included in your distribution or have a look at the <ulink url="http://doc.trolltech.com/">TROLLTECH Documentation</ulink> home page where you may find the QMake documentation of your <citetitle>Qt C++ GUI Application Development Toolkit</citetitle> version.
@@ -590,7 +815,7 @@ For more information see <ulink url="http://ant.apache.org/">The Apache Ant Proj
 </sect2>
 
 <sect2 id="custom-project">
-<title>Custom Project</title>
+<title>Custom project</title>
 
 <para>
 If you prefer to maintain your own <filename>Makefiles</filename> for your project you may use the custom project option of &kdevelop;. This may be feasible in unusually structured projects or if you want to retain full control over the <command>make</command> process.
@@ -600,14 +825,125 @@ Yet, if you do not <emphasis>really need</emphasis> the extra flexibility and co
 </para>
 </sect2>
 
-</sect1>
+</sect1> <!-- makesystems -->
 
-</chapter>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="parts">
+<title>Plugin parts</title>
+
+<para>
+&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
+</para>
+
+<para>
+Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
+</para>
+
+<para>
+Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
+</para>
+
+<para>
+Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
+</para>
+
+<table id="table-project-parts">
+<title>Project management parts in &kdevelop;</title>
+
+<tgroup cols="2"><tbody>
+<row>
+  <entry>antproject</entry>
+  <entry>ANT Project Manager (Java applications)</entry>
+</row>
+<row>
+  <entry>autoproject</entry>
+  <entry>Automake Project Manager</entry>
+</row>
+<row>
+  <entry>customproject</entry>
+  <entry>Custom Project Manager</entry>
+</row>
+<row>
+  <entry>trollproject</entry>
+  <entry>QMake based Project Manager</entry>
+</row>
+</tbody></tgroup>
+</table>
+
+<table id="table-global-parts">
+<title>Global parts in &kdevelop;</title>
+
+<tgroup cols="2"><tbody>
+<row><entry>Part Name</entry><entry>Description</entry></row>
+<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
+<row><entry>history</entry><entry></entry></row>
+<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
+<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
+<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
+<row><entry>openwith</entry><entry></entry></row>
+<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
+<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
+<row><entry>texttools</entry><entry>Additional text tools</entry></row>
+<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
+<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
+<row><entry>cvs</entry><entry>CVS Support</entry></row>
+<row><entry>tools</entry><entry></entry></row>
+<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
+<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
+<row><entry>filter</entry><entry></entry></row>
+<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Language support parts in &kdevelop;</title>
+<tgroup cols="2">
+<tbody>
+<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
+<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
+<row><entry>javasupport</entry><entry>Support for Java</entry></row>
+<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
+<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
+<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Project specific parts in &kdevelop;</title>
+<tgroup cols="2"><tbody>
+<row><entry>astyle</entry><entry></entry></row>
+<row><entry>buglist</entry><entry></entry></row>
+<row><entry>classview</entry><entry>Classview Manager</entry></row>
+<row><entry>ctags</entry><entry></entry></row>
+<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
+<row><entry>diff</entry><entry></entry></row>
+<row><entry>distpart</entry><entry></entry></row>
+<row><entry>doxygen</entry><entry></entry></row>
+<row><entry>fileview</entry><entry></entry></row>
+<row><entry>javadebugger</entry><entry></entry></row>
+<row><entry>manager</entry><entry></entry></row>
+<row><entry>nedit</entry><entry></entry></row>
+<row><entry>outputviews</entry><entry></entry></row>
+<row><entry>perforce</entry><entry></entry></row>
+<row><entry>qeditor</entry><entry></entry></row>
+<row><entry>scripting</entry><entry></entry></row>
+<row><entry>scriptproject</entry><entry></entry></row>
+<row><entry>sourcenav</entry><entry></entry></row>
+<row><entry>svn</entry><entry></entry></row>
+<row><entry>visualboyadvance</entry><entry></entry></row>
+<row><entry>windowmenu</entry><entry></entry></row>
+</tbody></tgroup>
+</table>
+
+</sect1> <!-- parts -->
+
+</chapter> <!-- kdevelopoverview -->
 
 <!-- ====================================================================== -->
 
 <chapter id="appwizard">
-<title>Getting Started: The Application Wizard</title>
+<title>Getting started: the application wizard</title>
 
 <sect1 id="newprojects">
 <title>New projects</title>
@@ -649,14 +985,14 @@ Let's look at all this in more detail now ...
 <!-- ### Explain steps in detail -->
 
 <sect2 id="newprojects-start">
-<title>Initial Steps</title>
+<title>Initial steps</title>
 
 <para>
 To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  You should see the New Project Wizard, as seen below:
 </para>
 
 <figure id="screenshot-newprojectwizard" float="1">
-<title>A screenshot of the Create New Project Wizard</title>
+<title>A screenshot of the Create New Project wizard</title>
 <mediaobject>
 <imageobject><imagedata fileref="createnewproject.png"/></imageobject>
 </mediaobject>
@@ -667,33 +1003,33 @@ Fill in the appropriate information, and select <guibutton>Next</guibutton>
 </para>
 
 <sect3 id="newprojects-start-type">
-<title>Select Programming Language and Application Type</title>
+<title>Select programming language and application type</title>
 <para></para>
 </sect3>
 
 <sect3 id="newprojects-start-general">
-<title>Provide General Information</title>
+<title>Provide general information</title>
 <para></para>
 </sect3>
 
 </sect2>
 
 <sect2 id="newprojects-start-cvs">
-<title>Supply Version System Information</title>
+<title>Supply version system information</title>
 <para></para>
 </sect2>
 
 <sect2 id="newprojects-start-templates">
-<title>Supply Header/Source Templates</title>
+<title>Supply header/source templates</title>
 <para></para>
 </sect2>
 
 <sect2 id="newprojects-start-build">
-<title>Build the Initial Project Files</title>
+<title>Build the initial project files</title>
 <para></para>
 </sect2>
 
-</sect1>
+</sect1> <!-- newprojects -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -701,39 +1037,37 @@ Fill in the appropriate information, and select <guibutton>Next</guibutton>
 <title>Importing existing projects</title>
 
 <para>
-To import an existing directory in &kdevelop; 3.0, select <guimenuitem>Import Existing Directory</guimenuitem>
+To import an existing directory in &kdevelop; select <guimenuitem>Import Existing Directory</guimenuitem>
 from the <guimenu>Project</guimenu> menu.  You should see the Import Directory Wizard, as seen below:
 </para>
 
 <figure id="screenshot-importdirectory" float="1">
-<title>The Import Directory Dialog</title>
+<title>The Import Directory dialog</title>
 <mediaobject>
 <imageobject><imagedata fileref="importdirectory.png"/></imageobject>
 </mediaobject>
 </figure>
 
-
-
-</sect1>
+</sect1> <!-- importing -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="convertingold">
-<title>Converting old &kdevelop; project files</title>
+<title>Converting old KDevelop project files</title>
 
 <para>
 &kdevelop; 3.0 ships with a utility called <filename>kdevprj2kdevelop</filename>.
 This utility can be used to convert older &kdevelop; project files to 3.0 files.
 </para>
 
-</sect1>
+</sect1> <!-- convertingold -->
 
-</chapter>
+</chapter> <!-- appwizard -->
 
 <!-- ====================================================================== -->
 
 <chapter id="editing">
-<title>Editing</title>
+<title>Editing tools</title>
 
 <sect1 id="keyboardmapping">
 <title>Keyboard mapping</title>
@@ -918,7 +1252,7 @@ Redo
 </tgroup>
 </informaltable>
 
-</sect1>
+</sect1> <!-- keyboardmapping -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1079,7 +1413,7 @@ items will be invalid. You can avoid this by saving all files beforehand.
 
 </sect2>
 
-</sect1>
+</sect1> <!-- searchinggrepping -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1089,9 +1423,9 @@ items will be invalid. You can avoid this by saving all files beforehand.
 <para>
 </para>
 
-</sect1>
+</sect1> <!-- newfiles -->
 
-</chapter>
+</chapter> <!-- editing -->
 
 <!-- ====================================================================== -->
 
@@ -1106,7 +1440,7 @@ lists and trees for the selection of files:
 <itemizedlist>
 <listitem>
 <formalpara>
-<title>File Tree</title>
+<title>File tree</title>
 <para>
 This shows a tree view of the file hierarchy below the project directory. If 
 you click on a file, it is loaded into the editor. For files which do not
@@ -1147,7 +1481,7 @@ the right mouse button on the root item of the tree.
 
 <listitem>
 <formalpara>
-<title>File Groups</title>
+<title>File groups</title>
 <para>
 This shows the files belonging to the project, grouped by their file name 
 extension. As in the file tree, you can edit a file by clicking on it
@@ -1172,12 +1506,12 @@ be put below more specific ones. For example, an asterisk for the
 
 </itemizedlist>
 
-</chapter>
+</chapter> <!-- filebrowsers -->
 
 <!-- ====================================================================== -->
 
 <chapter id="classbrowser">
-<title>The class browser</title>
+<title>The class browsers</title>
 <indexterm zone="classbrowser"><primary>class browser</primary></indexterm>
 
 <para>
@@ -1236,7 +1570,7 @@ generate new method and variable declaration in the respective class, together
 with an empty implementation.
 </para>
 
-</sect1>
+</sect1> <!-- classview -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1248,7 +1582,7 @@ The class tool dialog is activated by right clicking on a class in the class
 view and choosing <guimenuitem>Class tool...</guimenuitem>.
 </para>
 
-</sect1>
+</sect1> <!-- classtools -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1258,9 +1592,9 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 <para>
 </para>
 
-</sect1>
+</sect1> <!-- classhierarchy -->
 
-</chapter>
+</chapter> <!-- classbrowser -->
 
 <!-- ====================================================================== -->
 
@@ -1313,13 +1647,15 @@ All this documentation should be easily maintainable and ready at hand whenever 
 <imageobject><imagedata fileref="doctreeview.png"/></imageobject>
 </mediaobject>
 </figure>
-</sect1>
-</chapter>
+
+</sect1> <!-- docbrowser -->
+
+</chapter> <!-- documentation -->
 
 <!-- ====================================================================== -->
 
 <chapter id="projectmanagement">
-<title>Building and Project management</title>
+<title>Building and project management</title>
 
 <para>
 This chapter deals only with compiled projects, such as C++, Java or
@@ -1423,7 +1759,7 @@ CXX = g++
 <title>KDevelop's automake manager</title>
 
 <figure id="screenshot-automakemanager" float="1">
-<title>A screenshot of the Automake manager</title>
+<title>A screenshot of the automake manager</title>
 <mediaobject>
 <imageobject><imagedata fileref="automakemanager.png"/></imageobject>
 </mediaobject>
@@ -1454,19 +1790,19 @@ CXX = g++
 
 </sect2>
 
-</sect1>
+</sect1> <!-- autoproject -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="customproject">
-<title>Custom Makefiles and build scripts</title>
+<title>Custom makefiles and build scripts</title>
 <indexterm zone="customproject"><primary><filename>Makefile</filename></primary></indexterm>
 <indexterm zone="customproject"><primary><filename>build.xml</filename></primary></indexterm>
 
 <para>
 </para>
 
-</sect1>
+</sect1> <!-- customproject -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1476,7 +1812,7 @@ CXX = g++
 <para>
 </para>
 
-</sect1>
+</sect1> <!-- compileroptions -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1486,9 +1822,9 @@ CXX = g++
 <para>
 </para>
 
-</sect1>
+</sect1> <!-- makeoptions -->
 
-</chapter>
+</chapter> <!-- projectmanagement -->
 
 <!-- ====================================================================== -->
 
@@ -1504,7 +1840,7 @@ CXX = g++
 
 </para>
 
-</sect1>
+</sect1> <!-- buildconfigurations -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1556,7 +1892,7 @@ For many combinations, you can use a short form, for instance
 <wordasword>i386-linux</wordasword> or <wordasword>arm-elf</wordasword>.
 </para>
 
-</sect1>
+</sect1> <!-- crosscompiling -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1568,7 +1904,7 @@ For many combinations, you can use a short form, for instance
 <indexterm zone="qtembedded"><primary>framebuffer</primary></indexterm>
 
 <para>
-Qt/Embedded is a version of the Qt library that does not use the X window
+&qte; is a version of the &qt; library that does not use the X window
 system, but draws directly to the framebuffer on Linux systems. It is
 therefore interesting for embedded systems which have tight restrictions
 on the memory usage of the whole system. Its API is fully compatible with
@@ -1576,15 +1912,15 @@ the one of the X11 version.
 </para>
 
 <para>
-Developing an application for Qt/Embedded with &kdevelop; is not very different
-from developing a program for the X11 version of Qt. In fact, you can use the
+Developing an application for &qte; with &kdevelop; is not very different
+from developing a program for the X11 version of &qt;. In fact, you can use the
 same codebase for both versions. If you use the autoproject project
 management, you switch to the embedded version by passing the argument
 <option>--enable-embedded</option> to the configure script. You can set
 this in the <menuchoice><guimenu>Project</guimenu>
 <guimenuitem>Project Options...</guimenuitem></menuchoice> dialog under
 <guilabel>Configure Options</guilabel>. With the option
-<option>--with-qt-dir=DIR</option> you set the directory in which Qt/Embedded
+<option>--with-qt-dir=DIR</option> you set the directory in which &qte;
 is installed.
 </para>
 
@@ -1593,7 +1929,7 @@ After configuring and compiling your application with these options, it will
 link with the <filename>libqpe.so</filename> library. This version of your
 application will not normally run when you use X11. In order to test it, 
 run it under the control of the program <application>qvfb</application> 
-(Qt Virtual Frame Buffer). This is done by starting 
+(Qt Virtual Frame Buffer). This is done by starting
 <application>qvfb</application> and then starting your application with
 </para>
 
@@ -1610,8 +1946,8 @@ system and the version running on the target system.
 </para>
 
 <para>
-Applications for Qt/Embedded normally run as single applications on the
-device they are designed for. Trolltech also supports Qtopia, which is a 
+Applications for &qte; normally run as single applications on the
+device they are designed for. Trolltech also supports Qtopia, which is a
 collection of applications for PIM, web browsing and various other areas that
 work together in a consistent manner. It is the standard environment for
 instance on the Sharp Zaurus. You can write applications that integrate into
@@ -1622,14 +1958,14 @@ the autoproject project management, you have to add
 <option>--enable-qtopia</option> to the configure options.
 </para>
 
-</sect1>
+</sect1> <!-- qtembedded -->
 
-</chapter>
+</chapter> <!-- advancedautoproject -->
 
 <!-- ====================================================================== -->
 
 <chapter id="debugger">
-<title>The debugger</title>
+<title>The debugger interface</title>
 <indexterm zone="debugger"><primary>debugger</primary></indexterm>
 
 <para>
@@ -1744,7 +2080,7 @@ via the context menu.
 <para>
 </para>
 
-</sect1>
+</sect1> <!-- settingbreakpoints -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1798,9 +2134,9 @@ breakpoints.
 </para>
 </formalpara>
 
-</sect1>
+</sect1> <!-- debuggeroptions -->
 
-</chapter> 
+</chapter> <!-- debugger -->
 
 <!-- ====================================================================== -->
 
@@ -1810,7 +2146,7 @@ breakpoints.
 <para>
 </para>
 
-</chapter>
+</chapter> <!-- python -->
 
 <!-- ====================================================================== -->
 
@@ -1819,7 +2155,7 @@ breakpoints.
 
 <para>
 </para>
-</chapter>
+</chapter> <!-- php -->
 
 <!-- ====================================================================== -->
 
@@ -1830,7 +2166,7 @@ breakpoints.
 
 <para>
 &CVS; is the revision control system which many open source projects -
-including KDE - are using. It stores all sources codes in a central place,
+including &kde; - are using. It stores all sources codes in a central place,
 called the <emphasis>repository</emphasis>.  From the repository, developers 
 can check out a current version of the project or snapshots of it at arbitrary
 points of time. In contrast to some other revision control systems, it is not 
@@ -1851,7 +2187,7 @@ be commited.
 <para>
 So far, this has been a description of the basic features of &CVS; one usually
 has to cope with. But &CVS; can provide a lot more: One can  maintain several
-branches of a project (e. g. KDE 1.1.2 and KDE 2 were branches in KDE's 
+branches of a project (e. g. &kde; 1.1.2 and &kde; 2 were branches in &kde;'s
 development tree), merge changes from one branch to another, ask for
 differences between revisions, the revision history of files etc.
 </para>
@@ -1881,7 +2217,8 @@ In the file views, the following context menu items are available:
 <itemizedlist>
 
 <listitem>
-<formalpara><title>Add to Repository</title>
+<formalpara>
+<title>Add to repository</title>
 <para>Prepares the marked file for addition to the repository. The file
 is transferred to the repository when you commit it (or the containing
 directory) the next time.
@@ -1890,7 +2227,8 @@ directory) the next time.
 </listitem>
 
 <listitem>
-<formalpara><title>Remove from Repository</title>
+<formalpara>
+<title>Remove from repository</title>
 <para>
 Prepares a file for removal from the repository. This also deletes
 the file on the local file system, so use this feature with care!
@@ -1899,7 +2237,8 @@ the file on the local file system, so use this feature with care!
 </listitem>
 
 <listitem>
-<formalpara><title>Update</title>
+<formalpara>
+<title>Update</title>
 <para>
 Runs <command>cvs update</command> to merge any changes from other
 users into your working directory. When you use this menu item over
@@ -1910,7 +2249,8 @@ have disabled this in the configuration file <filename>.cvsrc</filename>.
 </listitem>
 
 <listitem>
-<formalpara><title>Commit</title>
+<formalpara>
+<title>Commit</title>
 <para>
 Runs <command>cvs commit</command> to upload any locally made changes
 to the repository. Note that you should update before doing this.
@@ -1933,7 +2273,7 @@ problem are described on the CVS/SSH FAQ which you can find in the
 SourceForge documentation.
 </para>
 
-</chapter>
+</chapter> <!-- cvs -->
 
 <!-- ====================================================================== -->
 
@@ -1961,12 +2301,12 @@ dialog under <guibutton>External tools</guibutton>.
 Other tools will be discussed in the chapter <xref linkend="plugintools"/>.
 </para>
 
-</chapter>
+</chapter> <!-- externalprogs -->
 
 <!-- ====================================================================== -->
 
 <chapter id="plugintools">
-<title>Plugin Tools</title>
+<title>Plugin tools</title>
 <indexterm zone="plugintools"><primary>plugins</primary></indexterm>
 
 <para>
@@ -2167,15 +2507,15 @@ the content of the matched subgroups will be shown in a list box.
 
 </itemizedlist>
 
-</chapter>
+</chapter> <!-- plugintools -->
 
 <!-- ====================================================================== -->
 
 <appendix id="app-uimodes-examples">
-<title>&kdevelop; User Interface Mode Examples</title>
+<title>&kdevelop; user interface mode examples</title>
 
 <sect1 id="mdi-desc">
-<title>Child Frame Windows Mode</title>
+<title>Child frame windows mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2193,12 +2533,12 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
 </para>
 
-</sect1>
+</sect1> <!-- mdi-desc -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="tabbed-desc">
-<title>Tabbed Pages Mode</title>
+<title>Tabbed pages mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2216,12 +2556,12 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
 </para>
 
-</sect1>
+</sect1> <!-- tabbed-desc -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="toplevel-desc">
-<title>Toplevel Windows Mode</title>
+<title>Toplevel windows mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2239,12 +2579,12 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
 </para>
 
-</sect1>
+</sect1> <!-- toplevel-desc -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="ideal-desc">
-<title>IDEAl Mode</title>
+<title>IDEAl mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2262,7 +2602,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
 </para>
 
-</sect1>
+</sect1> <!-- ideal-desc -->
 
 </appendix>
 
@@ -2274,19 +2614,19 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <title>Getting information</title>
 <para>
 </para>
-</sect1>
+</sect1> <!-- gettinginformation -->
 
 <sect1 id="app-reporting-bugs">
 <title>Reporting bugs</title>
 <para>
 </para>
-</sect1>
+</sect1> <!-- app-reporting-bugs -->
 
 <sect1 id="app-licensing">
 <title>Licensing</title>
 &underFDL;
 &underGPL;
-</sect1>
+</sect1> <!-- app-licensing -->
 </appendix>
 
 <!-- ====================================================================== -->
@@ -2302,7 +2642,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </para></listitem>
 </itemizedlist>
 </para>
-</sect1>
+</sect1> <!-- changes -->
 </appendix>
 
 <!-- ====================================================================== -->
