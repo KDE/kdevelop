@@ -56,8 +56,6 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
 
   setCaption( i18n("Class Tool") );
 
-  treeH.setTree( &classTree );
-
   setWidgetValues();
   readIcons();
   setCallbacks();
@@ -291,8 +289,8 @@ void CClassToolDlg::setStore( CClassStore *aStore )
 
   store = aStore;
 
-  // Set the store in the treehandler as weel.
-  treeH.setStore( store );
+  // Set the store in the treehandler as well.
+  ((CClassTreeHandler *)classTree.treeH)->setStore( store );
 
   lb = classCombo.listBox();
 
@@ -326,17 +324,33 @@ void CClassToolDlg::addClasses( QList<CParsedClass> *list )
   QListViewItem *root;
 
   // Clear all previous items in the tree.
-  treeH.clear();
+  classTree.treeH->clear();
 
   // Insert root item(the current class);
-  root = treeH.addRoot( currentClass->name, THCLASS );
+  root = classTree.treeH->addRoot( currentClass->name, THCLASS );
 
   for( aClass = list->first();
        aClass != NULL;
        aClass = list->next() )
   {
-    treeH.addClass( aClass, root );
+    ((CClassTreeHandler *)classTree.treeH)->addClass( aClass, root );
   }
+}
+
+/** Set the view definition command and its' argument. */
+void CClassToolDlg::setViewDefinitionCmd( CCommand *aCmd )
+{
+  assert( aCmd != NULL );
+
+  classTree.setDefinitionCmd( aCmd );
+}
+
+/** Set the view declaration command and its' argument. */
+void CClassToolDlg::setViewDeclarationCmd( CCommand *aCmd )
+{
+  assert( aCmd != NULL );
+
+  classTree.setDeclarationCmd( aCmd );
 }
 
 void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
@@ -344,9 +358,9 @@ void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
   QListViewItem *root;
   
   // Insert root item(the current class);
-  root = treeH.addRoot( aClass->name, THCLASS );
+  root = classTree.treeH->addRoot( aClass->name, THCLASS );
 
-  treeH.addAttributesFromClass( aClass, root, comboExport );
+  ((CClassTreeHandler *)classTree.treeH)->addAttributesFromClass( aClass, root, comboExport );
 }
 
 void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
@@ -354,9 +368,9 @@ void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
   QListViewItem *root;
   
   // Insert root item(the current class);
-  root = treeH.addRoot( aClass->name, THCLASS );
+  root = classTree.treeH->addRoot( aClass->name, THCLASS );
 
-  treeH.addMethodsFromClass( aClass, root, comboExport );
+  ((CClassTreeHandler *)classTree.treeH)->addMethodsFromClass( aClass, root, comboExport );
 }
 
 void CClassToolDlg::addAllClassMethods()
@@ -365,7 +379,7 @@ void CClassToolDlg::addAllClassMethods()
   CParsedClass *aClass;
 
   // Clear all previous items in the tree.
-  treeH.clear();
+  classTree.treeH->clear();
 
   // First treat all parents.
   for( aParent = currentClass->parents.first();
@@ -387,7 +401,7 @@ void CClassToolDlg::addAllClassAttributes()
   CParsedClass *aClass;
 
   // Clear all previous items in the tree.
-  treeH.clear();
+  classTree.treeH->clear();
   
   // First treat all parents.
   for( aParent = currentClass->parents.first();
@@ -461,16 +475,16 @@ void CClassToolDlg::viewParents()
 
   changeCaption();
 
-  treeH.clear();
+  classTree.treeH->clear();
   
   // Insert root item(the current class);
-  root = treeH.addRoot( currentClass->name, THCLASS );
+  root = classTree.treeH->addRoot( currentClass->name, THCLASS );
 
   for( aParent = currentClass->parents.first();
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    treeH.addClass( aParent->name, root );
+    ((CClassTreeHandler *)classTree.treeH)->addClass( aParent->name, root );
   }
 }
 

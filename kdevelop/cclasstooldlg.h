@@ -18,7 +18,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 #ifndef CCLASSTOOLDLG_H
 #define CCLASSTOOLDLG_H
 
@@ -30,6 +29,8 @@
 #include <qlayout.h> 
 #include "./classparser/ClassStore.h"
 #include "cclasstreehandler.h"
+#include "ccommand.h"
+#include "cclasstooltreeview.h"
 
 typedef enum _CTOperations
 {
@@ -44,6 +45,8 @@ public: // Constructor & Destructor
 
   CClassToolDlg( QWidget *parent=0, const char *name=0 );
 
+public: // Public attributes
+
 public: // Public methods to set attribute values
 
   /** Set the store to use to search for classes. */
@@ -52,6 +55,12 @@ public: // Public methods to set attribute values
   /** Set the class to view. */
   void setClass( const char *aName );
   void setClass( CParsedClass *aClass );
+
+  /** Set the view definition command and its' argument. */
+  void setViewDefinitionCmd( CCommand *aCmd );
+
+  /** Set the view declaration command and its' argument. */
+  void setViewDeclarationCmd( CCommand *aCmd );
 
   /** View the parents of the current class. */
   void viewParents();
@@ -74,6 +83,11 @@ public: // Public methods to set attribute values
   /** View virtual methods in this class and parents. */
   void viewVirtuals();
 
+public: // Public widgets
+
+  /** The actual view. */
+  CClassToolTreeView classTree;
+
 protected: // Private widgets
 
  QLabel classLbl;
@@ -92,8 +106,6 @@ protected: // Private widgets
  QPushButton methodsBtn;
  QPushButton virtualsBtn;
  QComboBox exportCombo;
-
- QListView classTree;
 
  protected slots:
 
@@ -125,8 +137,19 @@ private: // Private attribues
  /** Stores what operation the user selected last. */
  CTDOperations currentOperation;
 
- /** Handler to view things in the tree. */
- CClassTreeHandler treeH;
+ /** Command to be executed when the users wants a definition. */
+ CCommand *viewDefinitionCmd;
+
+ /** Argument to the viewDefinitionCmd. */
+ void *viewDefinitionArg;
+
+ /** Command to be executed when the user wants a declaration. */
+ CCommand *viewDeclarationCmd;
+
+ /** Argument to the viewDeclarationCmd. */
+ void *viewDeclarationArg;
+
+ 
 
 private: // Private methods
 
