@@ -1,9 +1,13 @@
+2001-05-03  F@lk Brettschneider <falk@kdevelop.org>
+    * bad behaviour fixed: avoid flickering when adding new maximized MDI views to the MDI system
+    * bugfix: proper reinsertion of items in mainframe's fillWindowMenu()
+
 2001-05-01  jbb <jbb@kdevelop.org>
     * Vertical scrollbar improvements patch from Jens Zurheide <jens.zurheide@gmx.de>
 
 2001-05-01  jbb <jbb@kdevelop.org>
     * grep dialog and write access patches from Harald Fernengel <harry@bnro.de>
-    
+
 2001-04-30  F@lk Brettschneider <falk@kdevelop.org>
    *  improved menu stuff for tree and output tool views
 
