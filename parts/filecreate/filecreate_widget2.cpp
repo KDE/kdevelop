@@ -184,8 +184,13 @@ namespace FileCreate {
   void FriendlyWidget::resizeRow(int row) {
     if (row>=numRows() || row<0) return;
     int maxHeight = 0;
+
     for(int c=0;c<numCols();c++) {
-      QSize size = item(row,c)->sizeHint();
+      QTableItem* i = item( row, c );
+      if( !i )
+         continue;
+
+      QSize size = i->sizeHint();
       maxHeight = size.height()>maxHeight ? size.height() : maxHeight;
     }
     setRowHeight(row,maxHeight+2); // bit of extra room
@@ -195,6 +200,11 @@ namespace FileCreate {
     if (col>=numCols() || col<0) return;
     int maxWidth = 0;
     for(int r=0;r<numRows();r++) {
+
+      QTableItem* i = item( r, col );
+      if( !i )
+         continue;
+
       QSize size = item(r,col)->sizeHint();
       maxWidth = size.width()>maxWidth ? size.width() : maxWidth;
     }
