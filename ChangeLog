@@ -1,3 +1,12 @@
+2000-10-18 Ralf Nolden <nolden@kde.org>
+  * updated qt2 templates, mdi template uses QAction as well, fixed up am_edit for
+    using tr instead of i18n and not adding klocale.h for qt templates
+  * updated manual to a 1.3 release adding info about using Qt designer - not finished yet
+  * updated kde2 templates for new am_edit, uic check as well, MDI template does not use KAction yet and crashes on exit...
+  * dependency problem still unsolved as ui files get processed at the end of compiling which causes
+    a problem if the header is included before...anyone a clue how to fix that ? (this is for all templates)
+  *PLEASE TEST THIS STUFF !!!
+
 2000-10-10 Ralf Nolden <nolden@kde.org>
 	* updated qt2 sdi application: removed kunload error in am_edit,
 	rewrote template to make use of QAction stuff - resource.h is now

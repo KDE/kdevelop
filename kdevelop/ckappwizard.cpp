@@ -1593,7 +1593,8 @@ void CKAppWizard::removeSources(const QString &dir)
     file.remove (dir + "/" + nametext + "/" + nametext + "doc.h");
     file.remove (dir + "/" + nametext + "/" + nametext + "view.cpp");
     file.remove (dir + "/" + nametext + "/" + nametext + "view.h");
-    file.remove (dir + "/" + nametext + "/resource.h");
+    if(kdenormalitem->isSelected()|| kdenormaloglitem->isSelected() || qtnormalitem->isSelected()|| qextmdiitem->isSelected())
+      file.remove (dir + "/" + nametext + "/resource.h");
   }
   if( qextmdiitem->isSelected())
   {
@@ -2336,8 +2337,12 @@ void CKAppWizard::slotProcessExited() {
   project->setCXXFLAGS ("-O0 -g3 -Wall");
   
   
-  if (kdeminiitem->isSelected() || kde2miniitem->isSelected()) {
+  if (kdeminiitem->isSelected() ) {
     project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
+  }
+
+  else if ( kde2miniitem->isSelected()) {
+    project->setLDADD ("$(LIB_KDEUI)");
   }
   else if (kdenormalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
@@ -2348,7 +2353,7 @@ void CKAppWizard::slotProcessExited() {
      project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIB_QGL)");
   }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
-    project->setLDADD (" -lkfile -lkdeui -lkdecore -lqt -lXext -lX11");
+    project->setLDADD ("$(LIB_KFILE)");
   }
   else if (qtnormalitem->isSelected() || qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
@@ -2653,14 +2658,23 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
-      
-      fileInfo.rel_name = namelow + "/resource.h";
-      fileInfo.type = CPP_HEADER;
-      fileInfo.dist = true;
-      fileInfo.install = false;
-      fileInfo.install_location = "";
-      project->addFileToProject (namelow + "/resource.h",fileInfo);
-      
+
+      if (kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || qtnormalitem->isSelected() ||qextmdiitem->isSelected()){
+        fileInfo.rel_name = namelow + "/resource.h";
+        fileInfo.type = CPP_HEADER;
+        fileInfo.dist = true;
+        fileInfo.install = false;
+        fileInfo.install_location = "";
+        project->addFileToProject (namelow + "/resource.h",fileInfo);
+      }
+      if(kde2normalitem->isSelected() || kde2mdiitem->isSelected()){
+        fileInfo.rel_name = namelow + "/" + namelow + "ui.rc";
+        fileInfo.type = DATA;
+        fileInfo.dist = true;
+        fileInfo.install = false;
+        fileInfo.install_location = "";
+        project->addFileToProject (namelow + "/" + namelow + "ui.rc",fileInfo);
+      }
       if( qextmdiitem->isSelected()) {
         fileInfo.rel_name = namelow + "/" + "tabprocessingeditwidget.cpp";
         fileInfo.type = CPP_SOURCE;

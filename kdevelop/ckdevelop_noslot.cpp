@@ -689,23 +689,14 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   // Load QtDesigner if clicked/loaded an User Interface file (.ui)
   if( filename.right(3) == ".ui") {
     if(!CToolClass::searchProgram("designer")){
-      debug("QtDesigner not fount!");
       return;
     }
-    showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
 
 		KProcess designer_process;
 		designer_process << "designer" << "-client" << filename;
 		if(!designer_process.start(KProcess::DontCare)) {
     	debug("QtDesigner didn't start!");
 		}
-		/*
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("designer -client " + filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
-		*/
     return;
   }
 

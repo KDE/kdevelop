@@ -2,10 +2,10 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.2
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.3
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 1.2 , March 21, 2000
+<date>Version 1.3 , October 16, 2000
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -59,12 +59,14 @@ anywhere within the IDE.
 
 <sect>Changes
 <p>
-Version 1.2 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 1.0 final release, followed by the release of version 1.1. We believe that the current
-version is to be expected as the final release for the KDE 1.x series, giving developers the environment they want to use.
+Version 1.3 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 1.0 final release, followed by the release of version 1.1 and 1.2. We believe that the current
+version is to be expected as the final release for the KDE 1.x series, giving developers the environment they want to use especially in
+regards to KDE 2.0 development.
 
 Improvements were made in the following sections:
 
+KDevelop 1.2:
 <itemize>
 <item>fast classparser and -browser with graphical class-tree view and dialog-based adding of members and classes,
 <item>CVS support for most needed functions such as adding, removing, updating and committing files and directories,
@@ -73,6 +75,17 @@ Improvements were made in the following sections:
 <item>updated documentation tree which lets you access the class documentation up to any method of classes 
 directly
 </itemize>
+
+KDevelop 1.3:
+
+<itemize>
+<item>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction class and the configure script searches
+for the <bf>uic</bf> which processes Qt designer files
+<item>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also using the uic for desinger files
+<item>general support for the new Qt designer in the New File dialog, LFV folders and automatic opening on selection in the file trees.
+<item>several bugfixes regarding bugs in the kwrite code and KDevelop itself
+</itemize>
+
 
 Any comments about the IDE, its documentation or feature requests are welcome.
 
@@ -133,6 +146,16 @@ with many translators who transfer KDevelop to as most languages as possible to 
 developer community the IDE in their own language, including the handbooks that ship with it. Many users 
 contributed their experience and knowledge to the project as one of the most promising products for Linux/Unix 
 developers to make it even more stable and portable to other Unices.
+
+After the 1.2 release on May 4th, we continued fixing several bugs while working on a 2.0 version using the KDE 2.0
+API and the latest technologies KDE 2.0 offers. Since the release of Qt-2.2.0 brought Qt´s designer for constructing
+user interfaces which also supports KDE widgets, the designer is about to replace KDevelop´s own dialog editor as it offers
+dynamic layout management and directly connecting widgets. To support using the designer within KDevelop, the templates and KDevelop
+have been updated to make easy use of it while working on a KDE 2.0 or Qt 2.2.x project.
+
+The 1.3 release is to be expected as the last version that needs KDE 1.x libraries to run; the port to the KDE 2.0 is under way and is
+to be expected later in 2000 to early 2001 (estimated). As KDevelop 1.3 enables developers to directly work on KDE 2.0 projects, we
+will take our time to provide you a new KDevelop as soon as possible with even more features and please you to be patient meanwhile.
  
 <sect>Printed Versions
 <p>
@@ -201,10 +224,11 @@ as distribution packages and thereby can be installed easily.
 (available at <url url="http://developer.kde.org">)
 <item><idx/KDbg/, available at <url url="http://members.telecom.at/~johsixt/kdbg.html">
 <item><idx/KIconEdit/ (available at <url url="http://www.kde.org">)
+<item><idx/Qt designer and uic/ which come along with Qt 2.2.x.
 </itemize>
 
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
-200 MMX, 128MB RAM.
+200 MMX, 128MB RAM as well as on several other platforms.
 
 As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including <idx/enscript/ as packages or
 rpm's, so you should have no problem installing the required third-party software.
@@ -599,6 +623,14 @@ dialog, generation of the code <idx/output/ and it's direct testing within the p
 can control the <idx/Compiler/ <idx/output/ without having to switch back to the programming view. For a detailed description, see <ref
 id="The Dialog Editor">.
 
+The current release makes use of the Qt designer for all KDE 2.0/Qt 2.x project templates. This doesn´t make the dialog editor obsolete as
+one may want to continue working on a Qt 1.x /KDE 1.x project before porting to the new API. Mind that the designer has to be included in
+you PATH variable to be automatically called from within KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic
+as well to generate C++ output from your .ui files created with designer. KDevelop takes care of automatically adding .ui files to Makefile.am
+under the _SOURCES line. If you run into problems with including header files of classes that get generated during <tt/make/, make sure the ui file
+gets processed before any implementation file that includes a generated class header, i.e. set the ui files in the front of the _SOURCES line if necessary.
+
+
 <sect1><idx/KAppWizard/ and the Classtools
 <p>
 The <idx/KAppWizard/ and the Classtools provided for project generation and automatic code extension are intended to make the
@@ -896,6 +928,9 @@ headerfile containing the class and set the cursor to the class <idx/declaration
 <idx/implementation/ file and place the cursor at the function header.	For elements, KDevelop will look for the header file and place
 the cursor at the line the element is declarated.	The <idx/classviewer/ also provides popup-menus that offer more specified options,
 see <ref id="The Class Browser" name="The Class Browser"> for more detailed information.
+
+Mind that the Class Viewer does <bf/not/ display generated files like those generated by moc and uic as they get removed from the distribution
+as well as they are not present on a clean development tree.
 
 <sect1>The Logical File Viewer
 <p>
@@ -2424,6 +2459,13 @@ not comfortable with certain options for e.g. the <idx/Linker/ or need additiona
 the <idx/Makefile.am/ macros and add all changes in the <idx/Makefile.am/'s after the section separated with the entry "KDevelop write area".
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
 this will prevent using KDevelop for any changes related to project configuration.
+
+Another hint may be of good use when developing KDE 2.0/ Qt 2.2.x applications using the Qt designer to create user interfaces. The ui files
+get added by KDevelop to the _SOURCES line in the Makefile.am of the subdirectory containing the ui file. This may result in the scenario that
+you want to include the header file of the generated dialog which may not exist yet when your file that includes it gets compiled as the <bf>uic</bf>
+(Qt user interface compiler) generates the C++ output. Therefore, the order of source files in the _SOURCES line may be important - if you
+run into problems, remove the ui file from the project (don´t delete it!), add the sourcefile that needs to include a generated header to the project and then
+re-add the ui file to the project.
 
 <sect>Compiler and <idx/Linker/ Flags for Projects
 <p>
