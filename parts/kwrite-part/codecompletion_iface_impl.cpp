@@ -1,4 +1,4 @@
-# basic idea from qtdesigner by TrollTech
+// basic idea from qtdesigner by TrollTech
 #include "kwrite/kwview.h"
 #include <qsizegrip.h>
 #include <qapp.h>
