@@ -241,13 +241,6 @@ void MainWindowIDEAl::createFramework() {
 
     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
-//    connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
-//    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
-//    connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags())); // do we need this? I think not.
-//     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-//     connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-//     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-//     connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
 }
 
 
@@ -550,7 +543,10 @@ void MainWindowIDEAl::slotPartAdded(KParts::Part* part) {
     if ( !part || !part->inherits("KTextEditor::Document") )
         return;
 
-//    connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    // listen to the part's 'completed' signal in order to
+    // discover when when the filename changes
+    KParts::ReadWritePart * rw_part = static_cast<KParts::ReadWritePart*>( part );
+    connect( rw_part, SIGNAL( completed() ), this, SLOT( slotPartJobCompleted() ) );
 
     // Connect to the document's views newStatus() signal in order to keep track of the
     // modified-status of the document.
@@ -607,14 +603,27 @@ void MainWindowIDEAl::raiseEditor() {
 // the active part/current page. //teatime
 void MainWindowIDEAl::slotNewStatus()
 {
-    kdDebug(0) << "MainWindowIDEAl::slotNewStatus()" << endl;
+    kdDebug(9000) << "MainWindowIDEAl::slotNewStatus()" << endl;
 
     QObject * senderobj = const_cast<QObject*>( sender() );
     KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
 
-    if ( ! view ) return;
+    if ( view )
+    {
+        updateTabForPart( view->document() );
+    }
+}
 
-    KParts::ReadWritePart * rw_part = view->document();
+void MainWindowIDEAl::slotPartJobCompleted()
+{
+    kdDebug(9000) << "MainWindowIDEAl::slotPartJobCompleted()" << endl;
+
+    QObject * senderobj = const_cast<QObject*>( sender() );
+    updateTabForPart( dynamic_cast<KParts::ReadWritePart *>( senderobj ) );
+}
+
+void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
+{
     if ( rw_part && rw_part->widget() )
     {
         if ( rw_part->isModified() )
@@ -627,38 +636,6 @@ void MainWindowIDEAl::slotNewStatus()
         }
     }
 }
-
-/* // Disabled until I know it doesn't break anything to remove it
-void MainWindowIDEAl::slotTextChanged() {
-    QWidget* w = m_tabWidget->currentPage();
-    if ( !w )
-        return;
-
-    QString t = m_tabWidget->tabLabel( w );
-    if ( t.right( 1 ) != "*" ){
-        t += "*";
-	m_tabWidget->changeTab( w, t );
-    }
-}
-
-void MainWindowIDEAl::slotUpdateModifiedFlags()
-{
-    QString newTitle;
-    QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
-    for ( ; it.current(); ++it) {
-        KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
-        if ( rw_part && rw_part->widget() ) {
-	    newTitle = rw_part->url().fileName();
-	    if ( rw_part->isModified() )
-                newTitle += "*";
-            if ( m_tabWidget->tabLabel( rw_part->widget() ) != newTitle ) {
-		m_tabWidget->changeTab( rw_part->widget(), newTitle );
-		m_tabWidget->setTabToolTip( rw_part->widget(), rw_part->url().url() );
-	    }
-        }
-    }
-}
-*/
 
 void MainWindowIDEAl::slotBottomTabsChanged() {
     if ( !m_bottomBar )

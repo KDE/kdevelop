@@ -97,9 +97,8 @@ private slots:
   void slotTabSelected(QWidget*);
   void slotFillWindowMenu();
   void slotPartAdded(KParts::Part*);
-//  void slotTextChanged();
-//  void slotUpdateModifiedFlags();
   void slotNewStatus();
+  void slotPartJobCompleted();
   void slotBottomTabsChanged();
   void slotRightTabsChanged();
   void slotLeftTabsChanged();
@@ -117,6 +116,7 @@ private:
 
   void moveRelativeTab(int);
   void raiseTabbar( KTabZoomWidget *tabBar );
+  void updateTabForPart( KParts::ReadWritePart * );
 
   KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
 
