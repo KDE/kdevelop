@@ -797,6 +797,8 @@ private:
 
   int lasttab;
   QString lastfile;
+  bool useGlimpse;
+  bool useHtDig;
 
 };
 
