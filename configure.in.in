@@ -4,7 +4,7 @@ AM_INIT_AUTOMAKE(kdevelop, 3.1.0)
 KDE_NEED_FLEX
 
 KDEV_CHECK_DOCBASE
-KDEV_CHECK_SCRIPTING
+#KDEV_CHECK_SCRIPTING
 #KDEV_CHECK_JAVA
 #KDEV_CHECK_SVN
 #KDEV_CHECK_QEDITOR
@@ -74,9 +74,6 @@ AM_CONDITIONAL(include_autoproject, test "$autoproject" = "yes")
 
 AC_ARG_ENABLE(customproject, AC_HELP_STRING([--disable-customproject], [disable build tool support for custom makefiles]), [customproject=${enableval}], [customproject=yes])
 AM_CONDITIONAL(include_customproject, test "$customproject" = "yes")
-
-AC_ARG_ENABLE(genericproject, AC_HELP_STRING([--disable-genericproject], [disable build tool support for generic]), [genericproject=${enableval}], [genericproject=yes])
-AM_CONDITIONAL(include_genericproject, test "$genericproject" = "yes")
 
 AC_ARG_ENABLE(scriptproject, AC_HELP_STRING([--disable-scriptproject], [disable build tool support for script]), [scriptproject=${enableval}], [scriptproject=yes])
 AM_CONDITIONAL(include_scriptproject, test "$scriptproject" = "yes")
