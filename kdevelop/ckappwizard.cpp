@@ -1590,8 +1590,8 @@ void CKAppWizard::slotApplicationClicked() {
   else if (kde2mdiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/kdemdi.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
-    apidoc->setChecked(true);
+    apidoc->setEnabled(false);
+    apidoc->setChecked(false);
     datalink->setEnabled(true);
     datalink->setChecked(true);
     progicon->setEnabled(true);
