@@ -70,8 +70,8 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
     _cancel->setEnabled( false );
     _replace->setEnabled( false );
 
-    buttonlayout->addWidget( _cancel );
     buttonlayout->addWidget( _replace );
+    buttonlayout->addWidget( _cancel );
 
     _listview = new ReplaceView( this );
     layout->addWidget( _listview );
