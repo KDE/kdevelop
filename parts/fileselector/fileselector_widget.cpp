@@ -351,6 +351,7 @@ void KDevFileSelector::setView(KFile::FileView view)
 void KDevFileSelector::slotFilterChange( const QString & nf )
 {
     QString f = nf.stripWhiteSpace();
+    QToolTip::remove(btnFilter);
     bool empty = f.isEmpty() || f == "*";
     if ( empty )
     {
