@@ -105,10 +105,10 @@ KDevArgHint::KDevArgHint ( QWidget *parent ) : QFrame ( parent, 0,  WType_Popup 
 
 	m_pStateLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
 	m_pStateLabel->setAlignment ( AlignCenter );
-	m_pStateLabel->setFont ( QFont ( "Arial", 9 ) );
+	m_pStateLabel->setFont ( QFont ( "Arial", 10 ) );
 	m_pFuncLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
 	m_pFuncLabel->setAlignment ( AlignCenter );
-	m_pFuncLabel->setFont ( QFont ( "Arial", 9 ) );
+	m_pFuncLabel->setFont ( QFont ( "Arial", 10 ) );
 
 	m_pStateLabel->setFixedSize ( 30, 16 );
 
