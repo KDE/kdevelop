@@ -536,20 +536,15 @@ VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataTyp
 	if (arrayelement_re.search(varName) != -1) {
 		key_.sprintf("%.6d", arrayelement_re.cap(1).toInt());
 	} else if (key_.startsWith("$")) {
-		// Global variable
-		key_.prepend("1001");
+		key_.prepend("1001");		// Global variable
 	} else if (QRegExp("^[A-Z]").search(varName) != -1) {
-		// Constant
-		key_.prepend("1002");
+		key_.prepend("1002");		// Constant
 	} else if (key_.startsWith("@@")) {
-		// Class variable
-		key_.prepend("1003");
+		key_.prepend("1003");		// Class variable
 	} else if (key_.startsWith("@")) {
-		// Instance variable
-		key_.prepend("1004");
+		key_.prepend("1004");		// Instance variable
 	} else {
-		// Local variable or parameter
-		key_.prepend("1005");
+		key_.prepend("1005");		// Local variable or parameter
 	}
 
 //    kdDebug(9012) << " ### VarItem::VarItem *CONSTR* " << varName << endl;	
@@ -640,7 +635,7 @@ QString VarItem::typeFromValue(const QString& value)
 	QRegExp ref_re("^#<(([^:]|::)+):");
 	
 	if (ref_re.search(value) != -1) {
-		return ref_re.cap(1);
+		return QString(ref_re.cap(1));
 	} else if (QRegExp("^(/|%r)").search(value) != -1) {
 		return QString("Regexp");
 	} else if (QRegExp("^[\"'%<]").search(value) != -1) {

@@ -403,6 +403,7 @@ void RDBController::parseThreadList(char *buf)
     viewedThread_ = frameStack_->viewedThread();
     varTree_->setCurrentThread(viewedThread_);
 }
+
 // **************************************************************************
 
 void RDBController::parseSwitchThread(char *buf)
@@ -414,6 +415,33 @@ void RDBController::parseSwitchThread(char *buf)
 		viewedThread_ = thread_re.cap(1).toInt();
 		currentFrame_ = 1;
 	}
+}
+
+// **************************************************************************
+
+// After an 'up nnn' or 'down nnn' command, get the new source file and line no.
+void RDBController::parseFrameMove(char *buf)
+{
+	QString sourceFile;
+	int sourceLine = 0;
+	
+    if (stateIsOn(s_fetchLocals)) {
+		return;
+	}
+	
+	// "#2 /home/duke/play/testit/trykorundum/src/main.rb:11"
+    QRegExp sourcepos_re("#\\d+\\s([^:]+):(\\d+)");
+	if (sourcepos_re.search(buf) != -1) {
+		sourceFile = sourcepos_re.cap(1);
+		sourceLine = sourcepos_re.cap(2).toInt();
+		
+		if (!sourceFile.isNull() && !sourceFile.endsWith("debuggee.rb")) {
+        	emit showStepInSource(sourceFile, sourceLine, "");
+			return;
+		}
+	}
+	
+	emit dbgStatus(i18n("No source: %1").arg(sourceFile), state_);
 }
 
 // **************************************************************************
@@ -573,6 +601,10 @@ void RDBController::parse(char *buf)
 		parseRequestedData(buf);
 	} else if (currentCmd_->rawDbgCommand() == "thread list") {
 		parseThreadList(buf);
+	} else if (	qstrncmp(currentCmd_->rawDbgCommand(), "up ", strlen("up ")) == 0
+				|| qstrncmp(currentCmd_->rawDbgCommand(), "down ", strlen("down ")) == 0 ) 
+	{
+		parseFrameMove(buf);
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "thread switch ", strlen("thread switch ")) == 0) {
 		parseSwitchThread(buf);
 	} else if (currentCmd_->rawDbgCommand() == "thread current") {

@@ -69,6 +69,7 @@ private:
     void parseBacktraceList   (char *buf);
     void parseThreadList      (char* buf);
     void parseSwitchThread    (char* buf);
+    void parseFrameMove       (char *buf);
     void parseBreakpointSet   (char *buf);
     void parseDisplay         (char *buf, char * expr);
     void parseUpdateDisplay   (char *buf);
