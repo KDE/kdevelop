@@ -32,7 +32,7 @@
 
 #include "kdevcore.h"
 
-#include "cppcodecompletionparser.h"
+#include "cppccparser.h"
 #include "cppsupportpart.h"
 #include "simpleparser.h"
 
