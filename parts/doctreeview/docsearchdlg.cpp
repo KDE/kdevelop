@@ -15,6 +15,7 @@
 
 #include <qcombobox.h>
 #include <qfile.h>
+#include <qdir.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -102,11 +103,30 @@ bool DocSearchDialog::performSearch()
     config.setGroup("htdig");
     QString exe = config.readEntry("htsearch", kapp->dirs()->findExe("htsearch"));
     if (exe.isEmpty()) {
-        kdDebug() << "Can not find htsearch" << endl;
-        return false;
+        // Check for htsearch in /usr/lib/cgi-bin (for Debian systems)
+        exe = "/usr/lib/cgi-bin/htsearch";
+        QFile f(exe);
+        if (!f.exists()) {
+            kdDebug() << "Can not find htsearch" << endl;
+            return false;
+        }
     }
 
     QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
+    QDir d;
+    if(indexdir.isEmpty() || !QFile::exists(indexdir + "/htdig.conf")) {
+        if(QFile::exists("/var/lib/gideon/helpindex/htdig.conf")) {
+            indexdir = "/var/lib/gideon/helpindex";
+        } else {
+            kdDebug() << "Can not find the htdig configuration file" << endl;
+            return false;
+        }
+    }
+
+    QString savedir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
+    if(!d.exists(savedir)) {
+        d.mkdir(savedir);
+    }
 
     QString query = QString("words=%1;method=%2;matchesperpage=%3;format=%4;sort=%5")
         .arg(searchterm_edit->text())
@@ -155,7 +175,7 @@ bool DocSearchDialog::performSearch()
     searchResult = searchResult.replace(QRegExp("Content-type: text/html"), "");
 
     // dump the search result
-    QFile f(indexdir + "/results.html");
+    QFile f(savedir + "/results.html");
     if (f.open(IO_WriteOnly)) {
         QTextStream ts(&f);
         ts << searchResult << endl;
