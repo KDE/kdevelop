@@ -21,6 +21,7 @@
 
 class Context;
 class QPopupMenu;
+class QDir;
 class KDialogBase;
 class KURL;
 class KURL::List;
