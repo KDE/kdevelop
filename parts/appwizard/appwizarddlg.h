@@ -33,7 +33,7 @@ class KArchiveFile;
 #include <kiconview.h>
 #include "kdevversioncontrol.h"
 #include "appwizarddlgbase.h"
-#include "vcs_form.h"
+//#include "vcs_form.h"
 #include "autoform.h"
 
 struct installFile
@@ -138,7 +138,7 @@ private: //methods
 
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
-    void loadVcs();
+//    void loadVcs();
 	void updateNextButtons();
 
 	void populateFavourites();
@@ -161,7 +161,7 @@ private: //data
     //! Store the category name and the pointer in the treeview
     QDict<QListViewItem> m_categoryMap;
     //! A list of currently available version control systems
-    QDict<KDevVersionControl> m_availVcs;
+//    QDict<KDevVersionControl> m_availVcs;
 	
     QHBoxLayout *m_custom_options_layout;
     AutoForm *m_customOptions;
@@ -170,7 +170,7 @@ private: //data
     QPtrList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
-    VcsForm *m_vcsForm;
+//    VcsForm *m_vcsForm;
     bool m_pathIsValid;
 	KPopupMenu* m_favouritesMenu;
 	KPopupMenu* m_templatesMenu;

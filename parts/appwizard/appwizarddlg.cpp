@@ -266,7 +266,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     dest_edit->setURL(defaultProjectsDir);
     dest_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 
-    loadVcs();
+//    loadVcs();
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
 
@@ -302,7 +302,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 AppWizardDialog::~AppWizardDialog()
 {}
-
+/*
 void AppWizardDialog::loadVcs()
 {
     m_vcsForm = new VcsForm();
@@ -332,7 +332,7 @@ void AppWizardDialog::loadVcs()
 
     addPage( m_vcsForm, i18n("Version Control System") );
 }
-
+*/
 
 void AppWizardDialog::updateNextButtons()
 {
@@ -592,7 +592,7 @@ void AppWizardDialog::accept()
       dest_edit->setFocus();
       return;
     }
- 
+/* 
     if (m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget())) {
         KDevVersionControl* pVC = m_part->versionControlByName( m_vcsForm->combo->currentText() );
         if (pVC) {
@@ -604,7 +604,7 @@ void AppWizardDialog::accept()
 			kdDebug( 9000 ) << "Could not grab the selected VCS: " << m_vcsForm->combo->currentText() << endl;
 		}
     }
-    
+*/    
 	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 	
 	QStringList::Iterator cleanIt = cleanUpSubstMap.begin();
@@ -868,10 +868,30 @@ void AppWizardDialog::openAfterGeneration()
 	QDomDocument projectDOM;
 	projectDOM.setContent( &file );
 	file.close();
-	
+
 	// DOM Modifications go here
 	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
-	
+
+////////////////////////	
+
+	QStringList loadList = QStringList::split( ',', "KDevBookmarks,KDevCTags2,KDevClassView,KDevFileView,KDevQuickOpen" );
+	QStringList ignoreList;
+
+	KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
+	KTrader::OfferList::ConstIterator itt = offers.begin();
+	while( itt != offers.end() )
+	{
+		if ( !loadList.contains( (*itt)->name() ) )
+		{
+			ignoreList << (*itt)->name();
+		}
+		++itt;
+	}
+
+	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreList );
+
+////////////////////////
+
 	// write the dom back
 	if( !file.open( IO_WriteOnly ) )
 		return;

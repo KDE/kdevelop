@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>437</width>
-            <height>289</height>
+            <height>293</height>
         </rect>
     </property>
     <property name="caption">
@@ -34,6 +34,9 @@
             <property name="name">
                 <cstring>vcsCombo</cstring>
             </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
             <property name="sizePolicy">
                 <sizepolicy>
                     <hsizetype>3</hsizetype>
@@ -46,6 +49,9 @@
         <widget class="QPushButton" row="1" column="2">
             <property name="name">
                 <cstring>fetchModuleButton</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -65,6 +71,9 @@
         <widget class="QLabel" row="1" column="0">
             <property name="name">
                 <cstring>textLabel1</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
             </property>
             <property name="text">
                 <string>&amp;Fetch from:</string>
@@ -335,6 +344,8 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

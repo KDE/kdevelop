@@ -33,6 +33,8 @@
 #include <kcursor.h>
 #include <kfile.h>
 #include <kurlrequester.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
 #include <kprocess.h>
 
 #include "kdevcore.h"
@@ -79,7 +81,7 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     infrastructureBox->setEnabled(false);
     setProjectType("c");
     connect( name_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotProjectNameChanged( const QString & ) ) );
-    scanAvailableVCS();
+//    scanAvailableVCS();
     connect( fetchModuleButton, SIGNAL(clicked()),
         this, SLOT(slotFetchModulesFromRepository()) );
     connect(urlinput_edit, SIGNAL(urlSelected(const QString& )), this, SLOT(dirChanged()));
@@ -356,12 +358,21 @@ void ImportDialog::setProjectType(const QString &type)
         ++i;
     }
 }
-
+/*
 void ImportDialog::scanAvailableVCS()
 {
-    vcsCombo->insertStringList( m_part->registeredVersionControls() );
+//    vcsCombo->insertStringList( m_part->registeredVersionControls() );
+	int i = 0;
+	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl");
+	KTrader::OfferList::const_iterator it = offers.begin();
+	while( it != offers.end() )
+	{
+		vcsCombo->insertItem( (*it)->genericName(), i++ );
+		++it;
+	}	
 }
-
+*/
+/*
 void ImportDialog::slotFinishedCheckout( QString destinationDir )
 {
     urlinput_edit->setURL( destinationDir );
@@ -369,9 +380,11 @@ void ImportDialog::slotFinishedCheckout( QString destinationDir )
     setCursor( KCursor::arrowCursor() );
 //    setEnabled( true );
 }
-
+*/
+/*
 void ImportDialog::slotFetchModulesFromRepository()
 {
+	
     KDevVersionControl *vcs = m_part->versionControlByName( vcsCombo->currentText() );
     if (!vcs)
         return;
@@ -385,8 +398,9 @@ void ImportDialog::slotFetchModulesFromRepository()
     //restore cursor if we can't fetch repository
     if ( !vcs->fetchFromRepository() )
         setCursor( KCursor::arrowCursor() );
+	
 }
-
+*/
 void ImportDialog::projectTypeChanged( const QString &type )
 {
     if (m_infrastructure[type].isOn)

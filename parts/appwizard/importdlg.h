@@ -42,11 +42,11 @@ protected slots:
     virtual void projectTypeChanged(int type);
 
 private slots:
-    void slotFinishedCheckout( QString destinationDir );
-    void slotFetchModulesFromRepository();
+//    void slotFinishedCheckout( QString destinationDir );
+//    void slotFetchModulesFromRepository();
     void slotProjectNameChanged( const QString &_text );
 private:
-    void scanAvailableVCS();
+//    void scanAvailableVCS();
     void scanLegacyKDevelopProject(const QString &fileName);
     void scanLegacyStudioProject(const QString &fileName);
     void scanAutomakeProject(const QString &dirName);
