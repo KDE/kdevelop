@@ -37,9 +37,11 @@ CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 
 	connect ( m_pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
 		this, SLOT ( slotDocumentActivated ( KEditor::Document* ) ) );
-	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
+	//segfault on kde3/qt3
+	/*	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
+		connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
+		connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
+	*/
 
 	m_pParser = 0;
 	m_pCursorIface = 0;

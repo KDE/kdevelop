@@ -357,11 +357,13 @@ KEditor::Editor *Core::editor()
   // find the preferred editor
   KConfig *config = kapp->config();
   config->setGroup("Editor");
-  QString editor = config->readEntry("EmbeddedEditor", "KWriteEditorPart");
+  //  QString editor = config->readEntry("EmbeddedEditor", "KWriteEditorPart"); // dosn't work at the moment
+  QString editor = config->readEntry("EmbeddedEditor","EditorTestPart"); 
+ 
 
   // ask the trader about the editors, using the preferred one if available
   KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString("Name == '%1'").arg(editor));
-
+ 
   // try to load the editor
   KTrader::OfferList::Iterator it;
   for (it = offers.begin(); it != offers.end(); ++it)
@@ -379,8 +381,10 @@ KEditor::Editor *Core::editor()
 
   // Note: We should probably abort the application if no editor
   // is found at all!
-  if (!_editor)
-    return 0;
+  if (!_editor){
+    KMessageBox::sorry(win, i18n("Can't find a Editor plugin :-(."));
+    exit(0);
+  }
 
   // merge the GUI with ours
   win->factory()->addClient(_editor);
