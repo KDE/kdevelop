@@ -34,10 +34,17 @@ as the KDE libraries and the design of User Interfaces. Also, you should have ma
 
 <sect1>About this Handbook
 <p>
-This handbook has been written to give developers an introduction into KDE application development with special regards to the KDevelop
-Integrated Development Environment. The reader will learn how to create his own application, what the framework automatically generated
-by the KAppWizard already offers and how it runs. By the following chapters, the user is introduced into certain aspects of GUI
-application design by a tutorial application, <em/KScribble/.
+This handbook has been written to give developers an introduction into KDE application development by using the KDevelop
+Integrated Development Environment.
+
+The following chapters therefore give an introduction on how to create projects, explains the sourcecode already generated and shows 
+how to extend the given sources on various topics such as toobars, menubars and view areas.
+
+Then the dialogeditor is discussed in detail, explaining how widgets are created and covers widget properties settings in detail 
+for all provided widgets.
+
+Finally, you will learn about several topics that will complete your knowledge in regards of project design and helps you work out 
+additional issues besides coding such as adding API documentation and extending online-manuals. 
 
 <bf/In the next chapter/
 
@@ -358,8 +365,7 @@ first parameter; then you have to specify the signal that you want to connect to
 provides a slot, followed by the member function which actually <em/is/ the slot that will be executed on signal emission.
 
 By using signals and slots, your program's objects can interact with each other easily without explicitely depending on the existance
-of the receiver object. You will learn more about using this mechanism for productive usage later in this handbook while working with
-the tutorial application <em/KScribble/.
+of the receiver object. You will learn more about using this mechanism for productive usage later in this handbook.
 
 
 <sect1>What KDE provides
@@ -448,7 +454,7 @@ by yourself.
 </itemize>
 
 In this chapter we'll see how the KAppWizard can be invoked and what has to be done to generate a KDE application project. This will
-also be the initial step of our tutorial, where you will create your first version of <em/KScribble/. For all other project types the
+also be the initial step of our coverage, where we will create the initial version of a sample project. For all other project types the
 steps are usually the same, just you may not have certain options available.
 
 <sect1>Invoking KAppWizard and Project Generation
@@ -462,14 +468,13 @@ will switch to the next page, where you have to set the general project options.
 
 <sect2>The Generate Settings Page
 <p>
-For our first version of <em/KScribble/, enter <tt/KScribble/ as "Projectname". Then select the directory you want to have your project
-build in; the default is your home directory. You can enter the path manually or you can as well press the button on the right to
-select the directory by a dialog.
+For our sample application, we choose the project name <tt/KScribble/; therefore insert this in the field "Projectname". Then select 
+the directory you want to have your project build in; the default is your home directory. You can enter the path manually or you can as 
+well press the button on the right to select the directory by a dialog.
 
 Next, you have to enter the Versionnumber. For the first version, set this to <tt/0.1/. It is usual to number new applications that are
 in development for the first release lower than 1, and as the initial version will only contain the standard framework, we'll name this
-the 0.1 version. During the following chapters, we'll increase this value along with the facilities that <em/KScribble/ will get by our
-implementation.
+the 0.1 version.
 
 Finally, add your name to the "Author" field and your email adress. We'll leave all other options untouched- they are needed for our
 project.
@@ -527,8 +532,7 @@ After this last step, you're finished with creating a new project. KDevelop then
 project's files and classes.
 
 
-In the next section, we'll discuss how to build and run your first version of <em/KScribble/ and how the sourcecode is organized, so
-you have an idea where we are and where we're going to extend the features of <em/KScribble/ in the following chapters.
+In the next section, we'll discuss how to build and run your first version of <em/KScribble/ and how the sourcecode is organized.
 
 <sect1>The First Build
 <p>
@@ -983,8 +987,6 @@ memory.
 <item>add any methods that have to be accessible by the user via accelerator keys and menus/toolbars.
 </itemize>
 
-During the development of our sample application <em/KScribble/, we'll go further into this development process and complete the
-application framework according to our program's special needs.
 
 <sect3>Application Configuration
 <p>
@@ -1264,8 +1266,7 @@ instance of a class <tt/&lt;yourapp&gt;View/, which inherits <tt/QWidget/ alread
 <tt/initView()/, where an instance is created and connected to the main widget as it's view with <tt/KTMainWidget::setView()/.
 
 This chapter therefore describes how to use library widgets for creating views of KDE or Qt applications that are generated with
-KDevelop, then we're looking at the libraries and what kind of views are already offered. Finally, we will extend the already provided
-view class of <em/KScribble/, <tt/KScribbleView/ in section <ref id="Creating your own Views" name="Creating your own Views">.
+KDevelop, then we're looking at the libraries and what kind of views are already offered. 
 
 <sect1>Using Library Views
 <p>
@@ -1340,19 +1341,72 @@ The <tt/khtmlw/ library on the other hand offers a complete HTML-interpreting wi
 so you don't even have to take care for that. A possible use could be to integrate it as a preview widget for an HTML editor; used by
 applications such as KFM, KDEHelp and KDevelop to display HTML files.
 
-Now that you have a general overview of what is already provided, you may notice that for a lot of purposes already existing widgets
-can be used or combined together. KMail is an example as well as KDevelop itself makes use of library view components to display data.
-But for applications such as drawing programs or syntax-coloring editors, those can only be the beginning. In those cases, you often
-have to derive your view from an existing view or from <tt/QWidget/ to display your data and allow manipulation. As our example
-application <em/KScribble/, will be a small drawing program, we don't have any choice: we as well have to use <tt/QWidget/; therefore
-we can leave our framework untouched and start extending the implementation of the class <tt/KScribbleView/ until it is capable of
-offering user input. During the next section, we will do that by overwriting virtual methods provided by <tt/QWidget/ for user event
-handling; then we will connect certain functions to the toolbar and menubar and connect these to our widget.
 
 <sect1>Creating your own Views<label id="Creating your own Views">
 <p>
+Now that you have a general overview of what is already provided, you may notice that for a lot of purposes already existing widgets
+can be used or combined together. KMail is an example as well as KDevelop itself makes use of library view components to display data.
 
-<sect>Configuring Menubars and Toolbars<label id="Configuring Menubars and Toolbars">
+For applications that use a special file format or have to deal with graphics, you are probably forced to create your own view widget 
+to allow data manipulation. This is realized in our sample by the class <tt/KScribbleView/, already providing a base for a view area.
+
+The inheritance from <tt/QWidget/ is necessary to overwrite the virtual methods to access user events, this is probably the most work 
+besides providing popup menus for easier access of certain functions. Also it is likely that you have to implement a set of slots which 
+can be accessed by toolbar buttons or menubar commands to connect to as well as methods to manipulate variables such as e.g. a painter 
+color.   
+
+For completeness, we will repeat the necessary methods:
+
+<bf/a) Keyboard events --TAB and Shift-TAB keys:/
+
+changes the keyboard input focus from the current widget to the next widget in the focus order. The focus can be set to widgets by
+calling <tt/setFocusPolicy()/ and process the following event handlers:
+
+<itemize>
+<item><tt/virtual void focusInEvent ( QFocusEvent * )/
+<item><tt/virtual void focusOutEvent ( QFocusEvent * )/
+</itemize>
+
+<bf/b) all other keyboard input:/
+<itemize>
+<item><tt/virtual void keyPressEvent ( QKeyEvent * )/
+<item><tt/virtual void keyReleaseEvent ( QKeyEvent * )/
+</itemize>
+
+<bf/c) mouse movements:/
+<itemize>
+<item><tt/virtual void mouseMoveEvent ( QMouseEvent * )/
+<item><tt/virtual void enterEvent ( QEvent * )/
+<item><tt/virtual void leaveEvent ( QEvent * )/
+</itemize>
+
+<bf/d) mouse button actions:/
+<itemize>
+<item><tt/virtual void mousePressEvent ( QMouseEvent * )/
+<item><tt/virtual void mouseReleaseEvent ( QMouseEvent * )/
+<item><tt/virtual void mouseDoubleClickEvent ( QMouseEvent * )/
+</itemize>
+
+<bf/e) window events containing the widget:/
+<itemize>
+<item><tt/virtual void moveEvent ( QMoveEvent * )/
+<item><tt/virtual void resizeEvent ( QResizeEvent * )/
+<item><tt/virtual void closeEvent ( QCloseEvent * )/
+</itemize>
+
+When reimplementing these functions, you should watch certain issues to avoid implementation mistakes that will make it almost 
+impossible to change the widget's behavoir afterwards:
+
+<enum>
+<item>declare your virtual methods as <bf/virtual/ as well and keep the acess to protected. This allows code-reuse by inheritance and 
+is consistent.
+<item>don't hardcode any eventprocessing which should be made configurable. This counts most for keyboard events which should be 
+realized with keyboard accelerators if any function is called. This even counts for text processing ! (Imagine that a lot of users are 
+familiar with their favorite editor's bahavoir. If this is configurable, they can use the behavoir they like and are used to)
+<item>forward popup menu highlighting signals to the main widget to enable statusbar help
+</enum>  
+
+<sect>Configuring Menubars and Toolbars<label id="Configuring Menubars and Toolbars"> 
 <p>
 Menubars and toolbars are one of the most important parts of an application to provide methods to work with a document structure. As a
 general rule, you should make all functions availabele by the menubar. Those methods that should not be available at a current stage of
@@ -2422,7 +2476,7 @@ Example:
 <sect1>Special Tags
 <p>
 <bf/NOTE:/ The following documentation of this chapter is taken from the KDoc documentation provided with KDoc by 
-Sirtaj S. Kang (taj@.kde.org), author of KDoc; Copyright (c) 1997
+Sirtaj S. Kang <htmlurl url="mailto:taj@.kde.org" name="taj@.kde.org">), author of KDoc; Copyright (c) 1997
 
 The documentation is a mixture of:
 
@@ -2447,38 +2501,38 @@ The valid tags for each type of source code entity are:
 <itemize>
 <item>Classes
 <tscreen><verb>
-	@short [one sentence of text] 
-			A short description of the class 
-	@author [one sentence of text] 
-			Class author 
-	@version [once sentence of text] 
-			Class version (I normally set this to the RCS/CVS tag "Id") 
-	@see [one or more references to classes or methods] 	
-			References to other related documentation.
+  @short [one sentence of text] 
+    A short description of the class 
+  @author [one sentence of text] 
+    Class author 
+  @version [once sentence of text] 
+    Class version (I normally set this to the RCS/CVS tag "Id") 
+  @see [one or more references to classes or methods] 	
+    References to other related documentation.
 </verb></tscreen>
 
 <item>Methods
 
 <tscreen><verb>
-@see 
-		as above 
-@return [one sentence] 
-		A sentence describing the return value 
-@param [param name identifier] [param description] 
-		Describe a parameter. The param description can span multiple 
-		lines and will be terminated by a blank line, the end of the 
-		comment, or another param entry. For this reason, param entries 
-		should normally be the last part of the doc comment. 
+  @see 
+    as above 
+  @return [one sentence] 
+    A sentence describing the return value 
+  @param [param name identifier] [param description] 
+    Describe a parameter. The param description can span multiple 
+    lines and will be terminated by a blank line, the end of the 
+    comment, or another param entry. For this reason, param entries 
+    should normally be the last part of the doc comment. 
 </verb></tscreen>
 
 <item>Constants, Enums, Properties
 <tscreen><verb>
-@see 
-		as above
+  @see 
+    as above
 </verb></tscreen>
 <item>ALSO <tt/@ref/
-
-As a departure from the javadoc format, the metatag "@ref" has the same format as @see, but can appear anywhere in the documentation (all other tags must appear on a line by themselves).
+		As a departure from the javadoc format, the metatag "@ref" has the same format as @see, but can appear anywhere in the documentation 
+(all other tags must appear on a line by themselves). 
 </itemize>
 
 <sect>Internationalization
@@ -2488,8 +2542,8 @@ As a departure from the javadoc format, the metatag "@ref" has the same format a
 i18n is an internationalization standard that is used to offer internationalized versions of an application or project. The difficulty 
 with writing applications is that they only support the language they originally are composed with; visually this can be seen on 
 labels, menuentries and the like. Goal of the internationalization is to provide applications and library functions in the language of 
-the user; therefore enabling users that are not capable of the original language to make use of the provided functionality.
-   
+the user; therefore enabling users that are not capable of the original language to make use of the provided functionality and feel 
+more comfortable.    
 
 <sect1>How KDE supports Internationalization
 <p>
@@ -2505,40 +2559,195 @@ The developer on the other hand only has to know two things to make his applicat
 <enum>
 <item>include <tt/kapp.h/ into your sourcecode wherever a visible text appears in your application, e.g. in source files that contain 
 QLabels.
-<item>wherever you set the visual string, embrace it with the <tt/i18n()/ macro provided by <tt/kapp.h/.
+<item>wherever you set the visual string, embrace it with the <tt/i18n()/ macro provided by <tt/kapp.h/ to enable translation.
+<item>whenever you have to access a locale object, use the <tt/klocale/ macro provided by <tt/kapp.h/
 </enum>
 
 That is almost all you have to watch for while coding. Mind that you should not internationalize any configuration strings that are 
-used by <tt/KConfig/, because this is not necessary on one hand and doesn't work for reading in values on the other; besides messes too 
-much in the translation files.
-     
-<sect1>Translation Team Contacts
+used by <tt/KConfig/, because this is not necessary on one hand and doesn't work for reading in values on the other.     
+
+<sect1>Adding a Language to your Project
+<p>
+KDevelop also takes part on making life easier for developers to include native language support to their applications. Whenever you 
+create a new KDE project, a <tt/po/ directory is added to the main project directory. There, your <em/&lt;application&gt;/.pot file 
+will be placed after the generation is complete. The .pot file already contains all strings that are set up with the i18n() macro, 
+therefore you only have to write your code using the macro again. From time to time, you should do a "Project"-"Make messages and 
+merge", which will automatically extract all macros again and rebuilds the pot file.
+
+To add a language to your application, choose "Project"-"Add tranlation file", which opens the language selection dialog. Select the 
+desired language and press OK. Then, the according <em/&lt;lang&gt;/.po file will be build in the <tt/po/ directory. Then start 
+translating the po file by selecting it from the po directory in the Real File Viewer or from the LFV, folder "Translations". If you 
+have KTranslator installed, it will be opened in the "Tools" window with KTranslator, otherwise as a text file in the header/resource 
+window.
+
+KTranslator makes it very easy to translate strings by scanning the existing translations of your local KDE installation, so they can 
+be used already. 
+
+For editing by hand, we'll have a look at an example:
+<tscreen><verb> 
+#: kscribble.cpp:619
+msgid "Opens an existing document"
+msgstr ""
+</verb></tscreen>
+
+The above shows a string that was extracted from the file <tt/kscribble.cpp/ at line 619. <tt/msgid/ and <tt/msgstr/ are the tags which 
+give the information for the translation; <tt/msgstr/ will contain the translated string. There, you have to watch escape sequences 
+such as \n or \t, which have to be included into the translation string. A german translation would therefore look like this:
+
+<tscreen><verb> 
+#: kscribble.cpp:619
+msgid "Opens an existing document"
+msgstr "Öffnet ein existierendes Dokument"
+</verb></tscreen>
+
+That would be all to watch for translation; after you're done, save the file. When make is run within the po directory, the message 
+files will be processed and errors may occur if strings are not translated consistantly, e.g. escape sequences are missing. Then edit 
+the according message string again and make sure that make runs without errors.
+
+Additionally, you should be very careful when translating ampersands within text strings. The letters after ampersands are used as 
+keyboard accelerators in conjunction with the ALT key to access menubar or popup menu items to change the keyboard focus to the 
+selected item more quickly. Now, if the same accelerator letter appears in the same keyboard focus area (which would be the main widget 
+on one time, and a dialog at another), each widget after the first one cannot be accessed by the supposed keyboard accelerator. So even 
+translators have a responsibility for the usage of the application under their language. There is also no guarantee that the original 
+letter will occur in the tranlation, so translators have to choose very carefully and should test the application under their language 
+after they installed the translation to ensure it runs without these malfunctions.
+    
+<sect1>Translation Team Contacts 
 <p>
 The KDE Team also provides numerous contacts to developers that are contributing to the KDE project as translators. Those are organized 
 in language teams and coordinate the translation work.
+For an actual list and information who to ask for translating your application, see <htmlurl url="http://www.kde.org"  
+name="http://www.kde.org">.  
 
-For a full list and information who to ask for translating your application, see <htmlurl url="http://www.kde.org" 
-name="http://www.kde.org">.
-  
-<sect1>Adding a Language to your Project
-<p>
-Before your application can support internationalization, you have to run "Make Messages and merge" from the "Project" menu. This will 
-scan all of your sourcefiles for the <tt/i18n()/ macro and extracts the strings into a &lt;yourapp&gt;.pot file, which is then placed 
-into the <tt/po/ subdirectory of your project.
+The information below is taken from the KDE website and contains the current contact adresses as of March 06, 1999. If you want to join 
+a team please write directly to one of the team coordinators. 
 
-Then select the desired language by choosing "Add new translation file" from the "Project" menu. After pressing "OK", the translation 
-file will be build and added to the project in form of &lt;language_prefix&gt;.po, placed in the po directory.
+The translation of the KDE is organized by Juraj Bednar <htmlurl url="mailto:bednar@rak.isternet.sk" 
+name="mailto:bednar@rak.isternet.sk"> and Matthias Elter <htmlurl url="mailto:me@kde.org" name="me@kde.org">
+ 
+You can subscribe KDE internationalization mailing list kde-i18n-doc@kde.org by sending a mail to <htmlurl 
+url="mailto:kde-i18n-doc-request@kde.org?subject=subscribe" name="kde-i18n-doc-request@kde.org"> with the word "subscribe" in the 
+subject line. 
 
-When translation files have to be updated, run "Make Messages and merge" form the "Project" menu to extract the i18n() macros again 
-into the pot file. In this context, merging means that the new strings that are added will be added to all currently integrated po 
-files. Translators then only have to look for the strings currently not translated.
+Before starting any translation work, please contact the according translation team leaders for coordination to avoid double work.
 
-<sect1>Translating po files
-<p>
-To translate the po files, the KDE SDK offers a tool that is called <tt/KTranslator/. In case it is installed, selecting a po file will 
-open the file with KTranslator in the Tools-window where the message strings can be translated using the existing translation files 
-installed at the translator's KDE locale directory. If KTranslator is not installed, the po file is opened in the Resource window where 
-it can be edited manually as a text file.
+<descrip>
+
+
+<tag/br Breton translation team:/
+team coordinators: Jañ-Mai DRAPIER <htmlurl url="mailto:jdrapier@club-internet.fr" name="jdrapier@club-internet.fr">
+website: <htmlurl url="http://perso.club-internet.fr/jdrapier" name="http://perso.club-internet.fr/jdrapier">
+
+<tag/ca Catalan translation team:/
+team coordinators: Sebastià Pla <htmlurl url="mailto:sastia@redestb.es" name="sastia@redestb.es">
+
+<tag/cs Czech translation team:/
+team coordinators:  Miroslav Flídr <htmlurl url="mailto:flidr@kky.zcu.cz" name="flidr@kky.zcu.cz">
+
+<tag/da Danish translation team:/
+team coordinators:  Erik Kjær Pedersen <htmlurl url="mailto:erik@binghamton.edu" name="erik@binghamton.edu">
+
+<tag/de German translation team:/
+team coordinators: Thomas Diehl <htmlurl url="mailto:th.diehl@gmx.net" name="th.diehl@gmx.net">
+website: <htmlurl url="http://www.dtp-service.com/kde/de/" name="http://www.dtp-service.com/kde/de/">
+mailing list:  send a mail with 'subscribe' in the subject line to: <htmlurl url="mailto:kde-i18n-de-request@kde.org?subject=subscribe" 
+name="kde-i18n-de-request@kde.org"> Webforum for discussions and user feedback: <htmlurl url="http://www.dtp-service.com/discus_d" 
+name="http://www.dtp-service.com/discus_d"> 
+
+<tag/el Greek translation team:/
+team coordinators:  Theodore J. Soldatos <htmlurl url="mailto:theodore@eexi.gr" name="theodore@eexi.gr">
+
+<tag/eo Esperanto translation team:/
+team coordinators:  Wolfram Diestel <htmlurl url="mailto:diestel@rzaix340.rz-uni-leipzig.de" name="diestel@rzaix340.rz-uni-leipzig.de">
+
+<tag/es Spanish translation team:/
+team coordinators:  Boris Wesslowski, Alonso Lara <htmlurl url="mailto:Boris@Wesslowski.com" name="Boris@Wesslowski.com">
+website: <htmlurl url="http://members.xoom.com/keko5/" name="http://members.xoom.com/keko5/">
+mailing list: send a mail with 'subscribe' in the subject line to <htmlurl url="mailto:kde-es@kde.org?subject=subscribe" 
+name="kde-es@kde.org"> 
+
+<tag/et Estonian translation team:/
+team coordinators:  Hasso C. Tepper <htmlurl url="mailto:hasso@ewsound.estnet.ee" name="hasso@ewsound.estnet.ee">
+
+<tag/fi Finnish translation team:/
+team coordinators: Kim Enkovaara <htmlurl url="mailto:kim.enkovaara@iki.fi" name="kim.enkovaara@iki.fi">
+
+<tag/fr French translation team:/
+team coordinators:  Francois-Xavier Duranceau <htmlurl url="mailto:Francois-Xavier.Duranceau@loria.fr" name="Francois-Xavier.Duranceau@loria.fr">
+website: <htmlurl url="http://www.loria.fr/~durancea/kde/wip-apps.html" name="http://www.loria.fr/~durancea/kde/wip-apps.html">
+mailing list: send an empty mail to:  <htmlurl url="mailto:kde-traduc-fr-subscribe@egroups.com" name="kde-traduc-fr-subscribe@egroups.com">
+
+<tag/he Hebrew translation team:/
+team coordinators:  Erez Nir <htmlurl url="mailto:erez-n@actcom.co.il" name="erez-n@actcom.co.il">
+
+<tag/hr Croatian translation team:/
+team coordinators:  Vladimir Vuksan <htmlurl url="mailto:vuksan@veus.hr" name="vuksan@veus.hr">
+
+<tag/hu Hungarian translation team:/
+team coordinators:  Marcell Lengyel <htmlurl url="mailto:miketkf@yahoo.com" name="miketkf@yahoo.com">
+website:<htmlurl url="http://sophia.jpte.hu/~kde" name="http://sophia.jpte.hu/~kde">
+
+<tag/is Icelandic translation team:/
+team coordinators: 
+Logi Ragnarsson, <htmlurl url="mailto:logir@imf.au.dk" name="logir@imf.au.dk">
+Thorarinn R. Einarsson, <htmlurl url="mailto:thori@mindspring.com" name="thori@mindspring.com">
+Bjarni R. Einarsson, <htmlurl url="mailto:bre@netverjar.is" name="bre@netverjar.is">
+Hrafnkell Eiriksson, <htmlurl url="mailto:hkelle@rhi.hi.is" name="hkelle@rhi.hi.is">
+Gudmundur Erlingsson, <htmlurl url="mailto:gudmuner@lexis.hi.is" name="gudmuner@lexis.hi.is">
+Richard Allen <htmlurl url="mailto:ra@hp.is" name="ra@hp.is">
+
+<tag/it Italian translation team:/
+team coordinators:  Andrea Rizzi <htmlurl url="mailto:rizzi@kde.org" name="rizzi@kde.org">
+
+<tag/ko Korean translation team:/
+team coordinators:  LinuxKorea Co. <htmlurl url="mailto:kde@linuxkorea.co.kr" name="kde@linuxkorea.co.kr">
+
+<tag/mk Macedonian translation team:/
+team coordinators:  Sasha Konecni <htmlurl url="mailto:sasha@msi-uk.com" name="sasha@msi-uk.com">
+
+<tag/nl Dutch translation team:/
+team coordinators:  flidr@CyberGate.zcu.cz <htmlurl url="mailto:flidr@CyberGate.zcu.cz" name="flidr@CyberGate.zcu.cz">
+
+<tag/no Norwegian translation team:/
+team coordinators:  Hans Petter Bieker <htmlurl url="mailto:zerium@webindex.no" name="zerium@webindex.no">
+
+<tag/pl Polish translation team:/
+team coordinators:  Piotr Roszatycki <htmlurl url="mailto:dexter@fnet.pl" name="dexter@fnet.pl">
+
+<tag/pt Portuguese translation team:/
+team coordinators:  Pedro Morais <htmlurl url="mailto:pmmm@camoes.rnl.ist.utl.pt" name="pmmm@camoes.rnl.ist.utl.pt">
+
+<tag/pt_BR Brazil Portuguese translation team:/
+team coordinators:  Elvis Pfützenreuter <htmlurl url="mailto:epx@netville.com.br" name="epx@netville.com.br">
+
+<tag/ro Romanian translation team:/
+team coordinators:  Paul Ionescu <htmlurl url="mailto:ipaul@romsys.ro" name="ipaul@romsys.ro">
+
+<tag/ru Russian translation team:/
+team coordinators:  Denis Y. Pershin <htmlurl url="mailto:dyp@inetlab.com" name="dyp@inetlab.com">
+
+<tag/sk Slovak translation team:/
+team coordinators:  Juraj Bednar <htmlurl url="mailto:bednar@isternet.sk" name="bednar@isternet.sk">
+mailling list:  send a mail with 'subscribe' in the subject line to: <htmlurl url="mailto:sk-i18n@rak.isternet.sk?subject=subscribe" 
+name="sk-i18n@rak.isternet.sk"> 
+
+<tag/sl Slovenian translation team:/
+team coordinators:  blazzupancic@hotmail.com <htmlurl url="mailto:blazzupancic@hotmail.com" name="blazzupancic@hotmail.com">
+
+<tag/sv Swedish translation team:/
+ team coordinators:  Anders Widell <htmlurl url="mailto:d95-awi@nada.kth.se" name="d95-awi@nada.kth.se">
+
+<tag/tr Turkish translation team:/
+team coordinators:  Gorkem Cetin <htmlurl url="mailto:gorkem@linux.org.tr" name="gorkem@linux.org.tr">
+
+<tag/zh_GB2312 Simplified Chinese translation team:/
+team coordinators:  Wang Jian <htmlurl url="mailto:larkw@263.net" name="larkw@263.net">
+
+<tag/zh_TW_Big5 Chinese BIG5 translation team:/
+team coordinators:  Chou Yeh-Jyi <htmlurl url="mailto:ycchou@ccca.nctu.edu.tw" name="ycchou@ccca.nctu.edu.tw">
+</descrip>
+
+
     
 <sect>Finding Errors
 <p>
@@ -2642,6 +2851,532 @@ Apart from this, you can also tick the checkbox "Abort on fatal errors". In this
 entries apply immediately and saved in your application's configuration file. Please note that these settings are specific for one 
 singular application! When you press cancel, your entries are discarded and the old ones are restored. 
 
+<sect>The KDE File System Standard
+<p>
+This chapter is a copy of the KDE-File System Standard as published on the KDE website at <htmlurl url="http://www.kde.org" 
+name="http://www.kde.org">, written by Richard Moore <htmlurl url="rich@kde.org" name="rich@kde.org">
+
+
+<bf/KDE File System Standard/
+
+This file documents the directory structure that KDE and all KDE compliant applications should use. This is version 0.0.4 of the 
+standard. 
+
+<sect1>Introduction
+<p>
+The purpose of the KDE FSSTD is to ensure that all resources (icons, mimetypes etc.) needed for KDE applications are stored in a 
+consistent directory structure. Following this structure allows applications to make use of tools such as the KIconLoader class and 
+allows separation of the platform specific data needed by KDE from platform independent data (making installations on multiple 
+architectures possible). In this document directory names have been suffixed with a `/` character. Where the word 'appname' appears in 
+angle brackets &lt;like this&gt; it means that there should be an entry corresponding to every installed KDE application. The word 
+'lang' is used in the same way to indicate that there should be an entry for every supported language named according to the standard 
+two letter language codes eg. 'fr' for French, 'de' for German etc. 
+
+<sect1>Directory Layout
+<p>
+The KDE directory structure is as shown below, the top of the KDE installation tree is usually '/opt/kde' and can be found at run time 
+by using the kdedir() method of KApplication (this replaces the KDEDIR environment variable the use of which is now deprecated). This 
+document will refer to this directory as kdedir(). 
+
+
+kdedir()/ 
+<itemize>
+<item>bin/
+	<itemize>
+	<item>Application binaries 
+	</itemize>
+<item>lib/ 
+	<itemize>
+	<item>standard kde libraries (libkdecore etc.) 
+	<item><em/&lt;appname&gt;//
+		<itemize>
+		<item>Application specific data that is platform dependent 
+		</itemize>
+	</itemize>
+<item>include/ 
+	<itemize>
+	<item>standard kde header files 
+	</itemize>
+<item>parts/ 
+<item>cgi-bin/ 
+	<itemize>
+	<item>CGI programs for kdehelp 
+	</itemize>
+<item>share/ 
+	<itemize>
+	<item>doc/ 
+		<itemize>
+		<item>HTML/ 
+			<itemize>
+			<item>default --> Link to kdedir()/share/doc/HTML/en 
+			<item><em/&lt;lang&gt;// 
+				<itemize>
+				<item><em/&lt;appname&gt;// 
+					<itemize>
+					<item>index.html 
+					<item>other application help files 
+					</itemize>
+				</itemize>
+			</itemize>
+		</itemize>
+	<item>config/ 
+	<item>applnk/ 
+		<itemize>
+		<item>System/ 
+		<item>Utilities/ 
+		<item>Applications/
+		<item>Games/ 
+		<item>kfind.kdelnk 
+		<item>khelp.kdelnk 
+		<item>khome.kdelnk 
+		<item>krefresh.kdelnk 
+		</itemize>
+	<item>mimelnk/ 
+		<itemize>
+		<item>magic 
+		<item>text/ 
+		<item>audio/ 
+		</itemize>
+	<item>partlnk/ 
+		<itemize>
+		<item><em/&lt;partname&gt;/.kdelnk 
+		</itemize>
+	<item>icons/ 
+		<itemize>
+		<item>Icons used in kdelnk files 
+		<item><em/&lt;appname&gt;/.xpm 
+		<item>mini/ 
+			<itemize>
+			<item>Mini Icons for kpanel 
+			</itemize>
+		</itemize>
+	<item>toolbar/ 
+		<itemize>
+		<item>Standard toolbar pixmaps (eg. fileopen.xpm) 
+		</itemize>
+	<item>wallpapers/ 
+		<itemize>
+		<item>Wallpapers used by kdisplay 
+		</itemize>
+	<item>apps/ 
+		<itemize>
+		<item><em/&lt;appname&gt;// 
+			<itemize>
+			<item>toolbar/ 
+				<itemize>
+				<item>Toolbar pixmaps 
+				</itemize>
+			<item>pics/ 
+				<itemize>
+				<item>Other application pixmaps 
+				</itemize>
+			<item>application specific data (must be platform independent) 
+			</itemize>				
+		<item><em/&lt;libname&gt;// 
+			<itemize>
+			<item>pics/ 
+			</itemize>
+		</itemize>
+	<item>locale/ 
+		<itemize>
+		<item><em/&lt;lang&gt;// 
+			<itemize>
+			<item>LC_MESSAGES/ 
+				<itemize>
+				<item><em/&lt;appname&gt;/.mo 
+				</itemize>
+			</itemize>
+		</itemize>
+	</itemize>
+</itemize>
+					
+<sect1>What does this mean to application developers?
+<p>
+A standard KDE application will install files into several places in the above structure. The only required items are the application 
+binary, the application kdelnk file, the application icon and the application help files - all others are optional. The most common 
+things that are installed are: 
+
+<tscreen><verb>
+Type of file                                      Location
+
+Application binary (required)                     kdedir()/bin/
+Application kdelnk file (required)                kdedir()/share/applnk/
+Application icon (required)                       kdedir()/share/icons/&lt;appname&gt;.xpm
+Application help files (required)                 kdedir()/share/doc/default/HTML/&lt;appname&gt;/&lt;index&gt;.html
+Application toolbar pixmaps                       kdedir()/share/apps/&lt;appname&gt;/toolbar/
+Application platform independent data             kdedir()/share/apps/&lt;appname&gt;/
+Application platform specific data                kdedir()/lib/&lt;appname&gt;/
+</verb></tscreen>
+
+<sect1>Application Documentation
+<p>
+I've suggested making putting at least a single page in kdedir()/doc/default/HTML/&lt;appname&gt;/&lt;appname&gt;.html a requirement for KDE 
+compliance. The application is free to use the directory to store any help data it requires. 
+
+
+ Applications that support more than one language would place the other languages inkdedir()/doc/&lt;lang&gt;/HTML/&lt;appname&gt;/&lt;appname&gt;.html 
+with there being one 'lang' directory for each language code as usual. Arranging the files like this would allow links between the help 
+files of two different applications that both support a given language. 
+
+I am not 100% happy with the solution I've suggested as it does not allow any way to fall back to the default language if a required 
+translation is not available. 
+
+<sect1>What does this mean to library developers?
+<p>
+
+<itemize>
+<item>kdedir()/share/apps/&lt;libname&gt;/toolbar
+</itemize>
+Toolbar icons for library widgets. 
+
+<itemize>
+<item>kdedir()/share/apps/&lt;libname&gt;/pics 
+</itemize>
+Any other bitmaps for library widgets.
+
+
+<sect>KDE Developer's mini-HOWTO
+<p>
+This mini-HOWTO covers issues that are collected by David Sweet <htmlurl url="mailto:dsweet@chaos.umd.edu" 
+name="<dsweet@chaos.umd.edu>">  in his <em/The KDE Developer's mini-HOWTO (May 21, 1999)/ and was mailed at the KDE-Developer's 
+mailinglist. It contains information about CVS and package uploading to the KDE website which will be of use when you want to publish 
+your applications.
+
+The current version of the original document can be found at: <htmlurl url="http://www.chaos.umd.edu/~dsweet/KDE/DevelMiniHOWTO.txt" 
+name="http://www.chaos.umd.edu/~dsweet/KDE/DevelMiniHOWTO.txt">.
+
+The following is adapted for usage with the KDevelop IDE, therefore <bf/NOT/ representing the original text.
+
+<sect1>Information and Source Code
+<p>
+
+<sect2>General Information
+<p>
+The K Desktop Environment is an open source Unix desktop created by volunteers from around the world.  There are many ways to 
+contribute to the project.  You can write new code, improve old code, write documentation, translate to other languages, create 
+artwork, sounds, & music, report bugs, and suggest new features. 
+
+KDE uses the Qt toolkit which is developed by Troll Tech (www.troll.no). The main components of the desktop are a file manager
+(kfm), window manager (kwm), and panel (kpanel).  There are many more utilities and applications which are included in the base 
+distribution and available elsewhere.
+
+The primary programming language used for development is C++, although bindings are available for Python (pyKDE). 
+
+The currently released version of KDE is 1.1.1.  KDE 1.1.2 will introduce theme support (which allows users to dramatically change the
+appearance of their desktops) and include bugfixes.  One should expect KDE 1.1.2 to be released in about 4-6 months.  KDE 2.0 will 
+include rewrites or major updates of kfm, khtmlw (an HTML widget), kpanel, kmail & maybe kwm, unicode support, and much more.
+
+KDE 2.0 requires mico, a free CORBA implementation.  CORBA is used to make the new kfm (dubbed Konquerer) easily extensible and to 
+create a document-centric user interface for KOffice.  The user can, for example, embed a chart created and edited with KSpread into a 
+document which has text created and edited by KWord.  Here's a bit from Simon
+Hausmann about KOM/OpenParts:
+
+OpenParts is based on KOM. It provides an easy way to graphically embed other application's "widgets" , provides a clever way to manage 
+shared GUI elements, together with a CORBA/KOM interface/implementation of these, and it implements the basic support for the document 
+view model, extensively used by KOffice. See kdenonbeta/corbadoc/komop.html in CVS for more. 
+
+<sect2>URLs
+<p>
+The main KDE web site is at:  <htmlurl url="http://www.kde.org" name="http://www.kde.org">
+See the "Developer information" section in the navigation side bar.
+
+Bug reports can be found at:  <htmlurl url="http://bugs.kde.org" name="http://bugs.kde.org">
+
+Troll Tech (makers of the Qt toolkit) main site:  <htmlurl url="http://www.troll.no" name="http://www.troll.no">
+
+KDE Source Code and binaries:  <htmlurl url="ftp://ftp.kde.org" name="ftp://ftp.kde.org">  (or mirrors)
+Qt  Source Code and binaries:  <htmlurl url="ftp://ftp.troll.no" name="ftp://ftp.troll.no">
+
+CORBA Info: <htmlurl url="http://www.omg.org/" name="http://www.omg.org/">
+
+A good CORBA paper: <htmlurl url="http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz" 
+name="http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz">
+ 
+MICO: <htmlurl url="http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/" name="http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/">  (read 
+the documentation!  It's good.) 
+
+OpenParts/KOM: <htmlurl url="http://www.chaos.umd.edu/~dsweet/KDE/KTrans/KOM" name="http://www.chaos.umd.edu/~dsweet/KDE/KTrans/KOM">
+
+
+<sect2>Mailing lists
+<p>
+
+The list kde-devel is for KDE developers in general.  The koffice mailing list is for developers interested in koffice, and kfm-devel 
+is for kfm (the file manager) developers.
+
+Send a message to either kde-devel-request or koffice-request with the messag "subscribe myid@myserver" (where myid@myserver stands for 
+your email address).  Go to the KDE mail page a click on "Mailing Lists" for more information about other KDE mailing lists and the 
+mailing list archive.
+
+Toll Tech provides a list for users of the Qt 2.0 snapshots (discussed below).  You may subscribe to this by sending an email to
+<htmlurl url="mailto:snapshot-users-request@troll.no" name="snapshot-users-request@troll.no"> with the _message_ "subscribe".
+
+
+As a KDE developer you may want or need a kde email address, like joedeveloper@kde.org.  To obtain one, send an email to Martin Konold 
+at <htmlurl url="konold@kde.org" name="konold@kde.org">.
+
+To gain access to the KDE CVS respository (discussed below), send an email with an encrypted password to Stephan Kulow 
+<htmlurl url="mailto:coolo@kde.org" name="<coolo@kde.org>">.
+
+To get your encrpyted password, type:
+<tscreen><verb>
+perl -e print\ crypt\('passwd','sa'\)\.\"\\n\"
+</verb></tscreen>
+
+where passwd is your choice of password and sa is two random characters from the set [a-zA-Z0-9./]. The output is the encrypted
+passwd.
+
+<sect1>KDE CVS
+<p>
+The KDE CVS (Concurrent Versions System) is the source code repository for the KDE project.  You can access it via 
+
+(i) WWW: http://www., (ii) cvs utility,  (iii) cvsup utility, or (iv) snapshots. 
+
+You will need CVS access only for (ii); (i), (iii), and (iv) are read-only methods and available to the public.
+
+The web page for method (i) explains its usage.  I haven't an explanation for method (iii), cvsup, yet.  Please see 
+<htmlurl url="http://www.kde.org/cvsup.html" name="http://www.kde.org/cvsup.html"> [-- Perhaps someone who uses it will contribute a 
+short explanation of usage and information on obtaining it. --] The snapshots, (iv), are .tar.bz2 files which contain a section of KDE 
+code (called "modules"; ex, kdelibs, kdeutils) as it looked on some specified day (specified in the filename: ex, 
+kdelibs990517.tar.bz2).  The snapshots are posted daily in <htmlurl url="ftp://ftp.kde.org/pub/kde/unstable/CVS/snapshots" 
+name="ftp://ftp.kde.org/pub/kde/unstable/CVS/snapshots">. [ (ii) is described below. ] 
+
+The repository (or, just "CVS") stores all of the changes made to the source code by all of the contributors so that changes may
+be undone.  Each time a user makes a change (s)he includes a comment so that the devlopment of code can be more easily followed.  These
+comments are sent to the kde-cvs mailing list.  The CVS splits into _branches_ which may contain different versions of the KDE project.
+For example, the two branches being developed now are KDE_1_1_BRANCH and HEAD.  They both are derived from the same code (i.e., if you
+"undid" enough of the changes made to either branch you'd reveal identical source code) but used for different purposes.  Here are some
+branches and descriptions for your reference:
+
+<itemize>
+<item>KDE_1_1_1_RELEASE - code that was considered stable, released, and distributed as KDE 1.1.1
+<item>KDE_1_1_BRANCH - derived from KDE_1_1_1_RELEASE; being developed for KDE 1.1.2; will include themes and bugfixed; based on Qt 
+1.42. 	
+<item>HEAD - code which will become KDE 2.0.  It is based on Qt 2.0, requires mico, has a new kwm, kpanel, etc.  LOTS of changes.
+</itemize>
+
+
+The cvs utility is probably on your system.  To learn to use it I would recommend reading the man page!  Below is an explanation of 
+some common functions.
+
+Let's assume below that your username is joedeveloper.  As written below you should enter all of these commands from some base 
+directory. (KDE/CVS is not a bad choice!)
+
+Set the environment variable CVSROOT to :pserver:joedeveloper@cvs.kde.org:/home/kde.
+
+Checking out a module, ex. kdelibs from HEAD
+<tscreen><verb>
+  cvs -z6 checkout -r HEAD kdelibs
+  cvs -z6 checkout kdelibs
+</verb></tscreen>
+
+The -z6 option tells the server to compress the code at "level 6" before sending it to you.  This may speed things up for you.
+The -r options tells cvs which branch you want to checkout from. The default is the HEAD branch.
+
+Checking out a module, ex. kdelibs, from KDE_1_1_BRANCH
+
+<tscreen><verb>
+  cvs -z6 checkout -r KDE_1_1_BRANCH kdelibs
+</verb></tscreen>
+
+Note: you could use co as an abbreviation for checkout.
+
+Checking out an application from within a module (ex kjots, which is in the kdeutils module) from the HEAD branch
+
+<enum>
+<item>cvs -z6 co -l kdeutils
+<item>cvs -z6 co -l admin
+<item>cvs -z6 co -l kdeutils/kjots
+<item>cd kdeutils; ln -s ../admin
+</enum>
+
+The -l in line (1) tells cvs not to recurse the subdirectories of kdeutils.  This means will get the configure script and its
+companions (discussed below), but none of the application source code.
+
+Line (2) gets the admin directory which contains support files for autoconf and friends.  (This directory is retrieved automatically 
+when checking out an entire module.)
+
+Line (3) gets the kjots source.
+
+Line (4) makes a link to the admin directory.  (This is better than copying or moving the directory here.  If you leave admin where cvs
+put if then you can easily update the admin directory with cvs.  You could also make links to admin from any other modules you check 
+out this way and thus have only one, up-to-date copy of admin.)
+
+Updating source code you've previously checked out (ex. kdeutils/kjots)
+	
+<tscreen><verb>
+  cvs -z6 update kdeutils/kjots
+</verb></tscreen>
+
+The source code for kjots on your hard drive will be updated to match the code in the CVS.  You don't need to specify the branch here.  
+The correct branch is stored in kdeutils/kjots/CVS/Tag.
+
+Commiting changes (putting them into CVS) (ex. kdeutils/kjots)
+<tscreen><verb>
+  cvs -z6 commit kdeutils/jots
+</verb></tscreen>
+	
+You'll be prompted to edit a comment.  Enter a short one which desribes the changes you're making with this commmit.  (You can use
+your editor of choice by setting the EDITOR or CVSEDITOR environment variable.)
+
+Adding a file (ex. kdeutils/kmyapp/greatnewcode.cpp) [create the file first!]
+<tscreen><verb>
+  cd kdeutils/kmyapp
+  cvs add greatnewcode.cpp
+  cvs commit
+</verb></tscreen>
+
+
+Deleting a file (ex. kdeutils/kmyapp/badoldcode.cpp)
+<tscreen><verb>
+  cd kdeutils/kmyapp
+  rm badoldcode.cpp
+  cvs remove badoldcode.cpp
+  cvs commit
+</verb></tscreen>
+	
+
+Adding a directory (a module, like a new app) (ex. kdeutils/kmyapp, with the source file kmysource.cpp)
+<tscreen><verb>
+  cd kdeutils
+  mkdir kmyapp
+  (create the kmyapp/kmysource.cpp file)
+  cvs add kmyapp
+  cvs add kmyapp/kmysource.cpp
+  cvs commit    (actually puts the directory and file in the CVS)
+</verb></tscreen>
+
+Note: You need to have files in a directory to commit it.
+
+Removing a directory (a module, like a new app) (ex. kdeutils/kmyapp)
+<tscreen><verb>
+  cd kdeutils/kmyapp
+  (delete all files, as described above in "Deleting a file")
+  cd ..
+  cvs -P update  (will remove the local kmyapp automatically)
+</verb></tscreen>
+
+
+<sect1>Compiling and Safe Development Practices (with configure)
+<p>
+Before you start downloading and compiling the latest sources you should be aware that there's a good chance they won't work!  They are
+in a state of constant development so they could very well have bugs.
+
+Knowing this, you should find a way to compile and run new KDE stuff without interfering with your existing stable KDE setup.  Here's 
+one way, using the HEAD branch as an example.  We, again, assume your login is joedeveloper.  We also assume that your home directory 
+is in /home/joedeveloper.  (This would be the case for Red Hat systems.)
+
+Make a directory called KDE in the home directory of your *user* account.  You should not be doing any of this as root!  Make another
+called KDE/CVS-HEAD.  cd into that directory and get the KDE sources from the HEAD branch that you want.  The (minumum) modules needed 
+to use an application are: kdesupport, kdelibs.  You should compile and install them in that order (see below for compiling).  Others 
+you might want are: kdebase, kdeutils, kdegraphics, etc.
+
+Now, make a directory called KDE/kde-HEAD.  This is where you'll store the compiled code from the HEAD branch -- as well as Qt 2.0!  
+Let's get Qt 2.0 (snapshots are available from <htmlurl url="ftp://ftp.troll.no/qt/snapshots" name="ftp://ftp.troll.no/qt/snapshots">.  
+Get the latest one.  Don't expect it to work without a little help, though.  You can find some help on the Qt snapshot mailing list 
+mentioned above.)  Put the sources in KDE/kde-HEAD. To compile the code, cd to KDE/kde-HEAD and
+
+<tscreen><verb>	
+	gzip -d qt-2.00beta-snapshot-1999xxxx.tar.gz
+	tar -xvf qt-2.00beta-snapshot-1999xxxx.tar
+	ln -s qt-2.00beta-snapshot-1999xxxx qt
+	cd qt
+	setenv QTDIR $PWD     (if you use csh/tcsh, change this for bash)
+	cd configs
+	mv linux-g++-shared linux-g++-shared.orig  
+	sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared
+	make linux-g++-shared
+	make
+</verb></tscreen>
+
+You should compare the files configs/linux-g++-shared and configs/linux-g++-shared.orig if you don't know what the sed is doing.
+The look up the -fno-rtti option of egcs.
+
+Now, for the KDE code.  cd to KDE/CVS-HEAD/kdesupport.  Type
+	
+make -f Makefile.cvs
+
+./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt 
+--with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib 
+
+make
+
+If all goes well, then
+	
+make install
+
+If not, try to fix things, then type
+	
+make install
+
+Repeat this process for the other modules.  You should alter the ./configure line to read
+
+./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt 
+--with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib --enable-new-stuff --enable-tutorials 
+
+when you compile the code in the kdelibs module.
+
+<sect1>Compiling tips
+<p>
+We turned off the "-fno-rtti" option when compiling Qt 2.0 because it prevents KDE from linking. It seems that you need to compile and 
+install qimageio (part of Qt) separately if you want to get koffice to compile.  [-- I'll provide instructions once I try this. --]
+
+
+<sect1>Submitting contributions
+<p>
+If you are hacking at CVS, you should follow the commit procedure outlined above. If you are developing outside of CVS, you can submit 
+you code (widgets, applications, etc.) via FTP to <htmlurl url="ftp://upload.kde.org/Incoming" name="ftp://upload.kde.org/Incoming">  
+
+When you do this be sure to include an .lsm (Linux Software Map) file. This way your code can be automatically placed in the 
+appropriate spot on ftp.kde.org and its mirrors and an announcement can be automatically sent to kde-announce.  Here's a sample .lsm:
+
+<tscreen><verb>
+Begin3
+Title:          KLab
+Version:        0.1.0
+Entered-date:   3/1/99
+Description:    GUI and more for RLab
+Keywords:       kde rlab math plot plotting
+Author:         David Sweet <dsweet@chaos.umd.edu>
+Maintained-by:  David Sweet <dsweet@chaos.umd.edu>
+Home-page:      http://www.glue.umd.edu/~dsweet/KDE/KLab
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/scientific
+Alternate-site: http://www.glue.umd.edu/~dsweet/KDE/KLab/
+Original-site:  ftp://upload.kde.org/pub/kde/Incoming
+Platform:       unix
+Copying-policy: GPL
+End                  
+</verb></tscreen>
+
+KDevelop projects by default contain a lsm file in the main project directory. There, your email-adress and your name is already 
+inserted, so you only have to complete the information that is missing like the sites. The .lsm file should be uploaded separately 
+from the source code. The source code should be packaged as a .tar.gz (or .tgz)  or .tar.bz2.  This archive should expand to a single 
+directory with all of your stuff in it. Within KDevelop, choose "Project"-"Create Distribution"-"tar.gz" which automatically creates 
+the tar.gz file.
+
+<sect1>Thanks 
+<p>
+I'd like to thank the following people for their suggestions (in no particular order): Roberto Alsina, Waldo Bastian, Harri Porten, 
+Samuel Wuethrich, Daniel Naber, Martin Konold.
+
+<sect>Authors
+<p>
+
+The KDevelop Programming Handbook contains information that are taken from various sources on the internet and by mails to various 
+mailing lists, as:
+
+<bf/KDoc documentation:/ Sirtaj S. Kang <htmlurl url="mailto:taj@.kde.org" name="taj@.kde.org">
+
+<bf/KDE Internationalization:/ Matthias Elter <htmlurl url="mailto:me@kde.org" name="me@kde.org">
+ 
+<bf/KDebug documentation:/ Kalle Dalheimer <htmlurl url="mailto:kalle@kde.org" name="kalle@kde.org"> 
+ 
+<bf/The KDE File System Standard:/ Richard Moore <htmlurl url="rich@kde.org" name="rich@kde.org">
+
+<bf/KDE-Developer's mini-HOWTO:/ David Sweet <htmlurl url="mailto:dsweet@chaos.umd.edu" name="<dsweet@chaos.umd.edu>">
+
+The contents of the according chapters are copyright of the original authors. 
+ 
 <sect>Copyright<label id="Copyright"> 
 <p>
 <tscreen><verb>
@@ -2664,6 +3399,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
 
 
 

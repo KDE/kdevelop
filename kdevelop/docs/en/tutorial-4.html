@@ -59,9 +59,7 @@ the library widget you want to use inherits <CODE>QWidget</CODE>. Therefore, the
 instance of a class <CODE>&lt;yourapp&gt;View</CODE>, which inherits <CODE>QWidget</CODE> already. The application creates your view in the method
 <CODE>initView()</CODE>, where an instance is created and connected to the main widget as it's view with <CODE>KTMainWidget::setView()</CODE>.
 <P>This chapter therefore describes how to use library widgets for creating views of KDE or Qt applications that are generated with
-KDevelop, then we're looking at the libraries and what kind of views are already offered. Finally, we will extend the already provided
-view class of <EM>KScribble</EM>, <CODE>KScribbleView</CODE> in section 
-<A HREF="#Creating your own Views">Creating your own Views</A>.
+KDevelop, then we're looking at the libraries and what kind of views are already offered. 
 <P>
 <H3><A NAME="ss4.1">4.1 Using Library Views</A>
 </H3>
@@ -131,19 +129,63 @@ where we will find some useful things first. For creating new applications, the 
 <P>The <CODE>khtmlw</CODE> library on the other hand offers a complete HTML-interpreting widget that is ready to use. It is scrollable already,
 so you don't even have to take care for that. A possible use could be to integrate it as a preview widget for an HTML editor; used by
 applications such as KFM, KDEHelp and KDevelop to display HTML files.
-<P>Now that you have a general overview of what is already provided, you may notice that for a lot of purposes already existing widgets
-can be used or combined together. KMail is an example as well as KDevelop itself makes use of library view components to display data.
-But for applications such as drawing programs or syntax-coloring editors, those can only be the beginning. In those cases, you often
-have to derive your view from an existing view or from <CODE>QWidget</CODE> to display your data and allow manipulation. As our example
-application <EM>KScribble</EM>, will be a small drawing program, we don't have any choice: we as well have to use <CODE>QWidget</CODE>; therefore
-we can leave our framework untouched and start extending the implementation of the class <CODE>KScribbleView</CODE> until it is capable of
-offering user input. During the next section, we will do that by overwriting virtual methods provided by <CODE>QWidget</CODE> for user event
-handling; then we will connect certain functions to the toolbar and menubar and connect these to our widget.
+<P>
 <P>
 <H3><A NAME="Creating your own Views"></A> <A NAME="ss4.2">4.2 Creating your own Views</A>
 </H3>
 
+<P>Now that you have a general overview of what is already provided, you may notice that for a lot of purposes already existing widgets
+can be used or combined together. KMail is an example as well as KDevelop itself makes use of library view components to display data.
+<P>For applications that use a special file format or have to deal with graphics, you are probably forced to create your own view widget 
+to allow data manipulation. This is realized in our sample by the class <CODE>KScribbleView</CODE>, already providing a base for a view area.
+<P>The inheritance from <CODE>QWidget</CODE> is necessary to overwrite the virtual methods to access user events, this is probably the most work 
+besides providing popup menus for easier access of certain functions. Also it is likely that you have to implement a set of slots which 
+can be accessed by toolbar buttons or menubar commands to connect to as well as methods to manipulate variables such as e.g. a painter 
+color.   
+<P>For completeness, we will repeat the necessary methods:
+<P><B>a) Keyboard events --TAB and Shift-TAB keys:</B>
+<P>changes the keyboard input focus from the current widget to the next widget in the focus order. The focus can be set to widgets by
+calling <CODE>setFocusPolicy()</CODE> and process the following event handlers:
 <P>
+<UL>
+<LI><CODE>virtual void focusInEvent ( QFocusEvent * )</CODE></LI>
+<LI><CODE>virtual void focusOutEvent ( QFocusEvent * )</CODE></LI>
+</UL>
+<P><B>b) all other keyboard input:</B>
+<UL>
+<LI><CODE>virtual void keyPressEvent ( QKeyEvent * )</CODE></LI>
+<LI><CODE>virtual void keyReleaseEvent ( QKeyEvent * )</CODE></LI>
+</UL>
+<P><B>c) mouse movements:</B>
+<UL>
+<LI><CODE>virtual void mouseMoveEvent ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void enterEvent ( QEvent * )</CODE></LI>
+<LI><CODE>virtual void leaveEvent ( QEvent * )</CODE></LI>
+</UL>
+<P><B>d) mouse button actions:</B>
+<UL>
+<LI><CODE>virtual void mousePressEvent ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void mouseReleaseEvent ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void mouseDoubleClickEvent ( QMouseEvent * )</CODE></LI>
+</UL>
+<P><B>e) window events containing the widget:</B>
+<UL>
+<LI><CODE>virtual void moveEvent ( QMoveEvent * )</CODE></LI>
+<LI><CODE>virtual void resizeEvent ( QResizeEvent * )</CODE></LI>
+<LI><CODE>virtual void closeEvent ( QCloseEvent * )</CODE></LI>
+</UL>
+<P>When reimplementing these functions, you should watch certain issues to avoid implementation mistakes that will make it almost 
+impossible to change the widget's behavoir afterwards:
+<P>
+<OL>
+<LI>declare your virtual methods as <B>virtual</B> as well and keep the acess to protected. This allows code-reuse by inheritance and 
+is consistent.</LI>
+<LI>don't hardcode any eventprocessing which should be made configurable. This counts most for keyboard events which should be 
+realized with keyboard accelerators if any function is called. This even counts for text processing ! (Imagine that a lot of users are 
+familiar with their favorite editor's bahavoir. If this is configurable, they can use the behavoir they like and are used to)</LI>
+<LI>forward popup menu highlighting signals to the main widget to enable statusbar help</LI>
+</OL>
+  
 <P>
 <P ALIGN="RIGHT">
 

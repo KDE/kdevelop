@@ -74,6 +74,12 @@ install-data-local:
 	$(INSTALL_DATA) tutorial-12.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-12.html
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) tutorial-13.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-13.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) tutorial-14.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-14.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) tutorial-15.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-15.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) tutorial-16.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-16.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/index-9.html
@@ -111,4 +117,8 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-11.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-12.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-13.html
+	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-14.html
+	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-15.html
+	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-16.html
+
 

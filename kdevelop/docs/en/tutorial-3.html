@@ -39,7 +39,7 @@ KDevelop or for projects where you want to start from scratch. Mind that you hav
 by yourself.</LI>
 </UL>
 <P>In this chapter we'll see how the KAppWizard can be invoked and what has to be done to generate a KDE application project. This will
-also be the initial step of our tutorial, where you will create your first version of <EM>KScribble</EM>. For all other project types the
+also be the initial step of our coverage, where we will create the initial version of a sample project. For all other project types the
 steps are usually the same, just you may not have certain options available.
 <P>
 <H3><A NAME="ss3.1">3.1 Invoking KAppWizard and Project Generation</A>
@@ -55,13 +55,12 @@ will switch to the next page, where you have to set the general project options.
 <P>
 <H4>The Generate Settings Page</H4>
 
-<P>For our first version of <EM>KScribble</EM>, enter <CODE>KScribble</CODE> as "Projectname". Then select the directory you want to have your project
-build in; the default is your home directory. You can enter the path manually or you can as well press the button on the right to
-select the directory by a dialog.
+<P>For our sample application, we choose the project name <CODE>KScribble</CODE>; therefore insert this in the field "Projectname". Then select 
+the directory you want to have your project build in; the default is your home directory. You can enter the path manually or you can as 
+well press the button on the right to select the directory by a dialog.
 <P>Next, you have to enter the Versionnumber. For the first version, set this to <CODE>0.1</CODE>. It is usual to number new applications that are
 in development for the first release lower than 1, and as the initial version will only contain the standard framework, we'll name this
-the 0.1 version. During the following chapters, we'll increase this value along with the facilities that <EM>KScribble</EM> will get by our
-implementation.
+the 0.1 version.
 <P>Finally, add your name to the "Author" field and your email adress. We'll leave all other options untouched- they are needed for our
 project.
 <P>To give you some information about the options, you can press the right mouse button over the options, and you will get a quickhelp
@@ -109,8 +108,7 @@ is finished, the "Cancel" button changes to an "Exit" button to leave the wizard
 <P>After this last step, you're finished with creating a new project. KDevelop then loads it and the treeviews let you browse through the
 project's files and classes.
 <P>
-<P>In the next section, we'll discuss how to build and run your first version of <EM>KScribble</EM> and how the sourcecode is organized, so
-you have an idea where we are and where we're going to extend the features of <EM>KScribble</EM> in the following chapters.
+<P>In the next section, we'll discuss how to build and run your first version of <EM>KScribble</EM> and how the sourcecode is organized.
 <P>
 <H3><A NAME="ss3.2">3.2 The First Build</A>
 </H3>
@@ -548,8 +546,7 @@ means to manipulate data,</LI>
 memory.</LI>
 <LI>add any methods that have to be accessible by the user via accelerator keys and menus/toolbars.</LI>
 </UL>
-<P>During the development of our sample application <EM>KScribble</EM>, we'll go further into this development process and complete the
-application framework according to our program's special needs.
+<P>
 <P>
 <H4>Application Configuration</H4>
 
