@@ -1,3 +1,10 @@
+2003-10-08  Tilman Vogel  <Tilman Vogel web de (dot at dot)>
+    - added auto completion to the namespace field
+    - added classes from all namespaces to the auto completion of the base
+      class field, add classes from specified namespace without qualifier
+    - lookup classes for parsing in the correct namespace, not only the global namespace
+    - fixed bug causing crash when changing inheritance mode
+
 2003-10-04 Alexander Dymo <cloudtemple@mksat.net>
     * Reenabled Ada language support (ported it to code model and reenabled
       background parsing).

@@ -103,22 +103,105 @@ CppNewClassDialog::CppNewClassDialog(KDevLanguageSupport *part, QWidget *parent,
     overMenu->insertItem(i18n("Replace Base Class Method"),
         this, SLOT(replaceFunctionality()), 0, 12);
 
-    comp = basename_edit->completionObject();
-    setCompletion(m_part->codeModel());
+    compBasename = basename_edit->completionObject();
+    setCompletionBasename(m_part->codeModel());
+    compNamespace = namespace_edit->completionObject();
+    setCompletionNamespaceRecursive(m_part->codeModel()->globalNamespace());
     classname_edit->setFocus();
 }
 
 
 CppNewClassDialog::~CppNewClassDialog()
 {
-    delete comp;
+    delete compBasename;
+    delete compNamespace;
 }
 
-void CppNewClassDialog::setCompletion(CodeModel *model)
+void CppNewClassDialog::setCompletionBasename(CodeModel *model)
 {
-    QStringList classNames = sortedNameList( model->globalNamespace()->classList() );
-    for (QStringList::const_iterator it = classNames.begin(); it != classNames.end(); ++it)
-        comp->addItem(*it);
+    compBasename->clear();
+  
+    // Import selected namespace without qualifier
+    NamespaceDom namespaceDom = model->globalNamespace();
+    
+    QStringList::const_iterator it = currNamespace.begin();
+    for ( ; it != currNamespace.end() ; ++it ) {
+	if( ! namespaceDom->hasNamespace(*it) )
+	    break;
+	namespaceDom = namespaceDom->namespaceByName(*it);
+    }
+    
+    if(it == currNamespace.end())
+	// complete namespace has been found (not breaked)
+	compBasename->insertItems(sortedNameList( namespaceDom -> classList() ));
+    
+    addCompletionBasenameNamespacesRecursive(model->globalNamespace());
+    
+    QStringList compItems = compBasename->items();
+    it = compItems.begin();
+    for(int i=0;
+	it != compItems.end(); ++it, ++i) 
+	kdDebug(9007) << "compBasename->items()[" << i << "] = \"" << *it << "\"" << endl;
+ }
+
+QStringList& gres( QStringList &list, const QRegExp & rx, const QString & after )
+{
+    QStringList::Iterator it = list.begin();
+    while ( it != list.end() ) {
+        (*it).replace( rx, after);
+        ++it;
+    }
+    return list;
+}
+
+void CppNewClassDialog::addCompletionBasenameNamespacesRecursive(const NamespaceDom & namespaceDom,
+								 const QString & namespaceParent)
+{
+    // Add classes of this namespace
+    QStringList classList = sortedNameList( namespaceDom -> classList() );
+
+    if(! namespaceParent.isEmpty() ) {
+#if QT_VERSION >= 0x030200
+	classList.gres( QRegExp("^"), namespaceParent + "::" );
+#else
+    gres(classList, QRegExp("^"), namespaceParent + "::" );
+#endif
+    }
+
+    compBasename -> insertItems(classList);
+
+    
+    // Recursion
+    NamespaceList namespaceList = namespaceDom->namespaceList();
+    NamespaceList::const_iterator it = namespaceList.begin();
+    
+    for( ; it != namespaceList.end() ; ++it ) {
+	QString fullNamespace;
+	
+	if(! namespaceParent.isEmpty() ) 
+	    fullNamespace = namespaceParent+"::";
+	
+	fullNamespace += (*it) -> name();
+	addCompletionBasenameNamespacesRecursive( *it, fullNamespace );
+    }
+}
+
+
+void CppNewClassDialog::setCompletionNamespaceRecursive( const NamespaceDom & namespaceDom, const QString & namespaceParent )
+{
+    NamespaceList namespaceList = namespaceDom->namespaceList();
+    NamespaceList::const_iterator it = namespaceList.begin();
+    for( ; it != namespaceList.end() ; ++it ) {
+	QString fullNamespace;
+	
+	if(! namespaceParent.isEmpty() )
+	    fullNamespace = namespaceParent+"::";
+	
+	fullNamespace += (*it) -> name();
+	kdDebug(9007) << "compNamespace -> addItem( \"" << fullNamespace << "\" )" << endl;
+	compNamespace -> addItem( fullNamespace );
+	setCompletionNamespaceRecursive( *it, fullNamespace );
+    }
 }
 
 void CppNewClassDialog::nameHandlerChanged(const QString &text)
@@ -168,11 +251,23 @@ void CppNewClassDialog::classNameChanged(const QString &text)
     }
 }
 
+void CppNewClassDialog::classNamespaceChanged(const QString &text)
+{  
+    currNamespace = QStringList::split(QString("::"), text);
+    setCompletionBasename(m_part -> codeModel());
+    reloadAdvancedInheritance(true);
+}
+
 void CppNewClassDialog::baseclassname_changed(const QString &text)
 {
     if ( (basename_edit->hasFocus()) && (!baseincludeModified) ) {
-        QString header = text + interface_suffix;
-        switch( gen_config->superCase() )
+        QString header = text;
+	if (header.contains(QRegExp("::")))
+	  header = header.mid(header.findRev(QRegExp("::"))+2);
+        header = header.replace(QRegExp(" *<.*>"), "");
+	header += interface_suffix;
+	
+	switch( gen_config->superCase() )
         {
             case ClassGeneratorConfig::LowerCase:
                 header = header.lower();
@@ -182,9 +277,7 @@ void CppNewClassDialog::baseclassname_changed(const QString &text)
                 break;
             default:;
         }
-        if (header.contains(QRegExp("::")))
-            header = header.left(header.find(QRegExp("::"))) + interface_suffix;
-        header = header.replace(QRegExp(" *<.*>"), "");
+	
         baseinclude_edit->setText(header);
     }
 }
@@ -403,6 +496,10 @@ void CppNewClassDialog::remBaseClassOnly()
 
 void CppNewClassDialog::remClassFromAdv(QString text)
 {
+    // Strip off namespace qualification
+    if(text.contains("::"))
+        text = text.mid(text.findRev("::")+2);
+     
     removeTemplateParams(text);
     QListViewItem *it = 0;
     if ((it = access_view->findItem(text, 0)))
@@ -657,9 +754,9 @@ void CppNewClassDialog::newTabSelected(QWidget* /*w*/)
 }
 
 
-void CppNewClassDialog::reloadAdvancedInheritance(bool /*clean*/)
+void CppNewClassDialog::reloadAdvancedInheritance(bool clean)
 {
-/*    clearConstructorsList(clean);
+    clearConstructorsList(clean);
     clearMethodsList(clean);
     clearUpgradeList(clean);
 
@@ -671,14 +768,52 @@ void CppNewClassDialog::reloadAdvancedInheritance(bool /*clean*/)
             parseClass(it.current()->text(0), it.current()->text(1));
         }
         ++it;
-    }*/
+    }
 }
 
 void CppNewClassDialog::parseClass(QString clName, QString inheritance)
 {
+    // Determine namespace
+    QStringList clNamespace = currNamespace;
+    bool clFullQualified = false;
+    
+    if(clName.contains("::")) {
+	// Full qualified, override imported namespace
+	clFullQualified = true;
+	int splitpoint = clName.findRev("::");
+	clNamespace = QStringList::split("::", clName.left(splitpoint));
+	clName = clName.mid(splitpoint + 2);
+    }
+  
+    kdDebug(9007) << "clFullQualified = " << clFullQualified << endl;
+    kdDebug(9007) << "clName = " << clName << endl;
+    QString debMsg = "clNamespace = ";
+    for(QStringList::const_iterator it = clNamespace.begin();
+	it != clNamespace.end(); ++it)
+	debMsg += (*it) + "::";
+    kdDebug(9007) << debMsg << endl;
+  
     QString templateAdd = templateActualParamsFormatted(clName);
     removeTemplateParams(clName);
-    ClassList myClasses = m_part->codeModel()->globalNamespace()->classByName(clName);
+
+    ClassList myClasses; // = m_part->codeModel()->globalNamespace()->classByName(clName);
+
+    NamespaceDom namespaceDom = m_part->codeModel()->globalNamespace();
+
+    QStringList::const_iterator namespaceIt = clNamespace.begin();
+    for( ; namespaceIt != clNamespace.end(); ++namespaceIt) {
+	if (! namespaceDom -> hasNamespace(*namespaceIt))
+	    break;
+	namespaceDom = namespaceDom->namespaceByName(*namespaceIt);
+    }
+    if (namespaceIt == clNamespace.end()) {
+	// Found specified namespace
+	myClasses = namespaceDom->classByName(clName);
+	// Fall back to global namespace if class was not fully qualified and is not found in selected namespace
+	if( myClasses.empty() && ! clFullQualified )
+	    myClasses = m_part -> codeModel() -> globalNamespace() -> classByName(clName);
+    }
+    
     for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
     {
         PCheckListItem<ClassDom> *it = new PCheckListItem<ClassDom>(*classIt, constructors_view, (*classIt)->name());
@@ -702,10 +837,10 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
             }
             else if ((*methodIt)->isSlot())
             {
-                addToMethodsList(over_slots, *methodIt);
-
                 if ((*methodIt)->access() != CodeModelItem::Private)
                 {
+		    addToMethodsList(over_slots, *methodIt);
+
                     QString inhModifier;
                     //protected inheritance gives protected attributes
                     if (inheritance.contains("protected")) inhModifier = "protected";
@@ -718,12 +853,11 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
             }
             else
             {
-                if (!isDestructor((*classIt)->name(), *methodIt))
-                    addToMethodsList(over_methods, *methodIt);
-
                 // display only public and protected methods of the base class
                 if ( (!isDestructor((*classIt)->name(), *methodIt)) && ((*methodIt)->access() != CodeModelItem::Private) )
                 {
+                    addToMethodsList(over_methods, *methodIt);
+		    
                     // see what modifier is given for the base class
                     QString inhModifier;
                     //protected inheritance gives protected methods
@@ -866,7 +1000,7 @@ void CppNewClassDialog::setAccessForBase(QString baseclass, QString newAccess)
                 if ( (curr = dynamic_cast<PListViewItem<VariableDom>* >(it.current())) )
                     setAccessForItem(curr, newAccess, curr->item()->access() == CodeModelItem::Public);
                 else if ( (curr_m = dynamic_cast<PListViewItem<FunctionDom>* >(it.current())) )
-                    setAccessForItem(curr_m, newAccess, curr->item()->access() == CodeModelItem::Public);
+                    setAccessForItem(curr_m, newAccess, curr_m->item()->access() == CodeModelItem::Public);
             }
             ++it;
         }

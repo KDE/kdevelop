@@ -106,6 +106,7 @@ public:
 protected:
     virtual void accept();
     virtual void classNameChanged(const QString &text);
+    virtual void classNamespaceChanged(const QString &text);
     virtual void headerChanged();
     virtual void implementationChanged();
     virtual void nameHandlerChanged(const QString &text);
@@ -173,11 +174,15 @@ private:
     QString implementation_url;
     QString interface_suffix;
     QString implementation_suffix;
+    QStringList currNamespace;
     bool lowercase_filenames;
     QStringList currBaseClasses;
-    KCompletion * comp;
+    KCompletion * compBasename;
+    KCompletion * compNamespace;
 
-    void setCompletion(CodeModel *model);
+    void setCompletionBasename(CodeModel *model);
+    void addCompletionBasenameNamespacesRecursive(const NamespaceDom & namespaceDom, const QString & namespaceParent = "");
+    void setCompletionNamespaceRecursive(const NamespaceDom & namespaceDom, const QString & namespaceParent = "");
     void setStateOfInheritanceEditors(bool state, bool hideList = true);
     void setAccessForBase(QString baseclass, QString newAccess);
     void setAccessForItem(QListViewItem *curr, QString newAccess, bool isPublic);

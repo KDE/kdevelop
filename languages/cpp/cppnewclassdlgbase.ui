@@ -205,7 +205,7 @@ template &lt;params&gt; classname</string>
                                     <cstring>namespace_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KLineEdit">
                                 <property name="name">
                                     <cstring>namespace_edit</cstring>
                                 </property>
@@ -1219,6 +1219,12 @@ Namespace1::Namespace2::...::NamespaceN</string>
         <receiver>CppNewClassDlgBase</receiver>
         <slot>scopeboxActivated(int)</slot>
     </connection>
+    <connection>
+        <sender>namespace_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CppNewClassDlgBase</receiver>
+        <slot>classNamespaceChanged(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>classname_edit</tabstop>
@@ -1263,27 +1269,27 @@ Namespace1::Namespace2::...::NamespaceN</string>
 <slots>
     <slot access="protected">updateClassStore()</slot>
     <slot access="protected">access_view_mouseButtonPressed( int button, QListViewItem * item, const QPoint &amp; p, int c )</slot>
-    <slot access="protected">classNameChanged(const QString &amp;text)</slot>
+    <slot access="protected">classNameChanged( const QString &amp; text )</slot>
     <slot access="protected">headerChanged()</slot>
     <slot access="protected">implementationChanged()</slot>
-    <slot access="protected">nameHandlerChanged(const QString &amp;text)</slot>
+    <slot access="protected">nameHandlerChanged( const QString &amp; text )</slot>
     <slot access="protected">addBaseClass()</slot>
     <slot access="protected">remBaseClass()</slot>
-    <slot access="protected">currBaseNameChanged(const QString &amp;text)</slot>
+    <slot access="protected">currBaseNameChanged( const QString &amp; text )</slot>
     <slot access="protected">currBasePrivateSet()</slot>
     <slot access="protected">currBaseProtectedSet()</slot>
     <slot access="protected">currBasePublicSet()</slot>
-    <slot access="protected">currBaseVirtualChanged(int val)</slot>
-    <slot access="protected">currBaseSelected(QListViewItem *it)</slot>
-    <slot access="protected">checkObjCInheritance(int val)</slot>
-    <slot access="protected">checkQWidgetInheritance(int val)</slot>
-    <slot access="protected">newTabSelected(const QString &amp;text)</slot>
+    <slot access="protected">currBaseVirtualChanged( int val )</slot>
+    <slot access="protected">currBaseSelected( QListViewItem * it )</slot>
+    <slot access="protected">checkObjCInheritance( int val )</slot>
+    <slot access="protected">checkQWidgetInheritance( int val )</slot>
+    <slot access="protected">newTabSelected( const QString &amp; text )</slot>
     <slot access="protected">changeToPrivate()</slot>
     <slot access="protected">changeToProtected()</slot>
     <slot access="protected">changeToPublic()</slot>
     <slot access="protected">changeToInherited()</slot>
-    <slot access="protected">methods_view_mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</slot>
-    <slot access="protected">newTabSelected(QWidget *w)</slot>
+    <slot access="protected">methods_view_mouseButtonPressed( int, QListViewItem *, const QPoint &amp;, int )</slot>
+    <slot access="protected">newTabSelected( QWidget * w )</slot>
     <slot access="protected">extendFunctionality()</slot>
     <slot access="protected">replaceFunctionality()</slot>
     <slot access="protected">to_constructors_list_clicked()</slot>
@@ -1294,12 +1300,13 @@ Namespace1::Namespace2::...::NamespaceN</string>
     <slot access="protected">upbaseclass_button_clicked()</slot>
     <slot access="protected">downbaseclass_button_clicked()</slot>
     <slot access="protected">baseclasses_view_selectionChanged()</slot>
-    <slot access="protected">gtk_box_stateChanged(int)</slot>
-    <slot access="protected">qobject_box_stateChanged(int)</slot>
+    <slot access="protected">gtk_box_stateChanged( int )</slot>
+    <slot access="protected">qobject_box_stateChanged( int )</slot>
     <slot access="protected">selectall_button_clicked()</slot>
-    <slot access="protected">baseclassname_changed(const QString&amp;)</slot>
-    <slot access="protected">baseIncludeChanged(const QString&amp;)</slot>
-    <slot access="protected">scopeboxActivated(int)</slot>
+    <slot access="protected">baseclassname_changed( const QString &amp; )</slot>
+    <slot access="protected">baseIncludeChanged( const QString &amp; )</slot>
+    <slot access="protected">scopeboxActivated( int )</slot>
+    <slot access="protected">classNamespaceChanged( const QString &amp; )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
