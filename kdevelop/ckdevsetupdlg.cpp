@@ -69,7 +69,7 @@ void CKDevSetupDlg::addGeneralTab()
 {
   // ****************** the General Tab ********************
   generalPage = addPage(i18n("General"),i18n("KDevelop General Configuration"),
-		KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ));
+  KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(generalPage,4,1,15,7);
 
   QButtonGroup* makeGroup;
@@ -284,7 +284,7 @@ void CKDevSetupDlg::addKeysTab()
 
   keyMap = m_accel->keyDict();
   keysPage = addPage(i18n("Keys"),i18n("Configuration of KDevelop Hot-Keys"),
-		KGlobal::instance()->iconLoader()->loadIcon( "key_bindings", KIcon::NoGroup, KIcon::SizeMedium ));
+  KGlobal::instance()->iconLoader()->loadIcon( "key_bindings", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(keysPage,2,1,15,7);
 
   keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
@@ -296,7 +296,7 @@ void CKDevSetupDlg::addDocTab()
   // ****************** the Documentation Tab ********************
 
   QFrame* docPage = addPage(i18n("Documentation"),i18n("Path to KDE 2/Qt 2 API Documentation"),
-		KGlobal::instance()->iconLoader()->loadIcon( "contents", KIcon::NoGroup, KIcon::SizeMedium ));
+  KGlobal::instance()->iconLoader()->loadIcon( "contents", KIcon::NoGroup, KIcon::SizeMedium ));
 
   QGridLayout *grid = new QGridLayout(docPage,2,1,15,7);
 
@@ -471,8 +471,8 @@ void CKDevSetupDlg::addDebuggerTab()
   bool dbgFloatingToolbar   = config->readBoolEntry("Enable floating toolbar", false);
   bool dbgTerminal          = config->readBoolEntry("Debug on separate tty console", false);
 
-  QFrame* debuggerPage = addPage(i18n("Debugger"),i18n("Debugger Settings"),
-		KGlobal::instance()->iconLoader()->loadIcon( "debugger", KIcon::NoGroup, KIcon::SizeMedium ));
+  debuggerPage = addPage(i18n("Debugger"),i18n("Debugger Settings"),
+  KGlobal::instance()->iconLoader()->loadIcon( "debugger", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(debuggerPage,3,1,15,7);
   dbgExternalCheck = new QCheckBox( debuggerPage, "dbgExternal" );
   grid->addWidget(dbgExternalCheck,0,0);
@@ -594,7 +594,7 @@ void CKDevSetupDlg::addQT2Tab()
 {
 
   QFrame* QT2Page = addPage(i18n("Path"),i18n("Path to KDE 2 / Qt 2 installation"),
-		KGlobal::instance()->iconLoader()->loadIcon( "fileopen", KIcon::NoGroup, KIcon::SizeMedium ));
+  KGlobal::instance()->iconLoader()->loadIcon( "fileopen", KIcon::NoGroup, KIcon::SizeMedium ));
 
   config->setGroup("QT2");
   QGridLayout *grid = new QGridLayout(QT2Page,2,1,15,7);
