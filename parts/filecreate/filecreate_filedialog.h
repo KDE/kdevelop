@@ -15,9 +15,12 @@
 
 #include <kfiledialog.h>
 
+#include "filecreate_typechooser.h"
+
 namespace FileCreate {
 
   class FileDialog : public KFileDialog {
+    Q_OBJECT
 
   public:
     FileDialog(const QString& startDir, const QString& filter,
@@ -27,7 +30,15 @@ namespace FileCreate {
 
     virtual void initGUI();
 
-  
+  protected:
+    QWidget * m_extraWidget;
+    TypeChooser * m_typeChooser;
+    
+  protected slots:
+    void slotActionFilterChanged(const QString & filter);
+    void slotActionTextChanged(const QString & text);
+
+
   };
 
 }

@@ -45,7 +45,7 @@ using namespace FileCreate;
 
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin(parent, name), m_selectedWidget(-1)
+  : KDevPlugin(parent, name ? name : "FileCreatePart"), KDevCreateFile(), m_selectedWidget(-1)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc"); 
@@ -55,14 +55,16 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 
   KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
   newAction->setStatusText( i18n("Creates a new file") );
+  newAction->setText( i18n("Create a new file", "New...") );
+  newAction->setWhatsThis( i18n("Use this to create a new file within your project.") );
+  newAction->setToolTip( i18n("Use this to create a new file within your project.") );
   m_filetypes.setAutoDelete(true);
 
-  m_availableWidgets[0] = new FileCreateWidget(this);
-  m_availableWidgets[1] = new FileCreateWidget2(this);
+  m_availableWidgets[0] = new TreeWidget(this); 
+  m_availableWidgets[1] = new FriendlyWidget(this); 
   m_numWidgets = 2;
   
-  //setWidget(new FileCreateWidget2(this));
-  selectWidget(1);
+  selectWidget(0);
   
   
 }
@@ -81,27 +83,28 @@ void FileCreatePart::selectWidget(int widgetNumber) {
 }
   
 
-bool FileCreatePart::setWidget(FileCreateTypeChooser * widg) {
+bool FileCreatePart::setWidget(TypeChooser * widg) {
+
   if (!widg) return false;
+
   // the type chooser must of course also be derived from QWidget
   QWidget * as_widget = dynamic_cast<QWidget*>(widg);
-  if (as_widget) {
-    // remove the existing widget
-    if (widget()) {
-      disconnect( widget()->signaller(), SIGNAL(filetypeSelected(const FileCreateFileType *)), this, SLOT(slotFiletypeSelected(const FileCreateFileType *)) );
-      QWidget * as_widget2 = dynamic_cast<QWidget*>(widget());
-      if (as_widget2)
-        topLevel()->removeView(as_widget2);
-    }
-    connect( widg->signaller(), SIGNAL(filetypeSelected(const FileCreateFileType *)), this, SLOT(slotFiletypeSelected(const FileCreateFileType *)) );
-    topLevel()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
+  if (!as_widget) return false;
+
+  // remove the existing widget
+  if (typeChooserWidget()) {
+    disconnect( typeChooserWidget()->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
+    QWidget * as_widget2 = typeChooserWidgetAsQWidget();
+    if (as_widget2)
+      topLevel()->removeView(as_widget2);
   }
+  connect( widg->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
+  topLevel()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
   return true;
 }
 
-
 void FileCreatePart::refresh() {
-  if (widget()) widget()->refresh();
+  if (typeChooserWidget()) typeChooserWidget()->refresh();
 }
 
 void FileCreatePart::slotNewFile() {
@@ -130,7 +133,7 @@ void FileCreatePart::slotProjectOpened() {
       // if an extension has been specified as enabled, ensure it
       // and all its subtypes are enabled
       if (subtyperef==QString::null) {
-        FileCreateFileType * filetype = getType(ext);
+        FileType * filetype = getType(ext);
         if (filetype) {
           filetype->setEnabled(true);
           if (filetype->subtypes().count())
@@ -139,8 +142,8 @@ void FileCreatePart::slotProjectOpened() {
       } else {
         // if an extension + subtype have been specified, enable
         // the subtype and the extension (the 'parent')
-        FileCreateFileType * filetype = getType(ext);
-        FileCreateFileType * subtype = getType(ext,subtyperef);
+        FileType * filetype = getType(ext);
+        FileType * subtype = getType(ext,subtyperef);
         if (filetype && subtype) {
           filetype->setEnabled(true);
           subtype->setEnabled(true);
@@ -160,9 +163,9 @@ void FileCreatePart::slotProjectOpened() {
       QFileInfoListIterator it( *list );
       QFileInfo *fi;
       while ( (fi = it.current()) != 0 ) {
-        FileCreateFileType * filetype = getType(fi->fileName());
+        FileType * filetype = getType(fi->fileName());
         if (!filetype) {
-          filetype = new FileCreateFileType;
+          filetype = new FileType;
           filetype->setName( fi->fileName() + " files" );
           filetype->setExt( fi->fileName() );
           filetype->setCreateMethod("template");
@@ -183,7 +186,7 @@ void FileCreatePart::slotProjectClosed() {
   refresh();
 }
 
-void FileCreatePart::slotFiletypeSelected(const FileCreateFileType * filetype) {
+void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
   KDevCreateFile::CreatedFile createdFile = createNewFile(filetype->ext(),
                                                           QString::null,
                                                           QString::null,
@@ -193,6 +196,7 @@ void FileCreatePart::slotFiletypeSelected(const FileCreateFileType * filetype) {
     kdDebug(9034) << "Opening url: " << uu.prettyURL().latin1() << endl;
     partController()->editDocument ( uu );
   }
+  topLevel()->lowerView( typeChooserWidgetAsQWidget() );
 }
 
 int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
@@ -202,7 +206,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
     for(QDomNode node = fileTypes.firstChild();!node.isNull();node=node.nextSibling()) {
       if (node.isElement() && node.nodeName()=="type") {
         QDomElement element = node.toElement(); 
-        FileCreateFileType * filetype = new FileCreateFileType;
+        FileType * filetype = new FileType;
         filetype->setName( element.attribute("name") );
         filetype->setExt( element.attribute("ext") );
         filetype->setCreateMethod( element.attribute("create") );
@@ -219,7 +223,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
             kdDebug(9034) << "subnode: " << subnode.nodeName().latin1() << endl;
             if (subnode.isElement() && subnode.nodeName()=="subtype") {
               QDomElement subelement = subnode.toElement();
-              FileCreateFileType * subtype = new FileCreateFileType;
+              FileType * subtype = new FileType;
               subtype->setExt( filetype->ext() );
               subtype->setCreateMethod( filetype->createMethod() );
               subtype->setSubtypeRef( subelement.attribute("ref") );
@@ -237,7 +241,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
   return numRead;
 }
 
-FileCreateFileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
+FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
 
   QString subtypeRef = subtRef;
   QString ext = ex;
@@ -247,14 +251,14 @@ FileCreateFileType * FileCreatePart::getType(const QString & ex, const QString s
     subtypeRef = ex.mid(dashPos+1);
   }
 
-  QPtrList<FileCreateFileType> filetypes = getFileTypes();
-  for(FileCreateFileType * filetype = filetypes.first();
+  QPtrList<FileType> filetypes = getFileTypes();
+  for(FileType * filetype = filetypes.first();
       filetype;
       filetype=filetypes.next()) {
     if (filetype->ext()==ext) {
       if (subtypeRef==QString::null) return filetype;
-      QPtrList<FileCreateFileType> subtypes = filetype->subtypes();
-      for(FileCreateFileType * subtype = subtypes.first();
+      QPtrList<FileType> subtypes = filetype->subtypes();
+      for(FileType * subtype = subtypes.first();
           subtype;
           subtype=subtypes.next()) {
         if (subtypeRef==subtype->subtypeRef()) return subtype;
@@ -273,16 +277,16 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   KURL selectedURL;
 
   KDialogBase * dialogBase = NULL;
-  FileCreateWidget2 * filetypeWidget = NULL;
+  FriendlyWidget * filetypeWidget = NULL;
 
   FileDialog * fileDialogWidget = NULL;  
   
   // If the file type (extension) is unknown, we're going to need to ask
   if (ext==QString::null) {
     m_filedialogFiletype = NULL;
-    filetypeWidget = new FileCreateWidget2(this);
-    connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileCreateFileType *) ) ,
-             this, SLOT(slotNoteFiletype(const FileCreateFileType *)) );
+    filetypeWidget = new FriendlyWidget(this);
+    connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileType *) ) ,
+             this, SLOT(slotNoteFiletype(const FileType *)) );
     filetypeWidget->refresh();
   }
 
@@ -293,7 +297,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     if (dir==QString::null)
       dir=project()->projectDirectory();
 
-    fileDialogWidget = new FileCreate::FileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
+    fileDialogWidget = new FileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
 
     dialogBase = fileDialogWidget;
                    
@@ -378,7 +382,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   
 }
 
-void FileCreatePart::slotNoteFiletype(const FileCreateFileType * filetype) {
+void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
   kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : QString::fromLatin1("Null") ) << endl;
   m_filedialogFiletype = filetype;
 }

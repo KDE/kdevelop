@@ -17,13 +17,18 @@
 #include <qguardedptr.h>
 #include <qptrlist.h>
 
+#include <qwidget.h>
 #include <kdevplugin.h>
 #include <kdevcreatefile.h>
 
+#include "filecreate_typechooser.h"
 
-class FileCreateWidget;
-class FileCreateFileType;
-class FileCreateTypeChooser;
+namespace FileCreate {
+  class Widget;
+  class FileType;
+}
+
+using namespace FileCreate;
 
 class FileCreatePart : public KDevPlugin, public KDevCreateFile
 {
@@ -33,7 +38,7 @@ public:
   FileCreatePart(QObject *parent, const char *name, const QStringList &);
   virtual ~FileCreatePart();
 
-  QPtrList<FileCreateFileType> getFileTypes() const { return m_filetypes; }
+  QPtrList<FileType> getFileTypes() const { return m_filetypes; }
 
   /**
    * Call this method to create a new file, within or without the project. Supply as
@@ -47,9 +52,13 @@ public:
                      QString subtype = QString::null);
 
   void selectWidget(int widgetNumber);
-  FileCreateTypeChooser * widget() const {
+  TypeChooser * typeChooserWidget() const {
     return (m_selectedWidget>=0 && m_selectedWidget<m_numWidgets) ?
                               m_availableWidgets[m_selectedWidget] : NULL;
+  }
+  QWidget * typeChooserWidgetAsQWidget() const {
+    TypeChooser * tc = typeChooserWidget();
+    return tc ? dynamic_cast<QWidget*>(tc) : NULL;
   }
 
 
@@ -57,29 +66,29 @@ public:
    * Finds the file type object for a given extension and optionally subtype.
    * You can omit the subtype and specify the extension as ext-subtype if you wish.
    */
-  FileCreateFileType * getType(const QString & ext, const QString subtype = QString::null);
+  FileType * getType(const QString & ext, const QString subtype = QString::null);
     
 public slots:
   void slotProjectOpened();
   void slotProjectClosed();
-  void slotFiletypeSelected(const FileCreateFileType *);
+  void slotFiletypeSelected(const FileType *);
   void slotNewFile();
-  void slotNoteFiletype(const FileCreateFileType * filetype);
+  void slotNoteFiletype(const FileType * filetype);
   
 private:
     
-  //FileCreateTypeChooser * m_widget;
+  //TypeChooser * m_widget;
   int m_selectedWidget;
-  QPtrList<FileCreateFileType> m_filetypes;
+  QPtrList<FileType> m_filetypes;
 
-  FileCreateTypeChooser * m_availableWidgets[2];
+  TypeChooser * m_availableWidgets[2];
   int m_numWidgets;
 
-  bool setWidget(FileCreateTypeChooser * widget);
+  bool setWidget(TypeChooser * widget);
   void refresh();
   int readTypes(const QDomDocument & dom, bool enable);
 
-  const FileCreateFileType * m_filedialogFiletype;
+  const FileType * m_filedialogFiletype;
   
 };
 

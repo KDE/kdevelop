@@ -28,54 +28,79 @@
 
 #include <iostream>
 
-FileCreateWidget::FileCreateWidget(FileCreatePart *part)
-  : KListView(0, "filecreate widget"), FileCreateTypeChooser(part)
-{
+namespace FileCreate {
+
+  TreeWidget::TreeWidget(FileCreatePart *part)
+    : KListView(0, "filecreate widget"), TypeChooser(part)
+  {
   
-  addColumn("File Type");
-  addColumn("Extension");
+    addColumn("File Type");
+    addColumn("Extension");
 
-  setRootIsDecorated(true);
+    setRootIsDecorated(true);
 
-  QWhatsThis::add(this, i18n("This part makes the creation of new files within the project easier."));
+    QWhatsThis::add(this, i18n("This part makes the creation of new files within the project easier."));
 
   
-  connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotTypeSelected(QListViewItem*)) );
-}
+    connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotTypeSelected(QListViewItem*)) );
+  }
 
 
-FileCreateWidget::~FileCreateWidget()
-{
-}
+  TreeWidget::~TreeWidget()
+  {
+  }
 
-void FileCreateWidget::refresh() {
-  clear();
-  QPtrList<FileCreateFileType> filetypes = m_part->getFileTypes();
-  for(FileCreateFileType * filetype = filetypes.first();
-      filetype!=NULL;
-      filetype=filetypes.next()) {
-    if (filetype->enabled()) {
-      FileCreateListItem * listitem = new FileCreateListItem( this, filetype );
-      QPtrList<FileCreateFileType> subtypes = filetype->subtypes();
-      for(FileCreateFileType * subtype = subtypes.first();
-          subtype!=NULL;
-          subtype=subtypes.next()) {
-        if (subtype->enabled())
-          new FileCreateListItem( listitem, subtype );
+  void TreeWidget::setCurrent(const FileType * current) {
+
+    bool found = false;
+    QListViewItem * lvi = firstChild();
+    while(lvi && !found) {
+      ListItem * li = dynamic_cast<ListItem*>(lvi);
+      if (li) {
+	if (li->filetype()==current) {
+	  found=true;
+	  setSelected(li,true);
+	}
+      }
+      if (lvi->nextSibling()) 
+	lvi = lvi->nextSibling();
+      else {
+	while (lvi && !lvi->nextSibling())
+	  lvi = lvi->parent();
+      }
+    }
+
+  }
+
+
+  void TreeWidget::refresh() {
+    clear();
+    QPtrList<FileType> filetypes = m_part->getFileTypes();
+    for(FileType * filetype = filetypes.first();
+	filetype!=NULL;
+	filetype=filetypes.next()) {
+      if (filetype->enabled()) {
+	ListItem * listitem = new ListItem( this, filetype );
+	QPtrList<FileType> subtypes = filetype->subtypes();
+	for(FileType * subtype = subtypes.first();
+	    subtype!=NULL;
+	    subtype=subtypes.next()) {
+	  if (subtype->enabled())
+	    new ListItem( listitem, subtype );
+	}
       }
     }
   }
+
+  void TreeWidget::slotTypeSelected(QListViewItem * item) {
+    ListItem * fileitem = dynamic_cast<ListItem*>(item);
+    if (!fileitem) return;
+  
+    const FileType * filetype = fileitem->filetype();
+
+    TypeChooser::filetypeSelected(filetype);
+  }
+  
+
 }
 
-void FileCreateWidget::slotTypeSelected(QListViewItem * item) {
-  FileCreateListItem * fileitem = dynamic_cast<FileCreateListItem*>(item);
-  if (!fileitem) return;
-  
-  const FileCreateFileType * filetype = fileitem->filetype();
-
-  filetypeSelected(filetype);
-}
-  
-
-
-#include "filecreate_widget.moc"

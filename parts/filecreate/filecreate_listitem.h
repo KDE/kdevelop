@@ -16,19 +16,23 @@
 
 #include "filecreate_filetype.h"
 
-class FileCreateListItem : public QListViewItem {
+namespace FileCreate {
+
+class ListItem : public QListViewItem {
 
 public:
-  FileCreateListItem(QListView * listview, const FileCreateFileType * filetype);
-  FileCreateListItem(FileCreateListItem * listitem, const FileCreateFileType * filetype);
-  virtual ~FileCreateListItem() { }
+  ListItem(QListView * listview, const FileType * filetype);
+  ListItem(ListItem * listitem, const FileType * filetype);
+  virtual ~ListItem() { }
 
-  const FileCreateFileType * filetype() const { return m_filetype; }
+  const FileType * filetype() const { return m_filetype; }
   
 private:
-  const FileCreateFileType * m_filetype;
+  const FileType * m_filetype;
   
 };
+
+}
 
 #endif
 

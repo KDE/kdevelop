@@ -2,10 +2,10 @@
 <kpartplugin name="filecreate" library="libfilecreateplugin" version="1">
 <MenuBar>
  <Menu name="file">
-   <Action name="file_new"/>
+    <Action name="file_new"/>
  </Menu>
 </MenuBar>
-<ToolBar name="extraToolBar">
+<ToolBar name="mainToolBar">
   <Action name="file_new"/>
 </ToolBar>
 </kpartplugin>

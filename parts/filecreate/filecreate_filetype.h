@@ -14,11 +14,13 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
-class FileCreateFileType {
+namespace FileCreate {
+
+class FileType {
 
 public:
 
-  FileCreateFileType() : m_enabled(false) {
+  FileType() : m_enabled(false) {
     m_subtypes.setAutoDelete(true);
   }
 
@@ -39,8 +41,8 @@ public:
 
   void setSubtypesEnabled(bool enabled = true);
   
-  void addSubtype(const FileCreateFileType * subtype) { m_subtypes.append(subtype); }
-  QPtrList<FileCreateFileType> subtypes() const { return m_subtypes; }
+  void addSubtype(const FileType * subtype) { m_subtypes.append(subtype); }
+  QPtrList<FileType> subtypes() const { return m_subtypes; }
   
 private:
   QString m_name;
@@ -52,8 +54,10 @@ private:
 
   bool m_enabled;
   
-  QPtrList<FileCreateFileType> m_subtypes;
+  QPtrList<FileType> m_subtypes;
 
 };
+
+}
 
 #endif

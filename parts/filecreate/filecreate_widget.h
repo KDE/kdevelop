@@ -22,25 +22,27 @@
 class KDevProject;
 class FileCreatePart;
 
-class FileCreateFileType;
+namespace FileCreate {
 
-class FileCreateWidget : public KListView, public FileCreateTypeChooser
-{
-  Q_OBJECT
+  class FileType;
+
+  class TreeWidget : public KListView, public TypeChooser
+    {
+      Q_OBJECT
     
-public:
+      public:
 		  
-  FileCreateWidget(FileCreatePart *part);
-  ~FileCreateWidget();
+        TreeWidget(FileCreatePart *part);
+        virtual ~TreeWidget();
 
-  virtual void refresh();
+	virtual void refresh();
+	virtual void setCurrent(const FileType * current);
 
-public slots:
-  void slotTypeSelected(QListViewItem * item);
-//public:
-//  void filetypeSelected(const FileCreateFileType * filetype);
+      public slots:
+	void slotTypeSelected(QListViewItem * item);
 
-};
+    };
 
+}
 
 #endif

@@ -5,26 +5,29 @@
 
 #include <kdebug.h>
 
-class FileCreateFileType;
 class FileCreatePart;
 
-class FileCreateTypeChooser  {
+namespace FileCreate {
+
+class FileType;
+
+class TypeChooser  {
   
 public:
 
-  FileCreateTypeChooser(FileCreatePart * part) : m_part(part), m_current(NULL) {
+  TypeChooser(FileCreatePart * part) : m_part(part), m_current(NULL) {
     m_signaller = new Signaller;
   }
-  virtual ~FileCreateTypeChooser() { delete m_signaller; }
+  virtual ~TypeChooser() { delete m_signaller; }
 
   virtual void setPart(FileCreatePart * part) { m_part = part; }
   virtual FileCreatePart * part() const { return m_part; }
   virtual void refresh() = 0;
-  virtual const FileCreateFileType * current() const { return m_current; }
+  virtual void setCurrent(const FileType * current) = 0;
+  virtual const FileType * current() const { return m_current; }
 
-  // signals
-  virtual void filetypeSelected(const FileCreateFileType * filetype) {
-    //m_current = filetype;
+  virtual void filetypeSelected(const FileType * filetype) {
+    m_current = filetype;
     kdDebug(9034) << "type selected: about to signal" << endl;
     if (filetype) m_signaller->signal(filetype);
     kdDebug(9034) << "type selected: done signal" << endl;
@@ -35,8 +38,10 @@ public:
 protected:
   FileCreatePart * m_part;
   Signaller * m_signaller;
-  const FileCreateFileType * m_current;
+  const FileType * m_current;
 
 };
+
+}
 
 #endif

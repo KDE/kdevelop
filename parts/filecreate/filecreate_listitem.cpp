@@ -17,7 +17,9 @@
 
 #include <qpixmap.h>
 
-FileCreateListItem::FileCreateListItem(QListView * listview, const FileCreateFileType * filetype) :
+namespace FileCreate {
+
+ListItem::ListItem(QListView * listview, const FileType * filetype) :
   QListViewItem(listview, filetype->name(), filetype->ext() ), m_filetype(filetype) {
 
   KIconLoader * loader = KGlobal::iconLoader();
@@ -30,7 +32,7 @@ FileCreateListItem::FileCreateListItem(QListView * listview, const FileCreateFil
 }
 
 
-FileCreateListItem::FileCreateListItem(FileCreateListItem * listitem, const FileCreateFileType * filetype) :
+ListItem::ListItem(ListItem * listitem, const FileType * filetype) :
   QListViewItem(listitem, filetype->name(), filetype->ext() ), m_filetype(filetype) {
 
   KIconLoader * loader = KGlobal::iconLoader();
@@ -42,6 +44,6 @@ FileCreateListItem::FileCreateListItem(FileCreateListItem * listitem, const File
 
 }
 
-
+}
 
 

@@ -10,7 +10,13 @@
 
 #include "filecreate_filedialog.h"
 
+#include <qfileinfo.h>
 #include <kdeversion.h>
+#include <kurlcombobox.h>
+#include <kdebug.h>
+
+#include "filecreate_part.h"
+#include "filecreate_filetype.h"
 
 namespace FileCreate {
 
@@ -21,8 +27,14 @@ namespace FileCreate {
     KFileDialog(startDir, filter, parent, name, modal, extraWidget) {
 #else
     KFileDialog(startDir, filter, parent, name, modal) {
-      setPreviewWidget(extraWidget);
+      if (extraWidget) setPreviewWidget(extraWidget);
 #endif
+
+    m_extraWidget = extraWidget;
+    m_typeChooser = dynamic_cast<TypeChooser*>(extraWidget);
+     
+    connect(this, SIGNAL(filterChanged(const QString &)), this, SLOT(slotActionFilterChanged(const QString &)) );
+    connect(locationEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotActionTextChanged(const QString &)) );
 
   }
 
@@ -33,5 +45,22 @@ namespace FileCreate {
   {
     KFileDialog::initGUI();
   }
+
+  void FileDialog::slotActionFilterChanged(const QString & filter) {
+  }
+
+  void FileDialog::slotActionTextChanged(const QString & text) {
+    kdDebug(9034) << "slotActionTextChanged - " << text << endl;
+    if (!m_typeChooser) return;
+    QString ext = QFileInfo(text).extension();
+    kdDebug(9034) << "Extension is: " << ext << endl;
+    FileType * filetype = m_typeChooser->part()->getType(ext);
+    if (!filetype) return;
+    kdDebug(9034) << "found matching extension: " << ext << endl;
+    kdDebug(9034) << "Description: " << filetype->descr() << endl;
+    m_typeChooser->setCurrent(filetype);
+  }
+
+  
   
 }

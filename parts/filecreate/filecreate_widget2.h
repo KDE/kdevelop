@@ -24,34 +24,86 @@ class KIconLoader;
 class KDevProject;
 class FileCreatePart;
 
-class FileCreateFileType;
+namespace FileCreate {
 
-class FileCreateWidget2 : public QTable, public FileCreateTypeChooser
-{
-  Q_OBJECT
+  class FileType;
+
+  class FriendlyWidget : public QTable, public TypeChooser
+    {
+      Q_OBJECT
     
-public:
+      public:
 		  
-  FileCreateWidget2(FileCreatePart *part);
-  virtual ~FileCreateWidget2();
+        FriendlyWidget(FileCreatePart *part);
+        virtual ~FriendlyWidget();
 
-  virtual void refresh();
+	/**
+	 * Refreshes the widget with the part's file type list.
+	 */
+	virtual void refresh();
+	/**
+	 * Sets the currently highlighted file type.
+	 */
+	virtual void setCurrent(const FileType * current);
 
-private:
-  virtual void setRow(int row, FileCreateFileType * filetype);
-  virtual void empty();
-  virtual void setDefaultColumnWidths();
+      protected:
+	/**
+	 * Sets row <i>row</i> to filetype <i>filetype</i>.
+	 */
+	virtual void setRow(int row, FileType * filetype);
+	/**
+	 * Clears the table.
+	 */
+	virtual void empty();
+	/** 
+	 * Sets some default column widths.
+	 */
+	virtual void setDefaultColumnWidths();
+	/**
+	 * Scans the cells in the table and adjusts their size based
+	 * on their contents.
+	 */
+	virtual void resizeCells();
+	/**
+	 * Sets the height of a row to the highest
+	 * cell in the row.
+	 */
+	virtual void resizeRow(int row);
+	/**
+	 * Sets the width of a column to the widest
+	 * cell in the column.
+	 */
+	virtual void resizeColumn(int col);
 
-  KIconLoader * m_iconLoader;
-  QMap<int,FileCreateFileType*> typeForRow;
-  FileCreateFileType * m_selected;
+	/**
+	 * The default icon loader, here for convenience.
+	 */
+	KIconLoader * m_iconLoader;
+	/**
+	 * A mapping of each row number to a file type.
+	 */
+	QMap<int,FileType*> typeForRow;
+	/**
+	 * The currently selected file type, or null if none.
+	 */
+	FileType * m_selected;
 
-private slots:
-  virtual void slotCellSelected(int row, int col);
-  virtual void slotDoSelection();
+      protected slots:
+	/**
+	 * When a cell is selected by the user.
+	 */
+	virtual void slotCellSelected(int row, int col);
+	/**
+	 * Invoked as a single shot after slotCellSelected, with m_selected
+	 * set to the selected file type, so that
+	 * the GUI will be updated before the selection event
+	 * takes place.
+	 */
+	virtual void slotDoSelection();
 
   
-};
+    };
 
+}
 
 #endif
