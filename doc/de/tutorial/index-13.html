@@ -24,10 +24,10 @@
 <P>In diesem Kapitel werden wir Ihnen zeigen, wie einfach es ist, Druckerfunktionen mit Qt zu implementieren. Tatsächlich ist es 
 nur eine Zeile Code, die wir schreiben müssen, aber wir werden verstehen, wer den Druckauftrag eigentlich ausführt. Wenn der 
 Benutzer den "Drucken" Knopf in <EM>KScribble</EM> benutzt oder "Drucken" aus dem Dateimenü wählt, wird die <CODE>slotFilePrint()</CODE> 
-Methode in <CODE>KScribbleApp</CODE> aufgerufen. Diese Methode prüft, welches Kind Fenster gerade aktiv ist und erzeugt eine Instanz 
+Methode in <CODE>KScribbleApp</CODE> aufgerufen. Diese Methode prüft, welches Kindfenster gerade aktiv ist und erzeugt eine Instanz 
 der Druckerklasse <CODE>QPrinter</CODE>. Dann ruft sie die Druckmethode des Widgets auf, nämlich <CODE>KScribbleView::print()</CODE>. Das 
 Framework enthält bereits die Basisimplementation- was zeigt, daß Sie zum Drucken nur die Klasse <CODE>QPainter</CODE> verwenden 
-müssen, die dann auf dem Drucker ausgibt. Dise Klasse ruft auch den Druckdialog auf.
+müssen, die dann auf dem Drucker ausgibt. Diese Klasse ruft auch den Druckdialog auf.
 <P>Was wir hier tun müssen, ist <CODE>QPainter</CODE> Methoden zu benutzen, um das Pixmap des Dokuments zu drucken, das mit der Ansicht 
 verbunden ist. Da <CODE>QPainter</CODE> bereits einen Satz an <CODE>drawPixmap()</CODE> Methoden anbietet, werden wir natürlich eine davon 
 benutzen: 
@@ -60,7 +60,7 @@ Erweiterung, die Ausschneiden, Kopieren, Einfügen und Wiederrufen sowie Drag&amp
 Nach dem Auspacken mit <CODE>tar zxvf kscribble-1.0.tar.gz</CODE> laden Sie das Projekt und rufen Sie "Automake und Autoconf" aus dem 
 "Erstellen" Menü in KDevelop auf. Dann wählen Sie "Configure" aus dem gleichen Menü. Die Konfigurationen sind die meiner 
 Installation von KDE 2 und Qt 2.1, Sie müssen sie also an Ihre Installation anpassen.
-<P>Der Anhang enthält ebenfalls den kompletten Quellcode für dieses Paket, so daß Sie ihn online lesen können.
+<P>Der Anhang enthält ebenfalls den kompletten Quellcode für dieses Paket, so daß Sie ihn Online lesen können.
 <P>
 <P>
 <P ALIGN="RIGHT">

@@ -24,10 +24,10 @@
 <P>Wenn es um Bilder geht, bieten die Qt und KDE Bibliotheken ein weites Feld an Operationen. 
 Neben den reinen Zeichenroutinen unterstützen die Bibliotheken einen ganzen Satz an 
 Bildformaten, die gelesen und geschrieben werden können- alles ohne Einschränkungen für Ihre 
-Ansicht. Die Hauptklasse für diese Operationen ist <CODE>QImageIO</CODE> die auch eine 
+Ansicht. Die Hauptklasse für diese Operationen ist <CODE>QImageIO</CODE>, die auch eine 
 Supportbibliothek unter KDE hat: <CODE>KImageIO</CODE>. Zur Vorbereitung und bevor wir diese 
 schönen Routinen verwenden können, müssen wir die erforderliche Bibliothek für <EM>KScribble</EM> 
-verfügbar machen: nämlich libkimgio. Öffnen Sie "Projekt"->"Optionen" in Kdevelop und fügen Sie 
+verfügbar machen: nämlich libkimgio. Öffnen Sie "Projekt"->"Optionen" in KDevelop und fügen Sie 
 die Zeile -libkimgio bei den zusätzlichen Bibliotheken ein. 
 <P>
 <H3><A NAME="ss12.1">12.1 Vorbereiten des Dokuments</A>
@@ -105,7 +105,7 @@ kscribble.cpp:
 <HR>
 <P>Es funktioniert natürlich genauso wie die Verwendung von <CODE>QString format=QImageIO::imageFormat(file);</CODE>. Hier liefert uns <CODE>KImageIO</CODE> das Format des Bildes 
 und wir können dem Dokument mitteilen, die Datei mit dem Dateinamen und dem Format zu öffnen ( 
-eine weitere Möglichkeit wäre das Format in der Dokumentklasse zu ermitteln).
+eine weitere Möglichkeit wäre, das Format in der Dokumentklasse zu ermitteln).
 <P>
 <P>
 <H3><A NAME="ss12.4">12.4 Setzen von Dateifiltern mit KImageIO</A>

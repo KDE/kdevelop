@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Installation von KDE 2</TITLE>
+<TITLE>KDE Anwendungs Tutorials: Installation von KDE 2 </TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,26 +18,31 @@
  <A HREF="index-4.html">Zurück</A>
  <A HREF="index.html#toc5">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="s5">5. Installation von KDE 2</A></H3>
+<H3><A NAME="s5">5. Installation von KDE 2 </A></H3>
 
-<P>In diesem Kapitel werden wir zunächst einige Schritte unternehmen, die Ihnen helfen KDevelop für die Erstellung von KDE 2 / Qt 2.x
-Anwendungen vorzubereiten. Erforderlich sind:
+<P> In diesem Kapitel werden wir zunächst einige Schritte unternehmen, die 
+Ihnen helfen KDevelop für die Erstellung von KDE 2 / Qt 2.x Anwendungen 
+vorzubereiten. Erforderlich sind: 
 <UL>
 <LI>ein aktueller Qt-2.1 Snapshot erhältlich auf 
 <A HREF="http://www.troll.no">http://www.troll.no</A></LI>
 <LI>ein aktueller KDE 2 Snapshot der Pakete <CODE>kdesupport</CODE> and <CODE>kdelibs</CODE></LI>
 </UL>
-<P>Sowohl die Qt-2.1 als auch die KDE 2 Bibliotheken befinden sich zur Zeit in der Entwicklung werden aber als "final" betrachtet
-und die Änderungen, die für die tatsächlichen Release Versionen erwartet werden sind äußerst gering und werden möglicherweise
-Ihre Anwendungen in keiner Weise berühren. Das bedeutet, daß Sie die neuesten Bibliotheken kennenlernen werden und es Ihnen
-möglich ist wertvolle Zeit zu sparen, indem Sie Ihre Anwendung entwickeln können bevor die Bibliotheken überhaupt fertig sind.
-<P>Die folgenden Abschnitte beschreiben im Detail, in drei Schritten was zu tun ist:
+
+Sowohl die Qt-2.1 als auch die KDE 2 Bibliotheken befinden sich zur Zeit in der Entwicklung werden aber als 
+"final" betrachtet und die Änderungen, die für die tatsächlichen Release Versionen erwartet werden sind äußerst gering 
+und werden möglicherweise Ihre Anwendungen in keiner Weise berühren. Das bedeutet, daß Sie die neuesten 
+Bibliotheken kennenlernen werden und es Ihnen möglich ist wertvolle Zeit zu 
+sparen, indem Sie Ihre Anwendung entwickeln können bevor die Bibliotheken 
+überhaupt fertig sind. Die folgenden Abschnitte beschreiben im Detail, in drei 
+Schritten was zu tun ist: 
 <UL>
-<LI>Installieren der Qt Bibliothek</LI>
+<LI>Installieren der Qt Bibliothek </LI>
 <LI>Installieren der KDE Bibliothek</LI>
 <LI>KDevelop einstellen</LI>
 </UL>
-<P>Dann sind Sie bereit und wir werden im nächsten Kapitel mit dem ersten Schritt zur Erstellung des Beispielprogramm <EM>KScribble</EM>
+ 
+Dann sind Sie bereit und wir werden im nächsten Kapitel mit dem ersten Schritt zur Erstellung des Beispielprogramm <EM>KScribble</EM>
 fortfahren.
 <P>
 <H3><A NAME="ss5.1">5.1 Vorbereitung von Qt-2.1</A>
@@ -54,7 +59,7 @@ Sie das Tarball in das Verzeichnis, in dem sich auch Ihre bisherige Qt Version b
 das <CODE>/usr/lib</CODE>. Dort sollte sich entweder ein Verzeichnis für qt-1.44 oder qt-2.0.2 befinden, je nach Distributionsversion.
 Entpacken Sie die Bibliotheksquellen mit
 <P><CODE>tar zxvf qtxxx.tar.gz</CODE>
-<P>abhängig vom Namen des tarballs. Setzen Sie dann die Umgebungsvariable <CODE>QTDIR</CODE> so, daß sie auf das Verzeichnis zeigt, in dem
+<P>abhängig vom Namen des Tarballs. Setzen Sie dann die Umgebungsvariable <CODE>QTDIR</CODE> so, daß sie auf das Verzeichnis zeigt, in dem
 sich Ihre neue Qt-2.1 Bibliothek befindet, z.B. mit <CODE>setenv QTDIR=/usr/lib/qt-2.1</CODE>.Eine andere Lösung wäre es, das qt-1.44
 Verzeichnis, daß normalerweise nur qt heißt, in qt-1.44 umzubenennen und einen symlink qt zu erzeugen, der auf qt-2.1 zeigt. Nachdem
 die Bibliothek erzeugt ist, lassen Sie ihn wieder auf qt-1.44 zeigen.
@@ -68,7 +73,7 @@ make
 <P>Nachdem Sie die Qt-2.1 Bibliotheken erfolgreich erstellt haben, können Sie die QTDIR Variable wieder auf Ihre Qt-1.44 zeigen lassen.
 <P>Wechseln Sie nun in das Verzeichnis <CODE>/usr/lib/qt-2.1/lib</CODE> und kopieren Sie alle erzeugten Bibliotheken <B>außer</B> dem
 symbolischen Link <CODE>libqt.so</CODE> nach <CODE>/usr/lib</CODE>.
-<P>Sie sind nun fertig mit Qt und zum nächsten Schritt weitergehen, dem Einrichten der KDE 2 Bibliotheken. Wenn Sie nur für Qt entwickeln
+<P>Sie sind nun fertig mit Qt und können zum nächsten Schritt weitergehen, dem Einrichten der KDE 2 Bibliotheken. Wenn Sie nur für Qt entwickeln
 wollen, gehen Sie weiter zum Abschnitt 
 <A HREF="#Einrichten von KDevelop">Einrichten von KDevelop</A>.
 <P>
@@ -96,13 +101,13 @@ make install
 mit der neu erstellten Qt-2.1 Bibliothek, deren Pfad Sie mit der Option --with-qt-dir angegeben haben.
 <P>Dasselbe gilt für das kdelibs Paket, wechseln Sie einfach in das kdelibs Verzeichnis, und geben Sie das gleiche wie beim kdesupport
 Paket ein.
-<P>Sie haben nun alle Bibliotheken, die zum erstellen einer KDE 2 Applikation erforderlich sind.
-<P>Nebenbei bemerkt, das KDE Bibliothekspaket enthält sie Unterstützung zur automatischen Generierung der HTML Dokumentation, die
-auf einfache Weise erhalten können, indem Sie Kdoc installieren. Geben Sie dann im kdelibs Verzeichnis <CODE>makekdedoc</CODE> ein
+<P>Sie haben nun alle Bibliotheken, die zum Erstellen einer KDE 2 Applikation erforderlich sind.
+<P>Nebenbei bemerkt, das KDE Bibliothekspaket enthält die Unterstützung zur automatischen Generierung der HTML Dokumentation, die Sie
+auf einfache Weise erhalten können, indem Sie Kdoc installieren. Geben Sie dann im kdelibs Verzeichnis <CODE>makekdedoc</CODE> ein,
 und Kdoc erstellt die Bibliotheksdokumentation im Unterverzeichnis <CODE>srcdoc</CODE>. In KDevelop können Sie online auf die Dokumentation
 zugreifen, wenn Sie im Setup Dialog den Pfad zur KDE Bibliotheksdokumentation auf <CODE>kdelibs/srcdoc</CODE> einstellen. Auf die gleiche
-Art und Weise geben Sie auch den Pfad zu Ihrer Qt Dokumentation an, indem Sie <CODE>/usr/lib/qt-2.1/html</CODE> einstellen und so die
-Dokumentation direkt aus KDevelop heraus erreichen können.
+Art und Weise geben Sie auch den Pfad zu Ihrer Qt Dokumentation an, indem Sie <CODE>/usr/lib/qt-2.1/html</CODE> einstellen. Sie können so die
+Dokumentation direkt aus KDevelop heraus erreichen.
 <P>Wenn Sie erfolgreich die Qt-2.1 und KDE 2 Bibliotheken installiert haben, fehlt nur noch ein Schritt bis zur Erstellung Ihrer
 ersten KDE 2 Applikation, Sie müssen nur KDevelop die nötigen Informationen geben, wo Sie die Bibliotheken installiert haben. Dies
 werden wir im nächsten Abschnitt machen.
@@ -114,8 +119,8 @@ werden wir im nächsten Abschnitt machen.
 Öffnen Sie einfach KDevelop und wählen Sie "Einstellungen"->"KDevelop Setup" um die KDevelop Konfiguration zu erreichen.
 Wechseln Sie dort zur letzten Seite namens "Pfad". Diese Seite enthält zwei Eingabefelder, eins für die Qt und eins für die
 KDE 2 Bibliotheken. Da Sie alles erfolgreich installiert haben, wählen Sie <CODE>/usr/lib/qt-2.1</CODE> für den Qt-2.x
-Bibliothekspfad und <CODE>/opt/kde2</CODE> für KDE 2. Drücken Sie dann den "OK" Knopf und Sie sind fertig.
-<P>Benutzer, die nur für Qt-2.x (inklusive der aktuellen Qt-2.0.2 Version) entwickeln wollen, müssen nur den Qt-2.x Pfad setzen..
+Bibliothekspfad und <CODE>/opt/kde2</CODE> für KDE 2. Drücken Sie dann den "OK" Knopf, und Sie sind fertig.
+<P>Benutzer, die nur für Qt-2.x (inklusive der aktuellen Qt-2.0.2 Version) entwickeln wollen, müssen nur den Qt-2.x Pfad setzen.
 <P>Wir können nun zum nächsten Kapitel weitergehen, in dem wir den ersten Schritt des <EM>KScribble</EM> Beispielprogrammes erstellen
 werden.
 <P>

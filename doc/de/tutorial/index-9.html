@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Definieren der Ansicht</TITLE>
+<TITLE>KDE Anwendungs Tutorials: Definition der Ansicht</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,7 +18,7 @@
  <A HREF="index-8.html">Zurück</A>
  <A HREF="index.html#toc9">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="s9">9. Definieren der Ansicht</A></H3>
+<H3><A NAME="s9">9. Definition der Ansicht</A></H3>
 
 <P>
 <P>
@@ -26,16 +26,16 @@
 </H3>
 
 <P>
-<P>In diesem Kapitel werden wir uns der view Klasse von <EM>KScribble</EM> zuwenden um zu definieren, wie die Kind Fenster arbeiten sollen. 
+<P>In diesem Kapitel werden wir uns der View Klasse von <EM>KScribble</EM> zuwenden, um zu definieren, wie die Kindfenster arbeiten sollen. 
 Als erstes sehen wir, daß KScribbleView standarmäßig von <CODE>QWidget</CODE> abgeleitet ist. Das ist die Mindestanforderung für ein 
 Kindfenster, aber es reicht bereits für unsere Bedürfnisse aus. Wenn es darum geht, das Verhalten eines neuen Widgets zu definieren, 
-müssen wir wissen, wir der Benutzer mit dem Fenster interagieren soll. In unserem Beispiel, soll dies offensichtlich mit Hilfe der Maus 
+müssen wir wissen, wie der Benutzer mit dem Fenster interagieren soll. In unserem Beispiel, soll dies offensichtlich mit Hilfe der Maus 
 geschehen. Daher müssen wir einige virtuelle Methoden von <CODE>QWidget</CODE> überschreiben, die die Mausereignisse verarbeiten die unser 
-Widget empfängt. Was wir wissen müssen, ist wann der Benutzer eine Maustaste drückt, weil nur gezeichnet werden soll, wenn eine 
-Maustaste gedrückt ist. Außerdem müssen wir wissen, wann die Maus bewegt wird (und wohin), sowie den Zeitpunkt, an dem Maustaste 
+Widget empfängt. Was wir wissen müssen ist, wann der Benutzer eine Maustaste drückt, weil nur gezeichnet werden soll, wenn eine 
+Maustaste gedrückt ist. Außerdem müssen wir wissen, wann die Maus bewegt wird (und wohin), sowie den Zeitpunkt, zu dem die Maustaste 
 losgelassen wird, da dann der Zeichenzug beendet ist. Weiterhin wollen wir, daß unser Bild im Fenster gezeichnet wird und seine 
 Größe angepasst wird, wenn der Benutzer sich entschließt, das Fenster in der Größe zu verändern. Wir werden auch ein Member 
-<CODE>QPointArray</CODE> und einen Boolschen Wert mousePressed hinzufügen. Fügen Sie den mit dem Pfeil gekennzeichneten Code Ihrer Klasse 
+<CODE>QPointArray</CODE> und einen boolschen Wert mousePressed hinzufügen. Fügen Sie den, mit dem Pfeil gekennzeichneten Code, Ihrer Klasse 
 KScribbleView hinzu:
 <P>
 <HR>
@@ -73,12 +73,12 @@ KScribbleView hinzu:
 
 <P>
 <P>Wir kommen jetzt zu der tatsächlichen Implementierung der Ereignis Handler. Wie in 
-<A HREF="../kde_libref/index.html">The KDE Library Reference Guide</A> erkärt, hat Qt gute Methoden Ereignisse zu behandeln, besonders wenn die Ziele Widgets sind. 
+<A HREF="../kde_libref/index.html">The KDE Library Reference Guide</A> erkärt, hat Qt gute Methoden, Ereignisse zu behandeln, besonders wenn die Ziele Widgets sind. 
 <CODE>QWidget</CODE> als Basisklasse, preselektiert die Events und stellt Basis Event Handler zur Verfügung, die, da sie als virtuell 
 deklariert sind, überladen werden können, so daß wir definieren können, wie unser Widget auf Ereignisse reagieren soll. 
 Eine Methode ist bereits überladen: die <CODE>closeEvent()</CODE> Methode. Dies ist notwendig, weil unser Hauptfenster, repräsentiert in der 
 App Klasse, bereits das Schließen von Kind Fenstern preselektiert und dies behandelt; daher muß der Standard Event Handler, der nur 
-das Schließen akzeptiert, überschrieben werden um dies zu vermeiden und die App Klasse diese Arbeit machen zu lassen.
+das Schließen akzeptiert, überschrieben werden und diese Arbeit die App Klasse machen lassen.
 <P>Als erstes müssen wir im Konstruktor das Standardverhalten des Widgets deklarieren, indem wir Member initialisieren und vordefinierte 
 Werte setzen:
 <P>
@@ -99,7 +99,7 @@ Werte setzen:
     }
 </PRE>
 <HR>
-<P>Wir setzen den Hintergrund auf NoBackground, einen Cursor (crossCursor) und initialisieren mousePressed und polyline. Nun beginnen 
+<P>Wir setzen den Hintergrund auf NoBackground, setzen einen Cursor (crossCursor) und initialisieren mousePressed und polyline. Nun beginnen 
 wir mit der Implementation unseres ersten Ereignis Handlers, <CODE>mousePressEvent()</CODE>, um zu erkennen wann der Benutzer 
 die Maus drückt und wo.
 <P>Beachten Sie: Die folgenden Implementationen müssen komplett eingefügt werden, es gibt also keinen Pfeil !
@@ -113,8 +113,8 @@ void KScribbleView::mousePressEvent( QMouseEvent *e )
 }
 </PRE>
 <HR>
-<P>Hier setzen wir mousePressed auf true, wir haben das Event also irgendwie behandelt. Die zeite Zeile ist nicht so offensichtlich: wir 
-speichern die Position, an der die Maustaste gedrückt wurde in den ersten drei Elementen unseres Feldes. Da das Feld ein 
+<P>Hier setzen wir mousePressed auf true, wir haben das Event also irgendwie behandelt. Die zweite Zeile ist nicht so offensichtlich: wir 
+speichern die Position, an der die Maustaste gedrückt wurde, in den ersten drei Elementen unseres Feldes. Da das Feld ein 
 <CODE>QPointArray</CODE> ist, kann es Werte vom Typ <CODE>QPoint</CODE> speichern (die selber wieder einen x und y Wert enthalten). Wir werden in 
 diesem Feld Mauspositionen speichern und daraus die Zeichenroutine im mouseMoveEvent entwickeln:
 <P>
@@ -147,29 +147,29 @@ void KScribbleView::mouseMoveEvent( QMouseEvent *e )
 </PRE>
 <HR>
 <P>Dieser Event Handler ist wahrscheinlich der schwierigste, wir werden ihn also Schritt für Schritt durchgehen, um zu verstehen was 
-gemacht wird. Als erstes empfängt der Handler alle Mausbewegungen über dem Widget. Da wir aber nur an Bewegungen interessiert sind 
+gemacht wird. Als erstes empfängt der Handler alle Mausbewegungen über dem Widget. Da wir aber nur an Bewegungen interessiert sind, 
 wenn gleichzeitig eine Maustaste gedrückt ist, weil dann gezeichnet werden muß, haben wir gefragt ob mousePressed true ist. 
 Dies wurde vom <CODE>mousePressEvent()</CODE> Handler bereits gemacht, daher brauchen wir uns darum nicht weiter zu kümmern. Nun 
 beginnen wir zu zeichnen. Als erstes erzeugen wir einen <CODE>QPainter</CODE> und lassen ihn in den Puffer des Dokumentes zeichnen. 
 Das ist wichtig, da der Puffer die wirklichen Daten enthält, die Ansicht dient nur als Kommunikator zwischen Dokument und 
 Benutzer. Den Stift holen wir ebenfalls aus der Dokumentinstanz, indem wir <CODE>currentPen()</CODE> aufrufen. Die nächsten drei 
-Zeilen weisen die Werte des polyline <CODE>QPoint</CODE> zu und setzen Punkt 2 auf 1, 1 auf 0 und 0 auf den Punkt an den die 
+Zeilen weisen die Werte des polyline <CODE>QPoint</CODE> zu und setzen Punkt 2 auf 1, 1 auf 0 und 0 auf den Punkt, zu dem die 
 Mausbewegung ging (das ist der Wert an dem wir interessiert sind). Angenommen wir haben gerade die Maus gedrückt (also enthalten 
 alle Werte diese Position) und das erste Mausereignis, das die Position enthält, zu der eine Linie gezeichnet werden soll, findet 
 statt; dann wird dieser Wert wieder in das erste Element des Feldes eingetragen. Sie mögen sich fragen, warum wir dann drei 
 Elemente im Feld brauchen, wenn wir nur eine Linie von einer zu nächsten Position zeichnen wollen. Die folgenden Zeilen erklären 
 das: nachdem die Übertragung in unseren Puffer erfolgt ist (mit <CODE>drawPolyline()</CODE> und <CODE>painter.end()</CODE>), erstellen wir 
 ein Rechteck r und verwenden <CODE>boundingRect()</CODE> von <CODE>QPointArray</CODE> um ein <CODE>QRect</CODE> zu erhalten, das alle drei 
-Punkte enthält. Daher brauchen wir die drei Punkten, um ein fast fertiges Rechteck zu erhalten. Dann verwenden wir 
+Punkte enthält. Daher brauchen wir die drei Punkte, um ein fast fertiges Rechteck zu erhalten. Dann verwenden wir 
 <CODE>normalize()</CODE>, damit der linke, obere Wert am kleinsten ist (da Koordinaten von links, oben nach rechts, unten zunehmen). 
 Das nächste ist, die Größe des Rechtecks der Breite des Stiftes anzupassen, weil der Stift eine bestimmte Breite hat, die wir mit 
-<CODE>penWidth()</CODE> ermitteln, und das Rechteck um die Breite des Stiftes zu erweitern (Stellen Sie sich vor, die Maus wäre nur um 
+<CODE>penWidth()</CODE> ermitteln, und um das Rechteck um die Breite des Stiftes zu erweitern (Stellen Sie sich vor, die Maus wäre nur um 
 zwei Pixel bewegt worden, der Stift hätte aber eine Breite von 10 Pixeln, dann würde das Rechteck nicht den ganzen gezeichneten 
 Bereich enthalten). Schließlich markieren wir das Dokument noch als modifiziert und verwenden die <CODE>bitBlt()</CODE> Funktion, um 
-das Rechteck aus dem Puffer in das Widget zu kopieren. bitBlt arbeitet bitweise und idt sehr schnell, dies ist also eine 
-gute Methode den gezeichneten Bereich in das Widget zu kopieren, anstatt das ganze Widget neuzuzeichnen. Seine Argumente sind: 
+das Rechteck aus dem Puffer in das Widget zu kopieren. bitBlt arbeitet bitweise und ist sehr schnell, dies ist also eine 
+bessere Methode den gezeichneten Bereich in das Widget zu kopieren, als das ganze Widget neuzuzeichnen. Seine Argumente sind: 
 Erst das Objekt in das gezeichnet werden soll (das Ziel), in diesem Fall ist es unser Widget, wir müssen also den Zeiger 
-<B>this</B> verwenden. Die nächsten beiden Argumente sind die linke, obere Ecke des Zieles gefolgt von der Quelle mit deren Höhe 
+<B>this</B> verwenden. Die nächsten beiden Argumente sind die linke, obere Ecke des Zieles, gefolgt von der Quelle, mit deren Höhe 
 und Breite. Da die pixmap Koordinaten die gleichen sind, die auch unser Widget verwendet (weil unser Pixmap in der linken oberen 
 Ecke gezeichnet wurde), sind die Koordinaten für den linken, oberen Punkt bei Quelle und Ziel identisch. Darauf muß in einem der 
 nächsten Schritte geachtet werden, daher wird es hier schon erwähnt. Als nächstes kommt, was beim Loslassen der Maustaste 
@@ -182,9 +182,9 @@ void KScribbleView::mouseReleaseEvent( QMouseEvent * ) {
 }
 </PRE>
 <HR>
-<P>Wir sind jetz mit der Implementierung der Benutzerinteraktion fertig, was die Zeichenfunktione angeht. Das Beispiel zeigt, daß es 
-nicht alzu kompliziert ist ein Document View Modell zu benutzen. Erzeugen Sie nur die Dokumentinstanz, so daß sie die Inhalte 
-enthält und kopieren Sie die Inhalte in Ihre Ansicht. 
+<P>Wir sind jetzt mit der Implementierung der Benutzerinteraktion fertig, was die Zeichenfunktionen angeht. Das Beispiel zeigt, daß es 
+nicht allzu kompliziert ist, ein Document View Modell zu benutzen. Erzeugen Sie nur die Dokumentinstanz, so daß sie die Inhalte 
+enthält, und kopieren Sie die Inhalte in Ihre Ansicht. 
 <P>
 <P>
 <H3><A NAME="ss9.3">9.3 Zeichnen und Größe des Dokuments ändern.</A>
@@ -192,7 +192,7 @@ enthält und kopieren Sie die Inhalte in Ihre Ansicht.
 
 <P>
 <P>Übrig bleiben zwei virtuelle Handler, die reimplementiert werden müssen. Als erstes müssen wir darauf achten, daß unser Bild im 
-Fenster gezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
+Fenster neu gezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
 nicht mehr da sein, wenn sie wieder zu Ihrer Zeichnung wechseln, es sei denn, Ihr Zeichenereignis wird ausgeführt, so daß das 
 Bild neu gezeichnet wird: 
 <P>
@@ -212,10 +212,10 @@ void KScribbleView::paintEvent( QPaintEvent *e )
 der, neugezeichnet wird, also holen wir uns die Geometrie des Events ( <CODE>e->rect()</CODE> ) und verwenden die Koordinaten für 
 <CODE>bitBlt()</CODE> genau wie wir es bei <CODE>mouseMoveEvent()</CODE> gemacht haben.
 <P>Das einzige, um das wir uns nicht gekümmert haben, ist die Größe des Pixmaps. Wir haben sie nirgendwo gesetzt - wir haben noch 
-nicht einmal das Pixmap aus der document Klasse benutzt, außer zum Laden und Speichern- aber diese Methoden werden nicht 
-aufgerufen, wenn ein neues Bild erzeugt wird. Es scheint also unser Pixmap weder eine Größe noch einen vordefinierten Hintergrund 
+nicht einmal das Pixmap aus der Dokumentklasse benutzt, außer zum Laden und Speichern- aber diese Methoden werden nicht 
+aufgerufen, wenn ein neues Bild erzeugt wird. Es scheint also, unser Pixmap habe weder eine Größe noch einen vordefinierten Hintergrund 
 (selbst wenn wir die Größe gesetzt hätten, wären die Inhalte zufällige Farben, weil es nicht initialisiert wurde). Andererseits 
-haben wir die Tatsache, daß die KScribbleView Instanzen in der Größe angepasst werden, wenn sie angezeigt werden- wenigstens auf 
+haben wir die Tatsache, daß die KScribbleView Instanzen in der Größe angepasst werden wenn sie angezeigt werden- wenigstens auf 
 die Minimalgröße. Das ist der Punkt, an dem wir auch die Initialisierung vornehmen können, weil der Benutzer die Größe manuell 
 ändern kann und das Widget ebenfalls ein resize Event erhält. Aus Gründen der Einfachheit, setzen wir die Pixmap Größe gleich der 
 Widgetgröße. All dies geschieht im Event Handler <CODE>resizeEvent()</CODE>:
@@ -245,7 +245,7 @@ neue Größe bringen. Die errechneten Werte werden in w und h gespeichert. Bevor j
 Kopie des Pixmaps in tmp. Dann verändern wir den Puffer (das Dokument), füllen es mit weißer Farbe und kopieren dann den Inhalt 
 von tmp in den Puffer zurück. Die ändert unser Pixmap immer synchron mit dem Widget, von dem es angezeigt wird, aber es verliert 
 nicht die Daten, die außerhalb des sichtbaren Bereiches liegen, wenn das Widget verkleinert wird.
-<P>Wir sind an einem Punkt angekommen, an dem wir die Funktionalität unserer Anwendung testen können. Drücken Sie "Ausführen" und 
+<P>Wir sind an einem Punkt angekommen, an dem wir die Funktionalität unserer Anwendung testen können. Drücken Sie "Ausführen", und 
 nachdem <EM>KScribble</EM> angezeigt wird, sind Sie bereit, Ihr erstes Bild damit zu zeichnen !
 <P>
 <P>

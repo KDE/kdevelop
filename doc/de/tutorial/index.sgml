@@ -39,7 +39,7 @@ Da Anfänger immer mit Startschwierigkeiten zu kämpfen haben,
 versucht dieser Leitfaden, bestimmte Aspekte der
 Erstellung von KDE Anwendungen zu erläutern. Dieses Ziel 
 soll anhand von Anleitungen zur Vorgehensweise, wie man mit 
-Hilfe der KDevelop IDE aus den mit der QT Bibliothekt 
+Hilfe der KDevelop IDE aus den mit der QT Bibliothek
 ausgelieferten Beispielen, lauffähige Anwendungen erstellt, 
 erreicht werden.
 
@@ -60,7 +60,7 @@ Außerdem werden wir uns ansehen, wie man mit dem Application
 Wizard eine Mini-KDE Anwendung erstellt. Ausgehend von dem 
 bereitgestellten minimalen Gerüst, erstellen wir eine 
 lauffähige KDE Beispielanwendung, die von den KDE 
-Bibliotheken Gebrauch macht, und erläutern die verschiedenen 
+Bibliotheken Gebrauch macht und erläutern die verschiedenen 
 Bestandteile einer KDE Anwendung bis ins Detail.
 
 Das KDevelop Team wünscht Ihnen viel Erfolg beim Erlernen 
@@ -112,7 +112,7 @@ Benutzerschnittstellen.
 <item>Ein Sortiment weiterer Hilfsklassen für Grafiken, 
 Datei- und Datenverwaltung.
 
-<item>Der signal-slot Mechanismus für die Kommunikation 
+<item>Den signal-slot Mechanismus für die Kommunikation 
 zwischen Klassen.
 
 <item>Ereignis Überwachung durch event loops und virtuelle 
@@ -141,12 +141,12 @@ würden Sie QT wählen, aber wir benutzen zum Erstellen
 unserer Beispiele das Mini-KDE Projekt. Das hat einen ganz 
 einfachen Grund: Die QT Tutorials enthalten nicht besonders 
 viel Code, und würden wir im Application Wizard die QT 
-Anwendung auswählen, hätten wir eine Arbeit, den 
+Anwendung auswählen, müssten wir uns die Arbeit machen, den 
 vorliegenden Code so zu ändern, daß wir ein "echtes" 
 Beispiel erstellen können. 
 
 Auch wenn die Mini-KDE Anwendung nur aus einem leeren 
-Fenster besteht und ebenfalls auf nach der QT Bibliothek und 
+Fenster besteht und ebenfalls nach der QT Bibliothek und 
 deren Headerdateien sucht, ist sie für unsere Zwecke genau 
 richtig und verlangt keine großen Änderungen. 
 
@@ -161,7 +161,7 @@ Schritte des Tutorials von Nutzen sind.
 Da die einzelnen Tutorial Schritte jeweils auf  
 dem in den vorherigen Schritten erstellten Code 
 aufbauen, beginnen wir mit dem Projektnamen <tt/MyWidget/ 
-beginnen. Dadurch wird bereits die Basisklasse erstellt, die 
+. Dadurch wird bereits die Basisklasse erstellt, die 
 in Kapitel 4 benötigt wird, und wir müssen uns später nicht 
 mehr darum kümmern. Da wir mit dem ersten Schritt des 
 Tutorials beginnen wollen, geben wir als Versionsnummer eine 
@@ -175,11 +175,11 @@ können zur nächsten Seite springen.
 
 Hier können Sie Informationen bezüglich der Versionsverwaltung 
 CVS eingeben. Aber diese Seite interessiert uns nicht. Wir lassen 
-die Voreinstellung für "VCS Unterstützung" auf "Keine" und 
+die Voreinstellung für "VCS Unterstützung" auf "NONE" und 
 gehen direkt zur nächsten Seite.
 
-Tragen Sie hier Ihren Dateikopf für die Headerdateien Ihres 
-Projektes ein, oder belassen Sie die Vorgaben. Das gleiche 
+Tragen Sie hier den Dateikopf für die Headerdateien Ihres 
+Projektes ein, oder belassen Sie es bei den Vorgaben. Das gleiche 
 gilt für die 5. Seite, wo selbiges für den Dateikopf der 
 Quelltext-Dateien eingetragen werden kann.
 
@@ -187,8 +187,7 @@ Schließlich sind wir auf der letzten Seite angelangt. Hier
 müssen wir auf "Erzeugen" klicken, um das Projekt zu 
 erstellen. Ist der Button nicht verfügbar, gehen wir zur 
 ersten Seite zurück und schauen nach, ob wir nicht 
-irgendwo vergessen haben eine benötigte Information 
-einzugeben. 
+irgendwo eine benötigte Information vergessen haben.
 
 Ist alles in Ordnung, wurde das Projekt erstellt, und in 
 der letzten Zeile des Ausgabefensters des Application 
@@ -222,7 +221,7 @@ Funktion unseres Projektes ändern, um das erste Beispiel
 des Tutorials zum Laufen zu bringen.
 
 Um in den Quelltext der Funktion <tt/main()/ 
-zu springen, gehen Sie mit der Maus in den Ordner "Globals", 
+zu springen, gehen Sie mit der Maus in den Ordner "Globale", 
 und von dort in den Unterordner "Funktionen", der alle 
 globalen Funktionen enthält, die keiner Klasse angehören. 
 Durch Anklicken des Eintrages von <tt/main()/ öffnet sich 
@@ -493,64 +492,68 @@ KDevelop.
 Danach sollten Sie in der Lage sein, mit den QT Beispielen
 fortzufahren, die mit QT geliefert werden.
 Im nächsten Kapitel werden Sie mit Hilfe der Beispielanwendung <em>KScribble</em> an die Entwicklung für KDE 2 herangeführt. KScribble ist eine kleine 
-Zeichenanwendung, an der Ihnen die Konzepte des Anwendungsdesigns gezeigt werden und an der Sie sehen wie Sie Ihr Programm implementieren.
-
+Zeichenanwendung, an der Ihnen die Konzepte des Anwendungsdesigns gezeigt 
+werden, und an der Sie sehen, wie Sie Ihr Programm implementieren. 
 <chapt> KDE Applikationen erstellen
 <p>
 Dieses Handbuch versucht Ihnen das KDE/Qt Anwendungsdesign zu zeigen, indem Schritt für Schritt eine Beispielanwendung erstellt wird.
 Das Hauptziel ist, ein gewisses Verständnis dafür zu entwickeln, wie zwei der wichtigsten Ideen der graphischen Benutzeroberfläche verwirklicht 
 sind: das Document View Modell und das Multiple Document Interface (MDI) Modell.
 
-Dadurch erhalten Sie eine gute Vorstellung von den Konzepten, die demnächst kommen werden: KDE 2 und die Qt 2.1 Bibliothek, die dem Programmierer 
-neue Erweiterungen und Technologien an die Hand geben, die das Anwendungsdesign verbessern und die zur Verfügung stehenden Möglichkeiten erweitern werde. 
-Schlüsselworte wie Widget Themen, Interprozesskommunikation und eingebettete Anwendungen sind populäre Gesprächsthemen und werden sogar mehr ermöglichen, 
-als Sie sich im Moment vorstellen können.
-
-Deshalb bietet KDevelop 1.1, das noch auf KDE 1.1.x basiert, Programmierern einige der meistgeforderten Möglichkeiten: Entwicklung von KDE 2 Anwendungen, 
-während Sie noch auf einer stabilen Oberfläche sind. Sie ahnen schon, daß diese Einführung auf einer KDE 2 Anwendung basiert, die schon Gebrauch von 
-Qt-2.1 macht und eine Lösung für das erwähnte MDI Modell bietet - angeboten als "ready-to-go" Anwendung. In dieser Einführung werden Sie eine klare Einsicht 
-in die Funktionweise erhalten, wie es funktioniert und das wird es auch viel einfacher machen, das Document View Modell zu verstehen, was sogar für 
-erfahrene Programmierer schwierig ist. Dies wird Ihnen helfen andere Typen von Anwendungen zu schreiben, die ebenfalls das Document View Modell verwenden, 
-auch wenn sie nur ein einziges Fenster enthalten und die Notwendigkeit nicht offensichtlich ist. Aber lassen Sie uns einfach beginnen - Sie werden sehen was auf Sie 
-zukommt und wie einfach es tatsächlich ist.
-
-Die weiteren Kapitel dieser Einführung behandeln die folgenden Schritte:
-<itemize>
+Dadurch erhalten Sie eine gute Vorstellung von den Konzepten, die demnächst kommen werden: KDE 2 und die Qt 2.1 
+Bibliothek, die dem Programmierer neue Erweiterungen und Technologien an die Hand geben, die das Anwendungsdesign 
+verbessern und die zur Verfügung stehenden Möglichkeiten erweitern werden. Schlüsselworte wie Widget-Themes, 
+Interprozesskommunikation und eingebettete Anwendungen sind populäre Gesprächsthemen und werden sogar mehr ermöglichen, 
+als Sie sich im Moment vorstellen können. Deshalb bietet KDevelop 1.1, das noch auf KDE 1.1.x basiert, Programmierern 
+einige der meistgeforderten Möglichkeiten: Entwicklung von KDE 2 Anwendungen, während Sie 
+noch auf einer stabilen Oberfläche sind. Sie ahnen schon, daß diese Einführung 
+auf einer KDE 2 Anwendung basiert, die schon Gebrauch von Qt-2.1 macht und 
+eine Lösung für das erwähnte MDI Modell bietet - angeboten als "ready-to-go" 
+Anwendung. In dieser Einführung werden Sie eine klare Einsicht in die 
+Funktionweise erhalten, und das wird es auch viel einfacher machen, das Document View Modell zu verstehen, was sogar für 
+erfahrene Programmierer schwierig ist. Dies wird Ihnen helfen andere Typen von 
+Anwendungen zu schreiben, die ebenfalls das Document View Modell verwenden, 
+auch wenn sie nur ein einziges Fenster enthalten und die Notwendigkeit nicht 
+offensichtlich ist. Aber lassen Sie uns einfach beginnen - Sie werden sehen 
+was auf Sie zukommt und wie einfach es tatsächlich ist. Die weiteren Kapitel 
+dieser Einführung behandeln die folgenden Schritte: 
+<itemize> 
 <item>Installation von KDE 2 (Bibliotheken) und Einstellungen in KDevelop zur Erzeugung von KDE 2 Anwendungen.
 <item>Verstehen der grundlegenden Konzepte der MDI und Document View Modelle.
 <item>Erzeugen des generischen Layouts für <em>KScribble</em> und Erklärung des Layoutkonzeptes.
-<item>Implementierung der document Klasse, die die Schnittstelle zum Lesen und Schreiben der Dokumentdaten zur Verfügung stellt,
-sowie das Dokument verwaltet.
-<item>Implementierung der view Klasse zur Visualisierung der Daten. Diese Klasse übernimmt auch die Interaktion mit dem Benutzer.
-<item>Hinzufügen von Dialogen zur Einstellung der Stiftgröße und -farbe des Stiftes, mit dem gezeichnet wird, und deren Integration
-in die Werkzeug- und Menüleiste.
+<item>Implementierung der Document Klasse, die die Schnittstelle zum Lesen und Schreiben der Dokumentdaten zur 
+Verfügung stellt, sowie das Dokument verwaltet.
+<item>Implementierung der view Klasse zur Visualisierung der Daten. Diese Klasse übernimmt auch die Interaktion mit dem 
+Benutzer.
+<item>Hinzufügen von Dialogen zur Einstellung der Größe und Farbe des Stiftes, mit dem gezeichnet wird, und deren 
+Integration in die Werkzeug- und Menüleiste.
 <item>Ändern der Ansicht der Standard <tt>QWidget</tt> Vererbung in eine rollbare Ansicht.
 </itemize>
+Das Beispiel selbst basiert auf dem Code, den Sie in der <em/scribble/ Beispielanwendung finden können, die mit der 
+Qt-Bibliothek geliefert wird. Die Quellen des Originals können Sie auch in der 
+Qt Dokumentation im Abschnitt Beispiele finden. 
 
-Das Beispiel selbst basiert auf dem Code, den Sie in der <em/scribble/ Beispielanwendung finden können, die mit der Qt-Bibliothek
-geliefert wird. Die Quellen des Originals können Sie auch in der Qt Dokumentation im Abschnitt Beispiele finden.
-
-<chapt>Installation von KDE 2
-<p>
-In diesem Kapitel werden wir zunächst einige Schritte unternehmen, die Ihnen helfen KDevelop für die Erstellung von KDE 2 / Qt 2.x
-Anwendungen vorzubereiten. Erforderlich sind:
+<chapt>Installation von KDE 2 
+<p> In diesem Kapitel werden wir zunächst einige Schritte unternehmen, die 
+Ihnen helfen KDevelop für die Erstellung von KDE 2 / Qt 2.x Anwendungen 
+vorzubereiten. Erforderlich sind: 
 <itemize>
-<item>ein aktueller Qt-2.1 Snapshot erhältlich auf <htmlurl url="http://www.troll.no" name="http://www.troll.no">
+<item>ein aktueller Qt-2.1 Snapshot erhältlich auf <htmlurl url="http://www.troll.no"   
+name="http://www.troll.no">
 <item>ein aktueller KDE 2 Snapshot der Pakete <tt>kdesupport</tt> and <tt>kdelibs</tt>
 </itemize>
-
-Sowohl die Qt-2.1 als auch die KDE 2 Bibliotheken befinden sich zur Zeit in der Entwicklung werden aber als "final" betrachtet
-und die Änderungen, die für die tatsächlichen Release Versionen erwartet werden sind äußerst gering und werden möglicherweise
-Ihre Anwendungen in keiner Weise berühren. Das bedeutet, daß Sie die neuesten Bibliotheken kennenlernen werden und es Ihnen
-möglich ist wertvolle Zeit zu sparen, indem Sie Ihre Anwendung entwickeln können bevor die Bibliotheken überhaupt fertig sind.
-
-Die folgenden Abschnitte beschreiben im Detail, in drei Schritten was zu tun ist:
+Sowohl die Qt-2.1 als auch die KDE 2 Bibliotheken befinden sich zur Zeit in der Entwicklung werden aber als 
+"final" betrachtet und die Änderungen, die für die tatsächlichen Release Versionen erwartet werden sind äußerst gering 
+und werden möglicherweise Ihre Anwendungen in keiner Weise berühren. Das bedeutet, daß Sie die neuesten 
+Bibliotheken kennenlernen werden und es Ihnen möglich ist wertvolle Zeit zu 
+sparen, indem Sie Ihre Anwendung entwickeln können bevor die Bibliotheken 
+überhaupt fertig sind. Die folgenden Abschnitte beschreiben im Detail, in drei 
+Schritten was zu tun ist: 
 <itemize>
-<item>Installieren der Qt Bibliothek
+<item>Installieren der Qt Bibliothek 
 <item>Installieren der KDE Bibliothek
 <item>KDevelop einstellen
-</itemize>
-
+</itemize> 
 Dann sind Sie bereit und wir werden im nächsten Kapitel mit dem ersten Schritt zur Erstellung des Beispielprogramm <em>KScribble</em>
 fortfahren.
 
@@ -570,7 +573,7 @@ Entpacken Sie die Bibliotheksquellen mit
 
 <tt>tar zxvf qtxxx.tar.gz</tt>
 
-abhängig vom Namen des tarballs. Setzen Sie dann die Umgebungsvariable <tt>QTDIR</tt> so, daß sie auf das Verzeichnis zeigt, in dem
+abhängig vom Namen des Tarballs. Setzen Sie dann die Umgebungsvariable <tt>QTDIR</tt> so, daß sie auf das Verzeichnis zeigt, in dem
 sich Ihre neue Qt-2.1 Bibliothek befindet, z.B. mit <tt>setenv QTDIR=/usr/lib/qt-2.1</tt>.Eine andere Lösung wäre es, das qt-1.44
 Verzeichnis, daß normalerweise nur qt heißt, in qt-1.44 umzubenennen und einen symlink qt zu erzeugen, der auf qt-2.1 zeigt. Nachdem
 die Bibliothek erzeugt ist, lassen Sie ihn wieder auf qt-1.44 zeigen.
@@ -586,7 +589,7 @@ Nachdem Sie die Qt-2.1 Bibliotheken erfolgreich erstellt haben, können Sie die Q
 Wechseln Sie nun in das Verzeichnis <tt>/usr/lib/qt-2.1/lib</tt> und kopieren Sie alle erzeugten Bibliotheken <bf>außer</bf> dem
 symbolischen Link <tt>libqt.so</tt> nach <tt>/usr/lib</tt>.
 
-Sie sind nun fertig mit Qt und zum nächsten Schritt weitergehen, dem Einrichten der KDE 2 Bibliotheken. Wenn Sie nur für Qt entwickeln
+Sie sind nun fertig mit Qt und können zum nächsten Schritt weitergehen, dem Einrichten der KDE 2 Bibliotheken. Wenn Sie nur für Qt entwickeln
 wollen, gehen Sie weiter zum Abschnitt <ref id="Einrichten von KDevelop" name="Einrichten von KDevelop">.
 
 <sect>Einrichten der KDE 2 Bibliotheken
@@ -612,14 +615,14 @@ mit der neu erstellten Qt-2.1 Bibliothek, deren Pfad Sie mit der Option --with-q
 Dasselbe gilt für das kdelibs Paket, wechseln Sie einfach in das kdelibs Verzeichnis, und geben Sie das gleiche wie beim kdesupport
 Paket ein.
 
-Sie haben nun alle Bibliotheken, die zum erstellen einer KDE 2 Applikation erforderlich sind.
+Sie haben nun alle Bibliotheken, die zum Erstellen einer KDE 2 Applikation erforderlich sind.
 
-Nebenbei bemerkt, das KDE Bibliothekspaket enthält sie Unterstützung zur automatischen Generierung der HTML Dokumentation, die
-auf einfache Weise erhalten können, indem Sie Kdoc installieren. Geben Sie dann im kdelibs Verzeichnis <tt>makekdedoc</tt> ein
+Nebenbei bemerkt, das KDE Bibliothekspaket enthält die Unterstützung zur automatischen Generierung der HTML Dokumentation, die Sie
+auf einfache Weise erhalten können, indem Sie Kdoc installieren. Geben Sie dann im kdelibs Verzeichnis <tt>makekdedoc</tt> ein,
 und Kdoc erstellt die Bibliotheksdokumentation im Unterverzeichnis <tt>srcdoc</tt>. In KDevelop können Sie online auf die Dokumentation
 zugreifen, wenn Sie im Setup Dialog den Pfad zur KDE Bibliotheksdokumentation auf <tt>kdelibs/srcdoc</tt> einstellen. Auf die gleiche
-Art und Weise geben Sie auch den Pfad zu Ihrer Qt Dokumentation an, indem Sie <tt>/usr/lib/qt-2.1/html</tt> einstellen und so die
-Dokumentation direkt aus KDevelop heraus erreichen können.
+Art und Weise geben Sie auch den Pfad zu Ihrer Qt Dokumentation an, indem Sie <tt>/usr/lib/qt-2.1/html</tt> einstellen. Sie können so die
+Dokumentation direkt aus KDevelop heraus erreichen.
 
 Wenn Sie erfolgreich die Qt-2.1 und KDE 2 Bibliotheken installiert haben, fehlt nur noch ein Schritt bis zur Erstellung Ihrer
 ersten KDE 2 Applikation, Sie müssen nur KDevelop die nötigen Informationen geben, wo Sie die Bibliotheken installiert haben. Dies
@@ -631,54 +634,54 @@ Dieser Teil ist der einfachste des ganzen Konfigurationsprozesses für die KDE 2 
 Öffnen Sie einfach KDevelop und wählen Sie "Einstellungen"->"KDevelop Setup" um die KDevelop Konfiguration zu erreichen.
 Wechseln Sie dort zur letzten Seite namens "Pfad". Diese Seite enthält zwei Eingabefelder, eins für die Qt und eins für die
 KDE 2 Bibliotheken. Da Sie alles erfolgreich installiert haben, wählen Sie <tt>/usr/lib/qt-2.1</tt> für den Qt-2.x
-Bibliothekspfad und <tt>/opt/kde2</tt> für KDE 2. Drücken Sie dann den "OK" Knopf und Sie sind fertig.
+Bibliothekspfad und <tt>/opt/kde2</tt> für KDE 2. Drücken Sie dann den "OK" Knopf, und Sie sind fertig.
 
-Benutzer, die nur für Qt-2.x (inklusive der aktuellen Qt-2.0.2 Version) entwickeln wollen, müssen nur den Qt-2.x Pfad setzen..
+Benutzer, die nur für Qt-2.x (inklusive der aktuellen Qt-2.0.2 Version) entwickeln wollen, müssen nur den Qt-2.x Pfad setzen.
 
 Wir können nun zum nächsten Kapitel weitergehen, in dem wir den ersten Schritt des <em>KScribble</em> Beispielprogrammes erstellen
 werden.
 
 
-<chapt>Anwendungs Konzepte
+<chapt>Anwendungskonzepte
 <p>
-Dieses Kapitel stellt Ihnen die Ideen der bereits erwähnten Applikationsmodelle vor: das MDI (Multiple Document Interface) und das 
-Document View Modell. Eine Basiseinführung in das Doc-View Modell und die Generierung eines Projektes mit KDevelop ist schon in 
-<htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook"> enthalten, aber auf Basis des Single Document 
-Interface (SDI). In jedem Falle, sollten Sie mit den Grundlagen der KDE und Qt Klassen vertraut sein, die in <htmlurl
-url="../kde_libref/index.html" name="The KDE Library Reference Guide"> erklärt sind, die Basisklassen der darunterliegenden 
+Dieses Kapitel stellt Ihnen die Ideen der bereits erwähnten Applikationsmodelle vor: des MDI (Multiple Document Interface) und des 
+Document View Modells. Eine Basiseinführung in das Doc-View Modell und die Generierung eines Projektes mit KDevelop ist schon im 
+<htmlurl url="../programming/index.html" name="KDevelop Programming Handbook"> enthalten, aber auf Basis des Single Document 
+Interfaces (SDI). In jedem Falle sollten Sie mit den Grundlagen der KDE und Qt Klassen vertraut sein, die in <htmlurl
+url="../kde_libref/index.html" name="The KDE Library Reference Guide"> erklärt sind. Die Basisklassen der darunterliegenden 
 Bibliotheken und ihre Verwendung werden dort im Detail beschrieben, außerdem finden Sie zusätzlich eine Beschreibung des Qt 
 Signal-Slot Verfahrens und der Ereignisverarbeitung.
 
-Als Anhaltspunkt sollten Sie bereits wissen:
+Sie sollten bereits wissen:
 <itemize>
-<item>Das jede KDE Applikation eine Instanz von <tt>KApplication</tt> (bei Qt eine Instanz von <tt>QApplication</tt>) benötigt
+<item>Daß jede KDE Applikation eine Instanz von <tt>KApplication</tt> (bei Qt eine Instanz von <tt>QApplication</tt>) benötigt
 <item>Generell ein Main Fenster von <tt>KTMainWindow</tt> bei KDE (for Qt von <tt>QMainWindow</tt>) abgeleitet ist
-<item>Das Ereignisse (z.B. Tastendrücke oder Mausbewegungen) von darunterliegenden Window System an die Anwendung gesendet 
+<item>Daß Ereignisse (z.B. Tastendrücke oder Mausbewegungen) von darunterliegenden Window System an die Anwendung gesendet 
 werden
-<item>Das <tt>QWidget</tt> als Basisklasse für alle Graphical User Interface (GUI) Komponenten spezialisierte Event Handler durch 
-virtuelle Functionen bereitstellt, die die entsprechenden Events durch Reimplementation von <tt>QObject::event()</tt> ausfiltern 
-<item>Das das Qt Signal-Slot Verfahren bedeutet, das eine Komponente Signale aussendet und ein Empfänger sich mit diesen Signalen 
+<item>Daß <tt>QWidget</tt> als Basisklasse für alle Graphical User Interface (GUI) Komponenten spezialisierte Event Handler durch 
+virtuelle Funktionen bereitstellt, die die entsprechenden Events durch Reimplementation von <tt>QObject::event()</tt> ausfiltern 
+<item>Daß das Qt Signal-Slot Verfahren bedeutet, daß eine Komponente Signale aussendet und ein Empfänger sich mit diesen Signalen 
 verbinden kann, um bestimmte Aktionen auszuführen.
-<item>Das dieser Mechanismus es unnötig macht, Klassen für GUI Komponenten zu beerben, weil die Signale Sie über z.B. 
+<item>Daß dieser Mechanismus es unnötig macht, Klassen für GUI Komponenten zu beerben, weil die Signale Sie über z.B. 
 Mausereignisse informieren, wo es passend für ein Widget ist.
 </itemize>
 
 <sect>Das Document-View Modell
 <p>
-Das Document-View Modell ist eines der grundlegendsten Konzepte für Anwendungsdesign, das auf GUI basiert. Daher ist ein gewisses 
-Verständnis für das Warum nötig, um zu sehen, daß es Sinn macht es zu benutzen, obwohl der Programmiere andere Möglichkeiten hat. 
+Das Document-View Modell ist eines der grundlegendsten Konzepte für GUI basiertes Anwendungsdesign. Daher ist ein gewisses 
+Verständnis für das "Warum" nötig, um zu erkennen, daß es Sinn macht es zu benutzen, obwohl der Programmierer andere Möglichkeiten hat. 
 Lassen Sie uns aber zuerst einen Blick auf das normale Design einer typischen KDE / Qt Applikation werfen:
 
 Die Instanz Ihrer Anwendung stellt die erste Verbindung zu Ihrer Applikation zu Verfügung und ist der Startpunkt der 
 Ereignisbehandlung eines Programms. Das Programm selber präsentiert sich dem Benutzer über eine graphische Benutzerschnittstelle, 
-die meisten Hauptfenster genannt wird. Das Hauptfenster stellt dann dem Benutzer die erforderlichen Funktionen zur Verfügung, wie 
+die meistens Hauptfenster genannt wird. Das Hauptfenster stellt dann dem Benutzer die erforderlichen Funktionen zur Verfügung, wie 
 Tastenkürzel, eine Menüleiste, eine Werkzeugleiste und eine Statuszeile. Im Zentrum befindet sich ein sogenannter 
 "Ansichtsbereich", was bedeutet, daß dieser Bereich die Instanz einer anderen Klasse ist, normalerweise "Ansicht" genannt. Diese 
 Instanz wird erzeugt, wenn das Hauptfenster beim Programmstart konstruiert wird und muß mit Hilfe einer Methode des Hauptfensters 
 zum Ansichtsbereich gemacht werden: <tt>setView(your_view)</tt> bei KDE Applikationen die <tt>KTMainWindow</tt> verwenden,
-<tt>setCentralWidget(your_view)</tt> bei Qt Applikationen die <tt>QMainWindow</tt> verwenden. Nun, offensichtlich is die Ansicht 
-der Bereich, der verantwortlich für die Interaktion mit dem Benutzer ist, wenn die Daten, die er represäntiert manipuliert werden 
-sollen. Zum Beispiel könnten Sie <tt>QMultiLineEdit</tt> als Ansicht verwenden, und Sie hätten einen Editor. Dann können Sie die 
+<tt>setCentralWidget(your_view)</tt> bei Qt Applikationen die <tt>QMainWindow</tt> verwenden. Nun, offensichtlich ist die Ansicht 
+der Bereich, der verantwortlich für die Interaktion mit dem Benutzer ist, wenn die Daten, die er repräsentiert manipuliert werden 
+sollen. Zum Beispiel könnten Sie <tt>QMultiLineEdit</tt> als Ansicht verwenden, und Sie hätten einen Editor. Dann könnten Sie die 
 gegebenen Slots der Ansicht zur Kommunikation mit der Menüleiste oder der Werkzeugleiste folgendermaßen verwenden:
 
 Während Sie die Menüleiste erstellen, möchten Sie eine Methode für das Kommando "Cut" im "Edit" Menü bereitstellen:
@@ -691,32 +694,32 @@ Dies erzeugt einen Menüeintrag im "Edit" Menü, der, wenn aktiviert, direkt den S
 Ansichtsbereich gemacht haben. Der Slot des MultiLineEdit wird aufgerufen und schneidet als Reaktion den ausgewählten Text aus, 
 die Funktionalität dazu wird bereits von der Klasse selbst zur Verfügung gestellt, es gibt also keine Notwendigkeit von 
 <tt>QMultiLineEdit</tt> zu erben, um einen Ansichtsbereich zu erzeugen, der fähig zu solchen Aktionen ist. Diese Funktionen können 
-sofort aufgerufen werden und machen das Erstellen von Anwendungen sehr schnell- Sie brauchen nur die Anwendungsinstanz und das 
-Hauptfendter mit den Verbindungen zu Ihrem Ansichtsbereich und das ist alles ! Das bedeutet, ein einfacher Editor kann geschrieben 
-werden, indem man eine einzige Klasse erzeugt, die das Hauptfenster definiert und wie man Datei in und aus dem Editor schreibt und 
-ließt- nur einige Basisslots die Ihre Hauptansicht selbst implementieren muß. 
+sofort aufgerufen werden und machen das Erstellen von Anwendungen sehr einfach; Sie brauchen nur die Anwendungsinstanz und das 
+Hauptfenster mit den Verbindungen zu Ihrem Ansichtsbereich, und das ist alles ! Das bedeutet, ein einfacher Editor kann geschrieben 
+werden, indem man eine einzige Klasse erzeugt, die das Hauptfenster definiert und das Ein- und Auslesen von Daten implementiert- 
+nur einige Basisslots, die Ihre Hauptansicht selbst implementieren muß. 
 
 Aber hier ist nun der Grund für dieses mysteriöse Document-View Modell: Sie müssen selbst Methoden zur Verfügung stellen, um die 
-Dateien, die Sie mit dem <tt>QMultiLineEdit</tt> Ansichtsbereich lesen und schreiben zu können, und zwar <bf>innerhalb</bf> des 
-Hauptfensterinterfaces. Ja, das ist offensichtlich der einfachste Weg und der logischste. Nun, wenn die Dateien und ihren Inhalt 
+Dateien mit dem <tt>QMultiLineEdit</tt> Ansichtsbereich lesen und schreiben zu können, und zwar <bf>innerhalb</bf> des 
+Hauptfensterinterfaces. Das ist offensichtlich der einfachste und logischste Weg. Nun, wenn wir die Dateien und ihren Inhalt 
 als ein sogenanntes "Dokument" betrachten, das wir mit dem Attribut eines "Objektes" in der C++ Terminologie beschreiben, ist der 
 nächste Schritt nur ein kleiner: Ich habe ein Dokument, eine Ansicht und ein Hauptfenster- warum trenne ich diese drei Objekte 
-nicht voneinander? Wir könnten auf einfache Weise eine kleine Klasse erzeugen, die eine Datei in einen Text Stream ließt und dann 
+nicht voneinander? Wir könnten auf einfache Weise eine kleine Klasse erzeugen, die eine Datei in einen Textstream liest und dann 
 die Ansicht aufrufen, um diesen Text für den Benutzer sichtbar zu machen. Dasselbe gilt auch wieder für das Speichern der Datei- 
-Die document Klasse sollte dann eine Methode anbieten, den Text aus der Ansicht zu lesen und als Datei zu speichern. im Beispiel 
-wären diese beiden Methoden die einzigen Aktionen die von der document Klasse ausgeführt werden müssten, weil die Edit Ansicht 
+Die Dokumentklasse sollte dann eine Methode anbieten, den Text aus der Ansicht zu lesen und als Datei zu speichern. Im Beispiel 
+wären diese beiden Methoden die einzigen Aktionen die von der Dokumentklasse ausgeführt werden müssten, weil die Edit-Ansicht 
 bereits alle Methoden über Slots bereitstellt, die für einen Editor benötigt werden, und Sie können den Inhalt der Ansicht direkt 
 über diese Slots manipulieren. 
 
-Nun, die Haupidee hinter dieser Aufteilung in drei Objekte (Dokument, Ansicht, Hauptfenster) anstatt der minimal zwei, der Ansicht 
-und dem Hauptfenster, ist folgende Frage: Was, wenn ich dem Benutzer die Möglichkeit geben will mit <bf>zwei</bf> oder sogar mehr 
+Nun, die Hauptidee hinter dieser Aufteilung in drei Objekte (Dokument, Ansicht, Hauptfenster), anstatt der minimal zwei 
+(Ansicht und Hauptfenster), ist folgende Frage: Was, wenn ich dem Benutzer die Möglichkeit geben will mit <bf>zwei</bf> oder sogar mehr 
 Ansichten zu arbeiten? Solche Dinge kann man sogar mit nur einem Hauptfenster durch Trenner erreichen, wobei zwei Instanzen 
-<bf>einer</bf> Datei angezeigt werden. Die Lösung kann dann nur sein, daß wenn der Benutzer den Dateiinhalt in einem Fenster 
+<bf>einer</bf> Datei angezeigt werden. Die Lösung kann dann nur sein, daß, wenn der Benutzer den Dateiinhalt in einem Fenster 
 verändert, die andere Ansicht darüber informiert wird und ihren Inhalt aktualisieren muß. Sonst würde folgendes passieren: Wenn 
 der Benutzer in einer Ansicht am Anfang etwas ausschneidet, dann am Ende der <bf>anderen</bf> Ansicht einfügt und dann die erste 
 Ansicht schließt, würde die Datei mit beiden Teilen gespeichert, weil die zweite Ansicht nichts von dem Ausschneiden weiß. Das 
-bedeutet, daß die beiden Asichten synchronisiert werden müssen und das kann erreicht werden, indem alle Ansichten ständig über 
-alle Benutzeraktionen informiert werden, welche Ansicht der User tatsächlich verwendet sollte egal sein. Das bedeutet, daß 
+bedeutet, daß die beiden Asichten synchronisiert werden müssen, und das kann erreicht werden, indem alle Ansichten ständig über 
+alle Benutzeraktionen informiert werden. Welche Ansicht der User tatsächlich verwendet sollte egal sein. Das bedeutet, daß 
 schließlich eine Dokumentklasse benötigt wird, die alleine den wahren Inhalt des Dokumentes enthält und den Ansichten die 
 Möglichkeit bietet, diesen zu verändern.
 
@@ -725,17 +728,17 @@ ohne es leben könne- genauso könnte er auch ein Widget selber schreiben, das die
 vorgebene Klasse als Ansichtsbereich zu verwenden, solange Sie nur <bf>ein</bf> Dokument in <bf>einem</bf> Ansichtsbereich 
 präsentieren, kann die Ansicht auch für die Daten verantwortlich sein und nur Methoden zum Lesen oder Speichern einer Datei zur 
 Verfügung stellen. Das nächste beschriebene Modell wird sich in diesem Punkt unterscheiden- dort werden Sie die tatsächliche 
-Notwendigkeit und die Funktionalität, die die Document Klasse bereitstellt, erkennen.
+Notwendigkeit und die Funktionalität, die die Dokumentklasse bereitstellt, erkennen.
 
 <sect>Das Multiple Document Interface (MDI)
 <p>
 Da der letzte Abschnitt das Document View Modell beschrieben hat, können Sie sicher erraten, was MDI bedeutet. Benutzer die von 
 anderen Plattformen als Unix/Linux kommen, sowie die Programmierer, die für diese Plattformen entwickeln, sind daran gewöhnt. Da 
 X-Window Applikationen traditionell mehr auf Funktionalität und Stabilität abzielen, sind Unix Anwender an einzelne Fenster 
-gewöhnt, die Funktionalität bieten, weshalb oft nicht einmal das Document View Modell benötigt wird um Anwendungen zu erstellen. 
-Mit Qt als Multi-Platform Werkzeug, haben Entwickler sogar noch mehr Auswahl- die Entwicklung für sowohl Unix, als auch 
-MS Windows(tm). Während auf Windows Applikationen, die sogenannte Kind Fenster verwalten können zu einer Art Standard geworden 
-sind, darauf zielt die Qt 2.1 Bibliothek ab, können auch Unix Benutzer von dieser Architektur profitieren. 
+gewöhnt, die Funktionalität bieten, weshalb oft nicht einmal das Document View Modell benötigt wird, um Anwendungen zu erstellen. 
+Mit Qt als Multi-Plattform Werkzeug, haben Entwickler sogar noch mehr Auswahl- die Entwicklung für sowohl Unix, als auch 
+MS Windows(tm). Auf Windows sind Applikationen, die sogenannte Kind Fenster verwalten können zu einer Art Standard geworden und die 
+Qt 2.1 Bibliothek zielt darauf ab, daß auch Unix Benutzer von dieser Architektur profitieren können. 
 
 Was ist nun die Bedeutung von MDI? Eine MDI Applikation hat das gleiche Konzept, wie eine gewöhnliche Anwendung, die, wie oben 
 beschrieben, eine Anwendungsinstanz und ein Hauptfenster hat. Der Ansichtsbereich macht nun den Unterschied: Sie verwenden nicht 
@@ -754,43 +757,43 @@ Applikations Instanz -> Hauptfenster -> Ansicht -> Aktives Kind Fenster
 
 Die Ansicht beherrscht nun verschiedene Aktionen:
 <itemize>
-<item>Erzeugen von so vielen Kind Fenstern, wie der Benutzer anfordert
-<item>Zur Verfügung stellen von Methoden, zur Ermittlung des aktiven Kind Fensters
+<item>Erzeugen von so vielen Kindfenstern, wie der Benutzer anfordert
+<item>Zur Verfügung stellen von Methoden, zur Ermittlung des aktiven Kindfensters
 <item>Verwaltung einer Liste offener Ansichten
-<item>Verwaltung das Verhalten des Kind Fensters bei maximieren, minimieren, so wie es der Fenstermanager für to-level 
+<item>Steuern des Verhaltens des Kindfensters bei Maximieren, Minimieren, so wie es der Fenstermanager für top-level 
 Fenster macht
 </itemize> 
 
-Nun, Sie können komplette Widgets wie <tt>QMultiLineEdit</tt> als Kind Fenster für Anwendungen verwenden, die nur ein Fenster 
-bereitstellen und jedes Fenster ist für seine eigenen Daten verantwortlich. Dies könnte als Multiple Document Interface 
+Nun, Sie können komplette Widgets wie <tt>QMultiLineEdit</tt> als Kindfenster für Anwendungen verwenden, die nur ein Fenster 
+bereitstellen, und jedes Fenster ist für seine eigenen Daten verantwortlich. Dies könnte als Multiple Document Interface 
 beschrieben werden, wobei jedes Fenster wie ein einzelnes Dokument ist. Die Anwendung verwaltet dann die üblichen Aktionen, wie 
-bereitstellen von Methoden zur Interaktion, wie Ausschneiden und Kopieren. Die Erweiterungen dieses Konzepts um das Document View 
+Bereitstellen von Methoden zur Interaktion, wie Ausschneiden und Kopieren. Die Erweiterung dieses Konzepts um das Document View 
 Modell, verbessert die Möglichkeiten bei weitem: stellen Sie sich vor, daß Sie innerhalb des Haupfensters so viele Fenster öffnen 
-können wie Sie wollen und das ein Kind Fenster, die neue Ansicht eines Dokuments sein kann, das bereits in einem anderen Kind 
-Fenster gezeigt wird. Die Verwaltung hierfür macht die schon beschriebene Aufteilung in das drei Objekte Modell nötig, aber 
-limitiert weder die Anzahl der tatsächlichen Instanzen noch die der Ansichten.
+können wie Sie wollen und das ein Kindfenster, die neue Ansicht eines Dokuments sein kann, das bereits in einem anderen Kindfenster 
+gezeigt wird. Die Verwaltung hierfür macht die schon beschriebene Aufteilung in das drei Objekte Modell nötig, aber 
+limitiert weder die Anzahl der tatsächlichen Instanzen, noch die der Ansichten.
 
 Glücklicherweise enthält Qt 2.1 die Möglichkeit solche Anwendungen zu schreiben und KDevelop bietet Ihnen die entsprechenden 
-Anwendungsschablonen für beides, sowohl nur-Qt Programme als auch KDE 2 Programme mit denselben Interface Methoden- Sie können 
+Anwendungsschablonen für beides, sowohl nur-Qt Programme als auch KDE 2 Programme mit denselben Interface Methoden; Sie können 
 also beide Typen adequat erstellen. Die Verwendung des KDE 2 Interfaces bietet Ihnen sogar noch mehr Möglichkeiten durch 
 Bibliotheksfunktionen sowie Interprozesskommunikation, dies sind jedoch spezielle Aspekte die durch separate Einführungen 
 abgedeckt werden müssen.
 
-Sie sind nun vorbereitet der Entwicklung für KDE 2 zu folgen- folgen Sie einfach dem nächsten Kapitel, um einen ersten Einblick in 
-die Funktionalität zu erhalten, die bereits von KDevelop zur Verfügung gestellt wird, wenn sie Anendungen erstellen. Dort werden 
+Sie sind nun vorbereitet der Entwicklung für KDE 2 zu folgen.Lesen Sie einfach das nächste Kapitel, um einen ersten Einblick in 
+die Funktionalität zu erhalten, die bereits von KDevelop zur Verfügung gestellt wird, wenn sie Anwendungen erstellen. Dort werden 
 wir das Framework für unsere Beispielanwendung <em/KScribble/ generieren und die praktischen Aspekte der Programmierung von MDI 
 Applikationen beschreiben.
 
 
 <chapt>Das MDI Framework
 <p>
-Wenn Sie bereits frühere Versionen von KDevelop kennen, werden Sie wissen, daß Ihre IDE sogenannte "frameworks" als Startpunkt der 
-Anwendungsentwicklung verwendet. Diese Frameworks enthalten standardmäßig eine Unterstützung für ein generisches Document View 
+Wenn Sie bereits frühere Versionen von KDevelop kennen, werden Sie wissen, daß Ihre IDE sogenannte "Frameworks" als Startpunkt der 
+Anwendungsentwicklung verwendet. Diese Frameworks enthalten standardmäßig die Unterstützung für ein generisches Document View 
 Modell, waren aber bisher auf SDI Strukturen (Single Document Interface, <em/ein/ Fenster mit <em/einem/ Ansichtsbereich) 
 limitiert. Seit KDevelop 1.1, kann der Application Wizard eine Menge mehr als die vorhergehenden Versionen: er bietet einige neue 
 Projekttypen insbesondere für jene Programmierer an, die up-to-date mit der kommenden KDE 2, sowie mit Qt 2.1 bleiben wollen. Eine 
-der Haupterweiterungen sind MDI Frameworks für beide, sowohl KDE 2 als auch Qt 2.1. Sie unterscheiden sich nur in der Verwendung 
-einiger Bibliotheksfunktionen wie Dateidialoge oder Message Boxen, sowie den verwendeten Werkzeugleisten- und Statuszeilenklassen- 
+der Haupterweiterungen sind MDI Frameworks für sowohl KDE 2 als auch Qt 2.1. Sie unterscheiden sich nur in der Verwendung 
+einiger Bibliotheksfunktionen, wie Dateidialoge oder Message Boxen, sowie den verwendeten Werkzeugleisten- und Statuszeilenklassen- 
 die KDE Version verwendet KDE 2 Methoden, die Qt Version die entsprechenden Qt Funktionen.
 
 Zur Erstellung des ersten Schrittes der Beispielanwendung <em>KScribble</em>, müssen Sie sicherstellen, daß Sie die Anweisungen in 
@@ -802,28 +805,28 @@ oben beschriebenen Unterschieden: andere Methodenaufrufe für Dialoge und GUI Kom
 <sect>Erzeugen eines MDI Frameworks
 <p>
 Nun werden wir uns in die Entwicklung stürzen, indem wir den Rahmen für <em/KScribble/ erzeugen. Starten Sie KDevelop und wählen 
-Sie "Projekt"-"Neu" aus dem Menü um den Applikation Wizard zu starten. Auf der ersten Seite wird Ihnen ein Baum mit Projekttypen 
+Sie "Projekt"-"Neu" aus dem Menü, um den Applikation Wizard zu starten. Auf der ersten Seite wird Ihnen ein Baum mit Projekttypen 
 angezeigt. Dieser enthält KDE und Qt Projekte. Wählen Sie "KDE 2 MDI" aus dem KDE Abschnitt. Wenn Sie nur Qt 2.1 installiert 
 haben, wählen Sie "Qt 2.1 MDI" aus dem Qt Abschnitt. Dann wählen Sie "Weiter", geben "KScribble" als Projeknamen und 1.0 als 
-Versionsnummer ein. Fügen Sie Ihren Namen und E-Mail Adresse in die entsprechenden Felder ein, fertig. Klicken Sie auf den 
-"Erzeugen" Knopf und KDevelop wird unsere erste Version von <em/KScribble/ erzeugen, waährend Sie die Ausgabe auf der letzten 
+Versionsnummer ein. Fügen Sie Ihren Namen und Ihre E-Mail Adresse in die entsprechenden Felder ein, fertig. Klicken Sie auf den 
+"Erzeugen" Knopf und KDevelop wird unsere erste Version von <em/KScribble/ erzeugen, während Sie die Ausgabe auf der letzten 
 Seite des AppWiz verfolgen können. Schließlich drücken Sie noch "Beenden" um zu KDevelop zurückzukehren. Im Ausgabefenster sehen 
 Sie eine weitere Meldung, daß die Message Datei für Ihr Projekt erstellt wurde, was wichtig sein wird, wenn Sie <em/KScribble/ in 
 andere Sprachen übersetzen.
 
 <sect>Übersicht
 <p>
-Nun ist es wichtig, daß Sie wissen Wo Sie Was in den generierten Quellen finden und wo Ihr Platz als Programmierer ist, damit 
+Nun ist es wichtig, daß Sie wissen <em>wo</em> Sie <em>was</em> in den generierten Quellen finden und wo Ihr Platz als Programmierer ist, damit 
 <em/KScribble/ eine einzigartige KDE Applikation wird.
 
 Zunächst einmal sehen Sie in der Klassenansicht drei, bereits erzeugte Klassen, <tt>KScribbleApp</tt>, <tt>KScribbleDoc</tt> und
 <tt>KScribbleView</tt>. Wie oben erklärt, spielt jede von ihnen eine bestimmte Rolle in Ihrer Anwendung; die App Klasse bildet das 
 Hauptfenster und koordiniert die Benutzerinteraktion, die Doc Klasse verwaltet die Dokumente, die eine Anwendung manipulieren 
-kann; schließlich ist die View Klasse verantwortlich für die Benutzerinteraktion mit den Kind Fenstern und kommuniziert mit dem 
+kann; schließlich ist die View Klasse verantwortlich für die Benutzerinteraktion mit den Kindfenstern und kommuniziert mit dem 
 ihr angeschlossenen Dokument. Dies hat verschiedene Konsequenzen: um guten Nutzen aus der gegebenen Funktionalität zu ziehen, muß 
 sich der Programmierer an die gegebene View Klasse halten. Standardmäßig erbt die Ansicht <tt>QWidget</tt> als minimale 
 Anforderung, aber Sie sind bei weitem nicht darauf beschränkt. Von einer anderen Klasse zu erben, ist nicht allzuviel Arbeit und 
-schließlich gibt es noch die Möglichkeit z.B. <tt>QMainWindow</tt> oder <tt>KTMainWindow</tt> als zu beerbende Klasse zu verwenden 
+schließlich gibt es noch die Möglichkeit, z.B. <tt>QMainWindow</tt> oder <tt>KTMainWindow</tt> als zu beerbende Klasse zu verwenden 
 und eine andere Klasse für der Verwaltung der Ansicht zu benutzen.
 
 Im nächsten Kapitel werden wir fortfahren <em/KScribble/ um die Verwaltung seiner Dokumente zu erweitern. Danach werden wir die 
@@ -831,28 +834,28 @@ Benutzerinteraktion implementieren und Sie werden die erste Funktionalität unser
 sie laden und sie speichern.
 
 
-<chapt>Definieren der Dokumente
+<chapt>Definition der Dokumente
 <p>
 
-Der erste Schritt beim Erstellen einer Applikation, die aud dem Document-View Modell basiert, sollte immer sein, sich zu überlegen
-welche Arten von Daten die Anwendung verwalten muß. Dies entscheidet, wie die view Klasse aussehen wird, aber besonders, wie die
-document Klasse Daten in und aus Dateien lesen und schreiben wird und welche Methoden angeboten werden, um die Daten zu manipulieren.
+Der erste Schritt beim Erstellen einer Applikation, die auf dem Document-View Modell basiert, sollte immer sein, sich zu überlegen,
+welche Arten von Daten die Anwendung verwalten muß. Dies entscheidet, wie die View Klasse aussehen wird, aber insbesondere, wie die
+Dokumentklasse Daten in und aus Dateien lesen und schreiben wird und welche Methoden angeboten werden, um die Daten zu manipulieren.
 Da <em>KScribble</em> eine einfache Zeichenanwendung sein wird, die mit graphischen Daten umgeht, werden wir die Qt Klasse
-<tt>QPixmap</tt> verwenden, um unsere Daten zu speichen während wir editieren. <tt>QPixmap</tt> bietet auch einfache Methoden, Bilder
+<tt>QPixmap</tt> dazu verwenden, unsere Daten zu speichen während wir editieren. <tt>QPixmap</tt> bietet auch einfache Methoden, Bilder
 in und aus Dateien zu lesen und zu schreiben, so daß die Serialisation mit zwei Zeilen erreicht werden kann, eine zum Lesen und eine
 zum Schreiben. Weiterhin müssen wir einen Stift definieren, der in ein Dokument schreibt, seine Breite und Farbe einstellen und der
-view Klasse ermöglichen den Stift anzusprechen - tatsächlich wollen Sie, daß die Ansicht die Zeichenmethoden anbietet, aber das
+View Klasse ermöglichen, den Stift anzusprechen - tatsächlich wollen Sie, daß die Ansicht die Zeichenmethoden anbietet, aber das
 Dokument als zentrales Element für alle Ansichten, muß das Original des Stiftes besitzen, da sonst verschiedene Ansichten desselben
 Dokuments verschiedene Stifte verwenden würden!
 
-Daher fügen wir zur Definition der Arbeitsweise unserer document Klasse eine Instanz von <tt>QPixmap</tt> und eine von
+Daher fügen wir zur Definition der Arbeitsweise unserer Dokumentklasse eine Instanz von <tt>QPixmap</tt> und eine von
 <tt>QPen</tt> hinzu und editieren die Methoden <tt>newDocument()</tt>, <tt>openDocument()</tt> und <tt>saveDocument()</tt>.
 
 <sect>Hinzufügen der Instanzen
 <p>
 
 Öffnen Sie die Datei <tt>kscribbledoc.h</tt> durch Auswahl in einer der Baumansichten oder durch einen Klick in der Klassenansicht
-über <tt>KScribbleDoc</tt>. Dann fügen Sie die mit -> markierten Zeilen aus dem folgenden Code Ausschnit hinzu:
+über <tt>KScribbleDoc</tt>. Dann fügen Sie die mit -> markierten Zeilen aus dem folgenden Codeausschnit hinzu:
 
 <code>
 ->  #include <qpixmap.h>
@@ -882,14 +885,14 @@ Daher fügen wir zur Definition der Arbeitsweise unserer document Klasse eine Ins
 </code>
 
 Wie Sie sehen, haben wir pen und buffer, sowie <tt>currentPen()</tt> und <tt>penWidth()</tt> hinzugefügt. Da pen als private deklariert
-ist, bieten wir eine Möglichkeit sowohl auf den Stift selber, als auch auf die Stiftbreite zuzugreifen. Da diese bereits in der
+ist, bieten wir ein Möglichkeiten sowohl auf den Stift selber, als auch auf die Stiftbreite zuzugreifen. Da diese bereits in der
 Klassendeklaration implementiert sind, müssen wir sie nicht der Implementationsdatei hinzufügen, der wir uns nun zuwenden.
 
 <sect>Initialisierung des Dokuments
 <p>
 
-Wählen Sie die Methode <tt>newDocument()</tt> in der <tt>KScribbleDoc</tt> Klasse um zur Methodendeklaration zu springen. Hier fügen wir
-nur eine mit dem Pfeil markierte Zeile ein:
+Wählen Sie die Methode <tt>newDocument()</tt> in der <tt>KScribbleDoc</tt>-Klasse um zur Methodendeklaration zu springen. Hier fügen wir
+nur eine, mit dem Pfeil markierte Zeile ein:
 
 <code>
   kscribbledoc.cpp
@@ -946,12 +949,12 @@ erledigt:
 </code>
 
 Fügen Sie wieder die Zeilen mit dem Pfeil Ihrem Code hinzu. Was wir getan haben, ist die Zeilen, in denen <tt>Dateiname</tt> geöffnet
-wird, auszukommentieren, weil die automatisch von den Laden- und Speichermethoden von <tt>QPixmap</tt> erledigt wird, die wir
-stattdessen hinzufügen. Andere Dokumente mögen Dateien öffnen und deren Inhalt, Textzeilen oder was auch immer, lesen, weshalb
+wird, auszukommentieren, weil dies automatisch von den Laden- und Speichermethoden von <tt>QPixmap</tt> erledigt wird, die wir
+stattdessen hinzufügen. Andere Dokumente mögen Dateien öffnen und deren Inhalt ( Textzeilen oder was auch immer) lesen, weshalb
 die <tt>QFile</tt> Methoden schon im Frame enthalten sind.Da <tt>save()</tt> und <tt>load()</tt> bei Erfolg einen Boolschen Wert
 zurückliefern, Geben wir false zurück, wenn nicht, so daß der Rest der Anwendung einen Returnwert erhält und Warnungen ausgibt, wenn
 die Operation nicht erfolgreich war. Die <tt>load()</tt> und <tt>save()</tt> Methoden sind nun schon in <tt>QPixmap</tt> enthalten.
-Sie benötigen den Dateinamen und das Format als Argument; die Quellen rufen die document Methoden jedoch noch <bf>nicht</bf> mit dem
+Sie benötigen den Dateinamen und das Format als Argument; die Quellen rufen die Dokument Methoden jedoch noch <bf>nicht</bf> mit dem
 Format auf. Wenn nur <em/ein/ Format verwendet wird, reicht es, dieses hier zu setzen, andere Methoden könnten das Format zum
 Beispiel ermitteln - aber wir werden später noch einmal darauf zurückkommen. Für jetzt verwenden wir "PNG" als Format; sehen Sie unter
 <tt>QImageIO</tt> nach, um mehr über Bildformate zu erfahren.
@@ -959,27 +962,27 @@ Beispiel ermitteln - aber wir werden später noch einmal darauf zurückkommen. Für
 Nun sind wir fast mit der Definition unserer Dokumentstruktur fertig. Der <tt>QPixmap</tt> Puffer dient uns als Speicher für unser
 Originalbild, während wir daran arbeiten. Der Stift ist gültig für alle Ansichten, die mit dem Dokument verbunden sind. Beachten Sie,
 daß die Initialisierung des Stiftes in <tt>newDocument</tt> erfolgt. Diese Methode wird immer intern nach dem Konstruktor aufgerufen,
-Sie sollten also dort document Instanzinitialisierungen vornehmen, wie wir es mit dem Stift gemacht haben.
+Sie sollten also dort die Instanzinitialisierungen vornehmen, wie wir es mit dem Stift gemacht haben.
 
-Im nächsten Kapitel werden wir uns der view Klasse widmen, um zu definieren, wie die Ansicht mit dem Benutzer kooperieren soll und
-wie sie auf das Dokument zugreift- und dann sind wir bereit zu zeichnen !
+Im nächsten Kapitel werden wir uns der View Klasse widmen, um zu definieren, wie die Ansicht mit dem Benutzer kooperieren soll und
+wie sie auf das Dokument zugreift, und dann sind wir bereit zu zeichnen !
 
-<chapt>Definieren der Ansicht
+<chapt>Definition der Ansicht
 <p>
 
 <sect>Interaktion mit dem Benutzer
 <p>
 
-In diesem Kapitel werden wir uns der view Klasse von <em/KScribble/ zuwenden um zu definieren, wie die Kind Fenster arbeiten sollen. 
+In diesem Kapitel werden wir uns der View Klasse von <em/KScribble/ zuwenden, um zu definieren, wie die Kindfenster arbeiten sollen. 
 Als erstes sehen wir, daß KScribbleView standarmäßig von <tt>QWidget</tt> abgeleitet ist. Das ist die Mindestanforderung für ein 
 Kindfenster, aber es reicht bereits für unsere Bedürfnisse aus. Wenn es darum geht, das Verhalten eines neuen Widgets zu definieren, 
-müssen wir wissen, wir der Benutzer mit dem Fenster interagieren soll. In unserem Beispiel, soll dies offensichtlich mit Hilfe der Maus 
+müssen wir wissen, wie der Benutzer mit dem Fenster interagieren soll. In unserem Beispiel, soll dies offensichtlich mit Hilfe der Maus 
 geschehen. Daher müssen wir einige virtuelle Methoden von <tt>QWidget</tt> überschreiben, die die Mausereignisse verarbeiten die unser 
-Widget empfängt. Was wir wissen müssen, ist wann der Benutzer eine Maustaste drückt, weil nur gezeichnet werden soll, wenn eine 
-Maustaste gedrückt ist. Außerdem müssen wir wissen, wann die Maus bewegt wird (und wohin), sowie den Zeitpunkt, an dem Maustaste 
+Widget empfängt. Was wir wissen müssen ist, wann der Benutzer eine Maustaste drückt, weil nur gezeichnet werden soll, wenn eine 
+Maustaste gedrückt ist. Außerdem müssen wir wissen, wann die Maus bewegt wird (und wohin), sowie den Zeitpunkt, zu dem die Maustaste 
 losgelassen wird, da dann der Zeichenzug beendet ist. Weiterhin wollen wir, daß unser Bild im Fenster gezeichnet wird und seine 
 Größe angepasst wird, wenn der Benutzer sich entschließt, das Fenster in der Größe zu verändern. Wir werden auch ein Member 
-<tt>QPointArray</tt> und einen Boolschen Wert mousePressed hinzufügen. Fügen Sie den mit dem Pfeil gekennzeichneten Code Ihrer Klasse 
+<tt>QPointArray</tt> und einen boolschen Wert mousePressed hinzufügen. Fügen Sie den, mit dem Pfeil gekennzeichneten Code, Ihrer Klasse 
 KScribbleView hinzu:
 
 <code>
@@ -1014,12 +1017,12 @@ KScribbleView hinzu:
 <p>
 
 Wir kommen jetzt zu der tatsächlichen Implementierung der Ereignis Handler. Wie in <htmlurl url="../kde_libref/index.html" name="The
-KDE Library Reference Guide"> erkärt, hat Qt gute Methoden Ereignisse zu behandeln, besonders wenn die Ziele Widgets sind. 
+KDE Library Reference Guide"> erkärt, hat Qt gute Methoden, Ereignisse zu behandeln, besonders wenn die Ziele Widgets sind. 
 <tt>QWidget</tt> als Basisklasse, preselektiert die Events und stellt Basis Event Handler zur Verfügung, die, da sie als virtuell 
 deklariert sind, überladen werden können, so daß wir definieren können, wie unser Widget auf Ereignisse reagieren soll. 
 Eine Methode ist bereits überladen: die <tt>closeEvent()</tt> Methode. Dies ist notwendig, weil unser Hauptfenster, repräsentiert in der 
 App Klasse, bereits das Schließen von Kind Fenstern preselektiert und dies behandelt; daher muß der Standard Event Handler, der nur 
-das Schließen akzeptiert, überschrieben werden um dies zu vermeiden und die App Klasse diese Arbeit machen zu lassen.
+das Schließen akzeptiert, überschrieben werden und diese Arbeit die App Klasse machen lassen.
 
 Als erstes müssen wir im Konstruktor das Standardverhalten des Widgets deklarieren, indem wir Member initialisieren und vordefinierte 
 Werte setzen:
@@ -1040,7 +1043,7 @@ Werte setzen:
     }
 </code>
 
-Wir setzen den Hintergrund auf NoBackground, einen Cursor (crossCursor) und initialisieren mousePressed und polyline. Nun beginnen 
+Wir setzen den Hintergrund auf NoBackground, setzen einen Cursor (crossCursor) und initialisieren mousePressed und polyline. Nun beginnen 
 wir mit der Implementation unseres ersten Ereignis Handlers, <tt>mousePressEvent()</tt>, um zu erkennen wann der Benutzer 
 die Maus drückt und wo.
 
@@ -1054,8 +1057,8 @@ void KScribbleView::mousePressEvent( QMouseEvent *e )
 }
 </code>
 
-Hier setzen wir mousePressed auf true, wir haben das Event also irgendwie behandelt. Die zeite Zeile ist nicht so offensichtlich: wir 
-speichern die Position, an der die Maustaste gedrückt wurde in den ersten drei Elementen unseres Feldes. Da das Feld ein 
+Hier setzen wir mousePressed auf true, wir haben das Event also irgendwie behandelt. Die zweite Zeile ist nicht so offensichtlich: wir 
+speichern die Position, an der die Maustaste gedrückt wurde, in den ersten drei Elementen unseres Feldes. Da das Feld ein 
 <tt>QPointArray</tt> ist, kann es Werte vom Typ <tt>QPoint</tt> speichern (die selber wieder einen x und y Wert enthalten). Wir werden in 
 diesem Feld Mauspositionen speichern und daraus die Zeichenroutine im mouseMoveEvent entwickeln:
 
@@ -1087,29 +1090,29 @@ void KScribbleView::mouseMoveEvent( QMouseEvent *e )
 </code>
 
 Dieser Event Handler ist wahrscheinlich der schwierigste, wir werden ihn also Schritt für Schritt durchgehen, um zu verstehen was 
-gemacht wird. Als erstes empfängt der Handler alle Mausbewegungen über dem Widget. Da wir aber nur an Bewegungen interessiert sind 
+gemacht wird. Als erstes empfängt der Handler alle Mausbewegungen über dem Widget. Da wir aber nur an Bewegungen interessiert sind, 
 wenn gleichzeitig eine Maustaste gedrückt ist, weil dann gezeichnet werden muß, haben wir gefragt ob mousePressed true ist. 
 Dies wurde vom <tt>mousePressEvent()</tt> Handler bereits gemacht, daher brauchen wir uns darum nicht weiter zu kümmern. Nun 
 beginnen wir zu zeichnen. Als erstes erzeugen wir einen <tt>QPainter</tt> und lassen ihn in den Puffer des Dokumentes zeichnen. 
 Das ist wichtig, da der Puffer die wirklichen Daten enthält, die Ansicht dient nur als Kommunikator zwischen Dokument und 
 Benutzer. Den Stift holen wir ebenfalls aus der Dokumentinstanz, indem wir <tt>currentPen()</tt> aufrufen. Die nächsten drei 
-Zeilen weisen die Werte des polyline <tt>QPoint</tt> zu und setzen Punkt 2 auf 1, 1 auf 0 und 0 auf den Punkt an den die 
+Zeilen weisen die Werte des polyline <tt>QPoint</tt> zu und setzen Punkt 2 auf 1, 1 auf 0 und 0 auf den Punkt, zu dem die 
 Mausbewegung ging (das ist der Wert an dem wir interessiert sind). Angenommen wir haben gerade die Maus gedrückt (also enthalten 
 alle Werte diese Position) und das erste Mausereignis, das die Position enthält, zu der eine Linie gezeichnet werden soll, findet 
 statt; dann wird dieser Wert wieder in das erste Element des Feldes eingetragen. Sie mögen sich fragen, warum wir dann drei 
 Elemente im Feld brauchen, wenn wir nur eine Linie von einer zu nächsten Position zeichnen wollen. Die folgenden Zeilen erklären 
 das: nachdem die Übertragung in unseren Puffer erfolgt ist (mit <tt>drawPolyline()</tt> und <tt>painter.end()</tt>), erstellen wir 
 ein Rechteck r und verwenden <tt>boundingRect()</tt> von <tt>QPointArray</tt> um ein <tt>QRect</tt> zu erhalten, das alle drei 
-Punkte enthält. Daher brauchen wir die drei Punkten, um ein fast fertiges Rechteck zu erhalten. Dann verwenden wir 
+Punkte enthält. Daher brauchen wir die drei Punkte, um ein fast fertiges Rechteck zu erhalten. Dann verwenden wir 
 <tt>normalize()</tt>, damit der linke, obere Wert am kleinsten ist (da Koordinaten von links, oben nach rechts, unten zunehmen). 
 Das nächste ist, die Größe des Rechtecks der Breite des Stiftes anzupassen, weil der Stift eine bestimmte Breite hat, die wir mit 
-<tt>penWidth()</tt> ermitteln, und das Rechteck um die Breite des Stiftes zu erweitern (Stellen Sie sich vor, die Maus wäre nur um 
+<tt>penWidth()</tt> ermitteln, und um das Rechteck um die Breite des Stiftes zu erweitern (Stellen Sie sich vor, die Maus wäre nur um 
 zwei Pixel bewegt worden, der Stift hätte aber eine Breite von 10 Pixeln, dann würde das Rechteck nicht den ganzen gezeichneten 
 Bereich enthalten). Schließlich markieren wir das Dokument noch als modifiziert und verwenden die <tt>bitBlt()</tt> Funktion, um 
-das Rechteck aus dem Puffer in das Widget zu kopieren. bitBlt arbeitet bitweise und idt sehr schnell, dies ist also eine 
-gute Methode den gezeichneten Bereich in das Widget zu kopieren, anstatt das ganze Widget neuzuzeichnen. Seine Argumente sind: 
+das Rechteck aus dem Puffer in das Widget zu kopieren. bitBlt arbeitet bitweise und ist sehr schnell, dies ist also eine 
+bessere Methode den gezeichneten Bereich in das Widget zu kopieren, als das ganze Widget neuzuzeichnen. Seine Argumente sind: 
 Erst das Objekt in das gezeichnet werden soll (das Ziel), in diesem Fall ist es unser Widget, wir müssen also den Zeiger 
-<bf>this</bf> verwenden. Die nächsten beiden Argumente sind die linke, obere Ecke des Zieles gefolgt von der Quelle mit deren Höhe 
+<bf>this</bf> verwenden. Die nächsten beiden Argumente sind die linke, obere Ecke des Zieles, gefolgt von der Quelle, mit deren Höhe 
 und Breite. Da die pixmap Koordinaten die gleichen sind, die auch unser Widget verwendet (weil unser Pixmap in der linken oberen 
 Ecke gezeichnet wurde), sind die Koordinaten für den linken, oberen Punkt bei Quelle und Ziel identisch. Darauf muß in einem der 
 nächsten Schritte geachtet werden, daher wird es hier schon erwähnt. Als nächstes kommt, was beim Loslassen der Maustaste 
@@ -1121,16 +1124,16 @@ void KScribbleView::mouseReleaseEvent( QMouseEvent * ) {
 }
 </code>
 
-Wir sind jetz mit der Implementierung der Benutzerinteraktion fertig, was die Zeichenfunktione angeht. Das Beispiel zeigt, daß es 
-nicht alzu kompliziert ist ein Document View Modell zu benutzen. Erzeugen Sie nur die Dokumentinstanz, so daß sie die Inhalte 
-enthält und kopieren Sie die Inhalte in Ihre Ansicht. 
+Wir sind jetzt mit der Implementierung der Benutzerinteraktion fertig, was die Zeichenfunktionen angeht. Das Beispiel zeigt, daß es 
+nicht allzu kompliziert ist, ein Document View Modell zu benutzen. Erzeugen Sie nur die Dokumentinstanz, so daß sie die Inhalte 
+enthält, und kopieren Sie die Inhalte in Ihre Ansicht. 
 
 
 <sect>Zeichnen und Größe des Dokuments ändern.
 <p>
 
 Übrig bleiben zwei virtuelle Handler, die reimplementiert werden müssen. Als erstes müssen wir darauf achten, daß unser Bild im 
-Fenster gezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
+Fenster neu gezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
 nicht mehr da sein, wenn sie wieder zu Ihrer Zeichnung wechseln, es sei denn, Ihr Zeichenereignis wird ausgeführt, so daß das 
 Bild neu gezeichnet wird: 
 
@@ -1150,10 +1153,10 @@ der, neugezeichnet wird, also holen wir uns die Geometrie des Events ( <tt>e->re
 <tt>bitBlt()</tt> genau wie wir es bei <tt>mouseMoveEvent()</tt> gemacht haben.
 
 Das einzige, um das wir uns nicht gekümmert haben, ist die Größe des Pixmaps. Wir haben sie nirgendwo gesetzt - wir haben noch 
-nicht einmal das Pixmap aus der document Klasse benutzt, außer zum Laden und Speichern- aber diese Methoden werden nicht 
-aufgerufen, wenn ein neues Bild erzeugt wird. Es scheint also unser Pixmap weder eine Größe noch einen vordefinierten Hintergrund 
+nicht einmal das Pixmap aus der Dokumentklasse benutzt, außer zum Laden und Speichern- aber diese Methoden werden nicht 
+aufgerufen, wenn ein neues Bild erzeugt wird. Es scheint also, unser Pixmap habe weder eine Größe noch einen vordefinierten Hintergrund 
 (selbst wenn wir die Größe gesetzt hätten, wären die Inhalte zufällige Farben, weil es nicht initialisiert wurde). Andererseits 
-haben wir die Tatsache, daß die KScribbleView Instanzen in der Größe angepasst werden, wenn sie angezeigt werden- wenigstens auf 
+haben wir die Tatsache, daß die KScribbleView Instanzen in der Größe angepasst werden wenn sie angezeigt werden- wenigstens auf 
 die Minimalgröße. Das ist der Punkt, an dem wir auch die Initialisierung vornehmen können, weil der Benutzer die Größe manuell 
 ändern kann und das Widget ebenfalls ein resize Event erhält. Aus Gründen der Einfachheit, setzen wir die Pixmap Größe gleich der 
 Widgetgröße. All dies geschieht im Event Handler <tt>resizeEvent()</tt>:
@@ -1183,7 +1186,7 @@ Kopie des Pixmaps in tmp. Dann verändern wir den Puffer (das Dokument), füllen e
 von tmp in den Puffer zurück. Die ändert unser Pixmap immer synchron mit dem Widget, von dem es angezeigt wird, aber es verliert 
 nicht die Daten, die außerhalb des sichtbaren Bereiches liegen, wenn das Widget verkleinert wird.
 
-Wir sind an einem Punkt angekommen, an dem wir die Funktionalität unserer Anwendung testen können. Drücken Sie "Ausführen" und 
+Wir sind an einem Punkt angekommen, an dem wir die Funktionalität unserer Anwendung testen können. Drücken Sie "Ausführen", und 
 nachdem <em>KScribble</em> angezeigt wird, sind Sie bereit, Ihr erstes Bild damit zu zeichnen !
 
 
@@ -1193,15 +1196,15 @@ Wie wir gesehen haben, haben wir <em/KScribble/ bereits die Fähigkeit gegeben, B
 speichern, haben durch Überladen virtueller Methoden Interaktion ermöglicht, und wir haben die erste Funktionalität erreicht- wir 
 können auch Bilder zeichnen. Aber als wir die <tt>QPen</tt> Instanz erzeugt haben, haben wir vordefinierte Werte für den Stift 
 verwendet; die Farbe ist Schwarz und die Breite ist auf 3 Pixel eingestellt. Da Sie für gewöhnlich diese Werte ändern können 
-wollen, müssen wir die Haupt GUI um Funktionen, diese Werten zu setzen, erweitern, je nachdem welches Fenster gerade aktiv ist und 
+wollen, müssen wir die Haupt-GUI um Funktionen, diese Werte zu setzen, erweitern, je nachdem welches Fenster gerade aktiv ist und 
 welches Dokument damit verbunden ist. Dieses Kapitel wird Ihnen daher zeigen:
 
 <itemize>
 <item>Das Hinzufügen eines neuen Menüs zur Menüleiste
-<item>Erweiterung der Werkzeugleiste um Icons für die in der Menüleiste definierten Methoden
+<item>Erweiterung der Werkzeugleiste um Icons, für die in der Menüleiste definierten Methoden
 <item>Die Erstellung eines neuen Dialoges mit dem KDevelop Dialogeditor
 <item>Verbinden der neuen Kommandos der Menü- und Werkzeugleiste mit Aufrufen der Dialoge
-<item>Ermöglichen der Änderung der Stiftgröße in der document Klasse
+<item>Ermöglichen der Änderung der Stiftgröße in der Dokumentklasse
 </itemize>
 
 Desweiteren fügen wir eine Methode hinzu, den Inhalt des gesamten Dokuments über das Menü zu löschen.
@@ -1237,7 +1240,7 @@ class KScribbleApp
 </code>
 
 Jetzt werden wir das Menü selbst erzeugen. Ändern Sie die Implementation der Methode <tt>KScribbleApp::initMenuBar()</tt> und 
-editieren Sie die mit dem Pfeil markierten Zeilen:
+editieren Sie die, mit dem Pfeil markierten Zeilen:
 
 <code>
 void KScribbleApp::initMenuBar()
@@ -1261,10 +1264,10 @@ void KScribbleApp::initMenuBar()
 </code>
 
 Sie sehen, daß wir zunächst das Menü mit <tt>new QPopupMenu()</tt> erzeugen. Dann verwenden wir 
-die insertItem Methoden, zum Hinzufügen der Menüeinträge Color und Brush. Die sichtbaren 
+die insertItem Methode, zum Hinzufügen der Menüeinträge Color und Brush. Die sichtbaren 
 Kommandos werden mit der Methode <tt>i18n()</tt> eingefügt, womit sichergestellt ist, daß Sie 
 Ihre Applikation internationalisieren können. Als generelle Regel kann gesagt werden, daß Sie 
-alle später sichtbaren Texte mit der Methode <tt>i18n()</tt> deklarieren. Nur-Qt Programme, die 
+alle später sichtbaren Texte mit der Methode <tt>i18n()</tt> deklarieren sollten. Nur-Qt Programme, die 
 Qt > 2.0 verwenden, benutzen dazu die Methode <tt>tr()</tt>, da Qt eigene Verfahren hat, 
 Anwendungen zu internationalisieren. Das zweite Argument ist ein Makro, die ID des 
 Menüeintrages. Diese ID ist eine Nummer, die wir mit #define in der resource.h, in der Sie 
@@ -1275,13 +1278,13 @@ Deshalb muß jeder Menüeintrag, unbhängig davon, in welchem Popupmenü er erschein
 einzigartige Nummer besitzen, und da wir uns Nummern schlecht merken können, ist die Verwendung 
 eines #define für die ID eine gute Lösung. Das Popupmenü wird nun ebenfalls mit 
 <tt>insertItem()</tt> der Menüleiste hinzugefügt, und zwar mit einem Zeiger auf das Menü als 
-zweitem Argument. Beachten Sie, daß wir das Popupmenü nach dem Edit- und vor dem Viewmenü 
+zweitem Argument. Beachten Sie, daß wir das Popupmenü <em/nach/ dem Edit- und <em/vor/ dem Viewmenü 
 eingefügt haben, es wird also später zwischen diesen beiden Menüs erscheinen. Was auch wichtig 
 bei der Erstellung von Menüs ist, ist, daß sie dem Benutzer auch über Shortcuts zur Verfügung 
 gestellt werden sollten; normalerweise sehen Sie in Menüs einen unterstrichenen Buchstaben, der 
 zusammen mit ALT die entsprechende Funktion aufruft. Als Programmierer, müssen Sie diesen 
 Buchstaben durch ein vorangestelltes "&amp;" setzen, das "Pen" Menü wird also später durch 
-drücken von ALT+P erreichbar sein. Innerhalb des Menüs kann der Benutzer auch nur den 
+drücken von ALT+P erreichbar sein. Innerhalb des Menüs kann der Benutzer auch <em/nur/ den 
 Buchstaben eingeben, um den entsprechen Menüpunkt auszuführen, Sie sollten also für die anderen 
 Menüpunkte ebenfalls Tastaturkürzel zur Verfügung stellen. Achten Sie darauf, den Code zum 
 Einfügen von Einträgen in Gruppen zusammenzuschreiben, die Sie überblicken können, damit Sie 
@@ -1303,13 +1306,13 @@ resource.h ///////////////////////////////////////////////////////////////////
 #define ID_PEN_BRUSH                14020
 </code>
 
-Sie sehen, daß die Nummern für jeden Eintrag einzigartig sind- Sie müssen darauf achten, 
-nicht zweimal dieselbe Nummer zu vergeben- sollte es aber dennoch einmal versehentlich 
+Sie sehen, daß die Nummern für jeden Eintrag einzigartig sind. Sie müssen darauf achten, 
+nicht zweimal dieselbe Nummer zu vergeben. Sollte es aber dennoch einmal versehentlich 
 passieren, wird Sie der Compiler über die Redefinition informieren.
 
 Das ist zum jetzigen Zeitpunkt alles, das Sie zum Hinzufügen eines neuen Menüs tun müssen. Die 
-ausgeführten Aktionen sind: "Color", Aufruf des Farbauswahldialogs, "Brush", Aufruf des Dialogs 
-zum Setzen der Stiftbreite (diesen Dialog werden wir noch erstellen). Aber zuerst werden wir im 
+ausgeführten Aktionen sind: "Color" (Aufruf des Farbauswahldialogs) und "Brush" (Aufruf des Dialogs 
+zum Setzen der Stiftbreite). Letzeren Dialog werden wir noch erstellen, aber zuerst werden wir im 
 nächsten Kapitel auch die Werkzeugleiste um zwei Icons für diese Aktionen erweitern.
 
 
@@ -1319,7 +1322,7 @@ nächsten Kapitel auch die Werkzeugleiste um zwei Icons für diese Aktionen erweit
 Wenn Sie neue Kommandos über Knöpfe in der Werkzeugleiste zur Verfügung stellen möchten, können 
 Sie dies leicht mit der <tt>initToolbar()</tt> Methode der <tt>App</tt> Klasse tun. Hier 
 entscheiden wir uns, je einen Knopf für die beiden Menüeinträge im Stiftmenü hinzuzufügen, aber 
-diese Knöpfe brauchen Icons. Sie können sie entweder im KDE Verzeichnis toolbar finden, oder, 
+diese Knöpfe brauchen Icons. Sie können sie entweder im KDE Verzeichnis "toolbar" finden, oder, 
 wenn keins der Icons zu der Aktion paßt, sie selbst erzeugen. KIconEdit ist gut dafür geeignet 
 Icons zu erstellen, also werden wir sie zuerst erzeugen. Wählen Sie "Neu" aus dem KDevelop 
 Dateimenü, gehen Sie auf den Linux/KDE Tabulator und wählen Sie dann "Icon" als Dateityp. Das 
@@ -1331,8 +1334,8 @@ KIconEdit innerhalb von KDevelop geöffnet. Zeichnen Sie etwas, daß dem Benutzer 
 Knopfes zeigt, speichern Sie das Pixmap und wählen Sie dann den LFV / RFV in KDevelop. Wählen 
 Sie das Icon mit der rechten Maustaste aus und gehen Sie im Popupmenü auf "Eigenschaften". Sie 
 sehen, daß das Icon der Distribution hinzugefügt wurde, damit es aber später von Ihrem Programm 
-gefunden werden kann, müssen Sie Sie das Installationsziel ebenfalls angeben. Markieren Sie die 
-die "installieren" Option und geben Sie dann darunter ein:
+gefunden werden kann, müssen Sie das Installationsziel ebenfalls angeben. Markieren Sie die "installieren" Option und geben 
+Sie dann darunter ein:
 
 <tt>$(kde_datadir)/kscribble/toolbar/pencolor.xpm</tt>
 
@@ -1341,7 +1344,7 @@ jede Anwendung ihr Unterverzeichnis mit zusätzlich benötigten Dateien hat. Icons
 einem Unterverzeichnis namens toolbar abgelegt werden, damit der icon loader die Pixmaps für 
 Ihr Programm finden kann. 
 
-Wenn Sie damit fertig sind, wiederholen Sie die gleichen Schritte für das zweite Icon zum 
+Wenn Sie damit fertig sind, wiederholen Sie die gleichen Schritte für das Icon zum 
 Setzen der Stiftweite. Nennen Sie dieses Icon "penwidth.xpm".
 
 Nun müssen wir nur noch Knöpfe auf der Werkzeugleiste erzeugen; fügen Sie dazu die markierten 
@@ -1364,21 +1367,21 @@ void KScribbleApp::initToolBar()
 
 Wir verwenden an dieser Stelle die Methoden von KToolBar um die Knöpfe einzufügen. Das erste 
 Argument, <tt>BarIcon()</tt>, veranlaßt die Methode, das Icon für den Knopf zu laden. Was etwas 
-ungewöhnlich erscheint, ist, daß wir uns nicht um die Dateierweiterung zu kümmern brauchen. Das 
+ungewöhnlich erscheint ist, daß wir uns nicht um die Dateierweiterung zu kümmern brauchen. Das 
 bevorzugte Format unter KDE 2 ist *.PNG, aber es funktioniert auch mit xpm's ( Sie könnten 
-ImageMagick für die Konvertierung der Icons nach PNG verwenden- oder, zu einem späteren 
+ImageMagick für die Konvertierung der Icons nach PNG verwenden, oder, zu einem späteren 
 Zeitpunkt,<em>KScribble</em> !). 
 
 Das zweite Argument ist wiederum die ID. Die Kommandos werden dann automatisch aktiviert, da 
-<tt>toolBar()</tt> bereits mit denselben Methoden verbunden ist wie die Menübar über das Signal 
+<tt>toolBar()</tt> bereits mit denselben Methoden verbunden ist wie die Menübar, über das Signal 
 <tt>activated()</tt>. Das dritte Argument steht für "erreichbar" wenn wahr, "deaktiviert" wenn 
-falsch; da wir die Knöpfe verfügbar haben wollen, setzen wir es auf wahr. Schließlich setzen wir 
+falsch; da die Knöpfe verfügbar sein sollen, setzen wir es auf wahr. Schließlich setzen wir 
 noch eine Kurzinfo für die Knöpfe, die wir wieder in <tt>i18n()</tt> einschließen, um die 
 Internationalisierung zu ermöglichen. 
 
-Nun sind Sie für's erste fertig- die GUI ist, zumindest visuell, erweitert. Sie können 
+Nun sind Sie für's erste fertig. Die GUI ist, zumindest visuell, erweitert. Sie können 
 <em/KScribble/ wieder kompilieren und ausführen und sich anschauen, wie es aussieht- natürlich haben 
-die neuen Elemente ind der Menü- und in der Werkzeugleiste noch keine Funktion- dies wird sich aber 
+die neuen Elemente in der Menü- und in der Werkzeugleiste noch keine Funktion- dies wird sich aber 
 im nächsten Abschnitt ändern. Sie werden vielleicht auch bemerken, daß die Icons, die wir 
 hinzugefügt haben, nicht angezeigt werden. Dies liegt daran, daß wir <em/KScribble/ nicht 
 installiert haben, und so werden sie nicht gefunden. Alle anderen Icons werden bereits mit den KDE 
@@ -1398,8 +1401,8 @@ drei weitere Knöpfe: einen zum Zurücksetzen der Weite, einen zum Abbrechen des D
 hinzufügen, was wichtig ist, weil der Fokus der Tabulatortaste der Reihenfolge folgt, in der die 
 Widgets erstellt werden. D.h., wenn Sie mit dem "OK" Knopf anfangen, bringt uns das Drücken der 
 Tabtaste zuerst zur Spinbox und dann zum "Cancel" Knopf - was so nicht erwartet wird. Der Tabfokus 
-sollte den Elementen von oben nach unten und von rechts nach links folgen, also müssen wir den 
-Dialog auch in dieser Reihenfolge erstellen. Um Elementen zum Dialog hinzuzufügen, wählen Sie den 
+sollte den Elementen von oben nach unten und von links nach rechts folgen, also müssen wir den 
+Dialog auch in dieser Reihenfolge erstellen. Um Elemente zum Dialog hinzuzufügen, wählen Sie den 
 Widgets Tabulator im linken Panel. Dort werden alle verfügbaren Widgets durch Icons repräsentiert, 
 damit Sie Ihren Dialog erstellen können. Ein Druck auf ein Widget Icon erzeugt das neue Element in 
 der linken, oberen Ecke des Hauptwidgets. Von dort können Sie es mit der Maus zu der Position 
@@ -1407,10 +1410,9 @@ ziehen, an der Sie das Element haben wollen. Desweiteren können Sie die Einstell
 gewählte Widget im "Widgeteigenschaften" Panel auf der rechten Bilschirmseite vornehmen.
 
 <bf>Das Label:</bf> Wählen Sie <tt>QLabel</tt> aus dem Widgettabulator und plazieren Sie es an 
-Position x:50, y:20. Dann gehen Sie zum "General" Abschnitt in den Widgeteigenschaften. Ändern Sie 
-den den Text der Eigenschaft "Text" von "Label:" nach "Pen Width:". Passen Sie die Breite in 
-x-Richtung dem Text des Labels an, ein Wert von 120 sollte reichen. Sie können dies entweder mit der 
-Maus machen, oder den Wert im "Geometry" Abschnitt eingeben.
+Position x:50, y:20. Dann gehen Sie zum "General" Abschnitt in den Widgeteigenschaften. Ändern Sie den Text der Eigenschaft "Text" 
+von "Label:" nach "Pen Width:". Passen Sie die Breite in x-Richtung dem Text des Labels an, ein Wert von 120 sollte reichen. 
+Sie können dies entweder mit der Maus machen, oder den Wert im "Geometry" Abschnitt eingeben.
 
 <bf>Die Spinbox:</bf> Wählen Sie <tt>QSpinbox</tt> und plazieren Sie sie rechts neben dem eben 
 erstellten Label. Setzen Sie den Variablennamen im Abschnitt "C++ Code" auf "width_spbox". Die 
@@ -1419,7 +1421,7 @@ Minimal- und Maximalwerte sind 1 und 100, was für unsere Stiftweite ausreichen s
 <bf>Die Knöpfe:</bf> Schließlich brauchen wir noch unsere drei Knöpfe. Der linke Knopf soll der 
 Standardknopf sein. Erzeugen Sie einen <tt>QPushbutton</tt> und plazieren Sie ihn an einer günstigen 
 Stelle unten im Dialog, setzen Sie den Variablennamen auf "default_btn" und den Text auf "Default". 
-Machen Sie das gleiche mit dem "OK" Knopf, Variablenname "ok_btn" und dem "Cancel" Knopf", 
+Machen Sie das gleiche mit dem "OK" Knopf, Variablenname "ok_btn" und dem "Cancel" Knopf, 
 Variablenname "cancel_btn". Setzen Sie die Knopftexte auf "&amp;OK" und "&amp;Cancel".
 
 Wenn Sie mit Ihrem Layout zufrieden sind, wählen Sie "Alle Quellen erzeugen" aus dem "Erstellen" 
@@ -1430,7 +1432,7 @@ der benötigt wird, damit der Dialog auch etwas macht.
 
 <sect>Verbinden und Einstellen
 <p>
-Nachdem wie nun das GUI des Dialogs erstellt haben, müssen wir den Köpfen noch die Funktionalität 
+Nachdem wie nun die GUI des Dialogs erstellt haben, müssen wir den Köpfen noch die Funktionalität 
 geben, und Mittel zur Verfügung stellen, die Werte der Spinbox zu holen und zu setzen, weil wir 
 wollen, daß der Dialog den aktuellen Wert anzeigt, wenn er aufgerufen wird, und wir möchten den 
 eingestellten Wert auslesen, wenn der "OK" Knopf gedrückt wird. 
@@ -1492,7 +1494,7 @@ void KPenBrushDlg::slotDefault()
 }
 </code>
 
-Dies setzt den Standardwert für den Stift auf 3 Pixel.
+Dies setzt den Standardwert für die Stiftbreite auf 3 Pixel.
 
 Wir sind nun mit unserem ersten Dialog fertig und können uns den anderen Klassen der Anwendung 
 zuwenden, um noch einiges zu adaptieren und Methoden zu implementieren, die den Dialog aufrufen.
@@ -1616,7 +1618,7 @@ void KScribbleApp::slotPenColor()
 </code>
 
 Wenn wir uns den Code ansehen, erkennen wir, daß wir eine weitere neue Methode von 
-<tt>KScribbleDoc</tt> verwenden, um die Farbe des Srifts zu setzen. Diese Methode müssen 
+<tt>KScribbleDoc</tt> verwenden, um die Farbe des Stifts zu setzen. Diese Methode müssen 
 wir ebenfalls implementieren: 
 
 <code>
@@ -1639,7 +1641,7 @@ Dialoge, die wir aufrufen wollen, eingefügt.
 erstellt.
 <item> Als nächstes haben wir die Methoden geschrieben, die die Dialoge aufrufen und die 
 Eigenschaften setzen die wir ändern wollen.
-<item> Schließlich haben wir die benötigten Set-Methoden hinzugefügt, so daß wir in der 
+<item> Schließlich haben wir die benötigten Set-Methoden hinzugefügt, sodaß wir in der 
 Lage sind, die Werte zu ändern, nachdem die Dialoge ausgeführt worden sind.
 </itemize>
 
@@ -1652,7 +1654,7 @@ des Dokumentes und die Interaktion mit den Ansichten beeinflussen.
 <p>
 
 In diesem Kapitel werden wir die Funktionalität unseres Widgets durch zwei Verbesserungen 
-erweitern: Synchronisierte Ansichten und rollbare Ansichten.
+erweitern: synchronisierte Ansichten und rollbare Ansichten.
  
 <sect>Synchronisierung der Ansichten
 <p>
@@ -1667,10 +1669,10 @@ Sie eine Ansicht, die nicht die aktuellen Daten enthält, verdecken und sie dann 
 den Vordergrund holen, werden die richtigen Daten angezeigt. Das liegt daran, das jede 
 Ansicht, wenn Sie verdeckt war, ein paint-Ereignis vom Fenstersystem erhält, wenn Sie 
 wieder in den Vordergrund kommt, dann <tt>KScribbleView::paintEvent()</tt> aufruft und 
-dadurch den Bereich, der verdeckt war, schließlich neuzeichnet. Was wir erreichen wollen, 
-ist das alle Ansichten synchron mit der Ansicht gezeichnet werden, in der der Benutzer 
-gerade arbeitet. Tatsächlich werden Sie sehen, das diese Erweiterung leicht zu 
-bewerkstelligen ist. Die document Klasse bietet uns bereits eine Methode 
+dadurch den Bereich, der verdeckt war schließlich neuzeichnet. Was wir erreichen wollen, 
+ist daß alle Ansichten synchron mit der Ansicht gezeichnet werden, in der der Benutzer 
+gerade arbeitet. Tatsächlich werden Sie sehen, daß diese Erweiterung leicht zu 
+bewerkstelligen ist. Die Dokumentklasse bietet uns bereits eine Methode 
 <tt>updateAllViews()</tt>, welche die Methode <tt>update()</tt> für jede Ansicht in der 
 Ansichtenliste des Dokuments aufruft. Das macht es sehr einfach die Inhalte der Ansichten 
 zu synchronisieren - jedes Mal, wenn der Inhalt verändert wird, hier durch Mausbewegungen 
@@ -1700,15 +1702,15 @@ darstellbare Bereich ist. Beginnend von der oberen, linken Ecke, wird der Rest d
 aus der Sicht des Benutzers ausgeschnitten. Eine Rollansicht ist ein Widget, das auf der 
 rechten und unteren Seite Rollbalken zur Verfügung stellt, mit deren Hilfe der Benutzer 
 den Inhalt des Fensters verschieben kann. Tatsächlich wird das Dokument in seiner ganzen 
-Größe gezeigt, aber die Ansicht kann innerhalb des Dokuments bewegt werden, so daß jeder 
+Größe gezeigt, aber die Ansicht kann innerhalb des Dokuments bewegt werden, sodaß jeder 
 Teil mit Hilfe der Scrollbars angezeigt werden kann. Glücklicherweise gibt es in Qt die 
 Klasse <tt>QScrollView</tt>,die selber von <tt>QWidget</tt> abgeleitet ist und die gleiche 
 Grundfunktionalität wie ein gewöhnliches Widget bietet, jedoch den Inhalt der Ansicht bei 
 der Verwendung von Scrollbars verwaltet - mit der zusätzlichen Option, daß der 
 Programmierer entweder einfach nur eine Instanz von <tt>QScrollView</tt> verwendet, die zu 
 verwaltenden Kindfenster mit der Rollansicht als Eltern erstellt und sie mit 
-<tt>addChild()</tt> der Rollansicht hinzufügt oder eine Ansicht von <tt>QScrollView</tt> 
-ableitet und dann, statt direkt in das Widget, in den viewport zeichnet, der ein 
+<tt>addChild()</tt> der Rollansicht hinzufügt, oder eine Ansicht von <tt>QScrollView</tt> 
+ableitet und dann, statt direkt in das Widget, in den Viewport zeichnet, der ein 
 definierter Bereich innerhalb der Rollansicht ist. Der Unterschied hier ist, daß 
 <tt>QScrollView</tt> einen Satz von Ereignisbehandlungsroutinen, ähnlich denen von 
 <tt>QWidget</tt>, extra für den Viewport bereitstellt. Das was also vorher 
@@ -1729,7 +1731,7 @@ diese Werte, geändert werden.
 <tt>QScrollView</tt>. 
 <item> Umbenennen der virtuellen Methoden in die entsprechenden Viewportmethoden aus 
 <tt>QScrollView</tt>. 
-<item> Adaptieren der virtuellen Event Handler, so daß sie die Geometrie des Viewports 
+<item> Adaptieren der virtuellen Event Handler, sodaß sie die Geometrie des Viewports 
 beeinflussen. Das bedeutet, daß die alte Implementation auf die Geometrie von 
 <tt>QWidget</tt> vertraut, die in der linken, oberen Ecke eines Widgets beginnt. Wenn die 
 Ansicht gerollt wird und diese Ecke ist nicht sichtbar, müssen wir dafür sorgen, daß die 
@@ -1740,7 +1742,7 @@ von <tt>QWidget</tt> gelieferten Positionen in Viewportkoordinaten übersetzt wer
 <p>
 
 Wie bereits erwähnt, müssen wir sowohl die Größe eines Dokuments ändern, als auch diese Größe initialisieren, und wir müssen eine 
-Methode breitstellen, die diese Größe für die Ansichten holt. Dazu fügen wir die Variable <tt>QSize size</tt> sowie die Methode 
+Methode bereitstellen, die diese Größe für die Ansichten holt. Dazu fügen wir die Variable <tt>QSize size</tt> sowie die Methode 
 <tt>docSize()</tt> in <tt>KScribbleDoc</tt> ein:
 
 <code>
@@ -1757,7 +1759,7 @@ private:
 
 </code>
 
-Jetzt müssen wir alle Methoden, die Dokumentinhalte öffnen oder initialisieren, modifizieren - <tt>newDocument()</tt> und
+Jetzt müssen wir alle Methoden, die Dokumentinhalte öffnen oder initialisieren, modifizieren.Dies sind <tt>newDocument()</tt> und
 <tt>openDocument()</tt>:
 
 <code>
@@ -1798,7 +1800,7 @@ Jetzt müssen wir alle Methoden, die Dokumentinhalte öffnen oder initialisieren, 
 In <tt>newDocument()</tt> initialisieren wir die Größe mit Standardwerten von 300 Pixeln Breite und 200 Pixeln Höhe. Das ist genug 
 für ein kleines Bild und wir könnten auch immer noch einen Dialog zur Größenänderung hinzufügen. Wenn es daran geht, das Bild zu 
 öffnen, müssen wir die Größe auf die des Bildes setzen. Dies kann man erreichen, indem man <tt>QPixmap::size()</tt> aufruft, was 
-wir bereits in <tt>openDocument()</tt> verwendet haben. Dann sind mit dem Setzen der Größen fertig und wir können damit beginnen, 
+wir bereits in <tt>openDocument()</tt> verwendet haben. Dann sind mit dem Setzen der Größen fertig, und wir können damit beginnen, 
 KScribbleView zu reimplementieren und eine Rollansicht daraus zu machen. 
 
 <sect>Adaptieren der Ansicht
@@ -1830,9 +1832,9 @@ class KScribbleView : public QScrollView
 }
 </code>
 
-An dieser Stelle haben wir zuerst durch als Basisklasse ersetzt und die erforderliche Headerdatei eingesetzt.Außerdem haben wir 
-alle implementierten Event Handler, die mit Interaktion bezüglich des Inhalts der Rollansicht zu tun haben, durch die 
-entsprechenden Methoden aus <tt>QScrollView</tt> ersetzt und haben das resizeEvent auskommentiert. Nun können wir nit der 
+An dieser Stelle haben wir zuerst <tt>QWidget</tt> durch <tt>QScrollView</tt> als Basisklasse ersetzt und in die erforderliche Headerdatei 
+eingesetzt.Außerdem haben wir alle implementierten Event Handler, die mit Interaktion bezüglich des Inhalts der Rollansicht zu tun haben, 
+durch die entsprechenden Methoden aus <tt>QScrollView</tt> ersetzt und haben das resizeEvent auskommentiert. Nun können wir mit der 
 Implementation dieser Methoden beginnen und die Größe unseres Bildes verwenden. Da eine Ansicht immer erst nach dem Dokument 
 existiert, können wir sowohl die Größe des Widgets (die Viewportgröße), als auch die des Inhalts direkt im Konstruktor anpassen.
 
@@ -1858,12 +1860,12 @@ KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* na
 </code>
 
 Beachten Sie, daß sich vorher <tt>resizeEvent()</tt> um die Gleichheit der Größe der Zeichenfläche und des Widgets gekümmert hat. 
-Zur gleichen Zeit wurde dabei auch die Größe des Dokuments geändert, so daß das Bild immer die gleiche Größe wie das Widget hatte. 
+Zur gleichen Zeit wurde dabei auch die Größe des Dokuments geändert, sodaß das Bild immer die gleiche Größe wie das Widget hatte. 
 Da wir jetzt bereits die Größe des Dokuments initialisiert haben (in <tt>newDocument()</tt> und <tt>openDocument()</tt>), passen 
 wir jetzt die Größe des Inhalts einfach durch Aufruf von <tt>resizeContents()</tt> aus <tt>QScrollView</tt> an die Größe des 
 Dokuments an. Sie sehen auch, daß wir den Cursor für das Widget von dem allumfassenden Widget auf den Viewport geändert haben, den 
 wir mit <tt>viewport()</tt> ermitteln können. Jetzt können wir wieder die Event Handler implementieren. Zuerst sollten wir auf 
-das paintEvent achten, da dies eines der wichtigsten ist, weil es immer aufgerufen wird, wenn das Widget sichtbar wird oder seine 
+das paintEvent achten, da dies eines der wichtigsten Events ist, weil es immer aufgerufen wird, wenn das Widget sichtbar wird oder seine 
 Größe ändert. 
 
 <bf>Achtung:</bf> Denken Sie daran die <tt>resizeEvent()</tt> Implementation auszukommentieren!
@@ -1887,7 +1889,7 @@ vertauschen:
 
 bitBlt( viewport(), -contentsX(), -contentsY(), &amp;doc->buffer, 0, 0 );
 
-Die letzten Änderungen, die wir noch brauchen, ist die Änderung des Maus Eventhandlers. Im Moment hat <tt>mouseMoveEvent()</tt>, 
+Die letzte Änderung, die wir noch brauchen, ist die Änderung des Mauseventhandlers. Im Moment hat <tt>mouseMoveEvent()</tt>, 
 das zu <tt>viewportMouseMoveEvent()</tt> wird, auch einen <tt>bitBlt()</tt> Aufruf. Hier müssen wir die gleichen Änderungen 
 vornehmen, wie beim paint Event. Weiterhin haben wir im <tt>mousePressEvent()</tt> und dem <tt>mouseMoveEvent()</tt> die Position 
 der Events mit <tt>e->pos()</tt> geholt. Diese Abfrage liefert uns nun die Position eines Widgets - nicht die des Inhalts, also 
@@ -1919,20 +1921,20 @@ müssen wir dies mit <tt>viewportToContents()</tt> übersetzen, damit an die korre
   }
 </code>
 
-In <tt>viewportMouseMoveEvent()</tt> mussten wir wieder das Ziel von this nach <tt>viewport()</tt> ändern - und damit die 
+In <tt>viewportMouseMoveEvent()</tt> mußten wir wieder das Ziel von this nach <tt>viewport()</tt> ändern - und damit die 
 Positionen übersetzen. Diesmal haben wir die zweite Variante des Aufrufs, den wir in <tt>viewportPaintEvent()</tt> verwendet 
-haben, benutzt, indem wir die contentsX und contentsY subtrahiert haben um das Rechteck, das die aktuelle Zeichnung enthält, an 
+haben, benutzt, indem wir contentsX und contentsY subtrahiert haben um das Rechteck, das die aktuelle Zeichnung enthält, an 
 die korrekte Stelle des Viewports zu kopieren.
 
-Schließlich werden wir noch eine kleine Änderung an der <tt>update()</tt> Methode vornehmen: warum sollten wir jedes mal das ganze 
+Schließlich werden wir noch eine kleine Änderung an der <tt>update()</tt> Methode vornehmen: warum sollten wir jedesmal das ganze 
 Widget neuzeichnen? Dies wird in den meisten Fällen die Performance herabsetzen und zu dem sogenannten "Flicker" Effekt führen. 
 Dieser Effekt tritt manchmal bei Widgets auf, aber es gibt einige Möglichkeiten dieses Verhalten zu verringern. Statt 
 <tt>repaint()</tt> aufzurufen, könnten wir ebensogut <tt>repaint(false)</tt> verwenden. Dadurch werden die Inhalte nicht vor dem 
 Zeichnen gelöscht. Da wir den Inhalt des Dokuments direkt in das Widget kopieren, müssen wir die Daten nicht löschen, weil sie 
-sowieso überschrieben werden. Die Verbindung mit <tt>QScrollView</tt> können wir die Zeichenaktionen sogar noch weiter reduzieren: 
+sowieso überschrieben werden. In Verbindung mit <tt>QScrollView</tt> können wir die Zeichenaktionen sogar noch weiter reduzieren: 
 wir beschränken die update Methode darauf <tt>repaint()</tt> auf dem viewport() Widget aufzurufen, da dies wiederum 
 <tt>viewportPaintEvent()</tt> aufruft. Außerdem können wir, wenn das Dokument kleiner als der Viewport ist, das paint Event noch 
-auf das Rechteck des Viewports beschränken in dem das Dokument angezeigt wird. Die sichtbare Höhe und Breite können wir uns holen 
+auf das Rechteck des Viewports beschränken, in dem das Dokument angezeigt wird. Die sichtbare Höhe und Breite können wir uns holen 
 und zu dem zu zeichnenden Rechteck zusammensetzen. Zusätzlich verwenden wir false als erase Parameter, so daß die Dokumentenfläche 
 nicht gelöscht wird: 
 
@@ -1943,12 +1945,12 @@ viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
 }
 </code>
 
-Jetzt sind wir fertig ! Dieses Kapitel war sicher eines, der am schwierigsten zu implementierenden un zu verstehenden - 
-insbesondere dort, wo es um die sich ändernden Geometrien geht. Andererseits haben wir unserer Anwendung durch die rollbaren 
+Jetzt sind wir fertig ! Dieses Kapitel war sicher eines, der am schwierigsten zu implementierenden und zu verstehenden - 
+insbesondere dort, wo es um die, sich ändernden Geometrien ging. Andererseits haben wir unserer Anwendung durch die rollbaren 
 und synchronisierten Ansichten, eine vollkommen andere Funktionalität verliehen.
 
-Damit begeben wir uns in das letzte Kapitel unserer Einführung. Dort werden wir nur noch einige, wenige Änderungen vornehmen, 
-indem wir Gebrauch von einigen neuen Methoden der KDE 2 Bibliotheken machen, doch wie immer, wird uns dies wieder eine 
+Damit begeben wir uns in das letzte Kapitel unserer Einführung. Dort werden wir nur noch einige, wenige Änderungen vornehmen 
+und Gebrauch von einigen neuen Methoden der KDE 2 Bibliotheken machen, doch wie immer, wird uns dies wieder eine 
 interessante Funktionalität eröffnen - <em>KScribble</em> wird in der Lage sein, eine ganze Reihe von Bildformaten zu öffnen und 
 zu speichern, und damit wird die Einschränkung, nur mit png Dateien arbeiten zu können, entfallen.
 
@@ -1959,10 +1961,10 @@ zu speichern, und damit wird die Einschränkung, nur mit png Dateien arbeiten zu 
 Wenn es um Bilder geht, bieten die Qt und KDE Bibliotheken ein weites Feld an Operationen. 
 Neben den reinen Zeichenroutinen unterstützen die Bibliotheken einen ganzen Satz an 
 Bildformaten, die gelesen und geschrieben werden können- alles ohne Einschränkungen für Ihre 
-Ansicht. Die Hauptklasse für diese Operationen ist <tt>QImageIO</tt> die auch eine 
+Ansicht. Die Hauptklasse für diese Operationen ist <tt>QImageIO</tt>, die auch eine 
 Supportbibliothek unter KDE hat: <tt>KImageIO</tt>. Zur Vorbereitung und bevor wir diese 
 schönen Routinen verwenden können, müssen wir die erforderliche Bibliothek für <em/KScribble/ 
-verfügbar machen: nämlich libkimgio. Öffnen Sie "Projekt"->"Optionen" in Kdevelop und fügen Sie 
+verfügbar machen: nämlich libkimgio. Öffnen Sie "Projekt"->"Optionen" in KDevelop und fügen Sie 
 die Zeile -libkimgio bei den zusätzlichen Bibliotheken ein. 
 
 <sect>Vorbereiten des Dokuments
@@ -2042,7 +2044,7 @@ kscribble.cpp:
 Es funktioniert natürlich genauso wie die Verwendung von <tt>QString 
 format=QImageIO::imageFormat(file);</tt>. Hier liefert uns <tt>KImageIO</tt> das Format des Bildes 
 und wir können dem Dokument mitteilen, die Datei mit dem Dateinamen und dem Format zu öffnen ( 
-eine weitere Möglichkeit wäre das Format in der Dokumentklasse zu ermitteln).
+eine weitere Möglichkeit wäre, das Format in der Dokumentklasse zu ermitteln).
 
 
 <sect>Setzen von Dateifiltern mit KImageIO
@@ -2112,10 +2114,10 @@ void KScribbleApp::slotFileSaveAs()
 In diesem Kapitel werden wir Ihnen zeigen, wie einfach es ist, Druckerfunktionen mit Qt zu implementieren. Tatsächlich ist es 
 nur eine Zeile Code, die wir schreiben müssen, aber wir werden verstehen, wer den Druckauftrag eigentlich ausführt. Wenn der 
 Benutzer den "Drucken" Knopf in <em/KScribble/ benutzt oder "Drucken" aus dem Dateimenü wählt, wird die <tt>slotFilePrint()</tt> 
-Methode in <tt>KScribbleApp</tt> aufgerufen. Diese Methode prüft, welches Kind Fenster gerade aktiv ist und erzeugt eine Instanz 
+Methode in <tt>KScribbleApp</tt> aufgerufen. Diese Methode prüft, welches Kindfenster gerade aktiv ist und erzeugt eine Instanz 
 der Druckerklasse <tt>QPrinter</tt>. Dann ruft sie die Druckmethode des Widgets auf, nämlich <tt>KScribbleView::print()</tt>. Das 
 Framework enthält bereits die Basisimplementation- was zeigt, daß Sie zum Drucken nur die Klasse <tt>QPainter</tt> verwenden 
-müssen, die dann auf dem Drucker ausgibt. Dise Klasse ruft auch den Druckdialog auf.
+müssen, die dann auf dem Drucker ausgibt. Diese Klasse ruft auch den Druckdialog auf.
 
 Was wir hier tun müssen, ist <tt>QPainter</tt> Methoden zu benutzen, um das Pixmap des Dokuments zu drucken, das mit der Ansicht 
 verbunden ist. Da <tt>QPainter</tt> bereits einen Satz an <tt>drawPixmap()</tt> Methoden anbietet, werden wir natürlich eine davon 
@@ -2154,7 +2156,7 @@ Nach dem Auspacken mit <tt>tar zxvf kscribble-1.0.tar.gz</tt> laden Sie das Proj
 "Erstellen" Menü in KDevelop auf. Dann wählen Sie "Configure" aus dem gleichen Menü. Die Konfigurationen sind die meiner 
 Installation von KDE 2 und Qt 2.1, Sie müssen sie also an Ihre Installation anpassen.
 
-Der Anhang enthält ebenfalls den kompletten Quellcode für dieses Paket, so daß Sie ihn online lesen können.
+Der Anhang enthält ebenfalls den kompletten Quellcode für dieses Paket, so daß Sie ihn Online lesen können.
 
 	
 <chapt>Copyright <label id="Copyright"> <p> 

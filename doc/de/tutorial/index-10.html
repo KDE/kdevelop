@@ -24,15 +24,15 @@
 speichern, haben durch Überladen virtueller Methoden Interaktion ermöglicht, und wir haben die erste Funktionalität erreicht- wir 
 können auch Bilder zeichnen. Aber als wir die <CODE>QPen</CODE> Instanz erzeugt haben, haben wir vordefinierte Werte für den Stift 
 verwendet; die Farbe ist Schwarz und die Breite ist auf 3 Pixel eingestellt. Da Sie für gewöhnlich diese Werte ändern können 
-wollen, müssen wir die Haupt GUI um Funktionen, diese Werten zu setzen, erweitern, je nachdem welches Fenster gerade aktiv ist und 
+wollen, müssen wir die Haupt-GUI um Funktionen, diese Werte zu setzen, erweitern, je nachdem welches Fenster gerade aktiv ist und 
 welches Dokument damit verbunden ist. Dieses Kapitel wird Ihnen daher zeigen:
 <P>
 <UL>
 <LI>Das Hinzufügen eines neuen Menüs zur Menüleiste</LI>
-<LI>Erweiterung der Werkzeugleiste um Icons für die in der Menüleiste definierten Methoden</LI>
+<LI>Erweiterung der Werkzeugleiste um Icons, für die in der Menüleiste definierten Methoden</LI>
 <LI>Die Erstellung eines neuen Dialoges mit dem KDevelop Dialogeditor</LI>
 <LI>Verbinden der neuen Kommandos der Menü- und Werkzeugleiste mit Aufrufen der Dialoge</LI>
-<LI>Ermöglichen der Änderung der Stiftgröße in der document Klasse</LI>
+<LI>Ermöglichen der Änderung der Stiftgröße in der Dokumentklasse</LI>
 </UL>
 <P>Desweiteren fügen wir eine Methode hinzu, den Inhalt des gesamten Dokuments über das Menü zu löschen.
 <P>
@@ -68,7 +68,7 @@ class KScribbleApp
 </PRE>
 <HR>
 <P>Jetzt werden wir das Menü selbst erzeugen. Ändern Sie die Implementation der Methode <CODE>KScribbleApp::initMenuBar()</CODE> und 
-editieren Sie die mit dem Pfeil markierten Zeilen:
+editieren Sie die, mit dem Pfeil markierten Zeilen:
 <P>
 <HR>
 <PRE>
@@ -93,10 +93,10 @@ void KScribbleApp::initMenuBar()
 </PRE>
 <HR>
 <P>Sie sehen, daß wir zunächst das Menü mit <CODE>new QPopupMenu()</CODE> erzeugen. Dann verwenden wir 
-die insertItem Methoden, zum Hinzufügen der Menüeinträge Color und Brush. Die sichtbaren 
+die insertItem Methode, zum Hinzufügen der Menüeinträge Color und Brush. Die sichtbaren 
 Kommandos werden mit der Methode <CODE>i18n()</CODE> eingefügt, womit sichergestellt ist, daß Sie 
 Ihre Applikation internationalisieren können. Als generelle Regel kann gesagt werden, daß Sie 
-alle später sichtbaren Texte mit der Methode <CODE>i18n()</CODE> deklarieren. Nur-Qt Programme, die 
+alle später sichtbaren Texte mit der Methode <CODE>i18n()</CODE> deklarieren sollten. Nur-Qt Programme, die 
 Qt > 2.0 verwenden, benutzen dazu die Methode <CODE>tr()</CODE>, da Qt eigene Verfahren hat, 
 Anwendungen zu internationalisieren. Das zweite Argument ist ein Makro, die ID des 
 Menüeintrages. Diese ID ist eine Nummer, die wir mit #define in der resource.h, in der Sie 
@@ -107,13 +107,13 @@ Deshalb muß jeder Menüeintrag, unbhängig davon, in welchem Popupmenü er erschein
 einzigartige Nummer besitzen, und da wir uns Nummern schlecht merken können, ist die Verwendung 
 eines #define für die ID eine gute Lösung. Das Popupmenü wird nun ebenfalls mit 
 <CODE>insertItem()</CODE> der Menüleiste hinzugefügt, und zwar mit einem Zeiger auf das Menü als 
-zweitem Argument. Beachten Sie, daß wir das Popupmenü nach dem Edit- und vor dem Viewmenü 
+zweitem Argument. Beachten Sie, daß wir das Popupmenü <EM>nach</EM> dem Edit- und <EM>vor</EM> dem Viewmenü 
 eingefügt haben, es wird also später zwischen diesen beiden Menüs erscheinen. Was auch wichtig 
 bei der Erstellung von Menüs ist, ist, daß sie dem Benutzer auch über Shortcuts zur Verfügung 
 gestellt werden sollten; normalerweise sehen Sie in Menüs einen unterstrichenen Buchstaben, der 
 zusammen mit ALT die entsprechende Funktion aufruft. Als Programmierer, müssen Sie diesen 
 Buchstaben durch ein vorangestelltes "&amp;" setzen, das "Pen" Menü wird also später durch 
-drücken von ALT+P erreichbar sein. Innerhalb des Menüs kann der Benutzer auch nur den 
+drücken von ALT+P erreichbar sein. Innerhalb des Menüs kann der Benutzer auch <EM>nur</EM> den 
 Buchstaben eingeben, um den entsprechen Menüpunkt auszuführen, Sie sollten also für die anderen 
 Menüpunkte ebenfalls Tastaturkürzel zur Verfügung stellen. Achten Sie darauf, den Code zum 
 Einfügen von Einträgen in Gruppen zusammenzuschreiben, die Sie überblicken können, damit Sie 
@@ -136,12 +136,12 @@ resource.h ///////////////////////////////////////////////////////////////////
 #define ID_PEN_BRUSH                14020
 </PRE>
 <HR>
-<P>Sie sehen, daß die Nummern für jeden Eintrag einzigartig sind- Sie müssen darauf achten, 
-nicht zweimal dieselbe Nummer zu vergeben- sollte es aber dennoch einmal versehentlich 
+<P>Sie sehen, daß die Nummern für jeden Eintrag einzigartig sind. Sie müssen darauf achten, 
+nicht zweimal dieselbe Nummer zu vergeben. Sollte es aber dennoch einmal versehentlich 
 passieren, wird Sie der Compiler über die Redefinition informieren.
 <P>Das ist zum jetzigen Zeitpunkt alles, das Sie zum Hinzufügen eines neuen Menüs tun müssen. Die 
-ausgeführten Aktionen sind: "Color", Aufruf des Farbauswahldialogs, "Brush", Aufruf des Dialogs 
-zum Setzen der Stiftbreite (diesen Dialog werden wir noch erstellen). Aber zuerst werden wir im 
+ausgeführten Aktionen sind: "Color" (Aufruf des Farbauswahldialogs) und "Brush" (Aufruf des Dialogs 
+zum Setzen der Stiftbreite). Letzeren Dialog werden wir noch erstellen, aber zuerst werden wir im 
 nächsten Kapitel auch die Werkzeugleiste um zwei Icons für diese Aktionen erweitern.
 <P>
 <P>
@@ -152,7 +152,7 @@ nächsten Kapitel auch die Werkzeugleiste um zwei Icons für diese Aktionen erweit
 <P>Wenn Sie neue Kommandos über Knöpfe in der Werkzeugleiste zur Verfügung stellen möchten, können 
 Sie dies leicht mit der <CODE>initToolbar()</CODE> Methode der <CODE>App</CODE> Klasse tun. Hier 
 entscheiden wir uns, je einen Knopf für die beiden Menüeinträge im Stiftmenü hinzuzufügen, aber 
-diese Knöpfe brauchen Icons. Sie können sie entweder im KDE Verzeichnis toolbar finden, oder, 
+diese Knöpfe brauchen Icons. Sie können sie entweder im KDE Verzeichnis "toolbar" finden, oder, 
 wenn keins der Icons zu der Aktion paßt, sie selbst erzeugen. KIconEdit ist gut dafür geeignet 
 Icons zu erstellen, also werden wir sie zuerst erzeugen. Wählen Sie "Neu" aus dem KDevelop 
 Dateimenü, gehen Sie auf den Linux/KDE Tabulator und wählen Sie dann "Icon" als Dateityp. Das 
@@ -164,14 +164,14 @@ KIconEdit innerhalb von KDevelop geöffnet. Zeichnen Sie etwas, daß dem Benutzer 
 Knopfes zeigt, speichern Sie das Pixmap und wählen Sie dann den LFV / RFV in KDevelop. Wählen 
 Sie das Icon mit der rechten Maustaste aus und gehen Sie im Popupmenü auf "Eigenschaften". Sie 
 sehen, daß das Icon der Distribution hinzugefügt wurde, damit es aber später von Ihrem Programm 
-gefunden werden kann, müssen Sie Sie das Installationsziel ebenfalls angeben. Markieren Sie die 
-die "installieren" Option und geben Sie dann darunter ein:
+gefunden werden kann, müssen Sie das Installationsziel ebenfalls angeben. Markieren Sie die "installieren" Option und geben 
+Sie dann darunter ein:
 <P><CODE>$(kde_datadir)/kscribble/toolbar/pencolor.xpm</CODE>
 <P>Damit wird das Pixmap im data Verzeichnis der KDE Dateisystemhierarchie installiert, in der 
 jede Anwendung ihr Unterverzeichnis mit zusätzlich benötigten Dateien hat. Icons müssen in 
 einem Unterverzeichnis namens toolbar abgelegt werden, damit der icon loader die Pixmaps für 
 Ihr Programm finden kann. 
-<P>Wenn Sie damit fertig sind, wiederholen Sie die gleichen Schritte für das zweite Icon zum 
+<P>Wenn Sie damit fertig sind, wiederholen Sie die gleichen Schritte für das Icon zum 
 Setzen der Stiftweite. Nennen Sie dieses Icon "penwidth.xpm".
 <P>Nun müssen wir nur noch Knöpfe auf der Werkzeugleiste erzeugen; fügen Sie dazu die markierten 
 Zeilen Ihrem Code hinzu: 
@@ -194,19 +194,19 @@ void KScribbleApp::initToolBar()
 <HR>
 <P>Wir verwenden an dieser Stelle die Methoden von KToolBar um die Knöpfe einzufügen. Das erste 
 Argument, <CODE>BarIcon()</CODE>, veranlaßt die Methode, das Icon für den Knopf zu laden. Was etwas 
-ungewöhnlich erscheint, ist, daß wir uns nicht um die Dateierweiterung zu kümmern brauchen. Das 
+ungewöhnlich erscheint ist, daß wir uns nicht um die Dateierweiterung zu kümmern brauchen. Das 
 bevorzugte Format unter KDE 2 ist *.PNG, aber es funktioniert auch mit xpm's ( Sie könnten 
-ImageMagick für die Konvertierung der Icons nach PNG verwenden- oder, zu einem späteren 
+ImageMagick für die Konvertierung der Icons nach PNG verwenden, oder, zu einem späteren 
 Zeitpunkt,<EM>KScribble</EM> !). 
 <P>Das zweite Argument ist wiederum die ID. Die Kommandos werden dann automatisch aktiviert, da 
-<CODE>toolBar()</CODE> bereits mit denselben Methoden verbunden ist wie die Menübar über das Signal 
+<CODE>toolBar()</CODE> bereits mit denselben Methoden verbunden ist wie die Menübar, über das Signal 
 <CODE>activated()</CODE>. Das dritte Argument steht für "erreichbar" wenn wahr, "deaktiviert" wenn 
-falsch; da wir die Knöpfe verfügbar haben wollen, setzen wir es auf wahr. Schließlich setzen wir 
+falsch; da die Knöpfe verfügbar sein sollen, setzen wir es auf wahr. Schließlich setzen wir 
 noch eine Kurzinfo für die Knöpfe, die wir wieder in <CODE>i18n()</CODE> einschließen, um die 
 Internationalisierung zu ermöglichen. 
-<P>Nun sind Sie für's erste fertig- die GUI ist, zumindest visuell, erweitert. Sie können 
+<P>Nun sind Sie für's erste fertig. Die GUI ist, zumindest visuell, erweitert. Sie können 
 <EM>KScribble</EM> wieder kompilieren und ausführen und sich anschauen, wie es aussieht- natürlich haben 
-die neuen Elemente ind der Menü- und in der Werkzeugleiste noch keine Funktion- dies wird sich aber 
+die neuen Elemente in der Menü- und in der Werkzeugleiste noch keine Funktion- dies wird sich aber 
 im nächsten Abschnitt ändern. Sie werden vielleicht auch bemerken, daß die Icons, die wir 
 hinzugefügt haben, nicht angezeigt werden. Dies liegt daran, daß wir <EM>KScribble</EM> nicht 
 installiert haben, und so werden sie nicht gefunden. Alle anderen Icons werden bereits mit den KDE 
@@ -227,25 +227,24 @@ drei weitere Knöpfe: einen zum Zurücksetzen der Weite, einen zum Abbrechen des D
 hinzufügen, was wichtig ist, weil der Fokus der Tabulatortaste der Reihenfolge folgt, in der die 
 Widgets erstellt werden. D.h., wenn Sie mit dem "OK" Knopf anfangen, bringt uns das Drücken der 
 Tabtaste zuerst zur Spinbox und dann zum "Cancel" Knopf - was so nicht erwartet wird. Der Tabfokus 
-sollte den Elementen von oben nach unten und von rechts nach links folgen, also müssen wir den 
-Dialog auch in dieser Reihenfolge erstellen. Um Elementen zum Dialog hinzuzufügen, wählen Sie den 
+sollte den Elementen von oben nach unten und von links nach rechts folgen, also müssen wir den 
+Dialog auch in dieser Reihenfolge erstellen. Um Elemente zum Dialog hinzuzufügen, wählen Sie den 
 Widgets Tabulator im linken Panel. Dort werden alle verfügbaren Widgets durch Icons repräsentiert, 
 damit Sie Ihren Dialog erstellen können. Ein Druck auf ein Widget Icon erzeugt das neue Element in 
 der linken, oberen Ecke des Hauptwidgets. Von dort können Sie es mit der Maus zu der Position 
 ziehen, an der Sie das Element haben wollen. Desweiteren können Sie die Einstellungen für das 
 gewählte Widget im "Widgeteigenschaften" Panel auf der rechten Bilschirmseite vornehmen.
 <P><B>Das Label:</B> Wählen Sie <CODE>QLabel</CODE> aus dem Widgettabulator und plazieren Sie es an 
-Position x:50, y:20. Dann gehen Sie zum "General" Abschnitt in den Widgeteigenschaften. Ändern Sie 
-den den Text der Eigenschaft "Text" von "Label:" nach "Pen Width:". Passen Sie die Breite in 
-x-Richtung dem Text des Labels an, ein Wert von 120 sollte reichen. Sie können dies entweder mit der 
-Maus machen, oder den Wert im "Geometry" Abschnitt eingeben.
+Position x:50, y:20. Dann gehen Sie zum "General" Abschnitt in den Widgeteigenschaften. Ändern Sie den Text der Eigenschaft "Text" 
+von "Label:" nach "Pen Width:". Passen Sie die Breite in x-Richtung dem Text des Labels an, ein Wert von 120 sollte reichen. 
+Sie können dies entweder mit der Maus machen, oder den Wert im "Geometry" Abschnitt eingeben.
 <P><B>Die Spinbox:</B> Wählen Sie <CODE>QSpinbox</CODE> und plazieren Sie sie rechts neben dem eben 
 erstellten Label. Setzen Sie den Variablennamen im Abschnitt "C++ Code" auf "width_spbox". Die 
 Minimal- und Maximalwerte sind 1 und 100, was für unsere Stiftweite ausreichen sollte.
 <P><B>Die Knöpfe:</B> Schließlich brauchen wir noch unsere drei Knöpfe. Der linke Knopf soll der 
 Standardknopf sein. Erzeugen Sie einen <CODE>QPushbutton</CODE> und plazieren Sie ihn an einer günstigen 
 Stelle unten im Dialog, setzen Sie den Variablennamen auf "default_btn" und den Text auf "Default". 
-Machen Sie das gleiche mit dem "OK" Knopf, Variablenname "ok_btn" und dem "Cancel" Knopf", 
+Machen Sie das gleiche mit dem "OK" Knopf, Variablenname "ok_btn" und dem "Cancel" Knopf, 
 Variablenname "cancel_btn". Setzen Sie die Knopftexte auf "&amp;OK" und "&amp;Cancel".
 <P>Wenn Sie mit Ihrem Layout zufrieden sind, wählen Sie "Alle Quellen erzeugen" aus dem "Erstellen" 
 Menü, geben Sie als Klassennamen "KPenBrushDlg" ein und wählen Sie <CODE>QDialog</CODE>. Nachdem Sie 
@@ -256,7 +255,7 @@ der benötigt wird, damit der Dialog auch etwas macht.
 <H3><A NAME="ss10.4">10.4 Verbinden und Einstellen</A>
 </H3>
 
-<P>Nachdem wie nun das GUI des Dialogs erstellt haben, müssen wir den Köpfen noch die Funktionalität 
+<P>Nachdem wie nun die GUI des Dialogs erstellt haben, müssen wir den Köpfen noch die Funktionalität 
 geben, und Mittel zur Verfügung stellen, die Werte der Spinbox zu holen und zu setzen, weil wir 
 wollen, daß der Dialog den aktuellen Wert anzeigt, wenn er aufgerufen wird, und wir möchten den 
 eingestellten Wert auslesen, wenn der "OK" Knopf gedrückt wird. 
@@ -317,7 +316,7 @@ void KPenBrushDlg::slotDefault()
 }
 </PRE>
 <HR>
-<P>Dies setzt den Standardwert für den Stift auf 3 Pixel.
+<P>Dies setzt den Standardwert für die Stiftbreite auf 3 Pixel.
 <P>Wir sind nun mit unserem ersten Dialog fertig und können uns den anderen Klassen der Anwendung 
 zuwenden, um noch einiges zu adaptieren und Methoden zu implementieren, die den Dialog aufrufen.
 <P>
@@ -442,7 +441,7 @@ void KScribbleApp::slotPenColor()
 </PRE>
 <HR>
 <P>Wenn wir uns den Code ansehen, erkennen wir, daß wir eine weitere neue Methode von 
-<CODE>KScribbleDoc</CODE> verwenden, um die Farbe des Srifts zu setzen. Diese Methode müssen 
+<CODE>KScribbleDoc</CODE> verwenden, um die Farbe des Stifts zu setzen. Diese Methode müssen 
 wir ebenfalls implementieren: 
 <P>
 <HR>
@@ -465,7 +464,7 @@ Dialoge, die wir aufrufen wollen, eingefügt.</LI>
 erstellt.</LI>
 <LI> Als nächstes haben wir die Methoden geschrieben, die die Dialoge aufrufen und die 
 Eigenschaften setzen die wir ändern wollen.</LI>
-<LI> Schließlich haben wir die benötigten Set-Methoden hinzugefügt, so daß wir in der 
+<LI> Schließlich haben wir die benötigten Set-Methoden hinzugefügt, sodaß wir in der 
 Lage sind, die Werte zu ändern, nachdem die Dialoge ausgeführt worden sind.</LI>
 </UL>
 <P>Mit dieser Struktur steht Ihnen ein allgemeiner Weg zur Verfügung, Ihre Anwendung um 

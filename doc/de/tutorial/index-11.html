@@ -22,7 +22,7 @@
 
 <P>
 <P>In diesem Kapitel werden wir die Funktionalität unseres Widgets durch zwei Verbesserungen 
-erweitern: Synchronisierte Ansichten und rollbare Ansichten.
+erweitern: synchronisierte Ansichten und rollbare Ansichten.
 <P>
 <H3><A NAME="ss11.1">11.1 Synchronisierung der Ansichten</A>
 </H3>
@@ -38,10 +38,10 @@ Sie eine Ansicht, die nicht die aktuellen Daten enthält, verdecken und sie dann 
 den Vordergrund holen, werden die richtigen Daten angezeigt. Das liegt daran, das jede 
 Ansicht, wenn Sie verdeckt war, ein paint-Ereignis vom Fenstersystem erhält, wenn Sie 
 wieder in den Vordergrund kommt, dann <CODE>KScribbleView::paintEvent()</CODE> aufruft und 
-dadurch den Bereich, der verdeckt war, schließlich neuzeichnet. Was wir erreichen wollen, 
-ist das alle Ansichten synchron mit der Ansicht gezeichnet werden, in der der Benutzer 
-gerade arbeitet. Tatsächlich werden Sie sehen, das diese Erweiterung leicht zu 
-bewerkstelligen ist. Die document Klasse bietet uns bereits eine Methode 
+dadurch den Bereich, der verdeckt war schließlich neuzeichnet. Was wir erreichen wollen, 
+ist daß alle Ansichten synchron mit der Ansicht gezeichnet werden, in der der Benutzer 
+gerade arbeitet. Tatsächlich werden Sie sehen, daß diese Erweiterung leicht zu 
+bewerkstelligen ist. Die Dokumentklasse bietet uns bereits eine Methode 
 <CODE>updateAllViews()</CODE>, welche die Methode <CODE>update()</CODE> für jede Ansicht in der 
 Ansichtenliste des Dokuments aufruft. Das macht es sehr einfach die Inhalte der Ansichten 
 zu synchronisieren - jedes Mal, wenn der Inhalt verändert wird, hier durch Mausbewegungen 
@@ -71,15 +71,15 @@ darstellbare Bereich ist. Beginnend von der oberen, linken Ecke, wird der Rest d
 aus der Sicht des Benutzers ausgeschnitten. Eine Rollansicht ist ein Widget, das auf der 
 rechten und unteren Seite Rollbalken zur Verfügung stellt, mit deren Hilfe der Benutzer 
 den Inhalt des Fensters verschieben kann. Tatsächlich wird das Dokument in seiner ganzen 
-Größe gezeigt, aber die Ansicht kann innerhalb des Dokuments bewegt werden, so daß jeder 
+Größe gezeigt, aber die Ansicht kann innerhalb des Dokuments bewegt werden, sodaß jeder 
 Teil mit Hilfe der Scrollbars angezeigt werden kann. Glücklicherweise gibt es in Qt die 
 Klasse <CODE>QScrollView</CODE>,die selber von <CODE>QWidget</CODE> abgeleitet ist und die gleiche 
 Grundfunktionalität wie ein gewöhnliches Widget bietet, jedoch den Inhalt der Ansicht bei 
 der Verwendung von Scrollbars verwaltet - mit der zusätzlichen Option, daß der 
 Programmierer entweder einfach nur eine Instanz von <CODE>QScrollView</CODE> verwendet, die zu 
 verwaltenden Kindfenster mit der Rollansicht als Eltern erstellt und sie mit 
-<CODE>addChild()</CODE> der Rollansicht hinzufügt oder eine Ansicht von <CODE>QScrollView</CODE> 
-ableitet und dann, statt direkt in das Widget, in den viewport zeichnet, der ein 
+<CODE>addChild()</CODE> der Rollansicht hinzufügt, oder eine Ansicht von <CODE>QScrollView</CODE> 
+ableitet und dann, statt direkt in das Widget, in den Viewport zeichnet, der ein 
 definierter Bereich innerhalb der Rollansicht ist. Der Unterschied hier ist, daß 
 <CODE>QScrollView</CODE> einen Satz von Ereignisbehandlungsroutinen, ähnlich denen von 
 <CODE>QWidget</CODE>, extra für den Viewport bereitstellt. Das was also vorher 
@@ -100,7 +100,7 @@ diese Werte, geändert werden.</LI>
 <CODE>QScrollView</CODE>. </LI>
 <LI> Umbenennen der virtuellen Methoden in die entsprechenden Viewportmethoden aus 
 <CODE>QScrollView</CODE>. </LI>
-<LI> Adaptieren der virtuellen Event Handler, so daß sie die Geometrie des Viewports 
+<LI> Adaptieren der virtuellen Event Handler, sodaß sie die Geometrie des Viewports 
 beeinflussen. Das bedeutet, daß die alte Implementation auf die Geometrie von 
 <CODE>QWidget</CODE> vertraut, die in der linken, oberen Ecke eines Widgets beginnt. Wenn die 
 Ansicht gerollt wird und diese Ecke ist nicht sichtbar, müssen wir dafür sorgen, daß die 
@@ -111,7 +111,7 @@ von <CODE>QWidget</CODE> gelieferten Positionen in Viewportkoordinaten übersetzt
 
 <P>
 <P>Wie bereits erwähnt, müssen wir sowohl die Größe eines Dokuments ändern, als auch diese Größe initialisieren, und wir müssen eine 
-Methode breitstellen, die diese Größe für die Ansichten holt. Dazu fügen wir die Variable <CODE>QSize size</CODE> sowie die Methode 
+Methode bereitstellen, die diese Größe für die Ansichten holt. Dazu fügen wir die Variable <CODE>QSize size</CODE> sowie die Methode 
 <CODE>docSize()</CODE> in <CODE>KScribbleDoc</CODE> ein:
 <P>
 <HR>
@@ -128,7 +128,7 @@ private:
   QSize size;
 </PRE>
 <HR>
-<P>Jetzt müssen wir alle Methoden, die Dokumentinhalte öffnen oder initialisieren, modifizieren - <CODE>newDocument()</CODE> und
+<P>Jetzt müssen wir alle Methoden, die Dokumentinhalte öffnen oder initialisieren, modifizieren.Dies sind <CODE>newDocument()</CODE> und
 <CODE>openDocument()</CODE>:
 <P>
 <HR>
@@ -170,7 +170,7 @@ private:
 <P>In <CODE>newDocument()</CODE> initialisieren wir die Größe mit Standardwerten von 300 Pixeln Breite und 200 Pixeln Höhe. Das ist genug 
 für ein kleines Bild und wir könnten auch immer noch einen Dialog zur Größenänderung hinzufügen. Wenn es daran geht, das Bild zu 
 öffnen, müssen wir die Größe auf die des Bildes setzen. Dies kann man erreichen, indem man <CODE>QPixmap::size()</CODE> aufruft, was 
-wir bereits in <CODE>openDocument()</CODE> verwendet haben. Dann sind mit dem Setzen der Größen fertig und wir können damit beginnen, 
+wir bereits in <CODE>openDocument()</CODE> verwendet haben. Dann sind mit dem Setzen der Größen fertig, und wir können damit beginnen, 
 KScribbleView zu reimplementieren und eine Rollansicht daraus zu machen. 
 <P>
 <H3><A NAME="ss11.3">11.3 Adaptieren der Ansicht</A>
@@ -204,9 +204,9 @@ class KScribbleView : public QScrollView
 }
 </PRE>
 <HR>
-<P>An dieser Stelle haben wir zuerst durch als Basisklasse ersetzt und die erforderliche Headerdatei eingesetzt.Außerdem haben wir 
-alle implementierten Event Handler, die mit Interaktion bezüglich des Inhalts der Rollansicht zu tun haben, durch die 
-entsprechenden Methoden aus <CODE>QScrollView</CODE> ersetzt und haben das resizeEvent auskommentiert. Nun können wir nit der 
+<P>An dieser Stelle haben wir zuerst <CODE>QWidget</CODE> durch <CODE>QScrollView</CODE> als Basisklasse ersetzt und in die erforderliche Headerdatei 
+eingesetzt.Außerdem haben wir alle implementierten Event Handler, die mit Interaktion bezüglich des Inhalts der Rollansicht zu tun haben, 
+durch die entsprechenden Methoden aus <CODE>QScrollView</CODE> ersetzt und haben das resizeEvent auskommentiert. Nun können wir mit der 
 Implementation dieser Methoden beginnen und die Größe unseres Bildes verwenden. Da eine Ansicht immer erst nach dem Dokument 
 existiert, können wir sowohl die Größe des Widgets (die Viewportgröße), als auch die des Inhalts direkt im Konstruktor anpassen.
 <P>
@@ -233,12 +233,12 @@ KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* na
 </PRE>
 <HR>
 <P>Beachten Sie, daß sich vorher <CODE>resizeEvent()</CODE> um die Gleichheit der Größe der Zeichenfläche und des Widgets gekümmert hat. 
-Zur gleichen Zeit wurde dabei auch die Größe des Dokuments geändert, so daß das Bild immer die gleiche Größe wie das Widget hatte. 
+Zur gleichen Zeit wurde dabei auch die Größe des Dokuments geändert, sodaß das Bild immer die gleiche Größe wie das Widget hatte. 
 Da wir jetzt bereits die Größe des Dokuments initialisiert haben (in <CODE>newDocument()</CODE> und <CODE>openDocument()</CODE>), passen 
 wir jetzt die Größe des Inhalts einfach durch Aufruf von <CODE>resizeContents()</CODE> aus <CODE>QScrollView</CODE> an die Größe des 
 Dokuments an. Sie sehen auch, daß wir den Cursor für das Widget von dem allumfassenden Widget auf den Viewport geändert haben, den 
 wir mit <CODE>viewport()</CODE> ermitteln können. Jetzt können wir wieder die Event Handler implementieren. Zuerst sollten wir auf 
-das paintEvent achten, da dies eines der wichtigsten ist, weil es immer aufgerufen wird, wenn das Widget sichtbar wird oder seine 
+das paintEvent achten, da dies eines der wichtigsten Events ist, weil es immer aufgerufen wird, wenn das Widget sichtbar wird oder seine 
 Größe ändert. 
 <P><B>Achtung:</B> Denken Sie daran die <CODE>resizeEvent()</CODE> Implementation auszukommentieren!
 <P>Jetzt wird der paintEvent das Pixmap aus dem Puffer an die entsprechende Position der Ansicht kopieren müssen. Zu diesem Zweck 
@@ -259,7 +259,7 @@ und Sie müssen vielleicht ein wenig "Versuch und Irrtum" bei der Implementation 
 andere mögliche Aufruf von <CODE>bitBlt()</CODE> würde sein, die Werte der Positionen zu switchen und die Werte der Inhalte zu 
 vertauschen:
 <P>bitBlt( viewport(), -contentsX(), -contentsY(), &amp;doc->buffer, 0, 0 );
-<P>Die letzten Änderungen, die wir noch brauchen, ist die Änderung des Maus Eventhandlers. Im Moment hat <CODE>mouseMoveEvent()</CODE>, 
+<P>Die letzte Änderung, die wir noch brauchen, ist die Änderung des Mauseventhandlers. Im Moment hat <CODE>mouseMoveEvent()</CODE>, 
 das zu <CODE>viewportMouseMoveEvent()</CODE> wird, auch einen <CODE>bitBlt()</CODE> Aufruf. Hier müssen wir die gleichen Änderungen 
 vornehmen, wie beim paint Event. Weiterhin haben wir im <CODE>mousePressEvent()</CODE> und dem <CODE>mouseMoveEvent()</CODE> die Position 
 der Events mit <CODE>e->pos()</CODE> geholt. Diese Abfrage liefert uns nun die Position eines Widgets - nicht die des Inhalts, also 
@@ -292,19 +292,19 @@ müssen wir dies mit <CODE>viewportToContents()</CODE> übersetzen, damit an die k
   }
 </PRE>
 <HR>
-<P>In <CODE>viewportMouseMoveEvent()</CODE> mussten wir wieder das Ziel von this nach <CODE>viewport()</CODE> ändern - und damit die 
+<P>In <CODE>viewportMouseMoveEvent()</CODE> mußten wir wieder das Ziel von this nach <CODE>viewport()</CODE> ändern - und damit die 
 Positionen übersetzen. Diesmal haben wir die zweite Variante des Aufrufs, den wir in <CODE>viewportPaintEvent()</CODE> verwendet 
-haben, benutzt, indem wir die contentsX und contentsY subtrahiert haben um das Rechteck, das die aktuelle Zeichnung enthält, an 
+haben, benutzt, indem wir contentsX und contentsY subtrahiert haben um das Rechteck, das die aktuelle Zeichnung enthält, an 
 die korrekte Stelle des Viewports zu kopieren.
-<P>Schließlich werden wir noch eine kleine Änderung an der <CODE>update()</CODE> Methode vornehmen: warum sollten wir jedes mal das ganze 
+<P>Schließlich werden wir noch eine kleine Änderung an der <CODE>update()</CODE> Methode vornehmen: warum sollten wir jedesmal das ganze 
 Widget neuzeichnen? Dies wird in den meisten Fällen die Performance herabsetzen und zu dem sogenannten "Flicker" Effekt führen. 
 Dieser Effekt tritt manchmal bei Widgets auf, aber es gibt einige Möglichkeiten dieses Verhalten zu verringern. Statt 
 <CODE>repaint()</CODE> aufzurufen, könnten wir ebensogut <CODE>repaint(false)</CODE> verwenden. Dadurch werden die Inhalte nicht vor dem 
 Zeichnen gelöscht. Da wir den Inhalt des Dokuments direkt in das Widget kopieren, müssen wir die Daten nicht löschen, weil sie 
-sowieso überschrieben werden. Die Verbindung mit <CODE>QScrollView</CODE> können wir die Zeichenaktionen sogar noch weiter reduzieren: 
+sowieso überschrieben werden. In Verbindung mit <CODE>QScrollView</CODE> können wir die Zeichenaktionen sogar noch weiter reduzieren: 
 wir beschränken die update Methode darauf <CODE>repaint()</CODE> auf dem viewport() Widget aufzurufen, da dies wiederum 
 <CODE>viewportPaintEvent()</CODE> aufruft. Außerdem können wir, wenn das Dokument kleiner als der Viewport ist, das paint Event noch 
-auf das Rechteck des Viewports beschränken in dem das Dokument angezeigt wird. Die sichtbare Höhe und Breite können wir uns holen 
+auf das Rechteck des Viewports beschränken, in dem das Dokument angezeigt wird. Die sichtbare Höhe und Breite können wir uns holen 
 und zu dem zu zeichnenden Rechteck zusammensetzen. Zusätzlich verwenden wir false als erase Parameter, so daß die Dokumentenfläche 
 nicht gelöscht wird: 
 <P>
@@ -316,11 +316,11 @@ viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
 }
 </PRE>
 <HR>
-<P>Jetzt sind wir fertig ! Dieses Kapitel war sicher eines, der am schwierigsten zu implementierenden un zu verstehenden - 
-insbesondere dort, wo es um die sich ändernden Geometrien geht. Andererseits haben wir unserer Anwendung durch die rollbaren 
+<P>Jetzt sind wir fertig ! Dieses Kapitel war sicher eines, der am schwierigsten zu implementierenden und zu verstehenden - 
+insbesondere dort, wo es um die, sich ändernden Geometrien ging. Andererseits haben wir unserer Anwendung durch die rollbaren 
 und synchronisierten Ansichten, eine vollkommen andere Funktionalität verliehen.
-<P>Damit begeben wir uns in das letzte Kapitel unserer Einführung. Dort werden wir nur noch einige, wenige Änderungen vornehmen, 
-indem wir Gebrauch von einigen neuen Methoden der KDE 2 Bibliotheken machen, doch wie immer, wird uns dies wieder eine 
+<P>Damit begeben wir uns in das letzte Kapitel unserer Einführung. Dort werden wir nur noch einige, wenige Änderungen vornehmen 
+und Gebrauch von einigen neuen Methoden der KDE 2 Bibliotheken machen, doch wie immer, wird uns dies wieder eine 
 interessante Funktionalität eröffnen - <EM>KScribble</EM> wird in der Lage sein, eine ganze Reihe von Bildformaten zu öffnen und 
 zu speichern, und damit wird die Einschränkung, nur mit png Dateien arbeiten zu können, entfallen.
 <P>
