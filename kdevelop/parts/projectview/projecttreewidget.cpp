@@ -61,7 +61,7 @@ void ProjectTreeWidget::slotClicked(QListViewItem* pItem){
   if(pPItem->className() == QString("FileItem") ){
     FileItem* pFileItem = static_cast<FileItem*>(pItem);
     // inform the part
-    m_pProjectView->fileClicked(pFileItem->absFileName());
+    emit m_pProjectView->gotoSourceFile(pFileItem->absFileName(), 0);
   }
 }
 
@@ -164,8 +164,10 @@ void ProjectTreeWidget::refresh(){
 }
 
 
-void ProjectTreeWidget::readProjectSpaceGlobalConfig(QDomDocument& doc){
+void ProjectTreeWidget::readProjectSpaceGlobalConfig()
+{
   kdDebug(9009) << "ProjectTreeWidget::readProjectSpaceGlobalConfig:" << endl;
+  QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
   m_projectFileGroups.clear();
   QDomNodeList projectViewList = doc.elementsByTagName("ProjectView");
 
@@ -192,8 +194,10 @@ void ProjectTreeWidget::readProjectSpaceGlobalConfig(QDomDocument& doc){
 }
 
 
-void ProjectTreeWidget::writeProjectSpaceGlobalConfig(QDomDocument& doc){
+void ProjectTreeWidget::writeProjectSpaceGlobalConfig()
+{
   kdDebug(9009) << "ProjectTreeWidget::writeProjectSpaceGlobalConfig" << endl;
+  QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
   QDomElement rootElement = doc.documentElement();
   QDomElement projectViewElement = doc.createElement("ProjectView");
   QString projectName;

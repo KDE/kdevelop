@@ -53,7 +53,7 @@ AppWizard::~AppWizard(){
 }
 
 void AppWizard::init(bool newProjectspace,ProjectSpace* pProjectspace,QString projectName,QString absProjectLocation){
-  kdDebug(9000) << "enter AppWizard::init" << endl;
+  kdDebug(9030) << "enter AppWizard::init" << endl;
   m_newProjectspace = newProjectspace;
   m_pProjectspace = pProjectspace;
   m_projectName = projectName;
@@ -75,7 +75,7 @@ void AppWizard::init(bool newProjectspace,ProjectSpace* pProjectspace,QString pr
 }
 
 void AppWizard::accept(){
-  kdDebug(9000) << "start generation" << endl;
+  kdDebug(9030) << "start generation" << endl;
   if(m_newProjectspace){ // only if a new one was selected
     m_pProjectspace->setAuthor(author_edit->text());
     m_pProjectspace->setEmail(email_edit->text());
@@ -88,10 +88,10 @@ void AppWizard::accept(){
   m_pProjectspace->writeGlobalDocument();
   m_pProjectspace->writeUserDocument();
   if(!m_pProjectspace->saveConfig()){
-    kdDebug(9000) << "error in writing ConfigFile" << endl;
+    kdDebug(9030) << "error in writing ConfigFile" << endl;
   }
   else{
-    kdDebug(9000) << "ConfigFile successfully written" << endl;
+    kdDebug(9030) << "ConfigFile successfully written" << endl;
   }
   QWizard::accept();
 }
@@ -107,7 +107,7 @@ void AppWizard::generateDefaultFiles(){
   KShellProcess proc("/bin/sh");
   
   QString absProjectPath = m_pProject->absolutePath();
-  kdDebug(9000) << "creating directory: " << absProjectPath << endl;
+  kdDebug(9030) << "creating directory: " << absProjectPath << endl;
   // create the directories
   proc << "mkdirhier";
   proc << absProjectPath;

@@ -71,7 +71,11 @@ void CppSupport::classStoreClosed()
     m_parser = 0;
 }
 
-void CppSupport::doInitialParsing(){
+void CppSupport::languageSupportOpened()
+{
+    // At the time this method is called, all components are already
+    // loaded and notified about the project space and the class store
+    
   // quick hack
   Project* pProject = m_pProjectSpace->currentProject();
   QStringList files;
@@ -85,13 +89,14 @@ void CppSupport::doInitialParsing(){
   }
 }
 
+
 void CppSupport::addedFileToProject(KDevFileNode* pNode)
 {
-  kdDebug(9007) << "CppSupport::addedFileToProject()" << endl;
-  QString fileName = pNode->absoluteFileName();
-  m_parser->parse(fileName);
+    kdDebug(9007) << "CppSupport::addedFileToProject()" << endl;
+    QString fileName = pNode->absoluteFileName();
+    m_parser->parse(fileName);
   
-  emit updateSourceInfo();
+    emit updateSourceInfo();
 }
 
 
@@ -309,6 +314,8 @@ QString CppSupport::asHeaderCode(ParsedAttribute *pa)
 
     return str;
 }
+
+
 QStringList CppSupport::fileFilters(){
   QStringList list;
   list << "*.h;*.hxx;*.cpp;*.cc;*.C;*.cxx;*.idl;*.c";
@@ -317,4 +324,5 @@ QStringList CppSupport::fileFilters(){
   list << "*";
   return list;
 }
+
 #include "cppsupport.moc"

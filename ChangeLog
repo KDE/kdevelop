@@ -1,3 +1,7 @@
+2000-12-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Implemented window layout saving per project
+	  with the help of the new XML based DockMainWindow::(read|write)Config
+
 2000-11-22  Falk Brettschneider  <falk@kdevelop.org>
         * removed part qextmdimainfrmview (class KDevelop itself takes its part)
 	* integrated the adding of widgets as docked tool views in QextMDI, class KDevelop adapted

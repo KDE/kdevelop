@@ -33,8 +33,7 @@ public:
     ~ProjectTreeWidget();
     void setProjectSpace(ProjectSpace* pProjectSpace);
 
-    // indirect from KDevComponent
-    void readProjectSpaceGlobalConfig(QDomDocument& doc);
+    void readProjectSpaceGlobalConfig();
     /**
        <Project name = "">
        <FileGroup name="" filter ="" />
@@ -45,7 +44,7 @@ public:
        <FileGroup name="" filter ="" />
        </project>
     */
-    void writeProjectSpaceGlobalConfig(QDomDocument& doc);
+    void writeProjectSpaceGlobalConfig();
     void addedFileToProject(KDevFileNode* pNode);
     void removedFileFromProject(KDevFileNode* pNode);
     /** clears the tree and repaint it again*/

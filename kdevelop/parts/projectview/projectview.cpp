@@ -45,24 +45,16 @@ void ProjectView::setupGUI(){
 }
 
 void ProjectView::projectSpaceOpened(ProjectSpace *pProjectSpace){
+  kdDebug(9009) << "projectSpaceOpened" << endl;
   m_pProjectTree->setProjectSpace(pProjectSpace);
+  m_pProjectTree->readProjectSpaceGlobalConfig();
 }
 
   
 void ProjectView::projectSpaceClosed(){
+  kdDebug(9009) << "projectSpaceClosed" << endl;
+  m_pProjectTree->writeProjectSpaceGlobalConfig();
   m_pProjectTree->clear();
-}
-
-
-void ProjectView::readProjectSpaceGlobalConfig(QDomDocument& doc){
-  kdDebug(9009) << "readProjectSpaceGlobalConfig:" << endl;
-  m_pProjectTree->readProjectSpaceGlobalConfig(doc);
-}
-
-
-void ProjectView::writeProjectSpaceGlobalConfig(QDomDocument& doc){
-  kdDebug(9009) << "writeProjectSpaceGlobalConfig" << endl;
-  m_pProjectTree->writeProjectSpaceGlobalConfig(doc);
 }
 
 
@@ -93,11 +85,6 @@ void ProjectView::removedFileFromProject(KDevFileNode* pNode){
 
 void ProjectView::addedProject(KDevNode*){
   m_pProjectTree->refresh();
-}
-
-
-void ProjectView::fileClicked(QString absFileName){
-  emit gotoSourceFile(absFileName,0);
 }
 
 #include "projectview.moc"

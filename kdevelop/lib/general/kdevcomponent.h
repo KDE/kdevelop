@@ -73,11 +73,18 @@ public:
      */
     virtual void stopButtonClicked();
     /**
-     * A projectspace  has been opened.
+     * A projectspace has been opened.
+     * This occasion may e.g. be used to read ProjectSpace related
+     * configuration from the document. User independent data is
+     * available in the DOM document projectSpace->readUserDocument().
+     * User dependent data (it is important for multiuser projects
+     * to distinguish them) are available under projectSpace->readGlobalDocument().
      */
     virtual void projectSpaceOpened(ProjectSpace *projectSpace);
     /**
      * The projectspace has been closed.
+     * This occasion may e.g. be used to write ProjectSpace related
+     * configuration to the DOM document, see #projectSpaceClosed()
      */
     virtual void projectSpaceClosed();
     /**
@@ -129,23 +136,6 @@ public:
   */
   virtual QList<KAction>* kdevNodeActions(KDevNode* pNode);
   
-
-    /** write the ProjectSpace related configuration to the document
-     , but only user independent data (important for multiuser projects)*/
-    virtual void writeProjectSpaceGlobalConfig(QDomDocument& doc);
-
-    /** write the ProjectSpace related configuration to the document
-	, saves user dependent data */
-    virtual void writeProjectSpaceUserConfig(QDomDocument& doc);
-    
-    /** read the ProjectSpace related configuration from the document
-	, but only user independent data (important for multiuser projects)*/
-    virtual void readProjectSpaceGlobalConfig(QDomDocument& doc);
-
-    /** read the ProjectSpace related configuration from the document
-	, read user dependent data */
-    virtual void readProjectSpaceUserConfig(QDomDocument& doc);
-
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
     /**

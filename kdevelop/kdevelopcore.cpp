@@ -19,7 +19,6 @@
 #include <kfiledialog.h>
 #include <qdom.h>
 
-
 #include "classstore.h"
 #include "projectoptionsdlg.h"
 #include "kdevelop.h"
@@ -260,18 +259,13 @@ void KDevelopCore::unloadLanguageSupport()
 }
 
 
-
-void KDevelopCore::newFile()
+void KDevelopCore::unloadProjectSpace()
 {
-  //just a test!
-  QWidget* pEV = new QWidget(0L);
-  m_pKDevelopGUI->embedWidget( pEV, KDevComponent::DocumentView, "Document", 0L);
-  pEV->show();
-}
+    kdDebug(9000) << "KDevelopCore::unloadProjectSpace" << endl;
+    if (!m_pProjectSpace)
+        return;
 
-void KDevelopCore::unloadProjectSpace(){
-  kdDebug(9000) << "KDevelopCore::unloadProjectSpace" << endl;
-  QDomDocument* pDoc=0;
+#if 0
   pDoc = m_pProjectSpace->writeGlobalDocument();
   QListIterator<KDevComponent> it6(m_components);
   for (; it6.current(); ++it6){
@@ -283,11 +277,17 @@ void KDevelopCore::unloadProjectSpace(){
   for (; it7.current(); ++it7){
     (*it7)->writeProjectSpaceUserConfig(*pDoc);
   }
-  m_pProjectSpace->saveConfig();
-  m_components.remove(m_pProjectSpace);
-  delete m_pProjectSpace;
-  m_pProjectSpace = 0L;
+#endif
 
+    // Save window layout
+    QDomElement docel = m_pProjectSpace->readUserDocument()->documentElement();
+    QDomElement layoutel = docel.namedItem("Layout").toElement();
+    if (layoutel.isNull()) {
+        layoutel = docel.ownerDocument().createElement("Layout");
+        docel.appendChild(layoutel);
+    }
+    m_pKDevelopGUI->writeDockConfig(layoutel);
+    
   if (m_pLanguageSupport) {
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
@@ -311,6 +311,11 @@ void KDevelopCore::unloadProjectSpace(){
   for (; it4.current(); ++it4)
     (*it4)->projectSpaceClosed();
   
+  m_pProjectSpace->saveConfig();
+  m_components.remove(m_pProjectSpace);
+  delete m_pProjectSpace;
+  m_pProjectSpace = 0L;
+
   KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
   pAC->action("project_close")->setEnabled(false);
   /*pAC->action("project_add_existing_files")->setEnabled(false);
@@ -331,14 +336,20 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
   QString projectSpace = ProjectSpace::projectSpacePluginName(fileName);
   m_pProjectSpace = ProjectSpace::createNewProjectSpace(projectSpace);
 
-  if(m_pProjectSpace != 0){
+    if (!m_pProjectSpace) {
+        KMessageBox::sorry(m_pKDevelopGUI,
+                           i18n("No ProjectSpace component for %1 found").arg(projectSpace));
+        return false;
+    }
+
     initComponent(m_pProjectSpace);
     m_pKDevelopGUI->guiFactory()->addClient( m_pProjectSpace);
     m_pProjectSpace->readConfig(fileName);
     m_pProjectSpace->dump();
     loadLanguageSupport(m_pProjectSpace->programmingLanguage());
     loadVersionControl(vcservice);
-    
+
+#if 0    
     // read the config for all components (maybe also other plugins?)
     QDomDocument* pDoc = m_pProjectSpace->readGlobalDocument();
     QListIterator<KDevComponent> it7(m_components);
@@ -351,7 +362,7 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
     for (; it6.current(); ++it6){
       (*it6)->readProjectSpaceUserConfig(*pDoc);
     }
-    
+#endif
     
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
@@ -361,19 +372,24 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
     for (; it2.current(); ++it2)
       (*it2)->classStoreOpened(m_pClassStore);
   
-    
     if (m_pVersionControl) {
       QListIterator<KDevComponent> it3(m_components);
       for (; it3.current(); ++it3)
         (*it3)->versionControlOpened(m_pVersionControl);
     }
     
-    
     if (m_pLanguageSupport) {
       QListIterator<KDevComponent> it4(m_components);
       for (; it4.current(); ++it4)
 	(*it4)->languageSupportOpened(m_pLanguageSupport);
     }
+
+    // Restore window layout
+    QDomElement docel = m_pProjectSpace->readUserDocument()->documentElement();
+    QDomElement layoutel = docel.namedItem("Layout").toElement();
+    if (!layoutel.isNull())
+        m_pKDevelopGUI->readDockConfig(layoutel);
+    
     // some special connections only from the projectspace interface
     connect( m_pProjectSpace, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
              this, SLOT(addedFileToProject(KDevFileNode*)) );
@@ -397,19 +413,18 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
       
       
     */
-    if(m_pLanguageSupport){
-      // the very first parsing, after a projectspace was opened
-      m_pLanguageSupport->doInitialParsing();
-    }
-  }
-  else {
-    KMessageBox::sorry(m_pKDevelopGUI,
-		       i18n("No ProjectSpace component for %1 found").arg(projectSpace));
-    return false;
-  }
-  return true;
+
+    return true;
 }
 
+
+void KDevelopCore::newFile()
+{
+  //just a test!
+  QWidget* pEV = new QWidget(0L);
+  m_pKDevelopGUI->embedWidget( pEV, KDevComponent::DocumentView, "Document", 0L);
+  pEV->show();
+}
 
 
 void KDevelopCore::slotFilePrint()
@@ -439,6 +454,7 @@ void KDevelopCore::slotFileNew()
   newFile();
 }
 
+
 void KDevelopCore::slotProjectNew(){
   // if m_pProjectSpace == 0, create a new one
   NewProjectDlg* pDlg = new NewProjectDlg(m_pProjectSpace);
@@ -459,6 +475,7 @@ void KDevelopCore::slotProjectNew(){
   delete pDlg;
 }
 
+
 void KDevelopCore::slotProjectOpen()
 {
     QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevpsp",
@@ -468,9 +485,7 @@ void KDevelopCore::slotProjectOpen()
 
     }
 
-    if (m_pProjectSpace)
-        unloadProjectSpace();
-
+    unloadProjectSpace();
     loadProjectSpace(fileName);
 }
 
@@ -479,19 +494,15 @@ void KDevelopCore::slotProjectOpenRecent(const KURL &url)
 {
     QString file = url.path(0);
 
-    if (m_pProjectSpace)
-        unloadProjectSpace();
-
+    unloadProjectSpace();
     loadProjectSpace(file);
 }
 
 
 void KDevelopCore::slotProjectClose()
 {
-  if(m_pProjectSpace != 0){
     // Ask for confirmation?
     unloadProjectSpace();
-  }
 }
 
 
@@ -611,6 +622,8 @@ KDevViewHandler* KDevelopCore::viewHandler()
 {
    return m_pViewHandler;
 }
+
+#if 0
 void KDevelopCore::writeProjectSpaceGlobalConfig(QDomDocument& doc){
   QListIterator<KDevComponent> it(m_components);
   for (; it.current(); ++it){
@@ -635,6 +648,7 @@ void KDevelopCore::readProjectSpaceUserConfig(QDomDocument& doc){
     (*it)->readProjectSpaceGlobalConfig(doc);
   }
 }
+#endif
 
 void KDevelopCore::needKDevNodeActions(KDevComponent* pWho,KDevNode* pNode){
   QList<KAction>* pAllList = new QList<KAction>;
@@ -673,4 +687,5 @@ void KDevelopCore::addedProject(KDevNode* pNode){
     (*it)->addedProject(pNode);
   }
 }
+
 #include "kdevelopcore.moc"

@@ -37,6 +37,7 @@ protected:
     virtual void projectSpaceClosed();
     virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
+    virtual void languageSupportOpened();
     virtual void addedFileToProject(KDevFileNode* pNode);
     virtual void removedFileFromProject(KDevFileNode* pNode);
     virtual void savedFile(const QString &fileName);
@@ -46,7 +47,6 @@ protected:
     virtual void addMethodRequested(const QString &className);
     virtual void addAttributeRequested(const QString &className);
     virtual QStringList fileFilters();
-    virtual void doInitialParsing();
 
 private:
     QString asHeaderCode(ParsedMethod *pm);

@@ -61,11 +61,8 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     // Default is: switch to editor mode in Childframe mode
     KConfig* pConfig = kapp->config();
     pConfig->setGroup( "MDI settings" );
-    QString yes_no = pConfig->readEntry( "toplevel mode", "0" );
-    if (yes_no == "1")
-        restoreDockAndMdiSzenario( EditorEnv | TopLevelMode);
-    else
-        restoreDockAndMdiSzenario( EditorEnv | ChildframeMode);
+    bool yes_no = pConfig->readBoolEntry( "toplevel mode", false );
+    restoreDockAndMdiSzenario( yes_no? (EditorEnv | TopLevelMode) : (EditorEnv | ChildframeMode) );
 
     // insert the Window menu provided by QextMDI, we don't need KParts here.
     menuBar()->removeItemAt( 6);
@@ -89,6 +86,8 @@ void KDevelop::initActions(){
   pAction = KStdAction::quit(this, SLOT(close()), actionCollection());
   
 }
+
+
 void KDevelop::slotOptionsEditToolbars(){
   KEditToolbar dlg(factory());
   if (dlg.exec()){
@@ -109,9 +108,12 @@ void KDevelop::readProperties(KConfig* pConfig){
 
 bool KDevelop::queryClose(){
   kdDebug(9000) << "KDevelop::queryClose" << endl;
+  m_pCore->unloadProjectSpace();
   return true;
   
 }
+
+
 bool KDevelop::queryExit(){
     kdDebug(9000) << "KDevelop::queryExit" << endl;
     saveCurrentDockAndMdiSzenario();
@@ -562,11 +564,11 @@ void KDevelop::restoreDockAndMdiSzenario( int dockSzenario)
     // and switch to the desired MDI mode
     switch (dockSzenario) {
         case EditorEnv | TopLevelMode:
-            readDockConfig( pConfig, "editormode toplevel dock-scenario");
+//            readDockConfig( pConfig, "editormode toplevel dock-scenario");
             switchToToplevelMode();
             break;
         case EditorEnv | ChildframeMode:
-            readDockConfig( pConfig, "editormode childframe dock-scenario");
+//            readDockConfig( pConfig, "editormode childframe dock-scenario");
             switchToChildframeMode();
             break;
     }
@@ -580,16 +582,16 @@ void KDevelop::saveCurrentDockAndMdiSzenario()
     // and also the current MDI mode
     switch (m_dockSzenario) {
         case EditorEnv | TopLevelMode:
-            qDebug( "writing editormode toplevel dock-scenario...");
-            writeDockConfig( pConfig, "editormode toplevel dock-scenario");
+            kdDebug(9000) << "writing editormode toplevel dock-scenario..." << endl;
+//            writeDockConfig( pConfig, "editormode toplevel dock-scenario");
             break;
         case EditorEnv | ChildframeMode:
-            qDebug( "writing editormode childframe dock-scenario...");
-            writeDockConfig( pConfig, "editormode childframe dock-scenario");
+            kdDebug(9000) << "writing editormode childframe dock-scenario..." << endl;
+//            writeDockConfig( pConfig, "editormode childframe dock-scenario");
             break;
     }
     pConfig->setGroup( "MDI settings" );
-    pConfig->writeEntry( "toplevel mode", isInTopLevelMode() ? "1" : "0");
+    pConfig->writeEntry( "toplevel mode", isInTopLevelMode());
 }
 
 #include "kdevelop.moc"

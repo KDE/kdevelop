@@ -95,13 +95,5 @@ void KDevComponent::setKDevNodeActions(QList<KAction>*){
 QList<KAction>* KDevComponent::kdevNodeActions(KDevNode*){
   return 0;
 }
-void KDevComponent::writeProjectSpaceGlobalConfig(QDomDocument&){
-}
-void KDevComponent::writeProjectSpaceUserConfig(QDomDocument&){
-}
-void KDevComponent::readProjectSpaceGlobalConfig(QDomDocument&){
-}
-void KDevComponent::readProjectSpaceUserConfig(QDomDocument&){
-}
 
 #include "kdevcomponent.moc"

@@ -46,8 +46,9 @@ QStringList Project::allSources(){
 }
 
 /** returns all files*/
-QStringList Project::allAbsoluteFileNames(){
-  cerr  << endl << "kdevelop (project): Project::allFileNames() ";
+QStringList Project::allAbsoluteFileNames()
+{
+  kdDebug(9030) << "Project::allFileNames()" << endl;
   QStringList list;
   RegisteredFile* pFile;
   for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
@@ -62,7 +63,7 @@ RegisteredFile* Project::file(QString relFileName){
       return pFile;
     }
   }
-  cerr << endl << "kdevelop (project): Project::fileProperties() return 0!:" << relFileName;
+  kdDebug(9030) << "Project::fileProperties() return 0!:" << relFileName << endl;
   dump();
   return 0;
 }
@@ -70,7 +71,7 @@ RegisteredFile* Project::fileAbsolute(QString absFileName){
   QString relFile = CToolClass::getRelativeFile(m_absPath,absFileName);
   RegisteredFile* pFile= file(relFile);
   if(pFile == 0){
-    cerr << endl << "kdevelop (project): Project::filePropertiesAbsolute() return 0!:" << absFileName;
+    kdDebug(9030) << "Project::filePropertiesAbsolute() return 0!:" << absFileName << endl;
     dump();
   }
   return pFile;
@@ -127,16 +128,16 @@ void Project::removeFile(QString absFilename){
   for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
     if( pFile->relativeFile() == relFile){
       if(m_pFiles->remove(pFile)){
-	cerr << endl << " Project::removeFile file '" + relFile + "' found and removed";
+	kdDebug(9030) << "Project::removeFile file '" + relFile + "' found and removed" << endl;
       }
     }
   }
 }
 void Project::showAllFiles(){
   RegisteredFile* pFile;
-  cerr << endl << "show all registered Files for: " << m_name;
+  kdDebug(9030) << "show all registered Files for: " << m_name << endl;
   for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
-    cerr << "\nFilename:" << pFile->relativeFile();
+    kdDebug(9030) << "Filename:" << pFile->relativeFile() << endl;
   }
 }
 
@@ -152,7 +153,7 @@ void Project::dump(){
 bool Project::readUserConfig(QDomDocument& /*doc*/,QDomElement& projectElement){
   QDomElement filesElement = projectElement.namedItem("projecttest").toElement();
   if(filesElement.isNull()){
-    cerr << "\nProject::readUserConfig no \"projecttest\" tag found!";
+    kdDebug(9030) << "Project::readUserConfig no \"projecttest\" tag found!" << endl;
     return false;
   }
   return true;
@@ -163,15 +164,16 @@ void Project::updateMakefileEntries(QTextStream& stream){
 
 
 
-bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
-  cerr << "\nenter Project::writeGlobalConfig";
+bool Project::writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement)
+{
+  kdDebug(9030) << "enter Project::writeGlobalConfig" << endl;
   KAboutData* pData = aboutPlugin();
   QString pluginName;
   if(pData !=0){
     pluginName = pData->appName();
   }
   else {
-    kdDebug(9000) << "Project::writeGlobalConfig() no aboutPlugin() found :-(";
+    kdDebug(9030) << "Project::writeGlobalConfig() no aboutPlugin() found :-(";
     return false;
   }
   projectElement.setAttribute("pluginName",pluginName);
@@ -201,7 +203,7 @@ bool Project::readGlobalConfig(QDomDocument&/*doc*/,QDomElement& projectElement)
 
   QDomElement filesElement = projectElement.namedItem("Files").toElement();
   if(filesElement.isNull()){
-    cerr << "\nProjectSpace::readGlobalConfig no \"Files\" tag found!";
+    kdDebug(9030) << "ProjectSpace::readGlobalConfig no \"Files\" tag found!" << endl;
     return false;
   }
 
@@ -223,21 +225,21 @@ KAboutData* Project::aboutPlugin(){
 // a Factory ?
 
 Project* Project::createNewProject(QString projecttypeName,QObject* parent){
-  kdDebug(9000) << "enter PluginLoader::getNewProject";
+  kdDebug(9030) << "enter PluginLoader::getNewProject";
   QString constraint = QString("[Name] == '%1'").arg(projecttypeName);
   KTrader::OfferList offers = KTrader::self()->query("KDevelop/Project", constraint);
   KService *service = *offers.begin();
-  kdDebug(9000) << "Found Project Component " << service->name() << endl;
+  kdDebug(9030) << "Found Project Component " << service->name() << endl;
 
   KLibFactory *factory = KLibLoader::self()->factory(service->library());
   if (!factory){
-    kdDebug(9000) << "Factory not available " << service->library()  << endl;
+    kdDebug(9030) << "Factory not available " << service->library()  << endl;
   }
   
   Project* prj  = (Project*)factory->create(parent,service->name().latin1(),
 					    "Project");
   if(!prj){
-    kdDebug(9000) << "couldn't create the project "<<  service->library()  << endl;
+    kdDebug(9030) << "couldn't create the project "<<  service->library()  << endl;
   }
   return prj;
 }

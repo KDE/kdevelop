@@ -32,8 +32,7 @@ protected:
     virtual void stopButtonClicked();
     virtual void projectSpaceClosed();
     virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
-    virtual void readProjectSpaceUserConfig(QDomDocument& doc);
-    virtual void writeProjectSpaceUserConfig(QDomDocument& doc);
+
 private:
     QGuardedPtr<GrepWidget> m_widget;
     friend class GrepWidget;

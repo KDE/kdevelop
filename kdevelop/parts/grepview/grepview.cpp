@@ -17,6 +17,7 @@
 #include <kiconloader.h>
 #include <kdialogbase.h>
 
+#include "projectspace.h"
 #include "grepview.h"
 #include "grepwidget.h"
 #include "grepconfigwidget.h"
@@ -87,26 +88,30 @@ void GrepView::projectSpaceOpened(ProjectSpace *pProjectSpace)
 {
     kdDebug(9001) << "GrepView::projectSpaceOpened()" << endl;
     m_widget->setProjectSpace(pProjectSpace);
+
+#if 0
+    //at the moment GrepView writes only data that are user depended,
+    // find the "GrepView" tag
+    QDomDocument doc = pProjectSpace->readUserDocument();
+    QDomNodeList grepList = doc.elementsByTagName("GrepView");
+    QDomElement grepElement = grepList.item(0).toElement();
+    kdDebug(9001) << "GrepView::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;
+#endif
 }
 
 
 void GrepView::projectSpaceClosed()
 {
     kdDebug(9001) << "GrepView::projectSpaceClosed()" << endl;
-}
-//at the moment GrepView writes only data that are user depended,
-void GrepView::readProjectSpaceUserConfig(QDomDocument& doc){
-  // find the "GrepView" tag
-  QDomNodeList grepList = doc.elementsByTagName("GrepView");
-  QDomElement grepElement = grepList.item(0).toElement();
-  kdDebug(9001) << "GrepView::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;
+
+#if 0
+    kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;
+    QDomDocument doc = pProjectSpace->readUserDocument();
+    QDomElement rootElement = doc.documentElement();
+    QDomElement elem = doc.createElement("GrepView");
+    elem.setAttribute("test", "value");
+    rootElement.appendChild( elem );
+#endif
 }
 
-void GrepView::writeProjectSpaceUserConfig(QDomDocument& doc){
-  kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;
-  QDomElement rootElement = doc.documentElement();
-  QDomElement elem = doc.createElement("GrepView");
-  elem.setAttribute("test", "value");
-  rootElement.appendChild( elem );
-}
 #include "grepview.moc"

@@ -31,10 +31,13 @@ public:
     virtual ~KDevelopCore();
 
     void loadInitialComponents();
+    bool loadProjectSpace(const QString &fileName);
+    void unloadProjectSpace();
+    
     KDevViewHandler* viewHandler();
     // Session management
-  virtual void saveProperties(KConfig*);
-  virtual void readProperties(KConfig*);
+    virtual void saveProperties(KConfig*);
+    virtual void readProperties(KConfig*);
 
 private:
     void initActions();
@@ -45,8 +48,6 @@ private:
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
     void newFile();
-    bool loadProjectSpace(const QString &fileName);
-    void unloadProjectSpace();
     
 
 private slots:
@@ -70,10 +71,10 @@ private slots:
     void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();
     void gotoProjectManual();
-    void writeProjectSpaceGlobalConfig(QDomDocument& doc);
-    void writeProjectSpaceUserConfig(QDomDocument& doc);
-    void readProjectSpaceGlobalConfig(QDomDocument& doc);
-    void readProjectSpaceUserConfig(QDomDocument& doc);
+//    void writeProjectSpaceGlobalConfig(QDomDocument& doc);
+//    void writeProjectSpaceUserConfig(QDomDocument& doc);
+//    void readProjectSpaceGlobalConfig(QDomDocument& doc);
+//    void readProjectSpaceUserConfig(QDomDocument& doc);
     void needKDevNodeActions(KDevComponent* pWho,KDevNode* pNode);
     /** from a Projectspace*/
     void addedFileToProject(KDevFileNode* pNode);
