@@ -43,6 +43,7 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context)
         popupfile = fcontext->fileName();
         QFileInfo fi(popupfile);
         QString name = fi.fileName();
+	popup->insertSeparator();
         popup->insertItem( i18n("Commit: %1").arg(name),
                            this, SLOT(slotCommit()) );
         popup->insertItem( i18n("Update: %1").arg(name),
