@@ -147,7 +147,7 @@ void $APPNAME$View::startVideo()
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
         exit(0);
 
-    SDL_WM_SetCaption("BlurScope","blurscope");
+    SDL_WM_SetCaption("$APPNAME$","$APPNAMELC$");
 
     /* See if we try to get a hardware colormap */
     videoflags = SDL_SWSURFACE | (fullscreen?SDL_FULLSCREEN:0);
@@ -161,7 +161,7 @@ void $APPNAME$View::startVideo()
     if(!surface)
         SDL_Quit();
 
-    SDL_WM_SetCaption("BlurScope", 0);
+    SDL_WM_SetCaption("$APPNAME$", 0);
     SDL_ShowCursor(0);
 
 }
