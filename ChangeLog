@@ -1,8 +1,14 @@
+2002-07-15 Jakob Simon-Gaarde <jakob@jsg.dk>
+  * trollproject:
+    * trollprojectwidget:
+      * The projectmanager now supports qmake scopes
+        ( very large step towards completion of the trollprojectpart )
+
 2002-07-15 Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* Exchanged old javasupport part with the beginnings of a new one,
 	* written entirely in C++.
-	
+
 2002-07-07 Victor Röder <victor_roeder@gmx.de>
 	* repaired layouting of some Automake dialogs
 	* adapted the the look of all Autmake dialogs
