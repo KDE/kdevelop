@@ -778,6 +778,9 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
 		
         // Create new file template pages
         QStringList l = QStringList::split(",", info->fileTemplates);
+        if (l.empty()) //if the app template doesn't show file templates, we need to set another m_lastPage, aleXXX
+           m_lastPage=m_vcsForm;
+
         QStringList::ConstIterator it = l.begin();
         while (it != l.end()) {
             AppWizardFileTemplate fileTemplate;
