@@ -22,7 +22,7 @@ typedef KGenericFactory<ValgrindPart> ValgrindFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( "kdevvalgrind" ) );
 
 ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin( parent, name )
+  : KDevPlugin( parent, name ? name : "ValgrindPart" )
 {
   setInstance( ValgrindFactory::instance() );
   setXMLFile( "kdevpart_valgrind.rc" );
@@ -98,13 +98,18 @@ void ValgrindPart::appendMessage( const QString& message )
 void ValgrindPart::slotExecValgrind()
 {
   ValgrindDialog* dlg = new ValgrindDialog();
-  if ( project() ) {
+  if ( project() && _lastExec.isEmpty() ) {
     QString pExec = project()->projectDirectory();
     if ( !pExec.endsWith( "/" ) && !project()->mainProgram().startsWith( "/" ) )
       pExec += "/";
     pExec += project()->mainProgram();
     dlg->setExecutable( pExec );
+  } else {
+    dlg->setExecutable( _lastExec );
   }
+  dlg->setParameters( _lastParams );
+  dlg->setValExecutable( _lastValExec );
+  dlg->setValParams( _lastValParams );
   if ( dlg->exec() == QDialog::Accepted ) {
     runValgrind( dlg->executableName(), dlg->parameters(), dlg->valExecutable(), dlg->valParams() );
   }
@@ -134,11 +139,16 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
   topLevel()->raiseView( m_widget );
   core()->running( this, true );
+
+  _lastExec = exec;
+  _lastParams = params;
+  _lastValExec = valExec;
+  _lastValParams = valParams;
 }
 
-void ValgrindPart::receivedStdout( KProcess*, char* msg, int len )
+void ValgrindPart::receivedStdout( KProcess*, char* /* msg */, int /* len */ )
 {
-  kdDebug() << "got StdOut: " <<QString::fromLocal8Bit( msg, len ) << endl;
+  //kdDebug() << "got StdOut: " <<QString::fromLocal8Bit( msg, len ) << endl;
 }
 
 void ValgrindPart::receivedStderr( KProcess*, char* msg, int len )
@@ -187,6 +197,37 @@ void ValgrindPart::processExited( KProcess* p )
     lastPiece = QString::null;
     core()->running( this, false );
   }
+}
+
+void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
+{
+//  qDebug( "RESTORE" );
+  QDomElement execElem = el->namedItem( "executable" ).toElement();
+  _lastExec = execElem.attribute( "path", "" );
+  _lastParams = execElem.attribute( "params", "" );
+
+  QDomElement valElem = el->namedItem( "valgrind" ).toElement();
+  _lastValExec = valElem.attribute( "path", "valgrind" );
+  _lastValParams = valElem.attribute( "params", "" );
+}
+
+void ValgrindPart::savePartialProjectSession( QDomElement* el )
+{
+//  qDebug( "SAVE" );
+  QDomDocument domDoc = el->ownerDocument();
+  if ( domDoc.isNull() ) 
+    return;
+
+  QDomElement execElem = domDoc.createElement( "executable" );
+  execElem.setAttribute( "path", _lastExec );
+  execElem.setAttribute( "params", _lastParams );
+
+  QDomElement valElem = domDoc.createElement( "valgrind" );
+  valElem.setAttribute( "path", _lastValExec );
+  valElem.setAttribute( "params", _lastValParams );
+
+  el->appendChild( execElem );
+  el->appendChild( valElem );
 }
 
 #include "valgrind_part.moc"

@@ -23,6 +23,9 @@ public:
   
   void runValgrind( const QString& exec, const QString& parameters, const QString& valExec, const QString& valParameters );
 
+  void savePartialProjectSession( QDomElement* el );
+  void restorePartialProjectSession( const QDomElement* el );
+
 private slots:
   void slotExecValgrind();
   void slotKillValgrind();
@@ -33,6 +36,7 @@ private slots:
 private:
   void getActiveFiles();
   void appendMessage( const QString& message );
+  QString _lastExec, _lastParams, _lastValExec, _lastValParams;
   KProcess* proc;
   QString currentMessage;
   QString lastPiece;

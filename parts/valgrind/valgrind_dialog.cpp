@@ -66,7 +66,7 @@ QString ValgrindDialog::valParams() const
   return params;
 }
 
-void ValgrindDialog::setValParame( const QString& params )
+void ValgrindDialog::setValParams( const QString& params )
 {
   w->valParamEdit->setText( params );
 }

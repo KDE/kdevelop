@@ -32,7 +32,7 @@ public:
 
   // command line parameters for valgrind
   QString valParams() const;
-  void setValParame( const QString& params );
+  void setValParams( const QString& params );
       
 private:
   DialogWidget *w;
