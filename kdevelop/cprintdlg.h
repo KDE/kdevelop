@@ -1,9 +1,9 @@
 /***************************************************************************
                           cprintdlg.h  -  description                              
-                             -------------------                                         
-    begin                : Thu Feb 4 1999                                           
-    copyright            : (C) 1999 by                          
-    email                :                                      
+                             -------------------                                  
+    begin                : Thu Feb 4 1999                                        
+    copyright            : (C) 1999 by Stefan Heidrich                         
+    email                : sheidric@rz.uni-potsdam.de                              
  ***************************************************************************/
 
 /***************************************************************************
@@ -45,7 +45,9 @@ public slots:
  void slotPrettyPrintClicked(bool);
  void slotPrintToFileClicked(bool);
  void slotCancelClicked();
-  
+ void slotFilesConfClicked();
+ void slotPrintingConfClicked();
+
 protected:
  QButtonGroup* paperFormatGroup;
  QPushButton *printingConfButton,*printToFileDlg,*filesConfButton,

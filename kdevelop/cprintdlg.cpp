@@ -2,8 +2,8 @@
                           cprintdlg.cpp  -  description                              
                              -------------------                                         
     begin                : Thu Feb 4 1999                                           
-    copyright            : (C) 1999 by                          
-    email                :                                      
+    copyright            : (C) 1999 by Stefan Heidrich                         
+    email                : sheidric@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -17,6 +17,8 @@
 
 
 #include "cprintdlg.h"
+#include "cfileprintdlg.h"
+#include "cconfigprintdlg.h"
 #include <qpixmap.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -218,7 +220,8 @@ void CPrintDlg::init(){
   printingConfButton->setText(( "printing..." ));
   printingConfButton->setAutoRepeat( FALSE );
   printingConfButton->setAutoResize( FALSE );
-  
+  connect (printingConfButton,SIGNAL(clicked()),SLOT(slotPrintingConfClicked()));  
+
   printToFileLine = new QLineEdit( printwidget, "printToFileLine" );
   printToFileLine->setGeometry( 30, 140, 230, 30 );
   printToFileLine->setMinimumSize( 0, 0 );
@@ -418,6 +421,7 @@ void CPrintDlg::init(){
   filesConfButton->setText(( "files..." ));
   filesConfButton->setAutoRepeat( FALSE );
   filesConfButton->setAutoResize( FALSE );
+  connect (filesConfButton, SIGNAL(clicked()),SLOT(slotFilesConfClicked()));
   
   prettyCombBox = new QComboBox( FALSE, printwidget, "prettyCombBox" );
   prettyCombBox->setGeometry( 360, 360, 180, 30 );
@@ -588,4 +592,15 @@ void CPrintDlg::slotPrintToFileClicked(bool status) {
 
 void CPrintDlg::slotCancelClicked() {
   reject();
+}
+
+void CPrintDlg::slotFilesConfClicked() {
+ CFilePrintDlg *fileconf = new CFilePrintDlg(this, "filedialog");
+ fileconf->exec(); 
+}
+
+void CPrintDlg::slotPrintingConfClicked() {
+ CConfigPrintDlg *printconf = new CConfigPrintDlg(this, "confdialog");
+ printconf->resize(600,510);
+ printconf->exec(); 
 }
