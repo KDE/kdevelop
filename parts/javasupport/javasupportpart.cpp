@@ -197,7 +197,7 @@ void JavaSupportPart::parse(const QString &fileName)
         }
 
     } catch( antlr::ANTLRException& ex ){
-        kdDebug() << "*exception*: " << ex.toString().c_str() << std::endl;
+        kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
         d->problemReporter->reportError( ex.what(),
                                          fileName,
                                          lexer.getLine(),
@@ -232,7 +232,7 @@ void JavaSupportPart::parseContents( const QString& contents, const QString& fil
         int errors = lexer.numberOfErrors() + parser.numberOfErrors();
 
     } catch( antlr::ANTLRException& ex ){
-        kdDebug() << "*exception*: " << ex.toString().c_str() << std::endl;
+        kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
         d->problemReporter->reportError( ex.what(),
                                          fileName,
                                          lexer.getLine(),
