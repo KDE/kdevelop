@@ -227,6 +227,7 @@ protected slots:
 	virtual void slotClicked();
 public slots:
 	virtual void setIcon(const QString&);
+	virtual void setIcon(const QPixmap&);
 };
 
 #endif

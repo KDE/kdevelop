@@ -129,6 +129,9 @@ void KMdiDockContainer::insertWidget (KDockWidget *dwdg, QPixmap pixmap, const Q
 		m_map.insert(w,tab);
 		m_revMap.insert(tab,w);
 
+                if (((KDockWidget*)parentWidget())->mayBeShow())
+			((KDockWidget*)parentWidget())->dockBack();
+
 		if (w->getHeader()->qt_cast("KDockWidgetHeader")) {
 			kdDebug()<<"*** KDockWidgetHeader has been found"<<endl;
 			KDockWidgetHeader *hdr=static_cast<KDockWidgetHeader*>(w->getHeader()->
@@ -162,8 +165,10 @@ void KMdiDockContainer::insertWidget (KDockWidget *dwdg, QPixmap pixmap, const Q
 
 void KMdiDockContainer::changeOverlapMode() {
 	const KDockButton_Private *btn=dynamic_cast<const KDockButton_Private*>(sender());
+	kdDebug()<<"KMdiDockContainer::changeOverlapMode: button=="<<btn<<endl;
 	if (!btn) return;
 	if (!btn->isOn()) {
+		kdDebug()<<"KMdiDockContainer::changeOverlapMode: activateOverlapMode"<<endl;
 		if (m_vertical) {
 			activateOverlapMode(m_tb->width());
 		}
@@ -172,12 +177,19 @@ void KMdiDockContainer::changeOverlapMode() {
 			activateOverlapMode(m_tb->height());
 		}
 	} else {
+		kdDebug()<<"KMdiDockContainer::changeOverlapMode: deactivateOverlapMode"<<endl;
 		deactivateOverlapMode();
 	}
 	
 	for (QMap<KMdiDockWidget*,KDockButton_Private*>::iterator it=m_overlapButtons.begin();
 		it!=m_overlapButtons.end();++it)
 		it.data()->setOn(!isOverlapMode());
+}
+
+void KMdiDockContainer::hideIfNeeded() {
+	kdDebug()<<"************************* hideIfNeeded *************************"<<endl;
+	if (!itemNames.count())
+		((KDockWidget*)parentWidget())->undock();
 }
 
 void KMdiDockContainer::removeWidget(KDockWidget* dwdg)
@@ -196,6 +208,8 @@ void KMdiDockContainer::removeWidget(KDockWidget* dwdg)
 	}
 	KDockContainer::removeWidget(w);
 	itemNames.remove(w->name());
+	if (!itemNames.count())
+		((KDockWidget*)parentWidget())->undock();
 }
 
 void KMdiDockContainer::undockWidget(KDockWidget *dwdg)
@@ -260,6 +274,14 @@ void KMdiDockContainer::setToolTip (KDockWidget *, QString &s)
 {
 	kdDebug()<<"***********************************Setting tooltip for a widget: "<<s<<endl;
 	;
+}
+
+void  KMdiDockContainer::setPixmap(KDockWidget* widget ,const QPixmap& pixmap)
+{
+	int id=m_ws->id(widget);
+	if (id==-1) return;
+	KMultiTabBarTab *tab=m_tb->tab(id);
+	tab->setIcon(pixmap.isNull()?SmallIcon("misc"):pixmap);
 }
 
 #ifndef NO_KDE

@@ -23,13 +23,9 @@
  ***************************************************************************/
 
 #include "kmultitabbar.h"
-#ifndef NO_INCLUDE_MOCFILES
 #include "kmultitabbar.moc"
-#endif
 #include "kmultitabbar_p.h"
-#ifndef NO_INCLUDE_MOCFILES
 #include "kmultitabbar_p.moc"
-#endif
 #include <qbutton.h>
 #include <qpopupmenu.h>
 #include <qlayout.h>
@@ -38,12 +34,9 @@
 #include <qfontmetrics.h>
 #include <qstyle.h>
 
-#ifdef NO_KDE
-#include "dummykmainwindow.h"
-#else
 #include <kiconloader.h>
 #include <kdebug.h>
-#endif
+
 
 KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMultiTabBarMode bm):QScrollView(parent)
 {
@@ -54,13 +47,13 @@ KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMulti
 	setVScrollBarMode(AlwaysOff);
 	if (bm==KMultiTabBar::Vertical)
 	{
-		box=new QVBox(viewport());
+		box=new QVBox(viewport());			
 		box->setFixedWidth(24);
 		setFixedWidth(24);
 	}
 	else
 	{
-		box=new QHBox(viewport());
+		box=new QHBox(viewport());			
 		box->setFixedHeight(24);
 		setFixedHeight(24);
 	}
@@ -252,6 +245,11 @@ void KMultiTabBarTab::setIcon(const QString& icon)
 	setIconSet(SmallIcon(icon));
 }
 
+void KMultiTabBarTab::setIcon(const QPixmap& icon)
+{
+	setIconSet(icon);
+}
+
 void KMultiTabBarTab::slotClicked()
 {
 	updateState();
@@ -329,16 +327,16 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 
 	QSize sh;
-	if ((m_style==KMultiTabBar::KDEV3) || (isOn())) sh=QPushButton::sizeHint();
+	if ((m_style==KMultiTabBar::KDEV3) || (isOn())) sh=QPushButton::sizeHint();	
 	else sh=QSize(36,24);
-
+	
 	QPixmap pixmap( sh.width(),24); ///,sh.height());
 	pixmap.fill(eraseColor());
 	QPainter painter(&pixmap);
 
 
 	QStyle::SFlags st=QStyle::Style_Default;
-
+	
 	st|=QStyle::Style_Enabled;
 
 	if (isOn()) st|=QStyle::Style_On;
@@ -349,11 +347,11 @@ void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 	switch (m_position) {
 		case KMultiTabBar::Left:
 			paint->rotate(-90);
-			paint->drawPixmap(-pixmap.width(),0,pixmap);
+			paint->drawPixmap(-pixmap.width(),0,pixmap);	
 			break;
 		case KMultiTabBar::Right:
 			paint->rotate(90);
-			paint->drawPixmap(0,-pixmap.height(),pixmap);
+			paint->drawPixmap(0,-pixmap.height(),pixmap);	
 			break;
 
 		default:
@@ -363,16 +361,16 @@ void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 //	style().drawControl(QStyle::CE_PushButtonLabel,painter,this, QRect(0,0,pixmap.width(),pixmap.height()),
 //		colorGroup(),QStyle::Style_Enabled);
 
-
+	
 }
 
 void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 {
         QPixmap pixmap;
-	if ( iconSet())
+	if ( iconSet()) 
         	pixmap = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal );
 	paint->fillRect(0, 0, 24, 24, colorGroup().background());
-
+	
 	if (!isOn())
 	{
 
@@ -459,7 +457,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 			}
 
 		}
-		else
+		else 
 		if (m_position==KMultiTabBar::Top)
 		{
 			paint->fillRect(0,0,width()-1,23,QBrush(colorGroup().light()));
@@ -509,7 +507,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 
                                 paint->rotate(-90);
                                 kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
-
+                                
 				paint->drawPixmap(-24-tpixmap.width(),2,tpixmap);
 
 			}
@@ -540,7 +538,7 @@ KMultiTabBar::KMultiTabBar(KMultiTabBarMode bm, QWidget *parent,const char *name
 	}
 	m_l->setMargin(0);
 	m_l->setAutoAdd(false);
-
+	
 	m_internal=new KMultiTabBarInternal(this,bm);
 	setPosition((bm==KMultiTabBar::Vertical)?KMultiTabBar::Right:KMultiTabBar::Bottom);
 	setStyle(VSNET);
@@ -552,7 +550,7 @@ KMultiTabBar::KMultiTabBar(KMultiTabBarMode bm, QWidget *parent,const char *name
 	m_btnTabSep->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 	m_btnTabSep->setLineWidth(2);
 	m_btnTabSep->hide();
-
+	
 }
 
 KMultiTabBar::~KMultiTabBar() {
@@ -630,7 +628,7 @@ bool KMultiTabBar::isTabRaised(int id) const
 	{
 		return ttab->isOn();
 	}
-
+	
 	return false;
 }
 

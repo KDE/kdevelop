@@ -65,7 +65,7 @@ public:
 
 public slots:
    /** 
-   * Grabs the mouse, a move cursor, sets a move indicator variable to TRUE and keeps the global mouse position in mind
+   * Grabs the mouse, a move cursor, sets a move indicator variable to true and keeps the global mouse position in mind
    */
    void slot_moveViaSystemMenu();
 

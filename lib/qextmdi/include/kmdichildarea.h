@@ -107,23 +107,23 @@ public:
    * Appends a new KMdiChildFrm to this manager.
    * The child is shown,raised and gets focus if this window has it.
    */
-   void manageChild(KMdiChildFrm *lpC,bool bShow=TRUE,bool bCascade=TRUE);
+   void manageChild(KMdiChildFrm *lpC,bool bShow=true,bool bCascade=true);
    /**
    * Destroys a KMdiChildFrm managed.<br>
    * Note that if a client is attached to this child , it is deleted too!
    */
-   void destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
+   void destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild = true);
    /**
    * Destroys a KMdiChildFrm managed.<br>
    * Note that if a client is attached to this child , it is NOT deleted!
    */
-   void destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
+   void destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopChild = true);
    /**
    * Brings the child lpC to the top of the stack
-   * The children is focused if bSetFocus is TRUE
+   * The children is focused if bSetFocus is true
    * otherwise is raised only
    */
-   void setTopChild(KMdiChildFrm *lpC,bool bSetFocus=FALSE);
+   void setTopChild(KMdiChildFrm *lpC,bool bSetFocus=false);
    /**
    * Returns the topmost child (the active one) or 0 if there are no children.
    * Note that the topmost child may be also hidded , if ALL the windows are minimized.

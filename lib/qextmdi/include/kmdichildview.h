@@ -52,17 +52,17 @@
   * There are 2 possibilities for you to put your widgets under MDI control:
   *
   * Either you inherit all the views from KMdiChildView:
-  *   <PRE>
+  *   \code
   *   class MyMdiWidget : public KMdiChildView
   *   { .... };
   *   ...
   *   MyMdiWidget w;
   *   mainframe->addWindow(w, flags);
-  *   </PRE>
+  *   \endcode
   *
   * or you wrap them by a KMdiChildView somehow like this:
   *
-  * <PRE>
+  * \code
   * void DocViewMan::addKMdiFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
   * {
   *   // cover it by a KMdi childview and add that MDI system
@@ -99,7 +99,7 @@
   *   pMDICover->setFirstFocusableChildWidget(0L);
   *   pMDICover->setLastFocusableChildWidget(0L);
   * }
-  * </PRE>
+  * \endcode
   *
   */
 
@@ -111,23 +111,23 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildView : public QWidget
 
 // attributes
 protected:
-   /** 
+   /**
    * See KMdiChildView::caption
    */
    QString     m_szCaption;
-   /** 
+   /**
    * See KMdiChildView::tabCaption
    */
    QString     m_sTabCaption;
-   /** 
+   /**
    * See KMdiChildView::focusedChildWidget
    */
    QWidget*    m_focusedChildWidget;
-   /**  
+   /**
    * See KMdiChildView::setFirstFocusableChildWidget
    */
    QWidget*    m_firstFocusableChildWidget;
-   /**  
+   /**
    * See KMdiChildView::setLastFocusableChildWidget
    */
    QWidget*    m_lastFocusableChildWidget;
@@ -137,11 +137,11 @@ protected:
    int         m_windowMenuID;
    /**
    * Holds a temporary information about if the MDI view state has changed but is not processed yet (pending state).
-   * For example it could be that a 'maximize' is pending, if this variable is TRUE.
+   * For example it could be that a 'maximize' is pending, if this variable is true.
    */
    bool        m_stateChanged;
 
-   /** 
+   /**
    * Holds the time when this view was activated (not only displayed) for the last time.
    */
    QDateTime   m_time;
@@ -162,7 +162,7 @@ private:
    */
    bool m_bMainframesActivateViewIsPending;
    /**
-   * 
+   *
    */
    bool m_bFocusInEventIsPending;
 
@@ -202,8 +202,8 @@ public:
    */
    QWidget* focusedChildWidget();
    /**
-   * Returns TRUE if the MDI view is a child window within the MDI mainframe widget
-   * or FALSE if the MDI view is in toplevel mode
+   * Returns true if the MDI view is a child window within the MDI mainframe widget
+   * or false if the MDI view is in toplevel mode
    */
    bool isAttached() const { return (mdiParent() != 0L); };
    /**
@@ -219,12 +219,12 @@ public:
    * Calls updateButton on the taskbar button if it has been set.
    */
    virtual void setCaption(const QString& szCaption);
-   /** 
-   * Sets the caption of the button referring to this window 
+   /**
+   * Sets the caption of the button referring to this window
    */
    virtual void setTabCaption(const QString& caption);
-   /** 
-   * Sets the caption of both, window and button on the taskbar (they are going to be the same) 
+   /**
+   * Sets the caption of both, window and button on the taskbar (they are going to be the same)
    */
    virtual void setMDICaption(const QString &caption);
    /**
@@ -238,7 +238,7 @@ public:
    bool isMinimized() const;
    /**
    * Tells if the window is minimized when attached to the Mdi manager,
-   * otherwise returns FALSE.
+   * otherwise returns false.
    */
    bool isMaximized() const;
    /**
@@ -246,7 +246,7 @@ public:
     */
    QRect internalGeometry() const;
    /**
-   * Sets the geometry of the client area of this MDI child window. The 
+   * Sets the geometry of the client area of this MDI child window. The
    * top left position of the argument is the position of the top left point
    * of the client area in its parent coordinates and the arguments width
    * and height is the width and height of the client area. Please note: This
@@ -258,9 +258,9 @@ public:
    */
    QRect externalGeometry() const;
    /**
-   * Sets the geometry of the frame of this MDI child window. The top left 
-   * position of the argument is the position of the top left point of the 
-   * frame in its parent coordinates and the arguments width and height is 
+   * Sets the geometry of the frame of this MDI child window. The top left
+   * position of the argument is the position of the top left point of the
+   * frame in its parent coordinates and the arguments width and height is
    * the width and height of the widget frame. Please note: This differs
    * from the behaviour of QWidget::setGeometry()!
    */
@@ -291,24 +291,24 @@ public:
    * Switches interposing in event loop of all current child widgets off.
    */
    void removeEventFilterForAllChildren();
-   /** 
-   * Internally used for setting an ID for the 'Window' menu entry 
+   /**
+   * Internally used for setting an ID for the 'Window' menu entry
    */
    void setWindowMenuID( int id);
-   /** 
+   /**
    * Sets the minimum size of the widget to w by h pixels.
    * It extends it base clase method in a way that the minimum size of
-   * its childframe (if there is one) will be set, additionally. 
+   * its childframe (if there is one) will be set, additionally.
    */
    virtual void setMinimumSize ( int minw, int minh );
-   /** 
+   /**
    * Sets the maximum size of the widget to w by h pixels.
    * It extends it base clase method in a way that the maximum size of
-   * its childframe (if there is one) will be set, additionally. 
+   * its childframe (if there is one) will be set, additionally.
    */
    virtual void setMaximumSize ( int maxw, int maxh );
-   /** 
-   * Returns if this is added as MDI tool-view 
+   /**
+   * Returns if this is added as MDI tool-view
    */
    inline bool isToolView() const { return m_bToolView; };
    /**
@@ -338,13 +338,13 @@ public slots:
    * Useful as slot.
    */
    virtual void detach();
-   /** 
+   /**
    * Mimimizes the MDI view. If attached, the covering childframe widget is minimized (only a mini widget
    * showing the caption bar and the system buttons will remain visible). If detached, it will use the
    * minimize of the underlying system ( QWidget::showMinimized ).
    */
    virtual void minimize();
-   /** 
+   /**
    * Maximizes the MDI view. If attached, this widget will fill the whole MDI view area widget. The system buttons
    * move to the main menubar (if set by KMdiMainFrm::setMenuForSDIModeSysButtons ).
    * If detached, it will use the minimize of the underlying system ( QWidget::showMaximized ).
@@ -354,47 +354,47 @@ public slots:
    * Restores this window to its normal size. Also known as 'normalize'.
    */
    virtual void restore();
-   /** 
+   /**
    * Internally called, if KMdiMainFrm::attach is called.
    * Actually, only the caption of the covering childframe is set.
    */
    virtual void youAreAttached(KMdiChildFrm *lpC);
-   /** 
+   /**
    * Internally called, if KMdiMainFrm::detach is called.
    * Some things for going toplevel will be done here.
    */
    virtual void youAreDetached();
-   /** 
-   * Called if someone click on the "Window" menu item for this child frame window 
+   /**
+   * Called if someone click on the "Window" menu item for this child frame window
    */
    virtual void slot_clickedInWindowMenu();
-   /** 
-   * Called if someone click on the "Dock/Undock..." menu item for this child frame window 
+   /**
+   * Called if someone click on the "Dock/Undock..." menu item for this child frame window
    */
    virtual void slot_clickedInDockMenu();
-   /** 
-   * Calls QWidget::show but also for it's parent widget if attached 
+   /**
+   * Calls QWidget::show but also for it's parent widget if attached
    */
    virtual void show();
-   /** 
-   * Calls QWidget::hide() or it's parent widget hide() if attached 
+   /**
+   * Calls QWidget::hide() or it's parent widget hide() if attached
    */
    virtual void hide();
-   /** 
-   * Calls QWidget::raise() or it's parent widget raise() if attached 
+   /**
+   * Calls QWidget::raise() or it's parent widget raise() if attached
    */
    virtual void raise();
-   /** 
+   /**
    * Overridden from its base class method. Emits a signal KMdiChildView::isMinimizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system minimizing.
    */
    virtual void showMinimized();
-   /** 
+   /**
    * Overridden from its base class method. Emits a signal KMdiChildView::isMaximizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system maximizing.
    */
    virtual void showMaximized();
-   /** 
+   /**
    * Overridden from its base class method. Emits a signal KMdiChildView::isRestoredNow , additionally.
    * Note that this method is not used by an external windows manager call on system normalizing.
    */
@@ -406,25 +406,25 @@ protected:
     * mainframe has control over the views. Therefore the MDI view has to request the mainframe for a close.
     */
    virtual void closeEvent(QCloseEvent *e);
-   /** 
+   /**
    * It only catches QEvent::KeyPress events there. If a Qt::Key_Tab is pressed, the internal MDI focus
    * handling is called. That means if the last focusable child widget of this is called, it will jump to the
    * first focusable child widget of this.
    * See KMdiChildView::setFirstFocusableChildWidget and KMdiChildView::lastFirstFocusableChildWidget
    */
    virtual bool eventFilter(QObject *obj, QEvent *e);
-   /** 
+   /**
    * If attached, the childframe will be activated and the MDI taskbar button will be pressed. Additionally, the
    * memorized old focused child widget of this is focused again.
-   * Sends the focusInEventOccurs signal before changing the focus and the 
+   * Sends the focusInEventOccurs signal before changing the focus and the
    * gotFocus signal after changing the focus.
    */
    virtual void focusInEvent(QFocusEvent *e);
-   /** 
-   * Send the lostFocus signal 
+   /**
+   * Send the lostFocus signal
    */
    virtual void focusOutEvent(QFocusEvent *e);
-   /** 
+   /**
    * Internally used for the minimize/maximize/restore mechanism when in attach mode.
    */
    virtual void resizeEvent(QResizeEvent *e);
@@ -433,15 +433,15 @@ protected slots:
    void slot_childDestroyed();
 
 signals:
-   /** 
+   /**
    * Internally used by KMdiChildView::attach to send it as command to the mainframe.
    */
    void attachWindow( KMdiChildView*,bool);
-   /** 
+   /**
    * Internally used by KMdiChildView::detach to send it as command to the mainframe.
    */
    void detachWindow( KMdiChildView*,bool);
-   /** 
+   /**
    * Is sent when this MDI child view is going to receive focus (before actually changing the focus).
    * Internally used to send information to the mainframe that this MDI child view is focused.
    * See KMdiChildView::focusInEvent
@@ -470,44 +470,44 @@ signals:
    * See KMdiChildView::closeEvent and KMdiMainFrm::closeWindow
    */
    void childWindowCloseRequest( KMdiChildView*);
-   /** 
-   * Emitted when the window caption is changed via KMdiChildView::setCaption or KMdiChildView::setMDICaption 
+   /**
+   * Emitted when the window caption is changed via KMdiChildView::setCaption or KMdiChildView::setMDICaption
    */
    void windowCaptionChanged( const QString&);
-   /** 
-   * Emitted  when the window caption is changed via KMdiChildView::setTabCaption or KMdiChildView::setMDICaption 
+   /**
+   * Emitted  when the window caption is changed via KMdiChildView::setTabCaption or KMdiChildView::setMDICaption
    */
    void tabCaptionChanged( const QString&);
-   /** 
+   /**
    * Internally used to send information to the mainframe that this MDI view is maximized now.
    * Usually, the mainframe switches system buttons.
    */
    void mdiParentNowMaximized(bool);
    /**
-   * Is automatically emitted when slot_clickedInWindowMenu is called 
+   * Is automatically emitted when slot_clickedInWindowMenu is called
    */
    void clickedInWindowMenu(int);
-   /** 
-   * Is automatically emitted when slot_clickedInDockMenu is called 
+   /**
+   * Is automatically emitted when slot_clickedInDockMenu is called
    */
    void clickedInDockMenu(int);
-   /** 
-   * Signals this has been maximized 
+   /**
+   * Signals this has been maximized
    */
    void isMaximizedNow();
-   /** 
-   * Signals this has been minimized 
+   /**
+   * Signals this has been minimized
    */
    void isMinimizedNow();
-   /** 
-   * Signals this has been restored (normalized) 
+   /**
+   * Signals this has been restored (normalized)
    */
    void isRestoredNow();
-   /** 
+   /**
    * Signals this has been attached
    */
    void isAttachedNow();
-   /** 
+   /**
    * Signals this has been detached
    */
    void isDetachedNow();

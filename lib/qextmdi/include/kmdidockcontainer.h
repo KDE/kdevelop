@@ -41,12 +41,15 @@ public:
         KMdiDockWidget *parentDockWidget();
         virtual void insertWidget (KDockWidget *w, QPixmap, const QString &, int &);
         virtual void setToolTip (KDockWidget *, QString &);
+	virtual void setPixmap(KDockWidget*,const QPixmap&);
 	virtual void undockWidget(KDockWidget*);
 	virtual void removeWidget(KDockWidget*);	
+        void hideIfNeeded();
 #ifndef NO_KDE2
 	virtual void save(KConfig *);
 	virtual void load(KConfig *);
 #endif
+
 public slots:
 	void init();
         void collapseOverlapped();

@@ -201,7 +201,7 @@ public:
    * Installs an event filter to catch focus events.
    * Resizes this mdi child in a way that the child fits perfectly in.
    */
-   void setClient(KMdiChildView *w, bool bAutomaticResize = FALSE);
+   void setClient(KMdiChildView *w, bool bAutomaticResize = false);
    /**
    * Reparents the client widget to 0 (desktop), moves with an offset from the original position
    * Removes the event filter.
@@ -231,7 +231,7 @@ public:
    /**
    * Minimizes , Maximizes or restores the window.
    */
-   void setState(MdiWindowState state,bool bAnimate=TRUE);
+   void setState(MdiWindowState state,bool bAnimate=true);
    /**
    * Returns the current state of the window
    * Cool to have it inline...

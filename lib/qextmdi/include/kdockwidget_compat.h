@@ -716,7 +716,13 @@ protected:
   QWidget *latestKDockContainer();
 
 signals:
-  /**
+   /**
+   *@since 3.2
+   *is emitted after the setWidget method has finished
+   */
+  void widgetSet(QWidget*);
+	     
+   /**
    * Emitted when another dock widget is docking to this.
    *
    * @param dw the dockwidget that is docking to this
@@ -889,6 +895,8 @@ public:
    */
   virtual ~KDockManager();
 
+  void dumpDockWidgets();
+
 #ifndef NO_KDE2
   /**
    * Saves the current state of the dockmanager and of all controlled widgets.
@@ -1010,6 +1018,14 @@ public:
    * Returns TRUE if the splitter uses the high resolution, FALSE otherwise.
    */
   bool splitterHighResolution() const;
+
+  /**
+   * @since 3.2
+   */
+  void setSpecialLeftDockContainer(KDockWidget* container);
+  void setSpecialTopDockContainer(KDockWidget* container);
+  void setSpecialRightDockContainer(KDockWidget* container);
+  void setSpecialBottomDockContainer(KDockWidget* container);
 
 signals:
 

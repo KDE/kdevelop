@@ -37,7 +37,7 @@ public:
    virtual void last() {}
    virtual void next() {}
    virtual void prev() {}
-   virtual bool isDone() const { return TRUE; }
+   virtual bool isDone() const { return true; }
    virtual Item currentItem() const {
    /* should really never go inside here */
    return 0;

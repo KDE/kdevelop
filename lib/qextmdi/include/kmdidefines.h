@@ -43,16 +43,15 @@
 namespace KMdi
 {
    /** extent Qt events
-      @see QCustomEvent, QEvent::User 
-      <PRE>
-      bool
-      B_MyWidget::event( QEvent* e) {
+      @see QCustomEvent, QEvent::User
+      \code
+      bool B_MyWidget::event( QEvent* e) {
          if( e->type() == QEvent::Type(QEvent::User + int(KMdi::EV_Move))) {
             ...
          }
          ...
       }
-      </PRE>
+      \endcode
    */
    enum EventType {
       EV_Move=1,

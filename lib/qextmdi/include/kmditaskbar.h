@@ -145,7 +145,7 @@ public:
    * Removes a KMdiTaskBarButton and deletes it. If the rest of the buttons are smaller
    * than they usually are, all those buttons will be resized in a way that the new free size is used as well.
    */
-   void removeWinButton(KMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);
+   void removeWinButton(KMdiChildView *win_ptr, bool haveToLayoutTaskBar = true);
    /**
    * Returns the neighbor taskbar button of the taskbar button of the MDI view given by parameter
    * bRight specifies the side, of course left is used if bRight is false.

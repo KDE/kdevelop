@@ -629,6 +629,11 @@ public:
   QGuardedPtr<KDockWidget> mainDockWidget;
 
   QObjectList containerDocks;
+
+  QGuardedPtr<KDockWidget> leftContainer;
+  QGuardedPtr<KDockWidget> topContainer;
+  QGuardedPtr<KDockWidget> rightContainer;
+  QGuardedPtr<KDockWidget> bottomContainer;
 };
 
 
@@ -1105,6 +1110,25 @@ KDockWidget* KDockWidget::manualDock( KDockWidget* target, DockPosition dockPos,
 //  kdDebug()<<"KDockWidget::manualDock(): success = false (1)"<<endl;
   }
 
+  KDockWidget *tmpTarget;
+  switch (dockPos) {
+    case DockLeft:tmpTarget=dockManager()->d->leftContainer;
+	break;
+    case DockRight:tmpTarget=dockManager()->d->rightContainer;
+        break;
+    case DockBottom:tmpTarget=dockManager()->d->bottomContainer;
+        break;
+    case DockTop:tmpTarget=dockManager()->d->topContainer;
+        break;
+    default: tmpTarget=0;
+  }
+													      
+  if (this!=tmpTarget) {
+    if (target && (target==dockManager()->d->mainDockWidget) && tmpTarget) {
+	return manualDock(tmpTarget,DockCenter,spliPos,pos,check,tabIndex);
+    }
+  }
+																  
   // check allowed target submit this operations
   if ( target && !(target->sDocking & (int)dockPos) ){
     succes = false;
@@ -1584,6 +1608,7 @@ void KDockWidget::setWidget( QWidget* mw )
      layout->addWidget( widget,1 );
   }
   updateHeader();
+  emit widgetSet(mw);
 }
 
 void KDockWidget::setDockTabName( KDockTabGroup* tab )
@@ -2725,6 +2750,16 @@ void KDockManager::readConfig( KConfig* c, QString group )
 }
 #endif
 
+void KDockManager::dumpDockWidgets() {
+  QObjectListIt it( *childDock );
+  KDockWidget * obj;
+  while ( (obj=(KDockWidget*)it.current()) ) {
+    ++it;
+    kdDebug()<<"KDockManager::dumpDockWidgets:"<<obj->name()<<endl;
+  }
+
+}
+		
 KDockWidget* KDockManager::getDockWidgetFromName( const QString& dockName )
 {
   QObjectListIt it( *childDock );
@@ -2872,7 +2907,24 @@ void KDockManager::drawDragRectangle()
 }
 
 
+void KDockManager::setSpecialLeftDockContainer(KDockWidget* container) {
+  d->leftContainer=container;
+}
+	
+void KDockManager::setSpecialTopDockContainer(KDockWidget* container) {
+  d->topContainer=container;
+}
+		
+void KDockManager::setSpecialRightDockContainer(KDockWidget* container) {
+  d->rightContainer=container;
 
+}
+			
+void KDockManager::setSpecialBottomDockContainer(KDockWidget* container) {
+  d->bottomContainer=container;
+}
+				
+				
 KDockArea::KDockArea( QWidget* parent, const char *name)
 :QWidget( parent, name)
 {
@@ -2992,7 +3044,7 @@ KDockContainer::~KDockContainer(){
 		while (tmp)
 		{
 			struct ListItem *tmp2=tmp->next;
-			delete tmp->data;
+			free(tmp->data);
 			delete tmp;
 			tmp=tmp2;
 		}

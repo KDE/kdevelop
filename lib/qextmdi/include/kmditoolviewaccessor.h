@@ -54,14 +54,18 @@ private:
 	KMdiToolViewAccessor( class KMdiMainFrm *parent);
 public:
 	~KMdiToolViewAccessor();
-	QWidget *widgetContainer();
-	void setWidget(QWidget* widgetToWrap);
-	QWidget *widget();
+	QWidget *wrapperWidget();
+	QWidget *wrappedWidget();
 	void show(KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L,int percent = 50);
+public slots:
+	void setWidgetToWrap(QWidget* widgetToWrap);
 	void hide();
 private:
    class KMdiToolViewAccessorPrivate *d;
    class KMdiMainFrm *mdiMainFrm;
+
+protected:
+	bool eventFilter(QObject *o, QEvent *e);
 };
 
 
