@@ -2,6 +2,8 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
 
+KDE_OPTIONS = nofinal
+
 kde_module_LTLIBRARIES = libkdevfileview.la libkdevfilegroups.la
 
 libkdevfileview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

@@ -1,3 +1,5 @@
+KDE_OPTIONS = nofinal
+
 INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
 METASOURCES = AUTO
 lib_LTLIBRARIES =  libkdevqtimporter.la
