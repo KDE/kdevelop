@@ -558,7 +558,7 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
   if( aMethod )
     switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
   else
-    debug( "Couldn't find method %s.%s", parentPath, itemName );
+    debug( "Couldn't find method %s::%s", parentPath, itemName );
 }
 
 /*-------------------------------------- CKDevelop::CVGotoDeclaration()
@@ -751,31 +751,30 @@ CParsedContainer *CKDevelop::CVGetContainer( const char *containerPath,
                                              THType containerType )
 {
   REQUIRE1( "Valid container path", containerPath != NULL, NULL );
+  REQUIRE1( "Valid container path length", strlen( containerPath ) > 0, NULL );
 
   CParsedContainer *aContainer;
 
-  if( strlen( containerPath ) > 0 )
+  switch( containerType )
   {
-    switch( containerType )
-    {
-      case THCLASS:
-        // Try to fetch the class.
-        aContainer = class_tree->store->getClassByName( containerPath );
-
-        // If we found the class and it isn't a subclass we update the combo.
-        if( aContainer != NULL && aContainer->declaredInScope.isEmpty() )
-          CVClassSelected( containerPath );
-        break;
-      case THSTRUCT:
-        aContainer = class_tree->store->globalContainer.getStructByName( containerPath );
-        break;
-      case THSCOPE:
-        aContainer = class_tree->store->globalContainer.getScopeByName( containerPath );
-        break;
-      default:
-        aContainer = NULL;
-        break;
-    }
+    case THCLASS:
+      // Try to fetch the class.
+      aContainer = class_tree->store->getClassByName( containerPath );
+      
+      // If we found the class and it isn't a subclass we update the combo.
+      if( aContainer != NULL && aContainer->declaredInScope.isEmpty() )
+        CVClassSelected( containerPath );
+      break;
+    case THSTRUCT:
+      aContainer = class_tree->store->globalContainer.getStructByName( containerPath );
+      break;
+    case THSCOPE:
+      aContainer = class_tree->store->globalContainer.getScopeByName( containerPath );
+      break;
+    default:
+      debug( "Didn't find class/struct/scope %s[%d]", containerPath, containerType );
+      aContainer = NULL;
+      break;
   }
 
   return aContainer;
