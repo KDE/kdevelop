@@ -1,0 +1,22 @@
+If you have Automake 1.5 installed, then take note of the following.
+
+For Existing Projects
+---------------------
+You will need to copy the following files into the admin directory of your project if you have one
+
+/usr/share/doc/kdevelop/updates/conf.change.pl.gz
+/usr/share/doc/kdevelop/updates/config.pl.gz
+
+Make sure to uncompress the files after you have copied them.
+
+If you get errors when you run automake, then you will need to make sure that no variables are redefined in you Makefile.am files.
+For example you may need to change the following line in the toplevel Makefile.am
+
+EXTRA_DIST = admin
+
+to
+
+EXTRA_DIST += admin
+
+In other places you may need to comment out one of the definitions.
+

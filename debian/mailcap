@@ -1,0 +1,1 @@
+application/x-kdevelop-project; kdevelop -caption "KDevelop 2.1.5"   %s;test=test "$DISPLAY" != ""; priority=7

@@ -2,14 +2,14 @@ Source: kdevelop
 Section: devel
 Priority: optional
 Maintainer: Norman Jordan <njordan@debian.org>
-Build-Depends: debhelper (>> 3.0.0), gettext, libtool, kdelibs4-dev, libqt3-mt-dev, qt3-tools, kdoc, kdelibs4-doc, qt3-doc, flex, libpng-dev
+Build-Depends: debhelper (>> 3.0.0), gettext, kdelibs4-dev, libqt3-mt-dev, qt3-tools, kdelibs4-doc, qt3-doc, flex, libfam-dev
 Standards-Version: 3.5.2
 
 Package: kdevelop
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake1.5, kdevelop-data
+Depends: ${shlibs:Depends}, autoconf, automake | automake1.5 | automake1.6 | automake1.7, kdevelop-data
 Recommends: make, kdevelop-doc
-Suggests: libqt3-dev, qt3-doc, kdbg, kdelibs4-dev, kdebase, libarts1-dev, kdelibs4-doc, htdig, sgmltools-lite, linuxdoc-tools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, c-cpp-reference
+Suggests: libqt3-dev, qt3-doc, kdbg, kdelibs4-dev, kdebase, libarts1-dev, kdelibs4-doc, htdig, doxygen | kdoc, gettext, sgmltools-lite, linuxdoc-tools, gettext, a2ps, enscript, gv, qt-designer | kde-designer | qt3-tools, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, c-cpp-reference, ebook-dev-kde20, dh-make
 Description: An IDE for Unix/X11
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 

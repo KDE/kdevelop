@@ -1,0 +1,20 @@
+The following steps describe howto get kdevelop to work with htdig.
+
+1. You will need a modified htdig. You can get Debian packages at
+http://people.debian.org/~njordan/kdevelop/htdig/
+
+2. Login as the user that will use KDevelop and do the following steps.
+
+3. Create the following directories if they don't already exist.
+~/.kde/share/apps/kdevelop/tools
+~/.kde/share/apps/kdevelop/htdig
+~/.kde/share/apps/kdevelop/htdig/db
+
+4. Copy the file /usr/share/doc/kdevelop/examples/htdig.conf ~/.kde/share/apps/kdevelop/tools
+
+5. Edit the file ~/.kde/share/apps/kdevelop/tools/htdig.conf and change "HOMEDIR" to your home directory.
+
+6. Go through the KDevelop Setup again. It will take a while to index all of the documentation, so be patient.
+
+7. If you have problems, try editing the file ~/.kde/share/config/kdeveloprc and delete the line beginning with "doc_kde=" and then rerun the KDevelop Setup again.
+
