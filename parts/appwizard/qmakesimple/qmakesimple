@@ -1,7 +1,7 @@
 # KDE Config File
 [General]
-Name=Simple Hello world program
+Name=Hello world program
 Icon=qmakesimple.png
 Category=C++/QMake project
-Comment=Generates a simple Hello world program in C++
+Comment=Generates a simple Hello world program in C++ using QMake based project manager
 FileTemplates=h,CStyle,cpp,CStyle
