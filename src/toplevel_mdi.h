@@ -42,8 +42,6 @@ public:
 
   void realClose();
 
-  bool isClosing() const { return m_closing; }
-
   /** Reimplemented from QextMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 

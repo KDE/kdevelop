@@ -16,6 +16,10 @@ KDevTopLevel *API::topLevel()
   return TopLevel::getInstance();
 }
 
+bool API::topLevelValid()
+{
+  return TopLevel::topLevelValid();
+}
 
 KDevPartController *API::partController()
 {

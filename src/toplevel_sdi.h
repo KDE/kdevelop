@@ -43,8 +43,6 @@ public:
 
   void realClose();
 
-  bool isClosing() const { return m_closing; }
-
 signals:
 
   void wantsToQuit();

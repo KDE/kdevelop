@@ -13,6 +13,11 @@
 KDevTopLevel *TopLevel::s_instance = 0;
 
 
+bool TopLevel::topLevelValid()
+{
+  return s_instance != 0;
+}
+
 KDevTopLevel *TopLevel::getInstance()
 {
   if (!s_instance)

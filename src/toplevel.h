@@ -10,6 +10,7 @@ class TopLevel
 public:
 
   static KDevTopLevel *getInstance();
+  static bool topLevelValid();
   static void          invalidateInstance(KDevTopLevel *instance);
 
 
