@@ -1,3 +1,14 @@
+2002-04-13  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Import dialog rewritten with designer, added author 
+	  and email fields
+	* When directory is selected in the import dialog, make
+	  some guess work based on legacy project files, AUTHORS
+	  and configure.in files
+	* Set /general/author and /general/email variables in
+	  project file when creating new projects
+	* More keywords in app wizard
+
 2002-04-10  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* implemented setting the execution point
 	* move execution point handling from core to part controller
