@@ -248,8 +248,8 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 
   kdDebug(9000) << "mimeType = " << mimeType << endl;
 
-  if (mimeType.startsWith("text/")
-      || mimeType.startsWith("application/x-")
+  if ( mimeType.startsWith("text/")
+      || mimeType.startsWith("application/x-") && mimeType != "application/x-designer"
       || mimeType == "image/x-xpm")
   {
       mimeType = "text/plain";
