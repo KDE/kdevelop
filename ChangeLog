@@ -1,3 +1,7 @@
+2004-05-26 Robert Gruber <rgruber@users.sourceforge.net>
+    * Added possibility to set the priority of the make-process
+    * Added possibility to search case insensitive
+
 2004-05-21 Sascha Cunz <scunz@ng-projekt.de>
     * Added a ncurses template
 
