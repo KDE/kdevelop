@@ -44,6 +44,7 @@
 #include <ktempfile.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <kfile.h>
 #include <kapplication.h>
 
 #include <ktrader.h>
@@ -129,7 +130,9 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
-    dest_edit->setText(defaultProjectsDir);
+    QToolTip::add( dest_edit->button(), i18n("Choose projects directory") );
+    dest_edit->setURL(defaultProjectsDir);
+    dest_edit->setMode(KFile::Directory|KFile::ExistingOnly);
 
     /*    //add a new page (fileprops)
 	  QString projectname = "Test";
@@ -492,7 +495,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             icon_label->clear();
         }
         desc_textview->setText(info->comment);
-//        dest_edit->setText(info->defaultDestDir);
+//        dest_edit->setURL(info->defaultDestDir);
         m_projectLocationWasChanged = false;
         //projectNameChanged(); // set the dest new
 
@@ -528,20 +531,15 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
 }
 
 
-void AppWizardDialog::destButtonClicked()
+void AppWizardDialog::destButtonClicked(const QString& dir)
 {
-    QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
-                                                      i18n("Project Location") );
     if(!dir.isEmpty()) {
-        if ( !dir.endsWith( "/" ) )
-            dir += "/";
-        dest_edit->setText(dir);
 
         // set new location as default project dir?
         KConfig *config = kapp->config();
         config->setGroup("General Options");
         QDir defPrjDir( config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()) );
-        QDir newDir (dest_edit->text());
+        QDir newDir (dir);
         kdDebug(9010) << "DevPrjDir == newdir?: " << defPrjDir.absPath() << " == " << newDir.absPath() << endl;
         if (defPrjDir != newDir) {
             if (KMessageBox::questionYesNo(this, i18n("Set default project location to: ") + newDir.absPath() + "?",
@@ -565,9 +563,9 @@ void AppWizardDialog::projectLocationChanged()
 {
   // Jakob Simon-Gaarde: Got tired of the anoying bug with the appname/location confussion.
   // This version insures WYSIWYG and checks pathvalidity
-  finalLoc_label->setText(dest_edit->text() + (dest_edit->text().right(1)=="/" ? "":"/") + appname_edit->text().lower());
-  QDir qd(dest_edit->text());
-  QFileInfo fi(dest_edit->text() + "/" + appname_edit->text().lower());
+  finalLoc_label->setText(dest_edit->url() + (dest_edit->url().right(1)=="/" ? "":"/") + appname_edit->text().lower());
+  QDir qd(dest_edit->url());
+  QFileInfo fi(dest_edit->url() + "/" + appname_edit->text().lower());
   if (!qd.exists() || appname_edit->displayText().isEmpty()||fi.exists())
   {
     if (!fi.exists() || appname_edit->displayText().isEmpty()) {

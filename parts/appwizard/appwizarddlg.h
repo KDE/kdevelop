@@ -79,7 +79,7 @@ protected:
     virtual void templatesTreeViewClicked(QListViewItem*);
     virtual void textChanged();
     virtual void licenseChanged();
-    virtual void destButtonClicked();
+    virtual void destButtonClicked(const QString&);
     virtual void projectNameChanged();
     virtual void projectLocationChanged();
     virtual void accept();

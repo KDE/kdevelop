@@ -19,6 +19,7 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qtextstream.h>
+#include <qtooltip.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -46,7 +47,7 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
-    urlinput_edit->setCaption(i18n("Choose Directory to Import"));
+    QToolTip::add( urlinput_edit->button(), i18n("Choose directory to import") );
     urlinput_edit->setMode(KFile::Directory|KFile::ExistingOnly);
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
