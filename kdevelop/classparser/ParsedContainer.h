@@ -67,7 +67,6 @@ QList<T> *getSortedDictList( QDict<T> &dict )
   QList<T> *retVal = new QList<T>();
   char *str;
   QStrList srted;
-  QString m;
   QDictIterator<T> itr( dict );
 
   retVal->setAutoDelete( false );
@@ -77,8 +76,7 @@ QList<T> *getSortedDictList( QDict<T> &dict )
        itr.current();
        ++itr )
   {
-    itr.current()->asString( m );
-    srted.inSort( m );
+    srted.inSort( itr.current()->name );
   }
 
   for( str = srted.first();
