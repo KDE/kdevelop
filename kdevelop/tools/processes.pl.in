@@ -51,7 +51,7 @@ else {
 	
 	
 # change to work/project directory 
-printflush (STDOUT, "change directory...\n");
+printflush (STDOUT, "changing directory...\n");
 chdir ($overDirectory) || die "Couldn't change to directory $overDirectory: $!";
 
 $date = `date`;
@@ -61,7 +61,7 @@ $year = 1900 + $time[5];
 
 setupDefaultChangings();
 
-printflush (STDOUT,"change directory...\n");
+printflush (STDOUT,"changing directory...\n");
 chdir ($overDirectory);
 
 if ($processes{APPLICATION} eq "customproj") {
@@ -453,7 +453,7 @@ sub changeNormalApp {
 #    unpackFiles("normal.tar");
 #    
     #renamed the directory
-    printflush (STDOUT, "change files...\n");
+    printflush (STDOUT, "changing files...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
     
@@ -529,7 +529,7 @@ sub changeNormalOGLApp {
 # 
    
     #renamed the directory
-    printflush (STDOUT, "change files...\n");
+    printflush (STDOUT, "changing files...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
     
@@ -594,7 +594,7 @@ sub changeMiniApp {
 #   unpackFiles("mini.tar");
 #    
     #renamed the directory
-    printflush (STDOUT, "change files...\n");
+    printflush (STDOUT, "changing files...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
     
@@ -654,7 +654,7 @@ sub changeTerminalCPPApp {
 #    unpackFiles("cpp.tar");
 #    
     #renamed the directory
-    printflush (STDOUT, "change files...\n");
+    printflush (STDOUT, "changing files...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
     
@@ -693,7 +693,7 @@ sub changeTerminalCApp {
 #    unpackFiles("c.tar");
 #
     #renamed the directory
-    printflush (STDOUT, "change files...\n");
+    printflush (STDOUT, "changing files...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
 
@@ -731,7 +731,7 @@ sub changeQtApp {
 #    unpackFiles("qt.tar");
 #    
     #renamed the directory
-    printflush (STDOUT, "change files...\n");
+    printflush (STDOUT, "changing files...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
     

@@ -675,11 +675,17 @@ void CKDevelop::slotProjectNewAppl(){
     readProjectFile(file);
     QString type=prj->getProjectType();
 
+  /* transferred to processesend.pl
+     to insert the created pot file also into the repository (if necessary)
+  */
+  /*
     if (type == "normal_kde" || type == "mini_kde" || type == "normalogl_kde" ||
         type =="normal_kde2" || type=="mini_kde2" || type == "mdi_kde2")
     {
       slotProjectMessages();
     }
+   */
+
     slotViewRefresh();		// a new project started, this is legitimate
   }
   slotStatusMsg(i18n("Ready."));
@@ -749,7 +755,7 @@ void CKDevelop::slotProjectMessages(){
   shell_process.clearArguments();
   //shellprocess << make_cmd;
   shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
   beep = true;
 }
 

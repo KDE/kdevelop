@@ -29,7 +29,7 @@ if ($processes{APPLICATION} eq "customproj") {}
 else {
   my $confargs = $processes{CONFIGARG} || "";
   #start make -f Makefile.dist
-  printflush (STDOUT,"create configuration files...\n");
+  printflush (STDOUT,"creating configuration files...\n");
   printflush (STDOUT,">make -f Makefile.dist\n");
   chdir ($overDirectory);
   system ("make -f Makefile.dist");
@@ -46,7 +46,7 @@ else {
 if ($processes{API} eq "yes")
 {
 	
-  printflush (STDOUT,"create API documentation...\n");
+  printflush (STDOUT,"creating API documentation...\n");
   chdir ($underDirectory);
   #create the API-documentation
       if (<*.h>)
@@ -76,7 +76,6 @@ if ($processes{API} eq "yes")
 if ($processes{USER} eq "yes") {
   
   #create the html-files
-  printflush (STDOUT,"configure files...\n");
   chdir ($underDirectory . "/docs/en");
 
   if ( 	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
@@ -86,6 +85,7 @@ if ($processes{USER} eq "yes") {
   }
   else
   {
+    printflush (STDOUT,"creating user documentation...\n");
     if (-e "index.nif")
     {
       printflush (STDOUT,">ksgml2html index.sgml en\n");
@@ -100,6 +100,24 @@ if ($processes{USER} eq "yes") {
 }
 
 chdir ($underDirectory);
+
+if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" ||
+    $processes{APPLICATION} eq "kdenormalogl" ||
+    $processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
+    $processes{APPLICATION} eq "kde2mdi")
+  {
+    printflush (STDOUT,"creating $nameLittle.pot\n");
+    if ($processes{XGETTEXT} && $processes{XGETTEXT} eq "yes")
+    {
+      printflush (STDOUT,">make messages\n");
+      system ("make messages >/dev/null");
+    }
+    else
+    {
+      printflush (STDOUT,"NO $nameLittle.pot creation without xgettext\n");
+    }
+  }
+
 printflush (STDOUT,"READY\n");
 
 system("rm -f ". $homedirectory . "/.kde/share/apps/kdevelop/" . $entriesfilename);

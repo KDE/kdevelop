@@ -1220,6 +1220,11 @@ void CKAppWizard::generateEntries(const QString &filename) {
    entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
 	idx_path+" "+nameline->text()+" *.h\n";
 #endif
+
+  entries << "XGETTEXT\n";
+  if (CToolClass::searchProgram("xgettext"))
+    entries << "yes\n";
+  else entries << "no\n";
   entries << "USER\n";
   if (userdoc->isChecked())
     entries << "yes\n";
@@ -2774,8 +2779,18 @@ void CKAppWizard::slotMakeEnd() {
   if (vsBox->currentItem() == 1 && !cvscommand.isEmpty())
   {
    KShellProcess p;
-   cvscommand += (QString) "cvs com -m \"" + messageline->text() +
-        "\" .";
+   cvscommand += (QString) "cvs com -m \"" + messageline->text() + "\" .";
+   p.clearArguments();
+   p << cvscommand;
+   p.start(KProcess::Block, KProcess::AllOutput);
+  }
+
+  QFileInfo pot (directorytext + "/po/" + nametext +".pot");
+  if (vsBox->currentItem() == 1 && pot.exists())
+  {
+   KShellProcess p;
+   cvscommand="cd "+ directorytext + "/po && cvs add "+ nametext +".pot && ";
+   cvscommand += QString("cvs com -m \"") + messageline->text() + "\" .";
    p.clearArguments();
    p << cvscommand;
    p.start(KProcess::Block, KProcess::AllOutput);
