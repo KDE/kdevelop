@@ -268,6 +268,8 @@ void DocTreeConfigWidget::readConfig()
 
 void DocTreeConfigWidget::storeConfig()
 {
+    kdDebug() << "DocTreeConfigWidget::storeConfig()" << endl;
+
 #ifndef GIDEON
     // Save KDevelop section
     QStringList kdevelopHidden;

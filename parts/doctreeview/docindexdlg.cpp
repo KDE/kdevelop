@@ -29,6 +29,7 @@
 #include "kdevcore.h"
 #include "domutil.h"
 
+#include "misc.h"
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 #include "docindexdlg.h"
@@ -46,6 +47,8 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     QFontMetrics fm(fontMetrics());
     term_combo->setMinimumWidth(fm.width('X')*40);
 
+    readKDocIndex();
+    
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
     QStringList books = dirs->findAllResources("docindices", QString::null, false, true);
 
@@ -59,6 +62,7 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     QListIterator<DocIndex> iit(indices);
     for (; iit.current(); ++iit) {
         QCheckBox *box = new QCheckBox(iit.current()->title, book_group);
+        box->setChecked(true);
         books_boxes.append(box);
         connect( box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
     }
@@ -67,9 +71,11 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     category_group->setExclusive(false);
 
     concept_box = new QCheckBox(i18n("&Concept index"), category_group);
-    //    concept_box->setChecked(true);
+    concept_box->setChecked(true);
     ident_box = new QCheckBox(i18n("&Identifier index"), category_group);
+    ident_box->setChecked(true);
     file_box = new QCheckBox(i18n("&File index"), category_group);
+    file_box->setChecked(true);
     
     connect( concept_box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
     connect( ident_box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
@@ -174,7 +180,86 @@ void DocIndexDialog::storeConfig()
     DomUtil::writeBoolEntry(dom, "/kdevdoctreeview/categories/file", file_box->isChecked());
 }
 
+
+void DocIndexDialog::readKDocIndex()
+{
+    DocIndex *index = new DocIndex;
+    indices.append(index);
+
+    index->indexName = "qt";
+    index->title = i18n("Qt/KDE API");
+
+    QStringList itemNames, fileNames, hiddenNames;
+    DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
+    DocTreeViewTool::getHiddenLibraries(&hiddenNames);
+
+    QStringList::Iterator it;
+    for (it = fileNames.begin(); it != fileNames.end(); ++it)
+        if (!hiddenNames.contains(*it)) {
+            FILE *f;
+            if ((*it).right(3) != QString::fromLatin1(".gz")) {
+                if ( (f = fopen(*it, "r")) != 0) {
+                    readKDocEntryList(f, &index->identNames, &index->identUrls);
+                    fclose(f);
+                }
+            } else {
+                if ( (f = popen(QString("gzip -c -d ")
+                                + (*it) + " 2>/dev/null", "r")) != 0) {
+                    readKDocEntryList(f, &index->identNames, &index->identUrls);
+                    pclose(f);
+                }
+            }
+        }
+}
+
+
+void DocIndexDialog::readKDocEntryList(FILE *f,
+                                       QStringList *nameList, QStringList *urlList)
+{
+    char buf[1024];
+    int pos0;
+    QString classname, membername, base, filename;
     
+    while (fgets(buf, sizeof buf, f)) {
+        QString s = buf;
+        if (s.left(pos0=11) == "<BASE URL=\"") {
+            int pos2 = s.find("\">", pos0);
+            if (pos2 != -1)
+                base = s.mid(pos0, pos2-pos0);
+        }
+        else if (s.left(pos0=9) == "<C NAME=\"") {
+            int pos1 = s.find("\" REF=\"", pos0);
+            if (pos1 == -1)
+                continue;
+                int pos2 = s.find("\">", pos1+7);
+                if (pos2 == -1)
+                    continue;
+                classname = s.mid(pos0, pos1-pos0);
+                filename = s.mid(pos1+7, pos2-(pos1+7));
+                filename.replace(QRegExp("::"), "__");
+                (*nameList) << classname;
+                (*urlList) << (base + "/" + filename);
+        }
+      else if (s.left(pos0=9) == "<M NAME=\"" || s.left(pos0=10) == "<ME NAME=\"")
+          {
+              int pos1 = s.find("\" REF=\"", pos0);
+              if (pos1 == -1)
+                  continue;
+              int pos2 = s.find("\">", pos1+7);
+              if (pos2 == -1)
+                  continue;
+
+              // Long version: membername = classname + "::" + s.mid(pos0, pos1-pos0);
+              membername = s.mid(pos0, pos1-pos0);
+              filename = s.mid(pos1+7, pos2-(pos1+7));
+              filename.replace(QRegExp("::"), "__");
+              (*nameList) << (membername + " (" + classname + ")");
+              (*urlList) << (base + "/" + filename);
+          }
+    }
+}
+
+
 void DocIndexDialog::readIndexFromFile(const QString &fileName)
 {
     QFileInfo fi(fileName);

@@ -1,3 +1,9 @@
+2001-07-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added kdoc-generated Qt/KDE index to index dialog
+	* Destroy compiled-in factories at exit. Otherwise
+	  their KConfig's don't get sync()ed
+
 2001-07-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Made doxygen config widget more KDE compliant, i.e.

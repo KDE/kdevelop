@@ -89,7 +89,7 @@ Core::Core()
 
     // create editor object
     (void) editor();
-    
+
     initGlobalParts();
 
     win->show();
@@ -111,6 +111,7 @@ Core::Core()
 Core::~Core()
 {
     delete dcopIface;
+    PartLoader::cleanup();
 }
 
 

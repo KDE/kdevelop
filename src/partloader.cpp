@@ -32,13 +32,15 @@ extern "C" {
 };
 
 
+static KLibFactory *doctreeviewFactory = 0;
+static KLibFactory *classviewFactory = 0;
+static KLibFactory *grepviewFactory = 0;
+static KLibFactory *appwizardFactory = 0;
+static KLibFactory *outputviewsFactory = 0;
+
+
 static KLibFactory *factoryForService(KService *service)
 {
-    static KLibFactory *doctreeviewFactory = 0;
-    static KLibFactory *classviewFactory = 0;
-    static KLibFactory *grepviewFactory = 0;
-    static KLibFactory *appwizardFactory = 0;
-    static KLibFactory *outputviewsFactory = 0;
     
     // Currently some factories are directly linked and hard-coded
     // for efficiency reasons
@@ -78,6 +80,16 @@ static KLibFactory *factoryForService(KService *service)
     return KLibLoader::self()->factory(service->library());
 }
 
+
+
+void PartLoader::cleanup()
+{
+    delete doctreeviewFactory;
+    delete classviewFactory;
+    delete grepviewFactory;
+    delete appwizardFactory;
+    delete outputviewsFactory;
+}
 
 
 KDevPart *PartLoader::loadService(KService *service, const char *className, KDevApi *api, QObject *parent)

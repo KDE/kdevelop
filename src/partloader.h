@@ -24,6 +24,11 @@ class PartLoader
 {
 public:
     /**
+     * Cleanup: Must be called to destory the factories,
+     * Without this, KConfigs of compiled-in parts don't get sync()ed
+     */
+    static void cleanup();
+    /**
      * Loads a KDevelop part representing a service.
      */
     static KDevPart *loadService(KService *service, const char *className,

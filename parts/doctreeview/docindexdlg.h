@@ -12,6 +12,7 @@
 #ifndef _DOCINDEXDLG_H_
 #define _DOCINDEXDLG_H_
 
+#include <stdio.h>
 #include <qdialog.h>
 #include <qdom.h>
 #include <qlist.h>
@@ -55,6 +56,8 @@ private slots:
 private:
     void readConfig();
     void storeConfig();
+    void readKDocIndex();
+    void readKDocEntryList(FILE *f, QStringList *nameList, QStringList *urlList);
     void readIndexFromFile(const QString &fileName);
     void readEntryList(const QDomElement &el, QStringList *nameList, QStringList *urlList);
 
