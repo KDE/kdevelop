@@ -32,7 +32,7 @@ public:
 
   virtual bool removeLine(uint line) = 0;
 
-  virtual QString line(uint line) const = 0;
+  virtual QString line(uint line,bool replaceTabsWithSpaces=false) const = 0;
   virtual bool setLine(const QString &text, uint line) = 0;
 
   virtual bool hasSelectedText();

@@ -64,9 +64,18 @@ bool EditIfaceImpl::removeLine(uint line)
 }
 
 
-QString EditIfaceImpl::line(uint line) const
+QString EditIfaceImpl::line(uint line,bool replaceTabsWithSpaces) const
 {
-  return m_edit->document()->textLine(line);
+  if(replaceTabsWithSpaces){
+    QString lineStr = m_edit->document()->textLine(line);
+    QString spaces;
+    spaces.fill(' ',((KWriteDoc*)m_edit->document())->tabWidth());
+    return lineStr.replace(QRegExp("\t"),spaces);		 
+    
+  }
+  else {
+    return m_edit->document()->textLine(line);
+  }
 }
 
 

@@ -28,6 +28,7 @@
 #include <kstddirs.h>
 
 
+
 PHPCodeCompletion::PHPCodeCompletion(KDevCore* core,ClassStore* store){
   m_editor = core->editor();
   m_core = core;
@@ -60,7 +61,12 @@ void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
 	  if(lineReg.match(s)){
 	      e.prefix = lineReg.group(1);
 	      e.text = lineReg.group(2);
-	      e.postfix ="()";
+	      //	      if(QString(lineReg.group(3)) == "void"){
+		e.postfix ="()";
+		//	      }
+		//	      else{
+		//	      e.postfix ="(...)";
+		//	      }	      
 	      e.prototype = QString(lineReg.group(1)) + " " + QString(lineReg.group(2)) + 
 		  "(" + QString(lineReg.group(3)) + ")";
 	      m_globalFunctions.append(e);
@@ -72,11 +78,11 @@ void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
   
 }
 void PHPCodeCompletion::argHintHided(){
-  cerr << "PHPCodeCompletion::argHintHided" << endl ;
+  //  cerr << "PHPCodeCompletion::argHintHided" << endl ;
   m_argWidgetShow = false;
 }
 void PHPCodeCompletion::completionBoxHided(){
-  cerr << "PHPCodeCompletion::completionBoxHided()" << endl ;
+  //  cerr << "PHPCodeCompletion::completionBoxHided()" << endl ;
   m_completionBoxShow=false;
 }
 
@@ -112,8 +118,9 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
   connect(m_codeInterface,SIGNAL(completionDone()),this,SLOT(completionBoxHided()));
 
   m_currentLine = line;
-  QString lineStr = m_editInterface->line(line);
+  QString lineStr = m_editInterface->line(line,true);
   if(lineStr.isNull() || lineStr.isEmpty()) return; // nothing to do
+
 
   if(checkForNewInstanceArgHint(doc,lineStr,col,line)){
     return;
@@ -126,7 +133,6 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
   if(checkForGlobalFunctionArgHint(doc,lineStr,col,line)){
     return;
   }
-  
 
   QString restLine = lineStr.mid(col);
   if(restLine.left(1) != " " && restLine.left(1) != "\t" && !restLine.isNull()){
@@ -280,6 +286,10 @@ bool PHPCodeCompletion::checkForGlobalFunctionArgHint(KEditor::Document *doc,QSt
   QString methodStart = lineStr.left(col);
   int leftBracket = methodStart.findRev("(");
   int rightBracket = methodStart.findRev(")");
+  cerr << "col: " << col << endl;
+  cerr << "leftBracket: " << leftBracket << endl;
+  cerr << "rightBracket: " << rightBracket << endl;
+  cerr << "methodStart: " << methodStart << endl; 
   if(leftBracket == -1) return false; // ok not found
   if(rightBracket>leftBracket) return false; // we are out of (..)
   methodStart = methodStart.left(leftBracket+1);
@@ -328,7 +338,8 @@ bool PHPCodeCompletion::checkForGlobalFunction(KEditor::Document *doc,QString li
     }
     QString startChar = startStr.left(1);
     if(startChar == " " || startChar == "\t" || startChar == "+" || 
-       startChar == "-" || startChar == "=" ||startChar == "/" || startChar == "*" || startChar == ";"){
+       startChar == "-" || startChar == "=" ||startChar == "/" || startChar == "*" || startChar == ";" ||
+       startChar == ")" || startChar == "(" || startChar == "}" || startChar == "{"){
       methodStart = startStr.right(2);
     }
   }
@@ -451,7 +462,12 @@ QValueList<KEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariab
 	    pMethod = methodList->next() ) {
 	KEditor::CompletionEntry e;
 	e.text = pMethod->name();
+	//	ParsedArgument* pArg = pMethod->arguments.first();
+	//	if(pArg->type() == ""){
 	e.postfix ="()";
+	//	}else{
+	//      e.postfix ="(...)";
+	//	}
 	list.append(e);
       }
       QList<ParsedAttribute>* attList = pClass->getSortedAttributeList();

@@ -214,6 +214,7 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 	}
 
 	QString strCurLine = pEditIface->line ( nLine );
+	strCurLine.replace(QRegExp("\t"),"        "); // hack which asume that TAB is 8 char big #fixme
 	//strCurLine = strCurLine.left ( nCol );
 	QString strLineToCursor = strCurLine.left ( nCol );
 	QString strLineAfterCursor = strCurLine.mid ( nCol, ( strCurLine.length() - nCol ) );

@@ -46,7 +46,7 @@ bool EditIfaceImpl::removeLine(uint line)
 }
 
 
-QString EditIfaceImpl::line(uint line) const
+QString EditIfaceImpl::line(uint line,bool replaceTabsWithSpaces) const
 {
   return m_edit->textLine(line);
 }
