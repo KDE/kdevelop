@@ -29,6 +29,7 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 #include <kstddirs.h>
+#include <kprocess.h>
 
 #include <qdir.h>
 #include <qfile.h>
@@ -443,7 +444,7 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
       return baseurl+"/index.html";
     }
     else if ( (f = popen(QString("gzip -c -d ")
-                         + indexFile + ".gz 2>/dev/null", "r")) != 0)
+                         + KShellProcess::quote(indexFile+".gz") + " 2>/dev/null", "r")) != 0)
     {
       char buf[512];
 //      int count=0;
@@ -568,7 +569,7 @@ void DocTreeKDELibsBook::setOpen(bool o)
       fclose(f);
     }
     else  if ( (f = popen(QString("gzip -c -d ")
-                                 + idx_filename + ".gz 2>/dev/null", "r")) != 0)
+                                 + KShellProcess::quote(idx_filename + ".gz") + " 2>/dev/null", "r")) != 0)
           {
             count=readKdoc2Index(f);
             pclose(f);
