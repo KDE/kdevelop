@@ -146,6 +146,8 @@ void ClassToolDialog::setLanguageSupport(KDevLanguageSupport *ls)
 
 void ClassToolDialog::setClassName(const QString &name)
 {
+    if ( class_combo->count() == 0 ) refresh();
+
     QListBox *lb = class_combo->listBox();
 
     for (int i=0; i < (int)lb->count(); ++i)

@@ -92,12 +92,10 @@ KPopupMenu *ClassTreeItem::createPopup()
 
 QString ClassTreeItem::scopedText() const
 {
-    QString str;
-    
     if (m_item)
-        str = m_item->path();
+        return m_item->path();
 
-    return str.replace(QRegExp("\\."), "::");
+    return QString::null;
 }
 
 
