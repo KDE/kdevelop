@@ -201,18 +201,13 @@ void ClassStore::out()
 {
     QValueList<ParsedAttribute*> globalAttributes;
     QValueList<ParsedStruct*> globalStructs;
-    ParsedScopeContainer *aScope;
-    ParsedClass *aClass;
-    ParsedMethod *aMethod;
-    ParsedAttribute *aAttr;
-    ParsedStruct *aStruct;
 
     // Output all namespaces
     kdDebug(9005) << "Global namespaces" << endl;
     QValueList<ParsedScopeContainer*> globalScopes = globalContainer.getSortedScopeList();
     QValueList<ParsedScopeContainer*>::ConstIterator scopeIt;
     for (scopeIt = globalScopes.begin(); scopeIt != globalScopes.end(); ++scopeIt)
-        aScope->out();
+        (*scopeIt)->out();
 
 
     // Output all classes.
@@ -220,14 +215,14 @@ void ClassStore::out()
     QValueList<ParsedClass*> classes = getSortedClassList();
     QValueList<ParsedClass*>::ConstIterator classIt;
     for (classIt = classes.begin(); classIt != classes.end(); ++classIt)
-        aClass->out();
+        (*classIt)->out();
 
     // Global methods
     kdDebug(9005) << "Global functions\n" << endl;
     QValueList<ParsedMethod*> globalMethods = globalContainer.getSortedMethodList();
     QValueList<ParsedMethod*>::ConstIterator methodIt;
     for (methodIt = globalMethods.begin(); methodIt != globalMethods.end(); ++methodIt)
-        aMethod->out();
+        (*methodIt)->out();
 
     // Global structures
 /*    kdDebug(9005) << "Global variables" << endl;
@@ -598,7 +593,6 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers( const QString &aName )
 QValueList<ParsedClass*> ClassStore::getSortedClassList()
 {
     QValueList<ParsedClass*> list = globalContainer.getSortedClassList();
-    ParsedClass *aClass;
 
     // Remove all non-global classes.
     QValueList<ParsedClass*>::Iterator it, newit;
@@ -785,7 +779,6 @@ void ClassStore::storeAll()
 
 	( *m_pStream ) << m_strFormatVersion;
 
-	ParsedScopeContainer* pScope;
 	ParsedClass* pClass;
 	ParsedMethod* pMethod;
 	ParsedAttribute* pAttribute;
