@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>UIChooser</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,7 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>ButtonGroup1</cstring>
@@ -31,13 +30,12 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>modeMDI</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Childframe window mode</string>
+                        <string>C&amp;hildframe window mode</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>All tool views are initially docked to the mainframe.
@@ -63,7 +61,7 @@ A typical example of this user interface mode is KDEStudio, our friend C++-IDE i
                         <cstring>modeToplevel</cstring>
                     </property>
                     <property name="text">
-                        <string>T&amp;oplevel window mode</string>
+                        <string>To&amp;plevel window mode</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>All editor, browser and tool views will be toplevel windows (directly on desktop).
@@ -99,16 +97,11 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
             <property name="name">
                 <cstring>TextLabel1</cstring>
             </property>
-            <property name="font">
-                <font>
-                    <italic>1</italic>
-                </font>
-            </property>
             <property name="margin">
                 <number>0</number>
             </property>
             <property name="text">
-                <string>Please note that a change to and from IDEAl mode requires a restart of the program.</string>
+                <string>&lt;i&gt;Please note that a change to and from IDEAl mode requires a restart of the program.&lt;/i&gt;</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignVCenter</set>

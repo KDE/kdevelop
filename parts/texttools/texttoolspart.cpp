@@ -50,13 +50,16 @@ TextToolsPart::~TextToolsPart()
 void TextToolsPart::createWidget()
 {
     if (m_widget)
+    {
+        mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("Text structure"));
         return;
-    
+    }
+
     m_widget = new TextToolsWidget(this);
     m_widget->setCaption(i18n("Text Structure"));
-    QWhatsThis::add(m_widget, i18n("Text Structure\n\n"
-                                     "This browser shows the structure of your HTML text."));
-    mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("text structure"));
+    QWhatsThis::add(m_widget, i18n("<b>Text Structure</b><p>"
+                                     "This browser shows the structure of the text."));
+    mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("Text structure"));
 }
 
 
@@ -84,6 +87,9 @@ void TextToolsPart::activePartChanged(KParts::Part *part)
         kdDebug(9030) << "set mode LaTeX" << endl;
         createWidget();
         m_widget->setMode(TextToolsWidget::LaTeX, rwpart);
+    } else if (m_widget) {
+        kdDebug(9030) << "hide output view" << endl;
+        mainWindow()->removeView(m_widget);
     }
 }
 

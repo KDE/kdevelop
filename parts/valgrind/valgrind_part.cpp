@@ -44,10 +44,20 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   m_widget = new ValgrindWidget( this );
   m_widget->setIcon( SmallIcon("fork") );
 
-  QWhatsThis::add( m_widget, i18n( "Valgrind memory leak check" ) );
+  QWhatsThis::add( m_widget, i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
+    "use of uninitialised memory<br>"
+    "reading/writing memory after it has been free'd<br>"
+    "reading/writing off the end of malloc'd blocks<br>"
+    "reading/writing inappropriate areas on the stack<br>"
+    "memory leaks -- where pointers to malloc'd blocks are lost forever<br>"
+    "passing of uninitialised and/or unaddressible memory to system calls<br>"
+    "mismatched use of malloc/new/new [] vs free/delete/delete []<br>"
+    "some abuses of the POSIX pthread API." ) );
 
-  new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
+  KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
 	       SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
+  action->setToolTip(i18n("Valgrind memory leak check"));
+  action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs."));
 
   mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }

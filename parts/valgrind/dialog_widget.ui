@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>DialogWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,7 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox1</cstring>
@@ -31,7 +30,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="KURLRequester" row="0" column="1">
                     <property name="name">
                         <cstring>executableEdit</cstring>
@@ -42,7 +40,10 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Parameters:</string>
+                        <string>&amp;Parameters:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>paramEdit</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -50,7 +51,10 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Executable:</string>
+                        <string>&amp;Executable:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>executableEdit</cstring>
                     </property>
                 </widget>
                 <widget class="KLineEdit" row="1" column="1">
@@ -71,13 +75,12 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>memleakBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Memory leak check</string>
+                        <string>Memory &amp;leak check</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -91,7 +94,6 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-
                         <spacer>
                             <property name="name">
                                 <cstring>spacer1</cstring>
@@ -114,7 +116,7 @@
                                 <cstring>reachableBox</cstring>
                             </property>
                             <property name="text">
-                                <string>Show still reachable blocks</string>
+                                <string>&amp;Show still reachable blocks</string>
                             </property>
                         </widget>
                     </hbox>
@@ -124,7 +126,7 @@
                         <cstring>childrenBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Trace children</string>
+                        <string>&amp;Trace children</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -138,13 +140,15 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-
                         <widget class="QLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Additional parameters:</string>
+                                <string>Additional p&amp;arameters:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>valParamEdit</cstring>
                             </property>
                         </widget>
                         <widget class="KLineEdit" row="1" column="1">
@@ -162,7 +166,10 @@
                                 <cstring>textLabel4</cstring>
                             </property>
                             <property name="text">
-                                <string>Executable:</string>
+                                <string>E&amp;xecutable:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>valExecutableEdit</cstring>
                             </property>
                         </widget>
                     </grid>
@@ -189,14 +196,23 @@
     <tabstop>valParamEdit</tabstop>
 </tabstops>
 <includes>
-    <include location="local" impldecl="in implementation">dialog_widget.ui.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="local" impldecl="in implementation">dialog_widget.ui.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 <slots>
     <slot access="private" specifier="non virtual">checkBoxToggled()</slot>
     <slot>init()</slot>
 </slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

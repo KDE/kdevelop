@@ -297,7 +297,7 @@ void MainWindowShare::slotConfigureNotifications()
 
 void MainWindowShare::slotSettings()
 {
-    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
+    KDialogBase dlg(KDialogBase::TreeList, i18n("Configure KDevelop"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
                     "customization dialog");
 

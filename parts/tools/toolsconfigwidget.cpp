@@ -26,6 +26,7 @@
 #include <kurldrag.h>
 
 #include "addtooldlg.h"
+#include "kapplicationtree.h"
 
 
 struct ToolsConfigEntry
@@ -175,6 +176,7 @@ void ToolsConfigWidget::toolsmenuaddClicked()
 {
     AddToolDialog dlg(this);
     dlg.setCaption(i18n("Add to Tools Menu"));
+    dlg.tree->setFocus();
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
@@ -199,6 +201,7 @@ void ToolsConfigWidget::filecontextaddClicked()
 {
     AddToolDialog dlg(this);
     dlg.setCaption(i18n("Add to File Context Menus"));
+    dlg.tree->setFocus();
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
@@ -223,6 +226,7 @@ void ToolsConfigWidget::dircontextaddClicked()
 {
     AddToolDialog dlg(this);
     dlg.setCaption(i18n("Add to Directory Context Menus"));
+    dlg.tree->setFocus();
     if (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();

@@ -1,48 +1,34 @@
 <tip category="KDevelop|General">
 <html>
-<p>...that you can select your autosaving time in the setup dialog?
+<p>If you want to specify additional command-line options to your make program, you can set them in the <b>Project Options</b> dialog, <b>Make Options</b> tab.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>If you want to specify additional command-line options to your make program, you can set them in the setup dialog.
+<p>If you use functions of other libraries than the target is currently linked with, you can specify them in the <b>Target Options</b> dialog.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>If you use functions of other libraries than the application is currently linked with, you can specify them in the project options dialog.
+<p>If you want to change your application's version number, you can change it in the <b>Project Options</b> dialog, <b>General</b> tab, automatically updating your project.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>If you want to change your application's version number, you can change it in the project options dialog, automatically updating your project.
+<p>If you want to create a new project, choose "Project"->"New Project" from the menu.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>If you want to create a new project, choose "Project"->"Application Wizard" from the menubar.
-</html>
-</tip>
-
-
-<tip category="KDevelop|General">
-<html>
-<p>If you don't have a KDE-library documentation, create it by choosing "Update" from the Documentation tab in the KDevelop Setup dialog.
-</html>
-</tip>
-
-
-<tip category="KDevelop|General">
-<html>
-<p>If you changed your applications' classes, you should update your API documentation by selecting "Run Doxygen" from the Build menu.
+<p>If you changed your applications' classes, you should update your API documentation by selecting "Build API Documentation" from the Build menu.
 </html>
 </tip>
 
@@ -56,7 +42,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you're searching for information on classes or classmembers, select "Search for Help on..." from the Help menu.
+<p>If you're searching for information on classes or classmembers, select "Search for Help on..." from the Help menu or use "Index" tab of the documentation tree.
 </html>
 </tip>
 
@@ -70,7 +56,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>Hint: You can search the documentation for a keyword by marking the word and select "look up" in the right button popup menu.
+<p>Hint: You can search the documentation for a keyword by marking the word and select "Search in Documentation" in the right button popup menu.
 </html>
 </tip>
 
@@ -84,35 +70,28 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you have found a bug in KDevelop, please let us know. Contact addresses are in the KDevelop Handbook.
+<p>If you have found a bug in KDevelop, please let us know. Use KDE Bugzilla at http://bugs.kde.org/ or select "Help"->"Report Bug" from the menu.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>If you want to add your own documentation to the documentation tree, click with the right mouse button on the "Others" entry in the tree. Then configure the path and entry name.
+<p>If you want to add your own documentation to the documentation tree use <b>Documentation Tree</b> tab in the <b>Configure KDevelop</b> dialog.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can create a new class with "new class" from the Project menu?
+<p>...that you can create a new class with "New Class" from the "Project" menu?
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>that you can print your files either with a2ps or enscript from within KDevelop?
-</html>
-</tip>
-
-
-<tip category="KDevelop|General">
-<html>
-<p>To open a project, select "Open" from the Project menu.
+<p>To open a project, select "Open Project" from the "Project" menu.
 </html>
 </tip>
 
@@ -126,49 +105,35 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can use keyboard shortcuts for turning the output and tree window on and off?
+<p>...that you can debug your programs within KDevelop by selecting "Debug"->"Start" in the menu?
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can debug your programs within KDevelop by selecting "Debug" in the Build menu or by choosing the Debug icon?
+<p>...that you can switch between classes or namespaces by selecting the class or namespace combo in the toolbar?
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can switch between classes by selecting the class combo in the toolbar?
+<p>...that you can preview images and icons by selecting them in the file viewer's trees?
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can edit xpm's with kiconedit by selecting them in the file viewer's trees?
+<p>...that you can set the compiler options in the <b>Project Options</b> dialog, <b>Configure Options</b> tab?
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can set the compiler warnings in the project options dialog?
-</html>
-</tip>
-
-
-<tip category="KDevelop|General">
-<html>
-<p>...that you can even search for marked text from within the documentation browser using the right button menu?
-</html>
-</tip>
-
-
-<tip category="KDevelop|General">
-<html>
-<p>...that you can copy text from the documentation browser to the clipboard with a right button menu and insert it into your sources?
+<p>...that you can copy text from the documentation browser to the clipboard and insert it into your sources?
 </html>
 </tip>
 
@@ -189,14 +154,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can undo and redo your actions and set the amount of steps in the editor dialog?
-</html>
-</tip>
-
-
-<tip category="KDevelop|General">
-<html>
-<p>...that you can access more internal debug functions by holding down the debug toolbar button?
+<p>...that you can access more internal debug functions selecting "Debug"->"Viewers"?
 </html>
 </tip>
 
@@ -210,14 +168,21 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can bookmark helpbrowser pages in the "Bookmarks" menu?
+<p>...that your source bookmarks are stored in the project?
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can start grep search from inside editor and browser with context menu?
+<p>...that your documentation bookmarks are stored globally in KDevelop configuration?
+</html>
+</tip>
+
+
+<tip category="KDevelop|General">
+<html>
+<p>...that you can start grep search from inside editor with context menu?
 </html>
 </tip>
 
