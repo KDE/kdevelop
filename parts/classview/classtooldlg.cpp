@@ -262,8 +262,8 @@ void ClassToolDialog::refresh()
     QString oldName = class_combo->currentText();
 
     class_combo->clear();
-    QStrList *list = m_part->classStore()->getSortedClassNameList();
-    class_combo->insertStrList(list);
+    QStringList *list = m_part->classStore()->getSortedClassNameList();
+    class_combo->insertStringList(*list);
     delete list;
     setClassName(oldName);
 
