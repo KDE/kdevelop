@@ -44,9 +44,8 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
-  guiFactory()->addClient(this);
-  initComponents();
   createGUI( 0L );
+  initComponents();
 }
 
 
@@ -779,7 +778,7 @@ void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos
             }
             KDevComponent *comp = (KDevComponent*) obj;
             guiFactory()->addClient(comp);
-            
+
             KDockWidget *wid = createDockWidget((*it)->name(), BarIcon((*it)->icon()),
                                                 0, (*it)->comment(), "");
             wid->setWidget(comp->widget());
