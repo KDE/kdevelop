@@ -1,0 +1,65 @@
+# KDE Config File
+[General]
+Name=QMake based KDE template
+Icon=kmake.png
+Category=C++/QMake project
+Comment=Generates a simple KDE application using QMake based project manager
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=kmake.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/app.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/mainviewimp.cpp
+Dest=%{dest}/src/mainviewimp.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/mainviewimp.h
+Dest=%{dest}/src/mainviewimp.h
+
+[FILE6]
+Type=install
+EscapeXML=true
+Source=%{src}/mainview.ui
+Dest=%{dest}/src/mainview.ui
+
+[FILE6]
+Type=install
+EscapeXML=true
+Source=%{src}/appui.rc
+Dest=%{dest}/src/appui.rc
+
+[FILE6]
+Type=install
+Source=%{src}/app.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[MSG]
+Type=message
+Comment=A Qmake based KDE application was created in %{dest}
