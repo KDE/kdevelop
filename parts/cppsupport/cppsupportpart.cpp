@@ -335,7 +335,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     m_activeFileName = QString::null;
 
     if (m_activeDocument) {
-	m_activeFileName = QDir( m_activeDocument->url().path() ).canonicalPath();
+	m_activeFileName = kdevCanonicalPath( m_activeDocument->url().path() );
         QFileInfo fi( m_activeFileName );
         QString ext = fi.extension();
         if (fileExtensions().contains(ext))
@@ -369,7 +369,7 @@ void CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
 
-    m_projectDirectory = QDir( project()->projectDirectory() ).canonicalPath();
+    m_projectDirectory = kdevCanonicalPath( project()->projectDirectory() );
 
     connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
@@ -490,7 +490,7 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 
     for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
-	QString path = QDir( m_projectDirectory + "/" + (*it) ).canonicalPath();
+	QString path = kdevCanonicalPath( m_projectDirectory + "/" + (*it) );
 
 	maybeParse( path );
 	emit addedSourceInfo( path );
@@ -501,7 +501,7 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
-	QString path = QDir( m_projectDirectory + "/" + *it ).canonicalPath();
+	QString path = kdevCanonicalPath( m_projectDirectory + "/" + *it );
 
 	removeWithReferences( path );
 	m_backgroundParser->removeFile( path );
@@ -514,7 +514,7 @@ void CppSupportPart::changedFilesInProject( const QStringList & fileList )
 
     for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
-	QString path = QDir( m_projectDirectory + "/" + *it ).canonicalPath();
+	QString path = kdevCanonicalPath( m_projectDirectory + "/" + *it );
 
 	maybeParse( path );
 	emit addedSourceInfo( path );
@@ -770,7 +770,7 @@ CppSupportPart::parseProject( )
 	QFileInfo fileInfo( d, *it );
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
-            QString absFilePath = QDir( fileInfo.absFilePath() ).canonicalPath();
+            QString absFilePath = kdevCanonicalPath( fileInfo.absFilePath() );
 	    kdDebug(9007) << "parse file: " << absFilePath << endl;
 
 	    if( (n%5) == 0 ){
@@ -831,7 +831,7 @@ void CppSupportPart::maybeParse( const QString& fileName )
         return;
 
     QFileInfo fileInfo( fileName );
-    QString path = QDir( fileName ).canonicalPath();
+    QString path = kdevCanonicalPath( fileName );
     QDateTime t = fileInfo.lastModified();
 
     if( !fileInfo.exists() ){
@@ -990,7 +990,7 @@ void CppSupportPart::partRemoved( KParts::Part* part )
 	if( fileName.isEmpty() )
 	    return;
 
-	QString canonicalFileName = QDir( fileName ).canonicalPath();
+	QString canonicalFileName = kdevCanonicalPath( fileName );
 	m_backgroundParser->removeFile( canonicalFileName );
 	m_backgroundParser->addFile( canonicalFileName, true );
     }
@@ -1018,7 +1018,7 @@ QStringList CppSupportPart::modifiedFileList()
 	    continue;
 
 	QDateTime t = fileInfo.lastModified();
-	QString path = QDir(fileInfo.absFilePath()).canonicalPath();
+	QString path = kdevCanonicalPath( fileInfo.absFilePath() );
 	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( path );
 	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 	    continue;
