@@ -1118,7 +1118,6 @@ void GenHighlight::done() {
   for (z = 0; z < nContexts; z++) delete contextList[z];
 }
 
-
 CHighlight::CHighlight(const char * name) : GenHighlight(name) {
   iWildcards = "*.c";
   iMimetypes = "text/x-c-src";
@@ -1333,7 +1332,7 @@ void PascalHighlight::createItemData(ItemDataList &list) {
   list.append(new ItemData("Keyword",dsKeyword));      // 1
   list.append(new ItemData("Data Type",dsDataType));   // 2
   list.append(new ItemData("Number",dsDecVal));        // 3
-	list.append(new ItemData("Hex",dsBaseN));				     // 4			
+	list.append(new ItemData("Hex",dsBaseN));				     // 4
   list.append(new ItemData("String",dsString));        // 5
   list.append(new ItemData("Directive",dsOthers));     // 6
   list.append(new ItemData("Comment",dsComment));      // 7
@@ -1378,10 +1377,46 @@ void PascalHighlight::makeContextList() {
   setKeywords(keyword,dataType);
 
 }
+
 void PascalHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType)
 {
   keyword->addList(HlManager::self()->syntax->finddata("Pascal","keyword"));
   dataType->addList(HlManager::self()->syntax->finddata("Pascal","type"));
+}
+
+
+PHPHighlight::PHPHighlight(const char * name) : CHighlight(name) {
+  iWildcards = "*.inc;*.php";
+  iMimetypes = "text/x-php-src";
+}
+
+PHPHighlight::~PHPHighlight() {
+}
+
+void PHPHighlight::createItemData(ItemDataList &list) {
+  list.append(new ItemData(I18N_NOOP("Normal Text"),dsNormal));
+  list.append(new ItemData(I18N_NOOP("Keyword"    ),dsKeyword));
+  list.append(new ItemData(I18N_NOOP("Variable"   ),dsDecVal));
+  list.append(new ItemData(I18N_NOOP("Operator"   ),dsOthers));
+  list.append(new ItemData(I18N_NOOP("String"     ),dsString));
+  list.append(new ItemData(I18N_NOOP("String Char"),dsChar));
+  list.append(new ItemData(I18N_NOOP("Comment"    ),dsComment));
+  list.append(new ItemData(I18N_NOOP("Pod"        ),dsOthers, Qt::darkYellow, Qt::yellow, false, true));
+}
+
+void PHPHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType)
+{
+    keyword->addList(HlManager::self()->syntax->finddata("C","keyword"));
+    dataType->addList(HlManager::self()->syntax->finddata("C","type"));
+    keyword->addList(HlManager::self()->syntax->finddata("C++","keyword"));
+    dataType->addList(HlManager::self()->syntax->finddata("C++","type"));
+}
+
+void PHPHighlight::makeContextList() {
+  HlContext *c;
+  CHighlight::makeContextList();
+  c = contextList[0];
+  c->items.append(new Hl2CharDetect(8,1,'@','"'));
 }
 
 
@@ -2271,6 +2306,7 @@ HlManager::HlManager() : QObject(0L)
   hlList.append(new ModulaHighlight("Modula 2" ));
   hlList.append(new AdaHighlight(   "Ada"      ));
   hlList.append(new PascalHighlight("Pascal"   ));
+  hlList.append(new PascalHighlight("PHP"   ));
   hlList.append(new PovrayHighlight("Povray"   ));
   hlList.append(new PythonHighlight("Python"   ));
   hlList.append(new PerlHighlight(  "Perl"     ));

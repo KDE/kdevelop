@@ -485,6 +485,18 @@ class PascalHighlight : public CHighlight {
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
 };
 
+class PHPHighlight : public CHighlight {
+  public:
+    PHPHighlight(const char *name);
+    virtual ~PHPHighlight();
+    virtual QString getCommentStart() { return QString("//"); };
+    virtual QString getCommentEnd() { return QString(""); };
+  protected:
+    virtual void createItemData(ItemDataList &);
+    virtual void makeContextList();
+    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
+};
+
 class PovrayHighlight : public CHighlight {   
  public:     
   PovrayHighlight(const char *name);
