@@ -1,3 +1,8 @@
+1999-10-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed #1871: Crash on Solaris due to KSwallow bug
+	* Fixed #2086: Not enough spacing in make options
+        * In bug report dialog, note about usage of 'mail'
+
 1999-10-20 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* committed patch by G. Jungman (beginning of
 	  namespace support) - Thanks 

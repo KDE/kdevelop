@@ -29,19 +29,18 @@ automake 1.4
 Qt 1.44 NOT Qt 2.0
 KDE 1.1 or KDE 1.1.2
 flex
-CVS 1.10
 
 optional:
 -----------------------
 KDE-SDK
 sgmltools
-Glimpse 4.1
+Glimpse >= 4.1
 KIconEdit
 KDbg
 a2ps
 enscript
-Gv,Ghostview,KGhotsview
-cvs
+Gv, Ghostview, KGhostview
+cvs >= 1.10
 
 
 

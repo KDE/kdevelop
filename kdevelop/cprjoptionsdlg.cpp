@@ -42,7 +42,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   need_makefile_generation = false;
 
   
-  setFixedSize(520,355);
+  setFixedSize(560,355);
   QStrList short_info;
   int pos;
 
@@ -55,7 +55,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   QLabel* prjname_label;
   prjname_label = new QLabel( w, "prjname_label" );
   prjname_label->setGeometry( 10, 10, 170, 20 );
-  prjname_label->setText( i18n("Projectname:") );
+  prjname_label->setText( i18n("Project name:") );
   
   prjname_edit = new QLineEdit( w, "prjname_edit" );
   prjname_edit->setGeometry( 10, 30, 170, 30 );
@@ -124,11 +124,11 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   QLabel* info_label;
   info_label=new QLabel(w,"info_label");
-  info_label->setGeometry(270,10,230,20);
+  info_label->setGeometry(270,10,225,20);
   info_label->setText(i18n("Short Information:"));
 
   info_edit=new QMultiLineEdit(w,"info_edit");
-  info_edit->setGeometry(270,30,230,240);
+  info_edit->setGeometry(270,30,270,240);
   short_info=prj_info->getShortInfo();
   short_info.first();
   do {
@@ -150,7 +150,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   QGroupBox* target_group;
   target_group=new QGroupBox(w2,"target_group");
-  target_group->setGeometry(10,10,240,140);
+  target_group->setGeometry(10,10,260,140);
   target_group->setTitle(i18n("Target"));
   KQuickHelp::add(target_group, i18n("Set your target options here\n"
 				     "by specifying your machine type\n"
@@ -217,12 +217,12 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   QGroupBox* debug_group;
   debug_group=new QGroupBox(w2,"debug_group");
-  debug_group->setGeometry(260,10,240,140);
+  debug_group->setGeometry(280,10,255,140);
   debug_group->setTitle(i18n("Debugging"));
   KQuickHelp::add(debug_group, i18n("Set your debugging options here."));
 
   debug=new QCheckBox(w2,"debug");
-  debug->setGeometry(270,30,220,20);
+  debug->setGeometry(290,30,220,20);
   debug->setText(i18n("generate debugging information"));
   if (cxxflags.contains("-g")) {
     debug->setChecked(true);
@@ -233,7 +233,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 														"to generate debugging information."));
 
   debug_level=new QSpinBox(w2,"debug_level");
-  debug_level->setGeometry(290,60,40,20);
+  debug_level->setGeometry(310,60,40,20);
   debug_level->setRange(1,3);
   if (cxxflags.contains("-g1")) debug_level->setValue(1);
   if (cxxflags.contains("-g2")) debug_level->setValue(2);
@@ -242,7 +242,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   QLabel* debug_level_label;
   debug_level_label=new QLabel(w2,"debug_level_label");
-  debug_level_label->setGeometry(350,60,140,20);
+  debug_level_label->setGeometry(370,60,140,20);
   debug_level_label->setText(i18n("Debug-level"));
   KQuickHelp::add(debug_level,
   KQuickHelp::add(debug_level_label, i18n("Set the debugging level here.\n"
@@ -252,7 +252,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   gprof_info=new QCheckBox(w2,"gprof_info");
-  gprof_info->setGeometry(270,90,220,20);
+  gprof_info->setGeometry(290,90,220,20);
   gprof_info->setText(i18n("generate extra information for gprof"));
   if (cxxflags.contains("-pg")) {
     gprof_info->setChecked(true);
@@ -264,7 +264,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 				"<i>gprof</i>.")); 
 
   save_temps=new QCheckBox(w2,"save_temps");
-  save_temps->setGeometry(270,120,220,20);
+  save_temps->setGeometry(290,120,220,20);
   save_temps->setText(i18n("store temporary intermediate files"));
   if (cxxflags.contains("-save-temps")) {
     save_temps->setChecked(true);
@@ -673,7 +673,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 //  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
   QGroupBox* ldflags_group;
   ldflags_group=new QGroupBox(w4,"ldflags_group");
-  ldflags_group->setGeometry(10,10,490,100);
+  ldflags_group->setGeometry(10,10,530,100);
   ldflags_group->setTitle(i18n("library flags"));
   KQuickHelp::add(ldflags_group, i18n("Set your library flags here."));
  
@@ -725,7 +725,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   QGroupBox* libs_group;
   libs_group=new QGroupBox(w4,"libs_group");
-  libs_group->setGeometry(10,120,490,150);
+  libs_group->setGeometry(10,120,530,150);
   libs_group->setTitle(i18n("libraries"));
   KQuickHelp::add(libs_group, i18n("Choose your libraries here."));
  
@@ -895,9 +895,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w5, i18n("This dialog is for setting\nyour make options."));
 
   m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
-  m_print_debug_info->setGeometry( 20, 20, 150, 30 );
-  m_print_debug_info->setMinimumSize( 0, 0 );
-  m_print_debug_info->setMaximumSize( 32767, 32767 );
+  m_print_debug_info->setGeometry( 10, 20, 190, 30 );
   m_print_debug_info->setFocusPolicy( QWidget::TabFocus );
   m_print_debug_info->setBackgroundMode( QWidget::PaletteBackground );
   m_print_debug_info->setFontPropagation( QWidget::NoChildren );
@@ -907,9 +905,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_debug_info->setAutoResize( FALSE );
 
   m_cont_after_error = new QCheckBox( w5, "m_cont_after_error" );
-  m_cont_after_error->setGeometry( 180, 20, 150, 30 );
-  m_cont_after_error->setMinimumSize( 0, 0 );
-  m_cont_after_error->setMaximumSize( 32767, 32767 );
+  m_cont_after_error->setGeometry( 200, 20, 170, 30 );
   m_cont_after_error->setFocusPolicy( QWidget::TabFocus );
   m_cont_after_error->setBackgroundMode( QWidget::PaletteBackground );
   m_cont_after_error->setFontPropagation( QWidget::NoChildren );
@@ -919,9 +915,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_cont_after_error->setAutoResize( FALSE );
 
   m_print_data_base = new QCheckBox( w5, "m_print_data_base" );
-  m_print_data_base->setGeometry( 340, 20, 150, 30 );
-  m_print_data_base->setMinimumSize( 0, 0 );
-  m_print_data_base->setMaximumSize( 32767, 32767 );
+  m_print_data_base->setGeometry( 375, 20, 170, 30 );
   m_print_data_base->setFocusPolicy( QWidget::TabFocus );
   m_print_data_base->setBackgroundMode( QWidget::PaletteBackground );
   m_print_data_base->setFontPropagation( QWidget::NoChildren );
@@ -931,9 +925,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_data_base->setAutoResize( FALSE );
 
   m_env_variables = new QCheckBox( w5, "m_env_variables" );
-  m_env_variables->setGeometry( 20, 60, 150, 30 );
-  m_env_variables->setMinimumSize( 0, 0 );
-  m_env_variables->setMaximumSize( 32767, 32767 );
+  m_env_variables->setGeometry( 10, 60, 190, 30 );
   m_env_variables->setFocusPolicy( QWidget::TabFocus );
   m_env_variables->setBackgroundMode( QWidget::PaletteBackground );
   m_env_variables->setFontPropagation( QWidget::NoChildren );
@@ -943,9 +935,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_env_variables->setAutoResize( FALSE );
 
   m_no_rules = new QCheckBox( w5, "m_no_rules" );
-  m_no_rules->setGeometry( 180, 60, 150, 30 );
-  m_no_rules->setMinimumSize( 0, 0 );
-  m_no_rules->setMaximumSize( 32767, 32767 );
+  m_no_rules->setGeometry( 200, 60, 170, 30 );
   m_no_rules->setFocusPolicy( QWidget::TabFocus );
   m_no_rules->setBackgroundMode( QWidget::PaletteBackground );
   m_no_rules->setFontPropagation( QWidget::NoChildren );
@@ -955,9 +945,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_no_rules->setAutoResize( FALSE );
 
   m_touch_files = new QCheckBox( w5, "m_touch_files" );
-  m_touch_files->setGeometry( 340, 60, 150, 30 );
-  m_touch_files->setMinimumSize( 0, 0 );
-  m_touch_files->setMaximumSize( 32767, 32767 );
+  m_touch_files->setGeometry( 375, 60, 170, 30 );
   m_touch_files->setFocusPolicy( QWidget::TabFocus );
   m_touch_files->setBackgroundMode( QWidget::PaletteBackground );
   m_touch_files->setFontPropagation( QWidget::NoChildren );
@@ -967,9 +955,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_touch_files->setAutoResize( FALSE );
 
   m_ignor_errors = new QCheckBox( w5, "m_ignor_errors" );
-  m_ignor_errors->setGeometry( 20, 100, 150, 30 );
-  m_ignor_errors->setMinimumSize( 0, 0 );
-  m_ignor_errors->setMaximumSize( 32767, 32767 );
+  m_ignor_errors->setGeometry( 10, 100, 190, 30 );
   m_ignor_errors->setFocusPolicy( QWidget::TabFocus );
   m_ignor_errors->setBackgroundMode( QWidget::PaletteBackground );
   m_ignor_errors->setFontPropagation( QWidget::NoChildren );
@@ -979,9 +965,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_ignor_errors->setAutoResize( FALSE );
 
   m_silent_operation = new QCheckBox( w5, "m_silent_operation" );
-  m_silent_operation->setGeometry( 180, 100, 150, 30 );
-  m_silent_operation->setMinimumSize( 0, 0 );
-  m_silent_operation->setMaximumSize( 32767, 32767 );
+  m_silent_operation->setGeometry( 200, 100, 170, 30 );
   m_silent_operation->setFocusPolicy( QWidget::TabFocus );
   m_silent_operation->setBackgroundMode( QWidget::PaletteBackground );
   m_silent_operation->setFontPropagation( QWidget::NoChildren );
@@ -991,9 +975,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_silent_operation->setAutoResize( FALSE );
 
   m_print_work_dir = new QCheckBox( w5, "m_print_work_dir" );
-  m_print_work_dir->setGeometry( 340, 100, 150, 30 );
-  m_print_work_dir->setMinimumSize( 0, 0 );
-  m_print_work_dir->setMaximumSize( 32767, 32767 );
+  m_print_work_dir->setGeometry( 375, 100, 170, 30 );
   m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
   m_print_work_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_print_work_dir->setFontPropagation( QWidget::NoChildren );
@@ -1003,9 +985,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_work_dir->setAutoResize( FALSE );
 
   m_job_number_label = new QLabel( w5, "m_job_number_label" );
-  m_job_number_label->setGeometry( 20, 140, 100, 30 );
-  m_job_number_label->setMinimumSize( 0, 0 );
-  m_job_number_label->setMaximumSize( 32767, 32767 );
+  m_job_number_label->setGeometry( 10, 140, 100, 30 );
   m_job_number_label->setFocusPolicy( QWidget::NoFocus );
   m_job_number_label->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number_label->setFontPropagation( QWidget::NoChildren );
@@ -1015,9 +995,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_job_number_label->setMargin( -1 );
 
   m_job_number = new QSpinBox( w5, "m_job_number" );
-  m_job_number->setGeometry( 130, 140, 60, 30 );
-  m_job_number->setMinimumSize( 0, 0 );
-  m_job_number->setMaximumSize( 32767, 32767 );
+  m_job_number->setGeometry( 120, 140, 60, 30 );
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
   m_job_number->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number->setFontPropagation( QWidget::NoChildren );
@@ -1032,9 +1010,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_job_number->setWrapping( FALSE );
 
   m_set_modify_label = new QLabel( w5, "m_set_modify_label" );
-  m_set_modify_label->setGeometry( 20, 190, 100, 30 );
-  m_set_modify_label->setMinimumSize( 0, 0 );
-  m_set_modify_label->setMaximumSize( 32767, 32767 );
+  m_set_modify_label->setGeometry( 10, 190, 100, 30 );
   m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
   m_set_modify_label->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_label->setFontPropagation( QWidget::NoChildren );
@@ -1044,7 +1020,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_label->setMargin( -1 );
 
   m_set_modify_line = new QLineEdit( w5, "m_set_modify_line" );
-  m_set_modify_line->setGeometry( 130, 190, 320, 30 );
+  m_set_modify_line->setGeometry( 120, 190, 330, 30 );
   m_set_modify_line->setMinimumSize( 0, 0 );
   m_set_modify_line->setMaximumSize( 32767, 32767 );
   m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
@@ -1071,9 +1047,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_dir->setAutoResize( FALSE );
   
   m_optional_label = new QLabel( w5, "m_optional_label" );
-  m_optional_label->setGeometry( 20, 240, 100, 30 );
-  m_optional_label->setMinimumSize( 0, 0 );
-  m_optional_label->setMaximumSize( 32767, 32767 );
+  m_optional_label->setGeometry( 10, 240, 100, 30 );
   m_optional_label->setFocusPolicy( QWidget::NoFocus );
   m_optional_label->setBackgroundMode( QWidget::PaletteBackground );
   m_optional_label->setFontPropagation( QWidget::NoChildren );
@@ -1083,7 +1057,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_optional_label->setMargin( -1 );
 
   m_optional_line = new QLineEdit( w5, "m_optional_line" );
-  m_optional_line->setGeometry( 130, 240, 360, 30 );
+  m_optional_line->setGeometry( 120, 240, 370, 30 );
   m_optional_line->setMinimumSize( 0, 0 );
   m_optional_line->setMaximumSize( 32767, 32767 );
   m_optional_line->setFocusPolicy( QWidget::StrongFocus );
