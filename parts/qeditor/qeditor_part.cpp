@@ -233,8 +233,10 @@ bool QEditorPart::saveFile()
 
 void QEditorPart::fileReload()
 {
-    if (openURL(url()))
+    if (openURL(url())) {
         setModified( false );
+	emit newStatus();
+    }
 }
 
 void QEditorPart::fileOpen()
