@@ -136,7 +136,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
   m_pCurrentFocusedWindow(0),
   m_pStretchSpace(0)
 {
-	m_pFrm = parent;
+ 	m_pFrm = parent;
 	m_pButtonList = new QList<QextMdiTaskBarButton>;
 	m_pButtonList->setAutoDelete(TRUE);
 	setFontPropagation(QWidget::SameFont);
@@ -272,7 +272,11 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
    }
    else {
       // too many buttons for actual width
-      int newButtonWidth = (taskBarWidth - 15) / buttonCount;
+      int newButtonWidth;
+      if( buttonCount != 0)
+         newButtonWidth = (taskBarWidth - 15) / buttonCount;
+      else
+         newButtonWidth = 0;
 #if QT_VERSION > 209
       if( orientation() == Qt::Vertical)
          newButtonWidth = 80;
@@ -289,5 +293,4 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
 {
    layoutTaskBar( rse->size().width());
-   QToolBar::resize( rse->size());
 }
