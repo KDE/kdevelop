@@ -37,7 +37,7 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
 		   clogfileview.cpp cdocbrowser.cpp cproject.cpp \
 		   kswallow.cpp cgeneratenewfile.cpp \
-		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp ctoolclass.cpp \
+		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp ctoolclass.cpp 
 
 
 kdevelop_METASOURCES = USE_AUTOMOC

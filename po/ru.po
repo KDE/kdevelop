@@ -1,0 +1,2468 @@
+# KTranslator Generated File
+
+#: ckdevelop_init.cpp:550 ckdevelop_init.cpp:551
+msgid ""
+msgstr ""
+"Date: 1999-01-28 22:30:41+0300\n"
+"From: Charlie & <root@ws-ilmar.ints.ru>\n"
+"Content-Type: text/plain; charset=\n"
+"Xgettext-Options: -s -ki18n\n"
+"Files: caddexistingfiledlg.cpp caddexistingfiledlg.moc.cpp cclassview.cpp cclassview.moc.cpp ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.moc.cpp cdocbrowser.cpp cdocbrowser.moc.cpp cdoctree.cpp cdoctree.moc.cpp ceditwidget.cpp ceditwidget.moc.cpp cfilepropdlg.cpp cfilepropdlg.moc.cpp cgeneratenewfile.cpp cgrouppropertiesdlg.cpp cgrouppropertiesdlg.moc.cpp ckappwizard.cpp ckappwizard.moc.cpp ckdevelop.cpp ckdevelop.moc.cpp ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevsetupdlg.cpp ckdevsetupdlg.moc.cpp clogfileview.cpp clogfileview.moc.cpp cnewclassdlg.cpp cnewclassdlg.moc.cpp cnewfiledlg.cpp cnewfiledlg.moc.cpp coutputwidget.cpp coutputwidget.moc.cpp cprjoptionsdlg.cpp cprjoptionsdlg.moc.cpp cproject.cpp crealfileview.cpp crealfileview.moc.cpp ctabctl.cpp ctabctl.moc.cpp ctoolclass.cpp cupdatekdedocdlg.cpp cupdatekdedocdlg.moc.cpp kswallow.cpp kswallow.moc.cpp main.cpp kwrite/highlight.cpp kwrite/highlight.moc.cpp "
+"kwrite/kmimemagic.cpp kwrite/kwdialog.cpp kwrite/kwdialog.moc.cpp kwrite/kwdoc.cpp kwrite/kwdoc.moc.cpp kwrite/kwview.cpp kwrite/kwview.moc.cpp\n"
+
+#: ckdevelop.cpp:1032
+msgid "\tKDevelop Version "
+msgstr "\tВерсия KDevelop"
+
+#: ckdevelop_init.cpp:552
+msgid " INS "
+msgstr "ВСТАВ"
+
+#: ckdevelop_init.cpp:391
+msgid "&Add Bookmark"
+msgstr "Добавить Закладку"
+
+#: kwrite/kwdialog.cpp:159
+msgid "&All"
+msgstr "Все"
+
+#: kwrite/kwdialog.cpp:262
+msgid "&Auto Brackets"
+msgstr "Автоскобки"
+
+#: kwrite/kwdialog.cpp:257
+msgid "&Backspace Indent"
+msgstr "Отступ при забое"
+
+#: ckdevelop_init.cpp:394
+msgid "&Bookmarks"
+msgstr "Закладки"
+
+#: ckdevelop_init.cpp:447
+msgid "&Buffers"
+msgstr "Буферы"
+
+#: ckdevelop_init.cpp:350
+msgid "&Build"
+msgstr "Собрать"
+
+#: kwrite/highlight.cpp:1928 kwrite/highlight.cpp:2018
+msgid "&Cancel"
+msgstr "&Отмена"
+
+#: kwrite/kwdialog.cpp:51
+msgid "&Case Sensitive"
+msgstr "С учетом регистра"
+
+#: ckdevelop_init.cpp:340
+msgid "&Clean/Rebuild all"
+msgstr "Очистить/Пересобрать все"
+
+#: ckdevelop_init.cpp:244 kwrite/kwdialog.cpp:164
+msgid "&Close"
+msgstr "&Закрыть"
+
+#: ckdevelop_init.cpp:267
+msgid "&Copy"
+msgstr "&Копировать"
+
+#: kwrite/kwdialog.cpp:294
+msgid "&Delete On Input"
+msgstr "Удалять при вводе"
+
+#: ckdevelop_init.cpp:320
+msgid "&Documentation"
+msgstr "Документация"
+
+#: ckdevelop_init.cpp:284
+msgid "&Edit"
+msgstr "&Редактирование"
+
+#: ckdevelop_init.cpp:392
+msgid "&Edit Bookmarks..."
+msgstr "Редактировать Закладки"
+
+#: ckdevelop_init.cpp:431
+msgid "&Editor..."
+msgstr "&Editor..."
+
+#: ckdevelop_init.cpp:364
+msgid "&Existing File(s)..."
+msgstr "&Existing File(s)..."
+
+#: ckdevelop_init.cpp:252
+msgid "&File"
+msgstr "&Файл"
+
+#: ckdevelop_init.cpp:376
+msgid "&File Properties..."
+msgstr "Свойства Файла..."
+
+#: kwrite/kwdialog.cpp:53
+msgid "&From Cursor"
+msgstr "От курсора"
+
+#: ckdevelop_init.cpp:278
+msgid "&Goto Line..."
+msgstr "Перейти на строчку..."
+
+#: kwrite/kwdialog.cpp:217
+msgid "&Goto Line:"
+msgstr "Перейти на строчку:"
+
+#: ckdevelop_init.cpp:466
+msgid "&Help"
+msgstr "&Помощь"
+
+#: ckdevelop_init.cpp:271
+msgid "&Insert File..."
+msgstr "&Вставить файл..."
+
+#: ckdevelop_init.cpp:438
+msgid "&KDevelop..."
+msgstr "&KDevelop..."
+
+#: ckdevelop_init.cpp:451
+msgid "&KIconedit"
+msgstr "Редактор иконок"
+
+#: ckdevelop_init.cpp:452
+msgid "&Kdbg"
+msgstr "Отладчик"
+
+#: ckdevelop_init.cpp:336
+msgid "&Make"
+msgstr "Создать"
+
+#: kwrite/kwdialog.cpp:292
+msgid "&Multiple Selections"
+msgstr "Множественное выделение"
+
+#: ckdevelop_init.cpp:368
+msgid "&New Class..."
+msgstr "Новый Класс..."
+
+#: ckdevelop_init.cpp:230 ckdevelop_init.cpp:363
+msgid "&New File..."
+msgstr "Новый файл..."
+
+#: kwrite/kwdialog.cpp:154
+msgid "&No"
+msgstr "Нет"
+
+#: kwrite/highlight.cpp:1922 kwrite/highlight.cpp:2012 kwrite/kwdialog.cpp:88 kwrite/kwdialog.cpp:224 kwrite/kwdialog.cpp:350 kwrite/kwdialog.cpp:437
+msgid "&OK"
+msgstr "&ОК"
+
+#: ckdevelop_init.cpp:235
+msgid "&Open File..."
+msgstr "Открыть файл..."
+
+#: ckdevelop_init.cpp:440
+msgid "&Options"
+msgstr "Настройки"
+
+#: ckdevelop_init.cpp:378
+msgid "&Options..."
+msgstr "&Опции"
+
+#: ckdevelop_init.cpp:269
+msgid "&Paste"
+msgstr "&Вставить"
+
+#: kwrite/kwdialog.cpp:291
+msgid "&Persistent Selections"
+msgstr "Постоянное выделение"
+
+#: ckdevelop_init.cpp:247
+msgid "&Print..."
+msgstr "&Печать..."
+
+#: ckdevelop_init.cpp:380
+msgid "&Project"
+msgstr "Проект"
+
+#: kwrite/kwdialog.cpp:80
+msgid "&Prompt On Replace"
+msgstr "Спросить при замене"
+
+#: ckdevelop_init.cpp:298
+msgid "&Qt-Library"
+msgstr "Библиотека Qt"
+
+#: ckdevelop_init.cpp:249
+msgid "&Quit"
+msgstr "&Выход"
+
+#: ckdevelop_init.cpp:338
+msgid "&Rebuild all"
+msgstr "Пересобрать все"
+
+#: ckdevelop_init.cpp:407
+msgid "&Refresh"
+msgstr "Обновить"
+
+#: ckdevelop_init.cpp:371
+msgid "&Remove File from Project"
+msgstr "&Remove File from Project"
+
+#: ckdevelop_init.cpp:274
+msgid "&Repeat Search..."
+msgstr "Повторить поиск"
+
+#: kwrite/kwdialog.cpp:40
+msgid "&Replace With:"
+msgstr "Заменить на:"
+
+#: ckdevelop_init.cpp:276
+msgid "&Replace..."
+msgstr "Заменить..."
+
+#: ckdevelop_init.cpp:334
+msgid "&Run"
+msgstr "Запустить"
+
+#: ckdevelop_init.cpp:240
+msgid "&Save"
+msgstr "&Сохранить"
+
+#: ckdevelop_init.cpp:295
+msgid "&Search Marked Text"
+msgstr "Поиск в выделенном тексте"
+
+#: ckdevelop_init.cpp:273
+msgid "&Search..."
+msgstr "Искать..."
+
+#: kwrite/kwdialog.cpp:55
+msgid "&Selected Text"
+msgstr "Выделенный текст"
+
+#: ckdevelop_init.cpp:343
+msgid "&Stop"
+msgstr "&Стоп"
+
+#: ckdevelop_init.cpp:435
+msgid "&Syntax Highlighting..."
+msgstr "&Syntax Highlighting..."
+
+#: kwrite/kwdialog.cpp:30
+msgid "&Text To Find:"
+msgstr "Искать:"
+
+#: kwrite/kwdialog.cpp:295
+msgid "&Toggle Old"
+msgstr "Переключать старый"
+
+#: ckdevelop_init.cpp:453
+msgid "&Tools"
+msgstr "Инструменты"
+
+#: kwrite/kwdialog.cpp:293
+msgid "&Vertical Selections"
+msgstr "Вертикальное выделение"
+
+#: kwrite/kwdialog.cpp:52
+msgid "&Whole Words Only"
+msgstr "Только целые слова"
+
+#: kwrite/kwdialog.cpp:258
+msgid "&Word Wrap"
+msgstr "Разрыв между словами"
+
+#: kwrite/kwdialog.cpp:147
+msgid "&Yes"
+msgstr "Да"
+
+#: ckappwizard.cpp:226
+msgid ".kdelnk-File"
+msgstr "файл .kdelnk"
+
+#: kwrite/kwview.cpp:1476
+msgid ""
+"A Document with this Name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Документ с этим именем уже существует.\n"
+"Переписать?"
+
+#: ckappwizard.cpp:184
+msgid "API-Documentation"
+msgstr "Документация по API"
+
+#: ckdevelop_init.cpp:464
+msgid "About KDevelop..."
+msgstr "О KDevelop..."
+
+#: ckdevelop.cpp:1032
+msgid "About..."
+msgstr "О программе..."
+
+#: ckdevelop.cpp:1219
+msgid "Add a file to the current project"
+msgstr "Добавить файл в текущий проект"
+
+#: ckdevelop.cpp:1220
+msgid "Add a new file to the project"
+msgstr "Добавить новый файл в проект"
+
+#: cprjoptionsdlg.cpp:848
+msgid "Add additional libraries here."
+msgstr "Укажите здесь дополнительные библиотеки."
+
+#: ckdevelop.cpp:1221
+msgid "Add an existing file to the project"
+msgstr "Добавить существующий файл в проект"
+
+#: kwrite/kwview.cpp:1153 kwrite/kwview.cpp:1183
+msgid "An Error occured while trying to open this Document"
+msgstr "Ошибка во время открытия данного Документа"
+
+#: ckappwizard.cpp:80
+msgid "Application"
+msgstr "Приложение"
+
+#: ckdevelop_noslot.cpp:56
+msgid "Attention"
+msgstr "Attention"
+
+#: ckappwizard.cpp:125 cprjoptionsdlg.cpp:70
+msgid "Author:"
+msgstr "Автор:"
+
+#: kwrite/kwdialog.cpp:256
+msgid "Auto &Indent"
+msgstr "Авто выравнивание"
+
+#: ckdevelop_init.cpp:342
+msgid "Autocon&f"
+msgstr "Автоконфигуратор"
+
+#: ckdevelop_init.cpp:292 ckdevelop_init.cpp:532
+msgid "Back"
+msgstr "Назад"
+
+#: kwrite/kwdialog.cpp:402
+msgid "Background:"
+msgstr "Фон:"
+
+#: kwrite/kwview.cpp:1690 kwrite/kwview.cpp:1879
+msgid "Beginning of document reached"
+msgstr "Достугнуто начало документа"
+
+#: kwrite/highlight.cpp:1732
+msgid "Bold"
+msgstr "Жирный"
+
+#: ccreatedocdatabasedlg.cpp:251
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+
+#: ckdevelop_init.cpp:265
+msgid "C&ut"
+msgstr "Вы&резать"
+
+#: ckdevsetupdlg.cpp:111 cnewclassdlg.cpp:128 cprjoptionsdlg.cpp:854 kwrite/kwdialog.cpp:94 kwrite/kwdialog.cpp:230 kwrite/kwdialog.cpp:355 kwrite/kwdialog.cpp:442 kwrite/kwview.cpp:1400
+msgid "Cancel"
+msgstr "Отмена"
+
+#: kwrite/highlight.cpp:1808
+msgid "Charset:"
+msgstr "Кодировка:"
+
+#: ckappwizard.cpp:296
+msgid ""
+"Check this if you want a standard\n"
+"cpp-Template for your cpp-files.\n"
+msgstr ""
+"Check this if you want a standard\n"
+"cpp-Template for your cpp-files."
+
+#: ckappwizard.cpp:265
+msgid ""
+"Check this if you want a standard\n"
+"headertemplate for your headerfiles\n"
+msgstr ""
+"Check this if you want a standard\n"
+"headertemplate for your headerfiles"
+
+#: ckappwizard.cpp:193
+msgid ""
+"Check this if you wish a general User\n"
+"Documentation to be generated automatically."
+msgstr ""
+"Нажатие этой кнопки обеспечит автоматическую\n"
+"генерацию каркаса Руководства пользователя"
+
+#: ckappwizard.cpp:229
+msgid ""
+"Check this if you wish to have\n"
+"a .kdelnk for you application in the\n"
+"K-Menu.  The default is the Applications-\n"
+"submenu. You can change this to other menus\n"
+"by changing the file properties afterwards."
+msgstr ""
+"Нажмите эту кнопку для создания файла\n"
+".kdelnk вашей программы в К-меню. По-умолчанию\n"
+"он помещается в подменю Программы. Вы можете\n"
+"это изменить позднее, изменив свойства файла."
+
+#: ckappwizard.cpp:204
+msgid ""
+"Check this if you wish to have\n"
+"the GNU-Standard files created like\n"
+"INSTALL and README"
+msgstr ""
+"Нажмите эту кнопку для создания\n"
+"стандартных файлов GNU, таких как\n"
+"INSTALL и README"
+
+#: ckappwizard.cpp:187
+msgid ""
+"Check this if you wish to have your API\n"
+"Documentation generated automatically"
+msgstr ""
+"Нажатие этой кнопки обеспечит автоматическую\n"
+"генерацию документации по вашему API"
+
+#: ckappwizard.cpp:199
+msgid "Check this to create a lsm-File"
+msgstr "Нажмите эту кнопку для создания lsm-файла"
+
+#: ckappwizard.cpp:214
+msgid ""
+"Check this to create a sample icon for\n"
+"your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit.\n"
+msgstr ""
+"Check this to create a sample icon for\n"
+"your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+
+#: ckappwizard.cpp:222
+msgid ""
+"Check this to create a sample mini-icon\n"
+"for your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit.\n"
+msgstr ""
+"Check this to create a sample mini-icon\n"
+"for your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+
+#: cprjoptionsdlg.cpp:210
+msgid ""
+"Checking this turns on the -g flag\n"
+"to GCC to generate debugging information\n"
+msgstr ""
+"Checking this turns on the -g flag\n"
+"to GCC to generate debugging information"
+
+#: cupdatekdedocdlg.cpp:178
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled.\n"
+msgstr ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+
+#: cupdatekdedocdlg.cpp:161
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+"Нажатие этой кнопки удалит текущую документацию\n"
+"и заменит ее свежесгенерированной новой\n"
+"документацией по тому же пути."
+
+#: cprjoptionsdlg.cpp:706
+msgid "Choose your libraries here."
+msgstr "Выберите бибилиотеки."
+
+#: ckdevelop_init.cpp:245
+msgid "Close All"
+msgstr "Close All"
+
+#: ckdevelop.cpp:1175
+msgid "Closes all open files"
+msgstr "Закрыть все открытые файлы"
+
+#: ckdevelop.cpp:1174
+msgid "Closes the actual file"
+msgstr "Закрыть текущий файл???"
+
+#: ckdevelop.cpp:1179
+msgid "Closes the current window"
+msgstr "Closes the current window"
+
+#: ckdevelop.cpp:262
+msgid "Closing all files..."
+msgstr "Закрытие всех файлов..."
+
+#: ckdevelop.cpp:204
+msgid "Closing file..."
+msgstr "Закрытие файла..."
+
+#: kwrite/highlight.cpp:1722
+msgid "Color:"
+msgstr "Цвет:"
+
+#: cprjoptionsdlg.cpp:299
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information.\n"
+msgstr ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+
+#: cprjoptionsdlg.cpp:286
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on.\n"
+msgstr ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+
+#: cprjoptionsdlg.cpp:269
+msgid "Compiler Options"
+msgstr "Опции Компилятора"
+
+#: cprjoptionsdlg.cpp:639
+msgid "Compiler Warnings"
+msgstr "Предупреждения компилятора"
+
+#: kwrite/highlight.cpp:1950
+msgid "Config Select"
+msgstr "Выбор настроек"
+
+#: ckdevelop_init.cpp:461
+msgid "Contents"
+msgstr "Содержимое"
+
+#: kwrite/kwview.cpp:1680 kwrite/kwview.cpp:1868
+msgid "Continue from the beginning"
+msgstr "Продолжать с начала"
+
+#: kwrite/kwview.cpp:1691 kwrite/kwview.cpp:1880
+msgid "Continue from the end"
+msgstr "Продолжить с конца"
+
+#: ceditwidget.cpp:36 ckdevelop_init.cpp:496
+msgid "Copy"
+msgstr "Копировать"
+
+#: ckdevelop.cpp:325
+msgid "Copying..."
+msgstr "Копирование..."
+
+#: ckdevelop.cpp:1185
+msgid "Copys the selected section to the clipboard"
+msgstr "Копирует выделенный блок в clipboard"
+
+#: kwrite/kwview.cpp:1408
+msgid ""
+"Could not save the document.\n"
+"Open a new document anyways?"
+msgstr ""
+"Не могу записать документ.\n"
+"Все равно открыть новый документ?"
+
+#: kwrite/kwview.cpp:1256 kwrite/kwview.cpp:1321
+msgid "Could not start or find KFM"
+msgstr "Ошибка запуска KFM"
+
+#: ckappwizard.cpp:43
+msgid "Create"
+msgstr "Создать"
+
+#: ckdevelop_init.cpp:317
+msgid "Create Searchdatabase..."
+msgstr "Create Searchdatabase..."
+
+#: ckdevelop.cpp:1224
+msgid "Create a new Class frame structure and files"
+msgstr "Создать новую структуру класса и файлы???"
+
+#: ckdevelop.cpp:1204
+msgid "Create a search database of the current Documentation"
+msgstr "Создать поисковую БД по текущей документации"
+
+#: ckdevelop.cpp:1215
+msgid "Create the Project's API with KDoc"
+msgstr "Создать документацию по API проекта с помощью KDoc"
+
+#: ckdevelop.cpp:1216
+msgid "Create the Project's User Manual with the sgml-file"
+msgstr "Создать Руководство пользователя проекта с помощью sgml-files"
+
+#: ckdevelop.cpp:1166
+msgid "Creates a new file"
+msgstr "Создает новый файл"
+
+#: ckdevelop.cpp:572
+msgid "Creating Search Database..."
+msgstr "Создание поисковой БД..."
+
+#: ckdevelop.cpp:53
+msgid "Creating a new frame application..."
+msgstr "Создание нового приложения..."
+
+#: ckdevelop.cpp:67
+msgid "Creating new file..."
+msgstr "Создание нового файла ..."
+
+#: ckdevelop.cpp:738
+msgid "Creating project API-Documentation..."
+msgstr "Создание документации по API проекта..."
+
+#: ckdevelop.cpp:758
+msgid "Creating project Manual..."
+msgstr "Создание руководства пользователя..."
+
+#: ceditwidget.cpp:35 ckdevelop_init.cpp:500
+msgid "Cut"
+msgstr "Вырезать"
+
+#: ckdevelop.cpp:1184
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "Вырезает выделенный блок и помещает его в clipboard"
+
+#: ckdevelop.cpp:320
+msgid "Cutting..."
+msgstr "Вырезание..."
+
+#: cprjoptionsdlg.cpp:223
+msgid "Debug-level"
+msgstr "Уровень отладки"
+
+#: cprjoptionsdlg.cpp:199
+msgid "Debugging"
+msgstr "Отладка"
+
+#: kwrite/highlight.cpp:1994 kwrite/highlight.cpp:2003
+msgid "Default"
+msgstr "Умолчания"
+
+#: kwrite/highlight.cpp:1913
+msgid "Default Font"
+msgstr "Шрифт по умолчанию"
+
+#: kwrite/highlight.cpp:1891
+msgid "Default Item Styles"
+msgstr "Стили элемента по умолчанию"
+
+#: clogfileview.cpp:39
+msgid "Delete File..."
+msgstr "Delete File..."
+
+#: ckdevelop_init.cpp:281
+msgid "Deselect All"
+msgstr "Deselect All"
+
+#: clogfileview.cpp:236
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+
+#: ckdevsetupdlg.cpp:105
+msgid "Doc-Location"
+msgstr "Месторасположение документации"
+
+#: kwrite/kwdialog.cpp:255
+msgid "Edit Options"
+msgstr "Параметры редактирования"
+
+#: ckdevelop_init.cpp:433
+msgid "Editor-&Colors..."
+msgstr "Editor-&Colors..."
+
+#: ckappwizard.cpp:127 cprjoptionsdlg.cpp:83
+msgid "Email:"
+msgstr "Email:"
+
+#: ckdevelop.cpp:1233
+msgid "Enables / disables the browser toolbar"
+msgstr "Включить/выключить панель просмотрщика"
+
+#: ckdevelop.cpp:1237
+msgid "Enables / disables the outputview"
+msgstr "Включить/выключить просмотр вывода"
+
+#: ckdevelop.cpp:1232
+msgid "Enables / disables the standard toolbar"
+msgstr "Включить/выключить стандартную панель инструментов"
+
+#: ckdevelop.cpp:1234
+msgid "Enables / disables the statusbar"
+msgstr "Включить/выключить панель состояния"
+
+#: ckdevelop.cpp:1236
+msgid "Enables / disables the treeview"
+msgstr "Включить/выключить просмотр деревьев"
+
+#: kwrite/kwview.cpp:1679 kwrite/kwview.cpp:1867
+msgid "End of document reached"
+msgstr "Достигнут конец документа"
+
+#: ckdevelop.cpp:1244
+msgid "Enter the KDevelop Homepage"
+msgstr "Перейти на домашную страницу KDevelop"
+
+#: ckappwizard.cpp:151
+msgid ""
+"Enter the Project's name here. This is\n"
+"also the directory name under which your Project\n"
+"will be created."
+msgstr ""
+"Здесь введите название проекта. Оно\n"
+"также будет являтся именем директории,\n"
+"в которой проект будет создан."
+
+#: ckappwizard.cpp:162
+msgid ""
+"Enter the Version number here.\n"
+"The number will be used in the about-dialog\n"
+"and in the main widget's topbar."
+msgstr ""
+"Введите номер версии. Этот номер\n"
+"будет использован в диалоге 'О программе'\n"
+"и в названии окна приложения проекта."
+
+#: ckdevsetupdlg.cpp:96
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"switch to menuentry <blue><i>Documentation ->\n"
+"Update KDE-Documentation</i><black> to create it."
+msgstr ""
+"Укажите путь к документации по KDE\n"
+"Для облегчения указания воспользуйтесь\n"
+"кнопкой справа - она позволит вам изменять\n"
+"директории.\n"
+"\n"
+"Если документация по библиотеке KDE у вас не\n"
+"установлена, то вы легко сможете получить ее,\n"
+"выбрав пункт меню <blue><i>Документация->Обновить документацию по KDE</i>"
+
+#: ckdevsetupdlg.cpp:40
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by switching to menuentry<i>Documentation -> \n"
+" Update KDE-Documentation</i>.Please use the Update dialog whenever you update \n"
+"your KDE Libs."
+msgstr ""
+"Укажите путь к документации по библиотекам\n"
+"Qt и KDE для просмотрщика документации.\n"
+"Qt обычно поставляется с полной документацией,\n"
+"в то время как документацию по KDE вы можете легко\n"
+"создать, выбрав пункт меню <i>Документация->\n"
+"Обновить документацию KDE</i>. Пользуйтесь пожалуста\n"
+"диалогом обновления, когда вы обновляете библиотеки KDE."
+
+#: ckdevsetupdlg.cpp:69
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"Укажите путь к документации по бибилиотеке\n"
+"Qt. Для облегчения указания пути воспользуйтесь\n"
+"кнопкой справа - она позволи вам изменять директории.\n"
+"\n"
+"Обычно документация к бибилотеке Qt\n"
+"располагается в <i><blue>$QTDIR/html</i>"
+
+#: ckappwizard.cpp:157
+msgid ""
+"Enter the toplevel-directory the project\n"
+"will be stored. This <b>must</b> be an\n"
+"<b>existing directory !!"
+msgstr ""
+"Введите директорию верхнего уровня,\n"
+"в которой разместится проект. Это <b>должна</b>\n"
+"быть <b>существующая директория!!"
+
+#: ckappwizard.cpp:171
+msgid ""
+"Enter your email adress here, so users\n"
+"can send you bug reports easiely ;-))"
+msgstr ""
+"Введит свой email для получения\n"
+"сообщений об ошибках от пользователей."
+
+#: ckappwizard.cpp:167
+msgid ""
+"Enter your name here for the about dialog.\n"
+"You may also consider using the Team-name.\n"
+msgstr ""
+"Enter your name here for the about dialog.\n"
+"You may also consider using the Team-name."
+
+#: caddexistingfiledlg.cpp:177 caddexistingfiledlg.cpp:182 caddexistingfiledlg.cpp:188 cnewfiledlg.cpp:228 cnewfiledlg.cpp:233 cnewfiledlg.cpp:237 cnewfiledlg.cpp:241 cnewfiledlg.cpp:245 cnewfiledlg.cpp:249 cnewfiledlg.cpp:253
+msgid "Error..."
+msgstr "Ошибка..."
+
+#: ckappwizard.cpp:381
+msgid "Exit"
+msgstr "Выход"
+
+#: ckdevelop.cpp:310
+msgid "Exiting..."
+msgstr "Выход..."
+
+#: ckdevelop.cpp:1181
+msgid "Exits the program"
+msgstr "Выйти из программы"
+
+#: kwrite/highlight.cpp:1783
+msgid "Family:"
+msgstr "Семейство:"
+
+#: kwrite/highlight.cpp:1977
+msgid "File Extensions:"
+msgstr "Расширение файла"
+
+#: kwrite/kwview.cpp:1682 kwrite/kwview.cpp:1693 kwrite/kwview.cpp:1703
+msgid "Find"
+msgstr "Искать"
+
+#: kwrite/kwdialog.cpp:54
+msgid "Find &Backwards"
+msgstr "Искать назад"
+
+#: ckdevelop_init.cpp:293 ckdevelop_init.cpp:533
+msgid "Forward"
+msgstr "Вперед"
+
+#: kwrite/kwdialog.cpp:423
+msgid "Found:"
+msgstr "Найдено:"
+
+#: ckappwizard.cpp:201
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "Стандартные файлы GNU (INSTALL,README,COPYING...)"
+
+#: cprjoptionsdlg.cpp:125
+msgid "General"
+msgstr "Главное"
+
+#: ckdevelop.cpp:1167
+msgid "Generate a new project"
+msgstr "Создает новый проект"
+
+#: cprjoptionsdlg.cpp:239
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+"Генерировать дополнительнй код для записи\n"
+"профилировочной информации для анализа\n"
+"программы спомощью <i>gprof</i>."
+
+#: ckdevelop.cpp:653
+msgid "Generating Documentation..."
+msgstr "Генерация документации..."
+
+#: cprjoptionsdlg.cpp:438
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+
+#: ckdevelop.cpp:1192
+msgid "Go to Line Number..."
+msgstr "Перейти к строке номер..."
+
+#: cprjoptionsdlg.cpp:96
+msgid "Handbook:"
+msgstr "Handbook:"
+
+#: ckappwizard.cpp:288
+msgid "Headertemplate for .cpp-files"
+msgstr "Заголовок для файлов .cpp"
+
+#: ckappwizard.cpp:257
+msgid "Headertemplate for .h-files"
+msgstr "Пример заголовок файлов .h"
+
+#: kwrite/highlight.cpp:1973
+msgid "Highlight Auto Select"
+msgstr "Автоматический выбор раскраски"
+
+#: kwrite/highlight.cpp:1954
+msgid "Highlight:"
+msgstr "Раскраска:"
+
+#: cprjoptionsdlg.cpp:668
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+
+#: cprjoptionsdlg.cpp:265
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+"Здесь укажите дополнительные опции\n"
+"компиляции, которые будут переданы\n"
+"компилятору через переменную окружения\n"
+"CXXFLAGS."
+
+#: cprjoptionsdlg.cpp:698
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+"Укажите дополнительные опции редактора связей,\n"
+"которые будут ему переданы при вызове через\n"
+"переменную окружения LDFLAGS."
+
+#: cprjoptionsdlg.cpp:119
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not</n>\n"
+"for README etc."
+msgstr ""
+"Введите краткую справку, характеризующую\n"
+"ваш проект. Эта справка только для проекта,\n"
+"<b>не</b> для файла README и пр."
+
+#: cupdatekdedocdlg.cpp:208
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+"Здесь укажите путь к текущим исходным\n"
+"текстам библиотек KDE. Это тот то место,\n"
+"куда вы распаковали, например, kdelibs\n"
+"snapshot, типа /snapshot/kdelibs."
+
+#: cupdatekdedocdlg.cpp:215
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+"Укажите путь, по которому будет установлена\n"
+"вновь созданная документация. Примечание:\n"
+"информация о пути в общих настройках будет\n"
+"изменена автоматически. Вам не придется ее\n"
+"изменять самостоятельно."
+
+#: cprjoptionsdlg.cpp:102
+msgid ""
+"Insert your Handbook-sgml-file name.\n"
+"Usually this is index.sgml"
+msgstr ""
+"Введите имя файла Handbook-sgml-file.\n"
+"Обычно это index.sgml"
+
+#: cprjoptionsdlg.cpp:89
+msgid "Insert your email-address here"
+msgstr "Здесь введите свой email"
+
+#: cprjoptionsdlg.cpp:76
+msgid "Insert your name here"
+msgstr "Здесь вставьте свое имя"
+
+#: kwrite/kwview.cpp:1228 kwrite/kwview.cpp:1349
+msgid "Inserted"
+msgstr "Вставлено"
+
+#: ckdevelop.cpp:346
+msgid "Inserting file contents..."
+msgstr "Вставка содержимого файла..."
+
+#: ckdevelop.cpp:1188
+msgid "Inserts a file at the current position"
+msgstr "Вставляет файл в текущую позицию"
+
+#: ckdevelop_init.cpp:282
+msgid "Invert Selection"
+msgstr "Invert Selection"
+
+#: ckdevelop.cpp:1213
+msgid "Invoke make clean and rebuild all"
+msgstr "Выполнить команду make clean и перестроить все"
+
+#: ckdevelop.cpp:1211
+msgid "Invoke make-command"
+msgstr "Выполнить команду make"
+
+#: ckdevelop.cpp:1210
+msgid "Invoke make-command and run the program"
+msgstr "Выполнить команду make и запустит программу"
+
+#: kwrite/highlight.cpp:1737
+msgid "Italic"
+msgstr "Наклонный"
+
+#: kwrite/highlight.cpp:2000
+msgid "Item Font"
+msgstr "Шрифт элемента"
+
+#: kwrite/highlight.cpp:1991
+msgid "Item Style"
+msgstr "Стиль элемента"
+
+#: kwrite/highlight.cpp:1895 kwrite/highlight.cpp:1966
+msgid "Item:"
+msgstr "Элемент:"
+
+#: cprjoptionsdlg.cpp:784
+msgid "KDE HTML widget"
+msgstr "KDE HTML widget"
+
+#: cupdatekdedocdlg.cpp:33
+msgid "KDE Library Documentation Update..."
+msgstr "Обновление документации библиотеки KDE..."
+
+#: cprjoptionsdlg.cpp:823
+msgid "KDE Spell checking"
+msgstr "KDE Spell checking"
+
+#: cprjoptionsdlg.cpp:836
+msgid "KDE addressbook"
+msgstr "адресная книга KDE"
+
+#: cprjoptionsdlg.cpp:758
+msgid "KDE basics"
+msgstr "главная библиотека KDE"
+
+#: cprjoptionsdlg.cpp:810
+msgid "KDE file handling"
+msgstr "библиотека KDE для работы с файлами"
+
+#: cprjoptionsdlg.cpp:797
+msgid "KDE kfm functionality"
+msgstr "библиотека KDE для взаимодействия с kfm"
+
+#: cprjoptionsdlg.cpp:771
+msgid "KDE user interface"
+msgstr "библиотека пользовательского интерфейса KDE"
+
+#: ckdevelop_init.cpp:299
+msgid "KDE-&Core-Library"
+msgstr "Основная библиотека KDE"
+
+#: ckdevelop_init.cpp:301
+msgid "KDE-&GUI-Library"
+msgstr "Бибилиотека GUI KDE"
+
+#: ckdevelop_init.cpp:305
+msgid "KDE-&HTML-Library"
+msgstr "Библиотека HTML KDE"
+
+#: ckdevelop_init.cpp:303
+msgid "KDE-&KFile-Library"
+msgstr "Библиотека KFile KDE"
+
+#: ckappwizard.cpp:82
+msgid "KDE-Application"
+msgstr "Приложение KDE"
+
+#: ckappwizard.cpp:95
+msgid "KDE-Mini-Application"
+msgstr "Мини-Приложение KDE"
+
+#: ckdevelop_init.cpp:462
+msgid "KDevelop Homepage"
+msgstr "KDevelop Homepage"
+
+#: ckappwizard.cpp:62
+msgid "KWizard"
+msgstr "KWizard"
+
+#: kwrite/kwview.cpp:1242 kwrite/kwview.cpp:1300
+msgid ""
+"KWrite is already waiting\n"
+"for an internet job to finish\n"
+"Please wait until it has finished\n"
+"Alternatively stop the running one."
+msgstr ""
+"KWrite ожидает\n"
+"завершения интернет задачи\n"
+"Пожайлуста подождите\n"
+"Либо остановите."
+
+#: ckdevelop.cpp:726
+msgid "Killing current process..."
+msgstr "Снять текущий процесс..."
+
+#: kwrite/kwview.cpp:1993
+msgid "Line"
+msgstr "Линия"
+
+#: ckdevelop.cpp:1089
+msgid "Line: %d Col: %d"
+msgstr "Строка: %d Столбец: %d"
+
+#: ckdevelop_init.cpp:549
+msgid "Line: 00000 Col: 000"
+msgstr "Строка: 00000 Столбец: 000"
+
+#: cprjoptionsdlg.cpp:850
+msgid "Linker Options"
+msgstr "Опции Редактора связей"
+
+#: ckappwizard.cpp:268 ckappwizard.cpp:299
+msgid "Load..."
+msgstr "Загрузка..."
+
+#: kwrite/kwview.cpp:1220
+msgid "Loading..."
+msgstr "Загружаю..."
+
+#: ckdevelop_init.cpp:507
+msgid "Make"
+msgstr "Создать"
+
+#: ckdevelop_init.cpp:345
+msgid "Make &API-Doc"
+msgstr "Создать документацию по API"
+
+#: ckdevelop_init.cpp:347
+msgid "Make &User-Manual"
+msgstr "Создать руководство пользователя"
+
+#: cprjoptionsdlg.cpp:637
+msgid "Make all warnings into errors."
+msgstr "Считать все предупреждения ошибками."
+
+#: kwrite/kwview.cpp:1207
+msgid "Malformed URL"
+msgstr "Неверный URL"
+
+#: kwrite/highlight.cpp:1984
+msgid "Mime Types:"
+msgstr "Типы Mime:"
+
+#: ckappwizard.cpp:218
+msgid "Mini-Icon"
+msgstr "Мини-иконка"
+
+#: ckdevelop_init.cpp:232
+msgid "N&ew Project..."
+msgstr "Новый Проект..."
+
+#: ckappwizard.cpp:113
+msgid "Names"
+msgstr "Имена"
+
+#: ckappwizard.cpp:272 ckappwizard.cpp:303 ckdevelop_init.cpp:486
+msgid "New"
+msgstr "Новый"
+
+#: clogfileview.cpp:35 clogfileview.cpp:46 clogfileview.cpp:57
+msgid "New Class..."
+msgstr "Новый класс..."
+
+#: clogfileview.cpp:34 clogfileview.cpp:45 clogfileview.cpp:56
+msgid "New File..."
+msgstr "Новый файл..."
+
+#: clogfileview.cpp:36 clogfileview.cpp:47 clogfileview.cpp:58
+msgid "New LFV-Group..."
+msgstr "Новая группа LFV..."
+
+#: kwrite/kwview.cpp:1399 kwrite/kwview.cpp:1410 kwrite/kwview.cpp:1478 kwrite/kwview.cpp:1685 kwrite/kwview.cpp:1696 kwrite/kwview.cpp:1873 kwrite/kwview.cpp:1885
+msgid "No"
+msgstr "Нет"
+
+#: kwrite/kwview.cpp:1455
+msgid "No changes need to be saved"
+msgstr "Изменений нет"
+
+#: kwrite/highlight.cpp:1715
+msgid "Normal:"
+msgstr "Нормальный:"
+
+#: ckdevsetupdlg.cpp:110 cnewclassdlg.cpp:127 cprjoptionsdlg.cpp:853 kwrite/kwview.cpp:1118 kwrite/kwview.cpp:1128 kwrite/kwview.cpp:1138 kwrite/kwview.cpp:1154 kwrite/kwview.cpp:1168 kwrite/kwview.cpp:1184 kwrite/kwview.cpp:1211 kwrite/kwview.cpp:1244 kwrite/kwview.cpp:1257 kwrite/kwview.cpp:1302 kwrite/kwview.cpp:1322 kwrite/kwview.cpp:1705 kwrite/kwview.cpp:1856
+msgid "OK"
+msgstr "ОК"
+
+#: cprjoptionsdlg.cpp:684
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+
+#: ckdevelop_init.cpp:237
+msgid "Open &Project..."
+msgstr "Открыть проект..."
+
+#: ckdevelop_init.cpp:488
+msgid "Open File"
+msgstr "Открыть файл"
+
+#: ckdevelop.cpp:74
+msgid "Opening file..."
+msgstr "Открытие файла..."
+
+#: ckdevelop.cpp:85
+msgid "Opening project..."
+msgstr "Открытие проекта..."
+
+#: ckdevelop.cpp:1168
+msgid "Opens an existing file"
+msgstr "Открывает существующий файл"
+
+#: ckdevelop.cpp:1169
+msgid "Opens an existing project"
+msgstr "Открывает существующий проект"
+
+#: cprjoptionsdlg.cpp:187
+msgid "Optimization-level"
+msgstr "Уровень оптимизации"
+
+#: kwrite/kwdialog.cpp:50
+msgid "Options"
+msgstr "Настройки"
+
+#: ceditwidget.cpp:37 ckdevelop_init.cpp:498
+msgid "Paste"
+msgstr "Вставить"
+
+#: ckdevelop.cpp:1186
+msgid "Pastes the clipboard contents to actual position"
+msgstr "Вставляет содержимое clipboard в текущую позицию"
+
+#: ckdevelop.cpp:330
+msgid "Pasting selection..."
+msgstr "Вставка выделения..."
+
+#: ckdevelop.cpp:1177
+msgid "Prints the current document"
+msgstr "Prints the current document"
+
+#: ckappwizard.cpp:318
+msgid "Processes"
+msgstr "Процессы"
+
+#: ckappwizard.cpp:210
+msgid "Program-Icon"
+msgstr "Иконка программы"
+
+#: ckdevelop.cpp:1245
+msgid "Programmer's Hall of Fame..."
+msgstr "Доска почета программистов..."
+
+#: ckdevelop_init.cpp:308
+msgid "Project &API-Doc"
+msgstr "Документация по API проекта"
+
+#: ckdevelop_init.cpp:311
+msgid "Project &User-Manual"
+msgstr "Руководство пользователя"
+
+#: cprjoptionsdlg.cpp:36
+msgid "Project Options"
+msgstr "Настройки проекта"
+
+#: ckappwizard.cpp:119
+msgid "Projectdirectory:"
+msgstr "Директория проекта:"
+
+#: ckappwizard.cpp:180
+msgid "Projectfiles & Desktopgoodies"
+msgstr "Файлы проекта и Desktopgoodies"
+
+#: ckappwizard.cpp:117 cprjoptionsdlg.cpp:45
+msgid "Projectname:"
+msgstr "Название проекта:"
+
+#: clogfileview.cpp:41 clogfileview.cpp:51
+msgid "Properties..."
+msgstr "Свойства..."
+
+#: cprjoptionsdlg.cpp:745
+msgid "Qt\n"
+msgstr "Qt\n"
+
+#: ckdevelop_init.cpp:262
+msgid "R&edo"
+msgstr "Откат назад"
+
+#: kwrite/kwview.cpp:1233 kwrite/kwview.cpp:1358
+msgid "Read"
+msgstr "Прочитано"
+
+#: ckdevelop.cpp:1212
+msgid "Rebuild the program"
+msgstr "Перестроить программу"
+
+#: ckdevelop_init.cpp:503
+msgid "Refresh"
+msgstr "Обновить"
+
+#: ckdevelop.cpp:1230
+msgid "Refresh current view"
+msgstr "Обновить текущий вид"
+
+#: clogfileview.cpp:38
+msgid "Remove File"
+msgstr "Удалить файл"
+
+#: clogfileview.cpp:49
+msgid "Remove Group"
+msgstr "Удалить группу"
+
+#: kwrite/kwdialog.cpp:260
+msgid "Remove Trailing &Spaces"
+msgstr "Удалять конечные пробелы"
+
+#: ckdevelop.cpp:1222
+msgid "Remove file from the project"
+msgstr "Удалить файл из проекта"
+
+#: ckdevelop.cpp:1190
+msgid "Repeat the last search"
+msgstr "Повторить последний поиск"
+
+#: ckdevelop.cpp:356
+msgid "Repeating last search..."
+msgstr "Повтор последнего поиска..."
+
+#: kwrite/kwview.cpp:1854 kwrite/kwview.cpp:1870 kwrite/kwview.cpp:1882
+msgid "Replace"
+msgstr "Заменить"
+
+#: kwrite/kwdialog.cpp:259
+msgid "Replace &Tabs"
+msgstr "Заменять табуляции"
+
+#: kwrite/kwdialog.cpp:142
+msgid "Replace this occurence?"
+msgstr "Заменить все вхождения?"
+
+#: ckdevelop.cpp:361
+msgid "Replacing..."
+msgstr "Замена..."
+
+#: ckdevelop_init.cpp:509
+msgid "Run"
+msgstr "Запустить"
+
+#: ckdevelop.cpp:705
+msgid "Running make clean and rebuilding all..."
+msgstr "Запуск make clean и перестроение проекта..."
+
+#: ckdevelop.cpp:688
+msgid "Running make clean-command "
+msgstr "Запуск команды make clean"
+
+#: ckdevelop.cpp:668
+msgid "Running make..."
+msgstr "Запуск команды make..."
+
+#: ckdevelop_init.cpp:241
+msgid "Save &As..."
+msgstr "Записать как..."
+
+#: ckdevelop_init.cpp:242 ckdevelop_init.cpp:492
+msgid "Save All"
+msgstr "Сохранить все"
+
+#: ckdevelop_init.cpp:490
+msgid "Save File"
+msgstr "Сохранить файл"
+
+#: ckdevelop.cpp:1173
+msgid "Save all changed files"
+msgstr "Сохранить все изменения во всех файлах"
+
+#: ckdevelop.cpp:165
+msgid "Save file as..."
+msgstr "Сохранить файл как..."
+
+#: ckdevelop.cpp:1171
+msgid "Save the actual document"
+msgstr "Сохраняет текущий документ???"
+
+#: ckdevelop.cpp:1172
+msgid "Save the document as..."
+msgstr "Сохранить документ как..."
+
+#: ckdevelop.cpp:209
+msgid "Save?"
+msgstr "Сохранить?"
+
+#: ckdevelop.cpp:115
+msgid "Saving all changed files..."
+msgstr "Сохранение всех измененных файлов..."
+
+#: ckdevelop.cpp:103
+msgid "Saving file..."
+msgstr "Сохранение файла..."
+
+#: kwrite/kwview.cpp:1283
+msgid "Saving..."
+msgstr "Записываю..."
+
+#: ckdevelop_init.cpp:536
+msgid "Search Text in Documenation"
+msgstr "Поиск текста в документации"
+
+#: ckdevelop.cpp:1191
+msgid "Search and replace expression"
+msgstr "Найти и заменить выражение"
+
+#: kwrite/kwview.cpp:1704
+msgid "Search string not found!"
+msgstr "Искомая строка не найдена!"
+
+#: ckdevelop.cpp:1189
+msgid "Search the file for an expression"
+msgstr "Ищет регулярные выражения в файле"
+
+#: ckdevelop.cpp:1197
+msgid "Search the selected text in the documentation"
+msgstr "Поиск выделенного текста в документе"
+
+#: ckdevelop.cpp:590
+msgid "Searching selected text in documentation..."
+msgstr "Поиск выделенного текста в документации..."
+
+#: ckdevelop.cpp:351
+msgid "Searching..."
+msgstr "Поиск..."
+
+#: ckdevelop_init.cpp:280
+msgid "Select &All"
+msgstr "Выделить все"
+
+#: kwrite/kwdialog.cpp:290
+msgid "Select Options"
+msgstr "Параметры выделения"
+
+#: ckappwizard.cpp:239
+msgid ""
+"Select this if you wish another\n"
+"already created icon to be used."
+msgstr ""
+"Выдерите это, если вы хотите\n"
+"использовать существующую иконку."
+
+#: ckappwizard.cpp:246
+msgid ""
+"Select this if you wish another\n"
+"already created mini-icon to be used."
+msgstr ""
+"Выберите это, если вы хотите\n"
+"использовать существующую мини-иконку."
+
+#: ckappwizard.cpp:86
+msgid ""
+"Select this to create a complete framework for\n"
+"your new application. It will contain three main\n"
+"classes: one for the mainwindow, one for the\n"
+"main view and one for the application's documents\n"
+"The main window offers a menubar, toolbar and\n"
+"a statusbar including statusbar help and status\n"
+"signaling."
+msgstr ""
+"Выберите этот пункт для создания нового\n"
+"проекта приложения. Он будет содержать\n"
+"три основных класса: один класс - основного окна,\n"
+"другой - основное представление и третий - документы\n"
+"(данные) приложения. Основное окно содержит меню,\n"
+"панели инструментов и панель состояния, показывающую\n"
+"текущее состояние и подсказки."
+
+#: ckappwizard.cpp:99
+msgid ""
+"Select this to create a mini-Application.\n"
+"This will only contain the main widget\n"
+"class which inherits QWidget until now."
+msgstr ""
+"Select this to create a mini-Application.\n"
+"This will only contain the main widget\n"
+"class which inherits QWidget until now."
+
+#: kwrite/kwdialog.cpp:430
+msgid "Selected + Found:"
+msgstr "Выделено + Найдено:"
+
+#: kwrite/highlight.cpp:1725 kwrite/kwdialog.cpp:416
+msgid "Selected:"
+msgstr "Выделенный:"
+
+#: ckdevelop.cpp:335
+msgid "Selecting all..."
+msgstr "Выделение всего..."
+
+#: ckdevelop.cpp:1187
+msgid "Selects the whole document contents"
+msgstr "Выделяет весь документ"
+
+#: ckdevelop.cpp:1227
+msgid "Set project and compiler options"
+msgstr "Задать настройки проекта и опции компиляции"
+
+#: cprjoptionsdlg.cpp:190
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed.\n"
+msgstr ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+
+#: cprjoptionsdlg.cpp:275
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use.\n"
+msgstr ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+
+#: cprjoptionsdlg.cpp:645
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+"Установите опции редактора связей и выберите\n"
+"дополнительные библиотеки для вашего проекта."
+
+#: cprjoptionsdlg.cpp:225
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+"Здесь устанавливается уровень отладки\n"
+"Вы можете выбирать уровень от 1 до 3, что\n"
+"вызовет использование опций -g1,..., -g3,\n"
+"устанавливающих этот уровень."
+
+#: cprjoptionsdlg.cpp:51
+msgid "Set the project's name here."
+msgstr "Введите название проекта."
+
+#: ckdevelop.cpp:1239
+msgid "Set up the KDevelop environment"
+msgstr "Set up the KDevelop environment"
+
+#: cprjoptionsdlg.cpp:130
+msgid "Set your Compiler options here"
+msgstr "Здесь устанавливаются опции компиляции"
+
+#: cprjoptionsdlg.cpp:200
+msgid "Set your debugging options here.\n"
+msgstr "Set your debugging options here.\n"
+
+#: cprjoptionsdlg.cpp:655
+msgid "Set your library flags here."
+msgstr "Здесь установите библиотечные флаги."
+
+#: cprjoptionsdlg.cpp:63
+msgid ""
+"Set your project's version\n"
+"number here."
+msgstr ""
+"Введите номер версии вашего\n"
+"проекта."
+
+#: cprjoptionsdlg.cpp:136
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"Здесь выставляются целевые опции\n"
+"путем указания типа процессора\n"
+"и уровня оптимизации gcc компилятора."
+
+#: ckdevelop.cpp:452
+msgid "Setting up KDevelop..."
+msgstr "Установка KDevelop..."
+
+#: cprjoptionsdlg.cpp:109
+msgid "Short Information:"
+msgstr "Краткая информация:"
+
+#: ckdevelop.cpp:1226
+msgid "Show the current file properties"
+msgstr "Показать текущие свойства файла"
+
+#: kwrite/highlight.cpp:1793
+msgid "Size:"
+msgstr "Размер:"
+
+#: kwrite/kwview.cpp:1116 kwrite/kwview.cpp:1126 kwrite/kwview.cpp:1136 kwrite/kwview.cpp:1152 kwrite/kwview.cpp:1166 kwrite/kwview.cpp:1182 kwrite/kwview.cpp:1209 kwrite/kwview.cpp:1241 kwrite/kwview.cpp:1255 kwrite/kwview.cpp:1299 kwrite/kwview.cpp:1320 kwrite/kwview.cpp:1407
+msgid "Sorry"
+msgstr "Извините"
+
+#: cprjoptionsdlg.cpp:157
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages."
+msgstr ""
+"Укажите тип машины для вашей программы.\n"
+"Типы машин, отличные от вашего, обычно\n"
+"используются при создании дистрибутивов\n"
+"для других платформ."
+
+#: ckdevelop_init.cpp:511
+msgid "Stop"
+msgstr "Стоп"
+
+#: ckdevelop.cpp:1214
+msgid "Stop make immediately"
+msgstr "Немедленно остановить сборку"
+
+#: cprjoptionsdlg.cpp:251
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+"Сохранять промежуточные файлы, которые обычно\n"
+"являются временными, в текущей директории. Это\n"
+"означает, что компиляция файла <i>foo.c</i> породит\n"
+"<i>foo.o, foo.i</i> и <i>foo.s</i>"
+
+#: ckdevelop.cpp:1243
+msgid "Switch to KDevelop's User Manual"
+msgstr "Переключить на руководство пользователя KDevelop"
+
+#: ckdevelop.cpp:1195
+msgid "Switch to last browser page"
+msgstr "Переключиться на последнюю страницу просмотрщика"
+
+#: ckdevelop.cpp:1196
+msgid "Switch to next browser page"
+msgstr "Переключиться на следующую страницу просмотрщика"
+
+#: ckdevelop.cpp:1199
+msgid "Switch to the KDE-Core-Documentation"
+msgstr "Переключиться на документацию по KDE-Core"
+
+#: ckdevelop.cpp:1201
+msgid "Switch to the KDE-File-Documentation"
+msgstr "Переключиться на документацию по файлам KDE"
+
+#: ckdevelop.cpp:1200
+msgid "Switch to the KDE-GUI-Documentation"
+msgstr "Переключиться на документацию по GUI KDE"
+
+#: ckdevelop.cpp:1202
+msgid "Switch to the KDE-Html-Documentation"
+msgstr "Переключиться на документацию по HTML KDE"
+
+#: ckdevelop.cpp:1198
+msgid "Switch to the QT-Documentation"
+msgstr "Переключиться на документацию по Qt"
+
+#: ckdevelop.cpp:1205
+msgid "Switch to the project's API-Documentation"
+msgstr "Переключиться на документацию по FPI проекта"
+
+#: ckdevelop.cpp:1206
+msgid "Switch to the project's User-Manual"
+msgstr "Переключиться на руководство пользователя"
+
+#: ckdevelop.cpp:459
+msgid "Switching to last page..."
+msgstr "Переключение на последнюю страницу..."
+
+#: ckdevelop.cpp:477
+msgid "Switching to next page..."
+msgstr "Переключение на следующую страницу..."
+
+#: ckdevelop.cpp:632
+msgid "Switching to project API Documentation..."
+msgstr "Переключение на документацию по API проекта..."
+
+#: ckdevelop.cpp:637
+msgid "Switching to project Manual..."
+msgstr "Переключение на руководство пользователя???"
+
+#: ckdevelop.cpp:366
+msgid "Switching to selected line..."
+msgstr "Переключение на выбранную строку..."
+
+#: kwrite/kwdialog.cpp:332
+msgid "Tab Width:"
+msgstr "Размер табуляции:"
+
+#: cprjoptionsdlg.cpp:135
+msgid "Target"
+msgstr "Цель"
+
+#: cprjoptionsdlg.cpp:143
+msgid "Target Machine"
+msgstr "Платформа"
+
+#: kwrite/kwdialog.cpp:409
+msgid "Text Background:"
+msgstr "Фон текста:"
+
+#: kwrite/kwview.cpp:1397
+msgid ""
+"The current Document has been modified.\n"
+"Would you like to save it?"
+msgstr ""
+"Текущий документ был изменен.\n"
+"Сохранить?"
+
+#: ckdevelop.cpp:210
+msgid "The document was modified,save?"
+msgstr "Документ был изменен, сохранить?"
+
+#: cnewfiledlg.cpp:228
+msgid "The filename must end with .cpp,.c,.cc or .C !"
+msgstr "Файл должен оканчиваться на .cpp,.c,.cc или .C !"
+
+#: cnewfiledlg.cpp:233
+msgid "The filename must end with .h !"
+msgstr "Файл должен оканчиваться на .h !"
+
+#: cnewfiledlg.cpp:241
+msgid "The filename must end with .kdelnk !"
+msgstr "Файл должен оканчиваться на .kdelnk !"
+
+#: cnewfiledlg.cpp:237
+msgid "The filename must end with .lsm !"
+msgstr "Файл должен оканчиваться на .lsm !"
+
+#: cnewfiledlg.cpp:245
+msgid "The filename must end with .sgml !"
+msgstr "Файл должен оканчиваться на .sgml !"
+
+#: kwrite/kwview.cpp:1117
+msgid "The specified File does not exist"
+msgstr "Указанный файл не существует"
+
+#: cprjoptionsdlg.cpp:40
+msgid ""
+"This dialog is for editing\n"
+"your project options."
+msgstr ""
+"Этот диалог предназначен для\n"
+"изменения настроек вашего проекта."
+
+#: cupdatekdedocdlg.cpp:195
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+"Это не удаляет вашу текущую документацию\n"
+"и позволяет выбрать новую директорию для\n"
+"документации по библиотеке KDE. \n"
+"Предупреждение: не указывайте туже\n"
+"директорию, в которой установлена старая\n"
+"документация. Это может перемешать файлы."
+
+#: cfilepropdlg.cpp:232
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+"Эта опция управляет включением\n"
+"файла в конечный дистрибутив."
+
+#: cfilepropdlg.cpp:239
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+"Эта опция управляет установкой\n"
+"файла при установке ПО с \n"
+"использование make install\n"
+"Если кнопка нажата, то вам\n"
+"необходимо указать путь\n"
+"установки и имя файла\n"
+"Возможные значения:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Остальные значения находятся в Makefile"
+
+#: cprjoptionsdlg.cpp:166
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+"Эта опция соответствует опции\n"
+"<i>-fsyntax-only</i> компилятора,\n"
+"которая только проверяет ваш код \n"
+"на наличие ситаксических ошибок,\n"
+"больше ничего не делая."
+
+#: ckdevelop_init.cpp:422
+msgid "Toogle &Browser-Toolbar"
+msgstr "Включить набор интсрументов просмотрщика"
+
+#: ckdevelop_init.cpp:414
+msgid "Toogle &Output-View"
+msgstr "Toogle &Output-View"
+
+#: ckdevelop_init.cpp:418
+msgid "Toogle &Std-Toolbar"
+msgstr "Включить стандартный набор инструментов"
+
+#: ckdevelop_init.cpp:410
+msgid "Toogle &Tree-View"
+msgstr "Toogle &Tree-View"
+
+#: ckdevelop_init.cpp:426
+msgid "Toogle Status&bar"
+msgstr "Включить панель состояния"
+
+#: ckdevelop_init.cpp:261
+msgid "U&ndo"
+msgstr "Откат"
+
+#: kwrite/kwdialog.cpp:342
+msgid "Undo steps:"
+msgstr "Глубина отката:"
+
+#: ckdevelop_init.cpp:315
+msgid "Update KDE-Documentation..."
+msgstr "Обновить документацию по KDE..."
+
+#: ckdevelop.cpp:1203
+msgid "Update your KDE-Libs Documentation"
+msgstr "Обновить документацию по библиотекам KDE"
+
+#: ckdevelop.cpp:649
+msgid "Updating KDE-Libs documentation..."
+msgstr "Обновление документации библиотек KDE..."
+
+#: ckappwizard.cpp:190
+msgid "User-Dokumentation"
+msgstr "Руководство пользователя"
+
+#: cprjoptionsdlg.cpp:57
+msgid "Version:"
+msgstr "Версия:"
+
+#: ckappwizard.cpp:121
+msgid "Versionsnumber:"
+msgstr "Версия:"
+
+#: kwrite/kwview.cpp:1250 kwrite/kwview.cpp:1308
+msgid "Waiting for KFM..."
+msgstr "Жду KFM..."
+
+#: cprjoptionsdlg.cpp:375
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+"Выдавать предупреждения обо всех\n"
+"типах пункций, зависящих от\n"
+"<i>sizeof</i> или <i>void</i>.\n"
+"GNU C присваивает этим типам размер\n"
+"равный 1 для удобства в вычислениях\n"
+"указателей типа <i>void *</i> и на\n"
+"функции."
+
+#: cprjoptionsdlg.cpp:312
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+"Выдавать предупреждающие сообщения о\n"
+"некоторых конструкциях, имеющих различную\n"
+"интерпретацию в обычном и ANSI C"
+
+#: cprjoptionsdlg.cpp:578
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+"Выдавать предупреждения, когда функция не может быть\n"
+"представлена как inline в случаях, когда она либо\n"
+"объявлена как inline, либо использована опция\n"
+"<i>-finline-functions</i>."
+
+#: cprjoptionsdlg.cpp:505
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+
+#: cprjoptionsdlg.cpp:536
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+
+#: cprjoptionsdlg.cpp:520
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+
+#: cprjoptionsdlg.cpp:458
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+
+#: cprjoptionsdlg.cpp:565
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+"Выдавать предупреждения, если определение <i>extern</i>\n"
+"было встречено внутри определения функции."
+
+#: cprjoptionsdlg.cpp:592
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+
+#: cprjoptionsdlg.cpp:325
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+
+#: cprjoptionsdlg.cpp:491
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+
+#: cprjoptionsdlg.cpp:551
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+"Выдавать предупреждения, если встречаются повторные определения\n"
+"любых идентификаторов в пределах одного файла. Даже в тех случаях,\n"
+"когда эти определения не являются ошибочными и ничего не изменяют."
+
+#: cprjoptionsdlg.cpp:477
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+
+#: cprjoptionsdlg.cpp:605
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class.\n"
+msgstr ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+
+#: cprjoptionsdlg.cpp:624
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+
+#: cprjoptionsdlg.cpp:392
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+"Выдавать предупреждение при приведении\n"
+"возвращаемого значения функции к\n"
+"несоответствующему типу. Например, если\n"
+"<i>int malloc()</i> приводится к <i>какому-\n"
+"нибудь указателю *.</i>"
+
+#: cprjoptionsdlg.cpp:336
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+"Выдавать предупреждение, если одна\n"
+"локальная переменная затеняет? другую."
+
+#: cprjoptionsdlg.cpp:406
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+
+#: cprjoptionsdlg.cpp:421
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+
+#: cprjoptionsdlg.cpp:362
+msgid ""
+"Warn whenever an object\n"
+"of larger than LEN bytes \n"
+"is defined."
+msgstr ""
+"Выдавать предупреждение при\n"
+"обнаружении идентификатора\n"
+"более LEN байтов."
+
+#: cprjoptionsdlg.cpp:347
+msgid ""
+"Warn whenever two distinct\n"
+"identifiers match in the first LEN\n"
+"characters. This may help you prepare\n"
+"a program that will compile with\n"
+"certain obsolete, brain-damaged\n"
+"compilers."
+msgstr ""
+"Выдавать предупреждение, если два идентификатора\n"
+"совпадают в первых LEN символах. Это поможет вам\n"
+"подготовить программу к компиляции некоторыми\n"
+"старыми ограниченными компиляторами."
+
+#: clogfileview.cpp:236 kwrite/kwview.cpp:1396 kwrite/kwview.cpp:1475
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: ckdevelop_init.cpp:553
+msgid "Welcome to KDevelop!"
+msgstr "Добро пожаловать в KDevelop!"
+
+#: kwrite/kwdialog.cpp:261
+msgid "Wrap &Cursor"
+msgstr "Курсор при разрыве"
+
+#: kwrite/kwdialog.cpp:322
+msgid "Wrap Words At:"
+msgstr "Разрывать слова на:"
+
+#: kwrite/kwview.cpp:1291 kwrite/kwview.cpp:1368
+msgid "Wrote"
+msgstr "Записано"
+
+#: cprjoptionsdlg.cpp:719
+msgid "X11 basics\n"
+msgstr "X11 basics\n"
+
+#: cprjoptionsdlg.cpp:732
+msgid "X11 extensions\n"
+msgstr "X11 extensions\n"
+
+#: kwrite/kwview.cpp:1398 kwrite/kwview.cpp:1409 kwrite/kwview.cpp:1477 kwrite/kwview.cpp:1684 kwrite/kwview.cpp:1695 kwrite/kwview.cpp:1872 kwrite/kwview.cpp:1884
+msgid "Yes"
+msgstr "Да"
+
+#: kwrite/kwview.cpp:1137
+msgid "You do not have read permission to this file"
+msgstr "Вы не имеете права читать этот файл"
+
+#: kwrite/kwview.cpp:1167
+msgid "You do not have write permission to this file"
+msgstr "Вы не имеете прав записи на этот файл"
+
+#: kwrite/kwview.cpp:1127
+msgid "You have specified a directory"
+msgstr "Вы указали каталог"
+
+#: caddexistingfiledlg.cpp:183
+msgid "You must choose a destination,that is in your project-dir!"
+msgstr "Вы должны указать файл в директории проекта!"
+
+#: cnewfiledlg.cpp:253
+msgid "You must choose a location,that is in your project-dir!"
+msgstr "Вы должны указать месторасположение в каталоге вашего проекта!"
+
+#: caddexistingfiledlg.cpp:189
+msgid "You must choose a valid dir as a destination!"
+msgstr "Вы должны указать правильное имя директории!"
+
+#: caddexistingfiledlg.cpp:177
+msgid "You must choose an existing sourcefile!"
+msgstr "Вы должны выбрать существующий файл исходных текстов!"
+
+#: cnewfiledlg.cpp:249
+msgid "You must enter a filename!"
+msgstr "Выдолжны ввести имя файла!"
+
+#: ccreatedocdatabasedlg.cpp:255
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr "a tiny index (2-3% of the total size of all files)"
+
+#: ckappwizard.cpp:295
+msgid "activate, if you want a cpptemplate for your cppfiles"
+msgstr "activate, if you want a cpptemplate for your cppfiles"
+
+#: ckappwizard.cpp:264
+msgid "activate, if you want a headertemplate for your headerfiles"
+msgstr "activate, if you want a headertemplate for your headerfiles"
+
+#: ckappwizard.cpp:228
+msgid "activate, if you want a link in the K-Menu"
+msgstr "activate, if you want a link in the K-Menu"
+
+#: ckappwizard.cpp:221
+msgid "activate, if you want a mini-icon for your program"
+msgstr "activate, if you want a mini-icon for your program"
+
+#: ckappwizard.cpp:213
+msgid "activate, if you want an icon for your program"
+msgstr "activate, if you want an icon for your program"
+
+#: ckappwizard.cpp:186
+msgid "activate, if you wish the API-Documentationfiles"
+msgstr "activate, if you wish the API-Documentationfiles"
+
+#: ckappwizard.cpp:203
+msgid "activate, if you wish the GNU-Standard-Files"
+msgstr "activate, if you wish the GNU-Standard-Files"
+
+#: ckappwizard.cpp:192
+msgid "activate, if you wish the User-Documentationfiles"
+msgstr "activate, if you wish the User-Documentationfiles"
+
+#: ckappwizard.cpp:198
+msgid "activate, if you wish the lsm-File"
+msgstr "activate, if you wish the lsm-File"
+
+#: cprjoptionsdlg.cpp:691
+msgid "additional flags:"
+msgstr "дополнительные флаги:"
+
+#: cprjoptionsdlg.cpp:841
+msgid "additional libraries:"
+msgstr "дополнительные библиотеки:"
+
+#: cprjoptionsdlg.cpp:259
+msgid "additional options:"
+msgstr "дополнительные опции"
+
+#: ccreatedocdatabasedlg.cpp:248
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+
+#: ckdevelop_init.cpp:524
+msgid "choice the class"
+msgstr "выберите класс"
+
+#: ckdevelop_init.cpp:528
+msgid "choice the methods"
+msgstr "выберите метод"
+
+#: ckappwizard.cpp:46
+msgid "creating the project"
+msgstr "создаю проект"
+
+#: ckappwizard.cpp:131
+msgid "enter the projectname"
+msgstr "enter the projectname"
+
+#: ckappwizard.cpp:148
+msgid "enter your email-address"
+msgstr "enter your email-address"
+
+#: ckappwizard.cpp:145
+msgid "enter your name"
+msgstr "enter your name"
+
+#: ckappwizard.cpp:41
+msgid "exit the CKAppWizard"
+msgstr "exit the CKAppWizard"
+
+#: cprjoptionsdlg.cpp:204
+msgid "generate debugging information"
+msgstr "генерировать отладочную информацию"
+
+#: cprjoptionsdlg.cpp:233
+msgid "generate extra information for gprof"
+msgstr "генерировать дополнительную информацию для gprof"
+
+#: ckappwizard.cpp:292
+msgid "headertemplate for .cpp-files"
+msgstr "заголовок для файлов .cpp"
+
+#: ckappwizard.cpp:261
+msgid "headertemplate for .h-files"
+msgstr "пример заголовков файлов .h"
+
+#: cprjoptionsdlg.cpp:148
+msgid "i386v"
+msgstr "i386v"
+
+#: cprjoptionsdlg.cpp:705
+msgid "libraries"
+msgstr "библиотеки"
+
+#: cprjoptionsdlg.cpp:654
+msgid "library flags"
+msgstr "библиотечные флаги"
+
+#: ceditwidget.cpp:123
+msgid "look up: "
+msgstr "look up: "
+
+#: ckappwizard.cpp:196
+msgid "lsm-File - Linux Software Map"
+msgstr "lsm-File - Linux Software Map"
+
+#: cprjoptionsdlg.cpp:630
+msgid "make all Warnings into errors"
+msgstr "Считать все предупреждения ошибками"
+
+#: cprjoptionsdlg.cpp:164
+msgid "only syntax check"
+msgstr "только синтаксическая проверка"
+
+#: cprjoptionsdlg.cpp:174
+msgid "optimize"
+msgstr "оптимизировать"
+
+#: kwrite/kwview.cpp:1852 kwrite/kwview.cpp:1866 kwrite/kwview.cpp:1878
+msgid "replace(s) made"
+msgstr "произведено замен(а)"
+
+#: ckappwizard.cpp:51
+msgid "set all changes back"
+msgstr "восстановить все изменения"
+
+#: cprjoptionsdlg.cpp:245
+msgid "store temporary intermediate files"
+msgstr "сохранять временные промежуточные файлы"
+
+#: ckappwizard.cpp:135
+msgid "the directory, in which your project is"
+msgstr "the directory, in which your project is"
+
+#: ckappwizard.cpp:142
+msgid "the versionsnumber, with which your project should start"
+msgstr "the versionsnumber, with which your project should start"
+
+#: ckappwizard.cpp:84
+msgid "use for a KDE-Application with toolbar ect."
+msgstr "use for a KDE-Application with toolbar ect."
+
+#: ckappwizard.cpp:97
+msgid "use for a minimal KDE-Application"
+msgstr "use for a minimal KDE-Application"
+
+#: ckdevelop_init.cpp:548
+msgid "xxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxx"
+
+#: ckappwizard.cpp:138
+msgid "you can browse to a directory here"
+msgstr "you can browse to a directory here"
+
+#: ckappwizard.cpp:305
+msgid "you can clear the cpptemplate here"
+msgstr "здесь вы можете очистить заголовок"
+
+#: ckappwizard.cpp:274
+msgid "you can clear the headertemplate here"
+msgstr "здесь вы можете очистить заголовок"
+
+#: ckappwizard.cpp:310
+msgid "you can edit your cpptemplate here"
+msgstr "здес вы можете отредактировать заголовок"
+
+#: ckappwizard.cpp:280
+msgid "you can edit your headertemplate here"
+msgstr "здесь вы можете отредактировать заголовок"
+
+#: ckappwizard.cpp:301
+msgid "you can load another cpptemplate here"
+msgstr "здесь вы можете загрузить другой заголовок"
+
+#: ckappwizard.cpp:270
+msgid "you can load another headertemplate here"
+msgstr "здесь вы можете загрузить другой заголовок"
+
+#: ckappwizard.cpp:332
+msgid "you can see all warnings and errormessages here"
+msgstr "здесь вы видете предупреждения и сообщения об ошибках"
+
+#: ckappwizard.cpp:327
+msgid "you can see the normal outputs here"
+msgstr "здесь вы видите обычный вывод"
+
+#: ckappwizard.cpp:238
+msgid "you can select another icon here"
+msgstr "you can select another icon here"
+
+#: ckappwizard.cpp:245
+msgid "you can select another mini-icon here"
+msgstr "you can select another mini-icon here"
+
+#: cprjoptionsdlg.cpp:147
+msgid "your machine"
+msgstr "ваша машина"
