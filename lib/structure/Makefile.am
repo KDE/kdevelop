@@ -17,5 +17,4 @@ test_kdict_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 ##test_trie_LDADD=$(all_libraries) -lqt-mt
 ##test_string_trie_SOURCES=test-string-trie.cxx
 
-KDE_OPTIONS = nofinal
 METASOURCES = AUTO
