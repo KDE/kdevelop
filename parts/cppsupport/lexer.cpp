@@ -867,3 +867,4 @@ int Lexer::macroExpression()
     return macroLogicalOr();
 }
 
+#include "lexer.moc"
