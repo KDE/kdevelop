@@ -28,7 +28,6 @@
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
 #include "configureoptionswidget.h"
-#include "classstoreoptionswidget.h"
 #include "addtranslationdlg.h"
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
@@ -136,10 +135,6 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     vbox = dlg->addVBoxPage(i18n("Make Options"));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
-
-    vbox = dlg->addVBoxPage( i18n( "ClassStore Options" ) );
-    ClassStoreOptionsWidget* w5 = new ClassStoreOptionsWidget( this, vbox );
-    connect( dlg, SIGNAL( okClicked( ) ), w5, SLOT(accept( ) ) );
 }
 
 
