@@ -170,7 +170,7 @@ void KDlgPropertyBase::dumpFontPropCall(QTextStream *stream, QString methname,
 	    contents += ", ";
 	    contents += QString().setNum(font.weight());
 	    if(font.italic())
-	    contents += ",true)";
+	    contents += ",true";
 	    contents += ")";
 	    dumpPropCall(stream, methname, contents);
 	}
