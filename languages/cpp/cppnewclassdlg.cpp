@@ -831,7 +831,11 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
         for (FunctionList::const_iterator methodIt = functionList.begin();
             methodIt != functionList.end(); ++methodIt)
         {
-            if (isConstructor((*classIt)->name(), *methodIt))
+            if ( (*methodIt)->isSignal() )
+            {
+                // don't show signals as overridable methods
+            }
+            else if (isConstructor((*classIt)->name(), *methodIt))
             {
                 addToConstructorsList(it, *methodIt);
             }
