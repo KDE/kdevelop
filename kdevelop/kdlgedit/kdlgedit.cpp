@@ -598,6 +598,7 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   generateIfWidget("QProgressBar","qprogressbar.h",generateQProgressBar);
   generateIfWidget("QMultiLineEdit","qmultilinedit.h",generateQMultiLineEdit);
   generateIfWidget("QGroupBox","qgroupbox.h",generateQGroupBox);
+  generateIfWidget("QButtonGroup","qbuttongroup.h",generateQButtonGroup);
   generateIfWidget("QSlider","qslider.h",generateQSlider);
   generateIfWidget("QScrollBar","qscrollbar.h",generateQScrollBar);
   generateIfWidget("QSpinBox","qspinbox.h",generateQSpinBox);
@@ -962,6 +963,42 @@ void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
     props->dumpStringPropCall(stream, "setTitle", "Title", withi18n);
     
     *stream << "\n";
+    KDlgItemDatabase *cdb = wid->getChildDb();  // da --->
+    if (cdb)
+      {
+	KDlgItem_Base *cdit = cdb->getFirst();
+	while (cdit)
+	  {
+	    generateWidget( (KDlgItem_Widget*)cdit, stream, wid->getProps()->getPropValue("VarName"));
+	    cdit = cdb->getNext();
+	  }
+      }      // da <---
+}
+
+// added by da
+void KDlgEdit::generateQButtonGroup(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+{
+    KDlgPropertyBase* props = wid->getProps();
+
+    props->dumpConstruct(stream, "QButtonGroup", _parent);
+    generateCommon(wid,stream,_parent);
+
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    props->dumpStringPropCall(stream, "setTitle", "Title", withi18n);
+
+    *stream << "\n";
+
+    KDlgItemDatabase *cdb = wid->getChildDb();
+    if (cdb)
+      {
+	KDlgItem_Base *cdit = cdb->getFirst();
+	while (cdit)
+	  {
+	    generateWidget( (KDlgItem_Widget*)cdit, stream, wid->getProps()->getPropValue("VarName"));
+	    cdit = cdb->getNext();
+	  }
+      }
+
 }
 
 

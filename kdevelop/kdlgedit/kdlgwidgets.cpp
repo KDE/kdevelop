@@ -142,6 +142,11 @@ void KDlgWidgets::clicked_QGroupBox()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QGroupBox");
 }
+// added by da
+void KDlgWidgets::clicked_QButtonGroup()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QButtonGroup");
+}
 void KDlgWidgets::clicked_QListView()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QListView");
@@ -252,6 +257,7 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_QSpinBox.xpm",      "QSpinBox",       clicked_QSpinBox      ,i18n("Allows choosing numeric values by up-\nand down buttons or insertion if write enabled."));
   macroAddButton("kdlg_QListBox.xpm",      "QListBox",       clicked_QListBox      ,i18n("Provides a single-column list of items that can be scrolled."));
   macroAddButton("kdlg_QGroupBox.xpm",      "QGroupBox",       clicked_QGroupBox      ,i18n("Provides a groupbox frame with title to indicate that\nchild widgets within the box belong together."));
+  macroAddButton("kdlg_QButtonGroup.xpm",   "QButtonGroup",    clicked_QButtonGroup   ,i18n("Provides a buttongroup frame with title to indicate that\nchild widgets within the box belong together."));	// da
   macroAddButton("kdlg_QLineEdit.xpm",      "QLineEdit",       clicked_QLineEdit      ,i18n("Inserts a text field giving the user the\npossibility to enter of change a text."));
   macroAddButton("kdlg_QMultiLineEdit.xpm",      "QMultiLineEdit",       clicked_QMultiLineEdit      ,i18n("Offers a multi-line editor."));
   macroAddButton("kdlg_QScrollBar.xpm",      "QScrollBar",       clicked_QScrollBar      ,i18n("Indicates the range of a value and sets the current value\nby a slider as well as up- and down buttons; often used\nfor widgets whose contents is larger than the acutally visible\nview area. By using the scrollbar, the visible area\ncan be changed to another part of the widgets' contents."));

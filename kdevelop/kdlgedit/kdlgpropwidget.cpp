@@ -24,6 +24,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
+#include <qbuttongroup.h>	// da
 #include <qpopupmenu.h>
 #include <qmultilinedit.h>
 #include <qlabel.h>
@@ -111,6 +112,7 @@ void fillHelps()
   setPropHelp(nr++, "QLineEdit",       "CursorPositon",   i18n("<i>Class : QLineEdit</i>\n\nSet the cursor position for this line edit.") );
   setPropHelp(nr++, "QLineEdit",       "isTextSelected",  i18n("<i>Class : QLineEdit</i>\n\nWhen enabled the text is initially selected.") );
   setPropHelp(nr++, "QGroupBox",       "Title",           i18n("<i>Class : QGroupBox</i>\n\nSets the groupbox title that is displayed in the box frame.") );
+  setPropHelp(nr++, "QButtonGroup",    "Title",           i18n("<i>Class : QButtonGroup</i>\n\nSets the buttongroup title that is displayed in the box frame.") );	// da
   setPropHelp(nr++, "QProgressBar",    "TotalSteps",      i18n("<i>Class : QProgressBar</i>\n\nSets the total steps of the progressbar. During the iteration of your action to display the progress, you have to call setProgress(int) to advance the progress step displayed to (int)") );
   setPropHelp(nr++, "QMultiLineEdit",  "setFixedVisibleLines",  i18n("<i>Class : QMultiLineEdit</i>\n\nSets a fixed height for the widget so that the given number of textlines are displayed using the current font.") );
   setPropHelp(nr++, "QMultiLineEdit",  "Text",            i18n("<i>Class : QMultiLineEdit</i>\n\nSets the text of the widget.") );

@@ -39,7 +39,7 @@
 
 Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
 
-***small patches and bugfixes***
+***patches and bugfixes***
 
 -Pau Estalella Fernandez <pef@upcnet.upc.es>
 -Jost Schenk <Jost@Schenk.de>
@@ -65,6 +65,7 @@ Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
 -Ralf Palsa <rpalsa@eso.org>
 -Richard Dale <Richard_Dale@tipitina.demon.co.uk>
 -Holger Schurig <holger@holger.om.org>
+-Dag Andersen <dandersen@c2i.net>
 
 KDevelop contains sourcecode from the following programs/classes:
 
