@@ -123,9 +123,9 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int index;
     getCursorPosition(&currentPara, &index);
 
-    bool isQt304 = true;
-    if (strncmp(qVersion(), "3.0.4", sizeof("3.0.4")) == 0) {
-      isQt304 = false;
+    bool isQt304 = false;
+    if (qVersion() == "3.0.4") {
+      isQt304 = true;
     }
 
     int paraCount;
@@ -298,11 +298,11 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
-    if (strncmp(qVersion(), "3.0.4", sizeof("3.0.4")) == 0) {
-      m_errorMap.insert(numLines()-1, errorDetails);
+    if (qVersion() == "3.0.4") {
+      m_errorMap.insert(numLines(), errorDetails);
     }
     else {
-      m_errorMap.insert(numLines(), errorDetails);
+      m_errorMap.insert(numLines()-1, errorDetails);
     }
   }
 }
