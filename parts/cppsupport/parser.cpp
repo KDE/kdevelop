@@ -284,7 +284,7 @@ bool Parser::parseName( QDomElement& name )
 
 #warning "ignore namespace for now!!"    
     parseNestedNameSpecifier();
-    return parseUnqualiedName( name );
+    return parseUnqualifiedName( name );
 }
 
 bool Parser::parseTranslationUnit( ClassStore* store )
@@ -1248,7 +1248,7 @@ bool Parser::parseClassSpecifier( QDomElement& def )
     }
 
     QDomElement name;
-    parseUnqualiedName( name );
+    parseUnqualifiedName( name );
     def.setAttribute( "id", name.attribute("id") );
 
     QDomElement parents;
@@ -1759,7 +1759,9 @@ bool Parser::parseNestedNameSpecifier()
 	    
 	} else if( lex->lookAhead(1) == Token_scope ){
 	    lex->nextToken(); // skip name
-	    lex->nextToken(); // skip SymbolTable
+	    lex->nextToken(); // skip ::
+	    if( lex->lookAhead(0) == Token_template && lex->lookAhead(1) == Token_identifier )
+		lex->nextToken(); // skip optional template keyword
 	    ok = true;
 	} else
 	    break;
@@ -1784,7 +1786,7 @@ bool Parser::parsePtrToMember()
 	lex->nextToken();
 	
 	if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == '*' ){
-	    lex->nextToken(); // skip SymbolTable
+	    lex->nextToken(); // skip ::
 	    lex->nextToken(); // skip *
 	    return true;
 	} else
@@ -1794,9 +1796,9 @@ bool Parser::parsePtrToMember()
     return false;
 }
 
-bool Parser::parseUnqualiedName( QDomElement& e )
+bool Parser::parseUnqualifiedName( QDomElement& e )
 {
-    //kdDebug(9007) << "Parser::parseUnqualiedName()" << endl;
+    //kdDebug(9007) << "Parser::parseUnqualifiedName()" << endl;
     
     bool isDestructor = false;
 

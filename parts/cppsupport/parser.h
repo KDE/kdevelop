@@ -68,7 +68,7 @@ public /*rules*/ :
     bool parseDeclaration();
 
     bool parseNestedNameSpecifier();
-    bool parseUnqualiedName( QDomElement& );
+    bool parseUnqualifiedName( QDomElement& );
     bool parseStringLiteral();
     bool parseName( QDomElement& );
     bool parseOperatorFunctionId( QDomElement& );
