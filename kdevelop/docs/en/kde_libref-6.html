@@ -192,7 +192,8 @@ provides a preview module that is able to show a preview of the filecontents</LI
 <P>
 <P>The <CODE>KFileDialog</CODE> class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
 creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
-filename to save files to.
+filename to save files to. The <CODE>KFileDialog</CODE> class itself is a specialized class that is based on <CODE>KFileBaseDialog</CODE>, so if the
+given methods don't fit your needs you can always inherit from <CODE>KFileBaseDialog</CODE> to customize the settings.
 <P>The following examples show the usage for each purpose:
 <P>
 <BLOCKQUOTE><CODE>
@@ -200,20 +201,72 @@ filename to save files to.
 // request a filename to open
 
 QString open_filename;
+open_filename=KFileDialog::getOpenFileName()
 
-open_filename=
-QString getOpenFileName(const char *dir= 0, const char *filter= 0, QWidget *parent= 0, const char *name= 0)
+if(!open_filename.isEmpty())
+{
+  // read the file
+}
 </PRE>
 </CODE></BLOCKQUOTE>
+<P>This asks the user for a filename to open. The <CODE>KFileDialog</CODE> shows and retrieves the information. If the user cancels the
+filedialog, the return string will be null, therefore you have to test first if <CODE>QString::isEmpty()</CODE> doesn't return <CODE>true</CODE> before
+opening the file actually.
+<P>The same goes with the static methods <CODE>getSaveFileName()</CODE>, <CODE>getOpenFileURL()</CODE>, <CODE>getSaveFileURL()</CODE>, whereby each function takes
+parameters to set the starting directory, mime-types and, as usual, the <CODE>QWidget</CODE> <CODE>parent,name</CODE> parameters.
+<P>The parallel methods for <CODE>getSaveFile</CODE> and <CODE>getOpenFile</CODE> behave identically for retrieving remote and/or local files with the URL
+dialogs.
 <P>
 <H4>KFileBaseDialog</H4>
 
+<P>The class <CODE>KFileBaseDialog</CODE> provides the basic interfaces for building filedialogs; therefore filedialogs can be customized in wide
+ranges towards your needs and is the most flexible way to construct filedialogs. Besides that, the class provides additional
+functionality for other standard cases like retrieving a directory name as well as multiple-file selection.
 <P>
+<H4>Retrieving a directory name</H4>
+
+<P>The class provides retrieving a directory name by the static method <CODE>getDirectory()</CODE>. The following example shows the usage:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QString the_directory;
+
+the_directory=KFileBaseDialog::getDirectory();
+
+if(!the_directory.isEmpty())
+{
+        // do something
+}
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H4>Multiple Selections</H4>
+
+<P>Like the <CODE>KFileDialog</CODE> provides static members to retrieve single filenames for saving and opening, the <CODE>KFileBaseDialog</CODE>
+provides the corresponding methods for multiple file selection (I don't know why they are <EM>not</EM> static methods...).
+<P>As these are non-static, you have to create an instance of the <CODE>KFileBaseDialog</CODE> class first and then retrieve the string list. The
+following example shows this. Mind that only the URL methods are provided!
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QStrList file_list;
+KFileBaseDialog* mydialog= new KFileBaseDialog();
+
+file_list=mydialog->getOpenFileURLList();
+
+if(!file_list.isEmpty())
+{
+  // do something
+}
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>The same applies to <CODE>getSaveFileURLList()</CODE>.
 <P>
 <H4>KFilePreviewDialog</H4>
 
-<P>
-<P>
+<P>The class <CODE>KFilePreviewDialog</CODE> provides another specialized, but more seldomly used filedialog. Its best feature is that it provides
+an area where the programmer can use a preview widget for his file format to open. The best usage is made within graphic programs that
+operate on pictures.
 <P>
 <H3><A NAME="ss6.4">6.4 KColorDialog</A>
 </H3>

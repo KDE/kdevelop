@@ -703,11 +703,6 @@ void CKDevelop::slotProjectAPI(){
   shell_process.clearArguments();
 
   if( !QFileInfo(kde_ref_file).exists()){
-    KMsgBox::message(this,i18n("Warning"),i18n("The KDE-library documentation is not installed.\n"
-                                                "Please update your documentation with the options\n"
-                                                "given in the KDevelop Setup dialog, Documentation tab.\n\n"
-                                                "Your API-documentation will be created without\n"
-                                                "cross-references to the KDE and Qt libraries."),KMsgBox::EXCLAMATION);
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << prj->getProjectName();

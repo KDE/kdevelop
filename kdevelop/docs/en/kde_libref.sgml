@@ -1884,7 +1884,8 @@ The following sections will discuss the usage and handling of the according file
 
 The <tt/KFileDialog/ class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
 creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
-filename to save files to.
+filename to save files to. The <tt/KFileDialog/ class itself is a specialized class that is based on <tt/KFileBaseDialog/, so if the
+given methods don't fit your needs you can always inherit from <tt/KFileBaseDialog/ to customize the settings.
 
 The following examples show the usage for each purpose:
 
@@ -1892,17 +1893,72 @@ The following examples show the usage for each purpose:
 // request a filename to open
 
 QString open_filename;
+open_filename=KFileDialog::getOpenFileName()
 
-open_filename=
-QString getOpenFileName(const char *dir= 0, const char *filter= 0, QWidget *parent= 0, const char *name= 0)
+if(!open_filename.isEmpty())
+{
+  // read the file
+}
 </verb></tscreen>
+
+This asks the user for a filename to open. The <tt/KFileDialog/ shows and retrieves the information. If the user cancels the
+filedialog, the return string will be null, therefore you have to test first if <tt/QString::isEmpty()/ doesn't return <tt/true/ before
+opening the file actually.
+
+The same goes with the static methods <tt/getSaveFileName()/, <tt/getOpenFileURL()/, <tt/getSaveFileURL()/, whereby each function takes
+parameters to set the starting directory, mime-types and, as usual, the <tt/QWidget/ <tt/parent,name/ parameters.
+
+The parallel methods for <tt/getSaveFile/ and <tt/getOpenFile/ behave identically for retrieving remote and/or local files with the URL
+dialogs.
 
 <sect1>KFileBaseDialog
 <p>
+The class <tt/KFileBaseDialog/ provides the basic interfaces for building filedialogs; therefore filedialogs can be customized in wide
+ranges towards your needs and is the most flexible way to construct filedialogs. Besides that, the class provides additional
+functionality for other standard cases like retrieving a directory name as well as multiple-file selection.
+
+<sect2>Retrieving a directory name
+<p>
+The class provides retrieving a directory name by the static method <tt/getDirectory()/. The following example shows the usage:
+
+<tscreen><verb>
+QString the_directory;
+
+the_directory=KFileBaseDialog::getDirectory();
+
+if(!the_directory.isEmpty())
+{
+	// do something
+}
+</verb></tscreen>
+
+<sect2>Multiple Selections
+<p>
+Like the <tt/KFileDialog/ provides static members to retrieve single filenames for saving and opening, the <tt/KFileBaseDialog/
+provides the corresponding methods for multiple file selection (I don't know why they are <em/not/ static methods...).
+
+As these are non-static, you have to create an instance of the <tt/KFileBaseDialog/ class first and then retrieve the string list. The
+following example shows this. Mind that only the URL methods are provided!
+
+<tscreen><verb>
+QStrList file_list;
+KFileBaseDialog* mydialog= new KFileBaseDialog();
+
+file_list=mydialog->getOpenFileURLList();
+
+if(!file_list.isEmpty())
+{
+  // do something
+}
+</verb></tscreen>
+
+The same applies to <tt/getSaveFileURLList()/.
 
 <sect1>KFilePreviewDialog
 <p>
-
+The class <tt/KFilePreviewDialog/ provides another specialized, but more seldomly used filedialog. Its best feature is that it provides
+an area where the programmer can use a preview widget for his file format to open. The best usage is made within graphic programs that
+operate on pictures.
 
 <sect>KColorDialog
 <p>

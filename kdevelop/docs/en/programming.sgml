@@ -3358,13 +3358,6 @@ C++ programming tips that relate to KDE and Qt programming especially and are ta
 on the Internet at <url url="http://www.kde.org">.
 
 <descrip>
-<tag/Operating Systems and Compilers/
-Sometimes you may need to know about the operating system and the compiler to ensure your application can be compiled on these
-platforms as well. This is needed especially if commercial developers are writing applications with the Qt library and want to run the
-applications on Microsoft&reg; operating systems. The Qt library already provides a set of <tt/#define/s for all supported platforms in
-<tt/qglobal.h/. Therefore, when portability problems should be solved, you should include this file and use the defines that meet your
-requirements.
-
 <tag/Filenames/ First of all, when creating sourcefiles, you should always use lowercase filenames. KDevelop supports
 this guideline already if you stick to its filename aut-suggestion. This makes it easier for other developers to remember what source
 files to look for when they have to debug your application.

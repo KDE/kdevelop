@@ -2486,7 +2486,7 @@ information.
 <p>
 <tag/-Wtraditional/Warn about certain constructs that behave differently in traditional and ANSI C.
 <p>
-<tag/-Wundef/"Warn if an undefined identifier is evaluated in an `#if' directive.
+<tag/-Wundef/Warn if an undefined identifier is evaluated in an `#if' directive.
 <p>
 <tag/-Wshadow/Warn whenever a local <idx/variable/ shadows another local <idx/variable/.
 <p>
@@ -3388,6 +3388,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 
 EXTRA_DIST =cref.html logotp3.gif tipdatabase \
-						index.sgml programming.sgml tutorial.sgml kde_libref.sgml \
+						index.sgml programming.sgml tutorial.sgml kde_libref.sgml add_kdedoc.sgml \
 						index.html index-1.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html   \
 						index-9.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html index-16.html\
 						tutorial.html tutorial-1.html tutorial-2.html tutorial-3.html tutorial-4.html \
@@ -8,8 +8,10 @@ EXTRA_DIST =cref.html logotp3.gif tipdatabase \
 						programming-7.html programming-8.html programming-9.html programming-10.html programming-11.html programming-12.html \
 						programming-13.html programming-14.html programming-15.html programming-16.html programming-17.html programming-18.html \
 						kde_libref.html kde_libref-1.html kde_libref-2.html kde_libref-3.html kde_libref-4.html kde_libref-5.html kde_libref-6.html \
-						kde_libref-7.html kde_libref-8.html kde_libref-9.html
-
+						kde_libref-7.html kde_libref-8.html kde_libref-9.html \
+						add_kdedoc.html add_kdedoc-1.html add_kdedoc-2.html add_kdedoc-3.html add_kdedoc-4.html add_kdedoc-5.html add_kdedoc-6.html \
+						add_kdedoc-7.html
+						
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) tipdatabase $(kde_htmldir)/en/kdevelop/tipdatabase
@@ -119,6 +121,22 @@ install-data-local:
 	$(INSTALL_DATA) kde_libref-8.html $(kde_htmldir)/en/kdevelop/kde_libref-8.html
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) kde_libref-9.html $(kde_htmldir)/en/kdevelop/kde_libref-9.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc.html $(kde_htmldir)/en/kdevelop/add_kdedoc.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-1.html $(kde_htmldir)/en/kdevelop/add_kdedoc-1.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-2.html $(kde_htmldir)/en/kdevelop/add_kdedoc-2.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-3.html $(kde_htmldir)/en/kdevelop/add_kdedoc-3.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-4.html $(kde_htmldir)/en/kdevelop/add_kdedoc-4.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-5.html $(kde_htmldir)/en/kdevelop/add_kdedoc-5.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-6.html $(kde_htmldir)/en/kdevelop/add_kdedoc-6.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-7.html $(kde_htmldir)/en/kdevelop/add_kdedoc-7.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/cref.html
@@ -175,4 +193,12 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-7.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-8.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-9.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-1.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-2.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-3.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-4.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-5.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-6.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-7.html
 

@@ -233,6 +233,8 @@ void DocTreeKDevelopFolder::refresh()
 				   "tutorial.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
 				   "kde_libref.html", true);
+    (void) new DocTreeKDevelopBook(this, i18n("KDE 2 Developer Guide"),
+				   "add_kdedoc.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
 				   "cref.html");
 }

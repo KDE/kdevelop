@@ -1,0 +1,542 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDE 2 Developer's Guide: KDE KOM/Open Parts</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="add_kdedoc-4.html">Next</A>
+ <A HREF="add_kdedoc-2.html">Previous</A>
+ <A HREF="add_kdedoc.html#toc3">Table of Contents</A>
+</P>
+<H3><A NAME="KOMOP"></A> <A NAME="s3">3. KDE KOM/Open Parts</A></H3>
+
+<P>Torben Weis <CODE>weis@kde.org</CODE>, Bernd Wuebben <CODE>wuebben@kde.org</CODE>
+<P>v 1.0 August 1998
+<P><EM>A free Object Model for Unix</EM>
+<P>
+<H3><A NAME="ss3.1">3.1 Introduction</A>
+</H3>
+
+<P>
+<P>
+<P>Although it is nice to have applications like StarOffice and
+ApplixWare available for Unix/Linux, it is a sad fact that they do not
+interact with other applications. In fact user is expected to use the
+supplied e-mail-client only, the StarOffice spreadsheet cannot be
+embedded into an Applix document, and users cannot use the WWW
+browser of their choice.
+<P>
+<P>
+<P>Even a rather simple component-based approach like COM (Component
+Object Model) can do lots of magic. Take a glimpse into Bill Gates'
+world to convince yourself. The spread sheet of one software house can
+be used in a word processor of another and many applications support
+scripting interfaces. A veritable industry of OCX/ActiveX component
+writers has cropped up. Using easy to learn languages such as Visual
+Basic, users with a minimal programming background can glue separate
+components together with ease in order to create new applications
+exhibiting previously unavailable functionality. As Aristotle put it:
+The whole is more than the sum of its parts.
+<P>
+<P>
+<P>Even the most faithful of all Unix supporters had to recognize that
+the Unix community had technologically fallen far behind the windows as
+well as Macintosh worlds with regard to GUI and desktop technologies.
+Fortunately, distributed objects make sense beyond a the realm of
+desktop and GUI applications. The development of distributed databases
+may serve as an example and component technology in general fits
+nicely into the strategy of major software companies which in turn
+helped to push CORBA development on the UNIX platform. Consequently,
+there is a standardized, network transparent, platform- and
+language-independent solution to the IPC-problem available, that is
+based on an object-oriented approach and that offers exception
+handling as well as support for management of complex data structures.
+<P>
+<P>
+<P>While initially only available commercially, free implementations of
+the CORBA 2.0 standard object request broker (ORB) became available as
+well.  A particularly well done free implementation of the CORBA
+standard, that will soon cover the full CORBA-2.1 standard, was
+developed at the university of Frankfurt, Germany.  This GNU GPL'd ORB
+named MICO, can compete with commercial implementations with respect to
+completeness and stability.
+<P>
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.2">3.2 CORBA-based KDE Object Model</A>
+</H3>
+
+<P>
+<P>However, CORBA alone is not enough, as the standard only describes how
+distributed objects communicate; the COSS (CORBA Standard Services)
+define interfaces for a whole range of so called services, such as
+trading services, security services, transactions sercies and license
+management services and others. As is apparent, desktop development or
+even GUI application development did not play an important role when
+designing CORBA. The nearly indispensable event service does not
+support event filtering, furthermore it lacks a mechanism for so
+called 'callbacks'. Thus, in order for X11 and CORBA to work well
+together, CORBA´s well done industry standard object model had to be
+enhanced in order to be suitable as the underlying distributed object
+broker on which to build the all important compound document
+framework.  Of course all this had to be undertaking within the limits
+of the accepted CORBA industry standards.
+<P>
+<P>
+<P>The KDE Object Model (KOM) addresses these issues and makes life
+easier for a programmer by automatically giving each object a base set
+of functionalities. This includes first and foremost event
+handling. Each KOM object is capable of receiving events. An event
+consists of an arbitrary data structure (<CODE>CORBA::Any</CODE>) as well
+as a string, describing the type of the event, for example
+Desktop/Font/ChangeFont or Desktop/Color. By reading this string, an
+object can decide whether it is interested in that event, and will
+know how the unknown data structure is to be interpreted semantically.
+<P>
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.3">3.3 Flexibility with events and filters</A>
+</H3>
+
+<P>
+<P>An important aspect when processing events is filtering. It allows the
+developer to enhance the functionality of a program without having to
+change the sources.  There are three types of filters: those which
+merely recognize events, those which are allowed to change or discard
+events, and finally those which finally process them.  This model can
+be illustrated with a simple WWW browser example: If a program wants
+the browser to open a new URL, it has to send it an event. To enhance
+the browser with a history function and the user only has to plug in a
+filter of the first category into the browser. This filter can record
+all URLs, thereby managing a history function. A tool for blocking
+certain pages (in order to protect minors for example) belongs to
+category two: If the URL is rated unsuitable for minors, the filter
+discards the event or replaces the URL in it with a different one. If
+the Browser does not support mailto, we need a third category filter:
+upon arrival of a URLOpen event with mailto:joe@doe in it, the event
+is discarded from the browser's point of view, but the filter offers
+an alternative implementation.
+<P>
+<P>
+<P>The filter principle is of great importance, as in CORBA only
+interfaces are inherited, not implementations.  It would not be
+possible to derive from the browser object and to just overload the
+function that opens a new URL. The event model does not just solve
+this problem, it enables developers to install several enhancements at
+the same time. A second filter, filtering FTP URLs for example, can be
+easily installed in addition. It is important that an user can plug-in
+an arbitrary number of such filters at run-time. A filter is installed
+this way:
+<P>
+<P>
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+
+      KOM::EventTypeSeq types;
+
+      types.length (1);
+
+      types [0] = CORBA::string_dup ("OpenURL");
+
+      browser->installEventFilter ( this, "eventFilter", types);
+
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Now, all you have to do is wait for events:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+
+boolean MailFilter::eventFilter (in Object obj, in EventType type, in any value)
+{
+
+    if ( type == "OpenURL" )
+    {
+
+        char *p;
+
+        if (( value >>=p ) &amp;&amp; strcmp (type, "mailto:", 7) == 0)
+        {
+
+            // open mail app
+
+            CORBA::string_free (p);
+
+            return true;
+
+        }
+    }
+
+     return false;
+}
+
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>When a user enters a URL in the example above, the browser sends an
+event to itself. This concept can also serve for a macro recorder,
+because events can be filtered, saved and re-send later. As event
+handling works the same way for all KOM objects, there is now - at
+last - the possibility of creating a supra-component macro recording.
+<P>
+<P>
+<P>To avoid performance loss, filters can be installed in a way that they
+only receive events whose type matches a certain
+expression. Desktop/Font/* would filter all events that have to do
+with the font settings of the whole desktop.
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.4">3.4 Callbacks with signal and slots</A>
+</H3>
+
+<P>
+<P>In an event-driven environment, programmers have to deal with so
+called callbacks. A callback is a mechanism by which a button for
+example activates a procedure that is supposed to be called once the
+button is pressed. C offers pointers to functions for that, under C++
+we can use elegant signals and slots. A wonderful implementation of
+this idea is offered by the QT toolkit. KOM offers this technique for
+distributed objects as well, it uses CORBA´s DII (Dynamic Invocation
+Interface) for that purpose. An object can be target and sender of
+signals at the same time. To receive a signal, an object must have a
+slot with a matching list of parameters. Such a slot is not different
+from a usual CORBA method without return value. The lines
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+
+      MySender_var s = new MySender;
+
+      MyReceiver_var r = new MyReceiver;
+
+      r.connect ( "selected", s, "myslot" );
+
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>connect two objects with each other. As soon as <CODE>s</CODE> emits the
+selected signal, the function myslot of object <CODE>r</CODE> is
+called. If one of the objects is destroyed, the connection between the
+two is released automatically. It is possible to connect one signal to
+different slots and one slot to different signals. Theoretically, it
+would also be possible to work with events here. Signals and slots
+however work a lot faster and are easier to handle for the programmer,
+because he/she does not have to deal with event
+processing. Furthermore they are type-safe. On the other hand, you
+have to work without the advantages of filtering.
+<P>
+<P>
+<P>As already mentioned, interface inheritance does not solve all
+problems. The browser example shows that installing multiple
+enhancements at run-time works only because filters are loaded which
+can plug into the browser. The principle behind this mechanism is
+called dynamic aggregation. You take a core object (the browser) and
+enhance it by other objects (plug-ins). The interface of the browser
+is expanded with the sum of the plug-ins' interfaces. KOM support
+run-time installation and uninstallation of those plug-ins. Neither is
+required to run within the same process or even the same computer.
+<P>
+<P>
+<P>An object that communicates with the browser does not notice which
+interface was implemented by the core object and which by the
+plug-ins. If a client wants to know whether a component supports a
+special interface, a simple
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+
+CORBA::Object_var obj = browser->getInterface ('IDL:/foo/bar:1.0');
+
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>is enough to get a reference to that interface. It is even possible to
+load the plug-in with the required interface at run-time. This saves a
+lot of memory, because the plug-ins allocate resources only then when
+they are really needed.
+<P>
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.5">3.5 OpenParts: KOM meets GUI</A>
+</H3>
+
+<P>
+<P>Until now, the word GUI has not been mentioned a single time. Indeed,
+KOM is solely based on CORBA. There are in effect quite a number of
+applications which do not have or do not need a GUI. It would not make
+sense to burden those applications with GUI code; we better leave that
+to the supporters of the Redmond doctrine. OpenParts form a layer on
+top of CORBA, KOM, and X11. Embedding GUI components in own programs
+has become widely known since introduction of MS Internet Explorer
+4.0. In the windows world, a lot of controls have been created, a
+whole industry has formed around the creation of controls and nearly
+everything, from a simple push-button to a complete WWW browser, can
+be realized as a control.
+<P>
+<P>
+<P>The idea behind controls is actualized in KDE's OpenParts. This is
+done using window objects that export a well-defined interface. The
+CORBA Implementation Repository registers the implementation of those
+components.
+<P>When an application needs a specific control, it relays a request to
+the repository. In the OpenParts framework, separate server processes
+handle these requests. Thus, a high level of toolkit, compiler,
+language and multi threading-support independence is achieved. The
+repository returns a reference to a factory. CORBA does not support
+the creation of new objects with a special construct. Because of that,
+factories have been introduced, which serve the purpose of creating a
+new object and returning a reference to it.
+<P>
+<P>
+<P>The actual embedding is done via X11 swallowing. The element that is
+to be embedded (a X11 window) is assigned a new parent using the X11
+Xlib call <CODE>XReparentWindow</CODE>. In order to keep developers away
+from messing around with pure X11, there exist so called control
+frames. This class depends on the used toolkit and (viewed from
+outside) looks like a normal window implemented using a specific GUI
+toolkit. The control frame is made the new father of the control. Is
+it moved or resized, the control is moved or resized as well.
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.6">3.6 Dynamic Elements realized easily</A>
+</H3>
+
+<P>
+<P>Some elements of a window are subject to restrictions. There can only
+be one menu bar as well as one status bar. Great confusion would ensue
+if controls were allowed to take control of these restricted
+elements. One way to avoid this confusion is offered by an enhancement
+of controls: Parts. A part can be in three different modes: inactive,
+marked, or active. In a top-level window only one can be active. This
+part gains control over the restricted elements. The top-level window
+is called PartShell; it owns menu bar, tool bars, status bar etc. Each
+part can register its menus and toolbars with the Shell. The Shell,
+however, only displays the restricted elements of the active Part.
+<P>
+<P>
+<P>Using Parts, one can build the basic structure of an integrated office
+suite. Text processing, spread sheet, drawing application and all the
+rest is put into such structures. As Parts can contain Parts, a
+spread-sheet Part can be embedded into a text-Part with no
+problems. Instead of ControlFrames, the developer can use the mightier
+PartFrames as well. A single click on a part creates a window frame,
+the user can move and resize the frame now; another click makes it
+active. The window frame is changed automatically to show the user,
+that the part has been made active. The Shell changes menu bar and
+tool bar to the needs of the Part that has become active.
+<P>
+<P>
+<P>What is missing is a common file menu: it is the Shell's privilege to
+provide a menu and a toolbar of its own for that purpose. Via these
+widgets, the user can access the document as a whole, for example to
+save or print it.
+<P>
+<P>
+<P>
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.7">3.7 The Document View Architecture</A>
+</H3>
+
+<P>
+<P>OpenParts support the Document View Model, known from Smalltalk and
+popularized in Microsoft's MFC. A view displays the document on the
+screen and is derived from the Parts class. The document contains data
+as well as the associated algorithms. The advantage of this solution is
+that users can have several views of the document. It is, for example,
+possible to display two paragraphs of a longer article in two windows
+or to display an image in a separate window when manipulating it. When
+zooming in on this picture, the rest of the document does not have to
+be enlarged as well.
+<P>
+<P>
+<P>For reasons of performance, document and view run within the same
+process. In order to achieve a clean design, the developer has to
+strictly follow the principle of separating data and belonging
+manipulating algorithms on one side and viewing algorithms on the
+other side. Every user action first affects the view. This view must
+then signal the Document to change the data basis accordingly. After
+that, the Document must inform all views to update their windows
+in order to correctly reflect the new data state.
+<P>
+<P>
+<P>
+<P>An important aspect is using a Document without a View. This allows to
+make use of an office suite's functionality in a batch job, for
+example. The Document should export methods for manipulating data. A
+CORBA-aware scripting language could make use of those methods. At
+this time, CORBA-binding for Perl, Tcl, and CORBA-Script exist, a
+Python binding is being worked on.
+<P>
+<P>
+<P>Object models, and operating systems are alike in that they are of
+mere academic value as long as there are no applications making use of
+their qualities. KOffice is, at the moment, the largest and most
+widely known application using OpenParts technology. As the KDE
+project makes wider use of CORBA, and KOM and OpenParts respectively,
+there is reason to hope that Unix will soon have a free implementation
+of a object model that transfers the advantages of contemporary
+compound document framework technology to the user.
+<P>
+<P>
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.8">3.8 Using OpenParts: KOffice</A>
+</H3>
+
+<P>
+<P>Based on OpenParts technology, the KOffice project aims at offering a
+free and easily extendible office suite for KDE.
+<P>
+<P>
+<P>The 'mother' of all KOffice components (called Parts) is the spread
+sheet KSpread. Although officially still declared 'alpha', it is
+already working very well.. Its mathematical functions can be easily
+enhanced by means of an embedded Python language interpreter.
+<P>
+<P>
+<P>KPresenter is a presentation application written by Reginald
+Stadlbauer, which convincingly demonstrated its usability at the Linux
+Congress in Cologne where a talk about KDE was given using
+KPresenter. In the future, Linus Torvalds will no longer have use
+Windows applications when giving presentations.
+<P>
+<P>
+<P>KChart is an application to create diagrams. It supports different
+modes (bars, lines, etc.) and can be embedded into other KOffice
+application without problems. When data is changed in, for example,
+KSpread, the chart automatically changes itself accordingly.
+<P>
+<P>
+<P>There is a component for displaying graphics, and work is being done
+adapting a formula editor and a vector-oriented painting application
+(KIllustrator). For the future, adaptation of KLyx is planned to embed
+Parts in LaTeX documents. Other KDE applications like KOrganizer,
+KAddressbook and KMail will be enhanced with CORBA interfaces to
+provide seamless integration in the KOffice suite.
+<P>
+<P>
+<P>If possible, components save their data in XML format. To save an
+aggregate document in a file, the MIME multi-part format is used. XML
+and MIME multi-part share the advantage that import and exports filters
+can easily be written in scripting languages like Python and
+Perl. Ever since a WinWord filter attracted attention on
+c.o.l.a. (comp.os.linux.announce), developers began writing import
+filters for the most important MS applications.
+<P>
+<P>KOffice runs quite stably for a alpha release. To compile it, a fast
+CPU and a reasonable amount of RAM ( 64 MByte) should be available;
+for using KOffice, 32 MByte and a Pentium 133 MHz will
+suffice. KOffice is reported to work on DEC Alpha and Sun Sparcs as
+well. The sources for KOffice, KOM and OpenParts are available on
+<A HREF="http://www.kde.org">http://www.kde.org</A><P>
+<P>
+<P>
+<H3><A NAME="ss3.9">3.9 Code Re-use with CORBA</A>
+</H3>
+
+<P>
+<P>A developer, sitting in front of his editor and trying to build new
+software components out of old ones, might sadly remember the good old
+Lego pieces from his/her childhood. Those always fit together nicely,
+and from a great number of primitive elements, great buildings could be
+constructed. From the software developer's point of view, software
+pieces do not fit at all, and each new building requires a lot of work
+to make it usable. Many developers therefore choose to rewrite the
+sources rather than to re-use code.
+<P>
+<P>
+<P>Under Unix, the usual method concerning code re-use is putting code
+into libraries and linking the application against them. However,
+sometimes it happens that those libraries use different GUI toolkits,
+or that some support multi-threading and some do not. Additionally,
+all libraries should have been compiled with the same compiler,
+otherwise you will be subject to problems at the linking stage.
+<P>
+<P>
+<P>One solution is to split an application into several processes. One
+process might, for example, offer database functionality with
+multi-threading, another one might offer the X11-GUI
+single-threaded. Now, the problem of Interprocess Communication (IPC)
+remains to be solved. CORBA (Common Object Request Broker
+Architecture) offers a modern and object-oriented solution, but the
+developer is tied to the CORBA object model, what is somewhat limited
+in contrast to the C++, Python or Smalltalk object model. First of all
+one can derive only from interfaces, not from implementations. If
+there is a text editor as a CORBA object, it usually is impossible to
+derive from this editor and overload just a few of its functions. The
+derivation of implementations works only if the sources of the editor
+are available, or if it is available as a library. But that was what
+we wanted to avoid.
+<P>
+<P>
+<P>As the main article describes, the KDE Object Model (KOM) offers a
+solution for this problem; it is based on events and event
+filters. Instead of calling a function directly, it is possible to
+send an event. By filtering events, function overloading can be
+simulated.
+<P>
+<P>
+<P>There are other obstacles when re-using code: According to Murphy's
+laws, the desperately needed module is always written in a different
+programming language than expected. Mixing different languages in one
+application is always a problem for programmers. Even semi-automatic
+wrapper generators like SWIG expect a certain amount of refining from
+the programmer. Further, a look at the KDE bindings in Python, Perl
+and Tcl shows that this wrapper code can easily grow huge. As
+OpenParts is CORBA-based, objects can be implemented in any of the
+languages for which CORBA bindings are available for. For interpreter
+languages, in most cases no special wrapper code is necessary, for
+compiler languages like C/C++, wrapper code generation is done
+automatically.
+<P>
+<P>
+<P>
+<P>
+<H3><A NAME="ss3.10">3.10 Credits</A>
+</H3>
+
+<P>Most of this document was written by Torben Weis
+<A HREF="email:weis@kde.org">weis@kde.org</A>.
+Additions, corrections as well as the editorial work was done by
+Bernd Johannes Wuebben 
+<A HREF="email:wuebben@kde.org">wuebben@kde.org</A>.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="add_kdedoc-4.html">Next</A>
+ <A HREF="add_kdedoc-2.html">Previous</A>
+ <A HREF="add_kdedoc.html#toc3">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
