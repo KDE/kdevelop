@@ -1,8 +1,7 @@
 2001-04-20  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: crash at Windows->CloseAll+Windows->Close
     * nice icon for the MDI views
-    * first step of reactivating the trees-on/off button - now for a compound group of dockwidgets
-      (switch on almost works again)
+    * 2 steps of reactivating the trees-on/off button - now for a compound group of dockwidgets
 
 2001-04-19  F@lk Brettschneider <falk@kdevelop.org>
     * improved Options->KDevelop->User_interface page

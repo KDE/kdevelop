@@ -35,6 +35,7 @@
 #include "ctoolclass.h"
 #include "ctoolsconfigdlg.h"
 #include "cupdatekdedocdlg.h"
+#include "ckonsolewidget.h"
 
 #include "dbgtoolbar.h"
 #include "dbgpsdlg.h"
@@ -675,63 +676,117 @@ void CKDevelop::slotViewPreviousError(){
 
 void CKDevelop::slotViewTTreeView()
 {
-  if (view_menu->isItemChecked(ID_VIEW_TREEVIEW)) {
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-  }
-  else {
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-    toolBar()->setButton(ID_VIEW_TREEVIEW,true);
-
-    // dock back whole groups of dockwidgets
-    QList<KDockWidget> dockWdgList;
-    if (class_tree)
-      dockWdgList.append( (KDockWidget*)class_tree->parentWidget()->parentWidget());
-    if (log_file_tree)
-      dockWdgList.append( (KDockWidget*)log_file_tree->parentWidget()->parentWidget());
-    if (real_file_tree)
-      dockWdgList.append( (KDockWidget*)real_file_tree->parentWidget()->parentWidget());
-    if (doc_tree)
-      dockWdgList.append( (KDockWidget*)doc_tree->parentWidget()->parentWidget());
+  // build a list of dockwidgets that covers some tree views
+  // and which are of interest at the moment
+  QList<KDockWidget> dockWdgList;
+  if (class_tree)
+    dockWdgList.append( (KDockWidget*)class_tree->parentWidget()->parentWidget());
+  if (log_file_tree)
+    dockWdgList.append( (KDockWidget*)log_file_tree->parentWidget()->parentWidget());
+  if (real_file_tree)
+    dockWdgList.append( (KDockWidget*)real_file_tree->parentWidget()->parentWidget());
+  if (doc_tree)
+    dockWdgList.append( (KDockWidget*)doc_tree->parentWidget()->parentWidget());
+//  if (weAreDebuggingAtTheMoment)
     if (var_viewer)
       dockWdgList.append( (KDockWidget*)var_viewer->parentWidget()->parentWidget());
+//  }
 
-    QListIterator<KDockWidget> it( dockWdgList);
-    QList<KDockWidget> rootDockWidgetList;
-    QListIterator<KDockWidget> it2( rootDockWidgetList);
-    KDockWidget* pDockW = 0L;
+  toggleGroupOfToolViewCovers(ID_VIEW_TREEVIEW, &dockWdgList);
+}
 
-    while ((pDockW = it.current()) != 0L) { // for all of the dockwidget covers of tree views
-      ++it;
-      KDockWidget* pRootDockW = 0L;
-      KDockWidget* pCandidate = 0L;
-      QWidget* pW = pDockW;
-      // find the oldest ancestor of the current dockwidget
+void CKDevelop::slotViewTOutputView()
+{
+  // build a list of dockwidgets that covers some tree views
+  // and which are of interest at the moment
+  QList<KDockWidget> dockWdgList;
+  if (messages_widget)
+    dockWdgList.append( (KDockWidget*)messages_widget->parentWidget()->parentWidget());
+  if (stdin_stdout_widget)
+    dockWdgList.append( (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget());
+  if (stderr_widget)
+    dockWdgList.append( (KDockWidget*)stderr_widget->parentWidget()->parentWidget());
+  if (konsole_widget)
+    dockWdgList.append( (KDockWidget*)konsole_widget->parentWidget()->parentWidget());
+  if (brkptManager)
+    dockWdgList.append( (KDockWidget*)brkptManager->parentWidget()->parentWidget());
+//  if (weAreDebuggingAtTheMoment) {
+    if (frameStack)
+      dockWdgList.append( (KDockWidget*)frameStack->parentWidget()->parentWidget());
+    if (disassemble)
+      dockWdgList.append( (KDockWidget*)disassemble->parentWidget()->parentWidget());
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+    if (dbg_widget)
+      dockWdgList.append( (KDockWidget*)dbg_widget->parentWidget()->parentWidget());
+#endif
+//  }
+
+  toggleGroupOfToolViewCovers(ID_VIEW_OUTPUTVIEW, &dockWdgList);
+}
+
+void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolViewCoverList)
+{
+  bool bToggleOn = true;
+  if (view_menu->isItemChecked(type))
+    bToggleOn = false;
+
+  QListIterator<KDockWidget> it( *pToolViewCoverList);
+  QList<KDockWidget> rootDockWidgetList;
+  QListIterator<KDockWidget> it2( rootDockWidgetList);
+  KDockWidget* pDockW = 0L;
+
+  // search their ancenstors (they can also be mutual ones) and store them in rootDockWidgetList
+  while ((pDockW = it.current()) != 0L) { // for all of the dockwidget covers of tree views
+    ++it;
+    KDockWidget* pRootDockW = 0L;
+    QWidget* pW = pDockW;
+    // find the oldest ancestor of the current dockwidget
+    // depending on if we toggle on or off
+    if (bToggleOn) {
       while (pW) {
         if (pW->inherits("KDockWidget")) {
           pRootDockW = (KDockWidget*) pW;
         }
         pW = pW->parentWidget();
       }
-      if (pRootDockW) {
-        // if that oldest ancestor is not already in the list, append it
-        bool found = false;
-        if (!rootDockWidgetList.isEmpty()) {
-          for ( it2.toFirst(); it2.current() && !found; ++it2 ) {
-            KDockWidget* pDockW = it2.current();
-            if (pDockW == pRootDockW)
-              found = true;
-          }
-          if (!found) {
-            rootDockWidgetList.append( pRootDockW);
-          }
+    }
+    else {
+      KDockWidget* pUndockCandidate = 0L;
+      while (!pW->isTopLevel()) {
+        if (pW->inherits("KDockWidget")) {
+          pUndockCandidate = (KDockWidget*) pW;
+          if (pUndockCandidate->enableDocking() != KDockWidget::DockNone)
+            pRootDockW = pUndockCandidate;
         }
-        else {
-          rootDockWidgetList.append( pRootDockW);
-        }
+        pW = pW->parentWidget();
       }
     }
 
+    if (pRootDockW) {
+      // if that oldest ancestor is not already in the list, append it
+      bool found = false;
+      if (!rootDockWidgetList.isEmpty()) {
+        for ( it2.toFirst(); it2.current() && !found; ++it2 ) {
+          KDockWidget* pDockW = it2.current();
+          if (pDockW == pRootDockW)
+            found = true;
+        }
+        if (!found) {
+          rootDockWidgetList.append( pRootDockW);
+        }
+      }
+      else {
+        rootDockWidgetList.append( pRootDockW);
+      }
+    }
+  }
+
+  // now really show/hide the chosen dockwidgets as well as toggling the view menu button
+  if (bToggleOn) {
+    view_menu->setItemChecked(type, true);
+    toolBar()->setButton(type, true);
+
+    // dock back whole groups of dockwidgets
     for ( it2.toFirst(); it2.current(); ++it2 ) { // for all found root dockwidgets
       KDockWidget* pCur = it2.current();
       if (pCur->isVisible()) {
@@ -744,30 +799,19 @@ void CKDevelop::slotViewTTreeView()
       }
     }
   }
+  else{
+    view_menu->setItemChecked(type, false);
+    toolBar()->setButton(type, false);
 
-//////////  if(treedock->isVisible()){
-//////////    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-//////////    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-//////////  }
-//////////  else{
-//////////    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-//////////    toolBar()->setButton(ID_VIEW_TREEVIEW,true);
-//////////  }
-//////////  treedock->changeHideShowState();
+    // undock (hide) whole groups of dockwidgets
+    for ( it2.toFirst(); it2.current(); ++it2 ) { // for all found root dockwidgets
+      KDockWidget* pCur = it2.current();
+      if (pCur->isVisible()) {
+        pCur->undock();
+      }
+    }
+  }
 }
-
-void CKDevelop::slotViewTOutputView(){
-//////////  if(outputdock->isVisible()){
-//////////    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-//////////    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-//////////  }
-//////////  else{
-//////////    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//////////    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
-//////////  }
-//////////  outputdock->changeHideShowState();
-}
-
 
 void CKDevelop::slotViewTStdToolbar(){
  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
@@ -3896,7 +3940,7 @@ void CKDevelop::slotToolbarClicked(int item){
 /** Reimplemented from base class QextMdiMainFrm.
  *  Dispatches this 'event' to m_docViewMan which will delete the closed view
  */
-void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
+void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool /*layoutTaskBar*/)
 {
   // get the embedded view
   QObjectList* pL = (QObjectList*) (pWnd->children());

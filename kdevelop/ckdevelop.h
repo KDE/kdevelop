@@ -243,6 +243,9 @@ public:
   VarViewer* getVarViewer() { return var_viewer; };
   QWhatsThis* getWhatsThis() { return whats_this; };
 
+  /** shared helper method for slotViewTTreeView and slotViewTOutputView */
+  void toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolViewCoverList);
+
  public slots:
 
   void slotSwitchToFile(QString filename, int line);
