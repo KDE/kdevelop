@@ -312,18 +312,18 @@ void KDlgEditWidget::slot_helpSelected()
 
   if (selectedWidget() != mainWidget())
     {
-      helptext = helptext + QString(i18n("<b><i>Raise</i></b>\n\nBrings the item one step towards the topmost one in the hierarchy.\n\n"));
-      helptext = helptext + QString(i18n("<b><i>Lower</i></b>\n\nOn the contrary to <i>raise</i> this function brings the item one step backwards in the hierarchy, to the bottommost item.\n\n"));
-      helptext = helptext + QString(i18n("<b><i>Raise to top</i></b>\n\nSets the item to be the topmost one.\n\n"));
-      helptext = helptext + QString(i18n("<b><i>Raise to bottom</i></b>\n\nMakes the item to become the bottommost.\n\n"));
-      helptext = helptext + QString(i18n("<b><i>Copy</i></b>\n\nSelects the item to be copied. That means, if you choose paste later, this item will be inserted.\n\n"));
-      helptext = helptext + QString(i18n("<b><i>Delete</i></b>\n\nRemoves the selected item from the dialog.\n\n"));
-      helptext = helptext + QString(i18n("<b><i>Cut</i></b>\n\nCopies the item and removes it from the dialog. But unlike toe delete function you will be able to insert a copy of the item using the <i>paste</i> function.\n\n"));
+      helptext += i18n("<b><i>Raise</i></b>\n\nBrings the item one step towards the topmost one in the hierarchy.\n\n");
+      helptext += i18n("<b><i>Lower</i></b>\n\nOn the contrary to <i>raise</i> this function brings the item one step backwards in the hierarchy, to the bottommost item.\n\n");
+      helptext += i18n("<b><i>Raise to top</i></b>\n\nSets the item to be the topmost one.\n\n");
+      helptext += i18n("<b><i>Raise to bottom</i></b>\n\nMakes the item to become the bottommost.\n\n");
+      helptext += i18n("<b><i>Copy</i></b>\n\nSelects the item to be copied. That means, if you choose paste later, this item will be inserted.\n\n");
+      helptext += i18n("<b><i>Delete</i></b>\n\nRemoves the selected item from the dialog.\n\n");
+      helptext += i18n("<b><i>Cut</i></b>\n\nCopies the item and removes it from the dialog. But unlike toe delete function you will be able to insert a copy of the item using the <i>paste</i> function.\n\n");
     }
   else
-    helptext = helptext + QString(i18n("<b>Note :</b> Since the selected item is the main widget only few of the normally available functions are enabled. Open another items' help to get information about the other functions.\n\n"));
+    helptext += i18n("<b>Note :</b> Since the selected item is the main widget only few of the normally available functions are enabled. Open another item's help to get information about the other functions.\n\n");
 
-  helptext = helptext + QString(i18n("<b><i>Paste</i></b>\n\nInserts an item you have copied before using the <i>Copy</i>function at the current position of the mouse pointer.\n\n"));
+  helptext += i18n("<b><i>Paste</i></b>\n\nInserts an item you have copied before using the <i>Copy</i>function at the current position of the mouse pointer.\n\n");
 
   helptext = KDlgLimitLines(helptext,60);
 
@@ -574,10 +574,6 @@ bool KDlgEditWidget::saveToFile( QString fname )
       t << "// " << "Created by KDlgEdit Version " << KDLGEDIT_VERSION_STR << " (C) 1999 by Pascal Krahmer\n";
       t << "// " << "Get KDevelop including KDlgEdit at \"www.beast.de/kdevelop\"\n";
       t << "// " << "\n";
-      t << "// " << "This file is free software; you can redistribute it and/or modify\n";
-      t << "// " << "it under the terms of the GNU General Public License as published by\n";
-      t << "// " << "the Free Software Foundation; either version 2 of the License, or\n";
-      t << "// " << "(at your option) any later version.\n\n";
       t << "data Information\n";
       t << "{\n";
       t << "   Filename=\"" << fname << "\"\n";

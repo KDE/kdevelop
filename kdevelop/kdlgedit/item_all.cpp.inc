@@ -4,6 +4,52 @@
 #include "kdlgproplv.h"
 
 
+int CALLER_ITEMCLASS_NAME::MyWidget::recPosX(int px)
+{
+    int xnew = px+x(); 
+    if ((!parent()) || (parent()!=parentObject->getEditWidget()))
+	return ((KDlgItem_Widget::MyWidget*)parent())->recPosX(xnew);
+    else
+	return px;
+}
+
+
+int CALLER_ITEMCLASS_NAME::MyWidget::recPosY(int py)
+{
+    int ynew = py+y();
+    if ((!parent()) || (parent()!=parentObject->getEditWidget()))
+	return ((KDlgItem_Widget::MyWidget*)parent())->recPosY(ynew);
+    else
+	return py;
+}
+
+
+void CALLER_ITEMCLASS_NAME::MyWidget::deselect()
+{
+    if (isItemActive)
+	{
+	    isItemActive = false;
+	    repaint();
+	}
+}
+
+
+void CALLER_ITEMCLASS_NAME::MyWidget::select()
+{
+    if (!isItemActive)
+	{
+	    isItemActive = true;
+	    repaint();
+	}
+}
+
+
+void CALLER_ITEMCLASS_NAME::MyWidget::selectMe()
+{
+    parentObject->getEditWidget()->selectWidget((KDlgItem_Base*)parentObject);
+}
+
+
 void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
 {
   selectMe();

@@ -20,11 +20,13 @@
 #define KDLGEDIT_H
 
 #include <qobject.h>
-#include "items.h"
+#include <qtextstream.h>
+#include <qstrlist.h>
+//#include "items.h"
 
-//#include "../cproject.h"
 class CProject;
 class TDialogFileInfo;
+class KDlgItem_Widget;
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
@@ -80,6 +82,7 @@ void slotFileNew();
   void slotDeleteDialog(QString file);
   
   protected:
+  void generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
 
   void generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QString parent);

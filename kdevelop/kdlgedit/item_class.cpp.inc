@@ -27,13 +27,13 @@
     {
       public:
         MyWidget(classname* wid, QWidget* parent = 0, const char* name = 0);
-        int recPosX(int px) { int xnew = px+x(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((KDlgItem_Widget::MyWidget*)parent())->recPosX(xnew); else return px; }
-        int recPosY(int py) { int ynew = py+y(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((KDlgItem_Widget::MyWidget*)parent())->recPosY(ynew); else return py; }
+        int recPosX(int px);
+        int recPosY(int py);
         bool isItemActive;
         bool isMainwidget;
-        void deselect() { if (isItemActive) { isItemActive = false; repaint(); } }
-        void select() { if (!isItemActive) { isItemActive = true; repaint(); } }
-        void selectMe() { parentObject->getEditWidget()->selectWidget((KDlgItem_Base*)parentObject); }
+        void deselect();
+        void select();
+        void selectMe();
       protected:
         classname* parentObject;
         bool isMBPressed;
