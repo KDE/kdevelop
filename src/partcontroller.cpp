@@ -72,6 +72,10 @@ void PartController::setupActions()
   (void) KStdAction::open(this, SLOT(slotOpenFile()),
     ac, "file_open");
 
+  m_openRecentAction = KStdAction::openRecent( this, SLOT(slotOpenRecent(const KURL&) ),
+    ac, "file_open_recent" );
+  m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
+
   m_saveAllFilesAction = new KAction(i18n("Save &All"), 0,
     this, SLOT(slotSaveAllFiles()),
     ac, "file_save_all");
@@ -472,9 +476,15 @@ void PartController::slotOpenFile()
 
   for ( QStringList::Iterator it = fileNames.begin(); it != fileNames.end(); ++it ) {
     editDocument(KURL(*it));
+    m_openRecentAction->addURL( KURL(*it) );
   }
+  m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
 }
 
+void PartController::slotOpenRecent( const KURL& url )
+{
+  editDocument( url );
+}
 
 bool PartController::closeDocuments(const QStringList &documents)
 {

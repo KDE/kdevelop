@@ -20,7 +20,7 @@ namespace KParts
 };
 
 class KAction;
-
+class KRecentFilesAction;
 
 #include "kdevpartcontroller.h"
 
@@ -70,6 +70,7 @@ private slots:
   void slotRevertAllFiles();
 
   void slotOpenFile();
+  void slotOpenRecent(const KURL&);
 
   void slotCloseWindow();
   void slotCloseAllWindows();
@@ -101,6 +102,7 @@ private:
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
+  KRecentFilesAction *m_openRecentAction;
   QString m_presetEncoding;
     
   DocumentationPart *findDocPart(const QString &context);
