@@ -15,13 +15,19 @@ class CodeCompletionIfaceImpl : public KEditor::CodeCompletionDocumentIface {
   
   CodeCompletionIfaceImpl(KWrite *edit,KEditor::Document *parent, KEditor::Editor *editor);
  
-  virtual void showCompletionBox(QValueList<KEditor::CompletionEntry>* complList);
+  virtual void showCompletionBox(QValueList<KEditor::CompletionEntry> complList,int offset=0);
+  bool eventFilter( QObject *o, QEvent *e );
   
 private:
-
+  void updateBox();
   KWrite *m_edit;
-  QVBox *completionPopup;
-  QListBox *completionListBox;
+  QVBox *m_completionPopup;
+  QListBox *m_completionListBox;
+  QValueList<KEditor::CompletionEntry> m_complList;
+  int m_lineCursor;
+  int m_colCursor;
+  int m_offset;
+
 };
   
   

@@ -1,43 +1,145 @@
 
 #include "kwrite/kwview.h"
 #include <qsizegrip.h>
+#include <qapp.h>
 
 #include "codecompletion_iface_impl.h"
 #include <iostream.h>
 
 
+class CompletionItem : public QListBoxText
+{
+public:
+  CompletionItem( QListBox *lb,KEditor::CompletionEntry entry )
+    : QListBoxText( lb ) { 
+    setText( entry.prefix + " " + entry.text + " " + entry.postfix); 
+    m_entry = entry;
+  }
+  KEditor::CompletionEntry m_entry;
+};
+
 CodeCompletionIfaceImpl::CodeCompletionIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : CodeCompletionDocumentIface(parent, editor), m_edit(edit){
 
-  completionPopup = new QVBox( 0, 0, WType_Popup );
-  completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
-  completionPopup->setLineWidth( 1 );
+  m_completionPopup = new QVBox( 0, 0, WType_Popup );
+  m_completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
+  m_completionPopup->setLineWidth( 1 );
   
-  completionListBox = new QListBox( completionPopup );
-  completionListBox->setFrameStyle( QFrame::NoFrame );
-  //  completionListBox->installEventFilter( this );
-  completionListBox->setHScrollBarMode( QScrollView::AlwaysOn );
-  completionListBox->setVScrollBarMode( QScrollView::AlwaysOn );
-  completionListBox->setCornerWidget( new QSizeGrip( completionListBox ) );
-  completionPopup->installEventFilter( this );
-  completionPopup->setFocusProxy( completionListBox );
+  m_completionListBox = new QListBox( m_completionPopup );
+  m_completionListBox->setFrameStyle( QFrame::NoFrame );
+  m_completionListBox->installEventFilter( this );
+  //  m_completionListBox->setHScrollBarMode( QScrollView::AlwaysOn );
+  //  m_completionListBox->setVScrollBarMode( QScrollView::AlwaysOn );
+  //  m_completionListBox->setCornerWidget( new QSizeGrip( m_completionListBox ) );
+  m_completionPopup->installEventFilter( this );
+  m_completionPopup->setFocusProxy( m_completionListBox );
   //  _widget->installEventFilter( this);
 }
 
-void CodeCompletionIfaceImpl::showCompletionBox(QValueList<KEditor::CompletionEntry>* complList){
+void CodeCompletionIfaceImpl::showCompletionBox(QValueList<KEditor::CompletionEntry> complList,int offset){
   cerr << "showCompletionBox " << endl;
+  m_complList = complList;
+  m_offset = offset;
+  m_edit->getCursorPosition(&m_lineCursor, &m_colCursor);
+  m_colCursor = m_colCursor - offset; // calculate the real start of the code completion text
+  updateBox();
 
-  QValueList<KEditor::CompletionEntry>::Iterator it;
-  for( it = complList->begin(); it != complList->end(); ++it ){
-      cerr << "insert " << endl;
-    completionListBox->insertItem((*it).prefix + " " + (*it).text + " " + (*it).postfix);
-  }
-  completionPopup->resize( completionListBox->sizeHint() +
-			   QSize( completionListBox->verticalScrollBar()->width() + 4,
-				  completionListBox->horizontalScrollBar()->height() + 4 ) );
-  completionListBox->setCurrentItem( 0 );
-  completionListBox->setFocus();
-  //  completionPopup->move( _widget->mapToGlobal( _widget->getCursorPoint() + QPoint(0,7)) );
-  completionPopup->show();
 }
+
+bool CodeCompletionIfaceImpl::eventFilter( QObject *o, QEvent *e ){
+  
+  if ( o == m_completionPopup || o == m_completionListBox || o == m_completionListBox->viewport() ) {
+    if ( e->type() == QEvent::KeyPress ) {
+      cerr << endl << "keyPressed,ListBox";
+      QKeyEvent *ke = (QKeyEvent*)e; 
+      if ( ke->key() == Key_Left || ke->key() == Key_Right || 
+	   ke->key() == Key_Up || ke->key() == Key_Down ||
+	   ke->key() == Key_Home || ke->key() == Key_End ||
+	   ke->key() == Key_Prior || ke->key() == Key_Next ) {
+	return FALSE;
+      }
+      
+      if (ke->key() == Key_Enter || ke->key() == Key_Return) { // return
+	CompletionItem* item = static_cast<CompletionItem*> (m_completionListBox->item(m_completionListBox->currentItem()));
+	if(item !=0){
+	  QString text = item->m_entry.text;
+	  QString currentLine = m_edit->currentTextLine();
+	  int len = m_edit->currentColumn() - m_colCursor;
+	  QString currentComplText = currentLine.mid(m_colCursor,len);
+	  QString add = text.mid(currentComplText.length());
+	  m_edit->insertText(add);
+	  if(item->m_entry.postfix == "()"){ // add ()
+	    m_edit->insertText("()");
+	    m_edit->setCursorPosition(m_edit->currentLine(),m_edit->currentColumn()-1);
+	  }
+
+	  m_completionPopup->hide();
+	  m_edit->view()->setFocus();
+	  emit completionDone();
+	}
+	return FALSE;
+      }
+
+      if(ke->key() == Key_Escape){ // abort
+	m_completionPopup->hide();
+	m_edit->view()->setFocus();
+	emit completionAborted();
+	return FALSE;
+      }
+      
+      QApplication::sendEvent(m_edit->view(), e ); // redirect the event to the editor
+      if(m_colCursor+m_offset > m_edit->currentColumn()){ // the cursor is to far left
+	m_completionPopup->hide();
+	m_edit->view()->setFocus();
+	emit completionAborted();
+	return FALSE;
+      }
+      updateBox();
+      return TRUE;
+    }
+    
+    if(e->type() == QEvent::FocusOut){
+      m_completionPopup->hide();
+      emit completionAborted();
+    }
+  }
+  return FALSE;
+}
+
+void CodeCompletionIfaceImpl::updateBox(){
+  m_completionListBox->clear();
+  QString currentLine = m_edit->currentTextLine();
+  cerr << endl << "Column:" << m_colCursor;
+  cerr << endl << "Line:" << currentLine;
+  cerr << endl << "CurrentColumn:" << m_edit->currentColumn();
+  int len = m_edit->currentColumn() - m_colCursor;
+  cerr << endl << "Len:" << len;
+  QString currentComplText = currentLine.mid(m_colCursor,len);
+  cerr << endl << "TEXT:" << currentComplText;
+  QValueList<KEditor::CompletionEntry>::Iterator it;
+  cerr << "Count:" << m_complList.count();
+  for( it = m_complList.begin(); it != m_complList.end(); ++it ){
+    cerr << endl << "insert ";
+    if((*it).text.startsWith(currentComplText)){
+      new CompletionItem(m_completionListBox,*it);
+    }
+  }
+  if(m_completionListBox->count()==0){
+    m_completionPopup->hide();
+    m_edit->view()->setFocus();
+    emit completionAborted();
+    return;
+  }
+  m_completionPopup->resize( m_completionListBox->sizeHint() +
+			     QSize( m_completionListBox->verticalScrollBar()->width() + 4,
+				    m_completionListBox->horizontalScrollBar()->height() + 4 ) );
+  m_completionListBox->setCurrentItem( 0 );
+  m_completionListBox->setSelected( 0,true );
+  m_completionListBox->setFocus();
+  //PointStruc point = m_edit->view()->getCursorPosition();
+  //  m_completionPopup->move( m_edit->view()->mapToGlobal(QPoint(point.y,point.x)));
+  m_completionPopup->show();
+}
+
+
 
