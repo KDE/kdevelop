@@ -30,11 +30,9 @@ mimedir = $(kde_mimedir)/application
 
 bin_SCRIPTS = extractrc
 
-rc.cpp: $(EXTRACTRC) kdevelopui.rc
-
 messages: rc.cpp
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
 	if test -n "$$LIST"; then \
-	 $(XGETTEXT) $$LIST -ktr -o kdevelop.pot; \
+	 $(XGETTEXT) -ktr $$LIST -o $(podir)/kdevelop.pot; \
 	fi
 
