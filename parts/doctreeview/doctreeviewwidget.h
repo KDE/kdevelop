@@ -12,6 +12,10 @@
 #ifndef _DOCTREEWIDGET_H_
 #define _DOCTREEWIDGET_H_
 
+#include <qmap.h>
+#include <qstringlist.h>
+#include <qvbox.h>
+
 #include "klistview.h"
 
 
@@ -25,9 +29,15 @@ class DocTreeTocFolder;
 class DocTreeViewPart;
 class KDevProject;
 class CustomizeDialog;
+class QToolButton;
+class KListView;
+class KAction;
+class KHistoryCombo;
+class QHBox;
+class QLabel;
 
 
-class DocTreeViewWidget : public KListView
+class DocTreeViewWidget : public QVBox
 {
     Q_OBJECT
     
@@ -45,8 +55,20 @@ private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void refresh();
+	void slotJumpToNextMatch();
+	void slotJumpToPrevMatch();
+	void slotStopSearching();
+	void slotStartSearching();
+	void slotHistoryReturnPressed ( const QString& );
+	void slotSelectionChanged ( QListViewItem* );
+	void slotShowButtonToggled ( bool );
 	
+protected:
+	DocTreeItem* searchForItem ( DocTreeItem*, const QString& );
+
 private: 
+	KListView* docView;
+
     QListViewItem *contextItem;
     DocTreeItem *folder_kdevelop;
     DocTreeKDELibsFolder *folder_kdelibs;
@@ -56,5 +78,26 @@ private:
     DocTreeProjectFolder *folder_project;
     QList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;
+
+	QHBox* docToolbar;
+	QHBox* searchToolbar;
+	
+	QLabel* hLine;
+
+	QToolButton* docConfigButton;
+	QToolButton* showButton;
+	QToolButton* prevButton;
+	QToolButton* nextButton;
+	QToolButton* startButton;
+	QToolButton* stopButton;
+	KHistoryCombo* completionCombo;
+	
+	bool m_keepSearching;
+	DocTreeItem* m_activeTreeItem;
+	
+	QStringList historyList;
+	QMap < QString, DocTreeItem* > historyMap;
+
+	KAction* docConfigAction;
 };
 #endif

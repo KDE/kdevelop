@@ -12,21 +12,31 @@
 #include "doctreeviewwidget.h"
 
 #include <stdio.h>
+
+#include <qapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qhbox.h>
 #include <qheader.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qregexp.h>
+#include <qsizepolicy.h>
 #include <qtimer.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
 #include <qvbox.h>
+
+#include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <kcombobox.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 #include <klocale.h>
+#include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
-#include <kiconloader.h>
-#include <kpopupmenu.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -44,7 +54,7 @@ class DocTreeItem : public QListViewItem
 {
 public:
     enum Type { Folder, Book, Doc };
-    DocTreeItem( QListView *parent, Type type, const QString &text, const QString &context );
+    DocTreeItem( KListView *parent, Type type, const QString &text, const QString &context );
     DocTreeItem( DocTreeItem *parent, Type type, const QString &text, const QString &context);
 
     void setFileName(const QString &fn)
@@ -53,6 +63,7 @@ public:
         { return filename; }
     virtual void clear();
     virtual QString context() const { return m_context; }
+	virtual Type getType() const { return typ; }
     
 private:
     void init();
@@ -61,7 +72,7 @@ private:
 };
 
 
-DocTreeItem::DocTreeItem(QListView *parent, Type type, const QString &text, const QString &context)
+DocTreeItem::DocTreeItem(KListView *parent, Type type, const QString &text, const QString &context)
     : QListViewItem(parent, text), typ(type), m_context(context)
 {
     init();
@@ -217,6 +228,7 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
               filename.replace(QRegExp("::"), "__");
               if (classItem) {
                   DocTreeItem *item = new DocTreeItem(classItem, Doc, membername, context());
+				  kdDebug ( 9000 ) << "++++++++++++++ " << membername << endl;
                   item->setFileName(DocTreeItem::fileName() + "/" + filename);
               }
           }
@@ -229,7 +241,7 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
 class DocTreeKDELibsFolder : public DocTreeItem
 {
 public:
-    DocTreeKDELibsFolder(DocTreeViewWidget *parent, const QString &context)
+    DocTreeKDELibsFolder(KListView *parent, const QString &context)
         : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries (kdoc)"), context)
         { setExpandable(true); }
     void refresh();
@@ -304,7 +316,7 @@ DocTreeDoxygenBook::DocTreeDoxygenBook(DocTreeItem *parent, const QString &name,
     : DocTreeItem(parent, Book, name, context),
       dirname(dirName)
 {
-    QString fileName = dirName + "/html/index.html";
+    QString fileName = dirName + "/index.html";
     setFileName(fileName);
     setExpandable(true);
 }
@@ -359,7 +371,7 @@ void DocTreeDoxygenBook::readTagFile()
 class DocTreeDoxygenFolder : public DocTreeItem
 {
 public:
-    DocTreeDoxygenFolder(DocTreeViewWidget *parent, const QString &context)
+    DocTreeDoxygenFolder(KListView *parent, const QString &context)
         : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries (Doxygen)"), context)
         { setExpandable(true); }
     void refresh();
@@ -372,6 +384,8 @@ void DocTreeDoxygenFolder::refresh()
 
     KConfig *config = DocTreeViewFactory::instance()->config();
     QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
+//	kdDebug ( 9002 ) << "********************************** " << docdir << endl;
+//	docdir = "/usr/local/kde3/share/doc/HTML/en/kdelibs-apidocs";
     QDir d(docdir);
     QStringList fileList = d.entryList("*", QDir::Dirs);
 
@@ -394,7 +408,7 @@ void DocTreeDoxygenFolder::refresh()
 class DocTreeTocFolder : public DocTreeItem
 {
 public:
-    DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fileName, const QString &context);
+    DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context);
     ~DocTreeTocFolder();
 
     QString tocName() const
@@ -405,12 +419,12 @@ private:
 };
 
 
-DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fileName, const QString &context)
+DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context)
     : DocTreeItem(parent, Folder, fileName, context)
 {
     QFileInfo fi(fileName);
     toc_name = fi.baseName();
-    
+
     QFile f(fileName);
     if (!f.open(IO_ReadOnly)) {
         kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
@@ -485,7 +499,6 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
 
         childEl = childEl.nextSibling().toElement();
     }
-
 }
 
 
@@ -503,7 +516,7 @@ DocTreeTocFolder::~DocTreeTocFolder()
 class DocTreeDocbaseFolder : public DocTreeItem
 {
 public:
-    DocTreeDocbaseFolder(DocTreeViewWidget *parent, const QString &context);
+    DocTreeDocbaseFolder(KListView *parent, const QString &context);
     ~DocTreeDocbaseFolder();
     virtual void setOpen(bool o);
 private:
@@ -511,7 +524,7 @@ private:
 };
 
 
-DocTreeDocbaseFolder::DocTreeDocbaseFolder(DocTreeViewWidget *parent, const QString &context)
+DocTreeDocbaseFolder::DocTreeDocbaseFolder(KListView *parent, const QString &context)
     : DocTreeItem(parent, Folder, i18n("Documentation Base"), context)
 {
     setExpandable(true);
@@ -578,12 +591,12 @@ void DocTreeDocbaseFolder::setOpen(bool o)
 class DocTreeBookmarksFolder : public DocTreeItem
 {
 public:
-    DocTreeBookmarksFolder(DocTreeViewWidget *parent, const QString &context);
+    DocTreeBookmarksFolder(KListView *parent, const QString &context);
     void refresh();
 };
 
 
-DocTreeBookmarksFolder::DocTreeBookmarksFolder(DocTreeViewWidget *parent, const QString &context)
+DocTreeBookmarksFolder::DocTreeBookmarksFolder(KListView *parent, const QString &context)
     : DocTreeItem(parent, Folder, i18n("Bookmarks"), context)
 {}
 
@@ -611,7 +624,7 @@ void DocTreeBookmarksFolder::refresh()
 class DocTreeProjectFolder : public DocTreeItem
 {
 public:
-    DocTreeProjectFolder(DocTreeViewWidget *parent, const QString &context);
+    DocTreeProjectFolder(KListView *parent, const QString &context);
     void setProject(KDevProject *project)
         { m_project = project; }
     void refresh();
@@ -621,7 +634,7 @@ private:
 };
 
 
-DocTreeProjectFolder::DocTreeProjectFolder(DocTreeViewWidget *parent, const QString &context)
+DocTreeProjectFolder::DocTreeProjectFolder(KListView *parent, const QString &context)
     : DocTreeItem(parent, Folder, i18n("Current Project"), context)
 {}
 
@@ -668,47 +681,130 @@ void DocTreeProjectFolder::refresh()
 
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : KListView(0, "doc tree widget")
+    : QVBox(0, "doc tree widget"), m_keepSearching ( false ), m_activeTreeItem ( 0L )
 {
-    setFocusPolicy(ClickFocus);
-    setRootIsDecorated(true);
-    setResizeMode(QListView::LastColumn);
-    setSorting(-1);
-    header()->hide();
-    addColumn(QString::null);
-    
-    folder_bookmarks = new DocTreeBookmarksFolder(this, "ctx_bookmarks");
+    /* initializing the documentation toolbar */
+	KActionCollection* actions = new KActionCollection(this);
+	
+	docToolbar = new QHBox ( this, "documentation toolbar" );
+	docToolbar->setMargin ( 2 );
+	docToolbar->setSpacing ( 2 );
+	
+	hLine = new QLabel ( this, "horizontal line" );
+	hLine->setFrameShape ( QLabel::HLine );
+	hLine->setFrameShadow( QLabel::Sunken );
+	hLine->setMaximumHeight ( 5 );
+	hLine->hide();
+
+	searchToolbar = new QHBox ( this, "search toolbar" );
+	searchToolbar->setMargin ( 2 );
+	searchToolbar->setSpacing ( 2 );
+	searchToolbar->hide();
+
+	docConfigButton = new QToolButton ( docToolbar, "configure button" );
+	docConfigButton->setPixmap ( SmallIcon ( "configure" ) );
+	docConfigButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, docConfigButton->sizePolicy().hasHeightForWidth() ) );
+	docConfigButton->setEnabled ( false );
+	QToolTip::add ( docConfigButton, i18n ( "Customize the select documentation tree..." ) );
+
+    QWidget *spacer = new QWidget(docToolbar);
+    docToolbar->setStretchFactor(spacer, 1);
+
+	showButton = new QToolButton ( docToolbar, "show button" );
+	showButton->setText ( "Search Selected Folder..." );
+	//showButton->setPixmap ( SmallIcon ( "find" ) );
+	showButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, docConfigButton->sizePolicy().hasHeightForWidth() ) );
+	showButton->setToggleButton ( true );
+	showButton->setMinimumHeight ( 23 );
+
+	QLabel* label = new QLabel ( i18n ( " Look For" ), searchToolbar, "introduction text" );
+	label->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );
+
+	completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
+	
+	startButton = new QToolButton ( searchToolbar, "start searching" );
+	startButton->setPixmap ( SmallIcon ( "key_enter" ) );
+	startButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, startButton->sizePolicy().hasHeightForWidth() ) );
+	QToolTip::add ( startButton, i18n ( "Start searching." ) );
+
+	stopButton = new QToolButton ( searchToolbar, "stop searching" );
+	stopButton->setPixmap ( SmallIcon ( "cancel" ) );
+	stopButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, stopButton->sizePolicy().hasHeightForWidth() ) );
+	stopButton->setEnabled ( false );
+	QToolTip::add ( stopButton, i18n ( "Stop searching." ) );
+/*
+	nextButton = new QToolButton ( docToolbar, "next match button" );
+	nextButton->setPixmap ( SmallIcon ( "next" ) );
+	nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth() ) );
+	QToolTip::add ( nextButton, i18n ( "Jump to next matching entry." ) );
+
+	prevButton = new QToolButton ( docToolbar, "previous match button" );
+	prevButton->setPixmap ( SmallIcon ( "previous" ) );
+	prevButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, prevButton->sizePolicy().hasHeightForWidth() ) );
+	QToolTip::add ( prevButton, i18n ( "Jump to last matching entry." ) );
+*/
+	docToolbar->setMaximumHeight ( docConfigButton->height() );
+
+	docView = new KListView ( this, "documentation list view" );
+
+    docView->setFocusPolicy(ClickFocus);
+    docView->setRootIsDecorated(true);
+    docView->setResizeMode(QListView::LastColumn);
+    docView->setSorting(-1);
+    docView->header()->hide();
+    docView->addColumn(QString::null);
+
+    folder_bookmarks = new DocTreeBookmarksFolder(docView, "ctx_bookmarks");
     folder_bookmarks->refresh();
-    folder_project   = new DocTreeProjectFolder(this, "ctx_current");
+    folder_project   = new DocTreeProjectFolder(docView, "ctx_current");
 #ifdef WITH_DOCBASE
-    folder_docbase   = new DocTreeDocbaseFolder(this, "ctx_docbase");
+    folder_docbase   = new DocTreeDocbaseFolder(docView, "ctx_docbase");
 #endif
 
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
     QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
-    QStringList::Iterator tit;
+  QStringList::Iterator tit;
     for (tit = tocs.begin(); tit != tocs.end(); ++tit)
-        folder_toc.append(new DocTreeTocFolder(this, *tit, QString("ctx_%1").arg(*tit)));
+        folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
 
-    folder_doxygen   = new DocTreeDoxygenFolder(this, "ctx_doxygen");
+    folder_doxygen   = new DocTreeDoxygenFolder(docView, "ctx_doxygen");
     folder_doxygen->refresh();
 
-    folder_kdelibs   = new DocTreeKDELibsFolder(this, "ctx_kdelibs");
+    folder_kdelibs   = new DocTreeKDELibsFolder(docView, "ctx_kdelibs");
     folder_kdelibs->refresh();
 
     // Preliminary
-    folder_kdevelop = new DocTreeItem(this, DocTreeItem::Folder, i18n("KDevelop"), "ctx_kdevelop");
+    folder_kdevelop = new DocTreeItem(docView, DocTreeItem::Folder, i18n("KDevelop"), "ctx_kdevelop");
     ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE2 Development Book", "ctx_kdevelop") )
         ->setFileName("help:/kde2book/index.html");
     ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE Architecture Overview", "ctx_kdevelop") )
         ->setFileName("help:/kdearch/index.html");
     ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDevelop Manual", "ctx_kdevelop") )
         ->setFileName("help:/kdevelop/index.html");
-                    
-    connect( this, SIGNAL(executed(QListViewItem*)),
+
+//				historyMap[name] = item;
+//			historyList.append  ( name );
+
+//	completionCombo.setHistoryItems ( historyList, true );
+
+	docConfigAction = new KAction(i18n("Customize..."), "configure", 0,
+									  this, SLOT(slotConfigure()), actions, "documentation options");
+
+	connect ( showButton, SIGNAL ( toggled ( bool ) ), this, SLOT ( slotShowButtonToggled ( bool ) ) );
+	connect ( docConfigButton, SIGNAL ( clicked() ), this, SLOT ( slotConfigure() ) );
+	//connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
+	//connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
+	connect ( startButton, SIGNAL ( clicked() ), this, SLOT ( slotStartSearching() ) );
+	connect ( stopButton, SIGNAL ( clicked() ), this, SLOT ( slotStopSearching() ) );
+	connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotHistoryReturnPressed ( const QString& ) ) );
+
+    connect( docView, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+    connect( docView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+	connect ( docView, SIGNAL ( selectionChanged ( QListViewItem* ) ), this, SLOT ( slotSelectionChanged ( QListViewItem* ) ) );
+			 
+	completionCombo->setHistoryItems ( historyList );
 
     m_part = part;
 }
@@ -717,6 +813,129 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 DocTreeViewWidget::~DocTreeViewWidget()
 {}
 
+DocTreeItem* DocTreeViewWidget::searchForItem ( DocTreeItem* item, const QString& currentText )
+{
+	DocTreeItem* foundItem = 0L;
+	
+	//kdDebug ( 9002 ) << "Opening item: " << item->text ( 0 ) << endl;
+	item->setOpen ( true );
+
+	foundItem = static_cast <DocTreeItem*> ( docView->findItem ( currentText, 0, Qt::BeginsWith ) );
+
+	if ( foundItem != 0 )
+	{
+		//kdDebug ( 9002 ) << "Found a matching entry!" << endl;
+		docView->setSelected ( foundItem, true );
+		docView->ensureItemVisible ( foundItem );
+		m_keepSearching = false;
+		stopButton->setEnabled ( false );
+		slotItemExecuted ( foundItem );
+		return foundItem;
+	}
+
+	DocTreeItem* old = item;
+
+	//kdDebug ( 9002 ) << "Searching for " << item->text ( 0 ) << " with " << item->childCount() << " children." << endl;
+
+	for ( int i = 0; i < old->childCount(); i++ )
+	{
+		//kdDebug ( 9002 ) << "The " << i << ". child of " << old->text ( 0 );
+
+		DocTreeItem* itemBelow = static_cast <DocTreeItem*> ( item->itemBelow() );
+
+		//kdDebug ( 9002 ) << " which is " << itemBelow->text ( 0 ) << endl;
+
+		foundItem = searchForItem ( itemBelow, currentText );
+
+		if ( foundItem != 0 ) break;
+		if ( !m_keepSearching ) break;
+
+		item = itemBelow; //static_cast <DocTreeItem*> ( itemBelow->nextSibling() );
+
+		//kdDebug ( 9002 ) << "Sibling: " << item->text ( 0 ) << endl;
+
+		qApp->processEvents();
+	}
+
+	//kdDebug ( 9002 ) << "End searching for " << old->text ( 0 ) << endl;
+
+	//kdDebug ( 9002 ) << "Closing item: " << old->text ( 0 ) << endl;
+	if ( !foundItem ) old->setOpen ( false );
+
+	return foundItem;
+}
+
+void DocTreeViewWidget::slotJumpToNextMatch()
+{
+
+}
+
+void DocTreeViewWidget::slotJumpToPrevMatch()
+{
+
+}
+
+void DocTreeViewWidget::slotShowButtonToggled ( bool on )
+{
+	if ( on )
+	{
+		searchToolbar->show();
+		hLine->show();
+	}
+	else
+	{
+		searchToolbar->hide();
+		hLine->hide();
+	}
+}
+
+void DocTreeViewWidget::slotStartSearching()
+{
+	QString currentText = completionCombo->currentText();
+
+	slotHistoryReturnPressed ( currentText );
+}
+
+void DocTreeViewWidget::slotStopSearching()
+{
+	m_keepSearching = false;
+
+	stopButton->setEnabled ( false );
+}
+
+void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
+{
+	DocTreeItem* foundItem = 0L;
+	DocTreeItem* folderItem = static_cast<DocTreeItem*> ( docView->selectedItem() );
+	//DocTreeItem* folderItem = 0L;
+	if ( !folderItem ) folderItem = static_cast<DocTreeItem*> ( docView->firstChild() );
+
+	stopButton->setEnabled ( true );
+
+	m_keepSearching = true;
+	
+	qApp->processEvents();
+	
+	//folderItem->setOpen ( true );
+
+	for ( int i = 0; i < docView->childCount(); i++ )
+	{
+		//kdDebug ( 9000 ) << "Searching: " << folderItem->text ( 0 ) << endl;
+
+		if ( searchForItem ( folderItem, currentText ) != 0 ) break;
+		if ( !m_keepSearching ) break;
+
+		folderItem = static_cast <DocTreeItem*>  ( folderItem->nextSibling() );
+
+		qApp->processEvents();
+	}
+}
+
+void DocTreeViewWidget::slotSelectionChanged ( QListViewItem* item )
+{
+	docConfigButton->setEnabled ( true );
+	contextItem = item;
+}
 
 void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
 {
@@ -742,7 +961,7 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         return;
     contextItem = item;
     KPopupMenu popup(i18n("Documentation Tree"), this);
-    popup.insertItem(i18n("Customize..."), this, SLOT(slotConfigure()));
+    popup.insertItem(i18n("Properties..."), this, SLOT(slotConfigure()));
     popup.exec(p);
 }
 
@@ -785,17 +1004,17 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     folder_project->refresh();
 
     // Remove all...
-    takeItem(folder_bookmarks);
-    takeItem(folder_project);
+    docView->takeItem(folder_bookmarks);
+    docView->takeItem(folder_project);
 #ifdef WITH_DOCBASE
-    takeItem(folder_docbase);
+    docView->takeItem(folder_docbase);
 #endif
     QListIterator<DocTreeTocFolder> it1(folder_toc);
     for (; it1.current(); ++it1)
-        takeItem(it1.current());
-    takeItem(folder_doxygen);
-    takeItem(folder_kdelibs);
-    takeItem(folder_kdevelop);
+        docView->takeItem(it1.current());
+    docView->takeItem(folder_doxygen);
+    docView->takeItem(folder_kdelibs);
+    docView->takeItem(folder_kdevelop);
 
     // .. and insert all again except for ignored items
     QDomElement docEl = m_part->projectDom()->documentElement();
@@ -812,23 +1031,23 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         }
     }
     
-    insertItem(folder_bookmarks);
-    insertItem(folder_project);
+    docView->insertItem(folder_bookmarks);
+    docView->insertItem(folder_project);
 #ifdef WITH_DOCBASE
-    insertItem(folder_docbase);
+    docView->insertItem(folder_docbase);
 #endif
     QListIterator<DocTreeTocFolder> it2(folder_toc);
     for (; it2.current(); ++it2) {
         if (!ignoretocs.contains(it2.current()->tocName()))
-            insertItem(it2.current());
+            docView->insertItem(it2.current());
     }
-    insertItem(folder_doxygen);
+    docView->insertItem(folder_doxygen);
     if (!ignoretocs.contains("kde"))
-        insertItem(folder_kdelibs);
+        docView->insertItem(folder_kdelibs);
 
-    insertItem(folder_kdevelop);
+    docView->insertItem(folder_kdevelop);
 
-    triggerUpdate();
+    docView->triggerUpdate();
 }
 
 
