@@ -1,3 +1,8 @@
+1999-08-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* For cvs operations on directories, do not change into
+	  the directory above, but into the directory itself
+	  and use '.' as file name to act on
+
 1999-08-04 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commited patch by Stephan Uhlmann (suhlmann@gmx.de>, now it's possible to 
 	insert header/cpp templates to "project->add existing files"

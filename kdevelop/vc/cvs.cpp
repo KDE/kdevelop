@@ -6,12 +6,33 @@
 #include "cvs.h"
 
 
-void CVS::add(const char *filename)
+/* Split an absolute file name into the directory and
+   the file name part. The clou is that for directories,
+   we want dirpart to be the directory, otherwise we
+   would go above the cvs module for the top-level dir.
+*/
+   
+void CVS::splitPath(const char *filename, QString *dirpart, QString *filepart)
 {
     QFileInfo fi(filename);
-    QString dirpath(fi.dirPath());
-    QString name(fi.fileName());
+    if (fi.isDir())
+        {
+            *dirpart = fi.absFilePath();
+            *filepart = ".";
+        }
+    else
+        {
+            *dirpart = fi.dirPath();
+            *filepart = fi.fileName();
+        }
+}
 
+
+void CVS::add(const char *filename)
+{
+    QString dirpath, name;
+    splitPath(filename, &dirpath, &name);
+    
     QString command("cd ");
     command += dirpath;
     command += " && cvs add ";
@@ -26,10 +47,9 @@ void CVS::add(const char *filename)
 
 void CVS::remove(const char *filename)
 {
-    QFileInfo fi(filename);
-    QString dirpath(fi.dirPath());
-    QString name(fi.fileName());
-
+    QString dirpath, name;
+    splitPath(filename, &dirpath, &name);
+    
     QString command("cd ");
     command += dirpath;
     command += " && cvs remove -f ";
@@ -44,10 +64,9 @@ void CVS::remove(const char *filename)
 
 void CVS::update(const char *filename)
 {
-    QFileInfo fi(filename);
-    QString dirpath(fi.dirPath());
-    QString name(fi.fileName());
-
+    QString dirpath, name;
+    splitPath(filename, &dirpath, &name);
+    
     QString command("cd ");
     command += dirpath;
     command += " && cvs update -dP ";
@@ -62,10 +81,9 @@ void CVS::update(const char *filename)
 
 void CVS::commit(const char *filename)
 {
-    QFileInfo fi(filename);
-    QString dirpath(fi.dirPath());
-    QString name(fi.fileName());
-
+    QString dirpath, name;
+    splitPath(filename, &dirpath, &name);
+    
     CommitDialog *d = new CommitDialog();
     if (d->exec() == QDialog::Rejected)
         return;
@@ -91,9 +109,9 @@ VersionControl::State CVS::registeredState(const char *filename)
     char buf[512];
     State state;
     
-    QFileInfo fi(filename);
-    QString dirpath(fi.dirPath());
-    QString name(fi.fileName());
+    QString dirpath, name;
+    splitPath(filename, &dirpath, &name);
+    
     QString entriesfile(dirpath + "/CVS/Entries");
 
     FILE *f = fopen(entriesfile, "r");
