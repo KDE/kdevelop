@@ -368,11 +368,11 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 
 <itemizedlist>
 <title>Required:</title>
-  <listitem><para><application>gcc/g++</application> 2.95, 3.1, 3.2 (or compatible)</para></listitem>
+  <listitem><para><application>gcc/g++</application> 2.95.3 or greater (or compatible)</para></listitem>
   <listitem><para><application>GNU make</application> (or compatible)</para></listitem>
   <listitem><para><application>perl</application> 5.004</para></listitem>
-  <listitem><para><application>autoconf</application> 2.54 or greater</para></listitem>
-  <listitem><para><application>automake</application> 1.6.2 or greater</para></listitem>
+  <listitem><para><application>autoconf</application> 2.52 or greater</para></listitem>
+  <listitem><para><application>automake</application> 1.6.1 or greater</para></listitem>
   <listitem><para><application>flex</application> 2.5.4</para></listitem>
   <listitem><para><application>Qt</application> 3.0.3 or greater</para></listitem>
   <listitem><para><application>KDE</application> 3.0.4 or greater</para></listitem>
@@ -380,6 +380,9 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 
 <itemizedlist>
 <title>Optional:</title>
+  <listitem><para>
+  The <application>ctags</application> source navigation tool, from <ulink url="http://ctags.sourceforge.net">http://ctags.sourceforge.net</ulink>, which enables you fast access to declarations and definitions by a few simple clicks on a name in the editor.
+  </para></listitem>
   <listitem><para>
   <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This allows you to navigate in a graphical view of your classes' dependencies.
   </para></listitem>
@@ -538,7 +541,7 @@ If you just only want to run &kdevelop; a (smaller and faster running) release v
 <formalpara>
 <title>Make and install &kdevelop;</title>
 <para>
-<command>configure</command> will check the sytem and build a <filename>Makefile</filename> according to what it found. The <command>make</command> command will use this <filename>Makefile</filename> by default. Thus
+<command>configure</command> will check the system and build a <filename>Makefile</filename> according to what it found. The <command>make</command> command will use this <filename>Makefile</filename> by default. Thus
 </para>
 </formalpara>
 <para>
@@ -560,27 +563,105 @@ and entering the root password. Then install the application:
   <userinput>make install</userinput>
 </para>
 <para>
-That was all. If you installed &kdevelop; in the default &kde; directory you can now run the <acronym>IDE</acronym>. Otherwise some additional steps will be necessary as shown in the following chapter.
+That was all. If you installed &kdevelop; in the default &kde; directory you can now run the <acronym>IDE</acronym>. Otherwise some additional steps will be necessary as shown in the <link linkend="compileandinstall-options-dir">Non-default installation directory</link> section below.
 </para>
 
 </sect3>
 </sect2>
 
+<sect2 id="compileandinstall-bsd">
+<title>How to compile on FreeBSD</title>
+
+<para>
+If you want compile and install &kdevelop; on a <acronym>FreeBSD</acronym> system follow the normal instructions but after
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make -f Makefile.cvs</userinput>
+</para>
+<para> do:
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>export CXXFLAGS="-L/usr/X11R6/lib -I/usr/local/include/db41 -I/usr/local/include -L/usr/local/lib -I/usr/X11R6/include"</userinput>
+</para>
+<para><emphasis>Note:</emphasis> You need the <emphasis>berkeley db 4.1</emphasis> installed, if you have another version, you have to adjust the path.
+</para>
+
+<sect3>
+<title>Check the berkeley db version</title>
+<para>
+To find out which berkeley db version you have installed, run:
+</para>
+<para>
+  <prompt>~&gt; </prompt>
+  <userinput>pkg_info | grep db41</userinput>
+</para>
+<para>
+This should return someting like:
+<screen>
+db41-4.1.25_1       The Berkeley DB package, revision 4.1
+</screen>
+</para>
+</sect3>
+
+<sect3>
+<title>More changes</title>
+<para>
+Change the line
+</para>
+<para>
+<option>ac_cv_bdb=no</option>
+</para>
+<para>
+to
+</para>
+<para>
+<option>ac_cv_bdb=yes</option>
+</para>
+<para>
+in the <filename>configure</filename> file because otherwise configure can't find the db libraries.
+</para>
+<para>
+<emphasis>Note:</emphasis> As <command>make -f Makefile.cvs</command> rebuilds the <filename>configure</filename> file you have to always change this entry as well.
+</para>
+<para>
+The <acronym>FreeBSD</acronym> guys renamed <filename>libdb.so</filename> to <filename>libdbxx.so</filename>. So replace
+</para>
+<para>
+<option>libkdevcatalog_la_LIBADD = -ldb</option>
+</para>
+<para>
+by
+</para>
+<para>
+<option>libkdevcatalog_la_LIBADD = -ldb41</option>
+</para>
+<para>
+in <filename>lib/catalog/Makefile.am</filename>.
+</para>
+<para>
+Then you can continue with the normal <command>configure</command> and <command>make</command> steps as shown above.
+</para>
+</sect3>
+
+</sect2>
+
 <sect2 id="compileandinstall-options">
 <title>Some notes on <command>configure</command> options</title>
 
-<sect3>
+<sect3 id="compileandinstall-options-dir">
 <title>Non-default installation directory</title>
 
 <para>
-By default <command>configure</command> prepares the <acronym>IDE</acronym> to be installed in the default &kde; directory. This is necessary because &kdevelop; assumes direct access to some tools and parts which reside there. If want to use your own installation directory, you must tell <command>configure</command> this by the <option>--prefix</option>:
+By default <command>configure</command> prepares the <acronym>IDE</acronym> to be installed in the default &kde; directory. This is necessary because &kdevelop; assumes direct access to some tools and parts which reside there. If want to use your own installation directory, you must tell <command>configure</command> this by the <option>--prefix</option> option:
 </para>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>./configure --prefix=(where-your-kde3-is)</userinput>
 </para>
 <para>
-There is a caveat if you do so. You must provide a means for &kdevelop; to access the needed tools and parts in the &kde; directory. (You can still use the IDE, but with very restrained capabilities.) You have to use a shell where the following commands must be executed before you can start &kdevelop; at the shell prompt.
+There is a caveat if you do so. You must provide a means for &kdevelop; to access the needed tools and parts in the &kde; directory. (You can still use the IDE without doing so, but with very restrained capabilities.) You have to use a shell where the following commands must be executed before you can start &kdevelop; at the shell prompt.
 </para>
 <para>
 (<emphasis>Note the plural:</emphasis> KDEDIRS, not just KDEDIR)
@@ -601,6 +682,12 @@ In a tcsh shell you must set the environment variables using:
 <para>
     <prompt>(your-kdevelop-directory)&gt; </prompt>
     <userinput>setenv KDEDIRS /usr/local/kde:/opt/kde3</userinput>
+</para>
+<para>
+The <command>kbuildsycoca</command> command ("build system control cache") looks around for libraries and caches their location and version, so that &kdevelop; can find them. The caveat is that it takes noticeable time - and it has to be run any time you call up the shell to start &kdevelop; from a non-default directory. You may want to put the above commands into a shell script to reduce the typing effort.
+</para>
+<para>
+(You could as well put the lines in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file, but this is not advisable as <command>kbuildsycoca</command> will then be run any time you call up the shell.)
 </para>
 </sect3>
 
@@ -635,9 +722,6 @@ In a tcsh shell you must set the environment variables using:
   several <link linkend="makesystems">Project Management Systems</link> which aid in building and managing your project,
   </para></listitem>
   <listitem><para>
-  several <link linkend="parts">Plugin Parts</link>, extensible modules which can be loaded at runtime and on demand.  This allows you to only turn on those features you really need.
-  </para></listitem>
-  <listitem><para>
   some <link linkend="editing">Editing tools</link> to easily work on your program texts
   </para></listitem>
   <listitem><para>
@@ -648,6 +732,9 @@ In a tcsh shell you must set the environment variables using:
   </para></listitem>
   <listitem><para>
   a <link linkend="debugger">Debugger Interface</link> to find and remove program errors from within &kdevelop;, and
+  </para></listitem>
+  <listitem><para>
+  several <link linkend="parts">Plugin Parts</link>, extensible modules which can be loaded at runtime and on demand.  This allows you to only turn on those features you really need.
   </para></listitem>
   <listitem><para>
   a set of other diagnosis, documentation, and optimization helper tools.
@@ -709,16 +796,58 @@ In a tcsh shell you must set the environment variables using:
 </itemizedlist>
 </para>
 
+<sect2 id="uimodes-switch">
+<title>How to switch user interface modes</title>
+
+<para>
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure Gideon...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand field. This will get you to the settings page shown below.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="select-user-interface.png" format="PNG"/>
+	</imageobject>
+	<caption><para>
+	Select a user interface mode
+	</para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+Select the radio button of the user interface mode you want to switch to, then press <guibutton>OK</guibutton>
+</para>
+<para>
+<emphasis>Note 1:</emphasis> If you switch to or from the (non-windowed) IDEAl mode, you'll have to restart &kdevelop;.
+</para>
+<para>
+<emphasis>Note 2:</emphasis> Currently there are two IDEAl modes provided - a "window" IDEAl mode and a "standard" IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
+</para>
+</sect2>
+
 <sect2 id="maximize-workspace">
-<title>How to maximize your work space area</title>
+<title>How to maximize the work space area</title>
 <para>
 To maximize space, there is a full-screen window mode available which expands the mainframe area to the screen borders. Additional space can be reclaimed by hiding the menubar. And you can of course hide any toolbar as usual in <application>KDE</application> applications.
 </para>
-<!-- ### Expand this: menus, short commands, toolbar icons -->
+
+<formalpara>
+<title>Full screen mode</title>
+<para>
+To switch to or from full screen mode select <menuchoice> <guimenu>Tools</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>Shift</keycap> <keycap>F</keycap> </keycombo>. There is also a <guiicon>Full-Screen Mode</guiicon> icon in the <guilabel>Browse Toolbar</guilabel> available.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Hide/unhide the menubar</title>
+<para>
+To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, e.g. the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
+</para>
+</formalpara>
+
 </sect2>
 
 </sect1> <!-- uimodes-overview -->
-
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -743,34 +872,6 @@ Globally, a project will rely on some form of project management system.  &kdeve
   </para></listitem>
 </itemizedlist>
 </para>
-
-<sect2 id="makesystems-distribution">
-<title>How to distribute your application</title>
-
-<para>
-The distribution of your applications does not require the end-user to have anything different installed other than
-<itemizedlist>
-  <listitem><para>an appropriate compiler,</para></listitem>
-  <listitem><para>a linker, and</para></listitem>
-  <listitem><para>the appropriate development libraries,</para></listitem>
-</itemizedlist>
-</para>
-<para>
-which at least for C++ applications is most often the case. But you can as well distribute <emphasis>binary packages</emphasis> of your application.
-<!-- ### more detail on binary construction needed somewhere -->
-In either way, the end-user of your product does not need &kdevelop; installed.
-</para>
-<para>
-For giving away your sources, we advise to include the <emphasis>project file</emphasis> of &kdevelop; as well. This makes it very easy for other developers - if they use &kdevelop; - to work with your sources.
-</para>
-<para>
-For projects where s<emphasis>everal developers</emphasis>, maybe working on different places, are involved, this should be the case anyway. So you can ensure consistency of the <filename>Makefiles</filename> to not run into trouble.
-</para>
-<para>
-Especially on multi language applications, <emphasis>translators</emphasis> won't actually work with the source code, except in cases that require correction for enabling translation support.
-</para>
-
-</sect2>
 
 <sect2 id="automake-project">
 <title>Automake project</title>
@@ -825,118 +926,35 @@ Yet, if you do not <emphasis>really need</emphasis> the extra flexibility and co
 </para>
 </sect2>
 
+<sect2 id="makesystems-distribution">
+<title>How to distribute your application</title>
+
+<para>
+The distribution of your applications does not require the end-user to have anything different installed other than
+<itemizedlist>
+  <listitem><para>an appropriate compiler,</para></listitem>
+  <listitem><para>a linker, and</para></listitem>
+  <listitem><para>the appropriate development libraries,</para></listitem>
+</itemizedlist>
+</para>
+<para>
+which at least for C++ applications is most often the case. But you can as well distribute <emphasis>binary packages</emphasis> of your application.
+<!-- ### more detail on binary construction needed somewhere -->
+In either way, the end-user of your product does not need &kdevelop; installed.
+</para>
+<para>
+For giving away your sources, we advise to include the <emphasis>project file</emphasis> of &kdevelop; as well. This makes it very easy for other developers - if they use &kdevelop; - to work with your sources.
+</para>
+<para>
+For projects where s<emphasis>everal developers</emphasis>, maybe working on different places, are involved, this should be the case anyway. So you can ensure consistency of the <filename>Makefiles</filename> to not run into trouble.
+</para>
+<para>
+Especially on multi language applications, <emphasis>translators</emphasis> won't actually work with the source code, except in cases that require correction for enabling translation support.
+</para>
+
+</sect2>
+
 </sect1> <!-- makesystems -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="parts">
-<title>Plugin parts</title>
-
-<para>
-&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
-</para>
-
-<para>
-Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
-</para>
-
-<para>
-Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
-</para>
-
-<para>
-Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
-</para>
-
-<table id="table-project-parts">
-<title>Project management parts in &kdevelop;</title>
-
-<tgroup cols="2"><tbody>
-<row>
-  <entry>antproject</entry>
-  <entry>ANT Project Manager (Java applications)</entry>
-</row>
-<row>
-  <entry>autoproject</entry>
-  <entry>Automake Project Manager</entry>
-</row>
-<row>
-  <entry>customproject</entry>
-  <entry>Custom Project Manager</entry>
-</row>
-<row>
-  <entry>trollproject</entry>
-  <entry>QMake based Project Manager</entry>
-</row>
-</tbody></tgroup>
-</table>
-
-<table id="table-global-parts">
-<title>Global parts in &kdevelop;</title>
-
-<tgroup cols="2"><tbody>
-<row><entry>Part Name</entry><entry>Description</entry></row>
-<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
-<row><entry>history</entry><entry></entry></row>
-<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
-<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
-<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
-<row><entry>openwith</entry><entry></entry></row>
-<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
-<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
-<row><entry>texttools</entry><entry>Additional text tools</entry></row>
-<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
-<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
-<row><entry>cvs</entry><entry>CVS Support</entry></row>
-<row><entry>tools</entry><entry></entry></row>
-<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
-<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
-<row><entry>filter</entry><entry></entry></row>
-<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
-</tbody></tgroup>
-</table>
-
-<table>
-<title>Language support parts in &kdevelop;</title>
-<tgroup cols="2">
-<tbody>
-<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
-<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
-<row><entry>javasupport</entry><entry>Support for Java</entry></row>
-<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
-<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
-<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
-</tbody></tgroup>
-</table>
-
-<table>
-<title>Project specific parts in &kdevelop;</title>
-<tgroup cols="2"><tbody>
-<row><entry>astyle</entry><entry></entry></row>
-<row><entry>buglist</entry><entry></entry></row>
-<row><entry>classview</entry><entry>Classview Manager</entry></row>
-<row><entry>ctags</entry><entry></entry></row>
-<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
-<row><entry>diff</entry><entry></entry></row>
-<row><entry>distpart</entry><entry></entry></row>
-<row><entry>doxygen</entry><entry></entry></row>
-<row><entry>fileview</entry><entry></entry></row>
-<row><entry>javadebugger</entry><entry></entry></row>
-<row><entry>manager</entry><entry></entry></row>
-<row><entry>nedit</entry><entry></entry></row>
-<row><entry>outputviews</entry><entry></entry></row>
-<row><entry>perforce</entry><entry></entry></row>
-<row><entry>qeditor</entry><entry></entry></row>
-<row><entry>scripting</entry><entry></entry></row>
-<row><entry>scriptproject</entry><entry></entry></row>
-<row><entry>sourcenav</entry><entry></entry></row>
-<row><entry>svn</entry><entry></entry></row>
-<row><entry>visualboyadvance</entry><entry></entry></row>
-<row><entry>windowmenu</entry><entry></entry></row>
-</tbody></tgroup>
-</table>
-
-</sect1> <!-- parts -->
 
 </chapter> <!-- kdevelopoverview -->
 
@@ -945,12 +963,18 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <chapter id="appwizard">
 <title>Getting started: the application wizard</title>
 
+<para>
+In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and/or tools specially needed to get the application up and running.
+</para>
+<para>
+Organizing all development work in projects allows you to easily switch between the global tasks at hand. This is quite handy if you e.g. work on several applications at the same time as is often the case. Tell &kdevelop; to open the project you want to work at and you may proceed in the environment just where you left.
+</para>
+
 <sect1 id="newprojects">
 <title>New projects</title>
 
 <para>
-Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. (...)
-<!-- ### Expand: which procedures -->
+Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial director structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
 </para>
 <para>
 &kdevelop; provides an easy way to initiate a new programming project - the <emphasis>Application Wizard</emphasis>. You will find the Application Wizard at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
@@ -982,21 +1006,23 @@ Voil&agrave; - that's all. Application Wizard will have provided you with a prim
 Let's look at all this in more detail now ...
 </para>
 
-<!-- ### Explain steps in detail -->
-
 <sect2 id="newprojects-start">
 <title>Initial steps</title>
 
 <para>
-To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  You should see the New Project Wizard, as seen below:
+To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  The <guilabel>Create New Project</guilabel> dialog will pop up as shown below:
 </para>
 
-<figure id="screenshot-newprojectwizard" float="1">
-<title>A screenshot of the Create New Project wizard</title>
-<mediaobject>
-<imageobject><imagedata fileref="createnewproject.png"/></imageobject>
-</mediaobject>
-</figure>
+<screenshot id="screenshot-newprojectwizard">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="createnewproject.png" format="PNG"/>
+    </imageobject>
+	<caption><para>
+	The Create New Project application wizard dialog
+	</para></caption>
+  </mediaobject>
+</screenshot>
 
 <para>
 Fill in the appropriate information, and select <guibutton>Next</guibutton>
@@ -1938,7 +1964,7 @@ app <option>-qws</option> <option>-display QVFb:0</option>
 </command></screen></para>
 
 <para>
-Naturally, when you have a working version of your application, you 
+Naturally, when you have a working version of your application, you
 will want to use it on the target processor. For this, it will probably
 be convenient to create multiple build configurations, as explained above,
 so that you can quickly switch between the version running on your development
@@ -2137,6 +2163,122 @@ breakpoints.
 </sect1> <!-- debuggeroptions -->
 
 </chapter> <!-- debugger -->
+
+<!-- ====================================================================== -->
+
+<chapter id="parts">
+<title>Plugin parts</title>
+
+<sect1 id="parts-overview">
+<title>Overview</title>
+
+<para>
+&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
+</para>
+
+<para>
+Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
+</para>
+
+<para>
+Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
+</para>
+
+<para>
+Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
+</para>
+
+<table id="table-project-parts">
+<title>Project management parts in &kdevelop;</title>
+
+<tgroup cols="2"><tbody>
+<row>
+  <entry>antproject</entry>
+  <entry>ANT Project Manager (Java applications)</entry>
+</row>
+<row>
+  <entry>autoproject</entry>
+  <entry>Automake Project Manager</entry>
+</row>
+<row>
+  <entry>customproject</entry>
+  <entry>Custom Project Manager</entry>
+</row>
+<row>
+  <entry>trollproject</entry>
+  <entry>QMake based Project Manager</entry>
+</row>
+</tbody></tgroup>
+</table>
+
+<table id="table-global-parts">
+<title>Global parts in &kdevelop;</title>
+
+<tgroup cols="2"><tbody>
+<row><entry>Part Name</entry><entry>Description</entry></row>
+<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
+<row><entry>history</entry><entry></entry></row>
+<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
+<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
+<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
+<row><entry>openwith</entry><entry></entry></row>
+<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
+<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
+<row><entry>texttools</entry><entry>Additional text tools</entry></row>
+<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
+<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
+<row><entry>cvs</entry><entry>CVS Support</entry></row>
+<row><entry>tools</entry><entry></entry></row>
+<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
+<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
+<row><entry>filter</entry><entry></entry></row>
+<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Language support parts in &kdevelop;</title>
+<tgroup cols="2">
+<tbody>
+<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
+<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
+<row><entry>javasupport</entry><entry>Support for Java</entry></row>
+<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
+<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
+<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Project specific parts in &kdevelop;</title>
+<tgroup cols="2"><tbody>
+<row><entry>astyle</entry><entry></entry></row>
+<row><entry>buglist</entry><entry></entry></row>
+<row><entry>classview</entry><entry>Classview Manager</entry></row>
+<row><entry>ctags</entry><entry></entry></row>
+<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
+<row><entry>diff</entry><entry></entry></row>
+<row><entry>distpart</entry><entry></entry></row>
+<row><entry>doxygen</entry><entry></entry></row>
+<row><entry>fileview</entry><entry></entry></row>
+<row><entry>javadebugger</entry><entry></entry></row>
+<row><entry>manager</entry><entry></entry></row>
+<row><entry>nedit</entry><entry></entry></row>
+<row><entry>outputviews</entry><entry></entry></row>
+<row><entry>perforce</entry><entry></entry></row>
+<row><entry>qeditor</entry><entry></entry></row>
+<row><entry>scripting</entry><entry></entry></row>
+<row><entry>scriptproject</entry><entry></entry></row>
+<row><entry>sourcenav</entry><entry></entry></row>
+<row><entry>svn</entry><entry></entry></row>
+<row><entry>visualboyadvance</entry><entry></entry></row>
+<row><entry>windowmenu</entry><entry></entry></row>
+</tbody></tgroup>
+</table>
+
+</sect1> <!-- parts-overview -->
+
+</chapter>
 
 <!-- ====================================================================== -->
 
@@ -2522,12 +2664,14 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </para>
 
 <screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-mdi-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
+  <mediaobject>
+    <imageobject>
+    <imagedata fileref="gideon-mdi-mode.png" format="PNG"/>
+    </imageobject>
+    <textobject><phrase>Screenshot</phrase></textobject>
+	<caption><para>&kdevelop; child frame windows mode</para></caption>
+  </mediaobject>
+</screenshot>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2545,12 +2689,14 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </para>
 
 <screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-tabbed-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="gideon-tabbed-mode.png" format="PNG"/>
+    </imageobject>
+    <textobject><phrase>Screenshot</phrase></textobject>
+	<caption><para>&kdevelop; tabbed pages mode</para></caption>
+  </mediaobject>
+</screenshot>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2568,12 +2714,14 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </para>
 
 <screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-toplevel-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="gideon-toplevel-mode.png" format="PNG"/>
+    </imageobject>
+    <textobject><phrase>Screenshot</phrase></textobject>
+	<caption><para>&kdevelop; toplevel windows mode</para></caption>
+  </mediaobject>
+</screenshot>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -2591,12 +2739,14 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </para>
 
 <screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-ideal-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="gideon-ideal-mode.png" format="PNG"/>
+    </imageobject>
+    <textobject><phrase>Screenshot</phrase></textobject>
+	<caption><para>&kdevelop; IDEAl mode</para></caption>
+  </mediaobject>
+</screenshot>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
