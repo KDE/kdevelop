@@ -428,7 +428,7 @@ systems by autoconf-generated configure scripts.
 <para>
 The distribution of your applications does not require the end-user to have anything different installed
 other than a C++ compiler and the appropriate development libraries, which is most often the case; but
-ou can as well distribut binary packages of your application.  In either way, the end-user of your product
+you can as well distribute binary packages of your application.  In either way, the end-user of your product
 does not have to have &kdevelop; installed.  For giving away your sources, we advise to include the 
 project file of &kdevelop; as well, as this makes it very easy for other developerss to work with your
 sources if they use KDevelop as well.  For projects where several developers, maybe working on different
@@ -971,7 +971,7 @@ that visualize the class structure in different ways.
 <para>
 This view is shown on the left side of the main window and contains a linear
 list of all classes, variables and functions in your project. It is designed
-as a tree view. If you open a class node by clicking on bit, a list with all 
+as a tree view. If you open a class node by clicking on it, a list with all
 methods and attributes of the respective class is shown.
 </para>
 
@@ -1510,7 +1510,7 @@ The debugger backend <application>gdb</application> does not allow to set
 breakpoints within code that is not currently loaded. In a highly modular
 application, where often code is only loaded on demand as a plugin (using
 the libc function <function>dlopen(3)</function>), this can be incovenient. 
-Therefore, &kdevelop; rolls it own support for breakpoints in shared 
+Therefore, &kdevelop; rolls its own support for breakpoints in shared
 libraries. If you set this option, it allows you to set breakpoints in 
 libraries which are not loaded. Then, whenever <application>gdb</application>
 notifies that a library is loaded, &kdevelop; tries to set the pending 
@@ -1632,7 +1632,7 @@ the file on the local file system, so use this feature with care!
 Runs <command>cvs update</command> to merge any changes from other
 users into your working directory. When you use this menu item over
 a directory, the update normally happens recursively, except if you
-have disable this in the configuration file <filename>.cvsrc</filename>.
+have disabled this in the configuration file <filename>.cvsrc</filename>.
 </para>
 </formalpara>
 </listitem>
