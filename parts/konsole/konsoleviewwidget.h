@@ -9,7 +9,9 @@
 class KDevProject;
 class KonsoleWidgetPrivate;
 class KonsoleViewPart;
-class KParts::ReadOnlyPart;
+namespace KParts {
+  class ReadOnlyPart;
+}
 class QVBoxLayout;
 
 

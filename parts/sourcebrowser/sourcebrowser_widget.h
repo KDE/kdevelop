@@ -8,7 +8,9 @@
 
 class KDevProject;
 class SourceBrowserPart;
-class KParts::ReadOnlyPart;
+namespace KParts {
+  class ReadOnlyPart;
+}
 
 
 class SourceBrowserWidget : public QWidget

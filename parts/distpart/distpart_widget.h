@@ -15,7 +15,9 @@
 
 class KDevProject;
 class DistpartPart;
-class KParts::ReadOnlyPart;
+namespace KParts {
+  class ReadOnlyPart;
+}
 
 
 class DistpartDialog : public distpart_ui
