@@ -486,6 +486,9 @@ void CKDevelop::slotViewNextError(){
   if(info.filename != ""){
     messages_widget->setCursorPosition(info.makeoutputline,0);
     switchToFile(info.filename,info.errorline-1);
+    if(!bKDevelop){
+      switchToKDevelop();
+  }
   }
   else{
     XBell(kapp->getDisplay(),100); // not a next found, beep
@@ -512,6 +515,9 @@ void CKDevelop::slotViewPreviousError(){
   if(info.filename != ""){
     messages_widget->setCursorPosition(info.makeoutputline,0);
     switchToFile(info.filename,info.errorline-1);
+    if(!bKDevelop){
+      switchToKDevelop();
+  }
   }
   else{
     XBell(kapp->getDisplay(),100); // not a previous found, beep
@@ -686,10 +692,8 @@ void CKDevelop::slotBuildMake(){
     return;
   }
 
-  // save/generate dialog if needed
-  if (kdlg_edit_widget->isModified()){
-    kdlgedit->slotBuildGenerate();
-  }
+  //save/generate dialog if needed
+  kdlgedit->generateSourcecodeIfNeeded();
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -1156,21 +1160,12 @@ void CKDevelop::slotHelpBack(){
   slotStatusMsg(i18n("Switching to last page..."));
   QString str = history_list.prev();
   if (str != 0){
-  	enableCommand(ID_HELP_BROWSER_STOP);
-	  if(!bKDevelop)
-  	  switchToKDevelop();
-  	s_tab_view->setCurrentTab(BROWSER);
-		browser_widget->showURL(str);
-    enableCommand(ID_HELP_FORWARD);
+    if(!bKDevelop)
+      switchToKDevelop();
+    s_tab_view->setCurrentTab(BROWSER);
+    browser_widget->showURL(str);
   }
-  if (history_list.prev() == 0){ // no more backs
-    disableCommand(ID_HELP_BACK);
-    history_list.first(); // set it at first
-  }
-  else{
-    history_list.next();
-  }
-		
+
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
   slotStatusMsg(i18n("Ready."));
 }
@@ -1179,19 +1174,12 @@ void CKDevelop::slotHelpForward(){
   slotStatusMsg(i18n("Switching to next page..."));
   QString str = history_list.next();
   if (str != 0){
-	  if(!bKDevelop)
-  	  switchToKDevelop();
-  	s_tab_view->setCurrentTab(BROWSER);
-		browser_widget->showURL(str);
-    enableCommand(ID_HELP_BACK);
+    if(!bKDevelop)
+      switchToKDevelop();
+    s_tab_view->setCurrentTab(BROWSER);
+    browser_widget->showURL(str);
   }
-  if (history_list.next() == 0){ // no more forwards
-   	disableCommand(ID_HELP_FORWARD);
-    history_list.last(); // set it at last
-  }
-  else{
-    history_list.prev();
-  }
+
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1200,18 +1188,10 @@ void CKDevelop::slotHelpHistoryBack( int id_){
 	
   QString str = history_list.at(id_);
   if (str != 0){
-	  if(!bKDevelop)
-  	  switchToKDevelop();
-  	s_tab_view->setCurrentTab(BROWSER);
-		browser_widget->showURL(str);
-    enableCommand(ID_HELP_FORWARD);
-  }
-  if (history_list.prev() == 0){ // no more backs
-    disableCommand(ID_HELP_BACK);
-    history_list.first(); // set it at first
-  }
-  else{
-    history_list.next();
+    if(!bKDevelop)
+      switchToKDevelop();
+    s_tab_view->setCurrentTab(BROWSER);
+    browser_widget->showURL(str);
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -1220,22 +1200,16 @@ void CKDevelop::slotHelpHistoryBack( int id_){
 
 void CKDevelop::slotHelpHistoryForward( int id_){
 	slotStatusMsg(i18n("Opening history page..."));
-	
-  QString str = history_list.at(id_);
+
+  int cur=history_list.at()+1;	
+  QString str = history_list.at(cur+id_);
   if (str != 0){
-	  if(!bKDevelop)
-  	  switchToKDevelop();
-  	s_tab_view->setCurrentTab(BROWSER);
-		browser_widget->showURL(str);
-    enableCommand(ID_HELP_BACK);
+    if(!bKDevelop)
+      switchToKDevelop();
+    s_tab_view->setCurrentTab(BROWSER);
+    browser_widget->showURL(str);
   }
-  if (history_list.next() == 0){ // no more forwards
-  	disableCommand(ID_HELP_FORWARD);
-    history_list.last(); // set it at last
-  }
-  else{
-    history_list.prev();
-  }
+
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1417,7 +1391,6 @@ void CKDevelop::slotHelpBugReport(){
   
 }
 void CKDevelop::slotHelpAbout(){
-
   QMessageBox aboutmsg(this, "About KDevelop");
   aboutmsg.setCaption(i18n("About KDevelop..."));
   aboutmsg.setButtonText(1, i18n("OK"));
@@ -1428,6 +1401,7 @@ void CKDevelop::slotHelpAbout(){
                         "Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>\n"
                         "Jonas Nordin <jonas.nordin@cenacle.se>\n"
                         "Pascal Krahmer <pascal@beast.de>\n"
+			"Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
                         "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
                         "Martin Piskernig <martin.piskernig@stuwo.at>\n\n"
                         "See The KDevelop User Manual, Chapter Authors\n"
@@ -1578,9 +1552,11 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   else{
     browser_widget->showURL(url); // without reload if equal
   }
-  if (!history_list.isEmpty()){
+
+/*  if (!history_list.isEmpty()){
     enableCommand(ID_HELP_BACK);
   }
+*/
 
   QString str = history_list.current();
   //if it's a url-request from the search result jump to the correct point
@@ -1616,39 +1592,102 @@ void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
 }
 
 void CKDevelop::slotDocumentDone( KHTMLView *_view ){
+  QString actualURL=browser_widget->currentURL();
+  int cur =  history_list.at()+1; // get the current index
+  int found =  history_list.find(actualURL); // get the current index
+
   if(prev_was_search_result){
     browser_widget->findTextBegin();
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
-  prev_was_search_result=false;
   setCaption(browser_widget->currentTitle()+" - KDevelop " + version);
 	
-    // insert into the history-list
-  if(browser_widget->currentURL().left(7) != "http://"){ // http aren't added to the history list
+  // insert into the history-list
+  if(actualURL.left(7) != "http://"){ // http aren't added to the history list
 
-    int cur =  history_list.at(); // get the current index
-    if(cur == -1){
-      history_list.append(browser_widget->currentURL());
-			history_title_list.append(browser_widget->currentTitle());
+   if (found == -1)
+   {
+    if(cur == 0 ){
+      history_list.append(actualURL);
+      history_title_list.append(browser_widget->currentTitle());
     }
     else{
-      history_list.insert(cur+1,browser_widget->currentURL());
-      history_title_list.insert(cur+1, browser_widget->currentTitle());
+      history_list.insert(cur,actualURL);
+      history_title_list.insert(cur, browser_widget->currentTitle());
     }
+   }
+   else
+   {
+     // the desired URL was already found in the list
+
+     if (actualURL.contains("kdevelop/search_result.html") &&
+	history_title_list.at(found)!=browser_widget->currentTitle())
+     {
+         // this means... a new search_result.html is selected and an old one
+         // was found in list
+         //   so append it at the end
+         history_list.remove(found);
+         history_title_list.remove(found);
+         // append now the new one
+         cur=history_list.count();
+         history_list.insert(cur,actualURL);
+         history_title_list.insert(cur, browser_widget->currentTitle());
+     }
+     else
+     if (prev_was_search_result)
+      {
+         // this means... sort the found entry after the search_result.html-entry
+         //   so we can always use the back button to get the last search results
+         history_list.remove(found);
+         history_title_list.remove(found);
+         // correct cur after removing a list element
+         if (found<cur)
+           cur--;
+         history_list.insert(cur,actualURL);
+         history_title_list.insert(cur, browser_widget->currentTitle());
+      }
+      else
+      {
+         cur=found;
+      }
+   }
+
+   // set now the pointer of the history list
+   history_list.at(cur);
+
+   // reorganize the prev- and the next-historylist
+   history_next->clear();
+   history_prev->clear();
+		
+   int i;
+   for ( i =0 ; i < cur; i++){
+       history_prev->insertItem(history_title_list.at(i));
+   }
+
+   for (i = cur+1 ; i < (int) history_list.count(); i++){
+       history_next->insertItem(history_title_list.at(i));
+   }
+
+   // disable the back button if necessary
+   if (cur == 0){ // no more backwards
+ 	disableCommand(ID_HELP_BACK);
+   }
+   else {
+ 	enableCommand(ID_HELP_BACK);
+   }
+
+   // disable the forward button if necessary
+   if (cur >= ((int) history_list.count())-1){ // no more forwards
+ 	disableCommand(ID_HELP_FORWARD);
+   }
+   else {
+ 	enableCommand(ID_HELP_FORWARD);
+   }
+
   }
 
-	history_next->clear();
-	history_prev->clear();
-		
-	int i;
-  for ( i =0 ; i < history_list.at(); i++){
-    history_prev->insertItem(history_title_list.at(i));
-  }
-  uint j;
-  for ( j = history_list.at()+1 ; j < history_list.count(); j++){
-    history_next->insertItem(history_title_list.at(j));
-  }
-	disableCommand(ID_HELP_BROWSER_STOP);
+  prev_was_search_result=false;
+  disableCommand(ID_HELP_BROWSER_STOP);
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
@@ -1776,7 +1815,10 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
    QTextStream stream(&file);
    file.open(IO_WriteOnly);
 
-   stream << "<HTML><HEAD></HEAD><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>Title<TH>Hits\n";
+   stream << "<HTML>";
+   stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_text;
+   stream << "</TITLE></HEAD><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
+   stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
    QString numstr;
    for(str = sort_list.first();str != 0;str = sort_list.next() ){
      stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+

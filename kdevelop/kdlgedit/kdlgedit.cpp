@@ -130,7 +130,7 @@ bool KDlgEdit::slotFileClose(){
   if (dialog_file == "") return true;
   int result = 1;
   if(((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
-    result = KMsgBox::yesNoCancel(0,i18n("Question"),i18n("You have modified the current dialog. Do you want to save\nthe dialog and generate the sourcecodes?"));
+    result = KMsgBox::yesNoCancel(0,i18n("Question"),i18n("You have modified the current dialog\nDo you want to save it?"));
   }
   if(result == 3) return false; // cancel
   if(result == 1) { // ok
@@ -202,16 +202,19 @@ void KDlgEdit::slotViewRefresh()
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->recreateItem();
 }
 
-void KDlgEdit::slotBuildGenerate(){
-  //************************************
-  // if this is the first sourccode-generation show the generate dialog, 
+void KDlgEdit::generateSourcecodeIfNeeded(){
+}
+
+void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
+    //************************************
+  // if this is the first sourcecode-generation show the generate dialog, 
   // otherwise generate only the needed changes
   //************************************
 
   CProject* prj = ((CKDevelop*)parent())->getProject(); 
   TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
   cerr << ":::::" << info.classname;
-  if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty()){ // no class generated
+  if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty() || force_get_classname_dialog ){ // no class generated
     
     KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
     if( dlg.exec()){
@@ -406,6 +409,13 @@ void KDlgEdit::slotBuildGenerate(){
   slotFileSave();
 }
 
+void KDlgEdit::slotBuildCompleteGenerate(){
+    buildGenerate(true);
+}
+void KDlgEdit::slotBuildGenerate(){
+  buildGenerate(false);
+}
+
 void KDlgEdit::slotViewGrid()
 {
   KDlgGridDialog dlg((QWidget*)parent());
@@ -574,14 +584,6 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   generateIfWidget("KTreeList","ktreelist.h",generateKTreeList);
 
 
-
-
-  
-
-
-
-
-
 #undef generateIfWidget
 
 
@@ -643,11 +645,11 @@ void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QStri
     *stream << varname_p + "setMaxLength("+ props->getPropValue("MaxLength") +");\n";
   }
   //setFrame
-  if(props->getPropValue("hasFrame") != "TRUE"){
+  if(props->getPropValue("hasFrame") == "false"){
     *stream << varname_p + "setFrame(false);\n";
   }
   //isTextSelected
-  if(props->getPropValue("isTextSelected") != "FALSE"){
+  if(props->getPropValue("isTextSelected") == "true"){
     *stream << varname_p + "selectAll();\n";
   }
   
@@ -675,19 +677,19 @@ void KDlgEdit::generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,
  	}
 
   //isTextSelected
-  if(props->getPropValue("isTextSelected") != "FALSE"){
+  if(props->getPropValue("isTextSelected") == "true"){
     *stream << varname_p + "selectAll();\n";
   }
   //isAutoUpdate
-  if(props->getPropValue("isAutoUpdate") == "FALSE"){
+  if(props->getPropValue("isAutoUpdate") == "false"){
     *stream << varname_p + "setAutoUpdate(false);\n";
   }
   //isReadOnly
-   if(props->getPropValue("isReadOnly") == "TRUE"){
+   if(props->getPropValue("isReadOnly") == "true"){
      *stream << varname_p + "setReadOnly(true);\n";
    }
    //isOverWriteMode
-   if(props->getPropValue("isOverWriteMode") == "TRUE"){
+   if(props->getPropValue("isOverWriteMode") == "true"){
      *stream << varname_p + "setOverwriteMode(true);\n";
    }
    if(props->getPropValue("setFixedVisibleLines") != ""){
@@ -727,7 +729,7 @@ void KDlgEdit::generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString
   //setRange
   *stream << varname_p + "setRange("+ props->getPropValue("MinValue") +","+props->getPropValue("MaxValue")+");\n";
   //setTracking
-  if(props->getPropValue("isTracking") == "FALSE"){
+  if(props->getPropValue("isTracking") == "false"){
     *stream << varname_p + "setTracking(false);\n";
   }
   // setOrientation
@@ -751,7 +753,7 @@ void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
   //setRange
   *stream << varname_p + "setRange("+ props->getPropValue("MinValue") +","+props->getPropValue("MaxValue")+");\n";
   //setTracking
-  if(props->getPropValue("isWrapping") == "TRUE"){
+  if(props->getPropValue("isWrapping") == "true"){
     *stream << varname_p + "seWrapping(true);\n";
   }
   *stream << "\n";
@@ -773,7 +775,7 @@ void KDlgEdit::generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QStr
   //setRange
   *stream << varname_p + "setRange("+ props->getPropValue("MinValue") +","+props->getPropValue("MaxValue")+");\n";
   //setTracking
-  if(props->getPropValue("isTracking") == "FALSE"){
+  if(props->getPropValue("isTracking") == "false"){
     *stream << varname_p + "setTracking(false);\n";
   }
   // setOrientation
@@ -799,15 +801,15 @@ void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QS
  	 }
  	}
   //  setChecked
-  if(props->getPropValue("isChecked") == "TRUE"){
+  if(props->getPropValue("isChecked") == "true"){
     *stream << varname_p + "setChecked(true);\n";
   }
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //isAutoRepeat
-  if(props->getPropValue("isAutoRepeat") == "TRUE"){
+  if(props->getPropValue("isAutoRepeat") == "true"){
     *stream << varname_p + "setAutoRepeat(true);\n";
   }
   //Pixmap
@@ -840,15 +842,15 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 	}
  
   //  setChecked
-  if(props->getPropValue("isChecked") == "TRUE"){
+  if(props->getPropValue("isChecked") == "true"){
     *stream << varname_p + "setChecked(true);\n";
   }
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //isAutoRepeat
-  if(props->getPropValue("isAutoRepeat") == "TRUE"){
+  if(props->getPropValue("isAutoRepeat") == "true"){
     *stream << varname_p + "setAutoRepeat(true);\n";
   }
   //Pixmap
@@ -869,7 +871,7 @@ void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //entries
@@ -907,7 +909,7 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
  	 }
   }
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //Margin
@@ -925,31 +927,31 @@ void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
    QString varname_p = "\t"+props->getPropValue("VarName") + "->";
 
    // //isAutoUpdate
-   if(props->getPropValue("isAutoUpdate") == "FALSE"){
+   if(props->getPropValue("isAutoUpdate") == "false"){
      *stream << varname_p + "setAutoUpdate(false);\n";
    }
    //isAutoScroll
-   if(props->getPropValue("isAutoScroll") == "FALSE"){
+   if(props->getPropValue("isAutoScroll") == "false"){
      *stream << varname_p + "setAutoScroll(false);\n";
    }
     //isAutoScrollBar
-   if(props->getPropValue("isAutoScrollBar") == "FALSE"){
+   if(props->getPropValue("isAutoScrollBar") == "false"){
       *stream << varname_p + "setAutoScrollBar(false);\n";
     }
    //  //isAutoBottomScrollBar
-    if(props->getPropValue("isAutoBottomScrollBar") == "FALSE"){
+    if(props->getPropValue("isAutoBottomScrollBar") == "false"){
       *stream << varname_p + "setAutoBottomScrollBar(false);\n";
     }
    //isBottomScrollBar
-   if(props->getPropValue("isBottomScrollBar") == "TRUE"){
+   if(props->getPropValue("isBottomScrollBar") == "true"){
      *stream << varname_p + "setBottomScrollBar(true);\n";
    }
    //isDragSelect
-   if(props->getPropValue("isDragSelect") == "FALSE"){
+   if(props->getPropValue("isDragSelect") == "false"){
      *stream << varname_p + "setDragSelect(false);\n";
    }
    //isSmoothScrolling
-   if(props->getPropValue("isSmoothScrolling") == "FALSE"){
+   if(props->getPropValue("isSmoothScrolling") == "false"){
      *stream << varname_p + "setSmoothScrolling(false);\n";
    }
    //setFixedVisibleLines
@@ -990,31 +992,31 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
  	 }
   }
   //isDefault
-  if(props->getPropValue("isDefault") == "TRUE"){
+  if(props->getPropValue("isDefault") == "true"){
     *stream << varname_p + "setDefault(true);\n";
   }
   //IsAutoDefaul
-  if(props->getPropValue("isAutoDefault") == "TRUE"){
+  if(props->getPropValue("isAutoDefault") == "true"){
     *stream << varname_p + "setAutoDefault(true);\n";
   }
   //IsToggleButton
-  if(props->getPropValue("isToggleButton") == "TRUE"){
+  if(props->getPropValue("isToggleButton") == "true"){
     *stream << varname_p + "setToggleButton(true);\n";
   }
   //isToogledOn
-  if(props->getPropValue("isToggledOn") == "TRUE"){
+  if(props->getPropValue("isToggledOn") == "true"){
     *stream << varname_p + "setToggleOn(true);\n";
   }
   //IsMenuButton
-  if(props->getPropValue("isMenuButton") == "TRUE"){
+  if(props->getPropValue("isMenuButton") == "true"){
     *stream << varname_p + "setIsMenuButton(true);\n";
   }
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //isAutoRepeat
-  if(props->getPropValue("isAutoRepeat") == "TRUE"){
+  if(props->getPropValue("isAutoRepeat") == "true"){
     *stream << varname_p + "setAutoRepeat(true);\n";
   }
   //Pixmap
@@ -1036,11 +1038,13 @@ void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   //setText
   if(props->getPropValue("Title") != ""){
-    if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-      //      *stream << varname_p + "setTitle(i18n(\""+ props->getPropValue("Title") +"\"));\n";
-    }else{
-      *stream << varname_p + "setTitle(\""+ props->getPropValue("Title") +"\");\n";
-    }
+      
+      if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+	  *stream << varname_p + "setTitle(i18n(\""+ props->getPropValue("Title") +"\"));\n";
+      }
+      else{
+	  *stream << varname_p + "setTitle(\""+ props->getPropValue("Title") +"\");\n";
+      }
   }
 
   *stream << "\n";
@@ -1072,31 +1076,31 @@ void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QS
     }
   }
   //isDefault
-  if(props->getPropValue("isDefault") == "TRUE"){
+  if(props->getPropValue("isDefault") == "true"){
     *stream << varname_p + "setDefault(true);\n";
   }
   //IsAutoDefaul
-  if(props->getPropValue("isAutoDefault") == "TRUE"){
+  if(props->getPropValue("isAutoDefault") == "true"){
     *stream << varname_p + "setAutoDefault(true);\n";
   }
   //IsToggleButton
-  if(props->getPropValue("isToggleButton") == "TRUE"){
+  if(props->getPropValue("isToggleButton") == "true"){
     *stream << varname_p + "setToggleButton(true);\n";
   }
   //isToogledOn
-  if(props->getPropValue("isToggledOn") == "TRUE"){
+  if(props->getPropValue("isToggledOn") == "true"){
     *stream << varname_p + "setToggleOn(true);\n";
   }
   //IsMenuButton
-  if(props->getPropValue("isMenuButton") == "TRUE"){
+  if(props->getPropValue("isMenuButton") == "true"){
     *stream << varname_p + "setIsMenuButton(true);\n";
   }
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //isAutoRepeat
-  if(props->getPropValue("isAutoRepeat") == "TRUE"){
+  if(props->getPropValue("isAutoRepeat") == "true"){
     *stream << varname_p + "setAutoRepeat(true);\n";
   }
   //Pixmap
@@ -1124,7 +1128,7 @@ void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString 
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
 
   //isAutoResize
-  if(props->getPropValue("isAutoResize") == "TRUE"){
+  if(props->getPropValue("isAutoResize") == "true"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
   //setText
@@ -1208,6 +1212,9 @@ void KDlgEdit::generateKSeparator(KDlgItem_Widget *wid, QTextStream *stream,QStr
   if(props->getPropValue("Orientation") == "Horizontal"){
     *stream << varname_p + "setOrientation(KSeparator::HLine);\n";
   }
+  else{
+      *stream << varname_p + "setOrientation(KSeparator::VLine);\n";
+  }
   *stream << "\n";
 }
 void KDlgEdit::generateKTreeList(KDlgItem_Widget *wid, QTextStream *stream,QString _parent){
@@ -1251,7 +1258,7 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
     +props->getPropValue("MaxHeight")+");\n";
   }
   //setFixedSize
-  if(props->getPropValue("IsFixedSize") == "TRUE"){
+  if(props->getPropValue("IsFixedSize") == "true"){
     *stream << varname_p + "setFixedSize("+props->getPropValue("Width")
       +","+props->getPropValue("Height")+");\n";
   }
@@ -1262,11 +1269,11 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
   }
   /////////////////////////////////General///////////////////////////
   //IsHidden
-  if(props->getPropValue("IsHidden") != "FALSE"){
+  if(props->getPropValue("IsHidden") == "true"){
     *stream << varname_p + "hide();\n";
   }
   //isEnabled
-  if(props->getPropValue("IsEnabled") != "TRUE"){
+  if(props->getPropValue("IsEnabled") == "false"){
     *stream << varname_p + "setEnabled(false);\n";
   }
   ////////////////////////////////C++ Code//////////////////////////

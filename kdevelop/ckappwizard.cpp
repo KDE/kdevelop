@@ -237,7 +237,6 @@ void CKAppWizard::initPages(){
   directoryline->setMaxLength( 32767 );
   directoryline->setEchoMode( QLineEdit::Normal );
   directoryline->setFrame( TRUE );
-  directoryline->setReadOnly ( TRUE );
 
   directoryload = new QPushButton( widget1, "directoryload" );
   directoryload->setGeometry( 440, 50, 30, 30 );

@@ -230,6 +230,13 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
     KMsgBox::message(this,i18n("Attention"),filename +"\n\nFile does not exist!");
     return;
   }
+
+  if(filename.right(8) == ".kdevdlg"){
+    switchToKDlgEdit();
+    kdlgedit->slotOpenDialog(filename);
+    return;
+  }
+  
   // load kiconedit if clicked/loaded  an icon
   if((filename).right(4) == ".xpm"){
     if(!CToolClass::searchProgram("kiconedit")){
@@ -281,11 +288,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
     return;
   }
 
-  if(filename.right(8) == ".kdevdlg"){
-    switchToKDlgEdit();
-    kdlgedit->slotOpenDialog(filename);
-    return;
-  }
   
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
@@ -457,8 +459,7 @@ void CKDevelop::switchToKDevelop(){
 
 }
 void CKDevelop::switchToKDlgEdit(){
-//   KConfig *config = kapp->getConfig();
-
+//   KConfig *config = kapp->getConfig();  
 
   config->setGroup("KDlgEdit");
   if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")

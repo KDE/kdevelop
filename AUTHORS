@@ -5,6 +5,7 @@
 -Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 -Jonas Nordin <jonas.nordin@cenacle.se>
 -Pascal Krahmer <pascal@beast.de>
+-Bernd Gehrmann <bernd@physik.hu-berlin.de>
 -Stefan Bartel <bartel@rz.uni-potsdam.de>
 
 ***Translations coordination***
@@ -33,7 +34,6 @@ Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
 -Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 -Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 -Matt Koss <koss@napri.sk>
--Bernd Gehrmann <bernd@physik.hu-berlin.de>
 -Walter Tasin <tasin@e-technik.fh-muenchen.de>
 -Torsten Uhlmann <TUhlmann@debis.com>
 
@@ -41,7 +41,6 @@ KDevelop contains sourcecode from the following programs/classes:
 
 KWrite 0.98	:(c) 1998 by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 KDE Help	:(c) 1996 by Martin R. Jones <mjones@kde.org>
-GrapeFruit	:(c) 1999 by Bernd Gehrmann <bernd@physik.hu-berlin.de>
 KSwallow	:(c) by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
 kcmlocale	:(c) 1998 by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
 

@@ -66,9 +66,16 @@ void slotFileNew();
   void slotViewGrid();
   /** uses kdlgloader to provide a wysiwyg preview. */
   void slotViewPreview();
-
+  
+  void buildGenerate(bool force_get_classname_dialog);
   /** generates the sources for the current edited widget */
   void slotBuildGenerate();
+  void slotBuildCompleteGenerate();
+  void  generateSourcecodeIfNeeded();
+
+  void slotOpenDialog(QString file);
+  
+  protected:
   void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
 
   void generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
@@ -98,10 +105,6 @@ void slotFileNew();
   void generateKRestrictedLine(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateKSeparator(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateKTreeList(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-
-  void slotOpenDialog(QString file);
-protected:
-  
   void generateInitialHeaderFile(TDialogFileInfo info,QString baseclass_header);
   void generateInitialSourceFile(TDialogFileInfo info);
 

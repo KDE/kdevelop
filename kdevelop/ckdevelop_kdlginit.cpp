@@ -174,10 +174,15 @@ void CKDevelop::initKDlgMenuBar(){
 // Build-menu entries
 
   kdlg_build_menu = new QPopupMenu;
-  kdlg_build_menu->insertItem(Icon("generate.xpm"),i18n("&GenerateSources..."),kdlgedit,
-				SLOT(slotBuildGenerate()),0,ID_KDLG_BUILD_GENERATE);   kdlg_build_menu->insertSeparator(); 	
-	kdlg_build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this, 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
-	kdlg_build_menu->insertItem(Icon("rebuild.xpm"),i18n("&Rebuild all"), this, 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
+  kdlg_build_menu->insertItem(Icon("generate.xpm"),i18n("&Generate Sources..."),kdlgedit,
+			      SLOT(slotBuildGenerate()),0,ID_KDLG_BUILD_GENERATE);  	
+  
+  kdlg_build_menu->insertItem(Icon("generate.xpm"),i18n("&Generate Complete Sources..."),kdlgedit,
+			      SLOT(slotBuildCompleteGenerate()),0,ID_KDLG_BUILD_COMPLETE_GENERATE);  
+  kdlg_build_menu->insertSeparator(); 
+  
+  kdlg_build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this, 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
+  kdlg_build_menu->insertItem(Icon("rebuild.xpm"),i18n("&Rebuild all"), this, 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
 
   kdlg_build_menu->insertItem(i18n("&Clean/Rebuild all"), this,
 			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
@@ -401,9 +406,9 @@ void CKDevelop::initKDlgStatusBar(){
   }
 }
 
+
 /*
 void CKDevelop::initKDlgKeyAccel(){
-  accel->connectItem( KAccel::Open , kdlgedit, SLOT(slotFileOpen()) );
   accel->connectItem( KAccel::Close , kdlgedit, SLOT(slotFileClose()) );
   accel->connectItem( KAccel::Save , kdlgedit, SLOT(slotFileSave()) );
 
