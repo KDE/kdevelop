@@ -304,58 +304,58 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
       else{  // don't return to the setup to set the qt-path and index without qt
         *proc << "mkdir "+new_doc_path+"kdoc-reference;
 						cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-					 	+ new_doc_path +"kdoc-reference kdecore *.h;
+					 	+ new_doc_path +"kdoc-reference -nkdecore *.h;
 						cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-						+ new_doc_path +"kdoc-reference kdeui *.h -lkdecore;
+						+ new_doc_path +"kdoc-reference -nkdeui *.h -lkdecore;
 						cd ../kio;kdoc -d "+ new_doc_path + "/kio -ufile:" + new_doc_path + "kio/ -L"
-						+ new_doc_path +"kdoc-reference kio *.h -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkio *.h -lkdecore -lkdeui;
 						cd ../kimgio;kdoc -d "+ new_doc_path + "/kimgio -ufile:" + new_doc_path + "kimio/ -L"
-						+ new_doc_path +"kdoc-reference kimgio *.h -lkdecore -lkdeui -lkio;
+						+ new_doc_path +"kdoc-reference -nkimgio *.h -lkdecore -lkdeui -lkio;
 						cd ../mediatool;kdoc -d "+ new_doc_path + "/mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-						+ new_doc_path +"kdoc-reference mediatool *.h -lkdecore -lkdeui -lkio;
+						+ new_doc_path +"kdoc-reference -nmediatool *.h -lkdecore -lkdeui -lkio;
 						cd ../kdeutils;kdoc -d "+ new_doc_path + "/kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-						+ new_doc_path +"kdoc-reference kdeutils *.h -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkdeutils *.h -lkdecore -lkdeui;
 						cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
-						+ new_doc_path +"kdoc-reference jscript *.h -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -njscript *.h -lkdecore -lkdeui;
 						cd ../khtml;kdoc -d "+ new_doc_path + "/khtml -ufile:" + new_doc_path + "khtml/ -L"
-						+ new_doc_path +"kdoc-reference khtml *.h -lkdecore -lkdeui -ljscript;
+						+ new_doc_path +"kdoc-reference -nkhtml *.h -lkdecore -lkdeui -ljscript;
 						cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
-						+ new_doc_path +"kdoc-reference kfile *.h -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkfile *.h -lkdecore -lkdeui;
 						cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-						+ new_doc_path +"kdoc-reference kfmlib *.h -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkfmlib *.h -lkdecore -lkdeui;
 						cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
-						+ new_doc_path +"kdoc-reference kab *.h -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkab *.h -lkdecore -lkdeui;
 						cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
-						+ new_doc_path +"kdoc-reference kspell *.h -lkdecore -lkdeui";
+						+ new_doc_path +"kdoc-reference -nkspell *.h -lkdecore -lkdeui";
       }
     }
     else{  // cross-reference to qt
       *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
-				 		"kdoc-reference " + qtPath + "classes.html;
+				 		"kdoc-reference " + qtPath + ";
 						cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-					 	+ new_doc_path +"kdoc-reference kdecore *.h -lqt;
+					 	+ new_doc_path +"kdoc-reference -nkdecore *.h -lqt;
 						cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-						+ new_doc_path +"kdoc-reference kdeui *.h -lqt -lkdecore;
+						+ new_doc_path +"kdoc-reference -nkdeui *.h -lqt -lkdecore;
 						cd ../kio;kdoc -d "+ new_doc_path + "/kio -ufile:" + new_doc_path + "kio/ -L"
-						+ new_doc_path +"kdoc-reference kio *.h -lqt -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkio *.h -lqt -lkdecore -lkdeui;
 						cd ../kimgio;kdoc -d "+ new_doc_path + "/kimgio -ufile:" + new_doc_path + "kimio/ -L"
-						+ new_doc_path +"kdoc-reference kimgio *.h -lqt -lkdecore -lkdeui -lkio;
+						+ new_doc_path +"kdoc-reference -nkimgio *.h -lqt -lkdecore -lkdeui -lkio;
 						cd ../mediatool;kdoc -d "+ new_doc_path + "/mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-						+ new_doc_path +"kdoc-reference mediatool *.h -lqt -lkdecore -lkdeui -lkio;
+						+ new_doc_path +"kdoc-reference -nmediatool *.h -lqt -lkdecore -lkdeui -lkio;
 						cd ../kdeutils;kdoc -d "+ new_doc_path + "/kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-						+ new_doc_path +"kdoc-reference kdeutils *.h -lqt -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkdeutils *.h -lqt -lkdecore -lkdeui;
 						cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
-						+ new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -njscript *.h -lqt -lkdecore -lkdeui;
 						cd ../khtml;kdoc -d "+ new_doc_path + "/khtml -ufile:" + new_doc_path + "khtml/ -L"
-						+ new_doc_path +"kdoc-reference khtml *.h -lqt -lkdecore -lkdeui -ljscript;
+						+ new_doc_path +"kdoc-reference -nkhtml *.h -lqt -lkdecore -lkdeui -ljscript;
 						cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
-						+ new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkfile *.h -lqt -lkdecore -lkdeui;
 						cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-						+ new_doc_path +"kdoc-reference kfmlib *.h -lqt -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkfmlib *.h -lqt -lkdecore -lkdeui;
 						cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
-						+ new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;
+						+ new_doc_path +"kdoc-reference -nkab *.h -lqt -lkdecore -lkdeui;
 						cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
-						+ new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
+						+ new_doc_path +"kdoc-reference -nkspell *.h -lqt -lkdecore -lkdeui";
     }
   }
   else{ // use old khtmlw
@@ -371,58 +371,58 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
       else{  // don't return to the setup to set the qt-path and index without qt
         *proc << "mkdir "+new_doc_path+"kdoc-reference;
 					  	cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-					 	  + new_doc_path +"kdoc-reference kdecore *.h;
+					 	  + new_doc_path +"kdoc-reference -nkdecore *.h;
 					  	cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-					  	+ new_doc_path +"kdoc-reference kdeui *.h -lkdecore;
+					  	+ new_doc_path +"kdoc-reference -nkdeui *.h -lkdecore;
 				  		cd ../kio;kdoc -d "+ new_doc_path + "/kio -ufile:" + new_doc_path + "kio/ -L"
-					  	+ new_doc_path +"kdoc-reference kio *.h -lkdecore -lkdeui;
+					  	+ new_doc_path +"kdoc-reference -nkio *.h -lkdecore -lkdeui;
 				  		cd ../kimgio;kdoc -d "+ new_doc_path + "/kimgio -ufile:" + new_doc_path + "kimio/ -L"
-					  	+ new_doc_path +"kdoc-reference kimgio *.h -lkdecore -lkdeui -lkio;
+					  	+ new_doc_path +"kdoc-reference -nkimgio *.h -lkdecore -lkdeui -lkio;
 				  		cd ../mediatool;kdoc -d "+ new_doc_path + "/mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-			  			+ new_doc_path +"kdoc-reference mediatool *.h -lkdecore -lkdeui -lkio;
+			  			+ new_doc_path +"kdoc-reference -nmediatool *.h -lkdecore -lkdeui -lkio;
 						  cd ../kdeutils;kdoc -d "+ new_doc_path + "/kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-					  	+ new_doc_path +"kdoc-reference kdeutils *.h -lkdecore -lkdeui;
+					  	+ new_doc_path +"kdoc-reference -nkdeutils *.h -lkdecore -lkdeui;
 				  		cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
-			  			+ new_doc_path +"kdoc-reference jscript *.h -lkdecore -lkdeui;
+			  			+ new_doc_path +"kdoc-reference -njscript *.h -lkdecore -lkdeui;
 		  				cd ../khtmlw;kdoc -d "+ new_doc_path + "/khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
-						  + new_doc_path +"kdoc-reference khtmlw *.h -lkdecore -lkdeui -ljscript;
+						  + new_doc_path +"kdoc-reference -nkhtmlw *.h -lkdecore -lkdeui -ljscript;
 					  	cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
-				  		+ new_doc_path +"kdoc-reference kfile *.h -lkdecore -lkdeui;
+				  		+ new_doc_path +"kdoc-reference -nkfile *.h -lkdecore -lkdeui;
 			  			cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-						  + new_doc_path +"kdoc-reference kfmlib *.h -lkdecore -lkdeui;
+						  + new_doc_path +"kdoc-reference -nkfmlib *.h -lkdecore -lkdeui;
 					  	cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
-				  		+ new_doc_path +"kdoc-reference kab *.h -lkdecore -lkdeui;
+				  		+ new_doc_path +"kdoc-reference -nkab *.h -lkdecore -lkdeui;
 			  			cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
-		  				+ new_doc_path +"kdoc-reference kspell *.h -lkdecore -lkdeui";
+		  				+ new_doc_path +"kdoc-reference -nkspell *.h -lkdecore -lkdeui";
       }
     }
     else{  // cross-reference to qt
       *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
-				 		  "kdoc-reference " + qtPath + "classes.html;
+				 		  "kdoc-reference " + qtPath + ";
 					  	cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-				  	 	+ new_doc_path +"kdoc-reference kdecore *.h -lqt;
+				  	 	+ new_doc_path +"kdoc-reference -nkdecore *.h -lqt;
 			  			cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-		  				+ new_doc_path +"kdoc-reference kdeui *.h -lqt -lkdecore;
+		  				+ new_doc_path +"kdoc-reference -nkdeui *.h -lqt -lkdecore;
 	  					cd ../kio;kdoc -d "+ new_doc_path + "/kio -ufile:" + new_doc_path + "kio/ -L"
-  						+ new_doc_path +"kdoc-reference kio *.h -lqt -lkdecore -lkdeui;
+  						+ new_doc_path +"kdoc-reference -nkio *.h -lqt -lkdecore -lkdeui;
 						  cd ../kimgio;kdoc -d "+ new_doc_path + "/kimgio -ufile:" + new_doc_path + "kimio/ -L"
-					  	+ new_doc_path +"kdoc-reference kimgio *.h -lqt -lkdecore -lkdeui -lkio;
+					  	+ new_doc_path +"kdoc-reference -nkimgio *.h -lqt -lkdecore -lkdeui -lkio;
 				  		cd ../mediatool;kdoc -d "+ new_doc_path + "/mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-			  			+ new_doc_path +"kdoc-reference mediatool *.h -lqt -lkdecore -lkdeui -lkio;
+			  			+ new_doc_path +"kdoc-reference -nmediatool *.h -lqt -lkdecore -lkdeui -lkio;
 		  				cd ../kdeutils;kdoc -d "+ new_doc_path + "/kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-	  					+ new_doc_path +"kdoc-reference kdeutils *.h -lqt -lkdecore -lkdeui;
+	  					+ new_doc_path +"kdoc-reference -nkdeutils *.h -lqt -lkdecore -lkdeui;
   						  cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
-					  	+ new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;
+					  	+ new_doc_path +"kdoc-reference -njscript *.h -lqt -lkdecore -lkdeui;
 				  		cd ../khtmlw;kdoc -d "+ new_doc_path + "/khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
-			  			+ new_doc_path +"kdoc-reference khtmlw *.h -lqt -lkdecore -lkdeui -ljscript;
+			  			+ new_doc_path +"kdoc-reference -nkhtmlw *.h -lqt -lkdecore -lkdeui -ljscript;
 		  				cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
-	  					+ new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;
+	  					+ new_doc_path +"kdoc-reference -nkfile *.h -lqt -lkdecore -lkdeui;
 	  					cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-						  + new_doc_path +"kdoc-reference kfmlib *.h -lqt -lkdecore -lkdeui;
+						  + new_doc_path +"kdoc-reference -nkfmlib *.h -lqt -lkdecore -lkdeui;
 					  	cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
-				  		+ new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;
+				  		+ new_doc_path +"kdoc-reference -nkab *.h -lqt -lkdecore -lkdeui;
 			  			cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
-		  				+ new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
+		  				+ new_doc_path +"kdoc-reference -nkspell *.h -lqt -lkdecore -lkdeui";
     } // end cross-reference qt
   }   // end use old khtmlw
     proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
