@@ -24,10 +24,11 @@ COutputWidget::COutputWidget(KApplication* a,QWidget* parent, char* name) :
 void COutputWidget::insertAtEnd(QString s)
 {
   int row = (numLines() == 0)? 0 : numLines()-1;
+  // correct workaround for QMultilineEdit
+  //  the string inside could be NULL, and so QMultilineEdit fails
   int col = qstrlen(textLine(row));
-  if (s == "\n" && row == 0 && col == 0)
-    s = " \n";
-  
+  if (s.left(1) == "\n" && row == 0 && col == 0)
+     s = QString(" ")+s;
   insertAt(s, row, col);
 }
 void COutputWidget::mouseReleaseEvent(QMouseEvent*){
