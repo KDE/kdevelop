@@ -1,3 +1,7 @@
+2004-10-27  Amilcar Lucas <amilcar@kdevelop.org>
+	Exclude non API classes from the doxygen API documentation. 
+	Please use the "doxygen doxyfile" command to test it. 
+
 2004-10-27 Alexander Dymo <adymo@kdevelop.org>
     The first step in creating RubyQt/Korundum RAD environment -
     started to implement KDevDesigner integration for Ruby:
