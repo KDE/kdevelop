@@ -211,7 +211,7 @@ void CToolsConfigDlg::slotToolMoveUp()
 #include <iostream.h>
 void CToolsConfigDlg::slotToolMoveDown()
 {
-  int current = tools_listbox->currentItem();
+  uint current = tools_listbox->currentItem();
   // if (current == (int)tools_listbox->count()-1 || current == -1) return;
   swap(current,current+1);
   tools_listbox->clear();
@@ -259,7 +259,7 @@ void CToolsConfigDlg::slotShowToolProp(int index){
   else{
     move_up_button->setEnabled( FALSE);
   }
-  if(index+1 != tools_listbox->count()){
+  if(index+1 != (int)tools_listbox->count()){
     move_down_button->setEnabled( TRUE );
   }
   else{
