@@ -310,6 +310,10 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
     if(((CKDevelop*)parent())->getProject()->isKDEProject()){
       local_includes.append("#include <kapp.h>");
     }
+    if(((CKDevelop*)parent())->getProject()->isKDE2Project()){
+      local_includes.append("#include <kapp.h>");
+      local_includes.append("#include <klocale.h>");
+    }
     generateWidget(((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget(),&stream,"this");
     stream << "}\n";
   }
@@ -662,7 +666,7 @@ void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QStri
     props->dumpConstruct(stream, "QLineEdit", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpIntPropCall(stream, "setMaxLength", "MaxLength");
@@ -684,7 +688,7 @@ void KDlgEdit::generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,
     props->dumpConstruct(stream, "QMultiLineEdit", _parent);
     generateCommon(wid,stream,_parent);
     
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     if (props->propValueAsBool("isTextSelected"))
@@ -735,7 +739,7 @@ void KDlgEdit::generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString
 void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
 
     props->dumpConstruct(stream, "QSpinBox", _parent);
     generateCommon(wid,stream,_parent);
@@ -782,7 +786,7 @@ void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QS
     props->dumpConstruct(stream, "QRadioButton", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
     
     props->dumpBoolPropCall(stream, "setChecked", "isChecked", false);
@@ -810,7 +814,7 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
     props->dumpConstruct(stream, "QCheckBox", _parent);
     generateCommon(wid,stream,_parent);
   
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
  
     props->dumpBoolPropCall(stream, "setChecked", "isChecked", false);
@@ -832,8 +836,8 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
   KDlgPropertyBase* props = wid->getProps();
-  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
-  
+  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
+
   props->dumpConstruct(stream, "QComboBox", _parent);
   generateCommon(wid,stream,_parent);
   
@@ -872,7 +876,7 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
     props->dumpConstruct(stream, "QLabel", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
@@ -885,8 +889,8 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
 void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
   KDlgPropertyBase* props = wid->getProps();
-  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
-  
+  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
+
   props->dumpConstruct(stream, "QListBox", _parent);
   generateCommon(wid,stream,_parent);
   
@@ -932,7 +936,7 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
     props->dumpConstruct(stream, "QPushButton", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpBoolPropCall(stream, "setDefault", "isDefault", false);
@@ -961,7 +965,7 @@ void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
     props->dumpConstruct(stream, "QGroupBox", _parent);
     generateCommon(wid,stream,_parent);
     
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setTitle", "Title", withi18n);
     
     *stream << "\n";
@@ -985,7 +989,7 @@ void KDlgEdit::generateQButtonGroup(KDlgItem_Widget *wid, QTextStream *stream,QS
     props->dumpConstruct(stream, "QButtonGroup", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setTitle", "Title", withi18n);
 
     *stream << "\n";
@@ -1019,7 +1023,7 @@ void KDlgEdit::generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QStri
     props->dumpBoolPropCall(stream, "setAllColumnsShowFocus", "isAllColumnsShowFocus", false);
     props->dumpBoolPropCall(stream, "setRootIsDecorated", "isRootDecorated", false);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
      //Columns
     int i = 0;
     QString src = props->getPropValue("Columns");
@@ -1093,7 +1097,7 @@ void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QS
     props->dumpConstruct(stream, "KColorButton", _parent);
     generateCommon(wid,stream,_parent);
   
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpBoolPropCall(stream, "setDefault", "isDefault", false);
@@ -1119,7 +1123,7 @@ void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString 
   
     props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject() ||((CKDevelop*)parent())->getProject()->isKDE2Project();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     *stream << "\n";
@@ -1289,7 +1293,7 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 	}
 
     if (!props->getPropValue("Quickhelp").isEmpty()
-	&& ((CKDevelop*)parent())->getProject()->isKDEProject())
+	&& ( ((CKDevelop*)parent())->getProject()->isKDEProject() || ((CKDevelop*)parent())->getProject()->isKDEProject()) )
 	{
 	    if(local_includes.contains("#include <kquickhelp.h>") == 0)
 		local_includes.append("#include <kquickhelp.h>");
@@ -1298,7 +1302,7 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 	}
     
     if(props->getPropValue("ToolTip") != ""){
-      if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+      if( ((CKDevelop*)parent())->getProject()->isKDEProject() || ((CKDevelop*)parent())->getProject()->isKDEProject() ){
 	if(local_includes.contains("#include <qtooltip.h>") == 0)
 	  local_includes.append("#include <qtooltip.h>");
 	*stream << "  QToolTip::add("+ props->getPropValue("VarName") +

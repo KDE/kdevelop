@@ -1149,12 +1149,12 @@ CProject * lNewProject = new CProject(file);
   enableCommand(ID_PROJECT_CLOSE);
   enableCommand(ID_PROJECT_ADD_FILE_EXIST);
 
-  if(prj->isKDEProject() || prj->isQtProject()){
+  if(prj->isKDEProject() || prj->isQtProject() || prj->isKDE2Project() || prj->isQt2Project()){
     enableCommand(ID_TOOLS_KDLGEDIT);
     kdlg_tabctl->setTabEnabled("dialogs_view",true);
   }  
 
-  if (prj->isKDEProject()){
+  if (prj->isKDEProject() || prj->isKDE2Project() || prj->isQt2Project()){
    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   }
   else{
@@ -1169,7 +1169,7 @@ CProject * lNewProject = new CProject(file);
     enableCommand(ID_PROJECT_OPTIONS);
   }
   
-  if(prj->isKDEProject() || prj->isQtProject()){
+  if(prj->isKDEProject() || prj->isQtProject() || prj->isKDE2Project() || prj->isQt2Project() ){
     kdlg_tabctl->setTabEnabled("dialogs_view",true);
     kdlg_tabctl->setCurrentTab(1); // dialogs
   
