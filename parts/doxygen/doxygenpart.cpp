@@ -190,6 +190,14 @@ void DoxygenPart::adjustDoxyfile()
     gen_xml->setValueString("yes");
   }
 
+  // set "Enternal/GENERATE_TAGFILE" to generate tag file for documentation browser
+  ConfigString *gen_tag = dynamic_cast<ConfigString*>(Config::instance()->get("GENERATE_TAGFILE"));
+  if (gen_tag)
+  {
+    gen_tag->setDefaultValue(QString(project()->projectName().remove(".kdevelop")+".tag").latin1());
+    gen_tag->init();
+  }
+  
   // write doxy file
   QFile f2(fileName);
   if (!f2.open(IO_WriteOnly))
