@@ -19,7 +19,7 @@ class QCheckListItem;
 class QListViewItem;
 class FilePropertyBase;
 class FileItem;
-class SubprojectItem;
+class SubqmakeprojectItem;
 class GroupItem;
 
 class ScopeItem : public QCheckListItem
@@ -33,7 +33,7 @@ class ScopeItem : public QCheckListItem
   bool            isDirty();
 
   private:
-  QStringList     *m_excludeList; // pointer all the way into the right SubprojectItem excludelist
+  QStringList     *m_excludeList; // pointer all the way into the right SubqmakeprojectItem excludelist
   QString         m_scopeString;
   bool            m_initialMode;
 };
@@ -41,18 +41,18 @@ class ScopeItem : public QCheckListItem
 class FilePropertyDlg : public FilePropertyBase
 {
   public:
-                  FilePropertyDlg(SubprojectItem *spitem, int grtype,FileItem *fitem,
+                  FilePropertyDlg(SubqmakeprojectItem *spitem, int grtype,FileItem *fitem,
                                   QStringList &dirtyScopes,QWidget *parent=0,
                                   const char* name = 0,bool modal = FALSE, WFlags fl = 0);
 
   private:
-  void            createScopeTree(SubprojectItem *spitem,ScopeItem *sitem=0);
-  GroupItem*      getInstallRoot(SubprojectItem *spitem);
-  GroupItem*      getInstallObject(SubprojectItem *spitem,const QString& objectname);
-  QStringList*    getExcludeList(SubprojectItem *spitem);
+  void            createScopeTree(SubqmakeprojectItem *spitem,ScopeItem *sitem=0);
+  GroupItem*      getInstallRoot(SubqmakeprojectItem *spitem);
+  GroupItem*      getInstallObject(SubqmakeprojectItem *spitem,const QString& objectname);
+  QStringList*    getExcludeList(SubqmakeprojectItem *spitem);
   QStringList     getExcludedScopes(ScopeItem *sitem=0);
   FileItem        *m_fileItem;
-  SubprojectItem  *m_subProjectItem;
+  SubqmakeprojectItem  *m_subProjectItem;
   QStringList     &m_dirtyScopes;
   QStringList     m_dummy;
   QString         m_installObjectName;

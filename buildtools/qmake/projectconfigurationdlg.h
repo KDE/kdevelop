@@ -27,14 +27,14 @@ enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
 #include "trollprojectwidget.h"
 
 struct ProjectConfiguration;
-class SubprojectItem;
-class ProjectItem;
+class SubqmakeprojectItem;
+class qProjectItem;
 
 
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {
 public:
-  ProjectConfigurationDlg(SubprojectItem * _item,QListView *_prjList,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  ProjectConfigurationDlg(SubqmakeprojectItem * _item,QListView *_prjList,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
   ~ProjectConfigurationDlg();
   void UpdateControls();
 
@@ -92,9 +92,9 @@ void updateDependenciesControl();
 
 protected:
   QListView *prjList;
-  SubprojectItem *myProjectItem;
-  QPtrList <ProjectItem> getAllProjects();
-  void getAllSubProjects(ProjectItem *item,QPtrList <ProjectItem> *itemList);
+  SubqmakeprojectItem *myProjectItem;
+  QPtrList <qProjectItem> getAllProjects();
+  void getAllSubProjects(qProjectItem *item,QPtrList <qProjectItem> *itemList);
   
 
 };

@@ -16,19 +16,19 @@
 
 #include "choosesubprojectdlgbase.h"
 
-class SubprojectItem;
+class SubqmakeprojectItem;
 class TrollProjectWidget;
 
 class ChooseItem: public KListViewItem
 {
 public:
-    ChooseItem(SubprojectItem *spitem, QListViewItem *parent, QString text);
-    ChooseItem(SubprojectItem *spitem, QListView *parent, QString text);
+    ChooseItem(SubqmakeprojectItem *spitem, QListViewItem *parent, QString text);
+    ChooseItem(SubqmakeprojectItem *spitem, QListView *parent, QString text);
 
-    SubprojectItem *subproject();
+    SubqmakeprojectItem *subproject();
 
 private:
-    SubprojectItem *m_spitem;
+    SubqmakeprojectItem *m_spitem;
 };
 
 class ChooseSubprojectDlg : public ChooseSubprojectDlgBase
@@ -40,7 +40,7 @@ public:
   ~ChooseSubprojectDlg();
   /*$PUBLIC_FUNCTIONS$*/
 
-  SubprojectItem *selectedSubproject();
+  SubqmakeprojectItem *selectedSubproject();
 
 public slots:
   /*$PUBLIC_SLOTS$*/

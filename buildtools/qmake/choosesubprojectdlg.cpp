@@ -43,17 +43,17 @@ void ChooseSubprojectDlg::accept()
     QDialog::accept();
 }
 
-ChooseItem::ChooseItem( SubprojectItem * spitem, QListViewItem * parent, QString text )
+ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, QListViewItem * parent, QString text )
     :KListViewItem(parent, text), m_spitem(spitem)
 {
 }
 
-ChooseItem::ChooseItem( SubprojectItem * spitem, QListView * parent, QString text )
+ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, QListView * parent, QString text )
     :KListViewItem(parent, text), m_spitem(spitem)
 {
 }
 
-SubprojectItem * ChooseItem::subproject( )
+SubqmakeprojectItem * ChooseItem::subproject( )
 {
     return m_spitem;
 }
@@ -65,7 +65,7 @@ void ChooseSubprojectDlg::fillSubprojectsView( ChooseItem *item )
 
     QListViewItem * sub_spitem = item->subproject()->firstChild();
     while( sub_spitem ) {
-        SubprojectItem *spitem = dynamic_cast<SubprojectItem *>(sub_spitem);
+        SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem *>(sub_spitem);
         if (spitem)
         {
             ChooseItem *child_item = new ChooseItem(spitem, item, spitem->text(0));
@@ -91,7 +91,7 @@ void ChooseSubprojectDlg::itemSelected( QListViewItem * it )
         buttonOk->setEnabled(true);
 }
 
-SubprojectItem * ChooseSubprojectDlg::selectedSubproject( )
+SubqmakeprojectItem * ChooseSubprojectDlg::selectedSubproject( )
 {
     if (subprojects_view->currentItem())
     {

@@ -47,7 +47,7 @@ void ScopeItem::excludeFromScope(const QString &fileName,bool b)
     m_excludeList->append(fileName);
 }
 
-FilePropertyDlg::FilePropertyDlg(SubprojectItem *spitem,int grtype, FileItem *fitem, QStringList &dirtyScopes,
+FilePropertyDlg::FilePropertyDlg(SubqmakeprojectItem *spitem,int grtype, FileItem *fitem, QStringList &dirtyScopes,
                                  QWidget *parent, const char* name, bool modal, WFlags fl)
 : FilePropertyBase(parent,name,modal,fl),
 m_dirtyScopes(dirtyScopes)
@@ -65,7 +65,7 @@ m_dirtyScopes(dirtyScopes)
   createScopeTree(m_subProjectItem);
 }
 
-GroupItem* FilePropertyDlg::getInstallRoot(SubprojectItem* item)
+GroupItem* FilePropertyDlg::getInstallRoot(SubqmakeprojectItem* item)
 {
   QPtrListIterator<GroupItem> it(item->groups);
   for (;it.current();++it)
@@ -76,7 +76,7 @@ GroupItem* FilePropertyDlg::getInstallRoot(SubprojectItem* item)
   return 0;
 }
 
-GroupItem* FilePropertyDlg::getInstallObject(SubprojectItem* item, const QString& objectname)
+GroupItem* FilePropertyDlg::getInstallObject(SubqmakeprojectItem* item, const QString& objectname)
 {
   GroupItem* instroot = getInstallRoot(item);
   if (!instroot)
@@ -93,7 +93,7 @@ GroupItem* FilePropertyDlg::getInstallObject(SubprojectItem* item, const QString
 }
 
 
-QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
+QStringList* FilePropertyDlg::getExcludeList(SubqmakeprojectItem *spitem)
 {
     if (m_gtype == GroupItem::Sources)
       return &(spitem->sources_exclude);
@@ -123,12 +123,12 @@ QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
     return NULL;
 }
 
-void FilePropertyDlg::createScopeTree(SubprojectItem *spitem,ScopeItem *sitem)
+void FilePropertyDlg::createScopeTree(SubqmakeprojectItem *spitem,ScopeItem *sitem)
 {
-  QPtrListIterator<SubprojectItem> spit(spitem->scopes);
+  QPtrListIterator<SubqmakeprojectItem> spit(spitem->scopes);
   for (; spit.current(); ++spit)
   {
-    SubprojectItem *nextSubproject = spit;
+    SubqmakeprojectItem *nextSubproject = spit;
     QStringList *excludeList = getExcludeList(nextSubproject);
     if (!excludeList)
       continue;

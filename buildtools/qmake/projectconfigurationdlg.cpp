@@ -37,7 +37,7 @@
 #include <qtabwidget.h>
 #include <pathutil.h>
 
-ProjectConfigurationDlg::ProjectConfigurationDlg(SubprojectItem *_item,QListView *_prjList,QWidget* parent, const char* name, bool modal, WFlags fl)
+ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QListView *_prjList,QWidget* parent, const char* name, bool modal, WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
 //=================================================
 {
@@ -430,28 +430,28 @@ void ProjectConfigurationDlg::UpdateControls()
   mocdir_url->setURL(myProjectItem->configuration.m_mocpath);
 }
 
-QPtrList <ProjectItem> ProjectConfigurationDlg::getAllProjects()
+QPtrList <qProjectItem> ProjectConfigurationDlg::getAllProjects()
 {
-  QPtrList <ProjectItem> tmpPrjList;
-  ProjectItem *item=(ProjectItem *)prjList->firstChild();
+  QPtrList <qProjectItem> tmpPrjList;
+  qProjectItem *item=(qProjectItem *)prjList->firstChild();
   while(item)
   {
     tmpPrjList.append(item);
     getAllSubProjects(item,&tmpPrjList);
-    item=(ProjectItem *)item->nextSibling();
+    item=(qProjectItem *)item->nextSibling();
   }
   return(tmpPrjList);
 }
 
-void ProjectConfigurationDlg::getAllSubProjects(ProjectItem *item,QPtrList <ProjectItem> *itemList)
+void ProjectConfigurationDlg::getAllSubProjects(qProjectItem *item, QPtrList <qProjectItem> *itemList)
 {
 
-  ProjectItem *subItem=(ProjectItem *)item->firstChild();
+  qProjectItem *subItem=(qProjectItem *)item->firstChild();
   while(subItem)
   {
     itemList->append(subItem);
     getAllSubProjects(subItem,itemList);
-    subItem=(ProjectItem *)subItem->nextSibling();
+    subItem=(qProjectItem *)subItem->nextSibling();
   }
 }
 
@@ -464,19 +464,19 @@ void ProjectConfigurationDlg::updateIncludeControl()
 
 
   QStringList incList=myProjectItem->configuration.m_incadd;
-  QPtrList <ProjectItem> itemList=getAllProjects();
-  ProjectItem *item=itemList.first();
+  QPtrList <qProjectItem> itemList=getAllProjects();
+  qProjectItem *item=itemList.first();
 
   
   while(item){
-    if(item->type()==ProjectItem::Subproject)
+    if(item->type() == qProjectItem::Subproject)
     {
 
       //includes
       //temp strlist
-      if( ((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ||
-          ((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION){
-          SubprojectItem *sItem=(SubprojectItem*)item;
+      if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ||
+          ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_APPLICATION){
+          SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
          //if(sItem!=myProjectItem) //needed own path for other libs
          if (!sItem->isScope)
          {
@@ -511,7 +511,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
 void ProjectConfigurationDlg::updateLibaddControl()
 {
 
-  QPtrList <ProjectItem> itemList=getAllProjects();
+  QPtrList <qProjectItem> itemList=getAllProjects();
 
   insidelib_listview->setSorting(-1,false);
   outsidelib_listview->setSorting(-1,false);
@@ -523,14 +523,14 @@ void ProjectConfigurationDlg::updateLibaddControl()
 
   QStringList::Iterator it=libList.begin();
   for(;it!=libList.end();++it){
-        ProjectItem *item=itemList.first();
+        qProjectItem *item=itemList.first();
         while(item){
-          if(item->type()==ProjectItem::Subproject)
+          if(item->type()==qProjectItem::Subproject)
           {
 
             //librarys
-            if( ((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
-              SubprojectItem *sItem=(SubprojectItem*)item;
+            if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
+              SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
 
 
               if(sItem!=myProjectItem)
@@ -557,14 +557,14 @@ void ProjectConfigurationDlg::updateLibaddControl()
   kdDebug()<< "itemlist count =" << itemList.count()<<endl;
 
   //add all other prj in itemList unchecked
-  ProjectItem *item=itemList.first();
+  qProjectItem *item=itemList.first();
   while(item)
   {
-    if(item->type()==ProjectItem::Subproject)
+    if(item->type()==qProjectItem::Subproject)
     {
       //librarys
-      if( ((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
-        SubprojectItem *sItem=(SubprojectItem*)item;
+      if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
+        SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
         if(sItem!=myProjectItem)
         {
           // create lib string
@@ -588,7 +588,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
 
 void ProjectConfigurationDlg::updateDependenciesControl( )
 {
-  QPtrList <ProjectItem> itemList=getAllProjects();
+  QPtrList <qProjectItem> itemList=getAllProjects();
 
   intDeps_view->setSorting(-1,false);
   extDeps_view->setSorting(-1,false);
@@ -597,13 +597,13 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
 
   QStringList::Iterator it=depsList.begin();
   for(;it!=depsList.end();++it){
-        ProjectItem *item=itemList.first();
+        qProjectItem *item=itemList.first();
         while(item){
-          if(item->type()==ProjectItem::Subproject)
+          if(item->type()==qProjectItem::Subproject)
           {
-            if( (((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
-                || (((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
-              SubprojectItem *sItem=(SubprojectItem*)item;
+            if( (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
+                || (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
+              SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
               if ((!sItem->isScope) && (sItem!=myProjectItem))
               {
                   QString tmpLib;
@@ -632,14 +632,14 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
   kdDebug()<< "itemlist count =" << itemList.count()<<endl;
 
   //add all other prj in itemList unchecked
-  ProjectItem *item=itemList.first();
+  qProjectItem *item=itemList.first();
   while(item)
   {
-    if(item->type()==ProjectItem::Subproject)
+    if(item->type()==qProjectItem::Subproject)
     {
-      if( (((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
-        || (((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
-        SubprojectItem *sItem=(SubprojectItem*)item;
+      if( (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
+        || (((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
+        SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
         if ((!sItem->isScope) && (sItem!=myProjectItem))
         {
           QString tmpLib;
@@ -671,12 +671,12 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
   if(myProjectItem->configuration.m_template==QTMP_SUBDIRS)
   {
 
-      QPtrList <ProjectItem> itemList;
+      QPtrList <qProjectItem> itemList;
 
-      ProjectItem *item=(ProjectItem *)myProjectItem->firstChild();
+      qProjectItem *item=(qProjectItem *)myProjectItem->firstChild();
       while(item){
         itemList.append(item);
-        item=(ProjectItem*)item->nextSibling();
+        item=(qProjectItem*)item->nextSibling();
       }
 
 
@@ -688,7 +688,7 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
     for(;it1!=buildList.end();++it1){
       item=itemList.first();
       while(item){
-        if(item->type()==ProjectItem::Subproject)
+        if(item->type()==qProjectItem::Subproject)
         {
           if(item->text(0)==(*it1)){
             new QListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
@@ -702,7 +702,7 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
     //add the rest
       item=itemList.first();
       while(item){
-        if(item->type()==ProjectItem::Subproject)
+        if(item->type()==qProjectItem::Subproject)
         {
             new QListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
         }
@@ -719,18 +719,18 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   //temp strlist
   QStringList libDirList=myProjectItem->configuration.m_librarypath;
 
-  QPtrList <ProjectItem> itemList=getAllProjects();
+  QPtrList <qProjectItem> itemList=getAllProjects();
   outsidelibdir_listview->setSorting(-1,false);
 
-  ProjectItem *item=itemList.first();
+  qProjectItem *item=itemList.first();
   
   while(item){
-    if(item->type()==ProjectItem::Subproject)
+    if(item->type()==qProjectItem::Subproject)
     {
 
       //librarys
-      if( ((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
-        SubprojectItem *sItem=(SubprojectItem*)item;
+      if( ((SubqmakeprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
+        SubqmakeprojectItem *sItem=(SubqmakeprojectItem*)item;
 
         if(sItem!=myProjectItem)
         {

@@ -69,28 +69,28 @@
 
 #define VALUES_PER_ROW  1
 
-/**
- * Class ProjectViewItem
+/*
+ * Class qProjectItem
  */
 
-ProjectItem::ProjectItem(Type type, QListView *parent, const QString &text)
+qProjectItem::qProjectItem(Type type, QListView *parent, const QString &text)
     : QListViewItem(parent, text), typ(type)
 {}
 
 
-ProjectItem::ProjectItem(Type type, ProjectItem *parent, const QString &text)
+qProjectItem::qProjectItem(Type type, qProjectItem *parent, const QString &text)
     : QListViewItem(parent, text), typ(type)
 {}
 
 
 
 
-/**
- * Class SubprojectItem
+/*
+ * Class SubqmakeprojectItem
  */
 
-SubprojectItem::SubprojectItem(QListView *parent, const QString &text, const QString &scopeString)
-    : ProjectItem(Subproject, parent, text)
+SubqmakeprojectItem::SubqmakeprojectItem(QListView *parent, const QString &text, const QString &scopeString)
+    : qProjectItem(Subproject, parent, text)
 {
     this->scopeString=scopeString;
     configuration.m_template = QTMP_APPLICATION;
@@ -98,29 +98,29 @@ SubprojectItem::SubprojectItem(QListView *parent, const QString &text, const QSt
 }
 
 
-SubprojectItem::SubprojectItem(SubprojectItem *parent, const QString &text,const QString &scopeString)
-    : ProjectItem(Subproject, parent, text)
+SubqmakeprojectItem::SubqmakeprojectItem(SubqmakeprojectItem *parent, const QString &text,const QString &scopeString)
+    : qProjectItem(Subproject, parent, text)
 {
     this->scopeString=scopeString;
     init();
 }
 
-SubprojectItem::~SubprojectItem()
+SubqmakeprojectItem::~SubqmakeprojectItem()
 {
 }
-QString SubprojectItem::getRelativPath()
+QString SubqmakeprojectItem::getRelativPath()
 {
   if(this->parent()==NULL||this->parent()->parent()==NULL) return("/"+configuration.m_subdirName);
-  else return(((SubprojectItem*)this->parent())->getRelativPath()+"/"+configuration.m_subdirName);
+  else return(((SubqmakeprojectItem*)this->parent())->getRelativPath()+"/"+configuration.m_subdirName);
 }
-QString SubprojectItem::getDownDirs()
+QString SubqmakeprojectItem::getDownDirs()
 {
-    SubprojectItem* pItem=this;
+    SubqmakeprojectItem* pItem=this;
 	while (pItem->parent())
-	    pItem=(SubprojectItem*)pItem->parent();
+	    pItem=(SubqmakeprojectItem*)pItem->parent();
     return getRelativePath(QDir::cleanDirPath(this->path),QDir::cleanDirPath(pItem->path));
 }
-QString SubprojectItem::getSharedLibAddObject(QString downDirs)
+QString SubqmakeprojectItem::getSharedLibAddObject(QString downDirs)
 {
   if(configuration.m_requirements & QD_SHARED)
   {
@@ -150,7 +150,7 @@ QString SubprojectItem::getSharedLibAddObject(QString downDirs)
   }
   return "";
 }
-QString SubprojectItem::getApplicationObject( QString downDirs )
+QString SubqmakeprojectItem::getApplicationObject( QString downDirs )
 {
   QString tmpPath;
   if(configuration.m_destdir!="")
@@ -170,7 +170,7 @@ QString SubprojectItem::getApplicationObject( QString downDirs )
   else
     return tmpPath + "/" + configuration.m_target;
 }
-QString SubprojectItem::getLibAddObject(QString downDirs)
+QString SubqmakeprojectItem::getLibAddObject(QString downDirs)
 {
   if(configuration.m_requirements & QD_SHARED)
   {
@@ -209,7 +209,7 @@ QString SubprojectItem::getLibAddObject(QString downDirs)
 
   return("");
 }
-QString SubprojectItem::getLibAddPath(QString downDirs)
+QString SubqmakeprojectItem::getLibAddPath(QString downDirs)
 {
 
   //PATH only add if shared lib
@@ -231,7 +231,7 @@ QString SubprojectItem::getLibAddPath(QString downDirs)
   return(tmpPath);
 
 }
-QString SubprojectItem::getIncAddPath(QString downDirs)
+QString SubqmakeprojectItem::getIncAddPath(QString downDirs)
 {
   QString tmpPath=downDirs+this->getRelativPath();
   tmpPath=QDir::cleanDirPath(tmpPath);
@@ -239,7 +239,7 @@ QString SubprojectItem::getIncAddPath(QString downDirs)
   return(tmpPath);
 }
 
-void SubprojectItem::init()
+void SubqmakeprojectItem::init()
 {
   configuration.m_template = QTMP_APPLICATION;
   configuration.m_warnings = QWARN_ON;
@@ -258,12 +258,12 @@ void SubprojectItem::init()
 }
 
 
-/**
+/*
  * Class GroupItem
  */
 
 GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const QString &scopeString)
-    : ProjectItem(Group, lv, text)
+    : qProjectItem(Group, lv, text)
 {
     this->scopeString = scopeString;
     groupType = type;
@@ -293,12 +293,12 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return NoType;
 }
 
-/**
+/*
  * Class FileItem
  */
 
 FileItem::FileItem(QListView *lv, const QString &text, bool exclude/*=false*/)
-    : ProjectItem(File, lv, text)
+    : qProjectItem(File, lv, text)
 {
     // if excluded is set the file is excluded in the subproject/project.
     // by default excluded is set to false, thus file is included
@@ -541,7 +541,7 @@ void TrollProjectWidget::openProject(const QString &dirName)
     QDomDocument &dom = *(m_part->projectDom());
     m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                                                     "subclass","sourcefile", "uifile");
-    SubprojectItem *item = new SubprojectItem(overview, "/","");
+    SubqmakeprojectItem *item = new SubqmakeprojectItem(overview, "/","");
     item->subdir = dirName.right(dirName.length()-dirName.findRev('/')-1);
     item->path = dirName;
     item->m_RootBuffer = &(item->m_FileBuffer);
@@ -569,7 +569,7 @@ QStringList TrollProjectWidget::allSubprojects()
     for (; it.current(); ++it) {
         if (it.current() == overview->firstChild())
             continue;
-        QString path = static_cast<SubprojectItem*>(it.current())->path;
+        QString path = static_cast<SubqmakeprojectItem*>(it.current())->path;
         res.append(path.mid(prefixlen));
     }
 
@@ -587,7 +587,7 @@ QStringList TrollProjectWidget::allFiles()
         if (item->firstChild())
             s.push(item->firstChild());
 
-        SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
+        SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
         QString path = spitem->path;
 
         for (QPtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
@@ -614,7 +614,7 @@ QString TrollProjectWidget::projectDirectory()
     if (!overview->firstChild())
         return QString::null; //confused
 
-    return static_cast<SubprojectItem*>(overview->firstChild())->path;
+    return static_cast<SubqmakeprojectItem*>(overview->firstChild())->path;
 }
 
 
@@ -685,7 +685,7 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
     if (!item)
         return;
     cleanDetailView(m_shownSubproject);
-    m_shownSubproject = static_cast<SubprojectItem*>(item);
+    m_shownSubproject = static_cast<SubqmakeprojectItem*>(item);
     setupContext();
     buildProjectDetailTree(m_shownSubproject,details);
 
@@ -727,7 +727,7 @@ QString TrollProjectWidget::getCurrentOutputFilename()
     return m_shownSubproject->configuration.m_target;
 }
 
-void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
+void TrollProjectWidget::cleanDetailView(SubqmakeprojectItem *item)
 {
   // If no children in detailview
   // it is a subdir template
@@ -736,7 +736,7 @@ void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
 //    if (item->configuration.m_template == QTMP_SUBDIRS)
 //      return;
     // Remove all GroupItems and all of their children from the view
-//    QPtrListIterator<SubprojectItem> it(item->scopes);
+//    QPtrListIterator<SubqmakeprojectItem> it(item->scopes);
 //    for (; it.current(); ++it)
 //    {
 //      cleanDetailView(*it);
@@ -754,7 +754,7 @@ void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
   }
 }
 
-void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *listviewControl)
+void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListView *listviewControl)
 {
 //  if (item->configuration.m_template == QTMP_SUBDIRS)
 //    return;
@@ -762,7 +762,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
   // Insert all GroupItems and all of their children into the view
   if (listviewControl)
   {
-//    QPtrListIterator<SubprojectItem> it1(item->scopes);
+//    QPtrListIterator<SubqmakeprojectItem> it1(item->scopes);
 //    for (; it1.current(); ++it1)
 //    {
 //      listviewControl->insertItem(*it1);
@@ -799,7 +799,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
   }
   else
   {
-//    QPtrListIterator<SubprojectItem> it1(item->scopes);
+//    QPtrListIterator<SubqmakeprojectItem> it1(item->scopes);
 //    for (; it1.current(); ++it1)
 //    {
 //      item->insertItem(*it1);
@@ -824,9 +824,9 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
         return;
 
     // We assume here that ALL items in both list views
-    // are ProjectItem's
-    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
-    if (pvitem->type() != ProjectItem::File)
+    // are qProjectItem's
+    qProjectItem *pvitem = static_cast<qProjectItem*>(item);
+    if (pvitem->type() != qProjectItem::File)
         return;
 
     QString dirName = m_shownSubproject->path;
@@ -976,7 +976,7 @@ void TrollProjectWidget::slotRebuildTarget()
   m_part->mainWindow()->lowerView(this);
 }
 
-void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
+void TrollProjectWidget::slotCreateScope(SubqmakeprojectItem *spitem)
 {
   if (spitem==0 && m_shownSubproject==0)
     return;
@@ -1003,7 +1003,7 @@ void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
     return;
 }
 
-void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
+void TrollProjectWidget::slotAddSubdir(SubqmakeprojectItem *spitem)
 {
   if (spitem==0 && m_shownSubproject==0)
     return;
@@ -1036,7 +1036,7 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
     }
     spitem->subdirs.append(subdirname);
     updateProjectFile(spitem);
-    SubprojectItem *newitem = new SubprojectItem(spitem, subdirname,"");
+    SubqmakeprojectItem *newitem = new SubqmakeprojectItem(spitem, subdirname,"");
     newitem->subdir = subdirname;
     newitem->m_RootBuffer = &(newitem->m_FileBuffer);
     newitem->path = spitem->path + "/" + subdirname;
@@ -1049,13 +1049,13 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
     return;
 }
 
-void TrollProjectWidget::slotRemoveSubproject(SubprojectItem *spitem)
+void TrollProjectWidget::slotRemoveSubproject(SubqmakeprojectItem *spitem)
 {
   if (spitem==0 && m_shownSubproject==0)
     return;
   else
   {
-    if ( ( spitem = dynamic_cast<SubprojectItem *>(m_shownSubproject->parent()) ) != NULL  )
+    if ( ( spitem = dynamic_cast<SubqmakeprojectItem *>(m_shownSubproject->parent()) ) != NULL  )
     {
     QString subdirname = m_shownSubproject->subdir;
     spitem->subdirs.remove(subdirname);
@@ -1071,7 +1071,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     if (!item)
         return;
 
-    SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
+    SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
 
     KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
 
@@ -1153,7 +1153,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
 }
 
-void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
+void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
 //=======================================================================
 {
   updateProjectFile(item); //for update buildorder
@@ -1299,7 +1299,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
 }
 
-SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QString &scopeString)
+SubqmakeprojectItem* TrollProjectWidget::getScope(SubqmakeprojectItem *baseItem,const QString &scopeString)
 //===============================================================================================
 {
   QStringList baseScopeParts = QStringList::split(':',baseItem->scopeString);
@@ -1321,10 +1321,10 @@ SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QStr
     return baseItem;
   // process next step of recursive function
   QString nextScopePart = subScopeParts[i];
-  QPtrListIterator<SubprojectItem> spit(baseItem->scopes);
+  QPtrListIterator<SubqmakeprojectItem> spit(baseItem->scopes);
   for (; spit.current(); ++spit)
   {
-    SubprojectItem *spitem = spit;
+    SubqmakeprojectItem *spitem = spit;
     kdDebug(9024) << spitem->text(0) << "==" << nextScopePart << endl;
     if (spitem->text(0)==nextScopePart)
     {
@@ -1337,7 +1337,7 @@ SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QStr
 
 void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {
-  SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
+  SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   FileBuffer *subBuffer=m_shownSubproject->m_RootBuffer->getSubBuffer(spitem->scopeString);
   subBuffer->removeValues("SUBDIRS");
@@ -1393,7 +1393,7 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
 }
 
-void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* subBuffer)
+void TrollProjectWidget::updateInstallObjects(SubqmakeprojectItem* item, FileBuffer* subBuffer)
 {
   // Install objects
   GroupItem* instroot = getInstallRoot(item);
@@ -1698,7 +1698,7 @@ void TrollProjectWidget::slotAddFiles()
   }
 }
 
-GroupItem* TrollProjectWidget::getInstallRoot(SubprojectItem* item)
+GroupItem* TrollProjectWidget::getInstallRoot(SubqmakeprojectItem* item)
 {
   QPtrListIterator<GroupItem> it(item->groups);
   for (;it.current();++it)
@@ -1709,7 +1709,7 @@ GroupItem* TrollProjectWidget::getInstallRoot(SubprojectItem* item)
   return 0;
 }
 
-GroupItem* TrollProjectWidget::getInstallObject(SubprojectItem* item, const QString& objectname)
+GroupItem* TrollProjectWidget::getInstallObject(SubqmakeprojectItem* item, const QString& objectname)
 {
   GroupItem* instroot = getInstallRoot(item);
   if (!instroot)
@@ -1800,9 +1800,9 @@ void TrollProjectWidget::slotRemoveFile()
   QListViewItem *selectedItem = details->currentItem();
   if (!selectedItem)
     return;
-  ProjectItem *pvitem = static_cast<ProjectItem*>(selectedItem);
+  qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
   // Check that it is a file (just in case)
-  if (pvitem->type() != ProjectItem::File)
+  if (pvitem->type() != qProjectItem::File)
     return;
   FileItem *fitem = static_cast<FileItem*>(pvitem);
   removeFile(m_shownSubproject, fitem);
@@ -1813,9 +1813,9 @@ void TrollProjectWidget::slotConfigureFile()
   QListViewItem *selectedItem = details->currentItem();
   if (!selectedItem)
     return;
-  ProjectItem *pvitem = static_cast<ProjectItem*>(selectedItem);
+  qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
   // Check that it is a file (just in case)
-  if (pvitem->type() != ProjectItem::File)
+  if (pvitem->type() != qProjectItem::File)
     return;
   FileItem *fitem = static_cast<FileItem*>(pvitem);
 
@@ -1824,7 +1824,7 @@ void TrollProjectWidget::slotConfigureFile()
     return;
   QStringList dirtyScopes;
   FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
-  SubprojectItem *scope;
+  SubqmakeprojectItem *scope;
   propdlg->exec();
 
   for (uint i=0; i<dirtyScopes.count();i++)
@@ -1875,8 +1875,8 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
     rebuildTargetButton->setEnabled(false);
     executeTargetButton->setEnabled(false);*/
 
-    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
-    if (pvitem->type() == ProjectItem::Group)
+    qProjectItem *pvitem = static_cast<qProjectItem*>(item);
+    if (pvitem->type() == qProjectItem::Group)
     {
       GroupItem* gitem = static_cast<GroupItem*>(item);
       if (gitem->groupType == GroupItem::InstallObject)
@@ -1896,7 +1896,7 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
 
 
     }
-    else if (pvitem->type() == ProjectItem::File)
+    else if (pvitem->type() == qProjectItem::File)
     {
         removefileButton->setEnabled(true);
         configurefileButton->setEnabled(true);
@@ -1911,8 +1911,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
     if (!item)
         return;
 
-    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
-    if (pvitem->type() == ProjectItem::Group) {
+    qProjectItem *pvitem = static_cast<qProjectItem*>(item);
+    if (pvitem->type() == qProjectItem::Group) {
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
         QString title,ext;
         switch (titem->groupType) {
@@ -2188,7 +2188,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
            cmd += m_shownSubproject->pro_file;
            m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
         }
-    } else if (pvitem->type() == ProjectItem::File) {
+    } else if (pvitem->type() == qProjectItem::File) {
 
         removefileButton->setEnabled(true);
         FileItem *fitem = static_cast<FileItem*>(pvitem);
@@ -2258,7 +2258,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             return;
           QStringList dirtyScopes;
           FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
-          SubprojectItem *scope;
+          SubqmakeprojectItem *scope;
           propdlg->exec();
           for (uint i=0; i<dirtyScopes.count();i++)
           {
@@ -2359,7 +2359,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 }
 
 
-void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
+void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem)
 {
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
@@ -2482,13 +2482,13 @@ QString TrollProjectWidget::getUiFileLink(const QString &relpath, const QString&
   return "";
 }
 
-void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, FileBuffer *buffer)
+void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeString, FileBuffer *buffer)
 {
     if (!scopeString.isEmpty())
     {
       QStringList scopeNames = QStringList::split(':',scopeString);
-      SubprojectItem *sitem;
-      sitem = new SubprojectItem(item, scopeNames[scopeNames.count()-1],scopeString);
+      SubqmakeprojectItem *sitem;
+      sitem = new SubqmakeprojectItem(item, scopeNames[scopeNames.count()-1],scopeString);
       sitem->path = item->path;
       sitem->m_RootBuffer = buffer;
       sitem->subdir = item->subdir;
@@ -2676,7 +2676,7 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
       parseScope(item,scopeString+(!scopeString.isEmpty() ? ":" : "")+childScopes[i],buffer);
 }
 
-void TrollProjectWidget::parse(SubprojectItem *item)
+void TrollProjectWidget::parse(SubqmakeprojectItem *item)
 {
     QFileInfo fi(item->path);
 //    QString proname = item->path + "/" + fi.baseName() + ".pro";
@@ -2850,7 +2850,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
       QStringList::Iterator it;
       for (it = lst.begin(); it != lst.end(); ++it)
       {
-        SubprojectItem *newitem = new SubprojectItem(item, (*it),"");
+        SubqmakeprojectItem *newitem = new SubqmakeprojectItem(item, (*it),"");
         newitem->subdir = *it;
         newitem->m_RootBuffer = &(newitem->m_FileBuffer);
         newitem->path = item->path + "/" + (*it);
@@ -2886,10 +2886,10 @@ void TrollProjectWidget::slotBuildFile()
 //    m_part->startMakeCommand(buildDir, target);
 
     kdDebug(9020) << "searching for the subproject" << endl;
-    QPtrList<SubprojectItem> list = findSubprojectForFile(fi);
+    QPtrList<SubqmakeprojectItem> list = findSubprojectForFile(fi);
     kdDebug(9020) << "searching for the subproject: success" << endl;
 
-    SubprojectItem *spitem;
+    SubqmakeprojectItem *spitem;
     for ( spitem = list.first(); spitem; spitem = list.next() )
     {
         QString buildcmd = constructMakeCommandLine(spitem->configuration.m_makefile);
@@ -3071,7 +3071,7 @@ void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & 
     m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
-void TrollProjectWidget::createMakefileIfMissing(const QString &dir, SubprojectItem *item)
+void TrollProjectWidget::createMakefileIfMissing(const QString &dir, SubqmakeprojectItem *item)
 {
   QFileInfo fi;
   QFileInfo fi2;
@@ -3093,14 +3093,14 @@ void TrollProjectWidget::createMakefileIfMissing(const QString &dir, SubprojectI
   }
 }
 
-QPtrList<SubprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
+QPtrList<SubqmakeprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
 {
-    QPtrList<SubprojectItem> list;
+    QPtrList<SubqmakeprojectItem> list;
     findSubprojectForFile(list, m_rootSubproject, fi.absFilePath());
     return list;
 }
 
-void TrollProjectWidget::findSubprojectForFile( QPtrList<SubprojectItem> &list, SubprojectItem * item, QString absFilePath )
+void TrollProjectWidget::findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath )
 {
     QDir d(item->path);
     kdDebug(9020) << "searching withing subproject: " << item->path << endl;
@@ -3124,7 +3124,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<SubprojectItem> &list, 
     QListViewItem * child = item->firstChild();
     while( child )
     {
-        SubprojectItem *spitem = dynamic_cast<SubprojectItem*>(child);
+        SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem*>(child);
 
         if (spitem)
         {
@@ -3138,7 +3138,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<SubprojectItem> &list, 
 /*    QListViewItemIterator it( item );
     while ( it.current() )
     {
-        SubprojectItem *spitem = dynamic_cast<SubprojectItem*>(it.current());
+        SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem*>(it.current());
 
         if (spitem)
         {

@@ -39,7 +39,7 @@
 
 class TrollProjectPart;
 class KListView;
-class SubprojectItem;
+class SubqmakeprojectItem;
 class GroupItem;
 class FileItem;
 class FileBuffer;
@@ -85,13 +85,13 @@ struct ProjectConfiguration
 /**
  * Base class for all items appearing in ProjectOverview and ProjectDetails.
  */
-class ProjectItem : public QListViewItem
+class qProjectItem : public QListViewItem
 {
 public:
     enum Type { Subproject, Group, File };
 
-    ProjectItem(Type type, QListView *parent, const QString &text);
-    ProjectItem(Type type, ProjectItem *parent, const QString &text);
+    qProjectItem(Type type, QListView *parent, const QString &text);
+    qProjectItem(Type type, qProjectItem *parent, const QString &text);
 
     QString scopeString;
     Type type()
@@ -107,19 +107,19 @@ private:
 /**
  * Stores the content of one .pro file
  */
-class SubprojectItem : public ProjectItem
+class SubqmakeprojectItem : public qProjectItem
 {
 public:
-    SubprojectItem(QListView *parent, const QString &text,const QString &scopeString);
-    SubprojectItem(SubprojectItem *parent, const QString &text, const QString &scopeString);
-    ~SubprojectItem();
+    SubqmakeprojectItem(QListView *parent, const QString &text,const QString &scopeString);
+    SubqmakeprojectItem(SubqmakeprojectItem *parent, const QString &text, const QString &scopeString);
+    ~SubqmakeprojectItem();
 
     QString subdir;
     QString relpath;
     QString path;
     QString pro_file;
     QPtrList<GroupItem> groups;
-    QPtrList<SubprojectItem> scopes;
+    QPtrList<SubqmakeprojectItem> scopes;
 
     // Containers of included an excluded files
     QStringList subdirs;
@@ -168,13 +168,13 @@ class ProjectConfigurationDlg;
 class InsideCheckListItem:public QCheckListItem
 {
 public:
-  InsideCheckListItem(QListView *parent,SubprojectItem *item, ProjectConfigurationDlg *config):
+  InsideCheckListItem(QListView *parent,SubqmakeprojectItem *item, ProjectConfigurationDlg *config):
     QCheckListItem(parent, item->relpath.right(item->relpath.length()-1), QCheckListItem::CheckBox)
   {
     prjItem=item;
     m_config = config;
   }
-  InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item, ProjectConfigurationDlg *config):
+  InsideCheckListItem(QListView *parent,QListViewItem *after,SubqmakeprojectItem *item, ProjectConfigurationDlg *config):
       QCheckListItem(parent,
 #if KDE_VERSION > 305
 		     after,
@@ -184,7 +184,7 @@ public:
     prjItem=item;
     m_config = config;
   }
-  SubprojectItem *prjItem;
+  SubqmakeprojectItem *prjItem;
   ProjectConfigurationDlg *m_config;
 
 protected:
@@ -193,7 +193,7 @@ protected:
 
 
 
-class GroupItem : public ProjectItem
+class GroupItem : public qProjectItem
 {
 public:
     enum GroupType {NoType, Sources, Headers, Forms,Distfiles,Images,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject};
@@ -212,12 +212,12 @@ public:
     QStringList         str_files_exclude;
     // end qmake INSTALLS support
     GroupType           groupType;
-    SubprojectItem*     owner;
+    SubqmakeprojectItem*     owner;
 };
 
 
 // Not sure if this complexity is really necessary...
-class FileItem : public ProjectItem
+class FileItem : public qProjectItem
 {
 public:
     FileItem(QListView *lv, const QString &text,bool exclude=false);
@@ -271,10 +271,10 @@ public:
     GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name, const QString &scopeName);
     FileItem *createFileItem(const QString &name);
 
-    SubprojectItem* getScope(SubprojectItem *baseItem,const QString &scopeString); // baseItem must be ansister
+    SubqmakeprojectItem* getScope(SubqmakeprojectItem *baseItem,const QString &scopeString); // baseItem must be ansister
     void updateProjectFile(QListViewItem *item);
-    void updateProjectConfiguration(SubprojectItem *item);
-    void updateInstallObjects(SubprojectItem* item, FileBuffer *subBuffer);
+    void updateProjectConfiguration(SubqmakeprojectItem *item);
+    void updateInstallObjects(SubqmakeprojectItem* item, FileBuffer *subBuffer);
     void addFileToCurrentSubProject(GroupItem *titem,const QString &filename);
     void addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename);
     void addFile(const QString &fileName, bool noPathTruncate = false);
@@ -306,28 +306,28 @@ private slots:
     void slotDetailsExecuted(QListViewItem *item);
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotConfigureFile();
-    void slotAddSubdir(SubprojectItem *spitem=0);
-    void slotRemoveSubproject(SubprojectItem *spitem=0);
-    void slotCreateScope(SubprojectItem *spitem=0);
+    void slotAddSubdir(SubqmakeprojectItem *spitem=0);
+    void slotRemoveSubproject(SubqmakeprojectItem *spitem=0);
+    void slotCreateScope(SubqmakeprojectItem *spitem=0);
 
 private:
-    void cleanDetailView(SubprojectItem *item);
-    void buildProjectDetailTree(SubprojectItem *item, KListView *listviewControl);
-    void removeFile(SubprojectItem *spitem, FileItem *fitem);
+    void cleanDetailView(SubqmakeprojectItem *item);
+    void buildProjectDetailTree(SubqmakeprojectItem *item, KListView *listviewControl);
+    void removeFile(SubqmakeprojectItem *spitem, FileItem *fitem);
     void setupContext();
-    void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
-    void parse(SubprojectItem *item);
-    GroupItem* getInstallRoot(SubprojectItem *item);
-    GroupItem* getInstallObject(SubprojectItem *item,const QString& objectname);
+    void parseScope(SubqmakeprojectItem *item,QString scopeString, FileBuffer *buffer);
+    void parse(SubqmakeprojectItem *item);
+    GroupItem* getInstallRoot(SubqmakeprojectItem *item);
+    GroupItem* getInstallObject(SubqmakeprojectItem *item,const QString& objectname);
     QString getUiFileLink(const QString &path, const QString& filename);
     QString getHeader();
     QString constructMakeCommandLine(const QString makeFileName = QString::null);
     void startMakeCommand(const QString &dir, const QString &target);
-    void createMakefileIfMissing(const QString &dir, SubprojectItem *item);
+    void createMakefileIfMissing(const QString &dir, SubqmakeprojectItem *item);
 
     /*fileName: full base file name like QFileInfo::baseName ( true )*/
-    QPtrList<SubprojectItem> findSubprojectForFile( QFileInfo fi );
-    void findSubprojectForFile( QPtrList<SubprojectItem> &list, SubprojectItem * item, QString absFilePath );
+    QPtrList<SubqmakeprojectItem> findSubprojectForFile( QFileInfo fi );
+    void findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath );
 //    QString makeEnvironment();
 
     QVBox     *overviewContainer;
@@ -356,8 +356,8 @@ private:
     QToolButton *configurefileButton;
 
     DomUtil::PairList m_subclasslist;
-    SubprojectItem *m_shownSubproject;
-    SubprojectItem *m_rootSubproject;
+    SubqmakeprojectItem *m_shownSubproject;
+    SubqmakeprojectItem *m_rootSubproject;
     TrollProjectPart *m_part;
 
     friend class ChooseSubprojectDlg;
