@@ -516,11 +516,14 @@ void QEditorView::internalCollapseBlock( QTextParagraph* p )
     while( p ){
         ParagData* data = (ParagData*) p->extraData();
         if( data ){
-            p->hide();
 
             if( data->level() == lev ){
                 break;
             }
+	    
+	    kdDebug(9032) << "hide parag " << p->paragId() << " level = " << data->level() << endl;
+            p->hide();
+	    
             p = p->next();
         }
     }
