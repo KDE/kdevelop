@@ -32,6 +32,7 @@
 #include <kshortcut.h>
 #include <kcompletion.h>
 #include <kdirwatch.h>
+#include <kdeversion.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -195,7 +196,11 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 
   // Make sure the URL exists
   // KDE 3.0 compatibility hack: use KIO::NetAccess for everything >= KDE 3.1
+#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+  if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+#else
   if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
+#endif
     // Try to find this file in the current project's list instead
     KDevProject* project = API::getInstance()->project();
 
@@ -203,14 +208,22 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
       url = findURLInProject(url);
 
       localUrl = url.url().startsWith("file:/");
+#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+      if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+#else
       if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
+#endif
         // See if this url is relative to the current project's directory
         url = project->projectDirectory() + "/" + url.url();
       }
     }
 
     localUrl = url.url().startsWith("file:/");
+#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+#else
     if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
+#endif
       // Here perhaps we should prompt the user to find the file?
       return;
     }

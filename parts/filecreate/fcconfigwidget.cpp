@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
+#include <kdeversion.h>
 
 #include "fctypeedit.h"
 #include "fctemplateedit.h"
@@ -379,7 +380,11 @@ void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString des
     {
         KURL destDir;
         destDir.setPath(dest);
+#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+        if (!KIO::NetAccess::exists(destDir))
+#else
         if (!KIO::NetAccess::exists(destDir, false, 0 ))
+#endif
             KIO::NetAccess::mkdir(destDir);
 
         KURL destination;
