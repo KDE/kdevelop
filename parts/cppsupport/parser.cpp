@@ -831,6 +831,7 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTemplateDeclaration()" << endl;
 
+    qDebug( "------------------> Parser::parseTemplateDeclaration() " );
     int start = lex->index();
 
     AST::Node exp;

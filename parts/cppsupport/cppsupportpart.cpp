@@ -330,7 +330,8 @@ CppSupportPart::projectOpened( )
     connect( project(), SIGNAL(projectCompiled()),
 	     this, SLOT(slotProjectCompiled()) );
 
-    // code completion working class
+    QDir::setCurrent( project()->projectDirectory() );
+    
     m_projectFileList = project()->allFiles();
 
     m_timestamp.clear();

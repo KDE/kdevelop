@@ -2,7 +2,10 @@
 
 #include "driver.h"
 #include "ast.h"
-//#include "my_walker.h"
+
+#ifdef __WALKER__
+#include "my_walker.h"
+#endif
 
 #include <qfileinfo.h>
 #include <qfile.h>
@@ -106,73 +109,70 @@ int main( int argc, char* argv[] )
 {
     MyDriver driver;
     driver.setResolveDependencesEnabled( true );
-
+    
     bool showMacros = false;
-
+    
     for( int i=1; i<argc; ++i ){
-        if( QString(argv[i]) == "-m" ){
+	if( QString(argv[i]) == "-m" ){
 	    showMacros = true;
 	    continue;
 	}
-
+	
 	QFile f( argv[i] );
-
+	
 	if( !f.open(IO_ReadOnly) ){
 	    std::cout << "cannot open file " << argv[i] << std::endl;
 	    continue;
 	}
-
-        std::cout << "parsing " << argv[ i ];
-
+	
+	std::cout << "parsing " << argv[ i ];
+	
 	QTextStream s( &f );
 	QString contents = s.read();
 	f.close();
-
-        QFileInfo info( argv[i] );
-
+	
+	QFileInfo info( argv[i] );
+	
 	TranslationUnitAST::Node translationUnit = driver.parseFile( info.absFilePath(), contents  );
 	QValueList<Problem> problems = driver.problems( info.absFilePath() );
-
-
-        if( info.extension() == "cpp" )
-            driver.removeAllMacrosInFile( info.absFilePath() );
-
+	
+	
+	if( info.extension() == "cpp" )
+	    driver.removeAllMacrosInFile( info.absFilePath() );
+	
 	if( problems.count() == 0 ){
-	        std::cout << " OK" << std::endl;
-                //MyWalker w;
-                //w.parseTranslationUnit( translationUnit.get() );
-
-
-            // QValueList<Macro> macros( const QString& fileName ) const;
-	    // QValueList<Dependence> dependences( const QString& fileName )
-
+	    std::cout << " OK" << std::endl;
+#ifdef __WALKER__
+	    MyWalker w;
+	    w.parseTranslationUnit( translationUnit.get() );
+#endif
 	    continue;
 	}
-
+	
 	QStringList lines = QStringList::split( "\n", contents, true );
 	QValueList<Problem>::Iterator it = problems.begin();
 	std::cout << " found " << problems.count() << " problems" << std::endl;
-
+	
 	while( it != problems.end() ) {
 	    Problem p = *it++;
 	    QString textLine = lines[ p.line() ];
-
+	    
 	    std::cerr << p.line()+1 << ": " << p.text() << std::endl;
 	    std::cerr << p.line()+1 << ": " << textLine << std::endl;
-
+	    
 	    QString s = textLine.left( p.column() );
 	    s.replace( QRegExp("[^\t]"), " " );
 	    s += "^";
-
+	    
 	    std::cerr << p.line()+1 << ": " << s << std::endl;
 	}
-
-        std::cerr << std::endl;
+	
+	std::cerr << std::endl;
     }
-
+    
     std::cout << "parsed " << driver.count << " files" << std::endl;
-
-
+    
+    
     if( showMacros ){
         std::cout << std::endl << "Macro Table" << std::endl;
 	std::cout << "-----------------------------------------------------------------" << std::endl;
