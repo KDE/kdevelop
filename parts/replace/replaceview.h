@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens.dagerbo@swipnet.se                                                 *
+ *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,6 +14,10 @@
 
 #include <klistview.h>
 
+#include <qstring.h>
+#include <qregexp.h>
+
+class QTextStream;
 class QWidget;
 class ReplaceItem;
 
@@ -21,11 +25,16 @@ class ReplaceView : public KListView
 {
 public:
     ReplaceView( QWidget *);
-
     ReplaceItem * firstChild() const;
+    void setReplacementData( QRegExp const &, QString const & );
+    void showReplacementsForFile( QTextStream &, QString const & );
+    void makeReplacementsForFile( QTextStream & istream, QTextStream & ostream, ReplaceItem const * fileitem );
 
-    void makeReplacements(QString const & pattern, QString const & replacement );
-    void showReplacements( QStringList const & files, QString const & pattern, QString const & replacement );
+private:
+    QRegExp _regexp;
+    QString _replacement;
+    ReplaceItem * _latestfile;
+
 };
 
 

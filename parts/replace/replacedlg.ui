@@ -8,49 +8,181 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>394</width>
-            <height>281</height>
+            <width>420</width>
+            <height>500</height>
         </rect>
     </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>32767</width>
+            <height>32767</height>
+        </size>
+    </property>
     <property name="caption">
-        <string>Project wide find-replace</string>
+        <string>Project Wide String Replacement</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>groupBox1</cstring>
             </property>
-            <property name="text">
-                <string>String to find:</string>
+            <property name="title">
+                <string>Strings</string>
             </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Find</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>find_combo</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replacement</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>replacement_combo</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QLineEdit">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>find_line</cstring>
+                <cstring>groupBox2</cstring>
             </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel2</cstring>
+            <property name="title">
+                <string>Options</string>
             </property>
-            <property name="text">
-                <string>Replacement string:</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>replacement_line</cstring>
-            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>case_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Case sensitive</string>
+                    </property>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup2</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>strings_all_radio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>All substrings</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>strings_wholewords_radio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Whole words only</string>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout3</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>strings_regexp_radio</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Regular expression:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>regexp_button</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Editor</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>regexp_combo</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
             </property>
             <property name="title">
-                <string>Target</string>
+                <string>Target files in project</string>
             </property>
             <vbox>
                 <property name="name">
@@ -58,10 +190,10 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>all_radio</cstring>
+                        <cstring>files_all_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>all files in current project</string>
+                        <string>All files</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -69,24 +201,39 @@
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>open_radio</cstring>
+                        <cstring>files_open_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>open files only (including any non-project files)</string>
+                        <string>Open files only</string>
                     </property>
                 </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>files_path_radio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Files under path:</string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester">
+                            <property name="name">
+                                <cstring>path_urlreq</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </vbox>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>modified_files_check</cstring>
-            </property>
-            <property name="text">
-                <string>Save modified files</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -108,7 +255,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>21</width>
+                            <width>186</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -119,6 +266,9 @@
                     </property>
                     <property name="text">
                         <string>Find</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -146,6 +296,56 @@
         <receiver>ReplaceDlg</receiver>
         <slot>accept()</slot>
     </connection>
+    <connection>
+        <sender>strings_regexp_radio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>regexp_combo</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>strings_regexp_radio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>find_combo</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>strings_regexp_radio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>regexp_combo</receiver>
+        <slot>setFocus()</slot>
+    </connection>
+    <connection>
+        <sender>strings_regexp_radio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>regexp_button</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>files_path_radio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>path_urlreq</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
+<tabstops>
+    <tabstop>find_combo</tabstop>
+    <tabstop>replacement_combo</tabstop>
+    <tabstop>case_box</tabstop>
+    <tabstop>strings_all_radio</tabstop>
+    <tabstop>regexp_button</tabstop>
+    <tabstop>regexp_combo</tabstop>
+    <tabstop>files_all_radio</tabstop>
+    <tabstop>path_urlreq</tabstop>
+    <tabstop>find_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>strings_wholewords_radio</tabstop>
+    <tabstop>strings_regexp_radio</tabstop>
+    <tabstop>files_path_radio</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

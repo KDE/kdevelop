@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens.dagerbo@swipnet.se                                                 *
+ *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,10 +10,10 @@
  ***************************************************************************/
 
 #include <qheader.h>
-#include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
 #include <qstringlist.h>
+#include <qregexp.h>
 
 #include "replaceitem.h"
 #include "replaceview.h"
@@ -26,7 +26,7 @@ ReplaceItem * ReplaceView::firstChild() const
 }
 
 
-ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent )
+ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent ), _latestfile( 0 )
 {
     setSorting( -1 );
     addColumn( "" );
@@ -34,105 +34,66 @@ ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent )
     setFullWidth();
 }
 
-
-void ReplaceView::makeReplacements(QString const & pattern, QString const & replacement )
+void ReplaceView::makeReplacementsForFile( QTextStream & istream, QTextStream & ostream, ReplaceItem const * fileitem )
 {
-    ReplaceItem const * fileitem = firstChild();
+    int line = 0;
 
-    while ( fileitem )
+    ReplaceItem const * lineitem = fileitem->firstChild();
+    while ( lineitem )
     {
-        if ( fileitem->isOn() )
+        if ( lineitem->isOn() )
         {
-            kdDebug(0) << " ## " << fileitem->file() << endl;
+            //kdDebug(0) << " #### " << lineitem->text() << endl;
 
-            QString outfilename = fileitem->file() + "_modified";
-
-            QFile infile( fileitem->file() );
-            QFile outfile( outfilename );
-            if ( ! ( infile.open( IO_ReadOnly ) && outfile.open( IO_WriteOnly ) ) )
+            while ( line < lineitem->line() )
             {
-                kdDebug(0) << " **** ERROR opening file! **** " << endl;
-                return;
+                ostream << istream.readLine() << "\n";
+                line++;
             }
-            QTextStream instream( &infile);
-            QTextStream outstream( &outfile );
-
-            int line = 0;
-
-            ReplaceItem const * lineitem = fileitem->firstChild();
-            while ( lineitem )
-            {
-                if ( lineitem->isOn() )
-                {
-                    kdDebug(0) << " #### " << lineitem->text() << endl;
-
-                    while ( line < lineitem->line() )
-                    {
-                        outstream << instream.readLine() << "\n";
-                        line++;
-                    }
-                    // here is the hit
-                    Q_ASSERT( line == lineitem->line() );
-                    outstream << instream.readLine().replace( pattern, replacement ) << "\n";
-                    line++;
-                }
-
-                lineitem = lineitem->nextSibling();
-            }
-
-            while ( !instream.atEnd() )
-            {
-                outstream << instream.readLine() << "\n";
-            }
-
-            infile.close();
-            outfile.close();
-
-            QDir().rename( outfilename, fileitem->file(), true );
+            // here is the hit
+            Q_ASSERT( line == lineitem->line() );
+            ostream << istream.readLine().replace( _regexp, _replacement ) << "\n";
+            line++;
         }
-        fileitem = fileitem->nextSibling();
+
+        lineitem = lineitem->nextSibling();
+    }
+
+    while ( !istream.atEnd() )
+    {
+        ostream << istream.readLine() << "\n";
     }
 }
 
-void ReplaceView::showReplacements( QStringList const & files, QString const & pattern, QString const &replacement )
+void ReplaceView::showReplacementsForFile( QTextStream & stream, QString const & file )
 {
-    ReplaceItem::s_listview_done = false;
+    ReplaceItem * latestitem = 0;
 
-    ReplaceItem * latestfile = 0;
+    int line = 0;
+    bool firstline = true;
 
-    QStringList::ConstIterator it = files.begin();
-    while ( it != files.end() )
+    while ( !stream.atEnd() )
     {
-        ReplaceItem * latestitem = 0;
+        QString s = stream.readLine();
 
-        QFile file( *it );
-        if ( file.open ( IO_ReadOnly ) )
+        if ( s.contains( _regexp ) > 0 )
         {
-            int line = 0;
-            bool firstline = true;
-            QTextStream stream ( &file );
+            s.replace( _regexp, _replacement );
 
-            while ( !stream.atEnd() )
+            if ( firstline )
             {
-                QString s = stream.readLine();
-
-                if ( s.contains( pattern ) > 0 )
-                {
-                    s.replace( pattern, replacement );
-
-                    if ( firstline )
-                    {
-                        latestfile = new ReplaceItem( this, latestfile, *it );
-                        firstline = false;
-                    }
-                    latestitem = new ReplaceItem( latestfile, latestitem, *it, s.stripWhiteSpace(), line );
-                    latestfile->insertItem( latestitem );
-                }
-                line++;
+                _latestfile = new ReplaceItem( this, _latestfile, file );
+                firstline = false;
             }
+            latestitem = new ReplaceItem( _latestfile, latestitem, file, s.stripWhiteSpace(), line );
+            _latestfile->insertItem( latestitem );
         }
-        ++it;
+        line++;
     }
+}
 
-    ReplaceItem::s_listview_done = true;
+void ReplaceView::setReplacementData( QRegExp const & re, QString const & replacement )
+{
+    _regexp = re;
+    _replacement = replacement;
 }

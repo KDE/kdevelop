@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens.dagerbo@swipnet.se                                                 *
+ *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,11 +12,14 @@
 #ifndef __REPLACE_WIDGET_H__
 #define __REPLACE_WIDGET_H__
 
+#include <ktexteditor/editinterface.h>
+
 #include <qwidget.h>
 #include <qstring.h>
 
 class QPushButton;
 class QListViewItem;
+class QDialog;
 
 class ReplacePart;
 class ReplaceDlg;
@@ -37,26 +40,31 @@ public slots:
     void clear();
 
     void clicked( QListViewItem * );
+    void showRegExpEditor();
 
 private:
-    void reloadOpenFiles();
+    void showReplacements();
+    void makeReplacements();
 
     QString relativeProjectPath( QString );
     QString fullProjectPath( QString );
 
     QStringList const & workFiles();
-    QStringList const & openEditorPaths();
-    QStringList const & modifiedEditorPaths();
-    QStringList const & getEditorPaths( bool );
+    QStringList const & allProjectFiles();
+    QStringList const & subProjectFiles( QString const & );
+    QStringList const & openProjectFiles();
+
+    KTextEditor::EditInterface * getEditInterfaceForFile( QString const & file );
 
     ReplacePart * m_part;
     ReplaceDlg * m_dialog;
+    ReplaceView * _listview;
+    QDialog * _regexp_dialog;
+    QPushButton * _cancel;
+    QPushButton * _replace;
 
     QStringList _list;
 
-    QPushButton * _cancel;
-    QPushButton * _replace;
-    ReplaceView * _listview;
 };
 
 

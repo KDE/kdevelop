@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens.dagerbo@swipnet.se                                                 *
+ *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,7 @@ typedef KGenericFactory<ReplacePart> ReplaceFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) );
 
 ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
-        : KDevPlugin( "replace-across", "grep", parent, name ? name : "ReplacePart" )
+        : KDevPlugin( "replace-across", "", parent, name ? name : "ReplacePart" )
 {
     setInstance(ReplaceFactory::instance());
     setXMLFile("kdevpart_replace.rc");
@@ -37,7 +37,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     QWhatsThis::add
         (m_widget, i18n("WHAT DOES THIS PART DO?"));
 
-    mainWindow()->embedOutputView( m_widget, "Replace", "Replace strings across project" );
+    mainWindow()->embedOutputView( m_widget, "Replace", "Project wide string replacement" );
 
     KAction * action = new KAction(i18n("Re&place String Across Project..."), "replace project",
                                    CTRL+ALT+Key_P, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
@@ -56,7 +56,7 @@ ReplacePart::~ReplacePart()
 
 void ReplacePart::slotReplace()
 {
-    kdDebug(0) << " ******* ReplacePart::slotReplace()" << endl;
+    //kdDebug(0) << " ******* ReplacePart::slotReplace()" << endl;
     m_widget->showDialog();
 }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens.dagerbo@swipnet.se                                                 *
+ *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,7 @@ bool ReplaceItem::hasCheckedChildren() const
 
 void ReplaceItem::stateChange( bool state )
 {
-    kdDebug(0) << " ****** ReplaceItem::stateChanged() - " << state << " : " << text() << endl;
+    //kdDebug(0) << " ****** ReplaceItem::stateChanged() - " << state << " : " << text() << endl;
 
     if ( s_listview_done && justClicked() )
     {
@@ -41,7 +41,7 @@ void ReplaceItem::stateChange( bool state )
 
 void ReplaceItem::setChecked( bool checked )
 {
-    kdDebug(0) << " ****** ReplaceItem::setChecked() - " << checked << " : " << text() << endl;
+    //kdDebug(0) << " ****** ReplaceItem::setChecked() - " << checked << " : " << text() << endl;
 
     if ( !isFile() )	// this is a child item
     {

@@ -1,0 +1,37 @@
+libkdevreplace
+--------------
+
+This plugin replaces a search pattern with a specified string, after letting the
+user preview and choose which replacements should take place. The operation is
+only carried out on files that are part of the current project.
+
+by Jens Dagerbo <jens.dagerbo@swipnet.se> aka teatime
+
+
+
+Planned development:
+
+# Colorization of the output view.
+ It would be nice to match the colors of the grepview, and to specifically
+ differentiate between the replacement string and the remaining text.
+
+# GUI redraws during operation. (See Limitations.)
+
+# Better tooltips. i18n wrappers.
+
+# Look into using the QPoint info of the clicked signal, instead of the current
+ stateChanged/blockClick() hack.
+
+# Some more code cleanups and better commenting (doxygen style comments).
+
+
+
+Current limitations:
+
+# Doesn't update the GUI during search and replace operation.
+ This should probably be fixed, but isn't really much of a problem, unless work
+ is done on a large project and a slow machine.
+
+# Search/Replace will work on all matches on a line.
+ There is no (nor will there likely be) a way to limit matching to only some
+ matches on the same line. In practice this is not a very big problem.
