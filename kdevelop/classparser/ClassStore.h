@@ -94,6 +94,15 @@ public: // Public queries
   /** Fetches a global variable from the store by using its' name. */
   CParsedAttribute *getGlobalVarByName( const char *aName );
 
+  /** Fetches all classes with the named parent. */
+  QList<CParsedClass> *getClassesByParent( const char *aName );
+
+  /** Fetches all clients of a named class. */
+  QList<CParsedClass> *getClassClients( const char *aName );
+
+  /** Fetches all suppliers of a named class. */
+  QList<CParsedClass> *getClassSuppliers( const char *aName );
+
 public: // Public Methods
 
   /** Remove all parsed classes. */

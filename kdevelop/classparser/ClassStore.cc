@@ -275,3 +275,87 @@ CParsedAttribute *CClassStore::getGlobalVarByName( const char *aName )
 {
   return globalVariables.find( aName );
 }
+
+/*--------------------------------- CClassStore::getClassesByParent()
+ * getClassesByParent()
+ *   Get all classes with a certain parent.
+ *
+ * Parameters:
+ *   aName             Name of the parent.
+ *
+ * Returns:
+ *   QList<CParsedClass> * The classes with the desired parent.
+ *-----------------------------------------------------------------*/
+QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
+{
+  QList<CParsedClass> *retVal = new QList<CParsedClass>();
+
+  retVal->setAutoDelete( false );
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    if( classIterator.current()->hasParent( aName ) )
+      retVal->append( classIterator.current() );
+  }
+
+  return retVal;
+}
+
+/*------------------------------------ CClassStore::getClassClients()
+ * getClassClients()
+ *   Fetches all clients of a named class.
+ *
+ * Parameters:
+ *   aName             Name of the class.
+ *
+ * Returns:
+ *   QList<CParsedClass> * The clients of the class.
+ *-----------------------------------------------------------------*/
+QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
+{
+  bool exit;
+  CParsedClass *aClass;
+  CParsedAttribute *aAttr;
+  QList<CParsedClass> *retVal = new QList<CParsedClass>();
+
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    aClass = classIterator.current();
+    if( aClass->name != aName )
+    {
+      exit = false;
+      for( aClass->attributeIterator.toFirst();
+           aClass->attributeIterator.current() && !exit;
+           ++(aClass->attributeIterator) )
+      {
+        aAttr = aClass->attributeIterator.current();
+        exit = ( aAttr->type.find( aName ) != -1 );
+      }
+
+      if( exit )
+        retVal->append( aClass );
+    }
+  }
+
+  return retVal;
+}
+
+/*------------------------------------ CClassStore::getClassSuppliers()
+ * getClassSuppliers()
+ *   Fetches all suppliers of a named class.
+ *
+ * Parameters:
+ *   aName             Name of the class.
+ *
+ * Returns:
+ *   QList<CParsedClass> * The suppliers to the class.
+ *-----------------------------------------------------------------*/
+QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
+{
+  QList<CParsedClass> *retVal = new QList<CParsedClass>();
+
+  return retVal;
+}
