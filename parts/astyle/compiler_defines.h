@@ -31,7 +31,7 @@
 #define USES_NAMESPACE
 
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ < 3
 // for G++ implementation of string.compare:
 #define COMPARE(place, length, str)       compare((str), (place), (length))
 #else
