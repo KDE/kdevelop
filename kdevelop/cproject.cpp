@@ -293,7 +293,7 @@ ProjectFileType CProject::getType( const char *aFile )
       if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
 	  ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" )
 	retVal = CPP_SOURCE;
-      else if( ext == ".h" || ext == ".hxx" )
+      else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" || ext == ".H" || ext == ".hh" )
 	retVal = CPP_HEADER;
       else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")
 	retVal = LEXICAL;

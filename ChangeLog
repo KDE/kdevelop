@@ -1,3 +1,7 @@
+1999-08-11 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* added .hh .H .hpp to header-extensions
+	* now underline is able in classname
+
 1999-08-11 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bug-fix: selecting a C-project causes a wrong app-wizard-page-title
           i. e. "Headertemplate for .c-files" instead of "Headertemplate for .h-files"

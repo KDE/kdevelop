@@ -1637,7 +1637,7 @@ void CKAppWizard::slotProjectnameEntry() {
   QString first = "";
   QString end = nametext;
   QRegExp regexp1 ("[a-zA-Z]");
-  QRegExp regexp2 ("[a-zA-Z0-9]");
+  QRegExp regexp2 ("[a-zA-Z0-9_]");
   if (!length==0) {
   	for (i=0;i<length;i++) {
   	  first = end.left(1);
