@@ -212,11 +212,11 @@ class Context
 	def restore_debug_pp
 		Array.module_eval %q{
 			def pretty_print(q)
-				q.group(1, '[', ']') {
-				self.each {|v|
-					q.comma_breakable unless q.first?
-					q.pp v
-				}
+					q.group(1, '[', ']') {
+					self.each {|v|
+						q.comma_breakable unless q.first?
+						q.pp v
+					}
 				}
 			end
 		}
