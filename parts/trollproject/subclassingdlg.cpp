@@ -31,13 +31,13 @@
 #define WIDGET_FUNCTIONS    "functions"
 
 // All widgets
-#define accept SlotItem(m_slotView,"accept()","virtual","protected","void",false)
-#define reject SlotItem(m_slotView,"reject()","virtual","protected","void",false)
+#define SLOT_ACCEPT SlotItem(m_slotView,"accept()","virtual","protected","void",false)
+#define SLOT_REJECT SlotItem(m_slotView,"reject()","virtual","protected","void",false)
 
 // Wizards
-#define back SlotItem(m_slotView,"back()","virtual","protected","void",false)
-#define next SlotItem(m_slotView,"next()","virtual","protected","void",false)
-#define help SlotItem(m_slotView,"help()","virtual","protected","void",false)
+#define SLOT_BACK SlotItem(m_slotView,"back()","virtual","protected","void",false)
+#define SLOT_NEXT SlotItem(m_slotView,"next()","virtual","protected","void",false)
+#define SLOT_HELP SlotItem(m_slotView,"help()","virtual","protected","void",false)
 
 
 SlotItem::SlotItem(QListView *parent,const QString &methodName,
@@ -77,16 +77,16 @@ m_newFileNames(newFileNames)
   m_formName = QStringList::split('.',splitPath[splitPath.count()-1])[0]; // "somedlg.ui" = "somedlg"
   splitPath.pop_back();
   m_formPath = "/" + splitPath.join("/"); // join path to ui-file
-  kdDebug(9010) << "Formpath: " << m_formPath << endl;
-  kdDebug(9010) << "Formname: " << m_formName << endl;
 
   QDomDocument doc;
+
   DomUtil::openDOMFile(doc,formFile);
   m_baseClassName = DomUtil::elementByPathExt(doc,WIDGET_CLASS_NAME).text();
-  kdDebug(9010) << "Baseclass: " << m_baseClassName << endl;
+
   m_baseCaption = DomUtil::elementByPathExt(doc,WIDGET_CAPTION_NAME).text();
   setCaption(i18n("Create subclass of ")+m_baseClassName);
 
+  QString QTBaseClass = DomUtil::elementByPathExt(doc,"widget").attribute("class","QDialog");
   QDomElement slotsElem = DomUtil::elementByPathExt(doc,WIDGET_SLOTS);
   QDomNodeList slotnodes = slotsElem.childNodes();
   for (unsigned int i=0; i<slotnodes.count();i++)
@@ -112,6 +112,7 @@ m_newFileNames(newFileNames)
     m_slotView->insertItem(newFunc);
     m_slots << newFunc;
   }
+
 
 }
 
