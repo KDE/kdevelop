@@ -66,12 +66,12 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
 				    m_part->actionCollection(), "classview_add_method" );
     m_actionAddAttribute = new KAction( i18n("Add Attribute..."), KShortcut(), this, SLOT(slotAddAttribute()),
 				    m_part->actionCollection(), "classview_add_attribute" );
- 
+
     m_actionOpenDeclaration = new KAction( i18n("Open declaration"), KShortcut(), this, SLOT(slotOpenDeclaration()),
 				    m_part->actionCollection(), "classview_open_declaration" );
     m_actionOpenImplementation = new KAction( i18n("Open implementation"), KShortcut(), this, SLOT(slotOpenImplementation()),
 				    m_part->actionCollection(), "classview_open_implementation" );
-    
+
     KConfig* config = m_part->instance()->config();
     config->setGroup( "General" );
     setViewMode( config->readNumEntry( "ViewMode", KDevelop3ViewMode ) );
@@ -90,7 +90,7 @@ void ClassViewWidget::slotExecuted( QListViewItem* item )
     if( ClassViewItem* cbitem = dynamic_cast<ClassViewItem*>( item ) ){
 	if( cbitem->hasImplementation() )
 	    cbitem->openImplementation();
-	else 
+	else
 	    cbitem->openDeclaration();
     }
 }
@@ -150,7 +150,7 @@ void ClassViewWidget::insertFile( const QString& fileName )
     FileDom dom = m_part->codeModel()->fileByName( fn );
     if( !dom )
 	return;
-    
+
     if( fn.startsWith(m_projectDirectory) )
 	fn = fn.mid( m_projectDirectoryLength );
 
@@ -233,17 +233,17 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
     KPopupMenu menu( this );
 
     ClassViewItem* item = dynamic_cast<ClassViewItem*>( selectedItem() );
-    
+
     m_actionOpenDeclaration->setEnabled( item && item->hasDeclaration() );
     m_actionOpenImplementation->setEnabled( item && item->hasImplementation() );
-    
+
     int oldViewMode = viewMode();
     m_actionOpenDeclaration->plug( &menu );
     m_actionOpenImplementation->plug( &menu );
     menu.insertSeparator();
-    
+
     m_actionViewMode->plug( &menu );
-    
+
     menu.exec( ev->globalPos() );
 
     if( viewMode() != oldViewMode )
@@ -607,7 +607,7 @@ void NamespaceDomBrowserItem::setup( )
     setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, listView()->m_part->instance()) );
     setExpandable( true );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
@@ -617,7 +617,7 @@ void ClassDomBrowserItem::setup( )
     setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, listView()->m_part->instance()) );
     setExpandable( true );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
@@ -635,7 +635,7 @@ void FunctionDomBrowserItem::setup( )
 
     setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
@@ -666,7 +666,7 @@ void VariableDomBrowserItem::setup( )
 
     setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data());
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
