@@ -85,7 +85,8 @@ void FrameStack::parseGDBBacktraceList(char* str)
   while (char* end = strchr(str, '\n'))
   {
     *end = 0;                             // make it a string
-    currentList_->append(str);            // This copies the string (deepcopies = true above)
+    if (*str == '#')                      // Don't bother with extra data
+      currentList_->append(str);          // This copies the string (deepcopies = true above)
     str = end+1;                          // next string
   }
 
