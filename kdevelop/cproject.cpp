@@ -224,7 +224,7 @@ void CProject::writeFileInfo(TFileInfo info){
   config->writeEntry("dist",info.dist);
   config->writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace(QRegExp("[\\$]"),"$$");
+  info.install_location.replace(QRegExp("[$]"),"$$");
   config->writeEntry("install_location",info.install_location);
 }
 
@@ -234,7 +234,7 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
   config->writeEntry("dist",info.dist);
   config->writeEntry("install",info.install);
   // save the $ because kconfig removes one
-										  info.install_location.replace(QRegExp("[\\$]"),"$$");
+  info.install_location.replace(QRegExp("[$]"),"$$");
   config->writeEntry("install_location",info.install_location);
 
   config->writeEntry("baseclass",info.baseclass);
@@ -345,7 +345,11 @@ TFileInfo CProject::getFileInfo(const QString& rel_filename){
   info.type = getTypeFromString( config->readEntry("type") );
   info.dist = config->readBoolEntry("dist");
   info.install = config->readBoolEntry("install");
+  config->setDollarExpansion(false);
   info.install_location = config->readEntry("install_location");
+  info.install_location.replace(QRegExp("[$][$]"), "$");
+  config->setDollarExpansion(true);
+  
   return info;
 }
 
@@ -1052,18 +1056,22 @@ void CProject::updateMakefileAm(const QString& makefile)
         if (dist_write)
           stream << dist_str << "\n";
 
+        config->setDollarExpansion(false);
         //**************install-data-local****************
         bool install_data=false;
+        QString install_location;
         QString install_data_str = "\ninstall-data-local:\n";
         for(str2 = files.first();str2 !=0;str2 = files.next())
         {
           config->setGroup(str2);
+          install_location=config->readEntry("install_location");
+          install_location.replace(QRegExp("[$][$]"), "$");
           if (config->readBoolEntry("install") && config->readEntry("type") != "SCRIPT")
           {
             install_data_str = install_data_str + "\t$(mkinstalldirs) "
-              + getDir(config->readEntry("install_location")) + "\n";
+              + getDir(install_location) + "\n";
             install_data_str = install_data_str + "\t$(INSTALL_DATA) $(srcdir)/" +
-              getName(str2) + " " + config->readEntry("install_location") + "\n";
+              getName(str2) + " " + install_location + "\n";
 
             install_data = true;
           }
@@ -1077,12 +1085,14 @@ void CProject::updateMakefileAm(const QString& makefile)
         for(str2 = files.first();str2 !=0;str2 = files.next())
         {
           config->setGroup(str2);
+          install_location=config->readEntry("install_location");
+          install_location.replace(QRegExp("[$][$]"), "$");
           if (config->readBoolEntry("install") && config->readEntry("type") == "SCRIPT")
           {
             install_exec_str = install_exec_str + "\t$(mkinstalldirs) "
-              + getDir(config->readEntry("install_location")) + "\n";
+              + getDir(install_location) + "\n";
             install_exec_str = install_exec_str + "\t$(INSTALL_SCRIPT) " +
-              getName(str2) + " " + config->readEntry("install_location") + "\n";
+              getName(str2) + " " + install_location + "\n";
             install_exec = true;
           }
         }
@@ -1096,10 +1106,12 @@ void CProject::updateMakefileAm(const QString& makefile)
         for(str2 = files.first();str2 !=0;str2 = files.next())
         {
           config->setGroup(str2);
+          install_location=config->readEntry("install_location");
+          install_location.replace(QRegExp("[$][$]"), "$");
           if (config->readBoolEntry("install"))
           {
             uninstall_local_str = uninstall_local_str + "\t-rm -f " +
-              config->readEntry("install_location") +"\n";
+              install_location +"\n";
             uninstall_local=true;
           }
         }
@@ -1107,6 +1119,8 @@ void CProject::updateMakefileAm(const QString& makefile)
           stream << uninstall_local_str;
 
         stream << "\n";
+        
+        config->setDollarExpansion(true);
         found = true;
       }
 
