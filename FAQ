@@ -65,11 +65,15 @@ Q: Configure complains about not being able to compile a small KDE
    libXext.
 A: Install the package xdevel
 
-Q: Patching configure doesn't help, after starting autoconf my changings are lost.
+
+Q: Patching configure/Makefile/Makefile.in/config.h doesn't help, after starting
+   autoconf/automake/autoheader my changings are lost.
    Where should I patch things?
 A: There's a list of file, where you may patch things for the autotools.
-   Makefile.am, configure.in.in, configure.in (only if there is no configure.in.in),
-   
+   Makefile.am, configure.in.in, configure.in (only if there is no configure.in.in)
+   [rarely used: acconfig.h, configure.in.mid, configure.in.bot]
+
+      
 Q: I´m developing an application where I need to set -D options to the preprocessor.
    If I add these in KDevelop to my project options, everything is ok, but when I
    distribute my package, the -D options set in KDevelop are not used. What do I have
@@ -213,12 +217,13 @@ Q: I am using CXXFLAGS="$USE_EXCEPTIONS" inside configure.in(.in) and it works f
 A: If you would use your version before AC_CHECK_COMPILERS() a call like
      CXXFLAGS="-pedantic" ./configure
    wouldn't work correctly.
-   If you did use it after AC_CHECK_COMPILERS() the CXXFLAGS setted in
+   If you did use it after AC_CHECK_COMPILERS() the CXXFLAGS set in
    AC_CHECK_COMPILERS() would be cleared.
    (For example in a "configure --enable-debug" call CXXFLAGS would be
     changed to insert also debug information to your code.)
    So please use CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS" instead.
 
+   
 Q: I'm using additional headers and libs for my KDE/QT project. Putting
    -I/usr/include/foo in the compiler options and -L/usr/lib/foo to the
    linker options won't distribute the settings into the tarball.
@@ -280,43 +285,50 @@ A: *** OBSOLETE for new project templates ***
    After that, don´t forget to update configure and all Makefiles.
    (Inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
 
+   
 Q: In the questions above I always see "configure.in(.in)". I have both files in my 
    project. Which file should be patched?
 A: If there is a configure.in.in in your top-level project directory patch this one.
-   If you dodn't find a configure.in.in patch configure.in.
+   If you didn't find a configure.in.in patch configure.in.
 
+   
 Q: I have downloaded the QT-2.2.x packages from ftp.kde.org and there are now KDE
-    widgets available in the designer. How can I get them ?
+   widgets available in the designer. How can I get them ?
 A: You have to recompile QT with ./configure -kde as additional option. Remember to set
-    $KDEDIR and $QTDIR to the appropriate directories. After doing so you have an option
-    KDE in the tools menue of the designer.
+   $KDEDIR and $QTDIR to the appropriate directories. After doing so you have an option
+   KDE in the tools menue of the designer.
 
+    
 Q: I use RedHat Linux with KDevelop and tried to recompile the QT library with -kde in
-    order to use the designer with KDE widget support but  during configure it says that
-    $KDEDIR does not contain a valid KDE installation ?
+   order to use the designer with KDE widget support but  during configure it says that
+   $KDEDIR does not contain a valid KDE installation ?
 A: RedHat uses a non-standard directory setting with KDE. The normal case would be that
-    the libs are in $KDEDIR/lib, binaries in $KDEDIR/bin and includes in $KDEDIR/include.
-    RedHat uses /usr as $KDEDIR but $KDEDIR/include/kde as directory for  header files.
-    Therefore configure from QT fails to detect the correct directories. It searches dcopserver
-    in the binaries folder and the header files in their folder. So if you choose $KDEDIR to be
-    /usr, configure can't find the includes. A possible solution for this is to create a /usr/local/kde
-    directory and set symlinks to /usr/bin and /usr/include/kde in this "pseudo" kde dir.
-    Then export KDEDIR=/usr/local/kde and do the ./configure -kde. After compiling QT you have
-    the KDE entries in the tools menu of the QT designer.
+   the libs are in $KDEDIR/lib, binaries in $KDEDIR/bin and includes in $KDEDIR/include.
+   RedHat uses /usr as $KDEDIR but $KDEDIR/include/kde as directory for  header files.
+   Therefore configure from QT fails to detect the correct directories. It searches dcopserver
+   in the binaries folder and the header files in their folder. So if you choose $KDEDIR to be
+   /usr, configure can't find the includes. A possible solution for this is to create a /usr/local/kde
+   directory and set symlinks to /usr/bin and /usr/include/kde in this "pseudo" kde dir.
+   Then export KDEDIR=/usr/local/kde and do the ./configure -kde. After compiling QT you have
+   the KDE entries in the tools menu of the QT designer.
 
+    
 Q: Is there any HOWTO available on how to work with QT designer made dialogs ?
 A: Yes, there is a great tutorial on http://women.kde.org/docs/tut_kdevelop/
+
 
 Q: I have installed htdig but there is now htsearch available ?
 A: On e.g. RedHat systems the htsearch executable is placed in the /cgi-bin dir of apache.
    You can create symlinks in /usr/bin or simply add this path ro ~/.bashrc
 
+   
 Q: I have htdig, htmerge and htsearch available but I get an error message thet the config
    file of htdig could not be found or is invalid ?
 A: Read README.htdig in the source directory tree and create a htdig.conf file. Then copy
    it to $KDEDIR/share/apps/kdevelop/tools. Now create your search index with the kdevelop
    setup menu.
 
+   
 Q: How do I change my project framework (aka autotool-project-files) to compile it for KDE/QT version 3
    after project creation?
 A: With the actual admin/-content it is possible to select the kde version by changing one line inside 
@@ -336,6 +348,7 @@ A: With the actual admin/-content it is possible to select the kde version by ch
    KDE_USE_QT(2) inside configure.in and change this to 
    KDE_USE_QT or revert this to a comment, for QT 3.x usage.
 
+   
 Q: I have changed my project like above to develop for another KDE/QT version, but configure still 
    uses the wrong kde directories, what has to be done?
 A: If you want to develop for another kde/qt version, you have to give configure the correct pathes,
@@ -343,7 +356,8 @@ A: If you want to develop for another kde/qt version, you have to give configure
    ./configure --with-qt-dir=/usr/lib/qt3
    ./configure --prefix=/opt/kde2 --with-qt-dir=/usr/local/qt2
    You must have installed the desired qt/kde version on your system.
- 
+
+   
 Q: I have two KDE versions on my system. If I try to create a KDE 2 project on KDevelop 2.1 (made for
    KDE 2) a configure-call without parameters always uses /opt/kde3 (or /opt/kde) instead of /opt/kde2.
    What's wrong?
@@ -357,6 +371,7 @@ A: Please check first your actual KDEDIR environment variable. In some cases it 
    with KDevelop inside "Options->KDevelop Setup->Path->KDE/QT Pathes" 
    (or Project->Project Options->Compiler Options/Configure").
 
+   
 Q: I've done so, but the configure call still uses the wrong directory?
 A: Now you have to "DistClean" (i.e. either "Project->DistClean" from within KDevelop or 
    "make distclean" from console) your project.
