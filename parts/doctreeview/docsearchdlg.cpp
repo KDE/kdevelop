@@ -106,7 +106,7 @@ bool DocSearchDialog::performSearch()
         return false;
     }
 
-    QString indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
+    QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
 
     QString query = QString("words=%1;method=%2;matchesperpage=%3;format=%4;sort=%5")
         .arg(searchterm_edit->text())

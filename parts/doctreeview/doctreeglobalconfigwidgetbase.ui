@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>DocTreeGlobalConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -166,6 +166,12 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
                     </spacer>
                 </vbox>
             </widget>
@@ -179,12 +185,6 @@
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
                     </property>
                     <widget class="QCheckBox">
                         <property name="name">
@@ -248,6 +248,72 @@
                     </spacer>
                     <widget class="QLayoutWidget">
                         <property name="name">
+                            <cstring>layout4</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>htdigbinEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>htmergebinLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>htmerge executable:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>htsearchbinEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>htdigbinLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>htdig executable:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>htmergebinEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>htsearchbinLabel</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>htsearch executable:</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer9</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
                             <cstring>Layout3</cstring>
                         </property>
                         <hbox>
@@ -270,6 +336,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -289,6 +361,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                         </hbox>
                     </widget>
@@ -301,6 +379,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>60</height>
+                            </size>
                         </property>
                     </spacer>
                 </vbox>

@@ -1,4 +1,4 @@
-SUBDIRS = lib parts plugins src pics
+SUBDIRS = lib parts plugins src pics doc
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING admin configure.in.bot
 

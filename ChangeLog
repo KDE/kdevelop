@@ -1,6 +1,12 @@
+2002-10-31  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Since khelpcenter/htmlsearch is no more, put htdig configuration
+	  options in doctreeview config widget; ship html and pic files
+	  for htdig
+
 2002-10-29 Victor Röder <victor_roeder@gmx.de>
 	* applied Sebastian Kratzert's search improvements
-		for the docViewPart
+	  for the docViewPart
 
 2002-10-28 F@lk Brettschneider <falk@kdevelop.org>
 	* compiles with KDE-3.0.3 again

@@ -51,6 +51,11 @@ void DocTreeGlobalConfigWidget::readConfig()
     indexKdelibsBox->setChecked(config->readEntry("IndexKdelibs"));
     indexBooksBox->setChecked(config->readEntry("IndexBooks"));
     indexBookmarksBox->setChecked(config->readEntry("IndexBookmarks"));
+
+    config->setGroup("htdig");
+    htdigbinEdit->setText(config->readEntry("htdigbin"));
+    htmergebinEdit->setText(config->readEntry("htmergebin"));
+    htsearchbinEdit->setText(config->readEntry("htsearchbin"));
 }
 
 
@@ -68,6 +73,11 @@ void DocTreeGlobalConfigWidget::storeConfig()
     config->writeEntry("IndexKdelibs", indexKdelibsBox->isChecked());
     config->writeEntry("IndexBooks", indexBooksBox->isChecked());
     config->writeEntry("IndexBookmarks", indexBookmarksBox->isChecked());
+
+    config->setGroup("htdig");
+    config->writeEntry("htdigbin", htdigbinEdit->text());
+    config->writeEntry("htmergebin", htmergebinEdit->text());
+    config->writeEntry("htsearchbin", htsearchbinEdit->text());
 }
 
 

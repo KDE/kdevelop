@@ -38,7 +38,7 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
 {
     proc = 0;
     
-    indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
+    indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
     QDir d; d.mkdir(indexdir);
     
     QGridLayout *grid = new QGridLayout(plainPage(), 5,3, spacingHint());
@@ -106,8 +106,8 @@ void ProgressDialog::setFilesDigged(int n)
 
 void ProgressDialog::setState(int n)
 {
-    QPixmap unchecked = QPixmap(locate("data", "khelpcenter/pics/unchecked.xpm"));
-    QPixmap checked = QPixmap(locate("data", "khelpcenter/pics/checked.xpm"));
+    QPixmap unchecked = QPixmap(locate("data", "kdevdoctreeview/pics/unchecked.xpm"));
+    QPixmap checked = QPixmap(locate("data", "kdevdoctreeview/pics/checked.xpm"));
     
     check1->setPixmap( n > 0 ? checked : unchecked);  
     check2->setPixmap( n > 1 ? checked : unchecked);  
@@ -305,17 +305,15 @@ bool ProgressDialog::createConfig()
     if (language == "C")
         language = "en";
 
-    QString wrapper = locate("data", QString("khelpcenter/%1/wrapper.html").arg(language));
+    QString wrapper = locate("data", QString("kdevdoctreeview/%1/wrapper.html").arg(language));
     if (wrapper.isEmpty())
-        wrapper = locate("data", QString("khelpcenter/en/wrapper.html"));
-    if (wrapper.isEmpty())
-        wrapper = locate("data", QString("/usr/share/htdig/wrapper.html"));
+        wrapper = locate("data", QString("kdevdoctreeview/en/wrapper.html"));
     if (wrapper.isEmpty())
         return false;
     wrapper = wrapper.left(wrapper.length()-12);
     
     // locate the image dir
-    QString images = locate("data", "khelpcenter/pics/star.png");
+    QString images = locate("data", "kdevdoctreeview/pics/star.png");
     if (images.isEmpty())
         //return false;
     images = images.left(images.length()-8);
@@ -356,7 +354,7 @@ bool ProgressDialog::generateIndex()
     setState(1);
 
     // run htdig
-    KConfig config("khelpcenterrc", true);
+    KConfig config("kdevdoctreeviewrc", true);
     config.setGroup("htdig");
     QString exe = config.readEntry("htdig", kapp->dirs()->findExe("htdig"));
     if (exe.isEmpty())

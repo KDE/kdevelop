@@ -174,7 +174,7 @@ void DocTreeViewPart::slotSearchDocumentation()
 {
     DocSearchDialog dlg(m_widget, "doc search dialog");
     if (dlg.exec()) {
-        QString indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
+        QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
         partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
     }
 }
@@ -222,7 +222,7 @@ void DocTreeViewPart::slotContextFulltextSearch()
     DocSearchDialog dlg(m_widget, "doc search dialog");
     dlg.setSearchTerm(m_popupstr);
     if (dlg.performSearch()) {
-        QString indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
+        QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
         partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
     }
 }

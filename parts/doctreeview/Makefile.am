@@ -1,5 +1,7 @@
 # Here resides the doc tree view part.
 
+SUBDIRS = data
+
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevdoctreeview.la kio_kdeapi.la
