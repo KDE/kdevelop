@@ -115,6 +115,13 @@ void PHPCodeCompletion::setActiveEditorPart(KParts::Part *part)
     return;
   }
 
+  m_selectionInterface = dynamic_cast<KTextEditor::SelectionInterface*>(part);
+  if(!m_selectionInterface) {
+	kdDebug(9018) << "editor doesn't support the SelectionInterface" << endl;
+	return;
+  }
+
+
   disconnect(part->widget(), 0, this, 0 ); // to make sure that it is't connected twice
   connect(part->widget(), SIGNAL(cursorPositionChanged()),
           this, SLOT(cursorPositionChanged()));
@@ -137,6 +144,10 @@ void PHPCodeCompletion::cursorPositionChanged(){
   //  lineStr.replace(QRegExp("\t"),"_");
   //  kdDebug(9018) << "ZEILEohneTAB:" << lineStr <<":" << endl;
 
+  if(m_selectionInterface->hasSelection()){
+	kdDebug(9018) << "No CodeCompletion/ArgHinting at the moment, because text is selected" << endl;
+	return;
+  }
 
   if(m_config->getCodeHinting()){
     if(checkForNewInstanceArgHint(lineStr,col,line)){

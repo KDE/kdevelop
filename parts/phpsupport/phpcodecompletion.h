@@ -27,6 +27,7 @@
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/selectioninterface.h>
 
 
 class KDevCore;
@@ -81,6 +82,7 @@ protected slots:
   KTextEditor::EditInterface *m_editInterface;
   KTextEditor::CodeCompletionInterface *m_codeInterface;
   KTextEditor::ViewCursorInterface *m_cursorInterface;
+  KTextEditor::SelectionInterface *m_selectionInterface;
   PHPConfigData* m_config;
 };
 
