@@ -90,7 +90,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
 
     KConfig* config = AbbrevFactory::instance()->config();
     KConfigGroupSaver group( config, "General" );
-    m_autoWordCompletionEnabled = config->readBoolEntry( "AutoWordCompletion", true );
+    m_autoWordCompletionEnabled = config->readBoolEntry( "AutoWordCompletion", false );
 	
     updateActions();
 }
@@ -366,12 +366,13 @@ void AbbrevPart::insertChars( const QString &chars )
 		currentCol += spaces.length();
 	}
 
-        int idx = lineText.find( "|" );
+        int idx = lineText.find( '|' );
         if( idx != -1 ){
             stream << lineText.left( idx ) << lineText.mid( idx+1 );
 	    if( !foundPipe ){
 		foundPipe = true;
 		currentCol += lineText.left( idx ).length();
+		kdDebug(9007) << "found pipe at " << currentLine << ", " << currentCol << endl;
 	    }
         } else {
             stream << lineText;
@@ -388,6 +389,7 @@ void AbbrevPart::insertChars( const QString &chars )
 	}
     }
     editIface->insertText( line, col, str );
+    kdDebug(9007) << "go to " << currentLine << ", " << currentCol << endl;
     viewCursorIface->setCursorPositionReal( currentLine, currentCol );
 }
 
