@@ -23,6 +23,7 @@ KMimeType::List KDevLanguageSupport::mimeTypes()
 
 QString KDevLanguageSupport::formatTag( const Tag& tag )
 {
+    Q_UNUSED( tag );
     return QString::null;
 }
 
@@ -40,16 +41,19 @@ void KDevLanguageSupport::addClass()
 {
 }
 
-void KDevLanguageSupport::addMethod(const QString &/*className*/)
+void KDevLanguageSupport::addMethod( ClassDom klass )
 {
+    Q_UNUSED( klass );
 }
 
-void KDevLanguageSupport::implementVirtualMethods(const QString& /*className*/ )
+void KDevLanguageSupport::implementVirtualMethods( ClassDom klass )
 {
+    Q_UNUSED( klass );
 }
 
-void KDevLanguageSupport::addAttribute(const QString &/*className*/)
+void KDevLanguageSupport::addAttribute( ClassDom klass )
 {
+    Q_UNUSED( klass );
 }
 
 QStringList KDevLanguageSupport::subclassWidget(const QString& /*formName*/)
@@ -64,6 +68,7 @@ QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const
 
 QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool shortDescription )
 {
+    Q_UNUSED( shortDescription );
     return item->name();
 }
 

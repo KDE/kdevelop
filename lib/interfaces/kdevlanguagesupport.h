@@ -9,9 +9,9 @@
 #include <qstringlist.h>
 #include <kmimetype.h>
 #include "kdevplugin.h"
+#include "codemodel.h"
 
 class Tag;
-class CodeModelItem;
 
 class KDevLanguageSupport : public KDevPlugin
 {
@@ -71,17 +71,17 @@ public:
      * Opens an "Add method" dialog and adds the configured
      * method to the sources.
      */
-    virtual void addMethod(const QString &className);
+    virtual void addMethod( ClassDom klass );
     /**
      * Opens an "Implement Virtual Methods" dialog and adds the
      * configured methods to the sources.
      */
-    virtual void implementVirtualMethods(const QString &className);
+    virtual void implementVirtualMethods( ClassDom klass );
     /**
      * Opens an "Add attribute" dialog and adds the configured
      * method to the sources.
      */
-    virtual void addAttribute(const QString &className);
+    virtual void addAttribute( ClassDom klass );
     /**
      * Opens an "Subclass Widget" dialog for given Qt .ui file (formName)
      * and propmts to implement it's slots.
