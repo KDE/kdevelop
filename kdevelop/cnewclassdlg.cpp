@@ -17,6 +17,8 @@
  ***************************************************************************/
 
 #include <kquickhelp.h>
+#include <qlayout.h>
+#define LAYOUT_BORDER (10)
 #include "cnewclassdlg.h"
 #include "cproject.h"
 
@@ -28,15 +30,18 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   header_modified =false;
   impl_modified = false;
   setCaption(i18n("Class Generator" ));
- 
-
+////
+  QGridLayout * main_layout = new QGridLayout( this, 4, 2, LAYOUT_BORDER );
 
   classname_group = new QButtonGroup( this, "classname_group" );
-  classname_group->setGeometry( 15, 10, 230, 60 );
   classname_group->setTitle(i18n("Classname") );
-	
-  classname_edit = new QLineEdit( this, "classname_edit" );
-  classname_edit->setGeometry( 25, 30, 210, 30 );
+  main_layout->addWidget( classname_group, 0, 0 );
+
+  QBoxLayout * layout = new QVBoxLayout( classname_group, LAYOUT_BORDER );
+  layout->addSpacing( LAYOUT_BORDER );
+  classname_edit = new QLineEdit( classname_group, "classname_edit" );
+  classname_edit->setMinimumSize( classname_edit->sizeHint() );
+  layout->addWidget( classname_edit );
 	KQuickHelp::add(classname_group,
 	KQuickHelp::add(classname_edit, i18n("Insert your new classname here.\n"
 	                                    "Please try to keep some standards\n"
@@ -46,12 +51,15 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 
 
   baseclass_group = new QButtonGroup( this, "baseclass_group" );
-  baseclass_group->setGeometry( 260, 10, 230, 60 );
   baseclass_group->setTitle(i18n( "Baseclass") );
-  baseclass_group->setAlignment( 1 );
+  //  baseclass_group->setAlignment( 1 );
+  main_layout->addWidget( baseclass_group, 0, 1 );
 
-  baseclass_edit = new QLineEdit( this, "baseclass_edit" );
-  baseclass_edit->setGeometry( 275, 30, 205, 30 );
+  layout = new QVBoxLayout( baseclass_group, LAYOUT_BORDER );
+  layout->addSpacing( LAYOUT_BORDER );
+  baseclass_edit = new QLineEdit( baseclass_group, "baseclass_edit" );
+  baseclass_edit->setMinimumSize( baseclass_edit->sizeHint() );
+  layout->addWidget( baseclass_edit );
   KQuickHelp::add(baseclass_edit, i18n("Insert the baseclass from which your new class\n"
                                     "will be derived from. If you have checked\n"
                                     "`generate a QWidget-Childclass`, the new class will\n"
@@ -59,17 +67,21 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                     "new class will not have a parent class."));
 
   files_group = new QButtonGroup( this, "files_group" );
-  files_group->setGeometry( 15, 80, 230, 120 );
   files_group->setTitle( i18n("Files") );
-  files_group->setAlignment( 1 );
-  
+  main_layout->addWidget( files_group, 1, 0 );
+  //  files_group->setAlignment( 1 );
 
-  header_label = new QLabel( this, "header_label" );
-  header_label->setGeometry( 25, 100, 50, 30 );
+
+  layout = new QVBoxLayout( files_group, LAYOUT_BORDER );
+  layout->addSpacing( LAYOUT_BORDER );
+  header_label = new QLabel( files_group, "header_label" );
   header_label->setText( i18n("Header") );
-	
-  header_edit = new QLineEdit( this, "header_edit" );
-  header_edit->setGeometry( 85, 100, 150, 30 );
+  header_label->setMinimumSize( header_label->sizeHint() );
+  layout->addWidget( header_label );
+
+  header_edit = new QLineEdit( files_group, "header_edit" );
+  header_edit->setMinimumSize( header_edit->sizeHint() );
+  layout->addWidget( header_edit );
 
   KQuickHelp::add(header_label,
   KQuickHelp::add(header_edit, i18n("Insert your header filename here.\n"
@@ -77,12 +89,14 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                     "you select the classname, but you can\n"
                                     "still edit it afterwards.")));
 
-  impl_label = new QLabel( this, "impl_label" );
-  impl_label->setGeometry( 25, 155, 60, 30 );
+  impl_label = new QLabel( files_group, "impl_label" );
   impl_label->setText( i18n("Impl.") );
+  impl_label->setMinimumSize( impl_label->sizeHint() );
+  layout->addWidget( impl_label );
 
-  impl_edit = new QLineEdit( this, "impl_edit" );
-  impl_edit->setGeometry( 85, 155, 150, 30 );
+  impl_edit = new QLineEdit( files_group, "impl_edit" );
+  impl_edit->setMinimumSize( impl_edit->sizeHint() );
+  layout->addWidget( impl_edit );
 
   KQuickHelp::add(impl_label,
   KQuickHelp::add(impl_edit, i18n("Insert your implementation filename here.\n"
@@ -91,12 +105,15 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                   "still edit it afterwards.")));
 
   doc_group = new QButtonGroup( this, "doc_group" );
-  doc_group->setGeometry( 15, 210, 230, 120 );
   doc_group->setTitle( i18n("Documentation") );
+  main_layout->addWidget( doc_group, 2, 0 );
 
 
-  doc_edit = new QMultiLineEdit( this, "doc_edit" );
-  doc_edit->setGeometry( 25, 230, 210, 90 );
+  layout = new QVBoxLayout( doc_group, LAYOUT_BORDER );
+  layout->addSpacing( LAYOUT_BORDER );
+  doc_edit = new QMultiLineEdit( doc_group, "doc_edit" );
+  doc_edit->setMinimumSize( doc_edit->sizeHint() );
+  layout->addWidget( doc_edit );
   KQuickHelp::add(doc_group,
   KQuickHelp::add(doc_edit, i18n("Insert a short description for your new class\n"
                                 "here for documenation purposes. This will be used\n"
@@ -104,37 +121,46 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                 "after the class is created.")));
 	
   inher_group = new QButtonGroup( this, "inher_group" );
-  inher_group->setGeometry( 260, 80, 230, 120 );
   inher_group->setTitle( i18n("Inheritence") );
+  main_layout->addWidget( inher_group, 1, 1 );
 
-
-  public_button = new QRadioButton( this, "public_button" );
-  public_button->setGeometry( 275, 100, 100, 30 );
+  layout = new QVBoxLayout( inher_group, LAYOUT_BORDER );
+  layout->addSpacing( LAYOUT_BORDER );
+  public_button = new QRadioButton( inher_group, "public_button" );
   public_button->setText( "public" );
   public_button->setChecked(true);
-  
-  protected_button = new QRadioButton( this, "protected_button" );
-  protected_button->setGeometry( 275, 130, 90, 30 );
+  public_button->setMinimumSize( public_button->sizeHint() );
+  layout->addWidget( public_button );
+
+  protected_button = new QRadioButton( inher_group, "protected_button" );
   protected_button->setText("protected" );
-  
-  private_button = new QRadioButton( this, "private_button" );
-  private_button->setGeometry( 275, 160, 100, 30 );
+  protected_button->setMinimumSize( protected_button->sizeHint() );
+  layout->addWidget( protected_button );
+
+  private_button = new QRadioButton( inher_group, "private_button" );
   private_button->setText( "private" );
-	
+  private_button->setMinimumSize( private_button->sizeHint() );
+  layout->addWidget( private_button );
+  layout->addStretch( 1 );
 
   add_group = new QButtonGroup( this, "add_group" );
-  add_group->setGeometry( 260, 210, 230, 120 );
   add_group->setTitle(i18n("Additional Options") );
+  main_layout->addWidget( add_group, 2, 1 );
 
-  template_check = new QCheckBox( this, "template_check" );
-  template_check->setGeometry( 275, 240, 185, 30 );
+  layout = new QVBoxLayout( add_group, LAYOUT_BORDER );
+  layout->addSpacing( LAYOUT_BORDER );
+  template_check = new QCheckBox( add_group, "template_check" );
   template_check->setText( i18n("use header/cpp-templates") );
   template_check->setChecked(true);
-  
-  qwidget_check = new QCheckBox( this, "qwidget_check" );
-  qwidget_check->setGeometry( 275, 280, 210, 30 );
+  template_check->setMinimumSize( template_check->sizeHint() );
+  layout->addWidget( template_check );
+
+  qwidget_check = new QCheckBox( add_group, "qwidget_check" );
   qwidget_check->setText( i18n("generate a QWidget-Childclass") );
-  
+  qwidget_check->setMinimumSize( qwidget_check->sizeHint() );
+  layout->addWidget( qwidget_check );
+  layout->addStretch( 1 );
+
   add_group->insert( template_check );
   add_group->insert( qwidget_check );
   KQuickHelp::add(add_group,
@@ -159,17 +185,33 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                       "or private.")))));
 
 
-
-  ok_button = new QPushButton( this, "ok_button" );
-  ok_button->setGeometry( 130, 340, 100, 30 );
-  ok_button->setText(i18n("OK"));
-	ok_button->setDefault( TRUE );
+  layout = new QHBoxLayout;
+  main_layout->addLayout( layout, 3, 1 );
 
   cancel_button = new QPushButton( this, "cancel_button" );
-  cancel_button->setGeometry( 275, 340, 100, 30 );
-  cancel_button->setText(i18n("Cancel")); 
-  setFixedSize( 505,380 );
+  cancel_button->setText(i18n("Cancel"));
+  cancel_button->setFixedSize( cancel_button->sizeHint() );
 
+  ok_button = new QPushButton( this, "ok_button" );
+  ok_button->setText(i18n("OK"));
+  ok_button->setDefault( TRUE );
+  ok_button->setFixedSize( cancel_button->sizeHint() );
+  layout->addStretch( 1 );
+  layout->addWidget( ok_button );
+  layout->addWidget( cancel_button );
+
+
+  main_layout->setColStretch( 0, 1 );
+  main_layout->setColStretch( 1, 0 );
+  main_layout->setRowStretch( 0, 0 );
+  main_layout->setRowStretch( 1, 0 );
+  main_layout->setRowStretch( 2, 1 );
+  main_layout->setRowStretch( 3, 0 );
+
+  main_layout->activate();
+	adjustSize();
+
+////
   connect(classname_edit,SIGNAL(textChanged(const char*)),SLOT(slotClassEditChanged(const char*)));
   connect(header_edit,SIGNAL(textChanged(const char*)),SLOT(slotHeaderEditChanged(const char*)));
   connect(impl_edit,SIGNAL(textChanged(const char*)),SLOT(slotImplEditChanged(const char*)));

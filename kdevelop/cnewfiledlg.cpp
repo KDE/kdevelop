@@ -22,16 +22,23 @@
 #include <iostream.h>
 #include <kfiledialog.h>
 #include <kquickhelp.h>
+#include <qlayout.h>
+#define LAYOUT_BORDER (10)
 
 CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CProject* p_prj) 
   : QDialog(parent,name,modal,f){
   
   prj = p_prj;
   setCaption(i18n("New File..."));    
+
+	QVBoxLayout * main_layout = new QVBoxLayout( this, LAYOUT_BORDER );
+	QHBoxLayout * hlayout = new QHBoxLayout();
+	main_layout->addLayout( hlayout, 1 );
+
 	// the tabview
 	tab = new KTabCtl(this);
-  tab->setGeometry( 20, 20, 230, 160);
   tab->setBorder(false);
+	
 
   list_linux = new QListBox( tab, "list_linux" );
   list_linux->insertItem(i18n("lsm File - Linux Software Map"));
@@ -59,22 +66,25 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   tab->addTab(list_manuals,i18n("Manuals"));
   tab->addTab(list_linux,i18n("Linux/KDE"));
 
+	/* Had some problems with the sizeHint() below... so it's fixed :(
+	   It seems though that the minimum size is later dynamically reassigned
+	   anyway, the values below are used only for initial setup of window. */
+	tab->setMinimumSize( 100, 200 );
+	hlayout->addWidget( tab, 0 );
+
+	QVBoxLayout * vlayout = new QVBoxLayout();
+	hlayout->addLayout( vlayout, 1 );
+
 	label_filename = new QLabel( this, "label_filename" );
-	label_filename->setGeometry( 270, 30, 170, 30 );
-	label_filename->setMinimumSize( 10, 10 );
-	label_filename->setMaximumSize( 32767, 32767 );
 	label_filename->setFocusPolicy( QWidget::NoFocus );
 	label_filename->setBackgroundMode( QWidget::PaletteBackground );
 	label_filename->setFontPropagation( QWidget::NoChildren );
 	label_filename->setPalettePropagation( QWidget::NoChildren );
 	label_filename->setText( i18n("Filename:") );
-	label_filename->setAlignment( 289 );
-	label_filename->setMargin( -1 );
+	label_filename->setMinimumSize( label_filename->sizeHint() );
+	vlayout->addWidget( label_filename, 0 );
 	
 	edit = new QLineEdit( this, "edit" );
-	edit->setGeometry( 270, 70, 180, 30 );
-	edit->setMinimumSize( 10, 10 );
-	edit->setMaximumSize( 32767, 32767 );
 	edit->setFocusPolicy( QWidget::StrongFocus );
 	edit->setBackgroundMode( QWidget::PaletteBase );
 	edit->setFontPropagation( QWidget::NoChildren );
@@ -84,11 +94,10 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	edit->setEchoMode( QLineEdit::Normal );
 	edit->setFrame( TRUE );
         KQuickHelp::add(label_filename,KQuickHelp::add(edit,i18n("Enter a name for your new file here.")));
-
+  edit->setMinimumSize( edit->sizeHint() );
+	vlayout->addWidget( edit, 0 );
+	
 	check_use_template = new QCheckBox( this, "check_use_template" );
-	check_use_template->setGeometry( 270, 120, 180, 30 );
-	check_use_template->setMinimumSize( 10, 10 );
-	check_use_template->setMaximumSize( 32767, 32767 );
 	check_use_template->setFocusPolicy( QWidget::TabFocus );
 	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
 	check_use_template->setFontPropagation( QWidget::NoChildren );
@@ -97,11 +106,12 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
 	KQuickHelp::add(check_use_template,i18n("Check this if you want to use a template."));
+	check_use_template->setMinimumSize( check_use_template->sizeHint() );
+	vlayout->addWidget( check_use_template, 0 );
+
+	vlayout->addStretch( 1 );
 	
 	button_group = new QButtonGroup( this, "button_group" );
-	button_group->setGeometry( 20, 200, 430, 140 );
-	button_group->setMinimumSize( 10, 10 );
-	button_group->setMaximumSize( 32767, 32767 );
 	button_group->setFocusPolicy( QWidget::NoFocus );
 	button_group->setBackgroundMode( QWidget::PaletteBackground );
 	button_group->setFontPropagation( QWidget::NoChildren );
@@ -109,11 +119,19 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	button_group->setFrameStyle( 49 );
 	button_group->setTitle( i18n("Project Options" ));
 	button_group->setAlignment( 1 );
+	main_layout->addWidget( button_group, 0 );
 
-	check_add_project = new QCheckBox( this, "check_add_project" );
-	check_add_project->setGeometry( 30, 220, 210, 30 );
-	check_add_project->setMinimumSize( 10, 10 );
-	check_add_project->setMaximumSize( 32767, 32767 );
+	QGridLayout* glayout = new QGridLayout( button_group, 4, 2, LAYOUT_BORDER );
+  glayout->setRowStretch( 0, 0 );
+  glayout->setRowStretch( 1, 0 );
+  glayout->setRowStretch( 2, 0 );
+  glayout->setRowStretch( 3, 0 );
+  glayout->setColStretch( 0, 1 );
+  glayout->setColStretch( 1, 0 );
+
+	glayout->addRowSpacing( 0, LAYOUT_BORDER );
+
+	check_add_project = new QCheckBox( button_group, "check_add_project" );
 	check_add_project->setFocusPolicy( QWidget::TabFocus );
 	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
 	check_add_project->setFontPropagation( QWidget::NoChildren );
@@ -122,23 +140,19 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
 	KQuickHelp::add(check_add_project,i18n("Check this if you want to add the new file to your project."));
+	check_add_project->setMinimumSize( check_add_project->sizeHint() );
+	glayout->addWidget( check_add_project, 1, 0 );	
 	
-	location_label = new QLabel( this, "location_label" );
-	location_label->setGeometry( 30, 250, 160, 30 );
-	location_label->setMinimumSize( 0, 0 );
-	location_label->setMaximumSize( 32767, 32767 );
+	location_label = new QLabel( button_group, "location_label" );
 	location_label->setFocusPolicy( QWidget::NoFocus );
 	location_label->setBackgroundMode( QWidget::PaletteBackground );
 	location_label->setFontPropagation( QWidget::NoChildren );
 	location_label->setPalettePropagation( QWidget::NoChildren );
 	location_label->setText(i18n("Location:") );
-	location_label->setAlignment( 289 );
-	location_label->setMargin( -1 );
-	
-	prj_loc_edit = new QLineEdit( this, "prj_loc_edit" );
-	prj_loc_edit->setGeometry( 30, 290, 360, 30 );
-	prj_loc_edit->setMinimumSize( 0, 0 );
-	prj_loc_edit->setMaximumSize( 32767, 32767 );
+	location_label->setMinimumSize( location_label->sizeHint() );
+	glayout->addWidget( location_label, 2, 0 );
+
+	prj_loc_edit = new QLineEdit( button_group, "prj_loc_edit" );
 	prj_loc_edit->setFocusPolicy( QWidget::StrongFocus );
 	prj_loc_edit->setBackgroundMode( QWidget::PaletteBase );
 	prj_loc_edit->setFontPropagation( QWidget::NoChildren );
@@ -148,11 +162,10 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	prj_loc_edit->setEchoMode( QLineEdit::Normal );
 	prj_loc_edit->setFrame( TRUE );
 	KQuickHelp::add(prj_loc_edit,i18n("Enter the directory where the new file will be located."));
+	prj_loc_edit->setMinimumSize( prj_loc_edit->sizeHint() );
+	glayout->addWidget( prj_loc_edit, 3, 0 );
 
-	loc_button = new QPushButton( this, "loc_button" );
-	loc_button->setGeometry( 410, 290, 30, 30 );
-	loc_button->setMinimumSize( 0, 0 );
-	loc_button->setMaximumSize( 32767, 32767 );
+	loc_button = new QPushButton( button_group, "loc_button" );
 	loc_button->setFocusPolicy( QWidget::TabFocus );
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
 	loc_button->setFontPropagation( QWidget::NoChildren );
@@ -163,14 +176,20 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
 	KQuickHelp::add(loc_button,i18n("Here you can choose a directory where the new file will be located."));
+	loc_button->setMinimumSize( loc_button->sizeHint().height(), loc_button->sizeHint().height() );
+	glayout->addWidget( loc_button, 3, 1 );
+
+	glayout->activate();
 
 	button_group->insert( check_add_project );
 	button_group->insert( loc_button );
 
+	hlayout = new QHBoxLayout();
+	main_layout->addLayout( hlayout, 0 );
+
+	hlayout->addStretch( 1 );
+
 	ok = new QPushButton( this, "ok" );
-	ok->setGeometry( 110, 360, 100, 30 );
-	ok->setMinimumSize( 10, 10 );
-	ok->setMaximumSize( 32767, 32767 );
 	ok->setFocusPolicy( QWidget::TabFocus );
 	ok->setBackgroundMode( QWidget::PaletteBackground );
 	ok->setFontPropagation( QWidget::NoChildren );
@@ -179,11 +198,8 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	ok->setAutoRepeat( FALSE );
 	ok->setAutoResize( FALSE );
 	ok->setDefault( TRUE );
-	
+		
 	cancel = new QPushButton( this, "cancel" );
-	cancel->setGeometry( 270, 360, 100, 30 );
-	cancel->setMinimumSize( 10, 10 );
-	cancel->setMaximumSize( 32767, 32767 );
 	cancel->setFocusPolicy( QWidget::TabFocus );
 	cancel->setBackgroundMode( QWidget::PaletteBackground );
 	cancel->setFontPropagation( QWidget::NoChildren );
@@ -192,9 +208,14 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	cancel->setAutoRepeat( FALSE );
 	cancel->setAutoResize( FALSE );
 
-  setMinimumSize( 0, 0 );
-  setMaximumSize( 32767, 32767 );
-  resize( 470,410 );
+	ok->setFixedSize( cancel->sizeHint() );
+	cancel->setFixedSize( cancel->sizeHint() );
+
+	hlayout->addWidget( ok, 0 );
+	hlayout->addWidget( cancel, 0 );
+
+	main_layout->activate();
+	adjustSize();
 
   connect(tab,SIGNAL(tabSelected(int)),SLOT(slotTabSelected(int)));
   connect(ok,SIGNAL(clicked()),SLOT(slotOKClicked()));
@@ -474,6 +495,7 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
+
 
 
 

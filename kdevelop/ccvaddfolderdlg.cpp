@@ -23,13 +23,15 @@
 #include "ccvaddfolderdlg.h"
 #include <kmsgbox.h>
 #include <kapp.h>
+#include <qlayout.h>
+#define LAYOUT_BORDER (10)
 
 CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
-    folderLbl( this, "folderLbl" ),
-    folderEdit( this, "folderEdit" ),
-    okBtn( this, "okBtn" ),
-    cancelBtn( this, "cancelBtn" )
+		folderLbl( this, "folderLbl" ),
+	  folderEdit( this, "folderEdit" ),
+	  okBtn( this, "okBtn" ),
+	  cancelBtn( this, "cancelBtn" )
 {
   setCaption(i18n("Add folder") );
 
@@ -39,14 +41,15 @@ CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
 
 void CCVAddFolderDlg::setWidgetValues()
 {
-  folderLbl.setGeometry( 10, 10, 80, 30 );
+	QGridLayout * layout = new QGridLayout( this, 2, 3, LAYOUT_BORDER );
+	
   folderLbl.setText( i18n("Folder name:") );
+ 	folderLbl.setMinimumSize( folderLbl.sizeHint() );
+	layout->addWidget( &folderLbl, 0, 0 );
 
-  folderEdit.setGeometry( 90, 10, 160, 30 );
+  folderEdit.setMinimumSize( folderEdit.sizeHint() );
+	layout->addWidget( &folderEdit, 0, 1 );
 
-  okBtn.setGeometry( 260, 10, 100, 30 );
-  okBtn.setMinimumSize( 0, 0 );
-  okBtn.setMaximumSize( 32767, 32767 );
   okBtn.setFocusPolicy( QWidget::TabFocus );
   okBtn.setBackgroundMode( QWidget::PaletteBackground );
   okBtn.setFontPropagation( QWidget::NoChildren );
@@ -54,11 +57,8 @@ void CCVAddFolderDlg::setWidgetValues()
   okBtn.setText( i18n("OK") );
   okBtn.setAutoRepeat( FALSE );
   okBtn.setAutoResize( FALSE );
-	okBtn.setDefault(true);
+	okBtn.setDefault( true );
 
-  cancelBtn.setGeometry( 260, 50, 100, 30 );
-  cancelBtn.setMinimumSize( 0, 0 );
-  cancelBtn.setMaximumSize( 32767, 32767 );
   cancelBtn.setFocusPolicy( QWidget::TabFocus );
   cancelBtn.setBackgroundMode( QWidget::PaletteBackground );
   cancelBtn.setFontPropagation( QWidget::NoChildren );
@@ -66,7 +66,22 @@ void CCVAddFolderDlg::setWidgetValues()
   cancelBtn.setText( i18n("Cancel") );
   cancelBtn.setAutoRepeat( FALSE );
   cancelBtn.setAutoResize( FALSE );
+	
+	okBtn.setFixedSize( cancelBtn.sizeHint() );
+	cancelBtn.setFixedSize( cancelBtn.sizeHint() );
 
+	layout->addWidget( &okBtn, 0, 2 );
+	layout->addWidget( &cancelBtn, 1, 2 );
+
+	layout->setRowStretch( 0, 1 );
+	layout->setRowStretch( 1, 1 );
+	layout->setColStretch( 0, 0 );
+	layout->setColStretch( 1, 1 );
+	layout->setColStretch( 2, 0 );
+
+	layout->activate();
+  adjustSize();
+	
   folderEdit.setFocus();
 }
 
@@ -87,5 +102,8 @@ void CCVAddFolderDlg::OK()
   else
     accept();
 }
+
+
+
 
 
