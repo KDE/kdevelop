@@ -64,7 +64,7 @@ bool operator < ( const KTextEditor::CompletionEntry& e1, const KTextEditor::Com
 {
     return
 	e1.type < e2.type ||
-	( !(e1.type < e2.type) && e1.text < e2.text ) || 
+	( !(e1.type < e2.type) && e1.text < e2.text ) ||
 	( !(e1.text < e2.text) && e1.prefix < e2.prefix ) ||
 	( !(e1.prefix < e2.prefix) && e1.postfix < e2.postfix ) ||
 	( !(e1.postfix < e2.postfix) && e1.comment < e2.comment ) ||
@@ -209,12 +209,12 @@ CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
 {
     Q_UNUSED( entry );
     m_bCompletionBoxShow = false;
-    
+
     unsigned int line, column;
     m_activeCursor->cursorPositionReal( &line, &column );
     QString textLine = m_activeEditor->textLine( line );
     QString ch = textLine.mid( column-1, 1 );
-    
+
     if( ch == "(" )
 	completeText();  // show arguments
 }
@@ -495,46 +495,46 @@ CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 	expr = expr.mid( 2 );
 	global = true;
     }
-    
+
     QStringList exprList = splitExpression( expr );
     SimpleVariable v_this = ctx->findVariable( "this" );
-    
+
     QString type = v_this.type;
     ParsedClassContainer* container = findContainer( v_this.type );
-        
+
     QStringList::Iterator it = exprList.begin();
     while( it != exprList.end() ){
 	QString e = *it;
-	
+
 	e = e.stripWhiteSpace();
 	bool onlyStatic = e.find( "::" ) != -1;
 	int leftParen = e.find( "(" );
-	
+
 	if( leftParen != -1 )
 	    e = e.left( leftParen );
-	
+
 	e = e.replace( QRegExp("::"), "." );
 	if( e.endsWith(".") )
 	    e = e.left( e.length() - 1 );
-	
+
 	type = QString::null;
 	if( it == exprList.begin() ){
 	    SimpleVariable v = ctx->findVariable( e );
 	    type = v.type;
 	}
-	
+
 	if( type.isEmpty() )
-	    type = purify( typeOf(e, container) );    
-	
+	    type = purify( typeOf(e, container) );
+
 	if( type.isEmpty() && it == exprList.begin() )
 	    type = purify( typeOf(e) );
-	
+
 	if( type.isEmpty() || !(container = findContainer(type)) )
 	    break;
-	
+
 	++it;
     }
-    
+
     return type;
 }
 
@@ -573,7 +573,7 @@ CppCodeCompletion::completeText( )
     v.type = className;
     variableList.append( v );
     ctx->add( v );
-    
+
     QString word;
     int start_expr = expressionAt( contents, contents.length() - 1 );
     kdDebug(9007) << "start_expr = " << start_expr << endl;
@@ -598,25 +598,25 @@ CppCodeCompletion::completeText( )
 
     QString type = evaluateExpression( expr, ctx );
     if( type ){
-	
-	
+
+
 	if( showArguments ){
 	    QStringList functionList = getSignatureListForClass( type, word );
-	    
+
 	    if( functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
-	    
+
 	    if( functionList.count() ){
 		m_activeCompletion->showArgHint( functionList, "()", "," );
 	    }
-	} else {	    
+	} else {
 	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type );
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length(), false );
 	}
     }
-    
+
     delete( ctx );
     ctx = 0;
 }
@@ -680,7 +680,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 #if 0
     m_pSupport->backgroundParser()->lock();
     TranslationUnitAST* ast = m_pSupport->backgroundParser()->translationUnit( fileName );
-    
+
     AST* node = findNodeAt( ast, line, column );
 
     if( node ){
@@ -720,7 +720,7 @@ ParsedClassContainer* CppCodeCompletion::findContainer( const QString& name, Par
         path.remove( s );
         container = scope;
     }
-    
+
     if( path.size() == 0 )
         return container;
 
@@ -733,7 +733,7 @@ ParsedClassContainer* CppCodeCompletion::findContainer( const QString& name, Par
 
         QStringList::ConstIterator impIt = imports.begin();
         while( impIt != imports.end() ){
-            ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container, imports );
+            ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container );
             if( kl )
                 return kl;
             ++impIt;
@@ -746,12 +746,12 @@ ParsedClassContainer* CppCodeCompletion::findContainer( const QString& name, Par
 QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( const QString& type, bool includePrivate )
 {
     QValueList<KTextEditor::CompletionEntry> entryList;
-    
+
     if( ParsedClassContainer* container = findContainer(type) ){
-	
+
 	ParsedClass* klass = dynamic_cast<ParsedClass*>( container );
 	ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( container );
-	
+
 	if( klass )
 	{
 	    QPtrList<ParsedParent> l = klass->parents;
@@ -759,11 +759,11 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it.current() ){
 		ParsedParent* p = it.current();
 		++it;
-		
+
 		entryList += findAllEntries( p->name(), false );
 	    }
 	}
-	
+
 	if( klass )
 	{
 	    QValueList<ParsedMethod*> l = klass->getSortedSlotList();
@@ -771,16 +771,16 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedMethod* meth = *it;
 		++it;
-		
+
 		if( !includePrivate && meth->access() == PIE_PRIVATE )
 		    continue;
-		
+
 		KTextEditor::CompletionEntry entry;
 		entry.type = QString::number( KIND_SLOT );
-		//entry.prefix = meth->type();			       
-		
+		//entry.prefix = meth->type();
+
 		entry.text = meth->name() + "(";
-		
+
 		QString text;
 		for( ParsedArgument *pArg = meth->arguments.first();
 		pArg != 0;
@@ -791,11 +791,11 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		}
 		text += ")";
 		entry.postfix = text;
-		
+
 		entryList << entry;
-	    }	    
+	    }
 	}
-	
+
 	if( klass )
 	{
 	    QValueList<ParsedMethod*> l = klass->getSortedSignalList();
@@ -803,15 +803,15 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedMethod* meth = *it;
 		++it;
-		
+
 		if( !includePrivate && meth->access() == PIE_PRIVATE )
 		    continue;
-		
+
 		KTextEditor::CompletionEntry entry;
 		entry.type = QString::number( KIND_SIGNAL );
 		//entry.prefix = meth->type();
 		entry.text = meth->name() + "(";
-		
+
 		QString text;
 		for( ParsedArgument *pArg = meth->arguments.first();
 		pArg != 0;
@@ -823,9 +823,9 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		text += ")";
 		entry.postfix = text;
 		entryList << entry;
-	    }	    
+	    }
 	}
-	
+
 	// methods
 	{
 	    QValueList<ParsedMethod*> l = container->getSortedMethodList();
@@ -833,15 +833,15 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedMethod* meth = *it;
 		++it;
-		
+
 		if( !includePrivate && meth->access() == PIE_PRIVATE )
 		    continue;
-		
+
 		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_METHOD );		
+		entry.type = QString::number( KIND_METHOD );
 		//entry.prefix = meth->type();
 		entry.text = meth->name() + "(";
-		
+
 		QString text;
 		for( ParsedArgument *pArg = meth->arguments.first();
 		pArg != 0;
@@ -855,7 +855,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		entryList << entry;
 	    }
 	}
-	
+
 	// attributes
 	{
 	    QValueList<ParsedAttribute*> l = container->getSortedAttributeList();
@@ -863,18 +863,18 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedAttribute* attr = *it;
 		++it;
-		
+
 		if( !includePrivate && attr->access() == PIE_PRIVATE )
 		    continue;
-		
+
 		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_ATTRIBUTE );		
+		entry.type = QString::number( KIND_ATTRIBUTE );
 		//entry.prefix = attr->type();
 		entry.text = attr->name();
 		entryList << entry;
 	    }
 	}
-	
+
 	// namespaces
 	if( scope )
 	{
@@ -883,14 +883,14 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedScopeContainer* sc = *it;
 		++it;
-		
+
 		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_NAMESPACE );		
+		entry.type = QString::number( KIND_NAMESPACE );
 		entry.text = sc->name();
 		entryList << entry;
 	    }
 	}
-	
+
 	// inner classes
 	{
 	    QValueList<ParsedClass*> l = container->getSortedClassList();
@@ -898,14 +898,14 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedClass* cl = *it;
 		++it;
-		
+
 		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_CLASS );		
+		entry.type = QString::number( KIND_CLASS );
 		entry.text = cl->name();
 		entryList << entry;
 	    }
 	}
-			
+
 	// inner structs
 	{
 	    QValueList<ParsedClass*> l = container->getSortedStructList();
@@ -913,15 +913,15 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    while( it != l.end() ){
 		ParsedClass* cl = *it;
 		++it;
-		
+
 		KTextEditor::CompletionEntry entry;
-		entry.type = QString::number( KIND_STRUCT );		
+		entry.type = QString::number( KIND_STRUCT );
 		entry.text = cl->name();
 		entryList << entry;
 	    }
 	}
     }
-    
+
     entryList = unique( entryList );
     // qHeapSort( entryList );
     return entryList;
@@ -931,12 +931,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 {
     if( !container )
 	container = m_pSupport->classStore()->globalScope();
-    
+
     QString type;
-    
+
     ParsedClass* klass = dynamic_cast<ParsedClass*>( container );
     ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( container );
-        
+
     if( klass )
     {
 	QValueList<ParsedMethod*> l = klass->getSortedSlotList();
@@ -944,12 +944,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it != l.end() ){
 	    ParsedMethod* meth = *it;
 	    ++it;
-	    
+
 	    if( meth->name() == name )
 		return meth->type();
-	}	    
+	}
     }
-    
+
     if( klass )
     {
 	QValueList<ParsedMethod*> l = klass->getSortedSignalList();
@@ -957,12 +957,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it != l.end() ){
 	    ParsedMethod* meth = *it;
 	    ++it;
-	    
+
 	    if( meth->name() == name )
 		return meth->type();
-	}	    
+	}
     }
-    
+
     // methods
     {
 	QValueList<ParsedMethod*> l = container->getSortedMethodList();
@@ -970,12 +970,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it != l.end() ){
 	    ParsedMethod* meth = *it;
 	    ++it;
-	    
+
 	    if( meth->name() == name )
 		return meth->type();
 	}
     }
-    
+
     // attributes
     {
 	QValueList<ParsedAttribute*> l = container->getSortedAttributeList();
@@ -983,12 +983,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it != l.end() ){
 	    ParsedAttribute* attr = *it;
 	    ++it;
-	 
+
 	    if( attr->name() == name )
 		return attr->type();
 	}
     }
-    
+
     // namespaces
     if( scope )
     {
@@ -997,12 +997,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it != l.end() ){
 	    ParsedScopeContainer* sc = *it;
 	    ++it;
-	    
+
 	    if( sc->path() == name )
 		return name;
 	}
     }
-    
+
     // inner classes
     {
 	QValueList<ParsedClass*> l = container->getSortedClassList();
@@ -1010,12 +1010,12 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it != l.end() ){
 	    ParsedClass* cl = *it;
 	    ++it;
-	    
+
 	    if( cl->path() == name )
 		return name;
 	}
     }
-    
+
     // inner structs
     {
 	QValueList<ParsedClass*> l = container->getSortedStructList();
@@ -1028,8 +1028,8 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 		return name;
 	}
     }
-    
- 
+
+
     // parents
     if( klass )
     {
@@ -1038,7 +1038,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	while( it.current() ){
 	    ParsedParent* p = it.current();
 	    ++it;
-	    
+
 	    ParsedClassContainer* c = findContainer( p->name() );
 	    if( c != 0 ){
 		type = typeOf( p->name(), c );
@@ -1046,8 +1046,8 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 		    return type;
 	    }
 	}
-    }    
-    
+    }
+
     return QString::null;
 }
 
