@@ -463,6 +463,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	           if( !text.isEmpty() )
 		       text += "::";
 	           text += formatModelItem( *it, true );
+		   text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
                    int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
 	           int line, column;
 	           (*it)->getStartPosition( &line, &column );
@@ -489,13 +490,14 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                 for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it ){
                     QString text = (*it)->scope().join( "::");
                     kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
-                    if( !text.isEmpty() )
-                        text += "::";
-                        text += formatModelItem( *it, true );
-                        int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
-                        int line, column;
-                        (*it)->getStartPosition( &line, &column );
-                        m2->setItemParameter( id, line );
+		    if( !text.isEmpty() )
+			text += "::";
+		    text += formatModelItem( *it, true );
+		    text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+		    int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
+		    int line, column;
+		    (*it)->getStartPosition( &line, &column );
+		    m2->setItemParameter( id, line );
                 }
                 kdDebug() << "CppSupportPart::contextMenu 4" << endl;
            }
@@ -1458,7 +1460,7 @@ void CppSupportPart::recomputeCodeModel( const QString& fileName )
 
 void CppSupportPart::emitFileParsed( )
 {
-	emit fileParsed( m_activeFileName );
+    emit fileParsed( m_activeFileName );
 }
 
 bool CppSupportPart::isHeader( const QString fileName )
