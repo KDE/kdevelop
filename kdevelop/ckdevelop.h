@@ -491,6 +491,8 @@ public:
   void slotDebugToggleBreakpoint();
   void slotDebugInterrupt();
 
+  void slotDebugRunUntil(const QString& filename, int line);
+
   ////////////////////////
   // TOOLS-Menu entries
   ///////////////////////

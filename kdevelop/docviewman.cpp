@@ -733,6 +733,8 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
   connect( pEW, SIGNAL(toggleBPEnabled(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleBPEnabled(const QString&,int)));
   connect( pEW, SIGNAL(toggleBreakpoint(const QString&,int)), m_pParent->getBrkptManager(), SLOT(slotToggleStdBreakpoint(const QString&,int)));
   connect( pEW, SIGNAL(clearAllBreakpoints()), m_pParent->getBrkptManager(),   SLOT(slotClearAllBreakpoints()));
+  connect( pEW, SIGNAL(runToCursor(const QString&, int)), m_pParent, SLOT(slotDebugRunUntil(const QString&, int)));
+
   // connect adding watch variable from the rmb in the editors
   connect( pEW, SIGNAL(addWatchVariable(const QString&)), m_pParent->getVarViewer()->varTree(), SLOT(slotAddWatchVariable(const QString&)));
 

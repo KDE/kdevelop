@@ -1229,7 +1229,8 @@ void CKDevelop::slotDebugRunToCursor()
   if (!dbgController)
     return;
 
-  if (!m_docViewManager->currentEditView()) return;
+  if (!m_docViewManager->currentEditView())
+    return;
   m_docViewManager->currentEditView()->slotRunToCursor();
 }
 
@@ -1702,6 +1703,11 @@ void CKDevelop::setDebugMenuProcess(bool enable)
   }
 }
 
+void CKDevelop::slotDebugRunUntil(const QString& filename, int line)
+{
+  if (dbgController)
+    dbgController->slotRunUntil(filename, line);
+}
 
 void CKDevelop::setupInternalDebugger()
 {

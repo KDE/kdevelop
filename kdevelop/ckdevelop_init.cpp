@@ -540,7 +540,7 @@ void CKDevelop::initKeyAccel()
   accel->connectItem( "DebugRun", this, SLOT(slotDebugRun()), true, ID_DEBUG_RUN );
 
   accel->insertItem( i18n("Debug run to cursor"), "DebugRunCursor", (unsigned int) 0);
-  accel->connectItem( "DebugRunCursor", this, SLOT(slotDebugRun()), true, ID_DEBUG_RUN_CURSOR );
+  accel->connectItem( "DebugRunCursor", this, SLOT(slotDebugRunToCursor()), true, ID_DEBUG_RUN_CURSOR );
 
   accel->insertItem( i18n("Debug stop"), "DebugStop", (unsigned int) 0);
   accel->connectItem( "DebugStop", this, SLOT(slotDebugStop()), true, ID_DEBUG_STOP);
