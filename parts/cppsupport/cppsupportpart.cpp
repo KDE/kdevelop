@@ -108,8 +108,8 @@ void showMemUsage()
 {}
 #endif
 
-enum { KDEV_DB_VERSION = 3 };
-enum { KDEV_PCS_VERSION = 2 };
+enum { KDEV_DB_VERSION = 4 };
+enum { KDEV_PCS_VERSION = 3 };
 
 class CppDriver: public KDevDriver
 {
@@ -286,7 +286,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    m_backgroundParser->lock();
 	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
 
-		if( !hasErrors ){
+		if( true /*!hasErrors*/ ){
 		    StoreWalker walker( fileName, codeModel() );
 
 		    if( codeModel()->hasFile(fileName) ){
@@ -506,6 +506,7 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
     for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
 	QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
+        kdDebug(9007) << "=====================> remove file: " << path << endl;
 
 	removeWithReferences( path );
 	m_backgroundParser->removeFile( path );

@@ -28,6 +28,7 @@
 #include "tree_parser.h"
 #include "cpp_tags.h"
 #include "cppsupport_utils.h"
+#include "tag_creator.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -255,6 +256,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
+    m_completionMode     = NormalCompletion;
 
     m_repository = new CodeInformationRepository();
     setupCodeInformationRepository();
@@ -593,7 +595,8 @@ CppCodeCompletion::completeText( )
 
     bool showArguments = false;
     bool isInstance = true;
-    
+    m_completionMode = NormalCompletion;
+
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
@@ -614,7 +617,7 @@ CppCodeCompletion::completeText( )
 
         showArguments = TRUE;
     }
-    
+
     QStringList type, this_type;
     QString expr, word;
 
@@ -666,26 +669,36 @@ CppCodeCompletion::completeText( )
 
 		    QString contents = textToReparse;
 		    int start_expr = expressionAt( contents, contents.length() - 1 );
+
 		    // kdDebug(9007) << "start_expr = " << start_expr << endl;
-		    if( start_expr != int(contents.length()) - 1 ){
-			expr = contents.mid( start_expr, contents.length() - start_expr );
-			expr = expr.stripWhiteSpace();
-		    }
+		    if( start_expr != int(contents.length()) - 1 )
+			expr = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
 
-		    int idx = expr.length() - 1;
-		    while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
-			--idx;
-		    }
-		    if( idx != int(expr.length()) - 1 ){
-			++idx;
-			word = expr.mid( idx ).stripWhiteSpace();
-			expr = expr.left( idx ).stripWhiteSpace();
-		    }
+                    if( expr.startsWith("SIGNAL") || expr.startsWith("SLOT") ){
+			m_completionMode = expr.startsWith("SIGNAL") ? SignalCompletion : SlotCompletion;
 
-		    if( !expr.isEmpty() ){
-			kdDebug(9007) << "expr = " << expr << endl;
-		    } else {
-			kdDebug(9007) << "no expr found!!" << endl;
+		        showArguments = false;
+			int end_expr = start_expr - 1;
+                        while( end_expr > 0 && contents[end_expr].isSpace() )
+                            --end_expr;
+
+                        if( contents[end_expr] != ',' ){
+                            expr = QString::null;
+                        } else {
+                            --end_expr;
+                            start_expr = expressionAt( contents, end_expr );
+			    expr = contents.mid( start_expr, end_expr - start_expr + 1 ).stripWhiteSpace();
+                        }
+                    } else {
+		    	int idx = expr.length() - 1;
+		    	while( expr[idx].isLetterOrNumber() || expr[idx] == '_' )
+			    --idx;
+
+		        if( idx != int(expr.length()) - 1 ){
+			    ++idx;
+			    word = expr.mid( idx ).stripWhiteSpace();
+			    expr = expr.left( idx ).stripWhiteSpace();
+		        }
 		    }
 
 		    ctx = computeContext( def, endLine, endColumn );
@@ -750,30 +763,40 @@ CppCodeCompletion::completeText( )
 
 		QString contents = getText( startLine, startColumn, line, showArguments ? column-1 : column );
 
+
+		/// @todo remove code duplication
 		int start_expr = expressionAt( contents, contents.length() - 1 );
 
-		kdDebug(9007) << "------> found expression at " << start_expr << endl;
-		// kdDebug(9007) << "start_expr = " << start_expr << endl;
-		if( start_expr != int(contents.length()) - 1 ){
-		    expr = contents.mid( start_expr, contents.length() - start_expr );
-		    expr = expr.stripWhiteSpace();
-		}
+		    // kdDebug(9007) << "start_expr = " << start_expr << endl;
+		    if( start_expr != int(contents.length()) - 1 )
+			expr = contents.mid( start_expr, contents.length() - start_expr ).stripWhiteSpace();
 
-		if( !expr.isEmpty() ){
-		    kdDebug(9007) << "expr = " << expr << endl;
-		} else {
-		    kdDebug(9007) << "no expr found!!" << endl;
-		}
+                    if( expr.startsWith("SIGNAL") || expr.startsWith("SLOT") ){
+			m_completionMode = expr.startsWith("SIGNAL") ? SignalCompletion : SlotCompletion;
 
-		int idx = expr.length() - 1;
-		while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
-		    --idx;
-		}
-		if( idx != int(expr.length()) - 1 ){
-		    ++idx;
-		    word = expr.mid( idx ).stripWhiteSpace();
-		    expr = expr.left( idx ).stripWhiteSpace();
-		}
+		        showArguments = false;
+			int end_expr = start_expr - 1;
+                        while( end_expr > 0 && contents[end_expr].isSpace() )
+                            --end_expr;
+
+                        if( contents[end_expr] != ',' ){
+                            expr = QString::null;
+                        } else {
+                            --end_expr;
+                            start_expr = expressionAt( contents, end_expr );
+			    expr = contents.mid( start_expr, end_expr - start_expr + 1 ).stripWhiteSpace();
+                        }
+                    } else {
+		    	int idx = expr.length() - 1;
+		    	while( expr[idx].isLetterOrNumber() || expr[idx] == '_' )
+			    --idx;
+
+		        if( idx != int(expr.length()) - 1 ){
+			    ++idx;
+			    word = expr.mid( idx ).stripWhiteSpace();
+			    expr = expr.left( idx ).stripWhiteSpace();
+		        }
+		    }
 
 		ctx = computeContext( def, line, column );
 
@@ -801,7 +824,7 @@ CppCodeCompletion::completeText( )
     if( ch2 == "::" || expr.isEmpty() ){
 	isInstance = false;
     }
-    
+
     if( !showArguments ){
 	QValueList<KTextEditor::CompletionEntry> entryList;
 
@@ -1374,7 +1397,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	    tags = m_repository->query( args );
 	    computeCompletionEntryList( entryList, tags, isInstance );
 	}
-	
+
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
 	    << Catalog::QueryArgument( "name", type.join("::") );
@@ -1397,15 +1420,29 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	Tag& tag = *it;
 	++it;
 
-	if( !tag.name().isEmpty() )
-	    entryList << CodeInformationRepository::toEntry( tag );
+	if( tag.name().isEmpty() ){
+	    continue;
+	} else if( m_completionMode != NormalCompletion ){
+	    if( tag.kind() != Tag::Kind_FunctionDeclaration )
+	        continue;
+
+	    CppFunction<Tag> info( tag );
+
+	    if( m_completionMode == SlotCompletion && !info.isSlot() )
+	        continue;
+	    else if( m_completionMode == SignalCompletion && !info.isSignal() )
+	        continue;
+	}
+
+	entryList << CodeInformationRepository::toEntry( tag );
     }
 }
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ClassDom klass, bool isInstance )
 {
     computeCompletionEntryList( entryList, klass->functionList(), isInstance );
-    computeCompletionEntryList( entryList, klass->variableList(), isInstance );
+    if( m_completionMode == NormalCompletion )
+        computeCompletionEntryList( entryList, klass->variableList(), isInstance );
 
     QStringList parents = klass->baseClassList();
     for( QStringList::Iterator it=parents.begin(); it!=parents.end(); ++it ){
@@ -1422,7 +1459,9 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
     if( cfg->includeGlobalFunctions() ){
 	computeCompletionEntryList( entryList, scope->functionList(), isInstance );
-	computeCompletionEntryList( entryList, scope->variableList(), isInstance );
+
+        if( m_completionMode == NormalCompletion )
+	    computeCompletionEntryList( entryList, scope->variableList(), isInstance );
     }
 
     if( !isInstance && cfg->includeTypes() ){
@@ -1474,7 +1513,11 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
 	if( isInstance && meth->isStatic() )
 	    continue;
-	
+	else if( m_completionMode == SignalCompletion && !meth->isSignal() )
+	    continue;
+	else if( m_completionMode == SlotCompletion && !meth->isSlot() )
+	    continue;
+
 	KTextEditor::CompletionEntry entry;
 	//entry.prefix = meth->type();
 
@@ -1502,7 +1545,10 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	if( meth->isConstant() )
 	    text += " const";
 
-	entry.postfix = text;
+        if( m_completionMode != NormalCompletion )
+            entry.text += text.stripWhiteSpace();
+	else
+            entry.postfix = text;
 
 	entryList << entry;
     }
@@ -1510,11 +1556,14 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const VariableList & attributes, bool isInstance )
 {
+    if( m_completionMode != NormalCompletion )
+        return;
+
     VariableList::ConstIterator it = attributes.begin();
     while( it != attributes.end() ){
 	VariableDom attr = *it;
 	++it;
-	
+
 	if( isInstance && attr->isStatic() )
 	    continue;
 
@@ -1606,7 +1655,7 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 
 	    signature += arg->type() + " " + arg->name();
 	    signature = signature.stripWhiteSpace();
-	    
+
 	    if( argIt != args.end() )
 		signature += ", ";
 	}
@@ -1630,7 +1679,7 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	CppFunction<Tag> info( tag );
 	if( info.name() != name )
 	    continue;
-	
+
         QString signature;
         signature += tag.name() + "(";
         QStringList arguments = info.arguments();
@@ -1647,10 +1696,10 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
             }
         }
         signature += ")";
-	
+
 	if( info.isConst() )
 	    signature += " const";
-	
+
 	signatureList << signature.stripWhiteSpace();
     }
 }

@@ -42,12 +42,12 @@ void TagCreator::setDocumentationDirectories(const QStringList& str){
 
 void TagCreator::parseDeclaration( DeclarationAST* ast )
 {
-    if( ast->nodeType() == NodeType_AccessDeclaration || 
-	m_currentAccess.isEmpty() || 
-	m_currentAccess.contains("public") || 
-	m_currentAccess.contains("protected") || 
+    if( ast->nodeType() == NodeType_AccessDeclaration ||
+	m_currentAccess.isEmpty() ||
+	m_currentAccess.contains("public") ||
+	m_currentAccess.contains("protected") ||
 	m_currentAccess.contains("signals") )
-	
+
 	   TreeParser::parseDeclaration( ast );
 }
 
@@ -278,6 +278,8 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
     tagBuilder.setInline( isInline );
     tagBuilder.setPure( false );
     tagBuilder.setConst( d->constant() != 0 );
+    tagBuilder.setSignal( m_inSignals );
+    tagBuilder.setSlot( m_inSlots );
 
     m_catalog->addItem( tag );
 
@@ -474,7 +476,7 @@ void TagCreator::parseAccessDeclaration( AccessDeclarationAST * access )
 	m_currentAccess = "public"; //!?
 
     m_inSlots = l.count() > 1 ? l.at( 1 )->text() == "slots" : false;
-    m_inSignals = l.count() > 1 ? l.at( 0 )->text() == "signals" : false;
+    m_inSignals = l.count() >= 1 ? l.at( 0 )->text() == "signals" : false;
 }
 
 void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec,
@@ -540,6 +542,8 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
     tagBuilder.setInline( isInline );
     tagBuilder.setPure( isPure );
     tagBuilder.setConst( d->constant() != 0 );
+    tagBuilder.setSignal( m_inSignals );
+    tagBuilder.setSlot( m_inSlots );
 
     parseFunctionArguments( tag, d );
 

@@ -42,10 +42,19 @@ class CppCodeCompletion : public QObject
 {
     Q_OBJECT
 public:
+    enum CompletionMode
+    {
+        NormalCompletion,
+        SignalCompletion,
+        SlotCompletion
+    };
+
+public:
     CppCodeCompletion( CppSupportPart* part );
     virtual ~CppCodeCompletion();
 
     CodeInformationRepository* repository() { return m_repository; }
+    CompletionMode completionMode() const { return m_completionMode; }
 
     int expressionAt( const QString& text, int index );
     QStringList splitExpression( const QString& text );
@@ -53,7 +62,7 @@ public:
     QStringList evaluateExpression( QString expr, SimpleContext* ctx );
 
     static QStringList typeName( const QString& name );
-    
+
 public slots:
     void completeText();
 
@@ -67,16 +76,17 @@ private slots:
 
 private:
     void setupCodeInformationRepository();
-    FunctionDefinitionAST* functionDefinition( AST* node );    
+    FunctionDefinitionAST* functionDefinition( AST* node );
     void computeRecoveryPoints();
-    
+
     QStringList evaluateExpressionInternal( QStringList& exprList, const QStringList& scope, SimpleContext* ctx=0 );
-    
+
     QStringList typeOf( const QValueList<Tag>& tags );
     QStringList typeOf( const QString& name, ClassDom klass );
     QStringList typeOf( const QString& name, NamespaceDom scope );
     QStringList typeOf( const QString& name, const FunctionList& methods );
-    
+
+    /// @todo remove isInstance
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type, bool isInstance );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance );
@@ -86,12 +96,12 @@ private:
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst, bool isInstance );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
-    
+
     void computeSignatureList( QStringList& signatureList, const QString& name, const QStringList& type );
     void computeSignatureList( QStringList& signatureList, const QString& name, ClassDom klass );
     void computeSignatureList( QStringList& signatureList, const QString& name, const FunctionList& methods );
     void computeSignatureList( QStringList& signatureList, const QString& name, QValueList<Tag>& tags );
-    
+
     SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, StatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, StatementListAST* ast, int line, int col );
@@ -104,8 +114,8 @@ private:
     void computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col );
 
     QString getText( int startLine, int startColumn, int endLine, int endColumn );
-    
-    ClassDom findContainer( const QString& name, NamespaceDom container=0, bool includeImports=false );    
+
+    ClassDom findContainer( const QString& name, NamespaceDom container=0, bool includeImports=false );
     QString findClass( const QString& className );
 
 private:
@@ -124,6 +134,7 @@ private:
 
     CodeInformationRepository* m_repository;
     CppCodeCompletionData* d;
+    CompletionMode m_completionMode;
 };
 
 #endif

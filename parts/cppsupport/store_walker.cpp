@@ -428,7 +428,7 @@ void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
 	m_currentAccess = CodeModelItem::Public;
 
     m_inSlots = l.count() > 1 ? l.at( 1 )->text() == "slots" : false;
-    m_inSignals = l.count() > 1 ? l.at( 0 )->text() == "signals" : false;
+    m_inSignals = l.count() >= 1 ? l.at( 0 )->text() == "signals" : false;
 }
 
 NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QString & name )
