@@ -1,30 +1,31 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
- <!ENTITY $APPNAME$ "<application>$APPNAME$</application>">
- <!ENTITY % addindex "IGNORE">
- <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
+  <!ENTITY kappname "&$APPNAME$;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->   
 ]>
 <!-- Important note: please use template.docbook instead of this file.
      This is only the conversion of app.sgml into DocBook SGML.  
      template.docbook gives you more information on what you can and
      should do.  Thanks. --> 
-<book lang="en">
+
+<book lang="&language;">
+
   <bookinfo>
     <title>The $APPNAME$ Handbook</title>
     <authorgroup>
       <author>
 	<firstname></firstname>
 	<surname>$AUTHOR$</surname>
-	<affiliation>
-	  <address><email><ulink url="mailto:$EMAIL$">$EMAIL$</ulink></email></address>
-	</affiliation>
+	<affiliation><address><email>$EMAIL$</email></address></affiliation>
       </author>
     </authorgroup>
-    <date>`date "+%d/%m/%Y"`</date>
-    <releaseinfo>Version $APP_VERSION</releaseinfo>
+    <date>`date "+%Y-%m-%d"`</date>
+    <releaseinfo>$APP_VERSION</releaseinfo>
     <abstract>
       <para>SHORT DESCRIPTION GOES HERE</para>
     </abstract>
     <keywordset>
+      <keyword>KDE</keyword>
       <keyword>$APPNAME$</keyword>
     </keywordset>
   </bookinfo>
