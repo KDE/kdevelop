@@ -25,7 +25,8 @@ class ConfigOption
       O_Enum,      //<! A fixed set of items
       O_String,    //<! A single item
       O_Int,       //<! An integer value
-      O_Bool       //<! A boolean value
+      O_Bool,      //<! A boolean value
+      O_Obsolete   //<! An obsolete option
     };
     enum 
     { 
@@ -309,6 +310,18 @@ class ConfigBool : public ConfigOption
     QCString m_valueString;
 };
 
+/*! \brief Section marker for obsolete options
+ *
+ */
+class ConfigObsolete : public ConfigOption
+{
+  public:
+    ConfigObsolete(OptionType t) : ConfigOption(t)  {}
+    void writeTemplate(QTextStream &,bool,bool) {}
+    void substEnvVars() {}
+};
+
+
 // some convenience macros
 #define Config_getString(val)  Config::instance()->getString(__FILE__,__LINE__,val)
 #define Config_getInt(val)     Config::instance()->getInt(__FILE__,__LINE__,val)
@@ -479,6 +492,14 @@ class Config
       m_dict->insert(name,result);
       return result;
     }
+    /*! Adds an option that has become obsolete. */
+    ConfigOption *addObsolete(const char *name)
+    {
+      ConfigObsolete *option = new ConfigObsolete(ConfigOption::O_Obsolete);
+      m_dict->insert(name,option);
+      m_obsolete->append(option);
+      return option;
+    }
     /*! @} */
 
     /*! Writes a template configuration file to \a f. If \a shortIndex
@@ -519,23 +540,29 @@ class Config
      *  to the configuration object 
      */
     void create();
+
   protected:
+
     Config()
     { 
-      m_options = new QPtrList<ConfigOption>;
-      m_dict = new QDict<ConfigOption>(257);
+      m_options  = new QPtrList<ConfigOption>;
+      m_obsolete = new QPtrList<ConfigOption>;
+      m_dict     = new QDict<ConfigOption>(257);
       m_options->setAutoDelete(TRUE);
+      m_obsolete->setAutoDelete(TRUE);
       m_initialized = FALSE;
       create();
     }
    ~Config()
     {
       delete m_options;
+      delete m_obsolete;
       delete m_dict;
     }
 
   private:
     QPtrList<ConfigOption> *m_options;
+    QPtrList<ConfigOption> *m_obsolete;
     QDict<ConfigOption> *m_dict;
     static Config *m_instance;
     bool m_initialized;

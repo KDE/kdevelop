@@ -1228,13 +1228,19 @@ YY_RULE_SETUP
 					         s->resize(0);
 					         BEGIN(GetString);
 						 break;
+					       case ConfigOption::O_Obsolete:
+					         config_err("Warning: Tag `%s' at line %d of file %s has become obsolete.\n"
+						            "To avoid this warning please update your configuration "
+							    "file using \"doxygen -u\"\n", cmd.data(),yyLineNr,yyFileName.data()); 
+					         BEGIN(SkipInvalid);
+						 break;
 					     }
 					   }
 					}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 475 "config.l"
+#line 481 "config.l"
 { QCString cmd=yytext;
                                           cmd=cmd.left(cmd.length()-2).stripWhiteSpace(); 
 					  ConfigOption *option = config->get(cmd);
@@ -1265,24 +1271,30 @@ YY_RULE_SETUP
 						    yytext,yyLineNr,yyFileName.data()); 
 					        BEGIN(SkipInvalid);
 						break;
+					       case ConfigOption::O_Obsolete:
+					         config_err("Warning: Tag `%s' at line %d of file %s has become obsolete.\n"
+						            "To avoid this warning please update your configuration "
+							    "file using \"doxygen -u\"\n", cmd.data(),yyLineNr,yyFileName.data()); 
+					         BEGIN(SkipInvalid);
+						 break;
 					     }
 					   }
 					}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 508 "config.l"
+#line 520 "config.l"
 { BEGIN(GetStrList); l=&includePathList; l->clear(); elemStr=""; }
 	YY_BREAK
 /* include a config file */
 case 6:
 YY_RULE_SETUP
-#line 510 "config.l"
+#line 522 "config.l"
 { BEGIN(Include);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 511 "config.l"
+#line 523 "config.l"
 { 
   					  readIncludeFile(yytext); 
   					  BEGIN(Start);
@@ -1298,7 +1310,7 @@ case YY_STATE_EOF(GetStrList):
 case YY_STATE_EOF(GetQuotedString):
 case YY_STATE_EOF(GetEnvVar):
 case YY_STATE_EOF(Include):
-#line 515 "config.l"
+#line 527 "config.l"
 {
                                           //printf("End of include file\n");
 					  //printf("Include stack depth=%d\n",g_includeStack.count());
@@ -1323,17 +1335,17 @@ case YY_STATE_EOF(Include):
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 537 "config.l"
+#line 549 "config.l"
 { config_err("Warning: ignoring unknown tag `%s' at line %d, file %s\n",yytext,yyLineNr,yyFileName.data()); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 538 "config.l"
+#line 550 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 539 "config.l"
+#line 551 "config.l"
 { 
   					  yyLineNr++; 
 					  if (!elemStr.isEmpty())
@@ -1346,7 +1358,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 548 "config.l"
+#line 560 "config.l"
 {
   				          if (!elemStr.isEmpty())
 					  {
@@ -1358,12 +1370,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 556 "config.l"
+#line 568 "config.l"
 { (*s)+=yytext; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 557 "config.l"
+#line 569 "config.l"
 { lastState=YY_START;
   					  BEGIN(GetQuotedString); 
                                           tmpString.resize(0); 
@@ -1371,7 +1383,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 561 "config.l"
+#line 573 "config.l"
 { 
   					  //printf("Quoted String = `%s'\n",tmpString.data());
   					  if (lastState==GetString)
@@ -1388,19 +1400,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 574 "config.l"
+#line 586 "config.l"
 {
   					  tmpString+='"';
   					}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 577 "config.l"
+#line 589 "config.l"
 { tmpString+=*yytext; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 578 "config.l"
+#line 590 "config.l"
 { 
   					  QCString bs=yytext; 
   					  bs=bs.upper();
@@ -1419,39 +1431,39 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 593 "config.l"
+#line 605 "config.l"
 {
   					  elemStr+=yytext;
   					}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 596 "config.l"
+#line 608 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 597 "config.l"
+#line 609 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 598 "config.l"
+#line 610 "config.l"
 { yyLineNr++; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 599 "config.l"
+#line 611 "config.l"
 
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 600 "config.l"
+#line 612 "config.l"
 { yyLineNr++ ; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 602 "config.l"
+#line 614 "config.l"
 ECHO;
 	YY_BREAK
 
@@ -2337,7 +2349,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 602 "config.l"
+#line 614 "config.l"
 
 
 /*@ ----------------------------------------------------------------------------
@@ -2817,6 +2829,9 @@ void Config::check()
     filePatternList.append("*.idl");
     filePatternList.append("*.odl");
     filePatternList.append("*.cs");
+    filePatternList.append("*.php");
+    filePatternList.append("*.php3");
+    filePatternList.append("*.inc");
   }
 
   // add default pattern if needed
@@ -2834,104 +2849,104 @@ void Config::check()
   //}
   
   // more checks needed if and only if the search engine is enabled.
-  if (Config_getBool("SEARCHENGINE"))
-  {
-    // check cgi name
-    QCString &cgiName = Config_getString("CGI_NAME");
-    if (cgiName.isEmpty())
-    {
-      config_err("Error: tag CGI_NAME: no cgi script name after the CGI_NAME tag.\n");
-      exit(1);
-    }
-    // check cgi URL
-    QCString &cgiURL = Config_getString("CGI_URL");
-    if (cgiURL.isEmpty())
-    {
-      config_err("Error: tag CGI_URL: no URL to cgi directory specified.\n");
-      exit(1);
-    }
-    else if (cgiURL.left(7)!="http://" && 
-	     cgiURL.left(8)!="https://" &&
-	     cgiURL.left(4)!="cgi:"
-	    )
-    {
-      config_err("Error: tag CGI_URL: URL to cgi directory is invalid (must "
-	  "start with http:// or https://).\n");
-      exit(1);
-    }
-    // check documentation URL
-    QCString &docURL = Config_getString("DOC_URL");
-    if (docURL.isEmpty())
-    {
-      docURL = Config_getString("OUTPUT_DIRECTORY").copy().prepend("file://").append("html");
-    }
-    else if (docURL.left(7)!="http://" && 
-	     docURL.left(8)!="https://" &&
-	     docURL.left(7)!="file://"
-	    )
-    {
-      config_err("Error: tag DOC_URL: URL to documentation is invalid or "
-	  "not absolute.\n"); 
-      exit(1);
-    }
-    // check absolute documentation path
-    QCString &docAbsPath = Config_getString("DOC_ABSPATH");
-    if (docAbsPath.isEmpty())
-    {
-      docAbsPath = Config_getString("OUTPUT_DIRECTORY")+"/html"; 
-    }
-    else if (docAbsPath[0]!='/' && docAbsPath[1]!=':')
-    {
-      config_err("Error: tag DOC_ABSPATH: path is not absolute!\n");
-      exit(1);
-    }
-    // check path to doxysearch
-    QCString &binAbsPath = Config_getString("BIN_ABSPATH");
-    if (binAbsPath.isEmpty())
-    {
-      config_err("Error: tag BIN_ABSPATH: no absolute path to doxysearch "
-	  "specified.\n");
-      exit(1);
-    }
-    else if (binAbsPath[0]!='/' && binAbsPath[1]!=':')
-    {
-      config_err("Error: tag BIN_ABSPATH: path is not absolute!\n");
-      exit(1);
-    }
-
-    // check perl path
-    bool found=FALSE;
-    QCString &perlPath = Config_getString("PERL_PATH");
-    if (perlPath.isEmpty())
-    {
-      QFileInfo fi;
-      fi.setFile("/usr/bin/perl");
-      if (fi.exists()) 
-      {
-	perlPath="/usr/bin/perl";
-        found=TRUE;
-      }
-      else
-      {
-	fi.setFile("/usr/local/bin/perl");
-	if (fi.exists())
-        {
-  	  perlPath="/usr/local/bin/perl";
-          found=TRUE;
-        }
-      }
-    }
-    if (!found)
-    {
-      QFileInfo fi(perlPath);
-      if (!fi.exists())
-      {
-        config_warn("Warning: tag PERL_PATH: perl interpreter not found at default or"
-            "user specified (%s) location\n",
-        perlPath.data());
-      }
-    }
-  }
+//  if (Config_getBool("SEARCHENGINE"))
+//  {
+//    // check cgi name
+//    QCString &cgiName = Config_getString("CGI_NAME");
+//    if (cgiName.isEmpty())
+//    {
+//      config_err("Error: tag CGI_NAME: no cgi script name after the CGI_NAME tag.\n");
+//      exit(1);
+//    }
+//    // check cgi URL
+//    QCString &cgiURL = Config_getString("CGI_URL");
+//    if (cgiURL.isEmpty())
+//    {
+//      config_err("Error: tag CGI_URL: no URL to cgi directory specified.\n");
+//      exit(1);
+//    }
+//    else if (cgiURL.left(7)!="http://" && 
+//	     cgiURL.left(8)!="https://" &&
+//	     cgiURL.left(4)!="cgi:"
+//	    )
+//    {
+//      config_err("Error: tag CGI_URL: URL to cgi directory is invalid (must "
+//	  "start with http:// or https://).\n");
+//      exit(1);
+//    }
+//    // check documentation URL
+//    QCString &docURL = Config_getString("DOC_URL");
+//    if (docURL.isEmpty())
+//    {
+//      docURL = Config_getString("OUTPUT_DIRECTORY").copy().prepend("file://").append("html");
+//    }
+//    else if (docURL.left(7)!="http://" && 
+//	     docURL.left(8)!="https://" &&
+//	     docURL.left(7)!="file://"
+//	    )
+//    {
+//      config_err("Error: tag DOC_URL: URL to documentation is invalid or "
+//	  "not absolute.\n"); 
+//      exit(1);
+//    }
+//    // check absolute documentation path
+//    QCString &docAbsPath = Config_getString("DOC_ABSPATH");
+//    if (docAbsPath.isEmpty())
+//    {
+//      docAbsPath = Config_getString("OUTPUT_DIRECTORY")+"/html"; 
+//    }
+//    else if (docAbsPath[0]!='/' && docAbsPath[1]!=':')
+//    {
+//      config_err("Error: tag DOC_ABSPATH: path is not absolute!\n");
+//      exit(1);
+//    }
+//    // check path to doxysearch
+//    QCString &binAbsPath = Config_getString("BIN_ABSPATH");
+//    if (binAbsPath.isEmpty())
+//    {
+//      config_err("Error: tag BIN_ABSPATH: no absolute path to doxysearch "
+//	  "specified.\n");
+//      exit(1);
+//    }
+//    else if (binAbsPath[0]!='/' && binAbsPath[1]!=':')
+//    {
+//      config_err("Error: tag BIN_ABSPATH: path is not absolute!\n");
+//      exit(1);
+//    }
+//
+//  }
+//  // check perl path
+//  bool found=FALSE;
+//  QCString &perlPath = Config_getString("PERL_PATH");
+//  if (perlPath.isEmpty())
+//  {
+//    QFileInfo fi;
+//    fi.setFile("/usr/bin/perl");
+//    if (fi.exists()) 
+//    {
+//      perlPath="/usr/bin/perl";
+//      found=TRUE;
+//    }
+//    else
+//    {
+//      fi.setFile("/usr/local/bin/perl");
+//      if (fi.exists())
+//      {
+//	perlPath="/usr/local/bin/perl";
+//	found=TRUE;
+//      }
+//    }
+//  }
+//  if (!found)
+//  {
+//    QFileInfo fi(perlPath);
+//    if (!fi.exists())
+//    {
+//      config_warn("Warning: tag PERL_PATH: perl interpreter not found at default or"
+//	  "user specified (%s) location\n",
+//	  perlPath.data());
+//    }
+//  }
 
 #undef PUTENV
 #undef SEP
@@ -2995,7 +3010,7 @@ void Config::create()
   
   // option definitions
   //-----------------------------------------------------------------------------------------------
-  addInfo("General","General configuration options");
+  addInfo("Project","Project related configuration options");
   //-----------------------------------------------------------------------------------------------
   
   
@@ -3129,6 +3144,143 @@ void Config::create()
 #endif
 		 );
   cb = addBool(
+                    "BRIEF_MEMBER_DESC",
+                    "If the BRIEF_MEMBER_DESC tag is set to YES (the default) Doxygen will \n"
+                    "include brief member descriptions after the members that are listed in \n"
+                    "the file and class documentation (similar to JavaDoc). \n"
+                    "Set to NO to disable this. \n",
+                    TRUE
+                 );
+  cb = addBool(
+                    "REPEAT_BRIEF",
+                    "If the REPEAT_BRIEF tag is set to YES (the default) Doxygen will prepend \n"
+                    "the brief description of a member or function before the detailed description. \n"
+                    "Note: if both HIDE_UNDOC_MEMBERS and BRIEF_MEMBER_DESC are set to NO, the \n"
+                    "brief descriptions will be completely suppressed. \n",
+                    TRUE
+                 );
+  cb = addBool(
+                    "ALWAYS_DETAILED_SEC",
+                    "If the ALWAYS_DETAILED_SEC and REPEAT_BRIEF tags are both set to YES then \n"
+                    "Doxygen will generate a detailed section even if there is only a brief \n"
+                    "description. \n",
+                    FALSE
+                 );
+  cb = addBool(
+                    "INLINE_INHERITED_MEMB",
+                    "If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all inherited \n"
+                    "members of a class in the documentation of that class as if those members were \n"
+		    "ordinary class members. Constructors, destructors and assignment operators of \n"
+		    "the base classes will not be shown. \n",
+		    FALSE
+                 );
+  cb = addBool(
+                    "FULL_PATH_NAMES",
+                    "If the FULL_PATH_NAMES tag is set to YES then Doxygen will prepend the full \n"
+                    "path before files name in the file list and in the header files. If set \n"
+                    "to NO the shortest path that makes the file name unique will be used. \n",
+                    FALSE
+                 );
+  cl = addList(
+                    "STRIP_FROM_PATH",
+                    "If the FULL_PATH_NAMES tag is set to YES then the STRIP_FROM_PATH tag \n"
+                    "can be used to strip a user-defined part of the path. Stripping is \n"
+                    "only done if one of the specified strings matches the left-hand part of \n"
+                    "the path. It is allowed to use relative paths in the argument list.\n"
+                 );
+  cl->addDependency("FULL_PATH_NAMES");
+  cb = addBool(
+                    "SHORT_NAMES",
+		    "If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter \n"
+		    "(but less readable) file names. This can be useful is your file systems \n"
+		    "doesn't support long names like on DOS, Mac, or CD-ROM. \n",
+		    FALSE
+                 );
+  cb = addBool(
+                    "JAVADOC_AUTOBRIEF",
+                    "If the JAVADOC_AUTOBRIEF tag is set to YES then Doxygen \n"
+                    "will interpret the first line (until the first dot) of a JavaDoc-style \n"
+                    "comment as the brief description. If set to NO, the JavaDoc \n"
+                    "comments will behave just like the Qt-style comments (thus requiring an \n"
+                    "explict @brief command for a brief description. \n",
+                    FALSE
+                 );
+  cb = addBool(
+                    "MULTILINE_CPP_IS_BRIEF",
+                    "The MULTILINE_CPP_IS_BRIEF tag can be set to YES to make Doxygen \n"
+                    "treat a multi-line C++ special comment block (i.e. a block of //! or /// \n"
+		    "comments) as a brief description. This used to be the default behaviour. \n"
+		    "The new default is to treat a multi-line C++ comment block as a detailed \n"
+		    "description. Set this tag to YES if you prefer the old behaviour instead. \n",
+                    FALSE
+                 );
+  cb = addBool(
+                    "DETAILS_AT_TOP",
+                    "If the DETAILS_AT_TOP tag is set to YES then Doxygen \n"
+                    "will output the detailed description near the top, like JavaDoc.\n"
+                    "If set to NO, the detailed description appears after the member \n"
+                    "documentation. \n",
+                    FALSE
+                 );
+  cb = addBool(
+                    "INHERIT_DOCS",
+                    "If the INHERIT_DOCS tag is set to YES (the default) then an undocumented \n"
+                    "member inherits the documentation from any documented member that it \n"
+                    "reimplements. \n",
+                    TRUE
+                 );
+  cb = addBool(
+                    "DISTRIBUTE_GROUP_DOC",
+                    "If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC \n"
+                    "tag is set to YES, then doxygen will reuse the documentation of the first \n"
+                    "member in the group (if any) for the other members of the group. By default \n"
+                    "all members of a group must be documented explicitly.\n",
+                    FALSE
+                 );
+  ci = addInt(
+                    "TAB_SIZE",
+                    "The TAB_SIZE tag can be used to set the number of spaces in a tab. \n"
+                    "Doxygen uses this value to replace tabs by spaces in code fragments. \n",
+                    1,16,8
+                );
+  cl = addList(
+                    "ALIASES",
+                    "This tag can be used to specify a number of aliases that acts \n"
+                    "as commands in the documentation. An alias has the form \"name=value\". \n"
+                    "For example adding \"sideeffect=\\par Side Effects:\\n\" will allow you to \n"
+                    "put the command \\sideeffect (or @sideeffect) in the documentation, which \n"
+                    "will result in a user-defined paragraph with heading \"Side Effects:\". \n"
+                    "You can put \\n's in the value part of an alias to insert newlines. \n" 
+                 );
+  cb = addBool(
+                    "OPTIMIZE_OUTPUT_FOR_C",
+                    "Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources \n"
+                    "only. Doxygen will then generate output that is more tailored for C. \n"
+                    "For instance, some of the names that are used will be different. The list \n"
+                    "of all members will be omitted, etc. \n",
+                    FALSE
+                 );
+  cb = addBool(
+                    "OPTIMIZE_OUTPUT_JAVA",
+                    "Set the OPTIMIZE_OUTPUT_JAVA tag to YES if your project consists of Java sources \n"
+                    "only. Doxygen will then generate output that is more tailored for Java. \n"
+                    "For instance, namespaces will be presented as packages, qualified scopes \n"
+                    "will look different, etc. \n",
+                    FALSE
+                 );
+  cb = addBool(    
+                    "SUBGROUPING",
+		    "Set the SUBGROUPING tag to YES (the default) to allow class member groups of \n"
+		    "the same type (for instance a group of public functions) to be put as a \n"
+		    "subgroup of that type (e.g. under the Public Functions section). Set it to \n"
+		    "NO to prevent subgrouping. Alternatively, this can be done per class using \n"
+		    "the \\nosubgrouping command. \n",
+		    TRUE
+                );
+  //-----------------------------------------------------------------------------------------------
+  addInfo("Build","Build related configuration options");
+  //-----------------------------------------------------------------------------------------------
+  cb = addBool(
                     "EXTRACT_ALL",
                     "If the EXTRACT_ALL tag is set to YES doxygen will assume all entities in \n"
                     "documentation are documented, even if no documentation was available. \n"
@@ -3189,52 +3341,6 @@ void Config::create()
                     FALSE
                  );
   cb = addBool(
-                    "BRIEF_MEMBER_DESC",
-                    "If the BRIEF_MEMBER_DESC tag is set to YES (the default) Doxygen will \n"
-                    "include brief member descriptions after the members that are listed in \n"
-                    "the file and class documentation (similar to JavaDoc). \n"
-                    "Set to NO to disable this. \n",
-                    TRUE
-                 );
-  cb = addBool(
-                    "REPEAT_BRIEF",
-                    "If the REPEAT_BRIEF tag is set to YES (the default) Doxygen will prepend \n"
-                    "the brief description of a member or function before the detailed description. \n"
-                    "Note: if both HIDE_UNDOC_MEMBERS and BRIEF_MEMBER_DESC are set to NO, the \n"
-                    "brief descriptions will be completely suppressed. \n",
-                    TRUE
-                 );
-  cb = addBool(
-                    "ALWAYS_DETAILED_SEC",
-                    "If the ALWAYS_DETAILED_SEC and REPEAT_BRIEF tags are both set to YES then \n"
-                    "Doxygen will generate a detailed section even if there is only a brief \n"
-                    "description. \n",
-                    FALSE
-                 );
-  cb = addBool(
-                    "INLINE_INHERITED_MEMB",
-                    "If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all inherited \n"
-                    "members of a class in the documentation of that class as if those members were \n"
-		    "ordinary class members. Constructors, destructors and assignment operators of \n"
-		    "the base classes will not be shown. \n",
-		    FALSE
-                 );
-  cb = addBool(
-                    "FULL_PATH_NAMES",
-                    "If the FULL_PATH_NAMES tag is set to YES then Doxygen will prepend the full \n"
-                    "path before files name in the file list and in the header files. If set \n"
-                    "to NO the shortest path that makes the file name unique will be used. \n",
-                    FALSE
-                 );
-  cl = addList(
-                    "STRIP_FROM_PATH",
-                    "If the FULL_PATH_NAMES tag is set to YES then the STRIP_FROM_PATH tag \n"
-                    "can be used to strip a user-defined part of the path. Stripping is \n"
-                    "only done if one of the specified strings matches the left-hand part of \n"
-                    "the path. It is allowed to use relative paths in the argument list.\n"
-                 );
-  cl->addDependency("FULL_PATH_NAMES");
-  cb = addBool(
                     "INTERNAL_DOCS",
                     "The INTERNAL_DOCS tag determines if documentation \n"
                     "that is typed after a \\internal command is included. If the tag is set \n"
@@ -3252,13 +3358,6 @@ void Config::create()
                     TRUE
                  );
   cb = addBool(
-                    "SHORT_NAMES",
-		    "If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter \n"
-		    "(but less readable) file names. This can be useful is your file systems \n"
-		    "doesn't support long names like on DOS, Mac, or CD-ROM. \n",
-		    FALSE
-                 );
-  cb = addBool(
                     "HIDE_SCOPE_NAMES",
                     "If the HIDE_SCOPE_NAMES tag is set to NO (the default) then Doxygen \n"
                     "will show members with their full class and namespace scopes in the \n"
@@ -3270,39 +3369,6 @@ void Config::create()
                     "If the SHOW_INCLUDE_FILES tag is set to YES (the default) then Doxygen \n"
                     "will put a list of the files that are included by a file in the documentation \n"
                     "of that file. \n",
-                    TRUE
-                 );
-  cb = addBool(
-                    "JAVADOC_AUTOBRIEF",
-                    "If the JAVADOC_AUTOBRIEF tag is set to YES then Doxygen \n"
-                    "will interpret the first line (until the first dot) of a JavaDoc-style \n"
-                    "comment as the brief description. If set to NO, the JavaDoc \n"
-                    "comments will behave just like the Qt-style comments (thus requiring an \n"
-                    "explict @brief command for a brief description. \n",
-                    FALSE
-                 );
-  cb = addBool(
-                    "MULTILINE_CPP_IS_BRIEF",
-                    "The MULTILINE_CPP_IS_BRIEF tag can be set to YES to make Doxygen \n"
-                    "treat a multi-line C++ special comment block (i.e. a block of //! or /// \n"
-		    "comments) as a brief description. This used to be the default behaviour. \n"
-		    "The new default is to treat a multi-line C++ comment block as a detailed \n"
-		    "description. Set this tag to YES if you prefer the old behaviour instead. \n",
-                    FALSE
-                 );
-  cb = addBool(
-                    "DETAILS_AT_TOP",
-                    "If the DETAILS_AT_TOP tag is set to YES then Doxygen \n"
-                    "will output the detailed description near the top, like JavaDoc.\n"
-                    "If set to NO, the detailed description appears after the member \n"
-                    "documentation. \n",
-                    FALSE
-                 );
-  cb = addBool(
-                    "INHERIT_DOCS",
-                    "If the INHERIT_DOCS tag is set to YES (the default) then an undocumented \n"
-                    "member inherits the documentation from any documented member that it \n"
-                    "reimplements. \n",
                     TRUE
                  );
   cb = addBool(
@@ -3319,20 +3385,6 @@ void Config::create()
                     "declaration order. \n",
                     TRUE
                  );
-  cb = addBool(
-                    "DISTRIBUTE_GROUP_DOC",
-                    "If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC \n"
-                    "tag is set to YES, then doxygen will reuse the documentation of the first \n"
-                    "member in the group (if any) for the other members of the group. By default \n"
-                    "all members of a group must be documented explicitly.\n",
-                    FALSE
-                 );
-  ci = addInt(
-                    "TAB_SIZE",
-                    "The TAB_SIZE tag can be used to set the number of spaces in a tab. \n"
-                    "Doxygen uses this value to replace tabs by spaces in code fragments. \n",
-                    1,16,8
-                );
   cb = addBool(
                     "GENERATE_TODOLIST",
                     "The GENERATE_TODOLIST tag can be used to enable (YES) or \n"
@@ -3362,15 +3414,6 @@ void Config::create()
                     TRUE
 	         );
   cl = addList(
-                    "ALIASES",
-                    "This tag can be used to specify a number of aliases that acts \n"
-                    "as commands in the documentation. An alias has the form \"name=value\". \n"
-                    "For example adding \"sideeffect=\\par Side Effects:\\n\" will allow you to \n"
-                    "put the command \\sideeffect (or @sideeffect) in the documentation, which \n"
-                    "will result in a user-defined paragraph with heading \"Side Effects:\". \n"
-                    "You can put \\n's in the value part of an alias to insert newlines. \n" 
-                 );
-  cl = addList(
                     "ENABLED_SECTIONS",
                     "The ENABLED_SECTIONS tag can be used to enable conditional \n"
                     "documentation sections, marked by \\if sectionname ... \\endif. \n"
@@ -3387,37 +3430,13 @@ void Config::create()
                     0,10000,30
                  );
   cb = addBool(
-                    "OPTIMIZE_OUTPUT_FOR_C",
-                    "Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources \n"
-                    "only. Doxygen will then generate output that is more tailored for C. \n"
-                    "For instance, some of the names that are used will be different. The list \n"
-                    "of all members will be omitted, etc. \n",
-                    FALSE
-                 );
-  cb = addBool(
-                    "OPTIMIZE_OUTPUT_JAVA",
-                    "Set the OPTIMIZE_OUTPUT_JAVA tag to YES if your project consists of Java sources \n"
-                    "only. Doxygen will then generate output that is more tailored for Java. \n"
-                    "For instance, namespaces will be presented as packages, qualified scopes \n"
-                    "will look different, etc. \n",
-                    FALSE
-                 );
-  cb = addBool(
                     "SHOW_USED_FILES",
                     "Set the SHOW_USED_FILES tag to NO to disable the list of files generated \n"
                     "at the bottom of the documentation of classes and structs. If set to YES the \n"
                     "list will mention the files that were used to generate the documentation. \n",
                     TRUE
                 );
-  cb = addBool(    
-                    "SUBGROUPING",
-		    "Set the SUBGROUPING tag to YES (the default) to allow class member groups of \n"
-		    "the same type (for instance a group of public functions) to be put as a \n"
-		    "subgroup of that type (e.g. under the Public Functions section). Set it to \n"
-		    "NO to prevent subgrouping. Alternatively, this can be done per class using \n"
-		    "the \\nosubgrouping command. \n",
-		    TRUE
-                );
+  
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Messages","configuration options related to warning and progress messages");
   //-----------------------------------------------------------------------------------------------
@@ -3482,7 +3501,7 @@ void Config::create()
                     "and *.h) to filter out the source-files in the directories. If left \n"
                     "blank the following patterns are tested: \n"
 		    "*.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx *.hpp \n"
-		    "*.h++ *.idl *.odl *.cs\n"
+		    "*.h++ *.idl *.odl *.cs *.php *.php3 *.inc\n"
                  );
   cb = addBool(
                     "RECURSIVE",
@@ -4351,52 +4370,12 @@ void Config::create()
                     "used. If set to NO the values of all tags below this one will be ignored. \n",
                     FALSE
                  );
-  cs = addString(
-                    "CGI_NAME",
-                    "The CGI_NAME tag should be the name of the CGI script that \n"
-                    "starts the search engine (doxysearch) with the correct parameters. \n"
-                    "A script with this name will be generated by doxygen. \n"
-                   );
-  cs->setDefaultValue("search.cgi");
-  cs->addDependency("SEARCHENGINE");
-  cs = addString(
-                    "CGI_URL",
-                    "The CGI_URL tag should be the absolute URL to the directory where the \n"
-                    "cgi binaries are located. See the documentation of your http daemon for \n"
-                    "details. \n"
-                   );
-  cs->addDependency("SEARCHENGINE");
-  cs = addString(
-                    "DOC_URL",
-                    "The DOC_URL tag should be the absolute URL to the directory where the \n"
-                    "documentation is located. If left blank the absolute path to the \n"
-                    "documentation, with file:// prepended to it, will be used. \n"
-                   );
-  cs->addDependency("SEARCHENGINE");
-  cs = addString(
-                    "DOC_ABSPATH",
-                    "The DOC_ABSPATH tag should be the absolute path to the directory where the \n"
-                    "documentation is located. If left blank the directory on the local machine \n"
-                    "will be used. \n"
-                   );
-  cs->setWidgetType(ConfigString::Dir);
-  cs->addDependency("SEARCHENGINE");
-  cs = addString(
-                    "BIN_ABSPATH",
-                    "The BIN_ABSPATH tag must point to the directory where the doxysearch binary \n"
-                    "is installed. \n"
-                   );
-  cs->setDefaultValue("/usr/local/bin/");
-  cs->setWidgetType(ConfigString::Dir);
-  cs->addDependency("SEARCHENGINE");
-  cl = addList(
-                    "EXT_DOC_PATHS",
-                    "The EXT_DOC_PATHS tag can be used to specify one or more paths to \n"
-                    "documentation generated for other projects. This allows doxysearch to search \n"
-                    "the documentation for these projects as well. \n"
-                 );
-  cl->setWidgetType(ConfigList::Dir);
-  cl->addDependency("SEARCHENGINE");
+  addObsolete("CGI_NAME");
+  addObsolete("CGI_URL");
+  addObsolete("DOC_URL");
+  addObsolete("DOC_ABSPATH");
+  addObsolete("BIN_ABSPATH");
+  addObsolete("EXT_DOC_PATHS");
 
   // The IMAGE_PATTERNS tag is now officially obsolete.
 }
