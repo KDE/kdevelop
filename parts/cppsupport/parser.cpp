@@ -294,7 +294,8 @@ bool Parser::parseName( NameAST::Node& node )
     if( parseUnqualifiedName(unqualifedName) ){
         //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "----------> name parsed!!" << endl;
 	
-	node = CreateNode<NameAST>();
+	NameAST::Node ast = CreateNode<NameAST>();
+	node = ast;
 	node->setGlobal( isGlobal );
 	node->setNestedName( nestedName );
 	node->setUnqualifedName( unqualifedName );
@@ -310,7 +311,8 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTranslationUnit()" << endl;
             
-    node = CreateNode<TranslationUnitAST>();
+    TranslationUnitAST::Node tun = CreateNode<TranslationUnitAST>();
+    node = tun;
     while( !lex->lookAhead(0).isNull() ){
         DeclarationAST::Node def;
         if( !parseDefinition(def) ){
@@ -429,7 +431,8 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
     }
     lex->nextToken();
     
-    node = CreateNode<LinkageBodyAST>();
+    LinkageBodyAST::Node lba = CreateNode<LinkageBodyAST>();
+    node = lba;
         
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
@@ -590,7 +593,8 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 
     AST::Node op;    
     if( parseOperator(op) ){
-        node = CreateNode<AST>();
+	AST::Node asn = CreateNode<AST>();
+	node = asn;
 	UPDATE_POS( node, start, lex->index() );
 	return true;
     } else {
@@ -610,7 +614,8 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 	while( parsePtrOperator(ptrOp) )
   	    ;	    
 	
-        node = CreateNode<AST>();
+	AST::Node asn = CreateNode<AST>();
+	node = asn;
 	UPDATE_POS( node, start, lex->index() );
 	return true;
     }
@@ -622,7 +627,8 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
     
     int start = lex->index();
     
-    node = CreateNode<TemplateArgumentListAST>();
+    TemplateArgumentListAST::Node taln = CreateNode<TemplateArgumentListAST>();
+    node = taln;
     
     AST::Node templArg;
     if( !parseTemplateArgument(templArg) )
@@ -816,7 +822,8 @@ bool Parser::parseCvQualify( AST::Node& node )
 	    break;
     }
     
-    node = CreateNode<AST>();
+    AST::Node asn = CreateNode<AST>();
+    node = asn;
     UPDATE_POS( node, start, lex->index() );
     
     return n != 0;
@@ -889,7 +896,8 @@ bool Parser::parseTemplateArgument( AST::Node& node )
         return false;
     }
     
-    node = CreateNode<AST>();
+    AST::Node asn = CreateNode<AST>();
+    node = asn;
     UPDATE_POS( node, start, lex->index() );
     
     return true;
@@ -1412,12 +1420,13 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
     AST::Node cv;
     parseCvQualify( cv );
 
-    AST::Node classKey;    
+    AST::Node classKey;
     int classKeyStart = lex->index();
     
     int kind = lex->lookAhead( 0 );
     if( kind == Token_class || kind == Token_struct || kind == Token_union ){
-        classKey = CreateNode<AST>();
+	AST::Node asn = CreateNode<AST>();
+        classKey = asn;
 	lex->nextToken();
 	UPDATE_POS( classKey, classKeyStart, lex->index() );
     } else {
@@ -1476,11 +1485,13 @@ bool Parser::parseAccessSpecifier( AST::Node& node )
     switch( lex->lookAhead(0) ){
     case Token_public:
     case Token_protected:
-    case Token_private:
-        node = CreateNode<AST>();
+    case Token_private: {
+        AST::Node asn = CreateNode<AST>();
+	node = asn;
 	lex->nextToken();
 	UPDATE_POS( node, start, lex->index() );
 	return true;
+        }
     }
     
     return false;
@@ -1620,7 +1631,8 @@ bool Parser::parseEnumerator( EnumeratorAST::Node& node )
     }
     lex->nextToken();
     
-    node = CreateNode<EnumeratorAST>();
+    EnumeratorAST::Node ena = CreateNode<EnumeratorAST>();
+    node = ena;
     
     AST::Node id = CreateNode<AST>();
     UPDATE_POS( id, start, lex->index() );
@@ -1704,7 +1716,8 @@ bool Parser::parseBaseClause( BaseClauseAST::Node& node )
     }
     lex->nextToken();
     
-    node = CreateNode<BaseClauseAST>();
+    BaseClauseAST::Node bca = CreateNode<BaseClauseAST>();
+    node = bca;
     
     BaseSpecifierAST::Node baseSpec;
     if( parseBaseSpecifier(baseSpec) ){
@@ -1885,7 +1898,8 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
     int index = start;
     bool ok = false;
     
-    node = CreateNode<NestedNameSpecifierAST>();
+    NestedNameSpecifierAST::Node nns = CreateNode<NestedNameSpecifierAST>();
+    node = nns;
     
     while( lex->lookAhead(0) == Token_identifier ){
 	index = lex->index();
