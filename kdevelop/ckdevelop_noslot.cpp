@@ -82,7 +82,7 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
     // if not found a successor create an new file
     actual_info = new TEditInfo;
     actual_info->modified=false;
-    QString sCFilename= (project && prj->getProjectType()=="normal_c") ? "Untitled.c" : "Untitled.cpp";
+    QString sCFilename= (project && prj->getProjectType()=="normal_c") ? i18n("Untitled.c") : i18n("Untitled.cpp");
     actual_info->id = menu_buffers->insertItem(sCFilename,-2,0);
     actual_info->filename = sCFilename;
 
@@ -110,8 +110,8 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
     // if not found a successor create an new file
     actual_info = new TEditInfo;
     actual_info->modified=false;
-    actual_info->id = menu_buffers->insertItem("Untitled.h",-2,0);
-    actual_info->filename = "Untitled.h";
+    actual_info->id = menu_buffers->insertItem(i18n("Untitled.h"),-2,0);
+    actual_info->filename = i18n("Untitled.h");
 
     edit_infos.append(actual_info);
 
@@ -136,7 +136,7 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
 bool CKDevelop::isUntitled(const char* name)
 {
   QString s=(name) ? name : "";
-  return (s=="Untitled.h" || s=="Untitled.c" || s=="Untitled.cpp");
+  return (s==i18n("Untitled.h") || s==i18n("Untitled.c") || s==i18n("Untitled.cpp"));
 }
 
 /*---------------------------------------- CKDevelop::fileSaveAs()

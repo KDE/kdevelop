@@ -144,7 +144,7 @@ void CKDevelop::initView(){
   header_widget->setFocusPolicy(QWidget::StrongFocus);
 
   header_widget->setFont(font);
-  header_widget->setName("Untitled.h");
+  header_widget->setName(i18n("Untitled.h"));
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
   header_widget->doc()->readConfig(config);
@@ -154,7 +154,7 @@ void CKDevelop::initView(){
   cpp_widget = new CEditWidget(kapp,s_tab_view,"cpp");
   cpp_widget->setFocusPolicy(QWidget::StrongFocus);
   cpp_widget->setFont(font);
-  cpp_widget->setName("Untitled.cpp");
+  cpp_widget->setName(i18n("Untitled.cpp"));
   config->setGroup("KWrite Options");
   cpp_widget->readConfig(config);
   cpp_widget->doc()->readConfig(config);

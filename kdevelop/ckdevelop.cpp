@@ -207,8 +207,8 @@ void CKDevelop::slotFileSaveAll(){
   view->setUpdatesEnabled(false);
 
   if(header_widget->isModified()){
-    if(header_widget->getName() == "Untitled.h"){
-      switchToFile("Untitled.h");
+    if(header_widget->getName() == i18n("Untitled.h")){
+      switchToFile(i18n("Untitled.h"));
       slotFileSaveAs();
     }
     else{
@@ -217,12 +217,12 @@ void CKDevelop::slotFileSaveAll(){
     mod=true;
   }
   if(cpp_widget->isModified()){
-    if(cpp_widget->getName() == "Untitled.cpp"){
-      switchToFile("Untitled.cpp");
+    if(cpp_widget->getName() == i18n("Untitled.cpp")){
+      switchToFile(i18n("Untitled.cpp"));
       slotFileSaveAs();
     }
-    else if(cpp_widget->getName() == "Untitled.c"){
-      switchToFile("Untitled.c");
+    else if(cpp_widget->getName() == i18n("Untitled.c")){
+      switchToFile(i18n("Untitled.c"));
       slotFileSaveAs();
     }
     else{

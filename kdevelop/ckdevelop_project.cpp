@@ -67,7 +67,7 @@ bool CKDevelop::slotProjectClose(){
 //    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header msgbox result");
     // yes- save headerwidget
     if(result== 1){			 	
-      if(edit_widget->getName() == "Untitled.h"){
+      if(edit_widget->getName() == i18n("Untitled.h")){
 				slotFileSaveAs();
         slotFileClose();
       }
@@ -111,7 +111,7 @@ bool CKDevelop::slotProjectClose(){
     // yes- save cpp widget
     edit_widget=cpp_widget;
     if(result== 1){			 	
-      if(edit_widget->getName() == "Untitled.cpp" || edit_widget->getName() == "Untitled.c"){
+      if(edit_widget->getName() == i18n("Untitled.cpp") || edit_widget->getName() == i18n("Untitled.c")){
 	slotFileSaveAs();    
         slotFileClose();
       }
@@ -239,8 +239,8 @@ bool CKDevelop::slotProjectClose(){
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
     
     // re-inititalize the edit widgets
-    header_widget->setName("Untitled.h");
-    cpp_widget->setName("Untitled.cpp");
+    header_widget->setName(i18n("Untitled.h"));
+    cpp_widget->setName(i18n("Untitled.cpp"));
     TEditInfo* edit1 = new TEditInfo;
     TEditInfo* edit2 = new TEditInfo;
     edit1->filename = header_widget->getName();
@@ -955,13 +955,13 @@ bool CKDevelop::readProjectFile(QString file){
   if (prj->getProjectType()=="normal_c")
   {
     TEditInfo *actual_info=0l;
-    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename!="Untitled.cpp";
+    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename!=i18n("Untitled.cpp");
          actual_info=edit_infos.next());
     if (actual_info)
     {
-      actual_info->filename = "Untitled.c";
+      actual_info->filename = i18n("Untitled.c");
       menu_buffers->changeItem(actual_info->filename, actual_info->id);
-      if (cpp_widget->getName()=="Untitled.cpp")
+      if (cpp_widget->getName()==i18n("Untitled.cpp"))
         cpp_widget->setName(actual_info->filename);
     }
    }
@@ -1052,9 +1052,9 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
     current.openfiles.append(actual_info->filename);
     debug(actual_info->filename);
   }
-  current.openfiles.removeRef("Untitled.h");
-  current.openfiles.removeRef("Untitled.cpp");
-  current.openfiles.removeRef("Untitled.c");
+  current.openfiles.removeRef(i18n("Untitled.h"));
+  current.openfiles.removeRef(i18n("Untitled.cpp"));
+  current.openfiles.removeRef(i18n("Untitled.c"));
   current.header_file = header_widget->getName();
   current.cpp_file = cpp_widget->getName();
   current.browser_file =history_list.current();
