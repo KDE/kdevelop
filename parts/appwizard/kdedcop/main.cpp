@@ -16,7 +16,7 @@ static const char *version = "0.1";
 static KCmdLineOptions options[] =
 {
 //    { "+[URL]", I18N_NOOP( "Document to open." ), 0 },
-    { 0, 0, 0 }
+    KCmdLineLastOption
 };
 
 int main(int argc, char **argv)
