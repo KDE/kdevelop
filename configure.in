@@ -47,6 +47,9 @@ dnl correct paths to install to. This macro adds about 1700 lines to
 dnl your configure, so be aware not to remove it!
 AC_PATH_KDE   
 
+dnl use this routine to initialize LIBDL
+KDE_CHECK_LIBDL
+
 dnl Image readers/writers
 
 AC_FIND_GIF

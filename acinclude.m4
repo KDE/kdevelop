@@ -380,6 +380,9 @@ AC_DEFUN(KDE_MISC_TESTS,
    AC_CHECK_KSIZE_T
    AC_LANG_C
    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
+   AC_CHECK_LIB(db, main, [LIBDB="-ldb"],
+      [AC_CHECK_LIB(gdbm, main, [LIBDB="-lgdbm"])])
+   AC_SUBST(LIBDB)
    if test $ac_cv_lib_dnet_dnet_ntoa = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
         [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
@@ -1153,35 +1156,59 @@ if eval "test \"`echo `$ac_cv_func_random\" = yes"; then
 fi
 LIBS="$ac_libs_safe"
 ])
-
 AC_DEFUN(AC_FIND_GIF,
-   [AC_MSG_CHECKING([for giflib])
-AC_CACHE_VAL(ac_cv_lib_gif,
-[ac_save_LIBS="$LIBS"
-LIBS="$all_libraries -lgif -lX11 $LIBSOCKET"
-AC_TRY_LINK(dnl
-[
-#ifdef __cplusplus
-extern "C" {
-#endif
-int GifLastError(void);
-#ifdef __cplusplus
-}
-#endif
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-],
-            [return GifLastError();],
-            eval "ac_cv_lib_gif=yes",
-            eval "ac_cv_lib_gif=no")
-LIBS="$ac_save_LIBS"
-])dnl
-if eval "test \"`echo $ac_cv_lib_gif`\" = yes"; then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE_UNQUOTED(HAVE_LIBGIF)
-else
-  AC_MSG_ERROR(You need giflib30. Please install the kdesupport package)
-fi
+  [ AC_MSG_CHECKING([for giflib])
+    AC_CACHE_VAL(ac_cv_lib_gif,
+      [ac_save_LIBS="$LIBS"
+      LIBS="$all_libraries -lgif -lX11 $LIBSOCKET"
+      AC_TRY_LINK(dnl
+      [
+        #ifdef __cplusplus
+          extern "C" {
+        #endif
+          int GifLastError(void);
+        #ifdef __cplusplus
+          }
+        #endif
+        /* We use char because int might match the return type of a gcc2
+        builtin and then its argument prototype would still apply.  */
+      ],
+        [return GifLastError();],
+        eval "ac_cv_lib_gif=yes",
+        eval "ac_cv_lib_gif=no")
+        LIBS="$ac_save_LIBS"
+        if eval "test \"`echo $ac_cv_lib_gif`\" = yes"; then
+          LIBGIF="-lgif"
+        else
+          LIBS="$all_libraries -lungif -lX11 $LIBSOCKET"
+          AC_TRY_LINK(dnl
+          [
+            #ifdef __cplusplus
+              extern "C" {
+            #endif
+              int GifLastError(void);
+            #ifdef __cplusplus
+              }
+            #endif
+            /* We use char because int might match the return type of a gcc2
+            builtin and then its argument prototype would still apply.  */
+          ],
+          [return GifLastError();],
+          eval "ac_cv_lib_gif=yes",
+          eval "ac_cv_lib_gif=no")
+          LIBS="$ac_save_LIBS"
+          if eval "test \"`echo $ac_cv_lib_gif`\" = yes"; then
+            LIBGIF="-lungif"
+          fi
+        fi
+    ])dnl
+    if eval "test \"`echo $ac_cv_lib_gif`\" = yes"; then
+      AC_MSG_RESULT($LIBGIF)
+      AC_SUBST(LIBGIF)
+      AC_DEFINE_UNQUOTED(HAVE_LIBGIF)
+    else
+      AC_MSG_ERROR(You need giflib30. Please install the kdesupport package)
+    fi
 ])
 
 AC_DEFUN(KDE_FIND_JPEG_HELPER,
@@ -3476,9 +3503,16 @@ AC_CHECK_TOOL(AS, as, false)
 ])
 
 AC_DEFUN(AC_SET_LIBTOOL_VARIABLE,
-[# Always use our own libtool.
-LIBTOOL='$(SHELL) $(top_builddir)/libtool $1'
-AC_SUBST(LIBTOOL)dnl
+[# Always use our own libtool except on NetBSD.
+AC_MSG_CHECKING(for libtool)
+ac_save_LIBTOOL=${LIBTOOL:=no.LIBTOOL}
+if test -f $ac_save_LIBTOOL; then
+  LIBTOOL="$ac_save_LIBTOOL $1"
+else
+  LIBTOOL='$(SHELL) $(top_builddir)/libtool $1'
+fi
+AC_SUBST(LIBTOOL)
+AC_MSG_RESULT($LIBTOOL)
 ])
 
 # AC_SYS_SYMBOL_UNDERSCORE - does the compiler prefix global symbols
