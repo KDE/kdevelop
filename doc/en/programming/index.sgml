@@ -610,7 +610,7 @@ the messages it gives us:
 23  make[1]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble'
 </code></tscreen>
 <p>
-As you see, we've put line-numbers in front of each line, which won't appear in your output; it just makes it easier to describe what
+As you see, we've put line numbers in front of each line, which won't appear in your output; it just makes it easier to describe what
 happened during the build now. First of all, <tt/make/ works recursively. That means, it starts from the directory it is invoked in and
 then goes into the subdirectories first, returns and processes the next directory. Finally, the directory it was started is processed
 and <tt/make/ finishes. Therefore, <tt/make/ started in the main project directory containing the sources first. In line 1 and 2, you
@@ -624,9 +624,9 @@ directories for these include files were determined by the <tt/configure/ script
 knows where these are located. Finally, <tt/-O0/ sets the optimization to zero (no optimization), <tt/-g/ enables debugging, <tt/-Wall/
 sets the compiler warnings to <tt/all/ and <tt/-c/ tells the compiler to produce an object file, so only compile the file.
 
-This is done for the other source-files of our project as well in lines 13-15. Obviously, our sources are compiled, but instead of
+This is done for the other source files of our project as well in lines 13-15. Obviously, our sources are compiled, but instead of
 linking the object files of the sources to the final binary, we see some other commands. In line 16, you see that the program "moc" is
-called to process the header-file  <tt/kscribble.h/, with it's output in <tt/kscribble.moc.cpp/. Then, in line 17, this source file is
+called to process the header file  <tt/kscribble.h/, with its output in <tt/kscribble.moc.cpp/. Then, in line 17, this source file is
 compiled as well. The same happens with the other project header files until line 21. Now, as the <idx/Qt/ toolkit contains the signal/slot
 mechanism, but still stays a C++ implementation, you're using certain keywords that are not originally C++ language, such as the
 <tt/signals:/ and <tt/slots:/ declaration in your classes. This gives you the ability to easily allow object communication for all
@@ -3663,7 +3663,7 @@ setColor( &amp;color );
 <chapt>Licensing
 <p>
 This section deals with questions that come up in regards to licensing applications that are created with the KDevelop IDE. First, we
-will have a look at the default behavoir, discuss adavantages of licensing your applications under the GPL and finally will cover
+will have a look at the default behavior, discuss adavantages of licensing your applications under the GPL and finally will cover
 issues that come up when developing commercial applications.
 
 <sect>The GPL License
