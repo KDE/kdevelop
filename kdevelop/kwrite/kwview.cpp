@@ -629,7 +629,9 @@ void KWriteView::update(VConfig &c) {
     tagLines(bm.cursor.y, bm.cursor.y);
   }
   // make new bracket mark
-  kWriteDoc->newBracketMark(cursor, bm);
+  if (c.flags & cfHighlightBrackets) {
+    kWriteDoc->newBracketMark(cursor, bm);
+  }
 
   if (c.flags & cfMark) {
     kWriteDoc->selectTo(c.cursor,cursor,c.flags);
@@ -688,7 +690,9 @@ void KWriteView::updateCursor(PointStruc &newCursor) {
   if (bm.sXPos < bm.eXPos) {
     tagLines(bm.cursor.y, bm.cursor.y);
   }
-  kWriteDoc->newBracketMark(newCursor, bm);
+  if (kWrite->configFlags & cfHighlightBrackets) {
+    kWriteDoc->newBracketMark(cursor, bm);
+  }
 
   cursor = newCursor;
   cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
@@ -911,9 +915,16 @@ void KWriteView::paintCursor() {
 }
 
 void KWriteView::paintBracketMark() {
-  int y;
 
-  y = kWriteDoc->fontHeight*(bm.cursor.y +1) - yPos -1;
+  if (!(kWrite->configFlags & cfHighlightBrackets)) {
+    return;
+  }
+
+  if ((bm.cursor.x < 0) || (bm.cursor.y < 0)) {
+    return;
+  }
+
+  int y = kWriteDoc->fontHeight*(bm.cursor.y +1) - yPos -1;
 
   QPainter paint;
   paint.begin(this);

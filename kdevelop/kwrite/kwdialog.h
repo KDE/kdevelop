@@ -84,6 +84,7 @@ class SettingsDialog : public QDialog {
     QCheckBox *opt12;
     QCheckBox *opt13;
     QCheckBox *opt14;
+    QCheckBox *opt15;
     QLineEdit *e1;
     QLineEdit *e2;
     QLineEdit *e3;

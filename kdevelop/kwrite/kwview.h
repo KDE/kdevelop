@@ -36,26 +36,27 @@ const int srAll             = 11;
 const int srCancel          = QDialog::Rejected;
 
 //config flags
-const int cfAutoIndent      = 1;
-const int cfBackspaceIndent = 2;
-const int cfWordWrap        = 4;
-const int cfReplaceTabs     = 8;
-const int cfRemoveSpaces    = 16;
-const int cfWrapCursor      = 32;
-const int cfAutoBrackets    = 64;
+const int cfAutoIndent        = 1;
+const int cfBackspaceIndent   = 2;
+const int cfWordWrap          = 4;
+const int cfReplaceTabs       = 8;
+const int cfRemoveSpaces      = 16;
+const int cfWrapCursor        = 32;
+const int cfAutoBrackets      = 64;
 
-const int cfPersistent      = 128;
-const int cfKeepSelection   = 256;
-const int cfVerticalSelect  = 512;
-const int cfDelOnInput      = 1024;
-const int cfXorSelect       = 2048;
+const int cfPersistent        = 128;
+const int cfKeepSelection     = 256;
+const int cfVerticalSelect    = 512;
+const int cfDelOnInput        = 1024;
+const int cfXorSelect         = 2048;
 
-const int cfOvr             = 4096;
-const int cfMark            = 8192;
+const int cfOvr               = 4096;
+const int cfMark              = 8192;
 
-const int cfAutoCopy        = 16384;
+const int cfAutoCopy          = 16384;
 
-const int cfShowTabs    		= 32768;
+const int cfShowTabs          = 32768;
+const int cfHighlightBrackets = 65536;
 
 
 //update flags

@@ -3356,6 +3356,7 @@ int KWriteDoc::viewCount()
 
 void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm)
 {
+
   TextLine *textLine;
   int x, line, count, attr;
   QChar bracket, opposite, ch;

@@ -309,23 +309,16 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 
   QGroupBox *g1 = new QGroupBox(i18n("Edit Options"),this);
   opt1 = new QCheckBox(i18n("Auto &Indent"),g1);
-//  opt1->setFixedSize(opt1->sizeHint());
   opt2 = new QCheckBox(i18n("&Backspace Indent"),g1);
-//  opt2->setFixedSize(opt2->sizeHint());
   opt3 = new QCheckBox(i18n("&Word Wrap"),g1);
-//  opt3->setFixedSize(opt3->sizeHint());
   opt4 = new QCheckBox(i18n("&Replace Tabs"),g1);
-//  opt4->setFixedSize(opt4->sizeHint());
   opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),g1);
-//  opt5->setFixedSize(opt5->sizeHint());
   opt6 = new QCheckBox(i18n("Wrap &Cursor"),g1);
-//  opt6->setFixedSize(opt6->sizeHint());
   opt7 = new QCheckBox(i18n("&Auto Brackets"),g1);
-//  opt7->setFixedSize(opt7->sizeHint());
-	opt8 = new QCheckBox(i18n("&Show tabs"), g1);
-//  opt8->setFixedSize(opt7->sizeHint());
+  opt15 = new QCheckBox(i18n("&Highlight Brackets"),g1);
+  opt8 = new QCheckBox(i18n("&Show tabs"), g1);
 
-  g1->setMinimumHeight(8+8+8+6*4+8*(opt1->sizeHint().height()));
+//  g1->setMinimumHeight(8+8+8+6*4+9*(opt1->sizeHint().height()));
 
   opt1->setChecked(flags & cfAutoIndent);
   opt2->setChecked(flags & cfBackspaceIndent);
@@ -338,17 +331,11 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 
   QGroupBox *g2 = new QGroupBox(i18n("Select Options"),this);
   opt9 = new QCheckBox(i18n("&Persistent Selections"),g2);
-//  opt9->setFixedSize( opt8->sizeHint() );
   opt10 = new QCheckBox(i18n("&Multiple Selections"),g2);
-//  opt10->setFixedSize( opt9->sizeHint() );
   opt11 = new QCheckBox(i18n("&Vertical Selections"),g2);
-//  opt11->setFixedSize( opt10->sizeHint() );
   opt12 = new QCheckBox(i18n("&Delete On Input"),g2);
-//  opt12->setFixedSize( opt11->sizeHint() );
   opt13 = new QCheckBox(i18n("&Toggle Old"),g2);
-//  opt13->setFixedSize( opt12->sizeHint() );
   opt14 = new QCheckBox(i18n("A&uto Copy"),g2);
-//  opt14->setFixedSize( opt13->sizeHint() );
 
   g2->setMinimumHeight(8+8+8+6*4+6*(opt9->sizeHint().height()));
 
@@ -358,7 +345,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt12->setChecked(flags & cfDelOnInput);
   opt13->setChecked(flags & cfXorSelect);
   opt14->setChecked(flags & cfAutoCopy);
-
+  opt15->setChecked(flags & cfHighlightBrackets);
 
   e1 = new QLineEdit(this);
   sprintf(buf,"%d",wrapAt);
@@ -420,6 +407,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   vbl1->addWidget( opt5,0,AlignLeft );
   vbl1->addWidget( opt6,0,AlignLeft );
   vbl1->addWidget( opt7,0,AlignLeft );
+  vbl1->addWidget( opt15,0,AlignLeft );
   vbl1->addWidget( opt8,0,AlignLeft );
 
   vbl3->addSpacing( 10 );
@@ -481,6 +469,7 @@ int SettingsDialog::getFlags() {
   if (opt12->isChecked()) flags |= cfDelOnInput;
   if (opt13->isChecked()) flags |= cfXorSelect;
   if (opt14->isChecked()) flags |= cfAutoCopy;
+  if (opt15->isChecked()) flags |= cfHighlightBrackets;
   return flags;
 }
 

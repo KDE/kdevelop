@@ -1,3 +1,7 @@
+2001-06-04  Harald Fernengel  <harry@bnro.de>
+
+    * Added option to switch off bracket highlighting
+
 2001-06-04  jbb <jbb@kdevelop.org>
     * bugfix: crash when typing F4 on empty project
     
