@@ -35,9 +35,6 @@ dependencies).
 
 Caveats and known bugs:
 -----------------------
-- It doesn't call the Config::check() function whenever you click "OK" in the
-  configuration dialog. So the configuration is not checked so you don't
-  get warning messages when you enter invalid settings.
 - It doesn't resize the configuration GUI properly.
 
 
