@@ -224,13 +224,13 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
     QRadioButton *align_def = new QRadioButton(i18n("Default (-$A8)"), align_group);
     align_def->setChecked(true);
     new FlagRadioButton(align_group, radioController,
-                     "-$A1", i18n("Never align"));
+                     "'-$A1'", i18n("Never align"));
     new FlagRadioButton(align_group, radioController,
-                     "-$A2", i18n("On word boundaries"));
+                     "'-$A2'", i18n("On word boundaries"));
     new FlagRadioButton(align_group, radioController,
-                     "-$A4", i18n("On double word boundaries"));
+                     "'-$A4'", i18n("On double word boundaries"));
     new FlagRadioButton(align_group, radioController,
-                     "-$A8", i18n("On quad word boundaries"));
+                     "'-$A8'", i18n("On quad word boundaries"));
     new FlagCheckBox(align_group, controller,
                      "'-$W+'", i18n("Generate stack frames"), "'-$W-'");
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
@@ -240,11 +240,11 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
     QRadioButton *enum_def = new QRadioButton(i18n("Default (-$Z1)"), enum_group);
     enum_def->setChecked(true);
     new FlagRadioButton(enum_group, radioController,
-                     "-$Z1", i18n("Unsigned byte (256 values)"));
+                     "'-$Z1'", i18n("Unsigned byte (256 values)"));
     new FlagRadioButton(enum_group, radioController,
-                     "-$Z2", i18n("Unsigned word (64K values)"));
+                     "'-$Z2'", i18n("Unsigned word (64K values)"));
     new FlagRadioButton(enum_group, radioController,
-                     "-$Z4", i18n("Unsigned double word (4096M values)"));
+                     "'-$Z4'", i18n("Unsigned double word (4096M values)"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout2->addWidget(enum_group, 0, 1);
 
