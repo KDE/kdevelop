@@ -1191,7 +1191,7 @@ void DocViewMan::doFileCloseAll()
   // synchronizeDocAndInfo();
 
   QListIterator<QObject> itDoc(m_documentList);
-  for ( itDoc.toLast(); itDoc.current() != 0L; --itDoc) {
+  for ( itDoc.toLast(); cont && itDoc.current() != 0L; --itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
     if (pDoc
         && pDoc->isModified()
