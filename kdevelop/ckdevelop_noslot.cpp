@@ -701,8 +701,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   // load kiconedit if clicked/loaded  an icon
-  if( filename.right(4) == ".xpm" || filename.right(4) == ".png" ||
-	filename.right(4) == ".gif" || filename.right(4) == ".jpg"){
+  if( filename.right(4) == ".xpm" || filename.right(4) == ".png" ){
     if(!CToolClass::searchProgram("kiconedit")){
       return;
     }
@@ -714,6 +713,35 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     swallow_widget->init();
     return;
   }
+
+  // Load Qt linguist if the filename is a ts file
+  if( filename.right(3) == ".ts") {
+    if(!CToolClass::searchProgram("linguist")){
+      return;
+    }
+
+		KProcess linguist_process;
+		linguist_process << "linguist" << filename;
+		if(!linguist_process.start(KProcess::DontCare)) {
+    	debug("Qt Linguist didn't start!");
+		}
+    return;
+  }
+
+  // Load Qt linguist if the filename is a ts file
+  if( filename.right(3) == ".po") {
+    if(!CToolClass::searchProgram("kbabel")){
+      return;
+    }
+
+		KProcess linguist_process;
+		linguist_process << "kbabel" << filename;
+		if(!linguist_process.start(KProcess::DontCare)) {
+    	debug("KBabel didn't start!");
+		}
+    return;
+  }
+
   //load ktranslator if clicked/loaded an po file
   if((filename).right(3) == ".po"){
     if(CToolClass::searchInstProgram("ktranslator")){
@@ -726,19 +754,28 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     return;
 		}
   }
-  //load ktranslator if clicked/loaded an po file
-  if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp" || (filename).right(4) == ".xbm"){
-    if(!CToolClass::searchInstProgram("kpaint")){
-			return;
+
+  //load kpaint for graphics files
+  if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp" || (filename).right(4) == ".xbm"||
+	filename.right(4) == ".gif" || filename.right(4) == ".jpg"){
+    bool gimp=true;
+    if(!CToolClass::searchInstProgram("gimp")){
+      if(!CToolClass::searchInstProgram("kpaint"))
+  			return;
 		}
     showOutputView(false);
     s_tab_view->setCurrentTab(TOOLS);
     swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kpaint "+ filename);
+    if(gimp)
+      swallow_widget->setExeString("gimp "+ filename);
+    else
+      swallow_widget->setExeString("kpaint "+ filename);
+
     swallow_widget->sWExecute();
     swallow_widget->init();
     return;
   }
+
   if((filename).right(3) == ".ps"){
     if(!CToolClass::searchInstProgram("kghostview")){
 			return;
@@ -751,7 +788,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     swallow_widget->init();
     return;
   }
-
   
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
@@ -1048,8 +1084,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_BUILD_CONFIGURE);
     QString type=prj->getProjectType();
-    if (type != "normal_kde" && type != "mini_kde" && type != "normalogl_kde" &&
-    		type !="normal_kde2" && type !="mini_kde2" && type != "mdi_kde2")
+    if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
     {
       disableCommand(ID_PROJECT_MESSAGES);
     }
@@ -1058,12 +1093,12 @@ void CKDevelop::setToolMenuProcess(bool enable){
     }
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
 
-    // we don´t support docbook -> html, yet!
-    if (prj->getProjectType()=="normal_kde2" || prj->getProjectType()=="mini_kde2" ||
-        prj->getProjectType()=="mdi_kde2")
-      disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-    else
-      enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+//    // we don´t support docbook -> html, yet!
+//    if (prj->isKDE2Project())
+//      disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+//    else // ADDED make in projectdir/doc for user manual
+
+    enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
 
     enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 

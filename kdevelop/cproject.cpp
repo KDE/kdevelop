@@ -40,6 +40,7 @@ CProject::CProject(QString file)
   ptStringMap[ CPP_HEADER ] = "HEADER";
   ptStringMap[ SCRIPT ] = "SCRIPT";
   ptStringMap[ DATA ] = "DATA";
+  ptStringMap[ QT_TS ] = "QT_TS";
   ptStringMap[ PO ] = "PO";
   ptStringMap[ KDEV_DIALOG ] = "KDEV_DIALOG";
   ptStringMap[ LEXICAL ] = "SOURCE";
@@ -315,6 +316,8 @@ ProjectFileType CProject::getType( const char *aFile )
 	retVal = KDEV_DIALOG;
       else if( ext == ".po" )
 	retVal = PO;
+      else if( ext == ".ts" )
+	retVal = QT_TS;
     }
   
   return retVal;
@@ -680,6 +683,22 @@ void CProject::updateMakefileAm(QString makefile){
 	  //	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
 	  //stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
 	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
+    /********************* QT 2 INTERNATIONALIZATION **************/	
+	  if(isQt2Project()){
+	    // add a separate SOURCES line for lupdate to get translations
+  	  stream << "SOURCES = " << sources << "\n";
+      // add a TRANSLATIONS line for lupdate/lrelease containing all .ts files
+      QStrList ts_files;
+      getTSFiles(makefile,ts_files);
+
+      QString tsstr, tsfiles;
+  	  for(tsstr= ts_files.first();tsstr !=0;tsstr = ts_files.next()){
+	      tsfiles =  tsstr + " " + tsfiles ;
+  	  }
+  	  stream << "TRANSLATIONS = " << tsfiles << "\n";
+	  }
+    /********************* QT 2 INTERNATIONALIZATION END **************/	
+	
 	  if(static_libs.isEmpty()){
 	    stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
 	  }
@@ -952,6 +971,28 @@ void CProject::getPOFiles(QString rel_name_makefileam,QStrList& po_files){
       info = getFileInfo(file);
       if(info.type == PO){
 	po_files.append(getName(file));
+      }
+    }
+  }
+}
+
+/** returns the Qt translation files (*.ts) in the project
+ */
+void CProject::getTSFiles(QString makefileam, QStrList& ts_files){
+
+  ts_files.clear();
+  QStrList files;
+  char *file;
+  TFileInfo info;
+  config.setGroup(makefileam);
+  config.readListEntry("files",files);
+
+  for(file = files.first();file != 0;file = files.next()){
+    if( getType( file ) == QT_TS )
+    {
+      info = getFileInfo(file);
+      if(info.type == QT_TS){
+      	ts_files.append(getName(file));
       }
     }
   }

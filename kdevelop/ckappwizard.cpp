@@ -2818,10 +2818,10 @@ void CKAppWizard::slotProcessExited() {
   }
   
   if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() ||
-  		qtnormalitem->isSelected()|| qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()))
+  		qtnormalitem->isSelected()|| qextmdiitem->isSelected()))
   {
     group_filters.clear();
-    group_filters.append("*.po");
+    group_filters.append("*.ts");
     project->addLFVGroup (i18n("Translations"),"");
     project->setFilters(i18n("Translations"),group_filters);
   } 

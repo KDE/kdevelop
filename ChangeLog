@@ -1,3 +1,18 @@
+2000-10-18 Ralf Nolden <nolden@kde.org>
+  * updated installer for linguist, gimp, kbabel (preferred over ktranslator if found)
+  * added Qt linguist support for KDevelop´s Qt 2 projects. Allows adding translations, make messages and
+    automatic LFV group for translation files, *.qm files are directly included with the project so only the
+    installation destination has to be set by the programmer. linguist is called on opening ts files, lupdate and lrelease
+    to generate/update translations.
+  * added make command to make user manuals in doc dir of kde2 projects so docbook files get generated and set default HTML page
+    for the doctree/helpmenu to projectdir/doc/en/HTML/index.html
+  * fixed bug in sgml error parsing pointing to wrong file, now this works with docbook as well as with sgml ;-)
+
+  * fixed *small* bug in make clean ;-) getSubDir() is not always getProjectDir() and I had to recompile KDevelop instead of that
+    test program...@!$#
+
+  * there is NO dependency problem as written below on 10-18 for designer files. am_edit handles that.
+
 2000-10-27 Falk Brettschneider <falk@kdevelop.org>
   * Another new Feature!:
     Now you can set any program at any location as executable that will be started on "Execute" or "Debug".

@@ -742,11 +742,27 @@ void CKDevelop::slotProjectAddNewTranslationFile(){
   QString file;
   if (dlg.exec()){
     file = dlg.getLangFile();
-    file = prj->getProjectDir() + "po/" + file;
-    QFile nfile(file); // create a empty file
-    nfile.open(IO_WriteOnly);
-    nfile.close();
-    addFileToProject(file, PO); 
+    if(!prj->isQt2Project()){
+      file = prj->getProjectDir() + "po/" + file;
+      QFile nfile(file); // create a empty file
+      nfile.open(IO_WriteOnly);
+      nfile.close();
+      addFileToProject(file, PO);
+    }
+    else{
+      QString ts,qm;
+      ts = prj->getProjectDir() +prj->getSubDir() + file + QString(".ts");
+      QFile ts_file(ts); // create a empty file
+      ts_file.open(IO_WriteOnly);
+      ts_file.close();
+      addFileToProject(ts, QT_TS);
+
+      qm = prj->getProjectDir() +prj->getSubDir() + file + QString(".qm");
+      QFile qm_file(qm); // create a empty file
+      qm_file.open(IO_WriteOnly);
+      qm_file.close();
+      addFileToProject(qm, DATA);
+    }
     slotProjectMessages();
   }
 }
@@ -764,10 +780,16 @@ void CKDevelop::slotAddFileToProject(QString abs_filename){
 }
 
 void CKDevelop::slotProjectMessages(){
-  if(!CToolClass::searchProgram("xgettext")){
-    return;
+  if(!prj->isQt2Project()){
+    if(!CToolClass::searchProgram("xgettext")){
+      return;
+    }
   }
-
+  else{
+    if(!(CToolClass::searchProgram("lupdate") && CToolClass::searchProgram("lrelease")) ){
+      return;
+    }
+  }
   slotDebugStop();
 
   error_parser->toogleOff();
@@ -779,8 +801,14 @@ void CKDevelop::slotProjectMessages(){
   error_parser->toogleOff();
   shell_process.clearArguments();
   //shellprocess << make_cmd;
-  shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
-  shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
+  if(!prj->isQt2Project()){
+    shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
+    shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
+  }
+  else{
+    shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
+    shell_process << "lupdate Makefile.am && lrelease Makefile.am" ;
+  }
   next_job="fv_refresh";
   shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
   beep = true;
@@ -880,12 +908,30 @@ void CKDevelop::slotProjectAPI(){
 
 void CKDevelop::slotProjectManual(){
 
-    CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
-    if(dlg.exec()){
+ if(prj->isKDE2Project()){
+    slotDebugStop();
+  	showOutputView(true);
+  	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+  	setToolMenuProcess(false);
+	  slotFileSaveAll();
+  	slotStatusMsg(i18n("Creating project Manual..."));
+  	messages_widget->clear();
+    shell_process.clearArguments();
+    shell_process << "cd '"+prj->getProjectDir()+"/doc"+"' && ";
+    shell_process << make_cmd;
+    next_job="fv_refresh";
+    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    beep=true;
+    return;
+  }
+
+  CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
+  if(dlg.exec()){
 	
   slotDebugStop();
 	showOutputView(true);
 	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+	
 	setToolMenuProcess(false);
 	//  slotFileSaveAll();
 	slotStatusMsg(i18n("Creating project Manual..."));

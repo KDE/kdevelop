@@ -1827,8 +1827,8 @@ void CKDevelop::slotBuildMakeClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getSubDir());
-  error_parser->setStartDir(prj->getSubDir());
+  QDir::setCurrent(prj->getProjectDir());
+  error_parser->setStartDir(prj->getProjectDir());
 
   process.clearArguments();
   process << make_cmd << "clean";
@@ -2606,15 +2606,12 @@ void CKDevelop::slotHelpManual(){
  
     QString doc_file = finfo.dirPath() + "/" + finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
-//    	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
-//    				i18n("The Project manual documentation is not present.\n" 
-//    							"Would you like to generate the handbook  now ?"), KMsgBox::QUESTION);
-//    	if(result==1){
-//    		slotProjectManual();
-//			}
-//			else{
-				return;   // replaced by right mouse button handling to generate the help manual in DocTreeView 
-//			}
+      // try docbook file projectdir/doc/HTML/index.html
+      doc_file = prj->getProjectDir()+"/doc/en/HTML/index.html";
+      if(!QFileInfo(doc_file).exists())
+				return;   // replaced by right mouse button handling to generate the help manual in DocTreeView
+		  else
+    	  slotURLSelected(browser_widget,doc_file,1,"test");
 		}
 		else{
 	    slotStatusMsg(i18n("Switching to project Manual..."));
@@ -3486,7 +3483,9 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 	  error_parser->parseInMakeMode(&str1);
       }
       if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-	  error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+//	  error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+	  // docbook file
+	  error_parser->parseInSgml2HtmlMode(&str1, prj->getSGMLFile());
       }
       //enable/disable the menus/toolbars
       if(error_parser->hasNext()){
