@@ -16,8 +16,10 @@
 #include <qdom.h>
 #include <qdir.h>
 #include <qfile.h>
+#include <qregexp.h>
+
 void DoxyDoc::formatType( QString& str ) {
-	str.remove( ' ' );
+	str.replace( QRegExp(" "),"" );
 };
 
 DoxyDoc::DoxyDoc( const QStringList& dir ) {
@@ -30,7 +32,7 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 	QString scope = tmpscope;
 	bool foundfile = false;
 	//produce doxygen conform filenames
-	QString filename = "/class" + scope.replace('_', "__").replace( "::", "_1_1" ) + ".xml";
+	QString filename = "/class" + scope.replace(QRegExp("_"), "__").replace( QRegExp("::"), "_1_1" ) + ".xml";
 	//search for file in all directories
 	for (std::list<QDir>::const_iterator ci = m_dirs.begin(); !foundfile && ci != m_dirs.end(); ++ci){
 		if (QFile::exists( ci->path() + filename)){

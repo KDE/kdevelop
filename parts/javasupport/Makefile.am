@@ -10,6 +10,7 @@ INCLUDES =      -I$(top_srcdir)/lib/antlr \
                 -I$(top_srcdir)/lib/sourceinfo \
                 -I$(top_srcdir)/lib/util \
                 -I$(top_srcdir)/lib/catalog \
+		-I$(top_srcdir)/lib/compat \
                 $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevjavasupport.la

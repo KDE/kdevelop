@@ -198,7 +198,11 @@ bool QEditorArgHint::eventFilter( QObject*, QEvent* e )
 
 void QEditorArgHint::adjustSize( )
 {
-    QRect screen = QApplication::desktop()->screenGeometry( pos() );
+    QRect screen = QApplication::desktop()->screenGeometry(
+#if QT_VERSION >= 0x030100
+	pos() 
+#endif	
+	);
 
     QFrame::adjustSize();
     if( width() > screen.width() )
