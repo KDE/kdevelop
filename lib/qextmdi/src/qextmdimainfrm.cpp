@@ -459,9 +459,10 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
             }
          }
       }
-      if (pTargetDock)
+      if (pTargetDock) {
          pCover->manualDock( pTargetDock, pos, percent);
 //check      pCover->show();
+      }
    }
 }
 
@@ -919,18 +920,19 @@ bool QextMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
                 setSwitching(FALSE);
               }
               return TRUE;
+	}
+        else
 #else
-    // TODO implement me for Qt-only!
+        // TODO implement me for Qt-only!
+#endif
+        {
+#ifndef NO_KDE
+          kdDebug(9000) << "KAction( \"view_last_window\") not found." << endl;
+#else
+          qDebug("### KAction( \"view_last_window\") __not__ found.\n");
 #endif
         }
-        else {
-#ifdef NO_KDE
-          qDebug( "### KAction( \"view_last_window\") __not__ found.\n" );
-#else
-          kdDebug(9000) << "KAction( \"view_last_window\") not found." << endl;
-#endif          
-        }
-      }    
+      }
    }
    return FALSE;  // standard event processing
 }

@@ -655,7 +655,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
    }
 
    // memorize the focuses in a dictionary because they will get lost during reparenting
-   KDict<FocusPolicy>* pFocPolDict = new KDict<FocusPolicy>;
+   QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
    pFocPolDict->setAutoDelete(TRUE);
    QObjectList *list = m_pClient->queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over the buttons
@@ -715,7 +715,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
    QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
    
    //reparent to desktop widget , no flags , point , show it
-   KDict<FocusPolicy>* pFocPolDict;
+   QDict<FocusPolicy>* pFocPolDict;
    pFocPolDict = unlinkChildren();
 
    // get name of focused child widget
@@ -777,7 +777,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 }
 
 //============== linkChildren =============//
-void QextMdiChildFrm::linkChildren( KDict<FocusPolicy>* pFocPolDict)
+void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
 {
    // reset the focus policies for all widgets in the view (take them from the dictionary)
    QObjectList *list = m_pClient->queryList( "QWidget" );
@@ -820,10 +820,10 @@ void QextMdiChildFrm::linkChildren( KDict<FocusPolicy>* pFocPolDict)
 
 //============== unlinkChildren =============//
 
-KDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
+QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
 {
    // memorize the focuses in a dictionary because they will get lost during reparenting
-   KDict<FocusPolicy>* pFocPolDict = new KDict<FocusPolicy>;
+   QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
    pFocPolDict->setAutoDelete(TRUE);
 
    QObjectList *list = m_pClient->queryList( "QWidget" );

@@ -36,7 +36,7 @@
 #include <qdatetime.h>
 #include <qlayout.h>
 
-#include <kdict.h>
+#include <qdict.h>
 
 #include "qextmdichildfrmcaption.h"
 
@@ -378,11 +378,11 @@ protected:
    /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
    * Install the event filter for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter )
    */
-   void linkChildren( KDict<FocusPolicy>* pFocPolDict);
+   void linkChildren( QDict<FocusPolicy>* pFocPolDict);
    /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
    * Remove all event filters for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter )
    */
-   KDict<QWidget::FocusPolicy>* unlinkChildren();
+   QDict<QWidget::FocusPolicy>* unlinkChildren();
    /** Calculates the corner id for the resize cursor. The return value can be tested for:
    * QEXTMDI_RESIZE_LEFT, QEXTMDI_RESIZE_RIGHT, QEXTMDI_RESIZE_TOP, QEXTMDI_RESIZE_BOTTOM
    * or an OR'd variant of them for the corners.

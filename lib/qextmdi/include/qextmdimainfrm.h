@@ -241,8 +241,8 @@ protected:
    int                     m_oldMainFrmMaxHeight;
    static QextMdi::FrameDecor   m_frameDecoration;
    bool                    m_bSDIApplication;
-   QGuardedPtr<KDockWidget> m_pDockbaseAreaOfDocumentViews;
-   QGuardedPtr<KDockWidget> m_pDockbaseOfTabPage;
+   KDockWidget*            m_pDockbaseAreaOfDocumentViews;
+   KDockWidget*            m_pDockbaseOfTabPage;
    QDomDocument*           m_pTempDockSession;
    bool                    m_bClearingOfWindowMenuBlocked;
 
