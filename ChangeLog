@@ -18,6 +18,18 @@
 	* changed the main.cpp in cpp.tar.gz
 	* fixed the resize bug by switching to the treeview and outputview
 
+1999-03-12  Matt Koss  <koss@napri.sk>
+
+	* Added some convenience slots for jumping to the tabs ( Ctrl-1 ... Ctrl-4 )
+	* Added last tab / file switching ( Ctrl-Tab )
+	* Added default View switch to the preferences - CV or LFV
+	* fixed the bug in doc viewer - background color was not set
+	* fixed key accels didn't get saved
+	* Added empty application type to the Project New dialog :
+	        This type is very useful for importing existing projects -
+	        No special files are generated and make is applied to the top directory.
+	* Added buffer menu with Ctrl + Right mouse button
+
 1999-03-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed saving of changed key-configuration in the Setup dialog
 	* fixed autosaving to be disabled during processes (if a process runs and then files are saved, the build process would be confused)
