@@ -28,7 +28,7 @@
  * ParsedItem()
  *   Constructor.
  *-----------------------------------------------------------------*/
-ParsedItem::ParsedItem()
+ParsedItem::ParsedItem(): GuardedItem()
 { 
     _itemType = PIT_UNKNOWN;
     _access = PIE_GLOBAL;

@@ -108,6 +108,8 @@ void ParsedContainer::addAttribute( ParsedAttribute *anAttribute )
     if ( !path().isEmpty() )
         anAttribute->setDeclaredInScope( path() );
 
+    //qDebug( "ParsedContainer::addAttribute: " + anAttribute->asString() );
+
     attributes.insert( anAttribute->name(),  anAttribute );
 }
 
@@ -362,6 +364,33 @@ QValueList<ParsedStruct*> ParsedContainer::getSortedStructList()
 void ParsedContainer::removeWithReferences( const QString &aFile )
 {
     REQUIRE( "Valid filename length", aFile.length() > 0 );
+
+    ParsedMethod *method = methodIterator.toFirst();
+    while ( method ) {
+        if ( method->declaredInFile() == aFile )
+            removeMethod( method );
+        else
+            ++methodIterator;
+        method = methodIterator.current();
+    }
+
+    ParsedAttribute *attr = attributeIterator.toFirst();
+    while (attr) {
+        if ( attr->declaredInFile() == aFile )
+            removeAttribute( attributeIterator.currentKey() );
+        else
+            ++attributeIterator;
+        attr = attributeIterator.current();
+    }
+
+    ParsedStruct *str = structIterator.toFirst();
+    while ( str ) {
+        if ( str->declaredInFile() == aFile )
+            removeStruct( structIterator.currentKey() );
+        else
+            ++structIterator;
+        str = structIterator.current();
+    }
 }
 
 /*----------------------------------- ParsedContainer::removeMethod()

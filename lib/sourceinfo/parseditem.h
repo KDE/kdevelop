@@ -22,6 +22,8 @@
 #include <qstring.h>
 #include <qtextstream.h>
 
+#include "guardeditem.h"
+
 /** The type of a ParsedItem. */
 enum PIType { 
     PIT_UNKNOWN, PIT_CLASS, PIT_METHOD, 
@@ -44,7 +46,7 @@ enum PIAccess {
  *
  * @author Jonas Nordin
  */
-class ParsedItem
+class ParsedItem: public GuardedItem
 {
 public:
     ParsedItem();
