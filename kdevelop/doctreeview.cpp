@@ -286,11 +286,11 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
     config->setGroup("Doc_Location");
 
 #ifdef WITH_KDOC2
-    QString idx_path;
-    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
-            + "/kdoc-reference";
+    QString doc_dir, idx_path;
+    doc_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+    idx_path= doc_dir + "/kdoc-reference";
 
-    if (!idx_path.isEmpty())
+    if (!doc_dir.isEmpty())
         {
             // If we have a kdoc2 index in either uncompressed
             // or compressed form, we read it in on demand.
