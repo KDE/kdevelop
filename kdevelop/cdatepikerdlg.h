@@ -32,8 +32,10 @@ public:
   CDatepikerDlg(QWidget* parent=0,const char* name=0);
   ~CDatepikerDlg();
   QString dateString;
+  QDate date;
   void init();
   void getDateString(QString&);
+  void getDate(QDate&);
 
 public slots:
     void slotDateSelected(QDate date);    

@@ -34,10 +34,15 @@ void CDatepikerDlg::init() {
 }
 
 void CDatepikerDlg::slotDateSelected(QDate selectedDate) {
+  date = selectedDate;
   dateString = selectedDate.toString();
   reject();
 }
 
 void CDatepikerDlg::getDateString(QString &string) {
   string = dateString;
+}
+
+void CDatepikerDlg::getDate(QDate &date2) {
+  date2 = date;
 }

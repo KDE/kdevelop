@@ -42,7 +42,7 @@ void CRealFileView::refresh(QString projectdir) {
 }
 
 
-void CRealFileView::scanDir(QString& directory,KPath& path) {
+void CRealFileView::scanDir(const QString& directory,KPath& path) {
   
   QDir dir(directory);
   if (!dir.exists()) {

@@ -653,10 +653,10 @@ void CKAppWizard::slotMiniClicked() {
 void CKAppWizard::slotQtClicked() {
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
   widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(true);
-  apidoc->setChecked(true);
-  datalink->setEnabled(true);
-  datalink->setChecked(true);
+  apidoc->setEnabled(false);
+  apidoc->setChecked(false);
+  datalink->setEnabled(false);
+  datalink->setChecked(false);
   progicon->setEnabled(true);
   progicon->setChecked(true);
   miniicon->setEnabled(true);
@@ -669,16 +669,16 @@ void CKAppWizard::slotQtClicked() {
 void CKAppWizard::slotCPPClicked() {
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
   widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(false);
-  apidoc->setChecked(false);
+  apidoc->setEnabled(true);
+  apidoc->setChecked(true);
   datalink->setEnabled(false);
   datalink->setChecked(false);
-  progicon->setEnabled(false);
-  progicon->setChecked(false);
-  miniicon->setEnabled(false);
-  miniicon->setChecked(false);
-  miniload->setEnabled(false);
-  iconload->setEnabled(false);
+  progicon->setEnabled(true);
+  progicon->setChecked(true);
+  miniicon->setEnabled(true);
+  miniicon->setChecked(true);
+  miniload->setEnabled(true);
+  iconload->setEnabled(true);
 }
 
 // connection of this
@@ -1054,6 +1054,10 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) {
     fileInfo.install = true;
+  if (qta->isChecked()) {
+    fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
+  }
+  else 
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
    }
     project->writeFileInfo (fileInfo);
@@ -1064,7 +1068,11 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) {
     fileInfo.install = true;
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
+    if (qta->isChecked()) {
+      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
+    }
+    else 
+      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
    }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-3.html");
@@ -1073,6 +1081,10 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) {
     fileInfo.install = true;
+    if (qta->isChecked()) {
+      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
+    }
+    else 
     fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
    }
     project->writeFileInfo (fileInfo);
@@ -1082,7 +1094,11 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) {
     fileInfo.install = true;
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
+    if (qta->isChecked()) {
+      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
+    }
+    else 
+      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
    }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-5.html");
@@ -1091,7 +1107,11 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) { 
    fileInfo.install = true;
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
+    if (qta->isChecked()) {
+      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
+    }
+    else 
+      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
    }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index-6.html");
@@ -1100,7 +1120,11 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) {
     fileInfo.install = true;
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
+    if (qta->isChecked()) {
+      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
+    }
+    else 
+      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
    }
     project->writeFileInfo (fileInfo);
     project->addFileToProject (namelow + "/docs/en/index.html");
@@ -1109,7 +1133,11 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
    if (!(ta->isChecked())) {
     fileInfo.install = true;
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
+    if (qta->isChecked()) {
+      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
+    }
+    else 
+      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
    }
     project->writeFileInfo (fileInfo);
   }

@@ -20,6 +20,7 @@
 #include <iostream.h>
 #include "ctoolclass.h"
 #include <kmsgbox.h>
+#include <kquickhelp.h>
 
 CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabDialog(parent, name, true){
   init();
@@ -475,6 +476,51 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_60->insert( headertextButton );
   qtarch_ButtonGroup_65->insert( filenameLine );
   qtarch_ButtonGroup_66->insert( hostnameButton );
+
+  KQuickHelp::add(headerButton,
+	i18n("If you wish to have a page header, then check it."));
+
+  KQuickHelp::add(headertextLine,
+	i18n("Here you can enter the headertext."));
+
+  KQuickHelp::add(headertextButton,
+	i18n("If you wish to have a headertext, then check it."));
+
+  KQuickHelp::add(loginButton,
+	i18n("If you wish to print a userlogin, then check it."));
+
+  KQuickHelp::add(fancyHeaderButton,
+	i18n("If you will a fancy header, then check it."));
+
+  KQuickHelp::add(filenameLine,
+	i18n("If you wish to print the filenames, then check it."));
+
+  KQuickHelp::add(qtarch_Label_21,
+  KQuickHelp::add(filenameSize,
+	i18n("Here you can choose, if the filename from the last '/'\n"
+	     "is print, or if the full filename is print.")));
+
+  KQuickHelp::add(qtarch_Label_25,
+  KQuickHelp::add(filenamePosition,
+	i18n("Here you can set the position in the header.")));
+
+  KQuickHelp::add(hostnamePosition,
+	i18n("Here you can set the position in the header."));
+
+  KQuickHelp::add(qtarch_Label_23,
+  KQuickHelp::add(hostnameSize,
+	i18n("Here you can choose, if the hostname up to the first\n"
+	     "'.' is print, or the full hostname is print.")));
+
+  KQuickHelp::add(loginPosition,
+	i18n("Here you can set the position in the header."));
+
+  KQuickHelp::add(hostnameButton,
+	i18n("If you wish to print the hostname, then check it."));
+
+  KQuickHelp::add(headertextPosition,
+	i18n("Here you can set the position in the header."));
+
 }
 
 void CConfigEnscriptDlg::initTab2(QWidget*parent) {
@@ -842,7 +888,35 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   qtarch_ButtonGroup_77->insert( modificationTimeButton );
   qtarch_ButtonGroup_76->insert( modificationDateButton );
   qtarch_ButtonGroup_74->insert( currentDateButton );
-  
+
+  KQuickHelp::add(currentTimeButton,
+	i18n("If you wish to print the current time, then check it."));
+
+  KQuickHelp::add(modificationTimeButton,
+	i18n("If you wish to print the modification time, then check it."));
+
+  KQuickHelp::add(modificationDateButton,
+	i18n("If you wish to print the modification date, then check it."));
+
+  KQuickHelp::add( currentDateButton,
+	i18n("If you wish to print the current date, then check it."));
+
+  KQuickHelp::add(modificationTimeFormat,
+  KQuickHelp::add(modificationDateFormat,
+  KQuickHelp::add(currentTimeFormat,
+  KQuickHelp::add(currentDateFormat,
+	i18n("Here you can set the format.")))));
+
+  KQuickHelp::add(currentTimePosition,
+  KQuickHelp::add(modificationTimePosition,
+  KQuickHelp::add(currentDatePosition,
+  KQuickHelp::add(modificationDatePosition,
+	i18n("Here you can set the position in the header.")))));
+
+  KQuickHelp::add(currentTimeAmpm,
+  KQuickHelp::add(modificationTimeAmpm,
+	i18n("Here you can choose, if you time will be printed in\n"
+	     "am/pm format or in 24h format.")));
 }
 
 void CConfigEnscriptDlg::initTab3(QWidget*parent) {
@@ -1228,6 +1302,63 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_21->insert( cutLinesButton );
   qtarch_ButtonGroup_21->insert( replaceButton );
 
+  KQuickHelp::add(bordersButton,
+	i18n("If button is checked, borders around columns are printed."));
+
+  KQuickHelp::add(tocButton,
+	i18n("If button is checked, a summary is printed at the end."));
+
+  KQuickHelp::add(markedWrappedLinesButton,
+	i18n("If button is checked, wrapped lines are marked in the output."));
+
+  KQuickHelp::add(numberingPagesButton,
+	i18n("If button is checked, the sides are numbered."));
+
+  KQuickHelp::add(numberingLineButton,
+	i18n("Precede each line with its line number."));
+
+  KQuickHelp::add(qtarch_label,
+  KQuickHelp::add(linesPerPage,
+	i18n("Print setting number lines per each page.")));
+
+  KQuickHelp::add(alignFileList,
+	i18n("Align separate input files to even align page count.\n"
+	     "This is handy for two-side and 2-up printings."));
+
+  KQuickHelp::add(valueForWrappedLine,
+	i18n("Set the style of the wrap value."));
+
+  KQuickHelp::add(qtarch_Label_14,
+  KQuickHelp::add(cycleOfChange,
+	i18n("Specify  how high highlight bars are in lines.")));
+
+  KQuickHelp::add(numberingPagesList,
+	i18n("Set the position in the header."));
+
+  KQuickHelp::add(highlightBarsButton,
+	i18n("If button is checked, highlight bars are printed."));
+
+  KQuickHelp::add(qtarch_Label_2,
+  KQuickHelp::add(setTabSize,
+	i18n("Set tabulator size to specify number.")));
+
+  KQuickHelp::add(cutLinesButton,
+	i18n("If button is checked, lines that are too long will\n"
+	     "be cut. Otherwise enscript wraps long lines  so no\n"
+	     "information is lost."));
+
+  KQuickHelp::add(replaceButton,
+	i18n("If button is checked, non printing characters are\n"
+	     "replace by space."));
+
+  KQuickHelp::add(fontForBodyButton,
+	i18n("If you clicked the button, a fontdialog is shown\n"
+	     "and you can select a font that is used for body text."));
+
+  KQuickHelp::add(fontForHeaderButton,
+	i18n("If you clicked the button, a fontdialog is shown\n"
+	     "and you can select a font that is used for header text."));
+
   connect (markedWrappedLinesButton,SIGNAL(clicked()),SLOT(slotWrappedLinesClicked()));
   connect (fontForHeaderButton,SIGNAL(clicked()),SLOT(slotFontHeaderClicked()));
   connect (fontForBodyButton,SIGNAL(clicked()),SLOT(slotFontBodyClicked()));
@@ -1555,6 +1686,44 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_ButtonGroup_136->insert( underlayAngleDefault );
   qtarch_ButtonGroup_134->insert( underlayFontButton );
   qtarch_ButtonGroup_131->insert( underlayPositionDefaultButton );
+
+  KQuickHelp::add(underlayButton,
+	i18n("If you wish to print underlayed text, then check it."));
+
+  KQuickHelp::add(qtarch_Label_71,
+  KQuickHelp::add(underlayAngle,
+	i18n("Here you can set the angle of the underlayed text.")));
+
+  KQuickHelp::add(qtarch_ButtonGroup_133,
+  KQuickHelp::add(underlayXPosition,
+	i18n("Here you can set the x-position of the underlayed text.")));
+
+  KQuickHelp::add(qtarch_ButtonGroup_132,
+  KQuickHelp::add(underlayYPosition,
+	i18n("Here you can set the y-position of the underlayed text.")));
+
+  KQuickHelp::add(qtarch_Label_74,
+  KQuickHelp::add(underlayGray,
+	i18n("Here you can set the underlayed text gray.\n"
+	     "The lower the darker is the text.")));
+
+  KQuickHelp::add(underlayAngleDefault,
+	i18n("If you wish to print the underlayed text with the\n"
+	     "default angle, then check it."));
+
+  KQuickHelp::add(underlayStyle,
+	i18n("Here you can set the style of the underlayed text."));
+
+  KQuickHelp::add(underlayPositionDefaultButton,
+	i18n("If you wish to print the underlayed text with the\n"
+	     "default position, then check it."));
+
+  KQuickHelp::add(underlaytextLine,
+	i18n("Here you can enter the text."));
+
+  KQuickHelp::add(underlayFontButton,
+	i18n("Here you can set another font by clicking on it."));
+
   
 }
 
@@ -1907,22 +2076,26 @@ void CConfigEnscriptDlg::slotFontUnderlayClicked() {
   QString string1,string2,string3,string;
   int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
+  fontDialog->setCaption("UnderlayFontDialog");
   fontDialog->exec();
-  font=fontDialog->font();
-  string1=font.family();
-  string=string1.left(1).upper();
-  string1=string1.replace(0,1,string);
-  if (font.bold()) {
-    string1 = string1 + "-Bold";
+  if (fontDialog->result()) {
+    font=fontDialog->font();
+    string1=font.family();
+    string=string1.left(1).upper();
+    string1=string1.replace(0,1,string);
+    if (font.bold()) {
+      string1 = string1 + "-Bold";
+    }
+    if (font.italic()) {
+      string3="Italic";
+    }
+    else {
+      string3="Roman";
+    }
+    size=font.pointSize();
+    underlayFontButton->setText(string1+ "-" + string3 + string2.setNum(size));
   }
-  if (font.italic()) {
-    string3="Italic";
-  }
-  else {
-    string3="Roman";
-  }
-  size=font.pointSize();
-  underlayFontButton->setText(string1+ "-" + string3 + string2.setNum(size));
+  delete (fontDialog);
 }
 
 void CConfigEnscriptDlg::slotFontBodyClicked() {
@@ -1930,22 +2103,26 @@ void CConfigEnscriptDlg::slotFontBodyClicked() {
   QString string1,string2,string3,string;
   int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
+  fontDialog->setCaption("BodyFontDialog");
   fontDialog->exec();
-  font=fontDialog->font();
-  string1=font.family();
-  string=string1.left(1).upper();
-  string1=string1.replace(0,1,string);
-  if (font.bold()) {
-    string1 = string1 + "-Bold";
+  if (fontDialog->result()) {
+    font=fontDialog->font();
+    string1=font.family();
+    string=string1.left(1).upper();
+    string1=string1.replace(0,1,string);
+    if (font.bold()) {
+      string1 = string1 + "-Bold";
+    }
+    if (font.italic()) {
+      string3="Italic";
+    }
+    else {
+      string3="Roman";
+    }
+    size=font.pointSize();
+    fontForBodyButton->setText(string1+ "-" + string3 + string2.setNum(size));
   }
-  if (font.italic()) {
-    string3="Italic";
-  }
-  else {
-    string3="Roman";
-  }
-  size=font.pointSize();
-  fontForBodyButton->setText(string1+ "-" + string3 + string2.setNum(size));
+  delete (fontDialog);
 }
 
 void CConfigEnscriptDlg::slotFontHeaderClicked() {
@@ -1953,22 +2130,26 @@ void CConfigEnscriptDlg::slotFontHeaderClicked() {
   QString string1,string2,string3,string;
   int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
+  fontDialog->setCaption("HeaderFontDialog");
   fontDialog->exec();
-  font=fontDialog->font();
-  string1=font.family();
-  string=string1.left(1).upper();
-  string1=string1.replace(0,1,string);
-  if (font.bold()) {
-    string1 = string1 + "-Bold";
+  if (fontDialog->result()) {
+    font=fontDialog->font();
+    string1=font.family();
+    string=string1.left(1).upper();
+    string1=string1.replace(0,1,string);
+    if (font.bold()) {
+      string1 = string1 + "-Bold";
+    }
+    if (font.italic()) {
+      string3="Italic";
+    }
+    else {
+      string3="Roman";
+    }
+    size=font.pointSize();
+    fontForHeaderButton->setText(string1+ "-" + string3 + string2.setNum(size));
   }
-  if (font.italic()) {
-    string3="Italic";
-  }
-  else {
-    string3="Roman";
-  }
-  size=font.pointSize();
-  fontForHeaderButton->setText(string1+ "-" + string3 + string2.setNum(size));
+  delete (fontDialog);
 }
 
 void CConfigEnscriptDlg::slotDefaultClicked() {
@@ -2481,7 +2662,7 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
 void CConfigEnscriptDlg::slotOkClicked() {
   QString lastSettings;
   lastSettings = createParameters(1);
-  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings = kapp->getConfig();
   settings->setGroup("Enscript");
   settings->writeEntry("Header",headerButton->isChecked());
   settings->writeEntry("FancyHeader",fancyHeaderButton->isChecked());
@@ -2539,7 +2720,6 @@ void CConfigEnscriptDlg::slotOkClicked() {
   settings->setGroup("LastSettings");
   settings->writeEntry("EnscriptSettings",lastSettings);
   settings->sync();
-  delete (settings);
   reject();
 }
 
@@ -2562,7 +2742,7 @@ bool CConfigEnscriptDlg::lookProgram(QString name) {
 }
 
 void CConfigEnscriptDlg::loadSettings() {
-  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings = kapp->getConfig();
   settings->setGroup("Enscript");
   if (!strcmp(settings->readEntry("Header"),"true")) {
     headerButton->setChecked(true);
@@ -2603,7 +2783,7 @@ void CConfigEnscriptDlg::loadSettings() {
   hostnameButton->setChecked(true);
   }
   else {
-  hostnameButton->setChecked(false);
+    hostnameButton->setChecked(false);
   }
   hostnameSize->setCurrentItem((settings->readEntry("HostnameSize")).toInt());
   hostnamePosition->setCurrentItem((settings->readEntry("HostnamePosition")).toInt());
@@ -2729,5 +2909,4 @@ void CConfigEnscriptDlg::loadSettings() {
   slotWrappedLinesClicked();
   slotHighlightBarsClicked();
   slotNumberingPagesClicked();
-  delete (settings);
 }

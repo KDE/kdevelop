@@ -21,14 +21,23 @@
 #include <iostream.h>
 #include <kapp.h>
 #include <kmsgbox.h>
+#include <qdatetime.h>
+#include "cproject.h"
+#include <kquickhelp.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
-  slotSelfChoosenFilesActive(6);
-  selfChoosenFilesMultiLine->setEnabled(false);
+  loadSettings();
+  slotSelfChoosenFilesActive(0);
+  endDate = QDate::currentDate();
+  endTime.setHMS(endTimeHourLine->value(),endTimeMinuteLine->value(),0);
+  beginDate = QDate::currentDate();
+  beginTime.setHMS(beginTimeHourLine->value(),beginTimeMinuteLine->value(),0);
 }
 
 CFilePrintDlg::~CFilePrintDlg(){
+  selfChoosenFilesMultiLine->clear();
+  delete(selfChoosenFilesMultiLine);
 }
 
 void CFilePrintDlg::init() {
@@ -85,7 +94,6 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_142->setTitle( "Between" );
   qtarch_ButtonGroup_142->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_139;
   qtarch_ButtonGroup_139 = new QButtonGroup( this, "ButtonGroup_139" );
   qtarch_ButtonGroup_139->setGeometry( 20, 10, 320, 160 );
   qtarch_ButtonGroup_139->setMinimumSize( 0, 0 );
@@ -118,7 +126,7 @@ void CFilePrintDlg::init() {
   selfChoosenFilesCleanButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesCleanButton->setFontPropagation( QWidget::NoChildren );
   selfChoosenFilesCleanButton->setPalettePropagation( QWidget::NoChildren );
-  selfChoosenFilesCleanButton->setText( "clean" );
+  selfChoosenFilesCleanButton->setText( "clear" );
   selfChoosenFilesCleanButton->setAutoRepeat( FALSE );
   selfChoosenFilesCleanButton->setAutoResize( FALSE );
   
@@ -466,6 +474,78 @@ void CFilePrintDlg::init() {
   cancelButton->setText(i18n("Cancel"));
   cancelButton->setGeometry( 480, 440, 100, 30 );
 
+  KQuickHelp::add(selfChoosenFilesMultiLine,
+	i18n("Here are the files which will be printed, if 'self\n"
+	     "choosen file' is checked."));
+
+  KQuickHelp::add(selfChoosenFilesCleanButton,
+	i18n("Clean the 'self choosen file list'."));
+
+  KQuickHelp::add(selfChoosenFilesAddButton,
+	i18n("Add the choosen file to the list."));
+
+  KQuickHelp::add(selfChoosenFilesDeleteButton,
+	i18n("Delete selected files in the filelist."));
+
+  KQuickHelp::add(qtarch_Label_79,
+  KQuickHelp::add(selfChoosenFileLine,
+	i18n("Your choosen file from the filedialog is shown here.")));
+
+  KQuickHelp::add(allInProjectButton,
+	i18n("If this button is checked, all files in the project,\n"
+	     "which are registered, will be printed. Inclusive the\n"
+	     "html- and xpm-files."));
+
+  KQuickHelp::add(selfChoosenFilesButton,
+	i18n("If this button is checked, your self choosen files\n"
+	     "will be printed."));
+
+  KQuickHelp::add(changedFilesButton,
+	i18n("If this button is checked, all files from the project,\n"
+	     "which are changed between the two dates will be printed."));
+
+  KQuickHelp::add(headerFilesButton,
+	i18n("If this button is checked, all registered headers will\n"
+	     "be printed."));
+
+  KQuickHelp::add(cppFilesButton,
+	i18n("If this button is checked, all registered sourcefiles\n"
+	     "will be printed."));
+
+  KQuickHelp::add(qtarch_Label_83,
+  KQuickHelp::add(beginTimeButton,
+	i18n("This is the end date of the interval.")));
+
+  KQuickHelp::add(qtarch_Label_77,
+  KQuickHelp::add(beginDateButton,
+	i18n("This is the begin date of the interval.")));
+
+  KQuickHelp::add(qtarch_Label_89,
+  KQuickHelp::add(beginTimeMinuteLine,
+	i18n("This is the begining minute of the begin date.")));
+
+  KQuickHelp::add(qtarch_Label_80,
+  KQuickHelp::add(beginTimeHourLine,
+	i18n("This is the begining hour of the begin date.")));
+
+  KQuickHelp::add(qtarch_Label_84,
+  KQuickHelp::add(endTimeHourLine,
+	i18n("This is the ending hour of the end date.")));
+
+  KQuickHelp::add(qtarch_Label_90,
+  KQuickHelp::add(endTimeMinuteLine,
+	i18n("This is the ending minute of the end date.")));
+
+  KQuickHelp::add(selfChoosenFilesPushButton,
+	i18n("If you clicked this button, a filedialog will be open,\n"
+	     "and you can choose a file."));
+
+  KQuickHelp::add(currentButton,
+	i18n("If this button is checked, the current header- or\n"
+	     "sourcefile will be printed."));
+
+
+
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotFileCancelClicked()));
   connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
   connect (selfChoosenFilesCleanButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileCleanClicked()));
@@ -478,6 +558,10 @@ void CFilePrintDlg::init() {
   
   beginDateButton->setText((QDate::currentDate()).toString());
   beginTimeButton->setText((QDate::currentDate()).toString());
+  beginTimeHourLine->setValue(QTime::currentTime().hour());
+  beginTimeMinuteLine->setValue(QTime::currentTime().minute());
+  endTimeHourLine->setValue(QTime::currentTime().hour());
+  endTimeMinuteLine->setValue(QTime::currentTime().minute());
   mainwidget->show();
 }
 
@@ -488,8 +572,10 @@ void CFilePrintDlg::slotFileCancelClicked() {
 void CFilePrintDlg::slotBeginDateDlgClicked() {
   QString text="";
   CDatepikerDlg datepik;
+  datepik.setCaption("BeginDate");
   datepik.exec();
   datepik.getDateString(text);
+  datepik.getDate(beginDate);
   beginDateButton->setText(text);
 }
 
@@ -497,12 +583,32 @@ void CFilePrintDlg::slotBeginDateDlgClicked() {
 void CFilePrintDlg::slotEndDateDlgClicked() {
   QString text="";
   CDatepikerDlg datepik;
+  datepik.setCaption("EndDate");
   datepik.exec();
   datepik.getDateString(text);
+  datepik.getDate(endDate);
   beginTimeButton->setText(text);
 }
 void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
-  if (number==5) {
+  if (number==0) {
+    if (currentButton->isChecked()) {
+      slotSelfChoosenFilesActive(6);
+    }
+    else if (cppFilesButton->isChecked()) {
+      slotSelfChoosenFilesActive(1);
+    }
+    else if (headerFilesButton->isChecked()) {
+      slotSelfChoosenFilesActive(2);
+    }
+    else if (changedFilesButton->isChecked()) {
+      slotSelfChoosenFilesActive(3);
+    }
+    else if (allInProjectButton->isChecked()) {
+      slotSelfChoosenFilesActive(4);
+    }
+    else slotSelfChoosenFilesActive(5);
+  }
+  else if (number==5) {
     selfChoosenFilesPushButton->setEnabled(true);
     selfChoosenFileLine->setEnabled(true);
     selfChoosenFilesAddButton->setEnabled(true);
@@ -529,61 +635,60 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
     beginTimeHourLine->setEnabled(false);
     beginTimeMinuteLine->setEnabled(false);
   }
-  else
-    if (number==3) {
-      selfChoosenFilesPushButton->setEnabled(false);
-      selfChoosenFileLine->setEnabled(false);
-      selfChoosenFilesAddButton->setEnabled(false);
-      selfChoosenFilesDeleteButton->setEnabled(false);
-      selfChoosenFilesCleanButton->setEnabled(false);
-      selfChoosenFilesMultiLine->setEnabled(false);
-      qtarch_ButtonGroup_143->setEnabled(false);
-      qtarch_Label_79->setEnabled(false);
-      qtarch_Label_88->setEnabled(true);
-      qtarch_Label_89->setEnabled(true);
-      qtarch_Label_90->setEnabled(true);
-      qtarch_Label_91->setEnabled(true);
-      qtarch_Label_77->setEnabled(true);
-      qtarch_Label_80->setEnabled(true);
-      qtarch_Label_83->setEnabled(true);
-      qtarch_Label_84->setEnabled(true);
-      qtarch_ButtonGroup_140->setEnabled(true);
-      qtarch_ButtonGroup_141->setEnabled(true);
-      qtarch_ButtonGroup_142->setEnabled(true);
-      beginDateButton->setEnabled(true);
-      endTimeHourLine->setEnabled(true);
-      endTimeMinuteLine->setEnabled(true);
-      beginTimeButton->setEnabled(true);
-      beginTimeHourLine->setEnabled(true);
-      beginTimeMinuteLine->setEnabled(true);
-    }
-    else {
-      selfChoosenFilesPushButton->setEnabled(false);
-      selfChoosenFileLine->setEnabled(false);
-      selfChoosenFilesAddButton->setEnabled(false);
-      selfChoosenFilesDeleteButton->setEnabled(false);
-      selfChoosenFilesCleanButton->setEnabled(false);
-      selfChoosenFilesMultiLine->setEnabled(false);
-      qtarch_ButtonGroup_143->setEnabled(false);
-      qtarch_Label_79->setEnabled(false);
-      qtarch_Label_88->setEnabled(false);
-      qtarch_Label_89->setEnabled(false);
-      qtarch_Label_90->setEnabled(false);
-      qtarch_Label_91->setEnabled(false);     
-      qtarch_Label_77->setEnabled(false);
-      qtarch_Label_80->setEnabled(false);
-      qtarch_Label_83->setEnabled(false);
-      qtarch_Label_84->setEnabled(false);
-      qtarch_ButtonGroup_140->setEnabled(false);
-      qtarch_ButtonGroup_141->setEnabled(false);
-      qtarch_ButtonGroup_142->setEnabled(false);
-      beginDateButton->setEnabled(false);
-      endTimeHourLine->setEnabled(false);
-      endTimeMinuteLine->setEnabled(false);
-      beginTimeButton->setEnabled(false);
-      beginTimeHourLine->setEnabled(false);
-      beginTimeMinuteLine->setEnabled(false);
-    }
+  else if (number==3) {
+    selfChoosenFilesPushButton->setEnabled(false);
+    selfChoosenFileLine->setEnabled(false);
+    selfChoosenFilesAddButton->setEnabled(false);
+    selfChoosenFilesDeleteButton->setEnabled(false);
+    selfChoosenFilesCleanButton->setEnabled(false);
+    selfChoosenFilesMultiLine->setEnabled(false);
+    qtarch_ButtonGroup_143->setEnabled(false);
+    qtarch_Label_79->setEnabled(false);
+    qtarch_Label_88->setEnabled(true);
+    qtarch_Label_89->setEnabled(true);
+    qtarch_Label_90->setEnabled(true);
+    qtarch_Label_91->setEnabled(true);
+    qtarch_Label_77->setEnabled(true);
+    qtarch_Label_80->setEnabled(true);
+    qtarch_Label_83->setEnabled(true);
+    qtarch_Label_84->setEnabled(true);
+    qtarch_ButtonGroup_140->setEnabled(true);
+    qtarch_ButtonGroup_141->setEnabled(true);
+    qtarch_ButtonGroup_142->setEnabled(true);
+    beginDateButton->setEnabled(true);
+    endTimeHourLine->setEnabled(true);
+    endTimeMinuteLine->setEnabled(true);
+    beginTimeButton->setEnabled(true);
+    beginTimeHourLine->setEnabled(true);
+    beginTimeMinuteLine->setEnabled(true);
+  }
+  else {
+    selfChoosenFilesPushButton->setEnabled(false);
+    selfChoosenFileLine->setEnabled(false);
+    selfChoosenFilesAddButton->setEnabled(false);
+    selfChoosenFilesDeleteButton->setEnabled(false);
+    selfChoosenFilesCleanButton->setEnabled(false);
+    selfChoosenFilesMultiLine->setEnabled(false);
+    qtarch_ButtonGroup_143->setEnabled(false);
+    qtarch_Label_79->setEnabled(false);
+    qtarch_Label_88->setEnabled(false);
+    qtarch_Label_89->setEnabled(false);
+    qtarch_Label_90->setEnabled(false);
+    qtarch_Label_91->setEnabled(false);     
+    qtarch_Label_77->setEnabled(false);
+    qtarch_Label_80->setEnabled(false);
+    qtarch_Label_83->setEnabled(false);
+    qtarch_Label_84->setEnabled(false);
+    qtarch_ButtonGroup_140->setEnabled(false);
+    qtarch_ButtonGroup_141->setEnabled(false);
+    qtarch_ButtonGroup_142->setEnabled(false);
+    beginDateButton->setEnabled(false);
+    endTimeHourLine->setEnabled(false);
+    endTimeMinuteLine->setEnabled(false);
+    beginTimeButton->setEnabled(false);
+    beginTimeHourLine->setEnabled(false);
+    beginTimeMinuteLine->setEnabled(false);
+  }
 }
 
 void CFilePrintDlg::slotSelfChoosenFileButtonClicked() {
@@ -592,6 +697,7 @@ void CFilePrintDlg::slotSelfChoosenFileButtonClicked() {
 
 void CFilePrintDlg::slotSelfChoosenFileAddClicked() {
   selfChoosenFilesMultiLine->insertItem(selfChoosenFileLine->text());
+  selfChoosenFileLine->clear();
 }
 
 void CFilePrintDlg::slotSelfChoosenFileCleanClicked() {
@@ -608,7 +714,36 @@ void CFilePrintDlg::slotSelfChoosenFileDeleteClicked() {
 }
 
 void CFilePrintDlg::slotOkClicked() {
-  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  beginTime.setHMS(beginTimeHourLine->value(),beginTimeMinuteLine->value(),0);
+  endTime.setHMS(endTimeHourLine->value(),endTimeMinuteLine->value(),0);
+  settings = kapp->getConfig();
+  settings->setGroup("FileDialog");
+  int i=6;
+  if (currentButton->isChecked()) {
+    i=6;
+  }
+  else if (cppFilesButton->isChecked()) {
+    i=1;
+  }
+  else if (headerFilesButton->isChecked()) {
+    i=2;
+  }
+  else if (changedFilesButton->isChecked()) {
+    i=3;
+  }
+  else if (allInProjectButton->isChecked()) {
+    i=4;
+  }
+  else i=5;
+  settings->writeEntry("FileSelection",i);
+  settings->writeEntry("FileLine",selfChoosenFileLine->text());
+  unsigned int count = selfChoosenFilesMultiLine->count();
+  fileList.clear();
+  for (unsigned int i=count;i>0;i--) {
+    fileList.append(selfChoosenFilesMultiLine->text(i-1));      
+  }
+  settings->writeEntry("FileList",fileList);
+
   settings->setGroup("LastSettings");
   if (currentButton->isChecked()) {
     settings->writeEntry("FileSettings","current");
@@ -641,9 +776,43 @@ void CFilePrintDlg::slotOkClicked() {
     settings->writeEntry("FileSettings",sources);
   }
   else {
-    settings->writeEntry("FileSettings","Test2");
+    QStrList filelist;
+    QString sources = "";
+    QString str = "";
+    QString prj_str = "";
+    QString directory = "";
+    QDateTime beginDateTime (beginDate, beginTime);
+    QDateTime endDateTime (endDate, endTime);
+    QFileInfo fileInfo;
+    settings->setGroup("Files");
+    prj_str = settings->readEntry("project_file");
+    CProject project (prj_str);
+    project.readProject();
+    prj_str.truncate(prj_str.findRev("/")); 
+    directory = prj_str;
+    project.getAllFiles(filelist);
+    for(str= filelist.first();str !=0;str = filelist.next()){
+      fileInfo.setFile(directory + "/" + str);
+      if (beginDateTime != endDateTime) {
+	if ((beginDateTime < fileInfo.lastModified()) && (fileInfo.lastModified() < endDateTime)) {
+	  sources =  prj_str + "/" + str + " " + sources ;
+	}
+      }
+    }
+    settings->setGroup("LastSettings");
+    settings->writeEntry("FileSettings",sources);
   }
   settings->sync();
-  delete (settings);
   reject();
+}
+
+void CFilePrintDlg::loadSettings() {
+  selfChoosenFilesMultiLine->clear();
+  fileList.clear();
+  settings = kapp->getConfig();
+  settings->setGroup("FileDialog");
+  qtarch_ButtonGroup_139->setButton(settings->readNumEntry("FileSelection"));
+  selfChoosenFileLine->setText(settings->readEntry("FileLine"));
+  settings->readListEntry("FileList",fileList);
+  selfChoosenFilesMultiLine->insertStrList(&fileList);
 }

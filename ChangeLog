@@ -1,3 +1,9 @@
+1999-03-07 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* added quickhelp in all printdialogs
+	* added lpr as printprogram
+	* now all setting are saved
+	* implemented the cancel buttons of the fontdialogs 
+
 1999-03-07 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* added qt-base-appl screenshot
 	* serveral changes to make kdevelop ready for 0.3 :-)

@@ -40,7 +40,7 @@ public:
 
 protected:
   /** scans the project directory and fills the treelist */
-  void scanDir(QString& directory,KPath& path);
+  void scanDir(const QString& directory,KPath& path);
 private:
 KIconLoader* loader;
 

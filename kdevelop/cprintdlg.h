@@ -42,6 +42,7 @@ public:
   void init();
   bool lookProgram(QString name);
   QString createFileString();
+  void loadSettings();
   QString files,globalpara,prj_str;
 
 public slots:
@@ -69,6 +70,10 @@ protected:
  CConfigA2psDlg *a2psconf;
  QString string,oldfiles;
  KShellProcess *process,*process2;
- KSimpleConfig *settings;
+ KConfig *settings;
+ QButtonGroup* qtarch_ButtonGroup_4;
+ QButtonGroup* qtarch_ButtonGroup_10;
+ QButtonGroup* qtarch_ButtonGroup_8;
+ QButtonGroup* qtarch_ButtonGroup_6;
 };
 #endif

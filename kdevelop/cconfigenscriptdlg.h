@@ -37,7 +37,7 @@
 #include <kfontdialog.h>
 #include <kprocess.h>
 #include <htmltoken.h>
-#include <ksimpleconfig.h>
+#include <kapp.h>
 
 class CConfigEnscriptDlg : public QTabDialog {
   Q_OBJECT
@@ -195,7 +195,7 @@ protected:
     QString parameters,globalpara,leftstr,middlestr,rightstr,headerstr;
     QPushButton* previewButton;
     KShellProcess *process,*process2;
-    KSimpleConfig *settings;
+    KConfig *settings;
 };
 
 #endif // CCONFIGENSCRIPTDLG

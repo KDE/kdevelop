@@ -27,8 +27,8 @@
 #include <qspinbox.h>
 #include <kfiledialog.h>
 #include <kdatepik.h>
-#include <ksimpleconfig.h>
 #include "cdatepikerdlg.h"
+#include <kapp.h>
 
 /** the KDE-Fileprintdialog
   *@author Stefan Heidrich
@@ -40,6 +40,8 @@ public:
   CFilePrintDlg(QWidget* parent=0,const char* name=0);
   ~CFilePrintDlg();
   void init();
+  void loadSettings();
+  QDate beginDate,endDate;
   
 public slots:
     void slotFileCancelClicked();
@@ -86,7 +88,10 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_142;
     QButtonGroup* qtarch_ButtonGroup_141;
     QButtonGroup* qtarch_ButtonGroup_140;
-    KSimpleConfig *settings;
+    QButtonGroup* qtarch_ButtonGroup_139;
+    KConfig *settings;
+    QTime beginTime,endTime;
+    QStrList fileList;
 };
 #endif // CFILEPRINTDLG
 

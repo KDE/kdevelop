@@ -640,6 +640,7 @@ void CKDevelop::slotProjectNewAppl(){
   
   slotStatusMsg(i18n("Creating a new frame application..."));
   CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
+  kappw->setCaption("ApplicationWizard");
   kappw->exec();
   QString file = kappw->getProjectFile();
   

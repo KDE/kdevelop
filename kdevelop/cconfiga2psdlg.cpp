@@ -22,6 +22,7 @@
 #include <iostream.h>
 #include "ctoolclass.h"
 #include <kmsgbox.h>
+#include <kquickhelp.h>
 
 CConfigA2psDlg::CConfigA2psDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -92,6 +93,7 @@ void CConfigA2psDlg::init() {
 	boltFontButton->setText( "bold font" );
 	boltFontButton->setAutoRepeat( FALSE );
 	boltFontButton->setAutoResize( FALSE );
+
 
 	alignFilesButton = new QCheckBox( this, "boltFontButton" );
 	alignFilesButton->setGeometry( 150, 90, 120, 30 );
@@ -367,7 +369,7 @@ void CConfigA2psDlg::init() {
 	linesPerPage->setPalettePropagation( QWidget::NoChildren );
 	linesPerPage->setFrameStyle( 50 );
 	linesPerPage->setLineWidth( 2 );
-	linesPerPage->setRange( 0, 99 );
+	linesPerPage->setRange( 40, 160 );
 	linesPerPage->setSteps( 1, 0 );
 	linesPerPage->setPrefix( "" );
 	linesPerPage->setSuffix( "" );
@@ -487,7 +489,108 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_21->insert( cutLinesButton );
 	qtarch_ButtonGroup_60->insert( headertextButton );
 	qtarch_ButtonGroup_20->insert( fontsizeButton );
-  
+
+  KQuickHelp::add(boltFontButton,
+	i18n("Print using bold font."));
+
+  KQuickHelp::add(printAsISOLatin,
+	i18n("Print non ascii characters (with the high bit set)\n"
+             "as ISO Latin 1 characters. These characters are\n"
+	     "printed as M- (for meta) followed by  the character\n"
+	     "of the low 7 bits."));
+
+  KQuickHelp::add(interpretButton,
+	i18n("Interpret   TAB,   BS  and  FF  characters TAB\n"
+             "is replaced by enough spaces  to  reach next\n"
+             "tab stop while BS and FF have their meanings."));
+
+  KQuickHelp::add(currentDateButton,
+	i18n("Print the current date and time at the bottom of the\n"
+             "page. This option is affected by the no surrounding\n"
+             "border and the no header options."));
+
+  KQuickHelp::add(headertextButton,
+	i18n("If button is checked, no filename is printed in the\n"
+	     "pages headers.Now you can use a text instead of the\n"
+	     "filename."));
+
+  KQuickHelp::add(qtarch_Label_20,
+  KQuickHelp::add(headertextLine,
+	i18n("Use this text instead of the file name in the page\n"
+             "headers for printing next (and only next) file.")));
+
+  KQuickHelp::add(loginButton,
+	i18n("Print user login ID in the upper right corner of\n"
+	     "the page.  (available for Unix systems only)"));
+
+  KQuickHelp::add(filenameLine,
+	i18n("Print filename ,centered, at bottom of page."));
+
+  KQuickHelp::add(headerButton,
+	i18n("If button is checked ,print page headers."));
+
+  KQuickHelp::add(replaceButton,
+	i18n("If button is checked ,non-printing characters are\n"
+	     "replaced by a space.Otherwise non-printing characters\n"
+	     "are replaced so that they are visible and easy to\n"
+	     "identify. Control characters are printed  like ^X\n"
+	     "for ctrl-x; the delete character is printed as ^?.\n"
+	     "Non ascii characters are printed as M- (for meta)\n"
+             "followed by the character of the low 7 bits."));
+
+  KQuickHelp::add(cutLinesButton,
+	i18n("If button checked ,lines too large will be truncate.\n"
+	     "Otherwise lines  too large will be fold and be printed\n"
+	     "inside the borders. Max line size depends on format\n"
+	     "and font size used and whether line numbering has been\n"
+	     "suppressed."));
+
+  KQuickHelp::add(alignFilesButton,
+	i18n("Compact mode for a sequence of  files.  This  option\n"
+             "allows  the printing of two files in the same physical\n"
+	     "page: last page of the first file  in  the  left\n"
+             "(or  up)  side  and first page of the second file in\n"
+             "the right (or down) side. This option is valid  only\n"
+             "for twinpage mode (two pages per physical page)."));
+
+  KQuickHelp::add(qtarch_Label_2,
+  KQuickHelp::add(setTabSize,
+	i18n("Set TAB size to value. This option is\n"
+	     "ignored if TAB is not interpreted.")));
+
+  KQuickHelp::add(qtarch_Label_3,
+  KQuickHelp::add(a2psFontSize,
+	i18n("Changes font size to this value.")));
+
+  KQuickHelp::add(numberingLineButton,
+	i18n("Output lines are preceded by line numbers,\n"
+	     "numbered sequentially from 1."));
+
+  KQuickHelp::add(bordersButton,
+	i18n("Print page surrounding borders."));
+
+  KQuickHelp::add(qtarch_Label_113,
+  KQuickHelp::add(numberingPagesList,
+	i18n("Reset sheet numbering for each new file. Sheet\n"
+	     "numbering is used to number physical pages (sheets)\n"
+	     "as they are printed. Page numbering numbers the\n"
+	     "logical pages, of which there are usually two per\n"
+	     "physical page.")));
+
+  KQuickHelp::add(qtarch_label,
+  KQuickHelp::add(linesPerPage,
+	i18n("Set  the  lines per page for printing. The font size\n"
+             "is automatically scaled up to fill in the whole page.\n"
+	     "The  minimum number of lines per page is set at 40\n"
+	     "and maximum is at 160.")));
+
+  KQuickHelp::add(fontsizeButton,
+	i18n("Check this button if you wish to change the fontsize."));
+
+  KQuickHelp::add(linesButton,
+	i18n("Check this button if you wish to change the number of\n"
+	     "the lines per page."));
+
   connect (cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
   connect (previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
   connect(defaultButton,SIGNAL(clicked()),SLOT(slotDefaultClicked()));
@@ -707,7 +810,7 @@ void CConfigA2psDlg::slotPreviewClicked() {
 void CConfigA2psDlg::slotOkClicked() {
   QString lastSettings;
   lastSettings = slotCreateParameters();
-  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings = kapp->getConfig();
   settings->setGroup("A2ps");
   settings->writeEntry("Header",headerButton->isChecked());
   settings->writeEntry("Borders",bordersButton->isChecked());
@@ -732,7 +835,6 @@ void CConfigA2psDlg::slotOkClicked() {
   settings->setGroup("LastSettings");
   settings->writeEntry("A2psSettings",lastSettings);
   settings->sync();
-  delete (settings);
   reject();
 }
 
@@ -798,7 +900,7 @@ void CConfigA2psDlg::slotLinesClicked() {
 
 void CConfigA2psDlg::loadSettings() {
   selectedProgram();
-  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings = kapp->getConfig();
   settings->setGroup("A2ps");
   if (!strcmp(settings->readEntry("Header"),"true")) {
     headerButton->setChecked(true);
@@ -902,5 +1004,4 @@ void CConfigA2psDlg::loadSettings() {
   }
   slotFontsizeClicked();
   slotLinesClicked();
-  delete (settings);
 }
