@@ -87,7 +87,8 @@ class AutoSubprojectView : public KListView
         KAction* otherAction;
         
         QStringList m_commandList;
-                
+        QValueList<int> m_commandTypeList;
+
 	private slots:
 		void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 // 		void slotSubprojectExecuted(QListViewItem* item);

@@ -4,6 +4,9 @@
     <property name="name">
         <cstring>ManageCustomBuildCommandsBase</cstring>
     </property>
+    <property name="enabled">
+        <bool>true</bool>
+    </property>
     <property name="geometry">
         <rect>
             <x>0</x>
@@ -13,7 +16,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string></string>
+        <string>ManageCustomBuildCommandsBase</string>
     </property>
     <grid>
         <property name="name">
@@ -55,6 +58,14 @@
                     <pixmap></pixmap>
                 </property>
             </column>
+            <column>
+                <property name="text">
+                    <string>Command Type</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </column>
             <property name="name">
                 <cstring>commandsTable</cstring>
             </property>
@@ -62,7 +73,10 @@
                 <number>0</number>
             </property>
             <property name="numCols">
-                <number>2</number>
+                <number>3</number>
+            </property>
+            <property name="rowMovingEnabled">
+                <bool>true</bool>
             </property>
             <property name="selectionMode">
                 <enum>SingleRow</enum>

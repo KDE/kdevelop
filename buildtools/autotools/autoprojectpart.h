@@ -72,6 +72,7 @@ public:
     QString currentBuildConfig() const;
     QString topsourceDirectory() const;
     void startMakeCommand(const QString &dir, const QString &target, bool withKdesu = false);
+    void startSimpleMakeCommand(const QString &dir, const QString &command, bool withKdesu = false);
     void buildTarget(QString relpath, TargetItem* titem);
     void executeTarget(const QDir& dir, const TargetItem* titem);
 

@@ -35,6 +35,7 @@
 /** KDevelop */
 #include <kdevmainwindow.h>
 #include <kdevmakefrontend.h>
+#include <kdevappfrontend.h>
 
 /** AutoProject */
 #include "subprojectoptionsdlg.h"
@@ -900,8 +901,13 @@ void AutoSubprojectView::slotManageBuildCommands( )
 		it != customBuildCommands.constEnd(); ++it)
 	{
 		widget->commandsTable->insertRows(widget->commandsTable->numRows());
+		widget->setRowProperties(widget->commandsTable->numRows()-1);
 		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 0, it.key());
-		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 1, it.data());
+		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 1,
+			it.data().section(":::", 0, 0));
+		static_cast<QComboTableItem*>(widget->commandsTable->
+			item(widget->commandsTable->numRows() - 1, 2))->
+			setCurrentItem(it.data().section(":::", 1, 1).toInt());
 	}
 	
 	widget->commandsTable->setFocus();
@@ -912,22 +918,49 @@ void AutoSubprojectView::slotManageBuildCommands( )
 		for (int i = 0; i < widget->commandsTable->numRows(); ++i)
 		{
 			config->writeEntry(widget->commandsTable->text(i, 0),
-				widget->commandsTable->text(i, 1));
+				widget->commandsTable->text(i, 1)+":::"+
+				QString("%1").arg(static_cast<QComboTableItem*>(widget->
+				commandsTable->item(i, 2))->currentItem()));
 		}
+		config->sync();
 	}
 	
 }
 
 void AutoSubprojectView::slotCustomBuildCommand(int val)
 {
-	QString cmd = m_commandList[val];
+	QString cmd = m_commandList[val].section(":::", 0, 0);
+	int type = m_commandList[val].section(":::", 1, 1).toInt();
 	
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-
+	
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
-
-	m_part->startMakeCommand( m_part->buildDirectory() + relpath, cmd );
+	switch (type)
+	{
+		case 0: //make target
+			m_part->startMakeCommand( m_part->buildDirectory() + relpath, cmd );
+			break;
+		case 1: //make target as root
+			m_part->startMakeCommand( m_part->buildDirectory() + relpath, cmd, true );
+			break;
+		case 2: //make command
+			m_part->startSimpleMakeCommand( m_part->buildDirectory() + relpath, cmd );
+			break;
+		case 3: //make command as root
+			m_part->startSimpleMakeCommand( m_part->buildDirectory() + relpath, cmd, true );
+			break;
+		case 4: //command
+			m_part->appFrontend()->startAppCommand(m_part->buildDirectory() + relpath,
+				cmd, false);
+			break;
+		case 5: //command as root
+			m_part->appFrontend()->startAppCommand(m_part->buildDirectory() + relpath,
+				"kdesu -t -c ' cd " +
+				KProcess::quote(m_part->buildDirectory() + relpath) + " && "
+				 + cmd + "'", false);
+			break;
+	}
 }
 
 #include "autosubprojectview.moc"

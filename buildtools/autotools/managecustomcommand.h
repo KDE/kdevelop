@@ -25,6 +25,8 @@ class ManageCustomCommand: public ManageCustomBuildCommandsBase {
 Q_OBJECT
 public:
     ManageCustomCommand(QWidget *parent = 0, const char *name = 0);
+    
+    void setRowProperties(int row);
 public slots:
     virtual void addButton_clicked();
     virtual void removeButton_clicked();

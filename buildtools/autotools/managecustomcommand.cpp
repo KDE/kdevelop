@@ -20,6 +20,8 @@
 
 #include <qtable.h>
 
+#include <klocale.h>
+
 ManageCustomCommand::ManageCustomCommand(QWidget *parent, const char *name)
     :ManageCustomBuildCommandsBase(parent, name)
 {
@@ -28,11 +30,20 @@ ManageCustomCommand::ManageCustomCommand(QWidget *parent, const char *name)
 void ManageCustomCommand::addButton_clicked()
 {
     commandsTable->setNumRows(commandsTable->numRows() + 1);
+    setRowProperties(commandsTable->numRows()-1);
 }
 
 void ManageCustomCommand::removeButton_clicked()
 {
     commandsTable->removeRow(commandsTable->currentRow());
+}
+
+void ManageCustomCommand::setRowProperties(int row)
+{
+    commandsTable->setItem(row, 2,
+        new QComboTableItem(commandsTable, QStringList::split(",", 
+        i18n("this is a list of items in the combobox",
+        "Make target,Make target (as root),Make command,Make command (as root),Command,Command (as root)"))));
 }
 
 #include "managecustomcommand.moc"

@@ -1338,4 +1338,29 @@ QStringList AutoProjectPart::distFiles() const
 	return sourceList + files;
 }
 
+void AutoProjectPart::startSimpleMakeCommand( const QString & dir, const QString & command, bool withKdesu )
+{
+	if (partController()->saveAllFiles()==false)
+		return; //user cancelled
+	
+//	m_buildCommand = constructMakeCommandLine(dir, target);
+	
+	QString cmdline = command;
+	cmdline.prepend(makeEnvironment());
+	
+	QString dircmd = "cd ";
+	dircmd += KProcess::quote(dir);
+	dircmd += " && ";
+	
+	m_buildCommand = dircmd + cmdline;
+	
+	if (withKdesu)
+		m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
+	
+	if (!m_buildCommand.isNull())
+		makeFrontend()->queueCommand(dir, m_buildCommand);
+}
+
 #include "autoprojectpart.moc"
+
+// kate: space-indent off; indent-width 8; tab-width 8; show-tabs on;
