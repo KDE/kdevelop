@@ -620,6 +620,7 @@ void CClassTreeHandler::getCurrentNames( const char **className,
                                          const char **declName,
                                          THType *idxType )
 {
+  QListViewItem *iter;
   QListViewItem *item;
   QListViewItem *parent;
   THType parentType;
@@ -628,25 +629,38 @@ void CClassTreeHandler::getCurrentNames( const char **className,
   parent = item->parent();
   parentType = itemType( parent );
 
-  switch( parentType )
-  {
-    case THCLASS:
-      *className = parent->text(0);
-      break;
-    case THSTRUCT:
-      *className = parent->text(0);
-      break;
-    default:
-      *className = NULL;
-  }
-
-  // Set the name of the current item.
-  *declName = item->text(0);
-
   // Set the type of the current item.
   *idxType = itemType();
 
-  // If this is a top-level class or struct we make sure to send the name.
-  if( *className == NULL && ( *idxType == THSTRUCT || *idxType == THCLASS ) )
-    *className = *declName;
+  // If we're viewing a class or struct declName should be empty.
+  if( *idxType == THCLASS )
+    *declName = NULL;
+  else 
+    *declName = item->text(0);
+
+  // If we're viewing a class we start the classname iteration at the
+  // current item 
+  if( *idxType == THCLASS )
+    iter = item;
+  else // Start at the parent.
+    iter = parent;
+
+  // Set inital classname and first iteration step
+  ccstr = iter->text(0);
+  iter = iter->parent();
+
+  while( iter != NULL && itemType( iter ) == THCLASS )
+  {
+    ccstr = "." + ccstr;
+    ccstr = iter->text(0) + ccstr;
+
+    iter = iter->parent();
+  }
+
+  // For global items, i.e parent isn't a class or struct, classname is NULL.
+  if( parentType == THCLASS || parentType == THSTRUCT || 
+      *idxType == THCLASS )
+    *className = ccstr;
+  else
+    *className = NULL;
 }

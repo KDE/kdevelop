@@ -119,6 +119,9 @@ private: // Private attributes
   /** The classtore. */
   CClassStore *store;
 
+  /** Class string */
+  QString ccstr;
+
 };
 
 #endif 
