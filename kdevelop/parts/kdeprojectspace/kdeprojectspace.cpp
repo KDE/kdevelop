@@ -41,7 +41,6 @@
 #include <klibloader.h>
 #include <qlineedit.h>
 #include <iostream.h>
-#include "KDevCompiler.h"
 #include "kdevmakefrontend.h"
 #include "KDevComponentManager.h"
 
@@ -59,10 +58,6 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 	m_projectspaceTemplate = std_dirs->findResource("data","kdevelop/projectspaces/kde_projectspace.tar.gz");
 	m_language = "C++";
 	m_pAboutData=0;
-
-	addCompiler(KDevCompiler::Gcc);
-	addCompiler(KDevCompiler::Cpp);
-	
 	setXMLFile("kdevkdeprojectspaceui.rc");
 }
 
