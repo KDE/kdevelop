@@ -1,1 +1,13 @@
+-----TODO list for a first beta version-------
+
+- the editor (using kwrite part, first prototype integration is available)
+- project management (most of the basics (multiple projects,appwizard,persistence...) is implemented,the makefile generation and Projectoptions aren't finished yet
+- documentation browser (isn't integrated yet, should be based on khtml part)
+- debugger (doesn't work)
+- assorted templates (a small KDE2 is available at the moment, some more should be added. Application Wizard plugins)
+- a new Real File View (small filemanager,a konqueror component?) 
+- grep (works)
+- make system for c++ (works)
+- classparser (the current version works, but we will need a better solution in the future)	
+- project view (works)
 
