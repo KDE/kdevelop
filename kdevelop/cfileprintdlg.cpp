@@ -17,7 +17,7 @@
 
 #include "cfileprintdlg.h"
 #include <qlabel.h>
-#include <qbttngrp.h>
+#include <qbuttongroup.h>
 #include <iostream.h>
 #include <kapp.h>
 

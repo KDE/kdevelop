@@ -35,7 +35,7 @@ class CClassView;
 #include <kpopmenu.h>
 
 /** 
-  *the classview in kdevelop attention: only a prototype 
+  *the classview in kdevelop
   *@author Sandy Meier
 */
 
@@ -56,8 +56,8 @@ public:
   bool leftButton();
   bool rightButton();
 protected:
-protected slots:
-  void slotSingleSelected(int index);
+    protected slots:
+    void slotSingleSelected(int index);
   void slotProjectOptions();
   void slotFileNew();
   void slotClassNew();

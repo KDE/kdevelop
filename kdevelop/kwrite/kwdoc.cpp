@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <qobject.h>
-#include <qapp.h>
-#include <qclipbrd.h>
+#include <qapplication.h>
+#include <qclipboard.h>
 #include <qfont.h>
 #include <qpainter.h>
 

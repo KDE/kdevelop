@@ -21,12 +21,12 @@
 #define CNEWFILEDLG_H
 
 #include <qdialog.h>
-#include <qpushbt.h>
-#include <qlined.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
 #include <qlistbox.h>
 #include <qlabel.h>
-#include <qchkbox.h>
-#include <qbttngrp.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
 #include <ktabctl.h>
 #include "cproject.h"
 

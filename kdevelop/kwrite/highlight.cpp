@@ -1,8 +1,8 @@
 #include <string.h>
 
-//#include <qcombo.h>
-#include <qgrpbox.h>
-#include <qtstream.h>
+//#include <qcombobox.h>
+#include <qgroupbox.h>
+#include <qtextstream.h>
 #include <qregexp.h>
 
 #include <kapp.h>

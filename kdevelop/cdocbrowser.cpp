@@ -23,13 +23,13 @@
 #include <X11/Xlib.h>
 
 #include <qregexp.h>
-#include <qbttngrp.h>
-#include <qradiobt.h>
-#include <qpushbt.h>
-#include <qcombo.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qpushbutton.h>
+#include <qcombobox.h>
 #include <qlabel.h>
-#include <qchkbox.h>
-#include <qclipbrd.h>
+#include <qcheckbox.h>
+#include <qclipboard.h>
 
 
 #include <kapp.h>

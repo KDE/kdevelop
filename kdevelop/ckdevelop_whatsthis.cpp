@@ -16,7 +16,9 @@
  ***************************************************************************/
 
  
-#include <ckdevelop.h>
+#include "ckdevelop.h"
+#include "cclassview.h"
+#include "cdocbrowser.h"
  
 void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
@@ -163,13 +165,13 @@ void CKDevelop::initWhatsThis(){
 	                                  "This will automatically open the source file and set the "
 	                                  "cursor to the line that caused the compiler error/warning. "));
 
-// this doesn't work because of the ClickFocus policy of the stdin/stdout widget. NoFocus functions but
-// disables the functionality of the widget...:-(                                  	
-/*	whats_this->add(stdin_stdout_widget, i18n("StdIn/StdOut\n\n"
-	                                  "The Standard Input/Standard Output window is a replacement "
-	                                  "for terminal-based application communication. Running "
-	                                  "terminal applications are using this instead of a terminal window."));
-*/
+	// this doesn't work because of the ClickFocus policy of the stdin/stdout widget. NoFocus functions but
+	// disables the functionality of the widget...:-(                                  	
+	/*	whats_this->add(stdin_stdout_widget, i18n("StdIn/StdOut\n\n"
+		"The Standard Input/Standard Output window is a replacement "
+		"for terminal-based application communication. Running "
+		"terminal applications are using this instead of a terminal window."));
+	*/
 	                                  	
 	whats_this->add(stderr_widget, i18n("StdErr\n\n"
 	                                    "The Standard Error window displays messages of running applications "

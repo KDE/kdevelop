@@ -20,10 +20,10 @@
 
 #include <qdialog.h>
 #include <qlabel.h>
-#include <qpushbt.h>
-#include <qlined.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
 #include <qlistbox.h>
-#include <qradiobt.h>
+#include <qradiobutton.h>
 #include <kfiledialog.h>
 
 /** the KDE-Fileprintdialog

@@ -1,5 +1,5 @@
 /***************************************************************************
-                    kdevelop.cpp - the main class in CKDevelop
+                    ckdevelop.cpp - the main class in CKDevelop
                              -------------------                                         
 
     begin                : 20 Jul 1998                                        
@@ -17,28 +17,32 @@
  ***************************************************************************/
 
 
-#include "ckdevelop.h"
+
 #include <kmsgbox.h>
 #include <qfile.h>
-#include <qtstream.h>
+#include <qtextstream.h>
 #include <iostream.h>
 #include <kfiledialog.h>
 #include <qfont.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <ktabctl.h>
 #include <qregexp.h>
-#include "ckdevsetupdlg.h"
-#include <qclipbrd.h>
+#include <qclipboard.h>
 
+
+#include "ckdevsetupdlg.h"
+#include "ckdevelop.h"
 #include "cupdatekdedocdlg.h"
-#include <kdebug.h>
 #include <kkeydialog.h>
 #include "./kwrite/kwdoc.h"
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
 #include "cprintdlg.h"
 #include "debug.h"
+#include "kswallow.h"
+#include "cdocbrowser.h"
 
+#include <X11/Xlib.h>
 
 void CKDevelop::slotFileNew(){
   
@@ -296,6 +300,8 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("project_file","");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
+    prj->setCurrentWorkspaceNumber(workspace);
+    saveCurrentWorkspaceIntoProject();
     prj->writeProject();
     if(!slotProjectClose()){ // if not ok,pressed cancel
       e->ignore();
@@ -424,6 +430,31 @@ void CKDevelop::slotViewTTreeView(){
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
   
 }
+void CKDevelop::showTreeView(bool show){
+  if(show){
+    if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+      return; // it's already visible){
+    }
+    else{
+      top_panner->setSeparatorPos(tree_view_pos);
+      view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+    }
+  }
+  else{
+    if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+      return; // it's already unvisible){
+    }
+    else{
+      view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+      tree_view_pos=top_panner->separatorPos();
+      top_panner->setSeparatorPos(0);
+    }
+  }
+  QRect rMainGeom= top_panner->geometry();
+  top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
+  top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
+  
+}
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
@@ -438,6 +469,7 @@ void CKDevelop::slotViewTOutputView(){
   view->resize(rMainGeom.width()-1,rMainGeom.height());
   view->resize(rMainGeom.width()+1,rMainGeom.height());
 }
+
 void CKDevelop::showOutputView(bool show){
   if(show){
     if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -545,7 +577,7 @@ void CKDevelop::slotOptionsAutosave(){
     saveTimer->stop();
 }
 void CKDevelop::slotOptionsMake(int id){
-
+  
   switch(id){
   case ID_OPTIONS_MAKE_MAKE:
     options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,true);
@@ -792,12 +824,12 @@ void CKDevelop::slotBuildCompileFile(){
   //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
   process << make_cmd <<fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-
 }
 
 void CKDevelop::slotBuildRun(){
   slotBuildMake();
   slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
+  beep=false;
   next_job = "run";
 }
 void CKDevelop::slotBuildDebug(){
@@ -838,7 +870,7 @@ void CKDevelop::slotBuildMake(){
   else{
     process << make_cmd;
   }
-  
+  beep = true;
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -852,7 +884,6 @@ void CKDevelop::slotBuildRebuildAll(){
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
-
   showOutputView(true);
 
   setToolMenuProcess(false);
@@ -864,7 +895,7 @@ void CKDevelop::slotBuildRebuildAll(){
   process << make_cmd;
   process << "clean";
   next_job = make_cmd; // checked in slotProcessExited()
-  
+  beep = true;
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 void CKDevelop::slotBuildCleanRebuildAll(){
@@ -880,7 +911,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   process.clearArguments();
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   process << "sh" << path + "cleanrebuildall";
-  
+  beep = true;
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -922,6 +953,7 @@ void CKDevelop::slotBuildAutoconf(){
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   process << "sh" << path + "autoconfsuite";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  beep = true;
 }
 
 
@@ -936,6 +968,7 @@ void CKDevelop::slotBuildConfigure(){
   process.clearArguments();
   process << "./configure";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+   beep = true;
 }
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
@@ -1032,7 +1065,6 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){ 
   int x,y;
-  showOutputView(true);
   messages_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
@@ -1040,7 +1072,6 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){  
   int x,y;
-  showOutputView(true);
   messages_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
@@ -1107,6 +1138,7 @@ void CKDevelop::slotClickedOnMessagesWidget(){
 void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
   slotStatusMsg(IDS_DEFAULT);
+  bool ready = true;
   if (process.normalExit()) {
     if (next_job == make_cmd){ // rest from the rebuild all
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
@@ -1120,6 +1152,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       setToolMenuProcess(false);
       process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
       next_job = "";
+      ready=false;
     }
     if (next_job == "run" && process.exitStatus() == 0){ // rest from the buildRun
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
@@ -1132,13 +1165,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       setToolMenuProcess(false);
       appl_process.start(KProcess::NotifyOnExit,KProcess::All);
       next_job = "";
+      ready = false;
     }
     if (next_job == "refresh"){ // rest from the add projectfile
       refreshTrees();
     }
-  } 
+  }
   else {
-    KDEBUG(KDEBUG_ERROR,CKDEVELOP,"process exited with error(s)...");
+    KDEBUG(KDEBUG_WARN,CKDEVELOP,"process exited with error(s)...");
+  }
+  if(beep && ready){
+    XBell(kapp->getDisplay(),100); //beep :-)
+    beep = false;
   }
 }
 void CKDevelop::slotTTabSelected(int item){
@@ -1309,7 +1347,10 @@ void CKDevelop::slotDocTreeSelected(int index){
   }
   //
   config->setGroup("Other_Doc_Location");
-  slotURLSelected(browser_widget,"file:" + config->readEntry(*str),1,"test");
+  QFileInfo file_info(config->readEntry(*str));
+  if(file_info.isFile()){
+    slotURLSelected(browser_widget,"file:" + config->readEntry(*str),1,"test");
+  }
 }
 void CKDevelop::slotToolsKIconEdit(){
 

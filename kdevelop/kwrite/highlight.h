@@ -3,8 +3,8 @@
 
 #include <qlist.h>
 //#include <qlistbox.h>
-#include <qchkbox.h>
-#include <qcombo.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qdialog.h>
 
 #include <kcolorbtn.h>

@@ -21,12 +21,12 @@
 
 #include "cconfigprintdlg.h"
 #include <qdialog.h>
-#include <qbttngrp.h>
-#include <qchkbox.h>
-#include <qpushbt.h>
-#include <qlined.h>
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
 #include <qspinbox.h>
-#include <qcombo.h>
+#include <qcombobox.h>
 #include <kfiledialog.h>
 
 /** the KDE-Printdialog

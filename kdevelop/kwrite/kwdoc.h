@@ -5,7 +5,7 @@
 #include <qlist.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qfontmet.h>
+#include <qfontmetrics.h>
 
 #include "kwview.h"
 #include "highlight.h"

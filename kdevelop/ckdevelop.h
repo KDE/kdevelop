@@ -47,26 +47,18 @@ class CKDevelop;
 #include <kaccel.h>
 #include <kprogress.h>
 
-#include "caddexistingfiledlg.h"
-#include "cdocbrowser.h"
+class CDocBrowser;
+class CClassView;
+class KSwallowWidget;
 #include "ceditwidget.h"
-#include "cfilepropdlg.h"
-#include "cnewclassdlg.h"
-#include "cnewfiledlg.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
 #include "crealfileview.h"
 #include "clogfileview.h"
 #include "cproject.h"
-#include "cprjoptionsdlg.h"
-#include "cclassview.h"
-#include "kswallow.h"
 #include "cdoctree.h"
 #include "structdef.h"
 #include "resource.h"
-
-
-
 
 
 /** the mainclass in kdevelop
@@ -101,10 +93,9 @@ public:
   void delFileFromProject(QString rel_filename);
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
+  void switchToWorkspace(int id);
   int getTabLocation(QString filename);
   
-  
-
   /** set the correct toolbar and menubar,if a process is running
     * @param enable if true than enable,otherwise disable
     */
@@ -145,6 +136,7 @@ public:
   void slotViewGotoLine();
   void slotViewTTreeView();
   void slotViewTOutputView();
+  void showTreeView(bool show=true);
   void showOutputView(bool show=true);
   void slotViewTStdToolbar();
   void slotViewTBrowserToolbar();
@@ -160,6 +152,7 @@ public:
   void slotProjectOpen();
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
+  void  slotProjectWorkspaces(int);
   void slotProjectAddNewFile();
   
   void slotProjectAddExistingFiles();
@@ -261,7 +254,7 @@ public:
   void slotNewLineColumn();
   void slotNewUndo();
   
-
+  
   // return the position of the classdeclaration begin
   int CVGotoClassDecl(QString classname);
   void CVGotoClassVarDecl(QString classname,QString var_name);
@@ -273,6 +266,7 @@ public:
   QString searchToolGetURL(QString str);
   void  slotCreateSearchDatabase();
   void refreshClassCombos();
+  void  saveCurrentWorkspaceIntoProject();
   
 protected:
   virtual void closeEvent(QCloseEvent* e);
@@ -283,10 +277,11 @@ private:
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
   QPopupMenu* project_menu;
+  QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
-  QPopupMenu* make;
+  QPopupMenu* make_submenu;
   QPopupMenu* menu_buffers;
   QPopupMenu* help_menu;
   QWhatsThis* whats_this;
@@ -294,7 +289,9 @@ private:
   KNewPanner* view;
   KNewPanner* top_panner;
   
+  bool beep; // set this to true, if you want a beep after a process,slotProcessExited()
   
+
   KIconLoader icon_loader;
   KProcess process; // for tools,compiler,make,kodc
   KProcess appl_process; //only for selfmade appl
@@ -305,23 +302,19 @@ private:
   KAccel *accel;
   KConfig* config;
   int act_outbuffer_len;
-  //  int s_tab_current; // actual Tab in the s_tab_view 
 
   // for the browser
   QStrList history_list;
   
-  
   QList<TEditInfo> edit_infos;
-  //some widgets for the mainview
 
+  //some widgets for the mainview
   CTabCtl* s_tab_view; // the tabbar for the sourcescode und browser 
   CTabCtl* t_tab_view; // the tabbar for the trees
   CTabCtl* o_tab_view; // the tabbar for the output_widgets 
-  
-  CEditWidget* edit_widget; // a pointer to the actual editwidget
- 
-  CEditWidget* header_widget; // the editwidget for the headers/resources
 
+  CEditWidget* edit_widget; // a pointer to the actual editwidget
+  CEditWidget* header_widget; // the editwidget for the headers/resources
   CEditWidget* cpp_widget;    //  the editwidget for cpp files
   CDocBrowser* browser_widget;
   KSwallowWidget* swallow_widget;
@@ -330,15 +323,14 @@ private:
   CLogFileView* log_file_tree; // the logical filetree
   CRealFileView* real_file_tree; // the real filetree
   CDocTree* doc_tree; // the documentation tre
- 
-
+  
   COutputWidget* messages_widget; // output for the compiler ...
   COutputWidget* stdin_stdout_widget;
   COutputWidget* stderr_widget;
 
   int tree_view_pos;
   int output_view_pos;
-
+  int workspace;
 
   QString version;
   bool project;

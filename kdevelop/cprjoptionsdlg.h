@@ -21,17 +21,17 @@
 
 #include "cproject.h"
 #include <kfiledialog.h>
-#include <qbttngrp.h>
-#include <qradiobt.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 #include <qlistbox.h>
-#include <qlined.h>
+#include <qlineedit.h>
 #include <qmultilinedit.h>
 #include <qtabdialog.h>
 #include <kapp.h>
-#include <qchkbox.h>
-#include <qcombo.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <kmsgbox.h>
 #include <klined.h>
 #include <kspinbox.h>

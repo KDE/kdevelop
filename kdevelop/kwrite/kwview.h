@@ -1,9 +1,9 @@
 #ifndef _KWVIEV_H_
 #define _KWVIEV_H_
 
-#include <qscrbar.h>
-#include <qiodev.h>
-#include <qpopmenu.h>
+#include <qscrollbar.h>
+#include <qiodevice.h>
+#include <qpopupmenu.h>
 
 #include <kfm.h>
 #include <kconfig.h>

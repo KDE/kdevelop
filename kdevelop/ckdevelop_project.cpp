@@ -19,6 +19,12 @@
 #include "ctoolclass.h"
 #include "ckappwizard.h"
 #include "debug.h"
+#include "cclassview.h"
+#include "cprjoptionsdlg.h"
+#include "caddexistingfiledlg.h"
+#include "cfilepropdlg.h"
+#include "cnewfiledlg.h"
+#include "cnewclassdlg.h"
 
 void CKDevelop::slotProjectNew(){
 	// Currently a project open ?
@@ -32,9 +38,6 @@ void CKDevelop::slotProjectNew(){
   - then call slotProjectAddExistingFiles to add all files needed by the new app.
   Makefile.am - don't know yet how to create it for the project Type. Maybe Prototypes ?
   Ralf 
-
-  I don't like the idea. A projectframework is too complicated( configure.in,Makefiles.am,aclocal.m4,subdirs,templates ...) for creating on the fly.
-  Sandy
 */
   		
 
@@ -53,9 +56,11 @@ bool CKDevelop::slotProjectClose(){
   // check if header widget contains modified file
   if(header_widget->isModified()){
     KDEBUG(KDEBUG_INFO,CKDEVELOP,"header_widget modified file");
-      KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
-					 +i18n("\n\ncontains changed files. Save modified file\n\n")+header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
-					 i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
+				       i18n("The project\n\n")+prj->getProjectName()
+				       +i18n("\n\ncontains changed files. Save modified file\n\n")
+				       +header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
+				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
     // show the messagea and store result in result:
     project_close->show();
     int result=project_close->result();
@@ -66,11 +71,11 @@ bool CKDevelop::slotProjectClose(){
     // yes- save headerwidget
     if(result== 1){			 	
       if(edit_widget->getName() == "Untitled.h"){
-				slotFileSaveAs();    
+	slotFileSaveAs();    
         slotFileClose();
       }
       else{
-				slotFileSave();
+	slotFileSave();
         slotFileClose();
       }
       edit_widget->toggleModified(false);      
@@ -95,8 +100,10 @@ bool CKDevelop::slotProjectClose(){
   } // end header widge close
   
   if(cpp_widget->isModified()){
-    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
-				       +i18n("\n\ncontains changed files. Save modified file\n\n")+cpp_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
+    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
+				       i18n("The project\n\n")+prj->getProjectName()
+				       +i18n("\n\ncontains changed files. Save modified file\n\n")+
+				       cpp_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
 				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
     // show the messagea and store result in result:
     project_close->show();
@@ -104,7 +111,7 @@ bool CKDevelop::slotProjectClose(){
     
     KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp_widget modified file");
     KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp msgbox result");
-		// yes- save cpp widget
+    // yes- save cpp widget
     edit_widget=cpp_widget;
     if(result== 1){			 	
       if(edit_widget->getName() == "Untitled.cpp"){
@@ -143,8 +150,10 @@ bool CKDevelop::slotProjectClose(){
       KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
       if(actual_info->modified){
 	
-	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
-					   +i18n("\n\ncontains changed files. Save modified file\n\n")+actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
+	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
+					   i18n("The project\n\n")+prj->getProjectName()
+					   +i18n("\n\ncontains changed files. Save modified file\n\n")
+					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
 					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
  				// show the messagea and store result in result:
 	project_close->show();
@@ -428,7 +437,7 @@ bool CKDevelop::readProjectFile(QString file){
   }
 
 // TODO: Add function to read last opened files from project to restore project workspace
-
+  switchToWorkspace(prj->getCurrentWorkspaceNumber());
   // set the menus enable
   // file menu
   
@@ -448,6 +457,7 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_NEW_CLASS);
   enableCommand(ID_PROJECT_FILE_PROPERTIES);
   enableCommand(ID_PROJECT_OPTIONS);
+  enableCommand(ID_PROJECT_WORKSPACES);
 
   enableCommand(ID_BUILD_AUTOCONF);
   project=true;
@@ -553,12 +563,51 @@ void CKDevelop::slotProjectNewAppl(){
   else if (old_project != ""){ // if cancel load the old project again
     readProjectFile(old_project);
   }
-  
   //cerr << kappw->getProjectFile();
   slotStatusMsg(IDS_DEFAULT); 
 }
 
+void  CKDevelop::slotProjectWorkspaces(int id){
+  if(project_menu->isItemChecked(id)){
+    return; // we are already in this workspace
+  }
+  saveCurrentWorkspaceIntoProject();
+  
+  // and now the new workspace
+  switch(id){
+  case ID_PROJECT_WORKSPACES_1:
+    switchToWorkspace(1);
+    break;
+  case ID_PROJECT_WORKSPACES_2:
+    switchToWorkspace(2);
+    break;
+  case ID_PROJECT_WORKSPACES_3:
+    switchToWorkspace(3);
+    break;
+  }
+   
+}
 
+void  CKDevelop::saveCurrentWorkspaceIntoProject(){
+  TWorkspace current;
+  TEditInfo* actual_info;
+
+  // save the current workspace
+  current.id = workspace;
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+    current.openfiles.append(actual_info->filename);
+    debug(actual_info->filename);
+  }
+  current.openfiles.removeRef("Untitled.h");
+  current.openfiles.removeRef("Untitled.cpp");
+  current.header_file = header_widget->getName();
+  current.cpp_file = cpp_widget->getName();
+  current.browser_file =history_list.current();
+  current.show_treeview =view_menu->isItemChecked(ID_VIEW_TREEVIEW);
+  current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
+
+  prj->writeWorkspace(current);
+}
 
 
 

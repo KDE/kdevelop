@@ -7,9 +7,9 @@
 #include <qfont.h>
 #include <qpainter.h>
 #include <qkeycode.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qpixmap.h>
-#include <qfileinf.h>
+#include <qfileinfo.h>
 #include <qfile.h>
 #include <qdir.h>
 

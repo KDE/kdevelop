@@ -17,7 +17,7 @@
 
 #include "cconfigprintdlg.h"
 #include <qlabel.h>
-#include <qbttngrp.h>
+#include <qbuttongroup.h>
 #include <kapp.h>
 
 CConfigPrintDlg::CConfigPrintDlg(QWidget* parent,const char* name,int prog) : QTabDialog(parent, name, true){

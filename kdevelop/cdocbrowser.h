@@ -22,8 +22,8 @@
 
 #include <qwidget.h>
 #include <qstring.h>
-#include <qtabdlg.h>
-#include <qcombo.h>
+#include <qtabdialog.h>
+#include <qcombobox.h>
 #include <qstrlist.h>
 #include <qpopupmenu.h>
 

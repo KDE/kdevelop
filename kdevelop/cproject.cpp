@@ -701,3 +701,60 @@ void CProject::updateConfigureIn(){
 //   process << "automake";
 //   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+void  CProject::writeWorkspace(TWorkspace ws){
+  switch(ws.id){
+  case 1:
+    config->setGroup("Workspace_1");
+    break;
+  case 2:
+    config->setGroup("Workspace_2");
+    break;
+  case 3:
+    config->setGroup("Workspace_3");
+    break;
+  default:
+    config->setGroup("Workspace_1");
+  }
+  config->writeEntry("openfiles",ws.openfiles);
+  config->writeEntry("header_file",ws.header_file);
+  config->writeEntry("cpp_file",ws.cpp_file);
+  config->writeEntry("browser_file",ws.browser_file);
+  config->writeEntry("show_treeview",ws.show_treeview);
+  config->writeEntry("show_outputview",ws.show_output_view);
+  config->sync();
+}
+void CProject::setCurrentWorkspaceNumber(int id){
+   config->setGroup("General");
+   config->writeEntry("workspace",id);
+   config->sync();
+}
+int CProject::getCurrentWorkspaceNumber(){
+  config->setGroup("General");
+  int i = config->readNumEntry("workspace",1);
+  return i;
+}
+TWorkspace CProject::getWorkspace(int id){
+  TWorkspace ws;
+
+  switch(id){
+  case 1:
+    config->setGroup("Workspace_1");
+    break;
+  case 2:
+    config->setGroup("Workspace_2");
+    break;
+  case 3:
+    config->setGroup("Workspace_3");
+    break;
+  default:
+    config->setGroup("Workspace_1");
+  }
+
+  config->readListEntry("openfiles",ws.openfiles);
+  ws.header_file = config->readEntry("header_file");
+  ws.cpp_file = config->readEntry("cpp_file");
+  ws.browser_file = config->readEntry("browser_file");
+  ws.show_treeview = config->readBoolEntry("show_treeview");
+  ws.show_output_view =config->readBoolEntry("show_outputview");
+  return ws;
+}

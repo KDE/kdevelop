@@ -16,10 +16,12 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include "ckdevelop.h"
+
 #include <iostream.h>
 #include <kmsgbox.h>
+#include "ckdevelop.h"
 #include "debug.h"
+#include "cclassview.h"
 
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
@@ -176,7 +178,34 @@ void CKDevelop::setToolMenuProcess(bool enable){
   }
 }
 
-
+void CKDevelop::switchToWorkspace(int id){
+  workspace = id;
+  if(id == 1){
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,true);
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
+  }
+  if(id == 2){
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,true);
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
+  }
+  if(id == 3){
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
+    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,true);
+  }
+  TWorkspace ws = prj->getWorkspace(id);
+  if(ws.show_output_view){
+    showOutputView(true);
+  }
+  else{showOutputView(false);}
+  
+  if(ws.show_treeview){
+    showTreeView(true);
+  }
+  else{showTreeView(false);}
+}
 
 
 

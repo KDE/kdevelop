@@ -21,7 +21,7 @@
 #include <qpixmap.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qbttngrp.h>
+#include <qbuttongroup.h>
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>

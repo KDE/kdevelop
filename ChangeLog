@@ -1,3 +1,10 @@
+1999-02-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* replaced all #include <q*.h> with the longer version
+	* added a ring bell after a make
+	* added some class foward-declarartions and moved some includes to the *.cpp file,
+	it reduce the dependencies and  the compiletime
+	* added first version of workspaces (only a test)
+	
 1999-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added autosave functionality. saveTimeout is set to 5 min. TODO: configuration dialog for saveTimeout.
     until then change Autosave Timeout (in ms) in your kdeveloprc

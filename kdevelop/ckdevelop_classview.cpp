@@ -23,7 +23,7 @@
 #include <iostream.h>
 #include <qregexp.h>
 #include "debug.h"
-
+#include "cclassview.h"
 
 void CKDevelop::slotClassTreeSelected(int index){
   if(!class_tree->leftButton()) return; // not pressed the left button
