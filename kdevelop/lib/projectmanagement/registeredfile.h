@@ -19,6 +19,7 @@
 #define REGISTEREDFILE_H
 
 #include <qstring.h>
+#include <kconfig.h>
 
 /**
   *@author Sandy Meier
@@ -45,6 +46,11 @@ public:
   
   void setInstall(bool yes=true);
   bool shouldBeInstalled();
+
+  /** writes the configuration to the projectfile*/
+  void writeConfig(KConfig* config);
+  /** the rel_name set in the constructor will be used*/
+  void readConfig(KConfig* config);
   
  protected:
   QString m_file;

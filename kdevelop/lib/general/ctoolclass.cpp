@@ -24,6 +24,8 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include "ctoolclass.h"
+#include <kdebug.h>
+#include <qdir.h>
 
 
 bool CToolClass::searchProgram(QString name){
@@ -141,3 +143,48 @@ QString CToolClass::escapetext(const char *szOldText, bool bForGrep)
   return sRegExpString;
 }
 
+QString CToolClass::getRelativePath(QString source_dir,QString dest_dir){
+  kdDebug(9000) << "source_dir:" << source_dir <<endl;
+  kdDebug(9000) << "dest_dir:" << dest_dir <<endl;
+
+  // a special case , the dir are equals
+  if (source_dir == dest_dir){
+    kdDebug(9000) << "rel_dir:./" <<endl;
+    return "./";
+  }
+  dest_dir.remove(0,1); // remove beginning /
+  source_dir.remove(0,1); // remove beginning /
+  bool found = true;
+  int slash_pos=0;
+  
+
+  do {
+    slash_pos = dest_dir.find('/');
+    if (dest_dir.left(slash_pos) == source_dir.left(slash_pos)){
+      dest_dir.remove(0,slash_pos+1);
+      source_dir.remove(0,slash_pos+1);
+    }
+    else {
+      found = false;
+    }
+  }
+  while(found == true);
+
+  int slashes = source_dir.contains('/');
+  int i;
+  for(i=0;i < slashes;i++){
+    dest_dir.prepend("../");
+  }
+
+  kdDebug(9000) << "rel_dir:" << dest_dir <<endl;
+  return dest_dir;
+}
+
+QString CToolClass::getAbsolutePath(QString source_dir, QString rel_path){
+  QDir dir(source_dir);
+  if(!dir.cd(rel_path)){
+    kdDebug(9000) << "Error in CToolClass::getAbsolutePath, directory doesn't exists" << endl;
+    return "";
+  }
+  return dir.absPath() + "/";
+}

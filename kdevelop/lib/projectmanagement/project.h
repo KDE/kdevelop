@@ -63,9 +63,10 @@ class Project : public QObjectPlugin  {
   virtual void updateMakefile();
 
   virtual void addFile(RegisteredFile* file);
+  virtual void addFile(QString abs_filename);
   virtual void removeFile(RegisteredFile* file);
 
-  virtual bool readConfig(QString filename);
+  virtual bool readConfig(QString abs_filename);
   virtual bool readGeneralConfig(KSimpleConfig* config);
   virtual bool readUserConfig(KSimpleConfig* config);
   
@@ -80,7 +81,9 @@ class Project : public QObjectPlugin  {
   QString m_name;
   QString m_version;
   QString m_abs_path;
+  /** absolute*/
   QString m_user_project_file;
+  /** absolute */
   QString m_project_file;
   QString m_projecttype_name;
 };

@@ -35,6 +35,16 @@ public:
 
   static QString locatehtml(const QString &filename);
 
+  /** returns the relative path, to get from source_path to destpath (both are absolute)
+      for examples: 
+      source_path: /home/smeier/testprj/
+      dest_path:   /usr/lib/
+      relative_path = ../../../user/lib/
+   */      
+  static QString getRelativePath(QString source_dir,QString dest_dir);
+
+  static QString getAbsolutePath(QString source_dir, QString rel_path);
+
   /** Change a text string for search in a way,
    *  which makes it useable for a regular expression search.
    *  This means converting reg. exp. special chars like $, [, !, ecc.

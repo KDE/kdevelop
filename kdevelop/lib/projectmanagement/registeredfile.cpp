@@ -57,3 +57,15 @@ bool RegisteredFile::shouldBeInstalled(){
 }
 
 
+void RegisteredFile::writeConfig(KConfig* config){
+  config->setGroup(m_file);
+  config->writeEntry("dist",m_dist);
+  config->writeEntry("install",m_install);
+  config->writeEntry("install_file",m_install_file);
+}
+void RegisteredFile::readConfig(KConfig* config){
+  config->setGroup(m_file);
+  m_dist = config->readBoolEntry("dist",false);
+  m_install = config->readBoolEntry("install",false);
+  m_install_file = config->readEntry("install_file","");
+}

@@ -23,6 +23,9 @@
 #include <ksimpleconfig.h>
 #include <kdebug.h>
 #include <qdir.h>
+#include <ctoolclass.h>
+#include <qfileinfo.h>
+
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name,QString file) : KDevComponent(parent,name){
   m_projects = new QList<Project>;
@@ -38,7 +41,12 @@ void ProjectSpace::addProject(QString file){
 }
 void ProjectSpace::addProject(Project* prj){
   m_projects->append (prj);
+  m_current_project = prj;
 }
+void ProjectSpace::setCurrentProject(Project* prj){
+  m_current_project = prj;
+}
+
 void ProjectSpace::removeProject(QString name){
 }
 void ProjectSpace::generateDefaultFiles(){
@@ -105,12 +113,47 @@ QString& ProjectSpace::setInfosInString(QString& strtemplate, bool basics){
     NAME.kdevpsp contains options for all users, like cvs system
     .NAME.kdevpsp contains options from the local user:
 */
-bool ProjectSpace::readConfig(QString filename){
+bool ProjectSpace::readConfig(QString abs_filename){
+  kdDebug(9000) << "enter ProjectSpace::readConfig" << endl;
+  QFileInfo file_info(abs_filename);
+  m_path = file_info.dirPath();
+  m_projectspace_file = abs_filename;
+  // the "global" one
+  kdDebug(9000)  << "project_space_filename:" << m_projectspace_file << endl;
+  KSimpleConfig* config = new KSimpleConfig(m_projectspace_file);
+  readGeneralConfig(config); // maybe virtual overwritten
+  config->sync();
+  delete config;
+
+  m_user_projectspace_file = m_path + "/." + m_name + ".kdevpsp";
+  // the "local/user" on
+  kdDebug(9000) << "user_projectspace_filename:" << m_user_projectspace_file << endl;
+  config = new KSimpleConfig(m_user_projectspace_file);
+  writeUserConfig(config); // maybe virtual overwritten
+  config->sync();
+  delete config;
   return true;
 }
 
 bool ProjectSpace::readGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
+  m_name = config->readEntry("name","");
+  m_path = config->readEntry("path","");
+  m_plugin_name = config->readEntry("plugin_name","");
+  
+
+  // read all projects
+  QStringList files = config->readListEntry("projectfiles");
+  QStringList::Iterator it;
+  QString filename;
+  QFileInfo fileinfo;
+  Project* prj;
+  for(it = files.begin(); it != files.end(); ++it){
+    fileinfo.setFile(*it);
+    filename = fileinfo.fileName();
+    prj = new Project(this,"",CToolClass::getAbsolutePath(m_path,fileinfo.dirPath()) + filename);
+    addProject(prj);
+  }
   return true;
 }
 
@@ -154,7 +197,9 @@ bool ProjectSpace::writeGeneralConfig(KSimpleConfig* config){
   QStringList projectfiles;
   Project* prj;
   for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
-    projectfiles.append(prj->getProjectFile());
+    // add the relative path
+    QString file = prj->getProjectFile();
+    projectfiles.append(CToolClass::getRelativePath(m_path,file));
   }
   config->writeEntry("projectfiles",projectfiles);
   return true;
@@ -166,48 +211,3 @@ bool ProjectSpace::writeUserConfig(KSimpleConfig* config){
   return true;
 }
 
-QString ProjectSpace::getRelativePath(QString source_dir,QString dest_dir){
-  kdDebug(9000) << "source_dir:" << source_dir <<endl;
-  kdDebug(9000) << "dest_dir:" << dest_dir <<endl;
-
-  // a special case , the dir are equals
-  if (source_dir == dest_dir){
-    kdDebug(9000) << "rel_dir:./" <<endl;
-    return "./";
-  }
-  dest_dir.remove(0,1); // remove beginning /
-  source_dir.remove(0,1); // remove beginning /
-  bool found = true;
-  int slash_pos=0;
-  
-
-  do {
-    slash_pos = dest_dir.find('/');
-    if (dest_dir.left(slash_pos) == source_dir.left(slash_pos)){
-      dest_dir.remove(0,slash_pos+1);
-      source_dir.remove(0,slash_pos+1);
-    }
-    else {
-      found = false;
-    }
-  }
-  while(found == true);
-
-  int slashes = source_dir.contains('/');
-  int i;
-  for(i=0;i < slashes;i++){
-    dest_dir.prepend("../");
-  }
-
-  kdDebug(9000) << "rel_dir:" << dest_dir <<endl;
-  return dest_dir;
-}
-
-QString ProjectSpace::getAbsolutePath(QString source_dir, QString rel_path){
-  QDir dir(source_dir);
-  if(!dir.cd(rel_path)){
-    kdDebug(9000) << "Error in ProjectSpace::getAbsolutePath, directory doesn't exists" << endl;
-    return "";
-  }
-  return dir.absPath() + "/";
-}

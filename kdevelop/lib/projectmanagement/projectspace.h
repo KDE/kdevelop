@@ -41,6 +41,8 @@ class ProjectSpace : public KDevComponent, public Plugin  {
 
   void addProject(Project* prj);
   void removeProject(QString name);
+
+  void setCurrentProject(Project* prj);
   
   /** set the projectspace name*/
   void setName(QString name);
@@ -81,7 +83,7 @@ class ProjectSpace : public KDevComponent, public Plugin  {
       .NAME.kdevpsp contains options from the local user:
   */
 
-  virtual bool readConfig(QString filename);
+  virtual bool readConfig(QString abs_filename);
   virtual bool readGeneralConfig(KSimpleConfig* config);
   virtual bool readUserConfig(KSimpleConfig* config);
   
@@ -89,15 +91,7 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual bool writeGeneralConfig(KSimpleConfig* config);
   virtual bool writeUserConfig(KSimpleConfig* config);
 
-  /** returns the relative path, to get from source_path to destpath (both are absolute)
-      for examples: 
-      source_path: /home/smeier/testprj/
-      dest_path:   /usr/lib/
-      relative_path = ../../../user/lib/
-   */
-      
-  static QString getRelativePath(QString source_dir,QString dest_dir);
-  static QString getAbsolutePath(QString source_dir, QString rel_path);
+  
 
 
 protected:
@@ -117,6 +111,10 @@ protected:
 
   /** current active project*/
   Project* m_current_project;
+  /** absolute*/
+  QString m_user_projectspace_file;
+  /** absolute */
+  QString m_projectspace_file;
 };
 
 #endif

@@ -19,6 +19,7 @@
 // and I commited it, so Makefile.am changing all the time isn't needed.
 
 #include "projectspace.h"
+#include "ctoolclass.h"
 #include "project.h"
 #include <kapp.h>
 #include <kcmdlineargs.h>
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]){
   KCmdLineArgs::init( argc, argv,"testprj","","");
   KApplication a;
   ProjectSpace* space = new ProjectSpace();
-  space->setName("SPACE");
+    space->setName("SPACE");
   space->setAbsolutePath("/home/smeier/testprj/jk");
 
   Project* prj = new Project();
@@ -37,12 +38,14 @@ int main(int argc, char* argv[]){
 
   Project* prj1 = new Project();
 
-  RegisteredFile* file = new RegisteredFile("main.cpp");
-
-
-  prj->addFile(file);
+  prj->addFile("/home/smeier/main.cpp");
   space->addProject(prj);
   space->writeConfig();
-  QString rel_path = ProjectSpace::getRelativePath("/home/smeier/","/usr/bin/");
-  cerr << endl << "ABS:" << ProjectSpace::getAbsolutePath("/home/smeier/",rel_path) << endl;
+  
+  space->readConfig("/home/smeier/testprj/jk/SPACE.kdevpsp");
+  
+
+  // test some function in ProjectSpace
+  QString rel_path = CToolClass::getRelativePath("/home/smeier/","/usr/bin/");
+  cerr << endl << "ABS:" << CToolClass::getAbsolutePath("/home/smeier/",rel_path) << endl;
 }
