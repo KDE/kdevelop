@@ -55,8 +55,8 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
 {
     setInstance(CustomProjectFactory::instance());
     setXMLFile("kdevcustomproject.rc");
-    
-    m_executeAfterBuild = false;    
+
+    m_executeAfterBuild = false;
 
     KAction *action;
 
@@ -88,7 +88,7 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
-    
+
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
 	     this, SLOT(slotCommandFinished(const QString&)) );
 }
@@ -415,7 +415,7 @@ void CustomProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
 
-    if( !m_executeAfterBuild && isDirty() ){
+    if( !m_executeAfterBuild && DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
         slotBuild();
         return;

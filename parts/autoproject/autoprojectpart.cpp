@@ -59,8 +59,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     m_executeAfterBuild = false;
     bool kde = (args[0] == "kde");
-    m_needMakefileCvs = false; 
-	
+    m_needMakefileCvs = false;
+
     m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("Automake Manager"));
@@ -69,7 +69,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                    "in the upper half shows the subprojects, each one having a "
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the subproject selected in the overview."));
-    
+
     mainWindow()->embedSelectViewRight(m_widget, i18n("Automake Manager"), i18n("Automake Manager"));
 
     KAction *action;
@@ -139,7 +139,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
     }
-    
+
     connect( buildConfigAction, SIGNAL(activated(const QString&)),
              this, SLOT(slotBuildConfigChanged(const QString&)) );
     connect( buildConfigAction->popupMenu(), SIGNAL(aboutToShow()),
@@ -190,7 +190,7 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
 {
     m_projectName = projectName;
     m_projectPath =dirName;
-    
+
 	m_widget->openProject(dirName);
 
     QDomDocument &dom = *projectDom();
@@ -258,7 +258,7 @@ QString AutoProjectPart::makeEnvironment()
     // in the form of: "ENV_VARIABLE=ENV_VALUE"
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
-    DomUtil::PairList envvars = 
+    DomUtil::PairList envvars =
         DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/make/envvars", "envvar", "name", "value");
 
     QString environstr;
@@ -326,7 +326,7 @@ void AutoProjectPart::removeFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->removeFiles ( fileList );
 }
 
@@ -334,7 +334,7 @@ void AutoProjectPart::removeFiles ( const QStringList& fileList )
 {
 	// FIXME: m_widget->removeFiles does nothing!
 	m_widget->removeFiles ( fileList );
-	
+
 	emit removedFilesFromProject ( fileList );
 }
 
@@ -344,7 +344,7 @@ QStringList AutoProjectPart::allBuildConfigs()
 
     QStringList allConfigs;
     allConfigs.append("default");
-    
+
     QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
     QDomElement childEl = node.firstChild().toElement();
     while (!childEl.isNull()) {
@@ -456,7 +456,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     partController()->saveAllFiles();
 
     m_buildCommand = constructMakeCommandLine(dir, target);
-    
+
     if (withKdesu)
 	m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
 
@@ -480,7 +480,7 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
     QString dependency = *l2it;
     if (dependency.startsWith("$(top_builddir)/")) {
       // These are the internal libraries
-#if KDE_VERSION > 305	
+#if KDE_VERSION > 305
       dependency.remove("$(top_builddir)/");
 #else
       QString topBuildDirStr("$(top_builddir)/");
@@ -533,7 +533,7 @@ void AutoProjectPart::slotBuild()
 	slotConfigure();
 	m_needMakefileCvs = false;
     }
-    
+
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 
@@ -557,7 +557,7 @@ void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
     path += relpath.mid(1);
   else
     path += relpath;
-  
+
   // Save all files once
   partController()->saveAllFiles();
 
@@ -588,7 +588,7 @@ void AutoProjectPart::slotBuildActiveTarget()
   QString relpath = m_widget->activeSubproject()->path.mid( projectDirectory().length() );
 
   // build it
-  buildTarget(relpath, titem);  
+  buildTarget(relpath, titem);
 
   // hide the autoproject toolbar (if not sticky)
   mainWindow()->lowerView( m_widget );
@@ -618,7 +618,7 @@ void AutoProjectPart::slotCompileFile()
     QString buildDir = buildDirectory() + sourceDir.mid(projectDir.length());
     QString target = baseName + ".lo";
     kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
-    
+
     startMakeCommand(buildDir, target);
 }
 
@@ -748,11 +748,11 @@ void AutoProjectPart::slotMakeMessages()
 void AutoProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
-    
-    if( !m_executeAfterBuild && isDirty() ){
+
+    if( !m_executeAfterBuild && DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
         slotBuild();
-	return;
+        return;
     }
 
     QString directory;
@@ -823,19 +823,19 @@ void AutoProjectPart::restorePartialProjectSession ( const QDomElement* el )
 void AutoProjectPart::savePartialProjectSession ( QDomElement* el )
 {
 	QDomDocument domDoc = el->ownerDocument();
-	
+
 	KMessageBox::information ( 0, "Hallo, Welt!" );
-	
+
 	kdDebug ( 9000 ) << "*********************************************** 1) AutoProjectPart::savePartialProjectSession()" << endl;
-	
+
 	if ( domDoc.isNull() )
 	{
 		kdDebug ( 9000 ) << "*********************************************** 2) AutoProjectPart::savePartialProjectSession()" << endl;
 		return;
 	}
-	
+
 	kdDebug ( 9000 ) << "*********************************************** 3) AutoProjectPart::savePartialProjectSession()" << endl;
-	
+
 	m_widget->saveSession ( el );
 }
 
@@ -844,10 +844,10 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     kdDebug(9020) << "AutoProjectPart::slotProcessFinished()" << endl;
 
     Q_UNUSED( command );
-    
+
     if( m_buildCommand != command )
 	return;
-    
+
     m_buildCommand = QString::null;
 
     m_timestamp.clear();
