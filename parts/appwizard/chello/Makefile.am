@@ -17,5 +17,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local: script.local
-	$(INSTALL_DATA) script.local $(chellodir)/script
+	$(INSTALL_DATA) script.local $(DESTDIR)$(chellodir)/script
 
