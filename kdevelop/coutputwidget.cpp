@@ -165,11 +165,13 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   const int errorGccFileGroup = 1;
   const int errorGccRowGroup = 2;
 
+/*
   QString dbg;
   for ( uint i = 0; i < line.length(); ++i ) {
     dbg += "0x" + QString::number( line[i].unicode(), 16 ) + ",";
   }
   kdDebug() << line << endl << dbg << endl;
+*/
 
   if (m_dirChange.match(line))
   {
