@@ -2960,4 +2960,21 @@ void KWrite::slotToggleBreakpoint()
 {
   emit toggleBreakpoint(QString(kWriteDoc->fileName()), currentLine()+1);
 }
+
+void KWrite::pasteStr(QString s)
+{
+  VConfig c;
+  kWriteView->getVConfig(c);
+  kWriteDoc->insert(kWriteView,c,s);
+  kWriteDoc->updateViews();
+}
+
+void KWrite::delMarkedText()
+{
+  VConfig c;
+  kWriteView->getVConfig(c);
+  kWriteDoc->delMarkedText(kWriteView,c);
+  kWriteDoc->updateViews();
+}
+
 #include "kwview.moc"

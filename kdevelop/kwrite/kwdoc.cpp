@@ -433,6 +433,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   ,tagStart(0)
   ,tagEnd(0)
   ,pseudoModal(0L)
+  ,bUpdateEnabled(true)
 {
   contents.setAutoDelete(true);
 
@@ -1327,6 +1328,9 @@ void KWriteDoc::updateMaxLength(TextLine *textLine) {
 void KWriteDoc::updateViews(KWriteView *exclude) {
   KWriteView *view;
   int flags;
+
+  if (!bUpdateEnabled) return;
+
   bool markState=hasMarkedText();
 
   flags = (newDocGeometry) ? ufDocGeometry : 0;

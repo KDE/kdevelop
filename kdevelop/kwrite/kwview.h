@@ -339,6 +339,10 @@ class KWrite : public QWidget {
 
     /**  */
     void slotToggleBreakpoint();
+    /**  */
+    void pasteStr(QString s);
+    /**  */
+    void delMarkedText();
 
   signals:
     /** The cursor position has changed. Get the values with currentLine()

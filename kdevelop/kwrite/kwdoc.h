@@ -186,6 +186,7 @@ class KWriteDoc : public QObject {
     KWrite* getKWrite();
     QList<KWriteView> viewList() { return views; };
     int viewCount();
+    void setUpdatesEnabled( bool bEnabled ){ bUpdateEnabled = bEnabled; }
 
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);
@@ -222,6 +223,7 @@ class KWriteDoc : public QObject {
 
     QDateTime getLastFileModifDate() { return m_fileLastModifDate; };
     void setLastFileModifDate(QDateTime modif) { m_fileLastModifDate = modif; };
+    void selectTo(PointStruc &start, PointStruc &end, int flags);
 
   protected:
     void setHighlight(int n);
@@ -242,7 +244,6 @@ class KWriteDoc : public QObject {
     int textHeight();
 
     void toggleRect(int, int, int, int);
-    void selectTo(PointStruc &start, PointStruc &end, int flags);
     void clear();
     void copy(int flags);
     void paste(KWriteView *,VConfig &);
@@ -349,6 +350,7 @@ class KWriteDoc : public QObject {
 #if defined(QT_I18N) && defined(HAVE_NKF_H)
     Nkf::NkfCode JPcode;
 #endif
+    bool bUpdateEnabled;
 };
 
 #endif //KWDOC_H
