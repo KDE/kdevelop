@@ -1,3 +1,6 @@
+2002-09-20 Roberto Raggi <raggi@cli.di.unipi.it>
+	* Added statement rules to c++ parser
+
 2002-09-19 Roberto Raggi <raggi@cli.di.unipi.it>
 	* Improved code completion
 
