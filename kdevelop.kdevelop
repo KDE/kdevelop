@@ -1,0 +1,174 @@
+<!DOCTYPE kdevelop>
+<kdevelop>
+  <general>
+    <author>KDevelop Authors</author>
+    <email>kdevelop-devel@kdevelop.org</email>
+    <version>3.0.0a7_CVS</version>
+    <projectmanagement>KDevKDEAutoProject</projectmanagement>
+    <primarylanguage>C++</primarylanguage>
+    <keywords>
+      <keyword>Qt</keyword>
+      <keyword>KDE</keyword>
+    </keywords>
+    <projectdirectory>.</projectdirectory>
+    <absoluteprojectpath>false</absoluteprojectpath>
+    <description>KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.</description>
+    <ignoreparts>
+      <part>KDevClearCase</part>
+      <part>KDevPerforce</part>
+      <part>KDevVisualBoyAdvance</part>
+    </ignoreparts>
+    <secondaryLanguages/>
+  </general>
+  <kdevfileview>
+    <groups>
+      <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+      <group pattern="*.ui" name="User Interface" />
+      <group pattern="*.png" name="Icons" />
+      <group pattern="*.po;*.ts" name="Translations" />
+      <group pattern="*" name="Others" />
+      <hidenonprojectfiles>true</hidenonprojectfiles>
+    </groups>
+    <tree>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidepatterns>*.o,*.lo,CVS,autom4te.cache</hidepatterns>
+      <showvcsfields>true</showvcsfields>
+    </tree>
+  </kdevfileview>
+  <kdevdoctreeview>
+    <ignoretocs>
+      <toc>gtk</toc>
+      <toc>gnustep</toc>
+      <toc>python</toc>
+      <toc>php</toc>
+      <toc>perl</toc>
+      <toc>bash</toc>
+      <toc>gnome1</toc>
+      <toc>sw</toc>
+      <toc>w3c-dom-level2-html</toc>
+      <toc>w3c-svg</toc>
+      <toc>w3c-uaag10</toc>
+      <toc>Ruby</toc>
+      <toc>Ruby</toc>
+      <toc>Ruby</toc>
+      <toc>opengl</toc>
+      <toc>ruby</toc>
+      <toc>sdl</toc>
+      <toc>stl</toc>
+    </ignoretocs>
+    <projectdoc>
+      <userdocDir>html/</userdocDir>
+      <apidocDir>apidocs/html/</apidocDir>
+    </projectdoc>
+    <ignoredocs/>
+    <ignoreqt_xml>
+      <toc>Guide to the Qt Translation Tools</toc>
+      <toc>Qt Assistant Manual</toc>
+      <toc>qmake User Guide</toc>
+    </ignoreqt_xml>
+    <ignoredoxygen>
+      <toc>TiP</toc>
+      <toc>SystemC</toc>
+    </ignoredoxygen>
+    <ignorekdocs/>
+    <ignoredevhelp/>
+  </kdevdoctreeview>
+  <kdevdebugger>
+    <general>
+      <dbgshell></dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <breakonloadinglibs>true</breakonloadinglibs>
+      <separatetty>false</separatetty>
+      <floatingtoolbar>false</floatingtoolbar>
+      <runappinappdirectory>true</runappinappdirectory>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
+    </general>
+    <display>
+      <staticmembers>false</staticmembers>
+      <demanglenames>true</demanglenames>
+    </display>
+  </kdevdebugger>
+  <kdevautoproject>
+    <make>
+      <envvars>
+        <envvar value="1" name="WANT_AUTOCONF_2_5" />
+        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
+      </envvars>
+      <abortonerror>false</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin></makebin>
+    </make>
+    <run>
+      <mainprogram>0:1:notrans</mainprogram>
+      <programargs></programargs>
+      <terminal>false</terminal>
+      <envvars/>
+      <autocompile>true</autocompile>
+      <directoryradio>build</directoryradio>
+      <customdirectory>/</customdirectory>
+    </run>
+    <general>
+      <useconfiguration>default</useconfiguration>
+      <activetarget>buildtools/qmake/libkdevtrollproject.la</activetarget>
+    </general>
+    <configurations>
+      <default>
+        <configargs>--enable-debug=full --prefix=$KDEDIR --with-kdelibsdoxy-dir=$KDEDIR/share/doc/HTML/en/kdelibs-apidocs</configargs>
+        <builddir></builddir>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <cxxflags>-O0 -g3</cxxflags>
+        <f77flags></f77flags>
+      </default>
+    </configurations>
+  </kdevautoproject>
+  <kdevfilecreate>
+    <filetypes/>
+    <useglobaltypes/>
+  </kdevfilecreate>
+  <cppsupportpart>
+    <codecompletion/>
+    <filetemplates>
+      <choosefiles>false</choosefiles>
+      <interfaceURL/>
+      <implementationURL/>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+      <lowercasefilenames>true</lowercasefilenames>
+    </filetemplates>
+  </cppsupportpart>
+  <kdevclassview>
+    <folderhierarchy>true</folderhierarchy>
+    <depthoffolders>2</depthoffolders>
+  </kdevclassview>
+  <kdevcppsupport>
+    <codecompletion>
+      <includeGlobalFunctions>true</includeGlobalFunctions>
+      <includeTypes>true</includeTypes>
+      <includeEnums>true</includeEnums>
+      <includeTypedefs>false</includeTypedefs>
+      <automaticCodeCompletion>true</automaticCodeCompletion>
+      <automaticArgumentsHint>true</automaticArgumentsHint>
+      <codeCompletionDelay>250</codeCompletionDelay>
+      <argumentsHintDelay>400</argumentsHintDelay>
+      <automaticHeaderCompletion>true</automaticHeaderCompletion>
+      <headerCompletionDelay>250</headerCompletionDelay>
+    </codecompletion>
+    <references>
+      <pcs>Qt</pcs>
+      <pcs>KDElibs</pcs>
+    </references>
+  </kdevcppsupport>
+</kdevelop>
