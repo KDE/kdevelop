@@ -214,6 +214,8 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       lpC->move(topLeftMdiChildArea);
    }
    lpC->setClient(pWnd);
+   if (pWnd->minimumHeight() == pWnd->maximumHeight())
+      lpC->setFixedHeight (lpC->height());
    pWnd->youAreAttached(lpC);
 
    // this is done in activateView

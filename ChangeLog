@@ -1,3 +1,7 @@
+2000-06-09 Falk Brettschneider <gigafalk@yahoo.com>
+  * several bugfixes for the maximum/minimum/fixed size/width/height problem of attached childviews
+    (f.i.no minimum size for MDI views anymore,cascading,undocking minimized MDI views)
+
 2000-06-06 Falk Brettschneider <gigafalk@yahoo.com>
   * fixed misbehaviour of window captions when in toplevel mode using new dockwidget features
     (needs kdelibs/kdeui update (of today))

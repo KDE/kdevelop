@@ -107,7 +107,7 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
 #endif
-   QPoint		   m_undockPositioningOffset;
+   QPoint		                m_undockPositioningOffset;
 
 // methods
 public:
@@ -140,6 +140,10 @@ public:
    QPopupMenu* windowMenu() { return m_pWindowMenu; };
    virtual void setBackgroundColor( const QColor &c) { m_pMdi->setBackgroundColor( c); };
    virtual void setBackgroundPixmap( const QPixmap &pm) { m_pMdi->setBackgroundPixmap( pm); };
+   void setDefaultChildFrmSize( const QSize& sz)
+      { m_pMdi->m_defaultChildFrmSize = sz; };
+   QSize defaultChildFrmSize()
+      { return m_pMdi->m_defaultChildFrmSize; };
 
 public slots:
    /**

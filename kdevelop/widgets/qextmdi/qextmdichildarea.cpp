@@ -50,6 +50,7 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
 	m_pZ = new QList<QextMdiChildFrm>;
 	m_pZ->setAutoDelete(TRUE);
 	setFocusPolicy(ClickFocus);
+	m_defaultChildFrmSize = QSize(400,300);
 }
 
 //============ ~QextMdiChildArea ============//
@@ -172,7 +173,6 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
 void QextMdiChildArea::resizeEvent(QResizeEvent *e)
 {
 	//If we have a maximized children at the top , adjust its size
-//	QScrollView::resizeEvent(e);
 	QextMdiChildFrm *lpC=m_pZ->last();
 	if(lpC){
 		if(lpC->m_state == QextMdiChildFrm::Maximized)
@@ -200,8 +200,8 @@ QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
 	if(indexOfWindow==0)return pnt;
 	QextMdiChildFrm *lpC=m_pZ->first();
 	int step=(lpC ? lpC->m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_BORDER : 20);
-	int availableHeight=height()-(lpC ? lpC->minimumSize().height() : QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT);
-	int availableWidth=width()-(lpC ? lpC->minimumSize().width() : QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
+	int availableHeight=height()-(lpC ? lpC->minimumSize().height() : m_defaultChildFrmSize.height());
+	int availableWidth=width()-(lpC ? lpC->minimumSize().width() : m_defaultChildFrmSize.width());
 	int ax=0;
 	int ay=0;
 	for(int i=0;i<indexOfWindow;i++){
@@ -267,7 +267,6 @@ void QextMdiChildArea::cascadeWindows()
 		if(lpC->m_state != QextMdiChildFrm::Minimized){
 			if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
 			lpC->move(getCascadePoint(idx));
-			lpC->resize(lpC->minimumSize());
 			idx++;
 		}
 		list.removeFirst();
@@ -368,13 +367,13 @@ void QextMdiChildArea::tileAllInternal(int maxWnds)
 	if(numVisible<1)return;
 	int numToHandle=((numVisible > maxWnds) ? maxWnds : numVisible);
 	int xQuantum=width()/colstable[numToHandle-1];
-	if(xQuantum < ((lpTop->minimumSize().width() > QEXTMDI_MDI_CHILDFRM_MIN_WIDTH) ? lpTop->minimumSize().width() : QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)){
+	if(xQuantum < ((lpTop->minimumSize().width() > m_defaultChildFrmSize.width()) ? lpTop->minimumSize().width() : m_defaultChildFrmSize.width())){
 		if(colrecall[numToHandle-1]==0)debug("Tile : Not enouh space");
 		else tileAllInternal(colrecall[numToHandle-1]);
 		return;
 	}
 	int yQuantum=height()/rowstable[numToHandle-1];
-	if(yQuantum < ((lpTop->minimumSize().height() > QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT) ? lpTop->minimumSize().height() : QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT)){
+	if(yQuantum < ((lpTop->minimumSize().height() > m_defaultChildFrmSize.height()) ? lpTop->minimumSize().height() : m_defaultChildFrmSize.height())){
 		if(rowrecall[numToHandle-1]==0)debug("Tile : Not enough space");
 		else tileAllInternal(rowrecall[numToHandle-1]);
 		return;

@@ -157,7 +157,8 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_iResizeCorner=QEXTMDI_NORESIZE;
    m_iLastCursorCorner=QEXTMDI_NORESIZE;
    setMouseTracking(TRUE);
-   setMinimumSize(QSize(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH,QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT));
+
+   setMinimumSize( QSize( 30, m_pCaption->heightHint()));
 
    m_pSystemMenu = new QPopupMenu();
 }
@@ -232,6 +233,9 @@ void QextMdiChildFrm::setResizeCursor(int resizeCorner)
 
 void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 {
+   if(m_state != Normal) return;
+   if(m_pClient->minimumSize() == m_pClient->maximumSize()) return;
+
    if(m_resizeMode) {
       if( !(e->state() & RightButton) && !(e->state() & MidButton)) {
          // same as: if no button or left button pressed
@@ -268,7 +272,7 @@ void QextMdiChildFrm::leaveEvent(QEvent *)
       if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
    }
 }
-#include <iostream.h>
+
 void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 {
    QRect resizeRect(x(),y(),width(),height());
@@ -276,13 +280,14 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 	// Calculate the minimum width & height
 	int minWidth=0;
 	int minHeight=0;
+	// it could be the client forces the childframe to enlarge its minimum size
 	if(m_pClient){
 		minWidth  = m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
 		minHeight = m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
 					m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
 	}
-	if(minWidth<QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)minWidth=QEXTMDI_MDI_CHILDFRM_MIN_WIDTH;
-	if(minHeight<QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)minHeight=QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT;
+	if(minWidth<minimumWidth())minWidth=minimumWidth();
+	if(minHeight<minimumHeight())minHeight=minimumHeight();
 
 	QPoint mousePos( xPos, yPos);
 	
@@ -342,10 +347,14 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 int QextMdiChildFrm::getResizeCorner(int ax,int ay)
 {
 	int ret = QEXTMDI_NORESIZE;
-	if((ax>0)&&(ax<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_LEFT;
-	if((ax<width())&&(ax>(width()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_RIGHT;
-	if((ay>0)&&(ay<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_TOP;
-	if((ay<(height()))&&(ay>(height()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_BOTTOM;
+	if(m_pClient->minimumWidth() != m_pClient->maximumWidth()) {
+  	if((ax>0)&&(ax<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_LEFT;
+	  if((ax<width())&&(ax>(width()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_RIGHT;
+	}
+  if(m_pClient->minimumHeight() != m_pClient->maximumHeight()) {
+  	if((ay>0)&&(ay<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_TOP;
+	  if((ay<(height()))&&(ay>(height()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_BOTTOM;
+	}
 	return ret;
 }
 
@@ -425,89 +434,90 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 		case Normal:
 			switch(m_state){
 				case Maximized:
-					//F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
-					m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-					setGeometry(m_restoredRect);
-					m_state=state;
-					break;
+          //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
+          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
+          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+          setGeometry(m_restoredRect);
+          m_state=state;
+          break;
 				case Minimized:
-					//begin=QRect(x()+width()/2,y()+height()/2,1,1);
-					//if(bAnimate)m_pManager->animate(begin,end);
-					setMinimumSize(m_oldClientMinSize);
-					if( minimumWidth() == 0)
-					   setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
-               if( minimumHeight() == 0)					
-					   setMinimumHeight(QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT);
-               // reset to normal-captionbar
-               m_pMinimize->setPixmap( *m_pMinButtonPixmap);
-					m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-               QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
-               QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-					
-					setGeometry(m_restoredRect);
-					m_pClient->show();
-					m_state=state;
-					break;
+          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
+          //if(bAnimate)m_pManager->animate(begin,end);
+          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
+          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+          // reset to normal-captionbar
+          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+          QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+          QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+            					
+          setGeometry(m_restoredRect);
+          m_pClient->show();
+          m_state=state;
+          break;
 				case Normal:
-					break;
+           break;
 			}
 			break;
 		case Maximized:
 			//end=QRect(0,0,m_pManager->width(),m_pManager->height());
 			switch(m_state){
 				case Minimized:
-					//begin=QRect(x()+width()/2,y()+height()/2,1,1);
-					//if(bAnimate)m_pManager->animate(begin,end);
-					setMinimumSize(m_oldClientMinSize);
-					if( minimumWidth() == 0)
-					   setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
-					if( minimumHeight() == 0)
-					   setMinimumHeight(QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT);
-               // reset to maximize-captionbar
-					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-               m_pMinimize->setPixmap( *m_pMinButtonPixmap);
-               QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
-               QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-					
-					m_state=state;
-					setGeometry(-m_pClient->x(), -m_pClient->y(),
-									m_pManager->width() + width() - m_pClient->width(),
-									m_pManager->height() + height() - m_pClient->height());
-					m_pClient->show();
-					raise();
-					break;
+          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
+          //if(bAnimate)m_pManager->animate(begin,end);
+          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
+          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+          setMaximumSize(32767,32767);
+          // reset to maximize-captionbar
+          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
+          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+          QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+          QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+          m_state=state;
+          setGeometry(-m_pClient->x(), -m_pClient->y(),
+                      m_pManager->width() + width() - m_pClient->width(),
+                      m_pManager->height() + height() - m_pClient->height());
+          m_pClient->show();
+          raise();
+          break;
 				case Normal:
-					m_state=state;
-					//if(bAnimate)m_pManager->animate(begin,end);
-					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-					setGeometry(-m_pClient->x(), -m_pClient->y(),
-									m_pManager->width() + width() - m_pClient->width(),
-									m_pManager->height() + height() - m_pClient->height());
-					show();
-					raise();
-					break;
+          m_state=state;
+          m_oldClientMinSize = m_pClient->minimumSize();
+          m_oldClientMaxSize = m_pClient->maximumSize();
+          setMaximumSize(32767,32767);
+          //if(bAnimate)m_pManager->animate(begin,end);
+          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
+          setGeometry(-m_pClient->x(), -m_pClient->y(),
+          				    m_pManager->width() + width() - m_pClient->width(),
+                      m_pManager->height() + height() - m_pClient->height());
+          show();
+          raise();
+          break;
 				case Maximized:
-   				break;
+          break;
 			}
 			break;
 		case Minimized:
 			//end=QRect(x()+width()/2,y()+height()/2,1,1);
 			switch(m_state){
 				case Maximized:
-					m_state=state;
-				   switchToMinimizeLayout();
-					//if(bAnimate)m_pManager->animate(begin,end);
-					m_pManager->childMinimized(this,TRUE);
-					break;
-				case Normal:
-					m_state=state;
-               m_restoredRect = geometry();
-				   switchToMinimizeLayout();
-					//if(bAnimate)m_pManager->animate(begin,end);
-					m_pManager->childMinimized(this,FALSE);
-					break;
+          m_state=state;
+          switchToMinimizeLayout();
+          //if(bAnimate)m_pManager->animate(begin,end);
+          m_pManager->childMinimized(this,TRUE);
+          break;
+        case Normal:
+          m_state=state;
+          m_oldClientMinSize = m_pClient->minimumSize();
+          m_oldClientMaxSize = m_pClient->maximumSize();
+          m_restoredRect = geometry();
+          switchToMinimizeLayout();
+          //if(bAnimate)m_pManager->animate(begin,end);
+          m_pManager->childMinimized(this,FALSE);
+          break;
 				case Minimized:
-					break;
+          break;
 			}
 			break;
 	}
@@ -550,7 +560,10 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 	m_pClient=w;
 	//resize to match the client
 	int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
-	resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+  if(w->size().isEmpty() || (w->size() == QSize(1,1)))
+  	resize(m_pManager->m_defaultChildFrmSize.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+  else
+  	resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
 
 	// memorize the focuses in a dictionary because they will get lost during reparenting
 	QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
@@ -579,7 +592,13 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 	if(w->parent()!=this){
 		//reparent to this widget , no flags , point , show it
       QPoint pnt2(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
+      QSize mins = w->minimumSize();
+      QSize maxs = w->maximumSize();
+      w->setMinimumSize(0,0);
+      w->setMaximumSize(32767,32767);
      	w->reparent(this,0,pnt2,w->isVisible()); //Flags get lost thru recreate! (DND too!)
+     	w->setMinimumSize(mins.width(),mins.height());
+     	w->setMaximumSize(maxs.width(),maxs.height());
    } else w->move(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
 	
    linkChildren( pFocPolDict);
@@ -588,10 +607,10 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
 	
-   if( m_pClient->minimumSize().width() > QEXTMDI_MDI_CHILDFRM_MIN_WIDTH) {
+   if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
       setMinimumWidth(m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
    }
-	if( m_pClient->minimumSize().height() > QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT) {
+	if( m_pClient->minimumSize().height() > m_pManager->m_defaultChildFrmSize.height()) {
       setMinimumHeight( m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
                         m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR);
    }
@@ -873,12 +892,11 @@ void QextMdiChildFrm::switchToMinimizeLayout()
 {
    int clientMinWidth = m_pClient->minimumWidth();
    if( clientMinWidth == 0)
-      clientMinWidth = QEXTMDI_MDI_CHILDFRM_MIN_WIDTH;
+      clientMinWidth = m_pManager->m_defaultChildFrmSize.width();
    m_pClient->hide();
 
-   m_oldClientMinSize = m_pClient->minimumSize();
    setMinimumWidth(0);
-   setMinimumHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+   setFixedHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+QEXTMDI_MDI_CHILDFRM_SEPARATOR);
 
    m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
 

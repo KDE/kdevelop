@@ -448,12 +448,14 @@ void QextMdiChildView::setMinimumSize( int minw, int minh)
 
 void QextMdiChildView::setMaximumSize( int maxw, int maxh)
 {
+   if( mdiParent() != 0L) {
+      int w = maxw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+      if( maxw == 32767) w = 32767;
+      int h = maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + mdiParent()->captionHeight();
+      if( maxh == 32767) w = 32767;
+      mdiParent()->setMaximumSize( maxw, maxh);
+   }
    QWidget::setMaximumSize( maxw, maxh);
-   if( mdiParent() != 0L)
-      mdiParent()->setMaximumSize( maxw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-                                   maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
-                                        + QEXTMDI_MDI_CHILDFRM_SEPARATOR
-                                        + mdiParent()->captionHeight());
 }
 
 //============= show ===============//

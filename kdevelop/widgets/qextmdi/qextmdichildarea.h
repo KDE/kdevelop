@@ -49,6 +49,7 @@ public:
 	* Z Order stack (top=last)
 	*/
 	QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
+  QSize                   m_defaultChildFrmSize;
 
 private:
 	QFont m_captionFont;

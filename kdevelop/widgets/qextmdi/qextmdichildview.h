@@ -168,7 +168,7 @@ public:     // Methods
    /** sets the maximum size of the widget to w by h pixels.
      * It extends it base clase method in a way that the maximum size of
      * its childframe (if there is one) will be set, additionally. */
-   virtual void setMaximumSize ( int minw, int minh );
+   virtual void setMaximumSize ( int maxw, int maxh );
 
 public slots:
 	/**

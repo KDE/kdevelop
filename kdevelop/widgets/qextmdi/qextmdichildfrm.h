@@ -116,6 +116,7 @@ protected:
    /** imitates a system menu for child frame windows */
    QPopupMenu     *m_pSystemMenu;
    QSize          m_oldClientMinSize;
+   QSize          m_oldClientMaxSize;
 
 // methods
 public:
