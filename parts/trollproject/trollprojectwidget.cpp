@@ -397,8 +397,14 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
     else if (r == idTestDlg)
     {
-      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg();
-      dlg->show();
+      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(this);
+      dlg->exec();
+      BuildMode mode;
+      mode = (BuildMode) dlg->getBuildMode();
+      if (mode==BM_DEBUG)
+        KMessageBox::error(this,i18n("Debug"));
+      else
+        KMessageBox::error(this,i18n("Release"));
     }
 
 

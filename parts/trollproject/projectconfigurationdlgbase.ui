@@ -1,16 +1,16 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>ProjectConfigurationDlg</class>
+<class>ProjectConfigurationDlgBase</class>
 <author>Jakob Simon-Gaarde</author>
 <widget class="QDialog">
     <property name="name">
-        <cstring>ProjectConfigurationDlg</cstring>
+        <cstring>ProjectConfigurationDlgBase</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>301</width>
-            <height>129</height>
+            <width>199</width>
+            <height>123</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -67,7 +67,7 @@
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>RadioButton4</cstring>
+                        <cstring>radioReleaseMode</cstring>
                     </property>
                     <property name="text">
                         <string>Release</string>
@@ -80,7 +80,7 @@
         </widget>
         <widget class="QPushButton" row="1" column="1">
             <property name="name">
-                <cstring>PushButton1</cstring>
+                <cstring>buttonOk</cstring>
             </property>
             <property name="text">
                 <string>Ok</string>
@@ -107,11 +107,22 @@
 </widget>
 <connections>
     <connection>
-        <sender>PushButton1</sender>
+        <sender>buttonOk</sender>
         <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlg</receiver>
+        <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>accept()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="local" impldecl="in declaration">configdefinitions.h</include>
+    <include location="local" impldecl="in implementation">projectconfigurationdlgbase.ui.h</include>
+</includes>
+<variables>
+    <variable>BuildMode *buildMode</variable>
+    <variable></variable>
+</variables>
+<slots>
+    <slot returnType="int">getBuildMode()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
