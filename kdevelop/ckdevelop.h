@@ -21,7 +21,6 @@
 
 #include "cproject.h"
 #include "ctreehandler.h"
-#include "structdef.h"      // needed for TEditInfo
 #include "resource.h"
 #include <kpp.h>
 #include <kdialog.h>
@@ -91,6 +90,30 @@ class Kpp;
 // MDI and related classes
 class DocViewMan;
 
+// SaveAllDialog class
+class SaveAllDialog : public KDialog
+{
+  Q_OBJECT
+
+  public:
+    enum SaveAllResult{Yes=1, No=2, SaveAll=3, Cancel=4};
+
+    SaveAllDialog(const QString& filename, CProject* prj);
+    ~SaveAllDialog();
+
+    SaveAllResult result();
+
+  private slots:
+    void yes();
+    void no();
+    void saveAll();
+    void cancel();
+
+  private:
+    SaveAllResult m_result;
+
+};
+
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
@@ -116,12 +139,6 @@ public:
   void completeStartup(bool ignoreLastProject);
 
 
-  /** Remove a specified file from the edit_infos struct
-   *  and leave the widgets in a proper state
-   *  @param filename           The filename you want to remove.
-   */
-  void removeFileFromEditlist(const char *filename);
-
   /** Change a text string for search in a way,
    *  which makes it useable for a regular expression search.
    *  This means converting reg. exp. special chars like $, [, !, ecc.
@@ -130,31 +147,6 @@ public:
    *  @param bForGrep      special handling for using resultstring with grep
    */
   QString realSearchText2regExp(const char *szOldString, bool bForGrep=false);
-
-  /* get the info structure from the filename */
-  TEditInfo *getInfoFromFilename(const QString &filename);
-
-  /** syncs modified-flag in edit_info-structs
-   *
-   *  @param sFilename   the filename you want to set
-   *  @param bModified   changing edit_info-elment to this value
-   */
-  bool setInfoModified(const QString &sFilename, bool bModified=true);
-
-  /** checks the project files
-   *  if there is one file modified or younger than the binary
-   */
-  bool isProjectDirty();
-
-  /*
-    synchronize the "modified"-information of the KWriteDocs 
-    with the TEditInfo list
-   */
-  void synchronizeDocAndInfo();
-  /*
-    get the modified files and ask if they should be saved
-   */
-  void saveModifiedFiles();
 
   /*
      parses only the files listed in the stringlist
@@ -170,7 +162,6 @@ public:
    *  @return true if it succeeded
    */
   bool fileSaveAs();
-  bool saveFileFromTheCurrentEditWidget();
 
   void refreshTrees(QStrList * iFileList = NULL);
   void refreshTrees(TFileInfo *info);
@@ -224,7 +215,21 @@ public:
   void setDebugMenuProcess(bool enable);
 
   /** Get the current project. */
-  CProject* getProject()                 {return prj;}
+  CProject* getProject() { return prj; };
+
+  /** Get the name of the current project if any */
+  QString getProjectName();
+
+  /** Is there a current project */
+  bool hasProject() { return project; };
+
+  /** Create a SaveAllDialog to save project files */
+  SaveAllDialog::SaveAllResult doProjectSaveAllDialog(const QString &filename);
+
+  /** checks the project files
+   *  if there is one file modified or younger than the binary
+   */
+  bool isProjectDirty();
 
   /** Get the breakpoint manager */
   BreakpointManager* getBrkptManager() { return brkptManager; };
@@ -514,8 +519,8 @@ public:
   void slotBookmarksToggle();
   void slotBookmarksClear();
   void slotBookmarksBrowserSelected(int);
- 	void slotBookmarksNext();
-	void slotBookmarksPrevious();
+  void slotBookmarksNext();
+  void slotBookmarksPrevious();
 
   ////////////////////////
   // HELP-Menu entries
@@ -638,11 +643,7 @@ public:
   void slotNewLineColumn();
   void slotNewUndo();
 
-  void slotBufferMenu(const QPoint& pos);
-
-  void slotMenuBuffersSelected(int id);
-//  void slotClickedOnMessagesWidget();
-  
+  //  void slotClickedOnMessagesWidget();  
 
   void slotURLSelected(const QString& url,int,const char*);
   void slotDocumentDone();
@@ -797,6 +798,9 @@ public: // Public methods
   QString searchToolGetURL(QString str);
   void saveCurrentWorkspaceIntoProject();
 
+  /** Get the progress bar */
+  QProgressBar* getProgressBar() { return statProg; };
+	
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
 protected:
@@ -815,7 +819,7 @@ protected:
   /** initializes the session windows and opens the projects of the last
    * session */
   void readProperties(KConfig* );
-	
+
   /** overridden from it's base class method, additionally moves the MDI system buttons (in maximized mode)
    */
   virtual void resizeEvent( QResizeEvent *pRSE);
@@ -844,7 +848,6 @@ private:
   QPopupMenu* debugPopup;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
-  QPopupMenu* menu_buffers;
   KHelpMenu* help_menu;
   QWhatsThis* whats_this;
 	
@@ -894,8 +897,6 @@ private:
   QStrList doc_bookmarks_list;
   QStrList doc_bookmarks_title_list;
 	
-  QList<TEditInfo> edit_infos;
-
   ///////////////////////////////
   //some widgets for the mainview
   ///////////////////////////////
@@ -1021,29 +1022,6 @@ private slots:
     void slotGetRPMBuildSTDOUT(QString sstdout);
     void slotGetRPMBuildSTDERR(QString sstderr);
     void slotAddSpec(QString path);
-};
-
-class SaveAllDialog : public KDialog
-{
-  Q_OBJECT
-
-  public:
-    enum SaveAllResult{Yes=1, No=2, SaveAll=3, Cancel=4};
-
-    SaveAllDialog(const QString& filename, CProject* prj);
-    ~SaveAllDialog();
-
-    SaveAllResult result();
-
-  private slots:
-    void yes();
-    void no();
-    void saveAll();
-    void cancel();
-
-  private:
-    SaveAllResult m_result;
-
 };
 
 #endif

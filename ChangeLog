@@ -1,3 +1,8 @@
+2001-03-18  Christian Couder <christian@kdevelop.org>
+    * Moved all the edit_info stuff from the CKDevelop class to the
+	DocViewMan class.
+    * Code simplified in many places in ckdevelop files.
+
 2001-03-17  jbb <jbb@kdevelop.org>
     * Re-write message_widget to have coloured error messages - removed
     * cerrormessageparser.cpp .h
@@ -8,6 +13,10 @@
 
 2001-03-17  jbb <jbb@kdevelop.org>
     * add dialog for library settings - it's a bit crude :(
+
+2001-03-16  Christian Couder <christian@kdevelop.org>
+    * global bookmarks, there are still bugs and the implementation
+	will probably change.
 
 2001-03-16  F@lk Brettschneider <falk@kdevelop.org>
     * Closing and reopen edit files should work now without crash.

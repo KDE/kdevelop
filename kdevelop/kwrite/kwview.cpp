@@ -329,29 +329,9 @@ void KIconBorder::slotToggleBPEnabled()
 /** toggles a bookmark */
 void KIconBorder::slotToggleBookmark()
 {
+	debug("KIconBorder::slotToggleBookmark !\n");
+
 	kWrite->toggleBookmark(cursorOnLine);
-/*
-	if(kWrite->bookmarked(cursorOnLine))
-  {
-    kWrite->removeBookmark(cursorOnLine);
-  }
-	else
-	{
-		// Save the cursor position
-		int oldLine = kWriteView->cursor.y;
-
-		// Add a bookmark at the clicked line
-		kWriteView->cursor.y = cursorOnLine;
-  	kWrite->addBookmark();
-
-		// Reset the cursor position
-		kWriteView->cursor.y = oldLine;
-
-		// Repaint the bookmarked line
-    kWriteDoc->tagLines(cursorOnLine, cursorOnLine);
-	  kWriteDoc->updateViews();
-	}
-*/
 }
 
 /** gets the Range of the function the cursor is in */

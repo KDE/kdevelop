@@ -862,7 +862,7 @@ void CKDevelop::initMenuBar(){
 
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
-  menu_buffers = new QPopupMenu;
+  //   menu_buffers = new QPopupMenu;
 //FB  menuBar()->insertItem(i18n("&Window"), menu_buffers);
   menuBar()->insertItem(i18n("&Window"), windowMenu());//FB
   menuBar()->insertSeparator();
@@ -1281,7 +1281,7 @@ void CKDevelop::initConnections(){
   connect(messages_widget, SIGNAL(switchToFile(const QString&, int)),this,SLOT(slotSwitchToFile(const QString&, int)));
 
   // connect the windowsmenu with a method
-  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
+  //  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
 
   connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));

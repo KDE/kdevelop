@@ -27,6 +27,7 @@
 //------------------------------------------------------------------------------
 #include "qextmdichildview.h"
 #include "highlight.h"
+#include "structdef.h"      // needed for TEditInfo
 
 class KWriteDoc;
 class CEditWidget;
@@ -67,6 +68,60 @@ public:
   bool saveDoc(int docId, const QString& strFileName);
   /** Close a document, causes all views to be closed. */
   void closeDoc(int docId);
+
+  ///////////////////////////
+  // EditInfo stuff
+  ///////////////////////////
+
+  /* get the info structure from the filename */
+  TEditInfo *getInfoFromFilename(const QString &filename);
+
+  /** Remove a specified file from the edit_infos struct
+   *  and leave the widgets in a proper state
+   *  @param filename           The filename you want to remove.
+   */
+  void removeFileFromEditlist(const char *filename);
+
+  /*
+    synchronize the "modified"-information of the KWriteDocs 
+    with the TEditInfo list
+   */
+  void synchronizeDocAndInfo();
+
+  /*
+    get the modified files and ask if they should be saved
+   */
+  void saveModifiedFiles();
+
+  /*
+    force reload for the modified file
+   */
+  void reloadModifiedFiles();
+
+  /** syncs modified-flag in edit_info-structs
+   *
+   *  @param sFilename   the filename you want to set
+   *  @param bModified   changing edit_info-elment to this value
+   */
+  bool setInfoModified(const QString &sFilename, bool bModified=true);
+
+  bool noInfoModified();
+
+  TEditInfo* findInfo(const QString &sFilename);
+
+  void appendInfo(TEditInfo* info);
+
+  void appendInfoFilenames(QStrList &fileList);
+
+  bool saveFileFromTheCurrentEditWidget();
+
+  void doFileCloseAll();
+
+  bool doProjectClose();
+
+  ///////////////////////////
+  // Doc stuff
+  ///////////////////////////
 
   /** Retrieve the document pointer.
     * The returned object is of type QObject since we deal with several document types. */
@@ -148,6 +203,10 @@ private:
 
   /** list of documents and views belonging to it */
   QList<DocViewNode>            m_docsAndViews;
+
+  /** list of info about edit document 
+   (should ne merged with the above list) */
+  QList<TEditInfo> edit_infos;
 
   /** List of the focused views, the view at the end is the recently
       focused view */

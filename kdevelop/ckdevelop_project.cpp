@@ -73,165 +73,88 @@ bool CKDevelop::slotProjectClose()
 {
   // R.Nolden 03.02.99
   slotStatusMsg(i18n("Closing project..."));
-  TEditInfo* actual_info;
-  QStrList handledNames;
-  bool cont=true;
-
   log_file_tree->storeState(prj);
 
-  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-  QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
-  QListIterator<int> docIter(allDocs);
-  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
-    int curDocId = *(docIter.current());
-    KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
-    setInfoModified(pDoc->fileName(), pDoc->isModified());
-  }
+  bool cont = m_docViewManager->doProjectClose();  
 
-  for(actual_info=edit_infos.first();cont && actual_info != 0;)
-	{
-//    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
-    TEditInfo *next_info=edit_infos.next();
-    if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
-		{
-
-      SaveAllDialog dialog(actual_info->filename, prj);
-      dialog.exec();
-      SaveAllDialog::SaveAllResult result = dialog.result();
-	
-	    // what to do
-			if(result==SaveAllDialog::Yes)
-			{  // Yes- only save the actual file
-				// save file as if Untitled and close file
-	  		if(isUntitled(actual_info->filename))
-        {
-	    		switchToFile(actual_info->filename);
-          handledNames.append(actual_info->filename);
-	    		cont=fileSaveAs();
-          next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-	  		}
-				// Save file and close it
-	  		else
-				{
-	    		switchToFile(actual_info->filename);
-          handledNames.append(actual_info->filename);
-	    		slotFileSave();
-          actual_info->modified=m_docViewManager->currentEditView()->isModified();
-          cont=!actual_info->modified; //something went wrong
-	  		}
-			}
-	
-			if(result==SaveAllDialog::No)
-			{   // No - no save but close
-        handledNames.append(actual_info->filename);
-	  		actual_info->modified=false;
-        removeFileFromEditlist(actual_info->filename); // immediate remove
-        next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-			}
-			
-			if(result==SaveAllDialog::SaveAll)
-			{  // Save all
-	  		slotFileSaveAll();
-	  		break;
-			}
-			
-			if(result==SaveAllDialog::Cancel)
-			{ // Cancel
-	  		cont=false;
-	  		break;
-      }
-    }  // end actual file close
-     actual_info=next_info;
-  } // end for-loop
-
-  // check if something went wrong with saving
   if (cont)
-  {
-    for(actual_info=edit_infos.first(); cont && actual_info != 0;
-				actual_info=edit_infos.next())
     {
-        if (actual_info->modified)
-           cont=false;
-    } // end for-loop
-  }
+      // cancel wasn't pressed and all sources are saved - project closed
+      // clear all widgets
+      
+      class_tree->clear();
+      log_file_tree->clear();
+      real_file_tree->clear();
+      // menu_buffers->clear();
+      
+      messages_widget->clear();
+      stdin_stdout_widget->clear();
+      stderr_widget->clear();
+      
+      if (dbgController)
+	slotDebugStop();
+      
+      //clear all edit_infos before starting a new project
+      // edit_infos.clear(); now in doProjectClose (Christian)
+      
+      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+      
+      // close all documents
+      QList<int> allDocs = m_docViewManager->docs();
+      QListIterator<int> docIter(allDocs);
+      // for all kwrite documents
+      for ( ; docIter.current(); ++docIter) {
+	int curDocId = *(docIter.current());
+	m_docViewManager->closeDoc( curDocId);
+      }
 
-  if (cont)
-	{
-    // cancel wasn't pressed and all sources are saved - project closed
-    // clear all widgets
-
-    class_tree->clear();
-    log_file_tree->clear();
-    real_file_tree->clear();
-    menu_buffers->clear();
-
-    messages_widget->start();
-    stdin_stdout_widget->clear();
-    stderr_widget->clear();
-
-    if (dbgController)
-			slotDebugStop();
-
-    //clear all edit_infos before starting a new project
-    edit_infos.clear();
-    
-    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
-    
-    // close all documents
-    QList<int> allDocs = m_docViewManager->docs();
-    QListIterator<int> docIter(allDocs);
-    // for all kwrite documents
-    for ( ; docIter.current(); ++docIter) {
-      int curDocId = *(docIter.current());
-      m_docViewManager->closeDoc( curDocId);
+      // set project to false and disable all ID_s related to project=true	
+      prj->writeProject();
+      project=false;
+      //    prj->valid = false;   wtf!!!!
+      delete prj;
+      prj = 0;
+      
+      disableCommand(ID_FILE_NEW);
+      // doc menu
+      disableCommand(ID_HELP_PROJECT_API);
+      disableCommand(ID_HELP_USER_MANUAL);
+      // build menu
+      setToolMenuProcess(false);  
+      disableCommand(ID_BUILD_STOP);
+      disableCommand(ID_BUILD_AUTOCONF);
+      
+      // prj menu
+      disableCommand(ID_PROJECT_CLOSE);
+      disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+      disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+      disableCommand(ID_PROJECT_REMOVE_FILE);
+      disableCommand(ID_PROJECT_NEW_CLASS);
+      disableCommand(ID_PROJECT_FILE_PROPERTIES);
+      disableCommand(ID_PROJECT_OPTIONS);
+      disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+      
+      disableCommand(ID_CV_WIZARD);
+      disableCommand(ID_CV_GRAPHICAL_VIEW);
+      disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+      disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+      
+      file_open_popup->clear();
+      file_open_list.clear();
     }
-
-    // set project to false and disable all ID_s related to project=true	
-    prj->writeProject();
-    project=false;
-//    prj->valid = false;   wtf!!!!
-    delete prj;
-    prj = 0;
-    
-    disableCommand(ID_FILE_NEW);
-    // doc menu
-    disableCommand(ID_HELP_PROJECT_API);
-    disableCommand(ID_HELP_USER_MANUAL);
-    // build menu
-    setToolMenuProcess(false);  
-    disableCommand(ID_BUILD_STOP);
-    disableCommand(ID_BUILD_AUTOCONF);
-
-    // prj menu
-    disableCommand(ID_PROJECT_CLOSE);
-    disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-    disableCommand(ID_PROJECT_REMOVE_FILE);
-    disableCommand(ID_PROJECT_NEW_CLASS);
-    disableCommand(ID_PROJECT_FILE_PROPERTIES);
-    disableCommand(ID_PROJECT_OPTIONS);
-    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-
-    disableCommand(ID_CV_WIZARD);
-    disableCommand(ID_CV_GRAPHICAL_VIEW);
-	  disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
-  	disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
-
-    file_open_popup->clear();
-    file_open_list.clear();
-  }
 
   slotStatusMsg(i18n("Ready."));
   refreshTrees();
-
+  
   if (!cont)
-  {
-   setMainCaption();
-  }
-
+    {
+      setMainCaption();
+    }
+  
   return cont; // false if pressed cancel
 }
+
 
 void CKDevelop::slotProjectAddNewFile(){
   newFile(true);
@@ -1412,7 +1335,7 @@ bool CKDevelop::addFileToProject(QString complete_filename,
 
 void CKDevelop::slotRemoveFileFromEditlist(const QString &absFilename)
 {
-  removeFileFromEditlist(absFilename);
+  m_docViewManager->removeFileFromEditlist(absFilename);
   setMainCaption();
 }
 
@@ -1510,21 +1433,19 @@ bool CKDevelop::readProjectFile(QString file)
 
 void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   TWorkspace current;
-  TEditInfo* actual_info;
 
   // save the current workspace
   current.id = workspace;
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    current.openfiles.append(actual_info->filename);
-    debug(actual_info->filename);
-  }
+
+  m_docViewManager->appendInfoFilenames(current.openfiles);
+
   current.openfiles.removeRef(i18n("Untitled.h"));
   current.openfiles.removeRef(i18n("Untitled.cpp"));
   current.openfiles.removeRef(i18n("Untitled.c"));
 //FB  current.header_file = header_widget->getName();
 //FB  current.cpp_file = cpp_widget->getName();
-  current.browser_file =history_list.current();
-  current.show_treeview =view_menu->isItemChecked(ID_VIEW_TREEVIEW);
+  current.browser_file = history_list.current();
+  current.show_treeview = view_menu->isItemChecked(ID_VIEW_TREEVIEW);
   current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
 
   prj->writeWorkspace(current);

@@ -19,12 +19,15 @@
  ***************************************************************************/
 
 #include <qfile.h>
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
 #include <qobjectlist.h>
+#include <qprogressbar.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "ckdevelop.h"
 #include "kwdoc.h"
@@ -34,6 +37,7 @@
 #include "docviewman.h"
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
+#include <kmessagebox.h>
 
 //==============================================================================
 // class implementation
@@ -496,7 +500,7 @@ void DocViewMan::closeView(QWidget* pView)
     case DocViewMan::Source:
       {
         KWriteDoc* pDoc = (KWriteDoc*) pDocViews->pDoc;
-        m_pParent->removeFileFromEditlist( pDoc->fileName()); // this removes from edit_infos and calls closeDoc right after
+        removeFileFromEditlist( pDoc->fileName()); // this removes from edit_infos and calls closeDoc right after
       }
       break;
     case DocViewMan::HTML:
@@ -707,6 +711,481 @@ void DocViewMan::gotoBookmark(int n) {
       m_pParent->switchToFile(pDoc->fileName());
       pDoc->gotoBookmark(text);
       return;
+    }
+  }
+}
+
+/*---------------------------------------- getInfoFromFilename
+ * TEditInfo* DocViewMan::getInfoFromFilename(const QString &filename)
+ *
+ * searches for the edit_info-element
+ *
+ * Returns:
+ *       returns either 0l if the filename wasn't found
+ *       or the pointer of the first occurence inside
+ *       the TEditInfoList
+ *-----------------------------------------------------------------*/
+TEditInfo* DocViewMan::getInfoFromFilename(const QString &filename)
+{
+  TEditInfo *pRetVal=0l;
+  bool bSearch=true;
+  QDir dir=QFileInfo(filename).dir(true);
+  QString fullname=dir.canonicalPath()+"/"+QFileInfo(filename).fileName();
+
+  // search the current file which would be changed
+  for(pRetVal=edit_infos.first(); bSearch && pRetVal != 0l;)
+  {
+    if (pRetVal->filename == fullname )
+      bSearch=false;
+    else
+      pRetVal=edit_infos.next();
+  }
+  return pRetVal;
+}
+
+void DocViewMan::synchronizeDocAndInfo()
+{
+  debug("DocViewMan::synchronizeDocAndInfo ! \n");
+
+  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+  QList<int> allKWriteDocs = docs(DocViewMan::Header | DocViewMan::Source);
+  QListIterator<int> docIter(allKWriteDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curKWriteDocId = *(docIter.current());
+    // Because of our filter from above the doc object is always a KWriteDoc, and we'll always get id's for existing docs
+    KWriteDoc* pDoc = (KWriteDoc*) docPointer( curKWriteDocId);
+    setInfoModified(pDoc->fileName(), pDoc->isModified());
+  }
+}
+
+
+
+void DocViewMan::removeFileFromEditlist(const char *filename){
+  TEditInfo* actual_info;
+
+  QString corrAbsFilename = (m_pParent->isUntitled(filename)) 
+    ? QString(filename) 
+    : QFileInfo(filename).absFilePath();
+
+  //search the actual edit_info and remove it
+  for(actual_info=edit_infos.first();actual_info != 0;){
+    TEditInfo* next_info=edit_infos.next();
+    if (actual_info->filename == corrAbsFilename){ // found
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
+//      m_pParent->menu_buffers->removeItem(actual_info->id);
+      if(edit_infos.removeRef(actual_info)){
+//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
+      }
+    }
+    actual_info=next_info;
+  }
+
+  int docId = findDoc(corrAbsFilename);
+  closeDoc( docId);
+}
+
+/*---------------------------------------- setInfoModified()
+ * setInfoModified(const QString &sFilename, bool bModified)
+ *
+ *  search all edit_infos for the file named "sFilename", the first
+ *  match will change 'modified'
+ *
+ * Parameters:
+ *  sFilename   filename to search in the EditInfos
+ *  bModified   sets editinfo->modified
+ * Returns:
+ *       returns true if a struct-element was changed
+ *-----------------------------------------------------------------*/
+bool DocViewMan::setInfoModified(const QString &sFilename, bool bModified)
+{
+  bool bChanged=false;
+
+  for(TEditInfo* actual_info = edit_infos.first();
+      !bChanged && actual_info != 0;
+      actual_info = edit_infos.next())
+  {
+   if ( actual_info->filename == sFilename)
+      { // found
+        actual_info->modified=bModified;
+        bChanged=true;
+      }
+  }
+
+  return bChanged;
+}
+
+bool DocViewMan::noInfoModified()
+{
+    int no_modif = true;
+
+    for(TEditInfo* actual_info = edit_infos.first();
+	no_modif && actual_info != 0;
+	actual_info = edit_infos.next())
+    {
+       if (actual_info->modified)
+         no_modif = false;
+    }
+
+    return no_modif;
+}
+
+TEditInfo* DocViewMan::findInfo(const QString &sFilename)
+{
+    TEditInfo* actual_info = 0;
+
+    for(TEditInfo* search_info = edit_infos.first();
+	search_info != 0 && actual_info == 0;
+	search_info = edit_infos.next())
+      {
+	if (search_info->filename == sFilename)
+	  actual_info = search_info;
+      }
+
+    return actual_info;
+}
+
+void DocViewMan::appendInfo(TEditInfo* info)
+{
+  edit_infos.append(info);
+}
+
+void DocViewMan::appendInfoFilenames(QStrList &fileList)
+{
+  for(TEditInfo* actual_info = edit_infos.first();
+      actual_info != 0;
+      actual_info = edit_infos.next())
+    {
+      fileList.append(actual_info->filename);
+      debug(actual_info->filename);
+    }
+}
+
+// closes all KWrite documents and their views but not the document browser views
+void DocViewMan::doFileCloseAll()
+{
+  // Get the project name
+  QString prjName = m_pParent->getProjectName();
+  if (prjName != QString(""))
+    prjName = "\n" + prjName + "\n\n";
+
+  QStrList handledNames;
+  bool cont=true;
+
+  // Added by Christian
+  synchronizeDocAndInfo();
+
+  for(TEditInfo* actual_info = edit_infos.first();
+      cont && actual_info != 0;)
+  {
+    TEditInfo *next_info=edit_infos.next();
+    if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
+    {
+#warning FIXME MessageBox needed with an extra button.
+//      KMessageBox *files_close=
+//        new KMessageBox(this,
+//                        i18n("The project\n")+prjName
+//                          +i18n("contains changed files. Save modified file\n\n")
+//                          +actual_info->filename+" ?\n\n",
+//                          i18n("Save changed files ?"),
+//                          i18n("Yes"), i18n("No"), /*i18n("Save all"), */i18n("Cancel"));
+//
+//      // show the messagea and store result in result:
+//
+//      files_close->show();
+//
+//      int result=files_close->result();
+      int result = KMessageBox::warningYesNoCancel(m_pParent,
+                          i18n("The project %1\n"
+                                "contains changed files. Save modified file\n\n%2 ?\n\n")
+                          .arg(prjName)
+                          .arg(actual_info->filename),
+                          i18n("Save changed files ?"));
+
+      // create the save project messagebox
+
+      // what to do
+      if(result==KMessageBox::Yes) // Yes- only save the current file
+      {
+        // save file as if Untitled and close file
+        if(m_pParent->isUntitled(actual_info->filename))
+        {
+          m_pParent->switchToFile(actual_info->filename);
+          handledNames.append(actual_info->filename);
+          cont=m_pParent->fileSaveAs();
+          next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+        }        
+        else // Save file and close it
+        {
+          m_pParent->switchToFile(actual_info->filename);
+          handledNames.append(actual_info->filename);
+          m_pParent->slotFileSave();
+          actual_info->modified=currentEditView()->isModified();
+          cont=!actual_info->modified; //something went wrong
+        }
+      }
+
+      else if(result==KMessageBox::No) // No - no save but close
+      {
+        handledNames.append(actual_info->filename);
+        actual_info->modified=false;
+        removeFileFromEditlist(actual_info->filename); // immediate remove
+        next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+      }
+
+//      if(result==3) // Save all
+//      {
+//        slotFileSaveAll();
+//        break;
+//      }
+
+      else if(result==KMessageBox::Cancel) // Cancel
+      {
+        cont=false;
+        break;
+      }
+    }  // end actual file close
+    if (cont) {
+      // close the document
+      int docId = findDoc( actual_info->filename);
+      closeDoc( docId); // this closes all views, automatically
+    }
+    actual_info=next_info;
+  } // end for-loop
+
+  // check if something went wrong with saving
+  if ( cont )
+  {
+    cont = noInfoModified();
+
+    if(cont)
+    {
+      // menu_buffers->clear();
+
+      //clear all edit_infos before starting a new project
+      edit_infos.clear();
+
+    }
+  }
+
+}
+
+bool DocViewMan::doProjectClose()
+{
+  debug("DocViewMan::doProjectClose !\n");
+
+  TEditInfo* actual_info = 0;
+  QStrList handledNames;
+  bool cont = true;
+
+  synchronizeDocAndInfo();
+
+  for(actual_info = edit_infos.first(); cont && actual_info != 0;)
+    {
+//    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+      TEditInfo *next_info=edit_infos.next();
+      if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
+	{
+	  SaveAllDialog::SaveAllResult result = m_pParent->doProjectSaveAllDialog(actual_info->filename);
+	  
+	  // what to do
+	  if(result==SaveAllDialog::Yes)
+	    {  // Yes- only save the actual file
+				// save file as if Untitled and close file
+	      if(m_pParent->isUntitled(actual_info->filename))
+		{
+		  m_pParent->switchToFile(actual_info->filename);
+		  handledNames.append(actual_info->filename);
+		  cont=m_pParent->fileSaveAs();
+		  // start again... 'cause we deleted an entry
+		  next_info=edit_infos.first(); 
+		}
+				// Save file and close it
+	      else
+		{
+		  m_pParent->switchToFile(actual_info->filename);
+		  handledNames.append(actual_info->filename);
+		  m_pParent->slotFileSave();
+		  actual_info->modified = currentEditView()->isModified();
+		  cont = !actual_info->modified; //something went wrong
+		}
+	    }
+	  
+	  if(result==SaveAllDialog::No)
+	    {   // No - no save but close
+	      handledNames.append(actual_info->filename);
+	      actual_info->modified=false;
+	      // immediate remove
+	      removeFileFromEditlist(actual_info->filename);
+	      // start again... 'cause we deleted an entry
+	      next_info=edit_infos.first(); 
+	    }
+	  
+	  if(result==SaveAllDialog::SaveAll)
+	    {  // Save all
+	      m_pParent->slotFileSaveAll();
+	      break;
+	    }
+	  
+	  if(result==SaveAllDialog::Cancel)
+	    { // Cancel
+	      cont=false;
+	      break;
+	    }
+	}  // end actual file close
+      actual_info=next_info;
+    } // end for-loop
+  
+  // check if something went wrong with saving
+  if (cont)
+  {
+    cont = noInfoModified();
+
+    if(cont) 
+      {
+	edit_infos.clear();
+      }
+  }
+
+  return cont;
+}
+
+bool DocViewMan::saveFileFromTheCurrentEditWidget()
+{
+  // Get the current file name
+  QString filename = currentEditView()->getName();
+
+  // Get it's info
+  TEditInfo* actual_info = findInfo(filename);
+  if (actual_info == 0)
+    return false; //oops :-(
+
+  // Ask if we should save it
+  QFileInfo file_info(filename);
+  if(file_info.lastModified() != actual_info->last_modified)
+  {
+    if (KMessageBox::No == KMessageBox::questionYesNo(m_pParent,
+
+                    i18n("The file %1 was modified outside\n this editor.Save anyway?").arg(filename),
+                    i18n("File modified")))
+      return false;
+  }
+
+  // Really save it
+  currentEditView()->doSave();
+  QFileInfo file_info2(filename);
+  actual_info->last_modified = file_info2.lastModified();
+
+  return true;
+}
+
+void DocViewMan::saveModifiedFiles() 
+{
+  debug("DocViewMan::saveModifiedFiles ! \n");
+
+  QProgressBar* pProgressBar = m_pParent->getProgressBar();
+  ASSERT(pProgressBar);
+
+  pProgressBar->setTotalSteps(edit_infos.count());
+  pProgressBar->show();
+
+  QStrList iFileList(false);
+  bool mod=false;
+  {
+    CEditWidget blind_widget(0L,0,0,0);//FB
+    {
+      QStrList handledNames;
+      TEditInfo* actual_info; //FB?, *cpp_info, *header_info;
+      for(actual_info=edit_infos.first();actual_info != 0;) {
+	int i=0;
+	TEditInfo *next_info=edit_infos.next();
+	pProgressBar->setProgress(++i);
+	
+	kdDebug() << "checking: " << actual_info->filename << "\n";
+	kdDebug() << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
+	
+	if(!m_pParent->isUntitled(actual_info->filename) && actual_info->modified &&
+	   handledNames.contains(actual_info->filename)<1)
+	  {
+	    int qYesNo=KMessageBox::Yes;
+	    handledNames.append(actual_info->filename);
+	
+	    kdDebug() << " file info" << "\n";
+	
+	    QFileInfo file_info(actual_info->filename);
+	    if (file_info.lastModified() != actual_info->last_modified)
+	      {
+		qYesNo = KMessageBox::questionYesNo(m_pParent,
+						    i18n("The file %1 was modified outside\nthis editor. Save anyway?").arg(actual_info->filename),
+						    i18n("File modified"));
+	      }
+	
+	    kdDebug() << " KMessageBox::Yes" << "\n";
+	
+	    if (qYesNo==KMessageBox::Yes)
+	      {
+		kdDebug() << " create file_info" << "\n";
+		QFileInfo file_info(actual_info->filename);
+		bool isModified;
+		
+		kdDebug() << " use bind widget " << "\n";		
+		blind_widget.setName(actual_info->filename);
+		blind_widget.setText(actual_info->text);
+		blind_widget.toggleModified(true);
+
+		kdDebug() << "doSave" << "\n";		
+		blind_widget.doSave();
+		isModified=blind_widget.isModified();
+		
+		kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+		
+		
+		//FB?          if (actual_info==cpp_info)
+		//FB?             cpp_widget->setModified(isModified);
+		//FB?          if (actual_info==header_info)
+		//FB?             header_widget->setModified(isModified);
+		
+		actual_info->modified = isModified;
+		if (!isModified)
+		  {
+#ifdef WITH_CPP_REPARSE
+		    mod=true;
+#else
+		    mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx");
+#endif
+		    iFileList.append(actual_info->filename);
+		    actual_info->last_modified = file_info.lastModified();
+		  }
+	      }
+	  }
+	actual_info=next_info;
+      }
+      debug("end handledNames !\n");
+    }
+    debug("end edit widget !\n");
+  }
+  debug("stat prog ! \n");
+
+  pProgressBar->reset();
+  
+  debug("refreshClassViewByFileList ! \n");
+  if (m_pParent->hasProject() && !iFileList.isEmpty() && mod)
+    m_pParent->refreshClassViewByFileList(&iFileList);
+}
+
+void DocViewMan::reloadModifiedFiles()
+{
+  QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
+
+  TEditInfo* actual_info;
+    
+  for ( ; it.current(); ++it ) {
+    actual_info = it.current();
+    QFileInfo file_info(actual_info->filename);
+
+    // Reload only changed files
+    if(actual_info->last_modified != file_info.lastModified()){
+      // Force reload, no modified on disc messagebox
+      m_pParent->switchToFile(actual_info->filename,-1,-1,true,false); 
     }
   }
 }
