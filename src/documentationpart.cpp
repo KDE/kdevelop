@@ -107,10 +107,10 @@ done:
 #undef I
 #undef X
 
-bool DocumentationPart::openURL(const KURL &url)
+QString DocumentationPart::resolveEnvVarsInURL(const QString& url)
 {
   // check for environment variables and make necessary translations
-  QString path = url.url();
+  QString path = url;
   int nDollarPos = path.find( '$' );
 
   // Note: the while loop below is a copy of code in kdecore/kconfigbase.cpp ;)
@@ -172,6 +172,12 @@ bool DocumentationPart::openURL(const KURL &url)
     nDollarPos = path.find( '$', nDollarPos );
   }
   
+  return path;
+}
+
+bool DocumentationPart::openURL(const KURL &url)
+{
+  QString path = resolveEnvVarsInURL(url.url());
   KURL newUrl(path);
   return KHTMLPart::openURL(newUrl);
 }

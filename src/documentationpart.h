@@ -16,6 +16,7 @@ public:
   void setContext(const QString &context);
   QString context() const;
   virtual bool openURL(const KURL &url);
+  static QString resolveEnvVarsInURL(const QString& url);
 
 
 private slots:
