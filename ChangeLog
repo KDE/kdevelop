@@ -1,3 +1,12 @@
+2000-03-06  Ralf Funken <rfunken@kdevelop.de>
+	* Added missing language to 'Add new Translation' Dialog
+        * Checked all files for missing i18n() statements,
+          unfortunately there have been quite a few changes so all po
+          files have to be checked again :-( but I think that will be 
+          it now :-)  
+        * Updated kdevelop.pot
+        * Updated de.po
+
 2000-03-06 jbb <jbb@ihug.co.nz>
 	* Fixed crash when >200 chars entered for "Debug with args"
 
