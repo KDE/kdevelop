@@ -1,3 +1,7 @@
+2004-02-19 jbb <jbb@kdevelop.org>
+    * Robert Gruber's patch
+        - fix printing member variable when a /x modifier is added
+
 2004-02-18 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added function lookup to QuickOpen plugin. Patch by Ahn, Duk J.
 
