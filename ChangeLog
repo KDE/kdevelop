@@ -1,3 +1,6 @@
+2003-11-28 F@lk Brettschneider <falkbr@kdevelop.org>
+   * old IDEAl look for toolview-buttons is back in IDEAl mode
+   
 2003-11-20 F@lk Brettschneider <falkbr@kdevelop.org>
    * latest sync with KMdi of kdelibs-cvsHead (fixes some crashes)
    * enabled kmdiguiclient.h/cpp for KDE less version 3.2 too
