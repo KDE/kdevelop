@@ -7,8 +7,11 @@ files, for example:
 <code>
     --with-extra-libs=$HOME/kde/lib --with-extra-includes=$HOME/kde/include
 </code>
-
 (where $HOME/kde is where I install my own kde stuff so I don't mess with working kde installation)
+
+<b>WARNING:</b> So, if you have already compiled kdevelop *without* cvsservice and have now
+installed cervisia to try this nice piece of software, you need to re-run configure so it
+can detect cervisia installation and enable compilation for vcs/cvsservice.
 
 <b>WARNING:</b> Keep in mind that there are incoming changes in cvsservice architecture
 which could make this part quite subject to heavy modifications.
@@ -33,18 +36,17 @@ Implementation of this component is done by:
     cvs jobs independently archiving parallelism with the CvsProcesssWidget.
   - CVSDir and CVSEntry provide abstraction for accessing to local CVS information
   - CVSFileInfoProvider is an implementation of KDevVCSFileInfoProvider interface
-    and collects data about files stats: for now implementation only works synchronously
-    (look at status() method) and I hope to finish the async interface in time for 3.0
-    release. (Sync means that information are collected from local CVS dirs which do not
-    provide much information; async mean that a "cvs status <dir-name>" request is
-    launched, output parsed and information returned to the client in _different_ times).
-    Obviously this stuff requires the client (actually only the FileTree viewer)
-    to be aware of this feature ;-)
+    and collects data about files stats: for CVS, both synch (fetch data from local sandbox)
+    and asynch (fetch from repository server) are working with some minor bugs in the parsing
+    of 'cvs status' output for the latter. (Sync means that information are collected
+    from local CVS dirs which do not provide much information; async mean that a
+    "cvs status <dir-name>" request is launched, output parsed and information returned
+    to the client in _different_ times). Obviously this stuff requires the client
+    (actually only the FileTree viewer) to be aware of this feature (see parts/fileview for
+    additional info).
 
 \todo
-    - Implement the async interface CVSFileInfoProvider
-    - optimization in the CVSFileInfoProvider by using some sort of cache mecanism: this is
-      required since we don't want to make the client to burden with this job (or not?).
+    - Fix minor bugs in parsing 'cvs status' output (see CVSEntry and CVSFileInfoProvider classes)
     - Fix the "cvs update" function which behave strangely for sub-directories of the main
       project dir.
 
@@ -52,12 +54,13 @@ Implementation of this component is done by:
 
 \maintainer <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
 
-\feature because this is a (buggy) direct conversion, as in parts/cvs (MarioS: this is a strange feature!)
-\feature it is possbile to 'add as binary' files to repository
+\feature All that provided by parts/cvs
+\feature it is possible to 'add as binary' files to repository
 \feature checkout from remote repository ability added to the appwizard/importdlg
 \feature should handle :ext: repositories thanks to cvsservice
 \feature can tag / un-tag files
-\feature Can revert and diff between specific releases
+\feature can revert and diff between specific releases
+\feature can do multiple diff from a common cvs log output text
 
 \bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">cvs part component at Bugzilla database</a>
 
