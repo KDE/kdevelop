@@ -23,6 +23,16 @@ CompileErrorFilter::ErrorFormat::ErrorFormat( const char * regExp, int file, int
 {
 }
 
+CompileErrorFilter::ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text, QString comp )
+	: expression( regExp )
+	, fileGroup( file )
+	, lineGroup( line )
+	, textGroup( text )
+	, compiler( comp )
+{
+}
+
+
 CompileErrorFilter::CompileErrorFilter( OutputFilter& next )
 	: OutputFilter( next )
 {
@@ -36,6 +46,8 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 		ErrorFormat( "([^: \t]+):([0-9]+):(?:[0-9]+):([^0-9]+)", 1, 2, 3 ),
 		// GCC
 		ErrorFormat( "([^: \t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
+		// ICC
+		ErrorFormat( "([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" ),
 		//libtool link
 		ErrorFormat( "(libtool):( link):( warning): ", 0, 0, 0 ),
 		// Fortran
@@ -55,6 +67,7 @@ void CompileErrorFilter::processLine( const QString& line )
 	QString file;
 	int lineNum = 0;
 	QString text;
+	QString compiler;
 	int i = 0;
 	bool isWarning = false;
 	ErrorFormat* errFormats = errorFormats();
@@ -68,6 +81,7 @@ void CompileErrorFilter::processLine( const QString& line )
         	        file    = regExp.cap( format->fileGroup );
 	                lineNum = regExp.cap( format->lineGroup ).toInt() - 1;
 	                text    = regExp.cap( format->textGroup );
+			compiler = format->compiler;
 			if (regExp.cap(3).contains("warning", false))
 				isWarning = true;
 			break;
@@ -86,7 +100,7 @@ void CompileErrorFilter::processLine( const QString& line )
 
 	if ( hasmatch )
 	{
-		emit item( new ErrorItem( file, lineNum, text, line, isWarning ) );
+		emit item( new ErrorItem( file, lineNum, text, line, isWarning, compiler ) );
 	}
 	else
 	{

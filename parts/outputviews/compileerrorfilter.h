@@ -30,10 +30,12 @@ public:
 	{
 		ErrorFormat() {}
 		ErrorFormat( const char *, int, int, int );
+		ErrorFormat( const char *, int, int, int, QString );
 		QRegExp expression;
 		int fileGroup;
 		int lineGroup;
 		int textGroup;
+		QString compiler;
 	};
 	static ErrorFormat* errorFormats();
 

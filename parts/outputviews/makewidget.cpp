@@ -161,14 +161,14 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 {
 	updateSettingsFromConfig();
 
-	if ( m_compilerOutputLevel == eFull )
+/*	if ( m_compilerOutputLevel == eFull )
 	{
 		setTextFormat( Qt::LogText );
 	}
 	else
-	{
+	{*/
 		setTextFormat( Qt::RichText );
-	}
+//	}
 	
 	if ( m_bLineWrapping )
 		setWordWrap(WidgetWidth);
@@ -496,7 +496,10 @@ void MakeWidget::insertStdoutLine( const QString& line )
 void MakeWidget::insertStderrLine( const QString& line )
 {
 	if ( !appendToLastLine( line ) )
+        {
+            kdDebug() << "inserting stderr line: " << line << endl;
 		m_errorFilter.processLine( line );
+  }
 }
 
 void MakeWidget::slotProcessExited(KProcess *)
@@ -739,7 +742,7 @@ void MakeWidget::refill()
 
 void MakeWidget::slotVeryShortCompilerOutput() { setTextFormat( Qt::RichText ); setCompilerOutputLevel(eVeryShort); }
 void MakeWidget::slotShortCompilerOutput() { setTextFormat( Qt::RichText ); setCompilerOutputLevel(eShort); }
-void MakeWidget::slotFullCompilerOutput() { setTextFormat( Qt::LogText ); setCompilerOutputLevel(eFull);  }
+void MakeWidget::slotFullCompilerOutput() { setTextFormat( Qt::RichText ); setCompilerOutputLevel(eFull);  }
 
 void MakeWidget::setCompilerOutputLevel(EOutputLevel level)
 {
