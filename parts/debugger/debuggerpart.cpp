@@ -566,6 +566,7 @@ void DebuggerPart::slotRun()
     } else {
       mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
     }
+    mainWindow()->raiseView(gdbOutputWidget);
     controller->slotRun();
 }
 
