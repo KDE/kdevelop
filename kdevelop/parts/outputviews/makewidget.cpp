@@ -192,3 +192,4 @@ void MakeWidget::insertStderrLine(const QString &line)
     else
         ProcessView::insertStderrLine(line);
 }
+#include "makewidget.moc"

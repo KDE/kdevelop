@@ -118,3 +118,4 @@ void AppOutputView::stopButtonClicked()
 {
     m_widget->stopButtonClicked();
 }
+#include "outputviews.moc"

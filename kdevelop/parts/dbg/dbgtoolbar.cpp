@@ -519,3 +519,4 @@ void DbgToolbar::slotDebugMemoryView()
 }
 
 // **************************************************************************
+#include "dbgtoolbar.moc"

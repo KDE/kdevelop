@@ -681,3 +681,4 @@ bool CBugReportDlg::sendEmail() {
 
 
 
+#include "cbugreportdlg.moc"

@@ -376,3 +376,4 @@ void FileItem::setProjectName(QString projectName){
 QString FileItem::projectName(){
   return m_projectName;
 }
+#include "projecttreewidget.moc"

@@ -9,3 +9,4 @@ KDevVersionControl::KDevVersionControl(QObject *parent, const char *name)
 KDevVersionControl::~KDevVersionControl()
 {
 }
+#include "kdevversioncontrol.moc"

@@ -116,3 +116,4 @@ void CClassWizardDlg::slotAddMethod( const char *aClassName,
   emit addMethod( aClassName, aMethod );
 }
 
+#include "cclasswizarddlg.moc"

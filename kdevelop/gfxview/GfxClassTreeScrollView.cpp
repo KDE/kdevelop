@@ -91,3 +91,4 @@ void CGfxClassTreeScrollView::resizeEvent(QResizeEvent *resevent)
   // Call baseclass implementation of resizeEvent
   QScrollView::resizeEvent(resevent);
 }
+#include "GfxClassTreeScrollView.moc"

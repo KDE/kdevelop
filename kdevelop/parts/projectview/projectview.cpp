@@ -84,3 +84,4 @@ void ProjectView::removedFileFromProject(KDevFileNode* pNode){
 void ProjectView::addedProject(KDevNode*){
   m_pProjectTree->refresh();
 }
+#include "projectview.moc"

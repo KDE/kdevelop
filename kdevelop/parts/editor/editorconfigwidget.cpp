@@ -33,3 +33,4 @@ EditorConfigWidget::EditorConfigWidget(QWidget *parent, const char *name)
 EditorConfigWidget::~EditorConfigWidget()
 {
 }
+#include "editorconfigwidget.moc"

@@ -237,3 +237,4 @@ void CGfxClassTreeWindow::printClicked()
     m_treescrollview->m_classtree->onPrintTree( &pr, tmp );
 }
 
+#include "GfxClassTreeWindow.moc"

@@ -134,3 +134,4 @@ void FlagCheckBoxController::writeFlags(QStringList *list)
 }
     
 
+#include "flagboxes.moc"

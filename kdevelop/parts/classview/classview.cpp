@@ -459,3 +459,4 @@ void ClassView::gotoImplementation(const QString &className,
     if (pm)
         emit gotoSourceFile(pm->definedInFile, pm->definedOnLine);
 }
+#include "classview.moc"

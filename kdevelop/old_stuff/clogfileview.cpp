@@ -499,3 +499,4 @@ void CLogFileView::slotCommit()
 {
     emit commitFileToVCS(getFullFilename(currentItem()));
 }
+#include "clogfileview.moc"

@@ -447,3 +447,4 @@ void CNewFileDlg::slotListHighlighted(int){
 
 
 
+#include "cnewfiledlg.moc"

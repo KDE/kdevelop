@@ -1420,3 +1420,4 @@ bool CPrjOptionsDlg::needConfigureInUpdate(){
 
 
 
+#include "cprjoptionsdlg.moc"

@@ -188,3 +188,4 @@ KAboutData* KDESDIAppWizardPlugin::aboutPlugin(){
   }
   return m_pAboutData;
 }
+#include "kdesdiappwizardplugin.moc"

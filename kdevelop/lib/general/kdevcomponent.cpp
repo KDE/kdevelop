@@ -103,3 +103,4 @@ void KDevComponent::readProjectSpaceGlobalConfig(QDomDocument&){
 void KDevComponent::readProjectSpaceUserConfig(QDomDocument&){
 }
 
+#include "kdevcomponent.moc"

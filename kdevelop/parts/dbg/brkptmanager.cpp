@@ -460,3 +460,4 @@ void BreakpointManager::slotParseGDBBreakpointSet(char* str, int BPKey)
 }
 
 /***************************************************************************/
+#include "brkptmanager.moc"

@@ -71,3 +71,4 @@ void DocTreeView::projectSpaceClosed()
 {
     m_widget->projectSpaceClosed();
 }
+#include "doctreeview.moc"

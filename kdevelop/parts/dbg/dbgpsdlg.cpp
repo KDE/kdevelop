@@ -145,3 +145,4 @@ void Dbg_PS_Dialog::slotProcessExited()
 }
 
 /***************************************************************************/
+#include "dbgpsdlg.moc"

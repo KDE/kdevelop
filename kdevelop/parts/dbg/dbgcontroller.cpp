@@ -34,3 +34,4 @@ DbgController::~DbgController()
 
 /***************************************************************************/
 
+#include "dbgcontroller.moc"

@@ -207,3 +207,4 @@ void ClassTreeWidget::buildTreeByNamespace(bool fromScratch)
 }
 
 
+#include "classtreewidget.moc"

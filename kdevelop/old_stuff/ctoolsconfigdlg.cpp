@@ -332,3 +332,4 @@ void CToolsConfigDlg::swap(int item1,int item2){
   tools_argument.remove(item2);
   tools_argument.insert(item2,str1);
 }
+#include "ctoolsconfigdlg.moc"

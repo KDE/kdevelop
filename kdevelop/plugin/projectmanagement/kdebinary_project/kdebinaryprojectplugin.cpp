@@ -40,3 +40,4 @@ KAboutData* KDEBinaryProjectPlugin::aboutPlugin(){
   }
   return m_pAboutData;
 }
+#include "kdebinaryprojectplugin.moc"

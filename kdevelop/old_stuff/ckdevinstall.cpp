@@ -943,3 +943,4 @@ void CKDevInstall::slotCancel()
   config->sync();
   close();
 }
+#include "ckdevinstall.moc"

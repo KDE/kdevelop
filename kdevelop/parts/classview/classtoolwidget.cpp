@@ -166,3 +166,4 @@ void ClassToolWidget::insertAllClassAttributes(ParsedClass *parsedClass, PIExpor
     // Add the current class
     addClassAndAttributes(parsedClass, filter, &lastItem);
 }
+#include "classtoolwidget.moc"

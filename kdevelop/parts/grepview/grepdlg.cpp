@@ -189,3 +189,4 @@ void GrepDialog::slotSearchClicked()
     emit searchClicked();
     hide();
 }
+#include "grepdlg.moc"

@@ -30,3 +30,4 @@ QObject *KDESDIAppWizardFactory::create(QObject *parent, const char *name,
     emit objectCreated(obj);
     return obj;
 }
+#include "main.moc"

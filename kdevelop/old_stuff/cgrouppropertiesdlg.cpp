@@ -117,3 +117,4 @@ void CGroupPropertiesDlg::slotOK(){
 
 
 
+#include "cgrouppropertiesdlg.moc"

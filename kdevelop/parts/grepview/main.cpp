@@ -58,3 +58,4 @@ KInstance *GrepFactory::instance()
 
     return s_instance;
 }
+#include "main.moc"

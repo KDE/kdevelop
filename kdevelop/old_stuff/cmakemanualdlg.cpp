@@ -79,3 +79,4 @@ void CMakeManualDlg::slotFileButtonClicked(){
 	file_edit->setText(str.path());
     }    
 }
+#include "cmakemanualdlg.moc"

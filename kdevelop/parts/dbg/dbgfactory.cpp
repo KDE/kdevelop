@@ -44,3 +44,4 @@ KInstance *DbgFactory::instance()
 
     return s_instance;
 }
+#include "dbgfactory.moc"

@@ -91,3 +91,4 @@ void CDocTreePropDlg::slotFileButtonClicked(){
     file_edit->setText(str.path());
   }
 }
+#include "cdoctreepropdlg.moc"

@@ -90,3 +90,4 @@ void CExecuteArgDlg::slotTextChanged( const QString &t )
 void CExecuteArgDlg::slotClose(){
     edit->clear();
 }
+#include "cexecuteargdlg.moc"

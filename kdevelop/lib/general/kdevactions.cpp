@@ -40,3 +40,4 @@ void KDevNodeAction::slotActivated(){
 }
 
 
+#include "kdevactions.moc"

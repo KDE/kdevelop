@@ -109,3 +109,4 @@ void GrepView::writeProjectSpaceUserConfig(QDomDocument& doc){
   elem.setAttribute("test", "value");
   rootElement.appendChild( elem );
 }
+#include "grepview.moc"

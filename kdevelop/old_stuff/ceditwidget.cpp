@@ -459,3 +459,4 @@ void CEditWidget::slotGrepText(){
     emit grepText(searchtext);
 }
 
+#include "ceditwidget.moc"

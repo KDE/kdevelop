@@ -75,3 +75,4 @@ KInstance *GccOptionsFactory::instance()
 
     return s_instance;
 }
+#include "main.moc"

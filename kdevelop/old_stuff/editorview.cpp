@@ -160,3 +160,4 @@ void EditorView::toggleDockingMode()
 		emit attach();
 	}
 }
+#include "editorview.moc"

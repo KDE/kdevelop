@@ -194,3 +194,4 @@ void CTreeView::slotRightButtonPressed(QListViewItem *item,
 
 
 
+#include "ctreeview.moc"

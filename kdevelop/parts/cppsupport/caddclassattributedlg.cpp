@@ -211,3 +211,4 @@ void CAddClassAttributeDlg::OK()
     accept();
 }
 
+#include "caddclassattributedlg.moc"

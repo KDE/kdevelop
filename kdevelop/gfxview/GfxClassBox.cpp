@@ -493,3 +493,4 @@ void CGfxClassBox::slotPrintSubTree()
   emit PrintSubTree(this);
 }
 
+#include "GfxClassBox.moc"

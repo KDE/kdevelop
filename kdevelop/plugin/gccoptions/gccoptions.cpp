@@ -506,3 +506,4 @@ QString GccOptions::flags() const
     flags.truncate(flags.length()-1);
     return flags;
 }
+#include "gccoptions.moc"

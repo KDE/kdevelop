@@ -393,3 +393,4 @@ void CRealFileView::slotCommit()
 
 
 
+#include "crealfileview.moc"

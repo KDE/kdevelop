@@ -183,3 +183,4 @@ EditorView::EditorView( KTextEditor::Document *document, QWidget *parent, const 
 EditorView::~EditorView()
 {
 }
+#include "editorview.moc"

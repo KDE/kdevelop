@@ -448,3 +448,4 @@ void CFilePropDlg::slotOk(){
 
 
 
+#include "cfilepropdlg.moc"

@@ -64,3 +64,4 @@ KStartupLogo::~KStartupLogo(){
 
 
 
+#include "kstartuplogo.moc"

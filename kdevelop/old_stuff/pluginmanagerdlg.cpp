@@ -369,3 +369,4 @@ void PluginManagerDlg::initDialog(){
 	setMaximumSize( 680, 420 );
     
 }
+#include "pluginmanagerdlg.moc"

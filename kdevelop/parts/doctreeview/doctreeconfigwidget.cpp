@@ -265,3 +265,4 @@ void DocTreeConfigWidget::accept()
     storeConfig();
     part->configurationChanged();
 }
+#include "doctreeconfigwidget.moc"

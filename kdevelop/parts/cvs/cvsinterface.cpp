@@ -124,3 +124,4 @@ KDevVersionControl::State CvsInterface::registeredState(const QString &fileName)
 }
 #endif
     
+#include "cvsinterface.moc"

@@ -169,3 +169,4 @@ QPopupMenu *DelayedPopupAction::popupMenu()
     
     return m_popup;
 }
+#include "classactions.moc"

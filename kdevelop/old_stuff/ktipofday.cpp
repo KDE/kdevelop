@@ -131,3 +131,4 @@ void KTipofDay::slotUser1()
    f.close();
   }
 }
+#include "ktipofday.moc"

@@ -674,3 +674,4 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+#include "cdocbrowser.moc"

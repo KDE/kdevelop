@@ -568,3 +568,4 @@ void CKDevSetupDlg::slotKDEUpdateReq(){
   if (kde_doc_path != new_path)
     kde_edit->setText(new_path);
 }
+#include "ckdevsetupdlg.moc"

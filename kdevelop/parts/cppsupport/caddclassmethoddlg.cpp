@@ -329,3 +329,4 @@ void CAddClassMethodDlg::OK()
   else
     accept();
 }
+#include "caddclassmethoddlg.moc"

@@ -37,3 +37,4 @@ void PrjStatPlugin::stop(){
 void PrjStatPlugin::slotMenuActivated() {
 QMessageBox::information( kdev, "Test1", "test2" );
 }          
+#include "prjstatplugin.moc"

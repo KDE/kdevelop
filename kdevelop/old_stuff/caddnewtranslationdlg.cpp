@@ -238,3 +238,4 @@ QString CAddNewTranslationDlg::getLangFile(){
   return langfile;
 }
 
+#include "caddnewtranslationdlg.moc"

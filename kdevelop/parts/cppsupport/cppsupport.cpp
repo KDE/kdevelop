@@ -301,3 +301,4 @@ QStringList CppSupport::fileFilters(){
   list << "*";
   return list;
 }
+#include "cppsupport.moc"

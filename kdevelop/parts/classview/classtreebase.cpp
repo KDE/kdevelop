@@ -511,3 +511,4 @@ void ClassTreeBase::setLanguageSupport(KDevLanguageSupport *ls)
 {
     m_langsupport = ls;
 }
+#include "classtreebase.moc"

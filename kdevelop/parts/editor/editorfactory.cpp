@@ -68,3 +68,4 @@ KInstance *EditorFactory::instance()
     return s_instance;
 }
 
+#include "editorfactory.moc"

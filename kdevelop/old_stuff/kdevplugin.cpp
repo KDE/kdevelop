@@ -32,3 +32,4 @@ void KDevPlugin::start(){
 }
 void KDevPlugin::stop(){
 }
+#include "kdevplugin.moc"

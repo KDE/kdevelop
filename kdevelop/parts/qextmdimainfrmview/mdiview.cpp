@@ -31,3 +31,4 @@ MdiView::MdiView( QWidget* pClient, const QString& caption, QWidget* pParent, co
 MdiView::~MdiView()
 {
 }
+#include "mdiview.moc"

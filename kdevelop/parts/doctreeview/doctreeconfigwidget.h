@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #ifndef _DOCTREECONFIGWIDGET_H_
-#define _DOCTREECONFIFWIDGET_H_
+#define _DOCTREECONFIGWIDGET_H_
 
 #include <qhbox.h>
 #include <qtabwidget.h>

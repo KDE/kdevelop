@@ -1967,3 +1967,4 @@ void CKAppWizard::slotVendorEntry() {
 
 
 
+#include "ckappwizard.moc"

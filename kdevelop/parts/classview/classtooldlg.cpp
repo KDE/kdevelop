@@ -419,3 +419,4 @@ void ClassToolDialog::buildTree()
             break;
         }
 }
+#include "classtooldlg.moc"

@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #ifndef CCONFIGA2PSDLG
-#define CCONFIGA2PSTDLG
+#define CCONFIGA2PSDLG
 
 #include <qdialog.h>
 

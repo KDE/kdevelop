@@ -48,3 +48,4 @@ void MdiFrame::switchToToplevelMode()
   QextMdiMainFrm::switchToToplevelMode();
   emit letKDevelopDoTheSwitchToToplevelMode();
 }
+#include "mdiframe.moc"

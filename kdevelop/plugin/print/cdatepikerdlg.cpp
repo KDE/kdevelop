@@ -46,3 +46,4 @@ void CDatepikerDlg::getDateString(QString &string) {
 void CDatepikerDlg::getDate(QDate &date2) {
   date2 = date;
 }
+#include "cdatepikerdlg.moc"

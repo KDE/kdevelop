@@ -107,3 +107,4 @@ void DbgManager::slotDebugInterrupt()
 void DbgManager::slotDebugStop()
 {}
 
+#include "dbgmanager.moc"

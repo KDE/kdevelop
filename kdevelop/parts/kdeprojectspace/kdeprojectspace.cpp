@@ -159,3 +159,4 @@ QList<FileGroup> KDEProjectSpace::defaultFileGroups(){
   return list;
 }
 
+#include "kdeprojectspace.moc"

@@ -27,3 +27,4 @@ GrepConfigWidget::GrepConfigWidget(QWidget *parent, const char *name)
 GrepConfigWidget::~GrepConfigWidget()
 {
 }
+#include "grepconfigwidget.moc"

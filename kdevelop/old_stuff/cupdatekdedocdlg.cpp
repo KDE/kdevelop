@@ -434,3 +434,4 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
+#include "cupdatekdedocdlg.moc"

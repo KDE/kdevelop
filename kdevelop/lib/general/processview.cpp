@@ -145,3 +145,4 @@ void ProcessView::insertStderrLine(const QString &line)
 void ProcessView::childFinished(bool /*normal*/, int /*status*/)
 {
 }
+#include "processview.moc"

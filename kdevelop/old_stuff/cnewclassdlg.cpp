@@ -432,3 +432,4 @@ void CNewClassDlg::slotImplEditChanged(const QString &){
 
 
 
+#include "cnewclassdlg.moc"

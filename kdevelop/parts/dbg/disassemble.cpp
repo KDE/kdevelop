@@ -158,3 +158,4 @@ void Disassemble::getNextDisplay()
 }
 
 /***************************************************************************/
+#include "disassemble.moc"

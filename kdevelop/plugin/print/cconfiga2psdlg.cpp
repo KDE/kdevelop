@@ -966,3 +966,4 @@ void CConfigA2psDlg::loadSettings() {
   slotFontsizeClicked();
   slotLinesClicked();
 }
+#include "cconfiga2psdlg.moc"

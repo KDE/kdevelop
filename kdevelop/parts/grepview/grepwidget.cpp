@@ -197,3 +197,4 @@ void GrepWidget::setProjectSpace(ProjectSpace *pProjectSpace)
 {
     grepdlg->setDirectory(pProjectSpace->absolutePath());
 }
+#include "grepwidget.moc"

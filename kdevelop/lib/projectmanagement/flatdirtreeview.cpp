@@ -82,3 +82,4 @@ QString FlatDirTreeView::currentDir(){
   return m_currentDir;
 }
 
+#include "flatdirtreeview.moc"

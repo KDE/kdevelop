@@ -68,3 +68,4 @@ void KDevDirectoryNode::show(){
   cerr << endl << "Directory:" << m_dir;
 }
 
+#include "kdevnodes.moc"

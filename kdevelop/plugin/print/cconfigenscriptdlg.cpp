@@ -2916,3 +2916,4 @@ void CConfigEnscriptDlg::loadSettings() {
   slotHighlightBarsClicked();
   slotNumberingPagesClicked();
 }
+#include "cconfigenscriptdlg.moc"

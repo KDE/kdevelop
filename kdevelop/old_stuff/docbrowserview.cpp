@@ -40,3 +40,4 @@ void DocBrowserView::resizeEvent (QResizeEvent *e){
   }
 //  browser->resize(e->size());
 }
+#include "docbrowserview.moc"

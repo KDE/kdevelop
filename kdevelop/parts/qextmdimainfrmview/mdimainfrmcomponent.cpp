@@ -171,3 +171,4 @@ bool MdiMainFrmComponent::event( QEvent *e)
     return ret;
 }
 
+#include "mdimainfrmcomponent.moc"

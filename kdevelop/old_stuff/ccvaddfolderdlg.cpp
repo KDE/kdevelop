@@ -110,3 +110,4 @@ void CCVAddFolderDlg::OK()
 
 
 
+#include "ccvaddfolderdlg.moc"

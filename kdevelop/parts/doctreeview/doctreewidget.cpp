@@ -603,3 +603,4 @@ void DocTreeWidget::projectSpaceClosed()
     folder_project->setProjectSpace(0);
 }
 
+#include "doctreewidget.moc"

@@ -138,3 +138,4 @@ void FileCloseAllDlg::getSelectedFiles(QStringList* list){
     }
   }
 }
+#include "fileclosealldlg.moc"

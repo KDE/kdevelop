@@ -18,3 +18,4 @@ QString KDevCompilerOptions::flags() const
 {
     return QString();
 }
+#include "kdevcompileroptions.moc"
