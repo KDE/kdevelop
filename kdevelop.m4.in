@@ -471,7 +471,7 @@ AC_DEFUN([KDEV_CHECK_MDI],
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     save_CXXFLAGS="$CXXFLAGS"
-    CXXFLAGS="-I$ac_qt_includes -I$ac_kde_includes"
+    CXXFLAGS="$CXXFLAGS -I$ac_qt_includes -I$ac_kde_includes"
 
     AC_TRY_COMPILE([
       #include <kdeversion.h>
@@ -521,7 +521,7 @@ AC_DEFUN([KDEV_CHECK_COMPAT],
 
     save_CXXFLAGS="$CXXFLAGS"
 
-    CXXFLAGS="$QT_INCLUDES -I$ac_kde_includes"
+    CXXFLAGS="$CXXFLAGS $QT_INCLUDES -I$ac_kde_includes"
 
     AC_TRY_COMPILE([
       #include <qglobal.h>
@@ -748,7 +748,7 @@ AC_DEFUN([KDEV_CHECK_VCSCOMPAT],
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     save_CXXFLAGS="$CXXFLAGS"
-    CXXFLAGS="-I$ac_qt_includes -I$ac_kde_includes"
+    CXXFLAGS="$CXXFLAGS -I$ac_qt_includes -I$ac_kde_includes"
 
     AC_TRY_COMPILE([
       #include <kdeversion.h>
