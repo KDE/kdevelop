@@ -15,7 +15,7 @@
 
 #include <qlineedit.h>
 #include <qlistview.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 
 #include "domutil.h"
 #include "addenvvardlg.h"
@@ -84,10 +84,9 @@ void RunOptionsWidget::removeVarClicked()
 
 void RunOptionsWidget::browseMainProgram()
 {
-  QString path = QFileDialog::getOpenFileName(m_projectDirectory,
-                               i18n("All files (*)"),
-                               0,
-                               i18n("Browse main program"),
+  QString path = KFileDialog::getOpenFileName(m_projectDirectory,
+                               i18n("*|All Files"),
+                               this,
                                i18n("Select main program executable."));
 
   if (path.find(m_projectDirectory)==0)
