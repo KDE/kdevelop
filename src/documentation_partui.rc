@@ -5,6 +5,9 @@
   <Menu name="file" noMerge="0"><text>&amp;File</text>
     <Action name="print_doc" group="print_merge"/>
   </Menu>
+  <Menu name="edit" noMerge="0">
+    <Action name="copy_doc_selection" group="edit_paste_merge"/>
+  </Menu>
 </MenuBar>
 
 <ToolBar name="browserToolBar">

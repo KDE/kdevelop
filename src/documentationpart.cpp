@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <qfile.h>
+#include <qclipboard.h>
+#include <qapplication.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -51,8 +53,10 @@ DocumentationPart::DocumentationPart()
     this, SLOT( slotDuplicate() ), actions, "doc_dup" );
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
   printAction = KStdAction::print(this, SLOT(slotPrint()), actions, "print_doc");
+  copyAction = KStdAction::copy(this, SLOT(slotCopy()), actions, "copy_doc_selection");
 
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
+  connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 
 //BEGIN documentation history stuff  
     
@@ -93,7 +97,10 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
   m_backAction->plug( &popup );
   m_forwardAction->plug( &popup );
   popup.insertSeparator();
-  
+
+  copyAction->plug( &popup );
+  popup.insertSeparator();
+    
   KAction * incFontAction = this->action("incFontSizes");
   KAction * decFontAction = this->action("decFontSizes");
   if ( incFontAction && decFontAction )
@@ -478,6 +485,24 @@ void DocumentationPart::addHistoryEntry()
 		m_history.append( newEntry );
 		m_Current = m_history.fromLast();
 	}
+}
+
+void DocumentationPart::slotCopy( )
+{
+    QString text = selectedText();
+    text.replace( QChar( 0xa0 ), ' ' );
+    QClipboard *cb = QApplication::clipboard();
+    disconnect( cb, SIGNAL( selectionChanged() ), this, SLOT( slotClearSelection() ) );
+    cb->setText(text);
+    connect( cb, SIGNAL( selectionChanged() ), this, SLOT( slotClearSelection() ) );
+}
+
+void DocumentationPart::slotSelectionChanged( )
+{
+    if (selectedText().isEmpty())
+        copyAction->setEnabled(false);
+    else
+        copyAction->setEnabled(true);
 }
 
 #include "documentationpart.moc"
