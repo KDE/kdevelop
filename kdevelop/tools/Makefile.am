@@ -1,11 +1,11 @@
 
 tools_DATA =  processesend.pl processes.pl
 
-EXTRA_DIST = processes.pl.in processesend.pl kimport
+bin_SCRIPTS = kimport kdevdlg2ui one2two
+
+EXTRA_DIST = processes.pl.in processesend.pl kimport kdevdlg2ui one2two
 
 toolsdir = $(kde_datadir)/kdevelop/tools/
-
-bin_SCRIPTS = kimport kdevdlg2ui
 
 processes.pl: processes.pl.in
 	cp $(srcdir)/processes.pl.in processes.pl
