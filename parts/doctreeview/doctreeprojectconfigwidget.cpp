@@ -172,12 +172,12 @@ void DocTreeProjectConfigWidget::readConfig()
 
     QString userdocDir = DomUtil::readEntry(d ,
         "/kdevdoctreeview/projectdoc/userdocDir", m_project->projectDirectory() + "/html/" );
-    userdocdirEdit->setURL( userdocDir );
+    userdocdirEdit->setURL( userdocDir[0] != QChar('/') ? m_project->projectDirectory() + QString("/") + userdocDir : userdocDir );
     userdocdirEdit->fileDialog()->setMode( KFile::Directory );
 
     QString apidocDir = DomUtil::readEntry(d,
         "/kdevdoctreeview/projectdoc/apidocDir", m_project->projectDirectory() + "/html/" );
-    apidocdirEdit->setURL( apidocDir );
+    apidocdirEdit->setURL( apidocDir[0] != QChar('/') ? m_project->projectDirectory() + QString("/") + apidocDir : apidocDir );
     apidocdirEdit->fileDialog()->setMode( KFile::Directory );
 
     m_ignoreQT_XML  = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoreqt_xml", "toc");
@@ -267,10 +267,19 @@ void DocTreeProjectConfigWidget::storeConfig()
     if (m_project->projectDom())
         d = *m_project->projectDom();
 
+    QString userdocUrl = userdocdirEdit->url();
+    QString apidocUrl = apidocdirEdit->url();
+
+    if( userdocUrl.startsWith(m_project->projectDirectory()) )
+        userdocUrl = userdocUrl.mid( m_project->projectDirectory().length() + 1 );
+
+    if( apidocUrl.startsWith(m_project->projectDirectory()) )
+        apidocUrl = apidocUrl.mid( m_project->projectDirectory().length() + 1 );
+
     DomUtil::writeEntry(d,
-        "/kdevdoctreeview/projectdoc/userdocDir", userdocdirEdit->url());
+        "/kdevdoctreeview/projectdoc/userdocDir", userdocUrl );
     DomUtil::writeEntry(d,
-        "/kdevdoctreeview/projectdoc/apidocDir", apidocdirEdit->url());
+        "/kdevdoctreeview/projectdoc/apidocDir", apidocUrl );
 
     DomUtil::writeListEntry(d,
         "/kdevdoctreeview/ignoreqt_xml", "toc", m_ignoreQT_XML );
