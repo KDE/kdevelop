@@ -91,8 +91,6 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 {
     setInstance( CvsFactory::instance() );
 
-    setXMLFile( "kdevcvsservicepart.rc" );
-
     init();
 
     /// \FIXME (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation

@@ -127,8 +127,6 @@ CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
 {
     setInstance( CvsFactory::instance() );
     
-    setXMLFile( "kdevcvspart.rc" );
-
     init();
 }
 

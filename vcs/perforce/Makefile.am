@@ -14,4 +14,3 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevperforce.desktop
 
 rcdir = $(kde_datadir)/kdevperforce
-rc_DATA = kdevperforcepart.rc

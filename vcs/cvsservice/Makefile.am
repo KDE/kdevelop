@@ -38,5 +38,5 @@ servicepicsdir = $(kde_datadir)/kdevcvsservice/pics
 servicepics_DATA = kdev_cvs.png
 
 rcdir = $(kde_datadir)/kdevcvsservice
-rc_DATA = kdevcvsservicepart.rc buildcvs.sh
+rc_DATA = buildcvs.sh
 

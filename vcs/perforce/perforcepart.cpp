@@ -42,8 +42,6 @@ PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList
     : KDevPlugin( "Perforce", "perforce", parent, name ? name : "PerforcePart" )
 {
     setInstance(PerforceFactory::instance());
-    setXMLFile( "kdevperforcepart.rc" );
-
     setupActions();
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),

@@ -12,4 +12,3 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevpart_subversion.desktop
 
 rcdir = $(kde_datadir)/kdevsubversion
-rc_DATA = kdevpart_subversion.rc

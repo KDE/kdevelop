@@ -52,7 +52,6 @@ K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( &data ) )
 subversionPart::subversionPart(QObject *parent, const char *name, const QStringList& )
 	: KDevVersionControl("KDevsubversionPart", "kdevsubversionpart", parent, name ? name : "Subversion" ) {
 	setInstance(subversionFactory::instance());
-	setXMLFile("kdevpart_subversion.rc");
 	m_projWidget = 0;
 
 	m_impl = new subversionCore( this );

@@ -15,4 +15,4 @@ service_DATA = kdevcvs.desktop
 
 
 rcdir = $(kde_datadir)/kdevcvs
-rc_DATA = kdevcvspart.rc buildcvs.sh
+rc_DATA = buildcvs.sh
