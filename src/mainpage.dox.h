@@ -129,7 +129,7 @@ operation of KDevelop.
   - parts/regexptest = A regular expression tester
     - (see RegexpTestPart)
     .
-  - parts/abbrev = Abbreviation Expansion (see AbbrevPart class)
+  - parts/abbrev = Abbreviation Expansion
     - (see AbbrevPart)
     .
   - parts/filter = Shell Filtering and Insertion
@@ -213,7 +213,7 @@ To add support for a new language check this page \ref howToAddNewLanguage
     - (see CTagsPart)
     .
   - parts/debugger = GNU Debugger Manager
-    - (see DebuggerPart)
+    - (see GDBDebugger::DebuggerPart and JAVADebugger::JavaDebuggerPart)
     .
   - parts/diff = Difference viewer
     - (see DiffPart)
@@ -228,7 +228,7 @@ To add support for a new language check this page \ref howToAddNewLanguage
     - (see FileViewPart, FileGroupsPart)
     .
   - parts/javadebugger = Java debugger frontend
-    - (see JavaDebuggerPart)
+    - (see JAVADebugger::JavaDebuggerPart)
     .
   - parts/manager = Document manager
     - (see DocManager, ViewManager)
@@ -258,7 +258,7 @@ To add support for a new language check this page \ref howToAddNewLanguage
     - (see SvnPart)
     .
   - parts/visualboyadvance = VisualBoy Advance integration
-    - (see VisualBoyAdvancePart)
+    - (see VisualBoyAdvance::VisualBoyAdvancePart)
     .
   .
 
