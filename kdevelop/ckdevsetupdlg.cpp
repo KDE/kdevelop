@@ -67,17 +67,17 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   KQuickHelp::add(makeGroup,
   KQuickHelp::add(makeSelectLabel,
   KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
-								       "Select your system's make-command.\n"
-								       "Usually, this is make, FreeBSD users\n"
-								       "may use gmake. Mind that you can also\n"
-								       "add option parameters to your make-binary\n"
-								       "as well."))));
+					  "Select your system's make-command.\n"
+					  "Usually, this is make, FreeBSD users\n"
+					  "may use gmake. Mind that you can also\n"
+					  "add option parameters to your make-binary\n"
+					  "as well."))));
   
   bool autoSave=config->readBoolEntry("Autosave",true);
   QLabel* autosaveTimeLabel;
   autosaveTimeLabel = new QLabel( w1, "autosaveTimeLabel" );
   autosaveTimeLabel->setGeometry( 20, 140, 210, 25 );
-  autosaveTimeLabel->setText(i18n("Select Autosave time-intervall:"));
+  autosaveTimeLabel->setText(i18n("Select Autosave time-interval:"));
   autosaveTimeLabel->setAlignment( 289 );
   autosaveTimeLabel->setMargin( -1 );
   autosaveTimeLabel->setEnabled(autoSave);
@@ -127,14 +127,30 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	KQuickHelp::add(autosaveGroup,i18n("Autosave\n\n"
 	                                "If autosave is enabled, your currently\n"
 	                                "changed files will be saved after the\n"
-	                                "time-intervall selected times out.\n\n"
+	                                "time-interval selected times out.\n\n"
 	                                "Please select your timeout-value.\n"
 	                                "Available are: 3 minutes, 5 minutes,\n"
 	                                "15 minutes and 30 minutes.")))));
   
+  defaultClassViewCheck = new QCheckBox( w1, "defaultClassViewCheck" );
+  defaultClassViewCheck->setGeometry( 220, 210, 180, 30 );
+  connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent,SLOT(slotOptionsDefaultCV(bool)));
+  defaultClassViewCheck->setText(i18n( "Class View is default"));
+  defaultClassViewCheck->setAutoRepeat( FALSE );
+  defaultClassViewCheck->setAutoResize( FALSE );
+  bool defaultcv=config->readBoolEntry("DefaultClassView",true);
+  defaultClassViewCheck->setChecked( defaultcv );
+  KQuickHelp::add(defaultClassViewCheck, i18n("Class View is default\n\n"
+					      "If this is enabled, KDevelop\n"
+					      "will automatically switch to\n"
+					      "Class View tab.\n"
+					      "When disabled, KDevelop will\n"
+					      "use Logical File View tab."));
+
   autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
-  autoSwitchCheck->setGeometry( 20, 210, 210, 30 );
+  autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   autoSwitchCheck->setText(i18n("enable Autoswitch"));
   autoSwitchCheck->setAutoRepeat( FALSE );
   autoSwitchCheck->setAutoResize( FALSE );
@@ -151,7 +167,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   autoswitchGroup->lower();
   
   KQuickHelp::add(autoSwitchCheck,
-	KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
+		  KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
 						       "If autoswitch is enabled, KDevelop\n"
 						       "will open windows in the working\n"
 						       "view automatically according to\n"
@@ -387,6 +403,7 @@ void CKDevSetupDlg::slotDefault(){
     autosaveTimeCombo->setCurrentItem(1);
 
     autoSwitchCheck->setChecked(true);
+    defaultClassViewCheck->setChecked(false);
     logoCheck->setChecked(true);
     lastProjectCheck->setChecked(true);
     tipDayCheck->setChecked(true);
@@ -417,6 +434,9 @@ void CKDevSetupDlg::ok(){
 
   bool autoswitch=autoSwitchCheck->isChecked();
   config->writeEntry("Autoswitch",autoswitch);
+
+  bool defaultcv=defaultClassViewCheck->isChecked();
+  config->writeEntry("DefaultClassView",defaultcv);
 
   config->writeEntry("Make",makeSelectLineEdit->text());
 

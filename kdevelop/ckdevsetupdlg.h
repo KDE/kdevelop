@@ -60,6 +60,7 @@ private:
   QComboBox* autosaveTimeCombo;
   QLineEdit* makeSelectLineEdit;
   QCheckBox* autoSwitchCheck;
+  QCheckBox* defaultClassViewCheck;
   QCheckBox* logoCheck;
   QCheckBox* tipDayCheck;
   QCheckBox* lastProjectCheck;

@@ -106,9 +106,11 @@ public:
   void setToolMenuProcess(bool enable);
 
  public slots:
+
 ////////////////////////
 // FILE-Menu entries
 ///////////////////////
+
   /** generate a new file*/
   void slotFileNew();
   /**open a file*/
@@ -211,6 +213,7 @@ public:
   /** compile the actual sourcefile using setted options */
   void slotBuildCompileFile();
   void slotBuildMake();
+//   void slotBuildMakeWith();
   void slotBuildRebuildAll();
   void slotBuildCleanRebuildAll();
   void slotBuildStop();
@@ -249,6 +252,8 @@ public:
   void slotOptionsAutosaveTime(int);
   /** dis-/enalbes autoswitch by setting bAutoswitch */
   void slotOptionsAutoswitch(bool);
+  /** toggles between autoswitching to CV or LFV */
+  void slotOptionsDefaultCV(bool);
   /** shows the Update dialog and sends output to the messages widget */
   void slotOptionsUpdateKDEDocumentation();
 	/** shows the create search database dialog called by the setup button */
@@ -330,7 +335,12 @@ public:
   void slotNewLineColumn();
   void slotNewUndo();
 
-
+  void slotBufferMenu(const QPoint& pos);
+  void slotShowC();
+  void slotShowHeader();
+  void slotShowHelp();
+  void slotShowTools();
+  void slotToggleLast();
 
   void slotMenuBuffersSelected(int id);
   void slotClickedOnMessagesWidget();
@@ -443,6 +453,8 @@ private:
   int saveTimeout;   // timeout time
 
   bool bAutoswitch;
+  bool bDefaultCV;
+
   KProgress* statProg;
 //  QProgressBar* statProg;
   //some vars for the searchengine
@@ -452,6 +464,7 @@ private:
   // values are "run","make" "refresh";
   QString next_job;
   QString make_cmd;
+//   QString make_with_cmd;
 
   CConfigEnscriptDlg* enscriptconf;
   CConfigA2psDlg* a2psconf;
@@ -459,6 +472,10 @@ private:
   CAddExistingFileDlg* add_dlg;
 
   enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
+
+  int lasttab;
+  QString lastfile;
+
 };
 
 #endif

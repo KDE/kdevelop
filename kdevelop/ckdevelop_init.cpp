@@ -167,6 +167,8 @@ void CKDevelop::init(){
   connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+  connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this,
+	  SLOT(slotBufferMenu(const QPoint&)));
 
   edit_widget=header_widget;
   cpp_widget = new CEditWidget(kapp,s_tab_view,"cpp");
@@ -182,6 +184,8 @@ void CKDevelop::init(){
   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+  connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this,
+	  SLOT(slotBufferMenu(const QPoint&)));
 
   // init the 2 first kedits
   TEditInfo* edit1 = new TEditInfo;
@@ -239,7 +243,9 @@ void CKDevelop::init(){
     saveTimer->stop();
   }
   bAutoswitch=config->readBoolEntry("Autoswitch",true);
+  bDefaultCV=config->readBoolEntry("DefaultClassView",true);
   make_cmd=config->readEntry("Make","make");
+  //  make_with_cmd=config->readEntry("MakeWith","");
 
   // initialize output_view_pos
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -323,12 +329,32 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Make"), "Make", IDK_BUILD_MAKE );
   accel->connectItem( "Make", this, SLOT(slotBuildMake() ) );
 
+//   accel->insertItem( i18n("Make with"), "MakeWith", IDK_BUILD_MAKE_WITH );
+//   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ) );
+
   accel->insertItem( i18n("Run"), "Run", IDK_BUILD_RUN);
   accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
 
   //doc menu
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
   accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ) );
+
+  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContent()) );
+
+  accel->insertItem( i18n("Show C Sources Window"), "ShowC",IDK_SHOW_C);
+  accel->connectItem( "ShowC", this, SLOT(slotShowC() ) );
+
+  accel->insertItem( i18n("Show Header Window"), "ShowHeader",IDK_SHOW_HEADER);
+  accel->connectItem( "ShowHeader", this, SLOT(slotShowHeader() ) );
+
+  accel->insertItem( i18n("Show Help Window"), "ShowHelp",IDK_SHOW_HELP);
+  accel->connectItem( "ShowHelp", this, SLOT(slotShowHelp() ) );
+
+  accel->insertItem( i18n("Show Tools Window"), "ShowTools",IDK_SHOW_TOOLS);
+  accel->connectItem( "ShowTools", this, SLOT(slotShowTools() ) );
+
+  accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
+  accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast() ) );
 
   accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()) );
 
@@ -538,6 +564,10 @@ void CKDevelop::initMenu(){
   build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this,
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
+
+//   build_menu->insertItem(Icon("make.xpm"),i18n("Make &with"),this,
+// 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
+//   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE_WITH ,"MakeWith" );
 
   build_menu->insertItem(Icon("rebuild.xpm"),i18n("&Rebuild all"), this,
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);

@@ -35,6 +35,8 @@
 #include <kmsgbox.h>
 #include <ktabctl.h>
 
+// #include <kio_linedit_dlg.h>
+
 #include "ckdevelop.h"
 #include "ckdevsetupdlg.h"
 #include "cupdatekdedocdlg.h"
@@ -46,6 +48,12 @@
 #include "./kwrite/kwdoc.h"
 #include "kswallow.h"
 
+
+////////////
+void openFileManagerWindow( const char * )
+{
+}
+///////////
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -551,6 +559,35 @@ void CKDevelop::slotBuildMake(){
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
+// void CKDevelop::slotBuildMakeWith(){
+//   KLineEditDlg *box = new KLineEditDlg(i18n("Make with :"), make_with_cmd.data(), this, true);
+//   box->show();
+
+//   if (!box->result())   /* cancelled */
+//     return;
+
+//   make_with_cmd = box->text();
+//   delete box;
+
+//   showOutputView(true);
+//   setToolMenuProcess(false);
+//   slotFileSaveAll();
+//   slotStatusMsg(i18n("Running make..."));
+//   messages_widget->clear();
+
+//   if ( prj->getProjectType() == "normal_empty" ||
+//        prj->getProjectType() == "normal_java")
+//     QDir::setCurrent(prj->getProjectDir()); 
+//   else
+//     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
+
+//   process.clearArguments();
+//   process << make_with_cmd;
+
+//   beep = true;
+//   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+// }
+
 void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
@@ -890,6 +927,10 @@ void CKDevelop::slotOptionsAutosaveTime(int time){
 
 void CKDevelop::slotOptionsAutoswitch(bool autoswitch){
   bAutoswitch=autoswitch;
+}
+
+void CKDevelop::slotOptionsDefaultCV(bool defaultcv){
+  bDefaultCV=defaultcv;
 }
 
 void CKDevelop::slotOptionsUpdateKDEDocumentation(){
@@ -1420,10 +1461,15 @@ void CKDevelop::slotTTabSelected(int item){
   }
 }
 void CKDevelop::slotSTabSelected(int item){
-	if (item == HEADER){
-		if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-      	t_tab_view->setCurrentTab(CV);
-		}
+  lasttab = s_tab_view->getCurrentTab();
+
+  if (item == HEADER){
+    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+      if ( bDefaultCV)
+	t_tab_view->setCurrentTab(CV);
+      else
+	t_tab_view->setCurrentTab(LFV);
+    }
     disableCommand(ID_BUILD_COMPILE_FILE);
     edit_widget = header_widget;
     edit_widget->setFocus();
@@ -1437,9 +1483,12 @@ void CKDevelop::slotSTabSelected(int item){
 
   }
   if (item == CPP){
-		if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-      	t_tab_view->setCurrentTab(CV);
-		}
+    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+      if ( bDefaultCV)
+	t_tab_view->setCurrentTab(CV);
+      else
+	t_tab_view->setCurrentTab(LFV);
+    }
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
@@ -1639,9 +1688,35 @@ void CKDevelop::slotTCurrentTab(int item){
   t_tab_view->setCurrentTab(item);
 }
 
-
 void CKDevelop::slotSCurrentTab(int item){
   s_tab_view->setCurrentTab(item);
+}
+
+void CKDevelop::slotShowC() {
+  s_tab_view->setCurrentTab( CPP );
+}
+
+void CKDevelop::slotShowHeader() {
+  s_tab_view->setCurrentTab( HEADER );
+}
+
+void CKDevelop::slotShowHelp() {
+  s_tab_view->setCurrentTab( BROWSER );
+}
+
+void CKDevelop::slotShowTools() {
+  s_tab_view->setCurrentTab( TOOLS );
+}
+
+void CKDevelop::slotToggleLast() {
+  if ( lasttab != s_tab_view->getCurrentTab() )
+    s_tab_view->setCurrentTab( lasttab );
+  else
+    switchToFile( lastfile );
+}
+
+void CKDevelop::slotBufferMenu( const QPoint& point ) {
+  menu_buffers->popup( point );
 }
 
 void CKDevelop::closeEvent(QCloseEvent* e){

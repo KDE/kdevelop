@@ -51,7 +51,9 @@ int CKDevelop::getTabLocation(QString filename){
   
 }
 void CKDevelop::switchToFile(QString filename){
-  QString test_name = edit_widget->getName();
+  lastfile = edit_widget->getName();
+  lasttab = s_tab_view->getCurrentTab();
+
   TEditInfo* info;
   TEditInfo* actual_info;
 

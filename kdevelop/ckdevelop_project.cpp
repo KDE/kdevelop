@@ -348,7 +348,7 @@ void CKDevelop::slotAddExistingFiles(){
         type = "HEADER";
       }
       if (getTabLocation(dest_name) == CPP){
-      	type = "SOURCE";
+	type = "SOURCE";
       }
       
       if(QFile::exists(dest_name)){
@@ -397,7 +397,9 @@ void CKDevelop::slotAddExistingFiles(){
 
 void CKDevelop::slotProjectAddExistingFiles(){
   add_dlg = new CAddExistingFileDlg(this,"test",prj);
+
   add_dlg->destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
+
   if(add_dlg->exec()){
     QTimer::singleShot(100,this,SLOT(slotAddExistingFiles()));
   }
