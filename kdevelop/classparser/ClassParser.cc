@@ -277,6 +277,48 @@ void CClassParser::parseEnum()
     getNextLexem();
 }
 
+
+void CClassParser::parseNamespace()
+{
+  getNextLexem();
+
+  // cerr << "parsing namespace" << endl;
+  // cerr << "lexem = " << lexem << ":" << static_cast<char>(lexem) << endl;
+
+  if( lexem == '{' ) {
+    // anonymous namespace
+    // assume 1-1 correspondence between file name and translation unit
+    QString short_file_name(currentFile);
+    short_file_name.replace( QRegExp(".*/"), "");
+    QString trans_unit_ident("(");
+    trans_unit_ident += short_file_name;
+    trans_unit_ident += ")";
+    namespace_stack.push_back(trans_unit_ident);
+  }
+  else {
+    // extract name of namespace
+    CParsedLexem alex( lexem, getText() );
+    namespace_stack.push_back(alex.text);
+
+    // check that it is well-formed, moving to beginning of block
+    getNextLexem();
+    while(lexem != '{') {
+      debug("Bad namespace identifier.");
+      getNextLexem();
+    }
+  }
+
+  // skip over '{'
+  getNextLexem();
+
+  while(lexem != 0 && lexem != '}') {
+    parseTopLevelLexem();
+  }
+
+  namespace_stack.pop_back();
+}
+
+
 /*---------------------------------------- CClassParser::parseUnion()
  * parseUnion()
  *   Parse an union.
@@ -1089,9 +1131,20 @@ CParsedClass *CClassParser::parseClassHeader()
     getNextLexem();
   }
 
+  QString fully_qualified_name;
+
+  for( list<QString>::const_iterator i = namespace_stack.begin();
+       i != namespace_stack.end();
+       ++i
+      ) {
+    fully_qualified_name += *i;
+    fully_qualified_name += QString("::");
+  }
+
   // The classname is at the top of the stack.
   aLexem = lexemStack.pop();
-  aClass->setName( aLexem->text );
+  fully_qualified_name += aLexem->text;
+  aClass->setName( fully_qualified_name /* aLexem->text */);
   delete aLexem;
 
   // Check if this a implementation of a nested class.
@@ -1439,6 +1492,9 @@ void CClassParser::parseTopLevelLexem()
 
   switch( lexem )
   {
+    case NAMESPACE:
+      parseNamespace();
+      break;
     case CPCLASS:
       aClass = parseClass();
       

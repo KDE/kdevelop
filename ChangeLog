@@ -1,3 +1,7 @@
+1999-10-20 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* committed patch by G. Jungman (beginning of
+	  namespace support) - Thanks 
+
 1999-10-20 Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* fixed lost focus on "add member function ..." (bug#1643)
 

@@ -18,6 +18,8 @@
 #ifndef _CLASSPARSER_H_INCLUDED
 #define _CLASSPARSER_H_INCLUDED
 
+#include <list>
+
 #include <qstring.h>
 #include <qlist.h>
 #include <qstack.h>
@@ -105,6 +107,9 @@ private: // Private attributes
   /** Start of a declaration that has been pushed on the stack. */
   int declStart;
 
+  /** Stores the namespace stack. */
+  list<QString> namespace_stack;
+
 private: // Private methods
 
   /** Get the next lexem from the lexer. */
@@ -148,6 +153,9 @@ private: // Private methods
 
   /** Parse an union. */
   void parseUnion();
+
+  /** Parse a namespace. */
+  void parseNamespace();
 
   /** Skip a throw() statement. */
   void skipThrowStatement();
