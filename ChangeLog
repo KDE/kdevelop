@@ -1,3 +1,9 @@
+2003-07-25 Alexander Dymo <cloudtemple@mksat.net>
+    * Added "Force Reedit", "Install" and "Install (as root user)" actions into the subproject
+      menu for Automake Manager. Force Reedit is only available for KDE projects.
+    * Quote environment variables with double quotes to allow shell expansion when
+      launching make from the project manager.
+
 2003-07-19 Harald Fernengel <harry@kdevelop.org>
     * QEdtior can now Reload files
 
