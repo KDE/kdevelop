@@ -42,7 +42,13 @@ if ($processes{USER} eq "yes") {
   #create the html-files
   printflush (STDOUT,"configure files...\n");
   chdir ($underDirectory . "/docs/en");
-  system ("sgml2html index.sgml");
+#  if (open (LOOKING,index.nif")) {
+ # 	close (LOOKING);
+ # 	system ("ksgml2html index.sgml en");
+ # }
+ # else {
+  	system ("sgml2html index.sgml");
+ # }
 }
 
 chdir ($underDirectory);

@@ -29,6 +29,8 @@
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
   q = new KShellProcess();
   gen_prj = false;
+  modifyDirectory = 0;
+  nameold = "";
   setCaption(i18n("Application Wizard"));
   init();
   initPages();
@@ -47,17 +49,14 @@ void CKAppWizard::init(){
   
   setFixedSize(515,530);
   setCancelButton();
-  cancelButton = new QButton();
   cancelButton = getCancelButton();
   QToolTip::add(cancelButton,i18n("exit the CKAppWizard"));
   connect(this,SIGNAL(cancelclicked()),SLOT(slotAppEnd()));
   setOkButton(i18n("Create"));
-  okButton = new QButton();
   okButton = getOkButton();
   QToolTip::add(okButton,i18n("creating the project"));
   connect(this,SIGNAL(okclicked()),SLOT(slotOkClicked()));
   setDefaultButton();
-  defaultButton = new QButton();
   defaultButton = getDefaultButton();
   QToolTip::add(defaultButton,i18n("set all changes back"));
   connect(this,SIGNAL(defaultclicked(int)),SLOT(slotDefaultClicked(int)));
@@ -510,6 +509,7 @@ void CKAppWizard::initPages(){
   
 
   connect(nameline,SIGNAL(textChanged(const char*)),SLOT(slotProjectnameEntry()));
+	connect(directoryline,SIGNAL(textChanged(const char*)),SLOT(slotDirectoryEntry()));
   connect(directoryload,SIGNAL(clicked()),SLOT(slotDirDialogClicked()));
   connect(miniload,SIGNAL(clicked()),SLOT(slotMiniIconButtonClicked()));
   connect(progicon,SIGNAL(clicked()),SLOT(slotProgIconClicked()));   
@@ -702,7 +702,8 @@ void CKAppWizard::initPages(){
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
   // go to page 2 then to page 1
   gotoPage(1);  
-  gotoPage(0);    
+  gotoPage(0);
+
 }
 
 // connection to directoryload
@@ -712,8 +713,14 @@ void CKAppWizard::slotDirDialogClicked() {
   dirdialog->setCaption (i18n("Directory"));
   dirdialog->show();
   projname = nameline->text();
-  dir = dirdialog->dirPath() + projname.lower();
-  directoryline->setText(dir);
+  if (!modifyDirectory) {
+  	dir = dirdialog->dirPath() + projname.lower();
+  	directoryline->setText(dir);
+  }
+  else {
+  	dir = dirdialog->dirPath();
+    directoryline->setText(dir);
+  }
   dir = dirdialog->dirPath();
   delete (dirdialog);
 }
@@ -757,14 +764,15 @@ void CKAppWizard::slotOkClicked() {
 
   StringTokenizer tokener;
   bool found=false;
-  QString file;
+  QString file1,file2;
   QString complete_path = getenv("PATH");
 
   tokener.tokenize(complete_path,":");
 
   while(tokener.hasMoreTokens()){
-    file = QString(tokener.nextToken()) + "/sgml2html";
-    if(QFile::exists(file)){
+    file1 = QString(tokener.nextToken()) + "/sgml2html";
+    file2 = QString(tokener.nextToken()) + "/ksgml2html";
+    if(QFile::exists(file1) || QFile::exists(file2)){
       found = true;
       break;
     }
@@ -772,38 +780,36 @@ void CKAppWizard::slotOkClicked() {
 
   if (!found) {
   	userdoc->setChecked(false);
-  	KMsgBox msg (0,i18n("sgml2html does not exists!"),
-    i18n("If you want to generate the user-documentation, you need sgml2html.\n"
-    		 "If you do not have it, the user-documentation will not be generate."),16,i18n("Ok"));
+  	KMsgBox msg (0,i18n("sgml2html and ksgml2html do not exists!"),
+    i18n("If you want to generate the user-documentation, you need one of these programs.\n"
+    		 "If you do not have one, the user-documentation will not be generate."),16,i18n("Ok"));
     msg.show();
   }
 
   QDir dir;
   QString direct = directoryline->text();
-  
+
   if (direct.right(1) == "/") { direct.resize(direct.length()); }
   direct.resize (direct.length() - (direct.length() - direct.findRev('/') - 1));
   dir.setPath(direct);
 
-  if (!dir.exists()) {
-  	KMsgBox msg (0,i18n("Directory does not exists!"),
-    i18n("The directory " + direct + " does not exists. If you \n"
-    		 "wish to install your project there, please create the \n"
-    		 "directory first."),16,i18n("Cancel"));
-    msg.show();     	
-			
-	return;
-  }
   KShellProcess p;
+  if (!dir.exists()) {
+ 		p.clearArguments();
+		p << "mkdirhier";
+		p << direct;
+		p.start(KProcess::Block,KProcess::AllOutput);	
+  }
+
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     if(KMsgBox::yesNo(0,i18n("Directory exists!"),
     	i18n("The selected project directory already exists. If you\n "
     	"click 'OK', all files and subdirectories of the currently chosen\n "
 			"project directory will be deleted before a new project is going\n "
-			"to be generated."),     	
-			
-KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {        return;
+			"to be generated."),KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {
+		
+		   return;
     }
     else {
       p.clearArguments();
@@ -814,10 +820,6 @@ KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {        return;
     }
   }
   else {
-    p.clearArguments();
-    QString copydes = (QString ) "rm -r -f " + directoryline->text() + QString ("/");
-    p << copydes;
-    p.start(KProcess::Block,KProcess::AllOutput);
     okPermited();
   }
 }
@@ -1360,14 +1362,23 @@ void CKAppWizard::slotProjectnameEntry() {
     	endname = endname.append(first);
     }
   }
+
   nameline->setText(endname);
-  directoryline->setText(dir + endname.lower());
+  if (!modifyDirectory) {
+   	directoryline->setText(dir + endname.lower());
+  }
   if (nametext == "" || kdeentry->isSelected() || qtentry->isSelected() ||
    	  ccppentry->isSelected() || othersentry->isSelected()) {
    	okButton->setEnabled(false);
   }
   else {
    	okButton->setEnabled(true);
+  }
+}
+
+void CKAppWizard::slotDirectoryEntry() {
+  if(directoryline->hasFocus()) {
+  	modifyDirectory = true;
   }
 }
 
@@ -1532,7 +1543,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
-  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected())) {
+  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected()) && CToolClass::searchProgram("xgettext")) {
     makeAmInfo.rel_name = "po/Makefile.am";
 //    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
     makeAmInfo.type = "po";
@@ -1898,7 +1909,27 @@ void CKAppWizard::slotProcessExited() {
 
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
-  
+
+
+  StringTokenizer tokener;
+  QString complete_path = getenv("PATH");
+  tokener.tokenize(complete_path,":");
+
+  while(tokener.hasMoreTokens()) {
+    QString file2 = QString(tokener.nextToken()) + "/ksgml2html";
+    if(QFile::exists(file2)) {
+      KShellProcess process;
+		 	QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
+ 			process.clearArguments();
+ 			process << "cp"; // copy is your friend :-)
+ 			process << nif_template;
+ 			process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
+ 			process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
+		 	break;
+    }
+  }
+
+
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
   q->clearArguments();
   *q << "perl" << path1 + "processesend.pl";
@@ -1945,9 +1976,6 @@ QString CKAppWizard::getProjectFile() {
   }
   delete (directoryline);
   delete (nameline);
-  delete (defaultButton);
-  delete (okButton);
-  delete (cancelButton);
   delete (widget0);
   delete (widget1);
   delete (widget2);
@@ -1960,6 +1988,15 @@ QString CKAppWizard::getProjectFile() {
 bool CKAppWizard::generatedProject(){
   return gen_prj;
 }
+
+
+
+
+
+
+
+
+
 
 
 

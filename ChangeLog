@@ -1,5 +1,11 @@
+1999-07-28 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* fixed the changing of the directory after change the directory
+	  in the applicationwizard seperatly
+	* you can generate new application again, if you do not have gettext
+	* fixed other things
+
 1999-07-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  * finished empty sections of the KDE library reference
+	* finished empty sections of the KDE library reference
 
 1999-07-27 Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* fixed some bugs in kdlgedit, commented out some not working features

@@ -511,9 +511,6 @@ void CKDevelop::slotProjectNewAppl(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-  if (!CToolClass::searchProgram("gettext")) {
-  	return;
-  }
   if(project){
     old_project = prj->getProjectFile();
     if(!slotProjectClose()){
@@ -1063,3 +1060,7 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+

@@ -93,6 +93,7 @@ void slotDirDialogClicked();
   //  void slotQtClicked();
   //  void slotCPPClicked();
   void slotProjectnameEntry();
+  void slotDirectoryEntry();
   void slotIconButtonClicked();
   void slotMiniIconButtonClicked();
   void slotProgIconClicked();
@@ -107,7 +108,7 @@ private:
 
   QString m_author_email;
   QString  m_author_name;
-  bool  gen_prj;
+  bool  gen_prj, modifyDirectory;
   QObject* o;
   QWidget *widget0,*widget1,*widget2,*widget3,*widget4,*widget1a,*widget1b;
   QListView* applications;
@@ -149,7 +150,7 @@ private:
   QPixmap pm,iconpm,minipm,*icontemp,*minitemp;
   QPainter painter;
   KApplication* help;
-  QString dir,nametext,directorytext,name1,name2,namelow;
+  QString dir,nametext,directorytext,name1,name2,namelow,nameold;
   KEdit *cppedit,*hedit;
   QButton *okButton,*cancelButton,*defaultButton, *prevButton;
   KIconLoader* loader;
@@ -176,3 +177,4 @@ private:
 };
 
 #endif
+
