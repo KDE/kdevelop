@@ -12,8 +12,17 @@ DocumentationPart::DocumentationPart()
 {
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KURL &)) );
+  connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
 }
 
+void DocumentationPart::popup( const QString & url, const QPoint & p )
+{
+//    qWarning("DocumentationPart::popup: %s", url.latin1());
+    KURL kurl (DocumentationPart::url().upURL());
+    kurl.addPath(url);
+    if (kurl.isValid())
+        PartController::getInstance()->showDocument(kurl, url);
+}
 
 void DocumentationPart::setContext(const QString &context)
 {

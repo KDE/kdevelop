@@ -22,14 +22,14 @@ signals:
   void fileNameChanged(const KURL& url);
 
 private slots:
- 
+
   void openURLRequest(const KURL &url);
+  void popup( const QString & url, const QPoint & p );
 
 
 private:
 
   QString m_context;
-
 };
 
 
