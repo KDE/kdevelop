@@ -133,21 +133,12 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
         reformat_box->setChecked(true);
   }
 
-  CodeModel model;
-
-  m_cppSupport->backgroundParser()->lock();
-  TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
-  if( !translationUnit )
-      translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
-
-  StoreWalker w( filename + ".h", &model );
-  w.parseTranslationUnit( translationUnit );
-  m_cppSupport->backgroundParser()->unlock();
-
   QStringList pathsplit(QStringList::split('/',filename));
 
   QString baseClass = readBaseClassName();
-  ClassList myClasses = model.globalNamespace()->classList();
+  if (!cppSupport->codeModel()->hasFile(filename+QString(".h")))
+    return;
+  ClassList myClasses = cppSupport->codeModel()->fileByName(filename+QString(".h"))->classList();
   for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
   {
     kdDebug() << "base class " << baseClass << " class " << (*classIt)->name()
