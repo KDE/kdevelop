@@ -16,6 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "./kdlgedit/kdlgedit.h"
+#include "./kdlgedit/kdlgpropwidget.h"
+#include "./kdlgedit/kdlgproplv.h"
 #include <iostream.h>
 
 #include <qprogressdialog.h>
@@ -791,6 +793,11 @@ void CKDevelop::switchToKDlgEdit(){
   else
     enableToolBar(KToolBar::Hide, ID_KDLG_TOOLBAR);
 
+  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW))
+    kdlg_prop_widget->getListView()->show();
+  else
+    kdlg_prop_widget->getListView()->hide();
+
   setKeyAccel();  // initialize Keys
 
   // this toolbar toogle is for placing the panner devider correctly
@@ -907,6 +914,22 @@ void CKDevelop::switchToWorkspace(int id){
 }
 
 void CKDevelop::showTreeView(bool show){
+
+   if (bKDevelop)
+   {
+     if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+       t_tab_view->show();
+     else
+       t_tab_view->hide();
+   }
+   else
+   {
+     if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+       kdlg_tabctl->show();
+     else
+       kdlg_tabctl->hide();
+   }
+
   if(bAutoswitch)
   {
     if(show){
@@ -1070,6 +1093,8 @@ void CKDevelop::readOptions(){
   if(config->readBoolEntry("show_properties_view",true)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
   }	
+  else
+
 
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
