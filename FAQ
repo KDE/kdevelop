@@ -1,9 +1,9 @@
 KDevelop-FAQ
 
 Q: The configure script doesn't find my Qt library.
-A: Use the options 
+A: Use the options
      --with-qt-includes=path_to_your_qt_includes
-   and 
+   and
      --with-qt-libraries=path_to_your_qt_library
 
 
@@ -18,9 +18,9 @@ A: There are 2 ways.
       be the other way round, in any case ensure  you only have on version
       of the header file, the library and that  they are consistent.
 
-      It is useful to use the locate command to verify that I have 
+      It is useful to use the locate command to verify that I have
       the correct version of a library and header files e.g.
-      updatedb 
+      updatedb
       locate libjpeg
       locate jpeglib
 
@@ -28,12 +28,12 @@ A: There are 2 ways.
       library (configure --with-libjpeg --with-libgif).
 
 
-Q: make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po' 
-   cd .. && automake --gnu --include-deps po/Makefile 
-   aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL' 
-   make[2]: *** [Makefile.in] Error 1 
-A: Workaround for automake-1.4/automake-2.13 users: Just run 
-   "aclocal" manually, then it will compile. 
+Q: make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+   cd .. && automake --gnu --include-deps po/Makefile
+   aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
+   make[2]: *** [Makefile.in] Error 1
+A: Workaround for automake-1.4/automake-2.13 users: Just run
+   "aclocal" manually, then it will compile.
 
 
 Q: What must i do if configure said that i need giflib23.
@@ -43,7 +43,7 @@ A: Try a newer snap of kdesupport, or maybe you have another giflib installed?
 Q: How can I convert a KDevelop 0.2 project to a 0.3 one?
 A: Please change the AC_OUTPUT in the configure.in to a oneline version
 
-   for example: 
+   for example:
    old version:
       AC_OUTPUT(Makefile \
 		kdevelop/kwrite/Makefile \
@@ -57,7 +57,7 @@ Q: Configure complains about the Qt version not being between 1.44
    and 2.00
 A: You probably have Qt2.00 installed on your system, and this
    messes up ./configure. For the purpose of compiling KDevelop you should
-   temporarily uninstall all Qt2.00 components from your system.
+   set QTDIR to the correct directory.
 
 
 Q: Configure complains about not being able to compile a small KDE
@@ -293,3 +293,47 @@ A: As KDevelop for KDE 2 is currently under development, you should consider usi
    Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
    For developing KDE 2 applications with KDevelop 1.x you have to set the correct
    path in the KDevelop Setup even if you´re running KDevelop under KDE 2 !
+
+Q: I'm using a KDevelop 1.4 which is already KDE2 enabled. There is no dialog editor any
+    more. How do I create my dialogs ?
+A: Since KDevelop 1.4 the QT designer is used for creating dialogs. But not only the tool
+    has changed but also the way how dialogs are designed and used from within KDevelop.
+    To create a new dialog choose new from the file dialog and create a new QT designer (*.ui)
+    file. Now the designer is opened and you can develop your dialog. ATTENTION: most
+    QT packages (*.deb,*.rpm) does not include support for KDE widgets. You need this to
+    use e.g. KListView or other KDE widgets in your dialogs.
+    After creating the dialog, you inherit your dialog class from the newly created dialog.
+
+Q: I have downloaded the QT-2.2.x packages from ftp.kde.org and there are now KDE
+    widgets available in the designer. How can I get them ?
+A: You have to recompile QT with ./configure -kde as additional option. Remember to set
+    $KDEDIR and $QTDIR to the appropriate directories. After doing so you have an option
+    KDE in the tools menue of the designer.
+
+Q: I use RedHat Linux with KDevelop and tried to recompile the QT library with -kde in
+    order to use the designer with KDE widget support but  during configure it says that
+    $KDEDIR does not contain a valid KDE installation ?
+A: RedHat uses a non-standard directory setting with KDE. The normal case would be that
+    the libs are in $KDEDIR/lib, binaries in $KDEDIR/bin and includes in $KDEDIR/include.
+    RedHat uses /usr as $KDEDIR but $KDEDIR/include/kde as directory for  header files.
+    Therefore configure from QT fails to detect the correct directories. It searches dcopserver
+    in the binaries folder and the header files in their folder. So if you choose $KDEDIR to be
+    /usr, configure can't find the includes. A possible solution for this is to create a /usr/local/kde
+    directory and set symlinks to /usr/bin and /usr/include/kde in this "pseudo" kde dir.
+    Then export KDEDIR=/usr/local/kde and do the ./configure -kde. After compiling QT you have
+    the KDE entries in the tools menu of the QT designer.
+
+Q: Is there any HOWTO available on how to work with QT designer made dialogs ?
+A: Yes, there is a great tutorial on http://women.kde.org/docs/tut_kdevelop/
+
+Q: I have installed htdig but there is now htsearch available ?
+A: On e.g. RedHat systems the htsearch executable is placed in the /cgi-bin dir of apache.
+    You can create symlinks in /usr/bin or simply add this path ro ~/.bashrc
+
+Q: I have htdig, htmerge and htsearch available but I get an error message thet the config
+    file of htdig could not be found or is invalid ?
+A: Read README.htdig in the source directory tree and create a htdig.conf file. Then copy
+    it to $KDEDIR/share/apps/kdevelop/tools. Now create your search index with the kdevelop
+    setup menu.
+
+
