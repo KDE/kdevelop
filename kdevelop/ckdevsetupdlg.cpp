@@ -1,10 +1,10 @@
 /***************************************************************************
                      kdevsetup.cpp - the setup dialog for KDevelop
-                             -------------------                                         
-                          
-    begin                : 17 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+                             -------------------
+
+    begin                : 17 Aug 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -33,6 +33,8 @@
 #include <qfileinfo.h>
 #include <qlineedit.h>
 #include <qwhatsthis.h>
+#include <qlayout.h>
+#include <qgrid.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -47,22 +49,24 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 
   setCaption( i18n("KDevelop Setup" ));
   config=KGlobal::config();
-  
+
   // ****************** the General Tab ********************
   w1 = new QWidget( this, "general" );
-  
-  
+
+  QGridLayout *grid1 = new QGridLayout(w1,4,1,15,7);
   QButtonGroup* makeGroup;
   makeGroup = new QButtonGroup( w1, "makeGroup" );
-  makeGroup->setGeometry( 10, 10, 400, 60 );
+  //makeGroup->setGeometry( 10, 10, 400, 60 );
+  grid1->addWidget(makeGroup,0,0);
   makeGroup->setFrameStyle( 49 );
   makeGroup->setTitle(i18n( "Make-Command" ));
   makeGroup->setAlignment( 1 );
   makeGroup->lower();
 
   QLabel* makeSelectLabel;
-  makeSelectLabel = new QLabel( w1, "makeSelectLabel" );
-  makeSelectLabel->setGeometry( 20, 30, 210, 25 );
+  QGridLayout *grid2 = new QGridLayout(makeGroup,1,2,15,7);
+  makeSelectLabel = new QLabel( makeGroup, "makeSelectLabel" );
+  grid2->addWidget(makeSelectLabel,0,0);
   makeSelectLabel->setText(i18n("Select Make-Command:"));
   makeSelectLabel->setAlignment( 289 );
   makeSelectLabel->setMargin( -1 );
@@ -70,8 +74,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   config->setGroup("General Options");
   QString make_cmd=config->readEntry("Make","make");
 
-  makeSelectLineEdit = new QLineEdit( w1, "makeSelectLineEdit" );
-  makeSelectLineEdit->setGeometry( 270, 30, 130, 25 );
+  makeSelectLineEdit = new QLineEdit( makeGroup, "makeSelectLineEdit" );
+  grid2->addWidget(makeSelectLineEdit,0,1);
   makeSelectLineEdit->setText(make_cmd);
 
   QString makeSelectMsg = i18n("Make-Command\n\n"
@@ -85,33 +89,34 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(makeSelectLineEdit, makeSelectMsg);
 
   bool autoSave=config->readBoolEntry("Autosave",true);
-  
+
   QButtonGroup* autosaveGroup;
   autosaveGroup = new QButtonGroup( w1, "autosaveGroup" );
-  autosaveGroup->setGeometry( 10, 90, 400, 90 );
+  grid2 = new QGridLayout(autosaveGroup,2,2,15,7);
+
   autosaveGroup->setFrameStyle( 49 );
   autosaveGroup->setTitle( i18n("Autosave") );
   autosaveGroup->setAlignment( 1 );
   //  autosaveGroup->insert( autoSaveCheck );
   autosaveGroup->lower();
-  
-  autoSaveCheck = new QCheckBox( w1, "autoSaveCheck" );
-  autoSaveCheck->setGeometry( 20, 110, 210, 30 );
+
+  autoSaveCheck = new QCheckBox( autosaveGroup, "autoSaveCheck" );
+  grid2->addWidget(autoSaveCheck,0,0);
   autoSaveCheck->setText(i18n("enable Autosave"));
   autoSaveCheck->setAutoRepeat( FALSE );
   autoSaveCheck->setAutoResize( FALSE );
   autoSaveCheck->setChecked(autoSave);
-  
+
   QLabel* autosaveTimeLabel;
-  autosaveTimeLabel = new QLabel( w1, "autosaveTimeLabel" );
-  autosaveTimeLabel->setGeometry( 20, 140, 250, 25 );
+  autosaveTimeLabel = new QLabel( autosaveGroup, "autosaveTimeLabel" );
+  grid2->addWidget(autosaveTimeLabel,1,0);
   autosaveTimeLabel->setText(i18n("Select Autosave time-interval:"));
   autosaveTimeLabel->setAlignment( 289 );
   autosaveTimeLabel->setMargin( -1 );
   autosaveTimeLabel->setEnabled(autoSave);
-  
-  autosaveTimeCombo = new QComboBox( FALSE, w1, "autosaveTimeCombo" );
-  autosaveTimeCombo->setGeometry( 270, 140, 130, 25 );
+
+  autosaveTimeCombo = new QComboBox( FALSE, autosaveGroup, "autosaveTimeCombo" );
+  grid2->addWidget(autosaveTimeCombo,1,1);
   autosaveTimeCombo->setSizeLimit( 10 );
   autosaveTimeCombo->setAutoResize( FALSE );
   autosaveTimeCombo->insertItem(i18n("3 min"),0 );
@@ -139,27 +144,27 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(autosaveTimeCombo, autosaveMsg);
   QWhatsThis::add(autoSaveCheck, autosaveMsg);
   QWhatsThis::add(autosaveGroup, autosaveMsg);
+  grid1->addWidget(autosaveGroup,1,0);
 
   QButtonGroup* autoswitchGroup;
   autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
-  autoswitchGroup->setGeometry( 10, 190, 400, 60 );
+
   autoswitchGroup->setFrameStyle( 49 );
   autoswitchGroup->setTitle(i18n( "Autoswitch") );
   autoswitchGroup->setAlignment( 1 );
   //  autoswitchGroup->insert( autoSwitchCheck );
   autoswitchGroup->lower();
-  
-  autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
-  autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
-
+  grid2 = new QGridLayout(autoswitchGroup,1,2,15,7);
+  autoSwitchCheck = new QCheckBox( autoswitchGroup, "autoSwitchCheck" );
+  grid2->addWidget(autoSwitchCheck,0,0);
   autoSwitchCheck->setText(i18n("enable Autoswitch"));
   autoSwitchCheck->setAutoRepeat( FALSE );
   autoSwitchCheck->setAutoResize( FALSE );
   bool autoSwitch=config->readBoolEntry("Autoswitch",true);
   autoSwitchCheck->setChecked( autoSwitch );
 
-  defaultClassViewCheck = new QCheckBox( w1, "defaultClassViewCheck" );
-  defaultClassViewCheck->setGeometry( 220, 210, 180, 30 );
+  defaultClassViewCheck = new QCheckBox( autoswitchGroup, "defaultClassViewCheck" );
+  grid2->addWidget(defaultClassViewCheck,0,1);
   defaultClassViewCheck->setText(i18n( "use Class View as default"));
   defaultClassViewCheck->setAutoRepeat( FALSE );
   defaultClassViewCheck->setAutoResize( FALSE );
@@ -181,58 +186,60 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 						       "Disableing autoswitch means you\n"
 						       "will have to switch to windows\n"
 						       "yourself, including turning on and\n"
-						       "off the outputwindow.");	
+						       "off the outputwindow.");
   QWhatsThis::add(autoSwitchCheck, autoswitchMsg);
   QWhatsThis::add(autoswitchGroup, autoswitchMsg);
-
+  grid1->addWidget(autoswitchGroup,2,0);
 //  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
-  
+
   QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
-  startupGroup->setGeometry( 10, 260, 400, 70 );
+  //startupGroup->setGeometry( 10, 260, 400, 70 );
+
+  grid2 = new QGridLayout(startupGroup,2,2,15,7);
   startupGroup->setFrameStyle( 49 );
   startupGroup->setTitle(i18n("Startup"));
   startupGroup->setAlignment( 1 );
   //	startupGroup->insert( logoCheck );
   //	startupGroup->insert( lastProjectCheck );
   startupGroup->lower();
-  
+
   QWhatsThis::add(startupGroup, i18n("Startup\n\n"
 	                  "The Startup group offers options for\n"
 				     "starting KDevelop"));
-  
+
   config->setGroup("General Options");
   bool logo=config->readBoolEntry("Logo",true);
   bool lastprj=config->readBoolEntry("LastProject",true);
-  
-  logoCheck = new QCheckBox( w1, "logoCheck" );
-  logoCheck->setGeometry( 20, 275, 190, 25 );
+
+  logoCheck = new QCheckBox( startupGroup, "logoCheck" );
+  grid2->addWidget(logoCheck,0,0);
   logoCheck->setText(i18n("Startup Logo"));
   logoCheck->setAutoRepeat( FALSE );
   logoCheck->setAutoResize( FALSE );
   logoCheck->setChecked( logo );
-  
+
   QWhatsThis::add(logoCheck, i18n("Startup Logo\n\n"
 	                  "If Startup Logo is enabled, KDevelop will show the\n"
 	                  "logo picture while it is starting."));
-  
-  lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
-  lastProjectCheck->setGeometry( 20, 295, 190, 25 );
+
+  lastProjectCheck = new QCheckBox( startupGroup, "lastProjectCheck" );
+  grid2->addWidget(lastProjectCheck,1,0);
   lastProjectCheck->setText(i18n("Load last project"));
   lastProjectCheck->setAutoRepeat( FALSE );
   lastProjectCheck->setAutoResize( FALSE );
   lastProjectCheck->setChecked( lastprj );
-  
+
   QWhatsThis::add(lastProjectCheck, i18n("Load last project\n\n"
                     "If Load last project is enabled, KDevelop will load\n"
                     "the last project used."));
 
-	
+
   config->setGroup("TipOfTheDay");
   bool tip=config->readBoolEntry("show_tod",true);
 
-	
-	tipDayCheck = new QCheckBox( w1, "tipDayCheck" );
-	tipDayCheck->setGeometry( 220, 275, 150, 25 );
+
+	tipDayCheck = new QCheckBox( startupGroup, "tipDayCheck" );
+                grid2->addWidget(tipDayCheck,0,1);
 	tipDayCheck->setText(i18n("Tip of the Day"));
 	tipDayCheck->setAutoRepeat( FALSE );
 	tipDayCheck->setAutoResize( FALSE );
@@ -241,7 +248,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 	QWhatsThis::add(tipDayCheck, i18n("Tip of the Day\n\n"
 	                  "If Tip of the Day is enabled, KDevelop will show the\n"
 	                  "Tip of the Day every time it starts."));
-	
+  grid1->addWidget(startupGroup,3,0);
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   connect( autosaveTimeCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsAutosaveTime(int)) );
@@ -256,10 +263,12 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   //  KKeyChooser* w2 = new KKeyChooser ( dict,this);
   keyMap = accel->keyDict();
   w2 = new QWidget( this, "keys" );
+  grid1 = new QGridLayout(w2,2,1,15,7);
+
   w21 = new KKeyChooser ( &keyMap, w2, true);
-  w21->setGeometry(15,10,395,320);
-  
-  
+  //w21->setGeometry(15,10,395,320);
+  grid1->addWidget( w21,0,0);
+
   // ****************** the Documentation Tab ********************
   w = new QWidget( this, "documentaion" );
   config->setGroup("Doc_Location");
@@ -363,7 +372,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   create_label->setText(i18n("Create Search Database :") );
   create_label->setAlignment( 289 );
   create_label->setMargin( -1 );
-  
+
   QPushButton* create_button;	
   create_button = new QPushButton( w, "create_button" );
   create_button->setGeometry( 290, 230, 110, 30 );
@@ -442,9 +451,9 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   bool dbgTerminal          = config->readBoolEntry("Debug on separate tty console", false);
 
   w3 = new QWidget( this, "debug" );
-
+  grid1 = new QGridLayout(w3,3,1,15,7);
   dbgExternalCheck = new QCheckBox( w3, "dbgExternal" );
-  dbgExternalCheck->setGeometry( 20, 10, 210, 25 );
+  grid1->addWidget(dbgExternalCheck,0,0);
   dbgExternalCheck->setText(i18n("Use external debugger"));
   dbgExternalCheck->setAutoRepeat( FALSE );
   dbgExternalCheck->setAutoResize( FALSE );
@@ -456,21 +465,22 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "The internal debugger is a frontend to gdb"));
 
   dbgExternalGroup = new QButtonGroup( w3, "dbgExternalGroup" );
-  dbgExternalGroup->setGeometry( 10, 40, 400, 70 );
+  grid2 = new QGridLayout(dbgExternalGroup,1,2,15,7);
   dbgExternalGroup->setFrameStyle( 49 );
   dbgExternalGroup->setTitle(i18n( "External" ));
   dbgExternalGroup->setAlignment( 1 );
   dbgExternalGroup->lower();
 
-  dbgSelectCmdLabel = new QLabel( w3, "dbgSelectLabel" );
-  dbgSelectCmdLabel->setGeometry( 20, 70, 210, 25 );
+  dbgSelectCmdLabel = new QLabel( dbgExternalGroup, "dbgSelectLabel" );
+  grid2->addWidget(dbgSelectCmdLabel,0,0);
   dbgSelectCmdLabel->setText(i18n("Select debug command:"));
   dbgSelectCmdLabel->setAlignment( 289 );
   dbgSelectCmdLabel->setMargin( -1 );
 
-  dbgExternalSelectLineEdit = new QLineEdit( w3, "dbgExternalSelectLineEdit" );
-  dbgExternalSelectLineEdit->setGeometry( 270, 70, 130, 25 );
+  dbgExternalSelectLineEdit = new QLineEdit( dbgExternalGroup, "dbgExternalSelectLineEdit" );
+  grid2->addWidget(dbgExternalSelectLineEdit,0,1);
   dbgExternalSelectLineEdit->setText(dbg_cmd);
+  grid1->addWidget(dbgExternalGroup,1,0);
 
   QString dbgSelectCmdMsg = i18n("Identify the external debugger\n\n"
 	                  "Enter the program name you wish to run\n"
@@ -479,14 +489,15 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(dbgExternalSelectLineEdit, dbgSelectCmdMsg);
 
   dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
-  dbgInternalGroup->setGeometry( 10, 130, 400, 180 );
+  grid1->addWidget(dbgInternalGroup,2,0);
+  grid2 = new QGridLayout(dbgInternalGroup,5,1,15,7);
   dbgInternalGroup->setFrameStyle( 49 );
   dbgInternalGroup->setTitle(i18n( "Internal" ));
   dbgInternalGroup->setAlignment( 1 );
   dbgInternalGroup->lower();
 
-  dbgMembersCheck = new QCheckBox( w3, "dbgMembers" );
-  dbgMembersCheck->setGeometry( 20, 150, 210, 25 );
+  dbgMembersCheck = new QCheckBox( dbgInternalGroup, "dbgMembers" );
+  grid2->addWidget( dbgMembersCheck,0,0);
   dbgMembersCheck->setText(i18n("Display static members"));
   dbgMembersCheck->setAutoRepeat( FALSE );
   dbgMembersCheck->setAutoResize( FALSE );
@@ -499,8 +510,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "But if you need to debug into these values then\n"
                     "check this option" ));
 
-  dbgAsmCheck = new QCheckBox( w3, "dbgMembers" );
-  dbgAsmCheck->setGeometry( 20, 180, 210, 25 );
+  dbgAsmCheck = new QCheckBox( dbgInternalGroup, "dbgMembers" );
+  grid2->addWidget( dbgAsmCheck,1,0);
   dbgAsmCheck->setText(i18n("Display mangled names"));
   dbgAsmCheck->setAutoRepeat( FALSE );
   dbgAsmCheck->setAutoResize( FALSE );
@@ -510,8 +521,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 	                  "can select to see the methods mangled names\n"
                     "However, non-mangled names are easier to read." ));
 
-  dbgLibCheck = new QCheckBox( w3, "dbgMembers" );
-  dbgLibCheck->setGeometry( 20, 210, 310, 25 );
+  dbgLibCheck = new QCheckBox( dbgInternalGroup, "dbgMembers" );
+  grid2->addWidget( dbgLibCheck,2,0);
   dbgLibCheck->setText(i18n("Try setting BPs on lib load"));
   dbgLibCheck->setAutoRepeat( FALSE );
   dbgLibCheck->setAutoResize( FALSE );
@@ -524,8 +535,9 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "details and a \"gotcha\" relating to this behaviour.\n\n"
                     "If you are not \"dlopen\"ing libs leave this off." ));
 
-  dbgFloatCheck = new QCheckBox( w3, "dbgFloatToolbar" );
-  dbgFloatCheck->setGeometry( 20, 240, 310, 25 );
+  dbgFloatCheck = new QCheckBox( dbgInternalGroup, "dbgFloatToolbar" );
+  //dbgFloatCheck->setGeometry( 20, 240, 310, 25 );
+  grid2->addWidget( dbgFloatCheck,3,0);
   dbgFloatCheck->setText(i18n("Enable floating toolbar"));
   dbgFloatCheck->setAutoRepeat( FALSE );
   dbgFloatCheck->setAutoResize( FALSE );
@@ -537,8 +549,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "Also this toolbar can be docked to the panel\n"
                     "This toolbar is in addition to the toolbar in KDevelop" ));
 
-  dbgTerminalCheck = new QCheckBox( w3, "dbgTerminalCheck" );
-  dbgTerminalCheck->setGeometry( 20, 270, 310, 25 );
+  dbgTerminalCheck = new QCheckBox( dbgInternalGroup, "dbgTerminalCheck" );
+  grid2->addWidget( dbgTerminalCheck,4,0);
   dbgTerminalCheck->setText(i18n("Enable separate terminal for application i/o"));
   dbgTerminalCheck->setAutoRepeat( FALSE );
   dbgTerminalCheck->setAutoResize( FALSE );

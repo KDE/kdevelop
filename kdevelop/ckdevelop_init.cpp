@@ -99,7 +99,7 @@ CKDevelop::CKDevelop(bool witharg) :
 
   config = KGlobal::config();
   kdev_caption=kapp->caption();
-  
+
   config->setGroup("General Options");
   KStartupLogo* start_logo=0L;
   if (config->readBoolEntry("Logo",true))
@@ -131,7 +131,7 @@ CKDevelop::CKDevelop(bool witharg) :
   slotViewRefresh();
   if(start_logo)
     start_logo->raise();
-	
+
   initDebugger();
   show();
 
@@ -142,7 +142,7 @@ CKDevelop::CKDevelop(bool witharg) :
 
   initWhatsThis();
   slotStatusMsg(i18n("Welcome to KDevelop!"));
-  
+
   initProject(witharg);
 
   if (start_logo)
@@ -299,7 +299,7 @@ void CKDevelop::initView()
   edit2->modified=false;
   edit_infos.append(edit1);
   edit_infos.append(edit2);
-  
+
   // init some dialogs
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
 }
@@ -1037,7 +1037,7 @@ void CKDevelop::initToolBar(){
 
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
-	
+
   /////////////////////
   // the second toolbar
   /////////////////////
@@ -1321,7 +1321,7 @@ void CKDevelop::initProject(bool witharg)
     }
 
     if (bLastProject)
-    {  	   	
+    {
       config->setGroup("Files");
       filename = config->readEntry("project_file","");
       slotProjectOpenCmdl(filename);
@@ -1365,7 +1365,7 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
-		
+
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
   accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
   accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );

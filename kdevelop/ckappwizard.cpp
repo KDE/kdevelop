@@ -935,6 +935,7 @@ void CKAppWizard::initPages()
   page5->setEnabled(true);
   addPage(page5, i18n("Processes"));
   setFinishEnabled ( page5, true );
+  setNextEnabled( page5, false );
 
   // create a MultiLineEdit for the processes of kAppWizard
   output = new QMultiLineEdit( page5, "output" );
@@ -2043,8 +2044,15 @@ void CKAppWizard::slotDefaultClicked() {
 }
 
 // connection of nameline
-void CKAppWizard::slotProjectnameEntry(const QString&)
+void CKAppWizard::slotProjectnameEntry(const QString&_projectname)
 {
+  if(_projectname.isEmpty())
+        {
+        setNextEnabled( page1, false );
+        return;
+        }
+  else
+        setNextEnabled( page1, true );
   int position = nameline->cursorPosition();
   nametext = nameline->text();
   nametext = nametext.stripWhiteSpace();

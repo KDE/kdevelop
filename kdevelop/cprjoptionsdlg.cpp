@@ -27,6 +27,9 @@
 #include "debug.h"
 #include "ctoolclass.h"
 #include <kstddirs.h>
+#include <knumvalidator.h>
+#include <qlayout.h>
+#include <qgrid.h>
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
@@ -36,7 +39,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QString cxxflags=prj->getCXXFLAGS();
   QString ldflags=prj->getLDFLAGS();
   QString ldadd=prj->getLDADD();
-  
+
   old_version = prj->getVersion();
   old_ldflags =  ldflags.stripWhiteSpace();
   old_ldadd = ldadd.stripWhiteSpace();
@@ -46,75 +49,77 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   need_configure_in_update = false;
   need_makefile_generation = false;
 
-  
+
   setFixedSize(630,355);
   QStrList short_info;
   int pos;
 
   setCaption( i18n("Project Options" ));
-  
+
   // ****************** the General_Widget ********************
   QWidget *w = new QWidget( this, "general" );
+  QGridLayout *grid6 = new QGridLayout(w,9,6,15,7);
   QWhatsThis::add(w, i18n("Set the general options of your project here."));
 
   QLabel* prjname_label;
   prjname_label = new QLabel( w, "prjname_label" );
-  prjname_label->setGeometry( 10, 10, 170, 20 );
+  grid6->addWidget(prjname_label,0,0);
   prjname_label->setText( i18n("Project name:") );
 
   prjname_edit = new QLineEdit( w, "prjname_edit" );
-  prjname_edit->setGeometry( 10, 30, 170, 30 );
+  grid6->addMultiCellWidget(prjname_edit,1,1,0,1);
   prjname_edit->setText( prj_info->getProjectName() );
   QWhatsThis::add(prjname_label, i18n("Set the project name here."));
   QWhatsThis::add(prjname_edit, i18n("Set the project name here."));
-  
+
 
   QLabel* version_label;
   version_label = new QLabel( w, "version_label" );
-  version_label->setGeometry( 190, 10, 60, 20 );
+  grid6->addWidget(version_label,0,2);
   version_label->setText( i18n("Version:") );
 
   version_edit = new QLineEdit( w, "version_edit" );
-  version_edit->setGeometry( 190, 30, 60, 30 );
+  grid6->addWidget(version_edit,1,2);
   version_edit->setText( prj_info->getVersion() );
+  version_edit->setValidator( new KFloatValidator( version_edit ));
   QWhatsThis::add(version_label, i18n("Set your project version\nnumber here."));
   QWhatsThis::add(version_edit, i18n("Set your project version\nnumber here."));
 
 
   QLabel* author_label;
   author_label = new QLabel( w, "author_label" );
-  author_label->setGeometry( 10, 80, 240, 20 );
+  grid6->addWidget(author_label,2,0);
   author_label->setText( i18n("Author:") );
-   
+
   author_edit = new QLineEdit( w, "author_edit" );
-  author_edit->setGeometry( 10, 100, 240, 30 );
+  grid6->addMultiCellWidget(author_edit,3,3,0,2);
   author_edit->setText( prj_info->getAuthor() );
   QWhatsThis::add(author_label,  i18n("Insert your name or the name of your team here"));
   QWhatsThis::add(author_edit, i18n("Insert your name or the name of your team here"));
-   
+
   QLabel* email_label;
   email_label = new QLabel( w, "email_label" );
-  email_label->setGeometry( 10, 150, 240, 20 );
+  grid6->addWidget(email_label,4,0);
   email_label->setText( i18n("Email:") );
-  
+
   email_edit = new QLineEdit( w, "email_edit");
-  email_edit->setGeometry( 10, 170, 240, 30 );
+  grid6->addMultiCellWidget(email_edit,5,5,0,2);
   email_edit->setText( prj_info->getEmail() );
   QWhatsThis::add(email_label, i18n("Insert your email-address here"));
   QWhatsThis::add(email_edit, i18n("Insert your email-address here"));
 
 
   modifymakefiles_checkbox = new QCheckBox( w, "" );
-  modifymakefiles_checkbox->setGeometry( 10, 215, 290, 20 );
+  grid6->addMultiCellWidget(modifymakefiles_checkbox,6,6,0,1);
   modifymakefiles_checkbox->setText( i18n("Modify Makefiles") );
   modifymakefiles_checkbox->setChecked(prj->getModifyMakefiles());
 
-  QLabel *vcsystem_label 
+  QLabel *vcsystem_label
     = new QLabel( i18n("Version Control:"), w, "vcsystem_label" );
-  vcsystem_label->setGeometry( 10, 240, 170, 30 );
+  grid6->addWidget(vcsystem_label,7,0);
 
   vcsystem_combo = new QComboBox( false, w );
-  vcsystem_combo->setGeometry( 190, 240, 60, 30 );
+  grid6->addWidget(vcsystem_combo,7,2);
   QStrList l;
   VersionControl::getSupportedSystems(&l);
   vcsystem_combo->insertItem(i18n("None"));
@@ -126,11 +131,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
   QLabel* info_label;
   info_label=new QLabel(w,"info_label");
-  info_label->setGeometry(270,10,225,20);
+  grid6->addWidget(info_label,0,3);
   info_label->setText(i18n("Short Information:"));
 
   info_edit=new QMultiLineEdit(w,"info_edit");
-  info_edit->setGeometry(270,30,270,240);
+  grid6->addMultiCellWidget(info_edit,1,8,3,5);
   short_info=prj_info->getShortInfo();
   short_info.first();
   do {
@@ -208,7 +213,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   if (cxxflags.contains("-O2")) optimize_level->setValue(2);
   if (cxxflags.contains("-O3")) optimize_level->setValue(3);
   connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
-  
+
   QLabel* optimize_level_label;
   optimize_level_label=new QLabel(w2,"optimize_level_label");
   optimize_level_label->setGeometry(100,120,140,20);
@@ -286,7 +291,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 				"files in the current directory. This means\n"
 				"compiling a file <i>foo.c</i> will produce\n"
 				"the files <i>foo.o, foo.i</i> and<i>foo.s"));
- 
+
   QLabel* addit_gcc_options_label;
   addit_gcc_options_label=new QLabel(w2,"addit_gcc_options_label");
   addit_gcc_options_label->setGeometry(10,180,200,20);
@@ -310,9 +315,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QWidget *w3= new QWidget(this,"Warnings");
   QWhatsThis::add(w3, i18n("Set the Compiler warnings here by checking\n"
 			"the -W options you want to use."));
- 
+  QGridLayout *grid1 = new QGridLayout(w3,13,2,15,7);
   w_all=new QCheckBox(w3,"w_all");
-  w_all->setGeometry(10,10,230,20);
+  grid1->addWidget(w_all,0,0);
   w_all->setText("-Wall");
   if (cxxflags.contains("-Wall")) {
     w_all->setChecked(true);
@@ -325,7 +330,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 			"turn on."));
 
   w_=new QCheckBox(w3,"w_");
-  w_->setGeometry(10,30,230,20);
+  grid1->addWidget(w_,1,0);
   w_->setText("-W");
   if (cxxflags.contains("-W ")) {
     w_->setChecked(true);
@@ -338,7 +343,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 			"GCC-Info for more information."));
 
   w_traditional=new QCheckBox(w3,"w_traditional");
-  w_traditional->setGeometry(10,50,230,20);
+  grid1->addWidget(w_traditional,2,0);
   w_traditional->setText("-Wtraditional");
   if (cxxflags.contains("-Wtraditional")) {
     w_traditional->setChecked(true);
@@ -351,7 +356,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_undef=new QCheckBox(w3,"w_undef");
-  w_undef->setGeometry(10,70,230,20);
+  grid1->addWidget(w_undef,3,0);
   w_undef->setText("-Wundef");
   if (cxxflags.contains("-Wundef")) {
     w_undef->setChecked(true);
@@ -362,7 +367,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 				"evaluated in an `#if' directive"));
 
   w_shadow=new QCheckBox(w3,"w_shadow");
-  w_shadow->setGeometry(10,90,230,20);
+  grid1->addWidget(w_shadow,4,0);
   w_shadow->setText("-Wshadow");
   if (cxxflags.contains("-Wshadow")) {
     w_shadow->setChecked(true);
@@ -401,7 +406,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   */
 
   w_pointer_arith=new QCheckBox(w3,"w_pointer_arith");
-  w_pointer_arith->setGeometry(10,110,230,20);
+  grid1->addWidget(w_pointer_arith,5,0);
   w_pointer_arith->setText("-Wpointer-arith");
   if (cxxflags.contains("-Wpointer-arith")) {
     w_pointer_arith->setChecked(true);
@@ -418,7 +423,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_bad_function_cast=new QCheckBox(w3,"w_bad_function_cast");
-  w_bad_function_cast->setGeometry(10,130,230,20);
+  grid1->addWidget(w_bad_function_cast,6,0);
   w_bad_function_cast->setText("-Wbad-function-cast");
   if (cxxflags.contains("-Wbad-function-cast")) {
     w_bad_function_cast->setChecked(true);
@@ -432,7 +437,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_cast_qual=new QCheckBox(w3,"w_cast_qual");
-  w_cast_qual->setGeometry(10,150,230,20);
+  grid1->addWidget(w_cast_qual,7,0);
   w_cast_qual->setText("-Wcast-qual");
   if (cxxflags.contains("-Wcast-qual")) {
     w_cast_qual->setChecked(true);
@@ -447,7 +452,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_cast_align=new QCheckBox(w3,"w_cast_align");
-  w_cast_align->setGeometry(10,170,230,20);
+  grid1->addWidget(w_cast_align,8,0);
   w_cast_align->setText("-Wcast-align");
   if (cxxflags.contains("-Wcast-align")) {
     w_cast_align->setChecked(true);
@@ -463,14 +468,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_write_strings=new QCheckBox(w3,"w_write_strings");
-  w_write_strings->setGeometry(10,190,230,20);
+  grid1->addWidget(w_write_strings,9,0);
   w_write_strings->setText("-Wwrite-strings");
   if (cxxflags.contains("-Wwrite-strings")) {
     w_write_strings->setChecked(true);
   } else {
     w_write_strings->setChecked(false);
   }
-  QWhatsThis::add(w_write_strings, 
+  QWhatsThis::add(w_write_strings,
 	i18n("Give string constants the type <i>const char[LENGTH]</i>\n"
 	     	"so that copying the address of one into a non-<i>const\n"
 	     	"char *</i> pointer will get a warning. These warnings\n"
@@ -483,7 +488,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_conversion=new QCheckBox(w3,"w_conversion");
-  w_conversion->setGeometry(10,210,230,20);
+  grid1->addWidget(w_conversion,10,0);
   w_conversion->setText("-Wconversion");
   if (cxxflags.contains("-Wconversion")) {
     w_conversion->setChecked(true);
@@ -502,7 +507,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_sign_compare=new QCheckBox(w3,"w_sign_compare");
-  w_sign_compare->setGeometry(260,10,230,20);
+  grid1->addWidget(w_sign_compare,0,1);
   w_sign_compare->setText("-Wsign-compare");
   if (cxxflags.contains("-Wsign-compare")) {
     w_sign_compare->setChecked(true);
@@ -516,7 +521,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_aggregate_return=new QCheckBox(w3,"w_aggregate_return");
-  w_aggregate_return->setGeometry(260,30,230,20);
+  grid1->addWidget(w_aggregate_return,1,1);
   w_aggregate_return->setText("-Waggregate-return");
   if (cxxflags.contains("-Waggregate-return")) {
     w_aggregate_return->setChecked(true);
@@ -530,7 +535,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_strict_prototypes=new QCheckBox(w3,"w_strict_prototypes");
-  w_strict_prototypes->setGeometry(260,50,230,20);
+  grid1->addWidget(w_strict_prototypes,2,1);
   w_strict_prototypes->setText("-Wstrict-prototypes");
   if (cxxflags.contains("-Wstrict-prototypes")) {
     w_strict_prototypes->setChecked(true);
@@ -545,7 +550,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_missing_prototypes=new QCheckBox(w3,"w_missing_prototypes");
-  w_missing_prototypes->setGeometry(260,70,230,20);
+  grid1->addWidget(w_missing_prototypes,3,1);
   w_missing_prototypes->setText("-Wmissing-prototypes");
   if (cxxflags.contains("-Wmissing-prototypes")) {
     w_missing_prototypes->setChecked(true);
@@ -561,7 +566,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_missing_declarations=new QCheckBox(w3,"w_missing_declarations");
-  w_missing_declarations->setGeometry(260,90,230,20);
+  grid1->addWidget(w_missing_declarations,4,1);
   w_missing_declarations->setText("-Wmissing-declarations");
   if (cxxflags.contains("-Wmissing-declarations")) {
     w_missing_declarations->setChecked(true);
@@ -576,7 +581,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_redundant_decls=new QCheckBox(w3,"w_redundant_decls");
-  w_redundant_decls->setGeometry(260,110,230,20);
+  grid1->addWidget(w_redundant_decls,5,1);
   w_redundant_decls->setText("-Wredundant-decls");
   if (cxxflags.contains("-Wredundant-decls")) {
     w_redundant_decls->setChecked(true);
@@ -590,7 +595,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_nested_externs=new QCheckBox(w3,"w_nested_externs");
-  w_nested_externs->setGeometry(260,130,230,20);
+  grid1->addWidget(w_nested_externs,6,1);
   w_nested_externs->setText("-Wnested-externs");
   if (cxxflags.contains("-Wnested-externs")) {
     w_nested_externs->setChecked(true);
@@ -603,7 +608,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_inline=new QCheckBox(w3,"w_inline");
-  w_inline->setGeometry(260,150,230,20);
+  grid1->addWidget(w_inline,7,1);
   w_inline->setText("-Winline");
   if (cxxflags.contains("-Winline")) {
     w_inline->setChecked(true);
@@ -617,7 +622,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_old_style_cast=new QCheckBox(w3,"w_old_style_cast");
-  w_old_style_cast->setGeometry(260,170,230,20);
+  grid1->addWidget(w_old_style_cast,8,1);
   w_old_style_cast->setText("-Wold-style-cast");
   if (cxxflags.contains("-Wold-style-cast")) {
     w_old_style_cast->setChecked(true);
@@ -630,7 +635,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_overloaded_virtual=new QCheckBox(w3,"w_overloaded_virtual");
-  w_overloaded_virtual->setGeometry(260,190,230,20);
+  grid1->addWidget(w_overloaded_virtual,9,1);
   w_overloaded_virtual->setText("-Woverloaded-virtual");
   if (cxxflags.contains("-Woverloaded-virtual")) {
     w_overloaded_virtual->setChecked(true);
@@ -649,7 +654,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_synth=new QCheckBox(w3,"w_synth");
-  w_synth->setGeometry(260,210,230,20);
+  grid1->addWidget(w_synth,10,1);
   w_synth->setText("-Wsynth");
   if (cxxflags.contains("-Wsynth")) {
     w_synth->setChecked(true);
@@ -662,7 +667,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
 
   w_error=new QCheckBox(w3,"w_error");
-  w_error->setGeometry(260,250,230,20);
+  grid1->addWidget(w_error,12,1);
   w_error->setText(i18n("make all Warnings into errors"));
   if (cxxflags.contains("-Werror")) {
     w_error->setChecked(true);
@@ -678,6 +683,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   // *************** Linker Options *********************
 
   QWidget *w4= new QWidget(this,"Linker");
+  QGridLayout *grid2 = new QGridLayout(w4,2,1,15,7);
   QWhatsThis::add(w4, i18n("Set the Linker options and choose the\n"
 			"libraries to add to your project."));
   ldflags = " " + ldflags + " ";
@@ -686,12 +692,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 //  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
   QGroupBox* ldflags_group;
   ldflags_group=new QGroupBox(w4,"ldflags_group");
-  ldflags_group->setGeometry(10,10,530,100);
+  QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7);
+
   ldflags_group->setTitle(i18n("library flags"));
   QWhatsThis::add(ldflags_group, i18n("Set your library flags here."));
- 
-  l_remove_symbols=new QCheckBox(w4,"l_remove_symbols");
-  l_remove_symbols->setGeometry(20,30,470,20);
+
+  l_remove_symbols=new QCheckBox(ldflags_group,"l_remove_symbols");
+  grid3->addMultiCellWidget(l_remove_symbols,0,0,0,1);
   l_remove_symbols->setText(i18n("remove all symbol table and relocation information from the executable"));
   if (ldflags.contains(" -s ")) {
     l_remove_symbols->setChecked(true);
@@ -705,9 +712,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 			"should keep those informations in the object files.\n"
 			"It's useless to let the compiler generate debug\n"
 			"informations and to remove it with this option."));
-  
-  l_static=new QCheckBox(w4,"l_static");
-  l_static->setGeometry(20,50,360,20);
+
+  l_static=new QCheckBox(ldflags_group,"l_static");
+  grid3->addMultiCellWidget(l_static,1,1,0,1);
+
   l_static->setText(i18n("prevent using shared libraries"));
   if (ldflags.contains(" -static ")) {
     l_static->setChecked(true);
@@ -720,16 +728,17 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QWhatsThis::add(l_static, i18n("On systems that support dynamic linking,\n"
 				 "this prevents linking with the shared libraries.\n"
 				 "On other systems, this option has no effect."));
- 
+
   QLabel* addit_ldflags_label;
-  addit_ldflags_label=new QLabel(w4,"addit_ldflags_label");
-  addit_ldflags_label->setGeometry(20,70,90,30);
+  addit_ldflags_label=new QLabel(ldflags_group,"addit_ldflags_label");
+  grid3->addWidget(addit_ldflags_label,2,0);
   addit_ldflags_label->setText(i18n("additional flags:"));
 
-  addit_ldflags=new QLineEdit(w4,"addit_ldflags");
-  addit_ldflags->setGeometry(120,70,370,30);
+  addit_ldflags=new QLineEdit(ldflags_group,"addit_ldflags");
+  grid3->addWidget(addit_ldflags,2,1);
   ldflags=ldflags.stripWhiteSpace();
   addit_ldflags->setText(ldflags);
+  grid2->addWidget(ldflags_group,0,0);
 
   QString ldflagsMsg = i18n("Insert other linker options here\n"
 				      "to invoke the linker with by setting the\n"
@@ -739,12 +748,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
   QGroupBox* libs_group;
   libs_group=new QGroupBox(w4,"libs_group");
-  libs_group->setGeometry(10,120,530,150);
+
+  QGridLayout *grid4 = new QGridLayout(libs_group,5,4,15,7);
   libs_group->setTitle(i18n("libraries"));
   QWhatsThis::add(libs_group, i18n("Choose your libraries here."));
- 
-  l_X11=new QCheckBox(w4,"l_X11");
-  l_X11->setGeometry(20,140,110,20);
+
+  l_X11=new QCheckBox(libs_group,"l_X11");
+  grid4->addWidget(l_X11,0,0);
   l_X11->setText("X11");
   if (ldadd.contains(" -lX11 ")) {
     l_X11->setChecked(true);
@@ -756,8 +766,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   }
   QWhatsThis::add(l_X11, i18n("X11 basics\n"));
 
-  l_Xext=new QCheckBox(w4,"l_Xext");
-  l_Xext->setGeometry(20,160,110,20);
+  l_Xext=new QCheckBox(libs_group,"l_Xext");
+  grid4->addWidget(l_Xext,1,0);
   l_Xext->setText("Xext");
   if (ldadd.contains(" -lXext ")) {
     l_Xext->setChecked(true);
@@ -768,9 +778,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     l_Xext->setChecked(false);
   }
   QWhatsThis::add(l_Xext, i18n("X11 extensions\n"));
-  
-  l_qt=new QCheckBox(w4,"l_qt");
-  l_qt->setGeometry(20,180,110,20);
+
+  l_qt=new QCheckBox(libs_group,"l_qt");
+  grid4->addWidget(l_qt,2,0);
   l_qt->setText("qt");
   if(!(prj->isKDE2Project() || prj->isQt2Project())){
     if (ldadd.contains(" -lqt ")) {
@@ -797,8 +807,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
   QWhatsThis::add(l_qt, i18n("Qt"));
 
-  l_kdecore=new QCheckBox(w4,"l_kdecore");
-  l_kdecore->setGeometry(20,200,110,20);
+  l_kdecore=new QCheckBox(libs_group,"l_kdecore");
+  grid4->addWidget(l_kdecore,3,0);
   l_kdecore->setText("kdecore");
   if (ldadd.contains(" -lkdecore ")) {
     l_kdecore->setChecked(true);
@@ -810,8 +820,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   }
   QWhatsThis::add(l_kdecore, i18n("KDE basics"));
 
-  l_kdeui=new QCheckBox(w4,"l_kdeui");
-  l_kdeui->setGeometry(140,140,110,20);
+  l_kdeui=new QCheckBox(libs_group,"l_kdeui");
+  grid4->addWidget(l_kdeui,0,1);
   l_kdeui->setText("kdeui");
   if (ldadd.contains(" -lkdeui ")) {
     l_kdeui->setChecked(true);
@@ -823,8 +833,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   }
   QWhatsThis::add(l_kdeui, i18n("KDE user interface"));
 
-  l_khtmlw=new QCheckBox(w4,"l_khtmlw");
-  l_khtmlw->setGeometry(140,160,110,20);
+  l_khtmlw=new QCheckBox(libs_group,"l_khtmlw");
+  grid4->addWidget(l_khtmlw,1,1);
   l_khtmlw->setText("khtmlw");
   if (ldadd.contains(" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ")) {
     l_khtmlw->setChecked(true);
@@ -837,9 +847,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QWhatsThis::add(l_khtmlw, i18n("KDE HTML widget :\n"
 				 "this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
 				 "-ltiff, -lpng, -lm, -ljscript."));
- 
-  l_kfm=new QCheckBox(w4,"l_kfm");
-  l_kfm->setGeometry(140,180,110,20);
+
+  l_kfm=new QCheckBox(libs_group,"l_kfm");
+  grid4->addWidget(l_kfm,2,1);
   l_kfm->setText("kfm");
   if (ldadd.contains(" -lkfm ")) {
     l_kfm->setChecked(true);
@@ -850,9 +860,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     l_kfm->setChecked(false);
   }
   QWhatsThis::add(l_kfm, i18n("KDE kfm functionality"));
- 
-  l_kfile=new QCheckBox(w4,"l_kfile");
-  l_kfile->setGeometry(140,200,110,20);
+
+  l_kfile=new QCheckBox(libs_group,"l_kfile");
+  grid4->addWidget(l_kfile,3,1);
   l_kfile->setText("kfile");
   if (ldadd.contains(" -lkfile ")) {
     l_kfile->setChecked(true);
@@ -864,8 +874,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   }
   QWhatsThis::add(l_kfile, i18n("KDE file handling"));
 
-  l_kspell=new QCheckBox(w4,"l_kspell");
-  l_kspell->setGeometry(260,140,110,20);
+  l_kspell=new QCheckBox(libs_group,"l_kspell");
+  grid4->addWidget(l_kspell,0,2);
   l_kspell->setText("kspell");
   if (ldadd.contains(" -lkspell ")) {
     l_kspell->setChecked(true);
@@ -876,9 +886,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     l_kspell->setChecked(false);
   }
   QWhatsThis::add(l_kspell, i18n("KDE Spell checking"));
- 
-  l_kab=new QCheckBox(w4,"l_kab");
-  l_kab->setGeometry(260,160,110,20);
+
+  l_kab=new QCheckBox(libs_group,"l_kab");
+  grid4->addWidget(l_kab,1,2);
   l_kab->setText("kab");
   if (ldadd.contains(" -lkab ")) {
     l_kab->setChecked(true);
@@ -889,9 +899,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     l_kab->setChecked(false);
   }
   QWhatsThis::add(l_kab, i18n("KDE addressbook"));
- 
-  l_math=new QCheckBox(w4,"l_math");
-  l_math->setGeometry(380,140,105,20);
+
+  l_math=new QCheckBox(libs_group,"l_math");
+  grid4->addWidget (l_math,0,3);
   l_math->setText("math");
   if (l_khtmlw->isChecked() || ldadd.contains(" -lm ")) {
     l_math->setChecked(true);
@@ -905,18 +915,18 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QWhatsThis::add(l_math, i18n("Math library"));
 
   QLabel* addit_ldadd_label;
-  addit_ldadd_label=new QLabel(w4,"addit_ldadd_label");
-  addit_ldadd_label->setGeometry(20,230,110,30);
+  addit_ldadd_label=new QLabel(libs_group,"addit_ldadd_label");
+  grid4->addWidget (addit_ldadd_label,4,0);
   addit_ldadd_label->setText(i18n("additional libraries:"));
 
-  addit_ldadd=new QLineEdit(w4,"addit_ldadd");
-  addit_ldadd->setGeometry(140,230,350,30);
+  addit_ldadd=new QLineEdit(libs_group,"addit_ldadd");
+  grid4->addMultiCellWidget(addit_ldadd,4,4,1,3);
   ldadd=ldadd.stripWhiteSpace();
 
   addit_ldadd->setText(ldadd);
   QWhatsThis::add(addit_ldadd_label, i18n("Add additional libraries here."));
   QWhatsThis::add(addit_ldadd, i18n("Add additional libraries here."));
-
+  grid2->addWidget(libs_group,1,0);
   addTab(w4,i18n("Linker Options"));
 
   // ****************** the Make_Widget ********************
