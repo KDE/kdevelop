@@ -1,3 +1,7 @@
+1999-11-25  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	*  updated README and several other files for 1.0
+	* some small fixed to avoid warnings during compilation
+
 1999-11-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Partially reverted last patch, as it didn't even compile :-(
 	* Fixed #2319: Project menu accelerators

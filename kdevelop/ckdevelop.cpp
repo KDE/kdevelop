@@ -1959,7 +1959,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
 //	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
     switchToKDevelop();
-  showOutputView(false);
+  //showOutputView(false);
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
@@ -2469,7 +2469,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 void CKDevelop::slotTTabSelected(int item){
   if(item == DOC ){
     // disable the outputview
-    showOutputView(false);
+    //    showOutputView(false);
   }
 }
 void CKDevelop::slotSTabSelected(int item){
