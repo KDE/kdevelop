@@ -122,11 +122,19 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int currentPara;
     int index;
     getCursorPosition(&currentPara, &index);
-#if QT_VERSION < 304
-    int paraCount = paragraphs()-1;
-#else
-    int paraCount = paragraphs();
-#endif    
+
+    bool isQt304 = true;
+    if (strncmp(qVersion(), "3.0.4", sizeof("3.0.4")) == 0) {
+      isQt304 = false;
+    }
+
+    int paraCount;
+    if (!isQt304) {
+      paraCount = paragraphs()-1;
+    }
+    else {
+      paraCount = paragraphs();
+    }    
 
     // escape rich edit tags like "&", "<", ">"
     line = QStyleSheet::escape( line );
@@ -143,8 +151,9 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
         break;
       default:
         // Runtime check for broken Qt version. Don't add empty new lines.
-        if (line[0]=='\n' && strncmp(qVersion(), "3.0.4", sizeof("3.0.4")) == 0)
+        if (line[0]=='\n' && !isQt304) {
           break;
+        }
           
         line ="<font color=\"black\">" + line + "</font>";
         append(line);
@@ -289,11 +298,12 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
-#if QT_VERSION < 304
-    m_errorMap.insert(numLines()-1, errorDetails);
-#else
-    m_errorMap.insert(numLines(), errorDetails);
-#endif    
+    if (strncmp(qVersion(), "3.0.4", sizeof("3.0.4")) == 0) {
+      m_errorMap.insert(numLines()-1, errorDetails);
+    }
+    else {
+      m_errorMap.insert(numLines(), errorDetails);
+    }
   }
 }
 
