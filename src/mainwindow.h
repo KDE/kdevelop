@@ -68,6 +68,7 @@ public:
   void init();
 
   void prepareToCloseViews();
+  void guiRestoringFinished();
 
   virtual void setUserInterfaceMode(const QString& uiMode);
 

@@ -203,6 +203,10 @@ void MainWindowIDEAl::prepareToCloseViews()
   // seems there's nothing to do here
 }
 
+void MainWindowIDEAl::guiRestoringFinished()
+{
+  // seems there's nothing to do here
+}
 
 KMainWindow *MainWindowIDEAl::main() {
     return this;

@@ -239,12 +239,14 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_toggleViewbar(0L)
   ,m_bUiModeSwitchPending(false)
 {
-   setManagedDockPositionModeEnabled(true);
+  setManagedDockPositionModeEnabled(true);
 
   resize( 800, 600 );
   m_pMainWindowShare = new MainWindowShare(this);
 
   previous_output_view = NULL;
+  
+  m_pDockbaseAreaOfDocumentViews->dockManager()->setReadDockConfigMode(KDockManager::RestoreAllDockwidgets);
 }
 
 
@@ -313,14 +315,6 @@ bool MainWindow::queryExit()
 {
   saveSettings();
   return true;
-}
-
-void MainWindow::prepareToCloseViews()
-{
-#if KDE_VERSION <= 305    
-    // seems not to work with KDE-3.1 and 3.2 :-(
-    writeDockConfig();
-#endif    
 }
 
 KMainWindow *MainWindow::main()
@@ -444,21 +438,17 @@ void MainWindow::checkAndFixToolViewObjectName(QWidget* view, const QString& sho
     bool fixed = false;
     if (objName.isEmpty()) {
         objName = shortName;
-        if (objName.isEmpty()) {
-            QString s; s.setNum(s_index4DoubledName++);
-            objName += "unknown_" + s;
-        }
         fixed = true;
     }
-    bool nameDoubled;
-    do {  
-        nameDoubled = bool(dockManager->getDockWidgetFromName(objName));
-        if (nameDoubled) {
-            QString idxStr; idxStr.setNum(s_index4DoubledName++);
-            objName += idxStr;
-            fixed = true;
-        }
-    } while (nameDoubled); // check fixed vesion too
+    if (objName == "unnamed") {
+        objName = shortName;
+        fixed = true;
+    }
+    if (objName.isEmpty()) {
+        QString s; s.setNum(s_index4DoubledName++);
+        objName += "unnamed_" + s;
+        fixed = true;
+    }
     if (fixed) {
         view->setName(objName.latin1());
     }
@@ -574,10 +564,6 @@ void MainWindow::removeView(QWidget *view)
     m_childViewMap.remove(wrapper);
     m_captionDict.remove(wrapper->caption());
   }
-  else {
-    m_selectViews.remove(view);
-    m_outputViews.remove(view);
-  }
   
   // Note: this reparenting is necessary. Otherwise, the view gets
   // deleted twice: once when the wrapper is deleted, and the second
@@ -603,6 +589,10 @@ void MainWindow::removeView(QWidget *view)
   }
   else {
     kdDebug(9000) << "pDock already destroyed!!" << endl;
+  }
+  if (!wrapper) {
+    m_selectViews.remove(view);
+    m_outputViews.remove(view);
   }
 }
 
@@ -718,8 +708,19 @@ void MainWindow::loadMDISettings()
   // restore a possible maximized Childframe mode
   bool maxChildFrmMode = config->readBoolEntry("maximized childframes", true);
   setEnableMaximizedChildFrmMode(maxChildFrmMode);
+  
+  readDockConfig();
 }
 
+void MainWindow::guiRestoringFinished()
+{
+   dockManager->finishReadDockConfig(); 
+}
+
+void MainWindow::prepareToCloseViews()
+{
+  writeDockConfig();
+}
 
 void MainWindow::saveSettings()
 {
@@ -1223,11 +1224,6 @@ void MainWindow::switchToIDEAlMode()
 
 void MainWindow::slotReactToProjectOpened()
 {
-#if KDE_VERSION <= 305
-    // seems not to work with KDE-3.1 and 3.2 :-(
-    readDockConfig();
-#endif    
-
     // This is a workaround for a bug in KDockWidget::readDockConfig() called above:
     // We must hide the unavailable views again because they are somehow shown again here
     // (unfortunately, we can't avoid the flickering which is a result of that show()-hide() calling)

@@ -62,6 +62,7 @@ public:
   void init();
 
   void prepareToCloseViews();
+  void guiRestoringFinished();
 
   bool eventFilter( QObject *watched, QEvent *e );
   bool switching(void) const { return m_bSwitching; }
