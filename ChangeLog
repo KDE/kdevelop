@@ -1,6 +1,9 @@
+2001-12-11  F@lk Brettschneider <falk@kdevelop.org>
+    * made widget/qextmdi compilable with QT_NO_COMPAT for Qt3
+
 2001-12-10  Ralf Nolden <nolden@kde.org>
     * bugfix from Bernd Lachner for the bugfix from Bernd Lachner <dev@lachner-net.de> to prevent ui files from being 
-	parsed which caused segfaults on some projects while loading. I hope this time I got it right :)
+      parsed which caused segfaults on some projects while loading. I hope this time I got it right :)
 
 2001-12-10  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
     * fix: new TabIndent editor option for turning on/off
@@ -16,11 +19,11 @@
     * improved AutoIndent mode: indent close braces.
 
 2001-12-07 Ralf Nolden <nolden@kde.org>
-    * bugfix from Bernd Lachner <dev@lachner-net.de> to prevent ui files from being parsed which caused segfaults on 
-	some projects while loading
+    * bugfix from Bernd Lachner <dev@lachner-net.de> to prevent ui files from being parsed which caused segfaults on
+      some projects while loading
 
 2001-12-05  F@lk Brettschneider <falk@kdevelop.org>
-    * bugfix: grottenhäßliches flickering removed when switching between maximized MDI editor views
+    * bugfix: grottenhï¿½liches flickering removed when switching between maximized MDI editor views
       Thanks to QextMDI-superguru Lars Beikirch <lars.beikirch@gmx.net>
 
 2001-12-04  F@lk Brettschneider <falk@kdevelop.org>
