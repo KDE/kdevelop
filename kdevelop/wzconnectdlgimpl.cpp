@@ -320,10 +320,10 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     implMethod -> asString ( strImplMethod );
     kdDebug() << "implMethod: " << strImplMethod.data() << endl;
 
-    if ( attrMember ) strAttrMember = attrMember -> name;
-    else strAttrMember = "this";
+    if ( Member.isEmpty() )
+      Member = "this";
 
-    toAdd = "connect( " + strAttrMember + ", ";
+    toAdd = "connect( " + Member + ", ";
     toAdd = toAdd + "SIGNAL( " + strSignalMethod + " ), ";
     toAdd = toAdd + "SLOT( " + strSlotMethod + " ) );";
 
@@ -380,24 +380,28 @@ void CClassPropertiesDlgImpl::slotBtnApply()
         case CTPATTRIBUTE:
             kdDebug() << "Applying new Attribute..." << endl;
             applyAddAttribute();
-            accept();
-            return;
+            break;
         case CTPMETHOD:
         case CTPSIGNAL:
         case CTPSLOT:
             kdDebug() << "Applying new method..." << endl;
             applyAddMethod();
-            accept();
-            return;
+            break;
         case CTPIMPL:
             applySignalSlotMapImplementation();
-            accept();
             break;
         default:
             buttonApply -> setEnabled( false );
             buttonUndo -> setEnabled ( false );
             break;
     }
+
+    if ( workClassAttrList )
+    {
+      workClassAttrList -> clear();
+      delete workClassAttrList;
+    }
+    accept();
 }
 
 /*
@@ -568,8 +572,9 @@ void CClassPropertiesDlgImpl::slotSigMemberSelected(const QString& aMember)
 {
     QString aName;
     QString a;
+
     getClassNameFromString( aMember, aName );
-    getMemberFromString( aMember, a);
+    getMemberFromString( aMember, Member);
 
     CParsedClass * aClass;
     //cbSigSignalList_2 -> clear();
@@ -813,6 +818,8 @@ void CClassPropertiesDlgImpl::init()
             break;
     }
     setMinimumSize( 540, 500 );
+    Member = "";
+    workClassAttrList = 0;
 }
 /**  */
 void CClassPropertiesDlgImpl::setClass ( CParsedClass* aClass )
@@ -821,9 +828,10 @@ void CClassPropertiesDlgImpl::setClass ( CParsedClass* aClass )
     setCurrentClassName( aClass -> name );
     // Propagate change to the rest of the dialog data
     // Get attributes list
-    QList<CParsedAttribute> *AttrList = getAllParentAttr( aClass );  //aClass->getSortedAttributeList();
+    workClassAttrList = getAllParentAttr( aClass ); //->getSortedAttributeList();
+
     // update Signals Tab data:
-    setSigTabAttrList ( AttrList );
+    setSigTabAttrList ( workClassAttrList );
     // Get slot list:
     QList<CParsedMethod> *MethList = aClass ->getSortedSlotList();
 
@@ -836,7 +844,6 @@ void CClassPropertiesDlgImpl::setClass ( CParsedClass* aClass )
     // update Connect Implementation Tab data:
     setImplTabMethList ( MethList,false );
     delete MethList;
-    delete AttrList;
 }
 /**  */
 void CClassPropertiesDlgImpl::setSigTabAttrList ( QList <CParsedAttribute>* AttrList )
@@ -1166,13 +1173,15 @@ void CClassPropertiesDlgImpl::getMemberFromString ( const QString& str, QString&
 {
     int spos;
     CParsedAttribute* aAttr;
-    QList < CParsedAttribute>  *l;
-    l = currentClass -> getSortedAttributeList();
+//    QList < CParsedAttribute>  *l;
+    if (!workClassAttrList)
+      workClassAttrList = currentClass -> getSortedAttributeList();
+
     spos = str.length() - str.find(" ");
     //if( spos == -1) spos = 0;
     newName = str.right(spos-1);
-    kdDebug() << newName.data() << endl;
-    for ( aAttr = l -> first(); aAttr; aAttr = l  -> next())
+    kdDebug() << "parsed name: '" << newName.data() << "'" << endl;
+    for (aAttr=workClassAttrList->first(); aAttr; aAttr = workClassAttrList->next())
     {
         if (aAttr -> name == newName)
         {
@@ -1352,7 +1361,7 @@ QList <CParsedAttribute>* CClassPropertiesDlgImpl::getAllParentAttr(CParsedClass
         attrList = new QList <CParsedAttribute>;
         attrList -> clear();
     }
-    for ( aAttribute = aClassAttrList -> first(); aAttribute; aAttribute = aClassAttrList -> next() )
+    for ( aAttribute = aClassAttrList -> first(); aAttribute; aAttribute = aClassAttrList -> next() ) attrList -> append( aAttribute );
       attrList -> append( aAttribute );
 
     return attrList;

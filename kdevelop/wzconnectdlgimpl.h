@@ -38,11 +38,11 @@ extern ClsHeader QtKde[];
 
 // Index of tabs
 #define CTPCLASSVIEW    (int)0
-#define CTPATTRIBUTE     (int)1
-#define CTPMETHOD         (int)2
-#define CTPSIGNAL          (int)3
-#define CTPSLOT             (int)4
-#define CTPIMPL             (int)5
+#define CTPATTRIBUTE    (int)1
+#define CTPMETHOD       (int)2
+#define CTPSIGNAL       (int)3
+#define CTPSLOT         (int)4
+#define CTPIMPL         (int)5
 //-------------------------------
 
 #include <kconfig.h>
@@ -54,10 +54,10 @@ class CClassPropertiesDlgImpl : public CClassPropertiesDlg
     Q_OBJECT
 
 public:
-        CClassPropertiesDlgImpl( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-        CClassPropertiesDlgImpl( CTPACTION action, CClassToolDlg* ctdlg, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-	     CClassPropertiesDlgImpl( CClassView* cv, CTPACTION action, CClassToolDlg* ctdlg, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-    ~CClassPropertiesDlgImpl();
+  CClassPropertiesDlgImpl( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  CClassPropertiesDlgImpl( CTPACTION action, CClassToolDlg* ctdlg, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  CClassPropertiesDlgImpl( CClassView* cv, CTPACTION action, CClassToolDlg* ctdlg, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  ~CClassPropertiesDlgImpl();
   /**  */
   void setCurrentClassName ( const QString& );
   /** Fill'in data into the widgets depending on which TAB ' vtab ' is
@@ -166,6 +166,8 @@ private: // Private attributes
   /** used to build the connect instruction.
         If value is 0 ( NULL ) then the default class member [ this ]  is used*/
   CParsedAttribute* attrMember;
+  /**  */
+  QList <CParsedAttribute>* workClassAttrList;
   CClassToolDlg* CTDlg;
   void applyAddAttribute();
   void applyAddMethod();
@@ -189,6 +191,7 @@ protected: // Protected attributes
   QStrList argList;
   /**  */
   QList <CParsedClass> sigClassList;
+  QString Member;
 };
 
 #endif // CCLASSPROPERTIESDLGIMPL_H

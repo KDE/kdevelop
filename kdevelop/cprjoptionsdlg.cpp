@@ -1542,7 +1542,7 @@ void CPrjOptionsDlg::ok(){
   text="";
 
   QString vcsystem = vcsystem_combo->currentText();
-  prj_info->setVCSystem(vcsystem == i18n("None")? QString("None") : vcsystem);
+  prj_info->setVCSystem(vcsystem == i18n("None") ? QString("None") : vcsystem);
 
   prj_info->setModifyMakefiles(modifymakefiles_checkbox->isChecked());
 

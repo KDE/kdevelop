@@ -187,6 +187,7 @@ private:
   QLabel* vsSupport;
   QPushButton* locationbutton;
   QButtonGroup* qtarch_ButtonGroup_1;
+  QString noneStr;
 };
 
 #endif

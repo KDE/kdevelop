@@ -1152,15 +1152,16 @@ void CKAppWizard::generateEntries(const QString &filename) {
     else if (kickeritem->isSelected()) {
       entries << "kickerapp\n";
     }
-		else if (kioslaveitem->isSelected()) {
-			entries << "kioslave\n";
-		}
-		else if (sharedlibitem->isSelected()) {
-			entries << "sharedlib\n";
-		}
-		else if (kpartitem->isSelected()) {
-			entries << "kpart\n";
-		}    else if (customprojitem->isSelected()) {
+    else if (kioslaveitem->isSelected()) {
+      entries << "kioslave\n";
+    }
+//    else if (sharedlibitem->isSelected()) {
+//      entries << "sharedlib\n";
+//    }
+    else if (kpartitem->isSelected()) {
+      entries << "kpart\n";
+    }
+    else if (customprojitem->isSelected()) {
       entries << "customproj\n";
     }
 
@@ -1282,7 +1283,11 @@ void CKAppWizard::generateEntries(const QString &filename) {
     entries << "VERSION\n";
     entries << versionline->text() << "\n";
     entries << "VSSUPPORT\n";
-    entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
+    if (vsBox->currentItem()==0)
+      entries << "none\n";          // do not translated
+    else
+      entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
+
     entries << "VENDORTAG\n";
     entries << QString(vendorline->text()) + "\n";
     entries << "RELEASETAG\n";
@@ -1416,9 +1421,9 @@ void CKAppWizard::okPermited()
   else if (kioslaveitem->isSelected()) {
     copysrc = locate("appdata", "templates/kioslave.tar.gz");
   }
-  else if (sharedlibitem->isSelected()) {
-    copysrc = locate("appdata", "templates/sharedlib.tar.gz");
-  }
+//  else if (sharedlibitem->isSelected()) {
+//    copysrc = locate("appdata", "templates/sharedlib.tar.gz");
+//  }
   else {
     hasTemplate = false;
   }
@@ -1578,7 +1583,7 @@ void CKAppWizard::removeSources(const QString &dir)
     file.remove (dir + "/" + nametext + "/app.c");
     file.remove (dir + "/" + nametext + "/app.h");
   }
-  if( kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected()||sharedlibitem->isSelected()){
+  if( kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected()/*||sharedlibitem->isSelected()*/){
         file.remove (dir + "/" + nametext + "/main.cpp");
   }
 }
@@ -1678,29 +1683,29 @@ void CKAppWizard::slotApplicationClicked() {
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
-  else if (sharedlibitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
-  {
-    pm.load(locate("appdata", "pics/sharelib.png"));
-    widget1b->setBackgroundPixmap(pm);
-    apidoc->setChecked(true);
-    datalink->setEnabled(false);
-    datalink->setChecked(false);
-    progicon->setEnabled(false);
-    progicon->setChecked(false);
-    miniicon->setEnabled(false);
-    miniicon->setChecked(false);
-    miniload->setEnabled(false);
-    iconload->setEnabled(false);
-    lsmfile->setChecked(true);
-    gnufiles->setChecked(true);
-    userdoc->setChecked(true);
-    generatesource->setChecked(true);
-    generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
-       m_finishButton->setEnabled(true);
-    }
-    apphelp->setText (i18n("Create a C++ based shared library."));
-  }
+//  else if (sharedlibitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+//  {
+//    pm.load(locate("appdata", "pics/sharelib.png"));
+//    widget1b->setBackgroundPixmap(pm);
+//    apidoc->setChecked(true);
+//    datalink->setEnabled(false);
+//    datalink->setChecked(false);
+//    progicon->setEnabled(false);
+//    progicon->setChecked(false);
+//    miniicon->setEnabled(false);
+//    miniicon->setChecked(false);
+//    miniload->setEnabled(false);
+//    iconload->setEnabled(false);
+//    lsmfile->setChecked(true);
+//    gnufiles->setChecked(true);
+//    userdoc->setChecked(true);
+//    generatesource->setChecked(true);
+//    generatesource->setEnabled(true);
+//    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
+//       m_finishButton->setEnabled(true);
+//    }
+//    apphelp->setText (i18n("Create a C++ based shared library."));
+//  }
   else if (kioslaveitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/kioslave.png"));
@@ -2266,15 +2271,15 @@ void CKAppWizard::slotProcessExited() {
   else if (kickeritem->isSelected()){
    project->setProjectType("kicker_app");
   }
-	else if (kpartitem->isSelected()){
-		project->setProjectType("kpart_plugin");
-	}
-	else if (kioslaveitem->isSelected()){
-		project->setProjectType("kio_slave");
-	}
-	else if (sharedlibitem->isSelected()){
-		project->setProjectType("shared_lib");
-	}
+  else if (kpartitem->isSelected()){
+    project->setProjectType("kpart_plugin");
+  }
+  else if (kioslaveitem->isSelected()){
+    project->setProjectType("kio_slave");
+  }
+//  else if (sharedlibitem->isSelected()){
+//    project->setProjectType("shared_lib");
+//  }
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
   }
@@ -2292,18 +2297,18 @@ void CKAppWizard::slotProcessExited() {
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
-  project->setCXXFLAGS ("-O0 -g3 -Wall");
+  project->setCXXFLAGS ("-O0 -g3 -Wall");   // default value is to use debugging
 
   if ( kickeritem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11");
   }
   if ( kpartitem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11 $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
-   project->setLDFLAGS("${all_libraries}");
+//   project->setLDFLAGS("${all_libraries}");
   }
   if ( kioslaveitem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore -lqt -lXext -lX11 -lkio");
-   project->setLDFLAGS("${all_libraries} ${KDE_RPATH}");
+//   project->setLDFLAGS("${all_libraries} ${KDE_RPATH}");
   }
   if ( kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
@@ -2359,8 +2364,8 @@ void CKAppWizard::slotProcessExited() {
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
   sub_dir_list.clear();
-  if(kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected() || sharedlibitem->isSelected()){
-  	makeAmInfo.type = "shared_library";
+  if(kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected() /*|| sharedlibitem->isSelected()*/){
+    makeAmInfo.type = "shared_library";
   }
   else {
    makeAmInfo.type = "prog_main";
@@ -2407,12 +2412,7 @@ void CKAppWizard::slotProcessExited() {
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
-  if (vsBox->currentItem()==0) {
-    project->setVCSystem("None");
-  }
-  else {
-    project->setVCSystem("CVS");
-  }
+  project->setVCSystem(vsBox->currentItem()==0 ? QString("None") : QString("CVS"));
 
   TFileInfo fileInfo;
   fileInfo.rel_name = namelow + ".kdevprj";
