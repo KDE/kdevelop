@@ -14,13 +14,13 @@
 
 #include <qdialog.h>
 #include <qlineedit.h>
-
+class QPushButton;
 
 class AddEnvvarDialog : public QDialog
 {
     Q_OBJECT
 
-public: 
+public:
     AddEnvvarDialog( QWidget *parent=0, const char *name=0 );
     ~AddEnvvarDialog();
 
@@ -32,10 +32,12 @@ public:
         { varname_edit->setText(name); }
     void setvalue(const QString value) const
         { value_edit->setText(value); }
-
+ private slots:
+    void slotTextChanged();
 private:
     QLineEdit *varname_edit;
     QLineEdit *value_edit;
+    QPushButton *m_pOk;
 };
 
 #endif

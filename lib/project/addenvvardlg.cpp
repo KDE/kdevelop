@@ -14,7 +14,7 @@
 #include <qpushbutton.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
-
+#include <kstdguiitem.h>
 #include "addenvvardlg.h"
 
 
@@ -28,11 +28,14 @@ AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     varname_edit->setFocus();
     varname_label->setBuddy(varname_edit);
 
+    connect( varname_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotTextChanged() ) );
     QLabel *value_label = new QLabel(i18n("&Value:"), this);
     value_edit = new QLineEdit(this);
     value_label->setBuddy(value_edit);
     QFontMetrics fm(value_edit->fontMetrics());
     value_edit->setMinimumWidth(fm.width('X')*35);
+    connect( value_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotTextChanged() ) );
+
 
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
 
@@ -49,17 +52,23 @@ AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-    ok->setDefault(true);
-    connect( ok, SIGNAL(clicked()), this, SLOT(accept()) );
+    m_pOk = buttonbox->addButton( KStdGuiItem::ok().text());
+    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
+    m_pOk->setDefault(true);
+    connect( m_pOk, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
+    slotTextChanged();
 }
 
 
 AddEnvvarDialog::~AddEnvvarDialog()
 {}
+
+void AddEnvvarDialog::slotTextChanged()
+{
+    m_pOk->setEnabled( !varname_edit->text().isEmpty() && !value_edit->text().isEmpty() );
+}
 
 #include "addenvvardlg.moc"
