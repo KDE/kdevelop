@@ -532,7 +532,10 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     QString proname = item->path + "/" + fi.baseName() + ".pro";
     kdDebug(9024) << "Parsing " << proname << endl;
 
+
+
     item->m_FileBuffer.bufferFile(proname);
+    item->m_FileBuffer.handleScopes();
 
     QString values;
     values = item->m_FileBuffer.getValues("INTERFACES");

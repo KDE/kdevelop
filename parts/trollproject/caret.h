@@ -1,3 +1,4 @@
+#include <stdio.h>
 class Caret
 {
   public:
