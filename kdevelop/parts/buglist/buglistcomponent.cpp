@@ -23,7 +23,6 @@
 #include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
 #include <kiconloader.h>
 #include <kdialogbase.h>
 
@@ -50,9 +49,9 @@ BugListComponent::~BugListComponent()
 
 void BugListComponent::stopButtonClicked()
 {
-    kdDebug(9001) << "BugList::stopButtonClicked()" << endl;
+    kdDebug(9040) << "BugList::stopButtonClicked()" << endl;
 
-    // Down she downs.
+    // Down she goes.
 //    if (m_pBugList)
 //    {
 //        m_pBugList->slotCancelClicked ();
@@ -63,14 +62,15 @@ void BugListComponent::stopButtonClicked()
 
 void BugListComponent::setupGUI()
 {
-    kdDebug(9001) << "SetupGUI BugList" << endl;
+    kdDebug(9040) << "SetupGUI BugList" << endl;
 
-    KAction *action;
-    action = new KAction(i18n("&Bug Tracking"), CTRL+ALT+Key_B, this,  SLOT(slotActivate()),
+    m_pMenuAction = new KAction(i18n("&Bug Tracking"), CTRL+ALT+Key_B, this,  SLOT(slotActivate()),
                          actionCollection(), "bug_tracking");
-    action->setStatusText( i18n("Buglist status text.") );
-    action->setWhatsThis( i18n("Buglist What Text\n\n"
-                               "xxx") );
+    m_pMenuAction->setStatusText (i18n("Provides bug tracking features for your project."));
+    m_pMenuAction->setWhatsThis (i18n("Provides bug tracking features for your project."));
+
+    // Bug tracking is only valid with a project.
+    m_pMenuAction->setEnabled (FALSE);
 }
 
 
@@ -83,8 +83,33 @@ void BugListComponent::configWidgetRequested(KDialogBase *dlg)
 
 void BugListComponent::projectSpaceOpened()
 {
-    kdDebug(9001) << "BugList::projectSpaceOpened()" << endl;
-//  m_widget->setProjectSpace(projectSpace());
+    kdDebug(9040) << "BugList::projectSpaceOpened()" << endl;
+
+    // Take a note of the project space in use.
+    if (projectSpace ())
+    {
+        // Bug tracking is only valid with a project.
+        m_pMenuAction->setEnabled (TRUE);
+
+        // Keep a track of the current project space. Probably not needed.
+        kdDebug(9040) << "BugList::Project Space Read" << endl;
+        m_pProjectSpace = projectSpace();
+
+/*        QDomDocument *doc = m_pProjectSpace->readUserDocument();
+        QDomNodeList grepList = doc->elementsByTagName("BugList");
+        QDomElement grepElement = grepList.item(0).toElement();
+        kdDebug(9040) << "BugList::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;*/
+    }
+    else
+    {
+        kdDebug(9040) << "BugList::Project Space Write" << endl;
+
+/*        QDomDocument *doc = m_pProjectSpace->readUserDocument();
+        QDomElement rootElement = doc->documentElement();
+        QDomElement elem = doc->createElement("BugList");
+        elem.setAttribute ("test", "value");
+        rootElement.appendChild (elem);*/
+    }
 /*
 #if 0
     //at the moment GrepView writes only data that are user depended,
@@ -107,12 +132,27 @@ void BugListComponent::projectSpaceOpened()
 
 
 /*
+    Notification that the project space has now closed.
+
+    NOTE: Doesn't seem to work yet.
+*/
+
+void BugListComponent::projectSpaceClosed()
+{
+    // Bug tracking is only valid with a project.
+    m_pMenuAction->setEnabled (FALSE);
+
+    m_pProjectSpace = NULL;
+}
+
+
+/*
     Use this slot to create an instance of the bug tracking object.
 */
 
 void BugListComponent::slotActivate()
 {
-    kdDebug(9001) << "BugList Activated" << endl;
+    kdDebug(9040) << "BugList Activated" << endl;
 
     if (!m_pBugList)
     {
@@ -129,7 +169,7 @@ void BugListComponent::slotActivate()
 
 void BugListComponent::slotWidgetClosed ()
 {
-    kdDebug(9001) << "BugList Deactivate" << endl;
+    kdDebug(9040) << "BugList Deactivate" << endl;
 
     // Clean up as required.
     if (m_pBugList)

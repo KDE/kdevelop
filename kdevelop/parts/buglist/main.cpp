@@ -50,7 +50,7 @@ BugListFactory::~BugListFactory()
 QObject *BugListFactory::create(QObject *parent, const char *name,
                              const char */*classname*/, const QStringList &/*args*/)
 {
-    kdDebug(9001) << "Building BugList" << endl;
+    kdDebug(9040) << "Building BugList" << endl;
 
     QObject *obj = new BugListComponent(parent, name);
     emit objectCreated(obj);

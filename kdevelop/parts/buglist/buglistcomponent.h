@@ -19,7 +19,9 @@
 #define BUGLISTCOMPONENT_H
 
 #include "buglist.h"
+#include <kaction.h>
 #include <kdevcomponent.h>
+#include <projectspace.h>
 
 /**The main component for the buglist class.
   *@author Ivan Hawkes
@@ -40,9 +42,12 @@ protected:
     virtual void configWidgetRequested(KDialogBase *dlg);
     virtual void stopButtonClicked();
     virtual void projectSpaceOpened();
+    virtual void projectSpaceClosed();
 
 private:
-    BugList     *m_pBugList;
+    BugList         *m_pBugList;        // The main buglist object.
+    ProjectSpace    *m_pProjectSpace;   // Pointer to the project space.
+    KAction         *m_pMenuAction;     // The menu item we add.
 
 public slots:
     /**
