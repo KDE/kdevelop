@@ -40,7 +40,7 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
   m_mainwidget->setWidget(new QWidget(this, "mainwidget"));
   setView(m_mainwidget);
   setMainDockWidget(m_mainwidget);
-  
+
   initComponents();
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
@@ -67,7 +67,7 @@ void KDevelop::initActions(){
   // Separator
   m_paFileSave = KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
   m_paFileSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
-  m_paFileSaveAll = new KAction( i18n("Save A&ll"), QIconSet( BarIcon("save_all") ), 0, this, SLOT( slotFileSaveAll() ), actionCollection(), "file_save_all");
+  m_paFileSaveAll = new KAction( i18n("Save A&ll"), "save_all", 0, this, SLOT( slotFileSaveAll() ), actionCollection(), "file_save_all");
   // Separator
   m_paFilePrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(),  "file_print");
   m_paFileQuit = KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(),  "file_quit");
@@ -85,9 +85,9 @@ void KDevelop::initActions(){
   m_paEditPaste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(),"edit_paste" );
   // Separator
 
-  m_paEditIndent = new KAction( i18n("In&dent"), QIconSet( BarIcon("indent") ), CTRL+Key_I, this, SLOT( slotEditIndent() ),
+  m_paEditIndent = new KAction( i18n("In&dent"), "indent", CTRL+Key_I, this, SLOT( slotEditIndent() ),
       actionCollection(), "edit_indent");
-  m_paEditUnindent = new KAction( i18n("Uninden&t"), QIconSet( BarIcon("unindent") ), CTRL+Key_U, this, SLOT( slotEditUnindent() ),
+  m_paEditUnindent = new KAction( i18n("Uninden&t"), "unindent", CTRL+Key_U, this, SLOT( slotEditUnindent() ),
       actionCollection(), "edit_unindent");
   // Separator
   m_paEditComment = new KAction( i18n("Comment"), CTRL+Key_M, this, SLOT( slotEditComment() ),
@@ -102,7 +102,7 @@ void KDevelop::initActions(){
   m_paEditRepeatSearch = KStdAction::findNext( this, SLOT(slotEditRepeatSearch()),
       actionCollection(), "edit_repeat_search" );
   m_paEditReplace = KStdAction::replace( this, SLOT( slotEditReplace() ), actionCollection(), "edit_replace" );
-  m_paEditSearchInFiles = new KAction( i18n("&Search in Files..."), QIconSet( BarIcon("grep") ), 0, this, SLOT( slotEditSearchInFiles() ),
+  m_paEditSearchInFiles = new KAction( i18n("&Search in Files..."), "grep", 0, this, SLOT( slotEditSearchInFiles() ),
       actionCollection(), "edit_search_in_files");
   // Separator
   m_paEditSelectAll = KStdAction::selectAll( this, SLOT( slotEditSelectAll() ), actionCollection(),"edit_select_all" );
@@ -120,8 +120,8 @@ void KDevelop::initActions(){
   m_paViewPreviousError = new KAction( i18n("&Previous Error"), SHIFT+Key_F4,
         this, SLOT( slotViewPreviousError() ), actionCollection(), "view_previous_error");
   // Separator
-  m_paViewTreeView = new KToggleAction( i18n("&Tree-View"), QIconSet( BarIcon("tree_win") ), CTRL+Key_T, actionCollection(), "view_treeview");
-  m_paViewOutputView = new KToggleAction( i18n("&Output-View"), QIconSet( BarIcon("output_win") ),
+  m_paViewTreeView = new KToggleAction( i18n("&Tree-View"), "tree_win", CTRL+Key_T, actionCollection(), "view_treeview");
+  m_paViewOutputView = new KToggleAction( i18n("&Output-View"), "output_win",
         CTRL+Key_B, actionCollection(), "view_output_view");
   // Separator
   m_paViewToolbar = KStdAction::showToolbar( this, SLOT( slotViewToolbar() ), actionCollection() );
@@ -151,7 +151,7 @@ void KDevelop::initActions(){
           actionCollection(), "view_debug_debugger");
   ////////////////
   // Separator
-  m_paViewRefresh = new KAction( i18n("&Refresh"), QIconSet( BarIcon("reload") ), 0, this, SLOT( slotViewRefresh() ), actionCollection(), "view_refresh");
+  m_paViewRefresh = new KAction( i18n("&Refresh"), "reload", 0, this, SLOT( slotViewRefresh() ), actionCollection(), "view_refresh");
 
 
   /////////////////////////////////////
@@ -159,7 +159,7 @@ void KDevelop::initActions(){
   ////////////////////////////////////
   m_paProjectNew = new KAction( i18n("&New..."), 0, this, SLOT( slotProjectNew() ),
           actionCollection(), "project_new");
-  m_paProjectOpen = new KAction( i18n("&Open..."), QIconSet( BarIcon("openprj") ), 0, this, SLOT( slotProjectOpen() ),
+  m_paProjectOpen = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
           actionCollection(), "project_open");
   m_paProjectOpenRecent = new KAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent() ),
           actionCollection(), "project_open_recent");
@@ -169,16 +169,16 @@ void KDevelop::initActions(){
           actionCollection(), "project_new_class");
   m_paProjectAddExistingFiles = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
           actionCollection(), "project_add_existing_files");
-  m_paProjectAddNewTranslationFile = new KAction( i18n("Add new &Translation File..."), QIconSet( BarIcon("locale") ), 0,
+  m_paProjectAddNewTranslationFile = new KAction( i18n("Add new &Translation File..."), "locale", 0,
           this, SLOT( slotProjectAddNewTranslationFile() ), actionCollection(), "project_add_translation");
-  m_paProjectFileProperties = new KAction( i18n("&File Properties..."), QIconSet( BarIcon("file_properties") ), 0,
+  m_paProjectFileProperties = new KAction( i18n("&File Properties..."), "file_properties", 0,
           this, SLOT( slotProjectFileProperties() ), actionCollection(), "project_file_properties");
   // Separator
   m_paProjectMessages = new KAction( i18n("Make &messages and merge"), 0, this, SLOT( slotProjectMessages() ),
           actionCollection(), "project_make_messages");
   m_paProjectAPI = new KAction( i18n("Make AP&I-Doc"), 0, this, SLOT( slotProjectAPI() ),
           actionCollection(), "project_make_api_doc");
-  m_paProjectManual = new KAction( i18n("Make &User-Manual..."), QIconSet( BarIcon("mini-book1") ),0, this, SLOT( slotProjectManual() ),
+  m_paProjectManual = new KAction( i18n("Make &User-Manual..."), "mini-book1",0, this, SLOT( slotProjectManual() ),
           actionCollection(), "project_make_user_doc");
   m_paProjectMakeDistSourceTgz = new KAction( i18n("&Source-tgz"), 0, this, SLOT( slotProjectMakeDistSourceTgz() ),
           actionCollection(), "project_dist_targz");
@@ -189,18 +189,18 @@ void KDevelop::initActions(){
   /////////////////////////////////////
   // Build Menu
   ////////////////////////////////////
-  m_paBuildCompileFile = new KAction( i18n("Compile &File"), QIconSet( BarIcon("compfile") ),0, this, SLOT( slotBuildCompileFile() ),
+  m_paBuildCompileFile = new KAction( i18n("Compile &File"), "compfile",0, this, SLOT( slotBuildCompileFile() ),
           actionCollection(), "build_compile_file");
-  m_paBuildMake = new KAction( i18n("&Make"), QIconSet( BarIcon("make_kdevelop") ), 0, this, SLOT( slotBuildMake() ), actionCollection(), "build_build");
-  m_paBuildRebuildAll = new KAction( i18n("&Rebuild all"), QIconSet( BarIcon("rebuild") ), 0, this, SLOT( slotBuildRebuildAll() ),
+  m_paBuildMake = new KAction( i18n("&Make"), "make_kdevelop", 0, this, SLOT( slotBuildMake() ), actionCollection(), "build_build");
+  m_paBuildRebuildAll = new KAction( i18n("&Rebuild all"), "rebuild", 0, this, SLOT( slotBuildRebuildAll() ),
           actionCollection(), "build_rebuild");
   m_paBuildCleanRebuildAll = new KAction( i18n("&Clean/Rebuild all"), 0, this, SLOT( slotBuildCleanRebuildAll() ),
           actionCollection(), "build_clean_rebuild_all");
   // Separator
-  m_paBuildStop = new KAction( i18n("&Stop Build"), QIconSet( BarIcon("stop_proc") ), 0, this, SLOT( slotBuildStop() ), actionCollection(), "build_stop");
+  m_paBuildStop = new KAction( i18n("&Stop Build"), "stop_proc", 0, this, SLOT( slotBuildStop() ), actionCollection(), "build_stop");
   // Separator
-  m_paBuildExecute = new KAction( i18n("&Execute"), QIconSet( BarIcon("run") ), 0, this, SLOT( slotBuildExecute() ), actionCollection(), "build_execute");
-  m_paBuildExecuteWithArgs = new KAction( i18n("Execute &with Arguments..."), QIconSet( BarIcon("run") ), 0, this, SLOT( slotBuildExecuteWithArgs() ),
+  m_paBuildExecute = new KAction( i18n("&Execute"), "run", 0, this, SLOT( slotBuildExecute() ), actionCollection(), "build_execute");
+  m_paBuildExecuteWithArgs = new KAction( i18n("Execute &with Arguments..."), "run", 0, this, SLOT( slotBuildExecuteWithArgs() ),
           actionCollection(), "build_execute_with_arguments");
   // Separator
   m_paBuildDistClean = new KAction( i18n("DistC&lean"), 0, this, SLOT( slotBuildDistClean() ),
@@ -218,13 +218,13 @@ void KDevelop::initActions(){
   m_paDebugStart = new KAction( i18n("&Start"), 0, this, SLOT( slotDebugStart() ), actionCollection(),"debug_start" );
   //////////////
   // Debug "Start (other)..." submenu
-  m_paDebugExamineCore = new KAction( i18n("Examine core file"), QIconSet( BarIcon("debugger") ), 0, this, SLOT( slotDebugExamineCore() ),
+  m_paDebugExamineCore = new KAction( i18n("Examine core file"), "debugger", 0, this, SLOT( slotDebugExamineCore() ),
           actionCollection(),"debug_examine_core" );
-  m_paDebugNamedFile = new KAction( i18n("Debug another executable"), QIconSet( BarIcon("debugger") ), 0, this, SLOT( slotDebugNamedFile() ),
+  m_paDebugNamedFile = new KAction( i18n("Debug another executable"), "debugger", 0, this, SLOT( slotDebugNamedFile() ),
           actionCollection(), "debug_debug_other_exe");
-  m_paDebugAttatch = new KAction( i18n("Attach to process"), QIconSet( BarIcon("debugger") ), 0, this, SLOT( slotDebugAttach() ),
+  m_paDebugAttatch = new KAction( i18n("Attach to process"), "debugger", 0, this, SLOT( slotDebugAttach() ),
           actionCollection(), "debug_attatch_to_process");
-  m_paDebugExecuteWithArgs = new KAction( i18n("Debug with arguments"), QIconSet( BarIcon("debugger") ), 0, this, SLOT( slotDebugExecuteWithArgs() ),
+  m_paDebugExecuteWithArgs = new KAction( i18n("Debug with arguments"), "debugger", 0, this, SLOT( slotDebugExecuteWithArgs() ),
           actionCollection(), "debug_debug_with_args");
   /////////////
   // Separator
@@ -271,11 +271,11 @@ void KDevelop::initActions(){
   /////////////////////////////////////
   // Bookmarks Menu
   ////////////////////////////////////
-  m_paBookmarksToggle = new KAction( i18n("&Toggle Bookmark"), QIconSet( BarIcon("bookmark_add") ), 0, this, SLOT( slotBookmarksToggle() ),
+  m_paBookmarksToggle = new KAction( i18n("&Toggle Bookmark"), "bookmark_add", 0, this, SLOT( slotBookmarksToggle() ),
          actionCollection(), "bookmarks_toggle");
-  m_paBookmarksNext = new KAction( i18n("&Next Bookmark"), QIconSet( BarIcon("bookmark") ), 0, this, SLOT( slotBookmarksNext() ),
+  m_paBookmarksNext = new KAction( i18n("&Next Bookmark"), "bookmark", 0, this, SLOT( slotBookmarksNext() ),
          actionCollection(), "bookmarks_next");
-  m_paBookmarksPrevious = new KAction( i18n("&Previous Bookmark"), QIconSet( BarIcon("bookmark") ), 0, this, SLOT( slotBookmarksPrevious() ),
+  m_paBookmarksPrevious = new KAction( i18n("&Previous Bookmark"), "bookmark", 0, this, SLOT( slotBookmarksPrevious() ),
          actionCollection(), "bookmarks_previous");
   m_paBookmarksClear = new KAction( i18n("&Clear Bookmarks"), 0, this, SLOT( slotBookmarksClear() ),
          actionCollection(), "bookmarks_clear");
@@ -288,25 +288,25 @@ void KDevelop::initActions(){
   m_paHelpBack = KStdAction::back( this, SLOT( slotHelpBack() ), actionCollection(), "help_back");
   m_paHelpForward = KStdAction::forward( this, SLOT( slotHelpForward() ), actionCollection(), "help_forward");
   // Separator
-  m_paHelpSearchMarkedText = new KAction( i18n("&Search Marked Text"), QIconSet( BarIcon("lookup") ), 0, this, SLOT( slotHelpSearchMarkedText() ),
+  m_paHelpSearchMarkedText = new KAction( i18n("&Search Marked Text"), "lookup", 0, this, SLOT( slotHelpSearchMarkedText() ),
           actionCollection(), "help_search_marked_text");
-  m_paHelpSearchForHelpOn = new KAction( i18n("Search for Help on..."), QIconSet( BarIcon("contents") ), 0, this, SLOT( slotHelpSearchForHelpOn() ),
+  m_paHelpSearchForHelpOn = new KAction( i18n("Search for Help on..."), "contents", 0, this, SLOT( slotHelpSearchForHelpOn() ),
           actionCollection(), "help_search_for_help_on");
   m_paHelpWhatsThis = KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), actionCollection(), "help_whats_this");
   // Separator
-  m_paHelpWelcome = new KAction( i18n("&Welcome to KDevelop"), QIconSet( BarIcon("mini-book1") ), 0,
+  m_paHelpWelcome = new KAction( i18n("&Welcome to KDevelop"), "mini-book1", 0,
           this, SLOT( slotHelpWelcome() ), actionCollection(), "help_welcome");
   m_paHelpUserManual = KStdAction::helpContents( this, SLOT( slotHelpContents() ), actionCollection(), "help_user_manual");
-  m_paHelpProgramming = new KAction( i18n("Programming Handbook"), QIconSet( BarIcon("mini-book1") ), 0, this, SLOT( slotHelpProgramming() ),
+  m_paHelpProgramming = new KAction( i18n("Programming Handbook"), "mini-book1", 0, this, SLOT( slotHelpProgramming() ),
           actionCollection(), "help_programming");
-  m_paHelpTutorial = new KAction( i18n("Tutorial Handbook"), QIconSet( BarIcon("mini-book1") ), 0, this, SLOT( slotHelpTutorial() ),
+  m_paHelpTutorial = new KAction( i18n("Tutorial Handbook"), "mini-book1", 0, this, SLOT( slotHelpTutorial() ),
           actionCollection(), "help_tutorial");
-  m_paHelpKDELibRef = new KAction( i18n("KDE Library Reference"), QIconSet( BarIcon("mini-book1") ), 0, this, SLOT( slotHelpKDELibRef() ),
+  m_paHelpKDELibRef = new KAction( i18n("KDE Library Reference"), "mini-book1", 0, this, SLOT( slotHelpKDELibRef() ),
           actionCollection(), "help_library_reference");
-  m_paHelpCReference = new KAction( i18n("C/C++-Reference"), QIconSet( BarIcon("mini-book1") ), 0, this, SLOT( slotHelpCReference() ),
+  m_paHelpCReference = new KAction( i18n("C/C++-Reference"), "mini-book1", 0, this, SLOT( slotHelpCReference() ),
           actionCollection(), "help_c_reference");
   // Separator
-  m_paHelpTipOfTheDay = new KAction( i18n("Tip of the Day"), QIconSet( BarIcon("idea") ), 0, this, SLOT( slotHelpTipOfTheDay() ),
+  m_paHelpTipOfTheDay = new KAction( i18n("Tip of the Day"), "idea", 0, this, SLOT( slotHelpTipOfTheDay() ),
           actionCollection(), "help_tip_of_the_day");
   m_paHelpHomepage = KStdAction::home( this, SLOT( slotHelpHomepage() ), actionCollection(), "help_kdevelop_homepage");
   // Separator
@@ -770,21 +770,21 @@ void KDevelop::initComponents()
                 continue;
             }
             KDevComponent *comp = (KDevComponent*) obj;
-            
+
             KDockWidget *wid = createDockWidget((*it)->name(), BarIcon((*it)->icon())
                                                 , 0, (*it)->comment(), "");
             wid->setWidget(comp->widget());
             wid->setToolTipString((*it)->comment());
             wid->manualDock(m_mainwidget, KDockWidget::DockLeft);
         }
-    }       
+    }
 }
 
 
 void KDevelop::slotFilePrint()
 {
     KLibFactory *factory = KLibLoader::self()->factory("libkdevprintplugin");
-    if (!factory) 
+    if (!factory)
         return;
 
     QStringList args;
