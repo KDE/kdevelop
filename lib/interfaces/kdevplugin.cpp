@@ -4,6 +4,8 @@
 #include "kdevapi.h"
 #include "kdevcore.h"
 
+#include <kaction.h>
+
 #include <dcopclient.h>
 #include <qdom.h>
 
@@ -20,8 +22,10 @@ struct KDevPlugin::Private
 KDevPlugin::KDevPlugin( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
     : QObject( parent, name ), d( new Private )
 {
-     assert( parent->inherits( "KDevApi" ) );
-     m_api = static_cast<KDevApi *>( parent );
+    assert( parent->inherits( "KDevApi" ) );
+    m_api = static_cast<KDevApi *>( parent );
+
+    actionCollection()->setHighlightingEnabled( true );
 
     d->name = name;
     d->icon = icon;

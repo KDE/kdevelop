@@ -19,6 +19,7 @@
 #include <kdevmakefrontend.h>
 #include <kdevappfrontend.h>
 #include <kdevdifffrontend.h>
+#include <kaction.h>
 
 #include "core.h"
 #include "api.h"
@@ -228,7 +229,12 @@ void PluginController::slotConfigWidget( KDialogBase* dlg )
 
 void PluginController::integratePart(KXMLGUIClient *part)
 {
-  TopLevel::getInstance()->main()->guiFactory()->addClient(part);
+    if ( ! part ) return;
+
+    TopLevel::getInstance()->main()->guiFactory()->addClient(part);
+
+    connect( part->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
+        TopLevel::getInstance()->main()->actionCollection(), SIGNAL( actionStatusText( const QString & ) ) );
 }
 
 void PluginController::removePart(KXMLGUIClient *part)
