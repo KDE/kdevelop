@@ -334,7 +334,8 @@ public: // Methods to fetch project options
   bool getModifyMakefiles();
 
   /** Fetch the options for make( i.e "-k" for "make -k". */
-  QString getMakeOptions()    { return readGroupEntry( "General", "make_options" ); }
+  QString getMakeOptions()    { QString flag=readGroupEntry( "General", "make_options" ); 
+	                              return flag.isEmpty() ? QString("") : flag;}
 
   /** Fetch the commandline execution arguments for the project binary. */
   QString getExecuteArgs()    { return readGroupEntry( "General", "execute_args" ); }
