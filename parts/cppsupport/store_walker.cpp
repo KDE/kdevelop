@@ -408,7 +408,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 
     attr->setStartPosition( startLine, startColumn );
     attr->setEndPosition( endLine, endColumn );
-    attr->setStatic( true );
+    attr->setStatic( isStatic );
 }
 
 void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
