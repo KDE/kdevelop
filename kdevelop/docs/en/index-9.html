@@ -36,20 +36,56 @@ about the author. The short description field is for additional information that
 and the like.
 <P>
 <H3><A NAME="Compiler Options"></A> <A NAME="ss9.2">9.2 Compiler Options</A>
- </H3>
+</H3>
 
-<P> 
+<P>The compiler options page sets the compiler flags towards your target, debugging and additional.
+<P>
+<H4>Target</H4>
+
+<P>The target box contains three options that can be set:
+<P>Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
+which is the option if you configured your compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
+option sets the -b flag to the compiler. Usually you would leave this to the default.
+<P>only syntax-check: If checked, the -fsyntax-only flag is set. This means that the compiler will check your code only for
+correctness in regards to the syntax, but doesn't check anything beyond that.
+<P>Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
+is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
+optimization level below from 1 to 3.
+<P>For a release version of your application, enable optimization and set the level to 2.
+<P>
+<H4>Debugging</H4>
+
+<P>Right of the Target box, you can see the Debugging-section. This means that you can set your compiler to include information for
+debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
+context to the sourcecode.
+<P>Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
+Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
+the binary size will increase by the debugging level.
+<P>Generate extra information for gprof: sets the -pg flag, resulting that the compiler will include information for the gprof
+program that displays caller graphs of your program's function.
+<P>Store temporary intermediate files: sets the -save-temps flag. This will result in storing the usually temporary files produced by
+the preprocessor and the assembler. A compilation of a sourcefile will therefore produce three output files: an *.o file which is
+the final output of the compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
+<P>For a release of your project, disable any debugging.
+<P>
+<H4>Additional Options</H4>
+
+<P>The text entry field on the bottom is intended for you to manually set any flags for the compiler by setting the CXXFLAGS
+environment variable in the makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
+description of all available compiler flags you should see your compiler documentation; for gcc and egcs this can be done by
+<B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the compiler.
+<P>
+<P>
 <H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
 </H3>
 
 <P>
 <P>
+<P>
 <H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
-</H3>
+ </H3>
 
-<P>
-<P>
-<P>
+<P> 
 <P ALIGN="RIGHT">
 
 <A HREF="index-10.html">Next</A>

@@ -163,6 +163,7 @@ void CKDevelop::slotFileSave(){
     }
   }
   slotStatusMsg(IDS_DEFAULT);
+  slotStatusHelpMsg(i18n("File  "+filename+ "  saved."));
 }
 
 void CKDevelop::slotFileSaveAs(){
@@ -1113,6 +1114,7 @@ void CKDevelop::slotBookmarksAdd(){
 		header_widget->addBookmark();
 	if(edit_widget==cpp_widget)
 		cpp_widget->addBookmark();
+
 }
 void CKDevelop::slotBookmarksClear(){
 	if(edit_widget==header_widget)
@@ -2112,6 +2114,7 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
 
 
 

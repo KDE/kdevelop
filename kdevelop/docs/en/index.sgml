@@ -1556,16 +1556,60 @@ handbook sgml file which is used for generating a set of HTML files that are inc
 about the author. The short description field is for additional information that you want to include like the program's purpose
 and the like.
 
-<sect1>Compiler Options<label id="Compiler Options"> <p> <sect1>Compiler Warnings<label id="Compiler Warnings">
+<sect1>Compiler Options<label id="Compiler Options">
+<p>
+The compiler options page sets the compiler flags towards your target, debugging and additional.
+
+<sect2>Target
+<p>
+The target box contains three options that can be set:
+
+Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
+which is the option if you configured your compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
+option sets the -b flag to the compiler. Usually you would leave this to the default.
+
+only syntax-check: If checked, the -fsyntax-only flag is set. This means that the compiler will check your code only for
+correctness in regards to the syntax, but doesn't check anything beyond that.
+
+Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
+is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
+optimization level below from 1 to 3.
+
+For a release version of your application, enable optimization and set the level to 2.
+
+<sect2>Debugging
+<p>
+Right of the Target box, you can see the Debugging-section. This means that you can set your compiler to include information for
+debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
+context to the sourcecode.
+
+Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
+Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
+the binary size will increase by the debugging level.
+
+Generate extra information for gprof: sets the -pg flag, resulting that the compiler will include information for the gprof
+program that displays caller graphs of your program's function.
+
+Store temporary intermediate files: sets the -save-temps flag. This will result in storing the usually temporary files produced by
+the preprocessor and the assembler. A compilation of a sourcefile will therefore produce three output files: an *.o file which is
+the final output of the compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
+
+For a release of your project, disable any debugging.
+
+<sect2>Additional Options
+<p>
+The text entry field on the bottom is intended for you to manually set any flags for the compiler by setting the CXXFLAGS
+environment variable in the makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
+description of all available compiler flags you should see your compiler documentation; for gcc and egcs this can be done by
+<bf/man gcc/; <bf/man g++/ will show you information about the c++ script that is used to lead the compiler.
+
+
+<sect1>Compiler Warnings<label id="Compiler Warnings">
 <p>
 
-<sect1>Linker Options<label id="Linker Options">
-<p>
 
-
-<sect>The Classbrowser<label id="The Classbrowser">
-<p>
-
+<sect1>Linker Options<label id="Linker Options"> <p> <sect>The Classbrowser<label id="The Classbrowser"> <p>
+The Linker Options can be set by the last page of the project options dialog
 
 <sect>The Dialogeditor<label id="The Dialogeditor">
 <p>
@@ -1573,10 +1617,9 @@ and the like.
 
 
 <sect>General Configuration<label id="General Configuration">
-
-<sect1> KDevelop Setup<label id="KDevelop Setup">
-<p>
-<sect2> General
+This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below are found
+in the KDevelop Setup dialog, which you can access by the according entry in the Options-menu.
+<sect1> General
 <p>
 <bf>Make-command:</bf>
 The General Options dialog lets you configure KDevelop's general settings.
@@ -1599,15 +1642,15 @@ For starting KDevelop, you have the option to enable/disable the startlogo to be
 Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
 
 
-<sect2>Changing Keyboard Shortcuts <label id="Changing Keyboard Shortcuts">
+<sect1>Changing Keyboard Shortcuts <label id="Changing Keyboard Shortcuts">
 <p>
 The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
 KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
 configuration can be changed by checking values like the Alt / Ctrl key etc.
 
 
-<sect2> Documentation<p>
-<sect3> Directories<p>
+<sect1> Documentation<p>
+<sect2> Directories<p>
 
 For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
 is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
@@ -1620,8 +1663,8 @@ according buttons, displaying a path-selection. If your system doesn't contain t
 first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
 also setting the KDE Library Doc path automatically.
 
-<sect3> Options<p>
-<sect4> Update KDE-Documentation
+<sect2> Options<p>
+<sect3> Update KDE-Documentation
 <p>
 For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
 installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
@@ -1651,7 +1694,7 @@ documentation to be generated for the kdelibs.  So it is important that you have
 that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
 give browsing the most functionality.
 
-<sect4>Create Search Database
+<sect3>Create Search Database
 <p>
 The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
 keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
@@ -1896,6 +1939,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 <p>
 </article>
+
+
 
 
 

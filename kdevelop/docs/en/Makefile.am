@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = index-9.html cref.html index-1.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html index.html logo3.jpg logotp3.gif tipdatabase tutorial-1.html tutorial-2.html tutorial-3.html tutorial-4.html tutorial-5.html tutorial-6.html tutorial-7.html tutorial-8.html tutorial-9.html tutorial.html 
+EXTRA_DIST = index-9.html cref.html index-1.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html index.html logo3.jpg logotp3.gif tipdatabase tutorial-1.html tutorial-2.html tutorial-3.html tutorial-4.html tutorial-5.html tutorial-6.html tutorial-7.html tutorial-8.html tutorial-9.html tutorial.html index-16.html 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
@@ -62,6 +62,8 @@ install-data-local:
 	$(INSTALL_DATA) tutorial-9.html $(kde_htmldir)/en/kdevelop/tutorial-9.html
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) tutorial.html $(kde_htmldir)/en/kdevelop/tutorial.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) index-16.html $(kde_htmldir)/en/kdevelop/index-16.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/index-9.html
@@ -93,4 +95,5 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-8.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-9.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial.html
+	-rm -f $(kde_htmldir)/en/kdevelop/index-16.html
 
