@@ -43,12 +43,11 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreat
 
 using namespace FileCreate;
 
-
-FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList& )
+FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
   : KDevPlugin(parent, name ? name : "FileCreatePart"), KDevCreateFile(), m_selectedWidget(-1)
 {
   setInstance(FileCreateFactory::instance());
-  setXMLFile("kdevpart_filecreate.rc"); 
+  setXMLFile("kdevpart_filecreate.rc");
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
@@ -60,13 +59,16 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setToolTip( i18n("Use this to create a new file within your project.") );
   m_filetypes.setAutoDelete(true);
 
-  m_availableWidgets[0] = new TreeWidget(this); 
-  m_availableWidgets[1] = new FriendlyWidget(this); 
+  m_availableWidgets[0] = new TreeWidget(this);
+  m_availableWidgets[1] = new FriendlyWidget(this);
   m_numWidgets = 2;
-  
-  selectWidget(0);
-  
-  
+
+  // TODO: provide a way of choosing your preferred widget without
+  // having to change the source, as this is not considered 'user-friendly'
+  // these days, I'm led to believe.
+  selectWidget(1);
+
+
 }
 
 
@@ -81,7 +83,7 @@ void FileCreatePart::selectWidget(int widgetNumber) {
   if (setWidget(m_availableWidgets[widgetNumber]))
     m_selectedWidget = widgetNumber;
 }
-  
+
 
 bool FileCreatePart::setWidget(TypeChooser * widg) {
 
@@ -108,7 +110,8 @@ void FileCreatePart::refresh() {
 }
 
 void FileCreatePart::slotNewFile() {
-  createNewFile();
+  KDevCreateFile::CreatedFile createdFile = createNewFile();
+  openCreatedFile(createdFile);
 }
 
 void FileCreatePart::slotProjectOpened() {
@@ -120,7 +123,7 @@ void FileCreatePart::slotProjectOpened() {
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
     readTypes(globalDom, false);
   }
-  
+
   // read in which global templates are to be used for this project
   QDomElement useGlobalTypes =
     DomUtil::elementByPath(*projectDom(),"/kdevfilecreate/useglobaltypes");
@@ -187,16 +190,22 @@ void FileCreatePart::slotProjectClosed() {
 }
 
 void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
+
   KDevCreateFile::CreatedFile createdFile = createNewFile(filetype->ext(),
                                                           QString::null,
                                                           QString::null,
                                                           filetype->subtypeRef());
+
+  openCreatedFile(createdFile);
+
+  topLevel()->lowerView( typeChooserWidgetAsQWidget() );
+}
+
+void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) {
   if (createdFile.status == KDevCreateFile::CreatedFile::STATUS_OK) {
     KURL uu(project()->projectDirectory() + createdFile.dir + "/" + createdFile.filename );
-    kdDebug(9034) << "Opening url: " << uu.prettyURL().latin1() << endl;
     partController()->editDocument ( uu );
   }
-  topLevel()->lowerView( typeChooserWidgetAsQWidget() );
 }
 
 int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
@@ -205,7 +214,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
   if (!fileTypes.isNull()) {
     for(QDomNode node = fileTypes.firstChild();!node.isNull();node=node.nextSibling()) {
       if (node.isElement() && node.nodeName()=="type") {
-        QDomElement element = node.toElement(); 
+        QDomElement element = node.toElement();
         FileType * filetype = new FileType;
         filetype->setName( element.attribute("name") );
         filetype->setExt( element.attribute("ext") );
@@ -217,7 +226,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, bool enable) {
         numRead++;
 
         kdDebug(9034) << "node: " << filetype->name().latin1() << endl;
-        
+
         if (node.hasChildNodes()) {
           for(QDomNode subnode = node.firstChild();!subnode.isNull();subnode=subnode.nextSibling()) {
             kdDebug(9034) << "subnode: " << subnode.nodeName().latin1() << endl;
@@ -271,7 +280,7 @@ FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
 // KDevFileCreate interface
 
 KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype) {
-  
+
   KDevCreateFile::CreatedFile result;
   KURL projectURL( project()->projectDirectory() );
   KURL selectedURL;
@@ -279,8 +288,8 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   KDialogBase * dialogBase = NULL;
   FriendlyWidget * filetypeWidget = NULL;
 
-  FileDialog * fileDialogWidget = NULL;  
-  
+  FileDialog * fileDialogWidget = NULL;
+
   // If the file type (extension) is unknown, we're going to need to ask
   if (ext==QString::null) {
     m_filedialogFiletype = NULL;
@@ -290,7 +299,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     filetypeWidget->refresh();
   }
 
-  // If the file name or path is unknown, we're going to need to ask  
+  // If the file name or path is unknown, we're going to need to ask
   if (dir==QString::null || name==QString::null) {
 
     // if no path is known, start at project root
@@ -300,7 +309,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     fileDialogWidget = new FileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
 
     dialogBase = fileDialogWidget;
-                   
+
   }
 
   // if no dialog has been created but there's a widget to be displayed,
@@ -310,7 +319,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
                                    KDialogBase::Ok, 0, "New file", true);
     dialogBase->setMainWidget(filetypeWidget);
   }
-  
+
 
   // if there's a dialog display it
   if (dialogBase) {
@@ -356,11 +365,13 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 
   // work out the path relative to the project directory
   QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
+
+  // add appropriate extension, if not already there
   if (!relToProj.endsWith("." + ext)) relToProj+="." + ext;
-  
+
   QString filename = URLUtil::filename(relToProj);
-  
-  kdDebug(9034) << "relative to proj dir = " << relToProj << endl;  
+
+  kdDebug(9034) << "relative to proj dir = " << relToProj << endl;
   kdDebug(9034) << "filename = " << filename << endl;
 
   // add in subtype, if specified
@@ -378,8 +389,8 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   result.filename = filename;
   result.dir = URLUtil::directory(relToProj);
   result.status = KDevCreateFile::CreatedFile::STATUS_OK;
-  return result;  
-  
+  return result;
+
 }
 
 void FileCreatePart::slotNoteFiletype(const FileType * filetype) {

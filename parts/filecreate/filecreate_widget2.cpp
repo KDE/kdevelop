@@ -35,7 +35,7 @@ namespace FileCreate {
   FriendlyWidget::FriendlyWidget(FileCreatePart *part)
     : QTable(0,4,0), TypeChooser(part), m_selected(NULL)
   {
-  
+
     setReadOnly(true);
     setShowGrid(false);
     horizontalHeader()->hide();
@@ -50,7 +50,7 @@ namespace FileCreate {
     QWhatsThis::add(this, i18n("Use this to create new files within your project."));
 
     setDefaultColumnWidths();
-  
+
   }
 
 
@@ -79,10 +79,10 @@ namespace FileCreate {
     if (changeToRow!=-1) {
       m_current = current;
       kdDebug(9034) << "Found row, setting current to row " << changeToRow << endl;
-      setCurrentCell(changeToRow,0);
+      slotCellSelected(changeToRow,0);
       selectRow(changeToRow);
     }
-    
+
   }
 
   void FriendlyWidget::refresh() {
@@ -96,9 +96,9 @@ namespace FileCreate {
     for(FileType * filetype = filetypes.first();
 	filetype;
 	filetype=filetypes.next()) {
-    
+
       if (filetype->enabled()) {
-      
+
 	if (filetype->subtypes().count()==0)
 	  setRow(row++, filetype);
 
@@ -106,19 +106,19 @@ namespace FileCreate {
 	for(FileType * subtype = subtypes.first();
 	    subtype;
 	    subtype=subtypes.next()) {
-	  if (subtype->enabled()) 
+	  if (subtype->enabled())
 	    setRow(row++, subtype);
 	}
-      
+
       }
-    
+
     }
     resizeCells();
     if (currentSelection()>-1) removeSelection(currentSelection());
 
     connect( this, SIGNAL(currentChanged(int,int)), this, SLOT(slotCellSelected(int,int)) );
-  
-  
+
+
   }
 
   void FriendlyWidget::setRow(int row, FileType * filetype) {
@@ -139,7 +139,7 @@ namespace FileCreate {
     }
 
     typeForRow[row]=filetype;
-  
+
   }
 
   void FriendlyWidget::empty() {
@@ -163,8 +163,8 @@ namespace FileCreate {
     }
 
     m_selected = typeForRow.contains(row) ? typeForRow[row] : NULL;
-    QTimer::singleShot(0, this, SLOT(slotDoSelection()) );  
-  
+    QTimer::singleShot(0, this, SLOT(slotDoSelection()) );
+
   }
 
   void FriendlyWidget::slotDoSelection() {
