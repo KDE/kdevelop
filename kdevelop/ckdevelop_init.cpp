@@ -388,7 +388,7 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", "");
   accel->connectItem("BuildAutoconf", this,SLOT(slotBuildAutoconf()) );
   
-  accel->insertItem( i18n("Configure"), "BuildConfigure", "");
+  accel->insertItem( i18n("Configure..."), "BuildConfigure", "");
   accel->connectItem( "BuildConfigure", this, SLOT(slotBuildConfigure()) );
   
   
@@ -597,7 +597,7 @@ void CKDevelop::initMenuBar(){
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
-  build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
+  build_menu->insertItem(i18n("C&onfigure..."), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
 
   kdev_menubar->insertItem(i18n("&Build"), build_menu);
 

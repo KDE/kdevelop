@@ -610,13 +610,16 @@ void CKDevelop::slotBuildRun(){
 }
 
 void CKDevelop::slotBuildRunWithArgs(){
-  CExecuteArgDlg argdlg(this,"Arguments",prj);
-  if(argdlg.exec()){
-    slotBuildMake();
-    slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
-    beep=false;
-    next_job = "run_with_args";
-  }
+    QString args=prj->getExecuteArgs();
+    CExecuteArgDlg argdlg(this,"Arguments",i18n("Execute with Arguments"),args);
+    if(argdlg.exec()){
+	prj->setExecuteArgs(argdlg.getArguments());		
+	prj->writeProject();
+	slotBuildMake();
+	slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
+	beep=false;
+	next_job = "run_with_args";
+    }
 }
 void CKDevelop::slotBuildDebug(){
 
@@ -666,6 +669,7 @@ void CKDevelop::slotBuildMake(){
     process << make_cmd;
   }
   beep = true;
+  
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -805,6 +809,17 @@ void CKDevelop::slotBuildAutoconf(){
 
 
 void CKDevelop::slotBuildConfigure(){
+
+    QString args=prj->getConfigureArgs();
+    CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
+    if(argdlg.exec()){
+	prj->setConfigureArgs(argdlg.getArguments());		
+	prj->writeProject();
+    }
+    else{
+	return;
+    }
+
   slotStatusMsg(i18n("Running ./configure..."));
   QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
 
@@ -819,15 +834,15 @@ void CKDevelop::slotBuildConfigure(){
   shell_process << flaglabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
-       if (!prj->getCXXFLAGS().isEmpty())
+      if (!prj->getCXXFLAGS().isEmpty())
           shell_process << prj->getCXXFLAGS() << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
+      if (!prj->getAdditCXXFLAGS().isEmpty())
           shell_process << prj->getAdditCXXFLAGS();
   }
   shell_process  << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
          shell_process << prj->getLDFLAGS();
-  shell_process  << "\" "<< "./configure";
+  shell_process  << "\" "<< "./configure " << argdlg.getArguments();
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 }
@@ -2099,36 +2114,39 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if (next_job == "refresh"){ // rest from the add projectfile
       refreshTrees();
     }
+    next_job = "";
   }
   else {
     result= i18n("*** process exited with error(s) ***\n");
+    next_job = "";
+    
   }
   if (!result.isEmpty())
   {
      int x,y;
      messages_widget->cursorPosition(&x,&y);
-    messages_widget->insertAt(result, x, y);
+     messages_widget->insertAt(result, x, y);
   }
   if (ready){ // start the error-message parser
-    QString str1 = messages_widget->text();
-    
-    if(error_parser->getMode() == CErrorMessageParser::MAKE){
-      error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
-    }
-    if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-      error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-    }
-    //enable/disable the menus/toolbars
-    if(error_parser->hasNext()){
-      enableCommand(ID_VIEW_NEXT_ERROR);
-    }
-    else{
-      disableCommand(ID_VIEW_NEXT_ERROR);
-    }
+      QString str1 = messages_widget->text();
+      
+      if(error_parser->getMode() == CErrorMessageParser::MAKE){
+	  error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
+      }
+      if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+	  error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+      }
+      //enable/disable the menus/toolbars
+      if(error_parser->hasNext()){
+	  enableCommand(ID_VIEW_NEXT_ERROR);
+      }
+      else{
+	  disableCommand(ID_VIEW_NEXT_ERROR);
+      }
   }
   if(beep && ready){
-    XBell(kapp->getDisplay(),100); //beep :-)
-    beep = false;
+      XBell(kapp->getDisplay(),100); //beep :-)
+      beep = false;
   }
   
 }

@@ -1,10 +1,7 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 dist-hook:
 	-perl am_edit
 
-SUBDIRS = kdevelop po 
 
-####### kdevelop will overwrite this part!!! (end)############
 # This file you have to edit. Change the name here
 SUBDIRS = kdevelop  po kdlgloader
 

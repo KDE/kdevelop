@@ -117,6 +117,7 @@ void KDlgEdit::slotOpenDialog(QString file){
 	    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",true);
 	    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",true);
 	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_GENERATE);
+	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
 	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_CLOSE);
 	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE);
 	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE_AS);
@@ -136,6 +137,7 @@ bool KDlgEdit::slotFileCloseForceSave(){
     ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
     ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",false);
     ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_GENERATE);
+    ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
     ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_CLOSE);
     ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE);
     ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE_AS);
@@ -157,6 +159,7 @@ bool KDlgEdit::slotFileClose(){
   ((CKDevelop*)parent())->kdlg_get_prop_widget()->hide();
   ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
   ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",false);
+  ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_GENERATE);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_CLOSE);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE);

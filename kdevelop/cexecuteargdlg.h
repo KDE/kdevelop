@@ -23,25 +23,29 @@
 #include <qdialog.h>
 #include <cproject.h>
 
-/**gets the commandline arguments for the execution of
-	*the project binary
+/**gets the commandline arguments 
   *@author Ralf Nolden
   */
 
 class CExecuteArgDlg : public QDialog  {
-   Q_OBJECT
-public: 
-	CExecuteArgDlg(QWidget *parent=0, const char *name=0,CProject* p_prj=0);
-	~CExecuteArgDlg();
-public slots:
+    Q_OBJECT
+	public: 
+    CExecuteArgDlg(QWidget *parent=0, const char *name=0,QString titel = "",QString args="");
+    ~CExecuteArgDlg();
+    
+    QString getArguments(){return arguments;}
+    
+    public slots:
 	void slotTextChanged(const char *t);
-	void slotSetArg();
-	void slotClose();
+    void slotSetArg();
+    void slotClose();
+    
 protected:
-  CProject* prj;
+    CProject* prj;
 private:
-  QString text;
-	QLineEdit *edit;
+    QString text;
+    QLineEdit *edit;
+    QString arguments;
 };
 
 #endif
