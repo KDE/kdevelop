@@ -4,6 +4,9 @@
 #include <qtabwidget.h>
 
 
+#include <kdebug.h>
+
+
 #include "kwrite_factory.h"
 #include "document_impl.h"
 #include "clipboard_iface_impl.h"
@@ -43,7 +46,7 @@ DocumentImpl::DocumentImpl(KEditor::Editor *parent)
 
 DocumentImpl::~DocumentImpl()
 {
-  delete m_document;
+kdDebug() << "DocumentImpl " << this << " desctructed!!!" << endl;
 }
 
 

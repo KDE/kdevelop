@@ -41,11 +41,16 @@ KEditor::Document *KWritePart::getDocument(const QString &filename)
   {
     QListIterator<DocumentImpl> it(_documents);
     for ( ; it.current(); ++it)
+    {
+      kdDebug() << "Iterator: " << it.current() << endl;
+      kdDebug() << "it.current()->fileName: " << it.current()->fileName() << endl;
+
       if (it.current()->fileName() == filename)
  	{
 	  impl = it.current();
 	  break;
 	}
+    }
   }
 
   // if there was none, create a new one
@@ -57,7 +62,6 @@ KEditor::Document *KWritePart::getDocument(const QString &filename)
     if (!filename.isEmpty())
 	impl->load(filename);
 	
-    connect(impl, SIGNAL(fileNameChanged(QString)), this, SLOT(fileNameChanged(QString)));
     connect(impl->manager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 
     _documents.append(impl);

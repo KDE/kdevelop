@@ -17,14 +17,11 @@ DocumentsIfaceImpl::DocumentsIfaceImpl(KEditor::Editor *editor)
 QList<KEditor::Document> DocumentsIfaceImpl::documents() const
 {
   QList<KEditor::Document> retval;
- /* 
+
   QListIterator<DocumentImpl> it(((KWritePart*)editor())->_documents);
   for ( ; it.current(); ++it)
-	{
-      kdDebug() << "ADDED to retval: " << it.current()->shortName() << endl;
-	  retval.append(it.current());
-    }
-  */
+    retval.append(it.current());
+  
   return retval; 
 }
 
