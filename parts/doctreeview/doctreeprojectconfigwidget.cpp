@@ -31,7 +31,116 @@
 #include "domutil.h"
 
 
-DocTreeProjectConfigWidget::DocTreeProjectConfigWidget(DocTreeViewWidget *widget, 
+class DocCheckItem: public QCheckListItem
+{
+public:
+    enum DocType
+    {
+        QT_XML,
+        DOXYGEN,
+        KDOC,
+        TOC,
+        DEVHELP
+    };
+
+    DocCheckItem ( DocTreeProjectConfigWidget *widget, DocType type, QCheckListItem * parent, const QString & text, Type tt = Controller )
+        :QCheckListItem(parent, text, tt), m_widget(widget), m_type(type)
+    {
+    }
+
+    DocCheckItem ( DocTreeProjectConfigWidget *widget, DocType type, QListViewItem * parent, const QString & text, Type tt = Controller )
+        :QCheckListItem(parent, text, tt), m_widget(widget), m_type(type)
+    {
+    }
+
+    DocCheckItem ( DocTreeProjectConfigWidget *widget, DocType type, QListView * parent, const QString & text, Type tt = Controller )
+        :QCheckListItem(parent, text, tt), m_widget(widget), m_type(type)
+    {
+    }
+
+    virtual DocType type()
+    {
+        return m_type;
+    }
+
+    virtual QString name() const
+    {
+        return m_name;
+    }
+    void setName(const QString &name)
+    {
+        m_name = name;
+    }
+
+protected:
+    virtual void stateChange ( bool state )
+    {
+        if (state == true)
+        {
+            switch (type())
+            {
+            case QT_XML:
+                    m_widget->m_ignoreQT_XML.remove( name() );
+                break;
+
+                case DOXYGEN:
+                    m_widget->m_ignoreDoxygen.remove( name() );
+                break;
+
+                case KDOC:
+                    m_widget->m_ignoreKDoc.remove( name() );
+                break;
+
+                case TOC:
+                    m_widget->m_ignoreToc.remove( name() );
+                break;
+
+                case DEVHELP:
+                    m_widget->m_ignoreDevHelp.remove( name() );
+                break;
+
+                default:
+                    kdDebug(9002) << "item unchecked with unknown DocType: " << name() << endl;
+            }
+        }
+        else
+        {
+            switch (type())
+            {
+                case QT_XML:
+                    m_widget->m_ignoreQT_XML << name();
+                break;
+
+                case DOXYGEN:
+                    m_widget->m_ignoreDoxygen << name();
+                break;
+
+                case KDOC:
+                    m_widget->m_ignoreKDoc << name();
+                break;
+
+                case TOC:
+                    m_widget->m_ignoreToc << name();
+                break;
+
+                case DEVHELP:
+                    m_widget->m_ignoreDevHelp << name();
+                break;
+
+                default:
+                    kdDebug(9002) << "item unchecked with unknown DocType: " << name() << endl;
+            }
+        }
+    }
+
+private:
+    DocTreeProjectConfigWidget *m_widget;
+    DocType m_type;
+    QString m_name;
+};
+
+
+DocTreeProjectConfigWidget::DocTreeProjectConfigWidget(DocTreeViewWidget *widget,
     QWidget *parent, KDevProject *project, const char *name): DocTreeProjectConfigWidgetBase(parent, name)
 
 {
@@ -40,8 +149,6 @@ DocTreeProjectConfigWidget::DocTreeProjectConfigWidget(DocTreeViewWidget *widget
 
     readConfig();
 
-    docListView->addColumn(i18n("Type"));
-    docListView->addColumn(i18n("Enabled"));
     docListView->addColumn(i18n("Title"));
     docListView->addColumn(i18n("URL"));
     docListView->setAllColumnsShowFocus(true);
@@ -59,7 +166,6 @@ void DocTreeProjectConfigWidget::readConfig()
     KConfig*       config = DocTreeViewFactory::instance()->config();
     KStandardDirs* dirs   = DocTreeViewFactory::instance()->dirs();
     QStringList    tocs;
-    QString        type;
 
     if (m_project->projectDom())
         d = *m_project->projectDom();
@@ -80,72 +186,77 @@ void DocTreeProjectConfigWidget::readConfig()
     m_ignoreToc     = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoretocs", "toc");
     m_ignoreDevHelp = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoredevhelp", "toc");
 
+    m_qtDocs = new QListViewItem(docListView, i18n("Qt Documentation Collection"));
+    m_qtDocs->setOpen(true);
+    m_doxygenDocs = new QListViewItem(docListView, i18n("Doxygen Documentation Collection"));
+    m_doxygenDocs->setOpen(true);
+    m_kdocDocs = new QListViewItem(docListView, i18n("KDoc Documentation Collection"));
+    m_kdocDocs->setOpen(true);
+    m_tocDocs = new QListViewItem(docListView, i18n("KDevelopTOC Documentation Collection"));
+    m_tocDocs->setOpen(true);
+    m_devHelpDocs = new QListViewItem(docListView, i18n("DevHelp Documentation Collection"));
+    m_devHelpDocs->setOpen(true);
 
     // Read qt *.xml Config ( DocType = QT_XML )
-    type.setNum(QT_XML);
     xmap = config->entryMap("General Qt");
     for (QMap<QString, QString>::Iterator itx = xmap.begin(); itx != xmap.end(); ++itx)
     {
         /// @todo Make it use a better name
         const QString name(itx.key());
-        if( m_ignoreQT_XML.contains( name ) )
-            new KListViewItem(docListView, type, "false", itx.key(), config->readPathEntry(itx.key()));
-        else
-            new KListViewItem(docListView, type, "true",  itx.key(), config->readPathEntry(itx.key()));
+        DocCheckItem *item = new DocCheckItem(this, DocCheckItem::QT_XML, m_qtDocs, itx.key(), QCheckListItem::CheckBox);
+        item->setText(1, config->readPathEntry(itx.key()));
+        item->setName(name);
+        item->setOn(!m_ignoreQT_XML.contains( name ));
     }
 
     // Read Doxygen Config ( DocType = DOXYGEN )
-    type.setNum(DOXYGEN);
     xmap = config->entryMap("General Doxygen");
     for (QMap<QString, QString>::Iterator itx = xmap.begin(); itx != xmap.end(); ++itx)
     {
         /// @todo Make it use a better name
         const QString name(itx.key());
-        if( m_ignoreDoxygen.contains( name ) )
-            new KListViewItem(docListView, type, "false", itx.key(), config->readPathEntry(itx.key()));
-        else
-            new KListViewItem(docListView, type, "true",  itx.key(), config->readPathEntry(itx.key()));
+        DocCheckItem *item = new DocCheckItem(this, DocCheckItem::DOXYGEN, m_doxygenDocs, itx.key(), QCheckListItem::CheckBox);
+        item->setText(1, config->readPathEntry(itx.key()));
+        item->setName(name);
+        item->setOn(!m_ignoreDoxygen.contains( name ));
     }
 
 
     // Read KDoc Config ( DocType = KDOC )
-    type.setNum(KDOC);
     xmap = config->entryMap("General KDoc");
     for (QMap<QString, QString>::Iterator itx = xmap.begin(); itx != xmap.end(); ++itx)
     {
         /// @todo Make it use a better name
         const QString name(itx.key());
-        if( m_ignoreKDoc.contains( name ) )
-            new KListViewItem(docListView, type, "false", itx.key(), config->readPathEntry(itx.key()));
-        else
-            new KListViewItem(docListView, type, "true",  itx.key(), config->readPathEntry(itx.key()));
+        DocCheckItem *item = new DocCheckItem(this, DocCheckItem::KDOC, m_kdocDocs, itx.key(), QCheckListItem::CheckBox);
+        item->setText(1, config->readPathEntry(itx.key()));
+        item->setName(name);
+        item->setOn(!m_ignoreKDoc.contains( name ));
     }
 
     // Read Toc Config ( DocType = TOC )
-    type.setNum(TOC);
     tocs = dirs->findAllResources("doctocs", QString::null, false, true);
     for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit)
     {
         const QString name( QFileInfo(*tit).baseName() );
         const QString location( DocTreeViewTool::tocLocation( *tit ) );
         const QString title (DocTreeViewTool::tocTitle( *tit ));
-        if( m_ignoreToc.contains( name ) )
-            new KListViewItem( docListView, type, "false", title, location);
-        else
-            new KListViewItem( docListView, type, "true",  title, location);
+        DocCheckItem *item = new DocCheckItem(this, DocCheckItem::TOC, m_tocDocs, title, QCheckListItem::CheckBox);
+        item->setText(1, location);
+        item->setName(name);
+        item->setOn(!m_ignoreToc.contains( name ));
     }
 
     // Read DevHelp Config ( DocType = DEVHELP )
-    type.setNum(DEVHELP);
     tocs = dirs->findAllResources("docdevhelp", QString::null, false, true);
     for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit)
     {
-        QFileInfo fi(*tit);
+        const QString name( QFileInfo(*tit).baseName() );
         BookInfo inf = DocTreeViewTool::devhelpInfo(*tit);
-        if( m_ignoreDevHelp.contains( fi.baseName() ) )
-            new KListViewItem( docListView, type, "false", inf.title, DocTreeViewTool::devhelpLocation(fi.baseName() , inf.defaultLocation));
-        else
-            new KListViewItem( docListView, type, "true",  inf.title, DocTreeViewTool::devhelpLocation(fi.baseName() , inf.defaultLocation));
+        DocCheckItem *item = new DocCheckItem(this, DocCheckItem::DEVHELP, m_devHelpDocs, inf.title, QCheckListItem::CheckBox);
+        item->setText(1, DocTreeViewTool::devhelpLocation(name, inf.defaultLocation));
+        item->setName(name);
+        item->setOn(!m_ignoreDevHelp.contains( name ));
     }
 }
 
@@ -187,81 +298,5 @@ void DocTreeProjectConfigWidget::setProject(KDevProject* project)
 }
 
 */
-
-void DocTreeProjectConfigWidget::enable_clicked()
-{
-    QListViewItem *item( docListView->selectedItem() );
-    if( item && item->text(1) == "false" )
-    {
-        switch (item->text(0).toInt())
-        {
-           case QT_XML:
-                m_ignoreQT_XML.remove( item->text( 2 ) );
-                item->setText(1, "true");
-            break;
-
-            case DOXYGEN:
-                m_ignoreDoxygen.remove( item->text( 2 ) );
-                item->setText(1, "true");
-            break;
-
-            case KDOC:
-                m_ignoreKDoc.remove( item->text( 2 ) );
-                item->setText(1, "true");
-            break;
-
-            case TOC:
-                m_ignoreToc.remove( item->text( 2 ) );
-                item->setText(1, "true");
-            break;
-
-            case DEVHELP:
-                m_ignoreDevHelp.remove( item->text( 2 ) );
-                item->setText(1, "true");
-            break;
-
-            default:
-                kdDebug(9002) << "enable_clicked() called with unknown DocType: " << item->text(0) << endl;
-        }
-    }
-}
-
-void DocTreeProjectConfigWidget::disable_clicked()
-{
-    QListViewItem *item( docListView->selectedItem() );
-    if( item && item->text(1) == "true" )
-    {
-        switch (item->text(0).toInt())
-        {
-            case QT_XML:
-                m_ignoreQT_XML << item->text( 2 );
-                item->setText(1, "false");
-            break;
-
-            case DOXYGEN:
-                m_ignoreDoxygen << item->text( 2 );
-                item->setText(1, "false");
-            break;
-
-            case KDOC:
-                m_ignoreKDoc << item->text( 2 );
-                item->setText(1, "false");
-            break;
-
-            case TOC:
-                m_ignoreToc << item->text( 2 );
-                item->setText(1, "false");
-            break;
-
-            case DEVHELP:
-                m_ignoreDevHelp << item->text( 2 );
-                item->setText(1, "false");
-            break;
-
-            default:
-                kdDebug(9002) << "disable_clicked() called with unknown DocType: " << item->text(0) << endl;
-        }
-    }
-}
 
 #include "doctreeprojectconfigwidget.moc"

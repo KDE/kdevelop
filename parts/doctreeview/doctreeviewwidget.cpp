@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qptrlist.h>
 #include <qprogressdialog.h>
+#include <qwhatsthis.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -1013,19 +1014,23 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     // INDEX MODE INIT
     QHBox *hbo = new QHBox(indexWidget, "label + edit");
     hbo->setMargin( 2 );
-    QLabel *l = new QLabel( 0, i18n("&Search:"), hbo, "search-label" );
+    QLabel *l = new QLabel( 0, i18n("Se&arch:"), hbo, "search-label" );
     filterEdit = new DocLineEdit( hbo, "index mode filter line edit" );
     l->setBuddy(filterEdit);
 
     subSearchButton = new QToolButton ( hbo, "sub search check" );
     subSearchButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
-    subSearchButton->setPixmap ( SmallIcon ( "pause" ) );
+    subSearchButton->setPixmap ( SmallIcon ( "grep" ) );
+    subSearchButton->setToggleButton(true);
     QToolTip::add ( subSearchButton, i18n ( "Search substrings" ) );
+    QWhatsThis::add(subSearchButton, i18n("<b>Search substrings</b><p>Index view searches for substrings in index items if toggled."));
 
     indexModeSwitch = new QToolButton ( hbo, "index mode switch" );
     indexModeSwitch->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
-    indexModeSwitch->setPixmap ( SmallIcon ( "pause" ) );
+    indexModeSwitch->setPixmap ( SmallIcon ( "contents" ) );
+    indexModeSwitch->setToggleButton(true);
     QToolTip::add ( indexModeSwitch, i18n ( "Show topics for index items" ) );
+    QWhatsThis::add(indexModeSwitch, i18n("<b>Show topics for index items</b><p>Index view shows topics to which index items belong if toggled."));
 
     indexView = new KListView ( indexWidget, "documentation index list view" );
 
@@ -1039,6 +1044,10 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     connect ( filterEdit, SIGNAL ( returnPressed() ), this, SLOT ( slotFilterReturn() ) );
     connect ( filterEdit, SIGNAL ( upPressed() ), this, SLOT ( slotIndexPrevMatch() ) );
     connect ( filterEdit, SIGNAL ( downPressed() ), this, SLOT ( slotIndexNextMatch() ) );
+    connect ( filterEdit, SIGNAL ( pgupPressed() ), this, SLOT ( slotIndexPgUp() ) );
+    connect ( filterEdit, SIGNAL ( pgdownPressed() ), this, SLOT ( slotIndexPgDown() ) );
+    connect ( filterEdit, SIGNAL ( homePressed() ), this, SLOT ( slotIndexHome() ) );
+    connect ( filterEdit, SIGNAL ( endPressed() ), this, SLOT ( slotIndexEnd() ) );
     connect ( indexView, SIGNAL ( executed(QListViewItem *) ), this, SLOT ( slotIndexItemExecuted(QListViewItem *) ) );
     connect ( indexView, SIGNAL ( returnPressed(QListViewItem *) ), this, SLOT ( slotIndexItemExecuted(QListViewItem *) ) );
 
@@ -1060,17 +1069,20 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     startButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, startButton->sizePolicy().hasHeightForWidth()) );
     startButton->setPixmap ( SmallIcon ( "key_enter" ) );
     QToolTip::add ( startButton, i18n ( "Start searching" ) );
+    QWhatsThis::add(startButton, i18n("<b>Start searching</b><p>Searches through the documentation topics for a given term and shows the topic found."));
 
     nextButton = new QToolButton ( searchToolbar, "next match button" );
     nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType )0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth()) );
     nextButton->setPixmap ( SmallIcon ( "next" ) );
     QToolTip::add ( nextButton, i18n ( "Jump to next matching entry" ) );
+    QWhatsThis::add(nextButton, i18n("<b>Jump to next matching entry</b><p>Shows the next topic found."));
     nextButton->setEnabled( false );
 
     prevButton = new QToolButton ( searchToolbar, "previous match button" );
     prevButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, prevButton->sizePolicy().hasHeightForWidth()) );
     prevButton->setPixmap ( SmallIcon ( "previous" ) );
-    QToolTip::add ( prevButton, i18n ( "Jump to last matching entry" ) );
+    QToolTip::add ( prevButton, i18n ( "Jump to previous matching entry" ) );
+    QWhatsThis::add(prevButton, i18n("<b>Jump to previous matching entry</b><p>Shows the previous topic found."));
     prevButton->setEnabled( false );
 
     docView = new KListView ( treeWidget, "documentation list view" );
@@ -1217,7 +1229,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 
 //    modeSwitch->setShape(QTabBar::TriangularAbove);
     modeSwitch->setBorder(false);
-    modeSwitch->addTab(treeWidget, i18n("Con&tents"));
+    modeSwitch->addTab(treeWidget, i18n("Co&ntents"));
     modeSwitch->addTab(indexWidget, i18n("&Index"));
 }
 
@@ -1376,20 +1388,24 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     }
     if ( i == folder_project )
     {
-        popup.insertItem(i18n("Project Properties"), this, SLOT(slotConfigureProject()));
+        int id = popup.insertItem(i18n("Project Properties"), this, SLOT(slotConfigureProject()));
+        popup.setWhatsThis(id, i18n("<b>Project properties</b><p>Displays <b>Project Documentation</b> properties dialog."));
     }
     else
     {
-        popup.insertItem(i18n("Properties"), this, SLOT(slotConfigure()));
+        int id = popup.insertItem(i18n("Properties"), this, SLOT(slotConfigure()));
+        popup.setWhatsThis(id, i18n("<b>Properties</b><p>Displays <b>Documentation Tree</b> properties dialog."));
     }
     if ( i != folder_bookmarks && dItem && !dItem->fileName().isEmpty() )
     {
-        popup.insertItem(i18n("Add to Bookmarks"), this, SLOT(slotAddBookmark()));
+        int id = popup.insertItem(i18n("Add to Bookmarks"), this, SLOT(slotAddBookmark()));
         dcontext = DocumentationContext( dItem->fileName(), dItem->text(0) );
+        popup.setWhatsThis(id, i18n("<b>Add to bookmarks</b><p>Adds currently selected topic to the bookmarks list."));
     }
     if (  contextItem->parent() && dItem && contextItem->parent() == folder_bookmarks )
     {
-        popup.insertItem(i18n("Remove"), this, SLOT(slotRemoveBookmark()));
+        int id = popup.insertItem(i18n("Remove"), this, SLOT(slotRemoveBookmark()));
+        popup.setWhatsThis(id, i18n("<b>Remove</b><p>Removes currently selected bookmark from the bookmarks list."));
         dcontext = DocumentationContext( dItem->fileName(), dItem->text(0) );
     }
     m_part->core()->fillContextMenu( &popup , &dcontext );
@@ -1487,14 +1503,18 @@ void DocTreeViewWidget::refresh()
     KConfig *config = DocTreeViewFactory::instance()->config();
     if (config)
     {
+        QStringList ignorekdocs( DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignorekdocs", "toc") );
         config->setGroup("General KDoc");
         QMap<QString, QString> emap = config->entryMap("General KDoc");
         QMap<QString, QString>::Iterator it;
         for (it = emap.begin(); it != emap.end(); ++it)
         {
-            DocTreeKDELibsFolder *kdf = new DocTreeKDELibsFolder(it.data(), it.key(), docView, "ctx_kdelibs");
-            kdf->refresh();
-            folder_kdoc.append(kdf);
+            if (!ignorekdocs.contains(it.key()))
+            {
+                DocTreeKDELibsFolder *kdf = new DocTreeKDELibsFolder(it.data(), it.key(), docView, "ctx_kdelibs");
+                kdf->refresh();
+                folder_kdoc.append(kdf);
+            }
         }
     }
 
@@ -1504,14 +1524,18 @@ void DocTreeViewWidget::refresh()
 
     if (config)
     {
+        QStringList ignoredoxygen( DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredoxygen", "toc") );
         config->setGroup("General Doxygen");
         QMap<QString, QString> emap = config->entryMap("General Doxygen");
         QMap<QString, QString>::Iterator it;
         for (it = emap.begin(); it != emap.end(); ++it)
         {
-            DocTreeDoxygenFolder *dxf = new DocTreeDoxygenFolder(it.data(), it.key(), docView, "ctx_doxygen");
-            dxf->refresh();
-            folder_doxygen.append(dxf);
+            if (!ignoredoxygen.contains(it.key()))
+            {
+                DocTreeDoxygenFolder *dxf = new DocTreeDoxygenFolder(it.data(), it.key(), docView, "ctx_doxygen");
+                dxf->refresh();
+                folder_doxygen.append(dxf);
+            }
         }
     }
 
@@ -1522,14 +1546,18 @@ void DocTreeViewWidget::refresh()
 
     if (config)
     {
+        QStringList ignoreqt_xml( DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoreqt_xml", "toc") );
         config->setGroup("General Qt");
         QMap<QString, QString> emap = config->entryMap("General Qt");
         QMap<QString, QString>::Iterator it;
         for (it = emap.begin(); it != emap.end(); ++it)
         {
-            DocTreeQtFolder *qtf = new DocTreeQtFolder(it.data(), it.key(), docView, "ctx_qt");
-            qtf->refresh();
-            folder_qt.append(qtf);
+            if (!ignoreqt_xml.contains(it.key()))
+            {
+                DocTreeQtFolder *qtf = new DocTreeQtFolder(it.data(), it.key(), docView, "ctx_qt");
+                qtf->refresh();
+                folder_qt.append(qtf);
+            }
         }
     }
 }
@@ -1577,6 +1605,10 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 
     // .. and insert all again except for ignored items
     QStringList ignoretocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc");
+    QStringList ignoredh = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredevhelp", "toc");
+    QStringList ignoredoxygen = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredoxygen", "toc");
+    QStringList ignorekdocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignorekdocs", "toc");
+    QStringList ignoreqt_xml = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoreqt_xml", "toc");
 
     docView->insertItem(folder_bookmarks);
     docView->insertItem(folder_project);
@@ -1585,7 +1617,10 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 #endif
     QPtrListIterator<DocTreeDevHelpFolder> itdh2(folder_devhelp);
     for (; itdh2.current(); ++itdh2)
-        docView->insertItem(itdh2.current());
+    {
+        if (!ignoredh.contains(itdh2.current()->tocName()))
+            docView->insertItem(itdh2.current());
+    }
 
     QPtrListIterator<DocTreeTocFolder> it2(folder_toc);
     //    it2.toLast();
@@ -1601,13 +1636,19 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     //    itk2.toLast();
     //    for (; itk2.current(); --itk2)
     for (; itk2.current(); ++itk2)
-        docView->insertItem(itk2.current());
+    {
+        if (!ignorekdocs.contains(itk2.current()->text(0)))
+            docView->insertItem(itk2.current());
+    }
 
     QPtrListIterator<DocTreeDoxygenFolder> itx2(folder_doxygen);
     //    itx2.toLast();
     //    for (; itx2.current(); --itx2)
     for (; itx2.current(); ++itx2)
-        docView->insertItem(itx2.current());
+    {
+        if (!ignoredoxygen.contains(itx2.current()->text(0)))
+            docView->insertItem(itx2.current());
+    }
 
     /*    if(folder_kdelibs && kdelibskdoc )
             if (!ignoretocs.contains("kde"))
@@ -1617,7 +1658,10 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     //    itq2.toLast();
     //    for (; itq2.current(); --itq2)
     for (; itq2.current(); ++itq2)
-        docView->insertItem(itq2.current());
+    {
+        if (!ignoreqt_xml.contains(itq2.current()->text(0)))
+            docView->insertItem(itq2.current());
+    }
     //    if(folder_qt) docView->insertItem(folder_qt);
 
     docView->triggerUpdate();
@@ -1805,7 +1849,7 @@ void DocTreeViewWidget::slotCurrentTabChanged(int curtab)
 
         // Put them in the list
         slotIndexModeCheckClicked();
-        
+
         progress.setProgress(100);
     }
 }
@@ -1819,12 +1863,12 @@ void DocTreeViewWidget::slotSubstringCheckClicked()
 void DocTreeViewWidget::slotIndexModeCheckClicked()
 {
     QString s;
-    
+
     if(indexMode == filteredMode)   indexMode = plainListMode;
     else                            indexMode = filteredMode;
-    
+
     indexView->clear();
-    
+
     QPtrListIterator<IndexTreeData> ptrListIterator( indexItems );
     while( ptrListIterator.current() )
     {
@@ -1832,12 +1876,12 @@ void DocTreeViewWidget::slotIndexModeCheckClicked()
 
         if(indexMode == plainListMode) s = itd->text() + " (" + itd->parent() + ")";
         else s = itd->text();
-        
+
         if((indexMode == plainListMode) || itd->isVisible()) new QListViewItem(indexView, s);
 
         ++ptrListIterator;
     }
-    
+
     slotFilterTextChanged(filterEdit->text());
 }
 
@@ -1865,6 +1909,47 @@ void DocTreeViewWidget::slotIndexPrevMatch( )
             indexView->ensureItemVisible(above);
         }
     }
+}
+
+void DocTreeViewWidget::slotIndexPgUp( )
+{
+}
+
+void DocTreeViewWidget::slotIndexPgDown( )
+{
+/*    if (indexView->currentItem())
+    {
+        QListViewItem *below = indexView->currentItem()->itemBelow();
+        while ( (below) && (below->isVisible()) )
+        {
+            below = below->itemBelow();
+        }
+        if (below)
+        {
+            indexView->setCurrentItem(below);
+            indexView->ensureItemVisible(below);
+        }
+    }*/
+}
+
+void DocTreeViewWidget::slotIndexHome( )
+{
+/*    QListViewItem *item = indexView->firstChild();
+    if (item)
+    {
+        indexView->setCurrentItem(item);
+        indexView->ensureItemVisible(item);
+    }*/
+}
+
+void DocTreeViewWidget::slotIndexEnd( )
+{
+/*    QListViewItem *item = indexView->lastItem();
+    if (item)
+    {
+        indexView->setCurrentItem(item);
+        indexView->ensureItemVisible(item);
+    }*/
 }
 
 #include "doctreeviewwidget.moc"

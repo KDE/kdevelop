@@ -8,18 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>942</width>
-            <height>870</height>
+            <width>577</width>
+            <height>430</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout1</cstring>
             </property>
@@ -32,7 +32,10 @@
                         <cstring>projectdocdirLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Location of project user documentation:</string>
+                        <string>Location of project &amp;user documentation:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>userdocdirEdit</cstring>
                     </property>
                 </widget>
                 <widget class="KURLRequester">
@@ -45,7 +48,10 @@
                         <cstring>userdocdirLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Location of project API documentation:</string>
+                        <string>Location of project &amp;API documentation:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>apidocdirEdit</cstring>
                     </property>
                 </widget>
                 <widget class="KURLRequester">
@@ -55,123 +61,39 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="KListView" row="2" column="0">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>docListView</cstring>
             </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>displayedDocsLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Displayed documents in documentation browser:</string>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="KListView">
-                            <property name="name">
-                                <cstring>docListView</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>320</width>
-                                    <height>260</height>
-                                </size>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>WheelFocus</enum>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>This table shows all the globally installed documentation. Use the enable and disable buttons to control the use of each documentation item in the current project. To add or remove documentation to this list, use Settings-&gt;Configure Gideon...-&gt;Documentation Tree</string>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout3</cstring>
-                            </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>EnableButton</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="text">
-                                        <string>Enable</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>DisableButton</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="text">
-                                        <string>Disable</string>
-                                    </property>
-                                </widget>
-                                <spacer>
-                                    <property name="name">
-                                        <cstring>spacer1</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Vertical</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>20</width>
-                                            <height>20</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </vbox>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+            <property name="minimumSize">
+                <size>
+                    <width>320</width>
+                    <height>260</height>
+                </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This view shows all the globaly installed documentation. Use checkboxes to control the use of each documentation item in the current project. To add or remove documentation to this list, use Settings-&gt;Configure Gideon...-&gt;Documentation Tree</string>
+            </property>
         </widget>
-    </vbox>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>displayedDocsLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Displayed documents in documentation &amp;browser:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>docListView</cstring>
+            </property>
+        </widget>
+    </grid>
 </widget>
-<connections>
-    <connection>
-        <sender>EnableButton</sender>
-        <signal>clicked()</signal>
-        <receiver>doctreeview_project_config_widget</receiver>
-        <slot>enable_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>DisableButton</sender>
-        <signal>clicked()</signal>
-        <receiver>doctreeview_project_config_widget</receiver>
-        <slot>disable_clicked()</slot>
-    </connection>
-</connections>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
-<slots>
-    <slot access="private">enable_clicked()</slot>
-    <slot access="private">disable_clicked()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>

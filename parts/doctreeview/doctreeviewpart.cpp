@@ -44,7 +44,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     setInstance(DocTreeViewFactory::instance());
 
     setXMLFile("kdevdoctreeview.rc");
-    
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
@@ -57,11 +57,11 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     m_widget = new DocTreeViewWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
     m_widget->setCaption(i18n("Documentation Tree"));
-    QWhatsThis::add(m_widget, i18n("Documentation Tree\n\n"
-                                   "The documentation tree gives access to library "
-                                   "documentation and the KDevelop manuals. It can "
-                                   "be configured individually."));
-    
+    QWhatsThis::add(m_widget, i18n("<b>Documentation Tree</b><p>"
+                                   "The documentation tree gives access to various "
+                                   "documentation sources (Qt DCF, Doxygen, KDoc, KDevelopTOC and DevHelp "
+                                   "documentation) and the KDevelop manuals. It also provides documentation index."));
+
     mainWindow()->embedSelectViewRight(m_widget, i18n("Documentation"), i18n("documentation browser"));
 
     KAction *action;
@@ -69,18 +69,19 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     action = new KAction( i18n("Full Text &Search..."), 0,
                           this, SLOT(slotSearchDocumentation()),
                           actionCollection(), "help_fulltextsearch" );
-    action->setStatusText( i18n("Performs a full text search in the documentation") );
-    action->setWhatsThis( i18n("Search in documentation\n\n"
-                               "Opens the Search in documentation dialog. There you "
-                               "can enter a search term which will be searched for in "
-                               "the documentation. For this to work, you must first "
-                               "create a full text index, which can be done in the "
+    action->setToolTip( i18n("Full text search in the documentation") );
+    action->setWhatsThis( i18n("<b>Full text search</b><p>"
+                               "Opens the Search in documentation dialog. It allows "
+                               "to enter a search term which will be searched for in "
+                               "the documentation. For this to work, a "
+                               "full text index must be created first, which can be done in the "
                                "configuration dialog of the documentation tree.") );
 
     action = new KAction( i18n("Man Page..."), 0,
                           this, SLOT(slotManpage()),
                           actionCollection(), "help_manpage" );
-    action->setStatusText( i18n("Show a manpage") );
+    action->setToolTip( i18n("Show a manpage") );
+    action->setWhatsThis(i18n("<b>Show a manpage</b><p>Opens a man page using embedded viewer."));
 }
 
 
@@ -135,10 +136,16 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             m_popupstr = ident;
             QString squeezed = KStringHandler::csqueeze(m_popupstr, 20);
             popup->insertSeparator();
-            popup->insertItem( i18n("Search in Documentation: %1").arg(squeezed),
+            int id = popup->insertItem( i18n("Search in Documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
-            popup->insertItem( i18n("Goto Manpage: %1").arg(ident),
+            popup->setWhatsThis(id, i18n("<b>Search in documentation</b><p>Searches "
+                               "for a term under the cursor in "
+                               "the documentation. For this to work, "
+                               "a full text index must be created first, which can be done in the "
+                               "configuration dialog of the documentation tree."));
+            id = popup->insertItem( i18n("Goto Manpage: %1").arg(ident),
                                this, SLOT(slotContextGotoManpage()) );
+            popup->setWhatsThis(id, i18n("<b>Goto manpage</b><p>Tries to open a man page for the term under the cursor."));
         }
     } else if (context->hasType( Context::DocumentationContext )) {
         const DocumentationContext *dcontext = static_cast<const DocumentationContext*>(context);
@@ -148,8 +155,13 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             m_popupstr = selection;
             QString squeezed = KStringHandler::csqueeze(selection, 20);
             popup->insertSeparator();
-            popup->insertItem( i18n("Search in Documentation: %1").arg(squeezed),
+            int id = popup->insertItem( i18n("Search in Documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
+            popup->setWhatsThis(id, i18n("<b>Search in documentation</b><p>Searches "
+                               "for a text of currently selected documentation item in "
+                               "the documentation. For this to work, "
+                               "a full text index must be created first, which can be done in the "
+                               "configuration dialog of the documentation tree."));
         }
     }
 } 

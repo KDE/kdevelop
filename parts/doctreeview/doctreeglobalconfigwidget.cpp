@@ -42,6 +42,10 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
                                                      QWidget *parent, const char *name)
     : DocTreeGlobalConfigWidgetBase(parent, name)
 {
+    extEnableButton->hide();
+    extDisableButton->hide();
+    dhEnableButton->hide();
+    dhDisableButton->hide();
     m_part = part;
     QDomDocument d;
     if(m_part->projectDom()) d = *m_part->projectDom();
@@ -75,13 +79,13 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     bListView->setAllColumnsShowFocus(true);
 
     extListView->addColumn(i18n("Name"));
-    extListView->addColumn(i18n("Enabled"));
+//    extListView->addColumn(i18n("Enabled"));
     extListView->addColumn(i18n("Title"));
     extListView->addColumn(i18n("URL"));
     extListView->setAllColumnsShowFocus(true);
 
     dhListView->addColumn(i18n("Name"));
-    dhListView->addColumn(i18n("Enabled"));
+//    dhListView->addColumn(i18n("Enabled"));
     dhListView->addColumn(i18n("Title"));
     dhListView->addColumn(i18n("URL"));
     dhListView->addColumn(i18n("Author"));
@@ -202,10 +206,11 @@ void DocTreeGlobalConfigWidget::readTocConfigs()
         const QString name( QFileInfo(*tit).baseName() );
         const QString location( DocTreeViewTool::tocLocation( *tit ) );
         const QString title (DocTreeViewTool::tocTitle( *tit ));
-        if( m_ignoreTocs.contains( name ) )
+        new KListViewItem( extListView, name, title, location);
+/*        if( m_ignoreTocs.contains( name ) )
             new KListViewItem( extListView, name, "false", title, location);
         else
-            new KListViewItem( extListView, name, "true", title, location);
+            new KListViewItem( extListView, name, "true", title, location);*/
     }
 }
 
@@ -332,7 +337,7 @@ void DocTreeGlobalConfigWidget::extEdit()
     if( item )
     {
         const QString name( item->text(0) );
-        const QString location( item->text(3) );
+        const QString location( item->text(2) );
         KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
         QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
         QString filePath;
@@ -355,25 +360,25 @@ void DocTreeGlobalConfigWidget::extEdit()
 
 void DocTreeGlobalConfigWidget::extEnable()
 {
-    QListViewItem *item( extListView->selectedItem() );
+/*    QListViewItem *item( extListView->selectedItem() );
     if( item && item->text(1) == "false" )
     {
         m_ignoreTocs.remove( item->text( 0 ) );
         DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc", m_ignoreTocs );
         item->setText(1, "true");
-    }
+   }*/
 }
 
 void DocTreeGlobalConfigWidget::extDisable()
 {
     //kdDebug(9002) << "disable" << endl;
-    QListViewItem *item( extListView->selectedItem() );
+/*    QListViewItem *item( extListView->selectedItem() );
     if( item && item->text(1) == "true" )
     {
         m_ignoreTocs << item->text( 0 );
         DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc", m_ignoreTocs );
         item->setText(1, "false");
-    }
+    }*/
 }
 
 
@@ -501,7 +506,7 @@ void DocTreeGlobalConfigWidget::extAddButton_clicked( )
 
         QFileInfo fi(dialog->url());
         dhListView->currentItem()->setText(0, fi.baseName());
-        dhListView->currentItem()->setText(1, "true");
+//        dhListView->currentItem()->setText(1, "true");
 
 //        QString localURL = locateLocal("data", QString("kdevdoctreeview/tocs/") + dialog->title());
         QString localURL = DocTreeViewFactory::instance()->dirs()->saveLocation("doctocs") + fi.baseName() + ".toc";
@@ -511,8 +516,8 @@ void DocTreeGlobalConfigWidget::extAddButton_clicked( )
         dest.setPath(localURL);
         KIO::NetAccess::copy(src, dest);
 
-        dhListView->currentItem()->setText(3, DocTreeViewTool::tocLocation( localURL ));
-        dhListView->currentItem()->setText(2, DocTreeViewTool::tocTitle( localURL ));
+        dhListView->currentItem()->setText(2, DocTreeViewTool::tocLocation( localURL ));
+        dhListView->currentItem()->setText(1, DocTreeViewTool::tocTitle( localURL ));
     }
     delete dialog;
 }
@@ -543,10 +548,10 @@ void DocTreeGlobalConfigWidget::dhAddButton_clicked( )
 
         BookInfo inf = DocTreeViewTool::devhelpInfo(dialog->url());
         dhListView->currentItem()->setText(0, fi.baseName(false));
-        dhListView->currentItem()->setText(1, "true");
-        dhListView->currentItem()->setText(2, inf.title);
-        dhListView->currentItem()->setText(3, inf.defaultLocation);
-        dhListView->currentItem()->setText(4, inf.author);
+//        dhListView->currentItem()->setText(1, "true");
+        dhListView->currentItem()->setText(1, inf.title);
+        dhListView->currentItem()->setText(2, inf.defaultLocation);
+        dhListView->currentItem()->setText(3, inf.author);
 
 //        QString localURL = locateLocal("data", QString("kdevdoctreeview/tocs/") + dialog->title());
         QString localURL = DocTreeViewFactory::instance()->dirs()->saveLocation("docdevhelp") + fi.baseName()  + ".devhelp";
@@ -561,13 +566,13 @@ void DocTreeGlobalConfigWidget::dhAddButton_clicked( )
 
 void DocTreeGlobalConfigWidget::dhDisableButton_clicked( )
 {
-    QListViewItem *item( dhListView->selectedItem() );
+/*    QListViewItem *item( dhListView->selectedItem() );
     if( item && item->text(1) == "true" )
     {
         m_ignoreDevHelp << item->text( 0 );
         DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredevhelp", "toc", m_ignoreDevHelp );
         item->setText(1, "false");
-    }
+    }*/
 }
 
 void DocTreeGlobalConfigWidget::dhEditButton_clicked( )
@@ -576,7 +581,7 @@ void DocTreeGlobalConfigWidget::dhEditButton_clicked( )
     if( item )
     {
         const QString name( item->text(0) );
-        const QString location( item->text(3) );
+        const QString location( item->text(2) );
         KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
         QStringList tocs = dirs->findAllResources("docdevhelp", QString::null, false, true);
         QString filePath;
@@ -599,13 +604,13 @@ void DocTreeGlobalConfigWidget::dhEditButton_clicked( )
 
 void DocTreeGlobalConfigWidget::dhEnableButton_clicked( )
 {
-    QListViewItem *item( dhListView->selectedItem() );
+/*    QListViewItem *item( dhListView->selectedItem() );
     if( item && item->text(1) == "false" )
     {
         m_ignoreDevHelp.remove( item->text( 0 ) );
         DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredevhelp", "toc", m_ignoreDevHelp );
         item->setText(1, "true");
-    }
+    }*/
 }
 
 void DocTreeGlobalConfigWidget::dhRemoveButton_clicked( )

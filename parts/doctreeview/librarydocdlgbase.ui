@@ -27,7 +27,10 @@
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>Library source path:</string>
+                <string>Library &amp;source path:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>libSource</cstring>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
@@ -38,20 +41,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                    <property name="accel">
-                        <string>F1</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer3_2</cstring>
@@ -91,7 +80,7 @@
                         <cstring>buttonDefault</cstring>
                     </property>
                     <property name="text">
-                        <string>Default</string>
+                        <string>De&amp;fault</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -138,7 +127,10 @@
                 <enum>MShadow</enum>
             </property>
             <property name="text">
-                <string>Library name:</string>
+                <string>&amp;Library name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>libName</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -146,7 +138,10 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Documentation path:</string>
+                <string>&amp;Documentation path:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>docLocal</cstring>
             </property>
         </widget>
         <widget class="KLineEdit" row="0" column="1">
@@ -244,16 +239,12 @@
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonDefault</tabstop>
     <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonHelp</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 <slots>
     <slot specifier="pure virtual">slotDefault()</slot>
 </slots>
@@ -261,6 +252,8 @@
     <function returnType="QString">url()</function>
     <function returnType="QString">path()</function>
 </functions>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>

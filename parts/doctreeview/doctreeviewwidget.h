@@ -67,8 +67,8 @@ private:
 class DocTreeViewWidget : public QVBox
 {
     Q_OBJECT
-    
-public: 
+
+public:
     DocTreeViewWidget(DocTreeViewPart *part);
     ~DocTreeViewWidget();
 
@@ -99,6 +99,10 @@ private slots:
     void slotIndexModeCheckClicked();
     void slotIndexNextMatch();
     void slotIndexPrevMatch();
+    void slotIndexPgUp();
+    void slotIndexPgDown();
+    void slotIndexHome();
+    void slotIndexEnd();
 
 protected:
     void searchForItem ( const QString& );
