@@ -3652,7 +3652,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
   }
 
   if (m_docViewManager->curDocIsHeaderFile()){
-    if(bAutoswitch){ //FB && t_tab_view->getCurrentTab()==DOC){
+    if(bAutoswitch && (dbgController == 0L)){ // only switch when not debugging!
       if ( bDefaultCV)
         makeWidgetDockVisible(class_tree->parentWidget());
       else
@@ -3666,7 +3666,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     slotNewLineColumn();
   }
   if (m_docViewManager->curDocIsCppFile()){
-    if(bAutoswitch){ //FB && t_tab_view->getCurrentTab()==DOC){
+    if(bAutoswitch && (dbgController == 0L)){   // only switch when not debugging!
       if ( bDefaultCV)
         makeWidgetDockVisible(class_tree->parentWidget());
       else
