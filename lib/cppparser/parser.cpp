@@ -119,7 +119,7 @@ Parser::Parser( Driver* driver, Lexer* lexer )
 
 Parser::~Parser()
 {
-    delete( d );
+    delete d;
     d = 0;
 }
 
