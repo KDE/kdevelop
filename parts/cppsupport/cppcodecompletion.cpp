@@ -137,11 +137,10 @@ CppCodeCompletion::slotDocumentActivated( KEditor::Document* pDoc )
     }
 }
 
-// this is just a hack because on kde 2.2.1 slotTextChanged isn't called properly
 void
 CppCodeCompletion::slotCursorPositionChanged( KEditor::Document* pDoc, int nLine, int nCol )
 {
-    slotTextChanged( pDoc, nLine, nCol );
+    // currently not needed
 }
 
 void
