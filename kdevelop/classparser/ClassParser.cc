@@ -206,7 +206,7 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   CParsedStruct *aStruct = new CParsedStruct();
 
   // Set some info about the struct.
-  aStruct->setDeclaredOnLine( getLineno() );
+  aStruct->setDeclaredOnLine( declStart );
   aStruct->setDeclaredInFile( currentFile );
   aStruct->setDefinedInFile( currentFile );
 
@@ -236,7 +236,13 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
     aStruct->setComment( comment );
 
   if( aStruct != NULL && !aStruct->name.isEmpty() )
+  {
     aContainer->addStruct( aStruct );
+
+    // Always add structs to the global container.
+    if( aContainer != &store.globalContainer )
+      store.globalContainer.addStruct( aStruct );
+  }
 }
 
 /*---------------------------------------- CClassParser::parseStruct()
@@ -296,6 +302,14 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
 
   CParsedScopeContainer *ns = new CParsedScopeContainer();
 
+  // Set some info about the namespace
+  ns->setDeclaredOnLine( declStart );
+  ns->setDeclaredInFile( currentFile );
+  ns->setDefinedInFile( currentFile );
+
+  if( commentInRange( ns ) )
+    ns->setComment( comment );
+
   getNextLexem();
 
   // cerr << "parsing namespace" << endl;
@@ -328,15 +342,31 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
   // skip over '{'
   getNextLexem();
 
-  while(lexem != 0 && lexem != '}') {
-    parseTopLevelLexem( ns );
-    if (lexem == ';')
-      getNextLexem();
+  while(lexem != 0 && lexem != '}') 
+  {
+    declStart = getLineno();
+    
+    if( isGenericLexem() )
+      parseGenericLexem( ns );
+    else
+      parseTopLevelLexem( ns );
+
+    getNextLexem();
   }
+
+  ASSERT( lexem == '}' );
 
   // If the parsing went ok, we add the scope.
   if( lexem != 0 )
+  {
+    ns->setDeclarationEndsOnLine( getLineno() );
+
     scope->addScope( ns );
+
+    // Always add namespaces to the global container.
+    if( scope != &store.globalContainer )
+      store.addScope( ns );
+  }
 }
 
 
@@ -1696,7 +1726,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
     case CPSTRUCT:
     case CPCONST:
     case ID:
-      parseMethodAttributes( &store.globalContainer );
+      parseMethodAttributes( scope );
       break;
     default:
       break;
