@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   cloudtemple@mskat.net                                                 *
+ *   Copyright (C) 2004 by Ian Reinhart Geiser                             *
+ *   geiseri@kde.org                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -17,55 +17,66 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PROPERTYWIDGETPROXY_H
-#define PROPERTYWIDGETPROXY_H
+#ifndef DATAFORM_H
+#define DATAFORM_H
 
 #include <qwidget.h>
+#include <qmap.h>
+#include <kdebug.h>
 #include <qvariant.h>
 
-#include "multiproperty.h"
-
-class QHBoxLayout;
-
-namespace PropertyLib{
-
-class PropertyWidget;
-
-#define PropertyType Property::PropertyType
-
-class PropertyWidgetProxy: public QWidget
+/**
+A widget that will connect a QMap<key,QVariant> to a form.
+ 
+ 
+@author Ian Reinhart Geiser
+*/
+class key
 {
-Q_OBJECT
-Q_PROPERTY( int propertyType READ propertyType WRITE setPropertyType DESIGNABLE true )
-Q_PROPERTY( PropertyType propertyType2 READ propertyType2 WRITE setPropertyType2 DESIGNABLE false )
 public:
-    PropertyWidgetProxy(QWidget *parent = 0, const char *name = 0);
-    ~PropertyWidgetProxy();
-    
-    void setPropertyType(int propertyType);
-    int propertyType() const { return m_propertyType; }
-    void setPropertyType2(PropertyType propertyType);
-    PropertyType propertyType2() const { return m_propertyType; }
-    
-    QVariant value() const;
-    void setValue(const QVariant &value);
-    
-    bool setProperty( const char *name, const QVariant &value);
-    QVariant property( const char *name) const;
-    
-protected:
-    virtual void setWidget();
-    
-private:
-    Property *p;
-    MultiProperty *mp;
-    
-    Property::PropertyType m_propertyType;
-    PropertyWidget *m_editor;
-    
-    QHBoxLayout *m_layout;
+	key( const QString &w="", const QString &p="") : widget(w),property(p){;}
+	virtual ~key(){;}
+	QString widget;
+	QString property;
+	bool operator<( const key &right) const 
+	{ 
+		if( widget == right.widget ) return (property < right.property);
+		return ( widget < right.widget ); 
+	} 
 };
 
-}
+typedef QMap<key,QVariant> PropertyMap;
+
+class DataForm : public QObject
+{
+	Q_OBJECT
+public:
+	DataForm(QWidget *parent = 0, const char *name = 0);
+	~DataForm();
+
+	void setMap( PropertyMap *map ) { m_dataMap = map; }
+	void setForm( QWidget *form ) { m_form = form; }
+	
+	/**
+	* Builds a map compatable with KMacroExpander.
+	* @arg fullKey will cause the Map to contain long keys
+	* consisting of widget.property vs short keys are just
+	* the widget name.
+	*/
+	QMap<QString,QString> createPropertyMap(bool fullKey = false) const;
+	
+public slots:
+	void updateView();
+	void resetView();
+	void updateData();
+	
+signals:
+	void mapChanged();
+
+private:
+	
+	QWidget *m_form;
+	PropertyMap *m_dataMap;
+};
 
 #endif

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
   <keywords>
@@ -13,11 +13,11 @@
  </general>
  <kdevautoproject>
   <general>
-   <activetarget>src/$APPNAMELC$</activetarget>
+   <activetarget>src/%{APPNAMELC}</activetarget>
    <useconfiguration>debug</useconfiguration>
   </general>
   <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
+   <mainprogram>src/%{APPNAMELC}</mainprogram>
    <terminal>true</terminal>
   </run>
     <configurations>
@@ -26,7 +26,7 @@
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
-        <cflags>-O2 -g0</cflags>
+        <cflags>-O2 -g0 %{CFLAGS}</cflags>
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
@@ -34,7 +34,7 @@
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
-        <cflags>-O0 -g3</cflags>
+        <cflags>-O0 -g3 %{CFLAGS}</cflags>
       </debug>
     </configurations>
  </kdevautoproject>

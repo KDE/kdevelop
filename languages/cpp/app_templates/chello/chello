@@ -11,25 +11,32 @@ ShowFilesAfterGeneration=src/APPNAMELC.c
 Archive=chello.tgz
 
 [LIBS]
-Type= Value
+Type = value
 ValueType=QString
 Value= OPT_LIBS
 Comment= Optional libraries to link to.
 Default= -lm
 
 [INCLUDES]
-Type= Value
+Type = value
 ValueType=QString
 Value= OPT_INCS
 Comment= Optional include path.
 Default= -I/usr/include
 
 [CFLAGS]
-Type= Value
+Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
 Default= -O2
+
+[DOCSOPT]
+Type = value
+ValueType=bool
+Value=INSTALL_DOCS
+Comment= Install Docbook documentation templates.
+Default=true
 
 [LICENSE]
 Type=install
@@ -38,7 +45,7 @@ Dest=%{dest}/%{LICENSEFILE}
 
 [ADMIN]
 Type=install archive
-Source=%{src}/template-common/admin.tar.gz"
+Source=%{src}/template-common/admin.tar.gz
 Dest=%{dest}
 Process=false
 
@@ -55,6 +62,16 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop
 [SRC]
 Type= mkdir
 Dir=%{dest}/src
+
+[DOCSDIR]
+Type=mkdir
+Dir=%{dest}/doc
+Option=INSTALL_DOCS
+
+[DOCSDIREN]
+Type=mkdir
+Dir=%{dest}/doc/en
+Option=INSTALL_DOCS
 
 [MAKEFILE.AM]
 Type=install
@@ -81,6 +98,24 @@ Type=install
 Source=%{src}/template-chello/main.c
 Dest=%{dest}/src/%{APPNAMELC}.c
 
+[DOCSMAKEFILE.AM1]
+Type=install
+Source=%{src}/template-common/kde-doc-Makefile.am
+Dest=%{dest}/doc/Makefile.am
+Option=INSTALL_DOCS
+
+[DOCSMAKEFILE.AM2]
+Type=install
+Source=%{src}/template-common/kde-doc-en-Makefile.am
+Dest=%{dest}/doc/en/Makefile.am
+Option=INSTALL_DOCS
+
+[DOCS]
+Type=install
+Source=%{src}/template-common/kde-index.docbook
+Dest=%{dest}/doc/en/index.docbook
+Option=INSTALL_DOCS
+
 [MGS]
-Type=Message
+Type=message
 Comment=A simple C project was created in %{dest}.

@@ -51,6 +51,15 @@
 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
+#include <kio/netaccess.h>
+#include <qfile.h>
+#include <qdir.h>
+#include <qtextstream.h>
+#include <kmacroexpander.h>
+#include <karchive.h>
+#include <ktar.h>
+
+#include <qlayout.h>
 
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
@@ -60,13 +69,14 @@
 #include "appwizardpart.h"
 #include "filepropspage.h"
 #include "misc.h"
-
+#include "dataform.h"
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
     : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0)
 {
 	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
+	m_customOptions = 0L;
     connect( this, SIGNAL( selected( const QString & ) ), this, SLOT( pageChanged() ) );
     
 	helpButton()->hide();
@@ -123,6 +133,61 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             category.prepend("/"); // prepend /
         categories.append(category);
         info->category = category;
+		// Grab properties and file/dir list
+		QStringList groups = templateConfig.groupList();
+		groups.remove("General");
+		QStringList::Iterator group = groups.begin();
+		for(  ; group != groups.end(); ++group)
+		{
+			templateConfig.setGroup( (*group) );
+			QString type = templateConfig.readEntry("Type", "value");
+			kdDebug(9010) << "Reading " <<  (*group) << " of type " << type << endl;
+			if( type == "value" )  // Add value
+			{
+				QString name = templateConfig.readEntry( "Value" );
+				QString label = templateConfig.readEntry( "Comment" );
+				QString type = templateConfig.readEntry( "ValueType", "String" );
+				autoKey key( name, label);
+				QVariant value = templateConfig.readPropertyEntry( "Default", QVariant::nameToType( type.latin1() ) );
+				value.cast( QVariant::nameToType( type.latin1() ) );  // fix this in kdelibs...
+				info->subValues.insert( key, value );
+			} 
+			else if( type == "install" ) // copy dir
+			{
+				installFile file;
+				file.source = templateConfig.readPathEntry("Source");
+				file.dest = templateConfig.readPathEntry("Dest");
+				file.process = templateConfig.readBoolEntry("Process",true);
+				file.option = templateConfig.readEntry("Option");
+				info->fileList.append(file);
+			}
+			else if( type == "install archive" )
+			{
+				installArchive arch;
+				arch.source = templateConfig.readPathEntry("Source");
+				arch.dest = templateConfig.readPathEntry("Dest");
+				arch.process = templateConfig.readBoolEntry("Process",true);
+				arch.option = templateConfig.readEntry("Option", "" );
+				info->archList.append(arch);
+			}
+			else if( type == "mkdir" )
+			{
+				installDir dir;
+				dir.dir = templateConfig.readPathEntry("Dir");
+				dir.option = templateConfig.readEntry("Option", "" );
+				dir.perms = templateConfig.readNumEntry("Perms", 0777 );
+				info->dirList.append(dir);
+			}
+			else if( type == "ui")
+			{
+				QString name = templateConfig.readPathEntry("File");
+				info->customUI = name;
+			}
+			else if( type == "message" )
+			{
+				info->message = templateConfig.readEntry( "Comment" );
+			}
+		}
         m_appsInfo.append(info);
     }
 
@@ -157,42 +222,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     dest_edit->setURL(defaultProjectsDir);
     dest_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 
-    /*    //add a new page (fileprops)
-	  QString projectname = "Test";
-    FilePropsPage* m_sdi_fileprops_page = new FilePropsPage(this,"fileprops");
-    QPtrList<ClassFileProp>* props_temp = new QPtrList<ClassFileProp>;
-    ClassFileProp* prop = new ClassFileProp();
-    prop->m_classname = projectname + "App";
-    prop->m_headerfile = projectname.lower() + "app.h";
-    prop->m_implfile = projectname.lower() + "app.cpp";
-    prop->m_baseclass = "KMainWindow";
-    prop->m_description = "The base class for the application window. It sets up the main window and reads the config file as well as providing a menubar, toolbar and statusbar. An instance of the View creates your center view, which is connected to the window's Doc object.";
-    prop->m_change_baseclass = false;
-    prop->m_key = "App";
-    props_temp->append(prop);
-
-    prop = new ClassFileProp();
-    prop->m_classname = projectname + "View";
-    prop->m_headerfile = projectname.lower() + "view.h";
-    prop->m_implfile = projectname.lower() + "view.cpp";
-    prop->m_baseclass = "QWidget";
-    prop->m_description = "The View class provides the view widget for the App instance. The View instance inherits QWidget as a base class and represents the view object of a KMainWindow. As View is part of the document-view model, it needs a reference to the document object connected with it by the App class to manipulate and display the document structure provided by the Doc class.";
-    prop->m_change_baseclass = true;
-    prop->m_key = "View";
-    props_temp->append(prop);
-
-    prop = new ClassFileProp();
-    prop->m_classname = projectname + "Doc";
-    prop->m_headerfile = projectname.lower() + "doc.h";
-    prop->m_implfile = projectname.lower() + "doc.cpp";
-    prop->m_baseclass = "QObject";
-    prop->m_description = "The Doc class provides a document object that can be used in conjunction with the classes App and View to create a document-view model for standard KDE applications based on KApplication and KMainWindow. Doc contains the methods for serialization of the document data from and to files";
-    prop->m_change_baseclass = true;
-    prop->m_key = "Doc";
-    props_temp->append(prop);
-
-    m_sdi_fileprops_page->setClassFileProps(*props_temp);
-    */
     loadVcs();
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
@@ -200,7 +229,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     //    licenseChanged();
 
     setNextEnabled(generalPage, false);
-//    nextButton()->setEnabled(!appname_edit->text().isEmpty());
 
 //    QRegExp appname_regexp ("[a-zA-Z][a-zA-Z0-9_]*"); //Non-Unicode version
     /* appname will start with a letter, and will contain letters,
@@ -224,6 +252,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             license_combo->setCurrentItem( idx - 1 );
     }
 	
+	m_custom_options_layout = new QHBoxLayout( custom_options );
+	m_custom_options_layout->setAutoAdd(true);
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -320,45 +350,36 @@ void AppWizardDialog::accept()
         projectLocationChanged();
         return;
     }
-
-	// create it dir
-	KShellProcess p("/bin/sh");
-	p.clearArguments();
-	p << "mkdirhier";
-	p << KShellProcess::quote(finalLoc_label->text());
-	p.start(KProcess::Block,KProcess::AllOutput);
-
-    // if dir still does not exist
-    if (!fi.dir().exists()) {
-      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist and cannot be created."));
-      showPage(generalPage);
-      dest_edit->setFocus();
-      return;
-    }
-    
-	QString source, script;
+	
+	QString source;
     QFileInfo finfo(m_pCurrentAppInfo->templateName);
     QDir dir(finfo.dir());
     dir.cdUp();
     source = dir.absPath();
-    script = dir.filePath("template-" + finfo.fileName() + "/script");
 
-    QString licenseFile, licenseName = i18n("Custom");
-    
-    if( license_combo->currentItem() != 0 )
-    {
-        licenseName = license_combo->currentText();
-        KDevLicense* lic = m_part->core()->licenses()[ licenseName ];
-        if( lic )
-        {
-			// This is just a temporary solution, because the perl subsystem does not
-			// support more than one file
-            QStringList files( lic->copyFiles() );
-            licenseFile = files.first();
-        }
-    }
-    
-    QStringList templateFiles;
+	// Build KMacroExpander map
+	QMap<QString,QString> subMap = m_customOptions->dataForm()->createPropertyMap(); 
+	kdDebug(9010) << "subMap size " << subMap.size() << endl;
+	// Add builtins
+	subMap.insert("APPNAME", appname_edit->text() );
+	subMap.insert("APPNAMELC", appname_edit->text().lower() );
+	subMap.insert("APPNAMEUC", appname_edit->text().upper() );
+	subMap.insert("AUTHOR", author_edit->text() );
+	subMap.insert("EMAIL", email_edit->text() );
+	subMap.insert("VERSION", version_edit->text());
+	subMap.insert("src", source );
+	subMap.insert("dest", finalLoc_label->text() );
+	subMap.insert("LICENSE", license_combo->currentText() );
+
+	// Add template files to the fileList
+	installDir templateDir;
+	templateDir.dir = "%{dest}/templates";
+	m_pCurrentAppInfo->dirList.prepend(templateDir);
+	
+	installDir baseDir;
+	baseDir.dir = "%{dest}";
+	m_pCurrentAppInfo->dirList.prepend( baseDir );
+	
     QValueList<AppWizardFileTemplate>::Iterator it;
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
         KTempFile *tempFile = new KTempFile();
@@ -370,33 +391,118 @@ void AppWizardDialog::accept()
         temps << (*it).edit->text();
         f.flush();
 
-        templateFiles << (*it).suffix;
-        templateFiles << tempFile->name();
+		installFile file;
+		file.source = tempFile->name();
+		file.dest = QString( "%{dest}/templates/%1" ).arg( (*it).suffix );
+		file.process = true;
+		m_pCurrentAppInfo->fileList.append( file );
     }
-
-    m_cmdline = "perl ";
-    m_cmdline += script;
-    m_cmdline += " --author=";
-    m_cmdline += KShellProcess::quote(QString::fromLocal8Bit(author_edit->text().utf8()));
-    m_cmdline += " --email=";
-    m_cmdline +=  KShellProcess::quote(email_edit->text());
-    m_cmdline += " --version=";
-    m_cmdline +=  KShellProcess::quote(version_edit->text());
-    m_cmdline += " --appname=";
-    m_cmdline +=  KShellProcess::quote(appname_edit->text());
-    m_cmdline += " --dest=";
-    m_cmdline +=  KShellProcess::quote(finalLoc_label->text());
-    m_cmdline += " --source=";
-    m_cmdline +=  KShellProcess::quote(source);
-    m_cmdline += " --license=";
-    m_cmdline +=  KShellProcess::quote(licenseName);
-    m_cmdline += " --licensefile=";
-    m_cmdline += KShellProcess::quote(licenseFile);
-    m_cmdline += " --filetemplates=";
-    m_cmdline += KShellProcess::quote(templateFiles.join(","));
-
-    m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
-
+	
+	// Add license file to the file list
+	QString licenseFile, licenseName = i18n("Custom");
+    
+    if( license_combo->currentItem() != 0 )
+    {
+        licenseName = license_combo->currentText();
+        KDevLicense* lic = m_part->core()->licenses()[ licenseName ];
+        if( lic )
+        {
+            QStringList files( lic->copyFiles() );
+			// Not sure why this wont work
+			QStringList::Iterator it = files.begin();
+			for( ; it != files.end(); ++it )
+			{
+				installFile file;
+				file.source = QString( "%{src}/template-common/%1" ).arg( *it );
+				file.dest = QString("%{dest}/%1").arg( *it );
+				file.process = true;
+				m_pCurrentAppInfo->fileList.append( file );
+			}
+			
+			subMap.insert("LICENSEFILE", files.first()  ); 
+        }
+    }
+	
+	// Run macro expander on both the dir map and file maps
+	QValueList<installFile>::Iterator fileIt = m_pCurrentAppInfo->fileList.begin();
+	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
+	{
+		(*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , subMap);
+		(*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , subMap);
+	}
+	
+	QValueList<installArchive>::Iterator archIt = m_pCurrentAppInfo->archList.begin();
+	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
+	{
+		(*archIt).source = KMacroExpander::expandMacros((*archIt).source , subMap);
+		(*archIt).dest = KMacroExpander::expandMacros((*archIt).dest , subMap);
+	}
+	
+	QValueList<installDir>::Iterator dirIt = m_pCurrentAppInfo->dirList.begin();
+	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
+	{
+		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , subMap);
+	}
+	
+	// Create dirs
+	dirIt = m_pCurrentAppInfo->dirList.begin();
+	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
+	{
+		kdDebug( 9000 ) << "Process dir " << (*dirIt).dir  << endl;
+		if( subMap[(*dirIt).option] != "false" )
+		{
+			
+			if( ! KIO::NetAccess::mkdir( (*dirIt).dir, this ) )
+			{
+				KMessageBox::sorry(this, QString( i18n("The directory %1 cannot be created.")).arg( (*dirIt).dir ) );
+				return;
+			}
+		}
+	}
+	// Unpack archives
+	archIt = m_pCurrentAppInfo->archList.begin();
+	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
+	{
+		if( subMap[(*archIt).option] != "false" )
+		{
+			KTar archive( (*archIt).source, "application/x-gzip" );
+			if( archive.open( IO_ReadOnly ) )
+			{
+				unpackArchive( archive.directory(), (*archIt).dest, subMap, (*archIt).process );
+			}
+			else
+			{
+				KMessageBox::sorry(this, QString( i18n("The archive %1 cannot be opened.")).arg( (*archIt).source ) );
+				archive.close();
+				return;
+			}
+			archive.close();
+		}
+	
+	}
+	
+	// Copy files & Process
+	fileIt = m_pCurrentAppInfo->fileList.begin();
+	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
+	{
+		kdDebug( 9000 ) << "Process file " << (*fileIt).source << endl;
+		if( subMap[(*fileIt).option] != "false" )
+		{
+			if( !copyFile( (*fileIt).source, (*fileIt).dest, subMap, (*fileIt).process ) )
+			{
+				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( (*fileIt).dest) );
+				return;
+			}
+		}
+	}
+    // if dir still does not exist
+    if (!fi.dir().exists()) {
+      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist and cannot be created."));
+      showPage(generalPage);
+      dest_edit->setFocus();
+      return;
+    }
+ 
     if (m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget())) {
         KDevVersionControl* pVC = m_part->versionControlByName( m_vcsForm->combo->currentText() );
         if (pVC) {
@@ -408,13 +514,80 @@ void AppWizardDialog::accept()
 			kdDebug( 9000 ) << "Could not grab the selected VCS: " << m_vcsForm->combo->currentText() << endl;
 		}
     }
-
-    QWizard::accept();
+    
+	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, subMap));
+	QWizard::accept();
 }
 
+bool AppWizardDialog::copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process )
+{
+	kdDebug() << "Copy: " << source << " to " << dest << endl;
+	if( process )
+	{
+		// Process the file and save it at the destFile location
+		QFile inputFile( source);
+		QFile outputFile( dest );
+		if( inputFile.open( IO_ReadOnly ) && outputFile.open(IO_WriteOnly) )
+		{
+			QTextStream input( &inputFile );
+			QTextStream output( &outputFile );
+			while( !input.atEnd() )
+				output << KMacroExpander::expandMacros(input.readLine(), subMap) << "\n";
+		}
+		else
+		{
+			inputFile.close();
+			outputFile.close();
+			return false;
+		}
+		inputFile.close();
+		outputFile.close();
+	}
+	else
+	{
+		// Copy the source file to the destFile.
+		return KIO::NetAccess::copy( source, dest, this );
+	}
+	return true;
+}
+
+void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString &dest, const QMap<QString,QString> &subMap, bool process )
+{
+	KIO::NetAccess::mkdir( dest , this );
+	kdDebug() << "Dir : " << dir->name() << " at " << dest << endl;
+	QStringList entries = dir->entries();
+	kdDebug() << "Entries : " << entries.join(",") << endl;
+	
+	QStringList::Iterator entry = entries.begin();
+	for( ; entry != entries.end(); ++entry )
+	{
+		
+		if( dir->entry( (*entry) )->isDirectory()  )
+		{
+			const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry( (*entry) );
+			unpackArchive( file , dest + "/" + file->name(),  subMap, process);
+		}
+		else if( dir->entry( (*entry) )->isFile()  )
+		{
+			const KArchiveFile *file = (KArchiveFile *) dir->entry( (*entry) );
+			KTempFile temp;
+			file->copyTo( temp.name() );
+			if ( !copyFile( temp.name(), dest + "//" + file->name() , subMap,  process ) )
+			{
+				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( dest) );
+				temp.unlink();
+				return;
+			}
+			temp.unlink();
+		}
+	}
+}
 
 void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
 {
+	if( m_customOptions )
+		delete m_customOptions;
+		
     // Delete old file template pages
     while (!m_fileTemplates.isEmpty()) {
         QMultiLineEdit *edit = m_fileTemplates.first().edit;
@@ -442,6 +615,11 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
         m_projectLocationWasChanged = false;
         //projectNameChanged(); // set the dest new
 
+		// Populate new custom options form
+		m_customOptions = new AutoForm( &m_pCurrentAppInfo->subValues, custom_options );
+		
+		custom_options->adjustSize();
+		
         // Create new file template pages
         QStringList l = QStringList::split(",", info->fileTemplates);
         QStringList::ConstIterator it = l.begin();

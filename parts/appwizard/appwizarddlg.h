@@ -21,6 +21,9 @@ class KTempFile;
 class QWidgetStack;
 class QVBox;
 class KPopupMenu;
+class QHBoxLayout;
+class KArchiveDirectory;
+class KArchiveFile;
 
 #include <qptrlist.h>
 #include <qdict.h>
@@ -32,6 +35,30 @@ class KPopupMenu;
 #include "kdevversioncontrol.h"
 #include "appwizarddlgbase.h"
 #include "vcs_form.h"
+#include "autoform.h"
+
+struct installFile
+{
+	QString source;
+	QString dest;
+	QString option;
+	bool process;
+};
+
+struct installArchive
+{
+	QString source;
+	QString dest;
+	QString option;
+	bool process;
+};
+
+struct installDir
+{
+	QString dir;
+	QString option;
+	int perms;
+};
 
 struct ApplicationInfo
 {
@@ -43,6 +70,12 @@ struct ApplicationInfo
     QString defaultDestDir;
     QString fileTemplates;
     QStringList openFilesAfterGeneration;
+    AutoPropertyMap subValues;
+    QValueList<installFile> fileList;
+    QValueList<installArchive> archList;
+    QValueList<installDir> dirList;
+    QString customUI;
+    QString message;
 
     //! item pointer to the listview
     QListViewItem *item;
@@ -54,7 +87,6 @@ struct ApplicationInfo
     : item( 0 ), favourite( 0 )
     {}
 };
-
 
 struct AppWizardFileTemplate
 {
@@ -106,7 +138,10 @@ private: //methods
 	void populateFavourites();
 	void addFavourite(QListViewItem* item, QString favouriteName="");
 	ApplicationInfo* findFavouriteInfo(QIconViewItem* item);
-		
+	
+	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, const QMap<QString,QString> &subMap, bool process );
+	bool copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process );
+	
 private: //data
 
     QPtrList<ApplicationInfo> m_appsInfo;
@@ -116,6 +151,8 @@ private: //data
     //! A list of currently available version control systems
     QDict<KDevVersionControl> m_availVcs;
 	
+    QHBoxLayout *m_custom_options_layout;
+    AutoForm *m_customOptions;
     AppWizardPart *m_part;
     QWidget *m_lastPage;
     QString m_cmdline;

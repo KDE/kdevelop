@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   cloudtemple@mskat.net                                                 *
+ *   Copyright (C) 2004 by Ian Reinhart Geiser                             *
+ *   geiseri@kde.org                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -17,55 +17,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PROPERTYWIDGETPROXY_H
-#define PROPERTYWIDGETPROXY_H
+#ifndef AUTOFORM_H
+#define AUTOFORM_H
 
-#include <qwidget.h>
-#include <qvariant.h>
+#include <qscrollview.h>
+#include <dataform.h>
+class KPushButton;
+class QVBox;
 
-#include "multiproperty.h"
-
-class QHBoxLayout;
-
-namespace PropertyLib{
-
-class PropertyWidget;
-
-#define PropertyType Property::PropertyType
-
-class PropertyWidgetProxy: public QWidget
+class autoKey : public key
 {
-Q_OBJECT
-Q_PROPERTY( int propertyType READ propertyType WRITE setPropertyType DESIGNABLE true )
-Q_PROPERTY( PropertyType propertyType2 READ propertyType2 WRITE setPropertyType2 DESIGNABLE false )
 public:
-    PropertyWidgetProxy(QWidget *parent = 0, const char *name = 0);
-    ~PropertyWidgetProxy();
-    
-    void setPropertyType(int propertyType);
-    int propertyType() const { return m_propertyType; }
-    void setPropertyType2(PropertyType propertyType);
-    PropertyType propertyType2() const { return m_propertyType; }
-    
-    QVariant value() const;
-    void setValue(const QVariant &value);
-    
-    bool setProperty( const char *name, const QVariant &value);
-    QVariant property( const char *name) const;
-    
-protected:
-    virtual void setWidget();
-    
-private:
-    Property *p;
-    MultiProperty *mp;
-    
-    Property::PropertyType m_propertyType;
-    PropertyWidget *m_editor;
-    
-    QHBoxLayout *m_layout;
+	autoKey( const QString &w="", const QString &l = "") : key(w,"value") , label(l) 
+	{ if( label.isEmpty() ) label = QString( "Value for %1" ).arg(w);}
+	QString label;
 };
 
-}
+typedef QMap<autoKey,QVariant> AutoPropertyMap;
+
+/**
+A QWidget that automaticly constructs a form from a PropertyMap.
+
+@author Ian Reinhart Geiser
+*/
+class AutoForm : public QScrollView
+{
+Q_OBJECT
+public:
+    AutoForm(AutoPropertyMap *map, QWidget *parent = 0, const char *name = 0);
+    ~AutoForm();
+    
+    /**
+    * Provides access to the internal @ref dataForm
+    */
+    DataForm *dataForm() const { return m_dataForm; }
+
+signals:
+    void mapChanged();
+    
+private slots:
+    void slotMapChanged();
+protected:
+	void viewportResizeEvent( QResizeEvent *ev );
+private:
+    void buildGUI( AutoPropertyMap *map );
+    KPushButton *m_reset;
+    KPushButton *m_submit;
+    DataForm *m_dataForm;
+    QVBox *m_mainBox;
+
+};
 
 #endif

@@ -79,6 +79,25 @@ void PropertyWidgetProxy::setValue(const QVariant &value)
         m_editor->setValue(value, false);
 }
 
+bool PropertyWidgetProxy::setProperty( const char * name, const QVariant & value )
+{
+	if( strcmp( name, "value") == 0 )
+	{
+		setPropertyType((int) value.type() );
+		setValue( value );
+		return true;
+	}
+	else
+		return QWidget::setProperty(name, value);
 }
 
+QVariant PropertyWidgetProxy::property( const char * name ) const
+{
+	if( strcmp( name, "value") == 0 )
+		return value(  );
+	else
+		return QWidget::property(name);
+}
+
+}
 #include "propertywidgetproxy.moc"
