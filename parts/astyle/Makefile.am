@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/kwrite $(all_includes)
+INCLUDES = $(all_includes) -I$(top_srcdir)/lib/interfaces
 
 kde_module_LTLIBRARIES = libkdevastyle.la
 libkdevastyle_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
