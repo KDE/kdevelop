@@ -1030,9 +1030,9 @@ CParsedClass *CClassParser::parseClassHeader()
   return aClass;
 }
 
-/*----------------------------- CClassParser::parseClassDeclarations()
- * parseClassDeclarations()
- *   Parse the declarations of a class.
+/*------------------------------------ CClassParser::parseClassLexem()
+ * parseClassLexem()
+ *   Handle lexem that are specific of a class.
  *
  * Parameters:
  *   aClass         The class which declarations we are parsing.
@@ -1040,99 +1040,82 @@ CParsedClass *CClassParser::parseClassHeader()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseClassDeclarations( CParsedClass *aClass )
+bool CClassParser::parseClassLexem( CParsedClass *aClass )
 {
   CParsedClass *childClass;
   CParsedMethod *aMethod;
   bool exit = false;
 
-  declaredScope = PIE_GLOBAL;
-
-  while( !exit )
+  switch( lexem )
   {
-    getNextLexem();
-    
-    switch( lexem )
-    {
-      case PUBLIC:
-        declaredScope = PIE_PUBLIC;
-        methodType = 0;
-        break;
-      case PROTECTED:
-        declaredScope = PIE_PROTECTED;
-        methodType = 0;
-      case PRIVATE:
-        declaredScope = PIE_PRIVATE;
-        methodType = 0;
-        break;
-      case QTSIGNAL:
-      case QTSLOT:
-        methodType = lexem;
-        break;
-      case CPENUM:
-        parseEnum();
-        break;
-      case CPUNION:
-        parseUnion();
-        break;
-      case CPTEMPLATE:
-        parseTemplate();
-        break;
-      case CPCLASS:
-        childClass = parseClass();
-        if( childClass != NULL )
-        {
-          childClass->setDeclaredInClass( aClass->name );
-          store.addClass( childClass );
-          aClass->addChildClass( childClass->name );
-        }
-        break;
-      case CPVIRTUAL:
-        // Skip the virtual token.
-        getNextLexem();
+    case PUBLIC:
+      declaredScope = PIE_PUBLIC;
+      methodType = 0;
+      break;
+    case PROTECTED:
+      declaredScope = PIE_PROTECTED;
+      methodType = 0;
+    case PRIVATE:
+      declaredScope = PIE_PRIVATE;
+      methodType = 0;
+      break;
+    case QTSIGNAL:
+    case QTSLOT:
+      methodType = lexem;
+      break;
+    case CPCLASS:
+      childClass = parseClass();
+      if( childClass != NULL )
+      {
+        childClass->setDeclaredInClass( aClass->name );
+        store.addClass( childClass );
+        aClass->addChildClass( childClass->name );
+      }
+      break;
+    case CPVIRTUAL:
+      // Skip the virtual token.
+      getNextLexem();
 
-        // Get the method.
-        aMethod = parseMethodDeclaration();
+      // Get the method.
+      aMethod = parseMethodDeclaration();
 
-        if( aMethod != NULL )
+      if( aMethod != NULL )
+      {
+        aMethod->setIsVirtual( true );
+        aClass->addMethod( aMethod );
+      }
+      break;        
+    case CPSTRUCT:
+    case CONST:
+    case ID:
+      // Ignore everything that hasn't got any scope declarator.
+      if( declaredScope != PIE_GLOBAL )
+      {
+        // If the type is signal or slot we KNOW it's a method.
+        if( methodType != 0 )
         {
-          aMethod->setIsVirtual( true );
-          aClass->addMethod( aMethod );
+          aMethod = parseMethodDeclaration();
+          if( aMethod && methodType == QTSIGNAL)
+            aClass->addSignal( aMethod );
+          if( aMethod && methodType == QTSLOT)
+            aClass->addSlot( aMethod );
         }
-        break;        
-      case STATIC:
-        isStatic = true;
-        break;
-      case CPSTRUCT:
-      case CONST:
-      case ID:
-        // Ignore everything that hasn't got any scope declarator.
-        if( declaredScope != PIE_GLOBAL )
-        {
-          // If the type is signal or slot we KNOW it's a method.
-          if( methodType != 0 )
-          {
-            aMethod = parseMethodDeclaration();
-            if( aMethod && methodType == QTSIGNAL)
-              aClass->addSignal( aMethod );
-            if( aMethod && methodType == QTSLOT)
-              aClass->addSlot( aMethod );
-          }
-          else
-            parseMethodAttributes( aClass );
-        }
-        isStatic=false;
-        break;
-      case '}':
-        exit = true;
-        break;
-      case 0:
-        exit = true;
-        break;
-      default:
-        break;
-    }
+        else
+          parseMethodAttributes( aClass );
+      }
+      isStatic=false;
+      break;
+    case '}':
+      exit = true;
+      break;
+    case 0:
+      exit = true;
+      break;
+    default:
+      break;
   }
+
+  return exit;
 }
 
 /*---------------------------------------- CClassParser::parseClass()
@@ -1147,11 +1130,25 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
 CParsedClass *CClassParser::parseClass()
 {
   CParsedClass *aClass;
+  bool exit = false;
 
   aClass = parseClassHeader();
 
   if( aClass != NULL )
-    parseClassDeclarations( aClass );
+  {
+    declaredScope = PIE_GLOBAL;
+
+    // Iterate until we find the end of the class.
+    while( !exit )
+    {
+      getNextLexem();
+
+      if( isGenericLexem() )
+        parseGenericLexem( aClass );
+      else
+        exit = parseClassLexem( aClass );
+    }
+  }
 
   return aClass;
 }
@@ -1161,6 +1158,23 @@ CParsedClass *CClassParser::parseClass()
  *                         TOP LEVEL METHODS                         *
  *                                                                   *
  ********************************************************************/
+
+/*------------------------------------- CClassParser::isGenericLexem()
+ * isGenericLexem()
+ *   Tells if the current lexem is generic and needs no special
+ *   handling depending on the current scope.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   bool       Is the current lexem generic?
+ *-----------------------------------------------------------------*/
+bool CClassParser::isGenericLexem()
+{
+  return ( lexem == CPENUM || lexem == CPUNION || lexem == STATIC ||
+           lexem == CPTYPEDEF || lexem == CPTEMPLATE || lexem == CPTHROW );
+}
+
 
 /*----------------------------- CClassParser::parseMethodAttributes()
  * parseMethodAttributes()
@@ -1222,6 +1236,99 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
   }
 }
 
+/*--------------------------------- CClassParser::parseGenericLexem()
+ * parseGenericLexem()
+ *   Take care of generic lexem.
+ *
+ * Parameters:
+ *   aContainer  Container to store parsed items in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
+{
+  assert( aContainer != NULL );
+
+  switch( lexem )
+  {
+    case CPENUM:
+      parseEnum();
+      break;
+    case CPUNION:
+      parseUnion();
+      break;
+    case STATIC:
+      isStatic = true;
+      break;
+    case CPTYPEDEF:
+      getNextLexem();
+      switch( lexem )
+      {
+        case CPSTRUCT:
+          parseStruct( aContainer );
+          break;
+        case CPENUM:
+          parseEnum();
+          break;
+        case CPUNION:
+          parseUnion();
+          break;
+      }
+      
+      // Skip the typedef name.
+      while( lexem != ';' && lexem != 0)
+        getNextLexem();
+      
+      emptyStack();
+      break;
+    case CPTEMPLATE:
+      parseTemplate();
+      break;
+    case CPTHROW:
+      debug( "Found throw statement." );
+      break;
+  }
+}
+  
+/*--------------------------------- CClassParser::parseTopLevelLexem()
+ * parseTopLevelLexem()
+ *   Take care of lexem in a top-level context.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseTopLevelLexem()
+{
+  CParsedClass *aClass;
+
+  switch( lexem )
+  {
+    case CPCLASS:
+      aClass = parseClass();
+      if( aClass != NULL )
+      {
+        if( !store.hasClass( aClass->name ) )
+          store.addClass( aClass );
+        else
+          debug( "Found new definition of class %s", aClass->name.data() );
+      }
+      break;
+    case '{': // Skip implementation blocks
+      skipBlock();
+      break;
+    case CPSTRUCT:
+    case CONST:
+    case ID:
+      parseMethodAttributes( &store.globalContainer );
+      break;
+    default:
+      break;
+  }
+}
+
 /*------------------------------------- CClassParser::parseToplevel()
  * parseToplevel()
  *   Parse and add all toplevel definitions i.e classes, global
@@ -1234,74 +1341,20 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
  *-----------------------------------------------------------------*/
 void CClassParser::parseToplevel()
 {
-  CParsedClass *aClass;
-
   // Ok... Here we go.
   lexem = -1;
 
+  getNextLexem();
+
+  // Loop until we're out of lexem.
   while( lexem != 0 )
   {
+    if( isGenericLexem() )
+      parseGenericLexem( &store.globalContainer );
+    else
+      parseTopLevelLexem();
+
     getNextLexem();
-
-    switch( lexem )
-    {
-      case CPTYPEDEF:
-        getNextLexem();
-        switch( lexem )
-        {
-          case CPSTRUCT:
-            parseStruct( &store.globalContainer );
-            break;
-          case CPENUM:
-            parseEnum();
-            break;
-          case CPUNION:
-            parseUnion();
-            break;
-        }
-
-        // Skip the typedef name.
-        while( lexem != ';' && lexem != 0)
-          getNextLexem();
-
-        emptyStack();
-        break;
-      case CPENUM:
-        parseEnum();
-        break;
-      case CPUNION:
-        parseUnion();
-        break;
-      case CPTEMPLATE:
-        parseTemplate();
-        break;
-      case CPTHROW:
-        debug( "Found throw statement." );
-        break;
-      case CPCLASS:
-        aClass = parseClass();
-        if( aClass != NULL )
-        {
-          if( !store.hasClass( aClass->name ) )
-            store.addClass( aClass );
-          else
-            debug( "Found new definition of class %s", aClass->name.data() );
-        }
-        break;
-      case '{': // Skip implementation blocks
-        skipBlock();
-        break;
-      case STATIC:
-        isStatic = true;
-        break;
-      case CPSTRUCT:
-      case CONST:
-      case ID:
-        parseMethodAttributes( &store.globalContainer );
-        break;
-      default:
-        break;
-    }
   }
 }
 

@@ -193,14 +193,31 @@ private: // Private methods
   /** Parse a class header, i.e find out classname and possible parents. */
   CParsedClass *parseClassHeader();
 
-  /** Parse the declarations of a class. */
-  void parseClassDeclarations( CParsedClass *aClass );
+  /** Handle lexem that are specific of a class. 
+   * @param aClass Class to store items in.
+   * @return Tells if we should stop parsing.
+   */
+  bool parseClassLexem( CParsedClass *aClass );
   
   /** Parse a class declaration. */
   CParsedClass *parseClass();
 
+  /** Tells if the current lexem is generic and needs no special
+   * handling depending on the current scope.
+   * @return Is this a generic lexem?
+   */
+  bool isGenericLexem();
+
   /** Parse all methods and attributes and add them to the container. */
   void parseMethodAttributes( CParsedContainer *aContainer );
+
+  /** Take care of generic lexem.
+   * @param aContainer Container to store parsed items in.
+   */
+  void parseGenericLexem(  CParsedContainer *aContainer );
+
+  /** Take care of lexem in a top-level context. */
+  void parseTopLevelLexem();
 
   /** Parse toplevel statements */
   void parseToplevel();
