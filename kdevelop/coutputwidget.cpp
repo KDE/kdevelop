@@ -117,6 +117,7 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
     // This is necessary in order to work around a bug in Qt's RichText widget. (Marcus Gruendler)
     styleSheet()->item( "font" )->setDisplayMode( QStyleSheetItem::DisplayBlock );
   }
+	connect(this, SIGNAL(clicked(int,int)), SLOT(checkForError(int,int)));
 #endif
 }
 
@@ -393,7 +394,7 @@ void CMakeOutputWidget::selectLine(int line)
 }
 
 // --------------------------------------------------------------------------------
-
+#if QT_VERSION < 300
 // override from QMultiLineEdit
 void CMakeOutputWidget::keyPressEvent( QKeyEvent* event )
 {
@@ -411,20 +412,25 @@ void CMakeOutputWidget::keyPressEvent( QKeyEvent* event )
 }
 
 // --------------------------------------------------------------------------------
-
 void CMakeOutputWidget::mouseReleaseEvent(QMouseEvent* event)
 {
   QMultiLineEdit::mouseReleaseEvent(event);
   checkForError();
 }
+#endif
 
 // --------------------------------------------------------------------------------
 
 // Check the current line for errors _and_ do the switch to the file:linenumber.
+#if QT_VERSION < 300
 void CMakeOutputWidget::checkForError()
 {
   int line,col;
   getCursorPosition(&line,&col);
+#else
+void CMakeOutputWidget::checkForError(int line, int col)
+{
+#endif
 
   ErrorMap::Iterator tmp_it;
   if ((tmp_it = m_errorMap.find(line)) != m_errorMap.end())

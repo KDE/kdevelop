@@ -81,16 +81,22 @@ public:
 signals:
   void switchToFile(const QString& filename, int lineNo);
 
+
+#if QT_VERSION >= 300
+private slots:
+	void checkForError(int line, int col);
+#endif
 private:
   void processLine(const QString& line, MakeOutputErrorType defaultType);
-  void checkForError();
+//  void checkForError();
   MakeOutputErrorType lineType(int row);
   void selectLine(int line);
 
   // override from QMultiLineEdit
+#if QT_VERSION < 300
+	void checkForError();
   void keyPressEvent( QKeyEvent* keyEvent );
   void mouseReleaseEvent(QMouseEvent* event);
-#if (QT_VERSION < 300)
   void paintCell(QPainter* p, int row, int col);
   int mapToView( int xIndex, int line );
 #else

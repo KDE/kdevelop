@@ -582,7 +582,9 @@ int DocTreeKDELibsBook::readDoxygenTag(const QDomDocument &d)
                 QString arglist = member.namedItem("arglist").toElement().text();  //doesn't look too good, commented out
                 if(class_doc && !classname.isEmpty()){
 	          if (membername == "enum") // modify the enums. They are too long in the arglist so they cause a smearing effect
-                    new ListViewDocItem(class_doc, membername + " "+ anchor + "{}" , baseurl + filename + "#" + anchor); 
+                    new ListViewDocItem(class_doc, membername + " "+ anchor + "{}" , baseurl + filename + "#" + anchor +"-enum");
+		  else if (membername == "prop") // handle Qt properties correctly
+		    new ListViewDocItem(class_doc, i18n("Property %1").arg(anchor), baseurl+ filename + "#" + anchor + "-prop"); 
 		  else 
                     new ListViewDocItem(class_doc, membername + arglist , baseurl + filename + "#" + anchor); // here the arglist, too
              	}
@@ -592,7 +594,10 @@ int DocTreeKDELibsBook::readDoxygenTag(const QDomDocument &d)
     }
     sortChildItems(0, true);
 
-    // NOW insert the additional ones at the beginning. We insert in the reverse oder to use after=0
+    // NOW insert the additional ones at the beginning. We insert in the reverse oder. Note: moveItem() doesn't accept 0 as
+    // parameter to move an item to the top of the tree. Therefore I use a workaround to insert it after the first child,
+    // then move the first child (which is still a class) after it's next sibling (which is one of the inserted pages).
+    // This makes the inserted page the first item. 
     ListViewDocItem* item= 0L;
     if (tagFile.contains("qt") ) {  //parse qt special files
  
