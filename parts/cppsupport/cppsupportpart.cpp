@@ -120,7 +120,7 @@ void CppSupportPart::projectOpened()
 
     // We want to parse only after all components have been
     // properly initialized
-    m_pParser = new CClassParser(classStore());
+    m_pParser = new CClassParser( classStore());
     m_pCompletion = new CppCodeCompletion ( core(), classStore() );
 
     QTimer::singleShot(0, this, SLOT(initialParse()));
@@ -129,15 +129,12 @@ void CppSupportPart::projectOpened()
 
 void CppSupportPart::projectClosed()
 {
-    if ( m_pParser) delete m_pParser;
-/*    if ( m_pEditIface ) delete m_pEditIface;
-    if ( m_pCursorIface ) delete m_pCursorIface;*/
+
+	if ( m_pParser) delete m_pParser;
     if ( m_pCompletion ) delete m_pCompletion;
 
     m_pParser = 0;
     m_pCompletion = 0;
-/*    m_pEditIface = NULL;
-    m_pCursorIface = NULL;*/
 }
 
 
@@ -197,33 +194,37 @@ void CppSupportPart::initialParse()
 {
     kdDebug(9007) << "initialParse()" << endl;
     
-    if (project()) {
-        kapp->setOverrideCursor(waitCursor);
-        
-        QStringList files = project()->allSourceFiles();
-        
-        int n = 0;
-        QProgressBar *bar = new QProgressBar(files.count(), core()->statusBar());
-        bar->setMinimumWidth(120);
-        bar->setCenterIndicator(true);
-        core()->statusBar()->addWidget(bar);
-        bar->show();
-                
-        for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-            bar->setProgress(n);
-            kapp->processEvents();
-            maybeParse(*it);
-            ++n;
-        }
-        
-        core()->statusBar()->removeWidget(bar);
-        delete bar;
+    if (project())
+	{
+			kapp->setOverrideCursor(waitCursor);
 
-        emit updatedSourceInfo();
-        kapp->restoreOverrideCursor();
-    } else {
-        kdDebug(9007) << "No project" << endl;
-    }
+			QStringList files = project()->allSourceFiles();
+
+			int n = 0;
+			QProgressBar *bar = new QProgressBar(files.count(), core()->statusBar());
+			bar->setMinimumWidth(120);
+			bar->setCenterIndicator(true);
+			core()->statusBar()->addWidget(bar);
+			bar->show();
+
+			for (QStringList::Iterator it = files.begin(); it != files.end() ;++it)
+			{
+				bar->setProgress(n);
+				kapp->processEvents();
+				maybeParse(*it);
+				++n;
+			}
+
+			core()->statusBar()->removeWidget(bar);
+			delete bar;
+
+			emit updatedSourceInfo();
+			kapp->restoreOverrideCursor();
+	}
+	else
+	{
+		kdDebug(9007) << "No project" << endl;
+	}
 }
 
 

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#define CodeCompletion 1
+#define CodeCompletion 0
 
 #include "cppcodecompletion.h"
 //#include "ParsedVariable.h"
@@ -37,6 +37,9 @@ CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 
 	connect ( m_pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
 		this, SLOT ( slotDocumentActivated ( KEditor::Document* ) ) );
+	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
 
 	m_pParser = 0;
 	m_pCursorIface = 0;
@@ -116,6 +119,12 @@ void CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int
 	QString strCurLine = m_pEditIface->line ( nLine );
 
 	//kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
+
+	if ( strCurLine.right ( 1 ) == "s" )
+	    savePersistantClassStore( );
+
+	if( strCurLine.right( 1 ) == "l" )
+	    loadPersistantClassStore( );
 
 	// CC for "Namespace::" for example
 	if ( strCurLine.right ( 2 ) == "::" )
@@ -197,233 +206,9 @@ void CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int
 			m_pParser->varList.clear();
 		}
 	}
-
-
 }
 
-
-void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol )
-{
-	kdDebug ( 9007 ) << "CppCodeCompletion::slotCursorPositionChanged (nLine=" << nLine << ", nCol=" << nCol << ")" << endl;
-
-	m_pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
-	if ( !m_pEditIface )
-	{
-		kdDebug ( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
-		return;
-	}
-
-	m_pCompletionIface = KEditor::CodeCompletionDocumentIface::interface ( pDoc );
-	if ( !m_pCompletionIface )
-	{
-		kdDebug ( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
-		return;
-	}
-
-	disconnect ( m_pCompletionIface, 0, this, 0);
-	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
-
-	QString strCurLine = m_pEditIface->line ( nLine );
-
-	if ( !m_pParser ) m_pParser = new CppCCParser ();
-
-
-
-
-//	QValueList<KEditor::CompletionEntry> completionList = m_pParser->getReturnTypeOfMethod ( "hallo()" );
-//	pCompletionIface->showCompletionBox ( completionList );
-
-	// CC for "pointer->" for example
-	if ( strCurLine.right ( 2 ) == "->" )
-	{
-		int nNodePos = getNodePos ( nLine, nCol );
-
-		if ( nNodePos )
-		{
-			QString strNodeText = getNodeText ( nNodePos, nLine );
-
-			QValueList<KEditor::CompletionEntry> completionList = getEntryListForStruct ( strNodeText );
-			if ( completionList.count() > 0 )
-			{
-				kdDebug ( 9007 ) << "Struct: strNodeText(" << strNodeText << ") found in ClassStore" << endl;
-				m_pCompletionIface->showCompletionBox ( completionList );
-				return;
-			}
-		}
-	}
-	
-	int nNode = getNodePos ( nLine, nCol );
-	
-/*	if ( nNode )
-	{
-		QString strNText = getNodeText ( nNode, nLine );
-		QString strDelimiter = getNodeDelimiter ( nNode, nLine );
-		QString strCText = getCompletionText ( nLine, nCol );
-		
-		//kdDebug ( 9007 ) << "strNText: (" << strNText << ")\t" << "strDelimiter: (" << strDelimiter << ")\t" << "strCText: (" << strCText << ")\t" << endl;
-
-		if ( strDelimiter == "." && strCText.isEmpty() )
-		{
-			kdDebug ( 9007 ) << "A signal '.' for code completion was demanded!" << endl;
-			
-			if ( m_pTmpFile ) delete m_pTmpFile;
-			m_pTmpFile = 0;
-			if ( !m_pTmpFile ) m_pTmpFile = new KTempFile();
-			if ( m_pTmpFile->status() != 0 ) return;
-
-			QString strFileName = createTmpFileForParser ( nLine );
-			
-			if ( m_pParser ) m_pParser->parse ( strFileName );
-
-			m_pTmpFile->unlink();
-			if ( m_pTmpFile->status() != 0 ) return;
-
-			for ( CParsedVariable* pVar = m_pParser->varList.first(); pVar != 0; pVar = m_pParser->varList.next() )
-			{
-				if ( pVar->sVariableName == strNText )
-				{
-					kdDebug ( 9007 ) << "Type of variable: " << pVar->sVariableType << endl;
-					QValueList<KEditor::CompletionEntry> completionList = getEntryListForClass ( pVar->sVariableType );
-
-					if ( completionList.count() > 0 )
-					{
-						m_pCompletionIface->showCompletionBox ( completionList );
-						break;
-					}
-
-					break;
-				}
-				
-			}
-			// remove the parsed variables of the CppCCParser!
-			m_pParser->varList.clear();
-			
-		}
-	}*/
-
-	if ( strCurLine.right ( 1 ) == "x" )
-	{
-		QFile f( "xxx.txt" );
-
-		if( f.open( IO_WriteOnly ) )
-		{
-			QDataStream s( &f );
-
-/*			ParsedScopeContainer* pScopeCon;
-			QStringList* pList = m_pStore->getSortedScopeNameList();
-			for ( int i = 0; i < pList->count(); i++ )
-			{
-				pScopeCon = m_pStore->getClassByName ( ( *pList->at ( i ) ) );
-				s << ( *pScopeCon );
-			}*/
-
-/*			ParsedClass* c;
-			QStringList* l = m_pStore->getSortedClassNameList( );
-			for( int i = 0; i < l->count( ); i++ ){
-				c = m_pStore->getClassByName( (*l->at( i )) );
-				s << *c;
-			}
-
-
-			f.close();
-
-			f.open ( IO_ReadOnly );
-			QDataStream t ( &f);
-
-			for ( int i = l->count(); i > 0; i-- )
-			{
-				t >> *c;
-				kdDebug ( 9007 ) << "Names of serialized classes: " << c->name() << endl;
-
-				ParsedParent* parent;
-				for ( parent = c->parents.first(); parent != 0; parent = c->parents.next() )
-				{
-					kdDebug ( 9007 ) << "Names of parents: " << parent->name() << endl;
-				}
-			}
-*/
-		f.close( );
-
-		}
-	}
-
-/*	if ( strCurLine.right ( 1 ) == "y" )
-	{
-		QFile f ("xxx.txt");
-
-		if ( f.open ( IO_ReadOnly ) )
-		{
-			QDataStream s ( &f);
-			ParsedClass* c;
-*/
-
-
-
-
-
-
-
-/*	if ( strCurLine.right ( 1 ) == "x" )
-	{
-		KRegExp reMethod ( "[ \t]*([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)" );
-		int nNodePos;
-		QString strNodeText;
-
-		kdDebug ( 9007 ) << "getReturnType => strNodeText: " << strNodeText << " nNodePos: " << nNodePos << endl;
-		nNodePos = getNodePos ( nLine, nCol );
-		if ( nNodePos ) strNodeText = getNodeText ( nNodePos, nLine );
-		kdDebug ( 9007 ) << "<getReturnType> => strNodeText: " << strNodeText << " nNodePos: " << nNodePos << endl;
-
-		if ( reMethod.match ( strNodeText ) )
-		{
-			//QString strType = m_pParser->getReturnTypeOfMethod ( nLine, nCol );
-
-			//kdDebug ( 9007 ) << "Return type of " << strNodeText << ": " << strType << endl;
-
-			if ( strType.isEmpty() ) return;
-
-			QValueList<KEditor::CompletionEntry> completionList = getEntryListForClass ( strType );
-			if ( completionList.count() > 0 )
-			{
-				m_pCompletionIface->showCompletionBox ( completionList );
-				return;
-			}
-		}
-	}*/
-
-/*	kdDebug ( 9007 ) << "NodeText(1): " << getNodeText( 1, nLine ) << " Delimiter: " << getNodeDelimiter(1, nLine) << endl;
-	kdDebug ( 9007 ) << "NodeText(2): " << getNodeText(2, nLine ) << " Delimiter: " << getNodeDelimiter(2, nLine) << endl;
-	kdDebug ( 9007 ) << "NodeText(3): " << getNodeText(3, nLine ) << " Delimiter: " << getNodeDelimiter(3, nLine) << endl;*/
-
-	if ( m_pEditIface->line ( nLine ) == "test(")
-	{
-		QValueList < KEditor::CompletionEntry > entryList;
-
-		KEditor::CompletionEntry entry;
-		entry.prefix = "int";
-		entry.text = "setCurrentEditor";
-		entry.postfix = "( KWrite* e )";
-
-		entryList.append ( entry );
-
-		//m_pCompletionIface->showCompletionBox ( entryList, 0 );
-
-		QStringList functionList;
-		QString strFunction = "int setCurrentEditor ( KWrite* e, WFlags fl )";
-		functionList.append ( strFunction );
-		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
-		functionList.append ( strFunction );
-		strFunction = "int setCurrentEditor ( NEdit* e, const char* name )";
-		functionList.append ( strFunction );
-
-		m_pCompletionIface->showArgHint ( functionList, "()", "," );
-	}
-
-	//doCodeCompletion ( nLine, nCol );
-}
-
+/**** TODO: replace this method with a parsing mechanism - very buggy! ****/
 
 QString CppCodeCompletion::createTmpFileForParser (int iLine)
 {
@@ -479,75 +264,40 @@ QString CppCodeCompletion::createTmpFileForParser (int iLine)
 }
 
 
-/*bool CppCodeCompletion::checkIfArgHintIsNeeded ( int nLine, int nCol )
+void
+CppCodeCompletion::loadPersistantClassStore( )
 {
-	return false;
+    kdDebug( 9007 ) << "Loading classstore" << endl;
+
+    if( m_pStore->open( "persistantstore.pcs", IO_ReadOnly ) ){
+	kdDebug( 9007 ) << "Reading persistant file" << endl;
+	m_pStore->wipeout( );
+	m_pStore->restoreAll( );
+	m_pStore->close( );
+    }
+
+    kdDebug( 9007 ) << "Size of classstore     : '" << sizeof( *m_pStore ) << "'" << endl;
+    kdDebug( 9007 ) << "Size of globalContainer: '" << sizeof( m_pStore->globalContainer ) << "'" << endl;
+
+//    m_pStore->out( );
 }
 
-QString CppCodeCompletion::getClassName ( const QString& strName )
+void
+CppCodeCompletion::savePersistantClassStore( )
 {
-	return QString::null;
+    kdDebug( 9007 ) << "Saving classstore" << endl;
+    kdDebug( 9007 ) << "Size of classstore     : '" << sizeof( *m_pStore ) << "'" << endl;
+    kdDebug( 9007 ) << "Size of globalContainer: '" << sizeof( m_pStore->globalContainer ) << "'" << endl;
+
+    if ( m_pStore->open ( "persistantstore.pcs", IO_WriteOnly ) ){
+	kdDebug ( 9007 ) << "Saving persistant file" << endl;
+	m_pStore->storeAll( );
+	m_pStore->close( );
+    }
 }
 
-bool CppCodeCompletion::doCodeCompletion ( int nLine, int nCol )
-{
-	//setLineToBeParsed ( m_pEditIface->line ( nLine ) );
-	QValueList<KEditor::CompletionEntry> completionList;
-	QValueList<KEditor::CompletionEntry> memberList;
 
-	QString strClass;
-	QString strCompletion = getCompletionText ( nLine, nCol );
-
-	kdDebug ( 9007 ) << "strCompletion: " << strCompletion << endl;
-
-	if ( strCompletion.isEmpty() )
-		return false;
-
-	int nNode = getNodePos ( nLine, nCol );
-
-	if ( nNode ) // Completiontext has a node
-	{
-		QString strNode = getNodeText ( nNode, nLine );
-
-		// TODO: find the base class
-	}
-
-	// for testing only!
-	//strClass = getCurrentClassName ( nLine );
-
-	if ( strClass.isEmpty() )
-		return false;
-
-	memberList = getEntryListForClass ( strClass );
-
-	if ( memberList.count() > 0 )
-	{
-		QValueList<KEditor::CompletionEntry>::Iterator it;
-
-		for ( it = memberList.begin(); it != memberList.end(); ++it )
-		{
-			if ( ( *it ).text.startsWith ( strCompletion ) )
-			{
-				KEditor::CompletionEntry entry;
-				entry = ( *it );
-				completionList << entry;
-			}
-		}
-	}
-
-	if ( completionList.count() > 0 && !m_bCompletionBoxShow )
-	{
-		m_pCompletionIface->showCompletionBox ( completionList, 1 );
-		m_bCompletionBoxShow = true;
-		kdDebug ( 9007 ) << "CppCodeCompletion::doCodeCompletion => showCompletionBox = true" << endl;
-		return true;
-	}
-
-	return false;
-}*/
-
-
-
+/**** Here begins some "parsing" stuff - to be replaced by a real parser ****/
 QString CppCodeCompletion::getCompletionText ( int nLine, int nCol ) // seems to be okay
 {
 	int nOffset = nCol;
@@ -753,7 +503,7 @@ QString CppCodeCompletion::getNodeDelimiter ( int nNode, int nLine )
 	return QString::null;
 }
 
-
+/**** Here begin some ClassStore queries - I think they are nearly stable (expected that nothing else is mentioned) ****/
 
 QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString strClass )
 {

@@ -25,7 +25,7 @@
 #include "keditor/cursor_iface.h"
 #include "keditor/codecompletion_iface.h"
 
-#include "classstore.h"
+#include "persistantclassstore.h"
 /*#include "parsedclass.h"
 #include "parsedmethod.h"*/
 
@@ -45,7 +45,6 @@ class CppCodeCompletion : public QObject
 
 	protected slots:
 		void slotDocumentActivated ( KEditor::Document* pDoc );
-		void slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol );
 		void slotArgHintHided();
 		void slotCompletionBoxHided();
 		void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
@@ -58,10 +57,8 @@ class CppCodeCompletion : public QObject
 
 		QString createTmpFileForParser (int iLine);
 
-		//bool checkIfArgHintIsNeeded ( int nLine, int nCol );
-		//QString getClassName ( const QString& strName );
-
-		//bool doCodeCompletion ( int nLine, int nCol );
+		void loadPersistantClassStore( );
+		void savePersistantClassStore( );
 
 		QValueList<KEditor::CompletionEntry> getEntryListForClass ( QString strClass );
 		QValueList<KEditor::CompletionEntry> getEntryListForNamespace ( const QString& strNamespace );

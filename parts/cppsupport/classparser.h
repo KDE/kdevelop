@@ -24,7 +24,7 @@
 #include <FlexLexer.h>
 #include <fstream.h>
 #include "tokenizer.h"
-#include "classstore.h"
+#include "persistantclassstore.h"
 
 /** This class handles the parsing and generation of all C++ and C
  * constructions. The classparser has a store in which all elements that
