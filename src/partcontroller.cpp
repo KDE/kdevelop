@@ -471,6 +471,16 @@ bool PartController::closeDocuments(const QStringList &documents)
   return true;
 }
 
+bool PartController::closePartForWidget( const QWidget* w )
+{
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it)
+    if (it.current()->widget() == w)
+    {
+      return closePart( *it );
+    }
+  return true;
+}
 
 bool PartController::readyToClose()
 {

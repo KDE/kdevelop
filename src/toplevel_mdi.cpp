@@ -148,6 +148,7 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
   pMDICover->setCaption(name);
 
   m_widgetMap.insert(view, pMDICover);
+  m_childViewMap.insert(pMDICover, view);
 
   return pMDICover;
 }
@@ -227,6 +228,7 @@ void TopLevelMDI::removeView(QWidget *view)
     m_partViews.remove(wrapper);
 
     m_widgetMap.remove(view);
+    m_childViewMap.remove(wrapper);
 
     // Note: this reparenting is necessary. Otherwise, the view gets
     // deleted twice: once when the wrapper is deleted, and the second
@@ -439,5 +441,9 @@ void TopLevelMDI::resizeEvent(QResizeEvent *ev)
   setSysButtonsAtMenuPosition();
 }
 
+void TopLevelMDI::childWindowCloseRequest(QextMdiChildView *pWnd)
+{
+  PartController::getInstance()->closePartForWidget( m_childViewMap[pWnd] );
+}
 
 #include "toplevel_mdi.moc"

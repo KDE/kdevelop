@@ -40,6 +40,8 @@ public:
 
   void realClose();
 
+  /** Reimplemented from QextMdiChildView to handle save prompt */
+  virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 
 signals:
 
@@ -84,6 +86,7 @@ private:
   KRecentFilesAction *m_openRecentProjectAction;
 
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;
+  QMap<QextMdiChildView*,QWidget*> m_childViewMap;
 
   QPtrList<QextMdiChildView> m_outputViews, m_selectViews, m_partViews;
 

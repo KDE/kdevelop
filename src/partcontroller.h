@@ -41,6 +41,7 @@ public:
   void showDocument(const KURL &url, const QString &context = QString::null);
 
   bool closeDocuments(const QStringList &list);
+  bool closePartForWidget( const QWidget* widget );
 
   static void createInstance(QWidget *parent);
   static PartController *getInstance();
