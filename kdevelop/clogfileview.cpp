@@ -479,8 +479,12 @@ void CLogFileView::slotAddToRepository()
 
 void CLogFileView::slotRemoveFromRepository()
 {
-    project->getVersionControl()->remove(getFullFilename(currentItem()));
-    refresh(project);
+    QString fullfilename=getFullFilename(currentItem());
+    QString name = getFileName(currentItem());
+
+    project->getVersionControl()->remove(fullfilename);
+    emit selectedFileRemove(name);
+    emit removeFileFromEditlist(fullfilename);
 }
  
 
@@ -494,9 +498,4 @@ void CLogFileView::slotCommit()
 {
     emit commitFileToVCS(getFullFilename(currentItem()));
 }
-
-
-
-
-
 
