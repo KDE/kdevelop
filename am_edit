@@ -86,6 +86,7 @@ $automkCall = "\n";
 $printname  = "";  # used to display the directory the Makefile is in
 $use_final  = 1;        # create code for --enable-final
 $cleantarget = "clean";
+$dryrun     = 0;
 
 while (defined ($ARGV[0]))
 {
@@ -134,6 +135,10 @@ while (defined ($ARGV[0]))
     {
 	$use_final = 0;
         $thisProg .= " --no-final";
+    }
+    elsif (/^-n$/)
+    {
+    	$dryrun = 1;
     }
     else
     {
@@ -429,8 +434,8 @@ sub initialise ()
       if ($MakefileData =~ /\n($realprogram)(\$\(EXEEXT\)?)?:.*\$\($program\_OBJECTS\)/) {
 	$realname{$program} = $1;
       } else {
+      	# not standard Makefile - nothing to worry about
 	$realname{$program} = "";
-	print STDERR "$printname: found program with no dependencies: $program\n";
       }
     }
 						
@@ -934,6 +939,7 @@ sub tag_ICON()
 	 'app' => 'apps',
 	 'device' => 'devices',
 	 'filesys' => 'filesystems',
+	 'listitems' => 'listitems',
 	 'mime' => 'mimetypes',
 	 'toolbar' => 'toolbars'
 	);
@@ -1173,6 +1179,7 @@ sub tag_CLOSURE () {
   return if ($1 !~ /CXXLINK/);
 
   if ($MakefileData !~ /\n$program\_LDFLAGS\s*=.*-no-undefined/) {
+    print STDERR "Report: $program contains undefined in $printname\n" if ($program =~ /^lib/ || $dryrun);
     return;
   }
   my $closure = $realname{$program} . ".closure";
@@ -1457,6 +1464,8 @@ sub addMocRules ()
 
 sub updateMakefile ()
 {
+    return if ($dryrun);
+
     open (FILEOUT, "> $makefile")
                         || die "Could not create $makefile: $!\n";
 
