@@ -8,8 +8,8 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
-static const char* description=I18N_NOOP("$APPNAME$ KOffice Program");
-static const char* version="$VERSION$";
+static const char description[] = I18N_NOOP("$APPNAME$ KOffice Program");
+static const char version[]     = "$VERSION$";
 
 KAboutData * new$APPNAME$AboutData()
 {

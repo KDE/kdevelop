@@ -8,10 +8,10 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-static const char *description =
+static const char description[] =
     I18N_NOOP("A KDE KPart Application");
 
-static const char *version = "0.1";
+static const char version[] = "0.1";
 
 static KCmdLineOptions options[] =
 {

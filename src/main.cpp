@@ -27,7 +27,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-  static const char *description = I18N_NOOP("Gideon");
+  static const char description[] = I18N_NOOP("Gideon");
   KAboutData aboutData("gideon", I18N_NOOP("Gideon"),
                        VERSION, description, KAboutData::License_GPL,
                        I18N_NOOP("(c) 1999,2000,2001,2002,2003 Various Authors"));
