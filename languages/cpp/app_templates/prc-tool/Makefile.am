@@ -15,6 +15,4 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(superwabadir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(superwabadir)/script
+
