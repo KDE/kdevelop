@@ -39,7 +39,11 @@ public:
    virtual void first() {
       m_iterator->toFirst();
    }
+   virtual void last() {
+      m_iterator->toLast();
+   }
    virtual void next()  { ++(*m_iterator); }
+   virtual void prev()  { --(*m_iterator); }
    virtual bool isDone() const { return m_iterator->current() == NULL; }
    virtual Item* currentItem() const { return m_iterator->current(); }
 

@@ -33,7 +33,9 @@ class QextMdiNullIterator : public QextMdiIterator<Item> {
 public:
    QextMdiNullIterator() {};
    virtual void first() {}
-   virtual void next()  {}
+   virtual void last() {}
+   virtual void next() {}
+   virtual void prev() {}
    virtual bool isDone() const { return TRUE; }
    virtual Item currentItem() const {
    /* should really never go inside here */

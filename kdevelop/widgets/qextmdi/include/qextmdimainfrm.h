@@ -389,6 +389,14 @@ public slots:
    * If in Childframe mode, we can switch between maximized or restored shown MDI views
    */
    virtual void setEnableMaximizedChildFrmMode(bool bEnable);
+   /**
+   *
+   */
+   virtual void gotoNextWindow();
+   /**
+   *
+   */
+   virtual void gotoPrevWindow();
 protected:
 //   /**
 //   * Calls the destructor by delete.
