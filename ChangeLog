@@ -1,3 +1,6 @@
+2001-04-30  F@lk Brettschneider <falk@kdevelop.org>
+   *  improved menu stuff for tree and output tool views
+
 2001-04-28  F@lk Brettschneider <falk@kdevelop.org>
     * on/off switch for certain single tool views improved (common behaviour now, new popupmenus, delayed buttons)
       (Note: requires latest KDE version from cvs!)
