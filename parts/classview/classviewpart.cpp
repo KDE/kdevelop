@@ -429,7 +429,7 @@ void ClassViewPart::syncCombos( )
         kdDebug() << "sync with " << (*it)->name() << " startLine " << startLine <<
             " endLine " << endLine << " line " << line << endl;
 
-        if ( (line >= startLine) && (line <= endLine) )
+        if ( (int(line) >= startLine) && (int(line) <= endLine) )
         {
             fndom = *it;
             break;
@@ -504,7 +504,7 @@ void ClassViewPart::syncCombos( )
             kdDebug() << "sync with " << (*it)->name() << " startLine " << startLine <<
                 " endLine " << endLine << " line " << line << endl;
 
-            if ( (line >= startLine) && (line <= endLine) )
+            if ( (int(line) >= startLine) && (int(line) <= endLine) )
             {
                 fndom = *it;
                 break;
@@ -658,16 +658,19 @@ void ClassViewPart::activePartChanged( KParts::Part * part)
     }
 }
 
-NamespaceDom ClassViewPart::syncNamespaces( const FileDom & dom )
+NamespaceDom ClassViewPart::syncNamespaces( const FileDom & /*dom*/ )
 {
+    return NamespaceDom();
 }
 
-ClassDom ClassViewPart::syncClasses( const NamespaceDom & dom )
+ClassDom ClassViewPart::syncClasses( const NamespaceDom & /*dom*/ )
 {
+    return ClassDom();
 }
 
-FunctionDom ClassViewPart::syncFunctions( const ClassDom & dom )
+FunctionDom ClassViewPart::syncFunctions( const ClassDom & /*dom*/ )
 {
+    return FunctionDom();
 }
 
 void ClassViewPart::focusNamespaces( )

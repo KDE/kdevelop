@@ -208,7 +208,7 @@ void processClass( ClassViewPart *part, KComboView *view, ClassItem * item )
     }
 }
 
-void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item )
+void processFunction( ClassViewPart* /*part*/, KComboView* /*view*/, FunctionItem* /*item*/ )
 {
     //@todo allow nested functions (adymo: Pascal has nested procedures and functions)
 /*    FunctionList functions = item->dom()->functionList();
