@@ -146,10 +146,10 @@
   </kdevautoproject>
   <kdevfilecreate>
     <filetypes>
-      <type icon="source_h" ext="h" name="C/C++ header" create="template" >
+      <type icon="source_h" ext="h" create="template" name="C/C++ header" >
         <descr>A new empty header file for C or C++.</descr>
       </type>
-      <type icon="source_cpp" ext="cpp" name="C++ source" create="template" >
+      <type icon="source_cpp" ext="cpp" create="template" name="C++ source" >
         <descr>A new empty C++ file.</descr>
       </type>
     </filetypes>
@@ -186,6 +186,7 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <references>
+      <pcs>Qt</pcs>
       <pcs>KDElibs</pcs>
     </references>
     <designerintegration>
