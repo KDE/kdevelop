@@ -826,6 +826,7 @@ bool DocViewMan::closeView(QWidget* pWnd)
 
   // get the embedded view
   QObjectList* pL = (QObjectList*) (pWnd->children());
+  if (!pL) return true; // I ran into this case once, no idea why this happened (rokrau 06/02/01)
   QWidget* pView = 0L;
   QObject* pChild;
   // the first object we'll find is the layout,
