@@ -307,7 +307,6 @@ Control elements are used within visible areas of the application and can be com
 control elements that the Qt library provides, KDE offers:
 
 <itemize>
-<item>KButton: active raise-lower button
 <item>KButtonBox: manages buttons
 <item>KColorButton: button displaying a color setting, calls <tt/KColorDialog/
 <item>KIconLoaderButton: button displaying a selected Icon, calls <tt/KIconLoaderDialog/
@@ -1883,7 +1882,6 @@ KAccel
 Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
 control elements that the Qt library provides, KDE offers:
 
-KButton: active raise-lower button
 KButtonBox: manages buttons
 KColorButton: button displaying a color setting
 KIconLoaderButton: button displaying a selected Icon
