@@ -16,7 +16,7 @@ development version of KDevelop.  Additionally, you
 can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or
 modifications to the %API.
 
-An on-line, updated every 24H, html version of this documentation can be found at: http://ng-project.org/~kdevelop/apidocs/html/index.html
+An on-line, updated every 24H, html version of this documentation can be found at: http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html
 
 More information about the KDevelop architecture in form of tutorials, HOWTOs,
 and FAQs can be found at
