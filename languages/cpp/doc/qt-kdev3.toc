@@ -22,13 +22,17 @@
 </tocsect1>
 <tocsect1 name="In short" url="in-short.html">
 </tocsect1>
+<tocsect1 name="Make the translations for a simple KDE project" url="translations.html">
+</tocsect1>
 <tocsect1 name="A few general tips" url="a_few_tips.html">
 	<tocsect2 name="General hints" url="a_few_tips.html#id2771559"/>
 	<tocsect2 name="Importing your project in KDE CVS" url="importing.html"/>
 	<tocsect2 name="How do I release my application as a tarball?" url="release-tarball.html"/>
 	<tocsect2 name="Useful links" url="links.html"/>
 </tocsect1>
-<tocsect1 name="Make the translations for a simple KDE project" url="translations.html">
+<tocsect1 name="Generating the source (alternate)" url="without_subclass.html">
+	<tocsect2 name="Without using the KDevelop subclassing capability" url="without_subclass.html"/>
+	<tocsect2 name="Implementing the slot" url="slots2.html"/>
 </tocsect1>
 <tocsect1 name="Credits and License" url="credits.html">
 </tocsect1>
