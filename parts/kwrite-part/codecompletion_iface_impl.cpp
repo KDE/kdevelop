@@ -137,7 +137,7 @@ void CodeCompletionIfaceImpl::updateBox(){
   m_completionListBox->setSelected( 0,true );
   m_completionListBox->setFocus();
   //PointStruc point = m_edit->view()->getCursorPosition();
-  //  m_completionPopup->move( m_edit->view()->mapToGlobal(QPoint(point.y,point.x)));
+  m_completionPopup->move(QPoint(100,400));  // fix it
   m_completionPopup->show();
 }
 
