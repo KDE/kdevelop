@@ -6,6 +6,7 @@
 class KXMLGUIClient;
 class KDevPart;
 class KService;
+class KDevPlugin;
 
 
 class PluginController
@@ -22,6 +23,7 @@ public:
 
   static KDevPart *loadPlugin(const KService::Ptr &service, const char *className, QObject *parent);
 
+  static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
 protected:
 

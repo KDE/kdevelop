@@ -160,6 +160,13 @@ void PluginController::integratePart(KXMLGUIClient *part)
   TopLevel::getInstance()->main()->guiFactory()->addClient(part);
 }
 
+KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
+{
+    return KParts::ComponentFactory
+        ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), 0,
+                                                 argumentsFromService( service ) );
+}
+
 QStringList PluginController::argumentsFromService( const KService::Ptr &service )
 {
     QStringList args;

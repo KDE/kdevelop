@@ -7,6 +7,7 @@
 
 
 #include <kxmlguiclient.h>
+#include <kservice.h>
 
 class KAction;
 
@@ -56,10 +57,12 @@ private:
 
   void initializeProjectSupport();
 
-  void checkNewService(KService *service);
+  void checkNewService(const KService::Ptr &service);
 
-  void integratePart(KDevPart *part);
-  void removePart(KDevPart *part);
+  bool loadService( const KService::Ptr &service );
+
+  void integratePart(KXMLGUIClient *part);
+  void removePart(KXMLGUIClient *part);
 
   ProjectInfo *m_info;
 

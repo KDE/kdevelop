@@ -18,6 +18,7 @@ class QDomDocument;
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
+#include "kdevplugin.h"
 
 
 #include "toplevel.h"
@@ -41,7 +42,7 @@ public:
   QDomDocument m_document;
   QString      m_projectPlugin, m_language;
   QStringList  m_ignoreParts, m_loadParts, m_keywords;
-  QPtrList<KDevPart> m_localParts;
+  QPtrList<KXMLGUIClient> m_localParts;
 
 };
 
@@ -205,21 +206,14 @@ void ProjectManager::loadLocalParts()
       continue;
 
     if (m_info->m_loadParts.contains((*it)->name()))
-    {
-      KDevPart *part = PluginController::getInstance()->loadPlugin(*it, "KDevPart", Core::getInstance());
-      if (!part)
-        return;
-
-      integratePart(part);
-      m_info->m_localParts.append(part);
-    }
+      loadService( *it );
     else
       checkNewService(*it);
   }
 }
 
 
-void ProjectManager::checkNewService(KService *service)
+void ProjectManager::checkNewService(const KService::Ptr &service)
 {
   QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
   QStringList langlist = var.asStringList();
@@ -244,13 +238,8 @@ void ProjectManager::checkNewService(KService *service)
     // the language and all keywords match or no keywords available
     if(keywordsMatch)
     {
-      m_info->m_loadParts << service->name();
-      KDevPart *part = PluginController::getInstance()->loadPlugin(service, "KDevPart", Core::getInstance());
-      if (!part)
-        return;
-
-      integratePart(part);
-      m_info->m_localParts.append(part);
+      if ( loadService( service ) )
+        m_info->m_loadParts << service->name();
     }
   }
   else
@@ -277,14 +266,25 @@ void ProjectManager::initializeProjectSupport()
   Core::getInstance()->doEmitProjectOpened();
 }
 
+bool ProjectManager::loadService( const KService::Ptr &service ) 
+{
+  KXMLGUIClient *part = PluginController::loadPlugin( service ); if ( !part )
+    part = PluginController::getInstance()->loadPlugin(service, "KDevPart",
+        Core::getInstance()); if ( !part ) return false;
 
-void ProjectManager::integratePart(KDevPart *part)
+  integratePart( part );
+  m_info->m_localParts.append( part );
+
+  return true;
+}
+
+void ProjectManager::integratePart(KXMLGUIClient *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->addClient(part);
 }
 
 
-void ProjectManager::removePart(KDevPart *part)
+void ProjectManager::removePart(KXMLGUIClient *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
    
