@@ -1,3 +1,7 @@
+2003-02-24 Roberto Raggi <roberto@kdevelop.org>
+	* improved the background parser
+	* better syncronization between background parser and cppsupport part
+
 2003-02-23 Roberto Raggi <roberto@kdevelop.org>
 	* use the new c++ parser to fill the class browser
 	* remove ParsedStruct
