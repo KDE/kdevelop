@@ -26,7 +26,7 @@ MakeOptionsWidget::MakeOptionsWidget(QDomDocument &dom, const QString &configGro
       m_dom(dom), m_configGroup(configGroup)
 {
     env_var_group->setColumnLayout( 1, Qt::Vertical );
-    m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup, env_var_group );
+    m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup + "/make/envvars", env_var_group );
 
     abort_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/abortonerror"));
     jobs_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/numberofjobs"));

@@ -29,7 +29,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
       m_dom(dom), m_configGroup(configGroup)
 {
     env_var_group->setColumnLayout( 1, Qt::Vertical );
-    m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup, env_var_group );
+    m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup + "/run/envvars", env_var_group );
 
     m_projectDirectory = projectDirectory;
     mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));

@@ -43,7 +43,7 @@ EnvironmentVariablesWidget::EnvironmentVariablesWidget(QDomDocument &dom, const 
       m_dom(dom), m_configGroup(configGroup)
 {
 	DomUtil::PairList list =
-        DomUtil::readPairListEntry(dom, configGroup + "/makeenvvars", "envvar", "name", "value");
+        DomUtil::readPairListEntry(dom, configGroup, "envvar", "name", "value");
     
     QListViewItem *lastItem = 0;
 
@@ -70,7 +70,7 @@ void EnvironmentVariablesWidget::accept()
         item = item->nextSibling();
     }
 
-    DomUtil::writePairListEntry(m_dom, m_configGroup + "/makeenvvars", "envvar", "name", "value", list);
+    DomUtil::writePairListEntry(m_dom, m_configGroup, "envvar", "name", "value", list);
 }
 
 #include "environmentvariableswidget.moc"

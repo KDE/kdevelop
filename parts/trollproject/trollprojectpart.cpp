@@ -321,7 +321,7 @@ void TrollProjectPart::slotExecute()
 
     QDomElement docEl = projectDom()->documentElement();
     QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
-    QDomElement envvarsEl = trollprojectEl.namedItem("envvars").toElement();
+    QDomElement envvarsEl = trollprojectEl.namedItem("run/envvars").toElement();
 
     QString environstr;
     QDomElement childEl = envvarsEl.firstChild().toElement();

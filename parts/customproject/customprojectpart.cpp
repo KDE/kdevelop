@@ -434,7 +434,7 @@ void CustomProjectPart::slotExecute()
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 
     DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/envvars", "envvar", "name", "value");
+        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/run/envvars", "envvar", "name", "value");
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;

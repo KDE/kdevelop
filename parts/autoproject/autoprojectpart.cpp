@@ -2,9 +2,9 @@
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
-*   Copyright (C) 2002 by Victor Rder                                    *
-*   victor_roeder@gmx.de                                                  *
-*                                                                         *
+ *   Copyright (C) 2002 by Victor Roeder                                   *
+ *   victor_roeder@gmx.de                                                  *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -237,11 +237,11 @@ void AutoProjectPart::setWantautotools()
 {
     QDomDocument &dom = *projectDom();
     QDomElement el  = DomUtil::elementByPath(dom, "/kdevautoproject");
-    if ( el.namedItem("makeenvvars").isNull() ) {
+    if ( el.namedItem("make/envvars").isNull() ) {
         DomUtil::PairList list;
         list << DomUtil::Pair("WANT_AUTOCONF_2_5", "1");
         list << DomUtil::Pair("WANT_AUTOMAKE_1_6", "1");
-        DomUtil::writePairListEntry(dom, "/kdevautoproject/makeenvvars", "envvar", "name", "value", list);
+        DomUtil::writePairListEntry(dom, "/kdevautoproject/make/envvars", "envvar", "name", "value", list);
     }
 }
 
@@ -249,7 +249,7 @@ void AutoProjectPart::setWantautotools()
 QString AutoProjectPart::makeEnvironment()
 {
     DomUtil::PairList envvars = 
-        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/makeenvvars", "envvar", "name", "value");
+        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/make/envvars", "envvar", "name", "value");
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;
@@ -719,7 +719,7 @@ void AutoProjectPart::slotExecute()
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 
     DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/envvars", "envvar", "name", "value");
+        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/run/envvars", "envvar", "name", "value");
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;
