@@ -94,15 +94,17 @@ void FileCreatePart::slotProjectOpened() {
     QDir templDir( project()->projectDirectory() + "/templates/" );
     templDir.setFilter( QDir::Files );
     const QFileInfoList * list = templDir.entryInfoList();
-    QFileInfoListIterator it( *list );
-    QFileInfo *fi;
-    while ( (fi = it.current()) != 0 ) {
-      FileCreateFileType * filetype = new FileCreateFileType;
-      filetype->setName( fi->fileName() + " files" );
-      filetype->setExt( fi->fileName() );
-      filetype->setCreateMethod("template");
-      m_filetypes.append(filetype);
-      ++it;
+    if( list ){
+      QFileInfoListIterator it( *list );
+      QFileInfo *fi;
+      while ( (fi = it.current()) != 0 ) {
+        FileCreateFileType * filetype = new FileCreateFileType;
+        filetype->setName( fi->fileName() + " files" );
+        filetype->setExt( fi->fileName() );
+        filetype->setCreateMethod("template");
+        m_filetypes.append(filetype);
+        ++it;
+      }
     }
   }
 
