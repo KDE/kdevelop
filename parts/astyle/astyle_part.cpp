@@ -11,10 +11,10 @@
 
 
 #include <kdevcore.h>
+#include <kdevapi.h>
 
 
-#include "keditor/editor.h"
-#include "keditor/edit_iface.h"
+#include <ktexteditor/editinterface.h>
 
 
 #include "astyle_factory.h"
@@ -36,8 +36,8 @@ AStylePart::AStylePart(KDevApi *api, QObject *parent, const char *name)
 
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
-  connect(core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
-		  this, SLOT(documentActivated(KEditor::Document*)));
+  m_controller = api->getPartController();
+  connect(api->getPartController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 }
 
 
@@ -48,13 +48,13 @@ AStylePart::~AStylePart()
 
 void AStylePart::beautifySource()
 {
-  KEditor::Document *doc = core()->editor()->currentDocument();
-  if (!doc)
-	return;
-
-  KEditor::EditDocumentIface *iface = KEditor::EditDocumentIface::interface(doc);
+  KParts::Part *part = m_controller->getActivePart();
+  if (!part)
+    return;
+  
+  KTextEditor::EditInterface *iface = dynamic_cast<KTextEditor::EditInterface*>(part);
   if (!iface)
-	return;
+    return;
 
   ASStringIterator is(iface->text());
   KDevFormatter formatter;
@@ -79,22 +79,28 @@ void AStylePart::configWidget(KDialogBase *dlg)
 }
 
 
-void AStylePart::documentActivated(KEditor::Document *doc)
+void AStylePart::activePartChanged(KParts::Part *part)
 {
   bool enabled = false;
+
+  KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
   
-  if (doc)
+  if (rw_part)
   {
-    QString extension = doc->url().path();
-	int pos = extension.findRev('.');
-	if (pos >= 0)
-	  extension = extension.mid(pos);
-	if (extension == ".h" || extension == ".c" || extension == ".java"
-		|| extension == ".cpp" || extension == ".cc" || extension == ".C"
-		|| extension == ".cxx" || extension == ".hxx")
-	  enabled = true;
-	if (!KEditor::EditDocumentIface::interface(doc))
-	  enabled = false;
+    KTextEditor::EditInterface *iface = dynamic_cast<KTextEditor::EditInterface*>(rw_part);
+
+    if (iface)
+    {
+      QString extension = rw_part->url().path();
+
+      int pos = extension.findRev('.');
+      if (pos >= 0)
+        extension = extension.mid(pos);
+      if (extension == ".h" || extension == ".c" || extension == ".java"
+	  || extension == ".cpp" || extension == ".cc" || extension == ".C"
+	  || extension == ".cxx" || extension == ".hxx")
+	enabled = true;
+    }
   }
 
   _action->setEnabled(enabled);

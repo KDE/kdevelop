@@ -10,6 +10,7 @@ class KDialogBase;
 #include <kaction.h>
 
 #include <kdevpart.h>
+#include <kdevpartcontroller.h>
 
 
 #include "keditor/editor.h"
@@ -27,7 +28,7 @@ public:
 
 private slots:
 
-  void documentActivated(KEditor::Document *doc);
+  void activePartChanged(KParts::Part *part);
 		  
   void beautifySource();
  
@@ -38,6 +39,9 @@ private:
 
   KAction *_action;
 
+  // TODO: remove, use a new accesor function to API instead!
+  KDevPartController *m_controller;
+  
 };
 
 

@@ -30,8 +30,7 @@ AStyleFactory::~AStyleFactory()
 }
 
 
-KDevPart *AStyleFactory::createPartObject(KDevApi *api, QObject *parent, 
-											   const QStringList &/*args*/)
+KDevPart *AStyleFactory::createPartObject(KDevApi *api, QObject *parent, const QStringList &/*args*/)
 {
   return new AStylePart(api, parent, "astyle");
 }
