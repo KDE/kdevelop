@@ -1,3 +1,8 @@
+2001-07-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+    * Extended the KEditor::EditIface a bit
+    * started to implement it in the editor parts
+
 2001-07-05  Richard Dale <duke@tipitina.demon.co.uk
 
 	* Fixed crash in class tool attribute display. Method and attribute
