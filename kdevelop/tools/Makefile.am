@@ -1,5 +1,5 @@
 
-tools_DATA =  processesend.pl processes.pl.in
+tools_DATA =  processesend.pl processes.pl.in processes.pl
 
 EXTRA_DIST = $(tools_DATA)
 

@@ -988,23 +988,7 @@ void CKAppWizard::slotNewCppButtonClicked() {
 // connection of this (defaultButton)
 void CKAppWizard::slotOkClicked() {
 
-  StringTokenizer tokener;
-  bool found=false;
-  QString file1,file2;
-  QString complete_path = getenv("PATH");
-
-  tokener.tokenize(complete_path,":");
-
-  while(tokener.hasMoreTokens()){
-    file1 = QString(tokener.nextToken()) + "/sgml2html";
-    file2 = QString(tokener.nextToken()) + "/ksgml2html";
-    if(QFile::exists(file1) || QFile::exists(file2)){
-      found = true;
-      break;
-    }
-  }
-
-  if (!found) {
+  if (!(CToolClass::searchInstProgram("sgml2html") || CToolClass::searchInstProgram("ksgml2html"))) {
   	userdoc->setChecked(false);
   	KMsgBox msg (0,i18n("sgml2html and ksgml2html do not exist!"),
     i18n("If you want to generate the user-documentation, you need one of these programs.\n"
@@ -2254,23 +2238,14 @@ void CKAppWizard::slotProcessExited() {
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
-
-  StringTokenizer tokener;
-  QString complete_path = getenv("PATH");
-  tokener.tokenize(complete_path,":");
-
-  while(tokener.hasMoreTokens()) {
-    QString file2 = QString(tokener.nextToken()) + "/ksgml2html";
-    if(QFile::exists(file2)) {
-      KShellProcess process;
-      QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
-      process.clearArguments();
-      process << "cp"; // copy is your friend :-)
-      process << nif_template;
-      process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
-      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
-      break;
-    }
+  if (CToolClass::searchProgram("ksgml2html")) {
+    KShellProcess process;
+    QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
+    process.clearArguments();
+    process << "cp"; // copy is your friend :-)
+    process << nif_template;
+    process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
+    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
   }
   
   KShellProcess p;
