@@ -723,7 +723,7 @@ void ArgumentModel::setDefaultValue( const QString & defaultValue )
 
 // ------------------------------------------------------------------------
 FunctionModel::FunctionModel( CodeModel* model )
-    : CodeModelItem( Function, model)
+    : CodeModelItem( Function, model), m_documentation(0)
 {
     m_access = Public;
     d.v.m_signal = false;
@@ -733,6 +733,12 @@ FunctionModel::FunctionModel( CodeModel* model )
     d.v.m_inline = false;
     d.v.m_constant = false;
     d.v.m_abstract = false;
+}
+
+FunctionModel::~ FunctionModel()
+{
+	if (m_documentation != 0)
+		delete m_documentation;
 }
 
 bool FunctionModel::isVirtual( ) const
@@ -814,6 +820,22 @@ bool FunctionModel::addArgument( ArgumentDom arg )
 void FunctionModel::removeArgument( ArgumentDom arg )
 {
     m_arguments.remove( arg );
+}
+
+QString FunctionModel::documentation() const
+{
+	if (m_documentation == 0)
+		return QString::null;
+	else
+		return *m_documentation;
+}
+
+void FunctionModel::setDocumentation(const QString& doc)
+{
+	if (m_documentation != 0) 
+		delete m_documentation;
+	
+	m_documentation = new QString(doc);
 }
 
 // ------------------------------------------------------------------------
