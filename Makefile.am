@@ -1,4 +1,4 @@
-SUBDIRS = lib parts plugins src po doc pics
+SUBDIRS = lib parts plugins src doc pics
 
 EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING gideon.lsm admin
 
