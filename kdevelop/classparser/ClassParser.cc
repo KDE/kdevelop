@@ -63,7 +63,6 @@ CClassParser::CClassParser()
  *-----------------------------------------------------------------*/
 CClassParser::~CClassParser()
 {
-  delete lexer;
 }
 
 /*********************************************************************
@@ -71,21 +70,6 @@ CClassParser::~CClassParser()
  *                          PRIVATE METHODS                          *
  *                                                                   *
  ********************************************************************/
-
-/*------------------------------------- CClassParser::getNextLexem()
- * getNextLexem()
- *   Fetch the next lexem from the lexer and store it in the 
- *   attribute lexem.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassParser::getNextLexem()
-{
-  lexem = lexer->yylex();
-}
 
 /*------------------------------ CClassParser::parseClassHeader()
  * parseClassHeader()
@@ -106,8 +90,8 @@ void CClassParser::parseClassHeader()
   // Ok, this seems to be a class definition so allocate the
   // the new object and set some values.
   currentClass = new CParsedClass();
-  currentClass->setName( lexer->YYText() );
-  currentClass->setDefinedOnLine( lexer->lineno() - 1 );
+  currentClass->setName( getText() );
+  currentClass->setDefinedOnLine( getLineno() );
   currentClass->setHFilename( currentFile );
   currentClass->setImplFilename( currentFile );
   
@@ -138,7 +122,7 @@ void CClassParser::parseClassHeader()
         
         // Add the parent.
         aParent = new CParsedParent();
-        aParent->setName( lexer->YYText() );
+        aParent->setName( getText() );
         aParent->setExport( export );
         
         currentClass->addParent( aParent );
@@ -182,7 +166,7 @@ void CClassParser::parseType( QString *aStr )
     getNextLexem();
   }
   
-  *aStr = lexer->YYText();
+  *aStr = getText();
   *aStr += " ";
 
   while( !exit )
@@ -196,7 +180,7 @@ void CClassParser::parseType( QString *aStr )
         getNextLexem();
         while( lexem != '>' )
         {
-          *aStr += lexer->YYText();
+          *aStr += getText();
           getNextLexem();
         }
         *aStr += ">";
@@ -247,7 +231,7 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
       getNextLexem();
       while( lexem != ']' )
       {
-        type += lexer->YYText();
+        type += getText();
         getNextLexem();
       }
       type += "]";
@@ -279,7 +263,7 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
       arg = new CParsedArgument();
       // If the argument has a name, we set it
       if( lexem != ')' && lexem != ',' )
-        arg->setName( lexer->YYText() );
+        arg->setName( getText() );
 
       arg->setType( type );
       method->addArgument( arg );
@@ -440,7 +424,7 @@ void CClassParser::parseDeclaration()
   }
 
   // Set the line on which the function is defined/declared.
-  declLine = lexer->lineno() - 1;
+  declLine = getLineno();
 
   // Check for variable declarations with classreferences.
   if( isDefiningClass && lexem == CLCL )
@@ -455,7 +439,7 @@ void CClassParser::parseDeclaration()
   // Save the variable/functionname.
   if( lexem == ID )
   {
-    declName = lexer->YYText();
+    declName = getText();
     getNextLexem();
   }
 
@@ -475,7 +459,7 @@ void CClassParser::parseDeclaration()
       getNextLexem();
       while( lexem != ']' )
       {
-        type += lexer->YYText();
+        type += getText();
         getNextLexem();
       }
       type += "]";
@@ -498,7 +482,7 @@ void CClassParser::parseDeclaration()
       getNextLexem();
       assert( lexem == ID );
       
-      declName = lexer->YYText();
+      declName = getText();
       
       getNextLexem();
       if( lexem == '(' )
@@ -555,7 +539,7 @@ void CClassParser::parseSignalSlotMap()
   // Fetch the signalname.
   getNextLexem();
   assert( lexem == ID );
-  aSS->setSignal( lexer->YYText() );
+  aSS->setSignal( getText() );
 
   // Skip the comma.
   getNextLexem();
@@ -564,7 +548,7 @@ void CClassParser::parseSignalSlotMap()
   // Fetch the slotname.
   getNextLexem();
   assert( lexem == ID );
-  m->setName( lexer->YYText() );
+  m->setName( getText() );
 
   // Add the mapping.
   currentClass->addSignalSlotMap( aSS );
@@ -593,7 +577,7 @@ void CClassParser::parseSignalTextMap()
   // Fetch the signalname.
   getNextLexem();
   assert( lexem == ID );
-  aST->setSignal( lexer->YYText() );
+  aST->setSignal( getText() );
 
   // Skip the comma.
   getNextLexem();
@@ -602,7 +586,7 @@ void CClassParser::parseSignalTextMap()
   while( lexem != ')' )
   {
     getNextLexem();
-    txt += lexer->YYText();
+    txt += getText();
   }
 
   aST->setText( txt );
@@ -707,7 +691,7 @@ void CClassParser::parseToplevel()
           if( lexem == CLASS )
           {
             getNextLexem();
-            currentClass->addFriend( lexer->YYText() );
+            currentClass->addFriend( getText() );
           }
           else if( declaredScope != -1 && scopedepth == 1 )
             parseDeclaration();
@@ -758,7 +742,6 @@ void CClassParser::parseFile( ifstream &file )
  *-----------------------------------------------------------------*/
 void CClassParser::reset()
 {
-  lexer = NULL;
   lexem = -1;
   declaredScope = CPGLOBAL;
   currentClass = NULL;

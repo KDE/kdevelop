@@ -73,7 +73,7 @@ public: // Public Methods
 private: // Private attributes
 
   /** Lexer used to fetch lexical patterns */
-  FlexLexer *lexer;
+  yyFlexLexer *lexer;
 
   /** Current lexem */
   int lexem;
@@ -102,7 +102,13 @@ private: // Private attributes
 private: // Private methods
 
   /** Get the next lexem from the lexer. */
-  void getNextLexem();
+  void getNextLexem()        { lexem = lexer->yylex(); }
+
+  /** Fetch the current text from the lexer and return it. */
+  const char *getText()      { return lexer->YYText(); }
+  
+  /** Fetch the current linenumber from the lexer and return it. */
+  int getLineno()            { return lexer->lineno() - 1; }
 
   /** Parse a classdefinition i.e name and possible inheritances. */
   void parseClassHeader();

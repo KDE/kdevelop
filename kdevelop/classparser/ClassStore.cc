@@ -319,6 +319,7 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
   CParsedAttribute *aAttr;
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
 
+  retVal->setAutoDelete( false );
   for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )
@@ -356,6 +357,42 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
 QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
 {
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
+
+  retVal->setAutoDelete( false );
+  return retVal;
+}
+
+/*------------------------------------ CClassStore::getSortedClasslist()
+ * getSortedClasslist()
+ *   Get all classes in sorted order.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedClass> * The classes.
+ *-----------------------------------------------------------------*/
+QList<CParsedClass> *CClassStore::getSortedClasslist()
+{
+  QList<CParsedClass> *retVal = new QList<CParsedClass>();
+  QStrList srted;
+  char *str;
+
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    srted.inSort( classIterator.current()->name );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getClassByName( str ) );
+  }
 
   return retVal;
 }

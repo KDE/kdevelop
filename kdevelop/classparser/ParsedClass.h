@@ -65,6 +65,9 @@ private: // Private attributes
   /** List of methods. */
   QList<CParsedMethod> methods;
 
+  /** All methods ordered by name and argument. */
+  QDict<CParsedMethod> methodsByNameAndArg;
+
 public: // Public attributes
 
   /** Name of the parsed class. */
@@ -79,8 +82,8 @@ public: // Public attributes
   /** List iwth names of frientclasses(if any). */
   QStrList friends;
 
-  /** All methods ordered by name and argument. */
-  QDict<CParsedMethod> methodsByNameAndArg;
+  /** Iterator for the methods. */
+  QListIterator<CParsedMethod> methodIterator;
 
   /** Iterator for the attributes. */
   QDictIterator<CParsedAttribute> attributeIterator;
@@ -156,6 +159,12 @@ public: // Public queries
 
   /** Get a attribute by using its' name. */
   CParsedAttribute *getAttributeByName( const char *aName );
+
+  /** Get all methods in sorted order. */
+  QList<CParsedMethod> *getSortedMethodList();
+
+  /** Get all attributes in sorted order. */
+  QList<CParsedAttribute> *getSortedAttributeList();
 
   /** Check if this class has the named parent. */
   bool hasParent( const char *aName );

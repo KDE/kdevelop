@@ -103,6 +103,9 @@ public: // Public queries
   /** Fetches all suppliers of a named class. */
   QList<CParsedClass> *getClassSuppliers( const char *aName );
 
+  /** Get all classes in sorted order. */
+  QList<CParsedClass> *getSortedClasslist();
+
 public: // Public Methods
 
   /** Remove all parsed classes. */

@@ -49,7 +49,8 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedClass::CParsedClass()
-  : attributeIterator( attributes )
+  : methodIterator( methods ),
+    attributeIterator( attributes )
 {
   parents.setAutoDelete( true );
   attributes.setAutoDelete( true );
@@ -382,6 +383,78 @@ bool CParsedClass::hasParent( const char *aName )
     ;
 
   return aParent != NULL;
+}
+
+/*------------------------------- CParsedClass::getSortedMethodList()
+ * getSortedMethodList()
+ *   Get all methods in sorted order. 
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedMethod> *  The sorted list.
+ *-----------------------------------------------------------------*/
+QList<CParsedMethod> *CParsedClass::getSortedMethodList()
+{
+  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+  char *str;
+  QStrList srted;
+  QString m;
+  
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( methodIterator.toFirst();
+       methodIterator.current();
+       ++methodIterator )
+  {
+    methodIterator.current()->toString( m );
+    srted.inSort( m );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getMethodByNameAndArg( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------------- CParsedClass::getSortedAttributeList()
+ * getSortedAttributeList()
+ *   Get all attributes in sorted order. 
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedMethod> *  The sorted list.
+ *-----------------------------------------------------------------*/
+QList<CParsedAttribute> *CParsedClass::getSortedAttributeList()
+{
+  QList<CParsedAttribute> *retVal = new QList<CParsedAttribute>();
+  char *str;
+  QStrList srted;
+  
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( attributeIterator.toFirst();
+       attributeIterator.current();
+       ++attributeIterator )
+  {
+    srted.inSort( attributeIterator.current()->name );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getAttributeByName( str ) );
+  }
+
+  return retVal;
 }
 
 /*----------------------------------------------- CParsedClass::out()
