@@ -248,7 +248,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   {
       mimeType = "text/plain";
       kapp->config()->setGroup("Editor");
-      preferred = kapp->config()->readEntry("EmbeddedKTextEditor", "");
+      preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
   } else if( mimeType.startsWith("inode/") ){
       return;
   }

@@ -40,6 +40,7 @@
 #include <ktexteditor/configinterface.h>
 #include <kparts/partmanager.h>
 #include <kdevpartcontroller.h>
+#include <kdeversion.h>
 #include <kdebug.h>
 
 #if (KDE_VERSION > 305)
@@ -315,14 +316,18 @@ void MainWindowShare::slotSettings()
     gsw->changeMessageFontButton->setFont(gsw->messageFont());
     gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
     gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
-    gsw->projects_url->setURL(config->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+    gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
     Core::getInstance()->doEmitConfigWidget(&dlg);
     dlg.resize( 800, 600);
     dlg.exec();
 
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
+#if KDE_IS_VERSION(3,1,3)
+    config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
+#else
     config->writeEntry("DefaultProjectsDir", gsw->projects_url->url());
+#endif
     config->writeEntry("Application Font", gsw->applicationFont());
     config->setGroup("MakeOutputView");
     config->writeEntry("Messages Font",gsw->messageFont());
