@@ -84,20 +84,28 @@ void Disassemble::slotDisassemble(char* buf)
     return;
 
   clear();
-  insertLine(strchr(buf, '\n')+1);
-  removeLine(numLines()-1);
-  removeLine(numLines()-1);
+  // Skip the first line (just header info)
+  char* start = strchr(buf, '\n');
 
-  if (numLines())
+  //Make sure there is something there
+  if (start)
   {
-    lower_ = strtol(textLine(0), 0, 0);
-    upper_ = strtol(textLine(numLines()-1), 0, 0);
-    displayCurrent();
-  }
-  else
-  {
-    lower_ = 0;
-    upper_ = 0;
+    insertLine(start+1);
+    // Skip the last two lines (just trailer info)
+    removeLine(numLines()-1);
+    removeLine(numLines()-1);
+
+    if (numLines())
+    {
+      lower_ = strtol(textLine(0), 0, 0);
+      upper_ = strtol(textLine(numLines()-1), 0, 0);
+      displayCurrent();
+    }
+    else
+    {
+      lower_ = 0;
+      upper_ = 0;
+    }
   }
 }
 
