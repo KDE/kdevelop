@@ -157,9 +157,9 @@ JDBController::~JDBController()
         setStateOn(s_waitTimer|s_appBusy);
         const char *quit="quit\n";
         dbgProcess_->writeStdin(quit, strlen(quit));
-        JDB_DISPLAY(quit)
+        JDB_DISPLAY(quit);
             timer->start(3000, TRUE);
-        DBG_DISPLAY("<quit wait>\n")
+        DBG_DISPLAY("<quit wait>\n");
             while (stateIsOn(s_waitTimer)) {
                 if (stateIsOn(s_programExited))
                     break;
@@ -411,7 +411,7 @@ char* JDBController::parseLine(char *buf)
             if ((strncmp(buf, "Breakpoint hit: thread", 22) == 0)) {
                 KRegExp ex( "Breakpoint hit: thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*), bci\\=[0-9]*.*\\n[^\\[]*\\[[0-9]*\\] ");
                 if (ex.match( QString(buf))) {
-                    DBG_DISPLAY(QString("Breakpoint hit in line ") + ex.group(3))
+                    DBG_DISPLAY(QString("Breakpoint hit in line ") + ex.group(3));
                     if (stateIsOn(s_appStarting)) {
                         setStateOff(s_appStarting);
                     }
