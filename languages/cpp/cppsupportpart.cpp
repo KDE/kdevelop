@@ -479,234 +479,188 @@ QString CppSupportPart::findHeader(const QStringList &list, const QString &heade
 
 void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    m_activeClass = 0;
-    m_activeFunction = 0;
-    m_activeVariable = 0;
+	m_activeClass = 0;
+	m_activeFunction = 0;
+	m_activeVariable = 0;
 	m_curAttribute = 0;
 	m_curClass = 0;
 	
-    if( context->hasType(Context::EditorContext) ){
-        int id;
-	
-	//Cache some values that are constant in this function
-	bool is_header, is_source;
-	QString source_header_candidate;
-	
-// 	CodeModelItemContext
-	if(context->type() == Context::EditorContext)
+	if( context->hasType(Context::EditorContext) )
 	{
-		m_curClass = currentClass();
-		if (m_curClass != 0)
+		int id;
+	
+		popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
+		popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
+										"If you are currently looking at a header file, this "
+										"brings you to the corresponding implementation file. "
+										"If you are looking at an implementation file (.cpp etc.), "
+										"this brings you to the corresponding header file.") );
+
+		// 	CodeModelItemContext
+		if(context->type() == Context::EditorContext)
 		{
-			m_curAttribute = currentAttribute(m_curClass);
-			if ( m_curAttribute != 0)
-				m_createGetterSetterAction->plug(popup);
-		}
-	}
-	
-	
-	is_header = isHeader(m_activeFileName);
-	is_source = isSource(m_activeFileName);	
-	
-        QString text;
-        int atline, atcol;
-        MakeMemberHelper(text,atline,atcol);
-        if(!text.isEmpty())
-        {
-         id = popup->insertItem( i18n( "Make Member"),
-                this, SLOT( slotMakeMember() ) );
-         popup->setWhatsThis( id, i18n("<b>Make member</b><p>Creates a class member function in implementation file "
-                              "based on the member declaration at the current line."));
-        }
-        
-	if((source_header_candidate = sourceOrHeaderCandidate()) != QString::null)
-	{
-	
-	 
-	}
-
-       kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
-       if( codeModel()->hasFile(m_activeFileName) ){
-           kdDebug() << "CppSupportPart::contextMenu 1" << endl;
-           QString candidate;
-           if (is_source)
-               candidate = source_header_candidate;
-           else
-               candidate = m_activeFileName;
-	       
-		unsigned int curLine = 0, curCol = 0;
-		if (m_activeViewCursor != 0)
-			m_activeViewCursor->cursorPosition(&curLine, &curCol);
-		
-		FunctionDom currentFunction = 0;
-		bool hasDeclAndDef = false;//indicate wether a matfching declaration/definition has been found
-		bool fileExists = !candidate.isEmpty() && codeModel()->hasFile(candidate);
-//           kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
-           if (fileExists )
-           {
-                QPopupMenu* m2 = new QPopupMenu( popup );
-                id = popup->insertItem( i18n("Go to Declaration"), m2 );
-                popup->setWhatsThis(id, i18n("<b>Go to declaration</b><p>Provides a menu to select available function declarations "
-                    "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
-
-                FileDom file2 = codeModel()->fileByName( candidate );
-//                kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
-
-                FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
-                for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it ){
-                    QString text = (*it)->scope().join( "::");
-//                    kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
-		    if( !text.isEmpty() )
-			text += "::";
-		    text += formatModelItem( *it, true );
-		    text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
-		    int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
-		    int line, column, endLine, endColumn;
-		    (*it)->getStartPosition( &line, &column );
-			(*it)->getStartPosition( &line, &column );
-			(*it)->getEndPosition(&endLine, &endColumn);
-		    m2->setItemParameter( id, line );
-		    if (m_activeViewCursor)
-			if (curLine >= line && curLine <= endLine)//@todo currently column isn't checked, should be sufficient this way
-				currentFunction = *it;
-                }
-			if(m2->count() == 0)
-				popup->removeItem(id);
-//                kdDebug() << "CppSupportPart::contextMenu 4" << endl;
-           }
-
-           QString candidate1;
-           if (is_header)
-               candidate1 = source_header_candidate;
-           else
-               candidate1 = m_activeFileName;
-//           kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
-
-		FunctionDefinitionDom currentFunctionDefintion = 0;
-		QString curFuncDefText;
-		CodeModelUtils::PredDefinitionMatchesDeclaration comparator(currentFunction);
-		
-           if( codeModel()->hasFile(candidate1) ){
-               QPopupMenu* m = new QPopupMenu( popup );
-               id = popup->insertItem( i18n("Go to Definition"), m );
-               popup->setWhatsThis(id, i18n("<b>Go to definition</b><p>Provides a menu to select available function definitions "
-                    "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
-
-               const FileDom file = codeModel()->fileByName( candidate1 );
-//               const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
-               const FunctionDefinitionList functionDefinitionList = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
-               for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
-	           QString text = (*it)->scope().join( "::");
-	           if( !text.isEmpty() )
-		       text += "::";
-	           text += formatModelItem( *it, true );
-	           text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
-                   int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
-	           int line, column, endLine, endColumn;
-	           (*it)->getStartPosition( &line, &column );
-		   (*it)->getEndPosition(&endLine, &endColumn);
-	           m->setItemParameter( id, line );
-			if (currentFunction == 0)
+			m_curClass = currentClass();
+			if (m_curClass != 0)
 			{
-				if (curLine >= line && curLine <=endLine)//cursor is currently above function defintion, find matching declaration later
-				{//@todo currently column isn't checked, should be sufficient this way
-					currentFunctionDefintion = *it;
-					curFuncDefText= text;
-				}
-			} else
-			{
-				if ( comparator(*it) ) //functiondefintion found for declaration the cursor is currently above
-				{
-					int tmpId = popup->insertItem(i18n("Go to Definition of This Function")/* + text*/, this, SLOT(gotoLine(int))); 
-					int linel, coll;
-					(*it)->getStartPosition(&linel, &coll);
-					popup->setItemParameter(tmpId, linel);
-					hasDeclAndDef = true;
-				}
+				m_curAttribute = currentAttribute(m_curClass);
+				if ( m_curAttribute != 0)
+					m_createGetterSetterAction->plug(popup);
 			}
-		   
+		}
+		
+		QString text;
+		int atline, atcol;
+		MakeMemberHelper(text,atline,atcol);
+		if(!text.isEmpty())
+		{
+			id = popup->insertItem( i18n( "Make Member"), this, SLOT( slotMakeMember() ) );
+			popup->setWhatsThis( id, i18n("<b>Make member</b><p>Creates a class member function in implementation file "
+												"based on the member declaration at the current line."));
+		}
+			
+		kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
+		
+		bool showContextMenuExplosion = false;
+		KConfig *config = CppSupportFactory::instance()->config();
+		if (config)
+		{
+			config->setGroup("General");
+			showContextMenuExplosion = config->readBoolEntry("ShowContextMenuExplosion", false );
+		}
+
+		if( showContextMenuExplosion && codeModel()->hasFile(m_activeFileName) )
+		{
+			//kdDebug() << "CppSupportPart::contextMenu 1" << endl;
+			QString candidate;
+			if ( isSource(m_activeFileName) )
+				candidate = sourceOrHeaderCandidate();
+			else
+				candidate = m_activeFileName;
+			
+			unsigned int curLine = 0, curCol = 0;
+			if (m_activeViewCursor != 0)
+				m_activeViewCursor->cursorPosition(&curLine, &curCol);
+			
+			//kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
+			
+			if ( !candidate.isEmpty() && codeModel()->hasFile(candidate) )
+			{
+				QPopupMenu* m2 = new QPopupMenu( popup );
+				id = popup->insertItem( i18n("Go to Declaration"), m2 );
+				popup->setWhatsThis(id, i18n("<b>Go to declaration</b><p>Provides a menu to select available function declarations "
+					"in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
+	
+				FileDom file2 = codeModel()->fileByName( candidate );
+				//kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
+	
+				FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
+				for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it )
+				{
+					QString text = (*it)->scope().join( "::");
+					//kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
+					if( !text.isEmpty() )
+					{
+						text += "::";
+					}
+					text += formatModelItem( *it, true );
+					text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+					int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
+					int line, column;
+					(*it)->getStartPosition( &line, &column );
+					m2->setItemParameter( id, line );
+				}
+				
+				if(m2->count() == 0)
+				{
+					popup->removeItem(id);
+				}
+				//kdDebug() << "CppSupportPart::contextMenu 4" << endl;
+			}
+
+			QString candidate1;
+			if ( isHeader(m_activeFileName) )
+			{
+				candidate1 = sourceOrHeaderCandidate();
+			}
+			else
+			{
+				candidate1 = m_activeFileName;
+			}
+			//kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
+			if( codeModel()->hasFile(candidate1) )
+			{
+				QPopupMenu* m = new QPopupMenu( popup );
+				id = popup->insertItem( i18n("Go to Definition"), m );
+				popup->setWhatsThis(id, i18n("<b>Go to definition</b><p>Provides a menu to select available function definitions "
+						"in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
+	
+				const FileDom file = codeModel()->fileByName( candidate1 );
+				const FunctionDefinitionList functionDefinitionList = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
+				for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+				{
+					QString text = (*it)->scope().join( "::");
+					if( !text.isEmpty() )
+					{
+						text += "::";
+					}
+					text += formatModelItem( *it, true );
+					text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+					int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
+					int line, column;
+					(*it)->getStartPosition( &line, &column );
+					m->setItemParameter( id, line );
 				}
 				if(m->count() == 0)
-					popup->removeItem(id);
-			   
-           }
-		if (fileExists && currentFunction == 0 && currentFunctionDefintion != 0)//cursor is above a functiondefintion, find matching  declaration
-		{
-			FileDom file2 = codeModel()->fileByName( candidate );
-			FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
-			for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it )
-				if (CodeModelUtils::compareDeclarationToDefinition(*it, currentFunctionDefintion))
 				{
-					int tmpId = popup->insertItem(i18n("Go to Declaration of This Function")/* + curFuncDefText*/, this, SLOT(gotoDeclarationLine(int))); 
-					int linel, coll;
-					(*it)->getStartPosition(&linel, &coll);
-					popup->setItemParameter(tmpId, linel);
-					hasDeclAndDef = true;
+					popup->removeItem(id);
 				}
+				
+			}
 		}
-		if (!hasDeclAndDef)
+
+		const EditorContext *econtext = static_cast<const EditorContext*>(context);
+		QString str = econtext->currentLine();
+		if (str.isEmpty()) return;
+	
+		QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
+		if (!re.exactMatch(str)) return;
+	
+		QString popupstr = re.cap(1);
+		m_contextFileName = findHeader(m_projectFileList, popupstr);
+		if (m_contextFileName.isEmpty()) return;
+		
+		id = popup->insertItem( i18n("Goto Include File: %1").arg(popupstr), this, SLOT(slotGotoIncludeFile()) );
+		popup->setWhatsThis(id, i18n("<b>Goto include file</b><p>Opens an include file under the cursor position."));
+
+	} 
+	else if( context->hasType(Context::CodeModelItemContext) )
+	{
+		const CodeModelItemContext* mcontext = static_cast<const CodeModelItemContext*>( context );
+	
+		if( mcontext->item()->isClass() )
 		{
-			QString tmp;
-	 		if(is_source)
-	  			tmp = i18n("Switch To Header");
-	 		else if(is_header)
-	  			tmp = i18n("Switch To Implementation");
-	  
-	 		if(!tmp.isEmpty())
-	 		{
-          			id = popup->insertItem( tmp,
-                		this, SLOT( slotSwitchHeader() ) );
-          			popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
-                                      "If you are currently looking at a header file, this "
-                                      "brings you to the corresponding implementation file. "
-                                      "If you are looking at an implementation file (.cpp etc.), "
-                                      "this brings you to the corresponding header file.") );
-	 		}
+			m_activeClass = (ClassModel*) mcontext->item();
+			int id = popup->insertItem( i18n("Extract Interface..."), this, SLOT(slotExtractInterface()) );
+			popup->setWhatsThis(id, i18n("<b>Extract interface</b><p>Extracts interface from the selected class and creates a new class with this interface. "
+				"No implementation code is extracted and no implementation code is created."));
+		} 
+		else if( mcontext->item()->isFunction() )
+		{
+			m_activeFunction = (FunctionModel*) mcontext->item();
 		}
-       }
-
-	const EditorContext *econtext = static_cast<const EditorContext*>(context);
-	QString str = econtext->currentLine();
-	if (str.isEmpty())
-	    return;
-
-	QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
-	if (!re.exactMatch(str))
-	    return;
-
-	QString popupstr = re.cap(1);
-	m_contextFileName = findHeader(m_projectFileList, popupstr);
-	if (m_contextFileName.isEmpty())
-	    return;
-
-	id = popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
-			   this, SLOT(slotGotoIncludeFile()) );
-    popup->setWhatsThis(id, i18n("<b>Goto include file</b><p>Opens an include file under the cursor position."));
-
-    } else if( context->hasType(Context::CodeModelItemContext) ){
-	const CodeModelItemContext* mcontext = static_cast<const CodeModelItemContext*>( context );
-
-	if( mcontext->item()->isClass() ){
-	    m_activeClass = (ClassModel*) mcontext->item();
-	    int id = popup->insertItem( i18n("Extract Interface..."), this, SLOT(slotExtractInterface()) );
-        popup->setWhatsThis(id, i18n("<b>Extract interface</b><p>Extracts interface from the selected class and creates a new class with this interface. "
-            "No implementation code is extracted and no implementation code is created."));
-	} else if( mcontext->item()->isFunction() ){
-	    m_activeFunction = (FunctionModel*) mcontext->item();
 	}
-    }
-    else if (context->hasType(Context::FileContext)){
-        const FileContext *fc = static_cast<const FileContext*>(context);
-        //this is a .ui file and only selection contains only one such file
-        KURL url = fc->urls().first();
-        kdDebug() << "file context with " << url.fileName() << endl;
-        if (url.fileName().endsWith(".ui"))
-        {
-            m_contextFileName = url.path();
-            int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
-            popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
-        }
-    }
+	else if (context->hasType(Context::FileContext)){
+		const FileContext *fc = static_cast<const FileContext*>(context);
+		//this is a .ui file and only selection contains only one such file
+		KURL url = fc->urls().first();
+		kdDebug() << "file context with " << url.path() << endl;
+		if (url.fileName().endsWith(".ui"))
+		{
+			m_contextFileName = url.path();
+			int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
+			popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
+		}
+	}
 }
 
 
@@ -878,7 +832,99 @@ QString CppSupportPart::sourceOrHeaderCandidate()
 
 void CppSupportPart::slotSwitchHeader()
 {
-    partController()->editDocument(KURL( sourceOrHeaderCandidate() ));
+	QString candidate = sourceOrHeaderCandidate();
+	if	( candidate == QString::null ) return;
+	
+	bool attemptMatch = true;
+	KConfig *config = CppSupportFactory::instance()->config();
+	if (config)
+	{
+		config->setGroup("General");
+		attemptMatch = config->readBoolEntry("SwitchShouldMatch", true );
+	}
+
+	// ok, both files exist. Do the codemodel have them?
+	if ( codeModel()->hasFile( m_activeFileName ) && codeModel()->hasFile( candidate ) && m_activeViewCursor && attemptMatch )
+	{
+		unsigned int currentline, column;
+		m_activeViewCursor->cursorPosition( &currentline, &column );
+		
+		if ( isHeader( m_activeFileName ) )
+		{
+			// we're in the header file, let's find the current function declaration
+			FileDom header = codeModel()->fileByName( m_activeFileName );
+			FunctionList functionList = CodeModelUtils::allFunctionsDetailed( header ).functionList;
+			
+			FunctionList::ConstIterator it_decl = functionList.begin();
+			while( it_decl != functionList.end() )
+			{
+				int startline, column, endLine, endColumn;
+				(*it_decl)->getStartPosition( &startline, &column );
+				(*it_decl)->getEndPosition(&endLine, &endColumn);
+				if ( currentline >= startline && currentline <= endLine )
+				{
+					// found it. can we find a matching defintion?
+					FileDom source = codeModel()->fileByName( candidate );
+					FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( source ).functionList;
+					for ( FunctionDefinitionList::ConstIterator it_def = functionDefList.begin(); it_def != functionDefList.end(); ++it_def )
+					{
+						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, *it_def ) )
+						{
+							// found the declaration, let's jump!
+							int line, column;
+							(*it_def)->getStartPosition( &line, &column );
+							KURL url;
+							url.setPath( candidate );
+							partController()->editDocument( url, line );
+							return;
+						}
+					}
+					break;
+				}
+				++it_decl;
+			}
+		}
+		else if ( isSource( m_activeFileName ) )
+		{
+			// we're in the source file, let's find the current function definition
+			FileDom header = codeModel()->fileByName( m_activeFileName );
+			FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed( header ).functionList;
+			
+			FunctionDefinitionList::ConstIterator it_def = functionDefList.begin(); 
+			while ( it_def != functionDefList.end())
+			{
+				int startline, column, endLine, endColumn;
+				(*it_def)->getStartPosition( &startline, &column );
+				(*it_def)->getEndPosition(&endLine, &endColumn);
+				if ( currentline >= startline && currentline <= endLine )
+				{
+					// found it. can we find a matching declaration?
+					FileDom source = codeModel()->fileByName( candidate );
+					FunctionList functionList = CodeModelUtils::allFunctionsDetailed( source ).functionList;
+					for ( FunctionList::ConstIterator it_decl = functionList.begin(); it_decl != functionList.end(); ++it_decl )
+					{
+						if ( CodeModelUtils::compareDeclarationToDefinition( *it_decl, *it_def ) )
+						{
+							// found the declaration, let's jump!
+							int line, column;
+							(*it_decl)->getStartPosition( &line, &column );
+							KURL url;
+							url.setPath( candidate );
+							partController()->editDocument( url, line );
+							return;
+						}
+					}
+					break;
+				}
+				++it_def;
+			}
+		}
+	}
+	
+	// last chance
+	KURL url;
+	url.setPath( candidate );
+	partController()->editDocument( url );
 }
 
 void CppSupportPart::slotGotoIncludeFile()
@@ -1694,7 +1740,7 @@ bool CppSupportPart::isHeader( const QString& fileName ) const
 {
     KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
     if( ptr && m_headerMimeTypes.contains( ptr->name() ) )
-	return true;
+        return true;
 
     return m_headerExtensions.contains( QFileInfo(fileName).extension() );
 }
@@ -1703,7 +1749,7 @@ bool CppSupportPart::isSource( const QString& fileName ) const
 {
     KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
     if( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
-	return true;
+        return true;
 
     return m_sourceExtensions.contains( QFileInfo(fileName).extension() );
 }

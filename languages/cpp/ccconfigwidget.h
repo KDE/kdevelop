@@ -40,7 +40,7 @@ private slots:
     void catalogUnregistered( Catalog* c );
 
 private:
-    void initFileTemplatesTab();
+    void initGeneralTab();
     void saveFileTemplatesTab();
     
     void initCodeCompletionTab();

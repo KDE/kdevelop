@@ -43,6 +43,7 @@
 #include <kdevcoderepository.h>
 #include <catalog.h>
 
+#include "cppsupportfactory.h"
 #include "ccconfigwidget.h"
 #include "cppsupportpart.h"
 #include "cppcodecompletionconfig.h"
@@ -59,18 +60,26 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     connect( m_pPart->codeRepository(), SIGNAL(catalogRegistered(Catalog* )), this, SLOT(catalogRegistered(Catalog* )) );
     connect( m_pPart->codeRepository(), SIGNAL(catalogUnregistered(Catalog* )), this, SLOT(catalogUnregistered(Catalog* )) );
 
-    initFileTemplatesTab( );
+    initGeneralTab( );
     initCodeCompletionTab( );
 	initGetterSetterTab( );
     inputCodeCompletion->setRange( 0, 2000, 100, false );
     inputArgumentsHint->setRange( 0, 2000, 100, false );
 }
 
-void CCConfigWidget::initFileTemplatesTab( )
+void CCConfigWidget::initGeneralTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
     interface_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/interfacesuffix", ".h"));
     implementation_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/implementationsuffix", ".cpp"));
+
+	KConfig *config = CppSupportFactory::instance()->config();
+	if (config)
+	{
+		config->setGroup("General");
+		m_switchShouldMatch->setChecked( config->readBoolEntry("SwitchShouldMatch", true ) );
+		m_showContextMenuExplosion->setChecked( config->readBoolEntry("ShowContextMenuExplosion", false ) );
+	}
 }
 
 CCConfigWidget::~CCConfigWidget( )
@@ -89,6 +98,14 @@ void CCConfigWidget::saveFileTemplatesTab( )
     QDomDocument dom = *m_pPart->projectDom();
     DomUtil::writeEntry(dom, "/cppsupportpart/filetemplates/interfacesuffix",interface_suffix->text());
     DomUtil::writeEntry(dom, "/cppsupportpart/filetemplates/implementationsuffix",implementation_suffix->text());
+
+	KConfig *config = CppSupportFactory::instance()->config();
+	if (config)
+	{
+		config->setGroup("General");
+		config->writeEntry("SwitchShouldMatch", m_switchShouldMatch->isChecked() );
+		config->writeEntry("ShowContextMenuExplosion", m_showContextMenuExplosion->isChecked() );
+	}
 }
 
 void CCConfigWidget::initCodeCompletionTab( )
