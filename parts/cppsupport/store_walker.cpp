@@ -636,6 +636,7 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
 
 void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ParsedClass * klass )
 {
+    klass->parents.clear();
     QPtrList<BaseSpecifierAST> l = baseClause->baseSpecifierList();
     QPtrListIterator<BaseSpecifierAST> it( l );
     while( it.current() ){
