@@ -2,7 +2,7 @@
 ## (C) 1997 Stephan Kulow
 
 AUTOMAKE_OPTIONS = foreign 1.4
-SUBDIRS = kdevelop doc po kdlgloader
+SUBDIRS = kdevelop po kdlgloader
 
 install-data-local:
 	@echo ""
