@@ -21,6 +21,7 @@
 #include <iostream.h>
 #include <qregexp.h>
 #include <kprocess.h>
+#include <kapp.h>
 #include "vc/versioncontrol.h"
 #include "debug.h"
 
@@ -493,8 +494,12 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
       makefileaminfo.rel_name = makefile_name;
       if(makefile_name_org == makefile_name){ // the first makefileam
 	if(info.type == CPP_SOURCE ) 
-          makefileaminfo.type = "static_library"; // cool 
+        {
+          makefileaminfo.type = "static_library"; // cool
+          createLibraryMakefileAm(makefile_name, "static");
+        }
 	else makefileaminfo.type = "normal";
+
 	addMakefileAmToProject(makefile_name,makefileaminfo);
       }
       else{
@@ -513,7 +518,9 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
   if(info.type == CPP_SOURCE){ // a static library is needed?
     config.setGroup(makefile_name);
 
-    if(config.readEntry("type") != "prog_main"){
+    if(config.readEntry("type", "") != "prog_main" &&
+	config.readEntry("type", "") != "shared_library")
+    {
       config.writeEntry("type","static_library");
     }
   }
@@ -694,20 +701,7 @@ void CProject::updateMakefileAm(QString makefile){
 	    sources =  str + " " + sources ;
 	  }
 	  QDir dir(getDir(makefile));
-//	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "qt2mdi"){
           QString type=getProjectType();
-/*	  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
-	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2"))
-	  {
-	    stream << "\nINCLUDES = $(all_includes)\n\n";
-	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
-	  }
-	  if(type =="normal_qt2" || type=="mdi_qt2" || type=="mdi_qextmdi" ||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2")
-	  {
-	    stream << "\nINCLUDES = $(all_includes)\n\n";
-	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
-		}	
-*/
           if (type!="normal_cpp" && type != "normal_c")
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 
@@ -724,6 +718,34 @@ void CProject::updateMakefileAm(QString makefile){
 
 	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
 	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
+	}
+
+	//***************************generate needed things for shared_library*********
+	config.setGroup(makefile);
+	if(config.readEntry("type") == "shared_library"){
+	  getSources(makefile,source_files);
+	  for(str= source_files.first();str !=0;str = source_files.next()){
+	    sources =  str + " " + sources ;
+	  }
+	  QDir dir(getDir(makefile));
+          QString type=getProjectType();
+
+	  stream << "lib_LTLIBRARIES = lib" << dir.dirName() << ".la\n\n";
+
+          if (type!="normal_cpp" && type != "normal_c")
+	    stream << "\nINCLUDES = $(all_includes)\n\n";
+
+          if (QFileInfo(getProjectDir() + "am_edit").exists())
+          {
+	    stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
+	  }
+          else
+           if (QFileInfo(getProjectDir() + "automoc").exists())
+           {
+	    stream << "lib" << dir.dirName() << "_la_METASOURCES = USE_AUTOMOC\n\n";
+           }
+
+	  stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
 	}
 
 	//***************************generate needed things for a po makefile*********
@@ -1164,7 +1186,55 @@ void CProject::getAllStaticLibraries(QStrList& libs){
       dir.setPath(getDir(makefile));
       libs.append(getDir(makefile) + "lib" + dir.dirName() + ".a");
     }
+    if(config.readEntry("type") == "shared_library"){
+
+      dir.setPath(getDir(makefile));
+      libs.append(getDir(makefile) + "lib" + dir.dirName() + ".la");
+    }
   }
+}
+
+void CProject::changeLibraryType(const QString &makefile, const QString &type)
+{
+  writeGroupEntry(makefile, "type", type+"_library");
+}
+
+void CProject::createLibraryMakefileAm(const QString &makefile, const QString &type)
+{
+
+  QString abs_filename = getProjectDir() + makefile;
+  QString lib_template = KApplication::kde_datadir() + "/kdevelop/templates/MAM_"+type+"_template";
+  QFile fileDest(abs_filename);
+  QFile file(lib_template);
+  QStrList list;
+  QString str;
+
+  QTextStream streamDest(&fileDest);
+  QTextStream stream(&file);
+  if(file.open(IO_ReadOnly))
+  { // read the template
+    while(!stream.eof())
+    {
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+
+  // save the old file
+  if (QFileInfo(abs_filename).exists())
+    QDir().rename(abs_filename, abs_filename+".old");
+
+  QDir dir(getDir(makefile));
+  if(fileDest.open(IO_WriteOnly))
+  { // write the Makefile.am
+    for(str = list.first();str != 0;str = list.next())
+    {
+      str.replace(QRegExp("\\|LIBNAME\\|"), dir.dirName());
+      streamDest << str << "\n";
+    }
+  }
+  fileDest.close();
+
 }
 
 /*-------------------------------------- CProject::setInfosInString()

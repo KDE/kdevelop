@@ -98,7 +98,7 @@ protected slots:
   void slotRemoveFromRepository();
   void slotUpdate();
   void slotCommit();
-	void slotShowNonPrjFiles();
+  void slotShowNonPrjFiles();
   /**  */
   void slotFolderDelete();
   /**  */
@@ -107,6 +107,9 @@ protected slots:
   void slotClassNew();
   /**  */
   void slotFileNew();
+  void slotUpdateMakefileAm();
+  void slotChangeToStatic();
+  void slotChangeToShared();
 
 private: // Popupmenus
   KPopupMenu *popup;

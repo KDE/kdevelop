@@ -93,7 +93,10 @@ CRealFileView::~CRealFileView(){
  *-----------------------------------------------------------------*/
 void CRealFileView::refresh(CProject* prj) 
 {
-  assert( prj );
+  // assert( prj );
+  if (!prj)
+	return;
+
   project=prj;
 
 	if (showNonPrjFiles) {
@@ -244,7 +247,9 @@ KPopupMenu *CRealFileView::getCurrentPopup()
     delete popup;
   bool cvs=project->getVersionControl();
   QString dir_name = getFullFilename(currentItem());
+  QString reldir_name = getRelFilename(currentItem());
   QString prjdir=project->getProjectDir()+"po";
+  TMakefileAmInfo info=project->getMakefileAmInfo(reldir_name+"/Makefile.am");
 
   switch( treeH->itemType() )
   {
@@ -254,6 +259,12 @@ KPopupMenu *CRealFileView::getCurrentPopup()
         SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
     popup->setCheckable(true);
     if(showNonPrjFiles) popup->setItemChecked(ID_RFV_SHOW_NONPRJFILES, true);
+
+    popup->insertSeparator();
+    popup->insertItem(i18n("Update all Makefile.am"), this, SLOT(slotUpdateMakefileAm()), 0, ID_PROJECT_UPDATE_AM);
+    popup->setItemEnabled(ID_PROJECT_UPDATE_AM,
+      project->getProjectType() != "normal_empty" && QFileInfo(dir_name+"/Makefile.am").exists());
+
     if (cvs)
     {
     	popup->insertSeparator();
@@ -292,6 +303,10 @@ KPopupMenu *CRealFileView::getCurrentPopup()
     popup->insertSeparator();
     popup->insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
 //    popup->insertItem(i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
+    popup->insertSeparator();
+    popup->insertItem(i18n("Update Makefile.am"), this, SLOT(slotUpdateMakefileAm()), 0, ID_PROJECT_UPDATE_AM);
+    popup->insertItem(i18n("Change to static lib"), this, SLOT(slotChangeToStatic()), 0, ID_PROJECT_CHANGE_TO_STATIC);
+    popup->insertItem(i18n("Change to shared lib"), this, SLOT(slotChangeToShared()), 0, ID_PROJECT_CHANGE_TO_SHARED);
     if (cvs)
     {
     	popup->insertSeparator();
@@ -307,6 +322,19 @@ KPopupMenu *CRealFileView::getCurrentPopup()
       popup->setItemEnabled(ID_FILE_NEW, false);
       popup->setItemEnabled(ID_PROJECT_NEW_CLASS, false);
       popup->setItemEnabled(ID_CV_FOLDER_NEW, false);
+    }
+
+    popup->setItemEnabled(ID_PROJECT_UPDATE_AM, false);
+    popup->setItemEnabled(ID_PROJECT_CHANGE_TO_STATIC, false);
+    popup->setItemEnabled(ID_PROJECT_CHANGE_TO_SHARED, false);
+
+    if (project->getProjectType() != "normal_empty" && QFileInfo(dir_name+"/Makefile.am").exists())
+    {
+      popup->setItemEnabled(ID_PROJECT_UPDATE_AM, true);
+      if (info.type=="shared_library")
+       popup->setItemEnabled(ID_PROJECT_CHANGE_TO_STATIC, true);
+      if (info.type=="static_library")
+       popup->setItemEnabled(ID_PROJECT_CHANGE_TO_SHARED, true);
     }
     break;
   default:
@@ -519,4 +547,43 @@ void CRealFileView::slotFolderDelete(){
 
     childproc.start(KProcess::Block, KProcess::Communication(KProcess::Stdout|KProcess::Stderr));
     refresh(project);
+}
+
+void CRealFileView::slotUpdateMakefileAm()
+{
+  QString dir_name = getFullFilename(currentItem());
+  QString reldir_name = getRelFilename(currentItem());
+  if (QFileInfo(dir_name+"/Makefile.am").exists())
+  {
+    if (reldir_name.left(1)=="/")
+     project->updateMakefilesAm();
+    else
+     project->updateMakefileAm(reldir_name+"/Makefile.am");
+  }
+}
+
+void CRealFileView::slotChangeToStatic()
+{
+  QString dir_name = getFullFilename(currentItem());
+  QString reldir_name = getRelFilename(currentItem());
+  if (QFileInfo(dir_name+"/Makefile.am").exists())
+  {
+    project->createLibraryMakefileAm(reldir_name+"/Makefile.am", "static");
+    project->changeLibraryType(reldir_name+"/Makefile.am", "static");
+    project->updateMakefilesAm();
+    refresh(project);
+  }
+}
+
+void CRealFileView::slotChangeToShared()
+{
+  QString dir_name = getFullFilename(currentItem());
+  QString reldir_name = getRelFilename(currentItem());
+  if (QFileInfo(dir_name+"/Makefile.am").exists())
+  {
+    project->createLibraryMakefileAm(reldir_name+"/Makefile.am", "shared");
+    project->changeLibraryType(reldir_name+"/Makefile.am", "shared");
+    project->updateMakefilesAm();
+    refresh(project);
+  }
 }
