@@ -30,6 +30,8 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ktexteditor/dynwordwrapinterface.h>
 
+class QXEmbed;
+
 namespace KNEdit
 {
 
@@ -75,7 +77,8 @@ class View : public KTextEditor::View, KTextEditor::ViewCursorInterface
     void cursorPositionChanged ();
 
   private:
-    Document* m_doc;
+    Document *m_doc;
+    QXEmbed  *m_embed;
 };
 
 };

@@ -52,6 +52,8 @@ Document::Document(bool bReadOnly, bool bSingleView, QWidget *parentWidget, cons
   m_singleView = bSingleView;
   m_readOnly = bReadOnly;
   m_kwm = new KWinModule( this );
+  m_timer = new QTimer( this, "NEdit Timer" );
+  connect( m_timer, SIGNAL(timeout()), this, SLOT(checkForNEditServer()) );
 
   setInstance( KNEditFactory::instance() );
 
@@ -121,13 +123,13 @@ void Document::invokeNC( const QString& command, bool appendFilename )
   if ( appendFilename )
     cmd += " \"" + m_file + "\"";
 
-  if ( !m_isReady || !proc ) {
+  if ( !m_isReady ) {
     // if NEdit server is not ready yet we store the commands for later
     m_commands += cmd;
-    return;
+  } else {
+    cmd = "nc -noask -svrname " + serverName() + " " + cmd;
+    system( cmd );
   }
-  cmd = "nc -noask -svrname " + serverName() + " " + cmd;
-  system( cmd );
 }
 
 // processes all commands in the queue
@@ -139,42 +141,74 @@ void Document::processCommands()
   }
 }
 
+// call this function when the NEdit Server is up and running
+// and ready to receive commands
+void Document::serverReady( WId wid )
+{
+  if ( m_isReady )
+    return;
+
+  disconnect( m_kwm, SIGNAL(windowAdded(WId)), this, SLOT(launchFinished(WId)) );
+
+  m_wid = wid;
+  m_isReady = true;
+
+  if ( activeView ) {
+    View* aView = (View*)activeView->qt_cast( "KNEdit::View" );
+    if ( aView ) {
+        aView->embedNEdit( wid );
+    }
+  }
+
+  processCommands();
+}
+
 
 void Document::launchFinished( WId wid )
 {
-  kdDebug() << "launch Finished" << endl;
-
   if ( m_isReady ) {
     return;
   }
 
-  system( "sleep 1" ); // stupid hack, remove ASAP
-
   KWin::Info inf = KWin::info( wid );
-  kdDebug() << wid << " " << inf.pid << " " << inf.name << " || " << inf.visibleName << endl;
+  kdDebug() << "launchFinished: " << wid << " " << inf.pid << " " << inf.name << " || " << inf.visibleName << endl;
 
   if ( inf.name.startsWith( "-" + m_serverName + "-" ) ) {
-    // yepp - this is the Process we started...
-    disconnect(m_kwm, SIGNAL(windowAdded(WId)), this, SLOT(launchFinished(WId)) );
-
-    if ( activeView ) {
-      View* aView = (View*)activeView->qt_cast( "KNEdit::View" );
-      if ( aView ) {
-//        aView->embedNEdit( wid );  // ### BIG TODO
-      }
+    // yepp - this is the Process we wanted...
+    serverReady( wid );
+  } else {
+    // NEdit server is launched, but not ready to receive commands yet
+    // so we need a stupid timer to check when it is ready...
+    m_widCache += wid;
+    if ( !m_timer->isActive() ) {
+      m_timer->start( 200, false );
     }
-    m_wid = wid;
-    m_isReady = true;
-
-    processCommands();
   }
+}
 
+// checks whether our NEdit server is ready to process commands...
+void Document::checkForNEditServer()
+{
+  QValueList<WId>::iterator it;
+  for ( it = m_widCache.begin(); it != m_widCache.end(); ++it ) {
+    KWin::Info inf = KWin::info( *it );
+    if ( inf.name.startsWith( "-" + m_serverName + "-" ) ) {
+      // yepp - this is the Process we wanted...
+      m_timer->stop();
+      disconnect( m_timer, SIGNAL(timeout()), this, SLOT(checkForNEditServer()) );
+
+      serverReady( *it );
+      m_widCache.clear();
+      return;
+    }
+  }
 }
 
 
 void Document::processExited()
 {
   // NEdit has been closed by user, so the document gets inactive
+  m_isReady = false;
   delete proc;
   proc = 0;
 

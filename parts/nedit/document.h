@@ -37,6 +37,7 @@
 #include <ktexteditor/printinterface.h>
 
 class QProcess;
+class QTimer;
 class KWinModule;
 
 namespace KNEdit 
@@ -83,10 +84,15 @@ public slots:
 signals:
   void hlChanged();
 
-private:
-  void processCommands();
+private slots:
+  void checkForNEditServer();
 
 private:
+  void processCommands();
+  void serverReady( WId wid );
+
+private:
+  QValueList<WId>             m_widCache;
   QPtrList<KTextEditor::View> _views;
   KTextEditor::View           *activeView;
   QProcess                    *proc;
@@ -96,6 +102,7 @@ private:
   KWinModule                  *m_kwm;
   WId                         m_wid;
   QStringList                 m_commands;
+  QTimer                      *m_timer;
 };
 
 };

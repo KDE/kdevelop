@@ -40,8 +40,8 @@ View::View ( Document *doc, QWidget *parent, const char *name ) : KTextEditor::V
 
   QVBoxLayout *vbl = new QVBoxLayout( this );
 
-  QLabel* lbl = new QLabel( "embedding of NEdit not implemented yet. Use the NEdit window that is floating around somewhere ;)", this );
-  vbl->addWidget( lbl );
+  m_embed = new QXEmbed( this, "embedded NEdit" );
+  vbl->addWidget( m_embed );
 }
 
 View::~View ()
@@ -57,13 +57,9 @@ KTextEditor::Document *View::document() const
 
 void View::embedNEdit( WId id )
 {
-  kdDebug() << "embedding: " << id << endl;
+  kdDebug() << "View: embedding: " << id << endl;
 
-  QXEmbed* embed = new QXEmbed( this, "embedded NEdit" );
-  embed->embed( id );
-  if ( layout() ) {
-    layout()->add( embed );
-  }
+  m_embed->embed( id );
 }
 
 
