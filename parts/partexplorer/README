@@ -1,10 +1,3 @@
-Let's sum up what it is this thing:
-
-PartExplorer is a frontend to KTrader (http://developer.kde.org/documentation/library/3.1-api/classref/kio/KTrader.html)
-and uses its syntax, no more no less: so before saying "it really sucks", give a look at
-http://developer.kde.org/documentation/library/kdeqt/tradersyntax.html.
-
-It has helped figuring out several problems when querying KParts (ok, mostly mispelled names ;-), and I
-hope that some other people will find it useful.
-
-Last updated on 28.07.2003 by Mario Scalas
+Please read the on-line, automaticaly updated KDevelop API documentation at:
+http://www.kdevelop.org
+or read the README.dox file.
