@@ -28,7 +28,6 @@
 #define _QEXTMDICAPTION_H_
 
 #include <qwidget.h>
-#include <qpixmap.h>
 
 #include "qextmdidefines.h"
 
@@ -51,10 +50,6 @@ public:
 	bool m_bCanMove;
 	QextMdiChildFrm *m_pParent;
 	QPoint m_relativeMousePos;
-	/**
-	* This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
-	*/
-	QPixmap *m_pIcon;
 public:
 	void setActive(bool bActive);
 	void setCaption(const QString& text);

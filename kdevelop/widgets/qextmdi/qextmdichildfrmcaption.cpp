@@ -24,19 +24,17 @@
 //
 //----------------------------------------------------------------------------
 
+#include <qpainter.h>
+#include <qapplication.h>
+
 #include "qextmdidefines.h"
 #include "qextmdichildfrmcaption.h"
 #include "qextmdichildfrm.h"
 #include "qextmdichildarea.h"
 
-#include <qpainter.h>
-#include <qapplication.h>
-
-#include "filenew.xpm"
-
 //////////////////////////////////////////////////////////////////////////////
 // Class   : QextMdiChildFrmCaption
-// Purpose : A Mdi label that draws the icon and the title
+// Purpose : An MDI label that draws the title
 //
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -48,8 +46,6 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
 {
 	m_szCaption    = tr("Unnamed");
 	m_bActive      = false;
-	QPixmap* pm = new QPixmap(filenew);
-	m_pIcon        = pm; // vorher = 0 F.B.
 	m_bCanMove     = false;
 	m_pParent      = parent;
 	setBackgroundMode(NoBackground);
@@ -112,7 +108,11 @@ void QextMdiChildFrmCaption::setCaption(const QString& text)
 int QextMdiChildFrmCaption::heightHint()
 {
 	int hght=m_pParent->m_pManager->m_captionFontLineSpacing+2;
+#ifdef WIN32
 	if(hght<18)hght=18;
+#else // in case of Unix: KDE look
+	if(hght<20)hght=20;
+#endif
 	return hght;
 }
 
@@ -130,10 +130,11 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
 		p.fillRect(r,m_pParent->m_pManager->m_captionInactiveBackColor);
 		p.setPen(m_pParent->m_pManager->m_captionInactiveForeColor);
 	}
-	if(m_pIcon){ //Paint the icon on the left (if there is an icon :) 16x16
-		p.drawPixmap(1,1,(*m_pIcon),0,0,16,16);
-	}
-	r.setLeft(r.left()+19); //Shift the after the icon
+#ifdef WIN32
+	r.setLeft(r.left()+19); //Shift the text after the icon
+#else // in case of Unix: KDE look
+	r.setLeft(r.left()+22); //Shift the text after the icon
+#endif
 	p.drawText(r,AlignVCenter|AlignLeft|SingleLine,m_szCaption);
 	
 }
