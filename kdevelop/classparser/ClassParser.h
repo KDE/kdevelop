@@ -83,8 +83,8 @@ public: // Public Methods
   /** Output this object as text on stdout */
   void out()     { store.out(); }
 
-  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
-    { store.getDependentFiles( fileList, dependentList); }
+//  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
+//    { store.getDependentFiles( fileList, dependentList); }
 
   void removeWithReferences( const char*  aFile )
       { store.removeWithReferences( aFile ); }
@@ -223,7 +223,7 @@ private: // Private methods
   /** Parse a class declaration. 
    * @return The parsed class or NULL if it was no class.
    */
-  CParsedClass *parseClass();
+  CParsedClass *parseClass(CParsedClass * aClass);
 
   /** Tells if the current lexem is generic and needs no special
    * handling depending on the current scope.

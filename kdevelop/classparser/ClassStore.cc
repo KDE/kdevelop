@@ -102,17 +102,28 @@ void CClassStore::removeWithReferences( const char *aFile )
   CParsedClass *aClass = globalContainer.classIterator.toFirst();
   while (aClass)
   {
-    // Remove the class if any of the files are the supplied one.
-    if(aClass->declaredInFile == aFile || aClass->definedInFile == aFile)
+    if( aClass->declaredInFile == aFile )
     {
-      removeClass(aClass->path());
-
-      // guard against the fact that sometimes the class might
-      // _not_ be removed!! Yes, you heard me, _not_ removed. Yuk!!!
-      if (aClass == globalContainer.classIterator.current())
-        ++globalContainer.classIterator;
+      if ( aClass->definedInFile.isEmpty() ||
+            aClass->definedInFile == aClass->declaredInFile )
+        removeClass( aClass->path() );
+      else
+        aClass->removeWithReferences(aFile);
     }
     else
+    {
+      if ( aClass->definedInFile == aFile )
+      {
+        if ( aClass->declaredInFile.isEmpty() )
+          removeClass( aClass->path() );
+        else
+          aClass->removeWithReferences(aFile);
+      }
+    }
+
+    // Move to the next class if we arn't already there due
+    // to the class being removed.
+    if (aClass == globalContainer.classIterator.current())
       ++globalContainer.classIterator;
 
     aClass = globalContainer.classIterator.current();
@@ -134,34 +145,34 @@ void CClassStore::removeWithReferences( const char *aFile )
  *    The added files in the dependentList parameter.
  *
  *-----------------------------------------------------------------*/
-void CClassStore::getDependentFiles(  QStrList& fileList,
-                                      QStrList& dependentList)
-{
-  for (QString thisFile = fileList.first();
-          thisFile;
-          thisFile = fileList.next())
-  {
-    // Find all classes with reference to this file.
-    for( globalContainer.classIterator.toFirst();
-         globalContainer.classIterator.current();
-         ++globalContainer.classIterator )
-    {
-      CParsedClass *aClass = globalContainer.classIterator.current();
-
-      if( aClass->declaredInFile  == thisFile &&
-          aClass->definedInFile   != thisFile)
-      {
-        if (dependentList.find(aClass->definedInFile) == -1)
-          dependentList.append(aClass->definedInFile);
-      }
-
-      // now scan methods for files
-      // ie a class in a.h is split into aa.cpp and ab.cpp
-      //
-      // TBD perhaps - as the above catches most situations
-    }
-  }
-}
+//void CClassStore::getDependentFiles(  QStrList& fileList,
+//                                      QStrList& dependentList)
+//{
+//  for (QString thisFile = fileList.first();
+//          thisFile;
+//          thisFile = fileList.next())
+//  {
+//    // Find all classes with reference to this file.
+//    for( globalContainer.classIterator.toFirst();
+//         globalContainer.classIterator.current();
+//         ++globalContainer.classIterator )
+//    {
+//      CParsedClass *aClass = globalContainer.classIterator.current();
+//
+//      if( aClass->declaredInFile  == thisFile &&
+//          aClass->definedInFile   != thisFile)
+//      {
+//        if (dependentList.find(aClass->definedInFile) == -1)
+//          dependentList.append(aClass->definedInFile);
+//      }
+//
+//      // now scan methods for files
+//      // ie a class in a.h is split into aa.cpp and ab.cpp
+//      //
+//      // TBD perhaps - as the above catches most situations
+//    }
+//  }
+//}
 
 /*------------------------------------------- CClassStore::storeAll()
  * storeAll()
@@ -762,5 +773,5 @@ void CClassStore::out()
   {
     aStruct->out();
   }
-  delete globalStructs;  
+  delete globalStructs;
 }

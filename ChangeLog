@@ -1,4 +1,8 @@
 2000-04-20 jbb <jbb@ihug.co.nz>
+      * Bug#2971 - A better fix from Richard Dale for this bug
+        And it also fixes the nested class problem.
+
+2000-04-20 jbb <jbb@ihug.co.nz>
       * Bug#2971 - fixed - Change header file and CV loses cpp links
 
 2000-04-16 Ralf Nolden <rnolden@kdevelop.de>
@@ -42,11 +46,11 @@
  
 2000-04-09 Walter Tasin  <tasin@kdevelop.de>
 	* Bug #2972 fixed
-          thanks to Richard Dale <Richard_Dale@tipitina.demon.co.nz>
+          thanks to Richard Dale <Richard_Dale@tipitina.demon.co.uk>
 	  for the hint.
 
 2000-04-09 jbb <jbb@ihug.co.nz>
-	* Patches by Richard Dale <Richard_Dale@tipitina.demon.co.nz>
+	* Patches by Richard Dale <Richard_Dale@tipitina.demon.co.uk>
       . Bug#2970 - fixes in translated messages still to be done though.
       . Bug#2971 - Still not quite right, but much, much better :-)
 

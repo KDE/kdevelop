@@ -1363,20 +1363,20 @@ CParsedClass *CClassParser::parseClassHeader()
   aClass->setDeclaredOnLine( getLineno() );
   aClass->setDefinedInFile( currentFile );
   aClass->setDeclaredInFile( currentFile );
-  
+
   // Skip stuff before the real classname.
   while( lexem != 0 && ( lexem == ID || lexem == CLCL ) )
   {
     if( lexem == CLCL )
       foundCLCL = true;
-      
+
     PUSH_LEXEM();
     getNextLexem();
   }
 
   // The classname is at the top of the stack.
   aLexem = lexemStack.pop();
-  
+
   if(aLexem == 0) {
     cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
     return 0;
@@ -1395,7 +1395,7 @@ CParsedClass *CClassParser::parseClassHeader()
 
       // Fetch the name of the parent.
       aLexem = lexemStack.pop();
-      
+
       // Only add . if the string contains something.
       if( !scopeStr.isEmpty() )
         scopeStr = "." + scopeStr;
@@ -1408,10 +1408,7 @@ CParsedClass *CClassParser::parseClassHeader()
     aClass->setDeclaredInScope( scopeStr );
   }
 
-  // Check for inheritance
-  if( lexem == ':' )
-    parseClassInheritance( aClass );
-  else if( lexem != '{' ) // Bogus class definition..
+  if( lexem != ':' && lexem != '{' ) // Bogus class definition..
   {
     delete aClass;
     aClass = NULL;
@@ -1458,14 +1455,32 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       methodType = lexem;
       break;
     case CPCLASS:
-      childClass = parseClass();
+      childClass = parseClassHeader();
       if( childClass != NULL )
       {
+        childClass->setDeclaredInScope( aClass->path() );
+
+        if( store.hasClass( childClass->path() ) ) {
+  	      CParsedClass *	parsedClassRef = store.getClassByName( childClass->path() );
+  	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine );
+  	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile );
+  	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope );
+  	      delete childClass;
+  	      childClass = parsedClassRef;
+        } else {
+          store.addClass( childClass );
+        }
+
         // When the childclass gets added to its parent class
         // the declaredInScope attribute gets set which gives it the
         // correct path.
         aClass->addClass( childClass );
-        store.globalContainer.addClass( childClass );
+
+        // Check for inheritance
+        if( lexem == ':' ) {
+          parseClassInheritance( childClass );
+        }
+        parseClass( childClass );
       }
       break;
     case CPVIRTUAL:
@@ -1477,10 +1492,19 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
 
       if( aMethod != NULL )
       {
-        aMethod->setIsVirtual( true );
-        aClass->addMethod( aMethod );
+		CParsedMethod *	pm = aClass->getMethod(*aMethod);
+		
+		if (pm != NULL) {
+          aMethod->setDefinedInFile( pm->definedInFile );
+          aMethod->setDefinedOnLine( pm->definedOnLine );
+          aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine );
+          aClass->removeMethod(pm);
+		}
+        	
+        	aMethod->setIsVirtual( true );
+		aClass->addMethod(aMethod);
       }
-      break;        
+      break;
     case CPSTRUCT:
     case CPCONST:
     case ID:
@@ -1498,6 +1522,15 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
+          (void) printf("slot: %s\n", aMethod->name.data());
+
+			CParsedMethod *	pm = aClass->getMethod(*aMethod);
+			if (pm != NULL) {
+               aMethod->setDefinedInFile( pm->definedInFile );
+               aMethod->setDefinedOnLine( pm->definedOnLine );
+               aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine );
+               aClass->removeMethod(pm);
+		    }
             aMethod->setIsSlot( true );
             aClass->addSlot( aMethod );
           }
@@ -1530,13 +1563,10 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedClass *CClassParser::parseClass()
+CParsedClass *CClassParser::parseClass( CParsedClass * aClass)
 {
-  CParsedClass *aClass;
   bool exit = false;
   PIExport oldScope=declaredScope;
-
-  aClass = parseClassHeader();
 
   if( aClass != NULL )
   {
@@ -1633,19 +1663,18 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
 
       if( !aMethod->name.isEmpty() )
       {
-        // If this method already exists we just set some attributes.
+        // If this method already exists we just get the attributes
+        // for the definition, and copy them into the new parsed method
+        // Then remove the old method.
         oldMethod = aContainer->getMethod( *aMethod );
         if( oldMethod != NULL )
         {
-          oldMethod->setIsInHFile( false );
-          oldMethod->setDefinedInFile( aMethod->definedInFile );
-          oldMethod->setDefinedOnLine( aMethod->definedOnLine );
-          oldMethod->setDefinitionEndsOnLine( aMethod->definitionEndsOnLine );
-
-          delete aMethod;
+          aMethod->setDefinedInFile( oldMethod->definedInFile );
+          aMethod->setDefinedOnLine( oldMethod->definedOnLine );
+          aMethod->setDefinitionEndsOnLine( oldMethod->definitionEndsOnLine );
+          aContainer->removeMethod(oldMethod);
         }
-        else
-          aContainer->addMethod( aMethod );
+        aContainer->addMethod( aMethod );
       }
       else
         delete aMethod;
@@ -1745,10 +1774,54 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
       parseNamespace( scope );
       break;
     case CPCLASS:
-      aClass = parseClass();
+      aClass = parseClassHeader();
       
       if( aClass != NULL )
       {
+      	// Build up the 'declared in scope' path for the class. But
+      	// don't put the class into the scope hierarchy yet, in case
+      	// it is already in the store (when 'aClass' will need to be
+      	// deleted, and the existing parsed class used instead).
+        QString savedClassPath = QString( aClass->declaredInScope );
+        QString classPath = aClass->declaredInScope;
+
+        if( classPath.isEmpty() && !scope->path().isEmpty() )
+          classPath = scope->path();
+        else if( !scope->path().isEmpty() )
+        {
+          // Get the parent class;
+          parentClass = store.getClassByName( scope->path() );
+
+          // If we didn't find a parent class, try to find a namespace.
+          if( parentClass == NULL )
+          {
+            parentScope = store.getScopeByName( scope->path() );
+
+            if( parentScope != NULL )
+              classPath = parentScope->path();
+          }
+          else
+            classPath = parentClass->path();
+        }
+
+        aClass->setDeclaredInScope( classPath );
+
+        cout << "Storing class with path: " << aClass->path() << endl;
+        
+        // Check if class is in the global store, add it if missing
+        if( store.hasClass( aClass->path() ) ) {
+  	      CParsedClass *	parsedClassRef = store.getClassByName( aClass->path() );
+  	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine );
+  	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile );
+  	      delete aClass;
+  	      aClass = parsedClassRef;
+        } else {
+          store.addClass( aClass );
+        }
+
+        // Restore the 'declared in scope' path, so that 'aClass'
+        // can be given the correct parent in the scope hierarchy
+        aClass->setDeclaredInScope( savedClassPath );
         QString scopePath = scope->path();
 
         if( aClass->declaredInScope.isEmpty() && !scopePath.isEmpty() )
@@ -1773,13 +1846,12 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
             parentClass->addClass( aClass );
         }
 
-        cout << "Storing class with path: " << aClass->path() << endl;
-        
-        // Always add the class to the global store.
-        if( !store.hasClass( aClass->path() ) )
-          store.addClass( aClass );
-        else
-          debug( "Found new definition of class %s", aClass->path().data() );
+        // Check for inheritance
+        if( lexem == ':' ) {
+          parseClassInheritance( aClass );
+        }
+
+        parseClass( aClass );
       }
       break;
     case '{': // Skip implementation blocks
