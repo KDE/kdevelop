@@ -482,7 +482,7 @@ ac_db_lib=db
    ])
 
   if test "$ac_cv_bdb" = "no"; then
-    AC_MSG_ERROR(no - please install Berkeley DB >= 3)
+    AC_MSG_ERROR(no - please install Berkeley DB >= 3 and <= 4.1)
   else
     if test "$ac_cv_bdb" = "yes_3or40" ; then
       bdb_open_hack=""
@@ -595,48 +595,3 @@ AC_DEFUN([KDEV_CHECK_COMPAT],
 AC_SUBST(COMPAT)
 AM_CONDITIONAL(include_compat, test -n "$COMPAT")
 ])
-
-dnl  **********
-dnl  Very ugly hack to see whether QT_VERSION > 3.0.4. Remove it when
-dnl  KDevelop needs Qt > 3.0.4 anyways
-dnl  stolen from licq's qt-plugin, thank you guys ;)
-dnl  **********
-
-AC_DEFUN([KDEV_CHECK_QEDITOR],
-[
-  AC_MSG_CHECKING(for Qt >= 3.0.5)
-
-  AC_CACHE_VAL(ac_cv_qt_setup,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-
-    save_CXXFLAGS="$CXXFLAGS"
-
-    CXXFLAGS="$QT_INCLUDES"
-
-    AC_TRY_COMPILE([
-      #include <qglobal.h>
-    ],
-    [
-      #if QT_VERSION < 305
-         choke me
-      #endif
-    ],
-      ac_cv_qt_setup=yes,
-      ac_cv_qt_setup=no
-    )
-    CXXFLAGS="$save_CXXFLAGS"
-    AC_LANG_RESTORE
-   ])
-
-  if test "$ac_cv_qt_setup" != "yes"; then
-    AC_MSG_RESULT(no)
-  else
-    AC_MSG_RESULT(yes)
-    QEDITOR=qeditor
-  fi
-AC_SUBST(QEDITOR)
-AM_CONDITIONAL(include_qeditor, test -n "$QEDITOR")
-])
-
