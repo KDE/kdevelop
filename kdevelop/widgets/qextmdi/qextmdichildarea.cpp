@@ -173,9 +173,15 @@ void QextMdiChildArea::resizeEvent(QResizeEvent* e)
    //If we have a maximized children at the top , adjust its size
    QextMdiChildFrm *lpC=m_pZ->last();
    if(lpC){
-      if(lpC->m_state == QextMdiChildFrm::Maximized)
-         lpC->resize( width() + lpC->width() - lpC->m_pClient->width(),
-                      height() + lpC->height() - lpC->m_pClient->height());
+      if(lpC->m_state == QextMdiChildFrm::Maximized) {
+         int clientw = 0, clienth = 0;
+         if (lpC->m_pClient != 0L) {
+            clientw = lpC->m_pClient->width();
+            clienth = lpC->m_pClient->height();
+         }
+         lpC->resize( width() + lpC->width() - clientw,
+                      height() + lpC->height() - clienth);
+      }
    }
    layoutMinimizedChildren();
    QWidget::resizeEvent(e);
