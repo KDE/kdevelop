@@ -660,8 +660,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 			"libraries to add to your project."));
   ldflags = " " + ldflags + " ";
   ldadd = " " + ldadd + " ";
-  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldflags.data());
-  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
+//  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldflags.data());
+//  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
   QGroupBox* ldflags_group;
   ldflags_group=new QGroupBox(w4,"ldflags_group");
   ldflags_group->setGeometry(10,10,490,100);
@@ -1476,14 +1476,15 @@ void CPrjOptionsDlg::ok(){
   text+=" -j";
   text+= m_job_number->text();
 
-	QString *str = (QString*) m_set_modify_line->text();
-  if (!str->isEmpty()) {
+  QString str;
+  str.setStr(m_set_modify_line->text());
+  if (!str.isEmpty()) {
     text+=" -W";
     text+= m_set_modify_line->text();
   }
 
-	str = (QString*) m_optional_line->text();
-  if (!str->isEmpty()) {
+  str.setStr(m_optional_line->text());
+  if (!str.isEmpty()) {
     text+=" ";
     text+= m_optional_line->text();
   }
@@ -1512,4 +1513,5 @@ void CPrjOptionsDlg::slotFileDialogClicked() {
 bool CPrjOptionsDlg::needConfigureInUpdate(){
   return  need_configure_in_update;
 }
+
 

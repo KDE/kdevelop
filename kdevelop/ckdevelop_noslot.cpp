@@ -219,7 +219,7 @@ void CKDevelop::switchToFile(QString filename){
   }
   
   if(actual_info == 0){
-    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
+//    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
   }
     // rescue the old file
   actual_info->text = edit_widget->text();
@@ -256,7 +256,7 @@ void CKDevelop::switchToFile(QString filename){
   info->cursor_col = 0;
 
   // update the widget
-  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"switchToFile: %s",filename.data());
+//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"switchToFile: %s",filename.data());
   edit_widget->clear();
   edit_widget->loadFile(filename,1);
   edit_widget->setName(filename);
@@ -827,6 +827,7 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
 
 
 

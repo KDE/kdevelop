@@ -1,17 +1,12 @@
+1999-06-07 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* commit bugfix by Torsten Uhlmann <TUhlmann@debis.com> ,cprjoptions
+
 1999-06-06 Pascal Krahmer
         * added some item properties
         * added some new property classes (try out the qlistbox/entries for example)
         * added info dialog for the first use of the dlgedit
         * fixed some bugs
         * muuuuch more !
-
-1999-06-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-	* added icons for the new items of the dialog editor
-	* added toolbar buttons to en/disable output and tree view
-	* added add bookmark to browser context menu, reloading of browser file,
-		home button and cancel request
-	* completed application wizard labels
-	* updated documentation for the new dialogeditor items and LFV configuration
 	
 1999-06-04 Pascal Krahmer
         * Added A LOT of items to the dialog editor.
@@ -24,10 +19,18 @@
 1999-06-03 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed some parsing bugs.
 	* redesigned the class hierarchy in the classparser. More flexible now.
-
+	
+1999-06-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added icons for the new items of the dialog editor
+	* added toolbar buttons to en/disable output and tree view
+	* added add bookmark to browser context menu, reloading of browser file,
+		home button and cancel request
+	* completed application wizard labels
+	* updated documentation for the new dialogeditor items and LFV configuration
+	
 1999-06-02 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed minor parsing bug.
-
+	
 1999-06-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed focus order in the Make Options tab of project options dialog, added FileOpen icon
 	* added status help messages missing

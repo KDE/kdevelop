@@ -125,10 +125,10 @@ void CKDevelop::slotFileClose(){
 //search the actual edit_info and remove it
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     if (actual_info->filename == edit_widget->getName()){ // found
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
       menu_buffers->removeItem(actual_info->id);
       if(edit_infos.removeRef(actual_info)){
-	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
+//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
       }
     }
   }
@@ -141,7 +141,7 @@ void CKDevelop::slotFileClose(){
       edit_widget->toggleModified(actual_info->modified);
       edit_widget->setName(actual_info->filename);
       setCaption(actual_info->filename);
-      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
+  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
       slotStatusMsg(i18n("Ready."));
       return;
     }
@@ -202,7 +202,7 @@ void CKDevelop::slotFileSaveAs(){
     name = KFileDialog::getSaveFileName(0,0,this,edit_widget->getName());
   }
   if (name.isNull()){
-    KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
+//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
     return;
   }
   else {
@@ -277,20 +277,20 @@ void CKDevelop::slotFileSaveAll(){
 	statProg->setProgress(0);
 	int i=0;
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+//    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
     i++;
     statProg->setProgress(i);
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
       	switchToFile(actual_info->filename);
       	slotFileSaveAs();
-      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
+//      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
       	mod = true;
       }
       else{
       	switchToFile(actual_info->filename);
       	edit_widget->doSave();
-      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
+//      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
       	if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
       	  mod = true;
       }
@@ -582,7 +582,7 @@ void CKDevelop::slotBuildCompileFile(){
   QFileInfo fileinfo(cpp_widget->getName());
   QDir::setCurrent(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
-  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
+//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
   process << make_cmd << fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -1114,7 +1114,7 @@ void CKDevelop::slotHelpBack(){
     history_list.next();
   }
 		
-  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
+//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2301,6 +2301,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 

@@ -51,7 +51,7 @@ bool CKDevelop::slotProjectClose(){
   
   // check if header widget contains modified file
   if(header_widget->isModified()){
-    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header_widget modified file");
+//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header_widget modified file");
     KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
 				       i18n("The project\n\n")+prj->getProjectName()
 				       +i18n("\n\ncontains changed files. Save modified file\n\n")
@@ -63,7 +63,7 @@ bool CKDevelop::slotProjectClose(){
     edit_widget=header_widget;
     
     // then show the messagebox
-    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header msgbox result");
+//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header msgbox result");
     // yes- save headerwidget
     if(result== 1){			 	
       if(edit_widget->getName() == "Untitled.h"){
@@ -78,18 +78,18 @@ bool CKDevelop::slotProjectClose(){
       mod=true;
     } 
     if(result==2){   // No - no save but close
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
       edit_widget->toggleModified(false);
       slotFileClose();
       mod=true;
     }
     if(result==3){  // Save all
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
       slotFileSaveAll();
       mod=true;
     }
     if(result==4){ // Cancel
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
       mod=false;
       headerCancel=true;
     }
@@ -105,8 +105,8 @@ bool CKDevelop::slotProjectClose(){
     project_close->show();
     int result=project_close->result();
     
-    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp_widget modified file");
-    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp msgbox result");
+//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp_widget modified file");
+//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp msgbox result");
     // yes- save cpp widget
     edit_widget=cpp_widget;
     if(result== 1){			 	
@@ -122,18 +122,18 @@ bool CKDevelop::slotProjectClose(){
       mod=true;
     }  
     if(result==2){   // No - no save but close
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
       edit_widget->toggleModified(false);
       slotFileClose();
       mod=true;
     }
     if(result==3){  // Save all
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
       slotFileSaveAll();
       mod=true;
     }
     if(result==4){ // Cancel
-      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
       cppCancel=true;
       mod=false;
     }
@@ -143,7 +143,7 @@ bool CKDevelop::slotProjectClose(){
   if(!headerCancel && !cppCancel){
     // for -loop for actual infos
     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+//      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
       if(actual_info->modified){
 	
 	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
@@ -155,21 +155,21 @@ bool CKDevelop::slotProjectClose(){
 	project_close->show();
     	int result=project_close->result();
 	
-	KDEBUG(KDEBUG_INFO,CKDEVELOP,"Msgbox");
+//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"Msgbox");
 	// create the save project messagebox
 	
 	// what to do
 	if(result==1){  // Yes- only save the actual file
 				// save file as if Untitled and close file
 	  if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
-	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
+//	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
 	    switchToFile(actual_info->filename);
 	    slotFileSaveAs();
 	    slotFileClose();
 	  }
 				// Save file and close it
 	  else{
-	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
+//	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
 	    switchToFile(actual_info->filename);
 	    slotFileSave();
 	    slotFileClose();
@@ -179,20 +179,20 @@ bool CKDevelop::slotProjectClose(){
 	} 
 	
 	if(result==2){   // No - no save but close
-	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close file");
+//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close file");
 	  actual_info->modified=false;
 	  slotFileClose();
 	  mod=true;
 	}
 	if(result==3){  // Save all
-	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
+//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
 	  slotFileSaveAll();
 	  mod=true;
 	  break;
 	}
 	if(result==4){ // Cancel
 	  mod=false;
-	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
+//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
 	  break;
 	}
 	
@@ -979,6 +979,7 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
 
 
 

@@ -389,7 +389,7 @@ void CLogFileView::split(QString str,QStrList& filters){
     if(next != -1){
       str2 = str.mid(pos,next-pos);
       filters.append(str2);
-      KDEBUG1(KDEBUG_INFO,CLOGFILEVIEW,"%s",str2.data());
+//      KDEBUG1(KDEBUG_INFO,CLOGFILEVIEW,"%s",str2.data());
     }
     pos = next+1;
   }
@@ -446,5 +446,6 @@ void CLogFileView::slotShowPath(){
 	}
 	refresh(project);	
 }
+
 
 
