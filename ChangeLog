@@ -1,3 +1,16 @@
+2000-06-06 Falk Brettschneider <gigafalk@yahoo.com>
+  * fixed misbehaviour of window captions when in toplevel mode using new dockwidget features
+    (needs kdelibs/kdeui update (of today))
+
+2000-06-06 John Birch <jbb@ihug.co.nz>
+  * fixed change in kdeui lib (KKeyButton in kdlgloader)
+
+2000-06-05 Ralf Nolden <rnolden@kdevelop.de>
+  * fixed API change for HTML widget search next
+
+2000-06-03 John Birch <jbb@ihug.co.nz>
+  * fixed change in kdeui lib
+
 2000-06-01 Falk Brettschneider <gigafalk@yahoo.com>
   * case distinction m_bIsDebuggingInternal/External, m_bInternalDbgChosen
 

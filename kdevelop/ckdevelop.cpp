@@ -833,27 +833,26 @@ void CKDevelop::slotBuildDebug(){
 
     // create the debugger widgets and put them on default position
     ASSERT(!m_bIsDebuggingInternal);  // if not already debugging
-    m_dockbase_brkptManager_view = createDockWidget(i18n("breakpoint"), BarIcon(""));
+    m_dockbase_brkptManager_view = createDockWidget(i18n("breakpoint"), BarIcon(""), 0L, i18n("Breakpoints"));
     m_brkptManager  = new BreakpointManager(0L, "BPManagerTab");
     m_dockbase_brkptManager_view->setWidget(m_brkptManager);
       	
-    m_dockbase_frameStack_view = createDockWidget(i18n("frame stack"), BarIcon(""));
+    m_dockbase_frameStack_view = createDockWidget(i18n("frame stack"), BarIcon(""), 0L, i18n("Frame stack"));
     m_frameStack    = new FrameStack(0L, "FStackTab");
     m_dockbase_frameStack_view->setWidget(m_frameStack);
       	
-    m_dockbase_disassemble_view = createDockWidget(i18n("disassemble"), BarIcon(""));
+    m_dockbase_disassemble_view = createDockWidget(i18n("disassemble"), BarIcon(""), 0L, i18n("Disassemble"));
     m_disassemble   = new Disassemble(0L, "DisassembleTab");
     m_dockbase_disassemble_view->setWidget(m_disassemble);
       	
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    m_dockbase_dbg_widget_view = createDockWidget(i18n("debugger"), BarIcon(""));
+    m_dockbase_dbg_widget_view = createDockWidget(i18n("debugger"), BarIcon(""), 0L, i18n("Debugger"));
     m_dbg_widget = new COutputWidget(kapp, 0L, "debuggerTab");
     m_dockbase_dbg_widget_view->setWidget(m_dbg_widget);
     m_dbg_widget->insertLine("Start dbg");
 #endif
 
-    m_dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"));
-    m_dockbase_var_viewer->setCaption("");
+    m_dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"), 0L, i18n("Variables"), "");
     m_var_viewer = new VarViewer(0L,"VARTab");
     m_dockbase_var_viewer->setWidget(m_var_viewer);
     m_dockbase_var_viewer->setToolTipString(i18n("variables tree view (for debugging)"));

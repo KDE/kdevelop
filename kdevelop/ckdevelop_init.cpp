@@ -123,47 +123,42 @@ void CKDevelop::initView(){
   ////////////////////////
   KIconLoader *il = KGlobal::iconLoader();
 
-  m_dockbase_messages_widget = createDockWidget(i18n("messages"), BarIcon(""));
+  m_dockbase_messages_widget = createDockWidget(i18n("messages"), BarIcon(""), 0L, i18n("Messages"));
   m_messages_widget = new MakeView(0L, "messages_widget");
   m_dockbase_messages_widget->setWidget(m_messages_widget);
 
-  m_dockbase_grepview = createDockWidget(i18n("search"), QPixmap( il->loadIcon( "find.png", KIcon::Small )) );
+  m_dockbase_grepview = createDockWidget(i18n("search"), QPixmap( il->loadIcon( "find.png", KIcon::Small )), 0L, i18n("Search"), "" );
   m_grepview = new GrepView(0L, "grepview");
 	m_dockbase_grepview->setWidget(m_grepview);
 	
-  m_dockbase_outputview = createDockWidget(i18n("output"), BarIcon(""));
+  m_dockbase_outputview = createDockWidget(i18n("output"), BarIcon(""), 0L, i18n("Output"));
   m_outputview = new OutputView(0L, "outputview");
 	m_dockbase_outputview->setWidget(m_outputview);
 
   ////////////////////////
   // Treeviews
   ////////////////////////
-  m_dockbase_class_tree = createDockWidget(i18n("CV"), QPixmap(locate("appdata", "pics/mini/CVclass.png")) );
-  m_dockbase_class_tree->setCaption("");
+  m_dockbase_class_tree = createDockWidget(i18n("CV"), QPixmap(locate("appdata", "pics/mini/CVclass.png")), 0L, i18n("Class view"), "" );
   m_class_tree = new CClassView(0L,"cv");
   m_dockbase_class_tree->setWidget(m_class_tree);
   m_dockbase_class_tree->setToolTipString(i18n("class tree view"));
 
-  m_dockbase_log_file_tree = createDockWidget(i18n("LFV"), QPixmap( il->loadIcon( "kdevelop.png", KIcon::Small )) );
-  m_dockbase_log_file_tree->setCaption("");
+  m_dockbase_log_file_tree = createDockWidget(i18n("LFV"), QPixmap( il->loadIcon( "kdevelop.png", KIcon::Small )), 0L, i18n("Logical file view"), "" );
   m_log_file_tree = new CLogFileView(0L,"lfv",m_config->readBoolEntry("lfv_show_path",false));
   m_dockbase_log_file_tree->setWidget(m_log_file_tree);
   m_dockbase_log_file_tree->setToolTipString(i18n("logical file tree view"));
 
-  m_dockbase_real_file_tree = createDockWidget(i18n("RFV"), QPixmap( il->loadIcon( "folder.png", KIcon::Small )) );
-  m_dockbase_real_file_tree->setCaption("");
+  m_dockbase_real_file_tree = createDockWidget(i18n("RFV"), QPixmap( il->loadIcon( "folder.png", KIcon::Small )), 0L, i18n("Real file view"), "" );
   m_real_file_tree = new CRealFileView(0L,"RFV");
   m_dockbase_real_file_tree->setWidget(m_real_file_tree);
   m_dockbase_real_file_tree->setToolTipString(i18n("real file tree view"));
 
-  m_dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("mini-book1"));
-  m_dockbase_doc_tree->setCaption("");
+  m_dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("mini-book1"), 0L, i18n("Documentation"), "");
   m_doc_tree = new DocTreeView(0L,"DOC");
   m_dockbase_doc_tree->setWidget(m_doc_tree);
   m_dockbase_doc_tree->setToolTipString(i18n("documentation tree view"));
 
-  m_dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"));
-  m_dockbase_widprop_split_view->setCaption("");
+  m_dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"), 0L, i18n("Dialog editor"), "");
   m_widprop_split_view = new WidgetsPropSplitView(0L,"DLG");
   m_dockbase_widprop_split_view->setWidget(m_widprop_split_view);
   m_dockbase_widprop_split_view->setToolTipString(i18n("dialog editor view"));
