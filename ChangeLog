@@ -1,3 +1,7 @@
+2002-03-08  Roberto Raggi <raggi@cli.di.unipi.it>
+    * bugfix: menu entries for code completion now shows keyboard accelerator
+    * bugfix: arghint is showed when "automatic arguments hint" is activated
+	
 2002-03-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: kthml view saving/loading to/from session works again (seems it was a KHTML API change)
 

@@ -224,6 +224,23 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
                     completeText();
                 }
                 return TRUE;
+            } else if( m_pDevelop->getAutomaticArgsHint() &&
+                       ke->key() == Key_ParenLeft ){
+
+                m_edit->insertText( ke->text() );
+                TextLine* l = m_edit->doc()->textLine( line );
+                int attr = l->getAttr( col );
+                if( attr == 13 ){
+                    QString s = l->getString();
+                    s = s.left( col );
+                    int index = s.length() - 1;
+                    while( index>=0 && s[index].isSpace() )
+                        --index;
+                    if( s[index].isLetterOrNumber() || s[index] == '_' ){
+                        completeText();
+                    }
+                }
+                return TRUE;
             }
         }
     }
@@ -345,6 +362,7 @@ void CppCodeCompletion::showArgHint ( QStringList functionList, const QString& s
     }
     // m_edit->view()->paintCursor();
     m_pArgHint->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
+    m_pArgHint->adjustSize();
     m_pArgHint->show();
 }
 
@@ -1042,8 +1060,17 @@ void CppCodeCompletion::completeText()
     } else {
         if( showArguments ){
             QString type = evaluateExpression( expr, ctx, m_pStore );
-            QStringList functionList = getMethodListForClass( type, word );
-            showArgHint( functionList, "()", "," );
+            QStringList functionList;
+
+            functionList = getMethodListForClass( type, word );
+
+            if( functionList.count() == 0 && className.isEmpty() ){
+                functionList = getFunctionList( word );
+            }
+
+            if( functionList.count() ){
+                showArgHint( functionList, "()", "," );
+            }
         } else {
             QValueList<CompletionEntry> entries;
             QString type;
