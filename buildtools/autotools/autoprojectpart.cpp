@@ -411,6 +411,8 @@ QString AutoProjectPart::runArguments() const
     // If no "Main Program" and no "Program Arguments" were specified, return the active target's run arguments
         if (m_widget->activeTarget())
             return DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + m_widget->activeTarget()->name);
+        else
+            return QString::null;
     else
         return DomProgramArguments;
 }
