@@ -10,8 +10,10 @@ SUBDIRS = app_templates file_templates doc
 kde_module_LTLIBRARIES = libkdevpythonsupport.la kio_pydoc.la
 
 libkdevpythonsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevpythonsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
-libkdevpythonsupport_la_SOURCES = pythonsupportpart.cpp pythonconfigwidget.cpp pythonconfigwidgetbase.ui
+libkdevpythonsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
+	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la
+libkdevpythonsupport_la_SOURCES = pythonsupportpart.cpp pythonconfigwidget.cpp pythonconfigwidgetbase.ui \
+	pythonimplementationwidget.cpp qtdesignerpythonintegration.cpp
 
 kio_pydoc_la_SOURCES = pydoc.cpp
 kio_pydoc_la_LIBADD = $(LIB_KIO)
