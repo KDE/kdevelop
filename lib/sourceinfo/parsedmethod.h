@@ -18,13 +18,7 @@
 #ifndef _PARSEDMETHOD_H_
 #define _PARSEDMETHOD_H_
 
-#if (QT_VERSION >= 300)
-#include <qptrlist.h>
-#else
 #include <qlist.h>
-#define QPtrList QList
-#define QPtrListIterator QListIterator
-#endif
 #include "parsedattribute.h"
 #include "parsedargument.h"
 
@@ -41,7 +35,7 @@ public:
     ~ParsedMethod();
     
     /** The methods arguments(if any) */
-    QPtrList<ParsedArgument> arguments;
+    QList<ParsedArgument> arguments;
     
 public:
     
@@ -153,5 +147,7 @@ private:
 
 QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg);
 QDataStream &operator>>(QDataStream &s, ParsedMethod &arg);
+
+QTextStream &operator<<(QTextStream &s, const ParsedMethod &arg);
 
 #endif

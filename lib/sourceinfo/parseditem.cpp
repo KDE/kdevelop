@@ -81,37 +81,81 @@ void ParsedItem::copy( ParsedItem *anItem )
  * Returns:
  *   The path to this item.
  *-----------------------------------------------------------------*/
-QString ParsedItem::path()
+QString ParsedItem::path( )
 {
-  if ( _declaredInScope.isEmpty() )
-    return _name;
-  else
-    return _declaredInScope + "." + _name;
-}
-
-
-QDataStream &operator<<(QDataStream &s, const ParsedItem &arg)
-{
-    s << (int)arg.itemType() << arg.name() << arg.declaredInScope() << (int)arg.access()
-      << arg.definedInFile() << arg.definedOnLine() << arg.definitionEndsOnLine()
-      << arg.declaredInFile() << arg.declaredOnLine() << arg.declarationEndsOnLine()
-      << arg.comment();
-}
-
-
-QDataStream &operator>>(QDataStream &s, ParsedItem &arg)
-{
-    int itemType; QString name, declaredInScope; int access;
-    QString definedInFile; int definedOnLine, definitionEndsOnLine;
-    QString declaredInFile; int declaredOnLine, declarationEndsOnLine;
-    QString comment;
+//    cerr << "ParsedItem::path _declaredInScope: '" << _declaredInScope << "'" << endl;
+//    cerr << "ParsedItem::path _name           : '" << _name << "'" << endl;
     
-    s >> itemType >> name >> declaredInScope >> access
-      >> definedInFile >> definedOnLine >> definitionEndsOnLine
-      >> declaredInFile >> declaredOnLine >> declarationEndsOnLine
-      >> comment;
+    if( ! name_ ){
+	cerr << "EE: ParsedItem::path name_ = 0 *** NOT correcting" << endl;
+	//_name = "<<<< ParsedItem standard name >>>>";
+    }
+
+    if ( _declaredInScope.isEmpty() )
+	return name_;
+    else
+	return _declaredInScope + "." + name_;
+}
+
+
+QDataStream& operator << ( QDataStream& s, const ParsedItem& arg )
+{
+    s << ( int ) arg.itemType( )              << arg.name( )           << arg.declaredInScope( )
+      << ( int ) arg.access( )                << arg.definedInFile( )  << ( int ) arg.definedOnLine( )
+      << ( int ) arg.definitionEndsOnLine( )  << arg.declaredInFile( ) << ( int ) arg.declaredOnLine( )
+      << ( int ) arg.declarationEndsOnLine( ) << arg.comment( );
+/*
+    cerr << "operator << - to be stored:" << endl;
+    cerr << "itemType             : " << arg.itemType( ) << endl;
+    cerr << "name                 : " << arg.name( ) << endl;
+    cerr << "declaredInScope      : " << arg.declaredInScope( ) << endl;
+    cerr << "access               : " << arg.access( ) << endl;
+    cerr << "definedInFile        : " << arg.definedInFile( ) << endl;
+    cerr << "definedOnLine        : " << arg.definedOnLine( ) << endl;
+    cerr << "definitionEndsOnLine : " << arg.definitionEndsOnLine( ) << endl;
+    cerr << "declaredInFile       : " << arg.declaredInFile( ) << endl;
+    cerr << "declaredOnLine       : " << arg.declaredOnLine( ) << endl;
+    cerr << "declarationEndsOnLine: " << arg.declarationEndsOnLine( ) << endl;
+    cerr << "comment              : " << arg.comment( ) << endl;
+*/
+    return s;
+}
+
+
+QDataStream& operator >> ( QDataStream& s, ParsedItem& arg )
+{
+    cerr << "operator >> ParsedItem start" << endl;
+    
+    int itemType = 999999; QString name = "xyz", declaredInScope = "xyz"; int access = 999999;
+    QString definedInFile = "xyz";  int definedOnLine = 999999,  definitionEndsOnLine = 999999;
+    QString declaredInFile = "xyz"; int declaredOnLine = 999999, declarationEndsOnLine = 999999;
+    QString comment = "xyz";
+
+    s >> itemType              >> name           >> declaredInScope
+      >> access                >> definedInFile  >> definedOnLine
+      >> definitionEndsOnLine  >> declaredInFile >> declaredOnLine
+      >> declarationEndsOnLine >> comment;
+
+    cerr << "last loaded: " << endl;
+    cerr << "---> itemType             : '" << itemType        << "'" << endl;
+    cerr << "     name                 : '" << name            << "'" << endl;
+    cerr << "     declaredInScope      : '" << declaredInScope << "'" << endl;
+    cerr << "     access               : '" << access          << "'" << endl;
+    cerr << "     definedInFile        : '" << definedInFile   << "'" << endl;
+    cerr << "     definedOnLine        : '" << definedOnLine   << "'" << endl;
+    cerr << "     definitionEndsOnLine : '" << definitionEndsOnLine  << "'" << endl;
+    cerr << "     declaredInFile       : '" << declaredInFile        << "'" << endl;
+    cerr << "     declaredOnLine       : '" << declaredOnLine        << "'" << endl;
+    cerr << "     declarationEndsOnLine: '" << declarationEndsOnLine << "'" << endl;
+    cerr << "     comment              : '" << comment         << "'" << endl;
 
     arg.setItemType((PIType)itemType);
+/*    
+    if( ! name || name == "" ){
+	cerr << "WW: ParsedItem::operator >> name corrected" << endl;
+	name = "<<<< dummy name >>>>";
+    }
+*/    
     arg.setName(name);
     arg.setDeclaredInScope(declaredInScope);
     arg.setAccess((PIAccess)access);
@@ -122,4 +166,26 @@ QDataStream &operator>>(QDataStream &s, ParsedItem &arg)
     arg.setDeclaredOnLine(declaredOnLine);
     arg.setDeclarationEndsOnLine(declarationEndsOnLine);
     arg.setComment(comment);
+
+    cerr << "operator >> ParsedItem end" << endl;
+
+    return s;
+}
+
+QTextStream& operator << ( QTextStream& s, const ParsedItem& arg )
+{
+    s << "  ParsedItem" << endl;
+    s << "  `-> itemType             : '" << arg.itemType( )              << "'" << endl;
+    s << "  `-> name                 : '" << arg.name( )                  << "'" << endl;
+    s << "  `-> declaredInScope      : '" << arg.declaredInScope( )       << "'" << endl;
+    s << "  `-> access               : '" << arg.access( )                << "'" << endl;
+    s << "  `-> definedInFile        : '" << arg.definedInFile( )         << "'" << endl;
+    s << "  `-> definedOnLine        : '" << arg.definedOnLine( )         << "'" << endl;
+    s << "  `-> definitionEndsOnLine : '" << arg.definitionEndsOnLine( )  << "'" << endl;
+    s << "  `-> declaredInFile       : '" << arg.declaredInFile( )        << "'" << endl;
+    s << "  `-> declaredOnLine       : '" << arg.declaredOnLine( )        << "'" << endl;
+    s << "  `-> declarationEndsOnLine: '" << arg.declarationEndsOnLine( ) << "'" << endl;
+    s << "  `-> comment              : '" << arg.comment( )               << "'" << endl;
+
+    return s;
 }

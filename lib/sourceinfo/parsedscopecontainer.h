@@ -97,10 +97,13 @@ public:
     void out();
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
+    friend QTextStream& operator << ( QTextStream& s, const ParsedScopeContainer& arg );
 };
 
 
 QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
 QDataStream &operator>>(QDataStream &s, ParsedScopeContainer &arg);
+
+QTextStream &operator<<(QTextStream &s, const ParsedScopeContainer &arg);
 
 #endif

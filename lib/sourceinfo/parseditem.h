@@ -20,7 +20,8 @@
 
 #include <qdatastream.h>
 #include <qstring.h>
-
+#include <qtextstream.h>
+#include <iostream.h>
 
 /** The type of a ParsedItem. */
 enum PIType { 
@@ -106,9 +107,24 @@ public:
      * @param aName The new name.
      */
     inline void setName(const QString &aName)
-        { _name = aName; }
+    {
+	if( !aName || aName == "" ){
+	    cerr << "EE: ParsedItem::setName - not a valid name" << endl;
+	    name_ = "setName standard name";
+	  }
+	else {
+	    if( name_.length( ) > 100 ){
+		cerr << "EE: ParsedItem::setName - length > 100" << endl;
+		cerr << "  : original length : '" << name_.length( ) << "'" << endl;
+		name_ = "setName standard name";
+	    }
+	    else {
+		name_ = aName;
+	    }
+	}
+    }
     QString name() const
-        { return _name; }
+        { return name_; }
     /**
      * Sets the acess (public/protected/private)
      * @param aExport The new access
@@ -217,7 +233,7 @@ public:
      * @return Pointer to str.
      */
     virtual QString asString()
-    { return _name; }
+    { return name_; }
     
     /** Outputs this object to stdout */
     virtual void out() = 0;
@@ -227,7 +243,7 @@ private:
     PIType _itemType;
     
     /** Name of this item */
-    QString _name;
+    QString name_;
     
     /** Current scope of this item. If it's empty it's a global item. */
     QString _declaredInScope;
@@ -255,10 +271,15 @@ private:
     
     /** Comment in the vicinity(above/after) of this item. */
     QString _comment;
+
+public:
+    //friend QDataStream &operator<<(QDataStream &s, const ParsedItem &arg);
 };
 
 
 QDataStream &operator<<(QDataStream &s, const ParsedItem &arg);
 QDataStream &operator>>(QDataStream &s, ParsedItem &arg);
+
+QTextStream &operator<<(QTextStream &s, const ParsedItem &arg);
 
 #endif 

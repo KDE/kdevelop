@@ -93,4 +93,6 @@ private:
 QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg);
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg);
 
+QTextStream &operator<<(QTextStream &s, const ParsedAttribute &arg);
+
 #endif

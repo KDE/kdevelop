@@ -19,7 +19,8 @@
 #define _PARSEDARGUMENT_H_
 
 #include <qstring.h>
-
+#include <qdatastream.h>
+#include <qtextstream.h>
 
 /**
  * This object represents the parsed argument of a method. 
@@ -75,5 +76,7 @@ private:
 
 QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg);
 QDataStream &operator>>(QDataStream &s, ParsedArgument &arg);
+
+QTextStream &operator<<(QTextStream &s, const ParsedArgument &arg);
 
 #endif

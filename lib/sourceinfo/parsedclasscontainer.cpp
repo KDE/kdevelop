@@ -22,7 +22,6 @@
 #include "parsedclasscontainer.h"
 #include "programmingbycontract.h"
 
-
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -103,7 +102,7 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
     REQUIRE( "Valid class", aClass != NULL );
     REQUIRE( "Valid classname", !aClass->name().isEmpty() );
     REQUIRE( "Unique class", !hasClass( useFullPath()? aClass->path() : aClass->name() ) );
-    
+
     if ( !path().isEmpty() )
         aClass->setDeclaredInScope( path() );
     
@@ -244,7 +243,7 @@ QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg)
     operator<<(s, (const ParsedContainer&)arg);
 
     // Add clases
-    s << arg.classes.count();
+    s << ( int ) arg.classes.count( );
     QDictIterator<ParsedClass> classIt(arg.classes);
     for (; classIt.current(); ++classIt)
         s << *classIt.current();
@@ -270,3 +269,17 @@ QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg)
     return s;
 }
 
+QTextStream& operator << ( QTextStream& s, const ParsedClassContainer& arg )
+{
+    operator << ( s, ( const ParsedContainer& ) arg );
+
+    // Add classes
+    s << "  ParsedClassContainer" << endl;
+    s << "  `-> classes count '" << arg.classes.count( ) << "'" << endl;
+    
+    QDictIterator<ParsedClass> classIt( arg.classes );
+    for( ; classIt.current( ); ++classIt )
+        s << *classIt.current( );
+    
+    return s;
+}

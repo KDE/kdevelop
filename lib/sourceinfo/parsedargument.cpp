@@ -17,11 +17,10 @@
  ***************************************************************************/
 
 #include <iostream.h>
-#include <qdatastream.h>
+//#include <qdatastream.h>
 #include <qstring.h>
 #include "parsedargument.h"
 #include "programmingbycontract.h"
-
 
 /*********************************************************************
  *                                                                   *
@@ -179,20 +178,40 @@ void ParsedArgument::out()
 
 QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg)
 {
-    s << arg.type() << arg.name() << arg.namePos();
+    s << arg.type() << arg.name() << (int) arg.namePos();
     return s;
 }
 
 
 QDataStream &operator>>(QDataStream &s, ParsedArgument &arg)
 {
+    cerr << "operator >> ParsedArgument start" << endl;
+
     QString type, name;
-    int posName;
+    int namePos;
 
-    s >> type >> name >> posName;
-    arg.setType(type);
-    arg.setName(name);
-    arg.setNamePos(posName);
+    s >> type >> name >> namePos;
+    arg.setType( type );
+    
+    if( !name || name == "" ){
+	cerr << "WW: operator >> ParsedArgument name = 0 * correcting" << endl;
+	name = "<<<< ParsedArgument name >>>>";
+    }
+	
+    arg.setName( name );
+    arg.setNamePos( namePos );
 
+    cerr << "argument-name : '" << name << "'" << endl;
+    cerr << "operator >> ParsedArgument end" << endl;
+    return s;
+}
+
+QTextStream& operator << ( QTextStream& s, const ParsedArgument& arg )
+{
+    s << "  ParsedArgument" << endl;
+    s << "  `-> type    : '" << arg.type( )    << "'" << endl;
+    s << "  `-> name    : '" << arg.name( )    << "'" << endl;
+    s << "  `-> namePos : '" << arg.namePos( ) << "'" << endl;
+    
     return s;
 }

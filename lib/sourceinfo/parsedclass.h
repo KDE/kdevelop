@@ -18,16 +18,10 @@
 #ifndef _PARSEDCLASS_H_
 #define _PARSEDCLASS_H_
 
+#include <qlist.h>
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
-#if (QT_VERSION >= 300)
-#include <qptrlist.h>
-#else
-#include <qlist.h>
-#define QPtrList QList
-#define QPtrListIterator QListIterator
-#endif
 #include "parseditem.h"
 #include "parsedparent.h"
 #include "parsedattribute.h"
@@ -49,13 +43,13 @@ public:
 private:
     
     /** List of all slots. */
-    QPtrList<ParsedMethod> slotList;
+    QList<ParsedMethod> slotList;
     
     /** All slots ordered by name and argument. */
     QDict<ParsedMethod> slotsByNameAndArg;
     
     /** List of all signals. */
-    QPtrList<ParsedMethod> signalList;
+    QList<ParsedMethod> signalList;
     
     /** All signals ordered by name and argument. */
     QDict<ParsedMethod> signalsByNameAndArg;
@@ -63,13 +57,13 @@ private:
 public:
     
     /** List with names of parent classes(if any). */
-    QPtrList<ParsedParent> parents;
+    QList<ParsedParent> parents;
     
     /** List of slots. */
-    QPtrListIterator<ParsedMethod> slotIterator;
+    QListIterator<ParsedMethod> slotIterator;
     
     /** List of signals. */
-    QPtrListIterator<ParsedMethod> signalIterator;
+    QListIterator<ParsedMethod> signalIterator;
 
 public:
     
@@ -148,13 +142,13 @@ public:
     ParsedMethod *getSlotByNameAndArg(const QString &aName);
     
     /** Gets all signals in sorted order. */
-    QPtrList<ParsedMethod> *getSortedSignalList();
+    QList<ParsedMethod> *getSortedSignalList();
     
     /** Gets all slots in sorted order. */
-    QPtrList<ParsedMethod> *getSortedSlotList();
+    QList<ParsedMethod> *getSortedSlotList();
     
     /** Gets all virtual methods. */
-    QPtrList<ParsedMethod> *getVirtualMethodList();
+    QList<ParsedMethod> *getVirtualMethodList();
     
     /**
      * Checks if this class has the named parent. 
@@ -171,6 +165,7 @@ public:
     void out();
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+    friend QTextStream& operator << ( QTextStream& s, const ParsedClass& arg );
 
 private:
     /** List with names of friend classes(if any). */
@@ -182,5 +177,7 @@ private:
 
 QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 QDataStream &operator>>(QDataStream &s, ParsedClass &arg);
+
+QTextStream &operator<<(QTextStream &s, const ParsedClass &arg);
 
 #endif

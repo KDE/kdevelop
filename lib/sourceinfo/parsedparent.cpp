@@ -17,10 +17,9 @@
  ***************************************************************************/
 
 #include <iostream.h>
-#include <qdatastream.h>
+//#include <qdatastream.h>
 #include "parsedparent.h"
 #include "programmingbycontract.h"
-
 
 /*********************************************************************
  *                                                                   *
@@ -126,12 +125,14 @@ void ParsedParent::out()
 
 QDataStream &operator<<(QDataStream &s, const ParsedParent &arg)
 {
-    return s << arg.name() << (int)arg.access();
+    return s << arg.name() << ( int ) arg.access();
 }
 
 
 QDataStream &operator>>(QDataStream &s, ParsedParent &arg)
 {
+    cerr << "operator >> ParsedParent start" << endl;
+
     QString name;
     int access;
 
@@ -139,5 +140,15 @@ QDataStream &operator>>(QDataStream &s, ParsedParent &arg)
     arg.setName(name);
     arg.setAccess((PIAccess)access);
 
+    cerr << "operator >> ParsedParent end" << endl;
+    return s;
+}
+
+QTextStream& operator << ( QTextStream& s, const ParsedParent& arg )
+{
+    s << "  ParsedParent"  << endl;
+    s << "  `-> name  : '" << arg.name( )           << "'" << endl;
+    s << "  `-> access: '" << ( int ) arg.access( ) << "'" << endl;
+    
     return s;
 }

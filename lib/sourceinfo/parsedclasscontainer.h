@@ -96,10 +96,13 @@ public:
     void clear(bool bAutodel=true);
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
+    friend QTextStream& operator << ( QTextStream& s, const ParsedClassContainer& arg );
 };
 
 
 QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
 QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg);
+
+QTextStream &operator<<(QTextStream &s, const ParsedClassContainer &arg);
 
 #endif
