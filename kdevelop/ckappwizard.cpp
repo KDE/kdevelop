@@ -1047,6 +1047,8 @@ void CKAppWizard::generateEntries(const QString &filename) {
         ++it; // increase the iterator
       }
     }
+    else
+      index_path="";
   }
 
   // Create filename to open in a secure manner
@@ -1160,10 +1162,10 @@ void CKAppWizard::generateEntries(const QString &filename) {
     config->setGroup("General Options");
     bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
     if (bCreateKDoc)
-     entries << QString("kdoc -p -d |UNDERDIRECTORY|-api")+
+     entries << QString("kdoc -p -d '|UNDERDIRECTORY|-api'")+
     index_path+" -n "+nameline->text()+" *.h\n";
     else
-     entries << QString("kdoc -p -d |UNDERDIRECTORY|-api")+
+     entries << QString("kdoc -p -d '|UNDERDIRECTORY|-api'")+
     index_path+" *.h\n";
 
     entries << "XGETTEXT\n";

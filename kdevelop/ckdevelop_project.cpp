@@ -1025,23 +1025,28 @@ void CKDevelop::slotProjectAPI(){
     {
       QDir d;
       d.setPath(idx_path);
-      if(!d.exists())
-        return;
-      QString libname;
-      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
-      QFileInfoListIterator it( *fileList ); // iterator
-      QFileInfo *fi; // the current file info
-      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
-        libname=fi->fileName();  // get the filename
-        if(fi->isFile())
-        {
-          libname=fi->baseName();  // get only the base of the filename as library name
-          if (libname != QString("libkmid")) { // workaround for a strange behaviour of kdoc: don't try libkmid
-            link+=" -l"+libname;
+      if(d.exists())
+      {
+        QString libname;
+        const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+        QFileInfoListIterator it( *fileList ); // iterator
+        QFileInfo *fi; // the current file info
+        while ( (fi=it.current()) ) 
+        {  // traverse all kdoc reference files
+          libname=fi->fileName();  // get the filename
+          if(fi->isFile())
+          {
+            libname=fi->baseName();  // get only the base of the filename as library name
+            if (libname != QString("libkmid")) 
+            { // workaround for a strange behaviour of kdoc: don't try libkmid
+              link+=" -l"+libname;
+            }
           }
+          ++it; // increase the iterator
         }
-        ++it; // increase the iterator
       }
+      else
+        idx_path="";
     }
 
     QDir d(prj->getProjectDir());
@@ -1061,12 +1066,12 @@ void CKDevelop::slotProjectAPI(){
     shell_process.clearArguments();
     shell_process << "kdoc";
     shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
-    if (!link.isEmpty())
+    if (!idx_path.isEmpty() && !link.isEmpty())
     {
-      shell_process << ("-L" + idx_path);
+      shell_process << "-L" << idx_path;
       shell_process << link;
     }
-
+    
     bool bCreateKDoc;
     config->setGroup("General Options");
     bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
