@@ -1,6 +1,13 @@
 2001-07-10  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: setFocus problem with inner widgets of a QextMdiChildView's focus loop fixed
       --> blinking cursor appears again when switching to files!
+    * bugfix: some minor focus probs with QextMDI
+    * bugfix: doubleclick on GrepView entry lets cursor blink again in target code line.
+      Fuckin' hell, I've missed that so much...
+    * don't blindly open everything with KRun in CKDevelop::switchToFile, ask if it's xpm,
+      hmm....need some more types to be checked?
+    * setup wizared: syntax highlighting for .moc, .diff and .po files added
+    * applied patch of Andre Bell <andre.bell@gmx.de> (docu tree works even if no project is loaded)
 
 2001-07-09  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: strange dock-back effect fixed
