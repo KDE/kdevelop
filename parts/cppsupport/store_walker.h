@@ -32,7 +32,7 @@ public:
     
     // translation-unit
     virtual void parseTranslationUnit( TranslationUnitAST* );
-    
+
     // declarations
     virtual void parseDeclaration( DeclarationAST* );
     virtual void parseLinkageSpecification( LinkageSpecificationAST* );
@@ -70,7 +70,7 @@ private:
     QString m_fileName;
     QStringList m_currentScope;
     ClassStore* m_store;
-    ParsedScopeContainer* m_currentScopeContainer;
+    ParsedClassContainer* m_currentContainer;
     ParsedClass* m_currentClass;
     PIAccess m_currentAccess;
     bool m_inSlots;

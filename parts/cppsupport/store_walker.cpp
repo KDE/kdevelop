@@ -18,7 +18,7 @@
 #include <qfileinfo.h>
 
 StoreWalker::StoreWalker( const QString& fileName, ClassStore* store )
-    : m_fileName( fileName ), m_store( store ), m_currentScopeContainer( 0 ), m_currentClass( 0 ), m_anon( 0 )
+    : m_fileName( fileName ), m_store( store ), m_currentContainer( 0 ), m_currentClass( 0 ), m_anon( 0 )
 {
 }
 
@@ -29,7 +29,7 @@ StoreWalker::~StoreWalker()
 void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
 {
     m_currentScope.clear();    
-    m_currentScopeContainer = m_store->globalScope();
+    m_currentContainer = m_store->globalScope();
     m_currentClass = 0;
     m_currentAccess = PIE_PUBLIC;
     m_inSlots = false;
@@ -52,12 +52,18 @@ void StoreWalker::parseLinkageSpecification( LinkageSpecificationAST* ast )
 
 void StoreWalker::parseNamespace( NamespaceAST* ast )
 {
+    ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( m_currentContainer );
+    if( !scope ){
+        kdDebug(9007) << "!!!!!!!!!!!!!!!!!!!!!!!!!! **error** !!!!!!!!!!!!!!!!!!!!" << endl;
+	return;
+    }
+
     QString nsName;
     if( !ast->namespaceName() ){
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
-	
-	nsName = QString::fromLatin1("(") + shortFileName + QString::fromLatin1(")");
+
+	nsName.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
     } else {
 	nsName = ast->namespaceName()->text();
     }
@@ -66,23 +72,23 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
-    
-    ParsedScopeContainer* ns = findOrInsertScopeContainer( m_currentScopeContainer, nsName );
+
+    ParsedScopeContainer* ns = findOrInsertScopeContainer( scope, nsName );
     ns->setDeclaredOnLine( startLine );
     ns->setDeclaredInFile( m_fileName );
     ns->setDeclarationEndsOnLine( endLine );
-    
+
     ns->setDefinedOnLine( startLine );
     ns->setDefinedInFile( m_fileName );
     
-    ParsedScopeContainer* old_scope = m_currentScopeContainer;
-    m_currentScopeContainer = ns;
+    ParsedClassContainer* old_scope = m_currentContainer;
+    m_currentContainer = ns;
     m_currentScope.push_back( nsName );
 
     TreeParser::parseNamespace( ast );
 
     m_currentScope.pop_back();
-    m_currentScopeContainer = old_scope;
+    m_currentContainer = old_scope;
 }
 
 void StoreWalker::parseNamespaceAlias( NamespaceAliasAST* ast )
@@ -203,7 +209,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     parseFunctionArguments( d, method );
 
-    ParsedClassContainer* c = cl ? (ParsedClassContainer*) cl : (ParsedClassContainer*) m_currentScopeContainer;
+    ParsedClassContainer* c = cl ? (ParsedClassContainer*) cl : (ParsedClassContainer*) m_currentContainer;
     if( cl )
 	method->setAccess( m_currentAccess );
     if( isStatic )
@@ -247,7 +253,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	else
 	    cl->addMethod( method );
     } else if( !isStored )
-	m_currentScopeContainer->addMethod( method );
+	m_currentContainer->addMethod( method );
 
     TreeParser::parseFunctionDefinition( ast );
 }
@@ -273,7 +279,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     PIAccess oldAccess = m_currentAccess;
     bool oldInSlots = m_inSlots;
     bool oldInSignals = m_inSignals;
- 
+
     QString kind = ast->classKey()->text();
     if( kind == "class" )
 	m_currentAccess = PIE_PRIVATE;
@@ -286,8 +292,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     if( !ast->name() ){
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
-	
-	className = QString::fromLatin1("(") + shortFileName + QString::number(m_anon++) + QString::fromLatin1(")");
+	className.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
     } else {
 	className = ast->name()->text();
     }
@@ -300,7 +305,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
-    
+
     bool inStore = false;
     if( kind == "class" )
 	inStore = m_store->hasClass( klass->path() );
@@ -313,35 +318,37 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	parsedClassRef->setDeclaredInFile( klass->declaredInFile() );
 	parsedClassRef->setDeclaredInScope( klass->declaredInScope() );
 	delete klass;
-	klass = parsedClassRef;	
+	klass = parsedClassRef;
     }
-    
+
     if( kind == "class" ){
-	m_currentScopeContainer->addClass( klass );
-	
+	m_currentContainer->addClass( klass );
+
 	if( !inStore )
 	    m_store->addClass( klass );
     } else {
-	m_currentScopeContainer->addStruct( klass );
-	
+	m_currentContainer->addStruct( klass );
+
 	if( !inStore )
 	    m_store->addStruct( klass );
     }
-    
+
     if( ast->baseClause() )
         parseBaseClause( ast->baseClause(), klass );
 
     m_currentScope.push_back( className );
- 
+
     ParsedClass* oldClass = m_currentClass;
-    ParsedClassContainer* oldContainer = m_currentScopeContainer;
+    ParsedClassContainer* oldContainer = m_currentContainer;
+
+    m_currentContainer = klass;
     m_currentClass = klass;
     TreeParser::parseClassSpecifier( ast );
+    m_currentContainer = oldContainer;
     m_currentClass = oldClass;
-    m_currentScopeContainer = oldContainer;
-    
+
     m_currentScope.pop_back();
-    
+
     m_currentAccess = oldAccess;
     m_inSlots = oldInSlots;
     m_inSignals = oldInSignals;
@@ -352,22 +359,22 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
     QPtrList<EnumeratorAST> l = ast->enumeratorList();
     QPtrListIterator<EnumeratorAST> it( l );
     while( it.current() ){
-	ParsedClassContainer* c = m_currentClass ? (ParsedClassContainer*) m_currentClass : (ParsedClassContainer*) m_currentScopeContainer;
-	ParsedAttribute* attr = findOrInsertAttribute( c, it.current()->id()->text() );
+        kdDebug(9007) << "-------------> m_currentContainer = " << m_currentContainer->path() << endl;
+	ParsedAttribute* attr = findOrInsertAttribute( m_currentContainer, it.current()->id()->text() );
 	attr->setType( "int" );
 	attr->setIsStatic( true );
-	
+
 	int startLine, startColumn;
 	int endLine, endColumn;
 	it.current()->getStartPosition( &startLine, &startColumn );
 	it.current()->getEndPosition( &endLine, &endColumn );
-    
+
 	attr->setDeclaredOnLine( startLine );
 	attr->setDefinedOnLine( startLine );
 	attr->setDeclaredInFile( m_fileName );
 	attr->setDefinedInFile( m_fileName );
 	attr->setDeclarationEndsOnLine( endLine );
-	
+
 	++it;
     }
     
@@ -397,20 +404,18 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     DeclaratorAST* t = d;
     while( t && t->subDeclarator() )
 	t = t->subDeclarator();
-    
+
     QString id;
     if( t )
 	id = t->declaratorId()->text();
-    
-    ParsedAttribute* attr = findOrInsertAttribute( (m_currentClass ?
-						    (ParsedClassContainer*) m_currentClass :
-						    (ParsedClassContainer*) m_currentScopeContainer), id );
-    
+
+    ParsedAttribute* attr = findOrInsertAttribute( m_currentContainer, id );
+
     bool isFriend = false;
     bool isVirtual = false;
     bool isStatic = false;
     bool isInline = false;
-    bool isPure = decl->initializer() != 0;
+    bool isInitialized = decl->initializer() != 0;
 
     if( storageSpec ){
 	QPtrList<AST> l = storageSpec->nodeList();
@@ -422,7 +427,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	    ++it;
 	}
     }
-    
+
     int startLine, startColumn;
     int endLine, endColumn;
     decl->getStartPosition( &startLine, &startColumn );
@@ -474,7 +479,7 @@ ParsedScopeContainer * StoreWalker::findOrInsertScopeContainer( ParsedScopeConta
 ParsedAttribute * StoreWalker::findOrInsertAttribute( ParsedClassContainer * scope, const QString & name )
 {
     ParsedAttribute* attr = scope->getAttributeByName( name );
-    if( !attr ){	
+    if( !attr ){
 	attr = new ParsedAttribute();
 	attr->setName( name );
 
@@ -535,11 +540,11 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     method->setIsVirtual( isVirtual );
     method->setIsPure( isPure );
     parseFunctionArguments( d, method );
-    
-    if( m_currentClass ){	
+
+    if( m_currentClass ){
 	bool isDestructor = id.startsWith("~");
 	method->setIsDestructor( isDestructor );
-	
+
 	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
 	method->setIsConstructor( isConstructor );
 
@@ -556,15 +561,14 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     }
     method->setIsConst( d->constant() != 0 );
 
-    ParsedClassContainer* c = m_currentClass ? (ParsedClassContainer*) m_currentClass : (ParsedClassContainer*) m_currentScopeContainer;
-    ParsedMethod* m = c->getMethod( method );
+    ParsedMethod* m = m_currentContainer->getMethod( method );
     if( m != 0 ){
 	method->setDefinedInFile( m->definedInFile() );
 	method->setDefinedOnLine( m->definedOnLine() );
 	method->setDefinitionEndsOnLine( m->definitionEndsOnLine() );
-	c->removeMethod( m );	
+	m_currentContainer->removeMethod( m );
     }
-    
+
     if( m_currentClass ){
 	if( m_inSlots )
 	    m_currentClass->addSlot( method );
@@ -573,7 +577,7 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 	else
 	    m_currentClass->addMethod( method );
     } else
-	m_currentScopeContainer->addMethod( method );
+	m_currentContainer->addMethod( method );
 }
 
 void StoreWalker::parseFunctionArguments( DeclaratorAST* declarator, ParsedMethod* method )
