@@ -50,7 +50,8 @@ const char *filepatterns[] = {
     "*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c",
     "*.cpp,*.cc,*.C,*.cxx,*.c",
     "*.h,*.hxx,*.idl",
-    "*"
+    "*",
+    0
 };
 
 
