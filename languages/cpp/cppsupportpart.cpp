@@ -968,7 +968,7 @@ CppSupportPart::parseProject( bool force )
 			for( int i=0; i<numFiles; ++i ){
 			QString fn;
 			uint ts;
-			Q_LONG offset;
+			/*Q_LONG*/ uint offset;
 	
 			_jd->stream >> fn >> ts >> offset;
 			_jd->pcs[ fn ] = qMakePair( ts, offset );
