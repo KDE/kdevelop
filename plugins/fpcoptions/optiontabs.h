@@ -13,6 +13,8 @@
 
 #include <qwidget.h>
 
+class QRadioButton;
+class FlagRadioButton;
 class FlagCheckBoxController;
 class FlagRadioButtonController;
 class FlagPathEditController;
@@ -83,6 +85,31 @@ public:
 private:
     FlagCheckBoxController *controller;
     FlagRadioButtonController *asmController;
+};
+
+class DebugOptimTab : public QWidget
+{
+    Q_OBJECT
+public:
+    DebugOptimTab( QWidget *parent=0, const char *name=0 );
+    ~DebugOptimTab();
+
+    void readFlags(QStringList *str);
+    void writeFlags(QStringList *str);
+
+private:
+    FlagCheckBoxController *controller;
+    FlagRadioButtonController *optimController;
+
+    QRadioButton *m_default;
+    QRadioButton *m_default2;
+    QRadioButton *m_default3;
+    FlagRadioButton *optim1;
+    FlagRadioButton *optim2;
+
+private slots:
+    void setReleaseOptions();
+    void setDebugOptions();
 };
 
 #endif

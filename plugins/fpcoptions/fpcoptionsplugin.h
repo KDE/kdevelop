@@ -50,6 +50,7 @@ private:
     FeedbackTab *feedback;
     FilesAndDirectoriesTab *directories;
     FilesAndDirectoriesTab2 *directories2;
+    DebugOptimTab *debug_optim;
     LanguageTab *language;
     AssemblerTab *assembler;
     QStringList unrecognizedFlags;

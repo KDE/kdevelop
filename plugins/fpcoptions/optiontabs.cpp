@@ -15,6 +15,7 @@
 #include <qvbuttongroup.h>
 #include <qapplication.h>
 #include <qframe.h>
+#include <qpushbutton.h>
 
 #include "flagboxes.h"
 
@@ -263,7 +264,7 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
     //layout->addSpacing(10);
 
     QVButtonGroup *asmkind_group = new QVButtonGroup(i18n("Assembler Reader"), this);
-    QRadioButton *m_defaultkind = new QRadioButton(i18n("Use Default Reader"), asmkind_group);
+    QRadioButton *m_defaultkind = new QRadioButton(i18n("Use default reader"), asmkind_group);
     m_defaultkind->setChecked(true);
     new FlagRadioButton(asmkind_group, asmController,
                         "-Ratt", i18n("AT&T style assembler"));
@@ -322,16 +323,126 @@ void AssemblerTab::writeFlags( QStringList * str )
 
 
 
+DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
+    : QWidget(parent, name), controller(new FlagCheckBoxController()),
+    optimController(new FlagRadioButtonController)
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+//    layout->setAutoAdd(true);
 
+    QBoxLayout *layout2 = new QHBoxLayout(layout, KDialog::spacingHint());
 
+    QBoxLayout *layout3 = new QVBoxLayout(layout2, KDialog::spacingHint());
 
+    QVButtonGroup *debug_group = new QVButtonGroup(i18n("Debugging"), this);
+    new FlagCheckBox(debug_group, controller,
+                     "-g", i18n("Generate information for GDB."), "-!g");
+    new FlagCheckBox(debug_group, controller,
+                     "-gd", i18n("Generate information for DBX."), "-!gd");
+    new FlagCheckBox(debug_group, controller,
+                     "-gh", i18n("Use heaptrc unit."), "-!gh");
+    new FlagCheckBox(debug_group, controller,
+                     "-gc", i18n("Generate checks for pointers."), "-!gc");
+    layout3->addWidget(debug_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout3->addSpacing(10);
 
+    QVButtonGroup *profile_group = new QVButtonGroup(i18n("Profiling"), this);
+    new FlagCheckBox(profile_group, controller,
+                     "-pg", i18n("Generate profiler code for gprof."), "-!pg");
+    layout3->addWidget(profile_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
+    QBoxLayout *layout4 = new QVBoxLayout(layout2, KDialog::spacingHint());
 
+    QVButtonGroup *optim_group1 = new QVButtonGroup(i18n("General Optimization"), this);
+    m_default = new QRadioButton(i18n("Default"), optim_group1);
+    m_default->setChecked(true);
+    new FlagRadioButton(optim_group1, optimController,
+                        "-Og", i18n("Generate smaller code"));
+    optim1 = new FlagRadioButton(optim_group1, optimController,
+                        "-OG", i18n("Generate faster code"));
+    layout4->addWidget(optim_group1);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
+    QVButtonGroup *optim_group2 = new QVButtonGroup(i18n("Optimization Levels"), this);
+    m_default2 = new QRadioButton(i18n("Default"), optim_group2);
+    m_default2->setChecked(true);
+    new FlagRadioButton(optim_group2, optimController,
+                        "-O1", i18n("Level 1"));
+    new FlagRadioButton(optim_group2, optimController,
+                        "-O2", i18n("Level 2"));
+    optim2 = new FlagRadioButton(optim_group2, optimController,
+                        "-O3", i18n("Level 3"));
+    layout4->addWidget(optim_group2);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
+    QHBoxLayout *layout5 = new QHBoxLayout(layout, KDialog::spacingHint());
 
+    QVButtonGroup *optim_group3 = new QVButtonGroup(i18n("Architecture"), this);
+    m_default3 = new QRadioButton(i18n("Default"), optim_group3);
+    m_default3->setChecked(true);
+    new FlagRadioButton(optim_group3, optimController,
+                     "-Op1", i18n("386/486."));
+    new FlagRadioButton(optim_group3, optimController,
+                     "-Op2", i18n("Pentium/PentiumMMX."));
+    new FlagRadioButton(optim_group3, optimController,
+                     "-Op2", i18n("PentiumPro/PII/Cyrix 6x86/K6."));
+    layout5->addWidget(optim_group3);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
+    QVButtonGroup *optim_group4 = new QVButtonGroup(i18n("Another Optimization"), this);
+    new FlagCheckBox(optim_group4, controller,
+                     "-Or", i18n("Use register variables."), "-!Or");
+    new FlagCheckBox(optim_group4, controller,
+                     "-Ou", i18n("Uncertain optimizations."), "-!Ou");
+    layout5->addWidget(optim_group4);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
+    QHBoxLayout *layout6 = new QHBoxLayout(layout, KDialog::spacingHint());
+    QPushButton *release = new QPushButton(i18n("Release"), this);
+    QPushButton *debug = new QPushButton(i18n("Debug"), this);
+    layout6->addWidget(release);
+    layout6->addWidget(debug);
+    connect(release, SIGNAL(clicked()), this, SLOT(setReleaseOptions()));
+    connect(debug, SIGNAL(clicked()), this, SLOT(setDebugOptions()));
 
+    layout->addStretch();
+}
 
+ DebugOptimTab::~ DebugOptimTab( )
+{
+    delete controller;
+}
+
+void DebugOptimTab::readFlags( QStringList * str )
+{
+    controller->readFlags(str);
+    optimController->readFlags(str);
+}
+
+void DebugOptimTab::writeFlags( QStringList * str )
+{
+    controller->writeFlags(str);
+    optimController->writeFlags(str);
+}
+
+void DebugOptimTab::setReleaseOptions()
+{
+    m_default->setChecked(true);
+    m_default2->setChecked(true);
+//    m_default3->setChecked(true);
+    QStringList sl = QStringList::split(",", "-!g,-!gd,-!gh,-!gc,-!pg,-!Ou,-!Or");
+    readFlags(&sl);
+    optim1->setChecked(true);
+    optim2->setChecked(true);
+}
+
+void DebugOptimTab::setDebugOptions()
+{
+    QStringList sl = QStringList::split(",", "-g,-!gd,-gh,-!gc,-!pg,-!Ou,-!Or");
+    readFlags(&sl);
+    m_default->setChecked(true);
+    m_default2->setChecked(true);
+//    m_default3->setChecked(true);
+}

@@ -53,6 +53,9 @@ FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
     vbox = addVBoxPage(i18n("Directories II"));
     directories2 = new FilesAndDirectoriesTab2(vbox, "directories2 tab");
 
+    vbox = addVBoxPage(i18n("Debug and Optimization"));
+    debug_optim = new DebugOptimTab(vbox, "debug_optim tab");
+
     vbox = addVBoxPage(i18n("Assembler"));
     assembler = new AssemblerTab(vbox, "assembler tab");
 
@@ -71,6 +74,7 @@ void FpcOptionsDialog::setFlags(const QString &flags)
     feedback->readFlags(&flaglist);
     language->readFlags(&flaglist);
     assembler->readFlags(&flaglist);
+    debug_optim->readFlags(&flaglist);
     directories->readFlags(&flaglist);
     directories2->readFlags(&flaglist);
     unrecognizedFlags = flaglist;
@@ -83,6 +87,7 @@ QString FpcOptionsDialog::flags() const
     language->writeFlags(&flaglist);
     directories2->writeFlags(&flaglist);
     directories->writeFlags(&flaglist);
+    debug_optim->writeFlags(&flaglist);
     assembler->writeFlags(&flaglist);
     feedback->writeFlags(&flaglist);
 
