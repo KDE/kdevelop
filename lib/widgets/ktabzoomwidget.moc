@@ -1,0 +1,107 @@
+/****************************************************************************
+** KTabZoomWidget meta object code from reading C++ file 'ktabzoomwidget.h'
+**
+** Created: Wed Mar 27 00:20:10 2002
+**      by: The Qt MOC ($Id$)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#undef QT_NO_COMPAT
+#include "ktabzoomwidget.h"
+#include <qmetaobject.h>
+#include <qapplication.h>
+
+#include <private/qucomextra_p.h>
+#if !defined(Q_MOC_OUTPUT_REVISION) || (Q_MOC_OUTPUT_REVISION != 19)
+#error "This file was generated using the moc from 3.0.2. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+const char *KTabZoomWidget::className() const
+{
+    return "KTabZoomWidget";
+}
+
+QMetaObject *KTabZoomWidget::metaObj = 0;
+static QMetaObjectCleanUp cleanUp_KTabZoomWidget;
+
+#ifndef QT_NO_TRANSLATION
+QString KTabZoomWidget::tr( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "KTabZoomWidget", s, c, QApplication::DefaultCodec );
+    else
+	return QString::fromLatin1( s );
+}
+#ifndef QT_NO_TRANSLATION_UTF8
+QString KTabZoomWidget::trUtf8( const char *s, const char *c )
+{
+    if ( qApp )
+	return qApp->translate( "KTabZoomWidget", s, c, QApplication::UnicodeUTF8 );
+    else
+	return QString::fromUtf8( s );
+}
+#endif // QT_NO_TRANSLATION_UTF8
+
+#endif // QT_NO_TRANSLATION
+
+QMetaObject* KTabZoomWidget::staticMetaObject()
+{
+    if ( metaObj )
+	return metaObj;
+    QMetaObject* parentObject = QWidget::staticMetaObject();
+    static const QUParameter param_slot_0[] = {
+	{ "index", &static_QUType_int, 0, QUParameter::In }
+    };
+    static const QUMethod slot_0 = {"selected", 1, param_slot_0 };
+    static const QUMethod slot_1 = {"unselected", 0, 0 };
+    static const QUMethod slot_2 = {"widgetDeleted", 0, 0 };
+    static const QMetaData slot_tbl[] = {
+	{ "selected(int)", &slot_0, QMetaData::Private },
+	{ "unselected()", &slot_1, QMetaData::Private },
+	{ "widgetDeleted()", &slot_2, QMetaData::Private }
+    };
+    metaObj = QMetaObject::new_metaobject(
+	"KTabZoomWidget", parentObject,
+	slot_tbl, 3,
+	0, 0,
+#ifndef QT_NO_PROPERTIES
+	0, 0,
+	0, 0,
+#endif // QT_NO_PROPERTIES
+	0, 0 );
+    cleanUp_KTabZoomWidget.setMetaObject( metaObj );
+    return metaObj;
+}
+
+void* KTabZoomWidget::qt_cast( const char* clname )
+{
+    if ( !qstrcmp( clname, "KTabZoomWidget" ) ) return (KTabZoomWidget*)this;
+    return QWidget::qt_cast( clname );
+}
+
+bool KTabZoomWidget::qt_invoke( int _id, QUObject* _o )
+{
+    switch ( _id - staticMetaObject()->slotOffset() ) {
+    case 0: selected(static_QUType_int.get(_o+1)); break;
+    case 1: unselected(); break;
+    case 2: widgetDeleted(); break;
+    default:
+	return QWidget::qt_invoke( _id, _o );
+    }
+    return TRUE;
+}
+
+bool KTabZoomWidget::qt_emit( int _id, QUObject* _o )
+{
+    return QWidget::qt_emit(_id,_o);
+}
+#ifndef QT_NO_PROPERTIES
+
+bool KTabZoomWidget::qt_property( int _id, int _f, QVariant* _v)
+{
+    return QWidget::qt_property( _id, _f, _v);
+}
+#endif // QT_NO_PROPERTIES
