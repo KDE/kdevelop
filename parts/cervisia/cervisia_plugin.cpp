@@ -66,6 +66,7 @@ CervisiaPlugin::~CervisiaPlugin()
     {
         mainWindow()->removeView( m_part->widget() );
         mainWindow()->main()->guiFactory()->removeClient( m_part );
+        m_part->closeURL();
         delete m_part;
     }
 }
@@ -89,6 +90,7 @@ void CervisiaPlugin::slotProjectClosed()
         return;
 
     // Remove the KPart's GUI since I see no way on how to tell to cervisiapart "deactivate!" ;-)
+    m_part->closeURL();
     mainWindow()->removeView( m_part->widget() );
     mainWindow()->main()->guiFactory()->removeClient( m_part );
 }
