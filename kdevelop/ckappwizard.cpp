@@ -785,8 +785,8 @@ void CKAppWizard::slotProcessExited() {
   project->setSGMLFile ("index.sgml");
   }
   project->setBinPROGRAM (namelow);
-  project->setLDFLAGS (" -g1 ");
-  project->setCXXFLAGS ("-O2 -g1 -Wall");
+  project->setLDFLAGS (" ");
+  project->setCXXFLAGS ("-O0 -g -Wall");
 
   if (kna->isChecked()) {
   project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");

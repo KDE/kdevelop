@@ -215,7 +215,7 @@ void CPrintDlg::init(){
   printingConfButton->setBackgroundMode( QWidget::PaletteBackground );
   printingConfButton->setFontPropagation( QWidget::NoChildren );
   printingConfButton->setPalettePropagation( QWidget::NoChildren );
-  printingConfButton->setText(i18n( "printing..." ));
+  printingConfButton->setText(i18n( "Options..." ));
   printingConfButton->setAutoRepeat( FALSE );
   printingConfButton->setAutoResize( FALSE );
   connect (printingConfButton,SIGNAL(clicked()),SLOT(slotPrintingConfClicked()));  
@@ -417,7 +417,7 @@ void CPrintDlg::init(){
   filesConfButton->setBackgroundMode( QWidget::PaletteBackground );
   filesConfButton->setFontPropagation( QWidget::NoChildren );
   filesConfButton->setPalettePropagation( QWidget::NoChildren );
-  filesConfButton->setText(i18n( "files..." ));
+  filesConfButton->setText(i18n( "Files..." ));
   filesConfButton->setAutoRepeat( FALSE );
   filesConfButton->setAutoResize( FALSE );
   connect (filesConfButton, SIGNAL(clicked()),SLOT(slotFilesConfClicked()));

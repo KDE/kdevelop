@@ -318,7 +318,7 @@ void CKDevelop::slotProjectAddExistingFiles(){
     refreshTrees();
   }
   if(new_subdir){
-    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe must now regenerate all Makefiles."),KMsgBox::INFORMATION);
+    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
     setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
   messages_widget->clear();
