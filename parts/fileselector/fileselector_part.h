@@ -1,38 +1,35 @@
-
-
 #ifndef __KDEVPART_FILESELECTOR_H__
 #define __KDEVPART_FILESELECTOR_H__
 
-#include <qguardedptr.h>
-#include <kdialogbase.h>
 #include <kdevplugin.h>
+
+#include <kdialogbase.h>
 #include <kfileitem.h>
 
+#include <qguardedptr.h>
 
-class FileSelectorWidget;
+class KDevFileSelector;
+class KDialogBase;
 
 class FileSelectorPart : public KDevPlugin
 {
-  Q_OBJECT
-
+    Q_OBJECT
 public:
-
-  FileSelectorPart(QObject *parent, const char *name, const QStringList &);
-  ~FileSelectorPart();
+    FileSelectorPart(QObject *parent, const char *name, const QStringList &);
+    virtual ~FileSelectorPart();
 
 public slots:
-
 //  void showTip();
 //  void showOnStart();
 //  void refresh();
-	void fileSelected(const KFileItem *file);
+    void fileSelected(const KFileItem *file);
 
- private slots:
-   void slotProjectOpened();
+private slots:
+    void slotProjectOpened();
+    void slotConfigWidget( KDialogBase * );
+
 private:
-    QGuardedPtr<FileSelectorWidget> m_filetree;
-
-
+    QGuardedPtr<KDevFileSelector> m_filetree;
 };
 
 
