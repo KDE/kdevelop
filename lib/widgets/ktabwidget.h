@@ -15,7 +15,7 @@ public:
   ~KTabBar();
 signals:
   void closeWindow(const QWidget *);
-  void closeOthers(const QWidget *);
+  void closeOthers(QWidget *);
 protected slots:
   virtual void mousePressEvent(QMouseEvent *e);  
   void closeWindowSlot();
