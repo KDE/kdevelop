@@ -47,6 +47,7 @@ public:
     // type-specifier
     virtual void parseClassSpecifier( ClassSpecifierAST* );
     virtual void parseEnumSpecifier( EnumSpecifierAST* );
+    virtual void parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* );
 
     virtual void parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );

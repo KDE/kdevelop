@@ -12,6 +12,7 @@
 AdaProjectWidget::AdaProjectWidget(AdaProjectPart *part)
  : QWidget(0, "AdaProject widget")
 {
+    Q_UNUSED( part );
 }
 
 

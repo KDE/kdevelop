@@ -10,6 +10,7 @@
 #include <kmimetype.h>
 #include "kdevplugin.h"
 
+class Tag;
 
 class KDevLanguageSupport : public KDevPlugin
 {
@@ -38,6 +39,11 @@ public:
      * should be configurable in the languagesupport dialog.
      */
     virtual KMimeType::List mimeTypes();
+
+    /**
+     * Formats a Tag as used by the class store to the human-readable convention.
+     */
+    virtual QString formatTag( const Tag& tag );
 
     /**
      * Formats a canonicalized class path as used by the class store

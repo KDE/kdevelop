@@ -120,7 +120,7 @@ void AdaSupportPart::initialParse ()
             kapp->processEvents (500);
         }
 
-        emit updatedSourceInfo ();
+        emit updatedSourceInfo();
 
         kapp->restoreOverrideCursor ();
         mainWindow ()->statusBar ()->message
@@ -155,7 +155,7 @@ void AdaSupportPart::addedFilesToProject (const QStringList &fileList)
             maybeParse (path);
         }
 
-        emit updatedSourceInfo ();
+        emit updatedSourceInfo();
 }
 
 
@@ -170,7 +170,7 @@ void AdaSupportPart::removedFilesFromProject (const QStringList &fileList)
             classStore ()->removeWithReferences (path);
         }
 
-        emit updatedSourceInfo ();
+        emit updatedSourceInfo();
 }
 
 
@@ -248,6 +248,7 @@ void AdaSupportPart::parseContents (const QString& contents, const QString& file
 
         parser.compilation_unit ();
         int errors = lexer.numberOfErrors () + parser.numberOfErrors ();
+        Q_UNUSED( errors );
 
     } catch (antlr::ANTLRException& ex) {
         kdDebug () << "*exception*: " << ex.toString ().c_str () << endl;
@@ -266,16 +267,16 @@ void AdaSupportPart::savedFile (const QString& fileName)
 
     if (project ()->allFiles ().contains (fileName.mid (project ()->projectDirectory ().length () + 1))) {
         maybeParse (fileName);
-        emit updatedSourceInfo ();
+        emit updatedSourceInfo();
     }
 }
 
 KMimeType::List AdaSupportPart::mimeTypes( )
 {
     KMimeType::List list;
-    
+
     list << KMimeType::mimeType( "text/x-adasrc" );
-    
+
     return list;
 }
 

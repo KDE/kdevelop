@@ -79,7 +79,7 @@ AutoProjectWidget::AutoProjectWidget( AutoProjectPart *part, bool kde )
 	m_activeTarget = 0;
 	m_shownSubproject = 0;
 	m_choosenTarget = 0;
-	
+
 	QSplitter *splitter = new QSplitter(Vertical, this);
 
 	initOverview ( splitter );
@@ -190,7 +190,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	addExistingFileButton->setEnabled( false );
 	removeButton->setEnabled( true );
 	buildTargetButton->setEnabled( true );
-	
+
 	m_detailView = new AutoDetailsView( this, m_part, targetBox, "project details widget" );
 	m_detailView->setRootIsDecorated( true );
 	m_detailView->setResizeMode( QListView::LastColumn );
@@ -268,7 +268,7 @@ QStringList AutoProjectWidget::allSubprojects()
 		QString path = static_cast<SubprojectItem*>( it.current() ) ->path;
 		res.append( path.mid( prefixlen ) );
 	}
-	
+
 	return res;
 }
 
@@ -295,7 +295,7 @@ QPtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
 SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, bool pathIsAbsolute)
 {
        kdDebug(9020) << "Looking for path " << path << endl;
-        
+
         int prefixLen = m_part->projectDirectory().length() + 1;
         for(QListViewItemIterator it = m_subprojectView;it.current();++it)
         {
@@ -457,7 +457,7 @@ void AutoProjectWidget::setActiveTarget( const QString &targetPath )
 			}
 		}
 	}
-	
+
 	if ( m_activeSubproject == 0 &&
 		m_activeTarget == 0 )
 	{
@@ -574,7 +574,7 @@ void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* sp
 
 	QMap<QString, QString> replaceMap;
 	replaceMap.insert( varname, spitem->variables[ varname ] );
-	
+
 	AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );
 
 	slotDetailsSelectionChanged(spitem);
@@ -590,13 +590,13 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 {
 	if ( !item )
 		return;
-		
+
 	// Delete the items from the details view first.
 	if ( m_shownSubproject )
 	{
 		// Remove all TargetItems and all of their children from the view
 		kdDebug ( 9020 ) << "m_shownSubproject (before takeItem()): " << m_shownSubproject->subdir << endl;
-		
+
 		QPtrListIterator<TargetItem> it1( m_shownSubproject->targets );
 		for ( ; it1.current(); ++it1 )
 		{
@@ -795,7 +795,7 @@ void AutoProjectWidget::emitRemovedFile( const QString &name )
 
 void AutoProjectWidget::restoreSession ( const QDomElement* el )
 {
-
+    Q_UNUSED( el );
 }
 
 void AutoProjectWidget::saveSession ( QDomElement* el )

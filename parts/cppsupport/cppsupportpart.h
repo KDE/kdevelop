@@ -49,7 +49,7 @@ class CppSupportPart : public KDevLanguageSupport
 
 public:
     CppSupportPart( QObject *parent, const char *name, const QStringList &args );
-    ~CppSupportPart();
+    virtual ~CppSupportPart();
 
     bool isValid() const { return m_valid; }
 
@@ -74,6 +74,8 @@ public:
     static KConfig *config();
 
     void emitFileParsed( const QString& fileName );
+
+    virtual QString formatTag( const Tag& tag );
 
 signals:
     void fileParsed( const QString& fileName );
@@ -131,8 +133,9 @@ private:
     void maybeParse( const QString& fileName );
 
     QStringList modifiedFileList();
-
     QString findSourceFile();
+    int pcsVersion();
+    void setPcsVersion( int version );
 
     CppCodeCompletion* m_pCompletion;
 

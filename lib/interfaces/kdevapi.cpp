@@ -2,6 +2,7 @@
 
 #include "kdevapi.h"
 #include "kdevversioncontrol.h"
+#include "kdevcoderepository.h"
 
 class KDevApiPrivate
 {
@@ -10,7 +11,7 @@ public:
   KDevApiPrivate()
     : m_projectDom(0), m_project(0), m_makeFrontend(0),
       m_appFrontend(0), m_languageSupport(0), m_versionControl(0),
-      m_diffFrontend(0), m_createFile(0), m_sourceFormatter(0)
+      m_diffFrontend(0), m_createFile(0), m_sourceFormatter(0), m_codeRepository(0)
   {}
 
   QDomDocument *m_projectDom;
@@ -22,19 +23,21 @@ public:
   KDevDiffFrontend *m_diffFrontend;
   KDevCreateFile *m_createFile;
   KDevSourceFormatter *m_sourceFormatter;
-
   KDevApi::VersionControlMap m_registeredVcs;
+  KDevCodeRepository* m_codeRepository;
 };
 
 
 KDevApi::KDevApi()
 {
   d = new KDevApiPrivate;
+  d->m_codeRepository = new KDevCodeRepository();
 }
 
 
 KDevApi::~KDevApi()
 {
+  delete d->m_codeRepository;
   delete d;
 }
 
@@ -116,7 +119,7 @@ QStringList KDevApi::registeredVersionControls() const
 	return foundVersionControls;
 }
 
-KDevVersionControl *KDevApi::versionControlByName( const QString &uid ) const
+KDevVersionControl *KDevApi::versionControlByName( const QString &uid )
 {
 	return d->m_registeredVcs[ uid ];
 }
@@ -159,6 +162,11 @@ KDevSourceFormatter *KDevApi::sourceFormatter()
 void KDevApi::setSourceFormatter(KDevSourceFormatter *sourceFormatter)
 {
   d->m_sourceFormatter = sourceFormatter;
+}
+
+KDevCodeRepository * KDevApi::codeRepository( )
+{
+  return d->m_codeRepository;
 }
 
 #include "kdevapi.moc"

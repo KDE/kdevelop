@@ -116,7 +116,6 @@ void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 {
     QString name = ast->name()->unqualifiedName()->text();
     m_imports.back().push_back( name );
-    TreeParser::parseUsingDirective( ast );
 }
 
 void StoreWalker::parseTypedef( TypedefAST* ast )
@@ -149,8 +148,6 @@ void StoreWalker::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 	    ++it;
 	}
     }
-
-    TreeParser::parseSimpleDeclaration( ast );
 }
 
 void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
@@ -269,8 +266,6 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	    klass->addMethod( method );
     } else if( !isStored )
 	cl->addMethod( method );
-
-    TreeParser::parseFunctionDefinition( ast );
 }
 
 void StoreWalker::parseLinkageBody( LinkageBodyAST* ast )
@@ -390,8 +385,6 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 
 	++it;
     }
-
-    TreeParser::parseEnumSpecifier( ast );
 }
 
 void StoreWalker::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* ast )

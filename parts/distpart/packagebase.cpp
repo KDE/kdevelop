@@ -21,13 +21,14 @@ QVBox * packageBase::area() {
 }
 
 bool packageBase::generatePackage(QString &error) {
+    Q_UNUSED( error );
     return false;
 }
 
-bool packageBase::saveFile(KURL /*theFile*/) {}
+bool packageBase::saveFile(KURL /*theFile*/) { return false; }
 
 
-bool packageBase::loadFile(KURL /*theFile*/) {}
+bool packageBase::loadFile(KURL /*theFile*/) { return false; }
 
 
 
@@ -107,7 +108,10 @@ void packageBase::setAppPackager(QString packager){
     m_dlg->setpackagerLineEditText(packager);
 }
 
-void packageBase::setAppURL(QString url){}
+void packageBase::setAppURL(QString url)
+{
+    Q_UNUSED( url );
+}
 
 void packageBase::setAppSummary(QString summary){
     m_dlg->setsummaryLineEditText(summary);
@@ -122,6 +126,7 @@ void packageBase::setAppLicense(QString licence){
 }
 
 void packageBase::setAppArch(QString arch){
+    Q_UNUSED( arch );
 }
 
 void packageBase::setAppDescription(QString description){

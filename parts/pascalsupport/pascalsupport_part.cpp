@@ -104,31 +104,38 @@ void PascalSupportPart::projectClosed()
 
 void PascalSupportPart::configWidget(KDialogBase *dlg)
 {
+    Q_UNUSED( dlg );
     return;
 }
 
 void PascalSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
+    Q_UNUSED( dlg );
     return;
 }
 
 void PascalSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
+    Q_UNUSED( popup );
+    Q_UNUSED( context );
     return;
 }
 
 void PascalSupportPart::savedFile(const QString &fileName)
 {
+    Q_UNUSED( fileName );
     return;
 }
 
 void PascalSupportPart::addedFilesToProject(const QStringList &fileList)
 {
+    Q_UNUSED( fileList );
     return;
 }
 
 void PascalSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
+    Q_UNUSED( fileList );
     return;
 }
 

@@ -4,6 +4,6 @@ Type=Service
 Exec=blubb
 Comment=Compiler Frontend
 Name=KDevMakeView
-Icon=
+Icon=konsole
 ServiceTypes=KDevelop/MakeFrontend
 X-KDE-Library=libkdevoutputviews

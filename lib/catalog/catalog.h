@@ -46,7 +46,7 @@ public:
     void addIndex( const QCString& name );
     void removeIndex( const QCString& name );
 
-    QCString addItem( const Tag& tag );
+    void addItem( Tag& tag );
     bool removeItem( const QCString& id );
 
     Tag getItemById( const QCString& id );
@@ -56,10 +56,10 @@ public:
 private:
     class Private;
     Private* d;
-    
+
 private:
     Catalog( const Catalog& source );
-    void operator = ( const Catalog& source );	    
+    void operator = ( const Catalog& source );
 };
 
 #endif

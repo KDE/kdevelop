@@ -161,7 +161,6 @@ void ProjectManager::saveSettings()
 
 void ProjectManager::loadDefaultProject()
 {
-  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
   KConfig *config = kapp->config();
   config->setGroup("General Options");
   QString project = config->readEntry("Last Project", "");
@@ -225,7 +224,7 @@ bool ProjectManager::loadProject(const KURL &url)
   m_projectOptionsAction->setEnabled(true);
 
   Core::getInstance()->doEmitProjectOpened();
-  
+
   return true;
 }
 

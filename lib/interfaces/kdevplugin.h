@@ -13,6 +13,7 @@
 #define _KDEVPLUGIN_H_
 
 #include <qobject.h>
+#include <qvaluelist.h>
 #include <kxmlguiclient.h>
 
 class KDevApi;
@@ -29,6 +30,7 @@ class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
 class KDevSourceFormatter;
+class KDevCodeRepository;
 class ClassStore;
 
 class DCOPClient;
@@ -216,25 +218,27 @@ public:
      */
     virtual void savePartialProjectSession(QDomElement* el);
 
-	/**
-	* Add @p vcs to the list of the registered VCS.
-	*/
-	void registerVersionControl( KDevVersionControl *vcs );
+    /**
+     * Add @p vcs to the list of the registered VCS.
+     */
+    void registerVersionControl( KDevVersionControl *vcs );
 
-	/**
-	* Returns the Version Control System having the specified uinque identifier @p uid.
-	*/
-	KDevVersionControl *versionControlByName( const QString &uid ) const;
+    /**
+     * Returns the Version Control System having the specified uinque identifier @p uid.
+     */
+    KDevVersionControl *versionControlByName( const QString &uid ) const;
 
-	/**
-	* Returns a list with unique identifiers among the version control systems.
-	*/
-	QStringList registeredVersionControls() const;
+    /**
+     * Returns a list with unique identifiers among the version control systems.
+     */
+    QStringList registeredVersionControls() const;
 
-	/**
-	* Remove (<u>not</u> delete) @p vcs to the list of the registered VCS.
-	*/
-	void unregisterVersionControl( KDevVersionControl *vcs );
+    /**
+     * Remove (<u>not</u> delete) @p vcs to the list of the registered VCS.
+     */
+    void unregisterVersionControl( KDevVersionControl *vcs );
+
+    KDevCodeRepository* codeRepository();
 
 signals:
     /**

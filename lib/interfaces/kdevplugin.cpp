@@ -184,4 +184,9 @@ KDevSourceFormatter * KDevPlugin::sourceFormatter( )
     return m_api->sourceFormatter();
 }
 
+KDevCodeRepository * KDevPlugin::codeRepository( )
+{
+    return m_api->codeRepository();
+}
+
 #include "kdevplugin.moc"

@@ -68,6 +68,7 @@ BashSupportPart::~BashSupportPart()
 
 void BashSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
+    Q_UNUSED( dlg );
 //	QVBox *vbox = dlg->addVBoxPage(i18n("Bash"));
 //	RubyConfigWidget *w = new RubyConfigWidget(*projectDom(), (QWidget *)vbox, "Bash config widget");
 //	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
@@ -143,7 +144,7 @@ kdDebug(9014) << "addedFilesToProject()" << endl;
 		parse(project()->projectDirectory() + "/" + ( *it ) );
 	}
 
-emit updatedSourceInfo();
+    emit updatedSourceInfo();
 }
 
 
@@ -423,11 +424,11 @@ void BashCodeCompletion::completionBoxAbort()
 KMimeType::List BashSupportPart::mimeTypes( )
 {
     KMimeType::List list;
-    
+
     KMimeType::Ptr mime = KMimeType::mimeType( "application/x-shellscript" );
     if( mime )
 	list << mime;
-    
+
     return list;
 }
 #include "bashsupport_part.moc"

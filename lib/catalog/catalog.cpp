@@ -330,15 +330,16 @@ bool Catalog::isValid() const
 }
 
 /*!
-    \fn Catalog::addItem( const QString& id, Tag tag )
+    \fn Catalog::addItem( Tag& tag )
  */
-QCString Catalog::addItem( const Tag& tag )
+void Catalog::addItem( Tag& tag )
 {
     // TODO: generate a unique ID
     static int n = 0;
     QCString id;
     id.sprintf( "%05d_", n++ );
 
+    tag.setId( id );
     if( d->addItem(d->dbp, id, tag) ){
 	QMap<QCString, DB*>::Iterator it = d->indexList.begin();
 	while( it != d->indexList.end() ){
@@ -347,10 +348,7 @@ QCString Catalog::addItem( const Tag& tag )
 
 	    ++it;
 	}
-	return id;
     }
-
-    return "";
 }
 
 /*!

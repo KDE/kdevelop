@@ -113,6 +113,7 @@ void AddExistingDirectoriesDialog::slotRemoveSelected()
 
 void AddExistingDirectoriesDialog::slotDropped ( QDropEvent* ev )
 {
+    Q_UNUSED( ev );
 }
 
 #include "addexistingdirectoriesdlg.moc"

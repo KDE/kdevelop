@@ -98,7 +98,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, AutoProjectP
 		chooseTargetRadioButton->setChecked ( true );
 		activeTargetRadioButton->setEnabled ( false );
 		neverAskAgainCheckBox->setEnabled ( false );
-		
+
 		slotSubprojectChanged ( subprojectComboBox->text(0) );
 	}
 
@@ -310,9 +310,9 @@ void ChooseTargetDialog::accept ()
 			proc.start(KProcess::DontCare);
 		}
 
-        // why open the files?! 
+        // why open the files?!
 //		m_part->partController()->editDocument ( KURL ( m_choosenSubproject->path + "/" + fileName ) );
-		
+
 		found = false;
 	}
 
@@ -333,5 +333,6 @@ SubprojectItem* ChooseTargetDialog::choosenSubproject()
 
 void ChooseTargetDialog::slotSubprojectTextChanged ( const QString& text )
 {
+    Q_UNUSED( text );
 	//KCompletionBox box = subprojectComboBox->
 }

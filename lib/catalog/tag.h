@@ -57,6 +57,16 @@ public:
 
     Tag& operator = ( const Tag& source );
 
+    QCString id() const
+    {
+        return m_id;
+    }
+
+    void setId( const QCString& id )
+    {
+        m_id = id;
+    }
+
     int kind() const
     {
         return m_kind;
@@ -76,7 +86,7 @@ public:
     {
         m_flags = flags;
     }
-        
+
     QString fileName() const
     {
         return m_fileName;
@@ -169,7 +179,7 @@ public:
 	    return m_startColumn;
 	else if( name == "endLine" )
 	    return m_endLine;
-	else if( name == "endColumn" )	
+	else if( name == "endColumn" )
 	    return m_endColumn;
         return m_attributes[ name ];
     }
@@ -190,7 +200,7 @@ public:
 	    m_startColumn = value.toInt();
 	else if( name == "endLine" )
 	    m_endLine = value.toInt();
-	else if( name == "endColumn" )	
+	else if( name == "endColumn" )
 	    m_endColumn = value.toInt();
 	else
 	    m_attributes[ name ] = value;
@@ -200,6 +210,7 @@ public:
     void store( QDataStream& stream ) const;
 
 private:
+    QCString m_id;
     int m_kind;
     unsigned long m_flags;
     QString m_name;

@@ -606,16 +606,14 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			const QRegExp &regexp, unsigned int *foundAtLine,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
 {
-    QEditor* ed = m_currentView->editor();
-
-    int line = startLine;
-    while( line>=0 && line<=numLines() ){
+    unsigned int line = startLine;
+    while( line<=numLines() ){
         QString str = textLine( line );
         int pos = -1;
         if( backwards ){
-            pos = regexp.searchRev( str, line == (int)startLine ? startCol : str.length() );
+            pos = regexp.searchRev( str, line == startLine ? startCol : str.length() );
         } else {
-            pos = regexp.search( str, line == (int)startLine ? startCol : 0 );
+            pos = regexp.search( str, line == startLine ? startCol : 0 );
         }
 
         if( pos != -1 ){

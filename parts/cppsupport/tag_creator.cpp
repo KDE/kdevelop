@@ -83,6 +83,10 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
     m_currentScope.pop_back();
 }
 
+void TagCreator::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* )
+{
+}
+
 void TagCreator::parseUsingDirective( UsingDirectiveAST* ast )
 {
     QString name;
@@ -107,7 +111,6 @@ void TagCreator::parseUsingDirective( UsingDirectiveAST* ast )
     }
 
     m_imports.back().push_back( name );
-    TreeParser::parseUsingDirective( ast );
 }
 
 void TagCreator::parseTypedef( TypedefAST* ast )
@@ -159,8 +162,6 @@ void TagCreator::parseTypedef( TypedefAST* ast )
 	}
 
     }
-
-    TreeParser::parseTypedef( ast );
 }
 
 void TagCreator::parseTemplateDeclaration( TemplateDeclarationAST* ast )
@@ -188,8 +189,6 @@ void TagCreator::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 	    ++it;
 	}
     }
-
-    TreeParser::parseSimpleDeclaration( ast );
 }
 
 void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
@@ -274,8 +273,6 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
         tag.setKind( Tag::Kind_FunctionDeclaration );
         m_catalog->addItem( tag );
     }
-
-    TreeParser::parseFunctionDefinition( ast );
 }
 
 void TagCreator::parseLinkageBody( LinkageBodyAST* ast )
@@ -286,7 +283,6 @@ void TagCreator::parseLinkageBody( LinkageBodyAST* ast )
 	parseDeclaration( it.current() );
 	++it;
     }
-    TreeParser::parseLinkageBody( ast );
 }
 
 void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
@@ -331,8 +327,7 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
     ast->getEndPosition( &line, &col );
     tag.setEndPosition( line, col );
 
-    QString id = m_catalog->addItem( tag );
-    Q_UNUSED( id ); // TODO
+    m_catalog->addItem( tag );
 
     if ( ast->baseClause() )
         parseBaseClause( tag.path(), ast->baseClause() );
@@ -366,8 +361,7 @@ void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
     ast->getEndPosition( &line, &col );
     tag.setEndPosition( line, col );
 
-    QString id = m_catalog->addItem( tag );
-    Q_UNUSED( id );
+    m_catalog->addItem( tag );
 
     QPtrList<EnumeratorAST> l = ast->enumeratorList();
     QPtrListIterator<EnumeratorAST> it( l );

@@ -50,7 +50,7 @@ FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const 
     : KDevLanguageSupport("FortranSupport", "fortran", parent, name ? name : "FortranSupportPart")
 {
     setInstance(FortranSupportFactory::instance());
-    
+
     setXMLFile("kdevfortransupport.rc");
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
@@ -85,7 +85,7 @@ void FortranSupportPart::slotFtnchek()
     partController()->saveAllFiles();
 
     QDomDocument &dom = *projectDom();
-    
+
     QString cmdline = "cd ";
     cmdline += project()->projectDirectory();
     cmdline += "&& ftnchek -nonovice ";
@@ -98,7 +98,7 @@ void FortranSupportPart::slotFtnchek()
         cmdline += "-declare ";
     if (DomUtil::readBoolEntry(dom, "/kdevfortransupport/ftnchek/pure"))
         cmdline += "-pure ";
-    
+
     cmdline += "-arguments=";
     if (DomUtil::readBoolEntry(dom, "/kdevfortransupport/ftnchek/argumentsall"))
         cmdline += "all ";
@@ -145,7 +145,7 @@ void FortranSupportPart::slotFtnchek()
             cmdline += *it + " ";
         }
     }
-    
+
     makeFrontend()->queueCommand(QString::null, cmdline);
 }
 
@@ -197,7 +197,7 @@ void FortranSupportPart::maybeParse(const QString fileName)
 void FortranSupportPart::initialParse()
 {
     kdDebug(9019) << "initialParse()" << endl;
-    
+
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allFiles();

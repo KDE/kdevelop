@@ -29,6 +29,7 @@ class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
 class KDevSourceFormatter;
+class KDevCodeRepository;
 
 class KDevApiPrivate;
 
@@ -36,7 +37,7 @@ class KDevApi : public QObject
 {
     Q_OBJECT
 public:
-	typedef QMap<QString,KDevVersionControl*> VersionControlMap;
+    typedef QMap<QString,KDevVersionControl*> VersionControlMap;
 
     KDevApi();
     virtual ~KDevApi();
@@ -64,24 +65,24 @@ public:
     KDevLanguageSupport *languageSupport();
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
 
-	void registerVersionControl( KDevVersionControl *vcs );
-	void unregisterVersionControl( KDevVersionControl *vcs );
-	QStringList registeredVersionControls() const;
-	KDevVersionControl *versionControlByName( const QString &uid ) const;
+    void registerVersionControl( KDevVersionControl *vcs );
+    void unregisterVersionControl( KDevVersionControl *vcs );
+    QStringList registeredVersionControls() const;
+    KDevVersionControl *versionControlByName( const QString &uid );
 
     KDevDiffFrontend *diffFrontend();
     void setDiffFrontend(KDevDiffFrontend *diffFrontend);
 
     KDevCreateFile *createFile();
     void setCreateFile(KDevCreateFile *createFile);
-    
+
     KDevSourceFormatter *sourceFormatter();
     void setSourceFormatter(KDevSourceFormatter *sourceFormatter);
 
+    KDevCodeRepository *codeRepository();
+
 private:
-
     KDevApiPrivate *d;
-
 };
 
 #endif

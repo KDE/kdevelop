@@ -32,6 +32,7 @@
 #include "cppsupportfactory.h"
 #include "classgeneratorconfig.h"
 #include "catalog.h"
+#include "cpp_tags.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -83,6 +84,7 @@
 #include <classstore.h>
 #include <kdevpartcontroller.h>
 #include <kdevmakefrontend.h>
+#include <kdevcoderepository.h>
 
 #include <parsedclass.h>
 #include <parsedattribute.h>
@@ -101,6 +103,8 @@ void showMemUsage()
 void showMemUsage()
 {}
 #endif
+
+enum { PCS_VERSION = 1 };
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
     : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"),
@@ -205,6 +209,12 @@ CppSupportPart::~CppSupportPart()
     //m_backgroundParser->reparse();
     m_backgroundParser->close();
     m_backgroundParser->wait();
+
+    QPtrListIterator<Catalog> it( m_catalogList );
+    while( Catalog* catalog = it.current() ){
+        ++it;
+        codeRepository()->unregisterCatalog( catalog );
+    }
 
     mainWindow( )->removeView( m_problemReporter );
 #ifdef ENABLE_FILE_STRUCTURE
@@ -349,7 +359,7 @@ CppSupportPart::projectOpened( )
     m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
 
-    QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
+    QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
 
@@ -665,7 +675,7 @@ CppSupportPart::initialParse( )
     }
 
     parseProject( );
-    emit updatedSourceInfo( );
+    emit updatedSourceInfo();
     m_valid = true;
     return;
 }
@@ -716,7 +726,7 @@ CppSupportPart::parseProject( )
     }
 
     kdDebug( 9007 ) << "updating sourceinfo" << endl;
-    emit updatedSourceInfo( );
+    emit updatedSourceInfo();
 
     mainWindow( )->statusBar( )->removeWidget( bar );
     delete bar;
@@ -993,20 +1003,42 @@ void CppSupportPart::setupCatalog( )
 {
     kdDebug(9007) << "CppSupportPart::setupCatalog()" << endl;
 
+    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
+
     KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
     QStringList pcsList = dirs->findAllResources( "pcs", "*.db", false, true );
+    QStringList pcsIdxList = dirs->findAllResources( "pcs", "*.idx", false, true );
+
+    if( pcsList.size() && pcsVersion() < PCS_VERSION ){
+        QStringList l = pcsList + pcsIdxList;
+        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled!! You have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("C++ Support") );
+        if( rtn == KMessageBox::Yes ){
+            QStringList::Iterator it = l.begin();
+            while( it != l.end() ){
+                QFile::remove( *it );
+                ++it;
+            }
+            // TODO: regenerate the pcs list
+            pcsList.clear();
+        } else {
+            return;
+        }
+    }
+
     QStringList::Iterator it = pcsList.begin();
     while( it != pcsList.end() ){
         Catalog* catalog = new Catalog();
         catalog->open( *it );
-        catalog->addIndex( "kind" );
-        catalog->addIndex( "name" );
-        catalog->addIndex( "scope" );
-        catalog->addIndex( "fileName" );
+        ++it;
+
+        for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
+            catalog->addIndex( (*idxIt).utf8() );
 
         m_catalogList.append( catalog );
-        ++it;
+        codeRepository()->registerCatalog( catalog );
     }
+
+    setPcsVersion( PCS_VERSION );
 }
 
 KMimeType::List CppSupportPart::mimeTypes( )
@@ -1036,6 +1068,52 @@ KMimeType::List CppSupportPart::mimeTypes( )
 void CppSupportPart::emitFileParsed( const QString & fileName )
 {
     emit fileParsed( fileName );
+}
+
+int CppSupportPart::pcsVersion()
+{
+    KConfig* config = CppSupportFactory::instance()->config();
+    KConfigGroupSaver cgs( config, "PCS" );
+    return config->readNumEntry( "Version", 0 );
+}
+
+void CppSupportPart::setPcsVersion( int version )
+{
+    KConfig* config = CppSupportFactory::instance()->config();
+    KConfigGroupSaver cgs( config, "PCS" );
+    config->writeEntry( "Version", version );
+    config->sync();
+}
+
+QString CppSupportPart::formatTag( const Tag & inputTag )
+{
+    Tag tag = inputTag;
+
+    switch( tag.kind() )
+    {
+        case Tag::Kind_Namespace:
+            return QString::fromLatin1("namespace ") + tag.name();
+
+        case Tag::Kind_Class:
+            return QString::fromLatin1("class ") + tag.name();
+
+        case Tag::Kind_Function:
+        case Tag::Kind_FunctionDeclaration:
+        {
+            CppFunction<Tag> tagInfo( tag );
+            return tagInfo.name() + "( " + tagInfo.arguments().join(", ") + " ) : " + tagInfo.type();
+        }
+        break;
+
+        case Tag::Kind_Variable:
+        case Tag::Kind_VariableDeclaration:
+        {
+            CppVariable<Tag> tagInfo( tag );
+            return tagInfo.name() + " : " + tagInfo.type();
+        }
+        break;
+    }
+    return tag.name();
 }
 
 #include "cppsupportpart.moc"

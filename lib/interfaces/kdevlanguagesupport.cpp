@@ -19,6 +19,11 @@ KMimeType::List KDevLanguageSupport::mimeTypes()
     return KMimeType::List();
 }
 
+QString KDevLanguageSupport::formatTag( const Tag& tag )
+{
+    return QString::null;
+}
+
 QString KDevLanguageSupport::formatClassName(const QString &name)
 {
     return name;

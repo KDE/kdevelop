@@ -34,7 +34,7 @@ Tag::Tag( const Tag& source )
     m_scope( source.m_scope ),
     m_fileName( source.m_fileName ),
     m_startLine( source.m_startLine ), m_startColumn( source.m_startColumn ),
-    m_endLine( source.m_endLine ), m_endColumn( source.m_endColumn ),   
+    m_endLine( source.m_endLine ), m_endColumn( source.m_endColumn ),
     m_attributes( source.m_attributes )
 {
 }
@@ -45,6 +45,7 @@ Tag::~Tag()
 
 Tag& Tag::operator = ( const Tag& source )
 {
+    m_id = source.m_id;
     m_kind = source.m_kind;
     m_flags = source.m_flags;
     m_name = source.m_name;
@@ -60,7 +61,8 @@ Tag& Tag::operator = ( const Tag& source )
 
 void Tag::load( QDataStream& stream )
 {
-    stream 
+    stream
+        >> m_id
 	>> m_kind
 	>> m_flags
 	>> m_name
@@ -75,7 +77,8 @@ void Tag::load( QDataStream& stream )
 
 void Tag::store( QDataStream& stream ) const
 {
-    stream 
+    stream
+        << m_id
 	<< m_kind
 	<< m_flags
 	<< m_name

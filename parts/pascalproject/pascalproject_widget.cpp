@@ -14,6 +14,7 @@
 PascalProjectWidget::PascalProjectWidget(PascalProjectPart *part)
  : QWidget(0, "PascalProject widget")
 {
+    Q_UNUSED( part );
 }
 
 

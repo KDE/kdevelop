@@ -173,7 +173,7 @@ void SQLSupportPart::parse()
 
     if ( project() ) {
         kapp->setOverrideCursor( waitCursor );
-/*	
+/*
 	QStringList files = project() ->allFiles();
         for ( QStringList::Iterator it = files.begin(); it != files.end() ;++it ) {
             kdDebug( 9014 ) << "maybe parse " << project() ->projectDirectory() + "/" + ( *it ) << endl;

@@ -203,7 +203,7 @@ void PerlSupportPart::initialParse()
         delete bar;
         kapp->restoreOverrideCursor();
         mainWindow()->statusBar()->message( i18n("Done") );
-      
+
     } else {
         kdDebug(9016) << "No project" << endl;
     }
@@ -302,7 +302,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
   m_inpackage = false;
   m_inscript = false;
   m_inclass=false;
-  
+
   int lineNo = -1;
   bool inpod = false;
   bool endpod = false;
@@ -313,7 +313,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
   kdDebug(9016) << "inscript : " << inscript << "," << fi.extension() << endl;
 
   if (inscript) { addScript(fileName,lineNo,fileName);}
-  
+
   for ( QStringList::Iterator it = lines->begin(); it != lines->end(); ++it ) {
     ++lineNo;
     line = (*it).local8Bit();
@@ -339,7 +339,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
           }
           continue;
     } //sub
-      
+
     //our matching
     if (globalre.match(line)) {
         //splitup multible ours
@@ -356,7 +356,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
         }
         continue;
     } //globalre
-      
+
     //bless matching
     if (blessre.match(line)) {
          kdDebug(9016) << "blessre match [" << m_lastpackage << "]" << endl;
@@ -364,7 +364,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
          addConstructor(m_lastclass,m_lastsub);
          continue;
     } //bless
-      
+
     //base matching
     if (basere.match(line)) {
          QString parent = basere.group(1);
@@ -390,7 +390,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
          }
      }
     } //base
-      
+
     if (isare.match(line)) {
          QString parent = isare.group(1);
          //create child & parent classes
@@ -399,7 +399,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
          addParentClass(parent,m_lastpackage);
          continue;
     } //isa
-      
+
     if (packagere.match(line)) {
          QString package=packagere.group(1);
          kdDebug(9016) << "packagere match [" << package << "]" << endl;
@@ -481,7 +481,7 @@ void PerlSupportPart::addPackage(const QString& fileName ,int lineNr , const QSt
 {
  ParsedScopeContainer *p = 0;
  ParsedScopeContainer *s = 0;
- 
+
  REQUIRE( "Valid package name",( ! name.isEmpty() ));
 
  //check if already exist
@@ -494,7 +494,7 @@ void PerlSupportPart::addPackage(const QString& fileName ,int lineNr , const QSt
      p->setDefinedOnLine(lineNr);
      classStore()->globalScope()->addScope(p);
 
-     //add to classstore 
+     //add to classstore
      s = classStore()->getScopeByName(name);
      if (!s) {
         classStore()->addScope(p);
@@ -544,7 +544,7 @@ void PerlSupportPart::addAttributetoPackage(const QString& fileName ,int lineNr 
 {
  ParsedScopeContainer *p = 0;
  ParsedAttribute *attr=0;
- 
+
  REQUIRE( "Valid attribute name",name.length() > 0 );
  REQUIRE( "Valid package name",m_lastpackage.length() > 0 );
 
@@ -616,7 +616,7 @@ void PerlSupportPart::addClass(const QString& fileName ,int lineNr ,const QStrin
        }
      }
  }
- 
+
  m_inclass=true;
  m_lastclass=name;
 }
@@ -740,7 +740,7 @@ void PerlSupportPart::addPackageSub(const QString& fileName ,int lineNr ,const Q
 {
  ParsedMethod *p = 0;
  ParsedScopeContainer *s = 0;
- 
+
  REQUIRE( "Valid sub name",name.length() > 0 );
  REQUIRE( "Valid package name",m_lastpackage.length() > 0 );
 
