@@ -469,7 +469,11 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
 
     if( !doc || !part->widget() || doc == docIface  )
+    {
+        actionCollection()->action( "edit_expandtext" )->setEnabled( false );
+        actionCollection()->action( "edit_expandabbrev" )->setEnabled( false );
         return;
+    }
 
     docIface = doc;
 
