@@ -142,6 +142,9 @@ operation of KDevelop.
 
 \subsubsection project-management-parts Project Management Parts in KDevelop
 
+  - parts/adaproject = Ada Project Manager
+    - (see AdaProjectPart)
+    .
   - parts/antproject = ANT Project Manager
     - (see AntProjectPart)
     .
@@ -150,6 +153,12 @@ operation of KDevelop.
     .
   - parts/customproject = Custom Project Manager
     - (see CustomProjectPart)
+    .
+  - parts/pascalproject = Pascal Project Manager
+    - (see PascalProjectPart)
+    .
+  - parts/scriptproject = Script Project Manager
+    - (see ScriptProjectPart)
     .
   - parts/trollproject = QMake based Project Manager
     - (see TrollProjectPart)
