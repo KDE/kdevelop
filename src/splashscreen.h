@@ -1,34 +1,35 @@
-#ifndef __SPLASHSCREEN_H__
-#define __SPLASHSCREEN_H__
 
+#ifndef _SPLASHSCREEN_H_
+#define _SPLASHSCREEN_H_
 
-#include <qobject.h>
-#include <qwidget.h>
+#include <qsplashscreen.h>
+#include <qpainter.h>
 #include <qlabel.h>
 
+class QPixmap;
 
-class SplashScreen : public QObject
+class SplashScreen : public QSplashScreen
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
+	SplashScreen(const QPixmap& pixmap, WFlags f = 0);
+	virtual ~SplashScreen();
 
-  SplashScreen();
-  ~SplashScreen();
-
-  virtual bool eventFilter(QObject* obj, QEvent* e);
+protected:
+	void drawContents (QPainter * painter);
 
 public slots:
+	void animate();
+	void message( const QString &str, int flags = AlignLeft,
+		const QColor &color = black );
 
-  void showMessage(const QString &message);
-
-	
 private:
-	
-  QWidget *m_splash;
-  QLabel  *m_message;
-
+	int state;
+	int progress_bar_size;
+	QString m_string;
+		
 };
 
-
 #endif
+

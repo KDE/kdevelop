@@ -9,9 +9,9 @@
 #include <kdebug.h>
 #include <dcopclient.h>
 
-#include <qsplashscreen.h>
 #include <qfileinfo.h>
 
+#include "splashscreen.h"
 #include "toplevel.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
@@ -83,21 +83,22 @@ int main(int argc, char *argv[])
  
   QPixmap pm;
   pm.load(locate("appdata", "pics/kdevelop-splash.png"));
-  QSplashScreen * splash = new QSplashScreen( pm );	// KSplashScreen seems broken
-  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
-    splash, SLOT(message(const QString &)));
-  splash->show();
-
+  SplashScreen * splash = new SplashScreen( pm );
+  
   app.processEvents();
 
   splash->message( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
-  PluginController::getInstance()->loadInitialPlugins();
-
   splash->message( i18n( "Starting GUI" ) );
   TopLevel::getInstance()->main()->show();
 
+  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
+    splash, SLOT(message(const QString &)));
+  splash->show();
+  
+  PluginController::getInstance()->loadInitialPlugins();
+  
   Core::getInstance()->doEmitCoreInitialized();
 
   delete splash;

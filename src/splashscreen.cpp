@@ -1,85 +1,80 @@
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qapplication.h>
-
-
-#include <kdebug.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kapplication.h>
-#include <kglobalsettings.h>
-#include <kdeversion.h>
-
-#include <kmainwindow.h>
-#include "toplevel.h"
 
 #include "splashscreen.h"
 #include "splashscreen.moc"
 
-SplashScreen::SplashScreen()
-  : QObject()
+#include <config.h>
+
+#include <qtimer.h>
+#include <qfont.h>
+
+SplashScreen::SplashScreen(const QPixmap& pixmap, WFlags f) : QSplashScreen(pixmap, f)
 {
-  m_splash = new QWidget( 0,
-    "splash", WStyle_NoBorder | WStyle_Customize | WStyle_StaysOnTop /*| WX11BypassWM */);
+	QTimer *timer = new QTimer( this );
+	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
+    timer->start(150);
 
-  m_splash->installEventFilter( this );
-
-  QVBoxLayout *vbox = new QVBoxLayout(m_splash);
-
-  QLabel *pixmap = new QLabel(m_splash);
-  QPixmap pm;
-  if (TopLevel::mode == TopLevel::AssistantMode)
-      pm.load(locate("data", "kdevelop/pics/kdevelop-splash.png"));
-  else
-      pm.load(locate("appdata", "pics/kdevelop-splash.png"));
-  pixmap->setPixmap(pm);
-  vbox->addWidget(pixmap);
-
-  m_message = new QLabel(m_splash);
-  m_message->setPaletteForegroundColor(Qt::white);
-  m_message->setBackgroundColor(Qt::black);
-  vbox->addWidget(m_message);
-
-  showMessage(i18n("Starting core application"));
-
-#if defined(KDE_IS_VERSION)
-#if (KDE_IS_VERSION(3,1,90))
-  QRect rect = KGlobalSettings::splashScreenDesktopGeometry();
-#else
-  QRect rect = QApplication::desktop()->screenGeometry(
-    QApplication::desktop()->screenNumber(QPoint(0,0)));
-#endif
-#else
-  QRect rect = QApplication::desktop()->screenGeometry(
-    QApplication::desktop()->screenNumber(QPoint(0,0)));
-#endif
-  m_splash->move(rect.x() + (rect.width() - m_splash->sizeHint().width()) / 2,
-     rect.y() + (rect.height() - m_splash->sizeHint().height()) / 2);
-  m_splash->setFixedSize(m_splash->sizeHint());
-
-  m_splash->show();
+	state = 0;
+	progress_bar_size = 3;
 }
 
 
 SplashScreen::~SplashScreen()
 {
-  delete m_splash;
 }
 
 
-void SplashScreen::showMessage(const QString &message)
+void SplashScreen::animate()
 {
-  kdDebug(9000) << "SPLASH: message=" << message << endl;
-
-  m_message->setText(" " + message);
-  kapp->processEvents();
+	state = ((state + 1) % (2*progress_bar_size-1));
+	repaint();
 }
 
-bool SplashScreen::eventFilter(QObject* obj, QEvent* e)
+
+void SplashScreen::message( const QString &str, int flags, const QColor &color)
 {
-  if (obj == m_splash && e->type() == QEvent::MouseButtonRelease) {
-    m_splash->hide();
-    return true;
-  }
-  return false;
+	QSplashScreen::message(str,flags,color);
+	animate();
+	m_string = str;
 }
+
+
+void SplashScreen::drawContents (QPainter* painter)
+{
+	int position;
+	QColor base_color (201,229,165); // Base green color
+	
+	// Draw background circles
+	painter->setPen(NoPen);
+	painter->setBrush(QColor(215,234,181)); 
+	painter->drawEllipse(51,7,9,9);
+	painter->drawEllipse(62,7,9,9);
+	painter->drawEllipse(73,7,9,9);
+
+	// Draw animated circles, increments are chosen 
+	// to get close to background's color 
+	// (didn't work well with QColor::light function)
+	for (int i=0; i < progress_bar_size; i++)
+	{
+		position = (state+i)%(2*progress_bar_size-1);
+		painter->setBrush(QColor(base_color.red()-18*i, 
+								 base_color.green()-10*i, 
+								 base_color.blue()-28*i));
+
+		if (position < 3) painter->drawEllipse(51+position*11,7,9,9);
+	}
+
+	painter->setPen(QColor(74,112,18));
+	painter->setFont(QFont("Helvetica", 8));
+	
+	// Draw version number
+	QRect r = rect();
+    r.setRect(r.x() + 5, r.y() + 5, r.width() - 10, r.height() - 10);
+    painter->drawText(r, Qt::AlignRight, QString ("Version ") + VERSION);
+
+	// Draw message at given position, limited to 43 chars
+	// If message is too long, string is truncated
+	if (m_string.length() > 40) {m_string.truncate(39); m_string += "...";}
+	painter->drawText (90, 16, m_string, 42);
+	
+}
+

@@ -10,8 +10,8 @@
 #include <dcopclient.h>
 
 #include <qfileinfo.h>
-#include <qsplashscreen.h>
 
+#include "splashscreen.h"
 #include "toplevel.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
@@ -74,17 +74,15 @@ int main(int argc, char *argv[])
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
-  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+//  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
   KApplication app;
 
   TopLevel::mode = TopLevel::AssistantMode;
 
   QPixmap pm;
-  pm.load(locate("data", "kdevelop/pics/kdevelop-splash.png"));
-  QSplashScreen * splash = new QSplashScreen( pm );	// KSplashScreen seems broken
-  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
-    splash, SLOT(message(const QString &)));
+  pm.load(locate("data", "kdevelop/pics/kdevassistant-splash.png"));
+  SplashScreen * splash = new SplashScreen( pm );
   splash->show();
 
   app.processEvents();
