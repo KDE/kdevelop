@@ -1824,13 +1824,14 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 	return true;
     }
 
+    lex->setIndex( start );
     return parseDeclaration( node );
 }
 
 bool Parser::parseCtorInitializer( AST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCtorInitializer()" << endl;
-    
+
     if( lex->lookAhead(0) != ':' ){
 	return false;
     }
