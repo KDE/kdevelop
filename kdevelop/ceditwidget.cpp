@@ -55,7 +55,7 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, int 
   KWrite(doc, parent, name)
   ,m_contentsType(contentsType)
 {
-  setFocusProxy (kWriteView); 
+  setFocusProxy (kWriteView);
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
   pop->insertItem(SmallIconSet("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
@@ -271,10 +271,6 @@ int CEditWidget::getLinePos( const char *buf, uint aLine )
 
   // Pos currently points at the last \n, that's why we add 1.
   return pos + 1;
-}
-
-void CEditWidget::enterEvent ( QEvent * /*e*/){
-  setFocus();
 }
 
 void CEditWidget::mousePressEvent(QMouseEvent* event){

@@ -198,7 +198,6 @@ protected: // Protected attributes
   QString searchtext;
 
 protected: // Protected methods
-  void enterEvent ( QEvent * e); 
   void mousePressEvent(QMouseEvent* event);
 
   /** Get the startposition in the buffer of a line
