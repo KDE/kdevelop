@@ -13,7 +13,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qmessagebox.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 #include <klineedit.h>
 #include <qpushbutton.h>
 
@@ -35,7 +35,7 @@ ProjectConfigurationDlg::~ProjectConfigurationDlg()
 void ProjectConfigurationDlg::browseTargetPath()
 //==============================================
 {
-  m_targetPath->setText(QFileDialog::getExistingDirectory());
+  m_targetPath->setText(KFileDialog::getExistingDirectory());
 
 }
 

@@ -27,7 +27,7 @@
 #include <qtimer.h>
 #include <qdir.h>
 #include <qinputdialog.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 #include <qtooltip.h>
 #include <kdebug.h>
 #include <klistview.h>
@@ -918,15 +918,14 @@ void TrollProjectWidget::addFile(const QString &fileName)
 void TrollProjectWidget::slotAddFiles()
 {
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  QString  sourceFiles = i18n("Source files (*.cpp *.c *.hpp *.h *.ui)");
-  QString  allFiles = i18n("All files (*)");
-  QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
-                                        sourceFiles,
+  QString  filter = i18n("Source files") + "(*.cpp *.c *.hpp *.h *.ui)";
+  filter += "\n" + i18n("All files") + " (*)";
+  KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
+                                        filter,
                                         this,
                                         i18n("Insert existing files"),
                                         TRUE);
-  dialog->addFilter(allFiles);
-  dialog->setMode(QFileDialog::ExistingFiles);
+  dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
   dialog->exec();
   QStringList files = dialog->selectedFiles();
   for (unsigned int i=0;i<files.count();i++)
@@ -1056,12 +1055,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
         if (r == idInsExistingFile)
         {
-          QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
+          KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
                                                 title + " ("+ext+")",
                                                 this,
                                                 "Insert existing "+ title,
                                                 TRUE);
-          dialog->setMode(QFileDialog::ExistingFiles);
+          dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
           dialog->exec();
           QStringList files = dialog->selectedFiles();
           for (unsigned int i=0;i<files.count();i++)
