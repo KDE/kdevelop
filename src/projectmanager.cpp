@@ -4,6 +4,7 @@
 #include <qstringlist.h>
 #include <qptrlist.h>
 #include <qvbox.h>
+#include <qsize.h>
 
 class QDomDocument;
 
@@ -171,10 +172,21 @@ void ProjectManager::slotProjectOptions()
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
   connect( lw, SIGNAL(accepted()), this, SLOT(updateActiveLangMenu()) );
 
+  KConfig *config = kapp->config();
+  config->setGroup("Project Settings Dialog");
+  int height = config->readNumEntry( "Height", 600 );
+  int width = config->readNumEntry( "Width", 800 );
+  
+  dlg.resize( width, height );
+  
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);
   dlg.exec();
 
   saveProjectFile();
+  
+  config->setGroup("Project Settings Dialog");
+  config->writeEntry( "Height", dlg.size().height() );
+  config->writeEntry( "Width", dlg.size().width() );
 }
 
 void ProjectManager::updateActiveLangMenu()
