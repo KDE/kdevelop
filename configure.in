@@ -27,7 +27,7 @@ dnl default autoconf macro had not the best support for C++ compilers.
 AC_CHECK_COMPILERS
 
 dnl Check for a lexer.
-AC_PROG_LEX
+AM_PROG_LEX
 
 dnl don't build libraries. This mainly disables the configure switches
 dnl --enable-shared and --enable-static, since they don't make that much
