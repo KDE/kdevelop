@@ -32,7 +32,7 @@
 #include <kdevgenericfactory.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
-#include <kregexp.h>
+#include <qregexp.h>
 
 
 typedef KDevGenericFactory<PythonSupportPart> PythonSupportFactory;
@@ -223,8 +223,8 @@ void PythonSupportPart::parse(const QString &fileName)
         return;
     QTextStream stream(&f);
 
-    KRegExp classre("^[ \t]*class[ \t]+([A-Za-z0-9_]+)[ \t]*(\\(([A-Za-z0-9_, \t]+)\\))?.*$");
-    KRegExp methodre("^[ \t]*def[ \t]+([A-Za-z0-9_]+).*$");
+    QRegExp classre("^[ \t]*class[ \t]+([A-Za-z0-9_]+)[ \t]*(\\(([A-Za-z0-9_, \t]+)\\))?.*$");
+    QRegExp methodre("^[ \t]*def[ \t]+([A-Za-z0-9_]+).*$");
 
     FileDom m_file = codeModel()->create<FileModel>();
     m_file->setName( fileName );
@@ -236,14 +236,14 @@ void PythonSupportPart::parse(const QString &fileName)
     while (!stream.atEnd()) {
         rawline = stream.readLine();
         line = rawline.stripWhiteSpace().local8Bit();
-        if (classre.match(line)) {
+        if (classre.search(line) != -1) {
 
             lastClass = codeModel()->create<ClassModel>();
-            lastClass->setName(classre.group(1));
+            lastClass->setName(classre.cap(1));
 	    lastClass->setFileName( fileName );
 	    lastClass->setStartPosition( lineNo, 0 );
 
-            QStringList parentList = QStringList::split(",", classre.group(3));
+            QStringList parentList = QStringList::split(",", classre.cap(3));
             QStringList::ConstIterator it;
             for (it = parentList.begin(); it != parentList.end(); ++it) {
                 QString baseName = (*it).stripWhiteSpace();
@@ -265,10 +265,10 @@ void PythonSupportPart::parse(const QString &fileName)
                 m_file->addClass( lastClass );
             }
 
-        } else if (methodre.match(line)) {
+        } else if (methodre.search(line) != -1 ) {
 
             FunctionDom method = codeModel()->create<FunctionModel>();
-            method->setName(methodre.group(1));
+            method->setName(methodre.cap(1));
 	    method->setFileName( fileName );
             method->setStartPosition( lineNo, 0 );
 
