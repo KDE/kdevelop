@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
-  <!ENTITY kdevrelease "3.0.1">
+  <!ENTITY kdevrelease "3.0.0">
   <!ENTITY apache "<application>Apache</application>">
   <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
@@ -41,8 +41,8 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-02-13</date>
-  <releaseinfo>3.0.1</releaseinfo>
+  <date>2004-02-17</date>
+  <releaseinfo>3.0.0</releaseinfo>
 
   <authorgroup>
     <author>
@@ -183,7 +183,9 @@ You will here find information on the following topics:
 <chapter id="nutshell">
 <title>In a Nutshell</title>
 
-<!-- ### Traditionally, most of this stuff will have been put into a FAQ section. It  is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for. -->
+<!-- Traditionally, most of this stuff will have been put into a FAQ section. It is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for.
+This chapter is meant to provide short hints and tips together with (mandatory) navigation links.
+There should be an additional FAQ section near the end nevertheless which contains more general stuff not directly related to navigating the manual. -->
 
 <para>
 The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. If you want more information on a topic just follow the link in the title starting that advice.
@@ -205,7 +207,7 @@ The information in this chapter is meant as a quick reference for a head start o
     <formalpara id="nutshell-hide-menu">
     <title><link linkend="maximize-workspace">Hide/Unhide the Menubar</link></title>
     <para>
-      To hide the menu bar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. To redisplay the menu bar only <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> is available.
+      To hide the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. To redisplay the menubar only <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> is available.
     </para>
     </formalpara>
   </listitem>
@@ -1681,7 +1683,7 @@ To switch to or from full screen mode select <menuchoice> <guimenu>View</guimenu
 <formalpara>
 <title>Hide/Unhide the Menubar</title>
 <para>
-To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, e.g. the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
+To <emphasis>hide</emphasis> the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, e.g. the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
 </para>
 </formalpara>
 
@@ -1707,7 +1709,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 </sect2> <!-- ui-elements-workarea -->
 
 <sect2 id="ui-elements-titlebar">
-<title>The &kdevelop; Title Bar</title>
+<title>The &kdevelop; Titlebar</title>
 
 <para>
 (... to be written ...)
@@ -1715,7 +1717,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 </sect2> <!-- ui-elements-titlebar -->
 
 <sect2 id="ui-elements-statusbar">
-<title>The &kdevelop; Status Bar</title>
+<title>The &kdevelop; Statusbar</title>
 
 <para>
 (... to be written ...)
@@ -1723,7 +1725,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 </sect2> <!-- ui-elements-statusbar -->
 
 <sect2 id="ui-elements-menubar">
-<title>The Menu Bar</title>
+<title>The menubar</title>
 
 <para>
 (... to be written ...)
@@ -1731,7 +1733,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 </sect2> <!-- ui-elements-menubar -->
 
 <sect2 id="ui-elements-toolbars">
-<title>The Tool Bars</title>
+<title>The Toolbars</title>
 
 <para>
 (... to be written ...)
@@ -2262,18 +2264,26 @@ KDevelop lets you use editor interfaces which have registered with &kde; and tha
 <title>Selecting a Source Format Style</title>
 
 <para>
-&kdevelop; automatically formats a source text in a predefined style. This style is highly configurable. Select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menu bar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
+&kdevelop; automatically formats a source text in a predefined style. This style is highly configurable. Select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Source Formatter</guilabel> in the left hand tree. This will display a series of three settings dialog tabs to the right, namely a <link linkend="setup-format-general">General Formatting Setup</link>, a <link linkend="setup-format-indent">Indentation Style Setup</link>, and a <link linkend="setup-format-other">Other Formatting Setup</link>.
 </para>
 
-<note><para>
+<tip><para>
 Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitely use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
+</para></tip>
+
+<note><para>
+The exact outcome of these style formatting definitions depends on the <link linkend="setup-editor">editor</link> you use. Currently, most settings are taylored to the Kate editor part (the <quote>Embedded Advanced Text Editor</quote>). Some other editors (e.g. the Qt editor) may rely on their own configuration settings. You will have to experiment in this case to find out the exact effects of the style settings provided here.
 </para></note>
+
+<warning><para>
+Tere may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with an none KDE standard editor.
+</para></warning>
 
 <sect3 id="setup-format-general">
 <title>General Formatting Setup</title>
 
 <para>
-The <guilabel>General</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog allows you to select one of five predefined source format styles.
+The <guilabel>General</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog allows you to select one out of five predefined source format styles.
 </para>
 
 <screenshot>
@@ -2288,7 +2298,7 @@ The <guilabel>General</guilabel> tab of the <guilabel>Source Formatter</guilabel
 </screenshot>
 
 <para>
-A formatted source example will be displayed in the field to the right. If none of the predefined styles is to your liking, you may press the top <guilabel>User defined</guilabel> radio button and define your own source formatting style style preferences on the other two tabs which will become available then.
+A formatted source example will be displayed in the field to the right. If none of the predefined styles is to your liking, you may press the top <guilabel>User defined</guilabel> radio button and define your own source formatting style preferences on the other two tabs which will become available then.
 </para>
 
 <note><para>
@@ -2337,10 +2347,10 @@ namespace foospace
 }
 </screen>
 
-<formalpara>
+<formalpara id="setup-format-indent-filling">
 <title>Defining Indentation Width and Characters</title>
 <para>
-The radio buttons grouped in the <guilabel>Filling</guilabel> box define how indentations in the source text will be drawn.
+The radio buttons grouped in the <guilabel>Filling</guilabel> group define how indents in the source text will be drawn.
 </para>
 </formalpara>
 
@@ -2349,7 +2359,7 @@ The radio buttons grouped in the <guilabel>Filling</guilabel> box define how ind
     <term><guilabel>Use tabs</guilabel></term>
     <listitem>
     <para>
-    This will cause the editor to insert a tab character for every indentation level. The indentation width is predefined in the editor settings. Use <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Editor...</guimenuitem></menuchoice> to define the tabulator width.
+    This will cause the editor to insert a tab character for each indentation level. The tab width is predefined in the editor settings (8 or 4 character columns usually). Use <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Editor...</guimenuitem></menuchoice> to redefine it.
     </para>
     <note><para>
     The actual tab width definition procedure depends on the editor you selected in the <link linkend="setup-editor">Selecting an Editor</link> configuration step. You will have to look up the corresponding editor help to find out.
@@ -2367,7 +2377,7 @@ The radio buttons grouped in the <guilabel>Filling</guilabel> box define how ind
 <formalpara>
 <title>Indented Entities</title>
 <para>
-This defines which of the (C/C++) entities the source formatter will extra indent beyond the current indentation level.
+This defines which of the (C/C++) entities will be formatted with an extra indent beyond the current indentation level.
 </para>
 </formalpara>
 <para>
@@ -2377,18 +2387,43 @@ By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> 
 <formalpara>
 <title>Continuation</title>
 <para>
-(... to be written ...)
+The settings grouped here apply to those cases where the source formatter automatically wraps around long source lines. It takes two special cases in account, namely that in deeply nested indents there should remain enough room for the source and that conditionals should get extra indent levels on continuation to make them stand out properly.
 </para>
 </formalpara>
 
-</sect3> <!-- setup-format-inden -->
+<note><para>
+This applies to <emphasis>static word wrap cases</emphasis> only where a fixed maximum line width is used in the source text. If you set up your editor to dynamically wrap around long lines in display only (which is possible in the Kate editor part) the effects of these settings usually will not show.
+</para></note>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Maximum in statement</guilabel></term>
+    <listitem>
+    <para>
+    This setting limits the maximum possible indentation for the continuation lines so that enough space will remain to keep the text readable. No continuation line will ever be indented beyond the number of columns you selected in this field.
+    </para>
+    <para>
+    The default is set to 40 character columns (half a standard 80 column page). You may want to increase this value to account for wider paper (e.g if you use landscape printing for your sources). Or decrease the value accordingly to take larger margin settings of your printouts into account.
+    </para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Minimum in conditional</guilabel></term>
+    <listitem>
+    <para>
+    Conditionals or source following e.g. an assignment operator should usually get an extra indent on continuation lines in order to keep the text readable. The amount of this extra indent is defined here.
+    </para>
+    <para>
+    The default is set to <quote>Twice current</quote> which means that continued conditionals will get an extra indent level of the standard indentation size you selected in the <link linkend="setup-format-indent-filling">Filling</link> group. You may change this extra indent to another fixed width (including zero) using the arrows or by entering the value directly.
+    </para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+</sect3> <!-- setup-format-indent -->
 
 <sect3 id="setup-format-other">
 <title>Other Formatting Setup</title>
-
-<para>
-(... to be written ...)
-</para>
 
 <screenshot>
   <mediaobject>
@@ -2401,6 +2436,134 @@ By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> 
   </mediaobject>
 </screenshot>
 
+<formalpara>
+<title>Controlling the position of braces</title>
+<para>
+The radio buttons the (somewhat misnamed) <guilabel>Brackets</guilabel> group control the position of block delimiting braces in a (C/C++) source text. There are three possibilities from which you can select.
+</para>
+</formalpara>
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Break</guilabel></term>
+    <listitem>
+    <para>This inserts a line break before each opening brace. Both delimiting braces of any block will be put at the same indentation level as the block head statement.</para>
+    <screen>
+namespace foospace
+{
+  int Foo()
+  {
+    if (isBar)
+    {
+      bar();
+      return 1;
+    }
+    else
+      return 0;
+  }
+}
+    </screen>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Attach</guilabel></term>
+    <listitem>
+    <para>
+    This will keep the opening brace of a block in line with the block head statement. Closing braces will be on the same indentation level as the block head statement. The <token>else</token> of an <token>if</token> statement will be kept in line with the closing brace of the preceding block.
+    </para>
+    <screen>
+namespace foospace {
+  int Foo() {
+    if (isBar) {
+      bar();
+      return 1;
+    } else
+      return 0;
+  }
+}
+    </screen>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Linux Style</guilabel></term>
+    <listitem>
+    <para>
+    This is a compromise of the above listed styles. Functional block delimiting braces will be put on extra lines. Braces opening a block in a conditional or loop statement will be kept in line.
+    </para>
+    <screen>
+namespace foospace
+{
+  int Foo()
+  {
+    if (isBar) {
+      bar();
+      return 1;
+    } else
+      return 0;
+  }
+}
+    </screen>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+<formalpara>
+<title>Controlling extra spaces</title>
+<para>
+By default &kdevelop; does minimize the use of spaces in source texts.
+</para>
+</formalpara>
+
+<screen>
+if (isBar(fooArg)==barValue)
+</screen>
+
+<para>
+You may enhance readability if you force the source formatter to insert extra spaces in special positions.
+</para>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Add spaces around parentheses</guilabel></term>
+    <listitem>
+    <para>In fact what is meant is to add spaces around the text put in parentheses. This enhances the readbilitiy of function arguments and conditionals.</para>
+    <screen>
+if ( isBar( fooArg )==barValue )
+    </screen>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Add spaces around operators</guilabel></term>
+    <listitem>
+    <para>This will put spaces around assignment and comparison operators to enhance the readability.</para>
+    <screen>
+if (isBar(fooArg) == barValue)
+    </screen>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+<formalpara>
+<title>Controlling the formatting of one-line constructs</title>
+<para>
+There are a few cases where you don't want the source formatter to split a long line apart. For C/C++ code this can be controlled here.
+</para>
+</formalpara>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Keep one-line statements</guilabel></term>
+    <listitem><para>
+    This keeps single line statements together in some situations even if they exceed a fixed maximum line length.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Keep one-line blocks</guilabel></term>
+    <listitem><para>
+    This keeps single line blocks together in some situations even if they exceed a fixed maximum line length.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+
 </sect3> <!-- setup-format-other -->
 
 </sect2> <!-- setup-format -->
@@ -2409,16 +2572,244 @@ By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> 
 <title>Setting Up the Code Snippets Tool</title>
 
 <para>
-(... to be written ...)
+When editing in &kdevelop; you can store often used parts of code as <link linkend="editing-snippets">Code Snippets</link>. To configure the capabilities of the code snippets part select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Code Snippets</guilabel> in the left hand tree. This will show the following dialog in the right hand side.
 </para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-snippets.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Configuring the Code Snippets tool
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<formalpara>
+<title>Activate snippet preview</title>
+<para>
+Mark the <quote><guilabel>Show snippet's text in tooltip</guilabel></quote> checkbox if you want to view the stored text in a tooltip window whenever you keep the mouse cursor over the title of that snippet.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Working with snippet variables</title>
+<para>
+The <guilabel>Code Snippets</guilabel> tool allows for a variable text in predefined places any time you insert a snippet into a file. To accomplish this  <guilabel>Code Snippets</guilabel> provides its own variables' mechanism. You can set up it's behaviour in the <guilabel>Variables</guilabel> group.
+</para>
+</formalpara>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Delimiter</guilabel></term>
+    <listitem><para>
+    The <guilabel>Code Snippets</guilabel> tool distinguishes variables in the text by surrounding the variable name with special delimiter symbols. To use your own delimiter symbol, change the predefined <guilabel>$</guilabel> character in the <guilabel>Delimiter</guilabel> field.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Input method for variables</guilabel></term>
+    <listitem><itemizedlist>
+      <listitem><para>
+      <guilabel>Single dialog for each variable within a snippet</guilabel> &ndash; will in turn pop up a separate dialog for each variable which the tool finds when inserting the selected code snippet.
+      </para></listitem>
+      <listitem><para>
+      <guilabel>One dialog for all variables within a snippet</guilabel> &ndash; will pop up a common dialog where the user has to fill in the values of all variables before the snippet will be inserted
+      </para></listitem>
+    </itemizedlist></listitem>
+  </varlistentry>
+</variablelist>
+
 </sect2> <!-- setup-snippets -->
 
 <sect2 id="setup-fileselector">
 <title>Configuring the File Selector</title>
 
 <para>
-(... to be written ...)
+&kdevelop; provides a <guilabel>File Selector</guilabel> plugin which, when loaded at startup, allows to navigate to any file or directory in the system.
 </para>
+
+<screenshot id="setup-fileselector-image">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="file-selector.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    The file selector (IDEAl mode)
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+The behaviour of the <guilabel>File Selector</guilabel> can be highly configured. Select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>File Selector</guilabel> in the left hand tree. This will show the following dialog in the right hand side.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-file-selector.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Configuring the file selector
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<formalpara>
+<title>Configuring the toolbar</title>
+<para>
+There is a toolbar on top of the <guilabel>File Selector</guilabel> which can be configured as usual in the <guilabel>Toolbar</guilabel> group.
+</para>
+</formalpara>
+
+<procedure id="setup-fileselector-add-action">
+  <title>Add an action to the toolbar</title>
+  <step>
+    <para>
+    Select an item in the right hand <guilabel>Selected actions</guilabel> list after which the new action should be inserted.
+    </para>
+  </step>
+  <step>
+    <para>
+    Select the action to be inserted in the left hand <guilabel>Available actions</guilabel> list.
+    </para>
+  </step>
+  <step>
+    <para>
+    Click the right (upper) arrow between both lists.
+    </para>
+    <para>The action will be removed from the <guilabel>Available actions</guilabel> list and inserted into the <guilabel>Selected actions</guilabel> list below the selected item.
+    </para>
+  </step>
+</procedure>
+
+<procedure>
+  <title>Remove an action from the toolbar</title>
+  <step>
+    <para>
+    Select the item to be removed in the right hand <guilabel>Selected actions</guilabel> list.
+    </para>
+  </step>
+  <step>
+    <para>
+    Click the left (lower) arrow between both lists.
+    </para>
+    <para>The selected item will be removed from the <guilabel>Selected actions</guilabel> list and put back into the <guilabel>Available actions</guilabel> list.
+    </para>
+  </step>
+</procedure>
+
+<procedure>
+  <title>Reorder the actions on the toolbar</title>
+  <step>
+    <para>
+    Select the action to be moved in the right hand <guilabel>Selected actions</guilabel> list.
+    </para>
+  </step>
+  <step>
+    <para>
+    Click the up or down arrow to the right of this list.
+    </para>
+    <para>The selected item will be moved up or down the <guilabel>Selected actions</guilabel> list.
+    </para>
+  </step>
+</procedure>
+
+<formalpara id="setup-fileselector-autosync">
+<title>Defining when the contents should change</title>
+<para>
+Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, i.e. when you select another directory or when you explicitely want to refresh its contents.
+</para>
+</formalpara>
+<para>
+You can however configure the <guilabel>File Selector</guilabel> to immediately reflect certain changes in your work. The settings in the <guilabel>Auto Synchronization</guilabel> group of the configuration dialog are responsible for this.
+</para>
+
+<note><para>
+You can always update the contents of the <guilabel>File Selector</guilabel> by pressing the <guilabel>Reload</guilabel> button in the toolbar. This is not availble by default, however. You must <link linkend="setup-fileselector-add-action">insert it there</link> first.
+</para></note>
+
+<variablelist>
+  <title>The file selector may update its content...</title>
+  <varlistentry>
+    <term>...<guilabel>When a document becomes active</guilabel></term>
+    <listitem><para>
+    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever you go to another already open document, e.g. when you click on the tab of the according edit window in IDEAl mode. If necessary the <guilabel>File Selector</guilabel> will switch to the directory this file belongs to and update the display to show the actual contents in there.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>...<guilabel>When a document is opened</guilabel></term>
+    <listitem><para>
+    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever a document will be opened, e.g. by the <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice> menu. If necessary the <guilabel>File Selector</guilabel> will switch to the directory this file belongs to and update the display to show the actual contents in there.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>...<guilabel>When the file selector becomes visible</guilabel></term>
+    <listitem><para>
+    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever it gets visible again. If necessary it will switch to the directory the actual document belongs to and update the display to show the actual contents in there.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+
+<para>
+You may freely combine these settings to taylor the actualization behaviour of the <guilabel>File Selector</guilabel> to your liking.
+</para>
+
+<formalpara>
+<title>Controlling the history in the comboboxes</title>
+<para>
+There are two comboboxes on top and bottom of the <guilabel>File Selector</guilabel> contents window which control the directory to be diplayed (top combobox) and the filters to be applied to the file display (bottom combobox). A history of the most recent settings is kept in the selection field of each combobox. You can configure the number of history entries as follows.
+</para>
+</formalpara>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Remember locations</guilabel></term>
+    <listitem><para>
+    Enter here the maximum number of directory selections the upper combobox shall remember.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Remember filters</guilabel></term>
+    <listitem><para>
+    Enter here the maximum number of filter definitions the lower combobox shall remember.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+
+<formalpara>
+<title>Controlling what should be remembered between sessions</title>
+<para>
+By default the <guilabel>File Selector</guilabel> is set up so that it shows the display of the most recent session again at the next &kdevelop; startup. You may change this behaviour in the <guilabel>Session</guilabel> configuration group.
+</para>
+</formalpara>
+
+<note><para>
+If &kdevelop; was automatically restarted by the KDE session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent KDE session will always be restored.
+</para></note>
+
+<variablelist>
+  <varlistentry>
+    <term><guilabel>Restore location</guilabel></term>
+    <listitem>
+    <para>
+    Remove the checkbox mark here if you don't want the displayed location be remembered between sessions.
+    </para>
+    <note><para>
+    If you selected one of the <link linkend="setup-fileselector-autosync">automatic update</link> settings the displayed location might automatically change regardless what has been remembered from the recent session.
+    </para></note>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Restore filters</guilabel></term>
+    <listitem>
+    <para>
+    Remove the checkbox mark here if you don't want the filters applied to the display be remembered between sessions.
+    </para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
 </sect2> <!-- setup-fileselector -->
 
 </sect1> <!-- setup-general -->
@@ -3242,6 +3633,10 @@ If ever you don't want the new project be built, abort the <guilabel>Create New 
 If you want to use a versioning system (&CVS;) there will be two runs actually. &appwizard; will first build the project directories and files and then call up the &CVS; program which restarts the <guilabel>Messages</guilabel> window with its own contents. If any error occurs in either of these runs, the process will stop showing you an according error message in the window.
 </para>
 
+<note><para>
+In many cases when your new project has been set up this way, &kdevelop; will automatically load the source file(s) of one or more basically important modules so you can readily start work. (Which source modules will be displayed&mdash;if any at all&mdash;however depends on the template initially selected in the &appwizard;.)
+</para></note>
+
 <para>
 Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
 </para>
@@ -3757,6 +4152,32 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <chapter id="editing">
 <title>Editing Tools</title>
 
+<sect1 id="editing-snippets">
+<title>Code Snippets</title>
+
+<itemizedlist>
+  <title>Features (preliminary survey)</title>
+  <listitem><para>
+  SnippetPart adds a tool-view which by default docs to the right
+  </para></listitem>
+  <listitem><para>
+  Adding, editing and removing of snippets is available via a popup-menu
+  </para></listitem>
+  <listitem><para>
+  Double-clicking a snippet form the list inserts it into to the active view at the current cursor position
+  </para></listitem>
+  <listitem><para>
+  Tool tips show the content of a snippet
+  </para></listitem>
+  <listitem><para>
+  Snippets are stored in the users home-directory, so every user can have his own snippets
+  </para></listitem>
+  <listitem><para>
+  Snippets can contain variables in the style of $VARNAME$. On using the snippet the user is prompted to enter replacement value for the variables
+  </para></listitem>
+</itemizedlist>
+</sect1> <!-- editing-snippets -->
+
 <sect1 id="keyboardmapping">
 <title>Keyboard Mapping</title>
 <indexterm zone="keyboardmapping"><primary>keybindings</primary></indexterm>
@@ -4004,7 +4425,7 @@ large) number of files is available through the
 
 <para>
 In the dialog, you can specify which files are searched. There is a number of
-wildcard patterns available in a combo box. In this way, you can easily
+wildcard patterns available in a combobox. In this way, you can easily
 restrict the find mechanism to header files. Furthermore, you specify a
 directory where the search is started. If you check the
 <guibutton>Recursive</guibutton> box, the search iterates through all
@@ -4705,7 +5126,7 @@ In this chapter you will find a basic description of the &automanag; elements an
     On top of each view there is a <emphasis>toolbar</emphasis>, the buttons in which will become activated when an element in this view is selected. This provides one way you can access the actions provided for that view element. The other are context menus which pop up on right mouse button click as will be discussed below.
     </para></listitem>
     <listitem><para>
-    In IDEAl mode there are two additional small buttons in the &automanag; window title bar left hand side &ndash; a triangular shaped right arrow, and a dot button. The arrow button is used to <emphasis>close the window</emphasis>. The dot button on the other hand will <emphasis>keep the window open</emphasis> even if another &kdevelop; window has been selected. (Otherwise the &automanag; window will automatically close whenever another window gets the input focus.)
+    In IDEAl mode there are two additional small buttons in the &automanag; window titlebar left hand side &ndash; a triangular shaped right arrow, and a dot button. The arrow button is used to <emphasis>close the window</emphasis>. The dot button on the other hand will <emphasis>keep the window open</emphasis> even if another &kdevelop; window has been selected. (Otherwise the &automanag; window will automatically close whenever another window gets the input focus.)
     </para></listitem>
   </itemizedlist></entry>
 </row></tbody></tgroup>
