@@ -2505,6 +2505,15 @@ void CKAppWizard::slotProcessExited() {
         fileInfo.install_location = "";
         project->addFileToProject (namelow + "/resource.h",fileInfo);
       }
+      if(kickeritem->isSelected()){
+        fileInfo.rel_name = namelow + "/" + namelow + "myview.ui";
+        fileInfo.rel_name = namelow + "/" + namelow + "myview.ui";
+        fileInfo.type = DATA;
+        fileInfo.dist = true;
+        fileInfo.install = false;
+        fileInfo.install_location = "";
+        project->addFileToProject (namelow + "/" + namelow + "myview.ui",fileInfo);
+      }
       if(kde2normalitem->isSelected() || kde2mdiitem->isSelected()){
         fileInfo.rel_name = namelow + "/" + namelow + "ui.rc";
         fileInfo.type = DATA;
