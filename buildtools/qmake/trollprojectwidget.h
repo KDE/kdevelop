@@ -183,9 +183,9 @@ public:
   InsideCheckListItem(QListView *parent,QListViewItem *after,SubqmakeprojectItem *item, ProjectConfigurationDlg *config):
       QCheckListItem(parent,
 #if KDE_VERSION > 305
-		     after,
+             after,
 #endif
-		     item->relpath.right(item->relpath.length()-1),QCheckListItem::CheckBox)
+             item->relpath.right(item->relpath.length()-1),QCheckListItem::CheckBox)
   {
     prjItem=item;
     m_config = config;
@@ -202,9 +202,10 @@ protected:
 class GroupItem : public qProjectItem
 {
 public:
-    enum GroupType {NoType, Sources, Headers, Forms,Distfiles,Images,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject};
+    enum GroupType {NoType, Sources, Headers, Forms,Distfiles,Images,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject, MaxTypeEnum };
 
     static GroupType groupTypeForExtension(const QString &ext);
+    static void groupTypeMeanings(GroupItem::GroupType type, QString& title, QString& ext);
 
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
@@ -219,6 +220,9 @@ public:
     // end qmake INSTALLS support
     GroupType           groupType;
     SubqmakeprojectItem*     owner;
+
+protected:
+    void paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align);
 };
 
 

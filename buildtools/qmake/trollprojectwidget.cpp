@@ -118,8 +118,8 @@ QString SubqmakeprojectItem::getRelativPath()
 QString SubqmakeprojectItem::getDownDirs()
 {
     SubqmakeprojectItem* pItem=this;
-	while (pItem->parent())
-	    pItem=(SubqmakeprojectItem*)pItem->parent();
+    while (pItem->parent())
+        pItem=(SubqmakeprojectItem*)pItem->parent();
     return getRelativePath(QDir::cleanDirPath(this->path),QDir::cleanDirPath(pItem->path));
 }
 QString SubqmakeprojectItem::getSharedLibAddObject(QString downDirs)
@@ -129,10 +129,10 @@ QString SubqmakeprojectItem::getSharedLibAddObject(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
-	  if (QDir::isRelativePath(configuration.m_destdir))
+      if (QDir::isRelativePath(configuration.m_destdir))
         tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-	  else
-	    tmpPath=configuration.m_destdir;
+      else
+        tmpPath=configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
@@ -157,10 +157,10 @@ QString SubqmakeprojectItem::getApplicationObject( QString downDirs )
   QString tmpPath;
   if(configuration.m_destdir!="")
   {
-  	  if (QDir::isRelativePath(configuration.m_destdir))
+      if (QDir::isRelativePath(configuration.m_destdir))
         tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-	  else
-	    tmpPath=configuration.m_destdir;
+      else
+        tmpPath=configuration.m_destdir;
   }else{
     tmpPath=downDirs+this->getRelativPath()+"/";
   }
@@ -187,10 +187,10 @@ QString SubqmakeprojectItem::getLibAddObject(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
- 	  if (QDir::isRelativePath(configuration.m_destdir))
+      if (QDir::isRelativePath(configuration.m_destdir))
         tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-	  else
-	    tmpPath=configuration.m_destdir;
+      else
+        tmpPath=configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
@@ -220,10 +220,10 @@ QString SubqmakeprojectItem::getLibAddPath(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
-	  if (QDir::isRelativePath(configuration.m_destdir))
+      if (QDir::isRelativePath(configuration.m_destdir))
         tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
-	  else
-	    tmpPath=configuration.m_destdir;
+      else
+        tmpPath=configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
@@ -273,8 +273,6 @@ GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const Q
     setPixmap(0, SmallIcon("tar"));
 }
 
-
-
 GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
 {
     if (ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx")
@@ -283,6 +281,8 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return Headers;
     else if (ext == "ui")
         return Forms;
+    else if (ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "xpm" || ext == "gif" || ext == "bmp")
+        return Images;
     else if (ext == "idl")
         return IDLs;
     else if (ext == "l" || ext == "ll" || ext == "lxx" || ext == "l++" )
@@ -293,6 +293,71 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return Translations;
     else
         return NoType;
+}
+
+void GroupItem::groupTypeMeanings(GroupItem::GroupType type, QString& title, QString& ext)
+{
+    switch (type) {
+        case GroupItem::Sources:
+            title = i18n("Sources");
+            ext = "*.cpp *.c";
+            break;
+        case GroupItem::Headers:
+            title = i18n("Headers");
+            ext = "*.h *.hpp";
+            break;
+        case GroupItem::Forms:
+            title = i18n("Forms");
+            ext = "*.ui";
+            break;
+        case GroupItem::IDLs:
+            title = i18n("Corba IDLs");
+            ext = "*.idl *.kidl";
+            break;
+        case GroupItem::Lexsources:
+            title = i18n("Lexsources");
+            ext = "*.l *.ll *.lxx *.l++";
+            break;
+        case GroupItem::Yaccsources:
+            title = i18n("Yaccsources");
+            ext = "*.y *.yy *.yxx *.y++";
+            break;
+        case GroupItem::Images:
+            title = i18n("Images");
+            ext = "*.jpg *.jpeg *.png *.xpm *.gif *.bmp";
+            break;
+        case GroupItem::Distfiles:
+            title = i18n("Distfiles");
+            ext = "*";
+            break;
+        case GroupItem::Translations:
+            title = i18n("Translations");
+            ext = "*.ts";
+            break;
+        case GroupItem::InstallRoot:
+            title = i18n("Installs");
+            ext = "*";
+            break;
+        case GroupItem::InstallObject:
+            title = i18n("Install object");
+            ext = "*";
+            break;
+
+        default: // just give back source files, et all
+            title = i18n("Source Files");
+            ext = "*.cpp *.cc *.c *.hpp *.h *.ui";
+    }
+}
+
+void GroupItem::paintCell(QPainter* p, const QColorGroup& c, int column, int width, int align)
+{
+    QColorGroup cg(c);
+    if (!firstChild())
+    {
+        cg.setColor(QColorGroup::Text, cg.mid());
+    }
+
+    qProjectItem::paintCell(p, cg, column, width, align);
 }
 
 /*
@@ -542,14 +607,21 @@ void TrollProjectWidget::openProject(const QString &dirName)
     QDomDocument &dom = *(m_part->projectDom());
     m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                                                     "subclass","sourcefile", "uifile");
-    SubqmakeprojectItem *item = new SubqmakeprojectItem(overview, "/","");
+    SubqmakeprojectItem *item = new SubqmakeprojectItem(overview, i18n("Subprojects"),"");
     item->subdir = dirName.right(dirName.length()-dirName.findRev('/')-1);
     item->path = dirName;
     item->m_RootBuffer = &(item->m_FileBuffer);
     parse(item);
     item->setOpen(true);
     m_rootSubproject = item;
-    overview->setSelected(item, true);
+    if (m_rootSubproject->firstChild())
+    {
+        overview->setSelected(m_rootSubproject->firstChild(), true);
+    }
+    else
+    {
+        overview->setSelected(m_rootSubproject, true);
+    }
 }
 
 
@@ -595,15 +667,15 @@ QStringList TrollProjectWidget::allFiles()
             GroupItem::GroupType type = (*tit)->groupType;
 
             if (type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images ||
-	    	type ==  GroupItem::Lexsources || type ==  GroupItem::Yaccsources || type == GroupItem::Distfiles ||
-		type ==  GroupItem::Translations || type ==  GroupItem::IDLs || type ==  GroupItem::InstallObject  ) {
-		for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
-		    QString filePath = path.mid( projectDirectory().length() + 1 );
+            type ==  GroupItem::Lexsources || type ==  GroupItem::Yaccsources || type == GroupItem::Distfiles ||
+        type ==  GroupItem::Translations || type ==  GroupItem::IDLs || type ==  GroupItem::InstallObject  ) {
+        for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
+            QString filePath = path.mid( projectDirectory().length() + 1 );
 
-		    if( !filePath.isEmpty() && !filePath.endsWith("/") )
-			filePath += "/";
+            if( !filePath.isEmpty() && !filePath.endsWith("/") )
+            filePath += "/";
                     res.append( filePath + (*fit)->name);
-		}
+        }
             }
         }
     }
@@ -798,6 +870,8 @@ void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListV
           (*it2)->sortChildItems(0,true);
         }
     }
+    listviewControl->setSelected(listviewControl->selectedItem(), false);
+    listviewControl->setCurrentItem(0);
   }
   else
   {
@@ -836,13 +910,13 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 
     bool isUiFile = QFileInfo(fitem->name).extension() == "ui";
     if( m_part->isTMakeProject() && isUiFile ){
-	// start designer in your PATH
-	KShellProcess proc;
+    // start designer in your PATH
+    KShellProcess proc;
         proc << "designer" << (dirName + "/" + QString(fitem->name));
         proc.start( KProcess::DontCare, KProcess::NoCommunication );
 
     } else
-	m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
 }
 
 
@@ -1231,7 +1305,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     configList.append("rtti");
   if (item->configuration.m_requirements & QD_ORDERED)
     configList.append("ordered");
-  
+
   if (item->configuration.m_requirements & QD_DLL )
     configList.append("dll");
   if (item->configuration.m_requirements & QD_LIBTOOL )
@@ -1246,7 +1320,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
   }
   if (item->configuration.m_requirements & QD_CONSOLE )
     configList.append("console");
-  
+
   if (item->configuration.m_inheritconfig == true)
     Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   else
@@ -1313,8 +1387,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
   QMap<QString,QString>::Iterator custVars = item->configuration.m_variables.begin();
   for( ; custVars != item->configuration.m_variables.end(); ++custVars )
   {
-  	Buffer->removeValues( custVars.key() );
-	Buffer->setValues( custVars.key(), QStringList(custVars.data()), FileBuffer::VSM_RESET);
+    Buffer->removeValues( custVars.key() );
+    Buffer->setValues( custVars.key(), QStringList(custVars.data()), FileBuffer::VSM_RESET);
   }
 
   // Write to .pro file
@@ -1531,7 +1605,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
   }
 }
 
-void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename)
+void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype, const QString &filename)
 {
   if (!m_shownSubproject)
     return;
@@ -1727,9 +1801,28 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate)
 
 void TrollProjectWidget::slotAddFiles()
 {
+  static KURL lastVisited;
   QString cleanSubprojectDir = QDir::cleanDirPath(m_shownSubproject->path);
-  QString  filter = "*.cpp *.cc *.c *.hpp *.h *.ui|" + i18n("Source Files");
+  KMessageBox::information(0, QString("cleanSubprojectDir is %1").arg(cleanSubprojectDir));
+  QString title, filter;
+  QString otherTitle, otherFilter;
+
+  GroupItem* item = dynamic_cast<GroupItem*>(details->selectedItem());
+  GroupItem::GroupType type = item ? item->groupType : GroupItem::NoType;
+  GroupItem::groupTypeMeanings(type, title, filter);
+  filter += "|" + title;
+
+  for (int i = GroupItem::NoType + 1; i < GroupItem::MaxTypeEnum; ++i)
+  {
+    if (type != i)
+    {
+        GroupItem::groupTypeMeanings(static_cast<GroupItem::GroupType>(i), otherTitle, otherFilter);
+        filter += "\n" + otherFilter + "|" + otherTitle;
+    }
+  }
+
   filter += "\n*|" + i18n("All Files");
+
 #if KDE_VERSION >= 310
   AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectDir,
                                         filter,
@@ -1744,34 +1837,38 @@ void TrollProjectWidget::slotAddFiles()
                                         true);
 #endif
   dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
+
+  if (!lastVisited.isEmpty())
+  {
+    dialog->setURL(lastVisited);
+  }
+
   dialog->exec();
   QStringList files = dialog->selectedFiles();
-  for (unsigned int i=0;i<files.count();i++)
+  lastVisited = dialog->baseURL();
+
+  for (unsigned int i = 0; i < files.count(); i++)
   {
     switch (dialog->mode())
     {
       case AddFilesDialog::Copy:
-        {
+      {
         // Copy selected files to current subproject folder
-        QProcess *proc = new QProcess( this );
-        proc->addArgument( "cp" );
-        proc->addArgument( "-f" );
-        proc->addArgument( files[i] );
-        proc->addArgument( cleanSubprojectDir );
-        proc->start();
-        QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
         // and add them to the filelist
-        QFile testExist(cleanSubprojectDir+"/"+filename);
+        QString filename = KURL(files[i]).filename();
+        KIO::NetAccess::file_copy(files[i], cleanSubprojectDir + "/" + filename, -1, true, false, this);
+        QFile testExist(cleanSubprojectDir + "/" + filename);
+
         if (testExist.exists())
         {
           QStringList files(filename);
           addFiles(files);
         }
-        }
-        break;
+      }
+      break;
 
       case AddFilesDialog::Link:
-        {
+      {
         // Link selected files to current subproject folder
         QProcess *proc = new QProcess( this );
         proc->addArgument( "ln" );
@@ -1787,14 +1884,16 @@ void TrollProjectWidget::slotAddFiles()
           QStringList files(filename);
           addFiles(files);
         }
-        }
-        break;
+      }
+      break;
 
       case AddFilesDialog::Relative:
+      {
         // Form relative path to current subproject folder
         QStringList files(URLUtil::relativePathToFile(cleanSubprojectDir , files[i]));
         addFiles(files, true);
-        break;
+      }
+      break;
     }
   }
 }
@@ -2017,100 +2116,55 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
     if (pvitem->type() == qProjectItem::Group) {
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
         QString title,ext;
-        switch (titem->groupType) {
-        case GroupItem::Sources:
-            title = i18n("Sources");
-            ext = "*.cpp *.c";
-            break;
-        case GroupItem::Headers:
-            title = i18n("Headers");
-            ext = "*.h *.hpp";
-            break;
-        case GroupItem::Forms:
-            title = i18n("Forms");
-            ext = "*.ui";
-            break;
-        case GroupItem::IDLs:
-            title = i18n("Corba IDLs");
-            ext = "*.idl *.kidl";
-            break;
-        case GroupItem::Lexsources:
-            title = i18n("Lexsources");
-            ext = "*.l *.ll *.lxx *.l++";
-            break;
-        case GroupItem::Yaccsources:
-            title = i18n("Yaccsources");
-            ext = "*.y *.yy *.yxx *.y++";
-            break;
-        case GroupItem::Images:
-            title = i18n("Images");
-            ext = "*.jpg *.png *.xpm *.gif";
-            break;
-        case GroupItem::Distfiles:
-            title = i18n("Distfiles");
-            ext = "*";
-            break;
-        case GroupItem::Translations:
-            title = i18n("Translations");
-            ext = "*.ts";
-            break;
-        case GroupItem::InstallRoot:
-            title = i18n("Installs");
-            break;
-        case GroupItem::InstallObject:
-            title = i18n("Install object");
-            break;
-
-        default: ;
-        }
+        GroupItem::groupTypeMeanings(titem->groupType, title, ext);
 
         KPopupMenu popup(this);
-	popup.insertTitle(title);
+        popup.insertTitle(title);
 
         int idInsExistingFile = -2;
-	int idInsNewFile = -2;
-	int idInsInstallObject = -2;
-	int idInsNewFilepatternItem = -2;
-	int idSetInstObjPath = -2;
-	int idLUpdate = -2;
-	int idLRelease = -2;
+        int idInsNewFile = -2;
+        int idInsInstallObject = -2;
+        int idInsNewFilepatternItem = -2;
+        int idSetInstObjPath = -2;
+        int idLUpdate = -2;
+        int idLRelease = -2;
 
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         if (titem->groupType == GroupItem::InstallRoot)
         {
-	  idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Install Object..."));
+            idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Install Object..."));
             popup.setWhatsThis(idInsInstallObject, i18n("<b>Add install object</b><p>Creates QMake install object. "
                 "It is possible to define a list of files to install and installation locations for each object. Warning! "
                 "Install objects without path specified will not be saved to a project file."));
         }
         else if (titem->groupType == GroupItem::InstallObject)
         {
-	  idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Install Path..."));
+            idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Install Path..."));
             popup.setWhatsThis(idSetInstObjPath, i18n("<b>Install path</b><p>Allows to choose the installation path for the current install object."));
-	  idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Pattern of Files to Install..."));
+            idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Pattern of Files to Install..."));
             popup.setWhatsThis(idInsNewFilepatternItem, i18n("<b>Add pattern of files to install</b><p>Defines the pattern to match files which will be installed. "
                 "It is possible to use wildcards and relative paths like <i>docs/*</i>."));
         }
         else if(titem->groupType == GroupItem::Translations)
         {
-	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
+            idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
             popup.setWhatsThis(idInsNewFile, i18n("<b>Create new file</b><p>Creates a new translation file and adds it to a currently selected TRANSLATIONS group."));
-	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
+            idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
             popup.setWhatsThis(idInsExistingFile, i18n("<b>Add existing files</b><p>Adds existing translation (*.ts) files to a currently selected TRANSLATIONS group. It is "
             "possible to copy files to a current subproject directory, create symbolic links or "
             "add them with the relative path."));
-	  idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update Translation Files"));
+            idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update Translation Files"));
             popup.setWhatsThis(idLUpdate, i18n("<b>Update Translation Files</b><p>Runs <b>lupdate</b> command from the current subproject directory. It collects translatable "
                 "messages and saves them into translation files."));
-	  idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release Binary Translations"));
+            idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release Binary Translations"));
             popup.setWhatsThis(idLRelease, i18n("<b>Release Binary Translations</b><p>Runs <b>lrelease</b> command from the current subproject directory. It creates binary "
                 "translation files that are ready to be loaded at program execution."));
         }
         else // File group containing files
         {
- 	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
+            idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Create New File..."));
             popup.setWhatsThis(idInsNewFile, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
-	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
+            idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Add Existing Files..."));
             popup.setWhatsThis(idInsExistingFile, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
             "possible to copy files to a current subproject directory, create symbolic links or "
             "add them with the relative path."));
@@ -2130,7 +2184,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             updateProjectFile(titem->owner);
           }
         }
-	    else if (r == idInsNewFilepatternItem)
+        else if (r == idInsNewFilepatternItem)
         {
           bool ok = FALSE;
           QString filepattern = KInputDialog::getText(
@@ -2171,15 +2225,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             case AddFilesDialog::Copy:
                 {
                 // Copy selected files to current subproject folder
-                QProcess *proc = new QProcess( this );
-                proc->addArgument( "cp" );
-                proc->addArgument( "-f" );
-                proc->addArgument( files[i] );
-                proc->addArgument( cleanSubprojectPath );
-                proc->start();
-                QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+                QString filename = KURL(files[i]).filename();
+                KIO::NetAccess::file_copy(files[i], cleanSubprojectPath + "/" + filename, -1, true, false, this);
                 // and add them to the filelist
-                addFileToCurrentSubProject(titem,filename);
+                addFileToCurrentSubProject(titem, filename);
 
                 QString fileNameToAdd = m_shownSubproject->relpath + "/" + filename;
                 if (fileNameToAdd.startsWith("/"))
@@ -2301,15 +2350,15 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
-	else if (r == idLUpdate)
+    else if (r == idLUpdate)
         {
-	   QString cmd = "lupdate ";
+       QString cmd = "lupdate ";
            cmd += m_shownSubproject->pro_file;
            m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
         }
         else if (r == idLRelease)
         {
-	   QString cmd = "lrelease ";
+       QString cmd = "lrelease ";
            cmd += m_shownSubproject->pro_file;
            m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
         }
@@ -2317,21 +2366,21 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         removefileButton->setEnabled(true);
         FileItem *fitem = static_cast<FileItem*>(pvitem);
-	GroupItem::GroupType gtype = static_cast<GroupItem*>(item->parent())->groupType;
+    GroupItem::GroupType gtype = static_cast<GroupItem*>(item->parent())->groupType;
 
-	KPopupMenu popup(this);
-	if (!(gtype == GroupItem::InstallObject))
+    KPopupMenu popup(this);
+    if (!(gtype == GroupItem::InstallObject))
         popup.insertTitle(i18n("File: %1").arg(fitem->name));
-	else
+    else
         popup.insertTitle(i18n("Pattern: %1").arg(fitem->name));
 
         int idRemoveFile = -2;
-	int idSubclassWidget = -2;
-	int idUpdateWidgetclass = -2;
-	int idUISubclasses = -2;
-	int idViewUIH = -2;
-	int idFileProperties = -2;
-	int idEditInstallPattern = -2;
+    int idSubclassWidget = -2;
+    int idUpdateWidgetclass = -2;
+    int idUISubclasses = -2;
+    int idViewUIH = -2;
+    int idFileProperties = -2;
+    int idEditInstallPattern = -2;
 
         if (!fitem->uiFileLink.isEmpty())
         {
@@ -2341,35 +2390,35 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         if(fitem->name.contains(".ui"))
         {
-	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclassing Wizard..."));
+      idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclassing Wizard..."));
           popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
-	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
+      idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
           popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
-	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("List of Subclasses..."));
+      idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("List of Subclasses..."));
           popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
                            "There is possibility to add or remove subclasses from the list."));
         }
-	if(!(gtype == GroupItem::InstallObject))
-	{
-	  idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove File"));
+    if(!(gtype == GroupItem::InstallObject))
+    {
+      idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove File"));
             popup.setWhatsThis(idRemoveFile, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
-	  idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
+      idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
             popup.setWhatsThis(idFileProperties, i18n("<b>Properties</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes."));
-	}
-	else
-	{
-	  idEditInstallPattern = popup.insertItem(SmallIconSet("configure_file"),i18n("Edit Pattern"));
+    }
+    else
+    {
+      idEditInstallPattern = popup.insertItem(SmallIconSet("configure_file"),i18n("Edit Pattern"));
             popup.setWhatsThis(idEditInstallPattern, i18n("<b>Edit pattern</b><p>Allows to edit install files pattern."));
-	  idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove Pattern"));
+      idRemoveFile = popup.insertItem(SmallIconSet("editdelete"),i18n("Remove Pattern"));
             popup.setWhatsThis(idRemoveFile, i18n("<b>Remove pattern</b><p>Removes install files pattern from the current install object."));
-	}
-	if(!(gtype == GroupItem::InstallObject))
-	{
+    }
+    if(!(gtype == GroupItem::InstallObject))
+    {
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
-	}
+    }
 
         int r = popup.exec(p);
         if (r == idRemoveFile)
@@ -2464,7 +2513,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else if (r == idEditInstallPattern)
         {
-	GroupItem *titem = static_cast<GroupItem*>(item->parent());
+    GroupItem *titem = static_cast<GroupItem*>(item->parent());
 
           bool ok = FALSE;
           QString filepattern = KInputDialog::getText(
@@ -2474,7 +2523,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                               fitem->name , &ok, this );
           if ( ok && !filepattern.isEmpty() )
           {
-	    removeFile(m_shownSubproject, fitem);
+        removeFile(m_shownSubproject, fitem);
             addFileToCurrentSubProject(titem,filepattern);
             updateProjectFile(titem->owner);
             slotOverviewSelectionChanged(m_shownSubproject);
@@ -2487,6 +2536,19 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem)
 {
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
+
+    if (KMessageBox::warningYesNo(this,
+                                  "<qt>" +
+                                  i18n("Are you sure you wish to remove <strong>%1</strong> from this project?")
+                                      .arg(fitem->name) +
+                                  "</qt>",
+                                  i18n("Remove File"),
+                                  KStdGuiItem::remove(),
+                                  KStdGuiItem::no(),
+                                  "removeFileFromQMakeProject") == KMessageBox::No)
+    {
+        return;
+    }
 
     if(gitem->groupType != GroupItem::InstallObject)
     {
@@ -2524,8 +2586,6 @@ void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem
     }
     DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
 
-
-
     switch (gitem->groupType)
     {
       case GroupItem::Sources:
@@ -2556,8 +2616,8 @@ void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem
         spitem->idls.remove(fitem->text(0));
         break;
       case GroupItem::InstallObject:
-	gitem->str_files.remove(fitem->text(0));
-	break;
+    gitem->str_files.remove(fitem->text(0));
+    break;
       default: ;
     }
     gitem->files.remove(fitem);
@@ -2587,16 +2647,16 @@ FileItem *TrollProjectWidget::createFileItem(const QString &name)
 
 void TrollProjectWidget::emitAddedFile(const QString &fileName)
 {
-	QStringList fileList;
-	fileList.append ( fileName );
+    QStringList fileList;
+    fileList.append ( fileName );
     emit m_part->addedFilesToProject(fileList);
 }
 
 
 void TrollProjectWidget::emitRemovedFile(const QString &fileName)
 {
-	QStringList fileList;
-	fileList.append ( fileName );
+    QStringList fileList;
+    fileList.append ( fileName );
     emit m_part->removedFilesFromProject(fileList);
 }
 
@@ -2633,9 +2693,9 @@ void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeStri
     QStringList minusListDummy;
     FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
     if( m_part->isTMakeProject() )
-	subBuffer->getValues("INTERFACES",item->forms,item->forms_exclude);
+    subBuffer->getValues("INTERFACES",item->forms,item->forms_exclude);
     else
-	subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
+    subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
 
     subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
@@ -2764,8 +2824,8 @@ void TrollProjectWidget::parseScope(SubqmakeprojectItem *item, QString scopeStri
 
 //    titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
     titem = createGroupItem(GroupItem::Forms,
-				       (m_part->isTMakeProject() ? "INTERFACES" : "FORMS"),
-				       scopeString);
+                       (m_part->isTMakeProject() ? "INTERFACES" : "FORMS"),
+                       scopeString);
 
     item->groups.append(titem);
     titem->owner = item;
@@ -2870,8 +2930,8 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         if(ConfigSetMode[0] == FileBuffer::VSM_RESET)
         {
           item->configuration.m_inheritconfig = false;
-	  break;
-	}
+      break;
+    }
       }
     }
 
@@ -3004,9 +3064,9 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
     QStringList::Iterator it = allValues.begin();
     for( ; it != allValues.end(); ++it )
     {
-    	item->m_FileBuffer.getValues(*it,lst,minusListDummy);
-	if( lst.count() != 0 )
-	item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
+        item->m_FileBuffer.getValues(*it,lst,minusListDummy);
+    if( lst.count() != 0 )
+    item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
     }
 
 }
