@@ -36,7 +36,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringLis
     : KDevPlugin("PythonScripting", "scripting", parent, name ? name : "ScriptingPart")
 {
     setInstance(ScriptingFactory::instance());
-    
+
     QString xml = QString::fromLatin1("<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">\n"
                                       "<kpartgui version=\"1\" name=\"editorpart\">\n"
                                       "<MenuBar>\n"
@@ -52,10 +52,10 @@ ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringLis
     putenv(env);
     Py_Initialize();
     free(env);
-    
+
     kdDebug(9011) << "Init kdevelopc" << endl;
     initkdevelopc();
-    
+
     kdDebug(9011) << "Init pydcopc" << endl;
     initpydcopc();
 
@@ -89,7 +89,7 @@ PyObject *ScriptingPart::addMenuItem(PyObject *args)
 {
     char *menu, *submenu;
     PyObject *func;
-    
+
     if (!PyArg_ParseTuple(args, (char*)"ssO", &menu, &submenu, &func))
         return 0;
 
@@ -97,18 +97,18 @@ PyObject *ScriptingPart::addMenuItem(PyObject *args)
         kdDebug(9011) << "Scripting function not callable" << endl;
         return 0;
     }
-    
+
     QString menustr = QString::fromLatin1(menu);
     QString submenustr = QString::fromLatin1(submenu);
     QString ident = menustr + submenustr;
 
     Py_XINCREF(func);
-    
+
     actions.insert(ident, func);
-    
-    core()->insertAction( new KAction(submenustr, 0, this, SLOT(slotScriptAction()),
+
+    core()->insertNewAction( new KAction(submenustr, 0, this, SLOT(slotScriptAction()),
 				      actionCollection(), ident.latin1()) );
-    
+
     QDomElement el = guiDocument.documentElement();
     el = el.namedItem("MenuBar").toElement();
     QDomElement child = el.firstChild().toElement();
@@ -123,13 +123,13 @@ PyObject *ScriptingPart::addMenuItem(PyObject *args)
         el.appendChild(child);
     }
     el = child;
-    
+
     child = guiDocument.createElement(QString::fromLatin1("Action"));
     child.setAttribute(QString::fromLatin1("name"), ident);
     el.appendChild(child);
 
     kdDebug(9011) << "New dom document: " << guiDocument.toString() << endl;
-    
+
     setDOMDocument(guiDocument);
 
     Py_INCREF(Py_None);
