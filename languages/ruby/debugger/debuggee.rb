@@ -249,12 +249,15 @@ class Context
 
   def const_list(ary, obj)
     ary.sort!
-	total_length = 0
     for c in ary
 	  str = debug_inspect(obj.module_eval(c))
-      if c.to_s != str && c.to_s !~ /SCRIPT_LINES__|ENV|TRUE|FALSE|NIL|MatchingData/ &&
+      if c.to_s != str && c.to_s !~ /SCRIPT_LINES__|TRUE|FALSE|NIL|MatchingData/ &&
         c.to_s !~ /IPsocket|IPserver|UDPsocket|UDPserver|TCPserver|TCPsocket|UNIXserver|UNIXsocket/
-      	stdout.printf "  %s => %s\n", c, debug_inspect(obj.module_eval(c))
+		if c.to_s == "ENV"
+      	  stdout.printf "  %s => Hash (%d element(s))\n", c, obj.module_eval(c).length
+		else
+      	  stdout.printf "  %s => %s\n", c, str
+		end
 	  end
     end
   end
@@ -601,11 +604,13 @@ class Context
 	  end
 
 	when /^\s*pp\s+/
+	  obj_name = $'
 	  obj = debug_eval($', binding)
 	  customize_debug_pp
 	  if obj.kind_of? Array
 	  	obj.each_index { |i| stdout.printf "[%d]=%s\n", i.to_s, debug_inspect(obj[i]) }
-	  elsif obj.kind_of? Hash
+	  elsif obj.kind_of? Hash or obj_name =~ /^ENV$/
+	    # Special case ENV to print like a hash
 	  	obj.each { |key, value| stdout.printf "[%s]=%s\n", key.inspect, debug_inspect(value) }
 	  else
 	    PP.pp(obj, stdout)

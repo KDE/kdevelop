@@ -98,10 +98,10 @@ RDBController::RDBController(VariableTree *varTree, FramestackWidget *frameStack
         currentFrame_(1),
         viewedThread_(-1),
         stdoutOutputLen_(0),
-        stdoutOutput_(new char[2048]),
+        stdoutOutput_(new char[4096]),
         holdingZone_(),
         rdbOutputLen_(0),
-        rdbOutput_(new char[2048]),
+        rdbOutput_(new char[8192]),
 		socketNotifier_(0),
         currentCmd_(0),
 		currentPrompt_("(rdb:1) "),
@@ -207,7 +207,7 @@ void RDBController::executeCmd()
 
         currentCmd_ = cmdList_.take(0);
     }
-
+    
 	char * ptr = currentCmd_->cmdToSend().data();
 	int bytesToWrite = currentCmd_->cmdLength();
 	int bytesWritten = 0;
@@ -227,9 +227,9 @@ void RDBController::executeCmd()
     QString prettyCmd = currentCmd_->cmdToSend();
     prettyCmd = currentPrompt_ + prettyCmd;
     emit rdbStdout( prettyCmd.latin1() );
-
+	
     if (!stateIsOn(s_silent))
-        emit dbgStatus ("", state_);
+        emit dbgStatus("", state_);
 }
 
 // **************************************************************************
@@ -1193,8 +1193,11 @@ void RDBController::slotReadFromSocket(int socket)
 	static bool parsing = false;
 
 	int bytesRead = read(socket, rdbOutput_ + rdbOutputLen_, rdbSizeofBuf_);
+	
 	rdbOutputLen_ += bytesRead;
     *(rdbOutput_ + rdbOutputLen_) = 0;
+	
+//    kdDebug(9012) << "RDBController::slotReadFromSocket input: " << rdbOutput_ << endl;
 
     // Already parsing? then get out quick.
     if (parsing)
