@@ -325,3 +325,4 @@ void AppWizardDialog::accept()
 
     QWizard::accept();
 }
+#include "appwizarddlg.moc"

@@ -254,3 +254,4 @@ void SubprojectOptionsDialog::removePrefixClicked()
 {
     delete prefix_view->currentItem();
 }
+#include "subprojectoptionsdlg.moc"

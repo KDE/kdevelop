@@ -139,3 +139,4 @@ void AddFileDialog::accept()
 
     QDialog::accept();
 }
+#include "addfiledlg.moc"

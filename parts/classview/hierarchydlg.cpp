@@ -109,3 +109,4 @@ void HierarchyDialog::classSelected(const QString &name)
         member_tree->insertAllClassAttributes(currentClass, (PIAccess)-1);
     }
 }
+#include "hierarchydlg.moc"

@@ -313,3 +313,4 @@ void ProjectOptionsDialog::accept()
 
     QTabDialog::accept();
 }
+#include "projectoptionsdlg.moc"

@@ -267,3 +267,4 @@ void DocumentationPart::forwPopupActivated(int id)
     restoreState();
     updateHistoryAction();
 }
+#include "documentationpart.moc"

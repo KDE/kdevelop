@@ -366,3 +366,4 @@ void SplitterHandle::paintEvent(QPaintEvent *)
     QPainter p(this);
     style().drawSplitter(&p, 0, 0, width(), height(), colorGroup(), Horizontal);
 }
+#include "splitter.moc"

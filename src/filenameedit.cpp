@@ -83,3 +83,4 @@ void FileNameEdit::selfDestroy()
 {
     delete this;
 }
+#include "filenameedit.moc"

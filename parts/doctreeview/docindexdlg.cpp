@@ -216,3 +216,4 @@ void DocIndexDialog::choiceChanged()
     
     term_combo->completionObject()->setItems(completions);
 }
+#include "docindexdlg.moc"

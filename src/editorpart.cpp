@@ -305,3 +305,4 @@ void EditorPart::slotReplace()
 {
     view->replace();
 }
+#include "editorpart.moc"

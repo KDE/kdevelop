@@ -229,3 +229,4 @@ void TopLevel::slotOptionsEditToolbars()
     if (dlg.exec())
         createGUI();
 }
+#include "toplevel.moc"

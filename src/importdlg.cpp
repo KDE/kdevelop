@@ -137,3 +137,4 @@ void ImportDialog::dirButtonClicked()
                                                     i18n("Choose a directory to import"));
     dir_edit->setText(dir);
 }
+#include "importdlg.moc"

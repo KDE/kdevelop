@@ -171,3 +171,4 @@ void AddTargetDialog::primaryChanged()
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
         prefix_combo->insertItem(QString(it.key()));
 }
+#include "addtargetdlg.moc"

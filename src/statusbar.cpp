@@ -94,3 +94,4 @@ void StatusBar::paintEvent(QPaintEvent *e)
         QStatusBar::paintEvent(e);
     }
 }
+#include "statusbar.moc"

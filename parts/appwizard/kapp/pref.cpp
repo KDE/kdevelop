@@ -41,3 +41,4 @@ $APPNAME$PrefPageTwo::$APPNAME$PrefPageTwo(QWidget *parent)
 
     new QLabel("Add something here", this);
 }
+#include "pref.moc"

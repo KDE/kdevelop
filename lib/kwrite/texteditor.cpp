@@ -90,3 +90,4 @@ QString TextEditorDocument::fileName() const
 {
     return url().path();
 }
+#include "texteditor.moc"

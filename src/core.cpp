@@ -694,3 +694,4 @@ void Core::slotStop()
     // Hmm, not much to do ;-)
     emit stopButtonClicked();
 }
+#include "core.moc"

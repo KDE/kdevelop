@@ -130,3 +130,4 @@ void TargetOptionsDialog::accept()
     
     QDialog::accept();
 }
+#include "targetoptionsdlg.moc"

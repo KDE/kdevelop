@@ -182,3 +182,4 @@ void DocSearchDialog::htsearchExited(KProcess *)
 {
     kapp->exit_loop();
 }
+#include "docsearchdlg.moc"
