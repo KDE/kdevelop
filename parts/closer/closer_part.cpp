@@ -83,9 +83,7 @@ void CloserPart::closeFiles( KURL::List const & fileList )
     {
         if ( KParts::ReadOnlyPart * ro_part = partForURL( *it ) )
         {
-            ro_part->closeURL();
-            partController()->removePart( ro_part );
-            delete ro_part;
+            partController()->closePartForWidget( ro_part->widget() );
         }
         ++it;
     }
