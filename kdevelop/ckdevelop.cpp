@@ -398,80 +398,86 @@ void CKDevelop::slotFileSaveAs(){
 #include <iostream.h>
 
 // Added by Christian
-void CKDevelop::saveModifiedFiles() {
-
+void CKDevelop::saveModifiedFiles()
+{
   QStrList iFileList(false);
   bool mod=false;
-  {
-    CEditWidget blind_widget(0L,0,0,0);//FB
+
+  HlManager* pHLMan = new HlManager;
+  KWriteDoc* pBlindDoc = new KWriteDoc(pHLMan);
+  CEditWidget* pBlindWidget = new CEditWidget(0L,0,pBlindDoc,0);
+
+  QStrList handledNames;
+  TEditInfo* actual_info; //FB?, *cpp_info, *header_info;
+
+  for(actual_info=edit_infos.first();actual_info != 0;) {
+    int i=0;
+    TEditInfo *next_info=edit_infos.next();
+    statProg->setProgress(++i);
+        	
+    kdDebug() << "checking: " << actual_info->filename << "\n";
+    kdDebug() << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
+        	
+    if(!isUntitled(actual_info->filename) && actual_info->modified &&
+    handledNames.contains(actual_info->filename)<1)
     {
-      QStrList handledNames;
-      TEditInfo* actual_info; //FB?, *cpp_info, *header_info;
-      for(actual_info=edit_infos.first();actual_info != 0;) {
-	int i=0;
-	TEditInfo *next_info=edit_infos.next();
-	statProg->setProgress(++i);
-	
-	kdDebug() << "checking: " << actual_info->filename << "\n";
-	kdDebug() << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
-	
-	if(!isUntitled(actual_info->filename) && actual_info->modified &&
-	   handledNames.contains(actual_info->filename)<1)
-	  {
-	    int qYesNo=KMessageBox::Yes;
-	    handledNames.append(actual_info->filename);
-	    QFileInfo file_info(actual_info->filename);
-	    if (file_info.lastModified() != actual_info->last_modified)
-	      {
-		qYesNo = KMessageBox::questionYesNo(this,
-						    i18n("The file %1 was modified outside\nthis editor. Save anyway?").arg(actual_info->filename),
-						    i18n("File modified"));
-	      }
-	    
-	    if (qYesNo==KMessageBox::Yes)
-	      {
-		QFileInfo file_info(actual_info->filename);
-		bool isModified;
-		blind_widget.setName(actual_info->filename);
-		blind_widget.setText(actual_info->text);
-		blind_widget.toggleModified(true);
-		blind_widget.doSave();
-		isModified=blind_widget.isModified();
-		
-		kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
-		
-		
-		//FB?          if (actual_info==cpp_info)
-		//FB?             cpp_widget->setModified(isModified);
-		//FB?          if (actual_info==header_info)
-		//FB?             header_widget->setModified(isModified);
-		
-		actual_info->modified = isModified;
-		if (!isModified)
-		  {
-#ifdef WITH_CPP_REPARSE
-		    mod=true;
-#else
-		    mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx");
-#endif
-		    iFileList.append(actual_info->filename);
-		    actual_info->last_modified = file_info.lastModified();
-		  }
-	      }
-	  }
-	actual_info=next_info;
+      int qYesNo=KMessageBox::Yes;
+      handledNames.append(actual_info->filename);
+      QFileInfo file_info(actual_info->filename);
+      if (file_info.lastModified() != actual_info->last_modified)
+      {
+        qYesNo = KMessageBox::questionYesNo(this,
+        i18n("The file %1 was modified outside\nthis editor. Save anyway?").arg(actual_info->filename),
+        i18n("File modified"));
       }
-      debug("end handledNames !\n");
+            	
+      if (qYesNo==KMessageBox::Yes)
+      {
+        QFileInfo file_info(actual_info->filename);
+        bool isModified;
+        pBlindWidget->setName(actual_info->filename);
+        pBlindWidget->setText(actual_info->text);
+        pBlindWidget->toggleModified(true);
+        pBlindWidget->doSave();
+        isModified=pBlindWidget->isModified();
+            		
+        kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+            		
+            		
+        //FB?          if (actual_info==cpp_info)
+        //FB?             cpp_widget->setModified(isModified);
+        //FB?          if (actual_info==header_info)
+        //FB?             header_widget->setModified(isModified);
+            		
+        actual_info->modified = isModified;
+        if (!isModified)
+        {
+#ifdef WITH_CPP_REPARSE
+          mod=true;
+#else
+          mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx");
+#endif
+          iFileList.append(actual_info->filename);
+          actual_info->last_modified = file_info.lastModified();
+        }
+      }
     }
-    debug("end edit widget !\n");
+    actual_info=next_info;
   }
+  debug("end handledNames !\n");
+
+  debug("end edit widget !\n");
+  delete pBlindWidget;
+  delete pBlindDoc;
+  delete pHLMan;
+
   debug("stat prog ! \n");
   //  statProg->hide();
   statProg->reset();
-  
+
   debug("refreshClassViewByFileList ! \n");
   if (project && !iFileList.isEmpty() && mod)
-    refreshClassViewByFileList(&iFileList);
+  refreshClassViewByFileList(&iFileList);
 }
 
 
