@@ -449,6 +449,7 @@ CppSupportPart::projectOpened( )
 void
 CppSupportPart::projectClosed( )
 {
+    m_backgroundParser->removeAllFiles();
     kdDebug( 9007 ) << "projectClosed( )" << endl;
     bool enablePCS = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepcs" );
 
@@ -1164,6 +1165,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
 	walker.parseTranslationUnit( translationUnit );
     }
     m_backgroundParser->unlock();
+    m_backgroundParser->removeFile( fileName );
 }
 
 
