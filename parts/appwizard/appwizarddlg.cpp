@@ -321,6 +321,34 @@ void AppWizardDialog::licenseChanged()
                 " *   License along with this program; if not, write to the                 *\n"
                 " *   Free Software Foundation, Inc.,                                       *\n"
                 " *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *\n";
+	    break;
+        case 4:
+            str +=
+                " *   This program is free software; you can redistribute it and/or modify  *\n"
+                " *   it under the terms of the GNU General Public License as published by  *\n"
+                " *   the Free Software Foundation; either version 2 of the License, or     *\n"
+                " *   (at your option) any later version.                                   *\n"
+                " *                                                                         *\n"
+                " *   This program is distributed in the hope that it will be useful,       *\n"
+                " *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *\n"
+                " *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *\n"
+                " *   GNU General Public License for more details.                          *\n"
+                " *                                                                         *\n"
+                " *   You should have received a copy of the GNU General Public License     *\n"
+                " *   along with this program; if not, write to the                         *\n"
+                " *   Free Software Foundation, Inc.,                                       *\n"
+                " *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *\n"
+                " *                                                                         *\n"
+                " *   In addition, as a special exception, the copyright holders give       *\n"
+                " *   permission to link the code of this program with any edition of       *\n"
+                " *   the Qt library by Trolltech AS, Norway (or with modified versions     *\n"
+                " *   of Qt that use the same license as Qt), and distribute linked         *\n"
+                " *   combinations including the two.  You must obey the GNU General        *\n"
+                " *   Public License in all respects for all of the code used other than    *\n"
+                " *   Qt.  If you modify this file, you may extend this exception to        *\n"
+                " *   your version of the file, but you are not obligated to do so.  If     *\n"
+                " *   you do not wish to do so, delete this exception statement from        *\n"
+                " *   your version.                                                         *\n";
         }
 
     str += " ***************************************************************************/\n";
@@ -414,6 +442,7 @@ void AppWizardDialog::accept()
         case 1: licensefile = "LICENSE.BSD"; break;
         case 2: licensefile = "LICENSE.QPL"; break;
         case 3: licensefile = "COPYING.LIB"; break;
+        case 4: licensefile = "COPYING";     break;
         default: ;
         }
 
