@@ -64,7 +64,6 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   initPages();
   m_author_email = author_email;
   m_author_name = author_name;
-#warning it seems project is a historical variable...
   project=0l;
   //cerr << ":" << m_author_name << ":";
   //cerr << ":" << m_author_email << ":";
@@ -99,7 +98,8 @@ void CKAppWizard::initPages(){
   
   QPixmap iconpm;    
   QPixmap minipm;
-  QPixmap pm(locate("kdev_pic", "kAppWizard.bmp"));
+  QPixmap pm;
+  pm.load(locate("appdata", "pics/kAppWizard.bmp"));
   
   // create a widget and paint a picture on it
   widget1a = new QWidget( widget0, "widget1a" );
@@ -848,7 +848,7 @@ void CKAppWizard::initPages(){
   
   // create the fifth page
   widget3 = new QWidget(this);
-  addPage(widget3, i18n("Headertemplate for .cpp-files"));
+  addPage(widget3, i18n("Headertemplate for .cpp/.c-files"));
   
   cppheader = new QCheckBox( widget3, "cppheader" );
   cppheader->setGeometry( 20, 20, 230, 30 );
@@ -948,7 +948,7 @@ void CKAppWizard::initPages(){
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
   // go to page 2 then to page 1
-#warning Substitution senseless??
+#warning Substitution would be senseless??
 /*
   showPage(widget1);
   showPage(widget0);
@@ -1064,15 +1064,15 @@ void CKAppWizard::okPermited() {
   errOutput->clear();
   output->clear();
   QDir kdevelop;
-#warning FIXME: These explicit paths are not possible in KDE2
-  kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
-  cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
+  kdevelop.mkdir(locateLocal("appdata", ""));
+  // cerr << locateLocal("appdata", "");
+  cppedit->setName(locateLocal("appdata","cpp"));
   cppedit->toggleModified(true);
   cppedit->doSave();
-  hedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/header");
+  hedit->setName(locateLocal("appdata","header"));
   hedit->toggleModified(true);
   hedit->doSave();
-  ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/entries");
+  ofstream entries (locateLocal("appdata", "entries"));
   entries << "APPLICATION\n";
   if (kdenormalitem->isSelected()) {
     entries << "kdenormal\n";
@@ -1194,9 +1194,9 @@ void CKAppWizard::okPermited() {
   QString copydes;
   QString vcsInit;
   if (vsBox->currentItem() == 1) {
-  	copydes = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
-  	dir.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
-  	dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
+  	copydes = locateLocal("appdata", "kdeveloptemp");
+  	dir.mkdir(copydes);
+  	dir.setCurrent(copydes);
   	vcsInit = (QString) "cvs -d " + vsLocation->text() + (QString) " init";
   	p.clearArguments();
 	  p << vcsInit;
@@ -1209,19 +1209,29 @@ void CKAppWizard::okPermited() {
  	
  	p.clearArguments();
   if (kdeminiitem->isSelected()) {
-    copyFile(locate("kdev_template", "mini.tar.gz"), copydes);
-  }  
+    copysrc = locate("appdata",  "templates/mini.tar.gz");
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
+  }
   else if (kdenormalitem->isSelected()) {
-    copyFile( locate("kdev_template", "normal.tar.gz"), copydes);
-  } 
+    copysrc = locate("appdata", "templates/normal.tar.gz");
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
+  }
   else if (qtnormalitem->isSelected()) {
-    copyFile(locate("kdev_template", "qt.tar.gz"), copydes);
-  } 
+    copysrc = locate("appdata","templates/qt.tar.gz");
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
+  }
   else if (cppitem->isSelected()) {
-    copyFile(locate("kdev_template", "cpp.tar.gz"), copydes);
-  } 
+    copysrc = locate("appdata", "templates/cpp.tar.gz");
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
+  }
   else if (citem->isSelected()) {
-    copyFile(locate("kdev_template", "c.tar.gz"), copydes);
+    copysrc = locate("appdata", "templates/c.tar.gz");
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
   }
 
   dir.setCurrent("/");
@@ -1267,7 +1277,7 @@ void CKAppWizard::okPermited() {
   cppedit->setEnabled(false);
   hedit->setEnabled(false);
   authorline->setEnabled(false);
-  emailline->setEnabled(false);  
+  emailline->setEnabled(false);
   versionline->setEnabled(false);
   hnew->setEnabled(false);
   hload->setEnabled(false);
@@ -1396,8 +1406,9 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
 }
 
 void CKAppWizard::slotApplicationClicked() {
+
   if (kdenormalitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("kdev_pic", "normalApp.bmp"));
+    pm.load(locate("appdata","pics/normalApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);
     apidoc->setChecked(true);
@@ -1422,7 +1433,7 @@ void CKAppWizard::slotApplicationClicked() {
     												"document-view codeframe model."));
   }
   else if (kdeminiitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("kdev_pic",  "miniApp.bmp"));
+    pm.load(locate("appdata",  "pics/miniApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);
     apidoc->setChecked(true);
@@ -1445,7 +1456,7 @@ void CKAppWizard::slotApplicationClicked() {
 */    apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
   }
   else if (qtnormalitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("kdev_pic", "qtApp.bmp"));
+    pm.load(locate("appdata", "pics/qtApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
     apidoc->setChecked(false);
@@ -1471,14 +1482,15 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if ((citem->isSelected() || cppitem->isSelected())
             && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("kdev_pic", "terminalApp.bmp"));
+    pm.load(locate("appdata", "pics/terminalApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     if (citem->isSelected())
     {
-#warning FIXME
-        //      setPage(4, i18n("Headertemplate for .c-files"));
       cppheader->setText( i18n("headertemplate for .c-files") );
     }
+    else
+      cppheader->setText( i18n("headertemplate for .c-files") );
+
     apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -1521,7 +1533,7 @@ void CKAppWizard::slotApplicationClicked() {
 			   "and mainmenus"));
       }*/
   else if (customprojitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("kdev_pic", "customApp.bmp"));
+    pm.load(locate("appdata", "pics/customApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
     apidoc->setChecked(false);
@@ -1599,11 +1611,11 @@ void CKAppWizard::slotApplicationClicked() {
 
 // connection of this
 void CKAppWizard::slotDefaultClicked(int page) {
-  pm.load(locate("kdev_pic", "normalApp.bmp"));
+  pm.load(locate("appdata", "pics/normalApp.bmp"));
 
 # warning seems to be obsolete, ´cause QWizard doesn´t support DEFAULT-Button
-// this should work instead
-    widget3->setCaption(i18n("Headertemplate for .cpp-files"));
+// no access to the title
+//    page(widget3)->t=i18n("Headertemplate for .c-files");
 
     if (currentPage()==widget3)
      showPage(widget3);
@@ -1623,15 +1635,15 @@ void CKAppWizard::slotDefaultClicked(int page) {
   userdoc->setChecked(true);
   miniload->setEnabled(true);
   iconload->setEnabled(true);
-  generatesource->setChecked(true);  
+  generatesource->setChecked(true);
   directoryline->setText(QDir::homeDirPath()+ QString("/"));
   dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
 //  finishButton()->setEnabled(false);
   miniload->setPixmap(BarIcon(locate("mini","application_settings.png")));
-  iconload->setPixmap(locate("icon", "xedit.png"));
-  cppedit->loadFile(locate("kdev_template", "cpp_template"),cppedit->OPEN_READWRITE);
-  hedit->loadFile(locate("kdev_template", "header_template"),hedit->OPEN_READWRITE);
+  iconload->setPixmap(locate("icon","xedit.png"));
+  cppedit->loadFile(locate("appdata", "templates/cpp_template"),cppedit->OPEN_READWRITE);
+  hedit->loadFile(locate("appdata", "templates/header_template"),hedit->OPEN_READWRITE);
   authorline->setText(m_author_name);
   emailline->setText(m_author_email);
   versionline->setText("0.1");
@@ -1724,7 +1736,7 @@ void CKAppWizard::slotIconButtonClicked() {
   QStringList iconlist;
   KIconLoaderDialog iload;
   iload.selectIcon(name1,"*");
-  if (!name1.isNull() )   
+  if (!name1.isNull() )
     iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1));
 }
 
@@ -1733,7 +1745,7 @@ void CKAppWizard::slotMiniIconButtonClicked() {
   QStringList miniiconlist;
   KIconLoaderDialog  mload;
   mload.selectIcon(name2,"*");
-  if (!name2.isNull() )     
+  if (!name2.isNull() )
     miniload->setPixmap(KGlobal::iconLoader()->loadApplicationMiniIcon(name2));
 }
 
@@ -1790,7 +1802,7 @@ void CKAppWizard::slotProcessExited() {
   QString directory = directoryline->text();
   QString prj_str;
   if (vsBox->currentItem() != 0) {
-    prj_str = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/" + namelow + ".kdevprj";
+    prj_str = locateLocal("appdata","kdeveloptemp/" + namelow + ".kdevprj");
   }
   else {
     prj_str = directory + "/" + namelow + ".kdevprj";
@@ -1800,23 +1812,23 @@ void CKAppWizard::slotProcessExited() {
   project->setKDevPrjVersion("1.0beta2");
   if (cppitem->isSelected()) {
     project->setProjectType("normal_cpp");
-  } 
+  }
   else if (citem->isSelected()) {
     project->setProjectType("normal_c");
   }
   else if (kdeminiitem->isSelected()) {
-    project->setProjectType("mini_kde");  
-  } 
+    project->setProjectType("mini_kde");
+  }
   else if (kdenormalitem->isSelected()) {
     project->setProjectType("normal_kde");
-  } 
+  }
   else if (qtnormalitem->isSelected()) {
     project->setProjectType("normal_qt");
-  } 
+  }
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
   }
-  
+
   project->setProjectName (nameline->text());
   project->setSubDir (namelow + "/");
   project->setAuthor (authorline->text());
@@ -1828,7 +1840,7 @@ void CKAppWizard::slotProcessExited() {
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
   project->setCXXFLAGS ("-O0 -g3 -Wall");
-  
+
   if (kdenormalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
   }
@@ -1838,7 +1850,7 @@ void CKAppWizard::slotProcessExited() {
   else if (qtnormalitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
   }
-  
+
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
@@ -1858,7 +1870,7 @@ void CKAppWizard::slotProcessExited() {
   }
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
-  
+
   makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
@@ -1871,7 +1883,7 @@ void CKAppWizard::slotProcessExited() {
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
-  
+
   if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected()) && CToolClass::searchProgram("xgettext")) {
     makeAmInfo.rel_name = "po/Makefile.am";
     makeAmInfo.type = "po";
@@ -1902,43 +1914,43 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("AUTHORS",fileInfo);
-    
+
     fileInfo.rel_name = "COPYING";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("COPYING",fileInfo);
-    
+
     fileInfo.rel_name = "ChangeLog";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("ChangeLog",fileInfo);
-    
+
     fileInfo.rel_name = "INSTALL";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("INSTALL",fileInfo);
-    
+
     fileInfo.rel_name = "README";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("README",fileInfo);
-    
+
     fileInfo.rel_name = "TODO";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("TODO",fileInfo);
-    
-  } 
+
+  }
 
   if (lsmfile->isChecked()) {
     fileInfo.rel_name = namelow + ".lsm";
@@ -1958,7 +1970,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/main."+extension,fileInfo);
   }
-  
+
   if (!citem->isSelected() && !cppitem->isSelected()) {
     if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
@@ -1967,7 +1979,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + ".cpp",fileInfo);
-      
+
       fileInfo.rel_name = namelow + "/" + namelow + ".h";
       fileInfo.type = CPP_HEADER;
       fileInfo.dist = true;
@@ -1976,7 +1988,7 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject (namelow + "/" + namelow + ".h",fileInfo);
     }
   }
-  
+
   if (kdenormalitem->isSelected() || qtnormalitem->isSelected()) {
     if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
@@ -1985,37 +1997,37 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + "doc.cpp",fileInfo);
-      
+
       fileInfo.rel_name = namelow + "/" + namelow + "doc.h";
       fileInfo.type = CPP_HEADER;
       fileInfo.dist = true;
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + "doc.h",fileInfo);
-      
+
       fileInfo.rel_name = namelow + "/" + namelow + "view.cpp";
       fileInfo.type = CPP_SOURCE;
       fileInfo.dist = true;
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + "view.cpp",fileInfo);
-      
+
       fileInfo.rel_name = namelow + "/" + namelow + "view.h";
       fileInfo.type = CPP_HEADER;
       fileInfo.dist = true;
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
-      
+
       fileInfo.rel_name = namelow + "/resource.h";
       fileInfo.type = CPP_HEADER;
       fileInfo.dist = true;
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/resource.h",fileInfo);
-    }  
+    }
   }
-  
+
   if (datalink->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + ".kdelnk";
     fileInfo.type = DATA;
@@ -2023,8 +2035,8 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
     project->addFileToProject (namelow + "/" + namelow + ".kdelnk",fileInfo);
-  } 
-  
+  }
+
   if (progicon->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
     fileInfo.type = DATA;
@@ -2039,7 +2051,7 @@ void CKAppWizard::slotProcessExited() {
     }
     project->addFileToProject (namelow + "/" + namelow + ".xpm",fileInfo);
   }
-  
+
   if (miniicon->isChecked()) {
     fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
     fileInfo.type = DATA;
@@ -2054,7 +2066,7 @@ void CKAppWizard::slotProcessExited() {
     }
     project->addFileToProject (namelow + "/mini-" + namelow + ".xpm",fileInfo);
   }
-  
+
   if (qtnormalitem->isSelected()) {
     fileInfo.rel_name = namelow + "/filenew.xpm";
     fileInfo.type = DATA;
@@ -2076,8 +2088,8 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/fileopen.xpm",fileInfo);
-  } 
-  
+  }
+
   if (userdoc->isChecked()) {
     fileInfo.rel_name = namelow + "/docs/en/index-1.html";
     fileInfo.type = DATA;
@@ -2086,13 +2098,13 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
-    } 
-    
+    }
+
     project->addFileToProject (namelow + "/docs/en/index-1.html",fileInfo);
-    
+
     fileInfo.rel_name = namelow + "/docs/en/index-2.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2100,12 +2112,12 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
-    } 
+    }
     project->addFileToProject (namelow + "/docs/en/index-2.html",fileInfo);
-    
+
     fileInfo.rel_name = namelow + "/docs/en/index-3.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2113,12 +2125,12 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
-    } 
+    }
     project->addFileToProject (namelow + "/docs/en/index-3.html",fileInfo);
-    
+
     fileInfo.rel_name = namelow + "/docs/en/index-4.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2126,12 +2138,12 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
-    } 
+    }
     project->addFileToProject (namelow + "/docs/en/index-4.html",fileInfo);
-    
+
     fileInfo.rel_name = namelow + "/docs/en/index-5.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2139,12 +2151,12 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
     }
     project->addFileToProject (namelow + "/docs/en/index-5.html",fileInfo);
-    
+
     fileInfo.rel_name = namelow + "/docs/en/index-6.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2152,12 +2164,12 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
-    } 
+    }
     project->addFileToProject (namelow + "/docs/en/index-6.html",fileInfo);
-    
+
     fileInfo.rel_name = namelow + "/docs/en/index.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2165,10 +2177,10 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
-      } 
-      else 
+      }
+      else
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
-    } 
+    }
     project->addFileToProject (namelow + "/docs/en/index.html",fileInfo);
     QFile gif (directory + "/" + namelow + "/docs/en/" + namelow + ".gif");
     if (gif.exists()) {
@@ -2179,15 +2191,15 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject (namelow + "/docs/en/" + namelow + ".gif",fileInfo);
     }
   }
-  
-  
+
+
   QStrList group_filters;
   group_filters.append("*");
   project->addLFVGroup ("Others","");
   project->setFilters("Others",group_filters);
-  
-  
-  
+
+
+
   if (gnufiles->isChecked()) {
     group_filters.clear();
     group_filters.append("AUTHORS");
@@ -2200,21 +2212,21 @@ void CKAppWizard::slotProcessExited() {
     project->addLFVGroup ("GNU","");
     project->setFilters("GNU",group_filters);
   }
-  
+
   if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected())) {
     group_filters.clear();
     group_filters.append("*.po");
     project->addLFVGroup (i18n("Translations"),"");
     project->setFilters(i18n("Translations"),group_filters);
-  } 
+  }
   if (!cppitem->isSelected() && !citem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
     project->addLFVGroup (i18n("Dialogs"),"");
     project->setFilters(i18n("Dialogs"),group_filters);
-  } 
-  
-  
+  }
+
+
   group_filters.clear();
   group_filters.append("*.cpp");
   group_filters.append("*.c");
@@ -2229,7 +2241,7 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.l");
   project->addLFVGroup (i18n("Sources"),"");
   project->setFilters(i18n("Sources"),group_filters);
-  
+
   group_filters.clear();
   group_filters.append("*.h");
   group_filters.append("*.hxx");
@@ -2237,7 +2249,7 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.H");
   project->addLFVGroup (i18n("Headers"),"");
   project->setFilters(i18n("Headers"),group_filters);
-  
+
   project->writeProject ();
   project->updateMakefilesAm ();
 
@@ -2245,15 +2257,19 @@ void CKAppWizard::slotProcessExited() {
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
   if (CToolClass::searchInstProgram("ksgml2html")) {
-    copyFile(locate("kdev_template", "nif_template"),
-             directoryline->text() +"/" + nameline->text().lower() + "/docs/en/index.nif");
-    // blocked because it is important
+    KShellProcess process;
+    QString nif_template = locate("appdata", "templates/nif_template");
+    process.clearArguments();
+    process << "cp"; // copy is your friend :-)
+    process << nif_template;
+    process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
+    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
   }
-  
+
   KShellProcess p;
   QDir dir;
 	if (vsBox->currentItem() == 1) {
-	  dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
+	  dir.setCurrent(locateLocal("appdata", "kdeveloptemp"));
 	  QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
 	    (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
 	    (QString) " " + releaseline->text();
@@ -2263,7 +2279,7 @@ void CKAppWizard::slotProcessExited() {
 
 	if (vsBox->currentItem() != 0) {
 		dir.setCurrent(QDir::homeDirPath());
-		QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
+		QString deltemp = QString("rm -r -f ") + locateLocal("appdata", "kdeveloptemp");
 		p.clearArguments();
  	 	p << deltemp;
     p.start(KProcess::Block, KProcess::AllOutput);
@@ -2394,11 +2410,5 @@ void CKAppWizard::slotVendorEntry() {
 }
 
 
-void CKAppWizard::copyFile(QString source, QString dest)
-{
-    KShellProcess p;
-    p << "cp";
-    p << source;
-    p << dest;
-    p.start(KProcess::Block, KProcess::AllOutput);
-}
+
+
