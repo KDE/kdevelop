@@ -69,42 +69,42 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
 // attributes	
 public:
 	enum MdiWindowState { Normal,Maximized,Minimized };
-	QextMdiChildView       *m_pClient;
+	QextMdiChildView        *m_pClient;
 
 protected:
-	QextMdiChildArea       *m_pManager;
-	QextMdiChildFrmCaption *m_pCaption;
+	QextMdiChildArea        *m_pManager;
+	QextMdiChildFrmCaption  *m_pCaption;
 #ifdef _OS_WIN32_
 	/**
 	* This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
 	*/
-	QextMdiWin32IconButton *m_pIcon;
-	QPushButton   *m_pMinimize;
-	QPushButton   *m_pMaximize;
-	QPushButton   *m_pClose;
-	QPushButton   *m_pUndock;
+	QextMdiWin32IconButton  *m_pIcon;
+	QPushButton    *m_pMinimize;
+	QPushButton    *m_pMaximize;
+	QPushButton    *m_pClose;
+	QPushButton    *m_pUndock;
 #else	// in case of UNIX: KDE look
-	QToolButton   *m_pIcon;
-	QToolButton   *m_pMinimize;
-	QToolButton   *m_pMaximize;
-	QToolButton   *m_pClose;
-	QToolButton   *m_pUndock;
+	QToolButton    *m_pIcon;
+	QToolButton    *m_pMinimize;
+	QToolButton    *m_pMaximize;
+	QToolButton    *m_pClose;
+	QToolButton    *m_pUndock;
 #endif
 	MdiWindowState m_state;
 	QRect          m_restoredRect;
 	int            m_iResizeCorner;
 	int            m_iLastCursorCorner;
 	bool           m_resizeMode;
-   QPixmap*       m_pIconButtonPixmap;
-   QPixmap*       m_pMinButtonPixmap;
-   QPixmap*       m_pMaxButtonPixmap;
-   QPixmap*       m_pRestoreButtonPixmap;
-   QPixmap*       m_pCloseButtonPixmap;
+   QPixmap        *m_pIconButtonPixmap;
+   QPixmap        *m_pMinButtonPixmap;
+   QPixmap        *m_pMaxButtonPixmap;
+   QPixmap        *m_pRestoreButtonPixmap;
+   QPixmap        *m_pCloseButtonPixmap;
+   QPixmap        *m_pUndockButtonPixmap;
    /** every child frame window has an temporary ID in the Window menu of the main frame. */
    int 				m_windowMenuID;
-   QPixmap*       m_pUndockButtonPixmap;
    /** imitates a system menu for child frame windows */
-   QPopupMenu* m_pSystemMenu;
+   QPopupMenu     *m_pSystemMenu;
 
 // methods
 public:
@@ -133,6 +133,10 @@ public:
 	* until this object is destroyed.
 	*/
 	void setIcon(QPixmap *ptr);
+	/**
+	 * Returns the child frame icon.
+	 */
+	QPixmap* icon();
 	/**
 	* Enables or disables the close button
 	*/
@@ -164,20 +168,12 @@ public:
 	void updateRects(){ resizeEvent(0); };
    /** sets an ID that is submitted to QextMdiChildArea::menuActivated( int) when the menu item for this child frame was clicked */
    void setWindowMenuID( int id);
+   /** Returns the system menu. */
+   QPopupMenu* systemMenu();
 
 public slots: // Public slots
    /** called if someone click on the "Window" menu item for this child frame window */
    void slot_clickedInWindowMenu();
-   /**
-    * emits a signal that tells the outside that the buttons from the MDI child
-    * frame in the main menu must be placed and connected with new slots
-    */
-   void setSysButtonsInMainMenu();
-   /**
-    * emits a signal that tells the outside that the buttons from the MDI child
-    * frame in the main menu must be reconnected with new slots
-    */
-   void updateSysButtonsInMainMenu();
 
 protected:
 	virtual void resizeEvent(QResizeEvent *);
@@ -188,7 +184,6 @@ protected:
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
    //   virtual bool focusNextPrevChild( bool next ) { return true; };
 	void resizeWindow(int resizeCorner, int x, int y);
-	void moveWindow(QPoint diff, QPoint relativeMousePos);
 	void setResizeCursor(int resizeCorner);
 
 protected slots:

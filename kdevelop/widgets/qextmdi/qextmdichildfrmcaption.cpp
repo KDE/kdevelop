@@ -63,31 +63,51 @@ QextMdiChildFrmCaption::~QextMdiChildFrmCaption()
 
 void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
-   grabMouse();
-   m_relativeMousePosInCaption = e->pos()- pos() + QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
-	//F.B. QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
-	m_oldGlobalMousePos = e->globalPos();
-	m_bCanMove=true;
+   if ( e->button() == LeftButton) {
+      // grabMouse();
+#ifndef _OS_WIN32_
+      QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
+#endif
+      m_bCanMove = true;
+      m_offset = mapToParent( e->pos());
+   }
 }
 
 //============= mouseReleaseEvent ============//
 
-void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *)
+void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
 {
-	m_bCanMove=false;
-	QApplication::restoreOverrideCursor();
-	releaseMouse();
+   if ( e->button() == LeftButton) {
+#ifndef _OS_WIN32_
+      QApplication::restoreOverrideCursor();
+#endif
+      releaseMouse();
+      m_bCanMove = false;
+   }
 }
 
 //============== mouseMoveEvent =============//
 void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 {
-   if(m_bCanMove){
-      QPoint newGlobalMousePos = e->globalPos();
-      QPoint diff = newGlobalMousePos - m_oldGlobalMousePos;
-      if(e->state() & LeftButton)m_pParent->moveWindow( diff, m_relativeMousePosInCaption);
-      m_oldGlobalMousePos = newGlobalMousePos;
+   if ( !m_bCanMove )
+      return;
+   QPoint relMousePosInChildArea = m_pParent->m_pManager->mapFromGlobal( e->globalPos() );
+
+   // mouse out of child area? stop child frame dragging
+   if ( !m_pParent->m_pManager->rect().contains( relMousePosInChildArea)) {
+      if ( relMousePosInChildArea.x() < 0)
+         relMousePosInChildArea.rx() = 0;
+      if ( relMousePosInChildArea.y() < 0)
+         relMousePosInChildArea.ry() = 0;
+      if ( relMousePosInChildArea.x() > m_pParent->m_pManager->width())
+         relMousePosInChildArea.rx() = m_pParent->m_pManager->width();
+      if ( relMousePosInChildArea.y() > m_pParent->m_pManager->height())
+         relMousePosInChildArea.ry() = m_pParent->m_pManager->height();
    }
+   QPoint mousePosInChildArea = relMousePosInChildArea - m_offset;
+
+   // set new child frame position
+   parentWidget()->move( mousePosInChildArea);
 }
 
 //=============== setActive ===============//

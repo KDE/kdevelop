@@ -172,6 +172,8 @@ public slots:
 	void focusInEventOccurs( QextMdiChildView*);
 	void childWindowCloseRequest( QextMdiChildView*);
 	void windowCaptionChanged( const QString&);
+	void mdiParentNowMaximized();
+	void mdiParentNoLongerMaximized(QextMdiChildFrm*);
 };
 
 inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }

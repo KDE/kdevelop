@@ -35,6 +35,18 @@
 #include "qextmdichildarea.h"
 #include "qextmdichildview.h"
 
+#ifdef _OS_WIN32_
+ #include "win_undockbutton.xpm"
+ #include "win_minbutton.xpm"
+ #include "win_restorebutton.xpm"
+ #include "win_closebutton.xpm"
+#else // in case of UNIX: KDE look
+ #include "kde_undockbutton.xpm"
+ #include "kde_minbutton.xpm"
+ #include "kde_restorebutton.xpm"
+ #include "kde_closebutton.xpm"
+#endif
+
 //###########################################
 //
 // CREATION PROCESS
@@ -111,11 +123,9 @@ void QextMdiMainFrm::createMdiManager()
 	QObject::connect( m_pMdi, SIGNAL(closeAllViews()), this, SLOT(closeAllViews()) );
 	QObject::connect( m_pMdi, SIGNAL(switchToToplevelMode()), this, SLOT(switchToToplevelMode()) );
 	QObject::connect( m_pMdi, SIGNAL(switchToChildframeMode()), this, SLOT(switchToChildframeMode()) );
-	QObject::connect( m_pMdi, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)),
-	                  this, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)) );
-	QObject::connect( m_pMdi, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)),
-	                  this, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)) );
-   QObject::connect( m_pMdi, SIGNAL(removeSysButtonsFromMainMenu()), this, SIGNAL(removeSysButtonsFromMainMenu()) );
+   QObject::connect( m_pMdi, SIGNAL(nowMaximized()), this, SLOT(setMaximizeModeOn()) );
+   QObject::connect( m_pMdi, SIGNAL(noLongerMaximized(QextMdiChildFrm*)), this, SLOT(setMaximizeModeOff(QextMdiChildFrm*)) );
+   QObject::connect( m_pMdi, SIGNAL(sysButtonConnectionsMustChange(QextMdiChildFrm*,QextMdiChildFrm*)), this, SLOT(updateSysButtonConnections(QextMdiChildFrm*,QextMdiChildFrm*)) );
 }
 
 //============ createTaskBar ==============//
@@ -334,8 +344,8 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
   	if(pWnd->isAttached()){
       if( !(pWnd->hasFocus()) ) {
          if( m_pCurrentWindow->isMaximized()) {
-            pWnd->mdiParent()->updateSysButtonsInMainMenu();
-         }
+            updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
+        }
          pWnd->setFocus();
       }
 	}
@@ -419,8 +429,6 @@ void QextMdiMainFrm::switchToToplevelMode()
 		   i++;
 			detachWindow(w);
 	}
-	if( i > 1)
-      slot_removeSysButtonsFromMainMenu();
 }
 
 /**
@@ -444,63 +452,109 @@ void QextMdiMainFrm::switchToChildframeMode()
 void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
 {
    m_pMainMenuBar = pMenuBar;
- 	QObject::disconnect( m_pMdi, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)),
-	                     this, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)) );
- 	QObject::connect( m_pMdi, SIGNAL(insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)),
-	                  this, SLOT(slot_insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*)) );
- 	QObject::disconnect( m_pMdi, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)),
-	                     this, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)) );
- 	QObject::connect( m_pMdi, SIGNAL(updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)),
-	                  this, SLOT(slot_updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*)) );
-   QObject::disconnect( m_pMdi, SIGNAL(removeSysButtonsFromMainMenu()), this, SIGNAL(removeSysButtonsFromMainMenu()) );
-   QObject::connect( m_pMdi, SIGNAL(removeSysButtonsFromMainMenu()), this, SLOT(slot_removeSysButtonsFromMainMenu()) );
+#ifdef _OS_WIN32_
+   m_pUndock = new QPushButton( pMenuBar);
+   m_pRestore = new QPushButton( pMenuBar);
+   m_pMinimize = new QPushButton( pMenuBar);
+   m_pClose = new QPushButton( pMenuBar);
 
+   setSysButtonsAtMenuPosition();
+
+   QPixmap* m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
+   QPixmap* m_pMinButtonPixmap = new QPixmap( win_minbutton);
+   QPixmap* m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
+   QPixmap* m_pCloseButtonPixmap = new QPixmap( win_closebutton);
+#else	// in case of Unix : KDE look
+   m_pUndock = new QToolButton( pMenuBar);
+   m_pRestore = new QToolButton( pMenuBar);
+   m_pMinimize = new QToolButton( pMenuBar);
+   m_pClose = new QToolButton( pMenuBar);
+
+   setSysButtonsAtMenuPosition();
+
+   QPixmap* m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
+   QPixmap* m_pMinButtonPixmap = new QPixmap( kde_minbutton);
+   QPixmap* m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
+   QPixmap* m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
+#endif
+
+   m_pUndock->hide();
+   m_pMinimize->hide();
+   m_pRestore->hide();
+   m_pClose->hide();
+	
+   m_pUndock->setPixmap( *m_pUndockButtonPixmap);
+   m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+   m_pRestore->setPixmap( *m_pRestoreButtonPixmap);
+   m_pClose->setPixmap( *m_pCloseButtonPixmap);
 }
 
-void QextMdiMainFrm::slot_insertSysButtonsInMainMenu(const QPixmap* pSystemMenuPM, const QPixmap* pUndockPM, const QPixmap* pMinPM, const QPixmap* pRestorePM, const QPixmap* pClosePM, const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc)
+void QextMdiMainFrm::setSysButtonsAtMenuPosition()
 {
-   m_pMainMenuBar->insertItem( *pSystemMenuPM, receiver, sysMenuFunc, /*accel*/0, /*id*/-1, 0);
-   if( style().guiStyle() == Qt::MotifStyle) {
-      m_pMainMenuBar->insertSeparator();
-      m_pMainMenuBar->insertItem( *pUndockPM, receiver, undockFunc);
-      m_pMainMenuBar->insertItem( *pMinPM, receiver, minFunc);
-      m_pMainMenuBar->insertItem( *pRestorePM, receiver, restoreFunc);
-      m_pMainMenuBar->insertItem( *pClosePM, receiver, closeFunc);
-   }
+   int menuW = m_pMainMenuBar->parentWidget()->width();
+#ifdef _OS_WIN32_
+   int h = 16;
+   int y = m_pMainMenuBar->height()/2-8;
+#else  // in case of UNIX: KDE look
+   int h = 20;
+   int y = m_pMainMenuBar->height()/2-10;
+#endif
+
+	m_pUndock->setGeometry( ( menuW - ( h * 4) - 5), y, h, h);
+	m_pMinimize->setGeometry( ( menuW - ( h * 3) - 5), y, h, h);
+	m_pRestore->setGeometry( ( menuW - ( h * 2) - 5), y, h, h);
+	m_pClose->setGeometry( ( menuW - h - 5), y, h, h);
 }
 
-void QextMdiMainFrm::slot_updateSysButtonsInMainMenu(const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc)
+/** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
+void QextMdiMainFrm::setMaximizeModeOn()
 {
-   int itemcount = m_pMainMenuBar->count();
-   // disconnect the old child frame
-   m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(0), m_pCurrentWindow->mdiParent(), sysMenuFunc);
-   if( style().guiStyle() == Qt::MotifStyle) {
-      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-4), m_pCurrentWindow->mdiParent(), undockFunc);
-      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-3), m_pCurrentWindow->mdiParent(), minFunc);
-      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-2), m_pCurrentWindow->mdiParent(), restoreFunc);
-      m_pMainMenuBar->disconnectItem( m_pMainMenuBar->idAt(itemcount-1), m_pCurrentWindow->mdiParent(), closeFunc);
-   }
-   // connect the new child frame
-   m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(0), receiver, sysMenuFunc);
-   if( style().guiStyle() == Qt::MotifStyle) {
-      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-4), receiver, undockFunc);
-      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-3), receiver, minFunc);
-      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-2), receiver, restoreFunc);
-      m_pMainMenuBar->connectItem( m_pMainMenuBar->idAt(itemcount-1), receiver, closeFunc);
-   }
+   QextMdiChildFrm* pCurrentChild = m_pMdi->topChild();
+   if( !pCurrentChild)
+      return;
+
+   QObject::connect( m_pUndock, SIGNAL(clicked()), pCurrentChild, SLOT(undockPressed()) );
+   m_pUndock->show();
+   QObject::connect( m_pMinimize, SIGNAL(clicked()), pCurrentChild, SLOT(minimizePressed()) );
+   m_pMinimize->show();
+   QObject::connect( m_pRestore, SIGNAL(clicked()), pCurrentChild, SLOT(maximizePressed()) );
+   m_pRestore->show();
+   QObject::connect( m_pClose, SIGNAL(clicked()), pCurrentChild, SLOT(closePressed()) );
+   m_pClose->show();
+
+   m_pMainMenuBar->insertItem( *pCurrentChild->icon(), pCurrentChild->systemMenu(), -1, 0);
 }
 
-void QextMdiMainFrm::slot_removeSysButtonsFromMainMenu()
+/** turns the system buttons for maximize mode (SDI mode) off, and disconnects them */
+void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
 {
-   int itemcount = m_pMainMenuBar->count();
-   if( style().guiStyle() == Qt::MotifStyle) {
-      m_pMainMenuBar->removeItemAt( itemcount - 1); // close
-      m_pMainMenuBar->removeItemAt( itemcount - 2); // restore
-      m_pMainMenuBar->removeItemAt( itemcount - 3); // min
-      m_pMainMenuBar->removeItemAt( itemcount - 4); // undock
-      m_pMainMenuBar->removeItemAt( itemcount - 5); // separator
-   }
-   m_pMainMenuBar->removeItemAt( 0); // system menu
+   if( !oldChild)
+      return;
+
+   m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(0));
+
+   QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
+   m_pUndock->hide();
+   QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
+   m_pMinimize->hide();
+   QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
+   m_pRestore->hide();
+   QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
+   m_pClose->hide();
+}
+
+/** reconnects the system buttons form maximize mode (SDI mode) with the new child frame */
+void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild)
+{
+   QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
+   QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
+   QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
+   QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
+
+   QObject::connect( m_pUndock, SIGNAL(clicked()), newChild, SLOT(undockPressed()) );
+   QObject::connect( m_pMinimize, SIGNAL(clicked()), newChild, SLOT(minimizePressed()) );
+   QObject::connect( m_pRestore, SIGNAL(clicked()), newChild, SLOT(maximizePressed()) );
+   QObject::connect( m_pClose, SIGNAL(clicked()), newChild, SLOT(closePressed()) );
 }
 
 /** Shows the view taskbar. This should be connected with your "View" menu. */

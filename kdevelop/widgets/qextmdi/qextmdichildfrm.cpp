@@ -307,27 +307,6 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 	}
 }
 
-//=========== moveWindow ==============//
-void QextMdiChildFrm::moveWindow( QPoint diff, QPoint relativeMousePos)
-{
-   int newPosX = x() + diff.x();
-   int newPosY = y() + diff.y();
-   int newMousePosX = newPosX + relativeMousePos.x();
-   int newMousePosY = newPosY + relativeMousePos.y();
-
-   if( (newMousePosX < 0) || (newMousePosX > m_pManager->width())
-    || (newMousePosY < 0) || (newMousePosY > m_pManager->height()) ) {
-      emit releaseMouse();
-      return;
-   }
-
-   if(m_state==Maximized){
-      m_state=Normal;
-      m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-   }
-   setGeometry( newPosX, newPosY, width(), height());
-}
-
 //================= getResizeCorner =============//
 
 int QextMdiChildFrm::getResizeCorner(int ax,int ay)
@@ -345,9 +324,18 @@ int QextMdiChildFrm::getResizeCorner(int ax,int ay)
 void QextMdiChildFrm::maximizePressed()
 {
 	switch(m_state){
-		case Maximized: setState(Normal);    break;
-		case Normal:    setState(Maximized); break;
-		case Minimized: setState(Maximized); break;
+		case Maximized:
+		   emit m_pManager->noLongerMaximized(this);
+		   setState(Normal);
+		   break;
+		case Normal:
+		   setState(Maximized);
+		   emit m_pManager->nowMaximized();
+		   break;
+		case Minimized:
+		   setState(Maximized);
+		   emit m_pManager->nowMaximized();
+		   break;
 	}
 }
 
@@ -358,7 +346,11 @@ void QextMdiChildFrm::minimizePressed()
 	switch(m_state){
 		case Minimized: setState(Normal);    break;
 		case Normal:    setState(Minimized); break;
-		case Maximized: setState(Minimized); break;
+		case Maximized:
+		   emit m_pManager->noLongerMaximized(this);
+		   setState(Normal);
+		   setState(Minimized);
+		   break;
 	}
 }
 
@@ -367,17 +359,14 @@ void QextMdiChildFrm::minimizePressed()
 void QextMdiChildFrm::closePressed()
 {
 	if(m_pClient)m_pClient->close();
-	if( m_state == Maximized)
-      emit m_pManager->removeSysButtonsFromMainMenu();
 }
 
 //============= undockPressed ============//
 
 void QextMdiChildFrm::undockPressed()
 {
-	if( m_state == Maximized)
-      emit m_pManager->removeSysButtonsFromMainMenu();
-	if(m_pClient) m_pManager->undockWindow(m_pClient);
+	if(m_pClient)
+	   m_pManager->undockWindow(m_pClient);
 }
 
 //============ setState =================//
@@ -398,7 +387,6 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 					m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
 					setGeometry(m_restoredRect);
 					m_state=state;
-               emit m_pManager->removeSysButtonsFromMainMenu();
 					break;
 				case Minimized:
 					begin=QRect(x()+width()/2,y()+height()/2,1,1);
@@ -424,7 +412,6 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 					m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
 					show();
 					raise();
-					setSysButtonsInMainMenu();
 					break;
 				case Normal:
 					m_state=state;
@@ -435,7 +422,6 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 									m_pManager->height() + height() - m_pClient->height());
 					show();
 					raise();
-					setSysButtonsInMainMenu();
 					break;
 				case Maximized:
    				break;
@@ -450,10 +436,11 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 					setGeometry(m_restoredRect);
 					m_state=state;
 					m_pManager->childMinimized(this,true);
-               emit m_pManager->removeSysButtonsFromMainMenu();
 					break;
 				case Normal:
-					hide();
+				   hide();
+					///+++m_pClient->hide();
+					///+++resize(m_pCaption->width(),m_pCaption->height());
 					//F.B. if(bAnimate)m_pManager->animate(begin,end);
 					m_state=state;
 					m_pManager->childMinimized(this,false);
@@ -482,11 +469,19 @@ void QextMdiChildFrm::enableClose(bool bEnable)
 	m_pClose->repaint(false);
 }
 
-//============ setIcon =============//
+//============ setIcon ==================//
 
-void QextMdiChildFrm::setIcon(QPixmap *ptr)
+void QextMdiChildFrm::setIcon(QPixmap *pIconPM)
 {
-	m_pIcon->setPixmap( *ptr);
+	m_pIconButtonPixmap = pIconPM;
+	m_pIcon->setPixmap( *m_pIconButtonPixmap);
+}
+
+//============ icon =================//
+
+QPixmap* QextMdiChildFrm::icon()
+{
+	return m_pIconButtonPixmap;
 }
 
 //============ setClient ============//
@@ -530,6 +525,8 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
    linkChildren( pFocPolDict);
 	
    QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
+   QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
+   QObject::connect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
 	
    if( m_pClient->minimumSize().width() > QEXTMDI_MDI_CHILDFRM_MIN_WIDTH &&
 	   m_pClient->minimumSize().height() > QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT) {
@@ -546,6 +543,8 @@ void QextMdiChildFrm::unsetClient()
 	if(!m_pClient)return;
 	
 	QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
+   QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
+   QObject::disconnect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
 	
 	//reparent to desktop widget , no flags , point , show it
 	QDict<FocusPolicy>* pFocPolDict;
@@ -762,85 +761,50 @@ void QextMdiChildFrm::setWindowMenuID( int id)
 	m_windowMenuID = id;
 }
 
+QPopupMenu* QextMdiChildFrm::systemMenu()
+{
+   if( m_pSystemMenu == 0)
+      return 0;
+
+   m_pSystemMenu->clear();
+
+#ifdef _OS_WIN32_
+   m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
+   m_pSystemMenu->insertItem(tr("&Move"),this, SLOT(maximizePressed()));
+   m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(maximizePressed()));
+   m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
+   m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
+   m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),false); // TODO
+   m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),false); // TODO
+   if( state() == Normal)
+      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),false);
+   else // state=maximized
+      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),false);
+#else
+   if( state() == Maximized)
+      m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
+   if( state() == Normal)
+      m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
+   m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
+   m_pSystemMenu->insertItem(tr("M&ove"),this, SLOT(maximizePressed()));
+   m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(maximizePressed()));
+   m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),false); // TODO
+   m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),false); // TODO
+#endif
+
+   m_pSystemMenu->insertItem(tr("&Undock"),this, SLOT(undockPressed()));
+   m_pSystemMenu->insertSeparator();
+   m_pSystemMenu->insertItem(tr("&Close"),this, SLOT(closePressed()));
+
+   return m_pSystemMenu;
+}
+
 /** Shows a system menu for child frame windows. */
 void QextMdiChildFrm::showSystemMenu()
 {
-   if( m_pSystemMenu != 0) {
-      m_pSystemMenu->clear();
-#ifdef _OS_WIN32_
-      m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
-      m_pSystemMenu->insertItem(tr("&Move"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
-      m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),false); // TODO
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),false); // TODO
-      if( state() == Normal)
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),false);
-      else // state=maximized
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),false);
-#else
-      if( state() == Maximized)
-         m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
-      if( state() == Normal)
-         m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
-      m_pSystemMenu->insertItem(tr("M&ove"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(maximizePressed()));
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),false); // TODO
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),false); // TODO
-#endif
-      m_pSystemMenu->insertItem(tr("&Undock"),this, SLOT(undockPressed()));
-      m_pSystemMenu->insertSeparator();
-      m_pSystemMenu->insertItem(tr("&Close"),this, SLOT(closePressed()));
-      QPoint popupmenuPosition;
-      if( m_state == Maximized) {
-         qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
-         popupmenuPosition = QPoint( m_pIcon->pos().x() + x(),
-            m_pIcon->pos().y() + m_pIcon->height() + y() + QEXTMDI_MDI_CHILDFRM_BORDER);
-      }
-      else {
-         qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
-         popupmenuPosition = QPoint( m_pIcon->pos().x(),
-            m_pIcon->pos().y() + m_pIcon->height() + QEXTMDI_MDI_CHILDFRM_BORDER );
-      }
-      m_pSystemMenu->popup( mapToGlobal( popupmenuPosition));
-   }
-}
-
-/**
- * emits a signal that tells the outside that the buttons from the MDI child
- * frame in the main menu must be placed and connected with these slots
- */
-void QextMdiChildFrm::setSysButtonsInMainMenu()
-{
-   emit m_pManager->insertSysButtonsInMainMenu(
-      m_pIconButtonPixmap,
-      m_pUndockButtonPixmap,
-      m_pMinButtonPixmap,
-      m_pRestoreButtonPixmap,
-      m_pCloseButtonPixmap,
-      this,
-      SLOT(showSystemMenu()),
-      SLOT(undockPressed()),
-      SLOT(minimizePressed()),
-      SLOT(maximizePressed()),
-      SLOT(closePressed())
-      );
-}
-
-/**
- * emits a signal that tells the outside that the buttons from the MDI child
- * frame in the main menu must be reconnected with these slots
- */
-void QextMdiChildFrm::updateSysButtonsInMainMenu()
-{
-   emit m_pManager->updateSysButtonsInMainMenu(
-      this,
-      SLOT(showSystemMenu()),
-      SLOT(undockPressed()),
-      SLOT(minimizePressed()),
-      SLOT(maximizePressed()),
-      SLOT(closePressed())
-      );
+   QPoint popupmenuPosition;
+   //qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
+   popupmenuPosition = QPoint( m_pIcon->pos().x(),
+                               m_pIcon->pos().y() + m_pIcon->height() + QEXTMDI_MDI_CHILDFRM_BORDER );
+   systemMenu()->popup( mapToGlobal( popupmenuPosition));
 }

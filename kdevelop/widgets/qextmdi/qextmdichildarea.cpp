@@ -43,10 +43,10 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
 	m_captionFont = QFont();//F.B.QFont("clean",16);
 	QFontMetrics fm(m_captionFont);
 	m_captionFontLineSpacing = fm.lineSpacing();
-	m_captionActiveBackColor = QColor(0,0,0);
-	m_captionActiveForeColor = QColor(80,255,0);
-	m_captionInactiveBackColor = QColor(80,80,80);
-	m_captionInactiveForeColor = QColor(200,200,200);
+	m_captionActiveBackColor = QColor(0,0,128);
+	m_captionActiveForeColor = QColor(255,255,255);
+	m_captionInactiveBackColor = QColor(160,160,164);
+	m_captionInactiveForeColor = QColor(255,255,255);
 	m_pZ = new QList<QextMdiChildFrm>;
 	m_pZ->setAutoDelete(true);
 	setFocusPolicy(ClickFocus);
@@ -90,6 +90,7 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
 	if(bShow){
 		if(top){ //Maximize if needed
 			if(top->state() == QextMdiChildFrm::Maximized){
+			   emit sysButtonConnectionsMustChange( top,lpC);
 				top->setState(QextMdiChildFrm::Normal,false);
 				lpC->setState(QextMdiChildFrm::Maximized,false);
 			}
@@ -114,6 +115,9 @@ void QextMdiChildArea::focusInEvent(QFocusEvent *)
 void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 {
 	bool bWasMaximized = lpC->state() == QextMdiChildFrm::Maximized;
+	if(bWasMaximized){
+	   emit noLongerMaximized(lpC);
+	}
 	QObject::disconnect(lpC);
 	lpC->blockSignals(true);
 	m_pZ->removeRef(lpC);
@@ -122,6 +126,9 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 		if(c)c->setState(QextMdiChildFrm::Maximized,false);
 	}
 	if(bFocusTopChild)focusTopChild();
+	QextMdiChildFrm* pTopChild = 0;
+	if( (pTopChild = topChild()) )
+      emit nowMaximized();	
 	fillWindowMenu();
 }
 
@@ -130,6 +137,10 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild)
 {
 	bool bWasMaximized = lpC->state() == QextMdiChildFrm::Maximized;
+	if(bWasMaximized){
+	   emit noLongerMaximized(lpC);
+	}
+	
 	QObject::disconnect(lpC);
 
    lpC->unsetClient();
@@ -141,6 +152,9 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 		if(c)c->setState(QextMdiChildFrm::Maximized,false);
 	}
 	if(bFocusTopChild)focusTopChild();
+	QextMdiChildFrm* pTopChild = 0;
+	if( (pTopChild = topChild()) )
+      emit nowMaximized();	
 	fillWindowMenu();
 }
 
@@ -558,6 +572,6 @@ void QextMdiChildArea::undockWindow(QWidget* pWidget)   // added by F.B.
 	lpC->unsetClient();
 	pWnd->youAreDetached();
    //m_pTaskBar->windowAttached(pWnd,false);
-	destroyChild(lpC,false); //Do not focus the new top child , we loose focus...
+	destroyChild(lpC,true); //Do not focus the new top child , we loose focus...
 	pWnd->setFocus();
 }

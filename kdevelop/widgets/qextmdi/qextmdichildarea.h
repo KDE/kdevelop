@@ -144,15 +144,17 @@ protected:	// Protected methods
 protected slots:
 	void menuActivated(int id);
 
-signals:
+signals: // Signals
    void topChildChanged(QextMdiChildView*);
 	void closeActiveView();
 	void closeAllViews();
 	void switchToToplevelMode();
 	void switchToChildframeMode();
-   void insertSysButtonsInMainMenu(const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QPixmap*, const QObject*, const char*, const char*, const char*, const char*, const char*);
-   void updateSysButtonsInMainMenu(const QObject*, const char*, const char*, const char*, const char*, const char*);
-   void removeSysButtonsFromMainMenu();
+   /** signalizes that the child frames are no longer maximized */
+   void noLongerMaximized(QextMdiChildFrm*);
+   /** signalizes that the child frames are maximized now*/
+   void nowMaximized();
+   void sysButtonConnectionsMustChange(QextMdiChildFrm*, QextMdiChildFrm*);
 };
 
 #endif   // _QEXTMDICHILDAREA_H_

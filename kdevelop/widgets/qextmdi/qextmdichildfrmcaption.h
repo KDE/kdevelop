@@ -59,15 +59,13 @@ protected slots:
 
 // attributes
 public:
-	QString m_szCaption;
-	bool m_bActive;
-	bool m_bCanMove;
-	QextMdiChildFrm *m_pParent;
+	QString           m_szCaption;
 
 protected: // Protected attributes
-	QPoint m_relativeMousePosInCaption;
-   /** it's for window dragging, stores the last mouse position, it's used to get the mouse move distance */
-   QPoint m_oldGlobalMousePos;
+	QextMdiChildFrm  *m_pParent;
+	bool              m_bActive;
+	bool              m_bCanMove;
+	QPoint            m_offset;
 };
 
 #endif //_QEXTMDICAPTION_H_

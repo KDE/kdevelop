@@ -73,6 +73,23 @@ protected:
    QPopupMenu              *m_pTaskBarPopup;
    QMenuBar                *m_pMainMenuBar;
 
+   QPixmap                 *m_pUndockButtonPixmap;
+   QPixmap                 *m_pMinButtonPixmap;
+   QPixmap                 *m_pRestoreButtonPixmap;
+   QPixmap                 *m_pCloseButtonPixmap;
+
+#ifdef _OS_WIN32_
+   QPushButton             *m_pUndock;
+   QPushButton             *m_pMinimize;
+   QPushButton             *m_pRestore;
+   QPushButton             *m_pClose;
+#else
+   QToolButton             *m_pUndock;
+   QToolButton             *m_pMinimize;
+   QToolButton             *m_pRestore;
+   QToolButton             *m_pClose;
+#endif
+
 // methods
 public:
 	QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
@@ -85,6 +102,7 @@ public:
 	bool windowExists(QextMdiChildView *pWnd);
 	virtual void switchWindows(bool bRight);
    virtual bool event(QEvent* e);
+   virtual void setSysButtonsAtMenuPosition();
 
 public slots:
    /**
@@ -153,7 +171,7 @@ protected:
     */
    QPopupMenu* windowMenu() { return m_pMdi->m_pWindowMenu; };
 
-protected slots:
+protected slots: // Protected slots
 	virtual void activateView(QextMdiChildView *pWnd);
 	virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
    /**
@@ -161,15 +179,12 @@ protected slots:
     * Usually, if its view raises.
     */
 	//virtual void pushNewTaskBarButton(QextMdiChildView* pWnd);
-   void slot_insertSysButtonsInMainMenu(const QPixmap* pSystemMenuPM, const QPixmap* pUndockPM, const QPixmap* pMinPM, const QPixmap* pRestorePM, const QPixmap* pClosePM, const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
-   void slot_updateSysButtonsInMainMenu(const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
-   void slot_removeSysButtonsFromMainMenu();
-
-signals: // Signals
-   /**  */
-   void insertSysButtonsInMainMenu(const QPixmap* pSystemMenuPM, const QPixmap* pUndockPM, const QPixmap* pMinPM, const QPixmap* pRestorePM, const QPixmap* pClosePM, const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
-   void updateSysButtonsInMainMenu(const QObject* receiver, const char* sysMenuFunc, const char* undockFunc, const char* minFunc, const char* restoreFunc, const char* closeFunc);
-   void removeSysButtonsFromMainMenu();
+   /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
+   void setMaximizeModeOn();
+   /** turns the system buttons for maximize mode (SDI mode) off, and disconnects them */
+   void setMaximizeModeOff( QextMdiChildFrm* oldChild);
+   /** reconnects the system buttons form maximize mode (SDI mode) with the new child frame */
+   void updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild);
 };
 
 #endif //_QEXTMDIMAINFRM_H_
