@@ -557,16 +557,24 @@ void KWriteView::update(VConfig &c) {
   if (cursor.x == c.cursor.x && cursor.y == c.cursor.y) return;
   exposeCursor = true;
 
+	/*
 	if(cursor.y != c.cursor.y)
 	{
 		int h = kWriteDoc->fontHeight;
 
 		// Check if the cursor goes out of what is currently seen
 		if(h * cursor.y < yPos)
+		{
+			debug("KWriteView::update1: scroll: dy: %d\n", yPos - h * cursor.y);	
 			leftBorder->scroll(0, yPos - h * cursor.y);
+		}
 		else if(h * (cursor.y + 1) > yPos + height())
+		{
+			debug("KWriteView::update2: scroll: dy: %d\n", yPos + height() - h * (cursor.y + 1));	
 			leftBorder->scroll(0, yPos + height() - h * (cursor.y + 1));
+		}
 	}
+	*/
 
   kWriteDoc->unmarkFound();
   
@@ -2255,6 +2263,8 @@ void KWrite::exposeFound(PointStruc &cursor, int slen, int flags, bool replace) 
   }
 
 	if(xPos < 0) xPos = 0;
+
+	debug("KWrite::exposefound: xPos: %d, yPos: %d\n", xPos, yPos);
 
   kWriteView->updateView(flags | ufPos,xPos,yPos);
   kWriteDoc->updateViews(kWriteView);
