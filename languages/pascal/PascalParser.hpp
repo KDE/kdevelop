@@ -214,8 +214,8 @@ public:
 	public: void procedureStatement();
 	public: void gotoStatement();
 	public: void raiseStatement();
-	public: void assignmentOperator();
 	public: void identifierOrArrayIdentifier();
+	public: void assignmentOperator();
 	public: void repetitiveStatement();
 	public: void conditionalStatement();
 	public: void exceptionStatement();
@@ -410,6 +410,10 @@ private:
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_73;
 	static const unsigned long _tokenSet_74_data_[];
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_74;
+	static const unsigned long _tokenSet_75_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_75;
+	static const unsigned long _tokenSet_76_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_76;
 };
 
 #endif /*INC_PascalParser_hpp_*/

@@ -595,7 +595,7 @@ expression
 
 expressionSign
 //    : STAR! | LE! | GE! | LTH! | GT! | NOT_EQUAL! | IN! | IS!
-    : LE! | GE! | LTH! | GT! | NOT_EQUAL! | IN! | IS!
+    : LE! | GE! | LTH! | GT! | NOT_EQUAL! | IN! | IS! | EQUAL!
     ;
 
 simpleExpression
@@ -608,7 +608,7 @@ term
 
 //TODO: distinguish between identifiers, typecasts and function calls -> semantic predicate
 factor
-    : ( LPAREN! expression LPAREN! )
+    : ( LPAREN! expression RPAREN! )
 //    | (qualifiedMethodIdentifier2 LBRACK!)=> qualifiedMethodIdentifier2 LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
     | identifierOrValueTypecastOrFunctionCall
 //    | identifier
@@ -677,14 +677,14 @@ simpleStatement
     ;
 
 assignmentStatement
-    : identifier assignmentOperator expression
+    : identifierOrArrayIdentifier assignmentOperator expression
     ;
 
 identifierOrArrayIdentifier
     : identifier
 //    | (qualifiedMethodIdentifier LBRACK!)=> qualifiedMethodIdentifier LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
 //    | qualifiedMethodIdentifier
-    | identifier LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
+    | identifier LBRACK! expression ( COMMA! expression )* RBRACK!
     ;
 
 assignmentOperator
@@ -751,7 +751,7 @@ whileStatement
     ;
 
 repeatStatement
-    : REPEAT^ statement ( SEMI! statement )* UNTIL! expression
+    : REPEAT^ statement ( SEMI! (statement)? )* UNTIL! expression
     ;
 
 forStatement
