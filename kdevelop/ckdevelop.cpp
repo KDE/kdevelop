@@ -272,7 +272,8 @@ void CKDevelop::slotFileCloseAll(){
 }
 void CKDevelop::slotFilePrint(){
   CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
-  printerdlg->show(); 
+  printerdlg->resize(600,480);
+  printerdlg->exec(); 
 }
 void CKDevelop::slotSCurrentTab(int item){
   s_tab_view->setCurrentTab(item);

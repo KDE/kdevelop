@@ -26,12 +26,14 @@
 #include <qlined.h>
 #include <qspinbox.h>
 #include <qcombo.h>
+#include <qkeycode.h>
+#include <qregexp.h>
 
 /** the KDE-Printdialog
   *@author Stefan Heidrich
   */
 
-class CPrintDlg : public QWidget {
+class CPrintDlg : public QDialog {
   Q_OBJECT
 public:
   CPrintDlg(QWidget* parent=0,const char* name=0);
@@ -39,29 +41,20 @@ public:
   void init();
   
 public slots:
-    void slotA2psActivated(int);
-  void  slotEnscriptActivated();
+    void slotProgramActivated(int);
+ void slotPrettyPrintClicked(bool);
+ void slotPrintToFileClicked(bool);
+ void slotCancelClicked();
   
 protected:
-  QButtonGroup* paperFormatGroup;
-  QPushButton* printingConfButton;
-  QLineEdit* printToFileLine;
-  QComboBox* paperCombBox;
-  QComboBox* programCombBox;
-  QLineEdit* printerLine;
-  QPushButton* printToFileDlg;
-  QComboBox* formatCombBox;
-  QComboBox* defaultCombBox;
-  QSpinBox* copySpinBox;
-  QCheckBox* prettyPrintCheckBox;
-  QCheckBox* prettyColorCheckBox;
-  QComboBox* pageSide;
-  QComboBox* sidePerPage;
-  QComboBox* pagePerSide;
-  QPushButton* filesConfButton;
-  QComboBox* prettyCombBox;
-  QComboBox* mediaCombBox;
-  QCheckBox* printToFileButton;
+ QButtonGroup* paperFormatGroup;
+ QPushButton *printingConfButton,*printToFileDlg,*filesConfButton,
+   *okButton,*cancelButton,*helpButton;
+ QLineEdit *printToFileLine,*printerLine;
+ QComboBox *paperCombBox,*programCombBox,*formatCombBox,*defaultCombBox, 
+   *pageSide,*sidePerPage,*pagePerSide,*prettyCombBox,*mediaCombBox;
+ QSpinBox *copySpinBox;
+ QCheckBox *prettyPrintCheckBox,*prettyColorCheckBox,*printToFileButton;
   
 };
 #endif

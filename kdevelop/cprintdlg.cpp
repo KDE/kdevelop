@@ -23,8 +23,11 @@
 #include <qbttngrp.h>
 #include <iostream.h>
 
-CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QWidget(parent, name, true){
+CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
+  slotProgramActivated(0);
+  slotPrintToFileClicked(false);
+  slotPrettyPrintClicked(false);
 }
 
 CPrintDlg::~CPrintDlg(){
@@ -32,9 +35,9 @@ CPrintDlg::~CPrintDlg(){
 
 
 void CPrintDlg::init(){
-  QWidget *mainwidget = new QWidget();
+  QWidget *mainwidget = new QWidget(this,"printdialog");
   mainwidget->resize (600,480);
-  QWidget *printwidget = new QWidget(mainwidget,"printing");
+  QWidget *printwidget = new QWidget(this,"printing");
   printwidget->resize(600,430);
   QButtonGroup* qtarch_ButtonGroup_35;
   qtarch_ButtonGroup_35 = new QButtonGroup( printwidget, "ButtonGroup_35" );
@@ -46,7 +49,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_35->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_35->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_35->setFrameStyle( 49 );
-  qtarch_ButtonGroup_35->setTitle( "Outputmedia" );
+  qtarch_ButtonGroup_35->setTitle(( "Outputmedia" ));
   qtarch_ButtonGroup_35->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_8;
@@ -59,7 +62,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_8->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_8->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_8->setFrameStyle( 49 );
-  qtarch_ButtonGroup_8->setTitle( "Outprinting" );
+  qtarch_ButtonGroup_8->setTitle(( "Outprinting" ));
   qtarch_ButtonGroup_8->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_9;
@@ -72,7 +75,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_9->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_9->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_9->setFrameStyle( 49 );
-  qtarch_ButtonGroup_9->setTitle( "Pretty-print" );
+  qtarch_ButtonGroup_9->setTitle(( "Pretty-print" ));
   qtarch_ButtonGroup_9->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_34;
@@ -85,7 +88,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_34->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_34->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_34->setFrameStyle( 49 );
-  qtarch_ButtonGroup_34->setTitle( "Pretty-print mode" );
+  qtarch_ButtonGroup_34->setTitle(( "Pretty-print mode" ));
   qtarch_ButtonGroup_34->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_11;
@@ -98,7 +101,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_11->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_11->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_11->setFrameStyle( 49 );
-  qtarch_ButtonGroup_11->setTitle( "Pages" );
+  qtarch_ButtonGroup_11->setTitle(( "Pages" ));
   qtarch_ButtonGroup_11->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_10;
@@ -111,7 +114,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_10->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_10->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_10->setFrameStyle( 49 );
-  qtarch_ButtonGroup_10->setTitle( "Page printing" );
+  qtarch_ButtonGroup_10->setTitle(( "Page printing" ));
   qtarch_ButtonGroup_10->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_7;
@@ -124,7 +127,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_7->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_7->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_7->setFrameStyle( 49 );
-  qtarch_ButtonGroup_7->setTitle( "Copy" );
+  qtarch_ButtonGroup_7->setTitle(( "Copy" ));
   qtarch_ButtonGroup_7->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_5;
@@ -137,7 +140,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_5->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_5->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_5->setFrameStyle( 49 );
-  qtarch_ButtonGroup_5->setTitle( "Printer" );
+  qtarch_ButtonGroup_5->setTitle(( "Printer" ));
   qtarch_ButtonGroup_5->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_6;
@@ -150,7 +153,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_6->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_6->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_6->setFrameStyle( 49 );
-  qtarch_ButtonGroup_6->setTitle( "Outputlocation" );
+  qtarch_ButtonGroup_6->setTitle(( "Outputlocation" ));
   qtarch_ButtonGroup_6->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_4;
@@ -163,7 +166,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_4->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_4->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_4->setFrameStyle( 49 );
-  qtarch_ButtonGroup_4->setTitle( "Default printsettings" );
+  qtarch_ButtonGroup_4->setTitle(( "Default printsettings" ));
   qtarch_ButtonGroup_4->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_3;
@@ -176,7 +179,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_3->setFrameStyle( 49 );
-  qtarch_ButtonGroup_3->setTitle( "Outputformat" );
+  qtarch_ButtonGroup_3->setTitle(( "Outputformat" ));
   qtarch_ButtonGroup_3->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_2;
@@ -189,7 +192,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_2->setFrameStyle( 49 );
-  qtarch_ButtonGroup_2->setTitle( "Program" );
+  qtarch_ButtonGroup_2->setTitle(( "Program" ));
   qtarch_ButtonGroup_2->setAlignment( 1 );
   
   paperFormatGroup = new QButtonGroup( printwidget, "PaperFormatGroup" );
@@ -201,7 +204,7 @@ void CPrintDlg::init(){
   paperFormatGroup->setFontPropagation( QWidget::NoChildren );
   paperFormatGroup->setPalettePropagation( QWidget::NoChildren );
   paperFormatGroup->setFrameStyle( 49 );
-  paperFormatGroup->setTitle( "Paper format" );
+  paperFormatGroup->setTitle(( "Paper format" ));
   paperFormatGroup->setAlignment( 1 );
   
   printingConfButton = new QPushButton( printwidget, "printingConfButton" );
@@ -212,7 +215,7 @@ void CPrintDlg::init(){
   printingConfButton->setBackgroundMode( QWidget::PaletteBackground );
   printingConfButton->setFontPropagation( QWidget::NoChildren );
   printingConfButton->setPalettePropagation( QWidget::NoChildren );
-  printingConfButton->setText( "printing..." );
+  printingConfButton->setText(( "printing..." ));
   printingConfButton->setAutoRepeat( FALSE );
   printingConfButton->setAutoResize( FALSE );
   
@@ -239,8 +242,8 @@ void CPrintDlg::init(){
   paperCombBox->setPalettePropagation( QWidget::NoChildren );
   paperCombBox->setSizeLimit( 10 );
   paperCombBox->setAutoResize( FALSE );
-  paperCombBox->insertItem( "portrait" );
-  paperCombBox->insertItem( "landscape" );
+  paperCombBox->insertItem(( "portrait" ));
+  paperCombBox->insertItem(( "landscape" ));
   
   programCombBox = new QComboBox( FALSE, printwidget, "programCombBox" );
   programCombBox->setGeometry( 30, 30, 80, 30 );
@@ -254,8 +257,7 @@ void CPrintDlg::init(){
   programCombBox->setAutoResize( FALSE );
   programCombBox->insertItem( "a2ps" );
   programCombBox->insertItem( "enscript" );
-  connect(programCombBox,SIGNAL(highlighted (int)),SLOT(slotA2psActivated(int)));
-  // connect(programCombBox,SIGNAL(activated()),SLOT(slotEnscriptActivated()));
+  connect(programCombBox,SIGNAL(activated (int)),SLOT(slotProgramActivated(int)));
   
   QLabel* qtarch_Label_1;
   qtarch_Label_1 = new QLabel( printwidget, "Label_1" );
@@ -266,7 +268,7 @@ void CPrintDlg::init(){
   qtarch_Label_1->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_1->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_1->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_1->setText( "Printername" );
+  qtarch_Label_1->setText(( "printername" ));
   qtarch_Label_1->setAlignment( 289 );
   qtarch_Label_1->setMargin( -1 );
   
@@ -319,9 +321,7 @@ void CPrintDlg::init(){
   defaultCombBox->setInsertionPolicy( QComboBox::AtBottom );
   defaultCombBox->setSizeLimit( 10 );
   defaultCombBox->setAutoResize( FALSE );
-  defaultCombBox->insertItem( "settings" );
-  defaultCombBox->insertItem( "unix manual output" );
-  defaultCombBox->insertItem( "lineprinter" );
+  defaultCombBox->insertItem(( "settings" ));
   
   copySpinBox = new QSpinBox( printwidget, "copySpinBox" );
   copySpinBox->setGeometry( 180, 220, 120, 30 );
@@ -348,9 +348,10 @@ void CPrintDlg::init(){
   prettyPrintCheckBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyPrintCheckBox->setFontPropagation( QWidget::NoChildren );
   prettyPrintCheckBox->setPalettePropagation( QWidget::NoChildren );
-  prettyPrintCheckBox->setText( "pretty-print" );
+  prettyPrintCheckBox->setText(( "pretty-print" ));
   prettyPrintCheckBox->setAutoRepeat( FALSE );
   prettyPrintCheckBox->setAutoResize( FALSE );
+  connect (prettyPrintCheckBox,SIGNAL(toggled(bool)),SLOT(slotPrettyPrintClicked(bool)));
   
   prettyColorCheckBox = new QCheckBox( printwidget, "prettyColorCheckBox" );
   prettyColorCheckBox->setGeometry( 480, 310, 70, 30 );
@@ -360,7 +361,7 @@ void CPrintDlg::init(){
   prettyColorCheckBox->setBackgroundMode( QWidget::PaletteBackground );
   prettyColorCheckBox->setFontPropagation( QWidget::NoChildren );
   prettyColorCheckBox->setPalettePropagation( QWidget::NoChildren );
-  prettyColorCheckBox->setText( "color" );
+  prettyColorCheckBox->setText(( "color" ));
   prettyColorCheckBox->setAutoRepeat( FALSE );
   prettyColorCheckBox->setAutoResize( FALSE );
   
@@ -375,10 +376,10 @@ void CPrintDlg::init(){
   pageSide->setInsertionPolicy( QComboBox::NoInsertion );
   pageSide->setSizeLimit( 10 );
   pageSide->setAutoResize( FALSE );
-  pageSide->insertItem( "odd" );
-  pageSide->insertItem( "even" );
-  pageSide->insertItem( "first half" );
-  pageSide->insertItem( "second half" );
+  pageSide->insertItem(( "odd" ));
+  pageSide->insertItem(( "even" ));
+  pageSide->insertItem(( "first half" ));
+  pageSide->insertItem(( "second half" ));
   
   sidePerPage = new QComboBox( FALSE, printwidget, "sidePerPage" );
   sidePerPage->setGeometry( 340, 130, 220, 30 );
@@ -390,8 +391,8 @@ void CPrintDlg::init(){
   sidePerPage->setPalettePropagation( QWidget::NoChildren );
   sidePerPage->setSizeLimit( 10 );
   sidePerPage->setAutoResize( FALSE );
-  sidePerPage->insertItem( "one side of paper" );
-  sidePerPage->insertItem( "two side of paper" );
+  sidePerPage->insertItem(( "one side of paper" ));
+  sidePerPage->insertItem(( "two side of paper" ));
 
   pagePerSide = new QComboBox( FALSE, printwidget, "pagePerSide" );
   pagePerSide->setGeometry( 340, 170, 220, 30 );
@@ -403,8 +404,8 @@ void CPrintDlg::init(){
   pagePerSide->setPalettePropagation( QWidget::NoChildren );
   pagePerSide->setSizeLimit( 10 );
   pagePerSide->setAutoResize( FALSE );
-  pagePerSide->insertItem( "one page per side" );
-  pagePerSide->insertItem( "two pages per side" );
+  pagePerSide->insertItem(( "one page per side" ));
+  pagePerSide->insertItem(( "two pages per side" ));
   
   filesConfButton = new QPushButton( printwidget, "filesConfButton" );
   filesConfButton->setGeometry( 350, 30, 110, 30 );
@@ -414,7 +415,7 @@ void CPrintDlg::init(){
   filesConfButton->setBackgroundMode( QWidget::PaletteBackground );
   filesConfButton->setFontPropagation( QWidget::NoChildren );
   filesConfButton->setPalettePropagation( QWidget::NoChildren );
-  filesConfButton->setText( "files..." );
+  filesConfButton->setText(( "files..." ));
   filesConfButton->setAutoRepeat( FALSE );
   filesConfButton->setAutoResize( FALSE );
   
@@ -482,9 +483,10 @@ void CPrintDlg::init(){
   printToFileButton->setBackgroundMode( QWidget::PaletteBackground );
   printToFileButton->setFontPropagation( QWidget::NoChildren );
   printToFileButton->setPalettePropagation( QWidget::NoChildren );
-  printToFileButton->setText( "print to file" );
+  printToFileButton->setText(( "print to file" ));
   printToFileButton->setAutoRepeat( FALSE );
   printToFileButton->setAutoResize( FALSE );
+  connect (printToFileButton,SIGNAL(toggled(bool)),SLOT(slotPrintToFileClicked(bool)));
   
   qtarch_ButtonGroup_8->insert( prettyPrintCheckBox );
   qtarch_ButtonGroup_8->insert( prettyColorCheckBox );
@@ -492,15 +494,98 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_9->insert( prettyColorCheckBox );
   qtarch_ButtonGroup_6->insert( printToFileDlg );
   qtarch_ButtonGroup_6->insert( printToFileButton );
+
+  okButton = new QPushButton( mainwidget, "okButton" );
+  okButton->setText(("Ok"));
+  okButton->setGeometry( 20, 440, 100, 30 );
+  cancelButton = new QPushButton( mainwidget, "cancelButton" );
+  cancelButton->setText(("Cancel"));
+  cancelButton->setGeometry( 140, 440, 100, 30 );
+  connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
+  helpButton = new QPushButton( mainwidget, "helpButton" );
+  helpButton->setText(("Help"));
+  helpButton->setGeometry( 480, 440, 100, 30 );
+
   mainwidget->show();
 }
 
-void CPrintDlg::slotA2psActivated(int i) {
-  mediaCombBox->setEnabled(false);
-  cout << "Hallo." << endl;
-}
-void CPrintDlg::slotEnscriptActivated() {
-  mediaCombBox->setEnabled(true);
-  cout << "Stefan." << endl;
+void CPrintDlg::slotProgramActivated(int i) {
+  if (i==1) 
+    {
+      mediaCombBox->setEnabled(true);
+      prettyPrintCheckBox->setEnabled(true);
+      slotPrettyPrintClicked(false);
+      formatCombBox->setEnabled(true);
+      pageSide->setEnabled(true);
+      int j =defaultCombBox->count();
+      int state=0;
+      for (int a=0;a<j;a++) {
+	if (!(strcmp(defaultCombBox->text(a),"unix manual output"))) {
+	  defaultCombBox->removeItem(a);
+	  a--;
+	  j--;
+	}
+	if (!(strcmp(defaultCombBox->text(a),"lineprinter"))) {
+	  state++;
+	}
+      }
+      if (state == 0) {
+      defaultCombBox->insertItem( "lineprinter" );
+      }
+    }
+  else 
+    { 
+      mediaCombBox->setEnabled(false);
+      prettyPrintCheckBox->setEnabled(false);
+      slotPrettyPrintClicked(false);
+      formatCombBox->setEnabled(false);
+      pageSide->setEnabled(false);
+      int j =defaultCombBox->count();
+      int state=0;
+      for (int a=0;a<j;a++) {
+	if (!(strcmp(defaultCombBox->text(a),"lineprinter"))) {
+	  defaultCombBox->removeItem(a);
+	  a--;
+	  j--;
+	}
+	if (!(strcmp(defaultCombBox->text(a),"unix manual output"))) {
+	  state++;
+	}
+      }
+      if (state == 0) {
+      defaultCombBox->insertItem( "unix manual output" );
+      }
+    }
 }
 
+void CPrintDlg::slotPrettyPrintClicked(bool status) {
+  if (status) 
+    {
+      prettyCombBox->setEnabled(true);
+      prettyColorCheckBox->setEnabled(true);
+    }
+  else
+    {
+      prettyCombBox->setEnabled(false);
+      prettyColorCheckBox->setEnabled(false);
+      prettyPrintCheckBox->setChecked(false);
+      prettyColorCheckBox->setChecked(false);
+    }
+}
+
+void CPrintDlg::slotPrintToFileClicked(bool status) {
+  if (status) 
+    {
+      printToFileDlg->setEnabled(true);
+      printToFileLine->setEnabled(true);
+    }
+  else
+    {
+      printToFileDlg->setEnabled(false);
+      printToFileLine->setEnabled(false);
+    }
+}
+
+void CPrintDlg::slotCancelClicked() {
+  reject();
+}
