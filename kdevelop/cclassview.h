@@ -99,8 +99,8 @@ protected: // Protected signals and slots
     void selectedProjectOptions();
     void selectedViewDeclaration();
     void selectedViewDefinition();
-    void signalAddMethod( CParsedMethod *aMethod );
-    void signalAddAttribute( CParsedAttribute *aAttribute );
+    void signalAddMethod( CParsedMethod * );
+    void signalAddAttribute( CParsedAttribute * );
 
 private: // Private constants
 

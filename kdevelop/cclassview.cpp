@@ -160,7 +160,7 @@ void CClassView::refresh()
 
   // Insert root item
   str = i18n( CLASSROOTNAME );
-  classes = treeH.addRoot( str, PROJECT );
+  classes = treeH.addRoot( str, THFOLDER );
 
   list = store->getSortedClasslist();
 
@@ -177,7 +177,7 @@ void CClassView::refresh()
 
   // Add the globals folder.
   str = i18n( GLOBALROOTNAME );
-  globals = treeH.addRoot( str, PROJECT );
+  globals = treeH.addRoot( str, THFOLDER );
 
   // Add all global functions and variables
   treeH.addGlobalFunctions( store->getGlobalFunctions(), globals );
@@ -230,9 +230,9 @@ int CClassView::indexType()
 
   // Should add cases for global functions and variables.
   if( strcmp( item->text(0), i18n( CLASSROOTNAME ) ) == 0 ) // Root
-    retVal = PROJECT;
+    retVal = THFOLDER;
   else if( cp.store.getClassByName( item->text(0) ) )
-    retVal = CVCLASS;
+    retVal = THCLASS;
   else // Check for methods and attributes.
   {
     parent = item->parent();
@@ -246,9 +246,9 @@ int CClassView::indexType()
   // Check for globals if nothing else has worked.
   if( retVal == -1 )
     if( store->getGlobalFunctionByNameAndArg( item->text(0) ) != NULL )
-      retVal = CVGLOBAL_FUNCTION;
+      retVal = THGLOBAL_FUNCTION;
     else if( store->getGlobalVarByName( item->text(0) ) != NULL )
-      retVal = CVGLOBAL_VARIABLE;
+      retVal = THGLOBAL_VARIABLE;
 
   return retVal;
 }
@@ -379,10 +379,10 @@ void CClassView::slotRightButtonPressed(QListViewItem *item,const QPoint &p,int 
     // If the right button is pressed we show a popupmenu.
     switch( indexType() )
     {
-      case PROJECT:
+      case THFOLDER:
         popup = &projectPopup;
         break;
-      case CVCLASS:
+      case THCLASS:
         popup = &classPopup;
         break;
       case METHOD:
@@ -430,23 +430,14 @@ void CClassView::slotClassDelete()
 
 void CClassView::slotMethodNew()
 {
-  CParsedClass *aClass;
   CParsedMethod *aMethod;
   CAddClassMethodDlg dlg(this, "methodDlg" );
   QString str;
   
   if( dlg.exec() )
   {
-    debug( "Adding method." );
     aMethod = dlg.asSystemObj();
-    aMethod->out();
-
-    aClass = getCurrentClass();
-    if( aClass )
-    {
-      aClass->addMethod( aMethod );
-      treeH.updateClass( aClass, currentItem() );
-    }
+    aMethod->setDeclaredInClass( currentItem()->text( 0 ) );
 
     emit signalAddMethod( aMethod );
   }
@@ -465,22 +456,12 @@ void CClassView::slotMethodDelete()
 
 void CClassView::slotAttributeNew()
 {
-  CParsedClass *aClass;
   CAddClassAttributeDlg dlg(this, "attrDlg" );
   CParsedAttribute *aAttr;
 
   if( dlg.exec() )
   {
-    debug( "Adding attribute:" );
     aAttr = dlg.asSystemObj();
-    aAttr->out();
-
-    aClass = getCurrentClass();
-    if( aClass )
-    {
-      aClass->addAttribute( aAttr );
-      treeH.updateClass( aClass, currentItem() );
-    }
 
     emit signalAddAttribute( aAttr );
   }
