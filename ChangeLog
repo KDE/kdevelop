@@ -3,6 +3,7 @@
     * bugfix: default mainframe caption after the last view has been closed
     * bugfix: default mainframe caption after the project has been closed
     * tab/space issues in DocViewMan, CKDevelop
+    * applied patch of August Hoerandl <august.hoerandl@gmx.at> concerning sorting the global part in CClassView
 
 2001-12-03  Ralf Nolden <nolden@kde.org>
     * fixed compile file function

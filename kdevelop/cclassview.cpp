@@ -477,12 +477,14 @@ void CClassView::refresh()
   item = treeH->addItem( i18n( "Namespaces" ), THFOLDER, globalsItem );
   scopeList = store->globalContainer.getSortedScopeList();
   ((CClassTreeHandler *)treeH)->addScopes( scopeList, item );
+  item->sortChildItems(0,true);
   delete scopeList;
 
   // Add global Structures
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
   structList = store->getSortedStructList();
   ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
+  item->sortChildItems(0,true);
   delete structList;
 
   // Add global functions
@@ -491,6 +493,7 @@ void CClassView::refresh()
   methodList = store->globalContainer.getSortedMethodList();
   kdDebug() << "Got " << methodList->count() << " methods" << endl;
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
+  item->sortChildItems(0,true);
   delete methodList;
 
   // Add global variables
@@ -498,6 +501,7 @@ void CClassView::refresh()
   item = treeH->addItem( i18n( "Variables" ), THFOLDER, globalsItem );
   attributeList = store->globalContainer.getSortedAttributeList();
   ((CClassTreeHandler *)treeH)->addGlobalVariables( attributeList, item );
+  item->sortChildItems(0,true);
   delete attributeList;
 
   treeH->setLastItem( item );
