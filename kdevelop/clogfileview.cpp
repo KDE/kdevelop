@@ -192,7 +192,9 @@ void CLogFileView::refresh(CProject* prj)
   preselectitem =""; // no preselect on the next refresh
   popupmenu_disable = false;
   
-
+  // Sort the damn list.
+  setSorting (0, TRUE);
+  sort ();
 }
 /** set the filename that will be selected after a refresh*/
 
