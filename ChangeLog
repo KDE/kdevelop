@@ -1,5 +1,6 @@
 2001-11-02  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: disable the disassemble when it's hidden
+    * bugfix ;-): ALT+0 till ALT+9 switches the views in tab page mode
 
 2001-11-02  jbb <jbb@kdevelop.org>
     * bugfix for 27/10/2001 patch (repaired switching the files (KDE2 version))

@@ -1682,6 +1682,29 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem( i18n("Goto Next Window"), "GotoNextWin", IDK_GOTO_NEXTWIN);
   accel->connectItem("GotoNextWin", m_pParent, SLOT(activateNextWin()), true, 0);
 
+  // view activation via alt+numberkey for tabpage mode
+  // (Note: the program will call the index ( = viewnumber - 1))
+  accel->insertItem( "ActivateView1", IDK_GOTO_EDITORVIEW1);
+  accel->insertItem( "ActivateView2", IDK_GOTO_EDITORVIEW2);
+  accel->insertItem( "ActivateView3", IDK_GOTO_EDITORVIEW3);
+  accel->insertItem( "ActivateView4", IDK_GOTO_EDITORVIEW4);
+  accel->insertItem( "ActivateView5", IDK_GOTO_EDITORVIEW5);
+  accel->insertItem( "ActivateView6", IDK_GOTO_EDITORVIEW6);
+  accel->insertItem( "ActivateView7", IDK_GOTO_EDITORVIEW7);
+  accel->insertItem( "ActivateView8", IDK_GOTO_EDITORVIEW8);
+  accel->insertItem( "ActivateView9", IDK_GOTO_EDITORVIEW9);
+  accel->insertItem( "ActivateView10", IDK_GOTO_EDITORVIEW10);
+  accel->connectItem("ActivateView1", this, SLOT(activateView1()), true, 0);
+  accel->connectItem("ActivateView2", this, SLOT(activateView2()), true, 0);
+  accel->connectItem("ActivateView3", this, SLOT(activateView3()), true, 0);
+  accel->connectItem("ActivateView4", this, SLOT(activateView4()), true, 0);
+  accel->connectItem("ActivateView5", this, SLOT(activateView5()), true, 0);
+  accel->connectItem("ActivateView6", this, SLOT(activateView6()), true, 0);
+  accel->connectItem("ActivateView7", this, SLOT(activateView7()), true, 0);
+  accel->connectItem("ActivateView8", this, SLOT(activateView8()), true, 0);
+  accel->connectItem("ActivateView9", this, SLOT(activateView9()), true, 0);
+  accel->connectItem("ActivateView10", this, SLOT(activateView10()), true, 0);
+
   //file menu
   accel->connectItem( KStdAccel::New, m_pParent, SLOT(slotFileNew()), true, ID_FILE_NEW );
   accel->connectItem( KStdAccel::Open , m_pParent, SLOT(slotFileOpen()), true, ID_FILE_OPEN );
@@ -2069,6 +2092,54 @@ void DocViewMan::slotEditDeselectAll()
     currentEditView()->deselectAll();
 }
 
+void DocViewMan::activateView1()
+{
+   m_pParent->activateView(0);
+}
 
+void DocViewMan::activateView2()
+{
+   m_pParent->activateView(1);
+}
+
+void DocViewMan::activateView3()
+{
+   m_pParent->activateView(2);
+}
+
+void DocViewMan::activateView4()
+{
+   m_pParent->activateView(3);
+}
+
+void DocViewMan::activateView5()
+{
+   m_pParent->activateView(4);
+}
+
+void DocViewMan::activateView6()
+{
+   m_pParent->activateView(5);
+}
+
+void DocViewMan::activateView7()
+{
+   m_pParent->activateView(6);
+}
+
+void DocViewMan::activateView8()
+{
+   m_pParent->activateView(7);
+}
+
+void DocViewMan::activateView9()
+{
+   m_pParent->activateView(8);
+}
+
+void DocViewMan::activateView10()
+{
+   m_pParent->activateView(9);
+}
 
 #include "docviewman.moc"

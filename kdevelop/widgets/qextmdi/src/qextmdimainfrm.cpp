@@ -1352,6 +1352,27 @@ void QextMdiMainFrm::activatePrevWin()
   delete it;
 }
 
+/** Activates the previous open view */
+void QextMdiMainFrm::activateView(int index)
+{
+   if (m_pDockbaseOfTabPage && (m_mdiMode == QextMdi::TabPageMode)) {
+#if !defined(NO_KDE2) && (QT_VERSION >= 300)
+      QTabWidget* pTab = (QTabWidget*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
+#else
+      KDockTabCtl* pTab = (KDockTabCtl*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
+#endif
+      QWidget* pPage = pTab->getFirstPage();
+      int i = 0;
+      while (pPage && (i < index)) {
+         pPage = pTab->getNextPage(pPage);
+         i++;
+      }
+      if (pPage) {
+         pTab->setVisiblePage(pPage);
+      }
+   }
+}
+
 /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
 void QextMdiMainFrm::setEnableMaximizedChildFrmMode(bool bEnable)
 {
