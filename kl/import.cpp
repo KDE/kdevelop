@@ -1,19 +1,19 @@
 /***************************************************************************
-                          main.cpp  -  description                              
-                             -------------------                                         
-    begin                : Fri Jun 18 13:52:43 CEST 1999
-                                           
-    copyright            : (C) 1999 by Martin Piskernig                         
-    email                : martin.piskernig@stuwo.at                                     
+                                                  main.cpp  -  description
+                                                        -------------------
+      begin                              : Fri Jun 18 13:52:43 CEST 1999
+
+      copyright                      : (C) 1999 by Martin Piskernig
+      email                              : martin.piskernig@stuwo.at
  ***************************************************************************/
 
 /***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
- *                                                                         *
+ *                                                                                                                                                *
+ *    This program is free software; you can redistribute it and/or modify  *
+ *    it under the terms of the GNU General Public License as published by  *
+ *    the Free Software Foundation; either version 2 of the License, or        *
+ *    (at your option) any later version.                                                                    *
+ *                                                                                                                                                *
  ***************************************************************************/
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +22,7 @@
 
 #include <iostream.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qtextstream.h>
@@ -29,54 +30,261 @@
 #include <qregexp.h>
 #include <qstrlist.h>
 
-QFile file;
-QDir ddir;
-int pos;
-QString subdirs,appsdir,sources,includes,metasources,name,extradist,noinstheaders,ldadd,toplevel;
-QTextStream ts;
-QString str;
+#if _QT_VERSION < 2
+#define QCString         QString
+#endif
 
-int analyze(QString dirstr);
-QString getString(QString str);
-QStrList splitString(QString str);
-
-int main(int argc, char** argv)
+QString getValues(QFile &file, const QString &sKeyword)
 {
- if(argc<2)
+  QString sResult, sLine;
+  bool bFound=false, bContinues=false;
+
+  file.at(0);
+  QTextStream tstream(&file);
+
+  while(!tstream.eof() && !bFound)
   {
-   cout << "Experimental convert of KDevelop projects" << endl;
-   cout << "Usage: import projectdir kdevprjfile" << endl;
-   exit(1);
+      sLine=tstream.readLine();
+      sLine=sLine.simplifyWhiteSpace();  // strip whitespaces an simplify it
+      if (sLine.find(sKeyword)==0)    // accept only if keyword is now at first position
+      {
+          bFound=true;
+          // take the part w/o the keyword
+          sResult=sLine.mid(sKeyword.length(),sLine.length());
+          // check the escape char
+          if (sResult.right(1)==QCString("\\"))
+          {
+                bContinues=true;
+                sResult=sResult.left(sResult.length()-1);
+          }
+      }
   }
 
+  while(!tstream.eof() && bContinues)
+  {
+      sLine=tstream.readLine();
+      sLine=sLine.simplifyWhiteSpace();  // strip whitespaces an simplify it
+
+      sResult+=' ';
+      sResult+=sLine;
+
+      // check the escape char
+      if (sResult.right(1)==QCString("\\"))
+      {
+            sResult=sResult.left(sResult.length()-1);
+      }
+      else
+            bContinues=false;
+
+  }
+
+  sResult=sResult.simplifyWhiteSpace();  // strip and simplify whitespaces
+  return sResult;
+}
+
+QStrList makeStringList(const QString &str)
+{
+  QStrList slResult;
+  QString sTemp = str;
+  QString sTheRealPart;
+
+  int pos;
+  sTemp=sTemp.simplifyWhiteSpace();
+
+  while (!sTemp.isEmpty())
+  {
+      if ((pos=sTemp.find(' '))!=-1)
+      {
+          sTheRealPart=sTemp.left(pos);
+          sTemp=sTemp.mid(pos+1, sTemp.length());
+      }
+      else
+      {
+          sTheRealPart=sTemp;
+          sTemp="";
+      }
+
+      sTheRealPart=sTheRealPart.stripWhiteSpace();  // make it a little bit secure ;-)
+      if (!sTheRealPart.isEmpty())
+          slResult.append(sTheRealPart);
+
+  }
+
+  return slResult;
+}
+
+void outputInfo(QFile &srcfile, const QString &sName, QFile &destfile)
+{
+  QString sKeyword,sEntry;
+  QStrList sEntryList;
+
+
+  cout << "---" << endl;
+  cout << "Name of project: " << sName << endl;
+
+  sKeyword=QCString("_SOURCES = ");
+  sEntry=getValues(srcfile, sName+sKeyword);
+  sEntryList=makeStringList(sEntry);
+
+  // here we are having the info either as string or stringlist
+  if (!sEntry.isEmpty())
+    cout << "  sources: " << sEntry <<endl;
+
+  /////////////
+  sKeyword=QCString("_METASOURCES = ");
+  sEntry=getValues(srcfile, sName+sKeyword);
+  sEntryList=makeStringList(sEntry);
+
+  // here we are having the info either as string or stringlist
+  if (!sEntry.isEmpty())
+    cout << "  metasources: " << sEntry <<endl;
+
+  /////////////
+  sKeyword=QCString("_LDADD = ");
+  sEntry=getValues(srcfile, sName+sKeyword);
+  sEntryList=makeStringList(sEntry);
+
+  // here we are having the info either as string or stringlist
+  if (!sEntry.isEmpty())
+    cout << "  ldadd: " << sEntry <<endl;
+
+  /////////////
+  sKeyword=QCString("_INCLUDES = ");
+  sEntry=getValues(srcfile, sName+sKeyword);
+  sEntryList=makeStringList(sEntry);
+
+  // here we are having the info either as string or stringlist
+  if (!sEntry.isEmpty())
+    cout << "  includes: " << sEntry <<endl;
+
+  sKeyword=QCString("APPSDIR = ");
+  sEntry=getValues(srcfile, sKeyword);
+  sEntryList=makeStringList(sEntry);
+
+  // here we are having the info either as string or stringlist
+  if (!sEntry.isEmpty())
+    cout << "  includes: " << sEntry <<endl;
+
+  cout << "---" << endl;
+
+}
+
+int analyze(QFile &file, const QString &dirstr)
+{
+ QString sMakefilename, sLine, sEntry;
+
+ QString sSubDirs, sProgs;
+ QStrList slSubDirList, slProgList;
+
+ // Construct the Makefile.am string
+
+ sMakefilename =  QCString("/Makefile.am");
+ sMakefilename = dirstr + sMakefilename;
+
+ QFile makefile(sMakefilename);
+
+ // If no Makefile.am exists, return to caller
+ // Return 1 if error
+ // Return 0 if everything's ok
+
+ if(!makefile.exists())
+  {
+    cerr << "Makefile.am does not exist in directory '" << dirstr << "'." << endl;
+    return(1);
+  }
+
+ if(!makefile.open(IO_ReadOnly))
+  {
+    cerr << "Cannot open Makefile.am of '" << dirstr << "'." << endl;
+    return(1);
+  }
+
+ // Print out directory we are entering
+
+ cout << "Entering directory '" << dirstr << "'" << endl;
+
+ sSubDirs=getValues(makefile, QCString("SUBDIRS = "));
+ slSubDirList=makeStringList(sSubDirs);
+ // Get subdirs
+
+ sProgs=getValues(makefile, QCString("bin_PROGRAMS = "));
+ slProgList=makeStringList(sProgs);
+
+
+ sEntry=slProgList.first();
+ while (!sEntry.isNull())
+ {
+    if (!sEntry.isEmpty())
+    {
+        outputInfo(makefile, sEntry, file);
+    }
+    sEntry=slProgList.next();
+ }
+
+
+ // Close open Makefile.am
+ makefile.close();
+
+ // Recursive calls to subdirs
+ sEntry=slSubDirList.first();
+ while (!sEntry.isNull())
+ {
+    if (!sEntry.isEmpty())
+    {
+        analyze(file, dirstr+QCString("/")+sEntry);
+    }
+    sEntry=slSubDirList.next();
+ }
+
+ return(0);
+}
+
+
+////////////////// here is main()
+int main(int argc, char** argv)
+{
+ QDir oldDir;    // get actual dir to restore
+ QDir newDir;
+ QFile prjFile;
+ QString sPrjdir, sFilename;
+
+ if(argc<2)
+  {
+    cout << "Experimental convert of KDevelop projects" << endl;
+    cout << "Usage: import projectdir kdevprjfile" << endl;
+    exit(1);
+  }
+
+ sPrjdir=QCString(argv[1]);
+ sFilename=QCString(argv[2]);
  // Directory already exists?
 
- ddir.setPath(argv[1]);
- if(!ddir.exists())
+ newDir.setPath(sPrjdir);
+ if(!newDir.exists())
   {
-   cout << "Directory " << argv[1] << " does not exist!" << endl;
-   exit(1);
+    cerr << "Directory " << sPrjdir << " does not exist!" << endl;
+    exit(1);
   }
 
  // File already exists?
 
- file.setName(argv[2]);
- if(file.exists())
+ prjFile.setName(sFilename);
+ if(prjFile.exists())
   {
-   char c;
-   cout << "File " << argv[2] << " already exists!" << endl;
-   cout << "Do you want to overwrite the file? ";
-   cin >> c;
-   if(c=='y')
-    file.open(IO_ReadWrite);
-   else
-    exit(1);
+    char c;
+    cerr << "File " << sFilename << " already exists!" << endl;
+    cerr << "Do you want to overwrite the file? ";
+    cin >> c;
+    if(toupper(c)!='Y')
+      exit(1);
   }
 
- // Else open it read write
-
- else
-  file.open(IO_ReadWrite);
+ if (!prjFile.open(IO_ReadWrite))
+ {
+    cerr << "Cannot open " << sFilename << "! (maybe not enough permissions)"
+                 << endl;
+    exit(1);
+ }
 
  cout << endl;
  cout << "Analyzing project" << endl;
@@ -84,186 +292,11 @@ int main(int argc, char** argv)
 
  // Recurse over SUBDIRS is done in analyze
 
- analyze(argv[1]);
- toplevel = argv[1];
+ analyze(prjFile, sPrjdir);
 
  // Close open file
+ prjFile.close();
 
- file.close();
+
  return EXIT_SUCCESS;
 }
-
-int analyze(QString dirstr)
-{
- QDir dir(dirstr);
- QString makefilestr;
- QString temp;
- // Construct the Makefile.am string
- 
- makefilestr = dirstr;
- makefilestr += "/Makefile.am";
- QFile makefile(makefilestr);
-
- // If no Makefile.am exists, return to caller
- // Return 1 if error
- // Return 0 if everything alright
-
- if(!makefile.open(IO_ReadOnly))
-  {
-   cout << "Makefile.am does not exist in directory '" << dir.path() << "'." << endl;
-   return(1);
-  }
-
- // Print out directory we are entering
-
- cout << endl << "Entering directory '" << dirstr << "'" << endl;
-
- ts.setDevice(&makefile);
-   
- // Get subdirs
- 
- while(!ts.eof())
-  {
-   str = ts.readLine();
-   if(str.find("SUBDIRS = ")!=-1)
-    {
-     subdirs = getString(str);
-     
-    }
-  }
-
- // Reset textstream to position 0
- makefile.at(0);
- 
- while(!ts.eof())
-  {
-   str = ts.readLine();
-   if(str.find("bin_PROGRAMS = ")!=-1)
-    name = getString(str);
-   if(name.find(" ")!=-1)
-    {
-     cout << "Sorry, multiple targets not supported yet." << endl;
-     exit(-1);
-    }
-  }
-
- makefile.at(0);
-
- // Get other information like source files, metasources, headers, ...
- while(!ts.eof())
-  {
-   str = ts.readLine();
-   if(str.find(name+"_SOURCES = ")!=-1)
-    sources = getString(str);
-   else if(str.find(name+"_METASOURCES = ")!=-1)
-    metasources = getString(str);
-   else if(str.find(name+"_LDADD = ")!=-1)
-    ldadd = getString(str);
-   else if(str.find(name+"_INCLUDES = ")!=-1)
-    includes = getString(str);
-   else if(str.find("APPSDIR = ")!=-1)
-    appsdir = getString(str);
-  }
-  
- // Print out collected information
-
- if(name)
-  cout << "Name of project: " << name << endl;
- if(sources)
-  cout << name << " source files: " << sources << endl;
- if(metasources)
-  cout << name << " metasource files: " << metasources << endl;
- if(subdirs)
-  cout << "Subdirs: " << subdirs << endl;
- if(includes)
-  cout << "Includes: " << includes << endl;
- if(ldadd)
-  cout << "Ldadd: " << ldadd << endl;
- if(appsdir)
-  cout << "Appsdir: " << appsdir << endl;
- 
- // Recursive calls to subdirs
-/* QStrList list = splitString(subdirs);
- QString s = list.first();
- while(s)
-  {
-   dirstr+=toplevel;
-   dir.cd(dirstr);
-   analyze(s);
-   s = list.next();
-  };
-*/
-
- // Close open Makefile.am
-
- makefile.close();
- return(0);
-}
-
-QString getString(QString str)
-{
- QString temp;
- pos = str.find("= ");
- str.remove(0,pos+1);
-
- // Now strip first and last whitespace
- 
- str = str.stripWhiteSpace();
- str = str.simplifyWhiteSpace();
- pos = str.find("\\");
- if(pos==-1);
- else
-  do
-   {
-   
-    // Read next line in temporary string
-    
-    QString temp = ts.readLine();
-    
-    // Strip white spaces in temp string
-      
-    temp.stripWhiteSpace();
-      
-    // Append temp to str
-      
-    str.append(temp);
-      
-    // Replace \ thru white space
-      
-    str.replace(QRegExp("\\"),"");
-    str = str.stripWhiteSpace();
-   }
-  while(temp.find("\\")!=-1);
- str = str.stripWhiteSpace();
- str = str.simplifyWhiteSpace();
-
- // Finally, store in return string
-  
- return(str);
-}
-
-QStrList splitString(QString str)
-{
- QStrList list;
- QString temp = "";
- if(str.find(" ")==-1)
-  return(0);
- str+=' ';
- do
-  {
-   temp = str;
-   temp+=' ';
-   pos = temp.find(" ");
-   temp.truncate(pos);
-   str.remove(0,pos);
-   str = str.stripWhiteSpace();
-   str = str.simplifyWhiteSpace();
-   temp = temp.stripWhiteSpace();
-   temp = temp.simplifyWhiteSpace();
-   list.append(temp);
-  }
- while(str!="");
- // Return string list
- return(list);
-}
-
