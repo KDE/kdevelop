@@ -1,3 +1,19 @@
+/***************************************************************************
+ mainwindowideal.cpp  -  KDevelop main widget for IDEAl user interface mode
+                             -------------------
+    begin                : 22 Dec 2002
+    copyright            : (C) 2002 by the KDevelop team
+    email                : team@kdevelop.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 #include <qlayout.h>
 #include <qmultilineedit.h>
 #include <qvbox.h>
@@ -41,17 +57,17 @@
 
 
 #include "toplevel.h"
-#include "toplevelshare.h"
-#include "toplevel_sdi.h"
+#include "mainwindowshare.h"
+#include "mainwindowideal.h"
 
 
-TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
+MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
  : KParts::MainWindow(parent, name)
  ,m_pWindowMenu(0L)
  ,m_closing(false)
 {
-    m_pTopLevelShare = new TopLevelShare(this);
-    
+    m_pMainWindowShare = new MainWindowShare(this);
+
     KAction * action;
 
     action = new KAction( i18n("&Next Window"), ALT+Key_PageDown,
@@ -93,7 +109,7 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
 }
 
 
-void TopLevelSDI::init() {
+void MainWindowIDEAl::init() {
 #if (KDE_VERSION > 305)
     setStandardToolBarMenuEnabled( true );
 #endif
@@ -117,13 +133,13 @@ void TopLevelSDI::init() {
 }
 
 
-TopLevelSDI::~TopLevelSDI() {
+MainWindowIDEAl::~MainWindowIDEAl() {
     TopLevel::invalidateInstance( this );
     delete m_pWindowMenu;
 }
 
 
-bool TopLevelSDI::queryClose() {
+bool MainWindowIDEAl::queryClose() {
     if (m_closing)
         return true;
 
@@ -131,12 +147,12 @@ bool TopLevelSDI::queryClose() {
     return false;
 }
 
-void TopLevelSDI::prepareToCloseViews()
+void MainWindowIDEAl::prepareToCloseViews()
 {
   // seems there's nothing to do here
 }
 
-void TopLevelSDI::realClose()
+void MainWindowIDEAl::realClose()
 {
   saveSettings();
 
@@ -145,17 +161,17 @@ void TopLevelSDI::realClose()
 }
 
 
-KMainWindow *TopLevelSDI::main() {
+KMainWindow *MainWindowIDEAl::main() {
     return this;
 }
 
 
-void TopLevelSDI::createStatusBar() {
+void MainWindowIDEAl::createStatusBar() {
     (void) new StatusBar(this);
 }
 
 
-void TopLevelSDI::createFramework() {
+void MainWindowIDEAl::createFramework() {
     m_leftBar = new KTabZoomWidget(this, KTabZoomPosition::Left);
     setCentralWidget(m_leftBar);
 
@@ -192,56 +208,56 @@ void TopLevelSDI::createFramework() {
 
 
 
-void TopLevelSDI::createActions() {
-    m_pTopLevelShare->createActions();
+void MainWindowIDEAl::createActions() {
+    m_pMainWindowShare->createActions();
 }
 
 
-void TopLevelSDI::embedPartView(QWidget *view, const QString &name, const QString& toolTip) {
+void MainWindowIDEAl::embedPartView(QWidget *view, const QString &name, const QString& toolTip) {
     m_tabWidget->addTab(view, name);
     m_tabWidget->setTabToolTip(view, toolTip);
     m_tabWidget->showPage(view);
 }
 
 
-void TopLevelSDI::embedSelectView(QWidget *view, const QString &name, const QString &toolTip) {
+void MainWindowIDEAl::embedSelectView(QWidget *view, const QString &name, const QString &toolTip) {
     m_leftBar->addTab(view, name, toolTip);
 }
 
-void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip) {
+void MainWindowIDEAl::embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip) {
     m_rightBar->addTab (view, title, toolTip);
 }
 
-void TopLevelSDI::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) {
+void MainWindowIDEAl::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) {
     m_bottomBar->addTab(view, name, toolTip);
 }
 
 
-void TopLevelSDI::removeView(QWidget *) {}
+void MainWindowIDEAl::removeView(QWidget *) {}
 
-void TopLevelSDI::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
+void MainWindowIDEAl::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
     // TODO: implement me
 }
 
-void TopLevelSDI::raiseView(QWidget *view) {
+void MainWindowIDEAl::raiseView(QWidget *view) {
     m_leftBar->raiseWidget(view);
     m_bottomBar->raiseWidget(view);
     m_tabWidget->showPage(view);
 }
 
 
-void TopLevelSDI::lowerView(QWidget *view) {
+void MainWindowIDEAl::lowerView(QWidget *view) {
     m_leftBar->lowerWidget(view);
     m_bottomBar->lowerWidget(view);
 }
 
 
-void TopLevelSDI::lowerAllViews() {
+void MainWindowIDEAl::lowerAllViews() {
     m_leftBar->lowerAllWidgets();
     m_bottomBar->lowerAllWidgets();
 }
 
-void TopLevelSDI::moveRelativeTab(int n) {
+void MainWindowIDEAl::moveRelativeTab(int n) {
 
     KTabZoomWidget * bar = 0;
     if (m_leftBar->hasFocus()) bar = m_leftBar;
@@ -267,22 +283,22 @@ void TopLevelSDI::moveRelativeTab(int n) {
         }
 }
 
-void TopLevelSDI::gotoNextWindow() {
+void MainWindowIDEAl::gotoNextWindow() {
     moveRelativeTab(1);
 }
 
-void TopLevelSDI::gotoPreviousWindow() {
+void MainWindowIDEAl::gotoPreviousWindow() {
     moveRelativeTab(-1);
 }
 
-void TopLevelSDI::createGUI(KParts::Part *part) {
+void MainWindowIDEAl::createGUI(KParts::Part *part) {
     if ( !part )
         setCaption( QString::null );
     KParts::MainWindow::createGUI(part);
 }
 
 
-void TopLevelSDI::loadSettings() {
+void MainWindowIDEAl::loadSettings() {
     KConfig *config = kapp->config();
 
     ProjectManager::getInstance()->loadSettings();
@@ -296,7 +312,7 @@ void TopLevelSDI::loadSettings() {
 }
 
 
-void TopLevelSDI::saveSettings() {
+void MainWindowIDEAl::saveSettings() {
     KConfig *config = kapp->config();
 
     ProjectManager::getInstance()->saveSettings();
@@ -310,7 +326,7 @@ void TopLevelSDI::saveSettings() {
 }
 
 //=============== slotFillWindowMenu ===============//
-void TopLevelSDI::slotFillWindowMenu() {
+void MainWindowIDEAl::slotFillWindowMenu() {
     // construct the menu and its submenus
     bool bNoViewOpened = true;    // Assume no view is open yet
     m_pWindowMenu->clear();       // Erase whole window menu
@@ -344,7 +360,7 @@ void TopLevelSDI::slotFillWindowMenu() {
 }
 
 //=============== slotBufferSelected ===============//
-void TopLevelSDI::slotBufferSelected() {
+void MainWindowIDEAl::slotBufferSelected() {
 
     // Get the URL of the sender
     QString SenderName = sender()->name();
@@ -370,14 +386,14 @@ void TopLevelSDI::slotBufferSelected() {
     slotFillWindowMenu();  // To check the correct entry
 }
 
-void TopLevelSDI::slotPartAdded(KParts::Part* part) {
+void MainWindowIDEAl::slotPartAdded(KParts::Part* part) {
     if ( !part || !part->inherits("KTextEditor::Document") )
         return;
 
     connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 }
 
-void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar ) {
+void MainWindowIDEAl::raiseTabbar( KTabZoomWidget* tabBar ) {
     if ( !tabBar )
         return;
 
@@ -399,23 +415,23 @@ void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar ) {
     }
 }
 
-void TopLevelSDI::raiseLeftTabbar() {
+void MainWindowIDEAl::raiseLeftTabbar() {
     raiseTabbar( m_leftBar );
 }
 
-void TopLevelSDI::raiseRightTabbar() {
+void MainWindowIDEAl::raiseRightTabbar() {
     raiseTabbar( m_rightBar );
 }
 
-void TopLevelSDI::raiseBottomTabbar() {
+void MainWindowIDEAl::raiseBottomTabbar() {
     raiseTabbar( m_bottomBar );
 }
 
-void TopLevelSDI::raiseEditor() {
+void MainWindowIDEAl::raiseEditor() {
     if(m_tabWidget->currentPage()) m_tabWidget->currentPage()->setFocus();
 }
 
-void TopLevelSDI::slotTextChanged() {
+void MainWindowIDEAl::slotTextChanged() {
     QWidget* w = m_tabWidget->currentPage();
     if ( !w )
         return;
@@ -427,7 +443,7 @@ void TopLevelSDI::slotTextChanged() {
     }
 }
 
-void TopLevelSDI::slotUpdateModifiedFlags()
+void MainWindowIDEAl::slotUpdateModifiedFlags()
 {
     QString newTitle;
     QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
@@ -445,27 +461,27 @@ void TopLevelSDI::slotUpdateModifiedFlags()
     }
 }
 
-void TopLevelSDI::slotBottomTabsChanged() {
+void MainWindowIDEAl::slotBottomTabsChanged() {
     if ( !m_bottomBar )
         return;
     m_raiseBottomBar->setEnabled( !m_bottomBar->isEmpty() );
 }
 
-void TopLevelSDI::slotRightTabsChanged() {
+void MainWindowIDEAl::slotRightTabsChanged() {
     if ( !m_rightBar )
         return;
     m_raiseRightBar->setEnabled( !m_rightBar->isEmpty() );
 }
 
-void TopLevelSDI::slotLeftTabsChanged() {
+void MainWindowIDEAl::slotLeftTabsChanged() {
     if ( !m_leftBar )
         return;
     m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
 }
 
-void TopLevelSDI::slotQuit()
+void MainWindowIDEAl::slotQuit()
 {
     (void) queryClose();
 }
 
-#include "toplevel_sdi.moc"
+#include "mainwindowideal.moc"

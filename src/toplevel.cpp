@@ -6,8 +6,8 @@
 #include "core.h"
 
 
-#include "toplevel_mdi.h"
-#include "toplevel_sdi.h"
+#include "mainwindow.h"
+#include "mainwindowideal.h"
 
 
 KDevTopLevel *TopLevel::s_instance = 0;
@@ -25,27 +25,27 @@ KDevTopLevel *TopLevel::getInstance()
     KConfig *config = kapp->config();
     config->setGroup("UI");
 
-    if (config->readEntry("MajorUIMode", "sdi") == "mdi")
+    if (config->readEntry("MajorUIMode", "IDEAl") == "QextMDI")
     {
-      TopLevelMDI *mdi = new TopLevelMDI;
-      s_instance = mdi;
+      MainWindow *mainWindow = new MainWindow;
+      s_instance = mainWindow;
 
-      mdi->init();
+      mainWindow->init();
 
-      kapp->setMainWidget(mdi);
+      kapp->setMainWidget(mainWindow);
 
-      QObject::connect(mdi, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
+      QObject::connect(mainWindow, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
     }
     else
     {
-      TopLevelSDI *sdi = new TopLevelSDI;
-      s_instance = sdi;
+      MainWindowIDEAl *mainWindowIDEAl = new MainWindowIDEAl;
+      s_instance = mainWindowIDEAl;
 
-      sdi->init();
+      mainWindowIDEAl->init();
 
-      kapp->setMainWidget(sdi);
+      kapp->setMainWidget(mainWindowIDEAl);
 
-      QObject::connect(sdi, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
+      QObject::connect(mainWindowIDEAl, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
     }
   }
 

@@ -1,5 +1,22 @@
-#ifndef _TOPLEVEL_MDI_H_
-#define _TOPLEVEL_MDI_H_
+/***************************************************************************
+  mainwindow.h - KDevelop main widget for all QextMDI-based user
+                   interface modes (Childframe, TabPage, Toplevel)
+                             -------------------
+    begin                : 22 Dec 2002
+    copyright            : (C) 2002 by the KDevelop team
+    email                : team@kdevelop.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+#ifndef _MAINWINDOW_H_
+#define _MAINWINDOW_H_
 
 
 #include <qmap.h>
@@ -16,20 +33,20 @@
 class QDomElement;
 class ViewMenuAction;
 class ViewMenuActionPrivateData;
-class TopLevelShare;
+class MainWindowShare;
 
 /**\brief Handles the multiple document interface modes..
 
 
 */
-class TopLevelMDI : public QextMdiMainFrm, public KDevTopLevel
+class MainWindow : public QextMdiMainFrm, public KDevTopLevel
 {
   Q_OBJECT
 
 public:
 
-  TopLevelMDI(QWidget* parent=0, const char *name=0);
-  ~TopLevelMDI();
+  MainWindow(QWidget* parent=0, const char *name=0);
+  ~MainWindow();
     
   void embedPartView(QWidget *view, const QString &title, const QString &toolTip = QString::null );    //!< Embeds a view as part view in the main working area at position (0,0)
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as select view in the left docking area
@@ -125,11 +142,11 @@ After a call to wrapper(), the given view is included in the frame of gideon in 
 - A horizontal layout manager (QHBoxLayout) is generated which has a the new QextMdiChildView as parent and the
   given view as Widget to layout.
 - The given view and the new QextMdiChildView are appended to
-  \ref TopLevelMDI::m_childViewMap "m_childViewMap" and \ref TopLevelMDI::m_widgetMap "m_widgetMap"
+  \ref MainWindow::m_childViewMap "m_childViewMap" and \ref MainWindow::m_widgetMap "m_widgetMap"
 - The new QextMdiChildView gets the given name as caption (full path name) and just the extracted file name as TabCaption.
 .
 The newly created QextMdiChildView is not yet connected to any other widget of Gideon, althoug it is appended to
-\ref TopLevelMDI::m_childViewMap "m_childViewMap" and \ref TopLevelMDI::m_widgetMap "m_widgetMap".
+\ref MainWindow::m_childViewMap "m_childViewMap" and \ref MainWindow::m_widgetMap "m_widgetMap".
 */
 
   QextMdiChildView *wrapper(
@@ -145,9 +162,9 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   void loadMDISettings();
   
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:QextMdiChildView*.\n
-                                                   //!< Contains the same pairs as \ref TopLevelMDI::m_childViewMap "m_childViewMap"
+                                                   //!< Contains the same pairs as \ref MainWindow::m_childViewMap "m_childViewMap"
   QMap<QextMdiChildView*,QWidget*> m_childViewMap; //!< Key: QextMdiChildView* --> Data:QWidget*.\n
-                                                   //!< Contains the same pairs as \ref TopLevelMDI::m_widgetMap "m_widgetMap"
+                                                   //!< Contains the same pairs as \ref MainWindow::m_widgetMap "m_widgetMap"
   QDict<QextMdiChildView>          m_captionDict;  //!< Key: caption string --> Data:QextMdiChildView*
 
   QPtrList<QextMdiChildView> m_outputViews;        //!< Lists all output views
@@ -166,7 +183,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   QString          m_CurrentOutputTab;             //!< Holds the previously active output tool view, if all output views have been hidden
   QString          m_CurrentTreeTab;               //!< Holds the previously active tree tool view, if all output views have been hidden
 
-  TopLevelShare*   m_topLevelShare;
+  MainWindowShare*   m_pMainWindowShare;
 };
 
 //=========================
@@ -176,7 +193,7 @@ struct ViewMenuActionPrivateData
 {
   KDockWidget * pDockWidget;                        //!< Pointer to the KDockWidget to hide or show
   QextMdiChildView *pChildView;
-  TopLevelMDI::EView eView;                         //!< Which tool view the action is for
+  MainWindow::EView eView;                         //!< Which tool view the action is for
 };
 
 /**\brief Mereley a KToggleAction whith some additional data to store the window

@@ -1,5 +1,5 @@
 /***************************************************************************
-          toplevelshare.cpp  -  shared stuff of the main widgets
+          mainwindowshare.cpp  -  shared stuff of the main widgets
                              -------------------
     begin                : 19 Dec 2002
     copyright            : (C) 2002 by Falk Brettschneider
@@ -38,9 +38,9 @@
 #include "projectmanager.h"
 #include "core.h"
 #include "settingswidget.h"
-#include "toplevelshare.h"
+#include "mainwindowshare.h"
 
-TopLevelShare::TopLevelShare(QObject* pParent, const char* name)
+MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
   :QObject(pParent, name)
   ,m_toggleMainToolbar(0L)
   ,m_toggleBuildToolbar(0L)
@@ -53,7 +53,7 @@ TopLevelShare::TopLevelShare(QObject* pParent, const char* name)
   m_pMainWnd = (KParts::MainWindow*)pParent;
 }
 
-void TopLevelShare::createActions()
+void MainWindowShare::createActions()
 {
   ProjectManager::getInstance()->createActions( m_pMainWnd->actionCollection() );
 
@@ -123,7 +123,7 @@ void TopLevelShare::createActions()
   m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
 }
 
-void TopLevelShare::slotToggleMainToolbar()
+void MainWindowShare::slotToggleMainToolbar()
 {
   if (m_toggleMainToolbar->isChecked())
     m_pMainWnd->toolBar("mainToolBar")->show();
@@ -131,7 +131,7 @@ void TopLevelShare::slotToggleMainToolbar()
     m_pMainWnd->toolBar("mainToolBar")->hide();
 }
 
-void TopLevelShare::slotToggleBuildToolbar()
+void MainWindowShare::slotToggleBuildToolbar()
 {
   if (m_toggleBuildToolbar->isChecked())
     m_pMainWnd->toolBar("buildToolBar")->show();
@@ -139,7 +139,7 @@ void TopLevelShare::slotToggleBuildToolbar()
     m_pMainWnd->toolBar("buildToolBar")->hide();
 }
 
-void TopLevelShare::slotToggleViewToolbar()
+void MainWindowShare::slotToggleViewToolbar()
 {
   if (m_toggleViewToolbar->isChecked())
     m_pMainWnd->toolBar("viewToolBar")->show();
@@ -147,7 +147,7 @@ void TopLevelShare::slotToggleViewToolbar()
     m_pMainWnd->toolBar("viewToolBar")->hide();
 }
 
-void TopLevelShare::slotToggleBrowserToolbar()
+void MainWindowShare::slotToggleBrowserToolbar()
 {
   if (m_toggleBrowserToolbar->isChecked())
     m_pMainWnd->toolBar("browserToolBar")->show();
@@ -155,7 +155,7 @@ void TopLevelShare::slotToggleBrowserToolbar()
     m_pMainWnd->toolBar("browserToolBar")->hide();
 }
 
-void TopLevelShare::slotToggleStatusbar()
+void MainWindowShare::slotToggleStatusbar()
 {
   KStatusBar* sb = (KStatusBar*) m_pMainWnd->statusBar();
   if (m_toggleStatusbar->isChecked())
@@ -164,16 +164,16 @@ void TopLevelShare::slotToggleStatusbar()
     sb->hide();
 }
 
-void TopLevelShare::slotToggleViewbar()
+void MainWindowShare::slotToggleViewbar()
 {
 }
 
-void TopLevelShare::slotActiveProcessCountChanged( uint active )
+void MainWindowShare::slotActiveProcessCountChanged( uint active )
 {
   m_stopProcesses->setEnabled( active > 0 );
 }
 
-void TopLevelShare::slotShowMenuBar()
+void MainWindowShare::slotShowMenuBar()
 {
     if (m_pMainWnd->menuBar()->isVisible()) {
         m_pMainWnd->menuBar()->hide();
@@ -183,14 +183,14 @@ void TopLevelShare::slotShowMenuBar()
     m_pMainWnd->saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
 }
 
-void TopLevelShare::slotConfigureNotifications()
+void MainWindowShare::slotConfigureNotifications()
 {
 #if (KDE_VERSION > 305)
     KNotifyDialog::configure(m_pMainWnd, "Notification Configuration Dialog");
 #endif
 }
 
-void TopLevelShare::slotSettings()
+void MainWindowShare::slotSettings()
 {
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
@@ -211,14 +211,14 @@ void TopLevelShare::slotSettings()
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
-void TopLevelShare::slotNewToolbarConfig()
+void MainWindowShare::slotNewToolbarConfig()
 {
   // replug actionlists here...
 
   m_pMainWnd->applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
 }
 
-void TopLevelShare::slotKeyBindings()
+void MainWindowShare::slotKeyBindings()
 {
   KKeyDialog dlg( false, m_pMainWnd );
   QPtrList<KXMLGUIClient> clients = m_pMainWnd->guiFactory()->clients();
@@ -229,7 +229,7 @@ void TopLevelShare::slotKeyBindings()
   dlg.configure();
 }
 
-void TopLevelShare::slotConfigureToolbars()
+void MainWindowShare::slotConfigureToolbars()
 {
   m_pMainWnd->saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
   KEditToolbar dlg( m_pMainWnd->factory() );
@@ -237,4 +237,4 @@ void TopLevelShare::slotConfigureToolbars()
   dlg.exec();
 }
 
-#include "toplevelshare.moc"
+#include "mainwindowshare.moc"

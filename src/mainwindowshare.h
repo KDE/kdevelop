@@ -1,5 +1,5 @@
 /***************************************************************************
-          toplevelshare.h  -  shared stuff of the main widgets
+          mainwindowshare.h  -  shared stuff of the main widgets
                              -------------------
     begin                : 19 Dec 2002
     copyright            : (C) 2002 by Falk Brettschneider
@@ -14,8 +14,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef __TOPLEVELSHARE_H__
-#define __TOPLEVELSHARE_H__
+#ifndef __MAINWINDOWSHARE_H__
+#define __MAINWINDOWSHARE_H__
 
 #include <qobject.h>
 
@@ -25,12 +25,12 @@ namespace KParts {
   class MainWindow;
 }
 
-class TopLevelShare : public QObject
+class MainWindowShare : public QObject
 {
   Q_OBJECT
 public:
-  TopLevelShare(QObject* pParent = 0L, const char* name = 0L);
-  ~TopLevelShare() {}
+  MainWindowShare(QObject* pParent = 0L, const char* name = 0L);
+  ~MainWindowShare() {}
 
   void createActions();
 
@@ -63,4 +63,4 @@ private:
   KParts::MainWindow*   m_pMainWnd;
 };
 
-#endif // __TOPLEVELSHARE_H__
+#endif // __MAINWINDOWSHARE_H__

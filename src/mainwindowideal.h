@@ -1,5 +1,21 @@
-#ifndef _TOPLEVEL_SDI_H_
-#define _TOPLEVEL_SDI_H_
+/***************************************************************************
+  mainwindowideal.h  -  KDevelop main widget for IDEAl user interface mode
+                             -------------------
+    begin                : 22 Dec 2002
+    copyright            : (C) 2002 by the KDevelop team
+    email                : team@kdevelop.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+#ifndef _MAINWINDOWIDEAL_H_
+#define _MAINWINDOWIDEAL_H_
 
 
 #include <qtabwidget.h>
@@ -9,19 +25,19 @@
 
 
 class KTabZoomWidget;
-class TopLevelShare;
+class MainWindowShare;
 
 #include "kdevtoplevel.h"
 
 
-class TopLevelSDI : public KParts::MainWindow, public KDevTopLevel
+class MainWindowIDEAl : public KParts::MainWindow, public KDevTopLevel
 {
   Q_OBJECT
 
 public:
 
-  TopLevelSDI(QWidget* parent=0, const char *name=0);
-  ~TopLevelSDI();
+  MainWindowIDEAl(QWidget* parent=0, const char *name=0);
+  ~MainWindowIDEAl();
     
   void embedPartView(QWidget *view, const QString &title, const QString &toolTip);
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
@@ -98,7 +114,7 @@ private:
 
   bool m_closing;
 
-  TopLevelShare*   m_pTopLevelShare;
+  MainWindowShare*   m_pMainWindowShare;
 };
 
 
