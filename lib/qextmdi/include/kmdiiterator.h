@@ -1,17 +1,18 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdinulliterator.h
+//    filename             : kmdiiterator.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 02/2000       by Massimo Morin
 //    changes              : 02/2000       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Massimo Morin (mmorin@schedsys.com)
+//    copyright            : (C) 1999-2003 by Massimo Morin (mmorin@schedsys.com)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -23,24 +24,24 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _QEXTMDINULLITERATOR_H_
-#define _QEXTMDINULLITERATOR_H_
+#ifndef _KMDIITERATOR_H_
+#define _KMDIITERATOR_H_
 
-#include "qextmdiiterator.h"
 
-template <class Item>
-class QextMdiNullIterator : public QextMdiIterator<Item> {
+template<class Item>
+class KMdiIterator {
 public:
-   QextMdiNullIterator() {};
-   virtual void first() {}
-   virtual void last() {}
-   virtual void next() {}
-   virtual void prev() {}
-   virtual bool isDone() const { return TRUE; }
-   virtual Item currentItem() const {
-   /* should really never go inside here */
-   return 0;
-   }
+   virtual ~KMdiIterator() {}
+
+   virtual void first() = 0;
+   virtual void last() = 0;
+   virtual void next() = 0;
+   virtual void prev() = 0;
+   virtual bool isDone() const = 0;
+   virtual Item currentItem() const = 0;
+
+protected:
+   KMdiIterator() {}
 };
 
-#endif // _QEXTMDINULLITERATOR_H_
+#endif // _KMDIITERATOR_H_

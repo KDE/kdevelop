@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdidefines.h
+//    filename             : kmdidefines.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@geocities.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -23,8 +24,8 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#ifndef _MDIDEFINES_H_
-#define _MDIDEFINES_H_
+#ifndef _KMDIDEFINES_H_
+#define _KMDIDEFINES_H_
 
 #include <qglobal.h>
 
@@ -33,20 +34,20 @@
 #define NO_KDE
 #endif
 
-#define QEXTMDI_MDI_CHILDFRM_SEPARATOR 2
-#define QEXTMDI_MDI_CHILDFRM_BORDER 3
-#define QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER 6
-#define QEXTMDI_MDI_CHILDFRM_MIN_WIDTH 130
+#define KMDI_CHILDFRM_SEPARATOR 2
+#define KMDI_CHILDFRM_BORDER 3
+#define KMDI_CHILDFRM_DOUBLE_BORDER 6
+#define KMDI_CHILDFRM_MIN_WIDTH 130
 
 //----------------------------------------------------------------------------
-namespace QextMdi
+namespace KMdi
 {
    /** extent Qt events
       @see QCustomEvent, QEvent::User 
       <PRE>
       bool
       B_MyWidget::event( QEvent* e) {
-         if( e->type() == QEvent::Type(QEvent::User + int(QextMdi::EV_Move))) {
+         if( e->type() == QEvent::Type(QEvent::User + int(KMdi::EV_Move))) {
             ...
          }
          ...
@@ -62,7 +63,7 @@ namespace QextMdi
    };
 
    /**
-   * During @ref QextMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system
+   * During @ref KMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system
    */
    enum AddWindowFlags {
       /**
@@ -103,8 +104,8 @@ namespace QextMdi
 
 #if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
   /* QT linked libraries compiled with MSVC */
-#  ifdef MAKEDLL_QEXTMDI
-    /* for building qextmdi */
+#  ifdef MAKEDLL_KMDI
+    /* for building kmdi */
 #   ifdef _DLL_IMP_EXP_MSG_
 #     ifdef _DEBUG
 #      pragma message ("  exporting C++ class to debug lib...")
@@ -112,20 +113,20 @@ namespace QextMdi
 #      pragma message ("  exporting C++ class to release lib...")
 #      endif
 #    endif
-#    define DLL_IMP_EXP_QEXTMDICLASS  __declspec(dllexport)
+#    define DLL_IMP_EXP_KMDICLASS  __declspec(dllexport)
 #  else
-    /* for including headers of qextmdi */
+    /* for including headers of kmdi */
 #    ifdef _DLL_IMP_EXP_MSG_
 #      ifdef _DEBUG
-#      pragma message ("  importing C++ class from qextmdi debug lib...")
+#      pragma message ("  importing C++ class from kmdi debug lib...")
 #      else
-#      pragma message ("  importing C++ class from qextmdi release lib...")
+#      pragma message ("  importing C++ class from kmdi release lib...")
 #      endif
 #    endif
-#    define DLL_IMP_EXP_QEXTMDICLASS  __declspec(dllimport)
+#    define DLL_IMP_EXP_KMDICLASS  __declspec(dllimport)
 #  endif
 #else
-#  define DLL_IMP_EXP_QEXTMDICLASS
+#  define DLL_IMP_EXP_KMDICLASS
 #endif
 
-#endif //_MDIDEFINES_H_
+#endif //_KMDIDEFINES_H_

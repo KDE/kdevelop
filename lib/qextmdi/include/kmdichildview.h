@@ -1,22 +1,23 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildview.h
+//    filename             : kmdichildview.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //                           02/2001       by Eva Brucherseifer (eva@rt.e-technik.tu-darmstadt.de)
 //                           01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
-//    copyright            : (C) 1999-2001 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -27,8 +28,8 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#ifndef _QEXTMDICHILDVIEW_H_
-#define _QEXTMDICHILDVIEW_H_
+#ifndef _KMDICHILDVIEW_H_
+#define _KMDICHILDVIEW_H_
 
 #include <qwidget.h>
 #include <qpixmap.h>
@@ -36,7 +37,7 @@
 #include <qapplication.h>
 #include <qdatetime.h>
 
-#include "qextmdichildfrm.h"
+#include "kmdichildfrm.h"
 
 /**
   * @short Base class for all your special view windows.
@@ -44,28 +45,28 @@
   * Base class for all MDI view widgets. QextMDI stores additional information in this class
   * to handle the attach/detach mechanism and such things.
   *
-  * All such windows 'lives' attached to a QextMdiChildFrm widget
-  * managed by QextMdiChildArea, or detached (managed by the window manager.)
-  * So remember that the @ref QextMdiChildView::parent pointer may change, and may be 0L, too.
+  * All such windows 'lives' attached to a KMdiChildFrm widget
+  * managed by KMdiChildArea, or detached (managed by the window manager.)
+  * So remember that the @ref KMdiChildView::parent pointer may change, and may be 0L, too.
   *
   * There are 2 possibilities for you to put your widgets under MDI control:
   *
-  * Either you inherit all the views from QextMdiChildView:
+  * Either you inherit all the views from KMdiChildView:
   *   <PRE>
-  *   class MyMdiWidget : public QextMdiChildView
+  *   class MyMdiWidget : public KMdiChildView
   *   { .... };
   *   ...
   *   MyMdiWidget w;
   *   mainframe->addWindow(w, flags);
   *   </PRE>
   *
-  * or you wrap them by a QextMdiChildView somehow like this:
+  * or you wrap them by a KMdiChildView somehow like this:
   *
   * <PRE>
   * void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
   * {
   *   // cover it by a QextMDI childview and add that MDI system
-  *   QextMdiChildView* pMDICover = new QextMdiChildView( pNewView->caption());
+  *   KMdiChildView* pMDICover = new KMdiChildView( pNewView->caption());
   *   pMDICover->setIcon(icon);
   *   m_MDICoverList.append( pMDICover);
   *   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
@@ -85,10 +86,10 @@
   *   // take it under MDI mainframe control (note: this triggers also a setFocus())
   *   int flags;
   *   if (bShow) {
-  *     flags = QextMdi::StandardAdd;
+  *     flags = KMdi::StandardAdd;
   *   }
   *   else {
-  *     flags = QextMdi::Hide;
+  *     flags = KMdi::Hide;
   *   }
   *   // set the accelerators for Toplevel MDI mode (each toplevel window needs its own accels
   *   connect( m_pParent, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(initKeyAccel(QWidget*)) );
@@ -102,32 +103,32 @@
   *
   */
 
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
+class DLL_IMP_EXP_KMDICLASS KMdiChildView : public QWidget
 {
-   friend class QextMdiMainFrm;
-   friend class QextMdiChildFrm;
+   friend class KMdiMainFrm;
+   friend class KMdiChildFrm;
    Q_OBJECT
 
 // attributes
 protected:
    /** 
-   * See @ref QextMdiChildView::caption
+   * See @ref KMdiChildView::caption
    */
    QString     m_szCaption;
    /** 
-   * See @ref QextMdiChildView::tabCaption
+   * See @ref KMdiChildView::tabCaption
    */
    QString     m_sTabCaption;
    /** 
-   * See @ref QextMdiChildView::focusedChildWidget
+   * See @ref KMdiChildView::focusedChildWidget
    */
    QWidget*    m_focusedChildWidget;
    /**  
-   * See @ref QextMdiChildView::setFirstFocusableChildWidget
+   * See @ref KMdiChildView::setFirstFocusableChildWidget
    */
    QWidget*    m_firstFocusableChildWidget;
    /**  
-   * See @ref QextMdiChildView::setLastFocusableChildWidget
+   * See @ref KMdiChildView::setLastFocusableChildWidget
    */
    QWidget*    m_lastFocusableChildWidget;
    /**
@@ -147,17 +148,17 @@ protected:
 
 private:
    /**
-   * Internally used as indicator whether this QextMdiChildView is treated as document view or as tool view.
+   * Internally used as indicator whether this KMdiChildView is treated as document view or as tool view.
    */
    bool  m_bToolView;
    /**
-   * Internally used by QextMdiMainFrm to store a temporary information that the method
+   * Internally used by KMdiMainFrm to store a temporary information that the method
    * activate() is unnecessary and that it can by escaped.
    * This saves from unnecessary calls when activate is called directly.
    */
    bool m_bInterruptActivation;
    /**
-   * Internally used to prevent cycles between QextMdiMainFrm::activateView() and QextMdiChildView::activate().
+   * Internally used to prevent cycles between KMdiMainFrm::activateView() and KMdiChildView::activate().
    */
    bool m_bMainframesActivateViewIsPending;
    /**
@@ -170,15 +171,15 @@ public:
    /**
    * Constructor
    */
-   QextMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
+   KMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
    /**
    * Constructor 2 (sets "Unnamed" as default caption)
    */
-   QextMdiChildView( QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
+   KMdiChildView( QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
    /**
    * Destructor
    */
-   ~QextMdiChildView();
+   ~KMdiChildView();
    /**
    * This method does the same as focusInEvent(). That's why it is a replacement for the setFocus() call. It makes
    * sense if you for instance want to focus (I mean raise and activate) this view although the real focus is
@@ -227,9 +228,9 @@ public:
    */
    virtual void setMDICaption(const QString &caption);
    /**
-   * Returns the QextMdiChildFrm parent widget (or 0 if the window is not attached)
+   * Returns the KMdiChildFrm parent widget (or 0 if the window is not attached)
    */
-   QextMdiChildFrm *mdiParent() const;
+   KMdiChildFrm *mdiParent() const;
    /**
    * Tells if the window is minimized when attached to the Mdi manager,
    * or if it is VISIBLE when 'floating'.
@@ -325,15 +326,15 @@ public:
 public slots:
    /**
    * Attaches this window to the Mdi manager.
-   * It calls the QextMdiMainFrm attachWindow function , so if you have a pointer
-   * to this QextMdiMainFrm you'll be faster calling that function.
+   * It calls the KMdiMainFrm attachWindow function , so if you have a pointer
+   * to this KMdiMainFrm you'll be faster calling that function.
    * Useful as slot.
    */
    virtual void attach();
    /**
    * Detaches this window from the Mdi manager.
-   * It calls the QextMdiMainFrm detachWindow function , so if you have a pointer
-   * to this QextMdiMainFrm you'll be faster calling that function.
+   * It calls the KMdiMainFrm detachWindow function , so if you have a pointer
+   * to this KMdiMainFrm you'll be faster calling that function.
    * Useful as slot.
    */
    virtual void detach();
@@ -345,7 +346,7 @@ public slots:
    virtual void minimize();
    /** 
    * Maximizes the MDI view. If attached, this widget will fill the whole MDI view area widget. The system buttons
-   * move to the main menubar (if set by @ref QextMdiMainFrm::setMenuForSDIModeSysButtons ).
+   * move to the main menubar (if set by @ref KMdiMainFrm::setMenuForSDIModeSysButtons ).
    * If detached, it will use the minimize of the underlying system (@ref QWidget::showMaximized ).
    */
    virtual void maximize();
@@ -354,12 +355,12 @@ public slots:
    */
    virtual void restore();
    /** 
-   * Internally called, if @ref QextMdiMainFrm::attach is called.
+   * Internally called, if @ref KMdiMainFrm::attach is called.
    * Actually, only the caption of the covering childframe is set.
    */
-   virtual void youAreAttached(QextMdiChildFrm *lpC);
+   virtual void youAreAttached(KMdiChildFrm *lpC);
    /** 
-   * Internally called, if @ref QextMdiMainFrm::detach is called.
+   * Internally called, if @ref KMdiMainFrm::detach is called.
    * Some things for going toplevel will be done here.
    */
    virtual void youAreDetached();
@@ -384,24 +385,24 @@ public slots:
    */
    virtual void raise();
    /** 
-   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMinimizedNow , additionally.
+   * Overridden from its base class method. Emits a signal @ref KMdiChildView::isMinimizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system minimizing.
    */
    virtual void showMinimized();
    /** 
-   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMaximizedNow , additionally.
+   * Overridden from its base class method. Emits a signal @ref KMdiChildView::isMaximizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system maximizing.
    */
    virtual void showMaximized();
    /** 
-   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isRestoredNow , additionally.
+   * Overridden from its base class method. Emits a signal @ref KMdiChildView::isRestoredNow , additionally.
    * Note that this method is not used by an external windows manager call on system normalizing.
    */
    virtual void showNormal();
 
 protected:
    /**
-    * Ignores the event and calls @ref QextMdiMainFrm::childWindowCloseRequest instead. This is because the
+    * Ignores the event and calls @ref KMdiMainFrm::childWindowCloseRequest instead. This is because the
     * mainframe has control over the views. Therefore the MDI view has to request the mainframe for a close.
     */
    virtual void closeEvent(QCloseEvent *e);
@@ -409,7 +410,7 @@ protected:
    * It only catches @ref QEvent::KeyPress events there. If a Qt::Key_Tab is pressed, the internal MDI focus
    * handling is called. That means if the last focusable child widget of this is called, it will jump to the
    * first focusable child widget of this.
-   * See @ref QextMdiChildView::setFirstFocusableChildWidget and @ref QextMdiChildView::lastFirstFocusableChildWidget
+   * See @ref KMdiChildView::setFirstFocusableChildWidget and @ref KMdiChildView::lastFirstFocusableChildWidget
    */
    virtual bool eventFilter(QObject *obj, QEvent *e);
    /** 
@@ -433,48 +434,48 @@ protected slots:
 
 signals:
    /** 
-   * Internally used by @ref QextMdiChildView::attach to send it as command to the mainframe.
+   * Internally used by @ref KMdiChildView::attach to send it as command to the mainframe.
    */
-   void attachWindow( QextMdiChildView*,bool);
+   void attachWindow( KMdiChildView*,bool);
    /** 
-   * Internally used by @ref QextMdiChildView::detach to send it as command to the mainframe.
+   * Internally used by @ref KMdiChildView::detach to send it as command to the mainframe.
    */
-   void detachWindow( QextMdiChildView*,bool);
+   void detachWindow( KMdiChildView*,bool);
    /** 
    * Is sent when this MDI child view is going to receive focus (before actually changing the focus).
    * Internally used to send information to the mainframe that this MDI child view is focused.
-   * See @ref QextMdiChildView::focusInEvent
+   * See @ref KMdiChildView::focusInEvent
    */
-   void focusInEventOccurs( QextMdiChildView*);
+   void focusInEventOccurs( KMdiChildView*);
    /**
    * Is sent when this MDI child has received the focus (after actually changing the focus).
-   * See @ref QextMdiChildView::focusInEvent
+   * See @ref KMdiChildView::focusInEvent
    */
-   void gotFocus( QextMdiChildView*);
+   void gotFocus( KMdiChildView*);
    /**
    * Is sent when this MDI child was set to the activate view of all MDI views (after actually changing the focus).
-   * See @ref QextMdiChildView::activate
+   * See @ref KMdiChildView::activate
    */
-   void activated( QextMdiChildView*);
+   void activated( KMdiChildView*);
    /** Is sent when this MDI child view has lost the focus (after actually changing the focus).
-    *  See @ref QextMdiChildView::focusOutEvent
+    *  See @ref KMdiChildView::focusOutEvent
     */
-   void lostFocus( QextMdiChildView*);
+   void lostFocus( KMdiChildView*);
    /** Is sent when this MDI child view was deactivated (after actually changing the focus).
-    *  See @ref QextMdiChildView::focusOutEvent
+    *  See @ref KMdiChildView::focusOutEvent
     */
-   void deactivated( QextMdiChildView*);
+   void deactivated( KMdiChildView*);
    /**
    * Internally used to send information to the mainframe that this MDI child view wants to be closed.
-   * See @ref QextMdiChildView::closeEvent and @ref QextMdiMainFrm::closeWindow
+   * See @ref KMdiChildView::closeEvent and @ref KMdiMainFrm::closeWindow
    */
-   void childWindowCloseRequest( QextMdiChildView*);
+   void childWindowCloseRequest( KMdiChildView*);
    /** 
-   * Emitted when the window caption is changed via @ref QextMdiChildView::setCaption or @ref QextMdiChildView::setMDICaption 
+   * Emitted when the window caption is changed via @ref KMdiChildView::setCaption or @ref KMdiChildView::setMDICaption 
    */
    void windowCaptionChanged( const QString&);
    /** 
-   * Emitted  when the window caption is changed via @ref QextMdiChildView::setTabCaption or @ref QextMdiChildView::setMDICaption 
+   * Emitted  when the window caption is changed via @ref KMdiChildView::setTabCaption or @ref KMdiChildView::setMDICaption 
    */
    void tabCaptionChanged( const QString&);
    /** 
@@ -512,13 +513,13 @@ signals:
    void isDetachedNow();
 };
 
-inline QextMdiChildFrm *QextMdiChildView::mdiParent() const
+inline KMdiChildFrm *KMdiChildView::mdiParent() const
 {
    QWidget* pw = parentWidget();
    if( pw != 0L)
-      if( pw->inherits("QextMdiChildFrm"))
-         return (QextMdiChildFrm *)pw;
+      if( pw->inherits("KMdiChildFrm"))
+         return (KMdiChildFrm *)pw;
    return 0L;
 }
 
-#endif //_QEXTMDICHILDVIEW_H_
+#endif //_KMDICHILDVIEW_H_

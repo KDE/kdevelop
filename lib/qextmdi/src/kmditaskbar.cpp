@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmditaskbar.cpp
+//    filename             : kmditaskbar.cpp
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2003 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -25,10 +26,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "qextmditaskbar.h"
-#include "qextmdimainfrm.h"
-#include "qextmdichildview.h"
-#include "qextmdidefines.h"
+#include "kmditaskbar.h"
+#include "kmdimainfrm.h"
+#include "kmdichildview.h"
+#include "kmdidefines.h"
 
 #include <qtooltip.h>
 #include <qlabel.h>
@@ -38,7 +39,7 @@
 #include <qnamespace.h>
 
 /*
-   @quickhelp: QextMdiTaskBar
+   @quickhelp: KMdiTaskBar
    @widget: Taskbar
       This window lists the currently open windows.<br>
       Each button corresponds to a single MDI (child) window.<br>
@@ -49,10 +50,10 @@
 
 //####################################################################
 //
-// QextMdiTaskBarButton
+// KMdiTaskBarButton
 //
 //####################################################################
-QextMdiTaskBarButton::QextMdiTaskBarButton(QextMdiTaskBar *pTaskBar,QextMdiChildView *win_ptr)
+KMdiTaskBarButton::KMdiTaskBarButton(KMdiTaskBar *pTaskBar,KMdiChildView *win_ptr)
 :QPushButton(pTaskBar),
  m_actualText("")
 {
@@ -62,11 +63,11 @@ QextMdiTaskBarButton::QextMdiTaskBarButton(QextMdiTaskBar *pTaskBar,QextMdiChild
    setFocusPolicy(NoFocus);
 }
 
-QextMdiTaskBarButton::~QextMdiTaskBarButton()
+KMdiTaskBarButton::~KMdiTaskBarButton()
 {
 }
 
-void QextMdiTaskBarButton::mousePressEvent( QMouseEvent* e)
+void KMdiTaskBarButton::mousePressEvent( QMouseEvent* e)
 {
    switch(e->button()) {
    case QMouseEvent::LeftButton:
@@ -82,19 +83,19 @@ void QextMdiTaskBarButton::mousePressEvent( QMouseEvent* e)
 }
 
 /** slot version of setText */
-void QextMdiTaskBarButton::setNewText(const QString& s)
+void KMdiTaskBarButton::setNewText(const QString& s)
 {
    setText( s);
    emit buttonTextChanged( 0);
 }
 
-void QextMdiTaskBarButton::setText(const QString& s)
+void KMdiTaskBarButton::setText(const QString& s)
 {
    m_actualText = s;
    QButton::setText( s);
 }
 
-void QextMdiTaskBarButton::fitText(const QString& origStr, int newWidth)
+void KMdiTaskBarButton::fitText(const QString& origStr, int newWidth)
 {
    QButton::setText( m_actualText);
 
@@ -122,26 +123,26 @@ void QextMdiTaskBarButton::fitText(const QString& origStr, int newWidth)
    QButton::setText( s);
 }
 
-QString QextMdiTaskBarButton::actualText() const
+QString KMdiTaskBarButton::actualText() const
 {
    return m_actualText;
 }
 
 //####################################################################
 //
-// QextMdiTaskBar
+// KMdiTaskBar
 //
 //####################################################################
 
-QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock)
-:  KToolBar( parent, "QextMdiTaskBar", /*honor_style*/ FALSE, /*readConfig*/ TRUE)
+KMdiTaskBar::KMdiTaskBar(KMdiMainFrm *parent,QMainWindow::ToolBarDock dock)
+:  KToolBar( parent, "KMdiTaskBar", /*honor_style*/ FALSE, /*readConfig*/ TRUE)
    ,m_pCurrentFocusedWindow(0)
    ,m_pStretchSpace(0)
    ,m_layoutIsPending(FALSE)
    ,m_bSwitchedOn(FALSE)
 {
    m_pFrm = parent;
-   m_pButtonList = new QPtrList<QextMdiTaskBarButton>;
+   m_pButtonList = new QPtrList<KMdiTaskBarButton>;
    m_pButtonList->setAutoDelete(TRUE);
 //QT30   setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
@@ -149,12 +150,12 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
    parent->moveToolBar( this, dock); //XXX obsolete!
 }
 
-QextMdiTaskBar::~QextMdiTaskBar()
+KMdiTaskBar::~KMdiTaskBar()
 {
    delete m_pButtonList;
 }
 
-QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
+KMdiTaskBarButton * KMdiTaskBar::addWinButton(KMdiChildView *win_ptr)
 {
    if( m_pStretchSpace) {
       delete m_pStretchSpace;
@@ -162,11 +163,11 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
       setStretchableWidget( 0L);
    }
 
-   QextMdiTaskBarButton *b=new QextMdiTaskBarButton( this, win_ptr);
+   KMdiTaskBarButton *b=new KMdiTaskBarButton( this, win_ptr);
    QObject::connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) ); 
-   QObject::connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
-   QObject::connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(activateView(QextMdiChildView*)) );
-   QObject::connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
+   QObject::connect( b, SIGNAL(clicked(KMdiChildView*)), this, SLOT(setActiveButton(KMdiChildView*)) );
+   QObject::connect( b, SIGNAL(leftMouseButtonClicked(KMdiChildView*)), m_pFrm, SLOT(activateView(KMdiChildView*)) );
+   QObject::connect( b, SIGNAL(rightMouseButtonClicked(KMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(KMdiChildView*)) );
    QObject::connect( b, SIGNAL(buttonTextChanged(int)), this, SLOT(layoutTaskBar(int)) );
    m_pButtonList->append(b);
    b->setToggleButton( TRUE);
@@ -186,9 +187,9 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
    return b;
 }
 
-void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar)
+void KMdiTaskBar::removeWinButton(KMdiChildView *win_ptr, bool haveToLayoutTaskBar)
 {
-   QextMdiTaskBarButton *b=getButton(win_ptr);
+   KMdiTaskBarButton *b=getButton(win_ptr);
    if (b){
       m_pButtonList->removeRef(b);
       if( haveToLayoutTaskBar) layoutTaskBar();
@@ -202,7 +203,7 @@ void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr, bool haveToLayou
    }
 }
 
-void QextMdiTaskBar::switchOn(bool bOn)
+void KMdiTaskBar::switchOn(bool bOn)
 {
    m_bSwitchedOn = bOn;
    if (!bOn) {
@@ -218,18 +219,18 @@ void QextMdiTaskBar::switchOn(bool bOn)
    }
 }
 
-QextMdiTaskBarButton * QextMdiTaskBar::getButton(QextMdiChildView *win_ptr)
+KMdiTaskBarButton * KMdiTaskBar::getButton(KMdiChildView *win_ptr)
 {
-   for(QextMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
+   for(KMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
       if(b->m_pWindow == win_ptr)return b;
    }
    return 0;
 }
 
-QextMdiTaskBarButton * QextMdiTaskBar::getNextWindowButton(bool bRight,QextMdiChildView *win_ptr)
+KMdiTaskBarButton * KMdiTaskBar::getNextWindowButton(bool bRight,KMdiChildView *win_ptr)
 {
    if(bRight){
-      for(QextMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
+      for(KMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
          if(b->m_pWindow == win_ptr){
             b = m_pButtonList->next();
             if(!b)b = m_pButtonList->first();
@@ -238,7 +239,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::getNextWindowButton(bool bRight,QextMdiCh
          }
       }
    } else {
-      for(QextMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
+      for(KMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
          if(b->m_pWindow == win_ptr){
             b = m_pButtonList->prev();
             if(!b)b = m_pButtonList->last();
@@ -250,11 +251,11 @@ QextMdiTaskBarButton * QextMdiTaskBar::getNextWindowButton(bool bRight,QextMdiCh
    return 0;
 }
 
-void QextMdiTaskBar::setActiveButton(QextMdiChildView *win_ptr)
+void KMdiTaskBar::setActiveButton(KMdiChildView *win_ptr)
 {
-   QextMdiTaskBarButton* newPressedButton = 0L;
-   QextMdiTaskBarButton* oldPressedButton = 0L;
-   for(QextMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
+   KMdiTaskBarButton* newPressedButton = 0L;
+   KMdiTaskBarButton* oldPressedButton = 0L;
+   for(KMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
       if( b->m_pWindow == win_ptr)
          newPressedButton = b;
       if( b->m_pWindow == m_pCurrentFocusedWindow)
@@ -269,7 +270,7 @@ void QextMdiTaskBar::setActiveButton(QextMdiChildView *win_ptr)
    }
 }
 
-void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
+void KMdiTaskBar::layoutTaskBar( int taskBarWidth)
 {
    if (m_layoutIsPending) return;
    m_layoutIsPending = TRUE;
@@ -280,7 +281,7 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 
    // calculate current width of all taskbar buttons
    int allButtonsWidth = 0;
-   QextMdiTaskBarButton *b = 0;
+   KMdiTaskBarButton *b = 0;
    for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
       allButtonsWidth += b->width();
    }
@@ -332,7 +333,7 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
    m_layoutIsPending = FALSE;
 }
 
-void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
+void KMdiTaskBar::resizeEvent( QResizeEvent* rse)
 {
    if (!m_layoutIsPending) {
       if (m_pButtonList->count() != 0) {
@@ -343,5 +344,5 @@ void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#include "qextmditaskbar.moc"
+#include "kmditaskbar.moc"
 #endif

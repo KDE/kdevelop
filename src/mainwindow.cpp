@@ -78,7 +78,7 @@ void ViewMenuAction::slotActivated()
 
 /** \brief The state of a single tool window (minor helper class)
  *
- * If a tool window (type QWidget) has to be displayed, it is wrapped by a QextMdiChildView
+ * If a tool window (type QWidget) has to be displayed, it is wrapped by a KMdiChildView
  * which in turn is embedded into a KDockWidget.
  *
  * This class works on the KDockWidget wrapper for the tool windows.
@@ -181,9 +181,9 @@ ToolWindowState::ToolWindowState(KDockWidget *pDockWidget)
 class ToolDockBaseState
 {
   public:
-  ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews);
+  ToolDockBaseState(const QPtrList<KMdiChildView> *pViews);
   KDockWidget      * pDockBaseWindow;      //!< Pointer to the window which contains all tool windows (may be equal to pDockWidget)
-  QextMdiChildView * pFirstToolWindow;     //!< The first tool window found
+  KMdiChildView * pFirstToolWindow;     //!< The first tool window found
   bool              hasDockBaseWindow;     //!< true if there is at least one parent tool window
   bool              dockBaseIsHidden;      //!< true if there is a parent and it is hidden
   bool              dockBaseIsVisible;     //!< true if there is a parent and it is visible
@@ -191,7 +191,7 @@ class ToolDockBaseState
   int               noViews;               //!< number of single tool windows visible
 };
 
-ToolDockBaseState::ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews):
+ToolDockBaseState::ToolDockBaseState(const QPtrList<KMdiChildView> *pViews):
   pDockBaseWindow      (0L),
   pFirstToolWindow     (0L),
   hasDockBaseWindow    (false),
@@ -201,7 +201,7 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews):
   noViews              (0)
 {
 
-  QPtrListIterator<QextMdiChildView> it(*pViews);
+  QPtrListIterator<KMdiChildView> it(*pViews);
   for( ; it.current(); ++it)                                        // Iterate through all views
   {
     QObject *pParent=it.current()->parent();
@@ -228,7 +228,7 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews):
 
 // ====================================================== class MainWindow
 MainWindow::MainWindow(QWidget *parent, const char *name)
-  : QextMdiMainFrm(parent, name)
+  : KMdiMainFrm(parent, name)
   ,m_myWindowsReady(false)
   ,m_pShowOutputViews(0L)
   ,m_pShowTreeViews(0L)
@@ -382,19 +382,19 @@ void MainWindow::createActions()
   m_toggleViewbar->setText(i18n("Show &Viewbar"));
   m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
   showViewTaskBar(); // because start state must be equal to the action state
-  if (m_mdiMode == QextMdi::TabPageMode) {
+  if (m_mdiMode == KMdi::TabPageMode) {
     slotToggleViewbar();
     m_toggleViewbar->setEnabled(false);
   }
 }
 
-QextMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
+KMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
 {
   QString shortName = name;
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
 
-  QextMdiChildView* pMDICover = createWrapper(view, name, shortName);
+  KMdiChildView* pMDICover = createWrapper(view, name, shortName);
   m_widgetMap.insert(view, pMDICover);
   m_childViewMap.insert(pMDICover, view);
 
@@ -403,7 +403,7 @@ QextMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
 
 void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QString& fullName)
 {
-  QextMdiChildView *child = wrapper(view, fullName);
+  KMdiChildView *child = wrapper(view, fullName);
   m_captionDict.insert(fullName, child);
 
   const QPixmap* wndIcon = view->icon();
@@ -412,13 +412,13 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
   }
 
 
-  unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::UseQextMDISizeHint;
+  unsigned int mdiFlags = KMdi::StandardAdd | KMdi::UseQextMDISizeHint;
   addWindow(child, mdiFlags);
 
   m_partViews.append(child);
 
   // hack for a strange geometry problem (otherwise the childview doesn't move to the right position in the childframe)
-  if ((mdiMode() == QextMdi::ChildframeMode) && isInMaximizedChildFrmMode()) {
+  if ((mdiMode() == KMdi::ChildframeMode) && isInMaximizedChildFrmMode()) {
     QWidget* v;
     if (child->mdiParent()) { v = child->mdiParent(); }
     else { v = child; }
@@ -441,11 +441,11 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
  *  If there is no tool window (first == null) then either MainWindow will serve
  *  as dock base or the first part view, depending on the mdi mode.
  */
-void MainWindow::addToolViewWindow(EView eView, QextMdiChildView *child, const QString& name, const QString &toolTip)
+void MainWindow::addToolViewWindow(EView eView, KMdiChildView *child, const QString& name, const QString &toolTip)
 {
   // Count how many windows are visible
   QWidget *first =0L;   // Pointer to a widget in that view area, may function as target to docking
-  QPtrList<QextMdiChildView> *pViews = (eView==OutputView)?&m_outputViews:&m_selectViews;
+  QPtrList<KMdiChildView> *pViews = (eView==OutputView)?&m_outputViews:&m_selectViews;
   if(m_myWindowsReady)
   {
     ToolDockBaseState dockBaseState(pViews);
@@ -460,7 +460,7 @@ void MainWindow::addToolViewWindow(EView eView, QextMdiChildView *child, const Q
 
   if (!first)  // If there is no selected view yet ...
   {
-    if (mdiMode() == QextMdi::TabPageMode)
+    if (mdiMode() == KMdi::TabPageMode)
       first = m_partViews.first();
 
     if (!first)
@@ -490,7 +490,7 @@ void MainWindow::addToolViewWindow(EView eView, QextMdiChildView *child, const Q
 
 void MainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
 {
-  QextMdiChildView *child = wrapper(view, name);
+  KMdiChildView *child = wrapper(view, name);
   addToolViewWindow(TreeView, child, name, toolTip);
   m_selectViews.append(child);
 }
@@ -503,7 +503,7 @@ void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const
 
 void MainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
 {
-  QextMdiChildView *child = wrapper(view, name);
+  KMdiChildView *child = wrapper(view, name);
   addToolViewWindow(OutputView, child, name, toolTip);
   m_outputViews.append(child);
 }
@@ -511,7 +511,7 @@ void MainWindow::embedOutputView(QWidget *view, const QString &name, const QStri
 
 void MainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 {
-  QextMdiChildView* pWrappingView = dynamic_cast<QextMdiChildView*>(pView->parentWidget());
+  KMdiChildView* pWrappingView = dynamic_cast<KMdiChildView*>(pView->parentWidget());
   if (!pWrappingView) return;
 
   if (m_partViews.find(pWrappingView) != -1) {
@@ -542,7 +542,7 @@ void MainWindow::removeView(QWidget *view)
     return;
   }
 
-  QextMdiChildView *wrapper = m_widgetMap[view];
+  KMdiChildView *wrapper = m_widgetMap[view];
 
   if (wrapper) {
     removeWindowFromMdi(wrapper);
@@ -559,7 +559,7 @@ void MainWindow::removeView(QWidget *view)
     // time when the part is deleted.
     view->reparent(this, QPoint(0,0), false);
 
-    // Find the KDockWidget which covers the QextMdiChildView to remove and delete.
+    // Find the KDockWidget which covers the KMdiChildView to remove and delete.
     // Undock the KDockWidget if there is one.
     // This will remove the corresponding tab from the output and tree views.
     KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
@@ -579,9 +579,9 @@ void MainWindow::raiseView(QWidget *view)
 {
     m_myWindowsReady = true;                                    // From now on, we can rely on the windows beeing active
     // Handle differences between output and tree views
-    QPtrList<QextMdiChildView> *pViews        = 0L;             // The views to make a menu from
+    QPtrList<KMdiChildView> *pViews        = 0L;             // The views to make a menu from
 
-    QextMdiChildView *wrapper = m_widgetMap[ view ];
+    KMdiChildView *wrapper = m_widgetMap[ view ];
     if( !wrapper ){
         kdDebug(9000) << "no wrapper!!" << endl;
         return;
@@ -595,7 +595,7 @@ void MainWindow::raiseView(QWidget *view)
 
     if( pViews ){
 
-        QPtrListIterator<QextMdiChildView> it(*pViews);
+        QPtrListIterator<KMdiChildView> it(*pViews);
         const  ToolDockBaseState allWinState(pViews);
 
         if (allWinState.dockBaseMayBeDockBack) // If it may be dock back, it is invisible
@@ -640,7 +640,7 @@ void MainWindow::createGUI(KParts::Part *part)
 {
   if ( !part )
     setCaption( QString::null );
-  QextMdiMainFrm::createGUI(part);
+  KMdiMainFrm::createGUI(part);
 
   m_pMainWindowShare->slotGUICreated( part );
 }
@@ -659,10 +659,10 @@ void MainWindow::loadMDISettings()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  int mdiMode = config->readNumEntry("MDIMode", QextMdi::ChildframeMode);
+  int mdiMode = config->readNumEntry("MDIMode", KMdi::ChildframeMode);
   switch (mdiMode)
   {
-  case QextMdi::ToplevelMode:
+  case KMdi::ToplevelMode:
     {
       int childFrmModeHt = config->readNumEntry("Childframe mode height", kapp->desktop()->height() - 50);
       resize(width(), childFrmModeHt);
@@ -670,10 +670,10 @@ void MainWindow::loadMDISettings()
     }
     break;
 
-  case QextMdi::ChildframeMode:
+  case KMdi::ChildframeMode:
     break;
 
-  case QextMdi::TabPageMode:
+  case KMdi::TabPageMode:
     {
       int childFrmModeHt = config->readNumEntry("Childframe mode height", kapp->desktop()->height() - 50);
       resize(width(), childFrmModeHt);
@@ -710,11 +710,11 @@ void MainWindow::saveMDISettings()
 
 void MainWindow::resizeEvent(QResizeEvent *ev)
 {
-  QextMdiMainFrm::resizeEvent(ev);
+  KMdiMainFrm::resizeEvent(ev);
   setSysButtonsAtMenuPosition();
 }
 
-void MainWindow::childWindowCloseRequest(QextMdiChildView *pWnd)
+void MainWindow::childWindowCloseRequest(KMdiChildView *pWnd)
 {
   PartController::getInstance()->closePartForWidget( m_childViewMap[pWnd] );
 }
@@ -740,11 +740,11 @@ void MainWindow::gotoLastWindow()
 }
 
 //=============== fillWindowMenu ===============//
-// This is more or less a verbatim copy from what is implemented in QextMdiMainFrm
+// This is more or less a verbatim copy from what is implemented in KMdiMainFrm
 void MainWindow::fillWindowMenu()
 {
    bool bTabPageMode = FALSE;
-   if (m_mdiMode == QextMdi::TabPageMode)
+   if (m_mdiMode == KMdi::TabPageMode)
       bTabPageMode = TRUE;
 
    bool bNoViewOpened = FALSE;
@@ -780,7 +780,7 @@ void MainWindow::fillWindowMenu()
       m_pPlacingMenu->insertItem(i18n("Tile &Non-overlapped"), m_pMdi,SLOT(tileAnodine()));
       m_pPlacingMenu->insertItem(i18n("Tile Overla&pped"), m_pMdi,SLOT(tilePragma()));
       m_pPlacingMenu->insertItem(i18n("Tile V&ertically"), m_pMdi,SLOT(tileVertically()));
-      if (m_mdiMode == QextMdi::ToplevelMode) {
+      if (m_mdiMode == KMdi::ToplevelMode) {
          m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
       }
       m_pWindowMenu->insertSeparator();
@@ -796,8 +796,8 @@ void MainWindow::fillWindowMenu()
 
    // for all child frame windows: give an ID to every window and connect them in the end with windowMenuItemActivated()
    int i=100;
-   QextMdiChildView* pView = 0L;
-   QPtrListIterator<QextMdiChildView> it(*m_pWinList);
+   KMdiChildView* pView = 0L;
+   QPtrListIterator<KMdiChildView> it(*m_pWinList);
    QValueList<QDateTime> timeStamps;
    for (; it.current(); ++it) {
 
@@ -891,7 +891,7 @@ void MainWindow::fillToolViewsMenu(
      EView eView)
 {
   // Handle differences between output and tree views
-  QPtrList<QextMdiChildView> *pViews        = 0L;         // The views to make a menu from
+  QPtrList<KMdiChildView> *pViews        = 0L;         // The views to make a menu from
   KActionMenu *              pActionMenu    = 0L;         // The menu to build
   ViewMenuAction  *         pAllViewsAction = 0L;         // Pointer to action which will toggle the state of all windows
 
@@ -917,7 +917,7 @@ void MainWindow::fillToolViewsMenu(
 
   // Prepare variable part of the menu
   m_myWindowsReady = true;                                            // From now on, we can rely on the windows beeing active
-  QPtrListIterator<QextMdiChildView> it(*pViews);
+  QPtrListIterator<KMdiChildView> it(*pViews);
   for( ; it.current(); ++it)                                          // Iterate through all views
   {
      if (m_unavailableViews.find(it.current()) != -1) {
@@ -961,10 +961,10 @@ void MainWindow::toggleToolDockBaseState(const ViewMenuActionPrivateData &Action
 {
   m_myWindowsReady = true;                                    // From now on, we can rely on the windows beeing active
   // Handle differences between output and tree views
-  QPtrList<QextMdiChildView> *pViews        = 0L;             // The views to make a menu from
+  QPtrList<KMdiChildView> *pViews        = 0L;             // The views to make a menu from
   pViews = (ActionData.eView == OutputView)?&m_outputViews:&m_selectViews;
 
-  QPtrListIterator<QextMdiChildView> it(*pViews);
+  QPtrListIterator<KMdiChildView> it(*pViews);
   const  ToolDockBaseState allWinState(pViews);
 
   if(allWinState.dockBaseIsVisible)           // If it is visible
@@ -991,7 +991,7 @@ void MainWindow::toggleToolDockBaseState(const ViewMenuActionPrivateData &Action
 void MainWindow::showAllToolWin(EView eView, bool show )
 {
   // Handle differences between output and tree views
-  QPtrList<QextMdiChildView> *pViews        = 0L;         // The views to make a menu from
+  QPtrList<KMdiChildView> *pViews        = 0L;         // The views to make a menu from
 
   pViews =(eView==OutputView)?&m_outputViews:&m_selectViews;
 
@@ -1008,7 +1008,7 @@ void MainWindow::showAllToolWin(EView eView, bool show )
 
   // Now switch on every single tool window
   m_myWindowsReady = true;                                            // From now on, we can rely on the windows beeing active
-  QPtrListIterator<QextMdiChildView> it(*pViews);
+  QPtrListIterator<KMdiChildView> it(*pViews);
   for( ; it.current(); ++it)                                          // Iterate through all views
   {
      if (m_unavailableViews.find(it.current()) != -1) {
@@ -1032,7 +1032,7 @@ void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData
 {
   // Determine the state of the windows inwolved
   const  ToolWindowState winState(ActionData.pDockWidget);
-  QPtrList<QextMdiChildView> *pViews        = 0L;             // The views to make a menu from
+  QPtrList<KMdiChildView> *pViews        = 0L;             // The views to make a menu from
   pViews = (ActionData.eView == OutputView)?&m_outputViews:&m_selectViews;
 
   const  ToolDockBaseState allWinState(pViews);
@@ -1065,7 +1065,7 @@ void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData
       {
         // Count how many windows are visible
         KDockWidget *first =0L;   // Pointer to a widget in that view area, may function as target to docking
-        QPtrListIterator<QextMdiChildView> it((ActionData.eView==OutputView)?m_outputViews:m_selectViews);
+        QPtrListIterator<KMdiChildView> it((ActionData.eView==OutputView)?m_outputViews:m_selectViews);
         for( ; it.current(); ++it)                              // Iterate through all  views
         {
           KDockWidget *pDockWidget=manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
@@ -1081,7 +1081,7 @@ void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData
         }
         if (!first)
         {
-          if (mdiMode() == QextMdi::TabPageMode)
+          if (mdiMode() == KMdi::TabPageMode)
           {
             first = manager()->findWidgetParentDock (m_partViews.first());
           }
@@ -1120,20 +1120,20 @@ void MainWindow::switchToToplevelMode()
 {
   saveMDISettings();
   m_toggleViewbar->setEnabled(true);
-  if (mdiMode() == QextMdi::TabPageMode) {
+  if (mdiMode() == KMdi::TabPageMode) {
       slotToggleViewbar();
   }
-  QextMdiMainFrm::switchToToplevelMode();
+  KMdiMainFrm::switchToToplevelMode();
 }
 
 void MainWindow::switchToChildframeMode()
 {
   saveMDISettings();
   m_toggleViewbar->setEnabled(true);
-  if (mdiMode() == QextMdi::TabPageMode) {
+  if (mdiMode() == KMdi::TabPageMode) {
       slotToggleViewbar();
   }
-  QextMdiMainFrm::switchToChildframeMode();
+  KMdiMainFrm::switchToChildframeMode();
 }
 
 void MainWindow::switchToTabPageMode()
@@ -1143,7 +1143,7 @@ void MainWindow::switchToTabPageMode()
       slotToggleViewbar();
   }
   m_toggleViewbar->setEnabled(false);
-  QextMdiMainFrm::switchToTabPageMode();
+  KMdiMainFrm::switchToTabPageMode();
 }
 
 void MainWindow::slotReactToProjectOpened()
@@ -1153,7 +1153,7 @@ void MainWindow::slotReactToProjectOpened()
   // This is a workaround for a bug in KDockWidget::readDockConfig() called above:
   // We must hide the unavailable views again because they are somehow shown again here
   // (unfortunately, we can't avoid the flickering which is a result of that show()-hide() calling)
-  QPtrListIterator<QextMdiChildView> it(m_unavailableViews);
+  QPtrListIterator<KMdiChildView> it(m_unavailableViews);
   for (; it.current(); ++it) {
     KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(*it);
     if (pWrappingDockWidget) {
@@ -1165,7 +1165,7 @@ void MainWindow::slotReactToProjectOpened()
 
 void MainWindow::slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl)
 {
-  QextMdiChildView* pMDICover = m_captionDict[viewName];
+  KMdiChildView* pMDICover = m_captionDict[viewName];
   if (!pMDICover) { return; }
 
   // read the view position and size
@@ -1179,7 +1179,7 @@ void MainWindow::slotRestoreAdditionalViewProperties(const QString& viewName, co
   bool bAttached = (bool) viewEl->attribute( "Attach", "1").toInt();
 
   // restore appearence
-  if ((mdiMode() != QextMdi::TabPageMode) && (mdiMode() != QextMdi::ToplevelMode)) {
+  if ((mdiMode() != KMdi::TabPageMode) && (mdiMode() != KMdi::ToplevelMode)) {
     if ((!pMDICover->isAttached()) && (bAttached) ) {
       pMDICover->attach();
     }
@@ -1203,7 +1203,7 @@ void MainWindow::slotRestoreAdditionalViewProperties(const QString& viewName, co
 
 void MainWindow::slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl)
 {
-  QextMdiChildView* pMDICover = m_captionDict[viewName];
+  KMdiChildView* pMDICover = m_captionDict[viewName];
   if (!pMDICover) { return; }
 
   // write the view position and size
@@ -1228,7 +1228,7 @@ void MainWindow::slotSaveAdditionalViewProperties(const QString& viewName, QDomE
   viewEl->setAttribute( "Height", geom.height());
 
   // MDI stuff
-  viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == QextMdi::TabPageMode));
+  viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == KMdi::TabPageMode));
 }
 
 void MainWindow::slotToggleViewbar()
@@ -1253,10 +1253,10 @@ void MainWindow::setUserInterfaceMode(const QString& uiMode)
 void MainWindow::callCommand(const QString& command)
 {
     if (isInMaximizedChildFrmMode() && (command == "qextmdi-UI: do hack on session loading finished")
-    && (mdiMode() == QextMdi::ChildframeMode)) {
-	QextMdiChildView* pLastView = 0L;
-	QextMdiChildFrm*  pLastFrm = 0L;
-	QextMdiIterator<QextMdiChildView*>* winListIter = createIterator();
+    && (mdiMode() == KMdi::ChildframeMode)) {
+	KMdiChildView* pLastView = 0L;
+	KMdiChildFrm*  pLastFrm = 0L;
+	KMdiIterator<KMdiChildView*>* winListIter = createIterator();
 	for (winListIter->first(); !winListIter->isDone(); winListIter->next()){
 	    pLastView = winListIter->currentItem();
 	    if (pLastView->isAttached()) {
@@ -1267,11 +1267,11 @@ void MainWindow::callCommand(const QString& command)
 	if (pLastFrm && pLastFrm->parentWidget()) {
 	    QApplication::sendPostedEvents();
 	    pLastFrm->setGeometry(
-		-QEXTMDI_MDI_CHILDFRM_BORDER,
-		-QEXTMDI_MDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
-		pLastFrm->parentWidget()->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-		pLastFrm->parentWidget()->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR
-		+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + pLastFrm->captionHeight());
+		-KMDI_CHILDFRM_BORDER,
+		-KMDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - KMDI_CHILDFRM_SEPARATOR,
+		pLastFrm->parentWidget()->width() + KMDI_CHILDFRM_DOUBLE_BORDER,
+		pLastFrm->parentWidget()->height() + KMDI_CHILDFRM_SEPARATOR
+		+ KMDI_CHILDFRM_DOUBLE_BORDER + pLastFrm->captionHeight());
 	}
 	delete winListIter;
     }

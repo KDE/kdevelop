@@ -1,22 +1,23 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildview.cpp
+//    filename             : kmdichildview.cpp
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create a
 //                           -06/2000      stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //                           02/2001       by Eva Brucherseifer (eva@rt.e-technik.tu-darmstadt.de)
 //                           01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
-//    copyright            : (C) 1999-2001 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2003 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -35,14 +36,14 @@
 #include <kdeversion.h>
 #endif
 
-#include "qextmdichildview.h"
-#include "qextmdimainfrm.h"
-#include "qextmdichildfrm.h"
-#include "qextmdidefines.h"
+#include "kmdimainfrm.h"
+#include "kmdichildfrm.h"
+#include "kmdidefines.h"
+#include "kmdichildview.h"
 
-//============ QextMdiChildView ============//
+//============ KMdiChildView ============//
 
-QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidget, const char* name, WFlags f)
+KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, const char* name, WFlags f)
 : QWidget(parentWidget, name, f)
   ,m_focusedChildWidget(0L)
   ,m_firstFocusableChildWidget(0L)
@@ -70,9 +71,9 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
    updateTimeStamp();
 }
 
-//============ QextMdiChildView ============//
+//============ KMdiChildView ============//
 
-QextMdiChildView::QextMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
+KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
 : QWidget(parentWidget, name, f)
   ,m_focusedChildWidget(0L)
   ,m_firstFocusableChildWidget(0L)
@@ -95,15 +96,15 @@ QextMdiChildView::QextMdiChildView( QWidget* parentWidget, const char* name, WFl
    updateTimeStamp();
 }
 
-//============ ~QextMdiChildView ============//
+//============ ~KMdiChildView ============//
 
-QextMdiChildView::~QextMdiChildView()
+KMdiChildView::~KMdiChildView()
 {
 }
 
 //============== internal geometry ==============//
 
-QRect QextMdiChildView::internalGeometry() const
+QRect KMdiChildView::internalGeometry() const
 {
    if(mdiParent()) { // is attached
       // get the client area coordinates inside the MDI child frame
@@ -124,7 +125,7 @@ QRect QextMdiChildView::internalGeometry() const
 
 //============== set internal geometry ==============//
 
-void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
+void KMdiChildView::setInternalGeometry(const QRect& newGeometry)
 {
    if(mdiParent()) { // is attached
       // retrieve the frame size
@@ -138,10 +139,10 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
 
-      newGeoQt.setWidth(newGeometry.width()+nFrameSizeLeft+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER/2);
-      newGeoQt.setHeight(newGeometry.height()+nFrameSizeTop+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER/2);
-//      newGeoQt.setWidth(newGeometry.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
-//      newGeoQt.setHeight(newGeometry.height()+mdiParent()->captionHeight()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+      newGeoQt.setWidth(newGeometry.width()+nFrameSizeLeft+KMDI_CHILDFRM_DOUBLE_BORDER/2);
+      newGeoQt.setHeight(newGeometry.height()+nFrameSizeTop+KMDI_CHILDFRM_DOUBLE_BORDER/2);
+//      newGeoQt.setWidth(newGeometry.width()+KMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+//      newGeoQt.setHeight(newGeometry.height()+mdiParent()->captionHeight()+KMDI_MDI_CHILDFRM_DOUBLE_BORDER);
 
       // set the geometry
       mdiParent()->setGeometry(newGeoQt);
@@ -156,8 +157,8 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
       // create the new geometry that is accepted by the QWidget::setGeometry() method
       QRect    newGeoQt;
 #if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
-      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft+frameGeo.width()-geo.width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
-      newGeoQt.setY(newGeometry.y()-nFrameSizeTop+frameGeo.height()-geo.height()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
+      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft+frameGeo.width()-geo.width()-KMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
+      newGeoQt.setY(newGeometry.y()-nFrameSizeTop+frameGeo.height()-geo.height()-KMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
 #else
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
@@ -172,14 +173,14 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
 
 //============== external geometry ==============//
 
-QRect QextMdiChildView::externalGeometry() const
+QRect KMdiChildView::externalGeometry() const
 {
    return mdiParent() ? mdiParent()->frameGeometry() : frameGeometry();
 }
 
 //============== set external geometry ==============//
 
-void QextMdiChildView::setExternalGeometry(const QRect& newGeometry)
+void KMdiChildView::setExternalGeometry(const QRect& newGeometry)
 {
    if(mdiParent()) { // is attached
        mdiParent()->setGeometry(newGeometry);
@@ -208,11 +209,11 @@ void QextMdiChildView::setExternalGeometry(const QRect& newGeometry)
 
 //============== minimize ==============//
 
-void QextMdiChildView::minimize(bool bAnimate)
+void KMdiChildView::minimize(bool bAnimate)
 {
    if(mdiParent()) {
       if(!isMinimized()) {
-         mdiParent()->setState(QextMdiChildFrm::Minimized,bAnimate);
+         mdiParent()->setState(KMdiChildFrm::Minimized,bAnimate);
       }
    } 
    else {
@@ -220,7 +221,7 @@ void QextMdiChildView::minimize(bool bAnimate)
    }
 }
 
-void QextMdiChildView::showMinimized()
+void KMdiChildView::showMinimized()
 {
    //qDebug("is minimized now");
    emit isMinimizedNow();
@@ -228,15 +229,15 @@ void QextMdiChildView::showMinimized()
 }
 
 //slot:
-void QextMdiChildView::minimize() { minimize(TRUE); }
+void KMdiChildView::minimize() { minimize(TRUE); }
 
 //============= maximize ==============//
 
-void QextMdiChildView::maximize(bool bAnimate)
+void KMdiChildView::maximize(bool bAnimate)
 {
    if(mdiParent()) {
       if(!isMaximized()) {
-         mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
+         mdiParent()->setState(KMdiChildFrm::Maximized,bAnimate);
          emit mdiParentNowMaximized(TRUE);
       }
    }
@@ -245,7 +246,7 @@ void QextMdiChildView::maximize(bool bAnimate)
    }
 }
 
-void QextMdiChildView::showMaximized()
+void KMdiChildView::showMaximized()
 {
    //qDebug("is maximized now");
    emit isMaximizedNow();
@@ -253,11 +254,11 @@ void QextMdiChildView::showMaximized()
 }
 
 //slot:
-void QextMdiChildView::maximize() { maximize(TRUE); }
+void KMdiChildView::maximize() { maximize(TRUE); }
 
 //============== restoreGeometry ================//
 
-QRect QextMdiChildView::restoreGeometry()
+QRect KMdiChildView::restoreGeometry()
 {
    if(mdiParent()) {
       return mdiParent()->restoreGeometry();
@@ -270,7 +271,7 @@ QRect QextMdiChildView::restoreGeometry()
 
 //============== setRestoreGeometry ================//
 
-void  QextMdiChildView::setRestoreGeometry(const QRect& newRestGeo)
+void  KMdiChildView::setRestoreGeometry(const QRect& newRestGeo)
 {
    if(mdiParent()) {
       mdiParent()->setRestoreGeometry(newRestGeo);
@@ -282,24 +283,24 @@ void  QextMdiChildView::setRestoreGeometry(const QRect& newRestGeo)
 
 //============== attach ================//
 
-void QextMdiChildView::attach()
+void KMdiChildView::attach()
 {
    emit attachWindow(this,TRUE);
 }
 
 //============== detach =================//
 
-void QextMdiChildView::detach()
+void KMdiChildView::detach()
 {
    emit detachWindow(this, TRUE);
 }
 
 //=============== isMinimized ? =================//
 
-bool QextMdiChildView::isMinimized() const
+bool KMdiChildView::isMinimized() const
 {
    if(mdiParent()) {
-      return (mdiParent()->state() == QextMdiChildFrm::Minimized);
+      return (mdiParent()->state() == KMdiChildFrm::Minimized);
    }
    else {
       return QWidget::isMinimized();
@@ -308,10 +309,10 @@ bool QextMdiChildView::isMinimized() const
 
 //============== isMaximized ? ==================//
 
-bool QextMdiChildView::isMaximized() const
+bool KMdiChildView::isMaximized() const
 {
    if(mdiParent()) {
-      return (mdiParent()->state() == QextMdiChildFrm::Maximized);
+      return (mdiParent()->state() == KMdiChildFrm::Maximized);
    }
    else {
       return QWidget::isMaximized();
@@ -320,14 +321,14 @@ bool QextMdiChildView::isMaximized() const
 
 //============== restore ================//
 
-void QextMdiChildView::restore()
+void KMdiChildView::restore()
 {
    if(mdiParent()) {
       if(isMaximized()) {
          emit mdiParentNowMaximized(FALSE);
       }
       if(isMinimized()||isMaximized()) {
-         mdiParent()->setState(QextMdiChildFrm::Normal);
+         mdiParent()->setState(KMdiChildFrm::Normal);
       }
    }
    else {
@@ -335,7 +336,7 @@ void QextMdiChildView::restore()
    }
 }
 
-void QextMdiChildView::showNormal()
+void KMdiChildView::showNormal()
 {
    //qDebug("is restored now");
    emit isRestoredNow();
@@ -344,7 +345,7 @@ void QextMdiChildView::showNormal()
 
 //=============== youAreAttached ============//
 
-void QextMdiChildView::youAreAttached(QextMdiChildFrm *lpC)
+void KMdiChildView::youAreAttached(KMdiChildFrm *lpC)
 {
    lpC->setCaption(m_szCaption);
 
@@ -353,7 +354,7 @@ void QextMdiChildView::youAreAttached(QextMdiChildFrm *lpC)
 
 //================ youAreDetached =============//
 
-void QextMdiChildView::youAreDetached()
+void KMdiChildView::youAreDetached()
 {
    setCaption(m_szCaption);
 
@@ -366,7 +367,7 @@ void QextMdiChildView::youAreDetached()
 
 //================ setCaption ================//
 // this set the caption of only the window
-void QextMdiChildView::setCaption(const QString& szCaption)
+void KMdiChildView::setCaption(const QString& szCaption)
 {
   // this will work only for window
    m_szCaption=szCaption;
@@ -382,7 +383,7 @@ void QextMdiChildView::setCaption(const QString& szCaption)
 
 //============== closeEvent ================//
 
-void QextMdiChildView::closeEvent(QCloseEvent *e)
+void KMdiChildView::closeEvent(QCloseEvent *e)
 {
    e->ignore(); //we ignore the event , and then close later if needed.
    emit childWindowCloseRequest(this);
@@ -390,14 +391,14 @@ void QextMdiChildView::closeEvent(QCloseEvent *e)
 
 //================ myIconPtr =================//
 
-QPixmap* QextMdiChildView::myIconPtr()
+QPixmap* KMdiChildView::myIconPtr()
 {
    return 0;
 }
 
 //============= focusInEvent ===============//
 
-void QextMdiChildView::focusInEvent(QFocusEvent *e)
+void KMdiChildView::focusInEvent(QFocusEvent *e)
 {
    QWidget::focusInEvent(e);
 
@@ -415,7 +416,7 @@ void QextMdiChildView::focusInEvent(QFocusEvent *e)
 
 //============= activate ===============//
 
-void QextMdiChildView::activate()
+void KMdiChildView::activate()
 {
    // avoid circularity
    static bool s_bActivateIsPending = FALSE;
@@ -437,7 +438,7 @@ void QextMdiChildView::activate()
       if(!m_bFocusInEventIsPending) {
          setFocus();
       }
-      //qDebug("QextMdiChildView::activate() called!");
+      //qDebug("KMdiChildView::activate() called!");
       emit activated(this);
    }
 
@@ -455,7 +456,7 @@ void QextMdiChildView::activate()
 
 //============= focusOutEvent ===============//
 
-void QextMdiChildView::focusOutEvent(QFocusEvent* e)
+void KMdiChildView::focusOutEvent(QFocusEvent* e)
 {
    QWidget::focusOutEvent(e);
 
@@ -464,7 +465,7 @@ void QextMdiChildView::focusOutEvent(QFocusEvent* e)
 
 //============= resizeEvent ===============//
 
-void QextMdiChildView::resizeEvent(QResizeEvent* e)
+void KMdiChildView::resizeEvent(QResizeEvent* e)
 {
    QWidget::resizeEvent( e);
 
@@ -485,7 +486,7 @@ void QextMdiChildView::resizeEvent(QResizeEvent* e)
    }
 }
 
-void QextMdiChildView::slot_childDestroyed()
+void KMdiChildView::slot_childDestroyed()
 {
    // do what we do if a child is removed
 
@@ -516,7 +517,7 @@ void QextMdiChildView::slot_childDestroyed()
 }
 
 //============= eventFilter ===============//
-bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
+bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
 #ifndef NO_KDE
 #if !(KDE_VERSION > 305)
@@ -634,7 +635,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
 }
 
 /** Switches interposing in event loop of all current child widgets off. */
-void QextMdiChildView::removeEventFilterForAllChildren()
+void KMdiChildView::removeEventFilterForAllChildren()
 {
    QObjectList *list = queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over all child widgets
@@ -647,34 +648,34 @@ void QextMdiChildView::removeEventFilterForAllChildren()
    delete list;                        // delete the list, not the objects
 }
 
-QWidget* QextMdiChildView::focusedChildWidget()
+QWidget* KMdiChildView::focusedChildWidget()
 {
    return m_focusedChildWidget;
 }
 
-void QextMdiChildView::setFirstFocusableChildWidget(QWidget* firstFocusableChildWidget)
+void KMdiChildView::setFirstFocusableChildWidget(QWidget* firstFocusableChildWidget)
 {
    m_firstFocusableChildWidget = firstFocusableChildWidget;
 }
 
-void QextMdiChildView::setLastFocusableChildWidget(QWidget* lastFocusableChildWidget)
+void KMdiChildView::setLastFocusableChildWidget(QWidget* lastFocusableChildWidget)
 {
    m_lastFocusableChildWidget = lastFocusableChildWidget;
 }
 /** Set a new value of  the task bar button caption  */
-void QextMdiChildView::setTabCaption (const QString& stbCaption) {
+void KMdiChildView::setTabCaption (const QString& stbCaption) {
 
   m_sTabCaption = stbCaption;
   emit tabCaptionChanged(m_sTabCaption);
 
 }
-void QextMdiChildView::setMDICaption (const QString& caption) {
+void KMdiChildView::setMDICaption (const QString& caption) {
   setCaption(caption);
   setTabCaption(caption);
 }
 
 /** sets an ID  */
-void QextMdiChildView::setWindowMenuID( int id)
+void KMdiChildView::setWindowMenuID( int id)
 {
    m_windowMenuID = id;
 }
@@ -682,7 +683,7 @@ void QextMdiChildView::setWindowMenuID( int id)
 //============= slot_clickedInWindowMenu ===============//
 
 /** called if someone click on the "Window" menu item for this child frame window */
-void QextMdiChildView::slot_clickedInWindowMenu()
+void KMdiChildView::slot_clickedInWindowMenu()
 {
    updateTimeStamp();
    emit clickedInWindowMenu( m_windowMenuID);
@@ -691,32 +692,32 @@ void QextMdiChildView::slot_clickedInWindowMenu()
 //============= slot_clickedInDockMenu ===============//
 
 /** called if someone click on the "Dock/Undock..." menu item for this child frame window */
-void QextMdiChildView::slot_clickedInDockMenu()
+void KMdiChildView::slot_clickedInDockMenu()
 {
    emit clickedInDockMenu( m_windowMenuID);
 }
 
 //============= setMinimumSize ===============//
 
-void QextMdiChildView::setMinimumSize( int minw, int minh)
+void KMdiChildView::setMinimumSize( int minw, int minh)
 {
    QWidget::setMinimumSize( minw, minh);
-   if ( (mdiParent() != 0L) && (mdiParent()->state() != QextMdiChildFrm::Minimized) ) {
-      mdiParent()->setMinimumSize( minw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-                                   minh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
-                                        + QEXTMDI_MDI_CHILDFRM_SEPARATOR
+   if ( (mdiParent() != 0L) && (mdiParent()->state() != KMdiChildFrm::Minimized) ) {
+      mdiParent()->setMinimumSize( minw + KMDI_CHILDFRM_DOUBLE_BORDER,
+                                   minh + KMDI_CHILDFRM_DOUBLE_BORDER
+                                        + KMDI_CHILDFRM_SEPARATOR
                                         + mdiParent()->captionHeight());
    }
 }
 
 //============= setMaximumSize ===============//
 
-void QextMdiChildView::setMaximumSize( int maxw, int maxh)
+void KMdiChildView::setMaximumSize( int maxw, int maxh)
 {
-   if ( (mdiParent() != 0L) && (mdiParent()->state() == QextMdiChildFrm::Normal) ) {
-      int w = maxw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+   if ( (mdiParent() != 0L) && (mdiParent()->state() == KMdiChildFrm::Normal) ) {
+      int w = maxw + KMDI_CHILDFRM_DOUBLE_BORDER;
       if(w > QWIDGETSIZE_MAX) { w = QWIDGETSIZE_MAX; }
-      int h = maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + mdiParent()->captionHeight();
+      int h = maxh + KMDI_CHILDFRM_DOUBLE_BORDER + KMDI_CHILDFRM_SEPARATOR + mdiParent()->captionHeight();
       if(h > QWIDGETSIZE_MAX) { h = QWIDGETSIZE_MAX; }
       mdiParent()->setMaximumSize( w, h);
    }
@@ -725,7 +726,7 @@ void QextMdiChildView::setMaximumSize( int maxw, int maxh)
 
 //============= show ===============//
 
-void QextMdiChildView::show()
+void KMdiChildView::show()
 {
    QWidget* pParent = mdiParent();
    if(pParent != 0L) {
@@ -736,7 +737,7 @@ void QextMdiChildView::show()
 
 //============= hide ===============//
 
-void QextMdiChildView::hide()
+void KMdiChildView::hide()
 {
    if(mdiParent() != 0L) {
       mdiParent()->hide();
@@ -746,7 +747,7 @@ void QextMdiChildView::hide()
 
 //============= raise ===============//
 
-void QextMdiChildView::raise()
+void KMdiChildView::raise()
 {
    if(mdiParent() != 0L) {
       mdiParent()->raise();
@@ -757,5 +758,5 @@ void QextMdiChildView::raise()
 
 
 #ifndef NO_INCLUDE_MOCFILES
-#include "qextmdichildview.moc"
+#include "kmdichildview.moc"
 #endif

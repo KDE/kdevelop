@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildarea.h
+//    filename             : kmdichildarea.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -24,41 +25,41 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _QEXTMDICHILDAREA_H_
-#define _QEXTMDICHILDAREA_H_
+#ifndef _KMDICHILDAREA_H_
+#define _KMDICHILDAREA_H_
 
 #include <qframe.h>
 #include <qptrlist.h>
 
-#include "qextmdichildfrm.h"
-#include "qextmdichildview.h"
+#include "kmdichildfrm.h"
+#include "kmdichildview.h"
 
 /**
   * @short Internal class.
   *
-  * The main frame widget QextMdiMainFrm consists of 2 child widgets. One is this class.
+  * The main frame widget KMdiMainFrm consists of 2 child widgets. One is this class.
   * It's the widget where the child frames (emulated toplevel MDI views) live in.
   * This class is the manager for the child frame widgets because it controls the
-  * Z-order widget stack of QextMdiChildFrm's.
+  * Z-order widget stack of KMdiChildFrm's.
   * It provides all placing and positioning algorithms for docked (attached) MDI views.
   *
-  * QextMdiChildArea doesn't know anything about the actual MDI views. It only knows
+  * KMdiChildArea doesn't know anything about the actual MDI views. It only knows
   * and manages the frame widgets of attached MDI views.
   * All actions and stuff concerning only to childframes are handled here.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildArea : public QFrame
+class DLL_IMP_EXP_KMDICLASS KMdiChildArea : public QFrame
 {
-   friend class QextMdiChildFrmCaption;
-   friend class QextMdiChildFrm;
+   friend class KMdiChildFrmCaption;
+   friend class KMdiChildFrm;
 
    Q_OBJECT
 
 // attributes
 public:
    /** 
-   * Z Order stack of @ref QextMdiChildFrm childframe windows (top=last) 
+   * Z Order stack of @ref KMdiChildFrm childframe windows (top=last) 
    */
-   QPtrList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
+   QPtrList<KMdiChildFrm> *m_pZ; //Auto delete enabled
    /**
    * the default size of an newly created childframe
    */
@@ -93,41 +94,41 @@ protected:
 // methods
 public:
    /** 
-   * Consruction. Note: This class needn't to know about @ref QextMdiMainFrm . 
+   * Consruction. Note: This class needn't to know about @ref KMdiMainFrm . 
    */
-   QextMdiChildArea(QWidget *parent);
+   KMdiChildArea(QWidget *parent);
    /**
    * Destructor : THERE should be no child windows anymore...
    * Howewer it simply deletes all the child widgets :)
    */
-   ~QextMdiChildArea();
+   ~KMdiChildArea();
 
    /**
-   * Appends a new QextMdiChildFrm to this manager.
+   * Appends a new KMdiChildFrm to this manager.
    * The child is shown,raised and gets focus if this window has it.
    */
-   void manageChild(QextMdiChildFrm *lpC,bool bShow=TRUE,bool bCascade=TRUE);
+   void manageChild(KMdiChildFrm *lpC,bool bShow=TRUE,bool bCascade=TRUE);
    /**
-   * Destroys a QextMdiChildFrm managed.<br>
+   * Destroys a KMdiChildFrm managed.<br>
    * Note that if a client is attached to this child , it is deleted too!
    */
-   void destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
+   void destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
    /**
-   * Destroys a QextMdiChildFrm managed.<br>
+   * Destroys a KMdiChildFrm managed.<br>
    * Note that if a client is attached to this child , it is NOT deleted!
    */
-   void destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
+   void destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
    /**
    * Brings the child lpC to the top of the stack
    * The children is focused if bSetFocus is TRUE
    * otherwise is raised only
    */
-   void setTopChild(QextMdiChildFrm *lpC,bool bSetFocus=FALSE);
+   void setTopChild(KMdiChildFrm *lpC,bool bSetFocus=FALSE);
    /**
    * Returns the topmost child (the active one) or 0 if there are no children.
    * Note that the topmost child may be also hidded , if ALL the windows are minimized.
    */
-   inline QextMdiChildFrm * topChild(){ return m_pZ->last(); };
+   inline KMdiChildFrm * topChild(){ return m_pZ->last(); };
    /**
    * Returns the number of visible children
    */
@@ -214,27 +215,27 @@ protected:
    /** 
    * Internally used. Actions that are necessary when an MDI view gets minimized 
    */
-   void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
+   void childMinimized(KMdiChildFrm *lpC,bool bWasMaximized);
 
 signals:
    /** 
    * Signalizes that there aren't maximized child frames any more
    */
-   void noMaximizedChildFrmLeft(QextMdiChildFrm*);
+   void noMaximizedChildFrmLeft(KMdiChildFrm*);
    /**
    * Signalizes that the child frames are maximized now
    */
    void nowMaximized(bool);
    /**
    * Internally used.
-   * Signalizes from QextMdiChildArea to QextMdiMainFrm
+   * Signalizes from KMdiChildArea to KMdiMainFrm
    * that the signal/slot connections of the system buttons in the menubar (only in Maximize mode)
    * must be updated to another MDI view because the focused MDI view has changed 
    */
-   void sysButtonConnectionsMustChange(QextMdiChildFrm*, QextMdiChildFrm*);
+   void sysButtonConnectionsMustChange(KMdiChildFrm*, KMdiChildFrm*);
    /**
    * Internally used.
-   * Signalizes from QextMdiChildArea to QextMdiMainFrm
+   * Signalizes from KMdiChildArea to KMdiMainFrm
    * that the 'Window' popup menu must be shown 
    */
    void popupWindowMenu( QPoint);
@@ -245,4 +246,4 @@ signals:
    void lastChildFrmClosed();
 };
 
-#endif   // _QEXTMDICHILDAREA_H_
+#endif   // _KMDICHILDAREA_H_

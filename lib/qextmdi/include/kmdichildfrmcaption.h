@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildfrmcaption.h
+//    filename             : kmdichildfrmcaption.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -23,32 +24,32 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#ifndef _QEXTMDICAPTION_H_
-#define _QEXTMDICAPTION_H_
+#ifndef _KMDICAPTION_H_
+#define _KMDICAPTION_H_
 
 #include <qwidget.h>
 
-#include "qextmdidefines.h"
+#include "kmdidefines.h"
 
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm;
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrm;
 
 /**
 * @short Internal class.
 *
 * It's the caption bar of a child frame widget.
 */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmCaption : public QWidget
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrmCaption : public QWidget
 {
    Q_OBJECT
 public:
    /** 
    * Constructor 
    */
-   QextMdiChildFrmCaption(QextMdiChildFrm *parent);
+   KMdiChildFrmCaption(KMdiChildFrm *parent);
    /** 
    * Destructor 
    */
-   ~QextMdiChildFrmCaption();
+   ~KMdiChildFrmCaption();
    /** 
    * Repaint the caption bar in active background colours 
    */
@@ -74,11 +75,11 @@ protected:
    */
    virtual void paintEvent(QPaintEvent *e);
    /** 
-   * The same as @ref QextMdiChildFrmCaption::slot_moveViaSystemMenu 
+   * The same as @ref KMdiChildFrmCaption::slot_moveViaSystemMenu 
    */
    virtual void mousePressEvent(QMouseEvent *);
    /** 
-   * Calls maximizePressed of the parent widget (@ref QextMdiChildFrm ) 
+   * Calls maximizePressed of the parent widget (@ref KMdiChildFrm ) 
    */
    virtual void mouseDoubleClickEvent(QMouseEvent *);
    /** 
@@ -86,7 +87,7 @@ protected:
    */
    virtual void mouseReleaseEvent(QMouseEvent *);
    /** 
-   * Checks if out of move range of the @ref QextMdiChildArea and calls @ref QextMdiChildFrm::move 
+   * Checks if out of move range of the @ref KMdiChildArea and calls @ref KMdiChildFrm::move 
    */
    virtual void mouseMoveEvent(QMouseEvent *e);
    /** 
@@ -105,7 +106,7 @@ protected: // Protected attributes
    /** 
    * parent widget 
    */
-   QextMdiChildFrm  *m_pParent;
+   KMdiChildFrm  *m_pParent;
    /** 
    * state variable indicating whether activated or not activated 
    */
@@ -120,4 +121,4 @@ protected: // Protected attributes
    bool              m_bChildInDrag;
 };
 
-#endif //_QEXTMDICAPTION_H_
+#endif //_KMDICAPTION_H_

@@ -1,2 +1,2 @@
-noinst_HEADERS = qextmdichildarea.h qextmdichildfrm.h qextmdichildfrmcaption.h qextmdidefines.h qextmdiiterator.h qextmdilistiterator.h \
-           qextmdimainfrm.h qextmdinulliterator.h qextmditaskbar.h qextmdichildview.h
+noinst_HEADERS = kmdichildarea.h kmdichildfrm.h kmdichildfrmcaption.h kmdidefines.h kmdiiterator.h kmdilistiterator.h \
+           kmdimainfrm.h kmdinulliterator.h kmditaskbar.h kmdichildview.h

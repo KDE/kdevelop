@@ -1,3 +1,6 @@
+2003-05-17 F@lk Brettschneider <falkbr@kdevelop.org>
+    * renamed QextMdi classes and files to KMdi
+
 2003-05-16 Alexander Dymo <cloudtemple@mksat.net>
     * Added sourceFormatter() method to KDevPlugin interface and corrected AStylePart to be
       the default source formatter part. Astyle library is separated from the part.

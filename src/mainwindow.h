@@ -1,5 +1,5 @@
 /***************************************************************************
-  kdevmainwindow.h - KDevelop main widget for all QextMDI-based user
+  kdevmainwindow.h - KDevelop main widget for all KMdi-based user
                    interface modes (Childframe, TabPage, Toplevel)
                              -------------------
     begin                : 22 Dec 2002
@@ -24,8 +24,8 @@
 #include <qdict.h>
 
 
-#include <qextmdimainfrm.h>
-#include <qextmdichildview.h>
+#include <kmdimainfrm.h>
+#include <kmdichildview.h>
 
 
 #include "kdevmainwindow.h"
@@ -39,7 +39,7 @@ class MainWindowShare;
 
 
 */
-class MainWindow : public QextMdiMainFrm, public KDevMainWindow
+class MainWindow : public KMdiMainFrm, public KDevMainWindow
 {
   Q_OBJECT
 
@@ -73,8 +73,8 @@ public:
 
   virtual void callCommand(const QString& command);
 
-  /** Reimplemented from QextMdiChildView to handle save prompt */
-  virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
+  /** Reimplemented from KMdiChildView to handle save prompt */
+  virtual void childWindowCloseRequest(KMdiChildView *pWnd);
 
   enum EView {OutputView, TreeView};
 
@@ -92,13 +92,13 @@ public slots:
   void gotoFirstWindow();
   void gotoLastWindow();
 
-  /** Reimplemented from QextMdiMainFrm*/
+  /** Reimplemented from KMdiMainFrm*/
   virtual void fillWindowMenu();
-  /** Reimplemented from QextMdiMainFrm to save chosen mode */
+  /** Reimplemented from KMdiMainFrm to save chosen mode */
   virtual void switchToToplevelMode();
-  /** Reimplemented from QextMdiMainFrm to save chosen mode */
+  /** Reimplemented from KMdiMainFrm to save chosen mode */
   virtual void switchToChildframeMode();
-  /** Reimplemented from QextMdiMainFrm to save chosen mode */
+  /** Reimplemented from KMdiMainFrm to save chosen mode */
   virtual void switchToTabPageMode();
 
 
@@ -125,7 +125,7 @@ protected:
   /** Reimplemented from QWidget just to get the info, that the window will now be shown */
   void resizeEvent(QResizeEvent *ev);
   /** Adds a tool view window to the output or tree views*/
-  void addToolViewWindow(EView eView, QextMdiChildView *child, const QString &name, const QString &toolTip);
+  void addToolViewWindow(EView eView, KMdiChildView *child, const QString &name, const QString &toolTip);
 
 
 private slots:
@@ -143,21 +143,21 @@ private:
   virtual bool queryExit();
 
 
-/**\brief Creates a wrapper of type QextMdiChildView for the given view.
+/**\brief Creates a wrapper of type KMdiChildView for the given view.
 
 After a call to wrapper(), the given view is included in the frame of gideon in the following way:\n
-- The view gets a new parent of type QextMdiChildView.
-- A horizontal layout manager (QHBoxLayout) is generated which has a the new QextMdiChildView as parent and the
+- The view gets a new parent of type KMdiChildView.
+- A horizontal layout manager (QHBoxLayout) is generated which has a the new KMdiChildView as parent and the
   given view as Widget to layout.
-- The given view and the new QextMdiChildView are appended to
+- The given view and the new KMdiChildView are appended to
   \ref MainWindow::m_childViewMap "m_childViewMap" and \ref MainWindow::m_widgetMap "m_widgetMap"
-- The new QextMdiChildView gets the given name as caption (full path name) and just the extracted file name as TabCaption.
+- The new KMdiChildView gets the given name as caption (full path name) and just the extracted file name as TabCaption.
 .
-The newly created QextMdiChildView is not yet connected to any other widget of Gideon, althoug it is appended to
+The newly created KMdiChildView is not yet connected to any other widget of Gideon, althoug it is appended to
 \ref MainWindow::m_childViewMap "m_childViewMap" and \ref MainWindow::m_widgetMap "m_widgetMap".
 */
 
-  QextMdiChildView *wrapper(
+  KMdiChildView *wrapper(
               QWidget *view,
               const QString &name);
 
@@ -169,16 +169,16 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   void saveMDISettings();
   void loadMDISettings();
 
-  QMap<QWidget*,QextMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:QextMdiChildView*.\n
+  QMap<QWidget*,KMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:KMdiChildView*.\n
                                                    //!< Contains the same pairs as \ref MainWindow::m_childViewMap "m_childViewMap"
-  QMap<QextMdiChildView*,QWidget*> m_childViewMap; //!< Key: QextMdiChildView* --> Data:QWidget*.\n
+  QMap<KMdiChildView*,QWidget*> m_childViewMap; //!< Key: KMdiChildView* --> Data:QWidget*.\n
                                                    //!< Contains the same pairs as \ref MainWindow::m_widgetMap "m_widgetMap"
-  QDict<QextMdiChildView>          m_captionDict;  //!< Key: caption string --> Data:QextMdiChildView*
+  QDict<KMdiChildView>          m_captionDict;  //!< Key: caption string --> Data:KMdiChildView*
 
-  QPtrList<QextMdiChildView> m_outputViews;        //!< Lists all output views
-  QPtrList<QextMdiChildView> m_selectViews;        //!< Lists all select views
-  QPtrList<QextMdiChildView> m_partViews;          //!< Lists all part views
-  QPtrList<QextMdiChildView> m_unavailableViews;   //!< Lists all views set to unavailable
+  QPtrList<KMdiChildView> m_outputViews;        //!< Lists all output views
+  QPtrList<KMdiChildView> m_selectViews;        //!< Lists all select views
+  QPtrList<KMdiChildView> m_partViews;          //!< Lists all part views
+  QPtrList<KMdiChildView> m_unavailableViews;   //!< Lists all views set to unavailable
 
   // Members for dealing with the tool views
   bool             m_myWindowsReady;               //!< true: gideon s windows are ready
@@ -199,7 +199,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
 struct ViewMenuActionPrivateData
 {
   KDockWidget * pDockWidget;                        //!< Pointer to the KDockWidget to hide or show
-  QextMdiChildView *pChildView;
+  KMdiChildView *pChildView;
   MainWindow::EView eView;                         //!< Which tool view the action is for
 };
 

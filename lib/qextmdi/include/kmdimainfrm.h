@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdimainfrm.h
+//    filename             : kmdimainfrm.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
@@ -9,13 +9,14 @@
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //                         : 02/2000       by Massimo Morin (mmorin@schedsys.com)
+//                           2000-2003     maintained by the KDevelop project
 //    patches              : */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //                         : 01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -27,8 +28,8 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _QEXTMDIMAINFRM_H_
-#define _QEXTMDIMAINFRM_H_
+#ifndef _KMDIMAINFRM_H_
+#define _KMDIMAINFRM_H_
 
 #ifndef NO_KDE
 #include <kmainwindow.h>
@@ -47,13 +48,13 @@
 #include <qdom.h>
 #include <qguardedptr.h>
 
-#include "qextmditaskbar.h"
-#include "qextmdichildarea.h"
-#include "qextmdichildview.h"
+#include "kmditaskbar.h"
+#include "kmdichildarea.h"
+#include "kmdichildview.h"
 
-#include "qextmdiiterator.h"
-#include "qextmdilistiterator.h"
-#include "qextmdinulliterator.h"
+#include "kmdiiterator.h"
+#include "kmdilistiterator.h"
+#include "kmdinulliterator.h"
 
 class QTimer;
 
@@ -62,10 +63,10 @@ class QTimer;
  *
  * This special event is needed because the view has to inform the main frame that it`s being closed.
  */
-class QextMdiViewCloseEvent : public QCustomEvent
+class KMdiViewCloseEvent : public QCustomEvent
 {
 public:
-   QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
+   KMdiViewCloseEvent( KMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
 };
 
 /**
@@ -77,10 +78,10 @@ public:
   * Basically, this class provides functionality for docking/undocking view windows and
   * manages the taskbar. Usually the programmer just need to know about this class and the child view class.
   *
-  * Your program mainwidget should inherit QextMdiMainFrm. Then usually you'll just need
+  * Your program mainwidget should inherit KMdiMainFrm. Then usually you'll just need
   * @ref addWindow() and @ref removeWindowFromMdi() to control the views.
   *   <PRE>
-  *   class MyMainWindow : public QextMdiMainFrm
+  *   class MyMainWindow : public KMdiMainFrm
   *   { .... };
   *   ...
   *   MyMainWindow mainframe;
@@ -111,7 +112,7 @@ public:
   * ...
   * void B_MainModuleWidget::resizeEvent ( QResizeEvent *e)
   * {
-  *   QextMdiMainFrm::resizeEvent( e);
+  *   KMdiMainFrm::resizeEvent( e);
   *   setSysButtonsAtMenuPosition();
   * }
   * </PRE>
@@ -126,18 +127,18 @@ public:
   * #endif
   *
   *    // restore MDI mode (toplevel, childframe, tabpage)
-  *    int mdiMode = config->readIntEntry( "mainmodule session", "MDI mode", QextMdi::ChildframeMode);
+  *    int mdiMode = config->readIntEntry( "mainmodule session", "MDI mode", KMdi::ChildframeMode);
   *    switch (mdiMode) {
-  *    case QextMdi::ToplevelMode:
+  *    case KMdi::ToplevelMode:
   *       {
   *          int childFrmModeHt = config->readIntEntry( "mainmodule session", "Childframe mode height", desktop()->height() - 50);
   *          mainframe->resize( m_pMdiMainFrm->width(), childFrmModeHt);
   *          mainframe->switchToToplevelMode();
   *       }
   *       break;
-  *    case QextMdi::ChildframeMode:
+  *    case KMdi::ChildframeMode:
   *       break;
-  *    case QextMdi::TabPageMode:
+  *    case KMdi::TabPageMode:
   *       {
   *          int childFrmModeHt = m_pCfgFileManager->readIntEntry( "mainmodule session", "Childframe mode height", desktop()->height() - 50);
   *          mainframe->resize( m_pMdiMainFrm->width(), childFrmModeHt);
@@ -157,7 +158,7 @@ public:
   * This class provides placing algorithms in Childframe mode. Call @ref tilePragma(), @ref tileAnodine(), @ref tileVertically(),
   * @ref cascadeWindows(), @ref cascadeMaximized(), @ref expandVertical(), @ref expandHorizontal() for those actions.
   *
-  * @ref activateView(QextMdiChildView*) and @ref activateView(int index) set the appropriate MDI child view as the active
+  * @ref activateView(KMdiChildView*) and @ref activateView(int index) set the appropriate MDI child view as the active
   * one. It will be raised, gets an active MDI frame and gets the focus. Call @ref activeView() to find out what the
   * current MDI view is.
   *
@@ -165,32 +166,32 @@ public:
   *
   * Connect accels of your program with @ref activatePrevWin(), @ref activateNextWin() and @ref activateView(int index).
   *
-  * Note: QextMdiChildViews can be added in 2 meanings: Either as a normal child view (usually containing
+  * Note: KMdiChildViews can be added in 2 meanings: Either as a normal child view (usually containing
   * user document views) or as a tool-view (usually containing status, info or control widgets).
   * The tool-views can be added as floating dockwidgets or as stay-on-top desktop windows in tool style.
   *
   * Here's an example how you can suggest things for the adding of views to the MDI control via flags:
   * <PRE>
   * m_mapOfMdiWidgets.insert( pWnd, mh);
-  * unsigned int mdiFlags = QextMdi::StandardAdd;
+  * unsigned int mdiFlags = KMdi::StandardAdd;
   * if( !bShow)
-  *    mdiFlags |= QextMdi::Hide;
+  *    mdiFlags |= KMdi::Hide;
   * if( !bAttach)
-  *    mdiFlags |= QextMdi::Detach;
+  *    mdiFlags |= KMdi::Detach;
   * if( bMinimize)
-  *    mdiFlags |= QextMdi::Minimize;
+  *    mdiFlags |= KMdi::Minimize;
   * if( bToolWindow)
-  *    mdiFlags |= QextMdi::ToolWindow;
+  *    mdiFlags |= KMdi::ToolWindow;
   * if (m_pMdiMainFrm->isFakingSDIApplication()) {
   *    if (bAttach) { // fake an SDI app
-  *       mdiFlags |= QextMdi::Maximize;
+  *       mdiFlags |= KMdi::Maximize;
   *    }
   *    else {
-  *       m_pMdiMainFrm->addWindow( pWnd, QPoint(20, 20), QextMdi::AddWindowFlags(mdiFlags));
+  *       m_pMdiMainFrm->addWindow( pWnd, QPoint(20, 20), KMdi::AddWindowFlags(mdiFlags));
   *       return;
   *    }
   * }
-  * m_pMdiMainFrm->addWindow( pWnd, QextMdi::AddWindowFlags(mdiFlags));
+  * m_pMdiMainFrm->addWindow( pWnd, KMdi::AddWindowFlags(mdiFlags));
   * </PRE>
   *
   * Further note: Pay attention to the fact that when you click on the close button of MDI views that their
@@ -198,20 +199,20 @@ public:
   * not get noticed about the deleted view and a dangling pointer will remain in the MDI control. The
   * @ref closeWindow() or the @ref removeWindowFromMdi() method is for that issue. The difference is @ref closeWindow()
   * deletes the view object. So if your application wants to control that by itself, call @ref removeWindowFromMdi()
-  * and call delete by yourself. See also @ref QextMdiChildView::closeEvent() for tat issue.
+  * and call delete by yourself. See also @ref KMdiChildView::closeEvent() for tat issue.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KParts::DockMainWindow
+class DLL_IMP_EXP_KMDICLASS KMdiMainFrm : public KParts::DockMainWindow
 {
-   friend class QextMdiChildView;
-   friend class QextMdiTaskBar;
+   friend class KMdiChildView;
+   friend class KMdiTaskBar;
    Q_OBJECT
 
 // attributes
 protected:
-   QextMdiChildArea        *m_pMdi;
-   QextMdiTaskBar          *m_pTaskBar;
-   QPtrList<QextMdiChildView> *m_pWinList;
-   QextMdiChildView        *m_pCurrentWindow;
+   KMdiChildArea        *m_pMdi;
+   KMdiTaskBar          *m_pTaskBar;
+   QPtrList<KMdiChildView> *m_pWinList;
+   KMdiChildView        *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
    QPopupMenu              *m_pWindowMenu;
@@ -234,12 +235,12 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
    QPoint                  m_undockPositioningOffset;
-   static QextMdi::MdiMode m_mdiMode;
+   static KMdi::MdiMode m_mdiMode;
    bool                    m_bMaximizedChildFrmMode;
    int                     m_oldMainFrmHeight;
    int                     m_oldMainFrmMinHeight;
    int                     m_oldMainFrmMaxHeight;
-   static QextMdi::FrameDecor   m_frameDecoration;
+   static KMdi::FrameDecor   m_frameDecoration;
    bool                    m_bSDIApplication;
    KDockWidget*            m_pDockbaseAreaOfDocumentViews;
    KDockWidget*            m_pDockbaseOfTabPage;
@@ -255,23 +256,23 @@ public:
    /**
    * Constructor.
    */
-   QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel | WDestructiveClose);
+   KMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel | WDestructiveClose);
    /**
    * Destructor.
    */
-   virtual ~QextMdiMainFrm();
+   virtual ~KMdiMainFrm();
    /**
    * Returns whether the application's MDI views are in maximized state or not.
    */
    bool isInMaximizedChildFrmMode() { return m_bMaximizedChildFrmMode; };
    /**
-   * Returns the MDI mode. This can be one of the enumerations QextMdi::MdiMode.
+   * Returns the MDI mode. This can be one of the enumerations KMdi::MdiMode.
    */
-   static QextMdi::MdiMode mdiMode() { return m_mdiMode; };
+   static KMdi::MdiMode mdiMode() { return m_mdiMode; };
    /**
    * Returns the focused attached MDI view.
    */
-   QextMdiChildView * activeWindow();
+   KMdiChildView * activeWindow();
    /**
    * Returns a popup menu filled according to the MDI view state. You can override this
    * method to insert additional entries there. The popup menu is usually popuped when the user
@@ -279,28 +280,28 @@ public:
    * Undock/Dock, Restore/Maximize/Minimize, Close and an empty sub-popup ( @ref windowPopup() )
    * menu called Operations.
    */
-   virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = FALSE);
+   virtual QPopupMenu * taskBarPopup(KMdiChildView *pWnd,bool bIncludeWindowPopup = FALSE);
    /**
    * Returns a popup menu with only a title "Window". You can fill it with own operations entries
    * on the MDI view. This popup menu is inserted as last menu item in @ref taskBarPopup() .
    */
-   virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = TRUE);
+   virtual QPopupMenu * windowPopup(KMdiChildView *pWnd,bool bIncludeTaskbarPopup = TRUE);
    /**
    * Called in the constructor (forces a resize of all MDI views)
    */
    virtual void applyOptions();
    /**
-   * Returns the QextMdiChildView belonging to the given caption string.
+   * Returns the KMdiChildView belonging to the given caption string.
    */
-   QextMdiChildView * findWindow(const QString& caption);
+   KMdiChildView * findWindow(const QString& caption);
    /**
    * Returns whether this MDI child view is under MDI control (using @ref addWindow() ) or not.
    */
-   bool windowExists(QextMdiChildView *pWnd);
+   bool windowExists(KMdiChildView *pWnd);
    /**
    * Catches certain Qt events and processes it here.
-   * Currently, here this catches only the @ref QextMdiViewCloseEvent (a QextMDI user event) which is sent
-   * from itself in @ref childWindowCloseRequest() right after a @ref QextMdiChildView::closeEvent() .
+   * Currently, here this catches only the @ref KMdiViewCloseEvent (a QextMDI user event) which is sent
+   * from itself in @ref childWindowCloseRequest() right after a @ref KMdiChildView::closeEvent() .
    * The reason for this event to itself is simple: It just wants to break the function call stack.
    * It continues the processing with calling @ref closeWindow() .
    * You see, a @ref close() is translated to a @ref closeWindow() .
@@ -328,17 +329,17 @@ public:
    * this iterator to handle with the MDI view list in a more abstract way.
    * The iterator hides what special data structure is used in QextMDI.
    */
-   QextMdiIterator<QextMdiChildView*>* createIterator() {
+   KMdiIterator<KMdiChildView*>* createIterator() {
       if ( m_pWinList == 0L) {
-         return new QextMdiNullIterator<QextMdiChildView*>();
+         return new KMdiNullIterator<KMdiChildView*>();
       } else {
-         return new QextMdiListIterator<QextMdiChildView>( *m_pWinList);
+         return new KMdiListIterator<KMdiChildView>( *m_pWinList);
       }
    }
    /**
-   * Deletes an QextMdiIterator created in the QextMDI library (needed for the windows dll problem).
+   * Deletes an KMdiIterator created in the QextMDI library (needed for the windows dll problem).
    */
-   void deleteIterator(QextMdiIterator<QextMdiChildView*>* pIt) { delete pIt; }
+   void deleteIterator(KMdiIterator<KMdiChildView*>* pIt) { delete pIt; }
    /**
    * Returns a popup menu that contains the MDI controlled view list.
    * Additionally, this menu provides some placing actions for these views.
@@ -354,13 +355,13 @@ public:
    */
    virtual void setBackgroundPixmap( const QPixmap &pm) { m_pMdi->setBackgroundPixmap( pm); };
    /**
-   * Sets a size that is used as the default size for a newly to the MDI system added @ref QextMdiChildView .
+   * Sets a size that is used as the default size for a newly to the MDI system added @ref KMdiChildView .
    *  By default this size is 600x400. So all non-resized added MDI views appear in that size.
    */
    void setDefaultChildFrmSize( const QSize& sz)
       { m_pMdi->m_defaultChildFrmSize = sz; };
    /**
-   * Returns the default size for a newly added QextMdiChildView. See @ref setDefaultChildFrmSize() .
+   * Returns the default size for a newly added KMdiChildView. See @ref setDefaultChildFrmSize() .
    */
    QSize defaultChildFrmSize()
       { return m_pMdi->m_defaultChildFrmSize; };
@@ -411,63 +412,63 @@ public:
    bool switching(void) const { return m_bSwitching; }
    
 public slots:
-   /** addWindow demands a QextMdiChildView. This method wraps every QWidget in such an object and
+   /** addWindow demands a KMdiChildView. This method wraps every QWidget in such an object and
        this way you can every widget put under MDI control.
     */
-   QextMdiChildView* createWrapper(QWidget *view, const QString& name, const QString& shortName);
+   KMdiChildView* createWrapper(QWidget *view, const QString& name, const QString& shortName);
    /**
     * One of the most important methods at all!
-    * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
+    * Adds a KMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether:
     * <UL><LI>the view should be attached or detached.</LI>
     * <LI>shown or hidden</LI>
     * <LI>maximized, minimized or restored (normalized)</LI>
     * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.
     */
-   virtual void addWindow( QextMdiChildView* pView, int flags = QextMdi::StandardAdd);
+   virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
    /** 
    * See the method above for more details. Additionally, it moves to point pos.
    */
-   virtual void addWindow( QextMdiChildView* pView, QPoint pos, int flags = QextMdi::StandardAdd);
+   virtual void addWindow( KMdiChildView* pView, QPoint pos, int flags = KMdi::StandardAdd);
    /** 
    * See the method above for more details. Additionally, it sets the geometry.
    */
-   virtual void addWindow( QextMdiChildView* pView, QRect rectNormal, int flags = QextMdi::StandardAdd);
+   virtual void addWindow( KMdiChildView* pView, QRect rectNormal, int flags = KMdi::StandardAdd);
    /**
    * Usually called from @ref addWindow() when adding a tool view window. It reparents the given widget
    * as toplevel and stay-on-top on the application's main widget.
    */
    virtual void addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L, int percent = 50, const QString& tabToolTip = 0, const QString& tabCaption = 0);
    /**
-   * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
+   * Removes a KMdiChildView from the MDI system and from the main frame`s control.
    * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
    */
-   virtual void removeWindowFromMdi(QextMdiChildView *pWnd);
+   virtual void removeWindowFromMdi(KMdiChildView *pWnd);
    /**
-   * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
+   * Removes a KMdiChildView from the MDI system and from the main frame`s control.
    * Note: The view will be deleted!
    */
-   virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = TRUE);
+   virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = TRUE);
    /**
-   * Switches the QextMdiTaskBar on and off.
+   * Switches the KMdiTaskBar on and off.
    */
    virtual void slot_toggleTaskBar();
    /**
-    * Makes a main frame controlled undocked QextMdiChildView docked.
-    * Doesn't work on QextMdiChildView which aren't added to the MDI system.
+    * Makes a main frame controlled undocked KMdiChildView docked.
+    * Doesn't work on KMdiChildView which aren't added to the MDI system.
     * Use addWindow() for that.
     */
-   virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=TRUE,bool bAutomaticResize=FALSE);
+   virtual void attachWindow(KMdiChildView *pWnd,bool bShow=TRUE,bool bAutomaticResize=FALSE);
    /**
-    * Makes a docked QextMdiChildView undocked.
+    * Makes a docked KMdiChildView undocked.
     * The view window still remains under the main frame's MDI control.
     */
-   virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
+   virtual void detachWindow(KMdiChildView *pWnd,bool bShow=TRUE);
    /** 
-   * Someone wants that the MDI view to be closed. This method sends a QextMdiViewCloseEvent to itself
+   * Someone wants that the MDI view to be closed. This method sends a KMdiViewCloseEvent to itself
    * to break the function call stack. See also @ref event() .
    */
-   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
+   virtual void childWindowCloseRequest(KMdiChildView *pWnd);
    /** 
    * Close all views 
    */
@@ -579,7 +580,7 @@ protected:
    */
    virtual void createTaskBar();
    /**
-   * Creates the MDI view area and connects some signals and slots with the QextMdiMainFrm widget.
+   * Creates the MDI view area and connects some signals and slots with the KMdiMainFrm widget.
    */
    virtual void createMdiManager();
    /**
@@ -593,19 +594,19 @@ protected slots: // Protected slots
    * Sets the focus to this MDI view, raises it, activates its taskbar button and updates
    * the system buttons in the main menubar when in maximized (Maximize mode).
    */
-   virtual void activateView(QextMdiChildView *pWnd);
+   virtual void activateView(KMdiChildView *pWnd);
    /** 
    * Activates the MDI view (see @ref activateView() ) and popups the taskBar popup menu (see @ref taskBarPopup() ).
    */
-   virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
+   virtual void taskbarButtonRightClicked(KMdiChildView *pWnd);
    /**
    * Turns the system buttons for maximize mode (SDI mode) off, and disconnects them 
    */
-   void switchOffMaximizeModeForMenu(QextMdiChildFrm* oldChild);
+   void switchOffMaximizeModeForMenu(KMdiChildFrm* oldChild);
    /**
    * Reconnects the system buttons form maximize mode (SDI mode) with the new child frame 
    */
-   void updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild);
+   void updateSysButtonConnections( KMdiChildFrm* oldChild, KMdiChildFrm* newChild);
    /** 
    * Usually called when the user clicks an MDI view item in the "Window" menu.
    */
@@ -628,11 +629,11 @@ protected slots: // Protected slots
    void closeViewButtonPressed();
 signals:
    /** 
-   * Signals the last attached @ref QextMdiChildView has been closed 
+   * Signals the last attached @ref KMdiChildView has been closed 
    */
    void lastChildFrmClosed();
    /** 
-   * Signals the last QextMdiChildView (that is under MDI control) has been closed 
+   * Signals the last KMdiChildView (that is under MDI control) has been closed 
    */
    void lastChildViewClosed();
    /**
@@ -645,4 +646,4 @@ signals:
    void childViewIsDetachedNow(QWidget*);
 };
 
-#endif //_QEXTMDIMAINFRM_H_
+#endif //_KMDIMAINFRM_H_

@@ -1,19 +1,20 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildfrm.h
+//    filename             : kmdichildfrm.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //    patches              : */2000        Lars Beikirch (Lars.Beikirch@gmx.net)
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -24,8 +25,8 @@
 //    License, or (at your option) any later version.
 //
 //------------------------------------------------------------------------------
-#ifndef _QEXTMDICHILDFRM_H_
-#define _QEXTMDICHILDFRM_H_
+#ifndef _KMDICHILDFRM_H_
+#define _KMDICHILDFRM_H_
 
 #include <qptrlist.h>
 #include <qpixmap.h>
@@ -38,21 +39,21 @@
 
 #include <qdict.h>
 
-#include "qextmdichildfrmcaption.h"
+#include "kmdichildfrmcaption.h"
 
-class QextMdiChildArea;
-class QextMdiChildView;
+class KMdiChildArea;
+class KMdiChildView;
 
 //==============================================================================
 /**
   * @short Internal class, only used on Win32.
   * This class provides a label widget that can process mouse click events.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiWin32IconButton : public QLabel
+class DLL_IMP_EXP_KMDICLASS KMdiWin32IconButton : public QLabel
 {
    Q_OBJECT
 public:
-   QextMdiWin32IconButton( QWidget* parent, const char* name = 0);
+   KMdiWin32IconButton( QWidget* parent, const char* name = 0);
    virtual void mousePressEvent( QMouseEvent*);
 
 signals:
@@ -67,13 +68,13 @@ signals:
  * @short a QCustomEvent for move
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmMoveEvent : public QCustomEvent
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrmMoveEvent : public QCustomEvent
 {
 public:
    /**
-   * Constructs a new customer event of type QEvent::User + QextMdi::EV_DragMove
+   * Constructs a new customer event of type QEvent::User + KMdi::EV_DragMove
    */
-   QextMdiChildFrmMoveEvent( QMoveEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(QextMdi::EV_Move)), e) {};
+   KMdiChildFrmMoveEvent( QMoveEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_Move)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -81,13 +82,13 @@ public:
  * @short a QCustomEvent for begin of dragging
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmDragBeginEvent : public QCustomEvent
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragBeginEvent : public QCustomEvent
 {
 public:
    /**
-   * Constructs a new customer event of type QEvent::User + QextMdi::EV_DragBegin
+   * Constructs a new customer event of type QEvent::User + KMdi::EV_DragBegin
    */
-   QextMdiChildFrmDragBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(QextMdi::EV_DragBegin)), e) {};
+   KMdiChildFrmDragBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_DragBegin)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -95,13 +96,13 @@ public:
  * @short a QCustomEvent for end of dragging
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmDragEndEvent : public QCustomEvent
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragEndEvent : public QCustomEvent
 {
 public:
    /**
-   * Constructs a new customer event of type QEvent::User + QextMdi::EV_DragEnd
+   * Constructs a new customer event of type QEvent::User + KMdi::EV_DragEnd
    */
-   QextMdiChildFrmDragEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(QextMdi::EV_DragEnd)), e) {};
+   KMdiChildFrmDragEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_DragEnd)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -109,13 +110,13 @@ public:
  * @short a QCustomEvent for begin of resizing
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmResizeBeginEvent : public QCustomEvent
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeBeginEvent : public QCustomEvent
 {
 public:
    /**
-   * Constructs a new customer event of type QEvent::User + QextMdi::EV_ResizeBegin
+   * Constructs a new customer event of type QEvent::User + KMdi::EV_ResizeBegin
    */
-   QextMdiChildFrmResizeBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(QextMdi::EV_ResizeBegin)), e) {};
+   KMdiChildFrmResizeBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_ResizeBegin)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -123,13 +124,13 @@ public:
  * @short a QCustomEvent for end of resizing
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmResizeEndEvent : public QCustomEvent
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeEndEvent : public QCustomEvent
 {
 public:
    /**
-   * Constructs a new customer event of type QEvent::User + QextMdi::EV_ResizeEnd
+   * Constructs a new customer event of type QEvent::User + KMdi::EV_ResizeEnd
    */
-   QextMdiChildFrmResizeEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(QextMdi::EV_ResizeEnd)), e) {};
+   KMdiChildFrmResizeEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_ResizeEnd)), e) {};
 };
 
 //==============================================================================
@@ -138,22 +139,22 @@ public:
   * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
   */
 //------------------------------------------------------------------------------
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
+class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
 {
-   friend class QextMdiChildArea;
-   friend class QextMdiChildFrmCaption;
+   friend class KMdiChildArea;
+   friend class KMdiChildFrmCaption;
    Q_OBJECT
 
 // attributes  
 public:
    enum MdiWindowState { Normal,Maximized,Minimized };
                            //positions same in h and cpp for fast order check
-   QextMdiChildView*       m_pClient;
+   KMdiChildView*       m_pClient;
 
 protected:
-   QextMdiChildArea*       m_pManager;
-   QextMdiChildFrmCaption* m_pCaption;
-   QextMdiWin32IconButton* m_pWinIcon;
+   KMdiChildArea*       m_pManager;
+   KMdiChildFrmCaption* m_pCaption;
+   KMdiWin32IconButton* m_pWinIcon;
    QToolButton*            m_pUnixIcon;
    QToolButton*            m_pMinimize;
    QToolButton*            m_pMaximize;
@@ -187,20 +188,20 @@ protected:
 // methods
 public:
    /**
-   * Creates a new QextMdiChildFrm class.<br>
+   * Creates a new KMdiChildFrm class.<br>
    */
-   QextMdiChildFrm(QextMdiChildArea *parent);
+   KMdiChildFrm(KMdiChildArea *parent);
    /**
-   * Delicato : destroys this QextMdiChildFrm
+   * Delicato : destroys this KMdiChildFrm
    * If a child is still here managed (no recreation was made) it is destroyed too.
    */
-   ~QextMdiChildFrm();
+   ~KMdiChildFrm();
    /**
-   * Reparents the widget w to this QextMdiChildFrm (if this is not already done)
+   * Reparents the widget w to this KMdiChildFrm (if this is not already done)
    * Installs an event filter to catch focus events.
    * Resizes this mdi child in a way that the child fits perfectly in.
    */
-   void setClient(QextMdiChildView *w, bool bAutomaticResize = FALSE);
+   void setClient(KMdiChildView *w, bool bAutomaticResize = FALSE);
    /**
    * Reparents the client widget to 0 (desktop), moves with an offset from the original position
    * Removes the event filter.
@@ -237,7 +238,7 @@ public:
    */
    inline MdiWindowState state(){ return m_state; };
    /**
-   * Returns the inner client area of the parent of this (which is QextMdiChildArea).
+   * Returns the inner client area of the parent of this (which is KMdiChildArea).
    */
    QRect mdiAreaContentsRect() const;
    /**
@@ -295,12 +296,12 @@ public slots:
 protected:
    /** Reimplemented from its base class.
    * Resizes the captionbar, relayouts the position of the system buttons,
-   * and calls resize for its embedded client @ref QextMdiChildView with the proper size 
+   * and calls resize for its embedded client @ref KMdiChildView with the proper size 
    */
    virtual void resizeEvent(QResizeEvent *);
    /** Reimplemented from its base class.
    * Detects if the mouse is on the edge of window and what resize cursor must be set.
-   * Calls QextMdiChildFrm::resizeWindow if it is in m_bResizing. 
+   * Calls KMdiChildFrm::resizeWindow if it is in m_bResizing. 
    */
    virtual void mouseMoveEvent(QMouseEvent *e);
    /** Reimplemented from its base class.
@@ -314,7 +315,7 @@ protected:
    virtual void mouseReleaseEvent(QMouseEvent *);
    /** Reimplemented from its base class.
    * give its child view the chance to notify a childframe move... that's why it sends
-   * a @ref QextMdiChildMovedEvent to the embedded @ref QextMdiChildView . 
+   * a @ref KMdiChildMovedEvent to the embedded @ref KMdiChildView . 
    */
    virtual void moveEvent(QMoveEvent* me);
    /** 
@@ -328,7 +329,7 @@ protected:
    */
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
    /** Calculates the new geometry from the new mouse position given as parameters
-   * and calls QextMdiChildFrm::setGeometry 
+   * and calls KMdiChildFrm::setGeometry 
    */
    void resizeWindow(int resizeCorner, int x, int y);
    /** 
@@ -376,18 +377,18 @@ protected slots:
 
 protected:
    /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
-   * Install the event filter for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter )
+   * Install the event filter for all direct child widgets of this. (See @ref KMdiChildFrm::eventFilter )
    */
    void linkChildren( QDict<FocusPolicy>* pFocPolDict);
    /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
-   * Remove all event filters for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter )
+   * Remove all event filters for all direct child widgets of this. (See @ref KMdiChildFrm::eventFilter )
    */
    QDict<QWidget::FocusPolicy>* unlinkChildren();
    /** Calculates the corner id for the resize cursor. The return value can be tested for:
-   * QEXTMDI_RESIZE_LEFT, QEXTMDI_RESIZE_RIGHT, QEXTMDI_RESIZE_TOP, QEXTMDI_RESIZE_BOTTOM
+   * KMDI_RESIZE_LEFT, KMDI_RESIZE_RIGHT, KMDI_RESIZE_TOP, KMDI_RESIZE_BOTTOM
    * or an OR'd variant of them for the corners.
    */
    int getResizeCorner(int ax,int ay);
 };
 
-#endif //_QEXTMDICHILDFRM_H_
+#endif //_KMDICHILDFRM_H_

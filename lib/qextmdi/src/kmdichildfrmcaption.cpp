@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildfrmcaption.cpp
+//    filename             : kmdichildfrmcaption.cpp
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2003 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -28,23 +29,23 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
-#include "qextmdidefines.h"
-#include "qextmdichildfrmcaption.h"
-#include "qextmdichildfrm.h"
-#include "qextmdichildarea.h"
-#include "qextmdimainfrm.h"
+#include "kmdidefines.h"
+#include "kmdichildfrmcaption.h"
+#include "kmdichildfrm.h"
+#include "kmdichildarea.h"
+#include "kmdimainfrm.h"
 #include <iostream>
 //////////////////////////////////////////////////////////////////////////////
-// Class   : QextMdiChildFrmCaption
+// Class   : KMdiChildFrmCaption
 // Purpose : An MDI label that draws the title
 //
 //
 //////////////////////////////////////////////////////////////////////////////
 
-//============== QextMdiChildFrmCaption =============//
+//============== KMdiChildFrmCaption =============//
 
-QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
-:QWidget(parent, "qextmdi_childfrmcaption")
+KMdiChildFrmCaption::KMdiChildFrmCaption(KMdiChildFrm *parent)
+:QWidget(parent, "kmdi_childfrmcaption")
 {
    m_szCaption    = tr("Unnamed");
    m_bActive      = FALSE;
@@ -54,19 +55,19 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
    m_bChildInDrag = false;
 }
 
-//============== ~QextMdiChildFrmCaption =============//
+//============== ~KMdiChildFrmCaption =============//
 
-QextMdiChildFrmCaption::~QextMdiChildFrmCaption()
+KMdiChildFrmCaption::~KMdiChildFrmCaption()
 {
 }
 
 //============= mousePressEvent ==============//
 
-void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
+void KMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
       setMouseTracking(FALSE);
-      if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look) {
+      if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look) {
          QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
       }
       m_pParent->m_bDragging = TRUE;
@@ -79,17 +80,17 @@ void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 
 //============= mouseReleaseEvent ============//
 
-void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
+void KMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
-      if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
+      if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look)
          QApplication::restoreOverrideCursor();
       releaseMouse();
       if(m_pParent->m_bDragging) {
          m_pParent->m_bDragging = FALSE;
          if (m_bChildInDrag) {
             //notify child view
-            QextMdiChildFrmDragEndEvent ue(e);
+            KMdiChildFrmDragEndEvent ue(e);
             if( m_pParent->m_pClient != 0L) {
                QApplication::sendEvent( m_pParent->m_pClient, &ue);
             }
@@ -100,7 +101,7 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
 }
 
 //============== mouseMoveEvent =============//
-void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
+void KMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 {
    if ( !m_pParent->m_bDragging ) {
       return;
@@ -108,7 +109,7 @@ void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 
    if (!m_bChildInDrag) {
       //notify child view
-      QextMdiChildFrmDragBeginEvent ue(e);
+      KMdiChildFrmDragBeginEvent ue(e);
       if( m_pParent->m_pClient != 0L) {
          QApplication::sendEvent( m_pParent->m_pClient, &ue);
       }
@@ -136,7 +137,7 @@ void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 
 //=============== setActive ===============//
 
-void QextMdiChildFrmCaption::setActive(bool bActive)
+void KMdiChildFrmCaption::setActive(bool bActive)
 {
    if( m_bActive == bActive)
       return;
@@ -155,7 +156,7 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
 
 //=============== setCaption ===============//
 
-void QextMdiChildFrmCaption::setCaption(const QString& text)
+void KMdiChildFrmCaption::setCaption(const QString& text)
 {
    m_szCaption = text;
    repaint(FALSE);
@@ -163,16 +164,16 @@ void QextMdiChildFrmCaption::setCaption(const QString& text)
 
 //============== heightHint ===============//
 
-int QextMdiChildFrmCaption::heightHint()
+int KMdiChildFrmCaption::heightHint()
 {
    int hght=m_pParent->m_pManager->m_captionFontLineSpacing+3;
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::Win95Look) {
       if(hght<18)hght=18;
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDE1Look) {
       if(hght<20)hght=20;
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook) {
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDELook) {
       if(hght<16)hght=16;
    }
    else {   // kde2laptop look
@@ -184,7 +185,7 @@ int QextMdiChildFrmCaption::heightHint()
 
 //=============== paintEvent ==============//
 
-void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
+void KMdiChildFrmCaption::paintEvent(QPaintEvent *)
 {
    QPainter p(this);
    QRect r=rect();
@@ -197,11 +198,11 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
       p.setPen(m_pParent->m_pManager->m_captionInactiveForeColor);
    }
    //Shift the text after the icon
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look)
+   if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::Win95Look)
       r.setLeft(r.left()+m_pParent->icon()->width()+3);
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look)
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDE1Look)
       r.setLeft(r.left()+22);
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook)
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDELook)
       r.setLeft(r.left()+m_pParent->icon()->width()+3);
    else  // kde2laptop look
       r.setLeft(r.left()+30);
@@ -214,7 +215,7 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
 
 //=============== abbreviateText ===============//
 
-QString QextMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
+QString KMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
 {
    QFontMetrics fm = fontMetrics();
    int actualWidth = fm.width( origStr);
@@ -252,23 +253,23 @@ QString QextMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
 
 //============= mouseDoubleClickEvent ===========//
 
-void QextMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
+void KMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
 {
    m_pParent->maximizePressed();
 }
 
 //============= slot_moveViaSystemMenu ===========//
 
-void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
+void KMdiChildFrmCaption::slot_moveViaSystemMenu()
 {
    setMouseTracking(TRUE);
    grabMouse();
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
+   if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look)
       QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
    m_pParent->m_bDragging = TRUE;
    m_offset = mapFromGlobal( QCursor::pos());
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#include "qextmdichildfrmcaption.moc"
+#include "kmdichildfrmcaption.moc"
 #endif

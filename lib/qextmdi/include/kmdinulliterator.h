@@ -1,17 +1,18 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdilistiterator.h
+//    filename             : kmdinulliterator.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 02/2000       by Massimo Morin
 //    changes              : 02/2000       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Massimo Morin (mmorin@schedsys.com)
+//    copyright            : (C) 1999-2003 by Massimo Morin (mmorin@schedsys.com)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -23,35 +24,24 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _QEXTMDILISTITERATOR_H_
-#define _QEXTMDILISTITERATOR_H_
+#ifndef _KMDINULLITERATOR_H_
+#define _KMDINULLITERATOR_H_
 
-#include <qptrlist.h>
+#include "kmdiiterator.h"
 
 template <class Item>
-class QextMdiListIterator : public QextMdiIterator<Item*> {
+class KMdiNullIterator : public KMdiIterator<Item> {
 public:
-   QextMdiListIterator(QPtrList<Item>& list) {
-      m_iterator = new QPtrListIterator<Item>(list);
+   KMdiNullIterator() {};
+   virtual void first() {}
+   virtual void last() {}
+   virtual void next() {}
+   virtual void prev() {}
+   virtual bool isDone() const { return TRUE; }
+   virtual Item currentItem() const {
+   /* should really never go inside here */
+   return 0;
    }
-
-   virtual void first() {
-      m_iterator->toFirst();
-   }
-   virtual void last() {
-      m_iterator->toLast();
-   }
-   virtual void next()  { ++(*m_iterator); }
-   virtual void prev()  { --(*m_iterator); }
-   virtual bool isDone() const { return m_iterator->current() == NULL; }
-   virtual Item* currentItem() const { return m_iterator->current(); }
-
-   virtual ~QextMdiListIterator() {
-      delete m_iterator;
-   }
-  
-private:
-   QPtrListIterator<Item> *m_iterator;
 };
 
-#endif // _QEXTMDILISTITERATOR_H_
+#endif // _KMDINULLITERATOR_H_

@@ -1,18 +1,19 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmditaskbar.h
+//    filename             : kmditaskbar.h
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Falk Brettschneider
+//    copyright            : (C) 1999-2003 by Falk Brettschneider
 //                                         and
 //                                         Szymon Stefanek (stefanek@tin.it)
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -24,8 +25,8 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _QEXTMDITASKBAR_H_
-#define _QEXTMDITASKBAR_H_
+#ifndef _KMDITASKBAR_H_
+#define _KMDITASKBAR_H_
 
 #ifdef NO_KDE
 #include "dummyktoolbar.h"
@@ -37,11 +38,11 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 
-#include "qextmdidefines.h"
+#include "kmdidefines.h"
 
-class QextMdiMainFrm;
-class QextMdiChildView;
-class QextMdiTaskBar;
+class KMdiMainFrm;
+class KMdiChildView;
+class KMdiTaskBar;
 
 /**
   * @short Internal class.
@@ -49,7 +50,7 @@ class QextMdiTaskBar;
   * It's a special kind of QPushButton catching mouse clicks.
   * And you have the ability to abbreviate the text that it fits in the button.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBarButton : public QPushButton
+class DLL_IMP_EXP_KMDICLASS KMdiTaskBarButton : public QPushButton
 {
    Q_OBJECT
 // methods
@@ -57,11 +58,11 @@ public:
    /** 
    * Constructor (sets to toggle button, adds a tooltip (caption) and sets to NoFocus 
    */
-   QextMdiTaskBarButton( QextMdiTaskBar *pTaskBar, QextMdiChildView *win_ptr);
+   KMdiTaskBarButton( KMdiTaskBar *pTaskBar, KMdiChildView *win_ptr);
    /** 
    * Destructor 
    */
-   ~QextMdiTaskBarButton();
+   ~KMdiTaskBarButton();
    /** 
    * text() returns the possibly abbreviated text including the dots in it. But actualText() returns the full text. 
    */
@@ -78,17 +79,17 @@ signals:
    /** 
    * Emitted when the button has been clicked. Internally connected to setFocus of the according MDI view. 
    */
-   void clicked(QextMdiChildView*);
+   void clicked(KMdiChildView*);
    /** 
-   * Internally connected with @ref QextMdiMainFrm::activateView 
+   * Internally connected with @ref KMdiMainFrm::activateView 
    */
-   void leftMouseButtonClicked(QextMdiChildView*);
+   void leftMouseButtonClicked(KMdiChildView*);
    /** 
-   * Internally connected with @ref QextMdiMainFrm::taskbarButtonRightClicked 
+   * Internally connected with @ref KMdiMainFrm::taskbarButtonRightClicked 
    */
-   void rightMouseButtonClicked(QextMdiChildView*);
+   void rightMouseButtonClicked(KMdiChildView*);
    /** 
-   * Emitted when the button text has changed. Internally connected with @ref QextMdiTaskBar::layoutTaskBar 
+   * Emitted when the button text has changed. Internally connected with @ref KMdiTaskBar::layoutTaskBar 
    */
    void buttonTextChanged(int);
 public slots:
@@ -107,7 +108,7 @@ public:
    /** 
    * The according MDI view 
    */
-   QextMdiChildView *m_pWindow;
+   KMdiChildView *m_pWindow;
 protected:
    /** 
    * Internally we must remember the real text because the button text can be abbreviated. 
@@ -119,41 +120,41 @@ protected:
  * @short Internal class.
  *
  * It's a special kind of QToolBar that acts as taskbar for child views.
- * QextMdiTaskBarButtons can be added or removed dynamically.<br>
+ * KMdiTaskBarButtons can be added or removed dynamically.<br>
  * The button sizes are adjusted dynamically, as well.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBar : public KToolBar
+class DLL_IMP_EXP_KMDICLASS KMdiTaskBar : public KToolBar
 {
    Q_OBJECT
 public:
    /** 
    * Constructor (NoFocus, minimum width = 1, an internal QPtrList of taskbar buttons (autodelete)) 
    */
-   QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
+   KMdiTaskBar(KMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
    /** 
    * Destructor (deletes the taskbar button list) 
    */
-   ~QextMdiTaskBar();
+   ~KMdiTaskBar();
    /** 
-   *Add a new @ref QextMdiTaskBarButton . The width doesn't change.
+   *Add a new @ref KMdiTaskBarButton . The width doesn't change.
    * If there's not enough space, all taskbar buttons will be resized to a new smaller size.
    * Probably button texts must be abbreviated now. 
    */
-   QextMdiTaskBarButton * addWinButton(QextMdiChildView *win_ptr);
+   KMdiTaskBarButton * addWinButton(KMdiChildView *win_ptr);
    /** 
-   * Removes a @ref QextMdiTaskBarButton and deletes it. If the rest of the buttons are smaller
+   * Removes a @ref KMdiTaskBarButton and deletes it. If the rest of the buttons are smaller
    * than they usually are, all those buttons will be resized in a way that the new free size is used as well. 
    */
-   void removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);
+   void removeWinButton(KMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);
    /** 
    * Returns the neighbor taskbar button of the taskbar button of the MDI view given by parameter
    * bRight specifies the side, of course left is used if bRight is false. 
    */
-   QextMdiTaskBarButton * getNextWindowButton(bool bRight,QextMdiChildView *win_ptr);
+   KMdiTaskBarButton * getNextWindowButton(bool bRight,KMdiChildView *win_ptr);
    /** 
    * Get the button belonging to the MDI view given as parameter. 
    */
-   QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
+   KMdiTaskBarButton * getButton(KMdiChildView *win_ptr);
    /**
    * Switch it on or off.
    */
@@ -181,21 +182,21 @@ public slots:
    * Pushes the desired taskbar button down (switch on), the old one is released (switched off).
    * Actually it's a radiobutton group behaviour. 
    */
-   void setActiveButton(QextMdiChildView *win_ptr);
+   void setActiveButton(KMdiChildView *win_ptr);
 protected:
    /** 
    * A list of taskbar buttons.
    * Note: Each button stands for one MDI view (toolviews doesn't have got a taskbar button). 
    */
-   QPtrList<QextMdiTaskBarButton>*  m_pButtonList;
+   QPtrList<KMdiTaskBarButton>*  m_pButtonList;
    /**
    * The belonging MDI mainframe (parent widget of this)
    */
-   QextMdiMainFrm*               m_pFrm;
+   KMdiMainFrm*               m_pFrm;
    /** 
    * The MDI view belonging to the currently pressed taskbar button 
    */
-   QextMdiChildView*             m_pCurrentFocusedWindow;
+   KMdiChildView*             m_pCurrentFocusedWindow;
    /** 
    * A stretchable widget used as 'space' at the end of a half filled taskbar 
    */
@@ -204,4 +205,4 @@ protected:
    bool                          m_bSwitchedOn;
 };
 
-#endif //_QEXTMDITASKBAR_H_
+#endif //_KMDITASKBAR_H_

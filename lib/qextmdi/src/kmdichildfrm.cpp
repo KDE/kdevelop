@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
-//    filename             : qextmdichildfrm.cpp
+//    filename             : kmdichildfrm.cpp
 //----------------------------------------------------------------------------
-//    Project              : Qt MDI extension
+//    Project              : KDE MDI extension
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
@@ -10,11 +10,12 @@
 //                                         classes and a Qt-based library
 //                         : 01/2003       by Jens Zurheide to allow switching
 //                                         between views based on timestamps
+//                           2000-2003     maintained by the KDevelop project
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2003 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
-//    email                :  gigafalk@yahoo.com (Falk Brettschneider)
+//    email                :  falkbr@kdevelop.org (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -35,26 +36,26 @@
 
 #include <qnamespace.h>
 
-#include "qextmdidefines.h"
-#include "qextmdichildfrmcaption.h"
-#include "qextmdichildarea.h"
-#include "qextmdichildfrm.h"
-#include "qextmdimainfrm.h"
+#include "kmdidefines.h"
+#include "kmdichildfrmcaption.h"
+#include "kmdichildarea.h"
+#include "kmdichildfrm.h"
+#include "kmdimainfrm.h"
 
 
 //////////////////////////////////////////////////////////////////////////////
-// QextMdiChildFrm
+// KMdiChildFrm
 //////////////////////////////////////////////////////////////////////////////
 
-#define QEXTMDI_NORESIZE 0
-#define QEXTMDI_RESIZE_TOP 1
-#define QEXTMDI_RESIZE_LEFT 2
-#define QEXTMDI_RESIZE_RIGHT 4
-#define QEXTMDI_RESIZE_BOTTOM 8
-#define QEXTMDI_RESIZE_TOPLEFT (1|2)
-#define QEXTMDI_RESIZE_TOPRIGHT (1|4)
-#define QEXTMDI_RESIZE_BOTTOMLEFT (8|2)
-#define QEXTMDI_RESIZE_BOTTOMRIGHT (8|4)
+#define KMDI_NORESIZE 0
+#define KMDI_RESIZE_TOP 1
+#define KMDI_RESIZE_LEFT 2
+#define KMDI_RESIZE_RIGHT 4
+#define KMDI_RESIZE_BOTTOM 8
+#define KMDI_RESIZE_TOPLEFT (1|2)
+#define KMDI_RESIZE_TOPRIGHT (1|4)
+#define KMDI_RESIZE_BOTTOMLEFT (8|2)
+#define KMDI_RESIZE_BOTTOMRIGHT (8|4)
 
 #include "filenew.xpm"
 #include "win_closebutton.xpm"
@@ -79,22 +80,22 @@
 #include "kde2laptop_undockbutton.xpm"
 
 
-QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
+KMdiWin32IconButton::KMdiWin32IconButton( QWidget* parent, const char* name)
   : QLabel( parent, name)
 {
 }
 
 //============ mousePressEvent ============//
 
-void QextMdiWin32IconButton::mousePressEvent( QMouseEvent*)
+void KMdiWin32IconButton::mousePressEvent( QMouseEvent*)
 {
    //emit pressed();
 }
 
-//============ QextMdiChildFrm ============//
+//============ KMdiChildFrm ============//
 
-QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
- : QFrame(parent, "qextmdi_childfrm")
+KMdiChildFrm::KMdiChildFrm(KMdiChildArea *parent)
+ : QFrame(parent, "kmdi_childfrm")
    ,m_pClient(0L)
    ,m_pManager(0L)
    ,m_pCaption(0L)
@@ -106,8 +107,8 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    ,m_pUndock(0L)
    ,m_state(Normal)
    ,m_restoredRect()
-   ,m_iResizeCorner(QEXTMDI_NORESIZE)
-   ,m_iLastCursorCorner(QEXTMDI_NORESIZE)
+   ,m_iResizeCorner(KMDI_NORESIZE)
+   ,m_iLastCursorCorner(KMDI_NORESIZE)
    ,m_bResizing(FALSE)
    ,m_bDragging(FALSE)
    ,m_pIconButtonPixmap(0L)
@@ -122,16 +123,16 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    ,m_oldClientMaxSize()
    ,m_oldLayoutResizeMode(QLayout::Minimum)
 {
-   m_pCaption  = new QextMdiChildFrmCaption(this);
+   m_pCaption  = new KMdiChildFrmCaption(this);
 
    m_pManager  = parent;
 
-   m_pWinIcon  = new QextMdiWin32IconButton(m_pCaption, "qextmdi_iconbutton_icon");
-   m_pUnixIcon = new QToolButton(m_pCaption, "qextmdi_toolbutton_icon");
-   m_pMinimize = new QToolButton(m_pCaption, "qextmdi_toolbutton_min");
-   m_pMaximize = new QToolButton(m_pCaption, "qextmdi_toolbutton_max");
-   m_pClose    = new QToolButton(m_pCaption, "qextmdi_toolbutton_close");
-   m_pUndock   = new QToolButton(m_pCaption, "qextmdi_toolbutton_undock");
+   m_pWinIcon  = new KMdiWin32IconButton(m_pCaption, "kmdi_iconbutton_icon");
+   m_pUnixIcon = new QToolButton(m_pCaption, "kmdi_toolbutton_icon");
+   m_pMinimize = new QToolButton(m_pCaption, "kmdi_toolbutton_min");
+   m_pMaximize = new QToolButton(m_pCaption, "kmdi_toolbutton_max");
+   m_pClose    = new QToolButton(m_pCaption, "kmdi_toolbutton_close");
+   m_pUndock   = new QToolButton(m_pCaption, "kmdi_toolbutton_undock");
 
    QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
    QObject::connect(m_pMaximize,SIGNAL(clicked()),this,SLOT(maximizePressed()));
@@ -153,14 +154,14 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
 
    setMouseTracking(TRUE);
 
-   setMinimumSize(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint());
+   setMinimumSize(KMDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint());
 
    m_pSystemMenu = new QPopupMenu();
 }
 
-//============ ~QextMdiChildFrm ============//
+//============ ~KMdiChildFrm ============//
 
-QextMdiChildFrm::~QextMdiChildFrm()
+KMdiChildFrm::~KMdiChildFrm()
 {
    delete m_pMinButtonPixmap;
    delete m_pMaxButtonPixmap;
@@ -172,7 +173,7 @@ QextMdiChildFrm::~QextMdiChildFrm()
 }
 
 //============ mousePressEvent =============//
-void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
+void KMdiChildFrm::mousePressEvent(QMouseEvent *e)
 {
    if( m_bResizing) {
       if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
@@ -184,10 +185,10 @@ void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
    m_pManager->setTopChild(this,FALSE);
 
    m_iResizeCorner=getResizeCorner(e->pos().x(),e->pos().y());
-   if(m_iResizeCorner != QEXTMDI_NORESIZE) {
+   if(m_iResizeCorner != KMDI_NORESIZE) {
       m_bResizing = TRUE;
       //notify child view
-      QextMdiChildFrmResizeBeginEvent ue(e);
+      KMdiChildFrmResizeBeginEvent ue(e);
       if( m_pClient != 0L) {
          QApplication::sendEvent( m_pClient, &ue);
       }
@@ -196,14 +197,14 @@ void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
 
 //============ mouseReleaseEvent ==============//
 
-void QextMdiChildFrm::mouseReleaseEvent(QMouseEvent *e)
+void KMdiChildFrm::mouseReleaseEvent(QMouseEvent *e)
 {
    if(m_bResizing) {
       if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
 
       m_bResizing = FALSE;
       //notify child view
-      QextMdiChildFrmResizeEndEvent ue(e);
+      KMdiChildFrmResizeEndEvent ue(e);
       if( m_pClient != 0L) {
          QApplication::sendEvent( m_pClient, &ue);
       }
@@ -212,28 +213,28 @@ void QextMdiChildFrm::mouseReleaseEvent(QMouseEvent *e)
 
 //============= setResizeCursor ===============//
 
-void QextMdiChildFrm::setResizeCursor(int resizeCorner)
+void KMdiChildFrm::setResizeCursor(int resizeCorner)
 {
    if(resizeCorner == m_iLastCursorCorner)return; //Don't do it twice
    m_iLastCursorCorner = resizeCorner;
    switch (resizeCorner) {
-      case QEXTMDI_NORESIZE:
+      case KMDI_NORESIZE:
          if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
          break;
-      case QEXTMDI_RESIZE_LEFT:
-      case QEXTMDI_RESIZE_RIGHT:
+      case KMDI_RESIZE_LEFT:
+      case KMDI_RESIZE_RIGHT:
          QApplication::setOverrideCursor(Qt::sizeHorCursor,TRUE);
          break;
-      case QEXTMDI_RESIZE_TOP:
-      case QEXTMDI_RESIZE_BOTTOM:
+      case KMDI_RESIZE_TOP:
+      case KMDI_RESIZE_BOTTOM:
          QApplication::setOverrideCursor(Qt::sizeVerCursor,TRUE);
          break;
-      case QEXTMDI_RESIZE_TOPLEFT:
-      case QEXTMDI_RESIZE_BOTTOMRIGHT:
+      case KMDI_RESIZE_TOPLEFT:
+      case KMDI_RESIZE_BOTTOMRIGHT:
          QApplication::setOverrideCursor(Qt::sizeFDiagCursor,TRUE);
          break;
-      case QEXTMDI_RESIZE_BOTTOMLEFT:
-      case QEXTMDI_RESIZE_TOPRIGHT:
+      case KMDI_RESIZE_BOTTOMLEFT:
+      case KMDI_RESIZE_TOPRIGHT:
          QApplication::setOverrideCursor(Qt::sizeBDiagCursor,TRUE);
          break;
    }
@@ -241,18 +242,18 @@ void QextMdiChildFrm::setResizeCursor(int resizeCorner)
 
 //============= unsetResizeCursor ===============//
 
-void QextMdiChildFrm::unsetResizeCursor()
+void KMdiChildFrm::unsetResizeCursor()
 {
-   if ( !m_bResizing && (m_iResizeCorner != QEXTMDI_NORESIZE) ) {
-      m_iResizeCorner=QEXTMDI_NORESIZE;
-      m_iLastCursorCorner=QEXTMDI_NORESIZE;
+   if ( !m_bResizing && (m_iResizeCorner != KMDI_NORESIZE) ) {
+      m_iResizeCorner=KMDI_NORESIZE;
+      m_iLastCursorCorner=KMDI_NORESIZE;
       if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
    }
 }
 
 //============= mouseMoveEvent ===============//
 
-void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
+void KMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 {
    if(m_state != Normal) return;
    if(!m_pClient) return;
@@ -275,10 +276,10 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 
 //============= moveEvent ===============//
 
-void QextMdiChildFrm::moveEvent(QMoveEvent* me)
+void KMdiChildFrm::moveEvent(QMoveEvent* me)
 {
    // give its child view the chance to notify a childframe move
-   QextMdiChildFrmMoveEvent cfme( me);
+   KMdiChildFrmMoveEvent cfme( me);
    if( m_pClient != 0L) {
       QApplication::sendEvent( m_pClient, &cfme);
    }
@@ -286,12 +287,12 @@ void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 
 //=============== leaveEvent ===============//
 
-void QextMdiChildFrm::leaveEvent(QEvent *)
+void KMdiChildFrm::leaveEvent(QEvent *)
 {
    unsetResizeCursor();
 }
 
-void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
+void KMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 {
    QRect resizeRect(x(),y(),width(),height());
 
@@ -302,12 +303,12 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
    int maxHeight=QWIDGETSIZE_MAX;
    // it could be the client forces the childframe to enlarge its minimum size
    if(m_pClient){
-      minWidth  = m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-      minHeight = m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
-                    m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
-      maxWidth  = m_pClient->maximumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-      maxHeight = m_pClient->maximumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
-                    m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
+      minWidth  = m_pClient->minimumSize().width() + KMDI_CHILDFRM_DOUBLE_BORDER;
+      minHeight = m_pClient->minimumSize().height()+ KMDI_CHILDFRM_DOUBLE_BORDER +
+                    m_pCaption->heightHint() + KMDI_CHILDFRM_SEPARATOR;
+      maxWidth  = m_pClient->maximumSize().width() + KMDI_CHILDFRM_DOUBLE_BORDER;
+      maxHeight = m_pClient->maximumSize().height()+ KMDI_CHILDFRM_DOUBLE_BORDER +
+                    m_pCaption->heightHint() + KMDI_CHILDFRM_SEPARATOR;
    }
    if(minWidth<minimumWidth())minWidth=minimumWidth();
    if(minHeight<minimumHeight())minHeight=minimumHeight();
@@ -318,16 +319,16 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
    
    // manipulate width
    switch (resizeCorner){
-   case QEXTMDI_RESIZE_TOPLEFT:     // no break
-   case QEXTMDI_RESIZE_LEFT:        // no break
-   case QEXTMDI_RESIZE_BOTTOMLEFT:
+   case KMDI_RESIZE_TOPLEFT:     // no break
+   case KMDI_RESIZE_LEFT:        // no break
+   case KMDI_RESIZE_BOTTOMLEFT:
       resizeRect.setLeft(mousePos.x());
       if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth + 1);
       if(resizeRect.width() > maxWidth)resizeRect.setLeft(resizeRect.right() - maxWidth + 1);
       break;
-   case QEXTMDI_RESIZE_TOPRIGHT:    // no break
-   case QEXTMDI_RESIZE_RIGHT:       // no break
-   case QEXTMDI_RESIZE_BOTTOMRIGHT:
+   case KMDI_RESIZE_TOPRIGHT:    // no break
+   case KMDI_RESIZE_RIGHT:       // no break
+   case KMDI_RESIZE_BOTTOMRIGHT:
       resizeRect.setRight(mousePos.x());
       if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth - 1);
       if(resizeRect.width() > maxWidth)resizeRect.setRight(resizeRect.left() + maxWidth - 1);
@@ -338,16 +339,16 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
    }
    // manipulate height
    switch (resizeCorner){
-   case QEXTMDI_RESIZE_TOPLEFT:  // no break
-   case QEXTMDI_RESIZE_TOP:      // no break
-   case QEXTMDI_RESIZE_TOPRIGHT:
+   case KMDI_RESIZE_TOPLEFT:  // no break
+   case KMDI_RESIZE_TOP:      // no break
+   case KMDI_RESIZE_TOPRIGHT:
       resizeRect.setTop(mousePos.y());
       if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight + 1);
       if(resizeRect.height() > maxHeight)resizeRect.setTop(resizeRect.bottom() - maxHeight + 1);
       break;
-   case QEXTMDI_RESIZE_BOTTOMLEFT:  // no break
-   case QEXTMDI_RESIZE_BOTTOM:      // no break
-   case QEXTMDI_RESIZE_BOTTOMRIGHT:
+   case KMDI_RESIZE_BOTTOMLEFT:  // no break
+   case KMDI_RESIZE_BOTTOM:      // no break
+   case KMDI_RESIZE_BOTTOMRIGHT:
       resizeRect.setBottom(mousePos.y());
       if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight - 1);
       if(resizeRect.height() > maxHeight)resizeRect.setBottom(resizeRect.top() + maxHeight - 1);
@@ -367,23 +368,23 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 
 //================= getResizeCorner =============//
 
-int QextMdiChildFrm::getResizeCorner(int ax,int ay)
+int KMdiChildFrm::getResizeCorner(int ax,int ay)
 {
-   int ret = QEXTMDI_NORESIZE;
+   int ret = KMDI_NORESIZE;
    if(m_pClient->minimumWidth() != m_pClient->maximumWidth()) {
-   if((ax>0)&&(ax<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_LEFT;
-     if((ax<width())&&(ax>(width()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_RIGHT;
+   if((ax>0)&&(ax<(KMDI_CHILDFRM_BORDER+2))) ret |= KMDI_RESIZE_LEFT;
+     if((ax<width())&&(ax>(width()-(KMDI_CHILDFRM_BORDER+2)))) ret |= KMDI_RESIZE_RIGHT;
    }
   if(m_pClient->minimumHeight() != m_pClient->maximumHeight()) {
-   if((ay>0)&&(ay<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_TOP;
-     if((ay<(height()))&&(ay>(height()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_BOTTOM;
+   if((ay>0)&&(ay<(KMDI_CHILDFRM_BORDER+2))) ret |= KMDI_RESIZE_TOP;
+     if((ay<(height()))&&(ay>(height()-(KMDI_CHILDFRM_BORDER+2)))) ret |= KMDI_RESIZE_BOTTOM;
    }
    return ret;
 }
 
 //============= maximizePressed ============//
 
-void QextMdiChildFrm::maximizePressed()
+void KMdiChildFrm::maximizePressed()
 {
    switch(m_state){
       case Maximized:
@@ -398,7 +399,7 @@ void QextMdiChildFrm::maximizePressed()
    }
 }
 
-void QextMdiChildFrm::restorePressed()
+void KMdiChildFrm::restorePressed()
 {
    if( m_state == Normal)
       return;
@@ -409,7 +410,7 @@ void QextMdiChildFrm::restorePressed()
 
 //============= minimizePressed ============//
 
-void QextMdiChildFrm::minimizePressed()
+void KMdiChildFrm::minimizePressed()
 {
    switch(m_state){
       case Minimized: setState(Normal);    break;
@@ -424,7 +425,7 @@ void QextMdiChildFrm::minimizePressed()
 
 //============= closePressed ============//
 
-void QextMdiChildFrm::closePressed()
+void KMdiChildFrm::closePressed()
 {
    if(m_pClient)
       m_pClient->close();
@@ -432,7 +433,7 @@ void QextMdiChildFrm::closePressed()
 
 //============= undockPressed ============//
 
-void QextMdiChildFrm::undockPressed()
+void KMdiChildFrm::undockPressed()
 {
    if(m_pClient) {
       if( m_state == Minimized)
@@ -443,7 +444,7 @@ void QextMdiChildFrm::undockPressed()
 
 //============ setState =================//
 
-void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
+void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
 {
    if(m_state==Normal){ //save the current rect
       m_restoredRect=QRect(x(),y(),width(),height());
@@ -497,8 +498,8 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
             m_pMinimize->setPixmap( *m_pMinButtonPixmap);
             QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
             QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-            int nFrameWidth = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-            int nFrameHeight = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + 
+            int nFrameWidth = KMDI_CHILDFRM_DOUBLE_BORDER;
+            int nFrameHeight = KMDI_CHILDFRM_DOUBLE_BORDER + KMDI_CHILDFRM_SEPARATOR + 
                                m_pCaption->heightHint();
             setGeometry(-m_pClient->x(), -m_pClient->y(),
                         m_pManager->width() + nFrameWidth,
@@ -512,8 +513,8 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
             // client min / max size / layout behaviour don't change
             setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
             m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-            int nFrameWidth = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-            int nFrameHeight = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR +
+            int nFrameWidth = KMDI_CHILDFRM_DOUBLE_BORDER;
+            int nFrameHeight = KMDI_CHILDFRM_DOUBLE_BORDER + KMDI_CHILDFRM_SEPARATOR +
                                m_pCaption->heightHint();
             QRect maximizedFrmRect(-m_pClient->x(), -m_pClient->y(),
                                    m_pManager->width() + nFrameWidth,
@@ -571,8 +572,8 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    break;
    }
 
-   QextMdiChildFrm*     pTopFrame = m_pManager->topChild();
-   QextMdiChildView*    pTopChild = 0L;
+   KMdiChildFrm*     pTopFrame = m_pManager->topChild();
+   KMdiChildView*    pTopChild = 0L;
    if (pTopFrame != 0L) {
       pTopChild = pTopFrame->m_pClient;
    }
@@ -589,28 +590,28 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
 
 //============== restoreGeometry ================//
 
-QRect QextMdiChildFrm::restoreGeometry() const
+QRect KMdiChildFrm::restoreGeometry() const
 {
    return m_restoredRect;
 }
 
 //============== setRestoreGeometry ================//
 
-void QextMdiChildFrm::setRestoreGeometry(const QRect& newRestGeo)
+void KMdiChildFrm::setRestoreGeometry(const QRect& newRestGeo)
 {
    m_restoredRect = newRestGeo;
 }
 
 //============ setCaption ===============//
 
-void QextMdiChildFrm::setCaption(const QString& text)
+void KMdiChildFrm::setCaption(const QString& text)
 {
    m_pCaption->setCaption(text);
 }
 
 //============ enableClose ==============//
 
-void QextMdiChildFrm::enableClose(bool bEnable)
+void KMdiChildFrm::enableClose(bool bEnable)
 {
    m_pClose->setEnabled(bEnable);
    m_pClose->repaint(FALSE);
@@ -618,7 +619,7 @@ void QextMdiChildFrm::enableClose(bool bEnable)
 
 //============ setIcon ==================//
 
-void QextMdiChildFrm::setIcon(const QPixmap& pxm)
+void KMdiChildFrm::setIcon(const QPixmap& pxm)
 {
    *m_pIconButtonPixmap = pxm;
    m_pWinIcon->setPixmap( pxm);
@@ -627,13 +628,13 @@ void QextMdiChildFrm::setIcon(const QPixmap& pxm)
 
 //============ icon =================//
 
-QPixmap* QextMdiChildFrm::icon()
+QPixmap* KMdiChildFrm::icon()
 {
    return m_pIconButtonPixmap;
 }
 
 //============ setClient ============//
-void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
+void KMdiChildFrm::setClient(KMdiChildView *w, bool bAutomaticResize)
 {
    m_pClient=w;
 
@@ -641,17 +642,17 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
       setIcon( *(w->icon()));
 
    //resize to match the client
-   int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
+   int clientYPos=m_pCaption->heightHint()+KMDI_CHILDFRM_SEPARATOR+KMDI_CHILDFRM_BORDER;
    if (bAutomaticResize || w->size().isEmpty() || (w->size() == QSize(1,1))) {
       if (m_pManager->topChild()) {
          resize(m_pManager->topChild()->size());
       }
       else {
-         resize(m_pManager->m_defaultChildFrmSize.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+         resize(m_pManager->m_defaultChildFrmSize.width()+KMDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+KMDI_CHILDFRM_BORDER+clientYPos);
       }
    }
    else {
-      resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+      resize(w->width()+KMDI_CHILDFRM_DOUBLE_BORDER,w->height()+KMDI_CHILDFRM_BORDER+clientYPos);
    }
 
    // memorize the focuses in a dictionary because they will get lost during reparenting
@@ -680,7 +681,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
    //Reparent if needed
    if(w->parent()!=this){
       //reparent to this widget , no flags , point , show it
-      QPoint pnt2(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
+      QPoint pnt2(KMDI_CHILDFRM_BORDER,clientYPos);
       QSize mincs = w->minimumSize();
       QSize maxcs = w->maximumSize();
       w->setMinimumSize(0,0);
@@ -691,24 +692,24 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
 
       w->setMinimumSize(mincs.width(),mincs.height());
       w->setMaximumSize(maxcs.width(),maxcs.height());
-   } else w->move(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
+   } else w->move(KMDI_CHILDFRM_BORDER,clientYPos);
 
    linkChildren( pFocPolDict);
 
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
 
    if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
-      setMinimumWidth(m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+      setMinimumWidth(m_pClient->minimumSize().width() + KMDI_CHILDFRM_DOUBLE_BORDER);
    }
    if( m_pClient->minimumSize().height() > m_pManager->m_defaultChildFrmSize.height()) {
-      setMinimumHeight( m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
-                        m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR);
+      setMinimumHeight( m_pClient->minimumSize().height()+ KMDI_CHILDFRM_DOUBLE_BORDER +
+                        m_pCaption->heightHint() + KMDI_CHILDFRM_SEPARATOR);
    }
 }
 
 //============ unsetClient ============//
 
-void QextMdiChildFrm::unsetClient( QPoint positionOffset)
+void KMdiChildFrm::unsetClient( QPoint positionOffset)
 {
    if(!m_pClient)return;
    
@@ -777,7 +778,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 }
 
 //============== linkChildren =============//
-void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
+void KMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
 {
    // reset the focus policies for all widgets in the view (take them from the dictionary)
    QObjectList *list = m_pClient->queryList( "QWidget" );
@@ -820,7 +821,7 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
 
 //============== unlinkChildren =============//
 
-QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
+QDict<QWidget::FocusPolicy>* KMdiChildFrm::unlinkChildren()
 {
    // memorize the focuses in a dictionary because they will get lost during reparenting
    QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
@@ -867,16 +868,16 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
 
 //============== resizeEvent ===============//
 
-void QextMdiChildFrm::resizeEvent(QResizeEvent *)
+void KMdiChildFrm::resizeEvent(QResizeEvent *)
 {
    doResize(); // an extra method because it can also called directly
 }
 
-void QextMdiChildFrm::doResize()
+void KMdiChildFrm::doResize()
 {
    //Resize the caption
    int captionHeight = m_pCaption->heightHint();
-   int captionWidth = width() - QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+   int captionWidth = width() - KMDI_CHILDFRM_DOUBLE_BORDER;
    int buttonHeight = m_pClose->pixmap()->height();
    int buttonWidth  = m_pClose->pixmap()->width();
    int heightOffset = captionHeight/2 - buttonHeight/2;
@@ -886,13 +887,13 @@ void QextMdiChildFrm::doResize()
    int frmIconWidth  = m_pWinIcon->pixmap()->width();
    int frmIconOffset = 1;
    QWidget* pIconWidget = m_pWinIcon;
-   m_pCaption->setGeometry( QEXTMDI_MDI_CHILDFRM_BORDER, QEXTMDI_MDI_CHILDFRM_BORDER, captionWidth, captionHeight);
+   m_pCaption->setGeometry( KMDI_CHILDFRM_BORDER, KMDI_CHILDFRM_BORDER, captionWidth, captionHeight);
    //The buttons are caption children
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::Win95Look) {
       rightOffset2 += 2;
       m_pUnixIcon->hide();
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDE1Look) {
       buttonWidth  += 4;
       buttonHeight += 4;
       heightOffset -= 2;
@@ -904,13 +905,13 @@ void QextMdiChildFrm::doResize()
       frmIconOffset = 0;
       pIconWidget = m_pUnixIcon;
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook) {
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDELook) {
       buttonWidth  += 3;
       buttonHeight += 3;
       heightOffset -= 1;
       m_pUnixIcon->hide();
    }
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::KDELaptopLook) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::KDELaptopLook) {
       pIconWidget->setGeometry(frmIconOffset,captionHeight/2-frmIconHeight/2,frmIconWidth,frmIconHeight);
       m_pClose->setGeometry((captionWidth-buttonWidth)-rightOffset1,heightOffset,buttonWidth,buttonHeight);
       m_pMaximize->setGeometry((captionWidth-(buttonWidth*2))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
@@ -930,10 +931,10 @@ void QextMdiChildFrm::doResize()
    //Resize the client
    if (m_pClient) {
       QSize newClientSize(captionWidth,
-      height()-(QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR));
+      height()-(KMDI_CHILDFRM_DOUBLE_BORDER+captionHeight+KMDI_CHILDFRM_SEPARATOR));
       if (newClientSize != m_pClient->size()) {
-         m_pClient->setGeometry(QEXTMDI_MDI_CHILDFRM_BORDER,
-                                m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER,
+         m_pClient->setGeometry(KMDI_CHILDFRM_BORDER,
+                                m_pCaption->heightHint()+KMDI_CHILDFRM_SEPARATOR+KMDI_CHILDFRM_BORDER,
                                 newClientSize.width(), newClientSize.height());
       }
    }
@@ -941,7 +942,7 @@ void QextMdiChildFrm::doResize()
 
 //============= eventFilter ===============//
 
-bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
+bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
 {
    switch (e->type()) {
    case QEvent::Enter:
@@ -1000,8 +1001,8 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          if ( ( (QWidget*)obj == m_pClient ) && (m_state == Normal) ) {
             QResizeEvent* re = (QResizeEvent*)e;
             int captionHeight = m_pCaption->heightHint();
-            QSize newChildFrmSize( re->size().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-               re->size().height() + captionHeight + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER );
+            QSize newChildFrmSize( re->size().width() + KMDI_CHILDFRM_DOUBLE_BORDER,
+               re->size().height() + captionHeight + KMDI_CHILDFRM_SEPARATOR + KMDI_CHILDFRM_DOUBLE_BORDER );
             if( newChildFrmSize != size())
                resize( newChildFrmSize );
          }
@@ -1058,7 +1059,7 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
 
 //============= raiseAndActivate ===============//
 
-void QextMdiChildFrm::raiseAndActivate()
+void KMdiChildFrm::raiseAndActivate()
 {
    //qDebug("ChildFrm::raiseAndActivate");
    m_pCaption->setActive(TRUE);
@@ -1067,7 +1068,7 @@ void QextMdiChildFrm::raiseAndActivate()
 
 //============= setMinimumSize ===============//
 
-void QextMdiChildFrm::setMinimumSize ( int minw, int minh )
+void KMdiChildFrm::setMinimumSize ( int minw, int minh )
 {
    QWidget::setMinimumSize(minw, minh);
    if (m_state == Maximized) {
@@ -1077,14 +1078,14 @@ void QextMdiChildFrm::setMinimumSize ( int minw, int minh )
 
 //============= systemMenu ===============//
 
-QPopupMenu* QextMdiChildFrm::systemMenu()
+QPopupMenu* KMdiChildFrm::systemMenu()
 {
    if( m_pSystemMenu == 0)
       return 0;
 
    m_pSystemMenu->clear();
 
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look) {
       m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
       m_pSystemMenu->insertItem(tr("&Move"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
       m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(slot_resizeViaSystemMenu()));
@@ -1123,27 +1124,27 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
 }
 
 /** Shows a system menu for child frame windows. */
-void QextMdiChildFrm::showSystemMenu()
+void KMdiChildFrm::showSystemMenu()
 {
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look) {
       m_pUnixIcon->setDown( FALSE);
    }
    QPoint popupmenuPosition;
    //qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
    QRect iconGeom;
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look)
+   if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::Win95Look)
       iconGeom = m_pWinIcon->geometry();
    else
       iconGeom = m_pUnixIcon->geometry();
    popupmenuPosition = QPoint( iconGeom.x(),
-                               iconGeom.y() + captionHeight() + QEXTMDI_MDI_CHILDFRM_BORDER );
+                               iconGeom.y() + captionHeight() + KMDI_CHILDFRM_BORDER );
    systemMenu()->popup( mapToGlobal( popupmenuPosition));
 }
 
-void QextMdiChildFrm::switchToMinimizeLayout()
+void KMdiChildFrm::switchToMinimizeLayout()
 {
-   setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
-   setFixedHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
+   setMinimumWidth(KMDI_CHILDFRM_MIN_WIDTH);
+   setFixedHeight(m_pCaption->height()+KMDI_CHILDFRM_DOUBLE_BORDER);
 
    m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
 
@@ -1159,15 +1160,15 @@ void QextMdiChildFrm::switchToMinimizeLayout()
    m_pManager->layoutMinimizedChildren();
 }
 
-void QextMdiChildFrm::slot_resizeViaSystemMenu()
+void KMdiChildFrm::slot_resizeViaSystemMenu()
 {
    grabMouse();
    m_bResizing = TRUE;
-   m_iResizeCorner = QEXTMDI_RESIZE_BOTTOMLEFT;
+   m_iResizeCorner = KMDI_RESIZE_BOTTOMLEFT;
    setResizeCursor( m_iResizeCorner);
 }
 
-void QextMdiChildFrm::redecorateButtons()
+void KMdiChildFrm::redecorateButtons()
 {
    if (m_pMinButtonPixmap)
       delete m_pMinButtonPixmap;
@@ -1180,21 +1181,21 @@ void QextMdiChildFrm::redecorateButtons()
    if (m_pUndockButtonPixmap)
       delete m_pUndockButtonPixmap;
 
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::Win95Look) {
       m_pMinButtonPixmap = new QPixmap( win_minbutton);
       m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
       m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
       m_pCloseButtonPixmap = new QPixmap( win_closebutton);
       m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDE1Look) {
       m_pMinButtonPixmap = new QPixmap( kde_minbutton);
       m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
       m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
       m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
       m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
    }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDELook) {
+   else if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDELook) {
       m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
       m_pMaxButtonPixmap = new QPixmap( kde2_maxbutton);
       m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
@@ -1210,7 +1211,7 @@ void QextMdiChildFrm::redecorateButtons()
    }
 
    m_pUnixIcon->setAutoRaise(TRUE);
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+   if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDE1Look) {
       m_pMinimize->setAutoRaise(TRUE);
       m_pMaximize->setAutoRaise(TRUE);
       m_pClose->setAutoRaise(TRUE);
@@ -1237,7 +1238,7 @@ void QextMdiChildFrm::redecorateButtons()
    m_pUndock->setPixmap( *m_pUndockButtonPixmap);
 }
 
-QRect QextMdiChildFrm::mdiAreaContentsRect() const
+QRect KMdiChildFrm::mdiAreaContentsRect() const
 {
    QFrame* p = (QFrame*)parentWidget();
    if (p) {
@@ -1250,5 +1251,5 @@ QRect QextMdiChildFrm::mdiAreaContentsRect() const
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#include "qextmdichildfrm.moc"
+#include "kmdichildfrm.moc"
 #endif
