@@ -90,16 +90,11 @@ void FeedbackTab::writeFlags(QStringList *list)
 
 
 FilesAndDirectoriesTab::FilesAndDirectoriesTab( QWidget * parent, const char * name )
-    :QWidget(parent, name), controller(new FlagCheckBoxController(QStringList::split(",","-v"))),
+    :QWidget(parent, name), controller(new FlagCheckBoxController()),
     pathController(new FlagPathEditController())
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
-
-    new FlagCheckBox(this, controller,
-                     "-P", i18n("Use pipes instead of files when assembling."));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addSpacing(10);
 
     new FlagPathEdit(this, ":", pathController,
                      "-Fu", i18n("Unit search path:"));
@@ -110,26 +105,6 @@ FilesAndDirectoriesTab::FilesAndDirectoriesTab( QWidget * parent, const char * n
     new FlagPathEdit(this, ":", pathController,
                      "-Fl", i18n("Library search path:"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addSpacing(10);
-
-    new FlagPathEdit(this, "", pathController,
-                     "-e", i18n("Location of as and ld programs:"));
-    new FlagPathEdit(this, "", pathController,
-                     "-FL", i18n("Dynamic linker executable:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addSpacing(10);
-
-    new FlagPathEdit(this, "", pathController,
-                     "-FU", i18n("Write units in:"));
-    new FlagPathEdit(this, "", pathController,
-                     "-Fe", i18n("Write compiler messages to file:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addSpacing(10);
-
-    new FlagPathEdit(this, "", pathController,
-                     "-Fr", i18n("Compiler messages file:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-
     layout->addStretch();
 }
 
@@ -151,6 +126,58 @@ void FilesAndDirectoriesTab::writeFlags( QStringList * str )
     pathController->writeFlags(str);
 }
 
+FilesAndDirectoriesTab2::FilesAndDirectoriesTab2( QWidget * parent, const char * name )
+    :QWidget(parent, name), controller(new FlagCheckBoxController()),
+    pathController(new FlagPathEditController())
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    layout->setAutoAdd(true);
+
+    new FlagCheckBox(this, controller,
+                     "-P", i18n("Use pipes instead of files when assembling."));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    new FlagPathEdit(this, "", pathController,
+                     "-e", i18n("Location of as and ld programs:"));
+    new FlagPathEdit(this, "", pathController,
+                     "-FL", i18n("Dynamic linker executable:"), KFile::File);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(20);
+
+    new FlagPathEdit(this, "", pathController,
+                     "-FU", i18n("Write units in:"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(20);
+
+    new FlagPathEdit(this, "", pathController,
+                     "-Fr", i18n("Compiler messages file:"), KFile::File);
+    new FlagPathEdit(this, "", pathController,
+                     "-Fe", i18n("Write compiler messages to file:"), KFile::File);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    layout->addStretch();
+}
+
+FilesAndDirectoriesTab2::~FilesAndDirectoriesTab2( )
+{
+    delete controller;
+    delete pathController;
+}
+
+void FilesAndDirectoriesTab2::readFlags( QStringList * str )
+{
+    controller->readFlags(str);
+    pathController->readFlags(str);
+}
+
+void FilesAndDirectoriesTab2::writeFlags( QStringList * str )
+{
+    controller->writeFlags(str);
+    pathController->writeFlags(str);
+}
+
+
 LanguageTab::LanguageTab( QWidget * parent, const char * name )
     : QWidget(parent, name), controller(new FlagCheckBoxController(QStringList::split(",","-v")))
 {
@@ -166,8 +193,6 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
                      "-So", i18n("Borland TP 7.0 compatibility mode."));
     new FlagCheckBox(compat_group, controller,
                      "-Sp", i18n("GNU Pascal compatibility mode."));
-    new FlagCheckBox(compat_group, controller,
-                     "-vr", i18n("Format errors like GCC does."));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
@@ -214,6 +239,94 @@ void LanguageTab::writeFlags( QStringList * str )
 {
     controller->writeFlags(str);
 }
+
+AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
+    : QWidget(parent, name), controller(new FlagCheckBoxController()),
+    asmController(new FlagRadioButtonController)
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+//    layout->setAutoAdd(true);
+
+    QBoxLayout *layout2 = new QHBoxLayout(layout, KDialog::spacingHint());
+
+    QVButtonGroup *info_group = new QVButtonGroup(i18n("Assembler Info"), this);
+    new FlagCheckBox(info_group, controller,
+                     "-a", i18n("Do not delete assembler files."));
+    new FlagCheckBox(info_group, controller,
+                     "-al", i18n("List source."));
+    new FlagCheckBox(info_group, controller,
+                     "-ar", i18n("List register allocation and release info."));
+    new FlagCheckBox(info_group, controller,
+                     "-at", i18n("List temporary allocations and deallocations."));
+    layout2->addWidget(info_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    //layout->addSpacing(10);
+
+    QVButtonGroup *asmkind_group = new QVButtonGroup(i18n("Assembler Reader"), this);
+    QRadioButton *m_defaultkind = new QRadioButton(i18n("Use Default Reader"), asmkind_group);
+    m_defaultkind->setChecked(true);
+    new FlagRadioButton(asmkind_group, asmController,
+                        "-Ratt", i18n("AT&T style assembler"));
+    new FlagRadioButton(asmkind_group, asmController,
+                        "-Rintel", i18n("Intel style assembler"));
+    new FlagRadioButton(asmkind_group, asmController,
+                        "-Rdirect", i18n("Direct assembler"));
+    layout2->addWidget(asmkind_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+
+    QVButtonGroup *asm_group = new QVButtonGroup(i18n("Assembler Output"), this);
+    QRadioButton *m_default = new QRadioButton(i18n("Use Default Output"), asm_group);
+    m_default->setChecked(true);
+    new FlagRadioButton(asm_group, asmController,
+                        "-Aas", i18n("Use GNU as"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Aasout", i18n("Use GNU asaout"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Anasmcoff", i18n("Use NASM coff"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Anasmelf", i18n("Use NASM elf"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Anasmobj", i18n("Use NASM obj"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Amasm", i18n("Use MASM"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Atasm", i18n("Use TASM"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Acoff", i18n("Use coff"));
+    new FlagRadioButton(asm_group, asmController,
+                        "-Apecoff", i18n("Use pecoff"));
+    layout->addWidget(asm_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    layout->addStretch();
+}
+
+ AssemblerTab::~ AssemblerTab( )
+{
+    delete controller;
+}
+
+void AssemblerTab::readFlags( QStringList * str )
+{
+    controller->readFlags(str);
+    asmController->readFlags(str);
+}
+
+void AssemblerTab::writeFlags( QStringList * str )
+{
+    controller->writeFlags(str);
+    asmController->writeFlags(str);
+}
+
+
+
+
+
+
+
+
 
 
 

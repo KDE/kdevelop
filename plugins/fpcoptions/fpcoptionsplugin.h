@@ -49,7 +49,9 @@ private:
 
     FeedbackTab *feedback;
     FilesAndDirectoriesTab *directories;
+    FilesAndDirectoriesTab2 *directories2;
     LanguageTab *language;
+    AssemblerTab *assembler;
     QStringList unrecognizedFlags;
 };
 

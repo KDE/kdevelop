@@ -44,11 +44,17 @@ FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
 {
     QVBox *vbox;
 
-    vbox = addVBoxPage(i18n("Files and Directories"));
-    directories = new FilesAndDirectoriesTab(vbox, "directories tab");
-
     vbox = addVBoxPage(i18n("Language"));
     language = new LanguageTab(vbox, "language tab");
+
+    vbox = addVBoxPage(i18n("Directories I"));
+    directories = new FilesAndDirectoriesTab(vbox, "directories tab");
+
+    vbox = addVBoxPage(i18n("Directories II"));
+    directories2 = new FilesAndDirectoriesTab2(vbox, "directories2 tab");
+
+    vbox = addVBoxPage(i18n("Assembler"));
+    assembler = new AssemblerTab(vbox, "assembler tab");
 
     vbox = addVBoxPage(i18n("Feedback"));
     feedback = new FeedbackTab(vbox, "feedback tab");
@@ -64,7 +70,9 @@ void FpcOptionsDialog::setFlags(const QString &flags)
 
     feedback->readFlags(&flaglist);
     language->readFlags(&flaglist);
+    assembler->readFlags(&flaglist);
     directories->readFlags(&flaglist);
+    directories2->readFlags(&flaglist);
     unrecognizedFlags = flaglist;
 }
 
@@ -72,8 +80,10 @@ QString FpcOptionsDialog::flags() const
 {
     QStringList flaglist;
 
-    directories->writeFlags(&flaglist);
     language->writeFlags(&flaglist);
+    directories2->writeFlags(&flaglist);
+    directories->writeFlags(&flaglist);
+    assembler->writeFlags(&flaglist);
     feedback->writeFlags(&flaglist);
 
     QString flags;
