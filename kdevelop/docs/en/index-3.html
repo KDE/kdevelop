@@ -11,15 +11,18 @@ of Contents</a>
 <hr>
 <h2>
 <a NAME="s3"></a>3. Configuration</h2>
-&nbsp;&nbsp;&nbsp; This section describes how to set up KDevelop to make
-programming a real enjoyment.&nbsp; We suggest following each step of configuration
-in the given order.
+
+<blockquote>&nbsp;&nbsp;&nbsp; This section describes how to set up KDevelop
+to make programming a real enjoyment.&nbsp; We suggest following each step
+of configuration in the given order.
 <br>Most important is 3.5 to 3.7, which enables you direct documentation
-access while coding your application.
+access while coding your application.</blockquote>
+
 <h2>
 <a NAME="ss3.1"></a>3.1 Editor</h2>
-The integrated editor of KDevelop is based on KWrite, known as the "Extended
-Editor"&nbsp; in KDE-1.1.
+
+<blockquote>The integrated editor of KDevelop is based on KWrite, known
+as the "Extended Editor"&nbsp; in KDE-1.1.
 <br>The options dialog configures the main behavoir for the editor regarding
 things as selections, wrapping etc.
 <p>Edit Options:
@@ -57,11 +60,13 @@ deletes a selection when writing in the selection.
 allows only one selection. A selection made gets deselected when another
 selection is made.
 <p>Wrap Words At:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-sets the maximum
+sets the maximum</blockquote>
+
 <h2>
 <a NAME="ss3.2"></a>3.2&nbsp; Editor-Colors</h2>
-The editor allows to configure the general view of the editing field by
-choosing colors for:
+
+<blockquote>The editor allows to configure the general view of the editing
+field by choosing colors for:
 <br>- background:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 the editor's background
 <br>- text background:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the background
@@ -72,27 +77,52 @@ the color of selected text to display the selection
 the color of text found by a search via the menu "View"-"Search", "Repeat
 search" and "Replace".
 <br>- selected + found:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the color
-of text selected to search for and found
-<br>&nbsp;
+of text selected to search for and found</blockquote>
+
 <h2>
-<a NAME="ss3.3"></a>3.3&nbsp; Syntax-Highlighting</h2>
-&nbsp;&nbsp;&nbsp; The Syntax-Highlighting configurations dialog allows
-settings for different programming languages and fonts, each independent.
+<a NAME="ss3.3"></a>3.3 Editor Defaults</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; The Editor Defaults dialog lets you configure
+the default values for language items such as keywords etc. and the default
+font style.&nbsp; When setting up the syntax highlighting (see below),
+those default values can be used to configure standard values configured
+here.</blockquote>
+
+<h2>
+<a NAME="ss3.4"></a>3.4&nbsp; Syntax-Highlighting</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; The Syntax-Highlighting configurations dialog
+allows settings for different programming languages and fonts, each independent.
 <br>To change the preset syntax-highlighting for a language, choose the
-language and the idiom wich display type you want to change.
+language and the idiom wich display type you want to change.</blockquote>
+
 <h2>
-<a NAME="ss3.4"></a>3.4&nbsp; Documentation Browser</h2>
-&nbsp;&nbsp;&nbsp; The Documentation Browser can be configured by this
-menu, setting colors for HTML links, background etc. Also the font size
-can be changed as well as the fixed and standard font type according to
-the system's installed fonts.
+<a NAME="ss3.5"></a>3.5&nbsp; Configure Keys</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; The Configure Keys dialog lets you configure
+the KDevelop key bindings. Note that global keys can be configured in the
+KDE Control&nbsp;Center, such as open file and print.
+<br>A key function can be configured by choosing the menu entry. Then the
+configuration can be changed by checking values like the Alt / Ctrl key
+etc.&nbsp; The defaults -button will reset all changes made to that keybindings
+configuration.</blockquote>
+
 <h2>
-<a NAME="ss3.5"></a>3.5&nbsp; Documentation Path</h2>
-&nbsp;&nbsp;&nbsp; For setting up the documentation browser to work correctly,
-KDevelop needs some information about where the HTML- documentation is
-placed on the system. Therefore, the Documentation Path properties dialog
-needs the path of the Qt- online documentation in HTML as well as the path
-to the KDE-library documentation.
+<a NAME="ss3.6"></a>3.6&nbsp; Documentation Browser</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; The Documentation Browser can be configured
+by this menu, setting colors for HTML links, background etc. Also the font
+size can be changed as well as the fixed and standard font type according
+to the system's installed fonts.</blockquote>
+
+<h2>
+<a NAME="ss3.7"></a>3.7&nbsp; Documentation Path</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; For setting up the documentation browser
+to work correctly, KDevelop needs some information about where the HTML-
+documentation is placed on the system. Therefore, the Documentation Path
+properties dialog needs the path of the Qt- online documentation in HTML
+as well as the path to the KDE-library documentation.
 <p><img SRC="kdevsetup.gif" height=246 width=470>
 <br><b><i><u>Picture 3.1: The Documentation path configuration dialog.</u></i></b>
 <p>Usually, the Qt-documentation is placed in the same directory where
@@ -108,12 +138,15 @@ you should first enter the next configuration dialog, Update KDE-Documentation.
 This will create the documentation to a path of your choice, also setting
 the KDE Library Doc path automatically.
 <br>&nbsp;
+<br>&nbsp;</blockquote>
+
 <h2>
-<a NAME="ss3.6"></a>3.6&nbsp; Update KDE-Documentation</h2>
-&nbsp;&nbsp;&nbsp; For those users who don't have a recent documentation
-of the KDE-libraries, especially the documentation for the files installed
-on the system, the Update KDE-Documentation dialog creates a new one or
-updates existing documentations.
+<a NAME="ss3.8"></a>3.8&nbsp; Update KDE-Documentation</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; For those users who don't have a recent
+documentation of the KDE-libraries, especially the documentation for the
+files installed on the system, the Update KDE-Documentation dialog creates
+a new one or updates existing documentations.
 <p><img SRC="kdevdocupdate.gif" height=408 width=538>
 <br><b><i><u>Picture 3.2: KDE Library Documentation Update.</u></i></b>
 <p>This function requires your system to have kdoc and qt2kdoc installed,
@@ -123,7 +156,7 @@ which is not the include-path for KDE !&nbsp; Just enter the path to the
 sources, like:&nbsp; /home/rnolden/kdelibs-1.1/ .&nbsp;&nbsp;&nbsp;&nbsp;
 Then, you can choose three different installation modes, as:
 <br>&nbsp;
-<ul>
+<blockquote>
 <li>
 &nbsp;&nbsp;&nbsp; Delete old Documentation and install to recent Documentation
 path:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -144,7 +177,7 @@ Documentation path:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is recommende
 for a new generation of the kdelibs documentation for users who didn't
 have one before and for those who want to keep the last documentation for
 an older kdelibs version.</li>
-</ul>
+</blockquote>
 The "new KDE Libs Documentation path" is to be set&nbsp; for option 2 and
 3 of the installation mode.&nbsp; This is also recommended for users who
 generate a new documentation from scratch.
@@ -157,16 +190,18 @@ to ensure that it can be found by qt2kdoc.
 <br>Finally, the KDE libs will be indexed and the documentation will be
 build with crossreferences to give browsing the most functionality.
 <br>&nbsp;
-<br>&nbsp;
+<br>&nbsp;</blockquote>
+
 <h2>
-<a NAME="ss3.7"></a>3.7&nbsp; Create Search Database</h2>
-&nbsp;&nbsp;&nbsp; The Create Search Database dialog, accessed via the
-options-menu, allows the programmer to create a database to search for
-a keyword interactively.&nbsp; To create and use the documentation search
-function, you must have the program glimpse 4.1 installed.&nbsp; Preset
-are the options to index the given KDE-library documentation as well as
-the Qt-documentation, assuming the path to the documentation files were
-set in the "Documentation Path" dialog of the options- menu.&nbsp;&nbsp;
+<a NAME="ss3.9"></a>3.9&nbsp; Create Search Database</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; The Create Search Database dialog, accessed
+via the options-menu, allows the programmer to create a database to search
+for a keyword interactively.&nbsp; To create and use the documentation
+search function, you must have the program glimpse 4.1 installed.&nbsp;
+Preset are the options to index the given KDE-library documentation as
+well as the Qt-documentation, assuming the path to the documentation files
+were set in the "Documentation Path" dialog of the options- menu.&nbsp;&nbsp;
 Additionally, the index can include directories the user can set up himself
 by the "additional directories to index"-field.&nbsp; After setting a path
 to an addional directory, the "Add" - button must be pushed to set the
@@ -178,8 +213,18 @@ index size, the more the index files will grow. On the other hand, a search
 in a bigger searchdatabase will be faster and more successful, so we suggest
 choosing a "medium" size.
 <br>For using the search function, see section&nbsp; <a href="index-4.html#ss4.8">4.8&nbsp;&nbsp;
-Using the Documentation Browser</a>
-<p>
+Using the Documentation Browser</a></blockquote>
+
+<h2>
+<a NAME="ss3.10"></a>3.10&nbsp; Make-Command</h2>
+
+<blockquote>&nbsp;&nbsp;&nbsp; The make-command menu lets you choose between
+various make-programs like make, gmake and dmake. The actually used make
+program is checked, the default value is "make".&nbsp; For FreeBSD and
+other users using gmake, please switch to "Gmake" to invoke the make-process
+by using gmake.</blockquote>
+
+<p><br>
 <hr><a href="index-2.html">Previous</a> <a href="index-4.html">Next</a><a href="index.html#toc3">Table
 of Contents</a>
 </body>

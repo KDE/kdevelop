@@ -21,6 +21,7 @@
 #include "./kwrite/kwdoc.h"
 #include "ctoolclass.h"
 #include <kaccel.h>
+#include <qtoolbutton.h>
 			
 CKDevelop::CKDevelop(){
   QString filename;
@@ -55,59 +56,7 @@ CKDevelop::CKDevelop(){
   
 }
 
-// all the init-stuff
-void CKDevelop::initConnections(){
-  // connections for the proc -processes
-  connect(&search_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-  	  this,SLOT(slotSearchReceivedStdout(KProcess*,char*,int)) );
 
-  connect(&search_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-  	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-  connect(&search_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
-  
-
-  connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-  	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-
-  connect(&process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-  connect(&process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) )) ;
-
-  // shellprocess  
-  connect(&shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-
-  connect(&shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-  connect(&shell_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) )) ;
-  
-  //application process
-
-  connect(&appl_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) ));
-
-  connect(&appl_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-	  this,SLOT(slotApplReceivedStdout(KProcess*,char*,int)) );
-
-  connect(&appl_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
-
-  
-  // connect the windowsmenu with a method
-  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
-
-  //connect the editor lookup function with slotDocSText
-  connect(cpp_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
-  connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
-	  
-  
-}
 void CKDevelop::init(){
   
   act_outbuffer_len=0;
@@ -132,7 +81,8 @@ void CKDevelop::init(){
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
   
   messages_widget = new COutputWidget(kapp,o_tab_view);
-  messages_widget->setFocusPolicy(QWidget::ClickFocus);
+//  messages_widget->setFocusPolicy(QWidget::ClickFocus);
+  messages_widget->setFocusPolicy(QWidget::NoFocus);
 
 //  output_widget->setFillColumnMode(80,true);
 //  output_widget->setWordWrap(true);
@@ -148,7 +98,8 @@ void CKDevelop::init(){
   connect(stdin_stdout_widget,SIGNAL(keyPressed(int)),this,SLOT(slotKeyPressedOnStdinStdoutWidget(int)));
   stderr_widget = new COutputWidget(kapp,o_tab_view);
   stderr_widget->setReadOnly(TRUE);
-  stderr_widget->setFocusPolicy(QWidget::ClickFocus);
+//  stderr_widget->setFocusPolicy(QWidget::ClickFocus);
+  stderr_widget->setFocusPolicy(QWidget::NoFocus);
 
   o_tab_view->addTab(messages_widget,"messages");
   o_tab_view->addTab(stdin_stdout_widget,"stdin/stdout");
@@ -166,18 +117,18 @@ void CKDevelop::init(){
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
   log_file_tree->setIndentSpacing(15);
-  log_file_tree->setFocusPolicy(QWidget::ClickFocus);
+  log_file_tree->setFocusPolicy(QWidget::NoFocus);
   
   class_tree = new CClassView(t_tab_view,"cv");
   class_tree->setIndentSpacing(15);
   class_tree->setFocusPolicy(QWidget::NoFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
-  real_file_tree->setFocusPolicy(QWidget::ClickFocus);
+  real_file_tree->setFocusPolicy(QWidget::NoFocus);
   real_file_tree->setIndentSpacing(15);
 
   doc_tree = new CDocTree(t_tab_view,"DOC",config);
-  doc_tree->setFocusPolicy(QWidget::ClickFocus);
+  doc_tree->setFocusPolicy(QWidget::NoFocus);
   doc_tree->setIndentSpacing(15);
 
   t_tab_view->addTab(class_tree,"CV");
@@ -417,12 +368,13 @@ void CKDevelop::initMenu(){
   bViewStatusbar = config->readBoolEntry("show_statusbar",true);
 
   view_menu = new QPopupMenu;
-  view_menu->insertItem(i18n("&Goto Line..."), this,
+  view_menu->insertItem(i18n("&Line..."), this,
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
 
+
   view_menu->insertSeparator();
-  view_menu->insertItem(i18n("&Tree-View"),this, 
+  view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
   accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
   view_menu->setItemChecked(ID_VIEW_TREEVIEW,config->readBoolEntry("show_tree_view",true));
@@ -515,7 +467,7 @@ void CKDevelop::initMenu(){
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
 
-  build_menu->insertItem(i18n("&Rebuild all"), this,
+  build_menu->insertItem(Icon("rebuild.xpm"),i18n("&Rebuild all"), this,
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
 
   build_menu->insertItem(i18n("&Clean/Rebuild all"), this, 
@@ -579,7 +531,7 @@ void CKDevelop::initMenu(){
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING);
   options_menu->insertSeparator();
 
-  options_menu->insertItem(i18n("&Keys..."),this,
+  options_menu->insertItem(i18n("Configure &Keys..."),this,
 			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
   options_menu->insertSeparator();
   
@@ -696,25 +648,33 @@ void CKDevelop::initToolbar(){
 /*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
+
+  QFrame *separatorLine= new QFrame(toolBar());
+  separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,10,separatorLine);
+
+//  toolBar()->insertSeparator();
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
+  toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
+  toolBar()->insertButton(pix,ID_EDIT_COPY, true,i18n("Copy"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
+  toolBar()->insertButton(pix,ID_EDIT_PASTE, true,i18n("Paste"));
   toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
 	toolBar()->insertButton(pix,ID_EDIT_UNDO,false,i18n("Undo"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
 	toolBar()->insertButton(pix,ID_EDIT_REDO,false,i18n("Undo"));
-  toolBar()->insertSeparator();
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
-  toolBar()->insertButton(pix,ID_EDIT_COPY, true,i18n("Copy"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
-  toolBar()->insertButton(pix,ID_EDIT_PASTE, true,i18n("Paste"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
-  toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
-  
-  toolBar()->insertSeparator();
+
+//  toolBar()->insertSeparator();
+  QFrame *separatorLine1= new QFrame(toolBar());
+  separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,20,separatorLine1);
 
 // toolBar()->insertButton(Icon("reload.xpm"),ID_VIEW_REFRESH, true,i18n("Refresh"));
 
-  toolBar()->insertSeparator();
-  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
+//  toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/compfile.xpm");
   toolBar()->insertButton(pix,ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
@@ -724,16 +684,20 @@ void CKDevelop::initToolbar(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/run.xpm");
   toolBar()->insertButton(pix,ID_BUILD_RUN, false,i18n("Run"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/stop.xpm");
-  toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
   toolBar()->insertSeparator();
-  
+  toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
+//  toolBar()->insertSeparator();
+
+  QFrame *separatorLine2= new QFrame(toolBar());
+  separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,30,separatorLine2);
+
   whats_this = new QWhatsThis;  
-  QWidget *btnwhat = (QWidget*)whats_this->whatsThisButton(toolBar());
+  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar());
   QToolTip::add(btnwhat, i18n("What's this...?"));
   toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
-  toolBar()->alignItemRight(ID_HELP_WHATS_THIS);
+  btnwhat->setFocusPolicy(QWidget::NoFocus);
 
-  btnwhat->setFocusPolicy(QWidget::ClickFocus);
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   config->setGroup("General Options");
   if(config->readBoolEntry("show_std_toolbar", true)){
@@ -745,7 +709,7 @@ void CKDevelop::initToolbar(){
 
   // the second toolbar
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo("Classes",TOOLBAR_CLASS_CHOICE,true,SIGNAL(activated(int))
-			  ,this,SLOT(slotClassChoiceCombo(int)),true,i18n("choice the class"),140 );
+			  ,this,SLOT(slotClassChoiceCombo(int)),true,i18n("choice the class"),160 );
   KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::NoFocus);
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo("Methods",TOOLBAR_METHOD_CHOICE,true,SIGNAL(activated(int))
@@ -782,7 +746,58 @@ void CKDevelop::initStatusBar(){
   enableStatusBar();
 }
 
+// all the init-stuff
+void CKDevelop::initConnections(){
+  // connections for the proc -processes
+  connect(&search_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+  	  this,SLOT(slotSearchReceivedStdout(KProcess*,char*,int)) );
 
+  connect(&search_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+  	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+
+  connect(&search_process,SIGNAL(processExited(KProcess*)),
+	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
+
+
+  connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+  	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+
+  connect(&process,SIGNAL(processExited(KProcess*)),
+	  this,SLOT(slotProcessExited(KProcess*) )) ;
+
+  // shellprocess
+  connect(&shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+
+  connect(&shell_process,SIGNAL(processExited(KProcess*)),
+	  this,SLOT(slotProcessExited(KProcess*) )) ;
+
+  //application process
+
+  connect(&appl_process,SIGNAL(processExited(KProcess*)),
+	  this,SLOT(slotProcessExited(KProcess*) ));
+
+  connect(&appl_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+	  this,SLOT(slotApplReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&appl_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
+
+
+  // connect the windowsmenu with a method
+  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
+
+  //connect the editor lookup function with slotDocSText
+  connect(cpp_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
+  connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
+	
+}
 void CKDevelop::initProject(){
   config->setGroup("Files");
   QString filename = config->readEntry("project_file","");
@@ -810,6 +825,23 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

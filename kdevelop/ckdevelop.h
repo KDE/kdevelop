@@ -138,12 +138,9 @@ public:
   void slotEditSearch();
   void slotEditRepeatSearch();
   void slotEditReplace();
-  void slotBookmarksAdd();
-  void slotBookmarksEdit();
 
 
   void slotViewGotoLine();
-
   void slotViewTTreeView();
   void slotViewTOutputView();
   void showOutputView(bool show=true);
@@ -210,11 +207,10 @@ public:
   void slotDocManual();
   void slotDocUpdateKDEDocumentation();
 
-
-
   void slotHelpContent();
   void slotHelpHomepage();
   void slotHelpAbout();
+
   void slotToolbarClicked(int);
   void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
 
@@ -360,6 +356,7 @@ private:
 };
 
 #endif
+
 
 
 

@@ -30,12 +30,13 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
-  pop->insertItem("",this,SLOT(slotLookUp()),0,0);
-  pop->insertSeparator();
   pop->insertItem(i18n("Cut"),this,SLOT(cut()),0,1);
   pop->insertItem(i18n("Copy"),this,SLOT(copy()),0,2);
   pop->insertItem(i18n("Paste"),this,SLOT(paste()),0,3);
-  
+  pop->insertSeparator();
+  pop->insertItem("",this,SLOT(slotLookUp()),0,0);
+  bookmarks.setAutoDelete(true);
+
 
 }
 
@@ -128,6 +129,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
 
 
 

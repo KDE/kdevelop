@@ -36,7 +36,8 @@ void CKDevelop::slotClassTreeSelected(int index){
   QRegExp regexp;
   path = class_tree->itemPath(index);
   name = path->pop();
-  
+
+
   level = path->count();
   if (level == 1) { // class,struct,or global
     CVGotoClassDecl(*name);
@@ -65,7 +66,7 @@ void CKDevelop::slotCVViewDeclaration(int index){
   QRegExp regexp;
   path = class_tree->itemPath(index);
   name = path->pop();
-  
+
   level = path->count();
   if (level == 1) { // class,struct,or global
     CVGotoClassDecl(*name);
@@ -125,7 +126,7 @@ int CKDevelop::CVGotoClassDecl(QString classname){
   int act_pos =0;
   TClassInfo* class_info,*info_found=0;
   int count=0,index=0;
-  
+
   // search the class_info
   for(class_info =class_tree->class_infos->first(); class_info !=0;
       class_info =class_tree->class_infos->next()){
@@ -175,7 +176,6 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
   int pos;
   QString last_textpart;
   QRegExp regexp = "[ (\t]";
-
 
   pos = compl_name.find( regexp );
   if ( pos > 0 )
@@ -292,6 +292,7 @@ void CKDevelop::refreshClassCombos(){
     method_combo->insertItem(method_info->name);
   }
 }
+
 
 
 

@@ -746,7 +746,7 @@ void CKDevelop::slotBuildCompileFile(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
- 
+
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
@@ -814,7 +814,15 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
   showOutputView(true);
+
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
@@ -863,7 +871,16 @@ void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
   showOutputView(true);
+
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf suite..."));
@@ -900,7 +917,16 @@ void CKDevelop::slotBuildAPI(){
   if(!CToolClass::searchProgram("kdoc")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
   showOutputView(true);
+
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
@@ -919,6 +945,14 @@ void CKDevelop::slotBuildManual(){
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
   showOutputView(true);
   setToolMenuProcess(false);
   //  slotFileSaveAll();
@@ -933,10 +967,6 @@ void CKDevelop::slotBuildManual(){
 }
 
 
-void CKDevelop::slotBookmarksAdd(){
-}
-void CKDevelop::slotBookmarksEdit(){
-}
 
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   showOutputView(false);
@@ -1254,7 +1284,19 @@ void CKDevelop::slotToolsKIconEdit(){
   if(!CToolClass::searchProgram("kiconedit")){
     return;
   }
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    output_view_pos=view->separatorPos();
+    view->setSeparatorPos(100);
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
   showOutputView(false);
+
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kiconedit");
@@ -1267,7 +1309,19 @@ void CKDevelop::slotToolsKDbg(){
   if(!CToolClass::searchProgram("kdbg")){
     return;
   }
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    output_view_pos=view->separatorPos();
+    view->setSeparatorPos(100);
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
   showOutputView(false);
+
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kdbg");
@@ -1280,7 +1334,9 @@ void CKDevelop::slotToolsKTranslator(){
   if(!CToolClass::searchProgram("ktranslator")){
     return;
   }
+
   showOutputView(false);
+
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("ktranslator");
@@ -1552,6 +1608,9 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
 
 
 
