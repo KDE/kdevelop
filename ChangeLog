@@ -1,5 +1,5 @@
 1999-09-24 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
-        * improvements on new key-acceleration system
+        * improvements on new key-accelerator system
 	* solving segfault on redefinition of short-cuts
           and new key definitions
         * implementing dialog short-cuts into new system
