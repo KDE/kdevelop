@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Simon Hausmann", "Help with KParts infrastructure", "hausmann@kde.org");
   aboutData.addAuthor("Jakob Simon-Gaarde", "QMake projectmanager", "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("Yann Hodique", "Patches", "Yann.Hodique@lifl.fr");
-  aboutData.addAuthor("Alexander Dymo", "Help with C++ support, Filecreate and Doctreeview configuration, minor fixes", "cloudtemple@mksat.net");
+  aboutData.addAuthor("Alexander Dymo", "Help with C++ support, Filecreate and Doctreeview, minor fixes", "cloudtemple@mksat.net");
   aboutData.addAuthor("F@lk Brettschneider", "MDI modes, QEditor, bugfixes", "falkbr@kdevelop.org");
   
   aboutData.addCredit("The KWrite authors", "Kate editor component", "kwrite-devel@kde.org");
