@@ -124,8 +124,8 @@
   <Action name="output_view"/>
 </ToolBar>
 
-<ToolBar name="browserToolBar" position="Top" newline="true">
-  <text>Browser Toolbar</text>
+<ToolBar name="docBrowserToolBar" position="Top" iconText="IconOnly" newline="true">
+  <text>Documentation Browser Toolbar</text>
   <Action name="browser_back" />
   <Action name="browser_forward" />
 </ToolBar>
