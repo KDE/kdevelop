@@ -1076,9 +1076,9 @@ void CKDevelop::initConnections()
           this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
 }
 
-void CKDevelop::completeStartup(bool ignoreLastProject)
+void CKDevelop::completeStartup( bool loadLastProject )
 {
-  CProject* pProj = initProject(ignoreLastProject);
+  CProject* pProj = initProject(loadLastProject);
   QApplication::sendPostedEvents();
 
   if (pProj != 0L) {
@@ -1102,33 +1102,17 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
   moveToolBar( m_pTaskBar, taskBarEdge);
 }
 
-CProject* CKDevelop::initProject(bool ignoreLastProject)
+CProject* CKDevelop::initProject( bool loadLastProject )
 {
-  CProject* pProj = 0L;
-
+  if( !loadLastProject || !lastShutdownOK )
+    return 0;
+  
   config->setGroup("General Options");
-  bool bLastProject;
-  if(!ignoreLastProject)
-    bLastProject=false;
-  else
-    bLastProject= config->readBoolEntry("LastProject",true);
+  if( !config->readBoolEntry("LastProject",true) )
+    return 0;
 
-  QString filename="";
-  if(bLastProject)
-  {
-    if (!lastShutdownOK)
-    {
-      bLastProject = false;
-    }
-
-    if (bLastProject)
-    {
-      config->setGroup("Files");
-      filename = config->readEntry("project_file","");
-      pProj = projectOpenCmdl_Part1(filename);
-    }
-  }
-  return pProj;
+  config->setGroup("Files");
+  return projectOpenCmdl_Part1( config->readEntry("project_file","") );
 }
 
 void CKDevelop::setKeyAccel()

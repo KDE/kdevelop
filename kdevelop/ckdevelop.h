@@ -141,9 +141,8 @@ public:
   void initToolBar();
   void initStatusBar();
   void initWhatsThis();
-  CProject* initProject(bool ignoreLastProject);
   void initDebugger();
-  void completeStartup(bool ignoreLastProject);
+  void completeStartup( bool loadLastProject);
 
 
   /** Change a text string for search in a way,
@@ -903,6 +902,8 @@ protected:
   virtual void resizeEvent( QResizeEvent *pRSE);
 
 private:
+  CProject* initProject( bool loadLastProject );
+  
   void printImpl(QStringList& list, KPrinter* printer);
   /** */
   bool isToolViewVisible(QWidget* pToolView);
