@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
   }*/
   TopLevel::getInstance()->guiRestoringFinished();
   
-  kapp->dcopClient()->registerAs("kdevelop");
+  kapp->dcopClient()->registerAs("kdevassistant");
   
   return app.exec();
 }
