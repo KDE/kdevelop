@@ -572,7 +572,7 @@ void CKDevelop::slotProjectOpenRecent( const KURL& url )
     if( KMessageBox::Yes == KMessageBox::questionYesNo(
           this, i18n( "This project no longer exists. "
                       "Do you want to remove it from the list?"),
-          i18n("File Not Found: %1").arg( url.url() ) ) )
+          i18n("File not Found: %1").arg( url.url() ) ) )
       pRecentProjects->removeURL(url);
     return;
   }
@@ -1043,7 +1043,7 @@ void CKDevelop::slotConfigureDoxygen(){
     {
        KMessageBox::error(0,
             QString("doxwizard ") +i18n(" is not necessary, but you have to edit your Configuration for doxygen by hand.\nMaybe you should look for a newer Version at:\n\n\t http://www.stack.nl/~dimitri/doxygen/download.html\n\n"),
-                            i18n("Program not found -- doxywizard "));
+                            i18n("Program not Found -- doxywizard "));
       return;
     }
 
@@ -1250,8 +1250,8 @@ void CKDevelop::slotProjectMakeTags()
   if(!CToolClass::searchInstProgram("ctags")) // no dialog
   {
     KMessageBox::sorry(0,
-      i18n("KDevelop needs \"Exuberant Ctags\" \n for tags based search functionality."),
-      i18n("You can find it at: http://ctags.sourceforge.net"));
+      i18n("KDevelop needs \"Exuberant Ctags\" \n for tags based search functionality.\n"
+           "You can find it at: http://ctags.sourceforge.net"));
     return;
   }
   create_tags();
@@ -1782,7 +1782,7 @@ void CKDevelop::slotSwitchDocTool()
                 {
                         KMessageBox::error(0,
                         i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
-                        i18n("Program not found -- doxygen"));
+                        i18n("Program not Found -- doxygen"));
                         // no doxygen found
                         return;
                 }

@@ -928,7 +928,7 @@ void CKAppWizard::accept() {
     userdoc->setChecked(false);
     KMessageBox::error (0,
                     i18n("If you want to generate the user-documentation, you need one of these programs."),
-                    i18n("sgml2html and ksgml2html do not exist!"));
+                    i18n("sgml2html and ksgml2html do not Exist!"));
   }
 
 
@@ -965,7 +965,7 @@ void CKAppWizard::accept() {
     KMessageBox::error(this,  i18n("Either the desired directory cannot be created or\n"
                                     "you haven't enough rights to use it.\n"
                                     "It isn't possible to generate a new project into this directory."),
-                              i18n("%1 isn't writable!").arg(direct));
+                              i18n("%1 isn't Writable!").arg(direct));
     return;
   }
 
@@ -973,7 +973,7 @@ void CKAppWizard::accept() {
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     KMessageBox::error( this, i18n("It isn't possible to generate a new project into an existing directory."),
-                        i18n("%1 already exists!").arg(directoryline->text()));
+                        i18n("%1 Already Exists!").arg(directoryline->text()));
       return;
 
   }

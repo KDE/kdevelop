@@ -229,11 +229,11 @@ void CAddClassAttributeDlg::OK()
   if( strlen( typeEdit.text() ) == 0 )
     KMessageBox::error( this,
                       i18n("You have to specify a variable type."),
-                      i18n("No type") );
+                      i18n("No Type") );
   else if( strlen( nameEdit.text() ) == 0 )
     KMessageBox::error( this,
                       i18n("You have to specify a variable name."),
-                      i18n("No name") );
+                      i18n("No Name") );
   else
     accept();
 }

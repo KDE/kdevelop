@@ -644,7 +644,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Build order</string>
+                    <string>&amp;Build Order</string>
                 </attribute>
                 <grid>
                     <property name="name">

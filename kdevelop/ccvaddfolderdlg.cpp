@@ -94,7 +94,7 @@ void CCVAddFolderDlg::OK()
   if( folderEdit->text().isEmpty() )
     KMessageBox::error( this,
                         i18n("You have to specify a foldername."),
-                        i18n("No name") );
+                        i18n("No Name") );
   else
     accept();
 }

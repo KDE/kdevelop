@@ -342,11 +342,11 @@ void CAddClassMethodDlg::OK()
   if( strlen( typeEdit.text() ) == 0 )
     KMessageBox::error( this,
                       i18n("You have to specify a function type."),
-                      i18n("No type"));
+                      i18n("No Type"));
   else if( strlen( declEdit.text() ) == 0 )
     KMessageBox::error( this,
                       i18n("You have to specify a function name."),
-                      i18n("No name"));
+                      i18n("No Name"));
   else
     accept();
 }

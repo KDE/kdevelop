@@ -633,7 +633,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
     {
       if( KMessageBox::questionYesNo( this,
                           i18n("Are you sure you want to delete this method?"),
-                          i18n("Delete method")) == KMessageBox::Yes )
+                          i18n("Delete Method")) == KMessageBox::Yes )
       {
         // Start by deleting the declaration.
         switchToFile( aMethod->declaredInFile(), aMethod->declaredOnLine() );
@@ -656,11 +656,11 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
     }
     else
         KMessageBox::error( NULL, i18n( "Couldn't find the method to delete." ),
-                                i18n( "Method missing" ) );
+                                i18n( "Method Missing" ) );
   }
   else
     KMessageBox::error( NULL, i18n( "Couldn't find the class which has the method to delete." ),
-                                i18n( "Class missing" ) );
+                                i18n( "Class Missing" ) );
 
 }
 

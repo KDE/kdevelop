@@ -193,7 +193,7 @@ bool Kpp::loadPrefs(){
   qsSpecTemplate = kcConfig->readEntry( "specTemplate", tempqsSpecTemplate);
   kdDebug() << "I got spec template from " << qsSpecTemplate << endl;
   if (qsSpecTemplate == "")
-	   KMessageBox::sorry(0, i18n("Currently there is no default template for your SPEC file. \n You will have select one before you can create an RPM." ), i18n("Missing SPEC template"), true);
+	   KMessageBox::sorry(0, i18n("Currently there is no default template for your SPEC file. \n You will have select one before you can create an RPM." ), i18n("Missing SPEC Template"), true);
 
   //QLineEdit_8->setText(kcConfig->readEntry("url", "none"));
   //QLineEdit_9->setText(kcConfig->readEntry("vendor", "none"));
@@ -232,7 +232,7 @@ bool Kpp::startBuild(){
   {
     // the source is not there, display a dialog and exit this dialog.
     kdDebug() << "need source file" << endl;
-    KMessageBox::sorry(0, i18n("You need to generate a source dist first..."), i18n("Missing tar.gz file"), true);
+    KMessageBox::sorry(0, i18n("You need to generate a source dist first..."), i18n("Missing tar.gz File"), true);
     exitApp();
   }
   else
@@ -271,7 +271,7 @@ bool Kpp::startBuild(){
       // the spec is not filled out correctly do no clobber the dialog
       // but do not start the build.
       kdDebug() << "spec form not filled out completely" << endl;
-      KMessageBox::sorry(0,i18n("You need to generate a spec file first..."), i18n("Missing spec file"), true);
+      KMessageBox::sorry(0,i18n("You need to generate a spec file first..."), i18n("Missing spec File"), true);
 
       return false;
     }

@@ -414,7 +414,7 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     {
         KMessageBox::error(this,
                       i18n("Unable to locate definition of method\n%1\n").arg(implMethod->name()),
-                      i18n("Method definition not found"), true);
+                      i18n("Method Definition not Found"), true);
         return;
     }
 

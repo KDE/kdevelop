@@ -164,7 +164,7 @@ void CCloneFunctionDlg::OK()
  if( strlen( methods->currentText() ) == 0 )
     KMessageBox::information( this,
                             i18n("You have to select a method."),
-                            i18n("No method") );
+                            i18n("No Method") );
  else
     accept();
 }

@@ -193,11 +193,11 @@ CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg()
 void CCreateDocDatabaseDlg::slotOkClicked()
 {
   if(!QFile::exists(m_kdeDocDir + "/kdeui/KDialog.html") && kde_checkbox->isChecked()){
-    KMessageBox::error(0,i18n("The KDE-Documentation-Path isn't set correctly."),i18n("No Database created!"));
+    KMessageBox::error(0,i18n("The KDE-Documentation-Path isn't set correctly."),i18n("No Database Created!"));
     return;
   }
   if(!QFile::exists(m_qtDocDir + "/qtabbar.html") && qt_checkbox->isChecked()){
-    KMessageBox::error(0,i18n("The Qt-Documentation-Path isn't set correctly."),i18n("No Database created!"));
+    KMessageBox::error(0,i18n("The Qt-Documentation-Path isn't set correctly."),i18n("No Database Created!"));
     return;
   }
 

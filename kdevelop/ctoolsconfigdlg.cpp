@@ -184,14 +184,14 @@ void CToolsConfigDlg::slotToolAdd()
   QString exe_file=QFileInfo(executable).fileName();
 
   if(executable.isEmpty()){
-  	KMessageBox::error(this, i18n("You have to set an executable to add to the Tools-Menu first."),i18n("Executable not set!"));
+  	KMessageBox::error(this, i18n("You have to set an executable to add to the Tools-Menu first."),i18n("Executable not Set!"));
   	return;
   }
   if(menutext.isEmpty()){
-    KMessageBox::error(this, i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."),i18n("Menu text not set!"));
+    KMessageBox::error(this, i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."),i18n("Menu Text not Set!"));
     return;
   }
-      	
+
   if(!QFileInfo(CToolClass::findProgram(executable)).isExecutable()){
     KMessageBox::sorry(this,i18n("The selected file is not an executable. Please choose an executable filename."));
     return;

@@ -223,7 +223,7 @@ void CUpdateKDEDocDlg::OK(){
                           i18n("The old documentation path\n%1"
                                 "\ndoesn't exist anymore."
                                 "\nProcess will continue without deletion...").arg(kde_doc_path),
-                          i18n("Old documentation deletion!"));
+                          i18n("Old Documentation Deletion!"));
     }
     else
     {
@@ -233,7 +233,7 @@ void CUpdateKDEDocDlg::OK(){
                     i18n("You have no write permission to delete\n"
                             "the old documentation in\n%1"
                             "\nProcess will continue without deletion...").arg(kde_doc_path),
-                    i18n("Old documentation deletion!"));
+                    i18n("Old Documentation Deletion!"));
       }
       else
       {

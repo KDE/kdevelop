@@ -178,7 +178,7 @@ void WizardQtDocPage::slotQTpressed()
       KMessageBox::error(this,i18n("\nThe chosen path does not lead to the\n"
                                    "Qt-library documentation. Please choose the\n"
                                    "correct path."),
-                                i18n("The selected path is not correct!"));
+                                i18n("The Selected Path is not Correct!"));
     }
   }
 }

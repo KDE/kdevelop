@@ -34,7 +34,7 @@ bool CToolClass::searchProgram(const QString& name, bool allowWarningMsg )
     {
       KMessageBox::sorry(0,
                         i18n("KDevelop needs \"%1\" to work properly.\n\tPlease install it!").arg(name),
-                        i18n("Program not found!"));
+                        i18n("Program not Found!"));
     }
     return false;
   }
