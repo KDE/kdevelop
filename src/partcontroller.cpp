@@ -23,7 +23,6 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 #include <khtml_part.h>
-#include <ktexteditor/view.h>
 
 #include "toplevel.h"
 #include "core.h"
