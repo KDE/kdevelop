@@ -1,3 +1,9 @@
+1999-02-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* changed the documentation update to use qt2kdoc
+	  to crossreference the documentation as well as building
+	  the reference files of kdoc in /kdoc-reference
+	* changed first documentation pages
+
 1999-02-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* clean up some sourcecodes (ckdevelop.cpp,ckdevelop_project.cpp)

@@ -1,82 +1,169 @@
-<HTML>
-<HEAD>
-   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.35 i586) [Netscape]">
-   <TITLE>The KDevelop Handbook: Usage </TITLE>
-</HEAD>
-<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000EF" VLINK="#51188E" ALINK="#FF0000">
-<A HREF="index-2.html">Previous</A> <A HREF="index-4.html">Next</A>
-<A HREF="index.html#toc3">Table of Contents</A>&nbsp;
-<HR>
-<H2>
-<A NAME="s3"></A>3. Usage</H2>
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; I; Linux 2.0.36 i586) [Netscape]">
+   <title>The KDevelop Handbook: Usage </title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<a href="index-2.html">Previous</a> <a href="index-4.html">Next</a><a href="index.html#toc3">Table
+of Contents</a>
+<hr>
+<h2>
+<a NAME="s3"></a>3. Configuration</h2>
+&nbsp;&nbsp;&nbsp; This section describes how to set up KDevelop to make
+programming a real enjoyment.&nbsp; We suggest following each step of configuration
+in the given order.
+<br>Most important is 3.5 to 3.7, which enables you direct documentation
+access while coding your application.
+<h2>
+<a NAME="ss3.1"></a>3.1 Editor</h2>
+The integrated editor of KDevelop is based on KWrite, known as the "Extended
+Editor"&nbsp; in KDE-1.1.
+<br>The options dialog configures the main behavoir for the editor regarding
+things as selections, wrapping etc.
+<p>Edit Options:
+<p>&nbsp;&nbsp;&nbsp; Auto Indent:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this sets the edior to place the cursor below the first literal when a
+new line is entered.
+<br>&nbsp;&nbsp;&nbsp; Backspace Indent:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this option sets the cursor below the first literal of the line above when
+backspace is pressed.
+<br>&nbsp;&nbsp;&nbsp; Word Wrap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+words are taken into the next line after the column set in "Wrap Words
+At:"
+<br>&nbsp;&nbsp;&nbsp; Replace Tabs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tabulators in the current text are replaced with tabulators of the "Tab
+Width:" value
+<br>&nbsp;&nbsp;&nbsp; Remove Trailing Spaces:&nbsp;&nbsp; removes trailing
+spaces
+<br>&nbsp;&nbsp;&nbsp; Wrap Cursor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sets the cursor to the end of the last line when backspace enters the beginning
+of a line
+<br>&nbsp;&nbsp;&nbsp; Auto Brackets:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+creates a closing bracket in front of the cursor when a bracket (any kind)
+is opened.
+<p>Select Options:
+<br>&nbsp;
+<br>&nbsp;&nbsp;&nbsp; Persistent Selections:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+selections made stay marked after setting the cursor to a different place
+<br>&nbsp;&nbsp;&nbsp; Multiple Selections:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+allows multiple independent selections within the text
+<br>&nbsp;&nbsp;&nbsp; Vertical Selections:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+when selecting multiple lines, the selection is also made horizontal and
+doesn't cover the whole line
+<br>&nbsp;&nbsp;&nbsp; Delete On Input:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+deletes a selection when writing in the selection.
+<br>&nbsp;&nbsp;&nbsp; Toggle&nbsp;Old:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+allows only one selection. A selection made gets deselected when another
+selection is made.
+<p>Wrap Words At:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sets the maximum
+<h2>
+<a NAME="ss3.2"></a>3.2&nbsp; Editor-Colors</h2>
+The editor allows to configure the general view of the editing field by
+choosing colors for:
+<br>- background:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+the editor's background
+<br>- text background:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the background
+of displayed text
+<br>- selected:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+the color of selected text to display the selection
+<br>- found:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+the color of text found by a search via the menu "View"-"Search", "Repeat
+search" and "Replace".
+<br>- selected + found:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the color
+of text selected to search for and found
+<br>&nbsp;
+<h2>
+<a NAME="ss3.3"></a>3.3&nbsp; Syntax-Highlighting</h2>
+&nbsp;&nbsp;&nbsp; The Syntax-Highlighting configurations dialog allows
+settings for different programming languages and fonts, each independent.
+<br>To change the preset syntax-highlighting for a language, choose the
+language and the idiom wich display type you want to change.
+<h2>
+<a NAME="ss3.4"></a>3.4&nbsp; Documentation Browser</h2>
+&nbsp;&nbsp;&nbsp; The Documentation Browser can be configured by this
+menu, setting colors for HTML links, background etc. Also the font size
+can be changed as well as the fixed and standard font type according to
+the system's installed fonts.
+<h2>
+<a NAME="ss3.5"></a>3.5&nbsp; Documentation Path</h2>
+&nbsp;&nbsp;&nbsp; For setting up the documentation browser to work correctly,
+KDevelop needs some information about where the HTML- documentation is
+placed on the system. Therefore, the Documentation Path properties dialog
+needs the path of the Qt- online documentation in HTML as well as the path
+to the KDE-library documentation.
+<p><img SRC="doc-path.gif" height=246 width=470>
+<br><b><i><u>Picture 3.1: The Documentation path configuration dialog.</u></i></b>
+<p>Usually, the Qt-documentation is placed in the same directory where
+Qt is installed; e.g. if Qt resides in /usr/local/qt, the path you have
+to enter is /usr/local/qt/html.
+<br>For the KDE- Documentation, you have to set the directory to the root
+of the documentation, assumed all KDE-Libs documentation resides in the
+same directory.
+<br>Both path's can be selected by pressing the according buttons, displaying
+a path-selection.
+<br>If your system doesn't contain the documentation for the KDE-libs,&nbsp;
+you should first enter the next configuration dialog, Update KDE-Documentation.
+This will create the documentation to a path of your choice, also setting
+the KDE Library Doc path automatically.
+<br>&nbsp;
+<h2>
+<a NAME="ss3.6"></a>3.6&nbsp; Update KDE-Documentation</h2>
+&nbsp;&nbsp;&nbsp; For those users who don't have a recent documentation
+of the KDE-libraries, especially the documentation for the files installed
+on the system, the Update KDE-Documentation dialog creates a new one or
+updates existing documentations.
+<p><img SRC="doc-update.gif" height=408 width=538>
+<br><b><i><u>Picture 3.2: KDE Library Documentation Update.</u></i></b>
+<p>This function requires your system to have kdoc and qt2kdoc installed,
+included in the kdesdk package.
+<br>First of, you have to set up the path to your recent kdelibs sources,
+which is not the include-path for KDE !&nbsp; Just enter the path to the
+sources, like:&nbsp; /home/rnolden/kdelibs-1.1/ .&nbsp;&nbsp;&nbsp;&nbsp;
+Then, you can choose three different installation modes, as:
+<br>&nbsp;
+<ul>
+<li>
+&nbsp;&nbsp;&nbsp; Delete old Documentation and install to recent Documentation
+path:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this assumes that you already have a documentation installed and is placed
+in the path the Documentation Path-dialog was entered. This will delete
+all documentation and install the newly generated documentation into the
+recent path.</li>
 
-<H2>
-<A NAME="ss3.1"></A>3.1 General Usage</H2>
-&nbsp;
-<BLOCKQUOTE>Notice: KQuickhelp is available nearly everywhere!&nbsp; Just
-click on anything with your right mouse-button to get this.
-<BR>If KDevelop starts for the first time, you get the main window with
-an empty file/classbrowser and output field.&nbsp; First of all, you should
-configure KDevelop to give the documetation browser access to the KDE and
-QT documentation by&nbsp; invoking&nbsp; the setup dialog via "Options"-
-"Configure KDevelop":
+<li>
+&nbsp;&nbsp;&nbsp; Delete old Documentation and install to new Documentation
+path:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+this will result in deleting the old documentation as well as above, but
+gives you the choice to set up a new documentation place.</li>
 
-<P>&nbsp;<IMG SRC="kdevsetup.gif" HEIGHT=246 WIDTH=470>
-<BR><B><I>Picture 1: The KDevelop Setup dialog configures the documentation
-paths</I></B>
-<BR>&nbsp;
+<li>
+&nbsp;&nbsp;&nbsp; Leave old Documentation untouched and install to new
+Documentation path:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is recommended
+for a new generation of the kdelibs documentation for users who didn't
+have one before and for those who want to keep the last documentation for
+an older kdelibs version.</li>
+</ul>
+The "new KDE Libs Documentation path" is to be set&nbsp; for option 2 and
+3 of the installation mode.&nbsp; This is also recommended for users who
+generate a new documentation from scratch.
+<p>After pressing the OK button, KDevelop will create a subdirectory in
+the documentation path containing the kdoc reference files.&nbsp; First,
+the qt library documentation classes will be indexed to connect the Qt
+documentation with the documentation to be generated for the kdelibs.&nbsp;
+So it is important that you have set up the Qt documentation path first
+to ensure that it can be found by qt2kdoc.
+<br>Finally, the KDE libs will be indexed and the documentation will be
+build with crossreferences to give browsing the most functionality.
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+<a NAME="ss3.7"></a>3.7&nbsp; Create Search Database</h2>
 
-<P>If you don't have a KDE-libs Documentation, especially if you use current
-snapshots, don't worry.&nbsp; Just switch to "Documentation"-"Update KDE-Documentation"
-<BR>This will offer you the following dialog field, where you have a various
-set of options to generate you a Documentation of your recent KDE-libs.
-<BR>&nbsp;
-<BR>&nbsp;<IMG SRC="kdevdocupdate.gif" HEIGHT=408 WIDTH=538>
-<BR><B><I>Picture 2: The Update KDE-Documentation dialog- easy and quick
-generation of new KDE-libs documentation</I></B>
-<BR>&nbsp;
-
-<P>&nbsp;Each new project will be created using KAppWizard by "File"- "New
-Project":
-
-<P><IMG SRC="kappwiz.gif" HEIGHT=428 WIDTH=408>
-<BR><B><I>Picture 3: Startpage of the application wizard</I></B>
-
-<P>KAppWizard leads you through several steps towards creating a frame
-application which you can work on.&nbsp; When the wizard is finished, files
-are copied to your development directory and classnames adapted to your
-application name.&nbsp; Your work starts like this (where KBase is the
-name of your application):
-
-<P><IMG SRC="kdevwork.gif" HEIGHT=569 WIDTH=707>
-<BR><B><I>Picture 3: the working environment after creation of a frame
-for the application KBase</I></B>
-
-<P>As you can see, we already switched to the documentation view of the
-Application KBase.&nbsp; It already contains three classes:
-<BR>- KBaseApp:&nbsp;&nbsp;&nbsp; inherits KTMainWindow and contains the
-code for the menubar, toolbar and statusbar and creates instances of the
-other classes
-<BR>- KBaseDoc:&nbsp;&nbsp;&nbsp;&nbsp; inherits QObject&nbsp; as a general
-class so it is SIGNAL-SLOT enabled (see QT Documentation).&nbsp; The document
-stores all data which it gets from
-<BR>- KBaseView:&nbsp;&nbsp; inherits QWidget.&nbsp; On itself, it creates
-an empty widget which you have to set up by implementing childwidgets or
-a complete new widget.
-
-<P>All files can be accessed by clicking on the filename on the left panner-
-the file opens automatically in the right tab of the right side for editing.
-
-<P>TODO:&nbsp; Go ahead and write a new application for the KDE-project
-!
-
-<P>You may visit the <A HREF="tutorial.html">tutorials</A> about how to
-expand your frame application to a full-featured KDE-app.
-
-<P>Have fun using KDevelop !!</BLOCKQUOTE>
-
-<HR><A HREF="index-2.html">Previous</A> <A HREF="index-4.html">Next</A>
-<A HREF="index.html#toc3">Table of Contents</A>
-</BODY>
-</HTML>
+<p><br>
+<hr><a href="index-2.html">Previous</a> <a href="index-4.html">Next</a><a href="index.html#toc3">Table
+of Contents</a>
+</body>
+</html>

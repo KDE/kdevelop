@@ -247,22 +247,36 @@ void CUpdateKDEDocDlg::OK(){
   if(!leave_new_radio_button->isChecked()){ // ok,let's delete it,attentation!!!
     proc->clearArguments();
     if(QDir::setCurrent(doc_path)){
-      *proc << "rm -f -r kab/;rm -f -r kfile/;rm -f -r kdecore/;rm -f -r kdeui/;
-                rm -f -r kspell/;rm -f -r khtmlw/;rm -f -r kfmlib/";    
+      *proc << "rm -f -r kdoc-reference/;rm -f -r kdecore/;rm -f -r kdeui/;rm -f -r jscript/;
+                rm -f -r khtmlw/;rm -f -r kfile/;rm -f -r kfmlib/;rm -f -r kab/;
+								rm -f -r kspell";    
       proc->start(KShellProcess::Block,KShellProcess::AllOutput);
     }
   }
   proc->clearArguments();
   QDir::setCurrent(kdelibs_path);
   
+  conf->setGroup("Doc_Location");
+  QString qtPath=conf->readEntry("doc_qt");
   
-  *proc << "cd kdeui/;kdoc -d " + new_doc_path + "/kdeui KDE-UI-Library *.h;
-            cd ../kdecore/;kdoc -d "+ new_doc_path +"/kdecore KDE-Core-Library *.h;
-            cd ../kfile/;kdoc -d "+ new_doc_path +"/kfile KDE-KFile-Library *.h;
-            cd ../khtmlw/;kdoc -d "+ new_doc_path +"/khtmlw KDE-HTMLW-Library *.h;
-            cd ../kfmlib/;kdoc -d "+ new_doc_path +"/kfmlib KDE-KFM-Library *.h;
-            cd ../kab/;kdoc -d "+ new_doc_path +"/kab KDE-KAB-Library *.h;
-            cd ../kspell/;kdoc -d "+ new_doc_path +"/kspell KDE-KSpell-Library *.h";
+  *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
+				 		"kdoc-reference " + qtPath + "classes.html;
+						cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
+					 	+ new_doc_path +"kdoc-reference kdecore *.h -lqt;
+						cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
+						+ new_doc_path +"kdoc-reference kdeui *.h -lqt -lkdecore;
+						cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
+						+ new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;
+						cd ../khtmlw;kdoc -d "+ new_doc_path + "/khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
+						+ new_doc_path +"kdoc-reference khtmlw *.h -lqt -lkdecore -lkdeui -ljscript;
+						cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
+						+ new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;
+						cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
+						+ new_doc_path +"kdoc-reference kfmlib *.h -lqt -lkdecore -lkdeui;
+						cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
+						+ new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;
+						cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
+						+ new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
 
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   accept();
@@ -294,3 +308,5 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
     source_edit->setText(name);
   }
 }
+
+

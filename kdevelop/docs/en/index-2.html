@@ -1,74 +1,80 @@
-<HTML>
-<HEAD>
-   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.35 i586) [Netscape]">
-   <TITLE>The KDevelop Handbook: Installation</TITLE>
-</HEAD>
-<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000EF" VLINK="#51188E" ALINK="#FF0000">
-<A HREF="index-1.html">Previous</A>
-<A HREF="index-3.html">Next</A> <A HREF="index.html#toc2">Table of Contents</A>&nbsp;
-<HR>
-<H2>
-<A NAME="s2"></A>2. Installation</H2>
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; I; Linux 2.0.36 i586) [Netscape]">
+   <title>The KDevelop Handbook: Installation</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+<a href="index-1.html">Previous</a><a href="index-3.html">Next</a><a href="index.html#toc2">Table
+of Contents</a>
+<hr>
+<h2>
+<a NAME="s2"></a>2. Installation</h2>
 
-<H2>
-<A NAME="ss2.1"></A>2.1 How to obtain KDevelop</H2>
-KDevelop can be found either on the&nbsp;&nbsp; <A HREF="http://www.kde.org/current.html">KDE
-Applications page</A>&nbsp; or on the <A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">KDevelop
-homepage</A>
-<H2>
-<A NAME="ss2.2"></A>2.2 Requirements</H2>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In order to successfully compile und use
-KDevelop, you need following programs and libraries.
+<h2>
+<a NAME="ss2.1"></a>2.1 How to obtain KDevelop</h2>
 
-<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gcc/g++ 2.7.2.1 (or compatible)
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; perl 5.004
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; autoconf 2.12
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; automake 1.2
+<blockquote>KDevelop can be found either on the&nbsp;&nbsp; <a href="http://www.kde.org/current.html">KDE
+Applications page</a>&nbsp; or on the <a href="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">KDevelop
+homepage.</a>
+<br>&nbsp;&nbsp;&nbsp; There, we offer weekly snapshots of the KDevelop
+CVS repository for those who want to stay up to date with KDevelop.</blockquote>
 
-<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Qt 1.4
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KDE 1.1
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KDE-SDK from 31.08.98 or newer
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp; with sgmltools 1.0&nbsp;
-)
+<h2>
+<a NAME="ss2.2"></a>2.2 Requirements</h2>
 
-<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KDevelop was tested under SuSE Linux&nbsp;
-5.2 on an AMD K6 200, 64MB RAM and under SuSE Linux 5.3 on an Intel 200
-MMX, 128MB RAM.
-<H2>
-<A NAME="ss2.3"></A>2.3 Compilation and installation</H2>
+<blockquote>In order to successfully compile and use KDevelop, you need
+following programs and libraries.
+<p>gcc/g++ 2.7.2.1 (or compatible)
+<br>perl 5.004
+<br>autoconf 2.12
+<br>automake 1.2
+<p>Qt 1.42
+<br>KDE 1.1
+<br>KDE-SDK from 31.08.98 or newer
+<br>(&nbsp; with sgmltools 1.0&nbsp; )
+<br>glimpse
+<p>KDevelop was tested under SuSE Linux&nbsp; 5.2 on an AMD K6 200, 64MB
+RAM and under FreeBSD 3.0-Release on an Intel 200 MMX, 128MB RAM.</blockquote>
 
-<BLOCKQUOTE>In order to compile and install KDevelop on your system, type
-the following in the base directory of the KDevelop distribution:</BLOCKQUOTE>
+<h2>
+<a NAME="ss2.3"></a>2.3 Compilation and installation</h2>
 
-<BLOCKQUOTE>
-<BLOCKQUOTE>
-<PRE><TT>% ./configure
-% make
-% make install</TT></PRE>
-</BLOCKQUOTE>
+<blockquote>In order to compile and install KDevelop on your system, type
+the following in the base directory of the KDevelop distribution:</blockquote>
+
+<blockquote>
+<blockquote>% ./configure
+<br>% make
+<br>% make install</blockquote>
 Since KDevelop uses
-<PRE>autoconf</PRE>
-you should have not trouble compiling it. Should you run into problems
-please report them to the&nbsp; authors of the KDevelop Team:
+<br>autoconf
+<br>you should have not trouble compiling it.
+<p>In order to compile the KDevelop CVS snapshot, type the following :
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %
+make -f Makefile.cvs
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+% ./configure
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+% make
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+% make install
+<p>Should you run into problems please report them to the&nbsp; authors
+of the KDevelop Team:
+<p>for concept, codeframework, maintainer:
+<br><a href="mailto:smeier@rz.uni-potsdam.de">Sandy Meier &lt;smeier@rz.uni-potsdam.de></a>
+<p>for the Application Wizard:
+<br><a href="mailto:sheidric@rz.uni-potsdam.de">Stefan Heidrich &lt;sheidric@rz.uni-potsdam.de></a>
+<p>for the Real File View:
+<br><a href="mailto:bartel@rz.uni-potsdam.de">Stefan Bartel &lt;bartel@rz.uni-potsdam.de></a>
+<p>for documentation, base application code:
+<br><a href="mailto:Ralf.Nolden@post.rwth-aachen.de">Ralf Nolden &lt;Ralf.Nolden@post.rwth-aachen.de></a>
+<p>After installing KDevelop you should read this handbook, especially
+the introduction, to set up KDevelop itself and start programming.</blockquote>
 
-<P>for concept, codeframework, maintainer:
-<BR><A HREF="mailto:smeier@rz.uni-potsdam.de">Sandy Meier &lt;smeier@rz.uni-potsdam.de></A>
-
-<P>for the Application Wizard:
-<BR><A HREF="mailto:sheidric@rz.uni-potsdam.de">Stefan Heidrich &lt;sheidric@rz.uni-potsdam.de></A>
-
-<P>for the Real File View:
-<BR><A HREF="mailto:bartel@rz.uni-potsdam.de">Stefan Bartel &lt;bartel@rz.uni-potsdam.de></A>
-
-<P>for documentation, base application code:
-<BR><A HREF="mailto:Ralf.Nolden@post.rwth-aachen.de">Ralf Nolden &lt;Ralf.Nolden@post.rwth-aachen.de></A></BLOCKQUOTE>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-After installing KDevelop you should read this handbook, especially the
-introduction, to set up KDevelop itself and start programming.
-
-<P>
-<HR><A HREF="index-1.html">Previous</A> <A HREF="index-3.html">Next</A>
-<A HREF="index.html#toc2">Table of Contents</A>
-</BODY>
-</HTML>
+<p><br>
+<hr><a href="index-1.html">Previous</a> <a href="index-3.html">Next</a><a href="index.html#toc2">Table
+of Contents</a>
+</body>
+</html>
