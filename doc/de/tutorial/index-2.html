@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDE Anwendungs Tutorials: Erste Schritte</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Weiter</A>
+ <A HREF="index-1.html">Zurück</A>
+ <A HREF="index.html#toc2">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s2">2. Erste Schritte</A></H3>
+
+<P> 
+<P>Erste Schritte - das bedeutet, sie sollten KDevelop bereits 
+soweit eingerichtet haben, daß es korrekt arbeitet. Stellen 
+Sie sicher, daß sie über das Menü "Hilfe" oder das 
+entsprechende Buch im Dokumentationsbaum Zugriff auf die 
+Online Referenz-Dokumentation von QT haben. Wenn Sie sich 
+die erste Seite der QT Dokumentation anschauen, werden Sie 
+dort Verweise auf die Abschnitte "Tutorial" und "Example 
+Programs" sehen. Unter "Tutorial" finden Sie eine 
+Einführung, die in 14 Schritten die Verwendung der QT 
+Bibliothek zum Erstellen von Anwendungen aufzeigt.
+<P>"Example Programs" führt Sie hingegen zu einer Reihe von 
+Beispielprogrammen, die QT beifügt sind und auf die in 
+den Beschreibungen mancher Klassen als beispielhafte 
+Anwendung verwiesen wird. Wenn Sie ein absoluter Neuling 
+sind, sollte Ihnen die Idee, die hinter QT steckt, angenehm 
+erscheinen; die Bereitstellung einer Bibliothek, die 
+folgendes bietet: 
+<P>
+<UL>
+<LI>Eine Basisklasse für Anwendungen (<CODE>QApplication</CODE>)
+</LI>
+<LI>Eine Widget Bibliothek für grafische 
+Benutzerschnittstellen.
+</LI>
+<LI>Ein Sortiment weiterer Hilfsklassen für Grafiken, 
+Datei- und Datenverwaltung.
+</LI>
+<LI>Der signal-slot Mechanismus für die Kommunikation 
+zwischen Klassen.
+</LI>
+<LI>Ereignis Überwachung durch event loops und virtuelle 
+Methoden.</LI>
+</UL>
+<P>Wenn Sie damit jetzt noch gar nichts anfangen können, 
+sollten Sie in 
+<A HREF="../programming/index-2.html#ss2.1">The KDevelop Programming Handbook</A> mehr über die QT 
+Bibliothek nachlesen. Dort erfahren Sie detaillierte Einzelheiten 
+zu den Grundlagen für eine QT Anwendung. Desweiteren finden Sie 
+dort eine Einführung in die Unterschiede zwischen QT- und 
+KDE-Anwendungen, im ersten Schritt des QT Tutorials sind 
+das aber nicht sonderlich viele. 
+<P>Wenn wir uns zunächst mit der QT vertraut machen, ist das 
+nebenbei ein guter Einstieg in die Programmierung von KDE 
+Anwendungen. Darum legen wir ein Projekt an, das nach dem 
+Bearbeiten die Tutorial Anwendungen erstellt.
+<P>Dazu starten wir zunächst KDevelop und wählen im 
+Menü "Projekt" den Menüpunkt "Neu". Der Application 
+Wizard erscheint, und Sie müssen sich entscheiden, welche 
+Art von Projekt Sie erstellen möchten. Für QT Anwendungen
+würden Sie QT wählen, aber wir benutzen zum Erstellen 
+unserer Beispiele das Mini-KDE Projekt. Das hat einen ganz 
+einfachen Grund: Die QT Tutorials enthalten nicht besonders 
+viel Code, und würden wir im Application Wizard die QT 
+Anwendung auswählen, hätten wir eine Arbeit, den 
+vorliegenden Code so zu ändern, daß wir ein "echtes" 
+Beispiel erstellen können. 
+<P>Auch wenn die Mini-KDE Anwendung nur aus einem leeren 
+Fenster besteht und ebenfalls auf nach der QT Bibliothek und 
+deren Headerdateien sucht, ist sie für unsere Zwecke genau 
+richtig und verlangt keine großen Änderungen. 
+<P>Auf der nächsten Seite des Wizards müssen wir die 
+projektspezifischen Informationen eingeben. Hier können 
+wir sämtliche KDE-spezfischen Zusätze weglassen, 
+beispielsweise das Mini-Icon und das Programm Icon, die 
+Dokumentation, usw. Wir geben nur die Informationen ein, die 
+zum Erstellen einer passenden Basis für die einzelnen 
+Schritte des Tutorials von Nutzen sind. 
+<P>Da die einzelnen Tutorial Schritte jeweils auf  
+dem in den vorherigen Schritten erstellten Code 
+aufbauen, beginnen wir mit dem Projektnamen <CODE>MyWidget</CODE> 
+beginnen. Dadurch wird bereits die Basisklasse erstellt, die 
+in Kapitel 4 benötigt wird, und wir müssen uns später nicht 
+mehr darum kümmern. Da wir mit dem ersten Schritt des 
+Tutorials beginnen wollen, geben wir als Versionsnummer eine 
+'1' an. Diese wird hochgezählt, wenn wir die nächsten 
+Schritte durchlaufen. 
+<P>Nun tragen Sie die restlichen benötigten Informationen wie  
+Ihren  Namen, Ihre E-Mail Adresse und das  
+Projekt-Verzeichnis ein. Mehr brauchen wir nicht, und wir 
+können zur nächsten Seite springen. 
+<P>Hier können Sie Informationen bezüglich der Versionsverwaltung 
+CVS eingeben. Aber diese Seite interessiert uns nicht. Wir lassen 
+die Voreinstellung für "VCS Unterstützung" auf "Keine" und 
+gehen direkt zur nächsten Seite.
+<P>Tragen Sie hier Ihren Dateikopf für die Headerdateien Ihres 
+Projektes ein, oder belassen Sie die Vorgaben. Das gleiche 
+gilt für die 5. Seite, wo selbiges für den Dateikopf der 
+Quelltext-Dateien eingetragen werden kann.
+<P>Schließlich sind wir auf der letzten Seite angelangt. Hier 
+müssen wir auf "Erzeugen" klicken, um das Projekt zu 
+erstellen. Ist der Button nicht verfügbar, gehen wir zur 
+ersten Seite zurück und schauen nach, ob wir nicht 
+irgendwo vergessen haben eine benötigte Information 
+einzugeben. 
+<P>Ist alles in Ordnung, wurde das Projekt erstellt, und in 
+der letzten Zeile des Ausgabefensters des Application 
+Wizards steht ***Erfolg***. 
+<P>Wählen Sie "Abbrechen", um den Wizard zu beenden. Wenn Sie 
+nun links auf die Baumansicht schauen, erkennen Sie, daß 
+das Projekt bereits eine Klasse "MyWidget" enthält. Das ist 
+so, weil wir uns für diese Bezeichnung als Anwendungsnamen 
+entschieden haben. Öffnen wir im Ordner "Globals" der 
+Klassenansicht den Unterordner "Funktionen", erkennen wir, 
+daß die Anwendung bereits eine Funktion <CODE>main()</CODE> besitzt, 
+in der die Ausführung des Programmes beginnt.
+<P>Die Anwendung ist damit bereits fertiggestellt. Sie könnten 
+nun auf "Erstellen" oder "Ausführen" gehen. Aber wir wollen 
+ja die Tutorial Anwendungen erzeugen, darum fahren wir fort 
+und änderen zuerst den Code, um unsere Tutorial Beispiele zu 
+erstellen. Das ist der nächste Schritt.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Weiter</A>
+ <A HREF="index-1.html">Zurück</A>
+ <A HREF="index.html#toc2">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
