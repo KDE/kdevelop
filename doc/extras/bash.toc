@@ -1,0 +1,80 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Bash Reference Manual</title>
+<base href="http://bashdb.sourceforge.net/"/>
+<tocsect1 name="Introduction" url="bashref.html#SEC1">
+	<tocsect2 name="What is Bash?" url="bashref.html#SEC2"/>
+	<tocsect2 name="What is a Shell?" url="bashref.html#SEC3"/>
+</tocsect1>
+<tocsect1 name="Definitions" url="bashref.html#SEC4"></tocsect1>
+<tocsect1 name="Basic Shell Features" url="bashref.html#SEC5">
+	<tocsect2 name="Shell Syntax" url="bashref.html#SEC6"/>
+	<tocsect2 name="Shell Commands" url="bashref.html#SEC15"/>
+	<tocsect2 name="Shell Functions" url="bashref.html#SEC22"/>
+	<tocsect2 name="Shell Parameters" url="bashref.html#SEC23"/>
+	<tocsect2 name="Shell Expansions" url="bashref.html#SEC26"/>
+	<tocsect2 name="Shell Redirections" url="bashref.html#SEC37"/>
+	<tocsect2 name="Executeing Commands" url="bashref.html#SEC47"/>
+	<tocsect2 name="Shell Scripts" url="bashref.html#SEC54"/>
+</tocsect1>
+<tocsect1 name="Shell Builtin Commands" url="bashref.html#SEC55">
+	<tocsect2 name="Bourne Shell Builtins" url="bashref.html#SEC56"/>
+	<tocsect2 name="Bash Builtin Commands" url="bashref.html#SEC57"/>
+	<tocsect2 name="The Set Builtin" url="bashref.html#SEC58"/>
+	<tocsect2 name="Special Builtins" url="bashref.html#SEC59"/>
+</tocsect1>
+<tocsect1 name="Shell Variables" url="bashref.html#SEC60">
+	<tocsect2 name="Bourne Shell Variables" url="bashref.html#SEC61"/>
+	<tocsect2 name="Bash Variables" url="bashref.html#SEC62"/>
+</tocsect1>
+<tocsect1 name="Bash Features" url="bashref.html#SEC63">
+	<tocsect2 name="Invoking Bash" url="bashref.html#SEC64"/>
+	<tocsect2 name="Bash Startup Files" url="bashref.html#SEC65"/>
+	<tocsect2 name="Bash Conditional Expressions" url="bashref.html#SEC77"/>
+	<tocsect2 name="Shell Arithmetic" url="bashref.html#SEC78"/>
+	<tocsect2 name="Aliases" url="bashref.html#SEC79"/>
+	<tocsect2 name="Arrays" url="bashref.html#SEC80"/>
+	<tocsect2 name="The Directory Stack" url="bashref.html#SEC81"/>
+	<tocsect2 name="Controlling the Prompt" url="bashref.html#SEC83"/>
+	<tocsect2 name="The Restricted Shell" url="bashref.html#SEC84"/>
+	<tocsect2 name="Bash POSIX Mode" url="bashref.html#SEC85"/>
+</tocsect1>
+<tocsect1 name="Job Control" url="bashref.html#SEC86">
+	<tocsect2 name="Job Control Basics" url="bashref.html#SEC87"/>
+	<tocsect2 name="Job Control Builtins" url="bashref.html#SEC88"/>
+	<tocsect2 name="Job Control Variables" url="bashref.html#SEC89"/>
+</tocsect1>
+<tocsect1 name="Using History Interactively" url="bashref.html#SEC114">
+	<tocsect2 name="Bash History Facilities" url="bashref.html#SEC115"/>
+	<tocsect2 name="Bash Hisotry Builtins" url="bashref.html#SEC116"/>
+	<tocsect2 name="History Expansion" url="bashref.html#SEC117"/>
+</tocsect1>
+<tocsect1 name="Command Line Editing" url="bashref.html#SEC90">
+	<tocsect2 name="Introduciton to Line Editing" url="bashref.html#SEC91"/>
+	<tocsect2 name="Readline Interaction" url="bashref.html#SEC92"/>
+	<tocsect2 name="Readline Init File" url="bashref.html#SEC98"/>
+	<tocsect2 name="Bindable Readline Commands" url="bashref.html#SEC102"/>
+	<tocsect2 name="Readline VI Mode" url="bashref.html#SEC111"/>
+	<tocsect2 name="Programmable Completion" url="bashref.html#SEC112"/>
+	<tocsect2 name="Programmable Completion Builtins" url="bashref.html#SEC113"/>
+</tocsect1>
+<tocsect1 name="Installing Bash" url="bashref.html#SEC121">
+	<tocsect2 name="Basic Installation" url="bashref.html#SEC122"/>
+	<tocsect2 name="Compilers and Options" url="bashref.html#SEC123"/>
+	<tocsect2 name="Compileing for Multiple Architectures" url="bashref.html#SEC124"/>
+	<tocsect2 name="Installation Names" url="bashref.html#SEC125"/>
+	<tocsect2 name="Specifying the System Type" url="bashref.html#SEC126"/>
+	<tocsect2 name="Shareing Defaults" url="bashref.html#SEC127"/>
+	<tocsect2 name="Operation Controls" url="bashref.html#SEC128"/>
+	<tocsect2 name="Operational Features" url="bashref.html#SEC129"/>
+</tocsect1>
+<tocsect1 name="Reporting Bugs" url="bashref.html#SEC130"></tocsect1>
+<tocsect1 name="Major Differences From The Bourne Shell" url="bashref.html#SEC131"></tocsect1>
+<tocsect1 name="Enhancements to BASH 2.05b" url="bashref.html#SEC133"></tocsect1>
+<tocsect1 name="Index of Shell Builtin Commands" url="bashref.html#SEC134"></tocsect1>
+<tocsect1 name="Index of Shell Reserved Words" url="bashref.html#SEC135"></tocsect1>
+<tocsect1 name="Parameter and Variable Index" url="bashref.html#SEC136"></tocsect1>
+<tocsect1 name="Function Index" url="bashref.html#SEC137"></tocsect1>
+<tocsect1 name="Concept Index" url="bashref.html#SEC138"></tocsect1>
+</kdeveloptoc>
+
