@@ -914,6 +914,8 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
  *
  * Parameters:
  *   aMethod        The method to initialize.
+ *	 isOperator			this is not used all the operator related processing
+ *									has already been done
  *
  * Returns:
  *   -
@@ -1106,7 +1108,7 @@ void CClassParser::parseMethodImpl(bool isOperator)
   lexemStack.push( new CParsedLexem( ID, name ) );
 
   // Get the method declaration.
-  fillInParsedMethod( &aMethod );
+  fillInParsedMethod( &aMethod);
 
   // Skip forward declarations.
   if( lexem != ';' )
@@ -1186,6 +1188,9 @@ int CClassParser::checkClassDecl()
         isMultiDecl = true;
         isStruct = false;
         break;
+      case CLCL:
+      	isImpl = true;
+      	break;
     }
 
     PUSH_LEXEM();
@@ -1198,10 +1203,11 @@ int CClassParser::checkClassDecl()
       ( lexem == 0 ); 
   }
 
+//this is not correct when considering an operator implementation
   // Pop the top lexem to check for ::. Then put it back again.
-  aLexem = lexemStack.pop();
-  isImpl = ( !lexemStack.isEmpty() && lexemStack.top()->type == CLCL );
-  lexemStack.push( aLexem );
+//  aLexem = lexemStack.pop();
+//  isImpl = ( !lexemStack.isEmpty() && lexemStack.top()->type == CLCL );
+//  lexemStack.push( aLexem );
 
   // If we find a '(' it's a function of some sort.
   if( lexem == '(' )

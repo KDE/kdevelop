@@ -1,3 +1,7 @@
+
+2000-01-22 Benoit Cerrina <benoit.cerrina@writeme.com>
+	* fixed bug in class parser regarding incorectly parsed operator implementations
+
 2000-01-22 Ralf Funken <funken.ruk@netcologne.de>
 	* updated de.po
 
@@ -19,7 +23,7 @@
 	  ATTENTION: KDE libs have to be compiled with --prefix=/your_KDE2_DIR so that your KDE2 apps will link and run
 	  when using --prefix as well
 	
-2000-01-19
+2000-01-19 Benoit Cerrina <benoit.cerrina@writeme.com>
 	*a better workaround for the doc tab bug, I now have an explanation why it happened.
 
 2000-01-19 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
