@@ -107,32 +107,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   type_combo->insertItem( "DATA" );
   type_combo->insertItem( "PO" );
   
-  
-  install_loc_edit = new QLineEdit( this, "install_loc_edit" );
-  install_loc_edit->setGeometry( 350, 300, 290, 30 );
-  install_loc_edit->setMinimumSize( 0, 0 );
-  install_loc_edit->setMaximumSize( 32767, 32767 );
-  install_loc_edit->setFocusPolicy( QWidget::StrongFocus );
-  install_loc_edit->setBackgroundMode( QWidget::PaletteBase );
-  install_loc_edit->setFontPropagation( QWidget::NoChildren );
-  install_loc_edit->setPalettePropagation( QWidget::NoChildren );
-  install_loc_edit->setText( "" );
-  install_loc_edit->setMaxLength( 32767 );
-  install_loc_edit->setEchoMode( QLineEdit::Normal );
-  install_loc_edit->setFrame( TRUE );
-  
-  install_loc_label = new QLabel( this, "install_loc_label" );
-  install_loc_label->setGeometry( 350, 280, 140, 20 );
-  install_loc_label->setMinimumSize( 0, 0 );
-  install_loc_label->setMaximumSize( 32767, 32767 );
-  install_loc_label->setFocusPolicy( QWidget::NoFocus );
-  install_loc_label->setBackgroundMode( QWidget::PaletteBackground );
-  install_loc_label->setFontPropagation( QWidget::NoChildren );
-  install_loc_label->setPalettePropagation( QWidget::NoChildren );
-  install_loc_label->setText(i18n("Installdir + Filename:") );
-  install_loc_label->setAlignment( 289 );
-  install_loc_label->setMargin( -1 );
-  
   size_label = new QLabel( this, "size_label" );
   size_label->setGeometry( 350, 80, 60, 30 );
   size_label->setMinimumSize( 0, 0 );
@@ -181,6 +155,32 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   install_check->setAutoRepeat( FALSE );
   install_check->setAutoResize( FALSE );
   
+
+  install_loc_label = new QLabel( this, "install_loc_label" );
+  install_loc_label->setGeometry( 350, 280, 140, 20 );
+  install_loc_label->setMinimumSize( 0, 0 );
+  install_loc_label->setMaximumSize( 32767, 32767 );
+  install_loc_label->setFocusPolicy( QWidget::NoFocus );
+  install_loc_label->setBackgroundMode( QWidget::PaletteBackground );
+  install_loc_label->setFontPropagation( QWidget::NoChildren );
+  install_loc_label->setPalettePropagation( QWidget::NoChildren );
+  install_loc_label->setText(i18n("Installdir + Filename:") );
+  install_loc_label->setAlignment( 289 );
+  install_loc_label->setMargin( -1 );
+
+  install_loc_edit = new QLineEdit( this, "install_loc_edit" );
+  install_loc_edit->setGeometry( 350, 300, 290, 30 );
+  install_loc_edit->setMinimumSize( 0, 0 );
+  install_loc_edit->setMaximumSize( 32767, 32767 );
+  install_loc_edit->setFocusPolicy( QWidget::StrongFocus );
+  install_loc_edit->setBackgroundMode( QWidget::PaletteBase );
+  install_loc_edit->setFontPropagation( QWidget::NoChildren );
+  install_loc_edit->setPalettePropagation( QWidget::NoChildren );
+  install_loc_edit->setText( "" );
+  install_loc_edit->setMaxLength( 32767 );
+  install_loc_edit->setEchoMode( QLineEdit::Normal );
+  install_loc_edit->setFrame( TRUE );
+
   ok_button = new QPushButton( this, "ok_button" );
   ok_button->setGeometry( 190, 360, 110, 30 );
   ok_button->setMinimumSize( 0, 0 );
@@ -189,9 +189,10 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
   ok_button->setPalettePropagation( QWidget::NoChildren );
-  ok_button->setText( "OK" );
+  ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
+	ok_button->setDefault(true);
 
   cancel_button = new QPushButton( this, "cancel_button" );
   cancel_button->setGeometry( 380, 360, 100, 30 );

@@ -1203,7 +1203,8 @@ void CKDevelop::slotHelpTutorial(){
 }
 void CKDevelop::slotHelpTipOfDay(){
 	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
-	tipdlg->exec();
+	tipdlg->show();
+	
 }
 
 
@@ -2078,6 +2079,13 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
+
+
+
 
 
 

@@ -3,7 +3,6 @@
 SUBDIRS = en de 
 
 ####### kdevelop will overwrite this part!!! (end)############
-SUBDIRS = en
 
 
 

@@ -23,11 +23,11 @@
 
 
 
-KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, true) {
+KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name, true) {
 	setCaption(i18n("Tip of the Day"));
-	
+
 	main_frame = new QFrame( this, "main_frame" );
-	main_frame->setGeometry( 10, 10, 410, 160 );
+	main_frame->setGeometry( 10, 10, 410, 200 );
 	main_frame->setMinimumSize( 0, 0 );
 	main_frame->setMaximumSize( 32767, 32767 );
 	main_frame->setFocusPolicy( QWidget::NoFocus );
@@ -36,21 +36,8 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, 
 	main_frame->setPalettePropagation( QWidget::NoChildren );
 	main_frame->setFrameStyle( 33 );
 
-	show_check = new QCheckBox( this, "show_check" );
-	show_check->setGeometry( 20, 170, 260, 30 );
-	show_check->setMinimumSize( 0, 0 );
-	show_check->setMaximumSize( 32767, 32767 );
-	show_check->setFocusPolicy( QWidget::TabFocus );
-	show_check->setBackgroundMode( QWidget::PaletteBackground );
-	show_check->setFontPropagation( QWidget::NoChildren );
-	show_check->setPalettePropagation( QWidget::NoChildren );
-	show_check->setText(i18n("show Tip of the day on next start"));
-	show_check->setAutoRepeat( FALSE );
-	show_check->setAutoResize( TRUE );
-	show_check->setChecked( TRUE );
-
 	bmp_frame = new QFrame( this, "bmp_frame" );
-	bmp_frame->setGeometry( 25, 40, 70, 100 );
+	bmp_frame->setGeometry( 20, 20, 50, 50 );
 	bmp_frame->setMinimumSize( 0, 0 );
 	bmp_frame->setMaximumSize( 32767, 32767 );
 
@@ -62,10 +49,36 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, 
 	bmp_frame->setFocusPolicy( QWidget::NoFocus );
 	bmp_frame->setFontPropagation( QWidget::NoChildren );
 	bmp_frame->setPalettePropagation( QWidget::NoChildren );
-	bmp_frame->setFrameStyle( 49 );
-
+	bmp_frame->setFrameStyle(49);
+	
+	QLabel* did_know_label;
+	did_know_label = new QLabel( this, "Label_1" );
+	did_know_label->setGeometry( 80, 20, 330, 50 );
+	did_know_label->setMinimumSize( 0, 0 );
+	did_know_label->setMaximumSize( 32767, 32767 );
+	{
+		QFont font( "Arial", 14, 75, 0 );
+		font.setStyleHint( (QFont::StyleHint)0 );
+		font.setCharSet( (QFont::CharSet)0 );
+		did_know_label->setFont( font );
+	}
+	{
+		QColorGroup normal( QColor( QRgb(16777215) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(0) ) );
+		QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(8421504) ), QColor( QRgb(0) ) );
+		QColorGroup active( QColor( QRgb(16777215) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(0) ) );
+		QPalette palette( normal, disabled, active );
+		did_know_label->setPalette( palette );
+	}
+	did_know_label->setFocusPolicy( QWidget::NoFocus );
+	did_know_label->setBackgroundMode( QWidget::PaletteLight );
+	did_know_label->setFontPropagation( QWidget::NoChildren );
+	did_know_label->setPalettePropagation( QWidget::NoChildren );
+	did_know_label->setText( i18n("Did you know...?") );
+	did_know_label->setFrameStyle(49);
+	did_know_label->setAlignment( 1316 );
+	
 	tip_label = new QLabel( this, "tip_label" );
-	tip_label->setGeometry( 110, 20, 300, 140 );
+	tip_label->setGeometry( 20, 80, 390, 120 );
 	tip_label->setMinimumSize( 0, 0 );
 	tip_label->setMaximumSize( 32767, 32767 );
 	tip_label->setFocusPolicy( QWidget::NoFocus );
@@ -75,10 +88,23 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, 
 	tip_label->setFrameStyle( 49 );
 	tip_label->setText( "" );
 	tip_label->setAlignment( 1313 );
-	tip_label->setMargin( -1 );
+	tip_label->setMargin( 5 );
+
+	show_check = new QCheckBox( this, "show_check" );
+	show_check->setGeometry( 20, 220, 260, 30 );
+	show_check->setMinimumSize( 0, 0 );
+	show_check->setMaximumSize( 32767, 32767 );
+	show_check->setFocusPolicy( QWidget::TabFocus );
+	show_check->setBackgroundMode( QWidget::PaletteBackground );
+	show_check->setFontPropagation( QWidget::NoChildren );
+	show_check->setPalettePropagation( QWidget::NoChildren );
+	show_check->setText(i18n("show Tip of the day on next start"));
+	show_check->setAutoRepeat( FALSE );
+	show_check->setAutoResize( TRUE );
+	show_check->setChecked( TRUE );
 
 	next_button = new QPushButton( this, "next_button" );
-	next_button->setGeometry( 50, 210, 130, 30 );
+	next_button->setGeometry( 50, 260, 130, 30 );
 	next_button->setMinimumSize( 0, 0 );
 	next_button->setMaximumSize( 32767, 32767 );
 	connect( next_button, SIGNAL(clicked()), SLOT(slotNext()) );
@@ -91,7 +117,7 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, 
 	next_button->setAutoResize( FALSE );
 	
 	ok_button = new QPushButton( this, "ok_button" );
-	ok_button->setGeometry( 250, 210, 130, 30 );
+	ok_button->setGeometry( 250, 260, 130, 30 );
 	ok_button->setMinimumSize( 0, 0 );
 	ok_button->setMaximumSize( 32767, 32767 );
 	connect( ok_button, SIGNAL(clicked()), SLOT(slotOK()) );
@@ -105,14 +131,7 @@ KTipofDay::KTipofDay(QWidget *parent, const char *name ) : QDialog(parent,name, 
 	ok_button->setDefault( TRUE );
 
 
-	KConfig *config = kapp->getConfig();
-	config->setGroup("TipOfTheDay");
- 	bool showTip=config->readBoolEntry("show_tod",true);
-
-	if(showTip)
-	  setGeometry(QApplication::desktop()->width()/2-215, QApplication::desktop()->height()/2-130, 430,260);
-	else
-		resize(430,260);
+	setGeometry(QApplication::desktop()->width()/2-215, QApplication::desktop()->height()/2-150, 430,300);
 	
 	setMinimumSize( 0, 0 );
 	setMaximumSize( 32767, 32767 );
@@ -176,6 +195,16 @@ void KTipofDay::slotNext()
 		f.close();
 	}
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -79,7 +79,7 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
   ok_button->setPalettePropagation( QWidget::NoChildren );
-  ok_button->setText( "OK" );
+  ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
 
@@ -126,5 +126,6 @@ void CDocTreePropDlg::slotFileButtonClicked(){
     file_edit->setText(str);
   }
 }
+
 
 

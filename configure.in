@@ -61,18 +61,5 @@ dnl everything to compile and run a KDE program is already checked
 
 dnl add here all your Makefiles. This are created by configure
 AC_OUTPUT(Makefile kdevelop/Makefile kdevelop/docs/Makefile kdevelop/docs/en/Makefile po/Makefile kdevelop/classparser/Makefile kdevelop/kdlgedit/Makefile kdevelop/kwrite/Makefile kdevelop/docs/de/Makefile kdevelop/pics/mini/Makefile kdevelop/pics/Makefile kdevelop/vc/Makefile kdevelop/print/Makefile kdevelop/templates/Makefile kdevelop/toolbar/Makefile kdevelop/tools/Makefile )
-	kdevelop/kwrite/Makefile \
-	kdevelop/classparser/Makefile \
-	kdevelop/kdlgedit/Makefile \
-	kdevelop/print/Makefile \
-	kdevelop/vc/Makefile \
-	kdevelop/templates/Makefile \
-	kdevelop/tools/Makefile \
-	kdevelop/docs/Makefile \
-	kdevelop/docs/en/Makefile \
-	kdevelop/toolbar/Makefile \
-	kdevelop/pics/Makefile \
-	kdevelop/pics/mini/Makefile \
-	kdevelop/Makefile \
-	po/Makefile)
+
 

@@ -638,49 +638,54 @@ void CKDevelop::slotProjectAPI(){
   QString doc_kde=config->readEntry("doc_kde");
   QString qt_ref_file=doc_kde+"kdoc-reference/qt.kdoc";
   QString kde_ref_file=doc_kde+"kdoc-reference/kdecore.kdoc";
+  QString khtmlw_ref_file=doc_kde+"kdoc-reference/khtmlw.kdoc";
 
-  if(doc_kde.isEmpty() || !QFileInfo(kde_ref_file).exists()){
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  shell_process.clearArguments();
+
+  if( !QFileInfo(kde_ref_file).exists()){
     KMsgBox::message(this,i18n("Warning"),i18n("The KDE-library documentation is not installed.\n"
                                                 "Please update your documentation with the options\n"
                                                 "given in the KDevelop Setup dialog, Documentation tab.\n\n"
                                                 "Your API-documentation will be created without\n"
                                                 "cross-references to the KDE and Qt libraries."),KMsgBox::EXCLAMATION);
-
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    shell_process.clearArguments();
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << prj->getProjectName();
     shell_process << "*.h";
-    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 //    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else if(!QFileInfo(qt_ref_file).exists()){
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    shell_process.clearArguments();
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
     shell_process << prj->getProjectName();
     shell_process << "*.h";
-    shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+		if(!QFileInfo(khtmlw_ref_file).exists()){
+    	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
+		}
+		else{
+    	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
+		}
 //    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else{
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    shell_process.clearArguments();
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
     shell_process << prj->getProjectName();
     shell_process << "*.h";
-    shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+		if(!QFileInfo(khtmlw_ref_file).exists()){
+    	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
+		}
+		else{
+    	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
+		}
 //    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 
 void CKDevelop::slotProjectManual(){
