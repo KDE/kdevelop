@@ -174,7 +174,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
-    search_button = new QPushButton(i18n("&Search"), this);
+    search_button = new KPushButton(KGuiItem(i18n("&Search"),"grep"), this);
     search_button->setDefault(true);
     KPushButton *done_button = new KPushButton(KStdGuiItem::cancel(), this);
     button_layout->addStretch();

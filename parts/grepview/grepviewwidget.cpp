@@ -124,7 +124,7 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part) :  QWidget(0, "grepview widge
 	m_part = part;
 
 	m_closeButton = new QToolButton(m_tabWidget);//@todo change text/icon
-	m_closeButton->setIconSet(SmallIcon("tab_remove"));
+	m_closeButton->setIconSet(SmallIconSet("tab_remove"));
 	m_closeButton->setEnabled(false);
 
 	connect (m_closeButton, SIGNAL(clicked()), this, SLOT(slotCloseCurrentOutput()));

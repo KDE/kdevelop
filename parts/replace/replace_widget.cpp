@@ -65,7 +65,7 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
     QHBoxLayout * buttonlayout = new QHBoxLayout( layout );
 
     _cancel = new KPushButton( KStdGuiItem::cancel(), this );
-    _replace = new QPushButton( i18n("Replace"), this );
+    _replace = new KPushButton( KGuiItem(i18n("Replace"),"filefind"), this );
 
     _cancel->setEnabled( false );
     _replace->setEnabled( false );
