@@ -54,9 +54,9 @@ KPopupMenu *ClassTreeItem::createPopup()
 
     KPopupMenu *popup = new KPopupMenu();
     if (features & KDevLanguageSupport::Declarations)
-        popup->insertItem( i18n("Go to Declaration..."), classTree(), SLOT(slotGotoDeclaration()) );
+        popup->insertItem( i18n("Go to Declaration"), classTree(), SLOT(slotGotoDeclaration()) );
     if (m_item->itemType() == PIT_METHOD)
-        popup->insertItem( i18n("Go to Definition..."), classTree(), SLOT(slotGotoImplementation()) );
+        popup->insertItem( i18n("Go to Definition"), classTree(), SLOT(slotGotoImplementation()) );
 
     QString title;
     switch(m_item->itemType()) {
