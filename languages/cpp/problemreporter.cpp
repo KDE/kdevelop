@@ -23,6 +23,7 @@
 
 #include <kdevpartcontroller.h>
 #include <kdevmainwindow.h>
+#include <kdevproject.h>
 
 #include <kdeversion.h>
 #include <kparts/part.h>
@@ -210,7 +211,7 @@ void ProblemReporter::reparse()
 
 void ProblemReporter::slotSelected( QListViewItem* item )
 {
-    KURL url( item->text(1) );
+    KURL url( m_cppSupport->project()->projectDirectory() + item->text(1) );
     int line = item->text( 2 ).toInt();
     // int column = item->text( 3 ).toInt();
     m_cppSupport->partController()->editDocument( url, line-1 );
@@ -227,9 +228,11 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
     QString msg = p.text();
     msg = msg.replace( QRegExp("\n"), "" );
 
+    QString relFileName = fileName;
+    relFileName.remove(m_cppSupport->project()->projectDirectory());
     new ProblemItem( this,
 		     levelToString( p.level() ),
-		     fileName,
+		     relFileName,
 		     QString::number( p.line() + 1 ),
 		     QString::number( p.column() + 1 ),
 		     msg );
