@@ -7,6 +7,21 @@ KDLGLOADER README
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+===================================================================================
+
+0. Table of contents
+--------------------
+
+1. Introduction
+2. Advantages and disadvantages
+3. How to use it
+4. Futur plans
+5. Changelog
+6. Authors
+
+===================================================================================
+
+
 1. Introduction
 ---------------
 
@@ -68,3 +83,12 @@ The first version will return the pointer to the item with the varname
 ------------
 
 1999-06-13 First version in cvs.
+
+6. Authors
+----------
+
+Main author :
+  Pascal Krahmer <pascal@beast.de>
+
+Provided you by :
+  The KDevelop Team.

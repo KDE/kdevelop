@@ -16,3 +16,4 @@ install:
 	install -m 555 libkdlgloader.so $(LIBINSTALLDIR)
 	install -m 555 kdlgloader.h $(INCINSTALLDIR)
 
+distdir:
