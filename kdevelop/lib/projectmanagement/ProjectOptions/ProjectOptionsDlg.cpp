@@ -64,7 +64,7 @@ ProjectOptionsDlg::ProjectOptionsDlg(QWidget *parent, const char *name, ProjectS
 
 	// iterate the compilers
 	QListViewItem* compilerItem;
-	QList<KDevCompiler> *compilers = ps->compilers();
+	QList<KDevCompiler> *compilers = ps->currentProject()->compilers();
   QListIterator<KDevCompiler> it(*compilers);
   for ( ; it.current(); ++it ) {
     KDevCompiler *comp = it.current();
@@ -114,7 +114,7 @@ void ProjectOptionsDlg::slotButtonOkClicked(){
 void ProjectOptionsDlg::slotButtonApplyClicked(){
 	// iterate the compilers
 	QListViewItem* compilerItem;
-	QList<KDevCompiler> *compilers = m_ps->compilers();
+	QList<KDevCompiler> *compilers = m_ps->currentProject()->compilers();
   QListIterator<KDevCompiler> it(*compilers);
   for ( ; it.current(); ++it ) {
     KDevCompiler *comp = it.current();
