@@ -403,7 +403,7 @@ void MakeWidget::searchItem(int parag)
 	{
 		// open the file
 		//kdDebug(9004) << "Opening file: " << directory(parag) << item->fileName << endl;
-		m_part->partController()->editDocument(directory(parag) + item->fileName, item->lineNum);
+		m_part->partController()->editDocument(item->fileName, item->lineNum);
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);
 	}

@@ -30,6 +30,8 @@ MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QStr
 MakeActionFilter::MakeActionFilter( OutputFilter& next )
 	: OutputFilter( next )
 {
+#define DEBUG
+
 #ifdef DEBUG
 	test();
 #endif
@@ -42,11 +44,13 @@ QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormats()
 
 	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
 	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 )
-	<< ActionFormat( i18n("generating"), "moc", ".*/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("generating"), "uic", ".*/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 )
+	<< ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
+	<< ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 )
+	<< ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
+	<< ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
+ 	<< ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("linking"), "g++", "g\\+\\+ (?:\\S* )*-o ([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("installing"), "", "^\\s*(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
+	<< ActionFormat( i18n("installing"), "", "^/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
 	;
