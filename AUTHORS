@@ -34,13 +34,16 @@ Help with KParts, KGenericFactory and other KDE infrastructure:
   Simon Hausmann <hausmann@kde.org>
 
 Subversion KPart:
-	Mickael Marchand <marchand@kde.org>
-
+  Mickael Marchand <marchand@kde.org>
 
 Patches:
-domseichter@t-online.de (Dominik Seichter)
-Yann Hodique <Yann.Hodique@lifl.fr>
-Hornung-Heinz@t-online.de (Heinz Hornung)
+  Dominic Seichter <domseichter@t-online.de>
+  Yann Hodique <Yann.Hodique@lifl.fr>
+  Heinz Hornung <Hornung-Heinz@t-online.de>
+
+SplashScreen:
+  Marion Klein <MarionKlein@wanadoo.fr>
+
 
 Other software included in the source package:
 
