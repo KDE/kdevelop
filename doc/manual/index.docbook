@@ -11,10 +11,10 @@
 <author>
 <firstname>Ralf</firstname><surname>Nolden </surname>
 <affiliation><orgname>The KDevelop Team</orgname>
-<address><email>&lt;Ralf.Nolden@post.rwth-aachen.de&gt;</email></address></affiliation>
+<address><email>Ralf.Nolden@post.rwth-aachen.de</email></address></affiliation>
 </author>
 <corpauthor>The Kdevelop Team</corpauthor>
-<othercredit>
+<othercredit role="reviewer">
 <firstname>Lauri</firstname><surname>Watts</surname>
 <contrib>Reviewer</contrib>
 <affiliation><address><email>vampyr@atconnex.net</email></address></affiliation>

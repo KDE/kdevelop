@@ -3,64 +3,20 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
 ]>
-
-<book id="kdevelop" lang="en">
-
-<!-- This header contains all of the meta-information for the document such
-as Authors, publish date, the abstract, and Keywords -->
+<book lang="en">
 
 <bookinfo>
-
 <title>The KDevelop2 Engine Handbook</title>
 
 <authorgroup>
 <author>
 <firstname>Ivan</firstname>
-<othername></othername>
 <surname>Hawkes</surname>
 </author>
 </authorgroup>
 
-<!-- This is a set of Keywords for indexing by search engines.
-Please at least include KDE, the KDE package it is in, the name
- of your application, and a few relevant keywords. -->
-
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>KDevelop</keyword>
-<keyword>KDevelop2</keyword>
-<keyword>Extending</keyword>
-<keyword>Developer</keyword>
-</keywordset>
-
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
-
-<date>Tue Dec 19 2000</date>
-<releaseinfo>0.1</releaseinfo>
-
-<revhistory>
-<revision>
-<revnumber></revnumber>
-<date></date>
-<authorinitials></authorinitials>
-<revremark>Initial release.
-</revremark>
-</revision>
-<revision>
-<revnumber>0.1
-</revnumber>
-<date>Tue Dec 19 2000</date>
-<authorinitials></authorinitials>
-<revremark>Initial release.
-</revremark>
-</revision>
-</revhistory>
-
-<!-- Abstract about this handbook -->
+<date>19/12/2000</date>
+<releaseinfo>0.01.00</releaseinfo>
 
 <abstract>
 <para>
@@ -69,6 +25,14 @@ This Handbook describes the techniques and interfaces used to extend the
 a KDevelop2 Part, and provide other information on extending the Kdevelop2 interface.
 </para>
 </abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>KDevelop2</keyword>
+<keyword>Extending</keyword>
+<keyword>Developer</keyword>
+</keywordset>
 
 </bookinfo>
 
@@ -152,8 +116,7 @@ application work. -->
 <para>My Mouse doesn't work. How do I quit <application>KDevelop</application>?</para>
 </question>
 <answer>
-<para>You silly goose! Check out the <link linkend="commands">Commands
-Section</link> for the answer.</para>
+<para>You silly goose!</para>
 </answer>
 </qandaentry>
 <qandaentry>
