@@ -276,7 +276,7 @@
                                     <cstring>newPCSButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add &amp;Persistant Class Store...</string>
+                                    <string>&amp;Create Code Completion Database...</string>
                                 </property>
                             </widget>
                         </hbox>

@@ -104,6 +104,7 @@ void CCConfigWidget::initCodeCompletionTab( )
 
     QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion Options") );
     codeCompletionOptions->setExpandable( true );
+    codeCompletionOptions->setOpen( true );
 
     //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint Options") );
 
@@ -119,7 +120,9 @@ void CCConfigWidget::initCodeCompletionTab( )
     m_includeTypedefs = new QCheckListItem( codeCompletionOptions, i18n("Include Typedefs"), QCheckListItem::CheckBox );
     m_includeTypedefs->setOn( c->includeTypedefs() );
     
-    m_pcsOptions = new QListViewItem( advancedOptions, i18n("Persistant Class Store") );
+    m_pcsOptions = new QListViewItem( advancedOptions, i18n("Code Completion Databases") );
+    m_pcsOptions->setOpen( true );
+
     QValueList<Catalog*> catalogs = m_pPart->codeRepository()->registeredCatalogs();
     for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
     {
