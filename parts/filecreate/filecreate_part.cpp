@@ -62,7 +62,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   m_numWidgets = 2;
   
   //setWidget(new FileCreateWidget2(this));
-  selectWidget(0);
+  selectWidget(1);
   
   
 }
@@ -273,14 +273,14 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   KURL selectedURL;
 
   KDialogBase * dialogBase = NULL;
-  FileCreateWidget * filetypeWidget = NULL;
+  FileCreateWidget2 * filetypeWidget = NULL;
 
   FileDialog * fileDialogWidget = NULL;  
   
   // If the file type (extension) is unknown, we're going to need to ask
   if (ext==QString::null) {
     m_filedialogFiletype = NULL;
-    filetypeWidget = new FileCreateWidget(this);
+    filetypeWidget = new FileCreateWidget2(this);
     connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileCreateFileType *) ) ,
              this, SLOT(slotNoteFiletype(const FileCreateFileType *)) );
     filetypeWidget->refresh();
