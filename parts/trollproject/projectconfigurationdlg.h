@@ -14,7 +14,7 @@
 
 enum QMakeBuildMode    {QBM_DEBUG,QBM_RELEASE};
 enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
-enum QMakeDepends      {QD_QT=1,QD_OPENGL=2,QD_THREAD=4,QD_X11=8};
+enum QMakeDepends      {QD_QT=1,QD_OPENGL=2,QD_THREAD=4,QD_X11=8,QD_STATIC=16};
 enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
 
 #include "projectconfigurationdlgbase.h"
@@ -30,6 +30,7 @@ public:
   void                   UpdateControls();
 
 public slots:
+  virtual void           radioLibrarytoggled(bool);
   virtual void           updateProjectConfiguration();
   virtual void           browseTargetPath();
   virtual void           clickSubdirsTemplate();

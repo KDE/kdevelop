@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ProjectConfigurationDlgBase</class>
 <author>Jakob Simon-Gaarde</author>
 <widget class="QDialog">
@@ -111,7 +111,7 @@
                         <property name="title">
                             <string>Template</string>
                         </property>
-                        <vbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
@@ -121,7 +121,7 @@
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QRadioButton">
+                            <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
                                 <property name="name">
                                     <cstring>radioApplication</cstring>
                                 </property>
@@ -132,7 +132,7 @@
                                     <string>Create an application</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QRadioButton" row="1" column="0">
                                 <property name="name">
                                     <cstring>radioLibrary</cstring>
                                 </property>
@@ -143,7 +143,18 @@
                                     <string>Create a library</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>checkStatic</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Static</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
                                 <property name="name">
                                     <cstring>radioSubdirs</cstring>
                                 </property>
@@ -154,7 +165,7 @@
                                     <string>This project holds subdirectories</string>
                                 </property>
                             </widget>
-                        </vbox>
+                        </grid>
                     </widget>
                     <widget class="QGroupBox">
                         <property name="name">
@@ -696,6 +707,12 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>clickSubdirsTemplate()</slot>
     </connection>
+    <connection>
+        <sender>radioLibrary</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>radioLibrarytoggled(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
@@ -719,6 +736,18 @@
     <slot>browseTargetPath()</slot>
     <slot>clickSubdirsTemplate()</slot>
     <slot>updateProjectConfiguration()</slot>
+    <slot>radioLibrarytoggled(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

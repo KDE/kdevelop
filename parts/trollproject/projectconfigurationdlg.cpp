@@ -31,6 +31,12 @@ ProjectConfigurationDlg::~ProjectConfigurationDlg()
 {
 }
 
+void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
+//=============================================
+{
+	if(!on) checkStatic->setChecked(false);
+	checkStatic->setEnabled(on);
+}
 
 void ProjectConfigurationDlg::browseTargetPath()
 //==============================================
@@ -66,6 +72,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     m_projectConfiguration->m_requirements += QD_THREAD;
   if (checkX11->isChecked())
     m_projectConfiguration->m_requirements += QD_X11;
+  if (checkStatic->isChecked())
+    m_projectConfiguration->m_requirements += QD_STATIC;
 
   // Warnings
   m_projectConfiguration->m_warnings = QWARN_OFF;
@@ -116,6 +124,7 @@ void ProjectConfigurationDlg::UpdateControls()
   // Buildmode
   if (activateRadiobutton)
     activateRadiobutton->setChecked(true);
+
   switch (m_projectConfiguration->m_buildMode)
   {
     case QBM_DEBUG:
@@ -137,6 +146,8 @@ void ProjectConfigurationDlg::UpdateControls()
     checkThread->setChecked(true);
   if (m_projectConfiguration->m_requirements & QD_X11)
     checkX11->setChecked(true);
+  if (m_projectConfiguration->m_requirements & QD_STATIC)
+    checkStatic->setChecked(true);
 
   // Warnings
   if (m_projectConfiguration->m_warnings == QWARN_ON)

@@ -808,6 +808,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     configList.append("thread");
   if (item->configuration.m_requirements & QD_X11)
     configList.append("x11");
+  if (item->configuration.m_requirements & QD_STATIC)
+    configList.append("staticlib");
   Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
   // Config strings
@@ -1582,6 +1584,8 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         item->configuration.m_requirements += QD_THREAD;
       if (lst.find("opengl")!=lst.end())
         item->configuration.m_requirements += QD_OPENGL;
+      if (lst.find("staticlib")!=lst.end())
+        item->configuration.m_requirements += QD_STATIC;
     }
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())
