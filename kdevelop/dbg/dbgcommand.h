@@ -44,6 +44,9 @@ public:
   bool expectReply() const                  { return waitForReply_; }
   bool typeMatch(const char cmdType) const  { return (prompt_ == cmdType); }
 
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "DbgCommand", 10) == 0; }
+
 protected:
   QString command_;
   bool    isRunCmd_;

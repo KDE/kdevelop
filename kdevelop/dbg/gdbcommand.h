@@ -79,6 +79,8 @@ public:
   GDBCommand(const QString& command, bool isRunCmd=false, bool isInfoCmd=true,
               char prompt=WAIT);
 	virtual ~GDBCommand();
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "GDBCommand", 10) == 0; }
 	
 	virtual QString cmdToSend();
 	
@@ -95,7 +97,9 @@ public:
   GDBItemCommand( VarItem* item, const QString& command,
                   bool isRunCmd=false, char prompt=DATAREQUEST);
 	virtual ~GDBItemCommand();
-	
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "GDBItemCommand", 14) == 0; }
+
 	VarItem* getItem()      { return item_; }
 
 private:
@@ -110,6 +114,9 @@ class GDBPointerCommand : public GDBItemCommand
 public:
   GDBPointerCommand(VarItem* item);
 	virtual ~GDBPointerCommand();
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "GDBPointerCommand", 17) == 0; }
+
 };
 
 /***************************************************************************/
@@ -130,6 +137,8 @@ class GDBSetBreakpointCommand : public GDBCommand
 public:
   GDBSetBreakpointCommand(const QString& setCommand, int key);
 	virtual ~GDBSetBreakpointCommand();
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "GDBSetBreakpointCommand", 23) == 0; }
 	
 	int getKey() const        { return key_; }
 	

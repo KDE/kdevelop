@@ -839,36 +839,31 @@ void GDBController::parseBacktraceList(char* buf)
 
 // When a breakpoint has been set, gdb responds with some data about the
 // new breakpoint. We just inform the breakpoint system about this.
-void GDBController::parseBreakpointSet(char* /*buf*/)
+void GDBController::parseBreakpointSet(char* buf)
 {
-#warning FIXME
-/*
-  if (GDBSetBreakpointCommand* BPCmd = dynamic_cast<GDBSetBreakpointCommand*>(currentCmd_))
+  if (currentCmd_->isA("GDBSetBreakpointCommand"))
   {
+    GDBSetBreakpointCommand* BPCmd = static_cast<GDBSetBreakpointCommand*>(currentCmd_);
     // ... except in this case :-) A -1 key tells us that this is
     // a special internal breakpoint, and we shouldn't do anything with it.
     // Currently there are _no_ internal breakpoints.
     if (BPCmd->getKey() != -1)
       emit rawGDBBreakpointSet(buf, BPCmd->getKey());
   }
-*/
 }
 
 // **************************************************************************
 
 // Extra data needed by an item was requested. Here's the result.
-void GDBController::parseRequestedData(char* /*buf*/)
+void GDBController::parseRequestedData(char* buf)
 {
-#warning FIXME
-/*
-  if (GDBItemCommand* gdbItemCommand = dynamic_cast<GDBItemCommand*> (currentCmd_))
+  if (currentCmd_->isA("GDBItemCommand"))
   {
     // Fish out the item from the command and let it deal with the data
-    VarItem* item = gdbItemCommand->getItem();
+    VarItem* item = (static_cast<GDBItemCommand*>(currentCmd_))->getItem();
     item->updateValue(buf);
     item->trim();
   }
-*/
 }
 
 // **************************************************************************
