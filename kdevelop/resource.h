@@ -184,7 +184,7 @@
 
 ///////////////////////////////////////////////////////////////////
 // tab-ID's for the t_tab_view
-#define CV 0
+#define CV  0
 #define LFV 1
 #define RFV 2
 #define DOC 3

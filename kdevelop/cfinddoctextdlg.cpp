@@ -35,7 +35,7 @@ CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(p
     icon_loader = KApplication::getKApplication()->getIconLoader();
     resize(250,120);
     setCaption(i18n("Search for Help on..."));
-    QPixmap question_pix = icon_loader->loadMiniIcon("mini-question.xpm");
+    QPixmap question_pix = icon_loader->loadMiniIcon("contents.xpm");
     setIcon(question_pix);
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 
@@ -96,6 +96,8 @@ void CFindDocTextDlg::slotFind()
 {
     emit signalFind( text );
 }
+
+
 
 
 

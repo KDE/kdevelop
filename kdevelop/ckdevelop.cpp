@@ -264,6 +264,11 @@ void CKDevelop::slotFilePrint(){
   delete (printerdlg);
 }
 
+void CKDevelop::slotTCurrentTab(int item){
+  t_tab_view->setCurrentTab(item);
+}
+
+
 void CKDevelop::slotSCurrentTab(int item){
   s_tab_view->setCurrentTab(item);
 }
@@ -286,6 +291,7 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
+  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   config->writeEntry("Autosave",bAutosave);
   config->writeEntry("Autosave Timeout",saveTimeout);
@@ -1226,6 +1232,8 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     beep = false;
   }
 }
+
+
 void CKDevelop::slotTTabSelected(int item){
   if(item == DOC ){
     // disable the outputview
@@ -1233,9 +1241,10 @@ void CKDevelop::slotTTabSelected(int item){
   }
 }
 void CKDevelop::slotSTabSelected(int item){
-  if (item == HEADER){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC)
-      t_tab_view->setCurrentTab(CV);
+	if (item == HEADER){
+		if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+      	t_tab_view->setCurrentTab(CV);
+		}
     disableCommand(ID_BUILD_COMPILE_FILE);
     edit_widget = header_widget;
     edit_widget->setFocus();
@@ -1249,8 +1258,9 @@ void CKDevelop::slotSTabSelected(int item){
 
   }
   if (item == CPP){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC)
-      t_tab_view->setCurrentTab(CV);
+		if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+      	t_tab_view->setCurrentTab(CV);
+		}
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
@@ -1263,6 +1273,7 @@ void CKDevelop::slotSTabSelected(int item){
 	    setCaption("KDevelop " + version + ": " +prj->getProjectName()+":  "+ edit_widget->getName());
 		else
 	    setCaption("KDevelop " + version + ": " + edit_widget->getName());
+
   }
   if(item == BROWSER){
     if(bAutoswitch)
@@ -1646,20 +1657,24 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_REBUILD_ALL:
   	slotBuildRebuildAll();
   	break;
+
+  case ID_BUILD_DEBUG:
+    slotBuildDebug();
+    break;
   case ID_BUILD_RUN:
     slotBuildRun();
     break;
   case ID_BUILD_STOP:
     slotBuildStop();
     break;
-  case ID_DOC_SEARCH_TEXT:
-    slotDocSText();
-    break;
   case ID_DOC_BACK:
     slotDocBack();
     break;
   case ID_DOC_FORWARD:
     slotDocForward();
+    break;
+  case ID_DOC_SEARCH_TEXT:
+    slotDocSText();
     break;
   case ID_HELP_SEARCH:
     slotHelpSearch();
@@ -1766,6 +1781,18 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

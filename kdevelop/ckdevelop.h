@@ -243,6 +243,7 @@ public:
   /**cv,lfv,wfv,doc*/
   void slotTTabSelected(int item);
   void slotSCurrentTab(int item);
+  void slotTCurrentTab(int item);
   void slotMenuBuffersSelected(int id);
   void slotClickedOnMessagesWidget();
   void slotKeyPressedOnStdinStdoutWidget(int key);

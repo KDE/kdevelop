@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
 	    kdevelop->show();
 	    a.getConfig()->setGroup("General Options");
     	    kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
+            kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
     }
     if(bStartLogo){
       start_logo->close();
@@ -50,6 +51,9 @@ int main(int argc, char* argv[]) {
     int rc = a.exec();
     return rc;
 }
+
+
+
 
 
 

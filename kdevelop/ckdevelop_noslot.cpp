@@ -40,8 +40,9 @@ void CKDevelop::refreshTrees(){
  
 
 int CKDevelop::getTabLocation(QString filename){
-  if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
-     || filename.right(2) == ".c"){
+  if(filename.right(4) == ".cpp" || filename.right(4) == ".CPP" || filename.right(2) == ".c"
+     || filename.right(2) == ".C" || filename.right(3) == ".cc"|| filename.right(3) == ".CC"
+     || filename.right(4) == ".cxx"|| filename.right(4) == ".CXX"){
     return CPP;
   }
   else{
@@ -86,7 +87,8 @@ void CKDevelop::switchToFile(QString filename){
   else{
     edit_widget = cpp_widget;
     s_tab_view->setCurrentTab(CPP);
-    if(build_menu->isItemEnabled(ID_BUILD_MAKE))
+
+    if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
       enableCommand(ID_BUILD_COMPILE_FILE);
     //output_widget->append("current edit_widget = cpp_widget");
   }
@@ -224,6 +226,12 @@ void CKDevelop::switchToWorkspace(int id){
   }
   else{showTreeView(false);}
 }
+
+
+
+
+
+
 
 
 

@@ -54,7 +54,7 @@ CKDevelop::CKDevelop(){
   config->setGroup("General Options");
   bool showOutput=config->readBoolEntry("show_output_view",false);
   if(showOutput)
-      { slotViewTOutputView();}
+  	slotViewTOutputView();
 }
 
 
@@ -109,13 +109,14 @@ void CKDevelop::init(){
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
   connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
 
-  log_file_tree = new CLogFileView(t_tab_view,"lfv");
-  log_file_tree->setIndentSpacing(15);
-  log_file_tree->setFocusPolicy(QWidget::NoFocus);
-  
+
   class_tree = new CClassView(t_tab_view,"cv");
   class_tree->setIndentSpacing(15);
   class_tree->setFocusPolicy(QWidget::NoFocus);
+
+  log_file_tree = new CLogFileView(t_tab_view,"lfv");
+  log_file_tree->setIndentSpacing(15);
+  log_file_tree->setFocusPolicy(QWidget::NoFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
   real_file_tree->setFocusPolicy(QWidget::NoFocus);
@@ -544,10 +545,10 @@ void CKDevelop::initMenu(){
   build_menu->insertItem(Icon("stop.xpm"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
   build_menu->insertSeparator();
 
-  build_menu->insertItem(Icon("run.xpm"),i18n("&Run"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
+  build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
   accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
 
-  build_menu->insertItem(i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
+  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
@@ -625,12 +626,12 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
   help_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
   help_menu->insertSeparator();
-  help_menu->insertItem(Icon("mini/mini-question.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
-  help_menu->insertItem(Icon("contents.xpm"),i18n("&Search Marked Text"),this,
+  help_menu->insertItem(Icon("search.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
   accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
+  help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
-  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),0 ,ID_HELP_CONTENT);
+  help_menu->insertItem(Icon("help.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),0 ,ID_HELP_CONTENT);
   accel->changeMenuAccel(help_menu, ID_HELP_CONTENT, KAccel::Help );
 
   help_menu->insertSeparator();
@@ -718,10 +719,18 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_BUILD_MAKE, false,i18n("Make"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/rebuild.xpm");
   toolBar()->insertButton(pix,ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
+  toolBar()->insertSeparator();
+	
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/debugger.xpm");
+	toolBar()->insertButton(pix,ID_BUILD_DEBUG, false, i18n("Debug program"));
+  toolBar()->insertSeparator();
+	
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/run.xpm");
   toolBar()->insertButton(pix,ID_BUILD_RUN, false,i18n("Run"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/stop.xpm");
+
   toolBar()->insertSeparator();
+
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/stop.xpm");
   toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
 
   QFrame *separatorLine2= new QFrame(toolBar());
@@ -755,10 +764,13 @@ void CKDevelop::initToolbar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("back.xpm"),ID_DOC_BACK, false,i18n("Back"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_DOC_FORWARD, false,i18n("Forward"));
-    
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_DOC_SEARCH_TEXT,
-					    true,i18n("Search Text in Documenation"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("search.xpm"), ID_DOC_SEARCH_TEXT,
+					    true,i18n("Search Text in Documenation"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_HELP_SEARCH,
+              true,i18n("Search for Help on..."));
+	
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
 
   if(config->readBoolEntry("show_browser_toolbar", true)){
@@ -888,6 +900,13 @@ void CKDevelop::initProject(){
   }
 
 }
+
+
+
+
+
+
+
 
 
 

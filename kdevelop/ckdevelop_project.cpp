@@ -485,6 +485,7 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_WORKSPACES);
 
   enableCommand(ID_BUILD_AUTOCONF);
+	
   project=true;
   slotViewRefresh();
   return true;
@@ -635,6 +636,8 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   prj->writeWorkspace(current);
 }
+
+
 
 
 

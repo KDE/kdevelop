@@ -34,13 +34,14 @@ void CTabCtl::setCurrentTab(int id){
 
   tabs->setCurrentTab(id);
   tabSelected(id);
-  showTab(id); 
+  showTab(id);
 }
 
 int CTabCtl::getCurrentTab(){
   int currentTab=tabs->currentTab();
   return currentTab;
 }
+
 
 
 
