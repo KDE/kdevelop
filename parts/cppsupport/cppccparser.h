@@ -14,7 +14,7 @@
 #include <qlist.h>
 #include <qstack.h>
 #include <FlexLexer.h>
-#include <fstream.h>
+#include <kdebug.h>
 #include <strstream.h>
 
 #include "tokenizer-cc.h"
@@ -35,7 +35,7 @@ public:
     /**
      * empty copy constructor
      */
-    CppCCParser( CppCCParser& ){ cerr << "EE: CppCCParser copy constructor called!" << endl;};
+    CppCCParser( CppCCParser& ){ kdDebug( 9007 ) << "EE: CppCCParser copy constructor called!" << endl; };
 
     /**
      * empty destructor

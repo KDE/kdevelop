@@ -11,6 +11,7 @@
 
 #include "cppccparser.h"
 #include "dbg.h"
+#include <fstream.h>
 #include <kdebug.h>
 
 
