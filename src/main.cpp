@@ -9,6 +9,8 @@
 #include <kdebug.h>
 #include <dcopclient.h>
 
+#include <qfileinfo.h>
+
 #include "toplevel.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
@@ -19,7 +21,6 @@
 static KCmdLineOptions options[] =
 {
     { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
-    { "project <url>",   	I18N_NOOP("Project to load"), 0 },
     { "+file(s)",		I18N_NOOP("Files to load"), 0 },
     { 0,0,0 }
 };
@@ -94,12 +95,27 @@ int main(int argc, char *argv[])
   splash->showMessage( i18n( "Loading Project" ) );
   delete splash;
 
+  for( int i=0; i<args->count(); ++i ){
+      kdDebug(9000) << "------> arg " << args->arg(i) << endl;
+  }
+  
+  bool openProject = false;
   if( args->count() == 0 ){
       ProjectManager::getInstance()->loadDefaultProject();
+      openProject = true;
+  } else if( args->count() > 0 ){
+      KURL url = args->url( 0 );
+      QString ext = QFileInfo( url.fileName() ).extension();
+      if( ext == "kdevelop" ){
+	  ProjectManager::getInstance()->loadProject( url );
+	  openProject = true;
+      }
   }
-
-  for( int a=0; a<args->count(); ++a ){
-     PartController::getInstance()->editDocument( KURL(args->url(a)) );
+  
+  if( !openProject ){
+      for( int a=0; a<args->count(); ++a ){
+	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
+      }
   }
 
   kapp->dcopClient()->registerAs("gideon");

@@ -162,18 +162,13 @@ void ProjectManager::saveSettings()
 void ProjectManager::loadDefaultProject()
 {
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-  if( args->isSet("project") ) {
-    KURL projectUrl( args->getOption("project") );
-    loadProject( projectUrl );
-  } else if( args->count() > 0 ) {
-    KConfig *config = kapp->config();
-    config->setGroup("General Options");
-    QString project = config->readEntry("Last Project", "");
-    bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
-    if (!project.isEmpty() && readProject)
-    {
+  KConfig *config = kapp->config();
+  config->setGroup("General Options");
+  QString project = config->readEntry("Last Project", "");
+  bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
+  if (!project.isEmpty() && readProject)
+  {
       loadProject(KURL(project));
-    }
   }
   kapp->processEvents();
 }
