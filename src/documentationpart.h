@@ -4,6 +4,7 @@
 
 #include <khtml_part.h>
 
+class KAction;
 
 class DocumentationPart : public KHTMLPart
 {
@@ -23,13 +24,21 @@ signals:
 
 private slots:
 
+  void slotStarted(KIO::Job *);
+  void slotCompleted();
+  void slotCancelled(const QString &errMsg);
+
   void openURLRequest(const KURL &url);
   void popup( const QString & url, const QPoint & p );
 
+  void slotReload();
+  void slotStop();
 
 private:
 
   QString m_context;
+  KAction *stopAction;
+  KAction *reloadAction;
 };
 
 

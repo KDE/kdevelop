@@ -1,6 +1,11 @@
 #include <stdlib.h>
 #include <qfile.h>
 
+#include <kaction.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
+#include <kiconloader.h>
+
 #include "partcontroller.h"
 
 
@@ -12,16 +17,64 @@ DocumentationPart::DocumentationPart()
 {
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KURL &)) );
+
+  connect(this, SIGNAL(started(KIO::Job *)), this, SLOT(slotStarted(KIO::Job* )));
+  connect(this, SIGNAL(completed()), this, SLOT(slotCompleted()));
+  connect(this, SIGNAL(canceled(const QString &)), this, SLOT(slotCancelled(const QString &)));
+
+  KActionCollection * actions = new KActionCollection( this );
+  reloadAction = new KAction( i18n( "Reload" ), "reload", 0,
+    this, SLOT( slotReload() ), actions, "doc_reload" );
+  reloadAction->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document."));
+  stopAction = new KAction( i18n( "Stop" ), "stop", 0,
+    this, SLOT( slotStop() ), actions, "doc_stop" );
+  stopAction->setWhatsThis(i18n("<b>Stop</b><p>Stops the loading of current document."));
+
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
 }
 
 void DocumentationPart::popup( const QString & url, const QPoint & p )
 {
-//    qWarning("DocumentationPart::popup: %s", url.latin1());
+  KPopupMenu *m_popup = new KPopupMenu( i18n( "Documentation Viewer" ), this->widget() );
+
+  int idNewWindow = -2;
+  if (!url.isEmpty())
+  {
+    idNewWindow = m_popup->insertItem(SmallIcon("window_new"),i18n("Open in New Window"));
+    m_popup->setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
+    m_popup->insertSeparator();
+  }
+  reloadAction->plug(m_popup);
+  stopAction->plug(m_popup);
+  m_popup->insertSeparator();
+
+/*  if (!url.isEmpty())
+  {
+    KAction *ac = action("savelinkas");
+    if (ac)
+    {
+        qWarning("savelinkas found");
+        ac->plug(m_popup);
+    }
+    KAction *ac2 = action("copylinklocation");
+    if (ac2)
+        ac2->plug(m_popup);
+    m_popup->insertSeparator();
+  }*/
+
+  KAction *ac = action("setEncoding");
+  if (ac)
+    ac->plug(m_popup);
+
+  int r = m_popup->exec(p);
+
+  if (r == idNewWindow)
+  {
     KURL kurl (DocumentationPart::url().upURL());
     kurl.addPath(url);
     if (kurl.isValid())
         PartController::getInstance()->showDocument(kurl, url);
+  }
 }
 
 void DocumentationPart::setContext(const QString &context)
@@ -181,7 +234,7 @@ QString DocumentationPart::resolveEnvVarsInURL(const QString& url)
     }
     nDollarPos = path.find( '$', nDollarPos );
   }
-  
+
   return path;
 }
 
@@ -198,5 +251,29 @@ void DocumentationPart::openURLRequest(const KURL &url)
   PartController::getInstance()->showDocument(url, context());
 }
 
+void DocumentationPart::slotReload( )
+{
+    PartController::getInstance()->showDocument(url(), m_context);
+}
+
+void DocumentationPart::slotStop( )
+{
+    closeURL();
+}
+
+void DocumentationPart::slotStarted( KIO::Job * )
+{
+    stopAction->setEnabled(true);
+}
+
+void DocumentationPart::slotCompleted( )
+{
+    stopAction->setEnabled(false);
+}
+
+void DocumentationPart::slotCancelled( const QString & /*errMsg*/ )
+{
+    stopAction->setEnabled(false);
+}
 
 #include "documentationpart.moc"
