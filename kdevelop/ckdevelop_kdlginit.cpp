@@ -372,8 +372,9 @@ void CKDevelop::initKDlgToolBar(){
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,separatorLine);
 
-	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("undo.xpm"),ID_KDLG_EDIT_UNDO,false,i18n("Undo"));
-	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("redo.xpm"),ID_KDLG_EDIT_REDO,false,i18n("Redo"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("undo.xpm"),ID_KDLG_EDIT_UNDO,false,i18n("Undo"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("redo.xpm"),ID_KDLG_EDIT_REDO,false,i18n("Redo"));
+  toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
 
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("cut.xpm"),ID_KDLG_EDIT_CUT,true,i18n("Cut"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("copy.xpm"),ID_KDLG_EDIT_COPY, true,i18n("Copy"));
@@ -392,15 +393,6 @@ void CKDevelop::initKDlgToolBar(){
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
 
-  QFrame *sepDbgRun = new QFrame(toolBar(ID_KDLG_TOOLBAR));
-  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,sepDbgRun);
-
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
-
   QFrame *separatorLine2= new QFrame(toolBar(ID_KDLG_TOOLBAR));
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,separatorLine2);
@@ -412,6 +404,15 @@ void CKDevelop::initKDlgToolBar(){
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("output_win.xpm"),ID_VIEW_OUTPUTVIEW, true,i18n("Output View"));
 	toolBar(ID_KDLG_TOOLBAR)->setToggle(ID_VIEW_TREEVIEW);
 	toolBar(ID_KDLG_TOOLBAR)->setToggle(ID_VIEW_OUTPUTVIEW);
+
+  QFrame *sepDbgRun = new QFrame(toolBar(ID_KDLG_TOOLBAR));
+  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,sepDbgRun);
+
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
   QFrame *separatorLine3= new QFrame(toolBar(ID_KDLG_TOOLBAR));
   separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
