@@ -26,6 +26,7 @@
 #include <qradiobutton.h>
 #include <kio/netaccess.h>
 #include <kio/scheduler.h>
+#include <kprocess.h>
 
 using namespace KIO;
 
@@ -84,6 +85,21 @@ void SvnIntegratorDlg::accept()
 		job = KIO::special(servURL, parms2, true);
 		NetAccess::synchronousRun(job, 0);
 	}
+
+	//delete the template directory and checkout a fresh one from the server
+    KProcess *rmproc = new KProcess();
+    *rmproc << "rm";
+    *rmproc << "-f" << "-r" << m_projectLocation;
+    rmproc->start(KProcess::Block);
+        
+	QByteArray parms3;
+	QDataStream s3( parms3, IO_WriteOnly );
+	int cmd2 = 1; //CHECKOUT
+	int rev = -1;
+	//servURL should be set correctly above
+	s3 << cmd2 << servURL << KURL::fromPathOrURL( m_projectLocation ) << rev << QString( "HEAD" );
+	SimpleJob *job2 = KIO::special(servURL, parms3, true);
+	NetAccess::synchronousRun(job2, 0);
 }
 
 void SvnIntegratorDlg::init(const QString &projectName, const QString &projectLocation)
