@@ -423,7 +423,7 @@ void MakeWidget::slotProcessExited(KProcess *)
 	// Defensive programming: We emit this with a single shot timer so that we go once again
 	// through the event loop. After that, we can be sure that the process is really finished
 	// and its KProcess object can be reused.
-	if (childproc->normalExit())
+	if (childproc->normalExit() && !childproc->exitStatus())
 		QTimer::singleShot(0, this, SLOT(startNextJob()));
 	else
 	{
