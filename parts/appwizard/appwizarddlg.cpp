@@ -51,7 +51,7 @@
 static void guessAuthorAndEmail(QString *author, QString *email)
 {
     char hostname[512];
-    
+
     struct passwd *pw = ::getpwuid(getuid());
     // pw==0 => the system must be really fucked up
     if (!pw)
@@ -72,7 +72,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
   KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
   m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
-  
+
   kdDebug(9010) << "Templates: " << endl;
   QString category;
   QStringList categories;
@@ -88,13 +88,13 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     pInfo->comment = config.readEntry("Comment");
     category = config.readEntry("Category");
     // format category to a unique status
-    if(category.right(1) == "/"){ 
+    if(category.right(1) == "/"){
       category.remove(category.length()-1,1); // remove /
     }
-    if(category.left(1) != "/"){ 
+    if(category.left(1) != "/"){
       category.prepend("/"); // prepend /
     }
-    
+
     categories.append(category);
     pInfo->category = category;
     m_appsInfo.append(pInfo);
@@ -116,8 +116,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
       kdDebug(9010) << "Error can't find category in categoryMap: " << pInfo->category << endl;
     }
   }
-  
-  
+
+
   QString author, email;
   guessAuthorAndEmail(&author, &email);
   author_edit->setText(author);
@@ -126,7 +126,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
   filetemplate_edit->setFont(KGlobalSettings::fixedFont());
   QFontMetrics fm(filetemplate_edit->fontMetrics());
   filetemplate_edit->setMinimumSize(fm.width("X")*81, fm.lineSpacing()*22);
-    
+
     /*    //add a new page (fileprops)
 	  QString projectname = "Test";
     FilePropsPage* m_sdi_fileprops_page = new FilePropsPage(this,"fileprops");
@@ -140,7 +140,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     prop->m_change_baseclass = false;
     prop->m_key = "App";
     props_temp->append(prop);
-    
+
     prop = new ClassFileProp();
     prop->m_classname = projectname + "View";
     prop->m_headerfile = projectname.lower() + "view.h";
@@ -150,7 +150,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     prop->m_change_baseclass = true;
     prop->m_key = "View";
     props_temp->append(prop);
-    
+
     prop = new ClassFileProp();
     prop->m_classname = projectname + "Doc";
     prop->m_headerfile = projectname.lower() + "doc.h";
@@ -160,10 +160,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     prop->m_change_baseclass = true;
     prop->m_key = "Doc";
     props_temp->append(prop);
-    
+
     m_sdi_fileprops_page->setClassFileProps(*props_temp);
     */
-    
+
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
     helpButton()->hide();
@@ -179,9 +179,9 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     connect( license_combo, SIGNAL(activated(int)),
              this, SLOT(licenseChanged()) );
     licenseChanged();
-
     tempFile = 0;
     m_part = part;
+    nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
 
 
@@ -193,12 +193,14 @@ AppWizardDialog::~AppWizardDialog()
 
 void AppWizardDialog::textChanged()
 {
+
     bool invalid = !m_pCurrentAppInfo
         || appname_edit->text().isEmpty()
         || dest_edit->text().isEmpty()
         || author_edit->text().isEmpty()
         || version_edit->text().isEmpty();
     setFinishEnabled(fileHeadersPage, !invalid);
+    nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
 
 
@@ -215,7 +217,7 @@ void AppWizardDialog::licenseChanged()
     str.replace(str.find("2001"), 4, QString::number(QDate::currentDate().year()));
     str.replace(str.find("$AUTHOR$                      "), QMIN(30, author.length()), author);
     str.replace(str.find("$EMAIL$                       "), QMIN(30, email.length()), email);
-    
+
     switch (license_combo->currentItem())
         {
         case 0:
@@ -265,7 +267,7 @@ void AppWizardDialog::licenseChanged()
         }
 
     str += " ***************************************************************************/\n";
-    
+
     filetemplate_edit->setText(str);
 }
 
@@ -287,7 +289,7 @@ void AppWizardDialog::accept()
       dest_edit->setFocus();
       return;
     }
-    
+
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber()) {
@@ -297,17 +299,17 @@ void AppWizardDialog::accept()
             appname_edit->setFocus();
             return;
         }
-    
+
     QString source, script;
     QFileInfo finfo(m_pCurrentAppInfo->templateName);
     QDir dir(finfo.dir());
     dir.cdUp();
     source = dir.absPath();
     script = dir.filePath("template-" + finfo.fileName() + "/script");
-    
+
     QString license =
         (license_combo->currentItem()<4)? license_combo->currentText() : QString("Custom");
-    
+
     QString licensefile;
     switch (license_combo->currentItem())
         {
@@ -317,7 +319,7 @@ void AppWizardDialog::accept()
         case 3: licensefile = "COPYING.LIB"; break;
         default: ;
         }
-    
+
     if (!tempFile) {
         tempFile = new KTempFile();
         tempFile->setAutoDelete(true);
@@ -328,8 +330,8 @@ void AppWizardDialog::accept()
     QTextStream temps(&f);
     temps << filetemplate_edit->text();
     f.flush();
-    
-    
+
+
     QString cmdline = "perl ";
     cmdline += script;
     cmdline += " --author=";
