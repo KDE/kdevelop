@@ -1,1 +1,1 @@
-SUBDIRS = pythonhello pyqt
+SUBDIRS = pythonhello pytk pyqt
