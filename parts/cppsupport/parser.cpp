@@ -938,36 +938,38 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
 
     int start = lex->index();
-    
+
     DeclaratorAST::Node ast = CreateNode<DeclaratorAST>();
-    
+
     DeclaratorAST::Node decl;
     NameAST::Node declId;
-    
+
     AST::Node ptrOp;
     while( parsePtrOperator(ptrOp) ){
 	ast->addPtrOp( ptrOp );
     }
-    
+
     if( lex->lookAhead(0) == '(' ){
 	lex->nextToken();
 
 	if( !parseDeclarator(decl) ){
 	    return false;
-	}	
+	}
 	ast->setSubDeclarator( decl );
-	
+
 	if( lex->lookAhead(0) != ')'){
 	    return false;
 	}
 	lex->nextToken();
     } else {
-	
-	if( !parseDeclaratorId(declId) ){
-	    return false;
-	}	
-	ast->setDeclaratorId( declId );
-	
+
+        int startDeclarator = lex->index();
+	if( parseDeclaratorId(declId) ){
+	    ast->setDeclaratorId( declId );
+	} else {
+	    lex->setIndex( startDeclarator );
+	}
+
 	if( lex->lookAhead(0) == ':' ){
 	    lex->nextToken();
 	    if( !skipConstantExpression() ){
@@ -976,14 +978,14 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	    goto update_node;
 	}
     }
-    
+
     {
-    
+
     while( lex->lookAhead(0) == '[' ){
         int startArray = lex->index();
 	lex->nextToken();
 	skipCommaExpression();
-	
+
 	ADVANCE( ']', "]" );
 	AST::Node array = CreateNode<AST>();
 	UPDATE_POS( array, startArray, lex->index() );
@@ -1454,7 +1456,7 @@ bool Parser::parseParameterDeclaration( AST::Node& /*node*/ )
 	lex->setIndex( index );
 	//removed parseAbstractDeclarator(decl);
     }
-    
+
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
 	if( !skipAssignmentExpression() ){
