@@ -10,19 +10,19 @@ installGNU();
 installDocbook();
 
 print "Installing project file\n";
-install( "${src}/template-common/kde-app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-kapp/app.kdevelop",          "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
 mkdir( "${dest}/po", 0777 );
-install( "${src}/template-common/lo16-app-app.png",    "${dest}/src/lo16-${APPNAMELC}-app.png");
-install( "${src}/template-common/lo32-app-app.png",    "${dest}/src/lo32-${APPNAMELC}-app.png");
-install( "${src}/template-common/app.desktop",         "${dest}/src/${APPNAMELC}.desktop" );
-install( "${src}/template-common/kde-app.lsm",         "${dest}/src/${APPNAMELC}.lsm" );
-install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.am",     "${dest}/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.cvs",    "${dest}/Makefile.cvs" );
 install( "${src}/template-common/kde-configure.in.in", "${dest}/configure.in.in" );
+install( "${src}/template-common/kde-app.desktop",     "${dest}/src/${APPNAMELC}.desktop" );
+install( "${src}/template-common/kde-app.lsm",         "${dest}/src/${APPNAMELC}.lsm" );
+install( "${src}/template-common/lo16-app-app.png",    "${dest}/src/lo16-${APPNAMELC}-app.png");
+install( "${src}/template-common/lo32-app-app.png",    "${dest}/src/lo32-${APPNAMELC}-app.png");
+install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
 
 print "Installing application sources\n";
 install( "${src}/template-kapp/src-Makefile.am",       "${dest}/src/Makefile.am" );
