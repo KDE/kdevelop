@@ -1,5 +1,7 @@
 SUBDIRS = widgets lib plugin parts tools templates
 
+UIC = uic
+
 INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 	   -I$(top_srcdir)/kdevelop/lib/sourceinfo \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement \
@@ -8,12 +10,15 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 LFLAGS = -+
 
 # until am_edit can handle uic
-newprojectdlgbase.h : newprojectdlg.ui
-	uic -o newprojectdlgbase.h newprojectdlg.ui;\
+newprojectdlgbase.h : $(srcdir)/newprojectdlg.ui
+	$(UIC) -o newprojectdlgbase.h newprojectdlg.ui;\
 	$(MOC) newprojectdlgbase.h -o newprojectdlgbase.moc
 
-newprojectdlgbase.cpp : newprojectdlg.ui
-	uic -i newprojectdlgbase.h -o newprojectdlgbase.cpp newprojectdlg.ui
+newprojectdlgbase.cpp : $(srcdir)/newprojectdlg.ui
+	$(UIC) -i newprojectdlgbase.h -o newprojectdlgbase.cpp $(srcdir)/newprojectdlg.ui
+
+BUILT_SOURCES = newprojectdlgbase.h newprojectdlgbase.cpp
+CLEANFILES = $(BUILT_SOURCES)
 
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
