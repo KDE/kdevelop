@@ -31,9 +31,12 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qmultilinedit.h>
+#include <qlayout.h> 
 #include "./classparser/ParsedAttribute.h"
 
-/** Dialog to create a new attibute for a class. */
+/** Dialog to create a new attibute for a class.
+ * @author Jonas Nordin
+ */
 class CAddClassAttributeDlg : public QDialog
 {
   Q_OBJECT
@@ -47,6 +50,29 @@ public: // Public queries
   CParsedAttribute *asSystemObj();
 
 public: // Public widgets
+
+  ///////////////////////////////
+  // Layouts
+  ///////////////////////////////
+
+  /** Main layout for the dialog. */
+  QVBoxLayout topLayout;
+  
+  /** Layout for function definition. */
+  QGridLayout varLayout;
+
+  /** Layout for choosing access. */
+  QGridLayout accessLayout;
+
+  /** Layout for choosing modifier. */
+  QGridLayout modifierLayout;
+
+  /** Layout for the ok/cancel buttons. */
+  QHBoxLayout buttonLayout;
+
+  ///////////////////////////////
+  // Groups
+  ///////////////////////////////
 
   QButtonGroup modifierGrp;
   QButtonGroup varGrp;
@@ -68,6 +94,7 @@ public: // Public widgets
 
   QPushButton okBtn;
   QPushButton cancelBtn;
+  QLabel btnFill;
 
 protected:
  protected slots:
