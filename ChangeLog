@@ -1,4 +1,7 @@
 1999-09-30 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed bug in the normal template save/readProperties(KConfig* config)
+
+1999-09-30 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* updated international documentation Makefile.am's and regenerated
 	  docs from sgml masters
 
