@@ -30,9 +30,9 @@
  <kdevfilecreate>
    <useglobaltypes>
      <type ext="F"/>
+     <type ext="fpp"/>
      <type ext="f"/>
-     <type ext="f77"/>
-     <type ext="fnt"/>
+     <type ext="for"/>
    </useglobaltypes>
  </kdevfilecreate>
  <kdevfortransupport>
@@ -57,8 +57,8 @@
  </kdevfortransupport>
   <kdevfileview>
     <groups>
-      <group pattern="*.f" name="Preprocessed Fortran" />
-      <group pattern="*.F;*.f77;*.ftn" name="Fortran77 source files" />
+      <group pattern="*.f;*.for;*.FOR" name="Preprocessed Fortran" />
+      <group pattern="*.F;*.fpp;*.FPP" name="Fortran77 source files" />
     </groups>
   </kdevfileview>
 </kdevelop>
