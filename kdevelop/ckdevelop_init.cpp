@@ -378,7 +378,7 @@ void CKDevelop::initKeyAccel()
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_GREP_IN_FILES );
   accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
 
-  accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_GREP_IN_FILES );
+  accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_SEARCH_GREP_IN_FILES );
   accel->connectItem( i18n("GrepSearch"), this, SLOT(slotEditSearchText() ) );
 
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
@@ -418,15 +418,26 @@ void CKDevelop::initKeyAccel()
   accel->insertItem( i18n("Statusbar"), "Statusbar", (unsigned int) 0);
   accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()), true, ID_VIEW_STATUSBAR );
 
+
   accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
 
   accel->insertItem( i18n("Refresh"), "Refresh", (unsigned int) 0);
   accel->connectItem( "Refresh", this, SLOT(slotViewRefresh()), true, ID_VIEW_REFRESH);
 
+  accel->insertItem( i18n("Goto Declaration"), "CVGotoDeclaration", (unsigned int) 0);
+  accel->connectItem( "CVGotoDeclaration", this,SLOT(slotClassbrowserViewDeclaration()),true, ID_CV_VIEW_DECLARATION); // project menu
+
+  accel->insertItem( i18n("Goto Definition"), "CVGotoDefinition", (unsigned int) 0);
+  accel->connectItem( "CVGotoDefinition", this, SLOT(slotClassbrowserViewDefinition()), true,ID_CV_VIEW_DEFINITION );
+
+  accel->insertItem( i18n("Class Declaration"), "CVGotoClass", (unsigned int) 0);
+  accel->connectItem( "CVGotoClass", this,SLOT(slotClassbrowserViewClass()),true, ID_CV_VIEW_CLASS_DECLARATION);
+
   accel->insertItem( i18n("Graphical Classview"), "CVViewTree", (unsigned int) 0);
   accel->connectItem( "CVViewTree", this, SLOT(slotClassbrowserViewTree()), true, ID_CV_GRAPHICAL_VIEW );
 
-  // project menu
+
+  // projectmenu
   accel->insertItem( i18n("New Project"), "NewProject",(unsigned int) 0);
   accel->connectItem( "NewProject", this, SLOT(slotProjectNewAppl()), true, ID_PROJECT_KAPPWIZARD );
 
@@ -1049,26 +1060,42 @@ void CKDevelop::initToolBar(){
 
   // Class combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),
-                                           ID_CV_TOOLBAR_CLASS_CHOICE,false,
-                                           SIGNAL(activated(int))
+                                           ID_CV_TOOLBAR_CLASS_CHOICE,true,
+                                           SIGNAL(activated(const QString&))
                                            ,this,
-                                           SLOT(slotClassChoiceCombo(int)),
+                                           SLOT(slotClassChoiceCombo(const QString&)),
                                            true,i18n("Classes"),160 );
 
   KComboBox* class_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  class_combo->setFocusPolicy(QWidget::NoFocus);
+  class_combo->setFocusPolicy(QWidget::ClickFocus);
+  class_combo->setAutoCompletion(true);
+  class_combo->setInsertionPolicy(QComboBox::NoInsertion);
   class_combo->setEnabled(false);
+  class_combo->useGlobalKeyBindings();
+  class_combo->setCompletionMode ( KGlobalSettings::CompletionPopup );
+  class_comp = class_combo->completionObject();
+  class_combo->setAutoDeleteCompletionObject( true );
+  connect(class_combo, SIGNAL(returnPressed(const QString&)), this,
+                      SLOT(slotClassChoiceCombo(const QString&)));
 
   // Method combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),
-                                           ID_CV_TOOLBAR_METHOD_CHOICE,false,
-                                           SIGNAL(activated(int))
-                                           ,this,SLOT(slotMethodChoiceCombo(int)),
+                                           ID_CV_TOOLBAR_METHOD_CHOICE,true,
+                                           SIGNAL(activated(const QString&))
+                                           ,this,SLOT(slotMethodChoiceCombo(const QString&)),
                                            true,i18n("Methods"),240 );
 
   KComboBox* choice_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
-  choice_combo->setFocusPolicy(QWidget::NoFocus);
+  choice_combo->setFocusPolicy(QWidget::ClickFocus);
+  choice_combo->setAutoCompletion(true);
+  choice_combo->setInsertionPolicy(QComboBox::NoInsertion);
   choice_combo->setEnabled(false);
+  choice_combo->useGlobalKeyBindings();
+  choice_combo->setCompletionMode ( KGlobalSettings::CompletionPopup );
+  method_comp = choice_combo->completionObject();
+  choice_combo->setAutoDeleteCompletionObject( true );
+  connect(choice_combo, SIGNAL(returnPressed(const QString&)), this,
+                      SLOT(slotMethodChoiceCombo(const QString&)));
 
   // Classbrowserwizard click button
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("classwiz",
@@ -1412,6 +1439,11 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(build_menu, ID_BUILD_AUTOCONF, "BuildAutoconf");
   accel->changeMenuAccel(build_menu, ID_BUILD_CONFIGURE, "BuildConfigure");
 
+  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DECLARATION, "CVGotoDeclaration");
+  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DEFINITION, "CVGotoDefinition");
+  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_CLASS_DECLARATION, "CVGotoClass");
+  accel->changeMenuAccel(classbrowser_popup, ID_CV_GRAPHICAL_VIEW, "CVViewTree");
+  accel->changeMenuAccel(classbrowser_popup,ID_PROJECT_NEW_CLASS , "NewClass");
 
   accel->changeMenuAccel(debug_menu,ID_DEBUG_START , "DebugStart");
   accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN ,"DebugRun" );

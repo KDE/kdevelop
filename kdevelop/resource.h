@@ -332,6 +332,7 @@
 #define IDK_HELP_CONTENTS							Key_F1							// standard key
 
 #define IDK_EDIT_GREP_IN_FILES				Key_F2
+#define IDK_EDIT_SEARCH_GREP_IN_FILES CTRL+SHIFT+Key_F2
 #define IDK_HELP_SEARCH_TEXT					SHIFT+Key_F2
 
 #define IDK_EDIT_REPEAT_SEARCH				Key_F3

@@ -135,7 +135,7 @@ if ($processes{VSSUPPORT} eq "cvs") {
     if ($processes{APPLICATION} -= /kde2mini|kde2normal|kde2mdi/)
     {
 
-      $copydes = $underDirectory . "/api/.cvsignore";
+      $copydes = $underDirectory . "-api/.cvsignore";
       copy ("$copysrc", "$copydes");
 
       $copydes = $underDirectory . "/po/.cvsignore";
@@ -399,8 +399,8 @@ sub condCopyProgIcons {
 
 sub condCreateApiDoc {
 
-  chdir ($underDirectory);
-  mkdir ("api", 0777);
+#  chdir ($underDirectory);
+#  mkdir ("api", 0777);
 
   # has been moved to processesend.pl
 

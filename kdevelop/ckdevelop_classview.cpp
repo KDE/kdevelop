@@ -59,15 +59,13 @@ void CKDevelop::slotClassbrowserViewTree()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotClassChoiceCombo(int index)
+void CKDevelop::slotClassChoiceCombo(const QString& text)
 {
-  CParsedClass *aClass;
-  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  QString classname = classCombo->text( index );
+  CParsedClass *aClass=NULL;
+  aClass = class_tree->store->getClassByName( text );
 
-  if ( !classname.isEmpty() )
+  if ( (!text.isEmpty()) && aClass)
   {
-    aClass = class_tree->store->getClassByName( classname );
     CVRefreshMethodCombo( aClass );
   }
 }
@@ -82,21 +80,22 @@ void CKDevelop::slotClassChoiceCombo(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotMethodChoiceCombo(int index)
+void CKDevelop::slotMethodChoiceCombo(const QString& text)
 {
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
-  QString methodname = methodCombo->text( index );
+
+  CParsedClass *aClass=NULL;
+  aClass = class_tree->store->getClassByName(classname );
 
   // Only bother if the methodname is non-empty.
-  if( !methodname.isEmpty() )
+  if( (!text.isEmpty()) && aClass)
   {
     // Make sure the next click on the wiz-button switch to declaration.
     cv_decl_or_impl = true;
 
     // Switch to the method defintion
-    CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
+    CVGotoDefinition( classname, text, THCLASS, THPUBLIC_METHOD );
   }
 }
 
@@ -506,7 +505,7 @@ void CKDevelop::CVClassSelected( const char *aName )
     {
       i--;
       classCombo->setCurrentItem( i );
-      slotClassChoiceCombo( i );
+      slotClassChoiceCombo( classCombo->currentText() );
     }
   }
 }
@@ -728,8 +727,10 @@ void CKDevelop::CVRefreshClassCombo()
        aClass = classList->next(), i++ )
   {
     classCombo->insertItem(SmallIcon("CVclass"), aClass->name );
+    class_comp->addItem(aClass->name);
     if( aClass->name == savedClass )
       savedIdx = i;
+
   }
   delete classList;
 	
@@ -780,6 +781,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
        ++aClass->methodIterator )
   {
     aClass->methodIterator.current()->asString( str );
+    method_comp->addItem(str);
     if(aClass->methodIterator.current()->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_meth"), str );
     if(aClass->methodIterator.current()->isProtected())
@@ -794,6 +796,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
        ++aClass->slotIterator )
   {
     aClass->slotIterator.current()->asString( str );
+    method_comp->addItem(str);
     if(aClass->slotIterator.current()->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_slot"), str );
     if(aClass->slotIterator.current()->isProtected())
@@ -808,6 +811,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
   {
     aClass->signalIterator.current()->asString( str );
     methodCombo->insertItem(SmallIcon("CVpublic_signal"), str );
+    method_comp->addItem(str);
   }
 
   // ADD ATTRIBUTES
@@ -818,6 +822,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
        list->next() )
   {
     str=list->current()->name;
+    method_comp->addItem(str);
     if(list->current()->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_var"), str );
     if(list->current()->isProtected())

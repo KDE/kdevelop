@@ -28,6 +28,7 @@
 #include <kiconloader.h>
 #include <kmainwindow.h>
 #include <khelpmenu.h>
+#include <kcompletion.h>
 
 #include <kdockwidget.h>
 
@@ -577,9 +578,9 @@ public:
   /** click action on DOC */
   void slotDocTreeSelected(QString url_file);
   /** selection of classes in the browser toolbar */
-  void slotClassChoiceCombo(int index);
+  void slotClassChoiceCombo(const QString& text);
   /** selection of methods in the browser toolbar */
-  void slotMethodChoiceCombo(int index);
+  void slotMethodChoiceCombo(const QString& text);
   /** add a file to the project */
   void slotAddFileToProject(QString abs_filename);
   void delFileFromProject(QString rel_filename);
@@ -821,7 +822,9 @@ private:
   QStrList tools_exe;
   QStrList tools_entry;
   QStrList tools_argument;
-  	
+
+  KCompletion* class_comp;
+  KCompletion* method_comp;	
   /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
   bool beep; 
