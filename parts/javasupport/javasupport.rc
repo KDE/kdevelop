@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevWindowMenu" version="1">
+<MenuBar>
+ <Menu name="go">
+   <Text>&amp;Go</Text>
+   <Action name="history_back"/>
+   <Action name="history_forward"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar">
+  <Action name="history_back"/>
+  <Action name="history_forward"/>
+</ToolBar>
+</kpartgui>
