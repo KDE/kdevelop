@@ -307,7 +307,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   if(actual_info == 0) return false; //oops :-(
 
   if(file_info.lastModified() != actual_info->last_modified){
-    if(QMessageBox::warning(this,i18n("File modified"),"The file " + filename +" was modified outside\n this editor.Save anyway?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::No) return false;
+    if(QMessageBox::warning(this,i18n("File modified"),i18n("The file ") + filename + i18n(" was modified outside\n this editor.Save anyway?"),i18n("&Yes"),i18n("&No"))) return false;
   }
   edit_widget->doSave();
   QFileInfo file_info2(filename);
@@ -412,8 +412,7 @@ void CKDevelop::slotFileSaveAll(){
           if (file_info.lastModified() != actual_info->last_modified)
           {
               qYesNo=QMessageBox::warning(this,i18n("File modified"),
-                    i18n(QString().sprintf("The file %s was modified outside\nthis editor. Save anyway?",actual_info->filename.data())),
-                     QMessageBox::Yes, QMessageBox::No);
+                    QString().sprintf(i18n("The file %s was modified outside\nthis editor. Save anyway?"),actual_info->filename.data()),QMessageBox::Yes, QMessageBox::No);
           }
 
           if (qYesNo==QMessageBox::Yes)
@@ -839,7 +838,7 @@ void CKDevelop::slotBuildRun()
   config->setGroup("MakeOptionsSettings");
   rebuildType=config->readNumEntry("RebuildType", 0);
   if (rebuildType==0 && isDirty)
-    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
                     i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
@@ -867,7 +866,7 @@ void CKDevelop::slotBuildRunWithArgs()
   config->setGroup("MakeOptionsSettings");
   rebuildType=config->readNumEntry("RebuildType", 0);
   if (rebuildType==0 && isDirty)
-    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
                     i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
@@ -903,7 +902,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
 
   if(bWithArgs)
   {
-    CExecuteArgDlg argdlg(this,"Arguments",i18n("Execute with Arguments"),args);
+    CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Execute with Arguments"),args);
     if(argdlg.exec())
     {
         args=argdlg.getArguments();
@@ -1313,7 +1312,7 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
   config->setGroup("MakeOptionsSettings");
   rebuildType=config->readNumEntry("RebuildType", 0);
   if (rebuildType==0 && isDirty)
-    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources have been modified"),
                     i18n("Should the project be rebuild before starting the debug session?"),
                     i18n("Yes"), i18n("No"), i18n("Cancel"),0,2);
 
@@ -1356,7 +1355,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
   // if we can run the application, so we can clear the Makefile.am-changed-flag
   prj->clearMakefileAmChanged();
 
-  CExecuteArgDlg argdlg(this,"Arguments",i18n("Debug with arguments"), args);
+  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Debug with arguments"), args);
   if (argdlg.exec())
   {
     args = argdlg.getArguments();
@@ -1731,7 +1730,7 @@ void CKDevelop::slotBuildConfigure(){
     //    QString shell = getenv("SHELL");
 
   QString args=prj->getConfigureArgs();
-  CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
+  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
   if(argdlg.exec()){
 	  prj->setConfigureArgs(argdlg.getArguments());		
 	  prj->writeProject();
@@ -2043,7 +2042,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
   bool foundHtDig = CToolClass::searchInstProgram("htdig");
   if(!foundGlimpse && !foundHtDig){
-    KMsgBox::message(0,"Program not found!","KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!",KMsgBox::EXCLAMATION);
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!"),KMsgBox::EXCLAMATION);
     return;
   }
   CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
@@ -2273,7 +2272,7 @@ void CKDevelop::slotHelpSearchText(QString text){
 
   if (!useGlimpse && !useHtDig)
   {
-    KMsgBox::message(0,"Program not found!","KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n\tPlease install one!",KMsgBox::EXCLAMATION);
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n\tPlease install one!"),KMsgBox::EXCLAMATION);
     return;
   }
 
@@ -3619,7 +3618,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
        text == i18n("KDE-KFile-Library") || text == i18n("KDE-KHTMLW-Library") ||
        text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
        text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
-      if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?",KMsgBox::INFORMATION) == 1) {
+      if(KMsgBox::yesNo(0,i18n("File not found!"),i18n("KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?"),KMsgBox::INFORMATION) == 1) {
 				slotOptionsUpdateKDEDocumentation();
       }
       return;

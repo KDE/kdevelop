@@ -729,7 +729,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   QFileInfo file_info(edit_widget->getName());
 
   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-    if(QMessageBox::warning(this,i18n("File modified"),"The file " + edit_widget->getName() +" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
+    if(QMessageBox::warning(this,i18n("File modified"),i18n("The file ") + edit_widget->getName() +i18n(" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?"),QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
       bForceReload = true;
       actual_info->last_modified = file_info.lastModified();
     }
@@ -1368,7 +1368,7 @@ void CKDevelop::readProperties(KConfig* sess_config){
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
-      KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+      KMsgBox::message(0,filename,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
       refreshTrees();
     }
     else{

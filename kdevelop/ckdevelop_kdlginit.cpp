@@ -440,7 +440,7 @@ void CKDevelop::initKDlgStatusBar(){
   kdlg_statusbar->changeItem("", ID_KDLG_STATUS_WH);
   kdlg_statusbar->changeItem("", ID_KDLG_STATUS_XY);
 
-  kdlg_statusbar->insertItem(i18n("        "), ID_KDLG_STATUS_WIDGET);
+  kdlg_statusbar->insertItem("        ", ID_KDLG_STATUS_WIDGET);
 
   kdlg_statusbar->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
   kdlg_statusbar->setInsertOrder(KStatusBar::RightToLeft);

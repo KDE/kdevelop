@@ -623,7 +623,7 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
     	if(!(readProjectFile(prjname)))		//the readProjectFile is now garanteed not to modify the state if it fails
 		{
 
-		    KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+		    KMsgBox::message(0,prjname,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
 //		    readProjectFile(old_project);		//not needed anymore
     	}
 		else

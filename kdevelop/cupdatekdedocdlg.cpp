@@ -100,7 +100,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc,KConfig* config, QWidget 
     del_recent_radio_button->setChecked( TRUE );
     KQuickHelp::add(del_recent_radio_button,
 		    i18n("Checking this will delete the current documentation\n"
-			 "and replacing it with the new generated documentation\n" 
+			 "and replace it with the new generated documentation\n"
 			 "in the same path.")); 
     
     
@@ -133,10 +133,10 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc,KConfig* config, QWidget 
     leave_new_radio_button->setAutoRepeat( FALSE );
     leave_new_radio_button->setAutoResize( FALSE );
     KQuickHelp::add(leave_new_radio_button,
-		    i18n("This doesn't delete your current documentation and leaves it\n"
-			 "is now and you can select a new path for the new kdelibs\n"
-			 "documentation. CAUTION: Don't insert the same path where\n"
-			 "your recent documentation is installed- this may mess up\n"
+		    i18n("This doesn't delete your current documentation, leaves it\n"
+			 "where it is now and you can select a new path for the new kdelibs\n"
+			 "documentation. CAUTION: Don't insert the same path as\n"
+			 "for your recent documentation - this may mess up\n"
 			 "the documentation by mixing old and new files!"));
     
     doc_label = new QLabel( this, "doc_label" );

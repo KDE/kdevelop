@@ -255,7 +255,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 				"Documentation for the Documentation Browser.\n"
 				"QT usually comes with complete Documentation\n"
 				"whereas for KDE you can create the Documentation\n"
-				"easiely by pressing the Update button below."));
+				"easily by pressing the Update button below."));
 	
   qt_edit = new QLineEdit( w, "qt_edit" );
   qt_edit->setGeometry( 170, 40, 190, 30 );
@@ -489,7 +489,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgAsmCheck->setChecked(displayMangledNames);
   KQuickHelp::add(dbgAsmCheck, i18n("Display mangled names\n\n"
 	                  "When displaying the disassembled code you\n"
-	                  "can elect to see the methods mangled names\n"
+	                  "can select to see the methods mangled names\n"
                     "However, non-mangled names are easier to read." ));
 
   dbgLibCheck = new QCheckBox( w3, "dbgMembers" );

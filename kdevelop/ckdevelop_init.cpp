@@ -1285,7 +1285,7 @@ void CKDevelop::initProject(bool witharg){
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
-      KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+      KMsgBox::message(0,filename,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
       refreshTrees();
     }
     else{

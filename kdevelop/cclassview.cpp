@@ -1086,8 +1086,8 @@ void CClassView::slotClassDelete()
                       i18n("Are you sure you want to delete this class?"),
                       KMsgBox::QUESTION ) == 1 )
   {
-    KMsgBox::message( this, "Not implemented",
-                      "This function isn't implemented yet." );
+    KMsgBox::message( this, i18n("Not implemented"),
+                      i18n("This function isn't implemented yet.") );
   }
                       
 }
@@ -1170,8 +1170,8 @@ void CClassView::slotAttributeDelete()
                       i18n("Are you sure you want to delete this attribute?"),
                       KMsgBox::QUESTION ) == 1 )
   {
-    KMsgBox::message( this, "Not implemented",
-                      "This function isn't implemented yet." );
+    KMsgBox::message( this, i18n("Not implemented"),
+                      i18n("This function isn't implemented yet.") );
   }
 }
 

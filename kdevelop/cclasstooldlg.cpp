@@ -307,9 +307,9 @@ void CClassToolDlg::setClass( const char *aName )
   // If we can't find the class something is very wring
   if( currentClass == NULL )
   {
-    QString warning = "Couldn't find class: ";
+    QString warning = i18n("Couldn't find class: ");
     warning += aName;
-    QMessageBox::warning( this, "Class error", warning );
+    QMessageBox::warning( this, i18n("Class error"), warning );
   }
 }
 
@@ -638,7 +638,7 @@ void CClassToolDlg::slotExportComboChoice(int /*idx*/)
   str = exportCombo.currentText();
 
   // Check exporttype
-  if( str == i18n("All") )
+  if( str == "All" )
     comboExport = CTHALL;
   else if( str == "Public" )
     comboExport = CTHPUBLIC;

@@ -868,7 +868,8 @@ void CKDevInstall::slotAuto() // proceed >>
   else{
     KMsgBox::message(this,i18n("Information"), i18n("\nNow KDevelop will create a new KDE-library\n"
                                                     "documentation. For that, you need the kdelibs\n"
-                                                    "package as the source package. If you don't have\n"
+                                                    "package as the source package. In most cases it is\n"
+                                                    "included in your distribution.If you don't have\n"
                                                     "the kdelibs as sources, we advise to obtain them\n"
                                                     "from www.kde.org. Mind that the sources should match\n"
                                                     "your installed kdelibs version.\n\n "), KMsgBox::INFORMATION);

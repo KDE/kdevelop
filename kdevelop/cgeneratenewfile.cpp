@@ -39,14 +39,14 @@ bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
   QString dirname = QFileInfo(in_absname).dirPath(true);
   if(dirname.contains(prj->getProjectDir()) == 0 )
   {
-    printf("don't try create a new subdir outside projectdirectory\n");	
+    printf("don't try to create a new subdir outside projectdirectory\n");	
     return false;
   }
   else //just mkdir
   {
     QDir dir;
     dir = (const char*)dirname;
-    printf("handleCreateSubDirectory() need create a directory '%s'\n", (const char*)dirname);			
+    printf("handleCreateSubDirectory() needs to create a directory '%s'\n", (const char*)dirname);			
     if(dir.exists() == false)
     {
       QString dir_to_make;
@@ -65,7 +65,7 @@ bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
         {
           if(dir.mkdir((const char*)dir_to_make, true))
           {
-            printf("handleCreateSubDirectory() has created directory '%s'\n", (const char*)dir_to_make);
+            printf(i18n("handleCreateSubDirectory() has created directory '%s'\n"), (const char*)dir_to_make);
           }
           else
           {
