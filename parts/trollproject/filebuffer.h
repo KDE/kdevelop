@@ -14,6 +14,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qptrlist.h>
 #include <qfile.h>
 #include "caret.h"
 
@@ -64,7 +65,7 @@ public:
                     {setValues(variable,QStringList::split(' ',values),append,valuesPerRow);}
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);
   bool              getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
-  int               getVariableValueSetModes(const QString &variable,FileBuffer::ValueSetMode* &modes);
+  void              getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes);
 
 private:
   QString           m_scopeName;
