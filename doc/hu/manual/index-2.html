@@ -8,9 +8,9 @@
  <LINK HREF="index.html#toc2" REL=contents>
 </HEAD>
 <BODY>
-<A HREF="index-3.html">Tovább</A>
-<A HREF="index-1.html">Vissza</A>
-<A HREF="index.html#toc2">Tartalom</A>
+<A HREF="index-3.html">Next</A>
+<A HREF="index-1.html">Previous</A>
+<A HREF="index.html#toc2">Contents</A>
 <HR>
 <H2><A NAME="Installation"></A> <A NAME="s2">2. Telepítés</A></H2>
 
@@ -18,179 +18,181 @@
 <H2><A NAME="ss2.1">2.1 Hogyan szerezzük be a KDevelop-ot?</A>
 </H2>
 
-<P>KDevelop can be found either on the KDE Applications page at 
-<A HREF="http://www.kde.org/current.html">http://www.kde.org/current.html</A> or on the KDevelop
-homepage at 
-<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>. KDevelop is also available on Linux distributions, such
-as SuSE 6.1.
-<P>We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
-KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
-into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
-KDoc and KDbg.
-<P>If you're experiencing problems with compiling or using KDevelop, please read the 
-<A HREF="index-14.html#Questions and Answers">Kérdések és Válaszok</A>
-section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
-subscribe to the KDevelop mailing list at 
-<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A> by sending a mail with an empty header and "subscribe" as contents. Requests and problem report
-should only target the usage of the KDevelop IDE and not towards any questions that regard any implementation problem you may have
-while coding your own application. Anyway, all mails send to the mailing list should be written in English, so that all participants can
-take part on discussions and are able to provide better help. The mailing list is also intended for those users willing to contribute
-and who found solutions for any problems they experienced, so we can fix errors and include that knowledge to give beginners an even
-more qualified first-hand help.
-An good way to report problems is to send the output you get by starting kdevelop from the console or to copy and paste the
-contents of KDevelop's internal Messages-window.
+<P>A KDevelop megtalálható egyrészt a KDE Alkalmazások oldalon a 
+<A HREF="http://www.kde.org/current.html">http://www.kde.org/current.html</A> címen, vagy a KDevelop
+honlapon: 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>. A KDevelop része a Linux disztribúcióknak is, mint például a SuSE 6.1.
+<P>Azok számára, akik követni akarják a KDevelop fejlesztésének menetét a honlapunkon a KDevelop CVS raktárból napi levonatokat is felajánlunk.
+Általában ezek a levonatok nem ajánlottak programfejlesztésre, viszont ki lehet rajtuk próbálni a legújabb szolgáltatásokat és
+betekintést nyújtanak a KDevelop csapat fejlesztõi folyamatába. Különbözõ, a KDevelop-hoz szükséges mások által írt szoftvert is
+ajánlunk, mint például a KDoc és a KDbg.
+<P>Ha a KDevelop fordítása vagy használata során problémákba ütközöl, kérjük olvasd el a 
+<A HREF="index-15.html#Questions and Answers">Kérdések és Válaszok</A>
+fejezetet ebben a kézikönyvben, vagy a GYIK (FAQ) fájlt a KDevelop csomagból. Ha a problémádra nem találsz választ, kérjük
+íratkozz fel a KDevelop levelezési listára itt: 
+<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A>
+azáltal, hogy egy üres fejlécû levelet küldesz, és a levél tartalma csak egy szó: "subscribe" (felíratkozom). A kérdés lehetõleg a
+KDevelop IDE használatára vonatkozzon, és ne az általad írt alkalmazás kódolása során felmerülõ megvalósítási problémákra.
+Akárhogy is, minden a listára küldött levél nyelve lehetõleg angol legyen, hogy minden tag részt vehessen a probléma megvitatásában,
+és így jobban tudjunk segíteni. A levelezõlista azon felhasználók számára is készült, akik hozzá kívánnak járulni a fejlesztéshez,
+vagy megtalálták egy általuk ismert hibának a megoldását, így mi ki tudjuk küszöbölni a hibákt és eltárolni ezt a tudást, hogy
+a kezdõknek még szakszerûbb segítséget nyújthassunk.
+A hibák bejelentésének egy bevált módszere ha elküldöd a kimenetet a konzolból indított KDevelop után, vagy ha kimásolod és beilleszted
+a KDevelop belsõ Üzenetek-ablakának tartalmát.
 <P>
-<H2><A NAME="ss2.2">2.2 Requirements</A>
+<H2><A NAME="ss2.2">2.2 Rendszer követelmények</A>
 </H2>
 
-<P>In order to successfully compile and use KDevelop, you need the following programs and libraries which are available on most platforms
-as distribution packages and thereby can be installed easily.
-<P><B>Required:</B>
+<P>Ahhoz hogy sikeresen lefordítsd és használd a KDevelop-ot, a következõ programokra és könyvtárakra lesz szükséged, melyek a legtöbb
+platformon elérhetõk disztribúciós csomagokként, és ilyen módon könnyedén telepíthetõk.
+<P><B>Szükséges:</B>
 <UL>
-<LI>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (or compatible), available at 
+<LI>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (vagy kompatibilis), letölthetõ: 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>GNU make (or compatible), available at 
+<LI>GNU make (vagy kompatibilis), letölthetõ: 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>perl 5.004, available at 
+<LI>perl 5.004, letölthetõ: 
 <A HREF="http://www.perl.com">http://www.perl.com</A></LI>
-<LI>autoconf 2.12, available at 
+<LI>autoconf 2.12, letölthetõ: 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>automake 1.2, available at 
+<LI>automake 1.2, letölthetõ: 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
 <LI>flex 2.5.4,</LI>
-<LI>GNU gettext, available at 
+<LI>GNU gettext, letölthetõ: 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>Qt 1.42, available at 
+<LI>Qt 1.42, letölthetõ: 
 <A HREF="http://www.troll.no">http://www.troll.no</A></LI>
-<LI>KDE 1.1.x, available at 
+<LI>KDE 1.1.x, letölthetõ: 
 <A HREF="http://www.kde.org">http://www.kde.org</A></LI>
 </UL>
-<P><B>Optional:</B>
+<P><B>Választható:</B>
 <UL>
-<LI>a2ps or enscript for printing support</LI>
-<LI>ghostview or kghostview for printing preview</LI>
-<LI>glimpse 4.0 for the search index, available at 
+<LI>a2ps vagy enscript a nyomtatás támogatására</LI>
+<LI>ghostview vagy kghostview a nyomtatási elõnézethez</LI>
+<LI>glimpse 4.0 a keresési indexhez, letölthetõ: 
 <A HREF="http://glimpse.cs.arizona.edu">http://glimpse.cs.arizona.edu</A></LI>
-<LI>sgmltools 1.0, available at 
+<LI>sgmltools 1.0, letölthetõ: 
 <A HREF="http://www.sgmltools.org">http://www.sgmltools.org</A></LI>
-<LI>KDE-SDK (<B>KDE S</B>oftware <B>D</B>evelopment <B>K</B>it), which includes KDoc, KSgml2Html, KTranslator
-(available at 
+<LI>KDE-SDK (<B>KDE Szoftver Fejlesztõ Készlet - S</B>oftware <B>D</B>evelopment <B>K</B>it), amely tartalmazza a
+KDoc-ot, KSgml2Html-t, KTranslator-t
+(letölthetõ: 
 <A HREF="http://developer.kde.org">http://developer.kde.org</A>)</LI>
-<LI>KDbg, available at 
+<LI>KDbg, letölthetõ: 
 <A HREF="http://members.telecom.at/~johsixt/kdbg.html">http://members.telecom.at/~johsixt/kdbg.html</A></LI>
-<LI>KIconEdit (available at 
+<LI>KIconEdit (letölthetõ: 
 <A HREF="http://www.kde.org">http://www.kde.org</A>)</LI>
 </UL>
-<P>KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
+<P>A KDevelop SuSE Linux 5.2-es disztribúción lett tesztelve, hardver: AMD K6 200, 64MB RAM, továbbá FreeBSD 3.0-n és SuSE Linux 6.0-n, hardver: Intel
 200 MMX, 128MB RAM.
-<P>As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including a2ps and enscript as packages or
-rpm's, so you should have no problem installing the required third-party software.
-<P><B>Documentation:</B>        
-<P>For creating the KDE library documentation, you need the kdelibs package in source available on your
-system as provided by the KDE project or included with the source packages of your distribution and <B>KDoc</B> (included in the
-KDE-SDK).
-<P>Also we're offering a C/C++ Reference on our homepage at 
-<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>
-that is integrated into the documentation browser after it's installation. Download the package and copy the source file as
-<CODE>root</CODE> into your KDE directory and untar it with <CODE>tar zxvf c_c++_reference.tar.gz</CODE>, then the reference is available in the
-documentation tree; otherwise selecting the reference book in the browser shows an error page with the KDevelop homepage URL offering a
-download and describes the installation process. 
+<P>A szerzõk tudomása szerint, a SuSE Linux és a FreeBSD minden szükséges csomagot tartalmaznak, beleértve az a2ps-t és enscript-et csomag
+vagy .rpm fájl formájában, így a szükséges más által írt szoftverek telepítésének nem kellene gondot okoznia.
+<P><B>Dokumentáció:</B> 
+<P>A KDE könytár dokumentációjának létrehozásához szükség lesz a kdelibs csomagra forráskód formájában,
+elérhetõ a rendszereden a disztribúcióban a KDE projekt részeként szállított forrás-csomagokban;
+és a <B>KDoc</B>-ra (a KDE-SDK-ban található).
+<P>A honlapunkról (
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>) ajánlunk még egy C/C++ Referenciát, amely telepítése után a
+dokumentáció böngészõbe kerül integrálásra. Töltsd le a csomagot és másold be a forrás fájlt <CODE>root</CODE> felhasználóként
+a KDE könyvtárba és csomagold ki a <CODE>tar zxvf c_c++_reference.tar.gz</CODE> paranccsal, ezután a referencia elérhetõ lesz
+a dokumentációs fában; egyébként, ha a böngészõben a referenciakönyvet választod, egy hibaüzenet jelenik meg a KDevelop
+honlap URL-lel, felajánlva a letöltést és leírva a telepítési eljárást.
+<P>
 <H2><A NAME="ss2.3">2.3 Fordítás és Telepítés</A>
 </H2>
 
-<P>In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
+<P>Ahhoz, hogy lefordítsd a KDevelop-ot és telepítsd a rendszeredre, a következõket gépeld be a KDevelop forrás disztribúció fõkönyvtárában:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
         % ./configure
         % make
 
-        (as root)
+        (root-ként)
         
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>
 <P>
-<P>Since KDevelop uses <CODE>autoconf</CODE> you should have not trouble compiling it.
-<P>In order to compile the KDevelop CVS snapshot, type the following :
+<P>Miután a KDevelop az <CODE>autoconf</CODE>-ot használja, a lefordításnak nem kellene problémát okoznia.
+<P>KDevelop CVS levonat fordításához a következõket gépeld be:
 <BLOCKQUOTE><CODE>
 <PRE>
         % make -f &lt;idx/Makefile.cvs/
         % ./configure
         % make
 
-        change as `root` and type:
+        menj át `root`-ba, és gépeld:
         
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>If your system's make-command is <CODE>gmake</CODE>, type <CODE>gmake</CODE> instead of <CODE>make</CODE>.
+<P>Ha a rendszered make-parancsa a <CODE>gmake</CODE>, írj <CODE>gmake</CODE>-et a <CODE>make</CODE> helyett.
 <P>
 <H2><A NAME="ss2.4">2.4 A KDevelop elindítása</A>
 </H2>
 
-<P>If you use KDE as your window manager, KDevelop can be started by choosing
-"K"-&gt;"Applications"-&gt;"KDevelop"-&gt;"KDevelop 0.4". As KDevelop supports KDE-Mime-types, you can also start by selecting a
-KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the KDE File Manager which will start KDevelop
-and load the project.
-Under other window managers, open a console and type:
+<P>Ha ablakkezelõként KDE-t használsz, a KDevelop a
+"K"-&gt;"Fejlesztés"-&gt;"KDevelop 1.0" útvonalon érhetõ el. Minthogy a KDevelop támogatja a KDE-Mime-típusokat, egy
+KDevelop projekt fájlra ("*.kdevprj", a KDevelop projekt ikonnal jelezve) kattintva a KDE Fájlkezelõben is elindítható
+(az adott projekttel együtt).
+Más ablakkezelõk alatt nyiss meg egy konzolt és gépeld be:
 <BLOCKQUOTE><CODE>
 <PRE>
 % kdevelop
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>To start KDevelop with an existing project, change into the project-directory and type:
+<P>Létezõ projekttel a KDevelop-ot úgy indíthatjuk, hogy belépünk az adott projekt könyvtárába és begépeljük:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
         
-% kdevelop  &lt;yourProject&gt;.kdevprj
+% kdevelop  &lt;aTeProjekted&gt;.kdevprj
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>Under each user account KDevelop will invoke the 
-<A HREF="#The Installation Program">automatikus telepítés</A> process on the
-first start, allowing a quick configuration of the most needed options. If your installation is messed up, you can reconfigure KDevelop
-any time either by entering
+<P>A KDevelop elsõ indításkor minden felhasználónál elindítja az 
+<A HREF="#The Installation Program">automatikus telepítés</A> programot,
+amely lehetõvé teszi a leggyakrabban használt választások gyors beállítását. Ha a telepítés el lett fuserálva, bármikor újrakonfigurálhatod
+a KDevelop-ot begépelve:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
         
-% kdevelop  --&lt;idx/setup/
+% kdevelop  --setup
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>or, when using KDE, by choosing "K"-&gt;"Applications"-&gt;"KDevelop"-&gt;"Setup".
+<P>vagy, a KDE-t használva a "K"-&gt;"Fejlesztés"-&gt;"KDevelop Setup" menü kiválasztásával.
 <P>
 <H2><A NAME="The Installation Program"></A> <A NAME="ss2.5">2.5 A telepítõprogram</A>
 </H2>
 
-<P>KDevelop includes an automatic installation program module which is invoked whenever Kdevelop is started and the configuration file
-kdeveloprc does not exist. We suggest you follow the installation steps by choosing "Proceed" to automatically check your system and to
-set up your KDevelop environment.
-<P>
-<P>The Installation dialog's buttons execute the following actions:
-<P><B>Help:</B>  Will open  the KDEHelp program.
-<P><B>Proceed:</B> This starts the installation process and executes the following actions:
+<P>A KDevelop tartalmaz egy automatikus telepítõ program modult, amely akkor kerül meghívásra, amikor a KDevelop-ot elindítják, de
+a kdeveloprc konfigurációs fájl nem létezik. Azt javasoljuk, kövesd a telepítés lépéseit a "Végrehajtás" kiválasztásával,
+hogy automatikusan ellenõrízze a rendszeredet és belõje a KDevelop környezetet.
+<P>A telepítõ dialógus nyomógombjai a következõ célokra szolgálnak:
+<P><B>Segítség:</B>  Megnyitja a KDEHelp programot.
+<P><B>Végrehajtás:</B> Elindítja a telepítési folyamatot és a következõ lépéseket teszi:
 <P>
 <OL>
-<LI> Checking for make/gmake, autoconf, autoheader, automake and perl for the creation and compilation of new applications
-generated by KDevelop. If gmake is installed, the make-command will be set automatically to use gmake.  Other commandline options
-to your make program can be set in the setup dialog accessed by the options menu later, an introduction into development under Unix is
-explained in section 
-<A HREF="index-3.html#Programs">Programok</A>.
+<LI> Ellenõrzi a make/gmake, autoconf, autoheader, automake és perl meglétét a KDevelop által generált új alkalmazások
+létrehozásához és lefordításához. Ha a gmake van telepítve, a make-parancs automatikusan átállítódik ennek a használatára.
+A make programhoz további parancssori beállítások a "Projekt/Beállítások" menüben adhatók meg; a Unix rendszer alatti fejlesztésrõl
+rövid ismertetõ a 
+<A HREF="index-3.html#Programs">Programok</A> fejezetben található.
 </LI>
-<LI> Checking for KDoc and glimpse.  Those will allow to create a new KDE-Library documentation and a search index
-automatically in a later setup step if found.
+<LI> Ellenõrzi a KDoc és a glimpse meglétét. Ezek teszik lehetõvé az új KDE-Könyvtár dokumentáció és a keresõ index
+automatikus létrehozását a telepítés egy késõbbi pontján, már ha megvannak.
 </LI>
-<LI> Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to
-allow correct printing. If neither program is installed, you can do this at any time later on at your option without having to run the
-setup again.
+<LI> Ellenõrzi az a2ps vagy az enscript jelenlétét, hogy biztosítsa a nyomtatás támogatottságát. A helyes nyomtatáshoz
+a két program valamelyikének rendelkezésre kell állnia. Ha egyik sincs telepítve, ezt bármikor a késõbbiekben megteheted anélkül, hogy
+újra kellene futtatni a telepítõ programot.
 </LI>
-<LI> Checking for KDbg, KIconEdit and KTranslator.  We encourage you to install those programs as they are good
-helpers for creating complete KDE-applications. Note that KDbg is used directly for debugging your current project within
-KDevelop; KIconEdit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconEdit and KTranslator
-are then configured to be available in the "Tools" menu of the KDevelop menu bar if they are found. Other tools can be added to the
-Tools-menu by selecting "Tools..." in the Options menu later.
+<LI> Ellenõrzi a KDbg, KIconEdit és KTranslator meglétét. Javasoljuk, hogy telepítsd ezeket a programokat, mivel
+kiváló segítséget nyújtanak komplett KDE-alkalmazások létrehozásánál. Megjegyzendõ, hogy a KDbg közvetlenül elérhetõ a
+KDevelop-on belül az aktuális projekt nyomkövetésére; a KIconEdit a fájl-nézegetõ fában kijelölt pixmaps-ek kirajzolására és
+szerkesztésére használatos. A KDbg, KIconEdit és KTranslator programok -ha megvannak- úgy lesznek konfigurálva, hogy
+elérhetõek legyenek az "Eszközök" menübõl.
+Egyéb programok is hozzáadhatóak az Eszközök-menühöz késõbb a "Beállítások" menüben az "Eszközök..." menüpont kiválasztásával.
 </LI>
 <LI> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
 needed program is recommended.
@@ -236,7 +238,7 @@ can select the directories and add them to the indexing process as well.
 </LI>
 <LI> If all installation steps were done correctly,  a final message states that KDevelop will be started
 after pressing OK. Mind that you can set up additional options like auto saving in the
-<A HREF="index-13.html#General Configuration">KDevelop Setup</A> dialog that can be accessed through the options menu.</LI>
+<A HREF="index-14.html#General Configuration">KDevelop Setup</A> dialog that can be accessed through the options menu.</LI>
 </OL>
 <P><B>Cancel:</B>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
 to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
@@ -244,8 +246,8 @@ to set all options yourself with the configuration dialogs provided in the optio
 <P>
 <P>
 <HR>
-<A HREF="index-3.html">Tovább</A>
-<A HREF="index-1.html">Vissza</A>
-<A HREF="index.html#toc2">Tartalom</A>
+<A HREF="index-3.html">Next</A>
+<A HREF="index-1.html">Previous</A>
+<A HREF="index.html#toc2">Contents</A>
 </BODY>
 </HTML>

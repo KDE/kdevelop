@@ -8,9 +8,9 @@
  <LINK HREF="index.html#toc8" REL=contents>
 </HEAD>
 <BODY>
-<A HREF="index-9.html">Tovább</A>
-<A HREF="index-7.html">Vissza</A>
-<A HREF="index.html#toc8">Tartalom</A>
+<A HREF="index-9.html">Next</A>
+<A HREF="index-7.html">Previous</A>
+<A HREF="index.html#toc8">Contents</A>
 <HR>
 <H2><A NAME="Projects"></A> <A NAME="s8">8. Projektek</A></H2>
 
@@ -116,19 +116,33 @@ Makefile.am outside the write area according to the needed settings</LI>
 </H2>
 
 <P>
-<P>The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
-projects use the GNU standard development tools as described in the requirements section of this handbook. For KDE applications,
-the wizard offers two different frameworks, the KDE-Application, providing a complete application with base classes for
-document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
-KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for the creation
-of small desktop tools or other simple applications without too much change on the existing code provided by the framework. A
-Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for end-users.
-The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
-and statusbar.
-<P>The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
-"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
-first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
-which requires any C-compiler at the minimum.
+<P>The KDevelop Application Wizard allows the creation of thirteen different types of projects, constructing a framework for each. All
+projects use the GNU standard development tools as described in the requirements section of this handbook.
+<P>For KDE applications there are six different frameworks:
+<UL>
+<LI>Mini: Creates a KDE-application with an empty main widget.</LI>
+<LI>Normal: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe model.</LI>
+<LI>Normal-OpenGL: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view 
+codeframe model. OpenGL(tm) (Mesa3D) support is added.</LI>
+<LI>KDE 2 Normal: Creates a KDE-2 application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe 
+model.</LI>
+<LI>KDE 2 Mini: Creates a KDE-2 application with an empty main widget.</LI>
+<LI>KDE 2 MDI: Creates a KDE-2 MDI (Multiple Document Interface) application with menubar, toolbar, statusbar and support for a document-view 
+codeframe model.</LI>
+</UL>
+<P>If you wish no dependencies towards the KDE-libraries for end-users, you can choose from four Qt-only types:
+<UL>
+<LI>Normal: Creates a Qt-Application with a main window containing a menubar, toolbar and statusbar, including support for a generic 
+document-view model.</LI>
+<LI>QT 2.x SDI: Creates a Qt-2.x Application with a main window containing a menubar, toolbar and statusbar, including support for a single 
+document-view interface (SDI) model.</LI>
+<LI>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
+document interface (MDI) model.</LI>
+<LI>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
+Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm).</LI>
+</UL>
+<P>The two C and C++ -Application types offer a framework for creating commandline applications.
+<P>And last but not least you can create an empty projekt, e.g. to work with existing projects.
 <P>The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
 Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
 *.lsm file.
@@ -139,7 +153,7 @@ Email address are asked for inserting them in header and cpp templates on top of
 <P>KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
 change that to just start the IDE without any project. To prevent the default behavior, disable the "Load last project" option in
 the 
-<A HREF="index-13.html#KDevelop Setup">KDevelop Setup</A> dialog.
+<A HREF="index-14.html#KDevelop Setup">KDevelop Setup</A> dialog.
 <P>To open another project, select "Open" from the "Project" menu or press the "Open Project" button on the toolbar. In case you've
 got another project currently open, this will be closed. If your current project then contains files that aren't saved, you are
 asked to save all changed files. Thereby, you can select which file to save and which you want to close without saving, or to save
@@ -313,8 +327,8 @@ before the conversion towards the now created entries done by KDevelop in the KD
 compiled and installed after the conversion to ensure the project's consistency.
 <P>
 <HR>
-<A HREF="index-9.html">Tovább</A>
-<A HREF="index-7.html">Vissza</A>
-<A HREF="index.html#toc8">Tartalom</A>
+<A HREF="index-9.html">Next</A>
+<A HREF="index-7.html">Previous</A>
+<A HREF="index.html#toc8">Contents</A>
 </BODY>
 </HTML>

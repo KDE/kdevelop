@@ -2,160 +2,64 @@
 <HTML>
 <HEAD>
  <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
- <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Általános beállítások</TITLE>
+ <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Beépített CVS</TITLE>
  <LINK HREF="index-14.html" REL=next>
  <LINK HREF="index-12.html" REL=previous>
  <LINK HREF="index.html#toc13" REL=contents>
 </HEAD>
 <BODY>
-<A HREF="index-14.html">Tovább</A>
-<A HREF="index-12.html">Vissza</A>
-<A HREF="index.html#toc13">Tartalom</A>
+<A HREF="index-14.html">Next</A>
+<A HREF="index-12.html">Previous</A>
+<A HREF="index.html#toc13">Contents</A>
 <HR>
-<H2><A NAME="General Configuration"></A> <A NAME="s13">13. Általános beállítások</A></H2>
+<H2><A NAME="s13">13. Beépített CVS</A></H2>
 
+<P>KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
+groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
+located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
+added or removed to the CVS by the developers.
+<P>Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
+at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
+receive the changes.
 <P>
-<P>This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
-found by the according entry in the Options-menu.
-<P>
-<H2><A NAME="Configuring the &quot;&lt;idx/Tools/&quot; Menu"></A> <A NAME="ss13.1">13.1 Configuring the "Tools" Menu</A>
+<H2><A NAME="ss13.1">13.1 Enabling CVS Support</A>
 </H2>
 
+<P>As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
+KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
+the option for Version Control to "CVS".
 <P>
-<!--
-configuring the Tools-menu
--->
-<!--
-"Options"-menu
--->
-<P>As KDevelop supports the use of third-party programs within it's user interface, you are able to configure any program that suits
-your needs towards application development. This can be done by adding programs to the already pre-defined ones in the
-"Tools"-menu. To change the tools-menu, select "Tools" from the "Options" menu. This dialog allows to specify the entry
-name, program and additional command line options you want to pass to the execution. To remove a program from the menu, select the
-entry name and choose "Delete". To add a program, specify the menuentry, where a &amp; is used as a menu-accelerator; you may compare the
-already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
-is added to the list. After leaving the configuration dialog, the tools-menu updates itself, so the new configuration is already
-usable without restarting KDevelop.
-<P>
-<H2><A NAME="ss13.2">13.2 File Viewer Options</A>
+<H2><A NAME="ss13.2">13.2 Using CVS Commands</A>
 </H2>
 
-<P>
-<!--
-file viewers
--->
-<P>The Logical File Viewer can be configured by context menus completely. As it's intention is to separate files logically to keep a
-better overview over complex projects, one of the most used configurations is to create file groups. Those can be set by opening the
-context menu with a right mouse button click over the project icon displayed at the root of the tree. The menu offers:
+<P>Then the following commands are available in the LFV and RFV by context menus:
+<P>Over a file not included in the repository:
 <UL>
-<LI>New File: Opens the New File dialog. Equals to the menubar command "File"-"New"</LI>
-<LI>New Class: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"New
-Class"
-<!--
-"Project"-menu
--->
-</LI>
-<LI>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for
-the project files that will be displayed in this group.</LI>
-<LI>Show relative path: displays the files with their path name starting from the main project directory if checked; otherwise only
-the filename is shown.</LI>
+<LI><B>Add to Repository</B>: adds the file to the repository. The file is set up to be added and will be introduced to the repository
+on the next <CODE>commit</CODE> command that includes the directory where the added file is located locally.</LI>
 </UL>
-<P>Over a group folder, the according context menu offers:
+<P>Over a file included in the repository:
 <UL>
-<LI>New Group: Opens the New Group dialog as in the context menu described above.</LI>
-<LI>Remove group: removes the group from the LFV.</LI>
-<LI>Properties: Opens the properties of the group. There, you can edit the file filters by a list of wildcards separated by commas.</LI>
+<LI><B>Update</B>: update the selected file with the CVS version</LI>
+<LI><B>Commit</B>: commit the selected file to the CVS repository</LI>
+<LI><B>Remove from Repository</B>: remove the file from the repository</LI>
 </UL>
-<P>
-<P>
-<H2><A NAME="KDevelop Setup"></A> <A NAME="ss13.3">13.3 KDevelop Setup</A>
-</H2>
-
-<P><B>Make-command:</B>
-The General Options dialog lets you configure KDevelop's general settings.
-First, you should set the make-command available on your system. If the selected program does not exist,
-KDevelop will warn you the next time you're invoking a make command.
-<P><B>Autosave:</B>
-<P>If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
-<P>
-<P><B>Autoswitch:</B>
-<P>If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
-documentation in the Help-menu, the Documentation browser will be opened, together with the documentation tree and the output
-window turned off.
-Startup:
-<P>For starting KDevelop, you have the option to enable/disable the start-logo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavior.
-<P>
-<H2><A NAME="Changing Keyboard Shortcuts"></A> <A NAME="ss13.4">13.4 Changing Keyboard Shortcuts</A>
-</H2>
-
-<P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / Ctrl key etc.
-<P>
-<H2><A NAME="Documentation"></A> <A NAME="ss13.5">13.5 Documentation</A>
-</H2>
-
-<P>
-<H3>Directories<!--documentation path--></H3>
-
-<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML-documentation
-is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-Library documentation.
-<P>Usually, the Qt-Documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
-documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
-according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
-first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
-also setting the KDE Library Doc path automatically.
-<P>
-<H3>Options</H3>
-
-<P>
-<H3>Update KDE-Documentation</H3>
-
-<P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
-installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
-function requires your system to have KDoc and qt2KDoc installed, included in the KDE-SDK package. First of, you have
-to set up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
-/home/rnolden/kdelibs-1.1/.
-<P>Then, you can choose three different installation modes, as:
-<P>
+<P>Over a folder:
 <UL>
-<LI> Delete old Documentation and  install to recent Documentation-path:  this assumes that you already have a documentation
-installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
-newly generated documentation into the recent path.</LI>
-<LI> Delete old Documentation and install to new Documentation-path:   this will result in deleting the old documentation as
-well as above, but gives you the choice to set up a new documentation place.</LI>
-<LI> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
-the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
-kdelibs version.</LI>
+<LI><B>Add</B>: adds the folder to the repository</LI>
+<LI><B>Remove</B>: removes the folder from the repository</LI>
+<LI><B>Update</B>: update the folder recursively to be in sync with the repository</LI>
+<LI><B>Commit</B>: commit any changes recursively to the repository</LI>
 </UL>
-<P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
-users who generate a new documentation from scratch.
-<P>After pressing the OK button, KDevelop will create a subdirectory "KDoc-reference" in the documentation path containing the KDoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
-documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by <CODE>qt2kdoc</CODE>. Finally, the KDE libs will be indexed and the documentation will be build with
-cross-references to give browsing the most functionality.
-<P>
-<H3>Create Search Database</H3>
-
-<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.0 installed.
-Preset are the options to index the given KDE-Library documentation as well as the Qt-Documentation, assuming the path to the
-documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
-directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an additional
-directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
-in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
-medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger search-database
-will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
-<A HREF="index-6.html#Using the Documentation Browser">Using the Documentation Browser</A>.
-<P>
+<P>The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
+the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
+successful or not.
+<P>As the CVS commands of KDevelop only work with the <CODE>cvs</CODE> system command and its commandline options, you should have no trouble to
+use the cvs features.
 <P>
 <HR>
-<A HREF="index-14.html">Tovább</A>
-<A HREF="index-12.html">Vissza</A>
-<A HREF="index.html#toc13">Tartalom</A>
+<A HREF="index-14.html">Next</A>
+<A HREF="index-12.html">Previous</A>
+<A HREF="index.html#toc13">Contents</A>
 </BODY>
 </HTML>

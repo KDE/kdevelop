@@ -15,256 +15,257 @@ Ez a kézikönyv része a KDevelop Integrált Fejlesztõi Környezetnek és ebbõl kifol
 <chapt>Bevezetõ
 <p>
 
-As everything on earth has it's fashions, today's computer world seems to tend more to the use of free software even for
-commercial purpose. The most popular free software project is Linux. It is now generally agreed that Linux, (as well as other projects
-such as the Apache web server, the Perl language and GNU suite of tools), proves that free software can be of as high a quality as
-commercial software. But despite the quality, end users must still suffer under the cryptic commands of any Unix Systems.For Linux to
-thrive, it needs applications, both free and commercial, and ease of use.
+Ahogy a világon mindennek megvan a maga divatja, a jelenkor számítógépes világában egyre inkább terjed a szabad szoftver használata,
+akár üzleti célokra is. A legnépszerûbb szabad szoftver projekt a Linux. Mostanára általánosan elfogadott, hogy a Linux - ahogy más projektek,
+mint például az Apache web szerver, a Perl nyelv és a GNU eszközök sora - bebizonyította, hogy a szabad szoftver minõsége állja a versenyt a
+ kereskedelmi szoftverekével. De dacára a minõségnek, a felhasználóknak még mindig a Unix Rendszerek titokzatos parancsaitól kell szenvednie.
+ A Linux növekedéséhez alkalmazások kellenek, ingyenesek és kereskedelmiek, és könnyû használhatóság.
 
-The <idx/KDE/ project tries to close this gap by providing an easy to use desktop and the companion libraries to extend the variety of
-available <idx/GUI/-based software. But especially as free software is often made in the author's free time, the question for many
-programmers is how much they like the current code development environment. KDevelop wants to take another major step: making the
-programmer's life easier and more efficient: products created with KDevelop can reach a higher level of reliability and functionality
-in the same development period.
+A <idx/KDE/ projekt ezt a szakadékot próbálja meg szûkíteni azáltal, hogy könnyen használható munkafelületet nyújt egy csoport könyvtárral
+ együtt, kiterjesztentõ a rendelkezésre álló <idx/GUI/-alapú szoftverek választékát. De mivel a szabad szoftver leginkább a szerzõje
+szabad idejében készül, különösen fontos kérdés, hogy a programozó mennyire kedveli a jelenlegi kódfejlesztõ környezetet.
+ A KDevelop meg kívánja tenni a következõ nagy lépést: megkönnyíteni a programozó életét és hatékonyabbá tenni a munkáját; a KDevelop-pal
+létrehozott termékek azonos fejlesztési idõ alatt magasabb minõségi és megbízhatósági szintet érhetnek el.
 
-To fulfill this goal, the KDevelop Integrated Development Environment provides many features that developers need as well as it
-wraps the functionality of third party projects such as <tt/make/ and the GNU C++ <idx/Compiler/s and makes them an invisible, integrated
-part of the development process. KDevelop manages:
+E cél elérése érdekében a KDevelop Integrált Fejlesztõi Környezet sok, a fejlesztõk által igényelt szolgáltatást nyújt,
+magába ágyaz mások által írt programokat, mint például a <tt/make/ és a GNU C++ <idx/fordítóprogram/ok, láthatatlan, integrált
+ részévé téve õket a fejlesztõi folyamatnak. A KDevelop tartalmazza:
 
 <itemize>
-<item> All development tools needed for C++ programming like <idx/Compiler/, <idx/Linker/, <idx/automake/ and
+<item> A C++ programozáshoz szükséges minden fejlesztõeszközt, mint például a <idx/fordítóprogram/, <idx/linker/, <idx/automake/ és
 <idx/autoconf/,
-<item> <idx/KAppWizard/, which generates complete, ready-to-go sample applications,
-<item> Classgenerator, for creating new <idx/classes/ and integrating them into the current project,
-<item> File management for sources, headers, documentation etc. to be included in the project,
-<item> The creation of User-Handbooks written with <idx/SGML/ and the automatic generation of <idx/HTML/-<idx/output/ with the KDE look and feel,
-<item> Automatic <idx/HTML/-based <idx/API-documentation/ for your project's <idx/classes/ with cross-references to the used libraries,
-<item> Internationalization support for your application, allowing translators to easily add their target language to a project,
-<item> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in <idx/dialog editor/,
-<item> managing your project via CVS by providing an easy-to-use frontend for the most needed functions,
-<item> Debugging your application by integrating <idx/KDbg/,
-<item> Editing of project-specific <idx/pixmaps/ with <idx/KIconEdit/,
-<item> The inclusion of any other program you need for development by adding it to the "<idx/Tools/"-menu according to your individual needs.
+<item> <idx/Alkalmazásvarázsló/t, amely teljes futtatásra kész mintaalkalmazást generál,
+<item> Osztálygenerátort, új <idx/osztály/ok létrehozására és az aktuális projektbe való integrálására,
+<item> Fájlkezelést a projektbe tartozó források, fejlécfájlok, dokumentáció stb. rendezgetésére,
+<item> Felhasználói kézikönyvek létrehozását <idx/SGML/-ben és KDE kinézetû <idx/HTML/-<idx/kimenet/ automatikus generálását,
+<item> Automatikus <idx/HTML/-alapú <idx/API-dokumentációt/ a projekted <idx/osztály/aihoz keresztreferenciákkal a felhasznált könyvtárakhoz,
+<item> "Nemzetköziesítési" támogatást az alkalmazásodhoz, lehetõvé téve, hogy könnyen új támogatott nyelvet adhassunk a projekthez,
+<item> WYSIWYG (Amit látsz, azt kapod) -felhasználói felület létrehozását, beépített <idx/dialógusszerkesztõ/vel,
+<item> A projekted CVS általi verziókarbantartását, könnyen használható felületet adva a legsûrûbben igényelt funkciókhoz,
+<item> Az alkalmazásod nyomkövetését, a <idx/KDbg/ integrálása által,
+<item> Projekt-specifikus <idx/pixmap/-ok szerkesztését a <idx/KIconEdit/-tel,
+<item> Bármilyen más eszköz beágyazását az "<idx/Eszközök/"-menün keresztül egyéni igénytõl függõen.
 </itemize>
 
 
-KDevelop makes it a joy to work with all programs in one place and saves time by automating standard development processes
-as well as giving you direct and transparent access to all information you need. The integrated browsing mechanisms are designed
-to support <idx/documentation/ requests that developers have in conjunction with their project.
+A KDevelop használatát élvezetessé teszi, hogy minden program egy helyrõl érhetõ el, idõt takaríthatunk meg a szokványos fejlesztõi
+folyamat automatizálásával, valamint, hogy közvetlen és átfogó módon érhetünk el minden szükséges információt.
+A beépített böngészõ eljárások támogatják azon kereséseket a <idx/documentáció/ban, amelyeket a fejlesztõk a projektjükkel kapcsolatban
+ elindíthatnak.
 
-The <idx/class viewer/ and error finder bring you anywhere in the project code with a mouse click without needing to search for files;
-File trees give direct access to the <idx/project files/ and the integrated help system offers superb access to online-documentation from
-anywhere within the IDE.
+Az <idx/osztály nézet/ és a hibakeresõ egy egérgomb klikkentésre bárhová eljuttat a projekt forráson belül anélkül, hogy fájlokban kellene
+keresgélni;
+A fájl-fa nézet közvetlenül elérhetõvé teszi a <idx/projekt fájlok/at és a beépített segítõ rendszer bárhonnan az IDE-n belül
+nagyszerû hozzáférést biztosít az online dokumentációhoz.
 
 <sect>Változások
 <p>
-Version 1.0 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 0.1 release followed by the 0.2, 0.3 and 0.4 releases; each of them were tested and bugs
-fixed. We believe that the current version is to be expected as the final release for the KDE 1.x series, giving developers the
-environment they want to use.
+A KDevelop 1.0-ás verziója a C/C++ fejlesztésekhez leginkább szükséges szolgáltatásokkal érkezik. A KDevelop kifejlesztésének során
+a projekt óriási fejlõdésen ment keresztül a 0.1-es verzió óta, amelyet a 0.2, 0.3 és a 0.4 verziók követtek; mindegyiket teszteltük,
+és a talált hibákat kijavítottuk. Úgy gondoljuk, hogy a jelenlegi lesz a KDE 1.x sorozathoz szánt végsõ verzió, amely olyan fejlesztõi
+környezetet nyújt, amilyet a programozók használni akarnak.
 
 A következõ területeken értünk el javulást:
 
 <itemize>
-<item>fast classparser and -browser with graphical class-tree view and dialog-based adding of members and classes,
-<item>CVS support for most needed functions such as adding, removing, updating and committing files and directories,
-<item>updated and extended documentation, now covering five handbooks shipping with KDevelop,
-<item>bugfixed classparser, dialogeditor and errorfinder.
+<item>gyors osztályelemzõ és ~böngészõ, grafikus osztály-fa nézettel, osztályok és elemeik dialógusalapú szerkesztésével,
+<item>CVS támogatás a leggyakrabban igényelt funkciókkal, mint például fájlok és könyvtárak hozzáadása, törlése, frissítése és jóváhagyása,
+<item>a KDevelop-pal együtt szállított frissített és kiterjesztett dokumentáció, amely pillanatnyilag öt kötetet számlál,
+<item>javított osztályelemzõ, dialógusszerkesztõ és hibakeresõ.
 </itemize>
 
 Az IDE-rõl, a dokumentációjáról vagy a szolgáltatásairól bármilyen észrevételt örömmel fogadunk.
 
 <sect>Errõl a kézikönyvrõl
 <p>
-This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
-information about specific programming issues, we suggest reading the <htmlurl url="../../default/kdevelop/programming/index.html" name="KDevelop Programming
-Handbook"> included with KDevelop, which covers themes such as understanding generated <idx/application framework/s and how to create
-full-featured <idx/KDE/ applications using example projects.
+Ez a felhasználói kézikönyv teljes áttekintést nyújt a KDevelop IDE-rõl és röviden leírja a fejlesztõi folyamat alapjait. Egyedi
+programozási kérdésekhez további információkért a KDevelop-pal szállított <htmlurl url="../../default/kdevelop/programming/index.html" name="KDevelop
+Programozói Kézikönyv"> elolvasását ajánljuk, amely olyan témákkal foglalkozik, mint például a generált <idx/keretalkalmazás/ok
+megértése és telivér <idx/KDE/ alkalmazások létrehozása példaprojektek felhasználásával.
 
-The design of this handbook is therefore separated into the following parts:
+Ez a kézikönyv a következõ részeket tartalmazza:
 <itemize>
-<item>Chapter <ref id="Installation" name="Telepítés">, covers the system requirements, installation and setting up of the KDevelop
-IDE. <item>Chapter <ref id="Programs" name="Programok">, tells you how programs are created with standard GNU development tools and
-how they are built.
-<item>Chapter <ref id="Development with KDevelop" name="Fejlesztés a KDevelop-pal">, takes you on a short tour describing the
-main functionality of the environment.
-<item>Chapter <ref id="Overview" name="Áttekintés">, explains the menus and dialogs as well as keyboard <idx/shortcuts/.
-<item>Chapter <ref id="The Help System" name="A Súgó Rendszer">, shows how to use the built-in <idx/documentation browser/ and
-additional help functions.
-<item>Chapter  <ref id="Working with the Editor" name="Munkában a Szerkesztõ">, explains the features of file management and
-editing.
-<item>Chapter <ref id="Projects" name="Projektek">, describes the creation and maintaining of software projects.
-<item>Chapter <ref id="Build Settings" name="Build beállítások">, contains a reference on how to set <idx/Compiler/ and liker flags as well as project options.
-<item>Chapter <ref id="The Class Browser" name="az Osztályböngészõ">, tells you how to make use of KDevelop's powerful Class Browser.
-<item>Chapter <ref id="The Dialog Editor" name="a Dialógus szerkesztõ">, features the integrated visual <idx/GUI/ constructor and how it
-generates C++ <idx/output/.
-<item>Chapter <ref id="General Configuration" name="Általános beállítások"> shows how you can set overall preferences for using KDevelop.
-<item>Chapter <ref id="Questions and Answers" name="Kérdések és Válaszok">, covers questions that regard to the usage of KDevelop
-under different flavors of Unix systems and problem solutions in general.
+<item>A <ref id="Installation" name="Telepítés"> fejezet ismerteti az ajánlott konfigurációt, a KDevelop IDE telepítését és üzembehelyezését.
+<item>A <ref id="Programs" name="Programok"> fejezet elmondja, hogyan hoznak létre programokat szabványos GNU fejlesztõeszközökkel, és hogyan
+lesznek lefordítva.
+<item>A <ref id="Development with KDevelop" name="Fejlesztés a KDevelop-pal"> fejezet rövid kirándulásra visz, körülírva a környezet fõbb funkcióit.
+<item>Az <ref id="Overview" name="Áttekintés"> fejezet bemutatja a menüket, dialógusablakokat és a <idx/billentyûkombinációk/at.
+<item><ref id="The Help System" name="A Súgó Rendszer"> megmutatja a beépített <idx/dokumentáció-böngészõ/ használatát és a további súgó funkciókat.
+<item>A <ref id="Working with the Editor" name="Munkában a Szerkesztõ"> fejezet elmagyarázza a fájl-kezelés és szerkesztés szolgáltatásait.
+<item>A <ref id="Projects" name="Projektek"> fejezet leírja a szoftver projektek létrehozását és karbantartását.
+<item>A <ref id="Build Settings" name="Build beállítások"> fejezet referenciát tartalmaz a <idx/fordítóprogram/ és a linker, valamint a projekt beállításairól.
+<item><ref id="The Class Browser" name="Az Osztályböngészõ"> fejezet elmondja, hogyan használhatjuk ki a KDevelop hatékony Osztályböngészõjének a szolgáltatásait.
+<item><ref id="The Dialog Editor" name="A Dialógus szerkesztõ"> fejezet felvázolja a beépített <idx/GUI/ építõt, és az általa generált C++ <idx/kimenet/et.
+<item>Az <ref id="General Configuration" name="Általános beállítások"> fejezet megmutatja, hogyan lehet a KDevelop-ban átlalánosan használt beállításokat megadni.
+<item>A <ref id="Questions and Answers" name="Kérdések és Válaszok"> fejezet a KDevelop különbözõ Unix rendszerek alatti használatát, és általános problémákat
+érintõ kérdéseket taglal.
 </itemize>
 
-For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
-work with the IDE as it covers the usage in depth. The understanding of how things are done the quickest way will save you a lot
-of time searching for functions and features as it will enable you to make use of first-class development tools even more simple.
+Kezdõ programozóknak és a KDevelop új felhasználóinak melegen ajánljuk ezen kézikönyv átolvasását, mielõtt az IDE-vel munkába
+kezdenének, mivel annak használatát mélységében taglalja. Annak megértése, hogyan lehet valamit a leggyorsabban elérni rengeteg,
+funkció és szolgáltatások utáni keresés idejét spórolhatja meg a számunkra, mivel még egyszerûbbé teszi az elsõrangú fejlesztõeszközök
+használatát.
 
 <chapt><idx/Telepítés/<label id="Installation">
 <p>
 <sect>Hogyan szerezzük be a KDevelop-ot?
 <p>
-KDevelop can be found either on the <idx/KDE/ Applications page at <url url="http://www.kde.org/current.html"> or on the KDevelop
-homepage at <url url="http://www.kdevelop.org">. KDevelop is also available on Linux distributions, such
-as SuSE 6.1.
+A KDevelop megtalálható egyrészt a <idx/KDE/ Alkalmazások oldalon a <url url="http://www.kde.org/current.html"> címen, vagy a KDevelop
+honlapon: <url url="http://www.kdevelop.org">. A KDevelop része a Linux disztribúcióknak is, mint például a SuSE 6.1.
 
-We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
-KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
-into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
-<idx/KDoc/ and <idx/KDbg/.
+Azok számára, akik követni akarják a KDevelop fejlesztésének menetét a honlapunkon a KDevelop CVS raktárból napi levonatokat is felajánlunk.
+Általában ezek a levonatok nem ajánlottak programfejlesztésre, viszont ki lehet rajtuk próbálni a legújabb szolgáltatásokat és
+betekintést nyújtanak a KDevelop csapat fejlesztõi folyamatába. Különbözõ, a KDevelop-hoz szükséges mások által írt szoftvert is
+ajánlunk, mint például a <idx/KDoc/ és a <idx/KDbg/.
 
-If you're experiencing problems with compiling or using KDevelop, please read the <ref id="Questions and Answers" name="Kérdések és Válaszok">
-section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
-subscribe to the KDevelop mailing list at <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
-"kdevelop@fara3.cs.uni-potsdam.de"> by sending a mail with an empty header and "subscribe" as contents. Requests and problem report
-should only target the usage of the KDevelop IDE and not towards any questions that regard any <idx/implementation/ problem you may have
-while coding your own application. Anyway, all mails send to the mailing list should be written in English, so that all participants can
-take part on discussions and are able to provide better help. The mailing list is also intended for those users willing to contribute
-and who found solutions for any problems they experienced, so we can fix <idx/errors/ and include that knowledge to give beginners an even
-more qualified first-hand help.
-An good way to report problems is to send the <idx/output/ you get by starting kdevelop from the console or to copy and paste the
-contents of KDevelop's internal <idx/Messages-window/.
+Ha a KDevelop fordítása vagy használata során problémákba ütközöl, kérjük olvasd el a <ref id="Questions and Answers" name="Kérdések és Válaszok">
+fejezetet ebben a kézikönyvben, vagy a GYIK (FAQ) fájlt a KDevelop csomagból. Ha a problémádra nem találsz választ, kérjük
+íratkozz fel a KDevelop levelezési listára itt: <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">
+azáltal, hogy egy üres fejlécû levelet küldesz, és a levél tartalma csak egy szó: "subscribe" (felíratkozom). A kérdés lehetõleg a
+KDevelop IDE használatára vonatkozzon, és ne az általad írt alkalmazás kódolása során felmerülõ <idx/megvalósítási/ problémákra.
+Akárhogy is, minden a listára küldött levél nyelve lehetõleg angol legyen, hogy minden tag részt vehessen a probléma megvitatásában,
+és így jobban tudjunk segíteni. A levelezõlista azon felhasználók számára is készült, akik hozzá kívánnak járulni a fejlesztéshez,
+vagy megtalálták egy általuk ismert hibának a megoldását, így mi ki tudjuk küszöbölni a <idx/hibák/t és eltárolni ezt a tudást, hogy
+a kezdõknek még szakszerûbb segítséget nyújthassunk.
+A hibák bejelentésének egy bevált módszere ha elküldöd a <idx/kimenet/et a konzolból indított KDevelop után, vagy ha kimásolod és beilleszted
+a KDevelop belsõ <idx/Üzenetek-ablak/ának tartalmát.
 
-<sect><idx/Requirements/
+<sect><idx/Rendszer követelmények/
 <p>
-In order to successfully compile and use KDevelop, you need the following programs and libraries which are available on most platforms
-as distribution packages and thereby can be installed easily.
+Ahhoz hogy sikeresen lefordítsd és használd a KDevelop-ot, a következõ programokra és könyvtárakra lesz szükséged, melyek a legtöbb
+platformon elérhetõk disztribúciós csomagokként, és ilyen módon könnyedén telepíthetõk.
 <p>
-<bf>Required:</bf>
+<bf>Szükséges:</bf>
 <itemize>
-<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (or compatible), available at <url url="http://www.gnu.org">
-<item>GNU make (or compatible), available at <url url="http://www.gnu.org">
-<item>perl 5.004, available at <url url="http://www.perl.com">
-<item><idx/autoconf/ 2.12, available at <url url="http://www.gnu.org">
-<item><idx/automake/ 1.2, available at <url url="http://www.gnu.org">
+<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (vagy kompatibilis), letölthetõ: <url url="http://www.gnu.org">
+<item>GNU make (vagy kompatibilis), letölthetõ: <url url="http://www.gnu.org">
+<item>perl 5.004, letölthetõ: <url url="http://www.perl.com">
+<item><idx/autoconf/ 2.12, letölthetõ: <url url="http://www.gnu.org">
+<item><idx/automake/ 1.2, letölthetõ: <url url="http://www.gnu.org">
 <item>flex 2.5.4,
-<item>GNU gettext, available at <url url="http://www.gnu.org">
-<item>Qt 1.42, available at <url url="http://www.troll.no">
-<item><idx/KDE/ 1.1.x, available at <url url="http://www.kde.org">
+<item>GNU gettext, letölthetõ: <url url="http://www.gnu.org">
+<item>Qt 1.42, letölthetõ: <url url="http://www.troll.no">
+<item><idx/KDE/ 1.1.x, letölthetõ: <url url="http://www.kde.org">
 </itemize>
 <p>
-<bf>Optional:</bf>
+<bf>Választható:</bf>
 <itemize>
-<item><idx/a2ps/ or <idx/enscript/ for <idx/printing/ support
-<item>ghostview or kghostview for <idx/printing/ preview
-<item><idx/glimpse/ 4.0 for the <idx/search index/, available at <url url="http://glimpse.cs.arizona.edu">
-<item>sgmltools 1.0, available at <url url="http://www.sgmltools.org">
-<item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it), which includes <idx/KDoc/, <idx/KSgml2Html/, <idx/KTranslator/
-(available at <url url="http://developer.kde.org">)
-<item><idx/KDbg/, available at <url url="http://members.telecom.at/~johsixt/kdbg.html">
-<item><idx/KIconEdit/ (available at <url url="http://www.kde.org">)
+<item><idx/a2ps/ vagy <idx/enscript/ a <idx/nyomtatás/ támogatására
+<item>ghostview vagy kghostview a <idx/nyomtatás/i elõnézethez
+<item><idx/glimpse/ 4.0 a <idx/keresési index/hez, letölthetõ: <url url="http://glimpse.cs.arizona.edu">
+<item>sgmltools 1.0, letölthetõ: <url url="http://www.sgmltools.org">
+<item><idx/KDE-SDK/ (<bf/KDE Szoftver Fejlesztõ Készlet - S/oftware <bf/D/evelopment <bf/K/it), amely tartalmazza a
+<idx/KDoc/-ot, <idx/KSgml2Html/-t, <idx/KTranslator/-t
+(letölthetõ: <url url="http://developer.kde.org">)
+<item><idx/KDbg/, letölthetõ: <url url="http://members.telecom.at/~johsixt/kdbg.html">
+<item><idx/KIconEdit/ (letölthetõ: <url url="http://www.kde.org">)
 </itemize>
 
-KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
+A KDevelop SuSE Linux 5.2-es disztribúción lett tesztelve, hardver: AMD K6 200, 64MB RAM, továbbá FreeBSD 3.0-n és SuSE Linux 6.0-n, hardver: Intel
 200 MMX, 128MB RAM.
 
-As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including <idx/a2ps/ and <idx/enscript/ as packages or
-rpm's, so you should have no problem installing the required third-party software.
+A szerzõk tudomása szerint, a SuSE Linux és a FreeBSD minden szükséges csomagot tartalmaznak, beleértve az <idx/a2ps/-t és <idx/enscript/-et csomag
+vagy .rpm fájl formájában, így a szükséges más által írt szoftverek telepítésének nem kellene gondot okoznia.
 
-<bf>Documentation:</bf>	
+<bf>Dokumentáció:</bf>	
 
-For creating the <idx/KDE/ library documentation, you need the kdelibs package in source available on your
-system as provided by the KDE project or included with the source packages of your distribution and <bf><idx/KDoc/</bf> (included in the
-<idx/KDE-SDK/).
+A <idx/KDE/ könytár dokumentációjának létrehozásához szükség lesz a kdelibs csomagra forráskód formájában,
+elérhetõ a rendszereden a disztribúcióban a KDE projekt részeként szállított forrás-csomagokban;
+és a <bf><idx/KDoc/</bf>-ra (a <idx/KDE-SDK/-ban található).
 
-Also we're offering a C/C++ <idx/Reference/ on our homepage at <url url="http://www.kdevelop.org">
-that is integrated into the <idx/documentation browser/ after it's installation. Download the package and copy the source file as
-<tt/root/ into your <idx/KDE/ directory and untar it with <tt/tar zxvf c_c++_reference.tar.gz/, then the reference is available in the
-documentation tree; otherwise selecting the reference book in the browser shows an error page with the KDevelop homepage URL offering a
-download and describes the installation process. <sect>Fordítás és Telepítés
+A honlapunkról (<url url="http://www.kdevelop.org">) ajánlunk még egy C/C++ <idx/Referenciát/, amely telepítése után a
+dokumentáció böngészõbe kerül integrálásra. Töltsd le a csomagot és másold be a forrás fájlt <tt/root/ felhasználóként
+a <idx/KDE/ könyvtárba és csomagold ki a <tt/tar zxvf c_c++_reference.tar.gz/ paranccsal, ezután a referencia elérhetõ lesz
+a dokumentációs fában; egyébként, ha a böngészõben a referenciakönyvet választod, egy hibaüzenet jelenik meg a KDevelop
+honlap URL-lel, felajánlva a letöltést és leírva a telepítési eljárást.
+
+<sect>Fordítás és Telepítés
 <p>
-In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
+Ahhoz, hogy lefordítsd a KDevelop-ot és telepítsd a rendszeredre, a következõket gépeld be a KDevelop forrás disztribúció fõkönyvtárában:
 
 <tscreen><verb>
 	&percnt ./configure
 	&percnt make
 
-	(as root)
+	(root-ként)
 	
 	&percnt make install
 </verb></tscreen>
 
 
-<p>Since KDevelop uses <tt><idx/autoconf/</tt> you should have not trouble compiling it.
+<p>Miután a KDevelop az <tt><idx/autoconf/</tt>-ot használja, a lefordításnak nem kellene problémát okoznia.
 
-In order to compile the KDevelop CVS snapshot, type the following :
+KDevelop CVS levonat fordításához a következõket gépeld be:
 <tscreen><verb>
 	&percnt make -f <idx/Makefile.cvs/
 	&percnt ./configure
 	&percnt make
 
-	change as `root` and type:
+	menj át `root`-ba, és gépeld:
 	
 	&percnt make install
 </verb></tscreen>
 
-If your system's <idx/make-command/ is <tt/gmake/, type <tt/gmake/ instead of <tt/make/.
+Ha a rendszered <idx/make-parancs/a a <tt/gmake/, írj <tt/gmake/-et a <tt/make/ helyett.
 
 <sect>A KDevelop elindítása
 <p>
-If you use <idx/KDE/ as your window manager, KDevelop can be started by choosing
-"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4". As KDevelop supports <idx/KDE/-Mime-types, you can also start by selecting a
-KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the <idx/KDE/ File Manager which will start KDevelop
-and load the project.
-Under other window managers, open a console and type:
+Ha ablakkezelõként <idx/KDE/-t használsz, a KDevelop a
+"K"&rarr"Fejlesztés"&rarr"KDevelop 1.0" útvonalon érhetõ el. Minthogy a KDevelop támogatja a <idx/KDE/-Mime-típusokat, egy
+KDevelop projekt fájlra ("*.kdevprj", a KDevelop projekt ikonnal jelezve) kattintva a <idx/KDE/ Fájlkezelõben is elindítható
+(az adott projekttel együtt).
+Más ablakkezelõk alatt nyiss meg egy konzolt és gépeld be:
 <tscreen><verb>
 &percnt kdevelop
 </verb></tscreen>
 
-To start KDevelop with an existing project, change into the project-directory and type:
+Létezõ projekttel a KDevelop-ot úgy indíthatjuk, hogy belépünk az adott projekt könyvtárába és begépeljük:
 
 <tscreen><verb> 	
-&percnt kdevelop  &lt;yourProject&gt;.kdevprj
+&percnt kdevelop  &lt;aTeProjekted&gt;.kdevprj
 </verb></tscreen>
 
-Under each user account KDevelop will invoke the <ref id="The Installation Program" name="automatikus telepítés"> process on the
-first start, allowing a quick configuration of the most needed options. If your installation is messed up, you can reconfigure KDevelop
-any time either by entering
+A KDevelop elsõ indításkor minden felhasználónál elindítja az <ref id="The Installation Program" name="automatikus telepítés"> programot,
+amely lehetõvé teszi a leggyakrabban használt választások gyors beállítását. Ha a telepítés el lett fuserálva, bármikor újrakonfigurálhatod
+ a KDevelop-ot begépelve:
 
 <tscreen><verb> 	
-&percnt kdevelop  --<idx/setup/
+&percnt kdevelop  --setup
 </verb></tscreen>
 
-or, when using KDE, by choosing "K"&rarr"Applications"&rarr"KDevelop"&rarr"Setup".
+vagy, a KDE-t használva a "K"&rarr"Fejlesztés"&rarr"KDevelop Setup" menü kiválasztásával.
 
 <sect>A telepítõprogram<label id="The Installation Program">
 <p>
-KDevelop includes an automatic installation program module which is invoked whenever Kdevelop is started and the configuration file
-kdeveloprc does not exist. We suggest you follow the installation steps by choosing "Proceed" to automatically check your system and to
-set up your KDevelop environment.
+A KDevelop tartalmaz egy automatikus telepítõ program modult, amely akkor kerül meghívásra, amikor a KDevelop-ot elindítják, de
+a kdeveloprc konfigurációs fájl nem létezik. Azt javasoljuk, kövesd a telepítés lépéseit a "Végrehajtás" kiválasztásával,
+hogy automatikusan ellenõrízze a rendszeredet és belõje a KDevelop környezetet.
 
-
-The Installation dialog's buttons execute the following actions:
+A telepítõ dialógus nyomógombjai a következõ célokra szolgálnak:
 <p>
-<bf>Help:</bf>  Will open  the KDEHelp program.
+<bf>Segítség:</bf>  Megnyitja a KDEHelp programot.
 <p>
-<bf>Proceed:</bf> This starts the installation process and executes the following actions:
+<bf>Végrehajtás:</bf> Elindítja a telepítési folyamatot és a következõ lépéseket teszi:
 
 <enum>
-<item> Checking for make/gmake, <idx/autoconf/, autoheader, <idx/automake/ and perl for the creation and compilation of new applications
-generated by KDevelop. If gmake is installed, the <idx/make-command/ will be set automatically to use gmake.  Other commandline options
-to your make program can be set in the <idx/setup/ dialog accessed by the options menu later, an introduction into development under Unix is
-explained in section <ref id="Programs" name="Programok">.
+<item> Ellenõrzi a make/gmake, <idx/autoconf/, autoheader, <idx/automake/ és perl meglétét a KDevelop által generált új alkalmazások
+létrehozásához és lefordításához. Ha a gmake van telepítve, a <idx/make-parancs/ automatikusan átállítódik ennek a használatára.
+A make programhoz további parancssori beállítások a "Projekt/Beállítások" menüben adhatók meg; a Unix rendszer alatti fejlesztésrõl
+rövid ismertetõ a <ref id="Programs" name="Programok"> fejezetben található.
 
-<item> Checking for <idx/KDoc/ and <idx/glimpse/.  Those will allow to create a new <idx/KDE-Library/ documentation and a <idx/search index/
-automatically in a later <idx/setup/ step if found.
+<item> Ellenõrzi a <idx/KDoc/ és a <idx/glimpse/ meglétét. Ezek teszik lehetõvé az új <idx/KDE-Könyvtár/ dokumentáció és a <idx/keresõ index/
+automatikus létrehozását a <idx/telepítés/ egy késõbbi pontján, már ha megvannak.
 
-<item> Checking for <idx/a2ps/ and <idx/enscript/ to ensure that <idx/printing/ is available.  Either one of these programs have to be installed to
-allow correct <idx/printing/. If neither program is installed, you can do this at any time later on at your option without having to run the
-<idx/setup/ again.
+<item> Ellenõrzi az <idx/a2ps/ vagy az <idx/enscript/ jelenlétét, hogy biztosítsa a <idx/nyomtatás/ támogatottságát. A helyes nyomtatáshoz
+a két program valamelyikének rendelkezésre kell állnia. Ha egyik sincs telepítve, ezt bármikor a késõbbiekben megteheted anélkül, hogy
+újra kellene futtatni a <idx/telepítõ/ programot.
 
-<item> Checking for <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/.  We encourage you to install those programs as they are good
-helpers for creating complete <idx/KDE/-applications. Note that <idx/KDbg/ is used directly for <idx/debugging/ your current project within
-KDevelop; <idx/KIconEdit/ is used to display and edit <idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/
-are then configured to be available in the "<idx/Tools/" menu of the KDevelop menu bar if they are found. Other tools can be added to the
-<idx/Tools/-menu by selecting "<idx/Tools/..." in the Options menu later.
+<item> Ellenõrzi a <idx/KDbg/, <idx/KIconEdit/ és <idx/KTranslator/ meglétét. Javasoljuk, hogy telepítsd ezeket a programokat, mivel
+kiváló segítséget nyújtanak komplett <idx/KDE/-alkalmazások létrehozásánál. Megjegyzendõ, hogy a <idx/KDbg/ közvetlenül elérhetõ a
+KDevelop-on belül az aktuális projekt nyomkövetésére; a <idx/KIconEdit/ a fájl-nézegetõ fában kijelölt <idx/pixmaps/-ek kirajzolására és
+szerkesztésére használatos. A <idx/KDbg/, <idx/KIconEdit/ és <idx/KTranslator/ programok -ha megvannak- úgy lesznek konfigurálva, hogy
+elérhetõek legyenek az "<idx/Eszközök/" menübõl.
+Egyéb programok is hozzáadhatóak az <idx/Eszközök/-menühöz késõbb a "Beállítások" menüben az "<idx/Eszközök/..." menüpont kiválasztásával.
 
 <item> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
 needed program is recommended.
@@ -907,7 +908,7 @@ and the filename has to be given as well as the path where the file will be crea
 dialog will be opened to let you choose a path and filename for the file to be saved.<p>
 <item><bf/Save As.../ Opens the "Save File As..." dialog to let you save the current file under a new filename<p>
 <item><bf/Save All/ Saves all changed files<p>
-<item><bf/Print...	Ctrl+P/ Opens the "Print File" dialog where you can set various options for <idx/printing/ either using <idx/a2ps/, <idx/enscript/ or
+<item><bf/Print...	Ctrl+P/ Opens the "Print File" dialog where you can set various options for <idx/printing/ either using <idx/enscript/ or
 lpr<p>
 <item><bf/Quit			Ctrl+Q/ Exits KDevelop. If files are changed, you will be asked if you want to save these files.<p>
 </itemize>
@@ -1043,7 +1044,7 @@ Configure again.<p>
 The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
 "<idx/Tools/"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
-see <ref id="Configuring the &dquot;<idx/Tools/&dquot; Menu" name="Configuring the &dquot;<idx/Tools/&dquot; Menu">.
+see <ref id="Configuring the "<idx/Tools/" Menu" name="Configuring the "<idx/Tools/" Menu">.
 
 <sect1>Changing KDevelop's settings
 <p><nidx/"Options"-menu/
@@ -1057,10 +1058,9 @@ with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 <item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
 languages, including <idx/HTML/.<p>
 <item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal <idx/Helpbrowser/<p>
-<item><bf/Configure Printer.../ Contains the entries for the printer <idx/configuration dialog/s according to the used <idx/printing/ program, <idx/a2ps/
-or <idx/enscript/.<p>
+<item><bf/Configure Printer.../ Contains the entries for the printer <idx/configuration dialog/s.
+<p>
 <itemize>
-<item><bf/<idx/a2ps// Configures the printer for use with <idx/a2ps/. See Printing for more information.<p>
 <item><bf/<idx/enscript// Configures the printer for use with <idx/enscript/. See Printing for more information.<p>
 </itemize>
 <item><bf/<idx/Tools/.../ Opens the Configure <idx/Tools/ dialog. Here, you can configure the "<idx/Tools/" menu by adding or removing programs that will
@@ -1870,58 +1870,19 @@ search again from the beginning. If you're finished, select "Cancel".
 <sect>Printing
 <p>
 As KDevelop is designed to give developers the best access to files and information to reduce development cycles, it also contains
-a new <idx/printing/ utility which makes use of two common <idx/printing/ programs available for Unix-Systems, <em/<idx/a2ps// (ASCII-to-Postscript) and
-<em/<idx/enscript//. Besides these, you can also print by directly using lpr (the lineprinter device). As using <idx/a2ps/ or <idx/enscript/ offers the
-most options towards <idx/printing/, you should install either one of these on your system; both programs are usually shipped with
-distributions, so you shouldn't have any problem to get them. But before <idx/printing/, you should have a look at the available
-<idx/configuration dialog/s to prepare the <idx/output/ according to your needs. The following section describes how to configure KDevelop for
-<idx/printing/ files.
+a new printing utility which makes use of <em/enscript/, a common printing program available for Unix-Systems. 
+Besides, you can also print by directly using lpr (the lineprinter device). As using enscript offers the
+most options towards printing, you should install it on your system; it is usually shipped with
+distributions, so you shouldn't have any problem to get it. But before printing, you should have a look at the available
+configuration dialog to prepare the output according to your needs. The following section describes how to configure KDevelop for
+printing files.
 
 <sect1>Configuring the Printer
 <p>
-The <idx/printing/ programs can both be configured by selecting "Print" from the <idx/"File"-menu/; on the <idx/printing/ dialog,
+The <idx/printing/ program can be configured by selecting "Print" from the <idx/"File"-menu/; on the <idx/printing/ dialog,
 select the program by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the
-configuration for the selected program that will be used. Another way to configure the programs are selecting "Printer
-Configuration..." from the "Options"-menu; then select "<idx/a2ps/" or "<idx/enscript/".
-
-<sect2>The <idx/a2ps/ Configuration Options
-<p>
-<sect3>Printing
-<p>
-<itemize>
-<item><bf/header:/  adds a header frame to the page
-<item><bf/filename:/  if checked, the header frame will contain the filename as its text
-<item><bf/login:/  adds the User ID to the right upper corner of the page
-<item><bf/borders:/  adds frame borders to the text page
-<item><bf/Date & Time:/  adds the <idx/printing/ date and time
-<item><bf/align files:/  prints out files on the same page, available for two-page <idx/printing/ mode
-<item><bf/set TAB size:/  sets the TAB size for <idx/printing/ TABs
-<item><bf/headertext:/ available, if filename is deselected and allows inserting another text to the header frame
-<item><bf/fontsize:/  sets the fontsize for the text. The default fontsize is 9
-</itemize>
-
-<sect3>Text<idx/printing/
-<p>
-<itemize>
-<item><bf/cut lines:/  cuts the line's contents if the line is too large to be printed. If deselected, lines will be broken.
-<item><bf/interpret TAB, BS and FF:/ interpret TAB, Backspace and FastForward characters.
-<item><bf/replace non-<idx/printing/ character by space:/ if the file contains non-printable characters, those will be replaced by space
-characters.
-<item><bf/print non-ASCII character as ISO-Latin 1:/ prints characters not included in the ASCII format in ISO-Latin 1 mode <idx/output/
-<item><bf/bold font:/ prints the whole text in bold font mode.
-</itemize>
-
-<sect3>Numbering
-<p>
-<itemize>
-<item><bf/numbering lines:/  numbers all lines top-down if enabled
-<item><bf/numbering pages:/ allows selecting page-numbering mode by:
-  <itemize>
-  <item><bf/file single:/ numbers each file's pages beginning with 1
-  <item><bf/file together:/  appends all following pages after the first for page numbering
-  </itemize>
-<item><bf/lines per page:/  sets the maximum lines per page to be printed.
-</itemize>
+configuration for the program.  Another way to configure the program is selecting "Printer
+Configuration..." from the "Options"-menu; then select "<idx/enscript/".
 
 <sect2>The <idx/enscript/ Configuration Options
 <p>
@@ -2037,7 +1998,7 @@ characters.
 <sect2>Direct Printing Options
 <p>
 <itemize>
-<item><bf/Program:/ sets the <idx/printing/ program to be used for <idx/printing/: <idx/a2ps/, <idx/enscript/ or lpr
+<item><bf/Program:/ sets the <idx/printing/ program to be used for <idx/printing/: <idx/enscript/ or lpr
 <item><bf/Printer:/ sets the printer to be used for <idx/printing/
 <item><bf/Output location:/ for <idx/printing/ into a file, select the <idx/output/ location
 <item><bf/Orientation:/ sets the orientation for <idx/printing/, either landscape or portrait
@@ -2203,20 +2164,37 @@ Makefile.am outside the write area according to the needed settings
 <sect> <idx/New Project/s
 <p>
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
-projects use the GNU standard development tools as described in the requirements section of this handbook. For <idx/KDE/ applications,
-the wizard offers two different frameworks, the <idx/KDE/-Application, providing a complete application with base <idx/classes/ for
-document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
-KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This type of project can be used for the creation
-of small desktop tools or other simple applications without too much change on the existing code provided by the framework. A
-Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the <idx/KDE-libraries/ for end-users.
-The Qt-Application also is created by using tree base <idx/classes/ like the KDE-standard-Application and provides a menubar, toolbar
-and statusbar.
+The KDevelop Application Wizard allows the creation of thirteen different types of projects, constructing a framework for each. All
+projects use the GNU standard development tools as described in the requirements section of this handbook.
 
-The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
-"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a <idx/GUI/
-first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
-which requires any C-compiler at the minimum.
+For <idx/KDE/ applications there are six different frameworks:
+<itemize>
+<item>Mini: Creates a KDE-application with an empty main widget.
+<item>Normal: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe model.
+<item>Normal-OpenGL: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view 
+codeframe model. OpenGL(tm) (Mesa3D) support is added.
+<item>KDE 2 Normal: Creates a KDE-2 application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe 
+model.
+<item>KDE 2 Mini: Creates a KDE-2 application with an empty main widget.
+<item>KDE 2 MDI: Creates a KDE-2 MDI (Multiple Document Interface) application with menubar, toolbar, statusbar and support for a document-view 
+codeframe model.
+</itemize>
+<P>
+If you wish no dependencies towards the <idx/KDE-libraries/ for end-users, you can choose from four Qt-only types:
+<itemize>
+<item>Normal: Creates a Qt-Application with a main window containing a menubar, toolbar and statusbar, including support for a generic 
+document-view model.
+<item>QT 2.x SDI: Creates a Qt-2.x Application with a main window containing a menubar, toolbar and statusbar, including support for a single 
+document-view interface (SDI) model.
+<item>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
+document interface (MDI) model.
+<item>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
+Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm).
+</itemize>
+
+The two C and C++ -Application types offer a framework for creating commandline applications.
+
+And last but not least you can create an empty projekt, e.g. to work with existing projects.
 
 The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
 Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
@@ -2439,14 +2417,11 @@ The <idx/compiler options/ page sets the compiler flags towards your target, <id
 
 <sect1>Target
 <p>
-The target box contains three options that can be set:
+The target box contains two options that can be set:
 
 Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
 which is the option if you <idx/configure/d your <idx/Compiler/ as a cross-compiler for an Intel 386-compatible machine running System V. This
 option sets the -b flag to the <idx/Compiler/. Usually you would leave this to the default.
-
-only syntax-check: If checked, the -fsyntax-only flag is set. This means that the <idx/Compiler/ will check your code only for
-correctness in regards to the syntax, but doesn't check anything beyond that.
 
 Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
 is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
@@ -2656,6 +2631,7 @@ down-arrow on the button, offers additional functionality that is also available
 <item><idx/New Class/: opens the <idx/New Class/ dialog to construct a new class
 <item>Add Method: adds a method to the selected class
 <item>Add Attribute: adds an attribute to the selected class
+<item>Show graphical classview: Opens the graphical inheritance tree
 </itemize>
 
 <sect1>Available Objects
@@ -2736,7 +2712,6 @@ Classes that make use of the selected class by an attribute in their class <idx/
 The suppliers that give <idx/attributes/ to the selected class.
 <tag/Attributes:/ The <idx/attributes/ of the class by their name
 <tag/Methods:/ The Methods of the selected class
-<tag/Virtual Methods:/ The virtual methods that a class provides
 </descrip>
 Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
 attribute value.
@@ -2984,6 +2959,193 @@ Now that your project contains a new widget, your work as a programmer is to imp
 add other methods you may need. <footnote>See <htmlurl url="../../default/kdevelop/programming/index-6.html" name="The KDevelop Programming Handbook, The
 Dialogeditor"> for more information about widget properties and sourcecode generation.</footnote>
 
+<chapt>A belsõ nyomkövetõ<label id="The Internal Debugger">
+<sect>Setup
+<p>
+
+The default setup for KDevelop is to use the internal debugger. You can change this under Options select the "KDevelop setup" menu 
+item, and then the Debugger tab.
+
+Click on "Use external debugger" if you wish to use a different debugger and enter the name of the debugger to use. See your 
+debuggers documentation on how to run it.
+
+Selecting the internal debugger enables an additional set of options you can choose from:
+<p>
+<itemize>
+<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change 
+the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option.
+<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names. 
+However, non-mangled names are easier to read.
+<item>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be 
+loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set 
+the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Shared libraries and breakpoints"> for more details 
+and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
+<item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
+The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+</itemize>
+<p>
+
+<sect>Using the internal debugger
+<p>
+<sect1>Changes made in the tree and output view window
+<p>
+If you choose the internal debugger, four tabs are added to your tree and output view windows.
+<sect2>On the tree view window
+<p>
+<itemize>
+<item>VAR tab : A tree view of the local variables at the current place in the  program you have stopped at. You can also see local 
+variables in the function  that called this functions. The VAR tab also contains a watch window. This allows  you to see the value of 
+global variables, or perhaps you may want to see only  one local variable rather than the variable in a large list of
+local variables.
+</itemize>
+
+<sect2>On the output view window
+<p>
+<itemize>
+<item>breakpoint : A list of breakpoints set and their current state.
+<item>framestack : The calling stack.
+<item>disassemble : A machine instruction view of the code showing the current instruction to be executed.
+</itemize>
+<p>
+
+<sect1>Changes made in the Debug menu and on the panel
+<p>
+<sect2>On the panel
+<p>
+Two normal and two dropdown buttons to control the debugger functions will be accessible as soon as you start the debugger.
+<p>
+<sect2>In the Debug menu
+<p>
+When you start debugging, ten items to control the debugger will be enabled.
+<p>
+Available functions: <label id="Available functions">
+<itemize>
+<item>Run: Continue the program from the current point.
+<item>Run to cursor: Execute the program up to the current cursor position
+<item>Step over: Execute one line of code stopping on the next
+ line of code in the same surce file. This will run any functions encountered
+ until the above condition is met.
+<item>Step over i(nstruction): Execute one machine instruction as above.
+<item>Step in: Execute exactly one source line of code. This
+ means you will "step into" the current function, if necessary
+<item>Step in i(nstruction): Execute one machine instruction as above.
+<item>Step out: Run to the end of the current stack frame (function)
+<item>Viewers: Allows a variety of views into the data.
+Currently implemented views are:
+<enum>
+<item> Memory address
+<item> Disassemble code
+<item> Current registers
+<item> Current libraries
+</enum>
+<item>Interrupt: Stop the application executing.
+<item>Stop: Stop the application executing and exit the debugger.
+</itemize>
+
+<p>
+<sect1>Details
+<p>
+
+<sect2>Breakpoints
+<p>
+Breakpoints can be set against source lines in a file (referred to as breakpoints) or on variables in the source (referred to as watchpoints). 
+Both types of breakpoints can be set at anytime, however watchpoints on local variables only have meaning  in the variables local 
+scope. Watchpoints have more meaning when you are dealing with global variables.
+
+<sect2>Set/Unset breakpoints
+<p>
+Simple one click set/unset. Click on the "icon" border to the left of the text in the editor at the line you want the breakpoint. Click again 
+on this line to unset the breakpoint.
+
+<sect2>Alternative beakpoint manipulating via menus
+<p>
+By right clicking on a breakpoint in the breakpoint list or on a breakpoint  in the editors icon border you will get a menu of breakpoint 
+options. This allows you to remove this breakpoint, clear all breakpoints, or edit the breakpoint.
+
+<sect2>Editing breakpoints
+<p>
+Use the above menu to display the edit breakpoint dialog. This contains the following fields :
+<enum>
+<item>Conditional: Enter the condition that must be met before gdb will interrupt the program execution.
+<item>Ignore count: How many times you want the code to past through this breakpoint before gdb interrupts the program execution.
+<item>Enable: When enabled gdb will break at this breakpoint. When disabled gdb will not break here.
+</enum>
+
+<sect2>Clear all breakpoints
+<p>
+Removes all the breakpoints for this program.
+
+<sect2>Set/Unset watchpoints
+<p>
+In the VAR view click with the Right Mouse button on a variable. A popup menu will be displayed allowing you to set a watchpoint on 
+the local variable. This functionality is limited to the scope that the local variable is in. As the variable goes out of scope the program 
+breaks and the watchpoint is deleted.
+
+WARNING: This is known to be problematic, so use caution when setting watchpoints on local variables.
+
+The watchpoint can also be set by a right mouse click on a previously entered watch variable, and selecting "toggle watchpoint"
+
+<sect2>Set/Unset Watch variables
+<p>
+At the bottom of the VAR view there is the "Watch" field where you can enter the variable name you wish to see display in the watch 
+list. Enter the variable name and type "enter" or click on the "Add" button alongside the field. Right Mouse clicking on the watch 
+variable in the treeview will bring up a menu so that you can remove the variable from the list.
+
+You can also enter a watch variable by right mouse clicking on a variable name in the editor window. This displays a popup menu 
+with "watch: variable name" on it.
+
+<sect2>Changing variable values
+<p>
+This is done via the watch variable. If you have a variable "test" then to set "test" to 5 type "test=5" in the watch field and add it to the 
+list. Note that "test" will be set to "5" EVERY time the program stops at a breakpoint, so once you have set the variable, usually you 
+should remove the item from the watch view.
+
+<sect>The floating toolbar <label id="The floating toolbar">
+<p>
+The floating toolbar is a feature of the internal debugger, which greatly improves your comfort in debugging GUI applications. 
+The toolbar is either on top of all windows displayed, or docked into the panel. When docked you can run your code by clicking on the 
+docked icon. The function this performs is the "step over" function. Right clicking on the docked item allows you to restore the toolbar 
+and optionally place focus on kdevelop.
+
+Besides the <ref id="Available functions" name="functions available from the Debug Menu">, the floating toolbar offers two additional 
+functions:
+<itemize>
+<item>Set focus on kdevelop : Set the focus on kdevelop
+<item>Set focus on app : This sets the focus on the window that had focus
+ when you pressed the "set focus on kdevelop" button. This is a
+ compromise, it should set the focus on the application being debugged but this
+ is difficult to do. If anyone has a better solution than the current functionality
+ then please let us know.
+</itemize>
+
+When gdb interrupts the program, probably because a breakpoint has been triggered, we highlight the "Set focus on kdevelop". We do 
+not automatically switch focus to kdevelop so that you can view the application window at this point. Click on the "set focus" button to 
+switch to kdevelop or press a button on the toolbar to perform your selected function.
+
+<sect> Shared libraries and breakpoints <label id="Shared libraries and breakpoints">
+<p>
+Shared libraries and breakpoints have a problem that has a reasonable solution. The problem is that gdb will not accept breakpoints in 
+source that is in a shared library which has not yet been opened but will be opened via a dlopen.
+
+The solution is to get gdb to tell us when a shared library has been opened. We do so by setting "stop-on 1". This means that when the 
+user sets a breakpoint, we flag this breakpoint as pending, try to set the breakpoint and if gdb says it succeeded then flag it as active. If 
+gdb is not successful then we leave the breakpoint as pending. The next instruction will always be "continue" .
+
+This is known as "lazy breakpoints"
+
+You have to be careful, though. If you inadvertantly set a breakpoint in a file that is really outside the program, that is it's neither part of 
+the program nor of any shared library inside the project, then this breakpoint will always be pending. There's nothing you can do about 
+that, because it might be in a shared library.
+
+Now here's the problem with this. If the user "step"s over code that  contains a library dlopen, then it isn't predictable what will happen. 
+The dlopen will be catched by gdb, thus the code will stop. Now there are two possibilities, either there are pending breakpoints, then 
+they will be marked as active and "continue" will lead to there. Or there aren't any pending breakpoints in this frame stack. Then the 
+program will "continue" until it waits for input or it may lead us straight to the end, none of which is what we expected. In this situation, I 
+do not do a continue but leave it stopped with the status line reflecting the stopped state. The frame stack is in the routine that caused 
+the stop.
+
+There isn't any way around this, but I could alleviate the problem somewhat by only doing a "set stop-on 1" when we have pending 
+breakpoints.
 
 <chapt>Beépített CVS
 <p>
@@ -3040,7 +3202,7 @@ use the cvs features.
 This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
 found by the according entry in the Options-menu.
 
-<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the &dquot;<idx/Tools/&dquot; Menu">
+<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the "<idx/Tools/" Menu">
 <p><nidx/configuring the Tools-menu/<nidx/"Options"-menu/
 
 As KDevelop supports the use of third-party programs within it's user interface, you are able to <idx/configure/ any program that suits
@@ -3154,7 +3316,8 @@ cross-references to give browsing the most functionality.
 <sect2>Create Search Database
 <p>
 The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program <idx/glimpse/ 4.0 installed.
+keyword interactively.  To create and use the documentation search function, you must have the program <idx/glimpse/ 4.0 or ht://Dig 
+installed.
 Preset are the options to index the given KDE-Library documentation as well as the <idx/Qt-Documentation/, assuming the path to the
 documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
 directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an additional
@@ -3174,22 +3337,18 @@ mailing list during experiences with the current versions of KDevelop as well as
 <p>
 Another improvement of KDevelop is the integrated bug-reporting system via email. If you experience a bug, you have the option to send
 the KDevelop development team a bug report either by your email-client or by the bug-report dialog. All bug-reports are collected on
-the KDevelop web site and can be reviewed on <htmlurl url="http://fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html" >. You
-can also receive all bug-reports via subscription to the bug-report mailing list by sending an empty email to
-<htmlurl url="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de" name="kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"> with
-"subscribe <em/your_email_address/" as the body contents.
+the KDevelop web site and can be reviewed on <htmlurl url="http://bugs.kde.org//db/pa/lkdevelop.html" name="http://bugs.kde.org//db/pa/lkdevelop.html">. 
 
-To send bug reports, please use this email address by your mail program. If you want to use KDevelop for direct bug-reporting, choose
+To send bug reports, please use the email address <htmlurl url="mailto:submit@bugs.kde.org" name="submit@bugs.kde.org">. If you want to use KDevelop for direct bug-reporting, choose
 "Bug Report" from the <idx/Help-menu/. You are presented the report dialog that lets you enter all necessary information about the
-bug you found. After pressing "OK", the dialog's contents is sent to the mailing list automatically.
+bug you found. After pressing "OK", the dialog's contents is sent there automatically.
 
 <sect>Where to get Information
 <p>
 <bf>Q:</bf> I have a question which is not addressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
 
-<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailing list at <htmlurl
-url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">. Send a mail with an empty header and
-"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be addressed there as well.
+<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailing list at <htmlurl url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name = "kdevelop-request@barney.cs.uni-potsdam.de">. Send a mail with an empty header and
+"subscribe youremailaddres" as contents; then you can participate on the discussions. All questions should go there and will be addressed there as well.
 If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
 the FAQ up to date.
 
@@ -3296,8 +3455,8 @@ them or get an updated rpm of the kdelibs from <url url="ftp://ftp.suse.com">
 
 <bf>Q:</bf> If I add files to my project, will they be automatically included and compiled ?
 
-<bf>A:</bf> Yes, they are included in the <idx/Makefile.am/'s then and if you make a "Rebuild All" (./<idx/configure/ updates the <idx/Makefile/s),
-your new added files will be included as well.
+<bf>A:</bf> Yes, they are included in the <idx/Makefile.am/'s then and if you make a "Rebuild All" (./<idx/configure/ updates the <idx/Makefile/s), your new
+added files will be included as well.
 
 <bf>Q:</bf> If I removed a file, I get some weird <idx/Linker/ messages. What is wrong with my project ?
 
@@ -3353,6 +3512,8 @@ Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Fi
 Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
 
 Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
+
+Ralf Funken    <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger work )
 
 Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
 
