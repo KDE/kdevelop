@@ -1,10 +1,10 @@
 /***************************************************************************
-                   prjoptionsdlg.cpp - the setup DLG for a project  
-                             -------------------                                         
+                   prjoptionsdlg.cpp - the setup DLG for a project
+                             -------------------
 
-    begin                : 10 Aug 1998                                        
+    begin                : 10 Aug 1998
     copyright            : (C) 1998 by Sandy Meier,Stefan Bartel
-    email                : smeier@rz.uni-potsdam.de,bartel@rz.uni-potsdam.de                                     
+    email                : smeier@rz.uni-potsdam.de,bartel@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,6 +18,7 @@
 
 #include "cprjoptionsdlg.h"
 #include "cprjcompopts.h"
+#include "cprjaddopts.h"
 
 #include "cproject.h"
 #include "ctoolclass.h"
@@ -52,7 +53,8 @@
 #include <qspinbox.h>
 #include <qwhatsthis.h>
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj,KDevSession* session,const QString& curr, QWidget *parent, const char *name)
@@ -68,7 +70,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj,KDevSession* session,const QString&
   prj_info = prj;
 	sess=session;
 	currentcfg=curr;
+
+  configureIn.setConfDir(prj->getProjectDir());
+  need_configure_in_update = false;
+  need_makefile_generation = false;
+
+
   addGeneralPage();
+  addAdditionalOptionsPage();
   addCompilerOptionsPage();
 //  addCompilerWarningsPage();
   addLinkerPage();
@@ -95,7 +104,8 @@ void CPrjOptionsDlg::addGeneralPage()
 
   prjname_edit = new QLineEdit( generalPage, "prjname_edit" );
   grid->addMultiCellWidget(prjname_edit,1,1,0,1);
-  prjname_edit->setText( prj_info->getProjectName() );
+  old_name=prj_info->getProjectName();
+  prjname_edit->setText( old_name );
   QWhatsThis::add(prjname_label, i18n("Set the project name here."));
   QWhatsThis::add(prjname_edit, i18n("Set the project name here."));
 
@@ -107,7 +117,9 @@ void CPrjOptionsDlg::addGeneralPage()
 
   version_edit = new QLineEdit( generalPage, "version_edit" );
   grid->addWidget(version_edit,1,2);
-  version_edit->setText( prj_info->getVersion() );
+
+  old_version = prj_info->getVersion();
+  version_edit->setText( old_version );
   QWhatsThis::add(version_label, i18n("Set your project version number here."));
   QWhatsThis::add(version_edit, i18n("Set your project version number here."));
 
@@ -176,13 +188,22 @@ void CPrjOptionsDlg::addGeneralPage()
 }
 
 //
+//****************** the additional options page ********************
+//
+void CPrjOptionsDlg::addAdditionalOptionsPage()
+{
+  QFrame* additionalPage = addPage(i18n("Configure-Settings"),i18n("\"configure\" Settings"),
+  KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
+  QGridLayout *grid = new QGridLayout(additionalPage);
+  QWhatsThis::add(additionalPage, i18n("Set some configure options of your project here."));
+  addOptsDlg = new CPrjAddOpts(&configureIn, additionalPage);
+  grid->addWidget(addOptsDlg,0,0);
+}
+//
 // *************** Compiler options *********************
 //
 void CPrjOptionsDlg::addCompilerOptionsPage()
 {
-
-  need_configure_in_update = false;
-  need_makefile_generation = false;
 
   QFrame* compilerOptions = addPage(i18n("Compiler Options"),i18n("Compiler Options and"
 	" Compiler Environment Configuration"),KGlobal::instance()->iconLoader()->loadIcon( "pipe", KIcon::NoGroup, KIcon::SizeMedium ));
@@ -213,7 +234,6 @@ void CPrjOptionsDlg::addLinkerPage()
 //  QString ldflags=prj_info->getLDFLAGS();
   QString ldadd=prj_info->getLDADD();
 
-  old_version = prj_info->getVersion();
 //  old_ldflags =  ldflags.stripWhiteSpace();
   old_ldadd = ldadd.stripWhiteSpace();
 //  old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
@@ -302,7 +322,7 @@ void CPrjOptionsDlg::addLinkerPage()
   if (l_qt->isChecked())
   {
     ldadd = ldadd.replace( QRegExp(" -lqt"), "" );
-    ldadd = ldadd.replace( QRegExp(" $(LIB_QT)"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_QT\\)"), "" );
   }
   QWhatsThis::add(l_qt, i18n("Qt"));
 
@@ -313,7 +333,7 @@ void CPrjOptionsDlg::addLinkerPage()
   if (l_kdecore->isChecked())
   {
     ldadd = ldadd.replace( QRegExp(" -lkdecore"), "" );
-    ldadd = ldadd.replace( QRegExp(" $(LIB_KDECORE)"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KDECORE\\)"), "" );
   }
   QWhatsThis::add(l_kdecore, i18n("KDE basics"));
 
@@ -324,7 +344,7 @@ void CPrjOptionsDlg::addLinkerPage()
   if (l_kdeui->isChecked())
   {
     ldadd = ldadd.replace( QRegExp(" -lkdeui"), "" );
-    ldadd = ldadd.replace( QRegExp(" $(LIB_KDEUI)"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KDEUI\\)"), "" );
   }
   QWhatsThis::add(l_kdeui, i18n("KDE user interface"));
 
@@ -335,7 +355,7 @@ void CPrjOptionsDlg::addLinkerPage()
   if (l_khtml->isChecked())
   {
     ldadd = ldadd.replace( QRegExp(" -lkhtml"), "" );
-    ldadd = ldadd.replace( QRegExp(" $(LIB_KHTML)"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KHTML\\)"), "" );
   }
   QWhatsThis::add(l_khtml, i18n("KDE HTML widget"));
 
@@ -345,6 +365,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kfm->setChecked(ldadd.find(" -lkfm ") != -1);
   if (l_kfm->isChecked())
     ldadd = ldadd.replace( QRegExp(" -lkfm"), "" );
+  // TODO add note that this is KDE-1 only, or remove checkbox if project isn't a KDE-1 project
   QWhatsThis::add(l_kfm, i18n("KDE kfm functionality"));
 
   l_kfile=new QCheckBox(libs_group,"l_kfile");
@@ -354,24 +375,41 @@ void CPrjOptionsDlg::addLinkerPage()
   if (l_kfile->isChecked())
   {
     ldadd = ldadd.replace( QRegExp(" -lkfile"), "" );
-    ldadd = ldadd.replace( QRegExp(" $(LIB_KFILE)"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KFILE\\)"), "" );
   }
   QWhatsThis::add(l_kfile, i18n("KDE file handling"));
+
+  l_kparts=new QCheckBox(libs_group,"l_kparts");
+  grid4->addWidget(l_kparts,3,2);
+  l_kparts->setText("kparts");
+  l_kparts->setChecked((ldadd.find(" -lkparts ") != -1) || (ldadd.find(" $(LIB_KPARTS) ") != -1));
+  if (l_kparts->isChecked())
+  {
+    ldadd = ldadd.replace( QRegExp(" -lkparts"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KPARTS\\)"), "" );
+  }
+  QWhatsThis::add(l_kparts, i18n("KDE component architecture"));
 
   l_kspell=new QCheckBox(libs_group,"l_kspell");
   grid4->addWidget(l_kspell,0,2);
   l_kspell->setText("kspell");
-  l_kspell->setChecked(ldadd.find(" -lkspell ") != -1);
+  l_kspell->setChecked((ldadd.find(" -lkspell ") != -1) || (ldadd.find(" $(LIB_KSPELL) ") != -1));
   if (l_kspell->isChecked())
+  {
     ldadd = ldadd.replace( QRegExp(" -lkspell"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KSPELL\\)"), "" );
+  }
   QWhatsThis::add(l_kspell, i18n("KDE Spell checking"));
 
   l_kab=new QCheckBox(libs_group,"l_kab");
   grid4->addWidget(l_kab,1,2);
   l_kab->setText("kab");
-  l_kab->setChecked(ldadd.find(" -lkab ") != -1);
+  l_kab->setChecked((ldadd.find(" -lkab ") != -1) || (ldadd.find(" $(LIB_KAB) ") != -1));
   if (l_kab->isChecked())
+  {
     ldadd = ldadd.replace( QRegExp(" -lkab"), "" );
+    ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KAB\\)"), "" );
+  }
   QWhatsThis::add(l_kab, i18n("KDE addressbook"));
 
   l_math=new QCheckBox(libs_group,"l_math");
@@ -677,7 +715,7 @@ void CPrjOptionsDlg::addMakePage()
   m_job_number->setValue(settings->readNumEntry ("JobNumber"));
 
   m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
-  
+
   m_makestartpoint_line->setText(
         prj_info->getDirWhereMakeWillBeCalled(prj_info->getProjectDir()));
 
@@ -808,24 +846,32 @@ void CPrjOptionsDlg::ok()
 
   if (l_math->isChecked() && !l_khtml->isChecked())
     text+=" -lm";
-  if (l_kab->isChecked())
-    text+=" -lkab";
-  if (l_kspell->isChecked())
-    text+=" -lkspell";
 
   if(prj_info->isKDE2Project())
   {
+    if (l_kab->isChecked())
+      text+=" $(LIB_KAB)";
+    if (l_kspell->isChecked())
+      text+=" $(LIB_KSPELL)";
+    if (l_kparts->isChecked())
+      text+=" $(LIB_KPARTS)";
     if (l_kfile->isChecked())
       text+=" $(LIB_KFILE)";
     if (l_khtml->isChecked())
       text+=" $(LIB_KHTML)";
     if (l_kdeui->isChecked())
-        text+=" $(LIB_KDEUI)";
+      text+=" $(LIB_KDEUI)";
     if (l_kdecore->isChecked())
       text+=" $(LIB_KDECORE)";
   }
   else
   {
+    if (l_kab->isChecked())
+      text+=" -lkab";
+    if (l_kspell->isChecked())
+      text+=" -lkspell";
+    if (l_kparts->isChecked())
+      text+=" -lkparts";
     if (l_kfile->isChecked())
       text+=" -lkfile";
     if (l_khtml->isChecked())
@@ -993,8 +1039,15 @@ void CPrjOptionsDlg::ok()
 
   // write it to the disk
   prj_info->writeProject();
-  if (version_edit->text() != old_version)
+  if (version_edit->text() != old_version || prjname_edit->text() != old_name)
     need_configure_in_update = true;
+
+  // check now for modifications inside configure.in(.in)
+  if (addOptsDlg && addOptsDlg->changed())
+  {
+    addOptsDlg->modifyConfigureIn();
+    need_configure_in_update = true;
+  }
 }
 
 // connection to set_modify_dir
@@ -1092,4 +1145,5 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked()
     m_makestartpoint_line->setText(file);
   }
 }
+
 #include "cprjoptionsdlg.moc"

@@ -39,10 +39,14 @@ else {
   system ("make -f Makefile.dist");
   
   #start configure
-  printflush (STDOUT,"make configure...\n");
-  printflush (STDOUT,">LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
+  printflush (STDOUT,"KDEHOME=$ENV{KDEHOME}; ") if ($ENV{KDEHOME});
+  printflush (STDOUT,"KDEDIR=$ENV{KDEDIR}; ") if ($ENV{KDEDIR});
+  printflush (STDOUT,"QTDIR=$ENV{QTDIR};") if ($ENV{QTDIR});
+  printflush (STDOUT,"\nmake configure...\n");
+
+  printflush (STDOUT,">LDFLAGS=\"\" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
   chdir ($overDirectory);
-  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);	
+  system ("LDFLAGS=\"\" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);	
 }
 
 #if API-Files was chosen in kAppWizard
@@ -81,8 +85,7 @@ if ($processes{USER} eq "yes") {
   #create the html-files
   chdir ($underDirectory . "/docs/en");
 
-  if ( 	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
-       	$processes{APPLICATION} eq "kde2mdi")
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kickerapp|^kpart$|kioslave|kcmodule/)
   {
      # FIXME: there should be the proper call for docbooks
   }
@@ -119,8 +122,7 @@ if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenorma
     }
   }
 
-if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
-    $processes{APPLICATION} eq "kde2mdi")
+if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme/)
   {
     printflush (STDOUT,"creating $nameLittle.pot\n");
     if ($processes{XGETTEXT} && $processes{XGETTEXT} eq "yes")

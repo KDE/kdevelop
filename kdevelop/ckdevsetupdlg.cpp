@@ -20,6 +20,7 @@
 
 #include "ckdevelop.h"
 #include "resource.h"
+#include "ccompletionopts.h"
 
 #include <kmessagebox.h>
 #include <kkeydialog.h>
@@ -55,11 +56,12 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, i
   ,wantsTreeRefresh(false)
   ,config(KGlobal::config())
   ,m_accel(accel)
-	,m_mdiMode(mdiMode)
+        ,m_mdiMode(mdiMode)
 {
 
   addGeneralTab();
   addKeysTab();
+  addCodeCompletionTab();
   addDocTab();
   addCompilerTab();
   addDebuggerTab();
@@ -103,11 +105,11 @@ void CKDevSetupDlg::addGeneralTab()
   makeSelectLineEdit->setText(make_cmd);
 
   QString makeSelectMsg = i18n("Make-Command\n\n"
-							  "Select your system's make-command.\n"
-							  "Usually, this is make, FreeBSD users\n"
-							  "may use gmake. Mind that you can also\n"
-							  "add option parameters to your make-binary\n"
-					  "as well.");
+                                                          "Select your system's make-command.\n"
+                                                          "Usually, this is make, FreeBSD users\n"
+                                                          "may use gmake. Mind that you can also\n"
+                                                          "add option parameters to your make-binary\n"
+                                          "as well.");
   QWhatsThis::add(makeGroup, makeSelectMsg);
   QWhatsThis::add(makeSelectLabel, makeSelectMsg);
   QWhatsThis::add(makeSelectLineEdit, makeSelectMsg);
@@ -194,23 +196,40 @@ void CKDevSetupDlg::addGeneralTab()
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
   defaultClassViewCheck->setChecked( defaultcv );
+
+  startupEditingCheck = new QCheckBox( autoswitchGroup, "autoStartupCheck" );
+  grid2->addWidget(startupEditingCheck,1,0);
+  startupEditingCheck->setText(i18n("start editing \"main\"-source file"));
+  startupEditingCheck->setAutoRepeat( FALSE );
+  startupEditingCheck->setAutoResize( FALSE );
+  bool startupEditing=config->readBoolEntry("StartupEditing",true);
+  startupEditingCheck->setChecked( startupEditing );
+
+
+  QWhatsThis::add(startupEditingCheck, i18n("startup with editing main.cpp or main.c\n\n"
+                                              "If this is enabled, KDevelop\n"
+                                              "will try to load main.cpp or main.c\n"
+                                              "after project creation.\n"
+                                              "When disabled, KDevelop doesn't load\n"
+                                              "a source file after project creation."));
+
   QWhatsThis::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
-					      "If this is enabled, KDevelop\n"
-					      "will automatically switch to\n"
-					      "the Class Viewer when switching.\n"
-					      "When disabled, KDevelop will\n"
-					      "use Logical File Viewer for\n"
-					      "autoswitching."));
+                                              "If this is enabled, KDevelop\n"
+                                              "will automatically switch to\n"
+                                              "the Class Viewer when switching.\n"
+                                              "When disabled, KDevelop will\n"
+                                              "use Logical File Viewer for\n"
+                                              "autoswitching."));
 
   QString autoswitchMsg = i18n("Autoswitch\n\n"
-						       "If autoswitch is enabled, KDevelop\n"
-						       "will open windows in the working\n"
-						       "view automatically according to\n"
-						       "most needed functionality.\n\n"
-						       "Disableing autoswitch means you\n"
-						       "will have to switch to windows\n"
-						       "yourself, including turning on and\n"
-						       "off the outputwindow.");
+                                                       "If autoswitch is enabled, KDevelop\n"
+                                                       "will open windows in the working\n"
+                                                       "view automatically according to\n"
+                                                       "most needed functionality.\n\n"
+                                                       "Disableing autoswitch means you\n"
+                                                       "will have to switch to windows\n"
+                                                       "yourself, including turning on and\n"
+                                                       "off the outputwindow.");
   QWhatsThis::add(autoSwitchCheck, autoswitchMsg);
   QWhatsThis::add(autoswitchGroup, autoswitchMsg);
   grid->addWidget(autoswitchGroup,2,0);
@@ -223,13 +242,13 @@ void CKDevSetupDlg::addGeneralTab()
   startupGroup->setFrameStyle( 49 );
   startupGroup->setTitle(i18n("Startup"));
   startupGroup->setAlignment( 1 );
-  //	startupGroup->insert( logoCheck );
-  //	startupGroup->insert( lastProjectCheck );
+  //        startupGroup->insert( logoCheck );
+  //        startupGroup->insert( lastProjectCheck );
   startupGroup->lower();
 
   QWhatsThis::add(startupGroup, i18n("Startup\n\n"
-	                  "The Startup group offers options for\n"
-				     "starting KDevelop"));
+                          "The Startup group offers options for\n"
+                                     "starting KDevelop"));
 
   config->setGroup("General Options");
   bool logo=config->readBoolEntry("Logo",true);
@@ -243,8 +262,8 @@ void CKDevSetupDlg::addGeneralTab()
   logoCheck->setChecked( logo );
 
   QWhatsThis::add(logoCheck, i18n("Startup Logo\n\n"
-	                  "If Startup Logo is enabled, KDevelop will show the\n"
-	                  "logo picture while it is starting."));
+                          "If Startup Logo is enabled, KDevelop will show the\n"
+                          "logo picture while it is starting."));
 
   lastProjectCheck = new QCheckBox( startupGroup, "lastProjectCheck" );
   grid2->addWidget(lastProjectCheck,1,0);
@@ -261,18 +280,19 @@ void CKDevSetupDlg::addGeneralTab()
   config->setGroup("TipOfDay");
   bool tip=config->readBoolEntry("RunOnStart",true);
 
-	tipDayCheck = new QCheckBox( startupGroup, "tipDayCheck" );
+        tipDayCheck = new QCheckBox( startupGroup, "tipDayCheck" );
                 grid2->addWidget(tipDayCheck,0,1);
-	tipDayCheck->setText(i18n("Tip of the Day"));
-	tipDayCheck->setAutoRepeat( FALSE );
-	tipDayCheck->setAutoResize( FALSE );
-	tipDayCheck->setChecked( tip );
+        tipDayCheck->setText(i18n("Tip of the Day"));
+        tipDayCheck->setAutoRepeat( FALSE );
+        tipDayCheck->setAutoResize( FALSE );
+        tipDayCheck->setChecked( tip );
 
-	QWhatsThis::add(tipDayCheck, i18n("Tip of the Day\n\n"
-	                  "If Tip of the Day is enabled, KDevelop will show the\n"
-	                  "Tip of the Day every time it starts."));
+        QWhatsThis::add(tipDayCheck, i18n("Tip of the Day\n\n"
+                          "If Tip of the Day is enabled, KDevelop will show the\n"
+                          "Tip of the Day every time it starts."));
   grid->addWidget(startupGroup,3,0);
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsAutoswitch(bool)) );
+  connect( startupEditingCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsStartupEditing(bool)) );
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   connect( autosaveTimeCombo, SIGNAL(activated(int)),parent(), SLOT(slotOptionsAutosaveTime(int)) );
   connect( autoSaveCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsAutosave(bool)) );
@@ -297,7 +317,7 @@ void CKDevSetupDlg::addKeysTab()
 #if QT_VERSION < 300
   keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
 #else
-  keyChooser = new KKeyChooser ( m_accel/*->actions()*/, keysPage, true);
+  keyChooser = new KKeyChooser ( m_accel, keysPage, true);
 #endif
   grid->addWidget(keyChooser,0,0);
 }
@@ -314,10 +334,10 @@ void CKDevSetupDlg::addDocTab()
   config->setGroup("Doc_Location");
 
   QWhatsThis::add(docPage, i18n("Enter the path to your QT and KDE-Libs\n"
-				"Documentation for the Documentation Browser.\n"
-				"QT usually comes with complete Documentation\n"
-				"whereas for KDE you can create the Documentation\n"
-				"easily by pressing the Update button below."));
+                                "Documentation for the Documentation Browser.\n"
+                                "QT usually comes with complete Documentation\n"
+                                "whereas for KDE you can create the Documentation\n"
+                                "easily by pressing the Update button below."));
 
   QButtonGroup* docGroup;
 
@@ -347,11 +367,11 @@ void CKDevSetupDlg::addDocTab()
   qt_label->setText( i18n("Qt-Library-Doc:") );
 
   QString qtdocMsg = i18n("Enter the path to your QT-Documentation\n"
-				 "here. To access the path easier please\n"
-				 "press the pushbutton on the right to change\n"
-				 "directories.\n\n"
-				 "Usually the QT-Documentation is\n"
-				 "located in <i><blue>$QTDIR/html</i>");
+                                 "here. To access the path easier please\n"
+                                 "press the pushbutton on the right to change\n"
+                                 "directories.\n\n"
+                                 "Usually the QT-Documentation is\n"
+                                 "located in <i><blue>$QTDIR/html</i>");
 
   QWhatsThis::add(qt_edit, qtdocMsg);
   QWhatsThis::add(qt_button, qtdocMsg);
@@ -377,12 +397,12 @@ void CKDevSetupDlg::addDocTab()
   kde_label->setText( i18n("KDE-Libraries-Doc:") );
 
   QString kdedocMsg = i18n("Enter the path to your KDE-Documentation\n"
-				 "here. To access the path easier please\n"
-				 "press the pushbutton on the right to change\n"
-				 "directories.\n\n"
-				 "If you have no kdelibs Documentation installed,\n"
-				 "you can create it by selecting the Update button\n"
-				 "below.");
+                                 "here. To access the path easier please\n"
+                                 "press the pushbutton on the right to change\n"
+                                 "directories.\n\n"
+                                 "If you have no kdelibs Documentation installed,\n"
+                                 "you can create it by selecting the Update button\n"
+                                 "below.");
   QWhatsThis::add(kde_edit, kdedocMsg);
   QWhatsThis::add(kde_button, kdedocMsg);
   QWhatsThis::add(kde_label, kdedocMsg);
@@ -412,15 +432,15 @@ void CKDevSetupDlg::addDocTab()
   update_button->setAutoResize( FALSE );
 
   QString updateMsg = i18n("Update KDE-Documentation\n\n"
-				     "This lets you create or update the\n"
-				     "HTML-documentation of the KDE-libs.\n"
-				     "Mind that you have kdoc installed to\n"
-				     "use this function. Also, the kdelibs\n"
-				     "sources have to be available to create\n"
-				     "the documentation, as well as the \n"
-				     "Qt-Documentation path has to be set to\n"
-				     "cross-reference the KDE-Documentation\n"
-				     "with the Qt-classes.");
+                                     "This lets you create or update the\n"
+                                     "HTML-documentation of the KDE-libs.\n"
+                                     "Mind that you have kdoc installed to\n"
+                                     "use this function. Also, the kdelibs\n"
+                                     "sources have to be available to create\n"
+                                     "the documentation, as well as the \n"
+                                     "Qt-Documentation path has to be set to\n"
+                                     "cross-reference the KDE-Documentation\n"
+                                     "with the Qt-classes.");
   QWhatsThis::add(update_label, updateMsg);
   QWhatsThis::add(update_button, updateMsg);
 
@@ -440,12 +460,12 @@ void CKDevSetupDlg::addDocTab()
   create_button->setAutoResize( FALSE );
 
   QString createMsg = i18n("Create Search Database\n\n"
-						     "This will create a search database for glimpse\n"
-						     "which will be used to look up marked text in\n"
-						     "the documentation. We recommend updating the\n"
-						     "database each time you've changed the documentation\n"
-						     "e.g. after a kdelibs-update or installing a new\n"
-						     "Qt-library version.");
+                                                     "This will create a search database for glimpse\n"
+                                                     "which will be used to look up marked text in\n"
+                                                     "the documentation. We recommend updating the\n"
+                                                     "database each time you've changed the documentation\n"
+                                                     "e.g. after a kdelibs-update or installing a new\n"
+                                                     "Qt-library version.");
 
   QWhatsThis::add(create_label, createMsg);
   QWhatsThis::add(create_button, createMsg);
@@ -527,8 +547,8 @@ void CKDevSetupDlg::addDebuggerTab()
   dbgExternalCheck->setChecked(useExternalDbg);
 
   QWhatsThis::add(dbgExternalCheck, i18n("Select internal or external debugger\n\n"
-	                  "Choose whether to use an external debugger\n"
-	                  "or the internal debugger within kdevelop\n"
+                          "Choose whether to use an external debugger\n"
+                          "or the internal debugger within kdevelop\n"
                     "The internal debugger is a frontend to gdb"));
 
   dbgExternalGroup = new QButtonGroup( debuggerPage, "dbgExternalGroup" );
@@ -550,8 +570,8 @@ void CKDevSetupDlg::addDebuggerTab()
   grid->addWidget(dbgExternalGroup,1,0);
 
   QString dbgSelectCmdMsg = i18n("Identify the external debugger\n\n"
-	                  "Enter the program name you wish to run\n"
-	                  "as your debugger");
+                          "Enter the program name you wish to run\n"
+                          "as your debugger");
   QWhatsThis::add(dbgSelectCmdLabel, dbgSelectCmdMsg);
   QWhatsThis::add(dbgExternalSelectLineEdit, dbgSelectCmdMsg);
 
@@ -570,7 +590,7 @@ void CKDevSetupDlg::addDebuggerTab()
   dbgMembersCheck->setAutoResize( FALSE );
   dbgMembersCheck->setChecked(displayStaticMembers);
   QWhatsThis::add(dbgMembersCheck, i18n("Display static members\n\n"
-	                  "Displaying static members makes gdb slower in\n"
+                          "Displaying static members makes gdb slower in\n"
                     "producing data within kde and qt.\n"
                     "It may change the \"signature\" of the data\n"
                     "which QString and friends rely on.\n"
@@ -584,8 +604,8 @@ void CKDevSetupDlg::addDebuggerTab()
   dbgAsmCheck->setAutoResize( FALSE );
   dbgAsmCheck->setChecked(displayMangledNames);
   QWhatsThis::add(dbgAsmCheck, i18n("Display mangled names\n\n"
-	                  "When displaying the disassembled code you\n"
-	                  "can select to see the methods mangled names\n"
+                          "When displaying the disassembled code you\n"
+                          "can select to see the methods mangled names\n"
                     "However, non-mangled names are easier to read." ));
 
   dbgLibCheck = new QCheckBox( dbgInternalGroup, "dbgMembers" );
@@ -595,8 +615,8 @@ void CKDevSetupDlg::addDebuggerTab()
   dbgLibCheck->setAutoResize( FALSE );
   dbgLibCheck->setChecked(setBPsOnLibLoad);
   QWhatsThis::add(dbgLibCheck, i18n("Set pending breakpoints on loading a library\n\n"
-	                  "If GDB hasn't seen a library that will be loaded via\n"
-	                  "\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
+                          "If GDB hasn't seen a library that will be loaded via\n"
+                          "\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
                     "We can get gdb to stop on a library load and hence\n"
                     "try to set the pending breakpoints. See docs for more\n"
                     "details and a \"gotcha\" relating to this behaviour.\n\n"
@@ -610,7 +630,7 @@ void CKDevSetupDlg::addDebuggerTab()
   dbgFloatCheck->setAutoResize( FALSE );
   dbgFloatCheck->setChecked(dbgFloatingToolbar);
   QWhatsThis::add(dbgFloatCheck, i18n("Enable floating toolbar\n\n"
-	                  "Use the floating toolbar. This toolbar always stays\n"
+                          "Use the floating toolbar. This toolbar always stays\n"
                     "on top of all windows so that if the app covers KDevelop\n"
                     "you have control of the app though the small toolbar\n"
                     "Also this toolbar can be docked to the panel\n"
@@ -891,6 +911,9 @@ void CKDevSetupDlg::slotOkClicked(){
   bool autoswitch=autoSwitchCheck->isChecked();
   config->writeEntry("Autoswitch",autoswitch);
 
+  bool startupEditing=startupEditingCheck->isChecked();
+  config->writeEntry("StartupEditing",startupEditing);
+
   bool defaultcv=defaultClassViewCheck->isChecked();
   config->writeEntry("DefaultClassView",defaultcv);
 
@@ -907,8 +930,8 @@ void CKDevSetupDlg::slotOkClicked(){
 
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);
-	
-	config->setGroup("TipOfDay");
+
+        config->setGroup("TipOfDay");
     config->writeEntry("RunOnStart",tipDayCheck->isChecked());
 
   config->setGroup("Debug");
@@ -926,24 +949,27 @@ void CKDevSetupDlg::slotOkClicked(){
 
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
   config->setGroup("General Options");
-  config->writeEntry("ProjectDefaultDir", ppath_edit->text());	
+  config->writeEntry("ProjectDefaultDir", ppath_edit->text());
 // ---
 
   // user interface
   config->setGroup("General Options");
   switch (bg->id(bg->selected())) {
   case 0:
-	  m_mdiMode = QextMdi::ChildframeMode;
+          m_mdiMode = QextMdi::ChildframeMode;
     break;
   case 1:
-	  m_mdiMode = QextMdi::ToplevelMode;
+          m_mdiMode = QextMdi::ToplevelMode;
     break;
   case 2:
-	  m_mdiMode = QextMdi::TabPageMode;
+          m_mdiMode = QextMdi::TabPageMode;
     break;
   default:
     break;
   }
+
+  // code completion
+  completionOptsDlg->slotSettingsChanged();
 
 #if QT_VERSION < 300
   m_accel->setKeyDict(keyMap);
@@ -1034,7 +1060,7 @@ void CKDevSetupDlg::slotQt2Clicked(){
   }
   QString qt_testfile=dir+"include/qapp.h"; // test if the path really is the qt2 path
   if(!QFileInfo(qt_testfile).exists())
-  	KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
+          KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
                                  "Qt-2.x root directory. Please choose the\n"
                                  "correct path."),
                              i18n("The selected path is not correct!"));
@@ -1050,7 +1076,7 @@ void CKDevSetupDlg::slotKDE2Clicked(){
   }
   QString kde_testfile=dir+"include/kmessagebox.h"; // test if the path really is the kde2 path
   if(!QFileInfo(kde_testfile).exists())
-  	KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
+          KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
                                  "KDE-2.x root directory. Please choose the\n"
                                  "correct path."),
                              i18n("The selected path is not correct!"));
@@ -1067,5 +1093,18 @@ void CKDevSetupDlg::slotPPathClicked(){
   }
 }
 // ---
+
+void CKDevSetupDlg::addCodeCompletionTab()
+{
+    QFrame* additionalPage = addPage(i18n("Code Completion"),
+                                     i18n("Code Completion Configuration"),
+                                     KGlobal::instance()->iconLoader()->loadIcon( "source", KIcon::NoGroup, KIcon::SizeMedium ));
+    QGridLayout *grid = new QGridLayout(additionalPage);
+    QWhatsThis::add(additionalPage, i18n("Set some code completion options here."));
+    CKDevelop* pDevelop = (CKDevelop*) parent();
+    completionOptsDlg = new CCompletionOpts(pDevelop, additionalPage);
+    grid->addWidget(completionOptsDlg,0,0);
+
+}
 
 #include "ckdevsetupdlg.moc"

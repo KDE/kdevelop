@@ -1,11 +1,11 @@
 /***************************************************************************
                      ckdevsetupdlg.h - the setup dialog for CKDevelop
-                             -------------------                                         
+                             -------------------
 
-    version              :                                   
-    begin                : 17 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    version              :
+    begin                : 17 Aug 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #ifndef __CKDEVSETUPDLG_H_
@@ -30,6 +30,7 @@ class QButtonGroup;
 class QLabel;
 class QFrame;
 class QButtonGroup;
+class CCompletionOpts;
 
 #include <kdialogbase.h>
 #include <kaccel.h>
@@ -54,6 +55,7 @@ private:
   void addGeneralTab();
   void addKeysTab();
   void addDocTab();
+  void addCodeCompletionTab();
   /** adds the compiler page for setting up the compile environment */
   void addCompilerTab();
   void addDebuggerTab();
@@ -96,6 +98,7 @@ private:
   QComboBox* autosaveTimeCombo;
   QLineEdit* makeSelectLineEdit;
   QCheckBox* autoSwitchCheck;
+  QCheckBox* startupEditingCheck;
   QCheckBox* defaultClassViewCheck;
   QCheckBox* logoCheck;
   QCheckBox* tipDayCheck;
@@ -126,7 +129,10 @@ private:
 
   // user interface mode
   QButtonGroup* bg;
-	int m_mdiMode;
+  int m_mdiMode;
+
+  // code completion page
+  CCompletionOpts* completionOptsDlg;
 };
 
 #endif

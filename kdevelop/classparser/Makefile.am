@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libclassparser.a
 
 INCLUDES = $(all_includes)
 
 libclassparser_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libclassparser.a
 
 libclassparser_a_SOURCES = tokenizer.cc main.cc PersistantClassStore.cc ParsedStruct.cc ParsedSignalSlot.cc ParsedScopeContainer.cc ParsedParent.cc ParsedMethod.cc ParsedItem.cc ParsedContainer.cc ParsedClassContainer.cc ParsedClass.cc ParsedAttribute.cc ParsedArgument.cc ClassTreeNode.cc ClassStore.cc ClassParser.cc 
 

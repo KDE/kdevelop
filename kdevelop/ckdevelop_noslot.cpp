@@ -177,7 +177,7 @@ void CKDevelop::setMainCaption(int item)
     break;
 
   default:
-    if (pDoc) {
+    if (pDoc && activeWindow()) {
       //capt = QFileInfo(pCEW->getName()).fileName();
       QString name=pDoc->docName();
       int len=name.length();
@@ -438,6 +438,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList)
   kapp->processEvents(100);
   log_file_tree->storeState(pPrj);
   kapp->processEvents(100);
+  slotStatusMsg(i18n("Refreshing tree views..."));
   log_file_tree->refresh(pPrj);
 
   // Update RFV.
@@ -553,7 +554,8 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     || type.startsWith("application/x-kdevelop-project") ) )  // open with krun
   {
     bool bStartWithKRun = true;
-    if (type.startsWith("image/x-xpm") || type.startsWith("application/x-gettext")) {
+    if (type.startsWith("image/x-xpm") || type.startsWith("application/x-gettext") || type.startsWith("application/x-linguist") 
+     || type.startsWith("application/x-designer")) {
       if (KMessageBox::questionYesNo(this, i18n("Do you want to load it as ASCII file?"), i18n("Load decision")) == KMessageBox::Yes) {
         bStartWithKRun = false;
       }
@@ -564,17 +566,17 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     }
   }
 
-	// Enable or disable compile command
-	if (CProject::getType(filename) == CPP_SOURCE){
-		KAction* pAction=actionCollection()->action("build_make");
-		if (pAction && pAction->isEnabled()) {
-			actionCollection()->action("build_compile")->setEnabled(true);
-		}
-	}
-	else
-	{
-		actionCollection()->action("build_compile")->setEnabled(false);
-	}
+        // Enable or disable compile command
+        if (CProject::getType(filename) == CPP_SOURCE){
+                KAction* pAction=actionCollection()->action("build_make");
+                if (pAction && pAction->isEnabled()) {
+                        actionCollection()->action("build_compile")->setEnabled(true);
+                }
+        }
+        else
+        {
+                actionCollection()->action("build_compile")->setEnabled(false);
+        }
 
   // Ask the doc manager
   m_docViewManager->doSwitchToFile(filename, line, col,
@@ -609,22 +611,22 @@ void CKDevelop::startDesigner()
 
 void CKDevelop::setToolMenuProcess(bool enable){
 
-	if (enable)
-//		stateChanged("build_stop",StateReverse);
-		//disableCommand(ID_BUILD_STOP);
-//	else
-//		stateChanged("build_stop");
-		//enableCommand(ID_BUILD_STOP);
+        if (enable)
+//                stateChanged("build_stop",StateReverse);
+                //disableCommand(ID_BUILD_STOP);
+//        else
+//                stateChanged("build_stop");
+                //enableCommand(ID_BUILD_STOP);
 
-	if (enable && project){
+        if (enable && project){
 
-//		if (m_docViewManager->curDocIsCppFile())
-//			stateChanged("build_compile");
-			//enableCommand(ID_BUILD_COMPILE_FILE);
+//                if (m_docViewManager->curDocIsCppFile())
+//                        stateChanged("build_compile");
+                        //enableCommand(ID_BUILD_COMPILE_FILE);
 
-		enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
+                enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
 
-//		stateChanged("build",StateReverse);
+//                stateChanged("build",StateReverse);
 
 //    enableCommand(ID_BUILD_RUN);
 //    enableCommand(ID_BUILD_RUN_WITH_ARGS);
@@ -638,14 +640,14 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //    enableCommand(ID_BUILD_AUTOCONF);
 //    enableCommand(ID_BUILD_CONFIGURE);
 
-		QString type=prj->getProjectType();
-//		if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
-//			stateChanged("project_make_msg");
-			//disableCommand(ID_PROJECT_MESSAGES);
-//		else
-//			stateChanged("project_make_msg",StateReverse);
-			//enableCommand(ID_PROJECT_MESSAGES);
-//		stateChanged("project");
+                QString type=prj->getProjectType();
+//                if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
+//                        stateChanged("project_make_msg");
+                        //disableCommand(ID_PROJECT_MESSAGES);
+//                else
+//                        stateChanged("project_make_msg",StateReverse);
+                        //enableCommand(ID_PROJECT_MESSAGES);
+//                stateChanged("project");
 
 //    enableCommand(ID_PROJECT_CLOSE);
 //    enableCommand(ID_PROJECT_NEW_CLASS);
@@ -654,7 +656,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //    enableCommand(ID_PROJECT_FILE_PROPERTIES);
 //    enableCommand(ID_PROJECT_OPTIONS);
 
-//		stateChanged("file_new");
+//                stateChanged("file_new");
 
 //    enableCommand(ID_FILE_NEW);
 
@@ -667,11 +669,11 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //    enableCommand(ID_PROJECT_MAKE_TAGS);
 //    enableCommand(ID_PROJECT_LOAD_TAGS);
   }
-  else	
+  else        
 //  if (!enable)
   {
     // set the popupmenus enable or disable
-	  disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // disable switching project configs during an operation
+          disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // disable switching project configs during an operation
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
     disableCommand(ID_BUILD_RUN);
@@ -738,28 +740,28 @@ void CKDevelop::setToolMenuProcess(bool enable){
 
 void CKDevelop::showOutputView(bool show)
 {
-	if (bAutoswitch) {
-		if (show) {
-			if (isToolViewVisible(messages_widget)) {
-				// if it's a tab page, raise the messages_widget
-				makeWidgetDockVisible(messages_widget->parentWidget());
-			}
-			else {
-				slotViewTOutputView();
-			}
-		}
-		else {
-			//KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
-			//                                    (actionCollection()->action("view_toolbar"));
-			//if (pViewToolbarAction && !pViewToolbarAction->isChecked()) {
+        if (bAutoswitch) {
+                if (show) {
+                        if (isToolViewVisible(messages_widget)) {
+                                // if it's a tab page, raise the messages_widget
+                                makeWidgetDockVisible(messages_widget->parentWidget());
+                        }
+                        else {
+                                slotViewTOutputView();
+                        }
+                }
+                else {
+                        //KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+                        //                                    (actionCollection()->action("view_toolbar"));
+                        //if (pViewToolbarAction && !pViewToolbarAction->isChecked()) {
 //      if (!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)) {
-			//	return; //it's already unvisible
-			//}
-			//else {
-			//	slotViewTOutputView();
-			//}
-		}
-	}
+                        //        return; //it's already unvisible
+                        //}
+                        //else {
+                        //        slotViewTOutputView();
+                        //}
+                }
+        }
 }
 
 void CKDevelop::adjustTTreesToolButtonState()
@@ -805,129 +807,147 @@ void CKDevelop::adjustTOutputToolButtonState()
 
 void CKDevelop::readOptions()
 {
-	applyMainWindowSettings(config);
+        applyMainWindowSettings(config);
 
-	kdDebug() << "in CKDevelop::readOptions():\n" ;
+        kdDebug() << "in CKDevelop::readOptions():\n" ;
 
-	config->setGroup("General Options");
-	KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
-	                               (actionCollection()->action("view_toolbar"));
-	if(config->readBoolEntry("show_std_toolbar", true) && pToggleAction) {
-		pToggleAction->setChecked(true);
-	}
-	else {
-		pToggleAction->setChecked(false);
-	}
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_browser"));
-	if(config->readBoolEntry("show_browser_toolbar",true) && pToggleAction) {
-		pToggleAction->setChecked(true);
-	}
-	else {
-		pToggleAction->setChecked(false);
-	}
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_status"));
-	if (config->readBoolEntry("show_statusbar",true) && pToggleAction) {
-		pToggleAction->setChecked(true);
-	}
-	else {
-		pToggleAction->setChecked(false);
-	}
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_mdi"));
-	if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isSwitchedOn())
-	    && pToggleAction) {
-		showViewTaskBar();
-		pToggleAction->setChecked(true);
-	}
-	else {
-		hideViewTaskBar();
-		pToggleAction->setChecked(false);
-	}
+        config->setGroup("General Options");
+        KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+                                       (actionCollection()->action("view_toolbar"));
+        if(config->readBoolEntry("show_std_toolbar", true) && pToggleAction) {
+                pToggleAction->setChecked(true);
+        }
+        else {
+                pToggleAction->setChecked(false);
+        }
+        pToggleAction = dynamic_cast<KToggleAction*>
+                        (actionCollection()->action("view_browser"));
+        if(config->readBoolEntry("show_browser_toolbar",true) && pToggleAction) {
+                pToggleAction->setChecked(true);
+        }
+        else {
+                pToggleAction->setChecked(false);
+        }
+        pToggleAction = dynamic_cast<KToggleAction*>
+                        (actionCollection()->action("view_status"));
+        if (config->readBoolEntry("show_statusbar",true) && pToggleAction) {
+                pToggleAction->setChecked(true);
+        }
+        else {
+                pToggleAction->setChecked(false);
+        }
+        pToggleAction = dynamic_cast<KToggleAction*>
+                        (actionCollection()->action("view_mdi"));
+        if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isSwitchedOn())
+            && pToggleAction) {
+                showViewTaskBar();
+                pToggleAction->setChecked(true);
+        }
+        else {
+                hideViewTaskBar();
+                pToggleAction->setChecked(false);
+        }
 
 //  config->setGroup("General Options");
-	int mode=config->readNumEntry("tabviewmode", 3);
-	KRadioAction* pRadioAction;
-	switch (mode){
-		case 1:
-			pRadioAction = dynamic_cast<KRadioAction*>
-			               (actionCollection()->action("view_tab_text"));
-			if (pRadioAction) pRadioAction->setChecked(true);
-		break;
-		case 2:
-			pRadioAction = dynamic_cast<KRadioAction*>
-			               (actionCollection()->action("view_tab_icons"));
-			if (pRadioAction) pRadioAction->setChecked(true);
-		break;
-		case 3:
-			pRadioAction = dynamic_cast<KRadioAction*>
-			               (actionCollection()->action("view_tab_texticons"));
-			if (pRadioAction) pRadioAction->setChecked(true);
-		break;
-	}
+        int mode=config->readNumEntry("tabviewmode", 3);
+        KRadioAction* pRadioAction;
+        switch (mode){
+                case 1:
+                        pRadioAction = dynamic_cast<KRadioAction*>
+                                       (actionCollection()->action("view_tab_text"));
+                        if (pRadioAction) pRadioAction->setChecked(true);
+                break;
+                case 2:
+                        pRadioAction = dynamic_cast<KRadioAction*>
+                                       (actionCollection()->action("view_tab_icons"));
+                        if (pRadioAction) pRadioAction->setChecked(true);
+                break;
+                case 3:
+                        pRadioAction = dynamic_cast<KRadioAction*>
+                                       (actionCollection()->action("view_tab_texticons"));
+                        if (pRadioAction) pRadioAction->setChecked(true);
+                break;
+        }
 
-	// read setting whether to use the ctags search database
-	bCTags = config->readBoolEntry("use_ctags", false);
+        // read setting whether to use the ctags search database
+        bCTags = config->readBoolEntry("use_ctags", false);
+  config->setGroup("General Options");
+    /////////////////////////////////////////
+    // RUNTIME VALUES AND FILES
+  bAutosave=config->readBoolEntry("Autosave",true);
+  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
+  saveTimer=new QTimer(this);
+  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+  if(bAutosave){
+    saveTimer->start(saveTimeout);
+  }
+  else{
+    saveTimer->stop();
+  }
+  bAutoswitch=config->readBoolEntry("Autoswitch",true);
+  bStartupEditing=config->readBoolEntry("StartupEditing",true);
+  bDefaultCV=config->readBoolEntry("DefaultClassView",true);
+  make_cmd=config->readEntry("Make","make");
+  //  make_with_cmd=config->readEntry("MakeWith","");
 
-	config->setGroup("General Options");
-	/////////////////////////////////////////
-	// RUNTIME VALUES AND FILES
-	bAutosave=config->readBoolEntry("Autosave",true);
-	saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
-	saveTimer=new QTimer(this);
-	connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
-	if(bAutosave){
-		saveTimer->start(saveTimeout);
-	}
-	else{
-		saveTimer->stop();
-	}
-	bAutoswitch=config->readBoolEntry("Autoswitch",true);
-	bDefaultCV=config->readBoolEntry("DefaultClassView",true);
-	make_cmd=config->readEntry("Make","make");
+        config->setGroup("General Options");
+        /////////////////////////////////////////
+        // RUNTIME VALUES AND FILES
+        bAutosave=config->readBoolEntry("Autosave",true);
+        saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
+        saveTimer=new QTimer(this);
+        connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+        if(bAutosave){
+                saveTimer->start(saveTimeout);
+        }
+        else{
+                saveTimer->stop();
+        }
+        bAutoswitch=config->readBoolEntry("Autoswitch",true);
+        bDefaultCV=config->readBoolEntry("DefaultClassView",true);
+        make_cmd=config->readEntry("Make","make");
 //  make_with_cmd=config->readEntry("MakeWith","");
 
-	config->setGroup("Files");
-	pRecentProjects->loadEntries(config,"Recent Projects");
+        config->setGroup("Files");
+        pRecentProjects->loadEntries(config,"Recent Projects");
 
 
-	doctool = config->readNumEntry("doc_tool_type");
-	KToggleAction* pDoxyAction = dynamic_cast<KToggleAction*>
-	                             (actionCollection()->action("project_api_doxygen"));
-	KToggleAction* pKdocAction = dynamic_cast<KToggleAction*>
-	                             (actionCollection()->action("project_api_kdoc"));
-	KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
+        doctool = config->readNumEntry("doc_tool_type");
+        KToggleAction* pDoxyAction = dynamic_cast<KToggleAction*>
+                                     (actionCollection()->action("project_api_doxygen"));
+        KToggleAction* pKdocAction = dynamic_cast<KToggleAction*>
+                                     (actionCollection()->action("project_api_kdoc"));
+        KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
 
-	// must be done here - cause the call comes AFTER the initialization of Project menue :(
-	if (pDoxyAction && pKdocAction && pDoxyConfAction) {
-		if (doctool == DT_KDOC || doctool == 0)
-		{
-			pKdocAction->setChecked(true);
-			//pDoxyAction->setChecked(false);
-			if (hasProject())
-				pDoxyConfAction->setEnabled(false);
-		}
-		else if (doctool == DT_DOX)
-		{
-			pDoxyAction->setChecked(true);
-			//pKdocAction->setChecked(false);
-			if (hasProject())
-				pDoxyConfAction->setEnabled(true);
-		}
-	}
+        // must be done here - cause the call comes AFTER the initialization of Project menue :(
+        if (pDoxyAction && pKdocAction && pDoxyConfAction) {
+                if (doctool == DT_KDOC || doctool == 0)
+                {
+                        pKdocAction->setChecked(true);
+                        //pDoxyAction->setChecked(false);
+                        if (hasProject())
+                                pDoxyConfAction->setEnabled(false);
+                }
+                else if (doctool == DT_DOX)
+                {
+                        pDoxyAction->setChecked(true);
+                        //pKdocAction->setChecked(false);
+                        if (hasProject())
+                                pDoxyConfAction->setEnabled(true);
+                }
+        }
 
-	m_docViewManager->readBookmarkConfig(config);
-	/*
-	doc_bookmarks_list.setAutoDelete(TRUE);
-	doc_bookmarks_title_list.setAutoDelete(TRUE);
+        m_docViewManager->readBookmarkConfig(config);
+        /*
+        doc_bookmarks_list.setAutoDelete(TRUE);
+        doc_bookmarks_title_list.setAutoDelete(TRUE);
     
-	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
-	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
+        config->readListEntry("doc_bookmarks",doc_bookmarks_list);
+        config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
+        for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
-	}
-	*/
+        }
+        */
 
    // restore MDI mode
    config->setGroup("General Options");
@@ -960,53 +980,55 @@ void CKDevelop::readOptions()
 
 void CKDevelop::saveOptions(){
     
-	saveMainWindowSettings (config);
-	config->setGroup("General Options");
-	// toolbar visible
-	KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
-	                               (actionCollection()->action("view_toolbar"));
-	if (pToggleAction)
-		config->writeEntry("show_std_toolbar",pToggleAction->isChecked());
-	// browser toolbar visible
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_browser"));
-	if (pToggleAction)
-		config->writeEntry("show_browser_toolbar",pToggleAction->isChecked());
-	// status bar visible
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_status"));
-	if (pToggleAction)
-		config->writeEntry("show_statusbar",pToggleAction->isChecked());
-	// mdi taskbar visible
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_mdi"));
-	if (pToggleAction)
-		config->writeEntry("show_mdi_view_taskbar",pToggleAction->isChecked());
+        saveMainWindowSettings (config);
+        config->setGroup("General Options");
+        // toolbar visible
+        KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+                                       (actionCollection()->action("view_toolbar"));
+        if (pToggleAction)
+                config->writeEntry("show_std_toolbar",pToggleAction->isChecked());
+        // browser toolbar visible
+        pToggleAction = dynamic_cast<KToggleAction*>
+                        (actionCollection()->action("view_browser"));
+        if (pToggleAction)
+                config->writeEntry("show_browser_toolbar",pToggleAction->isChecked());
+        // status bar visible
+        pToggleAction = dynamic_cast<KToggleAction*>
+                        (actionCollection()->action("view_status"));
+        if (pToggleAction)
+                config->writeEntry("show_statusbar",pToggleAction->isChecked());
+        // mdi taskbar visible
+        pToggleAction = dynamic_cast<KToggleAction*>
+                        (actionCollection()->action("view_mdi"));
+        if (pToggleAction)
+                config->writeEntry("show_mdi_view_taskbar",pToggleAction->isChecked());
 
-	// write setting whether to use the ctags search database
-	config->writeEntry("use_ctags", bCTags);
+        // write setting whether to use the ctags search database
+        config->writeEntry("use_ctags", bCTags);
 
-	// set the mode of the tab headers
-	KRadioAction*
-	pRadioAction = dynamic_cast<KRadioAction*>
-	               (actionCollection()->action("view_tab_text"));
-	if (pRadioAction && pRadioAction->isChecked())
-		config->writeEntry("tabviewmode", 1);
-	pRadioAction = dynamic_cast<KRadioAction*>
-	               (actionCollection()->action("view_tab_icons"));
-	if (pRadioAction && pRadioAction->isChecked())
-		config->writeEntry("tabviewmode", 2);
-	pRadioAction = dynamic_cast<KRadioAction*>
-	               (actionCollection()->action("view_tab_texticons"));
-	if (pRadioAction && pRadioAction->isChecked())
-		config->writeEntry("tabviewmode", 3);
+        // set the mode of the tab headers
+        KRadioAction*
+        pRadioAction = dynamic_cast<KRadioAction*>
+                       (actionCollection()->action("view_tab_text"));
+        if (pRadioAction && pRadioAction->isChecked())
+                config->writeEntry("tabviewmode", 1);
+        pRadioAction = dynamic_cast<KRadioAction*>
+                       (actionCollection()->action("view_tab_icons"));
+        if (pRadioAction && pRadioAction->isChecked())
+                config->writeEntry("tabviewmode", 2);
+        pRadioAction = dynamic_cast<KRadioAction*>
+                       (actionCollection()->action("view_tab_texticons"));
+        if (pRadioAction && pRadioAction->isChecked())
+                config->writeEntry("tabviewmode", 3);
 
-	// write current chosen MDI mode
+        // write current chosen MDI mode
   config->writeEntry("MDI mode", mdiMode());
 
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
   config->writeEntry("Autosave",bAutosave);
+  config->writeEntry("StartupEditing",bStartupEditing);
+  
   config->writeEntry("Autosave Timeout",saveTimeout);
 
   config->writeEntry("Make",make_cmd);
@@ -1014,7 +1036,7 @@ void CKDevelop::saveOptions(){
   config->setGroup("Files");
   config->writeEntry("browser_file",history_list.current());
 
-	m_docViewManager->writeBookmarkConfig(config);
+        m_docViewManager->writeBookmarkConfig(config);
 /*
   config->writeEntry("doc_bookmarks", doc_bookmarks_list);
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);

@@ -63,6 +63,7 @@
 #include <qintdict.h>
 #include <qsocketnotifier.h>
 #include <qstring.h>
+#include <qfile.h>
 
 #include <klocale.h>
 #include <kstddirs.h>
@@ -92,7 +93,7 @@ static int chownpty(int fd, int grant)
       ::exit(1);
 
     QString path = locate("exe", BASE_CHOWN);
-    execle(path.latin1(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
+    execle(QFile::encodeName(path).data(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
     ::exit(1); // should not be reached
   }
   if (pid > 0)
@@ -321,18 +322,18 @@ bool STTY::findExternalTTY(const QString &termApp)
     * back the terminal name and then only sits and waits.
     */
 
-    const char* prog      = appName.latin1();
+    const char* prog      = qstrdup(appName.local8Bit().data());
     QString script = QString("tty>") + QString(fifo) + QString(";"                  // fifo name
                             "trap \"\" INT QUIT TSTP;"	  // ignore various signals
                             "exec<&-;exec>&-;"		        // close stdin and stdout
                             "while :;do sleep 3600;done");
-    const char* scriptStr = script.latin1();
+    const char* scriptStr = qstrdup(script.local8Bit().data());
     const char* end       = 0;
 
     ::execlp( prog,       prog,
 //              "-name",    "debugio",
 //              "-title",   "kdevelop: Program output",
-              "-caption", i18n("kdevelop: Debug application console").latin1(),
+	      "-caption", i18n("kdevelop: Debug application console").local8Bit().data(),
               "-e",       "sh",
               "-c",       scriptStr,
               end);

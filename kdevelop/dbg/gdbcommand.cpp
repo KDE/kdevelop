@@ -67,7 +67,7 @@ GDBItemCommand::~GDBItemCommand()
 
 GDBPointerCommand::GDBPointerCommand(VarItem* item) :
   GDBItemCommand(item,
-                  QCString("print *")+QCString(item->fullName().latin1()),
+                  QCString("print *")+item->fullName().local8Bit(),
                   false,
                   DATAREQUEST)
 {

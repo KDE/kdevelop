@@ -1,9 +1,9 @@
 # KDE Config File  
 [Desktop Entry]
+Encoding=UTF-8
 Type=Application
 Exec=|NAMELITTLE| -caption "%c" %i %m  
 Icon=|NAMELITTLE|.png
-MiniIcon=|NAMELITTLE|.png
 DocPath=|NAMELITTLE|/index.html
 Comment=
 Comment[de]=

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Thu Sep 23 1999
     copyright            : (C) 1999 by The KDevelop Team
-    email                : 
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -196,7 +196,11 @@ void CKDevAccel::disconnectItem(const QString& action,
 //  return bFound;
 //}
 
+#if QT_VERSION < 300
 void CKDevAccel::readSettings(KConfig* config, bool setEnableStruct)
+#else
+void CKDevAccel::readSettings(KConfigBase* config, bool setEnableStruct)
+#endif
 {
 //   KAccel::readSettings(config);
    KAccel::readSettings();

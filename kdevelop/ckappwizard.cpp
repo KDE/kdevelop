@@ -62,11 +62,12 @@
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) :
   KWizard(parent,name,true)
 {
-  q = new KShellProcess();
+  q = new KShellProcess("/bin/sh");
   gen_prj = false;
   modifyDirectory = false;
   modifyVendor = false;
   nameold = "";
+
   setCaption(i18n("Application Wizard"));
   setFixedSize(515,530);
 
@@ -944,7 +945,7 @@ void CKAppWizard::accept() {
 
 
   if (!dir.exists()) {
-    KShellProcess p;
+    KShellProcess p("/bin/sh");
     p.clearArguments();
     p << "mkdirhier";
     p << direct;
@@ -973,6 +974,55 @@ void CKAppWizard::accept() {
   }
 }
 
+/* This function creates the default configure arguments for the actual project */
+
+QString CKAppWizard::createConfigureArgs() 
+{
+
+  KConfig *config = KGlobal::config();
+  config->setGroup("QT2");
+  QString qtpath=config->readEntry("qt2dir");
+  QString kde2path=config->readEntry("kde2dir");
+  QString args(""), kdeargs(""), qtargs("");
+
+  if (/*!sharedlibitem->isSelected() && */ !gnomenormalitem->isSelected() &&
+      !citem->isSelected() && !cppitem->isSelected() && 
+      !customprojitem->isSelected())
+  {
+    if (!kde2path.isEmpty())
+    {
+      if(kde2path.right(1) == "/")
+          kde2path=kde2path.remove(kde2path.length()-1,1);
+      kdeargs="--prefix="+kde2path;   
+    }
+    
+    if (!qtpath.isEmpty())
+    {
+      if(qtpath.right(1) == "/")
+          qtpath=qtpath.remove(qtpath.length()-1,1);
+      qtargs="--with-qt-dir="+qtpath;
+    }
+     
+    if( qextmdiitem->isSelected())
+    {
+      if (!qtargs.isEmpty())
+        qtargs+=" ";
+      qtargs+="--enable-kde=no";
+    }
+      
+    if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() || qextmdiitem->isSelected())
+       args=qtargs;
+    else
+    {
+      if (!kdeargs.isEmpty() && !qtargs.isEmpty())
+        kdeargs+=" ";
+      args=kdeargs+qtargs;
+    }
+  }
+  
+  return args;  
+}
+
 void CKAppWizard::generateEntries(const QString &filename) {
 
   QString entriesfilename(filename.isEmpty() ? QString("entries") : filename);
@@ -993,12 +1043,17 @@ void CKAppWizard::generateEntries(const QString &filename) {
         libname=fi->fileName();  // get the filename
         if(fi->isFile())
         {
+         if (fi->baseName() != QString("libkmid")) 
+         { // workaround for a strange behaviour of kdoc: don't try libkmid
           libname=" -l"+fi->baseName();  // get only the base of the filename as library name
           link+=libname;
+         }
         }
         ++it; // increase the iterator
       }
     }
+    else
+      index_path="";
   }
 
   // Create filename to open in a secure manner
@@ -1012,7 +1067,7 @@ void CKAppWizard::generateEntries(const QString &filename) {
     entries << "TEMPLATESDIR\n";
     entries << KStandardDirs::kde_default("data") + "kdevelop/templates";
     entries << "\nKDEICONDIR\n";
-	  entries << KStandardDirs::kde_default("icon");
+    entries << KStandardDirs::kde_default("icon");
     entries << "\nAPPLICATION\n";
 
     if (kde2miniitem->isSelected()) {
@@ -1068,36 +1123,9 @@ void CKAppWizard::generateEntries(const QString &filename) {
       entries << "customproj\n";
     }
 
-    if (kthemeitem->isSelected()||kcmoduleitem->isSelected()||kpartitem->isSelected()||kickeritem->isSelected()||kioslaveitem->isSelected()||
-    	 kde2miniitem->isSelected() ||kde2normalitem->isSelected() ||kde2mdiitem->isSelected() ||
-    	qt2normalitem->isSelected() ||qt2mdiitem->isSelected() ||qextmdiitem->isSelected())
-     {
-      entries << "CONFIGARG\n";
-
-      KConfig * config = KGlobal::config();
-      config->setGroup("QT2");
-      QString arg=config->readEntry("qt2dir", "");
-      if(!arg.isEmpty())
-      {
-        if (arg.right(1) == "/" && arg.length()>1)
-          arg=arg.left(arg.length()-1);
-        arg="--with-qt-dir="+arg;
-      }
-
-      if(kthemeitem->isSelected()||kcmoduleitem->isSelected()||kpartitem->isSelected()||
-			kickeritem->isSelected()||kioslaveitem->isSelected()||
-			kde2miniitem->isSelected() ||kde2normalitem->isSelected()||kde2mdiitem->isSelected())
-     {
-			QString kde2path=config->readEntry("kde2dir", "");
-			if(!kde2path.isEmpty()) {
-	           if(kde2path.right(1) == "/" &&kde2path.length()>1)
-	               kde2path=kde2path.left(kde2path.length()-1);
-         		 arg=arg+" --prefix="+kde2path;
-        	}
-      }
-      entries << arg << "\n";
-    }
-
+    entries << "CONFIGARG\n";
+    entries << createConfigureArgs() << "\n";
+      
     entries << "NAME\n";
     entries << nameline->text() << "\n";
     entries << "DIRECTORY\n";
@@ -1125,6 +1153,10 @@ void CKAppWizard::generateEntries(const QString &filename) {
     if (apidoc->isChecked())
       entries << "yes\n";
     else entries << "no\n";
+    
+    entries << "KDE_QTVER\n";
+    entries << ((KDE_QTVER==3) ? "3\n" : "2\n");
+    
     entries << "KDOC_CALL\n";
 
     if (!index_path.isEmpty() && !link.isEmpty())
@@ -1135,10 +1167,10 @@ void CKAppWizard::generateEntries(const QString &filename) {
     config->setGroup("General Options");
     bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
     if (bCreateKDoc)
-     entries << QString("kdoc -p -d |UNDERDIRECTORY|-api")+
+     entries << QString("kdoc -p -d '|UNDERDIRECTORY|-api'")+
     index_path+" -n "+nameline->text()+" *.h\n";
     else
-     entries << QString("kdoc -p -d |UNDERDIRECTORY|-api")+
+     entries << QString("kdoc -p -d '|UNDERDIRECTORY|-api'")+
     index_path+" *.h\n";
 
     entries << "XGETTEXT\n";
@@ -1265,7 +1297,7 @@ void CKAppWizard::okPermited()
   if (!dir.exists())
     dir.setCurrent(prjdir);
 
-  KShellProcess p;
+  KShellProcess p("/bin/sh");
   QString copysrc;
   QString copydes;
   QString vcsInit;
@@ -1392,7 +1424,7 @@ void CKAppWizard::okPermited()
   *q << locateLocal("appdata", "");
 
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
-   m_finishButton->setEnabled(false);
+  m_finishButton->setEnabled(false);
 
   showPage(page5);
   page0->setEnabled(false);
@@ -2263,6 +2295,7 @@ void CKAppWizard::slotProcessExited() {
   project->setAuthor (authorline->text());
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
+  
   if (userdoc->isChecked()) {
     if(project->isKDE2Project())
       project->setSGMLFile (directory + "/doc/en/index.docbook");
@@ -2271,6 +2304,7 @@ void CKAppWizard::slotProcessExited() {
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
+  project->setMakeOptions ("-j1");
   project->setCXXFLAGS ("-O0 -g3 -Wall");   // default value is to use debugging
 
   if ( kickeritem->isSelected()) {
@@ -2304,49 +2338,19 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
   }
 
-  if(kcmoduleitem->isSelected()|| kthemeitem->isSelected()||
-	kickeritem->isSelected()||kpartitem->isSelected()||kioslaveitem->isSelected()||
-  	project->isQt2Project() || project->isKDE2Project() ||qextmdiitem->isSelected())
-  {
+  project->setConfigureArgs(createConfigureArgs());
 
-   	KConfig * config = KGlobal::config();
-	config->setGroup("QT2");
-	QString qtpath=config->readEntry("qt2dir");
-    if (qtpath.isEmpty())
-    {
-      project->setConfigureArgs("");
-    }
-    else
-    {
-      if(qtpath.right(1) == "/")
-        qtpath=qtpath.remove(qtpath.length()-1,1);
-
-      if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() )
-        project->setConfigureArgs("--with-qt-dir="+qtpath);
-      else
-      {
-        if( qextmdiitem->isSelected())
-          project->setConfigureArgs("--with-qt-dir="+qtpath+" --enable-kde=no");
-        else{
-          QString kde2path=config->readEntry("kde2dir");
-          if(kde2path.right(1) == "/")
-            kde2path=kde2path.remove(kde2path.length()-1,1);
-          project->setConfigureArgs("--with-qt-dir="+qtpath+" --prefix="+kde2path);
-        }
-      }
-    }
-  }
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
   makeAmInfo.type = "normal";
   sub_dir_list.append(namelow);
   // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
-  if (kde2normalitem->isSelected() || kde2miniitem->isSelected() ||kde2mdiitem->isSelected() ||
-		kcmoduleitem->isSelected()||kickeritem->isSelected()||kpartitem->isSelected()||kioslaveitem->isSelected())
- {
- 	sub_dir_list.append("po");
- }
+  if (project->isKDE2Project())
+  {
+    sub_dir_list.append("po");
+  }
+
   if (gnomenormalitem->isSelected()){
     sub_dir_list.append("macros");
     sub_dir_list.append("pixmaps");
@@ -2375,7 +2379,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
-  if(!gnomenormalitem->isSelected()){
+  if(!gnomenormalitem->isSelected() && !kthemeitem->isSelected()){
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
@@ -2387,13 +2391,11 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
-  if(!gnomenormalitem->isSelected()){
+  if(!gnomenormalitem->isSelected() && !kthemeitem->isSelected()){
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
-  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() ||
-       project->isQt2Project() || qextmdiitem->isSelected()) &&
-        CToolClass::searchProgram("xgettext"))
+  if (project->isKDE2Project() && CToolClass::searchProgram("xgettext"))
   {
     makeAmInfo.rel_name = "po/Makefile.am";
     makeAmInfo.type = "po";
@@ -2793,7 +2795,7 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject (namelow + "/docs/en/index"+num+".html",fileInfo);
     }
   }
-  if (userdoc->isChecked() && project->isKDE2Project())
+  if (userdoc->isChecked() && project->isKDE2Project() && !kthemeitem->isSelected())
   {
       fileInfo.rel_name ="doc/en/index.docbook";
       fileInfo.type = DATA;
@@ -2821,7 +2823,7 @@ void CKAppWizard::slotProcessExited() {
     project->setFilters("GNU",group_filters);
   }
 
-  if (kickeritem->isSelected()||project->isKDE2Project() || project->isKDEProject())
+  if (project->isKDE2Project() || project->isKDEProject())
   {
     group_filters.clear();
     group_filters.append("*.po");
@@ -2841,6 +2843,7 @@ void CKAppWizard::slotProcessExited() {
     group_filters.append("*.kdevdlg");
     group_filters.append("*.ui");
     group_filters.append("*.rc");
+    group_filters.append("*.dlg");
     project->addLFVGroup (i18n("User Interface"),"");
     project->setFilters(i18n("User Interface"),group_filters);
   }
@@ -2876,7 +2879,7 @@ void CKAppWizard::slotProcessExited() {
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
-  KShellProcess p;
+  KShellProcess p("/bin/sh");
   if (vsBox->currentItem() == 1)
   {
     dir.setCurrent(locateLocal("appdata", "kdeveloptemp"));   //QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
@@ -2946,7 +2949,7 @@ void CKAppWizard::slotMakeEnd() {
 
   if (vsBox->currentItem() == 1 && !cvscommand.isEmpty())
   {
-   KShellProcess p;
+   KShellProcess p("/bin/sh");
    cvscommand += (QString) "cvs commit -m \'" + message + "\' .";
    p.clearArguments();
    p << cvscommand;
@@ -2956,7 +2959,7 @@ void CKAppWizard::slotMakeEnd() {
   QFileInfo pot (directorytext + "/po/" + nametext +".pot");
   if (vsBox->currentItem() == 1 && pot.exists())
   {
-   KShellProcess p;
+   KShellProcess p("/bin/sh");
    cvscommand="cd "+ directorytext + "/po && cvs add "+ nametext +".pot && ";
    cvscommand += QString("cvs commit -m \'") + message + "\' .";
    p.clearArguments();

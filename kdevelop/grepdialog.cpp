@@ -1,6 +1,6 @@
 /***************************************************************************
-                          grepdialog.cpp  -  grep frontend                              
-                             -------------------                                         
+                          grepdialog.cpp  -  grep frontend
+                             -------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
  ***************************************************************************/
@@ -10,7 +10,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -33,7 +33,8 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>
-
+#include <iostream>
+using namespace std;
 
 const char *template_desc[] = {
     "normal",
@@ -266,7 +267,6 @@ void GrepDialog::templateActivated(int index)
 }
 
 
-#include <iostream.h>
 #include <kstddirs.h>
 void GrepDialog::itemSelected(const QString& item)
 {
@@ -333,7 +333,7 @@ void GrepDialog::slotSearch()
     pattern.replace(QRegExp("%s"), pattern_combo->currentText());
     pattern.replace(QRegExp("'"), "'\\''");
 
-    QString filepattern = "`find '";
+    QString filepattern = "find '";
     filepattern += dir_combo->currentText();
     filepattern += "'";
     if (!recursive_box->isChecked())
@@ -341,14 +341,11 @@ void GrepDialog::slotSearch()
     filepattern += " \\( -name ";
     filepattern += files;
     filepattern += " \\) -print";
-    filepattern += "`";
 
     childproc = new KShellProcess();
-    *childproc << "grep";
-    *childproc << "-n";
-    *childproc << (QString("-e '") + pattern + "'");
     *childproc << filepattern;
-    *childproc << "/dev/null";
+    *childproc << "|" << "xargs" << "grep" << "-n";
+    *childproc << (QString("-e '") + pattern + "'");
 
     connect( childproc, SIGNAL(processExited(KProcess *)),
          SLOT(childExited()) );
@@ -424,7 +421,7 @@ void GrepDialog::childExited()
 
 void GrepDialog::receivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
-    buf += QCString(buffer, buflen+1);
+    buf += QString::fromLocal8Bit(buffer, buflen);
     processOutput();
 }
 

@@ -435,7 +435,7 @@ void CLogFileView::split(QString str,QStringList& filters){
     next = str.find(',',pos);
     if(next != -1){
       str2 = str.mid(pos,next-pos);
-      filters.append(str2);
+      filters.append(str2.local8Bit().data());
 //      KDEBUG1(KDEBUG_INFO,CLOGFILEVIEW,"%s",str2.data());
     }
     pos = next+1;
@@ -443,17 +443,17 @@ void CLogFileView::split(QString str,QStringList& filters){
   //  str.findRev
   //  number = str.contains(','); // numbers of ,
   //   if(number == 0){
-  //     filters.append(str);
+  //     filters.append(str.local8Bit().data());
   //     return ;
   //   }
   //   for(;number>0;--number){ // split the string into strings
   //     pos = str.find(',');
   //     str2 = str.left(pos+1);
   //     str.remove(0,pos+1);
-  //     filters.append(str2);
+  //     filters.append(str2.local8Bit().data());
   //     cerr << str2 << "\n";
   //     if(str.length() != 0){
-  //       filters.append(str);
+  //       filters.append(str.local8Bit().data());
   //     }
   //   }
   return ;

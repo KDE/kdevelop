@@ -1,11 +1,11 @@
 /***************************************************************************
-                    cprjoptionsdlg.h - the setup DLG for a project  
-                             -------------------                                         
+                    cprjoptionsdlg.h - the setup DLG for a project
+                             -------------------
 
-    begin                : 10 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier,Stefan Bartel 
+    begin                : 10 Aug 1998
+    copyright            : (C) 1998 by Sandy Meier,Stefan Bartel
     email                : smeier@rz.uni-potsdam.de,bartel@rz.uni-potsdam.de
- 
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #ifndef __CPRJOPTIONSDLG_H_
@@ -29,9 +29,12 @@ class QPushButton;
 class KConfig;
 class QMultiLineEdit;
 class CPrjCompOpts;
+class CPrjAddOpts;
 class KDevSession;
 
 #include <kdialogbase.h>
+#include "cprjconfchange.h"
+
 //#include <qtabdialog.h>
 
 /** the setup-dialog for a project
@@ -48,6 +51,7 @@ public:
 
 private:
   void addGeneralPage();
+  void addAdditionalOptionsPage();
   void addCompilerOptionsPage();
   void addCompilerWarningsPage();
   void addLinkerPage();
@@ -56,8 +60,9 @@ private:
 
 protected:
 	CPrjCompOpts* compdlg;
+	CPrjAddOpts *addOptsDlg;
   /** local projectinfo object*/
-  CProject* prj_info; 
+  CProject* prj_info;
   // TAB General
   QLineEdit* email_edit;
   QLineEdit* author_edit;
@@ -78,6 +83,7 @@ protected:
   QCheckBox* l_khtml;
   QCheckBox* l_kfm;
   QCheckBox* l_kfile;
+  QCheckBox* l_kparts;
   QCheckBox* l_kspell;
   QCheckBox* l_kab;
   QCheckBox* l_math;
@@ -108,6 +114,7 @@ private:
 	KDevSession* sess;
 	QString currentcfg;
   QString old_version;
+  QString old_name;
   QString old_ldflags;
   QString old_ldadd;
   QString old_addit_flags;
@@ -119,7 +126,8 @@ private:
   QLineEdit* binary_edit;
   QLineEdit* libtool_edit;
 
-	
+  CPrjConfChange configureIn;
+
 protected slots:
    /** is called, if the ok-button were clicked*/
   void ok();

@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Nich Hudson",I18N_NOOP("Patches/Bugfixes"), "nick@nthcliff.demon.co.uk");
   aboutData.addCredit ("R. Imura",I18N_NOOP("Patches/Bugfixes"), "imura@cs.titech.ac.jp");
   aboutData.addCredit ("Ralf Funken",I18N_NOOP("Patches/Bugfixes"), "rfunken@kdevelop.de");
-  aboutData.addCredit ("Jens Zurheide",I18N_NOOP("Patches/Bugfixes"), "zuzu@surf-callino.de");
+  aboutData.addCredit ("Jens Zurheide",I18N_NOOP("Patches/Bugfixes"), "jens.zurheide@gmx.de");
   aboutData.addCredit ("Micha Bieber",I18N_NOOP("Patches/Bugfixes"), "micha@ani.de");
   aboutData.addCredit ("August Hoerandl",I18N_NOOP("Patches/Bugfixes"), "august.hoerandl@gmx.at");
   aboutData.addCredit ("Serge Lussier",I18N_NOOP("Patches/Bugfixes"), "serge.lussier@videotron.ca");
@@ -133,6 +133,8 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Michel Stol (aka Wimpie)",I18N_NOOP("Startlogo KDevelop 1.4, 2.0"), "f1r3f0x@hotmail.com");
 
   aboutData.addCredit ("Martin Piskernig",I18N_NOOP("Patches/Bugfixes, Translation coordination"), "martin.piskernig@stuwo.at");
+
+  aboutData.addCredit ("Roberto Raggi",I18N_NOOP("Code Completion"), "raggi@cli.di.unipi.it");
 
         KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options );

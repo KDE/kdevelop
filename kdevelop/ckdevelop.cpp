@@ -1,10 +1,10 @@
 /***************************************************************************
                     ckdevelop.cpp - the main class in CKDevelop
-                             -------------------                                         
+                             -------------------
 
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 20 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -106,12 +106,15 @@
 #include <config.h>
 #endif
 
+#include <iostream>
+using namespace std;
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotFileNew(){
-  
+
   slotStatusMsg(i18n("Creating new file..."));
   newFile(false);
   slotStatusMsg(i18n("Ready."));
@@ -196,7 +199,7 @@ void CKDevelop::slotFileSave()
   QString filename = m_docViewManager->currentEditView()->getDoc()->docName();
   QString sShownFilename = QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file %1").arg(sShownFilename));
-  
+
   if (isUntitled(filename)) {
     slotFileSaveAs();
   } else {
@@ -212,14 +215,12 @@ void CKDevelop::slotFileSave()
 
 void CKDevelop::slotFileSaveAs(){
     slotStatusMsg(i18n("Save file as..."));
-    
+
     fileSaveAs();
 
     setMainCaption();
     slotStatusMsg(i18n("Ready."));
 }
-
-#include <iostream.h>
 
 void CKDevelop::slotFileSaveAll()
 {
@@ -260,7 +261,7 @@ void CKDevelop::slotFilePrint()
 {
   if (!m_docViewManager->currentEditView())
     return;
-    
+
   slotStatusMsg(i18n("Printing..."));
   slotFileSave();
 
@@ -755,53 +756,53 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
 }
 
 void CKDevelop::slotViewTStdToolbar(){
-	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
-	                                    (actionCollection()->action("view_toolbar"));
-	if (!pViewToolbarAction) return;
-//	kdDebug() << "in CKDevelop::slotViewTStdToolbar():\n";
-	if (pViewToolbarAction->isChecked()) {
-//		kdDebug() << "pViewToolbarAction is checked.\n";
-		toolBar()->show();
-	}
-	else {
-//		kdDebug() << "pViewToolbarAction is not checked.\n";
-		toolBar()->hide();
-	}
+        KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+                                            (actionCollection()->action("view_toolbar"));
+        if (!pViewToolbarAction) return;
+//        kdDebug() << "in CKDevelop::slotViewTStdToolbar():\n";
+        if (pViewToolbarAction->isChecked()) {
+//                kdDebug() << "pViewToolbarAction is checked.\n";
+                toolBar()->show();
+        }
+        else {
+//                kdDebug() << "pViewToolbarAction is not checked.\n";
+                toolBar()->hide();
+        }
 }
 void CKDevelop::slotViewTBrowserToolbar(){
-	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
-	                                    (actionCollection()->action("view_browser"));
-	if (!pViewToolbarAction) return;
-	if (pViewToolbarAction->isChecked()) {
-		toolBar(ID_BROWSER_TOOLBAR)->show();
-	}
-	else {
-		toolBar(ID_BROWSER_TOOLBAR)->hide();
-	}
+        KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+                                            (actionCollection()->action("view_browser"));
+        if (!pViewToolbarAction) return;
+        if (pViewToolbarAction->isChecked()) {
+                toolBar(ID_BROWSER_TOOLBAR)->show();
+        }
+        else {
+                toolBar(ID_BROWSER_TOOLBAR)->hide();
+        }
 }
 
 void CKDevelop::slotViewTStatusbar(){
-	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
-	                                    (actionCollection()->action("view_status"));
-	if (!pViewToolbarAction) return;
-	if (pViewToolbarAction->isChecked()) {
-		statusBar()->show();
-	}
-	else {
-		statusBar()->hide();
-	}
+        KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+                                            (actionCollection()->action("view_status"));
+        if (!pViewToolbarAction) return;
+        if (pViewToolbarAction->isChecked()) {
+                statusBar()->show();
+        }
+        else {
+                statusBar()->hide();
+        }
 }
 
 void CKDevelop::slotViewMdiViewTaskbar(){
-	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
-	                                    (actionCollection()->action("view_mdi"));
-	if (!pViewToolbarAction) return;
-	if (pViewToolbarAction->isChecked()) {
-		showViewTaskBar();
-	}
-	else {
-		hideViewTaskBar();
-	}
+        KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+                                            (actionCollection()->action("view_mdi"));
+        if (!pViewToolbarAction) return;
+        if (pViewToolbarAction->isChecked()) {
+                showViewTaskBar();
+        }
+        else {
+                hideViewTaskBar();
+        }
 }
 
 void CKDevelop::showViewTaskBar()
@@ -982,37 +983,43 @@ void CKDevelop::slotBuildCompileFile(){
                    cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
                    cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
                    cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-                   addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+                   addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
                    ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
            }
            config->setGroup(group);
-           flags += "CPP="+ config->readEntry("CPP","cpp")+ " ";
-           flags += "CC=" + config->readEntry("CC","gcc")+ " ";
-           flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
+           flags += "CPP=\""+ config->readEntry("CPP","cpp")+ "\" ";
+           flags += "CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+           flags += "CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
           flags += "CPPFLAGS=\"" + cppflags + "\" ";
-    flags += "CFLAGS=\"" + cflags + "\" ";                        
            if(prj->getProjectType()=="normal_c"){
                    flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
            }
            else{
+       flags += "CFLAGS=\"" + cflags + "\" ";
        flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
            }
     flags += "LDFLAGS=\"" + ldflags+ "\" " ;
     cerr << QDir::currentDirPath() << endl;
+          debug("run: %s %s %s.o\n", flags.data(), make_cmd.data(), fileinfo.baseName().data());
           process << flags << make_cmd << fileinfo.baseName()+".o";
   }
   else
   {
     QString makefile=actualDir+"/Makefile";
     process << make_cmd;
+          debug("run: %s ", make_cmd.data());
     if (!QFileInfo(makefile).exists())
     {
       makefile=prj->getProjectDir()+prj->getSubDir()+"Makefile";
       if (!QFileInfo(makefile).exists())
         makefile=prj->getProjectDir()+"Makefile";
       if (QFileInfo(makefile).exists())
-        process << "-f" << makefile;
+      {
+                          process << "-f" << makefile;
+              debug("-f %s ", makefile.data());
+                        }
     }
+          debug("%s.o\n",fileinfo.baseName().data());
     process << fileinfo.baseName()+".o";
   }
 
@@ -1679,7 +1686,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (argdlg.exec())
   {
     args = argdlg.getArguments();
-    prj->setDebugArgs(args);    
+    prj->setDebugArgs(args);
     prj->writeProject();
 
     stdin_stdout_widget->clear();
@@ -1798,7 +1805,7 @@ void CKDevelop::setupInternalDebugger()
   ASSERT(!dbgController);
   if (dbgController)
     return;
-  
+
   saveTimer->stop();  // stop the autosaving
 //  slotStatusMsg(i18n("Running %1 (from %2) in internal debugger").arg(prj->getBinPROGRAM()).arg(prj->getRunFromDir()));
 
@@ -1929,19 +1936,19 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
                    cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
                    cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
                    cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-                   addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+                   addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
                    ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
            }
            config->setGroup(group);
-           flags += "CPP="+ config->readEntry("CPP","cpp")+ " ";
-           flags += "CC=" + config->readEntry("CC","gcc")+ " ";
-           flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
+           flags += "CPP=\""+ config->readEntry("CPP","cpp")+ "\" ";
+           flags += "CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+           flags += "CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
           flags += "CPPFLAGS=\"" + cppflags + "\" ";
-    flags += "CFLAGS=\"" + cflags + "\" ";                        
            if(prj->getProjectType()=="normal_c"){
                    flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
            }
            else{
+       flags += "CFLAGS=\"" + cflags + "\" ";
        flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
            }
     flags += "LDFLAGS=\"" + ldflags+ "\" " ;
@@ -2005,15 +2012,18 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   setToolMenuProcess(false);
   slotFileSaveAll();
   messages_widget->start();
-  
+
   debug("set make args !\n");
-  
+
   // set the make arguments
   process.clearArguments();
-  process << flags;
+  if (!flags.isEmpty())
+    process << flags;
   process << make_cmd << prj->getMakeOptions() << " -f" << makefile;
-  process << target;
-  
+  if (!target.isEmpty())
+   process << target;
+        debug("run: %s %s %s -f %s %s", (!flags.isEmpty() ? flags.data() : ""), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
+
   // why is this beeping business necessary? shouldn't there be a switch?
   // beep = true;
 
@@ -2069,18 +2079,22 @@ void CKDevelop::slotBuildCleanRebuildAll()
   next_job = "autoconf+configure+make";
 }
 
-void CKDevelop::RunConfigure(const QString& conf, bool ask){
-        QString args;
-        
+void CKDevelop::RunConfigure(const QString &conf, bool ask){
+        QString args, shellcommand;
+  QString vpath;
+
         if(conf==i18n("(Default)")){ // blddir=srcdir
                 args=prj->getConfigureArgs();
         }
-        else{
+        else
+  {
                 args=m_pKDevSession->getConfigureArgs(conf);
         }
-        if(ask){  //         only open dialog when asked
+
+  if(ask){  //         only open dialog when asked
           CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
           if(argdlg.exec()){
+                        args=argdlg.getArguments();
                   if(conf==i18n("(Default)")){
                     prj->setConfigureArgs(argdlg.getArguments());
                     prj->writeProject();
@@ -2102,19 +2116,24 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
   messages_widget->start();
   slotFileSaveAll();
   if(conf==i18n("(Default)"))
-          QDir::setCurrent(prj->getProjectDir());
-        else{
-                QString vpath=m_pKDevSession->getVPATHSubdir(conf);
+  {
+    vpath=prj->getProjectDir();
+  }
+  else
+  {
+                vpath=m_pKDevSession->getVPATHSubdir(conf);
                 QDir dir(vpath);
                 // change to VPATH subdir, create it if not existant
                 if(!dir.exists())
                         dir.mkdir(vpath);
-                QDir::setCurrent(vpath);
          }
-  shell_process.clearArguments();
+
+  QDir::setCurrent(vpath);
+
         QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
-        // get all other strings        
-  if(conf==i18n("(Default)")){
+        // get all other strings
+  if(conf==i18n("(Default)"))
+  {
                 cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
                 addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
                 ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
@@ -2124,32 +2143,44 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
                 QString platf=config->readEntry("Platform","linux");
                 group="Compilearch "+arch+"-"+platf;
   }
-        else{
+        else
+  {
                 group="Compilearch "+
                                                                                         m_pKDevSession->getArchitecture(conf)+"-"+
                                                                                         m_pKDevSession->getPlatform(conf);
                 cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
                 cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
                 cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-                addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+                addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
                 ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
         }
-         config->setGroup(group);
-         shell_process << "CPP=\""<< config->readEntry("CPP","cpp")<< "\" ";
-         shell_process << "CC=\"" << config->readEntry("CC","gcc")<< "\" ";
-         shell_process << "CXX=\"" << config->readEntry("CXX","g++")<< "\" ";
-        shell_process << "CPPFLAGS=\"" << cppflags << "\" ";
-  shell_process << "CFLAGS=\"" << cflags << "\" ";                        
-         if(prj->getProjectType()=="normal_c"){
-                  shell_process << "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+
+  config->setGroup(group);
+         shellcommand += "CPP=\"" + config->readEntry("CPP","cpp") + "\" ";
+         shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
+         shellcommand += "CXX=\"" + config->readEntry("CXX","g++") + "\" ";
+        shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
+         if(prj->getProjectType()=="normal_c")
+  {
+                  shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
          }
-         else{
-     shell_process << "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+         else
+  {
+     shellcommand += "CFLAGS=\"" + cflags + "\" ";
+     shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
          }
-  shell_process << "LDFLAGS=\"" + ldflags+ "\" " ;
-        // the configure script is always in the project directory, no matter where we are
-  shell_process  << prj->getProjectDir() +"/configure "<< args;
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
+  // this check is only to handle a strange bug
+  //   if vpath==project dir the rule for .ui files won't be accepted (Walter)
+  if (vpath!=prj->getProjectDir())
+     shellcommand += prj->getProjectDir() +"/configure "+ args;
+  else
+     shellcommand += "./configure "+ args;
+
+        shell_process.clearArguments();
+        shell_process << shellcommand;
+        debug("run: %s\n", shellcommand.data());
+        shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 
 }
@@ -2180,26 +2211,26 @@ void CKDevelop::slotBuildStop(){
 
 void CKDevelop::slotToolsTool(int tool)
 {
-	kdDebug() << "in CKDevelop::slotToolsTool(), sender is: " << sender()->name() << "\n";
+        kdDebug() << "in CKDevelop::slotToolsTool(), sender is: " << sender()->name() << "\n";
 // took out the old code and fixed this, with a "crude hack(TM)"
 // i believe this must be replaced with the gideon part (rokrau 02/16/02)
-	ToolAppList::Iterator it;
-	for( it = toolList.begin(); it != toolList.end(); ++it ) {
-		if ((*it).getExeName() == sender()->name())
-			break;
-	}
-	if (it == toolList.end()) return; // this can not be, right? :-)
-	CToolApp toolApp = (*it);
-	if ( !CToolClass::searchProgram( toolApp.getExeName() ) )
-		return;
+        ToolAppList::Iterator it;
+        for( it = toolList.begin(); it != toolList.end(); ++it ) {
+                if ((*it).getExeName() == sender()->name())
+                        break;
+        }
+        if (it == toolList.end()) return; // this can not be, right? :-)
+        CToolApp toolApp = (*it);
+        if ( !CToolClass::searchProgram( toolApp.getExeName() ) )
+                return;
 
 //  if(!bKDevelop)
 //    switchToKDevelop();
-    
+
 //  showOutputView(false);
 
-	QString argument = toolApp.getArgs();
-     
+  QString argument = toolApp.getArgs();
+
   // This allows us to replace the macro %H with the header file name, %S with the source file name,
   // %T with the currently selected text, %W with the currently selected word
   // and %D with the project directory name.  Any others we should have?
@@ -2308,26 +2339,21 @@ void CKDevelop::slotOptionsDocBrowser(){
    CDocBrowserOptionsDlg browserOptions;
    CDocBrowser* pDocBr = m_docViewManager->currentBrowserDoc();
 
-   connect( browserOptions.fontOptions, SIGNAL(fontSize(int)),
-     pDocBr, SLOT(slotDocFontSize( int )) );
-   connect( browserOptions.fontOptions, SIGNAL(standardFont( const QString& )),
-     pDocBr, SLOT(slotDocStandardFont( const QString& )) );
-   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const QString& )),
-     pDocBr, SLOT(slotDocFixedFont( const QString& )) );
-   connect( browserOptions.colorOptions, SIGNAL(colorsChanged(const QColor&, const QColor&,
-      const QColor&, const QColor&, const bool, const bool)),
-     pDocBr, SLOT(slotDocColorsChanged(const QColor&, const QColor&,
-                const QColor&, const QColor&, const bool, const bool)) );
-
-   browserOptions.show();
+   if ( pDocBr ) {
+     connect( browserOptions.fontOptions, SIGNAL(configChanged()),
+     pDocBr, SLOT(slotDocBrowserOptions()) );
+     connect( browserOptions.colorOptions, SIGNAL(configChanged()),
+     pDocBr, SLOT(slotDocBrowserOptions()) );
+   }
+   browserOptions.exec();
    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsToolsConfigDlg(){
     slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
 //  CToolsConfigDlg* configdlg= new CToolsConfigDlg(this,"configdlg");
-    CToolsConfigDlg configdlg(this,"configdlg");
-    configdlg.show();
+        CToolsConfigDlg configdlg(this,"configdlg");
+        configdlg.exec();
 
 //    tools_menu->clear();
     setToolmenuEntries();
@@ -2442,6 +2468,10 @@ void CKDevelop::slotOptionsAutoswitch(bool autoswitch){
   bAutoswitch=autoswitch;
 }
 
+void CKDevelop::slotOptionsStartupEditing(bool startupEditing){
+  bStartupEditing=startupEditing;
+}
+
 void CKDevelop::slotOptionsDefaultCV(bool defaultcv){
   bDefaultCV=defaultcv;
 }
@@ -2496,7 +2526,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   KButtonBox bb( &parentDlg);
   bb.addStretch();
   QPushButton* ok_button  = bb.addButton( i18n("OK") );
-  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );    
+  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );
   ok_button->setDefault(true);
   connect(cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()));
   connect(ok_button, SIGNAL(clicked()), &embeddedDlg, SLOT(slotOkClicked()));
@@ -2790,7 +2820,7 @@ void CKDevelop::slotHelpReference() {
   showDocHelp("reference/C/cref.html");
 }
 
-void CKDevelop::slotHelpTipOfDay(bool force){
+void CKDevelop::showHelpTipOfDay(bool force){
   KTipDialog::showTip(locate("data", "kdevelop/tips"), force);
 }
 
@@ -2812,17 +2842,17 @@ void CKDevelop::slotHelpAPI(){
       QString doxconf = api_dir +  prj->getProjectName().lower()+".doxygen";
       if(!QFileInfo(doxconf).exists())
       {
-        KMessageBox::error(0,
-                           i18n("Doxygen configuration file not found\n"
-                           "Generate a valid one:\n"
-                           "Project->API Doc Tool->Configure doxygen"));
+           KMessageBox::error(0,
+                       i18n("Doxygen configuration file not found\n"
+                             "Generate a valid one:\n"
+                             "Project->API Doc Tool->Configure doxygen"));
         return;
       }
       api_file=api_dir +  prj->getProjectName().lower() +"-api/html/index.html";
     }
     //MB end
     if(!QFileInfo(api_file).exists()){
-//      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
+//      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n"
 //                                                                      "Would you like to generate it now ?"), KMessageBox::QUESTION);
 //      if(result==1){
 //        slotProjectAPI();
@@ -2834,7 +2864,7 @@ void CKDevelop::slotHelpAPI(){
     else{
       slotStatusMsg(i18n("Switching to project API Documentation..."));
       slotURLSelected(api_file);
-      slotStatusMsg(i18n("Ready.")); 
+      slotStatusMsg(i18n("Ready."));
     }
   }
 }
@@ -2843,7 +2873,7 @@ void CKDevelop::slotHelpManual(){
 
     QString name = prj->getSGMLFile().copy();
     QFileInfo finfo(name);
- 
+
     QString doc_file = finfo.dirPath() + "/" + finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
       // try docbook file projectdir/doc/HTML/index.html
@@ -2964,7 +2994,7 @@ void CKDevelop::slotClassbrowserNewMethod()
 
 /*------------------------- CKDevelop::slotClassbrowserNewAttribute()
  * slotClassbrowserNewAttribute()
- *   Event when the user wants to create a new attribute from the 
+ *   Event when the user wants to create a new attribute from the
  *   browser toolbar/menu.
  *
  * Parameters:
@@ -3102,7 +3132,8 @@ void CKDevelop::slotNewStatus()
   }
 //  statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
-//?????  setMainCaption();
+  // and we need to set a [modified] in the caption
+  setMainCaption();
 }
 
 void CKDevelop::slotCPPMarkStatus(Kate::View *,bool bMarked)
@@ -3117,7 +3148,7 @@ void CKDevelop::slotCPPMarkStatus(Kate::View *,bool bMarked)
       disableCommand(ID_EDIT_CUT);
       disableCommand(ID_EDIT_COPY);
     }
-  }    
+  }
 }
 
 void CKDevelop::slotHEADERMarkStatus(Kate::View *, bool bMarked)
@@ -3131,7 +3162,7 @@ void CKDevelop::slotHEADERMarkStatus(Kate::View *, bool bMarked)
       else{
         disableCommand(ID_EDIT_CUT);
         disableCommand(ID_EDIT_COPY);
-      }    
+      }
   }
 }
 
@@ -3157,7 +3188,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
       }
       else{
         disableCommand(ID_EDIT_COPY);
-      }    
+      }
   }
 }
 
@@ -3178,7 +3209,7 @@ void CKDevelop::slotNewLineColumn()
   m_docViewManager->currentEditView()->cursorPosition(&line,&column);
   linenumber = i18n("Line: %1 Col: %2").arg(line+1).arg(column+1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
-} 
+}
 void CKDevelop::slotNewUndo()
 {
   if (!m_docViewManager->currentEditDoc()) return;
@@ -3198,7 +3229,7 @@ void CKDevelop::slotNewUndo()
   else{
     disableCommand(ID_EDIT_REDO);
   }
-  
+
 }
 
 
@@ -3213,7 +3244,7 @@ void CKDevelop::slotURLSelected(const QString& url)
   if (url_str.left(1)=="/")
      url_str=QString("file:") + url;
 
-  // Call the DocViewManager 
+  // Call the DocViewManager
   m_docViewManager->doSelectURL(url_str);
 
   QString str = history_list.current();
@@ -3360,51 +3391,26 @@ void CKDevelop::slotDocumentDone()
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 {
-  messages_widget->insertAtEnd(QCString(buffer,buflen+1));
-  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-  // QString str1 = messages_widget->text();
+  messages_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen));
 }
+
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  messages_widget->insertAtEnd(QCString(buffer,buflen+1), CMakeOutputWidget::Diagnostic);
-  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-  // QString str1 = messages_widget->text();
+  messages_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen), CMakeOutputWidget::Diagnostic);
 }
+
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  stdin_stdout_widget->insertAtEnd(QCString(buffer,buflen+1));
-//  if (*(buffer+buflen-1) == '\n')
-//    buflen--;
-    
-//  QString str(buffer,buflen+1);
-//  stdin_stdout_widget->insertLine(str);
-//  stdin_stdout_widget->setCursorPosition(stdin_stdout_widget->numLines()-1,0);
-
-//  int x,y;
-//  showOutputView(true);
-//  stdin_stdout_widget->cursorPosition(&x,&y);
-//  QString str(buffer,buflen+1);
-//  stdin_stdout_widget->insertAt(str,x,y);
+  stdin_stdout_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen));
 }
-void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  stderr_widget->insertAtEnd(QCString(buffer,buflen+1));
-//  if (*(buffer+buflen-1) == '\n')
-//    buflen--;
-    
-//  QString str(buffer,buflen+1);
-//  stderr_widget->insertLine(str);
-//  stderr_widget->setCursorPosition(stderr_widget->numLines()-1,0);
 
-//  int x,y;
-//  showOutputView(true);
-//  stderr_widget->cursorPosition(&x,&y);
-//  QString str(buffer,buflen+1);
-//  stderr_widget->insertAt(str,x,y);
+void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
+  stderr_widget->insertAtEnd(QString::fromLocal8Bit(buffer,buflen));
 }
 
 void CKDevelop::slotApplReceivedStdout(const char* buffer)
 {
   slotApplReceivedStdout(0, (char*)buffer, strlen(buffer));
 }
- 
+
 void CKDevelop::slotApplReceivedStderr(const char* buffer)
 {
     slotApplReceivedStderr(0, (char*)buffer, strlen(buffer));
@@ -3414,14 +3420,6 @@ void CKDevelop::slotApplReceivedStderr(const char* buffer)
 void CKDevelop::slotDebugReceivedStdout(const QString& buffer)
 {
   dbg_widget->insertAtEnd(buffer);
-//  char* buf = (char*)buffer;
-//  int buflen = strlen(buf);
-//  if (*(buf+buflen-1) == '\n')
-//    buflen--;
-
-//  QString str(buf,buflen+1);
-//  dbg_widget->insertLine(str);
-//  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
 }
 #else
 void CKDevelop::slotDebugReceivedStdout(const QString& )
@@ -3429,8 +3427,7 @@ void CKDevelop::slotDebugReceivedStdout(const QString& )
 #endif
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
-  QCString str(buffer,buflen+1);
-  search_output = search_output + QString(str);
+  search_output = search_output + QString::fromLocal8Bit(buffer,buflen);
 }
 void CKDevelop::slotSearchProcessExited(KProcess*)
 {
@@ -3676,7 +3673,7 @@ void CKDevelop::slotProcessExited(KProcess* proc)
       next_job = "";
       ready = false;
     }
-      
+
     else if (next_job == "refresh")
     { // rest from the add projectfile
       refreshTrees();
@@ -3761,11 +3758,15 @@ void CKDevelop::slotProcessExited(KProcess* proc)
       XBell(kapp->getDisplay(),100); //beep :-)
       beep = false;
   }
-  
+
 }
 
+// this requires some work using stateChanged()
+// (rokrau 03/21/02)
 void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
 {
+	Kate::View* pView = m_docViewManager->currentEditView();
+	Kate::Document* pDoc = m_docViewManager->currentEditDoc();
   if (!(m_docViewManager->curDocIsBrowser()))
   {
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
@@ -3793,6 +3794,8 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     enableCommand(ID_EDIT_SELECT_ALL);
     enableCommand(ID_EDIT_DESELECT_ALL);
     enableCommand(ID_EDIT_INVERT_SELECTION);
+    enableCommand(ID_EDIT_EXPAND_TEXT);
+    enableCommand(ID_EDIT_COMPLETE_TEXT);
   }
 
   if (m_docViewManager->curDocIsHeaderFile()){
@@ -3803,7 +3806,6 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
         makeWidgetDockVisible(log_file_tree->parentWidget());
     }
     disableCommand(ID_BUILD_COMPILE_FILE);
-    m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
 //    setMainCaption();
@@ -3821,43 +3823,45 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
 //      enableCommand(ID_BUILD_COMPILE_FILE);
 //    }
 //
-    m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
 //    setMainCaption();
     slotNewLineColumn();
   }
 
-    if (!(m_docViewManager->curDocIsBrowser()))
-    {
-    uint undoCount = m_docViewManager->currentEditDoc()->undoCount();
-    uint redoCount = m_docViewManager->currentEditDoc()->redoCount();
-    //undo
-    if(undoCount){
-      enableCommand(ID_EDIT_UNDO);
+  if (!(m_docViewManager->curDocIsBrowser()))
+  {
+    if (pDoc) {
+      int undoCount = pDoc->undoCount();
+      int redoCount = pDoc->undoCount();
+      //undo
+// to reenable using stateChanged
+// (rokrau 03/21/02)
+      if(undoCount){
+//        enableCommand(ID_EDIT_UNDO);
+      }
+      else{
+//        disableCommand(ID_EDIT_UNDO);
+      }
+      //redo
+      if(redoCount){
+//        enableCommand(ID_EDIT_REDO);
+      }
+      else{
+//        disableCommand(ID_EDIT_REDO);
+      }
+      QString str;
+      str = pDoc->selection();
+      if(str.isEmpty()){
+        disableCommand(ID_EDIT_CUT);
+        disableCommand(ID_EDIT_COPY);
+      }
+      else{
+        enableCommand(ID_EDIT_CUT);
+        enableCommand(ID_EDIT_COPY);
+      }
     }
-    else{
-      disableCommand(ID_EDIT_UNDO);
-    }
-    //redo
-    if(redoCount){
-      enableCommand(ID_EDIT_REDO);
-    }
-    else{
-      disableCommand(ID_EDIT_REDO);
-    }
-
-    QString str;
-    if (m_docViewManager->currentEditDoc())
-      str = m_docViewManager->currentEditDoc()->selection();
-    if(str.isEmpty()){
-      disableCommand(ID_EDIT_CUT);
-      disableCommand(ID_EDIT_COPY);
-    }
-    else{
-      enableCommand(ID_EDIT_CUT);
-      enableCommand(ID_EDIT_COPY);
-    }    
+    if (pView) pView->setFocus();
   }
   else if (m_docViewManager->curDocIsBrowser())
   {
@@ -3886,6 +3890,8 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     disableCommand(ID_EDIT_SELECT_ALL);
     disableCommand(ID_EDIT_DESELECT_ALL);
     disableCommand(ID_EDIT_INVERT_SELECTION);
+    disableCommand(ID_EDIT_EXPAND_TEXT);
+    disableCommand(ID_EDIT_COMPLETE_TEXT);
   }
 
   if (m_docViewManager->curDocIsBrowser())
@@ -3898,8 +3904,12 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
       enableCommand(ID_EDIT_COPY);
     else
       disableCommand(ID_EDIT_COPY);
+
+    setMainCaption(BROWSER);
   }
-  setMainCaption();
+  else {
+    setMainCaption();
+  }
 }
 
 void CKDevelop::slotLogFileTreeSelected(QString file){
@@ -3951,7 +3961,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     return;
   }
   QString text = doc_tree->selectedText();
-  
+
   if(!QFile::exists(url_file)){
     if( text == i18n("Qt-Library")){
       if(KMessageBox::questionYesNo(0,
@@ -3974,7 +3984,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     }
   }
   slotURLSelected(url_file);
-  
+
 }
 
 void CKDevelop::slotTCurrentTab(int item){
@@ -4090,7 +4100,7 @@ void CKDevelop::slotToolbarClicked(int item){
     else{
       slotClassbrowserViewDefinition();
       cv_decl_or_impl=true;
-    }    
+    }
     break;
 
   // Redirect to code that handles menu and toolbar selection
@@ -4212,6 +4222,30 @@ bool CKDevelop::isToolViewVisible(QWidget* pToolView)
   return bIsVisible;
 }
 
+/** checks if any of the tool views is visible */
+bool CKDevelop::isAnyToolViewVisible(){
+  return ( isToolViewVisible(class_tree)
+        || isToolViewVisible(log_file_tree)
+        || isToolViewVisible(real_file_tree)
+        || isToolViewVisible(doc_tree)
+        || ((dbgController != 0L) && isToolViewVisible(var_viewer)));
+}
+
+/** checks if any of the output view widget is visible */
+bool CKDevelop::isAnyOutputWindowVisible(){
+  return ( isToolViewVisible(messages_widget)
+        || isToolViewVisible(stdin_stdout_widget)
+        || isToolViewVisible(stderr_widget)
+        || isToolViewVisible(konsole_widget)
+        || isToolViewVisible(brkptManager)
+        || ((dbgController != 0L) && isToolViewVisible(disassemble))
+        || ((dbgController != 0L) && isToolViewVisible(frameStack))
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+        || ((dbgController != 0L) && isToolViewVisible(dbg_widget))
+#endif
+          );
+}
+
 void CKDevelop::fillToggleTreeViewsMenu()
 {
 //  toggletreeviews_popup->clear();
@@ -4254,67 +4288,92 @@ void CKDevelop::fillToggleTreeViewsMenu()
 
 void CKDevelop::slotViewTClassesView()
 {
-	KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_tree_classes"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTTreesToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_tree_classes"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else {
+                if (! isAnyToolViewVisible()) {
+                     slotViewTTreeView();
+                     slotActivateTView_Class();
+                } else
+                     pDock->dockBack();
+         }
+        adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTGroupsView()
 {
-	KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_tree_groups"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-	pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTTreesToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_tree_groups"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+        pDock->undock();
+       else {
+         if (! isAnyToolViewVisible()) {
+           slotViewTTreeView();
+           slotActivateTView_LFV();
+         } else
+           pDock->dockBack();
+      }
+        adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTFilesView()
 {
-	KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_tree_file"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTTreesToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_tree_file"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_RFV();
+    } else
+      pDock->dockBack();
+  }
+        adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTBooksView()
 {
-	KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_tree_books"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTTreesToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_tree_books"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_Doc();
+    } else
+      pDock->dockBack();
+  }
+        adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTWatchView()
 {
-	KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_tree_watch"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTTreesToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_tree_watch"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_VAR();
+    } else
+      pDock->dockBack();
+  }
+        adjustTTreesToolButtonState();
 }
 
 void CKDevelop::fillToggleOutputViewsMenu()
@@ -4379,106 +4438,140 @@ void CKDevelop::fillToggleOutputViewsMenu()
 
 void CKDevelop::slotViewOMessagesView()
 {
-	KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_msg"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_msg"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+                pDock->dockBack();
+                if (! isAnyOutputWindowVisible() ) {
+                    slotViewTOutputView();
+                    slotActivateOView_Messages();
+                } else
+                   pDock->dockBack();
+        adjustTOutputToolButtonState();
+
 }
 
 void CKDevelop::slotViewOStdOutView()
 {
-	KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_stdout"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_stdout"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+                if (! isAnyOutputWindowVisible() ) {
+                        slotViewTOutputView();
+                        slotActivateOView_StdInStdOut();
+                } else
+                        pDock->dockBack();
+        adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOStdErrView()
 {
-	KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_stderr"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_stderr"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+                if (! isAnyOutputWindowVisible() ) {
+                         slotViewTOutputView();
+                         slotActivateOView_StdErr();
+                } else
+                        pDock->dockBack();
+         adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOKonsoleView()
 {
-	KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_konsole"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_konsole"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+        if (! isAnyOutputWindowVisible() ) {
+                slotViewTOutputView();
+                slotActivateOView_Konsole();
+       } else
+                pDock->dockBack();
+       adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOBreakpointView()
 {
-	KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_break"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_break"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_BrkptManager();
+    } else
+      pDock->dockBack();
+  adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewODisassembleView()
 {
-	KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_disasm"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_disasm"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_Disassemble();
+    } else
+      pDock->dockBack();
+  adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOFrameStackView()
 {
-	KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_stack"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_stack"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+  else
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_FrameStack();
+    } else
+      pDock->dockBack();
+  adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewODebuggerView()
 {
-	KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
-	KToggleAction* pAction = dynamic_cast<KToggleAction*>
-	                         (actionCollection()->action("view_out_dbg"));
-	if (!pAction) return;
-	if (pAction->isChecked())
-		pDock->undock();
-	else
-		pDock->dockBack();
-	adjustTOutputToolButtonState();
+        KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
+        KToggleAction* pAction = dynamic_cast<KToggleAction*>
+                                 (actionCollection()->action("view_out_dbg"));
+        if (!pAction) return;
+        if (pAction->isChecked())
+                pDock->undock();
+        else
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_Dbg();
+    } else
+      pDock->dockBack();
+  adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotActivateTView_Class()
@@ -4516,19 +4609,16 @@ void CKDevelop::slotActivateTView_VAR()
 void CKDevelop::slotActivateOView_Messages()
 {
   dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-  messages_widget->setFocus();
 }
 
 void CKDevelop::slotActivateOView_StdInStdOut()
 {
   dockManager->findWidgetParentDock(stdin_stdout_widget->parentWidget())->makeDockVisible();
-  stdin_stdout_widget->setFocus();
 }
 
 void CKDevelop::slotActivateOView_StdErr()
 {
   dockManager->findWidgetParentDock(stderr_widget->parentWidget())->makeDockVisible();
-  stderr_widget->setFocus();
 }
 
 void CKDevelop::slotActivateOView_Konsole()
@@ -4539,8 +4629,11 @@ void CKDevelop::slotActivateOView_Konsole()
 
 void CKDevelop::slotActivateOView_BrkptManager()
 {
-  dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
-  brkptManager->setFocus();
+  if (brkptManager && dbgInternal)
+  {
+    dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
+    brkptManager->setFocus();
+  }
 }
 
 void CKDevelop::slotActivateOView_FrameStack()
@@ -4768,3 +4861,28 @@ void CKDevelop::statusCallback(int id_){
   }
 }
 
+void CKDevelop::setAutomaticCompletion( bool enable )
+{
+    config->setGroup("CodeCompletion");
+    config->writeEntry("automatic_completion",enable);
+    config->sync();
+}
+
+void CKDevelop::setAutomaticArgsHint( bool enable )
+{
+    config->setGroup("CodeCompletion");
+    config->writeEntry("automatic_argshint",enable);
+    config->sync();
+}
+
+bool CKDevelop::getAutomaticCompletion()
+{
+    config->setGroup("CodeCompletion");
+    return config->readBoolEntry("automatic_completion", true);
+}
+
+bool CKDevelop::getAutomaticArgsHint()
+{
+    config->setGroup("CodeCompletion");
+    return config->readBoolEntry("automatic_argshint", true);
+}

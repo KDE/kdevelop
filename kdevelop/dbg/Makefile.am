@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libkdevelopdbg.la
 INCLUDES = $(all_includes)
 
 
-LDFLAGS =     
+LDFLAGS =      
 
 
 libkdevelopdbg_la_LDFLAGS = -version-info 2:0

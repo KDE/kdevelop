@@ -142,6 +142,7 @@ sub setupDefaultChangings
   $changings{"|AUTHOR|"}=$processes{AUTHOR};
   $changings{"|EMAIL|"}=$processes{EMAIL};
   $changings{"|VERSION|"}=$processes{VERSION};
+  $changings{"|KDE_QTVER|"}=$processes{KDE_QTVER};
   $changings{"|DATE|"}=$date;
   $changings{"|YEAR|"}=$year;
   $changings{"|SUBDIR|"}= $nameLittle;
@@ -292,7 +293,7 @@ sub condCopyUserDocFiles {
   {
     #copying, rename and replace in the handbook-en-template
     chdir ($templatedir);
-    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/)
+    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kickerapp|^kpart$|kioslave|kcmodule/)
     {
       copy ("docbook_en_template", "$overDirectory/doc/en/index.docbook");
       chdir ("$overDirectory/doc/en");
@@ -573,7 +574,7 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|kpart|kioslave|kcmodule/)
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|^kpart$|kioslave|kcmodule/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -592,9 +593,9 @@ sub changeMiniApp {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
   }
-  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule|ktheme|kickerapp/)
+  if ($processes{APPLICATION} =~ /^kpart$|kioslave|kcmodule|ktheme|kickerapp/)
   {
-    if ($processes{APPLICATION} =~ /kpart/)
+    if ($processes{APPLICATION} =~ /^kpart$/)
         {
                 rename("skel.rc", $nameLittle.".rc");
                 replaceValuesInFile(\%changings, "$nameLittle.rc");
@@ -606,9 +607,9 @@ sub changeMiniApp {
         }
     if ($processes{APPLICATION} =~ /ktheme/)
         {
-		  			rename("skel.themerc", $nameLittle.".themerc");
-    				replaceValuesInFile(\%changings, "$nameLittle.themerc");
-		}
+                rename("skel.themerc", $nameLittle.".themerc");
+                replaceValuesInFile(\%changings, "$nameLittle.themerc");
+        }
     rename ("skel.cpp",  $nameLittle.".cpp");
     rename ("skel.h",   $nameLittle.".h");
     replaceValuesInFile(\%changings, "$nameLittle.cpp");
@@ -640,8 +641,8 @@ sub changeMiniApp {
 
   replaceValuesInFile(\%changings, "Makefile.am");
 
-  chdir ($underDirectory."/docs/en");
-  replaceValuesInFile(\%changings, "Makefile.am");
+#  chdir ($underDirectory."/docs/en");
+#  replaceValuesInFile(\%changings, "Makefile.am");
 
   condCopyGNUFiles();
   condCopyLsmFile();

@@ -199,8 +199,13 @@ QSize DbgButton::sizeHint() const
   QString s(text());
   if (s.isEmpty())
     return pixmap_.size();
-	
-  return QPushButton::sizeHint();	
+
+#if (QT_VERSION < 300)
+  return QPushButton::sizeHint();
+#else
+  return QSize(QPushButton::sizeHint().width() + pixmap_.size().width(),
+                QPushButton::sizeHint().height());
+#endif
 }
 
 // **************************************************************************

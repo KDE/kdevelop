@@ -85,7 +85,7 @@
             </property>
             <property>
                 <name>whatsThis</name>
-                <string>Opens the filedialog to let you create and choose the directory that should be used for running configure and make in for the configuration named above.</string>
+		<string>Opens the file dialog to let you create and choose the directory in which configure and make should be run, for the configuration named above.</string>
             </property>
         </widget>
         <widget row="0"  column="3" >
@@ -283,7 +283,7 @@
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
-                                    <string>Set the level of the -g debugging switch here. Maximum value ist 3.</string>
+                                    <string>Set the level of the -g debugging switch here. Maximum value is 3.</string>
                                 </property>
                             </widget>
                             <widget row="1"  column="1" >
@@ -529,7 +529,7 @@
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
-                                    <string>Select the target architecture here. If buildsystem and targetsystem are identical, you may need to change the according compiler settings in the KDevelop setup dialog. The same is valid for the according cross-compilers you intend to use.</string>
+                                    <string>Select the target architecture here. If buildsystem and targetsystem are identical, you may need to change the corresponding compiler settings in the KDevelop setup dialog. The same is valid for the corresponding cross-compilers you intend to use.</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -847,7 +847,7 @@
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
-                                    <string>On systems that support dynamic linking, checking this option prevents linking with shared libraries. On other systems, this option has no effect.  You can also use the configure option --enable-static.</string>
+                                    <string>On systems that support dynamic linking, checking this option prevents linking with shared libraries. On other systems, this option has no effect. You can also use the configure option --enable-static.</string>
                                 </property>
                             </widget>
                             <widget>
@@ -928,7 +928,7 @@
                         </property>
                         <property>
                             <name>whatsThis</name>
-                            <string>Pass any additional options to the configure script for this configuration here. A possible value that is not covered by the values above could be --enable-embedded to link against the libqte library and remove any X dependency instea of linking to libqt. Other options could be --with-qt-includes and --with-qt-libraries in case these cannot be detected on your system.</string>
+                            <string>Pass any additional options to the configure script for this configuration here. A possible value that is not covered by the values above could be --enable-embedded to link against the libqte library and remove any X dependency instead of linking to libqt. Other options could be --with-qt-includes and --with-qt-libraries in case these cannot be detected on your system.</string>
                         </property>
                     </widget>
                     <widget row="1"  column="0" >
@@ -1037,7 +1037,7 @@
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
-                                    <string>Path to the installation directory. In case of a KDE application, this would be the directory of the KDE installation. Passed over to configure as the --prefix= argument.  For other application types, this is usually /usr/local; the default behavior of the installation path can be set with this argument.</string>
+                                    <string>Path to the installation directory. In case of a KDE application, this would be the directory of the KDE installation. Passed over to configure as the --prefix= argument. For other application types, this is usually /usr/local; the default behavior of the installation path can be set with this argument.</string>
                                 </property>
                             </widget>
                             <widget row="1"  column="1" >

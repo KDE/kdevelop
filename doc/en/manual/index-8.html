@@ -430,7 +430,7 @@ warnings are set to the standard, -Wall. This ensures you can debug your applica
 detect constructions that may cause program errors. For some applications, you would need
 additional Compiler or Linker flags, especially if you're using libraries that are not
 currently included by the Linker. Then you need to update the project by configuring the
-correct settings with the Project Options dialog. See 
+correct settings with the Project Options dialog. See
 <A HREF="index-9.html#Build Settings">Build Settings</A> for more information how and where to set Compiler Options, Warnings and Linker
 Options.
 <P>
@@ -440,12 +440,89 @@ Options.
 <P>Existing automake/autoconf compatible projects (which make use of Makefile.am´s to store their
 information) can be used together with KDevelop by creating a KDevelop project file with the
 <B>kimport</B> script. After the project file has been build up, you should edit it with your
-favorite editor and set the project type accoding to your needs, see 
+favorite editor and set the project type accoding to your needs, see
 <A HREF="#Project Hacking">Project Hacking</A> for more details about available project types.
 Mind that you should deselect "modify Makefiles" in the Project Options after you loaded your
 project the first time.
 <P>
-<P>
+<H3><A NAME="ss8.8">8.8 Building Distributions</A>
+</H3>
+
+<P>KDevelop provides facilities to create distribution
+packages in one of three forms: tarball, RPM source and
+RPM binary forms.  When you are satisfied that your project
+is ready for a broader audience, you can use the <U>Make
+Distribution</U> item on the Project menu to make your
+distribution file(s).
+<P>If you only intend to distribute an RPM package, you still
+should build a <U>Source-tgz</U> distribution first to ensure
+that the tarball will build properly.  In this way, you
+will avoid RPM build errors that are actually problems
+with the source tarball.
+<P>Selecting <U>Source-tgz</U> under <U>Make Distibution</U>
+will create a tarball in the project base directory in the
+form <CODE>projectname-version.tar.gz</CODE> where
+<CODE>projectname</CODE> and <CODE>version</CODE> are the
+same as in the current <U>Project Options...</U> dialog.
+<P>Test the tarball by unpacking it in another directory
+(preferably on another machine), build, install and test
+that the package works as expected.
+<P>Once you are happy that the tarball works as expected,
+you can proceed to build your RPM packages.  First, you
+must build a proper RPM <CODE>projectname.spec</CODE>
+file.  Selecting <U>Configure RPM Package</U> under
+<U>Make Distibution</U> will display a dialog to establish
+the <CODE>projectname.spec</CODE> file required to build
+the packages.
+<P>You may find that your <CODE>projectname.spec</CODE>
+file is too complex to be managed by this dialog.  In
+this case, you are quite free to select the file from the
+LFV and edit it manually. However, you should
+avoid using <U>Configure RPM Package</U> for this project
+from that point forward, as the dialog will overwrite your
+manual changes with the KDevelop template.
+<P>If you need help in building or maintaining RPM's
+<CODE>.spec</CODE> files, there is excellent documentation
+to be found at
+<A HREF="http://www.rpm.org/RPM-HOWTO/build.html">Building RPMs</A>.
+There is also a terrific reference at the
+<A HREF="http://developer.kde.org">KDE Developer's Web Site</A>
+regarding the
+<A HREF="http://developer.kde.org/documentation/other/developer-faq.html#q53">Makefile generation process</A>
+  in the Developer's
+<A HREF="http://developer.kde.org/documentation/other/developer-faq.html">FAQ</A>.
+<P>The only field in the <U>Configure RPM Package</U> dialog
+that is optional is of course the options field. The
+<U>Build Prefix</U> should be set to a temporary directory
+with enough accessible space to unpack and build your
+whole package.  For example, for some platforms you might
+specify the <CODE>/var/tmp/projectname-build</CODE> directory.  After
+the build, everything in the <CODE>/var/tmp/projectname-build/*</CODE>
+build directory tree is deleted,
+so it would not be prudent to set this value to a directory that is
+important to you!
+<P>When you are satisfied that your <CODE>projectname.spec</CODE>
+file is correct, then selecting <U>Build RPM Package</U>
+under <U>Make Distibution</U> will build both the
+source and binary RPM packages.  All error messages
+from RPM are not currently displayed in the messages window.
+If an error is reported without any details, it usually means that
+you have an error in your <CODE>projectname.spec</CODE> file.
+<P>All three distribution types will be placed in the
+project base directory. One initial check recommended is to
+view the contents of the binary and source packages to ensure
+that they contain all the objects you intend to distribute.
+For example, for a project called <I>joshuastories</I> I would
+run <CODE>rpm -qlip joshuastories-0.1-1.i686.rpm</CODE> for
+version 0.1 - release 1 of the intel 686 binary package.
+<P>Remember to test your
+packages on different platforms to ensure that any
+dependancy information is correct, and that you have
+included all the necessary components for the package.
+Our development environments often have residual
+packages and data files that will enable our package
+to work, but will not on someone else's platform.
+
 <P ALIGN="RIGHT">
 
 <A HREF="index-9.html">Next</A>
@@ -454,9 +531,9 @@ project the first time.
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
-</CENTER>    
+</CENTER>
 </FONT>
 
- 
+
 </BODY>
 </HTML>

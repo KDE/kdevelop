@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libclasswizard.a
 
 INCLUDES = $(all_includes)
 
 libclasswizard_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libclasswizard.a
 
 libclasswizard_a_SOURCES = ccwvirtualmethodview.cpp cclasswizarddlg.cpp 
 

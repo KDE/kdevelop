@@ -40,3 +40,6 @@
 #undef KDOC_INDEXDIR
 #undef WITH_DOCBASE
 #undef WITH_KDOC2
+
+
+#undef KDE_QTVER

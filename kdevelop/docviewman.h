@@ -36,7 +36,7 @@ class CKDevelop;
 class KHTMLView;
 class CDocBrowser;
 class CKDevAccel;
-class KPopupMenu;
+class CClassStore;
 
 //=============================================================================
 // class DocViewMan
@@ -50,8 +50,11 @@ class DocViewMan : public QObject
   Q_OBJECT
 
 public:
-  DocViewMan( CKDevelop* parent);
+  DocViewMan( CKDevelop* parent, CClassStore* pStore=0 );
   ~DocViewMan();
+
+    void setStore( CClassStore* pStore );
+    CClassStore* store() const;
 
   /** */
   void doSwitchToFile(QString filename, int line, int col,
@@ -198,7 +201,7 @@ public:
   // View stuff
   ///////////////////////////
 
-  /** Get the currently focused CEditWidget view 
+  /** Get the currently focused CEditWidget view
       (Note: not the covering MDI widgets but the embedded view) */
   Kate::View* currentEditView() { return m_pCurEditView; };
   /** Get the currently focused KHTMLView view 
@@ -240,7 +243,7 @@ public:
   void initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget);
 
 public slots:
-  /** Is called whenever the MDI view has been activated. 
+  /** Is called whenever the MDI view has been activated.
    * The update of pointers for the "current..."-methods is made here */
   void slot_viewActivated(QextMdiChildView* pMDICover);
   /** Helper method for initKeyAccel(CKDevAccel* accel, QWidget* pTopLevelWidget), acts as slot entry with
@@ -252,10 +255,10 @@ public slots:
 
   /** Updates the bookmarks for each editor document */
   void updateCodeBMPopup();
-  /** shows the desired editor bookmark 
+  /** shows the desired editor bookmark
    * (eventually, switches to file and activates it) */
   void gotoCodeBookmark(int n);
-  /** shows the desired document bookmark 
+  /** shows the desired document bookmark
    * (eventually, switches to file and activates it) */
   void gotoDocBookmark(int n);
   /** The last view has been closed, set the mainwidget caption to default */
@@ -293,6 +296,11 @@ public slots:
   /** remove all text selections */
   void slotEditDeselectAll();
 
+    /** expand text */
+    void slotEditExpandText();
+    /** code completetion */
+    void slotEditCompleteText();
+
   // view activation by accel
   void activateView1();
   void activateView2();
@@ -311,10 +319,10 @@ signals:
   /** Is emitted when a view handled by the doc view manager looses focus. */
   void sig_viewLostFocus(QWidget* pView);
 
-  /** Is emitted when the last view managed by this instance 
+  /** Is emitted when the last view managed by this instance
       has been closed */
   void sig_lastViewClosed();
-  /** Is emitted when the last document managed by this instance 
+  /** Is emitted when the last document managed by this instance
       has been closed */
   void sig_lastDocClosed();
 
@@ -344,6 +352,9 @@ private:
   KHTMLView*                m_pCurBrowserView;
 
   bool                      m_curIsBrowser;
+  CClassStore*              m_pStore;
+  bool                      m_bCloseActionPending;
+
 
   KParts::Factory*          m_pKateFactory;
 };

@@ -280,13 +280,13 @@ bool Kpp::startBuild(){
 
 /** read the standard out */
 void Kpp::readStdOut(KProcess */*proc*/, char *buffer, int buflen){
-  QString temp = QString::fromLatin1(buffer, buflen);
+  QString temp = QString::fromLocal8Bit(buffer, buflen);
   emit stdERR(temp);
 }
 
 /** read teh standard error */
 void Kpp::readStdErr(KProcess */*proc*/, char *buffer, int buflen){
-  QString temp = QString::fromLatin1(buffer, buflen);
+  QString temp = QString::fromLocal8Bit(buffer, buflen);
   emit stdOUT(temp);
 }
 

@@ -41,6 +41,8 @@ public:
   virtual ~COutputWidget(){};
 
   void insertAtEnd(const QString& s);
+  void insertAtEnd(const char * s) { insertAtEnd(QString::fromLocal8Bit(s));};
+  void insertAtEnd(const QCString & s) { insertAtEnd(QString::fromLocal8Bit(s.data()));};
 };
 
 
@@ -69,6 +71,8 @@ public:
   ~CMakeOutputWidget() {};
 
   void insertAtEnd(const QString& s, MakeOutputErrorType defaultType=Normal);
+  void insertAtEnd(const char * s, MakeOutputErrorType defaultType=Normal) { insertAtEnd(QString::fromLocal8Bit(s),defaultType);};
+  void insertAtEnd(const QCString & s, MakeOutputErrorType defaultType=Normal) { insertAtEnd(QString::fromLocal8Bit(s.data()),defaultType);};
 
   void start();
   void viewNextError();

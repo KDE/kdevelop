@@ -35,11 +35,7 @@ void COutputWidget::insertAtEnd(const QString& s)
   int row = (numLines() < 1)? 0 : numLines()-1;
   // correct workaround for QMultilineEdit
   //  the string inside could be NULL, and so QMultilineEdit fails
-#if (QT_VERSION < 300)
   int col = qstrlen(textLine(row));
-#else
-  int col = 0;
-#endif
   if (s.left(1) == "\n" && row == 0 && col == 0)
     insertAt(" "+s, row, col);
   else
@@ -79,12 +75,15 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   m_buf(),
   m_enterDir("[^\n]*: Entering directory `(.*)'\n"),
   m_leaveDir("[^\n]*: Leaving directory `([^\n]*)'\n"),
-  m_errorGcc("([^: \t]+):([0-9]+)[:,].*")
+  m_errorGcc("^([^: \t]+):([0-9]+)[:,].*")
 {
   it = m_errorMap.begin();
   setReadOnly(true);        // -JROC uncommented again
   setWordWrap(WidgetWidth); // -JROC
   setWrapPolicy(Anywhere); // -JROC
+#if QT_VERSION >= 300
+  setTextFormat(Qt::RichText);
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -105,16 +104,29 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     // add to the end of the text - highlighting is done in the
     // paint routine.
     int row = (numLines() < 1)? 0 : numLines()-1;
-#if (QT_VERSION < 300)
+#if QT_VERSION < 300
     int col = qstrlen(textLine(row));
-#else
-    int col = 0;
-#endif
-
     bool displayAdditions=atEnd();
     insertAt(line, row, col);
     if (displayAdditions)
       setCursorPosition(numLines()+1,0);
+#else
+    switch (lineType(row))
+    {
+      case Error:
+        line = "<font color=\"darkRed\">" + line + "</font><br>";
+        append(line);
+        break;
+      case Diagnostic:
+        line = "<font color=\"darkBlue\">" + line + "</font><br>";
+        append(line);
+        break;
+      default:
+        append(line + "<br>");
+        break;
+    }
+    scrollToBottom();
+#endif
   }
 }
 
@@ -185,7 +197,7 @@ void CMakeOutputWidget::viewNextError()
       ErrorDetails errorDetails = it.data();
       if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
       {
-        selectLine(it.key());
+//?        selectLine(it.key());
         emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
         return;
       }
@@ -205,7 +217,7 @@ void CMakeOutputWidget::viewPreviousError()
       ErrorDetails errorDetails = it.data();
       if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
       {
-        selectLine(it.key());
+//?        selectLine(it.key());
         emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
         return;
       }
@@ -262,7 +274,7 @@ void CMakeOutputWidget::checkForError()
     ErrorDetails errorDetails = tmp_it.data();
     if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
     {
-      selectLine(line);
+//?      selectLine(line);
       emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
       it = tmp_it;
       return;

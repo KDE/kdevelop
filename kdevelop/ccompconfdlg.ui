@@ -105,7 +105,7 @@
                     </property>
                     <property>
                         <name>whatsThis</name>
-                        <string>Set you UNIX/Linux version here. Valid entries are e.g. linux, unixware etc.</string>
+                        <string>Set your UNIX/Linux version here. Valid entries are e.g. linux, unixware etc.</string>
                     </property>
                 </widget>
                 <widget row="1"  column="2" >
@@ -216,7 +216,7 @@
                     </property>
                     <property>
                         <name>whatsThis</name>
-                        <string>Select you platform here. Your platform may be one of the named ones or another one you need to use for crosscompiling.</string>
+                        <string>Select your platform here. Your platform may be one of the named ones or another one you need to use for crosscompiling.</string>
                     </property>
                 </widget>
                 <widget row="4"  column="1" >

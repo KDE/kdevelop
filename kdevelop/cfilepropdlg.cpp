@@ -2,9 +2,9 @@
    cfilepropdlg.cpp  -  yet another sourcefile with many confusing hacks,:-( sorry
                              -------------------
 
-    begin                : Sat Oct 17 1998                                           
-    copyright            : (C) 1998,1999 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : Sat Oct 17 1998
+    copyright            : (C) 1998,1999 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -21,7 +21,6 @@
 #include "clogfileview.h"
 #include "cproject.h"
 
-#include <iostream.h>
 #include <klocale.h>
 #include "debug.h"
 
@@ -38,6 +37,8 @@
 #include <qlayout.h>
 #include <kbuttonbox.h>
 
+#include <iostream>
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

@@ -115,7 +115,7 @@ bool CKDevelop::slotProjectClose()
 //      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
       // close all documents
-     	 m_docViewManager->doCloseAllDocs();
+              m_docViewManager->doCloseAllDocs();
 
       // set project to false and disable all ID_s related to project=true    
       prj->writeProject();
@@ -363,13 +363,119 @@ void CKDevelop::slotProjectRemoveFile(){
     delFileFromProject(name);
 }
 
+QString CKDevelop::prepareConfigureCommand()
+{
+        QStringList configs;
+  QString shellcommand;
+  QString args, cppflags, cflags, cxxflags, addcxxflags, ldflags;
+  
+  configs=m_pKDevSession->getCompileConfigs();
+  if(!configs.isEmpty())
+  { // only default used - run only in srcdir
+    for (QStringList::Iterator it=configs.begin() ; it!=configs.end() ; ++it)
+    {
+      QString vpath=m_pKDevSession->getVPATHSubdir( (*it) );
+      QDir dir(vpath);
+      // change to VPATH subdir, create it if not existant
+      if(!dir.exists())
+        dir.mkdir(vpath);
+    
+      if(it==configs.begin()) // first loop, leave out &&
+        shellcommand+=" echo \""+i18n("Running configure in build directory %1").arg(vpath);
+      else
+        shellcommand+=" && echo \""+i18n("Running configure in build directory %1").arg(vpath);
+      shellcommand+="\" ";
+
+      shellcommand +=" && cd "+vpath+" && ";
+      config->setGroup("Compilearch "+ 
+          m_pKDevSession->getArchitecture(*it)+"-"+m_pKDevSession->getPlatform(*it) );
+      shellcommand += "CPP=\""+ config->readEntry("CPP","cpp") + "\" ";
+      shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
+      shellcommand += "CXX=\"" + config->readEntry("CXX","g++") + "\" ";
+    
+      cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
+      cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
+      cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
+      addcxxflags=m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
+      ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
+
+      // this has to get over and over again per configuration
+      shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
+      // if the project type is normal_c, the cflags were stored in the cxxflags
+      // of the old project type. Therefore, when the project is normal_c, continue
+      // to export the CXXFLAGS as CFLAGS.
+      if(prj->getProjectType()=="normal_c")
+      {
+        shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+      }
+      else
+      {
+        shellcommand += "CFLAGS=\"" + cflags + "\" ";
+        shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+      }
+    
+      shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
+      // the configure script is always in the project directory, no matter where we are
+    
+      args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
+      // this check is only to handle a strange bug
+      //   if vpath==project dir the rule for .ui files won't be accepted (Walter)
+      if (vpath!=prj->getProjectDir())
+        shellcommand += prj->getProjectDir() +"/configure "+ args;
+      else
+        shellcommand += "./configure "+ args;
+      
+    }
+  }
+  else
+  {
+     cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+     addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+     ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+
+     
+     shellcommand+=" echo \""+i18n("Running configure in source directory")+"\" ";
+     shellcommand+=" && cd "+prj->getProjectDir()+" && ";
+     // export CC, CXX, CPP
+     config->setGroup("Compiler");
+     QString arch=config->readEntry("Architecture","i386");
+     QString platf=config->readEntry("Platform","linux");
+     
+     config->setGroup("Compilearch "+arch+"-"+platf);
+     shellcommand += " CPP=\"" + config->readEntry("CPP","cpp")+ "\" ";
+     shellcommand += " CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+     shellcommand += " CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
+     shellcommand += " CPPFLAGS=\"" + cppflags + "\" ";
+     
+     // if the project type is normal_c, the cflags were stored in the cxxflags
+     // of the old project type. Therefore, when the project is normal_c, continue
+     // to export the CXXFLAGS as CFLAGS.
+     if(prj->getProjectType()=="normal_c")
+     {
+        shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+     }
+     else
+     {
+        shellcommand += "CFLAGS=\"" + cflags + "\" ";
+        shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+     }
+    
+     shellcommand  += " LDFLAGS=\"" + ldflags + "\" ";
+     // the configure script is always in the project directory, no matter where we are
+     args=prj->getConfigureArgs();
+     shellcommand += "./configure " + args;
+  }
+  
+  return shellcommand;
+}
+  
 void CKDevelop::slotProjectOptions(){
         QStringList configs;
         QString shellcommand="";
         // get the current config to set it as the config in the project options dialog
          KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
          QString curr=compile_combo->currentText();
-  CPrjOptionsDlg prjdlg(prj,m_pKDevSession,curr, this,"optdialog");
+  CPrjOptionsDlg prjdlg(prj,m_pKDevSession, curr, this,"optdialog");
   if(prjdlg.exec()){
                  // refill the compile configs combobox
                  curr=compile_combo->currentText();
@@ -383,10 +489,11 @@ void CKDevelop::slotProjectOptions(){
 
                 //////////////////////////////////////
                 bool cfgure=false; // run configure for all configurations ?
-    if (prjdlg.needConfigureInUpdate()){
-                        cfgure=true;
+    if (prjdlg.needConfigureInUpdate())
+    {
+      cfgure=true;
       prj->updateConfigureIn();
-      KMessageBox::information(0,i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."));
+      KMessageBox::information(0,i18n("You have modified certain project information.\nWe will regenerate configure now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
       messages_widget->start();
@@ -397,92 +504,27 @@ void CKDevelop::slotProjectOptions(){
         makefile="Makefile.cvs";
       shellcommand += make_cmd + " -f "+makefile+" && ";
     }
-    if(prjdlg.needMakefileUpdate()){
-            cfgure=true;
+    if(prjdlg.needMakefileUpdate())
+    {
+      cfgure=true;
       prj->updateMakefilesAm();
-                }
-                if(cfgure){ // yes, run configure for either only the default config (builddir=srcdir)
-                                                        // or for all other configurations to update makefiles.
-                        QString args, cppflags, cflags, cxxflags, addcxxflags, ldflags;
-                        configs=m_pKDevSession->getCompileConfigs();
-                        if(!configs.isEmpty()){ // only default used - run only in srcdir
-                          for (QStringList::Iterator it=configs.begin() ; it!=configs.end() ; ++it){
-                      QString vpath=m_pKDevSession->getVPATHSubdir( (*it) );
-                      QDir dir(vpath);
-                      // change to VPATH subdir, create it if not existant
-                      if(!dir.exists())
-                              dir.mkdir(vpath);
-                      if(it==configs.begin()) // first loop, leave out &&
-                              shellcommand+=" echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
-                      else
-                              shellcommand+=" && echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
-                      shellcommand+="\" ";
-                      shellcommand +=" && cd "+vpath+" && ";
-                      config->setGroup("Compilearch "+
-                                                                                              m_pKDevSession->getArchitecture(*it)+"-"+
-                                                                                              m_pKDevSession->getPlatform(*it) );
-                      shellcommand += "CPP="+ config->readEntry("CPP","cpp") + " ";
-                      shellcommand += "CC=" + config->readEntry("CC","gcc") + " ";
-                      shellcommand += "CXX=" + config->readEntry("CXX","g++") + " ";
-                      cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
-                      cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
-                      cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
-                      addcxxflags==m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
-                      ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
-                // this has to get over and over again per configuration
-                       shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
-                       shellcommand += "CFLAGS=\"" + cflags + "\" ";
-                        // if the project type is normal_c, the cflags were stored in the cxxflags
-                        // of the old project type. Therefore, when the project is normal_c, continue
-                        // to export the CXXFLAGS as CFLAGS.
-                if(prj->getProjectType()=="normal_c"){
-                        shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-                }
-                else{
-            shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-                }
-                      shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
-                // the configure script is always in the project directory, no matter where we are
-                                        args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
-          shellcommand += prj->getProjectDir() +"/configure "+ args;
-                                }
-                        }
-                        else{
-                                args=prj->getConfigureArgs();
-                          QDir::setCurrent(prj->getProjectDir());
-                     cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
-                     addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
-                     ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
-                     // export CC, CXX, CPP
-                     config->setGroup("Compiler");
-                     QString arch=config->readEntry("Architecture","i386");
-                     QString platf=config->readEntry("Platform","linux");
-                     config->setGroup("Compilearch "+arch+"-"+platf);
-                     shell_process << "\" "<< "CPP="<< config->readEntry("CPP","cpp")<< " ";
-                     shell_process << "\" "<< "CC=" << config->readEntry("CC","gcc")<< " ";
-                     shell_process << "\" "<< "CXX=" << config->readEntry("CXX","g++")<< " ";
-                    shell_process << "\" "<< "CPPFLAGS=\"" << cppflags << "\" ";
-        shell_process << "\" "<< "CFLAGS=\"" << cflags << "\" ";                        
-                    // if the project type is normal_c, the cflags were stored in the cxxflags
-                    // of the old project type. Therefore, when the project is normal_c, continue
-                    // to export the CXXFLAGS as CFLAGS.
-               if(prj->getProjectType()=="normal_c"){
-                       shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-               }
-               else{
-           shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-               }
-        shell_process  << "\" " << "LDFLAGS=\" " << ldflags << "\" ";
-                                // the configure script is always in the project directory, no matter where we are
-                          shell_process << prj->getProjectDir() +"/configure "<< args;
-                        }
+    }
+
+    if(cfgure)
+    { // yes, run configure for either only the default config (builddir=srcdir)
+      // or for all other configurations to update makefiles.
+      QDir::setCurrent(prj->getProjectDir());
+    
+      shellcommand+=prepareConfigureCommand();
+      
       setToolMenuProcess(false);
       messages_widget->start();
       showOutputView(true);                
       shell_process.clearArguments();
-                  shell_process << shellcommand;
-            shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-                }                
+      shell_process << shellcommand;
+      debug("run: %s\n", shellcommand.data());
+      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    }
   }
 }
 
@@ -540,7 +582,7 @@ void CKDevelop::slotProjectFileProperties(){
 
 void CKDevelop::slotShowFileProperties(const QString& rel_name){
   CFilePropDlg dlg(this,"DLG",prj,rel_name);
-  dlg.show();
+  dlg.exec();
 }
 
 void CKDevelop::slotProjectOpen()
@@ -567,8 +609,8 @@ void CKDevelop::slotProjectOpen()
 
 void CKDevelop::slotProjectOpenRecent(const KURL& url)
 {
-	kdDebug() << "in CKDevelop::slotProjectOpenRecent(), selected :"
-	          << url.filename() << "\n";
+        kdDebug() << "in CKDevelop::slotProjectOpenRecent(), selected :"
+                  << url.filename() << "\n";
 
 //  QString proj = getProjectAsString(id);
 // FIXME until we use KURLs to open projects we need to stick with this
@@ -655,8 +697,8 @@ CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
       prjname);
 
     // enable the GUI again
-//		stateChanged("no_file");
-//		stateChanged("no_project");
+//                stateChanged("no_file");
+//                stateChanged("no_project");
 
 //    project_menu->setEnabled(true);
 //    enableCommand(ID_PROJECT_OPEN);
@@ -682,7 +724,7 @@ void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
 //  project_menu->setEnabled(true);
 //  enableCommand(ID_PROJECT_OPEN);
 
-	//  accel->setEnabled(true);
+        //  accel->setEnabled(true);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -736,23 +778,42 @@ void CKDevelop::slotProjectNewAppl(){
     }
 
     CProject* pProj = prepareToReadProjectFile(file);
-    if (pProj != 0L){
-      readProjectFile(file, pProj);
-                  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-                  compile_combo->clear(); // on startup, the combo contains "compile configuration"
-                  QStringList configs;
-                  configs.append(i18n("(Default)"));
-                  compile_combo->insertStringList(configs);
-                  int idx=configs.findIndex(i18n("(Default)")); // find the index for the last config
-                  compile_combo->setCurrentItem(idx);
-                  compile_combo->setEnabled(true);
-                }
-    else
-      return;
-
-    QString type=prj->getProjectType();
+    if (pProj == 0L)
+       return;
+    
+    readProjectFile(file, pProj);
+    KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+    compile_combo->clear(); // on startup, the combo contains "compile configuration"
+    
+    QStringList configs;
+    configs.append(i18n("(Default)"));
+    compile_combo->insertStringList(configs);
+    int idx=configs.findIndex(i18n("(Default)")); // find the index for the last config
+    compile_combo->setCurrentItem(idx);
+    compile_combo->setEnabled(true);
 
     slotViewRefresh();        // a new project started, this is legitimate
+    
+    /* try now to open the file main.(cpp|c), if the option "StartupEditing" 
+       says so...
+     */
+    if (bStartupEditing)
+    {
+      QStrList sources=pProj->getSources();
+      QString srcname, fname;
+      for(srcname=sources.first(); srcname!=0 && fname.isEmpty(); 
+         srcname=sources.next())
+      {
+        QFileInfo fi(srcname);
+        if (fi.fileName()=="main.c" || fi.fileName()=="main.cpp") 
+          fname=srcname; 
+      }
+    
+      if (!fname.isEmpty() && QFile::exists(fname))
+      {
+        switchToFile(fname);
+      }
+    }  
   }
   slotStatusMsg(i18n("Ready."));
 }
@@ -941,112 +1002,73 @@ void CKDevelop::slotProjectAPI(){
 
 // FIXME (rokrau 02/17/02)
 
-//  //MB
-//  if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
-//  {
-//      QString dir = prj->getProjectDir() + "/";
-//      QString doxconf =  dir +   prj->getProjectName().lower()+".doxygen";
-//         if(!QFileInfo(doxconf).exists())
-//       {
-//             KMessageBox::error(0,
-//                                     i18n("Doxygen configuration file not found\n"
-//                             "Generate a valid one:\n"
-//                             "Project->API Doc Tool->Configure doxygen"),
-//                             i18n("Error"));
-//            return;
-//       }
-//    slotDebugStop();
-//    showOutputView(true);
-//    setToolMenuProcess(false);
-////    error_parser->toogleOff();
-//    slotFileSaveAll();
-//    slotStatusMsg(i18n("Creating project API-Documentation..."));
-//    messages_widget->start();
-//    shell_process.clearArguments();
-//    shell_process << QString("cd '")+ dir + "' && ";
-//    shell_process << "doxygen "+prj->getProjectName().lower()+".doxygen";
-//    next_job="fv_refresh";
-//    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-//      beep=true;
-//       return;
-//  }
-//  else{  // Use KDOC 2.x
-//    //MB end
-//    if(!CToolClass::searchProgram("kdoc")){
-//      return;
-//    }
-//    slotDebugStop();
-//    showOutputView(true);
-//
-//    setToolMenuProcess(false);
-////    error_parser->toogleOff();
-//    slotFileSaveAll();
-//    slotStatusMsg(i18n("Creating project API-Documentation..."));
-//    messages_widget->start();
-//
-//    config->setGroup("Doc_Location");
-//    QString idx_path, link;
-//    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
-//            + "/kdoc-reference";
-//    if (!idx_path.isEmpty())
-//    {
-//      QDir d;
-//      d.setPath(idx_path);
-//      if(!d.exists())
-//        return;
-//      QString libname;
-//      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
-//      QFileInfoListIterator it( *fileList ); // iterator
-//      QFileInfo *fi; // the current file info
-//      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
-//        libname=fi->fileName();  // get the filename
-//        if(fi->isFile())
-//        {
-//          libname=fi->baseName();  // get only the base of the filename as library name
-//          if (libname != QString("libkmid")) { // workaround for a strange behaviour of kdoc: don't try libkmid
-//            link+=" -l"+libname;
-//          }
-//        }
-//        ++it; // increase the iterator
-//      }
-//    }
-//
-//    QDir d(prj->getProjectDir());
-//    int dirlength = d.absPath().length()+1;
-//
-//    QString sources;
-//    QStrList headerlist(prj->getHeaders());
-//    QStrListIterator it(headerlist);
-//    for (; it.current(); ++it)
-//    {
-//      QString file = it.current();
-//      file.remove(0, dirlength);
-//      sources += file;
-//      sources += " ";
-//    }
-//    QDir::setCurrent(prj->getProjectDir());
-//    shell_process.clearArguments();
-//    shell_process << "kdoc";
-//    shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
-//    if (!link.isEmpty())
-//    {
-//      shell_process << ("-L" + idx_path);
-//      shell_process << link;
-//    }
-//
-//    bool bCreateKDoc;
-//    config->setGroup("General Options");
-//    bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
-//    if (bCreateKDoc)
-//     shell_process << QString("-n ")+prj->getProjectName();
-//
-//    if (!sources.isEmpty())
-//        shell_process << sources;
-//
-//    next_job="fv_refresh";
-//    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-//    beep=true;
-//  }
+    config->setGroup("Doc_Location");
+    QString idx_path, link;
+    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+            + "/kdoc-reference";
+    if (!idx_path.isEmpty())
+    {
+      QDir d;
+      d.setPath(idx_path);
+      if(d.exists())
+      {
+        QString libname;
+        const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+        QFileInfoListIterator it( *fileList ); // iterator
+        QFileInfo *fi; // the current file info
+        while ( (fi=it.current()) ) 
+        {  // traverse all kdoc reference files
+          libname=fi->fileName();  // get the filename
+          if(fi->isFile())
+          {
+            libname=fi->baseName();  // get only the base of the filename as library name
+            if (libname != QString("libkmid")) 
+            { // workaround for a strange behaviour of kdoc: don't try libkmid
+              link+=" -l"+libname;
+            }
+          }
+          ++it; // increase the iterator
+        }
+      }
+      else
+        idx_path="";
+    }
+
+    QDir d(prj->getProjectDir());
+    int dirlength = d.absPath().length()+1;
+
+    QString sources;
+    QStrList headerlist(prj->getHeaders());
+    QStrListIterator it(headerlist);
+    for (; it.current(); ++it)
+    {
+      QString file = it.current();
+      file.remove(0, dirlength);
+      sources += file;
+      sources += " ";
+    }
+    QDir::setCurrent(prj->getProjectDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
+    if (!idx_path.isEmpty() && !link.isEmpty())
+    {
+      shell_process << "-L" << idx_path;
+      shell_process << link;
+    }
+    
+    bool bCreateKDoc;
+    config->setGroup("General Options");
+    bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+    if (bCreateKDoc)
+     shell_process << QString("-n ")+prj->getProjectName();
+
+    if (!sources.isEmpty())
+        shell_process << sources;
+
+    next_job="fv_refresh";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    beep=true;
 }
 
 //MB
@@ -1599,36 +1621,43 @@ void CKDevelop::newSubDir(){
     flagclabel="env CFLAGS=\"";
     flagcpplabel= "env CXXFLAGS=\"";
   }
+        QStringList configs;
+        QString shellcommand="";
+        // get the current config to set it as the config in the project options dialog
+         KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+         QString curr=compile_combo->currentText();
+                 // refill the compile configs combobox
+                 curr=compile_combo->currentText();
+                 compile_combo->clear();
+                 configs=m_pKDevSession->getCompileConfigs();
+                 configs.prepend(i18n("(Default)"));
+                 compile_combo->insertStringList(configs);
+                 int idx=configs.findIndex(curr); // find the index for the last config
+                 compile_combo->setCurrentItem(idx);
+                 compile_combo->setEnabled(true);
 
-  QString makefile("Makefile.dist");
-  if(!QFileInfo(QDir::current(), makefile).exists())
-    makefile="Makefile.cvs";
-  shell_process << make_cmd << " -f "+makefile+" && ";
-  //C++
-  shell_process << flagcpplabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-    {
-      if (!prj->getCXXFLAGS().isEmpty())
-    shell_process << prj->getCXXFLAGS() << " ";
-      if (!prj->getAdditCXXFLAGS().isEmpty())
-    shell_process << prj->getAdditCXXFLAGS();
-    }
-
-  shell_process  << "\" " << flagclabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-    {
-      if (!prj->getCXXFLAGS().isEmpty())
-    shell_process << prj->getCXXFLAGS() << " ";
-      if (!prj->getAdditCXXFLAGS().isEmpty())
-    shell_process << prj->getAdditCXXFLAGS();
-    }
-  
-  shell_process  << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-    shell_process << prj->getLDFLAGS();
-  shell_process  << "\" ";
-  shell_process <<  " ./configure" << prj->getConfigureArgs();
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+                //////////////////////////////////////
+    prj->updateConfigureIn();
+    KMessageBox::information(0,i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."));
+    setToolMenuProcess(false);
+    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+    messages_widget->start();
+    showOutputView(true);
+    QDir::setCurrent(prj->getProjectDir());
+    QString makefile("Makefile.dist");
+    if(!QFileInfo(QDir::current(), makefile).exists())
+        makefile="Makefile.cvs";
+    shellcommand += make_cmd + " -f "+makefile+" && ";
+    
+    shellcommand += prepareConfigureCommand();
+    
+    setToolMenuProcess(false);
+    messages_widget->start();
+    showOutputView(true);                
+    shell_process.clearArguments();
+          shell_process << shellcommand;
+                debug("run: %s\n", shellcommand.data());
+          shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
 /***************************************************************************/
@@ -1738,69 +1767,92 @@ void CKDevelop::slotTagSwitchTo()
   if (!pEditView) return;
   slotStatusMsg(i18n("Switch between Source and Header Files..."));
   bool useCTags = (bCTags && hasProject())?true:false ;
-  QFileInfo curFileInfo = QFileInfo(pEditView->getDoc()->docName());
+  bool bFoundInCTags=false;
+
+  // docName is missing in KTextEditor interface so we need to
+  // do this hack (rokrau 03/21/02)
+  Kate::Document* pDoc = dynamic_cast<Kate::Document*>
+                         (pEditView->document());
+  QFileInfo curFileInfo = QFileInfo(pDoc->docName());
   QString curFileName = curFileInfo.fileName();
   QString curFileDir = curFileInfo.dirPath();
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
-  // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
-  bool bToHeader=false;
-  if (m_docViewManager->curDocIsHeaderFile()) {
-    if (useCTags) {
-      int ntags;
-      ctags_dlg->searchTags(switchToName+".cxx",&ntags);
-      if (ntags) {
-        switchToName = switchToName + ".cxx";
-      }
-      else {
-        switchToName = switchToName + ".cpp";
+  
+  QStringList srcExtensions, headerExtensions, *extensionList=0l;;
+  QString newExtension;
+
+  srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".ecpp" << ".c" << ".ec"
+                << ".inl";
+  headerExtensions << ".h" << ".hpp" << ".hxx" << ".H" << ".hh" << ".tlh";
+
+  kdDebug() << "in CKDevelop::slotTagSwitchTo():" << endl;
+  kdDebug() << "current filename: " << curFileDir << "/" << curFileName << " (" << switchToName<< ")" << endl;
+  
+  if (m_docViewManager->curDocIsHeaderFile()) 
+  {
+    extensionList=&srcExtensions;
+  }
+  
+  if (m_docViewManager->curDocIsCppFile())
+  {
+    extensionList=&headerExtensions;
+  }
+  
+  if (extensionList)
+  {
+    if (useCTags) 
+    {
+      int ntags=0;
+      for (QStringList::Iterator it=extensionList->begin(); 
+           newExtension.isEmpty() && it!=extensionList->end(); ++it)
+      {
+           // should be fixed... it cannot find a tag, but they exist
+           ctags_dlg->searchTags(switchToName+(*it),&ntags);
+           if (ntags)
+           {
+              newExtension=*it;
+              bFoundInCTags=true;
+           }
       }
     }
-    else {
-      switchToName = switchToName + ".cpp";
+      
+    if (!newExtension.isEmpty()) 
+    {
+      switchToName = switchToName + newExtension;
     }
-    bToHeader=false;
-  }
-  else if (m_docViewManager->curDocIsCppFile()) {
-    switchToName = switchToName + ".h";
-  }
-  kdDebug() << "in CKDevelop::slotTagSwitchTo():\n";
-  kdDebug() << "current filename: " << curFileName << "\n";
-  kdDebug() << "switch to filename: " << switchToName << "\n";
-  // we can do this the easy...
-  if (useCTags) {
-    kdDebug() << "lookup file using CTags database, fast.\n";
-    ctags_dlg->slotGotoFile(switchToName);
-  }
-  // ...or the hard way
-  else {
-    kdDebug() << "lookup file in current Project, slow.\n";
-    CProject* pPrj=getProject();
-    bool found=false;
-    if (pPrj) {
-      QStrList* sfiles = (bToHeader?&pPrj->getHeaders():&pPrj->getSources());
-      QString fName=QString::null;
-      char* pFile=sfiles->first();
-      //kdDebug() << "selected files: \n" ;
-      while (pFile) {
-        fName = QFileInfo(pFile).fileName();
-        //kdDebug() << "fName= " << fName << " pFile= " << pFile << "\n";
-        if (fName==switchToName) {
-          //kdDebug() << "gotcha! switching to " << pFile << "\n";
-          found=true;
-          switchToFile(QString(pFile));
-          break;
+    else
+    {
+      for (QStringList::Iterator it=extensionList->begin(); 
+           newExtension.isEmpty() && it!=extensionList->end(); ++it)
+      {
+        if (QFile::exists(curFileDir+"/"+switchToName+(*it)))
+        {
+          newExtension=*it;
         }
-        pFile = sfiles->next();
       }
+      
+      if (!newExtension.isEmpty()) 
+        switchToName = switchToName + newExtension;
+    } 
+  }
+  
+  if (!newExtension.isEmpty())
+  {
+  
+    kdDebug() << "switch to filename: " << switchToName << endl;
+    
+    // we can do this the easy...
+    if (bFoundInCTags) 
+    {
+      kdDebug() << "lookup file using CTags database, fast." << endl;
+      ctags_dlg->slotGotoFile(switchToName);
     }
-    if (!pPrj || (pPrj&&!found)) {
-      // simple workaround for when there is no project loaded
-      QString fName = curFileDir + "/" + QFileInfo(switchToName).fileName();
-      if (!fName.isEmpty()) {
-        kdDebug() << "gotcha! switching to " << fName << "\n";
-        switchToFile(fName);
-      }
+    // ...or the hard way
+    else 
+    {
+      kdDebug() << "file was found in tree." << endl;
+      switchToFile(curFileDir+"/"+switchToName);
     }
   }
   slotStatusMsg(i18n("Ready."));
@@ -1816,34 +1868,34 @@ void CKDevelop::slotTagSearch()
 }
 void CKDevelop::slotSwitchDocTool()
 {
-	KRadioAction* pDoxyAction = dynamic_cast<KRadioAction*>
-	                             (actionCollection()->action("project_api_doxygen"));
-	KRadioAction* pKdocAction = dynamic_cast<KRadioAction*>
-	                             (actionCollection()->action("project_api_kdoc"));
-	KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
-	// kdoc used, can we switch to doxygen ?
-	if (pDoxyAction->isChecked())
-	{
-		if(!CToolClass::searchInstProgram("doxygen"))
-		{
-			KMessageBox::error(0,
-			i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
-			i18n("Program not found -- doxygen"));
-			// no doxygen found
-			return;
-		}
-		// yes, we have it
-		//pKdocAction->setChecked(false);
-		//pDoxyAction->setChecked(true);
-		if (hasProject()) pDoxyConfAction->setEnabled(true);
-		doctool = DT_DOX;
-		return;
-	} else // kdoc
-	{
-		//pKdocAction->setChecked(false);
-		//pDoxyAction->setChecked(true);
-		pDoxyConfAction->setEnabled(false);
-		doctool = DT_KDOC;
-	}
+        KRadioAction* pDoxyAction = dynamic_cast<KRadioAction*>
+                                     (actionCollection()->action("project_api_doxygen"));
+        KRadioAction* pKdocAction = dynamic_cast<KRadioAction*>
+                                     (actionCollection()->action("project_api_kdoc"));
+        KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
+        // kdoc used, can we switch to doxygen ?
+        if (pDoxyAction->isChecked())
+        {
+                if(!CToolClass::searchInstProgram("doxygen"))
+                {
+                        KMessageBox::error(0,
+                        i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
+                        i18n("Program not found -- doxygen"));
+                        // no doxygen found
+                        return;
+                }
+                // yes, we have it
+                //pKdocAction->setChecked(false);
+                //pDoxyAction->setChecked(true);
+                if (hasProject()) pDoxyConfAction->setEnabled(true);
+                doctool = DT_DOX;
+                return;
+        } else // kdoc
+        {
+                //pKdocAction->setChecked(false);
+                //pDoxyAction->setChecked(true);
+                pDoxyConfAction->setEnabled(false);
+                doctool = DT_KDOC;
+        }
 }
 //MB end

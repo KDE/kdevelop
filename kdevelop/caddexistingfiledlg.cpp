@@ -16,7 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-//#include <iostream.h>
 #include "caddexistingfiledlg.h"
 
 #include "cproject.h"
@@ -43,6 +42,9 @@
 #include <qlayout.h>
 #include <klineedit.h>
 #include <kbuttonbox.h>
+
+//#include <iostream>
+//using namespace std;
 
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 

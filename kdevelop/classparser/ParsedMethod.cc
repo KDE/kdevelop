@@ -138,56 +138,57 @@ QString CParsedMethod::asString( QString &str )
  *-----------------------------------------------------------------*/
 void CParsedMethod::out()
 {
+  QString s;
   CParsedArgument *arg;
 
   if( !comment.isEmpty() )
-    kdDebug() << "    " << comment << "\n";
+    kdDebug() << "    " << comment << endl;
 
-  kdDebug() << "    ";
+  s = "    ";
   switch( exportScope )
   {
     case PIE_PUBLIC:
-      kdDebug() << "public ";
+      s += "public ";
       break;
     case PIE_PROTECTED:
-      kdDebug() << "protected ";
+      s += "protected ";
       break;
     case PIE_PRIVATE:
-      kdDebug() << "private ";
+      s += "private ";
       break;
     case PIE_GLOBAL:
-      kdDebug() << "";
+      s += "";
       break;
   }
 
   if( isVirtual )
-    kdDebug() << "virtual ";
+    s += "virtual ";
 
   if( isStatic )
-    kdDebug() << "static ";
+    s += "static ";
 
   if( isSlot )
-    kdDebug() << "slot ";
+    s += "slot ";
 
   if( isSignal )
-    kdDebug() << "signal ";
+    s += "signal ";
 
-  kdDebug() << ( type.isEmpty() ? "" : type.data() )  << " " << name << "( ";
+  s += QString( type.isEmpty() ? "" : type.data() ) + " " + name + "( ";
 
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
   {
     if( arg != arguments.getFirst() )
-      kdDebug() << ", ";
+      s += ", ";
 
     arg->out();
   }
 
-  kdDebug() << ( isConst ? " ) const\n" : " )\n" );
-  kdDebug() << "      declared @ line " << declaredOnLine << " - ";
-  kdDebug() << declarationEndsOnLine << "\n";
-  kdDebug() << "      defined(in " << ( isInHFile ? ".h" : ".cc" ) << ")";
-  kdDebug() << "@ line " << definedOnLine << " - ";
-  kdDebug() << definitionEndsOnLine << "\n";
+  kdDebug() << s << QString( isConst ? " ) const" : " )" ) << endl;
+  s = QString("      declared @ line %d").arg(declaredOnLine) + " - ";
+  kdDebug() << s << declarationEndsOnLine << endl;
+  s = QString("      defined(in ") + ( isInHFile ? ".h" : ".cc" ) + ")";
+  s += QString("@ line %d").arg(definedOnLine) + " - ";
+  kdDebug() << s << definitionEndsOnLine << endl;
 }
 
 /*********************************************************************

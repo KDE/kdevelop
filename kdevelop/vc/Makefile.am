@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libkdevelopvc.la
 INCLUDES = $(all_includes)
 
 
-LDFLAGS =     
+LDFLAGS =      
 
 
 libkdevelopvc_la_LDFLAGS = -version-info 2:0

@@ -17,7 +17,6 @@
  *                                                                         *
  ***************************************************************************/
 
-//#include <iostream.h>
 #include <qfileinfo.h>
 #include "cgeneratenewfile.h"
 #include "cproject.h"
@@ -29,6 +28,9 @@
 #include <qdir.h>
 #include <klocale.h>
 #include <kstddirs.h>
+
+//#include <iostream.h>
+//using namespace std;
 
 bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
   QString& in_absname, QString& in_filename)

@@ -639,7 +639,7 @@ void VarItem::checkForRequests()
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-           fullName().latin1()));
+           fullName().local8Bit().data()));
   }
 
   // Signature for a QT2.x and QT3.x  QString when print statics are "on".
@@ -648,7 +648,7 @@ void VarItem::checkForRequests()
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-           fullName().latin1()));
+           fullName().local8Bit().data()));
   }
 
   // Signature for a QT2.0.x QT2.1 QCString
@@ -656,7 +656,7 @@ void VarItem::checkForRequests()
   {
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName().latin1()+QCString(".shd.data"));
+                                          fullName().local8Bit()+QCString(".shd.data"));
   }
 
   // Signature for a QT2.0.x QT2.1 QDir
@@ -666,14 +666,14 @@ void VarItem::checkForRequests()
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-           fullName().latin1()));
+           fullName().local8Bit().data()));
   }
   // Signature for a QT1.44 QString
   if (cache_.find("<QArrayT<char>> = {<QGArray> = {shd = ") == 0)
   {
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName().latin1()+QCString(".shd.data"));
+                                          fullName().local8Bit()+QCString(".shd.data"));
   }
 
   // Signature for a QT1.44 QDir
@@ -681,7 +681,7 @@ void VarItem::checkForRequests()
   {
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName().latin1()+QCString(".dPath.shd.data"));
+                                          fullName().local8Bit()+QCString(".dPath.shd.data"));
   }
 }
 

@@ -783,6 +783,8 @@ void CClassTreeHandler::getCurrentNames( QString &parentPath,
   item = tree->currentItem();
   parent = item->parent();
 
+  if (!parent) return ;
+
   aItemType = itemType();
   parentType = itemType(parent);
 

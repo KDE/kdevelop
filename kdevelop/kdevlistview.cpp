@@ -59,12 +59,12 @@ QListViewItem* KDevListView::lastChild() const
 }
 
 
-KDevListViewItem::KDevListViewItem(KDevListView *parent, const char *text, const char *id)
+KDevListViewItem::KDevListViewItem(KDevListView *parent, const QString &text, const QString &id)
     : QListViewItem(parent, parent->lastChild(), text), idnt(id)
 {}
 
 
-KDevListViewItem::KDevListViewItem(KDevListViewItem *parent, const char *text, const char *id)
+KDevListViewItem::KDevListViewItem(KDevListViewItem *parent, const QString &text, const QString &id)
     : QListViewItem(parent, parent->lastChild(), text), idnt(id)
 {}
 

@@ -14,7 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <iostream.h>
 
 #include <qmessagebox.h>
 #include <qdom.h>
@@ -32,6 +31,10 @@
 #include "cdocbrowser.h"
 #include "khtmlview.h"
 #include "qextmdimainfrm.h"
+
+#include <iostream.h>
+using namespace std;
+
 
 KDevSession::KDevSession(DocViewMan* pDocViewMan, const QString& /*fileName*/)
   : m_pDocViewMan(pDocViewMan)
@@ -245,7 +248,10 @@ void KDevSession::setConfigureArgs(const QString& configname,  const QString& co
 void KDevSession::recreateDocs(QDomElement& el){
   QDomElement mainframeEl = el.namedItem("Mainframe").toElement();
   bool bMaxMode = (bool) mainframeEl.attribute("MaximizeMode", "0").toInt();
-  ((QextMdiMainFrm*)m_pDocViewMan->parent())->setEnableMaximizedChildFrmMode(bMaxMode);
+  QextMdiMainFrm* pMainWidget = (QextMdiMainFrm*) qApp->mainWidget();
+  pMainWidget->setEnableMaximizedChildFrmMode(bMaxMode);
+  bool bTaskBarWasOn = pMainWidget->isViewTaskBarOn();
+  pMainWidget->hideViewTaskBar();
 
   // read the information about the documents
   QDomElement docsAndViewsEl = el.namedItem("DocsAndViews").toElement();
@@ -287,7 +293,7 @@ void KDevSession::recreateDocs(QDomElement& el){
 
   QextMdiChildView* pLastView = 0L;
   QextMdiChildFrm*  pLastFrm = 0L;
-  QextMdiIterator<QextMdiChildView*>* winListIter = ((QextMdiMainFrm*)m_pDocViewMan->parent())->createIterator();
+  QextMdiIterator<QextMdiChildView*>* winListIter = pMainWidget->createIterator();
   for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
     pLastView = winListIter->currentItem();
     if (bMaxMode && pLastView->isAttached()) {
@@ -310,6 +316,9 @@ void KDevSession::recreateDocs(QDomElement& el){
     for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
       winListIter->currentItem()->show();
     }
+  }
+  if (bTaskBarWasOn) {
+     pMainWidget->showViewTaskBar();
   }
 }
 
@@ -396,7 +405,8 @@ void KDevSession::saveViewGeometry( QWidget* pView, QDomElement viewEl)
   viewEl.setAttribute( "Height", geom.height());
 
   // MDI stuff
-  viewEl.setAttribute( "Attach", pMDICover->isAttached());
+  QextMdi::MdiMode mdiMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->mdiMode();
+  viewEl.setAttribute( "Attach", pMDICover->isAttached() || (mdiMode == QextMdi::TabPageMode));
 }
 
 //-------------- Falk's Views restoring ---------//
@@ -498,13 +508,20 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
 
   // read the information about the documents
   QDomElement docsAndViewsEl = session.namedItem("DocsAndViews").toElement();
-  if(docsAndViewsEl.isNull()){
-                docsAndViewsEl = domdoc.createElement("DocsAndViews");
-          session.appendChild( docsAndViewsEl);
-        }
-         else
-          docsAndViewsEl.clear();
-        
+  if (docsAndViewsEl.isNull()) {
+    docsAndViewsEl = domdoc.createElement("DocsAndViews");
+    session.appendChild( docsAndViewsEl);
+  }
+  else {
+    // we need to remove the old ones before memorizing the current ones (to avoid merging)
+    QDomNode n = docsAndViewsEl.firstChild();
+    while ( !n.isNull() ) {
+      QDomNode toBeRemoved = n;
+      n = n.nextSibling();
+      docsAndViewsEl.removeChild(toBeRemoved);
+    }
+  }
+
   if (m_pDocViewMan->docCount() > 0) {
     QList<Kate::Document> kWriteDocList = m_pDocViewMan->getKWriteDocList();
     for (kWriteDocList.first(); kWriteDocList.current() != 0; kWriteDocList.next()) {
@@ -559,7 +576,11 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
       }
       docIdStr.setNum(nDocs);
       QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
-      docEl.setAttribute( "FileName", pDoc->currentURL());
+      QString fname = pDoc->currentURL();
+      if (fname.left(5) == QString("file:")) {
+        fname = fname.right(fname.length()-5); // store without 'file:'
+      }
+      docEl.setAttribute( "FileName", fname);
       docsAndViewsEl.appendChild( docEl);
       // save the document itself
 //???         if (pDoc->bIsModified())

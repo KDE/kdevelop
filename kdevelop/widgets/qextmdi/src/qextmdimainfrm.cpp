@@ -571,14 +571,18 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 #if !defined(NO_KDE2) && (QT_VERSION >= 300)
          QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
          int cnt = pTab->count();
-#else
-         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
-         int cnt = pTab->pageCount();
-#endif
          m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
          if (pDockW == m_pDockbaseOfTabPage) {
             m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
          }
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         KDockWidget* pLastPage = (KDockWidget*) pTab->getLastPage();
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->getPrevPage(pLastPage);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = pLastPage;
+         }
+#endif
       }
       delete pDockW;
    }
@@ -641,14 +645,18 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 #if !defined(NO_KDE2) && (QT_VERSION >= 300)
          QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
          int cnt = pTab->count();
-#else
-         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
-         int cnt = pTab->pageCount();
-#endif
          m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
          if (pDockW == m_pDockbaseOfTabPage) {
             m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
          }
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         KDockWidget* pLastPage = (KDockWidget*) pTab->getLastPage();
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->getPrevPage(pLastPage);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = pLastPage;
+         }
+#endif
       }
       delete pDockW;
    }
@@ -735,14 +743,14 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
 {
    pWnd->m_bMainframesActivateViewIsPending = TRUE;
 
-	 bool bActivateNecessary = TRUE;
+         bool bActivateNecessary = TRUE;
    if (m_pCurrentWindow != pWnd) {
       m_pCurrentWindow = pWnd;
    }
    else {
       bActivateNecessary = FALSE;
-			// if this method is called as answer to view->activate(),
-			// interrupt it because it's not necessary
+                        // if this method is called as answer to view->activate(),
+                        // interrupt it because it's not necessary
       pWnd->m_bInterruptActivation = TRUE;
    }
 
@@ -762,8 +770,8 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
          pWnd->mdiParent()->raiseAndActivate();
       }
       if (!pWnd->isAttached()) {
-				 if (bActivateNecessary)
-	         pWnd->activate();
+                                 if (bActivateNecessary)
+                 pWnd->activate();
          m_pMdi->setTopChild(0L); // lose focus in the mainframe window
          if (!pWnd->isActiveWindow()) {
             pWnd->setActiveWindow();
@@ -1175,7 +1183,7 @@ void QextMdiMainFrm::finishChildframeMode()
          if( pView->isMaximized())
             pView->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
          detachWindow( pView, FALSE);
-	 
+         
       }
    }
 }

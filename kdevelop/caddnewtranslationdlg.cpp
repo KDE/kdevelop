@@ -1,9 +1,9 @@
 /***************************************************************************
-                          caddnewtranslationdlg.cpp  -  description                              
-                             -------------------                                         
-    begin                : Thu Apr 8 1999                                           
-    copyright            : (C) 1999 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+                          caddnewtranslationdlg.cpp  -  description
+                             -------------------
+    begin                : Thu Apr 8 1999
+    copyright            : (C) 1999 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -86,22 +86,28 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
   for ( QStringList::ConstIterator it = lang_list.begin();
     it != lang_list.end(); ++it )
     {
+      bool bStillMissing=true;
       if(po_files.isEmpty())
-        lang_combo->insertItem((*it).latin1());
-      for (po_files.first(); po_files.current()!=0; po_files.next())
+        lang_combo->insertItem((*it));
+      else
       {
-      	// remove already added language from the language list
-      	if(!(po_files.contains((*it).latin1()+QString(".po")) ||
-              po_files.contains(prj->getBinPROGRAM()+QString(".")+(*it).latin1()+QString(".ts"))));
-              lang_combo->insertItem((*it).latin1());
-
-       }
+        for (po_files.first(); bStillMissing && po_files.current()!=0; po_files.next())
+        {
+          // add only if the po-file wasn't found
+          if(po_files.contains(((*it)+QString(".po")).local8Bit()) ||
+              po_files.contains((prj->getBinPROGRAM()+QString(".")+(*it)+QString(".ts")).local8Bit()))
+           bStillMissing=false;
+        }
+        if (bStillMissing)
+          lang_combo->insertItem((*it));
+      }
     }
 
-	if(lang_list.isEmpty()){
-	  KMessageBox::information(0,i18n("Your sourcecode is already translated to all supported languages."));
-	  ok_button->setEnabled(false);
-	}
+    if(lang_combo->count()==0)
+    {
+      KMessageBox::information(0,i18n("Your sourcecode is already translated to all supported languages."));
+      ok_button->setEnabled(false);
+    }
 }
 
 CAddNewTranslationDlg::~CAddNewTranslationDlg(){

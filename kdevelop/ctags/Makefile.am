@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libctags.a
 
 INCLUDES = $(all_includes)
 
 libctags_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libctags.a
 
 libctags_a_SOURCES = ctagsdialog_impl.cpp ctagsdialog.ui cctags_interf.cpp cctags.cpp 
 

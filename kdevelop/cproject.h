@@ -1,10 +1,10 @@
 /***************************************************************************
                     cproject.h - the projectproperties
-                             -------------------                                         
+                             -------------------
 
-    begin                : 28 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 28 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -33,7 +33,7 @@ class KSimpleConfig;
 #define KDEVELOP_PRJ_VERSION "1.3"
 
 /** This type defines the different types that can
-  * exist in a project. 
+  * exist in a project.
   * @author Jonas Nordin
   */
 typedef enum _Project_enum
@@ -62,7 +62,7 @@ struct TMakefileAmInfo {
   QStrList sub_dirs;
 };
 
-/** info struct for a dialogfile (used in CProject) 
+/** info struct for a dialogfile (used in CProject)
  * maybe I will inherited this from TFileInfo in the future
  *@author Sandy Meier
  */
@@ -77,7 +77,7 @@ struct TDialogFileInfo {
   bool install;
   /** install-location*/
   QString install_location;
-  
+
   QString classname;
   /**QWidget,QFrame,QDialog,QTabDialog,Custom*/
   QString baseclass;
@@ -85,10 +85,10 @@ struct TDialogFileInfo {
   bool is_toplevel_dialog;
   /** the children if baseclass is a QTabdialog,relative filenames of other *.kdevdlg*/
   QStrList widget_files;
-  
+
   QString header_file;
   QString source_file;
-  QString data_file;  
+  QString data_file;
 };
 
 /** info struct for a file (used in CProject)
@@ -129,7 +129,7 @@ public:
 /** this class includes the properties of a project and some methods to read
   * and write these props,all Makefiles.am are registered in the [General] Group,every Makefile.am
   * has it own group and every file in the project too
-  * 
+  *
   ** format of the general group:**
   * [General]
   * classview_tree: a treestructure of all classes.
@@ -161,7 +161,7 @@ public:
 class CProject
 {
 
-public: 
+public:
   /** constructor */
   CProject(const QString& file);
   /** destructor */
@@ -255,7 +255,9 @@ public: // Methods to store project options
 
   /** if yes the makefiles in the project are modified from KDevelop*/
   void setModifyMakefiles(bool enable=true);
-  
+
+  /** whether to show non-project files in the file-view */
+  void setShowNonProjectFiles(bool enable=true);
 
   /** Store options for make( f.e. "-k" for "make -k"*/
   void setMakeOptions(const QString& options)    { writeGroupEntry( "General", "make_options", options ); }
@@ -268,7 +270,7 @@ public: // Methods to store project options
 
   /** Store the additional arguments for configure */
   void setConfigureArgs(const QString& args)     { writeGroupEntry( "General", "configure_args", args ); }
-  
+
   void setBinPROGRAM(const QString& name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
 
   void setPathToBinPROGRAM(const QString& name)  { writeGroupEntry( "Config for BinMakefileAm", "path_to_bin_program", name ); }
@@ -332,9 +334,12 @@ public: // Methods to fetch project options
   QString getSGMLFile()       { return readGroupEntry( "General", "sgml_file" ); }
 
   bool getModifyMakefiles();
+  /** whether to show non-project files in the file-view */
+  bool getShowNonProjectFiles();
 
   /** Fetch the options for make( i.e "-k" for "make -k". */
-  QString getMakeOptions()    { return readGroupEntry( "General", "make_options" ); }
+  QString getMakeOptions()    { QString flag=readGroupEntry( "General", "make_options" );
+	                              return flag.isEmpty() ? QString("") : flag;}
 
   /** Fetch the commandline execution arguments for the project binary. */
   QString getExecuteArgs()    { return readGroupEntry( "General", "execute_args" ); }
@@ -565,7 +570,7 @@ private: // Protected attributes
 
   /** Maps a ProjectFileType to a string. */
   QString *ptStringMap;
-  
+
   KSimpleConfig* config;
 
   /** true if the project was read*/

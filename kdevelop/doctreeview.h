@@ -100,7 +100,7 @@ class ListViewBookItem : public KDevListViewItem
 {
 public:
     ListViewBookItem( KDevListViewItem *parent,
-                      const char *text, const char *filename );
+                      const QString &text, const char *filename );
     virtual void setOpen(bool o);
 };
 
@@ -116,12 +116,12 @@ public:
 class DocTreeKDevelopBook : public ListViewBookItem
 {
 public:
-    DocTreeKDevelopBook( KDevListViewItem *parent, const char *text,
-                         const char *filename, bool expandable=false )
+    DocTreeKDevelopBook( KDevListViewItem *parent, const QString &text,
+                         const QString &filename, bool expandable=false )
         : ListViewBookItem(parent, text, locatehtml(filename))
         { setExpandable(expandable); }
     virtual void setOpen(bool o);
-    static QString readIndexTitle(const char* book);
+    static QString readIndexTitle(const QString & book);
     static QString locatehtml(const QString& filename);
 private:
     void readSgmlIndex(FILE *f);

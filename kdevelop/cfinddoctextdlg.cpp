@@ -151,7 +151,7 @@ QString CManpageTextDlg::manpageText()
 {
   QString manpage = edit->text();;
   if (!manpage.isEmpty())
-    manpage="man:/"+manpage+"(3)";
+    manpage="man:/"+manpage;    //+"(3)";
   return manpage;
 }
 

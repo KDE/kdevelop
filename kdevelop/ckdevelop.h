@@ -1,9 +1,9 @@
 /***************************************************************************
-                     ckdevelop.h - the mainclass in kdevelop   
-                             -------------------                                         
+                     ckdevelop.h - the mainclass in kdevelop
+                             -------------------
 
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
+    begin                : 20 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -175,10 +175,10 @@ public:
 
   void setKeyAccel();
   void setToolmenuEntries();
-    
+
   /** sets the Main window caption for KDevelop */
   void setMainCaption(int item=-1);
-              
+
   void newFile(bool add_to_project,const char* dir=0);
 
   /** prepare readProjectFile(..), creates and inits the project object */
@@ -186,8 +186,8 @@ public:
   /** read the projectfile from the disk (time consuming) */
   void readProjectFile(QString file, CProject* lNewProject);
 
-  /** Add a file with a specified type to the project. 
-   *  
+  /** Add a file with a specified type to the project.
+   *
    *  @param complete_filename   The absolute filename.
    *  @param type                Type of file.
    *  @param refresh             If to refresh the trees.
@@ -260,6 +260,13 @@ public:
   /** Second part of opening a .kdevprj project from file using prjfile as filename. */
   void projectOpenCmdl_Part2(CProject* pProj);
 
+  // code completion support
+  void setAutomaticCompletion( bool );
+  void setAutomaticArgsHint( bool );
+
+  bool getAutomaticCompletion();
+  bool getAutomaticArgsHint();
+
  public slots:
 
   void enableCommand(int id_);
@@ -268,14 +275,14 @@ public:
   ////////////////////////
   // FILE-Menu entries
   ///////////////////////
- 
+
   /** generate a new file*/
   void slotFileNew();
   /** generate a new file in dir*/
   void slotFileNew(const char* dir);
   /**open a file*/
   void slotFileOpen();
-  /** opens a file from the file_open_popup that is a delayed popup menu 
+  /** opens a file from the file_open_popup that is a delayed popup menu
    *installed in the open file button of the toolbar */
   void slotFileOpen( int id_ );
   /** close the current file*/
@@ -310,7 +317,7 @@ public:
   void slotEditUnindent();
   void slotEditComment();
   void slotEditUncomment();
-  
+
   ////////////////////////
   // VIEW-Menu entries
   ///////////////////////
@@ -403,9 +410,9 @@ public:
   ///////////////////////
   /** compile the actual sourcefile using preset options */
   bool RunMake(const CMakefile::Type type, const QString& target);
-	/** run configure. config is the configuration, ask=true opens the
-			configure arguments dialog to edit the configure options.*/
-	void RunConfigure(const QString& conf, bool ask);
+        /** run configure. config is the configuration, ask=true opens the
+                        configure arguments dialog to edit the configure options.*/
+        void RunConfigure(const QString& conf, bool ask);
 
   void slotBuildMake();
   void slotBuildMakeClean();
@@ -512,6 +519,8 @@ public:
   void slotOptionsKDevelop();
   /** sets the make command after it is changed in the Setup dialog */
   void slotOptionsMake();
+  /** dis-/enables startup editing "main"-source after AppWizard */
+  void slotOptionsStartupEditing(bool);
   /** dis-/enables autosaving by setting in the Setup dialog */
   void slotOptionsAutosave(bool);
   /** sets the autosaving time intervall */
@@ -524,7 +533,7 @@ public:
   void slotOptionsUpdateKDEDocumentation();
   /** shows the create search database dialog called by the setup button */
   void  slotOptionsCreateSearchDatabase();
-  
+
   ////////////////////////
   // BOOKMARKS-Menu entries
   ///////////////////////
@@ -550,7 +559,7 @@ public:
   void slotHelpBack();
   /** goes one page forward in the documentatio browser */
   void slotHelpForward();
-  /** goes to the page in the history list by delayed popup menu on the 
+  /** goes to the page in the history list by delayed popup menu on the
    *  back-button on the browser toolbar */
   void slotHelpHistoryBack( int id_);
   /** goes to the page in the history list by delayed popup menu on the
@@ -578,8 +587,8 @@ public:
   void slotHelpKDELibRef();
   /** shows the C/C++-referenc */
   void slotHelpReference();
-  /** shows the tip of the day */
-  void slotHelpTipOfDay(bool force=true);
+  /** calls showHelpTipOfDay() */
+  void slotHelpTipOfDay() { showHelpTipOfDay(true); };
   /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
   /** shows the API of the current project */
@@ -590,7 +599,7 @@ public:
   void showDocHelp(const QString& bookname);
 
   void slotGrepDialogItemSelected(QString filename,int linenumber);
-  
+
   //////////////////////////////////
   // Classbrowser wizardbutton slots
   //////////////////////////////////
@@ -621,7 +630,7 @@ public:
 
   /** set the tree tab automatically without click */
   void slotTCurrentTab(int item);
-    
+
   ///////////// -- the methods for the treeview selection
   /** click action on LFV */
   void slotLogFileTreeSelected(QString file);
@@ -638,7 +647,7 @@ public:
   void delFileFromProject(QString rel_filename);
 
   /////////some slots for VCS interaction
-  
+
   void slotUpdateFileFromVCS(QString file);
   void slotCommitFileToVCS(QString file);
   void slotUpdateDirFromVCS(QString dir);
@@ -664,7 +673,7 @@ public:
   void slotNewLineColumn();
   void slotNewUndo();
 
-  //  void slotClickedOnMessagesWidget();  
+  //  void slotClickedOnMessagesWidget();
 
   void slotURLSelected(const QString& url);
   void slotDocumentDone();
@@ -684,7 +693,7 @@ public:
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotProcessExited(KProcess* proc);
   void slotSearchProcessExited(KProcess*);
-  
+
   //////////////// -- the methods for signals generated from the CV
   /** Add a method to a class. Brings up a dialog and lets the
    * user fill it out.
@@ -703,7 +712,7 @@ public:
    * @param aClassName      The class to add the attribute to.
    */
   void slotCVAddAttribute( const char *aClassName );
-  
+
   void slotCVAddAttribute( const char *aClassName, CParsedAttribute* aAttr );
   /**  */
   void slotCVSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
@@ -713,13 +722,13 @@ public:
    */
   void slotCVDeleteMethod( const char *aClassName,const char *aMethodName );
 
-  /** The user wants to view the declaration of a method. 
+  /** The user wants to view the declaration of a method.
    * @param className Name of the class holding the declaration. NULL for globals.
    * @param declName Name of the declaration item.
    * @param type Type of declaration item
    */
-  void slotCVViewDeclaration( const char *parentPath, 
-                              const char *itemName, 
+  void slotCVViewDeclaration( const char *parentPath,
+                              const char *itemName,
                               THType parentType,
                               THType itemType );
 
@@ -732,8 +741,8 @@ public:
    * @param declName Name of the definition item.
    * @param type Type of definition item.
    */
-  void slotCVViewDefinition( const char *parentPath, 
-                             const char *itemName, 
+  void slotCVViewDefinition( const char *parentPath,
+                             const char *itemName,
                              THType parentType,
                              THType itemType );
 
@@ -803,20 +812,20 @@ protected: // Protected methods
    */
   void CVMethodSelected( const char *aName );
 
-  /** 
+  /**
    * Goto the definition of the specified item.
-   * 
+   *
    * @param parentPath Path of the container. Empty for globals.
    * @param itemName   Name of the selected item. Empty for containers.
    * @param parentType Type of container. Ignored for globals.
    * @param itemType   Type of the selected item. Ignored for containers.
    */
-  void CVGotoDefinition( const char *parentPath, 
-                         const char *itemName, 
+  void CVGotoDefinition( const char *parentPath,
+                         const char *itemName,
                          THType parentType,
                          THType itemType );
 
-  /** 
+  /**
    * Goto the declaration of the specified item.
    *
    * @param parentPath Path of the container. Empty for globals.
@@ -824,18 +833,18 @@ protected: // Protected methods
    * @param parentType Type of container. Ignored for globals.
    * @param itemType   Type of the selected item. Ignored for containers.
    */
-  void CVGotoDeclaration( const char *parentPath, 
-                         const char *itemName, 
+  void CVGotoDeclaration( const char *parentPath,
+                         const char *itemName,
                          THType parentType,
                          THType itemType );
-  
-  /** 
-   * Returns the class for the supplied classname. 
+
+  /**
+   * Returns the class for the supplied classname.
    *
    * @param parentPath Path of the container.
    * @param parentType Type of container.
    */
-  CParsedContainer *CVGetContainer( const char *parentPath, 
+  CParsedContainer *CVGetContainer( const char *parentPath,
                                     THType parentType );
 
   /** Update the class combo with all classes in alpabetical order. */
@@ -866,9 +875,9 @@ public: // Public methods
   /** Get the progress bar */
   QProgressBar* getProgressBar() { return statProg; };
 
-    /** Get the last search text */
-    QString & getDocSearchText() { return doc_search_text; };
-    
+        /** Get the last search text */
+        QString & getDocSearchText() { return doc_search_text; };
+
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
 
@@ -882,7 +891,7 @@ protected:
   bool queryClose();
   /** saves all options by calling saveOptions() */
   bool queryExit();
-  /** saves the currently opened project by the session manager and write 
+  /** saves the currently opened project by the session manager and write
    * the project file to the session config*/
   //void saveProperties(KConfig*);
   /** initializes the session windows and opens the projects of the last
@@ -897,10 +906,19 @@ private:
   void printImpl(QStringList& list, KPrinter* printer);
   /** */
   bool isToolViewVisible(QWidget* pToolView);
+  /** checks if any of the tool views is visible */
+  bool isAnyToolViewVisible();
+  /** checks if any of the output view widget is visible */
+  bool isAnyOutputWindowVisible();
   /** */
     void adjustTTreesToolButtonState();
   /** */
   void adjustTOutputToolButtonState();
+  /** shows the tip of the day */
+  void showHelpTipOfDay(bool force=true);
+
+  /* this is only to prepare the configure command inside a string */
+  QString prepareConfigureCommand();
 
 public:
   /** this attribute is true from construction until qApp->exec().
@@ -936,7 +954,7 @@ private:
   //QPopupMenu* options_menu;
   //KHelpMenu* help_menu;
   QWhatsThis* whats_this;
-    
+
   QPopupMenu* history_prev;
   QPopupMenu* history_next;
   QPopupMenu* file_open_popup;
@@ -951,19 +969,19 @@ private:
    * the declaration or the definition of the selected item. */
   bool cv_decl_or_impl;
 
-  QStrList file_open_list;    
+  QStrList file_open_list;
 
   /** QValueList containing the Tool Apps */
   ToolAppList toolList;
 
   KCompletion* compile_comp;
   KCompletion* class_comp;
-  KCompletion* method_comp;    
+  KCompletion* method_comp;
   /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
-  bool beep; 
-  
-  
+  bool beep;
+
+
   KIconLoader icon_loader;
   /** for tools,compiler,make,kodc */
   KShellProcess process;
@@ -994,7 +1012,7 @@ private:
   QStrList history_title_list;
     //  QStrList doc_bookmarks_list;
   //  QStrList doc_bookmarks_title_list;
-    
+
   ///////////////////////////////
   //some widgets for the mainview
   ///////////////////////////////
@@ -1019,7 +1037,7 @@ private:
 
   /** A konsole */
   CKonsoleWidget *konsole_widget;
-  
+
   int workspace;
 
   QString version;
@@ -1034,6 +1052,9 @@ private:
   bool bAutosave;
   /** The autosave interval. */
   int saveTimeout;
+
+  /** startup with editing main.(cpp|c) after appwizard */
+  bool bStartupEditing;
 
   bool bAutoswitch;
   bool bDefaultCV;
@@ -1072,7 +1093,7 @@ private:
   FrameStack* frameStack;
   /** show disassembled code being run - on output tab */
    Disassemble* disassemble;
- 
+
   /** debug aid. Switch on using compile switch GDB_MONITOR
       or DBG_MONITOR  - on output tab */
   COutputWidget* dbg_widget;
@@ -1142,6 +1163,8 @@ private slots:
   void slotViewODisassembleView();
   void slotViewOFrameStackView();
   void slotViewODebuggerView();
+
+  void slotCompileCombo(const QString&) {};
 };
 
 #endif

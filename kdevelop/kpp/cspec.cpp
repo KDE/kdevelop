@@ -18,7 +18,10 @@
 #include "cspec.h"
 #include <qregexp.h>
 #include <qstring.h>
-#include <iostream.h>
+
+#include <iostream>
+using namespace std;
+
 cSpec::cSpec(){
   qsCatagory = "KDE";
   qsLic = "GPL";

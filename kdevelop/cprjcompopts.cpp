@@ -381,8 +381,8 @@ void CPrjCompOpts::slotSettingsChanged(){
 	QString conf=conf_cb->currentText();
 	if(conf == i18n("(Default)")){
 		// just the lineedits here
-		prj_info->setCFLAGS(cppflags_le->text());
-		prj_info->setCPPFLAGS(cflags_le->text());
+		prj_info->setCFLAGS(cflags_le->text());
+		prj_info->setCPPFLAGS(cppflags_le->text());
   	prj_info->setAdditCXXFLAGS(cxxflags_le->text());
   	// complex calculation needed
   	prj_info->setCXXFLAGS(calculateCXXFLAGS());
@@ -390,6 +390,29 @@ void CPrjCompOpts::slotSettingsChanged(){
 		prj_info->setConfigureArgs(calculateConfigureArgs());	
 	}
 	else{
+		
+		QStringList::Iterator it;
+		QStringList vpathlist;
+  	for( it = compconfs.begin(); it != compconfs.end(); ++it ){
+  		if(sess->getVPATHSubdir(*it)!=vpathdir_le->text() )
+    		vpathlist.append(sess->getVPATHSubdir(*it));
+    	else
+    		vpathlist.append(vpathdir_le->text());
+    }
+  	for( it = vpathlist.begin(); it != vpathlist.end(); ++it ){
+			if(vpathlist.contains(*it)!=1){ //more that 1 time in it
+				// the warning code comes here
+//				KMessageBox::error( NULL, i18n( "The directory %1.\n"
+//						"is used more than once for different configurations.\n\n "
+//						"Please correct the builddirectory settings\n"
+//						"for the different configurations so that a\n"
+//						"builddirectory is only used once.\n\n"
+//						"No settings will be saved until the error\n"
+//						"is corrected." ).arg(*it),
+//                            i18n( "Error" ) );
+//				return;
+			}
+		}
 		// here comes the DOM storage
 		sess->setVPATHSubdir(conf,vpathdir_le->text() );
 		sess->setArchitecture(conf,target_arch_cb->currentText() );

@@ -145,10 +145,25 @@ QCString GDBParser::getValue(char** buf, bool requested)
 
   QCString value(start, *buf - start + 1);
 
-  // QT2.x string handling
+  // QT2.x/QT3.x string handling
   // A very bad hack alert!
   if (requested)
-    return value.replace( QRegExp("\\\\000"), "" );
+  {
+    // Done for kdevelop v2.1 - 03-Feb-2002 jbb
+    // Remove the extra \000's from the string (for gdb pre 5.1) and \0's
+    // (for gdb post 5.1).
+    // NOTE - we have made gdb output an invalid string for the unicode
+    // chars in a qstring.
+    // We should be outputting the array of unicode values and converting
+    // back to a QString. However this caters for most people and since
+    // the editor doesn't (didn't?) handle unicode anyway, it should
+    // suffice for now.
+    // As I said above - a very bad hack alert - and just getting worse...
+    QCString oldValue(value);
+    if (value.replace( QRegExp("\\\\000"), "" ) != oldValue)
+        return value;
+    return value.replace( QRegExp("\\\\0"), "" );
+  }
 
   return value;
 }
