@@ -95,7 +95,7 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
     }
 
     *childproc << command;
-    childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+    childproc->start(KProcess::OwnGroup, KProcess::AllOutput);
 }
 
 
