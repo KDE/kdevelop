@@ -73,7 +73,7 @@ void MethodListAction::refresh(const QString &className)
     CParsedClass *pc;
     QStringList list;
 
-    if (!className.isEmpty && (pc = m_store->getClassByName(className)) != 0) {
+    if (!className.isEmpty() && (pc = m_store->getClassByName(className)) != 0) {
         for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
             QString str;
             pc->methodIterator.current()->asString(str);
