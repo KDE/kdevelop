@@ -1,15 +1,14 @@
-<!DOCTYPE kdevelop>
+<?xml version="1.0"?>
 <kdevelop>
   <general>
-    <author>Roberto,,,</author>
-    <email>roberto@frustalupo</email>
+    <author>$AUTHOR$</author>
+    <email>$EMAIL$</email>
+    <version>$VERSION$</version>
     <projectmanagement>KDevTMakeProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
       <keyword>Qt</keyword>
     </keywords>
-    <version>$VERSION$</version>
-    <description></description>
     <ignoreparts/>
   </general>
   <kdevfileview>
@@ -32,10 +31,6 @@
       <toc>php</toc>
       <toc>perl</toc>
     </ignoretocs>
-    <projectdoc>
-      <userdocDir>/home/roberto/application/html/</userdocDir>
-      <apidocDir>/home/roberto/application/html/</apidocDir>
-    </projectdoc>
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
