@@ -22,6 +22,7 @@
 #include <ktrader.h>
 
 #include "partselectwidget.h"
+#include "plugincontroller.h"
 
 
 PartSelectWidget::PartSelectWidget(QDomDocument &projectDom,
@@ -69,9 +70,7 @@ PartSelectWidget::~PartSelectWidget()
 
 void PartSelectWidget::readGlobalConfig()
 {
-    KTrader::OfferList globalOffers
-        = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
-                                 QString::fromLatin1("[X-KDevelop-Scope] == 'Global'"));
+    KTrader::OfferList globalOffers = PluginController::pluginServices( "Global" );
     KConfig *config = KGlobal::config();
     config->setGroup("Plugins");
     
@@ -115,9 +114,7 @@ void PartSelectWidget::readProjectConfig()
         partEl = partEl.nextSibling().toElement();
     }
 
-    KTrader::OfferList localOffers
-        = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
-                                 QString::fromLatin1("[X-KDevelop-Scope] == 'Project'")); 
+    KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {
         QCheckListItem *item = new QCheckListItem(lv, (*it)->comment(), QCheckListItem::CheckBox);
         names.prepend((*it)->name());

@@ -198,9 +198,7 @@ void ProjectManager::loadLanguageSupport()
 
 void ProjectManager::loadLocalParts()
 {
-  KTrader::OfferList localOffers =
-    KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
-                           QString::fromLatin1("[X-KDevelop-Scope] == 'Project'"));
+  KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
   for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
   {
     if (m_info->m_ignoreParts.contains((*it)->name()))

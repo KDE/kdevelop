@@ -10,10 +10,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmainwindow.h>
-
+#include <kparts/componentfactory.h>
 
 #include "kdevapi.h"
 #include "kdevfactory.h"
+#include "kdevplugin.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 
@@ -84,9 +85,8 @@ void PluginController::loadDefaultParts()
 
 void PluginController::loadGlobalPlugins()
 {
-  KDevPart *part;
 
-  KTrader::OfferList globalOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"), QString::fromLatin1("[X-KDevelop-Scope] == 'Global'"));
+  KTrader::OfferList globalOffers = pluginServices( "Global" );
   KConfig *config = KGlobal::config();
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
@@ -94,11 +94,24 @@ void PluginController::loadGlobalPlugins()
     if (!config->readBoolEntry((*it)->name(), true))
        continue;
 
-    part = loadPlugin(*it, "KDevPart", Core::getInstance());
-    if (!part)
-      return;
+    if ( ( *it )->hasServiceType( "KDevelop/Part" ) ) {
+      KDevPart *part = loadPlugin(*it, "KDevPart", Core::getInstance());
+      if (!part)
+        return;
 
-    integratePart(part);
+      integratePart(part);
+    } else {
+        QStringList args;
+        QVariant prop = ( *it )->property( "X-KDevelop-Args" );
+        if ( prop.isValid() )
+            args = QStringList::split( " ", prop.toString() );
+
+	KDevPlugin *plugin = KParts::ComponentFactory
+	    ::createInstanceFromService<KDevPlugin>( *it, API::getInstance(), 0,
+                                                     args );
+        if ( plugin )
+            integratePart( plugin );
+    }
   }
 }
 
@@ -138,8 +151,17 @@ KDevPart *PluginController::loadPlugin(KService *service, const char *className,
   return part;
 }
 
+KService::List PluginController::pluginServices( const QString &scope )
+{
+    QString constraint;
 
-void PluginController::integratePart(KDevPart *part)
+    if ( !scope.isEmpty() )
+	constraint = QString::fromLatin1( "[X-KDevelop-Scope] == '%1'" ).arg( scope );
+    return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ), 
+	                           constraint );
+}
+
+void PluginController::integratePart(KXMLGUIClient *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->addClient(part);
 }

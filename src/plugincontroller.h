@@ -1,7 +1,9 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
+#include <kservice.h>
 
+class KXMLGUIClient;
 class KDevPart;
 class KService;
 
@@ -16,6 +18,7 @@ public:
   static void createInstance();
   static PluginController *getInstance();
 
+  static KService::List pluginServices( const QString &scope = QString::null );
 
   static KDevPart *loadPlugin(KService *service, const char *className, QObject *parent);
 
@@ -30,7 +33,7 @@ private:
   void loadGlobalPlugins();
   void loadDefaultParts();
 
-  void integratePart(KDevPart *part);
+  void integratePart(KXMLGUIClient *part);
 
   static PluginController *s_instance;
 
