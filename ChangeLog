@@ -1,3 +1,7 @@
+2004-06-14 Alexander Dymo <adymo@mksat.net>
+    * Documentation plugin can show methods in index for Qt and Doxygen documentation catalogs.
+    * Implemented a dialog to run profiler (calltree + kcachegrind).
+
 2004-06-05 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Fixed several ToolView related issues. Among other things, they should now 
       restore correctly to their last position after a restart.
