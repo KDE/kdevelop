@@ -18,6 +18,9 @@ kdevelop/plugin/projectmanagement/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/res/Makefile \
 kdevelop/plugin/projectmanagement/kdebinary_project/Makefile \
+kdevelop/plugin/Compilers/Makefile \
+kdevelop/plugin/Compilers/gcc/Makefile \
+kdevelop/plugin/Compilers/gpp/Makefile \
 kdevelop/parts/Makefile \
 kdevelop/parts/editor/Makefile \
 kdevelop/parts/dbg/Makefile \
@@ -39,12 +42,9 @@ kdevelop/lib/Interfaces/Makefile \
 kdevelop/lib/ComponentManager/Makefile \
 kdevelop/lib/ComponentManager/Components/Makefile \
 kdevelop/lib/kidetexteditor/Makefile \
-kdevelop/lib/servicetypes/Makefile \
 kdevelop/lib/projectmanagement/Makefile \
 kdevelop/lib/projectmanagement/ProjectOptions/Makefile \
 kdevelop/lib/projectmanagement/KDevCompiler/Makefile \
-kdevelop/lib/projectmanagement/KDevCompiler/gcc/Makefile \
-kdevelop/lib/projectmanagement/KDevCompiler/cpp/Makefile \
 kdevelop/templates/Makefile \
 pics/Makefile \
 pics/mini/Makefile \
