@@ -72,7 +72,7 @@ User Interface=*.ui,*.kdevdlg,*.rc,
 groups=Images,Headers,Sources,GNU,Translations,User Interface,Desktop,Others
 
 [Makefile.am]
-files=AUTHORS,BUGS,COPYING,ChangeLog,FAQ,INSTALL,Menushortcuts.html,README,README.htdig,TODO,acconfig.h,config.guess,config.h.bot,configure.in.in,kdevelop.lsm,kdevelop.m4,acinclude.m4,configure.files,subdirs,aclocal.m4,configure.in,stamp-h.in,config.h.in,kdevelop.kdevprj.save
+files=AUTHORS,BUGS,COPYING,ChangeLog,FAQ,INSTALL,Menushortcuts.html,README,README.htdig,TODO,acconfig.h,config.guess,config.h.bot,configure.in.in,kdevelop.lsm,kdevelop.m4,acinclude.m4,configure.files,subdirs,aclocal.m4,configure.in,stamp-h.in,config.h.in,kdevelop.kdevprj.save,admin
 sub_dirs=doc,kdevelop,po,
 type=normal
 
@@ -83,6 +83,12 @@ install_location=
 type=DATA
 
 [README]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[admin]
 dist=true
 install=false
 install_location=
@@ -798,7 +804,7 @@ install_location=
 type=DATA
 
 [kdevelop/Makefile.am]
-files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclasstooltreeview.cpp,kdevelop/cclasstooltreeview.h,kdevelop/wzconnectdlgimpl.cpp,kdevelop/cclasstreehandler.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/cclonefunctiondlg.cpp,kdevelop/cclonefunctiondlg.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/ceditwidget.cpp,kdevelop/ceditwidget.h,kdevelop/wzconnectdlgimpl.h,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/ckdevaccel.h,kdevelop/ckdevaccel.cpp,kdevelop/cclasstreehandler.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cmakemanualdlg.cpp,kdevelop/cmakemanualdlg.h,kdevelop/cmakemanualdlgdata.cpp,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/dbgpsdlg.cpp,kdevelop/dbgpsdlg.h,kdevelop/dbgtoolbar.cpp,kdevelop/dbgtoolbar.h,kdevelop/debug.h,kdevelop/doctreeview.cpp,kdevelop/doctreeview.h,kdevelop/extractrc,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/kdevelop-setup.desktop,kdevelop/kdevelop.desktop,kdevelop/kdeveloprc,kdevelop/kdevelopui.rc,kdevelop/kdevlistview.cpp,kdevelop/kdevlistview.h,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/lo16-app-kdevelop.png,kdevelop/lo32-app-kdevelop.png,kdevelop/lo32-mime-kdevelop_project.png,kdevelop/main.cpp,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/ckdevelop_init.cpp,kdevelop/wzconnectdlg.ui,kdevelop/x-kdevelop-project.desktop,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop.cpp,kdevelop/hi16-app-kdevelop.png,kdevelop/hi48-app-kdevelop.png,kdevelop/docviewman.cpp,kdevelop/docviewman.h,kdevelop/ckonsolewidget.cpp,kdevelop/ckonsolewidget.h,kdevelop/clibpropdlg.ui,kdevelop/clibpropdlgimpl.cpp,kdevelop/clibpropdlgimpl.h,kdevelop/kdevsession.cpp,kdevelop/kdevsession.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/ccompconfdlg.ui,kdevelop/ccompconf.h,kdevelop/ccompconf.cpp,kdevelop/codecompletion_arghint.h,kdevelop/codecompletion_arghint.cpp,kdevelop/cppcodecompletion.cpp,kdevelop/cppcodecompletion.h,kdevelop/cprjaddopts.cpp,kdevelop/cprjaddopts.h,kdevelop/cprjaddoptsdlg.ui,kdevelop/cprjcompopts.cpp,kdevelop/cprjcompopts.h,kdevelop/cprjcompoptsdlg.ui,kdevelop/cprjconfchange.cpp,kdevelop/cprjconfchange.h,kdevelop/kdevregexp.cpp,kdevelop/kdevregexp.h,kdevelop/simpleparser.cpp,kdevelop/simpleparser.h,kdevelop/cprjcompletionoptsdlg.ui,kdevelop/cprjcompletionopts.cpp,kdevelop/cprjcompletionopts.h
+files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclasstooltreeview.cpp,kdevelop/cclasstooltreeview.h,kdevelop/wzconnectdlgimpl.cpp,kdevelop/cclasstreehandler.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/cclonefunctiondlg.cpp,kdevelop/cclonefunctiondlg.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/ceditwidget.cpp,kdevelop/ceditwidget.h,kdevelop/wzconnectdlgimpl.h,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/ckdevaccel.h,kdevelop/ckdevaccel.cpp,kdevelop/cclasstreehandler.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cmakemanualdlg.cpp,kdevelop/cmakemanualdlg.h,kdevelop/cmakemanualdlgdata.cpp,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/dbgpsdlg.cpp,kdevelop/dbgpsdlg.h,kdevelop/dbgtoolbar.cpp,kdevelop/dbgtoolbar.h,kdevelop/debug.h,kdevelop/doctreeview.cpp,kdevelop/doctreeview.h,kdevelop/extractrc,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/kdevelop-setup.desktop,kdevelop/kdevelop.desktop,kdevelop/kdeveloprc,kdevelop/kdevelopui.rc,kdevelop/kdevlistview.cpp,kdevelop/kdevlistview.h,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/main.cpp,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/ckdevelop_init.cpp,kdevelop/wzconnectdlg.ui,kdevelop/x-kdevelop-project.desktop,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop.cpp,kdevelop/hi16-app-kdevelop.png,kdevelop/hi32-app-kdevelop.png,kdevelop/hi48-app-kdevelop.png,kdevelop/docviewman.cpp,kdevelop/docviewman.h,kdevelop/ckonsolewidget.cpp,kdevelop/ckonsolewidget.h,kdevelop/clibpropdlg.ui,kdevelop/clibpropdlgimpl.cpp,kdevelop/clibpropdlgimpl.h,kdevelop/kdevsession.cpp,kdevelop/kdevsession.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/ccompconfdlg.ui,kdevelop/ccompconf.h,kdevelop/ccompconf.cpp,kdevelop/codecompletion_arghint.h,kdevelop/codecompletion_arghint.cpp,kdevelop/cppcodecompletion.cpp,kdevelop/cppcodecompletion.h,kdevelop/cprjaddopts.cpp,kdevelop/cprjaddopts.h,kdevelop/cprjaddoptsdlg.ui,kdevelop/cprjcompopts.cpp,kdevelop/cprjcompopts.h,kdevelop/cprjcompoptsdlg.ui,kdevelop/cprjconfchange.cpp,kdevelop/cprjconfchange.h,kdevelop/kdevregexp.cpp,kdevelop/kdevregexp.h,kdevelop/simpleparser.cpp,kdevelop/simpleparser.h,kdevelop/cprjcompletionoptsdlg.ui,kdevelop/cprjcompletionopts.cpp,kdevelop/cprjcompletionopts.h,kdevelop/tips
 sub_dirs=classparser,kpp,classwizard,dbg,examples,gfxview,kwrite,pics,templates,tools,vc,widgets,ctags,setup
 type=prog_main
 
@@ -1998,6 +2004,12 @@ install=false
 install_location=
 type=DATA
 
+[kdevelop/hi32-app-kdevelop.png]
+dist=true
+install=false
+install_location=
+type=DATA
+
 [kdevelop/hi48-app-kdevelop.png]
 dist=true
 install=false
@@ -2246,24 +2258,6 @@ install_location=
 type=DATA
 
 [kdevelop/kwrite/pix/ddd.xpm]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelop/lo16-app-kdevelop.png]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelop/lo32-app-kdevelop.png]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelop/lo32-mime-kdevelop_project.png]
 dist=true
 install=false
 install_location=
@@ -2554,7 +2548,7 @@ install_location=
 type=DATA
 
 [kdevelop/pics/toolbar/Makefile.am]
-files=kdevelop/pics/toolbar/hi16-action-classnew.png,kdevelop/pics/toolbar/hi16-action-compfile.png,kdevelop/pics/toolbar/hi16-action-dbgwatchvar.png,kdevelop/pics/toolbar/hi16-action-debugger.png,kdevelop/pics/toolbar/hi16-action-inst_file.png,kdevelop/pics/toolbar/hi16-action-make_kdevelop.png,kdevelop/pics/toolbar/hi16-action-methodnew.png,kdevelop/pics/toolbar/hi16-action-newwidget.png,kdevelop/pics/toolbar/hi16-action-project_open.png,kdevelop/pics/toolbar/hi16-action-rebuild.png,kdevelop/pics/toolbar/hi16-action-reload_page.png,kdevelop/pics/toolbar/hi16-action-variablenew.png,kdevelop/pics/toolbar/hi22-action-brace.png,kdevelop/pics/toolbar/hi22-action-classwiz.png,kdevelop/pics/toolbar/hi22-action-compfile.png,kdevelop/pics/toolbar/hi22-action-dbgmemview.png,kdevelop/pics/toolbar/hi22-action-dbgnext.png,kdevelop/pics/toolbar/hi22-action-dbgnextinst.png,kdevelop/pics/toolbar/hi22-action-dbgparam.png,kdevelop/pics/toolbar/hi22-action-dbgrestart.png,kdevelop/pics/toolbar/hi22-action-dbgrun.png,kdevelop/pics/toolbar/hi22-action-dbgrunto.png,kdevelop/pics/toolbar/hi22-action-dbgstep.png,kdevelop/pics/toolbar/hi22-action-dbgstepinst.png,kdevelop/pics/toolbar/hi22-action-dbgstepout.png,kdevelop/pics/toolbar/hi22-action-dbgvar.png,kdevelop/pics/toolbar/hi22-action-debugger.png,kdevelop/pics/toolbar/hi22-action-file_properties.png,kdevelop/pics/toolbar/hi22-action-graphview.png,kdevelop/pics/toolbar/hi22-action-grep.png,kdevelop/pics/toolbar/hi22-action-make_kdevelop.png,kdevelop/pics/toolbar/hi22-action-newwidget.png,kdevelop/pics/toolbar/hi22-action-output_win.png,kdevelop/pics/toolbar/hi22-action-project_open.png,kdevelop/pics/toolbar/hi22-action-rebuild.png,kdevelop/pics/toolbar/hi22-action-reload_page.png,kdevelop/pics/toolbar/hi22-action-save_all.png,kdevelop/pics/toolbar/hi22-action-tree_win.png,kdevelop/pics/toolbar/lo16-action-brace.png,kdevelop/pics/toolbar/lo16-action-decreaseindent.png,kdevelop/pics/toolbar/lo16-action-increaseindent.png,kdevelop/pics/toolbar/hi16-action-brace.png,kdevelop/pics/toolbar/hi16-action-decreaseindent.png,kdevelop/pics/toolbar/hi16-action-increaseindent.png
+files=kdevelop/pics/toolbar/hi16-action-classnew.png,kdevelop/pics/toolbar/hi16-action-compfile.png,kdevelop/pics/toolbar/hi16-action-dbgwatchvar.png,kdevelop/pics/toolbar/hi16-action-debugger.png,kdevelop/pics/toolbar/hi16-action-inst_file.png,kdevelop/pics/toolbar/hi16-action-make_kdevelop.png,kdevelop/pics/toolbar/hi16-action-methodnew.png,kdevelop/pics/toolbar/hi16-action-newwidget.png,kdevelop/pics/toolbar/hi16-action-project_open.png,kdevelop/pics/toolbar/hi16-action-rebuild.png,kdevelop/pics/toolbar/hi16-action-reload_page.png,kdevelop/pics/toolbar/hi16-action-variablenew.png,kdevelop/pics/toolbar/hi22-action-brace.png,kdevelop/pics/toolbar/hi22-action-classwiz.png,kdevelop/pics/toolbar/hi22-action-compfile.png,kdevelop/pics/toolbar/hi22-action-dbgmemview.png,kdevelop/pics/toolbar/hi22-action-dbgnext.png,kdevelop/pics/toolbar/hi22-action-dbgnextinst.png,kdevelop/pics/toolbar/hi22-action-dbgparam.png,kdevelop/pics/toolbar/hi22-action-dbgrestart.png,kdevelop/pics/toolbar/hi22-action-dbgrun.png,kdevelop/pics/toolbar/hi22-action-dbgrunto.png,kdevelop/pics/toolbar/hi22-action-dbgstep.png,kdevelop/pics/toolbar/hi22-action-dbgstepinst.png,kdevelop/pics/toolbar/hi22-action-dbgstepout.png,kdevelop/pics/toolbar/hi22-action-dbgvar.png,kdevelop/pics/toolbar/hi22-action-debugger.png,kdevelop/pics/toolbar/hi22-action-file_properties.png,kdevelop/pics/toolbar/hi22-action-graphview.png,kdevelop/pics/toolbar/hi22-action-grep.png,kdevelop/pics/toolbar/hi22-action-make_kdevelop.png,kdevelop/pics/toolbar/hi22-action-newwidget.png,kdevelop/pics/toolbar/hi22-action-output_win.png,kdevelop/pics/toolbar/hi22-action-project_open.png,kdevelop/pics/toolbar/hi22-action-rebuild.png,kdevelop/pics/toolbar/hi22-action-reload_page.png,kdevelop/pics/toolbar/hi22-action-save_all.png,kdevelop/pics/toolbar/hi22-action-tree_win.png,kdevelop/pics/toolbar/hi16-action-brace.png,kdevelop/pics/toolbar/hi16-action-decreaseindent.png,kdevelop/pics/toolbar/hi16-action-increaseindent.png
 sub_dirs=
 type=normal
 
@@ -2799,24 +2793,6 @@ install_location=
 type=DATA
 
 [kdevelop/pics/toolbar/hi22-action-tree_win.png]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelop/pics/toolbar/lo16-action-brace.png]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelop/pics/toolbar/lo16-action-decreaseindent.png]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelop/pics/toolbar/lo16-action-increaseindent.png]
 dist=true
 install=false
 install_location=
@@ -3630,6 +3606,12 @@ install_location=
 type=DATA
 
 [subdirs]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[kdevelop/tips]
 dist=true
 install=false
 install_location=
