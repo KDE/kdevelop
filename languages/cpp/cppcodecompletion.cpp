@@ -1479,6 +1479,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementAST* stmt,
 	case NodeType_SwitchStatement:
 		computeContext( ctx, static_cast<SwitchStatementAST*>( stmt ), line, col );
 		break;
+	case NodeType_TryBlockStatement:
+		computeContext( ctx, static_cast<TryBlockStatementAST*>( stmt ), line, col );
+		break;
 	case NodeType_DeclarationStatement:
 		computeContext( ctx, static_cast<DeclarationStatementAST*>( stmt ), line, col );
 		break;
@@ -1545,6 +1548,40 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, WhileStatementAST* 
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col )
+{
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
+	computeContext( ctx, ast->condition(), line, col );
+	computeContext( ctx, ast->statement(), line, col );
+}
+
+void CppCodeCompletion::computeContext( SimpleContext*& ctx, TryBlockStatementAST* ast, int line, int col )
+{
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
+	computeContext( ctx, ast->statement(), line, col );
+	computeContext( ctx, ast->catchStatementList(), line, col );
+}
+
+void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementListAST* ast, int line, int col )
+{
+	if ( !inContextScope( ast, line, col, false, true ) )
+		return;
+	
+	QPtrList<CatchStatementAST> l( ast->statementList() );
+	QPtrListIterator<CatchStatementAST> it( l );
+	while ( it.current() )
+	{
+		CatchStatementAST * stmt = it.current();
+		++it;
+		
+		computeContext( ctx, stmt, line, col );
+	}
+}
+
+void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementAST* ast, int line, int col )
 {
 	if ( !inContextScope( ast, line, col ) )
 		return;

@@ -128,6 +128,9 @@ private:
 	void computeContext( SimpleContext*& ctx, DoStatementAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, WhileStatementAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col );
+	void computeContext( SimpleContext*& ctx, TryBlockStatementAST* ast, int line, int col );
+	void computeContext( SimpleContext*& ctx, CatchStatementListAST* ast, int line, int col );
+	void computeContext( SimpleContext*& ctx, CatchStatementAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, DeclarationStatementAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col );
 	bool inContextScope( AST* ast, int line, int col, bool checkStart = true, bool checkEnd = true );
