@@ -413,7 +413,7 @@ QString KDlgEdit::getRelativeName(QString abs_filename){
   // normalize it a little bit
   abs_filename.replace(QRegExp("///"),"/"); // remove ///
   abs_filename.replace(QRegExp("//"),"/"); // remove //
-  abs_filename.replace(QRegExp(prj->getProjectDir()),"");
+  abs_filename.remove (0, prj->getProjectDir().length());
   return abs_filename;
 }
   
