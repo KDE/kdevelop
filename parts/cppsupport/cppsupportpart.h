@@ -64,6 +64,7 @@ public:
 
     const QPtrList<Catalog>& catalogList() { return m_catalogList; }
 
+    bool isValidSource( const QString& fileName ) const;
     QStringList fileExtensions( ) const;
 
     virtual void customEvent( QCustomEvent* ev );

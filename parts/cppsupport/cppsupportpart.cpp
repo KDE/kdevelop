@@ -476,11 +476,13 @@ static QStringList reorder(const QStringList &list)
     QStringList headerExtensions = QStringList::split(",", "h,H,hh,hxx,hpp,tlh");
 
     QStringList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it)
+    for (it = list.begin(); it != list.end(); ++it){
+	QString fileName = *it;	
         if (headerExtensions.contains(QFileInfo(*it).extension()))
             headers << (*it);
         else
             others << (*it);
+    }
 
     return headers + others;
 }
@@ -745,7 +747,6 @@ CppSupportPart::parseProject( )
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
             QString absFilePath = fileInfo.absFilePath();
-            //kdDebug(9007) << "parse file" << absFilePath << endl;
 
 	    if( (n%5) == 0 ){
 	        kapp->processEvents();
@@ -754,13 +755,15 @@ CppSupportPart::parseProject( )
 		    return false;
 	    }
 	    
-	    QDateTime t = fileInfo.lastModified();
-	    if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
-		continue;
+	    if( isValidSource(absFilePath) ){
+		QDateTime t = fileInfo.lastModified();
+		if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
+		    continue;
 	    	    
-            m_driver->parseFile( absFilePath );
+		m_driver->parseFile( absFilePath );
 	    
-	    m_timestamp[ absFilePath ] = t;
+		m_timestamp[ absFilePath ] = t;
+	    }
         }
 
 	if( m_projectClosed ){
@@ -787,7 +790,7 @@ CppSupportPart::parseProject( )
 void
 CppSupportPart::maybeParse( const QString& fileName )
 {
-    if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
+    if( !isValidSource(fileName) )
         return;
 
     QFileInfo fileInfo( fileName );
@@ -1152,5 +1155,12 @@ void CppSupportPart::removeWithReferences( const QString & fileName )
     m_projectCatalog->removeItems( args );
 #endif
 }
+
+bool CppSupportPart::isValidSource( const QString& fileName ) const
+{
+    QFileInfo fileInfo( fileName );
+    return fileExtensions().contains( fileInfo.extension() ) && !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
+}
+
 
 #include "cppsupportpart.moc"

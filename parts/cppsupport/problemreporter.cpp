@@ -126,8 +126,8 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     if( m_document ) {
 	m_filename = m_document->url().path();
 
-	if( m_cppSupport->fileExtensions().contains(QFileInfo(m_filename).extension()) ){
-
+	if( m_cppSupport->isValidSource(m_filename) ){
+//fileExtensions().contains(QFileInfo(m_filename).extension())
 	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
 	    m_timer->changeInterval( m_delay );
