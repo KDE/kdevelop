@@ -294,6 +294,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     setupController();
 
+    QCStringList objects = kapp->dcopClient()->registeredApplications();
+    for (QCStringList::Iterator it = objects.begin(); it != objects.end(); ++it)
+        if ((*it).find("drkonqi-") == 0)
+            slotDCOPApplicationRegistered(*it);
+
     connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QCString&)), SLOT(slotDCOPApplicationRegistered(const QCString&)));
     kapp->dcopClient()->setNotifications(true);
 }
