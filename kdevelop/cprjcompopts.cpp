@@ -28,6 +28,7 @@
 #include <qspinbox.h>
 #include <qcheckbox.h>
 #include <qdom.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
