@@ -1027,40 +1027,40 @@ void CKDevelop::initToolBar(){
 
 //  toolBar()->insertButton(BarIcon("filenew"),ID_FILE_NEW, false,i18n("New"));
 
-  toolBar()->insertButton(BarIcon("project_open"),ID_PROJECT_OPEN, true,i18n("Open Project"));
+  toolBar()->insertButton("project_open",ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("fileopen"),ID_FILE_OPEN, true,i18n("Open File"));
+  toolBar()->insertButton("fileopen",ID_FILE_OPEN, true,i18n("Open File"));
   file_open_popup= new QPopupMenu();
   connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
   toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
 
-  toolBar()->insertButton(BarIcon("filesave"),ID_FILE_SAVE,true,i18n("Save File"));
-//  toolBar()->insertButton(BarIcon("save_all"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
+  toolBar()->insertButton("filesave",ID_FILE_SAVE,true,i18n("Save File"));
+//  toolBar()->insertButton("save_all"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
 
-  toolBar()->insertButton(BarIcon("fileprint"),ID_FILE_PRINT,false,i18n("Print"));
+  toolBar()->insertButton("fileprint",ID_FILE_PRINT,false,i18n("Print"));
 
 //  QFrame *sepUndo= new QFrame(toolBar());
 //  sepUndo->setFrameStyle(QFrame::VLine|QFrame::Sunken);
 //  toolBar()->insertWidget(0,20,sepUndo);
   toolBar()->insertSeparator();
 
-  toolBar()->insertButton(BarIcon("undo"),ID_EDIT_UNDO,false,i18n("Undo"));
-  toolBar()->insertButton(BarIcon("redo"),ID_EDIT_REDO,false,i18n("Redo"));
+  toolBar()->insertButton("undo",ID_EDIT_UNDO,false,i18n("Undo"));
+  toolBar()->insertButton("redo",ID_EDIT_REDO,false,i18n("Redo"));
   toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("editcut"),ID_EDIT_CUT,true,i18n("Cut"));
-  toolBar()->insertButton(BarIcon("editcopy"),ID_EDIT_COPY, true,i18n("Copy"));
-  toolBar()->insertButton(BarIcon("editpaste"),ID_EDIT_PASTE, true,i18n("Paste"));
+  toolBar()->insertButton("editcut",ID_EDIT_CUT,true,i18n("Cut"));
+  toolBar()->insertButton("editcopy",ID_EDIT_COPY, true,i18n("Copy"));
+  toolBar()->insertButton("editpaste",ID_EDIT_PASTE, true,i18n("Paste"));
 	
 //  QFrame *sepCompile= new QFrame(toolBar());
 //  sepCompile->setFrameStyle(QFrame::VLine|QFrame::Sunken);
 //  toolBar()->insertWidget(0,20,sepCompile);
   toolBar()->insertSeparator();
 
-  toolBar()->insertButton(BarIcon("compfile"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
-  toolBar()->insertButton(BarIcon("make_kdevelop"),ID_BUILD_MAKE, false,i18n("Make"));
-  toolBar()->insertButton(BarIcon("rebuild"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
+  toolBar()->insertButton("compfile",ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
+  toolBar()->insertButton("make_kdevelop",ID_BUILD_MAKE, false,i18n("Make"));
+  toolBar()->insertButton("rebuild",ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("debugger"),ID_DEBUG_START, false, i18n("Debug"));
+  toolBar()->insertButton("debugger",ID_DEBUG_START, false, i18n("Debug"));
   QPopupMenu* debugToolPopup = new QPopupMenu();
   debugToolPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
@@ -1069,18 +1069,18 @@ void CKDevelop::initToolBar(){
   connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
-  toolBar()->insertButton(BarIcon("exec"),ID_BUILD_RUN, false,i18n("Run"));
+  toolBar()->insertButton("exec",ID_BUILD_RUN, false,i18n("Run"));
   toolBar()->insertSeparator();
-  toolBar()->insertButton(BarIcon("stop"),ID_BUILD_STOP, false,i18n("Stop"));
+  toolBar()->insertButton("stop",ID_BUILD_STOP, false,i18n("Stop"));
 
 //  QFrame *sepDlgEd= new QFrame(toolBar());
 //  sepDlgEd->setFrameStyle(QFrame::VLine|QFrame::Sunken);
 //  toolBar()->insertWidget(0,20,sepDlgEd);
   toolBar()->insertSeparator();
 
-  toolBar()->insertButton(BarIcon("newwidget"),ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
-  toolBar()->insertButton(BarIcon("tree_win"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
-  toolBar()->insertButton(BarIcon("output_win"),ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
+  toolBar()->insertButton("newwidget",ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
+  toolBar()->insertButton("tree_win",ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
+  toolBar()->insertButton("output_win",ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
@@ -1089,10 +1089,10 @@ void CKDevelop::initToolBar(){
 //  toolBar()->insertWidget(0,20,sepDbgRun);
   toolBar()->insertSeparator();
 
-  toolBar()->insertButton(BarIcon("dbgrun"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
-  toolBar()->insertButton(BarIcon("dbgnext"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
-  toolBar()->insertButton(BarIcon("dbgstep"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
-  toolBar()->insertButton(BarIcon("dbgstepout"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
+  toolBar()->insertButton("dbgrun",ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
+  toolBar()->insertButton("dbgnext",ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
+  toolBar()->insertButton("dbgstep",ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
+  toolBar()->insertButton("dbgstepout",ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
   QPopupMenu* stepOverMenu = new QPopupMenu();
   stepOverMenu->insertItem(SmallIconSet("dbgnextinst"),i18n("Step over instr."),this,SLOT(slotDebugStepOverIns()),0,ID_DEBUG_NEXT_INST);
@@ -1135,7 +1135,7 @@ void CKDevelop::initToolBar(){
   choice_combo->setEnabled(false);
 
   // Classbrowserwizard click button
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("classwiz"),
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("classwiz",
                                             ID_CV_WIZARD, true,
                                             i18n("Declaration/Definition"));
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CV_WIZARD,
@@ -1143,24 +1143,24 @@ void CKDevelop::initToolBar(){
   disableCommand(ID_CV_WIZARD);
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("back"),ID_HELP_BACK, false,i18n("Back"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("back",ID_HELP_BACK, false,i18n("Back"));
   history_prev = new QPopupMenu();
   connect(history_prev, SIGNAL(activated(int)), SLOT(slotHelpHistoryBack(int)));
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_BACK, history_prev);
 	
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("forward"),ID_HELP_FORWARD, false,i18n("Forward"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("forward",ID_HELP_FORWARD, false,i18n("Forward"));
   history_next = new QPopupMenu();
   connect(history_next, SIGNAL(activated(int)), SLOT(slotHelpHistoryForward(int)));
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_FORWARD, history_next);
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("stop"),ID_HELP_BROWSER_STOP, false,i18n("Stop"));
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("reload_page"),ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
-	toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("contents"), ID_HELP_CONTENTS, true, i18n("User Manual"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("stop",ID_HELP_BROWSER_STOP, false,i18n("Stop"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("reload_page",ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
+	toolBar(ID_BROWSER_TOOLBAR)->insertButton("contents", ID_HELP_CONTENTS, true, i18n("User Manual"));
 	
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("help"), ID_HELP_SEARCH_TEXT,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("help", ID_HELP_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("filefind"),ID_HELP_SEARCH,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("filefind",ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
 //  QFrame *sepWhatsThis= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
@@ -1168,7 +1168,7 @@ void CKDevelop::initToolBar(){
 //  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,sepWhatsThis);
   toolBar()->insertSeparator();
 
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("contexthelp"),ID_HELP_WHATS_THIS,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton("contexthelp",ID_HELP_WHATS_THIS,
               true,i18n("What's this...?"));
 
 //  whats_this = new QWhatsThis(this);
