@@ -23,16 +23,16 @@ app.dcopClient().registerAs(app.name, false)
 
 # see if we are starting with session management
 if app.restored?
-    RESTORE(%{APPNAME})
+    RESTORE(%{APPNAMESC})
 else
     # no session.. just start up normally
     args = KDE::CmdLineArgs.parsedArgs
     if args.count == 0
-        widget = %{APPNAME}.new
+        widget = %{APPNAMESC}.new
         widget.show
     else
 	    for i in 0...args.count do
-            widget = %{APPNAME}.new
+            widget = %{APPNAMESC}.new
             widget.show
             widget.load(args.url(i))
         end

@@ -10,7 +10,7 @@
   @author %{AUTHOR} <%{EMAIL}>
   @version %{VERSION}
 =end
-class %{APPNAME}View < Qt::Widget
+class %{APPNAMESC}View < Qt::Widget
 
     #
     # Use this signal to change the content of the statusbar
@@ -29,7 +29,7 @@ class %{APPNAME}View < Qt::Widget
         super(parent)
         
         # keep a reference to the DCOP Interface so it doesn't get gc'd
-        @dcop = %{APPNAME}Iface.new(self)
+        @dcop = %{APPNAMESC}Iface.new(self)
         
         # setup our layout manager to automatically add our widgets
         top_layout = Qt::HBoxLayout.new(self)

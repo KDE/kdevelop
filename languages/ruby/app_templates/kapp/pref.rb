@@ -1,8 +1,8 @@
 
-class %{APPNAME}Preferences < KDE::DialogBase
+class %{APPNAMESC}Preferences < KDE::DialogBase
 
     def initialize()
-        super(TreeList, i18n("%{APPNAME} Preferences"),
+        super(TreeList, i18n("%{APPNAMESC} Preferences"),
                     Help|Default|Ok|Apply|Cancel, Ok)
         # this is the base class for your preferences dialog.  it is now
         # a Treelist dialog.. but there are a number of other
@@ -15,7 +15,7 @@ class %{APPNAME}Preferences < KDE::DialogBase
     end
 end
 
-class %{APPNAME}PrefPageOne < Qt::Frame
+class %{APPNAMESC}PrefPageOne < Qt::Frame
 
     def initialize(parent)
         super(parent)
@@ -26,7 +26,7 @@ class %{APPNAME}PrefPageOne < Qt::Frame
     end
 end
 
-class %{APPNAME}PrefPageTwo < Qt::Frame
+class %{APPNAMESC}PrefPageTwo < Qt::Frame
 
     def initialize(parent)
         super(parent)

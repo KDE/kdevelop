@@ -1,9 +1,9 @@
-class %{APPNAME}Iface < KDE::DCOPObject
+class %{APPNAMESC}Iface < KDE::DCOPObject
 
     k_dcop 'void openURL(QString)'
 
     def initialize(app)
-        super("%{APPNAME}Iface")
+        super("%{APPNAMESC}Iface")
         @app = app
     end
     

@@ -11,7 +11,7 @@ client = app.dcopClient
 client.attach
 
 # do a 'send' for now
-dcopRef = DCOPRef.new("%{APPNAMELC}", "%{APPNAME}Iface")
+dcopRef = DCOPRef.new("%{APPNAMELC}", "%{APPNAMESC}Iface")
 dcopRef.openURL("http://www.kde.org")
 
 app.exec

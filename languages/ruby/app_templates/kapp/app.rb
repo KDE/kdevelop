@@ -7,7 +7,7 @@
   @version %{VERSION}
 =end
 
-class %{APPNAME} < KDE::MainWindow
+class %{APPNAMESC} < KDE::MainWindow
 
     slots 'fileNew()',
           'fileOpen()',
@@ -24,8 +24,8 @@ class %{APPNAME} < KDE::MainWindow
           'changeCaption(const QString&)'
 
     def initialize()
-        super( nil, "%{APPNAME}" )
-        @view = %{APPNAME}View.new(self)
+        super( nil, "%{APPNAMESC}" )
+        @view = %{APPNAMESC}View.new(self)
         @printer = nil
         # accept dnd
         setAcceptDrops(true)
@@ -149,7 +149,7 @@ class %{APPNAME} < KDE::MainWindow
         # button is clicked
     
         # create a new window
-        %{APPNAME}.new.show()
+        %{APPNAMESC}.new.show()
     end
     
     def fileOpen()
@@ -236,14 +236,14 @@ class %{APPNAME} < KDE::MainWindow
     def newToolbarConfig()
         # This slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
         # recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
-        createGUI(Dir.getwd + '/%{APPNAMELC}ui.rc')
+        createGUI(Dir.getwd + '/%{APPNAMESC}ui.rc')
     
         applyMainWindowSettings(KDE::Global.config(), autoSaveGroup())
     end
     
     def optionsPreferences()
         # popup some sort of preference dialog, here
-        dlg = %{APPNAME}Preferences.new
+        dlg = %{APPNAMESC}Preferences.new
         if dlg.exec()
             # redo your settings
         end

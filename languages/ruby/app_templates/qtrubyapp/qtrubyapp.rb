@@ -1,4 +1,4 @@
-class %{APPNAME} < Qt::MainWindow
+class %{APPNAMESC} < Qt::MainWindow
 
     slots 'newDoc()',
           'choose()',
@@ -10,7 +10,7 @@ class %{APPNAME} < Qt::MainWindow
           'aboutQt()'
     
 	def initialize()
-        super( nil, "%{APPNAME}", WDestructiveClose )
+        super( nil, "%{APPNAMESC}", WDestructiveClose )
         @printer = Qt::Printer.new
     
         fileTools = Qt::ToolBar.new( self, "file operations" )
@@ -104,7 +104,7 @@ class %{APPNAME} < Qt::MainWindow
     private
         
     def newDoc()
-        ed = %{APPNAME}.new
+        ed = %{APPNAMESC}.new
         ed.setCaption(tr("Qt Example - Application"))
         ed.show()
     end
@@ -122,7 +122,7 @@ class %{APPNAME} < Qt::MainWindow
     
     def load( filename )
         f = Qt::File.new( filename )
-        if !f.open( IO_ReadOnly )
+        if !f.open( Qt::IO_ReadOnly )
             return
         end
     
@@ -142,7 +142,7 @@ class %{APPNAME} < Qt::MainWindow
     
         text = @e.text()
         f = Qt::File.new( @filename )
-        if !f.open( IO_WriteOnly ) 
+        if !f.open( Qt::IO_WriteOnly ) 
             statusBar().message( tr("Could not write to %s" % @filename),
                                 2000 )
             return
