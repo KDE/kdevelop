@@ -2,7 +2,7 @@
 lib_LTLIBRARIES = libkdevelopprint.la
 
 
-INCLUDES = $(all_includes) -I$(top_builddir)/kdevelop/kpp
+INCLUDES = $(all_includes)
 
 
 LDFLAGS = 

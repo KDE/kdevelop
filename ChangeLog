@@ -1,5 +1,9 @@
-2001-06-04  Harald Fernengel  <harry@bnro.de>
+2001-06-05  F@lk Brettschneider <falk@kdevelop.org>
+    * initially added new setup wizard (as shared library),
+      it is a quite redesigned setup app based on Ralf's old sources but now based on QWizard,
+      still unfinished and we need cool pictures for each page
 
+2001-06-04  Harald Fernengel  <harry@bnro.de>
     * Added option to switch off bracket highlighting
 
 2001-06-04  jbb <jbb@kdevelop.org>
