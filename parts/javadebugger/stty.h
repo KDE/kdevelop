@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Mon Sep 13 1999                                           
     copyright            : (C) 1999 by John Birch
-    email                : jb.nz@writeme.com
+    email                : jbb@kdevelop.org
 
   This code was originally written by Judin Maxim, from the
 	KDEStudio project.
