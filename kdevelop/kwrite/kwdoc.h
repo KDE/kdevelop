@@ -59,6 +59,9 @@ class TextLine {
 
     void markFound(int pos, int l);
     void unmarkFound();
+    	
+    bool isVisible() { return visible; };
+    void setVisible(bool status);
 
     void move(int pos, int offs);
 
@@ -79,6 +82,7 @@ class TextLine {
     unsigned char *attribs;
     unsigned char attr;
     int ctx;
+    bool visible;
 
   private:
     int bpID;
@@ -134,6 +138,7 @@ class KWriteDoc : QObject {
     friend KWriteView;
     friend KWrite;
     friend HlManager;
+		friend KIconBorder;
     
   public:
     KWriteDoc(HlManager *, const char *path = 0L);
@@ -148,6 +153,9 @@ class KWriteDoc : QObject {
     void writeConfig(KConfig *);
     void readSessionConfig(KConfig *);
     void writeSessionConfig(KConfig *);
+
+		int getTextLineCount() { return contents.count(); }
+
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);
 //  }
@@ -175,6 +183,7 @@ class KWriteDoc : QObject {
 
   public:
     int getHighlight() {return hlManager->findHl(highlight);}
+  	int getFontHeight() {return fontHeight;}
   protected:
     void setHighlight(int n);
     void makeAttribs();

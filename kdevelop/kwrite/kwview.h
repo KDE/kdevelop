@@ -13,6 +13,9 @@
 class KWriteDoc;
 class Highlight;
 
+//icon-paint
+const int iconBorderWidth		= 16;
+
 //search flags
 const int sfCaseSensitive   = 1;
 const int sfWholeWords      = 2;
@@ -83,11 +86,71 @@ struct SConfig {
 };
 
 class KWrite;
+class KWriteView;
+
+class KIconBorder : public QWidget {
+    Q_OBJECT
+  public:
+    KIconBorder(KWrite *, KWriteDoc *, KWriteView *);
+    ~KIconBorder();
+
+
+  	/** Paints line */
+		void paintLine(int line);
+		/** Clear line*/
+		void clearLine(int line);
+		/** Paint a bookmark on the line if needed */
+		void paintBookmark(int line);
+		/** Paint a breakpoint on the line if needed */
+		void paintBreakpoint(int line);
+
+  	/**  */
+  	virtual void mousePressEvent(QMouseEvent* e);
+  	/**  */
+    virtual void paintEvent(QPaintEvent* e);
+
+		int getFontHeight();
+
+  	/** Paint an icon to y */
+		void ShowIcon(QPixmap& icon, int y);
+
+	protected:
+    KWrite *kWrite;
+    KWriteDoc *kWriteDoc;
+		KWriteView *kWriteView;
+
+		QPopupMenu selectMenu;
+    /** Y-coord of the mouse */
+    int mouseY;
+
+	  /** Icon for the bookmarks */
+//	  QPixmap bookmarkIcon;
+
+  protected slots: // Protected slots
+    /**  */
+    void closePopup();
+    /**  */
+    void getRange();
+    /** toggles a bookmark */
+    void toggleBookmark();
+    /**  */
+    void toggleMenu();
+    /**  */
+    void slotBreakpointRMBMenu();
+
+  private: // Private attributes
+    /**  */
+    int id_toggle;
+    /**  */
+    bool selectBroBm;
+};
+
 
 class KWriteView : public QWidget {
     Q_OBJECT
     friend KWriteDoc;
     friend KWrite;
+    friend KIconBorder;
   public:
     KWriteView(KWrite *, KWriteDoc *);
     ~KWriteView();
@@ -105,14 +168,16 @@ class KWriteView : public QWidget {
     void top(VConfig &);
     void bottom(VConfig &);
 
-  protected slots:
+   	int getXPos() { return xPos;}
+  	int getYPos() { return yPos;}
+  	int getRange(int midline);
+
+protected slots:
     void changeXPos(int);
     void changeYPos(int);
 
   protected:
     virtual bool event ( QEvent * );
-	  void drawGutter(QPainter&, int, int);
-	  void scrollW(int, int);
 
     void getVConfig(VConfig &);
     void update(VConfig &);
@@ -146,6 +211,8 @@ class KWriteView : public QWidget {
     KWriteDoc *kWriteDoc;
     QScrollBar *xScroll;
     QScrollBar *yScroll;
+	
+	KIconBorder *leftBorder;
 
     int xPos;
     int yPos;
@@ -189,6 +256,7 @@ class KWrite : public QWidget {
     Q_OBJECT
     friend KWriteView;
     friend KWriteDoc;
+		friend KIconBorder;
   public:
     /** The document can be used by more than one KWrite objects
     */
@@ -470,13 +538,28 @@ class KWrite : public QWidget {
     /** Sets the actual edit position as bookmark number n
     */
     void setBookmark(int n);
-  public slots:
+    /** Is there a bookmark on the line?
+    */
+    bool bookmarked(int line);
+    /** Get a pointer to the bookmark list
+    */
+    QList<KWBookmark>* getBookmarks() { return &bookmarks; }
+public slots:
     /** Shows a popup that lets the user choose the bookmark number
     */
     void setBookmark();
     /** Adds the actual edit position to the end of the bookmark list
     */
     void addBookmark();
+    /** Remove the bookmark at line from the bookmark list
+    */
+		void removeBookmark(int line);
+    /** Go to the next bookmark
+    */
+		void nextBookmark();
+    /** Go to the previous bookmark
+    */
+		void previousBookmark();
     /** Clears all bookmarks
     */
     void clearBookmarks();
