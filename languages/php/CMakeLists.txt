@@ -1,0 +1,59 @@
+SUBDIRS( data app_templates file_templates doc )
+
+SET(kdevphpsupport_PART_SRCS
+phpsupportpart.cpp
+phpconfigwidget.cpp
+phphtmlview.cpp
+phpconfigparserwidget.cpp
+phperrorview.cpp
+phpconfigdata.cpp
+phpcodecompletion.cpp
+phpparser.cpp
+phpnewclassdlg.cpp
+)
+
+KDE_AUTOMOC(${kdevphpsupport_PART_SRCS})
+
+SET(
+phpconfigwidgetbase.ui
+phpconfigparserwidgetbase.ui
+phpinfodlg.ui
+phpnewclassdlgbase.ui
+)
+
+KDE_ADD_UI_FILES(kdevphpsupport_PART_SRCS ${kdevphpsupport_UI}
+
+ADD_LIBRARY(kdevphpsupport SHARED ${kdevphpsupport_PART_SRCS})
+
+
+
+#original Makefile.am contents follow:
+
+## Here resides the PHP support part.
+#
+#INCLUDES = -I$(top_srcdir)/lib/interfaces \
+#	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
+#	-I$(top_srcdir)/lib/widgets $(all_includes)
+#SUBDIRS = data app_templates file_templates doc
+#
+#
+#kde_module_LTLIBRARIES = libkdevphpsupport.la
+#libkdevphpsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+#libkdevphpsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libkdevwidgets.la $(LIB_KHTML)
+#
+#libkdevphpsupport_la_SOURCES = phpsupportpart.cpp phpconfigwidgetbase.ui phpconfigparserwidgetbase.ui phpconfigwidget.cpp phpinfodlg.ui phphtmlview.cpp phpconfigparserwidget.cpp phperrorview.cpp phpconfigdata.cpp phpcodecompletion.cpp phpparser.cpp phpnewclassdlgbase.ui phpnewclassdlg.cpp
+#
+#METASOURCES = AUTO
+#
+#servicedir = $(kde_servicesdir)
+#service_DATA = kdevphpsupport.desktop
+#
+#rcdir = $(kde_datadir)/kdevphpsupport
+#rc_DATA = kdevphpsupport.rc
+#
+#templatedir = ${kde_datadir}/kdevabbrev/templates
+#template_DATA = phptemplates
+
+#######################
+#previous CMakeLists.txt contents follow:
+

@@ -9,10 +9,13 @@ kdevwidgetsincludedir = $(includedir)/kdevelop/widgets
 libkdevwidgets_la_SOURCES = flagboxes.cpp qcomboview.cpp klistviewaction.cpp \
 	kcomboview.cpp resizablecombo.cpp kdevhtmlpart.cpp processlinemaker.cpp \
 	processwidget.cpp ksavealldialog.cpp
+
 kdevwidgetsinclude_HEADERS = klistviewaction.h qcomboview.h flagboxes.h \
 	ksavealldialog.h resizablecombo.h kcomboview.h kdevhtmlpart.h processlinemaker.h \
 	processwidget.h
+
 SUBDIRS = propeditor
+
 libkdevwidgets_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 rcdir = $(kde_datadir)/kdevelop
 

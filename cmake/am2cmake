@@ -35,7 +35,7 @@ class CMakeFile
       @amFile=amFile
       amFile =~ /(.*)Makefile.am/
       @path=$1
-      @listsFile=@path+"CMakeLists.txt.x"
+      @listsFile=@path+"CMakeLists.txt"
 
       @targets=Array.new
       
@@ -158,6 +158,12 @@ class CMakeFile
    end
       
    def createListsFile
+      prevLines=Array.new
+      if FileTest.exists?(@listsFile)
+         printf("file exists: %s\n", @listsFile)
+         prevLines=File.new(@listsFile, "r").readlines
+      end
+      
       file=File.new(@listsFile, "w+");
       if not @subDirs.empty?
          file.printf("SUBDIRS( %s )\n\n", @subDirs)
@@ -202,7 +208,9 @@ class CMakeFile
          end
       end
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
-      @lines.each{ |line| file.printf("# %s", line)}
+      @lines.each{ |line| file.printf("#%s", line)}
+      file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
+      prevLines.each{ |line| file.printf("#%s", line)}
    end
 end
 

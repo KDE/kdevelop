@@ -1,15 +1,39 @@
 
-PROJECT(%{APPNAMELC})
 
-#if you don't want the full compiler output, remove the following line
-SET(CMAKE_VERBOSE_MAKEFILE ON)
+#original Makefile.am contents follow:
 
-#add definitions, compiler switches, etc. 
-ADD_DEFINITIONS(-Wall -O2)
+#dataFiles = main.cpp cmakesimple.png CMakeLists.txt
+#templateName = cmakesimple
+#
+#### no need to change below:
+#template_DATA = $(templateName).kdevtemplate
+#templatedir = ${appwizarddatadir}/templates
+#
+#appwizarddatadir = ${kde_datadir}/kdevappwizard
+#$(templateName).tar.gz:
+#	$(TAR) -cf $(templateName).tar -C $(srcdir) ${dataFiles}
+#	$(GZIP) -9 $(templateName).tar
+#
+#archivedir = ${appwizarddatadir}
+#archive_DATA = $(templateName).tar.gz ${templateName}.png
+#
+#CLEANFILES = *.tar.gz
 
-#list all source files here
-ADD_EXECUTABLE(%{APPNAMELC} main.cpp)
+#######################
+#previous CMakeLists.txt contents follow:
 
-#need to link to some other libraries ? just add them here
-#TARGET_LINK_LIBRARIES(%{APPNAMELC} png jpeg)
-
+#
+#PROJECT(%{APPNAMELC})
+#
+##if you don't want the full compiler output, remove the following line
+#SET(CMAKE_VERBOSE_MAKEFILE ON)
+#
+##add definitions, compiler switches, etc. 
+#ADD_DEFINITIONS(-Wall -O2)
+#
+##list all source files here
+#ADD_EXECUTABLE(%{APPNAMELC} main.cpp)
+#
+##need to link to some other libraries ? just add them here
+##TARGET_LINK_LIBRARIES(%{APPNAMELC} png jpeg)
+#
