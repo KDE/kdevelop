@@ -262,7 +262,6 @@
     <tabstop>neverAskAgainCheckBox</tabstop>
     <tabstop>removeButton</tabstop>
     <tabstop>cancelButton</tabstop>
-    <tabstop>newFilesListBox</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

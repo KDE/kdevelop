@@ -57,6 +57,16 @@ AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* pa
 
 	setIcon ( SmallIcon ( "fileimport.png" ) );
 
+    QWidget::setTabOrder(sourceSelector, addAllButton);
+    QWidget::setTabOrder(addAllButton, addSelectedButton);
+    QWidget::setTabOrder(addSelectedButton, importView);
+    QWidget::setTabOrder(importView, removeAllButton);
+    QWidget::setTabOrder(removeAllButton, removeSelectedButton);
+    QWidget::setTabOrder(removeSelectedButton, okButton);
+    QWidget::setTabOrder(okButton, cancelButton);
+
+    sourceSelector->setFocus();
+    
 	init();
 }
 

@@ -98,6 +98,8 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
     QWidget::setTabOrder(removeSelectedButton, okButton);
     QWidget::setTabOrder(okButton, cancelButton);
 
+    sourceSelector->setFocus();
+
 	setIcon ( SmallIcon ( "fileimport.png" ) );
 
 	init();
