@@ -20,7 +20,7 @@
 #define CEDITWIDGET_H
 
 #include <kapp.h>
-#include <kspell.h>
+/* #include <kspell.h> */
 #include "./kwrite/kwview.h"
 
 /** An abstraction layer for the editwidget.
@@ -157,8 +157,8 @@ public: // Queries
   uint lines()                    { return (uint)(text().contains('\n', false)); }
 	
 public slots:
- void spellcheck();
- void spellcheck2(KSpell*);
+// void spellcheck();
+// void spellcheck2(KSpell*);
  void slotGrepText();
 		
 public: // Method to manipulate the buffer
@@ -218,8 +218,8 @@ signals:
  void addWatchVariable(const QString& varname);
 
 private:
- KSpell *kspell;
- KSpellConfig *ksc;
+// KSpell *kspell;
+// KSpellConfig *ksc;
  int spell_offset;
 };
 

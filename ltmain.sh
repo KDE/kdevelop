@@ -55,7 +55,7 @@ modename="$progname"
 PROGRAM=ltmain.sh
 PACKAGE=libtool
 VERSION=1.3a
-TIMESTAMP=" (1.506 1999/04/29 12:53:08)"
+TIMESTAMP=" (1.542 1999/05/27 10:56:10)"
 
 default_mode=
 help="Try \`$progname --help' for more information."
@@ -466,6 +466,7 @@ compiler."
 	command="$command -o $output_obj"
       fi
 
+      $run $rm "$output_obj"
       $show "$command"
       if $run eval "$command"; then :
       else
@@ -545,6 +546,7 @@ compiler."
 
       # Suppress compiler output if we already did a PIC compilation.
       command="$command$suppress_output"
+      $run $rm "$output_obj"
       $show "$command"
       if $run eval "$command"; then :
       else
@@ -611,8 +613,6 @@ compiler."
   # libtool link mode
   link)
     modename="$modename: link"
-    C_compiler="$CC" # save it, to compile generated C sources
-    CC="$nonopt"
     case "$host" in
     *-*-cygwin* | *-*-mingw* | *-*-os2*)
       # It is impossible to link a dll without this setting, and
@@ -802,7 +802,8 @@ compiler."
     convenience=
     old_convenience=
     deplibs=
-    linkopts=
+    compiler_flags=
+    linker_flags=
     dllsearchpath=
     lib_search_path=`pwd`
 
@@ -943,6 +944,29 @@ compiler."
 	    *) xrpath="$xrpath $arg" ;;
 	    esac
 	  fi
+	  prev=
+	  continue
+	  ;;
+	xcompiler)
+	  arg=`$echo "X$arg" | $Xsed -e "$sed_quote_subst"`
+	  case "$arg" in
+	  *[\[\~\#\^\&\*\(\)\{\}\|\;\<\>\?\'\ \	]*|*]*)
+	    arg="\"$arg\""
+	    ;;
+	  esac
+	  compiler_flags="$compiler_flags $arg"
+	  prev=
+	  continue
+	  ;;
+	xlinker)
+	  arg=`$echo "X$arg" | $Xsed -e "$sed_quote_subst"`
+	  case "$arg" in
+	  *[\[\~\#\^\&\*\(\)\{\}\|\;\<\>\?\'\ \	]*|*]*)
+	    arg="\"$arg\""
+	    ;;
+	  esac
+	  linker_flags="$linker_flags $arg"
+	  compiler_flags="$compiler_flags $wl$arg"
 	  prev=
 	  continue
 	  ;;
@@ -1116,6 +1140,39 @@ compiler."
 
       -version-info)
 	prev=vinfo
+	continue
+	;;
+	
+      -Wc,*)
+	arg=`$echo "X$arg" | $Xsed -e "$sed_quote_subst"`
+	case "$arg" in
+	*[\[\~\#\^\&\*\(\)\{\}\|\;\<\>\?\'\ \	]*|*]*)
+	  arg="\"$arg\""
+	  ;;
+	esac
+	flag=`$echo "X$arg" | $Xsed -e 's/^-Wc,//'`
+	compiler_flags="$compiler_flags $flag"
+	;;
+
+      -Wl,*)
+	arg=`$echo "X$arg" | $Xsed -e "$sed_quote_subst"`
+	case "$arg" in
+	*[\[\~\#\^\&\*\(\)\{\}\|\;\<\>\?\'\ \	]*|*]*)
+	  arg="\"$arg\""
+	  ;;
+	esac
+	flag=`$echo "X$arg" | $Xsed -e 's/^-Wl,//'`
+	linker_flags="$linker_flags $flag"
+	compiler_flags="$compiler_flags $wl$flag"
+	;;
+
+      -Xcompiler)
+	prev=xcompiler
+	continue
+	;;
+
+      -Xlinker)
+	prev=xlinker
 	continue
 	;;
 
@@ -1630,8 +1687,9 @@ compiler."
 	*)
 	  abs_ladir=`cd "$ladir" && pwd`
 	  if test -z "$abs_ladir"; then
-	    $echo "$modename: cannot determine absolute directory name of \`$ladir'" 1>&2
-	    exit 1
+	    $echo "$modename: warning: cannot determine absolute directory name of \`$dir'" 1>&2
+	    $echo "$modename: passing it literally to the linker, although it might fail" 1>&2
+	    absdir="$dir"
 	  fi
 	  ;;
 	esac
@@ -1660,9 +1718,10 @@ compiler."
 
 	if test -z "$libdir"; then
 	  # It is a libtool convenience library, so add in its objects.
-	  convenience="$convenience $dir/$old_library"
-	  old_convenience="$old_convenience $dir/$old_library"
-	  deplibs="$deplibs $dir/$old_library"
+	  convenience="$convenience $ladir/$objdir/$old_library"
+	  old_convenience="$old_convenience $ladir/$objdir/$old_library"
+	  deplibs="$deplibs $ladir/$objdir/$old_library"
+	  newdependency_libs="$newdependency_libs $dependency_libs"
 	  continue
 	fi
 
@@ -1880,6 +1939,18 @@ compiler."
       name=$name_save
 
       if test "$build_libtool_libs" = yes; then
+	if test -n "$rpath"; then
+	  case "$host" in
+	  *-*-cygwin* | *-*-mingw* | *-*-os2* | *-*-beos*)
+	    # these systems don't actually have a c library (as such)!
+	    ;;
+	  *)
+	    # Add libc to deplibs on all other systems.
+	    deplibs="$deplibs -lc"
+	    ;;
+	  esac
+	fi
+
 	# Transform deplibs into only deplibs that can be linked in shared.
 	name_save=$name
 	libname_save=$libname
@@ -1913,7 +1984,7 @@ compiler."
 	  int main() { return 0; }
 EOF
 	  $rm conftest
-	  $C_compiler -o conftest conftest.c $deplibs
+	  $CC -o conftest conftest.c $deplibs
 	  if test $? -eq 0 ; then
 	    ldd_output=`ldd conftest`
 	    for i in $deplibs; do
@@ -1946,7 +2017,7 @@ EOF
 	     # If $name is empty we are operating on a -L argument.
 	      if test "$name" != "" ; then
 		$rm conftest
-		$C_compiler -o conftest conftest.c $i
+		$CC -o conftest conftest.c $i
 		# Did it work?
 		if test $? -eq 0 ; then
 		  ldd_output=`ldd conftest`
@@ -1990,7 +2061,7 @@ EOF
 		    potential_libs=`ls $i/$libname[.-]* 2>/dev/null`
 		    for potent_lib in $potential_libs; do
 		      # Follow soft links.
-		      if ls -lLd "$potlib" 2>/dev/null \
+		      if ls -lLd "$potent_lib" 2>/dev/null \
 			 | grep " -> " >/dev/null; then
 			continue 
 		      fi
@@ -2090,18 +2161,6 @@ EOF
       
       # Test again, we may have decided not to build it any more
       if test "$build_libtool_libs" = yes; then
-	if test -n "$rpath"; then
-	  case "$host" in
-	  *-*-cygwin* | *-*-mingw* | *-*-os2* | *-*-beos*)
-	    # these systems don't actually have a c library (as such)!
-	    ;;
-	  *)
-	    # Add libc to deplibs on all other systems.
-	    deplibs="$deplibs -lc"
-	    ;;
-	  esac
-	fi
-
 	if test -n "$compile_shlibpath"; then
 	  eval "$shlibpath_var='$compile_shlibpath\$$shlibpath_var'; export $shlibpath_var"
 	fi
@@ -2137,51 +2196,6 @@ EOF
 	# Use standard objects if they are pic
 	test -z "$pic_flag" && libobjs=`$echo "X$libobjs" | $SP2NL | $Xsed -e "$lo2o" | $NL2SP`
 
-	if test -n "$whole_archive_flag_spec"; then
-	  if test -n "$convenience"; then
-	    eval libobjs=\"\$libobjs $whole_archive_flag_spec\"
-	  fi
-	else
-	  gentop="$output_objdir/${outputname}x"
-	  $show "${rm}r $gentop"
-	  $run ${rm}r "$gentop"
-	  $show "mkdir $gentop"
-	  $run mkdir "$gentop"
-	  status=$?
-	  if test $status -ne 0 && test ! -d "$gentop"; then
-	    exit $status
-	  fi
-	  generated="$generated $gentop"
-	  
-	  for xlib in $convenience; do
-	    # Extract the objects.
-	    case "$xlib" in
-	    [\\/]* | [A-Za-z]:[\\/]*) xabs="$xlib" ;;
-	    *) xabs=`pwd`"/$xlib" ;;
-	    esac
-	    xlib=`$echo "X$xlib" | $Xsed -e 's%^.*/%%'`
-	    xdir="$gentop/$xlib"
-
-	    $show "${rm}r $xdir"
-	    $run ${rm}r "$xdir"
-	    $show "mkdir $xdir"
-	    $run mkdir "$xdir"
-	    status=$?
-	    if test $status -ne 0 && test ! -d "$xdir"; then
-	      exit $status
-	    fi
-	    $show "(cd $xdir && $AR x $xabs)"
-	    $run eval "(cd \$xdir && $AR x \$xabs)" || exit $?
-
-	    libobjs="$libobjs "`find $xdir -name \*.o -print -o -name \*.lo -print | $NL2SP`
-	  done
-	fi
-
-	if test "$thread_safe" = yes && test -n "$thread_safe_flag_spec"; then
-	  eval flag=\"$thread_safe_flag_spec\"
-	  linkopts="$linkopts $flag"
-	fi
-
 	# Prepare the list of exported symbols
 	if test -z "$export_symbols"; then
 	  if test "$always_export_symbols" = yes || test -n "$export_symbols_regex"; then
@@ -2207,6 +2221,51 @@ EOF
 
 	if test -n "$export_symbols" && test -n "$include_expsyms"; then
 	  $run eval '$echo "X$include_expsyms" | $SP2NL >> "$export_symbols"'
+	fi
+
+	if test -n "$convenience"; then
+	  if test -n "$whole_archive_flag_spec"; then
+	    eval libobjs=\"\$libobjs $whole_archive_flag_spec\"
+	  else
+	    gentop="$output_objdir/${outputname}x"
+	    $show "${rm}r $gentop"
+	    $run ${rm}r "$gentop"
+	    $show "mkdir $gentop"
+	    $run mkdir "$gentop"
+	    status=$?
+	    if test $status -ne 0 && test ! -d "$gentop"; then
+	      exit $status
+	    fi
+	    generated="$generated $gentop"
+
+	    for xlib in $convenience; do
+	      # Extract the objects.
+	      case "$xlib" in
+	      [\\/]* | [A-Za-z]:[\\/]*) xabs="$xlib" ;;
+	      *) xabs=`pwd`"/$xlib" ;;
+	      esac
+	      xlib=`$echo "X$xlib" | $Xsed -e 's%^.*/%%'`
+	      xdir="$gentop/$xlib"
+
+	      $show "${rm}r $xdir"
+	      $run ${rm}r "$xdir"
+	      $show "mkdir $xdir"
+	      $run mkdir "$xdir"
+	      status=$?
+	      if test $status -ne 0 && test ! -d "$xdir"; then
+		exit $status
+	      fi
+	      $show "(cd $xdir && $AR x $xabs)"
+	      $run eval "(cd \$xdir && $AR x \$xabs)" || exit $?
+
+	      libobjs="$libobjs "`find $xdir -name \*.o -print -o -name \*.lo -print | $NL2SP`
+	    done
+	  fi
+	fi
+
+	if test "$thread_safe" = yes && test -n "$thread_safe_flag_spec"; then
+	  eval flag=\"$thread_safe_flag_spec\"
+	  linker_flags="$linker_flags $flag"
 	fi
 
 	# Do each of the archive commands.
@@ -2548,8 +2607,9 @@ EOF
 	*)
 	  abs_ladir=`cd "$ladir" && pwd`
 	  if test -z "$abs_ladir"; then
-	    $echo "$modename: cannot determine absolute directory name of \`$ladir'" 1>&2
-	    exit 1
+	    $echo "$modename: warning: cannot determine absolute directory name of \`$dir'" 1>&2
+	    $echo "$modename: passing it literally to the linker, although it might fail" 1>&2
+	    absdir="$dir"
 	  fi
 	  ;;
 	esac
@@ -3059,8 +3119,8 @@ static const void *lt_preloaded_setup() {
 	  esac
 
 	  # Now compile the dynamic symbol file.
-	  $show "(cd $output_objdir && $C_compiler -c$no_builtin_flag$pic_flag_for_symtable \"$dlsyms\")"
-	  $run eval '(cd $output_objdir && $C_compiler -c$no_builtin_flag$pic_flag_for_symtable "$dlsyms")' || exit $?
+	  $show "(cd $output_objdir && $CC -c$no_builtin_flag$pic_flag_for_symtable \"$dlsyms\")"
+	  $run eval '(cd $output_objdir && $CC -c$no_builtin_flag$pic_flag_for_symtable "$dlsyms")' || exit $?
 
 	  # Clean up the generated files.
 	  $show "$rm $output_objdir/$dlsyms $nlist ${nlist}S ${nlist}T"
@@ -3448,9 +3508,9 @@ fi\
       if test -n "$old_archive_from_new_cmds" && test "$build_libtool_libs" = yes; then
 	eval cmds=\"$old_archive_from_new_cmds\"
       else
-        # Ensure that we have .o objects in place incase we decided
-        # not to build a shared library, and have fallen back to building
-        # static libs even though --disable-static was passed!
+	# Ensure that we have .o objects in place incase we decided
+	# not to build a shared library, and have fallen back to building
+	# static libs even though --disable-static was passed!
 	for oldobj in $oldobjs; do
 	  if test ! -f $oldobj; then
 	    obj=`$echo "X$oldobj" | $Xsed -e "$o2lo"`
@@ -3591,6 +3651,7 @@ libdir='$install_libdir'\
     install_type=
     isdir=no
     stripme=
+    gnustrip=no
     for arg
     do
       if test -n "$dest"; then
@@ -3607,6 +3668,7 @@ libdir='$install_libdir'\
       -o) prev="-o" ;;
       -s)
 	stripme=" -s"
+	strip -V | grep "GNU strip" >/dev/null && gnustrip=yes
 	continue
 	;;
       -*) ;;
@@ -3753,6 +3815,10 @@ libdir='$install_libdir'\
 	  $show "$install_prog $dir/$realname $destdir/$realname"
 	  $run eval "$install_prog $dir/$realname $destdir/$realname" || exit $?
 	  test "X$dlname" = "X$realname" && dlname=
+	  if test $gnustrip = yes; then
+	    $show "strip --strip-unneeded $destdir/$realname"
+	    $run eval "strip --strip-unneeded $destdir/$realname" || exit $?
+	  fi
 
 	  if test $# -gt 0; then
 	    # Delete the old symlinks, and create new ones.
@@ -3930,6 +3996,11 @@ libdir='$install_libdir'\
       $show "$install_prog $file $oldlib"
       $run eval "$install_prog \$file \$oldlib" || exit $?
 
+      if test $gnustrip = yes; then
+	$show "strip --strip-debug $oldlib"
+	$run eval "strip --strip-debug $oldlib" || exit $?
+      fi
+      
       # Do each command in the postinstall commands.
       eval cmds=\"$old_postinstall_cmds\"
       IFS="${IFS= 	}"; save_ifs="$IFS"; IFS='~'
