@@ -30,3 +30,4 @@ ServiceTypes=KDevelop/VersionControl
 X-KDevelop-Scope=Project
 X-KDE-Library=libkdevsubversion
 X-KDevelop-Version=2
+X-KDevelop-Properties=VCS,SubversionVCS

@@ -66,3 +66,4 @@ ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
 X-KDE-Library=libkdevsnippet
 X-KDevelop-Version=2
+X-KDevelop-Properties=CodeEditing

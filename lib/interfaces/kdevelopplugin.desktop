@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 Name=KDevelop Plugin
+Name[br]=Lugent KDevelop
 Name[ca]=Connector per a KDevelop
 Name[da]=KDevelop plugin
 Name[de]=KDevelop-Plugin
@@ -34,6 +35,12 @@ Type=QString
 
 [PropertyDef::X-KDevelop-Mode]
 Type=QString
+
+# defines a list of properties which the plugin has
+# a profile will query all plugins for properties and will load only
+# those that have queried properties 
+[PropertyDef::X-KDevelop-Properties]
+Type=QStringList
 
 # only important for project plugins, you can add a list of programming languages which are supported
 # the plugin will be loaded by default, if the project use this language
