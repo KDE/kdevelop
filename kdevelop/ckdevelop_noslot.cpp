@@ -910,7 +910,7 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdi_view_taskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
-  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
+//!!!!!!!!!  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   // set the mode of the tab headers
   if(view_tab_menu->isItemChecked(ID_VIEW_TAB_TEXT))

@@ -178,16 +178,10 @@ void CKDevelop::initView()
   act_outbuffer_len=0;
   prj = 0;
 
-  o_tab_view = new CTabCtl(0L, "output_tabview","output_widget");//FB
-  addToolWindow(o_tab_view, KDockWidget::DockBottom, m_pMdi, 70);//FB
-
-  t_tab_view = new CTabCtl(0L);//FB
-  addToolWindow(t_tab_view, KDockWidget::DockLeft, m_pMdi, 35);//FB
-
   if (config->hasGroup("dock_setting_default"))
   {
     // use the last placements
-    readDockConfig(config);
+//    readDockConfig(config);
   }
 //  else
 //  {
@@ -202,47 +196,46 @@ void CKDevelop::initView()
 //FB  outputdock->setDockSite( KDockWidget::DockCorner);
 //FB  treedock->setDockSite( KDockWidget::DockCorner);
 
-  t_tab_view->setFocusPolicy(QWidget::ClickFocus);
+//  t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   ////////////////////////
   // Treeviews
   ////////////////////////
 
-  class_tree = new CClassView(t_tab_view,"cv");
-  class_tree->setFocusPolicy(QWidget::NoFocus);
+  class_tree = new CClassView(0L,"cv");
+//  class_tree->setFocusPolicy(QWidget::NoFocus);
+  log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),0L,"lfv");
+//  log_file_tree->setFocusPolicy(QWidget::NoFocus);
 
-  log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),t_tab_view,"lfv");
-  log_file_tree->setFocusPolicy(QWidget::NoFocus);
+  real_file_tree = new CRealFileView(0L,"RFV");
+//  real_file_tree->setFocusPolicy(QWidget::NoFocus);
 
-  real_file_tree = new CRealFileView(t_tab_view,"RFV");
-  real_file_tree->setFocusPolicy(QWidget::NoFocus);
+  doc_tree = new DocTreeView(0L,"DOC");
+//  doc_tree->setFocusPolicy(QWidget::NoFocus);
 
-  doc_tree = new DocTreeView(t_tab_view,"DOC");
-  doc_tree->setFocusPolicy(QWidget::NoFocus);
-
+  QString class_tree_title = i18n("Classes");
+  QString log_file_tree_title = i18n("Groups");
+  QString real_file_tree_title = i18n("Files");
+  QString doc_tree_title = i18n("Books");
   // set the mode of the tab headers
   config->setGroup("General Options");
   int mode=config->readNumEntry("tabviewmode", 3);
-  switch (mode){
-    case 1:
-      t_tab_view->addTab(class_tree,i18n("C&lasses"));
-      t_tab_view->addTab(log_file_tree,i18n("G&roups"));
-      t_tab_view->addTab(real_file_tree,i18n("File&s"));
-      t_tab_view->addTab(doc_tree,i18n("Boo&ks"));
-      break;
+  switch (mode) {
     case 2:
-      t_tab_view->addTab(class_tree,SmallIcon("CVclass"),"");
-      t_tab_view->addTab(log_file_tree,SmallIcon("attach"),"");
-      t_tab_view->addTab(real_file_tree,SmallIcon("folder"),"");
-      t_tab_view->addTab(doc_tree,SmallIcon("contents"),"");
-      break;
+      class_tree_title = "  ";
+      log_file_tree_title = "  ";
+      real_file_tree_title = "  ";
+      doc_tree_title = "  ";
     case 3:
-      t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("C&lasses"));
-      t_tab_view->addTab(log_file_tree,SmallIcon("attach"),i18n("G&roups"));
-      t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("File&s"));
-      t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Boo&ks"));
-      break;
+      class_tree->setIcon(SmallIcon("CVclass"));
+      log_file_tree->setIcon(SmallIcon("attach"));
+      real_file_tree->setIcon(SmallIcon("folder"));
+      doc_tree->setIcon(SmallIcon("contents"));
   }
+  addToolWindow(class_tree, KDockWidget::DockLeft, m_pMdi, 35, i18n("class tree"), class_tree_title);
+  addToolWindow(log_file_tree, KDockWidget::DockCenter, class_tree, 35, i18n("files of project"), log_file_tree_title);
+  addToolWindow(real_file_tree, KDockWidget::DockCenter, class_tree, 35, i18n("view on project directory"), real_file_tree_title);
+  addToolWindow(doc_tree, KDockWidget::DockCenter, class_tree, 35, i18n("documentation"), doc_tree_title);
 
   prev_was_search_result= false;
   //init
@@ -251,24 +244,24 @@ void CKDevelop::initView()
   // Outputwindow
   ////////////////////////
 	
-  messages_widget = new CMakeOutputWidget(o_tab_view);
+  messages_widget = new CMakeOutputWidget(0L);
   messages_widget->setFocusPolicy(QWidget::ClickFocus);
 //  messages_widget->setReadOnly(TRUE);
 
-  stdin_stdout_widget = new COutputWidget(o_tab_view);
+  stdin_stdout_widget = new COutputWidget(0L);
   stdin_stdout_widget->setReadOnly(TRUE);
   stdin_stdout_widget->setFocusPolicy(QWidget::ClickFocus);
 
-  stderr_widget = new COutputWidget(o_tab_view);
+  stderr_widget = new COutputWidget(0L);
   stderr_widget->setReadOnly(TRUE);
   stderr_widget->setFocusPolicy(QWidget::ClickFocus);
 
-  konsole_widget = new CKonsoleWidget(o_tab_view);
-  
-  o_tab_view->addTab(messages_widget,i18n("messages"));
-  o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
-  o_tab_view->addTab(stderr_widget,i18n("stderr"));
-  o_tab_view->addTab(konsole_widget, i18n("Konsole"));
+  konsole_widget = new CKonsoleWidget(0L);
+
+  addToolWindow(messages_widget, KDockWidget::DockBottom, m_pMdi, 70, i18n("output of KDevelop"), i18n("messages"));
+  addToolWindow(stdin_stdout_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("messages of started program"), i18n("stdout"));
+  addToolWindow(stderr_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("error messages of started program"), i18n("stderr"));
+  addToolWindow(konsole_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("embedded konsole window"), i18n("Konsole"));
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -685,7 +678,9 @@ void CKDevelop::initMenuBar(){
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
-
+  view_menu->insertSeparator();
+  view_menu->insertItem(i18n("Tool &Views"), dockHideShowMenu());//FB
+			
   menuBar()->insertItem(i18n("&View"), view_menu);
 
 
@@ -1218,7 +1213,7 @@ void CKDevelop::initStatusBar()
  *-----------------------------------------------------------------*/
 void CKDevelop::initConnections(){
 
-  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
+//!!!!!!!!!!  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
 
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedFileNew(const char*)), SLOT(slotFileNew(const char*)));
@@ -1500,39 +1495,35 @@ void CKDevelop::initDebugger()
   if (dbgInternal && !var_viewer)
   {
     ASSERT(!frameStack && !brkptManager && !var_viewer && !dbgController);
-    brkptManager  = new BreakpointManager(o_tab_view, "BPManagerTab");
-    frameStack    = new FrameStack(o_tab_view, "FStackTab");
-    disassemble   = new Disassemble(o_tab_view, "DisassembleTab");
+    brkptManager  = new BreakpointManager(0L, "BPManagerTab");
+    frameStack    = new FrameStack(0L, "FStackTab");
+    disassemble   = new Disassemble(0L, "DisassembleTab");
+    addToolWindow(brkptManager, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger breakpoints"), i18n("breakpoint"));
+    addToolWindow(frameStack, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger function call stack"), i18n("frame stack"));
+    addToolWindow(disassemble, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger disassemble view"), i18n("disassemble"));
 
-    var_viewer    = new VarViewer(t_tab_view,"VARTab");
+    var_viewer    = new VarViewer(0L,"VARTab");
 
     brkptManager->setFocusPolicy(QWidget::ClickFocus);
     frameStack->setFocusPolicy(QWidget::ClickFocus);
     disassemble->setFocusPolicy(QWidget::ClickFocus);
     var_viewer->setFocusPolicy(QWidget::NoFocus);
 
+    QString var_viewer_title = i18n("Watch");
     config->setGroup("General Options");
     int mode=config->readNumEntry("tabviewmode", 3);
     switch (mode){
-      case 1:
-        t_tab_view->addTab(var_viewer,i18n("W&atch"));
-        break;
       case 2:
-        t_tab_view->addTab(var_viewer,SmallIcon("brace"),"");
-        break;
+        var_viewer_title = "  ";
       case 3:
-        t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("W&atch"));
-        break;
+        var_viewer->setIcon(SmallIcon("brace"));
     }
-
-    o_tab_view->addTab(brkptManager,i18n("breakpoint"));
-    o_tab_view->addTab(frameStack,i18n("frame stack"));
-    o_tab_view->addTab(disassemble,i18n("disassemble"));
+    addToolWindow(var_viewer, KDockWidget::DockLeft, class_tree, 35, i18n("debugger variable watch view"), var_viewer_title);
 
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    dbg_widget = new COutputWidget(o_tab_view, "debuggerTab");
-    o_tab_view->addTab(dbg_widget,i18n("debugger"));
+    dbg_widget = new COutputWidget(0L, "debuggerTab");
+    addToolWindow(dbg_widget, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger control view"), i18n("debugger"));
     dbg_widget->setFocusPolicy(QWidget::ClickFocus);
     dbg_widget->setReadOnly(TRUE);
 #endif
@@ -1564,17 +1555,30 @@ void CKDevelop::initDebugger()
   if (var_viewer)
   {
     // Figure out whether the tabs should be enabled or not.
-    o_tab_view->setTabEnabled("BPManagerTab", dbgInternal);
-    o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
-    o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
+    if (dbgInternal)
+      dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
+    else
+      dockManager->findWidgetParentDock(brkptManager->parentWidget())->undock();
+    if (dbgInternal && dbgController) {
+      dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
+      dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
+      dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
+    }
+    else {
+      dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
+      dockManager->findWidgetParentDock(disassemble->parentWidget())->undock();
+      dockManager->findWidgetParentDock(var_viewer->parentWidget())->undock();
+    }
 
-//    t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
     brkptManager->setEnabled(dbgInternal);
     frameStack->setEnabled(dbgInternal && dbgController);
     disassemble->setEnabled(dbgInternal && dbgController);
     var_viewer->setEnabled(dbgInternal && dbgController);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    o_tab_view->setTabEnabled("debuggerTab", dbgInternal);
+    if (dbgInternal)
+      dockManager->findWidgetParentDock(dbg_widget->parentWidget())->makeDockVisible();
+    else
+      dockManager->findWidgetParentDock(dbg_widget->parentWidget())->undock();
     dbg_widget->setEnabled(dbgInternal);
 #endif
   }

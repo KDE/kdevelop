@@ -921,12 +921,12 @@ private:
   //some widgets for the mainview
   ///////////////////////////////
 
-  /** The tabbar for the trees. */
-  CTabCtl* t_tab_view;
-  /** The tabbar for the output_widgets. */
-  CTabCtl* o_tab_view;
-  KDockWidget* treedock;
-  KDockWidget* outputdock;
+//  /** The tabbar for the trees. */
+//  CTabCtl* t_tab_view;
+//  /** The tabbar for the output_widgets. */
+//  CTabCtl* o_tab_view;
+//  KDockWidget* treedock;
+//  KDockWidget* outputdock;
   KDockWidget* maindock;
 
   /** The classview. */

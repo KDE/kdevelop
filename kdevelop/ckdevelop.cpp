@@ -628,30 +628,30 @@ void CKDevelop::slotViewTabIcons(){
     view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,true);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
-    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),"");
-    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),"");
-    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),"");
-    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),"");
+//!!!!!!!!!    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),"");
+//!!!!!!!!!    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),"");
+//!!!!!!!!!    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),"");
+//!!!!!!!!!    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),"");
     if(var_viewer)
-      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),"");
+;//!!!!!!!!!      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),"");
 
 }
 void CKDevelop::slotViewTabText(){
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,true);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
-    t_tab_view->removePage(class_tree);
-    t_tab_view->removePage(log_file_tree);
-    t_tab_view->removePage(real_file_tree);
-    t_tab_view->removePage(doc_tree);
+//!!!!!!!!!    t_tab_view->removePage(class_tree);
+//!!!!!!!!!    t_tab_view->removePage(log_file_tree);
+//!!!!!!!!!    t_tab_view->removePage(real_file_tree);
+//!!!!!!!!!    t_tab_view->removePage(doc_tree);
     if(var_viewer)
-      t_tab_view->removePage(var_viewer);
-    t_tab_view->addTab(class_tree,i18n("C&lasses"));
-    t_tab_view->addTab(log_file_tree,i18n("G&roups"));
-    t_tab_view->addTab(real_file_tree,i18n("File&s"));
-    t_tab_view->addTab(doc_tree,i18n("Boo&ks"));
+;//!!!!!!!!!      t_tab_view->removePage(var_viewer);
+//!!!!!!!!!    t_tab_view->addTab(class_tree,i18n("C&lasses"));
+//!!!!!!!!!    t_tab_view->addTab(log_file_tree,i18n("G&roups"));
+//!!!!!!!!!    t_tab_view->addTab(real_file_tree,i18n("File&s"));
+//!!!!!!!!!    t_tab_view->addTab(doc_tree,i18n("Boo&ks"));
     if(var_viewer)
-      t_tab_view->addTab(var_viewer,i18n("W&atch"));
+;//!!!!!!!!!      t_tab_view->addTab(var_viewer,i18n("W&atch"));
 
 }
 void CKDevelop::slotViewTabTextIcons(){
@@ -659,12 +659,12 @@ void CKDevelop::slotViewTabTextIcons(){
     view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
 
-    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),i18n("C&lasses"));
-    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),i18n("G&roups"));
-    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),i18n("File&s"));
-    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),i18n("Boo&ks"));
+//!!!!!!!!!    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),i18n("C&lasses"));
+//!!!!!!!!!    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),i18n("G&roups"));
+//!!!!!!!!!    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),i18n("File&s"));
+//!!!!!!!!!    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),i18n("Boo&ks"));
     if(var_viewer)
-      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),i18n("W&atch"));
+;//!!!!!!!!!      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),i18n("W&atch"));
 }
 
 
@@ -835,7 +835,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     // Warning: not every user has the current directory in his path !
     if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
-       o_tab_view->setCurrentTab(STDINSTDOUT);
+       dockManager->findWidgetParentDock(stdin_stdout_widget->parentWidget())->makeDockVisible();
        QString term = "xterm";
        QString exec_str = term + " -e sh -c '" + binProgram + "'";
 
@@ -874,19 +874,19 @@ void CKDevelop::slotStartRun(bool bWithArgs)
 
        appl_process << kde2dir << binProgram;
        kdDebug() << endl << "EXEC:" << kde2dir << binProgram;
-       o_tab_view->setCurrentTab(STDERR);
+       dockManager->findWidgetParentDock(stderr_widget->parentWidget())->makeDockVisible();
     }
     else if(prj->isKDEProject() || prj->isQtProject() || prj->isQt2Project())
     {
       appl_process << binProgram;
       kdDebug() << endl << "EXEC:" << binProgram;
-      o_tab_view->setCurrentTab(STDERR);
+       dockManager->findWidgetParentDock(stderr_widget->parentWidget())->makeDockVisible();
     }
     else
     {
       appl_process << binProgram;
       kdDebug() << endl << "EXEC:" << binProgram;
-      o_tab_view->setCurrentTab(STDERR);
+       dockManager->findWidgetParentDock(stderr_widget->parentWidget())->makeDockVisible();
     }
 
     setToolMenuProcess(false);
@@ -1052,9 +1052,17 @@ void CKDevelop::slotDebugStop()
     brkptManager->refreshBP(m_docViewManager->currentEditView()->getName());
   }
 
-  o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
-  o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
-  t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
+  if (dbgInternal && dbgController) {
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
+  }
+  else {
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->undock();
+    dockManager->findWidgetParentDock(var_viewer->parentWidget())->undock();
+  }
+
   frameStack->setEnabled(dbgInternal && dbgController);
   disassemble->setEnabled(dbgInternal && dbgController);
   var_viewer->setEnabled(dbgInternal && dbgController);
@@ -1429,9 +1437,16 @@ void CKDevelop::setupInternalDebugger()
   dbgShuttingDown = false;
   setDebugMenuProcess(true);  // MUST be after dbgController
 
-  o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
-  o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
-  t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
+  if (dbgInternal && dbgController) {
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
+  }
+  else {
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->undock();
+    dockManager->findWidgetParentDock(var_viewer->parentWidget())->undock();
+  }
   frameStack->setEnabled(dbgInternal && dbgController);
   disassemble->setEnabled(dbgInternal && dbgController);
   var_viewer->setEnabled(dbgInternal && dbgController);
@@ -2817,7 +2832,7 @@ void CKDevelop::slotDocumentDone()
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 {
   messages_widget->insertAtEnd(QCString(buffer,buflen+1));
-  o_tab_view->setCurrentTab(MESSAGES);
+  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
   // QString str1 = messages_widget->text();
 
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
@@ -2845,7 +2860,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   messages_widget->insertAtEnd(QCString(buffer,buflen+1));
-  o_tab_view->setCurrentTab(MESSAGES);
+  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
   // QString str1 = messages_widget->text();
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
 //     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
@@ -3286,11 +3301,11 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/, int /* docType */)
   }
 
   if (m_docViewManager->curDocIsHeaderFile()){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
+    if(bAutoswitch){ //FB && t_tab_view->getCurrentTab()==DOC){
       if ( bDefaultCV)
-        t_tab_view->setCurrentTab(CV);
+        makeWidgetDockVisible(class_tree->parentWidget());
       else
-        t_tab_view->setCurrentTab(LFV);
+        makeWidgetDockVisible(log_file_tree->parentWidget());
     }
     disableCommand(ID_BUILD_COMPILE_FILE);
     m_docViewManager->currentEditView()->setFocus();
@@ -3300,11 +3315,11 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/, int /* docType */)
     slotNewLineColumn();
   }
   if (m_docViewManager->curDocIsCppFile()){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
+    if(bAutoswitch){ //FB && t_tab_view->getCurrentTab()==DOC){
       if ( bDefaultCV)
-        t_tab_view->setCurrentTab(CV);
+        makeWidgetDockVisible(class_tree->parentWidget());
       else
-        t_tab_view->setCurrentTab(LFV);
+        makeWidgetDockVisible(log_file_tree->parentWidget());
     }
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
@@ -3375,7 +3390,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/, int /* docType */)
   if (m_docViewManager->curDocIsBrowser())
   {
     if(bAutoswitch)
-      t_tab_view->setCurrentTab(DOC);
+      makeWidgetDockVisible(doc_tree);
     m_docViewManager->currentBrowserView()->setFocus();
 
     if (m_docViewManager->currentBrowserDoc()->hasSelection())
@@ -3395,7 +3410,7 @@ void CKDevelop::slotOTabSelected(int item)
     disassemble->slotActivate(item == DISASSEMBLE);
   else
     if (item == DISASSEMBLE)
-      o_tab_view->setCurrentTab(MESSAGES);
+      dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
 }
 
 void CKDevelop::slotLogFileTreeSelected(QString file){
@@ -3474,7 +3489,20 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
 }
 
 void CKDevelop::slotTCurrentTab(int item){
-    t_tab_view->setCurrentTab(item);
+  switch( item) {
+  case CV:
+    makeWidgetDockVisible( class_tree);
+  break;
+  case LFV:
+    makeWidgetDockVisible( log_file_tree);
+  break;
+  case RFV:
+    makeWidgetDockVisible( real_file_tree);
+  break;
+  case DOC:
+    makeWidgetDockVisible( doc_tree);
+  break;
+  }
 }
 
 void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
