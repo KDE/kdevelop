@@ -1,0 +1,10 @@
+coding style rules for KDevelop2
+
+- prefix "m_" for class attributes
+- prefix "p" for pointers but no further type-prefixes
+- prefix "m_p" for class attributes which are pointers
+- upper case letters for each single word in a compound word: e.g.
+KDevViewHandler instead of Kdevviewhandler.
+- tab space = 4
+- tabs replaced by spaces
+- no prefix "get" at the beginning of a get function.
