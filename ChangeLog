@@ -1,3 +1,7 @@
+2003-04-25 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added KTextEditor::ConfigInterface to QEditor
+    * Made changed editor settings apply to all open editors
+
 2003-04-23 Roberto Raggi <roberto@kdevelop.org>
     * fixed the deadlock in the background parser
 
