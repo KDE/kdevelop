@@ -1,3 +1,7 @@
+2002-12-12 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+    * Added a new extended path ability to DomUtil so that the path can be qualified on attributes
+      and multiple matches can be addressed with a zero-based index
+
 2002-12-12 F@lk Brettschneider <falk@kdevelop.org>
     * compiles/runs on KDE-3.0 as well again
     * backported KWidgetAction and KTextEditor::MarkInterfaceExtension from KDE-3.1 to KDE-3.0-compiled Gideon
