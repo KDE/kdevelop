@@ -49,6 +49,7 @@
 #include "ParsedMethod.h"
 #include "ParsedSignalSlot.h"
 #include "ParsedSignalText.h"
+#include "ParsedStruct.h"
 /** */
 class CParsedClass
 {
@@ -104,6 +105,9 @@ public: // Public attributes
   /** List with names of classes declared in this class(if any). */
   QStrList childClasses;
 
+  /** List with names of structures declared in this class(if any). */
+  QStrList structs;
+
   /** Iterator for the methods. */
   QListIterator<CParsedMethod> methodIterator;
 
@@ -138,6 +142,9 @@ public: // Metods to set attribute values
 
   /** Add a parent. */
   void addParent( CParsedParent *aParent );
+
+  /** Add a struct. */
+  void addStruct( const char *aName ) { structs.append( aName ); }
 
   /** Add a friend. */
   void addFriend( const char *aName ) { friends.append( aName ); }
@@ -179,6 +186,9 @@ public: // Public queries
 
   /** Get a method by comparing with another method. */
   CParsedMethod *getMethod( CParsedMethod &aMethod );
+
+  /** Get a struct by using it's name. */
+  CParsedStruct *getStructByName( const char *aName ) { return NULL; }
 
   /** Get a attribute by using its' name. */
   CParsedAttribute *getAttributeByName( const char *aName );
