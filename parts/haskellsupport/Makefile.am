@@ -1,6 +1,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+SUBDIRS = app_templates compiler
 
 kde_module_LTLIBRARIES = libkdevhaskellsupport.la
 libkdevhaskellsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
@@ -15,4 +16,3 @@ service_DATA = kdevhaskellsupport.desktop
 
 rcdir = $(kde_datadir)/kdevhaskellsupport
 rc_DATA = kdevhaskellsupport.rc
-
