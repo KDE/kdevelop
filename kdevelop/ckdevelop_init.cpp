@@ -218,7 +218,7 @@ void CKDevelop::initView()
 
   // set the mode of the tab headers
   config->setGroup("General Options");
-  int mode=config->readNumEntry("tabviewmode", 3);
+  int mode=config->readNumEntry("tabviewmode", 2);
   switch (mode) {
     case 2:
       class_tree_title = "";

@@ -1,3 +1,6 @@
+2002-01-18  F@lk Brettschneider <falk@kdevelop.org>
+    * default values for editor changed in setup, tool-view tabs default appearance changed
+
 2002-01-17  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: .kdevses writing repaired concerning to the MDI views,
       (bug has been since adding of compiler settings)
