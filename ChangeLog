@@ -1,3 +1,7 @@
+2002-04-15  Simon Hausmann <hausmann@kde.org>
+
+	* Completed transition to KDevPlugin and KGenericFactory.
+
 2002-04-14  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Support for multiple file templates in app wizard
