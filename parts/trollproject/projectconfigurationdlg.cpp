@@ -20,6 +20,7 @@
 #include <knotifyclient.h>
 #include <klineedit.h>
 #include <klineeditdlg.h>
+#include <kurlrequester.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlistview.h>
@@ -216,12 +217,10 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->configuration.m_librarypath.append(lvItem->text(0));
     lvItem=lvItem->itemBelow();
   }
-  
-
 
   //change build order
   lvItem=buildorder_listview->firstChild();
-  myProjectItem->subdirs.clear();  
+  myProjectItem->subdirs.clear();
   while(lvItem)
   {
     std::cerr<<lvItem->text(0)<<std::endl;
@@ -229,25 +228,14 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     lvItem=lvItem->itemBelow();
   }
 
+  // intermediate locations
+  myProjectItem->configuration.m_objectpath = objdir_url->url();
+  myProjectItem->configuration.m_uipath = uidir_url->url();
+  myProjectItem->configuration.m_mocpath = mocdir_url->url();
 
-  
-
-
-
-
-
-
-
-                      
   //CORBA
   myProjectItem->configuration.idl_compiler=idlCmdEdit->text();
   myProjectItem->configuration.idl_options=idlCmdOptionsEdit->text();
-  
-
-  
-
-
-
 
   QDialog::accept();
   
@@ -357,6 +345,9 @@ void ProjectConfigurationDlg::UpdateControls()
   updateLibDirAddControl();
   updateBuildOrderControl();  
 
+  objdir_url->setURL(myProjectItem->configuration.m_objectpath);
+  uidir_url->setURL(myProjectItem->configuration.m_uipath);
+  mocdir_url->setURL(myProjectItem->configuration.m_mocpath);
 }
 
 QPtrList <ProjectItem> ProjectConfigurationDlg::getAllProjects()

@@ -2,15 +2,18 @@
 <kpartgui name="KDevTrollProject" version="1">
 <MenuBar>
   <Menu name="build" >
-    <Action name="build_build" />
-    <Action name="build_clean" />
+    <Action name="build_compilefile" />
     <Separator/>
-    <Action name="build_execute" />
+    <Action name="build_build_project" />
+    <Action name="build_rebuild_project" />
+    <Action name="build_clean_project" />
+    <Separator/>
+    <Action name="build_execute_project" />
   </Menu>
 </MenuBar>
 <ToolBar name="buildToolBar">
-    <Action name="build_build" />
-    <Action name="build_execute" />
+    <Action name="build_build_project" />
+    <Action name="build_execute_project" />
 </ToolBar>
 </kpartgui>
 

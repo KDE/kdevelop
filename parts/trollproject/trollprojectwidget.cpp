@@ -241,37 +241,37 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setSpacing ( 2 );
     // Add subdir
     addSubdirButton = new QToolButton ( projectTools, "Make button" );
-    addSubdirButton->setPixmap ( SmallIcon ( "folder_new",22 ) );
+    addSubdirButton->setPixmap ( SmallIcon ( "folder_new" ) );
     addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
     addSubdirButton->setEnabled ( true );
     QToolTip::add( addSubdirButton, i18n( "Add new subdirectory..." ) );
     // Create scope
     createScopeButton = new QToolButton ( projectTools, "Make button" );
-    createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew",22 ) );
+    createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew" ) );
     createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
     createScopeButton->setEnabled ( true );
     QToolTip::add( createScopeButton, i18n( "Create scope..." ) );
     // build selected file
     buildFileButton = new QToolButton ( projectTools, "Make file button" );
-    buildFileButton->setPixmap ( SmallIcon ( "compfile",22 ) );
+    buildFileButton->setPixmap ( SmallIcon ( "compfile" ) );
     buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
     buildFileButton->setEnabled ( true );
     QToolTip::add( buildFileButton, i18n( "Build file" ) );
     // build
     buildProjectButton = new QToolButton ( projectTools, "Make button" );
-    buildProjectButton->setPixmap ( SmallIcon ( "make_kdevelop",22 ) );
+    buildProjectButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
     buildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildProjectButton->sizePolicy().hasHeightForWidth() ) );
     buildProjectButton->setEnabled ( true );
     QToolTip::add( buildProjectButton, i18n( "Build" ) );
     // rebuild
     rebuildProjectButton = new QToolButton ( projectTools, "Rebuild button" );
-    rebuildProjectButton->setPixmap ( SmallIcon ( "rebuild",22 ) );
+    rebuildProjectButton->setPixmap ( SmallIcon ( "rebuild" ) );
     rebuildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildProjectButton->sizePolicy().hasHeightForWidth() ) );
     rebuildProjectButton->setEnabled ( true );
     QToolTip::add( rebuildProjectButton, i18n( "Rebuild" ) );
     // run
     executeProjectButton = new QToolButton ( projectTools, "Run button" );
-    executeProjectButton->setPixmap ( SmallIcon ( "exec",22 ) );
+    executeProjectButton->setPixmap ( SmallIcon ( "exec" ) );
     executeProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeProjectButton->sizePolicy().hasHeightForWidth() ) );
     executeProjectButton->setEnabled ( true );
     QToolTip::add( executeProjectButton, i18n( "Run" ) );
@@ -280,7 +280,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setStretchFactor(spacer, 1);
     // Project configuration
     projectconfButton = new QToolButton ( projectTools, "Project configuration button" );
-    projectconfButton->setPixmap ( SmallIcon ( "configure",22 ) );
+    projectconfButton->setPixmap ( SmallIcon ( "configure" ) );
     projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
     QToolTip::add( projectconfButton, i18n( "Configure the project" ) );
@@ -289,13 +289,13 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubdir () ) );
     connect ( createScopeButton, SIGNAL ( clicked () ), this, SLOT ( slotCreateScope () ) );
     connect ( buildFileButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildFile () ) );
-    
+
     connect ( buildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
     connect ( executeProjectButton, SIGNAL ( clicked () ), this, SLOT ( slotExecuteProject () ) );
 
 
-    
+
     connect ( projectconfButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureProject () ) );
 
     // Project tree
@@ -328,21 +328,21 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
-    addfilesButton->setPixmap ( SmallIcon ( "fileimport",22 ) );
+    addfilesButton->setPixmap ( SmallIcon ( "fileimport" ) );
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
     QToolTip::add( addfilesButton, i18n( "Add existing files" ) );
 
     // Add new file button
     newfileButton = new QToolButton ( fileTools, "Add new file" );
-    newfileButton->setPixmap ( SmallIcon ( "filenew",22 ) );
+    newfileButton->setPixmap ( SmallIcon ( "filenew" ) );
     newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
     QToolTip::add( newfileButton, i18n( "Add new files" ) );
 
     // remove file button
     removefileButton = new QToolButton ( fileTools, "Remove file" );
-    removefileButton->setPixmap ( SmallIcon ( "button_cancel",22 ) );
+    removefileButton->setPixmap ( SmallIcon ( "button_cancel" ) );
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
@@ -354,30 +354,31 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // build
     buildTargetButton = new QToolButton ( fileTools, "Make button" );
-    buildTargetButton->setPixmap ( SmallIcon ( "make_kdevelop",22 ) );
+    buildTargetButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
     buildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildTargetButton->sizePolicy().hasHeightForWidth() ) );
     buildTargetButton->setEnabled ( true );
     QToolTip::add( buildTargetButton, i18n( "Build" ) );
     // rebuild
     rebuildTargetButton = new QToolButton ( fileTools, "Rebuild button" );
-    rebuildTargetButton->setPixmap ( SmallIcon ( "rebuild",22 ) );
+    rebuildTargetButton->setPixmap ( SmallIcon ( "rebuild" ) );
     rebuildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildTargetButton->sizePolicy().hasHeightForWidth() ) );
     rebuildTargetButton->setEnabled ( true );
-    QToolTip::add( rebuildProjectButton, i18n( "Rebuild" ) );
+    QToolTip::add( rebuildTargetButton, i18n( "Rebuild" ) );
     // run
     executeTargetButton = new QToolButton ( fileTools, "Run button" );
-    executeTargetButton->setPixmap ( SmallIcon ( "exec",22 ) );
+    executeTargetButton->setPixmap ( SmallIcon ( "exec" ) );
     executeTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeTargetButton->sizePolicy().hasHeightForWidth() ) );
     executeTargetButton->setEnabled ( true );
-                
-    
+    QToolTip::add( executeTargetButton, i18n( "Run" ) );
+
+
     // spacer
     spacer = new QWidget(fileTools);
     projectTools->setStretchFactor(spacer, 1);
 
     // Configure file button
     configurefileButton = new QToolButton ( fileTools, "Configure file" );
-    configurefileButton->setPixmap ( SmallIcon ( "configure_file",22 ) );
+    configurefileButton->setPixmap ( SmallIcon ( "configure_file" ) );
     configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
     configurefileButton->setEnabled ( true );
     QToolTip::add( configurefileButton, i18n( "Configure file" ) );
@@ -412,10 +413,10 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     executeTargetButton->setEnabled(false);
 
 
-             
+
     m_part = part;
     m_shownSubproject = 0;
-    
+
 }
 
 
@@ -759,7 +760,7 @@ void TrollProjectWidget::slotBuildProject()
   QString buildcmd = "make";
   m_part->queueCmd(dir,dircmd + buildcmd);
   m_part->mainWindow()->lowerView(this);
-  
+
 }
 void TrollProjectWidget::slotBuildTarget()
 {
@@ -2078,7 +2079,7 @@ void TrollProjectWidget::slotExecuteProject()
     bool inTerminal = DomUtil::readBoolEntry(*(m_part->projectDom()), "/kdevtrollproject/run/terminal");
 //    m_part->appFrontend()->startAppCommand(dircmd + program, inTerminal);
 //    m_part->execute(this->projectDirectory(), "./"+program );
-  m_part->appFrontend()->startAppCommand(this->projectDirectory(), "./"+program,inTerminal );
+  m_part->appFrontend()->startAppCommand(this->projectDirectory(), program,inTerminal );
 }
 
 

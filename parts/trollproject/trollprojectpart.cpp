@@ -73,17 +73,17 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     KAction *action;
 
-    const QIconSet icon(SmallIcon("compfile",22));
+    const QIconSet icon(SmallIcon("compfile"));
     action = new KAction( i18n("Compile &File"), icon, 0,
                           m_widget, SLOT(slotBuildFile()),
                           actionCollection(),"build_compilefile"  );
 
-                          
+
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           m_widget, SLOT(slotBuildProject()),
                           actionCollection(), "build_build_project" );
 
-    action = new KAction( i18n("&Rebuild Project"),SmallIcon ( "rebuild",22 ) , 0,
+    action = new KAction( i18n("&Rebuild Project"),SmallIcon ( "rebuild" ) , 0,
                           m_widget, SLOT(slotRebuildProject()),
                           actionCollection(),"build_rebuild_project"  );
     
@@ -97,13 +97,13 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
 
 
-                          
+
 
     action = new KAction( i18n("&Build Target Project"), "make_kdevelop", Key_F8,
                           m_widget, SLOT(slotBuildTarget()),
                           actionCollection(), "build_build_target" );
 
-    action = new KAction( i18n("&Rebuild Target Project"),SmallIcon ( "rebuild",22 ) , 0,
+    action = new KAction( i18n("&Rebuild Target Project"),SmallIcon ( "rebuild" ) , 0,
                           m_widget, SLOT(slotRebuildTarget()),
                           actionCollection(),"build_rebuild_target"  );
 
@@ -205,7 +205,7 @@ QString TrollProjectPart::projectName()
 
 QString TrollProjectPart::mainProgram()
 {
-   
+
     QDomDocument &dom = *projectDom();
     return QDir::cleanDirPath(projectDirectory() + "/" + DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram"));
 }

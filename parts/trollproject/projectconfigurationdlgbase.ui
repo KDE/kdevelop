@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>803</width>
-            <height>722</height>
+            <width>586</width>
+            <height>483</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -752,7 +752,7 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Link libraries ou&amp;tside project (LIBADD):</string>
+                            <string>Link libraries ou&amp;tside project:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>outsidelib_listview</cstring>
@@ -937,7 +937,7 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Link convenience libraries in&amp;side project (LIBADD):</string>
+                            <string>Link convenience libraries in&amp;side project:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>insidelib_listview</cstring>
@@ -950,7 +950,7 @@
                     <cstring>libPathTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Library paths</string>
+                    <string>Library Paths</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1195,7 +1195,7 @@
                     <cstring>buildOrderTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Build order</string>
+                    <string>Build Order</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1303,10 +1303,79 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Intermediate Locations</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>mocdir_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>MOC Files:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>uidir_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>UI Files:</string>
+                        </property>
+                    </widget>
+                    <widget class="KURLRequester" row="0" column="1">
+                        <property name="name">
+                            <cstring>mocdir_url</cstring>
+                        </property>
+                    </widget>
+                    <widget class="KURLRequester" row="1" column="1">
+                        <property name="name">
+                            <cstring>uidir_url</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>objdir_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Object Files:</string>
+                        </property>
+                    </widget>
+                    <widget class="KURLRequester" row="2" column="1">
+                        <property name="name">
+                            <cstring>objdir_url</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>spacer19</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>280</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
                     <cstring>corbaTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Corba</string>
+                    <string>CORBA</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -1334,7 +1403,7 @@
                                     <cstring>TextLabel1_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>idl compiler</string>
+                                    <string>IDL Compiler</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -1342,7 +1411,7 @@
                                     <cstring>TextLabel2_3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>compiler options</string>
+                                    <string>Compiler Options</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -1604,6 +1673,15 @@
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
