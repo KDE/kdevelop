@@ -55,7 +55,7 @@ class StructureParser : public QXmlDefaultHandler
 
     private:
         // The current state of our FSA.
-        typedef enum StateType
+        typedef enum
         {
             stateUnknown        = 0,
             stateDeveloperID    = 1,
@@ -82,7 +82,7 @@ class StructureParser : public QXmlDefaultHandler
             stateSysInfo        = 22,
             statePriority       = 23,
             stateRepeat         = 24
-        };
+        } StateType;
 
     private:
         StateType       State;
