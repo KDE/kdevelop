@@ -192,10 +192,10 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 	{
 		// Look for a hash type which has been printed via a 'pp' command, to
 		// expand its sub items. For example:
-		//		"greeting"=>"hello"
-		//		"farewell"=>"goodbye"
+		//		["greeting"]="hello"
+		//		["farewell"]="goodbye"
 		//
-		QRegExp pphash_re("\\s*([^=\\s]+)=([^\n]+)\\n");
+		QRegExp pphash_re("\\s*(\\[[^\\]]+\\])=([^\\n]+)\\n");
 		pos = pphash_re.search(buf);
 		
 		while (pos != -1) {

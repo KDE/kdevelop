@@ -1288,8 +1288,8 @@ void RDBController::slotUserRDBCmd(const QString& cmd)
     QRegExp delete_re("^del(ete)?(\\s.*)?");
     QRegExp display_re("^disp(lay)?(\\s.*)?");
     QRegExp undisplay_re("^undisp(lay)?(\\s.*)?");
-    QRegExp step_re("^s(tep)?(\\s.*)?");
-    QRegExp next_re("^n(ext)?(\\s.*)?");
+    QRegExp step_re("^s(tep)?(\\s[\\d]+)?$");
+    QRegExp next_re("^n(ext)?(\\s[\\d]+)?$");
     QRegExp varlocal_re("^v(ar)?\\s+l(ocal)?");
     QRegExp varglobal_re("^v(ar)?\\s+g(lobal)?");
     QRegExp varinstance_re("^v(ar)?\\s+i(nstance)?\\s(.*)");
