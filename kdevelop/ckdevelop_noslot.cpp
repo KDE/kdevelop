@@ -672,9 +672,11 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   if (pCurEditWidget) {
     debug("getting edit widget name !");
     editWidgetName = pCurEditWidget->getName(); //FB
+    debug("editWidgetName : '%s' !", editWidgetName.data());
   }
-
-  debug("editWidgetName : '%s' !", editWidgetName.data());
+  else {
+    debug("editWidgetName : '' !");
+  }
 
   debug("looking if file already open !\n");
   // We need to look in the list of "open" files for the file that
