@@ -14,9 +14,9 @@
 #include <kcombobox.h>
 #include <assert.h>
 
-namespace KDevCompat {
-
 class QPushButton;
+
+namespace KDevCompat {
 
 class KEditListBoxPrivate
 {

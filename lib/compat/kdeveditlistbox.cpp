@@ -349,9 +349,9 @@ KEditListBox::CustomEditor::CustomEditor( KComboBox *combo )
     assert( m_lineEdit );
 }
 
-#include "kdeveditlistbox.moc"
-
 }; //namespace
+
+#include "kdeveditlistbox.moc"
 
 #endif
 //-----------------------------------------------------------------------------

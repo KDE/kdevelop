@@ -97,9 +97,9 @@ void KWidgetAction::virtual_hook( int id, void* data )
 
 //--------------------end-of-copy-of-kde-3.1-----------
 
-#include "kdevwidgetaction.moc"
-
 }; //namespace
+
+#include "kdevwidgetaction.moc"
 
 #endif // !(KDE_VERSION > 305)
 
