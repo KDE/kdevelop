@@ -1,3 +1,6 @@
+2000-03-06 jbb <jbb@ihug.co.nz>
+	* Fixed crash when >200 chars entered for "Debug with args"
+
 2000-03-05  Ralf Nolden <rnolden@kdevelop.de>
 	* "cleaned" slotProjectAPI to read all kdoc index files
 	  for cross-referencing the project API

@@ -1363,9 +1363,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
     prj->setDebugArgs(args);		
     prj->writeProject();
 
-    slotStatusMsg(QString().sprintf(i18n("Debug with arguments (%s) in %s"),
-                            args.data(), dbgExternalCmd.data()));
-
+    slotStatusMsg(i18n("Debug with arguments"));
     stdin_stdout_widget->clear();
     stderr_widget->clear();
 
