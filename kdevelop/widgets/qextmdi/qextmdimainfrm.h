@@ -87,6 +87,7 @@ protected:
    QPopupMenu              *m_pTaskBarPopup;
 	QPopupMenu              *m_pWindowMenu;
    QPopupMenu              *m_pDockMenu;
+   QPopupMenu              *m_pPlacingMenu;
    QMenuBar                *m_pMainMenuBar;
 
    QPixmap                 *m_pUndockButtonPixmap;
@@ -136,6 +137,8 @@ public:
     * Additionally, this menu provides some placing actions for these views.
     */
    QPopupMenu* windowMenu() { return m_pWindowMenu; };
+   virtual void setBackgroundColor( const QColor &c) { m_pMdi->setBackgroundColor( c); };
+   virtual void setBackgroundPixmap( const QPixmap &pm) { m_pMdi->setBackgroundPixmap( pm); };
 
 public slots:
    /**
@@ -195,13 +198,24 @@ public slots:
      */
    virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
    /** Shows the view taskbar. This should be connected with your "View" menu. */
-   void showViewTaskBar();
+   virtual void showViewTaskBar();
    /** Hides the view taskbar. This should be connected with your "View" menu. */
-   void hideViewTaskBar();
-   /**
-   * Forces the update of the window menu.
-   */
-   void fillWindowMenu(const QString& s = 0);
+   virtual void hideViewTaskBar();
+   /** Update of the window menu contents. */
+   virtual void fillWindowMenu();
+
+	/** Cascades the windows without resizing them. */
+	virtual void cascadeWindows() { m_pMdi->cascadeWindows(); }
+	/** Cascades the windows resizing them to the maximum available size. */
+	virtual void cascadeMaximized() { m_pMdi->cascadeMaximized(); };
+	virtual void expandVertical() { m_pMdi->expandVertical(); };
+	virtual void expandHorizontal() { m_pMdi->expandHorizontal(); };
+	/** Tile Pragma */
+	virtual void tilePragma() { m_pMdi->tilePragma(); };
+	/** Tile Anodine */
+	virtual void tileAnodine() { m_pMdi->tileAnodine(); };
+	/** Tile Vertically */
+   virtual void tileVertically() { m_pMdi->tileVertically(); };
 
 protected:
 	virtual void closeEvent(QCloseEvent *e);
