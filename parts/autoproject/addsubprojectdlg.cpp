@@ -66,29 +66,42 @@ void AddSubprojectDialog::accept()
         }
         childItem = childItem->nextSibling();
     }
- 
+
+
+    // check for config.status
+    if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
+        KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run Configure first"));
+        QDialog::accept();
+	return;
+    }
+
     QDir      dir( m_subProject->path );
     QFileInfo file( dir, name );
-    
+
     if( file.exists() && !file.isDir() ) {
         KMessageBox::sorry(this, i18n("A file named %1 already exists.").arg(name));
+        QDialog::accept();
         return;
     } else if( file.isDir() ) {
         if( KMessageBox::warningContinueCancel(this,
                i18n("A subdirectory %1 already exists. "
-                    "Do you wish to add it as a subproject?").arg(name)) 
-            == KMessageBox::Cancel )
+                    "Do you wish to add it as a subproject?").arg(name))
+            == KMessageBox::Cancel ){
+            QDialog::accept();
             return;
+	}
     } else if (!dir.mkdir(name)) {
         KMessageBox::sorry(this, i18n("Could not create subdirectory %1.").arg(name));
+        QDialog::accept();
         return;
     }
 
     if(!dir.cd(name)) {
        KMessageBox::sorry(this, i18n("Could not access the subdirectory %1.").arg(name));
+       QDialog::accept();
        return;
     }
-    
+
     // Adjust SUBDIRS variable in containing Makefile.am
     m_subProject->variables["SUBDIRS"] += (" " + name);
     QMap<QString,QString> replaceMap;
@@ -101,16 +114,16 @@ void AddSubprojectDialog::accept()
     newitem->path = m_subProject->path + "/" + name;
     newitem->variables["INCLUDES"] = m_subProject->variables["INCLUDES"];
     newitem->setOpen(true);
-    
+
     // Move to the bottom of the list
     QListViewItem *lastItem = m_subProject->firstChild();
     while (lastItem->nextSibling())
         lastItem = lastItem->nextSibling();
     if (lastItem != newitem)
         newitem->moveItem(lastItem);
-    
+
     // Create a Makefile in the new subdirectory
-    
+
     QFile f( dir.filePath("Makefile.am") );
     if (f.exists()) {
         m_subprojectView->parse( newitem );
