@@ -96,7 +96,7 @@ inline void GCatalog<Tp>::addIndex( const QCString& name )
 
 	QFileInfo fileInfo( d->dbName );
 	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
-	
+
 	if( (ret = dbp->set_cachesize( dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
 	    kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
 	}
@@ -175,7 +175,7 @@ inline void GCatalog<Tp>::open( const QString& dbName )
     if( (ret = d->dbp->set_cachesize( d->dbp, 0, 2 * 1024 * 1024, 0 )) != 0 ){
 	kdDebug() << "set_cachesize: " << db_strerror(ret) << endl;
     }
-    
+
     if ((ret = d->dbp->open(
 	d->dbp  BDB_OPEN_HACK, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	kdDebug() << "db_open: " << db_strerror(ret) << endl;
@@ -478,15 +478,10 @@ inline void GCatalog<Tp>::removeItems( const QValueList< QueryArgument > & args 
 template <class Tp>
 inline QCString GCatalog<Tp>::generateId()
 {
-    for( ;; ){
-	QCString asStr;
-	QDataStream s( asStr, IO_WriteOnly );
-	s << d->rnd.getLong( 999999 );
-
-	if( !hasItem(asStr) ){
-	    return asStr;
-	}
-    }
+    static int n = 1;
+    QCString asStr;
+    asStr.sprintf( "%05d", n++ );
+    return asStr;
 }
 
 template <class Tp>
