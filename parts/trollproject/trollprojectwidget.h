@@ -44,6 +44,8 @@ struct ProjectConfiguration
   QMakeBuildMode  m_buildMode;
   QMakeWarnings   m_warnings;
   int             m_requirements;
+  QString         m_target;
+  QString         m_subdirName;
 };
 
 
@@ -160,6 +162,10 @@ public:
      * The directory of the currently active subproject.
      */
     QString subprojectDirectory();
+    /**
+     * The directory of the currently active subproject.
+     */
+    QString getCurrentTarget();
 
     GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name, const QString &scopeName);
     FileItem *createFileItem(const QString &name);

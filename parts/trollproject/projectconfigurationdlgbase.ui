@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>336</width>
-            <height>306</height>
+            <width>432</width>
+            <height>311</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -34,6 +34,22 @@
         <property name="spacing">
             <number>6</number>
         </property>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>buttonOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Ok</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonCancel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
         <spacer row="1" column="0">
             <property name="name">
                 <cstring>Spacer1_2</cstring>
@@ -46,8 +62,8 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>20</width>
-                    <height>20</height>
+                    <width>30</width>
+                    <height>0</height>
                 </size>
             </property>
         </spacer>
@@ -78,7 +94,7 @@
                 <attribute name="title">
                     <string>B&amp;asics</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
@@ -88,7 +104,7 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>groupTemplate</cstring>
                         </property>
@@ -140,7 +156,71 @@
                             </widget>
                         </vbox>
                     </widget>
-                </grid>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>GroupBox1</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Target</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Path</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Outputfile</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_targetPath</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_targetOutputFile</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="2">
+                                <property name="name">
+                                    <cstring>Browse</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>...</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Browse</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -295,6 +375,18 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>updateProjectConfiguration()</slot>
     </connection>
+    <connection>
+        <sender>Browse</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>browseTargetPath()</slot>
+    </connection>
+    <connection>
+        <sender>radioSubdirs</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>clickSubdirsTemplate()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
@@ -311,7 +403,12 @@
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">projectconfigurationdlgbase.ui.h</include>
+</includes>
 <slots>
+    <slot>browseTargetPath()</slot>
+    <slot>clickSubdirsTemplate()</slot>
     <slot>updateProjectConfiguration()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

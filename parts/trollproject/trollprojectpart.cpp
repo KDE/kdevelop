@@ -50,7 +50,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                                    ".pro file. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
 
-    topLevel()->embedSelectViewRight(m_widget, i18n("qmake Manager"));
+    topLevel()->embedSelectView(m_widget, i18n("qmake Manager"));
 
     KAction *action;
 
@@ -222,7 +222,7 @@ void TrollProjectPart::slotClean()
 void TrollProjectPart::slotExecute()
 {
     // temporary hack
-    QString program = m_widget->projectDirectory() + "/" + m_projectName;
+    QString program = m_widget->getCurrentTarget();
 
     QDomElement docEl = projectDom()->documentElement();
     QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
@@ -241,14 +241,21 @@ void TrollProjectPart::slotExecute()
     }
     program.prepend(environstr);
 
+    QString dircmd = "cd "+m_widget->subprojectDirectory() + " && " ;
+
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
-    appFrontend()->startAppCommand(program, inTerminal);
+    appFrontend()->startAppCommand(dircmd + program, inTerminal);
 }
 
 void TrollProjectPart::execute(const QString &command)
 {
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
     appFrontend()->startAppCommand(command, inTerminal);
+}
+
+void TrollProjectPart::queueCmd(const QString &dir, const QString &cmd)
+{
+    makeFrontend()->queueCommand(dir, cmd);
 }
 
 
