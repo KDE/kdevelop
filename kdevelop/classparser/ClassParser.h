@@ -1,42 +1,20 @@
-/********************************************************************
-* Name    : Definition of tha classparser.                          *
-* ------------------------------------------------------------------*
-* File    : ClassParser.h                                           *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Mon Mar 15 13:14:44 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Macros:                                                           *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Types:                                                            *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ClassParser.h  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _CLASSPARSER_H_INCLUDED
 #define _CLASSPARSER_H_INCLUDED
 
@@ -47,7 +25,14 @@
 #include <fstream.h>
 #include "tokenizer.h"
 #include "ClassStore.h"
-/** */
+
+/** This class handles the parsing and generation of all C++ and C
+ * constructions. The classparser has a store in which all elements that
+ * have been parsed is stored. The external interface to this class is
+ * very simple. Just call parse() and you're off.
+ * @author Jonas Nordin
+ * @short Handles parsing of C++ and C expressions.
+ */
 class CClassParser
 {
 public: // Constructor & Destructor
@@ -56,15 +41,17 @@ public: // Constructor & Destructor
   ~CClassParser();
 
 private: // Private classes
-  /** This class represents a lexema. Used to store lexem in a stack. */
+
+  /** This class represents one lexem, which is a type and a text.
+      It is used to store lexem in a stack. */
   class CParsedLexem
   {
-    public: // Constructor & destructor
+  public: // Constructor & destructor
     
     CParsedLexem( int aType, const char *aText) { type = aType; text = aText; }
     ~CParsedLexem() {}
     
-    public: // Public attributes
+  public: // Public attributes
     
     /** The lexem text. */
     QString text;
@@ -80,7 +67,10 @@ public: // Public attributes
 
 public: // Public Methods
 
-  /** Parse the two files and return the parsed classes found. */
+  /** Parse the two files and return the parsed classes found. 
+   * @param file Name of the file to parse.
+   * @return If the parsing was successful.
+   */
   bool parse( const char *file = NULL );
 
   /** Remove all parsed classes */
@@ -117,12 +107,16 @@ private: // Private methods
   /** Get the next lexem from the lexer. */
   void getNextLexem()        { lexem = lexer->yylex(); }
 
-  /** Fetch the current text from the lexer and return it. */
+  /** Fetch the current text from the lexer and return it. 
+   * @return The text of the current lexem.
+   */
   const char *getText()      { return lexer->YYText(); }
   
-  /** Fetch the current linenumber from the lexer and return it. */
-  //int getLineno()            { debug("%d",lexer->lineno());return lexer->lineno() - 1;  }
+  /** Fetch the current linenumber from the lexer and return it. 
+   * @return The current linenumber.
+   */
   int getLineno()            { return lexer->lineno() - 1;  }
+  //int getLineno()            { debug("%d",lexer->lineno());return lexer->lineno() - 1;  }
 
   /** Remove all elements from the stack. */
   void emptyStack();

@@ -1,32 +1,20 @@
-/********************************************************************
-* Name    : Implementation of the classparser.                      *
-* ------------------------------------------------------------------*
-* File    : ClassParser.cc                                          *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Mon Mar 15 14:18:46 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ClassParser.cpp  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #include <iostream.h>
 #include <qregexp.h> 
@@ -337,6 +325,10 @@ void CClassParser::parseTemplate()
   bool exit = false;
   int depth = 0;
 
+  // If we're currently at an <, increase the depth.
+  if( lexem == '<' )
+    depth++;
+
   while( !exit )
   {
     getNextLexem();
@@ -546,6 +538,35 @@ CParsedAttribute *CClassParser::parseVariable()
     // Skip all default values.
     if( lexem == '=' )
       skip = true;
+    else if( !skip && lexem == '(' ) // Check for function pointer
+    {
+      getNextLexem();
+      if( lexem == '*' )
+      {
+        lexemStack.push( new CParsedLexem( '(', "(" ));
+        PUSH_LEXEM();
+
+        // Push variable name.
+        getNextLexem();
+        PUSH_LEXEM();
+
+        // Push ')'
+        getNextLexem();
+        PUSH_LEXEM();
+
+        getNextLexem();
+
+        // We'll take a chance that this declaration doesn't include function pointers.
+        while( lexem != 0 && lexem != ')' )
+        {
+          PUSH_LEXEM();
+          getNextLexem();
+        }
+        
+        // Add ')'
+        PUSH_LEXEM();
+      }
+    }
     else if( !skip && !isEndOfVarDecl() )
     {
       PUSH_LEXEM();
@@ -798,27 +819,31 @@ void CClassParser::parseMethodImpl(bool isOperator)
   // Get the method declaration.
   fillInParsedMethod( &aMethod );
 
-  // Try to move the values to the declared method.
-  aClass = store.getClassByName( className );
-  if( aClass != NULL )
-  {
-    pm = aClass->getMethod( aMethod );
-    if( pm != NULL )
+  // Skip forward declarations.
+  if( lexem != ';' )
+  { 
+    // Try to move the values to the declared method.
+    aClass = store.getClassByName( className );
+    if( aClass != NULL)
     {
-      aClass->setDeclaredInFile( currentFile );
-      pm->setIsInHFile( false );
-      pm->setDeclaredInFile( currentFile );
-      pm->setDeclaredOnLine( declLine );
+      pm = aClass->getMethod( aMethod );
+      if( pm != NULL )
+      {
+        aClass->setDeclaredInFile( currentFile );
+        pm->setIsInHFile( false );
+        pm->setDeclaredInFile( currentFile );
+        pm->setDeclaredOnLine( declLine );
+      }
+      else
+      {
+        warning( "No method by the name %s found in class %s", 
+                 name.data(), className.data() );
+        aMethod.out();
+      }
     }
     else
-    {
-      warning( "No method by the name %s found in class %s", 
-               name.data(), className.data() );
-      aMethod.out();
-    }
+      warning( "No class by the name %s found", className.data() );
   }
-  else
-    warning( "No class by the name %s found", className.data() );
 }
 
 /*********************************************************************
@@ -850,6 +875,15 @@ int CClassParser::checkClassDecl()
   {
     switch( lexem )
     {
+      case '<':
+        // Only skip templates when we're not declaring an operator.
+        if( !isOperator )
+        {
+          parseTemplate();
+          if( lexem == '>' )
+            getNextLexem();
+        }
+        break;
       case CPSTRUCT:
         isStruct = true;
         break;
@@ -1314,11 +1348,10 @@ void CClassParser::parseFile( ifstream &file )
 
 /*--------------------------------------------- CClassParser::parse()
  * parse()
- *   Parse the two file and add found classes to the list.
+ *   Parse a file and add found items to the store.
  *
  * Parameters:
- *   hFile          Path to the .h file.
- *   defFile        Path to the .cc/.cpp whatever file.
+ *   file           Path of the file.
  *
  * Returns:
  *   bool           Was the parsing successful.
@@ -1341,7 +1374,7 @@ bool CClassParser::parse( const char *file )
 
 /*-------------------------------------------- CClassParser::wipeout()
  * wipeout()
- *   Remove all parsed classes and reset the state.
+ *   Remove all parsed items and reset the state.
  *
  * Parameters:
  *   -
