@@ -814,9 +814,7 @@ private:
   /** stderr output. */
   COutputWidget* stderr_widget;
 
-  int tree_view_pos;
-  int output_view_pos;
-  int properties_view_pos;
+  QValueList<int> kdlg_sizes;
   int workspace;
 
   CErrorMessageParser* error_parser;
