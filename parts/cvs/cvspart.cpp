@@ -542,6 +542,8 @@ bool CvsPart::isRegisteredInRepository()
 	{
 		kdDebug(9000) << "===> Error: could not open CVS/Entries!! " << endl;
 	}
+	f.close();
+
 	return found;
 }
 
