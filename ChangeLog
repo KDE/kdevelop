@@ -1,3 +1,6 @@
+2000-05-02  Ralf Funken <RFunken@kdevelop.de>
+	* Updated de.po
+
 2000-05-01 Walter Tasin  <tasin@kdevelop.de>
 	* correcting recognition of multi-var-declaration inside a scope
 	* virtual operator functions were not recognized well.
