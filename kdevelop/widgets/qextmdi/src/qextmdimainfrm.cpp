@@ -578,6 +578,7 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
             pWnd->setActiveWindow();
             pWnd->raise();
          }
+         m_pMdi->setTopChild(0L); // lose focus in the mainframe window
       }
       pWnd->setFocus();
    }

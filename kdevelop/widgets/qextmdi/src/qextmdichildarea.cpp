@@ -89,7 +89,7 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
 void QextMdiChildArea::focusInEvent(QFocusEvent *)
 {
    //qDebug("ChildArea::focusInEvent");
-   focusTopChild();
+//???   focusTopChild();
 }
 
 //============ destroyChild ============//
@@ -129,6 +129,7 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
    // destroy the old one
    QObject::disconnect(lpC);
    lpC->unsetClient();
+   m_pZ->setAutoDelete(false);
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
@@ -142,6 +143,9 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
          emit noMaximizedChildFrmLeft(0L); // last childframe removed
       }
    }
+   delete lpC;
+   m_pZ->setAutoDelete(true);
+
    if (bFocusTopChild)
       focusTopChild();
 //   if (bWasMaximized && topChild() )
@@ -155,25 +159,33 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
    if(m_pZ->last() != lpC){
       //qDebug("setTopChild");
       m_pZ->setAutoDelete(FALSE);
-      m_pZ->removeRef(lpC);
+      if (lpC) {
+         m_pZ->removeRef(lpC);
+      }
       //disable the labels of all the other children
       for(QextMdiChildFrm *pC=m_pZ->first();pC;pC=m_pZ->next()){
          pC->m_pCaption->setActive(FALSE);
       }
-      QextMdiChildFrm *pMaximizedChild=m_pZ->last();
-      if(pMaximizedChild->m_state != QextMdiChildFrm::Maximized)pMaximizedChild=0;
+      if (!lpC) {
+         return;
+      }
+
+      QextMdiChildFrm *pMaximizedChild = m_pZ->last();
+      if (pMaximizedChild->m_state != QextMdiChildFrm::Maximized) {
+         pMaximizedChild = 0L;
+      }
       m_pZ->setAutoDelete(TRUE);
       m_pZ->append(lpC);
       lpC->raise();
-      if(pMaximizedChild){
+      if (pMaximizedChild) {
          lpC->setState(QextMdiChildFrm::Maximized,FALSE); //do not animate the change
          lpC->m_pClient->resize(size());
          qApp->processOneEvent();
       }
-      if(pMaximizedChild){
+      if (pMaximizedChild) {
          pMaximizedChild->setState(QextMdiChildFrm::Normal,FALSE);
       }
-      if(bSetFocus){
+      if (bSetFocus) {
          if(!lpC->hasFocus())lpC->setFocus();
       }
       lpC->m_pClient->setFocus();
