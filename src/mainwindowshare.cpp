@@ -98,7 +98,7 @@ void MainWindowShare::createActions()
   action->setStatusText( i18n("Lets you customize KDevelop") );
 
 
-  m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
+  m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(slotToggleMainToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
   m_toggleMainToolbar->setText("&Main Toolbar");
   m_toggleMainToolbar->setStatusText( i18n("Hides or shows the main toolbar") );
 
