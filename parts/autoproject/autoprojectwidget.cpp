@@ -415,8 +415,8 @@ QStringList AutoProjectWidget::allSubprojects()
 	for ( ; it.current(); ++it )
 	{
 		// Skip root subproject
-		//if ( it.current() == overview->firstChild() )
-		//	continue;
+		if ( it.current() == overview->firstChild() )
+			continue;
 		QString path = static_cast<SubprojectItem*>( it.current() ) ->path;
 		res.append( path.mid( prefixlen ) );
 	}
@@ -433,8 +433,8 @@ QPtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
 	for ( ; it.current(); ++it )
 	{
 		// Skip root subproject
-		//if ( it.current() == overview->firstChild() )
-		//	continue;
+		if ( it.current() == overview->firstChild() )
+			continue;
 
 		SubprojectItem* spitem = static_cast <SubprojectItem*> ( it.current() );
 
