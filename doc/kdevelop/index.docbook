@@ -14,7 +14,6 @@
   <!ENTITY gnu "<acronym>GNU</acronym>">
   <!ENTITY grep "<command>grep</command>">
   <!ENTITY libtool "<command>libtool</command>">
-  <!ENTITY kde "<acronym>KDE</acronym>">
   <!ENTITY Mac "<application>Mac</application>">
   <!ENTITY Microsoft "<application>Microsoft</application>">
   <!ENTITY python "<application>Python</application>">
@@ -39,7 +38,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2003-09-26</date>
+  <date>2003-09-27</date>
   <releaseinfo>3.0.0a7</releaseinfo>
 
   <authorgroup>
@@ -513,6 +512,25 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
 <indexterm zone="kdevelopinstall">
   <primary>installation</primary></indexterm>
 
+<para>
+You will find here all the steps necessary to compile and install the &kdevelop; <acronym>IDE</acronym> as there are:
+
+<itemizedlist>
+  <listitem><para>
+  <link linkend="kdevelopinstall-howto">How to obtain &kdevelop;</link> mainly concentrates on downloading the most recent &kdevelop; sources from CVS.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="requirements">&kdevelop; requirements</link> lists the programs and libraries which you need installed to successfully compile the <acronym>IDE</acronym>.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="compileandinstall">&kdevelop; compilation and installation</link> leads you trough all steps of compilation and installing the application.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="make-api">How to obtain a &kdevelop; API documentation</link> tells what an <acronym>API</acronym> is and how you get such a useful tool for navigating the &kdevelop; sources.
+  </para></listitem>
+</itemizedlist>
+</para>
+
 <sect1 id="kdevelopinstall-howto">
 <title>How to obtain &kdevelop;</title>
 
@@ -523,7 +541,10 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <secondary>obtain</secondary></indexterm>
 
 <para>
-&kdevelop; can be found via the project home page at <ulink url="http://www.kdevelop.org"> http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">&kde; ftp site</ulink> &kdevelop; is also available from many different Linux distributions.
+&kdevelop; is available in binary form from many differnt &Linux; distributions such as &SuSE;, &RedHat; and others. These binaries are packed in some convenient format, mostly <acronym>RPM</acronym>, for easy installation. To install, follow the standard instructions given in your distribution.
+</para>
+<para>
+You may as well obtain the &kdevelop; sources, compile and install them by yourself. These sources can be found via the project home page at <ulink url="http://www.kdevelop.org"> http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">&kde; ftp site</ulink>.
 </para>
 
 <sect2 id="howto-cvs">
@@ -532,7 +553,7 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
 <indexterm zone="howto-cvs">
   <primary>CVS</primary></indexterm>
 
-<para>Anonymous &CVS; repository snapshots are available.  The module name is <emphasis>kdevelop</emphasis> at <filename class="directory">:pserver:anonymous@anoncvs.kde.org:/home/kde</filename>.
+<para>If you want be in front of current development, anonymous &CVS; repository snapshots are available.  The module name is <emphasis>kdevelop</emphasis> at <filename class="directory">:pserver:anonymous@anoncvs.kde.org:/home/kde</filename>.
 </para>
 
 <sect3 id="howto-cvs-co">
@@ -884,8 +905,7 @@ If you want to keep track of what your &kdevelop; application does at run-time y
 </formalpara>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
-  <userinput>./configure --enable-debug=full
-                         --prefix=(where-your-kde3-is)</userinput>
+  <userinput>./configure --enable-debug=full --prefix=(where-your-kde3-is)</userinput>
 </para>
 
 <formalpara>
@@ -898,6 +918,17 @@ If you only want to use &kdevelop; as-is a (smaller and faster running) release 
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>./configure --prefix=(where-your-kde3-is)</userinput>
 </para>
+
+<note>
+<para>
+If you want to build your own <link linkend="make-api">API documentation</link> for &kdevelop; you must include yet another option in the <command>configure</command> command:
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>./configure --(options-as-above) --with-kdelibsdoxy-dir=$KDEDIR/share/doc/HTML/en/kdelibs-apidocs
+  </userinput>
+</para>
+</note>
 
 <formalpara>
 <title>Make and install &kdevelop;</title>
@@ -1091,6 +1122,50 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 </sect2> <!-- compileandinstall-options -->
 
 </sect1> <!-- compileandinstall -->
+
+<sect1 id="make-api">
+<title>How to obtain a &kdevelop; API documentation</title>
+
+<para>
+<acronym>API</acronym> is the short form of <quote>Application Program Interface</quote>. Actually such an application program interface is a series of descriptions (i.e. calling conventions) by which an application program accesses operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, to be used like a dictionary to navigate the sources.
+</para>
+<para>
+There is a version of the most current API available at the <ulink url="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html">KDevelop-Home website</ulink>. It will be automaticaly updated every 24 hours so you can keep up.
+</para>
+<para>
+Alas, this version is best used read-only over the internet. Yet you may as well build your own API documentation from the &kdevelop; souces. To do so, you must tell this the automake system when you are about to <link linkend="compileandinstall-make-basic">compile the &kdevelop; sources</link>. This is accomplished by a special option in the <command>configure</command> command:
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>./configure --(options-as-usual) --with-kdelibsdoxy-dir=$KDEDIR/share/doc/HTML/en/kdelibs-apidocs
+  </userinput>
+</para>
+<para>
+(<command>make</command> will replace the <varname>$KDEDIR</varname> with your actual &kde; directory). Then issue a <command>make</command> command <link linkend="compileandinstall-make-basic">as usual</link>. After the &kdevelop; <acronym>IDE</acronym> has been built you have the option to buid the <acronym>API</acronym> as well. For this you must issue
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make apidocs</userinput>
+</para>
+<para>
+This will build a <filename>Doxyfile</filename> in your &kdevelop; base directory which in turn will be processed by the <application>doxygen</application> application to build quite a lot of <filename>.html</filename> <acronym>API</acronym> files. When the a rather lenghty <acronym>API</acronym> building process finally comes to an end, you must install the <acronym>API</acronym> just like you have to install the &kdevelop; <acronym>IDE</acronym> itself. Obtain superuser rights if necessary by
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>su</userinput>
+</para>
+<para>
+and entering the root password. Then install the <acronym>API</acronym> files:
+</para>
+<para>
+  <prompt>~/kde3src/kdevelop&gt; </prompt>
+  <userinput>make install-apidox</userinput>
+</para>
+<para>
+Once this is done, <command>make</command> will inform you about the directory where you can finally look at the <acronym>API</acronym> documentation's contents. Note this address, you can use it from the &konqueror; as well as from inside &kdevelop;, in case you have set up the &kdevelop; sources themselves as a project to work on.
+</para>
+
+</sect1> <!-- make-api -->
 
 </chapter> <!-- kdevelopinstall -->
 
@@ -2514,14 +2589,6 @@ This framework finally will be used to put the <emphasis>initial source files</e
 </formalpara>
 
 </sect2> <!-- appwizard-behind-app -->
-
-<!--<indexterm zone="appwizard-behind-cvs">
-  <primary>CVS</primary>
-  <secondary>new project</secondary>
-  <tertiary>build</tertiary></indexterm>
-<indexterm zone="appwizard-behind-cvs">
-  <primary>project</primary>
-  <secondary>CVS</secondary></indexterm>//-->
 
 <sect2 id="appwizard-behind-cvs">
 <title>Setting up &CVS;</title>
