@@ -8,10 +8,10 @@ class %{APPNAMESC}Preferences < KDE::DialogBase
         # a Treelist dialog.. but there are a number of other
         # possibilities (including Tab, Swallow, and just Plain)
         frame = addPage(i18n("First Page"), i18n("Page One Options"))
-        @pageOne = %{APPNAME}PrefPageOne.new(frame)
+        @pageOne = %{APPNAMESC}PrefPageOne.new(frame)
     
         frame = addPage(i18n("Second Page"), i18n("Page Two Options"))
-        @pageTwo = %{APPNAME}PrefPageTwo.new(frame)
+        @pageTwo = %{APPNAMESC}PrefPageTwo.new(frame)
     end
 end
 
