@@ -622,7 +622,7 @@ void CKDevSetupDlg::addDebuggerTab()
   QWhatsThis::add(dbgLibCheck, i18n("Set pending breakpoints on loading a library\n\n"
                           "If GDB hasn't seen a library that will be loaded via\n"
                           "\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
-                    "We can get gdb to stop on a library load and hence\n"
+                    "We can get GDB to stop on a library load and hence\n"
                     "try to set the pending breakpoints. See docs for more\n"
                     "details and a \"gotcha\" relating to this behavior.\n\n"
                     "If you are not \"dlopen\"ing libs leave this off." ));
