@@ -78,6 +78,26 @@ subversionWidget *subversionCore::processWidget() const {
 	return m_widget;
 }
 
+void subversionCore::resolve( const KURL::List& list ) {
+	KURL servURL = m_part->baseURL();
+	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
+	if ( ! servURL.protocol().startsWith( "svn" ) ) {
+		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	}
+	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+		kdDebug() << "resolving: " << (*it).prettyURL() << endl;
+		QByteArray parms;
+		QDataStream s( parms, IO_WriteOnly );
+		int cmd = 11;
+		bool recurse = true;
+		s << cmd << *it << recurse;
+		SimpleJob * job = KIO::special(servURL, parms, true);
+		job->setWindow( m_part->mainWindow()->main() );
+		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	}
+}
+
 void subversionCore::update( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
 	if ( servURL.isEmpty() ) servURL="svn+http://blah/";

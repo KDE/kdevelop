@@ -62,11 +62,13 @@ private slots:
 		void slotActionCommit();
 		void slotActionAdd();
 		void slotActionDel();
+		void slotActionResolve();
 		void slotUpdate();
 		void slotRevert();
 		void slotCommit();
 		void slotAdd();
 		void slotDel();
+		void slotResolve();
 		void slotProjectClosed();
 		void slotProjectOpened();
 		void projectConfigWidget( KDialogBase *dlg );
@@ -82,7 +84,8 @@ private:
 		*actionUpdate,
 		*actionAddToIgnoreList,
 		*actionRemoveFromIgnoreList,
-		*actionRevert;
+		*actionRevert,
+		*actionResolve;
 
 		QGuardedPtr<subversionProjectWidget> m_projWidget;
 		KURL base;

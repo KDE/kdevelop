@@ -136,6 +136,11 @@ void subversionPart::setupActions() {
 			this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "subversion_donot_ignore" );
 	actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in Subversion operations") );
 	actionRemoveFromIgnoreList->setWhatsThis( i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s).") );
+
+	actionResolve = new KAction( i18n("Re&solve conflicting state"), 0,
+			this, SLOT(slotActionResolve()), actionCollection(), "subversion_resolve" );
+	actionResolve->setToolTip( i18n("Resolve the conflicting state of a file after a merge") );
+	actionResolve->setWhatsThis( i18n("<b>Resolve the conflicting state</b><p>Remove the conflict state that can be set on a file after a merge failed.") );
 }
 
 QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
@@ -216,6 +221,8 @@ if(!project() || !isValidDirectory(project()->projectDirectory()))
         subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
 		id = subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
 		subMenu->setWhatsThis(id, i18n("<b>Revert</b><p>Undo local changes.") );
+		id = subMenu->insertItem( actionResolve->text(), this, SLOT(slotResolve()) );
+		subMenu->setWhatsThis(id, i18n("<b>Resolve</b><p>Resolve conflicting state.") );
 
 		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
@@ -249,6 +256,18 @@ void subversionPart::slotActionUpdate() {
 
 void subversionPart::slotUpdate() {
 	m_impl->update (m_urls);
+}
+
+void subversionPart::slotActionResolve() {
+	kdDebug() << "subversion: slotActionResolve()" << endl;
+	KURL doc;
+	if (urlFocusedDocument( doc )) {
+		m_impl->resolve( doc );
+	}
+}
+
+void subversionPart::slotResolve() {
+	m_impl->resolve (m_urls);
 }
 
 void subversionPart::slotActionCommit() {

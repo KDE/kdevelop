@@ -47,6 +47,7 @@ public:
 	void add( const KURL::List&);
 	void del( const KURL::List&);
 	void revert( const KURL::List&);
+	void resolve( const KURL::List&);
 	void checkout();
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
     KDevVCSFileInfoProvider *fileInfoProvider() const;
