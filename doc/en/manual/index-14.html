@@ -180,9 +180,11 @@ have to uncheck this option to generate the API documentation without errors.
 <H3><A NAME="Debugger"></A> <A NAME="ss14.6">14.6 Debugger </A>
 </H3>
 
-<P>The default setup for KDevelop is to use the internal debugger. Click on "Use external debugger" if you wish to use a different 
-debugger and enter the name of the debugger to use. See your debuggers documentation on how to run it.
-<P>Selecting the internal debugger enables an additional set of options you can choose from:
+<P>The default setup for KDevelop is to use 
+<A HREF="index-12.html#The Internal Debugger">the internal debugger</A>. Click on "Use external
+debugger" if you wish to use a different debugger and enter the name of the debugger to use. See your debuggers documentation on
+how to run it.
+Selecting the internal debugger enables an additional set of options you can choose from:
 <P>
 <UL>
 <LI>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change 
@@ -197,6 +199,8 @@ and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leav
 <LI>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
 The toolbar is most useful for debugging GUI applications. For details see 
 <A HREF="index-12.html#The floating toolbar">The floating toolbar</A>.</LI>
+<LI>Enable separate terminal for application i/o: This allows you to enter terminal input when your application contains
+terminal input code (eg cin, fgets etc.). If you use terminal input in your app, then tick this option. Otherwise leave this off.</LI>
 </UL>
 <P>
 <H3><A NAME="Setting Paths"></A> <A NAME="ss14.7">14.7 Setting Paths </A>
