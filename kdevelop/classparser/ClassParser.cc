@@ -1343,8 +1343,14 @@ int CClassParser::checkClassDecl()
   {
     if( isOperator )
       retVal = ( isImpl ? CP_IS_OPERATOR_IMPL : CP_IS_OPERATOR );
-    else
-      retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+    else {
+      if (m_isParsingClassDeclaration) {
+         retVal = CP_IS_METHOD;//( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+      }
+      else {
+         retVal = CP_IS_METHOD_IMPL;
+      }
+    }
   }
   else if( lexem == '{' )
   {
@@ -1935,6 +1941,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
           parseClassInheritance( aClass );
         }
 
+        m_isParsingClassDeclaration = true;
         parseClass( aClass );
       }
       break;
@@ -1944,6 +1951,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
     case CPSTRUCT:
     case CPCONST:
     case ID:
+      m_isParsingClassDeclaration = false;
       parseMethodAttributes( scope );
       break;
     default:
