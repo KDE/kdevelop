@@ -2,13 +2,14 @@
  * file     : scope.h
  * begin    : 2001
  * copyright: (c) by daniel engelschalt
- * email    : daniel.engelschalt@htw-dresden.de
+ * email    : daniel.engelschalt@gmx.net
  * license  : gpl version >= 2
- *
  */
 
 #ifndef _SCOPE_H
 #define _SCOPE_H
+
+#include <qstring.h>
 
 /**
  * this class represents a scope-object like '1.2.1'
@@ -24,12 +25,12 @@ public:
     /**
     * Copy Constructor
     */
-    CScope( CScope& cs );
+    CScope( const CScope& cs );
 
     /**
     * Init Constructor
     */
-    CScope( int iScope );
+    CScope( const int iScope );
 
     /**
     * Destructor
@@ -39,7 +40,12 @@ public:
     /**
     * operator =
     */
-    const CScope& operator = ( CScope& cs );
+    const CScope& operator = ( const CScope& cs );
+
+    /**
+     * operator <
+     */
+    bool operator < ( const CScope& cs );
 
     /**
     * reset the scope value
@@ -49,18 +55,22 @@ public:
     /**
     * to increase a scope
     */
-    void increase( int iScope );
+    void increase( const int iScope );
+
+    /**
+     * to check the right scope for cc
+     * wrapper function for operator < for easier use
+     */
+    bool isValidIn( const CScope& scope );
 
     /**
     * debug output
     */
-    void debugOutput( );
+    void debugOutput( ) const;
 
 private:
-
     #define MAXSCOPES 50
     char cScope[ MAXSCOPES ];
-
 };
 
 #endif

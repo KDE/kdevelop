@@ -2,13 +2,13 @@
  * file     : cppcodecompletionparser.h
  * begin    : 2001
  * copyright: (c) by daniel engelschalt
- * email    : daniel.engelschalt@htw-dresden.de
+ * email    : daniel.engelschalt@gmx.net
  * license  : gpl version >= 2
  *
  */
 
-#ifndef _CPPCCPARSER_H
-#define _CPPCCPARSER_H
+#ifndef _CPPCODECOMPLETIONPARSER_H
+#define _CPPCODECOMPLETIONPARSER_H
 
 #include <qstring.h>
 #include <qlist.h>
@@ -35,7 +35,7 @@ public:
     /**
     * empty copy constructor
     */
-    CppCCParser( CppCCParser& cp ){ cerr << "EE: CppCCParser copy constructor called!" << endl;};
+    CppCCParser( CppCCParser& ){ cerr << "EE: CppCCParser copy constructor called!" << endl;};
 
     /**
     * empty destructor
@@ -56,10 +56,24 @@ public:
     */
     bool parse( const QString* file = 0, const int iCCLine_ = 9999999 );
 
+    /**
+     * parse:
+     * @param string to parse
+     * @param search for that variable
+     */
+    bool parse( const QString* string = 0, const QString variable = QString::null );
+    
+    /**
+     * parse:
+     * @param file to parse
+     * @param search for that variable
+     */
+    bool parse( const QString& file = QString::null, const QString variable = QString::null );
+
 public:
     // public variables
     /** the place where we store what we found */
-    QList<CParsedVariable> varList;
+    QList<CParsedVariable> variableList;
 
 private:
     // private class
@@ -92,6 +106,9 @@ private:
 
 private:
     // private attributes
+    /** the list were all found variables will be appended */
+    QList<CParsedVariable> varList;
+
     /** pointer to lexer object */
     yyFlexLexer* lexer;
 
@@ -106,6 +123,12 @@ private:
 
     /** LineNo until we parse */
     int iCCLine;
+
+    /** variable to look for */
+    QString m_variable;
+
+    /** last used scope */
+    CScope m_lastScope;
 
 private:
     // private methods
@@ -127,12 +150,12 @@ private:
     /**
     * function body parsing
     */
-    void parseFuntionBody( );
+    void parseFunctionBody( );
 
     /**
-    * function body parsing
-    */
-    void parseFunctionBody( );
+     * try to decrease all found variables to 1 through scope evaluation
+     */
+    void postProcessVariables( );
 
     /**
     * print out what we found
@@ -158,7 +181,6 @@ private:
     * skip to this lexem
     */
     void skipToLexem( const char c );
-
 
     /** standard lexem functions */
     /**

@@ -152,6 +152,9 @@ private: // Private methods
 
   /** Parse an enumeration. */
   void parseEnum();
+  
+  /** try to parse an enum right */
+  void parseEnum( ParsedContainer* aContainer );
 
   /** Parse an union. */
   void parseUnion();

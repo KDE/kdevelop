@@ -19,6 +19,7 @@
 #define __CPPCODECOMPLETION_H__
 
 #include <qobject.h>
+#include <qstringlist.h>
 
 #include "keditor/editor.h"
 #include "keditor/edit_iface.h"
@@ -32,51 +33,80 @@
 #include "kdevcore.h"
 
 #include "cppcodecompletionparser.h"
+#include "cppsupportpart.h"
+#include "simpleparser.h"
 
 class KTempFile;
 
 class CppCodeCompletion : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore );
-		virtual ~CppCodeCompletion();
+public:
+    CppCodeCompletion ( CppSupportPart* part, ClassStore* pStore, ClassStore* pCCStore );
+    void setEnableCodeCompletion( bool setEnable );
+    virtual ~CppCodeCompletion();
 
-	protected slots:
-		void slotDocumentActivated ( KEditor::Document* pDoc );
-		void slotArgHintHided();
-		void slotCompletionBoxHided();
-		void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
+public slots:
+    void expandText();
+    void completeText();
+    void typeOf();
 
-	protected:
-		QString getCompletionText ( int nLine, int nCol );
-		QString getNodeText ( int nNode, int nLine );
-		QString getNodeDelimiter ( int nNode, int nLine );
-		int getNodePos ( int nLine, int nCol );
+protected slots:
+    void slotDocumentActivated ( KEditor::Document* pDoc );
+    void slotArgHintHided();
+    void slotCompletionBoxHided( /* int completionTextLine */ );
+    void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
+    void slotTextChangedRoberto( KEditor::Document *pDoc, int nLine, int nCol );
+    void slotCursorPositionChanged( KEditor::Document *pDoc, int nLine, int nCol );
 
-		QString createTmpFileForParser (int iLine);
+protected:
+    QString evaluateExpression( const QString& expr,
+                                const QValueList<SimpleVariable>& roo,
+                                ClassStore* sigma );
+    int expressionAt( const QString& text, int index );
+    QStringList splitExpression( const QString& text );
 
-		QValueList<KEditor::CompletionEntry> getEntryListForClass ( QString strClass );
-		QValueList<KEditor::CompletionEntry> getEntryListForNamespace ( const QString& strNamespace );
-		QValueList<KEditor::CompletionEntry> getEntryListForStruct ( const QString& strStruct );
-		QValueList<KEditor::CompletionEntry> getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace );
+    QString getMethodBody( int iLine, int iCol, QString* classname );
+    QString getCompletionText ( int nLine, int nCol );
+    QString getNodeText ( int nNode, int nLine );
+    QString getNodeDelimiter ( int nNode, int nLine );
+    int getNodePos ( int nLine, int nCol );
 
-		/* methods which are called recursively by getEntryListForClass(...) */
-		QList<ParsedMethod>* getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList );
-		QList<ParsedAttribute>* getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList );
-	private:
-		KEditor::Editor* m_pEditor;
-		ClassStore* m_pStore;
-		CppCCParser* m_pParser;
-		KEditor::CursorDocumentIface* m_pCursorIface;
-		KEditor::EditDocumentIface* m_pEditIface;
-		KEditor::CodeCompletionDocumentIface* m_pCompletionIface;
+    QValueList<KEditor::CompletionEntry> getEntryListForExpr( const QString& expr, const QValueList<SimpleVariable>& vars );
 
-		KTempFile* m_pTmpFile;
 
-		bool m_bArgHintShow;
-		bool m_bCompletionBoxShow;
+    QString createTmpFileForParser (int iLine);
+
+    QValueList<KEditor::CompletionEntry> getEntryListForClass( QString strClass );
+    QValueList<KEditor::CompletionEntry> getEntryListForNamespace( const QString& strNamespace );
+    QValueList<KEditor::CompletionEntry> getEntryListForStruct( const QString& strStruct );
+    QValueList<KEditor::CompletionEntry> getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace );
+
+    /* methods which are called recursively by getEntryListForClass(...) */
+    QList<ParsedMethod>* getParentMethodListForClass( ParsedClass* pClass, QList<ParsedMethod>* pList );
+    QList<ParsedAttribute>* getParentAttributeListForClass( ParsedClass* pClass, QList<ParsedAttribute>* pList );
+private:
+    KEditor::Editor* m_pEditor;
+    CppSupportPart* m_pSupport;
+    KDevCore* m_pCore;
+    ClassStore* m_pStore;
+    ClassStore* m_pCCStore;
+    CppCCParser* m_pParser;
+    KEditor::CursorDocumentIface* m_pCursorIface;
+    KEditor::EditDocumentIface* m_pEditIface;
+    KEditor::CodeCompletionDocumentIface* m_pCompletionIface;
+
+    KTempFile* m_pTmpFile;
+    QString m_currentClassName;
+    bool m_bArgHintShow;
+    bool m_bCompletionBoxShow;
+    bool m_bCodeCompletion;
+
+    QStringList m_CHCommentList;
+    
+    QString getTypeOfMethod( ParsedClass*, const QString& );
+    QString getTypeOfAttribute( ParsedClass*, const QString& );
 };
 
 #endif

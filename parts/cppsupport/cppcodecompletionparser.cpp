@@ -2,9 +2,8 @@
  * file     : codecompletionparser.cpp
  * begin    : 2001
  * copyright: (c) by daniel engelschalt
- * email    : daniel.engelschalt@htw-dresden.de
+ * email    : daniel.engelschalt@gmx.net
  * license  : gpl version >= 2
- *
  */
 
 #define ENABLEMESSAGEOUTPUT
@@ -57,6 +56,43 @@ CppCCParser::parse( const QString* string, const int iCCLine_ )
     return false;
 }
 
+bool
+CppCCParser::parse( const QString* string, const QString variable )
+{
+    if( string ){
+        istrstream s( string->latin1( ) );
+        iCCLine = 999999;
+        currentFile = QString::null;
+        m_variable = variable;
+        parseObject( s );
+        postProcessVariables( );
+        return true;
+    }
+    else {
+        errln( "EE: CppCCParser::parse string = 0" );
+    }
+
+    return false;
+}
+
+bool
+CppCCParser::parse( const QString& file, const QString variable )
+{
+    ifstream f( file.latin1( ) );
+    if( f.is_open( ) ){
+        currentFile = file;
+	m_variable = variable;
+	iCCLine = 999999;
+        parseObject( f );
+	postProcessVariables( );
+        return true;
+    }
+    else {
+        errln( "EE: CppCCParser::parse file '" << file.latin1( ) << "' couldn't opened" );
+    }
+
+    return false;
+}
 
 void
 CppCCParser::parseObject( istream& object )
@@ -73,7 +109,7 @@ CppCCParser::parseTopLevel( )
     // according to Victor and Daniel we will only provide one-method-parsing
     // so that the object only contains one method
 
-	// parsing the function header
+    // parsing the function header
     parseFunctionHead( );
 
     // parsing the function body
@@ -90,7 +126,8 @@ CppCCParser::parseFunctionHead( )
     CParsedVariable* pVar = 0;
 
     // current Scope - always 1 for "within function scope" ;)
-    CScope currentScope( 1 );
+    CScope tmpScope( 1 );
+    m_lastScope = tmpScope;
 
     // skipping up to the arguments
     skipToLexem( '(' );
@@ -101,7 +138,7 @@ CppCCParser::parseFunctionHead( )
         // create new variable-data holder and setting current ( = standard ) scope
         if( !pVar ){
             pVar = new CParsedVariable;
-            pVar->scope = currentScope;
+            pVar->scope = m_lastScope;
         }
 
         // check what we found
@@ -131,7 +168,7 @@ CppCCParser::parseFunctionHead( )
                 pVar->iVariableValue = CPVOID;
                 pVar->iLine = getLineNo( );
                 break;
-		
+
 	    case CPSTRUCT  : outln( " + STRUCT" );
 		pVar->iVariableValue = CPSTRUCT;
 		pVar->iLine = getLineNo( );
@@ -140,7 +177,7 @@ CppCCParser::parseFunctionHead( )
             case CPCONST   :
             case CPVOLATILE:
             case CPUNION   : outln( "const, volatile, union found - skipping" ); break;
-            
+
 	    // shouldn't happen
 	    case CPSTATIC  : errln( "CPSTATIC found - skipping" );
 
@@ -153,7 +190,7 @@ CppCCParser::parseFunctionHead( )
 
             // these are the signs for a variable's end
             case ')'    :
-		outln(  "Ending function head found: ')'" );
+		outln( "Ending function head found: ')'" );
 		if( pVar->sVariableName == "" ){
 		    pVar->setDefault( );
 		    outln( "something like ( const QString& ) has been found" );
@@ -165,7 +202,8 @@ CppCCParser::parseFunctionHead( )
 		// falling through to case ','
 
             case ','    :
-                if( !pVar->isDefault( ) ){
+                if( !pVar->isDefault( ) && pVar->sVariableName == m_variable ){
+                    outln( "--> , appended '" << pVar->sVariableName << "' <--" );		
                     varList.append( pVar );
                     pVar = 0;
                     break;
@@ -212,7 +250,9 @@ CppCCParser::parseFunctionBody( )
     int iScope = 1;
 
     // scope that countes
-    CScope currentScope( iScope );
+    // seems it is useless because it hasn't changed in parseFunctionHead( )
+    CScope tmpScope( iScope );
+    m_lastScope = tmpScope;
 
     // here we store what we found
     CParsedVariable* pVar = 0;
@@ -359,22 +399,22 @@ CppCCParser::parseFunctionBody( )
 
             case ','    :
                 outln( ", found" );
-                if( bWithinVariable == true ){
-                    pVar->scope = currentScope;
+                if( bWithinVariable == true && pVar->sVariableName == m_variable ){
+                    pVar->scope = m_lastScope;
                     varList.append( pVar );
                     pVar = new CParsedVariable( *pVar );
                     outln( "--> , appended '" << pVar->sVariableName << "' <--" );
                     break;
                 }
                 else {
-                    errln( "WW: unexpected else in ," );
+                    // errln( "WW: unexpected else in ," );
                 }
                 break;
 
             case ';'    :
                 outln( "; found" );
-                if( bWithinVariable == true ){
-                    pVar->scope = currentScope;
+                if( bWithinVariable == true && pVar->sVariableName == m_variable ){
+                    pVar->scope = m_lastScope;
                     varList.append( pVar );
                     outln( "--> ; appended '" << pVar->sVariableName << "' <--" );
                     pVar = 0;
@@ -382,15 +422,15 @@ CppCCParser::parseFunctionBody( )
                     break;
                 }
                 else {
-                    errln( "WW: unexpected else in ;" );
+                    // errln( "WW: unexpected else in ;" );
                 }
                 break;
 
             case '='    :
                 outln( "= found" );
                 skipToSemicolon( );
-                if( bWithinVariable == true ){
-                    pVar->scope = currentScope;
+                if( bWithinVariable == true && pVar->sVariableName == m_variable ){
+                    pVar->scope = m_lastScope;
                     varList.append( pVar );
                     outln( "--> = appended '" << pVar->sVariableName << "' <--" );
                     pVar = 0;
@@ -434,12 +474,13 @@ CppCCParser::parseFunctionBody( )
 
             case '{'    :
                 outln( "{ found" );
-                currentScope.increase( ++iScope );
+                m_lastScope.increase( ++iScope );
 //                currentScope.debugOutput( );
                 break;
 
             case '}'    :
                 outln( "} found" );
+#warning scopes needs method decrease !!!
                 iScope--;
                 break;
 
@@ -479,7 +520,35 @@ CppCCParser::parseFunctionBody( )
     // show what we found
     debugPrint( );
 
-    outln( "Parsing funtion body ending" );
+    outln( "Parsing function body ending" );
+}
+
+void
+CppCCParser::postProcessVariables( )
+{
+    errln( "-- post-processing started --" );
+    // if we found only one or none vars we just copy the one var
+    CParsedVariable* pVar;
+    if( varList.count( ) <= 1 ){
+        pVar = varList.first( );
+        if( pVar )
+            variableList.append( pVar );
+        return;
+    }
+
+    err( "   `-> m_lastScope: '" ); m_lastScope.debugOutput( ); errln( "'" );
+    for( uint i = 0; i < varList.count( ); i++ ){
+        pVar = varList.at( i );
+        if( !pVar->scope.isValidIn( m_lastScope ) ) {
+            err( "   `-> scope '" ); pVar->scope.debugOutput( ); errln( "' won't be added" );
+        }
+        else {
+            err( "   `-> scope '" ); pVar->scope.debugOutput( ); errln( "' will be added" );
+            variableList.append( pVar );
+        }
+    }
+    varList.clear( );
+    errln( "-- post-processing ended --" );
 }
 
 void
@@ -488,7 +557,7 @@ CppCCParser::debugPrint( )
     errln( "-- debugPrint start --" );
 
     errln( "Number of variables (" << varList.count( ) << ")" );
-    for( int i = 0; i < varList.count( ); i++ ){
+    for( uint i = 0; i < varList.count( ); i++ ){
         errln( "Variable found @line: "      << varList.at( i )->iLine );
         errln( "  Variable name          : " << varList.at( i )->sVariableName );
         err  ( "  Variable value         : " << varList.at( i )->iVariableValue );

@@ -2,9 +2,8 @@
  * file     : scope.cpp
  * begin    : 2001
  * copyright: (c) by daniel engelschalt
- * email    : daniel.engelschalt@htw-dresden.de
+ * email    : daniel.engelschalt@gmx.net
  * license  : gpl version >= 2
- *
  */
 
 #define ENABLEDEBUGOUTPUT
@@ -18,7 +17,7 @@ CScope::CScope( )
     reset( );
 }
 
-CScope::CScope( int iScope )
+CScope::CScope( const int iScope )
 {
     reset( );
     increase( iScope );
@@ -28,17 +27,52 @@ CScope::~CScope( )
 {
 }
 
-CScope::CScope( CScope& cs )
+CScope::CScope( const CScope& cs )
 {
     *this = cs;
 }
 
 const CScope&
-CScope::operator = ( CScope& cs )
+CScope::operator = ( const CScope& cs )
 {
     memcpy( cScope, cs.cScope, sizeof( cs.cScope ) );
 
     return *this;
+}
+
+inline bool
+CScope::operator < ( const CScope& cs )
+{
+    /*
+     * a short description how that algorithm works
+     * imagine the following method with these scopes:
+     * {       1
+     *   {     1.1
+     *   }
+     *   {     1.2
+     *     {   1.2.1
+     *     }
+     *   }
+     *   {     1.3
+     *    {    1.3.1
+     *     {   1.3.1.1
+     *
+     * valid in all scopes are variables from scope 1
+     * valid in a given scope are variables from all (unclosed) scopes above
+     * comparing scope 1 and 1.3 means: 1 == 1 and a not existing second number in 1 -> true
+     * comparing scope 1.2.1 and 1.3.1 : 1 == 1, 2 != 3 -> false
+     *
+     */
+
+    for( int i = 0; i < MAXSCOPES; i++ ){
+        if( !cs.cScope[ i ] )
+            return false;    
+        if( !cScope[ i ] )
+            return true;
+        if( cScope[ i ] != cs.cScope[ i ] )
+            return false;
+    }
+    return true;
 }
 
 void
@@ -48,7 +82,7 @@ CScope::reset( )
 }
 
 void
-CScope::increase( int iScope )
+CScope::increase( const int iScope )
 {
     if( ( iScope - 1 ) <= MAXSCOPES ){
         if( cScope[ iScope - 1 ] + 1 ){
@@ -65,8 +99,14 @@ CScope::increase( int iScope )
     }
 }
 
+bool
+CScope::isValidIn( const CScope& scope )
+{
+    return true ? *this < scope : false;
+}
+
 void
-CScope::debugOutput( )
+CScope::debugOutput( ) const
 {
     outln ( "*** debug output CScope started" );
     for( int i = 0; i < MAXSCOPES; i++ ){
@@ -75,11 +115,6 @@ CScope::debugOutput( )
         else
             break;
     }
-    errln( "" );
+//    errln( "" );
     outln( "*** debug output CScope ended" );
 }
-
-
-
-
-

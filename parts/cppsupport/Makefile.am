@@ -1,6 +1,6 @@
 # Here resides the C/C++ support part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
@@ -8,6 +8,9 @@ libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)
 
 libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       cppsupportpart.cpp \
+			       cppsupportwidget.cpp \
+	                       ccconfigwidget.cpp \
+	                       ccconfigwidgetbase.ui \
 			       classparser.cpp \
 			       tokenizer.cpp \
 			       addclassmethodui.ui \
@@ -17,7 +20,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       cppcodecompletion.cpp \
 			       cppcodecompletionparser.cpp \
 			       parsedvariable.cpp \
-			       scope.cpp
+			       scope.cpp\
+			       simpleparser.cpp
 
 EXTRA_DIST = tokenizer.l tokenizer-cc.l
 tokenizer.cpp: tokenizer.l

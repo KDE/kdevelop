@@ -16,6 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 // 1999-07-27 added kapp->processEvents() to line 1381 - Ralf
+// 2002-02-08 added simple enum parsing - daniel
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -285,6 +286,38 @@ void CClassParser::parseEnum()
 {
   while( lexem != 0 && lexem != ';' )
     getNextLexem();
+}
+
+/*--- CClassParser::parseEnum( )
+ * parseEnum( ParsedContainer* aContainer )
+ * tries to parse an enum right
+ *
+ * Parameters: a valid container
+ *
+ * Returns   : -
+ *
+ */
+void
+CClassParser::parseEnum( ParsedContainer* aContainer )
+{
+    ParsedAttribute* attr = new ParsedAttribute( );
+
+    // skip {
+    getNextLexem( );
+    // name
+    getNextLexem( );
+    while( lexem != '}' && lexem != 0 ){
+	if( lexem == '=' )
+	    getNextLexem( );
+	else if( lexem == ',' ){
+		aContainer->addAttribute( attr );
+		attr = new ParsedAttribute( );
+	     }
+	     else
+		attr->setName( getText( ) );
+	getNextLexem( );
+    }
+    aContainer->addAttribute( attr );
 }
 
 /*----------------------------------- CClassParser::parseNamespace()
@@ -1615,7 +1648,7 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
-          kdDebug(9007) << "slot: %s\n" << aMethod->name().data() << endl;
+          kdDebug(9007) << "slot: " << aMethod->name().data() << endl;
 
           ParsedMethod *pm = aClass->getMethod(aMethod);
           if (pm != NULL) {
@@ -2156,14 +2189,15 @@ void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseGenericLexem(  ParsedContainer *aContainer )
+void CClassParser::parseGenericLexem( ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
  
   switch( lexem )
   {
     case CPENUM:
-      parseEnum();
+      // daniel -- test for parsing enums right
+      parseEnum( aContainer );
       break;
     case CPUNION:
       parseUnion();
