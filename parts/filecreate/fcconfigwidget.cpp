@@ -469,6 +469,9 @@ void FCConfigWidget::copyToProject_button_clicked()
                 it->parent()->text(3),
                 locate("data", "kdevfilecreate/file-templates/"+ it->parent()->text(0)));
             destParent += it->parent()->text(0) + "-";
+            QCheckListItem *chk = dynamic_cast<QCheckListItem*>(it->parent());
+            if (chk)
+                chk->setOn(false);
         }
         QListViewItem *it_copy = 0;
         if (it_copy_parent)
@@ -483,6 +486,9 @@ void FCConfigWidget::copyToProject_button_clicked()
                 it->text(2),
                 it->text(3),
                 locate("data", "kdevfilecreate/file-templates/" +destParent+ it->text(0)));
+        QCheckListItem *chk = dynamic_cast<QCheckListItem*>(it);
+        if (chk)
+            chk->setOn(false);
         fc_view->setSelected(it_copy, true);
         fc_view->setCurrentItem(it_copy);
         QListViewItem * it_child = it->firstChild();
@@ -492,6 +498,9 @@ void FCConfigWidget::copyToProject_button_clicked()
                 it_child->text(2),
                 it_child->text(3),
                 locate("data", "kdevfilecreate/file-templates/"+ it_copy->text(0) + "-" + it_child->text(0)));
+            QCheckListItem *chk_child = dynamic_cast<QCheckListItem*>(it_child);
+            if (chk_child)
+                chk_child->setOn(false);
             it_child = it_child->nextSibling();
         }
     }
