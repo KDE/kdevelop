@@ -45,9 +45,11 @@ PFontCombo::PFontCombo(MultiProperty *property, QWidget *parent, const char *nam
     activated(int) and textChanged(const QString &) are not emitted*/
 #ifdef PURE_QT
     QFontDatabase fonts;
-    insertStringList(fonts.families());
-#endif
+    m_edit->insertStringList(fonts.families());
+    connect(m_edit, SIGNAL(activated(const QString &)), this, SLOT(updateProperty(const QString&)));
+#else
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+#endif
 }
 
 QVariant PFontCombo::value() const

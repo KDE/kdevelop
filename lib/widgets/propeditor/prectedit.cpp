@@ -59,4 +59,6 @@ void PRectEdit::setValue(const QVariant& value, bool emitChange)
 
 }
 
+#ifndef PURE_QT
 #include "prectedit.moc"
+#endif

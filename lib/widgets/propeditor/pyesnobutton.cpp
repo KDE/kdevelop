@@ -23,7 +23,11 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 
+#ifndef PURE_QT
 #include <klocale.h>
+#else
+#include "compat_tools.h"
+#endif
 
 namespace PropertyLib{
 
@@ -67,4 +71,6 @@ void PYesNoButton::updateProperty(bool toggled)
 
 }
 
+#ifndef PURE_QT
 #include "pyesnobutton.moc"
+#endif

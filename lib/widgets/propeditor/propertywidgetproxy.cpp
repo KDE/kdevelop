@@ -100,4 +100,7 @@ QVariant PropertyWidgetProxy::property( const char * name ) const
 }
 
 }
+
+#ifndef PURE_QT
 #include "propertywidgetproxy.moc"
+#endif

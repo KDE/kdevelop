@@ -25,6 +25,7 @@
 #include <kiconloader.h>
 #else
 #include "compat_tools.h"
+#include <undo.xpm>
 #endif
 
 #include <qtable.h>
@@ -89,7 +90,11 @@ public:
             else
                 valueToDraw = m_property->value();
             QColorGroup icg(cg);
+#ifndef PURE_QT
             icg.setColor(QColorGroup::Background, backgroundColor());
+#else
+            icg.setColor(QColorGroup::Background, white);
+#endif
             m_editor->machine(m_property)->propertyEditor->drawViewer(p, icg, r, valueToDraw);
             return;
         }
@@ -160,7 +165,6 @@ public:
         setSelectable(false);
     }
 };
-
 PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
     :KListView(parent, name)
 {
@@ -188,7 +192,11 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
     m_currentEditArea = new QWidget(viewport());
     m_currentEditArea->hide();
     m_undoButton = new QPushButton(m_currentEditArea);
+#ifndef PURE_QT
     m_undoButton->setPixmap(SmallIcon("undo"));
+#else
+    m_undoButton->setPixmap(QPixmap(undo_xpm));
+#endif
     m_undoButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
     m_undoButton->resize(m_undoButton->height(), m_undoButton->height());
     m_undoButton->hide();
@@ -263,12 +271,12 @@ void PropertyEditor::addChildProperties(PropertyItem *parent)
         machine(prop);
     }
         
-    qWarning("seeking children: count: %d", prop->details.count());
+//     qWarning("seeking children: count: %d", prop->details.count());
 
     parent->setOpen(true);
     for (QValueList<ChildProperty>::iterator it = prop->details.begin(); it != prop->details.end(); ++it)
     {
-        qWarning("found child %s", (*it).name().ascii());
+//         qWarning("found child %s", (*it).name().ascii());
         new PropertyItem(this, parent, new MultiProperty(&m_detailedList, &(*it)));
     }
 }
@@ -289,17 +297,18 @@ void PropertyEditor::clearProperties()
 
 void PropertyEditor::propertyValueChanged(Property *property)
 {
+//     qWarning("PropertyEditor::propertyValueChanged");
     if (m_currentEditWidget->propertyName() == property->name())
         m_currentEditWidget->setValue(property->value(), false);
     else
     {
-        //repaint all items
+//        repaint all items
         QListViewItemIterator it(this);
         while (it.current())
         {
             repaintItem(it.current());
             ++it;
-        }        
+        }
     }
 }
 
@@ -308,7 +317,7 @@ void PropertyEditor::propertyChanged(MultiProperty *property, const QVariant &va
     if (!property)
         return;
     
-    kdDebug() << "editor: assign " << property->name().latin1() << " to " << value.toString().latin1() << endl;
+    qWarning("editor: assign %s to %s", property->name().latin1(), value.toString().latin1());
     property->setValue(value, false);
     
     //highlight changed properties
@@ -317,6 +326,8 @@ void PropertyEditor::propertyChanged(MultiProperty *property, const QVariant &va
         m_currentEditItem->setChanged(true);
         repaintItem(m_currentEditItem);
     }
+    
+    emit changed();
     
 /*    if (m_list->contains(name))
     {
@@ -465,4 +476,6 @@ void PropertyEditor::undo()
 
 }
 
+#ifndef PURE_QT
 #include "propertyeditor.moc"
+#endif

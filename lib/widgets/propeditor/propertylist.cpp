@@ -203,6 +203,92 @@ void PropertyList::removeFromGroup(MultiProperty *property)
     m_groupOfProperty.remove(property);
 }
 
+void PropertyList::clear( )
+{
+    for (QMap<QString, MultiProperty*>::iterator it = m_list.begin(); it != m_list.end(); ++it)
+        removeProperty(it.key());
+}
+
+bool PropertyList::contains( const QString & name )
+{
+    if (m_list.contains(name))
+        return true;
+    return false;
+}
+
+QPtrList<Property> PropertyList::properties(const QString &name)
+{
+    if (m_list.contains(name))
+        return m_list[name]->list;
+    return QPtrList<Property>();
+}
+
+PropertyList::Iterator PropertyList::begin()
+{
+    return Iterator(this);
+}
+
+PropertyList::Iterator PropertyList::end()
+{
+    return Iterator(this, true);
+}
+
+//PropertyList::Iterator class
+
+PropertyList::Iterator::Iterator(PropertyList *list)
+    :m_list(list)
+{
+    current = m_list->m_list.begin();
+}
+
+PropertyList::Iterator::Iterator(PropertyList *list, bool end)
+    :m_list(list)
+{
+    current = m_list->m_list.end();
+}
+
+void PropertyList::Iterator::operator ++()
+{
+    next();
+}
+
+void PropertyList::Iterator::operator ++(int)
+{
+    next();
+}
+
+void PropertyList::Iterator::next()
+{
+    ++current;
+}
+
+MultiProperty *PropertyList::Iterator::operator *()
+{
+    return data();
+}
+
+QString PropertyList::Iterator::key()
+{
+    return current.key();
+}
+
+MultiProperty *PropertyList::Iterator::data()
+{
+    return current.data();
+}
+
+bool PropertyList::Iterator::operator !=(Iterator it)
+{
+    return current != it.current;
+}
+
+
+// PropertyBuffer class
+
+
+
+
+
 PropertyBuffer::PropertyBuffer( )
     :PropertyList(false)
 {
@@ -210,6 +296,7 @@ PropertyBuffer::PropertyBuffer( )
 
 void PropertyBuffer::intersect(const PropertyList *list)
 {
+    qWarning("PropertyBuffer::intersect");
     for (QMap<QString, MultiProperty*>::iterator it = m_list.begin(); it != m_list.end(); ++it)
     {
 //        qWarning("intersect:: for mp = %s", it.data()->name().ascii());
@@ -231,6 +318,24 @@ void PropertyBuffer::intersect(const PropertyList *list)
 //        qWarning("intersect::     removing %s from intersection", it.key().ascii());
         removeProperty(it.key());
     }
+    connect(list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(intersectedValueChanged(Property*)));
+}
+
+void PropertyBuffer::intersectedValueChanged(Property *property)
+{
+//     qWarning("PropertyBuffer::intersectedValueChanged");
+    QString propertyName = property->name();
+    if (!contains(propertyName))
+        return;
+    
+    MultiProperty mp(property);
+    if (mp == *m_list[propertyName])
+    {
+        Property *prop;
+        QPtrList<Property> props = properties(propertyName);
+        for (prop = props.first(); prop; prop = props.next())
+            emit propertyValueChanged(prop);
+    }
 }
 
 PropertyBuffer::PropertyBuffer(PropertyList *list)
@@ -245,28 +350,9 @@ PropertyBuffer::PropertyBuffer(PropertyList *list)
         addToGroup(list->m_groupOfProperty[it.data()], mp);
         m_list[it.key()] = mp;
     }
+    connect(list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(intersectedValueChanged(Property*)));
 }
-
-void PropertyList::clear( )
-{
-    for (QMap<QString, MultiProperty*>::iterator it = m_list.begin(); it != m_list.end(); ++it)
-        removeProperty(it.key());
-}
-
-bool PropertyList::contains( const QString & name )
-{
-    if (m_list.contains(name))
-        return true;
-    return false;
-}
-
-QPtrList<Property> PropertyList::properties(const QString &name)
-{
-    if (m_list.contains(name))
-        return m_list[name]->list;
-    return QPtrList<Property>();
-}
-
+    
 }
 
 #ifndef PURE_QT

@@ -158,7 +158,10 @@ void MultiProperty::setValue(const QVariant &value)
     {
         property->setValue(value);
         if (m_propertyList)
+        {
+//             qWarning("emit change");
             emit m_propertyList->propertyValueChanged(property);
+        }
     }
 }
 

@@ -26,9 +26,18 @@
 #include <qlabel.h>
 #include <qcursor.h>
 
+#ifndef PURE_QT
 #include <klocale.h>
+#else
+#include "compat_tools.h"
+#endif
+
+#ifndef PURE_QT
 #include <kfiledialog.h>
-#include <kpushbutton.h>
+#else
+#include <qfiledialog.h>
+#endif
+#include <qpushbutton.h>
 
 namespace PropertyLib{
 
@@ -42,7 +51,7 @@ PPixmapEdit::PPixmapEdit(MultiProperty* property, QWidget* parent, const char* n
     m_edit->setBackgroundMode(Qt::PaletteBase);
     m_edit->installEventFilter(this);
     
-    m_button = new KPushButton(i18n("..."), this);
+    m_button = new QPushButton(i18n("..."), this);
     m_button->resize(height(), height()-8);
     m_button->move(width() - m_button->width() -1, 0);
     m_button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
@@ -77,12 +86,21 @@ void PPixmapEdit::setValue(const QVariant& value, bool emitChange)
 
 void PPixmapEdit::updateProperty()
 {
+#ifndef PURE_QT
     KURL url = KFileDialog::getImageOpenURL(QString::null, this);
     if (!url.isEmpty())
     {
         m_edit->setPixmap(QPixmap(url.path()));
         emit propertyChanged(m_property, value());
     }
+#else
+    QString url = QFileDialog::getOpenFileName();
+    if (!url.isEmpty())
+    {
+        m_edit->setPixmap(QPixmap(url));
+        emit propertyChanged(m_property, value());
+    }
+#endif
 }
 
 void PPixmapEdit::resizeEvent(QResizeEvent *ev)
@@ -126,4 +144,6 @@ bool PPixmapEdit::eventFilter(QObject *o, QEvent *ev)
 
 }
 
+#ifndef PURE_QT
 #include "ppixmapedit.moc"
+#endif

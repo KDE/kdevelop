@@ -24,10 +24,15 @@
 #include <qdialog.h>
 #include <qpainter.h>
 
-#include <klocale.h>
-#include <kpushbutton.h>
 #include <keditlistbox.h>
+
+#ifndef PURE_QT
+#include <kpushbutton.h>
 #include <kstdguiitem.h>
+#else
+#include <qpushbutton.h>
+#include <compat_tools.h>
+#endif
 
 namespace PropertyLib{
 
@@ -69,8 +74,13 @@ void PStringListEdit::showEditor()
     dv->addWidget(select);
 
     QHBoxLayout *dh = new QHBoxLayout(dv, 6);
+#ifndef PURE_QT
     KPushButton *pbOk = new KPushButton(KStdGuiItem::ok(), dia);
     KPushButton *pbCancel = new KPushButton(KStdGuiItem::cancel(), dia);
+#else
+    QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
+    QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
+#endif
     QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));

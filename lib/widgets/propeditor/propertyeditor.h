@@ -20,7 +20,13 @@
 #ifndef PROPERTYEDITOR_H
 #define PROPERTYEDITOR_H
 
+#ifndef PURE_QT
 #include <klistview.h>
+#else
+#include <qlistview.h>
+#define KListView QListView
+#define KListViewItem QListViewItem
+#endif
 
 #include "propertylist.h"
 
@@ -68,6 +74,10 @@ public slots:
     void clearProperties();
     /**Deletes cached machines.*/
     void clearMachineCache();
+
+signals:
+    /**Emitted when something is changed in property editor.*/
+    void changed();
 
 protected slots:
     /**Updates property widget in the editor.*/

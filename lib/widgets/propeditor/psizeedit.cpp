@@ -60,4 +60,6 @@ void PSizeEdit::setValue(const QVariant& value, bool emitChange)
 
 }
 
+#ifndef PURE_QT
 #include "psizeedit.moc"
+#endif

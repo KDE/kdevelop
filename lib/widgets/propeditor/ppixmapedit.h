@@ -23,7 +23,7 @@
 #include "propertywidget.h"
 
 class QLabel;
-class KPushButton;
+class QPushButton;
 
 namespace PropertyLib{
 
@@ -49,7 +49,7 @@ protected slots:
 private:
     QLabel *m_edit;
     QLabel *m_popup;
-    KPushButton *m_button;
+    QPushButton *m_button;
 };
 
 }

@@ -64,4 +64,6 @@ void PDateTimeEdit::updateProperty(const QDateTime &val)
 
 }
 
+#ifndef PURE_QT
 #include "pdatetimeedit.moc"
+#endif

@@ -75,4 +75,6 @@ void PColorButton::updateProperty(const QColor &color)
 
 }
 
+#ifndef PURE_QT
 #include "pcolorbutton.moc"
+#endif

@@ -57,4 +57,6 @@ void PUrlEdit::updateProperty(const QString &val)
 
 }
 
+#ifndef PURE_QT
 #include "purledit.moc"
+#endif

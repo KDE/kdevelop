@@ -108,6 +108,7 @@ public:
         FontName = 2002                    /**<font name, e.g. "times new roman"*/,
         FileURL = 2003                     /**<url of a file*/,
         DirectoryURL = 2004                /**<url of a directory*/,
+        LineStyle = 2005                   /**<line style*/,
 
         UserDefined = 3000                 /**<plugin defined properties should start here*/
     };

@@ -24,7 +24,12 @@
 #include <qpushbutton.h>
 
 #include <kfontrequester.h>
+
+#ifndef PURE_QT
 #include <klocale.h>
+#else
+#include <compat_tools.h>
+#endif
 
 namespace PropertyLib{
 
@@ -34,7 +39,9 @@ PFontButton::PFontButton(MultiProperty* property, QWidget* parent, const char* n
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KFontRequester(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+#ifndef PURE_QT
     m_edit->button()->setText(i18n("..."));
+#endif
     l->addWidget(m_edit);
 
     connect(m_edit, SIGNAL(fontSelected(const QFont& )), this, SLOT(updateProperty(const QFont& )));
@@ -73,4 +80,6 @@ void PFontButton::updateProperty(const QFont &font)
 
 }
 
+#ifndef PURE_QT
 #include "pfontbutton.moc"
+#endif

@@ -59,4 +59,6 @@ void PPointEdit::setValue(const QVariant& value, bool emitChange)
 
 }
 
+#ifndef PURE_QT
 #include "ppointedit.moc"
+#endif

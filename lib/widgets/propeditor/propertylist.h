@@ -55,7 +55,33 @@ alphabetically sorted list of properties or both at the same time.
 class PropertyList: public QObject
 {
     Q_OBJECT
+
 public:
+    class Iterator {
+    public:
+        void operator ++();
+        void operator ++(int);
+        
+        MultiProperty *operator *();
+        
+        bool operator != (Iterator it);
+        
+        QString key();
+        MultiProperty *data();
+        
+    private:
+        Iterator(PropertyList *list);
+        Iterator(PropertyList *list, bool end);
+        
+        void next();
+        QMap<QString, MultiProperty*>::iterator current;
+        
+        PropertyList *m_list;
+        friend class PropertyList;
+    };
+    
+    typedef Iterator iterator;
+    
     PropertyList();
     virtual ~PropertyList();
 
@@ -91,6 +117,9 @@ public:
     
     /**The list of properties with given name.*/
     QPtrList<Property> properties(const QString &name);
+    
+    Iterator begin();
+    Iterator end();
 
 signals:
     /**Emitted when the value of the property is changed.*/
@@ -146,6 +175,7 @@ buf->intersect(list3);
 /endcode
 */
 class PropertyBuffer: public PropertyList{
+    Q_OBJECT
 public:
     /**Constructs a buffer from given property list.*/
     PropertyBuffer(PropertyList *list);
@@ -154,6 +184,10 @@ public:
 
     /**Intersects with other @ref PropertyLib::PropertyList.*/
     virtual void intersect(const PropertyList *list);
+
+protected slots:
+    void intersectedValueChanged(Property *property);
+    
 };
 
 }

@@ -65,4 +65,6 @@ void PDateEdit::updateProperty(const QDate &val)
 
 }
 
+#ifndef PURE_QT
 #include "pdateedit.moc"
+#endif

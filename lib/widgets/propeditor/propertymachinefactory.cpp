@@ -22,7 +22,7 @@
 #ifndef PURE_QT
 #include <klocale.h>
 #else
-#include "compat_tools.h"
+#define i18n QObject::tr
 #endif
 
 #include <qmap.h>
@@ -52,6 +52,7 @@
 #include "pfontbutton.h"
 #include "ppixmapedit.h"
 #include "pcursoredit.h"
+#include "plinestyleedit.h"
 
 namespace PropertyLib{
 
@@ -107,6 +108,8 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             return new Machine(new PUrlEdit(KFile::File, property));
         case Property::DirectoryURL:
             return new Machine(new PUrlEdit(KFile::Directory, property));
+        case Property::LineStyle:
+            return new Machine(new PLineStyleEdit(property));
 
         case Property::Size:
         {

@@ -72,4 +72,6 @@ QString PSizePolicyEdit::findValueDescription(QVariant val) const
 
 }
 
+#ifndef PURE_QT
 #include "psizepolicyedit.moc"
+#endif

@@ -36,4 +36,6 @@ void PCursorEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r,
 
 }
 
+#ifndef PURE_QT
 #include "pcursoredit.moc"
+#endif
