@@ -33,6 +33,7 @@
 #include <kdialogbase.h>
 #include <kkeydialog.h>
 #include <kmessagebox.h>
+#include <kiconloader.h>
 #include <kdevproject.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -637,14 +638,15 @@ void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
 {
     if ( rw_part && rw_part->widget() )
     {
-        if ( rw_part->isModified() )
-        {
-            m_tabWidget->changeTab( rw_part->widget(), rw_part->url().fileName() + "*" );
-        }
-        else
-        {
-            m_tabWidget->changeTab( rw_part->widget(), rw_part->url().fileName() );
-        }
+	QString tLabel( rw_part->url().fileName() );
+	QIconSet tSet;
+	if ( rw_part->isModified() )
+            tSet = SmallIconSet( "filesave" );
+	if ( ( m_tabWidget->tabLabel( rw_part->widget() ) == tLabel )
+             && ( m_tabWidget->tabIconSet( rw_part->widget() ).isNull() == tSet.isNull() ) )
+            return;
+
+        m_tabWidget->changeTab( rw_part->widget(), tSet, tLabel );
         m_tabWidget->setTabToolTip( rw_part->widget(), rw_part->url().url() );
     }
 }
