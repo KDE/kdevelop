@@ -943,6 +943,4 @@ void QextMdiChildFrm::slot_resizeViaSystemMenu()
    setResizeCursor( m_iResizeCorner);
 }
 
-#ifndef NO_KDE2
-#  include "qextmdichildfrm.moc"
-#endif
+#include "moc_qextmdichildfrm.cpp"
