@@ -127,19 +127,19 @@ KPopupMenu *CClassToolTreeView::getCurrentPopup()
 
 void CClassToolTreeView::slotViewDefinition() 
 {
-  const char *className;
-  const char *declName;
+  QString className;
+  QString declName;
   THType type;
 
-  ((CClassTreeHandler *)(treeH))->getCurrentNames( &className, &declName, &type );
+  ((CClassTreeHandler *)(treeH))->getCurrentNames( className, declName, &type );
 
   emit signalViewDefinition( className, declName, type );
 }
 
 void CClassToolTreeView::slotViewDeclaration()
 {
-  const char *className;
-  const char *declName;
+  QString className;
+  QString declName;
   THType type;
 
   if( treeH->itemType() == THCLASS )
@@ -149,7 +149,7 @@ void CClassToolTreeView::slotViewDeclaration()
   }
   else
   {
-    ((CClassTreeHandler *)(treeH))->getCurrentNames( &className, &declName, &type );
+    ((CClassTreeHandler *)(treeH))->getCurrentNames( className, declName, &type );
 
     emit signalViewDeclaration( className, declName, type );
   }
