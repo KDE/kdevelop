@@ -365,6 +365,8 @@ void FileTreeWidget::slotSelectionChanged()
 
     // Check for this item
     MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem*>( currentItem() );
+    if (!item)
+        return;
     if (item->isSelected())
     {
         if (m_selectedItems.find( item ) != -1)
