@@ -51,6 +51,18 @@
 </itemizedlist>
 </para>
 
+<note>
+  <para>
+  In fact there are three &kdevelop;-based applications:
+  </para>
+  <itemizedlist>
+    <listitem><para>The &kdevelop; IDE &mdash; this is the place where you will usually work.</para></listitem>
+    <listitem><para>The stand-alone &kdevelop; Assistant documentation browser &mdash; isolates all the powerful documentation facilities of the &kdevelop; IDE in a separate tool. This comes in handy when you want to look up some programming documentation but do not want to start the full IDE.</para></listitem>
+    <listitem><para>The &kdevelop; Designer &mdash; enhances the &Qt; User Interface Designer by &kde; specific elements and integrates nicely in the &kdevelop; IDE.</para></listitem>
+  </itemizedlist>
+</note>
+
+
 <sect1 id="uimodes-survey">
 <title>Available User Interface Modes</title>
 
@@ -83,7 +95,7 @@
     All tool views are docked in a tabbar fashion around the mainframe area. They are grouped left, bottom, and right according to the services provided.
     </para></listitem>
     <listitem><para>
-    Editor and browser views will be stacked in a big sized tabbed window amidst the mainframe area.
+    Editor and browser views will be stacked in a big sized tabbed window inmidst the mainframe area.
     </para></listitem>
   </itemizedlist>
   </listitem>

@@ -558,6 +558,17 @@ and entering the root password. Then install the application:
 That's all. If you installed &kdevelop; in the default &kde; directory you may now run the IDE. Otherwise some additional steps will be necessary as shown in the <link linkend="compile-and-install-options-dir">Non-default installation directory</link> section below.
 </para>
 
+<note>
+  <para>
+  In fact there usually will have been three &kdevelop;-based applications installed:
+  </para>
+  <itemizedlist>
+    <listitem><para>The &kdevelop; IDE &mdash; this is the place where you will usually work.</para></listitem>
+    <listitem><para>The stand-alone &kdevelop; Assistant documentation browser &mdash; isolates all the powerful documentation facilities of the &kdevelop; IDE in a separate tool. This comes in handy when you want to look up some programming documentation but do not want to start the full IDE.</para></listitem>
+    <listitem><para>The &kdevelop; Designer &mdash; enhances the &Qt; User Interface Designer by &kde; specific elements and integrates nicely in the &kdevelop; IDE.</para></listitem>
+  </itemizedlist>
+</note>
+
 </sect3> <!-- compile-and-install-make-basic -->
 </sect2> <!-- compile-and-install-make -->
 
