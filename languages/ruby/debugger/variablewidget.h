@@ -80,8 +80,6 @@ public slots:
 
 private:
     VariableTree *varTree_;
-    friend class VariableTree;
-
     KHistoryCombo *watchVarEditor_;
 };
 

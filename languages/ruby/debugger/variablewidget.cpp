@@ -687,7 +687,8 @@ void VarItem::update()
 {
 	if (isOpen()) {
 		startWaitingForData();
-		emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
+//		emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
+		((VariableTree*)listView())->expandItem(this, fullName().latin1());
 	}
 
 	return;
@@ -717,14 +718,28 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
         return;
 	}
 
-    if (column == VALUE_COLUMN && highlight_) {
-        QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
-                           cg.dark(), cg.mid(), red, cg.base());
-        QListViewItem::paintCell( p, hl_cg, column, width, align );
-    } else {
-        QListViewItem::paintCell( p, cg, column, width, align );
+    if (column == VALUE_COLUMN) {
+		// Show color values as colors, and make the text color the same
+		// as the base color
+		if (QRegExp("^#[\\da-f]+$").search(text(column)) != -1) {
+        	QColorGroup color_cg(	cg.foreground(), cg.background(), cg.light(),
+                           			cg.dark(), cg.mid(), 
+									QColor(text(column)), 
+									QColor(text(column)) );
+        	QListViewItem::paintCell(p, color_cg, column, width, align);
+			return;
+		}
+		
+		// Highlight recently changed items in red
+		if (highlight_) {
+        	QColorGroup hl_cg(	cg.foreground(), cg.background(), cg.light(),
+                           		cg.dark(), cg.mid(), red, cg.base() );
+        	QListViewItem::paintCell(p, hl_cg, column, width, align);
+			return;
+		}
 	}
 	
+	QListViewItem::paintCell(p, cg, column, width, align);
 	return;
 }
 
