@@ -604,18 +604,12 @@ void DocumentationPart::activateAssistantWindow(const QCString &ref)
         kdDebug() << "    call successful " << endl;
         QDataStream reply(replyData, IO_ReadOnly);
         
-        int result;
         int winId;
-        QString error;
-        reply >> result >> winId >> error;
-        if (result == 0)
-        {
-            kdDebug() << "Win ID: " << winId << endl;
-            KWin::forceActiveWindow(winId);
-            //KWin::activateWindow(winId);
-            
-            KApplication::dcopClient()->send(ref, "MainWindow", "show()", QByteArray());
-        }
+        reply >> winId;
+        kdDebug() << "Win ID: " << winId << endl;
+        KWin::forceActiveWindow(winId);
+
+        KApplication::dcopClient()->send(ref, "MainWindow", "show()", QByteArray());
     }
 }
 
