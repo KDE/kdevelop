@@ -37,9 +37,10 @@ const QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormat
 	<< ActionFormat( i18n("compiling"), "g++", "(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c ([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("compiling"), "g++", "(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c -.*", 1 )
 	<< ActionFormat( i18n("generating"), "moc", ".*/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
+	<< ActionFormat( i18n("generating"), "uic", ".*/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("linking"), "g++", "g\\+\\+ .* -o ([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("installing"), "", "(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 );
+	<< ActionFormat( i18n("installing"), "", "^(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 );
 
 	return formats;
 }

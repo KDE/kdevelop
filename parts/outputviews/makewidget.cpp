@@ -105,6 +105,38 @@ static const char *const message_xpm[] =
         "...####...."
     };
 
+class SelectionPreserver
+{
+public:
+	SelectionPreserver( QTextEdit& textEdit, bool stayAtEnd )
+		: m_textEdit( textEdit )
+		, m_atEnd( false )
+	{
+		int para, index;
+		m_textEdit.getCursorPosition( &para, &index );
+
+		m_atEnd = stayAtEnd
+		      && para == m_textEdit.paragraphs() - 1
+		      && index == m_textEdit.paragraphLength( para );
+
+		m_textEdit.getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
+	}
+
+	~SelectionPreserver()
+	{
+		m_textEdit.setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
+
+		if ( m_atEnd )
+		{
+			m_textEdit.moveCursor(QTextEdit::MoveEnd, false);
+			m_textEdit.moveCursor(QTextEdit::MoveLineStart, false);//if linewrap is off we must avoid the jumping of the vertical scrollbar
+		}
+	}
+
+	QTextEdit& m_textEdit;
+	bool m_atEnd;
+	int paraFrom, indexFrom, paraTo, indexTo;
+};
 
 MakeWidget::MakeWidget(MakeViewPart *part)
 	: QTextEdit(0, "make widget")
@@ -112,6 +144,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	, m_errorFilter( m_continuationFilter )
 	, m_continuationFilter( m_actionFilter )
 	, m_actionFilter( m_otherFilter )
+	, m_paragraphs(0)
 	, moved(false)
 	, m_part(part)
 	, m_vertScrolling(false)
@@ -207,7 +240,11 @@ void MakeWidget::startNextJob()
 	dirList.remove(it);
 
 	clear(); // clear the widget
-	m_items.clear(); // FIXME: memory leak
+	for ( QValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it )
+		delete *it;
+	m_items.clear();
+	m_paragraphToItem.clear();
+	m_paragraphs = 0;
 	moved = false;
 
 	insertItem( new CommandItem( currentCommand ) );
@@ -265,14 +302,14 @@ void MakeWidget::nextError()
 		parag = 0;
 
 	for ( int it = parag;
-#if QT_VERSION >= 0x030100 
+#if QT_VERSION >= 0x030100
 	      it < m_items.count();
 #else
 	      it < m_items.size();
 #endif
 	      ++it )
 	{
-		ErrorItem* item = dynamic_cast<ErrorItem*>( m_items[it] );
+		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
 			continue;
 		moved = true;
@@ -300,7 +337,7 @@ void MakeWidget::prevError()
 
 	for ( int it = parag; it >= 0; --it)
 	{
-		ErrorItem* item = dynamic_cast<ErrorItem*>( m_items[it] );
+		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
 			continue;
 		moved = true;
@@ -342,7 +379,7 @@ void MakeWidget::keyPressEvent(QKeyEvent *e)
 
 void MakeWidget::searchItem(int parag)
 {
-	ErrorItem* item = dynamic_cast<ErrorItem*>( m_items[parag] );
+	ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[parag] );
 	if ( item )
 	{
 		m_part->partController()->editDocument(item->fileName, item->lineNum);
@@ -361,26 +398,6 @@ void MakeWidget::insertStderrLine( const QString& line )
 {
 	if ( !appendToLastLine( line ) )
 		m_errorFilter.processLine( line );
-}
-
-bool MakeWidget::appendToLastLine( const QString& text )
-{
-#if QT_VERSION >= 0x030100 
-	if ( m_items.count() == 0 )
-#else
-	if ( m_items.size() == 0 )
-#endif
-		return false;
-#if QT_VERSION >= 0x030100 
-	MakeItem* item = m_items[m_items.count() - 1];
-#else
-	MakeItem* item = m_items[m_items.size() - 1];
-#endif	
-	if ( !item->append( text ) )
-		return false;
-	removeParagraph( paragraphs() - 1 );
-	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
-	return true;
 }
 
 void MakeWidget::slotProcessExited(KProcess *)
@@ -441,27 +458,41 @@ void MakeWidget::slotExitedDirectory( ExitingDirectoryItem* item )
 	delete dir;
 }
 
+bool MakeWidget::appendToLastLine( const QString& text )
+{
+#if QT_VERSION >= 0x030100
+	if ( m_items.count() == 0 )
+#else
+	if ( m_items.size() == 0 )
+#endif
+		return false;
+#if QT_VERSION >= 0x030100
+	MakeItem* item = m_items[m_items.count() - 1];
+#else
+	MakeItem* item = m_items[m_items.size() - 1];
+#endif
+	if ( !item->append( text ) )
+		return false;
+
+	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
+
+	removeParagraph( paragraphs() - 1 );
+	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
+
+	return true;
+}
+
 void MakeWidget::insertItem( MakeItem* item )
 {
 	m_items.push_back( item );
 
-	int para, index;
-	getCursorPosition( &para, &index );
+	if ( !item->visible( m_compilerOutputLevel ) )
+		return;
 
-	bool atEnd = para == paragraphs() - 1 && index == paragraphLength( para );
+	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
 
-	int paraFrom, indexFrom, paraTo, indexTo;
-	getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
-
+	m_paragraphToItem.insert( m_paragraphs++, item );
 	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
-
-	setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
-
-	if (atEnd && !m_vertScrolling && !m_horizScrolling)
-	{
-		moveCursor(MoveEnd, false);
-		moveCursor(MoveLineStart, false);//if linewrap is off we must avoid the jumping of the vertical scrollbar
-	}
 }
 
 bool MakeWidget::brightBg()
@@ -511,6 +542,20 @@ void MakeWidget::toggleLineWrapping()
 	}
 }
 
+void MakeWidget::refill()
+{
+	clear();
+	m_paragraphToItem.clear();
+	m_paragraphs = 0;
+	for( uint i = 0; i < m_items.size(); i++ )
+	{
+		if ( !m_items[i]->visible( m_compilerOutputLevel ) )
+			continue;
+		m_paragraphToItem.insert( m_paragraphs++, m_items[i] );
+		append( m_items[i]->formattedText( m_compilerOutputLevel, brightBg() ) );
+	}
+}
+
 void MakeWidget::slotVeryShortCompilerOutput() { setCompilerOutputLevel(eVeryShort); }
 void MakeWidget::slotShortCompilerOutput() { setCompilerOutputLevel(eShort); }
 void MakeWidget::slotFullCompilerOutput() { setCompilerOutputLevel(eFull); }
@@ -522,11 +567,7 @@ void MakeWidget::setCompilerOutputLevel(EOutputLevel level)
 	pConfig->setGroup("MakeOutputView");
 	pConfig->writeEntry("CompilerOutputLevel", (int) level);
 	pConfig->sync();
-	clear();
-	for( uint i = 0; i < m_items.size(); i++ )
-	{
-		append( m_items[i]->formattedText( m_compilerOutputLevel, brightBg() ) );
-	}
+	refill();
 }
 
 void MakeWidget::toggleShowDirNavigMessages()
@@ -536,6 +577,7 @@ void MakeWidget::toggleShowDirNavigMessages()
 	pConfig->setGroup("MakeOutputView");
 	pConfig->writeEntry("ShowDirNavigMsg", DirectoryItem::getShowDirectoryMessages());
 	pConfig->sync();
+	refill();
 }
 
 void MakeWidget::updateSettingsFromConfig()

@@ -54,12 +54,17 @@ QString MakeItem::icon()
 	}
 }
 
+QString MakeItem::text( EOutputLevel )
+{
+	return QStyleSheet::escape( m_text );
+}
+
 QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
 {
     return QString("<code>%1<font color=\"%2\">%3</font></code>%4")
 		.arg( icon() )
 		.arg( color( bright_bg ) )
-		.arg( QStyleSheet::escape( text( level ) ) )
+		.arg( text( level ) )
 		.arg( br() );
 }
 
@@ -92,8 +97,6 @@ bool ErrorItem::append( const QString& text )
 	return true;
 }
 
-
-
 ExitStatusItem::ExitStatusItem( bool normalExit, int exitStatus )
 	: m_normalExit( normalExit )
 	, m_exitStatus( exitStatus )
@@ -111,15 +114,14 @@ QString ExitStatusItem::text( EOutputLevel )
 
 bool DirectoryItem::m_showDirectoryMessages = true;
 
-QString ActionItem::formattedText( EOutputLevel level, bool bright_bg )
+QString EnteringDirectoryItem::text( EOutputLevel )
 {
-	if ( level < eFull )
-		return QString("<code>%1<font color=\"%2\">%3</font></code>%4")
-				.arg( icon() )
-				.arg( color( bright_bg ) )
-				.arg( text( level ) )
-				.arg( br() );
-	return MakeItem::formattedText( level, bright_bg );
+	return i18n("Entering directory <b>%3</b>").arg( directory );
+}
+
+QString ExitingDirectoryItem::text( EOutputLevel )
+{
+	return i18n("Leaving directory <b>%3</b>").arg( directory );
 }
 
 QString ActionItem::text( EOutputLevel outputLevel )
@@ -129,6 +131,6 @@ QString ActionItem::text( EOutputLevel outputLevel )
 		if ( m_tool.isEmpty() )
 			return QString( "%1 <b>%2</b>" ).arg( m_action ).arg( m_file );
 		return QString( "%1 <b>%2</b> (%3)" ).arg( m_action ).arg( m_file ).arg( m_tool );
-		}
+	}
 	return MakeItem::text( outputLevel );
 }

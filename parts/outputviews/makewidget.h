@@ -16,6 +16,7 @@
 #include <qregexp.h>
 #include <qtextedit.h>
 #include <qvaluevector.h>
+#include <qintdict.h>
 
 #include "outputfilter.h"
 #include "directorystatusmessagefilter.h"
@@ -75,6 +76,7 @@ private:
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
 	bool brightBg();
+	void refill();
 
     DirectoryStatusMessageFilter  m_directoryStatusFilter;
     CompileErrorFilter            m_errorFilter;
@@ -92,6 +94,8 @@ private:
     ProcessLineMaker* procLineMaker;
     QStack<QString> dirstack;
     QValueVector<MakeItem*> m_items;
+    QIntDict<MakeItem> m_paragraphToItem;
+    long m_paragraphs;
     bool moved;
 
     MakeViewPart *m_part;

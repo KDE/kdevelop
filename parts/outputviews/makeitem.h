@@ -32,8 +32,8 @@ public:
 
 	virtual bool append( const QString& ) { return false; }
 	virtual Type type() { return Diagnostic; }
-	virtual bool visible( EOutputLevel ) { return true; }
-	virtual QString text( EOutputLevel ) { return m_text; }
+	virtual bool visible( EOutputLevel level ) { return level > eVeryShort; }
+	virtual QString text( EOutputLevel );
 	virtual QString formattedText( EOutputLevel, bool bright_bg );
 	QString icon();
 	QString color( bool bright_bg );
@@ -51,6 +51,7 @@ public:
 	{}
 
 	Type type() { return Diagnostic; }
+	virtual bool visible( EOutputLevel ) { return true; }
 };
 
 class ExitStatusItem : public MakeItem
@@ -59,6 +60,7 @@ public:
 	ExitStatusItem( bool normalExit, int exitStatus );
 
 	Type type() { return m_normalExit && m_exitStatus == 0 ? Diagnostic : Error; }
+	virtual bool visible( EOutputLevel ) { return true; }
 	QString text( EOutputLevel level );
 
 private:
@@ -95,6 +97,8 @@ public:
 	{
 		return m_showDirectoryMessages;
 	}
+
+	virtual QString text( EOutputLevel );
 };
 
 class ExitingDirectoryItem : public DirectoryItem
@@ -107,6 +111,8 @@ public:
 	{
 		return m_showDirectoryMessages && level > eVeryShort;
 	}
+
+	virtual QString text( EOutputLevel );
 };
 
 class ErrorItem : public MakeItem
@@ -116,6 +122,7 @@ public:
 
 	virtual bool append( const QString& text );
 	Type type() { return Error; }
+	virtual bool visible( EOutputLevel ) { return true; }
 
 	QString fileName;
 	int lineNum;
@@ -132,8 +139,8 @@ public:
 		, m_tool( tool )
 	{}
 
+	virtual bool visible( EOutputLevel ) { return true; }
 	virtual QString text( EOutputLevel level );
-	virtual QString formattedText( EOutputLevel level, bool bright_bg );
 
 private:
 	QString m_action;
