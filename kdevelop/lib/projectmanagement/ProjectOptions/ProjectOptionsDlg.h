@@ -20,8 +20,6 @@
 
 #include "projectspace.h"
 #include "kdevcomponent.h"
-#include "KDevCompiler.h"
-#include "ProjectOptionsDlgBase.h"
 #include <qdialog.h>
 #include <qmap.h>
 #include "klocale.h"
@@ -31,29 +29,24 @@
   *@author Omid Givi
   */
 
-class ProjectOptionsDlg: public ProjectOptionsDlgBase {
+class KDevCompiler;
+
+class ProjectOptionsDlg: public KDialogBase {
     Q_OBJECT
 
 public:
     ProjectOptionsDlg(QWidget *parent=0, const char *name=0, ProjectSpace *ps=0);
     ~ProjectOptionsDlg();
 protected slots:
-	void slotTreeListItemSelected(QListViewItem *item );
-	void slotButtonOkClicked();
-	void slotButtonApplyClicked();
+	void slotOk();
+	void slotApply();
 
 signals:
-	void WidgetStarted(KDevCompiler*);
-	void ButtonApplyClicked(KDevCompiler*);
+	void WidgetStarted();
+	void ButtonApplyClicked();
 	
 protected:
   ProjectSpace *m_ps;
-  QWidget* currentWidget;
-  QWidget* nop;
-  QWidget* dp;
-  QWidget* gp;
-  QWidget* ip;
-  QMap<QListViewItem *, QWidget *> treeListToWidget;
 };
 
 #endif

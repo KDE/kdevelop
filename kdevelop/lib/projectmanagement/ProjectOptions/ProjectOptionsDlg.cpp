@@ -16,110 +16,80 @@
  ***************************************************************************/
 
 #include "ProjectOptionsDlg.h"
-#include "ProjectOptionsDlgBase.h"
 #include <kdebug.h>
 #include <qheader.h>
 #include <qlistview.h>
 #include <kiconloader.h>
-#include "GeneralPage.h"
-#include "DefaultPage.h"
-#include "NotImplementedPage.h"
+#include "InfoPageWidgetBase.h"
 #include <qlayout.h>
 #include <qobjectlist.h>
-#include "kdialogbase.h"
 #include "klocale.h"
 #include <qhbox.h>
 #include <qvbox.h>
+#include "KDevCompiler.h"
+#include "KDevLinker.h"
+
 
 /*
+ * Author: Omid Givi
  * class ProjectOptionsDlg
  */
 
 ProjectOptionsDlg::ProjectOptionsDlg(QWidget *parent, const char *name, ProjectSpace *ps)
-    : ProjectOptionsDlgBase( parent, name, true)
+    : KDialogBase(TreeList, i18n("Current Project Options"), Apply|Ok|Cancel, Ok,
+                  parent, name)
 {
   m_ps = ps;
 
   // Where do I get the right debug number for 'this'??
   kdDebug(9000) << "Opening ProjectOptions Dialog" << endl;
 
-  categoryTreeList->header()->hide();
-	categoryTreeList->setRootIsDecorated(true);
-  categoryTreeList->setSorting(-1);
+  QVBox *vbox;
+	setShowIconsInTreeList(true);
+	setRootIsDecorated(false);
+	
+	QWidget* optionsWidget;
 
-	// general page
-	QListViewItem* generalItem = new QListViewItem( categoryTreeList, "General");
-	generalItem->setPixmap(0, KGlobal::iconLoader()->loadIcon("folder", KIcon::Desktop, KIcon::SizeSmall));
-	QListViewItem* compilersItem = new QListViewItem( categoryTreeList, "Compilers");
-	compilersItem->setPixmap(0, KGlobal::iconLoader()->loadIcon("folder", KIcon::Desktop, KIcon::SizeSmall));
-	compilersItem->setOpen(true);
+	// info page
+  vbox = addVBoxPage(i18n("Info"), i18n("Current Project General Information"),
+  									 KGlobal::iconLoader()->loadIcon("info", KIcon::Desktop, KIcon::SizeSmall));
+	optionsWidget = new InfoPageWidgetBase(vbox, "General Info Page");
+	
+	// compilers
+  vbox = addVBoxPage(i18n("Compilers"), i18n("Compilers Options"),
+  									 KGlobal::iconLoader()->loadIcon("folder", KIcon::Desktop, KIcon::SizeSmall));
 		
-	dp = new DefaultPage(localWidget, "Default Page");
-  nop= new NotImplementedPage(localWidget, "Not Implemented Page");
-//  nop->resize(localWidget->width(), localWidget->height());
-	treeListToWidget.insert(generalItem, dp);
-	treeListToWidget.insert(compilersItem, dp);
-  generalItem = new QListViewItem(generalItem, "Info");
-	generalItem->setPixmap(0, KGlobal::iconLoader()->loadIcon("info", KIcon::Desktop, KIcon::SizeSmall));
-
 	// iterate the compilers
-	QListViewItem* compilerItem;
 	QList<KDevCompiler> *compilers = ps->currentProject()->compilers();
   QListIterator<KDevCompiler> it(*compilers);
   for ( ; it.current(); ++it ) {
     KDevCompiler *comp = it.current();
-    compilerItem = new QListViewItem(compilersItem, *(comp->name()));
-    compilerItem->setPixmap(0, KGlobal::iconLoader()->loadIcon(*(comp->icon()), KIcon::Desktop, KIcon::SizeSmall));
-    QWidget* optionsWidget = comp->initOptionsWidget(localWidget, this);
-    optionsWidget->resize(localWidget->width(), localWidget->height());
-    treeListToWidget.insert(compilerItem, comp->optionsWidget());
-	  emit(WidgetStarted(comp));
+    QStringList qsl = QStringList() << "Compilers" << *(comp->name());
+	  vbox = addVBoxPage(qsl, i18n("Compiler Options for: ") + *(comp->name()),
+  										 KGlobal::iconLoader()->loadIcon(*(comp->icon()), KIcon::Desktop, KIcon::SizeSmall));
+		
+   	optionsWidget = comp->initOptionsWidget(vbox, this);
   }
 
-  connect(categoryTreeList,SIGNAL(clicked(QListViewItem*)), SLOT(slotTreeListItemSelected(QListViewItem*)));
-//  connect(buttonOk, SIGNAL(clicked()), this, SLOT(slotButtonOkClicked()));	 		
-
-  dp->raise();
-	currentWidget = dp;
-}
+  // linker	
+	KDevLinker* kdl = ps->currentProject()->linker();
+  vbox = addVBoxPage(i18n("Linker"), i18n("Linker"),
+  									 KGlobal::iconLoader()->loadIcon(*(kdl->icon()), KIcon::Desktop, KIcon::SizeSmall));
+	
+  optionsWidget = kdl->initOptionsWidget(vbox, this);
+  emit(WidgetStarted());
+}	
 
 ProjectOptionsDlg::~ProjectOptionsDlg(){
 }
 
-void ProjectOptionsDlg::slotTreeListItemSelected(QListViewItem* item){
-
-  if (!item) return; // do we have an item?
-  if(item->depth() != 1) return; // do we have the right item?
-
-  QWidget *widgetItem = treeListToWidget[item];
-
-  QString name = item->text(0);
-  if (widgetItem){
-	  widgetItem->raise();
-	  currentWidget = widgetItem;
-	  if (widgetItem->parentWidget()){
-  	  widgetItem->resize((widgetItem->parentWidget())->width(), (widgetItem->parentWidget())->height());
-  	}
-  }else{
-    nop->raise();
-    nop->resize((nop->parentWidget())->width(), (nop->parentWidget())->height());
-  }
+void ProjectOptionsDlg::slotOk(){
+	slotApply();
+	accept();
 }
 
-void ProjectOptionsDlg::slotButtonOkClicked(){
-	slotButtonApplyClicked();
-	reject();
-}
-
-void ProjectOptionsDlg::slotButtonApplyClicked(){
-	// iterate the compilers
-	QListViewItem* compilerItem;
-	QList<KDevCompiler> *compilers = m_ps->currentProject()->compilers();
-  QListIterator<KDevCompiler> it(*compilers);
-  for ( ; it.current(); ++it ) {
-    KDevCompiler *comp = it.current();
-		emit(ButtonApplyClicked(comp));
-  }
+void ProjectOptionsDlg::slotApply(){
+	emit(ButtonApplyClicked());
 }
 
 #include "ProjectOptionsDlg.moc"
