@@ -268,6 +268,8 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return Forms;
     else if (ext == "idl")
         return IDLs;
+    else if (ext == "ts")
+        return Translations;
     else
         return NoType;
 }
