@@ -16,10 +16,12 @@
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kmenubar.h>
+#include <kmessagebox.h>
 
 
 #include "projectmanager.h"
 #include "partcontroller.h"
+#include "plugincontroller.h"
 #include "api.h"
 #include "core.h"
 #include "settingswidget.h"
@@ -55,6 +57,14 @@ void TopLevelMDI::init()
   createStatusBar();
 
   createGUI(0);
+
+  if ( PluginController::pluginServices().isEmpty() ) {
+    KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
+        "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
+        "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
+        "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
+        i18n("Couldn't find plugins") );
+  }
 }
 
 
