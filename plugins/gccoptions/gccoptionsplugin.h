@@ -30,8 +30,8 @@ class GccOptionsPlugin : public KDevCompilerOptions
     Q_OBJECT
 
 public:
-    enum Type { GCC, GPP, G77 };
-    GccOptionsPlugin( Type type, QObject *parent=0, const char *name=0 );
+    enum Type { GCC, GPP, G77, Unknown };
+    GccOptionsPlugin( QObject *parent, const char *name, const QStringList &args );
     ~GccOptionsPlugin();
 
     static QString captionForType(Type type);

@@ -19,10 +19,12 @@
 #include <qvbox.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kgenericfactory.h>
 
 #include "flagboxes.h"
 #include "gccoptionsplugin.h"
 
+K_EXPORT_COMPONENT_FACTORY( libkdevgccoptions, KGenericFactory<GccOptionsPlugin>( "kdevgccoptions" ) );
 
 class GeneralTab : public QWidget
 {
@@ -539,10 +541,22 @@ QString GccOptionsDialog::flags() const
 }
 
 
-GccOptionsPlugin::GccOptionsPlugin(Type type, QObject *parent, const char *name)
+GccOptionsPlugin::GccOptionsPlugin(QObject *parent, const char *name, const QStringList &args)
     : KDevCompilerOptions(parent, name)
 {
-    gcctype = type;
+    gcctype = Unknown;
+
+    if ( args.count() == 0 )
+	return;
+
+    QString typeStr = args[ 0 ];
+
+    if ( typeStr == "gcc" )
+	gcctype = GccOptionsPlugin::GCC;
+    else if ( typeStr == "g++" )
+	gcctype = GccOptionsPlugin::GPP;
+    else if ( typeStr == "g77" )
+	gcctype = GccOptionsPlugin::G77;
 }
 
 
@@ -564,6 +578,7 @@ QString GccOptionsPlugin::captionForType(Type type)
 
 QString GccOptionsPlugin::exec(QWidget *parent, const QString &flags)
 {
+    if ( gcctype == Unknown ) return QString::null;
     GccOptionsDialog *dlg = new GccOptionsDialog(gcctype, parent, "gcc options dialog");
     dlg->setFlags(flags);
     dlg->exec();
