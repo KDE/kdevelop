@@ -650,11 +650,14 @@ void GDBBreakpointWidget::slotRemoveBreakpoint()
 
 void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 {
+  while (m_table->numRows() > 0)
+  {    
     for ( int row = m_table->numRows()-1; row>=0; row-- )
     {
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
         removeBreakpoint(btr);
     }
+  }
 }
 
 /***************************************************************************/
