@@ -842,6 +842,7 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
   if (kWrite->popup && e->button() == RightButton) {
     kWrite->popup->popup(mapToGlobal(e->pos()));
   }
+  kWrite->mousePressEvent(e);
 }
 
 void KWriteView::mouseReleaseEvent(QMouseEvent *e) {
