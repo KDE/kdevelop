@@ -14,7 +14,7 @@ libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp doctreeviewpart.cpp doctr
 bin_PROGRAMS = kdevelop-htdig
 kdevelop_htdig_SOURCES = htdigindex.cpp
 
-# gideon_index_CXXFLAGS = -DINDEXER ## makes problems with automake 1.5 and am_edit (Walter/2.01.2002)
+# kdevelop_index_CXXFLAGS = -DINDEXER ## makes problems with automake 1.5 and am_edit (Walter/2.01.2002)
 
 kdevelop_htdig_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevelop_htdig_LDADD = $(LIB_KIO) $(LIB_KDEUI)

@@ -1,3 +1,3 @@
-profilesdir = $(kde_datadir)/gideon/profiles
+profilesdir = $(kde_datadir)/kdevelop/profiles
 profiles_DATA = tiny
 
