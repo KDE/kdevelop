@@ -31,10 +31,21 @@
 #include <kbuttonbox.h>
 #include <kglobal.h>
 
+// This order is dependent on the construction order :(
+enum {
+  ID_currentButton                = 0,
+  ID_allInProjectButton           = 1,
+  ID_selfChoosenFilesButton       = 2,
+  ID_selfChoosenFilesPushButton   = 3,
+  ID_headerFilesButton            = 4,
+  ID_cppFilesButton               = 5,
+  ID_changedFilesButton           = 6
+};
+
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
   loadSettings();
-  slotSelfChoosenFilesActive(0);
+  slotSelfChoosenFilesActive(ID_currentButton);
   endDate = QDate::currentDate();
   endTime.setHMS(endTimeHourLine->value(),endTimeMinuteLine->value(),0);
   beginDate = QDate::currentDate();
@@ -80,7 +91,7 @@ CFilePrintDlg::~CFilePrintDlg(){
 }
 
 void CFilePrintDlg::init() {
-  QGridLayout *grid1 = new QGridLayout(this,4,2,15,7);  
+  QGridLayout *grid1 = new QGridLayout(this,4,2,15,7);
   qtarch_ButtonGroup_139 = new QButtonGroup( this, "ButtonGroup_139" );
   qtarch_ButtonGroup_139->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_139->setBackgroundMode( QWidget::PaletteBackground );
@@ -90,8 +101,8 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_139->setTitle(i18n("File selection") );
   qtarch_ButtonGroup_139->setAlignment( 1 );
   grid1->addWidget(qtarch_ButtonGroup_139,0,0);
-  
-  QGridLayout *grid2 = new QGridLayout(qtarch_ButtonGroup_139,4,3,15,7);  
+
+  QGridLayout *grid2 = new QGridLayout(qtarch_ButtonGroup_139,4,3,15,7);
   currentButton = new QRadioButton( qtarch_ButtonGroup_139, "currentButton" );
   currentButton->setFocusPolicy( QWidget::TabFocus );
   currentButton->setBackgroundMode( QWidget::PaletteBackground );
@@ -149,7 +160,7 @@ void CFilePrintDlg::init() {
   selfChoosenFileLine->setFrame( TRUE );
   grid2->addWidget(selfChoosenFileLine,3,1);
 
-  
+
   selfChoosenFilesPushButton = new QPushButton(qtarch_ButtonGroup_139 , "selfChoosenFilesPushButton" );
   selfChoosenFilesPushButton->setFocusPolicy( QWidget::TabFocus );
   selfChoosenFilesPushButton->setBackgroundMode( QWidget::PaletteBackground );
@@ -191,7 +202,7 @@ void CFilePrintDlg::init() {
   changedFilesButton->setAutoRepeat( FALSE );
   changedFilesButton->setAutoResize( FALSE );
   grid2->addWidget(changedFilesButton,2,1);
-  
+
   qtarch_ButtonGroup_140 = new QButtonGroup( this, "ButtonGroup_140" );
   qtarch_ButtonGroup_140->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_140->setBackgroundMode( QWidget::PaletteBackground );
@@ -203,7 +214,7 @@ void CFilePrintDlg::init() {
   grid1->addMultiCellWidget( qtarch_ButtonGroup_140,1,2,0,0);
 
 
-  grid2 = new QGridLayout(qtarch_ButtonGroup_140,2,1,15,7);  
+  grid2 = new QGridLayout(qtarch_ButtonGroup_140,2,1,15,7);
 
   qtarch_ButtonGroup_142 = new QButtonGroup(  qtarch_ButtonGroup_140, "ButtonGroup_142" );
   qtarch_ButtonGroup_142->setFocusPolicy( QWidget::NoFocus );
@@ -215,7 +226,7 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_142->setAlignment( 1 );
   grid2->addWidget(qtarch_ButtonGroup_142,0,0);
 
-  QGridLayout *grid3 = new QGridLayout(qtarch_ButtonGroup_142,2,5,15,7);  
+  QGridLayout *grid3 = new QGridLayout(qtarch_ButtonGroup_142,2,5,15,7);
 
   qtarch_Label_77 = new QLabel( qtarch_ButtonGroup_142, "Label_77" );
   qtarch_Label_77->setFocusPolicy( QWidget::NoFocus );
@@ -236,7 +247,7 @@ void CFilePrintDlg::init() {
   beginDateButton->setAutoRepeat( FALSE );
   beginDateButton->setAutoResize( FALSE );
   grid3->addMultiCellWidget(beginDateButton,0,0,1,4);
-  
+
   qtarch_Label_80 = new QLabel( qtarch_ButtonGroup_142, "Label_80" );
   qtarch_Label_80->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_80->setBackgroundMode( QWidget::PaletteBackground );
@@ -262,7 +273,7 @@ void CFilePrintDlg::init() {
   beginTimeHourLine->setWrapping( FALSE );
   grid3->addWidget(beginTimeHourLine,1,1);
 
-  
+
   qtarch_Label_88 = new QLabel(qtarch_ButtonGroup_142, "Label_88" );
   qtarch_Label_88->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_88->setBackgroundMode( QWidget::PaletteBackground );
@@ -274,7 +285,7 @@ void CFilePrintDlg::init() {
   grid3->addWidget( qtarch_Label_88,1,2);
 
 
-  
+
   beginTimeMinuteLine = new QSpinBox( qtarch_ButtonGroup_142, "beginTimeMinuteList" );
   beginTimeMinuteLine->setFocusPolicy( QWidget::StrongFocus );
   beginTimeMinuteLine->setBackgroundMode( QWidget::PaletteBackground );
@@ -300,7 +311,7 @@ void CFilePrintDlg::init() {
   qtarch_Label_89->setMargin( -1 );
   grid3->addWidget(qtarch_Label_89,1,4);
 
-  
+
   qtarch_ButtonGroup_141 = new QButtonGroup(qtarch_ButtonGroup_140 , "ButtonGroup_141" );
   qtarch_ButtonGroup_141->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_141->setBackgroundMode( QWidget::PaletteBackground );
@@ -359,8 +370,8 @@ void CFilePrintDlg::init() {
   endTimeHourLine->setSpecialValueText( "" );
   endTimeHourLine->setWrapping( FALSE );
   grid3->addWidget(endTimeHourLine,1,1);
- 
-  
+
+
   qtarch_Label_91 = new QLabel( qtarch_ButtonGroup_141, "Label_91" );
   qtarch_Label_91->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_91->setBackgroundMode( QWidget::PaletteBackground );
@@ -370,7 +381,7 @@ void CFilePrintDlg::init() {
   qtarch_Label_91->setAlignment( 292 );
   qtarch_Label_91->setMargin( -1 );
   grid3->addWidget(qtarch_Label_91,1,2);
-  
+
   endTimeMinuteLine = new QSpinBox(  qtarch_ButtonGroup_141, "endTimeMinuteLine" );
   endTimeMinuteLine->setFocusPolicy( QWidget::StrongFocus );
   endTimeMinuteLine->setBackgroundMode( QWidget::PaletteBackground );
@@ -410,7 +421,7 @@ void CFilePrintDlg::init() {
 
   grid1->addMultiCellWidget(qtarch_ButtonGroup_143,0,2,1,1);
 
-  grid2 = new QGridLayout(qtarch_ButtonGroup_143,8,3,15,7);  
+  grid2 = new QGridLayout(qtarch_ButtonGroup_143,8,3,15,7);
 
   selfChoosenFilesMultiLine = new QListBox(qtarch_ButtonGroup_143 , "selfChoosenFilesMultiLine" );
   selfChoosenFilesMultiLine->setFocusPolicy( QWidget::StrongFocus );
@@ -456,7 +467,7 @@ void CFilePrintDlg::init() {
 
   grid2->addWidget(selfChoosenFilesCleanButton,7,2);
 
-  
+
   currentButton->setChecked(true);
 
   KButtonBox *bb = new KButtonBox( this );
@@ -558,7 +569,7 @@ void CFilePrintDlg::init() {
   connect(qtarch_ButtonGroup_139,SIGNAL(clicked(int)),SLOT(slotSelfChoosenFilesActive(int)));
   connect(beginDateButton,SIGNAL(clicked()),SLOT(slotBeginDateDlgClicked()));
   connect(beginTimeButton,SIGNAL(clicked()),SLOT(slotEndDateDlgClicked()));
-  
+
   beginDateButton->setText(KGlobal::locale()->formatDate(QDate::currentDate()));
 
   beginTimeButton->setText(KGlobal::locale()->formatDate(QDate::currentDate()));
@@ -595,26 +606,33 @@ void CFilePrintDlg::slotEndDateDlgClicked() {
   if(!text.isEmpty())
     beginTimeButton->setText(text);
 }
-void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
-  if (number==0) {
+void CFilePrintDlg::slotSelfChoosenFilesActive(int number)
+{
+  // ignore this button
+  if (number==ID_selfChoosenFilesPushButton)
+    return;
+
+  if (number==ID_currentButton)
+  {
     if (currentButton->isChecked()) {
-      slotSelfChoosenFilesActive(6);
+      slotSelfChoosenFilesActive(ID_changedFilesButton);
     }
     else if (cppFilesButton->isChecked()) {
-      slotSelfChoosenFilesActive(1);
+      slotSelfChoosenFilesActive(ID_cppFilesButton);
     }
     else if (headerFilesButton->isChecked()) {
-      slotSelfChoosenFilesActive(2);
+      slotSelfChoosenFilesActive(ID_headerFilesButton);
     }
     else if (changedFilesButton->isChecked()) {
-      slotSelfChoosenFilesActive(3);
+      slotSelfChoosenFilesActive(ID_changedFilesButton);
     }
     else if (allInProjectButton->isChecked()) {
-      slotSelfChoosenFilesActive(4);
+      slotSelfChoosenFilesActive(ID_allInProjectButton);
     }
-    else slotSelfChoosenFilesActive(5);
+    else slotSelfChoosenFilesActive(ID_selfChoosenFilesButton);
   }
-  else if (number==5) {
+  else if (number==ID_selfChoosenFilesButton)
+  {
     selfChoosenFilesPushButton->setEnabled(true);
     selfChoosenFileLine->setEnabled(true);
     selfChoosenFilesAddButton->setEnabled(true);
@@ -641,7 +659,8 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
     beginTimeHourLine->setEnabled(false);
     beginTimeMinuteLine->setEnabled(false);
   }
-  else if (number==3) {
+  else if (number==ID_changedFilesButton)
+  {
     selfChoosenFilesPushButton->setEnabled(false);
     selfChoosenFileLine->setEnabled(false);
     selfChoosenFilesAddButton->setEnabled(false);
@@ -668,7 +687,8 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
     beginTimeHourLine->setEnabled(true);
     beginTimeMinuteLine->setEnabled(true);
   }
-  else {
+  else
+  {
     selfChoosenFilesPushButton->setEnabled(false);
     selfChoosenFileLine->setEnabled(false);
     selfChoosenFilesAddButton->setEnabled(false);
@@ -680,7 +700,7 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
     qtarch_Label_88->setEnabled(false);
     qtarch_Label_89->setEnabled(false);
     qtarch_Label_90->setEnabled(false);
-    qtarch_Label_91->setEnabled(false);     
+    qtarch_Label_91->setEnabled(false);
     qtarch_Label_77->setEnabled(false);
     qtarch_Label_80->setEnabled(false);
     qtarch_Label_83->setEnabled(false);
@@ -714,7 +734,7 @@ void CFilePrintDlg::slotSelfChoosenFileDeleteClicked() {
   unsigned int count = selfChoosenFilesMultiLine->count();
   for (unsigned int i=count;i>0;i--) {
     if (selfChoosenFilesMultiLine->isSelected(i-1)) {
-      selfChoosenFilesMultiLine->removeItem(i-1);      
+      selfChoosenFilesMultiLine->removeItem(i-1);
     }
   }
 }
@@ -724,23 +744,24 @@ void CFilePrintDlg::slotOkClicked() {
   endTime.setHMS(endTimeHourLine->value(),endTimeMinuteLine->value(),0);
   settings = KGlobal::config();
   settings->setGroup("FileDialog");
-  int i=6;
+
+  int i=ID_currentButton;
   if (currentButton->isChecked()) {
-    i=6;
+    i=ID_currentButton;
   }
   else if (cppFilesButton->isChecked()) {
-    i=1;
+    i=ID_cppFilesButton;
   }
   else if (headerFilesButton->isChecked()) {
-    i=2;
+    i=ID_headerFilesButton;
   }
   else if (changedFilesButton->isChecked()) {
-    i=3;
+    i=ID_changedFilesButton;
   }
   else if (allInProjectButton->isChecked()) {
-    i=4;
+    i=ID_allInProjectButton;
   }
-  else i=5;
+  else i=ID_selfChoosenFilesButton;
   settings->writeEntry("FileSelection",i);
   settings->writeEntry("FileLine",selfChoosenFileLine->text());
   unsigned int count = selfChoosenFilesMultiLine->count();
@@ -828,9 +849,5 @@ void CFilePrintDlg::loadSettings() {
   settings->readListEntry("FileList",fileList);
   selfChoosenFilesMultiLine->insertStrList(&fileList);
 }
-
-
-
-
 
 #include "cfileprintdlg.moc"
