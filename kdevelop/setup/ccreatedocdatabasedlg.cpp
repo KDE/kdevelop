@@ -90,14 +90,14 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   qtarch_ButtonGroup_1->setTitle( i18n("Index Size") );
 
   tiny_radio_button = new QRadioButton(  qtarch_ButtonGroup_1, "RadioButton_2" );
-  tiny_radio_button->setText(i18n("tiny size") );
+  tiny_radio_button->setText(i18n("Tiny size") );
   tiny_radio_button->setChecked( TRUE );
 
   small_radio_button = new QRadioButton( qtarch_ButtonGroup_1, "RadioButton_3" );
-  small_radio_button->setText(i18n("small size") );
+  small_radio_button->setText(i18n("Small size") );
 
   medium_radio_button = new QRadioButton( qtarch_ButtonGroup_1, "RadioButton_4" );
-  medium_radio_button->setText(i18n("medium size") );
+  medium_radio_button->setText(i18n("Medium size") );
 
   grid1 = new QGridLayout(qtarch_ButtonGroup_1,3,1,15,7);
   grid1->addWidget(tiny_radio_button,0,0);
