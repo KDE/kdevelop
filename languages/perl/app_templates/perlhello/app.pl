@@ -22,11 +22,11 @@ __END__
 
 =head1 NAME
 
-%{APPNAME} - short discription of your program
+%{APPNAME} - short description of your program
 
 =head1 SYNOPSIS
 
- how to us your program
+ how to use your program
 
 =head1 DESCRIPTION
 
