@@ -1,3 +1,6 @@
+2004-01-28 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Ported Doxygen plugin, autotools part, FileTree and FileGroups to demand loaded config page
+
 2004-01-26 Dominik Haumann <dhdev@gmx.de>
     * src/projectmanager.cpp: ask if user tries to reload the already opened project
 
