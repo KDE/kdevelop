@@ -198,7 +198,7 @@ void CKDevelop::initWhatsThis(){
 											
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
 	                                                    "Choosing a class will switch to the header "
-	                                                    "file where the class is declarated."));
+	                                                    "file where the class is declared."));
 	
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE),i18n("Methods\n\n"
 	                                                    "Allows selecting a method of the current "
