@@ -16,10 +16,14 @@
 
 /**
  * This class is responsible for taking the data from the Makefile.am parser 
- * and providing various list view items for use in the automake manager 
+ * and providing various data list view items can use in the automake manager 
  * widget
  * @author Matt Rogers
  */
+namespace AutoTools {
+class ProjectAST;
+}
+
 class MakefileHandler
 {
 public:
@@ -37,7 +41,7 @@ public:
      * Get the AST for a certain path
      * \param folderPath the path of the folder to get an AST for
      */
-    ProjectAST* astForFolder( const QString& folderPath );
+    AutoTools::ProjectAST* astForFolder( const QString& folderPath );
 
 
 private:

@@ -29,6 +29,7 @@ class MakefileHandler::Private
 {
 public:
     QMap<QString, AutoTools::ProjectAST*> projects;
+    QMap<QString, QString> folderToFileMap;
 };
 
 MakefileHandler::MakefileHandler()
@@ -74,6 +75,7 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
     kdDebug(9020) << k_funcinfo << "pointer to AST is " << ast << endl;
     Q_ASSERT( ast != 0 );
     d->projects[filePath] = ast;
+    d->folderToFileMap[folder] = filePath;
 
     if ( recursive && ast && ast->hasChildren() )
     {
@@ -103,10 +105,13 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
     }
 }
 
-ProjectAST* MakefileHandler::astForFolder( const QString& folderPath )
+AutoTools::ProjectAST* MakefileHandler::astForFolder( const QString& folderPath )
 {
-    if ( d->projects.contains( folderPath ) )
-        return d->projects[folderPath];
+    if ( d->folderToFileMap.contains( folderPath ) )
+    {
+        QString filePath = d->folderToFileMap[folderPath];
+        return d->projects[filePath];
+    }
     else
         return 0;
 }
