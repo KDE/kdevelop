@@ -287,10 +287,10 @@ void QEditorView::installPopup( QPopupMenu *rmb_Menu )
 }
 
 void QEditorView::showArgHint(QStringList functionList,
-                              const QString& /*strWrapping*/,
+                              const QString& strWrapping,
                               const QString& strDelimiter)
 {
-    m_pCodeCompletion->showArgHint( functionList, strDelimiter, strDelimiter );
+    m_pCodeCompletion->showArgHint( functionList, strWrapping, strDelimiter );
 }
 
 void QEditorView::showCompletionBox(QValueList<KTextEditor::CompletionEntry> complList,
@@ -477,7 +477,7 @@ void QEditorView::replace( const QString&, int matchingIndex,
                         matchingIndex );
 }
 
-void QEditorView::expandBlock( QTextParagraph* p )
+void QEditorView::internalExpandBlock( QTextParagraph* p )
 {
     ParagData* data = (ParagData*) p->extraData();
     if( !data ){
@@ -500,13 +500,9 @@ void QEditorView::expandBlock( QTextParagraph* p )
             p = p->next();
         }
     }
-
-    m_editor->setCursorPosition( p->paragId(), 0 );
-    m_editor->refresh();
-    doRepaint();
 }
 
-void QEditorView::collapseBlock( QTextParagraph* p )
+void QEditorView::internalCollapseBlock( QTextParagraph* p )
 {
     ParagData* data = (ParagData*) p->extraData();
     if( !data ){
@@ -528,7 +524,21 @@ void QEditorView::collapseBlock( QTextParagraph* p )
             p = p->next();
         }
     }
+}
 
+void QEditorView::expandBlock( QTextParagraph* p )
+{
+    internalExpandBlock( p );
+    
+    m_editor->setCursorPosition( p->paragId(), 0 );
+    m_editor->refresh();
+    doRepaint();	
+}
+
+void QEditorView::collapseBlock( QTextParagraph* p )
+{
+    internalCollapseBlock( p );
+    
     m_editor->setCursorPosition( p->paragId(), 0 );
     m_editor->refresh();
     doRepaint();
@@ -569,6 +579,14 @@ void QEditorView::setupActions()
 		 editor(), SLOT(indent()),
                  actionCollection(), "edit_indent" );
 
+    new KAction( i18n("Collapse All Blocks"), "collapse all blocks", 0,
+		 this, SLOT(collapseAllBlocks()),
+                 actionCollection(), "edit_collapse_all_blocks" );
+    
+    new KAction( i18n("Expand All Blocks"), "collapse all blocks", 0,
+		 this, SLOT(expandAllBlocks()),
+                 actionCollection(), "edit_expand_all_blocks" );
+        
     new KAction( i18n("Start Macro"), "start macro", CTRL + Key_ParenLeft,
 		 editor(), SLOT(startMacro()),
                  actionCollection(), "tools_start_macro" );
@@ -586,5 +604,34 @@ void QEditorView::setupActions()
                  actionCollection(), "settings_configure_editor" );
 }
 
+void QEditorView::expandAllBlocks()
+{
+    QTextParagraph* p = m_editor->document()->firstParagraph();
+    while( p ){
+	ParagData* data = (ParagData*) p->extraData();
+	if( data && data->isBlockStart() ){
+	    internalExpandBlock( p );
+	}	
+	p = p->next();
+    }
+    
+    m_editor->refresh();
+    doRepaint();
+}
 
+void QEditorView::collapseAllBlocks()
+{
+    QTextParagraph* p = m_editor->document()->firstParagraph();
+    while( p ){
+	ParagData* data = (ParagData*) p->extraData();
+	if( data && data->isBlockStart() ){
+	    internalCollapseBlock( p );
+	}
+	p = p->next();
+    }
+    
+    m_editor->refresh();
+    doRepaint();
+}
+    
 #include "qeditor_view.moc"

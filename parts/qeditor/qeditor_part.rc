@@ -17,6 +17,8 @@
     <Action name="edit_find" group="edit_find_merge" />
     <Action name="edit_replace" group="edit_find_merge" />
     <Action name="go_goto_line" />
+    <Action name="edit_expand_all_blocks" />
+    <Action name="edit_collapse_all_blocks" />
   </Menu>
 
   <Menu name="tools" noMerge="1"><text>&amp;Tools</text>

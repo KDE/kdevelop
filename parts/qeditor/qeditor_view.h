@@ -84,6 +84,8 @@ public slots:
     void indent();
     void expandBlock( QTextParagraph* );
     void collapseBlock( QTextParagraph* );
+    void expandAllBlocks();
+    void collapseAllBlocks();
 
 protected slots:
     void highlight( const QString&, int, int, const QRect& );
@@ -95,6 +97,8 @@ protected:
                     QTextParagraph* lastParag, int lastIndex );
     bool process( const QString& );
     void doRepaint();
+    void internalExpandBlock( QTextParagraph* );
+    void internalCollapseBlock( QTextParagraph* );
     
 private:
     void setupActions();
