@@ -1,0 +1,17 @@
+[Protocol]
+exec=kio_svn
+protocol=svn
+input=none
+output=filesystem
+reading=true
+writing=true
+deleting=true
+makedir=true
+linking=false
+moving=true
+listing=Name,Size,Date,Owner
+defaultMimetype=application/octet-stream
+Icon=remote
+Description=Subversion ioslave
+maxInstances=5
+class=:internet
