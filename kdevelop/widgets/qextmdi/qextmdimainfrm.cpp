@@ -29,7 +29,12 @@
 #include <qcursor.h>
 #include <qclipboard.h>
 #include <qobjcoll.h>
-#include <qtoolbutton.h>
+#if defined(HAVE_KDE2)
+ #include <ktoolbarbutton.h>
+ #include <kmenubar.h>
+#else
+ #include <qtoolbutton.h>
+#endif
 
 #include "qextmdimainfrm.h"
 #include "qextmditaskbar.h"
@@ -51,8 +56,13 @@
 
 //============ constructor ============//
 
+#if defined(HAVE_KDE2)
+QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
+: KMainWindow( parentWidget, name, flags)
+#else
 QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
 : QMainWindow( parentWidget, name, flags)
+#endif
    ,m_pMdi(0L)
    ,m_pTaskBar(0L)
    ,m_pWinList(0L)
@@ -610,7 +620,11 @@ void QextMdiMainFrm::switchToChildframeMode()
  *             Otherwise only signals can be emitted to tell the outside that
  *             someone must do this job itself.
  */
+#if defined(HAVE_KDE2)
+void QextMdiMainFrm::setMenuForSDIModeSysButtons( KMenuBar* pMenuBar)
+#else
 void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
+#endif
 {
    m_pMainMenuBar = pMenuBar;
    if( m_pMainMenuBar == 0L)
@@ -628,11 +642,17 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
    QPixmap* m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
    QPixmap* m_pCloseButtonPixmap = new QPixmap( win_closebutton);
 #else // in case of Unix : KDE look
+#if defined(HAVE_KDE2)
+   m_pUndock = new KToolBarButton( pMenuBar);
+   m_pRestore = new KToolBarButton( pMenuBar);
+   m_pMinimize = new KToolBarButton( pMenuBar);
+   m_pClose = new KToolBarButton( pMenuBar);
+#else
    m_pUndock = new QToolButton( pMenuBar);
    m_pRestore = new QToolButton( pMenuBar);
    m_pMinimize = new QToolButton( pMenuBar);
    m_pClose = new QToolButton( pMenuBar);
-
+#endif
    setSysButtonsAtMenuPosition();
 
    QPixmap* m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
@@ -643,10 +663,12 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
 
 #if QT_VERSION > 209
 #ifndef _OS_WIN32_
+#ifndef HAVE_KDE2
    m_pUndock->setAutoRaise(TRUE);
    m_pMinimize->setAutoRaise(TRUE);
    m_pRestore->setAutoRaise(TRUE);
    m_pClose->setAutoRaise(TRUE);
+#endif
 #endif
 #endif
 

@@ -29,12 +29,19 @@
 #ifndef _QEXTMDIMAINFRM_H_
 #define _QEXTMDIMAINFRM_H_
 
-#include <qmainwindow.h>
+#if defined(HAVE_KDE2)
+ #include <kmainwindow.h>
+ #include <kmenubar.h>
+ #include <kpopupmenu.h>
+#else
+ #include <qmainwindow.h>
+ #include <qmenubar.h>
+ #include <qpopupmenu.h>
+#endif
+
 #include <qlist.h>
 #include <qrect.h>
-#include <qpopupmenu.h>
 #include <qapplication.h>
-#include <qmenubar.h>
 
 #include "qextmditaskbar.h"
 #include "qextmdichildarea.h"
@@ -97,12 +104,17 @@ public:
   * Provides functionality for docking/undocking view windows and manages the taskbar.<br>
   * Usually you just need to know about this class and the child view class.
   */
+#if defined(HAVE_KDE2)
+#define QMainWindow KMainWindow
+#endif
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 {
    friend class QextMdiChildView;
    friend class QextMdiTaskBar;
    
    Q_OBJECT
+
+#undef QMainWindow
 
 // attributes
 protected:  
@@ -115,7 +127,11 @@ protected:
    QPopupMenu              *m_pWindowMenu;
    QPopupMenu              *m_pDockMenu;
    QPopupMenu              *m_pPlacingMenu;
+#if defined(HAVE_KDE2)
+   KMenuBar                *m_pMainMenuBar;
+#else
    QMenuBar                *m_pMainMenuBar;
+#endif
 
    QPixmap                 *m_pUndockButtonPixmap;
    QPixmap                 *m_pMinButtonPixmap;
@@ -128,10 +144,17 @@ protected:
    QPushButton             *m_pRestore;
    QPushButton             *m_pClose;
 #else
+#if defined(HAVE_KDE2)
+   KToolBarButton          *m_pUndock;
+   KToolBarButton          *m_pMinimize;
+   KToolBarButton          *m_pRestore;
+   KToolBarButton          *m_pClose;
+#else
    QToolButton             *m_pUndock;
    QToolButton             *m_pMinimize;
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
+#endif
 #endif
    QPoint                  m_undockPositioningOffset;
    bool                    m_bTopLevelMode;
@@ -260,6 +283,18 @@ public:
    * Returns the Childframe mode height of this. Makes only sense when in Toplevel mode.
    */
    int childFrameModeHeight() { return m_oldMainFrmHeight; };
+   /**
+   * Tells the MDI system a QMenu where it can insert buttons for
+   * the system menu, undock, minimize, restore actions.
+   * If no such menu is given, QextMDI simply overlays the buttons
+   * at the upper right-hand side of the main widget.
+   */
+
+#if defined(HAVE_KDE2)
+   virtual void setMenuForSDIModeSysButtons( KMenuBar* = 0);
+#else
+   virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
+#endif
 
 public slots:
    /**
@@ -331,13 +366,6 @@ public slots:
    */
    virtual void switchToChildframeMode();
    /**
-   * Tells the MDI system a QMenu where it can insert buttons for
-   * the system menu, undock, minimize, restore actions.
-   * If no such menu is given, QextMDI simply overlays the buttons
-   * at the upper right-hand side of the main widget.
-   */
-   virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
-   /** 
    * Shows the view taskbar. This should be connected with your "View" menu. 
    */
    virtual void showViewTaskBar();
