@@ -314,14 +314,20 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QRect rectNormal, int flags)
 {
    addWindow( pWnd, flags);
-   pWnd->setGeometry( rectNormal);
+   if (m_bMaximizedChildFrmMode)
+      pWnd->setRestoreGeometry( rectNormal);
+   else
+      pWnd->setGeometry( rectNormal);
 }
 
 //============ addWindow ============//
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QPoint pos, int flags)
 {
    addWindow( pWnd, flags);
-   pWnd->move( pos);
+   if (m_bMaximizedChildFrmMode)
+      pWnd->setRestoreGeometry( QRect(pos, pWnd->restoreGeometry().size()));
+   else
+      pWnd->move( pos);
 }
 
 //============ addWindow ============//
@@ -420,12 +426,14 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 
    m_pMdi->manageChild(lpC,FALSE,bCascade);
    if (m_pMdi->topChild() && m_pMdi->topChild()->isMaximized()) {
-	   QRect r = lpC->geometry();
-  	 lpC->setGeometry(-lpC->m_pClient->x(), -lpC->m_pClient->y(),
-    	                 m_pMdi->width() + lpC->width() - lpC->m_pClient->width(),
-      	               m_pMdi->height() + lpC->height() - lpC->m_pClient->height());
-		 lpC->setRestoreGeometry(r);
-	 }		
+//   if (m_bMaximizedChildFrmMode) {
+      QRect r = lpC->geometry();
+      lpC->setState(QextMdiChildFrm::Maximized, true);
+      lpC->setGeometry(-lpC->m_pClient->x(), -lpC->m_pClient->y(),
+                       m_pMdi->width() + lpC->width() - lpC->m_pClient->width(),
+                       m_pMdi->height() + lpC->height() - lpC->m_pClient->height());
+      lpC->setRestoreGeometry(r);
+   }      
 
    if (m_bMaximizedChildFrmMode && (m_pMdi->m_pZ->count() > 1)) {
 //     updateSysButtonConnections( m_pMdi->topChild(), lpC);
