@@ -61,7 +61,6 @@ class DbgToolbar : public QFrame
   public:
     DbgToolbar(DbgController* dbgController, CKDevelop* ckDevelop);
     virtual ~DbgToolbar();
-//    virtual void mousePressEvent(QMouseEvent* e);
 
   private:
     void setAppIndicator(bool appIndicator);

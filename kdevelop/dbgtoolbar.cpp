@@ -104,8 +104,8 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
   {
     KPopupMenu* menu = new KPopupMenu( this );
     menu->setTitle("Debug toolbar");
-    menu->insertItem(i18n("Dock toolbar"),              toolBar_, SLOT(slotDock()));
-    menu->insertItem(i18n("Dock and iconify kDevelop"), toolBar_, SLOT(slotIconifyAndDock()));
+    menu->insertItem(i18n("Dock to panel"),                     toolBar_, SLOT(slotDock()));
+    menu->insertItem(i18n("Dock to panel and iconify kDevelop"),toolBar_, SLOT(slotIconifyAndDock()));
     menu->popup(e->globalPos());
     return;
   }
@@ -200,6 +200,7 @@ DbgDocker::DbgDocker(DbgToolbar* toolBar, const QPixmap& pixmap) :
   toolBar_(toolBar)
 {
   setPixmap(pixmap);
+  QToolTip::add( this, i18n("KDevelop debugger: Click to execute one line of code (\"step\")") );
 }
 
 // **************************************************************************
@@ -219,8 +220,8 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
     case RightButton:
       KPopupMenu* menu = new KPopupMenu( this );
       menu->setTitle("Debug toolbar");
-      menu->insertItem(i18n("Undock toolbar"),                toolBar_, SLOT(slotUndock()));
-      menu->insertItem(i18n("Undock and activate kDevelop"),  toolBar_, SLOT(slotActivateAndUndock()));
+      menu->insertItem(i18n("Activate"),                        toolBar_, SLOT(slotUndock()));
+      menu->insertItem(i18n("Activate (KDevelop gets focus)"),  toolBar_, SLOT(slotActivateAndUndock()));
       menu->popup(e->globalPos());
       break;
   }
@@ -356,16 +357,8 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
 
 DbgToolbar::~DbgToolbar()
 {
+  slotUndock();
 }
-
-// **************************************************************************
-
-//void DbgToolbar::slotDbgStop()
-//{
-//  ASSERT(!docker_);
-//  ckDevelop_->slotDebugStop();
-//  close();    // TODO - This is not right
-//}
 
 // **************************************************************************
 
