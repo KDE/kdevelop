@@ -74,6 +74,16 @@ QString CProject::getKDevPrjVersion(){
   return config->readEntry("kdevprj_version");
 }
 
+QString CProject::getClassViewTree(){
+  config->setGroup("General");
+  return config->readEntry("classview_tree");
+}
+
+void CProject::setClassViewTree( QString &tree ){
+  config->setGroup("General");
+  config->writeEntry("classview_tree", tree );
+}
+
 QString CProject::getProjectFile(){
   return prjfile;
 }
@@ -157,12 +167,6 @@ QString CProject::getExecuteArgs(){
   return config->readEntry("execute_args");
 }
 
-QStrList& CProject::getSources(){
-  return cpp_files;
-} 
-QStrList& CProject::getHeaders(){
-  return header_files;
-}
 void CProject::setBinPROGRAM(QString name){
   config->setGroup("Config for BinMakefileAm");
   config->writeEntry("bin_program",name);

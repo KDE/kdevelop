@@ -66,6 +66,7 @@ struct TWorkspace {
   * 
   ** format of the general group:**
   * [General]
+  * classview_tree: a treestructure of all classes.
   * makefiles: all makefiles in the project
   * project_type: at the moment "normal_cpp","mini_kde","normal_kde","normal_qt"
   * author: name of the author
@@ -97,39 +98,94 @@ public:
   CProject(QString file); 
   /** destructor */
   ~CProject();
-  /** the version of the kdevprj file format*/
+
+public: // Methods to store project options
+
+  /** Store the version of the kdevprj file format*/
   void setKDevPrjVersion(QString version);
   /** at the moment there exists 3 types: normal_cpp,normal_kde,mini_kde*/
   void setProjectType(QString type);
+  /** Store the projectname. */
   void setProjectName(QString name);
   /** the mainsubdir, not "po"*/
   void setSubDir(QString dirname);
+  /** Store the authors name. */
   void setAuthor(QString name);
+  /** Store the authors eMail-address. */
   void setEmail(QString email);
-  /** the project version*/
+  /** Store the project version. */
   void setVersion(QString version);
+  /** Store the classview tree. */
+  void setClassViewTree( QString &tree );
   /** at the moment only an english sgmlfile in docs/en/ */
   void setSGMLFile(QString version);  
   void setShortInfo(QStrList short_info);
   void setBinPROGRAM(QString name);
+  /** Store the linked flags. */
   void setLDFLAGS(QString flags);
+  /** Store the C++ compiler flags. */
   void setCXXFLAGS(QString flags);
-  /** set the librarys*/
+  /** Store the librarys*/
   void setLDADD(QString libstring);
   void setAdditCXXFLAGS(QString flags);
-
-  /**options for make( f.e. "-k" for "make -k"*/
+  /** Store options for make( f.e. "-k" for "make -k"*/
   void setMakeOptions(QString options);
-  QString getMakeOptions();
-
-	/** sets the commandline execution arguments for the project binary */
+  /** Store the commandline execution arguments for the project binary */
   void setExecuteArgs(QString args);
-  /** returns the arguments from the config file */
+
+public: // Methods to fetch project options
+
+  /** Fetch the classview tree. */
+  QString getClassViewTree();
+  /** Fetch the commandline execution arguments for the project binary. */
   QString getExecuteArgs();
+  /** Fetch the options for make( i.e "-k" for "make -k". */
+  QString getMakeOptions();
+  /** Fetch the version of the kdevprj file format*/
+  QString getKDevPrjVersion();
+  /** Fetch the type: {normal_cpp,normal_kde,mini_kde} */
+  QString getProjectType();
+  QString getProjectFile();
+  QString getProjectDir();
+  QString getSubDir();
+  /** Fetch the authors name. */
+  QString getAuthor();
+  /** Fetch the authors eMail-address. */
+  QString getEmail();
+  /** Fetch the projects version. */
+  QString getVersion();
+  QString getSGMLFile();
+  QString getProjectName();
+  QStrList getShortInfo();
+  QString getBinPROGRAM();
+  QString getLDFLAGS();
+  QString getCXXFLAGS();
+  /** Fetch the librarys. */
+  QString getLDADD();
+  QString getAdditCXXFLAGS();
+  /** Fetch all groups in the logic file view. */
+  void getLFVGroups(QStrList& groups);
+  TFileInfo getFileInfo(QString filename);
+  TMakefileAmInfo getMakefileAmInfo(QString rel_name);
+
+public: // Public queries
+
+  /* return the sources(.cpp,.c,.C,.cxx) */
+  QStrList& getSources() { return cpp_files; }
+  /** return the headers(.h.) */
+  QStrList& getHeaders() { return header_files; }
 
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
-  void getLFVGroups(QStrList& groups);
+
+  /** Get all sources in the project. */
+  void getSources(QString rel_name_makefileam,QStrList& sources);
+
+  /** check if a subdir is in the project (registered)*/
+  bool isDirInProject(QString rel_name);
+
+public: // Public methods
+
   /** if ace_group == empty insert prepend at the grouplist*/
   void addLFVGroup(QString name,QString ace_group);
   void removeLFVGroup(QString name);
@@ -142,37 +198,6 @@ public:
   void removeFileFromProject(QString rel_name);
   void setKDevelopWriteArea(QString makefile);
   void addMakefileAmToProject(QString rel_name,TMakefileAmInfo info);
-
-  QString getKDevPrjVersion();
-  QString getProjectType();
-  QString getProjectFile();
-  QString getProjectDir();
-  QString getSubDir();
-  QString getAuthor();
-  QString getEmail();
-  QString getVersion();
-  QString getSGMLFile();
-  QString getProjectName();
-  QStrList getShortInfo();
-  QString getBinPROGRAM();
-  QString getLDFLAGS();
-  QString getCXXFLAGS();
-  QString getLDADD();
-  QString getAdditCXXFLAGS();
-  TFileInfo getFileInfo(QString filename);
-  TMakefileAmInfo getMakefileAmInfo(QString rel_name);
-  
-  /* return the sources(.cpp,.c,.C,.cxx) */
-  QStrList& getSources();
-  /** return the headers(.h.) */
-  QStrList& getHeaders();
-
-  
-  
-  void getSources(QString rel_name_makefileam,QStrList& sources);
-  /* usefull information methods*/
-  /** check if a subdir is in the project (registered)*/
-  bool isDirInProject(QString rel_name);
 
   void updateConfigureIn();
   void updateMakefilesAm();
@@ -191,19 +216,21 @@ public:
 
 protected:
 
+  void setSourcesHeaders();
   void getAllStaticLibraries(QStrList& libs);
   QString getDir(QString rel_name);
   QString getName(QString rel_name);
-  void setSourcesHeaders();
+
+protected: // Protected attributes
   QString prjfile;
   QString dir;
   
- //  /** a list of all cpp-files in the project*/
+  /** a list of all cpp-files in the project*/
   QStrList cpp_files;
-  //   /** a list of all header-files in the project*/
+  /** a list of all header-files in the project*/
   QStrList header_files;
+
   KSimpleConfig* config;
   
 };
 #endif
-
