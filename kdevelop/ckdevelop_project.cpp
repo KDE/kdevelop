@@ -716,6 +716,73 @@ void CKDevelop::slotProjectNewAppl(){
   slotStatusMsg(i18n("Ready."));
 }
 
+/** calls kimport to generate a new project by
+requesting a project directory, writes project file
+and loads the new project */
+void CKDevelop::slotProjectGenerate(){
+  if(!CToolClass::searchProgram("kimport")){
+    return;
+  }
+  slotStatusMsg(i18n("Generating project file..."));
+  QString old_project="";
+  QString dir;
+
+  dir = KFileDialog::getDirectory(QDir::currentDirPath());
+  if (!dir.isEmpty()){
+
+    if(dir.right(1) != "/" ){
+     dir = dir + "/";
+    }
+    QString qt_testfile=dir+"Makefile.am"; // test if the path contains a Makefile.am
+    if(!QFileInfo(qt_testfile).exists()){
+      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to a\n"
+                                                                            "directory containing a Makefile.am\n"
+                                                                            "to create a Project file from"),KMsgBox::EXCLAMATION); 	
+      slotStatusMsg(i18n("Ready."));
+      return;
+    }
+  }
+  QDir directory(dir);
+  QString relDir=directory.dirName();
+  QString file =relDir+".kdevprj";
+  int result=1;
+  if(QFileInfo(file).exists())
+      result=KMsgBox::yesNo(this,i18n("File Exists!"),i18n("In the path you´ve given\n"
+                                                              "already contains a KDevelop Project file!\n"
+                                                                            "Overwrite ?"),KMsgBox::EXCLAMATION); 	
+  if(result){
+
+
+    showOutputView(true);
+    setToolMenuProcess(false);
+    messages_widget->clear();
+    error_parser->toogleOff();
+
+    shell_process.clearArguments();
+    shell_process << QString("cd '")+dir +"' && ";
+    shell_process <<  "kimport > "+file;
+    shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
+    beep = true;
+  }
+
+//  if(project)		//now that we know that a new project will be built we can close the previous one 	{
+//  {
+//    old_project = prj->getProjectFile();
+//   	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
+//		{
+//			readProjectFile(old_project);
+//			slotViewRefresh();
+//		}
+// 	  else
+//		{
+//      readProjectFile(file);
+//      slotViewRefresh();		// a new project started, this is legitimate
+//		}
+// 	
+// 	}
+  slotStatusMsg(i18n("Ready."));
+}
+
 void  CKDevelop::slotProjectWorkspaces(int id){
   if(project_menu->isItemChecked(id)){
     return; // we are already in this workspace

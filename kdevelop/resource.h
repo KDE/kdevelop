@@ -96,6 +96,7 @@
 // Project-menu entries 
 
 #define ID_PROJECT_KAPPWIZARD       13210
+#define ID_PROJECT_GENERATE         13211
 #define ID_PROJECT_OPEN			        13220
 #define ID_PROJECT_OPEN_RECENT			13230
 #define ID_PROJECT_CLOSE            13240

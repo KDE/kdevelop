@@ -324,6 +324,10 @@ public:
   ///////////////////////
   /** generates a new project with KAppWizard*/
   void slotProjectNewAppl();
+  /** calls kimport to generate a new project by
+    * requesting a project directory, writes project file
+    * and loads the new project */
+  void slotProjectGenerate();
   /** opens a projectfile and close the old one*/
   void slotProjectOpen();
   /** opens a project file from the recent project menu in the project menu by getting the project entry and

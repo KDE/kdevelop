@@ -318,7 +318,7 @@ ldflags=
 addcxxflags=
 ldadd=
 bin_program=kdevelop
-cxxflags= -O0 -g3 -Wall
+cxxflags=-O0 -g3 -Wall
 [kdevelop/cclasstooltreeview.cpp]
 install_location=
 dist=true
@@ -1852,13 +1852,13 @@ dist=true
 install=false
 type=SOURCE
 [General]
-make_options= -s -j1
+make_options=-s -j1
 makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdlgloader/Makefile.am,kdevelop/classparser/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/kdlgedit/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/toolbar/Makefile.am,kdevelop/tools/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/docs/de/Makefile.am,kdevelop/dlgs/Makefile.am,doc/de/manual/Makefile.am,doc/de/Makefile.am,doc/Makefile.am,doc/en/addendum/Makefile.am,doc/en/Makefile.am,doc/en/kde_libref/Makefile.am,doc/en/manual/Makefile.am,doc/en/programming/Makefile.am,doc/en/tutorial/Makefile.am,doc/en/welcome/Makefile.am,kdevelop/dbg/Makefile.am,
 version_control=CVS
 author=The KDevelop Team
 project_type=normal_empty
 sub_dir=kdevelop/
-lfv_open_groups=Others,
+lfv_open_groups=Header,Others,
 workspace=1
 project_name=KDevelop
 version='1.0 Beta 1'

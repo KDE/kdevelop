@@ -1,5 +1,7 @@
 2000-11-02  Ralf Nolden <nolden@kde.org>
   * fixed slotBuildCompileFile
+  * added Generate Project file to call kimport
+  * use Falk´s make call path
 
 2000-11-02 Falk Brettschneider <falk@kdevelop.org>
   * implemented the choice for using relative or absolute pathes in

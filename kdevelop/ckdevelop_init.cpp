@@ -662,6 +662,8 @@ void CKDevelop::initMenuBar(){
   // Project-menu entries
   project_menu = new QPopupMenu;
   project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
+  project_menu->insertItem(i18n("Generate Project File..."), this, SLOT(slotProjectGenerate()),0,ID_PROJECT_GENERATE);
+
   project_menu->insertItem(Icon("openprj.xpm"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
 
   recent_projects_menu = new QPopupMenu();

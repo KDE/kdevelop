@@ -1637,7 +1637,9 @@ void CKDevelop::slotBuildMake(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
-  QDir::setCurrent(makefileDir);
+//  QDir::setCurrent(makefileDir);
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+
   error_parser->setStartDir(makefileDir);
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
@@ -1725,8 +1727,10 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
   messages_widget->clear();
-  QDir::setCurrent(makefileDir);
-  error_parser->setStartDir(makefileDir);
+//  QDir::setCurrent(makefileDir);
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+//  error_parser->setStartDir(makefileDir);
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
   {
@@ -1768,8 +1772,10 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   slotFileSaveAll();
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
-  QDir::setCurrent(prj->getProjectDir()); 
-  error_parser->setStartDir(prj->getProjectDir());
+//  QDir::setCurrent(prj->getProjectDir());
+//  error_parser->setStartDir(prj->getProjectDir());
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
 
   QString makefile("Makefile.dist");
   if(!QFileInfo(QDir::current(), makefile).exists())
@@ -1810,7 +1816,8 @@ void CKDevelop::slotBuildDistClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
+//  QDir::setCurrent(prj->getProjectDir());
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
   error_parser->setStartDir(prj->getProjectDir());
 
   process.clearArguments();
@@ -1868,7 +1875,9 @@ void CKDevelop::slotBuildAutoconf(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf/automake suite..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
+//  QDir::setCurrent(prj->getProjectDir());
+  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
   shell_process.clearArguments();
   QString makefile("Makefile.dist");
   if(!QFileInfo(QDir::current(), makefile).exists())
@@ -1910,7 +1919,7 @@ void CKDevelop::slotBuildConfigure(){
   error_parser->toogleOff();
   messages_widget->clear();
   slotFileSaveAll();
-  QDir::setCurrent(prj->getProjectDir()); 
+  QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
   shell_process << flaglabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
@@ -4003,6 +4012,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           			  i18n("Removes file from the project"))
 
   ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             			  i18n("Creates a new Class frame structure and files"))
+  ON_STATUS_MSG(ID_PROJECT_GENERATE,               			  i18n("Creates a project file for an existing automake project"))
 
   ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       			  i18n("Shows the current file properties"))
   ON_STATUS_MSG(ID_PROJECT_OPTIONS,               			  i18n("Sets project and compiler options"))
