@@ -98,10 +98,10 @@ protected: // Private widgets
 
   /** This is a method rb. */
   QRadioButton methodRb;
-  /** This is a signal rb. */
-  QRadioButton signalRb;
   /** This is a slot rb. */
   QRadioButton slotRb;
+  /** This is a signal rb. */
+  QRadioButton signalRb;
 
   /** This method is virtual. */
   QCheckBox virtualCb;

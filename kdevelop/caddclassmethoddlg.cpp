@@ -49,8 +49,8 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     protectedRb( this, "protectedRb" ),
     privateRb( this, "privateRb" ),
     methodRb( this, "methodRb" ),
-    signalRb( this, "signalRb" ),
     slotRb( this, "slotRb" ),
+    signalRb( this, "signalRb" ),
     virtualCb( this, "virtualCb" ),
     pureCb( this, "pureCb" ),
     staticCb( this, "staticCb" ),
@@ -141,14 +141,14 @@ void CAddClassMethodDlg::setWidgetValues()
   methodRb.setText( i18n( "Method" ) );
   methodRb.setChecked( true );
 
+  slotRb.setMinimumSize( 60, 20 );
+  slotRb.setFixedHeight( 20 );
+  slotRb.setText( "Slot" );
+
   signalRb.setMinimumSize( 60, 20 );
   signalRb.setFixedHeight( 20 );
   signalRb.setText( "Signal" );
 
-  slotRb.setMinimumSize( 60, 20 );
-  slotRb.setFixedHeight( 20 );
-  slotRb.setText( "Slot" );
- 
   virtualCb.setMinimumSize( 60, 20 );
   virtualCb.setFixedHeight( 20 );
   virtualCb.setText( "Virtual" );
@@ -184,8 +184,8 @@ void CAddClassMethodDlg::setWidgetValues()
 
   // Type group
   typeGrp.insert( &methodRb );
-  typeGrp.insert( &signalRb );
   typeGrp.insert( &slotRb );
+  typeGrp.insert( &signalRb );
 
   // Modifier group
   modifierGrp.insert( &virtualCb );
