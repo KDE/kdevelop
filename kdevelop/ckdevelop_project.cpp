@@ -109,7 +109,7 @@ bool CKDevelop::slotProjectClose()
       
       //clear all edit_infos before starting a new project
       // edit_infos.clear(); now in doProjectClose (Christian)
-      
+
 //      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
 //      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
 //      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
@@ -124,35 +124,7 @@ bool CKDevelop::slotProjectClose()
       delete prj;
       prj = 0;
 
-//      stateChanged("no_file");
-//      stateChanged("no_project");
-
-//      KAction* pFileNewAction = actionCollection()->action("file_new");
-//      pFileNewAction->setEnabled(false);
-      //disableCommand(ID_FILE_NEW);
-      // doc menu
-//      disableCommand(ID_HELP_PROJECT_API);
-//      disableCommand(ID_HELP_USER_MANUAL);
-      // build menu
-//      setToolMenuProcess(false);
-//      disableCommand(ID_BUILD_STOP);
-//      disableCommand(ID_BUILD_AUTOCONF);
-      
-      // prj menu
-//      disableCommand(ID_PROJECT_CLOSE);
-//      disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-//      disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-//      disableCommand(ID_PROJECT_REMOVE_FILE);
-//      disableCommand(ID_PROJECT_NEW_CLASS);
-//      disableCommand(ID_PROJECT_FILE_PROPERTIES);
-//      disableCommand(ID_PROJECT_OPTIONS);
-//      disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-//
-//      disableCommand(ID_CV_WIZARD);
-//      disableCommand(ID_CV_GRAPHICAL_VIEW);
-//      disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
-//      disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
-//      disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
+      stateChanged("project_open",StateReverse);
 
       file_open_popup->clear();
       file_open_list.clear();
@@ -160,7 +132,7 @@ bool CKDevelop::slotProjectClose()
 
   slotStatusMsg(i18n("Ready."));
   refreshTrees();
-  
+
   if (bCloseProj) {
     setMainCaption();
   }
@@ -720,11 +692,8 @@ void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
     slotProjectLoadTags();
   }
 
-  // enable the GUI again
-//  project_menu->setEnabled(true);
-//  enableCommand(ID_PROJECT_OPEN);
+  stateChanged("project_open");
 
-        //  accel->setEnabled(true);
   slotStatusMsg(i18n("Ready."));
 }
 

@@ -20,7 +20,6 @@
 
 #include "cclassview.h"
 #include "cdocbrowser.h"
-//#include "ceditwidget.h"
 #include "ckdevaccel.h"
 #include "clogfileview.h"
 #include "coutputwidget.h"
@@ -41,8 +40,7 @@
 #include "kdevsession.h"
 
 #include <kaction.h>
-#include <kstdaction.h>                
-
+#include <kstdaction.h>
 #include <kaccel.h>
 #include <kapp.h>
 #include <kcursor.h>
@@ -56,10 +54,8 @@
 #include <kstdaccel.h>
 #include <kaboutdata.h>
 #include <klineedit.h>
-
-#include <qprogressbar.h>
-
-//#include "./kwrite/kwdoc.h"
+#include <krun.h>
+#include <kdebug.h>
 
 #undef Unsorted
 #include <qdir.h>
@@ -70,15 +66,14 @@
 #include <qsplitter.h>
 #include <qtoolbutton.h>
 #include <qwhatsthis.h>
+#include <qprogressbar.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <krun.h>
-
-#include "kdebug.h"
 #include <iostream>
+
 using namespace std;
 
 CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
@@ -167,26 +162,25 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
     readDockConfig(config, "docking_version_2_0");
   }
 
-        createGUI(0L);
-        show();
+  createGUI(0L);
+  show();
 
-        stateChanged("disable_file_save");
-        stateChanged("edit_src",StateReverse);
-        stateChanged("project_load");
-        stateChanged("project_open",StateReverse);
-        stateChanged("build_project",StateReverse);
-        stateChanged("build",StateReverse);
-        stateChanged("debug",StateReverse);
+  stateChanged("disable_file_save");
+  stateChanged("edit_src",StateReverse);
+  stateChanged("project_load");
+  stateChanged("project_open",StateReverse);
+  stateChanged("build_project",StateReverse);
+  stateChanged("build",StateReverse);
+  stateChanged("debug",StateReverse);
 
-        adjustTTreesToolButtonState();
-        adjustTOutputToolButtonState();
+  adjustTTreesToolButtonState();
+  adjustTOutputToolButtonState();
 
   setDebugMenuProcess(false);
   setToolmenuEntries();
 
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
-
 
 CKDevelop::~CKDevelop()
 {
@@ -282,9 +276,6 @@ void CKDevelop::initView()
   konsole_widget->setCaption(i18n("Konsole"));
   addToolWindow(konsole_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("embedded konsole window"), i18n("Konsole"));
 
-///////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
   m_docViewManager->initKeyAccel(accel, this);
   initMenuBar();
   initToolBar();
@@ -294,99 +285,214 @@ void CKDevelop::initView()
   ctags_dlg = new searchTagsDialogImpl(this,"searchTagsDialog");
 }
 
-/*--------------------------------------- CKDevelop::initMenuBar()
- * initMenuBar()
- *   Create the menubar with its' entries.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CKDevelop::initMenuBar(){
+void CKDevelop::initMenuBar() {
 
-        ///////////////////////////////////////////////////////////////////
-        // File
-        KAction*
-        pAction = KStdAction::openNew(this,
-                  SLOT(slotFileNew()),actionCollection(),"file_new");
-        pAction->setStatusText(i18n("Creates a new file"));
-        pAction = KStdAction::open(this,
-                  SLOT(slotFileOpen()),actionCollection(),"file_open");
-        pAction->setStatusText(i18n("Opens an existing file"));
-        pAction = KStdAction::close(this,
-                  SLOT(slotFileClose()),actionCollection(),"file_close");
-        pAction->setStatusText(i18n("Closes the current file"));
-        pAction = new KAction(i18n("Close All"),0,this,
-                  SLOT(slotFileClose()),actionCollection(),"file_close_all");
-        pAction->setStatusText(i18n("Closes all open files"));
-        pAction = KStdAction::save(this,
-                  SLOT(slotFileSave()),actionCollection(),"file_save");
-        pAction->setStatusText(i18n("Save the current document"));
-        pAction = KStdAction::saveAs(this,
-                  SLOT(slotFileSaveAs()),actionCollection(),"file_save_as");
-        pAction->setStatusText(i18n("Save the document as..."));
-        pAction = new KAction(i18n("Save A&ll"),SmallIconSet("save_all"),0,this,
-                  SLOT(slotFileSaveAll()),actionCollection(),"file_save_all");
-        pAction->setStatusText(i18n("Save all changed files"));
-        pAction = KStdAction::print(this,
-                  SLOT(slotFilePrint()),actionCollection(),"file_print");
-        pAction->setStatusText(i18n("Prints the current document"));
-        pAction = KStdAction::quit(this,
-                  SLOT(slotFileQuit()),actionCollection(),"file_quit");
-        pAction->setStatusText(i18n("Exits the program"));
+  ///////////////////////////////////////////////////////////////////
+  // File
 
-        ///////////////////////////////////////////////////////////////////
-        // Edit-menu entries
-        pAction = KStdAction::undo(m_docViewManager,
-                  SLOT(slotEditUndo()),actionCollection(),"edit_undo");
-        pAction = KStdAction::redo(m_docViewManager,
-                  SLOT(slotEditRedo()),actionCollection(),"edit_redo");
-        pAction = KStdAction::cut(m_docViewManager,
-                  SLOT(slotEditCut()),actionCollection(),"edit_cut");
-        pAction = KStdAction::copy(m_docViewManager,
-                  SLOT(slotEditCopy()),actionCollection(),"edit_copy");
-        pAction = KStdAction::paste(m_docViewManager,
-                  SLOT(slotEditPaste()),actionCollection(),"edit_paste");
-        pAction = new KAction(i18n("In&dent"),SmallIconSet("increaseindent"),CTRL+Key_I,this,
-                  SLOT(slotEditIndent()),actionCollection(),"edit_indent");
-        pAction = new KAction(i18n("Uninden&t"),SmallIconSet("decreaseindent"),CTRL+SHIFT+Key_I,this,
-                  SLOT(slotEditUnIndent()),actionCollection(),"edit_unindent");
-        pAction = new KAction(i18n("C&omment"),CTRL+Key_NumberSign,this,
-                  SLOT(slotEditComment()),actionCollection(),"edit_comment");
-        pAction = new KAction(i18n("Unco&mment"),CTRL+SHIFT+Key_NumberSign,this,
-                  SLOT(slotEditUncomment()),actionCollection(),"edit_uncomment");
-        pAction = new KAction(i18n("&Insert File..."),0,m_docViewManager,
-                  SLOT(slotEditInsertFile()),actionCollection(),"edit_insert_file");
-        pAction = KStdAction::find(m_docViewManager,
-                  SLOT(slotEditSearch()),actionCollection(),"edit_find");
-        pAction = KStdAction::findNext(m_docViewManager,
-                  SLOT(slotEditSearch()),actionCollection(),"edit_find_next");
-        pAction = KStdAction::replace(m_docViewManager,
-                  SLOT(slotEditSearch()),actionCollection(),"edit_replace");
-        pAction = new KAction(i18n("Search in &Files..."),SmallIconSet("grep"),Key_F2,this,
-                  SLOT(slotEditSearchInFiles()),actionCollection(),"edit_find_files");
-        pAction = new KAction(i18n("Search &CTags Database..."),0,this,
-                  SLOT(slotTagSearch()),actionCollection(),"edit_find_tag");
-        pAction = new KAction(i18n("Switch to Header/Source..."),Key_F12,this,
-                  SLOT(slotTagSwitchTo()),actionCollection(),"edit_switch_header");
-        pAction = KStdAction::selectAll(m_docViewManager,
-                  SLOT(slotEditSelectAll()),actionCollection(),"edit_select_all");
-        pAction = new KAction(i18n("Deselect All"),CTRL+SHIFT+Key_A,m_docViewManager,
-                  SLOT(slotEditDeselectAll()),actionCollection(),"edit_deslect_all");
-        pAction = new KAction(i18n("Invert Selection"),0,m_docViewManager,
-                  SLOT(slotEditInvertSelection()),actionCollection(),"edit_invert_selection");
+  KAction*
+  pAction = KStdAction::openNew(
+    this, SLOT(slotFileNew()),
+    actionCollection(), "file_new" );
+  pAction->setStatusText(i18n("Creates a new file"));
 
-        ///////////////////////////////////////////////////////////////////
-        // View-menu entries
-        pAction = KStdAction::gotoLine(this,
-                  SLOT(slotViewGotoLine()),actionCollection(),"view_goto");
-        pAction = new KAction(i18n("&Next Error"),Key_F4,this,
-                  SLOT(slotViewNextError()),actionCollection(),"view_next_error");
-        pAction = new KAction(i18n("&Previous Error"),SHIFT+Key_F4,this,
-                  SLOT(slotViewPreviousError()),actionCollection(),"view_prev_error");
-        pAction = new KAction(i18n("&Dialog Editor"),SmallIconSet("newwidget"),0,this,
-                  SLOT(startDesigner()),actionCollection(),"view_designer");
+  // XXX TODO: Use the std GUI for open. Can't use
+  // KStdAction because we need a KToolBarPopupAction.
+  KToolBarPopupAction* pOpenAction = new KToolBarPopupAction(
+    i18n("&Open..."), "fileopen", CTRL+Key_O,
+    this, SLOT(slotFileOpen()),
+    actionCollection(), "file_open" );
+  file_open_popup = pOpenAction->popupMenu();
+  connect(
+    file_open_popup, SIGNAL( activated( int ) ),
+    this, SLOT( slotFileOpen( int ) ) );
+  pOpenAction->setStatusText( i18n("Opens an existing file") );
+  pOpenAction->setWhatsThis( i18n("Open file\n\n"
+        "Shows the Open file dialog to "
+        "select a file to be opened. Holding "
+        "the button pressed will show a popup "
+        "menu containing all filenames of your "
+        "project's sources and header files. "
+        "Selecting a filename on the menu will "
+        "then open the file according to the "
+        "file-type."));
+
+  pAction = KStdAction::close(
+    this, SLOT(slotFileClose()),
+    actionCollection(), "file_close" );
+  pAction->setStatusText(i18n("Closes the current file"));
+
+  pAction = new KAction(
+    i18n("Close All"), 0,
+    this, SLOT(slotFileClose()),
+    actionCollection(), "file_close_all" );
+  pAction->setStatusText(
+    i18n("Closes all open files"));
+
+  pAction = KStdAction::save(
+    this, SLOT(slotFileSave()),
+    actionCollection(), "file_save");
+  pAction->setStatusText(
+    i18n("Save the current document"));
+
+  pAction = KStdAction::saveAs(
+    this, SLOT(slotFileSaveAs()),
+    actionCollection(), "file_save_as" );
+  pAction->setStatusText(
+    i18n("Save the document as..."));
+
+  pAction = new KAction(
+    i18n("Save A&ll"), "save_all", 0,
+    this, SLOT(slotFileSaveAll()),
+    actionCollection(), "file_save_all" );
+  pAction->setStatusText(
+    i18n("Save all changed files"));
+
+  pAction = KStdAction::print(
+    this, SLOT(slotFilePrint()),
+    actionCollection(), "file_print" );
+  pAction->setStatusText(
+    i18n("Prints the current document"));
+  pAction->setWhatsThis( i18n("Print\n\n"
+    "Opens the printing dialog. There, you can "
+    "configure which printing program you wish "
+    "to use, either a2ps or enscript, and print "
+    "your project files."));
+
+  pAction = KStdAction::quit(
+    this, SLOT(slotFileQuit()),
+    actionCollection(), "file_quit" );
+  pAction->setStatusText(i18n("Exits the program"));
+
+  
+
+  ///////////////////////////////////////////////////////////////////
+  // Edit
+
+  pAction = KStdAction::undo(
+    m_docViewManager, SLOT(slotEditUndo()),
+    actionCollection(), "edit_undo" );
+  pAction->setWhatsThis( i18n("Undo\n\n"
+    "Reverts the last editing step."));
+
+  pAction = KStdAction::redo(
+    m_docViewManager, SLOT(slotEditRedo()),
+    actionCollection(), "edit_redo" );
+  pAction->setWhatsThis( i18n("Redo\n\n"
+    "If an editing step was undone, redo "
+    "lets you do this step again."));
+
+  pAction = KStdAction::cut(
+    m_docViewManager, SLOT(slotEditCut()),
+    actionCollection(), "edit_cut" );
+  pAction->setWhatsThis( i18n("Cut\n\n"
+    "Cuts out the selected text and copies "
+    "it to the system clipboard."));
+
+  pAction = KStdAction::copy(
+    m_docViewManager, SLOT(slotEditCopy()),
+    actionCollection(), "edit_copy" );
+  pAction->setWhatsThis( i18n("Copy\n\n"
+    "Copies the selected text into the "
+    "system clipboard."));
+
+  pAction = KStdAction::paste(
+    m_docViewManager, SLOT(slotEditPaste()),
+    actionCollection(), "edit_paste" );
+  pAction->setWhatsThis( i18n("Paste\n\n"
+    "Inserts the contents of the "
+    "system clipboard at the current "
+    "cursor position. "));
+
+  pAction = new KAction(
+    i18n("In&dent"), "increaseindent", CTRL+Key_I,
+    this, SLOT(slotEditIndent()),
+    actionCollection(), "edit_indent" );
+
+  pAction = new KAction(
+    i18n("Uninden&t"), "decreaseindent", CTRL+SHIFT+Key_I,
+    this, SLOT(slotEditUnIndent()),
+    actionCollection(), "edit_unindent" );
+
+  pAction = new KAction(
+    i18n("C&omment"), CTRL+Key_NumberSign,
+    this, SLOT(slotEditComment()),
+    actionCollection(), "edit_comment" );
+
+  pAction = new KAction(
+    i18n("Unco&mment"), CTRL+SHIFT+Key_NumberSign,
+    this, SLOT(slotEditUncomment()),
+    actionCollection(), "edit_uncomment" );
+
+  pAction = new KAction(
+    i18n("&Insert File..."), 0,
+    m_docViewManager, SLOT(slotEditInsertFile()),
+    actionCollection(), "edit_insert_file" );
+
+  pAction = KStdAction::find(
+    m_docViewManager, SLOT(slotEditSearch()),
+    actionCollection(), "edit_find" );
+
+  pAction = KStdAction::findNext(
+    m_docViewManager, SLOT(slotEditSearch()),
+    actionCollection(), "edit_find_next" );
+
+  pAction = KStdAction::replace(
+    m_docViewManager, SLOT(slotEditSearch()),
+    actionCollection(), "edit_replace" );
+
+  pAction = new KAction(
+    i18n("Search in &Files..."), "grep", Key_F2,
+    this, SLOT(slotEditSearchInFiles()),
+    actionCollection(), "edit_find_files" );
+
+  pAction = new KAction(
+    i18n("Search &CTags Database..."), 0,
+    this, SLOT(slotTagSearch()),
+    actionCollection(), "edit_find_tag" );
+
+  pAction = new KAction(
+    i18n("Switch to Header/Source..."), Key_F12,
+    this, SLOT(slotTagSwitchTo()), actionCollection(), "edit_switch_header" );
+
+  pAction = KStdAction::selectAll(
+    m_docViewManager, SLOT(slotEditSelectAll()),
+    actionCollection(), "edit_select_all" );
+
+  pAction = new KAction(
+    i18n("Deselect All"), CTRL+SHIFT+Key_A,
+    m_docViewManager, SLOT(slotEditDeselectAll()),
+    actionCollection(), "edit_deslect_all" );
+
+  pAction = new KAction(
+    i18n("Invert Selection"), 0,
+    m_docViewManager, SLOT(slotEditInvertSelection()),
+    actionCollection(), "edit_invert_selection" );
+
+
+
+  ///////////////////////////////////////////////////////////////////
+  // View
+
+  pAction = KStdAction::gotoLine(
+    this, SLOT(slotViewGotoLine()),
+    actionCollection(), "view_goto" );
+
+  pAction = new KAction(
+    i18n("&Next Error"), Key_F4,
+    this, SLOT(slotViewNextError()),
+    actionCollection(), "view_next_error" );
+
+  pAction = new KAction(
+    i18n("&Previous Error"), SHIFT+Key_F4,
+    this, SLOT(slotViewPreviousError()),
+    actionCollection(), "view_prev_error" );
+
+  pAction = new KAction(
+    i18n("&Dialog Editor"),"newwidget", 0,
+    this, SLOT(startDesigner()),
+    actionCollection(), "view_designer" );
+
 // the state of these Actions is not yet being saved in the config file,
 // therefore we set the checked state true (rokrau 02/17/02)
         KToggleAction*
@@ -453,32 +559,42 @@ void CKDevelop::initMenuBar(){
         pRadioAction = new KRadioAction(i18n("&Text and Icons"),0,this,
                        SLOT(slotViewTabTextIcons()),actionCollection(),"view_tab_texticons");
         pRadioAction->setExclusiveGroup("view_tabtext");
-        pAction = new KAction(i18n("&Refresh"),SmallIconSet("reload"),0,this,
+        pAction = new KAction(i18n("&Refresh"),"reload",0,this,
                   SLOT(slotViewRefresh()),actionCollection(),"view_refresh");
 
         ///////////////////////////////////////////////////////////////////
         // Project-menu entries
-        pAction = new KAction(i18n("New..."),SmallIconSet("window_new"),0,this,
+        pAction = new KAction(i18n("New..."),"window_new",0,this,
                   SLOT(slotProjectNewAppl()),actionCollection(),"project_new");
-        pAction = new KAction(i18n("Generate Project File..."),SmallIconSet("wizard"),0,this,
-                  SLOT(slotProjectGenerate()),actionCollection(),"project_generate");
-        pAction = new KAction(i18n("&Open..."),SmallIconSet("project_open"),0,this,
-                  SLOT(slotProjectOpen()),actionCollection(),"project_open");
+        pAction = new KAction(
+                  i18n("Generate Project File..."), "wizard", 0,
+                  this, SLOT(slotProjectGenerate()),
+                  actionCollection(), "project_generate" );
+        pAction = new KAction(
+                  i18n("&Open..."), "project_open", 0,
+                  this, SLOT(slotProjectOpen()),
+                  actionCollection(), "project_open" );
+        pAction->setWhatsThis( i18n("Open project\n\n"
+             "Shows the open project dialog to select a project to be opened"));
+        
         // we store a pointer to the recent projects action
         pRecentProjects =
         KStdAction::openRecent(this,SLOT(slotProjectOpenRecent(const KURL&)),
                                actionCollection(),"project_open_recent");
-        pAction = new KAction(i18n("C&lose"),SmallIconSet("fileclose"),0,this,SLOT(slotProjectClose()),actionCollection(),"project_close");
-        pAction = new KAction(i18n("&New Class..."),SmallIconSet("classnew"),0,this,
+        pAction = new KAction(
+          i18n("C&lose"), "fileclose", 0,
+          this, SLOT(slotProjectClose()),
+          actionCollection(), "project_close");
+        pAction = new KAction(i18n("&New Class..."),"classnew",0,this,
                   SLOT(slotProjectNewClass()),actionCollection(),"project_new_class");
         pAction = new KAction(i18n("&Add existing File(s)..."),0,this,
                   SLOT(slotProjectAddExistingFiles()),actionCollection(),"project_add_file");
-        pAction = new KAction(i18n("Add new &Translation File..."),SmallIconSet("locale"),0,this,
+        pAction = new KAction(i18n("Add new &Translation File..."),"locale",0,this,
                   SLOT(slotProjectAddNewTranslationFile()),actionCollection(),"project_nwe_trans");
 // we really should reimplement this
 //  pAction = new KAction(i18n("&Remove File from Project"),0,this,
-//  //                           SLOT(slotProjectRemoveFile()),actionCollection(),"project_rm_file");
-        pAction = new KAction(i18n("&File Properties..."),SmallIconSet("file_properties"),SHIFT+Key_F7,this,
+//                               SLOT(slotProjectRemoveFile()),actionCollection(),"project_rm_file");
+        pAction = new KAction(i18n("&File Properties..."),"file_properties",SHIFT+Key_F7,this,
                   SLOT(slotProjectFileProperties()),actionCollection(),"project_file_prop");
         pAction = new KAction(i18n("Make &messages and merge"),0,this,
                   SLOT(slotProjectMessages()),actionCollection(),"project_make_msg");
@@ -488,41 +604,100 @@ void CKDevelop::initMenuBar(){
         pRadioAction = new KRadioAction(i18n("doxygen"),0,this,
                   SLOT(slotSwitchDocTool()),actionCollection(),"project_api_doxygen");
         pRadioAction->setExclusiveGroup("project_api");
-        pAction = new KAction(i18n("Configure doxygen"),SmallIconSet("configure"),0,this,
+        pAction = new KAction(i18n("Configure doxygen"),"configure",0,this,
                   SLOT(slotConfigureDoxygen()),actionCollection(),"project_api_doxyconf");
         pAction->setEnabled(false);
         pAction = new KAction(i18n("Make AP&I-Doc"),0,this,
                   SLOT(slotProjectAPI()),actionCollection(),"project_make_api_doc");
-        pAction = new KAction(i18n("Make &User-Manual..."),SmallIconSet("contents2"),0,this,
+        pAction = new KAction(i18n("Make &User-Manual..."),"contents2",0,this,
                   SLOT(slotProjectManual()),actionCollection(),"project_make_user_man");
-        pAction = new KAction(i18n("&Source-tgz"),SmallIconSet("tgz"),0,this,
+        pAction = new KAction(i18n("&Source-tgz"),"tgz",0,this,
                   SLOT(slotProjectMakeDistSourceTgz()),actionCollection(),"project_dist_srctgz");
-        pAction = new KAction(i18n("&Build RPM Package"),SmallIconSet("rpm"),0,this,
+        pAction = new KAction(i18n("&Build RPM Package"),"rpm",0,this,
                   SLOT(slotProjectMakeDistRPM()),actionCollection(),"project_build_rpm");
-        pAction = new KAction(i18n("&Configure RPM Package"),SmallIconSet("rpm"),0,this,
+        pAction = new KAction(i18n("&Configure RPM Package"),"rpm",0,this,
                   SLOT(slotConfigMakeDistRPM()),actionCollection(),"project_conf_rpm");
         pAction = new KAction(i18n("Load &tags file"),0,this,
                   SLOT(slotProjectLoadTags()),actionCollection(),"project_load_tags");
-        pAction = new KAction(i18n("O&ptions..."),SmallIconSet("configure"),Key_F7,this,
+        pAction = new KAction(i18n("O&ptions..."),"configure",Key_F7,this,
                   SLOT(slotProjectOptions()),actionCollection(),"project_options");
 
-        ///////////////////////////////////////////////////////////////////
-        // Build-menu entries
-        pAction = new KAction(i18n("Compile &File"),SmallIconSet("compfile"),SHIFT+Key_F8,this,
-                  SLOT(slotBuildCompileFile()),actionCollection(),"build_compile");
-        pAction = new KAction(i18n("&Make"),SmallIconSet("make_kdevelop"),Key_F8,this,
-                  SLOT(slotBuildMake()),actionCollection(),"build_make");
-        pAction = new KAction(i18n("Clea&n"),0,this,
-                  SLOT(slotBuildMakeClean()),actionCollection(),"build_clean");
-        pAction = new KAction(i18n("&Rebuild"),SmallIconSet("rebuild"),0,this,
-                  SLOT(slotBuildRebuildAll()),actionCollection(),"build_rebuild");
-        pAction = new KAction(i18n("Dist&Clean/Rebuild All"),0,this,
-                  SLOT(slotBuildCleanRebuildAll()),actionCollection(),"build_rebuild_all");
-        pAction = new KAction(i18n("&Stop Build"),SmallIconSet("stop"),Key_F10,this,
-                  SLOT(slotBuildStop()),actionCollection(),"build_stop");
-        pAction = new KAction(i18n("&Execute"),SmallIconSet("exec"),Key_F9,this,
-                  SLOT(slotBuildRun()),actionCollection(),"build_exec");
-        pAction = new KAction(i18n("Execute &with Arguments..."),SmallIconSet("exec"),ALT+Key_F9,this,
+  ///////////////////////////////////////////////////////////////////
+  // Build
+  pAction = new KAction(
+    i18n("Compile &File"), "compfile", SHIFT+Key_F8,
+    this, SLOT(slotBuildCompileFile()),
+    actionCollection(), "build_compile" );
+  pAction->setWhatsThis( i18n("Compile file\n\n"
+    "Only compile the file opened in "
+    "the C/C++ Files- window. The output "
+    "is shown in the output window. If "
+    "errors occur, clicking on the error line "
+    "causes the file window to show you the "
+    "line the error occured."));
+
+  pAction = new KAction(
+    i18n("&Make"), "make_kdevelop", Key_F8,
+    this, SLOT(slotBuildMake()),
+    actionCollection(), "build_make" );
+  pAction->setWhatsThis( i18n("Make\n\n"
+    "Invokes the make-command set in the "
+    "options-menu for the current project "
+    "after saving all files. "
+    "This will compile all changed sources "
+    "since the last compilation was invoked.\n"
+    "The output window opens to show compiler "
+    "messages. If errors occur, clicking on the "
+    "error line will open the file where the "
+    "error was found and sets the cursor to the "
+    "error line."));
+
+  pAction = new KAction(
+    i18n("Clea&n"), 0,
+    this, SLOT(slotBuildMakeClean()),
+    actionCollection(), "build_clean" );
+
+  pAction = new KAction(
+    i18n("&Rebuild"), "rebuild", 0,
+    this, SLOT(slotBuildRebuildAll()),
+    actionCollection(), "build_rebuild" );
+
+  pAction = new KAction(
+    i18n("Dist&Clean/Rebuild All"), 0,
+    this, SLOT(slotBuildCleanRebuildAll()),
+    actionCollection(), "build_rebuild_all" );
+  pAction->setWhatsThis( i18n("Rebuild all\n\n"
+    "After saving all files, rebuild all "
+    "invokes the make-command set with the "
+    "clean-option to remove all object files. "
+    "Then, configure creates new Makefiles and "
+    "the make-command will rebuild the project."));
+        
+  pAction = new KAction(
+    i18n("&Stop Build"), "stop", Key_F10,
+    this, SLOT(slotBuildStop()),
+    actionCollection(), "build_stop" );
+  pAction->setWhatsThis( i18n("Stop\n\n"
+    "If activated, the stop-command will interrupt "
+    "the active process. This affects make-commands "
+    "as well as documentation generation."));
+
+  pAction = new KAction(
+    i18n("&Execute"), "exec", Key_F9,
+    this, SLOT(slotBuildRun()),
+    actionCollection(), "build_exec" );
+  pAction->setWhatsThis( i18n("Execute\n\n"
+    "After saving all files,the make-command is "
+    "called to build the project. Then the binary "
+    "is executed out of the project directory.\n"
+    "Be aware that this function is only valid for "
+    "programs and that references to e.g. pixmaps "
+    "or html help files that are supposed to be "
+    "installed will cause some strange behavoir "
+    "like testing the helpmenu will open an error "
+    "message that the index.html file is not found."));
+
+        pAction = new KAction(i18n("Execute &with Arguments..."),"exec",ALT+Key_F9,this,
                   SLOT(slotBuildRunWithArgs()),actionCollection(),"build_exec_args");
         pAction = new KAction(i18n("DistC&lean"),0,this,
                   SLOT(slotBuildDistClean()),actionCollection(),"build_distclean");
@@ -533,43 +708,43 @@ void CKDevelop::initMenuBar(){
         
 //  edit_menu->insertSeparator();
 //  edit_menu->insertItem(i18n("Expand Text"),
-//                                                                                                m_docViewManager, SLOT(slotEditExpandText()),
-//                                                                                                0,ID_EDIT_EXPAND_TEXT);
+//                 m_docViewManager, SLOT(slotEditExpandText()),
+//                 0,ID_EDIT_EXPAND_TEXT);
 //  edit_menu->insertItem(i18n("Complete Text"),
-//                                                                                                m_docViewManager, SLOT(slotEditCompleteText()),
-//                                                                                                0,ID_EDIT_COMPLETE_TEXT);
+//                 m_docViewManager, SLOT(slotEditCompleteText()),
+//                 0,ID_EDIT_COMPLETE_TEXT);
 
-  ///////////////////////////////////////////////////////////////////
-  // Debug-menu entries
-        pAction = new KAction(i18n("&Start"),SmallIconSet("1rightarrow"),0,this,
+        ///////////////////////////////////////////////////////////////////
+        // Debug-menu entries
+        pAction = new KAction(i18n("&Start"),"1rightarrow",0,this,
                   SLOT(slotBuildDebug()),actionCollection(),"debug_start");
-        pAction = new KAction(i18n("Examine core file"),SmallIconSet("core"),0,this,
+        pAction = new KAction(i18n("Examine core file"),"core",0,this,
                   SLOT(slotDebugExamineCore()),actionCollection(),"debug_examine_core");
-        pAction = new KAction(i18n("Debug another executable"),SmallIconSet("exec"),0,this,
+        pAction = new KAction(i18n("Debug another executable"),"exec",0,this,
                   SLOT(slotDebugNamedFile()),actionCollection(),"debug_other_exec");
-        pAction = new KAction(i18n("Attach to process"),SmallIconSet("connect_creating"),0,this,
+        pAction = new KAction(i18n("Attach to process"),"connect_creating",0,this,
                   SLOT(slotDebugAttach()),actionCollection(),"debug_attach_process");
-        pAction = new KAction(i18n("Debug with arguments"),SmallIconSet("exec"),0,this,
+        pAction = new KAction(i18n("Debug with arguments"),"exec",0,this,
                   SLOT(slotDebugRunWithArgs()),actionCollection(),"debug_with_args");
-        pAction = new KAction(i18n("Run"),SmallIconSet("dbgrun"),0,this,
+        pAction = new KAction(i18n("Run"),"dbgrun",0,this,
                   SLOT(slotDebugRun()),actionCollection(),"debug_run");
-        pAction = new KAction(i18n("Run to cursor"),SmallIconSet("dbgrunto"),0,this,
+        pAction = new KAction(i18n("Run to cursor"),"dbgrunto",0,this,
                   SLOT(lotDebugRunToCursor()),actionCollection(),"debug_run_cursor");
-        pAction = new KAction(i18n("Step over"),SmallIconSet("dbgnext"),0,this,
+        pAction = new KAction(i18n("Step over"),"dbgnext",0,this,
                   SLOT(slotDebugStepOver()),actionCollection(),"debug_step_over");
-        pAction = new KAction(i18n("Step over instr."),SmallIconSet("dbgnextinst"),0,this,
+        pAction = new KAction(i18n("Step over instr."),"dbgnextinst",0,this,
                   SLOT(slotDebugStepOverIns()),actionCollection(),"debug_stepi_over");
-        pAction = new KAction(i18n("Step into"),SmallIconSet("dbgstep"),0,this,
+        pAction = new KAction(i18n("Step into"),"dbgstep",0,this,
                   SLOT(slotDebugStepInto()),actionCollection(),"debug_step_into");
-        pAction = new KAction(i18n("Step into instr."),SmallIconSet("dbgstepinst"),0,this,
+        pAction = new KAction(i18n("Step into instr."),"dbgstepinst",0,this,
                   SLOT(slotDebugStepIntoIns()),actionCollection(),"debug_stepi_into");
-        pAction = new KAction(i18n("Step out"),SmallIconSet("dbgstepout"),0,this,
+        pAction = new KAction(i18n("Step out"),"dbgstepout",0,this,
                   SLOT(slotDebugStepOutOff()),actionCollection(),"debug_step_out");
-        pAction = new KAction(i18n("Viewers"),SmallIconSet("dbgmemview"),0,this,
+        pAction = new KAction(i18n("Viewers"),"dbgmemview",0,this,
                   SLOT(slotDebugMemoryView()),actionCollection(),"debug_viewers");
-        pAction = new KAction(i18n("Interrupt"),SmallIconSet("player_pause"),0,this,
+        pAction = new KAction(i18n("Interrupt"),"player_pause",0,this,
                   SLOT(slotDebugInterrupt()),actionCollection(),"debug_interrupts");
-        pAction = new KAction(i18n("Stop"),SmallIconSet("stop"),0,this,
+        pAction = new KAction(i18n("Stop"),"stop",0,this,
                   SLOT(slotDebugStop()),actionCollection(),"debug_stop");
         ///////////////////////////////////////////////////////////////////
         // Tools-menu entries
@@ -579,20 +754,13 @@ void CKDevelop::initMenuBar(){
         // Options-menu entries
 //        pAction = new KAction(i18n("&Enscript..."),0,this,
 //                  SLOT(slotOptionsConfigureEnscript()),actionCollection(),"options_enscript");
-        pAction = new KAction(i18n("&Editor..."),SmallIconSet("edit"),0,this,
+        pAction = new KAction(i18n("&Editor..."),"edit",0,this,
                   SLOT(slotOptionsEditor()),actionCollection(),"options_editor");
-// these are no longer needed since we just call the kate part
-//        pAction = new KAction(i18n("Editor &Colors..."),0,this,
-//                  SLOT(slotOptionsEditorColors()),actionCollection(),"options_editor_colors");
-//        pAction = new KAction(i18n("Editor &Defaults..."),0,this,
-//                  SLOT(slotOptionsSyntaxHighlightingDefaults()),actionCollection(),"options_editor_defaults");
-//        pAction = new KAction(i18n("&Syntax Highlighting..."),0,this,
-//                  SLOT(slotOptionsSyntaxHighlighting()),actionCollection(),"options_editor_hl");
-        pAction = new KAction(i18n("Documentation &Browser..."),SmallIconSet("www"),0,this,
+        pAction = new KAction(i18n("Documentation &Browser..."),"www",0,this,
                   SLOT(slotOptionsDocBrowser()),actionCollection(),"options_doc_browser");
-        pAction = new KAction(i18n("Tools..."),SmallIconSet("run"),0,this,
+        pAction = new KAction(i18n("Tools..."),"run",0,this,
                   SLOT(slotOptionsToolsConfigDlg()),actionCollection(),"options_tools");
-        pAction = new KAction(i18n("&KDevelop Setup..."),SmallIconSet("configure"),0,this,
+        pAction = new KAction(i18n("&KDevelop Setup..."),"configure",0,this,
                   SLOT(slotOptionsKDevelop()),actionCollection(),"options_setup");
 
         ///////////////////////////////////////////////////////////////////
@@ -615,7 +783,7 @@ void CKDevelop::initMenuBar(){
 
         ///////////////////////////////////////////////////////////////////
         // Bookmarks-menu entries
-        pAction = new KAction(i18n("&Toggle Bookmark"),SmallIconSet("bookmark_add"),CTRL+Key_B,this,
+        pAction = new KAction(i18n("&Toggle Bookmark"),"bookmark_add",CTRL+Key_B,this,
                   SLOT(slotBookmarksToggle()),actionCollection(),"bookmarks_toggle");
         pAction = new KAction(i18n("&Next Bookmark"),Key_F5,this,
                   SLOT(slotBookmarksNext()),actionCollection(),"bookmarks_next");
@@ -623,10 +791,10 @@ void CKDevelop::initMenuBar(){
                   SLOT(slotBookmarksPrevious()),actionCollection(),"bookmarks_prev");
         pAction = new KAction(i18n("&Clear Bookmarks"),0,this,
                   SLOT(slotBookmarksClear()),actionCollection(),"bookmarks_clear");
-        pActionMenu = new KActionMenu(i18n("Code &Window"),SmallIconSet("bookmark_folder"),
+        pActionMenu = new KActionMenu(i18n("Code &Window"),"bookmark_folder",
                       actionCollection(),"bookmarks_code");
         KPopupMenu* pCodeBookmarksPopup = pActionMenu->popupMenu();
-        pActionMenu = new KActionMenu(i18n("&Browser Window"),SmallIconSet("bookmark_folder"),
+        pActionMenu = new KActionMenu(i18n("&Browser Window"),"bookmark_folder",
                       actionCollection(),"bookmarks_browser");
         KPopupMenu* pDocBookmarksPopup = pActionMenu->popupMenu();
         // set the KPopupMenu for the document view manager
@@ -638,35 +806,35 @@ void CKDevelop::initMenuBar(){
         QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));
         QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
         QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
-        pAction = new KAction(i18n("&Back"),SmallIconSet("back"),0,this,
+        pAction = new KAction(i18n("&Back"),"back",0,this,
                   SLOT(slotHelpBack()),actionCollection(),"help_back");
-        pAction = new KAction(i18n("&Forward"),SmallIconSet("forward"),0,this,
+        pAction = new KAction(i18n("&Forward"),"forward",0,this,
                   SLOT(slotHelpForward()),actionCollection(),"help_forward");
-        pAction = new KAction(i18n("&Search Marked Text"),SmallIconSet("help"),0,this,
+        pAction = new KAction(i18n("&Search Marked Text"),"help",0,this,
                   SLOT(slotHelpSearchText()),actionCollection(),"help_search_marked");
-        pAction = new KAction(i18n("Search for Help on..."),SmallIconSet("filefind"),0,this,
+        pAction = new KAction(i18n("Search for Help on..."),"filefind",0,this,
                   SLOT(slotHelpSearch()),actionCollection(),"help_search");
-        pAction = new KAction(i18n("Show Manpage on..."),SmallIconSet("help"),0,this,
+        pAction = new KAction(i18n("Show Manpage on..."),"help",0,this,
                   SLOT(slotManpage()),actionCollection(),"help_manpage");
         pAction = KStdAction::whatsThis(this,
                   SLOT(contextHelpActivated()),actionCollection(),"help_whatsthis");
         pAction = KStdAction::helpContents(this,
                   SLOT(slotHelpContents()),actionCollection(),"help_contents");
-        pAction = new KAction(programming,SmallIconSet("contents"),0,this,
+        pAction = new KAction(programming,"contents",0,this,
                   SLOT(slotHelpProgramming()),actionCollection(),"help_programming");
-        pAction = new KAction(tutorial,SmallIconSet("contents"),0,this,
+        pAction = new KAction(tutorial,"contents",0,this,
                   SLOT(slotHelpTutorial()),actionCollection(),"help_tutorial");
-        pAction = new KAction(kdelibref,SmallIconSet("contents"),0,this,
+        pAction = new KAction(kdelibref,"contents",0,this,
                   SLOT(slotHelpKDELibRef()),actionCollection(),"help_kdelibref");
-        pAction = new KAction(i18n("C/C++-Reference"),SmallIconSet("contents"),0,this,
+        pAction = new KAction(i18n("C/C++-Reference"),"contents",0,this,
                   SLOT(slotHelpReference()),actionCollection(),"help_cppreference");
-        pAction = new KAction(i18n("Project &API-Doc"),SmallIconSet("contents"),0,this,
+        pAction = new KAction(i18n("Project &API-Doc"),"contents",0,this,
                   SLOT(slotHelpAPI()),actionCollection(),"help_apidoc");
-        pAction = new KAction(i18n("Project &User-Manual"),SmallIconSet("contents"),0,this,
+        pAction = new KAction(i18n("Project &User-Manual"),"contents",0,this,
                   SLOT(slotHelpManual()),actionCollection(),"help_userman");
-        pAction = new KAction(i18n("Tip of the Day"),SmallIconSet("idea"),0,this,
+        pAction = new KAction(i18n("Tip of the Day"),"idea",0,this,
                   SLOT(slotHelpTipOfDay(bool)),actionCollection(),"help_tip");
-        pAction = new KAction(i18n("KDevelop Homepage"),SmallIconSet("www"),0,this,
+        pAction = new KAction(i18n("KDevelop Homepage"),"www",0,this,
                   SLOT(slotHelpHomepage()),actionCollection(),"help_homepage");
         pAction = KStdAction::reportBug(this,
                   SLOT(reportBug()),actionCollection(),"help_bugreport");
@@ -674,7 +842,6 @@ void CKDevelop::initMenuBar(){
                   SLOT(aboutApplication()),actionCollection(),"help_about_app");
         pAction = KStdAction::aboutKDE(this,
                   SLOT(aboutKDE()),actionCollection(),"help_about_kde");
-
 
   ////////////////////////////////////////////////
   // Popupmenu for the classbrowser wizard button
@@ -737,38 +904,6 @@ void CKDevelop::initMenuBar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::initToolBar(){
 
-  toolBar()->insertButton("filenew",ID_FILE_NEW, false,i18n("New"));
-//  toolBar()->insertSeparator();
-  toolBar()->insertButton("project_open",ID_PROJECT_OPEN, true,i18n("Open Project"));
-//  toolBar()->insertSeparator();
-  toolBar()->insertButton("fileopen",ID_FILE_OPEN, true,i18n("Open File"));
-  file_open_popup= new QPopupMenu();
-  connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
-  toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
-
-  toolBar()->insertButton("filesave",ID_FILE_SAVE,true,i18n("Save File"));
-//  toolBar()->insertButton("save_all"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
-
-  toolBar()->insertButton("fileprint",ID_FILE_PRINT,false,i18n("Print"));
-
-//  QFrame *sepUndo= new QFrame(toolBar());
-//  sepUndo->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-//  toolBar()->insertWidget(0,20,sepUndo);
-//  toolBar()->insertSeparator();
-
-  toolBar()->insertButton("undo",ID_EDIT_UNDO,false,i18n("Undo"));
-  toolBar()->insertButton("redo",ID_EDIT_REDO,false,i18n("Redo"));
-//  toolBar()->insertSeparator();
-  toolBar()->insertButton("editcut",ID_EDIT_CUT,true,i18n("Cut"));
-  toolBar()->insertButton("editcopy",ID_EDIT_COPY, true,i18n("Copy"));
-  toolBar()->insertButton("editpaste",ID_EDIT_PASTE, true,i18n("Paste"));
-
-//  toolBar()->insertSeparator();
-
-  toolBar()->insertButton("compfile",ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
-  toolBar()->insertButton("make_kdevelop",ID_BUILD_MAKE, false,i18n("Make"));
-  toolBar()->insertButton("rebuild",ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
-//  toolBar()->insertSeparator();
   toolBar()->insertButton("debugger",ID_DEBUG_START, false, i18n("Debug"));
   QPopupMenu* debugToolPopup = new QPopupMenu();
   debugToolPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
@@ -778,13 +913,6 @@ void CKDevelop::initToolBar(){
   connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
-  toolBar()->insertButton("exec",ID_BUILD_RUN, false,i18n("Run"));
-//  toolBar()->insertSeparator();
-  toolBar()->insertButton("stop",ID_BUILD_STOP, false,i18n("Stop"));
-
-//  toolBar()->insertSeparator();
-
-  toolBar()->insertButton("newwidget",ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
   toolBar()->insertButton("tree_win",ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
   toolBar()->insertButton("output_win",ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
@@ -1117,105 +1245,6 @@ CProject* CKDevelop::initProject( bool loadLastProject )
 
 void CKDevelop::setKeyAccel()
 {
-
-//  accel->setItemEnabled("Dialog Editor", true );
-//
-//
-//  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
-//  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
-//  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
-//  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
-//  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_ALL,"SaveAll" );
-//  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_AS,"SaveAs" );
-//  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
-//  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
-//
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KStdAccel::Undo );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KStdAccel::Cut );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KStdAccel::Copy );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KStdAccel::Paste );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KStdAccel::Find );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH_BACK,"RepeatSearchBack" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SEARCH,"CTagsSearch" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SWITCH,"CTagsSwitch" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_EXPAND_TEXT,"Expand Text" );
-//  accel->changeMenuAccel(edit_menu, ID_EDIT_COMPLETE_TEXT, "Complete Text");
-//
-//
-//  accel->changeMenuAccel(view_menu,ID_TOOLS_DESIGNER ,"Dialog Editor" );
-//  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
-//  accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
-//  accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
-//  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
-//  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
-//
-//  accel->changeMenuAccel(project_menu, ID_PROJECT_KAPPWIZARD,"NewProject" );
-//  accel->changeMenuAccel(project_menu, ID_PROJECT_OPEN,"OpenProject" );
-//  accel->changeMenuAccel(project_menu, ID_PROJECT_CLOSE,"CloseProject" );
-//  accel->changeMenuAccel(project_menu,ID_PROJECT_NEW_CLASS , "NewClass");
-//  accel->changeMenuAccel(project_menu, ID_PROJECT_ADD_FILE_EXIST, "AddExistingFiles");
-//  accel->changeMenuAccel(project_menu,ID_PROJECT_ADD_NEW_TRANSLATION_FILE ,"Add new Translation File" );
-//  accel->changeMenuAccel(project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
-//  accel->changeMenuAccel(project_menu,ID_PROJECT_MESSAGES , "MakeMessages");
-//  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_PROJECT_API,"ProjectAPI" );
-//  accel->changeMenuAccel(project_menu,ID_PROJECT_MAKE_USER_MANUAL , "ProjectManual");
-////  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,"Source-tgz" );
-//  accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
-//
-//  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
-//  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
-//  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL , "RebuildAll");
-//  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL ,"CleanRebuildAll" );
-//  accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
-//  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
-//  accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-//  accel->changeMenuAccel(build_menu,ID_BUILD_DISTCLEAN ,"BuildDistClean" );
-//  accel->changeMenuAccel(build_menu, ID_BUILD_MAKECLEAN, "BuildMakeClean");
-//  accel->changeMenuAccel(build_menu, ID_BUILD_AUTOCONF, "BuildAutoconf");
-//  accel->changeMenuAccel(build_menu, ID_BUILD_CONFIGURE, "BuildConfigure");
-//
-//  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DECLARATION, "CVGotoDeclaration");
-//  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DEFINITION, "CVGotoDefinition");
-//  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_CLASS_DECLARATION, "CVGotoClass");
-//  accel->changeMenuAccel(classbrowser_popup, ID_CV_GRAPHICAL_VIEW, "CVViewTree");
-//  accel->changeMenuAccel(classbrowser_popup,ID_PROJECT_NEW_CLASS , "NewClass");
-//
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_START , "DebugStart");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN ,"DebugRun" );
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN_CURSOR, "DebugRunCursor");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_STOP, "DebugStop");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP, "DebugStepInto");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP_INST, "DebugStepIntoInstr");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT, "DebugStepOver");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT_INST , "DebugStepOverInstr");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_FINISH ,  "DebugStepOut");
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_MEMVIEW ,"DebugViewer" );
-//  accel->changeMenuAccel(debug_menu,ID_DEBUG_BREAK_INTO ,"DebugInterrupt" );
-//
-//  accel->changeMenuAccel(debugPopup, ID_DEBUG_CORE, "DebugExamineCore");
-//  accel->changeMenuAccel(debugPopup, ID_DEBUG_NAMED_FILE, "DebugOtherExec");
-//  accel->changeMenuAccel(debugPopup, ID_DEBUG_ATTACH, "DebugAttach");
-//  accel->changeMenuAccel(debugPopup, ID_DEBUG_SET_ARGS, "DebugRunWithArgs");
-//
-//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_TOGGLE ,"Toggle_Bookmarks" );
-//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
-//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
-//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
-//
-//  accel->changeMenuAccel(help_menu->menu(),ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-//  accel->changeMenuAccel(help_menu->menu(), ID_HELP_SEARCH, "HelpSearch" );
-//  accel->changeMenuAccel(help_menu->menu(), ID_HELP_CONTENTS, KStdAccel::Help );
-
-
 }
 
 void CKDevelop::setToolmenuEntries(){

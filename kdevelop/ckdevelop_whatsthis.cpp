@@ -15,12 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
- 
 #include "ckdevelop.h"
 
 #include "cclassview.h"
 #include "cdocbrowser.h"
-//#include "ceditwidget.h"
 #include "clogfileview.h"
 #include "coutputwidget.h"
 #include "crealfileview.h"
@@ -33,91 +31,7 @@
 
 #include <qwhatsthis.h>
 
-void CKDevelop::initWhatsThis(){
-  whats_this->add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
-        "Shows the open project dialog "
-        "to select a project to be opened"));
-                                                              
-  whats_this->add(toolBar()->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
-        "Shows the Open file dialog to "
-        "select a file to be opened. Holding "
-        "the button pressed will show a popup "
-        "menu containing all filenames of your "
-        "project's sources and header files. "
-        "Selecting a filename on the menu will "
-        "then open the file according to the "
-        "file-type."));
-
-  whats_this->add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
-        "Saves the file opened in the actual "
-        "editing view"));
-    
-  whats_this->add(toolBar()->getButton(ID_FILE_PRINT),i18n("Print\n\n"
-        "Opens the printing dialog. There, you can "
-        "configure which printing program you wish "
-        "to use, either a2ps or ensrcipt, and print "
-        "your project files."));
-  
-  whats_this->add(toolBar()->getButton(ID_EDIT_UNDO),i18n("Undo\n\n"
-        "Reverts the last editing step."));
-  
-  whats_this->add(toolBar()->getButton(ID_EDIT_REDO),i18n("Redo\n\n"
-        "If an editing step was undone, redo "
-        "lets you do this step again."));
-  
-  whats_this->add(toolBar()->getButton(ID_EDIT_CUT),i18n("Cut\n\n"
-        "Cuts out the selected text and copies "
-        "it to the system clipboard."));
-  
-  whats_this->add(toolBar()->getButton(ID_EDIT_COPY),i18n("Copy\n\n"
-        "Copies the selected text into the "
-        "system clipboard."));
-    
-  whats_this->add(toolBar()->getButton(ID_EDIT_PASTE),i18n("Paste\n\n"
-        "Inserts the contents of the "
-        "system clipboard at the current "
-        "cursor position. "));
-  
-  whats_this->add(toolBar()->getButton(ID_BUILD_COMPILE_FILE),i18n("Compile file\n\n"
-        "Only compile the file opened in "
-        "the C/C++ Files- window. The output "
-        "is shown in the output window. If "
-        "errors occur, clicking on the error line "
-        "causes the file window to show you the "
-        "line the error occured."));
-
-  QString build_make_str=i18n("Make\n\n"
-        "Invokes the make-command set in the "
-        "options-menu for the current project "
-        "after saving all files. "
-        "This will compile all changed sources "
-        "since the last compilation was invoked.\n"
-        "The output window opens to show compiler "
-        "messages. If errors occur, clicking on the "
-        "error line will open the file where the "
-        "error was found and sets the cursor to the "
-        "error line.");
-  whats_this->add(toolBar()->getButton(ID_BUILD_MAKE),build_make_str);
-
-  QString build_rebuild_all_str=i18n("Rebuild all\n\n"
-        "After saving all files, rebuild all "
-        "invokes the make-command set with the "
-        "clean-option to remove all object files. "
-        "Then, configure creates new Makefiles and "
-        "the make-command will rebuild the project.");
-  whats_this->add(toolBar()->getButton(ID_BUILD_REBUILD_ALL),build_rebuild_all_str);
-
-  QString build_run_str=i18n("Execute\n\n"
-        "After saving all files,the make-command is "
-        "called to build the project. Then the binary "
-        "is executed out of the project directory.\n"
-         "Be aware that this function is only valid for "
-        "programs and that references to e.g. pixmaps "
-        "or html help files that are supposed to be "
-        "installed will cause some strange behavoir "
-        "like testing the helpmenu will open an error "
-        "message that the index.html file is not found.");
-  whats_this->add(toolBar()->getButton(ID_BUILD_RUN),build_run_str);
+void CKDevelop::initWhatsThis() {
 
   QString build_debug_str=i18n("Debug program\n\n"
         "Runs your program in the debugger you have chosen "
@@ -154,13 +68,6 @@ void CKDevelop::initWhatsThis(){
         "the outermost frame (ie in main()), then this operation "
         "has no affect.");
   whats_this->add(toolBar()->getButton(ID_DEBUG_FINISH), debug_finish_str);
-
-  QString build_stop_str=i18n("Stop\n\n"
-        "If activated, the stop-command will interrupt "
-        "the active process. This affects make-commands "
-        "as well as documentation generation.");
-  whats_this->add(toolBar()->getButton(ID_BUILD_STOP),build_stop_str);
-
 
   QString output=i18n("Output-View\n\n"
         "Enables/Disables the output window. The "

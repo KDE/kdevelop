@@ -167,15 +167,6 @@
     <text>&amp;Tools</text>
     <ActionList name="tool_list" />
   </Menu>
-  <Menu name="options">
-    <text>&amp;Options</text>
-    <Action name="options_editor" />
-    <Separator/>
-    <Action name="options_doc_browser" />
-    <Action name="options_tools" />
-    <Separator/>
-    <Action name="options_setup" />
-  </Menu>
   <Action name="window_menu" />
   <Menu name="bookmarks">
     <text>Book&amp;marks</text>
@@ -186,6 +177,15 @@
     <Separator/>
     <Action name="bookmarks_code" />
     <Action name="bookmarks_browser" />
+  </Menu>
+  <Menu name="options">
+    <text>&amp;Settings</text>
+    <Action name="options_editor" />
+    <Separator/>
+    <Action name="options_doc_browser" />
+    <Action name="options_tools" />
+    <Separator/>
+    <Action name="options_setup" />
   </Menu>
   <Menu name="help">
     <text>&amp;Help</text>
@@ -215,7 +215,36 @@
     <Action name="help_about_kde" />
   </Menu>
 </MenuBar>
-
+<ToolBar noMerge="1" fullWidth="true" name="mainToolBar" newline="true"><text>Main Toolbar</text>
+  <Action name="file_new" />
+  <Action name="project_open" />
+  <Action name="file_open" />
+  <Action name="file_save" />
+  <Action name="file_print" />
+  <Separator/>
+  <Action name="edit_undo" />
+  <Action name="edit_redo" />
+  <Separator/>
+  <Action name="edit_cut" />
+  <Action name="edit_copy" />
+  <Action name="edit_paste" />
+  <Separator/>
+  <Action name="build_compile" />
+  <Action name="build_make" />
+  <Action name="build_rebuild" />
+  <Separator/>
+<!--  <Action name="debug" />-->
+  <Action name="build_exec" />
+  <Action name="build_stop" />
+  <Separator/>
+<!--  <Action name="view_tree_all" />
+  <Action name="view_out_all" />
+  <Separator/>
+  <Action name="debug_run" />
+  <Action name="debug_step_over" />
+  <Action name="debug_step_into" />
+  <Action name="debug_step_out" />//-->
+</ToolBar>
 <State name="disable_file_save">
   <disable>
     <Action name="file_save" />
