@@ -1,3 +1,7 @@
+2003-01-01 Caleb Tennis <caleb@aei-tech.com>
+	* Add linebreaks for data being copied from make output window
+	  to clipboard
+
 2002-12-31 Caleb Tennis <caleb@aei-tech.com>
 	* Fix keyboard accelerator keys for File menu..no conflicts
 	* Fix broken signal/slot connections in code
