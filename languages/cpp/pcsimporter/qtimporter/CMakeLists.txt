@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces )
+
 SET(kdevqtimporter_LIB_SRCS
 kdevqtimporter.cpp
 settingsdialog.cpp
@@ -5,11 +7,11 @@ settingsdialog.cpp
 
 KDE_AUTOMOC(${kdevqtimporter_LIB_SRCS})
 
-SET(
+SET( kdevqtimporter_UI
 settingsdialogbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevqtimporter_LIB_SRCS ${kdevqtimporter_UI}
+KDE_ADD_UI_FILES(kdevqtimporter_LIB_SRCS ${kdevqtimporter_UI} )
 
 ADD_LIBRARY(kdevqtimporter SHARED ${kdevqtimporter_LIB_SRCS})
 
@@ -28,7 +30,3 @@ ADD_LIBRARY(kdevqtimporter SHARED ${kdevqtimporter_LIB_SRCS})
 #libkdevqtimporter_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 #	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la
 #libkdevqtimporter_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
-
-#######################
-#previous CMakeLists.txt contents follow:
-

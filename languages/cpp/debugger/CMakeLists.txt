@@ -1,5 +1,6 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/debugger ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevdebugger_PART_SRCS
-debuggerdcopinterface.skel
 debuggerpart.cpp
 dbgcontroller.cpp
 gdbcontroller.cpp
@@ -22,11 +23,17 @@ gdbtable.cpp
 
 KDE_AUTOMOC(${kdevdebugger_PART_SRCS})
 
-SET(
+SET( kdevdebugger_UI
 debuggerconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevdebugger_PART_SRCS ${kdevdebugger_UI}
+KDE_ADD_UI_FILES(kdevdebugger_PART_SRCS ${kdevdebugger_UI} )
+
+SET( kdevdebugger_DCOP_SRCS
+debuggerdcopinterface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevdebugger_PART_SRCS ${kdevdebugger_DCOP_SRCS})
 
 ADD_LIBRARY(kdevdebugger SHARED ${kdevdebugger_PART_SRCS})
 
@@ -56,7 +63,3 @@ ADD_LIBRARY(kdevdebugger SHARED ${kdevdebugger_PART_SRCS})
 #rcdir = $(kde_datadir)/kdevdebugger
 #rc_DATA = kdevdebugger.rc
 #noinst_HEADERS =  gdbtable.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,5 +1,7 @@
 SUBDIRS( data app_templates file_templates doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevphpsupport_PART_SRCS
 phpsupportpart.cpp
 phpconfigwidget.cpp
@@ -14,14 +16,14 @@ phpnewclassdlg.cpp
 
 KDE_AUTOMOC(${kdevphpsupport_PART_SRCS})
 
-SET(
+SET( kdevphpsupport_UI
 phpconfigwidgetbase.ui
 phpconfigparserwidgetbase.ui
 phpinfodlg.ui
 phpnewclassdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevphpsupport_PART_SRCS ${kdevphpsupport_UI}
+KDE_ADD_UI_FILES(kdevphpsupport_PART_SRCS ${kdevphpsupport_UI} )
 
 ADD_LIBRARY(kdevphpsupport SHARED ${kdevphpsupport_PART_SRCS})
 
@@ -53,7 +55,3 @@ ADD_LIBRARY(kdevphpsupport SHARED ${kdevphpsupport_PART_SRCS})
 #
 #templatedir = ${kde_datadir}/kdevabbrev/templates
 #template_DATA = phptemplates
-
-#######################
-#previous CMakeLists.txt contents follow:
-

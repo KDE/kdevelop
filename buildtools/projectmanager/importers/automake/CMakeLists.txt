@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevautomakeimporter_LIB_SRCS
 kdevautomakeimporter.cpp
 automakeprojectmodel.cpp
@@ -39,7 +41,3 @@ ADD_LIBRARY(kdevautomakeimporter SHARED ${kdevautomakeimporter_LIB_SRCS})
 #    
 #libkdevautomakeimporter_la_LDFLAGS = \
 #    -module $(all_libraries) $(KDE_PLUGIN)
-
-#######################
-#previous CMakeLists.txt contents follow:
-

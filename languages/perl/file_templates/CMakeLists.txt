@@ -6,7 +6,3 @@
 #template_DATA = pl pm
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

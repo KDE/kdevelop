@@ -1,4 +1,53 @@
-SUBDIRS( lib $(ADA_LANGUAGE) $(BASH_LANGUAGE) $(CPP_LANGUAGE) 	$(FORTRAN_LANGUAGE) $(HASKELL_LANGUAGE) $(JAVA_LANGUAGE) $(PASCAL_LANGUAGE) 	$(PERL_LANGUAGE) $(PHP_LANGUAGE) $(PYTHON_LANGUAGE) $(RUBY_LANGUAGE) $(SQL_LANGUAGE) )
+#if include_ada
+SET(ADA_LANGUAGE ada)
+#endif
+#
+#if include_bash
+SET(BASH_LANGUAGE bash)
+#endif
+#
+#if include_cpp
+SET(CPP_LANGUAGE cpp)
+#endif
+#
+#if include_fortran
+SET(FORTRAN_LANGUAGE fortran)
+#endif
+#
+#if include_haskell
+SET(HASKELL_LANGUAGE haskell)
+#endif
+#
+#if include_java
+SET(JAVA_LANGUAGE java)
+#endif
+#
+#if include_pascal
+SET(PASCAL_LANGUAGE pascal)
+#endif
+#
+#if include_perl
+SET(PERL_LANGUAGE perl)
+#endif
+#
+#if include_php
+SET(PHP_LANGUAGE php)
+#endif
+#
+#if include_python
+SET(PYTHON_LANGUAGE python)
+#endif
+#
+#if include_ruby
+SET(RUBY_LANGUAGE ruby)
+#endif
+#
+#if include_sql
+SET(SQL_LANGUAGE sql)
+#endif
+
+
+SUBDIRS( lib ${ADA_LANGUAGE} ${BASH_LANGUAGE} ${CPP_LANGUAGE} ${FORTRAN_LANGUAGE} ${HASKELL_LANGUAGE} ${JAVA_LANGUAGE} ${PASCAL_LANGUAGE} ${PERL_LANGUAGE} ${PHP_LANGUAGE} ${PYTHON_LANGUAGE} ${RUBY_LANGUAGE} ${SQL_LANGUAGE} )
 
 
 
@@ -78,7 +127,3 @@ SUBDIRS( lib $(ADA_LANGUAGE) $(BASH_LANGUAGE) $(CPP_LANGUAGE) 	$(FORTRAN_LANGUAG
 #
 #DOXYGEN_EMPTY = YES
 #include ../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

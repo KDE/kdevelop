@@ -1,5 +1,7 @@
 SUBDIRS( app_templates file_templates doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevperlsupport_PART_SRCS
 perlparser.cpp
 perlsupportpart.cpp
@@ -8,11 +10,11 @@ perlconfigwidget.cpp
 
 KDE_AUTOMOC(${kdevperlsupport_PART_SRCS})
 
-SET(
+SET( kdevperlsupport_UI
 perlconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevperlsupport_PART_SRCS ${kdevperlsupport_UI}
+KDE_ADD_UI_FILES(kdevperlsupport_PART_SRCS ${kdevperlsupport_UI} )
 
 ADD_LIBRARY(kdevperlsupport SHARED ${kdevperlsupport_PART_SRCS})
 
@@ -45,7 +47,3 @@ ADD_LIBRARY(kdevperlsupport SHARED ${kdevperlsupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevperlsupport
 #rc_DATA = kdevperlsupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

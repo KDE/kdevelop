@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(designerintegration_LIB_SRCS
 implementationwidget.cpp
 qtdesignerintegration.cpp
@@ -5,11 +7,11 @@ qtdesignerintegration.cpp
 
 KDE_AUTOMOC(${designerintegration_LIB_SRCS})
 
-SET(
+SET( designerintegration_UI
 implementationwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(designerintegration_LIB_SRCS ${designerintegration_UI}
+KDE_ADD_UI_FILES(designerintegration_LIB_SRCS ${designerintegration_UI} )
 
 ADD_LIBRARY(designerintegration SHARED ${designerintegration_LIB_SRCS})
 
@@ -32,7 +34,3 @@ ADD_LIBRARY(designerintegration SHARED ${designerintegration_LIB_SRCS})
 #DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevinterfaces kdevutil
 #DOXYGEN_PROJECTNAME = KDevelop Designer Integration Support Library
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -6,7 +6,3 @@
 #template_DATA = py
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

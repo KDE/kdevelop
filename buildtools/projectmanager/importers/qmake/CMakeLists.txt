@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/parsers/qmake ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(qmakeimporter_LIB_SRCS
 kdevqmakeeditor.cpp
 qmakeprojectmodel.cpp
@@ -23,7 +25,3 @@ ADD_LIBRARY(qmakeimporter SHARED ${qmakeimporter_LIB_SRCS})
 #kde_services_DATA = kdevqmakeimporter.desktop
 #libqmakeimporter_la_LIBADD = \
 #	$(top_builddir)/buildtools/projectmanager/interfaces/libprojectmanager_interfaces.la $(top_builddir)/buildtools/lib/parsers/qmake/libkdevqmakeparser.la
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor )
+
 SET(kdevqmakeparser_LIB_SRCS
 qmakeast.cpp
 qmakedriver.cpp
@@ -39,7 +41,3 @@ ADD_LIBRARY(kdevqmakeparser SHARED ${kdevqmakeparser_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop QMake parser
 #DOXYGEN_DOCDIRPREFIX = kdevparser
 #include ../../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

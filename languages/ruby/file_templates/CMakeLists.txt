@@ -7,7 +7,3 @@
 #
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

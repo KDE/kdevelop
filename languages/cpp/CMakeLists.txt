@@ -1,4 +1,6 @@
-SUBDIRS( templates subclassing_template newclass_templates file_templates 	app_templates compiler pcsimporter debugger doc )
+SUBDIRS( templates subclassing_template newclass_templates file_templates  	app_templates compiler pcsimporter debugger doc )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/designer_integration ${CMAKE_SOURCE_DIR}/languages/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/catalog ${CMAKE_SOURCE_DIR}/lib/compat ${CMAKE_SOURCE_DIR}/lib/cppparser ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/bdb/include ${CMAKE_SOURCE_DIR})
 
 SET(kdevcppsupport_PART_SRCS
 cppsupportpart.cpp
@@ -10,7 +12,6 @@ backgroundparser.cpp
 ast_utils.cpp
 store_walker.cpp
 KDevCppSupportIface.cpp
-KDevCppSupportIface.skel
 cppsupportfactory.cpp
 tag_creator.cpp
 codeinformationrepository.cpp
@@ -34,7 +35,7 @@ storeconverter.cpp
 
 KDE_AUTOMOC(${kdevcppsupport_PART_SRCS})
 
-SET(
+SET( kdevcppsupport_UI
 ccconfigwidgetbase.ui
 configproblemreporter.ui
 cppnewclassdlgbase.ui
@@ -46,11 +47,17 @@ createpcsdialogbase.ui
 creategettersetter.ui
 )
 
-KDE_ADD_UI_FILES(kdevcppsupport_PART_SRCS ${kdevcppsupport_UI}
+KDE_ADD_UI_FILES(kdevcppsupport_PART_SRCS ${kdevcppsupport_UI} )
+
+SET( kdevcppsupport_DCOP_SRCS
+KDevCppSupportIface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevcppsupport_PART_SRCS ${kdevcppsupport_DCOP_SRCS})
 
 ADD_LIBRARY(kdevcppsupport SHARED ${kdevcppsupport_PART_SRCS})
 
-ADD_EXECUTABLE(r++ ${r++_SRCS})
+#ADD_EXECUTABLE(r++ ${r++_SRCS})
 
 
 
@@ -69,11 +76,11 @@ ADD_EXECUTABLE(r++ ${r++_SRCS})
 #	$(all_includes)
 #
 #kde_module_LTLIBRARIES = libkdevcppsupport.la
-#libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -L$(top_srcdir)/bdb/dist
+#libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 #libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 #	$(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la \
 #	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la \
-#	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la $(top_builddir)/bdb/build_unix/libdb.a
+#	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la
 #
 #libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 #			ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp \
@@ -110,7 +117,3 @@ ADD_EXECUTABLE(r++ ${r++_SRCS})
 #r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 #noinst_HEADERS = cppimplementationwidget.h qtdesignercppintegration.h \
 #	storeconverter.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

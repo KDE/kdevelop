@@ -10,7 +10,3 @@ SUBDIRS( pgioptions )
 #
 #SUBDIRS = pgioptions
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

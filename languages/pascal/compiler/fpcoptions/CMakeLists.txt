@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevfpcoptions_PART_SRCS
 fpcoptionsplugin.cpp
 optiontabs.cpp
@@ -31,7 +33,3 @@ ADD_LIBRARY(kdevfpcoptions SHARED ${kdevfpcoptions_PART_SRCS})
 #
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

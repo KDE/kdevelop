@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevhaskellproject_PART_SRCS
 haskellproject_part.cpp
 haskellprojectoptionsdlg.cpp
@@ -5,11 +7,11 @@ haskellprojectoptionsdlg.cpp
 
 KDE_AUTOMOC(${kdevhaskellproject_PART_SRCS})
 
-SET(
+SET( kdevhaskellproject_UI
 haskellproject_optionsdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevhaskellproject_PART_SRCS ${kdevhaskellproject_UI}
+KDE_ADD_UI_FILES(kdevhaskellproject_PART_SRCS ${kdevhaskellproject_UI} )
 
 ADD_LIBRARY(kdevhaskellproject SHARED ${kdevhaskellproject_PART_SRCS})
 
@@ -38,7 +40,3 @@ ADD_LIBRARY(kdevhaskellproject SHARED ${kdevhaskellproject_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevhaskellproject
 #rc_DATA = kdevhaskellproject.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

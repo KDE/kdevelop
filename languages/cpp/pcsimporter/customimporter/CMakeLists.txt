@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces )
+
 SET(kdevcustompcsimporter_LIB_SRCS
 kdevcustomimporter.cpp
 settingsdialog.cpp
@@ -5,11 +7,11 @@ settingsdialog.cpp
 
 KDE_AUTOMOC(${kdevcustompcsimporter_LIB_SRCS})
 
-SET(
+SET( kdevcustompcsimporter_UI
 settingsdialogbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevcustompcsimporter_LIB_SRCS ${kdevcustompcsimporter_UI}
+KDE_ADD_UI_FILES(kdevcustompcsimporter_LIB_SRCS ${kdevcustompcsimporter_UI} )
 
 ADD_LIBRARY(kdevcustompcsimporter SHARED ${kdevcustompcsimporter_LIB_SRCS})
 
@@ -29,7 +31,3 @@ ADD_LIBRARY(kdevcustompcsimporter SHARED ${kdevcustompcsimporter_LIB_SRCS})
 #	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la
 #libkdevcustompcsimporter_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
 #kde_services_DATA = kdevpcscustomimporter.desktop
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor )
+
 SET(kdevbuildtoolswidgets_LIB_SRCS
 runoptionswidget.cpp
 makeoptionswidget.cpp
@@ -11,7 +13,7 @@ removesubprojectdialog.cpp
 
 KDE_AUTOMOC(${kdevbuildtoolswidgets_LIB_SRCS})
 
-SET(
+SET( kdevbuildtoolswidgets_UI
 runoptionswidgetbase.ui
 makeoptionswidgetbase.ui
 subclassesdlgbase.ui
@@ -19,7 +21,7 @@ environmentvariableswidgetbase.ui
 removesubprojectdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevbuildtoolswidgets_LIB_SRCS ${kdevbuildtoolswidgets_UI}
+KDE_ADD_UI_FILES(kdevbuildtoolswidgets_LIB_SRCS ${kdevbuildtoolswidgets_UI} )
 
 ADD_LIBRARY(kdevbuildtoolswidgets SHARED ${kdevbuildtoolswidgets_LIB_SRCS})
 
@@ -53,7 +55,3 @@ ADD_LIBRARY(kdevbuildtoolswidgets SHARED ${kdevbuildtoolswidgets_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Buildtool Widgets Library
 #DOXYGEN_DOCDIRPREFIX = kdevbt
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

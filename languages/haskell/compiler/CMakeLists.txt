@@ -10,7 +10,3 @@ SUBDIRS( ghcoptions )
 #
 #SUBDIRS = ghcoptions
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -12,7 +12,3 @@ SUBDIRS( parsers widgets base )
 #
 #DOXYGEN_EMPTY = YES
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

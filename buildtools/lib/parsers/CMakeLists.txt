@@ -1,4 +1,4 @@
-SUBDIRS( qmake  )
+SUBDIRS( qmake autotools )
 
 
 
@@ -8,11 +8,7 @@ SUBDIRS( qmake  )
 ## project management for the sole purpose that they
 ## can be shared between parts.
 #
-#SUBDIRS = qmake 
+#SUBDIRS = qmake autotools
 #
 #DOXYGEN_EMPTY = YES
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

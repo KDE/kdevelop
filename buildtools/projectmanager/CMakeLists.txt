@@ -1,4 +1,6 @@
-SUBDIRS( interfaces . importers builders )
+SUBDIRS( interfaces importers builders )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor )
 
 SET(kdevprojectmanager_PART_SRCS
 kdevprojectmanager_part.cpp
@@ -41,7 +43,3 @@ ADD_LIBRARY(kdevprojectmanager SHARED ${kdevprojectmanager_PART_SRCS})
 #
 #DOXYGEN_EMPTY = YES
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

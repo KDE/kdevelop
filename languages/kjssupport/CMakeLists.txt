@@ -9,11 +9,11 @@ subclassingdlg.cpp
 
 KDE_AUTOMOC(${kdevkjssupport_PART_SRCS})
 
-SET(
+SET( kdevkjssupport_UI
 subclassingdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevkjssupport_PART_SRCS ${kdevkjssupport_UI}
+KDE_ADD_UI_FILES(kdevkjssupport_PART_SRCS ${kdevkjssupport_UI} )
 
 ADD_LIBRARY(kdevkjssupport SHARED ${kdevkjssupport_PART_SRCS})
 
@@ -43,7 +43,3 @@ ADD_LIBRARY(kdevkjssupport SHARED ${kdevkjssupport_PART_SRCS})
 #
 #SUBDIRS = template subclassing_template
 #noinst_HEADERS =  kjsproblems.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

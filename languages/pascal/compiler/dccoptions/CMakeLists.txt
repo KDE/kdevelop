@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevdccoptions_PART_SRCS
 dccoptionsplugin.cpp
 optiontabs.cpp
@@ -27,7 +29,3 @@ ADD_LIBRARY(kdevdccoptions SHARED ${kdevdccoptions_PART_SRCS})
 #
 #servicedir = $(kde_servicesdir)
 #service_DATA = kdevdccoptions.desktop
-
-#######################
-#previous CMakeLists.txt contents follow:
-

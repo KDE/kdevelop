@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevghcoptions_PART_SRCS
 ghcoptionsplugin.cpp
 )
@@ -31,7 +33,3 @@ ADD_LIBRARY(kdevghcoptions SHARED ${kdevghcoptions_PART_SRCS})
 #
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -8,7 +8,3 @@
 ##indexdir = ${kde_datadir}/devdoctreeview/indices
 ##index_DATA = ruby.index
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extras )
+
 SET(kdevpgioptions_PART_SRCS
 pgioptionsfactory.cpp
 pgioptionsplugin.cpp
@@ -29,7 +31,3 @@ ADD_LIBRARY(kdevpgioptions SHARED ${kdevpgioptions_PART_SRCS})
 #servicedir = $(kde_servicesdir)
 #service_DATA = kdevpghpfoptions.desktop kdevpgf77options.desktop
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -6,7 +6,3 @@
 #template_DATA = java
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(projectmanager_interfaces_LIB_SRCS
 kdevprojectimporter.cpp
 kdevprojectmodel.cpp
@@ -45,7 +47,3 @@ ADD_LIBRARY(projectmanager_interfaces SHARED ${projectmanager_interfaces_LIB_SRC
 #DOXYGEN_PROJECTNAME = KDevelop Project Manager Interfaces Library
 #DOXYGEN_DOCDIRPREFIX = kdevpm
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

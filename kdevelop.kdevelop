@@ -1,9 +1,9 @@
 <!DOCTYPE kdevelop>
 <kdevelop>
   <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-  <absoluteprojectpath>true</absoluteprojectpath>
+    <projectmanagement>KDevCustomProject</projectmanagement>
+    <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
+    <absoluteprojectpath>true</absoluteprojectpath>
     <author>KDevelop Authors</author>
     <email>kdevelop-devel@kdevelop.org</email>
     <version>CVS</version>
@@ -115,9 +115,9 @@
       </runarguments>
     </run>
     <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-  <absoluteprojectpath>true</absoluteprojectpath>
+      <projectmanagement>KDevCustomProject</projectmanagement>
+      <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
+      <absoluteprojectpath>true</absoluteprojectpath>
       <useconfiguration>default</useconfiguration>
       <activetarget>parts/annotation/libkdevannotation.la</activetarget>
     </general>
@@ -148,10 +148,10 @@
   </kdevautoproject>
   <kdevfilecreate>
     <filetypes>
-      <type icon="source_h" ext="h" name="C/C++ header" create="template" >
+      <type icon="source_h" ext="h" create="template" name="C/C++ header" >
         <descr>A new empty header file for C or C++.</descr>
       </type>
-      <type icon="source_cpp" ext="cpp" name="C++ source" create="template" >
+      <type icon="source_cpp" ext="cpp" create="template" name="C++ source" >
         <descr>A new empty C++ file.</descr>
       </type>
     </filetypes>
@@ -212,9 +212,9 @@
   </kdevcvsservice>
   <kdevdebugger>
     <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-  <absoluteprojectpath>true</absoluteprojectpath>
+      <projectmanagement>KDevCustomProject</projectmanagement>
+      <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
+      <absoluteprojectpath>true</absoluteprojectpath>
       <programargs/>
       <gdbpath/>
       <dbgshell>libtool</dbgshell>

@@ -4,6 +4,8 @@ kchmpart.cpp
 
 KDE_AUTOMOC(${kchmpart_PART_SRCS})
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/widgets/)
+
 ADD_LIBRARY(kchmpart SHARED ${kchmpart_PART_SRCS})
 
 

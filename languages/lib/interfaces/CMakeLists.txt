@@ -26,7 +26,3 @@ ADD_LIBRARY(lang_interfaces SHARED ${lang_interfaces_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Language Support Interfaces Library
 #DOXYGEN_DOCDIRPREFIX = kdevlang
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

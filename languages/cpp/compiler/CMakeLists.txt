@@ -10,7 +10,3 @@ SUBDIRS( gccoptions )
 #
 #SUBDIRS = gccoptions
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

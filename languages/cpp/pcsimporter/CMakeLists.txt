@@ -7,7 +7,3 @@ SUBDIRS( qtimporter kdelibsimporter customimporter )
 #INCLUDES = 
 #METASOURCES = AUTO
 #SUBDIRS = qtimporter kdelibsimporter customimporter
-
-#######################
-#previous CMakeLists.txt contents follow:
-

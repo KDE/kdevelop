@@ -1,5 +1,7 @@
 SUBDIRS( file_templates app_templates compiler doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevfortransupport_PART_SRCS
 fortransupportpart.cpp
 fixedformparser.cpp
@@ -8,11 +10,11 @@ ftnchekconfigwidget.cpp
 
 KDE_AUTOMOC(${kdevfortransupport_PART_SRCS})
 
-SET(
+SET( kdevfortransupport_UI
 ftnchekconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevfortransupport_PART_SRCS ${kdevfortransupport_UI}
+KDE_ADD_UI_FILES(kdevfortransupport_PART_SRCS ${kdevfortransupport_UI} )
 
 ADD_LIBRARY(kdevfortransupport SHARED ${kdevfortransupport_PART_SRCS})
 
@@ -40,7 +42,3 @@ ADD_LIBRARY(kdevfortransupport SHARED ${kdevfortransupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevfortransupport
 #rc_DATA = kdevfortransupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -9,7 +9,3 @@
 #
 ##indexdir = ${kde_datadir}/devdoctreeview/indices
 ##index_DATA = libc.index libstdc++.index stl.index kde2book.index
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevcustomproject_PART_SRCS
 customprojectpart.cpp
 custombuildoptionswidget.cpp
@@ -6,12 +8,12 @@ custommakeconfigwidget.cpp
 
 KDE_AUTOMOC(${kdevcustomproject_PART_SRCS})
 
-SET(
+SET( kdevcustomproject_UI
 custombuildoptionswidgetbase.ui
 custommakeconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevcustomproject_PART_SRCS ${kdevcustomproject_UI}
+KDE_ADD_UI_FILES(kdevcustomproject_PART_SRCS ${kdevcustomproject_UI} )
 
 ADD_LIBRARY(kdevcustomproject SHARED ${kdevcustomproject_PART_SRCS})
 
@@ -40,7 +42,3 @@ ADD_LIBRARY(kdevcustomproject SHARED ${kdevcustomproject_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevcustomproject
 #rc_DATA = kdevcustomproject.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

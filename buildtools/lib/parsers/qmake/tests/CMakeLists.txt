@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor ${CMAKE_SOURCE_DIR}/buildtools/lib/parsers/qmake )
+
 
 
 #original Makefile.am contents follow:
@@ -23,7 +25,3 @@
 #viewer_LDFLAGS = $(all_libraries) $(LIB_KDECORE) $(KDE_RPATH)
 #viewer_LDADD = $(top_builddir)/buildtools/lib/parsers/qmake/libkdevqmakeparser.la
 #viewer_SOURCES = viewer.cpp viewer_main.cpp viewerbase.ui
-
-#######################
-#previous CMakeLists.txt contents follow:
-

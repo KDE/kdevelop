@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/debugger ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevrbdebugger_PART_SRCS
 debuggerpart.cpp
 dbgcontroller.cpp
@@ -49,7 +51,3 @@ ADD_LIBRARY(kdevrbdebugger SHARED ${kdevrbdebugger_PART_SRCS})
 #rcdir = $(kde_datadir)/kdevrbdebugger
 #rc_DATA = kdevrbdebugger.rc
 #noinst_HEADERS =  rdbtable.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevadaproject_PART_SRCS
 adaproject_part.cpp
 adaproject_widget.cpp
@@ -8,11 +10,11 @@ service.cpp
 
 KDE_AUTOMOC(${kdevadaproject_PART_SRCS})
 
-SET(
+SET( kdevadaproject_UI
 adaproject_optionsdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevadaproject_PART_SRCS ${kdevadaproject_UI}
+KDE_ADD_UI_FILES(kdevadaproject_PART_SRCS ${kdevadaproject_UI} )
 
 ADD_LIBRARY(kdevadaproject SHARED ${kdevadaproject_PART_SRCS})
 
@@ -38,7 +40,3 @@ ADD_LIBRARY(kdevadaproject SHARED ${kdevadaproject_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevadaproject
 #rc_DATA = kdevadaproject.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

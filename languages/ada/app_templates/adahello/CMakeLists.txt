@@ -18,7 +18,3 @@
 #
 #CLEANFILES = *.tar.gz
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

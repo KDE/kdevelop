@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevtrollproject_PART_SRCS
 caret.cpp
 filebuffer.cpp
@@ -13,14 +15,14 @@ pathutil.cpp
 
 KDE_AUTOMOC(${kdevtrollproject_PART_SRCS})
 
-SET(
+SET( kdevtrollproject_UI
 projectconfigurationdlgbase.ui
 filepropertybase.ui
 newwidgetdlgbase.ui
 choosesubprojectdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevtrollproject_PART_SRCS ${kdevtrollproject_UI}
+KDE_ADD_UI_FILES(kdevtrollproject_PART_SRCS ${kdevtrollproject_UI} )
 
 ADD_LIBRARY(kdevtrollproject SHARED ${kdevtrollproject_PART_SRCS})
 
@@ -58,7 +60,3 @@ ADD_LIBRARY(kdevtrollproject SHARED ${kdevtrollproject_PART_SRCS})
 #rcdir = $(kde_datadir)/kdevtrollproject
 #rc_DATA = kdevtrollproject.rc
 #noinst_HEADERS = trolllistview.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

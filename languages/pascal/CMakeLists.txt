@@ -1,5 +1,9 @@
 SUBDIRS( file_templates app_templates compiler doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/antlr ${CMAKE_SOURCE_DIR}/lib/catalog ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/bdb/include/ ${CMAKE_SOURCE_DIR} )
+
+ADD_DEFINITIONS(-fexceptions)
+
 SET(kdevpascalsupport_PART_SRCS
 pascalsupport_part.cpp
 PascalLexer.cpp
@@ -11,11 +15,11 @@ problemreporter.cpp
 
 KDE_AUTOMOC(${kdevpascalsupport_PART_SRCS})
 
-SET(
+SET( kdevpascalsupport_UI
 configproblemreporter.ui
 )
 
-KDE_ADD_UI_FILES(kdevpascalsupport_PART_SRCS ${kdevpascalsupport_UI}
+KDE_ADD_UI_FILES(kdevpascalsupport_PART_SRCS ${kdevpascalsupport_UI} )
 
 ADD_LIBRARY(kdevpascalsupport SHARED ${kdevpascalsupport_PART_SRCS})
 
@@ -56,7 +60,3 @@ ADD_LIBRARY(kdevpascalsupport SHARED ${kdevpascalsupport_PART_SRCS})
 #
 #templatedir = ${kde_datadir}/kdevabbrev/templates
 #template_DATA = pascaltemplates
-
-#######################
-#previous CMakeLists.txt contents follow:
-

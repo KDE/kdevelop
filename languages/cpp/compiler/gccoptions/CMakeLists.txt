@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevgccoptions_PART_SRCS
 gccoptionsplugin.cpp
 )
@@ -30,7 +32,3 @@ ADD_LIBRARY(kdevgccoptions SHARED ${kdevgccoptions_PART_SRCS})
 #
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

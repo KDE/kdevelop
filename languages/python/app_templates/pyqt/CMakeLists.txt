@@ -22,6 +22,3 @@
 #archive_DATA = $(templateName).tar.gz ${templateName}.png
 #
 #CLEANFILES = *.tar.gz
-#######################
-#previous CMakeLists.txt contents follow:
-

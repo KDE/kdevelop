@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor )
+
 SET(kdevbuildbase_LIB_SRCS
 kdevbuildtool.cpp
 )
@@ -24,7 +26,3 @@ ADD_LIBRARY(kdevbuildbase SHARED ${kdevbuildbase_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Buildtool Base Library
 #DOXYGEN_DOCDIRPREFIX = kdevbt
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

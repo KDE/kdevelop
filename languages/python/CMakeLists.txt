@@ -1,5 +1,7 @@
 SUBDIRS( app_templates file_templates doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/languages/lib/designer_integration ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevpythonsupport_PART_SRCS
 pythonsupportpart.cpp
 pythonconfigwidget.cpp
@@ -9,11 +11,11 @@ qtdesignerpythonintegration.cpp
 
 KDE_AUTOMOC(${kdevpythonsupport_PART_SRCS})
 
-SET(
+SET( kdevpythonsupport_UI
 pythonconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevpythonsupport_PART_SRCS ${kdevpythonsupport_UI}
+KDE_ADD_UI_FILES(kdevpythonsupport_PART_SRCS ${kdevpythonsupport_UI} )
 
 ADD_LIBRARY(kdevpythonsupport SHARED ${kdevpythonsupport_PART_SRCS})
 
@@ -52,7 +54,3 @@ ADD_LIBRARY(kdevpythonsupport SHARED ${kdevpythonsupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevpythonsupport
 #rc_DATA = kdevpythonsupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

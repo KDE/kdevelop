@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevautoproject_PART_SRCS
 autoprojectpart.cpp
 autoprojectwidget.cpp
@@ -31,7 +33,7 @@ autotoolsaction.cpp
 
 KDE_AUTOMOC(${kdevautoproject_PART_SRCS})
 
-SET(
+SET( kdevautoproject_UI
 configureoptionswidgetbase.ui
 subprojectoptionsdlgbase.ui
 targetoptionsdlgbase.ui
@@ -49,7 +51,7 @@ managecustomcommandsbase.ui
 autoprojectviewbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevautoproject_PART_SRCS ${kdevautoproject_UI}
+KDE_ADD_UI_FILES(kdevautoproject_PART_SRCS ${kdevautoproject_UI} )
 
 ADD_LIBRARY(kdevautoproject SHARED ${kdevautoproject_PART_SRCS})
 
@@ -93,7 +95,3 @@ ADD_LIBRARY(kdevautoproject SHARED ${kdevautoproject_PART_SRCS})
 #rc_DATA = kdevautoproject.rc
 #
 #noinst_HEADERS = managecustomcommand.h autotoolsaction.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

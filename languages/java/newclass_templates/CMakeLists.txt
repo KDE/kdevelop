@@ -6,7 +6,3 @@
 #newclassdir = ${javasupportdatadir}/newclass
 #
 #newclass_DATA = java_source
-
-#######################
-#previous CMakeLists.txt contents follow:
-

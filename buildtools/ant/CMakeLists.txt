@@ -1,15 +1,17 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevantproject_PART_SRCS
 antprojectpart.cpp
 )
 
 KDE_AUTOMOC(${kdevantproject_PART_SRCS})
 
-SET(
+SET( kdevantproject_UI
 antoptionswidget.ui
 classpathwidget.ui
 )
 
-KDE_ADD_UI_FILES(kdevantproject_PART_SRCS ${kdevantproject_UI}
+KDE_ADD_UI_FILES(kdevantproject_PART_SRCS ${kdevantproject_UI} )
 
 ADD_LIBRARY(kdevantproject SHARED ${kdevantproject_PART_SRCS})
 
@@ -38,7 +40,3 @@ ADD_LIBRARY(kdevantproject SHARED ${kdevantproject_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevantproject
 #rc_DATA = kdevantproject.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

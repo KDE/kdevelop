@@ -1,5 +1,7 @@
 SUBDIRS( app_templates file_templates doc debugger )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/designer_integration ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevrubysupport_PART_SRCS
 rubysupport_part.cpp
 rubyconfigwidget.cpp
@@ -9,11 +11,11 @@ rubyimplementationwidget.cpp
 
 KDE_AUTOMOC(${kdevrubysupport_PART_SRCS})
 
-SET(
+SET( kdevrubysupport_UI
 rubyconfigwidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevrubysupport_PART_SRCS ${kdevrubysupport_UI}
+KDE_ADD_UI_FILES(kdevrubysupport_PART_SRCS ${kdevrubysupport_UI} )
 
 ADD_LIBRARY(kdevrubysupport SHARED ${kdevrubysupport_PART_SRCS})
 
@@ -49,7 +51,3 @@ ADD_LIBRARY(kdevrubysupport SHARED ${kdevrubysupport_PART_SRCS})
 #picsdirdir = $(kde_datadir)/kdevrubysupport/pics
 #picsdir_DATA = ruby_config.png ruby_run.png
 #noinst_HEADERS = qtdesignerrubyintegration.h rubyimplementationwidget.h
-
-#######################
-#previous CMakeLists.txt contents follow:
-

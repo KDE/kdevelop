@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/external_interfaces )
+
 SET(kdevscriptproject_PART_SRCS
 scriptprojectpart.cpp
 scriptoptionswidget.cpp
@@ -6,11 +8,11 @@ scriptnewfiledlg.cpp
 
 KDE_AUTOMOC(${kdevscriptproject_PART_SRCS})
 
-SET(
+SET( kdevscriptproject_UI
 scriptoptionswidgetbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevscriptproject_PART_SRCS ${kdevscriptproject_UI}
+KDE_ADD_UI_FILES(kdevscriptproject_PART_SRCS ${kdevscriptproject_UI} )
 
 ADD_LIBRARY(kdevscriptproject SHARED ${kdevscriptproject_PART_SRCS})
 
@@ -44,7 +46,3 @@ ADD_LIBRARY(kdevscriptproject SHARED ${kdevscriptproject_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevscriptproject
 #rc_DATA = kdevscriptproject.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

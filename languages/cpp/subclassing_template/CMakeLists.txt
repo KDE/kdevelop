@@ -6,7 +6,3 @@
 #subclassingdir = ${cppsupportdatadir}/subclassing
 #
 #subclassing_DATA = subclass_template.h subclass_template.cpp
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevmakebuilder_LIB_SRCS
 kdevmakebuilder.cpp
 )
@@ -34,7 +36,3 @@ ADD_LIBRARY(kdevmakebuilder SHARED ${kdevmakebuilder_LIB_SRCS})
 #    
 #libkdevmakebuilder_la_LDFLAGS = \
 #    -module $(all_libraries) $(KDE_PLUGIN)
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,4 +1,6 @@
-SUBDIRS( . tests )
+SUBDIRS( tests )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor )
 
 SET(kdevautotoolsparser_STAT_SRCS
 autotoolsast.cpp
@@ -38,7 +40,3 @@ ADD_LIBRARY(kdevautotoolsparser STATIC ${kdevautotoolsparser_STAT_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop AutoTools Parser
 #DOXYGEN_DOCDIRPREFIX = kdevparser
 #include ../../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

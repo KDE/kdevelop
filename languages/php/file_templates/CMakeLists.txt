@@ -6,7 +6,3 @@
 #template_DATA = php
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

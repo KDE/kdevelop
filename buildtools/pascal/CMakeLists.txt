@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevpascalproject_PART_SRCS
 pascalproject_part.cpp
 pascalproject_widget.cpp
@@ -8,11 +10,11 @@ service.cpp
 
 KDE_AUTOMOC(${kdevpascalproject_PART_SRCS})
 
-SET(
+SET( kdevpascalproject_UI
 pascalproject_optionsdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevpascalproject_PART_SRCS ${kdevpascalproject_UI}
+KDE_ADD_UI_FILES(kdevpascalproject_PART_SRCS ${kdevpascalproject_UI} )
 
 ADD_LIBRARY(kdevpascalproject SHARED ${kdevpascalproject_PART_SRCS})
 
@@ -44,7 +46,3 @@ ADD_LIBRARY(kdevpascalproject SHARED ${kdevpascalproject_PART_SRCS})
 #
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -10,7 +10,3 @@ SUBDIRS( dccoptions  fpcoptions )
 #
 #SUBDIRS = dccoptions  fpcoptions
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces )
+
 SET(lang_debugger_LIB_SRCS
 kdevdebugger.cpp
 debugger.cpp
@@ -23,7 +25,3 @@ ADD_LIBRARY(lang_debugger SHARED ${lang_debugger_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Debugger Support Library
 #DOXYGEN_DOCDIRPREFIX = kdevlang
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/languages/lib/debugger ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevjavadebugger_PART_SRCS
 javadebuggerpart.cpp
 dbgcontroller.cpp
@@ -44,7 +46,3 @@ ADD_LIBRARY(kdevjavadebugger SHARED ${kdevjavadebugger_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevjavadebugger
 #rc_DATA = kdevjavadebugger.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

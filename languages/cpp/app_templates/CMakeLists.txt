@@ -14,7 +14,3 @@ SUBDIRS( kapp kpartapp kpartplugin kcmodule kicker kioslave kdevpart kdevpart2 c
 #
 #profileskdecppdir = $(kde_datadir)/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CppIDE/KDECppIDE
 #profileskdecpp_DATA = kdecpp.appwizard
-
-#######################
-#previous CMakeLists.txt contents follow:
-

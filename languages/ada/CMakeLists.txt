@@ -1,5 +1,9 @@
 SUBDIRS( app_templates file_templates doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/antlr ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR})
+
+ADD_DEFINITIONS(-fexceptions)
+
 SET(kdevadasupport_PART_SRCS
 adasupportpart.cpp
 problemreporter.cpp
@@ -15,12 +19,12 @@ AdaStoreWalker.cpp
 
 KDE_AUTOMOC(${kdevadasupport_PART_SRCS})
 
-SET(
+SET( kdevadasupport_UI
 addclassdlg.ui
 configproblemreporter.ui
 )
 
-KDE_ADD_UI_FILES(kdevadasupport_PART_SRCS ${kdevadasupport_UI}
+KDE_ADD_UI_FILES(kdevadasupport_PART_SRCS ${kdevadasupport_UI} )
 
 ADD_LIBRARY(kdevadasupport SHARED ${kdevadasupport_PART_SRCS})
 
@@ -69,7 +73,3 @@ ADD_LIBRARY(kdevadasupport SHARED ${kdevadasupport_PART_SRCS})
 #rc_DATA = kdevadasupport.rc
 #
 #KDE_OPTIONS = nofinal
-
-#######################
-#previous CMakeLists.txt contents follow:
-

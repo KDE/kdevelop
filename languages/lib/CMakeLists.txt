@@ -10,7 +10,3 @@ SUBDIRS( interfaces debugger designer_integration )
 #
 #DOXYGEN_EMPTY = YES
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

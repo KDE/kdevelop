@@ -1,5 +1,7 @@
 SUBDIRS( app_templates doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/compat ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevsqlsupport_PART_SRCS
 sqlsupport_part.cpp
 sqlactions.cpp
@@ -8,11 +10,11 @@ sqloutputwidget.cpp
 
 KDE_AUTOMOC(${kdevsqlsupport_PART_SRCS})
 
-SET(
+SET( kdevsqlsupport_UI
 sqlconfigwidget.ui
 )
 
-KDE_ADD_UI_FILES(kdevsqlsupport_PART_SRCS ${kdevsqlsupport_UI}
+KDE_ADD_UI_FILES(kdevsqlsupport_PART_SRCS ${kdevsqlsupport_UI} )
 
 ADD_LIBRARY(kdevsqlsupport SHARED ${kdevsqlsupport_PART_SRCS})
 
@@ -40,7 +42,3 @@ ADD_LIBRARY(kdevsqlsupport SHARED ${kdevsqlsupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevsqlsupport
 #rc_DATA = kdevsqlsupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

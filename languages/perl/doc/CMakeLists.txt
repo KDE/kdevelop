@@ -8,7 +8,3 @@
 ##indexdir = ${kde_datadir}/devdoctreeview/indices
 ##index_DATA =
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

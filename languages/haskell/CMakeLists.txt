@@ -1,5 +1,7 @@
 SUBDIRS( app_templates file_templates compiler doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/antlr ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevhaskellsupport_PART_SRCS
 haskellsupport_part.cpp
 )
@@ -32,7 +34,3 @@ ADD_LIBRARY(kdevhaskellsupport SHARED ${kdevhaskellsupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevhaskellsupport
 #rc_DATA = kdevhaskellsupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

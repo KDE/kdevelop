@@ -5,7 +5,3 @@
 #kjssupportdatadir = ${kde_datadir}/kdevkjssupport
 #subclassingdir = ${kjssupportdatadir}/subclassing
 #subclassing_DATA =  subclass_template.js
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,5 +1,7 @@
 SUBDIRS( app_templates doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdevbashsupport_PART_SRCS
 bashsupport_part.cpp
 )
@@ -32,7 +34,3 @@ ADD_LIBRARY(kdevbashsupport SHARED ${kdevbashsupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevbashsupport
 #rc_DATA = kdevbashsupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

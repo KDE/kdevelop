@@ -22,7 +22,3 @@
 #install-data-local: script.local
 #	$(mkinstalldirs) $(DESTDIR)$(jshellodir)
 #	$(INSTALL_DATA) script.local $(DESTDIR)$(jshellodir)/script
-
-#######################
-#previous CMakeLists.txt contents follow:
-

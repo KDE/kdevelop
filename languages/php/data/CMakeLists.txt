@@ -8,7 +8,3 @@
 #	mkdir -p $(DESTDIR)$(phpsupportdatadir)
 #	$(INSTALL_DATA) $(srcdir)/phpfunctions $(DESTDIR)$(phpsupportdatadir)/phpfunctions
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

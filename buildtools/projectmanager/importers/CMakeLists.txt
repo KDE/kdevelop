@@ -6,7 +6,3 @@ SUBDIRS( automake custom qmake )
 
 #METASOURCES = AUTO
 #SUBDIRS = automake custom qmake
-
-#######################
-#previous CMakeLists.txt contents follow:
-

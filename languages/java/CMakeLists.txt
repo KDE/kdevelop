@@ -1,5 +1,9 @@
 SUBDIRS( file_templates app_templates debugger doc )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/antlr ${CMAKE_SOURCE_DIR}/lib/catalog ${CMAKE_SOURCE_DIR}/lib/compat ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/bdb/include/ ${CMAKE_SOURCE_DIR} )
+
+ADD_DEFINITIONS(-fexceptions)
+
 SET(kdevjavasupport_PART_SRCS
 JavaLexer.cpp
 KDevJavaSupportIface.cpp
@@ -12,16 +16,21 @@ javasupport_utils.cpp
 problemreporter.cpp
 driver.cpp
 kdevdriver.cpp
-KDevJavaSupportIface.skel
 )
 
 KDE_AUTOMOC(${kdevjavasupport_PART_SRCS})
 
-SET(
+SET( kdevjavasupport_UI
 configproblemreporter.ui
 )
 
-KDE_ADD_UI_FILES(kdevjavasupport_PART_SRCS ${kdevjavasupport_UI}
+KDE_ADD_UI_FILES(kdevjavasupport_PART_SRCS ${kdevjavasupport_UI} )
+
+SET( kdevjavasupport_DCOP_SRCS
+KDevJavaSupportIface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevjavasupport_PART_SRCS ${kdevjavasupport_DCOP_SRCS})
 
 ADD_LIBRARY(kdevjavasupport SHARED ${kdevjavasupport_PART_SRCS})
 
@@ -66,7 +75,3 @@ ADD_LIBRARY(kdevjavasupport SHARED ${kdevjavasupport_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevjavasupport
 #rc_DATA = kdevjavasupport.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-
