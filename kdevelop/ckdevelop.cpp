@@ -828,7 +828,7 @@ void CKDevelop::slotBuildRun()
   bool isDirty=isProjectDirty();
   int qYesNoCancel=QMessageBox::Yes;
 
-  if (isDirty)
+  if (!prj->isCustomProject() && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
@@ -837,7 +837,7 @@ void CKDevelop::slotBuildRun()
   {
     beep=false;
     prj->writeProject();
-    if (isDirty && qYesNoCancel==QMessageBox::Yes)
+    if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
     {
       next_job = "run";
       slotBuildMake();
@@ -852,7 +852,7 @@ void CKDevelop::slotBuildRunWithArgs()
   bool isDirty=isProjectDirty();
   int qYesNoCancel=QMessageBox::Yes;
 
-  if (isDirty)
+  if (!prj->isCustomProject() && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
@@ -866,7 +866,7 @@ void CKDevelop::slotBuildRunWithArgs()
 	prj->setExecuteArgs(argdlg.getArguments());		
 	beep=false;
 	prj->writeProject();
-        if (isDirty && qYesNoCancel==QMessageBox::Yes)
+        if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
         {
           next_job = "run_with_args";
           slotBuildMake();
@@ -1286,7 +1286,7 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
   bool isDirty=isProjectDirty();
   int qYesNoCancel=QMessageBox::Yes;
 
-  if (isDirty)
+  if (!prj->isCustomProject() && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the debug session?"),
                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
@@ -1298,7 +1298,7 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
 
     beep=false;
     prj->writeProject();
-    if (isDirty && qYesNoCancel==QMessageBox::Yes)
+    if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
     {
       if (bWithArgs)
         next_job="debug_with_args";
@@ -1553,7 +1553,11 @@ void CKDevelop::slotBuildMake(){
     process << make_cmd;
   }
   beep = true;
-	process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+
+  // clear the flag that a Makefile.am has changed
+  prj->clearMakefileAmChanged();
+
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
 // void CKDevelop::slotBuildMakeWith(){

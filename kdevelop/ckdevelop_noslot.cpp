@@ -105,8 +105,6 @@ bool CKDevelop::isProjectDirty()
   // check if a Makefile.am has changed
   if (prj->getMakefileAmChanged())
     isClean=false;
-  // clear the flag to get a new situation
-  prj->clearMakefileAmChanged();
 
   setInfoModified(header_widget->getName(), header_widget->isModified());
   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
@@ -115,7 +113,8 @@ bool CKDevelop::isProjectDirty()
   for(filename=listAllPrjFiles.first(); isClean && filename != 0; filename=listAllPrjFiles.next())
   {
     // only check valid names and don't check files like *kdevprj or AUTHORS etc.
-    if (*filename!='\0' && CProject::getType(filename)!=DATA)
+    if (*filename!='\0' && CProject::getType(filename)!=DATA &&
+           CProject::getType(filename)!=KDEV_DIALOG)
     {
       TEditInfo *actual_info=getInfoFromFilename(prjDir+filename);
       QFileInfo src_info(prjDir + filename);
