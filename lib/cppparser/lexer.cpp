@@ -628,8 +628,10 @@ void Lexer::processDefine( Macro& m )
 	}
     }
 
-    m.setBody( body );
-    m_driver->addMacro( m );
+    if( !(m.name() == "signals" || m.name() == "slots") ){
+        m.setBody( body );
+        m_driver->addMacro( m );
+    }
 }
 
 void Lexer::processElse()
