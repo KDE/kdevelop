@@ -16,8 +16,8 @@
 class Caret
 {
   public:
-  long      m_row;
-  long      m_idx;
+  int      m_row;
+  int      m_idx;
             Caret();
             Caret(const int row, const int idx);
             Caret(const Caret& value);

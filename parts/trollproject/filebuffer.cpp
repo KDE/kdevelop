@@ -216,7 +216,7 @@ bool FileBuffer::getValues(const QString &variable,QStringList &plusList, QStrin
       valueString = "";
     else
       valueString = valueString + " ";
-    long lineNum=eqSign.m_row;
+    int lineNum=eqSign.m_row;
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
     while (line!="")
     {
@@ -265,7 +265,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     }
     QString line=m_buffer[eqSign.m_row];
     QChar effectOperator = line[eqSign.m_idx-1];
-    long lineNum=eqSign.m_row;
+    int lineNum=eqSign.m_row;
     curValues.clear();
     curValuesIgnore.clear();
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
@@ -352,7 +352,7 @@ void FileBuffer::getVariableValueSetModes(const QString &variable,QPtrList<FileB
 
     QString line=m_buffer[eqSign.m_row];
     QChar effectOperator = line[eqSign.m_idx-1];
-    long lineNum=eqSign.m_row;
+    int lineNum=eqSign.m_row;
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
     while (!line.isEmpty())
     {
@@ -554,7 +554,7 @@ QStringList FileBuffer::popBlock(const Caret &blockStart, const Caret &blockEnd)
 //===============================================================================
 {
   QStringList result = copyBlock(blockStart,blockEnd);
-  long poprow;
+  int poprow;
   if (blockStart.m_idx==0)
   {
     pop(blockStart.m_row);
