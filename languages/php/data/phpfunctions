@@ -704,8 +704,8 @@ mssql:bool mssql_field_seek(int result_id, int offset)
 mssql:string mssql_result(int result_id, int row, mixed field)
 mssql:void mssql_min_error_severity(int severity)
 mssql:void mssql_min_message_severity(int severity)
-mysql:int mysql_connect([string hostname[
-mysql:int mysql_pconnect([string hostname[
+mysql:int mysql_connect([string hostname])
+mysql:int mysql_pconnect([string hostname])
 mysql:int mysql_close([int link_identifier])
 mysql:int mysql_select_db(string database_name [, int link_identifier])
 mysql:int mysql_create_db(string database_name [, int link_identifier])
