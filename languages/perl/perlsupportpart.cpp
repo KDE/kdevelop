@@ -91,7 +91,13 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
 
 
 PerlSupportPart::~PerlSupportPart()
-{}
+{
+  if (project())
+      projectClosed();
+
+  delete m_parser;
+  m_parser=0;
+}
 
 
 void PerlSupportPart::projectOpened()
@@ -120,11 +126,9 @@ void PerlSupportPart::maybeParse(const QString fileName)
     QString extension = fi.extension();
     if (extension == "pl" || extension == "pm") {
         kdDebug(9016) << "maybe " << fileName << endl;
-        if( codeModel()->hasFile(fileName) ){
-          emit aboutToRemoveSourceInfo( fileName );
-          codeModel()->removeFile( codeModel()->fileByName(fileName) );
-        }
+        removeWithReference(fileName);
         m_parser->parse(fileName);
+	emit addedSourceInfo( fileName);
     }
 }
 
@@ -136,9 +140,8 @@ void PerlSupportPart::addedFilesToProject(const QStringList &fileList)
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
+		maybeParse(project()->projectDirectory() + "/" + ( *it ));
 	}
-	emit updatedSourceInfo();
 }
 
 
@@ -149,10 +152,7 @@ void PerlSupportPart::removedFilesFromProject(const QStringList &fileList)
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
      QString fileName = project()->projectDirectory() + "/" + ( *it );
-     if( codeModel()->hasFile(fileName) ){
-      emit aboutToRemoveSourceInfo( fileName );
-      codeModel()->removeFile( codeModel()->fileByName(fileName) );
-     }
+     removeWithReference(fileName);
    }
   emit updatedSourceInfo();
 }
@@ -160,13 +160,15 @@ void PerlSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 void PerlSupportPart::savedFile(const QString &fileName)
 {
+    Q_UNUSED( fileName );
+#if 0  // not needed anymore
     kdDebug(9016) << "savedFile()" << endl;
 
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse(fileName);
-        m_parser->parseUseFiles();
         emit updatedSourceInfo();
     }
+#endif
 }
 
 
@@ -249,6 +251,7 @@ KMimeType::List PerlSupportPart::mimeTypes( )
 	list << mime;
     return list;
 }
+
 void PerlSupportPart::initialParse()
 {
     kdDebug(9016) << "initialParse()" << endl;
@@ -270,18 +273,16 @@ void PerlSupportPart::initialParse()
         bar->show( );
         int n = 0;
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-            kdDebug(9016) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
+//            kdDebug(9016) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
             maybeParse(project()->projectDirectory() + "/" + *it);
             //update progress bar
             bar->setProgress( n++ );
             if( (n%5) == 0 )
               kapp->processEvents();
         }
-
-        m_parser->parseUseFiles();
-
-
+        parseUseFiles();
         emit updatedSourceInfo();
+
         //remove progressbar
         mainWindow( )->statusBar( )->removeWidget( bar );
         delete bar;
@@ -293,5 +294,34 @@ void PerlSupportPart::initialParse()
     }
 }
 
+void PerlSupportPart::removeWithReference( const QString & fileName )
+{
+    kdDebug(9016) << "remove with references: " << fileName << endl;
+    //m_timestamp.remove( fileName );
+    if( !codeModel()->hasFile(fileName) )
+        return;
+
+    emit aboutToRemoveSourceInfo( fileName );
+    codeModel()->removeFile( codeModel()->fileByName(fileName) );
+}
+
+void PerlSupportPart::parseUseFiles()
+{
+ kdDebug(9016) << "parse addional libs" << endl;
+ return;
+ QString filename;
+ QStringList m_usefiles = m_parser->UseFiles();
+
+ //parse addional use files
+ for (QStringList::Iterator it = m_usefiles.begin(); it != m_usefiles.end() ;++it)
+ {
+        filename = m_parser->findLib(*it);
+       //if something found , parse it
+       if (!filename.isEmpty()) {
+            //kdDebug(9016) << "found " << filename << endl;
+            maybeParse(filename);
+       }
+ }
+}
 
 #include "perlsupportpart.moc"
