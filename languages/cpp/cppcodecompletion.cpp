@@ -291,8 +291,8 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 
 CppCodeCompletion::~CppCodeCompletion( )
 {
-    delete( m_repository );
-    delete( d );
+    delete m_repository;
+    delete d;
 }
 
 void CppCodeCompletion::slotTimeout()
@@ -304,7 +304,7 @@ void CppCodeCompletion::slotTimeout()
     m_activeCursor->cursorPositionReal( &nLine, &nCol );
 
     if( nLine != m_ccLine || nCol != m_ccColumn )
-	return;;
+	return;
 
     QString textLine = m_activeEditor->textLine( nLine );
     QChar ch = textLine[ nCol ];;
