@@ -1256,8 +1256,8 @@ void CPrjOptionsDlg::addMakePage()
              "files  are being considered for remaking, which file- "
              "times are being compared and with what results, which "
              "files  actually  need  to  be  remade, which implicit "
-             "rules are considered and which  are  applied---every­ "
-             "thing  interesting about how make decides what to do."));
+             "rules are considered and which  are  applied---everything "
+             "interesting about how make decides what to do."));
 
   QWhatsThis::add(m_optional_label, i18n("Set any other additional options for your make-program here."));
   QWhatsThis::add(m_optional_line, i18n("Set any other additional options for your make-program here."));
@@ -1291,8 +1291,8 @@ void CPrjOptionsDlg::addMakePage()
               "in order to fool future invocations of make."));
 
   QWhatsThis::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory "
-           "before and after other processing.  This may be  use­ "
-           "ful  for  tracking down errors from complicated nests "
+           "before and after other processing.  This may be  useful "
+           "for  tracking down errors from complicated nests "
            "of recursive make commands."));
 
   QWhatsThis::add(m_silent_operation, i18n("Silent operation; do not print the commands as they "
