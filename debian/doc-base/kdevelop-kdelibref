@@ -1,9 +1,0 @@
-Document: kdevelop-kdelibref
-Title: KDE Library Reference Guide
-Author: Ralf Nolden
-Abstract: The Reference Guide to C++ Application Design for the K Desktop Environment.
-Section: Apps/Programming
-
-Format: HTML
-Index: /usr/share/doc/kde/HTML/en/kdevelop/kde_libref/index.html
-Files: /usr/share/doc/kde/HTML/en/kdevelop/kde_libref/*.html

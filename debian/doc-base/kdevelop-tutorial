@@ -1,9 +1,0 @@
-Document: kdevelop-tutorial
-Title: KDE Applications Tutorial
-Author: Ralf Nolden
-Abstract: This is the KDE Application Tutorials Handbook for the KDevelop IDE.
-Section: Apps/Programming
-
-Format: HTML
-Index: /usr/share/doc/kde/HTML/en/kdevelop/tutorial/index.html
-Files: /usr/share/doc/kde/HTML/en/kdevelop/tutorial/*.html
