@@ -66,6 +66,10 @@ public: // Public methods to set attribute values
   void setExport( int aExport );
 
 public: // Public methods
+
+  /** Return a string made for persistant storage. */
+  void asPersistantString( QString &dataStr );
+
   /** Output the class as text on stdout */
   void out();
 

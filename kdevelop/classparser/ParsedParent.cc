@@ -138,3 +138,32 @@ void CParsedParent::out()
   
   cout << ")\n";
 }
+
+/*--------------------------------- CParsedClass::asPersistantString()
+ * asPersistantString()
+ *   Return a string made for persistant storage.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedParent::asPersistantString( QString &dataStr )
+{
+  dataStr = "";
+
+  switch(export)
+  {
+    case PUBLIC:
+      dataStr += "public";
+      break;
+    case PROTECTED:
+      dataStr += "protected";
+      break;
+    case PRIVATE:
+      dataStr += "private";
+      break;
+  }
+  dataStr += "\n";
+  dataStr += name + "\n";
+}

@@ -246,6 +246,36 @@ void CParsedMethod::asCppCode( QString &str )
   str += "{\n}\n";
 }
 
+/*--------------------------------- CParsedClass::asPersistantString()
+ * asPersistantString()
+ *   Return a string made for persistant storage.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedMethod::asPersistantString( QString &dataStr )
+{
+  QString str;
+  CParsedArgument *arg;
+
+  CParsedAttribute::asPersistantString( dataStr );
+
+  // Add arguments.
+  dataStr += arguments.count() + "\n";
+  for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
+  {
+    arg->asPersistantString( str );
+    dataStr += str;
+  }
+
+  dataStr += ( isVirtual ?  "true" : "false" );
+  dataStr += "\n";
+  dataStr += declaredOnLine + "\n";
+  dataStr += declaredInFile + "\n";
+}
+
 /*------------------------------------------ CParsedMethod::isEqual()
  * isEqual()
  *   Is the supplied method equal to this one(regarding type, name 

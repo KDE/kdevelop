@@ -141,3 +141,20 @@ void CParsedArgument::out()
   if( !name.isEmpty() )
     cout << " " << name;
 }
+
+/*----------------------------- CParsedArgument::asPersistantString()
+ * asPersistantString()
+ *   Return a string made for persistant storage.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedArgument::asPersistantString( QString &dataStr )
+{
+  dataStr = "";
+
+  dataStr += type + "\n";
+  dataStr += name + "\n";
+}

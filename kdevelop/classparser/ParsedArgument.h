@@ -70,6 +70,9 @@ public: // Public queries
   /** Return this arguments as a string. */
   void toString( QString &str );
 
+  /** Return a string made for persistant storage. */
+  void asPersistantString( QString &dataStr );
+
   /** Output this object to stdout */
   void out();
 };

@@ -508,3 +508,69 @@ void CParsedClass::out()
   
   cout << endl;
 }
+
+/*--------------------------------- CParsedClass::asPersistantString()
+ * asPersistantString()
+ *   Return a string made for persistant storage.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::asPersistantString( QString &dataStr )
+{
+  CParsedParent *aParent;
+  CParsedMethod *aMethod;
+  QString str;
+
+  dataStr = "";
+  dataStr += name + "\n";
+  dataStr += definedOnLine + "\n";
+  
+  // Add parents.
+  dataStr += parents.count() + "\n";
+  for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
+  {
+    aParent->asPersistantString( str );
+    dataStr.append( str );
+  }
+  
+  // Add friends.
+  dataStr += friends.count() + "\n";
+  for( str = friends.first(); str != NULL; str = friends.next() )
+    dataStr += str + "\n";
+
+  // Add methods.
+  for( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
+  {
+    aMethod->asPersistantString( str );
+    dataStr.append( str );
+  }
+
+  // Add attributes.
+  dataStr += attributeIterator.count() + "\n";
+  for( attributeIterator.toFirst(); 
+       attributeIterator.current();
+       ++attributeIterator)
+  {
+    attributeIterator.current()->asPersistantString( str );
+    dataStr += str;
+  }
+
+  // Add signals.
+  for( aMethod = signalList.first(); 
+       aMethod != NULL; 
+       aMethod = signalList.next() )
+  {
+    aMethod->asPersistantString( str );
+    dataStr += str;
+  }
+
+  // Add slots.
+  for( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
+  {
+    aMethod->asPersistantString( str );
+    dataStr += str;
+  }
+}

@@ -95,6 +95,9 @@ public: // Public queries
   /** Return this method as a implementation stub. */
   void asCppCode( QString &buf );
 
+  /** Return a string made for persistant storage. */
+  void asPersistantString( QString &dataStr );
+
   /** Is the supplied method equal to this one
     * (regarding type, name and signature)? */
   bool isEqual( CParsedMethod &method );

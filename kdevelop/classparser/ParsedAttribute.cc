@@ -338,3 +338,34 @@ bool CParsedAttribute::isEqual( CParsedAttribute &attr )
 {
   return (name == attr.name && type == attr.type );
 }
+
+/*--------------------------------- CParsedAttribute::asPersistantString()
+ * asPersistantString()
+ *   Return a string made for persistant storage.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedAttribute::asPersistantString( QString &dataStr )
+{
+  QString str;
+
+  dataStr = "";
+
+  dataStr += name + "\n";
+  dataStr += type + "\n";
+  dataStr += definedInFile + "\n";
+  dataStr += declaredInClass + "\n";
+  dataStr += definedOnLine + "\n";
+  dataStr += ( isInHFile ? "true" : "false" );
+  dataStr += "\n";
+  dataStr += ( isStatic ? "true" : "false" );
+  dataStr += "\n";
+  dataStr += ( isConst ? "true" : "false" );
+  dataStr += "\n";
+  dataStr += export + "\n";
+  dataStr += comment.find( "\n", false ) + "\n";
+  dataStr += comment +"\n";
+}

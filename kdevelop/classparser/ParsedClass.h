@@ -76,10 +76,16 @@ public: // Public attributes
   /** Line at which the classdefinition starts. */
   int definedOnLine;
 
+  /** Filename of the .h file. */
+  QString hFilename;
+
+  /** Filename of the .cc/.cpp etc file. */
+  QString implFilename;
+
   /** List with names of parentclasses(if any). */
   QList<CParsedParent> parents;
 
-  /** List iwth names of frientclasses(if any). */
+  /** List with names of frientclasses(if any). */
   QStrList friends;
 
   /** Iterator for the methods. */
@@ -99,12 +105,6 @@ public: // Public attributes
   
   /** List of signal->text mappings. */
   QList<CParsedSignalText> textMaps;
-
-  /** Filename of the .h file. */
-  QString hFilename;
-
-  /** Filename of the .cc/.cpp etc file. */
-  QString implFilename;
 
 public: // Metods to set attribute values
 
@@ -168,6 +168,9 @@ public: // Public queries
 
   /** Check if this class has the named parent. */
   bool hasParent( const char *aName );
+
+  /** Return a string made for persistant storage. */
+  void asPersistantString( QString &dataStr );
 
 public: // Public methods
 

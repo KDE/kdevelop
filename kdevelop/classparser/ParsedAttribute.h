@@ -125,6 +125,9 @@ public: // Public queries
   /** Output this object to stdout */
   void out();
 
+  /** Return a string made for persistant storage. */
+  void asPersistantString( QString &dataStr );
+
 public: // Public queries
 
   /** Is the supplied attribute equal to this one(regarding type and name */
