@@ -220,7 +220,8 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
     int idx = 0;
     int pos = 0;
     int len = 0;
-    while ( (pos = rx.match(text, idx, &len)) != -1 ) {
+    while ( (pos = rx.search(text, idx)) != -1 ) {
+	len = rx.matchedLength();
 	QString word = text.mid(pos, len);
         if (map.find(word) == map.end()) {
             KTextEditor::CompletionEntry e;

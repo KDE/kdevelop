@@ -799,7 +799,7 @@ static int               lastState;
 static QCString          elemStr;
 static QCString          includeName;
 static QStrList          includePathList;
-static QStack<ConfigFileState> includeStack;
+static QPtrStack<ConfigFileState> includeStack;
 static int               includeDepth;
 
 static QCString     tabSizeString;
@@ -2428,8 +2428,9 @@ static void substEnvVarsInString(QCString &s)
   int p=0;
   int i,l;
   //printf("substEnvVarInString(%s) start\n",s.data());
-  while ((i=re.match(s,p,&l))!=-1)
+  while ((i=re.search(s,p))!=-1)
   {
+    l = re.matchedLength();
     //printf("Found environment var s.mid(%d,%d)=`%s'\n",i+2,l-3,s.mid(i+2,l-3).data());
     QCString env=getenv(s.mid(i+2,l-3));
     substEnvVarsInString(env); // recursively expand variables if needed.

@@ -83,7 +83,7 @@ private:
 	KDnDDirOperator * dir;
 	QPushButton *home, *up, *back, *forward, *cfdir;
 
-    QArray<int> m_popupIds;
+    QMemArray<int> m_popupIds;
 
     QPopupMenu *m_popup;
 

@@ -1413,7 +1413,7 @@ void JDBController::slotAbortTimedEvent()
 void JDBController::slotStepInSource(const QString &fileName, int lineNum)
 {
     DBG_DISPLAY((QString("(Show step in source) ")+fileName+QString(":")
-                 +QString().setNum(lineNum)).data());
+                 +QString().setNum(lineNum)).local8Bit().data());
 }
 
 // **************************************************************************
@@ -1438,7 +1438,7 @@ void JDBController::slotDbgStatus(const QString &status, int state)
     if (state & s_viewLocals)
         s += QString("<viewing locals>");
     
-    DBG_DISPLAY((s+status).data());
+    DBG_DISPLAY((s+status).local8Bit().data());
 }
 
 
