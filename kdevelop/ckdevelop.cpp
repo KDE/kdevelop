@@ -4157,6 +4157,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,                    i18n("Repeats the last search"))
     ON_STATUS_MSG(ID_EDIT_REPLACE,                          i18n("Searches and replace expression"))
     ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,                  i18n("Opens the search in files dialog to search for expressions over several files"))
+    ON_STATUS_MSG(ID_EDIT_TAGS_SWITCH,                      i18n("Switch between header and source file"))
 
     ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                    i18n("Run program to this cursor position"))
     ON_STATUS_MSG(ID_EDIT_STEP_OUT_OFF,                     i18n("Run the program until this function/method ends"))
