@@ -1,3 +1,0 @@
-SOURCES=$APPNAMELC$.cpp
-CONFIG += qtopia
-TARGET=../bin/$APPNAMELC$
