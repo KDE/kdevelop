@@ -64,7 +64,8 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   QHBoxLayout *hbox = new QHBoxLayout(f);
 
   d->m_title = new QLabel(f);
-  d->m_title->setBackgroundColor(KGlobalSettings::activeTitleColor());
+  d->m_title->setPaletteBackgroundColor(KGlobalSettings::activeTitleColor());
+  d->m_title->setPaletteForegroundColor(KGlobalSettings::activeTextColor());
   d->m_title->setAlignment(Qt::AlignCenter);
   hbox->addWidget(d->m_title, 1);
 
