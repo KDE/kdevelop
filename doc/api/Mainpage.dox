@@ -3,7 +3,7 @@
 */
 
 /**
-\mainpage The KDevelop %API Documentation
+\mainpage The KDevelop %API %Documentation
 
 KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.
 
@@ -16,7 +16,7 @@ development version of KDevelop.  Additionally, you
 can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or
 modifications to the %API.
 
-An on-line, updated every 24H, html version of this documentation can be found at: http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html
+An on-line, updated every 24H, html version of this documentation can be found at: http://www.kdevelop.org/HEAD/doc/api/index.html
 
 More information about the KDevelop architecture in form of tutorials, HOWTOs,
 and FAQs can be found at
@@ -66,7 +66,7 @@ There is also \ref FutureTasks (doc/api/FutureTasks.dox file). Put all ideas for
 
 This documentation is very large and changes with every cvs commit, therefore is not available for download.
 To build your local copy of this documentation you have two choices, depending on your system configuration.
-  - If you have KDE >= 3.2 , doxygen >= 1.3.4 , PHP >= 4.10 and a local running webserver then
+  - If you have %KDE >= 3.2 , doxygen >= 1.3.4 , PHP >= 4.10 and a local running webserver then
     - make apidox
     - make install-apidox (as root)
     .
@@ -84,7 +84,7 @@ documentation using your local webserver.
 \section License
 
 Permission is granted to copy, distribute and/or modify this document under
-the terms of the GNU Free Documentation License, Version 1.2 or any later
+the terms of the GNU Free %Documentation License, Version 1.2 or any later
 version published by the Free Software Foundation; For details see
 http://www.gnu.org/copyleft/fdl.html .
 
