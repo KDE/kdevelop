@@ -479,3 +479,5 @@ QStringList HaskellProjectPart::distFiles() const
 	QStringList files = dir.entryList( "*README*");
 	return sourceList + files;
 }
+
+#include "haskellproject_part.moc"
