@@ -135,7 +135,7 @@ public:
    /**
    * Returns the MDI mode. This can be one of the enumerations QextMdi::MdiMode.
    */
-   bool mdiMode() { return m_mdiMode; };
+   QextMdi::MdiMode mdiMode() { return m_mdiMode; };
    /**
    * Returns the focused attached MDI view.
    */

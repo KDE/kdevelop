@@ -482,7 +482,11 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
       m_pTaskBar->removeWinButton(pWnd);
    }
 
-   if(pWnd->isAttached()) {
+   if (m_mdiMode == QextMdi::TabPageMode) {
+      KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
+      pWnd->reparent(0L, QPoint(0,0));
+   }
+   else if (pWnd->isAttached()) {
       pWnd->mdiParent()->hide();
       m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
    }
@@ -751,13 +755,6 @@ void QextMdiMainFrm::switchToToplevelMode()
    if (m_mdiMode == QextMdi::ToplevelMode)
       return;
 
-   // save the old dock szenario of the dockwidged-like tool views to a DOM tree
-   delete m_pTempDockSession;
-   m_pTempDockSession = new QDomDocument( "docksession");
-   QDomElement curDockState = m_pTempDockSession->createElement("cur_dock_state");
-   m_pTempDockSession->appendChild( curDockState);
-   writeDockConfig( curDockState);
-
    QextMdi::MdiMode oldMdiMode = m_mdiMode;
 
    const int frameBorderWidth  = 7;  // TODO: Can we / do we need to ask the window manager?
@@ -859,25 +856,15 @@ void QextMdiMainFrm::switchToChildframeMode()
       setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
       m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
    }
-   QListIterator<KDockWidget> it4( rootDockWidgetList);
-   for (; it4.current(); ++it4 ) {
-       KDockWidget* pDockW = it4.current();
-       pDockW->dockBack();
+   if (m_mdiMode == QextMdi::TabPageMode) {
+      QListIterator<KDockWidget> it4( rootDockWidgetList);
+      for (; it4.current(); ++it4 ) {
+         KDockWidget* pDockW = it4.current();
+         pDockW->dockBack();
+      }
    }
 
-//   if (m_mdiMode == QextMdi::TabPageMode) {
-//      finishTabPageMode();
-//      // switch the tab-page dockbase and the childarea dockbase
-//      m_pDockbaseOfTabPage->setEnableDocking(KDockWidget::DockFullDocking);
-//      m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockCenter);
-//      m_pDockbaseAreaOfDocumentViews->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
-//      m_pDockbaseAreaOfDocumentViews->makeDockVisible();
-//      m_pDockbaseOfTabPage->undock();
-//      m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
-//      m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
-//   }
-
-   if (m_mdiMode == QextMdi::ToplevelMode) {
+   if (m_mdiMode == QextMdi::ToplevelMode && m_pTempDockSession) {
      // restore the old dock szenario which we memorized at the time we switched to toplevel mode
      QDomElement oldDockState = m_pTempDockSession->namedItem("cur_dock_state").toElement();
      readDockConfig( oldDockState);
@@ -905,6 +892,14 @@ void QextMdiMainFrm::switchToChildframeMode()
 
 void QextMdiMainFrm::finishChildframeMode()
 {
+   // save the old dock szenario of the dockwidged-like tool views to a DOM tree
+   delete m_pTempDockSession;
+   m_pTempDockSession = new QDomDocument( "docksession");
+   QDomElement curDockState = m_pTempDockSession->createElement("cur_dock_state");
+   m_pTempDockSession->appendChild( curDockState);
+   writeDockConfig( curDockState);
+
+   // detach all non-tool-views to toplevel
    QListIterator<QextMdiChildView> it4( *m_pWinList);
    for( ; it4.current(); ++it4) {
       QextMdiChildView* pView = it4.current();
@@ -916,12 +911,6 @@ void QextMdiMainFrm::finishChildframeMode()
          detachWindow( pView, TRUE);
       }
    }
-   // alternative?:
-//     QextMdiIterator<QextMdiChildView*>* pItMdi = createIterator();
-//     for (pItMdi->first(); !pItMdi->isDone(); pItMdi->next()) {
-//         pItMdi->currentItem()->detach();
-//     }
-//     delete pItMdi;
 }
 
 /**
