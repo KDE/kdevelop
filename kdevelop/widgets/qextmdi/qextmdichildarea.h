@@ -34,6 +34,7 @@
 
 /**
   * @short Internal class.
+  *
   * The main frame widget QextMdiMainFrm consists of 2 child widgets. One is this class.
   * It's the widget where the child frames live in. Furthermore the manager for the child frame widgets.
   * It provides all placing and positioning algorithms for docked (attached) MDI views.
@@ -102,6 +103,10 @@ public:
    */
 
    int getVisibleChildCount();
+   /** Calculates the cascade point for the given index. If index is -1
+       the cascade point is calculated for the window following the last window */
+   QPoint getCascadePoint(int indexOfWindow = -1);
+
    void setMdiCaptionFont(const QFont &fnt);
    void setMdiCaptionActiveForeColor(const QColor &clr);
    void setMdiCaptionActiveBackColor(const QColor &clr);
@@ -146,7 +151,6 @@ protected:
    void tileAllInternal(int maxWnds);
    virtual void focusInEvent(QFocusEvent *);
    virtual void resizeEvent(QResizeEvent *);
-   QPoint getCascadePoint(int indexOfWindow);
    void mousePressEvent(QMouseEvent *e);
    void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
    

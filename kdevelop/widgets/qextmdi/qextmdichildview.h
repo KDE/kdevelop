@@ -38,11 +38,12 @@
 
 /**
   * @short Base class for all your special view windows.
-  * Base class for all interface windows.<br>
-  * Defines some virtual functions for later common use.<br>
-  * The derived windows 'lives' attached to a QextMdiChildFrm widget<br>
-  * managed by QextMdiChildArea, or detached (managed by the window manager.)<br>
-  * So remember that the parent() pointer may change , and may be 0 too.<br>
+  *
+  * Base class for all MDI view widgets.
+  *
+  * The derived windows 'lives' attached to a QextMdiChildFrm widget
+  * managed by QextMdiChildArea, or detached (managed by the window manager.)
+  * So remember that the @ref QextMdiChildView::parent pointer may change, and may be 0L, too.
   */
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
@@ -51,70 +52,86 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
    friend class QextMdiChildFrm;
    Q_OBJECT
 
-public:     // Consruction & Destruction
-   QextMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0L);
-   ~QextMdiChildView();
-protected:     // Fields
+// attributes
+protected:
+   /** See @ref QextMdiChildView::caption
+    */
    QString     m_szCaption;
+   /** See @ref QextMdiChildView::tabCaption
+    */
    QString     m_sTabCaption;
+   /** See @ref QextMdiChildView::focusedChildWidget
+    */
    QWidget*    m_focusedChildWidget;
+   /**  See @ref QextMdiChildView::setFirstFocusableChildWidget
+    */
    QWidget*    m_firstFocusableChildWidget;
+   /**  See @ref QextMdiChildView::setLastFocusableChildWidget
+    */
    QWidget*    m_lastFocusableChildWidget;
-   /** every child view window has an temporary ID in the Window menu of the main frame. */
+   /** Every child view window has an temporary ID in the Window menu of the main frame. */
    int         m_windowMenuID;
+   /** Holds a temporary information about if the MDI view state has changed but is not processed yet (pending state).
+    *  For example it could be that a 'maximize' is pending, if this variable is true.
+    */
    bool        m_stateChanged;
 
-public:     // Methods
+// methods
+public:
+   /** Constructor
+    */
+   QextMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0L);
+   /** Destructor
+    */
+   ~QextMdiChildView();
    /**
-    * Memorize first focusable child widget <br>
+    * Memorizes the first focusable child widget of this widget
     */
    void setFirstFocusableChildWidget(QWidget*);
    /**
-    * Memorize last focusable child widget <br>
+    * Memorizes the last focusable child widget of this widget
     */
    void setLastFocusableChildWidget(QWidget*);
    /**
-    * Returns current focused child widget <br>
+    * Returns the current focused child widget of this widget
     */
    QWidget* focusedChildWidget();
    /**
-    * Returns TRUE if this window is attached to the Mdi manager<br>
-    * (inline)
+    * Returns TRUE if the MDI view is a child window within the MDI mainframe widget
+    * or false if the MDI view is in toplevel mode
     */
-   bool isAttached();
+   bool isAttached() { return (mdiParent() != 0L); };
    /**
-    * Returns the caption text<br>
-    * (inline)
+    * Returns the caption of the child window (different from the caption on the button in the taskbar)
     */
-   const QString& caption();
-   const QString& tabCaption();
+   const QString& caption() { return m_szCaption; };
    /**
-    * Sets the window caption string...<br>
-    * Calls updateButton on the taskbar button if it has been set.<br>
+    * Returns the caption of the button on the taskbar
+    */
+   const QString& tabCaption() { return m_sTabCaption; };
+   /**
+    * Sets the window caption string...
+    * Calls updateButton on the taskbar button if it has been set.
     */
    virtual void setCaption(const QString& szCaption);
-
-   /** Set the caption of the button referring to this window */
-  virtual void setTabCaption(const QString& caption);
-
-  /** Set the caption of both window and button on the taskbar (they are going to be the same) */
-  virtual void setMDICaption(const QString &caption);
-
-  // I need this for setting both....
-        /**
+   /** Sets the caption of the button referring to this window */
+   virtual void setTabCaption(const QString& caption);
+   /** Sets the caption of both, window and button on the taskbar (they are going to be the same) */
+   virtual void setMDICaption(const QString &caption);
+   /**
     * Returns the QextMdiChildFrm parent widget (or 0 if the window is not attached)
     */
    QextMdiChildFrm *mdiParent();
    /**
-    * Tells if the window is minimized when attached to the Mdi manager,<br>
+    * Tells if the window is minimized when attached to the Mdi manager,
     * or if it is VISIBLE when 'floating'.
     */
-   bool isMinimized();//Useful only when attached (?)
+   bool isMinimized();
    /**
-    * Tells if the window is minimized when attached to the Mdi manager,<br>
+    * Tells if the window is minimized when attached to the Mdi manager,
     * otherwise returns FALSE.
     */
-   bool isMaximized();//Useful only when attached (?)
+   bool isMaximized();
    /**
     * Returns the geometry of this MDI child window as QWidget::geometry() does.
     */
@@ -139,21 +156,20 @@ public:     // Methods
     * from the behaviour of QWidget::setGeometry()!
     */
    void setExternalGeometry(const QRect& newGeomety);
-   //Methods to override ABSOLUTELY
    /**
-    * You SHOULD override this function in the derived class<br>
+    * You should override this function in the derived class.
     */
    virtual QPixmap * myIconPtr();
    /**
-    * Minimizes this window when it is attached to the Mdi manager.<br>
+    * Minimizes this window when it is attached to the Mdi manager.
     * Otherwise has no effect
     */
-   virtual void minimize(bool bAnimate);   //Useful only when attached
+   virtual void minimize(bool bAnimate);
    /**
-    * Maximizes this window when it is attached to the Mdi manager.<br>
+    * Maximizes this window when it is attached to the Mdi manager.
     * Otherwise has no effect
     */
-   virtual void maximize(bool bAnimate);   //Useful only when attached
+   virtual void maximize(bool bAnimate);
    /**
      * Interpose in event loop of all current child widgets.
      * Must be recalled after dynamic adding of new child widgets!
@@ -163,7 +179,7 @@ public:     // Methods
      * Switches interposing in event loop of all current child widgets off.
      */
    void removeEventFilterForAllChildren();
-   /** sets an ID  */
+   /** Internally used for setting an ID for the 'Window' menu entry */
    void setWindowMenuID( int id);
    /** sets the minimum size of the widget to w by h pixels.
      * It extends it base clase method in a way that the minimum size of
@@ -178,68 +194,114 @@ public:     // Methods
 
 public slots:
    /**
-    * Attaches this window to the Mdi manager.<br>
-    * It calls the QextMdiMainFrm attachWindow function , so if you have a pointer<br>
-    * to this QextMdiMainFrm you'll be faster calling that function.<br>
+    * Attaches this window to the Mdi manager.
+    * It calls the QextMdiMainFrm attachWindow function , so if you have a pointer
+    * to this QextMdiMainFrm you'll be faster calling that function.
     * Useful as slot.
     */
    virtual void attach();
    /**
-    * Detaches this window from the Mdi manager.<br>
-    * It calls the QextMdiMainFrm detachWindow function , so if you have a pointer<br>
-    * to this QextMdiMainFrm you'll be faster calling that function.<br>
+    * Detaches this window from the Mdi manager.
+    * It calls the QextMdiMainFrm detachWindow function , so if you have a pointer
+    * to this QextMdiMainFrm you'll be faster calling that function.
     * Useful as slot.
     */
    virtual void detach();
-   
-   virtual void minimize(); //Overload and slot
-   virtual void maximize(); //Overload and slot
-   /**
-    * Restores this window when it is attached to the Mdi manager.
+   /** Mimimizes the MDI view. If attached, the covering childframe widget is minimized (only a mini widget
+    *  showing the caption bar and the system buttons will remain visible). If detached, it will use the
+    *  minimize of the underlying system (@ref QWidget::showMinimized).
     */
-   virtual void restore();    //Useful only when attached
+   virtual void minimize();
+   /** Maximizes the MDI view. If attached, this widget will fill the whole MDI view area widget. The system buttons
+    *  move to the main menubar (if set by @ref QextMdiMainFrm::setMenuForSDIModeSysButtons).
+    *  If detached, it will use the minimize of the underlying system (@ref QWidget::showMaximized).
+    */
+   virtual void maximize();
+   /**
+    * Restores this window to its normal size. Also known as 'normalize'.
+    */
+   virtual void restore();
+   /** Internally called, if @ref QextMdiMainFrm::attach is called.
+    *  Actually, only the caption of the covering childframe is set.
+    */
    virtual void youAreAttached(QextMdiChildFrm *lpC);
+   /** Internally called, if @ref QextMdiMainFrm::detach is called.
+    *  Some things for going toplevel will be done here.
+    */
    virtual void youAreDetached();
-   /** called if someone click on the "Window" menu item for this child frame window */
+   /** Called if someone click on the "Window" menu item for this child frame window */
    virtual void slot_clickedInWindowMenu();
-   /** called if someone click on the "Dock/Undock..." menu item for this child frame window */
+   /** Called if someone click on the "Dock/Undock..." menu item for this child frame window */
    virtual void slot_clickedInDockMenu();
-   /** calls QWidget::show but also for it's parent widget if attached */
+   /** Calls QWidget::show but also for it's parent widget if attached */
    virtual void show();
+   /** Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMinimizedNow, additionally.
+    *  Note that this method is not used by an external windows manager call on system minimizing.
+    */
    virtual void showMinimized();
+   /** Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMaximizedNow, additionally.
+    *  Note that this method is not used by an external windows manager call on system maximizing.
+    */
    virtual void showMaximized();
+   /** Overridden from its base class method. Emits a signal @ref QextMdiChildView::isRestoredNow, additionally.
+    *  Note that this method is not used by an external windows manager call on system normalizing.
+    */
    virtual void showNormal();
 
 protected:
    /**
-    * Ignores the event and calls QextMdiMainFrm::childWindowCloseRequest
-    * @see QextMdiMainFrm::childWindowCloseRequest
+    * Ignores the event and calls @ref QextMdiMainFrm::childWindowCloseRequest instead. This is because the
+    * mainframe has control over the views. Therefore the MDI view has to request the mainframe for a close.
     */
    virtual void closeEvent(QCloseEvent *e);
+   /** It only catches @ref QEvent::KeyPress events there. If a Qt::Key_Tab is pressed, the internal MDI focus
+    *  handling is called. That means if the last focusable child widget of this is called, it will jump to the
+    *  first focusable child widget of this.
+    *  See @ref QextMdiChildView::setFirstFocusableChildWidget and @ref QextMdiChildView::lastFirstFocusableChildWidget
+    */
    virtual bool eventFilter(QObject *obj, QEvent *e);
+   /** If attached, the childframe will be activated and the MDI taskbar button will be pressed. Additionally, the
+    *  memorized old focused child widget of this is focused again.
+    */
    virtual void focusInEvent(QFocusEvent *e);
+   /** Internally used for the minimize/maximize/restore mechanism when in attach mode.
+    */
    virtual void resizeEvent(QResizeEvent *e);
 
 private:
+   /** Internally used as indicator whether this QextMdiChildView is treated as document view or as tool view. */
    bool  m_bToolView;
 
 signals:
+   /** Internally used by @ref QextMdiChildView::attach to send it as command to the mainframe.
+    */
    void attachWindow( QextMdiChildView*,bool);
+   /** Internally used by @ref QextMdiChildView::detach to send it as command to the mainframe.
+    */
    void detachWindow( QextMdiChildView*,bool);
+   /** Internally used to send information to the mainframe that this MDI child view is focused.
+    *  See @ref QextMdiChildView::focusInEvent
+    */
    void focusInEventOccurs( QextMdiChildView*);
+   /** Internally used to send information to the mainframe that this MDI child view wants to be closed.
+    *  See @ref QextMdiChildView::closeEvent and @ref QextMdiMainFrm::closeWindow
+    */
    void childWindowCloseRequest( QextMdiChildView*);
-   
-   /** signal emitted when the window caption is changed via setCaption() or setMDICaption() */
+   /** Emitted when the window caption is changed via @ref QextMdiChildView::setCaption or @ref QextMdiChildView::setMDICaption */
    void windowCaptionChanged( const QString&);
-
-   /** signal emitted  when the window caption is changed via setTabCaption() or setMDICaption() */
+   /** Emitted  when the window caption is changed via @ref QextMdiChildView::setTabCaption or @ref QextMdiChildView::setMDICaption */
    void tabCaptionChanged( const QString&);
-  
+   /** Internally used to send information to the mainframe that this MDI view is maximized now.
+    *  Usually, the mainframe switches system buttons.
+    */
    void mdiParentNowMaximized();
+   /** Internally used to send information to the mainframe that this MDI view is no longer maximized now.
+    *  Usually, the mainframe switches system buttons.
+    */
    void mdiParentNoLongerMaximized(QextMdiChildFrm*);
-   /** is automatically emitted when slot_clickedInWindowMenu is called */
+   /** Is automatically emitted when slot_clickedInWindowMenu is called */
    void clickedInWindowMenu(int);
-   /** is automatically emitted when slot_clickedInDockMenu is called */
+   /** Is automatically emitted when slot_clickedInDockMenu is called */
    void clickedInDockMenu(int);
    /** Signals this has been maximized */
    void isMaximizedNow();
@@ -249,12 +311,6 @@ signals:
    void isRestoredNow();
 };
 
-/** Returns true if the MDI view is a child window within the MDI mainframe widget; or false if the MDI view is in toplevel mode */
-inline bool QextMdiChildView::isAttached(){ return (mdiParent() != 0L); }
-/** Returns the caption of the child window (this is differnet from the caption on the button on the taskbar) */
-inline const QString& QextMdiChildView::caption(){ return m_szCaption; }
-/** Returns the caption of the button on hte task bar */
-inline const QString& QextMdiChildView::tabCaption(){ return m_sTabCaption; }
 inline QextMdiChildFrm *QextMdiChildView::mdiParent()
 {
    QWidget* pw = parentWidget();

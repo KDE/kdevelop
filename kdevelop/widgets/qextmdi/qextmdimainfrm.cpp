@@ -159,6 +159,9 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 
    if( flags & QextMdi::ToolWindow) {
       addToolWindow( pWnd);
+      // some kind of cascading
+      pWnd->move(m_pMdi->mapToGlobal(m_pMdi->getCascadePoint()));
+
       return;
    }
 
@@ -409,15 +412,6 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
    m_pTaskBarPopup->insertItem(tr("Operations"),windowPopup(pWnd,FALSE));  //alvoid recursion
    return m_pTaskBarPopup;
    bIncludeWindowPopup = FALSE; // dummy!, only to avoid "unused parameter"
-}
-
-void QextMdiMainFrm::switchWindows(bool bRight)
-{
-   QextMdiChildFrm * pActMdi = m_pMdi->topChild();
-   if(!pActMdi)return;
-   QextMdiChildView * pAct = (QextMdiChildView *)pActMdi->m_pClient;
-   if(!pAct)return;
-   bRight = FALSE; // dummy!, only to avoid "unused parameter"
 }
 
 void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)

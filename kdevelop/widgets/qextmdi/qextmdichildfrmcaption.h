@@ -35,6 +35,7 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm;
 
 /**
   * @short Internal class.
+  *
   * It's the caption bar of a child frame widget.
   */
 

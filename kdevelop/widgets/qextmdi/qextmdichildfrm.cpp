@@ -423,7 +423,7 @@ void QextMdiChildFrm::undockPressed()
 
 //============ setState =================//
 
-void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
+void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
 {
    if(m_state==Normal){ //save the current rect
       m_restoredRect=QRect(x(),y(),width(),height());
@@ -529,7 +529,6 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
       }
    break;
    }
-   bAnimate = FALSE; //dummy, only to avoid "unused parameter"
 }
 
 //============ setCaption ===============//
@@ -549,10 +548,10 @@ void QextMdiChildFrm::enableClose(bool bEnable)
 
 //============ setIcon ==================//
 
-void QextMdiChildFrm::setIcon(QPixmap *pIconPM)
+void QextMdiChildFrm::setIcon(const QPixmap& pxm)
 {
-   m_pIconButtonPixmap = pIconPM;
-   m_pIcon->setPixmap( *m_pIconButtonPixmap);
+   *m_pIconButtonPixmap = pxm;
+   m_pIcon->setPixmap( pxm);
 }
 
 //============ icon =================//

@@ -59,6 +59,7 @@ signals:
 
 /**
  * @short Internal class
+ *
  * This special event will be useful, if the view has to be informed when its childframe window is being moved.
  */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmMovedEvent : public QCustomEvent
@@ -69,6 +70,7 @@ public:
 
 /**
   * @short Internal class.
+  *
   * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
   */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
@@ -142,10 +144,9 @@ public:
    */
    void unsetClient( QPoint positionOffset = QPoint(0,0));
    /**
-   * Sets the window icon ponter : assumes 16x16 pixmaps that SHOULD BE NOT DELETED
-   * until this object is destroyed.
+   * Sets the window icon pointer.
    */
-   void setIcon(QPixmap *ptr);
+   void setIcon(const QPixmap &pxm);
    /**
     * Returns the child frame icon.
     */

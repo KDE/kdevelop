@@ -41,6 +41,7 @@ class QextMdiTaskBar;
 
 /**
   * @short Internal class.
+  *
   * It's a special kind of QPushButton catching mouse clicks.
   * And you have the ability to abbreviate the text that it fits in the button.
   */
@@ -73,6 +74,7 @@ protected:
 
 /**
  * @short Internal class.
+ *
  * It's a special kind of QToolBar that acts as taskbar for child views.
  * QextMdiTaskBarButtons can be added or removed dynamically.<br>
  * The button sizes are adjusted dynamically, as well.

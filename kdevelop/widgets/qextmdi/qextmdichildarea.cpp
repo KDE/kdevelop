@@ -193,6 +193,9 @@ void QextMdiChildArea::mousePressEvent(QMouseEvent *e)
 
 QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
 {
+   if (indexOfWindow < 0) {
+      indexOfWindow = m_pZ->count();
+   }
    QPoint pnt(0,0);
    if(indexOfWindow==0)return pnt;
    QextMdiChildFrm *lpC=m_pZ->first();
@@ -244,7 +247,7 @@ void QextMdiChildArea::focusTopChild()
       emit lastChildFrmClosed();
       return;
    }
-   if(lpC->m_state==QextMdiChildFrm::Minimized)return;
+//REMOVE?   if(lpC->m_state==QextMdiChildFrm::Minimized)return;
    //disable the labels of all the other children
    for(QextMdiChildFrm *pC=m_pZ->first();pC;pC=m_pZ->next()){
       if(pC != lpC)pC->m_pCaption->setActive(FALSE);
