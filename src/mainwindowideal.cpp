@@ -552,18 +552,9 @@ void MainWindowIDEAl::raiseTabbar( KTabZoomWidget* tabBar ) {
         return;
 
     if ( tabBar->isRaised() ) {
-        if ( tabBar->isDocked() ) {
-            if ( tabBar->hasFocus() ) {
-                if ( m_tabWidget->currentPage() )
-                    m_tabWidget->currentPage()->setFocus();
-            } else {
-                tabBar->setFocus();
-            }
-        } else {
-            tabBar->lowerAllWidgets();
-            if ( m_tabWidget->currentPage() )
-                m_tabWidget->currentPage()->setFocus();
-        }
+        tabBar->lowerAllWidgets();
+        if ( m_tabWidget->currentPage() )
+            m_tabWidget->currentPage()->setFocus();
     } else {
         tabBar->raiseWidget( 0 );
     }
