@@ -83,7 +83,7 @@ void FileBuffer::removeComments()
     if (tmp[0]=='#')
     {
       pop(i);
-      ++i;
+      --i;
     }
   }
 
@@ -515,7 +515,7 @@ Caret FileBuffer::findScopeEnd(Caret pos)
     }
     else
     {
-      ++scopeDepth;
+      --scopeDepth;
       pos = nextScopeEnd + Caret(0,1);
     }
     if (nextScopeStart==nextScopeEnd)
