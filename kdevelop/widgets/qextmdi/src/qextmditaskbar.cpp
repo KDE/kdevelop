@@ -301,6 +301,6 @@ void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
    layoutTaskBar( rse->size().width());
 }
 
-#ifndef NO_KDE2
+#ifdef INCLUDE_MOCFILES
 #  include "qextmditaskbar.moc"
 #endif

@@ -2,6 +2,8 @@
 
 INCLUDES = $(all_includes) -I$(top_srcdir)/kdevelop/widgets/qextmdi/include -I$(top_srcdir)/kdevelop/widgets/qextmdi/res
 
+KDE_CXXFLAGS = -DINCLUDE_MOCFILES
+
 lib_LTLIBRARIES = libkdevqextmdi.la
 libkdevqextmdi_la_LDFLAGS = $(all_libraries) -version-info 1:0
 

@@ -576,6 +576,6 @@ void QextMdiChildView::hide()
    QWidget::hide();
 }
 
-#ifndef NO_KDE2
+#ifdef INCLUDE_MOCFILES
 #  include "qextmdichildview.moc"
 #endif

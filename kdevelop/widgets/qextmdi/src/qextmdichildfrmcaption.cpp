@@ -226,6 +226,6 @@ void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
    m_offset = mapFromGlobal( QCursor::pos());
 }
 
-#ifndef NO_KDE2
+#ifdef INCLUDE_MOCFILES
 #  include "qextmdichildfrmcaption.moc"
 #endif
