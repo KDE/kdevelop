@@ -489,6 +489,7 @@ void TrollProjectWidget::slotRebuildProject()
   if (m_shownSubproject->isScope)
     return;
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1("clean"));
   m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
   m_part->topLevel()->lowerView(this);
 }
@@ -533,6 +534,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         SubprojectItem *newitem = new SubprojectItem(spitem, subdirname,"");
         newitem->subdir = subdirname;
         newitem->path = spitem->path + "/" + subdirname;
+        parse(newitem);
 
       }
       else
@@ -999,20 +1001,64 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.handleScopes();
 
     parseScope(item,"",&(item->m_FileBuffer));
-    QStringList plusListDummy;
+    QStringList minusListDummy;
     QStringList lst;
-    item->m_FileBuffer.getValues("SUBDIRS",lst,plusListDummy);
-    item->subdirs = lst;
-    QStringList::Iterator it;
-    for (it = lst.begin(); it != lst.end(); ++it)
+
+    // set defaults
+    item->configuration.m_template = QTMP_APPLICATION;
+    item->configuration.m_buildMode = QBM_RELEASE;
+    item->configuration.m_warnings = QWARN_ON;
+    item->configuration.m_requirements = 0;
+    // retrieve the project configuration
+    item->m_FileBuffer.getValues("TEMPLATE",lst,minusListDummy);
+    if (lst.count())
     {
-      SubprojectItem *newitem = new SubprojectItem(item, (*it),"");
-      newitem->subdir = *it;
-      newitem->m_RootBuffer = &(newitem->m_FileBuffer);
-      newitem->path = item->path + "/" + (*it);
-      parse(newitem);
+      if (lst[0] == "app")
+        item->configuration.m_template = QTMP_APPLICATION;
+      if (lst[0] == "lib")
+        item->configuration.m_template = QTMP_LIBRARY;
+      if (lst[0] == "subdirs")
+        item->configuration.m_template = QTMP_SUBDIRS;
+    }
+    item->m_FileBuffer.getValues("CONFIG",lst,minusListDummy);
+    if (lst.count())
+    {
+      // config debug/release
+      if (lst.find("debug")!=lst.end())
+        item->configuration.m_buildMode = QBM_DEBUG;
+      if (lst.find("release")!=lst.end())
+        item->configuration.m_buildMode = QBM_RELEASE;
+      // config warnings on/off
+      if (lst.find("warn_on")!=lst.end())
+        item->configuration.m_warnings = QWARN_ON;
+      if (lst.find("warn_off")!=lst.end())
+        item->configuration.m_warnings = QWARN_OFF;
+      // config requerments
+      if (lst.find("qt")!=lst.end())
+        item->configuration.m_requirements += QD_QT;
+      if (lst.find("x11")!=lst.end())
+        item->configuration.m_requirements += QD_X11;
+      if (lst.find("thread")!=lst.end())
+        item->configuration.m_requirements += QD_THREAD;
+      if (lst.find("opengl")!=lst.end())
+        item->configuration.m_requirements += QD_OPENGL;
     }
 
+    // Handle "subdirs" project
+    if (item->configuration.m_template == QTMP_SUBDIRS)
+    {
+      item->m_FileBuffer.getValues("SUBDIRS",lst,minusListDummy);
+      item->subdirs = lst;
+      QStringList::Iterator it;
+      for (it = lst.begin(); it != lst.end(); ++it)
+      {
+        SubprojectItem *newitem = new SubprojectItem(item, (*it),"");
+        newitem->subdir = *it;
+        newitem->m_RootBuffer = &(newitem->m_FileBuffer);
+        newitem->path = item->path + "/" + (*it);
+        parse(newitem);
+      }
+    }
 }
 
 #include "trollprojectwidget.moc"

@@ -61,7 +61,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
-    
+
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
@@ -155,6 +155,18 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
         startQMakeCommand(dir);
     }
     QDomDocument &dom = *projectDom();
+
+    if (target=="clean")
+    {
+      QString cmdline = DomUtil::readEntry(dom, "/kdevtrollproject/make/makebin");
+      if (cmdline.isEmpty())
+          cmdline = MAKE_COMMAND;
+      cmdline += " clean";
+      QString dircmd = "cd ";
+      dircmd += dir;
+      dircmd += " && ";
+      makeFrontend()->queueCommand(dir, dircmd + cmdline);
+    }
 
     QString cmdline = DomUtil::readEntry(dom, "/kdevtrollproject/make/makebin");
     if (cmdline.isEmpty())
