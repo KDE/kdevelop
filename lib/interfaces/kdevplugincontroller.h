@@ -40,6 +40,18 @@ class KDevPluginController: public QObject
     Q_OBJECT
 public:
     
+    /**
+     * Returns a uniquely specified plugin. If it isn't already loaded, it will be. 
+     * Use with caution! See extension for parameter details.
+     */
+    virtual KDevPlugin * loadPlugin( const QString & serviceType, const QString & constraint ) = 0;
+
+    /**
+     * Unloads the plugin specified by @p plugin
+     * @param plugin The plugin desktopEntryName of the plugin to unload
+     */
+    virtual void unloadPlugin( const QString & plugin ) = 0;
+
     /**Unloads plugins specified by @p list.
     @param list The list of plugin names to unload. plugin name corresponds
     to the "Name" property in plugin .desktop file.*/

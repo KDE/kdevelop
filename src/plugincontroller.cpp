@@ -272,6 +272,36 @@ KDevPlugin * PluginController::extension( const QString & serviceType, const QSt
     return 0;
 }
 
+KDevPlugin * PluginController::loadPlugin( const QString & serviceType, const QString & constraint )
+{
+	KTrader::OfferList offers = KDevPluginController::query( serviceType, constraint );
+	if ( !offers.size() == 1 ) return 0;
+
+	KTrader::OfferList::const_iterator it = offers.constBegin();
+	QString name = (*it)->desktopEntryName();
+	
+	KDevPlugin * plugin = 0;
+	if ( plugin = m_parts[ name ] )
+	{
+		return plugin;
+	}
+	
+	if ( plugin = loadPlugin( *it ) )
+	{
+		m_parts.insert( name, plugin );
+		integratePart( plugin );
+	}
+	
+	return plugin;
+}
+
+void PluginController::unloadPlugin( const QString & plugin )
+{
+	QStringList pluginList;
+	pluginList << plugin;
+	unloadPlugins( pluginList );
+}
+
 KURL::List PluginController::profileResources(const QString &nameFilter)
 {
     return m_engine.resources(currentProfile(), nameFilter);
@@ -300,7 +330,6 @@ QString PluginController::changeProfile(const QString &newProfile)
         
     return oldProfile;
 }
-
 
 /*
 KDevPlugin * PluginController::getPlugin( const KService::Ptr & service )

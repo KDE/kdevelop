@@ -31,6 +31,10 @@ public:
   static PluginController *getInstance();
   static QStringList argumentsFromService( const KService::Ptr &service );
 
+  
+  virtual KDevPlugin * loadPlugin( const QString & serviceType, const QString & constraint );
+  virtual void unloadPlugin( const QString & plugin );
+  
   QString currentProfile() const { return m_profile; }
   
   void loadInitialPlugins();
