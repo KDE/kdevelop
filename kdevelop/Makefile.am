@@ -53,7 +53,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./dbg/libdbg.a ./vc/libvc.a ./print/libprint.a \
 	./gfxview/libgfxview.a ./kwrite/libkwrite.a \
 	./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dlgedit/libdlgedit.a \
-	$(LIB_KHTML) -lkspell -lkfile -lfl -ldl
+	$(LIB_KHTML) -lkspell -lkfile -lfl
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
