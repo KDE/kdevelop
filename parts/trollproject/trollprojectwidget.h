@@ -32,6 +32,7 @@
 #include <qptrlist.h>
 #include "filebuffer.h"
 #include "projectconfigurationdlg.h"
+#include "choosesubprojectdlg.h"
 #include "filepropertydlg.h"
 #include "newwidgetdlg.h"
 #include "domutil.h"
@@ -348,6 +349,8 @@ private:
     SubprojectItem *m_shownSubproject;
     SubprojectItem *m_rootSubproject;
     TrollProjectPart *m_part;
+
+    friend class ChooseSubprojectDlg;
 };
 
 #endif

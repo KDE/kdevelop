@@ -614,7 +614,7 @@ void TrollProjectWidget::setupContext()
     executeTargetButton->setEnabled(runable);
     m_part->actionCollection()->action("build_execute_target")->setEnabled(runable);
 
-    
+
     projectconfButton->setEnabled(projectconfigurable);
     configurefileButton->setEnabled(fileconfigurable);
     newfileButton->setEnabled(hasSourceFiles);
@@ -1073,6 +1073,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
       idQmake = popup.insertItem(SmallIcon("qmakerun"),i18n("Run qmake"));
       popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
+      if (spitem->configuration.m_template != QTMP_SUBDIRS)
+        popup.setItemEnabled(idAddSubproject, false);
       idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
       popup.insertSeparator();
       idProjectConfiguration = popup.insertItem(SmallIcon("configure"),i18n("Subproject Settings"));
@@ -1503,6 +1505,18 @@ void TrollProjectWidget::addFile(const QString &fileName, bool noPathTruncate)
 {
   if (!m_shownSubproject)
     return;
+  if (m_shownSubproject->configuration.m_template == QTMP_SUBDIRS)
+  {
+    ChooseSubprojectDlg dlg(this);
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        if (dlg.selectedSubproject())
+            overview->setCurrentItem(dlg.selectedSubproject());
+    }
+    else
+        return;
+  }
+
 /*  QStringList splitFile = QStringList::split('.',fileName);
   QString ext = splitFile[splitFile.count()-1];
   splitFile = QStringList::split('/',fileName);

@@ -25,6 +25,7 @@
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -85,7 +86,10 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->configuration.m_requirements = 0;
 
   if (radioApplication->isChecked())
+  {
     myProjectItem->configuration.m_template = QTMP_APPLICATION;
+    myProjectItem->setPixmap(0,SmallIcon("qmake_app"));
+  }
   else if (radioLibrary->isChecked())
   {
     myProjectItem->configuration.m_template = QTMP_LIBRARY;
@@ -97,9 +101,13 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     }
     if (pluginRadio->isOn())
       myProjectItem->configuration.m_requirements += QD_PLUGIN;
+    myProjectItem->setPixmap(0,SmallIcon("qmake_lib"));
   }
   else if (radioSubdirs->isChecked())
+  {
     myProjectItem->configuration.m_template = QTMP_SUBDIRS;
+    myProjectItem->setPixmap(0,SmallIcon("qmake_sub"));
+  }
 
   // Buildmode
   if (radioDebugMode->isChecked())

@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = libkdevtrollproject.la
 libkdevtrollproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevtrollproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/util/libkdevutil.la $(top_builddir)/lib/project/libkdevproject.la
 
-libkdevtrollproject_la_SOURCES = caret.cpp filebuffer.cpp projectconfigurationdlgbase.ui filepropertybase.ui newwidgetdlgbase.ui newwidgetdlg.cpp filepropertydlg.cpp projectconfigurationdlg.cpp trollprojectpart.cpp trollprojectwidget.cpp
+libkdevtrollproject_la_SOURCES = caret.cpp filebuffer.cpp projectconfigurationdlgbase.ui filepropertybase.ui newwidgetdlgbase.ui newwidgetdlg.cpp filepropertydlg.cpp projectconfigurationdlg.cpp trollprojectpart.cpp trollprojectwidget.cpp choosesubprojectdlgbase.ui choosesubprojectdlg.cpp
 
 
 METASOURCES = AUTO
