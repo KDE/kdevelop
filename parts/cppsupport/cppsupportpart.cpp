@@ -312,6 +312,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
         if (re.match(str.latin1()) &&
             !findHeader(project()->allSourceFiles(), re.group(1)).isEmpty()) {
             popupstr = re.group(1);
+	    popup->insertSeparator();
             popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
                                this, SLOT(slotGotoIncludeFile()) );
         }
