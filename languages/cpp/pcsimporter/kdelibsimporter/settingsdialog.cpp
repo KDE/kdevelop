@@ -41,8 +41,16 @@ QListBoxItem* QListBox_selectedItem(QListBox* cpQListBox)
 SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     : SettingsDialogBase(parent,name,fl)
 {
-    QStringList kdedirs;
-    kdedirs.push_back( ::getenv("KDEDIR") + QString("/include") );
+    // Parse $KDEDIRS first, because it takes precedence over $KDEDIR
+    QStringList kdedirs = QStringList::split( ':', QFile::decodeName( ::getenv( "KDEDIRS" ) ) );
+    for( QStringList::Iterator it = kdedirs.begin(); it != kdedirs.end(); ++it )
+        if ( !( *it ).isEmpty() )
+            *it += "/include";
+
+    QString kdedir = QFile::decodeName( ::getenv( "KDEDIR" ) );
+    if ( !kdedir.isEmpty() )
+        kdedirs.push_back( kdedir + "/include" );
+
     kdedirs.push_back( "/usr/lib/kde/include" );
     kdedirs.push_back( "/usr/local/kde/include" );
     kdedirs.push_back( "/usr/local/include" );
@@ -52,7 +60,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     kdedirs.push_back( "/opt/kde3/include" );
     kdedirs.push_back( "/opt/kde/include" );
 
-    for( QStringList::Iterator it=kdedirs.begin(); it!=kdedirs.end(); ++it )
+    for( QStringList::ConstIterator it = kdedirs.begin(); it != kdedirs.end(); ++it )
     {
         QString kdedir = *it;
         if( !kdedir.isEmpty() && isValidKDELibsDir(kdedir) )
@@ -66,7 +74,7 @@ SettingsDialog::~SettingsDialog()
 }
 
 /*$SPECIALIZATION$*/
-void SettingsDialog::slotSelectionChanged(QListBoxItem* item)
+void SettingsDialog::slotSelectionChanged( QListBoxItem* /* item */ )
 {
 #if QT_VERSION < 0x030100
     if( !QListBox_selectedItem(kdeListBox) ){
