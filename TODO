@@ -21,6 +21,9 @@ High priority tasks!
     UI Childframe mode, view-taskbar missing
   - docking state of all toolviews not restored after Gideon restart
   - editor options dialog missing when all views are closed
+  - editor view must detect and warn about changes made outside gideon
+  - messages view should hold place when scrolled but new output is
+    being added
    
 * debugger
   - Trying to call the debugger for the Gideon project itself just
@@ -69,9 +72,23 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
 UIs that intuitively ought to be there
 
-* automakemanager:
-  - install, etc. targets besides "build" for subproject menus & toolbar
+automakemanager:
+ * install, etc. targets besides "build" for subproject menus & toolbar
 
+4. Small Annoyances
+-------------------
+
+* If you click an error in the output view, "Next Error"/"Previous Error"
+  should then start from that point.
+* Next/Previous error should ignore lines that aren't actual errors, like
+  "(Each undeclared identifier is reported only once for each function it appears in.)"
+* Messages in status bar would look nicer if they appeared with the same
+  border as other items.
+* Sometimes breakpoints don't get set properly until you pause the debugged app.
+* Debug menu items not properly enabled/disabled.
+* Browser tool bar should truncate long menu entries so it doesn't take so
+  much space.
+  
 New features
 ============
   
