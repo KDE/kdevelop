@@ -127,6 +127,8 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 
 void KDevProjectManagerPart::closeProject()
 {
+    delete m_dirWatch;
+    m_dirWatch = 0;
 }
 
 KDevProjectManagerPart::Options KDevProjectManagerPart::options() const
