@@ -17,6 +17,7 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qgroupbox.h>
+#include <qcheckbox.h>
 
 #include "domutil.h"
 #include "environmentvariableswidget.h"
@@ -33,6 +34,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     m_projectDirectory = projectDirectory;
     mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
+    startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
 }
 
 
@@ -44,6 +46,7 @@ void RunOptionsWidget::accept()
 {
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
+    DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
 
     m_environmentVariablesWidget->accept();
 }
