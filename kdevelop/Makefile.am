@@ -47,6 +47,7 @@ mime_DATA = x-kdevelop-project.desktop
 
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = kdevelopcomponent.desktop \
+		   kdevelopcomponentviewhandler.desktop \
 		   kdevelopversioncontrol.desktop \
 		   kdeveloplanguagesupport.desktop \
 		   kdevelopcompileroptions.desktop \
