@@ -26,6 +26,10 @@
 #include <qwhatsthis.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <qgrid.h>
+#include <qlayout.h>
+#include <kbuttonbox.h>
+#include <kglobal.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -73,20 +77,11 @@ CFilePrintDlg::~CFilePrintDlg(){
   delete (qtarch_ButtonGroup_141);
   delete (qtarch_ButtonGroup_140);
   delete (qtarch_ButtonGroup_143);
-  delete (filewidget);
-  delete (mainwidget);
 }
 
 void CFilePrintDlg::init() {
-  mainwidget = new QWidget(this,"filedialog");
-  mainwidget->resize (600,480);
-  filewidget = new QWidget(this,"files");
-  filewidget->resize(600,430);
-
+  QGridLayout *grid1 = new QGridLayout(this,4,2,15,7);  
   qtarch_ButtonGroup_139 = new QButtonGroup( this, "ButtonGroup_139" );
-  qtarch_ButtonGroup_139->setGeometry( 20, 10, 320, 160 );
-  qtarch_ButtonGroup_139->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_139->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_139->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_139->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_139->setFontPropagation( QWidget::NoChildren );
@@ -94,11 +89,10 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_139->setFrameStyle( 49 );
   qtarch_ButtonGroup_139->setTitle(i18n("File selection") );
   qtarch_ButtonGroup_139->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_139,0,0);
   
-  currentButton = new QRadioButton( this, "currentButton" );
-  currentButton->setGeometry( 30, 30, 140, 30 );
-  currentButton->setMinimumSize( 0, 0 );
-  currentButton->setMaximumSize( 32767, 32767 );
+  QGridLayout *grid2 = new QGridLayout(qtarch_ButtonGroup_139,4,3,15,7);  
+  currentButton = new QRadioButton( qtarch_ButtonGroup_139, "currentButton" );
   currentButton->setFocusPolicy( QWidget::TabFocus );
   currentButton->setBackgroundMode( QWidget::PaletteBackground );
   currentButton->setFontPropagation( QWidget::NoChildren );
@@ -106,11 +100,11 @@ void CFilePrintDlg::init() {
   currentButton->setText( i18n("current") );
   currentButton->setAutoRepeat( FALSE );
   currentButton->setAutoResize( FALSE );
+  grid2->addWidget(currentButton,0,0);
+
 	
-  allInProjectButton = new QRadioButton( this, "allInProjectButton" );
-  allInProjectButton->setGeometry( 30, 60, 140, 30 );
-  allInProjectButton->setMinimumSize( 0, 0 );
-  allInProjectButton->setMaximumSize( 32767, 32767 );
+  allInProjectButton = new QRadioButton(qtarch_ButtonGroup_139, "allInProjectButton" );
+
   allInProjectButton->setFocusPolicy( QWidget::TabFocus );
   allInProjectButton->setBackgroundMode( QWidget::PaletteBackground );
   allInProjectButton->setFontPropagation( QWidget::NoChildren );
@@ -118,11 +112,11 @@ void CFilePrintDlg::init() {
   allInProjectButton->setText( i18n("all in project") );
   allInProjectButton->setAutoRepeat( FALSE );
   allInProjectButton->setAutoResize( FALSE );
+  grid2->addWidget(allInProjectButton,1,0);
 
-  selfChoosenFilesButton = new QRadioButton( this, "selfChoosenFilesButton" );
-  selfChoosenFilesButton->setGeometry( 30, 90, 290, 30 );
-  selfChoosenFilesButton->setMinimumSize( 0, 0 );
-  selfChoosenFilesButton->setMaximumSize( 32767, 32767 );
+
+  selfChoosenFilesButton = new QRadioButton(qtarch_ButtonGroup_139 , "selfChoosenFilesButton" );
+
   selfChoosenFilesButton->setFocusPolicy( QWidget::TabFocus );
   selfChoosenFilesButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesButton->setFontPropagation( QWidget::NoChildren );
@@ -130,11 +124,10 @@ void CFilePrintDlg::init() {
   selfChoosenFilesButton->setText( i18n("self choosen files") );
   selfChoosenFilesButton->setAutoRepeat( FALSE );
   selfChoosenFilesButton->setAutoResize( FALSE );
+  grid2->addWidget(selfChoosenFilesButton,2,0);
 
-  qtarch_Label_79 = new QLabel( this, "Label_79" );
-  qtarch_Label_79->setGeometry( 50, 130, 30, 30 );
-  qtarch_Label_79->setMinimumSize( 0, 0 );
-  qtarch_Label_79->setMaximumSize( 32767, 32767 );
+  qtarch_Label_79 = new QLabel( qtarch_ButtonGroup_139, "Label_79" );
+
   qtarch_Label_79->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_79->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_79->setFontPropagation( QWidget::NoChildren );
@@ -142,11 +135,10 @@ void CFilePrintDlg::init() {
   qtarch_Label_79->setText( i18n("file") );
   qtarch_Label_79->setAlignment( 289 );
   qtarch_Label_79->setMargin( -1 );
+  grid2->addWidget( qtarch_Label_79,3,0);
 
-  selfChoosenFileLine = new QLineEdit( this, "selfChoosenFileLine" );
-  selfChoosenFileLine->setGeometry( 100, 130, 190, 30 );
-  selfChoosenFileLine->setMinimumSize( 0, 0 );
-  selfChoosenFileLine->setMaximumSize( 32767, 32767 );
+  selfChoosenFileLine = new QLineEdit( qtarch_ButtonGroup_139, "selfChoosenFileLine" );
+
   selfChoosenFileLine->setFocusPolicy( QWidget::StrongFocus );
   selfChoosenFileLine->setBackgroundMode( QWidget::PaletteBase );
   selfChoosenFileLine->setFontPropagation( QWidget::NoChildren );
@@ -155,11 +147,10 @@ void CFilePrintDlg::init() {
   selfChoosenFileLine->setMaxLength( 32767 );
   selfChoosenFileLine->setEchoMode( QLineEdit::Normal );
   selfChoosenFileLine->setFrame( TRUE );
+  grid2->addWidget(selfChoosenFileLine,3,1);
+
   
-  selfChoosenFilesPushButton = new QPushButton( this, "selfChoosenFilesPushButton" );
-  selfChoosenFilesPushButton->setGeometry( 300, 130, 30, 30 );
-  selfChoosenFilesPushButton->setMinimumSize( 0, 0 );
-  selfChoosenFilesPushButton->setMaximumSize( 32767, 32767 );
+  selfChoosenFilesPushButton = new QPushButton(qtarch_ButtonGroup_139 , "selfChoosenFilesPushButton" );
   selfChoosenFilesPushButton->setFocusPolicy( QWidget::TabFocus );
   selfChoosenFilesPushButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesPushButton->setFontPropagation( QWidget::NoChildren );
@@ -168,11 +159,10 @@ void CFilePrintDlg::init() {
   selfChoosenFilesPushButton->setPixmap(pix);
   selfChoosenFilesPushButton->setAutoRepeat( FALSE );
   selfChoosenFilesPushButton->setAutoResize( FALSE );
-  
-  headerFilesButton = new QRadioButton( this, "headerFilesButton" );
-  headerFilesButton->setGeometry( 190, 30, 140, 30 );
-  headerFilesButton->setMinimumSize( 0, 0 );
-  headerFilesButton->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(selfChoosenFilesPushButton,3,2);
+
+
+  headerFilesButton = new QRadioButton(qtarch_ButtonGroup_139 , "headerFilesButton" );
   headerFilesButton->setFocusPolicy( QWidget::TabFocus );
   headerFilesButton->setBackgroundMode( QWidget::PaletteBackground );
   headerFilesButton->setFontPropagation( QWidget::NoChildren );
@@ -180,11 +170,9 @@ void CFilePrintDlg::init() {
   headerFilesButton->setText( i18n("all headers") );
   headerFilesButton->setAutoRepeat( FALSE );
   headerFilesButton->setAutoResize( FALSE );
+  grid2->addWidget(headerFilesButton,0,1);
 
-  cppFilesButton = new QRadioButton( this, "cppFilesButton" );
-  cppFilesButton->setGeometry( 190, 60, 140, 30 );
-  cppFilesButton->setMinimumSize( 0, 0 );
-  cppFilesButton->setMaximumSize( 32767, 32767 );
+  cppFilesButton = new QRadioButton( qtarch_ButtonGroup_139, "cppFilesButton" );
   cppFilesButton->setFocusPolicy( QWidget::TabFocus );
   cppFilesButton->setBackgroundMode( QWidget::PaletteBackground );
   cppFilesButton->setFontPropagation( QWidget::NoChildren );
@@ -192,11 +180,9 @@ void CFilePrintDlg::init() {
   cppFilesButton->setText( i18n("all cpp files") );
   cppFilesButton->setAutoRepeat( FALSE );
   cppFilesButton->setAutoResize( FALSE );
+  grid2->addWidget(cppFilesButton,1,1);
 
-  changedFilesButton = new QRadioButton( this, "changedFilesButton" );
-  changedFilesButton->setGeometry( 190, 90, 140, 30 );
-  changedFilesButton->setMinimumSize( 0, 0 );
-  changedFilesButton->setMaximumSize( 32767, 32767 );
+  changedFilesButton = new QRadioButton( qtarch_ButtonGroup_139, "changedFilesButton" );
   changedFilesButton->setFocusPolicy( QWidget::TabFocus );
   changedFilesButton->setBackgroundMode( QWidget::PaletteBackground );
   changedFilesButton->setFontPropagation( QWidget::NoChildren );
@@ -204,11 +190,9 @@ void CFilePrintDlg::init() {
   changedFilesButton->setText( i18n("changed files") );
   changedFilesButton->setAutoRepeat( FALSE );
   changedFilesButton->setAutoResize( FALSE );
+  grid2->addWidget(changedFilesButton,2,1);
   
   qtarch_ButtonGroup_140 = new QButtonGroup( this, "ButtonGroup_140" );
-  qtarch_ButtonGroup_140->setGeometry( 20, 180, 320, 240 );
-  qtarch_ButtonGroup_140->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_140->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_140->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_140->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_140->setFontPropagation( QWidget::NoChildren );
@@ -216,11 +200,12 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_140->setFrameStyle( 49 );
   qtarch_ButtonGroup_140->setTitle( i18n("Changed files") );
   qtarch_ButtonGroup_140->setAlignment( 1 );
+  grid1->addMultiCellWidget( qtarch_ButtonGroup_140,1,2,0,0);
 
-  qtarch_ButtonGroup_142 = new QButtonGroup( this, "ButtonGroup_142" );
-  qtarch_ButtonGroup_142->setGeometry( 30, 200, 300, 100 );
-  qtarch_ButtonGroup_142->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_142->setMaximumSize( 32767, 32767 );
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_140,2,1,15,7);  
+
+  qtarch_ButtonGroup_142 = new QButtonGroup(  qtarch_ButtonGroup_140, "ButtonGroup_142" );
   qtarch_ButtonGroup_142->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_142->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_142->setFontPropagation( QWidget::NoChildren );
@@ -228,11 +213,11 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_142->setFrameStyle( 49 );
   qtarch_ButtonGroup_142->setTitle( i18n("Between") );
   qtarch_ButtonGroup_142->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_142,0,0);
 
-  qtarch_Label_77 = new QLabel( this, "Label_77" );
-  qtarch_Label_77->setGeometry( 40, 220, 70, 30 );
-  qtarch_Label_77->setMinimumSize( 0, 0 );
-  qtarch_Label_77->setMaximumSize( 32767, 32767 );
+  QGridLayout *grid3 = new QGridLayout(qtarch_ButtonGroup_142,2,5,15,7);  
+
+  qtarch_Label_77 = new QLabel( qtarch_ButtonGroup_142, "Label_77" );
   qtarch_Label_77->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_77->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_77->setFontPropagation( QWidget::NoChildren );
@@ -240,11 +225,9 @@ void CFilePrintDlg::init() {
   qtarch_Label_77->setText( i18n("date") );
   qtarch_Label_77->setAlignment( 289 );
   qtarch_Label_77->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_77,0,0);
 
-  beginDateButton = new QPushButton( this, "beginDateButton" );
-  beginDateButton->setGeometry( 120, 220, 200, 30 );
-  beginDateButton->setMinimumSize( 0, 0 );
-  beginDateButton->setMaximumSize( 32767, 32767 );
+  beginDateButton = new QPushButton( qtarch_ButtonGroup_142, "beginDateButton" );
   beginDateButton->setFocusPolicy( QWidget::TabFocus );
   beginDateButton->setBackgroundMode( QWidget::PaletteBackground );
   beginDateButton->setFontPropagation( QWidget::NoChildren );
@@ -252,11 +235,9 @@ void CFilePrintDlg::init() {
   beginDateButton->setText( "" );
   beginDateButton->setAutoRepeat( FALSE );
   beginDateButton->setAutoResize( FALSE );
+  grid3->addMultiCellWidget(beginDateButton,0,0,1,4);
   
-  qtarch_Label_80 = new QLabel( this, "Label_80" );
-  qtarch_Label_80->setGeometry( 40, 260, 70, 30 );
-  qtarch_Label_80->setMinimumSize( 0, 0 );
-  qtarch_Label_80->setMaximumSize( 32767, 32767 );
+  qtarch_Label_80 = new QLabel( qtarch_ButtonGroup_142, "Label_80" );
   qtarch_Label_80->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_80->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_80->setFontPropagation( QWidget::NoChildren );
@@ -264,11 +245,9 @@ void CFilePrintDlg::init() {
   qtarch_Label_80->setText( i18n("time") );
   qtarch_Label_80->setAlignment( 289 );
   qtarch_Label_80->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_80,1,0);
 
-  beginTimeHourLine = new QSpinBox( this, "beginTimeHourLine" );
-  beginTimeHourLine->setGeometry( 120, 260, 60, 30 );
-  beginTimeHourLine->setMinimumSize( 0, 0 );
-  beginTimeHourLine->setMaximumSize( 32767, 32767 );
+  beginTimeHourLine = new QSpinBox(  qtarch_ButtonGroup_142, "beginTimeHourLine" );
   beginTimeHourLine->setFocusPolicy( QWidget::StrongFocus );
   beginTimeHourLine->setBackgroundMode( QWidget::PaletteBackground );
   beginTimeHourLine->setFontPropagation( QWidget::NoChildren );
@@ -281,11 +260,10 @@ void CFilePrintDlg::init() {
   beginTimeHourLine->setSuffix( "" );
   beginTimeHourLine->setSpecialValueText( "" );
   beginTimeHourLine->setWrapping( FALSE );
+  grid3->addWidget(beginTimeHourLine,1,1);
+
   
-  qtarch_Label_88 = new QLabel( this, "Label_88" );
-  qtarch_Label_88->setGeometry( 180, 260, 20, 30 );
-  qtarch_Label_88->setMinimumSize( 0, 0 );
-  qtarch_Label_88->setMaximumSize( 32767, 32767 );
+  qtarch_Label_88 = new QLabel(qtarch_ButtonGroup_142, "Label_88" );
   qtarch_Label_88->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_88->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_88->setFontPropagation( QWidget::NoChildren );
@@ -293,11 +271,11 @@ void CFilePrintDlg::init() {
   qtarch_Label_88->setText( ":" );
   qtarch_Label_88->setAlignment( 292 );
   qtarch_Label_88->setMargin( -1 );
+  grid3->addWidget( qtarch_Label_88,1,2);
+
+
   
-  beginTimeMinuteLine = new QSpinBox( this, "beginTimeMinuteList" );
-  beginTimeMinuteLine->setGeometry( 200, 260, 60, 30 );
-  beginTimeMinuteLine->setMinimumSize( 0, 0 );
-  beginTimeMinuteLine->setMaximumSize( 32767, 32767 );
+  beginTimeMinuteLine = new QSpinBox( qtarch_ButtonGroup_142, "beginTimeMinuteList" );
   beginTimeMinuteLine->setFocusPolicy( QWidget::StrongFocus );
   beginTimeMinuteLine->setBackgroundMode( QWidget::PaletteBackground );
   beginTimeMinuteLine->setFontPropagation( QWidget::NoChildren );
@@ -310,11 +288,9 @@ void CFilePrintDlg::init() {
   beginTimeMinuteLine->setSuffix( "" );
   beginTimeMinuteLine->setSpecialValueText( "" );
   beginTimeMinuteLine->setWrapping( FALSE );
+  grid3->addWidget(beginTimeMinuteLine,1,3);
 
-  qtarch_Label_89 = new QLabel( this, "Label_89" );
-  qtarch_Label_89->setGeometry( 270, 260, 50, 30 );
-  qtarch_Label_89->setMinimumSize( 0, 0 );
-  qtarch_Label_89->setMaximumSize( 32767, 32767 );
+  qtarch_Label_89 = new QLabel( qtarch_ButtonGroup_142 , "Label_89" );
   qtarch_Label_89->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_89->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_89->setFontPropagation( QWidget::NoChildren );
@@ -322,11 +298,10 @@ void CFilePrintDlg::init() {
   qtarch_Label_89->setText(i18n("o´clock"));
   qtarch_Label_89->setAlignment( 289 );
   qtarch_Label_89->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_89,1,4);
+
   
-  qtarch_ButtonGroup_141 = new QButtonGroup( this, "ButtonGroup_141" );
-  qtarch_ButtonGroup_141->setGeometry( 30, 310, 300, 100 );
-  qtarch_ButtonGroup_141->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_141->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_141 = new QButtonGroup(qtarch_ButtonGroup_140 , "ButtonGroup_141" );
   qtarch_ButtonGroup_141->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_141->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_141->setFontPropagation( QWidget::NoChildren );
@@ -335,10 +310,11 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_141->setTitle( i18n("And") );
   qtarch_ButtonGroup_141->setAlignment( 1 );
 
-  qtarch_Label_83 = new QLabel( this, "Label_83" );
-  qtarch_Label_83->setGeometry( 40, 330, 70, 30 );
-  qtarch_Label_83->setMinimumSize( 0, 0 );
-  qtarch_Label_83->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(qtarch_ButtonGroup_141,1,0);
+
+
+  grid3 = new QGridLayout(qtarch_ButtonGroup_141,2,5,15,7);
+  qtarch_Label_83 = new QLabel(qtarch_ButtonGroup_141 , "Label_83" );
   qtarch_Label_83->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_83->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_83->setFontPropagation( QWidget::NoChildren );
@@ -346,11 +322,9 @@ void CFilePrintDlg::init() {
   qtarch_Label_83->setText( i18n("date") );
   qtarch_Label_83->setAlignment( 289 );
   qtarch_Label_83->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_83,0,0);
 
-  beginTimeButton = new QPushButton( this, "beginTimeButton" );
-  beginTimeButton->setGeometry( 120, 330, 200, 30 );
-  beginTimeButton->setMinimumSize( 0, 0 );
-  beginTimeButton->setMaximumSize( 32767, 32767 );
+  beginTimeButton = new QPushButton(qtarch_ButtonGroup_141 , "beginTimeButton" );
   beginTimeButton->setFocusPolicy( QWidget::TabFocus );
   beginTimeButton->setBackgroundMode( QWidget::PaletteBackground );
   beginTimeButton->setFontPropagation( QWidget::NoChildren );
@@ -358,11 +332,10 @@ void CFilePrintDlg::init() {
   beginTimeButton->setText( "" );
   beginTimeButton->setAutoRepeat( FALSE );
   beginTimeButton->setAutoResize( FALSE );
+  grid3->addMultiCellWidget(beginTimeButton,0,0,1,4);
 
-  qtarch_Label_84 = new QLabel( this, "Label_84" );
-  qtarch_Label_84->setGeometry( 40, 370, 70, 30 );
-  qtarch_Label_84->setMinimumSize( 0, 0 );
-  qtarch_Label_84->setMaximumSize( 32767, 32767 );
+
+  qtarch_Label_84 = new QLabel(qtarch_ButtonGroup_141 , "Label_84" );
   qtarch_Label_84->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_84->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_84->setFontPropagation( QWidget::NoChildren );
@@ -370,11 +343,9 @@ void CFilePrintDlg::init() {
   qtarch_Label_84->setText( i18n("time") );
   qtarch_Label_84->setAlignment( 289 );
   qtarch_Label_84->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_84,1,0);
 
-  endTimeHourLine = new QSpinBox( this, "endTimeHourLine" );
-  endTimeHourLine->setGeometry( 120, 370, 60, 30 );
-  endTimeHourLine->setMinimumSize( 0, 0 );
-  endTimeHourLine->setMaximumSize( 32767, 32767 );
+  endTimeHourLine = new QSpinBox( qtarch_ButtonGroup_141, "endTimeHourLine" );
   endTimeHourLine->setFocusPolicy( QWidget::StrongFocus );
   endTimeHourLine->setBackgroundMode( QWidget::PaletteBackground );
   endTimeHourLine->setFontPropagation( QWidget::NoChildren );
@@ -387,11 +358,10 @@ void CFilePrintDlg::init() {
   endTimeHourLine->setSuffix( "" );
   endTimeHourLine->setSpecialValueText( "" );
   endTimeHourLine->setWrapping( FALSE );
+  grid3->addWidget(endTimeHourLine,1,1);
+ 
   
-  qtarch_Label_91 = new QLabel( this, "Label_91" );
-  qtarch_Label_91->setGeometry( 180, 370, 20, 30 );
-  qtarch_Label_91->setMinimumSize( 0, 0 );
-  qtarch_Label_91->setMaximumSize( 32767, 32767 );
+  qtarch_Label_91 = new QLabel( qtarch_ButtonGroup_141, "Label_91" );
   qtarch_Label_91->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_91->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_91->setFontPropagation( QWidget::NoChildren );
@@ -399,11 +369,9 @@ void CFilePrintDlg::init() {
   qtarch_Label_91->setText( ":" );
   qtarch_Label_91->setAlignment( 292 );
   qtarch_Label_91->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_91,1,2);
   
-  endTimeMinuteLine = new QSpinBox( this, "endTimeMinuteLine" );
-  endTimeMinuteLine->setGeometry( 200, 370, 60, 30 );
-  endTimeMinuteLine->setMinimumSize( 0, 0 );
-  endTimeMinuteLine->setMaximumSize( 32767, 32767 );
+  endTimeMinuteLine = new QSpinBox(  qtarch_ButtonGroup_141, "endTimeMinuteLine" );
   endTimeMinuteLine->setFocusPolicy( QWidget::StrongFocus );
   endTimeMinuteLine->setBackgroundMode( QWidget::PaletteBackground );
   endTimeMinuteLine->setFontPropagation( QWidget::NoChildren );
@@ -416,11 +384,9 @@ void CFilePrintDlg::init() {
   endTimeMinuteLine->setSuffix( "" );
   endTimeMinuteLine->setSpecialValueText( "" );
   endTimeMinuteLine->setWrapping( FALSE );
+  grid3->addWidget(endTimeMinuteLine,1,3);
 
-  qtarch_Label_90 = new QLabel( this, "Label_90" );
-  qtarch_Label_90->setGeometry( 270, 370, 50, 30 );
-  qtarch_Label_90->setMinimumSize( 0, 0 );
-  qtarch_Label_90->setMaximumSize( 32767, 32767 );
+  qtarch_Label_90 = new QLabel( qtarch_ButtonGroup_141, "Label_90" );
   qtarch_Label_90->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_90->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_90->setFontPropagation( QWidget::NoChildren );
@@ -428,8 +394,9 @@ void CFilePrintDlg::init() {
   qtarch_Label_90->setText(i18n("o´clock"));
   qtarch_Label_90->setAlignment( 289 );
   qtarch_Label_90->setMargin( -1 );
+  grid3->addWidget( qtarch_Label_90,1,4);
 
-  qtarch_ButtonGroup_143 = new QButtonGroup( this, "ButtonGroup_143" );
+  qtarch_ButtonGroup_143 = new QButtonGroup(this , "ButtonGroup_143" );
   qtarch_ButtonGroup_143->setGeometry( 350, 10, 230, 410 );
   qtarch_ButtonGroup_143->setMinimumSize( 0, 0 );
   qtarch_ButtonGroup_143->setMaximumSize( 32767, 32767 );
@@ -441,10 +408,11 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_143->setTitle( i18n("Self choosen files") );
   qtarch_ButtonGroup_143->setAlignment( 1 );
 
-  selfChoosenFilesMultiLine = new QListBox( this, "selfChoosenFilesMultiLine" );
-  selfChoosenFilesMultiLine->setGeometry( 360, 30, 210, 340 );
-  selfChoosenFilesMultiLine->setMinimumSize( 0, 0 );
-  selfChoosenFilesMultiLine->setMaximumSize( 32767, 32767 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_143,0,2,1,1);
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_143,8,3,15,7);  
+
+  selfChoosenFilesMultiLine = new QListBox(qtarch_ButtonGroup_143 , "selfChoosenFilesMultiLine" );
   selfChoosenFilesMultiLine->setFocusPolicy( QWidget::StrongFocus );
   selfChoosenFilesMultiLine->setBackgroundMode( QWidget::PaletteBase );
   selfChoosenFilesMultiLine->setFontPropagation( QWidget::SameFont );
@@ -452,11 +420,9 @@ void CFilePrintDlg::init() {
   selfChoosenFilesMultiLine->setFrameStyle( 51 );
   selfChoosenFilesMultiLine->setLineWidth( 2 );
   selfChoosenFilesMultiLine->setMultiSelection( TRUE );
+  grid2->addMultiCellWidget(selfChoosenFilesMultiLine,0,6,0,2);
 
-  selfChoosenFilesAddButton = new QPushButton( this, "selfChoosenFilesAddButton" );
-  selfChoosenFilesAddButton->setGeometry( 360, 380, 70, 30 );
-  selfChoosenFilesAddButton->setMinimumSize( 0, 0 );
-  selfChoosenFilesAddButton->setMaximumSize( 32767, 32767 );
+  selfChoosenFilesAddButton = new QPushButton( qtarch_ButtonGroup_143, "selfChoosenFilesAddButton" );
   selfChoosenFilesAddButton->setFocusPolicy( QWidget::TabFocus );
   selfChoosenFilesAddButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesAddButton->setFontPropagation( QWidget::NoChildren );
@@ -464,11 +430,10 @@ void CFilePrintDlg::init() {
   selfChoosenFilesAddButton->setText( i18n("add") );
   selfChoosenFilesAddButton->setAutoRepeat( FALSE );
   selfChoosenFilesAddButton->setAutoResize( FALSE );
+  grid2->addWidget(selfChoosenFilesAddButton,7,0);
 
-  selfChoosenFilesDeleteButton = new QPushButton( this, "selfChoosenFilesDeleteButton" );
-  selfChoosenFilesDeleteButton->setGeometry( 430, 380, 70, 30 );
-  selfChoosenFilesDeleteButton->setMinimumSize( 0, 0 );
-  selfChoosenFilesDeleteButton->setMaximumSize( 32767, 32767 );
+
+  selfChoosenFilesDeleteButton = new QPushButton( qtarch_ButtonGroup_143, "selfChoosenFilesDeleteButton" );
   selfChoosenFilesDeleteButton->setFocusPolicy( QWidget::TabFocus );
   selfChoosenFilesDeleteButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesDeleteButton->setFontPropagation( QWidget::NoChildren );
@@ -476,11 +441,11 @@ void CFilePrintDlg::init() {
   selfChoosenFilesDeleteButton->setText( i18n("delete") );
   selfChoosenFilesDeleteButton->setAutoRepeat( FALSE );
   selfChoosenFilesDeleteButton->setAutoResize( FALSE );
+  grid2->addWidget(selfChoosenFilesDeleteButton,7,1);
 
-  selfChoosenFilesCleanButton = new QPushButton( this, "selfChoosenFilesCleanButton" );
-  selfChoosenFilesCleanButton->setGeometry( 500, 380, 70, 30 );
-  selfChoosenFilesCleanButton->setMinimumSize( 0, 0 );
-  selfChoosenFilesCleanButton->setMaximumSize( 32767, 32767 );
+
+
+  selfChoosenFilesCleanButton = new QPushButton( qtarch_ButtonGroup_143 , "selfChoosenFilesCleanButton" );
   selfChoosenFilesCleanButton->setFocusPolicy( QWidget::TabFocus );
   selfChoosenFilesCleanButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesCleanButton->setFontPropagation( QWidget::NoChildren );
@@ -489,28 +454,17 @@ void CFilePrintDlg::init() {
   selfChoosenFilesCleanButton->setAutoRepeat( FALSE );
   selfChoosenFilesCleanButton->setAutoResize( FALSE );
 
-  qtarch_ButtonGroup_143->insert( selfChoosenFilesCleanButton );
-  qtarch_ButtonGroup_143->insert( selfChoosenFilesDeleteButton );
-  qtarch_ButtonGroup_143->insert( selfChoosenFilesAddButton );
-  qtarch_ButtonGroup_140->insert( beginTimeButton );
-  qtarch_ButtonGroup_140->insert( beginDateButton );
-  qtarch_ButtonGroup_141->insert( beginTimeButton );
-  qtarch_ButtonGroup_142->insert( beginDateButton );
-  qtarch_ButtonGroup_139->insert( currentButton,6 );
-  qtarch_ButtonGroup_139->insert( allInProjectButton,4 );
-  qtarch_ButtonGroup_139->insert( selfChoosenFilesButton,5 );
-  qtarch_ButtonGroup_139->insert( changedFilesButton,3 );
-  qtarch_ButtonGroup_139->insert( headerFilesButton,2 );
-  qtarch_ButtonGroup_139->insert( cppFilesButton,1 );
+  grid2->addWidget(selfChoosenFilesCleanButton,7,2);
+
+  
   currentButton->setChecked(true);
 
-  okButton = new QPushButton( mainwidget, "okButton" );
-  okButton->setText(i18n("OK"));
-  okButton->setGeometry( 370, 440, 100, 30 );
-
-  cancelButton = new QPushButton( mainwidget, "cancelButton" );
-  cancelButton->setText(i18n("Cancel"));
-  cancelButton->setGeometry( 480, 440, 100, 30 );
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  okButton = bb->addButton( i18n("OK") );
+  cancelButton = bb->addButton(i18n("Cancel"));
+  bb->layout();
+  grid1->addWidget( bb,3,1 );
 
   QWhatsThis::add(selfChoosenFilesMultiLine,
 	i18n("Here are the files which will be printed, if 'self\n"
@@ -605,13 +559,13 @@ void CFilePrintDlg::init() {
   connect(beginDateButton,SIGNAL(clicked()),SLOT(slotBeginDateDlgClicked()));
   connect(beginTimeButton,SIGNAL(clicked()),SLOT(slotEndDateDlgClicked()));
   
-  beginDateButton->setText((QDate::currentDate()).toString());
-  beginTimeButton->setText((QDate::currentDate()).toString());
+  beginDateButton->setText(KGlobal::locale()->formatDate(QDate::currentDate()));
+
+  beginTimeButton->setText(KGlobal::locale()->formatDate(QDate::currentDate()));
   beginTimeHourLine->setValue(QTime::currentTime().hour());
   beginTimeMinuteLine->setValue(QTime::currentTime().minute());
   endTimeHourLine->setValue(QTime::currentTime().hour());
   endTimeMinuteLine->setValue(QTime::currentTime().minute());
-  mainwidget->show();
 }
 
 void CFilePrintDlg::slotFileCancelClicked() {
@@ -625,7 +579,9 @@ void CFilePrintDlg::slotBeginDateDlgClicked() {
   datepik.exec();
   datepik.getDateString(text);
   datepik.getDate(beginDate);
-  beginDateButton->setText(text);
+  if(!text.isEmpty())
+    beginDateButton->setText(text);
+
 }
 
 
@@ -636,7 +592,8 @@ void CFilePrintDlg::slotEndDateDlgClicked() {
   datepik.exec();
   datepik.getDateString(text);
   datepik.getDate(endDate);
-  beginTimeButton->setText(text);
+  if(!text.isEmpty())
+    beginTimeButton->setText(text);
 }
 void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
   if (number==0) {

@@ -1160,7 +1160,7 @@ bool Highlight::containsFiletype(const QString& ext)
     return false;
 
   w = ";" + w + ";";
-  return w.find(";"+ext+ ";") != -1;
+  return w.find(";*."+ext+ ";") != -1;
 }
 
 bool Highlight::containsMimetype(const QString& mimetype)
@@ -1246,7 +1246,7 @@ CHighlight::CHighlight(const QString& name) :
   GenHighlight(name)
 {
   dw = "*.c";
-  dm = "text/x-c-src";
+  dm = "text/x-csrc";
 }
 
 CHighlight::~CHighlight() {
@@ -1326,7 +1326,7 @@ void CHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 
 CppHighlight::CppHighlight(const QString& name) : CHighlight(name) {
   dw = "*.cpp;*.h;*.C;*.cc";
-  dm = "text/x-c++-src;text/x-c++-hdr;text/x-c-hdr";
+  dm = "text/x-c++src;text/x-c++hdr;text/x-chdr";
 }
 
 CppHighlight::~CppHighlight() {
@@ -1344,7 +1344,7 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 
 PascalHighlight::PascalHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.pp;*.pas;*.inc";
-  dm = "text/x-pascal-src";
+  dm = "text/x-pascal";
 }
 
 PascalHighlight::~PascalHighlight() {
@@ -1405,7 +1405,7 @@ void PascalHighlight::makeContextList() {
 
 IdlHighlight::IdlHighlight(const QString& name) : CHighlight(name) {
   dw = "*.idl";
-  dm = "text/x-idl-src";
+  dm = "text/x-idl";
 }
 
 IdlHighlight::~IdlHighlight() {
@@ -1420,7 +1420,7 @@ void IdlHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 
 JavaHighlight::JavaHighlight(const QString& name) : CHighlight(name) {
   dw = "*.java";
-  dm = "text/x-java-src";
+  dm = "text/x-java";
 }
 
 JavaHighlight::~JavaHighlight() {
@@ -1513,7 +1513,7 @@ void BashHighlight::makeContextList() {
 
 ModulaHighlight::ModulaHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.md;*.mi";
-  dm = "text/x-modula-2-src";
+  dm = "text/x-modula-2";
 }
 
 ModulaHighlight::~ModulaHighlight() {
@@ -1553,7 +1553,7 @@ void ModulaHighlight::makeContextList() {
 
 AdaHighlight::AdaHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.a";
-  dm = "text/x-ada-src";
+  dm = "text/x-ada";
 }
 
 AdaHighlight::~AdaHighlight() {
@@ -1594,7 +1594,7 @@ void AdaHighlight::makeContextList() {
 
 PythonHighlight::PythonHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.py";
-  dm = "text/x-python-src";
+  dm = "text/x-python";
 }
 
 PythonHighlight::~PythonHighlight() {
@@ -1890,7 +1890,7 @@ void PerlHighlight::done() {
 
 SatherHighlight::SatherHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.sa";
-  dm = "text/x-sather-src";
+  dm = "text/x-sather";
 }
 
 SatherHighlight::~SatherHighlight() {
@@ -2027,7 +2027,6 @@ int HlManager::findByFile(const QString& filename)
 
     if (!ext.isEmpty())
     {
-      ext = "*."+ext;
       for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
       {
         if (highlight->containsFiletype(ext))

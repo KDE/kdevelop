@@ -403,11 +403,7 @@ QString CRealFileView::getFullFilename(QListViewItem* pItem) {
 
 bool CRealFileView::isInstalledFile(QString filename) 
 {
-	int i=0;
-	bool b=false;
-	i=filelist.contains(filename);
-	if ( i>0 ) b=true;
-	return b;
+	return (filelist.contains(filename) > 0);
 }
 
 /*********************************************************************
@@ -495,7 +491,7 @@ void CRealFileView::slotUpdate()
     QString file_dir_name = getFullFilename(currentItem());
     QFileInfo file_info(file_dir_name);
     if (file_info.isFile()){ 
-	emit updateFileFromVCS(file_dir_name);
+      emit updateFileFromVCS(file_dir_name);
     }
     if(file_info.isDir()){
       emit updateDirFromVCS(file_dir_name);
@@ -509,7 +505,7 @@ void CRealFileView::slotCommit()
     QString file_dir_name = getFullFilename(currentItem());
     QFileInfo file_info(file_dir_name);
     if (file_info.isFile()){ 
-	emit commitFileToVCS(file_dir_name);
+      emit commitFileToVCS(file_dir_name);
     }
     if(file_info.isDir()){
       emit commitDirToVCS(file_dir_name);

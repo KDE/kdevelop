@@ -36,7 +36,7 @@ CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabD
 }
 
 CConfigEnscriptDlg::~CConfigEnscriptDlg(){
-  delete (underlayFontButton);
+    delete (underlayFontButton);
   delete (underlaytextLine);
   delete (qtarch_Label_75);
   delete (underlayPositionDefaultButton);
@@ -99,24 +99,12 @@ CConfigEnscriptDlg::~CConfigEnscriptDlg(){
   delete (modificationDateFormat);
   delete (currentTimeAmpm);
   delete (currentTimePosition);
+  
   delete (modificationTimeButton);
   delete (currentTimeButton);
   delete (modificationDateButton);
   delete (currentDateButton);
-  delete (qtarch_ButtonGroup_71);
-  delete (qtarch_ButtonGroup_72);
-  delete (qtarch_ButtonGroup_75);
-  delete (qtarch_ButtonGroup_84);
-  delete (qtarch_ButtonGroup_74);
-  delete (qtarch_ButtonGroup_85);
-  delete (qtarch_ButtonGroup_86);
-  delete (qtarch_ButtonGroup_76);
-  delete (qtarch_ButtonGroup_90);
-  delete (qtarch_ButtonGroup_89);
-  delete (qtarch_ButtonGroup_88);
-  delete (qtarch_ButtonGroup_87);
-  delete (qtarch_ButtonGroup_77);
-  delete (qtarch_ButtonGroup_78);
+  
   delete (hostnameSize);
   delete (hostnamePosition);
   delete (qtarch_Label_22);
@@ -1515,10 +1503,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
  }
 
 void CConfigEnscriptDlg::initTab4(QWidget*parent) {
+
+  QGridLayout *grid1 = new QGridLayout(parent,5,2,15,7);
   qtarch_ButtonGroup_138 = new QButtonGroup( parent, "ButtonGroup_138" );
-  qtarch_ButtonGroup_138->setGeometry( 20, 50, 560, 60 );
-  qtarch_ButtonGroup_138->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_138->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_138->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_138->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_138->setFontPropagation( QWidget::NoChildren );
@@ -1526,11 +1513,34 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_ButtonGroup_138->setFrameStyle( 49 );
   qtarch_ButtonGroup_138->setTitle(i18n("Underlaytext") );
   qtarch_ButtonGroup_138->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_138,1,1,0,1);
+
+  QGridLayout *grid2 = new QGridLayout(qtarch_ButtonGroup_138,1,2,15,7);
+
+  qtarch_Label_75 = new QLabel( qtarch_ButtonGroup_138, "Label_75" );
+  qtarch_Label_75->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_75->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_75->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_75->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_75->setText(i18n("underlaytext") );
+  qtarch_Label_75->setAlignment( 289 );
+  qtarch_Label_75->setMargin( -1 );
+  grid2->addWidget( qtarch_Label_75,0,0);
+  
+  underlaytextLine = new QLineEdit(  qtarch_ButtonGroup_138, "underlaytextLine" );
+  underlaytextLine->setFocusPolicy( QWidget::StrongFocus );
+  underlaytextLine->setBackgroundMode( QWidget::PaletteBase );
+  underlaytextLine->setFontPropagation( QWidget::NoChildren );
+  underlaytextLine->setPalettePropagation( QWidget::NoChildren );
+  underlaytextLine->setText( "" );
+  underlaytextLine->setMaxLength( 32767 );
+  underlaytextLine->setEchoMode( QLineEdit::Normal );
+  underlaytextLine->setFrame( TRUE );
+  grid2->addWidget(underlaytextLine ,0,1);
+
+
   
   qtarch_ButtonGroup_137 = new QButtonGroup( parent, "ButtonGroup_137" );
-  qtarch_ButtonGroup_137->setGeometry( 280, 360, 300, 60 );
-  qtarch_ButtonGroup_137->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_137->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_137->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_137->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_137->setFontPropagation( QWidget::NoChildren );
@@ -1538,96 +1548,11 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_ButtonGroup_137->setFrameStyle( 49 );
   qtarch_ButtonGroup_137->setTitle(i18n("Underlaystyle") );
   qtarch_ButtonGroup_137->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_136 = new QButtonGroup( parent, "ButtonGroup_136" );
-  qtarch_ButtonGroup_136->setGeometry( 380, 240, 190, 100 );
-  qtarch_ButtonGroup_136->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_136->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_136->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_136->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_136->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_136->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_136->setFrameStyle( 49 );
-  qtarch_ButtonGroup_136->setTitle(i18n("Underlayangle") );
-  qtarch_ButtonGroup_136->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_135 = new QButtonGroup( parent, "ButtonGroup_135" );
-  qtarch_ButtonGroup_135->setGeometry( 20, 360, 250, 60 );
-  qtarch_ButtonGroup_135->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_135->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_135->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_135->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_135->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_135->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_135->setFrameStyle( 49 );
-  qtarch_ButtonGroup_135->setTitle( i18n("Underlaygray") );
-  qtarch_ButtonGroup_135->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_134 = new QButtonGroup( parent, "ButtonGroup_134" );
-  qtarch_ButtonGroup_134->setGeometry( 20, 240, 350, 100 );
-  qtarch_ButtonGroup_134->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_134->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_134->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_134->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_134->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_134->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_134->setFrameStyle( 49 );
-  qtarch_ButtonGroup_134->setTitle( i18n("Underlayfont") );
-  qtarch_ButtonGroup_134->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_131 = new QButtonGroup( parent, "ButtonGroup_131" );
-  qtarch_ButtonGroup_131->setGeometry( 20, 130, 560, 90 );
-  qtarch_ButtonGroup_131->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_131->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_131->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_131->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_131->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_131->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_131->setFrameStyle( 49 );
-  qtarch_ButtonGroup_131->setTitle( i18n("Underlayposition") );
-  qtarch_ButtonGroup_131->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_132 = new QButtonGroup( parent, "ButtonGroup_132" );
-  qtarch_ButtonGroup_132->setGeometry( 450, 150, 120, 60 );
-  qtarch_ButtonGroup_132->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_132->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_132->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_132->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_132->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_132->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_132->setFrameStyle( 49 );
-  qtarch_ButtonGroup_132->setTitle( i18n("Y-Position") );
-  qtarch_ButtonGroup_132->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_133 = new QButtonGroup( parent, "ButtonGroup_133" );
-  qtarch_ButtonGroup_133->setGeometry( 320, 150, 120, 60 );
-  qtarch_ButtonGroup_133->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_133->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_133->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_133->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_133->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_133->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_133->setFrameStyle( 49 );
-  qtarch_ButtonGroup_133->setTitle( i18n("X-Position") );
-  qtarch_ButtonGroup_133->setAlignment( 1 );
-  
-  underlayButton = new QCheckBox( parent, "underlayButton" );
-  underlayButton->setGeometry( 20, 10, 100, 30 );
-  underlayButton->setMinimumSize( 0, 0 );
-  underlayButton->setMaximumSize( 32767, 32767 );
-  underlayButton->setFocusPolicy( QWidget::TabFocus );
-  underlayButton->setBackgroundMode( QWidget::PaletteBackground );
-  underlayButton->setFontPropagation( QWidget::NoChildren );
-  underlayButton->setPalettePropagation( QWidget::NoChildren );
-  underlayButton->setText( i18n("underlay") );
-  underlayButton->setAutoRepeat( FALSE );
-  underlayButton->setAutoResize( FALSE );
-  connect (underlayButton,SIGNAL(clicked()),SLOT(slotUnderlayButtonClicked()));
-  
-  qtarch_Label_70 = new QLabel( parent, "Label_70" );
-  qtarch_Label_70->setGeometry( 290, 380, 100, 30 );
-  qtarch_Label_70->setMinimumSize( 0, 0 );
-  qtarch_Label_70->setMaximumSize( 32767, 32767 );
+  grid1->addWidget(qtarch_ButtonGroup_137,4,1);
+
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_137,1,2,15,7);
+  qtarch_Label_70 = new QLabel(qtarch_ButtonGroup_137 , "Label_70" );
   qtarch_Label_70->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_70->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_70->setFontPropagation( QWidget::NoChildren );
@@ -1635,11 +1560,33 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_Label_70->setText( i18n("underlaystyle") );
   qtarch_Label_70->setAlignment( 289 );
   qtarch_Label_70->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_70,0,0);
   
-  qtarch_Label_71 = new QLabel( parent, "Label_71" );
-  qtarch_Label_71->setGeometry( 390, 300, 60, 30 );
-  qtarch_Label_71->setMinimumSize( 0, 0 );
-  qtarch_Label_71->setMaximumSize( 32767, 32767 );
+  underlayStyle = new QComboBox( FALSE,qtarch_ButtonGroup_137 , "underlayStyle" );
+  underlayStyle->setFocusPolicy( QWidget::StrongFocus );
+  underlayStyle->setBackgroundMode( QWidget::PaletteBackground );
+  underlayStyle->setFontPropagation( QWidget::AllChildren );
+  underlayStyle->setPalettePropagation( QWidget::AllChildren );
+  underlayStyle->setSizeLimit( 10 );
+  underlayStyle->setAutoResize( FALSE );
+  underlayStyle->insertItem(i18n("outline"));
+  underlayStyle->insertItem(i18n("filled"));
+  grid2->addWidget(underlayStyle,0,1);
+
+
+  
+  qtarch_ButtonGroup_136 = new QButtonGroup( parent, "ButtonGroup_136" );
+  qtarch_ButtonGroup_136->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_136->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_136->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_136->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_136->setFrameStyle( 49 );
+  qtarch_ButtonGroup_136->setTitle(i18n("Underlayangle") );
+  qtarch_ButtonGroup_136->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_136,3,1);
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_136,2,2,15,7);
+  qtarch_Label_71 = new QLabel(qtarch_ButtonGroup_136 , "Label_71" );
   qtarch_Label_71->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_71->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_71->setFontPropagation( QWidget::NoChildren );
@@ -1647,35 +1594,22 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_Label_71->setText( i18n("angle") );
   qtarch_Label_71->setAlignment( 289 );
   qtarch_Label_71->setMargin( -1 );
-  
-  qtarch_Label_72 = new QLabel( parent, "Label_72" );
-  qtarch_Label_72->setGeometry( 220, 170, 100, 30 );
-  qtarch_Label_72->setMinimumSize( 0, 0 );
-  qtarch_Label_72->setMaximumSize( 32767, 32767 );
-  qtarch_Label_72->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_72->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_72->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_72->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_72->setText( i18n("position") );
-  qtarch_Label_72->setAlignment( 289 );
-  qtarch_Label_72->setMargin( -1 );
-  
-  qtarch_Label_73 = new QLabel( parent, "Label_73" );
-  qtarch_Label_73->setGeometry( 30, 280, 100, 30 );
-  qtarch_Label_73->setMinimumSize( 0, 0 );
-  qtarch_Label_73->setMaximumSize( 32767, 32767 );
-  qtarch_Label_73->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_73->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_73->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_73->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_73->setText(i18n("font") );
-  qtarch_Label_73->setAlignment( 289 );
-  qtarch_Label_73->setMargin( -1 );
-  
-  underlayAngle = new QSpinBox( parent, "underlayAngle" );
-  underlayAngle->setGeometry( 460, 300, 100, 30 );
-  underlayAngle->setMinimumSize( 0, 0 );
-  underlayAngle->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(qtarch_Label_71,1,0);
+
+
+
+  underlayAngleDefault = new QCheckBox(qtarch_ButtonGroup_136 , "underlayAngleDefault" );
+  underlayAngleDefault->setFocusPolicy( QWidget::TabFocus );
+  underlayAngleDefault->setBackgroundMode( QWidget::PaletteBackground );
+  underlayAngleDefault->setFontPropagation( QWidget::NoChildren );
+  underlayAngleDefault->setPalettePropagation( QWidget::NoChildren );
+  underlayAngleDefault->setText( i18n("default") );
+  underlayAngleDefault->setAutoRepeat( FALSE );
+  underlayAngleDefault->setAutoResize( FALSE );
+  connect (underlayAngleDefault,SIGNAL(clicked()),SLOT(slotUnderlayAngleDefaultClicked()));
+  grid2->addWidget(underlayAngleDefault,0,0);
+
+  underlayAngle = new QSpinBox( qtarch_ButtonGroup_136, "underlayAngle" );
   underlayAngle->setFocusPolicy( QWidget::StrongFocus );
   underlayAngle->setBackgroundMode( QWidget::PaletteBackground );
   underlayAngle->setFontPropagation( QWidget::NoChildren );
@@ -1688,45 +1622,22 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   underlayAngle->setSuffix( "" );
   underlayAngle->setSpecialValueText( "" );
   underlayAngle->setWrapping( FALSE );
+  grid2->addWidget(underlayAngle,1,1);
+
   
-  underlayXPosition = new QSpinBox( parent, "underlayXPosition" );
-  underlayXPosition->setGeometry( 330, 170, 100, 30 );
-  underlayXPosition->setMinimumSize( 0, 0 );
-  underlayXPosition->setMaximumSize( 32767, 32767 );
-  underlayXPosition->setFocusPolicy( QWidget::StrongFocus );
-  underlayXPosition->setBackgroundMode( QWidget::PaletteBackground );
-  underlayXPosition->setFontPropagation( QWidget::NoChildren );
-  underlayXPosition->setPalettePropagation( QWidget::NoChildren );
-  underlayXPosition->setFrameStyle( 50 );
-  underlayXPosition->setLineWidth( 2 );
-  underlayXPosition->setRange( 0, 10000 );
-  underlayXPosition->setSteps( 1, 0 );
-  underlayXPosition->setPrefix( "" );
-  underlayXPosition->setSuffix( "" );
-  underlayXPosition->setSpecialValueText( "" );
-  underlayXPosition->setWrapping( FALSE );
-  
-  underlayYPosition = new QSpinBox( parent, "underlayYPosition" );
-  underlayYPosition->setGeometry( 460, 170, 100, 30 );
-  underlayYPosition->setMinimumSize( 0, 0 );
-  underlayYPosition->setMaximumSize( 32767, 32767 );
-  underlayYPosition->setFocusPolicy( QWidget::StrongFocus );
-  underlayYPosition->setBackgroundMode( QWidget::PaletteBackground );
-  underlayYPosition->setFontPropagation( QWidget::NoChildren );
-  underlayYPosition->setPalettePropagation( QWidget::NoChildren );
-  underlayYPosition->setFrameStyle( 50 );
-  underlayYPosition->setLineWidth( 2 );
-  underlayYPosition->setRange( 0, 10000 );
-  underlayYPosition->setSteps( 1, 0 );
-  underlayYPosition->setPrefix( "" );
-  underlayYPosition->setSuffix( "" );
-  underlayYPosition->setSpecialValueText( "" );
-  underlayYPosition->setWrapping( FALSE );
-  
-  qtarch_Label_74 = new QLabel( parent, "Label_74" );
-  qtarch_Label_74->setGeometry( 30, 380, 150, 30 );
-  qtarch_Label_74->setMinimumSize( 0, 0 );
-  qtarch_Label_74->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_135 = new QButtonGroup( parent, "ButtonGroup_135" );
+  qtarch_ButtonGroup_135->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_135->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_135->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_135->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_135->setFrameStyle( 49 );
+  qtarch_ButtonGroup_135->setTitle( i18n("Underlaygray") );
+  qtarch_ButtonGroup_135->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_135,4,0);
+  grid2  = new QGridLayout(qtarch_ButtonGroup_135,1,2,15,7);
+
+
+  qtarch_Label_74 = new QLabel(qtarch_ButtonGroup_135 , "Label_74" );
   qtarch_Label_74->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_74->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_74->setFontPropagation( QWidget::NoChildren );
@@ -1734,11 +1645,10 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_Label_74->setText(i18n("underlaygray (x(1/10))"));
   qtarch_Label_74->setAlignment( 289 );
   qtarch_Label_74->setMargin( -1 );
-  
-  underlayGray = new QSpinBox( parent, "underlayGray" );
-  underlayGray->setGeometry( 180, 380, 80, 30 );
-  underlayGray->setMinimumSize( 0, 0 );
-  underlayGray->setMaximumSize( 32767, 32767 );
+  grid2->addWidget( qtarch_Label_74,0,0);
+
+
+  underlayGray = new QSpinBox( qtarch_ButtonGroup_135, "underlayGray" );
   underlayGray->setFocusPolicy( QWidget::StrongFocus );
   underlayGray->setBackgroundMode( QWidget::PaletteBackground );
   underlayGray->setFontPropagation( QWidget::NoChildren );
@@ -1751,75 +1661,21 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   underlayGray->setSuffix( "" );
   underlayGray->setSpecialValueText( "" );
   underlayGray->setWrapping( FALSE );
+  grid2->addWidget(underlayGray ,0,1);
+
   
-  underlayAngleDefault = new QCheckBox( parent, "underlayAngleDefault" );
-  underlayAngleDefault->setGeometry( 390, 260, 100, 30 );
-  underlayAngleDefault->setMinimumSize( 0, 0 );
-  underlayAngleDefault->setMaximumSize( 32767, 32767 );
-  underlayAngleDefault->setFocusPolicy( QWidget::TabFocus );
-  underlayAngleDefault->setBackgroundMode( QWidget::PaletteBackground );
-  underlayAngleDefault->setFontPropagation( QWidget::NoChildren );
-  underlayAngleDefault->setPalettePropagation( QWidget::NoChildren );
-  underlayAngleDefault->setText( i18n("default") );
-  underlayAngleDefault->setAutoRepeat( FALSE );
-  underlayAngleDefault->setAutoResize( FALSE );
-  connect (underlayAngleDefault,SIGNAL(clicked()),SLOT(slotUnderlayAngleDefaultClicked()));
-  
-  underlayStyle = new QComboBox( FALSE, parent, "underlayStyle" );
-  underlayStyle->setGeometry( 400, 380, 170, 30 );
-  underlayStyle->setMinimumSize( 0, 0 );
-  underlayStyle->setMaximumSize( 32767, 32767 );
-  underlayStyle->setFocusPolicy( QWidget::StrongFocus );
-  underlayStyle->setBackgroundMode( QWidget::PaletteBackground );
-  underlayStyle->setFontPropagation( QWidget::AllChildren );
-  underlayStyle->setPalettePropagation( QWidget::AllChildren );
-  underlayStyle->setSizeLimit( 10 );
-  underlayStyle->setAutoResize( FALSE );
-  underlayStyle->insertItem(i18n("outline"));
-  underlayStyle->insertItem(i18n("filled"));
-  
-  underlayPositionDefaultButton = new QCheckBox( parent, "underlayPositionDefaultButton" );
-  underlayPositionDefaultButton->setGeometry( 30, 170, 100, 30 );
-  underlayPositionDefaultButton->setMinimumSize( 0, 0 );
-  underlayPositionDefaultButton->setMaximumSize( 32767, 32767 );
-  underlayPositionDefaultButton->setFocusPolicy( QWidget::TabFocus );
-  underlayPositionDefaultButton->setBackgroundMode( QWidget::PaletteBackground );
-  underlayPositionDefaultButton->setFontPropagation( QWidget::NoChildren );
-  underlayPositionDefaultButton->setPalettePropagation( QWidget::NoChildren );
-  underlayPositionDefaultButton->setText(i18n("default") );
-  underlayPositionDefaultButton->setAutoRepeat( FALSE );
-  underlayPositionDefaultButton->setAutoResize( FALSE );
-  connect (underlayPositionDefaultButton,SIGNAL(clicked()),SLOT(slotUnderlayPositionDefaultClicked()));
-  
-  qtarch_Label_75 = new QLabel( parent, "Label_75" );
-  qtarch_Label_75->setGeometry( 30, 70, 120, 30 );
-  qtarch_Label_75->setMinimumSize( 0, 0 );
-  qtarch_Label_75->setMaximumSize( 32767, 32767 );
-  qtarch_Label_75->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_75->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_75->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_75->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_75->setText(i18n("underlaytext") );
-  qtarch_Label_75->setAlignment( 289 );
-  qtarch_Label_75->setMargin( -1 );
-  
-  underlaytextLine = new QLineEdit( parent, "underlaytextLine" );
-  underlaytextLine->setGeometry( 160, 70, 410, 30 );
-  underlaytextLine->setMinimumSize( 0, 0 );
-  underlaytextLine->setMaximumSize( 32767, 32767 );
-  underlaytextLine->setFocusPolicy( QWidget::StrongFocus );
-  underlaytextLine->setBackgroundMode( QWidget::PaletteBase );
-  underlaytextLine->setFontPropagation( QWidget::NoChildren );
-  underlaytextLine->setPalettePropagation( QWidget::NoChildren );
-  underlaytextLine->setText( "" );
-  underlaytextLine->setMaxLength( 32767 );
-  underlaytextLine->setEchoMode( QLineEdit::Normal );
-  underlaytextLine->setFrame( TRUE );
-  
-  underlayFontButton = new QPushButton( parent, "underlayFontButton" );
-  underlayFontButton->setGeometry( 140, 280, 220, 30 );
-  underlayFontButton->setMinimumSize( 0, 0 );
-  underlayFontButton->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_134 = new QButtonGroup( parent, "ButtonGroup_134" );
+  qtarch_ButtonGroup_134->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_134->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_134->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_134->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_134->setFrameStyle( 49 );
+  qtarch_ButtonGroup_134->setTitle( i18n("Underlayfont") );
+  qtarch_ButtonGroup_134->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_134,3,0);
+  grid2  = new QGridLayout(qtarch_ButtonGroup_134,1,2,15,7);
+
+  underlayFontButton = new QPushButton( qtarch_ButtonGroup_134, "underlayFontButton" );
   underlayFontButton->setFocusPolicy( QWidget::TabFocus );
   underlayFontButton->setBackgroundMode( QWidget::PaletteBackground );
   underlayFontButton->setFontPropagation( QWidget::NoChildren );
@@ -1828,10 +1684,127 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   underlayFontButton->setAutoRepeat( FALSE );
   underlayFontButton->setAutoResize( FALSE );
   connect (underlayFontButton, SIGNAL(clicked()),SLOT(slotFontUnderlayClicked()));
+  grid2->addWidget(underlayFontButton,0,1);
+
+
+  qtarch_Label_73 = new QLabel( qtarch_ButtonGroup_134, "Label_73" );
+  qtarch_Label_73->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_73->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_73->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_73->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_73->setText(i18n("font") );
+  qtarch_Label_73->setAlignment( 289 );
+  qtarch_Label_73->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_73,0,0);
   
-  qtarch_ButtonGroup_136->insert( underlayAngleDefault );
-  qtarch_ButtonGroup_134->insert( underlayFontButton );
-  qtarch_ButtonGroup_131->insert( underlayPositionDefaultButton );
+
+
+  
+  qtarch_ButtonGroup_131 = new QButtonGroup( parent, "ButtonGroup_131" );
+ 
+  qtarch_ButtonGroup_131->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_131->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_131->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_131->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_131->setFrameStyle( 49 );
+  qtarch_ButtonGroup_131->setTitle( i18n("Underlayposition") );
+  qtarch_ButtonGroup_131->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_131,2,2,0,1);
+
+  grid2  = new QGridLayout(qtarch_ButtonGroup_131,1,4,15,7);
+
+  underlayPositionDefaultButton = new QCheckBox( qtarch_ButtonGroup_131, "underlayPositionDefaultButton" );
+  
+  underlayPositionDefaultButton->setFocusPolicy( QWidget::TabFocus );
+  underlayPositionDefaultButton->setBackgroundMode( QWidget::PaletteBackground );
+  underlayPositionDefaultButton->setFontPropagation( QWidget::NoChildren );
+  underlayPositionDefaultButton->setPalettePropagation( QWidget::NoChildren );
+  underlayPositionDefaultButton->setText(i18n("default") );
+  underlayPositionDefaultButton->setAutoRepeat( FALSE );
+  underlayPositionDefaultButton->setAutoResize( FALSE );
+  connect (underlayPositionDefaultButton,SIGNAL(clicked()),SLOT(slotUnderlayPositionDefaultClicked()));
+  grid2->addWidget(underlayPositionDefaultButton,0,0);
+
+
+  qtarch_Label_72 = new QLabel( qtarch_ButtonGroup_131, "Label_72" );
+  qtarch_Label_72->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_72->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_72->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_72->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_72->setText( i18n("position") );
+  qtarch_Label_72->setAlignment( 289 );
+  qtarch_Label_72->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_72,0,1);
+  
+
+  qtarch_ButtonGroup_133 = new QButtonGroup( qtarch_ButtonGroup_131, "ButtonGroup_133" );
+  qtarch_ButtonGroup_133->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_133->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_133->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_133->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_133->setFrameStyle( 49 );
+  qtarch_ButtonGroup_133->setTitle( i18n("X-Position") );
+  qtarch_ButtonGroup_133->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_133,0,2);
+
+  QGridLayout *grid3 = new QGridLayout(qtarch_ButtonGroup_133,1,1,15,7);
+  
+  underlayXPosition = new QSpinBox( qtarch_ButtonGroup_133, "underlayXPosition" );
+  underlayXPosition->setFocusPolicy( QWidget::StrongFocus );
+  underlayXPosition->setBackgroundMode( QWidget::PaletteBackground );
+  underlayXPosition->setFontPropagation( QWidget::NoChildren );
+  underlayXPosition->setPalettePropagation( QWidget::NoChildren );
+  underlayXPosition->setFrameStyle( 50 );
+  underlayXPosition->setLineWidth( 2 );
+  underlayXPosition->setRange( 0, 10000 );
+  underlayXPosition->setSteps( 1, 0 );
+  underlayXPosition->setPrefix( "" );
+  underlayXPosition->setSuffix( "" );
+  underlayXPosition->setSpecialValueText( "" );
+  underlayXPosition->setWrapping( FALSE );
+  grid3->addWidget(underlayXPosition,0,0);
+
+
+  qtarch_ButtonGroup_132 = new QButtonGroup( qtarch_ButtonGroup_131, "ButtonGroup_132" );
+  qtarch_ButtonGroup_132->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_132->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_132->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_132->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_132->setFrameStyle( 49 );
+  qtarch_ButtonGroup_132->setTitle( i18n("Y-Position") );
+  qtarch_ButtonGroup_132->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_132,0,3);
+
+  grid3 = new QGridLayout(qtarch_ButtonGroup_132,1,1,15,7);
+  underlayYPosition = new QSpinBox( qtarch_ButtonGroup_132, "underlayYPosition" );
+  underlayYPosition->setFocusPolicy( QWidget::StrongFocus );
+  underlayYPosition->setBackgroundMode( QWidget::PaletteBackground );
+  underlayYPosition->setFontPropagation( QWidget::NoChildren );
+  underlayYPosition->setPalettePropagation( QWidget::NoChildren );
+  underlayYPosition->setFrameStyle( 50 );
+  underlayYPosition->setLineWidth( 2 );
+  underlayYPosition->setRange( 0, 10000 );
+  underlayYPosition->setSteps( 1, 0 );
+  underlayYPosition->setPrefix( "" );
+  underlayYPosition->setSuffix( "" );
+  underlayYPosition->setSpecialValueText( "" );
+  underlayYPosition->setWrapping( FALSE );
+
+  grid3->addWidget(underlayYPosition,0,0);
+
+ 
+  
+  underlayButton = new QCheckBox(parent , "underlayButton" );
+  underlayButton->setFocusPolicy( QWidget::TabFocus );
+  underlayButton->setBackgroundMode( QWidget::PaletteBackground );
+  underlayButton->setFontPropagation( QWidget::NoChildren );
+  underlayButton->setPalettePropagation( QWidget::NoChildren );
+  underlayButton->setText( i18n("underlay") );
+  underlayButton->setAutoRepeat( FALSE );
+  underlayButton->setAutoResize( FALSE );
+  grid1->addWidget(underlayButton,0,0);
+  connect (underlayButton,SIGNAL(clicked()),SLOT(slotUnderlayButtonClicked()));
+  
 
   QWhatsThis::add(underlayButton,
 	i18n("If you wish to print underlayed text, then check it."));

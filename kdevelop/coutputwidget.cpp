@@ -23,19 +23,22 @@ COutputWidget::COutputWidget(QWidget* parent, const char* name) :
 {
 }
 
-void COutputWidget::insertAtEnd(QString s)
+void COutputWidget::insertAtEnd(const QString& s)
 {
-  int row = (numLines() == 0)? 0 : numLines()-1;
+  int row = (numLines() < 1)? 0 : numLines()-1;
   // correct workaround for QMultilineEdit
   //  the string inside could be NULL, and so QMultilineEdit fails
   int col = qstrlen(textLine(row));
   if (s.left(1) == "\n" && row == 0 && col == 0)
-     s = QString(" ")+s;
-  insertAt(s, row, col);
+    insertAt(" "+s, row, col);
+  else
+    insertAt(s, row, col);
 }
+
 void COutputWidget::mouseReleaseEvent(QMouseEvent*){
   emit clicked();
 }
+
 void COutputWidget::keyPressEvent ( QKeyEvent* event){
 //  KEdit::keyPressEvent(event);
   QMultiLineEdit::keyPressEvent(event);

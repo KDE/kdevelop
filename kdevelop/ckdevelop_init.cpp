@@ -1126,13 +1126,13 @@ void CKDevelop::initStatusBar()
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
   connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
 
-  m_statusBar->insertItem("",                                  ID_STATUS_MSG,      1,  false);
-  m_statusBar->insertFixedItem("     ",                        ID_STATUS_DBG,          true);
-  m_statusBar->addWidget(statProg,                                                 0,  true);
-  m_statusBar->insertFixedItem("              ",               ID_STATUS_EMPTY_2,      true);
-  m_statusBar->insertFixedItem("        ",                     ID_STATUS_INS_OVR,      true);
-  m_statusBar->insertFixedItem("                            ", ID_STATUS_LN_CLM,       true);
-  m_statusBar->insertFixedItem("                      ",       ID_STATUS_EMPTY,        true);
+  m_statusBar->insertItem("",                                       ID_STATUS_MSG,      1,  false);
+  m_statusBar->insertFixedItem("     ",                             ID_STATUS_DBG,          true);
+  m_statusBar->addWidget(statProg,                                                      0,  true);
+  m_statusBar->insertFixedItem("              ",                    ID_STATUS_EMPTY_2,      true);
+  m_statusBar->insertFixedItem("        ",                          ID_STATUS_INS_OVR,      true);
+  m_statusBar->insertFixedItem("                                ",  ID_STATUS_LN_CLM,       true);
+  m_statusBar->insertFixedItem("                      ",            ID_STATUS_EMPTY,        true);
 
   m_statusBar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
   m_statusBar->setItemAlignment(ID_STATUS_DBG, AlignCenter);

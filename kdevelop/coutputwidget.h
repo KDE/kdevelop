@@ -30,22 +30,23 @@
 class COutputWidget : public QMultiLineEdit
 {
   Q_OBJECT
+
 public:
   /**contructor*/
   COutputWidget(QWidget* parent, const char* name=0);
   /**destructor*/
   ~COutputWidget(){};
 
-  void insertAtEnd(QString s); 
+  void insertAtEnd(const QString& s);
+
 protected:
-  virtual void mouseReleaseEvent(QMouseEvent* event);
-  virtual void keyPressEvent ( QKeyEvent* event);
+  void mouseReleaseEvent(QMouseEvent* event);
+  void keyPressEvent ( QKeyEvent* event);
   
-  signals:
+signals:
   /** emited, if the mouse was clicked over the widget*/
   void clicked();
   void keyPressed(int key);
-  
 };
 
 #endif

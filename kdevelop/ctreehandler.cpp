@@ -302,7 +302,7 @@ void CTreeHandler::readIcons()
   icons[ THPROTECTED_METHOD ] = new QPixmap( BarIcon( "CVprotected_meth"));
   icons[ THPRIVATE_METHOD ]   = new QPixmap( BarIcon( "CVprivate_meth"));
   icons[ THGLOBAL_FUNCTION ]  = new QPixmap( BarIcon( "CVglobal_meth"));
-  icons[ THC_FILE ]           = new QPixmap( BarIcon( "c_src"));
+  icons[ THC_FILE ]           = new QPixmap( BarIcon( "source"));
   icons[ THINSTALLED_FILE ]   = new QPixmap( BarIcon( "inst_file"));
   icons[ THDELETE ]           = new QPixmap( BarIcon( "delete"));
 
