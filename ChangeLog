@@ -1,3 +1,6 @@
+2003-03-11 Caleb Tennis <caleb@aei-tech.com>
+	* added library version number support for QMake project
+
 2003-03-10 Caleb Tennis <caleb@aei-tech.com>
 	* added "staticlib" support for QMake projects 
 
