@@ -2,6 +2,7 @@ INCLUDES = \
     -I$(top_srcdir)/buildtools/projectmanager/interfaces \
     -I$(top_srcdir)/lib/interfaces \
     -I$(top_srcdir)/lib/project \
+    -I$(top_builddir)/lib/project \
     -I$(top_srcdir)/lib/util \
     $(all_includes)
     
