@@ -189,9 +189,6 @@ signals:
   /** is emitted when the las document managed by this instance has been closed */
   void sig_lastDocClosed();
 
-  /** Is be emitted when data in a doc has changed. */
-  void sig_updated(QObject* pDoc, int nChangeFlags);
-
 // attributes
 private:
   /** internal struct for list of views belonging to a document */

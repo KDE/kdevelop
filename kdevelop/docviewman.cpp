@@ -24,6 +24,7 @@
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <qprogressbar.h>
+#include <qwhatsthis.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -74,22 +75,38 @@ int DocViewMan::createDoc( int contentsType, const QString& strFileName)
   switch (contentsType) {
   case DocViewMan::Header:
   case DocViewMan::Source:
-    pDoc = new KWriteDoc( &m_highlightManager, strFileName);
     debug("creating KWriteDoc ");
+    pDoc = new KWriteDoc( &m_highlightManager, strFileName);
     if (pDoc == 0L) {
       return -1;  // creation failed
     }
     break;
   case DocViewMan::HTML:
-    pDoc = new CDocBrowser(0L, "browser");
-    debug("creating CDocBrowser ");
+    {
+      debug("creating CDocBrowser ");
+      pDoc = new CDocBrowser(0L, "browser");
+      CDocBrowser* pDocBr = (CDocBrowser*) pDoc;
+      // some signal-slot connections
+      connect(pDocBr, SIGNAL(completed()),m_pParent, SLOT(slotDocumentDone()));
+      connect(pDocBr, SIGNAL(signalURLBack()),m_pParent,SLOT(slotHelpBack()));
+      connect(pDocBr, SIGNAL(signalURLForward()),m_pParent,SLOT(slotHelpForward()));
+      connect(pDocBr, SIGNAL(signalBookmarkToggle()),m_pParent,SLOT(slotBookmarksToggle()));
+      connect(pDocBr, SIGNAL(onURL(const QString&)),m_pParent,SLOT(slotURLonURL(const QString&)));
+      connect(pDocBr, SIGNAL(signalSearchText()),m_pParent,SLOT(slotHelpSearchText()));
+      //  connect(pDocBr, SIGNAL(goRight()), m_pParent, SLOT(slotHelpForward()));
+      //  connect(pDocBr, SIGNAL(goLeft()), m_pParent, SLOT(slotHelpBack()));
+      connect(pDocBr, SIGNAL(enableStop(int)), m_pParent, SLOT(enableCommand(int)));	
+      connect(pDocBr->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
+      connect(pDocBr, SIGNAL(signalGrepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
+      //  connect(pDocBr, SIGNAL(textSelected(KHTMLPart *, bool)),m_pParent,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
+
+      // init browser and assign URL
+      pDocBr->setDocBrowserOptions();
+      pDocBr->showURL(strFileName, true); // with reload if equal
+    }
     break;
   }
 
-//?       // connect signals
-//?       connect(pDoc, SIGNAL(sig_updated(QObject*, int)),
-//?               this, SIGNAL(sig_updated(QObject*, int)));
-//?
   // create new list item
   DocViewNode*   pNewInfo = new DocViewNode; // to be deleted by list
   static int idCounter = 0;
@@ -216,9 +233,6 @@ void DocViewMan::closeDoc(int docId)
       }
       // now finally, delete the document
       KWriteDoc* pDoc = (KWriteDoc*) pCurDocViewNode->pDoc;
-  //?      //   disconnect document signals
-  //?       disconnect(pDoc, SIGNAL(sig_updated(QObject*, int)),
-  //?                  this, SIGNAL(sig_updated(QObject*, int)));
       delete pDoc;
     }
     break;
@@ -395,17 +409,20 @@ QWidget* DocViewMan::createView(int docId)
     {
       CDocBrowser* pDoc = (CDocBrowser*) pDocViewNode->pDoc;
       pNewView = pDoc->view();
-      pNewView->setCaption( pDoc->currentURL());
+      pNewView->setCaption( pDoc->currentTitle());
+      // add "what's this" entry
+      m_pParent->getWhatsThis()->add(pNewView, i18n("Documentation Browser\n\n"
+            "The documentation browser window shows the online-"
+            "documentation provided with kdevelop as well as "
+            "library class documentation created. Use the documentation "
+            "tree to switch between various parts of the documentation."));
+      pDoc->showURL(pDoc->currentURL(), true); // with reload if equal
     }
     break;
   }
 
   if (!pNewView)
     return 0L;  // failed, could not create view
-
-  // connect signals
-//?       connect(pNewView, SIGNAL(sig_updated(QObject*, int)),
-//?               this, SIGNAL(sig_updated(QObject*, int)));
 
   // connect document with view
   if (docId >= 0) {

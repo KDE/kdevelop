@@ -34,6 +34,7 @@
 #include "kwdoc.h"
 #include "docviewman.h"
 
+#include <khtmlview.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -196,7 +197,16 @@ void CKDevelop::setMainCaption(int item)
   switch(item)
   {
   case BROWSER:
-    setCaption(browser_widget->currentTitle());
+    {
+      CDocBrowser* pCurBrowserDoc = m_docViewManager->currentBrowserDoc();
+      KHTMLView* pCurBrowserView = m_docViewManager->currentBrowserView();
+      if (pCurBrowserDoc) {
+        setCaption(pCurBrowserDoc->currentTitle());
+        QextMdiChildView* pMDICover = (QextMdiChildView*) pCurBrowserView->parentWidget();
+        pMDICover->setCaption(pCurBrowserDoc->currentURL());
+        pMDICover->setTabCaption(pCurBrowserDoc->currentTitle());
+      }
+    }
     break;
 
   default:
@@ -1133,13 +1143,6 @@ void CKDevelop::readOptions()
 	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
   }
-	
-  QString filename = config->readEntry("browser_file","");
-  if (filename.isEmpty())
-		filename = DocTreeKDevelopBook::locatehtml("about/intro.html");
-
-  if(!filename.isEmpty())
-    slotURLSelected(filename,1,"test");
 }
 
 void CKDevelop::saveOptions(){

@@ -230,12 +230,6 @@ void CKDevelop::initWhatsThis(){
         "documentation and the KDevelop manuals. Can be "
         "configured individually by right-button menu."));
   
-  whats_this->add(browser_widget->view(), i18n("Documentation Browser\n\n"
-        "The documentation browser window shows the online-"
-        "documentation provided with kdevelop as well as "
-        "library class documentation created. Use the documentation "
-        "tree to switch between various parts of the documentation."));
-  
   whats_this->add(messages_widget, i18n("Messages\n\n"
         "The messages window shows the output of the compiler and "
         "used utilities like kdoc reference documentation. "

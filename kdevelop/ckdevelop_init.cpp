@@ -80,8 +80,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,shell_process("/bin/sh")
   ,search_process("/bin/sh")
 
-  ,browser_widget(0L)
-
   ,dbgController(0L)
   ,dbgToolbar(0L)
   ,var_viewer(0L)
@@ -240,17 +238,6 @@ void CKDevelop::initView()
       t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("File&s"));
       t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Boo&ks"));
       break;
-  }
-
-  ////////////////////////////
-  // editor and browser window
-  ////////////////////////////
-  int newDocId = m_docViewManager->createDoc(DocViewMan::HTML, "browser");
-  if (newDocId != -1) {
-    browser_widget = (CDocBrowser*) m_docViewManager->docPointer( newDocId);
-    browser_widget->setDocBrowserOptions();
-    m_docViewManager->createView( newDocId);
-    browser_widget->show();//FB
   }
 
   prev_was_search_result= false;
@@ -1263,20 +1250,6 @@ void CKDevelop::initConnections(){
   connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));
   connect(doc_tree, SIGNAL(signalUpdateAPI()), SLOT(slotProjectAPI()));
   connect(doc_tree, SIGNAL(signalUpdateUserManual()), SLOT(slotProjectManual()));
-
-  connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
-  connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
-  connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
-  connect(browser_widget, SIGNAL(signalBookmarkToggle()),this,SLOT(slotBookmarksToggle()));
-
-  connect(browser_widget, SIGNAL(onURL(const QString&)),this,SLOT(slotURLonURL(const QString&)));
-  connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
-//  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
-//  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
-  connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
-  connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-  connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
   connect(messages_widget, SIGNAL(switchToFile(const QString&, int)),this,SLOT(slotSwitchToFile(const QString&, int)));
 

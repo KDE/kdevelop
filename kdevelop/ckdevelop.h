@@ -234,6 +234,7 @@ public:
   /** Get the breakpoint manager */
   BreakpointManager* getBrkptManager() { return brkptManager; };
   VarViewer* getVarViewer() { return var_viewer; };
+  QWhatsThis* getWhatsThis() { return whats_this; };
 
  public slots:
 
@@ -908,8 +909,6 @@ private:
   KDockWidget* treedock;
   KDockWidget* outputdock;
   KDockWidget* maindock;
-
-  CDocBrowser* browser_widget;
 
   /** The classview. */
   CClassView* class_tree;
