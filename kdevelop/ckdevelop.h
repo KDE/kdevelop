@@ -23,7 +23,7 @@
 #include "ctreehandler.h"
 #include "structdef.h"      // needed for TEditInfo
 #include "resource.h"
-#include "./kpp/kpp.h" // this should not be this way
+#include <kpp.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>

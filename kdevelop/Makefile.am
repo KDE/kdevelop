@@ -22,7 +22,7 @@ EXTRA_DIST = kdevelop.desktop caddclassattributedlg.cpp caddclassattributedlg.h 
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes)
+INCLUDES= $(all_includes) -I$(srcdir)/kpp -Ikpp
 
 METASOURCES = AUTO
 
