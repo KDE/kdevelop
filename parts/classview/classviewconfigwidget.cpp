@@ -60,7 +60,7 @@ void ClassViewConfigWidget::storeConfig()
 void ClassViewConfigWidget::accept()
 {
     storeConfig();
-    //    m_part->refresh();
+    emit m_part->configChange();
 }
 
 #include "classviewconfigwidget.moc"

@@ -132,6 +132,12 @@ void ClassViewPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
+void ClassViewPart::configChange()
+{
+    emit setLanguageSupport(languageSupport());
+}
+
+
 void ClassViewPart::projectOpened()
 {
     kdDebug(9003) << "ClassViewPart::projectSpaceOpened()" << endl;

@@ -28,11 +28,13 @@ public:
     FileViewPart( QObject *parent, const char *name, const QStringList & );
     ~FileViewPart();
 
+public slots:
+    void refresh();
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void projectOpened();
     void projectClosed();
-    void refresh();
 
 private:
     QGuardedPtr<FileTreeWidget> m_filetree;

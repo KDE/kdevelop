@@ -64,9 +64,10 @@ KPopupMenu *ClassViewWidget::createPopup()
 
 void ClassViewWidget::setLanguageSupport(KDevLanguageSupport *ls)
 {
-    if (ls)
+    if (ls) {
+        disconnect(ls, 0, this, 0);
         connect(ls, SIGNAL(updatedSourceInfo()), this, SLOT(refresh()));
-    else
+    } else
         refresh();
 }
 

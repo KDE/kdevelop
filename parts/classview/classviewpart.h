@@ -49,7 +49,8 @@ public:
     void registerHierarchyDialog(HierarchyDialog *dlg);
     void unregisterClassToolDialog(ClassToolDialog *dlg);
     void unregisterHierarchyDialog(HierarchyDialog *dlg);
-    
+    void configChange();
+
 signals:
     void setLanguageSupport(KDevLanguageSupport *ls);
     
