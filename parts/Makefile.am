@@ -19,7 +19,7 @@ if include_svn
 SVN_SUBDIR = svn
 endif
 
-if include_cvsservice
+include_cvsservice
 CVSSERVICE_SUBDIR = cvsservice
 endif
 
