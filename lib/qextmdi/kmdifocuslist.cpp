@@ -49,7 +49,7 @@ void KMdiFocusList::addWidgetTree(QWidget* w) {
 }
 	
 void KMdiFocusList::restore() {
-	for (QMap<QWidget*,QWidget::FocusPolicy>::iterator it=m_list.begin();it!=m_list.end();++it) {
+	for (QMap<QWidget*,QWidget::FocusPolicy>::const_iterator it=m_list.constBegin();it!=m_list.constEnd();++it) {
 		it.key()->setFocusPolicy(it.data());
 	}
 	m_list.clear();

@@ -120,6 +120,8 @@ KXMLGUIClient( mdiMainFrm )
         setXML( completeDescription, false /*merge*/ );
     }
  
+    if (actionCollection()->kaccel()==0)
+	    actionCollection()->setWidget(mdiMainFrm);
     m_toolMenu=new KActionMenu(i18n("Tool &Views"),actionCollection(),"kmdi_toolview_menu");
     if (showMDIModeAction) {
 	    m_mdiModeAction=new KSelectAction(i18n("MDI Mode"),0,actionCollection());
@@ -203,7 +205,7 @@ void KMDIGUIClient::setupActions()
 
       QPtrList<KAction> addList;
       if (m_toolViewActions.count()<3)
-	for (int i=0;i<m_toolViewActions.count();i++)
+	for (uint i=0;i<m_toolViewActions.count();i++)
 		addList.append(m_toolViewActions.at(i));
       else
         addList.append(m_toolMenu);

@@ -351,6 +351,11 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
      * Does the actual resize. Called from various places but from resizeEvent in general.
      */
      void doResize();
+     /**
+     * Does the actual resize, like doResize() but skips resize of the client if \a captionOnly is true.
+     * @todo: merge with doResize()
+     */
+     void doResize(bool captionOnly);
 
   protected slots:
      /**

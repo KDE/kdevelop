@@ -27,6 +27,9 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
+#include "config.h"
+
+#include <assert.h>
 
 #include <qcursor.h>
 #include <qclipboard.h>
@@ -41,7 +44,10 @@
 #include <kdeversion.h>
 #include <qtabwidget.h>
 
-#include <kipc.h>
+#if defined Q_WS_X11 && ! defined K_WS_QTONLY
+#include <kipc.h> // schroder remove this in x11 too, not needed any more...
+#endif
+
 #include <kiconloader.h>
 #include <kmdidockcontainer.h>
 #endif
@@ -83,9 +89,10 @@
 #include "kde2laptop_closebutton.xpm"
 #include "kde2laptop_closebutton_menu.xpm"
 
+#if defined Q_WS_X11 && ! defined K_WS_QTONLY
 #ifndef NO_KDE
-#include <X11/X.h>
-#include <X11/Xlib.h>
+#include <X11/X.h> // schroder
+#include <X11/Xlib.h> // schroder
 #endif
 
 #ifdef KeyRelease
@@ -97,6 +104,7 @@
 /* I hate the defines in the X11 header files. Get rid of one of them */
 #undef KeyPress
 #endif
+#endif // Q_WS_X11 && ! K_WS_QTONLY
 
 #ifdef NO_KDE
 using namespace KDockWidget_Compat;
@@ -207,6 +215,10 @@ public:
 
    // the MDI view taskbar
    createTaskBar();
+   
+   // this is only a hack, but prevents us from crash because the buttons are otherwise
+   // not created before we switch the modes where we need them !!!
+   setMenuForSDIModeSysButtons(menuBar());
 
    switch (mdiMode) {
 	case KMdi::IDEAlMode:
@@ -233,7 +245,6 @@ public:
 }
 
 void KMdiMainFrm::setStandardMDIMenuEnabled(bool showModeMenu) {
-  setMenuForSDIModeSysButtons(menuBar());
   m_mdiGUIClient=new KMDIPrivate::KMDIGUIClient(this,showModeMenu);
   connect(m_mdiGUIClient,SIGNAL(toggleTop()),this,SIGNAL(toggleTop()));
   connect(m_mdiGUIClient,SIGNAL(toggleLeft()),this,SIGNAL(toggleLeft()));
@@ -262,7 +273,7 @@ KMdiMainFrm::~KMdiMainFrm()
    // safely close the windows so properties are saved...
    KMdiChildView *pWnd = 0L;
    while((pWnd = m_pDocumentViews->first()))closeWindow(pWnd, false); // without re-layout taskbar!
-//#warning fixme    while((pWnd = m_pToolViews->first()))closeWindow(pWnd, false); // without re-layout taskbar!
+#warning fixme    while((pWnd = m_pToolViews->first()))closeWindow(pWnd, false); // without re-layout taskbar!
    emit lastChildViewClosed();
    delete m_pDocumentViews;
    delete m_pToolViews;
@@ -286,7 +297,7 @@ KMdiMainFrm::~KMdiMainFrm()
 }
 
 //============ applyOptions ============//
-//#warning fixme
+#warning fixme
 void KMdiMainFrm::applyOptions()
 {
    for(KMdiChildView *w = m_pDocumentViews->first();w;w= m_pDocumentViews->next()){
@@ -1451,6 +1462,7 @@ void KMdiMainFrm::switchToTabPageMode()
 
    m_pTaskBar->switchOn(false);
 
+   assert(m_pClose);
    QObject::connect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
    if (m_pDocumentViews->count() > 0) {
       m_pClose->show();
@@ -1528,9 +1540,13 @@ void KMdiMainFrm::setupTabbedDocumentViewSpace() {
       QPtrListIterator<KMdiChildView> it4( *m_pDocumentViews);
       for( ; it4.current(); ++it4) {
         KMdiChildView* pView = it4.current();
-        m_documentTabWidget->addTab(pView, pView->icon() ? *(pView->icon()) : QPixmap(),pView->tabCaption());	
+        m_documentTabWidget->addTab(pView, pView->icon() ? *(pView->icon()) : QPixmap(),pView->tabCaption());
+/*
 	connect(pView,SIGNAL(iconOrCaptionUdpated(QWidget*,QPixmap,const QString&)),
 		m_documentTabWidget,SLOT(updateView(QWidget*,QPixmap,const QString&)));
+*/
+    connect( pView, SIGNAL(iconUpdated(QWidget*, QPixmap )), m_documentTabWidget, SLOT(updateIconInView(QWidget*, QPixmap )) );
+    connect( pView, SIGNAL(captionUpdated(QWidget*, const QString& )), m_documentTabWidget, SLOT(updateCaptionInView(QWidget*, const QString& )) );
 
       }
 
@@ -1580,6 +1596,7 @@ void KMdiMainFrm::switchToIDEAlMode()
 
    m_pTaskBar->switchOn(false);
 
+   assert(m_pClose);   
    QObject::connect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
    if (m_pDocumentViews->count() > 0) {
       m_pClose->show();
@@ -1731,6 +1748,7 @@ void KMdiMainFrm::finishIDEAlMode(bool full)
 {
    // if tabified, release all views from their docking covers
    if (m_mdiMode == KMdi::IDEAlMode) {
+      assert(m_pClose); 
       m_pClose->hide();
       QObject::disconnect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
 
@@ -2032,6 +2050,8 @@ void KMdiMainFrm::activateFirstWin()
    for (it->first(); !it->isDone(); it->next()) {
       m.insert(it->currentItem()->getTimeStamp(), it->currentItem());
    }
+   
+   if ( !activeWindow() ) return;
 
    QDateTime current = activeWindow()->getTimeStamp();
    QMap<QDateTime,KMdiChildView*>::iterator pos(m.find(current));
@@ -2059,6 +2079,8 @@ void KMdiMainFrm::activateLastWin()
       m.insert(it->currentItem()->getTimeStamp(), it->currentItem());
    }
 
+   if ( !activeWindow() ) return;
+   
    QDateTime current = activeWindow()->getTimeStamp();
    QMap<QDateTime,KMdiChildView*>::iterator pos(m.find(current));
    if (pos != m.begin()) {
@@ -2112,6 +2134,7 @@ void KMdiMainFrm::setEnableMaximizedChildFrmMode(bool bEnable)
       }
       else {
          m_pMainMenuBar->insertItem( *pCurrentChild->icon(), pCurrentChild->systemMenu(), -1, 0);
+         assert(m_pClose);
          QObject::connect( m_pClose, SIGNAL(clicked()), pCurrentChild, SLOT(closePressed()) );
          m_pClose->show();
       }
@@ -2144,6 +2167,7 @@ void KMdiMainFrm::switchOffMaximizeModeForMenu(KMdiChildFrm* oldChild)
    m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(0));
 
    if( oldChild) {
+      assert(m_pClose);
       QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
       QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
       QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
@@ -2175,12 +2199,14 @@ void KMdiMainFrm::updateSysButtonConnections( KMdiChildFrm* oldChild, KMdiChildF
       m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(1));
    }
    if (oldChild) {
+      assert(m_pClose);
       QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
       QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
       QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
       QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
    }
    if (newChild) {
+      assert(m_pClose);
       QObject::connect( m_pUndock, SIGNAL(clicked()), newChild, SLOT(undockPressed()) );
       QObject::connect( m_pMinimize, SIGNAL(clicked()), newChild, SLOT(minimizePressed()) );
       QObject::connect( m_pRestore, SIGNAL(clicked()), newChild, SLOT(maximizePressed()) );

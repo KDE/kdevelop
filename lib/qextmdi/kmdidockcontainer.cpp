@@ -151,7 +151,7 @@ void KMdiDockContainer::init()
 
 KDockWidget *KMdiDockContainer::parentDockWidget()
 {
-  return (KDockWidget*)parent();
+  return ((KDockWidget*)parent());
 }
 
 void KMdiDockContainer::insertWidget (KDockWidget *dwdg, QPixmap pixmap, const QString &text, int &)
@@ -624,7 +624,7 @@ void KMdiDockContainer::toggle() {
 		m_tb->setTab(oldtab,false);
 	    	tabClicked(oldtab);
             KMdiMainFrm *mainFrm = dynamic_cast<KMdiMainFrm*>(m_mainWin);
-            if (mainFrm)
+            if (mainFrm && mainFrm->activeWindow())
                 mainFrm->activeWindow()->setFocus();
 	} else {
 		kdDebug(760)<<"KMdiDockContainer::toggle(): raising tab"<<endl;

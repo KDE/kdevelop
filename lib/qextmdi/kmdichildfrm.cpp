@@ -36,6 +36,7 @@
 #include <qpopupmenu.h>
 #include <qtoolbutton.h>
 #include <qnamespace.h>
+#include <qimage.h>
 
 #include "kmdidefines.h"
 #include "kmdichildfrmcaption.h"
@@ -43,6 +44,7 @@
 #include "kmdimainfrm.h"
 #include "kmdichildfrm.h"
 
+#include <kiconloader.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // KMdiChildFrm
@@ -140,7 +142,9 @@ KMdiChildFrm::KMdiChildFrm(KMdiChildArea *parent)
    QObject::connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
    QObject::connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
 
-   m_pIconButtonPixmap = new QPixmap( filenew);
+   m_pIconButtonPixmap = new QPixmap( SmallIcon("filenew") );
+   if (m_pIconButtonPixmap->isNull())
+       *m_pIconButtonPixmap = QPixmap(filenew);
    redecorateButtons();
 
    m_pWinIcon->setFocusPolicy(NoFocus);
@@ -622,9 +626,17 @@ void KMdiChildFrm::enableClose(bool bEnable)
 
 void KMdiChildFrm::setIcon(const QPixmap& pxm)
 {
-   *m_pIconButtonPixmap = pxm;
-   m_pWinIcon->setPixmap( pxm);
-   m_pUnixIcon->setPixmap( pxm);
+   QPixmap p = pxm;
+   if (p.width()!=18 || p.height()!=18) {
+      QImage img = p.convertToImage();
+      p = img.smoothScale(18,18,QImage::ScaleMin);
+   }
+   const bool do_resize = m_pIconButtonPixmap->size()!=p.size();
+   *m_pIconButtonPixmap = p;
+   m_pWinIcon->setPixmap( p );
+   m_pUnixIcon->setPixmap( p );
+   if (do_resize)
+      doResize(true);
 }
 
 //============ icon =================//
@@ -876,6 +888,11 @@ void KMdiChildFrm::resizeEvent(QResizeEvent *)
 
 void KMdiChildFrm::doResize()
 {
+   doResize(false);
+}
+
+void KMdiChildFrm::doResize(bool captionOnly)
+{
    //Resize the caption
    int captionHeight = m_pCaption->heightHint();
    int captionWidth = width() - KMDI_CHILDFRM_DOUBLE_BORDER;
@@ -930,7 +947,7 @@ void KMdiChildFrm::doResize()
       m_pUndock->setGeometry  ( captionWidth-27*3, heightOffset, 27, buttonHeight);
    }
    //Resize the client
-   if (m_pClient) {
+   if (!captionOnly && m_pClient) {
       QSize newClientSize(captionWidth,
       height()-(KMDI_CHILDFRM_DOUBLE_BORDER+captionHeight+KMDI_CHILDFRM_SEPARATOR));
       if (newClientSize != m_pClient->size()) {
