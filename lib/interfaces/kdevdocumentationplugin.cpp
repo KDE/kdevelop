@@ -460,11 +460,12 @@ void DocumentationPlugin::reinit(KListView *contents, IndexBox *index, QStringLi
             delete namedCatalogs[*it];
     }
     deletedConfigurationItems.clear();
-
+    
     //update configuration
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
         it != entryMap.end(); ++it)
     {
+        config->setGroup("Locations");
         if (restrictions.contains(it.key()) || (!catalogEnabled(it.key())))
         {
             if (namedCatalogs.contains(it.key()))
