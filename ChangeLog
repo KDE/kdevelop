@@ -1,3 +1,7 @@
+2001-03-23  Richard Dale <duke@tiptina.demon.co.uk>
+
+	* Added Java and Objective-C class browsing and KDE project templates
+
 2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
         * now QextMDI can look like an SDI application! :-)  (the 4. MDI mode we have got)
         * new QextMdiChildView constructor added (by Eva Brucherseifer, Thanks!)
