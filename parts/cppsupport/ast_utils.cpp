@@ -75,6 +75,9 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
     QListViewItem* item = new QListViewItem( parent, nodeDescription,
 					     QString::number(startLine), QString::number(startColumn),
 					     QString::number(endLine), QString::number(endColumn) );
+					     
+    if( ast->nodeType() == NodeType_FunctionDefinition )
+	   return;
     
     QPtrList<AST> children = ast->children();
     if( children.count() ){

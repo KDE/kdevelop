@@ -1252,15 +1252,21 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
     TranslationUnitAST* ast = m_backgroundParser->translationUnit( m_activeFileName );
     AST* node = 0;
     if( ast && (node = findNodeAt(ast, line, column)) ){
-	int startLine, startColumn;
-	int endLine, endColumn;
-	node->getStartPosition( &startLine, &startColumn );
-	node->getEndPosition( &endLine, &endColumn );
-	kdDebug(9007) << "------------> ast = " << (ast->text() ? tr("<empty>") : ast->text()) << endl;
-	if( node->text() )
-	    textHint = node->text();
-	else
-	    textHint = m_activeEditor->textLine( startLine ).simplifyWhiteSpace();
+    
+        while( node && node->nodeType() != NodeType_FunctionDefinition )
+	    node = node->parent();
+	    
+	if( node ){
+	    int startLine, startColumn;
+	    int endLine, endColumn;
+	    node->getStartPosition( &startLine, &startColumn );
+	    node->getEndPosition( &endLine, &endColumn );
+	    kdDebug(9007) << "------------> ast = " << (ast->text() ? tr("<empty>") : ast->text()) << endl;
+	    if( node->text() )
+	        textHint = node->text();
+	    else
+	        textHint = m_activeEditor->textLine( startLine ).simplifyWhiteSpace();
+	}
     }
     m_backgroundParser->unlock();
 }
