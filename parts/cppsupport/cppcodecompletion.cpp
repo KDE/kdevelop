@@ -45,6 +45,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpair.h>
+#include <qvaluestack.h>
 
 #include <kdevpartcontroller.h>
 #include <kdevmainwindow.h>
@@ -127,6 +128,8 @@ struct RecoveryPoint
 {
     int kind;
     QStringList scope;
+    QValueList<QStringList> imports;
+    
     int startLine, startColumn;
     int endLine, endColumn;
 
@@ -152,7 +155,7 @@ struct CppCodeCompletionData
 
     RecoveryPoint* findRecoveryPoint( int line, int column )
     {
-        if( recoveryPoints.count() == 0 )
+	if( recoveryPoints.count() == 0 )
             return 0;
 
         QPair<int, int> pt = qMakePair( line, column );
@@ -1163,20 +1166,40 @@ class ComputeRecoveryPoints: public TreeParser
 public:
     ComputeRecoveryPoints( QPtrList<RecoveryPoint>& points )
 	: recoveryPoints( points )
-	{
+    {
     }
     
     virtual void parseTranslationUnit( TranslationUnitAST* ast )
     {
+	QValueList<QStringList> dummy;
+	
+	m_imports.push( dummy );
 	TreeParser::parseTranslationUnit( ast );
+	m_imports.pop();
+	
 	kdDebug(9007) << "found " << recoveryPoints.count() << " recovery points" << endl;
+    }
+    
+    virtual void parseUsingDirective( UsingDirectiveAST* ast )
+    {
+	if( !ast->name() )
+	    return;
+	
+	QStringList type = CppCodeCompletion::typeName( ast->name()->text() );
+	m_imports.top().push_back( type );
     }
     
     virtual void parseNamespace( NamespaceAST* ast )
     {
 	//insertRecoveryPoint( ast );
 	m_currentScope.push_back( ast->namespaceName()->text() );
+	
+	m_imports.push( m_imports.top() ); // dup
+	m_imports.top().push_back( m_currentScope );
+	
 	TreeParser::parseNamespace( ast );
+	
+	m_imports.pop();
 	m_currentScope.pop_back();
     }
     
@@ -1194,7 +1217,9 @@ public:
     
     virtual void parseFunctionDefinition( FunctionDefinitionAST* ast )
     {
+	m_imports.push( m_imports.top() ); // dup
 	insertRecoveryPoint( ast );
+	m_imports.pop();
     }
     
     virtual void parseClassSpecifier( ClassSpecifierAST* ast )
@@ -1215,12 +1240,14 @@ public:
 	pt->scope = m_currentScope;
 	ast->getStartPosition( &pt->startLine, &pt->startColumn );
 	ast->getEndPosition( &pt->endLine, &pt->endColumn );
+	pt->imports = m_imports.top();
 	
 	recoveryPoints.append( pt );
     }
     
 private:
     QPtrList<RecoveryPoint>& recoveryPoints;
+    QValueStack< QValueList<QStringList> > m_imports;
     QStringList m_currentScope;
 };
 
@@ -1383,8 +1410,51 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ParsedScopeContainer * scope )
 {
-    computeCompletionEntryList( entryList, scope->getSortedMethodList() );
-    computeCompletionEntryList( entryList, scope->getSortedAttributeList() );
+    CppCodeCompletionConfig* cfg = m_pSupport->codeCompletionConfig();
+    
+    if( cfg->includeGlobalFunctions() ){	
+	computeCompletionEntryList( entryList, scope->getSortedMethodList() );
+	computeCompletionEntryList( entryList, scope->getSortedAttributeList() );    
+    }
+    
+    if( cfg->includeTypes() ){
+	computeCompletionEntryList( entryList, scope->getSortedClassList() );
+	computeCompletionEntryList( entryList, scope->getSortedScopeList() );
+    }
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QValueList< ParsedClass * > & lst )
+{
+    CppCodeCompletionConfig* cfg = m_pSupport->codeCompletionConfig();
+    
+    QValueList<ParsedClass*>::ConstIterator it = lst.begin();
+    while( it != lst.end() ){
+	ParsedClass* klass = *it;
+	++it;
+	
+	KTextEditor::CompletionEntry entry;
+	entry.prefix = "class";
+	entry.text = klass->name();
+	entryList << entry;
+	
+	if( cfg->includeTypes() ){
+	    computeCompletionEntryList( entryList, klass->getSortedClassList() );
+	}
+    }
+}
+
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QValueList< ParsedScopeContainer * > & lst )
+{
+    QValueList<ParsedScopeContainer*>::ConstIterator it = lst.begin();
+    while( it != lst.end() ){
+	ParsedScopeContainer* scope = *it;
+	++it;
+	
+	KTextEditor::CompletionEntry entry;
+	entry.prefix = "namespace";
+	entry.text = scope->name();
+	entryList << entry;
+    }
 }
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QValueList< ParsedMethod * > & methods )

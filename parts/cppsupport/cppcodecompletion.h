@@ -53,6 +53,8 @@ public:
     QStringList typeOf( const QString& name, const QStringList& scope );
     QStringList evaluateExpression( QString expr, SimpleContext* ctx );
 
+    static QStringList typeName( const QString& name );
+    
 public slots:
     void completeText();
 
@@ -69,7 +71,6 @@ private:
     FunctionDefinitionAST* functionDefinition( AST* node );    
     void computeRecoveryPoints();
     
-    QStringList typeName( const QString& name );
     QStringList evaluateExpressionInternal( QStringList& exprList, const QStringList& scope, SimpleContext* ctx=0 );
     
     QStringList typeOf( const QValueList<Tag>& tags );
@@ -84,6 +85,8 @@ private:
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ParsedScopeContainer* scope );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedMethod*>& methods );
     void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedAttribute*>& attributes );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedClass*>& lst );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QValueList<ParsedScopeContainer*>& lst );
     
     void computeSignatureList( QStringList& signatureList, const QString& name, const QStringList& type );
     void computeSignatureList( QStringList& signatureList, const QString& name, ParsedClass* klass );
