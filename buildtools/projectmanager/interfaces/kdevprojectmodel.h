@@ -260,19 +260,19 @@ inline ProjectItemDom ProjectModelItem::toItem()
 { return ProjectItemDom(this); }
 
 inline ProjectDependenceDom ProjectModelItem::toDependence()
-{ return isDependence() ? ProjectDependenceDom(static_cast<ProjectDependenceModel*>(this)) : 0; }
+{ return isDependence() ? ProjectDependenceDom(static_cast<ProjectDependenceModel*>(this)) : ProjectDependenceDom(0); }
 
 inline ProjectFileDom ProjectModelItem::toFile()
-{ return isFile() ? ProjectFileDom(static_cast<ProjectFileModel*>(this)) : 0; }
+{ return isFile() ? ProjectFileDom(static_cast<ProjectFileModel*>(this)) : ProjectFileDom(0); }
 
 inline ProjectTargetDom ProjectModelItem::toTarget()
-{ return isTarget() ? ProjectTargetDom(static_cast<ProjectTargetModel*>(this)) : 0; }
+{ return isTarget() ? ProjectTargetDom(static_cast<ProjectTargetModel*>(this)) : ProjectTargetDom(0); }
 
 inline ProjectFolderDom ProjectModelItem::toFolder() 
-{ return isFolder() ? ProjectFolderDom(static_cast<ProjectFolderModel*>(this)) : 0; }
+{ return isFolder() ? ProjectFolderDom(static_cast<ProjectFolderModel*>(this)) : ProjectFolderDom(0); }
 
 inline ProjectWorkspaceDom ProjectModelItem::toWorkspace()
-{ return isWorkspace() ? ProjectWorkspaceDom(static_cast<ProjectWorkspaceModel*>(this)) : 0; }
+{ return isWorkspace() ? ProjectWorkspaceDom(static_cast<ProjectWorkspaceModel*>(this)) : ProjectWorkspaceDom(0); }
 
 
 #endif // KDEVPROJECTMODEL_H
