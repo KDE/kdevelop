@@ -205,7 +205,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setToolTip(i18n("Make member"));
     action->setWhatsThis(i18n("<b>Make member</b><p>Creates a class member function in implementation file "
                               "based on the member declaration at the current line."));
-    action->setEnabled(false);
+    action->plug(new QWidget());
 
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
@@ -465,6 +465,19 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_activeVariable = 0;
 
     if( context->hasType(Context::EditorContext) ){
+
+        QString text;
+        int atline, atcol;
+        MakeMemberHelper(text,atline,atcol);
+        if(!text.isEmpty())
+        {
+         int id = popup->insertItem( i18n( "Make Member"),
+                this, SLOT( slotMakeMember() ) );
+         popup->setWhatsThis(i18n("<b>Make member</b><p>Creates a class member function in implementation file "
+                              "based on the member declaration at the current line."));
+        }
+        
+
         int id = popup->insertItem( i18n( "Switch Header/Implementation"),
                 this, SLOT( slotSwitchHeader() ) );
         popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
@@ -1004,12 +1017,10 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
     m_backgroundParser->unlock();
 }
 
-void CppSupportPart::slotMakeMember()
+void CppSupportPart::MakeMemberHelper(QString& text, int& atLine, int& atColumn)
 {
     if( !m_activeViewCursor || !m_valid )
         return;
-
-    QString text;
 
     m_backgroundParser->lock();
     TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
@@ -1076,20 +1087,33 @@ void CppSupportPart::slotMakeMember()
 
 	m_backgroundParser->lock();
 	translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
-	int atLine, atColumn;
 	if( translationUnit ){
 	    translationUnit->getEndPosition( &atLine, &atColumn );
 	} else {
 	    atLine = m_activeEditor->numLines() - 1;
 	    atColumn = 0;
 	}
-
-	if( m_activeEditor )
-	    m_activeEditor->insertText( atLine, atColumn, text );
-	if( m_activeViewCursor )
-	    m_activeViewCursor->setCursorPositionReal( atLine+3, 1 );
     }
     m_backgroundParser->unlock();
+}
+
+void CppSupportPart::slotMakeMember()
+{
+QString text;
+int atColumn, atLine;
+MakeMemberHelper(text,atLine,atColumn);
+
+if(!text.isEmpty())
+{ 
+ m_backgroundParser->lock();
+
+ if( m_activeEditor )
+  m_activeEditor->insertText( atLine, atColumn, text );
+ if( m_activeViewCursor )
+  m_activeViewCursor->setCursorPositionReal( atLine+3, 1 );
+
+ m_backgroundParser->unlock();
+ }
 }
 
 QStringList CppSupportPart::subclassWidget(const QString& formName)

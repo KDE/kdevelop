@@ -164,6 +164,8 @@ private:
     void removeWithReferences( const QString& fileName );
     void createIgnorePCSFile();
 
+    void MakeMemberHelper(QString& text, int& atline, int& atcol);
+
     QString sourceOrHeaderCandidate();
 
     QStringList modifiedFileList();
