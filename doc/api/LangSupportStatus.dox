@@ -23,7 +23,7 @@
       <th scope=col>SQL</th>
     </tr>
     <tr>
-      <td>Class wizard</td>
+      <td>\ref sectionClassWizard</td>
       <td bgcolor="cyan">Y</td>
       <td bgcolor="green">N/A</td>
       <td bgcolor="green">Y</td>
@@ -38,7 +38,7 @@
       <td bgcolor="green">N/A</td>
     </tr>
     <tr>
-      <td>Attribute/Method wizard</td>
+      <td>\ref sectionAttributeMethodWizard</td>
       <td bgcolor="red">N</td>
       <td bgcolor="green">N/A</td>
       <td bgcolor="green">Y</td>
@@ -71,7 +71,7 @@
       <td>  </td>
     </tr>
     <tr>
-      <td>Language parser</td>
+      <td>\ref sectionLanguageParser</td>
       <td bgcolor="green">ANTLR</td>
       <td bgcolor="yellow">Internal</td>
       <td bgcolor="green">cppparser</td>
