@@ -1,3 +1,11 @@
+2001-06-01  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+    * Reimplemented the modified-on-disk check with the new
+      editor-interface.
+    * Reimplemented the modified check before quitting.
+    * Added "Save all" and "Revert all"
+    * Added "Revert" to the editor interface.
+
 2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Made some dom writing code more robust by
