@@ -88,7 +88,7 @@ public:
 
   bool closeFile( const KURL & );
   bool closeAllOthers( const KURL & );
-  void reloadFile( const KURL &, bool force = false );
+  void reloadFile( const KURL & url );
 
 public slots:
 
@@ -115,11 +115,9 @@ private slots:
   void slotOpenRecent(const KURL&);
 
   void slotBack();
-  void slotForward();
   void slotBackAboutToShow();
-  void slotForwardAboutToShow();
   void slotPopupActivated( int id );
-  
+
   void slotSwitchTo();
   
   void slotPartAdded( KParts::Part* );
@@ -189,14 +187,11 @@ private:
 		int id;
 	};
 
-	void addHistoryEntry(const KURL & url, int line = -1, int col = -1 );
+	void addHistoryEntry();
 	void jumpTo( const HistoryEntry & );
 		
-	QValueList<HistoryEntry> m_history;
-	QValueList<HistoryEntry>::Iterator m_Current;
-	bool m_isJumping;
-	QGuardedPtr<KParts::ReadOnlyPart> m_latestPart;
-  
+	QValueList<HistoryEntry> m_simpleHistory;
+	bool m_isJumping;  
 };
 
 
