@@ -86,13 +86,13 @@ Core::Core()
     bufferActions.setAutoDelete(true);
 #endif 
 
-    initComponents();
-
 #ifdef NEW_EDITOR
     // create editor object
     (void) editor();
 #endif
-            
+    
+    initComponents(); 
+
     win->show();
 
     emit coreInitialized();
@@ -300,6 +300,9 @@ KEditor::Editor *Core::editor()
 
   // merge the GUI with ours
   win->factory()->addClient(_editor);
+
+  // make the editor aware of part activations
+  connect(partManager(), SIGNAL(activePartChanged(KParts::Part*)), _editor, SLOT(activePartChanged(KParts::Part*)));
 
   return _editor;
 }
