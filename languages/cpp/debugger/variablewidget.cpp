@@ -149,9 +149,9 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     setSorting(-1);
     QListView::setSelectionMode(QListView::Single);
 
-    addColumn(i18n("Variable"));
-    addColumn(i18n("Value"));
-    addColumn(i18n("Type"));
+    addColumn(i18n("Variable"), 100 );
+    addColumn(i18n("Value"), 100 );
+    addColumn(i18n("Type"), 100 );
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
