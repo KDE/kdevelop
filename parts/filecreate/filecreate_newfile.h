@@ -24,9 +24,8 @@ class QCheckBox;
 class QLineEdit;
 
 namespace FileCreate {
-
   class NewFileChooser : public KDialogBase {
-
+      Q_OBJECT
   public:
     NewFileChooser(QWidget *parent=0);
     virtual ~NewFileChooser();
@@ -37,7 +36,8 @@ namespace FileCreate {
     void setCurrent(const FileType *filetype);
     void setDirectory(const QString & url);
     void setName(const QString & name);
-
+  private slots:
+      void slotFileNameChanged(const QString &);
   protected:
     void addType(const FileType * filetype);
 

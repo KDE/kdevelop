@@ -10,6 +10,8 @@
 
 #include "filecreate_newfile.h"
 
+#include "filecreate_newfile.moc"
+
 #include <qvbox.h>
 #include <qgrid.h>
 
@@ -58,10 +60,17 @@ namespace FileCreate {
       m_addToProject->setChecked( true );
 
       m_urlreq->setMode((int) KFile::Directory);
+      connect( m_filename,  SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotFileNameChanged(const QString & ) ) );
+      slotFileNameChanged( m_filename->text() );
   }
 
   NewFileChooser::~NewFileChooser() {
   }
+
+    void NewFileChooser::slotFileNameChanged(const QString & _text)
+    {
+        enableButtonOK( !_text.isEmpty() );
+    }
 
   void NewFileChooser::setFileTypes(QPtrList<FileType> filetypes) {
     for(FileType * filetype = filetypes.first();
