@@ -13,7 +13,7 @@ High priority tasks!
   - CTRL-C doesn't work, typing ../ does weird things
 
 * automake part:
-  - Add files dialog: DND doesn't work!
+  - [FIXED - VR] Add files dialog: DND doesn't work!
   - Should be able to DND files from other targets / file list / konq
     to add to targets.
   - Doesn't always get lib path relative to $top_buildir correct.
@@ -97,6 +97,9 @@ UIs that intuitively ought to be there
 * automakemanager:
   - install, etc. targets besides "build" for subproject menus & toolbar
   
+* TopLevel SDI UI-mode:
+   -> Extend KDevPlugin-API in order to have a preferred border for at least the selection parts
+       (Automake Manager, Class Browser, File Groups, etc...)
 
   
 Other Issues
@@ -137,6 +140,12 @@ Other Issues
   - make all functions using filenames use KURLs instead
 
 * optimization:  
+
+* Import existing directory: Should be named "Import existing project" and more intuitive (wizard-like)
+  - Question from the wizard: "I have found C++ files in your project directory. Should C++ be the primary language
+  of your project?" User: [Yes/No] => Next Step...
+  - Something intuitive for the binary/-ies (for debugger and execution of program), libtool ([Yes/No] for the debugger), build tool
+  (qmake, automake,...?), etc.., too.
 
 
 6. Misc.
