@@ -8,6 +8,7 @@
 #include <kprocess.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
+#include <kseparator.h>
 #include "cvsdialog.h"
 
 // TODO: Only show dialog if cvs client doesn't exit immediately.
@@ -33,10 +34,8 @@ CvsDialog::CvsDialog(const char *text)
 			      rb_fm.lineSpacing()*8);
     layout->addWidget(resultbox, 5);
     
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    frame->setMinimumHeight(frame->sizeHint().height());
-    layout->addWidget(frame, 0);
+    KSeparator *hline = new KSeparator( KSeparator::HLine, this);
+    layout->addWidget(hline, 0);
 
     KButtonBox *buttonbox = new KButtonBox(this);
     layout->addWidget(buttonbox, 0);
