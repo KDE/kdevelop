@@ -386,26 +386,13 @@ void MainWindow::createActions()
   }
 }
 
-QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
+QextMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
 {
-  Q_ASSERT( view ); // if this assert fails, then some part didn't return a widget. Fix the part ;)
-
-  QextMdiChildView* pMDICover = new QextMdiChildView(name);
-  QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
-  view->reparent(pMDICover, QPoint(0,0));
-  pLayout->addWidget(view);
-  pMDICover->setName(name);
   QString shortName = name;
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
-  pMDICover->setTabCaption(shortName);
-  pMDICover->setCaption(name);
-
-  const QPixmap* wndIcon = view->icon();
-  if (wndIcon) {
-      pMDICover->setIcon(*wndIcon);
-  }
-
+  
+  QextMdiChildView* pMDICover = createWrapper(view, name, shortName);
   m_widgetMap.insert(view, pMDICover);
   m_childViewMap.insert(pMDICover, view);
 
