@@ -283,7 +283,7 @@ void CKDevInstall::slotQTpressed()
     QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
     if(QFileInfo(qt_testfile).exists()){
       if(dir.right(1) != "/"){
-	dir=dir+"/";
+      	dir=dir+"/";
       }
       config->writeEntry("doc_qt",dir);
       qt_test=false;
@@ -492,6 +492,7 @@ void CKDevInstall::slotAuto() // proceed >>
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
                   +print_str+kdbg_str+kiconedit_str+ktranslator_str, KMsgBox::INFORMATION);
 
+
   // now check for the qt libs documentation
   QString qt_testfile="classes.html";
   QString qt="";
@@ -499,7 +500,7 @@ void CKDevInstall::slotAuto() // proceed >>
   QDir* qt_dir=new QDir();
   if(qt_dir->cd("/usr/local/qt/html/"))
     if(qt_dir->exists("classes.html"))
-      qt="/usr/lib/qt/html/";
+      qt="/usr/local/qt/html/";
 
   if(qt_dir->cd("/usr/local/lib/qt/html/"))
     if(qt_dir->exists("classes.html"))
@@ -517,6 +518,10 @@ void CKDevInstall::slotAuto() // proceed >>
     if(qt_dir->exists("classes.html"))
       qt="/usr/X11/lib/qt/html/";
 
+  if(qt_dir->cd(config->readEntry("doc_qt")))
+    if(qt_dir->exists("classes.html"))
+      qt=config->readEntry("doc_qt");
+
   if(!qt.isEmpty())
     qt_test=false;
   else
@@ -526,7 +531,8 @@ void CKDevInstall::slotAuto() // proceed >>
     config->setGroup("Doc_Location");
     config->writeEntry("doc_qt",qt);
     KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found in:\n"+
-                          qt+"\n\nThe correct path has been set.\n"),KMsgBox::INFORMATION);
+                          qt+"\nThe correct path has been set.\n"),KMsgBox::INFORMATION);
+
   }
   else{  // return to the setup to set it manually ?
     int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
@@ -535,7 +541,7 @@ void CKDevInstall::slotAuto() // proceed >>
                                                   "to set it now ?\n"),KMsgBox::QUESTION);
     if(result==1){
 			hint_label->setGeometry( 40, 150, 440, 120 );
-	hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
+    	hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
       return;
 		}
   }
@@ -593,6 +599,9 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
+
+
 
 
 

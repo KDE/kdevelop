@@ -1,3 +1,7 @@
+1999-03-07  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * fixed the Installation bug with the qt-path
+  * added additional proof for the qt-path into the update dialog
+
 1999-03-07 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* added quickhelp in all printdialogs
 	* added lpr as printprogram

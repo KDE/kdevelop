@@ -278,7 +278,12 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
   
   conf->setGroup("Doc_Location");
   QString qtPath=conf->readEntry("doc_qt");
-  
+  bool qt_test=false;
+  QString qt_testfile=qtPath+"classes.html";
+  if(QFileInfo(qt_testfile).exists()){
+    qt_test=true;
+  }
+
   int result=KMsgBox::yesNo( this,i18n("Question"),i18n("The KDE-library documentation can be\n"
                                                         "generated using the old khtmlw library\n"
                                                         "or the new khtml library. Would you like\n"
@@ -286,8 +291,8 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
                                                          KMsgBox::QUESTION, i18n("use khtml") , i18n("use khtmlw"));
   if(result==1){ // use new khtml
 
-    if(qtPath.isEmpty()){  // don't crossreference to qt
-      int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set.\n"
+    if(!qt_test){  // don't crossreference to qt
+      int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set correctly.\n"
                                                       "If you want your KDE-library documentation to\n"
                                                       "be cross-referenced to the Qt-library, you have\n"
                                                       "to set the correct path to your Qt-library\n"
@@ -353,8 +358,8 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
     }
   }
   else{ // use old khtmlw
-    if(qtPath.isEmpty()){ // don't cross-reference to qt
-      int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set.\n"
+    if(!qt_test){ // don't cross-reference to qt
+      int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set correctly.\n"
                                                       "If you want your KDE-library documentation to\n"
                                                       "be cross-referenced to the Qt-library, you have\n"
                                                       "to set the correct path to your Qt-library\n"
@@ -459,6 +464,7 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
+
 
 
 
