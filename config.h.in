@@ -1,5 +1,42 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
+/* Define if lex declares yytext as a char * by default, not a char[].  */
+#undef YYTEXT_POINTER
+
+/* Define if the C++ compiler supports BOOL */
+#undef HAVE_BOOL
+
+/* defines if having libgif (always 1) */
+#undef HAVE_LIBGIF
+
+/* defines if having libjpeg (always 1) */
+#undef HAVE_LIBJPEG
+
+/* defines if having libtiff */
+#undef HAVE_LIBTIFF
+
+/* defines if having libpng */
+#undef HAVE_LIBPNG
+
+/* defines which to take for ksize_t */
+#undef ksize_t
+
+/* Define to 1 if NLS is requested.  */
+#undef ENABLE_NLS
+
+#undef QT_DOCDIR
+#undef KDELIBS_DOCDIR
+#undef KDOC_INDEXDIR
+#undef WITH_DOCBASE
+#undef WITH_KDOC2
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
+
 #ifndef HAVE_BOOL
 #define HAVE_BOOL
 typedef int bool;

@@ -9,5 +9,5 @@ SUBDIRS =  doc kdevelop kdlgloader po
 # have all needed files, that a GNU package needs
 AUTOMAKE_OPTIONS = foreign 
 
-EXTRA_DIST = todo.html BUGS FAQ kdevelop.kdevprj
+EXTRA_DIST = todo.html BUGS FAQ kdevelop.kdevprj kdevelop.lsm
 

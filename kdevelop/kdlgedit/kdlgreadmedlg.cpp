@@ -46,10 +46,6 @@ KDlgReadmeDlg::KDlgReadmeDlg(QWidget *parent)
   "in you applications :\n\n"\
   "- Let KDevelop create the dialogs' sources.\n"\
   "- Using the KDlgLoader for loading dialogs at run time.\n\n"\
-  "I recommend using the dialog loader since there\n"\
-  "are some problems regarding the source generation for\n"\
-  "now. However, using the loader would be a good idea\n"\
-  "for some other reasons as described i the help.\n\n"\
   "This is a WYSINWYG (What you see is\n"\
   "NEARLY what you get) editor. That means it\n"\
   "displays most of the widgets properties possible but\n"\
@@ -61,8 +57,7 @@ KDlgReadmeDlg::KDlgReadmeDlg(QWidget *parent)
   "designing dialogs more comfortable.\n\n"\
   "By the way, you can get help on every widget and\n"\
   "property by a right click. This also works in the\n"\
-  "editor window.\n\n"\
-  "Pascal Krahmer <pascal@beast.de>"));
+  "editor window.\n\n"));
 
   btn = new QPushButton(i18n("&Okay"), this);
   btn->setGeometry(190,320,100,30);

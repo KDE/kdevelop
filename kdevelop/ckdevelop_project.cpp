@@ -337,7 +337,7 @@ void CKDevelop::slotProjectRemoveFile(){
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
   QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-
+  QString args=prj->getConfigureArgs();
 
   if(prjdlg.exec()){
     if (prjdlg.needConfigureInUpdate()){
@@ -361,7 +361,7 @@ void CKDevelop::slotProjectOptions(){
       shell_process  << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
          shell_process << prj->getLDFLAGS();
-      shell_process  << "\" "<< "./configure";
+      shell_process  << "\" " << " ./configure" << args;
 
       shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
       return;
@@ -384,8 +384,8 @@ void CKDevelop::slotProjectOptions(){
       }
       shell_process  << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS();
-      shell_process  << "\" "<< "./configure";
+	shell_process << prj->getLDFLAGS();
+      shell_process  << "\" " << " ./configure "  << args;
 
       shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
     }

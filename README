@@ -25,6 +25,7 @@ programs and libraries:
 	a2ps  (optional)
 	enscript  (optional)
 	Gv,Ghostview,KGhotsview  (optional)
+	cvs (optional)
 
 
 Installation:

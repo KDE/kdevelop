@@ -1,4 +1,4 @@
-[Desktop Entry]
+[KDE Desktop Entry]
 Name=Development
 Name[cs]=Vıvojové nástroje
 Name[da]=Udvikling
@@ -21,5 +21,5 @@ Name[ru]=òÁÚÒÁÂÏÔËÁ
 Name[sk]=Vıvoj
 Name[sl]=Razvoj
 Name[sv]=Utveckling
-Icon=development_package.xpm
-MiniIcon=development_package.xpm
+Icon=package.xpm
+MiniIcon=package.xpm

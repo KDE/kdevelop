@@ -1012,6 +1012,12 @@ void CKAppWizard::slotOkClicked() {
     msg.show();
   }
 
+
+  if (vsBox->currentItem() == 1) {
+    if (!CToolClass::searchProgram("cvs")) {
+      return;
+    }
+  }
   QDir dir;
   QString direct = directoryline->text();
 
@@ -2239,8 +2245,8 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.hxx");
   group_filters.append("*.hpp");
   group_filters.append("*.H");
-  project->addLFVGroup (i18n("Header"),"");
-  project->setFilters(i18n("Header"),group_filters);
+  project->addLFVGroup (i18n("Headers"),"");
+  project->setFilters(i18n("Headers"),group_filters);
   
   project->writeProject ();
   project->updateMakefilesAm ();
