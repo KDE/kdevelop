@@ -110,7 +110,7 @@ void ProjectManager::slotProjectOptions()
     QVBox *box = dlg.addVBoxPage(i18n("General"));
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
-  
+
   QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
@@ -118,7 +118,7 @@ void ProjectManager::slotProjectOptions()
 
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);
   dlg.exec();
-  
+
   saveProjectFile();
 }
 
@@ -210,10 +210,11 @@ bool ProjectManager::closeProject()
   Q_ASSERT( API::getInstance()->project() );
 
   ProjectWorkspace::save();
-  Core::getInstance()->doEmitProjectClosed();
 
   if( !closeProjectSources() )
     return false;
+
+  Core::getInstance()->doEmitProjectClosed();
 
   unloadLocalParts();
   unloadLanguageSupport();
