@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(all_includes) -I$(top_srcdir)/lib/util
 
 KDE_CXXFLAGS = $(USE_RTTI) -DNO_NEW_CODE
 
@@ -8,7 +8,8 @@ libkdevkwrite_la_SOURCES = highlight.cpp texteditor.cpp \
 			   kwdoc.cpp kwview.cpp undohistory.cpp  \
 			   kwdialog.cpp kwrite_factory.cpp \
 			   kwbuffer.cpp kwtextline.cpp kvmallocator.cpp \
-			   kwattribute.cpp kwriteIface.skel syntaxdocument.cpp
+			   kwattribute.cpp kwriteIface.skel syntaxdocument.cpp \
+			   editorpart.cpp
 
 METASOURCES = AUTO
 
