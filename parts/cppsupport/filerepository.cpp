@@ -133,6 +133,9 @@ struct FileRepositoryData
     
     KTextEditor::Document* findDocument( const QString& fileName )
     {
+        if( !cppSupport->partController()->parts() )
+	   return 0;
+
 	QPtrListIterator<KParts::Part> it( *cppSupport->partController()->parts() );
 	while( it.current() ){
 	    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
@@ -234,6 +237,9 @@ FileRepository::~FileRepository()
 
 TranslationUnitAST* FileRepository::translationUnit( const QString& fileName, bool force )
 {
+    if( fileName.isEmpty() )
+        return 0;
+	
     Unit* unit = d->units.find( fileName );
     if( !unit ){
 	KTextEditor::Document* doc = d->findDocument( fileName );
@@ -251,6 +257,9 @@ TranslationUnitAST* FileRepository::translationUnit( const QString& fileName, bo
 
 QValueList<Problem> FileRepository::problems( const QString& fileName, bool force )
 {
+    if( fileName.isEmpty() )
+        return QValueList<Problem>();
+	
     Unit* unit = d->units.find( fileName );
     if( !unit ){
 	KTextEditor::Document* doc = d->findDocument( fileName );
@@ -271,7 +280,7 @@ void FileRepository::slotPartAdded( KParts::Part* part )
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
     if( doc ){
 	QString fileName = doc->url().path();
-	if( d->units.find(fileName) ){
+	if( !fileName.isEmpty() && d->units.find(fileName) ){
 	    d->units.remove( fileName );
 	}
     }
@@ -282,7 +291,7 @@ void FileRepository::slotPartRemoved( KParts::Part* part )
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
     if( doc ){
 	QString fileName = doc->url().path();
-	if( d->units.find(fileName) ){
+	if( !fileName.isEmpty() && d->units.find(fileName) ){
 	    d->units.remove( fileName );
 	}
     }
