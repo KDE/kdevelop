@@ -3,7 +3,8 @@
 # from KPart. 
 
 SUBDIRS = doctreeview classview appwizard outputviews grepview \
-	  debugger javadebugger konsole astyle partselector tipofday manager \
+	  debugger javadebugger konsole astyle partselector manager \
 	  cppsupport javasupport pythonsupport perlsupport \
 	  autoproject scriptproject \
+	  kwrite-part simple-editor
 	  $(PYTHON_SUBDIR)
