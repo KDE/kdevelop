@@ -1,3 +1,6 @@
+2003-02-23 Roberto Raggi <roberto@kdevelop.org>
+	* use the new c++ parser to fill the class browser
+
 2003-02-23 Caleb Tennis <caleb@aei-tech.com>
 	* Bug and Compilation Fixes
 
