@@ -35,6 +35,10 @@ private slots:
     void extEdit();
     void extEnable();
     void extDisable();
+    void doxygenadd_button_clicked();
+    void doxygenremove_button_clicked();
+    void qtdocsadd_button_clicked();
+    void qtdocsremove_button_clicked();
 
 private:
     void readConfig();

@@ -47,6 +47,24 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
         extEnableButton->setEnabled(false);
         extDisableButton->setEnabled(false);
     }
+    
+    qtdocs_view->addColumn(i18n("Title"));
+    qtdocs_view->addColumn(i18n("URL"));
+    qtdocs_view->setAllColumnsShowFocus(true);
+    
+    doxygen_view->addColumn(i18n("Title"));
+    doxygen_view->addColumn(i18n("URL"));
+    doxygen_view->setAllColumnsShowFocus(true);
+    
+    bListView->addColumn(i18n("Title"));
+    bListView->addColumn(i18n("URL"));
+    bListView->setAllColumnsShowFocus(true);
+    
+    extListView->addColumn(i18n("Name"));
+    extListView->addColumn(i18n("Enabled"));
+    extListView->addColumn(i18n("Location"));
+    extListView->setAllColumnsShowFocus(true);
+    
 }
 
 
@@ -57,12 +75,42 @@ DocTreeGlobalConfigWidget::~DocTreeGlobalConfigWidget()
 void DocTreeGlobalConfigWidget::readConfig()
 {
     KConfig *config = DocTreeViewFactory::instance()->config();
+    
+    //qt *.xml documentation files
+    config->setGroup("General Qt");   
+    QMap<QString, QString> emap = config->entryMap("General Qt");
+    QMap<QString, QString>::Iterator it;
+    for (it = emap.begin(); it != emap.end(); ++it)
+    {
+        KListViewItem *qtitem = new KListViewItem(qtdocs_view, it.key(), config->readPathEntry(it.key()));
+    }
+    if (emap.empty())
+    {
+        KListViewItem *qtitem = new KListViewItem(qtdocs_view, "Qt Reference Documentation", QString(QT_DOCDIR) + QString("/qt.xml"));
+        qtitem = new KListViewItem(qtdocs_view, "Qt Assistant Manual", QString(QT_DOCDIR) + QString("/assistant.xml"));
+        qtitem = new KListViewItem(qtdocs_view, "Qt Designer Manual", QString(QT_DOCDIR) + QString("/designer.xml"));
+        qtitem = new KListViewItem(qtdocs_view, "Guide to the Qt Translation Tools", QString(QT_DOCDIR) + QString("/linguist.xml"));
+        qtitem = new KListViewItem(qtdocs_view, "qmake User Guide", QString(QT_DOCDIR) + QString("/qmake.xml"));
+    }
 
-    config->setGroup("General");
-    qtdocdirEdit->setURL(config->readPathEntry("qtdocdir", QT_DOCDIR));
+    config->setGroup("General Doxygen");
+    QMap<QString, QString> xmap = config->entryMap("General Doxygen");
+    QMap<QString, QString>::Iterator itx;
+    for (itx = xmap.begin(); itx != xmap.end(); ++itx)
+    {
+        KListViewItem *qtitem = new KListViewItem(doxygen_view, itx.key(), config->readPathEntry(itx.key()));
+    }
+    if (xmap.empty())
+    {
+        KListViewItem *qtitem = new KListViewItem(doxygen_view, "KDE Libraries (Doxygen)", KDELIBS_DOXYDIR);
+    }
+    
+/*    qtdocdirEdit->setURL(config->readPathEntry("qtdocdir", QT_DOCDIR));
     qtdocdirEdit->fileDialog()->setMode( KFile::Directory );
     kdelibsdoxydirEdit->setURL(config->readPathEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
     kdelibsdoxydirEdit->fileDialog()->setMode( KFile::Directory );
+*/
+    config->setGroup("General");
     kdocCheck->setChecked( config->readBoolEntry("displayKDELibsKDoc", false) );
     
     config->setGroup("Index");
@@ -112,9 +160,25 @@ void DocTreeGlobalConfigWidget::storeConfig()
 {
     KConfig *config = DocTreeViewFactory::instance()->config();
 
+    config->deleteGroup("General Qt");
+    config->setGroup("General Qt");   
+    QListViewItemIterator it( qtdocs_view );
+    while ( it.current() )
+    {
+        config->writePathEntry(it.current()->text(0), it.current()->text(1));
+        ++it;
+    }
+
+    config->deleteGroup("General Doxygen");
+    config->setGroup("General Doxygen");   
+    QListViewItemIterator itx( doxygen_view );
+    while ( itx.current() ) 
+    {
+        config->writePathEntry(itx.current()->text(0), itx.current()->text(1));
+        ++itx;
+    }
+  
     config->setGroup("General");
-    config->writePathEntry("qtdocdir", qtdocdirEdit->url());
-    config->writePathEntry("kdelibsdocdir", kdelibsdoxydirEdit->url());
     config->writeEntry("displayKDELibsKDoc", kdocCheck->isChecked() );
  
     config->setGroup("Index");
@@ -225,5 +289,37 @@ void DocTreeGlobalConfigWidget::extDisable()
     }
 }
 
+
+void DocTreeGlobalConfigWidget::doxygenadd_button_clicked( )
+{
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "");
+    if (dialog->exec())
+    {
+        QString url = dialog->url();
+        if (url[url.length()-1] == QChar('/')) url.remove(url.length()-1, 1);
+        new KListViewItem(doxygen_view, dialog->title(), url);
+    }
+    delete dialog;
+}
+
+void DocTreeGlobalConfigWidget::doxygenremove_button_clicked( )
+{
+    if (doxygen_view->currentItem())
+        delete doxygen_view->currentItem();
+}
+
+void DocTreeGlobalConfigWidget::qtdocsadd_button_clicked( )
+{
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml");
+    if (dialog->exec())
+        new KListViewItem(qtdocs_view, dialog->title(), dialog->url());
+    delete dialog;
+}
+
+void DocTreeGlobalConfigWidget::qtdocsremove_button_clicked( )
+{
+    if (qtdocs_view->currentItem())
+        delete qtdocs_view->currentItem();
+}
 
 #include "doctreeglobalconfigwidget.moc"
