@@ -1400,7 +1400,13 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
 }
 	
 void CKDevelop::slotPluginPluginManager(){
-    PluginManagerDlg dlg;
+    TImportantPtrInfo info;
+
+    //fill all struct fields
+    info.kdev = this;
+    info.plugin_menu = plugin_menu;
+
+    PluginManagerDlg dlg(this,"plg",&info);
     dlg.show();
 }
 

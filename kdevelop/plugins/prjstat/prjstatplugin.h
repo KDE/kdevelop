@@ -5,18 +5,20 @@
 #include <kdevplugin.h>
 
 /**
-  *@author 
+  *@author Sandy Meier
   */
 
-class PrjStatPlugin : public KDevPlugin  {
+class PrjStatPlugin : public KDevPlugin {
+
+Q_OBJECT
+
  public: 
     PrjStatPlugin();
     ~PrjStatPlugin();
     virtual void start();
     virtual void stop();
-    
-    public slots:
-	void slotMenuActivated();
+   public slots:	 
+    virtual void slotMenuActivated();
 };
 
 #endif

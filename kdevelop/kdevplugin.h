@@ -20,10 +20,10 @@
 
 #include <qpopupmenu.h>
 
-#include "../ckdevelop.h"
+#include "ckdevelop.h"
 
 class KDevPlugin : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 
 public: 
   /** construtor */
@@ -34,10 +34,19 @@ public:
   virtual void start();
   virtual void stop();
   
-  void init(TImportantPtrInfo info);
+  void init(TImportantPtrInfo* info);
+
+  //plugin infos
+  QString name;
+  QString author;
+  QString description;
+  QString copyright;
+  QString homepage;
+  QString email;
+  QString version;
+
  protected:
-  
-  CKDevelop* kdev;
+    CKDevelop* kdev;
   QPopupMenu* plugin_menu;
 
 };

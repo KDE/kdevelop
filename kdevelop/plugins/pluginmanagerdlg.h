@@ -26,8 +26,12 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlistview.h>
+#include <qlist.h>
 
+#include "../structdef.h"
 
+class PluginInfo;
+class KDevPlugin;
 
 /**
   *@author Sandy Meier
@@ -36,9 +40,10 @@
 class PluginManagerDlg : public QDialog  {
    Q_OBJECT
 public: 
-	PluginManagerDlg(QWidget *parent=0, const char *name=0);
+	PluginManagerDlg(QWidget *parent=0, const char *name=0,TImportantPtrInfo* info=0);
 	~PluginManagerDlg();
 	void searchPlugins();
+	void initDialog();
 
 protected:
     QPushButton* ok_button;
@@ -51,6 +56,18 @@ protected:
     QLabel* email_label;
     QLabel* size_label;
     QMultiLineEdit* desc_multilineedit;
+    TImportantPtrInfo* ptrinfo;
+    QList<PluginInfo>* plugin_infos;
+    
+    protected slots:
+       void slotSelectionChanged ( QListViewItem * item);
+       
+};
+
+class PluginInfo {
+ public:
+    QString path;
+    KDevPlugin* plugin;
 };
 
 #endif

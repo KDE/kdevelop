@@ -14,13 +14,140 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+#include <qheader.h>
+#include <dlfcn.h>
+#include <qmessagebox.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 #include "pluginmanagerdlg.h"
-#include <qheader.h>
+#include "../kdevplugin.h"
+#include "../misc.h"
+
 #include "folder.xpm" 
 
-PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
-    	ok_button = new QPushButton( this, "ok_button" );
+
+PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name,TImportantPtrInfo* info ) : QDialog(parent,name,true) {
+
+    // init
+    ptrinfo = info;
+    plugin_infos = new QList<PluginInfo>;     
+    initDialog();
+    searchPlugins();
+    connect(plugin_listbox,SIGNAL(selectionChanged ( QListViewItem * )),SLOT(slotSelectionChanged ( QListViewItem * )) );
+}
+void PluginManagerDlg::searchPlugins(){         
+
+    void *handle=0;
+    KDevPlugin* (*create_function)( void );
+    
+    char* error;
+    KDevPlugin* instance=0;
+    StringTokenizer tokener;
+    PluginInfo* plginfo=0;
+    
+    //////// 1. STEP  get all interesting dirs
+    ////////////////////////
+
+    QStringList dirlist = KGlobal::dirs()->getResourceDirs("lib");
+    QString lib_path = getenv("LD_LIBRARY_PATH");
+    
+    tokener.tokenize(lib_path,":");
+    
+    while(tokener.hasMoreTokens()){
+	QString pathstr= tokener.nextToken();
+	if(pathstr.right(1) != "/") pathstr += "/"; // add / if needed
+	if(dirlist.contains(pathstr) == 0){
+	    dirlist.append(pathstr);
+	}
+    }
+    
+    QStringList::Iterator it;
+    QStringList::Iterator it2;
+    cerr << "enter fpr"; 
+    for (it = dirlist.begin(); it != dirlist.end(); it++){
+        cerr << "\n" << *it; 
+    }
+
+    ///////////2.STEP  get all potential plugins
+    //////////////////////////////
+    QDir dir;
+    QStringList plugins;
+    QStringList templist;
+    
+    for (it = dirlist.begin(); it != dirlist.end(); it++){
+        dir.setPath(*it); 
+	dir.setNameFilter("*_kdevplg.so");
+	templist = dir.entryList();
+	
+	for (it2 = templist.begin(); it2 != templist.end(); it2++){
+	    plugins.append(*it + *it2);
+	}
+    }
+
+   
+
+    ///////////// load the plugins,fill the plugininfos
+    /////////////////////////////////////////
+    for (it = plugins.begin(); it != plugins.end(); it++){
+	cerr << "\nPLG:" << *it;
+	
+	handle = dlopen( *it, RTLD_NOW ); // load the plugin
+	if (!handle ) {
+	    cerr << "\n" << handle <<"\ndlopen-error: " << dlerror() << endl;     
+	    
+	} 
+	else {
+	    create_function = (KDevPlugin* (*)(void)) dlsym( handle, "create" ) ;
+	    
+	    if ( (error = dlerror()) == NULL ) {
+		plginfo = new PluginInfo();
+		plginfo->plugin = (*create_function) ();
+		plginfo->path = *it;
+		cerr << "\nNAME:" << plginfo->plugin->name; 
+		cerr << "\nCOPYRIGHT:" << plginfo->plugin->copyright; 
+		plugin_infos->append(plginfo);
+	    }
+	    else{
+		cerr << "\ndlsym-error " << error << endl;
+	    }	        
+	} // end else
+    } // end for
+    
+    // fill the pluginlistview
+    for(plginfo=plugin_infos->first();plginfo!=0;plginfo=plugin_infos->next()){
+	(void) new QCheckListItem(plugin_listbox,plginfo->plugin->name,QCheckListItem::CheckBox);	
+    }
+}
+
+PluginManagerDlg::~PluginManagerDlg(){
+    delete plugin_infos;
+}
+
+void PluginManagerDlg::slotSelectionChanged ( QListViewItem* item){
+    QString name =item->text(0);
+    PluginInfo* plginfo;
+    QFileInfo fileinfo;
+    QString size;
+    for(plginfo=plugin_infos->first();plginfo!=0;plginfo=plugin_infos->next()){
+	if(name == plginfo->plugin->name){
+	    copyright_label->setText( plginfo->plugin->copyright);
+	    author_label->setText( plginfo->plugin->author);
+	    email_label->setText( plginfo->plugin->email);
+	    homepage_label->setText( plginfo->plugin->homepage);
+	    version_label->setText( plginfo->plugin->version);
+	    desc_multilineedit->setText( plginfo->plugin->description);
+
+	    fileinfo.setFile(plginfo->path);
+	    size.setNum(fileinfo.size());
+	    size_label->setText(size + " bytes");
+	    
+	}
+    }
+}
+    
+void PluginManagerDlg::initDialog(){
+    ok_button = new QPushButton( this, "ok_button" );
 	ok_button->setGeometry( 450, 380, 100, 30 );
 	ok_button->setMinimumSize( 0, 0 );
 	ok_button->setMaximumSize( 32767, 32767 );
@@ -124,7 +251,7 @@ PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog
 
 	QLabel* qtarch_Label_11;
 	qtarch_Label_11 = new QLabel( this, "Label_11" );
-	qtarch_Label_11->setGeometry( 310, 70, 80, 30 );
+	qtarch_Label_11->setGeometry( 310, 70, 70, 30 );
 	qtarch_Label_11->setMinimumSize( 0, 0 );
 	qtarch_Label_11->setMaximumSize( 32767, 32767 );
 	qtarch_Label_11->setFocusPolicy( QWidget::NoFocus );
@@ -231,9 +358,7 @@ PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog
 
 	plugin_listbox->addColumn( "clmn0" );
 	plugin_listbox->header()->hide();
-	(void) new QCheckListItem(plugin_listbox,"item1 sdasd",QCheckListItem::CheckBox);
-	(void) new QCheckListItem(plugin_listbox,"item2 sdff",QCheckListItem::CheckBox);
-	(void) new QCheckListItem(plugin_listbox,"item3 sdfdsfdf",QCheckListItem::CheckBox);
+	
 	//item = plugin_listbox->insertItem( "Project Statistic (plugin example)", true );
 	
 	//	item = plugin_listbox->insertItem( "File Info (plugin example)", true );
@@ -241,43 +366,5 @@ PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog
 	resize( 680,420 );
 	setMinimumSize( 680, 420 );
 	setMaximumSize( 680, 420 );
-	
-	
-
-	searchPlugins();
-}
-void PluginManagerDlg::searchPlugins(){
-    // void *handle;
-//     NullPlugin* (*create_function)( void );
-//     char* error;
-//     NullPlugin* instance;
     
-//     handle = dlopen( "libmenuplugin.so", RTLD_LAZY );
-//     if (!handle ) {
-// 	cerr << "Application !init lib!: " << dlerror() << endl;
-// 	//exit(1);
-	
-// 	QMessageBox::information( this, "LD-ERROR !!!",	
-// 				  "Das PlugIn ( \"libmenuplugin.so\" ) wurde nicht gefunden !!!" );
-	
-	
-	
-//     } else {
-	
-// 	create_function = (NullPlugin* (*)(void)) dlsym( handle, "create" ) ;
-// 	if ( (error = dlerror()) != NULL ) {
-// 	    cerr << "Application !sym lib!: " << error << endl;
-// 	    exit(1);
-// 	}
-	
-// 	instance = (*create_function) ();
-// 	cerr << instance << endl;
-	
-// 	instance->test( 4 );
-	
-// 	instance->init( this );
-//     }
 }
-PluginManagerDlg::~PluginManagerDlg(){
-}
-    

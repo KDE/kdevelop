@@ -9,7 +9,8 @@ SOMINOR = 0
 
 noinst_HEADERS = prjstatplugin.h
 
-libprjstat_kdevplg_la_SOURCES = prjstatplugin.cpp
+libprjstat_kdevplg_la_SOURCES = prjstatplugin.cpp main.cpp
+libprjstat_kdevplg_la_METASOURCES = USE_AUTOMOC  
 
 EXTRA_DIST = README
 

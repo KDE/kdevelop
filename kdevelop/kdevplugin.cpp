@@ -23,11 +23,12 @@ KDevPlugin::KDevPlugin(){
 }
 KDevPlugin::~KDevPlugin(){
 }
-void KDevPlugin::init(TImportantPtrInfo info){
-    kdev = info.kdev;
-    plugin_menu = info.plugin_menu;
+void KDevPlugin::init(TImportantPtrInfo* info){
+    kdev = info->kdev;
+    plugin_menu = info->plugin_menu;
 }
 void KDevPlugin::start(){
+    cerr << "START:KDEVPLUGIN";
 }
 void KDevPlugin::stop(){
 }
