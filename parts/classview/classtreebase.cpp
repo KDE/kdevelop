@@ -448,28 +448,16 @@ void ClassTreeBase::setTreeState(TreeState state)
     }
 }
 
-void ClassTreeBase::slotReturnPressed( QListViewItem *item )
+
+void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
 {
     if (!item)
         return;
 
-    ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
-    if (ctitem->isOrganizer())
-        return;
-    
-    QString toFile;
-    int toLine = -1;
-    ctitem->getImplementation(&toFile, &toLine);
-    m_part->partController()->editDocument(toFile, toLine);
-    m_part->topLevel()->lowerView(this);
-}
-
-void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
-{
     // We assume here that ALL (!) items in the list view
     // are ClassTreeItem's
     ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
-    if (!ctitem || ctitem->isOrganizer())
+    if (ctitem->isOrganizer())
         return;
 
     if (button == LeftButton) {
@@ -485,6 +473,12 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
         m_part->partController()->editDocument(toFile, toLine);
 	m_part->topLevel()->lowerView(this);
     }
+}
+
+
+void ClassTreeBase::slotReturnPressed(QListViewItem *item)
+{
+    slotItemPressed(LeftButton, item);
 }
 
 
