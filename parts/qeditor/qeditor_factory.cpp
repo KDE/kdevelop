@@ -200,7 +200,7 @@ KInstance *QEditorPartFactory::instance()
 
     if ( !s_instance )
     {
-        s_about = new KAboutData("qeditorpart", I18N_NOOP("Qt Designer Based Text Editor"), "0.1");
+        s_about = new KAboutData("qeditorpart", I18N_NOOP("QEditor (based on the editor of Qt-Designer)"), "0.1");
 	
         s_about->addAuthor("Roberto Raggi", 0, "roberto@kdevelop.org");
         s_about->addAuthor("Trolltech AS", 0, "info@trolltech.com");
