@@ -44,7 +44,7 @@
 #include "qsourcecolorizer.h"
 #include "simple_indent.h"
 #include "parenmatcher.h"
-
+#include "cindent.h"
 #include "cpp_colorizer.h"
 #include "java_colorizer.h"
 #include "python_colorizer.h"
@@ -112,7 +112,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
 	parenMatcher = new ParenMatcher();
 
-	m_tabIndent = FALSE;
+	m_tabIndent = TRUE;
 	m_backspaceIndent = TRUE;
 	m_currentLine = -1;
 
@@ -125,8 +125,6 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
 	document()->addSelection( 1000 );
 	document()->setSelectionColor( 1000, QColor( 204, 232, 195 ) );
-
-	document()->setIndent( new SimpleIndent() );
 
 	connect( this, SIGNAL(cursorPositionChanged(QTextCursor*) ),
 			 this, SLOT(doMatch(QTextCursor*)) );
@@ -157,8 +155,11 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 			insert( "\t" );
 		}
 		e->accept();
-	} else if( e->ascii() == '{' || e->ascii() == '}'
-			   || e->ascii() == ':' || e->ascii() == '#' ){
+	} else if( e->ascii() == '{' || e->ascii() == '}' || e->ascii() == '#' ){
+            // electric keys
+		insert( e->text(), TRUE );
+		e->accept();
+	} else if( e->ascii() == ':' || e->ascii() == '#' ){
 		insert( e->text(), FALSE );
 		e->accept();
 	} else if( e->key() == Key_Backspace ){
@@ -231,10 +232,11 @@ void QEditor::zoomOut()
 
 void QEditor::updateStyles()
 {
+    int tabwidth = 8;
 	QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
 	if( colorizer ){
-		setTabStopWidth( colorizer->format(0)->width('x') * 4 );
-		document()->setTabStops( colorizer->format(0)->width('x') * 4 );
+		setTabStopWidth( colorizer->format(0)->width('x') * tabwidth );
+		document()->setTabStops( colorizer->format(0)->width('x') * tabwidth );
 		setFont( colorizer->format( 0 )->font() );
 	}
 	QTextEdit::updateStyles();
@@ -350,16 +352,22 @@ void QEditor::setLanguage( const QString& l )
 	m_language = l;
 	if( m_language == "c++" ){
 		document()->setPreProcessor( new CppColorizer() );
-	} else if( m_language == "python" ){
-		document()->setPreProcessor( new PythonColorizer() );
-	} else if( m_language == "xml" ){
-		document()->setPreProcessor( new XMLColorizer() );
+                document()->setIndent( new CIndent() );
 	} else if( m_language == "java" ){
 		document()->setPreProcessor( new JavaColorizer() );
+                document()->setIndent( new CIndent() );
+	} else if( m_language == "python" ){
+		document()->setPreProcessor( new PythonColorizer() );
+                document()->setIndent( new SimpleIndent() );
+	} else if( m_language == "xml" ){
+		document()->setPreProcessor( new XMLColorizer() );
+                document()->setIndent( new SimpleIndent() );
 	} else if( m_language == "qmake" ){
 		document()->setPreProcessor( new QMakeColorizer() );
+                document()->setIndent( new SimpleIndent() );
 	} else {
 		document()->setPreProcessor( 0 );
+                document()->setIndent( new SimpleIndent() );
 	}
 
 	configChanged();
@@ -375,7 +383,7 @@ void QEditor::setText( const QString& text )
 {
 	setTextFormat( QTextEdit::PlainText );
 	QString s = text;
-	tabify( s );
+	// tabify( s );
 	QTextEdit::setText( s );
 	setTextFormat( QTextEdit::AutoText );
 }

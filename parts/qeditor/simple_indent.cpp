@@ -70,6 +70,7 @@ static int indentation( const QString &s )
 void tabify( QString &s )
 {
     int i = 0;
+    int tabwidth = 8;
     for ( ;; ) {
         for ( int j = i; j < (int)s.length(); ++j ) {
             if ( s[ j ] != ' ' && s[ j ] != '\t' ) {
@@ -77,10 +78,10 @@ void tabify( QString &s )
                     QString t  = s.mid( i, j - i );
                     int spaces = 0;
                     for ( int k = 0; k < (int)t.length(); ++k )
-                        spaces += ( t[ k ] == ' ' ? 1 : 4 );
+                        spaces += ( t[ k ] == ' ' ? 1 : tabwidth );
                     s.remove( i, t.length() );
-                    int tabs = spaces / 4;
-                    spaces = spaces - ( 4 * tabs );
+                    int tabs = spaces / tabwidth;
+                    spaces = spaces - ( tabwidth * tabs );
                     QString tmp;
                     tmp.fill( ' ', spaces );
                     if ( spaces > 0 )

@@ -189,6 +189,7 @@ KAboutData *QEditorPart::createAboutData()
 	// Makefile)
 	KAboutData *aboutData = new KAboutData("qeditorpart", I18N_NOOP("QEditorPart"), "0.1");
 	aboutData->addAuthor("Roberto Raggi", 0, "raggi@cli.di.unipi.it");
+	aboutData->addAuthor("Trolltech AS", 0, "");
 	return aboutData;
 }
 
