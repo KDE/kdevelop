@@ -50,10 +50,13 @@ protected slots:
 
  protected:
   bool checkForVariable(KEditor::Document *doc,QString lineStr,int col,int line);
-  bool checkForArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
-  bool checkForMethodArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
   bool checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col);
   bool checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line);
+
+  bool checkForGlobalFunctionArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForMethodArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForNewInstanceArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
+
   QValueList<KEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
   QString getClassName(QString varName,QString maybeInstanceOf);
   QString searchCurrentClassName();

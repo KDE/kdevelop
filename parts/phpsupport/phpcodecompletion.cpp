@@ -113,33 +113,45 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
 
   m_currentLine = line;
   QString lineStr = m_editInterface->line(line);
+  if(lineStr.isNull() || lineStr.isEmpty()) return; // nothing to do
+
+  if(checkForNewInstanceArgHint(doc,lineStr,col,line)){
+    return;
+  }
+
   if(checkForMethodArgHint(doc,lineStr,col,line)){
     return;
-  }  
+  }
+  
+  if(checkForGlobalFunctionArgHint(doc,lineStr,col,line)){
+    return;
+  }
+  
+
+  QString restLine = lineStr.mid(col);
+  if(restLine.left(1) != " " && restLine.left(1) != "\t" && !restLine.isNull()){
+    //cerr << "no codecompletion because no empty character after cursor:" << restLine << ":" << endl;    
+    return;
+  }
   if(checkForVariable(doc,lineStr,col,line)){
     return;
   }
-  QString restLine = lineStr.mid(col);
-  if(restLine.left(1) != " " && restLine.left(1) != "\t" && !restLine.isNull()){
-    cerr << "no codecompletion because no empty character after cursor:" << restLine << ":" << endl;    
-    return;
-  }
+  
   // $test = new XXX
   if(checkForNewInstance(doc,lineStr,col,line)){
     return;
   }
+  
   if(checkForGlobalFunction(doc,lineStr,col)) {
     return;
   }
+  
 
-  if(checkForArgHint(doc,lineStr,col,line)){
-    return;
-  }
   
 }
 
 bool PHPCodeCompletion::checkForMethodArgHint(KEditor::Document *doc,QString lineStr,int col,int line){
-  cerr << "enter checkForMethodArgHint" << endl;
+  //cerr << "enter checkForMethodArgHint" << endl;
   if(m_argWidgetShow){
     return false; //nothing to do
   }
@@ -148,21 +160,21 @@ bool PHPCodeCompletion::checkForMethodArgHint(KEditor::Document *doc,QString lin
   methodStart = methodStart.left(leftBracket);
   int varStart = methodStart.findRev("$");
   if(varStart ==-1){
-    cerr << "checkForMethodArgHint: no '$' (variable start) found" << endl;
+    //cerr << "checkForMethodArgHint: no '$' (variable start) found" << endl;
     return false;
   }
   QString variableLine = methodStart.mid(varStart+1);
   if(variableLine.isNull()){ return false;}
-  cerr << "VarLine:" << variableLine << endl;  
+  //  cerr << "VarLine:" << variableLine << endl;  
   QString className = "";
   QStringList vars = QStringList::split("->",variableLine);
   QString methodName = vars.last();
-  cerr << "methodname:" << methodName << endl;
+  //cerr << "methodname:" << methodName << endl;
   vars.remove(vars.fromLast()); // remove the methodname
   for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
     className = this->getClassName("$" + (*it),className);
   }
-  cerr << "Classname:" << className << endl;
+  //  cerr << "Classname:" << className << endl;
 
   ParsedClass* pClass =  m_classStore->getClassByName(className);
   if(pClass !=0){
@@ -186,6 +198,7 @@ bool PHPCodeCompletion::checkForMethodArgHint(KEditor::Document *doc,QString lin
   return false;
 }
 bool PHPCodeCompletion::checkForVariable(KEditor::Document *doc,QString lineStr,int col,int line){
+  //cerr  << "enter checkForVariable()" << endl;
   QString methodStart = lineStr.left(col);
   if(methodStart.right(2) != "->"){
     cerr  << "checkForVariable: no '->' found" << endl;
@@ -193,17 +206,17 @@ bool PHPCodeCompletion::checkForVariable(KEditor::Document *doc,QString lineStr,
   }
   int varStart = methodStart.findRev("$");
   if(varStart ==-1){
-    cerr << "checkForVariable: no '$' (variable start) found" << endl;
+    //cerr << "checkForVariable: no '$' (variable start) found" << endl;
     return false;
   }
   QString variableLine = methodStart.mid(varStart+1);
-  cerr << "VarLine:" << variableLine << endl;
+  //cerr << "VarLine:" << variableLine << endl;
   QString className ="";
   QStringList vars = QStringList::split("->",variableLine);
   for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
     className = this->getClassName("$" + (*it),className);
   }
-  cerr << "Classname:" << className << endl;
+  //cerr << "Classname:" << className << endl;
 
   QValueList<KEditor::CompletionEntry> list = this->getClassMethodsAndVariables(className);
   if(list.count()>0){
@@ -241,7 +254,7 @@ QString PHPCodeCompletion::searchClassNameForVariable(QString varName){
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->line(i);  
     if(createVarRe.match(lineStr)) { // ok found
-      cerr << endl << "match in searchClassNameForVariable:";
+      //      cerr << endl << "match in searchClassNameForVariable:";
       return createVarRe.group(1);
     }
   }
@@ -258,20 +271,27 @@ QString PHPCodeCompletion::searchCurrentClassName(){
   }
 }
 
-bool PHPCodeCompletion::checkForArgHint(KEditor::Document *doc,QString lineStr,int col,int line){
+bool PHPCodeCompletion::checkForGlobalFunctionArgHint(KEditor::Document *doc,QString lineStr,int col,int line){
+  //  cerr  << "enter checkForGlobalFunctionArgHint" << endl;
   if(m_argWidgetShow){
     return false; //nothing to do
   }
-  int leftBracket = lineStr.findRev("(",col);
-  int rightBracket = lineStr.find(")",col);
+
+  QString methodStart = lineStr.left(col);
+  int leftBracket = methodStart.findRev("(");
+  int rightBracket = methodStart.findRev(")");
+  if(leftBracket == -1) return false; // ok not found
+  if(rightBracket>leftBracket) return false; // we are out of (..)
+  methodStart = methodStart.left(leftBracket+1);
+  //  cerr << methodStart << endl;
   KRegExp functionre("([A-Za-z_]+)[ \t]*\\(");
-  if(functionre.match(lineStr)){ // check for global functions
+  if(functionre.match(methodStart)){ // check for global functions
     QString name = functionre.group(1);
     int startMethod = lineStr.findRev(name,col);
     QString startString = lineStr.mid(0,startMethod);
     if(startString.right(2) != "->"){
       QValueList <QString> functionList;
-      cerr << endl << "PHPCodeCompletion::checkForArgHint() found global function";
+      //cerr << "PHPCodeCompletion::checkForArgHint() found global function" << endl ;
       QValueList<FunctionCompletionEntry>::Iterator it;
       for( it = m_globalFunctions.begin(); it != m_globalFunctions.end(); ++it ){
 	if((*it).text == name){
@@ -296,7 +316,7 @@ bool PHPCodeCompletion::checkForArgHint(KEditor::Document *doc,QString lineStr,i
   return false;
 }
 bool PHPCodeCompletion::checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col){
-  cerr << endl << "enter checkForGlobalFunction";
+  //  cerr  << "enter checkForGlobalFunction" << endl;
   QString methodStart ="";
   if(lineStr.length()==2){
     methodStart = lineStr;
@@ -314,7 +334,7 @@ bool PHPCodeCompletion::checkForGlobalFunction(KEditor::Document *doc,QString li
   }
   if(methodStart != ""){
     // ok it is an global function
-    cerr << "Methodstart" << methodStart;
+    //    cerr << "Methodstart" << methodStart;
     QValueList<KEditor::CompletionEntry> list;
     QValueList<FunctionCompletionEntry>::Iterator it;
     for( it = m_globalFunctions.begin(); it != m_globalFunctions.end(); ++it ){
@@ -344,19 +364,70 @@ bool PHPCodeCompletion::checkForGlobalFunction(KEditor::Document *doc,QString li
   return false;
 }
 
+bool PHPCodeCompletion::checkForNewInstanceArgHint(KEditor::Document *doc,QString lineStr,int col,int line){
+  //  cerr  << "enter checkForNewInstanceArgHint" << endl;
+  if(m_argWidgetShow){
+    return false; //nothing to do
+  }
+
+  QString start = lineStr.left(col);
+  int leftBracket = start.findRev("(");
+  int rightBracket = start.findRev(")");
+  int equal = start.findRev("=");
+  if(equal == -1) return false; // ok not found
+  if(leftBracket == -1) return false; // ok not found
+  if(rightBracket>leftBracket) return false; // we are out of (..)
+  start = start.mid(equal,leftBracket-equal+1);
+  //  cerr << "NEW: " << start << endl;
+  KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
+  if(newre.match(start)){
+    ParsedClass* pClass=0;
+    pClass =  m_classStore->getClassByName(newre.group(1));
+    if(pClass !=0){ // exists this class?
+      QList<ParsedMethod> *methodList = pClass->getSortedMethodList();
+      for ( ParsedMethod *pMethod = methodList->first();
+	    pMethod != 0;
+	    pMethod = methodList->next() ) {
+	if(pMethod->name() == newre.group(1)){
+	  ParsedArgument* pArg = pMethod->arguments.first();
+	  m_argWidgetShow = true;
+	  QValueList <QString> functionList;
+	  if(pArg){
+	    functionList.append(pMethod->name()+"("+ pArg->type()+")");
+	  }
+	  m_codeInterface->showArgHint ( functionList, "()", "," );
+	  return true;
+	}
+      }   
+    }
+  }
+  return false;
+}
 bool PHPCodeCompletion::checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line){
+  //  cerr  << "enter checkForNewInstance" << endl;
+  QString start = lineStr.left(col);
   KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)");
-  if(newre.match(lineStr)){
-    if(lineStr.right(2) == newre.group(1)){
-      cerr << "CLASS: " << newre.group(1);
+  if(newre.match(start)){
+    QString classStart = newre.group(1);
+    if(start.right(2) == classStart){
       QValueList<KEditor::CompletionEntry> list;
       QList<ParsedClass>* classList = m_classStore->globalContainer.getSortedClassList();
       for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
-	if(pclass->name().startsWith(newre.group(1))){
+	if(pclass->name().startsWith(classStart)){
 	  KEditor::CompletionEntry e;
 	  e.text = pclass->name();
 	  list.append(e);
 	}
+      }
+      if(classStart == "ob") {
+	KEditor::CompletionEntry e;
+	e.text = "object";
+	list.append(e);
+      }
+      if(classStart == "ar") {
+	KEditor::CompletionEntry e;
+	e.text = "array";
+	list.append(e);
       }
       if(list.count() >0){
 	m_completionBoxShow=true;
@@ -365,7 +436,7 @@ bool PHPCodeCompletion::checkForNewInstance(KEditor::Document *doc,QString lineS
       }
     }
   }
-    return false;
+  return false;
 }
 QValueList<KEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariables(QString className){
   QList<ParsedParent> parents;
