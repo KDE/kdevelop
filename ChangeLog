@@ -1,3 +1,6 @@
+2004-01-24 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Updated Bookmarks Plugin. Various improvements and fixes.
+
 2004-01-21 Andras Mantia <amantia@kde.org>
     * Fix clear all breakpoints functionality
     
@@ -70,7 +73,7 @@
 2003-10-11 F@lk Brettschneider <falkbr@kdevelop.org>
     * now I've started again fixing the MDI user interfaces which are quite broken at present
 
-2003-10-08  Tilman Vogel  <Tilman Vogel web de (dot at dot)>
+2003-10-08 Tilman Vogel <Tilman Vogel web de (dot at dot)>
     - added auto completion to the namespace field
     - added classes from all namespaces to the auto completion of the base
       class field, add classes from specified namespace without qualifier
@@ -204,7 +207,7 @@
 2003-07-06 Alexander Dymo <cloudtemple@mksat.net>
     * Implemented Delphi compiler plugin
 
-2003-07-04 Amílcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
+2003-07-04 Amï¿½car do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
   Added debug and optimized build configurations to all C and C++ autoproject based templates
 
 2003-07-04 Andras Mantia <amantia@freemail.hu>
