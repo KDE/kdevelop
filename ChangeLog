@@ -1,6 +1,9 @@
 2001-05-18  F@lk Brettschneider <falk@kdevelop.org>
-    * prevent a gotFocus() signal in QextMdiChildView's activate(). Hope that helps...
-    
+    * prevent a gotFocus() signal in QextMdiChildView's activate(). Hope that helps... ;
+    * bugfix: reverted the change for setGeometry(..) called in QextMdiChildFrm::setState(), it didn't work ;
+    * applied patch for QextMDI by Lars Beikirch (lars.beikirch@gmx.net) to make a better fix for the
+      QEvent::ChildInserted/ChildRemoved problem with messageboxes and modal dialogs
+
 2001-05-17  F@lk Brettschneider <falk@kdevelop.org>
     * probably the bugfix for the 'popupmenu speed drop' problem
 
