@@ -32,8 +32,8 @@ WizardSyntaxHlPage::WizardSyntaxHlPage(QWidget* parent, const char* name, const 
   QVBox * vbox = new QVBox(this);
   QLabel* label = new QLabel(vbox);
   label = new QLabel(i18n("Now you can choose the Syntax-Highlighting style which KDevelop will use.") + "\n" +
-										 i18n("Which one do you want to use?"), vbox );
-   										
+                     i18n("Which one do you want to use?"), vbox );
+
   QButtonGroup* bg = new QButtonGroup(vbox);
 
   QGridLayout* grid = new QGridLayout(bg,2,1,15,7);
@@ -41,20 +41,20 @@ WizardSyntaxHlPage::WizardSyntaxHlPage(QWidget* parent, const char* name, const 
   QRadioButton* kWriteDefault = new QRadioButton( i18n("KWrite default"), bg );
   grid->addWidget(emacsStyle,0,0);
   grid->addWidget(kWriteDefault,1,0);
-	bg->setFixedHeight(bg->sizeHint().height());
+  bg->setFixedHeight(bg->sizeHint().height());
 
   QObject::connect(emacsStyle, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
   QObject::connect(kWriteDefault, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
 
   if (m_pInstallState->highlightStyle == 0)
-	  emacsStyle->setChecked(true);
-	else	
-	  kWriteDefault->setChecked(true);
+    emacsStyle->setChecked(true);
+  else
+    kWriteDefault->setChecked(true);
 
   label = new QLabel(vbox);
 }
 
 void WizardSyntaxHlPage::slotSetSyntaxHl(int highl_style)
 {
-	m_pInstallState->highlightStyle = highl_style;
+  m_pInstallState->highlightStyle = highl_style;
 }

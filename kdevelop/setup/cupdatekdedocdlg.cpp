@@ -1,10 +1,10 @@
 /***************************************************************************
-                          cupdatekdedocdlg.cpp  -  description                              
-                             -------------------                                         
-         
-    begin                : Mon Nov 9 1998                                           
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+                          cupdatekdedocdlg.cpp  -  description
+                             -------------------
+
+    begin                : Mon Nov 9 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #include "cupdatekdedocdlg.h"
@@ -52,7 +52,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
 
   QVBoxLayout* vl1 = new QVBoxLayout(this, 15, 7);
 
-	QWidget* wdg1 = new QWidget(this);
+  QWidget* wdg1 = new QWidget(this);
   source_label = new QLabel( wdg1, "source_label" );
   source_label->setText(i18n("new KDE Libs sources path:") );
   source_edit = new QLineEdit( wdg1, "source_edit" );
@@ -61,13 +61,13 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
   QPixmap pix = SmallIcon("fileopen");
   source_button->setPixmap(pix);
 
-	QHBoxLayout* hl1 = new QHBoxLayout(wdg1, 0, 7);
+  QHBoxLayout* hl1 = new QHBoxLayout(wdg1, 0, 7);
   hl1->addWidget(source_label);
   hl1->addWidget(source_edit);
   hl1->addWidget(source_button);
   vl1->addWidget(wdg1);
 
-	QWidget* wdg2 = new QWidget(this);
+  QWidget* wdg2 = new QWidget(this);
   install_box = new QButtonGroup( wdg2, "install_box" );
   install_box->setTitle(i18n("Choose installation mode:") );
   QHBoxLayout* hl2 = new QHBoxLayout(wdg2);
@@ -100,11 +100,11 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
      "the documentation by mixing old and new files!"));
 
   QVBoxLayout* vl2 = new QVBoxLayout(install_box, 15, 7);
-	vl2->addWidget(del_recent_radio_button);
-	vl2->addWidget(del_new_radio_button);
-	vl2->addWidget(leave_new_radio_button);
-	
-	QWidget* wdg3 = new QWidget(this);
+  vl2->addWidget(del_recent_radio_button);
+  vl2->addWidget(del_new_radio_button);
+  vl2->addWidget(leave_new_radio_button);
+
+  QWidget* wdg3 = new QWidget(this);
   doc_label = new QLabel( wdg3, "doc_label" );
   doc_label->setText(i18n("new KDE Libs Documentation path:") );
   doc_label->setEnabled(false);
@@ -115,7 +115,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
   doc_button->setPixmap(pix);
   doc_button->setEnabled(false);
 
-	QHBoxLayout* hl3 = new QHBoxLayout(wdg3, 0, 7);
+  QHBoxLayout* hl3 = new QHBoxLayout(wdg3, 0, 7);
   hl3->addWidget(doc_label);
   hl3->addWidget(doc_edit);
   hl3->addWidget(doc_button);
@@ -167,7 +167,7 @@ CUpdateKDEDocDlg::~CUpdateKDEDocDlg(){
 void CUpdateKDEDocDlg::OK(){
   KShellProcess proc_rm;
   QString kdelibs_path = source_edit->text();
-  
+
   if(kdelibs_path.right(1) != "/")
     kdelibs_path = kdelibs_path +"/";
 

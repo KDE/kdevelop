@@ -33,8 +33,8 @@ WizardToolsCheckPage::WizardToolsCheckPage(QWidget* parent, const char* name, co
 {
   QVBox * vbox = new QVBox(this);
   new QLabel(i18n("The following results have been determined for your system:")+"\n", vbox);
-	QListBox* lb = new QListBox(vbox);
-	searchForAllTools(lb);
+  QListBox* lb = new QListBox(vbox);
+  searchForAllTools(lb);
 }
 
 void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
@@ -61,10 +61,10 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   m_pInstallState->make	 = CToolClass::searchInstProgram("make");
   m_pInstallState->gmake = CToolClass::searchInstProgram("gmake");
 
-	m_pInstallState->glimpse      = CToolClass::searchInstProgram("glimpse");
-	m_pInstallState->glimpseindex = CToolClass::searchInstProgram("glimpseindex");
-	m_pInstallState->htdig        = CToolClass::searchInstProgram("htdig");
-	m_pInstallState->htsearch     = CToolClass::searchInstProgram("htsearch");
+  m_pInstallState->glimpse      = CToolClass::searchInstProgram("glimpse");
+  m_pInstallState->glimpseindex = CToolClass::searchInstProgram("glimpseindex");
+  m_pInstallState->htdig        = CToolClass::searchInstProgram("htdig");
+  m_pInstallState->htsearch     = CToolClass::searchInstProgram("htsearch");
 
   ToolAppList toolList;
 
@@ -119,7 +119,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
     toolList.append(CToolApp("kdbg", "K&Dbg"));
   }
   else
-  	dbg_str="kdbg"+not_found;
+    dbg_str="kdbg"+not_found;
 
   QString kiconedit_str;
   if(kiconedit){
@@ -128,7 +128,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   }
   else
     kiconedit_str="KIconedit"+not_found+i18n(" -- editing icons will not be possible\n");
-	
+
   QString ark_str;
   if(ark){
     ark_str="Archiever (ark)"+found+"\n";
@@ -137,11 +137,11 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   else
     ark_str="Archiever (ark)"+not_found+i18n(" -- viewing compressed files will not be possible\n");
 
-	QString kpaint_str;
+  QString kpaint_str;
   if(gimp){
     kpaint_str="GIMP"+found+"\n";
     toolList.append(CToolApp("gimp", "&GIMP"));
-	}
+  }
   else if(kpaint){
       kpaint_str="KPaint"+found+"\n";
       toolList.append(CToolApp("kpaint", "K&Paint"));
@@ -156,7 +156,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   }
   else
     designer_str=i18n("Qt Designer")+not_found+"\n";
-	
+
   QString linguist_str;
   if(linguist){
     linguist_str="Qt Linguist"+found+"\n";
@@ -207,13 +207,13 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
     {
       htsearch_str += i18n(" -- search functionality will not be provided\n");
       if (!m_pInstallState->htdig)
-	htdig_str += "\n";
+        htdig_str += "\n";
     }
     else if (!m_pInstallState->htdig)
     {
       htdig_str += i18n(" -- search functionality will not be provided\n");
       if (!m_pInstallState->htsearch)
-	htsearch_str += "\n";
+        htsearch_str += "\n";
     }
     if (!m_pInstallState->glimpse)
       glimpse_str += "\n";
@@ -239,28 +239,27 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
     print_str="a2ps / enscript"+not_found+ i18n(" -- printing can only use lpr\n");
 
 
-	lb->insertItem(make_str);
-	lb->insertItem(gmake_str);
-	lb->insertItem(autoconf_str);
-	lb->insertItem(autoheader_str);
-	lb->insertItem(automake_str);
-	lb->insertItem(perl_str);
-	lb->insertItem(sgml2html_str);
-	lb->insertItem(kdoc_str);
-	lb->insertItem(glimpse_str);
-	lb->insertItem(glimpseindex_str);
-	lb->insertItem(htdig_str);
-	lb->insertItem(htsearch_str);
-	lb->insertItem(print_str);
-	lb->insertItem(dbg_str);
-	lb->insertItem(kiconedit_str);
-	lb->insertItem(ark_str);
-	lb->insertItem(kpaint_str);
-	lb->insertItem(ktranslator_str);
-	lb->insertItem(kbabel_str);
-	lb->insertItem(linguist_str);
-	lb->insertItem(designer_str);
+  lb->insertItem(make_str);
+  lb->insertItem(gmake_str);
+  lb->insertItem(autoconf_str);
+  lb->insertItem(autoheader_str);
+  lb->insertItem(automake_str);
+  lb->insertItem(perl_str);
+  lb->insertItem(sgml2html_str);
+  lb->insertItem(kdoc_str);
+  lb->insertItem(glimpse_str);
+  lb->insertItem(glimpseindex_str);
+  lb->insertItem(htdig_str);
+  lb->insertItem(htsearch_str);
+  lb->insertItem(print_str);
+  lb->insertItem(dbg_str);
+  lb->insertItem(kiconedit_str);
+  lb->insertItem(ark_str);
+  lb->insertItem(kpaint_str);
+  lb->insertItem(ktranslator_str);
+  lb->insertItem(kbabel_str);
+  lb->insertItem(linguist_str);
+  lb->insertItem(designer_str);
 
   CToolClass::writeToolConfig(toolList);
 }
-

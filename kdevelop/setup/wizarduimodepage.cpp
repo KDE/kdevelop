@@ -105,5 +105,5 @@ WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QStr
 
 void WizardUIModePage::slotModeChanged(int userInterfaceMode)
 {
-	m_pInstallState->userInterfaceMode = userInterfaceMode;
+  m_pInstallState->userInterfaceMode = userInterfaceMode;
 }

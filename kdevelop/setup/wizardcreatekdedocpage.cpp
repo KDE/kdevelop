@@ -33,24 +33,24 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
 {
   bool kdoc = true;
   bool perl = true;
-	
-	QLabel* label;
-	m_vbox = new QVBox(this);
-	QWidget* wdg = new QWidget(m_vbox);
-	QVBoxLayout* vl = new QVBoxLayout(wdg);
+
+  QLabel* label;
+  m_vbox = new QVBox(this);
+  QWidget* wdg = new QWidget(m_vbox);
+  QVBoxLayout* vl = new QVBoxLayout(wdg);
   if (!kdoc && !perl) {
     label = new QLabel(wdg);
     label = new QLabel(i18n("The Program KDoc was not found on your system, a library documentation update can not be performed.\n\n"
-											 "KDoc is part of the kdesdk package that can be obtained from www.kde.org."), wdg);
+                            "KDoc is part of the kdesdk package that can be obtained from www.kde.org."), wdg);
     label->setAlignment(WordBreak);
     label = new QLabel(wdg);
   }
   else{
     label = new QLabel(i18n("Now KDevelop will create a new KDE-library documentation.\n\n"
-    												"For that, you need the kdelibs package as the source package. "
-    												"In most cases it is included in your distribution. "
-    												"If you don't have the kdelibs as sources, we advise to obtain them from www.kde.org.\n\n"
-    												"Mind that the sources should match your installed kdelibs version."), wdg);
+                            "For that, you need the kdelibs package as the source package. "
+                            "In most cases it is included in your distribution. "
+                            "If you don't have the kdelibs as sources, we advise to obtain them from www.kde.org.\n\n"
+                            "Mind that the sources should match your installed kdelibs version."), wdg);
     label->setAlignment(WordBreak);
     vl->addWidget(label);
     QString docDir = locateLocal("appdata", "KDE-Documentation");
@@ -64,15 +64,15 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
 //    kde_dir->mkdir(".kde/share/apps/kdevelop",false);
 //    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
 
-		m_pInstallState->kde = docDir;
+    m_pInstallState->kde = docDir;
     CUpdateKDEDocDlg* dlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, "test");
     vl->addWidget(dlg);
-		QObject::connect(dlg, SIGNAL(newDocPathIsSetNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );
+    QObject::connect(dlg, SIGNAL(newDocPathIsSetNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );
   }
 }
 
 void WizardCreateKDEDocPage::slotSetKDEDocPath(const QString& newKDEDocPath)
 {
-	m_pInstallState->kde = newKDEDocPath;
-	setValid(true);	// enable the Next button again
+  m_pInstallState->kde = newKDEDocPath;
+  setValid(true);	// enable the Next button again
 }

@@ -38,8 +38,8 @@ WizardLastPage::WizardLastPage(QWidget* parent, const char* name, const QString&
   label->setAlignment(WordBreak);
   label = new QLabel("", m_vbox);
 
-	m_pInstallState->install = false;
-	if (m_pInstallState->finish_dir)
-		m_pInstallState->finish_dir->setCurrent(QDir::homeDirPath());
+  m_pInstallState->install = false;
+  if (m_pInstallState->finish_dir)
+  m_pInstallState->finish_dir->setCurrent(QDir::homeDirPath());
 }
 

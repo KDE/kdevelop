@@ -1,8 +1,8 @@
 /***************************************************************************
-                          ccreatedocdatabasedlg.cpp  -  description                              
-                             -------------------                                         
+                          ccreatedocdatabasedlg.cpp  -  description
+                             -------------------
 
-    begin                : Sat Jan 9 1999                                           
+    begin                : Sat Jan 9 1999
     copyright            : (C) 1999 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #include "ccreatedocdatabasedlg.h"
@@ -37,7 +37,7 @@
 #include <qbuttongroup.h>
 #include <qlayout.h>
 #include <qgrid.h>
-#include <kbuttonbox.h> 
+#include <kbuttonbox.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -47,14 +47,14 @@
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,const QString& kdeDocDir, const QString& qtDocDir, bool foundGlimpse,bool foundHtDig) : QWidget(parent,name)
 {
-	m_kdeDocDir = kdeDocDir;
-	m_qtDocDir = qtDocDir;
+  m_kdeDocDir = kdeDocDir;
+  m_qtDocDir = qtDocDir;
 
   setCaption(i18n("Create Search Database..."));
   m_proc = proc;
   QGridLayout *grid2 = new QGridLayout(this,2,3,15,7);
- 
-	//-----search engine group-----
+
+  //-----search engine group-----
   QButtonGroup* searcheng_ButtonGroup;
   searcheng_ButtonGroup = new QButtonGroup( this, "ButtonGroup_0" );
   searcheng_ButtonGroup->setTitle( i18n("Index engine") );
@@ -74,9 +74,9 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   QGridLayout *grid1 = new QGridLayout(searcheng_ButtonGroup,3,1,15,7);
   grid1->addWidget(useGlimpse,0,0);
   grid1->addWidget(useHtDig,1,0);
-	grid2->addWidget(searcheng_ButtonGroup, 0, 0);
+  grid2->addWidget(searcheng_ButtonGroup, 0, 0);
 
-	// ------- index size group --------
+  // ------- index size group --------
   QButtonGroup* qtarch_ButtonGroup_1;
   qtarch_ButtonGroup_1 = new QButtonGroup( this, "ButtonGroup_1" );
   qtarch_ButtonGroup_1->setTitle( i18n("Index Size") );
@@ -95,11 +95,11 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   grid1->addWidget(tiny_radio_button,0,0);
   grid1->addWidget(small_radio_button,1,0);
   grid1->addWidget(medium_radio_button,2,0);
-	grid2->addWidget(qtarch_ButtonGroup_1, 0, 1);
+  grid2->addWidget(qtarch_ButtonGroup_1, 0, 1);
 
-	// ------- index options group --------
+  // ------- index options group --------
   QWidget* wdg = new QWidget(this);
-	QButtonGroup* qtarch_ButtonGroup_3;
+  QButtonGroup* qtarch_ButtonGroup_3;
   qtarch_ButtonGroup_3 = new QButtonGroup( wdg, "ButtonGroup_3" );
   qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
 
@@ -119,10 +119,10 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   grid1->addWidget(kde_checkbox,1,0);
   QVBoxLayout* vl = new QVBoxLayout(wdg,0,7);
   vl->addWidget(qtarch_ButtonGroup_3);
-	vl->addWidget(ok_button);
-	grid2->addWidget(wdg, 0, 2);
+  vl->addWidget(ok_button);
+  grid2->addWidget(wdg, 0, 2);
 
-	// ------- additional dirs group --------------
+  // ------- additional dirs group --------------
   QButtonGroup* qtarch_ButtonGroup_2;
   qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
   qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
@@ -159,18 +159,18 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
  connect(dir_button,SIGNAL(clicked()),SLOT(slotDirButtonClicked()));
 
  dir_edit->setFocus();
- 
+
  /*doc*/
  QWhatsThis::add(medium_radio_button,
-		 i18n("builds a medium-size index (20-30% of the size\n"
-		      "of all files), allowing faster search."));
+     i18n("builds a medium-size index (20-30% of the size\n"
+          "of all files), allowing faster search."));
  QWhatsThis::add(small_radio_button,
-		 i18n("Build a small index rather than tiny (meaning 7-9%\n"
-		      "of the sizes of all files - your mileage may vary)\n"
-		      "allowing faster search."));
+     i18n("Build a small index rather than tiny (meaning 7-9%\n"
+          "of the sizes of all files - your mileage may vary)\n"
+          "allowing faster search."));
  QWhatsThis::add(tiny_radio_button,
-		 i18n("a tiny index (2-3% of the total size of all files)"));
-	
+     i18n("a tiny index (2-3% of the total size of all files)"));
+
 }
 CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg(){
 }
@@ -185,10 +185,10 @@ void CCreateDocDatabaseDlg::slotOkClicked()
     KMessageBox::error(0,i18n("The Qt-Documentation-Path isn't set correctly."),i18n("No Database created!"));
     return;
   }
-  
+
   QDir dir(locateLocal("data", ""));
   dir.mkdir("kdevelop");
- 
+
   QString dirs;
   if(kde_checkbox->isChecked()){
     dirs = dirs + m_kdeDocDir;

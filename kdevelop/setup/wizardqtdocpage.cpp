@@ -29,10 +29,10 @@
 
 WizardQtDocPage::WizardQtDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
-	,qt_edit(0L)
+  ,qt_edit(0L)
 {
-	// nothing to be done here
-	// we create this page when it will be chosen (because it's widget contents depends on the current state at that time)
+  // nothing to be done here
+  // we create this page when it will be chosen (because it's widget contents depends on the current state at that time)
 }
 
 void WizardQtDocPage::showEvent(QShowEvent*)
@@ -43,23 +43,23 @@ void WizardQtDocPage::showEvent(QShowEvent*)
   QString qt_testfile; // for tests if the path really is the qt-doc path
   const char *qt_dirs[]={
     "/usr/local/qt-2.2.3/html",
-		"/usr/local/lib/qt-2.2.3/html",
-		"/usr/lib/qt-2.2.3/html",
-		"/usr/lib/qt-2.2.3/doc/html",
-		
-		"/usr/lib/qt2/html",
-		"/usr/lib/qt2/doc/html",
+    "/usr/local/lib/qt-2.2.3/html",
+    "/usr/lib/qt-2.2.3/html",
+    "/usr/lib/qt-2.2.3/doc/html",
+
+    "/usr/lib/qt2/html",
+    "/usr/lib/qt2/doc/html",
     "/usr/local/qt2/html",
-		"/usr/local/lib/qt2/html",
-		"/usr/lib/qt/html",
-		"/usr/lib/qt/doc/html",
+    "/usr/local/lib/qt2/html",
+    "/usr/lib/qt/html",
+    "/usr/lib/qt/doc/html",
     "/usr/local/qt/html",
-		"/usr/local/lib/qt/html",
-		"/usr/X11/lib/qt/html",
-		"/usr/X11/lib/qt/doc/html",
-		"/usr/doc/qt-doc/html",
-		
-		0l };
+    "/usr/local/lib/qt/html",
+    "/usr/X11/lib/qt/html",
+    "/usr/X11/lib/qt/doc/html",
+    "/usr/doc/qt-doc/html",
+
+    0l };
 
   // first check the autoconfified path
   if(m_pInstallState->qt_test && !m_pInstallState->qt.isEmpty())
@@ -79,29 +79,29 @@ void WizardQtDocPage::showEvent(QShowEvent*)
       m_pInstallState->qt_test=false;
   };
 
-	// create the widgets of this page
+  // create the widgets of this page
   m_vbox = new QVBox(this);
-  m_vbox->show();											
+  m_vbox->show();
   QLabel* label = new QLabel(m_vbox);
-	label->show();
-	
+  label->show();
+
   if(!m_pInstallState->qt_test){
     label = new QLabel(i18n("The Qt-Documentation has been found at:\n\n") + m_pInstallState->qt + "\n\n" +
-											 i18n("The correct path has been set."), m_vbox);
-		label->show();
+                       i18n("The correct path has been set."), m_vbox);
+    label->show();
     label->setAlignment(WordBreak);
     label = new QLabel(m_vbox);
-		label->show();
+    label->show();
     setPageTitle(i18n("Qt Documentation found"));
-	}
+  }
   else
   {  // return to the setup to set it manually ?
     label = new QLabel(i18n("The Qt-library documentation could not be detected.\n\n"
-    												"Please insert the correct path to your Qt-documentation manually."), m_vbox);
-		label->show();
+                            "Please insert the correct path to your Qt-documentation manually."), m_vbox);
+    label->show();
     label->setAlignment(WordBreak);
     label = new QLabel(m_vbox);
-		label->show();
+    label->show();
 
     QString qt_doc = m_pInstallState->qt;
 
@@ -110,9 +110,9 @@ void WizardQtDocPage::showEvent(QShowEvent*)
     QLabel* qt_label = new QLabel( i18n("Qt-Documentation Path:"), w1 );
 
     QWidget* w2 = new QWidget(w1);
-		vl->addWidget(qt_label);
-		vl->addWidget(w2);
-		
+    vl->addWidget(qt_label);
+    vl->addWidget(w2);
+
     QHBoxLayout* hl = new QHBoxLayout(w2, 15, 7);
 
     qt_edit = new QLineEdit( w2, "LineEdit" );
@@ -131,19 +131,19 @@ void WizardQtDocPage::showEvent(QShowEvent*)
     label = new QLabel(m_vbox);
 
     w1->show();
-		qt_label->show();
-		w2->show();
+    qt_label->show();
+    w2->show();
     qt_edit->show();
     qt_button->show();
-		label->show();
+    label->show();
   }
 }
 
 void WizardQtDocPage::hideEvent(QHideEvent*)
 {
   if (qt_edit)
-	  m_pInstallState->qt = qt_edit->text();
-	delete m_vbox;
+    m_pInstallState->qt = qt_edit->text();
+  delete m_vbox;
 }
 
 void WizardQtDocPage::slotQTpressed()

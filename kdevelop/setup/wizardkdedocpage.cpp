@@ -28,8 +28,8 @@
 WizardKDEDocPage::WizardKDEDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
 {
-	// nothing to be done here
-	// we create this page when it will be chosen (because it's widget contents depends on the current state at that time)
+  // nothing to be done here
+  // we create this page when it will be chosen (because it's widget contents depends on the current state at that time)
 }
 
 void WizardKDEDocPage::showEvent(QShowEvent*)
@@ -63,26 +63,28 @@ void WizardKDEDocPage::showEvent(QShowEvent*)
   QLabel* label;
   if (!kde_test) {
     label = new QLabel(m_vbox);
-	  label->show();
+    label->show();
     label = new QLabel(i18n("The KDE-Library-Documentation has been found at:\n\n") + m_pInstallState->kde + "\n\n" +
-    									 i18n("The correct path has been set."), m_vbox);
-	  label->show();
+                       i18n("The correct path has been set."), m_vbox);
+    label->show();
     label->setAlignment(WordBreak);
     label = new QLabel(m_vbox);
-	  label->show();
+    label->show();
     setPageTitle(i18n("KDE-Library Documentation found"));
-		emit enableCreateKDEDocPage(false);
+
+    emit enableCreateKDEDocPage(false);
   }
   else {
     label = new QLabel(m_vbox);
-	  label->show();
+    label->show();
     label = new QLabel(i18n("The documentation of the KDE-library could not be found.\n\n"
                             "It will be automatically regenerated in the next step."), m_vbox);
-	  label->show();
+    label->show();
     label->setAlignment(WordBreak);
     label = new QLabel(m_vbox);
-	  label->show();
-		emit enableCreateKDEDocPage(true);
+    label->show();
+    
+    emit enableCreateKDEDocPage(true);
   }
 }
 
