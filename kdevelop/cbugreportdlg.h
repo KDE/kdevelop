@@ -19,12 +19,15 @@
 #ifndef CBUGREPORTDLG_H
 #define CBUGREPORTDLG_H
 
+#include <qwidget.h>
 #include <qtabdialog.h>
+#include <qdialog.h>
 #include <qmultilinedit.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
-#include <qwhatsthis.h>
-#include <qcombobox.h>
+#include <qcombo.h>
+#include <kapp.h>
+#include <kquickhelp.h>
 #include <qstring.h>
 
 #include "cproject.h"
@@ -46,8 +49,11 @@ public:
 	QString kde_version;
 	QString os;
 	QString compiler;
+	QString sendmail_command;
 	
 protected:
+		// Attention
+		QLineEdit* sendmail_edit;
     // General Information
     QLineEdit* name_edit;
     QLineEdit* email_edit;
@@ -66,6 +72,7 @@ protected:
     QLineEdit* qt_version_edit;
     QLineEdit* os_edit;
     QLineEdit* compiler_edit;
+    QMultiLineEdit* misc_mledit;
     // Problem Description
     QMultiLineEdit* description_mledit;
     QMultiLineEdit* repeat_mledit;

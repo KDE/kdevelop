@@ -44,5 +44,6 @@ struct TBugReportInfo {
     QString qt_version;
     QString os;
     QString compiler;
+    QString sendmail_command;
 };
 #endif
