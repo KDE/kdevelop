@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR})
 
 SET(kdevmakebuilder_LIB_SRCS
 kdevmakebuilder.cpp
@@ -16,7 +16,7 @@ ADD_LIBRARY(kdevmakebuilder SHARED ${kdevmakebuilder_LIB_SRCS})
 #	-I$(top_srcdir)/buildtools/projectmanager/interfaces -I$(top_srcdir)/lib/interfaces \
 #	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util -I$(top_builddir)/buildtools/lib/widgets \
 #	$(all_includes)
-#    
+#
 #METASOURCES = AUTO
 #
 #lib_LTLIBRARIES = \
@@ -24,7 +24,7 @@ ADD_LIBRARY(kdevmakebuilder SHARED ${kdevmakebuilder_LIB_SRCS})
 #
 #noinst_HEADERS = \
 #    kdevmakebuilder.h
-#    
+#
 #libkdevmakebuilder_la_SOURCES = \
 #    kdevmakebuilder.cpp
 #
@@ -33,6 +33,6 @@ ADD_LIBRARY(kdevmakebuilder SHARED ${kdevmakebuilder_LIB_SRCS})
 #libkdevmakebuilder_la_LIBADD = \
 #	$(top_builddir)/buildtools/projectmanager/interfaces/libprojectmanager_interfaces.la $(top_builddir)/lib/libkdevelop.la \
 #	$(top_builddir)/buildtools/lib/widgets/libkdevbuildtoolswidgets.la
-#    
+#
 #libkdevmakebuilder_la_LDFLAGS = \
 #    -module $(all_libraries) $(KDE_PLUGIN)

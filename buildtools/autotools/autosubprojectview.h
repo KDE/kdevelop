@@ -35,7 +35,10 @@ namespace AutoProjectPrivate
 }
 
 
-class AutoSubprojectView : protected AutoProjectViewBase
+//with protected inheritance gcc 3.2.3 complains in autoprojectwidget.cpp, line 116
+//that it cannot access the base class QObject (for the connect() call),
+//so in order to be able to compile this file I made the inheritance public again, Alex
+class AutoSubprojectView : public AutoProjectViewBase
 {
 	Q_OBJECT
 
