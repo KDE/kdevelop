@@ -17,16 +17,6 @@
 #ifndef __MAINWINDOWSHARE_H__
 #define __MAINWINDOWSHARE_H__
 
-#include <kdeversion.h>
-
-#ifdef KDE_MAKE_VERSION
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-#  define NEED_CONFIGHACK
-# endif
-#else
-# define NEED_CONFIGHACK
-#endif
-
 #include <qobject.h>
 
 class KAction;
@@ -62,7 +52,6 @@ private slots:
   void slotConfigureEditors();
   void slotSettings();
   void slotActiveProcessChanged( KDevPlugin*, bool );
-  void slotActivePartChanged( KParts::Part* part );
   void slotStopPopupActivated(int);
   void slotStopMenuAboutToShow();
   void slotStopButtonPressed();
@@ -85,9 +74,7 @@ private:
   KToggleAction*   m_toggleBrowserToolbar;
   KToggleAction*   m_toggleStatusbar;
 
-#ifdef NEED_CONFIGHACK  
   KAction * m_configureEditorAction;
-#endif
 
   KToolBarPopupAction*  m_stopProcesses;                 //!< Stops all running processes
 

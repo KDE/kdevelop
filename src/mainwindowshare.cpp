@@ -203,12 +203,10 @@ void MainWindowShare::createActions()
   action->setToolTip( i18n("First accessed window") );
   action->setWhatsThis(i18n("<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)."));
 
-#ifdef NEED_CONFIGHACK
   m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
   m_configureEditorAction->setToolTip( i18n("Configure editor settings") );
   m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );
-#endif
 
   KDevPartController * partController = API::getInstance()->partController();
   connect( partController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
@@ -420,10 +418,7 @@ void MainWindowShare::slotConfigureEditors()
 
 void MainWindowShare::slotGUICreated( KParts::Part * part )
 {
-//can't hide it completely, it's called from mainwindow.cpp and I'd rather not 
-//add too much conditional complie statements...
-#ifdef NEED_CONFIGHACK
-    kdDebug(9000) << "MainWindowShare::slotGUICreated()" << endl;
+//    kdDebug(9000) << "MainWindowShare::slotGUICreated()" << endl;
 
     if ( ! part ) return;
 
@@ -443,7 +438,6 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
         kdDebug(9000) << " *** found \"set_confdlg\" action - unplugging" << endl;
         action->unplugAll();
     }
-#endif
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
@@ -506,13 +500,6 @@ void MainWindowShare::contextMenu(QPopupMenu* popup, const Context *)
 
   int id = popup->insertItem( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
   popup->setWhatsThis(id, i18n("<b>Show menubar</b><p>Lets you switch the menubar on/off."));
-}
-
-void MainWindowShare::slotActivePartChanged( KParts::Part * part )
-{
-#ifdef NEED_CONFIGHACK
-    m_configureEditorAction->setEnabled( part && dynamic_cast<KTextEditor::Document*>(part) );
-#endif
 }
 
 #include "mainwindowshare.moc"
