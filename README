@@ -28,6 +28,7 @@ Qt 1.44 NOT Qt 2.0
 KDE 1.1.x 
 flex
 
+
 optional:
 -----------------------
 KDE-SDK
@@ -35,7 +36,7 @@ sgmltools 1
 Glimpse >= 4.1
 KIconEdit
 KDbg
-a2ps
+a2ps 4.11
 enscript
 Gv, Ghostview, KGhostview
 cvs >= 1.10
