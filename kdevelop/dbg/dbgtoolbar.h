@@ -18,7 +18,6 @@
 #define DBGTOOLBAR_H
 
 class DbgController;
-//class CKDevelop;
 class DbgButton;
 class DbgToolbar;
 
@@ -59,7 +58,7 @@ class DbgToolbar : public QFrame
   Q_OBJECT
 
   public:
-    DbgToolbar(DbgController* dbgController/*, CKDevelop* ckDevelop*/);
+    DbgToolbar(DbgController* dbgController, Window ckDevelopWin);
     virtual ~DbgToolbar();
 
   private:
@@ -71,13 +70,14 @@ class DbgToolbar : public QFrame
     void slotUndock();
     void slotIconifyAndDock();
     void slotActivateAndUndock();
+    void slotDebugMemoryView();
 
   private slots:
     void slotDbgKdevFocus();
     void slotDbgPrevFocus();
 
   private:
-//    CKDevelop*      ckDevelop_;
+    Window          ckDevelopWin_;
     DbgController*  dbgController_;
     Window          activeWindow_;
     DbgButton*      bKDevFocus_;

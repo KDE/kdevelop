@@ -15,13 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
-//#include <qdir.h>
-
 #include "dbgtoolbar.h"
 #include "dbgcontroller.h"
-//#include "ckdevelop.h"
+#include "memview.h"
 
-#include <kapp.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kicontheme.h>
@@ -34,7 +31,6 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-
 
 // **************************************************************************
 // **************************************************************************
@@ -122,7 +118,7 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
   offset_ = toolBar_->pos() - e->globalPos();
   setFrameStyle( QFrame::Panel|QFrame::Sunken);
   QApplication::setOverrideCursor(QCursor(sizeAllCursor));
-//  setPalette(QPalette(kapp->selectColor));
+  setPalette(QPalette(colorGroup().mid()));
   repaint();
 }
 
@@ -135,7 +131,7 @@ void DbgMoveHandle::mouseReleaseEvent(QMouseEvent *e)
   offset_ = QPoint(0,0);
   setFrameStyle( QFrame::Panel|QFrame::Raised);
   QApplication::restoreOverrideCursor();
-//  setPalette(QPalette(kapp->backgroundColor));
+  setPalette(QPalette(colorGroup().background()));
   repaint();
 }
 
@@ -245,9 +241,9 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
 // **************************************************************************
 // **************************************************************************
 
-DbgToolbar::DbgToolbar(DbgController* dbgController/*, CKDevelop* parent*/) :
+DbgToolbar::DbgToolbar(DbgController* dbgController, Window ckDevelopWin) :
   QFrame(0, "DbgToolbar"),
-//  ckDevelop_(parent),
+  ckDevelopWin_(ckDevelopWin),
   dbgController_(dbgController),
   activeWindow_(0),
   bKDevFocus_(0),
@@ -271,50 +267,35 @@ DbgToolbar::DbgToolbar(DbgController* dbgController/*, CKDevelop* parent*/) :
 
   DbgMoveHandle*  moveHandle  = new DbgMoveHandle(this);
 
-  QPixmap pm;
-
-  ;
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgrun.xpm");
   DbgButton* bRun = new DbgButton(i18n("Run"),
         KGlobal::iconLoader()->loadIcon("dbgrun", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgbreak.xpm");
   DbgButton* bInterrupt = new DbgButton(i18n("Interrupt"),
         KGlobal::iconLoader()->loadIcon("dbgbreak", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
   DbgButton* bNext = new DbgButton(0,
         KGlobal::iconLoader()->loadIcon("dbgnext", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnextinst.xpm");
   DbgButton* bNexti = new DbgButton(0,
         KGlobal::iconLoader()->loadIcon("dbgnextinst", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
   DbgButton* bStep = new DbgButton(0,
         KGlobal::iconLoader()->loadIcon("dbgstep", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepinst.xpm");
   DbgButton* bStepi = new DbgButton(0,
         KGlobal::iconLoader()->loadIcon("dbgstepinst", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepout.xpm");
   DbgButton* bFinish = new DbgButton(i18n("Step out"),
         KGlobal::iconLoader()->loadIcon("dbgstepout", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
   DbgButton* bView = new DbgButton(i18n("Viewers"),
         KGlobal::iconLoader()->loadIcon("dbgmemview", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_icondir() + "/mini/kdevelop.xpm");
   bKDevFocus_ = new DbgButton(0,
         KGlobal::iconLoader()->loadIcon("kdevelop", KIcon::Desktop), this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
   bPrevFocus_ = new DbgButton(0,
         KGlobal::iconLoader()->loadIcon("dbgmemview", KIcon::Desktop), this);
-
-//  bStep->setAccel(CTRL+'S');
 
   connect(bRun,         SIGNAL(clicked()),  dbgController_, SLOT(slotRun()));
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));
@@ -323,7 +304,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController/*, CKDevelop* parent*/) :
   connect(bStep,        SIGNAL(clicked()),  dbgController,  SLOT(slotStepInto()));
   connect(bStepi,       SIGNAL(clicked()),  dbgController,  SLOT(slotStepIntoIns()));
   connect(bFinish,      SIGNAL(clicked()),  dbgController,  SLOT(slotStepOutOff()));
-//  connect(bView,        SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugMemoryView()));
+  connect(bView,        SIGNAL(clicked()),                  SLOT(slotDebugMemoryView()));
   connect(bKDevFocus_,  SIGNAL(clicked()),                  SLOT(slotDbgKdevFocus()));
   connect(bPrevFocus_,  SIGNAL(clicked()),                  SLOT(slotDbgPrevFocus()));
 
@@ -388,11 +369,10 @@ void DbgToolbar::slotDbgKdevFocus()
   // If anyone has a way of determining what window the app is _actually_ running on
   // then please fix and send a patch.
 
-// FIXME
-//  if (KWM::activeWindow() != ckDevelop_->winId())
-//    activeWindow_ = KWM::activeWindow();
+  if (KWM::activeWindow() != ckDevelopWin_)
+    activeWindow_ = KWM::activeWindow();
 
-//  KWM::activate(ckDevelop_->winId());
+  KWM::activate(ckDevelopWin_);
 }
 
 // **************************************************************************
@@ -423,11 +403,11 @@ void DbgToolbar::setAppIndicator(bool appIndicator)
   if (appIndicator)
   {
     bPrevFocus_->setPalette(QPalette(colorGroup().mid()));
-//    bKDevFocus_->setPalette(QPalette(kapp->backgroundColor));
+    bKDevFocus_->setPalette(QPalette(colorGroup().background()));
   }
   else
   {
-//    bPrevFocus_->setPalette(QPalette(kapp->backgroundColor));
+    bPrevFocus_->setPalette(QPalette(colorGroup().background()));
     bKDevFocus_->setPalette(QPalette(colorGroup().mid()));
   }
 }
@@ -442,8 +422,6 @@ void DbgToolbar::slotDock()
   ASSERT(!docker_);
   hide();
 
-//  QPixmap pm;
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
   docker_ = new DbgDocker(this,
           KGlobal::iconLoader()->loadIcon("dbgnext", KIcon::Desktop));
 
@@ -460,7 +438,7 @@ void DbgToolbar::slotIconifyAndDock()
   if (docked_)
     return;
 
-//  KWM::setIconify(ckDevelop_->winId(), true);
+  KWM::setIconify(ckDevelopWin_, true);
   slotDock();
 }
 
@@ -490,8 +468,20 @@ void DbgToolbar::slotActivateAndUndock()
   if (!docked_)
     return;
 
-//  KWM::activate(ckDevelop_->winId());
+  KWM::activate(ckDevelopWin_);
   slotUndock();
+}
+
+// **************************************************************************
+
+void DbgToolbar::slotDebugMemoryView()
+{
+  if (!dbgController_)
+    return;
+
+  MemoryView* memoryView = new MemoryView(this, "Memory view", dbgController_);
+  memoryView->exec();
+  delete memoryView;
 }
 
 // **************************************************************************
