@@ -100,7 +100,7 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
   if ( !rw_part || !rw_part->isModified() )
     return;
 
-  popup->insertItem( i18n( "Differences to saved file" ), 
+  popup->insertItem( i18n( "Difference to saved file" ), 
                      this, SLOT(localDiff()) );
 }
 
