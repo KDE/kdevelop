@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-use gideon;
+use kdevelop;
 
-initGideon();
+initKDevelop();
 
 print "Installing project file\n";
 installHTML( "${src}/template-phphello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );

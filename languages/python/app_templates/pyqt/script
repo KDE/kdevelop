@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
-use gideon;
+use kdevelop;
 use File::Copy;
 
-initGideon();
+initKDevelop();
 installFileTemplate();
 installGNU();
 

@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
-use gideon;
+use kdevelop;
 
 
-initGideon();
+initKDevelop();
 installFileTemplate();
 installLicense();
 installAdmin();

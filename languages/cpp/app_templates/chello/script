@@ -2,7 +2,7 @@
 
 use kdevelop;
 
-initGideon();
+initKDevelop();
 installFileTemplate();
 installLicense();
 installIncAdmin();

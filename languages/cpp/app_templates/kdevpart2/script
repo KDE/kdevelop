@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-use gideon;
+use kdevelop;
 
-initGideon();
+initKDevelop();
 installLicense();
 installAdmin();
 installGNU();
