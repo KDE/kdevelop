@@ -18,6 +18,7 @@ libkdevelop_la_SOURCES = kdevcomponent.cpp kdevversioncontrol.cpp \
 kdevelopincludedir = $(includedir)/kdevelop
 kdevelopinclude_HEADERS = kdevcomponent.h kdevversioncontrol.h \
 			  kdevlanguagesupport.h kdevcompileroptions.h \
-			  ctoolclass.h cproject.h processview.h ctreehandler.h
+			  ctoolclass.h cproject.h processview.h ctreehandler.h \
+			  kdevviewhandler.h
 
 METASOURCES = AUTO
