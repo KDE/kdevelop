@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=Simple SDL program
+Icon=cppsdl.png
+Category=C++
+Comment=Generates a simple SDL program in C++
+FileTemplates=h,CStyle,cpp,CStyle

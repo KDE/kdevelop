@@ -1,0 +1,25 @@
+AC_INIT(configure.in)
+
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE($APPNAMELC$, $VERSION$)
+
+AC_LANG_CPLUSPLUS
+AC_PROG_CXX
+AM_PROG_LIBTOOL
+
+AC_OUTPUT(Makefile src/Makefile)
+
+dnl Checks for libraries.
+sdl-config --libs --cflags
+
+dnl Check for SDL 
+SDL_VERSION=1.2.0
+AM_PATH_SDL($SDL_VERSION, 
+         :,
+         AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]) 
+) 
+CXXFLAGS="$CXXFLAGS $SDL_CFLAGS" 
+LIBS="$LIBS $SDL_LIBS"
+
+ 
+ 

@@ -6,7 +6,7 @@ SUBDIRS = . imports common kapp kpartapp kpartplugin kappjava javahello kcmodule
 	  kofficepart chello_gba dcopservice konqnavpanel qmakesimple qmakeapp khello kateplugin\
 	  qtopiaapp fortranhello adahello kdedcop \
 	  perlhello rubyhello bashhello pascalhello fpcsharedlib fpchello\
-	  fpcgtk superwaba
+	  fpcgtk superwaba cppsdlhello
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
