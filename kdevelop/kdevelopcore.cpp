@@ -6,7 +6,7 @@
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 
-#include "ClassParser.h"
+#include "ClassStore.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevversioncontrol.h"
@@ -23,6 +23,7 @@ KDevelopCore::KDevelopCore(KDevelop *gui)
     m_makefrontend = 0;
     m_appfrontend = 0;
     m_project = 0;
+    m_classstore = new CClassStore();
 
     initActions();
 
@@ -48,14 +49,6 @@ KDevelopCore::~KDevelopCore()
 
 void KDevelopCore::initComponent(KDevComponent *component)
 {
-    connect( component, SIGNAL(addToRepository(const QString&)),
-             this, SLOT(addToRepository(const QString&)) );
-    connect( component, SIGNAL(removeFromRepository(const QString&)),
-             this, SLOT(removeFromRepository(const QString&)) );
-    connect( component, SIGNAL(commitToRepository(const QString&)),
-             this, SLOT(commitToRepository(const QString&)) );
-    connect( component, SIGNAL(updateFromRepository(const QString&)),
-             this, SLOT(updateFromRepository(const QString&)) );
     connect( component, SIGNAL(executeMakeCommand(const QString&)),
              this, SLOT(executeMakeCommand(const QString&)) );
     connect( component, SIGNAL(executeAppCommand(const QString&)),
@@ -225,23 +218,54 @@ void KDevelopCore::loadProject()
     QString vcsystem = QString::fromLatin1("CVS");
     QString lang = QString::fromLatin1("C++");
     
-    loadVersionControl(vcsystem);
-    loadLanguageSupport(lang);
+    QListIterator<KDevComponent> it1(m_components);
+    for (; it1.current(); ++it1)
+        (*it1)->projectOpened(m_project);
 
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it)
-        (*it)->projectOpened(m_project);
+    QListIterator<KDevComponent> it2(m_components);
+    for (; it2.current(); ++it2)
+        (*it2)->classStoreOpened(m_classstore);
+
+    loadVersionControl(vcsystem);
+    if (m_versioncontrol) {
+        QListIterator<KDevComponent> it3(m_components);
+        for (; it3.current(); ++it3)
+            (*it3)->versionControlOpened(m_versioncontrol);
+    }
+
+    loadLanguageSupport(lang);
+    if (m_languagesupport) {
+        QListIterator<KDevComponent> it4(m_components);
+        for (; it4.current(); ++it4)
+            (*it4)->languageSupportOpened(m_languagesupport);
+    }
 }
 
 
 void KDevelopCore::unloadProject()
 {
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it)
-        (*it)->projectClosed();
+    if (m_languagesupport) {
+        QListIterator<KDevComponent> it1(m_components);
+        for (; it1.current(); ++it1)
+            (*it1)->languageSupportClosed();
+        unloadLanguageSupport();
+    }
 
-    unloadVersionControl();
-    unloadLanguageSupport();
+    if (m_versioncontrol) {
+        QListIterator<KDevComponent> it2(m_components);
+        for (; it2.current(); ++it2)
+            (*it2)->versionControlClosed();
+        unloadVersionControl();
+    }
+
+    QListIterator<KDevComponent> it3(m_components);
+    for (; it3.current(); ++it3)
+        (*it3)->classStoreClosed();
+    m_classstore->wipeout();
+
+    QListIterator<KDevComponent> it4(m_components);
+    for (; it4.current(); ++it4)
+        (*it4)->projectClosed();
 }
 
 
@@ -280,48 +304,6 @@ void KDevelopCore::slotOptionsKDevelopSetup()
 
     dlg->exec();
     delete dlg;
-}
-
-
-void KDevelopCore::addMethod(const QString &className)
-{
-    if (m_languagesupport)
-        m_languagesupport->addMethodRequested(className);
-}
-
-
-void KDevelopCore::addAttribute(const QString &className)
-{
-    if (m_languagesupport)
-        m_languagesupport->addAttributeRequested(className);
-}
-
-
-void KDevelopCore::addToRepository(const QString &fileName)
-{
-    if (m_versioncontrol)
-        m_versioncontrol->addToRepositoryRequested(fileName);
-}
-
-
-void KDevelopCore::removeFromRepository(const QString &fileName)
-{
-    if (m_versioncontrol)
-        m_versioncontrol->removeFromRepositoryRequested(fileName);
-}
-
-
-void KDevelopCore::commitToRepository(const QString &fileName)
-{
-    if (m_versioncontrol)
-        m_versioncontrol->commitToRepositoryRequested(fileName);
-}
-
-
-void KDevelopCore::updateFromRepository(const QString &fileName)
-{
-    if (m_versioncontrol)
-        m_versioncontrol->updateFromRepositoryRequested(fileName);
 }
 
 

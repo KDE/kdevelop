@@ -38,12 +38,6 @@ private slots:
     void slotOptionsKDevelopSetup();
 
     // Handling of component requests
-    void addMethod(const QString &className);
-    void addAttribute(const QString &className);
-    void addToRepository(const QString &fileName);
-    void removeFromRepository(const QString &fileName);
-    void commitToRepository(const QString &fileName);
-    void updateFromRepository(const QString &fileName);
     void executeMakeCommand(const QString &command);
     void executeAppCommand(const QString &command);
     void gotoSourceFile(const QString &fileName, int lineNo);
@@ -54,11 +48,14 @@ private slots:
 private:
     KDevelop *m_kdevelopgui;
     QList<KDevComponent> m_components;
+    QList<KDevComponent> m_runningcomponents;
+    
     KDevVersionControl *m_versioncontrol;
     KDevLanguageSupport *m_languagesupport;
     KDevComponent *m_makefrontend;
     KDevComponent *m_appfrontend;
     CProject *m_project;
+    CClassStore *m_classstore;
 };
 
 #endif

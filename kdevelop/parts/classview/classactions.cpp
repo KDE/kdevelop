@@ -92,23 +92,23 @@ void MethodListAction::refresh(const QString &classname)
 }
 
 
-KDevDelayedPopupAction::KDevDelayedPopupAction(const QString& text, const QString& pix, int accel,
-                                               QObject *receiver, const char *methname,
-                                               QObject* parent, const char* name )
+DelayedPopupAction::DelayedPopupAction(const QString& text, const QString& pix, int accel,
+                                       QObject *receiver, const char *methname,
+                                       QObject* parent, const char* name )
     : KAction(text, pix, accel, receiver, methname, parent, name)
 {
     m_popup = 0;
 }
 
 
-KDevDelayedPopupAction::~KDevDelayedPopupAction()
+DelayedPopupAction::~DelayedPopupAction()
 {
     if ( m_popup )
         delete m_popup;
 }
 
 
-int KDevDelayedPopupAction::plug(QWidget *widget, int index)
+int DelayedPopupAction::plug(QWidget *widget, int index)
 {
     if (widget->inherits("KToolBar")) {
         KToolBar *bar = (KToolBar *)widget;
@@ -128,7 +128,7 @@ int KDevDelayedPopupAction::plug(QWidget *widget, int index)
 }
 
 
-void KDevDelayedPopupAction::unplug(QWidget *widget)
+void DelayedPopupAction::unplug(QWidget *widget)
 {
     if (widget->inherits( "KToolBar")) {
         KToolBar *bar = (KToolBar *)widget;
@@ -147,7 +147,7 @@ void KDevDelayedPopupAction::unplug(QWidget *widget)
 }
 
 
-QPopupMenu *KDevDelayedPopupAction::popupMenu()
+QPopupMenu *DelayedPopupAction::popupMenu()
 {
     if (!m_popup)
         m_popup = new QPopupMenu();

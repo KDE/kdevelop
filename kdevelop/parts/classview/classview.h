@@ -24,6 +24,8 @@ protected:
     virtual void setupGUI();
     virtual void projectOpened(CProject *prj);
     virtual void projectClosed();
+    virtual void languageSupportOpened(KDevLanguageSupport *ls);
+    virtual void languageSupportClosed();
     virtual void classStoreOpened(CClassStore *store);
     virtual void classStoreClosed();
 
@@ -44,6 +46,7 @@ private slots:
 private:
     ClassWidget *m_widget;
 
+    void setupPopup();
     CParsedClass *getClass(const QString &className);
     void gotoDeclaration(const QString &classname,
                          const QString &declName,
@@ -54,8 +57,9 @@ private:
 
     ClassListAction *classes_action;
     MethodListAction *methods_action;
-    KDevDelayedPopupAction *popup_action;
+    DelayedPopupAction *popup_action;
     CClassStore *m_store;
+    KDevLanguageSupport *m_langsupport;
     bool m_cv_decl_or_impl;
 };
 

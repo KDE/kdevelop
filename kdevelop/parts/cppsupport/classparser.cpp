@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qregexp.h> 
 #include <kapp.h>
-#include "ClassParser.h"
+#include "classparser.h"
 #include "ProgrammingByContract.h"
 
 /** Line where a comment starts. */
@@ -59,8 +59,9 @@ enum
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassParser::CClassParser()
+CClassParser::CClassParser(CClassStore *classstore)
 {
+  store = classstore;
   reset();
 }
 
@@ -248,8 +249,8 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
     aContainer->addStruct( aStruct );
 
     // Always add structs to the global container.
-    if( aContainer != &store.globalContainer )
-      store.globalContainer.addStruct( aStruct );
+    if( aContainer != &store->globalContainer )
+      store->globalContainer.addStruct( aStruct );
 
   }
 }
@@ -1145,7 +1146,7 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
   if( lexem != ';' )
   { 
     // Try to move the values to the declared method.
-    aClass = store.getClassByName( className );
+    aClass = store->getClassByName( className );
     if( aClass != NULL)
     {
       pm = aClass->getMethod( aMethod );
@@ -1172,7 +1173,7 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
   	    path = scope->path() + "." + path;
   	
       cout << "scope path is " << path << endl;
-      aClass = store.getClassByName( path );
+      aClass = store->getClassByName( path );
       if( aClass != NULL)
       {
         pm = aClass->getMethod( aMethod );
@@ -1336,7 +1337,11 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     {
       aParent = new CParsedParent();
       aParent->setName( cname );
-      aParent->setExport( exportit );
+      CParsedParent::ExportAttr exportattr;
+      exportattr = (exportit == CPPUBLIC)? CParsedParent::ExportPublic
+          :  (exportit == CPPROTECTED)? CParsedParent::ExportProtected
+          :  CParsedParent::ExportPrivate;
+      aParent->setExport( exportattr );
       
       aClass->addParent( aParent );
     }
@@ -1468,15 +1473,15 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       {
         childClass->setDeclaredInScope( aClass->path() );
 
-        if( store.hasClass( childClass->path() ) ) {
-  	      CParsedClass *	parsedClassRef = store.getClassByName( childClass->path() );
+        if( store->hasClass( childClass->path() ) ) {
+  	      CParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
   	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine );
   	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile );
   	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope );
   	      delete childClass;
   	      childClass = parsedClassRef;
         } else {
-          store.addClass( childClass );
+          store->addClass( childClass );
         }
 
         // When the childclass gets added to its parent class
@@ -1798,12 +1803,12 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
         else if( !scope->path().isEmpty() )
         {
           // Get the parent class;
-          parentClass = store.getClassByName( scope->path() );
+          parentClass = store->getClassByName( scope->path() );
 
           // If we didn't find a parent class, try to find a namespace.
           if( parentClass == NULL )
           {
-            parentScope = store.getScopeByName( scope->path() );
+            parentScope = store->getScopeByName( scope->path() );
 
             if( parentScope != NULL )
               classPath = parentScope->path();
@@ -1817,14 +1822,14 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
         cout << "Storing class with path: " << aClass->path() << endl;
         
         // Check if class is in the global store, add it if missing
-        if( store.hasClass( aClass->path() ) ) {
-  	      CParsedClass *	parsedClassRef = store.getClassByName( aClass->path() );
+        if( store->hasClass( aClass->path() ) ) {
+  	      CParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
   	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine );
   	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile );
   	      delete aClass;
   	      aClass = parsedClassRef;
         } else {
-          store.addClass( aClass );
+          store->addClass( aClass );
         }
 
         // Restore the 'declared in scope' path, so that 'aClass'
@@ -1840,12 +1845,12 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
         else if( !scopePath.isEmpty() )
         {
           // Get the parent class;
-          parentClass = store.getClassByName( scopePath );
+          parentClass = store->getClassByName( scopePath );
 
           // If we didn't find a parent class, try to find a namespace.
           if( parentClass == NULL )
           {
-            parentScope = store.getScopeByName( scopePath );
+            parentScope = store->getScopeByName( scopePath );
 
             if( parentScope != NULL )
               parentScope->addClass( aClass );
@@ -1898,9 +1903,9 @@ void CClassParser::parseToplevel()
     declStart = getLineno();
 
     if( isGenericLexem() )
-      parseGenericLexem( &store.globalContainer );
+      parseGenericLexem( &store->globalContainer );
     else
-      parseTopLevelLexem( &store.globalContainer );
+      parseTopLevelLexem( &store->globalContainer );
 
   	kapp->processEvents(500);
     getNextLexem();
@@ -1970,7 +1975,7 @@ bool CClassParser::parse( const char *file )
   currentFile = file;
 
   // Remove all items with references to this file.
-  store.removeWithReferences( file );
+  store->removeWithReferences( file );
 
   // Parse the file.
   parseFile( f );
@@ -1989,7 +1994,7 @@ bool CClassParser::parse( const char *file )
  *-----------------------------------------------------------------*/
 void CClassParser::wipeout()
 {
-  store.wipeout();
+  store->wipeout();
 
   reset();
 }

@@ -35,15 +35,15 @@ private:
 };
 
 
-class KDevDelayedPopupAction : public KAction
+class DelayedPopupAction : public KAction
 {
     Q_OBJECT
 
 public:
-    KDevDelayedPopupAction( const QString &text, const QString &pix, int accel,
+    DelayedPopupAction( const QString &text, const QString &pix, int accel,
                             QObject *receiver, const char *methname,
                             QObject *parent, const char* name );
-    ~KDevDelayedPopupAction();
+    ~DelayedPopupAction();
     
     virtual int plug(QWidget *widget, int index=-1);
     virtual void unplug(QWidget *widget);

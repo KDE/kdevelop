@@ -38,7 +38,7 @@ class CClassParser
 {
 public: // Constructor & Destructor
 
-  CClassParser();
+  CClassParser(CClassStore *classstore);
   ~CClassParser();
 
 private: // Private classes
@@ -61,11 +61,6 @@ private: // Private classes
     int type;
   };
 
-public: // Public attributes
-
-  /** Store for the classes. */
-  CClassStore store;
-
 public: // Public Methods
 
   /** 
@@ -81,15 +76,18 @@ public: // Public Methods
   void wipeout();
 
   /** Output this object as text on stdout */
-  void out()     { store.out(); }
+  void out()     { store->out(); }
 
 //  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
 //    { store.getDependentFiles( fileList, dependentList); }
 
   void removeWithReferences( const char*  aFile )
-      { store.removeWithReferences( aFile ); }
+      { store->removeWithReferences( aFile ); }
 
 private: // Private attributes
+
+  /** Store for the classes. */
+  CClassStore *store;
 
   /** Lexer used to fetch lexical patterns */
   yyFlexLexer *lexer;

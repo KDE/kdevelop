@@ -4,12 +4,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
+
 #include "classview.h"
 #include "classactions.h"
 #include "main.h"
 #include "cproject.h"
 #include "ctreehandler.h"
 #include "ClassStore.h"
+#include "kdevlanguagesupport.h"
 
 
 ClassView::ClassView(QObject *parent, const char *name)
@@ -19,6 +21,7 @@ ClassView::ClassView(QObject *parent, const char *name)
     setXMLFile("kdevclassview.rc");
     
     m_cv_decl_or_impl = false;
+    m_langsupport = 0;
     m_store = 0;
 }
 
@@ -45,14 +48,31 @@ void ClassView::setupGUI()
                                          actionCollection(), "class_combo");
     methods_action = new MethodListAction(i18n("Methods"), 0, this, SLOT(selectedMethod()),
                                           actionCollection(), "method_combo");
-    popup_action  = new KDevDelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0, this, SLOT(switchedDeclImpl()),
-                                               actionCollection(), "class_wizard");
-    popup_action->popupMenu()->insertItem(i18n("Goto declaration"), this, SLOT(selectedGotoDeclaration()));
-    popup_action->popupMenu()->insertItem(i18n("Goto implementation"), this, SLOT(selectedGotoImplementation()));
-    popup_action->popupMenu()->insertItem(i18n("Goto class declaration"), this, SLOT(selectedGotoClassDeclaration()));
-    popup_action->popupMenu()->insertSeparator();
-    popup_action->popupMenu()->insertItem(i18n("Add method..."), this, SLOT(selectedAddMethod()));
-    popup_action->popupMenu()->insertItem(i18n("Add attribute..."), this, SLOT(selectedAddAttribute()));
+    popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0, this, SLOT(switchedDeclImpl()),
+                                           actionCollection(), "class_wizard");
+    setupPopup();
+}
+
+
+void ClassView::setupPopup()
+{
+    QPopupMenu *popup = popup_action->popupMenu();
+
+    popup->clear();
+    popup->insertItem(i18n("Goto declaration"), this, SLOT(selectedGotoDeclaration()));
+    popup->insertItem(i18n("Goto implementation"), this, SLOT(selectedGotoImplementation()));
+    popup->insertItem(i18n("Goto class declaration"), this, SLOT(selectedGotoClassDeclaration()));
+
+    if (m_langsupport) {
+        bool hasAddMethod = m_langsupport->hasFeature(KDevLanguageSupport::AddMethod);
+        bool hasAddAttribute = m_langsupport->hasFeature(KDevLanguageSupport::AddAttribute);
+        if (hasAddMethod || hasAddAttribute) 
+            popup->insertSeparator();
+        if (hasAddMethod)
+            popup->insertItem(i18n("Add method..."), this, SLOT(selectedAddMethod()));
+        if (hasAddAttribute)
+            popup->insertItem(i18n("Add attribute..."), this, SLOT(selectedAddAttribute()));
+    }
 }
 
 
@@ -70,6 +90,19 @@ void ClassView::projectClosed()
     classes_action->setEnabled(false);
     methods_action->setEnabled(false);
     popup_action->setEnabled(false);
+}
+
+
+void ClassView::languageSupportOpened(KDevLanguageSupport *ls)
+{
+    m_langsupport = ls;
+    setupPopup();
+}
+
+void ClassView::languageSupportClosed()
+{
+    m_langsupport = 0;
+    setupPopup();
 }
 
 
@@ -216,7 +249,8 @@ void ClassView::selectedGotoImplementation()
  */
 void ClassView::selectedAddMethod()
 {
-    emit addMethod(classes_action->currentText());
+    if (m_langsupport)
+        m_langsupport->addMethodRequested(classes_action->currentText());
 }
 
 
@@ -225,7 +259,8 @@ void ClassView::selectedAddMethod()
  */
 void ClassView::selectedAddAttribute()
 {
-    emit addAttribute(classes_action->currentText());
+    if (m_langsupport)
+        m_langsupport->addAttributeRequested(classes_action->currentText());
 }
 
 

@@ -21,6 +21,8 @@
 #include <qstring.h>
 #include <kparts/part.h>
 
+class KDevVersionControl;
+class KDevLanguageSupport;
 class CProject;
 class CClassStore;
 class KDialogBase;
@@ -71,6 +73,22 @@ public:
      * The project has beeen closed.
      */
     virtual void projectClosed();
+    /**
+     * A new version control version has been created.
+     */
+    virtual void versionControlOpened(KDevVersionControl *vc);
+    /**
+     * The version control object has been deleted.
+     */
+    virtual void versionControlClosed();
+    /**
+     * A new language support object has been created.
+     */
+    virtual void languageSupportOpened(KDevLanguageSupport *ls);
+    /**
+     * The language support object has been deleted.
+     */
+    virtual void languageSupportClosed();
     virtual void classStoreOpened(CClassStore *store);
     virtual void classStoreClosed();
     /**
@@ -91,32 +109,6 @@ public:
 
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
-    /**
-     * Adds the given file to the version control system.
-     */
-    void addToRepository(const QString &fileName);
-    /**
-     * Removes the given file from the version control system.
-     */
-    void removeFromRepository(const QString &fileName);
-    /**
-     * Commits the file to the version control system.
-     */
-    void commitToRepository(const QString &fileName);
-    /**
-     * Updates the file from the version control system.
-     */
-    void updateFromRepository(const QString &fileName);
-    /**
-     * Opens an "Add method" dialog and adds the configured
-     * method to the sources.
-     */
-    void addMethod(const QString &className);
-    /**
-     * Opens an "Add attribute" dialog and adds the configured
-     * method to the sources.
-     */
-    void addAttribute(const QString &className);
     /**
      * Executes a make-like command. The output of the command is put
      * in a separate view and is parsed for error messages.

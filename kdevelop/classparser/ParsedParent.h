@@ -18,7 +18,7 @@
 #ifndef _PARSEDPARENTS_H_INCLUDED
 #define _PARSEDPARENTS_H_INCLUDED
 
-#include "tokenizer.h"
+//#include "tokenizer.h"
 #include <qstring.h>
 
 /** Represents the parent to a class. */
@@ -34,8 +34,9 @@ public: // Public attributes
   /** Name of parent class */
   QString name;
 
+  enum ExportAttr { ExportPrivate, ExportProtected, ExportPublic };
   /** Export type of the inheritance */
-  int exportattr;
+  ExportAttr exportattr;
 
 public: // Public methods to set attribute values
 
@@ -43,7 +44,7 @@ public: // Public methods to set attribute values
   void setName( const char *aName );
 
   /** Set the export status */
-  void setExport( int aExport );
+  void setExport( ExportAttr aExport );
 
 public: // Public methods
 
@@ -57,9 +58,9 @@ public: // Public methods
   void out();
 
 public: // Public queries
-  inline bool isPublic()    { return ( exportattr == CPPUBLIC ); }
-  inline bool isProtected() { return ( exportattr == CPPROTECTED ); }
-  inline bool isPrivate()   { return ( exportattr == CPPRIVATE ); }
+  inline bool isPublic()    { return ( exportattr == ExportPublic ); }
+  inline bool isProtected() { return ( exportattr == ExportProtected ); }
+  inline bool isPrivate()   { return ( exportattr == ExportPrivate ); }
 
 };
 

@@ -5,6 +5,7 @@
 #include "ParsedAttribute.h"
 #include "ParsedMethod.h"
 #include "ClassStore.h"
+#include "classparser.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
 #include "main.h"
@@ -16,6 +17,7 @@ CppSupport::CppSupport(QObject *parent, const char *name)
     setInstance(CppSupportFactory::instance());
 
     m_store = 0;
+    m_parser = 0;
 }
 
 
@@ -38,30 +40,42 @@ void CppSupport::projectClosed()
 void CppSupport::classStoreOpened(CClassStore *store)
 {
     m_store = store;
+    m_parser = new CClassParser(store);
 }
 
 
 void CppSupport::classStoreClosed()
 {
     m_store = 0;
+    delete m_parser;
+    m_parser = 0;
 }
 
 
-void CppSupport::addedFileToProject(const QString &name)
+void CppSupport::addedFileToProject(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::addedFileToProject()" << endl;
+    m_parser->parse(fileName);
 }
 
 
-void CppSupport::removedFileFromProject(const QString &name)
+void CppSupport::removedFileFromProject(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::removedFileFromProject()" << endl;
+    m_parser->removeWithReferences(fileName);
 }
 
 
-void CppSupport::savedFile(const QString &name)
+void CppSupport::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::savedFile()" << endl;
+    m_parser->parse(fileName);
+}
+
+
+bool CppSupport::hasFeature(Features feature)
+{
+    return (feature==AddMethod) || (feature==AddAttribute);
 }
 
 

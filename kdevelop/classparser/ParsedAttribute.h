@@ -19,7 +19,7 @@
 #define _CPARSEDATTRIBUTE_H_INCLUDED
 
 #include "ParsedItem.h"
-#include "tokenizer.h"
+//#include "tokenizer.h"
 
 /** Represents an attribute and all data for the attribute. 
  * 

@@ -1,3 +1,10 @@
+2000-07-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Decentralized version control and language support handling
+	  into the respective components
+	* Moved C++ parser into cppsupport; includes some surgery
+          to separate the ClassStore stuff completely from
+          any constants in tokenizer.h
+
 2000-07-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Introduced an interface KDevLanguageSupport for programming
 	  language specific stuff like source parser, or the 'Add method' 

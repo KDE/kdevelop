@@ -34,6 +34,23 @@ void KDevComponent::projectClosed()
 {
 }
 
+void KDevComponent::versionControlOpened(KDevVersionControl *vc)
+{
+}
+
+void KDevComponent::versionControlClosed()
+{
+}
+
+void KDevComponent::languageSupportOpened(KDevLanguageSupport *ls)
+{
+}
+
+void KDevComponent::languageSupportClosed()
+{
+}
+
+
 void KDevComponent::classStoreOpened(CClassStore *store)
 {
 }
