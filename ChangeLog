@@ -1,6 +1,6 @@
 2003-11-09 F@lk Brettschneider <falkbr@kdevelop.org>
-    * as planned and decided month ago, now we
-      remove KDevelop's own special implementation of IDEAl UI mode.
+    * as planned and decided months ago, now I
+      removed KDevelop's own special implementation of IDEAl UI mode.
       This has been replaced by KDE's IDEAl UI mode, globally implemented in kdelibs/kmdi.
       Now we increase maintainance, KDE-comformity and can switch all KDevelop UI modes on the fly.
 
