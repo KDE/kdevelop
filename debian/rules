@@ -24,6 +24,9 @@ ifneq (,$(findstring withjava,$(DEB_BUILD_OPTIONS)))
 	endif
 endif
 
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	DEBUG_FLAGS=--enable-debug=full
+endif
 
 -include debian/debiandirs
 
@@ -74,7 +77,8 @@ configure-stamp:
 				--enable-vba \
 				$(configkdevelop) \
 				--disable-final \
-				$(JAVA_FLAGS)
+				$(JAVA_FLAGS) \
+				$(DEBUG_FLAGS)
 
 	touch configure-stamp
 

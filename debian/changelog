@@ -1,3 +1,20 @@
+kdevelop3 (4:3.0-00cvs-20031106) unstable; urgency=low
+
+  * Updated CVS sources
+  * Update debian/update_doc_index.sh
+    - Will not try to compare package versions for documentation packages that
+      are not installed
+
+ -- Norman Jordan <njordan@debian.org>  Thu,  6 Nov 2003 22:40:19 -0800
+
+kdevelop3 (4:3.0-00cvs20031021) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added the 'noopt' option to use the --enable-debug=full to configure
+    option. Patch supplied by Chris Halls.
+
+ -- Norman Jordan <njordan@debian.org>  Tue, 21 Oct 2003 13:51:34 -0700
+
 kdevelop3 (4:3.0-00cvs20031013) unstable; urgency=low
 
   * Updated CVS sources

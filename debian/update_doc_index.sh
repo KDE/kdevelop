@@ -68,34 +68,43 @@ get_indexed_versions
 
 need_update=0
 
-status=`check_package_status "$QTDOC_PACKAGE"`
+# Check if the QT documentation needs to be (re)indexed
+qtdoc_status=`check_package_status "$QTDOC_PACKAGE"`
 version=`dpkg --status $QTDOC_PACKAGE  2> /dev/null | grep '^Version: ' | cut -d ' ' -f 2`
-if [ ! -e "$GLOBAL_HTDIG_DIR/qtdoc_files" ] ||
-   ( [ $status == "yes" ] &&
+if [ "$qtdoc_status" == "yes" ] &&
+   ( [ ! -e "$GLOBAL_HTDIG_DIR/qtdoc_files" ] ||
    dpkg --compare-versions $version gt $QTDOC_VERSION ); then
   QTDOC_VERSION="$version"
   `update_files_list "qtdoc" "$QTDOC_DIR"`
   need_update=1
+elif [ "$qtdoc_status" == "no" -a -e "$GLOBAL_HTDIG_DIR/qtdoc_files" ]; then
+  rm "$GLOBAL_HTDIG_DIR/qtdoc_files"
 fi
 
-status=`check_package_status "$KDELIBSDOC_PACKAGE"`
+# Check if the KDE documentation needs to be (re)indexed
+kdedoc_status=`check_package_status "$KDELIBSDOC_PACKAGE"`
 version=`dpkg --status $KDELIBSDOC_PACKAGE  2> /dev/null | grep '^Version: ' | cut -d ' ' -f 2`
-if [ ! -e "$GLOBAL_HTDIG_DIR/kdelibsdoc_files" ] ||
-   ( [ $status == "yes" ] &&
+if [ "$kdedoc_status" == "yes" ] &&
+   ( [ ! -e "$GLOBAL_HTDIG_DIR/kdelibsdoc_files" ] ||
    dpkg --compare-versions $version gt $KDEDOC_VERSION ); then
   KDEDOC_VERSION="$version"
   `update_files_list "kdelibsdoc" "$KDELIBSDOC_DIR"`
   need_update=1
+elif [ "$kdedoc_status" == "no" -a -e "$GLOBAL_HTDIG_DIR/kdelibsdoc_files" ]; then
+  rm "$GLOBAL_HTDIG_DIR/kdelibsdoc_files"
 fi
 
-status=`check_package_status "$KDEVELOPDOC_PACKAGE"`
+# Check if the KDevelop documentation needs to be (re)indexed
+kdevelopdoc_status=`check_package_status "$KDEVELOPDOC_PACKAGE"`
 version=`dpkg --status $KDEVELOPDOC_PACKAGE  2> /dev/null | grep '^Version: ' | cut -d ' ' -f 2`
-if [ ! -e "GLOBAL_HTDIG_DIR/kdevelopdoc_files" ] ||
-   ( [ $status == "yes" ] &&
+if [ "$kdevelopdoc_status" == "yes" ] &&
+   ( [ ! -e "$GLOBAL_HTDIG_DIR/kdevelopdoc_files" ] ||
    dpkg --compare-versions $version gt $KDEVELOPDOC_VERSION ); then
   KDEVELOPDOC_VERSION="$version"
   `update_files_list "kdevelopdoc" "$KDEVELOPDOC_DIR"`
   need_update=1
+elif [ "$kdevelopdoc_status" == "no" -a -e "$GLOBAL_HTDIG_DIR/kdevelopdoc_files" ]; then
+  rm "$GLOBAL_HTDIG_DIR/kdelibsdoc_files"
 fi
 
 if [ $need_update == 0 ]; then
