@@ -26,3 +26,6 @@ noinst_HEADERS = contentsview.h indexview.h docglobalconfigwidget.h \
 				docconfiglistview.h editcatalogdlg.h docutils.h searchview.h bookmarkview.h selecttopic.h \
 		docprojectconfigwidget.h KDevDocumentationIface.h
 SUBDIRS = interfaces plugins tools data protocols
+
+DOXYGEN_EMPTY = YES
+include ../../Doxyfile.am
