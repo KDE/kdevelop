@@ -58,7 +58,10 @@ public /*rules*/ :
     bool parseTypedef();
     bool parseAsmDefinition();
     bool parseTemplateDeclaration();
-    bool parseDeclaration();
+    bool parseDeclaration2();
+	bool parseDeclaration();
+
+
     bool parseNestedNameSpecifier();
     bool parseUnqualiedName();
     bool parseStringLiteral();
@@ -74,12 +77,6 @@ public /*rules*/ :
     bool parseDeclarator();
     bool parseTemplateParameterList();
     bool parseTemplateParameter();
-    bool parseDeclHead();
-    bool parseIntegralDeclaration();
-    bool parseIntegralDeclHead();
-    bool parseOtherDeclaration();
-    bool parseConstDeclaration();
-    bool parseConstructorDeclaration();
     bool parseStorageClassSpecifier();
     bool parseFunctionSpecifier();
     bool parseConstantExpression();
@@ -133,7 +130,6 @@ public /*rules*/ :
     bool parseLabeledStatement();
     bool parseDeclarationStatement();
 
-    bool isConstructorDecl();
     bool skipUntil( int token );
     bool skipUntilDeclaration();
     bool skip( int l, int r );

@@ -133,6 +133,8 @@ void ProblemReporter::reparse()
     if( !m_editor )
         return;
 
+    m_timer->stop();
+
     if( m_bgParser ) {
         if( m_bgParser->running() ) {
             m_timer->changeInterval( m_delay );
@@ -155,7 +157,6 @@ void ProblemReporter::reparse()
     m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
     m_bgParser->start();
 
-    m_timer->stop();
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )

@@ -29,7 +29,9 @@ using namespace std;
 { \
     Token token = lex->lookAhead( 0 ); \
     if( token != tk ){ \
-        reportError( Errors::SyntaxError ); \
+        QString s = token.toString(); \
+        if( s.isEmpty() ) s = i18n("<eof>"); \
+        reportError( i18n("%1 expected found %2").arg(descr).arg(s) ); \
         return false; \
     } \
     lex->nextToken(); \
@@ -110,12 +112,12 @@ bool Parser::reportError( const QString& msg )
 
 void Parser::syntaxError()
 {
-    reportError( Errors::SyntaxError );
+    (void) reportError( Errors::SyntaxError );
 }
 
 void Parser::parseError()
 {
-    reportError( Errors::ParseError );
+    (void) reportError( Errors::ParseError );
 }
 
 bool Parser::skipUntil( int token )
@@ -214,12 +216,7 @@ bool Parser::parseTranslationUnit()
     while( !lex->lookAhead(0).isNull() ){
         if( !parseDefinition() ){
             // error recovery
-            syntaxError();
-            int tk = lex->lookAhead( 0 );
             skipUntilDeclaration();
-            if( lex->lookAhead(0) == tk ){
-                lex->nextToken();
-            }
         }
     }
 
@@ -348,6 +345,7 @@ bool Parser::parseNamespace()
 
     if( lex->lookAhead(0) != '{' ){
         reportError( i18n("{ expected") );
+        return false;
     }
 
     parseLinkageBody();
@@ -368,29 +366,13 @@ bool Parser::parseUsing()
         return parseUsingDirective();
     }
 
-
-    if( parseName() ){
-
-        if( lex->lookAhead(0) != ';' ){
-            reportError( i18n("; expected") );
-        } else
-            lex->nextToken(); // skip ;
-        return true;
-    }
-
-    if( lex->lookAhead(0) == Token_typename ){
+    if( lex->lookAhead(0) == Token_typename )
         lex->nextToken();
-    }
 
-    if( !parseName() ){
-        reportError( i18n("Namespace name expected") );
+    if( !parseName() )
         return false;
-    }
 
-    if( lex->lookAhead(0) != ';' ){
-        reportError( i18n("; expected") );
-    } else
-        lex->nextToken();
+    ADVANCE( ';', ";" )
 
     return true;
 }
@@ -404,16 +386,12 @@ bool Parser::parseUsingDirective()
     }
     lex->nextToken();
 
-
     if( !parseName() ){
         reportError( i18n("Namespace name expected") );
-    } else {
+        return false;
     }
 
-    if( lex->lookAhead(0) != ';' ){
-        reportError( i18n("} expected") );
-    } else
-        lex->nextToken();
+    ADVANCE( ';', ";" );
 
     return true;
 }
@@ -546,222 +524,6 @@ bool Parser::parseTemplateDeclaration()
 
     if( !parseDefinition( ) ){
         reportError( i18n("expected a declaration") );
-    }
-
-    return true;
-}
-
-bool Parser::parseDeclaration()
-{
-    //kdDebug(9007) << "Parser::parseDeclaration()" << endl;
-
-    return
-        parseIntegralDeclaration() ||
-        parseConstDeclaration() ||
-        parseOtherDeclaration();
-}
-
-bool Parser::parseDeclHead()
-{
-    //kdDebug(9007) << "Parser::parseDeclHead()" << endl;
-
-    while( parseStorageClassSpecifier() || parseFunctionSpecifier() ){
-    }
-
-    QStringList cv;
-    if( parseCvQualify(cv) ){
-    }
-
-    return true;
-}
-
-bool Parser::parseIntegralDeclaration()
-{
-    //kdDebug(9007) << "Parser::parseIntegralDeclaration()" << endl;
-    int index = lex->index();
-
-    if( !parseIntegralDeclHead() ){
-        lex->setIndex( index );
-        return false;
-    }
-
-    int tk = lex->lookAhead( 0 );
-    if( tk == ';' ){
-        lex->nextToken();
-    } else if( tk == ':' ){
-        lex->nextToken();
-        if( !parseConstantExpression() ){
-            lex->setIndex( index );
-            return false;
-        }
-        ADVANCE( ';', ';' );
-    } else {
-        if( !parseInitDeclaratorList() ){
-            lex->setIndex( index );
-            return false;
-        }
-
-        if( lex->lookAhead(0) == ';' ){
-            lex->nextToken();
-        } else {
-            if( !parseFunctionBody() ){
-                lex->setIndex( index );
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool Parser::parseIntegralDeclHead()
-{
-    //kdDebug(9007) << "Parser::parseIntegralDeclHead()" << endl;
-
-    if( !parseDeclHead() ){
-        return false;
-    }
-
-    if( !parseTypeSpecifier() ){
-        return false;
-    }
-
-    QStringList cv;
-    parseCvQualify( cv );
-
-    return true;
-}
-
-bool Parser::parseOtherDeclaration()
-{
-    //kdDebug(9007) << "Parser::parseOtherDeclaration()" << endl;
-
-    if( lex->lookAhead(0) == Token_friend ){
-        lex->nextToken();
-        if( !parseDefinition() ){
-            reportError( i18n("expected a declaration") );
-            return false;
-        }
-    } else {
-
-        if( !parseDeclHead() ){
-            return false;
-        }
-
-        if( !parseName() ){
-            return false;
-        }
-
-        if( isConstructorDecl() ){
-            if( !parseConstructorDeclaration() ){
-                return false;
-            }
-        } else {
-
-            QStringList cv;
-            if( parseCvQualify(cv) ){
-            }
-
-            if( !parseInitDeclaratorList() ){
-                return false;
-            }
-        }
-
-        if( lex->lookAhead(0) == ';' ){
-            // constructor/destructor or cast operator
-            lex->nextToken();
-        } else {
-            if( !parseFunctionBody() ){
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-bool Parser::parseConstDeclaration()
-{
-    //kdDebug(9007) << "Parser::parseConstDeclaration()" << endl;
-
-    if( lex->lookAhead(0) != Token_const ){
-        return false;
-    }
-    lex->nextToken();
-
-    int index = lex->index();
-
-    if( !parseInitDeclaratorList() ){
-        lex->setIndex( index );
-        return false;
-    }
-
-    ADVANCE( ';', ';' );
-
-    return true;
-}
-
-bool Parser::isConstructorDecl()
-{
-    //kdDebug(9007) << "Parser::isConstructorDecl()" << endl;
-
-    if( lex->lookAhead(0) != '(' ){
-        return false;
-    }
-
-    int tk = lex->lookAhead( 1 );
-    switch( tk ){
-    case '*':
-    case '&':
-    case '(':
-        return false;
-
-    case Token_const:
-    case Token_volatile:
-        return true;
-
-    case Token_scope:
-    {
-        int index = lex->index();
-        if( parsePtrToMember() )
-            return false;
-
-        lex->setIndex( index );
-    }
-    break;
-
-    }
-
-    return true;
-}
-
-bool Parser::parseConstructorDeclaration() // or castoperator declaration
-{
-    //kdDebug(9007) << "Parser::parseConstructorDeclaration()" << endl;
-
-    if( lex->lookAhead(0) != '(' ){
-        return false;
-    }
-    lex->nextToken();
-
-
-    if( !parseParameterDeclarationClause() ){
-        return false;
-    }
-
-    if( lex->lookAhead(0) != ')' ){
-        return false;
-    }
-    lex->nextToken();
-
-    if( lex->lookAhead(0) == Token_const ){
-        lex->nextToken();
-    }
-
-    if( lex->lookAhead(0) == ':' ){
-        if( !parseCtorInitializer() ){
-            return false;
-        }
     }
 
     return true;
@@ -1454,7 +1216,7 @@ bool Parser::parseMemberSpecificationList()
             break;
 
         if( !parseMemberSpecification() ){
-            int tk = lex->lookAhead( 0 );
+            Token tk = lex->lookAhead( 0 );
             skipUntilDeclaration();
             if( lex->lookAhead(0) == tk ){
                 lex->nextToken();
@@ -1849,12 +1611,12 @@ bool Parser::parseCommaExpression()
     //kdDebug(9007) << "Parser::parseCommaExpression()" << endl;
 
     if( !parseExpression() )
-    	return false;
+        return false;
 
     while( lex->lookAhead(0) == ',' ){
-    	lex->nextToken();
+        lex->nextToken();
 
-    	if( !parseExpression() ){
+        if( !parseExpression() ){
             reportError( i18n("expression expected") );
             return false;
         }
@@ -1948,7 +1710,7 @@ bool Parser::parseUnqualiedName()
 
     if( !isDestructor ){
 
-		int index = lex->index();
+        int index = lex->index();
 
         if( lex->lookAhead(0) == '<' ){
             lex->nextToken();
@@ -1957,7 +1719,7 @@ bool Parser::parseUnqualiedName()
             parseTemplateArgumentList();
 
             if( lex->lookAhead(0) != '>' ){
-				lex->setIndex( index );
+                lex->setIndex( index );
             } else
                 lex->nextToken();
         }
@@ -2024,7 +1786,7 @@ bool Parser::parseExpressionStatement()
     //kdDebug(9007) << "Parser::parseExpressionStatement()" << endl;
     parseCommaExpression();
     if( lex->lookAhead(0) != ';' ){
-    	reportError( i18n("; expected") );
+        reportError( i18n("; expected") );
         skipUntil( ';' );
     }
     lex->nextToken(); // skip ;
@@ -2096,15 +1858,15 @@ bool Parser::parseCondition()
     int index = lex->index();
 
     if( parseTypeSpecifier() ){
-    	if( parseDeclarator() && lex->lookAhead(0) == '=' ) {
+        if( parseDeclarator() && lex->lookAhead(0) == '=' ) {
             lex->nextToken();
 
             if( parseAssignmentExpression() )
-            	return true;
+                return true;
         }
     }
 
-	lex->setIndex( index );
+    lex->setIndex( index );
     return parseCommaExpression();
 }
 
@@ -2115,12 +1877,12 @@ bool Parser::parseWhileStatement()
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
     if( !parseCondition() ){
-    	reportError( i18n("condition expected") );
+        reportError( i18n("condition expected") );
     }
     ADVANCE( ')', ")" );
 
     if( !parseStatement() ){
-    	reportError( i18n("statement expected") );
+        reportError( i18n("statement expected") );
         // TODO: skipUntilStatement();
     }
 
@@ -2132,13 +1894,13 @@ bool Parser::parseDoStatement()
     //kdDebug(9007) << "Parser::parseDoStatement()" << endl;
     ADVANCE( Token_do, "do" );
     if( !parseStatement() ){
-    	reportError( i18n("statement expected") );
+        reportError( i18n("statement expected") );
         // TODO: skipUntilStatement();
     }
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
     if( !parseCommaExpression() ){
-    	reportError( i18n("expression expected") );
+        reportError( i18n("expression expected") );
     }
     ADVANCE( ')', ")" );
     ADVANCE( ';', ";" );
@@ -2154,7 +1916,7 @@ bool Parser::parseForStatement()
 
     //kdDebug(9007) << "1 token = " << lex->lookAhead(0).toString() << endl;
     if( !parseForInitStatement() ){
-    	reportError( i18n("for initialization expected") );
+        reportError( i18n("for initialization expected") );
     }
     //kdDebug(9007) << "2 token = " << lex->lookAhead(0).toString() << endl;
 
@@ -2179,7 +1941,7 @@ bool Parser::parseCompoundStatement()
 {
     //kdDebug(9007) << "Parser::parseCompoundStatement()" << endl;
     if( lex->lookAhead(0) != '{' ){
-    	return false;
+        return false;
     }
     lex->nextToken();
 
@@ -2187,12 +1949,12 @@ bool Parser::parseCompoundStatement()
         if( lex->lookAhead(0) == '}' )
             break;
 
-    	if( !parseStatement() )
+        if( !parseStatement() )
             break;
     }
 
     if( lex->lookAhead(0) != '}' ){
-    	reportError( i18n("} expected") );
+        reportError( i18n("} expected") );
     } else
         lex->nextToken();
 
@@ -2207,17 +1969,17 @@ bool Parser::parseIfStatement()
 
     ADVANCE( '(' , "(" );
     if( !parseCondition() ){
-    	reportError( i18n("condition expected") );
+        reportError( i18n("condition expected") );
     }
     ADVANCE( ')', ")" );
 
     if( !parseStatement() ){
-    	reportError( i18n("statement expected") );
+        reportError( i18n("statement expected") );
         // TODO: skipUntilStatement();
     }
 
     while( lex->lookAhead(0) == Token_else ){
-    	lex->nextToken();
+        lex->nextToken();
         if( !parseStatement() ) {
             reportError( i18n("statement expected") );
             return false;
@@ -2234,7 +1996,7 @@ bool Parser::parseSwitchStatement()
 
     ADVANCE( '(' , "(" );
     if( !parseCondition() ){
-    	reportError( i18n("condition expected") );
+        reportError( i18n("condition expected") );
     }
     ADVANCE( ')', ")" );
 
@@ -2279,8 +2041,10 @@ bool Parser::parseBlockDeclaration()
 
     int index = lex->index();
 
-    if ( !parseIntegralDeclHead() ) {
-        //kdDebug(9007) << "--> not parseIntegralDeclHead()" << endl;
+    QStringList cv;
+    parseCvQualify( cv );
+
+    if ( !parseTypeSpecifier() ) { // replace with simpleTypeSpecifier?!?!
         lex->setIndex( index );
         return false;
     }
@@ -2321,4 +2085,97 @@ bool Parser::parseDeclarationStatement()
     lex->nextToken();
 
     return true;
+}
+
+bool Parser::parseDeclaration()
+{
+    parseFunctionSpecifier();
+    parseStorageClassSpecifier();
+
+    int index = lex->index();
+
+    if( parseName() && lex->lookAhead(0) == '(' ){
+        // no type specifier, maybe a constructor or a cast operator!?!?!
+        lex->setIndex( index );
+
+        parseNestedNameSpecifier();
+        if( parseDeclarator() ){
+            switch( lex->lookAhead(0) ){
+            case ';':
+                lex->nextToken();
+                return true;
+            case ':':
+                if( parseCtorInitializer() && parseCompoundStatement() )
+                    return true;
+                syntaxError();
+                return false;
+            case '{':
+                if( !parseCompoundStatement() ){
+                    syntaxError();
+                    return false;
+                }
+                return true;
+            }
+        }
+        syntaxError();
+        return false;
+    }
+
+    lex->setIndex( index );
+
+    if( lex->lookAhead(0) == Token_const && lex->lookAhead(1) == Token_identifier && lex->lookAhead(2) == '=' ){
+        // constant definition
+        lex->nextToken();
+        if( parseInitDeclaratorList() ){
+            ADVANCE( ';', ";" );
+            //kdDebug(9007) << "found constant definition" << endl;
+            return true;
+        }
+        syntaxError();
+        return false;
+    }
+
+    QStringList cv;
+    parseCvQualify( cv );
+
+    if( parseTypeSpecifier() ){
+
+        if( lex->lookAhead(0) == ';' ){
+            // type definition
+            lex->nextToken();
+            return true;
+        }
+
+        if( parseNestedNameSpecifier() ) {
+            // maybe a method declaration/definition
+            if ( !parseDeclarator() ) {
+                syntaxError();
+                return false;
+            }
+        } else if ( !parseInitDeclaratorList() ) {
+            syntaxError();
+            return false;
+        }
+
+        switch( lex->lookAhead(0) ){
+        case ';':
+            lex->nextToken();
+            //kdDebug(9007) << "found function/field declaration" << endl;
+            return true;
+
+        case '{':
+            if ( parseCompoundStatement() ) {
+                //kdDebug(9007) << "found function definition" << endl;
+                return true;
+            }
+            break;
+
+        default:
+            syntaxError();
+            return false;
+        }
+    }
+
+    syntaxError();
+    return false;
 }
