@@ -997,8 +997,15 @@ void CKDevelop::setToolMenuProcess(bool enable){
       enableCommand(ID_PROJECT_MESSAGES);
     }
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
-    enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-		enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+
+    // we don´t support docbook -> html, yet!
+    if (prj->getProjectType()=="normal_kde2" || prj->getProjectType()=="mini_kde2" ||
+        prj->getProjectType()=="mdi_kde2")
+      disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+    else
+      enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+
+    enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
   }
   else
