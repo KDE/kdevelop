@@ -504,10 +504,7 @@ void PartController::slotFileNameChanged()
 
 QPopupMenu *PartController::contextPopupMenu()
 {
-  /* static */ QPopupMenu *popup = 0;
-
-  if (!popup)
-    popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
+    QPopupMenu * popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
 
   kdDebug( 9000 ) << "PartController::contextPopupMenu() will return " << popup << endl;
 
@@ -763,7 +760,7 @@ void PartController::slotOpenFile()
 {
   KURL::List fileNames = KFileDialog::getOpenURLs(QString::null, QString::null, TopLevel::getInstance()->main(), QString::null);
 
-  for ( KURL::List::Iterator it = fileNames.begin(); it != fileNames.end(); ++it ) 
+  for ( KURL::List::Iterator it = fileNames.begin(); it != fileNames.end(); ++it )
   {
     editDocument( *it );
     m_openRecentAction->addURL( *it );
