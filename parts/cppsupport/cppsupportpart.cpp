@@ -123,6 +123,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
 
+#ifdef ENABLE_FILE_STRUCTURE
     m_structureView = new KListView();
     QFont f = m_structureView->font();
     f.setPointSize( 8 );
@@ -132,6 +133,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_structureView->header()->hide();
     mainWindow()->embedSelectViewRight( m_structureView, i18n("File Structure"), i18n("Show the structure for the current source unit") );
     connect( m_structureView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
+#endif
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -204,11 +206,15 @@ CppSupportPart::~CppSupportPart()
     m_backgroundParser->wait();
 
     mainWindow( )->removeView( m_problemReporter );
+#ifdef ENABLE_FILE_STRUCTURE
     mainWindow()->removeView( m_structureView );
+#endif
 
     delete m_backgroundParser;
     delete m_pCompletion;
+#ifdef ENABLE_FILE_STRUCTURE
     delete m_structureView;
+#endif
     delete m_problemReporter;
 }
 
@@ -228,6 +234,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	}
 
+#ifdef ENABLE_FILE_STRUCTURE
 	if( fileName == m_activeFileName ){
 	    TranslationUnitAST* ast = m_backgroundParser->translationUnit( fileName );
 	    if( ast ){
@@ -235,6 +242,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		b.parseTranslationUnit( ast );
 	    }
 	}
+#endif
 
 	m_backgroundParser->unlock();
     } else if( ev->type() == int(Event_FileParsed) ){
@@ -274,7 +282,9 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     bool enabled = false;
 
+#ifdef ENABLE_FILE_STRUCTURE
     m_structureView->clear();
+#endif
 
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
