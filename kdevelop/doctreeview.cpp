@@ -136,6 +136,7 @@ public:
 	{ setExpandable(expandable); }
     virtual void setOpen(bool o);
 private:
+    void readSgmlIndex(FILE *f);
     static QString locatehtml(const char *filename);
 };
 
@@ -150,48 +151,61 @@ QString DocTreeKDevelopBook::locatehtml(const char *filename)
 }
 
 
+QString removeHTML(const QString &str)
+{
+    QString res = str;
+    int pos;
+    while ( (pos = res.find('<')) != -1)
+	{
+	    int pos2 = res.find('>', pos);
+	    if (pos2 == -1)
+		pos2 = res.length();
+	    res.remove(pos, pos2-pos+1);
+	}
+    return res;
+}
+
+
+void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
+{
+    char buf[512];
+    while (fgets(buf, sizeof buf, f))
+	{
+	    // HTML files produced by sgml2html have toc's like the following:
+	    // <H2><A NAME="toc1">1.</A> <A HREF="index-1.html">Introduction</A></H2>
+	    QString s = buf;
+	    if (s.find("<H2>") == -1)
+		continue;
+	    int pos1 = s.find("A HREF=\"");
+	    if (pos1 == -1)
+		continue;
+	    int pos2 = s.find('"', pos1+8);
+	    if (pos2 == -1)
+		continue;
+	    int pos3 = s.find('<', pos2+1);
+	    if (pos3 == -1)
+		continue;
+	    QString filename = s.mid(pos1+8, pos2-(pos1+8));
+	    QString title = s.mid(pos2+2, pos3-(pos2+2));
+	    QFileInfo fi(ident());
+	    QString path = fi.dirPath() + "/" + filename;
+	    new ListViewDocItem(this, title, path);
+	}
+}
+
+
 void DocTreeKDevelopBook::setOpen(bool o)
 {
     if (o && childCount() == 0)
 	{
-	    // Preliminary hack, only for user manual
-	    if (ident().find("kdevelop/index.html") != -1)
+	    FILE *f;
+	    if ( (f = fopen(ident(), "r")) != 0)
 		{
-		    QString pathbase = ident().left(ident().length()-5);
-		    QString path;
-		    path = pathbase + "-1.html";
-		    new ListViewDocItem(this, i18n("Introduction"), path);
-		    path = pathbase + "-2.html";
-		    new ListViewDocItem(this, i18n("Installation"), path);
-		    path = pathbase + "-3.html";
-		    new ListViewDocItem(this, i18n("Programs"), path);
-		    path = pathbase + "-4.html";
-		    new ListViewDocItem(this, i18n("Development with KDevelop"), path);
-		    path = pathbase + "-5.html";
-		    new ListViewDocItem(this, i18n("Overview"), path);
-		    path = pathbase + "-6.html";
-		    new ListViewDocItem(this, i18n("The Help System"), path);
-		    path = pathbase + "-7.html";
-		    new ListViewDocItem(this, i18n("Working with the Editor"), path);
-		    path = pathbase + "-9.html";
-		    new ListViewDocItem(this, i18n("Projects"), path);
-		    path = pathbase + "-9.html";
-		    new ListViewDocItem(this, i18n("Build Settings"), path);
-		    path = pathbase + "-10.html";
-		    new ListViewDocItem(this, i18n("The Class Browser"), path);
-		    path = pathbase + "-11.html";
-		    new ListViewDocItem(this, i18n("The Dialog Editor"), path);
-		    path = pathbase + "-12.html";
-		    new ListViewDocItem(this, i18n("General Configuration"), path);
-		    path = pathbase + "-13.html";
-		    new ListViewDocItem(this, i18n("Questions and Answers"), path);
-		    path = pathbase + "-14.html";
-		    new ListViewDocItem(this, i18n("Authors"), path);
-		    path = pathbase + "-15.html";
-		    new ListViewDocItem(this, i18n("Thanks"), path);
-		    path = pathbase + "-16.html";
-		    new ListViewDocItem(this, i18n("Copyright"), path);
+		    readSgmlIndex(f);
+		    fclose(f);
 		}
+	    else
+		setExpandable(false);
 	}
     ListViewBookItem::setOpen(o);
 }
@@ -214,11 +228,11 @@ void DocTreeKDevelopFolder::refresh()
     (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
 				   "index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
-				   "programming.html");
+				   "programming.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),
-				   "tutorial.html");
+				   "tutorial.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
-				   "kde_libref.html");
+				   "kde_libref.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
 				   "cref.html");
 }
@@ -240,9 +254,9 @@ class DocTreeKDELibsBook : public ListViewBookItem
 public:
     DocTreeKDELibsBook( KListViewItem *parent, const char *text,
 			const char *libname);
-    void readKdoc2Index(FILE *f);
     virtual void setOpen(bool o);
 private:
+    void readKdoc2Index(FILE *f);
     static QString locatehtml(const char *libname);
     QString idx_filename;
 };
@@ -331,6 +345,8 @@ void DocTreeKDELibsBook::setOpen(bool o)
 		    readKdoc2Index(f);
 		    pclose(f);
 		}
+	    else
+		setExpandable(false);
 	}
     ListViewBookItem::setOpen(o);
 }
