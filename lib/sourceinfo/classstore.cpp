@@ -599,10 +599,12 @@ QValueList<ParsedClass*> ClassStore::getSortedClassList()
 {
     QValueList<ParsedClass*> list = globalContainer.getSortedClassList();
     ParsedClass *aClass;
-    
+
     // Remove all non-global classes.
-    QValueList<ParsedClass*>::Iterator it;
-    for (it = list.begin(); it != list.end(); ++it) {
+    QValueList<ParsedClass*>::Iterator it, newit;
+    for (it = list.begin(); it != list.end(); it = newit) {
+        // Attention: remove() invalidates the iterator
+        newit = it; ++newit;
         if ( !(*it)->declaredInScope().isEmpty() )
             list.remove(it);
     }
