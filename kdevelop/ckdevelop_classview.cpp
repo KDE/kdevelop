@@ -586,12 +586,13 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
-      if( aContainer )
-        aMethod = aContainer->getMethodByNameAndArg( itemName );
-      if(!aMethod)
-        aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
-      if(!aMethod)
-        aMethod = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
+      if( aContainer ){
+          aMethod = aContainer->getMethodByNameAndArg( itemName );
+        if(!aMethod)
+          aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+        if(!aMethod)
+          aMethod = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
+      }
       break;
     case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
@@ -603,14 +604,14 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
     return;
   }
+  // now a new switch for the attributes
+  else if(aContainer && aContainer->hasAttribute(itemName) ){
+    aAttr = aContainer->getAttributeByName( itemName );
+  }
   else{
     CVGotoDeclaration( parentPath,itemName,parentType,itemType );
     debug( "Couldn't find method %s::%s", parentPath, itemName );
     return;
-  }
-  // now a new switch for the attributes
-  if(aContainer->hasAttribute(itemName) ){
-    aAttr = aContainer->getAttributeByName( itemName );
   }
 
   // Fetch the line and file from the attribute if the value is set.
