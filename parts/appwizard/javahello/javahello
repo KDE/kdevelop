@@ -5,6 +5,6 @@ Name[fr]=Application
 Icon=qmakeapp.png
 Category=Java/Ant project
 Comment=Generate a Java application
-Comment[fr]=Génère une application JAVA
+Comment[fr]=Génère une application dans le language JAVA
 FileTemplates=java,JavaStyle
 
