@@ -48,9 +48,9 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     m_base = new PartExplorerFormBase( this, "partexplorerformbase" );
     this->setMainWidget( m_base );
 
-	setButtonText( User1, i18n("&Start query") );
+    setButtonText( User1, i18n("&Start query") );
 
-	connect( this, SIGNAL(user1Clicked()), this, SLOT(slotSearchRequested()) );
+    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotSearchRequested()) );
     connect( m_base->lineEditType, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
     connect( m_base->lineEditCostraints, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 }
@@ -74,9 +74,9 @@ void PartExplorerForm::slotSearchRequested()
         return;
     }
 
-	// Query for requested services
+    // Query for requested services
     KTrader::OfferList foundServices = KTrader::self()->query( serviceType, costraints );
-	fillWidget( foundServices );
+    fillWidget( foundServices );
 }
 
 void PartExplorerForm::slotDisplayError( QString errorMessage )

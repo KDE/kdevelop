@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevPartExplorer" version="1">
 <MenuBar>
-	<Menu name="tools" >
-		<Action name="show_partexplorerform"/>
-		<Merge/>
-	</Menu>
+    <Menu name="tools" >
+        <Action name="show_partexplorerform"/>
+        <Merge/>
+    </Menu>
 </MenuBar>
 </kpartgui>
