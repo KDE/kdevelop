@@ -159,6 +159,7 @@ static QString remove_comment( QString text ){
     return s;
 }
 
+#if 0
 static QString purify( const QString& decl )
 {
     QString s = decl;
@@ -172,6 +173,7 @@ static QString purify( const QString& decl )
 
     return s;
 }
+#endif
 
 CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 {
@@ -553,10 +555,10 @@ CppCodeCompletion::evaluateExpression( const QString& e, SimpleContext* ctx )
 	}
 
 	if( type.isEmpty() )
-	    type = purify( typeOf(e, container) );
+	    type = typeName( typeOf(e, container) );
 
 	if( type.isEmpty() && it == exprList.begin() )
-	    type = purify( typeOf(e) );
+	    type = typeName( typeOf(e) );
 
 	if( type.isEmpty() || !(container = findContainer(type)) )
 	    break;
