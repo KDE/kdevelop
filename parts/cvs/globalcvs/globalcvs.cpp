@@ -28,10 +28,10 @@ GlobalCvs::GlobalCvs(QObject *parent, const char *name, const QStringList &)
     setInstance(GlobalCvsFactory::instance());
     setXMLFile("kdevglobalcvs.rc");
 
-    KAction * action = new KAction( i18n("Import Cvs Repository..."),"wizard", 0,
+/*    KAction * action = new KAction( i18n("Import Cvs Repository..."),"wizard", 0,
                                     this, SLOT(slotImportCvs()),
                                     actionCollection(), "cvs_import" );
-    action->setStatusText( i18n("Imports an existing Cvs repository.") );
+    action->setStatusText( i18n("Imports an existing Cvs repository.") ); */
 }
 
 
