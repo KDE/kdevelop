@@ -38,24 +38,24 @@ Type=install
 Source=%{src}/mainviewimp.cpp
 Dest=%{dest}/src/mainviewimp.cpp
 
-[FILE6]
+[FILE7]
 Type=install
 Source=%{src}/mainviewimp.h
 Dest=%{dest}/src/mainviewimp.h
 
-[FILE6]
+[FILE8]
 Type=install
 EscapeXML=true
 Source=%{src}/mainview.ui
 Dest=%{dest}/src/mainview.ui
 
-[FILE6]
+[FILE9]
 Type=install
 EscapeXML=true
 Source=%{src}/appui.rc
-Dest=%{dest}/src/appui.rc
+Dest=%{dest}/src/%{APPNAMELC}.rc
 
-[FILE6]
+[FILE10]
 Type=install
 Source=%{src}/app.desktop
 Dest=%{dest}/src/%{APPNAMELC}.desktop

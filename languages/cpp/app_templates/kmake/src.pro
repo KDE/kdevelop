@@ -10,8 +10,8 @@ KDEINCLUDE=$$KDEPREFIX/include/kde $$KDEPREFIX/include
 
 TEMPLATE = app
 
-INSTALLS += %{APPNAMELC}.rc \
-            %{APPNAMELC}.desktop \
+INSTALLS += %{APPNAMELC}_rc \
+            %{APPNAMELC}_desktop \
             target 
 target.path = $$KDEBIN 
 %{APPNAMELC}_desktop.files += *.desktop 
