@@ -883,9 +883,15 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->removeValues("HEADERS");
   subBuffer->setValues("HEADERS",spitem->headers,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("HEADERS",spitem->headers_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  subBuffer->removeValues("FORMS");
-  subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  if( m_part->isTMakeProject() ) {
+      subBuffer->removeValues("INTERFACES");
+      subBuffer->setValues("INTERFACES",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+      subBuffer->setValues("INTERFACES",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  } else {
+      subBuffer->removeValues("FORMS");
+      subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+      subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  }
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
 }
 
@@ -1453,12 +1459,18 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 
     QStringList minusListDummy;
     FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
-    subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
+    if( m_part->isTMakeProject() )
+	subBuffer->getValues("INTERFACES",item->forms,item->forms_exclude);
+    else
+	subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
+    
     subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
 
     // Create list view items
-    GroupItem *titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
+    GroupItem *titem = createGroupItem(GroupItem::Forms, 
+				       (m_part->isTMakeProject() ? "INTERFACES" : "FORMS"),
+				       scopeString);
     item->groups.append(titem);
     titem->owner = item;
     if (!item->forms.isEmpty()) {
