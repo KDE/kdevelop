@@ -292,8 +292,13 @@ bool CRealFileView::isInstalledFile(QString filename)
 
 void CRealFileView::slotSelectionChanged(QListViewItem* selection) 
 {
-  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER ||
-      mouseBtn == MidButton && treeH->itemType() != THFOLDER)
+  THType itemType=treeH->itemType();
+
+  // this patch is needed, if we change back the root icon to THPROJECT
+  // it doesn't disturb the current settings, i did this to sync the branches
+  //  W. Tasin
+  if( itemType!=THFOLDER && itemType!=THPROJECT &&
+	(mouseBtn == LeftButton || mouseBtn == MidButton))
     emit fileSelected(getFullFilename(selection));
 }
 
