@@ -51,6 +51,8 @@
 CParsedMethod::CParsedMethod()
 {
   arguments.setAutoDelete( true );
+  isVirtual = false;
+  declaredOnLine = 0;
 }
 
 /*----------------------------------- CParsedMethod::~CParsedMethod()

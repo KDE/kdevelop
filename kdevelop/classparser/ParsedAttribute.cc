@@ -53,6 +53,8 @@ CParsedAttribute::CParsedAttribute()
   isConst = false;
   isStatic = false;
   isInHFile = true;
+  definedOnLine = -1;
+  export = CPGLOBAL;
 }
 
 /*----------------------------- CParsedAttribute::~CParsedAttribute()
