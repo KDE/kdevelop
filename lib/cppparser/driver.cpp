@@ -102,7 +102,7 @@ void Driver::remove( const QString & fileName )
     QMap<QString, TranslationUnitAST*>::Iterator it = m_parsedUnits.find( fileName );
     if( it != m_parsedUnits.end() ){
 	TranslationUnitAST* unit = *it;
-	m_parsedUnits.remove( fileName );
+	m_parsedUnits.remove( it );
 	delete( unit );
     }
 }
