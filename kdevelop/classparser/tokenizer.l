@@ -73,6 +73,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "union"         {return CPUNION;}
 "operator"      {return CPOPERATOR;}
 "template"      {return CPTEMPLATE;}
+"throw"         {return CPTHROW;}
 
     /*==============> Ignored stuff <==============*/
 "Q_EXPORT"       {}

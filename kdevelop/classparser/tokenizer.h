@@ -61,6 +61,8 @@
 #define CPOPERATOR     278
 #define CPTEMPLATE     279
 #define NUM            280
+#define CPTHROW        281
+
 typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;
