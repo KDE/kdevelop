@@ -862,7 +862,7 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
 {
   QString stateIndicator("P");		// default to "paused"
 
-  if (state & (s_appBusy|s_waitForWrite))
+  if (state & s_appBusy)
     stateIndicator = "A";
 
   if (state & (s_dbgNotStarted|s_appNotStarted))
