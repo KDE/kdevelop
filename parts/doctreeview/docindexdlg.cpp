@@ -17,6 +17,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qvbuttongroup.h>
+#include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kcombobox.h>
 #include <kdebug.h>
