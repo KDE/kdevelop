@@ -108,8 +108,8 @@ protected: // Protected signals and slots
     void selectedProjectOptions();
     void selectedViewDeclaration(const char *, const char *,THType);
     void selectedViewDefinition(const char *, const char *,THType);
-    void signalAddMethod( CParsedMethod * );
-    void signalAddAttribute( CParsedAttribute * );
+    void signalAddMethod( const char * );
+    void signalAddAttribute( const char * );
 
 protected: // Implementations of virtual methods.
 

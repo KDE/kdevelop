@@ -24,8 +24,6 @@
 #include <qprogressdialog.h> 
 #include <qmessagebox.h>
 
-#include "caddclassmethoddlg.h"
-#include "caddclassattributedlg.h"
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
 
@@ -109,7 +107,9 @@ void CClassView::initPopups()
   classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
-  classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()));
+  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()));
+  classPopup.setItemEnabled( id, false );
+
   classPopup.insertSeparator();
   classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()));
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
@@ -721,17 +721,7 @@ void CClassView::slotClassViewSelected()
 
 void CClassView::slotMethodNew()
 {
-  CParsedMethod *aMethod;
-  CAddClassMethodDlg dlg(this, "methodDlg" );
-  QString str;
-  
-  if( dlg.exec() )
-  {
-    aMethod = dlg.asSystemObj();
-    aMethod->setDeclaredInClass( currentItem()->text( 0 ) );
-
-    emit signalAddMethod( aMethod );
-  }
+  emit signalAddMethod( currentItem()->text( 0 ) );
 }
 
 void CClassView::slotMethodDelete()
@@ -747,15 +737,7 @@ void CClassView::slotMethodDelete()
 
 void CClassView::slotAttributeNew()
 {
-  CAddClassAttributeDlg dlg(this, "attrDlg" );
-  CParsedAttribute *aAttr;
-
-  if( dlg.exec() )
-  {
-    aAttr = dlg.asSystemObj();
-
-    emit signalAddAttribute( aAttr );
-  }
+  emit signalAddAttribute( currentItem()->text( 0 ) );
 }
 
 void CClassView::slotAttributeDelete()
