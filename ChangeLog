@@ -1,18 +1,21 @@
+2002-07-30 Harald Fernengel <harry@kdevelop.org>
+	* Added a "diff frontend" to allow other plugins use the diff part.
+	* Implemented it for CVS, so you can now view the differences to the
+          repository.
+
 2002-07-29 Harald Fernengel <harry@kdevelop.org>
 	* Added a part to show diffs either in the widget from Kompare (->KDESDK)
           or in a QTextEdit if Kompare is not installed.
-	* TODO: Use it in the version management parts and allow applying/reverting of patches
 
 2002-07-27 Matthias Hölzer-Klüpfel <mhk@kde.org>
-
 	* Added a part for ant based projects.
-	
+
 2002-07-24 Roberto Raggi <raggi@cli.di.unipi.it>
 	* added a new java parser based on ANTLR
 
 2002-07-23 Roberto Raggi <raggi@cli.di.unipi.it>
 	* updated qeditor to qt 3.0.5
-	
+
 2002-07-19 Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* changes concerning the classstore are taking effect without restarting
 	* parsing of project directory works again without having persistance :)
