@@ -164,7 +164,7 @@ KHTMLPart* EditorManager::findOpenHTMLViewer(const KURL& url)
 void EditorManager::gotoSourceFile(const KURL& url, int lineNum)
 {
   kdDebug(9000) << "KDevelopCore::gotoSourceFile File:" << url.prettyURL()
-		<< " Line: " << QString::number(lineNum) 
+		<< " Line: " << QString::number(lineNum)
 		<< endl;
 
   KTextEditor::Document *document = findOpenDocument(url);
@@ -220,6 +220,9 @@ KTextEditor::Document* EditorManager::openDocument(const KURL& url)
   document->openURL(url);
 
   EditorView* view = new EditorView(document, (QWidget*)parent(), url.path());
+
+  view->setCaption(url.filename());
+
   emit embedWidget(view, DocumentView, url.path(), i18n("Editor view"));
   return document;
 }
