@@ -1,3 +1,6 @@
+1999-07-04  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed bug in RFV, when deleting a file from disc
+
 1999-07-04  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added a long passage on kde/qt event handling and signal/slot mechanism to kde_libref
 	* fixed i18n() bug in enscript configuration dialog
@@ -7,7 +10,7 @@
 	* added "Modify Makefiles" to project options, TODO: make sgml handbook generation configurable
 	* bugreport remembers email/name/compiler/kde_version ... , BRNR [19:58,20.06.99]
 	* fixed problem with "preview dialog" in multiuser environments,
- 	* added QuickHelp and Tooltip to the widgetsproperties : TODO: add this feature to "dialog preview"
+ 	* added QuickHelp and Tooltip to the widget-properties : TODO: add this feature to "dialog preview"
 
 1999-07-02  Sandy Meier <smeier@rz.uni-potsdam.de> 
 	* next/previews error message are now displayed on statusbar

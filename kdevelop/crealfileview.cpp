@@ -297,6 +297,7 @@ void CRealFileView::slotDeleteFilePhys() {
   filename = getFullFilename(currentItem());
   QFile::remove(filename);
 
+  filename=getRelFilename(currentItem());
   if (isInstalledFile(filename)) {
     emit removeFileFromProject(filename);
 }

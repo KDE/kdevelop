@@ -101,7 +101,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   modifymakefiles_checkbox = new QCheckBox( w, "" );
-  modifymakefiles_checkbox->setGeometry( 10, 220, 280, 20 );
+  modifymakefiles_checkbox->setGeometry( 10, 220, 290, 20 );
   modifymakefiles_checkbox->setText( i18n("Modify Makefiles") );
   modifymakefiles_checkbox->setChecked(prj->getModifyMakefiles());
     
