@@ -94,6 +94,13 @@ public:
   void initStatusBar();
   void initWhatsThis();
   void initProject();
+
+  /** Remove a specified file from the edit_infos struct
+   *  and leave the widgets in a proper state
+   *  @param filename           The filename you want to remove.
+   */
+  void removeFileFromEditlist(const char *filename);
+
   void refreshTrees();
   void refreshTrees(TFileInfo *info);
 

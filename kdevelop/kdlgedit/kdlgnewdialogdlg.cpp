@@ -373,7 +373,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 
 	// other settings
 	loc_edit->setText(prj->getProjectDir() + prj->getSubDir());
-	setCaption(i18n("New Dialog..."));
+	setCaption(i18n("Generate Dialog... (C++ Sourcecode)"));
 
 	header_modified = false;
 	source_modified = false;

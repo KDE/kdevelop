@@ -39,6 +39,7 @@
 #include <kfm.h>
 #include <kcolorbtn.h>
 #include <kcursor.h>
+#include <kprocess.h>
 
 #include "resource.h"
 
@@ -72,22 +73,17 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
 }
 
 CDocBrowser::~CDocBrowser(){
+   delete doc_pop;
 }
 
 
 
 void CDocBrowser::slotViewInKFM(){
+
+    KProcess showHTML;
+    showHTML << "kfmclient" << "openURL" << currentURL();
+    showHTML.start(KProcess::DontCare);
 	
-  if(vfork() > 0) {
-		QString url=currentURL();
-    // drop setuid, setgid
-    setgid(getgid());
-    setuid(getuid());
-
-    execlp("kfmclient", "kfmclient", "exec", url.data(), 0);
-    _exit(0);
-  }
-
 }
 
 void CDocBrowser::showURL(QString url,bool reload){
@@ -96,14 +92,9 @@ void CDocBrowser::showURL(QString url,bool reload){
 
   if(url.left(7) == "http://"){
 
-    if(vfork() > 0) {
-      // drop setuid, setgid
-      setgid(getgid());
-      setuid(getuid());
-      
-      execlp("kfmclient", "kfmclient", "exec", url.data(), 0);
-      _exit(0);
-    }
+    KProcess showHTML;
+    showHTML << "kfmclient" << "openURL" << url;
+    showHTML.start(KProcess::DontCare);
     return;
   }
   

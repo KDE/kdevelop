@@ -1,3 +1,9 @@
+
+1999-06-10  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* implemented complete new dialog-handling to support both concepts: 
+	kdlgloader and sourcecode generation
+	* commit patch by Walter Tasin (many bugfixes :-))
+
 1999-06-09  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed label alignment in KAppWizard, added some menubar icons and statusbarhelp for editor/browser popups
 	

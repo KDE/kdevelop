@@ -29,6 +29,80 @@
 #include "./kdlgedit/kdlgreadmedlg.h"
 
 
+void CKDevelop::removeFileFromEditlist(const char *filename){
+  TEditInfo* actual_info;
+
+//search the actual edit_info and remove it
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+    if (actual_info->filename == filename){ // found
+//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
+      menu_buffers->removeItem(actual_info->id);
+      if(edit_infos.removeRef(actual_info)){
+//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
+      }
+    }
+  }
+
+  // was this file in the cpp_widget?
+  if (cpp_widget->getName() == filename)
+  {
+    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+      // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
+      if ( CProject::getType( actual_info->filename ) == CPP_SOURCE)
+      { // found
+        cpp_widget->setText(actual_info->text);
+        cpp_widget->toggleModified(actual_info->modified);
+        cpp_widget->setName(actual_info->filename);
+        setCaption(actual_info->filename);
+  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
+        return;
+      }
+    }
+
+    // if not found a successor create an new file
+    actual_info = new TEditInfo;
+    actual_info->modified=false;
+    actual_info->id = menu_buffers->insertItem("Untitled.cpp",-2,0);
+    actual_info->filename = "Untitled.cpp";
+
+    edit_infos.append(actual_info);
+
+    cpp_widget->clear();
+    cpp_widget->setName(actual_info->filename);
+    setCaption(cpp_widget->getName());
+  }
+
+  // was this file in the header_widget?
+  if (header_widget->getName() == filename)
+  {
+    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+      // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
+      if ( CProject::getType( actual_info->filename ) != CPP_SOURCE)
+      { // found
+        header_widget->setText(actual_info->text);
+        header_widget->toggleModified(actual_info->modified);
+        header_widget->setName(actual_info->filename);
+        setCaption(actual_info->filename);
+  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
+        return;
+      }
+    }
+
+    // if not found a successor create an new file
+    actual_info = new TEditInfo;
+    actual_info->modified=false;
+    actual_info->id = menu_buffers->insertItem("Untitled.h",-2,0);
+    actual_info->filename = "Untitled.h";
+
+    edit_infos.append(actual_info);
+
+    header_widget->clear();
+    header_widget->setName(actual_info->filename);
+    setCaption(header_widget->getName());
+  }
+
+}
+
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
   if (!project){
@@ -59,18 +133,18 @@ void CKDevelop::refreshTrees(){
   // update the file_open_menu
   file_open_list=prj->getHeaders();
   QStrList sources=prj->getSources();
-	uint j;
-	for( j=0; j< sources.count(); j++){
-		file_open_list.append(sources.at(j));
-	}
-	// create the file_open_popup for the toolbar
-	file_open_popup->clear();
-	uint i;
- 	for ( i =0 ; i < file_open_list.count(); i++){
- 		QFileInfo fileInfo (file_open_list.at(i));
-  	file_open_popup->insertItem(fileInfo.fileName());
+  uint j;
+  for( j=0; j< sources.count(); j++){
+    file_open_list.append(sources.at(j));
   }
-
+  // create the file_open_popup for the toolbar
+  file_open_popup->clear();
+  uint i;
+  for ( i =0 ; i < file_open_list.count(); i++){
+    QFileInfo fileInfo (file_open_list.at(i));
+    file_open_popup->insertItem(fileInfo.fileName());
+  }
+  
   slotStatusMsg(i18n("Ready."));
 }
  
@@ -88,34 +162,37 @@ void CKDevelop::refreshTrees(){
 void CKDevelop::refreshTrees(TFileInfo *info)
 {
   if( project )
-  {
-    // If this is a sourcefile we parse it and update the classview.
-    if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
     {
-      class_tree->addFile( prj->getProjectDir() + info->rel_name );
-      refreshClassCombo();
+      // If this is a sourcefile we parse it and update the classview.
+      if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
+	{
+	  class_tree->addFile( prj->getProjectDir() + info->rel_name );
+	  refreshClassCombo();
+	}
+      
+      // Update LFV.
+      log_file_tree->storeState(prj);
+      log_file_tree->refresh(prj);
+      
+      // Update RFV.
+      real_file_tree->refresh(prj);
+      // update dialogs tree
+      kdlg_dialogs_view->refresh(prj);
+      
     }
-
-    // Update LFV.
-    log_file_tree->storeState(prj);
-    log_file_tree->refresh(prj);
-    
-    // Update RFV.
-    real_file_tree->refresh(prj);
-  }
   // refresh the file_open_list
   file_open_list=prj->getHeaders();
   QStrList sources=prj->getSources();
-	uint j;
-	for( j=0; j< sources.count(); j++){
-		file_open_list.append(sources.at(j));
-	}
-	// create the file_open_popup for the toolbar
-	file_open_popup->clear();
-	uint i;
- 	for ( i =0 ; i < file_open_list.count(); i++){
- 		QFileInfo fileInfo (file_open_list.at(i));
-  	file_open_popup->insertItem(fileInfo.fileName());
+  uint j;
+  for( j=0; j< sources.count(); j++){
+    file_open_list.append(sources.at(j));
+  }
+  // create the file_open_popup for the toolbar
+  file_open_popup->clear();
+  uint i;
+  for ( i =0 ; i < file_open_list.count(); i++){
+    QFileInfo fileInfo (file_open_list.at(i));
+    file_open_popup->insertItem(fileInfo.fileName());
   }
 }
 
@@ -250,7 +327,14 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
       //      output_widget->append ("File: was was already there");
-      setCaption(prj->getProjectName() +" - KDevelop " + version + " - [" + QFileInfo(filename).fileName()+"]");
+      if(project){
+  	setCaption(prj->getProjectName()+" - KDevelop " + version + 
+             " - ["+ QFileInfo(filename).fileName()+"]");
+ 	}
+ 	else{
+  	setCaption("KDevelop " + version + 
+             " - ["+ QFileInfo(filename).fileName()+"]");
+      }
       return;
     }
   }
@@ -275,12 +359,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
   if(project){
-  	setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
- 	}
- 	else{
-  	setCaption("KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
+    setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
   }
-
+  else{
+    setCaption("KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
+  }
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){

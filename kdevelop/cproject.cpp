@@ -127,6 +127,24 @@ void CProject::writeFileInfo(TFileInfo info){
   config.writeEntry("install_location",info.install_location);
 }
 
+void CProject::writeDialogFileInfo(TDialogFileInfo info){
+  config.setGroup( info.rel_name );
+  config.writeEntry("type", "KDEV_DIALOG" );
+  config.writeEntry("dist",info.dist);
+  config.writeEntry("install",info.install);
+  // save the $ because kconfig removes one
+  info.install_location.replace("[\\$]","$$");
+  config.writeEntry("install_location",info.install_location);
+
+  config.writeEntry("baseclass",info.baseclass);
+  config.writeEntry("widget_files",info.widget_files);
+  config.writeEntry("is_toplevel_dialog",info.is_toplevel_dialog);
+  config.writeEntry("header_file",info.header_file);
+  config.writeEntry("cpp_file",info.header_file);
+  config.writeEntry("data_file",info.data_file);
+  config.writeEntry("classname",info.classname);
+  
+}
 // void CProject::writeMakefileAmInfo(TMakefileAmInfo info){
 //   QString rel_name = info.rel_name;
 //   config.setGroup(rel_name);

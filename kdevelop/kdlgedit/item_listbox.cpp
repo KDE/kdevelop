@@ -97,5 +97,18 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   if(Prop2Str("setFixedVisibleLines") != ""){
     itm->setFixedVisibleLines(Prop2Int("setFixedVisibleLines"));
   }
+  // itm->clear();
 
+//   int i = 0;
+//   QString src = Prop2Str("Entries");
+//   if(src != ""){
+    
+//     QString s;
+//     s = getLineOutOfString(src,i,"\\n");
+//     while (!s.isNull()){
+// 	itm->insertItem(s);
+// 	i++;
+// 	s = getLineOutOfString(src,i,"\\n");
+//       }
+//   }
 }

@@ -84,4 +84,6 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
 
   itm->setText(Prop2Str("Text"));
+
+  
 }

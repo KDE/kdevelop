@@ -87,4 +87,19 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
 
   KDlgItem_Base::repaintItem(itm);
   itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
+
+  itm->clear();
+
+  int i = 0;
+  QString src = Prop2Str("Entries");
+  if(src != ""){
+    
+    QString s;
+    s = getLineOutOfString(src,i,"\\n");
+    while (!s.isNull()){
+	itm->insertItem(s);
+	i++;
+	s = getLineOutOfString(src,i,"\\n");
+      }
+  }
 }

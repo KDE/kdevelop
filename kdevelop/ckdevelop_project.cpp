@@ -33,6 +33,7 @@
 #include "./kdlgedit/kdlgeditwidget.h"
 #include "./kdlgedit/kdlgpropwidget.h"
 #include "./kdlgedit/kdlgdialogs.h"
+#include "./kdlgedit/kdlgedit.h"
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -220,6 +221,8 @@ bool CKDevelop::slotProjectClose(){
     stdin_stdout_widget->clear();
     stderr_widget->clear();
     kdlg_dialogs_view->clear();
+
+    kdlgedit->slotFileSave();
     
     kdlg_edit_widget->hide();
     kdlg_prop_widget->hide();
@@ -259,7 +262,6 @@ bool CKDevelop::slotProjectClose(){
     switchToFile(header_widget->getName());
     
     disableCommand(ID_FILE_NEW);
-    disableCommand(ID_KDLG_FILE_NEW);
     disableCommand(ID_FILE_PRINT);
     // doc menu
     disableCommand(ID_HELP_PROJECT_API);
@@ -842,20 +844,38 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   rel_name.replace(QRegExp(prj->getProjectDir()),"");
   
   TFileInfo info;
-  info.rel_name = rel_name;
-  info.type = type;
-  info.dist = ( type != PO );
-
-  info.install=false;
-  info.install_location = "";
-  new_subdir = prj->addFileToProject(rel_name,info);
-  
+  if( type == KDEV_DIALOG){
+    TDialogFileInfo dinfo;
+    dinfo.rel_name = rel_name;
+    dinfo.type = type;
+    dinfo.dist = true;
+    dinfo.install = false;
+    //...
+    dinfo.is_toplevel_dialog = true;
+    
+    new_subdir = prj->addDialogFileToProject(dinfo.rel_name,dinfo);
+    //    ((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
+    //    ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
+    
+    info.rel_name = rel_name;
+  }
+  else{ // normal File
+    info.rel_name = rel_name;
+    info.type = type;
+    info.dist = ( type != PO );
+    
+    info.install=false;
+    info.install_location = "";
+    new_subdir = prj->addFileToProject(rel_name,info);
+    
+    
+  }
   prj->writeProject();
   prj->updateMakefilesAm();
-
+  
   if(refresh)
     refreshTrees(&info);
-
+  
   return new_subdir;
 }
 
@@ -925,7 +945,6 @@ bool CKDevelop::readProjectFile(QString file){
   }
   
   if(prj->isKDEProject() || prj->isQtProject()){
-    enableCommand(ID_KDLG_FILE_NEW);
     kdlg_tabctl->setTabEnabled("dialogs_view",true);
     kdlg_tabctl->setCurrentTab(1); // dialogs
   

@@ -63,8 +63,10 @@ void CKDevelop::initKDlg(){
   initKDlgMenuBar();
   initKDlgKeyAccel();
   initKDlgToolBar();
-
+  
   initKDlgStatusBar();
+
+  connect(kdlg_dialogs_view,SIGNAL(newDialog()),SLOT(slotFileNew()));
 }
 
 void CKDevelop::initKDlgMenuBar(){
@@ -75,8 +77,8 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // File-menu entries
   kdlg_file_menu= new QPopupMenu;
-  kdlg_file_menu->insertItem(Icon("newwidget.xpm"),i18n("&New Dialog..."), kdlgedit, SLOT(slotFileNew()), 0,ID_KDLG_FILE_NEW);
-  kdlg_file_menu->insertItem(Icon("open.xpm"), i18n("&Open..."), kdlgedit, SLOT(slotFileOpen()), 0, ID_KDLG_FILE_OPEN);
+  kdlg_file_menu->insertItem(Icon("newwidget.xpm"),i18n("&New..."), this, SLOT(slotFileNew()), 0,ID_FILE_NEW);
+  kdlg_file_menu->insertItem(Icon("open.xpm"), i18n("&Open..."), this, SLOT(slotFileOpen()), 0, ID_FILE_OPEN);
   kdlg_file_menu->insertItem(i18n("&Close"), kdlgedit, SLOT(slotFileClose()),0, ID_KDLG_FILE_CLOSE);
   kdlg_file_menu->insertSeparator();
   kdlg_file_menu->insertItem(Icon("save.xpm"), i18n("&Save"), kdlgedit, SLOT(slotFileSave()),0, ID_KDLG_FILE_SAVE);
@@ -263,9 +265,6 @@ void CKDevelop::initKDlgMenuBar(){
 
   disableCommand(ID_FILE_NEW);
   disableCommand(ID_FILE_PRINT);
-
-  disableCommand(ID_KDLG_FILE_NEW);
-  disableCommand(ID_KDLG_FILE_OPEN);
   disableCommand(ID_KDLG_FILE_CLOSE);
   disableCommand(ID_KDLG_FILE_SAVE);
   disableCommand(ID_KDLG_FILE_SAVE_AS);
@@ -323,8 +322,8 @@ void CKDevelop::initKDlgToolBar(){
 
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("openprj.xpm"),ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("newwidget.xpm"),ID_KDLG_FILE_NEW,false,i18n("New Dialog"));
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("open.xpm"),ID_KDLG_FILE_OPEN, true,i18n("Open Dialog"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("newwidget.xpm"),ID_FILE_NEW,false,i18n("New..."));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("open.xpm"),ID_FILE_OPEN, true,i18n("Open..."));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("save.xpm"),ID_KDLG_FILE_SAVE,true,i18n("Save Dialog"));
 
   QFrame *separatorLine= new QFrame(toolBar(ID_KDLG_TOOLBAR));

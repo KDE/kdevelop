@@ -29,9 +29,7 @@ void CKDevelop::initWhatsThis(){
 																															"Shows the open project dialog "
 																															"to select a project to be opened"));
 																																	
-	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_NEW),i18n("New file\n\n"
-																													"Shows the New file dialog to "
-																													"create a new dialog definition file"));
+
 	
 	whats_this->add(toolBar()->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
 																													"Shows the Open file dialog to "
@@ -43,9 +41,7 @@ void CKDevelop::initWhatsThis(){
 																													"then open the file according to the "
 																													"file-type."));
 	
-	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_OPEN),i18n("Open file\n\n"
-																													"Shows the Open file dialog to "
-																													"select a *.kdevdlg file to be opened"));
+													
 
 	whats_this->add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
 																													"Saves the file opened in the actual "

@@ -194,8 +194,6 @@
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-File-menu-entries
-#define ID_KDLG_FILE_NEW            20010
-#define ID_KDLG_FILE_OPEN           20020
 #define ID_KDLG_FILE_CLOSE          20030
 #define ID_KDLG_FILE_SAVE           20040
 #define ID_KDLG_FILE_SAVE_AS           20050

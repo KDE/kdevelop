@@ -13,12 +13,16 @@
 
 ***Translations***
 
--Ilmar Habibulin <ilmar@ints.ru>              - russian 
--Steen Rabol <rabol@get2net.dk>               - danish
--Martin Piskernig <martin.piskernig@stuwo.at> - german
--Salvador Gimeno <salgiza@eui.upv.es>	      - spanish
--Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>     - polnish
--Duarte Loreto <dnloreto@esoterica.pt>	      - portuguese
+-Ilmar Habibulin <ilmar@ints.ru>              - Russian 
+-Steen Rabol <rabol@get2net.dk>               - Danish
+-Martin Piskernig <martin.piskernig@stuwo.at> - German
+-Salvador Gimeno <salgiza@eui.upv.es>	      - Spanish
+-Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>     - Polish
+-Duarte Loreto <dnloreto@esoterica.pt>	      - Portuguese
+
+***startlogo*** 
+
+Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
 
 ***small patches and bugfixes***
 
@@ -31,6 +35,7 @@
 -Matt Koss <koss@napri.sk>
 -Bernd Gehrmann <bernd@physik.hu-berlin.de>
 -Walter Tasin <tasin@e-technik.fh-muenchen.de>
+-Torsten Uhlmann <TUhlmann@debis.com>
 
 KDevelop contains sourcecode from the following programs/classes:
 

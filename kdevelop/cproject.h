@@ -324,6 +324,7 @@ public: // Public methods
   void addLFVGroup(QString name,QString ace_group);
   void removeLFVGroup(QString name);
   void writeFileInfo(TFileInfo info);
+  void writeDialogFileInfo(TDialogFileInfo info);
   //  void writeMakefileAmInfo(TMakefileAmInfo info);
   /** return true if a new subdir was added to the project*/
   bool addFileToProject(QString rel_name,TFileInfo info);

@@ -41,12 +41,19 @@ public:
   signals:
   void kdlgdialogsSelected(QString dialog_file);
   void newDialog();
+  // *.kdevdlg
+  void deleteDialog(QString dialog_filename);
 public  slots:
 void slotSelectionChanged( QListViewItem* item);
   void slotNewDialog();
+  void slotDeleteDialog();
 protected:
 CProject*  project;
+  // only new
   KPopupMenu dialog_pop;
+  // new and delete
+  KPopupMenu dialog_pop2;
+
   QString current_dialog;
 };
 

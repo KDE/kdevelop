@@ -106,6 +106,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   type_combo->insertItem( "SCRIPT" );
   type_combo->insertItem( "DATA" );
   type_combo->insertItem( "PO" );
+  type_combo->insertItem( "KDEV_DIALOG" );
   
   size_label = new QLabel( this, "size_label" );
   size_label->setGeometry( 350, 80, 60, 30 );
@@ -349,6 +350,9 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   }
   if (info->type == PO){
     type_combo->setCurrentItem(4);
+  }
+  if (info->type == KDEV_DIALOG){
+    type_combo->setCurrentItem(5);
   }
 
   if(info->dist){

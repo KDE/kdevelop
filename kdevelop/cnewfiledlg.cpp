@@ -48,6 +48,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
   list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
+  list_cpp->insertItem(i18n("Qt/KDE Dialog (*.kdevdlg)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
 
@@ -240,6 +241,10 @@ void CNewFileDlg::slotOKClicked(){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .sgml !"),KMsgBox::EXCLAMATION);
     return;
   }
+  if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"),KMsgBox::EXCLAMATION);
+    return;
+  }
   if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .xpm !"),KMsgBox::EXCLAMATION);
     return;
@@ -310,6 +315,12 @@ void CNewFileDlg::slotOKClicked(){
       file.close();
     }
   }
+  if( filetype == "DIALOG"){
+    QFile file(complete_filename);
+      file.remove();
+      file.open(IO_ReadWrite);
+      file.close();
+  }
   accept();
 }
 
@@ -328,6 +339,9 @@ QString CNewFileDlg::fileType(){
     }
     if (str == i18n("Empty Textfile")){
       return "TEXTFILE";
+    }
+    if(str == i18n("Qt/KDE Dialog (*.kdevdlg)")){
+      return "DIALOG";
     }
   }
   
@@ -349,6 +363,7 @@ QString CNewFileDlg::fileType(){
     if (str == i18n("Icon (*.xpm)")){
       return "ICON";
     }
+    
   }
   return "TEST";
 }
@@ -415,6 +430,9 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
       }
       if (filetype == "KDELNK" ) {
 	edit->setText(text + QString(".kdelnk"));
+      }
+      if (filetype == "DIALOG" ) {
+	edit->setText(text + QString(".kdevdlg"));
       }
       edit->setCursorPosition(1);
     }

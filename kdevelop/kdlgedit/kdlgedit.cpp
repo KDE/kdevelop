@@ -42,8 +42,7 @@ KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
    connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(kdlgdialogsSelected(QString)),
 	   SLOT(slotOpenDialog(QString)));
-   connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(newDialog()),
-	   SLOT(slotFileNew()));
+   dialog_file = "";
 }
 
 KDlgEdit::~KDlgEdit()
@@ -52,68 +51,60 @@ KDlgEdit::~KDlgEdit()
 
 
 void KDlgEdit::slotFileNew(){
-  CProject* prj = ((CKDevelop*)parent())->getProject(); 
-  TDialogFileInfo info;
-  QString temp_dialog_file = dialog_file;
-  if(prj != 0){
-    if(slotFileClose()){
-      KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
-      if( dlg.exec()){
-	// get the location
-	QString location = dlg.getLocation();
-	if(location.right(1) != "/"){
-	  location = location + "/";
-	}
-	info.rel_name = prj->getSubDir() + dlg.getClassname().lower() + ".kdevdlg";
-	info.dist = true;
-	info.install = false;
-	info.classname = dlg.getClassname();
-	info.baseclass = dlg.getBaseClass();
-	info.header_file = getRelativeName(location + dlg.getHeaderName());
-	info.source_file = getRelativeName(location + dlg.getSourceName());
-	info.data_file = getRelativeName(location + dlg.getDataName());
-	info.is_toplevel_dialog = true;
+  // CProject* prj = ((CKDevelop*)parent())->getProject(); 
+//   TDialogFileInfo info;
+//   QString temp_dialog_file = dialog_file;
+//   if(prj != 0){
+//     if(slotFileClose()){
+//       KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
+//       if( dlg.exec()){
+// 	// get the location
+// 	QString location = dlg.getLocation();
+// 	if(location.right(1) != "/"){
+// 	  location = location + "/";
+// 	}
+// 	info.rel_name = prj->getSubDir() + dlg.getClassname().lower() + ".kdevdlg";
+// 	info.dist = true;
+// 	info.install = false;
+// 	info.classname = dlg.getClassname();
+// 	info.baseclass = dlg.getBaseClass();
+// 	info.header_file = getRelativeName(location + dlg.getHeaderName());
+// 	info.source_file = getRelativeName(location + dlg.getSourceName());
+// 	info.data_file = getRelativeName(location + dlg.getDataName());
+// 	info.is_toplevel_dialog = true;
 	
-	QString l_dialog_file = prj->getProjectDir() + info.rel_name;
+// 	QString l_dialog_file = prj->getProjectDir() + info.rel_name;
 	
-	if(prj->addDialogFileToProject(info.rel_name,info)){
-	  ((CKDevelop*)parent())->newSubDir();
-	}
-	((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
-	((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
+// 	if(prj->addDialogFileToProject(info.rel_name,info)){
+// 	  ((CKDevelop*)parent())->newSubDir();
+// 	}
+// 	((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
+// 	((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
 	
-	// registrate the source files
-	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getHeaderName());
-	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getSourceName());
-	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getDataName());
+// 	// registrate the source files
+// 	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getHeaderName());
+// 	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getSourceName());
+// 	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getDataName());
 	
-	// generate the new files;
-	// header
-	generateInitialHeaderFile(info,dlg.getBaseClassHeader());
-	generateInitialSourceFile(info);
-	slotOpenDialog(l_dialog_file);
-	slotBuildGenerate();
-	((CKDevelop*)parent())->refreshTrees();
-      }
-      else{
-	if(temp_dialog_file != ""){
-	  slotOpenDialog(temp_dialog_file);
-	}
-      }
-    } // end if(slotFileClose()
-  }
+// 	// generate the new files;
+// 	// header
+// 	generateInitialHeaderFile(info,dlg.getBaseClassHeader());
+// 	generateInitialSourceFile(info);
+// 	slotOpenDialog(l_dialog_file);
+// 	slotBuildGenerate();
+// 	((CKDevelop*)parent())->refreshTrees();
+//       }
+//       else{
+// 	if(temp_dialog_file != ""){
+// 	  cerr << ":::" << temp_dialog_file << "::::";
+// 	  slotOpenDialog(temp_dialog_file);
+// 	}
+//       }
+//     } // end if(slotFileClose()
+//   }
 }
 
-void KDlgEdit::slotFileOpen()
-{
-  QString  name = KFileDialog::getOpenFileName("","*.kdevdlg",0);
-  if (name.isNull()){
-    return;
-  }
-  else{
-		slotOpenDialog(name);
-	}
-}
+
 void KDlgEdit::slotOpenDialog(QString file){
   if(file != dialog_file){
     if(slotFileClose()){
@@ -123,7 +114,6 @@ void KDlgEdit::slotOpenDialog(QString file){
       ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",true);
       ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_GENERATE);
       ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_CLOSE);
-      ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_OPEN);
       ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE);
       ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE_AS);
       
@@ -137,6 +127,7 @@ void KDlgEdit::slotOpenDialog(QString file){
 }
 
 bool KDlgEdit::slotFileClose(){
+  if (dialog_file == "") return true;
   int result = 1;
   if(((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
     result = KMsgBox::yesNoCancel(0,i18n("Question"),i18n("You have modified the current dialog. Do you want to save\nthe dialog and generate the sourcecodes?"));
@@ -151,7 +142,6 @@ bool KDlgEdit::slotFileClose(){
   ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",false);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_GENERATE);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_CLOSE);
-  ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_OPEN);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE);
   ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE_AS);
   dialog_file = "";
@@ -159,7 +149,9 @@ bool KDlgEdit::slotFileClose(){
 }
 
 void KDlgEdit::slotFileSave(){
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
+  if (dialog_file != ""){
+    ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
+  }
 }
 void KDlgEdit::slotFileSaveAs(){
   QString  name = KFileDialog::getSaveFileName("","*.kdevdlg",0);
@@ -211,10 +203,57 @@ void KDlgEdit::slotViewRefresh()
 }
 
 void KDlgEdit::slotBuildGenerate(){
+  //************************************
+  // if this is the first sourccode-generation show the generate dialog, 
+  // otherwise generate only the needed changes
+  //************************************
+
   CProject* prj = ((CKDevelop*)parent())->getProject(); 
   TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
+  cerr << ":::::" << info.classname;
+  if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty()){ // no class generated
+    
+    KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
+    if( dlg.exec()){
+      // get the location
+      QString location = dlg.getLocation();
+      bool newsubdir = false;
+      if(location.right(1) != "/"){
+	location = location + "/";
+      }
+      info.classname = dlg.getClassname();
+      info.baseclass = dlg.getBaseClass();
+      info.header_file = getRelativeName(location + dlg.getHeaderName());
+      info.source_file = getRelativeName(location + dlg.getSourceName());
+      info.data_file = getRelativeName(location + dlg.getDataName());
 
-  ///////////////////////////// datafile ///////////////////////////////////////////
+      prj->writeDialogFileInfo(info);
+	
+      // registrate the source files
+      newsubdir = ((CKDevelop*)parent())->addFileToProject(location + dlg.getHeaderName()
+							   ,CPP_HEADER);
+      newsubdir = ((CKDevelop*)parent())->addFileToProject(location + dlg.getSourceName()
+							   ,CPP_SOURCE) || newsubdir;
+      newsubdir  =((CKDevelop*)parent())->addFileToProject(location + dlg.getDataName()
+							   ,CPP_SOURCE) || newsubdir;
+
+      if(newsubdir)
+	((CKDevelop*)parent())->newSubDir();
+
+      // generate the new files;
+      // header
+      generateInitialHeaderFile(info,dlg.getBaseClassHeader());
+      generateInitialSourceFile(info);
+      ((CKDevelop*)parent())->refreshTrees();
+      ((CKDevelop*)parent())->kdlg_get_edit_widget()->setWidgetAdded(true); 
+    }
+    else{
+      return; // cancel sourcecode generation
+    }
+  }
+      
+      // normal generation of  changes
+      ///////////////////////////// datafile ///////////////////////////////////////////
 	////////first generate the datafile and then the header for the datafile//////////
 
   if( ((CKDevelop*)parent())->isFileInBuffer(prj->getProjectDir() + info.data_file)){
@@ -222,7 +261,8 @@ void KDlgEdit::slotBuildGenerate(){
       ((CKDevelop*)parent())->slotFileSave();
       ((CKDevelop*)parent())->slotFileClose();
   }
-  
+
+  cerr << "genrate";
   QFile file(prj->getProjectDir() + info.data_file);
   QTextStream stream( &file );
   if ( file.open(IO_WriteOnly) ){
@@ -832,6 +872,20 @@ void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
   if(props->getPropValue("isAutoResize") == "TRUE"){
     *stream << varname_p + "setAutoResize(true);\n";
   }
+  //entries
+   int i = 0;
+   QString src = props->getPropValue("Entries");
+   if(src != ""){
+     
+     QString s;
+     s = getLineOutOfString(src,i,"\\n");
+     while (!s.isNull())
+       {
+	 *stream << varname_p + "insertItem(\""+s+"\");\n";
+	 i++;
+	 s = getLineOutOfString(src,i,"\\n");
+       }
+   }
 
   *stream << "\n";
 }
@@ -898,10 +952,25 @@ void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
    if(props->getPropValue("isSmoothScrolling") == "FALSE"){
      *stream << varname_p + "setSmoothScrolling(false);\n";
    }
+   //setFixedVisibleLines
    if(props->getPropValue("setFixedVisibleLines") != ""){
      *stream << varname_p + "setFixedVisibleLines("+props->getPropValue("setFixedVisibleLines")+");\n";
    }
-
+   //entries
+   int i = 0;
+   QString src = props->getPropValue("Entries");
+   if(src != ""){
+     
+     QString s;
+     s = getLineOutOfString(src,i,"\\n");
+     while (!s.isNull())
+       {
+	 *stream << varname_p + "insertItem(\""+s+"\");\n";
+	 i++;
+	 s = getLineOutOfString(src,i,"\\n");
+       }
+   }
+     
    *stream << "\n";
 }
 void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString _parent){
@@ -983,6 +1052,7 @@ void KDlgEdit::generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QStri
   generateQWidget(wid,stream,_parent);
   
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  
 
 }
 void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QString _parent){
