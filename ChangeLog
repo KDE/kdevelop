@@ -1,3 +1,8 @@
+2002-01-15  F@lk Brettschneider <falk@kdevelop.org>
+    * attempt to avoid infinite recursion in KToolBar, also fixed in kdeui today
+    * when we open a popup menu FocusIn and FocusOut was called for KWriteView which makes it very slow
+      because of the triggered repaint. Fixed again after reintroducing the bug by Harald.
+
 2002-01-10  F@lk Brettschneider <falk@kdevelop.org>
     * for the keyboard freaks -> better switching around tool and editor views.
       (some tool-views need to get focus, some not. Reviewed)
