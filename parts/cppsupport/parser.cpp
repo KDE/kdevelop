@@ -2774,6 +2774,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    ast->setNestedName( nestedName );
 		    ast->setText( toString(start, endSignature) );
 		    ast->setTypeSpec( spec );
+		    ast->setFunctionBody( funBody );
 		    node = ast;
 		    UPDATE_POS( node, start, lex->index() );
 		    return true;
