@@ -72,7 +72,9 @@ private:
     bool m_inSignals;
     int m_anon;
     bool m_inStorageSpec;
-
+    bool m_inTypedef;
+    
+    DeclaratorAST* m_currentDeclarator;
     QValueStack<NamespaceDom> m_currentNamespace;
     QValueStack<ClassDom> m_currentClass;
 

@@ -42,6 +42,8 @@ void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
     m_inSlots = false;
     m_inSignals = false;
     m_inStorageSpec = false;
+    m_inTypedef = false;
+    m_currentDeclarator = 0;
     m_anon = 0;
     m_imports.clear();
 
@@ -109,7 +111,17 @@ void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 
 void StoreWalker::parseTypedef( TypedefAST* ast )
 {
+    DeclaratorAST* oldDeclarator = m_currentDeclarator;
+    
+    if( ast && ast->initDeclaratorList() && ast->initDeclaratorList()->initDeclaratorList().count() > 0 ) {
+	    QPtrList<InitDeclaratorAST> lst( ast->initDeclaratorList()->initDeclaratorList() );
+	    m_currentDeclarator = lst.at( 0 )->declarator();
+    }
+    
+    m_inTypedef = true;    
     TreeParser::parseTypedef( ast );
+    m_inTypedef = false;
+    m_currentDeclarator = oldDeclarator;
 }
 
 void StoreWalker::parseTemplateDeclaration( TemplateDeclarationAST* ast )
@@ -259,7 +271,9 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     m_inSignals = false;
 
     QString className;
-    if( !ast->name() ){
+    if( !ast->name() && m_currentDeclarator && m_currentDeclarator->declaratorId() ) {
+	className = m_currentDeclarator->declaratorId()->text().stripWhiteSpace();
+    } else if( !ast->name() ){
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
 	className.sprintf( "(%s_%d)", shortFileName.local8Bit().data(), m_anon++ );
