@@ -103,7 +103,6 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
     setXMLFile( "kdevcvsservicepart.rc" );
 
     init();
-    m_impl->m_widget->setIcon( UserIcon( "kdev_cvs", KIcon::DefaultState, CvsFactory::instance()) );
 
     // @fixme (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
     // of KDevVersionControl
@@ -128,7 +127,6 @@ void CvsServicePart::init()
     // @fixme factory pattern here? :-/
     m_impl = new CvsServicePartImpl( this );
     connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
-    connect( m_impl, SIGNAL(fileStateChanged(const VCSFileInfoList&)), SIGNAL(fileStateChanged(const VCSFileInfoList&)) );
 
     // Load / store project configuration every time project is opened/closed
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
@@ -142,10 +140,9 @@ void CvsServicePart::init()
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
         this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 
-    m_impl->processWidget()->setIcon( SmallIcon("db") );
-
+    m_impl->m_widget->setIcon( UserIcon( "kdev_cvs", KIcon::DefaultState, CvsFactory::instance()) );
+    QWhatsThis::add( m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service.") );
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
-    QWhatsThis::add(m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service."));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
