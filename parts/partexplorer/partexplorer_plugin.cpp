@@ -11,7 +11,17 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
+#include <kmainwindow.h>
+#include "kdevmainwindow.h"
+
 #include "partexplorerform.h"
+
+/**
+* TODO: Create the main window only when it is requested: for now the form is simply hidden until
+* requested. To further investigate.
+* TODO: Must eliminate the creation of KListViewItem objects here: should add some methods in the
+* part explorer form so this code does not need to access form's widgets. Must find a suitable way.
+*/
 
 typedef KGenericFactory<PartExplorerPlugin> PartExplorerPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( "kdevpartexplorer" ) );
@@ -19,7 +29,6 @@ K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( "kde
 PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, const QStringList & )
 	: KDevPlugin( "PartExplorer", "partexplorer", parent, name ? name : "PartExplorerPlugin" )
 {
-	kdDebug( 9000 ) << "PartExplorerPlugin::PartExplorerPlugin()" << endl;
 	// we need an instance
 	setInstance( PartExplorerPluginFactory::instance() );
 	// set our XML-UI resource file
@@ -31,7 +40,7 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
 		actionCollection(), "show_partexplorerform" );
 
 	// this should be your custom internal widget
-	m_widget = new PartExplorerForm( 0, "partexplorerform" );
+	m_widget = new PartExplorerForm( 0L, "partexplorerform" );
 	m_widget->hide();
 
 	// When the user press "Search" button then this part performs the query.
