@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>500</width>
-            <height>505</height>
+            <height>507</height>
         </rect>
     </property>
     <property name="caption">
@@ -43,7 +43,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Remote shell (CVS_RSH environment variable):</string>
+                        <string>&amp;Remote shell (CVS_RSH environment variable):</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cvsRshEnvVarEdit</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -62,7 +65,10 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>CVS server location:</string>
+                        <string>CVS server &amp;location:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>serverLocationEdit</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -88,7 +94,10 @@
                         <cstring>createNewDirWhenUpdateCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>Create new directories (if any)</string>
+                        <string>Create &amp;new directories (if any)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -96,7 +105,10 @@
                         <cstring>pruneEmptyDirWhenUpdateCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>Prune empty directories</string>
+                        <string>&amp;Prune empty directories</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+P</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -104,7 +116,10 @@
                         <cstring>recursiveWhenUpdateCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>Update subdirectories too</string>
+                        <string>&amp;Update subdirectories too</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+U</string>
                     </property>
                 </widget>
             </vbox>
@@ -125,7 +140,10 @@
                         <cstring>recursiveWhenCommitRemoveCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>Be recursive</string>
+                        <string>&amp;Be recursive</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+B</string>
                     </property>
                 </widget>
             </vbox>
@@ -167,7 +185,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Use these extra options:</string>
+                        <string>Use these e&amp;xtra options:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>diffOptionsEdit</cstring>
                     </property>
                 </widget>
                 <widget class="KIntNumInput" row="1" column="1">
@@ -197,7 +218,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Context lines:</string>
+                        <string>Con&amp;text lines:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>contextLinesInput</cstring>
                     </property>
                 </widget>
             </grid>

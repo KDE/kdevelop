@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>651</width>
-            <height>462</height>
+            <height>464</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -78,6 +78,9 @@
                             <property name="text">
                                 <string>...</string>
                             </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
                             <property name="toolTip" stdset="0">
                                 <string>Select a path!</string>
                             </property>
@@ -100,7 +103,10 @@
                                 <cstring>textLabel1_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Local destination directory:</string>
+                                <string>Local destination &amp;directory:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>workDirEdit</cstring>
                             </property>
                         </widget>
                     </grid>
@@ -126,7 +132,10 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>CVS_RSH:</string>
+                                <string>CVS_&amp;RSH:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>cvsRshEdit</cstring>
                             </property>
                         </widget>
                         <widget class="QLineEdit" row="1" column="0">
@@ -152,7 +161,10 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Server path (i.e. :pserver:marios@cvs.kde.org:/h:ome/kde):</string>
+                                <string>&amp;Server path (i.e. :pserver:marios@cvs.kde.org:/h:ome/kde):</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>serverPathLineEdit</cstring>
                             </property>
                         </widget>
                     </grid>
@@ -200,7 +212,10 @@
                                 <cstring>textLabel1_4</cstring>
                             </property>
                             <property name="text">
-                                <string>Module:</string>
+                                <string>&amp;Module:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>moduleEdit</cstring>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="2">
@@ -216,7 +231,10 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Tag/branch:</string>
+                                <string>&amp;Tag/branch:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>tagEdit</cstring>
                             </property>
                         </widget>
                         <widget class="QLineEdit" row="1" column="2">
@@ -252,7 +270,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Prune directories</string>
+                        <string>&amp;Prune directories</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+P</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -334,7 +355,13 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Fetch Modules List</string>
+                                <string>&amp;Fetch Modules List</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+F</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Fetch modules list from server</string>
@@ -349,6 +376,19 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>workDirEdit</tabstop>
+    <tabstop>chooseWorkDirButton</tabstop>
+    <tabstop>cvsRshEdit</tabstop>
+    <tabstop>serverPathLineEdit</tabstop>
+    <tabstop>moduleEdit</tabstop>
+    <tabstop>tagEdit</tabstop>
+    <tabstop>pruneDirsCheck</tabstop>
+    <tabstop>modulesListView</tabstop>
+    <tabstop>fetchModulesButton</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>

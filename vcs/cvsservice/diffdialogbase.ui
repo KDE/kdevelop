@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>213</height>
+            <height>215</height>
         </rect>
     </property>
     <property name="caption">
@@ -38,7 +38,10 @@
                         <cstring>diffLocalHeadRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>Local copy and HEAD</string>
+                        <string>&amp;Local copy and HEAD</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+L</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -57,7 +60,10 @@
                                 <cstring>diffLocalOtherRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>Local copy and an arbitrary revision:</string>
+                                <string>Local copy and an arbitrary &amp;revision:</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+R</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit">
@@ -75,7 +81,10 @@
                         <cstring>diffArbitraryRevRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>Two arbitrary revisions/tags:</string>
+                        <string>&amp;Two arbitrary revisions/tags:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>626</width>
-            <height>237</height>
+            <height>239</height>
         </rect>
     </property>
     <property name="caption">
@@ -49,7 +49,10 @@
                         <cstring>headRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>Most recent from HEAD</string>
+                        <string>&amp;Most recent from HEAD</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+M</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -68,7 +71,10 @@
                                 <cstring>revisionRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>An arbitrary revision/tag/branch:</string>
+                                <string>An arbitrary &amp;revision/tag/branch:</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+R</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>
@@ -103,7 +109,10 @@
                                 <cstring>dateRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>An arbitrary date:</string>
+                                <string>An arbitrary &amp;date:</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+D</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit">
@@ -128,22 +137,22 @@
             <property name="title">
                 <string>Additional Options</string>
             </property>
-            <widget class="QCheckBox">
+            <grid>
                 <property name="name">
-                    <cstring>revertCheck</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>471</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Enforce even if the file has been locally modified (revert)</string>
-                </property>
-            </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>revertCheck</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Enforce even if the file has been locally modified (revert)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+E</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="Line">
             <property name="name">

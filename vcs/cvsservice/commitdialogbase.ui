@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>531</width>
-            <height>383</height>
+            <height>385</height>
         </rect>
     </property>
     <property name="caption">
@@ -27,7 +27,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Message</string>
+                <string>&amp;Message</string>
             </property>
             <vbox>
                 <property name="name">
@@ -53,7 +53,10 @@
                         <cstring>checkAddToChangelog</cstring>
                     </property>
                     <property name="text">
-                        <string>Add to changelog:</string>
+                        <string>&amp;Add to changelog:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -122,6 +125,9 @@
                         <string>Alt+O</string>
                     </property>
                     <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
                         <bool>true</bool>
                     </property>
                 </widget>

@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>603</width>
-            <height>623</height>
+            <height>625</height>
         </rect>
     </property>
     <property name="caption">
@@ -34,7 +34,10 @@
                 <enum>Plain</enum>
             </property>
             <property name="text">
-                <string>Release tag:</string>
+                <string>Release &amp;tag:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>release_edit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="3">
@@ -65,7 +68,10 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>Message:</string>
+                <string>&amp;Message:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>message_edit</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -73,7 +79,10 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Module:</string>
+                <string>&amp;Module:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>module_edit</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0">
@@ -81,7 +90,10 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>Vendor tag:</string>
+                <string>&amp;Vendor tag:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>vendor_edit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="3">
@@ -117,7 +129,10 @@ Most of the thime you'll just reuse the project name</string>
                 <enum>Plain</enum>
             </property>
             <property name="text">
-                <string>Server path:</string>
+                <string>&amp;Server path:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>serverPathEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
@@ -143,7 +158,10 @@ Most of the thime you'll just reuse the project name</string>
                 <enum>Plain</enum>
             </property>
             <property name="text">
-                <string>CVS_RSH:</string>
+                <string>CVS_&amp;RSH:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cvsRshComboBox</cstring>
             </property>
         </widget>
         <widget class="QComboBox" row="1" column="1">
@@ -166,7 +184,10 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>init_check</cstring>
             </property>
             <property name="text">
-                <string>Init root</string>
+                <string>Init &amp;root</string>
+            </property>
+            <property name="accel">
+                <string>Alt+R</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check if you defined a new CVS Root</string>
@@ -193,6 +214,7 @@ Most of the thime you'll just reuse the project name</string>
 </widget>
 <tabstops>
     <tabstop>serverPathEdit</tabstop>
+    <tabstop>cvsRshComboBox</tabstop>
     <tabstop>init_check</tabstop>
     <tabstop>module_edit</tabstop>
     <tabstop>vendor_edit</tabstop>

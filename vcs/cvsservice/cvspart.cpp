@@ -13,6 +13,7 @@
 
 #include <qdir.h>
 #include <qpopupmenu.h>
+#include <qwhatsthis.h>
 
 #include <kpopupmenu.h>
 #include <kdebug.h>
@@ -143,6 +144,7 @@ void CvsServicePart::init()
     m_impl->processWidget()->setIcon( SmallIcon("db") );
 
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
+    QWhatsThis::add(m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service."));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,72 +157,72 @@ void CvsServicePart::setupActions()
     actionCommit = new KAction( i18n("&Commit to Repository"), 0, this,
         SLOT(slotActionCommit()), actionCollection(), "cvsservice_commit" );
     actionCommit->setToolTip( i18n("Commit file(s)") );
-    actionCommit->setWhatsThis( i18n("Commit file(s)<p>Commit file to repository if modified") );
+    actionCommit->setWhatsThis( i18n("<b>Commit file(s)</b><p>Commits file to repository if modified.") );
 
     actionDiff = new KAction( i18n("&Difference Between Revisions"), 0, this, SLOT(slotActionDiff()),
         actionCollection(), "cvsservice_diff" );
     actionDiff->setToolTip( i18n("Build difference") );
-    actionDiff->setWhatsThis( i18n("Build difference<p>Build difference between releases") );
+    actionDiff->setWhatsThis( i18n("<b>Build difference</b><p>Builds difference between releases.") );
 
     actionLog = new KAction( i18n("Generate &Log"), 0, this, SLOT(slotActionLog()),
         actionCollection(), "cvsservice_log" );
-    actionLog->setToolTip( i18n("Build log") );
-    actionLog->setWhatsThis( i18n("Build log<p>Produce log for this file") );
+    actionLog->setToolTip( i18n("Generate log") );
+    actionLog->setWhatsThis( i18n("<b>Generate log</b><p>Produces log for this file.") );
 
     actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvsservice_add" );
     actionAdd->setToolTip( i18n("Add file to repository") );
-    actionAdd->setWhatsThis( i18n("Add file <p>Add file to repository") );
+    actionAdd->setWhatsThis( i18n("<b>Add to repository</b><p>Adds file to repository.") );
 
     actionAddBinary = new KAction( i18n("Add to Repository as &Binary"), 0, this,
         SLOT(slotActionAddBinary()), actionCollection(), "cvsservice_add_bin" );
-    actionAddBinary->setToolTip( i18n("Add file to repository") );
-    actionAddBinary->setWhatsThis( i18n("Add file as binary<p>Add file to repository as binary (-kb option)") );
+    actionAddBinary->setToolTip( i18n("Add file to repository as binary") );
+    actionAddBinary->setWhatsThis( i18n("<b>Add to repository as binary</b><p>Adds file to repository as binary (-kb option).") );
 
     actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
         SLOT(slotActionRemove()), actionCollection(), "cvsservice_remove" );
     actionRemove->setToolTip( i18n("Remove from repository") );
-    actionRemove->setWhatsThis( i18n("Remove from repository<p>Remove file(s) from repository") );
+    actionRemove->setWhatsThis( i18n("<b>Remove from repository</b><p>Removes file(s) from repository.") );
 
     actionUpdate = new KAction( i18n("&Update/Revert to Another Release"), 0, this,
         SLOT(slotActionUpdate()), actionCollection(), "cvsservice_update" );
     actionUpdate->setToolTip( i18n("Update/revert") );
-    actionUpdate->setWhatsThis( i18n("Update/revert<p>Update/revert file(s) to another release") );
+    actionUpdate->setWhatsThis( i18n("<b>Update/revert to another release</b><p>Updates/reverts file(s) to another release.") );
 
     actionRemoveSticky = new KAction( i18n("R&emove Sticky Flag"), 0,
         this, SLOT(slotActionRemoveSticky()), actionCollection(), "cvsservice_removesticky" );
     actionRemoveSticky->setToolTip( i18n("Remove sticky flag") );
-    actionRemoveSticky->setWhatsThis( i18n("Remove sticky flag<p>Remove sticky flag from file(s)") );
+    actionRemoveSticky->setWhatsThis( i18n("<b>Remove sticky flag</b><p>Removes sticky flag from file(s).") );
 
     actionTag = new KAction( i18n("Make &Tag/Branch"), 0,
         this, SLOT(slotActionTag()), actionCollection(), "cvsservice_tag" );
     actionTag->setToolTip( i18n("Make tag/branch") );
-    actionTag->setWhatsThis( i18n("Make tag/branch<p>Tags/branches selected file(s)") );
+    actionTag->setWhatsThis( i18n("<b>Make tag/branch</b><p>Tags/branches selected file(s).") );
 
     actionUnTag = new KAction( i18n("&Delete Tag/Branch"), 0,
         this, SLOT(slotActionUnTag()), actionCollection(), "cvsservice_untag" );
     actionUnTag->setToolTip( i18n("Delete tag/branch") );
-    actionUnTag->setWhatsThis( i18n("Delete tag/branch<p>Delete tag/branches from selected file(s)") );
+    actionUnTag->setWhatsThis( i18n("<b>Delete tag/branch</b><p>Delete tag/branches from selected file(s).") );
 
     actionAddToIgnoreList = new KAction( i18n("&Ignore in CVS Operations"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvsservice_ignore" );
     actionAddToIgnoreList->setToolTip( i18n("Ignore in CVS operations") );
-    actionAddToIgnoreList->setWhatsThis( i18n("Ignore in CVS operations<p>Ignore file(s) by adding it to .cvsignore file") );
+    actionAddToIgnoreList->setWhatsThis( i18n("<b>Ignore in CVS operations</b><p>Ignore file(s) by adding it to .cvsignore file.") );
 
     actionRemoveFromIgnoreList = new KAction( i18n("Do &Not Ignore in CVS Operations"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "cvsservice_donot_ignore" );
     actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in CVS operations") );
-    actionRemoveFromIgnoreList->setWhatsThis( i18n("Do not ignore in CVS operations<p>Do not ignore file(s) by removing\nit from .cvsignore file") );
+    actionRemoveFromIgnoreList->setWhatsThis( i18n("<b>Do not ignore in CVS operations</b><p>Do not ignore file(s) by removing\nit from .cvsignore file.") );
 
     actionLogin = new KAction( i18n("&Log to Server"), 0, this,
         SLOT(slotActionLogin()), actionCollection(), "cvsservice_login" );
     actionLogin->setToolTip( i18n("Login to server") );
-    actionLogin->setWhatsThis( i18n("Login to server<p>Log-in to remote CVS server") );
+    actionLogin->setWhatsThis( i18n("<b>Login to server</b><p>Logs in to the CVS server.") );
 
     actionLogout = new KAction( i18n("L&ogout From Server"), 0, this,
         SLOT(slotActionLogout()), actionCollection(), "cvsservice_logout" );
     actionLogout->setToolTip( i18n("Logout from server") );
-    actionLogout->setWhatsThis( i18n("Logout from server<p>Log-out from remote CVS server") );
+    actionLogout->setWhatsThis( i18n("<b>Logout from server</b><p>Logs out from the CVS server.") );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -307,26 +309,38 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
         KPopupMenu *subMenu = new KPopupMenu( popup );
         popup->insertSeparator();
 
-        subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
+        int id = subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
+        subMenu->setWhatsThis(id, i18n("<b>Commit file(s)</b><p>Commits file to repository if modified."));
         // CvsService let to do log and diff operations only on one file (or directory) at time
         if (m_urls.count() == 1)
         {
-            subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
-            subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
+            id = subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
+            subMenu->setWhatsThis(id, i18n("<b>Build difference</b><p>Builds difference between releases."));
+            id = subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
+            subMenu->setWhatsThis(id, i18n("<b>Generate log</b><p>Produces log for this file."));
         }
-        subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
-        subMenu->insertItem( actionAddBinary->text(), this, SLOT(slotAddBinary()) );
-        subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
+        id = subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
+        subMenu->setWhatsThis(id, i18n("<b>Add to repository</b><p>Adds file to repository."));
+        id = subMenu->insertItem( actionAddBinary->text(), this, SLOT(slotAddBinary()) );
+        subMenu->setWhatsThis(id, i18n("<b>Add to repository as binary</b><p>Adds file to repository as binary (-kb option)."));
+        id = subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
+        subMenu->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Removes file(s) from repository."));
 
         subMenu->insertSeparator();
-        subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
-        subMenu->insertItem( actionUnTag->text(), this, SLOT(slotUnTag()) );
-        subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
-        subMenu->insertItem( actionRemoveSticky->text(), this, SLOT(slotRemoveSticky()) );
+        id = subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
+        subMenu->setWhatsThis(id, i18n("<b>Make tag/branch</b><p>Tags/branches selected file(s)."));
+        id = subMenu->insertItem( actionUnTag->text(), this, SLOT(slotUnTag()) );
+        subMenu->setWhatsThis(id, i18n("<b>Delete tag/branch</b><p>Delete tag/branches from selected file(s)."));
+        id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
+        subMenu->setWhatsThis(id, i18n("<b>Update/revert to another release</b><p>Updates/reverts file(s) to another release."));
+        id = subMenu->insertItem( actionRemoveSticky->text(), this, SLOT(slotRemoveSticky()) );
+        subMenu->setWhatsThis(id, i18n("<b>Remove sticky flag</b><p>Removes sticky flag from file(s)."));
 
         subMenu->insertSeparator();
-        subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
-        subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
+        id = subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
+        subMenu->setWhatsThis(id, i18n("<b>Ignore in CVS operations</b><p>Ignore file(s) by adding it to .cvsignore file."));
+        id = subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
+        subMenu->setWhatsThis(id, i18n("<b>Do not ignore in CVS operations</b><p>Do not ignore file(s) by removing\nit from .cvsignore file."));
 
         // Now insert in parent menu
         popup->insertItem( i18n("CvsService"), subMenu );

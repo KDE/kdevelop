@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>410</width>
-            <height>173</height>
+            <height>175</height>
         </rect>
     </property>
     <property name="caption">
@@ -35,7 +35,10 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Tag/Branch name:</string>
+                        <string>Tag/Branch &amp;name:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>tagBranchEdit</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
