@@ -2581,29 +2581,49 @@ symbol tables.
 <bf/additional libraries:/ Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
 libraries with the -l option; for the example -lkom.
 
-<sect1>Make
+<sect><idx/Make/ Options<label id="Make Options">
 <p>
 As GNU <idx/make/ supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
 en/disabled. The available settings are:
 
 <descrip>
-<tag/
-
 <tag/Print debug information/ prints out all information about the <idx/project files/ and what <idx/make/ determines for rebuilding them.
+<p>
 <tag/Continue after <idx/errors// tries to continue with the compilation after an error occurred (e.g. a file couldn't be compiled due to an
 error)
+<p>
 <tag/Print the data base/ prints out the <idx/make/-database for the current process which contains the changes from the last
-build-run. <tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
+build-run. 
+<p>
+<tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
 the <idx/Makefile/s.
+<p>
 <tag/No built-in rules/ doesn't use built-in rules for <idx/make/.
+<p>
 <tag/Touch files/ don't run the <idx/Compiler/ on changed files; instead only touches them. This sets them as already processed by <idx/make/.
+<p>
 <tag/Ignore all <idx/errors// Ignores all <idx/errors/ that occur
+<p>
 <tag/Silent operation/ doesn't print out any information about the build-process
+<p>
 <tag/Print working directory/ prints the current directory during the <idx/make/-process.
+<p>
 <tag/job number/ sets the amount of parallel processes for <idx/make/. For a single-CPU system we recommend setting this to one or two.
+<p>
 <tag/set modified/ sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
 means that the file will be processed by <idx/make/ and compiled if it is a source file.
-<tag/additional options/ set additional options to <idx/make/; those can be found in your local man page for "GNU Make". </descrip>
+<p>
+<tag/additional options/ set additional options to <idx/make/; those can be found in your local man page for "GNU Make".
+<p>
+<tag/Rebuild behaviour on run/ Sets the actions taken when you choose run. There are three options you can choose from:
+<itemize>
+<item>always rebuild: Always rebuild without checking for modified files.
+<item>Warning on modification: Warn if source files have been modified and ask if the project should be rebuilt.
+<item>Only on modification: Check if sources have changed and rebuild if so.
+</itemize>
+The default is to rebuild always.
+<p>
+</descrip>
 
 <chapt>The Class Browser<label id="The Class Browser">
 <p>
@@ -3241,7 +3261,8 @@ If Autosave is checked, KDevelop will save all changed files periodically.  The 
 If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
 documentation in the Help-menu, the Documentation browser will be opened, together with the documentation tree and the <idx/output/
 window turned off.
-Startup:
+
+<bf><idx/Startup/:</bf>
 
 For starting KDevelop, you have the option to enable/disable the <idx/start-logo/ to be shown during the time KDevelop loads.
 Further, if you don't like the last project to be opened on startup, you can disable the default behavior.
@@ -3313,6 +3334,34 @@ medium.  The higher the index size, the more the index files will grow. On the o
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 
+<sect>Debugger <label id="Debugger">
+<p>
+The default setup for KDevelop is to use the internal debugger. Click on "Use external debugger" if you wish to use a different 
+debugger and enter the name of the debugger to use. See your debuggers documentation on how to run it.
+
+Selecting the internal debugger enables an additional set of options you can choose from:
+<p>
+<itemize>
+<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change 
+the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option.
+<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names. 
+However, non-mangled names are easier to read.
+<item>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be 
+loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set 
+the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Shared libraries and breakpoints"> for more details 
+and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
+<item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
+The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+</itemize>
+
+<sect>Setting Paths <label id="Setting Paths">
+<p>
+On the paths tab you can enter the paths to your Qt 2.x and KDE 2 installations as well as where to create new projects. To learn 
+more about installing Qt 2.x / KDE 2 and configuring KDevelop for Qt 2.x and KDE 2 read the 
+<htmlurl url="../tutorial/index.html" name="KDE Application Tutorials">.
+
+The default location for KDevelop to create new projects is in the user's home directory. If you want to change this behaviour you 
+can enter the desired location into the default project path field.
 
 <chapt>Questions and Answers<label id="Questions and Answers">
 <p>

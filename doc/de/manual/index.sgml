@@ -1254,8 +1254,7 @@ Dokumentation zu durchsuchen.
 <sect>Tastenbefehle
 <p>
 Dieser Abschnitt behandelt die vordefinierten als auch die Standard-Konfiguration der Schnelltasten für Kommandos, die Sie in der
-KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Ändern der Tastatur Kürzel" name="Ändern der Tastatur Kürzel">.
-
+KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Ändern der Tastaturkürzel" name="Ändern der Tastaturkürzel">. 
 <sect1>Tastaturbelegung für Textbearbeitung
 <p>
 
@@ -2694,8 +2693,8 @@ verwendet um weitere Aufrufe von make zu täuschen.
 <tag/Arbeitsverzeichnis ausgeben/Gibt vor und nach den Prozessen das Arbeitsverzeichnis aus. Dies kann nützlich sein, um Fehler 
 in kompliziert verschachtelten, rekursiven 'Make'-Kommandos zu finden.
 
-<tag/Jobanzahl/Gibt die Anzahl der Jobs (Kommandos) an, die gleichzeitig abgearbeitet werden. Wenn Sie ein einzelnes 
-CPU-System haben, ist es nicht empfehlenswert, mehr als 2 zu wählen.
+<tag/Jobanzahl/Gibt die Anzahl der Jobs (Kommandos) an, die gleichzeitig abgearbeitet werden. Wenn Sie ein System mit nur einer 
+CPU haben, ist es nicht empfehlenswert, mehr als 2 zu wählen.
 
 <tag/Geändert setzen/Täusche vor, daß die Zieldatei gerade verändert wurde. Dies ist fast das gleiche wie 'touch' auf die Datei 
 auszuführen, allerdings wird die Änderungszeit nur für 'Make' geändert. Wenn Sie den Ordnerknopf auf der linken Seite drücken, 
@@ -2703,6 +2702,15 @@ können Sie eine Datei geändert setzen. Diese wird beim nächsten Aufruf von 'make
 
 <tag/Zusätzliche Optionen/Wählen Sie hier andere zusätzliche Optionen für Ihr Make-Programm. Sie können weitere Informationen 
 zu Make Optionen auf den manpages finden.
+
+<tag/Neu Erstellen bei Ausführen/ Setzt die Aktionen die bei der Auswahl von "Ausführen" durchgeführt werden. Sie können 
+aus drei Optionen auswählen:
+<itemize>
+<item>Immer neu erstellen: Immer neu erstellen, ohne auf geänderte Dateien zu prüfen.
+<item>Warnung bei Änderung: Warne, wenn Quelldateien verändert wurden und frage, ob neu erstellt werden soll.
+<item>nur bei Änderung: Prüfe, ob Quelldateien geändert wurden und erstelle neu, wenn ja..
+</itemize>
+Die Standardeinstellung ist, immer neu zu erstellen.
 </descrip>
 
 <chapt>Der Klassenbrowser<label id="Der Klassenbrowser">
@@ -3347,7 +3355,7 @@ während sich das Ausgabefenster schließt.
 Sie können wählen, ob das Start-Logo von KDevelop während des Ladens angezeigt werden soll. Weiterhin können Sie das Öffnen 
 des letzten Projektes unterdrücken, sowie einstellen, ob Sie den Tip des Tage angezeigt bekommen.
 
-<sect>Ändern der Tastatur Kürzel<label id="Ändern der Tastatur Kürzel">
+<sect>Ändern der Tastaturkürzel<label id="Ändern der Tastaturkürzel">
 <p>
 Der Dialog "Tasten" läßt Sie die Tastenzuordnung in KDevelop einstellen. Beachten Sie, daß globale Tastenkürzel wie Datei öffnen oder 
 Drucken, im KDE Kontrollcenter eingestellt werden können. Eine Tastenfunktion kann eingestellt werden, indem Sie einen Menüeintrag 
@@ -3414,6 +3422,40 @@ winzig, klein und mittel. Je höher die Indexgröße gewählt wird, um so größer wer
 die Suche in einer größeren Suchdatenbank beschleunigt und die Trefferquote ist höher, so daß wir eine mittlere Größe empfehlen. Zur 
 Verwendung der Suchfunktion, sehen Sie unter 
 <ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
+
+<sect>Debugger <label id="Debugger">
+<p>
+Standardmäßig verwendet KDevelop den internen Debugger. Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben 
+Sie den Namen des externen Debuggers ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
+
+Bei Auswahl des internen Debuggers erhalten Sie eine Anzahl zusätzlicher Optionen aus denen Sie auswählen können:
+<p>
+<itemize>
+<item>Zeige static members: Die Anzeige von statischen Elementen verlangsamt gdb bei der Datenenerzeugung in kde und qt. Die 
+"Signatur" der Daten auf die sich QString und friend-Funktionen verlassen, könnte verändert werden. Wenn Sie jedoch diese Werte 
+debuggen müssen, markieren Sie die Option
+<item>Zeige Teil-Namen an: Bei der Anzeige von disassembliertem Code können Sie sich Teil-Namen der Methoden anzeigen lassen. 
+Vollständige Namen sind jedoch einfacher zu lesen.
+<item>BPs beim Laden von Bibliotheken setzen: Hiermit wird versucht "schwebende" Breakpoints beim Laden von Bibliotheken zu
+setzen. Wenn GDB eine Bibliothek die mittels "dlopen" geladen werden soll noch nicht kennt, weigert er sich Unterbrechungen in 
+diesem Code anzunehmen. Es ist jedoch möglich beim Laden der Bibliothek anzuhalten und dann zu versuchen die "schwebenden" 
+Breakpunkte zu setzen. Im Kapitel <ref id="Dynamische Bibliotheken und Unterbrechungen" name="Dynamische Bibliotheken und Unterbrechungen">
+finden Sie Details und Probleme dieser Vorgehensweise. Wenn Sie keine Bibliotheken mit "dlopen" öffnen, lassen Sie diese Option 
+ausgeschaltet.
+<item>Schwebende Werkzeugleiste: Dies erlaubt Ihnen zusätzlich die Steuerung des Debuggers mit Hilfe der schwebenden 
+Werkzeugleiste. Die Werkzeugleiste ist bestens zum Debuggen von GUI Anwendungen geeignet. Details finden Sie unter 
+<ref id="Die schwebende Werkzeugleiste" name="Die schwebende Werkzeugleiste">.
+</itemize>
+
+<sect>Setzen der Pfade<label id="Setzen der Pfade">
+<p>
+Auf dem Tabulator "Pfad" können Sie die Pfade zu Ihren Qt 2.x und KDE 2 Installationen eingeben, sowie das Verzeichnis, in dem 
+neue Projekte erstellt werden sollen. Um mehr über die Installation von Qt 2.x / KDE 2 und die Konfiguration von KDevelop für Qt 
+2.x / KDE 2 zu erfahren, lesen Sie bitte das <htmlurl url="../tutorial/index.html" name="KDE Anwendungs Tutorial">. 
+
+Standardmäßig erstellt KDevelop neue Projekte im Homeverzeichnis des Benutzers. Wenn Sie dieses Verhalten ändern möchten, können 
+Sie das gewünschte Verzeichnis unter Standard Projektpfad eintragen.
+
 
 <chapt>Fragen und Antworten<label id="Fragen und Antworten">
 <p>
