@@ -216,6 +216,7 @@ void Lexer::getTokenPosition( const Token& token, int* line, int* col )
     }
 
     *line = mid + 1;
+	*col = int(ptr - m_startLineVector[ mid ]) + 1;
 }
 
 void Lexer::tokenize()
@@ -385,8 +386,13 @@ const QChar* Lexer::readCharLiteral( const QChar* ptr )
         } else if( *ptr == '\'' ){
             ++ptr;
             return ptr;
-        } else
+        } else {
+        	if( *ptr == '\n' ){
+            	newline( ptr+1 );
+        	}
+		
             ++ptr;
+		}
     }
 
     return ptr;
@@ -409,8 +415,12 @@ const QChar* Lexer::readStringLiteral( const QChar* ptr )
         } else if( *ptr == '"' ){
             ++ptr;
             return ptr;
-        } else
+        } else {
+        	if( *ptr == '\n' ){
+            	newline( ptr+1 );
+        	}
             ++ptr;
+		}
     }
 
     kdDebug(9007) << "Lexer::readStringLiteral() -- unexpected eof" << endl;
