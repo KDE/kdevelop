@@ -183,7 +183,7 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
                 aClass->getAttributeByName( item->text(0) ) :
                 aClass->getMethodByNameAndArg( item->text(0) ) );
       
-      toFile = aAttr->declaredInFile;
+      toFile = aAttr->definedInFile;
       toLine = aAttr->definedOnLine;
       break;
     case CVGLOBAL_FUNCTION:
@@ -191,7 +191,7 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
       aAttr = ( idxType == CVGLOBAL_FUNCTION ?
                 class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) ) :
                 class_tree->store->getGlobalVarByName( item->text(0) ) );
-      toFile = aAttr->declaredInFile;
+      toFile = aAttr->definedInFile;
       toLine = aAttr->definedOnLine;
       break;
     default:
