@@ -20,7 +20,8 @@
 #define _PARSEDCLASSCONTAINER_H_INCLUDED
 
 #include "ParsedContainer.h"
-#include "ParsedClass.h"
+
+class CParsedClass;
 
 /** This class is a container that also can hold classes.
  * It has a range of functions to work with the classes it holds.
@@ -87,5 +88,7 @@ public: // Public Methods
   /** Clear the internal state. */
   void clear();
 };
+
+#include "ParsedClass.h"
 
 #endif
