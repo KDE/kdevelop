@@ -7,10 +7,13 @@ Comment[da]=Et helt fantastisk KOffice program
 Comment[et]=Tõesti imeline KOffice'i rakendus
 Comment[fr]=Une application pour KOffice vraiment superbe
 Comment[it]=Un'applicazione di KOffice veramente bella
+Comment[nl]=Een fantastische KOffice-toepassing
 Comment[pt]=Uma aplicação fantástica para o KOffice
 Comment[pt_BR]=Um aplicativo realmente do tipo do KOffice
 Comment[ru]=Внушительное приложение KOffice
 Comment[sv]=Ett riktigt suveränt Koffice-program
+Comment[uk]=Дійсно чудова програма для KOffice
+Comment[xx]=xx A really awesome KOffice applicationxx
 Type=MimeType
 #You need to change the mime type below to match what your application will handle...
 Patterns=*.xmpl;
