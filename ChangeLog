@@ -1,3 +1,8 @@
+2001-04-18  Richard Dale <duke@tipitina.demon.co.uk
+
+	* GDB debugger part sources copied to 'parts/javadebugger', and all names 
+          changed to JDB ones. Ready to add jdb functionality.
+
 2001-04-17  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
 	* Moved the splitter widget to lib/util, so it can be shared with parts
