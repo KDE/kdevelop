@@ -484,10 +484,14 @@ void ClassStore::removeWithReferences(const QString &fileName)
 {
     for (QMap<QString, ParsedScopeContainer*>::Iterator it = m_allScopes.begin(); it != m_allScopes.end(); ++it)
         removeWithReferences(fileName, *it);
-//    for (QMap<QString, ParsedClass*>::Iterator it = m_allClasses.begin(); it != m_allClasses.end(); ++it)
-//        (*it)->removeWithReferences(fileName);
-//    for (QMap<QString, ParsedStruct*>::Iterator it = m_allStructs.begin(); it != m_allStructs.end(); ++it)
-//        (*it)->removeWithReferences(fileName);
+    for (QMap<QString, ParsedClass*>::Iterator it = m_allClasses.begin(); it != m_allClasses.end(); ++it) {
+        if ( (*it)->declaredInFile() == fileName )
+            m_allClasses.remove( it );
+    }
+    for (QMap<QString, ParsedStruct*>::Iterator it = m_allStructs.begin(); it != m_allStructs.end(); ++it) {
+        if ( (*it)->declaredInFile() == fileName )
+            m_allStructs.remove( it );
+    }
     m_globalScope->removeWithReferences(fileName);
 }
 

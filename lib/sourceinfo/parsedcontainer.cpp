@@ -108,8 +108,6 @@ void ParsedContainer::addAttribute( ParsedAttribute *anAttribute )
     if ( !path().isEmpty() )
         anAttribute->setDeclaredInScope( path() );
 
-    //qDebug( "ParsedContainer::addAttribute: " + anAttribute->asString() );
-
     attributes.insert( anAttribute->name(),  anAttribute );
 }
 
