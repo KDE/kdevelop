@@ -645,11 +645,13 @@ void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
     {
 	QString tLabel( rw_part->url().fileName() );
 	QIconSet tSet;
-	if ( rw_part->isModified() )
+	QString toolTip = rw_part->url().url();
+        if ( PartController::getInstance()->isDirty( rw_part ) ) {
+            toolTip.prepend( i18n("Externally modified - ") );
+            tSet = SmallIconSet( "revert" );
+	} else if ( rw_part->isModified() ) {
             tSet = SmallIconSet( "filesave" );
-	if ( ( m_tabWidget->tabLabel( rw_part->widget() ) == tLabel )
-             && ( !m_tabWidget->tabIconSet( rw_part->widget() ).isNull() ) )
-            return;
+        }
 
         m_tabWidget->changeTab( rw_part->widget(), tSet, tLabel );
         m_tabWidget->setTabToolTip( rw_part->widget(), rw_part->url().url() );
