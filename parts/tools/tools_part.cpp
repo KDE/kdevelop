@@ -27,10 +27,13 @@
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
 #include "urlutil.h"
+#include "configwidgetproxy.h"
 
 #include "toolsconfig.h"
 #include "toolsconfigwidget.h"
 
+#define TOOLSSETTINGS 1
+#define EXTRATOOLSSETTINGS 2
 
 static const KDevPluginInfo data("kdevtools");
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( data ) )
@@ -42,7 +45,11 @@ ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
 
   setXMLFile("kdevpart_tools.rc");
 
-  connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
+	m_configProxy = new ConfigWidgetProxy( core() );
+	m_configProxy->createGlobalConfigPage( i18n("Tools Menu"), TOOLSSETTINGS, info()->icon() );
+	m_configProxy->createGlobalConfigPage( i18n("External Tools"), EXTRATOOLSSETTINGS, info()->icon() );
+	connect( m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
   connect(core(), SIGNAL(coreInitialized()), this, SLOT(updateMenu()));
 
@@ -59,21 +66,21 @@ ToolsPart::~ToolsPart()
 {
 }
 
-
-void ToolsPart::configWidget(KDialogBase *dlg)
+void ToolsPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-	QVBox *vbox = dlg->addVBoxPage( i18n("Tools Menu"), i18n("Tools Menu"), BarIcon( info()->icon(), KIcon::SizeMedium) );
-  ToolsConfig *w = new ToolsConfig(vbox, "tools config widget");
-  connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
-  connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
-
-  vbox = dlg->addVBoxPage(i18n("External Tools"), i18n("External Tools"), BarIcon( info()->icon(), KIcon::SizeMedium) );
-  ToolsConfigWidget *w2 = new ToolsConfigWidget(vbox, "tools config widget");
-  connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
-  connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));
+	if ( pagenumber == TOOLSSETTINGS )
+	{
+		ToolsConfig *w = new ToolsConfig( page, "tools config widget" );
+		connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+		connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
+	}
+	else if ( pagenumber == EXTRATOOLSSETTINGS )
+	{
+		ToolsConfigWidget *w2 = new ToolsConfigWidget( page, "tools config widget" );
+		connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+		connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));
+	}
 }
-
-
 
 void ToolsPart::updateMenu()
 {

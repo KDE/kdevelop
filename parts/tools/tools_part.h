@@ -15,7 +15,7 @@
 class QPopupMenu;
 class KDialogBase;
 class Context;
-
+class ConfigWidgetProxy;
 
 class ToolsWidget;
 
@@ -31,9 +31,7 @@ public:
 
 
 private slots:
-
-    void configWidget(KDialogBase *dlg);
-
+	void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber );
     void updateMenu();
 
 	void slotToolActivated();
@@ -49,6 +47,7 @@ private:
 
     QPopupMenu *m_contextPopup;
     QString m_contextFileName;
+	ConfigWidgetProxy * m_configProxy;
   };
 
 typedef KDevGenericFactory<ToolsPart> ToolsFactory;
