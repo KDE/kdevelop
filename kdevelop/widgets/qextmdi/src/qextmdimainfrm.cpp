@@ -370,6 +370,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       QHBoxLayout* pLayout = new QHBoxLayout( pToolView, 0, -1, "internal_qextmdichildview_layout");
       pWnd->reparent( pToolView, QPoint(0,0));
       pToolView->setName( pWnd->name());
+      pToolView->setFocusPolicy( pWnd->focusPolicy());
       const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
       pToolView->setIcon( wndIcon);
       pToolView->setCaption( pWnd->caption());
