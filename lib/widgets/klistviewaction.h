@@ -17,7 +17,7 @@
 # include <kdevwidgetaction.h>
 #endif
 
-class QComboView;
+class KComboView;
 
 class KListViewAction
 #if KDE_VERSION > 305
@@ -27,16 +27,16 @@ class KListViewAction
 #endif
 {
 public:
-    KListViewAction(QComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name);
+    KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name);
 
     ~KListViewAction();
 
-    QComboView *view() const;
+    KComboView *view() const;
     void setToolTip(const QString & str);
     void setWhatsThis(const QString &str);
 
 private:
-    QComboView *m_view;
+    KComboView *m_view;
 };
 
 #endif

@@ -15,7 +15,7 @@
 # endif
 #endif
 #include "klistviewaction.h"
-#include "qcomboview.h"
+#include "kcomboview.h"
 
 #include <qtooltip.h>
 #include <qwhatsthis.h>
@@ -25,15 +25,15 @@ KListViewAction::~KListViewAction()
     delete m_view;
 }
 
-KListViewAction::KListViewAction(QComboView *view, const QString & text, const KShortcut & cut,
+KListViewAction::KListViewAction(KComboView *view, const QString & text, const KShortcut & cut,
     const QObject * receiver, const char * slot, KActionCollection * parent, const char * name ):
     KWidgetAction(view, text, cut, receiver, slot, parent, name), m_view(view)
 {
     m_view->setDuplicatesEnabled(false);
-    m_view->setInsertionPolicy(QComboView::NoInsertion);
+    m_view->setInsertionPolicy(KComboView::NoInsertion);
 }
 
-QComboView * KListViewAction::view( ) const
+KComboView * KListViewAction::view( ) const
 {
     return m_view;
 }

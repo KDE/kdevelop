@@ -21,7 +21,7 @@
 #include "codemodel.h"
 
 class ClassViewPart;
-class QComboView;
+class KComboView;
 
 class NamespaceItem: public QListViewItem{
 public:
@@ -58,13 +58,13 @@ private:
 
 namespace ViewCombosOp{
 
-void refreshNamespaces(ClassViewPart *part, QComboView *view);
-void refreshClasses(ClassViewPart *part, QComboView *view, const NamespaceDom &dom);
-void refreshFunctions(ClassViewPart *part, QComboView *view, const ClassDom & dom);
-void refreshFunctions(ClassViewPart *part, QComboView *view, const NamespaceDom & dom);
+void refreshNamespaces(ClassViewPart *part, KComboView *view);
+void refreshClasses(ClassViewPart *part, KComboView *view, const NamespaceDom &dom);
+void refreshFunctions(ClassViewPart *part, KComboView *view, const ClassDom & dom);
+void refreshFunctions(ClassViewPart *part, KComboView *view, const NamespaceDom & dom);
 
-void processNamespace( ClassViewPart *part, NamespaceItem * item );
-void processClass( ClassViewPart *part, ClassItem * item );
-void processFunction( ClassViewPart *part, FunctionItem * item );
+void processNamespace( ClassViewPart *part, KComboView *view, NamespaceItem * item );
+void processClass( ClassViewPart *part, KComboView *view, ClassItem * item );
+void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item );
 
 }

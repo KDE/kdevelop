@@ -48,7 +48,7 @@ class Q_EXPORT QComboView : public QWidget
     Q_OVERRIDE( bool autoMask DESIGNABLE true SCRIPTABLE true )
 
 public:
-    QComboView( QWidget* parent=0, const char* name=0 );
+//    QComboView( QWidget* parent=0, const char* name=0 );
     QComboView( bool rw, QWidget* parent=0, const char* name=0 );
     ~QComboView();
 
@@ -104,7 +104,7 @@ public:
     void setCurrentText( const QString& );
 
 public slots:
-    void	clear();
+    virtual void clear();
     void	clearValidator();
     void	clearEdit();
     virtual void setEditText( const QString &);

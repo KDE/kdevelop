@@ -20,7 +20,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include "qcomboview.h"
+#include "kcomboview.h"
 
 #include "viewcombos.h"
 #include "classviewpart.h"
@@ -100,23 +100,25 @@ void FunctionItem::setup()
 
 namespace ViewCombosOp{
 
-void refreshNamespaces(ClassViewPart *part, QComboView *view)
+void refreshNamespaces(ClassViewPart *part, KComboView *view)
 {
     view->clear();
 
     NamespaceItem *global_item = new NamespaceItem( part, view->listView(), i18n("(Global Namespace)"), part->codeModel()->globalNamespace() );
+    view->addItem(global_item);
     global_item->setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, part->instance()) );
     NamespaceList namespaces = part->codeModel()->globalNamespace()->namespaceList();
     for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
     {
         NamespaceItem *item = new NamespaceItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(item);
         item->setOpen(true);
-        processNamespace(part, item);
+        processNamespace(part, view, item);
     }
     view->setCurrentActiveItem(global_item);
 }
 
-void refreshClasses(ClassViewPart *part, QComboView *view, const NamespaceDom &dom)
+void refreshClasses(ClassViewPart *part, KComboView *view, const NamespaceDom &dom)
 {
     view->clear();
 
@@ -125,12 +127,13 @@ void refreshClasses(ClassViewPart *part, QComboView *view, const NamespaceDom &d
     for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
     {
         ClassItem *item = new ClassItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(item);
         item->setOpen(true);
-        processClass(part, item);
+        processClass(part, view, item);
     }
 }
 
-void refreshFunctions(ClassViewPart *part, QComboView *view, const ClassDom & dom)
+void refreshFunctions(ClassViewPart *part, KComboView *view, const ClassDom & dom)
 {
     view->clear();
 
@@ -139,12 +142,13 @@ void refreshFunctions(ClassViewPart *part, QComboView *view, const ClassDom & do
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
         FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(item);
         item->setOpen(true);
-        processFunction(part, item);
+        processFunction(part, view, item);
     }
 }
 
-void refreshFunctions(ClassViewPart *part, QComboView *view, const NamespaceDom & dom)
+void refreshFunctions(ClassViewPart *part, KComboView *view, const NamespaceDom & dom)
 {
     view->clear();
 
@@ -153,42 +157,46 @@ void refreshFunctions(ClassViewPart *part, QComboView *view, const NamespaceDom 
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
         FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(item);
         item->setOpen(true);
-        processFunction(part, item);
+        processFunction(part, view, item);
     }
 }
 
-void processNamespace( ClassViewPart *part, NamespaceItem * item )
+void processNamespace( ClassViewPart *part, KComboView *view, NamespaceItem * item )
 {
     NamespaceList namespaces = item->dom()->namespaceList();
     for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
     {
         NamespaceItem *newitem = new NamespaceItem(part, item, part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(newitem);
         newitem->setOpen(true);
-        processNamespace(part, newitem);
+        processNamespace(part, view, newitem);
     }
 }
 
-void processClass( ClassViewPart *part, ClassItem * item )
+void processClass( ClassViewPart *part, KComboView *view, ClassItem * item )
 {
     ClassList classes = item->dom()->classList();
     for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
     {
         ClassItem *newitem = new ClassItem(part, item, part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(newitem);
         newitem->setOpen(true);
-        processClass(part, newitem);
+        processClass(part, view, newitem);
     }
 }
 
-void processFunction( ClassViewPart *part, FunctionItem * item )
+void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item )
 {
     //TODO: allow nested functions (adymo: Pascal has nested procedures and functions)
 /*    FunctionList functions = item->dom()->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
         FunctionItem *newitem = new FunctionItem(part, item, part->languageSupport()->formatModelItem(*it), *it);
+        view->addItem(newitem);
         newitem->setOpen(true);
-        processFunction(part,newitem);
+        processFunction(part, view, newitem);
     }*/
 }
 

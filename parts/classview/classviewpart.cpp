@@ -30,7 +30,7 @@
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevlanguagesupport.h>
-#include <qcomboview.h>
+#include <kcomboview.h>
 #include <kdevpartcontroller.h>
 
 #include "classviewwidget.h"
@@ -81,17 +81,17 @@ void ClassViewPart::slotProjectClosed( )
 
 void ClassViewPart::setupActions( )
 {
-    m_namespaces = new KListViewAction( new QComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
+    m_namespaces = new KListViewAction( new KComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
     connect( m_namespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(QListViewItem*)) );
     m_namespaces->setToolTip(i18n("Namespaces"));
     m_namespaces->setWhatsThis(i18n("<b>Namespace Selector</b>\nSelect a namespace to view classes and functions contained in it."));
 
-    m_classes = new KListViewAction( new QComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
+    m_classes = new KListViewAction( new KComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
     connect( m_classes->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(QListViewItem*)) );
     m_classes->setToolTip(i18n("Classes"));
     m_classes->setWhatsThis(i18n("<b>Class Selector</b>\nSelect a class to view it's members."));
 
-    m_functions = new KListViewAction( new QComboView(true), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo" );
+    m_functions = new KListViewAction( new KComboView(true), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo" );
     connect( m_functions->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectFunction(QListViewItem*)) );
     m_functions->setToolTip(i18n("Functions"));
     m_functions->setWhatsThis(i18n("<b>Function Selector</b>\nSelect a function to jump to it's definition or declaration."));

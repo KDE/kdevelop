@@ -20,7 +20,7 @@ class ClassViewPart;
 class KDevLanguageSupport;
 class DigraphView;
 class ClassToolWidget;
-class QComboView;
+class KComboView;
 class QListViewItem;
 
 class HierarchyDialog : public QDialog
@@ -47,8 +47,8 @@ private:
     //like MyClass - MyNamespace.MyClass
     QMap<QString, QString> uclasses;
 
-    QComboView *namespace_combo;
-    QComboView *class_combo;
+    KComboView *namespace_combo;
+    KComboView *class_combo;
     DigraphView *digraph;
 //    ClassToolWidget *member_tree;
     ClassViewPart *m_part;

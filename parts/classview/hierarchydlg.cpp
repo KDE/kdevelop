@@ -20,7 +20,7 @@
 #include <qsplitter.h>
 
 #include "kdevlanguagesupport.h"
-#include "qcomboview.h"
+#include "kcomboview.h"
 
 #include "classviewpart.h"
 //#include "classtoolwidget.h"
@@ -31,9 +31,9 @@
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     : QDialog(0, "hierarchy dialog", WDestructiveClose)
 {
-    class_combo = new QComboView(false, this);
+    class_combo = new KComboView(false, this);
     class_combo->setMinimumWidth(150);
-    namespace_combo = new QComboView(false, this);
+    namespace_combo = new KComboView(false, this);
     namespace_combo->setMinimumWidth(150);
 
     QPushButton *close_button = new QPushButton(i18n("&Close"), this);
