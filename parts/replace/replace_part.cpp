@@ -51,7 +51,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
 
     mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("Project wide string replacement") );
 
-    KAction * action = new KAction(i18n("Find-Select-Replace..."), "replace project",
+    KAction * action = new KAction(i18n("Find-Select-Replace..."), 0,
                                    CTRL+SHIFT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
     action->setToolTip( i18n("Project wide string replacement") );
     action->setWhatsThis( i18n("<b>Find-Select-Replace</b><p>"

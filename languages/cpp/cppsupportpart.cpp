@@ -211,7 +211,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 	
 	m_createGetterSetterAction = new KAction(i18n("Create Accessor Methods"), 0, this, SLOT(slotCreateAccessMethods()), actionCollection(), "edit_create_getter_setter");
 	
-    action = new KAction(i18n("Make Member"), "makermember", Key_F2,
+    action = new KAction(i18n("Make Member"), 0, Key_F2,
                          this, SLOT(slotMakeMember()),
                          actionCollection(), "edit_make_member");
     action->setToolTip(i18n("Make member"));
