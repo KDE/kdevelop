@@ -947,9 +947,9 @@ void CKDevelop::slotDebugStop()
   edit_widget->clearStepLine();
   brkptManager->refreshBP(edit_widget->getName());
 
-  o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
-  o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
-  t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal && dbgController);
+  o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
+  o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
+  t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
   frameStack->setEnabled(dbgInternal && dbgController);
   disassemble->setEnabled(dbgInternal && dbgController);
   var_viewer->setEnabled(dbgInternal && dbgController);
@@ -1289,9 +1289,9 @@ void CKDevelop::setupInternalDebugger()
   dbgShuttingDown = false;
 	setDebugMenuProcess(true);  // MUST be after dbgController
 
-  o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
-  o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
-  t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal && dbgController);
+  o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
+  o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
+  t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
   frameStack->setEnabled(dbgInternal && dbgController);
   disassemble->setEnabled(dbgInternal && dbgController);
   var_viewer->setEnabled(dbgInternal && dbgController);

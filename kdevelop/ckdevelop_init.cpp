@@ -1453,10 +1453,10 @@ void CKDevelop::initDebugger()
   if (dbgInternal && !var_viewer)
   {
     ASSERT(!frameStack && !brkptManager && !var_viewer && !dbgController);
-    brkptManager  = new BreakpointManager(o_tab_view, "BPManager");
-    frameStack    = new FrameStack(o_tab_view, "FrameStack");
-    disassemble   = new Disassemble(kapp, o_tab_view, "Disassemble");
-    var_viewer    = new VarViewer(t_tab_view,"VAR");
+    brkptManager  = new BreakpointManager(o_tab_view, "BPManagerTab");
+    frameStack    = new FrameStack(o_tab_view, "FStackTab");
+    disassemble   = new Disassemble(kapp, o_tab_view, "DisassembleTab");
+    var_viewer    = new VarViewer(t_tab_view,"VARTab");
 
     brkptManager->setFocusPolicy(QWidget::NoFocus);
     frameStack->setFocusPolicy(QWidget::NoFocus);
@@ -1469,7 +1469,7 @@ void CKDevelop::initDebugger()
     t_tab_view->addTab(var_viewer,i18n("VAR"));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    dbg_widget = new COutputWidget(kapp, o_tab_view, "debugger");
+    dbg_widget = new COutputWidget(kapp, o_tab_view, "debuggerTab");
     o_tab_view->addTab(dbg_widget,i18n("debugger"));
     dbg_widget->insertLine("Start dbg");
 #endif
@@ -1522,16 +1522,16 @@ void CKDevelop::initDebugger()
   if (var_viewer)
   {
     // Figure out whether the tabs should be enabled or not.
-    o_tab_view->setTabEnabled("BPManager", dbgInternal);
-    o_tab_view->setTabEnabled("FrameStack", dbgInternal && dbgController);
-    o_tab_view->setTabEnabled("Disassemble", dbgInternal && dbgController);
-    t_tab_view->setTabEnabled("VAR", dbgInternal && dbgController);
+    o_tab_view->setTabEnabled("BPManagerTab", dbgInternal);
+    o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
+    o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
+    t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
     brkptManager->setEnabled(dbgInternal);
     frameStack->setEnabled(dbgInternal && dbgController);
     disassemble->setEnabled(dbgInternal && dbgController);
     var_viewer->setEnabled(dbgInternal && dbgController);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    o_tab_view->setTabEnabled("debugger", dbgInternal);
+    o_tab_view->setTabEnabled("debuggerTab", dbgInternal);
     dbg_widget->setEnabled(dbgInternal);
 #endif
   }
