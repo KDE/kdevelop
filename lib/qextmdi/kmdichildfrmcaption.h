@@ -31,7 +31,7 @@
 
 #include "kmdidefines.h"
 
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrm;
+class KMdiChildFrm;
 
 
 class KMdiChildFrmCaptionPrivate;
@@ -41,7 +41,7 @@ class KMdiChildFrmCaptionPrivate;
 *
 * It's the caption bar of a child frame widget.
 */
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrmCaption : public QWidget
+class KMdiChildFrmCaption : public QWidget
 {
    Q_OBJECT
 public:
@@ -128,3 +128,5 @@ private:
 };
 
 #endif //_KMDICAPTION_H_
+
+// kate: space-indent on; indent-width 2; replace-tabs on;

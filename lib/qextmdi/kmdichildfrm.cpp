@@ -27,6 +27,13 @@
 //
 //----------------------------------------------------------------------------
 
+#include "kmdichildfrm.h"
+#include "kmdichildfrm.moc"
+
+#include "kmdidefines.h"
+#include "kmdichildfrmcaption.h"
+#include "kmdichildarea.h"
+#include "kmdimainfrm.h"
 
 #include <qpainter.h>
 #include <qapplication.h>
@@ -36,13 +43,10 @@
 #include <qpopupmenu.h>
 #include <qtoolbutton.h>
 #include <qnamespace.h>
+#include <qimage.h>
 
-#include "kmdidefines.h"
-#include "kmdichildfrmcaption.h"
-#include "kmdichildarea.h"
-#include "kmdimainfrm.h"
-#include "kmdichildfrm.h"
-
+#include <klocale.h>
+#include <kiconloader.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // KMdiChildFrm
@@ -140,7 +144,10 @@ KMdiChildFrm::KMdiChildFrm(KMdiChildArea *parent)
    QObject::connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
    QObject::connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
 
-   m_pIconButtonPixmap = new QPixmap( filenew);
+   m_pIconButtonPixmap = new QPixmap( SmallIcon("filenew") );
+   if (m_pIconButtonPixmap->isNull())
+      *m_pIconButtonPixmap = QPixmap(filenew);
+   
    redecorateButtons();
 
    m_pWinIcon->setFocusPolicy(NoFocus);
@@ -622,9 +629,17 @@ void KMdiChildFrm::enableClose(bool bEnable)
 
 void KMdiChildFrm::setIcon(const QPixmap& pxm)
 {
-   *m_pIconButtonPixmap = pxm;
-   m_pWinIcon->setPixmap( pxm);
-   m_pUnixIcon->setPixmap( pxm);
+   QPixmap p = pxm;
+   if (p.width()!=18 || p.height()!=18) {
+      QImage img = p.convertToImage();
+      p = img.smoothScale(18,18,QImage::ScaleMin);
+   }
+   const bool do_resize = m_pIconButtonPixmap->size()!=p.size();
+   *m_pIconButtonPixmap = p;
+   m_pWinIcon->setPixmap( p );
+   m_pUnixIcon->setPixmap( p );
+   if (do_resize)
+      doResize(true);
 }
 
 //============ icon =================//
@@ -876,6 +891,11 @@ void KMdiChildFrm::resizeEvent(QResizeEvent *)
 
 void KMdiChildFrm::doResize()
 {
+	doResize(false);
+}
+
+void KMdiChildFrm::doResize(bool captionOnly)
+{
    //Resize the caption
    int captionHeight = m_pCaption->heightHint();
    int captionWidth = width() - KMDI_CHILDFRM_DOUBLE_BORDER;
@@ -930,7 +950,7 @@ void KMdiChildFrm::doResize()
       m_pUndock->setGeometry  ( captionWidth-27*3, heightOffset, 27, buttonHeight);
    }
    //Resize the client
-   if (m_pClient) {
+   if (!captionOnly && m_pClient) {
       QSize newClientSize(captionWidth,
       height()-(KMDI_CHILDFRM_DOUBLE_BORDER+captionHeight+KMDI_CHILDFRM_SEPARATOR));
       if (newClientSize != m_pClient->size()) {
@@ -1087,11 +1107,11 @@ QPopupMenu* KMdiChildFrm::systemMenu() const
    m_pSystemMenu->clear();
 
    if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look) {
-      m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
-      m_pSystemMenu->insertItem(tr("&Move"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
-      m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(slot_resizeViaSystemMenu()));
-      m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
-      m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
+      m_pSystemMenu->insertItem(i18n("&Restore"),this,SLOT(restorePressed()));
+      m_pSystemMenu->insertItem(i18n("&Move"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
+      m_pSystemMenu->insertItem(i18n("R&esize"),this, SLOT(slot_resizeViaSystemMenu()));
+      m_pSystemMenu->insertItem(i18n("M&inimize"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(i18n("M&aximize"),this, SLOT(maximizePressed()));
       if( state() == Normal)
          m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),false);
       else if( state() == Maximized) {
@@ -1106,20 +1126,20 @@ QPopupMenu* KMdiChildFrm::systemMenu() const
    }
    else  {
       if( state() != Normal)
-         m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
+         m_pSystemMenu->insertItem(i18n("&Restore"),this,SLOT(restorePressed()));
       if( state() != Maximized)
-         m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
+         m_pSystemMenu->insertItem(i18n("&Maximize"),this, SLOT(maximizePressed()));
       if( state() != Minimized)
-         m_pSystemMenu->insertItem(tr("&Minimize"),this, SLOT(minimizePressed()));
+         m_pSystemMenu->insertItem(i18n("&Minimize"),this, SLOT(minimizePressed()));
       if( state() != Maximized)
-         m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
+         m_pSystemMenu->insertItem(i18n("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
       if( state() == Normal)
-         m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(slot_resizeViaSystemMenu()));
+         m_pSystemMenu->insertItem(i18n("&Resize"),this, SLOT(slot_resizeViaSystemMenu()));
    }
 
-   m_pSystemMenu->insertItem(tr("&Undock"),this, SLOT(undockPressed()));
+   m_pSystemMenu->insertItem(i18n("&Undock"),this, SLOT(undockPressed()));
    m_pSystemMenu->insertSeparator();
-   m_pSystemMenu->insertItem(tr("&Close"),this, SLOT(closePressed()));
+   m_pSystemMenu->insertItem(i18n("&Close"),this, SLOT(closePressed()));
 
    return m_pSystemMenu;
 }
@@ -1251,6 +1271,4 @@ QRect KMdiChildFrm::mdiAreaContentsRect() const
    }
 }
 
-#ifndef NO_INCLUDE_MOCFILES
-#include "kmdichildfrm.moc"
-#endif
+// kate: space-indent on; indent-width 2; replace-tabs on;

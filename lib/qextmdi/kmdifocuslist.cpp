@@ -16,11 +16,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qobjectlist.h>
-#ifndef NO_KDE
-#include <kdebug.h>
-#endif
 #include "kmdifocuslist.h"
+#include "kmdifocuslist.moc"
+#include <qobjectlist.h>
+#include <kdebug.h>
 
 KMdiFocusList::KMdiFocusList(QObject *parent):QObject(parent) {
 }
@@ -49,7 +48,7 @@ void KMdiFocusList::addWidgetTree(QWidget* w) {
 }
 	
 void KMdiFocusList::restore() {
-	for (QMap<QWidget*,QWidget::FocusPolicy>::iterator it=m_list.begin();it!=m_list.end();++it) {
+	for (QMap<QWidget*,QWidget::FocusPolicy>::const_iterator it=m_list.constBegin();it!=m_list.constEnd();++it) {
 		it.key()->setFocusPolicy(it.data());
 	}
 	m_list.clear();
@@ -61,7 +60,3 @@ void KMdiFocusList::objectHasBeenDestroyed(QObject* o) {
 	QWidget *w=(QWidget*)o;
 	m_list.remove(w);
 }
-
-#ifndef NO_INCLUDE_MOCFILES
-#include "kmdifocuslist.moc"
-#endif

@@ -22,10 +22,9 @@
 #ifndef NO_KDE
 # include <kdebug.h>
 #endif
-
+#include "kmditoolviewaccessor_p.h"
 #include "kmdiguiclient.h"
 #include "kmdimainfrm.h"
-#include <kmdidockwidget.h>
 
 #include "kmditoolviewaccessor.h"
 #include "kmditoolviewaccessor_p.h"
@@ -35,7 +34,7 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 {
 	mdiMainFrm=parent;
 	d=new KMdiToolViewAccessorPrivate();
-	if (widgetToWrap->inherits("KDockWidget_Compat::KDockWidget")) {
+	if (widgetToWrap->inherits("KDockWidget")) {
 		d->widgetContainer=dynamic_cast<KDockWidget*>(widgetToWrap);
 		d->widget=d->widgetContainer->getWidget();
 	} else {
@@ -96,7 +95,7 @@ QWidget *KMdiToolViewAccessor::wrappedWidget() {
 void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
 {
 	Q_ASSERT(!(d->widget));
-	Q_ASSERT(!widgetToWrap->inherits("KDockWidget_Compat::KDockWidget"));
+	Q_ASSERT(!widgetToWrap->inherits("KDockWidget"));
 	disconnect(d->widgetContainer,SIGNAL(widgetSet(QWidget*)),this,SLOT(setWidgetToWrap(QWidget*)));
 	delete d->widget;
     d->widget=widgetToWrap;
@@ -207,7 +206,7 @@ void KMdiToolViewAccessor::place(KDockWidget::DockPosition pos, QWidget* pTarget
         pCover->manualDock( pTargetDock, pos, percent);
 //check      pCover->show();
     }
- }
+}
 
 void KMdiToolViewAccessor::hide() {
 	Q_ASSERT(d->widgetContainer);
@@ -223,5 +222,5 @@ void KMdiToolViewAccessor::show() {
 
 
 #ifndef NO_INCLUDE_MOCFILES
-//# include "kmditoolviewaccessor.moc"
+#include "kmditoolviewaccessor.moc"
 #endif

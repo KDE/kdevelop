@@ -105,7 +105,7 @@ class KMdiChildViewPrivate;
   *
   */
 
-class DLL_IMP_EXP_KMDICLASS KMdiChildView : public QWidget
+class KMdiChildView : public QWidget
 {
    friend class KMdiMainFrm;
    friend class KMdiChildFrm;
@@ -535,3 +535,5 @@ inline KMdiChildFrm *KMdiChildView::mdiParent() const
 }
 
 #endif //_KMDICHILDVIEW_H_
+
+// kate: space-indent on; indent-width 2; replace-tabs on;

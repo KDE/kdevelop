@@ -1,0 +1,30 @@
+/* XPM */
+#ifndef _WIN_RESTOREBUTTON_XPM_
+#define _WIN_RESTOREBUTTON_XPM_
+
+static const char *win_restorebutton[] = {
+/* width height num_colors chars_per_pixel */
+"    16    14        4            1",
+/* colors */
+". c #000000",
+"# c #808080",
+"a c None",
+"b c #ffffff",
+/* pixels */
+"bbbbbbbbbbbbbbb.",
+"baaaaaaaaaaaaa#.",
+"baaaa......aaa#.",
+"baaaa......aaa#.",
+"baaaa.aaaa.aaa#.",
+"baa......a.aaa#.",
+"baa......a.aaa#.",
+"baa.aaaa...aaa#.",
+"baa.aaaa.aaaaa#.",
+"baa.aaaa.aaaaa#.",
+"baa......aaaaa#.",
+"baaaaaaaaaaaaa#.",
+"b##############.",
+"................"
+};
+
+#endif

@@ -26,17 +26,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include <qnamespace.h>
+#include "kmditaskbar.h"
+#include "kmditaskbar.moc"
+
+#include "kmdimainfrm.h"
+#include "kmdichildview.h"
+#include "kmdidefines.h"
+
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <qwidget.h>
 #include <qstyle.h>
 
-#include "kmdimainfrm.h"
-#include "kmdichildview.h"
-#include "kmdidefines.h"
-#include "kmditaskbar.h"
-
+#include <qnamespace.h>
 
 /*
    @quickhelp: KMdiTaskBar
@@ -342,7 +344,3 @@ void KMdiTaskBar::resizeEvent( QResizeEvent* rse)
    }
    KToolBar::resizeEvent( rse);
 }
-
-#ifndef NO_INCLUDE_MOCFILES
-#include "kmditaskbar.moc"
-#endif

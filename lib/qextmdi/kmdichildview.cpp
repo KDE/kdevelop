@@ -29,20 +29,18 @@
 //
 //----------------------------------------------------------------------------
 
+#include "kmdichildview.h"
+#include "kmdichildview.moc"
+
 #include <qdatetime.h>
 #include <qobjectlist.h>
-
-#ifndef NO_KDE
-#include <kdeversion.h>
-#endif
 
 #include "kmdimainfrm.h"
 #include "kmdichildfrm.h"
 #include "kmdidefines.h"
-#include "kmdichildview.h"
 #include <kdebug.h>
+#include <klocale.h>
 #include <qiconset.h>
-
 
 //============ KMdiChildView ============//
 
@@ -63,7 +61,7 @@ KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, con
       m_szCaption = caption;
    }
    else {
-      m_szCaption = QString(tr("Unnamed"));
+      m_szCaption = QString(i18n("Unnamed"));
    }
    m_sTabCaption = m_szCaption;
 
@@ -90,7 +88,7 @@ KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
   ,m_bFocusInEventIsPending(false)
 {
    setGeometry( 0, 0, 0, 0);  // reset
-   m_szCaption = QString(tr("Unnamed"));
+   m_szCaption = QString(i18n("Unnamed"));
    m_sTabCaption = m_szCaption;
 
    setFocusPolicy(ClickFocus);
@@ -105,12 +103,13 @@ KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
 
 KMdiChildView::~KMdiChildView()
 {
-    kdDebug(760)<<"~KMdiChildView()"<<endl;
+  kdDebug(760)<<"~KMdiChildView()"<<endl;
 }
 
 void KMdiChildView::trackIconAndCaptionChanges(QWidget *view) {
 	m_trackChanges=view;
 }
+
 
 //============== internal geometry ==============//
 
@@ -166,13 +165,10 @@ void KMdiChildView::setInternalGeometry(const QRect& newGeometry)
 
       // create the new geometry that is accepted by the QWidget::setGeometry() method
       QRect    newGeoQt;
-#if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
-      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft+frameGeo.width()-geo.width()-KMDI_CHILDFRM_DOUBLE_BORDER+1);
-      newGeoQt.setY(newGeometry.y()-nFrameSizeTop+frameGeo.height()-geo.height()-KMDI_CHILDFRM_DOUBLE_BORDER+1);
-#else
+
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
-#endif
+
       newGeoQt.setWidth(newGeometry.width());
       newGeoQt.setHeight(newGeometry.height());
 
@@ -503,8 +499,8 @@ void KMdiChildView::slot_childDestroyed()
    // if we lost a child we uninstall ourself as event filter for the lost
    // child and its children
    const QObject* pLostChild = QObject::sender();
-   if (pLostChild != 0L) {
-      QObjectList *list = ((QObject*)(pLostChild))->queryList();
+   if ((pLostChild != 0L) && (pLostChild->isWidgetType())) {
+      QObjectList *list = ((QObject*)(pLostChild))->queryList("QWidget");
       list->insert(0, pLostChild);        // add the lost child to the list too, just to save code
       QObjectListIt it( *list );          // iterate over all lost child widgets
       QObject * obj;
@@ -529,18 +525,6 @@ void KMdiChildView::slot_childDestroyed()
 //============= eventFilter ===============//
 bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
-#ifndef NO_KDE
-#if !(KDE_VERSION > 305)
-   if ( obj != this && e->type() == QEvent::KeyRelease )
-     //  somethings eats the KeyRelease events and the main frame does not receive
-     //  the event. So manually forward the event the the eventFilter() functions
-     //  (but only if the sending object is not this object; avoid deadlock).
-     //  The main frame is one of the filtering objects for this one.
-     //  However this does not work for toplevel windows, but they don't distribute
-     //  any events anyway (like Alt+F,... )
-     qApp->sendEvent( this, e ); 
-#endif
-#endif
    if(e->type() == QEvent::KeyPress && isAttached()) {
       QKeyEvent* ke = (QKeyEvent*) e;
       if(ke->key() == Qt::Key_Tab) {
@@ -584,13 +568,13 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
       // if we lost a child we uninstall ourself as event filter for the lost
       // child and its children
       QObject* pLostChild = ((QChildEvent*)e)->child();
-      if (pLostChild != 0L) {
-         QObjectList *list = pLostChild->queryList();
+      if ((pLostChild != 0L) && (pLostChild->isWidgetType())) {
+         QObjectList *list = pLostChild->queryList( "QWidget" );
          list->insert(0, pLostChild);        // add the lost child to the list too, just to save code
          QObjectListIt it( *list );          // iterate over all lost child widgets
-         QObject * obj;
-         while ( (obj=it.current()) != 0 ) { // for each found object...
-            QWidget* widg = (QWidget*)obj;
+         QObject * o;
+         while ( (o=it.current()) != 0 ) { // for each found object...
+            QWidget* widg = (QWidget*)o;
             ++it;
             widg->removeEventFilter(this);
             if((widg->focusPolicy() == QWidget::StrongFocus) ||
@@ -621,9 +605,9 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code
          QObjectListIt it( *list );          // iterate over all new child widgets
-         QObject * obj;
-         while ( (obj=it.current()) != 0 ) { // for each found object...
-            QWidget* widg = (QWidget*)obj;
+         QObject * o;
+         while ( (o=it.current()) != 0 ) { // for each found object...
+            QWidget* widg = (QWidget*)o;
             ++it;
             widg->installEventFilter(this);
             connect(widg, SIGNAL(destroyed()), this, SLOT(slot_childDestroyed()));
@@ -644,6 +628,7 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
    else
    {
        if (e->type()==QEvent::IconChange) {
+//            qDebug("KMDiChildView:: QEvent:IconChange intercepted\n");
           if  (obj==this)
              iconUpdated(this,icon()?(*icon()):QPixmap());
           else if (obj==m_trackChanges)
@@ -654,7 +639,6 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
              captionUpdated(this,caption());
        }
    }
-
 
    return false;                           // standard event processing
 }
@@ -781,7 +765,4 @@ void KMdiChildView::raise()
    QWidget::raise();
 }
 
-
-#ifndef NO_INCLUDE_MOCFILES
-#include "kmdichildview.moc"
-#endif
+// kate: space-indent on; indent-width 2; replace-tabs on;

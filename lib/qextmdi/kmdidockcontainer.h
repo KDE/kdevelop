@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
    Copyright (C) 2002 Christoph Cullmann <cullmann@kde.org>
    Copyright (C) 2002,2003 Joseph Wenninger <jowenn@kde.org>
@@ -23,16 +22,19 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
+#include <kdockwidget.h>
 #include <qmap.h>
 #include <qdom.h>
+
+# include <kdockwidget_p.h>
+
 #include <qpushbutton.h>
-#include <kmdidockwidget.h>
 
 class QWidgetStack;
 class KMultiTabBar;
 class KDockButton_Private;
 
-class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
+class KMdiDockContainer: public QWidget, public KDockContainer
 {
   Q_OBJECT
 
@@ -50,13 +52,14 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
     virtual void removeWidget(KDockWidget*);
 
     void hideIfNeeded();
-#ifndef NO_KDE2
+
     virtual void save(KConfig *,const QString& group_or_prefix);
     virtual void load(KConfig *,const QString& group_or_prefix);
-#endif
+
     virtual void save(QDomElement&);
     virtual void load(QDomElement&);
 
+    void setStyle(int);
 
   public slots:
     void init();
@@ -76,9 +79,9 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
     int oldtab;
     int m_previousTab;
     int m_position;
-	QMap<KMdiDockWidget*,int> m_map;
-	QMap<int,KMdiDockWidget*> m_revMap;
-	QMap<KMdiDockWidget*,KDockButton_Private*> m_overlapButtons;
+    QMap<KDockWidget*,int> m_map;
+    QMap<int,KDockWidget*> m_revMap;
+    QMap<KDockWidget*,KDockButton_Private*> m_overlapButtons;
     QStringList itemNames;
     QMap<QString,QString> tabCaptions;
     QMap<QString,QString> tabTooltips;
@@ -94,3 +97,5 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
 };
 
 #endif
+
+// kate: space-indent on; indent-width 2; replace-tabs on;

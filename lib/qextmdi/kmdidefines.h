@@ -29,14 +29,9 @@
 
 #include <qglobal.h>
 
-#ifdef NO_KDE2
-#undef NO_KDE
-#define NO_KDE
-#endif
-
 #define KMDI_CHILDFRM_SEPARATOR 2
-#define KMDI_CHILDFRM_BORDER 3
-#define KMDI_CHILDFRM_DOUBLE_BORDER 6
+#define KMDI_CHILDFRM_BORDER 4
+#define KMDI_CHILDFRM_DOUBLE_BORDER 8
 #define KMDI_CHILDFRM_MIN_WIDTH 130
 
 //----------------------------------------------------------------------------
@@ -96,39 +91,11 @@ namespace KMdi
       IDEAlMode      = 4
    };
 
+   enum TabWidgetVisibility {
+      AlwaysShowTabs         = 0,
+      ShowWhenMoreThanOneTab = 1,
+      NeverShowTabs          = 2
+   };
 } //namespace
-
-
-//----------------------------------------------------------------------------
-#ifndef _DLL_IMP_EXP_MSG_
-#   define _DLL_IMP_EXP_MSG_
-#endif
-
-#if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
-  /* QT linked libraries compiled with MSVC */
-#  ifdef MAKEDLL_KMDI
-    /* for building kmdi */
-#   ifdef _DLL_IMP_EXP_MSG_
-#     ifdef _DEBUG
-#      pragma message ("  exporting C++ class to debug lib...")
-#      else
-#      pragma message ("  exporting C++ class to release lib...")
-#      endif
-#    endif
-#    define DLL_IMP_EXP_KMDICLASS  __declspec(dllexport)
-#  else
-    /* for including headers of kmdi */
-#    ifdef _DLL_IMP_EXP_MSG_
-#      ifdef _DEBUG
-#      pragma message ("  importing C++ class from kmdi debug lib...")
-#      else
-#      pragma message ("  importing C++ class from kmdi release lib...")
-#      endif
-#    endif
-#    define DLL_IMP_EXP_KMDICLASS  __declspec(dllimport)
-#  endif
-#else
-#  define DLL_IMP_EXP_KMDICLASS
-#endif
 
 #endif //_KMDIDEFINES_H_

@@ -19,8 +19,29 @@
 */
 
 /*
-   IMPORTANT Note: This file is forked from KDE-3.2 to let KDevelop-3 run also on KDE-3.0
+   activities:
+   -----------
+   05/2001 -               : useful patches, bugfixes by Christoph Cullmann <crossfire@babylon2k.de>,
+                             Joseph Wenninger <jowenn@bigfoot.com> and  Falk Brettschneider
+   03/2001 - 05/2001       : maintained and enhanced by Falk Brettschneider <falk@kdevelop.org>
+   03/2000                 : class documentation added by Falk Brettschneider <gigafalk@yahoo.com>
+   10/1999 - 03/2000       : programmed by Max Judin <novaprint@mtu-net.ru>
+
+   C++ classes in this file:
+   -------------------------
+   - KDockWidgetAbstractHeader     - minor helper class
+   - KDockWidgetAbstractHeaderDrag - minor helper class
+   - KDockWidgetHeaderDrag         - drag panel in a dockwidget title bar
+   - KDockWidgetHeader             - dockwidget title bar containing the drag panel
+   - KDockTabGroup                 - minor helper class
+   - KDockWidget                   - IMPORTANT CLASS: the one and only dockwidget class
+   - KDockManager                  - helper class
+   - KDockMainWindow               - IMPORTANT CLASS: a special KMainWindow that can have dockwidgets
+   - KDockArea                     - like KDockMainWindow but inherits just QWidget
+
+   IMPORTANT Note: This file compiles also in Qt-only mode by using the NO_KDE2 precompiler definition!
 */
+
 
 #ifndef KDOCKWIDGET_H
 #define KDOCKWIDGET_H
@@ -33,19 +54,25 @@
 #include <qdom.h>
 #include <qtabwidget.h>
 
-#ifdef NO_KDE2
-# ifdef _WINDOWS
-#   include "kmdidefines.h"
-# endif
-# include "kmdidummy.h"
+#ifndef NO_KDE2
+#include <kmainwindow.h>
+#include <netwm_def.h>
+#undef  EXPORT_DOCKCLASS
+#define EXPORT_DOCKCLASS
 #else
-# include <kmainwindow.h>
-# include <netwm_def.h>
-# include <kaction.h>
-# include <kparts/part.h>
-# undef  DLL_IMP_EXP_KMDICLASS
-# define DLL_IMP_EXP_KMDICLASS
+#include <qmainwindow.h>
+#include "exportdockclass.h"
+#include "dummykmainwindow.h"
 #endif
+
+class KDockSplitter;
+class KDockManager;
+class KDockMoveManager;
+class KDockWidget;
+class KDockButton_Private;
+class KDockWidgetPrivate;
+class KDockWidgetHeaderPrivate;
+class KDockArea;
 
 class QObjectList;
 class QPopupMenu;
@@ -60,16 +87,7 @@ class KConfig;
 class QToolBar;
 #endif
 
-class KDockSplitter;
-class KDockMoveManager;
-class KDockButton_Private;
-class KDockWidgetPrivate;
-class KDockWidgetHeaderPrivate;
-class KMdiMainFrm;
-
-namespace KDockWidget_Compat {
-
-class KDockWidget;
+class KDockContainer;
 
 /**
  * An abstract base clase for all dockwidget headers (and member of the dockwidget class set).
@@ -78,7 +96,7 @@ class KDockWidget;
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockWidgetAbstractHeader : public QFrame
+class KDockWidgetAbstractHeader : public QFrame
 {
   Q_OBJECT
 public:
@@ -127,7 +145,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockWidgetAbstractHeaderDrag : public QFrame
+class KDockWidgetAbstractHeaderDrag : public QFrame
 {
   Q_OBJECT
 public:
@@ -172,7 +190,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockWidgetHeaderDrag : public KDockWidgetAbstractHeaderDrag
+class KDockWidgetHeaderDrag : public KDockWidgetAbstractHeaderDrag
 {
   Q_OBJECT
 public:
@@ -213,7 +231,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockWidgetHeader : public KDockWidgetAbstractHeader
+class KDockWidgetHeader : public KDockWidgetAbstractHeader
 {
   Q_OBJECT
 public:
@@ -331,7 +349,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockTabGroup : public QTabWidget
+class EXPORT_DOCKCLASS KDockTabGroup : public QTabWidget
 {
   Q_OBJECT
 public:
@@ -391,7 +409,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockWidget: public QWidget
+class EXPORT_DOCKCLASS KDockWidget: public QWidget
 {
   Q_OBJECT
 friend class KDockManager;
@@ -704,6 +722,9 @@ protected:
   /// @since 3.1
   QWidget *latestKDockContainer();
 
+  /// @since 3.2
+  void setFormerBrotherDockWidget(KDockWidget *);
+
 signals:
   /**
    *@since 3.2
@@ -861,7 +882,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockManager: public QObject
+class EXPORT_DOCKCLASS KDockManager: public QObject
 {
   Q_OBJECT
 friend class KDockWidget;
@@ -1257,7 +1278,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class DLL_IMP_EXP_KMDICLASS KDockMainWindow : public KMainWindow
+class EXPORT_DOCKCLASS KDockMainWindow : public KMainWindow
 {
   Q_OBJECT
 
@@ -1438,7 +1459,7 @@ private:
 
 
 
-class DLL_IMP_EXP_KMDICLASS KDockArea : public QWidget
+class EXPORT_DOCKCLASS KDockArea : public QWidget
 {
   Q_OBJECT
 
@@ -1501,52 +1522,6 @@ private:
   KDockMainWindowPrivate *d;
 };
 
-class DLL_IMP_EXP_KMDICLASS KDockContainer
-{
-public:
-  KDockContainer();
-  virtual ~KDockContainer();
-  virtual KDockWidget *parentDockWidget();
-  virtual void insertWidget (KDockWidget *, QPixmap, const QString &, int &);
-  virtual void showWidget(KDockWidget *);
-  virtual void removeWidget(KDockWidget*);
-  virtual void undockWidget(KDockWidget*);
-#ifndef NO_KDE2
-  virtual void save(KConfig *cfg,const QString& group_or_prefix);
-  virtual void load(KConfig *cfg,const QString& group_or_prefix);
-#endif
-  virtual void save(QDomElement& dockElement);
-  virtual void load(QDomElement& dockElement);
-  virtual void setToolTip (KDockWidget *, QString &);
-  virtual void  setPixmap(KDockWidget*,const QPixmap&);
-  QStringList containedWidgets() const;
-protected:
-  friend class KDockManager;
-  friend class KDockSplitter;
-  void prepareSave(QStringList &names);
-  void activateOverlapMode(int nonOverlapSize);
-  void deactivateOverlapMode();
-  bool isOverlapMode();
-private:
-
-	struct ListItem {
-		struct ListItem *prev;
-		struct ListItem *next;
-		char *data;
-	};
-
-
-
-  struct ListItem *m_childrenListBegin;
-  struct ListItem *m_childrenListEnd;
-
-  class KDockContainerPrivate;
-  KDockContainerPrivate *d;
-  bool m_overlapMode;
-  int m_nonOverlapSize;
-};
-
-}; // KDockWidget_Compat
 
 #endif
 

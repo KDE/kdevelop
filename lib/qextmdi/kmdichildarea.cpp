@@ -25,14 +25,17 @@
 //
 //----------------------------------------------------------------------------
 
+#include "kmdichildarea.h"
+#include "kmdichildarea.moc"
+
+#include "kmdidefines.h"
+
 #include <kconfig.h>
 #include <kglobal.h>
 
 #include <math.h>
 #include <qpopupmenu.h>
 
-#include "kmdidefines.h"
-#include "kmdichildarea.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // KMdiChildArea
@@ -615,6 +618,7 @@ void KMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
    m_captionInactiveBackColor = clr;
 }
 
+
 //=====================================================================================
 // taken from koffice/kexi/plugins/relations/kexirelationviewtable.cpp
 // author: Jaroslaw Staniek, js@iidea.pl
@@ -671,6 +675,5 @@ void KMdiChildArea::getCaptionColors( const QPalette &pal,
     }
 }
 
-#ifndef NO_INCLUDE_MOCFILES
-#include "kmdichildarea.moc"
-#endif
+
+// kate: space-indent on; indent-width 2; replace-tabs on;

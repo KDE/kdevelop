@@ -49,7 +49,7 @@ class QToolButton;
   * @short Internal class, only used on Win32.
   * This class provides a label widget that can process mouse click events.
   */
-class DLL_IMP_EXP_KMDICLASS KMdiWin32IconButton : public QLabel
+class KMdiWin32IconButton : public QLabel
 {
    Q_OBJECT
 public:
@@ -68,7 +68,7 @@ signals:
  * @short a QCustomEvent for move
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrmMoveEvent : public QCustomEvent
+class KMdiChildFrmMoveEvent : public QCustomEvent
 {
 public:
    /**
@@ -82,7 +82,7 @@ public:
  * @short a QCustomEvent for begin of dragging
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragBeginEvent : public QCustomEvent
+class KMdiChildFrmDragBeginEvent : public QCustomEvent
 {
   public:
      /**
@@ -96,7 +96,7 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragBeginEvent : public QCustomEvent
  * @short a QCustomEvent for end of dragging
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragEndEvent : public QCustomEvent
+class KMdiChildFrmDragEndEvent : public QCustomEvent
 {
   public:
      /**
@@ -110,7 +110,7 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragEndEvent : public QCustomEvent
  * @short a QCustomEvent for begin of resizing
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeBeginEvent : public QCustomEvent
+class KMdiChildFrmResizeBeginEvent : public QCustomEvent
 {
   public:
      /**
@@ -124,7 +124,7 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeBeginEvent : public QCustomEvent
  * @short a QCustomEvent for end of resizing
  * This special event will be useful, to inform view about child frame event.
  */
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeEndEvent : public QCustomEvent
+class KMdiChildFrmResizeEndEvent : public QCustomEvent
 {
   public:
      /**
@@ -141,7 +141,7 @@ class KMdiChildFrmPrivate;
   * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
   */
 //------------------------------------------------------------------------------
-class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
+class KMdiChildFrm : public QFrame
 {
   friend class KMdiChildArea;
   friend class KMdiChildFrmCaption;
@@ -351,6 +351,11 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
      * Does the actual resize. Called from various places but from resizeEvent in general.
      */
      void doResize();
+     /**
+     * Does the actual resize, like doResize() but skips resize of the client if \a captionOnly is true.
+     * @todo: merge with doResize()
+     */
+     void doResize(bool captionOnly);
 
   protected slots:
      /**
@@ -398,3 +403,5 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
 };
 
 #endif //_KMDICHILDFRM_H_
+
+// kate: space-indent on; indent-width 2; replace-tabs on;

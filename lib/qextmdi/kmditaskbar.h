@@ -28,16 +28,11 @@
 #ifndef _KMDITASKBAR_H_
 #define _KMDITASKBAR_H_
 
-#ifdef NO_KDE
-#include "kmdidummy.h"
-#else
 #include <ktoolbar.h>
-#endif
 #include <qptrlist.h>
 #include <qpixmap.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qmainwindow.h>
 
 #include "kmdidefines.h"
 
@@ -53,7 +48,7 @@ class KMdiTaskBarButtonPrivate;
   * It's a special kind of QPushButton catching mouse clicks.
   * And you have the ability to abbreviate the text that it fits in the button.
   */
-class DLL_IMP_EXP_KMDICLASS KMdiTaskBarButton : public QPushButton
+class KMdiTaskBarButton : public QPushButton
 {
    Q_OBJECT
 // methods
@@ -131,7 +126,7 @@ class KMdiTaskBarPrivate;
  * KMdiTaskBarButtons can be added or removed dynamically.<br>
  * The button sizes are adjusted dynamically, as well.
  */
-class DLL_IMP_EXP_KMDICLASS KMdiTaskBar : public KToolBar
+class KMdiTaskBar : public KToolBar
 {
    Q_OBJECT
 public:

@@ -27,16 +27,17 @@
 #include <qapplication.h>
 #include <qdatetime.h>
 
-#include "kmdidockwidget.h"
-#include "kmdidefines.h"
+#include <kdockwidget.h>
 
 namespace KMDIPrivate {
    class KMDIGUIClient;
 }
 
-class DLL_IMP_EXP_KMDICLASS KMdiToolViewAccessor : public QObject
+
+class KMdiToolViewAccessor : public QObject
 {
    Q_OBJECT
+
 
    friend class KMdiMainFrm;
    friend class KMDIPrivate::KMDIGUIClient;
@@ -53,7 +54,7 @@ private:
    */
    bool m_bMainframesActivateViewIsPending;
    /**
-   * 
+   *
    */
    bool m_bFocusInEventIsPending;
 

@@ -2,6 +2,7 @@
 #define _KMDI_DOCUMENT_VIEW_TAB_WIDGET_H_
 
 #include <ktabwidget.h>
+#include <kmdidefines.h>
 
 class KMdiDocumentViewTabWidget:
  public KTabWidget
@@ -19,11 +20,17 @@ public:
 	virtual void insertTab ( QWidget * child, QTab * tab, int index = -1 );
 	virtual void removePage ( QWidget * w );
 
+	KMdi::TabWidgetVisibility tabWidgetVisibility();
+	void setTabWidgetVisibility( KMdi::TabWidgetVisibility );
+
 private slots:
 	void closeTab(QWidget* w);
 public slots:
 	void updateIconInView(QWidget*,QPixmap);
 	void updateCaptionInView(QWidget*,const QString&);
+private:
+	void maybeShow();
+	KMdi::TabWidgetVisibility m_visibility;
 };
 
 

@@ -25,6 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
+#include "kmdichildfrmcaption.h"
+#include "kmdichildfrmcaption.moc"
+
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qcursor.h>
@@ -35,7 +38,7 @@
 #include "kmdichildfrm.h"
 #include "kmdichildarea.h"
 #include "kmdimainfrm.h"
-#include "kmdichildfrmcaption.h"
+#include <klocale.h>
 #include <iostream>
 //////////////////////////////////////////////////////////////////////////////
 // Class   : KMdiChildFrmCaption
@@ -49,7 +52,7 @@
 KMdiChildFrmCaption::KMdiChildFrmCaption(KMdiChildFrm *parent)
 :QWidget(parent, "kmdi_childfrmcaption")
 {
-   m_szCaption    = tr("Unnamed");
+   m_szCaption    = i18n("Unnamed");
    m_bActive      = false;
    m_pParent      = parent;
    setBackgroundMode(NoBackground);
@@ -272,6 +275,4 @@ void KMdiChildFrmCaption::slot_moveViaSystemMenu()
    m_offset = mapFromGlobal( QCursor::pos());
 }
 
-#ifndef NO_INCLUDE_MOCFILES
-#include "kmdichildfrmcaption.moc"
-#endif
+// kate: space-indent on; indent-width 2; replace-tabs on;
