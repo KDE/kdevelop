@@ -12,13 +12,13 @@ bin_PROGRAMS = %{APPNAMELC}.kss
 %{APPNAMELC}_kss_SOURCES = %{APPNAMELC}ui.ui %{APPNAMELC}.cpp
 %{APPNAMELC}_kss_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LDADD)  $(LIB_KSYCOCA)
 
-datadir = $(kde_datadir)/k%{APPNAMELC}
+#datadir = $(kde_datadir)/%{APPNAMELC}
 
 desktop_DATA = %{APPNAMELC}.desktop
 desktopdir = $(kde_appsdir)/System/ScreenSavers
 
 EXTRA_DIST = $(desktop_DATA)
 
-messages: rc.cpp
-·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
+#messages: rc.cpp
+#       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+#	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

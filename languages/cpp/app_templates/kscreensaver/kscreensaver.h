@@ -1,7 +1,9 @@
+%{CPP_TEMPLATE}
 
-#ifndef __%{APPNAME}_H__
-#define __%{APPNAME}_H__
+#ifndef %{APPNAME}_H__
+#define %{APPNAME}_H__
 
+#include "kscreensaver.h"
 #include "%{APPNAMELC}ui.h"
 
 class %{APPNAME} : public KScreenSaver
