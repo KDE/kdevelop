@@ -1700,10 +1700,10 @@ void KMdiMainFrm::findToolViewsDockedToMain(QPtrList<KMdiDockWidget>* list,KMdiD
 
 void KMdiMainFrm::setupToolViewsForIDEALMode()
 {
-    m_leftContainer = createDockWidget("leftDock",SmallIcon("misc"),0L,"Left Dock");
-    m_rightContainer = createDockWidget("rightDock",SmallIcon("misc"),0L,"Right Dock");
-    m_topContainer = createDockWidget("topDock",SmallIcon("misc"),0L,"Top Dock");
-    m_bottomContainer = createDockWidget("bottomDock",SmallIcon("misc"),0L,"Bottom Dock");
+    m_leftContainer = createDockWidget("KMdiDock::leftDock",SmallIcon("misc"),0L,"Left Dock");
+    m_rightContainer = createDockWidget("KMdiDock::rightDock",SmallIcon("misc"),0L,"Right Dock");
+    m_topContainer = createDockWidget("KMdiDock::topDock",SmallIcon("misc"),0L,"Top Dock");
+    m_bottomContainer = createDockWidget("KMdiDock::bottomDock",SmallIcon("misc"),0L,"Bottom Dock");
 
     KDockWidget *mainDock=getMainDockWidget();
     KDockWidget *w=mainDock;

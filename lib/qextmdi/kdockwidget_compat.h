@@ -1515,6 +1515,8 @@ public:
   virtual void save(KConfig *cfg,const QString& group_or_prefix);
   virtual void load(KConfig *cfg,const QString& group_or_prefix);
 #endif
+  virtual void save(QDomElement& dockElement);
+  virtual void load(QDomElement& dockElement);
   virtual void setToolTip (KDockWidget *, QString &);
   virtual void  setPixmap(KDockWidget*,const QPixmap&);
   QStringList containedWidgets() const;

@@ -354,13 +354,105 @@ void KMdiDockContainer::setPixmap(KDockWidget* widget ,const QPixmap& pixmap)
   tab->setIcon(pixmap.isNull()?SmallIcon("misc"):pixmap);
 }
 
+void KMdiDockContainer::save(QDomElement& dockEl) 
+{
+	QDomDocument doc=dockEl.ownerDocument();
+	QDomElement el;
+	el=doc.createElement("name");
+	el.appendChild(doc.createTextNode(QString("%1").arg(parent()->name())));
+	dockEl.appendChild(el);
+	el=doc.createElement("overlapMode");
+	el.appendChild(doc.createTextNode(isOverlapMode() ?"true":"false"));
+	dockEl.appendChild(el);
+	QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+	QPtrListIterator<KMultiTabBarTab> it(*tl);
+	QStringList::Iterator it2=itemNames.begin();
+	int i=0;
+	for (;it.current()!=0;++it,++it2)
+	{
+		el=doc.createElement("child");
+		el.setAttribute("pos",QString("%1").arg(i));
+		el.appendChild(doc.createTextNode(*it2));
+		dockEl.appendChild(el);
+		if (m_tb->isTabRaised(it.current()->id()))
+		{
+			QDomElement el2=doc.createElement("raised");
+			el2.appendChild(doc.createTextNode(m_ws->widget(it.current()->id())->name()));
+			el.appendChild(el2);
+		}
+		++i;
+	}
+
+
+}
+
+void KMdiDockContainer::load(QDomElement& dockEl)
+{
+  QString raise;
+
+	for (QDomNode n=dockEl.firstChild();!n.isNull();n=n.nextSibling()) {
+		QDomElement el=n.toElement();
+		if (el.isNull()) continue;
+		if (el.tagName()=="overlapMode") {
+			if (el.attribute("overlapMode")!="false")
+				activateOverlapMode(m_tb->width());
+			else
+				deactivateOverlapMode();
+		} else if (el.tagName()=="child") {
+			KDockWidget *dw=((KDockWidget*)parent())->dockManager()->getDockWidgetFromName(el.text());
+			if (dw)
+			{
+				dw->manualDock((KDockWidget*)parent(),KDockWidget::DockCenter);
+			}
+		}
+	}
+
+
+  QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+  QPtrListIterator<KMultiTabBarTab> it1(*tl);
+  m_ws->hide();
+  if (m_vertical)
+  parentDockWidget()->setForcedFixedWidth(m_tb->width());
+  else
+  parentDockWidget()->setForcedFixedHeight(m_tb->height());
+  for (;it1.current()!=0;++it1)
+  {
+    m_tb->setTab(it1.current()->id(),false);
+  }
+  kapp->syncX();
+  m_delayedRaise=-1;
+
+  for (QMap<KMdiDockWidget*,KDockButton_Private*>::iterator it=m_overlapButtons.begin();
+    it!=m_overlapButtons.end();++it)
+    it.data()->setOn(!isOverlapMode());
+
+  if (!raise.isEmpty())
+  {
+    for (QMap<KMdiDockWidget*,int>::iterator it=m_map.begin();it!=m_map.end();++it)
+    {
+      if (it.key()->name()==raise)
+      {
+        m_delayedRaise=it.data();
+        QTimer::singleShot(0,this,SLOT(delayedRaise()));
+        kdDebug()<<"************** raising *******: "<<it.key()->name()<<endl;
+        break;
+      }
+    }
+
+  }
+  if (m_delayedRaise==-1)   QTimer::singleShot(0,this,SLOT(init()));
+
+
+
+
+}
+
 #ifndef NO_KDE
 void KMdiDockContainer::save(KConfig* cfg,const QString& group_or_prefix)
 {
-//  KConfig *cfg=kapp->config();
   QString grp=cfg->group();
-  cfg->deleteGroup(group_or_prefix+QString("::KMdiDock::%1").arg(parent()->name()));
-  cfg->setGroup(group_or_prefix+QString("::KMdiDock::%1").arg(parent()->name()));
+  cfg->deleteGroup(group_or_prefix+QString("%1").arg(parent()->name()));
+  cfg->setGroup(group_or_prefix+QString("::%1").arg(parent()->name()));
 
   if (isOverlapMode()) cfg->writeEntry("overlapMode","true");
     else cfg->writeEntry("overlapMode","false");
@@ -386,7 +478,7 @@ void KMdiDockContainer::save(KConfig* cfg,const QString& group_or_prefix)
 void KMdiDockContainer::load(KConfig* cfg,const QString& group_or_prefix)
 {
   QString grp=cfg->group();
-  cfg->setGroup(group_or_prefix+QString("::KMdiDock::%1").arg(parent()->name()));
+  cfg->setGroup(group_or_prefix+QString("::%1").arg(parent()->name()));
 
   if (cfg->readEntry("overlapMode")!="false")
     activateOverlapMode(m_tb->width());

@@ -24,6 +24,7 @@
 #include <qwidget.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qdom.h>
 #include <qpushbutton.h>
 #include <kmdidockwidget.h>
 
@@ -52,6 +53,9 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
     virtual void save(KConfig *,const QString& group_or_prefix);
     virtual void load(KConfig *,const QString& group_or_prefix);
 #endif
+    virtual void save(QDomElement&);
+    virtual void load(QDomElement&);
+
 
   public slots:
     void init();
