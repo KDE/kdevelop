@@ -1,3 +1,6 @@
+2000-06-18 Falk Brettschneider <gigafalk@yahoo.com>
+  * added patch of Richard Dale for dock/undock in editorview context-menu. Thanks Richard!
+
 2000-06-16 Falk Brettschneider <gigafalk@yahoo.com>
   * more improvements in QextMDI 
     (several signals for changing states,

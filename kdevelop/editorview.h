@@ -49,6 +49,7 @@ protected slots:
   void slotSplitHorizontal();
   void slotSplitVertical();
   void slotUnSplit();
+  void toggleDockingMode();
 
  protected:
   virtual void resizeEvent (QResizeEvent *e); 

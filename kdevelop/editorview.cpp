@@ -35,6 +35,7 @@ EditorView::EditorView(QWidget* parent,const char* name) : QextMdiChildView(name
     split_submenu->insertItem(BarIcon("paste"),i18n("split vertical"),this,SLOT(slotSplitVertical()),0);
     split_submenu->insertItem(BarIcon("paste"),i18n("unsplit"),this,SLOT(slotUnSplit()),0);
     editorfirstview->popup()->insertItem(BarIcon("paste"),i18n("Split View"),split_submenu);
+    editorfirstview->popup()->insertItem(BarIcon("paste"),i18n("Dock/Undock"),this,SLOT(toggleDockingMode()),0);
     editorfirstview->setFocus();
 
     connect(editorfirstview, SIGNAL(lookUp(QString)),SIGNAL(lookUp(QString)));
@@ -147,4 +148,15 @@ void EditorView::closeEvent(QCloseEvent* e){
     emit closing(this);
     QextMdiChildView::closeEvent(e);
     
+}
+
+//=============== toggleDockingMode ============//
+
+void EditorView::toggleDockingMode()
+{
+	if (isAttached()) {
+		emit detach();
+	} else {
+		emit attach();
+	}
 }
