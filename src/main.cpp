@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Jens Dagerbo", I18N_NOOP("Replace part, patches"), "jens.dagerbo@swipnet.se");
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
   aboutData.addCredit("Marcel Turino", I18N_NOOP("Documentation index view"), "M.Turino@gmx.de");
-  aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "Oliver.Kellogg@t-online.de");
+aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "okellogg@users.sourceforge.net");
   aboutData.addCredit( "Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
   aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
 
