@@ -267,7 +267,7 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          m_pDockbaseOfTabPage = pCover;
       }
       if (!(flags & QextMdi::Hide)) {
-        pCover->show();
+         pCover->show();
       }
       pWnd->setFocus();
    }
@@ -660,15 +660,12 @@ void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
 
 void QextMdiMainFrm::focusInEvent(QFocusEvent *)
 {
-   //qDebug("QextMdiMainFrm::focusInEvent");
-   m_pMdi->setFocus();
+//   qDebug("QextMdiMainFrm::focusInEvent");
+//???   m_pMdi->setFocus();
 }
 
 bool QextMdiMainFrm::event( QEvent* e)
 {
-   if( e->type() == QEvent::FocusIn) {
-      qDebug("FocusIn");
-   }
    if( e->type() == QEvent::User) {
       QextMdiChildView* pWnd = (QextMdiChildView*)((QextMdiViewCloseEvent*)e)->data();
       if( pWnd != 0L)
@@ -681,11 +678,13 @@ bool QextMdiMainFrm::event( QEvent* e)
 
 bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
 {
-   if( e->type() == QEvent::FocusIn) {
-      QFocusEvent* pFE = (QFocusEvent*) e;
-      if (pFE->reason() == QFocusEvent::ActiveWindow) {
-         if ( (m_pCurrentWindow != 0L) && !m_pCurrentWindow->isAttached() && (m_pMdi->topChild() != 0L)) {
-            return TRUE;   // eat the event
+   if(e->type() == QEvent::WindowActivate ) {
+      if ( m_pCurrentWindow && !m_pCurrentWindow->isHidden() && !m_pCurrentWindow->isAttached() && m_pMdi->topChild()) {
+         return TRUE;   // eat the event
+      }
+      else {
+         if (m_pMdi) {
+            m_pMdi->focusTopChild();
          }
       }
    }
@@ -1034,7 +1033,7 @@ void QextMdiMainFrm::switchToTabPageMode()
       setMainDockWidget(pCover);
    }
    if (pCover) {
-      if (m_pWinList->count() > 1) {  // note: with only 1 page we haven't already tabbed widgets
+      if (m_pWinList->count() > 1) { // note: with only 1 page we haven't already tabbed widgets
          // set the first page as active page
          KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
          if (pTab)
@@ -1343,7 +1342,7 @@ void QextMdiMainFrm::fillWindowMenu()
    if (m_mdiMode == QextMdi::TabPageMode)
       bTabPageMode = TRUE;
 
-	 bool bNoViewOpened = FALSE;
+   bool bNoViewOpened = FALSE;
    if (m_pWinList->isEmpty()) {
       bNoViewOpened = TRUE;
    }
@@ -1354,13 +1353,13 @@ void QextMdiMainFrm::fillWindowMenu()
    m_pWindowMenu->insertItem(tr("&Close"), this, SLOT(closeActiveView()));
    m_pWindowMenu->insertItem(tr("Close &All"), this, SLOT(closeAllViews()));
    if (bNoViewOpened) {
-      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(0), false);
-      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(1), false);
+      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(0), FALSE);
+      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(1), FALSE);
    }
    if (!bTabPageMode) {
       m_pWindowMenu->insertItem(tr("&Iconify All"), this, SLOT(iconifyAllViews()));
       if (bNoViewOpened) {
-         m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(2), false);
+         m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(2), FALSE);
       }
    }
    m_pWindowMenu->insertSeparator();

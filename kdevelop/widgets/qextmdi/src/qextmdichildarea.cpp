@@ -89,7 +89,7 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
 void QextMdiChildArea::focusInEvent(QFocusEvent *)
 {
    //qDebug("ChildArea::focusInEvent");
-//???   focusTopChild();
+   //focusTopChild();
 }
 
 //============ destroyChild ============//

@@ -93,7 +93,7 @@ QRect QextMdiChildView::internalGeometry()
       // map these values to the parent of the MDI child frame
       // (this usually is the MDI child area) and return
       QPoint ptTopLeft = mdiParent()->mapToParent(posInFrame.topLeft());
-      QSize  sz = size();
+      QSize sz = size();
       return QRect(ptTopLeft, sz);
    }
    else {
@@ -367,7 +367,6 @@ void QextMdiChildView::activate()
      emit gotFocus(this);
    }
 
-   // me must set the focus on the currently focused subwidget after we signaled gotFocus(this) to the outside world
    if( m_focusedChildWidget != 0L) {
       m_focusedChildWidget->setFocus();
    }
