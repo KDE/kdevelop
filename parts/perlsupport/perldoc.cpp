@@ -10,6 +10,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
+#include <kprocess.h>
 
 using namespace KIO;
 
@@ -34,10 +35,10 @@ void PerldocProtocol::get(const KURL& url)
     if (l[0] == "functions") {
         plain = true;
         cmd += "-t -f ";
-        cmd += l[1];
+        cmd += KProcess::quote(l[1]);
     } else if (l[0] == "faq") {
         cmd += "-u -q ";
-        cmd += l[1];
+        cmd += KProcess::quote(l[1]);
         cmd += " | pod2html";
     } else {
         QCString errstr(i18n("The only existing directories are functions and faq.").latin1());

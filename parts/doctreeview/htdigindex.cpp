@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kprocess.h>
 
 #define INDEXER
 #include "misc.cpp"
@@ -236,8 +237,10 @@ void ProgressDialog::scanDirectories()
                     fclose(f);
                 }
             } else {
-                if ( (f = popen(QString("gzip -c -d ")
-                                + (*it2) + " 2>/dev/null", "r")) != 0) {
+                QString cmd = "gzip -c -d ";
+                cmd += KProcess::quote(*it2);
+                cmd += " 2>/dev/null";
+                if ( (f = popen(QFile::encodeName(cmd), "r")) != 0) {
                     addKdocDir(f);
                     pclose(f);
                 }

@@ -8,6 +8,7 @@
 #include <qtextstream.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
+#include <kprocess.h>
 
 using namespace KIO;
 
@@ -29,11 +30,11 @@ void PydocProtocol::get(const KURL& url)
     mimeType("text/html");
     key = url.path();
 
-    QString cmd = python;
+    QString cmd = KProcess::quote(python);
     cmd += " ";
-    cmd += script;
+    cmd += KProcess::quote(script);
     cmd += " -w ";
-    cmd += key;
+    cmd += KProcess::quote(key);
     
     FILE *fd = popen(cmd.data(), "r");
     char buffer[4096];
