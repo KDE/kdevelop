@@ -6,7 +6,7 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
@@ -75,7 +75,7 @@ QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* nam
 
 void QextMdiWin32IconButton::mousePressEvent( QMouseEvent*)
 {
-	emit pressed();
+   emit pressed();
 }
 
 //============ QextMdiChildFrm ============//
@@ -90,12 +90,12 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pManager  = parent;
 
 #ifdef _OS_WIN32_
-   m_pIcon	   = new QextMdiWin32IconButton(m_pCaption, "qextmdi_iconbutton_icon");
+   m_pIcon     = new QextMdiWin32IconButton(m_pCaption, "qextmdi_iconbutton_icon");
    m_pMinimize = new QPushButton(m_pCaption, "qextmdi_pushbutton_min");
    m_pMaximize = new QPushButton(m_pCaption, "qextmdi_pushbutton_max");
    m_pClose    = new QPushButton(m_pCaption, "qextmdi_pushbutton_close");
    m_pUndock   = new QPushButton(m_pCaption, "qextmdi_pushbutton_undock");
-#else	// in case of UNIX: KDE look
+#else // in case of UNIX: KDE look
    m_pIcon     = new QToolButton(m_pCaption, "qextmdi_toolbutton_icon");
    m_pMinimize = new QToolButton(m_pCaption, "qextmdi_toolbutton_min");
    m_pMaximize = new QToolButton(m_pCaption, "qextmdi_toolbutton_max");
@@ -130,7 +130,7 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
    m_pCloseButtonPixmap = new QPixmap( win_closebutton);
    m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
-#else	// in case of UNIX: KDE look
+#else // in case of UNIX: KDE look
    m_pMinButtonPixmap = new QPixmap( kde_minbutton);
    m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
    m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
@@ -178,8 +178,8 @@ QextMdiChildFrm::~QextMdiChildFrm()
 void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
 {
    if( m_resizeMode) {
-   	if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
-	   m_resizeMode = FALSE;
+      if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
+      m_resizeMode = FALSE;
       releaseMouse();
    }
 
@@ -196,37 +196,37 @@ void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
 
 void QextMdiChildFrm::mouseReleaseEvent(QMouseEvent *)
 {
-	if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
-	m_resizeMode = FALSE;
+   if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
+   m_resizeMode = FALSE;
 }
 
 //============= setResizeCursor ===============//
 
 void QextMdiChildFrm::setResizeCursor(int resizeCorner)
 {
-	if(resizeCorner == m_iLastCursorCorner)return; //Don't do it twice
-	m_iLastCursorCorner = resizeCorner;
-	switch (resizeCorner) {
-		case QEXTMDI_NORESIZE:
-			if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
-			break;
-		case QEXTMDI_RESIZE_LEFT:
-		case QEXTMDI_RESIZE_RIGHT:
-			QApplication::setOverrideCursor(Qt::sizeHorCursor,TRUE);
-			break;
-		case QEXTMDI_RESIZE_TOP:
-		case QEXTMDI_RESIZE_BOTTOM:
-			QApplication::setOverrideCursor(Qt::sizeVerCursor,TRUE);
-			break;
-		case QEXTMDI_RESIZE_TOPLEFT:
-		case QEXTMDI_RESIZE_BOTTOMRIGHT:
-			QApplication::setOverrideCursor(Qt::sizeFDiagCursor,TRUE);
-			break;
-		case QEXTMDI_RESIZE_BOTTOMLEFT:
-		case QEXTMDI_RESIZE_TOPRIGHT:
-			QApplication::setOverrideCursor(Qt::sizeBDiagCursor,TRUE);
-			break;
-	}
+   if(resizeCorner == m_iLastCursorCorner)return; //Don't do it twice
+   m_iLastCursorCorner = resizeCorner;
+   switch (resizeCorner) {
+      case QEXTMDI_NORESIZE:
+         if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
+         break;
+      case QEXTMDI_RESIZE_LEFT:
+      case QEXTMDI_RESIZE_RIGHT:
+         QApplication::setOverrideCursor(Qt::sizeHorCursor,TRUE);
+         break;
+      case QEXTMDI_RESIZE_TOP:
+      case QEXTMDI_RESIZE_BOTTOM:
+         QApplication::setOverrideCursor(Qt::sizeVerCursor,TRUE);
+         break;
+      case QEXTMDI_RESIZE_TOPLEFT:
+      case QEXTMDI_RESIZE_BOTTOMRIGHT:
+         QApplication::setOverrideCursor(Qt::sizeFDiagCursor,TRUE);
+         break;
+      case QEXTMDI_RESIZE_BOTTOMLEFT:
+      case QEXTMDI_RESIZE_TOPRIGHT:
+         QApplication::setOverrideCursor(Qt::sizeBDiagCursor,TRUE);
+         break;
+   }
 }
 
 //============= mouseMoveEvent ===============//
@@ -267,8 +267,8 @@ void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 void QextMdiChildFrm::leaveEvent(QEvent *)
 {
    if(!m_resizeMode) {
-	   m_iResizeCorner=QEXTMDI_NORESIZE;
-   	m_iLastCursorCorner=QEXTMDI_NORESIZE;
+      m_iResizeCorner=QEXTMDI_NORESIZE;
+      m_iLastCursorCorner=QEXTMDI_NORESIZE;
       if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
    }
 }
@@ -277,105 +277,105 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 {
    QRect resizeRect(x(),y(),width(),height());
 
-	// Calculate the minimum width & height
-	int minWidth=0;
-	int minHeight=0;
-	// it could be the client forces the childframe to enlarge its minimum size
-	if(m_pClient){
-		minWidth  = m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-		minHeight = m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
-					m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
-	}
-	if(minWidth<minimumWidth())minWidth=minimumWidth();
-	if(minHeight<minimumHeight())minHeight=minimumHeight();
+   // Calculate the minimum width & height
+   int minWidth=0;
+   int minHeight=0;
+   // it could be the client forces the childframe to enlarge its minimum size
+   if(m_pClient){
+      minWidth  = m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+      minHeight = m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
+               m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR;
+   }
+   if(minWidth<minimumWidth())minWidth=minimumWidth();
+   if(minHeight<minimumHeight())minHeight=minimumHeight();
 
-	QPoint mousePos( xPos, yPos);
-	
-	switch (resizeCorner){
-	case QEXTMDI_RESIZE_LEFT:
-		resizeRect.setLeft(mousePos.x());
-		if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
-		break;
-	case QEXTMDI_RESIZE_RIGHT:
-		resizeRect.setRight(mousePos.x());
-		if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
-		break;
-	case QEXTMDI_RESIZE_TOP:
-		resizeRect.setTop(mousePos.y());
-		if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
-		break;
-	case QEXTMDI_RESIZE_BOTTOM:
-		resizeRect.setBottom(mousePos.y());
-		if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
-		break;
-	case QEXTMDI_RESIZE_BOTTOMRIGHT:
-		resizeRect.setBottom(mousePos.y());
-		if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
-		resizeRect.setRight(mousePos.x());
-		if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
-		break;
-	case QEXTMDI_RESIZE_TOPRIGHT:
-		resizeRect.setTop(mousePos.y());
-		if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
-		resizeRect.setRight(mousePos.x());
-		if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
-		break;
-	case QEXTMDI_RESIZE_BOTTOMLEFT:
-		resizeRect.setBottom(mousePos.y());
-		if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
-		resizeRect.setLeft(mousePos.x());			
-		if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
-		break;
-	case QEXTMDI_RESIZE_TOPLEFT:
-		resizeRect.setTop(mousePos.y());
-		if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
-		resizeRect.setLeft(mousePos.x());
-		if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
-		break;
-	}
+   QPoint mousePos( xPos, yPos);
+   
+   switch (resizeCorner){
+   case QEXTMDI_RESIZE_LEFT:
+      resizeRect.setLeft(mousePos.x());
+      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
+      break;
+   case QEXTMDI_RESIZE_RIGHT:
+      resizeRect.setRight(mousePos.x());
+      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
+      break;
+   case QEXTMDI_RESIZE_TOP:
+      resizeRect.setTop(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
+      break;
+   case QEXTMDI_RESIZE_BOTTOM:
+      resizeRect.setBottom(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
+      break;
+   case QEXTMDI_RESIZE_BOTTOMRIGHT:
+      resizeRect.setBottom(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
+      resizeRect.setRight(mousePos.x());
+      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
+      break;
+   case QEXTMDI_RESIZE_TOPRIGHT:
+      resizeRect.setTop(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
+      resizeRect.setRight(mousePos.x());
+      if(resizeRect.width() < minWidth)resizeRect.setRight(resizeRect.left() + minWidth);
+      break;
+   case QEXTMDI_RESIZE_BOTTOMLEFT:
+      resizeRect.setBottom(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setBottom(resizeRect.top() + minHeight);
+      resizeRect.setLeft(mousePos.x());         
+      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
+      break;
+   case QEXTMDI_RESIZE_TOPLEFT:
+      resizeRect.setTop(mousePos.y());
+      if(resizeRect.height() < minHeight)resizeRect.setTop(resizeRect.bottom() - minHeight);
+      resizeRect.setLeft(mousePos.x());
+      if(resizeRect.width() < minWidth)resizeRect.setLeft(resizeRect.right() - minWidth);
+      break;
+   }
 
-	setGeometry( resizeRect);
+   setGeometry( resizeRect);
 
-	if(m_state==Maximized){
-		m_state=Normal;
-		m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-	}
+   if(m_state==Maximized){
+      m_state=Normal;
+      m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+   }
 }
 
 //================= getResizeCorner =============//
 
 int QextMdiChildFrm::getResizeCorner(int ax,int ay)
 {
-	int ret = QEXTMDI_NORESIZE;
-	if(m_pClient->minimumWidth() != m_pClient->maximumWidth()) {
-  	if((ax>0)&&(ax<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_LEFT;
-	  if((ax<width())&&(ax>(width()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_RIGHT;
-	}
+   int ret = QEXTMDI_NORESIZE;
+   if(m_pClient->minimumWidth() != m_pClient->maximumWidth()) {
+   if((ax>0)&&(ax<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_LEFT;
+     if((ax<width())&&(ax>(width()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_RIGHT;
+   }
   if(m_pClient->minimumHeight() != m_pClient->maximumHeight()) {
-  	if((ay>0)&&(ay<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_TOP;
-	  if((ay<(height()))&&(ay>(height()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_BOTTOM;
-	}
-	return ret;
+   if((ay>0)&&(ay<(QEXTMDI_MDI_CHILDFRM_BORDER+2))) ret |= QEXTMDI_RESIZE_TOP;
+     if((ay<(height()))&&(ay>(height()-(QEXTMDI_MDI_CHILDFRM_BORDER+2)))) ret |= QEXTMDI_RESIZE_BOTTOM;
+   }
+   return ret;
 }
 
 //============= maximizePressed ============//
 
 void QextMdiChildFrm::maximizePressed()
 {
-	switch(m_state){
-		case Maximized:
-		   emit m_pManager->noLongerMaximized(this);
-		   setState(Normal);
-		   break;
-		case Normal:
-		   setState(Maximized);
-		   emit m_pManager->nowMaximized();
-		   break;
-		case Minimized:
-		   setState(Maximized);
-		   emit m_pManager->nowMaximized();
-		   break;
-	}
+   switch(m_state){
+      case Maximized:
+         emit m_pManager->noLongerMaximized(this);
+         setState(Normal);
+         break;
+      case Normal:
+         setState(Maximized);
+         emit m_pManager->nowMaximized();
+         break;
+      case Minimized:
+         setState(Maximized);
+         emit m_pManager->nowMaximized();
+         break;
+   }
 }
 
 void QextMdiChildFrm::restorePressed()
@@ -391,15 +391,15 @@ void QextMdiChildFrm::restorePressed()
 
 void QextMdiChildFrm::minimizePressed()
 {
-	switch(m_state){
-		case Minimized: setState(Normal);    break;
-		case Normal:    setState(Minimized); break;
-		case Maximized:
-		   emit m_pManager->noLongerMaximized(this);
-		   setState(Normal);
-		   setState(Minimized);
-		   break;
-	}
+   switch(m_state){
+      case Minimized: setState(Normal);    break;
+      case Normal:    setState(Minimized); break;
+      case Maximized:
+         emit m_pManager->noLongerMaximized(this);
+         setState(Normal);
+         setState(Minimized);
+         break;
+   }
 }
 
 //============= closePressed ============//
@@ -425,11 +425,11 @@ void QextMdiChildFrm::undockPressed()
 
 void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 {
-	if(m_state==Normal){ //save the current rect
-		m_restoredRect=QRect(x(),y(),width(),height());
-	}
-	//QRect begin(x(),y(),width(),height());
-	//QRect end=begin;
+   if(m_state==Normal){ //save the current rect
+      m_restoredRect=QRect(x(),y(),width(),height());
+   }
+   //QRect begin(x(),y(),width(),height());
+   //QRect end=begin;
    switch(state){
    case Normal:
       switch(m_state){
@@ -459,7 +459,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          break;
       case Normal:
           break;
-  		}
+      }
       break;
    case Maximized:
       //end=QRect(0,0,m_pManager->width(),m_pManager->height());
@@ -492,13 +492,13 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
          setGeometry(-m_pClient->x(), -m_pClient->y(),
-         				    m_pManager->width() + width() - m_pClient->width(),
+                         m_pManager->width() + width() - m_pClient->width(),
                      m_pManager->height() + height() - m_pClient->height());
          raise();
          break;
       case Maximized:
          break;
-		}
+      }
    break;
    case Minimized:
       //end=QRect(x()+width()/2,y()+height()/2,1,1);
@@ -530,45 +530,45 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 
 void QextMdiChildFrm::setCaption(const QString& text)
 {
-	m_pCaption->setCaption(text);
+   m_pCaption->setCaption(text);
 }
 
 //============ enableClose ==============//
 
 void QextMdiChildFrm::enableClose(bool bEnable)
 {
-	m_pClose->setEnabled(bEnable);
-	m_pClose->repaint(FALSE);
+   m_pClose->setEnabled(bEnable);
+   m_pClose->repaint(FALSE);
 }
 
 //============ setIcon ==================//
 
 void QextMdiChildFrm::setIcon(QPixmap *pIconPM)
 {
-	m_pIconButtonPixmap = pIconPM;
-	m_pIcon->setPixmap( *m_pIconButtonPixmap);
+   m_pIconButtonPixmap = pIconPM;
+   m_pIcon->setPixmap( *m_pIconButtonPixmap);
 }
 
 //============ icon =================//
 
 QPixmap* QextMdiChildFrm::icon()
 {
-	return m_pIconButtonPixmap;
+   return m_pIconButtonPixmap;
 }
 
 //============ setClient ============//
 void QextMdiChildFrm::setClient(QextMdiChildView *w)
 {
-	m_pClient=w;
-	//resize to match the client
-	int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
+   m_pClient=w;
+   //resize to match the client
+   int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
   if(w->size().isEmpty() || (w->size() == QSize(1,1)))
-  	resize(m_pManager->m_defaultChildFrmSize.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+   resize(m_pManager->m_defaultChildFrmSize.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
   else
-  	resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+   resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
 
-	// memorize the focuses in a dictionary because they will get lost during reparenting
-	QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
+   // memorize the focuses in a dictionary because they will get lost during reparenting
+   QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
    pFocPolDict->setAutoDelete(TRUE);
    QObjectList *list = m_pClient->queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over the buttons
@@ -589,34 +589,34 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
       pFocPolDict->insert( widg->name(), pFocPol);
    }
    delete list;                        // delete the list, not the objects
-	
-	//Reparent if needed
-	if(w->parent()!=this){
-		//reparent to this widget , no flags , point , show it
+   
+   //Reparent if needed
+   if(w->parent()!=this){
+      //reparent to this widget , no flags , point , show it
       QPoint pnt2(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
       QSize mincs = w->minimumSize();
       QSize maxcs = w->maximumSize();
       w->setMinimumSize(0,0);
       w->setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
 
-     	// min/max sizes, flags, DND get lost. :-(
-     	w->reparent(this,0,pnt2,w->isVisible());
-     	
-     	w->setMinimumSize(mincs.width(),mincs.height());
-     	w->setMaximumSize(maxcs.width(),maxcs.height());
+      // min/max sizes, flags, DND get lost. :-(
+      w->reparent(this,0,pnt2,w->isVisible());
+      
+      w->setMinimumSize(mincs.width(),mincs.height());
+      w->setMaximumSize(maxcs.width(),maxcs.height());
       setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
    } else w->move(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
-	
+   
    linkChildren( pFocPolDict);
-	
+   
    QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
-	
+   
    if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
       setMinimumWidth(m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
    }
-	if( m_pClient->minimumSize().height() > m_pManager->m_defaultChildFrmSize.height()) {
+   if( m_pClient->minimumSize().height() > m_pManager->m_defaultChildFrmSize.height()) {
       setMinimumHeight( m_pClient->minimumSize().height()+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER +
                         m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR);
    }
@@ -627,11 +627,11 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 {
   if(!m_pClient)return;
-	
+   
   QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
   QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
   QObject::disconnect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
-	
+   
   //reparent to desktop widget , no flags , point , show it
   QDict<FocusPolicy>* pFocPolDict;
   pFocPolDict = unlinkChildren();
@@ -666,16 +666,16 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
     // get first and last focusable widget
     if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
       if( firstFocusableChildWidget == 0)
-	firstFocusableChildWidget = widg;  // first widget
+   firstFocusableChildWidget = widg;  // first widget
       lastFocusableChildWidget = widg; // last widget
       //qDebug("*** %s (%s)",widg->name(),widg->className());
     }
     else {
       if( widg->focusPolicy() == QWidget::WheelFocus) {
-	if( firstFocusableChildWidget == 0)
-	  firstFocusableChildWidget = widg;  // first widget
-	lastFocusableChildWidget = widg; // last widget
-	//qDebug("*** %s (%s)",widg->name(),widg->className());
+   if( firstFocusableChildWidget == 0)
+     firstFocusableChildWidget = widg;  // first widget
+   lastFocusableChildWidget = widg; // last widget
+   //qDebug("*** %s (%s)",widg->name(),widg->className());
       }
     }
   }
@@ -735,7 +735,7 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
 
 QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
 {
-	// memorize the focuses in a dictionary because they will get lost during reparenting
+   // memorize the focuses in a dictionary because they will get lost during reparenting
    QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
    pFocPolDict->setAutoDelete(TRUE);
 
@@ -792,7 +792,7 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
    m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
    m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
    m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
-#else	// in case of Unix : KDE look
+#else // in case of Unix : KDE look
    m_pIcon->setGeometry(0,0,captionHeight,captionHeight);
    m_pClose->setGeometry((captionWidth-captionHeight),0,captionHeight,captionHeight);
    m_pMaximize->setGeometry((captionWidth-(captionHeight*2)),0,captionHeight,captionHeight);

@@ -5,7 +5,7 @@
 //
 //    begin                : 02/2000       by Massimo Morin
 //    changes              : 02/2000       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Massimo Morin (mmorin@schedsys.com)
@@ -32,23 +32,23 @@
 template <class Item, class ItemPtr>
 class QextMdiListIterator : public QextMdiIterator<ItemPtr> {
 public:
-  QextMdiListIterator(QList<Item>& list) {
-    m_iterator = new QListIterator<Item>(list);
-  }
+   QextMdiListIterator(QList<Item>& list) {
+      m_iterator = new QListIterator<Item>(list);
+   }
 
-  virtual void first() {
-    m_iterator->toFirst();
-  }
-  virtual void next()  { ++(*m_iterator); }
-  virtual bool isDone() const { return m_iterator->current() == NULL; }
-  virtual ItemPtr currentItem() const { return m_iterator->current(); }
+   virtual void first() {
+      m_iterator->toFirst();
+   }
+   virtual void next()  { ++(*m_iterator); }
+   virtual bool isDone() const { return m_iterator->current() == NULL; }
+   virtual ItemPtr currentItem() const { return m_iterator->current(); }
 
-  virtual ~QextMdiListIterator() {
-    delete m_iterator;
-  }
+   virtual ~QextMdiListIterator() {
+      delete m_iterator;
+   }
   
 private:
-  QListIterator<Item> *m_iterator;
+   QListIterator<Item> *m_iterator;
 };
 
 #endif // _QEXTMDILISTITERATOR_H_

@@ -6,9 +6,10 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create a
-//                                         stand-alone Qt extension set of
+//                           -06/2000      stand-alone Qt extension set of
 //                                         classes and a Qt-based library
-//                           02/2000       by Massimo Morin (mmorin@schedsys.com)
+//    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
+//                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
@@ -149,11 +150,11 @@ void QextMdiChildView::setExternalGeometry(const QRect& newGeometry)
 
 void QextMdiChildView::minimize(bool bAnimate)
 {
-	if(mdiParent()){
-		if(!isMinimized()){
-			mdiParent()->setState(QextMdiChildFrm::Minimized,bAnimate);
-		}
-	} else showMinimized();
+   if(mdiParent()){
+      if(!isMinimized()){
+         mdiParent()->setState(QextMdiChildFrm::Minimized,bAnimate);
+      }
+   } else showMinimized();
 }
 
 void QextMdiChildView::minimize(){ minimize(TRUE); }
@@ -162,12 +163,12 @@ void QextMdiChildView::minimize(){ minimize(TRUE); }
 
 void QextMdiChildView::maximize(bool bAnimate)
 {
-	if(mdiParent()){
-		if(!isMaximized()){
-			mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
-		   emit mdiParentNowMaximized();
-		}
-	} else showMaximized();
+   if(mdiParent()){
+      if(!isMaximized()){
+         mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
+         emit mdiParentNowMaximized();
+      }
+   } else showMaximized();
 }
 
 void QextMdiChildView::maximize(){ maximize(TRUE); }
@@ -190,7 +191,7 @@ void QextMdiChildView::detach()
 
 bool QextMdiChildView::isMinimized()
 {
-	if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Minimized);
+   if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Minimized);
    else return QWidget::isMinimized();
 }
 
@@ -198,39 +199,39 @@ bool QextMdiChildView::isMinimized()
 
 bool QextMdiChildView::isMaximized()
 {
-	if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Maximized);
-	if( size() == maximumSize()) return TRUE;
-	else return FALSE;
+   if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Maximized);
+   if( size() == maximumSize()) return TRUE;
+   else return FALSE;
 }
 
 //============== restore ================//
 
 void QextMdiChildView::restore()
 {
-	if(mdiParent()){
-	   if(isMaximized())
+   if(mdiParent()){
+      if(isMaximized())
          emit mdiParentNoLongerMaximized(mdiParent());
-		if(isMinimized()||isMaximized())mdiParent()->setState(QextMdiChildFrm::Normal);
-	} else showNormal();
+      if(isMinimized()||isMaximized())mdiParent()->setState(QextMdiChildFrm::Normal);
+   } else showNormal();
 }
 
 //=============== youAreAttached ============//
 
 void QextMdiChildView::youAreAttached(QextMdiChildFrm *lpC)
 {
-	lpC->setCaption(m_szCaption);
-	//F.B. lpC->setIconPointer(myIconPtr()); //It is ok to set a NULL icon too here
+   lpC->setCaption(m_szCaption);
+   //F.B. lpC->setIconPointer(myIconPtr()); //It is ok to set a NULL icon too here
 }
 
 //================ youAreDetached =============//
 
 void QextMdiChildView::youAreDetached()
 {
-	setCaption(m_szCaption);
-	
-	setTabCaption(m_sTabCaption);
-	if(myIconPtr())setIcon(*(myIconPtr()));
-	setFocusPolicy(QWidget::StrongFocus);
+   setCaption(m_szCaption);
+   
+   setTabCaption(m_sTabCaption);
+   if(myIconPtr())setIcon(*(myIconPtr()));
+   setFocusPolicy(QWidget::StrongFocus);
 }
 
 //================ setCaption ================//
@@ -238,29 +239,29 @@ void QextMdiChildView::youAreDetached()
 void QextMdiChildView::setCaption(const QString& szCaption)
 {
   // this will work only for window
-	m_szCaption=szCaption;
-	if (mdiParent()) {
-	  mdiParent()->setCaption(m_szCaption);
-	} else {
-	  //  sorry have to call the parent one
-	  QWidget::setCaption(m_szCaption);
-	}
-	emit windowCaptionChanged(m_szCaption);
+   m_szCaption=szCaption;
+   if (mdiParent()) {
+     mdiParent()->setCaption(m_szCaption);
+   } else {
+     //  sorry have to call the parent one
+     QWidget::setCaption(m_szCaption);
+   }
+   emit windowCaptionChanged(m_szCaption);
 }
 
 //============== closeEvent ================//
 
 void QextMdiChildView::closeEvent(QCloseEvent *e)
 {
-	e->ignore(); //we ignore the event , and then close later if needed.
-	emit childWindowCloseRequest(this);
+   e->ignore(); //we ignore the event , and then close later if needed.
+   emit childWindowCloseRequest(this);
 }
 
 //================ myIconPtr =================//
 
 QPixmap * QextMdiChildView::myIconPtr()
 {
-	return 0;
+   return 0;
 }
 
 //============= focusInEvent ===============//
@@ -413,7 +414,7 @@ void QextMdiChildView::setMDICaption (const QString& caption) {
 /** sets an ID  */
 void QextMdiChildView::setWindowMenuID( int id)
 {
-	m_windowMenuID = id;
+   m_windowMenuID = id;
 }
 
 //============= slot_clickedInWindowMenu ===============//
@@ -421,7 +422,7 @@ void QextMdiChildView::setWindowMenuID( int id)
 /** called if someone click on the "Window" menu item for this child frame window */
 void QextMdiChildView::slot_clickedInWindowMenu()
 {
-	emit clickedInWindowMenu( m_windowMenuID);
+   emit clickedInWindowMenu( m_windowMenuID);
 }
 
 //============= slot_clickedInDockMenu ===============//

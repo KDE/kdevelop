@@ -6,7 +6,7 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
@@ -34,123 +34,125 @@
 
 /**
   * @short Internal class.
-  * The widget where the child frames live in. Furthermore the manager for those frame widgets.
+  * The main frame widget QextMdiMainFrm consists of 2 child widgets. One is this class.
+  * It's the widget where the child frames live in. Furthermore the manager for the child frame widgets.
+  * It provides all placing and positioning algorithms for docked (attached) MDI views.
   */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildArea : public QFrame
 {
-	friend class QextMdiChildFrmCaption;
-	friend class QextMdiChildFrm;
+   friend class QextMdiChildFrmCaption;
+   friend class QextMdiChildFrm;
 
-	Q_OBJECT
+   Q_OBJECT
 
 // attributes
 public:
-	/**
-	* Z Order stack (top=last)
-	*/
-	QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
-  QSize                   m_defaultChildFrmSize;
+   /**
+   * Z Order stack (top=last)
+   */
+   QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
+   QSize                   m_defaultChildFrmSize;
 
 private:
-	QFont m_captionFont;
-	QColor m_captionActiveBackColor;
-	QColor m_captionActiveForeColor;
-	QColor m_captionInactiveBackColor;
-	QColor m_captionInactiveForeColor;
-	int m_captionFontLineSpacing;
+   QFont m_captionFont;
+   QColor m_captionActiveBackColor;
+   QColor m_captionActiveForeColor;
+   QColor m_captionInactiveBackColor;
+   QColor m_captionInactiveForeColor;
+   int m_captionFontLineSpacing;
 
 // methods
 public:
-	/** Consruction */
-	QextMdiChildArea(QWidget *parent);
-	/**
-	* Destructor : THERE should be no child windows anymore...
-	* Howewer it simply deletes all the child widgets :)
-	*/
-	~QextMdiChildArea();
+   /** Consruction */
+   QextMdiChildArea(QWidget *parent);
+   /**
+   * Destructor : THERE should be no child windows anymore...
+   * Howewer it simply deletes all the child widgets :)
+   */
+   ~QextMdiChildArea();
 
-	/**
-	* Appends a new QextMdiChildFrm to this manager.
-	* The child is shown,raised and gets focus if this window has it.
-	*/
-	void manageChild(QextMdiChildFrm *lpC,bool bShow=TRUE,bool bCascade=TRUE);
-	/**
-	* Destroys a QextMdiChildFrm managed.<br>
-	* Note that if a client is attached to this child , it is deleted too!
-	*/
-	void destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
-	/**
-	* Destroys a QextMdiChildFrm managed.<br>
-	* Note that if a client is attached to this child , it is NOT deleted!
-	*/
-	void destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
-	/**
-	* Brings the child lpC to the top of the stack
-	* The children is focused if bSetFocus is TRUE
-	* otherwise is raised only
-	*/
-	void setTopChild(QextMdiChildFrm *lpC,bool bSetFocus=FALSE);
-	/**
-	* Returns the topmost child (the active one) or 0 if there are no children.
-	* Note that the topmost child may be also hidded , if ALL the windows are minimized.
-	*/
-	inline QextMdiChildFrm * topChild(){ return m_pZ->last(); };
-	/**
-	* Returns the number of visible children
-	*/
+   /**
+   * Appends a new QextMdiChildFrm to this manager.
+   * The child is shown,raised and gets focus if this window has it.
+   */
+   void manageChild(QextMdiChildFrm *lpC,bool bShow=TRUE,bool bCascade=TRUE);
+   /**
+   * Destroys a QextMdiChildFrm managed.<br>
+   * Note that if a client is attached to this child , it is deleted too!
+   */
+   void destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
+   /**
+   * Destroys a QextMdiChildFrm managed.<br>
+   * Note that if a client is attached to this child , it is NOT deleted!
+   */
+   void destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild = TRUE);
+   /**
+   * Brings the child lpC to the top of the stack
+   * The children is focused if bSetFocus is TRUE
+   * otherwise is raised only
+   */
+   void setTopChild(QextMdiChildFrm *lpC,bool bSetFocus=FALSE);
+   /**
+   * Returns the topmost child (the active one) or 0 if there are no children.
+   * Note that the topmost child may be also hidded , if ALL the windows are minimized.
+   */
+   inline QextMdiChildFrm * topChild(){ return m_pZ->last(); };
+   /**
+   * Returns the number of visible children
+   */
 
-	int getVisibleChildCount();
-	void setMdiCaptionFont(const QFont &fnt);
-	void setMdiCaptionActiveForeColor(const QColor &clr);
-	void setMdiCaptionActiveBackColor(const QColor &clr);
-	void setMdiCaptionInactiveForeColor(const QColor &clr);
-	void setMdiCaptionInactiveBackColor(const QColor &clr);
+   int getVisibleChildCount();
+   void setMdiCaptionFont(const QFont &fnt);
+   void setMdiCaptionActiveForeColor(const QColor &clr);
+   void setMdiCaptionActiveBackColor(const QColor &clr);
+   void setMdiCaptionInactiveForeColor(const QColor &clr);
+   void setMdiCaptionInactiveBackColor(const QColor &clr);
 
 public slots:
-	/**
-	* Cascades the windows resizing it to the minimum size.
-	*/
-	void cascadeWindows();
-	/**
-	* Casecades the windows resizing it to the maximum available size.
-	*/
-	void cascadeMaximized();
-	void expandVertical();
-	void expandHorizontal();
-	/**
-	* Foces focus to the topmost child
-	* In case that it not gets focused automatically...
-	* Btw : It should not happen.
-	*/
-	void focusTopChild();
-	/**
-	* Tile Pragma
-	*/
-	void tilePragma();
-	/**
-	* Tile Anodine
-	*/
-	void tileAnodine();
-	/**
-	* Tile Vertically
-	*/
+   /**
+   * Cascades the windows resizing it to the minimum size.
+   */
+   void cascadeWindows();
+   /**
+   * Casecades the windows resizing it to the maximum available size.
+   */
+   void cascadeMaximized();
+   void expandVertical();
+   void expandHorizontal();
+   /**
+   * Foces focus to the topmost child
+   * In case that it not gets focused automatically...
+   * Btw : It should not happen.
+   */
+   void focusTopChild();
+   /**
+   * Tile Pragma
+   */
+   void tilePragma();
+   /**
+   * Tile Anodine
+   */
+   void tileAnodine();
+   /**
+   * Tile Vertically
+   */
    void tileVertically();
-	/**
-	* positioning of minimized child frames
-	*/
+   /**
+   * positioning of minimized child frames
+   */
    void layoutMinimizedChildren();
-	
-protected:	// Protected methods
-	void tileAllInternal(int maxWnds);
-	virtual void focusInEvent(QFocusEvent *);
-	virtual void resizeEvent(QResizeEvent *);
-	QPoint getCascadePoint(int indexOfWindow);
-	void mousePressEvent(QMouseEvent *e);
-	void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
-	
-	void undockWindow(QWidget *lpC);
+   
+protected:
+   void tileAllInternal(int maxWnds);
+   virtual void focusInEvent(QFocusEvent *);
+   virtual void resizeEvent(QResizeEvent *);
+   QPoint getCascadePoint(int indexOfWindow);
+   void mousePressEvent(QMouseEvent *e);
+   void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
+   
+   void undockWindow(QWidget *lpC);
 
-signals: // Signals
+signals:
    void topChildChanged(QextMdiChildView*);
    /** signalizes that the child frames are no longer maximized */
    void noLongerMaximized(QextMdiChildFrm*);

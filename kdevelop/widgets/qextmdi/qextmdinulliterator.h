@@ -5,7 +5,7 @@
 //
 //    begin                : 02/2000       by Massimo Morin
 //    changes              : 02/2000       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Massimo Morin (mmorin@schedsys.com)
@@ -31,14 +31,14 @@
 template <class Item>
 class QextMdiNullIterator : public QextMdiIterator<Item> {
 public:
-  QextMdiNullIterator() {};
-  virtual void first() {}
-  virtual void next()  {}
-  virtual bool isDone() const { return TRUE; }
-  virtual Item currentItem() const {
-  	/* should really never go inside here */
-  	return 0;
-  }
+   QextMdiNullIterator() {};
+   virtual void first() {}
+   virtual void next()  {}
+   virtual bool isDone() const { return TRUE; }
+   virtual Item currentItem() const {
+   /* should really never go inside here */
+   return 0;
+   }
 };
 
 #endif // _QEXTMDINULLITERATOR_H_

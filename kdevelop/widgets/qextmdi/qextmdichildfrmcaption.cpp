@@ -6,7 +6,7 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
@@ -44,12 +44,12 @@
 QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
 :QWidget(parent, "qextmdi_childfrmcaption")
 {
-	m_szCaption    = tr("Unnamed");
-	m_bActive      = FALSE;
-	m_bCanMove     = FALSE;
-	m_pParent      = parent;
-	setBackgroundMode(NoBackground);
-	setFocusPolicy(NoFocus);
+   m_szCaption    = tr("Unnamed");
+   m_bActive      = FALSE;
+   m_bCanMove     = FALSE;
+   m_pParent      = parent;
+   setBackgroundMode(NoBackground);
+   setFocusPolicy(NoFocus);
 }
 
 //============== ~QextMdiChildFrmCaption =============//
@@ -115,12 +115,12 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
 {
    if( m_bActive == bActive)
       return;
-	
-	//    Ensure the icon's pixmap has the correct bg color
+   
+   //    Ensure the icon's pixmap has the correct bg color
    m_pParent->m_pIcon->setBackgroundColor(bActive
    ? m_pParent->m_pManager->m_captionActiveBackColor
    : m_pParent->m_pManager->m_captionInactiveBackColor);
-	
+   
    m_bActive = bActive;
    repaint( FALSE);
 }
@@ -129,51 +129,51 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
 
 void QextMdiChildFrmCaption::setCaption(const QString& text)
 {
-	m_szCaption=text;
-	repaint(FALSE);
+   m_szCaption=text;
+   repaint(FALSE);
 }
 
 //============== heightHint ===============//
 
 int QextMdiChildFrmCaption::heightHint()
 {
-	int hght=m_pParent->m_pManager->m_captionFontLineSpacing+2;
+   int hght=m_pParent->m_pManager->m_captionFontLineSpacing+2;
 #ifdef _OS_WIN32_
-	if(hght<18)hght=18;
+   if(hght<18)hght=18;
 #else // in case of Unix: KDE look
-	if(hght<20)hght=20;
+   if(hght<20)hght=20;
 #endif
-	return hght;
+   return hght;
 }
 
 //=============== paintEvent ==============//
 
 void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
 {
-	QPainter p(this);
-	QRect r=rect();
-	p.setFont(m_pParent->m_pManager->m_captionFont);
-	if(m_bActive){
-		p.fillRect(r,m_pParent->m_pManager->m_captionActiveBackColor);
-		p.setPen(m_pParent->m_pManager->m_captionActiveForeColor);
-	} else {
-		p.fillRect(r,m_pParent->m_pManager->m_captionInactiveBackColor);
-		p.setPen(m_pParent->m_pManager->m_captionInactiveForeColor);
-	}
+   QPainter p(this);
+   QRect r=rect();
+   p.setFont(m_pParent->m_pManager->m_captionFont);
+   if(m_bActive){
+      p.fillRect(r,m_pParent->m_pManager->m_captionActiveBackColor);
+      p.setPen(m_pParent->m_pManager->m_captionActiveForeColor);
+   } else {
+      p.fillRect(r,m_pParent->m_pManager->m_captionInactiveBackColor);
+      p.setPen(m_pParent->m_pManager->m_captionInactiveForeColor);
+   }
 #ifdef _OS_WIN32_
-	r.setLeft(r.left()+19); //Shift the text after the icon
+   r.setLeft(r.left()+19); //Shift the text after the icon
 #else // in case of Unix: KDE look
-	r.setLeft(r.left()+22); //Shift the text after the icon
+   r.setLeft(r.left()+22); //Shift the text after the icon
 #endif
-	p.drawText(r,AlignVCenter|AlignLeft|SingleLine,m_szCaption);
-	
+   p.drawText(r,AlignVCenter|AlignLeft|SingleLine,m_szCaption);
+   
 }
 
 //============= mouseDoubleClickEvent ===========//
 
 void QextMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
 {
-	m_pParent->maximizePressed();
+   m_pParent->maximizePressed();
 }
 
 void QextMdiChildFrmCaption::slot_moveViaSystemMenu()

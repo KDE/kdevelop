@@ -6,7 +6,7 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
@@ -40,32 +40,32 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm;
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmCaption : public QWidget
 {
-	Q_OBJECT
+   Q_OBJECT
 public:
-	QextMdiChildFrmCaption(QextMdiChildFrm *parent);
-	~QextMdiChildFrmCaption();
-	void setActive(bool bActive);
-	void setCaption(const QString& text);
-	int heightHint();
+   QextMdiChildFrmCaption(QextMdiChildFrm *parent);
+   ~QextMdiChildFrmCaption();
+   void setActive(bool bActive);
+   void setCaption(const QString& text);
+   int heightHint();
 public slots:
    void slot_moveViaSystemMenu();
 
 protected:
-	virtual void paintEvent(QPaintEvent *e);
-	virtual void mousePressEvent(QMouseEvent *);
-	virtual void mouseDoubleClickEvent(QMouseEvent *);
-	virtual void mouseReleaseEvent(QMouseEvent *);
-	virtual void mouseMoveEvent(QMouseEvent *e);
-	
+   virtual void paintEvent(QPaintEvent *e);
+   virtual void mousePressEvent(QMouseEvent *);
+   virtual void mouseDoubleClickEvent(QMouseEvent *);
+   virtual void mouseReleaseEvent(QMouseEvent *);
+   virtual void mouseMoveEvent(QMouseEvent *e);
+   
 // attributes
 public:
-	QString           m_szCaption;
+   QString           m_szCaption;
 
 protected: // Protected attributes
-	QextMdiChildFrm  *m_pParent;
-	bool              m_bActive;
-	bool              m_bCanMove;
-	QPoint            m_offset;
+   QextMdiChildFrm  *m_pParent;
+   bool              m_bActive;
+   bool              m_bCanMove;
+   QPoint            m_offset;
 };
 
 #endif //_QEXTMDICAPTION_H_

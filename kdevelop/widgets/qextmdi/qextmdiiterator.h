@@ -5,7 +5,7 @@
 //
 //    begin                : 02/2000       by Massimo Morin
 //    changes              : 02/2000       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Massimo Morin (mmorin@schedsys.com)
@@ -30,12 +30,12 @@
 template<class Item>
 class QextMdiIterator {
 public:
-  virtual void first() = 0;
-  virtual void next()  = 0;
-  virtual bool isDone() const = 0;
-  virtual Item currentItem() const = 0;
+   virtual void first() = 0;
+   virtual void next()  = 0;
+   virtual bool isDone() const = 0;
+   virtual Item currentItem() const = 0;
 protected:
-  QextMdiIterator() {}
+   QextMdiIterator() {}
 };
 
 #endif // _QEXTMDIITERATOR_H_

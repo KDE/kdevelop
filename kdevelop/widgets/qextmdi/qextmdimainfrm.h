@@ -6,9 +6,10 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //                         : 02/2000       by Massimo Morin (mmorin@schedsys.com)
+//    patches              : */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
@@ -62,7 +63,7 @@ typedef enum {
 class QextMdiViewCloseEvent : public QCustomEvent
 {
 public:
-	QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
+   QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
 };
 
 /**
@@ -73,20 +74,20 @@ public:
   */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 {
-	friend class QextMdiChildView;
-	friend class QextMdiTaskBar;
-	
-	Q_OBJECT
+   friend class QextMdiChildView;
+   friend class QextMdiTaskBar;
+   
+   Q_OBJECT
 
 // attributes
-protected:	
-	QextMdiChildArea        *m_pMdi;
-	QextMdiTaskBar          *m_pTaskBar;
-	QList<QextMdiChildView> *m_pWinList;
-	QextMdiChildView        *m_pCurrentWindow;
+protected:  
+   QextMdiChildArea        *m_pMdi;
+   QextMdiTaskBar          *m_pTaskBar;
+   QList<QextMdiChildView> *m_pWinList;
+   QextMdiChildView        *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
-	QPopupMenu              *m_pWindowMenu;
+   QPopupMenu              *m_pWindowMenu;
    QPopupMenu              *m_pDockMenu;
    QPopupMenu              *m_pPlacingMenu;
    QMenuBar                *m_pMainMenuBar;
@@ -107,7 +108,7 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
 #endif
-   QPoint		                m_undockPositioningOffset;
+   QPoint                      m_undockPositioningOffset;
 
 // methods
 public:
@@ -151,7 +152,7 @@ public slots:
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether the view should be attached or detached.
     */
-//	virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = TRUE);
+// virtual void addWindow(QextMdiChildView *pWnd, bool bShow, bool bAttach = TRUE);
    /**
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
     * You can specify here whether the view should be attached or detached.
@@ -168,23 +169,23 @@ public slots:
     * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
     * Note: The view will be deleted!
     */
-	virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = TRUE);
+   virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = TRUE);
    /**
     * Switches the QextMdiTaskBar on and off.
     */
-	virtual void slot_toggleTaskBar();
+   virtual void slot_toggleTaskBar();
    /**
     * Makes a main frame controlled undocked QextMdiChildView docked.
     * Doesn't work on QextMdiChildView which aren't added to the MDI system.
     * Use addWindow() for that.
     */
-	virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
+   virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
    /**
     * Makes a docked QextMdiChildView undocked.
     * The view window still remains under the main frame's MDI control.
     */
-	virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
-	virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
+   virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
+   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
    /** close all views */
    virtual void closeAllViews();
    /** iconfiy all views */
@@ -209,28 +210,28 @@ public slots:
    /** Update of the window menu contents. */
    virtual void fillWindowMenu();
 
-	/** Cascades the windows without resizing them. */
-	virtual void cascadeWindows() { m_pMdi->cascadeWindows(); }
-	/** Cascades the windows resizing them to the maximum available size. */
-	virtual void cascadeMaximized() { m_pMdi->cascadeMaximized(); };
-	virtual void expandVertical() { m_pMdi->expandVertical(); };
-	virtual void expandHorizontal() { m_pMdi->expandHorizontal(); };
-	/** Tile Pragma */
-	virtual void tilePragma() { m_pMdi->tilePragma(); };
-	/** Tile Anodine */
-	virtual void tileAnodine() { m_pMdi->tileAnodine(); };
-	/** Tile Vertically */
+   /** Cascades the windows without resizing them. */
+   virtual void cascadeWindows() { m_pMdi->cascadeWindows(); }
+   /** Cascades the windows resizing them to the maximum available size. */
+   virtual void cascadeMaximized() { m_pMdi->cascadeMaximized(); };
+   virtual void expandVertical() { m_pMdi->expandVertical(); };
+   virtual void expandHorizontal() { m_pMdi->expandHorizontal(); };
+   /** Tile Pragma */
+   virtual void tilePragma() { m_pMdi->tilePragma(); };
+   /** Tile Anodine */
+   virtual void tileAnodine() { m_pMdi->tileAnodine(); };
+   /** Tile Vertically */
    virtual void tileVertically() { m_pMdi->tileVertically(); };
 
 protected:
-	virtual void closeEvent(QCloseEvent *e);
-	virtual void focusInEvent(QFocusEvent *);
-	virtual void createTaskBar();
-	virtual void createMdiManager();
+   virtual void closeEvent(QCloseEvent *e);
+   virtual void focusInEvent(QFocusEvent *);
+   virtual void createTaskBar();
+   virtual void createMdiManager();
 
 protected slots: // Protected slots
-	virtual void activateView(QextMdiChildView *pWnd);
-	virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
+   virtual void activateView(QextMdiChildView *pWnd);
+   virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
    /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
    void setMaximizeModeOn();
    /** turns the system buttons for maximize mode (SDI mode) off, and disconnects them */

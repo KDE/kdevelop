@@ -6,7 +6,7 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
@@ -46,11 +46,11 @@ class QextMdiTaskBar;
   */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBarButton : public QPushButton
 {
-	Q_OBJECT
+   Q_OBJECT
 // methods
 public:
-	QextMdiTaskBarButton( QextMdiTaskBar *pTaskBar, QextMdiChildView *win_ptr);
-	~QextMdiTaskBarButton();
+   QextMdiTaskBarButton( QextMdiTaskBar *pTaskBar, QextMdiChildView *win_ptr);
+   ~QextMdiTaskBarButton();
    QString actualText() const;
    void fitText(const QString&, int newWidth);
    void setText(const QString&);
@@ -66,7 +66,7 @@ protected slots:
 
 // attributes
 public:
-	QextMdiChildView *m_pWindow;
+   QextMdiChildView *m_pWindow;
 protected:
    QString m_actualText;
 };
@@ -79,23 +79,23 @@ protected:
  */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBar : public QToolBar
 {
-	Q_OBJECT
-public:		// Construction & Destruction
-	QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
-	~QextMdiTaskBar();
-	QextMdiTaskBarButton * addWinButton(QextMdiChildView *win_ptr);
-	void removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);
-	QextMdiTaskBarButton * getNextWindowButton(bool bRight,QextMdiChildView *win_ptr);
-	QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
+   Q_OBJECT
+public:     // Construction & Destruction
+   QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
+   ~QextMdiTaskBar();
+   QextMdiTaskBarButton * addWinButton(QextMdiChildView *win_ptr);
+   void removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);
+   QextMdiTaskBarButton * getNextWindowButton(bool bRight,QextMdiChildView *win_ptr);
+   QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
 protected:
    void resizeEvent( QResizeEvent*);
 protected slots:
    void layoutTaskBar( int taskBarWidth = 0);
 public slots:
-	void setActiveButton(QextMdiChildView *win_ptr);
+   void setActiveButton(QextMdiChildView *win_ptr);
 private:
-	QList<QextMdiTaskBarButton>*  m_pButtonList;
-	QextMdiMainFrm*               m_pFrm;
+   QList<QextMdiTaskBarButton>*  m_pButtonList;
+   QextMdiMainFrm*               m_pFrm;
    QextMdiChildView*             m_pCurrentFocusedWindow;
    QLabel*                       m_pStretchSpace;
 };

@@ -6,8 +6,9 @@
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
 //    changes              : 09/1999       by Falk Brettschneider to create an
-//                                         stand-alone Qt extension set of
+//                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//    patches              : */2000        Lars Beikirch (Lars.Beikirch@gmx.net)
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
@@ -47,13 +48,13 @@ class QextMdiChildView;
   */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiWin32IconButton : public QLabel
 {
-	Q_OBJECT
+   Q_OBJECT
 public:
-	QextMdiWin32IconButton( QWidget* parent, const char* name = 0);
-	virtual void mousePressEvent( QMouseEvent*);
+   QextMdiWin32IconButton( QWidget* parent, const char* name = 0);
+   virtual void mousePressEvent( QMouseEvent*);
 
 signals:
-	void pressed();
+   void pressed();
 };
 
 /**
@@ -63,7 +64,7 @@ signals:
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmMovedEvent : public QCustomEvent
 {
 public:
-	QextMdiChildFrmMovedEvent( QMoveEvent *me) : QCustomEvent( QEvent::Type(QEvent::User+1), me) {};
+   QextMdiChildFrmMovedEvent( QMoveEvent *me) : QCustomEvent( QEvent::Type(QEvent::User+1), me) {};
 };
 
 /**
@@ -72,39 +73,39 @@ public:
   */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
 {
-	friend class QextMdiChildArea;
-	friend class QextMdiChildFrmCaption;
-	Q_OBJECT
+   friend class QextMdiChildArea;
+   friend class QextMdiChildFrmCaption;
+   Q_OBJECT
 
-// attributes	
+// attributes  
 public:
-	enum MdiWindowState { Normal,Maximized,Minimized };
-	QextMdiChildView        *m_pClient;
+   enum MdiWindowState { Normal,Maximized,Minimized };
+   QextMdiChildView        *m_pClient;
 
 protected:
-	QextMdiChildArea        *m_pManager;
-	QextMdiChildFrmCaption  *m_pCaption;
+   QextMdiChildArea        *m_pManager;
+   QextMdiChildFrmCaption  *m_pCaption;
 #ifdef _OS_WIN32_
-	/**
-	* This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
-	*/
-	QextMdiWin32IconButton  *m_pIcon;
-	QPushButton    *m_pMinimize;
-	QPushButton    *m_pMaximize;
-	QPushButton    *m_pClose;
-	QPushButton    *m_pUndock;
-#else	// in case of UNIX: KDE look
-	QToolButton    *m_pIcon;
-	QToolButton    *m_pMinimize;
-	QToolButton    *m_pMaximize;
-	QToolButton    *m_pClose;
-	QToolButton    *m_pUndock;
+   /**
+   * This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
+   */
+   QextMdiWin32IconButton  *m_pIcon;
+   QPushButton    *m_pMinimize;
+   QPushButton    *m_pMaximize;
+   QPushButton    *m_pClose;
+   QPushButton    *m_pUndock;
+#else // in case of UNIX: KDE look
+   QToolButton    *m_pIcon;
+   QToolButton    *m_pMinimize;
+   QToolButton    *m_pMaximize;
+   QToolButton    *m_pClose;
+   QToolButton    *m_pUndock;
 #endif
-	MdiWindowState m_state;
-	QRect          m_restoredRect;
-	int            m_iResizeCorner;
-	int            m_iLastCursorCorner;
-	bool           m_resizeMode;
+   MdiWindowState m_state;
+   QRect          m_restoredRect;
+   int            m_iResizeCorner;
+   int            m_iLastCursorCorner;
+   bool           m_resizeMode;
    QPixmap        *m_pIconButtonPixmap;
    QPixmap        *m_pMinButtonPixmap;
    QPixmap        *m_pMaxButtonPixmap;
@@ -112,7 +113,7 @@ protected:
    QPixmap        *m_pCloseButtonPixmap;
    QPixmap        *m_pUndockButtonPixmap;
    /** every child frame window has an temporary ID in the Window menu of the child area. */
-   int 				m_windowMenuID;
+   int            m_windowMenuID;
    /** imitates a system menu for child frame windows */
    QPopupMenu     *m_pSystemMenu;
    QSize          m_oldClientMinSize;
@@ -120,62 +121,62 @@ protected:
 
 // methods
 public:
-	/**
-	* Creates a new QextMdiChildFrm class.<br>
-	*/
-	QextMdiChildFrm(QextMdiChildArea *parent);
-	/**
-	* Delicato : destroys this QextMdiChildFrm
-	* If a child is still here managed (no recreation was made) it is destroyed too.
-	*/
-	~QextMdiChildFrm();	
-	/**
-	* Reparents the widget w to this QextMdiChildFrm (if this is not already done)
-	* Installs an event filter to catch focus events.
-	* Resizes this mdi child in a way that the child fits perfectly in.
-	*/
-	void setClient(QextMdiChildView *w);
-	/**
-	* Reparents the client widget to 0 (desktop), moves with an offset from the original position
-	* Removes the event filter.
-	*/
-	void unsetClient( QPoint positionOffset = QPoint(0,0));
-	/**
-	* Sets the window icon ponter : assumes 16x16 pixmaps that SHOULD BE NOT DELETED
-	* until this object is destroyed.
-	*/
-	void setIcon(QPixmap *ptr);
-	/**
-	 * Returns the child frame icon.
-	 */
-	QPixmap* icon();
-	/**
-	* Enables or disables the close button
-	*/
-	void enableClose(bool bEnable);
-	/**
-	* Sets the caption of this window
-	*/
-	void setCaption(const QString& text);
-	/**
-	* Returns the caption of this mdi child.
-	* Cool to have it inline...
-	*/
-	const QString& caption(){ return m_pCaption->m_szCaption; };
-	/**
-	* Minimizes , Maximizes or restores the window.
-	*/
-	void setState(MdiWindowState state,bool bAnimate=TRUE);
-	/**
-	* Returns the current state of the window
-	* Cool to have it inline...
-	*/
-	inline MdiWindowState state(){ return m_state; };
-	/**
-	* Forces updating the rects of the caption and so...
-	* It may be useful when setting the mdiCaptionFont of the MdiManager
-	*/
-	void updateRects(){ resizeEvent(0); };
+   /**
+   * Creates a new QextMdiChildFrm class.<br>
+   */
+   QextMdiChildFrm(QextMdiChildArea *parent);
+   /**
+   * Delicato : destroys this QextMdiChildFrm
+   * If a child is still here managed (no recreation was made) it is destroyed too.
+   */
+   ~QextMdiChildFrm();  
+   /**
+   * Reparents the widget w to this QextMdiChildFrm (if this is not already done)
+   * Installs an event filter to catch focus events.
+   * Resizes this mdi child in a way that the child fits perfectly in.
+   */
+   void setClient(QextMdiChildView *w);
+   /**
+   * Reparents the client widget to 0 (desktop), moves with an offset from the original position
+   * Removes the event filter.
+   */
+   void unsetClient( QPoint positionOffset = QPoint(0,0));
+   /**
+   * Sets the window icon ponter : assumes 16x16 pixmaps that SHOULD BE NOT DELETED
+   * until this object is destroyed.
+   */
+   void setIcon(QPixmap *ptr);
+   /**
+    * Returns the child frame icon.
+    */
+   QPixmap* icon();
+   /**
+   * Enables or disables the close button
+   */
+   void enableClose(bool bEnable);
+   /**
+   * Sets the caption of this window
+   */
+   void setCaption(const QString& text);
+   /**
+   * Returns the caption of this mdi child.
+   * Cool to have it inline...
+   */
+   const QString& caption(){ return m_pCaption->m_szCaption; };
+   /**
+   * Minimizes , Maximizes or restores the window.
+   */
+   void setState(MdiWindowState state,bool bAnimate=TRUE);
+   /**
+   * Returns the current state of the window
+   * Cool to have it inline...
+   */
+   inline MdiWindowState state(){ return m_state; };
+   /**
+   * Forces updating the rects of the caption and so...
+   * It may be useful when setting the mdiCaptionFont of the MdiManager
+   */
+   void updateRects(){ resizeEvent(0); };
    /** Returns the system menu. */
    QPopupMenu* systemMenu();
    /** Returns the caption bar height */
@@ -185,32 +186,32 @@ public slots: // Public slots
    void slot_resizeViaSystemMenu();
 
 protected:
-	virtual void resizeEvent(QResizeEvent *);
-	virtual void mouseMoveEvent(QMouseEvent *e);
-	virtual void mousePressEvent(QMouseEvent *e);
-	virtual void mouseReleaseEvent(QMouseEvent *);
+   virtual void resizeEvent(QResizeEvent *);
+   virtual void mouseMoveEvent(QMouseEvent *e);
+   virtual void mousePressEvent(QMouseEvent *e);
+   virtual void mouseReleaseEvent(QMouseEvent *);
    virtual void moveEvent(QMoveEvent* me);
    virtual void leaveEvent(QEvent *);
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
    //   virtual bool focusNextPrevChild( bool next ) { return TRUE; };
-	void resizeWindow(int resizeCorner, int x, int y);
-	void setResizeCursor(int resizeCorner);
+   void resizeWindow(int resizeCorner, int x, int y);
+   void setResizeCursor(int resizeCorner);
    virtual void switchToMinimizeLayout();
 
 protected slots:
-	void maximizePressed();
-	void restorePressed();
-	void minimizePressed();
-	void closePressed();
-	void undockPressed();
-	void raiseAndActivate();
+   void maximizePressed();
+   void restorePressed();
+   void minimizePressed();
+   void closePressed();
+   void undockPressed();
+   void raiseAndActivate();
    /** Shows a system menu for child frame windows. */
    void showSystemMenu();
 
 private:
-	void linkChildren( QDict<FocusPolicy>* pFocPolDict);
-	QDict<QWidget::FocusPolicy>* unlinkChildren();
-	int getResizeCorner(int ax,int ay);
+   void linkChildren( QDict<FocusPolicy>* pFocPolDict);
+   QDict<QWidget::FocusPolicy>* unlinkChildren();
+   int getResizeCorner(int ax,int ay);
 };
 
 
