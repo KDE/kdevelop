@@ -1,5 +1,5 @@
 
-EXTRA_DIST = logotp3.gif tipdatabase \
+EXTRA_DIST = logotp3.png tipdatabase \
 						index.sgml \
 						index.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html \
 						index-9.html index-1.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html \
@@ -7,7 +7,7 @@ EXTRA_DIST = logotp3.gif tipdatabase \
 
 install-data-local: 	
 	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/
-	$(INSTALL_DATA) logotp3.gif $(kde_htmldir)/de/kdevelop/logotp3.gif
+	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/de/kdevelop/logotp3.png
 	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/
 	$(INSTALL_DATA) tipdatabase $(kde_htmldir)/de/kdevelop/tipdatabase
 	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/
@@ -46,7 +46,7 @@ install-data-local:
 	$(INSTALL_DATA) index-16.html $(kde_htmldir)/de/kdevelop/index-16.html
 
 uninstall-local:
-	-rm -f $(kde_htmldir)/de/kdevelop/logotp3.gif
+	-rm -f $(kde_htmldir)/de/kdevelop/logotp3.png
 	-rm -f $(kde_htmldir)/de/kdevelop/tipdatabase
 	-rm -f $(kde_htmldir)/de/kdevelop/index.html
 	-rm -f $(kde_htmldir)/de/kdevelop/index-1.html
@@ -65,4 +65,5 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/de/kdevelop/index-14.html
 	-rm -f $(kde_htmldir)/de/kdevelop/index-15.html
 	-rm -f $(kde_htmldir)/de/kdevelop/index-16.html
+
 

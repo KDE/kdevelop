@@ -58,41 +58,45 @@ KDevelop.
 </LI>
 <LI>ein C-Rahmenprogramm. Dieser Programmtyp ist auf das Vorhandensein eines C-Compilers beschränkt.</LI>
 </UL>
+<P>Zusätzlich bietet sich KDevelop an, um mit bereits existierenden Projekten zu arbeiten. Diese können jede Option haben, die der
+Programmierer selbst in configure und Makefiles gesetzt hat. Soweit es die Ausführung und den Erstellungsprozess betrifft, sind zur
+Zeit nur die gleichen Strukturen wie bei der Erstellung von Rahmenprogrammen erlaubt. Erzeugen Sie ein eigenes Projekt mit dem
+Applikations-wizard und fügen Sie Ihre Dateien dem Projekt hinzu, um die Bearbeitung mit dem Klassenbrowser zu ermöglichen.
+<P>Um den Erstellungsvorgang sicherzustellen, muß Ihr Projekt alle Quellcodes in einem Unterverzeichnis bereithalten, das dem
+kleingeschriebenen Projektnamen entspricht; die Ausführung der Binärdatei ist ebenfalls auf den Namen des kleingeschriebenen
+Projektnamens beschränkt.
+<P>Beachten Sie, das KDevelop selbst keine Informationen in die Makefiles oder Konfigurationsdateien schreibt - Sie sind für das Verhalten
+des Projekts vollständig selbst verantwortlich.
 <P>
-<P>Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
-configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
-as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
-by the classbrowser.
-<P>To ensure the buildprocess, your custom project has to have all sources in a subdirectory matching the lowecase name of your project;
-the execution of the binary is also restricted to this lowercase project name.
-<P>Mind that KDevelop does not write any information into Makefiles or configuration files. You ar responsible for any project behavoir
-and buildsettings yourself.
-<P>
-<H4>Libraries</H4>
+<H4>Bibliotheken</H4>
 
-<P>A general project-type to create libraries is not available at the moment. Anyway, building libraries is not impossible with KDevelop.
-Here are a few guidelines and workarounds:
+<P>Ein allgemeiner Projekt-Typ zur Erstellung von Bibliotheken ist zur Zeit nicht verfügbar. Andererseits ist es jedoch nicht unmöglich
+mit KDevelop Bibliotheken zu erstellen. Hier erhalten Sie ein paar Richtlinien und Anleitungen:
 <P>
 <UL>
-<LI>Whenever your project subdirectory gets another subdirectory that contains source files, KDevelop will build a static library of
-these. That means static libraries are already supported by automatic creation in order to sort project sourcefiles.
-Mind that the static library is part of the binary later and won't get installed.</LI>
-<LI>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
-subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
-the 
-<A HREF="programming-15.html">KDevelop Programming Handbook</A> offers a Makefile.am template. If the subdirectory's
-Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
-build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
-project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original projectsubdirectory
-according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter 
-<A HREF="#Project Hacking">Project Hacking</A>.</LI>
-<LI>for installing a shared library, you have to watch the KDE-Filesystem Standard as explained in 
-<A HREF="programming-13.html">The KDevelop Programming Handbook</A></LI>
+<LI>Wann immer Sie in Ihrem Projekt-Unterverzeichnis ein weiteres Unterverzeichnis erstellen, das Quellcodes enthält, wird KDevelop
+daraus eine statische Bibliothek erzeugen. Das bedeutet, das statische Bibliotheken grundsätzlich schon durch das Projektmanagement
+unterstützt wird, um die Projektdateien übersichtlicher zu sortieren. Beachten Sie, das die statische Bibliothek später ein Teil der
+Binärdatei wird und daher nicht installiert wird.
+</LI>
+<LI>Um eine dynamische Bibliothek zu erstellen, können Sie ein weiteres Projekt-Unterverzeichnis anlegen. Die Quellcodes, die sich in
+diesem Unterverzeichnis befinden, werden dem Projekt hinzugefügt und sind daher in der Klassen-Ansicht as Hauptklassen verfügbar. Um
+eine dynamische Bibliothek zu erzeugen, bietet Ihnen das 
+<A HREF="programming-15.html">KDevelop Programming Handbook</A> im
+Anhang eine Schablone zur Erstellung der entsprechenden Makefile.am an. Wenn das Makefile des neuen Unterverzeichnisses dem
+configure.in Skript hinzugefügt wurde, müssen Sie nur noch "Autoconf und automake" und "Configure" ausführen, um die Makefiles zu
+erzeugen. Die Erstellung selbst ist jedoch nur möglich, indem das Erstellungsprogramm aus dem Unterverzeichnis aufgerufen wird, da
+KDevelop die Erstellung aus dem ursprünglichen Projekt-Unterverzeichnis aufruft. Eine weitere Möglichkeit, eine dynamische Bibliothek
+zu erstellen wäre, die Makefile.am des ursprünglichen Unterverzeichnisses an die Schablone des Programmierhandbuches anzupassen, indem
+Sie die Regeln zur Projekt-Modifikation beachten, die im Abschnitt 
+<A HREF="#Project Hacking">Project Hacking</A> beschrieben
+werden.</LI>
+<LI>Um eine dynamische Bibliothek zu installieren, müssen Sie den KDE-Datei-System Standard beachten, wie er im 
+<A HREF="programming-13.html">The KDevelop Programming Handbook</A> beschrieben ist.</LI>
 </UL>
 <P>
-<H4>Multiple Targets</H4>
+<H4>Mehrere Zielobjekte</H4>
 
-<P>
 <P>For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
 targets like packages containing several applications. As commands like "Execute" require that only one target is build by the
 developer, those types of projects are only supported in the way that you have to write your own entries to the Makefile.am's and
@@ -119,9 +123,10 @@ newtarget.pot</LI>
 </UL>
 </LI>
 <LI>add your sources like the KDevelop write area contains outside the write area for your binary or library</LI>
-<LI>for installing static libraries, create the library with KDevelop's autocreation inside subdirectories. Then modify the
+<LI>for installing static libraries, create the library with KDevelop's auto-creation inside subdirectories. Then modify the
 Makefile.am outside the write area according to the needed settings</LI>
 </UL>
+<P>
 <P>
 <H3><A NAME="ss8.2">8.2 Neue Projekte</A>
 </H3>

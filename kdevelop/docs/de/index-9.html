@@ -85,29 +85,30 @@ description of all available compiler flags you should see your compiler documen
 <B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the compiler.
 <P>
 <P>
-<H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
+<H3><A NAME="Compiler Warnungen"></A> <A NAME="ss9.3">9.3 Compiler Warnungen</A>
 </H3>
 
-<P>The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
-explanations are taken from the man page for GCC, egcs version 1.1.1.
-The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
+<P>Im folgenden werden die möglichen Einstellungen für die Compiler-Warnungen des Projekt-Optionen Dialogs, Seite 3, erläutert. Die
+Erklärungen selbst sind der <CODE>man</CODE>-page des GCC, egcs Version 1.1.1 entnommen.
+Die Warnungen selbst sind diagnostische Meldungen, die anzeigen, das die entsprechenden Programmanweisungen möglicherweise Fehler
+verursachen.
 <P>
 <DL>
-<DT><B>-Wall</B><DD><P>Standard `-W' options combined.
+<DT><B>-Wall</B><DD><P>Standard-Warnungen kombiniert
 <P>
-<DT><B>-W</B><DD><P>Compile with -W. This option sets options not included in -Wall which are very specific. Please read GCC-Info for more
-information.
+<DT><B>-W</B><DD><P>Compiliere mit -W. Diese Einstellung fügt Warnungen hinzu, die nicht in -Wall enthalten sind. Bitte lesen Sie die
+GCC-Info für weitere Informationen.
 <P>
-<DT><B>-Wtraditional</B><DD><P>Warn about certain constructs that behave differently in traditional and ANSI C.
+<DT><B>-Wtraditional</B><DD><P>Warnungen über bestimmte Konstruktionen ausgeben, die sich unter traditionellem und ANSI C verschieden verhalten.
 <P>
-<DT><B>-Wundef</B><DD><P>"Warn if an undefined identifier is evaluated in an `#if' directive.
+<DT><B>-Wundef</B><DD><P>Warnung anzeigen, falls ein undefinierter Bezeichner in einer '#if' Direktive verwendet wird
 <P>
-<DT><B>-Wshadow</B><DD><P>Warn whenever a local variable shadows another local variable.
+<DT><B>-Wshadow</B><DD><P>Warnung anzeigen, falls eine lokale Variable eine andere lokale Variable überdeckt.
 <P>
-<DT><B>-Wid-clash-LEN</B><DD><P>Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
-that will compile with certain obsolete, brain-damaged compilers.
+<DT><B>-Wid-clash-LEN</B><DD><P>Warnung anzeigen, falls zwei verschieden Bezeichner in den ersten LEN Buchstaben übereinstimmen. Dies kann bei der
+Übersetzung eines Programms mit einigen nicht mehr zu verwendenden Compilern helfen.
 <P>
-<DT><B>-Wlarger-then-LEN</B><DD><P>Warn whenever an object of larger than LEN bytes is defined.
+<DT><B>-Wlarger-then-LEN</B><DD><P>Warnung anzeigen, falls ein Objekt mit einer Größe über LEN Bytes definiert wird.
 <P>
 <DT><B>-Wpointer-arith</B><DD><P>Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
 size of 1, for convenience in calculations with void * pointers and pointers to functions.
