@@ -281,7 +281,6 @@
 #define HEADER  0
 #define CPP 	1
 #define BROWSER 2
-#define TOOLS 	3
 
 ///////////////////////////////////////////////////////////////////
 // tab-ID's for the t_tab_view

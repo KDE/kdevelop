@@ -302,10 +302,6 @@ void CKDevelop::setMainCaption(int tab_item)
 	          kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
             break;
 
-          case TOOLS:
-	          kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
-            break;
-
           default:
 	          kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
 	          kdev_caption+= version +

@@ -1844,11 +1844,14 @@ QString KWriteDoc::getWord(PointStruc &cursor) {
   textLine = contents.at(cursor.y);
   len = textLine->length();
   start = end = cursor.x;
-  while (start > 0 && highlight->isInWord(textLine->getChar(start - 1))) start--;
-  while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
+  while (start > 0 && highlight->isInWord(textLine->getChar(start - 1)))
+    start--;
+  while (end < len && highlight->isInWord(textLine->getChar(end)))
+    end++;
   len = end - start;
-  QCString s;    //(len +1);
-  for (z = 0; z < len; z++) s[z] = textLine->getChar(start + z);
+  QCString s(len +1);
+  for (z = 0; z < len; z++)
+    s[z] = textLine->getChar(start + z);
   s[len] = '\0';
   return s;
 }

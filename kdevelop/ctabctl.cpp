@@ -19,7 +19,7 @@
 
 #include "ctabctl.h"
 
-CTabCtl::CTabCtl( QWidget* parent, const char* name, QString type) :
+CTabCtl::CTabCtl( QWidget* parent, const char* name, const QString& type) :
   KTabCtl(parent,name)
 {
   setFocusPolicy(QWidget::NoFocus);

@@ -50,7 +50,6 @@ class CClassView;
 class DocTreeView;
 class CRealFileView;
 class CLogFileView;
-class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
@@ -67,6 +66,7 @@ class COutputWidget;
 class CKDevAccel;
 class KProcess;
 class KWriteView;
+class KStartupLogo;
 
 // Debugger classes
 class VarViewer;
@@ -84,9 +84,11 @@ class CKDevelop : public KMainWindow {
   Q_OBJECT
 public:
   /**constructor*/
-  CKDevelop(bool witharg=true);
+  CKDevelop();
+
   /**destructor*/
-  virtual ~CKDevelop();
+  ~CKDevelop();
+
   void initView();
   void initConnections();
   void initKeyAccel();
@@ -96,6 +98,7 @@ public:
   void initWhatsThis();
   void initProject(bool witharg);
   void initDebugger();
+  void completeStartup(bool witharg);
 
 
   /** Remove a specified file from the edit_infos struct
@@ -757,17 +760,17 @@ protected:
   void readOptions();
   /** saves all options on queryExit() */
   void saveOptions();
-  /** save the project of the current window and close the swallow widget. 
+  /** save the project of the current window
    * If project closing is cancelled, returns false */
-  virtual bool queryClose();
+  bool queryClose();
   /** saves all options by calling saveOptions() */
-  virtual bool queryExit();
+  bool queryExit();
   /** saves the currently opened project by the session manager and write 
    * the project file to the session config*/
-  virtual void saveProperties(KConfig* );
+  void saveProperties(KConfig* );
   /** initializes the session windows and opens the projects of the last
    * session */
-  virtual void readProperties(KConfig* );
+  void readProperties(KConfig* );
 	
 private:
   //the menus for kdevelop main
@@ -861,8 +864,7 @@ private:
   CEditWidget* header_widget; // the editwidget for the headers/resources
   CEditWidget* cpp_widget;    //  the editwidget for cpp files
   CDocBrowser* browser_widget;
-//  KSwallowWidget* swallow_widget;
- 
+
   /** The classview. */
   CClassView* class_tree;
   /** The logical fileview. */
@@ -958,6 +960,8 @@ private:
   bool lastShutdownOK;
   bool m_statusBarIsKDevelop;
   KStatusBar* m_statusBar;
+  KStartupLogo* start_logo;
+
 };
 
 class SaveAllDialog : public KDialog

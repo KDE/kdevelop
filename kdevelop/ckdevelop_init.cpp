@@ -54,6 +54,7 @@
 #include <qdir.h>
 #include <qclipbrd.h>
 #include <qframe.h>
+#include <qmessagebox.h>
 #include <qprogressbar.h>
 #include <qpopupmenu.h>
 #include <qsplitter.h>
@@ -66,7 +67,7 @@
 
 #include <iostream.h>
 
-CKDevelop::CKDevelop(bool witharg) :
+CKDevelop::CKDevelop() :
   KMainWindow(0),
   process("/bin/sh"),
   appl_process("/bin/sh"),
@@ -101,7 +102,7 @@ CKDevelop::CKDevelop(bool witharg) :
   kdev_caption=kapp->caption();
 
   config->setGroup("General Options");
-  KStartupLogo* start_logo=0L;
+  start_logo=0L;
   if (config->readBoolEntry("Logo",true))
   {
     start_logo= new KStartupLogo(this);
@@ -142,16 +143,8 @@ CKDevelop::CKDevelop(bool witharg) :
 
   initWhatsThis();
   slotStatusMsg(i18n("Welcome to KDevelop!"));
-
-  initProject(witharg);
-
-  if (start_logo)
-    delete start_logo;
-
-  config->setGroup("TipOfTheDay");
-  if(config->readBoolEntry("show_tod",true))
-    slotHelpTipOfDay();
 }
+
 
 CKDevelop::~CKDevelop()
 {
@@ -1296,6 +1289,18 @@ void CKDevelop::initConnections(){
 	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
 }
 
+void CKDevelop::completeStartup(bool witharg)
+{
+//  initProject(witharg);
+
+  if (start_logo)
+    delete start_logo;
+
+  config->setGroup("TipOfTheDay");
+  if(config->readBoolEntry("show_tod",true))
+    slotHelpTipOfDay();
+}
+
 void CKDevelop::initProject(bool witharg)
 {
   config->setGroup("General Options");
@@ -1311,13 +1316,20 @@ void CKDevelop::initProject(bool witharg)
   {
     if (!lastShutdownOK)
     {
-  	  if ( KMessageBox::No == KMessageBox::questionYesNo(this,
-  	                            i18n( "KDevelop failed to shutdown correctly previously"
-  	                                  "\nWould you like to start with the last loaded project?"),
-            	                  i18n("KDevelop failed to shutdown correctly previously")))
-      {
-  	    bLastProject = false;
-  	  }
+      bLastProject = (QMessageBox::warning(this,
+                                    i18n("KDevelop failed to shutdown correctly previously"),
+ 	                                  i18n( "KDevelop failed to shutdown correctly previously"
+  	                                      "\nWould you like to start with the last loaded project?"),
+                                    i18n("Yes"), i18n("No"), 0,1) == 0);
+
+
+//  	  if ( KMessageBox::No == KMessageBox::questionYesNo(0,
+//  	                            i18n( "KDevelop failed to shutdown correctly previously"
+//  	                                  "\nWould you like to start with the last loaded project?"),
+//            	                  i18n("KDevelop failed to shutdown correctly previously")))
+//      {
+//  	    bLastProject = false;
+//  	  }
     }
 
     if (bLastProject)

@@ -33,7 +33,7 @@ public:
    type = normal,output_widget
   */
   
-  CTabCtl(QWidget* parent=0, const char* name=0, QString type="normal");
+  CTabCtl(QWidget* parent=0, const char* name=0, const QString& type="normal");
   /**destructor*/
   ~CTabCtl(){};
  

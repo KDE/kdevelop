@@ -541,7 +541,7 @@ void CKDevelop::slotEditCut(){
 }
 void CKDevelop::slotEditCopy(){
   slotStatusMsg(i18n("Copying..."));
-  if(s_tab_view->getCurrentTab()==2){
+  if(s_tab_view->getCurrentTab()==BROWSER){
     browser_widget->slotCopyText();
   }
   else
@@ -2157,23 +2157,6 @@ void CKDevelop::slotBuildStop(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-// void CKDevelop::slotToolsKDbg(){
-
-//   if(!CToolClass::searchProgram(dbgExternalCmd)){
-//     return;
-//   }
-//   if(!bKDevelop)
-//     switchToKDevelop();
-
-//   showOutputView(false);
-
-//   s_tab_view->setCurrentTab(TOOLS);
-//   swallow_widget->sWClose(false);
-//   swallow_widget->setExeString(dbgExternalCmd);
-//   swallow_widget->sWExecute();
-//   swallow_widget->init();
-// }
-
 void CKDevelop::slotToolsTool(int tool){
 
   if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
@@ -3125,7 +3108,7 @@ void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 {
   int item=s_tab_view->getCurrentTab();
   QString text=QApplication::clipboard()->text();
-  if(!bContents || item==BROWSER || item==TOOLS)
+  if(!bContents || item==BROWSER)
     disableCommand(ID_EDIT_PASTE);
   else
     enableCommand(ID_EDIT_PASTE);
@@ -3854,7 +3837,7 @@ void CKDevelop::slotSTabSelected(int item){
     }    
   }
 
-  if(item == BROWSER || item == TOOLS)
+  if(item == BROWSER)
   {
     disableCommand(ID_BUILD_COMPILE_FILE);
 
@@ -3894,13 +3877,6 @@ void CKDevelop::slotSTabSelected(int item){
 
     setMainCaption(BROWSER);
   }
-
-  if(item == TOOLS){
-    disableCommand(ID_EDIT_COPY);
-    setMainCaption(TOOLS);
-  }
-  //  s_tab_current = item;
-
 }
 
 void CKDevelop::slotOTabSelected(int item)

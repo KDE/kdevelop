@@ -45,7 +45,9 @@ int main(int argc, char* argv[]) {
       install->show();
       delete install;
     }
-    CKDevelop* kdevelop = new CKDevelop( argc > 1 );
+
+    CKDevelop* kdevelop = new CKDevelop();
+    kdevelop->completeStartup( argc > 1 );
 
 		// We don't want this happening - It shouldn't - but (indirectly) KHTMLPart connects :(
 		if (a.dcopClient() && a.dcopClient()->isAttached())
