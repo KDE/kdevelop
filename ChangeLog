@@ -1,15 +1,22 @@
+2001-12-12  August Hörandl <august.hoerandl@gmx.at>
+
+	* Add Class dialog rewritten using designer
+
 2001-12-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-  * Added a preliminary Trie code to structure lib
+
+	* Added a preliminary Trie code to structure lib
 
 2001-11-29  Sandy Meier  <smeier@kdevelop.org>
+
 	* added Gameboy Advance support including a "Hello World" template and
 	an emulator frontend
 
 2001-11-21  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-  * Started lib/structure which will feature tree,
-    trie and graph structures
-  * Started a part called sourcebrowser which will facilitate
-    multiple UI's to browse source code
+
+	* Started lib/structure which will feature tree,
+	  trie and graph structures
+	* Started a part called sourcebrowser which will facilitate
+	  multiple UI's to browse source code
 
 2001-10-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
