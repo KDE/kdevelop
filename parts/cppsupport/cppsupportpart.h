@@ -118,6 +118,8 @@ private slots:
      * loads, parses and creates both classstores needed
      */
     void initialParse( );
+    
+    void slotNeedTextHint( int, int, QString& );
 
 private:
 
@@ -171,6 +173,9 @@ private:
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
+    
+    KTextEditor::EditInterface* m_activeEditor;
+    QString m_activeFileName;
 };
 
 #endif

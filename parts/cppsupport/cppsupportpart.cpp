@@ -16,6 +16,8 @@
 #include "problemreporter.h"
 #include "implementmethodsdialog.h"
 #include "backgroundparser.h"
+#include "ast.h"
+#include "ast_utils.h"
 
 #include <qmessagebox.h>
 #include <qdir.h>
@@ -42,9 +44,17 @@
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
+#include <kdeversion.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/view.h>
+
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
+#  include <ktexteditor/texthintinterface.h>
+#else
+#  include <kde30x_texthintinterface.h>
+#endif
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -81,7 +91,7 @@ typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport(parent, name ? name : "CppSupportPart")
+    : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeEditor( 0 )
 {
     setInstance(CppSupportFactory::instance());
 
@@ -338,11 +348,17 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
 
 void CppSupportPart::activePartChanged(KParts::Part *part)
 {
+    kdDebug(9032) << "CppSupportPart::activePartChanged()" << endl;
+    
     bool enabled = false;
 
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
-
+    m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
+    
+    m_activeFileName = QString::null;
+    
     if (doc) {
+	m_activeFileName = doc->url().path();
         QFileInfo fi(doc->url().path());
         QString ext = fi.extension();
         if (fileExtensions().contains(ext))
@@ -352,6 +368,22 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
     actionCollection()->action("edit_type_of_expression")->setEnabled(enabled);
+ 
+    if( !part )
+	return;
+    
+    KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( part->widget() );
+    if( !view )
+	return;
+    
+    KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( view );
+    if( !textHintIface )
+	return;
+    
+    connect( view, SIGNAL(needTextHint(int,int,QString&)), 
+	     this, SLOT(slotNeedTextHint(int,int,QString&)) );
+    
+    textHintIface->enableTextHints( 1000 );    
 }
 
 
@@ -1181,6 +1213,24 @@ void CppSupportPart::implementVirtualMethods( const QString& className )
       return;
 
     KMessageBox::sorry( 0, i18n("Not implemented yet ;)"), i18n("Sorry") );
+}
+
+void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
+{
+    if( !m_activeEditor )
+	return;
+    
+    m_backgroundParser->lock();
+    TranslationUnitAST* ast = m_backgroundParser->translationUnit( m_activeFileName );
+    AST* node = 0;
+    if( ast && (node = findNodeAt(ast, line, column)) ){
+	int startLine, startColumn;
+	int endLine, endColumn;
+	node->getStartPosition( &startLine, &startColumn );
+	node->getEndPosition( &endLine, &endColumn );
+	textHint = m_activeEditor->textLine( startLine );
+    }
+    m_backgroundParser->unlock();
 }
 
 #include "cppsupportpart.moc"

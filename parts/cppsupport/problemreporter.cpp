@@ -34,6 +34,7 @@
 #else
 # include "kde30x_markinterfaceextension.h"
 #endif
+#include <ktexteditor/view.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -109,6 +110,16 @@ ProblemReporter::~ProblemReporter()
 {
 }
 
+void ProblemReporter::slotNeedTextHint( int line, int column, QString& textHint )
+{
+    if( !m_markIface )
+	return;
+    
+    if( m_markIface->mark(line) & KTextEditor::MarkInterface::markType10 ){
+	textHint = i18n("!!!!!!!!! this line contains a problem!!!!!");
+    }
+}
+
 void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
     if( !part )
@@ -120,6 +131,10 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     }
     
     m_document = dynamic_cast<KTextEditor::Document*>( part );
+    KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( part->widget() );
+    if( view )
+	connect( view, SIGNAL(needTextHint(int,int,QString&)),
+		 this, SLOT(slotNeedTextHint(int,int,QString&)) );
     
     if( m_document ) {
 	m_filename = m_document->url().path();

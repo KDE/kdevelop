@@ -187,18 +187,14 @@ Unit* BackgroundParser::findOrCreateUnit( const QString& fileName )
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
     TranslationUnitAST* ast = 0;
-    lock();
     ast = findOrCreateUnit( fileName )->translationUnit;    
-    unlock();
     return ast;
 }
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 {
     QValueList<Problem> problems;
-    lock();
     problems = findOrCreateUnit( fileName )->problems;
-    unlock();
     return problems;
 }
 
