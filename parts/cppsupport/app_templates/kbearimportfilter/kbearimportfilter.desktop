@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Type=Service
-ServiceTypes=KBear/SiteImportFilter
-X-KDE-Library=libkbear$APPNAMELC$importfilter
-Name=$APPNAME$ Import Filter
-X-KBear-ImportFile=sitemanager

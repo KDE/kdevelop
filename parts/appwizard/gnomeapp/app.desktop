@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=$APPNAME$
-Comment=
-Exec=$APPNAMELC$
-Icon=$APPNAMELC$-logo.png
-Terminal=0
-Type=Application
