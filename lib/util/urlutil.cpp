@@ -3,6 +3,8 @@
  *   linux@jrockey.com                                                     *
  *   Copyright (C) 2003 by Alexander Dymo                                  *
  *   cloudtemple@mksat.net                                                 *
+ *   Copyright (C) 2003 by Mario Scalas                                    *
+ *   mario.scalas@libero.it                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,7 +86,10 @@ QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url
   if (i == -1)
     return QString();
 
-  return absRef.replace( 0, absBase.length(), QString() );
+  if (absRef == absBase)
+    return QString( "./" );
+  else
+    return absRef.replace( 0, absBase.length(), QString() );
 }
 
 QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &url )
@@ -102,9 +107,6 @@ QString URLUtil::extractPathNameAbsolute( const KURL &url )
   {
     // Ok, this is an over-tight pre-condition on "url" since I hope nobody will never
     // stress this function with absurd cases ... but who knows?
-    // SIDENOTE: You will never believe it but the AutoMake Manager will first delete the
-    // files it is removing and then requesting to the cvspart to remove them: so this
-    // will always return QString() ;-((
   /*
     QString path = url.path();
     QFileInfo fi( path );  // Argh: QFileInfo is back ;))
@@ -119,9 +121,12 @@ bool URLUtil::isDirectory( const KURL &url )
   return QDir( url.path() ).exists();
 }
 
-void URLUtil::dump( const KURL::List &urls )
+void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
 {
-  kdDebug(9000) << "dump( const QValueList<KURL> & ) here!" << endl;
+  if (!aMessage.isNull())
+  {
+    kdDebug(9000) << aMessage << endl;
+  }
   kdDebug(9000) << " List has " << urls.count() << " elements." << endl;
 
   for (size_t i = 0; i<urls.count(); ++i)
