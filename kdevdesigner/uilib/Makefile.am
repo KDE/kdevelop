@@ -1,4 +1,4 @@
-CXXFLAGS=$(SHORTCXXFLAGS)
+AM_CXXFLAGS=$(SHORTCXXFLAGS)
 
 INCLUDES = -I$(top_srcdir)/kdevdesigner/shared $(all_includes)
 METASOURCES = AUTO

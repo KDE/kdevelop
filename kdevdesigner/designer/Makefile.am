@@ -1,6 +1,6 @@
 SUBDIRS = pics
 
-CXXFLAGS=$(SHORTCXXFLAGS)
+AM_CXXFLAGS=$(SHORTCXXFLAGS) -DDESIGNER
 INCLUDES = -I$(top_srcdir)/kdevdesigner/shared -I$(top_srcdir)/lib/external_interfaces $(all_includes)
 METASOURCES = AUTO
 kde_module_LTLIBRARIES =  libkdevdesignerpart.la
@@ -12,7 +12,6 @@ partdesktopdir = $(kde_servicesdir)
 partdesktop_DATA =  kdevdesigner_part.desktop
 partrc_DATA = kdevdesigner_part.rc kdevdesigner_part_sh.rc
 noinst_HEADERS = kdevdesigner_part.h designeraction.h myiconloader.h
-AM_CXXFLAGS = -DDESIGNER
 picsdirdir = $(kde_datadir)/kdevdesignerpart/pics
 
 KDE_OPTIONS=nofinal
