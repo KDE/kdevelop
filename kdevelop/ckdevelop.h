@@ -432,7 +432,7 @@ public:
   void slotBookmarksSet();
   void slotBookmarksAdd();
   void slotBookmarksClear();
-  void slotBoomarksBrowserSelected(int);
+  void slotBookmarksBrowserSelected(int);
  	void slotBookmarksNext();
 	void slotBookmarksPrevious();
 
@@ -698,6 +698,13 @@ protected: // Protected methods
    */
   CParsedContainer *CVGetContainer( const char *parentPath, 
                                     THType parentType );
+
+	/**
+	 * Open an URL in the Documentation Browser.
+	 *
+	 * @param file The URL to open.
+	 */
+	void openBrowserBookmark(char* file);
 
   /** Update the class combo with all classes in alpabetical order. */
   void CVRefreshClassCombo();

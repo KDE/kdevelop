@@ -1656,18 +1656,28 @@ void CKDevelop::slotBookmarksClear(){
 	}	
 }
 
-void CKDevelop::slotBoomarksBrowserSelected(int id_){
+void CKDevelop::openBrowserBookmark(char* file)
+{
 	slotStatusMsg(i18n("Opening bookmark..."));
-	QString file= doc_bookmarks_list.at(id_);
-	slotURLSelected( browser_widget, file,1,"test");	
+	slotURLSelected(browser_widget, QString(file),1,"test");	
   slotStatusMsg(i18n("Ready."));
+}
+
+void CKDevelop::slotBookmarksBrowserSelected(int id_){
+	char* file = doc_bookmarks_list.at(id_);
+	openBrowserBookmark(file);	
 }	
 
 void CKDevelop::slotBookmarksNext()
 {
 	if(s_tab_view->getCurrentTab()==BROWSER)
 	{
-		// TODO
+		if(doc_bookmarks_list.count() > 0)
+		{
+      char* file = doc_bookmarks_list.next();
+  		if(file == NULL) file = doc_bookmarks_list.first();
+			openBrowserBookmark(file);	
+		}
 	}
 	else
 	{
@@ -1679,7 +1689,12 @@ void CKDevelop::slotBookmarksPrevious()
 {
 	if(s_tab_view->getCurrentTab()==BROWSER)
 	{
-		// TODO
+		if(doc_bookmarks_list.count() > 0)
+		{
+      char* file = doc_bookmarks_list.prev();
+  		if(file == NULL) file = doc_bookmarks_list.last();
+			openBrowserBookmark(file);	
+		}
 	}
 	else
 	{
