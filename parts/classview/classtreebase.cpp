@@ -496,7 +496,12 @@ void ClassTreeBase::slotItemExecuted( QListViewItem* item )
         
     QString toFile;
     int toLine = -1;
-    ctitem->getImplementation(&toFile, &toLine);
+    if (dynamic_cast<ClassTreeClassItem*>(item)) {
+        ctitem->getDeclaration(&toFile, &toLine);
+    }
+    else {
+	ctitem->getImplementation(&toFile, &toLine);
+    }
     m_part->partController()->editDocument(toFile, toLine);
     m_part->topLevel()->lowerView(this);
 }
