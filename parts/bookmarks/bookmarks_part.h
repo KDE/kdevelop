@@ -21,6 +21,7 @@
 
 #include <kparts/part.h>
 #include <kurl.h>
+#include <ktexteditor/markinterfaceextension.h>
 
 #include <kdevplugin.h>
 
@@ -58,9 +59,10 @@ private slots:
 	// connected to partcontroller
 	void partAdded( KParts::Part * part );
 
-	// connected to KTextEditor::MarkInterface
+	// connected to KTextEditor::MarkInterface(Extension)
 	void marksChanged();
-
+	void markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction );
+	
 	// connected to KParts::ReadOnlyPart
 	void reload();
 

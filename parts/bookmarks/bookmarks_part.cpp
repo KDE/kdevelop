@@ -93,7 +93,9 @@ void BookmarksPart::partAdded( KParts::Part * part )
 			
 			// connect to this editor
 			KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( ro_part );
-			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksChanged() ) );
+//			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksChanged() ) );
+			connect( doc, SIGNAL( markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction ) ), 
+				this, SLOT( markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction ) ) );
 
 			// workaround for a katepart oddity where it drops all bookmarks on 'reload'
 			connect( doc, SIGNAL( completed() ), this, SLOT( reload() ) );
@@ -109,6 +111,15 @@ void BookmarksPart::reload()
 	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj ) )
 	{
 		setBookmarksForURL( ro_part );
+	}
+}
+
+
+void BookmarksPart::markChanged( KTextEditor::Mark mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction )
+{
+	if ( mark.type == KTextEditor::MarkInterface::markType01 ) // bookmark type
+	{
+		marksChanged();
 	}
 }
 
