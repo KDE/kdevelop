@@ -24,6 +24,87 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
+#ifdef Q_OS_WIN32
+template <class _Tp> class AUTO_PTR {
+private:
+    _Tp* _M_ptr;
+
+public:
+    typedef _Tp element_type;
+
+    explicit AUTO_PTR(_Tp* __p = 0)  _THROW0() : _M_ptr(__p) {}
+
+    template <class _Tp1> AUTO_PTR(AUTO_PTR<_Tp1>& __a)  _THROW0()
+	: _M_ptr(__a.release()) {}
+
+    AUTO_PTR(AUTO_PTR& __a)  _THROW0() : _M_ptr(__a.release()) {}
+
+
+
+    template <class _Tp1>
+    AUTO_PTR& operator=(AUTO_PTR<_Tp1>& __a)  _THROW0() {
+	if (__a.get() != this->get()) {
+	    delete _M_ptr;
+	    _M_ptr = __a.release();
+	}
+	return *this;
+    }
+
+    AUTO_PTR& operator=(AUTO_PTR& __a)  _THROW0() {
+	if (&__a != this) {
+	    delete _M_ptr;
+	    _M_ptr = __a.release();
+	}
+	return *this;
+    }
+
+    ~AUTO_PTR()  _THROW0() { delete _M_ptr; }
+
+    _Tp& operator*() const  _THROW0() {
+	return *_M_ptr;
+    }
+    _Tp* operator->() const  _THROW0() {
+	return _M_ptr;
+    }
+    _Tp* get() const  _THROW0() {
+	return _M_ptr;
+    }
+    _Tp* release()  _THROW0() {
+	_Tp* __tmp = _M_ptr;
+	_M_ptr = 0;
+	return __tmp;
+    }
+    void reset(_Tp* __p = 0)  _THROW0() {
+	delete _M_ptr;
+	_M_ptr = __p;
+    }
+
+    // According to the C++ standard, these conversions are required.  Most
+    // present-day compilers, however, do not enforce that requirement---and,
+    // in fact, most present-day compilers do not support the language
+    // features that these conversions rely on.
+
+
+private:
+    template<class _Tp1> struct AUTO_PTR_ref {
+	_Tp1* _M_ptr;
+	AUTO_PTR_ref(_Tp1* __p) : _M_ptr(__p) {}
+    };
+
+public:
+    AUTO_PTR(AUTO_PTR_ref<_Tp> __ref)  _THROW0()
+	: _M_ptr(__ref._M_ptr) {}
+    template <class _Tp1> operator AUTO_PTR_ref<_Tp1>()  _THROW0()
+	{ return AUTO_PTR_ref<_Tp>(this->release()); }
+    template <class _Tp1> operator AUTO_PTR<_Tp1>()  _THROW0()
+	{ return AUTO_PTR<_Tp1>(this->release()) }
+
+};
+
+#else
+#define AUTO_PTR std::auto_ptr
+#endif
+
 template <class T> typename T::Node CreateNode()
 {
     typename T::Node node( new T );
@@ -93,7 +174,7 @@ QString nodeTypeToString( NodeType type );
 class AST
 {
 public:
-    typedef std::auto_ptr<AST> Node;
+    typedef AUTO_PTR<AST> Node;
     enum { Type=NodeType_Generic };
 
 public:
@@ -135,7 +216,7 @@ private:
 class GroupAST: public AST
 {
 public:
-    typedef std::auto_ptr<GroupAST> Node;
+    typedef AUTO_PTR<GroupAST> Node;
     enum { Type = NodeType_Group };
 
 public:
@@ -158,7 +239,7 @@ private:
 class TemplateArgumentListAST: public AST
 {
 public:
-    typedef std::auto_ptr<TemplateArgumentListAST> Node;
+    typedef AUTO_PTR<TemplateArgumentListAST> Node;
     enum { Type = NodeType_TemplateArgumentList };
 
 public:
@@ -180,7 +261,7 @@ private:
 class ClassOrNamespaceNameAST: public AST
 {
 public:
-    typedef std::auto_ptr<ClassOrNamespaceNameAST> Node;
+    typedef AUTO_PTR<ClassOrNamespaceNameAST> Node;
     enum { Type = NodeType_ClassOrNamespaceName };
 
 public:
@@ -206,7 +287,7 @@ private:
 class NameAST: public AST
 {
 public:
-    typedef std::auto_ptr<NameAST> Node;
+    typedef AUTO_PTR<NameAST> Node;
     enum { Type = NodeType_Name };
 
 public:
@@ -236,7 +317,7 @@ private:
 class TypeParameterAST: public AST
 {
 public:
-    typedef std::auto_ptr<TypeParameterAST> Node;
+    typedef AUTO_PTR<TypeParameterAST> Node;
     enum { Type = NodeType_TypeParameter };
 
 public:
@@ -246,7 +327,7 @@ public:
     void setKind( AST::Node& kind );
 
     class TemplateParameterListAST* templateParameterList() { return m_templateParameterList.get(); }
-    void setTemplateParameterList( std::auto_ptr<class TemplateParameterListAST>& templateParameterList );
+    void setTemplateParameterList( AUTO_PTR<class TemplateParameterListAST>& templateParameterList );
 
     NameAST* name() { return m_name.get(); }
     void setName( NameAST::Node& name );
@@ -256,7 +337,7 @@ public:
 
 private:
     AST::Node m_kind;
-    std::auto_ptr<class TemplateParameterListAST> m_templateParameterList;
+    AUTO_PTR<class TemplateParameterListAST> m_templateParameterList;
     NameAST::Node m_name;
     AST::Node m_typeId;
 
@@ -268,7 +349,7 @@ private:
 class DeclarationAST: public AST
 {
 public:
-    typedef std::auto_ptr<DeclarationAST> Node;
+    typedef AUTO_PTR<DeclarationAST> Node;
     enum { Type = NodeType_Declaration };
 
 public:
@@ -282,7 +363,7 @@ private:
 class AccessDeclarationAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<AccessDeclarationAST> Node;
+    typedef AUTO_PTR<AccessDeclarationAST> Node;
     enum { Type = NodeType_AccessDeclaration };
 
 public:
@@ -304,7 +385,7 @@ private:
 class TypeSpecifierAST: public AST
 {
 public:
-    typedef std::auto_ptr<TypeSpecifierAST> Node;
+    typedef AUTO_PTR<TypeSpecifierAST> Node;
     enum { Type = NodeType_TypeSpecifier };
 
 public:
@@ -334,7 +415,7 @@ private:
 class BaseSpecifierAST: public AST
 {
 public:
-    typedef std::auto_ptr<BaseSpecifierAST> Node;
+    typedef AUTO_PTR<BaseSpecifierAST> Node;
     enum { Type = NodeType_BaseSpecifier };
 
 public:
@@ -362,7 +443,7 @@ private:
 class BaseClauseAST: public AST
 {
 public:
-    typedef std::auto_ptr<BaseClauseAST> Node;
+    typedef AUTO_PTR<BaseClauseAST> Node;
     enum { Type = NodeType_BaseClause };
 
 public:
@@ -382,7 +463,7 @@ private:
 class ClassSpecifierAST: public TypeSpecifierAST
 {
 public:
-    typedef std::auto_ptr<ClassSpecifierAST> Node;
+    typedef AUTO_PTR<ClassSpecifierAST> Node;
     enum { Type = NodeType_ClassSpecifier };
 
 public:
@@ -410,7 +491,7 @@ private:
 class EnumeratorAST: public AST
 {
 public:
-    typedef std::auto_ptr<EnumeratorAST> Node;
+    typedef AUTO_PTR<EnumeratorAST> Node;
     enum { Type = NodeType_Enumerator };
 
 public:
@@ -434,7 +515,7 @@ private:
 class EnumSpecifierAST: public TypeSpecifierAST
 {
 public:
-    typedef std::auto_ptr<EnumSpecifierAST> Node;
+    typedef AUTO_PTR<EnumSpecifierAST> Node;
     enum { Type = NodeType_EnumSpecifier };
 
 public:
@@ -454,7 +535,7 @@ private:
 class ElaboratedTypeSpecifierAST: public TypeSpecifierAST
 {
 public:
-    typedef std::auto_ptr<ElaboratedTypeSpecifierAST> Node;
+    typedef AUTO_PTR<ElaboratedTypeSpecifierAST> Node;
     enum { Type = NodeType_ElaboratedTypeSpecifier };
 
 public:
@@ -477,7 +558,7 @@ private:
 class LinkageBodyAST: public AST
 {
 public:
-    typedef std::auto_ptr<LinkageBodyAST> Node;
+    typedef AUTO_PTR<LinkageBodyAST> Node;
     enum { Type = NodeType_LinkageBody };
 
 public:
@@ -497,7 +578,7 @@ private:
 class LinkageSpecificationAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<LinkageSpecificationAST> Node;
+    typedef AUTO_PTR<LinkageSpecificationAST> Node;
     enum { Type = NodeType_LinkageSpecification };
 
 public:
@@ -525,7 +606,7 @@ private:
 class NamespaceAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<NamespaceAST> Node;
+    typedef AUTO_PTR<NamespaceAST> Node;
     enum { Type = NodeType_Namespace };
 
 public:
@@ -549,7 +630,7 @@ private:
 class NamespaceAliasAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<NamespaceAliasAST> Node;
+    typedef AUTO_PTR<NamespaceAliasAST> Node;
     enum { Type = NodeType_NamespaceAlias };
 
 public:
@@ -573,7 +654,7 @@ private:
 class UsingAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<UsingAST> Node;
+    typedef AUTO_PTR<UsingAST> Node;
     enum { Type = NodeType_Using };
 
 public:
@@ -597,7 +678,7 @@ private:
 class UsingDirectiveAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<UsingDirectiveAST> Node;
+    typedef AUTO_PTR<UsingDirectiveAST> Node;
     enum { Type = NodeType_UsingDirective };
 
 public:
@@ -617,7 +698,7 @@ private:
 class DeclaratorAST: public AST
 {
 public:
-    typedef std::auto_ptr<DeclaratorAST> Node;
+    typedef AUTO_PTR<DeclaratorAST> Node;
     enum { Type = NodeType_Declarator };
 
 public:
@@ -627,7 +708,7 @@ public:
     void addPtrOp( AST::Node& ptrOp );
 
     DeclaratorAST* subDeclarator() { return m_subDeclarator.get(); }
-    void setSubDeclarator( std::auto_ptr<DeclaratorAST>& subDeclarator );
+    void setSubDeclarator( AUTO_PTR<DeclaratorAST>& subDeclarator );
 
     NameAST* declaratorId() { return m_declaratorId.get(); }
     void setDeclaratorId( NameAST::Node& declaratorId );
@@ -639,7 +720,7 @@ public:
     void addArrayDimension( AST::Node& arrayDimension );
 
     class ParameterDeclarationClauseAST* parameterDeclarationClause() { return m_parameterDeclarationClause.get(); }
-    void setParameterDeclarationClause( std::auto_ptr<class ParameterDeclarationClauseAST>& parameterDeclarationClause );
+    void setParameterDeclarationClause( AUTO_PTR<class ParameterDeclarationClauseAST>& parameterDeclarationClause );
 
     // ### replace 'constant' with cvQualify
     AST* constant() { return m_constant.get(); }
@@ -650,11 +731,11 @@ public:
 
 private:
     QPtrList<AST> m_ptrOpList;
-    std::auto_ptr<DeclaratorAST> m_subDeclarator;
+    AUTO_PTR<DeclaratorAST> m_subDeclarator;
     NameAST::Node m_declaratorId;
     AST::Node m_bitfieldInitialization;
     QPtrList<AST> m_arrayDimensionList;
-    std::auto_ptr<class ParameterDeclarationClauseAST> m_parameterDeclarationClause;
+    AUTO_PTR<class ParameterDeclarationClauseAST> m_parameterDeclarationClause;
     AST::Node m_constant;
     GroupAST::Node m_exceptionSpecification;
 
@@ -666,7 +747,7 @@ private:
 class ParameterDeclarationAST: public AST
 {
 public:
-    typedef std::auto_ptr<ParameterDeclarationAST> Node;
+    typedef AUTO_PTR<ParameterDeclarationAST> Node;
     enum { Type = NodeType_ParameterDeclaration };
 
 public:
@@ -696,7 +777,7 @@ private:
 class ParameterDeclarationListAST: public AST
 {
 public:
-    typedef std::auto_ptr<ParameterDeclarationListAST> Node;
+    typedef AUTO_PTR<ParameterDeclarationListAST> Node;
     enum { Type = NodeType_ParameterDeclarationList };
 
 public:
@@ -718,7 +799,7 @@ private:
 class ParameterDeclarationClauseAST: public AST
 {
 public:
-    typedef std::auto_ptr<ParameterDeclarationClauseAST> Node;
+    typedef AUTO_PTR<ParameterDeclarationClauseAST> Node;
     enum { Type = NodeType_ParameterDeclarationClause };
 
 public:
@@ -745,7 +826,7 @@ private:
 class InitDeclaratorAST: public AST
 {
 public:
-    typedef std::auto_ptr<InitDeclaratorAST> Node;
+    typedef AUTO_PTR<InitDeclaratorAST> Node;
     enum { Type = NodeType_InitDeclarator };
 
 public:
@@ -769,7 +850,7 @@ private:
 class InitDeclaratorListAST: public AST
 {
 public:
-    typedef std::auto_ptr<InitDeclaratorListAST> Node;
+    typedef AUTO_PTR<InitDeclaratorListAST> Node;
     enum { Type = NodeType_InitDeclaratorList };
 
 public:
@@ -789,7 +870,7 @@ private:
 class TypedefAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<TypedefAST> Node;
+    typedef AUTO_PTR<TypedefAST> Node;
     enum { Type = NodeType_Typedef };
 
 public:
@@ -813,7 +894,7 @@ private:
 class TemplateParameterAST: public AST
 {
 public:
-    typedef std::auto_ptr<TemplateParameterAST> Node;
+    typedef AUTO_PTR<TemplateParameterAST> Node;
     enum { Type = NodeType_TemplateParameter };
 
 public:
@@ -837,7 +918,7 @@ private:
 class TemplateParameterListAST: public AST
 {
 public:
-    typedef std::auto_ptr<TemplateParameterListAST> Node;
+    typedef AUTO_PTR<TemplateParameterListAST> Node;
     enum { Type = NodeType_TemplateParameterList };
 
 public:
@@ -857,7 +938,7 @@ private:
 class TemplateDeclarationAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<TemplateDeclarationAST> Node;
+    typedef AUTO_PTR<TemplateDeclarationAST> Node;
     enum { Type = NodeType_TemplateDeclaration };
 
 public:
@@ -885,7 +966,7 @@ private:
 class SimpleDeclarationAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<SimpleDeclarationAST> Node;
+    typedef AUTO_PTR<SimpleDeclarationAST> Node;
     enum { Type = NodeType_SimpleDeclaration };
 
 public:
@@ -917,7 +998,7 @@ private:
 class StatementAST: public AST
 {
 public:
-    typedef std::auto_ptr<StatementAST> Node;
+    typedef AUTO_PTR<StatementAST> Node;
     enum { Type = NodeType_Statement };
 
 public:
@@ -931,7 +1012,7 @@ private:
 class ExpressionStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<ExpressionStatementAST> Node;
+    typedef AUTO_PTR<ExpressionStatementAST> Node;
     enum { Type = NodeType_ExpressionStatement };
 
 public:
@@ -951,7 +1032,7 @@ private:
 class ConditionAST: public AST
 {
 public:
-    typedef std::auto_ptr<ConditionAST> Node;
+    typedef AUTO_PTR<ConditionAST> Node;
     enum { Type = NodeType_Condition };
 
 public:
@@ -979,7 +1060,7 @@ private:
 class IfStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<IfStatementAST> Node;
+    typedef AUTO_PTR<IfStatementAST> Node;
     enum { Type = NodeType_IfStatement };
 
 public:
@@ -1007,7 +1088,7 @@ private:
 class WhileStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<WhileStatementAST> Node;
+    typedef AUTO_PTR<WhileStatementAST> Node;
     enum { Type = NodeType_WhileStatement };
 
 public:
@@ -1031,7 +1112,7 @@ private:
 class DoStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<DoStatementAST> Node;
+    typedef AUTO_PTR<DoStatementAST> Node;
     enum { Type = NodeType_DoStatement };
 
 public:
@@ -1055,7 +1136,7 @@ private:
 class ForStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<ForStatementAST> Node;
+    typedef AUTO_PTR<ForStatementAST> Node;
     enum { Type = NodeType_ForStatement };
 
 public:
@@ -1087,7 +1168,7 @@ private:
 class SwitchStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<SwitchStatementAST> Node;
+    typedef AUTO_PTR<SwitchStatementAST> Node;
     enum { Type = NodeType_SwitchStatement };
 
 public:
@@ -1111,7 +1192,7 @@ private:
 class StatementListAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<StatementListAST> Node;
+    typedef AUTO_PTR<StatementListAST> Node;
     enum { Type = NodeType_StatementList };
 
 public:
@@ -1131,7 +1212,7 @@ private:
 class DeclarationStatementAST: public StatementAST
 {
 public:
-    typedef std::auto_ptr<DeclarationStatementAST> Node;
+    typedef AUTO_PTR<DeclarationStatementAST> Node;
     enum { Type = NodeType_DeclarationStatement };
 
 public:
@@ -1151,7 +1232,7 @@ private:
 class FunctionDefinitionAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<FunctionDefinitionAST> Node;
+    typedef AUTO_PTR<FunctionDefinitionAST> Node;
     enum { Type = NodeType_FunctionDefinition };
 
 public:
@@ -1188,7 +1269,7 @@ private:
 class TranslationUnitAST: public AST
 {
 public:
-    typedef std::auto_ptr<TranslationUnitAST> Node;
+    typedef AUTO_PTR<TranslationUnitAST> Node;
     enum { Type = NodeType_TranslationUnit };
 
 public:

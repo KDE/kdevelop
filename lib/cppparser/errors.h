@@ -35,9 +35,9 @@ struct Error{
 
 class Errors{
 public:
-    static const Error& InternalError;
-    static const Error& SyntaxError;
-    static const Error& ParseError;
+    QT_STATIC_CONST Error& InternalError;
+    QT_STATIC_CONST Error& SyntaxError;
+    QT_STATIC_CONST Error& ParseError;
 };
 
 

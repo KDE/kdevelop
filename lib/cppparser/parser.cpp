@@ -33,6 +33,12 @@
 
 using namespace std;
 
+#ifdef Q_OS_WIN32
+QT_STATIC_CONST_IMPL Error& Errors::InternalError = Error( 1, -1, i18n("Internal Error") );
+QT_STATIC_CONST_IMPL Error& Errors::SyntaxError = Error( 2, -1, i18n("Syntax Error before '%1'") );
+QT_STATIC_CONST_IMPL Error& Errors::ParseError = Error( 3, -1, i18n("Parse Error before '%1'") );
+#endif
+
 #define ADVANCE(tk, descr) \
 { \
   const Token& token = lex->lookAhead( 0 ); \
