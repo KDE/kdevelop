@@ -13,6 +13,7 @@
 
 #include <qlistview.h>
 #include <knotifyclient.h>
+#include <klocale.h>
 
 #include "domutil.h"
 #include "addfilegroupdlg.h"
@@ -71,10 +72,24 @@ void FileGroupsConfigWidget::storeConfig()
 void FileGroupsConfigWidget::addGroup()
 {
     AddFileGroupDialog dlg;
+    dlg.setCaption(i18n("Add File Group"));
     if (!dlg.exec())
         return;
 
     (void) new QListViewItem(listview, dlg.title(), dlg.pattern());
+}
+
+
+void FileGroupsConfigWidget::editGroup()
+{
+    if (listview->childCount()==0 || listview->currentItem()==0)
+        return;
+    AddFileGroupDialog dlg(listview->currentItem()->text(0),listview->currentItem()->text(1));
+    dlg.setCaption(i18n("Edit File Group"));
+    if (!dlg.exec() || dlg.title().isEmpty() || dlg.pattern().isEmpty())
+        return;
+    listview->currentItem()->setText(0,dlg.title());
+    listview->currentItem()->setText(1,dlg.pattern());
 }
 
 

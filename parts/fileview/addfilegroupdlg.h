@@ -21,7 +21,7 @@ class AddFileGroupDialog : public QDialog
     Q_OBJECT
 
 public: 
-    AddFileGroupDialog( QWidget *parent=0, const char *name=0 );
+    AddFileGroupDialog( const QString& old_title="", const QString& old_pattern="", QWidget *parent=0, const char *name=0 );
     ~AddFileGroupDialog();
 
     QString title() const

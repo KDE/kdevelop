@@ -131,6 +131,14 @@
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
+                        <cstring>editgroup_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Edit Group...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>deletegroup_button</cstring>
                     </property>
                     <property name="text">
@@ -228,6 +236,12 @@
         <slot>addGroup()</slot>
     </connection>
     <connection>
+        <sender>editgroup_button</sender>
+        <signal>clicked()</signal>
+        <receiver>filegroups_config_widget</receiver>
+        <slot>editGroup()</slot>
+    </connection>
+    <connection>
         <sender>movedown_button</sender>
         <signal>clicked()</signal>
         <receiver>filegroups_config_widget</receiver>
@@ -235,10 +249,11 @@
     </connection>
 </connections>
 <slots>
-    <slot>addGroup()</slot>
-    <slot access="protected">moveUp()</slot>
-    <slot>moveDown()</slot>
+    <slot access="protected">addGroup()</slot>
+    <slot access="protected">editGroup()</slot>
     <slot access="protected">removeGroup()</slot>
+    <slot access="protected">moveUp()</slot>
+    <slot access="protected">moveDown()</slot>
 </slots>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

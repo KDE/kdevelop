@@ -30,6 +30,7 @@ public slots:
 
 private:
     virtual void addGroup();
+    virtual void editGroup();
     virtual void removeGroup();
     virtual void moveUp();
     virtual void moveDown();

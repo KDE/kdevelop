@@ -18,18 +18,16 @@
 #include "addfilegroupdlg.h"
 
 
-AddFileGroupDialog::AddFileGroupDialog(QWidget *parent, const char *name)
+AddFileGroupDialog::AddFileGroupDialog(const QString& old_title, const QString& old_pattern, QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add File Group"));
-    
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
-    title_edit = new QLineEdit(this);
+    title_edit = new QLineEdit(old_title, this);
     title_edit->setFocus();
     title_label->setBuddy(title_edit);
 
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
-    pattern_edit = new QLineEdit(this);
+    pattern_edit = new QLineEdit(old_pattern, this);
     pattern_label->setBuddy(pattern_edit);
     QFontMetrics fm(pattern_edit->fontMetrics());
     pattern_edit->setMinimumWidth(fm.width('X')*35);
