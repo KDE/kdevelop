@@ -223,8 +223,8 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     // Restore window layout
     QDomElement docel = static_cast<ProjectSpace*>(psObj)->readUserDocument()->documentElement();
     QDomElement layoutel = docel.namedItem("Layout").toElement();
-    if (!layoutel.isNull())
-        m_pKDevelopGUI->readDockConfig(layoutel);
+//    if (!layoutel.isNull())
+//        m_pKDevelopGUI->readDockConfig(layoutel);
 
     // some actions
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
@@ -250,7 +250,7 @@ void KDevelopCore::closeProjectSpace()
         layoutel = docel.ownerDocument().createElement("Layout");
         docel.appendChild(layoutel);
     }
-    m_pKDevelopGUI->writeDockConfig(layoutel);
+//    m_pKDevelopGUI->writeDockConfig(layoutel);
 
     // Language support component
     m_pKDevComponentManager->removeComponent("KDevLanguageSupport");
