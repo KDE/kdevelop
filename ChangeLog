@@ -1,4 +1,7 @@
 1999-07-15 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed problems with advanced macros.
+
+1999-07-15 Jonas Nordin <jonas.nordin@cenacle.se>
 	* some codecleanups in the classparser.
 
 1999-07-15 Sandy Meier   <smeier@rz.uni-potsdam.de>
