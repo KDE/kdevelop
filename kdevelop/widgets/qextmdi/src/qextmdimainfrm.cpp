@@ -558,6 +558,9 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 
    if (pWnd->isToolView())
       pWnd->m_bToolView = FALSE;
+
+   if (!m_pCurrentWindow)
+      emit lastChildViewClosed();
 }
 
 //============== closeWindow ==============//
