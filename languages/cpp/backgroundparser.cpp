@@ -54,49 +54,47 @@ public:
 
     virtual QString contents( const QString& fileName )
     {
-	if( !m_readFromDisk ){
-	    //kdDebug(9007) << "-------> kapp is locked = " << kapp->locked() << endl;
-	    bool needToLock = kapp->locked() == false;
+      QString contents = QString::null;
+    
+      if( !m_readFromDisk )
+      {
+            // GET LOCK
+            kapp->lock();
+            
+            //kdDebug(9007) << "-------> kapp locked" << endl;
+  
+            QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
+            QPtrListIterator<KParts::Part> it( parts );
+            while( it.current() ){
+                KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
+                ++it;
+  
+                KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
+                if( !doc || !editIface || doc->url().path() != fileName )
+                    continue;
+  
+                contents = QString( editIface->text().ascii() ); // deep copy
+  
+                //kdDebug(9007) << "-------> kapp unlocked" << endl;
+  
+                break;
+            }
+  
+            // RELEASE LOCK
+            kapp->unlock();
+            //kdDebug(9007) << "-------> kapp unlocked" << endl;
+        }
+        else
+        {
+          QFile f( fileName );
+          QTextStream stream( &f );
+          if( f.open(IO_ReadOnly) ){
+              QString contents = stream.read();
+              f.close();
+          }
+        }
 
-	    if( needToLock )
-		kapp->lock();
-
-	    //kdDebug(9007) << "-------> kapp locked" << endl;
-
-	    QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
-	    QPtrListIterator<KParts::Part> it( parts );
-	    while( it.current() ){
-		KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
-		++it;
-
-		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
-		if( !doc || !editIface || doc->url().path() != fileName )
-		    continue;
-
-		QString contents = QString( editIface->text().ascii() ); // deep copy
-
-		if( needToLock )
-		    kapp->unlock();
-
-		//kdDebug(9007) << "-------> kapp unlocked" << endl;
-
-		return contents;
-	    }
-
-	    if( needToLock )
-		kapp->unlock();
-	    //kdDebug(9007) << "-------> kapp unlocked" << endl;
-	}
-
-	QFile f( fileName );
-	QTextStream stream( &f );
-	if( f.open(IO_ReadOnly) ){
-	    QString contents = stream.read();
-	    f.close();
-	    return contents;
-	}
-
-	return QString::null;
+	return contents;
     }
 
     virtual bool isModified( const QString& fileName )
