@@ -43,14 +43,19 @@ public:
                         SubclassingDlg(const QString &formFile,QStringList &newFileNames,
                                        QWidget* parent = 0, const char* name = 0,
                                        bool modal = FALSE, WFlags fl = 0 );
+                        SubclassingDlg(const QString &formFile,const QString &filename,QStringList &dummy,
+                                       QWidget* parent = 0, const char* name = 0,
+                                       bool modal = FALSE, WFlags fl = 0 );
                         ~SubclassingDlg();
 
 private:
+  void                  readUiFile();
   void                  updateDlg();
   bool                  replaceKeywords(QString &buffer, bool canBeModal=true);
   void                  replace(QString &string, const QString& search, const QString& replace);
   bool                  saveBuffer(QString &buffer, const QString& filename);
   bool                  loadBuffer(QString &buffer, const QString& filename);
+  bool                  m_creatingNewSubclass;
 
 public slots:
   virtual void          accept();

@@ -37,7 +37,6 @@
 #include <kregexp.h>
 #include <kurl.h>
 #include <qmessagebox.h>
-#include "classparser.h"
 
 
 #include "kdevcore.h"
@@ -685,6 +684,7 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
     updateProjectFile(spitem);
     SubprojectItem *newitem = new SubprojectItem(spitem, subdirname,"");
     newitem->subdir = subdirname;
+    newitem->m_RootBuffer = &(newitem->m_FileBuffer);
     newitem->path = spitem->path + "/" + subdirname;
     parse(newitem);
   }
@@ -1235,8 +1235,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           QStringList newFileNames;
           SubclassingDlg *dlg = new SubclassingDlg(m_shownSubproject->path + "/" + fitem->name,newFileNames);
           dlg->exec();
+          QDomDocument &dom = *(m_part->projectDom());
           for (uint i=0; i<newFileNames.count(); i++)
           {
+            DomUtil::PairList list;
+            list << DomUtil::Pair(newFileNames[i],m_shownSubproject->path + "/" + fitem->name);
+            DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
             newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
           }
 
@@ -1244,21 +1248,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else if (r == idUpdateWidgetclass)
         {
-          ClassStore classcontainer;
-          CClassParser parser(&classcontainer);
-          parser.parse(m_shownSubproject->path + "/" + fitem->name);
-          QStringList classes(classcontainer.getSortedClassNameList());
-          typedef QValueList<ParsedMethod*> SlotList;
-          for (uint i=0; i<classes.count(); i++)
-          {
-            QMessageBox::information(0,"Class",classes[i]);
-            ParsedClass *cls = classcontainer.getClassByName(classes[i]);
-            cls->out();
-            SlotList slotlist = cls->getSortedMethodList();
-            SlotList::iterator it;
-            for ( it = slotlist.begin(); it != slotlist.end(); ++it )
-              QMessageBox::information(0,"Slot",(*it)->asString());
-          }
+         // SubclassingDlg *subclsdlg = new SubclassingDlg(
         }
 
 

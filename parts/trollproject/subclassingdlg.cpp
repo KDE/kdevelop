@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include "classparser.h"
 
 
 #define WIDGET_CAPTION_NAME "widget/property|name=caption/string"
@@ -80,7 +81,44 @@ m_newFileNames(newFileNames)
 //=================================================
 {
   m_formFile = formFile;
-  QStringList splitPath = QStringList::split('/',formFile);
+  readUiFile();
+  m_creatingNewSubclass = true;
+}
+
+
+SubclassingDlg::SubclassingDlg(const QString &formFile,const QString &filename,QStringList &dummy,
+                               QWidget* parent, const char* name,bool modal, WFlags fl)
+: SubclassingDlgBase(parent,name,modal,fl),
+m_newFileNames(dummy)
+//=================================================
+{
+  m_formFile = formFile;
+  readUiFile();
+  m_creatingNewSubclass = false;
+
+  ClassStore classcontainer;
+  CClassParser parser(&classcontainer);
+  parser.parse(filename + ".h");
+  QStringList classes(classcontainer.getSortedClassNameList());
+  typedef QValueList<ParsedMethod*> SlotList;
+  for (uint i=0; i<classes.count(); i++)
+  {
+    QMessageBox::information(0,"Class",classes[i]);
+    ParsedClass *cls = classcontainer.getClassByName(classes[i]);
+    cls->out();
+    SlotList slotlist = cls->getSortedMethodList();
+    SlotList::iterator it;
+    for ( it = slotlist.begin(); it != slotlist.end(); ++it )
+    {
+      ParsedMethod *method = *it;
+    }
+  }
+}
+
+
+void SubclassingDlg::readUiFile()
+{
+  QStringList splitPath = QStringList::split('/',m_formFile);
   m_formName = QStringList::split('.',splitPath[splitPath.count()-1])[0]; // "somedlg.ui" = "somedlg"
   splitPath.pop_back();
   m_formPath = "/" + splitPath.join("/"); // join path to ui-file
@@ -88,7 +126,7 @@ m_newFileNames(newFileNames)
   m_btnOk->setEnabled(false);
   QDomDocument doc;
 
-  DomUtil::openDOMFile(doc,formFile);
+  DomUtil::openDOMFile(doc,m_formFile);
   m_baseClassName = DomUtil::elementByPathExt(doc,WIDGET_CLASS_NAME).text();
 
   m_baseCaption = DomUtil::elementByPathExt(doc,WIDGET_CAPTION_NAME).text();
@@ -155,6 +193,7 @@ m_newFileNames(newFileNames)
 
 
 }
+
 
 
 SubclassingDlg::~SubclassingDlg()
@@ -338,8 +377,11 @@ void SubclassingDlg::accept()
   }
   saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
 
-  m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".cpp");
-  m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".h");
+  if (m_creatingNewSubclass)
+  {
+    m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".cpp");
+    m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".h");
+  }
   SubclassingDlgBase::accept();
 }
 
