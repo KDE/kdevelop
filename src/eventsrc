@@ -11,6 +11,7 @@ Name[sv]=Processen lyckades
 Name[xx]=xxProcess successfulxx
 Comment=Process finished successfully
 Comment[hu]=A folyamat sikeresen befejeződött
+Comment[pt_BR]=Processamento terminado com sucesso
 Comment[sv]=Processen avslutades med lyckat resultat
 Comment[xx]=xxProcess finished successfullyxx
 default_presentation=0
