@@ -36,7 +36,7 @@ SORT_MEMBER_DOCS       = YES
 DISTRIBUTE_GROUP_DOC   = NO
 TAB_SIZE               = 4
 GENERATE_TODOLIST      = YES
-GENERATE_TESTLIST      = YES
+GENERATE_TESTLIST      = NO
 GENERATE_BUGLIST       = YES
 GENERATE_DEPRECATEDLIST= YES
 ALIASES                = 
@@ -145,7 +145,7 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 XML_OUTPUT             = xml
 XML_SCHEMA             = 
 XML_DTD                = 
