@@ -72,6 +72,7 @@ enum NodeType
     NodeType_ParameterDeclaration,
     NodeType_ParameterDeclarationList,
     NodeType_ParameterDeclarationClause,
+    NodeType_Group,
 
     NodeType_Custom = 2000
 };
@@ -119,6 +120,28 @@ private:
     AST( const AST& source );
     void operator = ( const AST& source );
 };
+
+class GroupAST: public AST
+{
+public:
+    typedef std::auto_ptr<GroupAST> Node;
+    enum { Type = NodeType_Group };
+
+public:
+    GroupAST();
+    virtual ~GroupAST();
+
+    QPtrList<AST> nodes() { return m_nodes; }
+    void addNode( AST::Node& node );
+
+private:
+    QPtrList<AST> m_nodes;
+
+private:
+    GroupAST( const GroupAST& source );
+    void operator = ( const GroupAST& source );
+};
+
 
 class TemplateArgumentListAST: public AST
 {

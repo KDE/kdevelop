@@ -1148,24 +1148,22 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
     
     int start = lex->index();
     
-    AST::Node storageSpec;
-    while( parseStorageClassSpecifier(storageSpec) )
-	;
-
+    GroupAST::Node storageSpec;
+    parseStorageClassSpecifier( storageSpec );
 
     AST::Node cv;
     parseCvQualify( cv );
-    
+
     if( lex->lookAhead(0) != Token_enum ){
 	return false;
     }
 
     lex->nextToken();
-    
+
     if( lex->lookAhead(0) == Token_identifier ){
 	lex->nextToken();
     }
-    
+
     if( lex->lookAhead(0) != '{' ){
 	lex->setIndex( start );
 	return false;
@@ -1330,48 +1328,65 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
     return false;
 }
 
-bool Parser::parseStorageClassSpecifier( AST::Node& /*node*/ )
+bool Parser::parseStorageClassSpecifier( GroupAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseStorageClassSpecifier()" << endl;
-    
-    switch( lex->lookAhead(0) ){
-    case Token_friend:
-    case Token_auto:
-    case Token_register:
-    case Token_static:
-    case Token_extern:
-    case Token_mutable:
-	lex->nextToken();
-	return true;
+
+    int start = lex->index();
+    GroupAST::Node ast = CreateNode<GroupAST>();
+
+    while( !lex->lookAhead(0).isNull() ){
+        int tk = lex->lookAhead( 0 );
+        if( tk == Token_friend || Token_auto || Token_register || Token_static || Token_extern || Token_mutable ){
+	    int startNode = lex->index();
+	    lex->nextToken();
+
+	    AST::Node n = CreateNode<AST>();
+	    UPDATE_POS( n, startNode, lex->index() );
+	    ast->addNode( n );
+	} else
+	    break;
     }
-    
-    return false;
+
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    return true;
 }
 
-bool Parser::parseFunctionSpecifier( AST::Node& /*node*/ )
+bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionSpecifier()" << endl;
-    
-    switch( lex->lookAhead(0) ){
-    case Token_inline:
-    case Token_virtual:
-    case Token_explicit:
-	lex->nextToken();
-	return true;
+
+    int start = lex->index();
+    GroupAST::Node ast = CreateNode<GroupAST>();
+
+    while( !lex->lookAhead(0).isNull() ){
+        int tk = lex->lookAhead( 0 );
+        if( tk == Token_inline || Token_virtual || Token_explicit ){
+	    int startNode = lex->index();
+	    lex->nextToken();
+
+	    AST::Node n = CreateNode<AST>();
+	    UPDATE_POS( n, startNode, lex->index() );
+	    ast->addNode( n );
+	} else
+	    break;
     }
-    
-    return false;
+
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    return true;
 }
 
 bool Parser::parseTypeId( AST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeId()" << endl;
-    
+
     TypeSpecifierAST::Node spec;
     if( !parseTypeSpecifier(spec) ){
 	return false;
     }
-    
+
     DeclaratorAST::Node decl;
     parseAbstractDeclarator( decl );
 
@@ -1559,9 +1574,8 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 
     int start = lex->index();
 
-    AST::Node storageSpec;
-    while( parseStorageClassSpecifier(storageSpec) )
-	;
+    GroupAST::Node storageSpec;
+    parseStorageClassSpecifier( storageSpec );
 
     AST::Node cv;
     parseCvQualify( cv );
@@ -1643,7 +1657,7 @@ bool Parser::parseAccessSpecifier( AST::Node& node )
 	return true;
         }
     }
-    
+
     return false;
 }
 
@@ -2660,9 +2674,8 @@ bool Parser::parseBlockDeclaration( DeclarationAST::Node& node )
 
     int start = lex->index();
 
-    AST::Node storageSpec;
-    while( parseStorageClassSpecifier(storageSpec) )
-	;
+    GroupAST::Node storageSpec;
+    parseStorageClassSpecifier( storageSpec );
 
     TypeSpecifierAST::Node spec;
     if ( !parseTypeSpecifierOrClassSpec(spec) ) { // replace with simpleTypeSpecifier?!?!
@@ -2735,34 +2748,32 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 
     int start = lex->index();
     
-    AST::Node funSpec;
-    while( parseFunctionSpecifier(funSpec) )
-        ;
-    
-    AST::Node storageSpec;
-    while(  parseStorageClassSpecifier(storageSpec) )
-        ;
-    
+    GroupAST::Node funSpec;
+    parseFunctionSpecifier( funSpec );
+
+    GroupAST::Node storageSpec;
+    parseStorageClassSpecifier( storageSpec );
+
     AST::Node cv;
     parseCvQualify( cv );
-        
+
     int index = lex->index();
 
     NameAST::Node name;
     if( parseName(name) && lex->lookAhead(0) == '(' ){
 	// no type specifier, maybe a constructor or a cast operator??
-	
+
 	lex->setIndex( index );
-	
+
 	NestedNameSpecifierAST::Node nestedName;
 	parseNestedNameSpecifier( nestedName );
 	QString nestedNameText = toString( index, lex->index() );
-	
+
 	InitDeclaratorAST::Node declarator;
 	if( parseInitDeclarator(declarator) ){
 
 	    int endSignature = lex->index();
-	    
+
 	    switch( lex->lookAhead(0) ){
 	    case ';':
 		if( !nestedNameText ){

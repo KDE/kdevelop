@@ -94,6 +94,8 @@ QString nodeTypeToString( NodeType type )
 	return "ParameterDeclarationList";
     case NodeType_ParameterDeclarationClause:
 	return "ParameterDeclarationClause";
+    case NodeType_Group:
+	return "Group";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -1198,5 +1200,24 @@ void ParameterDeclarationClauseAST::setEllipsis( AST::Node& ellipsis )
 {
     m_ellipsis = ellipsis;
     if( m_ellipsis.get() ) m_ellipsis->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+GroupAST::GroupAST()
+{
+    m_nodes.setAutoDelete( true );
+}
+
+GroupAST::~GroupAST()
+{
+}
+
+void GroupAST::addNode( AST::Node& node )
+{
+    if( !node.get() )
+        return;
+
+    node->setParent( this );
+    m_nodes.append( node.release() );
 }
 
