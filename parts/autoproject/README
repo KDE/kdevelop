@@ -1,3 +1,31 @@
+Autoprojectpart is a projectmanager for Automake based projects. 
+
+Loads and maintains Makefile.am files. The Autoprojectpart
+supports creating subprojects, targets, services (.desktop) and applications (.desktop).
+Automake projects can be configured on subprojects, targets (except DATA and HEADER targets).
+It will regenerate a projects Makefile.am files dynamically as you add or 
+reconfigure subprojects**. Unsupported automake features will be left unchanged
+(hopefully) no major testing has been run yet (at least not be myself).
+
+Maintainer: Victor Röder <victor_roeder@gmx.de>
+
+TODO (taken from TODO file):
+-> automake part:
+  - Should be able to DND files from other targets / file list / konq
+    to add to targets.
+  - Doesn't always get lib path relative to $top_buildir correct.
+    (projectDirectory() != $(top_builddir) in general)
+  - Probably some Makefile.am entries should not be written if they are
+    empty (DEPENDENCIES, ... what else?)
+  - Allow to remove everything you can add (subprojects, targets, etc...)
+
+**)
+KNOWN BUGS:
+-> Lower Automake Manager view does not update it's view when adding a subproject (and targets,
+	etc to the new subproject)
+
+	
+NOTE:
 ---
 If you want to change  the default implemention for running/starting the binary 
 please add the following to your project file
@@ -8,7 +36,7 @@ please add the following to your project file
   </run>
 </kdevautoproject>
 
-with this configuration the "Automake Project Manager" doesn't insert the menuentry "execute program" 
+with this configuration the "Automake Manager" doesn't insert the menuentry "execute program" 
 and doesn't show the "Run Options" in the project configuration.
 
 Now you can implement this features with your own special plugin.

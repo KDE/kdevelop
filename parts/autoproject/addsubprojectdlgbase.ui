@@ -50,7 +50,7 @@
                 <cstring>fileGroupBox</cstring>
             </property>
             <property name="title">
-                <string>Subproject Information</string>
+                <string>&amp;Subproject</string>
             </property>
             <vbox>
                 <property name="name">
@@ -96,11 +96,10 @@
                             </property>
                             <property name="font">
                                 <font>
-                                    <bold>1</bold>
                                 </font>
                             </property>
                             <property name="text">
-                                <string>Enter subproject name:</string>
+                                <string>Enter Subproject Name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>spEdit</cstring>
@@ -170,7 +169,10 @@
                         <cstring>createButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Create</string>
+                        <string>&amp;Add</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -178,7 +180,7 @@
                         <cstring>cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>
@@ -188,5 +190,10 @@
 <includes>
 <include location="global" impldecl="in implementation">klineedit.h</include>
 </includes>
+<tabstops>
+    <tabstop>spEdit</tabstop>
+    <tabstop>createButton</tabstop>
+    <tabstop>cancelButton</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
