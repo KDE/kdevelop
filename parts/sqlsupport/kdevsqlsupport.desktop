@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=SQL Support
+Name=KDevSQLSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevsqlsupport
+X-KDevelop-Language=SQL
