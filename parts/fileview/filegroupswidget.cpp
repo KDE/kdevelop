@@ -43,6 +43,34 @@ static const char *translations[] = {
     I18N_NOOP("Others")
 };
 
+class FileComparator {
+public:
+	virtual ~FileComparator(){
+	};
+	virtual bool matches(const QString& name) const = 0;
+};
+
+class RegExpComparator : public FileComparator {
+public: 
+	RegExpComparator(const QString& pattern) : m_exp(pattern, true, true){
+	}
+	bool matches(const QString& name) const{
+		return m_exp.exactMatch(name);
+	}
+private:
+	const QRegExp m_exp;
+};
+
+class EndingComparator : public FileComparator {
+public:
+	EndingComparator(const QString& pattern) : m_pattern ( pattern){
+	}
+	bool matches(const QString& name) const{
+		return name.endsWith(m_pattern);
+	}
+private:
+	const QString m_pattern;
+};
 
 class FileViewFolderItem : public QListViewItem
 {
@@ -51,7 +79,7 @@ public:
     bool matches(const QString &fileName);
 
 private:
-    QStringList patterns;
+    QPtrList<FileComparator> m_patterns;
 };
 
 
@@ -59,7 +87,30 @@ FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, c
     : QListViewItem(parent, name)
 {
     setPixmap(0, SmallIcon("folder"));
-    patterns = QStringList::split(';', pattern);
+    m_patterns.setAutoDelete(true);
+    QStringList patternstring = QStringList::split(';', pattern);
+    QStringList::ConstIterator theend = patternstring.end();
+    for (QStringList::ConstIterator ci = patternstring.begin(); ci != theend; ++ci)
+	{
+		QString pattern = *ci;
+		QString tail = pattern.right( pattern.length() - 1 );
+		
+		if ( (tail).contains('*') || pattern.contains('?') || pattern.contains('[') || pattern.contains(']') )
+		{
+			m_patterns.append( new RegExpComparator( pattern ) );
+		}
+		else
+		{
+			if ( pattern.startsWith("*") )
+			{
+				m_patterns.append( new EndingComparator( tail ) );
+			}
+			else
+			{
+				m_patterns.append( new EndingComparator( pattern ) );
+			}
+		}
+    }
 }
 
 
@@ -68,14 +119,10 @@ bool FileViewFolderItem::matches(const QString &fileName)
     // Test with the file path, so that "*ClientServer/*.h" patterns work
     QString fName = QFileInfo(fileName).filePath();
 
-    QStringList::ConstIterator it;
-    for (it = patterns.begin(); it != patterns.end(); ++it) {
-        // The regexp objects could be created already
-        // in the constructor
-        QRegExp re(*it, true, true);
-        if (re.exactMatch(fName))
-            return true;
-    }
+    QPtrList<FileComparator>::ConstIterator theend = m_patterns.end();
+    for (QPtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci) 
+    	if ((*ci)->matches(fName))
+		return true;
 
     return false;
 }
