@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 1999 by Sandy Meier                                     *
  *   smeier@kdevelop.org                                                   *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +22,8 @@
 #include <klocale.h>
 
 
-AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
-    : QDialog(parent, name, true)
+AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, QWidget *parent, const char *name)
+    : QDialog(parent, name, true), m_mode(mode), m_filter(filter)
 {
     setCaption(i18n("Add Documentation Entry"));
 
@@ -30,25 +32,27 @@ AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
     title_edit->setFocus();
     title_label->setBuddy(title_edit);
 
-    QLabel *url_label = new QLabel(i18n("&File name:"), this);
-    url_edit = new QLineEdit(this);
+    QLabel *url_label = new QLabel(i18n("&Location:"), this);
+    url_edit = new KURLRequester(this);
     url_label->setBuddy(url_edit);
     QFontMetrics fm(url_edit->fontMetrics());
     url_edit->setMinimumWidth(fm.width('X')*35);
+    url_edit->setFilter(m_filter);
+    url_edit->setMode((int) m_mode);
 
-    QPushButton *url_button = new QPushButton("...", this);
+/*    QPushButton *url_button = new QPushButton("...", this);
     url_button->setFixedSize(30, 25);
 
     connect( url_button, SIGNAL(clicked()), this, SLOT(fileButtonClicked()));
-
+*/
     QString s = i18n("Enter the name of the entry here.");
     QWhatsThis::add(title_label, s);
     QWhatsThis::add(title_edit, s);
-    s = i18n("Enter the file name of the entry here.");
+    s = i18n("Enter the location of the entry here.");
     QWhatsThis::add(url_label, s);
     QWhatsThis::add(url_edit, s);
-    s = i18n("Here you can browse through your file system to select a file for the entry.");
-    QWhatsThis::add(url_button, s);
+/*    s = i18n("Here you can browse through your file system to select a location for the entry.");
+    QWhatsThis::add(url_button, s);*/
 
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
 
@@ -58,7 +62,7 @@ AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
     grid->addMultiCellWidget(title_edit, 0, 0, 1, 2);
     grid->addWidget(url_label, 1, 0);
     grid->addWidget(url_edit, 1, 1);
-    grid->addWidget(url_button, 1, 2);
+//    grid->addWidget(url_button, 1, 2);
 
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
@@ -78,14 +82,5 @@ AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
 
 AddDocItemDialog::~AddDocItemDialog()
 {}
-
-
-void AddDocItemDialog::fileButtonClicked()
-{
-    QString fileName = KFileDialog::getOpenFileName(QString::null, "*.html", this,
-                                                    i18n("Choose File Name"));
-    if (!fileName.isEmpty())
-        url_edit->setText(fileName);
-}
 
 #include "adddocitemdlg.moc"
