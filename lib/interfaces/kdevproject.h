@@ -50,6 +50,12 @@ public:
 	*/
 	virtual QString activeDirectory() = 0;
 	/**
+	* Returns the canonical build directory of the project.
+	* If the separate build directory is not supported, this should
+	* return the same as projectDiretory().
+	*/
+	virtual QString buildDirectory() = 0;
+	/**
 	* Returns a list of all files in the project.
 	* The files are relative to the project directory.
 	* TODO: This is currently a bit broken because the

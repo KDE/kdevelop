@@ -118,6 +118,11 @@ QString TrollProjectPart::projectDirectory()
 }
 
 
+QString TrollProjectPart::buildDirectory()
+{
+  return m_widget->projectDirectory();
+}
+
 QString TrollProjectPart::projectName()
 {
     return m_projectName;

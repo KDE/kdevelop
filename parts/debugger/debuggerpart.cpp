@@ -471,7 +471,7 @@ void DebuggerPart::startDebugger()
 {
     QString program;
     if (project())
-        program = project()->projectDirectory() + "/" + project()->mainProgram();
+        program = project()->buildDirectory() + "/" + project()->mainProgram();
     
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevdebugger/general/dbgshell");
     if( !shell.isEmpty() ) {

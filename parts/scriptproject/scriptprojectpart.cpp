@@ -160,6 +160,11 @@ QString ScriptProjectPart::projectDirectory()
 }
 
 
+QString ScriptProjectPart::buildDirectory()
+{
+    return m_projectDirectory;
+}
+
 QString ScriptProjectPart::projectName()
 {
     return m_projectName;

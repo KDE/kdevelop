@@ -165,6 +165,11 @@ QString AntProjectPart::projectDirectory()
 }
 
 
+QString AntProjectPart::buildDirectory()
+{
+  return m_projectDirectory;
+}
+
 QString AntProjectPart::projectName()
 {
   return m_projectName;

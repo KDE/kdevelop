@@ -43,8 +43,9 @@ protected:
     virtual void addFile(const QString &fileName);
 	virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
-	virtual void removeFiles ( const QStringList& fileList );
-
+        virtual void removeFiles ( const QStringList& fileList );
+    virtual QString buildDirectory();
+    
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotNewFile();
