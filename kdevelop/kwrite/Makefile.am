@@ -6,6 +6,8 @@ noinst_LIBRARIES = libkwrite.a
 
 libkwrite_a_METASOURCES = USE_AUTOMOC
 
-libkwrite_a_SOURCES = highlight.cpp kwdialog.cpp kwdoc.cpp kwview.cpp kguicommand.cpp
+libkwrite_a_SOURCES = highlight.cpp kmimemagic.cpp kwdialog.cpp kwdoc.cpp kwview.cpp
 
-noinst_HEADERS = highlight.h kwdialog.h kwdoc.h kwview.h kguicommand.cpp
+noinst_HEADERS = highlight.h kmimemagic.h kwdialog.h kwdoc.h kwview.h
+
+SUBDIRS = pix
