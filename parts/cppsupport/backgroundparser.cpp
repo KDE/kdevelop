@@ -25,7 +25,6 @@ void BackgroundParser::run()
 
     Driver driver;
     Lexer lexer;
-    lexer.setSource( m_source );
     // stl
     lexer.addSkipWord( "__STL_BEGIN_NAMESPACE" );
     lexer.addSkipWord( "__STL_END_NAMESPACE" );
@@ -48,6 +47,7 @@ void BackgroundParser::run()
     // kde
     lexer.addSkipWord( "K_EXPORT_COMPONENT_FACTORY", CppSupport::SkipWordAndArguments );
 
+    lexer.setSource( m_source );
     Parser parser( m_reporter, &driver,  &lexer );
     parser.setFileName( m_fileName );
 

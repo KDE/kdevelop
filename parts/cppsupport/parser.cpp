@@ -1928,6 +1928,11 @@ bool Parser::parseNestedNameSpecifier()
             }
             lex->nextToken(); // skip >
 
+            if ( lex->lookAhead(0) == Token_scope ) {
+                lex->nextToken();
+            } else
+                return true;
+
         } else if( lex->lookAhead(1) == Token_scope ){
             lex->nextToken(); // skip name
             lex->nextToken(); // skip name
