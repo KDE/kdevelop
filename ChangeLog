@@ -1,4 +1,10 @@
-
+1999-06-11 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed some parsing issues(structs with bit specifications).
+	* changed design of the parsed items. Started to modify the parser
+	  to use this new features.
+	* changes to the other classes that use the class store.
+	* fixed several memory leaks when updating the classview.
+	
 1999-06-10  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* implemented complete new dialog-handling to support both concepts: 
 	kdlgloader and sourcecode generation
