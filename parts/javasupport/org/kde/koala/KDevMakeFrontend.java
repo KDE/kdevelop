@@ -40,7 +40,7 @@ public class KDevMakeFrontend extends KDevPart  {
  Commands are always asynchronous.
      
 */
-	public native void startMakeCommand( String dir, String command);
+	public native void queueMakeCommand( String dir, String command);
 
 /** 
  Returns whether the application is currently running.

@@ -35,11 +35,11 @@ Java_org_kde_koala_KDevMakeFrontend_finalize(JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT void JNICALL
-Java_org_kde_koala_KDevMakeFrontend_startMakeCommand(JNIEnv *env, jobject obj, jstring dir, jstring command)
+Java_org_kde_koala_KDevMakeFrontend_queueMakeCommand(JNIEnv *env, jobject obj, jstring dir, jstring command)
 {
 static QString * _qstring_command = 0;
 static QString * _qstring_dir = 0;
-	((KDevMakeFrontend*) QtSupport::getQt(env, obj))->startMakeCommand((QString&) * (QString *) QtSupport::toQString(env, dir, &_qstring_dir), (QString&) * (QString *) QtSupport::toQString(env, command, &_qstring_command));
+	((KDevMakeFrontend*) QtSupport::getQt(env, obj))->queueCommand((QString&) * (QString *) QtSupport::toQString(env, dir, &_qstring_dir), (QString&) * (QString *) QtSupport::toQString(env, command, &_qstring_command));
 	return;
 }
 
