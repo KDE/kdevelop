@@ -412,10 +412,10 @@ void CKDevelop::slotFileSaveAll(){
           if (file_info.lastModified() != actual_info->last_modified)
           {
               qYesNo=QMessageBox::warning(this,i18n("File modified"),
-                    QString().sprintf(i18n("The file %s was modified outside\nthis editor. Save anyway?"),actual_info->filename.data()),QMessageBox::Yes, QMessageBox::No);
+                    QString().sprintf(i18n("The file %s was modified outside\nthis editor. Save anyway?"),actual_info->filename.data()),i18n("&Yes"), i18n("&No"));
           }
 
-          if (qYesNo==QMessageBox::Yes)
+          if (qYesNo==0) // Yes button has been pressed
           {
             QFileInfo file_info(actual_info->filename);
             bool isModified;

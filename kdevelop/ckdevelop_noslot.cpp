@@ -729,7 +729,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   QFileInfo file_info(edit_widget->getName());
 
   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-    if(QMessageBox::warning(this,i18n("File modified"),i18n("The file ") + edit_widget->getName() +i18n(" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?"),QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
+    if(QMessageBox::warning(this,i18n("File modified"),i18n("The file ") + edit_widget->getName() +i18n(" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?"),i18n("&Yes"),i18n("&No"))==0){
       bForceReload = true;
       actual_info->last_modified = file_info.lastModified();
     }
