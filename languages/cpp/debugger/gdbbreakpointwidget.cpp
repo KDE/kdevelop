@@ -590,9 +590,29 @@ void GDBBreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
         int id = atoi(startNo);
         if (id)
         {
+            /** rgruber:
+             * We set the needDisable flag if the breakpoint has been added and should be 
+             * disabled at the same time. This can happen if you open a project which has 
+             * a disabled breakpoint. Because setActive() resets some flags to false, we 
+             * reenable them before emit publishBPState() and set them back after comming back.
+             * This can only happen right after the breakpoint has been set. At any later time
+             * bp->dbgId() will already have an id set.
+             */
+            bool needDisable = (bp->dbgId() == -1 && bp->changedEnable() && !bp->isEnabled());
             bp->setActive(m_activeFlag, id);
             bp->setHardwareBP(hardware);
+            if (needDisable) {
+				kdDebug(9012) << "Added breakpoint will be disabled! resetting flags..." << endl;
+                bp->setEnabled(true);
+                bp->setEnabled(false);
+                bp->setPending(true);
+                bp->setActionModify(true);
+            }
             emit publishBPState(*bp);
+            if (needDisable) {
+                bp->setPending(false);
+                bp->setActionModify(false);
+            }
             btr->setRow();
         }
     }
