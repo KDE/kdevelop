@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                            *
+ *   Copyright (C) 1999-2002 by Bernd Gehrmann                            *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -15,6 +15,7 @@
 #include "klistview.h"
 
 
+class DocTreeItem;
 class DocTreeKDELibsFolder;
 class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
@@ -46,6 +47,7 @@ private slots:
 	
 private: 
     QListViewItem *contextItem;
+    DocTreeItem *folder_kdevelop;
     DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;

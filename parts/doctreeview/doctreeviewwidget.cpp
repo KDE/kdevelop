@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 1999-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -583,6 +583,15 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     folder_kdelibs   = new DocTreeKDELibsFolder(this, "ctx_kdelibs");
     folder_kdelibs->refresh();
 
+    // Preliminary
+    folder_kdevelop = new DocTreeItem(this, DocTreeItem::Folder, i18n("KDevelop"), "ctx_kdevelop");
+    ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE2 Development Book", "ctx_kdevelop") )
+        ->setFileName("help:/kde2book/index.html");
+    ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE Architecture Overview", "ctx_kdevelop") )
+        ->setFileName("help:/kdearch/index.html");
+    ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDevelop Manual", "ctx_kdevelop") )
+        ->setFileName("help:/kdevelop/index.html");
+                    
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
@@ -672,6 +681,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     for (; it1.current(); ++it1)
         takeItem(it1.current());
     takeItem(folder_kdelibs);
+    takeItem(folder_kdevelop);
 
     // .. and insert all again except for ignored items
     QDomElement docEl = m_part->projectDom()->documentElement();
@@ -700,6 +710,8 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     }
     if (!ignoretocs.contains("kde"))
         insertItem(folder_kdelibs);
+
+    insertItem(folder_kdevelop);
 
     triggerUpdate();
 }
