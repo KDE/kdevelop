@@ -14,8 +14,11 @@
 
 #include <qstringlist.h>
 #include <kfiletreeview.h>
+// VCS Support
+#include <kdevvcsfileinfoprovider.h>
 
 class FileViewPart;
+class KToggleAction;
 
 class FileTreeWidget : public KFileTreeView
 {
@@ -36,6 +39,8 @@ public:
     QString projectDirectory();
     QStringList projectFiles();
 
+    FileViewPart *part() const { return m_part; }
+
     KURL::List selectedPathUrls();
 
     void applyHidePatterns( const QString &hidePatterns );
@@ -45,6 +50,7 @@ public slots:
     void hideOrShow();
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
+    void vcsFileStateChanged( const VCSFileInfoList &modifiedFiles );
 
 private slots:
     void slotItemExecuted(QListViewItem *item);
@@ -69,7 +75,7 @@ private:
 
     QPtrList<KFileTreeViewItem> m_selectedItems;
 
-    class KToggleAction *m_actionToggleShowVCSFields,
+    KToggleAction *m_actionToggleShowVCSFields,
         *m_actionToggleShowNonProjectFiles;
 };
 

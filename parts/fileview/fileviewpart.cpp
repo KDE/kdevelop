@@ -28,6 +28,7 @@
 
 #include "partwidget.h"
 #include "filetreewidget.h"
+#include "kdevversioncontrol.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // class factory
@@ -57,8 +58,14 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     connect( project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
              m_widget->m_filetree, SLOT( removeProjectFiles( const QStringList & ) ) );
 
+    connect( versionControl(), SIGNAL(fileStateChanged(const VCSFileInfoList&)),
+        m_widget->m_filetree, SLOT(vcsFileStateChanged(const VCSFileInfoList&)) );
+
+
     m_widget->showProjectFiles();
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 FileViewPart::~FileViewPart()
 {
