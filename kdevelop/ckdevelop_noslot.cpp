@@ -521,7 +521,7 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
   				break;
   		}
 		}
-  	class_tree->refresh(&lHeaderList, &lSourceList);
+  	class_tree->refresh(lHeaderList, lSourceList);
 }
 
 /*------------------------------------------ CKDevelop::refreshTrees()

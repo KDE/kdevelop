@@ -78,7 +78,7 @@ public: // Public refreshmethods
    * @param iHeaderList the header files to reparse.
    * @param iSourceList the source files to reparse.
    */
-  void refresh( QStrList * iHeaderList, QStrList * iSourceList );
+  void refresh( QStrList& iHeaderList, QStrList& iSourceList );
 
 
   /** Refresh the whole view. */

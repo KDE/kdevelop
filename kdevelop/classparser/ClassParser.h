@@ -83,6 +83,12 @@ public: // Public Methods
   /** Output this object as text on stdout */
   void out()     { store.out(); }
 
+  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
+    { store.getDependentFiles( fileList, dependentList); }
+
+  void removeWithReferences( const char*  aFile )
+      { store.removeWithReferences( aFile ); }
+
 private: // Private attributes
 
   /** Lexer used to fetch lexical patterns */

@@ -214,6 +214,9 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   aStruct->setDeclaredOnLine( declStart );
   aStruct->setDeclaredInFile( currentFile );
   aStruct->setDefinedInFile( currentFile );
+  // force this now!!! 20-Apr-2000 jbb
+  if( !aContainer->path().isEmpty() )
+    aStruct->setDeclaredInScope( aContainer->path() );
 
   // Check for a name on the stack
   if( !lexemStack.isEmpty() && lexemStack.top()->type == ID )
@@ -347,31 +350,32 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
 
   // skip over '{'
   getNextLexem();
-   // EO start
-   // reference to an already declared namespace
-   // retrieve it
-     CParsedScopeContainer *ns2 = scope->getScopeByName(ns->name);
-     if (ns2)
-     {
-        delete ns;
-				ns = ns2;
-     }
-		 else	
-     {
-			  // this is a namespace declaration
-        scope->addScope( ns );
+  // EO start
+  // reference to an already declared namespace
+  // retrieve it
+  CParsedScopeContainer *ns2 = scope->getScopeByName(ns->name);
+  if (ns2)
+  {
+    delete ns;
+    ns = ns2;
+  }
+  else	
+  {
+    // this is a namespace declaration
+    scope->addScope( ns );
 
     // Always add namespaces to the global container.
     // EO why?
     // it is possible to have namespaces inside namespaces
     //    if( scope != &store.globalContainer )
     //       store.addScope( ns );
-     }
-	  // EO end
+  }
+  // EO end
+
   while(lexem != 0 && lexem != '}') 
   {
     declStart = getLineno();
-	
+  
     if( isGenericLexem() )
       parseGenericLexem( ns );
     else
@@ -526,7 +530,7 @@ bool CClassParser::isEndOfVarDecl()
 {
   return ( lexem == ';' || lexem == ',' || lexem == ')' || 
           // lexem == '}' ||
-	   lexem == 0 );
+     lexem == 0 );
 }
 
 /*------------------------------ CClassParser::fillInParsedVariable()
@@ -663,7 +667,7 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
 
   anAttr->type+=addDecl;
   anAttr->setDeclaredInFile( currentFile );
-  anAttr->setDeclaredOnLine( declStart );
+  anAttr->setDeclaredOnLine( /* declStart */ getLineno());
   anAttr->setExport( declaredScope );
 }
 
@@ -831,29 +835,28 @@ CParsedAttribute *CClassParser::parseVariable()
           getNextLexem();
         }
 
-       // Add last element... hoping this was a ')'
-       PUSH_LEXEM();
+        // Add last element... hoping this was a ')'
+        PUSH_LEXEM();
 
-       // now we should be at int (*fp...)   -> going ahead to (char, int)
-       if (lexem==')')
-       {
-
-        int depth=1;
-        getNextLexem();  // now it should be a (
-
-        if ( lexem == '(')
+        // now we should be at int (*fp...)   -> going ahead to (char, int)
+        if (lexem==')')
         {
-         while( lexem != 0 && depth>0  && lexem!=';')
+          int depth=1;
+          getNextLexem();  // now it should be a (
+
+          if ( lexem == '(')
           {
-            PUSH_LEXEM();
-            if (lexem==')')
-               depth--;
-            getNextLexem();
-            if (lexem=='(')
-               depth++;
+            while( lexem != 0 && depth>0  && lexem!=';')
+            {
+              PUSH_LEXEM();
+              if (lexem==')')
+                depth--;
+              getNextLexem();
+              if (lexem=='(')
+                depth++;
+            }
           }
         }
-       }
       }
     }
     else if( !skip && !isEndOfVarDecl() )
@@ -934,8 +937,8 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
  *
  * Parameters:
  *   aMethod        The method to initialize.
- *	 isOperator			this is not used all the operator related processing
- *									has already been done
+ *   isOperator			this is not used all the operator related processing
+ *  								has already been done
  *
  * Returns:
  *   -
@@ -1155,30 +1158,33 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
     }
     else
 // EO
-		{
-			QString path = scope->path() + "." + className;
+  	{
+  	  QString path = className;
+  	  if (scope->path())        // Don't produce bad class names
+  	    path = scope->path() + "." + path;
+  	
       cout << "scope path is " << path << endl;
-    aClass = store.getClassByName( path );
-    if( aClass != NULL)
-    {
-      pm = aClass->getMethod( aMethod );
-      if( pm != NULL )
+      aClass = store.getClassByName( path );
+      if( aClass != NULL)
       {
-        aClass->setDefinedInFile( currentFile );
-        pm->setIsInHFile( false );
-        pm->setDefinedInFile( currentFile );
-        pm->setDefinedOnLine( declLine );
-        pm->setDefinitionEndsOnLine( getLineno() );
+        pm = aClass->getMethod( aMethod );
+        if( pm != NULL )
+        {
+          aClass->setDefinedInFile( currentFile );
+          pm->setIsInHFile( false );
+          pm->setDefinedInFile( currentFile );
+          pm->setDefinedOnLine( declLine );
+          pm->setDefinitionEndsOnLine( getLineno() );
+        }
+        else
+        {
+          warning( "No method by the name %s found in class %s",
+                 name.data(), path.data() );
+          aMethod.out();
+        }
       }
       else
-      {
-        warning( "No method by the name %s found in class %s",
-                 name.data(), path.data() );
-        aMethod.out();
-      }
-     }
-     else
-      warning( "No class by the name %s found", path.data() );
+        warning( "No class by the name %s found", path.data() );
     }
   }
 }
@@ -1234,8 +1240,8 @@ int CClassParser::checkClassDecl()
         isStruct = false;
         break;
       case CLCL:
-      	isImpl = true;
-      	break;
+        isImpl = true;
+        break;
     }
 
     PUSH_LEXEM();
@@ -1746,7 +1752,10 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
         QString scopePath = scope->path();
 
         if( aClass->declaredInScope.isEmpty() && !scopePath.isEmpty() )
+        {
+          aClass->setDeclaredInScope(scopePath);
           scope->addClass( aClass );
+        }
         else if( !scopePath.isEmpty() )
         {
           // Get the parent class;
@@ -1812,8 +1821,8 @@ void CClassParser::parseToplevel()
       parseGenericLexem( &store.globalContainer );
     else
       parseTopLevelLexem( &store.globalContainer );
-		kapp->processEvents(500);
 
+  	kapp->processEvents(500);
     getNextLexem();
   }
 }

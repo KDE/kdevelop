@@ -96,24 +96,76 @@ void CClassStore::wipeout()
  *-----------------------------------------------------------------*/
 void CClassStore::removeWithReferences( const char *aFile )
 {
-  CParsedClass *aClass;
-
   // Remove all classes with reference to this file.
-  for( globalContainer.classIterator.toFirst();
-       globalContainer.classIterator.current();
-       ++globalContainer.classIterator )
+  // Need to take care here as we are using an iterator on a
+  // container that we can be deleting classes from.
+  CParsedClass *aClass = globalContainer.classIterator.toFirst();
+  while (aClass)
   {
-    aClass = globalContainer.classIterator.current();
-
     // Remove the class if any of the files are the supplied one.
-    if( aClass->declaredInFile == aFile                       &&
-        ( (aClass->definedInFile).isEmpty()                   ||
-          aClass->declaredInFile == aClass->definedInFile) )
-      removeClass( aClass->name);
+    if(aClass->declaredInFile == aFile || aClass->definedInFile == aFile)
+//    if (aClass->declaredInFile == aFile)
+    {
+      QString scopedName = (aClass->declaredInScope).isEmpty()
+                            ? aClass->name
+                            : aClass->declaredInScope + "." +aClass->name;
+
+      removeClass(scopedName);
+
+      // guard against the fact that sometimes the class might
+      // _not_ be removed!! Yes, you heard me, _not_ removed. Yuk!!!
+      if (aClass == globalContainer.classIterator.current())
+        ++globalContainer.classIterator;
+    }
+    else
+      ++globalContainer.classIterator;
+
+    aClass = globalContainer.classIterator.current();
   }
   
   // Remove all global functions, variables and structures.
   globalContainer.removeWithReferences( aFile );
+}
+
+/*-------------------------------- CClassStore::getDependentFiles()
+ * getDependentFiles()
+ *    Find all files that depends on the given file
+ *
+ * Parameters:
+ *   fileList       - The files to check
+ *   dependentList  - The dependent files are added to this list
+ *
+ * Returns:
+ *    The added files in the dependentList parameter.
+ *
+ *-----------------------------------------------------------------*/
+void CClassStore::getDependentFiles(  QStrList& fileList,
+                                      QStrList& dependentList)
+{
+  for (QString thisFile = fileList.first();
+          thisFile;
+          thisFile = fileList.next())
+  {
+    // Find all classes with reference to this file.
+    for( globalContainer.classIterator.toFirst();
+         globalContainer.classIterator.current();
+         ++globalContainer.classIterator )
+    {
+      CParsedClass *aClass = globalContainer.classIterator.current();
+
+      if( aClass->declaredInFile  == thisFile &&
+          aClass->definedInFile   != thisFile)
+      {
+        if (dependentList.find(aClass->definedInFile) == -1)
+          dependentList.append(aClass->definedInFile);
+      }
+
+      // now scan methods for files
+      // ie a class in a.h is split into aa.cpp and ab.cpp
+      //
+      // TBD perhaps - as the above catches most situations
+    }
+  }
 }
 
 /*------------------------------------------- CClassStore::storeAll()

@@ -323,8 +323,48 @@ void CClassView::refresh( CProject *proj )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::refresh( QStrList *iHeaderList, QStrList *iSourceList)
+void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
 {
+  cp.getDependentFiles( iHeaderList, iSourceList);
+
+  // Initialize progressbar.
+  int lTotalCount = 0;
+	lTotalCount += iHeaderList.count()+iSourceList.count();
+		
+  emit resetStatusbarProgress();
+  int lCurCount = 0;
+	emit setStatusbarProgress( lCurCount );
+  emit setStatusbarProgressSteps( lTotalCount );
+
+  const char* lCurFile;
+
+  // Remove all references to the files in the lists
+  for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
+    cp.removeWithReferences( lCurFile );
+  		
+  for (lCurFile = iSourceList.first(); lCurFile; lCurFile = iSourceList.next())
+    cp.removeWithReferences( lCurFile );
+
+  // Now parse the each file and add the data back.
+  for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
+  {
+    debug( "  parsing:[%s]", lCurFile );
+	  cp.parse( lCurFile );
+    emit setStatusbarProgress( ++lCurCount );
+  }
+
+  for (lCurFile = iSourceList.first(); lCurFile; lCurFile = iSourceList.next())
+  {
+    debug( "  parsing:[%s]", lCurFile );
+    cp.parse( lCurFile );
+    emit setStatusbarProgress( ++lCurCount );
+  }
+
+  //reset and refresh the tree
+	((CClassTreeHandler *)treeH)->clear();	
+	refresh();
+	
+/*
 	if (!iHeaderList && ! iSourceList)
 	{
 		cerr << "invalid file list " << __FILE__ << ":" << __LINE__ << endl;
@@ -368,6 +408,7 @@ void CClassView::refresh( QStrList *iHeaderList, QStrList *iSourceList)
   //reset and refresh the tree
 	((CClassTreeHandler *)treeH)->clear();	
 	refresh();
+*/
 }
 
 /*---------------------------------------------- CClassView::refresh()
