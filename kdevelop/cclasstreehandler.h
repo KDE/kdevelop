@@ -46,6 +46,9 @@ public: // Public methods
   /** Update methods/attr... of a certain class. */
   void updateClass( CParsedClass *aClass, QListViewItem *parent );
 
+  /** Add a list of classes to the view. */
+  void addClasses( QList<CParsedClass> *list, QListViewItem *parent );
+
   /** Add a class to the view. */
   QListViewItem *addClass( CParsedClass *aClass, QListViewItem *parent );
   QListViewItem *addClass( const char *aClass, QListViewItem *parent );

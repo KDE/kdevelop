@@ -119,6 +119,32 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
   addAttributesFromClass( aClass, parent, CTHALL );
 }
 
+/*---------------------------------- CClassTreeHandler::addClasses()
+ * addClasses()
+ *   Add a list of classes to the view. 
+ *
+ * Parameters:
+ *   list         List of classes to add.
+ *   parent       The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addClasses( QList<CParsedClass> *list, QListViewItem *parent )
+{
+  QListViewItem *item;
+  CParsedClass *aPC;
+
+  for( aPC = list->first();
+       aPC != NULL;
+       aPC = list->next() )
+  {
+    item = addClass( aPC, parent );
+    updateClass( aPC, item );
+    setLastItem( item );
+  }
+}
+
 /*---------------------------------- CClassTreeHandler::addClass()
  * addClass()
  *   Add a class to the view. 
