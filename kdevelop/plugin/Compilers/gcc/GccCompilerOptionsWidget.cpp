@@ -34,8 +34,8 @@
 GccCompilerOptionsWidget::GccCompilerOptionsWidget(QWidget *parent, const char *name, QWidget* pdlg)
 	 : GccCompilerOptionsWidgetBase(parent,name) {
 	compilerFlagsPreview->setReadOnly(true);
-	connect(pdlg, SIGNAL(WidgetStarted(KDevCompiler*)), this, SLOT(slotWidgetStarted(KDevCompiler*)));
-	connect(pdlg, SIGNAL(ButtonApplyClicked(KDevCompiler*)), this, SLOT(slotButtonApplyClicked(KDevCompiler*)));
+	connect(pdlg, SIGNAL(WidgetStarted()), this, SLOT(slotWidgetStarted()));
+	connect(pdlg, SIGNAL(ButtonApplyClicked()), this, SLOT(slotButtonApplyClicked()));
 }
 GccCompilerOptionsWidget::~GccCompilerOptionsWidget(){
 }
@@ -49,23 +49,25 @@ void GccCompilerOptionsWidget::slotFlagsToolButtonClicked(){
 }
 
 // reads the compiler flags
-void GccCompilerOptionsWidget::slotWidgetStarted(KDevCompiler *kdc){
-	if (*(kdc->name()) == "gcc"){
-  	compilerFlagsPreview->setText(*(kdc->flags()));
-	}
+void GccCompilerOptionsWidget::slotWidgetStarted(){
+	compilerFlagsPreview->setText(*(m_pKDevCompiler->flags()));
 }
 
 // writess the compiler flags
-void GccCompilerOptionsWidget::slotButtonApplyClicked(KDevCompiler *kdc){
-	if (*(kdc->name()) == "gcc"){
+void GccCompilerOptionsWidget::slotButtonApplyClicked(){
+	if (gccCompilerFlags->text() != ""){
 		compilerFlagsPreview->setText(compilerFlagsPreview->text() + " " + gccCompilerFlags->text());
 		gccCompilerFlags->setText("");
-  	kdc->setFlags(compilerFlagsPreview->text());
-  }
+	}
+ 	m_pKDevCompiler->setFlags(compilerFlagsPreview->text());
 }
 
 void GccCompilerOptionsWidget::slotClearAllClicked(){
   compilerFlagsPreview->setText("");
+}
+
+void GccCompilerOptionsWidget::setCompiler(KDevCompiler* kdc){
+	m_pKDevCompiler = kdc;
 }
 
 GeneralTabGcc::GeneralTabGcc(QWidget *parent, const char *name)

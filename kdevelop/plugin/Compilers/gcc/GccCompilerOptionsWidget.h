@@ -43,11 +43,16 @@ public:
 	GccCompilerOptionsWidget(QWidget *parent=0, const char *name=0, QWidget *pdlg=0);
 	~GccCompilerOptionsWidget();
 
+	void setCompiler(KDevCompiler*);
+
 public slots:
-    void slotFlagsToolButtonClicked();
-    void slotClearAllClicked();
-    void slotWidgetStarted(KDevCompiler *kdc);
-    void slotButtonApplyClicked(KDevCompiler *kdc);
+  void slotFlagsToolButtonClicked();
+  void slotClearAllClicked();
+  void slotWidgetStarted();
+  void slotButtonApplyClicked();
+
+private:
+	KDevCompiler* m_pKDevCompiler;
 };
 
   class GeneralTabGcc : public QWidget{
