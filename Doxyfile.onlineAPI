@@ -126,7 +126,7 @@ EXCLUDE                = languages/ada/app_templates \
                          languages/ruby/app_templates \
                          languages/sql/app_templates \
                          lib/qextmdi \
-                         vcs/cvs
+                         vcs/cvsclient
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc.* \
                          moc* \
