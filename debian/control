@@ -1,5 +1,5 @@
 Source: kdevelop-cvs
-Build-Depends: automake, autoconf, debhelper, libqt2.1-dev, kdelibs3-dev-cvs
+Build-Depends: automake, autoconf, debhelper, libqt2.1-dev, kdelibs3-dev-cvs, docbook, jade, sgml-base
 Section: devel
 Priority: optional
 Maintainer: Bernd Gehrmann <bernd@physik.hu-berlin.de>

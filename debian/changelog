@@ -1,3 +1,10 @@
+kdevelop-cvs (1:1.1-20000521-1.0) experimental; urgency=low
+ 
+  * New upstream CVS version
+  * More build-depends work
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 21 May 2000 22:30:00 -0700
+
 kdevelop-cvs (1:1.1-20000306-1.0) experimental; urgency=low
  
   * New upstream CVS version
