@@ -118,6 +118,7 @@ void PartController::setupActions()
   m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
     this, SLOT(slotBack()),
     ac, "browser_back");
+  m_backAction->setEnabled( false );
 
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotBackAboutToShow()));
@@ -128,6 +129,7 @@ void PartController::setupActions()
   m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0,
     this, SLOT(slotForward()),
     ac, "browser_forward");
+  m_forwardAction->setEnabled( false );
 
   connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotForwardAboutToShow()));
