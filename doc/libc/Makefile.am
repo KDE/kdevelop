@@ -1,4 +1,4 @@
-htmldir = $(kde_htmldir)/en/kdevdoctreeview/libc
+htmldir = $(kde_htmldir)/en/libc
 
 tocdir = ${kde_datadir}/kdevdoctreeview/tocs
 toc_DATA = libc.toc
@@ -27,9 +27,9 @@ libc.index: $(srcdir)/libc.index.in
 	echo "</kdevelopindex>" >> libc.index ; \
 	echo "" >> libc.index
 
-#install-data-local:
-#	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
-#	$(INSTALL_DATA) $(srcdir)/*.html $(DESTDIR)$(htmldir)
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
+	$(INSTALL_DATA) $(srcdir)/*.html $(DESTDIR)$(htmldir)
 
 #dist-hook:
 #	mkdir -p $(distdir) ; \
