@@ -123,8 +123,10 @@ bool CKDevelop::slotProjectClose()
       //    prj->valid = false;   wtf!!!!
       delete prj;
       prj = 0;
-      
-      disableCommand(ID_FILE_NEW);
+
+      KAction* pFileNewAction = actionCollection()->action("file_new");
+      pFileNewAction->setEnabled(false);
+      //disableCommand(ID_FILE_NEW);
       // doc menu
       disableCommand(ID_HELP_PROJECT_API);
       disableCommand(ID_HELP_USER_MANUAL);
@@ -1495,6 +1497,9 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
   // file menu
   
   enableCommand(ID_FILE_NEW);
+  KAction* pFileNewAction = actionCollection()->action("file_new");
+  pFileNewAction->setEnabled(true);
+
   // doc menu
   enableCommand(ID_HELP_PROJECT_API);
   enableCommand(ID_HELP_USER_MANUAL);

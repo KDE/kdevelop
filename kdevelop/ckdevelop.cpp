@@ -755,57 +755,63 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
 }
 
 void CKDevelop::slotViewTStdToolbar(){
- if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
-   view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
-    toolBar()->hide();
-  }
-  else{
-    view_menu->setItemChecked(ID_VIEW_TOOLBAR,true);
-    toolBar()->show();
-  }
-
+	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+	                                    (actionCollection()->action("view_toolbar"));
+	if (!pViewToolbarAction) return;
+//	kdDebug() << "in CKDevelop::slotViewTStdToolbar():\n";
+	if (pViewToolbarAction->isChecked()) {
+//		kdDebug() << "pViewToolbarAction is checked.\n";
+		toolBar()->show();
+	}
+	else {
+//		kdDebug() << "pViewToolbarAction is not checked.\n";
+		toolBar()->hide();
+	}
 }
 void CKDevelop::slotViewTBrowserToolbar(){
-  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR)){
-    view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,false);
-    toolBar(ID_BROWSER_TOOLBAR)->hide();
-  }
-  else{
-    view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,true);
-    toolBar(ID_BROWSER_TOOLBAR)->show();
-  }
+	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+	                                    (actionCollection()->action("view_browser"));
+	if (!pViewToolbarAction) return;
+	if (pViewToolbarAction->isChecked()) {
+		toolBar(ID_BROWSER_TOOLBAR)->show();
+	}
+	else {
+		toolBar(ID_BROWSER_TOOLBAR)->hide();
+	}
 }
 
 void CKDevelop::slotViewTStatusbar(){
-  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR)){
-    view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
-    statusBar()->hide();
-  }
-  else{
-    view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-    statusBar()->show();
-  }
+	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+	                                    (actionCollection()->action("view_status"));
+	if (!pViewToolbarAction) return;
+	if (pViewToolbarAction->isChecked()) {
+		statusBar()->show();
+	}
+	else {
+		statusBar()->hide();
+	}
 }
 
 void CKDevelop::slotViewMdiViewTaskbar(){
-  if (view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR)){
-    hideViewTaskBar();
-  }
-  else{
-    showViewTaskBar();
-  }
+	KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+	                                    (actionCollection()->action("view_mdi"));
+	if (!pViewToolbarAction) return;
+	if (pViewToolbarAction->isChecked()) {
+		showViewTaskBar();
+	}
+	else {
+		hideViewTaskBar();
+	}
 }
 
 void CKDevelop::showViewTaskBar()
 {
   QextMdiMainFrm::showViewTaskBar();
-  view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
 }
 
 void CKDevelop::hideViewTaskBar()
 {
   QextMdiMainFrm::hideViewTaskBar();
-  view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, false);
 }
 
 void CKDevelop::slotViewRefresh(){
@@ -813,9 +819,15 @@ void CKDevelop::slotViewRefresh(){
 }
 
 void CKDevelop::slotViewTabIcons(){
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,true);
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
+    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+                                  (actionCollection()->action("view_tab_text"));
+    pToggleAction->setChecked(false);
+    pToggleAction = dynamic_cast<KToggleAction*>
+                    (actionCollection()->action("view_tab_icons"));
+    pToggleAction->setChecked(true);
+    pToggleAction = dynamic_cast<KToggleAction*>
+                    (actionCollection()->action("view_tab_texticons"));
+    pToggleAction->setChecked(false);
     QWidget* w[5];
     w[0] = class_tree;
     w[1] = log_file_tree;
@@ -839,9 +851,15 @@ void CKDevelop::slotViewTabIcons(){
     }
 }
 void CKDevelop::slotViewTabText(){
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,true);
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
+    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+                                  (actionCollection()->action("view_tab_text"));
+    pToggleAction->setChecked(true);
+    pToggleAction = dynamic_cast<KToggleAction*>
+                    (actionCollection()->action("view_tab_icons"));
+    pToggleAction->setChecked(false);
+    pToggleAction = dynamic_cast<KToggleAction*>
+                    (actionCollection()->action("view_tab_texticons"));
+    pToggleAction->setChecked(false);
     QWidget* w[5];
     w[0] = class_tree;
     w[1] = log_file_tree;
@@ -865,9 +883,15 @@ void CKDevelop::slotViewTabText(){
     }
 }
 void CKDevelop::slotViewTabTextIcons(){
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,true);
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
-    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
+    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+                                  (actionCollection()->action("view_tab_text"));
+    pToggleAction->setChecked(false);
+    pToggleAction = dynamic_cast<KToggleAction*>
+                    (actionCollection()->action("view_tab_icons"));
+    pToggleAction->setChecked(false);
+    pToggleAction = dynamic_cast<KToggleAction*>
+                    (actionCollection()->action("view_tab_texticons"));
+    pToggleAction->setChecked(true);
     QWidget* w[5];
     w[0] = class_tree;
     w[1] = log_file_tree;
@@ -4178,42 +4202,42 @@ bool CKDevelop::isToolViewVisible(QWidget* pToolView)
 
 void CKDevelop::fillToggleTreeViewsMenu()
 {
-  toggletreeviews_popup->clear();
-
-  toggletreeviews_popup->insertItem(i18n("All &Tree Tool-Views"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
-  toggletreeviews_popup->insertSeparator();
-
-  toggletreeviews_popup->insertItem(i18n("&Classes"), this, SLOT(slotViewTClassesView()));
-  bool bClassesChecked = isToolViewVisible(class_tree);
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(2), bClassesChecked);
-
-  toggletreeviews_popup->insertItem(i18n("&Groups"), this, SLOT(slotViewTGroupsView()));
-  bool bGroupsChecked = isToolViewVisible(log_file_tree);
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(3), bGroupsChecked);
-
-  toggletreeviews_popup->insertItem(i18n("&Files"), this, SLOT(slotViewTFilesView()));
-  bool bFilesChecked = isToolViewVisible(real_file_tree);
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(4), bFilesChecked);
-
-  toggletreeviews_popup->insertItem(i18n("&Books"), this, SLOT(slotViewTBooksView()));
-  bool bBooksChecked = isToolViewVisible(doc_tree);
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(5), bBooksChecked);
-
-  toggletreeviews_popup->insertItem(i18n("&Watch"), this, SLOT(slotViewTWatchView()));
-  bool bWatchChecked = isToolViewVisible(var_viewer);
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(6), bWatchChecked);
-  toggletreeviews_popup->setItemEnabled(toggletreeviews_popup->idAt(6), (dbgController != 0L));
-
-  if (dbgController != 0L) {  // if not debugging, don't consider the watch view
-    if (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked && bWatchChecked) {
-      toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
-    }
-  }
-  else {
-    if (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked) {
-      toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
-    }
-  }
+//  toggletreeviews_popup->clear();
+//
+//  toggletreeviews_popup->insertItem(i18n("All &Tree Tool-Views"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
+//  toggletreeviews_popup->insertSeparator();
+//
+//  toggletreeviews_popup->insertItem(i18n("&Classes"), this, SLOT(slotViewTClassesView()));
+//  bool bClassesChecked = isToolViewVisible(class_tree);
+//  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(2), bClassesChecked);
+//
+//  toggletreeviews_popup->insertItem(i18n("&Groups"), this, SLOT(slotViewTGroupsView()));
+//  bool bGroupsChecked = isToolViewVisible(log_file_tree);
+//  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(3), bGroupsChecked);
+//
+//  toggletreeviews_popup->insertItem(i18n("&Files"), this, SLOT(slotViewTFilesView()));
+//  bool bFilesChecked = isToolViewVisible(real_file_tree);
+//  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(4), bFilesChecked);
+//
+//  toggletreeviews_popup->insertItem(i18n("&Books"), this, SLOT(slotViewTBooksView()));
+//  bool bBooksChecked = isToolViewVisible(doc_tree);
+//  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(5), bBooksChecked);
+//
+//  toggletreeviews_popup->insertItem(i18n("&Watch"), this, SLOT(slotViewTWatchView()));
+//  bool bWatchChecked = isToolViewVisible(var_viewer);
+//  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(6), bWatchChecked);
+//  toggletreeviews_popup->setItemEnabled(toggletreeviews_popup->idAt(6), (dbgController != 0L));
+//
+//  if (dbgController != 0L) {  // if not debugging, don't consider the watch view
+//    if (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked && bWatchChecked) {
+//      toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
+//    }
+//  }
+//  else {
+//    if (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked) {
+//      toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
+//    }
+//  }
 }
 
 void CKDevelop::slotViewTClassesView()
@@ -4268,62 +4292,62 @@ void CKDevelop::slotViewTWatchView()
 
 void CKDevelop::fillToggleOutputViewsMenu()
 {
-  toggleoutputviews_popup->clear();
-
-  toggleoutputviews_popup->insertItem(i18n("All &Output Tool-Views"),this,SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
-  toggleoutputviews_popup->insertSeparator();
-
-  toggleoutputviews_popup->insertItem(i18n("&Messages"), this, SLOT(slotViewOMessagesView()));
-  bool bMessagesChecked = isToolViewVisible(messages_widget);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(2), bMessagesChecked);
-
-  toggleoutputviews_popup->insertItem(i18n("&StdOut"), this, SLOT(slotViewOStdOutView()));
-  bool bStdOutChecked = isToolViewVisible(stdin_stdout_widget);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(3), bStdOutChecked);
-
-  toggleoutputviews_popup->insertItem(i18n("S&tdErr"), this, SLOT(slotViewOStdErrView()));
-  bool bStdErrChecked = isToolViewVisible(stderr_widget);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(4), bStdErrChecked);
-
-  toggleoutputviews_popup->insertItem(i18n("&Konsole"), this, SLOT(slotViewOKonsoleView()));
-  bool bKonsoleChecked = isToolViewVisible(konsole_widget);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(5), bKonsoleChecked);
-
-  toggleoutputviews_popup->insertItem(i18n("&Breakpoints"), this, SLOT(slotViewOBreakpointView()));
-  bool bBreakpointsChecked = isToolViewVisible(brkptManager);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(6), bBreakpointsChecked);
-
-  toggleoutputviews_popup->insertItem(i18n("&Disassemble"), this, SLOT(slotViewODisassembleView()));
-  bool bDisassembleChecked = isToolViewVisible(disassemble);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(7), bDisassembleChecked);
-  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(7), (dbgController != 0L));
-
-  toggleoutputviews_popup->insertItem(i18n("&Call Stack"), this, SLOT(slotViewOFrameStackView()));
-  bool bCallStackChecked = isToolViewVisible(frameStack);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(8), bCallStackChecked);
-  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(8), (dbgController != 0L));
-
-#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  toggleoutputviews_popup->insertItem(i18n("D&ebugger"), this, SLOT(slotViewODebuggerView()));
-  bool bDebuggerChecked = isToolViewVisible(dbg_widget);
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(9), bDebuggerChecked);
-  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(9), (dbgController != 0L));
-#endif
-
-  if (dbgController != 0L) {  // if not debugging, don't consider the disassemble, callstack and debugger views
-#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked) {
-#else
-    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked) {
-#endif
-      toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
-    }
-  }
-  else {
-    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked) {
-      toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
-    }
-  }
+//  toggleoutputviews_popup->clear();
+//
+//  toggleoutputviews_popup->insertItem(i18n("All &Output Tool-Views"),this,SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
+//  toggleoutputviews_popup->insertSeparator();
+//
+//  toggleoutputviews_popup->insertItem(i18n("&Messages"), this, SLOT(slotViewOMessagesView()));
+//  bool bMessagesChecked = isToolViewVisible(messages_widget);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(2), bMessagesChecked);
+//
+//  toggleoutputviews_popup->insertItem(i18n("&StdOut"), this, SLOT(slotViewOStdOutView()));
+//  bool bStdOutChecked = isToolViewVisible(stdin_stdout_widget);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(3), bStdOutChecked);
+//
+//  toggleoutputviews_popup->insertItem(i18n("S&tdErr"), this, SLOT(slotViewOStdErrView()));
+//  bool bStdErrChecked = isToolViewVisible(stderr_widget);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(4), bStdErrChecked);
+//
+//  toggleoutputviews_popup->insertItem(i18n("&Konsole"), this, SLOT(slotViewOKonsoleView()));
+//  bool bKonsoleChecked = isToolViewVisible(konsole_widget);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(5), bKonsoleChecked);
+//
+//  toggleoutputviews_popup->insertItem(i18n("&Breakpoints"), this, SLOT(slotViewOBreakpointView()));
+//  bool bBreakpointsChecked = isToolViewVisible(brkptManager);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(6), bBreakpointsChecked);
+//
+//  toggleoutputviews_popup->insertItem(i18n("&Disassemble"), this, SLOT(slotViewODisassembleView()));
+//  bool bDisassembleChecked = isToolViewVisible(disassemble);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(7), bDisassembleChecked);
+//  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(7), (dbgController != 0L));
+//
+//  toggleoutputviews_popup->insertItem(i18n("&Call Stack"), this, SLOT(slotViewOFrameStackView()));
+//  bool bCallStackChecked = isToolViewVisible(frameStack);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(8), bCallStackChecked);
+//  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(8), (dbgController != 0L));
+//
+//#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+//  toggleoutputviews_popup->insertItem(i18n("D&ebugger"), this, SLOT(slotViewODebuggerView()));
+//  bool bDebuggerChecked = isToolViewVisible(dbg_widget);
+//  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(9), bDebuggerChecked);
+//  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(9), (dbgController != 0L));
+//#endif
+//
+//  if (dbgController != 0L) {  // if not debugging, don't consider the disassemble, callstack and debugger views
+//#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+//    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked) {
+//#else
+//    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked) {
+//#endif
+//      toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
+//    }
+//  }
+//  else {
+//    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked) {
+//      toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
+//    }
+//  }
 }
 
 void CKDevelop::slotViewOMessagesView()
@@ -4497,20 +4521,20 @@ void CKDevelop::slotActivateOView_Dbg()
 void CKDevelop::statusCallback(int id_){
   switch(id_)
   {
-    ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
-    ON_STATUS_MSG(ID_FILE_OPEN,                             i18n("Opens an existing file"))
-    ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the current file"))
-    ON_STATUS_MSG(ID_FILE_REVERT,                           i18n("Discard all changes and reload file"))
-
-    ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the current document"))
-    ON_STATUS_MSG(ID_FILE_SAVE_AS,                          i18n("Save the document as..."))
-    ON_STATUS_MSG(ID_FILE_SAVE_ALL,                         i18n("Save all changed files"))
-
-    ON_STATUS_MSG(ID_FILE_PRINT,                            i18n("Prints the current document"))
-
-  //  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
-
-    ON_STATUS_MSG(ID_FILE_QUIT,                             i18n("Exits the program"))
+//    ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
+//    ON_STATUS_MSG(ID_FILE_OPEN,                             i18n("Opens an existing file"))
+//    ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the current file"))
+//    ON_STATUS_MSG(ID_FILE_REVERT,                           i18n("Discard all changes and reload file"))
+//
+//    ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the current document"))
+//    ON_STATUS_MSG(ID_FILE_SAVE_AS,                          i18n("Save the document as..."))
+//    ON_STATUS_MSG(ID_FILE_SAVE_ALL,                         i18n("Save all changed files"))
+//
+//    ON_STATUS_MSG(ID_FILE_PRINT,                            i18n("Prints the current document"))
+//
+//  //  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
+//
+//    ON_STATUS_MSG(ID_FILE_QUIT,                             i18n("Exits the program"))
 
     ON_STATUS_MSG(ID_EDIT_UNDO,                             i18n("Reverts the last editing step"))
     ON_STATUS_MSG(ID_EDIT_REDO,                             i18n("Re-execute the last undone step"))

@@ -40,6 +40,9 @@
 #include "docviewman.h"
 #include "kdevsession.h"
 
+#include <kaction.h>
+#include <kstdaction.h>
+
 #include <kaccel.h>
 #include <kapp.h>
 #include <kcursor.h>
@@ -161,6 +164,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   else {
     readDockConfig(config, "docking_version_2_0");
   }
+
+  createGUI(0L);
 
   show();
 
@@ -291,148 +296,112 @@ void CKDevelop::initMenuBar(){
 
 
 ///////////////////////////////////////////////////////////////////
-// File-menu entries
-  file_menu = new QPopupMenu;
-  file_menu->insertItem(SmallIconSet("filenew"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
-  file_menu->insertItem(SmallIconSet("fileopen"),i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
-  file_menu->insertItem(SmallIconSet("fileclose"),i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
-  file_menu->insertItem(i18n("Close All"), this, SLOT(slotFileCloseAll()), 0, ID_FILE_CLOSE_ALL);
-  file_menu->insertSeparator();
-  file_menu->insertItem(SmallIconSet("filesave"),i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
-  file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
-  file_menu->insertItem(SmallIconSet("save_all"),i18n("Save A&ll"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
-  file_menu->insertSeparator();
-  file_menu->insertItem(SmallIconSet("fileprint"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
-  file_menu->insertSeparator();
-  file_menu->insertItem(SmallIconSet("exit"),i18n("E&xit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
-
-  menuBar()->insertItem(i18n("&File"), file_menu);
-
+// File
+	KAction* pAction = KStdAction::openNew(this,SLOT(slotFileNew()),actionCollection(),"file_new");
+	pAction->setEnabled(false);
+	pAction->setStatusText(i18n("Creates a new file"));
+	pAction = KStdAction::open(this,SLOT(slotFileOpen()),actionCollection(),"file_open");
+	pAction->setStatusText(i18n("Opens an existing file"));
+	pAction = KStdAction::close(this,SLOT(slotFileClose()),actionCollection(),"file_close");
+	pAction->setStatusText(i18n("Closes the current file"));
+	pAction = new KAction(i18n("Close All"),0,this,SLOT(slotFileClose()),actionCollection(),"file_close_all");
+	pAction->setStatusText(i18n("Closes all open files"));
+	pAction = KStdAction::save(this,SLOT(slotFileSave()),actionCollection(),"file_save");
+	pAction->setStatusText(i18n("Save the current document"));
+	pAction = KStdAction::saveAs(this,SLOT(slotFileSaveAs()),actionCollection(),"file_save_as");
+	pAction->setStatusText(i18n("Save the document as..."));
+	pAction = new KAction(i18n("Save A&ll"),SmallIconSet("save_all"),0,this,SLOT(slotFileSaveAll()),actionCollection(),"file_save_all");
+	pAction->setStatusText(i18n("Save all changed files"));
+	pAction = KStdAction::print(this,SLOT(slotFilePrint()),actionCollection(),"file_print");
+	pAction->setStatusText(i18n("Prints the current document"));
+	pAction = KStdAction::quit(this,SLOT(slotFileQuit()),actionCollection(),"file_quit");
+	pAction->setStatusText(i18n("Exits the program"));
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
-
-  edit_menu = new QPopupMenu;
-  edit_menu->insertItem(SmallIconSet("undo"), i18n("U&ndo"), 
-												m_docViewManager, SLOT(slotEditUndo()),
-												0 ,ID_EDIT_UNDO);
-  edit_menu->insertItem(SmallIconSet("redo"), i18n("R&edo"), 
-												m_docViewManager, SLOT(slotEditRedo()),
-												0 ,ID_EDIT_REDO);
-  edit_menu->insertSeparator();
-  edit_menu->insertItem(SmallIconSet("editcut"),i18n("C&ut"), 
-												m_docViewManager, SLOT(slotEditCut()),
-												0 ,ID_EDIT_CUT);
-  edit_menu->insertItem(SmallIconSet("editcopy"),i18n("&Copy"), 
-												m_docViewManager, SLOT(slotEditCopy()),
-												0 ,ID_EDIT_COPY);
-  edit_menu->insertItem(SmallIconSet("editpaste"),i18n("&Paste"), 
-												m_docViewManager, SLOT(slotEditPaste()),
-												0 , ID_EDIT_PASTE);
-  edit_menu->insertSeparator();
-	edit_menu->insertItem(SmallIconSet("increaseindent"),i18n("In&dent"), 
-												this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(SmallIconSet("decreaseindent"),i18n("Uninden&t"), 
-												this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
-  edit_menu->insertSeparator();
-	edit_menu->insertItem(i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
-	edit_menu->insertItem(i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
-
-  edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("&Insert File..."),
-												m_docViewManager, SLOT(slotEditInsertFile()),
-												0,ID_EDIT_INSERT_FILE);
-
-  edit_menu->insertSeparator();
-  edit_menu->insertItem(SmallIconSet("find"),i18n("&Search..."), 
-												m_docViewManager, SLOT(slotEditSearch()),
-												0,ID_EDIT_SEARCH);
-  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"), 
-												m_docViewManager, SLOT(slotEditRepeatSearch(int)),
-												0,ID_EDIT_REPEAT_SEARCH);
-
-  edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
-  edit_menu->insertItem(SmallIconSet("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
-  /* (rokrau 05/14/01)
-   * this was taken out of the edit menu upon Falks request
-   * he thinks it is too confusing to have two different search dialogs
-   * it remains accessible through a keyboard shortcut though
-   */
-  //edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Search &CTags Database..."), this, SLOT(slotTagSearch()),0,ID_EDIT_TAGS_SEARCH);
-  edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Switch to Header/Source..."), this, SLOT(slotTagSwitchTo()),0,ID_EDIT_TAGS_SWITCH);
-
-//  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
-
-  edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("Select &All"), 
-												m_docViewManager, SLOT(slotEditSelectAll()),
-												0,ID_EDIT_SELECT_ALL);
-  edit_menu->insertItem(i18n("Deselect All"), 
-												m_docViewManager, SLOT(slotEditDeselectAll()),
-												0,ID_EDIT_DESELECT_ALL);
-  edit_menu->insertItem(i18n("Invert Selection"), 
-												m_docViewManager, SLOT(slotEditInvertSelection()),
-												0,ID_EDIT_INVERT_SELECTION);
-
-  menuBar()->insertItem(i18n("&Edit"), edit_menu);
+	pAction = KStdAction::undo(m_docViewManager, SLOT(slotEditUndo()),actionCollection(),"edit_undo");
+	pAction = KStdAction::redo(m_docViewManager, SLOT(slotEditRedo()),actionCollection(),"edit_redo");
+	pAction = KStdAction::cut(m_docViewManager, SLOT(slotEditCut()),actionCollection(),"edit_cut");
+	pAction = KStdAction::copy(m_docViewManager, SLOT(slotEditCopy()),actionCollection(),"edit_copy");
+	pAction = KStdAction::paste(m_docViewManager, SLOT(slotEditPaste()),actionCollection(),"edit_paste");
+	pAction = new KAction(i18n("In&dent"),SmallIconSet("increaseindent"),0,this,SLOT(slotEditIndent()),actionCollection(),"edit_indent");
+	pAction = new KAction(i18n("Uninden&t"),SmallIconSet("decreaseindent"),0,this,SLOT(slotEditUnIndent()),actionCollection(),"edit_unindent");
+	pAction = new KAction(i18n("C&omment"),0,this,SLOT(slotEditComment()),actionCollection(),"edit_comment");
+	pAction = new KAction(i18n("Unco&mment"),0,this,SLOT(slotEditUncomment()),actionCollection(),"edit_uncomment");
+	pAction = new KAction(i18n("&Insert File..."),0,m_docViewManager,SLOT(slotEditInsertFile()),actionCollection(),"edit_insert_file");
+	pAction = KStdAction::find(m_docViewManager,SLOT(slotEditSearch()),actionCollection(),"edit_find");
+	pAction = KStdAction::findNext(m_docViewManager, SLOT(slotEditSearch()),actionCollection(),"edit_find_next");
+	pAction = KStdAction::replace(m_docViewManager, SLOT(slotEditSearch()),actionCollection(),"edit_replace");
+	pAction = new KAction(i18n("Search in &Files..."),SmallIconSet("grep"),0,this,SLOT(slotEditSearchInFiles()),actionCollection(),"edit_find_files");
+	// this is not inserted in the menu
+	pAction = new KAction(i18n("Search &CTags Database..."),0,this,SLOT(slotTagSearch()),actionCollection(),"edit_find_tag");
+	pAction = new KAction(i18n("Switch to Header/Source..."),0,this,SLOT(slotTagSwitchTo()),actionCollection(),"edit_switch_header");
+	pAction = KStdAction::selectAll(m_docViewManager, SLOT(slotEditSelectAll()),actionCollection(),"edit_select_all");
+	pAction = new KAction(i18n("Deselect All"),0,m_docViewManager,SLOT(slotEditDeselectAll()),actionCollection(),"edit_deslect_all");
+	pAction = new KAction(i18n("Invert Selection"),0,m_docViewManager,SLOT(slotEditInvertSelection()),actionCollection(),"edit_invert_selection");
 
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
 
-  view_tab_menu = new QPopupMenu;
-  view_tab_menu->insertItem(i18n("Text only"), this, SLOT(slotViewTabText()), 0, ID_VIEW_TAB_TEXT);
-  view_tab_menu->insertItem(i18n("Icons only"), this, SLOT(slotViewTabIcons()), 0, ID_VIEW_TAB_ICONS);
-  view_tab_menu->insertItem(i18n("Text and Icons"), this, SLOT(slotViewTabTextIcons()),0, ID_VIEW_TAB_TEXT_ICONS);
-  config->setGroup("General Options");
-  int mode=config->readNumEntry("tabviewmode", 3);
-  switch (mode){
-    case 1:
-      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT, true);
-      break;
-    case 2:
-      view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS, true);
-      break;
-    case 3:
-      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS, true);
-      break;
-  }
+//  view_tab_menu = new QPopupMenu;
+//  view_tab_menu->insertItem(i18n("Text only"), this, SLOT(slotViewTabText()), 0, ID_VIEW_TAB_TEXT);
+//  view_tab_menu->insertItem(i18n("Icons only"), this, SLOT(slotViewTabIcons()), 0, ID_VIEW_TAB_ICONS);
+//  view_tab_menu->insertItem(i18n("Text and Icons"), this, SLOT(slotViewTabTextIcons()),0, ID_VIEW_TAB_TEXT_ICONS);
+//  config->setGroup("General Options");
+//  int mode=config->readNumEntry("tabviewmode", 3);
+//  switch (mode){
+//    case 1:
+//      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT, true);
+//      break;
+//    case 2:
+//      view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS, true);
+//      break;
+//    case 3:
+//      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS, true);
+//      break;
+//  }
+//
+//  // 2 popup menus for showing/hiding certain single tree and output tool views
+//  toggletreeviews_popup = new QPopupMenu( this, "toggletreeviews_popup_menu");
+//  toggleoutputviews_popup = new QPopupMenu( this, "toggleoutputviews_popup_menu");
+//  toggletreeviews_popup->setCheckable( true);
+//  toggleoutputviews_popup->setCheckable( true);
+//  connect( toggletreeviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleTreeViewsMenu()) );
+//  connect( toggleoutputviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleOutputViewsMenu()) );
+//
 
-  // 2 popup menus for showing/hiding certain single tree and output tool views
-  toggletreeviews_popup = new QPopupMenu( this, "toggletreeviews_popup_menu");
-  toggleoutputviews_popup = new QPopupMenu( this, "toggleoutputviews_popup_menu");
-  toggletreeviews_popup->setCheckable( true);
-  toggleoutputviews_popup->setCheckable( true);
-  connect( toggletreeviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleTreeViewsMenu()) );
-  connect( toggleoutputviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleOutputViewsMenu()) );
+	pAction = KStdAction::gotoLine(this,SLOT(slotViewGotoLine()),actionCollection(),"view_goto");
+	pAction = new KAction(i18n("&Next Error"),0,this,SLOT(slotViewNextError()),actionCollection(),"view_next_error");
+	pAction = new KAction(i18n("&Previous Error"),0,this,SLOT(slotViewPreviousError()),actionCollection(),"view_prev_error");
+	pAction = new KAction(i18n("&Dialog Editor"),SmallIconSet("newwidget"),0,this,SLOT(startDesigner()),actionCollection(),"view_designer");
 
-  view_menu = new QPopupMenu;
-  view_menu->insertItem(SmallIconSet("goto"),i18n("Goto &Line..."), this,
-			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
-  view_menu->insertSeparator();
-  view_menu->insertItem(i18n("&Next Error"),this,
-			SLOT(slotViewNextError()),0,ID_VIEW_NEXT_ERROR);
-  view_menu->insertItem(i18n("&Previous Error"),this,
-			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
-  view_menu->insertSeparator();
-  view_menu->insertItem(SmallIconSet("newwidget"),i18n("&Dialog Editor"),this,SLOT(startDesigner()),0,ID_TOOLS_DESIGNER);
-  view_menu->insertSeparator();
-  view_menu->insertItem(i18n("Tree Tool V&iews"), toggletreeviews_popup);
-  view_menu->insertItem(i18n("O&utput Tool Views"), toggleoutputviews_popup);
-  view_menu->insertSeparator();
-  view_menu->insertItem(i18n("Toolb&ar"),this,
-			   SLOT(slotViewTStdToolbar()),0,ID_VIEW_TOOLBAR);
-  view_menu->insertItem(i18n("&Browser-Toolbar"),this,
-			   SLOT(slotViewTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
-  view_menu->insertItem(i18n("&Statusbar"),this,
-			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
-  view_menu->insertItem(i18n("&MDI-View-Taskbar"),this,
-			   SLOT(slotViewMdiViewTaskbar()),0,ID_VIEW_MDIVIEWTASKBAR);
-  view_menu->insertItem(i18n("Tab-Te&xt"), view_tab_menu,ID_VIEW_TABS);
-  view_menu->insertSeparator();
-  view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
-			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
-			
-  menuBar()->insertItem(i18n("&View"), view_menu);
+	KToggleAction* pToggleAction = new KToggleAction(i18n("All &Tree Tool-Views"),0,this,SLOT(slotViewTTreeView()),actionCollection(),"view_tree_all");
+	pToggleAction = new KToggleAction(i18n("&Classes"),0,this,SLOT(slotViewTClassesView()),actionCollection(),"view_tree_classes");
+	pToggleAction = new KToggleAction(i18n("&Groups"),0,this,SLOT(slotViewTGroupsView()),actionCollection(),"view_tree_groups");
+	pToggleAction = new KToggleAction(i18n("&Files"),0,this,SLOT(slotViewTFilesView()),actionCollection(),"view_tree_file");
+	pToggleAction = new KToggleAction(i18n("&Books"),0,this,SLOT(slotViewTBooksView()),actionCollection(),"view_tree_books");
+	pToggleAction = new KToggleAction(i18n("&Watch"),0,this,SLOT(slotViewTWatchView()),actionCollection(),"view_tree_watch");
+
+	pToggleAction = new KToggleAction(i18n("All &Output Tool-Views"),0,this,SLOT(slotViewTOutputView()),actionCollection(),"view_out_all");
+	pToggleAction = new KToggleAction(i18n("&Messages"),0,this,SLOT(slotViewOMessagesView()),actionCollection(),"view_out_msg");
+	pToggleAction = new KToggleAction(i18n("&StdOut"),0,this,SLOT(slotViewOStdOutView()),actionCollection(),"view_out_stdout");
+	pToggleAction = new KToggleAction(i18n("S&tdErr"),0,this,SLOT(slotViewOStdErrView()),actionCollection(),"view_out_stderr");
+	pToggleAction = new KToggleAction(i18n("&Konsole"),0,this,SLOT(slotViewOKonsoleView()),actionCollection(),"view_out_konsole");
+	pToggleAction = new KToggleAction(i18n("&Breakpoints"),0,this,SLOT(slotViewOBreakpointView()),actionCollection(),"view_out_break");
+	pToggleAction = new KToggleAction(i18n("&Disassemble"),0,this,SLOT(slotViewODisassembleView()),actionCollection(),"view_out_disasm");
+	pToggleAction = new KToggleAction(i18n("&Call Stack"),0,this,SLOT(slotViewOFrameStackView()),actionCollection(),"view_out_stack");
+	pToggleAction = new KToggleAction(i18n("D&ebugger"),0,this,SLOT(slotViewODebuggerView()),actionCollection(),"view_out_dbg");
+
+	pToggleAction = new KToggleAction(i18n("Toolb&ar"),0,this,SLOT(slotViewTStdToolbar()),actionCollection(),"view_toolbar");
+	pToggleAction = new KToggleAction(i18n("&Browser-Toolbar"),0,this,SLOT(slotViewTBrowserToolbar()),actionCollection(),"view_browser");
+	pToggleAction = new KToggleAction(i18n("&Statusbar"),0,this,SLOT(slotViewTStatusbar()),actionCollection(),"view_status");
+	pToggleAction = new KToggleAction(i18n("&MDI-View-Taskbar"),0,this,SLOT(slotViewMdiViewTaskbar()),actionCollection(),"view_mdi");
+
+	pToggleAction = new KToggleAction(i18n("&Text only"),0,this,SLOT(slotViewTabText()),actionCollection(),"view_tab_text");
+	pToggleAction = new KToggleAction(i18n("&Icons only"),0,this,SLOT(slotViewTabIcons()),actionCollection(),"view_tab_icons");
+	pToggleAction = new KToggleAction(i18n("&Text and Icons"),0,this,SLOT(slotViewTabTextIcons()),actionCollection(),"view_tab_texticons");
+
+	pAction = new KAction(i18n("&Refresh"),SmallIconSet("reload"),0,this,SLOT(slotViewRefresh()),actionCollection(),"view_refresh");
 
 
   ///////////////////////////////////////////////////////////////////
@@ -714,17 +683,17 @@ void CKDevelop::initMenuBar(){
 
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
-  connect(file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 //  connect(p3,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(debug_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(debug_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 //  connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   //connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(classbrowser_popup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
@@ -1143,100 +1112,100 @@ void CKDevelop::setKeyAccel()
   accel->setItemEnabled("Dialog Editor", true );
 
 
-  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
-  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
-  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
-  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
-  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_ALL,"SaveAll" );
-  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_AS,"SaveAs" );
-  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
-  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
+//  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
+//  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
+//  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
+//  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
+//  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_ALL,"SaveAll" );
+//  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_AS,"SaveAs" );
+//  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
+//  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
 
-  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KStdAccel::Undo );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KStdAccel::Cut );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KStdAccel::Copy );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KStdAccel::Paste );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KStdAccel::Find );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH_BACK,"RepeatSearchBack" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SEARCH,"CTagsSearch" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SWITCH,"CTagsSwitch" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
-  accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KStdAccel::Undo );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KStdAccel::Cut );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KStdAccel::Copy );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KStdAccel::Paste );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KStdAccel::Find );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH_BACK,"RepeatSearchBack" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SEARCH,"CTagsSearch" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SWITCH,"CTagsSwitch" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
+//  accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
 
 
-  accel->changeMenuAccel(view_menu,ID_TOOLS_DESIGNER ,"Dialog Editor" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
-  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
-
-  accel->changeMenuAccel(project_menu, ID_PROJECT_KAPPWIZARD,"NewProject" );
-  accel->changeMenuAccel(project_menu, ID_PROJECT_OPEN,"OpenProject" );
-  accel->changeMenuAccel(project_menu, ID_PROJECT_CLOSE,"CloseProject" );
-  accel->changeMenuAccel(project_menu,ID_PROJECT_NEW_CLASS , "NewClass");
-  accel->changeMenuAccel(project_menu, ID_PROJECT_ADD_FILE_EXIST, "AddExistingFiles");
-  accel->changeMenuAccel(project_menu,ID_PROJECT_ADD_NEW_TRANSLATION_FILE ,"Add new Translation File" );
-  accel->changeMenuAccel(project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
-  accel->changeMenuAccel(project_menu,ID_PROJECT_MESSAGES , "MakeMessages");
-  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_PROJECT_API,"ProjectAPI" );
-  accel->changeMenuAccel(project_menu,ID_PROJECT_MAKE_USER_MANUAL , "ProjectManual");
-//  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,"Source-tgz" );
-  accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
-
-  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
-  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
-  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL , "RebuildAll");
-  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL ,"CleanRebuildAll" );
-  accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
-  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
-  accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-  accel->changeMenuAccel(build_menu,ID_BUILD_DISTCLEAN ,"BuildDistClean" );
-  accel->changeMenuAccel(build_menu, ID_BUILD_MAKECLEAN, "BuildMakeClean");
-  accel->changeMenuAccel(build_menu, ID_BUILD_AUTOCONF, "BuildAutoconf");
-  accel->changeMenuAccel(build_menu, ID_BUILD_CONFIGURE, "BuildConfigure");
-
-  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DECLARATION, "CVGotoDeclaration");
-  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DEFINITION, "CVGotoDefinition");
-  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_CLASS_DECLARATION, "CVGotoClass");
-  accel->changeMenuAccel(classbrowser_popup, ID_CV_GRAPHICAL_VIEW, "CVViewTree");
-  accel->changeMenuAccel(classbrowser_popup,ID_PROJECT_NEW_CLASS , "NewClass");
-
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_START , "DebugStart");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN ,"DebugRun" );
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN_CURSOR, "DebugRunCursor");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_STOP, "DebugStop");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP, "DebugStepInto");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP_INST, "DebugStepIntoInstr");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT, "DebugStepOver");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT_INST , "DebugStepOverInstr");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_FINISH ,  "DebugStepOut");
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_MEMVIEW ,"DebugViewer" );
-  accel->changeMenuAccel(debug_menu,ID_DEBUG_BREAK_INTO ,"DebugInterrupt" );
-
-  accel->changeMenuAccel(debugPopup, ID_DEBUG_CORE, "DebugExamineCore");
-  accel->changeMenuAccel(debugPopup, ID_DEBUG_NAMED_FILE, "DebugOtherExec");
-  accel->changeMenuAccel(debugPopup, ID_DEBUG_ATTACH, "DebugAttach");
-  accel->changeMenuAccel(debugPopup, ID_DEBUG_SET_ARGS, "DebugRunWithArgs");
-
-  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_TOGGLE ,"Toggle_Bookmarks" );
-  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
-  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
-  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
-
-  accel->changeMenuAccel(help_menu->menu(),ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-  accel->changeMenuAccel(help_menu->menu(), ID_HELP_SEARCH, "HelpSearch" );
-  accel->changeMenuAccel(help_menu->menu(), ID_HELP_CONTENTS, KStdAccel::Help );
-
-  accel->changeMenuAccel(help_menu->menu(),ID_HELP_PROJECT_API , "HelpProjectAPI" );
-  accel->changeMenuAccel(help_menu->menu(),ID_HELP_USER_MANUAL ,  "HelpProjectManual");
+//  accel->changeMenuAccel(view_menu,ID_TOOLS_DESIGNER ,"Dialog Editor" );
+//  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+//  accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
+//  accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
+//  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
+//  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
+//
+//  accel->changeMenuAccel(project_menu, ID_PROJECT_KAPPWIZARD,"NewProject" );
+//  accel->changeMenuAccel(project_menu, ID_PROJECT_OPEN,"OpenProject" );
+//  accel->changeMenuAccel(project_menu, ID_PROJECT_CLOSE,"CloseProject" );
+//  accel->changeMenuAccel(project_menu,ID_PROJECT_NEW_CLASS , "NewClass");
+//  accel->changeMenuAccel(project_menu, ID_PROJECT_ADD_FILE_EXIST, "AddExistingFiles");
+//  accel->changeMenuAccel(project_menu,ID_PROJECT_ADD_NEW_TRANSLATION_FILE ,"Add new Translation File" );
+//  accel->changeMenuAccel(project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
+//  accel->changeMenuAccel(project_menu,ID_PROJECT_MESSAGES , "MakeMessages");
+//  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_PROJECT_API,"ProjectAPI" );
+//  accel->changeMenuAccel(project_menu,ID_PROJECT_MAKE_USER_MANUAL , "ProjectManual");
+////  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,"Source-tgz" );
+//  accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
+//
+//  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
+//  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
+//  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL , "RebuildAll");
+//  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL ,"CleanRebuildAll" );
+//  accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
+//  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
+//  accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
+//  accel->changeMenuAccel(build_menu,ID_BUILD_DISTCLEAN ,"BuildDistClean" );
+//  accel->changeMenuAccel(build_menu, ID_BUILD_MAKECLEAN, "BuildMakeClean");
+//  accel->changeMenuAccel(build_menu, ID_BUILD_AUTOCONF, "BuildAutoconf");
+//  accel->changeMenuAccel(build_menu, ID_BUILD_CONFIGURE, "BuildConfigure");
+//
+//  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DECLARATION, "CVGotoDeclaration");
+//  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_DEFINITION, "CVGotoDefinition");
+//  accel->changeMenuAccel(classbrowser_popup, ID_CV_VIEW_CLASS_DECLARATION, "CVGotoClass");
+//  accel->changeMenuAccel(classbrowser_popup, ID_CV_GRAPHICAL_VIEW, "CVViewTree");
+//  accel->changeMenuAccel(classbrowser_popup,ID_PROJECT_NEW_CLASS , "NewClass");
+//
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_START , "DebugStart");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN ,"DebugRun" );
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN_CURSOR, "DebugRunCursor");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_STOP, "DebugStop");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP, "DebugStepInto");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP_INST, "DebugStepIntoInstr");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT, "DebugStepOver");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT_INST , "DebugStepOverInstr");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_FINISH ,  "DebugStepOut");
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_MEMVIEW ,"DebugViewer" );
+//  accel->changeMenuAccel(debug_menu,ID_DEBUG_BREAK_INTO ,"DebugInterrupt" );
+//
+//  accel->changeMenuAccel(debugPopup, ID_DEBUG_CORE, "DebugExamineCore");
+//  accel->changeMenuAccel(debugPopup, ID_DEBUG_NAMED_FILE, "DebugOtherExec");
+//  accel->changeMenuAccel(debugPopup, ID_DEBUG_ATTACH, "DebugAttach");
+//  accel->changeMenuAccel(debugPopup, ID_DEBUG_SET_ARGS, "DebugRunWithArgs");
+//
+//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_TOGGLE ,"Toggle_Bookmarks" );
+//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
+//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
+//  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
+//
+//  accel->changeMenuAccel(help_menu->menu(),ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+//  accel->changeMenuAccel(help_menu->menu(), ID_HELP_SEARCH, "HelpSearch" );
+//  accel->changeMenuAccel(help_menu->menu(), ID_HELP_CONTENTS, KStdAccel::Help );
+//
+//  accel->changeMenuAccel(help_menu->menu(),ID_HELP_PROJECT_API , "HelpProjectAPI" );
+//  accel->changeMenuAccel(help_menu->menu(),ID_HELP_USER_MANUAL ,  "HelpProjectManual");
 
 }
 

@@ -40,6 +40,9 @@
 
 #include "coutputwidget.h"
 
+#include <kaction.h>
+#include <kstdaction.h>
+
 #include <khtmlview.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -740,7 +743,9 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
 
-    disableCommand(ID_FILE_NEW);
+    KAction* pFileNewAction = actionCollection()->action("file_new");
+    pFileNewAction->setEnabled(false);
+    //disableCommand(ID_FILE_NEW);
   }
 
   if(bAutosave)
@@ -774,25 +779,28 @@ void CKDevelop::switchToWorkspace(int id){
 
 void CKDevelop::showOutputView(bool show)
 {
-  if (bAutoswitch) {
-    if (show) {
-      if (isToolViewVisible(messages_widget)) {
-				 // if it's a tab page, raise the messages_widget
-         makeWidgetDockVisible(messages_widget->parentWidget());
-      }
-      else {
-        slotViewTOutputView();
-      }
-    }
-    else {
-      if (!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)) {
-        return; //it's already unvisible
-      }
-      else {
-        slotViewTOutputView();
-      }
-    }
-  }
+	if (bAutoswitch) {
+		if (show) {
+			if (isToolViewVisible(messages_widget)) {
+				// if it's a tab page, raise the messages_widget
+				makeWidgetDockVisible(messages_widget->parentWidget());
+			}
+			else {
+				slotViewTOutputView();
+			}
+		}
+		else {
+			//KToggleAction* pViewToolbarAction = dynamic_cast<KToggleAction*>
+			//                                    (actionCollection()->action("view_toolbar"));
+			//if (pViewToolbarAction && !pViewToolbarAction->isChecked()) {
+//      if (!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)) {
+			//	return; //it's already unvisible
+			//}
+			//else {
+			//	slotViewTOutputView();
+			//}
+		}
+	}
 }
 
 void CKDevelop::adjustTTreesToolButtonState()
@@ -838,22 +846,66 @@ void CKDevelop::adjustTOutputToolButtonState()
 
 void CKDevelop::readOptions()
 {
-  applyMainWindowSettings(config);
+	applyMainWindowSettings(config);
 
-  config->setGroup("General Options");
+	kdDebug() << "in CKDevelop::readOptions():\n" ;
 
-  if(config->readBoolEntry("show_std_toolbar", true))
-    view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
-  if(config->readBoolEntry("show_browser_toolbar",true))
-    view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
-  if (config->readBoolEntry("show_statusbar",true))
-    view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-  if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isSwitchedOn())) {
-    showViewTaskBar();
-  }
-  else {
-    hideViewTaskBar();
-  }
+	config->setGroup("General Options");
+	KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+	                               (actionCollection()->action("view_toolbar"));
+	if(config->readBoolEntry("show_std_toolbar", true) && pToggleAction) {
+		pToggleAction->setChecked(true);
+	}
+	else {
+		pToggleAction->setChecked(false);
+	}
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_browser"));
+	if(config->readBoolEntry("show_browser_toolbar",true) && pToggleAction) {
+		pToggleAction->setChecked(true);
+	}
+	else {
+		pToggleAction->setChecked(false);
+	}
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_status"));
+	if (config->readBoolEntry("show_statusbar",true) && pToggleAction) {
+		pToggleAction->setChecked(true);
+	}
+	else {
+		pToggleAction->setChecked(false);
+	}
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_mdi"));
+	if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isSwitchedOn())
+	    && pToggleAction) {
+		showViewTaskBar();
+		pToggleAction->setChecked(true);
+	}
+	else {
+		hideViewTaskBar();
+		pToggleAction->setChecked(false);
+	}
+
+//  config->setGroup("General Options");
+	int mode=config->readNumEntry("tabviewmode", 3);
+	switch (mode){
+		case 1:
+			pToggleAction = dynamic_cast<KToggleAction*>
+			                (actionCollection()->action("view_tab_text"));
+			if (pToggleAction) pToggleAction->setChecked(true);
+		break;
+		case 2:
+			pToggleAction = dynamic_cast<KToggleAction*>
+			                (actionCollection()->action("view_tab_icons"));
+			if (pToggleAction) pToggleAction->setChecked(true);
+		break;
+		case 3:
+			pToggleAction = dynamic_cast<KToggleAction*>
+			                (actionCollection()->action("view_tab_texticons"));
+			if (pToggleAction) pToggleAction->setChecked(true);
+		break;
+	}
 
   // read setting whether to use the ctags search database
   bCTags = config->readBoolEntry("use_ctags", false);
@@ -940,25 +992,45 @@ void CKDevelop::readOptions()
 
 void CKDevelop::saveOptions(){
     
-  saveMainWindowSettings (config);
-  config->setGroup("General Options");
+	saveMainWindowSettings (config);
+	config->setGroup("General Options");
+	// toolbar visible
+	KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+	                               (actionCollection()->action("view_toolbar"));
+	if (pToggleAction)
+		config->writeEntry("show_std_toolbar",pToggleAction->isChecked());
+	// browser toolbar visible
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_browser"));
+	if (pToggleAction)
+		config->writeEntry("show_browser_toolbar",pToggleAction->isChecked());
+	// status bar visible
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_status"));
+	if (pToggleAction)
+		config->writeEntry("show_statusbar",pToggleAction->isChecked());
+	// mdi taskbar visible
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_mdi"));
+	if (pToggleAction)
+		config->writeEntry("show_mdi_view_taskbar",pToggleAction->isChecked());
 
-  config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
-  config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
+	// write setting whether to use the ctags search database
+	config->writeEntry("use_ctags", bCTags);
 
-  config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
-  config->writeEntry("show_mdi_view_taskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
-
-  // write setting whether to use the ctags search database
-  config->writeEntry("use_ctags", bCTags);
-
-  // set the mode of the tab headers
-  if(view_tab_menu->isItemChecked(ID_VIEW_TAB_TEXT))
-    config->writeEntry("tabviewmode", 1);
-  else if(view_tab_menu->isItemChecked(ID_VIEW_TAB_ICONS))
-    config->writeEntry("tabviewmode", 2);
-  else
-    config->writeEntry("tabviewmode", 3);
+	// set the mode of the tab headers
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_tab_text"));
+	if (pToggleAction && pToggleAction->isChecked())
+		config->writeEntry("tabviewmode", 1);
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_tab_icons"));
+	if (pToggleAction && pToggleAction->isChecked())
+		config->writeEntry("tabviewmode", 2);
+	pToggleAction = dynamic_cast<KToggleAction*>
+	                (actionCollection()->action("view_tab_texticons"));
+	if (pToggleAction && pToggleAction->isChecked())
+		config->writeEntry("tabviewmode", 3);
 
 	// write current chosen MDI mode
   config->writeEntry("MDI mode", mdiMode());
