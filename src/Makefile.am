@@ -11,7 +11,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 bin_PROGRAMS = gideon
 
 gideon_SOURCES = main.cpp core.cpp toplevel.cpp partloader.cpp documentationpart.cpp \
-		 editorpart.cpp importdlg.cpp filenameedit.cpp \
+		 importdlg.cpp filenameedit.cpp \
 		 statusbar.cpp
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
