@@ -5,6 +5,8 @@
 *   Benoit.Cerrina@writeme.com                                            *
 *   Copyright (C) 2002 by Bernd Gehrmann                                  *
 *   bernd@kdevelop.org                                                    *
+*   Copyright (C) 2003 by Alexander Dymo                                  *
+*   cloudtemple@mksat.net                                                 *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +27,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <qcombobox.h>
+#include <qlistview.h>
+
 
 #include "kdevplugin.h"
 #include "kdevproject.h"
@@ -48,6 +52,7 @@ CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const ch
     lowercase_filenames = DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/lowercasefilenames", true);
     m_parse = DomUtil::readEntry( *m_part->projectDom(), "/cppsupportpart/newclass/filenamesetting","none");
     //    name_handler_combo->setCurrentText(m_parse);
+    baseclasses_view->setSorting(-1);
 }
 
 
@@ -96,6 +101,23 @@ void CppNewClassDialog::implementationChanged()
 		implementationModified = true;
 }
 
+void CppNewClassDialog::checkObjCInheritance(int val)
+{
+    if (val && (baseclasses_view->childCount() > 1))
+        if (KMessageBox::warningContinueCancel(this, 
+        i18n("Objective C does not support multiple inheritance.\nOnly the first base class in the list will be taken into account"),
+        i18n("Warning"), KStdGuiItem::cont(), "Check Objective C inheritance rules" ) == KMessageBox::Cancel)
+        objc_box->setChecked(false);
+}
+
+void CppNewClassDialog::checkQWidgetInheritance(int val)
+{
+    if (val && (baseclasses_view->childCount() > 1))
+        if (KMessageBox::warningContinueCancel(this, 
+            i18n("Multiple inheritance requires QObject derivative to be first and unique in base class list."),
+            i18n("Warning"), KStdGuiItem::cont(), "Check QWidget inheritance rules" ) == KMessageBox::Cancel)
+            childclass_box->setChecked(false);
+}
 
 void CppNewClassDialog::accept()
 {
@@ -106,6 +128,105 @@ void CppNewClassDialog::accept()
 
 }
 
+void CppNewClassDialog::setStateOfInheritanceEditors(bool state)
+{
+    basename_edit->setEnabled(state);
+    virtual_box->setEnabled(state);
+    public_button->setEnabled(state);
+    protected_button->setEnabled(state);
+    private_button->setEnabled(state);
+    baseclasses_view->setEnabled(state);
+}
+
+void CppNewClassDialog::addBaseClass()
+{
+    if (baseclasses_view->selectedItem())
+        baseclasses_view->selectedItem()->setSelected(false);
+    QListViewItem* it = new QListViewItem(baseclasses_view, baseclasses_view->lastItem(), QString::null, "public");
+    setStateOfInheritanceEditors(true);
+    public_button->setChecked(true);
+    virtual_box->setChecked(false);
+    basename_edit->setText(QString::null);
+    basename_edit->setFocus();
+    baseclasses_view->setSelected(it, true);
+}
+    
+void CppNewClassDialog::remBaseClass()
+{
+    if (baseclasses_view->selectedItem())
+    {
+	QListViewItem *it = baseclasses_view->selectedItem();
+	baseclasses_view->selectedItem()->setSelected(false);
+        delete it;
+        if (baseclasses_view->childCount() == 0)
+            setStateOfInheritanceEditors(false);
+    }
+}
+
+void CppNewClassDialog::currBaseNameChanged(const QString &text)
+{
+    if ( baseclasses_view->selectedItem() )
+    {
+        baseclasses_view->selectedItem()->setText(0, text);
+    }
+}
+
+void CppNewClassDialog::currBasePrivateSet()
+{
+    if ( baseclasses_view->selectedItem() )
+    {
+        baseclasses_view->selectedItem()->setText(1, (virtual_box->isChecked()?"virtual ":"") + QString("private"));
+    }    
+}
+
+void CppNewClassDialog::currBaseProtectedSet()
+{
+    if ( baseclasses_view->selectedItem() )
+    {
+        baseclasses_view->selectedItem()->setText(1, (virtual_box->isChecked()?"virtual ":"") + QString("protected"));
+    }    
+}
+
+void CppNewClassDialog::currBasePublicSet()
+{
+    if ( baseclasses_view->selectedItem() )
+    {
+        baseclasses_view->selectedItem()->setText(1, (virtual_box->isChecked()?"virtual ":"") + QString("public"));
+    }    
+}
+
+void CppNewClassDialog::currBaseVirtualChanged(int val)
+{
+    if ( baseclasses_view->selectedItem() )
+    {
+        baseclasses_view->selectedItem()->setText(1, QString(val?"virtual ":"") + 
+         QString(private_button->isChecked()?"private":"") +
+         QString(protected_button->isChecked()?"protected":"") +
+         QString(public_button->isChecked()?"public":""));
+    }
+}
+
+void CppNewClassDialog::currBaseSelected(QListViewItem *it)
+{
+    if (it == 0) return;
+    basename_edit->setText(it->text(0));
+    if (it->text(1).contains("private"))
+        private_button->setChecked(true);
+    else
+        private_button->setChecked(false);
+    if (it->text(1).contains("protected"))
+        protected_button->setChecked(true);
+    else
+        protected_button->setChecked(false);
+    if (it->text(1).contains("public"))
+        public_button->setChecked(true);
+    else
+        public_button->setChecked(false);
+    if (it->text(1).contains("virtual"))
+        virtual_box->setChecked(true);
+    else
+        virtual_box->setChecked(false);
+}
 
 bool CppNewClassDialog::ClassGenerator::validateInput()
 {
@@ -170,14 +291,13 @@ void CppNewClassDialog::ClassGenerator::common_text()
   }
     
   namespaceStr = dlg.namespace_edit->text(); 
-  baseName = dlg.basename_edit->text();
   childClass = dlg.childclass_box->isChecked();
   objc = dlg.objc_box->isChecked();
 
-  if (baseName.isEmpty() && childClass)
-    baseName = "QWidget";
-  if (objc && baseName.isEmpty())
-    baseName = "NSObject";
+  if ( (dlg.baseclasses_view->childCount() == 0) && childClass)
+    QListViewItem* it = new QListViewItem(dlg.baseclasses_view, "QWidget", "public");
+  if (objc && (dlg.baseclasses_view->childCount() == 0))
+    QListViewItem* it = new QListViewItem(dlg.baseclasses_view, "NSObject", "public");
     
   doc = dlg.documentation_edit->text();
     
@@ -228,13 +348,29 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
     relPath += "../";
   args = childClass? "QWidget *parent, const char *name" : "";
   QString baseInitializer;
-  if (!baseName.isEmpty())
-    baseInitializer = childClass? "  : $BASECLASS$(parent, name)" : "  : $BASECLASS$()";
-    
+  
+  if (childClass && (dlg.baseclasses_view->childCount() == 0))
+    baseInitializer = "  : QWidget(parent, name)";
+  else if (dlg.baseclasses_view->childCount() != 0)
+  {
+    QListViewItemIterator it( dlg.baseclasses_view );
+    while ( it.current() )
+    {
+      if (!it.current()->text(0).isNull())
+      {
+        baseInitializer += " : ";
+        if (childClass && (baseInitializer == " : ")) 
+          baseInitializer += it.current()->text(0) + "(parent, name)";
+        else
+          baseInitializer += it.current()->text(0) + "()";
+      }       
+      ++it;
+    }
+  } 
+   
   classImpl.replace(QRegExp("\\$HEADER\\$"), relPath+header);
   classImpl.replace(QRegExp("\\$BASEINITIALIZER\\$"), baseInitializer);
   classImpl.replace(QRegExp("\\$CLASSNAME\\$"), className);
-  classImpl.replace(QRegExp("\\$BASECLASS\\$"), baseName);
   classImpl.replace(QRegExp("\\$ARGS\\$"), args);
   classImpl.replace(QRegExp("\\$FILENAME\\$"), implementation);
       
@@ -305,32 +441,56 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
       + namespaceEnd
       +         "#endif\n";
   }
-                    
+                   
   QString headerGuard = namespaceStr.upper() + header.upper();
   headerGuard.replace(QRegExp("\\."),"_");
   QString includeBaseHeader;
   if (childClass) // TODO: do this only if this is a Qt class
+  {
     includeBaseHeader = "#include <qwidget.h>";
-  else if (objc) {
-    if (baseName != "NSObject")
-      includeBaseHeader = "#include \"" + baseName + ".h\"";
-  } else if (!baseName.isEmpty())
-    includeBaseHeader = "#include <" + baseName.lower() + ".h>";
+  }
+  if (objc) {
+    if (dlg.baseclasses_view->firstChild())
+      if (dlg.baseclasses_view->firstChild()->text(0) != "NSObject")
+        includeBaseHeader = "#include \"" + dlg.baseclasses_view->firstChild()->text(0) + ".h\"";
+  } else
+  {
+    QListViewItemIterator it( dlg.baseclasses_view );
+    while ( it.current() )
+    {
+      if (!it.current()->text(0).isEmpty())
+        if ((!childClass) || (it.current()->text(0) != "QWidget"))
+          includeBaseHeader += "\n#include <" + it.current()->text(0).lower() + ".h>";
+      ++it;
+    }
+  }
     
   QString author = DomUtil::readEntry(*dlg.m_part->projectDom(), "/general/author");
     
   QString inheritance;
-  if (!baseName.isEmpty()) {
+  if (dlg.baseclasses_view->childCount() > 0) 
+  {
     inheritance += " : ";
-    if (dlg.virtual_box->isChecked())
-      inheritance += "virtual ";
-    if (dlg.public_button->isChecked())
-      inheritance += "public ";
-    if (dlg.protected_button->isChecked())
-      inheritance += "protected ";
-    if (dlg.private_button->isChecked())
-      inheritance += "private ";
-    inheritance += baseName;
+
+    QListViewItemIterator it( dlg.baseclasses_view );
+    while ( it.current() )
+    {
+      if (!it.current()->text(0).isEmpty())
+      {
+        if (inheritance != " : ")
+          inheritance += ", ";
+        if (it.current()->text(1).contains("virtual"))
+          inheritance += "virtual ";
+        if (it.current()->text(1).contains("public"))
+          inheritance += "public ";
+        if (it.current()->text(1).contains("protected"))
+          inheritance += "protected ";
+        if (it.current()->text(1).contains("private"))
+          inheritance += "private ";
+        inheritance += it.current()->text(0);
+      }
+      ++it;
+    }
   }
 
   QString qobject;
@@ -342,7 +502,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   classIntf.replace(QRegExp("\\$AUTHOR\\$"), author);
   classIntf.replace(QRegExp("\\$DOC\\$"), doc);
   classIntf.replace(QRegExp("\\$CLASSNAME\\$"), className);
-  classIntf.replace(QRegExp("\\$BASECLASS\\$"), baseName);
+  classIntf.replace(QRegExp("\\$BASECLASS\\$"), dlg.baseclasses_view->firstChild()->text(0));
   classIntf.replace(QRegExp("\\$INHERITANCE\\$"), inheritance);
   classIntf.replace(QRegExp("\\$QOBJECT\\$"), qobject);
   classIntf.replace(QRegExp("\\$ARGS\\$"), args);
@@ -373,6 +533,5 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 
 	project->addFiles ( fileList );
 }
-
 
 #include "cppnewclassdlg.moc"

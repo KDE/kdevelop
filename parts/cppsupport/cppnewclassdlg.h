@@ -3,6 +3,8 @@
  *   smeier@rz.uni-potsdam.de                                              *
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +36,19 @@ protected:
     virtual void headerChanged();
     virtual void implementationChanged();
     virtual void nameHandlerChanged(const QString &text);
+    
+    virtual void addBaseClass();
+    virtual void remBaseClass();
+    virtual void currBaseNameChanged(const QString &text);
+    virtual void currBasePrivateSet();
+    virtual void currBaseProtectedSet();
+    virtual void currBasePublicSet();
+    virtual void currBaseVirtualChanged(int val);
+    virtual void currBaseSelected(QListViewItem *it);
 
+    virtual void checkObjCInheritance(int val);
+    virtual void checkQWidgetInheritance(int val);
+    
 private:
 
     bool headerModified;
@@ -49,6 +63,8 @@ private:
     QString implementation_suffix;
     bool lowercase_filenames;
 
+    void setStateOfInheritanceEditors(bool state);
+    
     friend class ClassGenerator;
 
     // The class that translates UI input to a class
@@ -58,7 +74,7 @@ private:
       ClassGenerator(CppNewClassDialog& _dlg) : dlg(_dlg) {}
       void generate();
 
-    private:
+    private:   
       bool validateInput();
       void common_text();
       void gen_implementation();
@@ -71,7 +87,7 @@ private:
       KDevProject *project;
       QString subDir, headerPath, implementationPath;
       QString doc;
-      QString namespaceStr, baseName;
+      QString namespaceStr;
       bool childClass;
       bool objc;
       QString namespaceBeg, namespaceEnd;
