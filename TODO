@@ -1,27 +1,8 @@
-* Script project options 
-
-* Implement removing sub projects.
-
-* Implement Add Plugin
-
-* Show .po files in project management
-
-* Distinguish vanilla c++ support from c++ + Qt extensions
-  and show signals/slots in the class view only with Qt.
-
-* Fix the whole mess with header files which are parsed
-  whenever the source file is parsed. This is implemented
-  this way because header files don't appear in _SOURCES
-  in KDE projects :-(
-
-* Perhaps use konsole part for the application frontend
-
-* Implement reverse I-search
-
-* Check if a man page exists before offering the context menu
-  item 'Goto manpage'
-
-* Show intro page on startup
-
-* Optional: Arrange classes by sub project
-
+-- auto indent
+  - display modes in status bar
+  - indent-region
+  - undo doesn't work after indent
+  - indent close brace
+  - indent open paren/close paren
+  - indent << 
+  - indent public:, ...
