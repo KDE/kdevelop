@@ -126,6 +126,9 @@
       <type ext="dox" name="Doxygen documentation page" create="template" icon="document">
         <descr>A new empty Doxygen documentation page.</descr>
       </type>
+      <type ext="hs" name="Haskell source" create="template" icon="source_hs">
+        <descr>A new empty Haskell source file.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>

@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="KDevHaskellProject" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_build" />
+    <Separator/>
+    <Action name="build_execute" />
+  </Menu>
+</MenuBar>
+<ToolBar name="buildToolBar">
+    <Action name="build_build" />
+    <Action name="build_execute" />
+</ToolBar>
+</kpartplugin>

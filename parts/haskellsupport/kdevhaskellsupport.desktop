@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Haskell Language Support
+Name=KDevHaskellSupport
+GenericName=Haskell Language Support
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevhaskellsupport
+X-KDevelop-Language=Haskell

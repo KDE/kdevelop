@@ -1,0 +1,18 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
+INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+
+kde_module_LTLIBRARIES = libkdevhaskellsupport.la
+libkdevhaskellsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
+libkdevhaskellsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la
+
+libkdevhaskellsupport_la_SOURCES = haskellsupport_part.cpp
+
+METASOURCES = AUTO
+
+servicedir = $(kde_servicesdir)
+service_DATA = kdevhaskellsupport.desktop
+
+rcdir = $(kde_datadir)/kdevhaskellsupport
+rc_DATA = kdevhaskellsupport.rc
+

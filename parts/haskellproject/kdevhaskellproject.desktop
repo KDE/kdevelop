@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Haskell Project
+Name=KDevHaskellProject
+GenericName=Haskell Project
+ServiceTypes=KDevelop/Project
+X-KDE-Library=libkdevhaskellproject
