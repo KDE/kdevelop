@@ -177,7 +177,7 @@ void CClassPropertiesDlgImpl::applyAddAttribute()
     {
         CParsedMethod* aMethod = new CParsedMethod();
         workbuf = "const " + leVarType_2 -> text();
-        cerr << "Adding read property..." << endl;
+        std::cerr << "Adding read property..." << endl;
         if ( workbuf.find('*') == -1 ) workbuf += '&';
         aMethod -> setType( workbuf );
         workbuf = "get"+leVarName_2 -> text() + "()";
@@ -213,7 +213,7 @@ void CClassPropertiesDlgImpl::applyAddAttribute()
         else
             arg += " _newVal";
         workbuf += "( " + arg + ")";
-        cerr << "write method name: " << workbuf << endl;
+        std::cerr << "write method name: " << workbuf << endl;
         aMethod -> setName( workbuf );
         aMethod->setDeclaredInScope( currentClass -> path() );
         aMethod->setExport( PIE_PUBLIC );
