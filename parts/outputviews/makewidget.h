@@ -12,7 +12,7 @@
 #ifndef _MAKEWIDGET_H_
 #define _MAKEWIDGET_H_
 
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qregexp.h>
 #include <qtextedit.h>
 #include <qvaluevector.h>
