@@ -1,6 +1,4 @@
-
-
-toolbar_DATA = make.png stop_proc.png run.png copy.png paste.png \
+toolbar_DATA = make_kdevelop.png  stop_proc.png run.png copy.png paste.png \
 	       open.png cut.png save.png save_all.png undo.png redo.png \
 	       openprj.png compfile.png rebuild.png print.png debugger.png \
 	       lookup.png newwidget.png generate.png output_win.png tree_win.png \

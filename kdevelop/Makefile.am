@@ -23,7 +23,7 @@ LFLAGS = -+
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp \
+kdevelop_SOURCES = ckdevelop.cpp kdevelop.cpp kdevelopfactory.cpp main.cpp cnewfiledlg.cpp \
 	ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \
 	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
 	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
@@ -56,7 +56,7 @@ kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./db
 	$(LIB_KHTML) -lkspell -lkfile -lfl
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
+noinst_HEADERS = ckdevelop.h kdevelop.h kdevelopfactory.h cnewfiledlg.h ceditwidget.h \
 	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 	clogfileview.h structdef.h cdocbrowser.h cproject.h \
 	cclassview.h  cgeneratenewfile.h componentmanager.h \
@@ -72,19 +72,22 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	cmakemanualdlg.h component.h processview.h grepview.h \
 	makeview.h grepdlg.h outputview.h ckdevaccel.h editorview.h docbrowserview.h fileclosealldlg.h
 
-EXTRA_DIST = kdeveloprc \
+EXTRA_DIST = kdeveloprc kdevelopui.rc\
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
 	los-app-development_package.png lom-app-kdevelop.png los-app-kdevelop.png lom-app-kdevelop_project.png  	
 
-messages:
-	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot 
-
-appsdir   = $(kde_appsdir)/Applications/Development
+appsdir   = $(kde_appsdir)/Development
 KDE_ICON  = kdevelop kdevelop_project development_package
 apps_DATA = kdevelop.desktop kdevelop-setup.desktop .directory
 
 confdir   = $(kde_confdir)
 conf_DATA = kdeveloprc
 
+rcdir = $(kde_datadir)/kdevelop
+rc_DATA = kdevelopui.rc
+
 mimedir   = $(kde_mimedir)/application
 mime_DATA = x-kdevelop-project.desktop
+
+messages:
+	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot

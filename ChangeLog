@@ -1,3 +1,10 @@
+2000-06-19 Ralf Nolden <rnolden@kdevelop.de>
+  * added new classes KDevelop and KDevelopFactory. This class will replace CKDevelop and implements the new
+    KDE 2 KAction stuff currently. Methods have to be added according to those KActions are connected
+    to. The XML resource file contains the current state of Menus and toolbars.
+    This will disable the last functioning of KDevelop 2.0 for a while but is needed. All older stuff in
+    main.cpp has been commented out, developer information is in kdevelopfactory.cpp.
+
 2000-06-18 Falk Brettschneider <gigafalk@yahoo.com>
   * added patch of Richard Dale for dock/undock in editorview context-menu. Thanks Richard!
 
