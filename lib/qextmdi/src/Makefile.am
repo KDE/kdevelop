@@ -10,7 +10,7 @@ INCLUDES = -I$(top_srcdir)/lib/qextmdi/include -I$(top_srcdir)/lib/qextmdi/res $
 
 lib_LTLIBRARIES = libkdevelopqextmdi.la
 libkdevelopqextmdi_la_LDFLAGS = $(all_libraries) -version-info 2:0
-libkdevelopqextmdi_la_LIBADD  = $(LIB_KDEUI) $(LIB_KPARTS)
+libkdevelopqextmdi_la_LIBADD  = $(LIB_KPARTS) 
 
 libkdevelopqextmdi_la_SOURCES = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdichildfrmcaption.cpp qextmdichildview.cpp qextmdimainfrm.cpp qextmditaskbar.cpp
 
