@@ -217,7 +217,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	m_detailView = new AutoDetailsView( this, m_part, targetBox, "project details widget" );
 	m_detailView->setRootIsDecorated( true );
 	m_detailView->setResizeMode( QListView::LastColumn );
-	m_detailView->setSorting( -1 );
+//	m_detailView->setSorting( -1 );
 	m_detailView->header() ->hide();
 	m_detailView->addColumn( QString::null );
 }
