@@ -378,7 +378,7 @@ void CKDevInstall::slotAuto() // proceed >>
   int highl_style=KMessageBox::questionYesNo(this,
                                              i18n("\nNow you can choose the Syntax-Highlighting style\n"
                                                   "KDevelop will use. The options are to set\n"
-                                                  "the highlighting to Emacs stlye or to the default\n"
+                                                  "the highlighting to Emacs style or to the default\n"
                                                   "settings of KWrite (k.a. 'Extended Editor')\n\n"
                                                   "Which one do you want to use ?"),
                                              QString::null,
