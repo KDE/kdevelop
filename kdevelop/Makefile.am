@@ -92,10 +92,10 @@ messages:
 # don't install a list of file. Just one file per install.
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
-	$(mkinstalldirs) $(APPSDIR)/Development
-	$(INSTALL_DATA) $(srcdir)/kdevelop.desktop $(APPSDIR)/Development
-	$(INSTALL_DATA) $(srcdir/kdevelop-setup.desktop $(APPSDIR)/Development
-	$(INSTALL_DATA) $(srdir/.directory $(APPSDIR)/Development
+	$(mkinstalldirs) $(APPSDIR)/Programs/Development
+	$(INSTALL_DATA) $(srcdir)/kdevelop.desktop $(APPSDIR)/Programs/Development
+	$(INSTALL_DATA) $(srcdir/kdevelop-setup.desktop $(APPSDIR)/Programs/Development
+	$(INSTALL_DATA) $(srdir/.directory $(APPSDIR)/Programs/Development
 	$(mkinstalldirs) $(kde_icondir)/locolor
 	$(INSTALL_DATA) $(srcdir)/kdevelop.png $(kde_icondir)/locolor
 	$(INSTALL_DATA) $(srcdir)/kdevelop-project.png $(kde_icondir)/locolor	
@@ -109,8 +109,8 @@ install-data-local:
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:
-	-rm -f $(APPSDIR)/Development/kdevelop.desktop
-	-rm -f $(APPSDIR)/Development/kdevelop-setup.desktop
+	-rm -f $(APPSDIR)/Programs/Development/kdevelop.desktop
+	-rm -f $(APPSDIR)/Programs/Development/kdevelop-setup.desktop
 	-rm -f $(kde_icondir)/kdevelop.png
 	-rm -f $(kde_minidir)/kdevelop.png
 
