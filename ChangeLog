@@ -1,3 +1,6 @@
+1999-11-30 Jonas Nordin  <jonas.nordin@syncom.se>
+	* fixed add methods in all containers. 
+
 1999-11-29 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* fixed segfault at KProcess::commClose()
 	  in calling "Add existing file(s)..."
