@@ -985,6 +985,7 @@ CppSupportPart::parseProject( )
 
 	if( m_projectClosed ){
 	    kdDebug(9007) << "ABORT" << endl;
+            kapp->restoreOverrideCursor( );
 	    return false;
 	}
     }
