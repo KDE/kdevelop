@@ -489,344 +489,354 @@ Info contents" section in KDEHelp.
 
 <chapt>Fejlesztés a KDevelop-pal<label id="Development with KDevelop">
 <p>
-In this chapter you will get a general overview how you can use KDevelop and the internal <idx/dialog editor/ to create own applications.
-Thereby, all tools are described by their use during the development process. If you are a beginner in C++/<idx/GUI/ design and
-programming, you should read <htmlurl url="../../default/kdevelop/programming/index.html" name="The KDevelop Programming Handbook">, which describes some
-basics for program design and shows a more detailed use of KDevelop by sample projects which you can follow step-by-step to get used
-with the way applications are created using KDevelop. Also you should have read chapter <ref id="Programs" name="Programok"> to gain a
-general understanding why Unix applications should make use of provided development tools; this will make things easier when you hit
-references to what <idx/Makefile/s are etc.
+Ebben a fejezetben általános áttekintést kapunk arról, hogy hogyan használhatjuk a KDevelop-ot és a beépített <idx/dialógus szerkesztõt/ saját alkalmazásaink létrehozására.
+Ennélfogva minden eszközt a fejlesztési folyamaton belüli használata alatt mutatunk be. Ha még kezdõ vagy a C++/<idx/GUI/ tervezésben és
+programozásban, akkor olvasd el a <htmlurl url="../../default/kdevelop/programming/index.html" name="A KDevelop Programozási Kézikönyvet">, amely bemutat néhány
+programtervezési alapot és részletesebben bemutatja a KDevelop használatát néhány példaprojekttel amelyeket lépésrõl-lépésre követhetsz, hogy belerázódj az
+az alkalmazások létrehozásába a KDevelop használatával. Ezenkívûl elolvashatod a <ref id="Programs" name="Programok"> részt, hogy jobban
+megértsd, hogy a Unix alkalmazásokhoz miért van szükség fejlesztõeszközökre; ezek jelentõsen megkönnyítik a dolgunkat, nézzük meg például, hogy mik a <idx/Makefile/-ok, stb.
 
 <sect>Micsodák a KDevelop Projekt Alkalmazások ?
 <p>
-Projects created with KDevelop make it very easy for developers to use the GNU standard development tools. In opposition to the
-self-creation of <idx/Makefile/s, which have to be written anyway because of the project's complexity, those provide not only a better
-way of <idx/Makefile/ generation but also a good and safe way to provide a fast adaption towards different systems by <idx/autoconf/-generated
-<tt/configure/ scripts.
+A KDeveloppal készített projektek nagyban megkönnyítik a GNU standard fejlesztõeszközök használatát. Ellentétben a <idx/Makefile/-ok, saját írásával,
+melyeket mindenképp meg kell írni a project összetettsége miatt, ezek az eszközök nem csak jobb utat kínálnak a <idx/Makefile/-ok létrehozására, hanem
+biztonságos módszert is biztosítanak a program különbözõ rendszerekre való átírásához az <idx/autoconf/ által létrehozot <tt/configure/ scriptekkel.
 
-The distribution of your applications does not require the end-user to have anything different installed than a C++ <idx/Compiler/ and
-the development libraries, which is most often the case; but you can as well distribute binary packages of your application. In
-either way, the end-user of your product does not have to have KDevelop installed. For giving away your sources, we advise to
-include the project file of KDevelop as well, as this makes it very easy for other developers to work with your sources if they
-use KDevelop as well. For projects where several developers, maybe working on different places, are involved, this should the case
-anyway to ensure consistency of the <idx/Makefile/s so you don't run into trouble. Especially on multi language applications, translators
-won't actually work with the source code, except in cases that require corrections for enabling translation support. Anyway, those
-will be thankful as KDevelop simplifies their work to a minimum by adding their language and reducing the work to concentrate on
-the translation.
+Az alkalmazásaid terjesztéséhez nincs szükség a felhasználónál másra, mint egy telepített C++ <idx/fordító/ra és a fejlesztõi könyvtárakra,
+amelyek legtöbb esetben rendelkezésre állnak; de ugyanúgy létre lehet hozni bináris csomagokat is. Bármelyik esetet vesszük, a terméked végfelhasználójánál
+nincs szükség arra, hogy a KDevelop fel legyen installálva. Ha kiadod a forráskódot, akkor azt tanácsoljuk, hogy hagyd benne a KDevelop project fált
+is, mert ez nagyon megkönnyíti azoknak a fejlesztõknek a munkáját akik a KDevelop-ot használják, és a te programod forrásával akarnak dolgozni.
+Néhány fejlesztõs projekteknél, ahol a fejlesztõk talán még különbözõ helyeken is dolgoznak, ezzel a módszerrel bizosíthatják a <idx/Makefile/-ok 
+következetességét, és azok különbözõ verziói nem fognak egymással ütközni. Különösen hasznos többnyelvû alkalmazásoknál, ahol a fordítók nem 
+fognak a forráskódon dolgozni, kivéve ha azt módosítani kell a fordításhoz. Õk mindenképpen hálásak lesznek, mert a KDevelop leegyszerûsíti 
+a munkájukat így már nem kell másra csak a fordításra koncentrálniuk.
 
-With using KDevelop for your own projects, you would start creating a new application with the <idx/KAppWizard/. There, you can also
-set the project type according the goals of your program. Then, you would start developing the user interface by adding
-<idx/widgets/ that are already constructed in the libraries and only have to be called by your application, or by self-constructions
-that can be made with the dialog editor. Next comes the extension of the user interface by changing and extending those parts that
-are already made by KDevelop like the statusbar, menubar and toolbars. As resources are collected in a resource file, this can be
-extended simply by adding new values to the already existing one; the given resources can also be used as a guideline for adding
-your specific ones. After implementing the functionality to methods that are either generated empty by the <idx/dialog editor/ or already
-containing code for standard user actions, you should extend the User Manual by simply editing the provided <idx/SGML/ index file
-towards describing your applications capabilities. The last step would be to generate translation files and to distribute your
-project to translators doing the rest to enhance internationalization.
+Ha a KDevelop-ot saját projektek létrehozására használod, akkor a legjobb ha az új alkalmazás létrehozásához a <idx/KAppWizard/-ot használod. 
+Itt kiválaszthatod a projekt típusát a programod céljainak megfelelõen. Ezután elkezdheted a felhasználói felület fejlesztését elõre elkészített 
+<idx/widgetek/ hozzáadásával, melyeket vagy "kézzel" hívsz meg a programodból, vagy pedig a dialógus szerkesztõ írja meg a kódot, 
+amely lefut a programinduláskor. A következõ lépés a felhasználói felület kibõvitése, a KDevelop által létrehozott elemek módosításával, 
+bõvítésével. Ilyenek a menük, eszköztárak, státuszsorok. Mivel az erõforrások egy erõforrásfájlba vannak gyûjtve ezért ezek könnyen 
+kiegészíthetõk új értékek hozzáadásával a már létezõkhöz; a megadott erõforrások akár irányadóként is használhatók a te egyedi 
+erõforrásaidhoz. Miután kiegészítettük azokat a metódusokat, amelyeket a <idx/dialógus szerkesztõ/ készített és üresek, vagy már van bennük 
+kód a szokásos felhasználói mûveletekre, jöhet a Felhasználói kézikönyv kiegészítése a ez elõre elkészített <idx/SGML/ index fájl 
+szerkesztésével. Utolsó lépésként létrehozhatunk fordítási fájlokat, majd eljuttatjuk a projektet a fordítókhoz, akik elvégzik a többi lépést, 
+hogy az alkalmazás "még nemzetközibb" legyen.
 
-But even for non-<idx/GUI/ application designers the IDE offers an easy way to create new projects; the editor and Class Browser in
-conjunction with KDevelop's powerful project management will reduce the time for development to the minimum that is required for
-<idx/implementation/ of functionality.
+Az IDE a nem <idx/GUI/ alkalmazások tervezõinek is könnyû utat kínál új projektek létrehozásához; a szerkesztõ és az Osztályböngészõ a 
+KDevelop erõteljes projekt menedzsmentjével arra a minimumra csökkenti a fejlesztési idõt amely a program rendeltetésének 
+<idx/kifejtéséhez/ szükséges.
 
-<sect>A KDevelop Eszközök rövid leírása <idx/Tools/
+<sect>A KDevelop <idx/Eszközök/ rövid leírása
 <p>
-With KDevelop you have chosen a package, that, in conjuction with the use of other tools, will provide you a prefect and flexible
-environment for object-orientated application development under Unix-Systems. Generally, KDevelop consists of the programming
-environment and the <idx/dialog editor/; besides that all needed programs that can be helpful for designing applications are embedded in
-one or the other way.
+A KDeveloppal egy olyan csomagot választottál, amely más eszközökkel együttmûködve tökéletes és rugalmas környezetet biztosít az
+objektumorientált alkalmazásfejlesztéshez Unix rendszerek alatt. Általánosságban a Kdevelop programozási környezet és a 
+<idx/dialogus szerkesztõ/; mindemellett bele van ágyazva minden szükséges program amely segítségedre lehet az alkalmzás tervezéshez.
 
-<sect1>Programming Environment and Dialog Editor
+<sect1>Programozási környezet és a dialógus szerkesztõ
 <p>
 
-<sect2>The Programming Environment
+<sect2>A programozási környezet
 <p>
-The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
-many other tools by simplifying their use. It's built-in Editor and <idx/Helpbrowser/ as well as the Class Browser reduce the amount of
-work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
-on it's own and will probably result in shorter release cycles and better development improvements. From here, you're managing
-your project throughout all its details, keep the overview over your <idx/classes/ and don't have to use additional consoles for your
-work, as well as the integration of all user interfaces results in the fact that you only have to work with one window under X and
-don't have to watch for several ones spread all over your desktop.
+A programozási környezet a felhasználói felület amelyet a KDevelop biztosít projektek létrehozására és karbantartására, felhasználva sok
+más eszközt és leegyszerûsítve azok használatát. A beépített szerkesztõje és <idx/Súgó böngészõ/je csakúgy mint az Osztályböngészõ 
+lecsökkentik a munka mennyiségét, amelyek a fejlesztési folyamat alatt a programozót terhelik. Ez a könnyebbség élvezetté teszi a Unix
+alkalmazások írását, és valószínûleg rövidebb kibocsátási ciklusokat és jobb haladást fog eredményezni a fejlesztésben. Itt a projekted 
+minden részletét kezelheted, áttekintheted az <idx/osztályok/at, nincs szükség további konzolok használatára továbbá a felhasználói 
+felületek integrációja révén csak egyetlen ablakkal kell dolgozni az X alatt, és nem kell többet figyelni, melyek szét vannak szórva a munkaasztalon.
 
-<sect2>The Dialog Editor
+<sect2>A dialógus szerkesztõ
 <p>
-KDevelop's built-in <idx/dialog editor/ offers a simple way of designing user interfaces with the Qt and <idx/KDE/ libraries. Its
-simple way to do almost everything with the mouse allows a rapid construction of dialogs and main views for applications and their
-direct transformation into C++ code, which is directly added to the project. As the <idx/dialog editor/ is embedded into the rest of
-KDevelop's user interface, you have the same commands available than working in Programming mode. This allows e.g. construction of a
-dialog, generation of the code <idx/output/ and it's direct testing within the program by the availability of the <idx/make-command/s and you still
-can control the <idx/Compiler/ <idx/output/ without having to switch back to the programming view. For a detailed description, see <ref
-id="The Dialog Editor">.
+A KDevelop beépített <idx/dialógus szerkeszõ/je könnyû módot biztosít a Qt és KDE könyvtárak által biztosított felhasználói felületek 
+tervezéséhez. Ez lehetõvé teszi, hogy szinte mindent az egérrel végezzünk, így biztosítja a párbeszédablakok (dialógusablakok), és 
+fõablakok gyors létrehozását és közvetlen átalakítását C++ kóddá, amely így bekerül a projektbe. Mivel a <idx/dialógus szerkesztõ/ be van 
+ágyazva a KDevelop felhasználói felületébe, ezért ennek használatakor is ugyanazok a parancsok használhatók mint a forráskód szerkesztõ 
+módban. Így pl. lehetséges a dialógus ablakok szerkesztése közben, kód <idx/kimenet/ létrehozása és annak közvetlen tesztelése a programon belül, mivel 
+rendelkezésre állnak a <idx/make-parancs/ok és emellett ellenõrizheted a <idx/fordító/ <idx/kimenet/ét anélkül, hogy vissza kéne 
+kapcsolni a forráskód szerkesztõre. Részletes leírás a <ref id="The Dialog Editor" name="Dialógus szerkesztõ"> résznél található.
 
-<sect1><idx/KAppWizard/ and the Classtools
+<sect1>A <idx/KAppWizard/ és az Osztályeszközök
 <p>
-The <idx/KAppWizard/ and the Classtools provided for project generation and automatic code extension are intended to make the
-creation of applications as easy and safe as possible and offers a good way for beginners in Qt/<idx/KDE/ programming to start
-actually working themselves into the details of <idx/GUI/ application design, as results can be achieved very quickly.
+
+A <idx/KAppWizard/ és és az Osztályeszközök a projekt készítés és automatikus kód készítés céljából lettek beépítve, hogy olyan könnyen 
+és biztonságosan készítsenek alkalmazásokat amennyire csak lehet. Ezenkívül kiválóan megfelenek arra, hogy a Qt/<idx/KDE/ 
+programozásában még kezdõk is bele tudjanak fogni a <idx/GUI/ alkalmazástervezésbe, és gyorsan érjenek el eredményeket.
 
 <sect2><idx/KAppWizard/
 <p>
-<idx/KAppWizard/ is intended to create full-functional application projects that are ready-to-run by using GNU-standard tools and, for
-<idx/GUI/-programs, taking advantage of the <idx/KDE/ and Qt libraries. By specifying only the information that is required as a
-minimum, users are enabled to start working at a new project within seconds. Calling <idx/KAppWizard/ should be the first step to be done for
-creating a new application with KDevelop.
+A <idx/KAppWizard/ célja mûködõképes alkalmazás projektek létrhozása, amelyek a szabványos GNU eszközökkel futásra készek, valamint 
+-<idx/GUI/ programok részére- a Qt és <idx/KDE/ könyvtárak elõnyeinek kihasználása. A legszükségesebb információk megadásával a 
+felhasználók néhány másodperc alatt elkezdhetnek dolgozni egy új projekten. A <idx/KAppWizard/ futtatása az elsõ lépés egy 
+alkalmazás létrehozására a KDevelop-ban.
 
-<idx/KAppWizard/ provides you a so-called application skeleton with all needed C++ source code files for a running application. After
-you specified a projectname and set the needed preferences, your new project will be generated and you have a complete application
-that already contains a lot of functionality (for KDE and Qt projects), without even having to type one line of C++ code yourself. When
-specifying the complete set of options the program generator offers, your application already contains:
+A <idx/KAppWizard/ egy ú.n. alkalmazás vázat biztosít minden szükséges C++ forráskóddal ahhoz, hogy az alkalmzás fusson. Miután 
+megadtad a projektnevet és beállítottad szükséges tulajdonságokat, létrejön az új projekt, egy kész alkalmazás, mely már több 
+funkciót is tartalmaz ( Qt és KDE projektek ) úgy, hogy egy sor C++ kódot sem kellett még írnod.
+
+Ha készítõ program összes információját megadtuk amit az kér, akkor az alkalmazásban már van:
+<itemize> <item> SDI-felület ( Egy dokumentum/alkalmazásablak ), a "Dokumentum-Nézet-Vezérlõ" modellre alapozva 
+<item>menük és párbeszédablakok fájlok nyitásához és mentéséhez, továbbá <idx/nyomtatási/ párbeszédablakok 
+<item>egy eszköztár és egy státuszsor 
+<item>egy súgórendszer <idx/SGML/-alapú kézikönyvekkel 
+<item>teljes <idx/HTML/-alapú <idx/API/ (application programming interface) dokumentáció a projekt jelenlegi állapotához
+<item>installáló rutinok ( make )</itemize>
+
+A <idx/KAppWizard/ a Projekt menüben, az "Új..." menüpont kiválasztásával érhetõ el.
+
+<sect2>Osztályeszközök
+<p>
+Az "Osztályeszközök" fogalom egy sor lehetõséget jelöl, melyek a fejlesztõ rendelkezésére állnak, hogy ne csak egy 
+objektumoritentált nyelvvel dolgozzon, hanem a forráskódjait is objektumorientált módon használhassa. <idx/Osztályok/kal dolgozni 
+különálló fájlok helyett nagyon rugalmas utat kínál egy projekt bõvítéséhez és lehetvé teszi, hogy a felhasználó a projektje 
+objektumaira koncentráljon. A KDevelop ilyen eszközei az Osztálygenerátor és az Osztályböngészõ, mindkettõ jónéhány automatizált 
+lehetõséget biztosít.
+
+<sect3>Új osztály létrehozása az Osztálygenerátorral
+<p>
+A projekt létrehozása (<idx/KAppWizard/-dal) után a fejlesztõ dolga, hogy <idx/osztályok/at adjon hozzá, melyek kielégítik az 
+alkalmazás igényeit. A tipikus folyamat ekkor az lenne, -KDevelop nélkül- hogy létrehozunk egy fejléc és forrásfájlt, majd kézzel a 
+megfelelõ <idx/Makefile.am/ fájlt ezután elkezdhetjük írni az <idx/osztály/ <idx/deklarációt/ és az <idx/implementációt/. Az egész 
+folyamatot leegyszerüsíti az Osztálygenerátor: megadod az osztály nevét, a szülõosztályt, az öröklõdés tulajdonságait, valamint
+néhány további információt mint például az osztály dokumentációja a projektben betöltött szerepe szerint. Ezenkívül
+megváltoztathatsz héhány alapértéket, mint például az osztálynévbõl létrehozott fájlnevet, vagy azt, hogy az osztályban már benne
+legyen -e a Qt-SIGNAL/SLOT támogatás. A munka fennmaradó része automatikusan végbemegy - nem kell törõdni a <idx/Makefile.am/-mel,
+és az osztállyal. Az új "make" használata elegendõ, hogy az új osztály belekerüljön a fordítási folyamatba. Mivel az Osztályböngészõ
+frissíti magát egy új osztály hozzáadása után, ezért a <idx/deklaráció/ és az <idx/implementáció/ rögtön rendelkezésre áll, így
+máris kezdheted a munkát az osztály kibõvítésével. Az Osztály generátor a Projekt menü "<idx/Új osztály/..." menüpontjával érhetõ
+el.
+
+<sect3>Az Osztályböngészõ<p>
+Az Osztályböngészõ megjeleniti a projektben lévõ összes objektumtípust és függvényt egy faszerkezetben, balra a szerkesztõablaktól.
+Egy osztály elemzõ végignézi az összes fájlt metódusokat és <idx/osztályok/at keresve, majd grafikusan jeleníti meg õket.
+Ezekenfelül a helyi menük különleges funkcionalitást kínálnak arra, hogy úgy dolgozzunk a forrással, hogy az <idx/osztályok/ra és a
+függvényekre fókuszáljunk. Egy osztály kiválasztása azt eredményezi, hogy a szerkesztõben megnyílik az a fájl, ami az osztály
+<idx/deklaráció/ját tartalmazza, metódusok és függvények esetén, pedig az <idx/implementáció/s rész lesz látható. Teljes leírást
+<ref id="The Class Browser" name="az Osztályböngészõ"> résznél találsz.
+
+<sect>A Fejlesztõi folyamat<p>
+Egy új alkalmazás fejlesztése a KDeveloppal alapvetõen két fõ részre osztható: elõször létre kell hozni a program vázát a
+<idx/KAppWizard/dal, a fejlesztés "többi" részét pedig a KDevelop eszközeivel kell végezni, amelyhez nincs másra szükség mint a te
+programozói képességeidre.
+A továbbiakban, hogy elmagyarázzuk a fejlesztõi folyamatot, feltételezzük, hogy egy Qt/<idx/KDE/ alkalmazást akarsz létrehozni.
+Az ilyen projektekkel való munka folyamata magába foglalja a KDevelop legtöbb vonásának használatát, így bemutatása tulajdonképpen
+egy általános "HOGYAN".
+
+<sect1>Programváz létrehozása
+<p>
+Alkalmazás létrehozásának elsõ lépése a <idx/KAppWizard/ indítása, a projektnév megadása, és a létrehozás. Ezáltal a varázsló
+automatikusan létrehoz egy projekt fájlt az alkalmazásnak, és KDevelop részeket helyez el a <idx/Makefile.am/-ekben, amelyek akkor
+lesznek használatosak amikor kibõvítjük az alkalmazást. A projekt fájl az a fájl amit késõbb betöltve megjelenik a teljes projekt a
+fejlesztõi környezetben.
+
+A <idx/KAppWizard/-ot a "Projekt"-menü "Új..." menüpontjával érheted el. Amikor a varázsló megjelenik, az elsõ oldalon meg kell
+határoznod a projekt típusát. A "Következõ>>" gomb megnyomásával a második oldalra kerülsz, ahol meg kell adnod a projekt nevét,
+verzióját, a könyvtárát és személyes információkat. A 3. oldal még részletesebb lehetõségeket kínál (CVS verzió kontrol), a 4. és 5.
+oldalon pedig beállíthatjuk a projekt fejléc (.h) és <idx/implementáció/s fájljainak (.cpp) sablon fejlécét, amelyeket a KDevelop
+automatikusan ezeknek a fájloknak az elejére fûz. Ha már vannak sablon fájljaid (a Kdevelop is kínál ilyeneket), akkor azokat is
+meghatározhatod, mint sablonokat. Az utolsó ablak <idx/kimenet/i ablakból, és hibaüzenet ablakból áll. Ha megnyomod a "Létrehoz"
+gombot, akkor elkezdõdik az alkalmazás létrehozása, amely jónéhány lépésbõl áll, és a lépések nyomon követhetõk a <idx/kimenet/i
+ablakban. Amint a READY (KÉSZ) felirat megjelenik a <idx/kimenet/i ablakban a <idx/KAppWizard/ végzett, és megnyomhatod a "Kilépés"
+gombot, hogy visszatérhess a programozói környezethez. Ha létre akarod hozni a bináris fájlt, akkor válaszd a "Make" menüpontot  a "Build"
+menübõl, vagy ugyanezt a gombot az eszköztárról. A már létezõ funkciókat ki is próbálhatod a "Build" menü "Végrehajtás" parancsának
+választásával.
+
+<sect1>Alkalmazás fejlesztése
+<p>
+Ez a szakasz KDevelop-pal és a <idx/dialógus szerkesztõ/vel való fejlesztési fázisokat ábrázolja - amely mind elvégezhetõ az IDE-n
+belül.
+
+A lépések általában a forrásfájlok szerkesztésébõl, a források fordításából állnak, amiket a <idx/Linkelés/i folyamat követ, amely
+az object (.o) fájlokat összefûzi a végleges futtatható binárissá. Ezután kell megkeresni a <idx/hibák/at, amelyek vagy a fordítást
+vagy a linkelést akadályozzák meg, vagy pedig szemantikai hibák, amelyeket a <idx/hibakeresés/ során tárhatunk fel. Végezetül a
+dokumentációt kell kibõvíteni, és el kell készíteni (ha van rá igény) ezek fordításait. Azonban ezek a lépések keveredhetnek
+egymással, nem ennyire egyszerû abrázolni általánosan, hogy hogyan fejleszd saját alkalmazásod. Tipikusan, a szokásos eljárás az,
+hogy elõször létrehozod a projekt látható részeit, mint a fõablak, és a dialógus ablakok amelyekkel a különbözõ beállítások
+végezhetõk el, ezután az ehhez tartozó forráskód létrehozása és a szükséges kapcsolatok (SIGNAL/SLOT) megírása, továbbá a menü és az
+eszköztár bõvítése, a státuszsori súgók hozzáadása az új menüpontokhoz, és az új tagfüggvények objektumokkal való kitöltése, amelyek
+megjelenítik a dialógusablak(ok)at. Ezek után jöhet az alkalmazás fordítása, a tesztelése, majd a <idx/hibák/ javítása, azután újra
+tesztelés. A következõ részek tárgyalják, hogy mindez hogyan lehetséges; a te egyedi alkalmazásodhoz választhatsz akár más módszert
+is - a KDevelop elég rugalmas ahhoz, hogy szabadon dönthess arról, hogy mikor, hol milyen módszert alkalmazol.
+
+<sect2>Felhasználói felületek
+<p>
+Egy alkalmazás felhasználói felülete az amit a felhasználó valójában lát, és aminek segítségével õ és a program "egymásra hatnak".
+Ezért egy programnak általában van menüsora, eszköztára és státuszsora úgy mint fõ nézete, ami például egy szövegszerkesztõnél egy
+szöveg beviteli mezõ lehet. A <idx/KAppWizard/ által készített alkalmazások, már egy sor ilyen grafikus felületû funkcióval
+rendelkeznek - a keretstruktúra gondoskodik az ilyen szokványos elemekrõl mint az eszköztár és ezek gombjai. Amikor az
+alkalmazásodat fejleszted, ki kell egészíteni a megadott struktrát azokkal az elemekkel, amiket szeretnél a felhasználónak
+biztosítani. A munka egy része a dialógusablakok megtervezése pl.: értékek megváltoztatásához, mint például az ecset vastagságának
+beállítása egy rajzolóprogramban. Ez könnyedén megtehetõ a <idx/dialógus szerkesztõ/vel a KDevelop-on belül. Hogyan is csináljunk
+ilyen tetszetõs ablakokat ? Mivel a <idx/Qt-könyvtár/ egy <idx/GUI/ készlet, ezért egy jónéhány alapvetõ ú.n. "<idx/widget/"-et
+kínál. Ilyenek a cimkék, melyek szöveget, vagy képet jelenítenek meg, szövegbeviteli mezõk -egy vagy többsorosak is akár- és gombok a
+navigáláshoz, vagy parancsok végrehajtásához. Ezek mellett az "alacsonyszintû" felületelemek mellett, vannak szabványos
+párbeszédablakok, mint például <idx/nyomtatási/ párbeszédablak. A <idx/KDE-könyvtárak/ amelyek a Qt-könyvtáron alapulnak
+helyettesítéseket tartalmaznak bizonyos párbeszédablakokra valamint jónéhány további <idx/widget/-et, amelyek az alkalmazásokban
+használhatók. Tehát amikor elkezded a programod felületének tervezését, már ekkor kényelmesebbé teheted annak használatát a <idx/Qt/ és <idx/KDE/
+<idx/widgetek/-kel. A Qt online-dokumentációjában a legtöbb <idx/widget/-rõl vannak képek, így akár elõször meg is nézheted ott
+õket. Ezután azt tanácsoljuk, hogy ismerkedj meg közelebbrõl a KDE-UI könyvtárral, amely további <idx/widgetek/et is kínál. További
+könyvtárak, mint a K<idx/HTML/ könyvtár spciális <idx/widgetek/-et tartalmaz, melyeket számos program használ. Ez is leegyszerûsíti
+az alkalmazás tervezést, úgy mint az elõre gyártott párbeszédablakok a Qt-ben. A te egyedi párbeszédablakaidhoz az alacsony-szintû
+<idx/widgetek/-re lesz szükség. Egy párbeszédablakot a különbözõ <idx/widgetek/ egymással kombinált gyûjteménye alkotja, és
+technikailag egy C++ osztálynak felel meg, amely a <tt/<cdx/QWidget// vagy egy még speciálisabb dialógus osztály leszármazottja,
+amely szintén örökli a <tt/<cdx/QWidget//-et. A programnak amely egy widget-et használ ezért szüksége van egy objektumra az adott
+widget osztályából - ez majdnem minden amit meg kell értened, a párbeszédablakok és nézetek alkalmazásához. A KDevelop <idx/dialógus
+szerkesztõ/je jó módszert kínál a párbeszédablakok készítéséhez: Vizuális szerkesztést tesz lehetõvé dialógusok és C++ kód
+kombinációja helyett - ami a nehezebb út felhasználói felületek készítéséhez. Kapcsolj át a <idx/dialógus szerkesztõ/re "Nézet" menü
+megfelelõ pontjának kiválasztásával (vagy az eszkõztár gombjával). Látni fogod, hogy a KDevelop külseje megváltozik, de a menü és az
+eszköztár nagyon hasonlók. Ez nagyon egyszerûvé teszi az oda-vissza kapcsolgatást a két mód között és egy idõ múlva mindkettõben
+otthonosan fogod magad érezni. Itt létrehozhatod a nézeteket és párbeszédablakokat, és beállíthatsz minden rendelkezésre álló widget
+tulajdonságot. Új dialógust a következõ módon hozhatunk létre: a bal oldalon található rész Dialógus ablakok fülre kattintunk, 
+ahol megjelenik a már meglévõ dialógus ablakok listája - új projekt esetén ez üres, a fõablakot ne keressük itt, mert nincs a 
+listában. Ezután az egér jobb gomjával a lista tetjére kattintva elõjön egy helyi menü, benne az új dialógusablak menüponttal. 
+Innetõl a dolgok "maguktól mennek". Ha kész az ablak, válaszd ki a "Forráskód generálása..." menüpontot a "Build" menübõl; a 
+<idx/dialógus szerkesztõ/ és a projekt kezelõ elvégzi a többit. Ha a dialógust vagy nézetet most hoztad létre elõször, akkor a 
+dialógus szerkesztõ majd bekéri az osztály nevet és a szülõ osztályt. Ezután megnézheted, hogy minden rendben van -e, a Make vagy 
+Futtatás parancs használatával, ez újraépíti az alkalmazást -benne az új forrásokkal. De ekkor még ne várd, hogy az új ablakok már 
+használhatók legyenek, ez az <idx/implementáció/ tárgya, a fejlesztõ szokásos munkája. Ne aggódj, ez sem túl bonyolult. További 
+információt a <ref id="The Dialog Editor" name="Dialógusszerkesztõ"> résznél találhatsz, példák és irányelvek pedig a <htmlurl
+url="../../default/kdevelop/programming/index-6.html" name="A KDevelop programozási kézikönyv">ben vannak.
+
+
+<sect2>Új elemek projektbe integrálása
+<p>
+Miután létrehoztad a felhasználói felületeket, és a hozzájuk tartozó forrásokat, készen állsz arra, hogy az alkalmazásod használja 
+õket objektumokon keresztül. Amint azt feljebb említettük egy szokásos <idx/GUI/-alapú program vezérlõket és egy központi nézetet 
+tartalmaz, ahol esetleg a fõnézet is mûködteti a vezérlõket. Ezek mind az alkalmazás fõosztályának részei, és a dokumentum objektum 
+az amihez ez csatlakoztatva van. Az objektum orientált tervezés szerint a megadott architektúrát "Dokumentum-Nézet-Vezérlõ" 
+modellnek lehet nevezni. Ez a modell a programban betöltött szerepük szerint ábrázolja az objektumok alapvetõ funkcióit. 
+A Vezérlõ képviseli az alkalmazás koordinálását és biztosítja a felhasználói interakciót a menüvel továbbá az eszköztárral és a 
+státuszsorral.
+A Dokumentum osztály feladata annak a dokumentumnak a képvislete amelyen a felhasználó éppen dolgozik. Ennélfogva a dokumentum 
+osztályának hatáskörébe tartozik például a fájlok betöltése és mentése.
+A Nézet az alkalmazás ablakának központjában helyezkedik el, a dokumentumnak azt a részét mutatva, ami a felhasználót érdekli, és 
+biztosítja azokat függvényeket amelyekkel a felhasználó az adatot manipulálhatja. Mivel a menük és eszköztárak már rendelkezésre 
+állnak, a te feladatod a központi nézet és a többi párbeszédablak létrehozása, melyekkel a felhasználó megváltoztathatja a 
+beállításokat, vagy további funkciókat érhet el. A központi nézet létrehozásához a generált forráskód már tartalmaz egy osztályt a 
+&lt;TeAlkalmazásod&gt;View formában amely <tt/<cdx/QWidget// örökös osztály (ez az a minimális osztály ami képes a vizuális elemek 
+kezelésére Qt-ben és így <idx/KDE/-ben is). Általánosságban három különbözõ módszerrel lehet a megadott osztályt kibõviteni:
 <itemize>
-<item>an SDI-Interface (for working with one document per application window), based on the document-view-controller model
-<item>Menus and dialogs for opening and saving files as well as <idx/printing/ dialogs
-<item>a toolbar and statusbar already providing complete functionality
-<item>a helpsystem, containing an <idx/SGML/-based user manual and statusbar help
-<item>a complete <idx/HTML/-based <idx/API/ (application programming interface) documentation for the current state of the project
-<item>an installation routine though make
+<item>szakítunk a Dokumentum-Nézet struktúrával és valamely elõre definiált "nagy" <idx/widget/-et használjuk, amely már számos 
+funkcióval bír - Csak töröld a Nézet (View) osztályt  és cseréld ki a nézet-objektumot egy másikkal
+<item>változtasd meg a Nézet-osztály öröklõdését. Változtasd meg a szülõosztályt például QMultiLineEdit-re és az alkalmazásod 
+szinte máris egy egyszerû szövegszerkesztõ.
+<item>Ha a központi nézeted néhány különálló részbõl áll, hozd létre a <idx/widgetek/et és az <idx/osztály/aikat a <idx/dialógus 
+szerkesztõ/vel és a Nézet osztály konstruktorában hozz létre objektumokat ezekbõl az osztályokból, így a központi nézet ezek 
+kombinációjából jön majd ki
 </itemize>
 
-The <idx/KAppWizard/ is available by the Project-menu, entry "New...".
+A párbeszédablakoknál valamelyest más a helyzet. A szokásos módszer a meghívásukra a menün vagy az eszközsoron keresztül történik. 
+Miután megalkottad a dialógust, és létrehoztad a forrásait, az osztály készen áll arra, hogy objektumot hozz belõle létre, ami 
+ténylegesen a párbeszédablak lesz. Az elsõ, hogy alkalmas helyet keress a menüben az új menüpont hozzáadásához, amelynek 
+kiválasztásával aztán megjelenik a párbeszédablak. Ha a már kész menükben nem találsz megfelelõt, akkor csinálj egy új popup-menüt, 
+csakúgy mint a többit, szúrd bele a menüsorba, helyezd el benne az új bejegyzést és készíts egy slot-ot amelyet akkor akarsz 
+meghívni, ha a menüpontra kattintanak. Ezután a slot-hoz írd be kódot, amely létrehoz egy példányt a dialógus ablakból, majd hívd 
+meg a dialógus ablakot valamely <idx/tag függvény/-nyel az alaposztályból. Meg kell határoznod egy ID számot is az új menüponthoz. A 
+keretalkalmazásoknak már megvannak a saját ID-ik, amelyek a resource.h fájlban vannak összegyûjtve, így csak hozzá kell adnod az 
+ID-t és adni neki egy új számot. Ezzel készen is vagy - ezenkívül csinálhatsz egy újabb eszköztár ikont is és adhatsz hozzá 
+státuszsor súgót is. Az alkalmazásod új funkciót kínál, melyet immár a felhasználó is lát. Ezután kell elkészíteni a dialógus 
+metódusainak <idx/implementáció/ját amelyekben az ablak és vezérlõi az adatokat manipulálják. Végezetül indítsd el a make-et vagy 
+futtasd a programot és a megváltozott fájlok újra fordításra kerülnek; az eredmény azonnal tesztelhetõ.
 
-<sect2>Classtools
+<sect2>A teljes fejlesztési folyamat
 <p>
-The term "Classtools" describes a variety of functions that are available for the developer to work on a project not only by
-an object-orientated language but using the sources in an object-orientated way. Working with <idx/classes/ instead of having to
-watch for files offers a very flexible way to extend a project and lets the user concentrate on the objects the project contains.
-The tools that KDevelop offers are a Classgenerator and a Class Browser, where each one provides a lot of automated
-functionality.
+Feljebb megbeszéltük a szokásos módszert, hogy hogyan kezdjünk a KDevelop-pal új alkalmazás fejlesztésébe, és hogy hogyan bõvitsük 
+ki a felhasználói felületet. Nos, ezek a standard lépések, ahol az IDE segít neked, de a KDevelop több mint eszközök sora az 
+alkalmazások létrehozásához és annak vizuális részeihez. A következõkben rövid leírást adunk arról, hogy milyen funkciókat kínál a 
+KDevelop az alkalmazásfejlesztés kiteljesítéséhez. 
 
-<sect3> Creating a new class with the Classgenerator
+<sect3>Forráskód karbantartás
 <p>
-After generating a project with the <idx/KAppWizard/ your work as a developer would be to add a set of <idx/classes/ that match the design of
-the application. The typical process without using KDevelop would be to create a new header and sourcefile, add them manually to
-the according <idx/Makefile.am/ and to start writing the <idx/classes/ <idx/declaration/ and <idx/implementation/. To simplify the whole process, the
-Classgenerator lets you do this by only specifying the new class by its name, inherited class, inheritance attribute and further
-information such as class documentation by it's purpose for the project. Additionally, you can also change the filenames that are
-preset by the generator and if the class would be Qt-signal/slot enabled by default.
+A KDevelop IDE egy sor metódust biztosít a programozónak, hogy az a céljait a lehetõ legrövidebb idõ alatt érje el. Amint azt 
+fentebb tárgyaltuk a <idx/KAppWizard/ és a <idx/dialógus szerkesztõ/ lerövidítik azt az idõt amelyre általában szükséged lenne 
+ahhoz, hogy ugyanazt az eredményt a forrás kézi gépelésével elérd. Ez azonban nem teljesíti azt a munkát amit egy programozónak 
+általában tennie kell: kidolgozni az alkalmazása <idx/implementációs részét/, hogy biztosítsa a program helyes futását a 
+felhasználónál. Nos miért jó a KDevelop IDE programozási környezetnek, még akkor is ha nem <idx/GUI/ alkalmazásokat fejlesztesz ?
 
-The rest of the work is done automatically- you don't have to take care for <idx/Makefile.am/, files and the class itself. A new "make"
-invocation is enough to include the new class in the compilation process. As the Class Browser updates itself after the addition of
-a class, the <idx/declaration/ and <idx/implementation/ is available at once and you can start working on the extension of the class. The
-Classgenerator is invoked by the Project-menu, entry "<idx/New Class/".
+Az IDE általánosan karbantartja a projektedet; ez azt jelenti, hogy nem kell foglalkoznod a változások mentésével a <idx/Makefile/ 
+létrehozásával, stb, - ezt biztosítja a teljes projektmenedzsment -, és a KDevelop itt mutatja meg ez erejét bármilyen C++ 
+alkalmazásfejlesztéshez. Könnyen érthetõ, hogy ha ezeket a terheket leveszik a programozó válláról, akkor az sokkal jobban tud 
+koncentrálni a forráskód kidolgozására. Másfelõl a programkód általában szét van bontva több különbözõ fájlra a projektben, így 
+lehet elkülöníteni bizonyos részeket egymástól. Ez azt jelenti, hogyha továbbra is a nehezebb utat választod - lévén te vagy a 
+fejlesztõ, neked kell küzdeni ezeknek a fájloknak a létrehozásával és megírni a szabványos tartalmát, mint például a fájlok fejlécei 
+amelyek tartalmazzák a dátumot, a szerzõ nevét vagy például a liszensz feltételeket. Ráadásul így emlékezned kell, arra, hogy 
+egy-egy függvény, osztály <idx/deklaráció/ és <idx/implementáció/ hol van a projektben. Ezért vannak a KDevelop-ban az 
+Osztályeszközök - olyan funkciók, amellyel a fejlesztõ áthelyezheti a figyelmét a fájlokról az objektumokra- <idx/osztályok/ra, 
+struktúrákra és metódusokra. Az osztálygenerátorral könnyedén hozhatunk létre új osztályt, beleértve az öröklõdést és a 
+dokumentációt. Az Osztályböngészõ elvezet az objektumaidhoz; töbé nem számít, hogy a kód valójában hol található. A böngészõ 
+automatikusan megvizsgálja az összes forrást, és újraépíti magát a kiegészítések után is, hogy lépést tartson a munkáddal, és 
+lehetõvé teszi, hogy az új kódot közvetlenül is elérd. A helyi menük használatával a böngészõ még több funkciót kínál, mint a 
+<idx/tagfüggvények/ <idx/implementáció/jára vagy <idx/deklaráció/jára ugrás. A tagok hozzáadása grafikusan történik párbeszédablakok 
+segítségével- nem kell keresgélni a fájlt és benne a helyet, ahol hozzá lehetne adni az új bejegyzést. Végezetül egy még 
+speciálisabb nézetét is kérheted a projekted <idx/osztály/ainak az Osztályböngészõ segítségével, amely faszerkezetben mutatja annak 
+használatát, tartalmát, öröklõdését és az osztályból létrehozott objektumokat. Részletes információért nézd át az 
+<ref id="The Class Browser" name="Osztályböngészõ"> részt.
 
-<sect3>The Class Browser
+<sect3>Alkalmazások építése és futtatása
 <p>
-The Class Browser displays all types of objects and functions of your project in a tree left of the editing windows. A class parser
-scans all files for methods and <idx/classes/ and makes them available by graphical symbols. Over those, context-menus offer a
-specialized functionality to work with the sources by focusing on the <idx/classes/ and functions.
+A KDevelop IDE speciálisan arra lett tervezve, hogy elvégezze azokat a lépéseket, amelyeket rendszeresen el kell végezned, mint az 
+alkalmazások építése és futtatása vagy a <idx/hibák/ helyének azonosítása a forráskódban.
 
-Selecting a class will result in opening the file that contains the <idx/declaration/; on methods and functions this will
-show you the <idx/implementation/. For a full description, see <ref id="The Class Browser" name="az Osztályböngészõ">
-
-<sect> A Fejlesztõi folyamat
-<p>
-The development of a new application with KDevelop can generally be divided into two major steps: first, you have to generate a
-program skeleton with <idx/KAppWizard/, then the "rest" of the development has to be done using KDevelop's features, which only
-requires your abilities as a programmer. To describe the development process, we assume you want to create a Qt/<idx/KDE/ application,
-which implies using most of KDevelop's features for working with these types of project, so you have a general "HOW-TO".
-
-<sect1>Creating a Program Skeleton
-<p>
-To start creating your application, you normally would call the <idx/KAppWizard/, enter the project name and generate the program. By
-this, the wizard automatically creates a project file for the application and inserts the KDevelop areas into the <idx/Makefile.am/'s
-which will be used later when extending the application. The project file is the file you have to load for opening the project in
-later sessions.
-
-You call <idx/KAppWizard/ by the "Project"-menu, entry "New...". When the wizard appears, you have to specify the project
-type on the first page. Selecting "Next >>" brings you to the next page where you have to insert the project name, version,
-directory and your personal information. Page 3 offers more detailed options, page 4 and 5 allow editing file headers for header
-and <idx/implementation/ files that are inserted automatically according to your selection. If you already have file headers you want to
-use, you can choose those files as well. The last page contains an <idx/output/ window and an error message window. When selecting
-"Create", your application will be generated and the actions that are executed can be seen in the <idx/output/ window. If READY appears
-in the <idx/output/ window, the <idx/KAppWizard/ is finished and you can select "Exit" to return to the Programming Environment. To build the
-binary, choose "Make" from the Build-menu or choose the according button in the toolbar. You can as well test the functions already
-present by choosing "Execute" from the Build-menu.
-
-<sect1>Developing an Application
-<p>
-This section describes the development phase of applications with KDevelop and the <idx/dialog editor/- and all work can be done within
-the IDE.
-
-The development steps are generally to edit the source files, the compilation of the project sources followed by the <idx/Linker/
-process binding all object files to the final binary. Then <idx/errors/ have to be located which either prevented a compilation or
-linking or are semantical bugs that can be found by a <idx/debugging/ session. Finally, the documentation has to be extended and
-translations have to be added. But as all those steps can mix which each other, it is not that easy to describe a general way how
-to develop your own application. Typically, the usual procedure would be to first create all visible parts of the project like the
-main view and the dialogs for configuring any options, then generate the source code and implement all needed connections that
-still have to be done like changing the menubar and toolbars, adding statusbar help for new menu entries and fill the new member
-functions with objects that are displaying your dialogs. Then you would compile your application and test it's capabilities, fix
-<idx/errors/ and test it again. The following sections describe how this would be done; for your particular application
-you may choose another way- KDevelop leaves you enough flexibility to decide what to do at what time.
-
-<sect2>User Interfaces
-<p>
-The User Interface of an application is actually what the user sees and by which he interacts with the program. Therefore a
-program generally has a menubar, toolbars and a statusbar as well as a main view which would be e.g. a text input window for an
-editor. <idx/KAppWizard/ generated applications already contain a complex functionality on graphical interfaces- the frame structure
-takes care of standard elements such as bars and buttons. When developing your application, you have to extend the given structure
-to give the program the user interaction capability you want to provide. One part of the work is the design of dialogs e.g. for
-changing values like the brush width in a paint application. This can be done easily with the <idx/dialog editor/ inside KDevelop. Now,
-how do you create those good-looking dialogs ? As the <idx/Qt-library/ is a <idx/GUI/ toolkit, it provides a base set of so-called "<idx/widgets/"
-like labels displaying plain text, lineedits for text input and buttons for navigation and selection commands. Besides these
-"low-level" parts of user interfaces, standard dialogs are provided and are ready to use such as <idx/printing/ dialogs. The
-<idx/KDE-libraries/ then are based on the Qt-library and contain replacements for certain dialogs as well as additional <idx/widgets/ that
-can be used in your application. So, when you start designing your applications behavior towards the user, you should make yourself
-comfortable with the <idx/widgets/ provided with Qt and <idx/KDE/. The online-documentation of Qt offers screenshots for most of them,
-so you should have a look there first. Then we advise to have a closer look at the KDE-UI library, offering other <idx/widgets/. Libraries
-like the K<idx/HTML/ library contains very specialized <idx/widgets/ that a lot of programs make use of. It just simplifies application design like
-the predefined dialogs provided with Qt. For your own dialogs, those low-level <idx/widgets/ are the one you need. A dialog merely
-consists by a collection of different <idx/widgets/ combined together building the interface and is technically programmed by C++ code
-in a class that is derived from <tt/<cdx/QWidget// or a more specialized dialog class that inherits <tt/<cdx/QWidget//. The program
-using the widget therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are
-used.
-The <idx/dialog editor/ of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
-to combine dialogs with pure C++ code together- this is the hard way to create interfaces. Switch to the <idx/dialog editor/ by
-choosing the according entry in the "View"-menu (or by the toolbar button). You will see that KDevelop's face has changed but for
-e.g. the menubar and the toolbar are very similar. This makes it very easy to switch back and forth between the two working modes
-and you will feel comfortable in both after some time. There you can construct your views and dialogs as you like and set all
-available preferences for the items the view will contain. When you're finished, select "Generate Sources" from the Build-menu;
-the <idx/dialog editor/ and the project management will take care of the rest. You can test if everything went OK by selecting Make or
-Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
-matter of <idx/implementation/ that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
-about creating dialogs, see <ref id="The Dialog Editor" name="a Dialógusszerkesztõ">, examples and guidelines can also be found in
-<htmlurl url="../../default/kdevelop/programming/index-6.html" name="The KDevelop Programming Handbook">.
-
-<sect2>Binding New Elements
-<p>
-After you have created your user interfaces and generated the sources, you are ready to make your application use them by objects.
-As described above, a usual <idx/GUI/-based program contains bars and the main view; additionally the main view operates with the bars,
-which are part of the main application class, and the document object which it is connected to. In terms of object-oriented
-design, you would describe the given architecture as the "Document-View-Controller"-model. This model describes the basic
-functions for objects in an application towards their role within the program. The Controller represents the one coordinating the
-main application and provides user interaction through a menubar and additionally toolbars and a statusbar. The Document class
-takes the task of representing a document the user works with. Therefore, a document class should do all actions like loading
-files and saving them again. The view now is in the center of the application window, showing the user a part of the document
-visually and provides all functions to manipulate the data by the user. As the bars and toolbars are already present, your work
-would be to create the main view and additional dialogs by which the user can change any settings or has access to additional
-functions.
-
-To build your main-view, the generated source code for your application already contains a class in the form of
-&lt;YourApplication&gt;View which inherits the <tt/<cdx/QWidget// class (this is the minimal class that handles visual interfaces in Qt
-and therefore in <idx/KDE/ as well). In general, there are three different ways how to extend the given class:
+Az építési folyamatot a következõképpen kezdheted el:
 <itemize>
-<item>remove the document-view structure and use one of the predefined "big" <idx/widgets/ already containing a lot of functionality-
-just remove the View-class and replace the view-object by another.
-<item>change the inheritance of the View-class. Change the inheritance to e.g. QMultiLineEdit and your application would be an
-editor.
-<item>if your main view will consist of several separated parts, create the <idx/widgets/ and their <idx/classes/ you need with the
-<idx/dialog editor/ and create objects of these <idx/classes/ in the view-class constructors that in combination will build the main view.
+<item>A "Build" vagy "Rebuild All"-ra kattintás az eszközsoron
+<item>A "Build"/"Rebuild All" kiválasztása a Build menüben.
 </itemize>
 
-For dialogs, things are a bit different. The usual way would be to call a dialog through a menubar entry and additionally by a
-toolbar icon. After you constructed your dialog and generated the sources, the class is available for creating an object that will
-be the dialog. So you first have to look for a suitable place in the menubar to add an entry which will open the dialog when
-selected by the user. If the already given menus do not match your needs, create a new popup menu just like the others and insert
-your entry and the slot you want to call when the menuitem gets selected. Then implement the slot by creating an instance of the
-dialog class and call the dialog with the <idx/member functions/ given by the base class. Also you have to specify an ID for the
-menuentry. The frame applications have all IDs already given collected in a file resource.h, so you only have to add the ID and
-give it a new number. Then you're done- additionally you could construct another toolbar icon and add the statushelp message. Your
-application now offers a new functionality which is visible to the user. Now you have to add the <idx/implementation/ of methods that
-your dialog will be operating with to manipulate any values. Finally, call your make-tool or "Execute" and the changed files will
-be recompiled; the result of your changes can then be tested immediately.
-
-<sect2>The Complete Development Process
-<p>
-Above, we discussed the usual way how to start working on a new application using KDevelop and how to extend the user interface.
-Now, these are the standard steps where the IDE helps you, but KDevelop does more than providing tools for creating applications
-and their visual parts. The following gives a short description of the main functionality that is offered for enhancing
-application development.
-
-<sect3>Sourcecode Management
-<p>
-The KDevelop IDE provides a lot of methods to the programmer to achieve his goals within the shortest time.  As described above,
-the <idx/KAppWizard/ and the <idx/dialog editor/ shorten the time you would usually need to get to the same result manually. But this
-didn't cover the work a programmer has to do usually: working on the <idx/implementation/ of his application to provide a proper
-execution by the end-user. Now, why is KDevelop the IDE you would want to use as a coding environment, including it's use to
-create even non-<idx/GUI/ applications ?
-
-Implicitly, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
-<idx/Makefile/ generation and so on- this is providing full project-management, and KDevelop plays out all it's power here in any case
-of C++ application development. It is easy to understand that, after taking away the management from the programmer, he is more
-concentrated on working out the sourcecode. On the other hand, the code is usually spread over many different files across
-the project, so you can separate certain parts. But this means still working the hard way- being the developer, you still
-would have to struggle with creating these files and writing standard contents like file headers containing the date and the
-author's name as well as e.g. license terms for the code. Additionally, this requires that you have to remember where your
-functions, class <idx/declaration/s and <idx/implementation/s are in the project. Therefore, KDevelop contains the Classtools- a variety of
-actions, that allow fast work and moving the developer's focus from files to objects- <idx/classes/, structures and methods. The
-classgenerator lets you create a new class including inheritance, <idx/attributes/ and documentation easily . For object-oriented work,
-the Class Browser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
-Browser scans all sources automatically and rebuilds itself after additions to keep up with your work and enables you to access
-the new code directly. By context-menus, the browser offers even more functionality, like bringing you to the <idx/implementation/ or to
-the <idx/declaration/ of <idx/member functions/. Then, the addition of members are done graphically by dialogs- no search for the file and the
-place you would have to add your entries. Finally, you can get an even more specialized view of your project's <idx/classes/ by the
-Classtool dialog, providing you trees that show the usage, contents and inheritance of <idx/classes/ and their objects. For more
-detailed information, see <ref id="The Class Browser" name="az Osztályböngészõ">.
-
-<sect3>Building and Executing your Application
-<p>
-The KDevelop IDE is specially designed to take away all those steps that you have to do periodically like building and executing
-your program as well as locating <idx/errors/ in the sourcecode.
-
-You're starting the build-process by:
+Az alkalmazásod futtatásához válaszd ki
 <itemize>
-<item>clicking on the symbols "Build" or "Rebuild All" in the toolbar
-<item>or selecting "Build"/"Rebuild All" from the Build-menu.
+<item>a "Futtatás" vagy "Nyomkövetés" (elindítja a <idx/KDbg/-ot a programoddal együtt) gombot az eszköztárról
+<item>a megfelelõ menüpontokat a "Build" menübõl
+<item>vagy a "Végrehajtás argumentumokkal" menüpontot, hogy az alkalmazásodat további argumentumokkal indítsd el
 </itemize>
 
-To execute your application, choose
-<itemize>
-<item>the symbol "Execute" or "Debug" (starting <idx/KDbg/ with your program) from the toolbar
-<item>by the according menu entries in the Build-menu.
-<item>or by "Execute with Arguments" to start your application with additional arguments
-</itemize>
-For more information about the build-process, see <ref id="Projects" name="Projektek">.
+További információt az építési folyamatról a <ref id="Projects" name="Projektek"> résznél találsz.  
 
-<sect3>Searching Program Errors
+<sect3>Programhibák keresése
 <p>
-As naturally <idx/errors/ occur either during the build-process (which are detected by the <idx/Compiler/ and are called syntactical <idx/errors/
-because they result from a wrong syntax of the sources) or during the execution of the application, those have to be found and
-removed by the programmer. For locating <idx/errors/, the developer needs the information what exactly caused its occurance. As
-mentioned, the <idx/Compiler/ is able to detect syntax <idx/errors/ himself, resulting in that the executable can't be build (this can also
-happen by the <idx/Linker/ when he detects "unresolved symbols"-see <ref id="Linker Options" name="Linker Beállítások">). As he gives out a
-description of the error as detailed as possible, the error can be found and removed. During the build-process, you will see the <idx/output/
-window pop up showing you what your make-tool and the <idx/Compiler/ has to say. In case of <idx/errors/ or <idx/warnings/, just press the mouse button
-over the error line and the editor will open the affected file and sets the cursor to the errorline. This can also be done by the
-entries in the "View"-menu, "Next Error" and "Previous Error" or by the according keyboard <idx/shortcuts/. You will find that this is very
-functional and saves a lot of time to get to the error, thus for removing the cause your knowledge as a programmer is asked.
-
-Runtime Errors, which occur during execution and will mostly result in a segmentation fault, are sometimes hard to find.
-Therefore, you can enable the <idx/Compiler/ to add information within the binary to watch the execution by the sourcecode. A debugger
-then is another program that lets you do this by starting the application and letting you set breakpoints in the code where the
-execution stops, so you can control critical <idx/implementation/s and by this detect at least the line that caused the error. Finding
-the real cause is another task; it depends on the programmer to locate this. The <bf/gdb/ is a debugger that is provided with the
-GNU <idx/Compiler/ and programs like <em/ddd/ or <em/<idx/KDbg// are frontends that allow an easier use. KDevelop therefore uses <idx/KDbg/ and lets
-you invoke the <idx/debugging/ process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
-information about <idx/debugging/ applications, see <ref id="Projects" name="Projektek"> and <htmlurl url="../../default/kdevelop/programming/index-12.html"
-name="The KDevelop Programming Handbook">.
+Természetesen <idx/hibák/ elõfordulhatnak mind az építési folyamat során (amelyeket a <idx/fordító/ detektál, és szintaktikai 
+<idx/hibák/nak nevezik õket, mert a hiba a forráskód rossz szintaxisából származik) mind pedig az alkalmazás futása közben is, 
+amelyeket a programozónak kell megtalálni, és kijavítani (<idx/szemantikai/ hibák). A <idx/hibák/ feltárása érdekében a fejlesztõnek
+tudnia kell, hogy pontosan mi is okozta azt. Amint azt említettük a <idx/fordító/ képes felismerni a szintaktikai <idx/hibák/at,
+aminek eredményeképpen nem lehet a futtatható állományt létrehozni (ez akkor is megtörténhet, ha a <idx/linker/ "feloldatlan
+hivatkozások"-at talál; lásd a <ref id="Linker Options" name="Linker Beállítások"> részt). Lehetõség szerint ez olyan részletes
+leírást ad a hibáról, amilyet csak tud, így a hiba megtalálható és kijavítható. Az építési folyamat során látható a <idx/kimenet/i
+ablak, amelyben a make és a <idx/fordító/ üzenetei láthatók. <idx/Hibák/ vagy <idx/figyelmeztetések/ esetén, csak kattints a hiba
+sorára, és a szerkesztõ a megnyitja a hibás sort tartalmazó fájlt, és a hibát tartalmazó sorra ugrik. Ugyanezt megtehetjük a "Nézet"
+menü "Elõzõ hiba" és "Következõ hiba" pontjaival, vagy a megfelelõ billentyû <idx/kombináció/val. Ezt a funkciót nagyon hasznosnak
+fogod találni, ami rengeteg idõt takarít meg a hibakeresésnél. A futásidejû hibákat, melyek a programfutás közben lépnek fel, és
+legtöbbször szegmentációs hibák, néha nagyon nehéz megtalálni. Ezért megkérheted a <idx/fordító/t, hogy írjon a bináris fájlba
+hibakeresési információt, mellyel a forráskód futtatás közben is figyelhetõ. A hibakeresõ egy másik program, amellyel együtt
+indíthatod az alkalmazásodat, és amellyel töréspontokat állíthatsz be a kódban, ahol a futás megáll, így ellenõrzésed alá vonhatod
+az <idx/implementáció/s rész kritikus részeit, ezáltal felfedhetõ, hogy melyik a hibás sor. A hiba valódi okát megtalálni már egy
+másik feladat; ennek feltárása a programozón múlik. A <bf/gdb/ egy hibakeresõ amely a GNU <idx/fordító/hoz tartozik, és az olyan
+programok mint a <em/ddd/ vagy a <em/<idx/KDbg// ehhez készült kezelõfelületek, melyek megkönnyítik használatát. A KDevelop a
+<idx/KDbg/-t használja, a <idx/hibakeresõ/ folyamatot a "Debug" menü "Keres" parancsával, vagy az eszköztáron levõ gombbal lehet
+segítségül hívni. Az alkalmazások <idx/hibakeresés/érõl további információt a <ref id="Projects" name="Projektek"> résznél és a
+<htmlurl url="../../default/kdevelop/programming/index-12.html" name="KDevelop programozási kézikönyv">ben  találhatsz.
 
 <sect>További információk
 <p>
-The topics addressed within this chapter are described im more detail within the documentation provided with the KDevelop IDE and
-in other documentations:
+Az ebben a fejezetben tárgyalt témák részletesebben ki vannak fejtve a KDevelop IDE által biztosított dokumentációban, és más
+dokumentációkban:
 
 <itemize>
-<item><htmlurl url="../../default/kdevelop/programming/index.html" name="The KDevelop Programming Handbook">, covering a complete introduction into <idx/GUI/
-application design and programming with the Qt and <idx/KDE/ libraries,
-<item>this handbook, sections <ref id="Overview" name="Áttekintés"> to <ref id="Projects" name="Projects">, describing all avaliable
-functions within KDevelop, <item>this handbook, section <ref id="The Dialog Editor" name="The Dialog Editor">, addressing the use of the
-<idx/dialog editor/ to create your own <idx/widgets/, <item>The <em/Online-<idx/Reference/ Documentation/ to the <idx/Qt-library/, which covers examples of
-using the Qt <idx/GUI/-toolkit as well as a class reference and screenshots for the most important ready-to-use <idx/widgets/ included,
-<item>The <em/KDE-Library Class-<idx/Reference//, generated automatically by KDevelop from the KDE-Library sources, containing
-descriptions for all <idx/classes/ and <idx/widgets/ including example code for their use,
-<item>on the Internet, see:
+<item><htmlurl url="../../default/kdevelop/programming/index.html" name="A KDevelop programozási kézikönyv">, benne teljes bevezetés
+a <idx/GUI/ alkalmazás tervezésbe, valamint a Qt és <idx/KDE/ könyvtárak használatába,
+<item>ez a kézikönyv, az <ref id="Overview" name="Áttekintés">tõl a <ref id="Projects"
+name="Projektek">ig, a KDevelop minden funkcióját áttekinti,
+<item>ez a kézikönyv, <ref id="The Dialog Editor" name="A Dialógus szerkesztõ"> szakaszban részletesen kitér a
+<idx/dialógus szerkesztõ/ használatára, bemutatva, hogy hogyan hozd létre a saját <idx/widget/-eidet,
+<item>a <idx/Qt-könyvtár/ <em/Online-<idx/Referencia/ Dokumentáció/ja, amely példaprogramokat tartalmaz a Qt <idx/GUI/-eszközkészlet
+használatához, valamint benne van Qt osztályok referenciája, és képek a legfontosabb használatra kész <idx/widgetek/rõl,
+<item>A <em/KDE Könyvtár Osztály-<idx/Referencia//, amelyet a KDevelop hozott automatikusan létre a KDE könyvtárak forráskódjaiból,
+tartalmazza az <idx/osztályok/ és <idx/widgetek/ leírását, példaprogramokat használatukra,
+<item>valamint az Interneten:
   <itemize>
-  <item><url url="http://www.troll.no"> for information about Qt and additional third-party <idx/widgets/,
-  <item><url url="http://www.kde.org"> for information about the KDE project and developer guidelines,
-  <item><url url="http://developer.kde.org"> for additional references to KDE application development.
-  <item>on the KDevelop homepage <url url="http://www.kdevelop.org">
+  <item><url url="http://www.troll.no"> információ Qt és egyéb gyártók további <idx/widget/eirõl,
+  <item><url url="http://www.kde.org"> információ a KDE projektrõl és a fejlesztõi vezérelvekrõl,
+  <item><url url="http://developer.kde.org"> további referenciák a KDE alkalmazásfejlesztéshez
+  <item>a KDevelop weboldalán <url url="http://www.kdevelop.org">
   </itemize>
 </itemize>
-
 <chapt>Áttekintés<label id="Overview">
 <p>
 Looking at KDevelop, the user interface can be described by it's logical separation: the main window, the treeview and the <idx/output/
