@@ -909,6 +909,10 @@ private:
   QPopupMenu* file_open_popup;
   /** Popup menu for the classbrowser wizard button. */
   QPopupMenu* classbrowser_popup;
+  /** Popup menu to show/hide single tree tool views */
+  QPopupMenu* toggletreeviews_popup;
+  /** Popup menu to show/hide single output tool views */
+  QPopupMenu* toggleoutputviews_popup;
 
   /** Tells if the next click on the classwizard toolbar button should show
    * the declaration or the definition of the selected item. */
@@ -1081,11 +1085,29 @@ private:
   CTagsCommandLine m_CTagsCmdLine;
 
 private slots:
-    void slotdoneWithKpp();
-    void slotrpmBuildProcess();
-    void slotGetRPMBuildSTDOUT(QString sstdout);
-    void slotGetRPMBuildSTDERR(QString sstderr);
-    void slotAddSpec(QString path);
+  void slotdoneWithKpp();
+  void slotrpmBuildProcess();
+  void slotGetRPMBuildSTDOUT(QString sstdout);
+  void slotGetRPMBuildSTDERR(QString sstderr);
+  void slotAddSpec(QString path);
+  void slotDockWidgetHasUndocked(KDockWidget*);
+  void fillToggleTreeViewsMenu();
+  void fillToggleOutputViewsMenu();
+
+  // en-/disable the single tool views
+  void slotViewTClassesView();
+  void slotViewTGroupsView();
+  void slotViewTFilesView();
+  void slotViewTBooksView();
+  void slotViewTWatchView();
+  void slotViewOMessagesView();
+  void slotViewOStdOutView();
+  void slotViewOStdErrView();
+  void slotViewOKonsoleView();
+  void slotViewOBreakpointView();
+  void slotViewODisassembleView();
+  void slotViewOFrameStackView();
+  void slotViewODebuggerView();
 };
 
 #endif

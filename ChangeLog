@@ -1,3 +1,7 @@
+2001-04-28  F@lk Brettschneider <falk@kdevelop.org>
+    * on/off switch for certain single tool views improved (common behaviour now, new popupmenus, delayed buttons)
+      (Note: requires latest KDE version from cvs!)
+
 2001-04-25  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: there was a bloody event cycle in layoutTaskBar()
 

@@ -117,6 +117,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   // ********* MDI stuff (falk) *******
   m_docViewManager = new DocViewMan( this); // controls the kwrite documents, their views and the covering MDI views
   m_pKDevSession = new KDevSession( m_docViewManager, "testtest");
+  connect(this, SIGNAL(dockWidgetHasUndocked(KDockWidget*)), SLOT(slotDockWidgetHasUndocked(KDockWidget*)) );
 
   // ********* DEBUGGER stuff splattered everywhere (jbb) :-)
   // We need to know what debugger we are using to set the
@@ -196,22 +197,21 @@ void CKDevelop::initView()
 //FB  outputdock->setDockSite( KDockWidget::DockCorner);
 //FB  treedock->setDockSite( KDockWidget::DockCorner);
 
-//  t_tab_view->setFocusPolicy(QWidget::ClickFocus);
-
   ////////////////////////
   // Treeviews
   ////////////////////////
 
   class_tree = new CClassView(0L,"cv");
-//  class_tree->setFocusPolicy(QWidget::NoFocus);
+  class_tree->setFocusPolicy(QWidget::NoFocus);//???
+
   log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),0L,"lfv");
-//  log_file_tree->setFocusPolicy(QWidget::NoFocus);
+  log_file_tree->setFocusPolicy(QWidget::NoFocus);//???
 
   real_file_tree = new CRealFileView(0L,"RFV");
-//  real_file_tree->setFocusPolicy(QWidget::NoFocus);
+  real_file_tree->setFocusPolicy(QWidget::NoFocus);//???
 
   doc_tree = new DocTreeView(0L,"DOC");
-//  doc_tree->setFocusPolicy(QWidget::NoFocus);
+  doc_tree->setFocusPolicy(QWidget::NoFocus);//???
 
   QString class_tree_title = i18n("Classes");
   QString log_file_tree_title = i18n("Groups");
@@ -659,6 +659,14 @@ void CKDevelop::initMenuBar(){
       break;
   }
 
+  // 2 popup menus for showing/hiding certain single tree and output tool views
+  toggletreeviews_popup = new QPopupMenu( this, "toggletreeviews_popup_menu");
+  toggleoutputviews_popup = new QPopupMenu( this, "toggleoutputviews_popup_menu");
+  toggletreeviews_popup->setCheckable( true);
+  toggleoutputviews_popup->setCheckable( true);
+  connect( toggletreeviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleTreeViewsMenu()) );
+  connect( toggleoutputviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleOutputViewsMenu()) );
+
   view_menu = new QPopupMenu;
   view_menu->insertItem(SmallIconSet("goto"),i18n("Goto &Line..."), this,
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
@@ -670,11 +678,12 @@ void CKDevelop::initMenuBar(){
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("newwidget"),i18n("&Dialog Editor"),this,SLOT(startDesigner()),0,ID_TOOLS_DESIGNER);
   view_menu->insertSeparator();
-  view_menu->insertItem(i18n("&Tree-View"),this,
+  view_menu->insertItem(i18n("All &Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
-  view_menu->insertItem(i18n("&Output-View"),this,
+  view_menu->insertItem(i18n("Tree Tool V&iews"), toggletreeviews_popup);
+  view_menu->insertItem(i18n("All &Output-View"),this,
 			SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
-  view_menu->insertItem(i18n("Tool &Views"), dockHideShowMenu());//FB
+  view_menu->insertItem(i18n("O&utput Tool Views"), toggleoutputviews_popup);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("Toolb&ar"),this,
 			   SLOT(slotViewTStdToolbar()),0,ID_VIEW_TOOLBAR);
@@ -1046,7 +1055,9 @@ void CKDevelop::initToolBar(){
 
   toolBar()->insertButton("newwidget",ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
   toolBar()->insertButton("tree_win",ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
+  toolBar()->setDelayedPopup(ID_VIEW_TREEVIEW,toggletreeviews_popup);
   toolBar()->insertButton("output_win",ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
+  toolBar()->setDelayedPopup(ID_VIEW_OUTPUTVIEW,toggleoutputviews_popup);
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
