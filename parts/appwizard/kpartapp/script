@@ -22,8 +22,8 @@ install( "${src}/template-common/kde-configure.in.in", "${dest}/configure.in.in"
 install( "${src}/template-common/kde-part.desktop",    "${dest}/src/${APPNAMELC}_part.desktop" );
 install( "${src}/template-common/kde-app.desktop",     "${dest}/src/${APPNAMELC}.desktop" );
 install( "${src}/template-common/kde-app.lsm",         "${dest}/src/${APPNAMELC}.lsm" );
-install( "${src}/template-common/lo16-app-app.png",    "${dest}/src/lo16-app-${APPNAMELC}.png");
-install( "${src}/template-common/lo32-app-app.png",    "${dest}/src/lo32-app-${APPNAMELC}.png");
+install( "${src}/template-common/hi16-app-app.png",    "${dest}/src/hi16-app-${APPNAMELC}.png");
+install( "${src}/template-common/hi32-app-app.png",    "${dest}/src/hi32-app-${APPNAMELC}.png");
 install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
 install( "${src}/template-kpartapp/subdirs",           "${dest}/subdirs" );
 
