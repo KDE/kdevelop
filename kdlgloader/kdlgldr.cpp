@@ -19,6 +19,8 @@
 #include "kdlgldr.h"
 #include <qmessagebox.h>
 
+#include <stdlib.h>
+
 extern "C" {
 
   KDlgLoader *kdlgldr_init(QWidget *parent)
