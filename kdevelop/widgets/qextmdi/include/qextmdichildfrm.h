@@ -27,7 +27,6 @@
 //
 //------------------------------------------------------------------------------
 
-#include <qframe.h>
 #include <qlist.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
@@ -235,17 +234,9 @@ public:
    */
    inline MdiWindowState state(){ return m_state; };
    /**
-   * Returns the inner client area
+   * Returns the inner client area of the parent of this (which is QextMdiChildArea).
    */
-   inline QRect mdiAreaContentsRect() const {
-      QFrame* p=dynamic_cast<QFrame*>(parentWidget());
-      if(p) {
-         return p->contentsRect();
-      } else {
-         QRect empty;
-         return empty;
-      }
-   }
+   QRect mdiAreaContentsRect() const;
    /**
    * Returns the geometry that will be restored by calling restore().
    */
