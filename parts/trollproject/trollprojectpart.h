@@ -16,6 +16,8 @@
 
 #include <qdict.h>
 #include <qguardedptr.h>
+#include <qmap.h>
+#include <qdatetime.h>
 
 #include "kdevproject.h"
 
@@ -30,9 +32,10 @@ class TrollProjectPart : public KDevProject
 public:
     TrollProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~TrollProjectPart();
-    
+
     bool isTMakeProject() const { return m_tmakeProject; }
-    
+    bool isDirty();
+
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
@@ -48,12 +51,13 @@ protected:
     virtual void removeFiles ( const QStringList &fileList );
     virtual QString& getQMakeHeader() {return m_qmakeHeader;}
     virtual QString buildDirectory();
-    
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotBuild();
     void slotClean();
     void slotExecute();
+    void slotCommandFinished( const QString& command );
 
 private:
     void startMakeCommand(const QString &dir, const QString &target);
@@ -65,6 +69,11 @@ private:
     QString m_qmakeHeader;
     QString m_projectName;
     bool m_tmakeProject;
+
+    QMap<QString, QDateTime> m_timestamp;
+    bool m_executeAfterBuild;
+    QString m_buildCommand;
+
     friend class TrollProjectWidget;
     friend class ProjectRunOptionsDlg;
 };
