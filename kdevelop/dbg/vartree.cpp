@@ -497,7 +497,7 @@ QString VarItem::varPath() const
 QString VarItem::fullName() const
 {
   QString itemName(getName());
-  ASSERT (itemName);
+  ASSERT (!itemName.isEmpty());
   QString vPath = varPath();
   if (itemName[0] == '<')
     return vPath;
