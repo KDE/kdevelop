@@ -154,6 +154,9 @@ void CLogFileView::refresh(CProject* prj)
 	  }
 	  else{  // fill the dict, because the path is not stored into the tree
 	    QString fname = QFileInfo("/"+filename).fileName();
+      if (fname.isEmpty()) {
+        continue; // avoid trying to call treeH->addItem
+      }
 	    current_item = treeH->addItem( fname , THC_FILE, lastGrp );
 	    p_filename = new QString;
 	    dict->insert(current_item,*p_filename = filename);
