@@ -22,7 +22,11 @@
 
 #include "propertywidget.h"
 
+#ifndef PURE_QT
 class KDoubleNumInput;
+#else
+class QFloatInput;
+#endif
 
 namespace PropertyLib{
 
@@ -45,7 +49,11 @@ private slots:
     void updateProperty(double val);
 
 private:
+#ifndef PURE_QT
     KDoubleNumInput *m_edit;
+#else
+    QFloatInput *m_edit;
+#endif
 };
 
 }

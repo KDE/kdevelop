@@ -19,25 +19,33 @@
  ***************************************************************************/
 #include "pdoublenuminput.h"
 
-#include <limits.h>
-
-#include <qlayout.h>
+#ifndef PURE_QT
 #include <knuminput.h>
+#else
+#include "qfloatinput.h"
+#endif
+
+#include <limits.h>
+#include <qlayout.h>
 
 namespace PropertyLib{
 
 PDoubleNumInput::PDoubleNumInput(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
-{    
+{
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+#ifndef PURE_QT
     m_edit = new KDoubleNumInput(-999999.0, 999999.0, 0.0, 0.01, 2, this);
+    m_edit->setLabel(QString::null);
+#else
+    m_edit = new QFloatInput(-999999, 999999, 0.01, 2, this );
+#endif
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 /*    m_edit->setMinValue(-999999999);
     m_edit->setMaxValue(+999999999);
     m_edit->setPrecision(2);*/
-    m_edit->setLabel(QString::null);
     l->addWidget(m_edit);
-    
+
     connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
 }
 
@@ -49,7 +57,11 @@ QVariant PDoubleNumInput::value() const
 void PDoubleNumInput::setValue(const QVariant &value, bool emitChange)
 {
     disconnect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
+#ifndef PURE_QT
     m_edit->setValue(value.toDouble());
+#else
+    m_edit->setValue(int(value.toDouble()*pow(m_edit->digits(),10)));
+#endif
     connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
     if (emitChange)
         emit propertyChanged(m_property, value);
