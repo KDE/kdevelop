@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=Simple DCOP server
+Icon=kdedcop.png
+Category=C++/KDE
+Comment=Generates a basic KDE DCOP server. This is an ideal starting point for a DCOP server that does not require a GUI interface.
+FileTemplates=h,CStyle,cpp,CStyle
