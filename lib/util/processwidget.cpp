@@ -50,7 +50,7 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
                  pal.color(QPalette::Normal, QColorGroup::Mid));
     setPalette(pal);
 
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 305)
     childproc = new KProcess();
     childproc->setUseShell(true);
 #else

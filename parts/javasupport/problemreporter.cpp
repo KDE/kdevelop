@@ -29,7 +29,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
 
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 305)
 #include <ktexteditor/markinterfaceextension.h>
 #endif
 
@@ -253,7 +253,7 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 305)
 	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
 	
 	if( !iface )
