@@ -423,13 +423,19 @@ ProjectFolderList KDevAutomakeImporter::parse(ProjectFolderDom item)
 
     headersList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
     headersList.sort();
-        headersList = QStringList::split(QRegExp("[ \t]"), headersList.join( " " ));
+    
+    kdDebug(9000) << "headerList:" << headersList << endl;
 
     QStringList::Iterator fileIt = headersList.begin();
     while( fileIt != headersList.end() ){
         QString fname = *fileIt;
         ++fileIt;
 
+        kdDebug(9000) << "header:" << fname << " isHeader:" << AutoProjectPrivate::isHeader(fname)
+            << " headers.contains:" << headers.contains(fname) 
+            << " noinst_HEADERS_item:" << noinst_HEADERS_item
+            << endl;
+        
         if (noinst_HEADERS_item && AutoProjectPrivate::isHeader(fname) && !headers.contains(fname)) {
             AutomakeFileDom fitem = item->projectModel()->create<AutomakeFileModel>();
             fitem->setName(noinst_HEADERS_item->path + "/" + fname);    
@@ -584,8 +590,10 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
                 fitem->setName(titem->path + "/" + fname);
                 titem->addFile(fitem->toFile());
 
-                if( AutoProjectPrivate::isHeader(fname) )
+                if( AutoProjectPrivate::isHeader(fname) ) {
+                    kdDebug(9000) << "2 ==============> added header:" << fname << endl;
                     headers += fname;
+                }
             }
         }
     }
@@ -618,8 +626,10 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
             fitem->setName(titem->path + "/" + fname);
             titem->addFile(fitem->toFile());
 
-            if( AutoProjectPrivate::isHeader(fname) )
+            if( AutoProjectPrivate::isHeader(fname) ) {
+                kdDebug(9000) << "1 ==============> added header:" << fname << endl;
                 headers += fname;
+            }
 
         }
     }
@@ -749,7 +759,7 @@ AutomakeTargetDom KDevAutomakeImporter::findNoinstHeaders(ProjectFolderDom item)
     }
 
     if (!noinst_HEADERS_item){
-        AutomakeTargetDom noinst_HEADERS_item = item->projectModel()->create<AutomakeTargetModel>();
+        noinst_HEADERS_item = item->projectModel()->create<AutomakeTargetModel>();
         noinst_HEADERS_item->path = item->name();
         setup(noinst_HEADERS_item, "", "noinst", "HEADERS");
         
