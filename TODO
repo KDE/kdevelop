@@ -39,6 +39,7 @@ High priority tasks!
   - Browser tool bar should truncate long menu entries so it doesn't take so
     much space.
   - Open last open panel in the sidebars on startup, if possible
+  - Tag file creation fails silently if ctags is not installed
 
 * misc:
   - Printing files not supported
