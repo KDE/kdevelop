@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>RegexpTestDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>541</width>
-            <height>350</height>
+            <height>367</height>
         </rect>
     </property>
     <property name="caption">
@@ -66,6 +66,9 @@
                     <property name="checked">
                         <bool>true</bool>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the grep manpage</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -73,6 +76,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Extended POSIX syntax (used by egrep)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the grep manpage</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -82,13 +88,19 @@
                     <property name="text">
                         <string>&amp;QRegExp syntax</string>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the documentation of the QRegExp class</string>
+                    </property>
                 </widget>
-		<widget class="QRadioButton">
+                <widget class="QRadioButton">
                     <property name="name">
                         <cstring>qregexp_min_button</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;QRegExp syntax (minimal)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Matches a QRegExp non-greedy. Please read the QRegExp::setMinimal documentation for more details.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -97,6 +109,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;KRegExp syntax</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the KDE API documentation.</string>
                     </property>
                 </widget>
             </vbox>
@@ -117,7 +132,7 @@
                 <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property name="resizeable">
+                <property name="resizable">
                     <bool>true</bool>
                 </property>
             </column>
@@ -128,7 +143,7 @@
                 <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property name="resizeable">
+                <property name="resizable">
                     <bool>true</bool>
                 </property>
             </column>
@@ -149,6 +164,9 @@
             <property name="resizeMode">
                 <enum>AllColumns</enum>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Shows which groups were matched. See the corresponding documentations how groups are matched.</string>
+            </property>
         </widget>
         <spacer row="2" column="1">
             <property name="name">
@@ -159,6 +177,12 @@
             </property>
             <property name="sizeType">
                 <enum>Minimum</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
         <widget class="QLabel" row="3" column="0">
@@ -176,10 +200,16 @@
             <property name="name">
                 <cstring>teststring_edit</cstring>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Enter a string which will be matched against the regular expression</string>
+            </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1">
             <property name="name">
                 <cstring>pattern_edit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>enter a regulare expression, for example &lt;tt&gt;KD.*&lt;/tt&gt;, which matches all strings beginning with "KD"</string>
             </property>
         </widget>
         <widget class="QLabel" row="4" column="1">
@@ -219,6 +249,9 @@
                     <property name="text">
                         <string>&amp;Insert Quoted</string>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Inserts the regular expression into the currently opened source code file. Escapes any special characters like backslash.</string>
+                    </property>
                 </widget>
                 <spacer>
                     <property name="name">
@@ -230,6 +263,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
@@ -240,6 +279,9 @@
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Closes the dialog</string>
                     </property>
                 </widget>
             </hbox>

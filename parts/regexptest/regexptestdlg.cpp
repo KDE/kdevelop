@@ -76,7 +76,7 @@ void RegexpTestDialog::checkQRegExp()
     QRegExp rx( pattern_edit->text() );
     rx.setMinimal( qregexp_min_button->isChecked() );
     if ( !rx.isValid() ) {
-#if (KDE_VERSION > 308)
+#if QT_VERSION >= 0x030100
 	success_label->setText( rx.errorString() );
 #else
 	success_label->setText( i18n("Error compiling the regular expression.") );
@@ -88,8 +88,8 @@ void RegexpTestDialog::checkQRegExp()
 	return;
     }
     success_label->setText( i18n("Successfully matched") );
-#if (KDE_VERSION > 308)
-    int numCaptures = rx.numCaptures();
+#if QT_VERSION >= 0x030100
+    int numCaptures = rx.numCaptures() + 1;
 #else
     int numCaptures = 10;
 #endif
