@@ -43,9 +43,9 @@ autoconf,</LI>
 <LI> The creation of User-Handbooks written with SGML and the automatic generation of HTML-output with the KDE look and feel,</LI>
 <LI> Automatic HTML-based API-documentation for your project's classes with cross-references to the used libraries,</LI>
 <LI> Internationalization support for your application, allowing translators to easily add their target language to a project,</LI>
-<LI> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in dialog editor,</LI>
+<LI> creation of user interfaces by interaction with TrollTech큦 Qt Designer,</LI>
 <LI> managing your project via CVS by providing an easy-to-use frontend for the most needed functions,</LI>
-<LI> Debugging your application by integrating KDbg,</LI>
+<LI> Debugging your application with a debugger of your choice, either the internal KDevelop debugge, ddd or kdbg,</LI>
 <LI> Editing of project-specific pixmaps with KIconEdit,</LI>
 <LI> The inclusion of any other program you need for development by adding it to the "Tools"-menu according to your individual needs.</LI>
 </UL>
@@ -60,10 +60,9 @@ anywhere within the IDE.
 <H3><A NAME="ss1.1">1.1 Changes</A>
 </H3>
 
-<P>Version 1.3 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 1.0 final release, followed by the release of version 1.1 and 1.2. We believe that the current
-version is to be expected as the final release for the KDE 1.x series, giving developers the environment they want to use especially in
-regards to KDE 2.0 development.
+<P>Version 1.4 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 1.0 final release, followed by the release of version 1.1 and 1.2., the version line based on the KDE 1.x and Qt 1.4x libraries
+finished with version 1.3 in late December of 2000. The current version is a port of version 1.3 to KDE 2.1 with enhanced features.
 <P>Improvements were made in the following sections:
 <P><B>KDevelop 1.2:</B>
 <UL>
@@ -79,7 +78,7 @@ directly</LI>
 <UL>
 <LI>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction
 class and the configure script searches
-for the <B>uic</B> which processes Qt designer files</LI>
+for the <B>uic</B> which processes Qt Designer files</LI>
 <LI>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also
 using the uic for desinger files</LI>
 <LI>support for the new <B>Qt Designer</B> in KDE 2.0/Qt-2.2.x projects.</LI>
@@ -103,11 +102,20 @@ Project File) from almost any automake/autoconf compatible already existing proj
 your project directory and call kimport &gt; &lt;yourprojectname&gt;.kdevprj. This will redirect the
 output to a projectfile that you can load into KDevelop.</LI>
 <LI><B>kdevdlg2ui:</B> converts an existing *.kdevdlg file that has been created with
-KDevelop큦 Dialogeditor into a *.ui file that can be edited with Qt큦 designer.</LI>
+KDevelop큦 Dialogeditor into a *.ui file that can be edited with Qt큦 Designer.</LI>
 </UL>
 </LI>
 <LI>several bugfixes regarding bugs in the
 kwrite code and KDevelop itself </LI>
+</UL>
+<P><B>KDevelop 1.4:</B>
+<P>
+<UL>
+<LI>porting over to KDE 2.1. KDevelop is now a true KDE 2.x application and ships with KDE 2.1</LI>
+<LI>removal of KDE 1.x templates and the internal dialogeditor. Graphical user interface design is now based on using Qt Designer only.</LI>
+<LI>improved functionality in regards to the classbrowser such as providing the "grep" function over the class-tree and autocompletion in the browser toolbar
+that allows easy selection of classes, methods and member attributes as well as global functions, attributes and structs.</LI>
+<LI>overall GUI enhancements like geometry-managed dialogs; usage of KDE 2큦 new dialog classes and dockwidgets.</LI>
 </UL>
 <P>Any comments about the IDE, its documentation or feature requests are welcome.
 <P>
@@ -117,7 +125,9 @@ kwrite code and KDevelop itself </LI>
 <P>This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
 information about specific programming issues, we suggest reading the 
 <A HREF="programming/index.html">KDevelop Programming Handbook</A> included with KDevelop, which covers themes such as understanding generated application frameworks and how to create
-full-featured KDE applications using example projects.
+full-featured KDE applications using example projects. See also the included Tutorial Handbook as well as the KDE 2.0 Development book available
+at local bookstores in printed form or online at 
+<A HREF="http://www.andamooka.org">http://www.andamooka.org</A>.
 <P>The design of this handbook is therefore separated into the following parts:
 <UL>
 <LI>Chapter 
@@ -144,19 +154,19 @@ editing.</LI>
 <LI>Chapter 
 <A HREF="index-10.html#The Class Browser">The Class Browser</A>, tells you how to make use of KDevelop's powerful Class Browser.</LI>
 <LI>Chapter 
-<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, features the integrated visual GUI constructor and how it
-generates C++ output.</LI>
+<A HREF="index-11.html#Using Qt Designer in your Project">Using Qt Designer in your Project</A>, features how to use Qt Designer while working on your project
+and how KDevelop seamlessly cooperates with Designer.</LI>
 <LI>Chapter
 <A HREF="index-12.html#The Internal Debugger">The Internal Debugger</A>,gives an overview over debugging setup and use of the internal debugger</LI>
 <LI>Chapter
-<A HREF="index-13.html#CVS Integration">CVS Integration</A>, tells you how to use the revision control 
+<A HREF="index-13.html#CVS Integration">CVS Integration</A>, tells you how to use the revision control
 system CVS and RCS with your KDevelop project.</LI>
 <LI>Chapter 
-<A HREF="index-14.html#General Configuration">General Configuration</A> shows how you  can set overall 
-preferences for using KDevelop. </LI>
+<A HREF="index-14.html#General Configuration">General Configuration</A> shows how you  can set overall
+preferences for using KDevelop.</LI>
 <LI>Chapter 
-<A HREF="index-15.html#Questions and Answers">Questions and Answers</A>, covers questions that regard to 
-the usage of KDevelop under different flavors of Unix systems and problem solutions in general. </LI>
+<A HREF="index-15.html#Questions and Answers">Questions and Answers</A>, covers questions that regard to
+the usage of KDevelop under different flavors of Unix systems and problem solutions in general.</LI>
 </UL>
 <P>For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
 work with the IDE as it covers the usage in depth. The understanding of how things are done the quickest way will save you a lot
@@ -165,41 +175,43 @@ of time searching for functions and features as it will enable you to make use o
 <H3><A NAME="ss1.3">1.3 About the KDevelop Project</A>
 </H3>
 
-<P>The KDevelop project was started in summer of 1998 after KDE 1.0 was available on Linux/Unix to make the 
-attempt of creating an easy to use C/C++ IDE for programmers, especially targeting on the KDE desktop. Since 
-then the project has found a lot of helpers and supporters as well as sponsors who want to help the team 
-continue their work on this now widely recognized programming environment. Within one and a half year, the IDE 
-developed to a full-featured KDE application with the most possible functionality and stability as the 
-creators started to develop the IDE with the IDE itself at the time enough usability was given. Therefore bugs 
-were mostly found by the authors and could be fixed very quickly as well as needed extensions for programming 
-KDE applications. 
-<P>The first official stable release was made with version 1.0 on December 6, 1999. Thereafter, the KDevelop Team 
-introduced more features and stability into the IDE by new code or code that was unstable before, which lead 
-to the second release as version 1.1 on February 28, 2000. 
+<P>The KDevelop project was started in summer of 1998 after KDE 1.0 was available on Linux/Unix to make the
+attempt of creating an easy to use C/C++ IDE for programmers, especially targeting on the KDE desktop. Since
+then the project has found a lot of helpers and supporters as well as sponsors who want to help the team
+continue their work on this now widely recognized programming environment. Within one and a half year, the IDE
+developed to a full-featured KDE application with the most possible functionality and stability as the
+creators started to develop the IDE with the IDE itself at the time enough usability was given. Therefore bugs
+were mostly found by the authors and could be fixed very quickly as well as needed extensions for programming
+KDE applications.
+<P>The first official stable release was made with version 1.0 on December 6, 1999. Thereafter, the KDevelop Team
+introduced more features and stability into the IDE by new code or code that was unstable before, which lead
+to the second release as version 1.1 on February 28, 2000.
 <P>Since then, the project continud to integrate more functionality and simplifying the current codebase along
-with many translators who transfer KDevelop to as most languages as possible to provide the international 
-developer community the IDE in their own language, including the handbooks that ship with it. Many users 
-contributed their experience and knowledge to the project as one of the most promising products for Linux/Unix 
+with many translators who transfer KDevelop to as most languages as possible to provide the international
+developer community the IDE in their own language, including the handbooks that ship with it. Many users
+contributed their experience and knowledge to the project as one of the most promising products for Linux/Unix
 developers to make it even more stable and portable to other Unices.
 <P>After the 1.2 release on May 4th, we continued fixing several bugs while working on a 2.0 version using the KDE 2.0
-API and the latest technologies KDE 2.0 offers. Since the release of Qt-2.2.0 brought Qt큦 designer for constructing
-user interfaces which also supports KDE widgets, the designer is about to replace KDevelop큦 own dialog editor as it offers
-dynamic layout management and directly connecting widgets. To support using the designer within KDevelop, the templates and KDevelop
+API and the latest technologies KDE 2.0 offers. Since the release of Qt-2.2.0 brought Qt큦 Designer for constructing
+user interfaces which also supports KDE widgets, the Designer is about to replace KDevelop큦 own dialog editor as it offers
+dynamic layout management and directly connecting widgets. To support using the Designer within KDevelop, the templates and KDevelop
 have been updated to make easy use of it while working on a KDE 2.0 or Qt 2.2.x project.
-<P>The 1.3 release is to be expected as the last version that needs KDE 1.x libraries to run; the port to the KDE 2.0 is under way and is
-to be expected later in 2000 to early 2001 (estimated). As KDevelop 1.3 enables developers to directly work on KDE 2.0 projects, we
-will take our time to provide you a new KDevelop as soon as possible with even more features and please you to be patient meanwhile.
+<P>The 1.3 release marked another milestone. It was the last version that needed KDE 1.x libraries to run and was much anticipated through the offers it made towards
+development for the new KDE 2.0 platform when it was released on December 11th, 2000.
+<P>Since then John Birch and I decided that we really would like to have a KDE 2.x version of our "baby", KDevelop. We took the time and made it- by the end of 2000,
+we roughly had the functionality to say we were almost ready. While KDE 2.1 was short to come out early 2001, we decided to ship KDevelop with the base KDE distribution
+as this version will make many new KDE developers happy to start working on a great API on a free system to develop software for.
 <P>
 <H3><A NAME="ss1.4">1.4 Printed Versions</A>
 </H3>
 
-<P>A printed version of the complete KDevelop Documentation is available as the book titled <B>Developing 
-Applications for Linux: KDE Edition</B>, which can be ordered either online from the KDevelop website at 
+<P>A printed version of the complete KDevelop Documentation is available as the book titled <B>Developing
+Applications for Linux: KDE Edition</B>, which can be ordered either online from the KDevelop website at
 <A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A> or at 
-<A HREF="http://www.opendocs.org">http://www.opendocs.org</A>. A share of the Gross Profits from the sales of 
+<A HREF="http://www.opendocs.org">http://www.opendocs.org</A>. A share of the Gross Profits from the sales of
 this book goes back to the KDevelop project to support continuing the further development of KDevelop.
 <P>Printable versions of the KDevelop Documentation can also be obtained from the KDevelop website at 
-<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A> in DVI, PostScript and PDF format both in A4 and 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A> in DVI, PostScript and PDF format both in A4 and
 Letter size.
 <P>
 <P>

@@ -28,7 +28,7 @@
 <A HREF="http://www.kde.org/current.html">http://www.kde.org/current.html</A> or on the KDevelop
 homepage at 
 <A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>. KDevelop is also available on Linux distributions, such
-as SuSE 6.1.
+as SuSE 6.x. and 7.x
 <P>We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
 KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
 into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
@@ -58,16 +58,16 @@ as distribution packages and thereby can be installed easily.
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
 <LI>perl 5.004, available at 
 <A HREF="http://www.perl.com">http://www.perl.com</A></LI>
-<LI>autoconf 2.12, available at 
+<LI>autoconf 2.13, available at 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>automake 1.2, available at 
+<LI>automake 1.4, available at 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
 <LI>flex 2.5.4,</LI>
 <LI>GNU gettext, available at 
 <A HREF="http://www.gnu.org">http://www.gnu.org</A></LI>
-<LI>Qt 1.42, available at 
-<A HREF="http://www.troll.no">http://www.troll.no</A></LI>
-<LI>KDE 1.1.x, available at 
+<LI>Qt 2.2.x, available at 
+<A HREF="http://www.trolltech.no">http://www.trolltech.no</A></LI>
+<LI>KDE 2.1, available at 
 <A HREF="http://www.kde.org">http://www.kde.org</A></LI>
 </UL>
 <P><B>Optional:</B>
@@ -85,13 +85,12 @@ as distribution packages and thereby can be installed easily.
 <A HREF="http://members.telecom.at/~johsixt/kdbg.html">http://members.telecom.at/~johsixt/kdbg.html</A></LI>
 <LI>KIconEdit (available at 
 <A HREF="http://www.kde.org">http://www.kde.org</A>)</LI>
-<LI>Qt designer and uic which come along with Qt 2.2.x.</LI>
+<LI>Qt Designer and uic which come along with Qt 2.2.x.</LI>
 </UL>
-<P>KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
-200 MMX, 128MB RAM as well as on several other platforms.
+<P>KDevelop was tested with SuSE Linux as well as on several other platforms.
 <P>As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including enscript as packages or
 rpm's, so you should have no problem installing the required third-party software.
-<P><B>Documentation:</B>        
+<P><B>Documentation:</B>
 <P>For creating the KDE library documentation, you need the kdelibs package in source available on your
 system as provided by the KDE project or included with the source packages of your distribution and <B>KDoc</B> (included in the
 KDE-SDK).
@@ -112,7 +111,7 @@ download and describes the installation process.
         % make
 
         (as root)
-        
+
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -127,7 +126,7 @@ download and describes the installation process.
         % make
 
         change as `root` and type:
-        
+
         % make install
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -137,8 +136,8 @@ download and describes the installation process.
 </H3>
 
 <P>If you use KDE as your window manager, KDevelop can be started by choosing
-"K"-&gt;"Development"-&gt;"KDevelop 1.3". As KDevelop supports KDE-Mime-types, you can
-also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the 
+"K"-&gt;"Development"-&gt;"KDevelop 1.4". As KDevelop supports KDE-Mime-types, you can
+also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the
 KDE File Manager which will start KDevelop and load the project.
 Under other window managers, open a console and type:
 <BLOCKQUOTE><CODE>
@@ -150,7 +149,6 @@ Under other window managers, open a console and type:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
-        
 % kdevelop  &lt;yourProject&gt;.kdevprj
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -161,7 +159,6 @@ any time either by entering
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
-        
 % kdevelop  --setup
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -170,8 +167,8 @@ any time either by entering
 <H3><A NAME="The Installation Program"></A> <A NAME="ss2.5">2.5 The Installation Program</A>
 </H3>
 
-<P>KDevelop includes an automatic installation program module which is invoked whenever KDevelop is started and 
-the configuration file kdeveloprc does not exist. We suggest you follow the installation steps by choosing 
+<P>KDevelop includes an automatic installation program module which is invoked whenever KDevelop is started and
+the configuration file kdeveloprc does not exist. We suggest you follow the installation steps by choosing
 "Proceed" to automatically check your system and to set up your KDevelop environment.
 <P>
 <P>The Installation dialog's buttons execute the following actions:

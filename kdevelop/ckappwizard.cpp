@@ -1406,26 +1406,31 @@ void CKAppWizard::okPermited()
     hasTemplate = false;
   }
 
-  if (hasTemplate) {
-    p << "cp" << copysrc << copydes;
-    p.start (KProcess::Block, KProcess::AllOutput);
-  }
-
-  if (hasTemplate) {
+  if (hasTemplate && QFileInfo(copysrc).exists()) {
     p << "cp";
 		p << "'" + copysrc + "'";
 		p << "'" + copydes + "';";
 
-    if(kickeritem->isSelected()||kde2miniitem->isSelected()||kde2normalitem->isSelected()||kde2mdiitem->isSelected()||qt2normalitem->isSelected()||qt2mdiitem->isSelected())
+    if( (kickeritem->isSelected()||kde2miniitem->isSelected()||
+        kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
+        qt2normalitem->isSelected()||qt2mdiitem->isSelected()) && QFileInfo(adminsrc).exists() )
     {
-      p << "cp";
-			p << "'" + adminsrc + "'";
-			p << "'" + admindes + "'";
+        p << "cp";
+   			p << "'" + adminsrc + "'"; 			
+   			p << "'" + admindes + "'";
+   	}
+    else{
+      KMessageBox::error (this, QString(i18n("The template file admin.tar.gz is missing.\n"
+                  "Please correct your KDevelop installation.")).arg(adminsrc));
+      return;
     }
-    p.start (KProcess::Block,KProcess::AllOutput);
+    p.start(KProcess::Block,KProcess::AllOutput);
   }
-
-
+  else{
+    KMessageBox::error (this, QString(i18n("The template file is missing.\n"
+                "Please correct your KDevelop installation.")).arg(copysrc));
+    return;
+  }
 
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));

@@ -54,10 +54,10 @@ have no problems to create a full-functional application by using Qt only.
 remove the "Hello World" line in main() and construct your classes the same way with KDevelop as for KDE applications.</LI>
 <LI>a C program framework for C programmers. This is as well a terminal based application but only uses the C compiler.</LI>
 </UL>
-<P>Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the 
+<P>Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the
 required libraries as well as setting the according installation path in the KDevelop Setup dialog (see 
-<A HREF="index-14.html#General Configuration">General Configuration</A>) before generating a project to ensure everything 
-will work automatically. The KDevelop 1.3 Appwizard adds a GNOME-template so that developers wanting
+<A HREF="index-14.html#General Configuration">General Configuration</A>) before generating a project to ensure everything
+will work automatically. The KDevelop 1.4 Appwizard adds a GNOME-template so that developers wanting
 to use KDevelop to create GTK+-based applications can do so as well.
 <P>Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
@@ -134,23 +134,23 @@ projects use the GNU standard development tools as described in the requirements
 <UL>
 <LI>Mini: Creates a KDE-application with an empty main widget.</LI>
 <LI>Normal: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe model.</LI>
-<LI>Normal-OpenGL: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view 
+<LI>Normal-OpenGL: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view
 codeframe model. OpenGL(tm) (Mesa3D) support is added.</LI>
-<LI>KDE 2 Normal: Creates a KDE-2 application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe 
+<LI>KDE 2 Normal: Creates a KDE-2 application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe
 model.</LI>
 <LI>KDE 2 Mini: Creates a KDE-2 application with an empty main widget.</LI>
-<LI>KDE 2 MDI: Creates a KDE-2 MDI (Multiple Document Interface) application with menubar, toolbar, statusbar and support for a document-view 
+<LI>KDE 2 MDI: Creates a KDE-2 MDI (Multiple Document Interface) application with menubar, toolbar, statusbar and support for a document-view
 codeframe model.</LI>
 </UL>
 <P>If you wish no dependencies towards the KDE-libraries for end-users, you can choose from four Qt-only types:
 <UL>
-<LI>Normal: Creates a Qt-Application with a main window containing a menubar, toolbar and statusbar, including support for a generic 
+<LI>Normal: Creates a Qt-Application with a main window containing a menubar, toolbar and statusbar, including support for a generic
 document-view model.</LI>
-<LI>QT 2.x SDI: Creates a Qt-2.x Application with a main window containing a menubar, toolbar and statusbar, including support for a single 
+<LI>QT 2.x SDI: Creates a Qt-2.x Application with a main window containing a menubar, toolbar and statusbar, including support for a single
 document-view interface (SDI) model.</LI>
-<LI>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
+<LI>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple
 document interface (MDI) model.</LI>
-<LI>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
+<LI>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe.
 Requires the QextMDI library, see 
 <A HREF="http://www.geocities.com/gigafalk/qextmdi.htm">http://www.geocities.com/gigafalk/qextmdi.htm</A> for more information.</LI>
 </UL>
@@ -295,8 +295,9 @@ all done by KDevelop automatically.
 <A HREF="http://www.kde.org">http://www.kde.org</A>; a lot of people are doing translations for
 you to support their language. You will find a list of email-addresses of the translators you could write to and who will help you with
 this. Also read 
-<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A> and 
-<A HREF="programming/index-11.html">The KDevelop Programming Handbook</A> where questions about internationalization are covered again.
+<A HREF="index-11.html#Using Qt Designer in your Project">Using Qt Designer in your Project</A> and
+<A HREF="programming/index-11.html">The KDevelop Programming Handbook</A> where questions
+about internationalization are covered again.
 <P>
 <H4>Internationalization of KDE 2.0 Applications</H4>
 
@@ -322,7 +323,7 @@ Makefile.am in this section, there are already comments in it what to change whe
 <H4>Internationalization of Qt 2.2.x applications</H4>
 
 <P>Since Qt includes the tr() method together with the QTranslator class in Qt 2.x, you can easily
-internationalize your Qt-only project as well. KDevelop 1.3 supports this by using the tools that
+internationalize your Qt-only project as well. KDevelop 1.4 supports this by using the tools that
 come with Qt´s Linguist: lupdate and lrelease. The strings used with tr() are read into
 language-dependent *.ts files by lupdate; lrelease then converts the translated XML file to a file
 *.qm which stores the translations as binary information. You can add each language automatically
@@ -401,7 +402,7 @@ project_type=normal_kde2
 <H4>Qt Designer </H4>
 
 <P>Another hint may be of good use when developing KDE 2.0/ Qt 2.2.x applications
-using the Qt designer to create user interfaces. The ui files get added by KDevelop to the _SOURCES
+using the Qt Designer to create user interfaces. The ui files get added by KDevelop to the _SOURCES
 line in the Makefile.am of the subdirectory containing the ui file. This may result in the scenario
 that you want to include the header file of the generated dialog which may not exist yet when your
 file that includes it gets compiled as the <B>uic</B> (Qt user interface compiler) generates the
@@ -410,7 +411,7 @@ worry about that.
 <P>
 <H4>Converting *.kdevdlg files</H4>
 
-<P>KDevelop 1.3 comes with a converter script <CODE>kdevdlg2ui</CODE> to turn already constructed dialogs
+<P>KDevelop 1.4 comes with a converter script <CODE>kdevdlg2ui</CODE> to turn already constructed dialogs
 with it´s internal dialogeditor into a *.ui file. However, you should be aware that you may have
 to re-inherit from your class that is generated by Qt´s uic and add your implementations from your
 former KDevelop dialog there. The converter script is mainly used to convert the dialogs´ user

@@ -23,7 +23,7 @@
 <P>
 <P>KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent 
 version control) is to enable groups of developers to work on the same source-tree independently and to merge 
-changes into the repository. Usually, the repository is located at a server. The initial repository contains 
+changes into the repository. Usually, the repository is located at a server. The initial repository contains
 the base set of files that the project includes; directories and files are then added or removed to the CVS by 
 the developers. Locally, the developer works on his copy of the CVS tree. He writes his changes into his files 
 and tests, if his project still works, at least to a certain extend where incomplete sources don't prevent 
@@ -33,7 +33,7 @@ other developers from still working on the CVS repository if they receive the ch
 </H3>
 
 <P>When creating a new project with KDevelop, you can directly import the project as a CVS module. To enable 
-this, you have to have CVS installed (which should be already, if not, revise your system installation or 
+this, you have to have CVS installed (which should be already, if not, revise your system installation or
 contact your system administrator).
 <P>On the third page of the KAppWizard (VCS support), choose "CVS". Then the editing fields of this page get 
 active and you can specify the import parameters, see below for the given options. The KAppWizard will then 
@@ -59,14 +59,14 @@ your CVS copy you checked out.</LI>
 <DL>
 <DT><B>VCS Location:</B><DD><P>This is the CVS root directory where the project source tree will be imported and where 
 commits, checkouts and updates take place.
-<DT><B>Repository in CVS</B><DD><P>This is the module name given for your project. As this is the same as your project 
+<DT><B>Repository in CVS</B><DD><P>This is the module name given for your project. As this is the same as your project
 directory you can´t change that.
 <DT><B>Vendor Tag</B><DD><P>this is a tag for the entire branch
 <DT><B>Log Message</B><DD><P>is the first log message entry of the new module. When adding or commiting to the 
 repository, you will be asked for a log message each time to document your changes to the repository source 
 tree.
 <DT><B>Release Tag</B><DD><P>this specifies the tag under which your project source tree can be found, meaning that you 
-can create several projects with the same module name in the CVS root which differ in the tag, so you can work 
+can create several projects with the same module name in the CVS root which differ in the tag, so you can work
 on different branches of the same project. Example: KDE 2 is developed under the tag HEAD (default tag), KDE 
 1.1.2. can be found in the tag KDE_1_1_2_RELEASE.
 </DL>

@@ -160,18 +160,18 @@ according *.moc.cpp file and rebuild the project.
 application. Examining config.log reveals that it can't find the library
 libXext.
 <B>A:</B> Install the package xdevel
-<P><B>Q:</B> I´m developing an application where I need to set -D options to the preprocessor. If I add these 
-in KDevelop to my project options, everything is ok, but when I distribute my package, the -D options set in 
+<P><B>Q:</B> I´m developing an application where I need to set -D options to the preprocessor. If I add these
+in KDevelop to my project options, everything is ok, but when I distribute my package, the -D options set in
 KDevelop are not used. What do I have to do to make this work ?
-<B>A:</B> Edit the file configure.in in your toplevel source directory. Here, you have to enter somewhere at 
+<B>A:</B> Edit the file configure.in in your toplevel source directory. Here, you have to enter somewhere at
 the beginning:
 <P>CXXFLAGS=$(CXXFLAGS) " -DYOURDEFINE"
 AC_SUBST(CXXFLAGS)
 <P>
-<P><B>Q:</B> I´m already running a KDE 2 snapshot and I want to use KDevelop under KDE 2. What is the best way 
+<P><B>Q:</B> I´m already running a KDE 2 snapshot and I want to use KDevelop under KDE 2. What is the best way
 to do this ?
-<B>A:</B> As KDevelop for KDE 2 is currently under development, you should consider using the current stable 
-1.x release of KDevelop for production usage. Running KDevelop 1.x under KDE 2 can be done by creating a 
+<B>A:</B> As KDevelop for KDE 2 is currently under development, you should consider using the current stable
+1.x release of KDevelop for production usage. Running KDevelop 1.x under KDE 2 can be done by creating a
 shell-script:
 <P>#/bin/bash
 QTDIR=/usr/lib/qt-1.44 export QTDIR
@@ -180,7 +180,7 @@ exec /opt/kde/bin/kdevelop
 <P>Save this file as e.g. kdevelop1 and set this file to executable with
 <P>chmod 755 kdevelop1
 <P>Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
-For developing KDE 2 applications with KDevelop 1.x you have to set the correct path in the KDevelop Setup 
+For developing KDE 2 applications with KDevelop 1.x you have to set the correct path in the KDevelop Setup
 even if you´re running KDevelop under KDE 2 !
 <P>
 <P ALIGN="RIGHT">
