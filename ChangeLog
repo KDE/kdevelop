@@ -1,9 +1,13 @@
+2002-12-15 Harald Fernengel <harry@kdevelop.org>
+    * added new RMB menu item for text documents: difference to saved file
+      that will show you the modifications since your last save.
+
 2002-12-15 F@lk Brettschneider <falk@kdevelop.org>
     * breakpoint support in QEditor completed
 
 2002-12-13 F@lk Brettschneider <falk@kdevelop.org>
     * added breakpoint support in QEditor (not yet finished)
-    
+
 2002-12-12 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
     * Added a new extended path ability to DomUtil so that the path can be qualified on attributes
       and multiple matches can be addressed with a zero-based index
