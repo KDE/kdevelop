@@ -9,14 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 
 #include "shellscriptbuildsystem.h"
 
 #include "projectconfigurationwidget.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevbuildscript, KGenericFactory<ShellScriptBuildSystem>( "kdevbuildscript" ) )
+static const KAboutData data("kdevbuildscript", ("Shell Script Build System"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevbuildscript, KDevGenericFactory<ShellScriptBuildSystem>( &data ) )
 
 ShellScriptBuildSystem::ShellScriptBuildSystem(QObject *parent, const char *name, const QStringList )
  : KDevBuildSystem(parent, name)
