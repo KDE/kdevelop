@@ -128,18 +128,18 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   layout = new QVBoxLayout( inher_group, LAYOUT_BORDER );
   layout->addSpacing( LAYOUT_BORDER );
   public_button = new QRadioButton( inher_group, "public_button" );
-  public_button->setText( "public" );
+  public_button->setText(i18n("public"));
   public_button->setChecked(true);
   public_button->setMinimumSize( public_button->sizeHint() );
   layout->addWidget( public_button );
 
   protected_button = new QRadioButton( inher_group, "protected_button" );
-  protected_button->setText("protected" );
+  protected_button->setText(i18n("protected"));
   protected_button->setMinimumSize( protected_button->sizeHint() );
   layout->addWidget( protected_button );
 
   private_button = new QRadioButton( inher_group, "private_button" );
-  private_button->setText( "private" );
+  private_button->setText(i18n("private"));
   private_button->setMinimumSize( private_button->sizeHint() );
   layout->addWidget( private_button );
   layout->addStretch( 1 );

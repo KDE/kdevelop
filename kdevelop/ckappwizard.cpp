@@ -136,11 +136,11 @@ void CKAppWizard::initPages(){
   apphelp->setAlignment( 1313 );
   apphelp->setMargin( -1 );
   
-  othersentry = new QListViewItem (applications, i18n("Others"));
+  othersentry = new QListViewItem (applications, "Others");
   othersentry->setExpandable (true);
   othersentry->setOpen (TRUE);
   othersentry->sortChildItems (0,FALSE);
-  customprojitem = new QListViewItem (othersentry,i18n("custom project"));
+  customprojitem = new QListViewItem (othersentry,"custom project");
   
   /*	gtkentry = new QListViewItem (applications, "GTK");
 	gtkentry->setExpandable (true);
@@ -2171,8 +2171,8 @@ void CKAppWizard::slotProcessExited() {
   
   QStrList group_filters;
   group_filters.append("*");
-  project->addLFVGroup ("Others","");
-  project->setFilters("Others",group_filters);
+  project->addLFVGroup (i18n("Others"),"");
+  project->setFilters(i18n("Others"),group_filters);
   
   
   
