@@ -91,7 +91,8 @@ static const QString childrenParam( "--trace-children=yes" );
 
 QString ValgrindDialog::valParams() const
 {
-  QString params = w->valParamEdit->text();
+  QString params = QString::fromLatin1( "--tool=memcheck" );
+  params += w->valParamEdit->text();
   if ( w->memleakBox->isChecked() )
     params += " " + leakCheckParam;
   if ( w->reachableBox->isChecked() )
