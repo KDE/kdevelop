@@ -44,7 +44,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="2" column="2">
+        <widget class="KPushButton" row="2" column="2">
             <property name="name">
                 <cstring>buttonCancel</cstring>
             </property>
@@ -52,7 +52,7 @@
                 <string>&amp;Cancel</string>
             </property>
         </widget>
-        <widget class="QPushButton" row="2" column="1">
+        <widget class="KPushButton" row="2" column="1">
             <property name="name">
                 <cstring>buttonOk</cstring>
             </property>
@@ -113,6 +113,7 @@
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in implementation">kpushbutton.h</include>
 </includes>
 <slots>
     <slot>updateFileProperties()</slot>

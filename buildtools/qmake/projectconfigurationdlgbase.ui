@@ -51,7 +51,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="1" column="1">
+        <widget class="KPushButton" row="1" column="1">
             <property name="name">
                 <cstring>buttonOk</cstring>
             </property>
@@ -62,7 +62,7 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QPushButton" row="1" column="2">
+        <widget class="KPushButton" row="1" column="2">
             <property name="name">
                 <cstring>buttonCancel</cstring>
             </property>
@@ -186,7 +186,7 @@
                                     <cstring>m_targetOutputFile</cstring>
                                 </property>
                             </widget>
-                            <widget class="QPushButton" row="0" column="2">
+                            <widget class="KPushButton" row="0" column="2">
                                 <property name="name">
                                     <cstring>Browse</cstring>
                                 </property>
@@ -644,7 +644,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>insideIncMoveUpBtn</cstring>
                                 </property>
@@ -652,7 +652,7 @@
                                     <string>Move &amp;Up</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>insideIncMoveDownBtn</cstring>
                                 </property>
@@ -742,7 +742,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>outsideIncAddBtn</cstring>
                                 </property>
@@ -750,7 +750,7 @@
                                     <string>&amp;Add...</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>outsideIncRemoveBtn</cstring>
                                 </property>
@@ -758,7 +758,7 @@
                                     <string>&amp;Remove</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>outsideIncEditBtn</cstring>
                                 </property>
@@ -766,7 +766,7 @@
                                     <string>&amp;Edit</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>outsideIncMoveUpBtn</cstring>
                                 </property>
@@ -774,7 +774,7 @@
                                     <string>Move U&amp;p</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>outsideIncMoveDownBtn</cstring>
                                 </property>
@@ -857,7 +857,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>insideLibMoveUpBtn</cstring>
                                         </property>
@@ -865,7 +865,7 @@
                                             <string>Move &amp;Up</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>insideLibMoveDownBtn</cstring>
                                         </property>
@@ -929,7 +929,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibAddBtn</cstring>
                                         </property>
@@ -937,7 +937,7 @@
                                             <string>&amp;Add...</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibRemoveBtn</cstring>
                                         </property>
@@ -945,7 +945,7 @@
                                             <string>&amp;Remove</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibEditBtn</cstring>
                                         </property>
@@ -953,7 +953,7 @@
                                             <string>&amp;Edit</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibMoveUpBtn</cstring>
                                         </property>
@@ -961,7 +961,7 @@
                                             <string>Move U&amp;p</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibMoveDownBtn</cstring>
                                         </property>
@@ -1025,7 +1025,7 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibDirAddBtn</cstring>
                                         </property>
@@ -1036,7 +1036,7 @@
                                             <string>Alt+A</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibDirRemoveBtn</cstring>
                                         </property>
@@ -1044,7 +1044,7 @@
                                             <string>&amp;Remove</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibDirEditBtn</cstring>
                                         </property>
@@ -1052,7 +1052,7 @@
                                             <string>&amp;Edit</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibDirMoveUpBtn</cstring>
                                         </property>
@@ -1060,7 +1060,7 @@
                                             <string>Move U&amp;p</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>outsideLibDirMoveDownBtn</cstring>
                                         </property>
@@ -1149,7 +1149,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>intMoveUp_button</cstring>
                                 </property>
@@ -1157,7 +1157,7 @@
                                     <string>Move &amp;Up</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>intMoveDown_button</cstring>
                                 </property>
@@ -1228,7 +1228,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>extAdd_button</cstring>
                                 </property>
@@ -1239,7 +1239,7 @@
                                     <string>Alt+A</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>extRemove_button</cstring>
                                 </property>
@@ -1250,7 +1250,7 @@
                                     <string>Alt+R</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>extEdit_button</cstring>
                                 </property>
@@ -1261,7 +1261,7 @@
                                     <string>Alt+E</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>extMoveUp_button</cstring>
                                 </property>
@@ -1272,7 +1272,7 @@
                                     <string>Alt+P</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>extMoveDown_button</cstring>
                                 </property>
@@ -1608,7 +1608,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>buildmoveup_button</cstring>
                                         </property>
@@ -1619,7 +1619,7 @@
                                             <string>Alt+U</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>buildmovedown_button</cstring>
                                         </property>
@@ -1713,7 +1713,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>varAdd_button</cstring>
                                 </property>
@@ -1724,7 +1724,7 @@
                                     <string>Alt+A</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>varRemove_button</cstring>
                                 </property>
@@ -1735,7 +1735,7 @@
                                     <string>Alt+R</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>varEdit_button</cstring>
                                 </property>
@@ -1746,7 +1746,7 @@
                                     <string>Alt+E</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>varMoveUp_button</cstring>
                                 </property>
@@ -1757,7 +1757,7 @@
                                     <string>Alt+P</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>varMoveDown_button</cstring>
                                 </property>
@@ -2084,6 +2084,7 @@
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in implementation">kpushbutton.h</include>
 </includes>
 <slots>
     <slot>browseTargetPath()</slot>

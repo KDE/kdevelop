@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <qpushbutton.h>
+#include <kpushbutton.h>
 
 #include "trollprojectwidget.h"
 

@@ -28,7 +28,7 @@
             <cstring>unnamed</cstring>
         </property>
 
-        <widget class="QPushButton" row="1" column="2">
+        <widget class="KPushButton" row="1" column="2">
             <property name="name">
                 <cstring>PushButton2</cstring>
             </property>
@@ -169,7 +169,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="1" column="1">
+        <widget class="KPushButton" row="1" column="1">
             <property name="name">
                 <cstring>PushButton3</cstring>
             </property>
@@ -225,6 +225,7 @@
 </slots>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in implementation">kpushbutton.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
