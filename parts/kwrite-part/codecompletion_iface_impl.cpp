@@ -44,7 +44,23 @@ CodeCompletionIfaceImpl::CodeCompletionIfaceImpl(KWrite *edit, KEditor::Document
 
 void CodeCompletionIfaceImpl::showCompletionBox(QValueList<KEditor::CompletionEntry> complList,int offset){
   cerr << "showCompletionBox " << endl;
+
   m_complList = complList;
+  // align the prefix (begin)
+  QValueList<KEditor::CompletionEntry>::Iterator it;
+  int maxLen =0;
+  for( it = m_complList.begin(); it != m_complList.end(); ++it ){  
+    if(maxLen < (*it).prefix.length()){
+      maxLen = (*it).prefix.length();
+    }
+  }
+  for( it = m_complList.begin(); it != m_complList.end(); ++it ){  
+    QString fillStr;
+    fillStr.fill(QChar(' '),maxLen - (*it).prefix.length()); // add some spaces 
+    (*it).prefix.append(fillStr);
+  }
+  // alignt the prefix (end)
+
   m_offset = offset;
   m_edit->getCursorPosition(&m_lineCursor, &m_colCursor);
   m_colCursor = m_colCursor - offset; // calculate the real start of the code completion text
@@ -56,7 +72,6 @@ bool CodeCompletionIfaceImpl::eventFilter( QObject *o, QEvent *e ){
   
   if ( o == m_completionPopup || o == m_completionListBox || o == m_completionListBox->viewport() ) {
     if ( e->type() == QEvent::KeyPress ) {
-      cerr << endl << "keyPressed,ListBox";
       QKeyEvent *ke = (QKeyEvent*)e; 
       if ( ke->key() == Key_Left || ke->key() == Key_Right || 
 	   ke->key() == Key_Up || ke->key() == Key_Down ||
@@ -73,12 +88,15 @@ bool CodeCompletionIfaceImpl::eventFilter( QObject *o, QEvent *e ){
 	  int len = m_edit->currentColumn() - m_colCursor;
 	  QString currentComplText = currentLine.mid(m_colCursor,len);
 	  QString add = text.mid(currentComplText.length());
-	  m_edit->insertText(add);
 	  if(item->m_entry.postfix == "()"){ // add ()
-	    m_edit->insertText("()");
-	    m_edit->setCursorPosition(m_edit->currentLine(),m_edit->currentColumn()-1);
+	    m_edit->insertText(add + "()");
+	    VConfig c;
+	    m_edit->view()->getVConfig(c);
+	    m_edit->view()->cursorLeft(c);
 	  }
-
+	  else{
+	    m_edit->insertText(add);
+	  }
 	  m_completionPopup->hide();
 	  m_edit->view()->setFocus();
 	  emit completionDone();
@@ -140,11 +158,11 @@ void CodeCompletionIfaceImpl::updateBox(bool newCoordinate){
   m_completionListBox->setSelected( 0,true );
   m_completionListBox->setFocus();  
   if(newCoordinate){
-  m_completionPopup->resize( m_completionListBox->sizeHint() +
-			     QSize( m_completionListBox->verticalScrollBar()->width() + 4,
-				    m_completionListBox->horizontalScrollBar()->height() + 4 ) );
-  m_edit->view()->paintCursor();
-  m_completionPopup->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
+    m_completionPopup->resize( m_completionListBox->sizeHint() +
+			       QSize( m_completionListBox->verticalScrollBar()->width() + 4,
+				      m_completionListBox->horizontalScrollBar()->height() + 4 ) );
+    m_edit->view()->paintCursor();
+    m_completionPopup->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
   }
   m_completionPopup->show();
 }
