@@ -2,6 +2,8 @@
 This file contains a summary of any concern about the CvsPart plugin for Gideon
 ===============================================================================
 
+MEMO (for me, for others ;-)
+
 (Feel free to add your comments here, but first fill this section so we can
 know who said what and elaborate :-)
 [M] == Mario Scalas [marios]
@@ -18,6 +20,25 @@ know who said what and elaborate :-)
     which could make this part quite subject to heavy modifications.
     WARNING2: If it doesn't compile try to update your cvsservice.
 
+Implementation of this componente is done by:
+- class CvsPart, which does provide integration within gideon, set-up GUI
+  integration, forward cvs commands to the implementation (m_impl). It does also
+  intercepts signals like "mew files added to project" and "... removed from ...".
+- class CvsPartImpl & CvsServiceImpl do implement the actus feature: more general
+  functions (like checking for whether files are in repository, provide checks
+  on file lists, ...) so that it can be used for other implementations: currently
+  I've only provided that using CvsService from Cervisia HEAD.
+- class CvsProcessWidget provides output wrapping for commands (ok, it is useful
+  for debugging too ;-). This seems to be pretty *** buggy *** and needs to be
+  fixed.
+- class CvsOptions provides info about the user preferences when executing commands:
+  settings are stored in myprj.kdevses file, loaded when project is opened and
+  saved when project is closed.
+- There is a bunch of dialog classes for collecting useful data about the operations
+  one wants to perform: the only exception is LogForm which does perform some
+  complex text parsing and so encapsulates much logic (It was already made in this
+  way: I simply ported to CvsService ;-)
+
 Current features:
 * because this is a (buggy) direct conversion, as in parts/cvs.
 * it is possbile to 'add as binary' files to repository
@@ -25,6 +46,7 @@ Current features:
 * should handle :ext: repositories thanks to cvsservice
 * can tag / un-tag files
 * Can revert and diff between specific releases
+* ...
 
 To Do list
 
@@ -32,12 +54,11 @@ To Do list
 integrate them ;-)
 
 1. There is need of testing for the SSH repositories!
-2. Make the CvsProcessWidget show the start / ending of commands (currently does nothing)
-3. Share a common outputview between VCS ...
+2. Share a common outputview between VCS: CvsProcessWidget should be reworked :-/
 
 F.A.Q.
 
 Q: Does cvspart support login with :pserver: or :ext: ?
-A: Well, I dunno ;-) I have no ssh repositories to test so feel free to provide 
-feedback on the subject :-)) 
+A: Well, I dunno ;-) I have no ssh repositories to test so feel free to provide
+feedback on the subject :-))
 
