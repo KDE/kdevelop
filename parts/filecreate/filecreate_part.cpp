@@ -375,7 +375,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 }
 
 void FileCreatePart::slotNoteFiletype(const FileCreateFileType * filetype) {
-  kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : "Null") << endl;
+  kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : QString::fromLatin1("Null") ) << endl;
   m_filedialogFiletype = filetype;
 }
 
