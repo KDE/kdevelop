@@ -941,7 +941,9 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
 
 
 DocTreeView::~DocTreeView()
-{}
+{
+  delete toolTip; toolTip = NULL;
+}
 
 
 QString DocTreeView::selectedText()

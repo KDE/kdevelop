@@ -1444,7 +1444,7 @@ CParsedClass *CClassParser::parseClassHeader()
 
   // Ok, this seems to be a class definition so allocate the
   // the new object and set some values.
-  aClass = new CParsedClass();
+  aClass = new CParsedClass();		// root of a memory leak
   aClass->setDeclaredOnLine( getLineno() );
   aClass->setDefinedInFile( currentFile );
   aClass->setDeclaredInFile( currentFile );

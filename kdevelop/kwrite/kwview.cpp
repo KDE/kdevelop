@@ -58,7 +58,7 @@ QPixmap *getBuffer(void *user) {
   BufferInfo *info;
 
   if (!buffer) buffer = new QPixmap;
-  info = new BufferInfo;
+  info = new BufferInfo;   // causes memory leak but don't know how to handle (Zu)
   info->user = user;
   info->w = 0;
   info->h = 0;
@@ -94,7 +94,11 @@ void releaseBuffer(void *user) {
 
   for (z = (int) bufferInfoList.count() -1; z >= 0 ; z--) {
     info = bufferInfoList.at(z);
-    if (info->user == user) bufferInfoList.remove(z);
+    if (info->user == user) 
+    {
+      bufferInfoList.remove(z);
+      delete info;
+    }
   }
   resizeBuffer(0,0,0);
 }

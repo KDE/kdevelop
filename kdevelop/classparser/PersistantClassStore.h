@@ -72,7 +72,7 @@ public: // Public methods
   /** Remove a class from the database. 
    * @param aName Name of the class to remove.
    */
-  void removeClass( const char * /*aName*/ ) {};
+  void removeClass( const char * /*aName*/ ) { /* TODO: CPersistantClassStore::removeClass(): not yet implemented */  }
 
 public: // Public queries
 

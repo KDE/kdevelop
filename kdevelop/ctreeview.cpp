@@ -48,6 +48,7 @@ using namespace std;
  *-----------------------------------------------------------------*/
 CTreeView::CTreeView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   : KListView (parent, name)
+  , treeH( NULL )
 {
   // Initialize the object.
   setRootIsDecorated( true );
@@ -76,6 +77,7 @@ CTreeView::CTreeView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
  *-----------------------------------------------------------------*/
 CTreeView::~CTreeView()
 {
+  delete treeH; treeH = NULL;
 }
 
 /*********************************************************************
@@ -98,6 +100,8 @@ void CTreeView::setTreeHandler( CTreeHandler *aHandler )
 {
   assert( aHandler != NULL );
 
+  delete treeH;
+
   treeH = aHandler;
   treeH->setTree( this );
 }
@@ -113,7 +117,7 @@ void CTreeView::setTreeHandler( CTreeHandler *aHandler )
  *   QListViewItem  The item.
  *   NULL           No item was found.
  *-----------------------------------------------------------------*/
-QListViewItem *CTreeView::findByName( const char */*aName*/ )
+QListViewItem *CTreeView::findByName( const char * /*aName*/ )
 {
   debug( "CTreeView::findByName NOT IMPLEMENTED YET!" );
   return NULL;

@@ -317,6 +317,7 @@ void KDevSession::recreateDocs(QDomElement& el){
   if (bTaskBarWasOn) {
      pMainWidget->showViewTaskBar();
   }
+  delete winListIter; winListIter = NULL;
 }
 
 //-------------- Falk's Views recreation ---------//

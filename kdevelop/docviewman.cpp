@@ -1897,7 +1897,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("Make tags file"), "MakeTagsfile", 0);
   accel->connectItem("MakeTagsfile", m_pParent, SLOT(slotProjectMakeTags() ), true, ID_PROJECT_MAKE_TAGS );
 
-  accel->insertItem(i18n("Load tags file"), "LoadTagsfile", ID_PROJECT_LOAD_TAGS);
+  accel->insertItem(i18n("Load tags file"), "LoadTagsfile", 0 ); // ID_PROJECT_LOAD_TAGS);
   accel->connectItem("LoadTagsfile", m_pParent, SLOT(slotProjectLoadTags() ), true, ID_PROJECT_LOAD_TAGS );
 
   //build menu

@@ -37,8 +37,8 @@ TextLine::TextLine(int attribute, int context)
 }
 
 TextLine::~TextLine() {
-  delete text;
-  delete attribs;
+  delete[] text;
+  delete[] attribs;
 }
 
 void TextLine::move(int pos, int n) {
@@ -380,8 +380,8 @@ if (!newtext || !newattribs) {
 }
     memcpy(newtext,text,len);
     memcpy(newattribs,attribs,len);
-    delete text;
-    delete attribs;
+    delete[] text;
+    delete[] attribs;
     text = newtext;
     attribs = newattribs;
   }

@@ -184,6 +184,7 @@ CKDevelop::~CKDevelop()
     // i believe this is necessary to guarantee the config is written
     config->sync();
   }
+  delete m_pKDevSession; m_pKDevSession = NULL;
 }
 
 void CKDevelop::initView()
