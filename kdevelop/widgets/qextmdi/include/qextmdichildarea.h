@@ -218,10 +218,6 @@ protected:
    * Internally used. Actions that are necessary when an MDI view gets minimized 
    */
    void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
-   /** 
-   * An equivalent to @ref QextMdiMainFrm::detachWindow 
-   */
-   void undockWindow(QWidget *lpC);
 
 signals:
    /** 

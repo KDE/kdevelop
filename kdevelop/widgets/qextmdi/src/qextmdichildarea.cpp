@@ -549,23 +549,6 @@ void QextMdiChildArea::tileVertically()
    if(lpTop)lpTop->setFocus();
 }
 
-//============ undockWindow ============//
-void QextMdiChildArea::undockWindow(QWidget* pWidget)   // added by F.B.
-{
-   QextMdiChildView* pWnd = (QextMdiChildView*) pWidget;   // bad solution??? F.B.
-
-   if (!pWnd->parent()) return;
-   QextMdiChildFrm *lpC = pWnd->mdiParent();
-   QPixmap pixm(*(lpC->icon()));
-   QString capt(lpC->caption());
-   lpC->unsetClient();
-   pWnd->youAreDetached();
-   destroyChild(lpC,TRUE); //Do not focus the new top child , we loose focus...
-   pWnd->setIcon(pixm);
-   pWnd->setFocus();
-   pWnd->setCaption(capt);
-}
-
 //============ layoutMinimizedChildren ============//
 void QextMdiChildArea::layoutMinimizedChildren()
 {

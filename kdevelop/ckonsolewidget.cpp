@@ -24,8 +24,10 @@ public:
     if (url == dirname)
       return;
     url = dirname;
-    if (part)
-      part->openURL(KURL(dirname));
+    if (part) {
+      KURL url(dirname);
+      part->openURL(url);
+    }
   }
 
   void activate(QWidget *parent)

@@ -1,3 +1,10 @@
+2001-07-21  F@lk Brettschneider <falk@kdevelop.org>
+    * big bugfix: accelerators for undocked MDI views work again! :-)
+      --> Toplevel MDI mode is really ready to use now
+    * bugfixes: focus problems with undocked views
+      (Thanks to QextMDI guru Lars Beikirch!)
+    * bugfix: system menu of maximized view (in Childframe mode)
+
 2001-07-18  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: disassemble tool-view works again
     * bugfix: frame stack tool-view on/off-switch fixed

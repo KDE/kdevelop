@@ -417,7 +417,7 @@ void QextMdiChildFrm::undockPressed()
    if(m_pClient) {
       if( m_state == Minimized)
          setState( Normal);
-      m_pManager->undockWindow(m_pClient);
+      m_pClient->detach();
    }
 }
 
