@@ -236,7 +236,7 @@ public:
       if ( m_pWinList == 0L) {
          return new QextMdiNullIterator<QextMdiChildView*>();
       } else {
-         return new QextMdiListIterator<QextMdiChildView, QextMdiChildView*>( *m_pWinList);
+         return new QextMdiListIterator<QextMdiChildView>( *m_pWinList);
       }
    }
    /**

@@ -29,8 +29,8 @@
 #include <qlist.h>
 
 
-template <class Item, class ItemPtr>
-class QextMdiListIterator : public QextMdiIterator<ItemPtr> {
+template <class Item>
+class QextMdiListIterator : public QextMdiIterator<Item*> {
 public:
    QextMdiListIterator(QList<Item>& list) {
       m_iterator = new QListIterator<Item>(list);
@@ -41,7 +41,7 @@ public:
    }
    virtual void next()  { ++(*m_iterator); }
    virtual bool isDone() const { return m_iterator->current() == NULL; }
-   virtual ItemPtr currentItem() const { return m_iterator->current(); }
+   virtual Item* currentItem() const { return m_iterator->current(); }
 
    virtual ~QextMdiListIterator() {
       delete m_iterator;
