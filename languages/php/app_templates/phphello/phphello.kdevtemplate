@@ -7,7 +7,7 @@ Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php
 Comment[fr]=Génère un simple script de test du type « Hello world » dans le language PHP (http://www.php.net).
 DefaultDestinatonDir=HOMEDIR/public_html
 FileTemplates=php,CPPStyle
-ShowFilesAfterGeneration=%{APPNAMELC}.php
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.php
 Archive=phphello.tar.gz
 
 [PROJECT]

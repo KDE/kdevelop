@@ -5,7 +5,7 @@ Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapplet.tar.gz
 
 [FILE1]
@@ -42,3 +42,6 @@ Type=install
 Source=%{src}/simpleimpl.h
 Dest=%{dest}/%{APPNAMELC}.h
 
+[MSG]
+Type=message
+Comment=An opie applet was created in %{dest}

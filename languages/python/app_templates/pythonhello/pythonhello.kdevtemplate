@@ -9,7 +9,7 @@ Comment=This generates a simplistic "Hello world" program in Python
 Comment[fr]=Génère un simple script de test du type "Hello world" dans le language PYTHON.
 Comment[de]=Es wird ein einfaches "Hello world"-Programm in Python erzeugt.
 FileTemplates=py,ShellStyle
-ShowFilesAfterGeneration=APPNAMELC.py
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
 Archive=pythonhello.tar.gz
 
 [FILE1]
@@ -22,3 +22,7 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop
 Type=install
 Source=%{src}/app.py
 Dest=%{dest}/%{APPNAMELC}.py
+
+[MSG]
+Type=message
+Comment=A simple python script was created in %{dest}

@@ -7,7 +7,7 @@ Category=Fortran
 Comment=Generates a simple Hello world program in Fortran
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language FORTRAN.
 FileTemplates=f,None
-ShowFilesAfterGeneration=src/APPNAMELC.f
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.f
 Archive=fortranhello.tar.gz
 
 [INCADMIN]
@@ -53,3 +53,6 @@ Type=install
 Source=%{src}/main.f
 Dest=%{dest}/src/%{APPNAMELC}.f
 
+[MSG]
+Type=message
+Comment=a simple "Hello world" program in fortran was created in %{dest}

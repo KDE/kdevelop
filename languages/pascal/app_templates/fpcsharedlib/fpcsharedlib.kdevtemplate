@@ -6,7 +6,7 @@ Category=Pascal/Free Pascal
 Comment=Generates a shared library in Pascal
 Comment[fr]=Génère une bibliothéque partagée dans le language PASCAL.
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
-ShowFilesAfterGeneration=src/APPNAMELC.pp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
 Archive=fpcsharedlib.tar.gz
 
 [GNU]
@@ -28,3 +28,6 @@ Type=install
 Source=%{src}/main.pp
 Dest=%{dest}/src/%{APPNAMELC}.pp
 
+[MSG]
+Type=message
+Comment=A shared library project written in pascal was created in %{dest}

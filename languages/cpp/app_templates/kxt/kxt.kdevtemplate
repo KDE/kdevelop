@@ -7,7 +7,7 @@ Icon=preview.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
 Comment[fr]=Génère une simple application KDE avec un "widget" et un dialogue de configuration.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kxt.tar.gz
 
 [ADMIN]

@@ -5,7 +5,7 @@ Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie application.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapp.tar.gz
 
 [FILE1]
@@ -56,3 +56,6 @@ Type=install
 Source=%{src}/example.desktop
 Dest=%{dest}/apps/%{APPNAMELC}.desktop
 
+[MSG]
+Type=message
+Comment=An opie application was created in %{dest}

@@ -4,7 +4,7 @@ Name=Simple SQL Project
 Category=Database
 Comment=Generates a simple SQL project.
 FileTemplates=sql,AdaStyle
-ShowFilesAfterGeneration=APPNAMELC.sql
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sql
 Archive=sqlsimple.tar.gz
 
 [FILE1]
@@ -18,3 +18,6 @@ Type=install
 Source=%{src}/app.sql
 Dest=%{dest}/%{APPNAMELC}.sql
 
+[MSG]
+Type=install
+Comment=A simple SQL project was created in %{dest}

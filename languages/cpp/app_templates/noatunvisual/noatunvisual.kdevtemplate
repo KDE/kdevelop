@@ -5,7 +5,7 @@ Icon=noatunvisual.png
 Category=C++/KDE
 Comment=Generates a visualization plugin for noatun using SDL
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/plugin_APPNAMELC_impl.cpp
+ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}_impl.cpp
 Archive=noatunvisual.tar.gz
 
 [ADMIN]
@@ -114,3 +114,6 @@ Type=install
 Source=%{src}/plugin.plugin
 Dest=%{dest}/src/%{APPNAMELC}.plugin
 
+[MSG]
+Type=message
+Comment=A Noatun visualization plugin was created in %{dest}

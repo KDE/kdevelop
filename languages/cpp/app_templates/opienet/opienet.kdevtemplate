@@ -5,7 +5,7 @@ Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie network config plugin.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opienet.tar.gz
 
 [FILE1]
@@ -51,4 +51,8 @@ Dest=%{dest}/%{APPNAMELC}module.h
 Type=install
 Source=%{src}/simpleiface.h
 Dest=%{dest}/%{APPNAMELC}iface.h
+
+[MSG]
+Type=message
+Comment=An opie network settings plugin was created in %{dest}
 

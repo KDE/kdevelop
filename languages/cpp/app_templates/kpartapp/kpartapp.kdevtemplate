@@ -7,7 +7,7 @@ Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
 Comment[fr]=Génère une application complexe pour KDE en utilisant des composants logiciels du type « KPart ».
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC_part.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
 Archive=kpartapp.tar.gz
 
 [ADMIN]

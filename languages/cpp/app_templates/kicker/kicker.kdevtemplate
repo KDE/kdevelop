@@ -7,7 +7,7 @@ Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
 Comment[fr]=Génère un squelette d'applet qui peut être embarquée dans le tableau de bords de KDE.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kicker.tar.gz
 
 [ADMIN]

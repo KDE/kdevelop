@@ -7,7 +7,7 @@ Category=C++/KDE
 Comment=Generates a framework for a KDE screensaver.
 Comment[fr]=Génère un squelette d'application pour un économiseur d'écran KDE.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kscreensaver.tar.gz
 
 [ADMIN]

@@ -7,7 +7,7 @@ Comment=Generates a simple wxWidgets Hello application.
 Comment[fr]=Génère un simple programme de test du type « Hello world » en utilisant la bibliothéque wxWidgets.
 FileTemplates=h,CStyle,cpp,CStyle
 Icon=wxhello.png
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 
 [LICENSE]
 Type=install

@@ -9,7 +9,7 @@ Comment=This generates a simple 'Hello World' program in Haskell
 Comment[de]=Generiert ein einfaches 'Hello World' Programm in Haskell.
 Comment[it]=Genera un semplice programma 'Hello World' in Haskell.
 FileTemplates=hs,HaskellStyle
-ShowFilesAfterGeneration=src/APPNAMELC.hs
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.hs
 Archive=haskellhello.tar.gz
 
 [GNU]
@@ -31,3 +31,6 @@ Type=install
 Source=%{src}/Main.hs
 Dest=%{dest}/src/%{APPNAMELC}.hs
 
+[MSG]
+Type=message
+Comment=A simple 'hello world' program in Haskell was createed in %{dest}

@@ -8,7 +8,7 @@ Comment=Generates a simple "Hello world" program for the Gameboy Advance. You wi
 Comment[fr]=Génère un simple programme de test du type « Hello world » pour la « Gameboy Advance ». Il est nécessaire d'avoir le kit de développement « devkitadvance » pour pouvoir le compiler. Veuillez consulter le fichier « README.devel » pour plus de détails.
 ShowFileAfterGeneration=README.devel
 FileTemplates=h,CStyle,c,CStyle
-ShowFilesAfterGeneration=src/main.c
+ShowFilesAfterGeneration=%{dest}/src/main.c
 Archive=chellogba.tar.gz
 
 [INCADMIN]

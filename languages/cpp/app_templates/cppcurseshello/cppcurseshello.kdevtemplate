@@ -7,7 +7,7 @@ Category=C++
 Comment=Generates a simple ncurses based Hello world program in C++
 Comment[de]=Erstellt ein einfaches Hallo Welt programm für C++ basierend auf der ncurses Bibliothek
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=cppcurseshello.tar.gz
 
 [INCADMIN]

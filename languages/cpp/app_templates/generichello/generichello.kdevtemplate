@@ -7,7 +7,7 @@ Category=C++/Generic
 Comment=Generates a simple Hello world program in C++
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C++.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=generichello.tar.gz
 
 [GNU]
@@ -17,12 +17,12 @@ File=%{kdevelop}/template-common/gnu.kdevtemplate
 [FILE1]
 Type=install
 EscapeXML=true
-Source=%{src}/template-cppgenerichello/app.kdevelop
+Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [FILE2]
 Type=install
-Source=%{src}/template-cppgenerichello/app.prj
+Source=%{src}/app.prj
 Dest=%{dest}/%{APPNAMELC}.prj
 
 [MkDir1]
@@ -31,6 +31,6 @@ Dir=%{dest}/src
 
 [FILE3]
 Type=install
-Source=%{src}/template-cppgenerichello/main.cpp
+Source=%{src}/main.cpp
 Dest=%{dest}/src/%{APPNAMELC}.cpp
 

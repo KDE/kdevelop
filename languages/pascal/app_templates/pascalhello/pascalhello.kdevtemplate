@@ -7,7 +7,7 @@ Category=Pascal
 Comment=Generates a simple Hello world program in Pascal
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language PASCAL.
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
-ShowFilesAfterGeneration=src/APPNAMELC.pp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
 Archive=pascalhello.tar.gz
 
 [GNU]
@@ -29,3 +29,6 @@ Type=install
 Source=%{src}/main.pp
 Dest=%{dest}/src/%{APPNAMELC}.pp
 
+[MSG]
+Type=message
+Comment=A simple 'hello world' program in Pascal was created in %{dest}

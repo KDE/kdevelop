@@ -8,7 +8,7 @@ Category[fr]=C++/Environnement embarqué
 Comment=Generate a TMake/Qt based application for Qtopia 1.x
 Comment[fr]=Génère une application basée sur Qt / TMake pour l'environnement Qtopia 1.x.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=qtopiaapp.tar.gz
 
 [FILE1]
@@ -64,3 +64,6 @@ Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/main.cpp
 
+[MSG]
+Type=message
+Comment=A Qtopia application was created in %{dest}

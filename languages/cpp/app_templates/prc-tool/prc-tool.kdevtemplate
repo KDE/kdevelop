@@ -2,13 +2,12 @@
 [General]
 Name=Hello world program
 Name[fr]=Un simple programme de test « Hello world
-Icon=chellogba.png
+Icon= # got none
 Category=C/PalmOS
 Comment=Generates a template for palm application
 Comment[fr]=Génère un modèle d'application pour l'environnement PALM.
-#tShowFileAfterGeneration=README.devel
 FileTemplates=h,CStyle,c,CStyle
-ShowFilesAfterGeneration=APPNAME.c
+ShowFilesAfterGeneration=%{dest}/%{APPNAME}.c
 Archive=prc-tool.tar.gz
 
 [GNU]
@@ -51,3 +50,6 @@ Type=install
 Source=%{src}/callback.h
 Dest=%{dest}/callback.h
 
+[MSG]
+Type=message
+Comment=A palm application was created in %{dest}

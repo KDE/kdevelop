@@ -7,7 +7,7 @@ Category=C++/KDE
 Comment=Generates a basic KDE DCOP server. This is an ideal starting point for a DCOP server that does not require a GUI interface.
 Comment[fr]=Génère un simple serveur DCOP pour KDE. Ceci est un bon point de départ pour programmer un serveur DCOP qui ne nécessite pas d'interface graphique.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/main.cpp
+ShowFilesAfterGeneration=%{dest}/src/main.cpp
 Archive=kdedcop.tar.gz
 
 [ADMIN]

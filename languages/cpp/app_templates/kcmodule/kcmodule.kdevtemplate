@@ -7,7 +7,7 @@ Category=C++/KDE
 Comment=Generates a framework for a module which can be embedded into the KDE Control Center.
 Comment[fr]=Génère un squelette d'application pour un module externe qui peut être embarqué dans le centre de configuration de KDE.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kcmodule.tar.gz
 
 [ADMIN]

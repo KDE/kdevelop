@@ -5,7 +5,7 @@ Icon=kateplugin2.png
 Category=C++/KDE
 Comment=Generates a plugin with config page for Kate the text editor.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/plugin_APPNAMELC.cpp
+ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kateplugin2.tar.gz
 
 [ADMIN]

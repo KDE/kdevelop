@@ -8,7 +8,7 @@ Category[fr]=Java/Ant
 Comment=Generate a Java application
 Comment[fr]=Génère une application dans le language JAVA en utilisant Ant
 FileTemplates=java,JavaStyle
-ShowFilesAfterGeneration=Main.java
+ShowFilesAfterGeneration=%{dest}/Main.java
 Archive=javahello.tar.gz
 
 [FILE1]
@@ -32,3 +32,6 @@ Type=install
 Source=%{src}/build.xml
 Dest=%{dest}/build.xml
 
+[msg]
+Type=message
+Comment=A JAVA application was created in %{dest}

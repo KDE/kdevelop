@@ -7,7 +7,7 @@ Category=Java
 Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
 Comment[fr]=Génère un simple modéle d'application JAVA en utilisant SuperWaba pour les environnements WinCE et PalmOS. Plus d'informations peuvent être trouvé à l'URL suivante : http://www.superwaba.org.
 FileTemplates=java
-ShowFilesAfterGeneration=APPNAME.java
+ShowFilesAfterGeneration=%{dest}/%{APPNAME}.java
 Archive=superwaba.tar.gz
 
 [JAVA]
@@ -58,24 +58,4 @@ Archive=superwaba.tar.gz
 [GNU]
 Type=include
 File=%{kdevelop}/template-common/gnu.kdevtemplate
-
-[FILE1]
-Type=install
-Source=%{src}/sw.kdevelop
-Dest=%{dest}/%{APPNAMELC}.kdevelop
-
-[FILE2]
-Type=install
-Source=%{src}/sw.filelist
-Dest=%{dest}/%{APPNAMELC}.filelist
-
-[FILE3]
-Type=install
-Source=%{src}/src-Makefile
-Dest=%{dest}/Makefile
-
-[FILE4]
-Type=install
-Source=%{src}/sw.java
-Dest=%{dest}/%{APPNAME}.java
 

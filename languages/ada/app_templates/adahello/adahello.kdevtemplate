@@ -7,7 +7,7 @@ Category=Ada
 Comment=Generates a simple Hello world program in Ada
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language ADA.
 FileTemplates=adb,AdaStyle
-ShowFilesAfterGeneration=src/APPNAMELC.adb
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.adb
 Archive=adahello.tar.gz
 
 [GNU]
@@ -39,3 +39,6 @@ Type=install
 Source=%{src}/main.adb
 Dest=%{dest}/src/%{APPNAMELC}.adb
 
+[MSG]
+Type=message
+Comment=A simple "Hello world" program in ADA was created in %{dest}

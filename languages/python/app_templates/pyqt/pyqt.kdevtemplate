@@ -1,4 +1,4 @@
-# KDE Config file
+# KDE Config File
 [General]
 Name=Python Qt application
 Name[fr]=Une application Qt avec PYTHON
@@ -7,7 +7,7 @@ Category=Python
 Comment=This generates an application framework using Python and Qt
 Comment[fr]=Génère un squelette d'application Qt dans le language PYTHON.
 FileTemplates=py,ShellStyle
-ShowFilesAfterGeneration=APPNAMELC.py
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
 Archive=pyqt.tar.gz
 
 [GNU]
@@ -81,3 +81,6 @@ Type=install
 Source=%{src}/filesave.pyxpm
 Dest=%{dest}/filesave.pyxpm
 
+[MSG]
+Type=message
+Comment=A Python Qt application was created in %{dest}

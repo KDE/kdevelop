@@ -7,7 +7,7 @@ Category=C
 Comment=Generates a simple Hello world program in C
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C.
 FileTemplates=h,CStyle,c,CStyle
-ShowFilesAfterGeneration=src/APPNAMELC.c
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
 
 [LIBS]

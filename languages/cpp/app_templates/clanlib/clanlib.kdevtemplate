@@ -5,7 +5,7 @@ Category=C++
 Icon=clanlib.png
 Comment=Generates a simple ClanLib application.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/main.cpp
+ShowFilesAfterGeneration=%{dest}/src/main.cpp
 Archive=clanlib.tar.gz
 
 [GNU]

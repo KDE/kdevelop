@@ -440,7 +440,7 @@ void AppWizardDialog::accept()
 	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
 
 	QStringList cleanUpSubstMap;
-	cleanUpSubstMap << "src" << "dest" << "I18N" << "kdevelop";
+	cleanUpSubstMap << "src" << "I18N" << "kdevelop";
 	
 	// Add template files to the fileList
 	installDir templateDir;
@@ -856,11 +856,7 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
 
 void AppWizardDialog::openAfterGeneration()
 {
-	QString prjName( appname_edit->text() );
-	QString prjNameLC( prjName.lower() );
-	QString prjNameUC( prjName.upper() );
-	
-	QString projectFile( finalLoc_label->text() + "/" + prjNameLC + ".kdevelop" );
+	QString projectFile( finalLoc_label->text() + "/" + appname_edit->text().lower() + ".kdevelop" );
 	
 	// Read the DOM of the newly created project
 	QFile file( projectFile );
@@ -890,12 +886,8 @@ void AppWizardDialog::openAfterGeneration()
 		QString fileName( *it );
 		if ( !fileName.isNull() )
 		{
-			fileName.replace("APPNAMEUC", prjNameUC );
-			fileName.replace("APPNAMELC", prjNameLC );
-			fileName.replace("APPNAME", prjName );
-			KURL url( finalLoc_label->text() + "/" + fileName );
-			kdDebug(9010) << "Try to open: " << url.url() << endl;
-			m_part->partController()->editDocument(url);
+			fileName = KMacroExpander::expandMacros(fileName, m_pCurrentAppInfo->subMap);
+			m_part->partController()->editDocument( fileName );
 		}
 	}
 }
