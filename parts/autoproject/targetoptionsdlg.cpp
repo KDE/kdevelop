@@ -183,6 +183,8 @@ void TargetOptionsDialog::storeConfig()
 
 void TargetOptionsDialog::insideMoveUpClicked()
 {
+    if (!insidelib_listview->currentItem())
+        return;
     if (insidelib_listview->currentItem() == insidelib_listview->firstChild()) {
         KNotifyClient::beep();
         return;
@@ -197,6 +199,9 @@ void TargetOptionsDialog::insideMoveUpClicked()
 
 void TargetOptionsDialog::insideMoveDownClicked()
 {
+   if (!insidelib_listview->currentItem())
+       return;
+
    if (insidelib_listview->currentItem()->nextSibling() == 0) {
         KNotifyClient::beep();
         return;
@@ -208,6 +213,8 @@ void TargetOptionsDialog::insideMoveDownClicked()
 
 void TargetOptionsDialog::outsideMoveUpClicked()
 {
+    if (!outsidelib_listview->currentItem())
+        return;
     if (outsidelib_listview->currentItem() == outsidelib_listview->firstChild()) {
         KNotifyClient::beep();
         return;
@@ -222,6 +229,8 @@ void TargetOptionsDialog::outsideMoveUpClicked()
 
 void TargetOptionsDialog::outsideMoveDownClicked()
 {
+   if (!outsidelib_listview->currentItem())
+       return;
    if (outsidelib_listview->currentItem()->nextSibling() == 0) {
         KNotifyClient::beep();
         return;
