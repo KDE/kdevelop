@@ -127,7 +127,7 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   setKeyAccel();
 
   readOptions();
-  setAutoSaveSettings();
+  //setAutoSaveSettings();
 
   slotViewRefresh();
   if(start_logo)
