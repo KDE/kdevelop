@@ -11,6 +11,7 @@
 
 #include <qwhatsthis.h>
 #include <qvbox.h>
+#include <qtimer.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
