@@ -24,6 +24,9 @@
 #include "vartree.h"
 
 #include <kapp.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
 
@@ -34,9 +37,6 @@
 #include <iostream>
 #include <ctype.h>
 #include <stdlib.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <klocale.h>
 
 #if defined(DBG_MONITOR)
   #define GDB_MONITOR

@@ -3,6 +3,8 @@ require ("flush.pl");
 use File::Copy;
 
 $homedirectory = $ENV{KDEHOME};
+$homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
+
 my $entriesfilename= shift || "entries";
 printflush (STDOUT,"Starting with configuration\n");
 

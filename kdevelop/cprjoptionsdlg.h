@@ -19,31 +19,23 @@
 #ifndef __CPRJOPTIONSDLG_H_
 #define __CPRJOPTIONSDLG_H_
 
-#include "cproject.h"
-#include <kfiledialog.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qlineedit.h>
-#include <qmultilinedit.h>
-#include <qtabdialog.h>
-#include <kapp.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qwhatsthis.h>
-#include <qspinbox.h>
+class CProject;
+class QLineEdit;
+class QSpinBox;
+class QCheckBox;
+class QComboBox;
+class QLabel;
+class QPushButton;
+class KConfig;
+class QMultiLineEdit;
 
-/** the setup-dialog for a project 
+#include <kdialogbase.h>
+//#include <qtabdialog.h>
+
+/** the setup-dialog for a project
   *@author Sandy Meier, Stefan Bartel
   */
-class CPrjOptionsDlg : public QTabDialog
+class CPrjOptionsDlg : public KDialogBase // QTabDialog
 {
     Q_OBJECT
 public:
@@ -51,6 +43,15 @@ public:
   CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name );
   bool needConfigureInUpdate();
   bool needMakefileUpdate(){return need_makefile_generation;}
+
+private:
+  void addGeneralPage();
+  void addCompilerOptionsPage();
+  void addCompilerWarningsPage();
+  void addLinkerPage();
+  void addMakePage();
+  void addBinPage();
+
 protected:
   /** local projectinfo object*/
   CProject* prj_info; 
@@ -151,7 +152,7 @@ private:
 	
 protected slots:
    /** is called, if the ok-button were clicked*/
-  void  ok();
+  void ok();
   void slotFileDialogClicked();
   void slotOptimize_level_changed(int v);
   void slotDebug_level_changed(int v);

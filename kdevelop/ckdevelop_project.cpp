@@ -42,6 +42,7 @@
 #include <kbuttonbox.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>

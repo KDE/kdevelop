@@ -383,7 +383,7 @@ void DbgToolbar::slotDbgKdevFocus()
   if (winModule_->activeWindow() != ckDevelop_->winId())
     activeWindow_ = winModule_->activeWindow();
 
-  KWin::setActiveWindow(activeWindow_);
+  KWin::setActiveWindow(ckDevelop_->winId());
 }
 
 // **************************************************************************

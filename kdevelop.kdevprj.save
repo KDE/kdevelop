@@ -333,7 +333,7 @@ type=DATA
 [Config for BinMakefileAm]
 path_to_bin_program=kdevelop
 ldflags=
-addcxxflags=
+addcxxflags=-DGDB_MONITOR
 ldadd=-lkhtml -lm -lkfile -lkdeui -lkdecore $(LIB_QT)
 cxxflags=-O0 -g3 -Wall
 bin_program=kdevelop
@@ -1808,7 +1808,7 @@ short_info=,
 email=
 kdevprj_version=1.3
 dir_where_make_will_be_called=
-configure_args=--with-qt-dir=/opt/qt-2.2.2 --prefix=/home/kde2/kde
+configure_args=--with-qt-dir=/opt/qt-2.2 --prefix=/home/kde2/kde
 modifyMakefiles=true
 [kdevelop/templates/qtmdi.tar.gz]
 install_location=

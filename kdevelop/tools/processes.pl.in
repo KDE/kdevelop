@@ -11,10 +11,12 @@ my $entriesfilename= shift || "entries";
 my %changings;
 
 my $homedirectory = $ENV{KDEHOME};
-my $local_icondir = $homedirectory . "/share/icons/";
-my $local_datadir = $homedirectory . "/share/apps/";
-my $kde_miniicondir = $kde_icondir . "/mini";
-my $local_miniicondir = $local_icondir ."/mini";
+$homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
+
+my $local_icondir     = $homedirectory  . "/share/icons/";
+my $local_datadir     = $homedirectory  . "/share/apps/";
+my $kde_miniicondir   = $kde_icondir    . "/mini";
+my $local_miniicondir = $local_icondir  . "/mini";
 
 printflush (STDOUT,"Starting with installation\n");
 

@@ -56,25 +56,26 @@ static GDBParser* getParser()
 VarViewer::VarViewer( QWidget *parent, const char *name ) :
   QWidget( parent, name )
 {
-  setFocusPolicy(QWidget::StrongFocus);
   QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
 
   varTree_ = new VarTree(this);
+  varTree_->setFocusPolicy(QWidget::NoFocus);
   topLayout->addWidget( varTree_, 10 );
 
   QBoxLayout *watchEntry = new QHBoxLayout();
   topLayout->addLayout( watchEntry );
 
   QLabel *label = new QLabel( i18n("Watch: "), this );
-  label->setMinimumSize( label->sizeHint() );
-  label->setMaximumSize( label->sizeHint() );
+//  label->setMinimumSize( label->sizeHint() );
+//  label->setMaximumSize( label->sizeHint() );
   watchEntry->addWidget( label );
 
   // make the size small so that it can fit within the parent widget
   // size. The parents size is currently 4 tabs wide with <=3chars
   // in each tab. (ie quite small!) 
   watchVarEntry_ = new KLineEdit(this);
-  watchVarEntry_->setMinimumSize(0,0); //watchVarEntry_->sizeHint() );
+//  watchVarEntry_->setMinimumSize(0,0); //watchVarEntry_->sizeHint() );
+  watchVarEntry_->setFocusPolicy(QWidget::ClickFocus);
   watchEntry->addWidget( watchVarEntry_ );
 
   // just add a bit of space at the end of the entry widget
@@ -84,8 +85,9 @@ VarViewer::VarViewer( QWidget *parent, const char *name ) :
 //  watchEntry->addWidget( blank );
 
   QPushButton* addButton = new QPushButton( i18n("Add"), this );
-  addButton->setMinimumSize( addButton->sizeHint() );
-  addButton->setMaximumSize( addButton->sizeHint() );
+//  addButton->setMinimumSize( addButton->sizeHint() );
+//  addButton->setMaximumSize( addButton->sizeHint() );
+  addButton->setFocusPolicy(QWidget::NoFocus);
   watchEntry->addWidget( addButton );
 
   connect(addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()));
@@ -125,7 +127,6 @@ VarTree::VarTree( QWidget *parent, const char *name ) :
   addColumn(i18n("Variable"));
   addColumn(i18n("Value"));
   setMultiSelection (false);
-  setFocusPolicy(QWidget::StrongFocus);
 
   connect (this,  SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )),
                   SLOT(slotRightButtonClicked ( QListViewItem *, const QPoint &, int )));

@@ -268,11 +268,12 @@ void CKDevelop::initView()
   messages_widget->setReadOnly(TRUE);
 
   stdin_stdout_widget = new COutputWidget(o_tab_view);
-//  stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
+  stdin_stdout_widget->setReadOnly(TRUE);
+  stdin_stdout_widget->setFocusPolicy(QWidget::ClickFocus);
 
   stderr_widget = new COutputWidget(o_tab_view);
   stderr_widget->setReadOnly(TRUE);
-  stderr_widget->setFocusPolicy(QWidget::NoFocus);
+  stderr_widget->setFocusPolicy(QWidget::ClickFocus);
 
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
@@ -1433,10 +1434,10 @@ void CKDevelop::initDebugger()
     disassemble   = new Disassemble(o_tab_view, "DisassembleTab");
     var_viewer    = new VarViewer(t_tab_view,"VARTab");
 
-    brkptManager->setFocusPolicy(QWidget::NoFocus);
-    frameStack->setFocusPolicy(QWidget::NoFocus);
-    disassemble->setFocusPolicy(QWidget::NoFocus);
-//    var_viewer->setFocusPolicy(QWidget::NoFocus);
+    brkptManager->setFocusPolicy(QWidget::ClickFocus);
+    frameStack->setFocusPolicy(QWidget::ClickFocus);
+    disassemble->setFocusPolicy(QWidget::ClickFocus);
+    var_viewer->setFocusPolicy(QWidget::NoFocus);
 
     o_tab_view->addTab(brkptManager,i18n("breakpoint"));
     o_tab_view->addTab(frameStack,i18n("frame stack"));
@@ -1446,7 +1447,8 @@ void CKDevelop::initDebugger()
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     dbg_widget = new COutputWidget(o_tab_view, "debuggerTab");
     o_tab_view->addTab(dbg_widget,i18n("debugger"));
-    dbg_widget->insertLine("Start dbg");
+    dbg_widget->setFocusPolicy(QWidget::ClickFocus);
+    dbg_widget->setReadOnly(TRUE);
 #endif
 
   	// Connect the breakpoint manager to monitor the bp setting - even

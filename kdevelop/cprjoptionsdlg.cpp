@@ -17,109 +17,134 @@
  ***************************************************************************/
 
 #include "cprjoptionsdlg.h"
-#include "vc/versioncontrol.h"
-#include <iostream.h>
-#include <qstrlist.h>
-#include <qmessagebox.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <klocale.h>
-#include "debug.h"
+
+#include "cproject.h"
 #include "ctoolclass.h"
-#include <kstddirs.h>
+#include "debug.h"
+#include "vc/versioncontrol.h"
+
+#include <kapp.h>
+#include <klineedit.h>
+#include <kmessagebox.h>
 #include <knumvalidator.h>
-#include <qlayout.h>
+#include <klocale.h>
+#include <kstddirs.h>
+
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qdir.h>
+#include <kfiledialog.h>
+#include <qfileinfo.h>
 #include <qgrid.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlistbox.h>
+#include <qlineedit.h>
+#include <qmessagebox.h>
+#include <qmultilinedit.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qstrlist.h>
+#include <qspinbox.h>
+//#include <qtabdialog.h>
+#include <qwhatsthis.h>
+
+#include <iostream.h>
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
-    : QTabDialog( parent, name,TRUE )
+ : KDialogBase (  Tabbed,                   // dialogFace
+                  i18n("Project Options" ), // caption
+                  Ok|Cancel,                // buttonMask
+                  Ok,                       // defaultButton
+                  parent,
+                  name,
+                  true,                     // modal
+                  true)                     // separator
 {
   prj_info = prj;
-  QString cxxflags=prj->getCXXFLAGS();
-  QString ldflags=prj->getLDFLAGS();
-  QString ldadd=prj->getLDADD();
 
-  old_version = prj->getVersion();
-  old_ldflags =  ldflags.stripWhiteSpace();
-  old_ldadd = ldadd.stripWhiteSpace();
-  old_addit_flags = prj->getAdditCXXFLAGS().stripWhiteSpace();
-  old_cxxflags = cxxflags.stripWhiteSpace();
+//  setMinimumSize(680,355);
 
-  need_configure_in_update = false;
-  need_makefile_generation = false;
+  addGeneralPage();
+  addCompilerOptionsPage();
+  addCompilerWarningsPage();
+  addLinkerPage();
+  addMakePage();
+  addBinPage();
 
+  connect(this, SIGNAL(okClicked()), SLOT(ok()));
+}
 
-  setFixedSize(630,355);
-  QStrList short_info;
-  int pos;
-
-  setCaption( i18n("Project Options" ));
-
-  // ****************** the General_Widget ********************
-  QWidget *w = new QWidget( this, "general" );
-  QGridLayout *grid6 = new QGridLayout(w,9,6,15,7);
-  QWhatsThis::add(w, i18n("Set the general options of your project here."));
+//
+//****************** the General_Widget ********************
+//
+void CPrjOptionsDlg::addGeneralPage()
+{
+  QFrame* generalPage = addPage(i18n("General"));
+  QGridLayout *grid = new QGridLayout(generalPage,9,6,15,7);
+  QWhatsThis::add(generalPage, i18n("Set the general options of your project here."));
 
   QLabel* prjname_label;
-  prjname_label = new QLabel( w, "prjname_label" );
-  grid6->addWidget(prjname_label,0,0);
+  prjname_label = new QLabel( generalPage, "prjname_label" );
+  grid->addWidget(prjname_label,0,0);
   prjname_label->setText( i18n("Project name:") );
 
-  prjname_edit = new QLineEdit( w, "prjname_edit" );
-  grid6->addMultiCellWidget(prjname_edit,1,1,0,1);
+  prjname_edit = new QLineEdit( generalPage, "prjname_edit" );
+  grid->addMultiCellWidget(prjname_edit,1,1,0,1);
   prjname_edit->setText( prj_info->getProjectName() );
   QWhatsThis::add(prjname_label, i18n("Set the project name here."));
   QWhatsThis::add(prjname_edit, i18n("Set the project name here."));
 
 
   QLabel* version_label;
-  version_label = new QLabel( w, "version_label" );
-  grid6->addWidget(version_label,0,2);
+  version_label = new QLabel( generalPage, "version_label" );
+  grid->addWidget(version_label,0,2);
   version_label->setText( i18n("Version:") );
 
-  version_edit = new QLineEdit( w, "version_edit" );
-  grid6->addWidget(version_edit,1,2);
+  version_edit = new QLineEdit( generalPage, "version_edit" );
+  grid->addWidget(version_edit,1,2);
   version_edit->setText( prj_info->getVersion() );
   version_edit->setValidator( new KFloatValidator( version_edit ));
-  QWhatsThis::add(version_label, i18n("Set your project version\nnumber here."));
-  QWhatsThis::add(version_edit, i18n("Set your project version\nnumber here."));
+  QWhatsThis::add(version_label, i18n("Set your project version number here."));
+  QWhatsThis::add(version_edit, i18n("Set your project version number here."));
 
 
   QLabel* author_label;
-  author_label = new QLabel( w, "author_label" );
-  grid6->addWidget(author_label,2,0);
+  author_label = new QLabel( generalPage, "author_label" );
+  grid->addWidget(author_label,2,0);
   author_label->setText( i18n("Author:") );
 
-  author_edit = new QLineEdit( w, "author_edit" );
-  grid6->addMultiCellWidget(author_edit,3,3,0,2);
+  author_edit = new QLineEdit( generalPage, "author_edit" );
+  grid->addMultiCellWidget(author_edit,3,3,0,2);
   author_edit->setText( prj_info->getAuthor() );
   QWhatsThis::add(author_label,  i18n("Insert your name or the name of your team here"));
   QWhatsThis::add(author_edit, i18n("Insert your name or the name of your team here"));
 
   QLabel* email_label;
-  email_label = new QLabel( w, "email_label" );
-  grid6->addWidget(email_label,4,0);
+  email_label = new QLabel( generalPage, "email_label" );
+  grid->addWidget(email_label,4,0);
   email_label->setText( i18n("Email:") );
 
-  email_edit = new QLineEdit( w, "email_edit");
-  grid6->addMultiCellWidget(email_edit,5,5,0,2);
+  email_edit = new QLineEdit( generalPage, "email_edit");
+  grid->addMultiCellWidget(email_edit,5,5,0,2);
   email_edit->setText( prj_info->getEmail() );
   QWhatsThis::add(email_label, i18n("Insert your email-address here"));
   QWhatsThis::add(email_edit, i18n("Insert your email-address here"));
 
 
-  modifymakefiles_checkbox = new QCheckBox( w, "" );
-  grid6->addMultiCellWidget(modifymakefiles_checkbox,6,6,0,1);
+  modifymakefiles_checkbox = new QCheckBox( generalPage, "" );
+  grid->addMultiCellWidget(modifymakefiles_checkbox,6,6,0,1);
   modifymakefiles_checkbox->setText( i18n("Modify Makefiles") );
-  modifymakefiles_checkbox->setChecked(prj->getModifyMakefiles());
+  modifymakefiles_checkbox->setChecked(prj_info->getModifyMakefiles());
 
   QLabel *vcsystem_label
-    = new QLabel( i18n("Version Control:"), w, "vcsystem_label" );
-  grid6->addWidget(vcsystem_label,7,0);
+    = new QLabel( i18n("Version Control:"), generalPage, "vcsystem_label" );
+  grid->addWidget(vcsystem_label,7,0);
 
-  vcsystem_combo = new QComboBox( false, w );
-  grid6->addWidget(vcsystem_combo,7,2);
+  vcsystem_combo = new QComboBox( false, generalPage );
+  grid->addWidget(vcsystem_combo,7,2);
   QStrList l;
   VersionControl::getSupportedSystems(&l);
   vcsystem_combo->insertItem(i18n("None"));
@@ -130,47 +155,54 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
           vcsystem_combo->setCurrentItem(i);
 
   QLabel* info_label;
-  info_label=new QLabel(w,"info_label");
-  grid6->addWidget(info_label,0,3);
+  info_label=new QLabel(generalPage,"info_label");
+  grid->addWidget(info_label,0,3);
   info_label->setText(i18n("Short Information:"));
 
-  info_edit=new QMultiLineEdit(w,"info_edit");
-  grid6->addMultiCellWidget(info_edit,1,8,3,5);
-  short_info=prj_info->getShortInfo();
+  info_edit=new QMultiLineEdit(generalPage,"info_edit");
+  grid->addMultiCellWidget(info_edit,1,8,3,5);
+  QStrList short_info=prj_info->getShortInfo();
   short_info.first();
   do {
     info_edit->append(short_info.current());
   } while(short_info.next());
 
-  QString infoEditMsg = i18n("Insert some useful information about\n"
-				  "your project here. This is only for the\n"
-				  "information in the project file-<b>not\n"
-				  "\nfor README etc.");
+  QString infoEditMsg = i18n("Insert some useful information about "
+          "your project here. This is only for the "
+          "information in the project file-<b>not "
+          "for README etc.");
 
   QWhatsThis::add(info_label, infoEditMsg);
   QWhatsThis::add(info_edit, infoEditMsg);
+}
 
-  addTab( w, i18n("General"));
+//
+// *************** Compiler options *********************
+//
+void CPrjOptionsDlg::addCompilerOptionsPage()
+{
+  QString cxxflags=prj_info->getCXXFLAGS();
 
-  // *************** Compiler options *********************
+  need_configure_in_update = false;
+  need_makefile_generation = false;
 
-  QWidget *w2= new QWidget(this,"Compiler options");
-  QWhatsThis::add(w2, i18n("Set your Compiler options here"));
+  QFrame* compilerOptions = addPage(i18n("Compiler Options"));
+  QWhatsThis::add(compilerOptions, i18n("Set your Compiler options here"));
 
   QGroupBox* target_group;
-  target_group=new QGroupBox(w2,"target_group");
+  target_group=new QGroupBox(compilerOptions,"target_group");
   target_group->setGeometry(10,10,260,140);
   target_group->setTitle(i18n("Target"));
-  QWhatsThis::add(target_group, i18n("Set your target options here\n"
-				     "by specifying your machine type\n"
-				     "and GCC optimization level (0-3)"));
+  QWhatsThis::add(target_group, i18n("Set your target options here "
+             "by specifying your machine type "
+             "and GCC optimization level (0-3)"));
 
   QLabel* target_label;
-  target_label=new QLabel(w2,"target_label");
+  target_label=new QLabel(compilerOptions,"target_label");
   target_label->setGeometry(20,30,100,20);
   target_label->setText(i18n("Target Machine"));
 
-  target=new QComboBox(false,w2,"target");
+  target=new QComboBox(false,compilerOptions,"target");
   target->setGeometry(120,30,120,20);
   target->insertItem(i18n("your machine"),0);
   target->insertItem(i18n("i386v"),1);
@@ -182,31 +214,31 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     target->setCurrentItem(0);
   }
 
-  QString targetMsg = i18n("Specify the machine type for your program.\n"
-			       "Other machine types than your machine is\n"
-			       "usually only needed for precompiled\n"
-			       "distribution packages. i386v is intended for\n"
-			       "cross-compilers to build a binary for an intel\n"
-			       "machine running Unix System V.");
+  QString targetMsg = i18n("Specify the machine type for your program. "
+             "Other machine types than your machine is "
+             "usually only needed for precompiled "
+             "distribution packages. i386v is intended for "
+             "cross-compilers to build a binary for an intel "
+             "machine running Unix System V.");
   QWhatsThis::add(target_label, targetMsg);
   QWhatsThis::add(target, targetMsg);
 
-  // syntax_check=new QCheckBox(w2,"syntax_check");
+  // syntax_check=new QCheckBox(compilerOptions,"syntax_check");
 //   syntax_check->setGeometry(20,60,220,20);
 //   syntax_check->setText(i18n("only syntax check"));
 //   syntax_check->setChecked(cxxflags.contains("-fsyntax-only"));
-//   QWhatsThis::add(syntax_check, i18n("This option sets the compiler\n"
-// 			     	"to <i>-fsyntax-only</i>\n"
-// 				"which lets you check your code for\n"
-// 				"syntax-errors but doesn't do anything\n"
-// 				"else beyond that.")); 
+//   QWhatsThis::add(syntax_check, i18n("This option sets the compiler "
+//              "to <i>-fsyntax-only</i> "
+//         "which lets you check your code for "
+//         "syntax-errors but doesn't do anything "
+//         "else beyond that."));
 
-  optimize=new QCheckBox(w2,"optimize");
+  optimize=new QCheckBox(compilerOptions,"optimize");
   optimize->setGeometry(20,90,220,20);
   optimize->setText(i18n("optimize"));
   optimize->setChecked(!cxxflags.contains("-O0"));
 
-  optimize_level=new QSpinBox(w2,"optimize_level");
+  optimize_level=new QSpinBox(compilerOptions,"optimize_level");
   optimize_level->setGeometry(40,120,40,20);
   optimize_level->setRange(1,3);
   if (cxxflags.contains("-O1")) optimize_level->setValue(1);
@@ -215,27 +247,27 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
 
   QLabel* optimize_level_label;
-  optimize_level_label=new QLabel(w2,"optimize_level_label");
+  optimize_level_label=new QLabel(compilerOptions,"optimize_level_label");
   optimize_level_label->setGeometry(100,120,140,20);
   optimize_level_label->setText(i18n("Optimization-level"));
 
-  QString optimizeMsg = i18n("Set the -O option for the GCC\n"
-  					            "here. Turning off optimization\n"
-		                        "equals -O0. The higher the level\n"
-					            "the more time you need to compile\n"
-				 	            "but increases program speed.");
+  QString optimizeMsg = i18n("Set the -O option for the GCC "
+                        "here. Turning off optimization "
+                            "equals -O0. The higher the level "
+                      "the more time you need to compile "
+                       "but increases program speed.");
 
   QWhatsThis::add(optimize, optimizeMsg);
   QWhatsThis::add(optimize_level, optimizeMsg);
   QWhatsThis::add(optimize_level_label, optimizeMsg);
 
   QGroupBox* debug_group;
-  debug_group=new QGroupBox(w2,"debug_group");
+  debug_group=new QGroupBox(compilerOptions,"debug_group");
   debug_group->setGeometry(280,10,255,140);
   debug_group->setTitle(i18n("Debugging"));
   QWhatsThis::add(debug_group, i18n("Set your debugging options here."));
 
-  debug=new QCheckBox(w2,"debug");
+  debug=new QCheckBox(compilerOptions,"debug");
   debug->setGeometry(290,30,220,20);
   debug->setText(i18n("generate debugging information"));
   if (cxxflags.contains("-g")) {
@@ -243,10 +275,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     debug->setChecked(false);
   }
-  QWhatsThis::add(debug, i18n("Checking this turns on the -g flag\n"
-														"to generate debugging information."));
+  QWhatsThis::add(debug, i18n("Checking this turns on the -g flag "
+                            "to generate debugging information."));
 
-  debug_level=new QSpinBox(w2,"debug_level");
+  debug_level=new QSpinBox(compilerOptions,"debug_level");
   debug_level->setGeometry(310,60,40,20);
   debug_level->setRange(1,3);
   if (cxxflags.contains("-g1")) debug_level->setValue(1);
@@ -255,19 +287,19 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   connect( debug_level, SIGNAL(valueChanged(int)),this , SLOT(slotDebug_level_changed(int)) );
 
   QLabel* debug_level_label;
-  debug_level_label=new QLabel(w2,"debug_level_label");
+  debug_level_label=new QLabel(compilerOptions,"debug_level_label");
   debug_level_label->setGeometry(370,60,140,20);
   debug_level_label->setText(i18n("Debug-level"));
 
-  QString debugLevelMsg = i18n("Set the debugging level here.\n"
-					"You can choose from level 1-3 which\n"
-					"sets option -g1 to -g3 debugging\n"
-					"level.");
+  QString debugLevelMsg = i18n("Set the debugging level here. "
+          "You can choose from level 1-3 which "
+          "sets option -g1 to -g3 debugging "
+          "level.");
   QWhatsThis::add(debug_level, debugLevelMsg);
   QWhatsThis::add(debug_level_label, debugLevelMsg);
 
 
-  gprof_info=new QCheckBox(w2,"gprof_info");
+  gprof_info=new QCheckBox(compilerOptions,"gprof_info");
   gprof_info->setGeometry(290,90,220,20);
   gprof_info->setText(i18n("generate extra information for gprof"));
   if (cxxflags.contains("-pg")) {
@@ -275,11 +307,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     gprof_info->setChecked(false);
   }
-  QWhatsThis::add(gprof_info, i18n("Generate extra code to write profile\n"
-				"information for the analysis program\n"
-				"<i>gprof</i>.")); 
+  QWhatsThis::add(gprof_info, i18n("Generate extra code to write profile "
+        "information for the analysis program "
+        "<i>gprof</i>."));
 
-  save_temps=new QCheckBox(w2,"save_temps");
+  save_temps=new QCheckBox(compilerOptions,"save_temps");
   save_temps->setGeometry(290,120,220,20);
   save_temps->setText(i18n("store temporary intermediate files"));
   if (cxxflags.contains("-save-temps")) {
@@ -287,36 +319,51 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     save_temps->setChecked(false);
   }
-  QWhatsThis::add(save_temps, i18n("Store the usually temporary intermediate\n"
-				"files in the current directory. This means\n"
-				"compiling a file <i>foo.c</i> will produce\n"
-				"the files <i>foo.o, foo.i</i> and<i>foo.s"));
+  QWhatsThis::add(save_temps, i18n("Store the usually temporary intermediate "
+        "files in the current directory. This means "
+        "compiling a file <i>foo.c</i> will produce "
+        "the files <i>foo.o, foo.i</i> and<i>foo.s"));
 
   QLabel* addit_gcc_options_label;
-  addit_gcc_options_label=new QLabel(w2,"addit_gcc_options_label");
+  addit_gcc_options_label=new QLabel(compilerOptions,"addit_gcc_options_label");
   addit_gcc_options_label->setGeometry(10,180,200,20);
   addit_gcc_options_label->setText(i18n("additional options:"));
 
-  addit_gcc_options=new QLineEdit(w2,"addit_gcc_options");
+  addit_gcc_options=new QLineEdit(compilerOptions,"addit_gcc_options");
   addit_gcc_options->setGeometry(10,210,490,30);
   addit_gcc_options->setText(prj_info->getAdditCXXFLAGS());
 
-  QString gccOptionsMsg = i18n("Insert other GCC-options here\n"
-					"to invoke GCC with by setting the\n"
-					"CXXFLAGS-environment variable.");
+  QString gccOptionsMsg = i18n("Insert other GCC-options here "
+          "to invoke GCC with by setting the "
+          "CXXFLAGS-environment variable.");
   QWhatsThis::add(addit_gcc_options_label, gccOptionsMsg);
   QWhatsThis::add(addit_gcc_options, gccOptionsMsg);
 
-  addTab(w2,i18n("Compiler Options"));
+  if(prj_info->isCustomProject())
+    compilerOptions->setEnabled(false);
+}
 
+//
+// *************** Compiler Warnings *********************
+//
+void CPrjOptionsDlg::addCompilerWarningsPage()
+{
+  QString cxxflags=prj_info->getCXXFLAGS();
+  QString ldflags=prj_info->getLDFLAGS();
+  QString ldadd=prj_info->getLDADD();
 
-  // *************** Compiler Warnings *********************
+  old_version = prj_info->getVersion();
+  old_ldflags =  ldflags.stripWhiteSpace();
+  old_ldadd = ldadd.stripWhiteSpace();
+  old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
+  old_cxxflags = cxxflags.stripWhiteSpace();
 
-  QWidget *w3= new QWidget(this,"Warnings");
-  QWhatsThis::add(w3, i18n("Set the Compiler warnings here by checking\n"
-			"the -W options you want to use."));
-  QGridLayout *grid1 = new QGridLayout(w3,13,2,15,7);
-  w_all=new QCheckBox(w3,"w_all");
+  QFrame* compilerWarnings = addPage(i18n("Compiler Warnings"));
+  QWhatsThis::add(compilerWarnings, i18n("Set the Compiler warnings here by checking "
+      "the -W options you want to use."));
+
+  QGridLayout *grid1 = new QGridLayout(compilerWarnings,13,2,15,7);
+  w_all=new QCheckBox(compilerWarnings,"w_all");
   grid1->addWidget(w_all,0,0);
   w_all->setText("-Wall");
   if (cxxflags.contains("-Wall")) {
@@ -324,12 +371,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_all->setChecked(false);
   }
-  QWhatsThis::add(w_all, i18n("Compile with -Wall. This option\n"
-			"includes several different warning\n"
-			"parameters which are recommended to\n"
-			"turn on."));
+  QWhatsThis::add(w_all, i18n("Compile with -Wall. This option "
+      "includes several different warning "
+      "parameters which are recommended to "
+      "turn on."));
 
-  w_=new QCheckBox(w3,"w_");
+  w_=new QCheckBox(compilerWarnings,"w_");
   grid1->addWidget(w_,1,0);
   w_->setText("-W");
   if (cxxflags.contains("-W ")) {
@@ -337,12 +384,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_->setChecked(false);
   }
-  QWhatsThis::add(w_, i18n("Compile with -W. This option\n"
-			"sets options not included in -Wall\n"
-			"which are very specific. Please read\n"
-			"GCC-Info for more information."));
+  QWhatsThis::add(w_, i18n("Compile with -W. This option "
+      "sets options not included in -Wall "
+      "which are very specific. Please read "
+      "GCC-Info for more information."));
 
-  w_traditional=new QCheckBox(w3,"w_traditional");
+  w_traditional=new QCheckBox(compilerWarnings,"w_traditional");
   grid1->addWidget(w_traditional,2,0);
   w_traditional->setText("-Wtraditional");
   if (cxxflags.contains("-Wtraditional")) {
@@ -350,12 +397,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_traditional->setChecked(false);
   }
-  QWhatsThis::add(w_traditional, i18n("Warn about certain constructs\n"
-				"that behave differently in traditional\n"
-				"and ANSI C."));
+  QWhatsThis::add(w_traditional, i18n("Warn about certain constructs "
+        "that behave differently in traditional "
+        "and ANSI C."));
 
 
-  w_undef=new QCheckBox(w3,"w_undef");
+  w_undef=new QCheckBox(compilerWarnings,"w_undef");
   grid1->addWidget(w_undef,3,0);
   w_undef->setText("-Wundef");
   if (cxxflags.contains("-Wundef")) {
@@ -363,10 +410,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_undef->setChecked(false);
   }
-  QWhatsThis::add(w_undef, i18n("Warn if an undefined identifier is\n"
-				"evaluated in an `#if' directive"));
+  QWhatsThis::add(w_undef, i18n("Warn if an undefined identifier is "
+        "evaluated in an `#if' directive"));
 
-  w_shadow=new QCheckBox(w3,"w_shadow");
+  w_shadow=new QCheckBox(compilerWarnings,"w_shadow");
   grid1->addWidget(w_shadow,4,0);
   w_shadow->setText("-Wshadow");
   if (cxxflags.contains("-Wshadow")) {
@@ -374,10 +421,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_shadow->setChecked(false);
   }
-  QWhatsThis::add(w_shadow, i18n("Warn whenever a local variable\n"
-				"shadows another local variable."));
+  QWhatsThis::add(w_shadow, i18n("Warn whenever a local variable "
+        "shadows another local variable."));
 
-  /*  w_id_clash_len=new QCheckBox(w3,"w_id_clash_len");
+  /*  w_id_clash_len=new QCheckBox(compilerWarnings,"w_id_clash_len");
   w_id_clash_len->setGeometry(10,110,230,20);
   w_id_clash_len->setText("-Wid_clash-LEN");
   if (cxxflags.contains("-Wid-clash-LEN")) {
@@ -385,14 +432,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_id_clash_len->setChecked(false);
   }
-  QWhatsThis::add(w_id_clash_len, i18n("Warn whenever two distinct\n"
-				"identifiers match in the first LEN\n"
-				"characters. This may help you prepare\n"
-				"a program that will compile with\n"
-				"certain obsolete, brain-damaged\n"
-				"compilers."));
+  QWhatsThis::add(w_id_clash_len, i18n("Warn whenever two distinct "
+        "identifiers match in the first LEN "
+        "characters. This may help you prepare "
+        "a program that will compile with "
+        "certain obsolete, brain-damaged "
+        "compilers."));
 
-  w_larger_than_len=new QCheckBox(w3,"w_larger_than_len");
+  w_larger_than_len=new QCheckBox(compilerWarnings,"w_larger_than_len");
   w_larger_than_len->setGeometry(10,130,230,20);
   w_larger_than_len->setText("-Wlarger-than-LEN");
   if (cxxflags.contains("-Wlarger-than-LEN")) {
@@ -400,12 +447,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_larger_than_len->setChecked(false);
   }
-  QWhatsThis::add(w_larger_than_len, i18n("Warn whenever an object\n"
-					"of larger than LEN bytes \n"
-					"is defined."));
+  QWhatsThis::add(w_larger_than_len, i18n("Warn whenever an object "
+          "of larger than LEN bytes  "
+          "is defined."));
   */
 
-  w_pointer_arith=new QCheckBox(w3,"w_pointer_arith");
+  w_pointer_arith=new QCheckBox(compilerWarnings,"w_pointer_arith");
   grid1->addWidget(w_pointer_arith,5,0);
   w_pointer_arith->setText("-Wpointer-arith");
   if (cxxflags.contains("-Wpointer-arith")) {
@@ -413,16 +460,16 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_pointer_arith->setChecked(false);
   }
-  QWhatsThis::add(w_pointer_arith, i18n("Warn about anything that\n"
-				"depends on the <i>size of</i> a\n"
-				"function type or of <i>void</i>.\n"
-				"GNU C assigns these types a size of 1,\n"
-				"for convenience in calculations with\n"
-				"<i>void *</i> pointers and pointers\n"
-				"to functions."));
+  QWhatsThis::add(w_pointer_arith, i18n("Warn about anything that "
+        "depends on the <i>size of</i> a "
+        "function type or of <i>void</i>. "
+        "GNU C assigns these types a size of 1, "
+        "for convenience in calculations with "
+        "<i>void *</i> pointers and pointers "
+        "to functions."));
 
 
-  w_bad_function_cast=new QCheckBox(w3,"w_bad_function_cast");
+  w_bad_function_cast=new QCheckBox(compilerWarnings,"w_bad_function_cast");
   grid1->addWidget(w_bad_function_cast,6,0);
   w_bad_function_cast->setText("-Wbad-function-cast");
   if (cxxflags.contains("-Wbad-function-cast")) {
@@ -430,13 +477,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_bad_function_cast->setChecked(false);
   }
-  QWhatsThis::add(w_bad_function_cast, i18n("Warn whenever a function call is\n"
-					"cast to a non-matching type. For\n"
-					"example, warn if <i>int malloc()</i>\n"
-					"is cast to <i>anything *."));
+  QWhatsThis::add(w_bad_function_cast, i18n("Warn whenever a function call is "
+          "cast to a non-matching type. For "
+          "example, warn if <i>int malloc()</i> "
+          "is cast to <i>anything *."));
 
 
-  w_cast_qual=new QCheckBox(w3,"w_cast_qual");
+  w_cast_qual=new QCheckBox(compilerWarnings,"w_cast_qual");
   grid1->addWidget(w_cast_qual,7,0);
   w_cast_qual->setText("-Wcast-qual");
   if (cxxflags.contains("-Wcast-qual")) {
@@ -444,14 +491,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_cast_qual->setChecked(false);
   }
-  QWhatsThis::add(w_cast_qual, i18n("Warn whenever a pointer is cast\n"
-				"so as to remove a type qualifier\n"
-				"from the target type. For example,\n"
-				"warn if a <i>const char *</i> is\n"
-				"cast to an ordinary <i>char *."));
+  QWhatsThis::add(w_cast_qual, i18n("Warn whenever a pointer is cast "
+        "so as to remove a type qualifier "
+        "from the target type. For example, "
+        "warn if a <i>const char *</i> is "
+        "cast to an ordinary <i>char *."));
 
 
-  w_cast_align=new QCheckBox(w3,"w_cast_align");
+  w_cast_align=new QCheckBox(compilerWarnings,"w_cast_align");
   grid1->addWidget(w_cast_align,8,0);
   w_cast_align->setText("-Wcast-align");
   if (cxxflags.contains("-Wcast-align")) {
@@ -459,15 +506,15 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     w_cast_align->setChecked(false);
   }
-  QWhatsThis::add(w_cast_align, i18n("Warn whenever a pointer is cast such\n"
-				"that the required alignment of the target\n"
-				"is increased. For example, warn if a\n"
-				"<i>char *</i> is cast to an <i>int *</i> on\n"
-				"machines where integers can only be accessed\n"
-				"at two- or four-byte boundaries."));
+  QWhatsThis::add(w_cast_align, i18n("Warn whenever a pointer is cast such "
+        "that the required alignment of the target "
+        "is increased. For example, warn if a "
+        "<i>char *</i> is cast to an <i>int *</i> on "
+        "machines where integers can only be accessed "
+        "at two- or four-byte boundaries."));
 
 
-  w_write_strings=new QCheckBox(w3,"w_write_strings");
+  w_write_strings=new QCheckBox(compilerWarnings,"w_write_strings");
   grid1->addWidget(w_write_strings,9,0);
   w_write_strings->setText("-Wwrite-strings");
   if (cxxflags.contains("-Wwrite-strings")) {
@@ -476,18 +523,18 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_write_strings->setChecked(false);
   }
   QWhatsThis::add(w_write_strings,
-	i18n("Give string constants the type <i>const char[LENGTH]</i>\n"
-	     	"so that copying the address of one into a non-<i>const\n"
-	     	"char *</i> pointer will get a warning. These warnings\n"
-		"will help you find at compile time code that can try to\n"
-		"write into a string constant, but only if you have been\n"
-		"very careful about using <i>const</i> in declarations\n"
-		"and prototypes. Otherwise, it will just be a nuisance;\n"
-		"this is why we did not make <i>-Wall</i> request these\n"
-          	"warnings."));
+  i18n("Give string constants the type <i>const char[LENGTH]</i> "
+         "so that copying the address of one into a non-<i>const "
+         "char *</i> pointer will get a warning. These warnings "
+    "will help you find at compile time code that can try to "
+    "write into a string constant, but only if you have been "
+    "very careful about using <i>const</i> in declarations "
+    "and prototypes. Otherwise, it will just be a nuisance; "
+    "this is why we did not make <i>-Wall</i> request these "
+            "warnings."));
 
 
-  w_conversion=new QCheckBox(w3,"w_conversion");
+  w_conversion=new QCheckBox(compilerWarnings,"w_conversion");
   grid1->addWidget(w_conversion,10,0);
   w_conversion->setText("-Wconversion");
   if (cxxflags.contains("-Wconversion")) {
@@ -496,17 +543,17 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_conversion->setChecked(false);
   }
   QWhatsThis::add(w_conversion,
-	 i18n("Warn if a prototype causes a type conversion that is different\n"
-		"from what would happen to the same argument in the absence\n"
-		"of a prototype. This includes conversions of fixed point to\n"
-		"floating and vice versa, and conversions changing the width\n"
-		"or signedness of a fixed point argument except when the same\n"
-		"as the default promotion.  Also warn if a negative integer\n"
-		"constant expression is implicitly converted to an unsigned\n"
-		"type."));
+   i18n("Warn if a prototype causes a type conversion that is different "
+    "from what would happen to the same argument in the absence "
+    "of a prototype. This includes conversions of fixed point to "
+    "floating and vice versa, and conversions changing the width "
+    "or signedness of a fixed point argument except when the same "
+    "as the default promotion.  Also warn if a negative integer "
+    "constant expression is implicitly converted to an unsigned "
+    "type."));
 
 
-  w_sign_compare=new QCheckBox(w3,"w_sign_compare");
+  w_sign_compare=new QCheckBox(compilerWarnings,"w_sign_compare");
   grid1->addWidget(w_sign_compare,0,1);
   w_sign_compare->setText("-Wsign-compare");
   if (cxxflags.contains("-Wsign-compare")) {
@@ -515,12 +562,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_sign_compare->setChecked(false);
   }
   QWhatsThis::add(w_sign_compare,
-	i18n("Warn when a comparison between signed and unsigned values\n"
-	     "could produce an incorrect result when the signed value\n"
-	     "is converted to unsigned."));
+  i18n("Warn when a comparison between signed and unsigned values "
+       "could produce an incorrect result when the signed value "
+       "is converted to unsigned."));
 
 
-  w_aggregate_return=new QCheckBox(w3,"w_aggregate_return");
+  w_aggregate_return=new QCheckBox(compilerWarnings,"w_aggregate_return");
   grid1->addWidget(w_aggregate_return,1,1);
   w_aggregate_return->setText("-Waggregate-return");
   if (cxxflags.contains("-Waggregate-return")) {
@@ -529,12 +576,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_aggregate_return->setChecked(false);
   }
   QWhatsThis::add(w_aggregate_return,
-	i18n("Warn if any functions that return structures or unions are\n"
-		"defined or called. (In languages where you can return an\n"
-		"array, this also elicits a warning.)"));
+  i18n("Warn if any functions that return structures or unions are "
+    "defined or called. (In languages where you can return an "
+    "array, this also elicits a warning.)"));
 
 
-  w_strict_prototypes=new QCheckBox(w3,"w_strict_prototypes");
+  w_strict_prototypes=new QCheckBox(compilerWarnings,"w_strict_prototypes");
   grid1->addWidget(w_strict_prototypes,2,1);
   w_strict_prototypes->setText("-Wstrict-prototypes");
   if (cxxflags.contains("-Wstrict-prototypes")) {
@@ -543,13 +590,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_strict_prototypes->setChecked(false);
   }
   QWhatsThis::add(w_strict_prototypes,
-	i18n("Warn if a function is declared or defined without specifying\n"
-		"the argument types. (An old-style function definition is\n"
-		"permitted without a warning if preceded by a declaration\n"
-		"which specifies the argument types.)"));
+  i18n("Warn if a function is declared or defined without specifying "
+    "the argument types. (An old-style function definition is "
+    "permitted without a warning if preceded by a declaration "
+    "which specifies the argument types.)"));
 
 
-  w_missing_prototypes=new QCheckBox(w3,"w_missing_prototypes");
+  w_missing_prototypes=new QCheckBox(compilerWarnings,"w_missing_prototypes");
   grid1->addWidget(w_missing_prototypes,3,1);
   w_missing_prototypes->setText("-Wmissing-prototypes");
   if (cxxflags.contains("-Wmissing-prototypes")) {
@@ -558,14 +605,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_missing_prototypes->setChecked(false);
   }
   QWhatsThis::add(w_missing_prototypes,
-	i18n("Warn if a global function is defined without a previous\n"
-		"prototype declaration. This warning is issued even if\n"
-		"the definition itself provides a prototype. The aim\n"
-		"is to detect global functions that fail to be declared\n"
-		"in header files."));
+  i18n("Warn if a global function is defined without a previous "
+    "prototype declaration. This warning is issued even if "
+    "the definition itself provides a prototype. The aim "
+    "is to detect global functions that fail to be declared "
+    "in header files."));
 
 
-  w_missing_declarations=new QCheckBox(w3,"w_missing_declarations");
+  w_missing_declarations=new QCheckBox(compilerWarnings,"w_missing_declarations");
   grid1->addWidget(w_missing_declarations,4,1);
   w_missing_declarations->setText("-Wmissing-declarations");
   if (cxxflags.contains("-Wmissing-declarations")) {
@@ -574,13 +621,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_missing_declarations->setChecked(false);
   }
   QWhatsThis::add(w_missing_declarations,
-	i18n("Warn if a global function is defined without a previous\n"
-		"declaration. Do so even if the definition itself pro-\n"
-		"vides a prototype. Use this option to detect global\n"
-		"functions that are not declared in header files."));
+  i18n("Warn if a global function is defined without a previous "
+    "declaration. Do so even if the definition itself pro- "
+    "vides a prototype. Use this option to detect global "
+    "functions that are not declared in header files."));
 
 
-  w_redundant_decls=new QCheckBox(w3,"w_redundant_decls");
+  w_redundant_decls=new QCheckBox(compilerWarnings,"w_redundant_decls");
   grid1->addWidget(w_redundant_decls,5,1);
   w_redundant_decls->setText("-Wredundant-decls");
   if (cxxflags.contains("-Wredundant-decls")) {
@@ -589,12 +636,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_redundant_decls->setChecked(false);
   }
   QWhatsThis::add(w_redundant_decls,
-	i18n("Warn if anything is declared more than once in the same scope\n"
-		"even in cases where multiple declaration is valid and\n"
-		"changes nothing."));
+  i18n("Warn if anything is declared more than once in the same scope "
+    "even in cases where multiple declaration is valid and "
+    "changes nothing."));
 
 
-  w_nested_externs=new QCheckBox(w3,"w_nested_externs");
+  w_nested_externs=new QCheckBox(compilerWarnings,"w_nested_externs");
   grid1->addWidget(w_nested_externs,6,1);
   w_nested_externs->setText("-Wnested-externs");
   if (cxxflags.contains("-Wnested-externs")) {
@@ -603,11 +650,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_nested_externs->setChecked(false);
   }
   QWhatsThis::add(w_nested_externs,
-	i18n("Warn if an <i>extern</i> declaration is\n"
-		"encountered within a function."));
+  i18n("Warn if an <i>extern</i> declaration is "
+    "encountered within a function."));
 
 
-  w_inline=new QCheckBox(w3,"w_inline");
+  w_inline=new QCheckBox(compilerWarnings,"w_inline");
   grid1->addWidget(w_inline,7,1);
   w_inline->setText("-Winline");
   if (cxxflags.contains("-Winline")) {
@@ -616,12 +663,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_inline->setChecked(false);
   }
   QWhatsThis::add(w_inline,
-	i18n("Warn if a function can not be inlined, and either\n"
-		"it was declared as inline, or else the\n"
-		"<i>-finline-functions</i> option was given."));
+  i18n("Warn if a function can not be inlined, and either "
+    "it was declared as inline, or else the "
+    "<i>-finline-functions</i> option was given."));
 
 
-  w_old_style_cast=new QCheckBox(w3,"w_old_style_cast");
+  w_old_style_cast=new QCheckBox(compilerWarnings,"w_old_style_cast");
   grid1->addWidget(w_old_style_cast,8,1);
   w_old_style_cast->setText("-Wold-style-cast");
   if (cxxflags.contains("-Wold-style-cast")) {
@@ -630,11 +677,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_old_style_cast->setChecked(false);
   }
   QWhatsThis::add(w_old_style_cast,
-	i18n("Warn if an old-style (C-style) cast is used\n"
-	     "within a program"));
+  i18n("Warn if an old-style (C-style) cast is used "
+       "within a program"));
 
 
-  w_overloaded_virtual=new QCheckBox(w3,"w_overloaded_virtual");
+  w_overloaded_virtual=new QCheckBox(compilerWarnings,"w_overloaded_virtual");
   grid1->addWidget(w_overloaded_virtual,9,1);
   w_overloaded_virtual->setText("-Woverloaded-virtual");
   if (cxxflags.contains("-Woverloaded-virtual")) {
@@ -643,17 +690,17 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_overloaded_virtual->setChecked(false);
   }
   QWhatsThis::add(w_overloaded_virtual,
-	i18n("Warn when a derived class function declaration may be an\n"
-		"error in defining a virtual function (C++ only). In\n"
-		"a derived class, the definitions of virtual functions\n"
-		"must match the type signature of a virtual function\n"
-		"declared in the base class. With this option, the\n"
-		"compiler warns when you define a function with the same\n"
-		"as a virtual function, but with a type signature that\n"
-		"does not match any declarations from the base class."));
+  i18n("Warn when a derived class function declaration may be an "
+    "error in defining a virtual function (C++ only). In "
+    "a derived class, the definitions of virtual functions "
+    "must match the type signature of a virtual function "
+    "declared in the base class. With this option, the "
+    "compiler warns when you define a function with the same "
+    "as a virtual function, but with a type signature that "
+    "does not match any declarations from the base class."));
 
 
-  w_synth=new QCheckBox(w3,"w_synth");
+  w_synth=new QCheckBox(compilerWarnings,"w_synth");
   grid1->addWidget(w_synth,10,1);
   w_synth->setText("-Wsynth");
   if (cxxflags.contains("-Wsynth")) {
@@ -662,11 +709,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_synth->setChecked(false);
   }
   QWhatsThis::add(w_synth,
-	i18n("Warn when g++'s synthesis behavoir does\n"
-		"not match that of cfront."));
+  i18n("Warn when g++'s synthesis behavoir does "
+    "not match that of cfront."));
 
 
-  w_error=new QCheckBox(w3,"w_error");
+  w_error=new QCheckBox(compilerWarnings,"w_error");
   grid1->addWidget(w_error,12,1);
   w_error->setText(i18n("make all Warnings into errors"));
   if (cxxflags.contains("-Werror")) {
@@ -675,23 +722,37 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     w_error->setChecked(false);
   }
   QWhatsThis::add(w_error,
-	i18n("Make all warnings into errors."));
+  i18n("Make all warnings into errors."));
 
-  addTab(w3,i18n("Compiler Warnings"));
+  if(prj_info->isCustomProject())
+    compilerWarnings->setEnabled(false);
+}
 
+//
+// *************** Linker Options *********************
+//
+void CPrjOptionsDlg::addLinkerPage()
+{
+  QString ldflags=prj_info->getLDFLAGS();
+  QString ldadd=prj_info->getLDADD();
 
-  // *************** Linker Options *********************
+  old_version = prj_info->getVersion();
+  old_ldflags =  ldflags.stripWhiteSpace();
+  old_ldadd = ldadd.stripWhiteSpace();
+  old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
 
-  QWidget *w4= new QWidget(this,"Linker");
-  QGridLayout *grid2 = new QGridLayout(w4,2,1,15,7);
-  QWhatsThis::add(w4, i18n("Set the Linker options and choose the\n"
-			"libraries to add to your project."));
+  int pos;
+
+  QFrame* linkerOptions = addPage(i18n("Linker Options"));
+  QGridLayout *grid2 = new QGridLayout(linkerOptions,2,1,15,7);
+  QWhatsThis::add(linkerOptions, i18n("Set the Linker options and choose the "
+      "libraries to add to your project."));
   ldflags = " " + ldflags + " ";
   ldadd = " " + ldadd + " ";
 //  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldflags.data());
 //  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
   QGroupBox* ldflags_group;
-  ldflags_group=new QGroupBox(w4,"ldflags_group");
+  ldflags_group=new QGroupBox(linkerOptions,"ldflags_group");
   QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7);
 
   ldflags_group->setTitle(i18n("library flags"));
@@ -708,10 +769,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     l_remove_symbols->setChecked(false);
   }
-  QWhatsThis::add(l_remove_symbols, i18n("If you want to use a debugger, you\n"
-			"should keep those informations in the object files.\n"
-			"It's useless to let the compiler generate debug\n"
-			"informations and to remove it with this option."));
+  QWhatsThis::add(l_remove_symbols, i18n("If you want to use a debugger, you "
+      "should keep those informations in the object files. "
+      "It's useless to let the compiler generate debug "
+      "informations and to remove it with this option."));
 
   l_static=new QCheckBox(ldflags_group,"l_static");
   grid3->addMultiCellWidget(l_static,1,1,0,1);
@@ -725,9 +786,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     l_static->setChecked(false);
   }
-  QWhatsThis::add(l_static, i18n("On systems that support dynamic linking,\n"
-				 "this prevents linking with the shared libraries.\n"
-				 "On other systems, this option has no effect."));
+  QWhatsThis::add(l_static, i18n("On systems that support dynamic linking, "
+         "this prevents linking with the shared libraries. "
+         "On other systems, this option has no effect."));
 
   QLabel* addit_ldflags_label;
   addit_ldflags_label=new QLabel(ldflags_group,"addit_ldflags_label");
@@ -740,14 +801,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   addit_ldflags->setText(ldflags);
   grid2->addWidget(ldflags_group,0,0);
 
-  QString ldflagsMsg = i18n("Insert other linker options here\n"
-				      "to invoke the linker with by setting the\n"
-				      "LDFLAGS-environment variable.");
+  QString ldflagsMsg = i18n("Insert other linker options here "
+              "to invoke the linker with by setting the "
+              "LDFLAGS-environment variable.");
   QWhatsThis::add(addit_ldflags_label, ldflagsMsg);
   QWhatsThis::add(addit_ldflags, ldflagsMsg);
 
   QGroupBox* libs_group;
-  libs_group=new QGroupBox(w4,"libs_group");
+  libs_group=new QGroupBox(linkerOptions,"libs_group");
 
   QGridLayout *grid4 = new QGridLayout(libs_group,5,4,15,7);
   libs_group->setTitle(i18n("libraries"));
@@ -764,7 +825,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     l_X11->setChecked(false);
   }
-  QWhatsThis::add(l_X11, i18n("X11 basics\n"));
+  QWhatsThis::add(l_X11, i18n("X11 basics "));
 
   l_Xext=new QCheckBox(libs_group,"l_Xext");
   grid4->addWidget(l_Xext,1,0);
@@ -777,12 +838,12 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     l_Xext->setChecked(false);
   }
-  QWhatsThis::add(l_Xext, i18n("X11 extensions\n"));
+  QWhatsThis::add(l_Xext, i18n("X11 extensions "));
 
   l_qt=new QCheckBox(libs_group,"l_qt");
   grid4->addWidget(l_qt,2,0);
   l_qt->setText("qt");
-  if(!(prj->isKDE2Project() || prj->isQt2Project())){
+  if(!(prj_info->isKDE2Project() || prj_info->isQt2Project())){
     if (ldadd.contains(" -lqt ")) {
       l_qt->setChecked(true);
       pos=ldadd.find("-lqt ");
@@ -844,9 +905,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   } else {
     l_khtmlw->setChecked(false);
   }
-  QWhatsThis::add(l_khtmlw, i18n("KDE HTML widget :\n"
-				 "this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
-				 "-ltiff, -lpng, -lm, -ljscript."));
+  QWhatsThis::add(l_khtmlw, i18n("KDE HTML widget : "
+         "this includes -lkhtmlw, -lkimgio, -ljpeg, "
+         "-ltiff, -lpng, -lm, -ljscript."));
 
   l_kfm=new QCheckBox(libs_group,"l_kfm");
   grid4->addWidget(l_kfm,2,1);
@@ -927,13 +988,19 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QWhatsThis::add(addit_ldadd_label, i18n("Add additional libraries here."));
   QWhatsThis::add(addit_ldadd, i18n("Add additional libraries here."));
   grid2->addWidget(libs_group,1,0);
-  addTab(w4,i18n("Linker Options"));
+  if(prj_info->isCustomProject())
+    linkerOptions->setEnabled(false);
+}
 
-  // ****************** the Make_Widget ********************
-  QWidget *w5 = new QWidget( this, "make" );
-  QWhatsThis::add(w5, i18n("This dialog is for setting\nyour make options."));
+//
+// ****************** the Make_Widget ********************
+//
+void CPrjOptionsDlg::addMakePage()
+{
+  QFrame* makeOptions = addPage(i18n("Make Options"));
+  QWhatsThis::add(makeOptions, i18n("This dialog is for setting your make options."));
 
-  m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
+  m_print_debug_info = new QCheckBox( makeOptions, "m_print_debug_info" );
   m_print_debug_info->setGeometry( 10, 20, 220, 25 );
   m_print_debug_info->setFocusPolicy( QWidget::TabFocus );
   m_print_debug_info->setBackgroundMode( QWidget::PaletteBackground );
@@ -941,9 +1008,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_print_debug_info->setPalettePropagation( QWidget::NoChildren );
   m_print_debug_info->setText(i18n("Print debug information"));
   m_print_debug_info->setAutoRepeat( FALSE );
-  m_print_debug_info->setAutoResize( FALSE );
+//  m_print_debug_info->setAutoResize( FALSE );
 
-  m_cont_after_error = new QCheckBox( w5, "m_cont_after_error" );
+  m_cont_after_error = new QCheckBox( makeOptions, "m_cont_after_error" );
   m_cont_after_error->setGeometry( 240, 20, 190, 25 );
   m_cont_after_error->setFocusPolicy( QWidget::TabFocus );
   m_cont_after_error->setBackgroundMode( QWidget::PaletteBackground );
@@ -951,9 +1018,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_cont_after_error->setPalettePropagation( QWidget::NoChildren );
   m_cont_after_error->setText(i18n("Continue after errors"));
   m_cont_after_error->setAutoRepeat( FALSE );
-  m_cont_after_error->setAutoResize( FALSE );
+//  m_cont_after_error->setAutoResize( FALSE );
 
-  m_print_data_base = new QCheckBox( w5, "m_print_data_base" );
+  m_print_data_base = new QCheckBox( makeOptions, "m_print_data_base" );
   m_print_data_base->setGeometry( 445, 20, 190, 25 );
   m_print_data_base->setFocusPolicy( QWidget::TabFocus );
   m_print_data_base->setBackgroundMode( QWidget::PaletteBackground );
@@ -961,9 +1028,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_print_data_base->setPalettePropagation( QWidget::NoChildren );
   m_print_data_base->setText(i18n("Print the data base"));
   m_print_data_base->setAutoRepeat( FALSE );
-  m_print_data_base->setAutoResize( FALSE );
+//  m_print_data_base->setAutoResize( FALSE );
 
-  m_env_variables = new QCheckBox( w5, "m_env_variables" );
+  m_env_variables = new QCheckBox( makeOptions, "m_env_variables" );
   m_env_variables->setGeometry( 10, 50, 190, 25 );
   m_env_variables->setFocusPolicy( QWidget::TabFocus );
   m_env_variables->setBackgroundMode( QWidget::PaletteBackground );
@@ -971,9 +1038,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_env_variables->setPalettePropagation( QWidget::NoChildren );
   m_env_variables->setText(i18n("Environment variables"));
   m_env_variables->setAutoRepeat( FALSE );
-  m_env_variables->setAutoResize( FALSE );
+//  m_env_variables->setAutoResize( FALSE );
 
-  m_no_rules = new QCheckBox( w5, "m_no_rules" );
+  m_no_rules = new QCheckBox( makeOptions, "m_no_rules" );
   m_no_rules->setGeometry( 240, 50, 190, 25 );
   m_no_rules->setFocusPolicy( QWidget::TabFocus );
   m_no_rules->setBackgroundMode( QWidget::PaletteBackground );
@@ -981,9 +1048,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_no_rules->setPalettePropagation( QWidget::NoChildren );
   m_no_rules->setText(i18n("No built-in rules"));
   m_no_rules->setAutoRepeat( FALSE );
-  m_no_rules->setAutoResize( FALSE );
+//  m_no_rules->setAutoResize( FALSE );
 
-  m_touch_files = new QCheckBox( w5, "m_touch_files" );
+  m_touch_files = new QCheckBox( makeOptions, "m_touch_files" );
   m_touch_files->setGeometry( 445, 50, 190, 25 );
   m_touch_files->setFocusPolicy( QWidget::TabFocus );
   m_touch_files->setBackgroundMode( QWidget::PaletteBackground );
@@ -991,9 +1058,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_touch_files->setPalettePropagation( QWidget::NoChildren );
   m_touch_files->setText(i18n("Touch files"));
   m_touch_files->setAutoRepeat( FALSE );
-  m_touch_files->setAutoResize( FALSE );
+//  m_touch_files->setAutoResize( FALSE );
 
-  m_ignor_errors = new QCheckBox( w5, "m_ignor_errors" );
+  m_ignor_errors = new QCheckBox( makeOptions, "m_ignor_errors" );
   m_ignor_errors->setGeometry( 10, 80, 190, 25 );
   m_ignor_errors->setFocusPolicy( QWidget::TabFocus );
   m_ignor_errors->setBackgroundMode( QWidget::PaletteBackground );
@@ -1001,9 +1068,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_ignor_errors->setPalettePropagation( QWidget::NoChildren );
   m_ignor_errors->setText(i18n("Ignore all errors"));
   m_ignor_errors->setAutoRepeat( FALSE );
-  m_ignor_errors->setAutoResize( FALSE );
+//  m_ignor_errors->setAutoResize( FALSE );
 
-  m_silent_operation = new QCheckBox( w5, "m_silent_operation" );
+  m_silent_operation = new QCheckBox( makeOptions, "m_silent_operation" );
   m_silent_operation->setGeometry( 240, 80, 190, 25 );
   m_silent_operation->setFocusPolicy( QWidget::TabFocus );
   m_silent_operation->setBackgroundMode( QWidget::PaletteBackground );
@@ -1011,9 +1078,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_silent_operation->setPalettePropagation( QWidget::NoChildren );
   m_silent_operation->setText(i18n("Silent operation"));
   m_silent_operation->setAutoRepeat( FALSE );
-  m_silent_operation->setAutoResize( FALSE );
+//  m_silent_operation->setAutoResize( FALSE );
 
-  m_print_work_dir = new QCheckBox( w5, "m_print_work_dir" );
+  m_print_work_dir = new QCheckBox( makeOptions, "m_print_work_dir" );
   m_print_work_dir->setGeometry( 445, 80, 190, 25 );
   m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
   m_print_work_dir->setBackgroundMode( QWidget::PaletteBackground );
@@ -1021,9 +1088,9 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_print_work_dir->setPalettePropagation( QWidget::NoChildren );
   m_print_work_dir->setText(i18n("Print working directory"));
   m_print_work_dir->setAutoRepeat( FALSE );
-  m_print_work_dir->setAutoResize( FALSE );
+//  m_print_work_dir->setAutoResize( FALSE );
 
-  m_job_number_label = new QLabel( w5, "m_job_number_label" );
+  m_job_number_label = new QLabel( makeOptions, "m_job_number_label" );
   m_job_number_label->setGeometry( 10, 110, 100, 25 );
   m_job_number_label->setFocusPolicy( QWidget::NoFocus );
   m_job_number_label->setBackgroundMode( QWidget::PaletteBackground );
@@ -1033,7 +1100,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_job_number_label->setAlignment( 289 );
   m_job_number_label->setMargin( -1 );
 
-  m_job_number = new QSpinBox( w5, "m_job_number" );
+  m_job_number = new QSpinBox( makeOptions, "m_job_number" );
   m_job_number->setGeometry( 130, 110, 50, 25 );
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
   m_job_number->setBackgroundMode( QWidget::PaletteBackground );
@@ -1048,7 +1115,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_job_number->setSpecialValueText( "" );
   m_job_number->setWrapping( FALSE );
 
-  m_rebuild_label = new QLabel( w5, "m_rebuild_label" );
+  m_rebuild_label = new QLabel( makeOptions, "m_rebuild_label" );
   m_rebuild_label->setGeometry( 200, 110, 250, 25 );
   m_rebuild_label->setFocusPolicy( QWidget::NoFocus );
   m_rebuild_label->setBackgroundMode( QWidget::PaletteBackground );
@@ -1058,7 +1125,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_rebuild_label->setAlignment( 289 );
   m_rebuild_label->setMargin( -1 );
 
-  m_rebuild_combo = new QComboBox( w5, "m_rebuild_label" );
+  m_rebuild_combo = new QComboBox( makeOptions, "m_rebuild_label" );
   m_rebuild_combo->setGeometry( 430, 110, 170, 25 );
   m_rebuild_combo->setFocusPolicy( QWidget::NoFocus );
   m_rebuild_combo->setBackgroundMode( QWidget::PaletteBase );
@@ -1068,7 +1135,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_rebuild_combo->insertItem(i18n("only on modification"));
   m_rebuild_combo->insertItem(i18n("always rebuild"));
 
-  m_set_modify_label = new QLabel( w5, "m_set_modify_label" );
+  m_set_modify_label = new QLabel( makeOptions, "m_set_modify_label" );
   m_set_modify_label->setGeometry( 10, 150, 100, 25 );
   m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
   m_set_modify_label->setBackgroundMode( QWidget::PaletteBackground );
@@ -1078,10 +1145,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_set_modify_label->setAlignment( 289 );
   m_set_modify_label->setMargin( -1 );
 
-  m_set_modify_line = new QLineEdit( w5, "m_set_modify_line" );
+  m_set_modify_line = new QLineEdit( makeOptions, "m_set_modify_line" );
   m_set_modify_line->setGeometry( 130, 150, 430, 25 );
-  m_set_modify_line->setMinimumSize( 0, 0 );
-  m_set_modify_line->setMaximumSize( 32767, 32767 );
+//  m_set_modify_line->setMinimumSize( 0, 0 );
+//  m_set_modify_line->setMaximumSize( 32767, 32767 );
   m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
   m_set_modify_line->setBackgroundMode( QWidget::PaletteBase );
   m_set_modify_line->setFontPropagation( QWidget::NoChildren );
@@ -1091,20 +1158,19 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_set_modify_line->setEchoMode( QLineEdit::Normal );
   m_set_modify_line->setFrame( TRUE );
 
-  m_set_modify_dir = new QPushButton( w5, "m_set_modify_dir" );
+  m_set_modify_dir = new QPushButton( makeOptions, "m_set_modify_dir" );
   m_set_modify_dir->setGeometry( 570, 150, 30, 25 );
-  m_set_modify_dir->setMinimumSize( 0, 0 );
-  m_set_modify_dir->setMaximumSize( 32767, 32767 );
+//  m_set_modify_dir->setMinimumSize( 0, 0 );
+//  m_set_modify_dir->setMaximumSize( 32767, 32767 );
   m_set_modify_dir->setFocusPolicy( QWidget::TabFocus );
   m_set_modify_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_dir->setFontPropagation( QWidget::NoChildren );
   m_set_modify_dir->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix = BarIcon("open");
-  m_set_modify_dir->setPixmap(pix);
+  m_set_modify_dir->setPixmap(BarIcon("open"));
   m_set_modify_dir->setAutoRepeat( FALSE );
-  m_set_modify_dir->setAutoResize( FALSE );
-  
-  m_optional_label = new QLabel( w5, "m_optional_label" );
+//  m_set_modify_dir->setAutoResize( FALSE );
+
+  m_optional_label = new QLabel( makeOptions, "m_optional_label" );
   m_optional_label->setGeometry( 10, 190, 115, 25 );
   m_optional_label->setFocusPolicy( QWidget::NoFocus );
   m_optional_label->setBackgroundMode( QWidget::PaletteBackground );
@@ -1114,10 +1180,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_optional_label->setAlignment( 289 );
   m_optional_label->setMargin( -1 );
 
-  m_optional_line = new QLineEdit( w5, "m_optional_line" );
+  m_optional_line = new QLineEdit( makeOptions, "m_optional_line" );
   m_optional_line->setGeometry( 130, 190, 470, 25 );
-  m_optional_line->setMinimumSize( 0, 0 );
-  m_optional_line->setMaximumSize( 32767, 32767 );
+//  m_optional_line->setMinimumSize( 0, 0 );
+//  m_optional_line->setMaximumSize( 32767, 32767 );
   m_optional_line->setFocusPolicy( QWidget::StrongFocus );
   m_optional_line->setBackgroundMode( QWidget::PaletteBase );
   m_optional_line->setFontPropagation( QWidget::NoChildren );
@@ -1127,7 +1193,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_optional_line->setEchoMode( QLineEdit::Normal );
   m_optional_line->setFrame( TRUE );
 
-  m_makestartpoint_label = new QLabel( w5, "m_makestartpoint_label" );
+  m_makestartpoint_label = new QLabel( makeOptions, "m_makestartpoint_label" );
   m_makestartpoint_label->setGeometry( 10, 230, 100, 25 );
   m_makestartpoint_label->setFocusPolicy( QWidget::NoFocus );
   m_makestartpoint_label->setBackgroundMode( QWidget::PaletteBackground );
@@ -1137,10 +1203,10 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_makestartpoint_label->setAlignment( 289 );
   m_makestartpoint_label->setMargin( -1 );
 
-  m_makestartpoint_line = new QLineEdit( w5, "m_makestartpoint_line" );
+  m_makestartpoint_line = new QLineEdit( makeOptions, "m_makestartpoint_line" );
   m_makestartpoint_line->setGeometry( 130, 230, 430, 25 );
-  m_makestartpoint_line->setMinimumSize( 0, 0 );
-  m_makestartpoint_line->setMaximumSize( 32767, 32767 );
+//  m_makestartpoint_line->setMinimumSize( 0, 0 );
+//  m_makestartpoint_line->setMaximumSize( 32767, 32767 );
   m_makestartpoint_line->setFocusPolicy( QWidget::StrongFocus );
   m_makestartpoint_line->setBackgroundMode( QWidget::PaletteBase );
   m_makestartpoint_line->setFontPropagation( QWidget::NoChildren );
@@ -1150,89 +1216,88 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_makestartpoint_line->setEchoMode( QLineEdit::Normal );
   m_makestartpoint_line->setFrame( TRUE );
 
-  m_makestartpoint_dir = new QPushButton( w5, "m_makestartpoint_dir" );
+  m_makestartpoint_dir = new QPushButton( makeOptions, "m_makestartpoint_dir" );
   m_makestartpoint_dir->setGeometry( 570, 230, 30, 25 );
-  m_makestartpoint_dir->setMinimumSize( 0, 0 );
-  m_makestartpoint_dir->setMaximumSize( 32767, 32767 );
+//  m_makestartpoint_dir->setMinimumSize( 0, 0 );
+//  m_makestartpoint_dir->setMaximumSize( 32767, 32767 );
   m_makestartpoint_dir->setFocusPolicy( QWidget::TabFocus );
   m_makestartpoint_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_makestartpoint_dir->setFontPropagation( QWidget::NoChildren );
   m_makestartpoint_dir->setPalettePropagation( QWidget::NoChildren );
-  m_makestartpoint_dir->setPixmap(pix);
+  m_makestartpoint_dir->setPixmap(BarIcon("open"));
   m_makestartpoint_dir->setAutoRepeat( FALSE );
-  m_makestartpoint_dir->setAutoResize( FALSE );
+//  m_makestartpoint_dir->setAutoResize( FALSE );
 
-  addTab(w5,i18n("Make Options"));
 
-  QWhatsThis::add(m_set_modify_dir, i18n("Pressing the folder button lets you choose\n"
-  					 "a file which will be set modified. This will\n"
-  					 "recompile the file on the next build run."));
+  QWhatsThis::add(m_set_modify_dir, i18n("Pressing the folder button lets you choose "
+             "a file which will be set modified. This will "
+             "recompile the file on the next build run."));
 
-  QWhatsThis::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal\n"
-					   "processing. The debugging information tells you which\n"
-					   "files  are being considered for remaking, which file-\n"
-					   "times are being compared and with what results, which\n"
-					   "files  actually  need  to  be  remade, which implicit\n"
-					   "rules are considered and which  are  applied---every­\n"
-					   "thing  interesting about how make decides what to do."));
+  QWhatsThis::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal "
+             "processing. The debugging information tells you which "
+             "files  are being considered for remaking, which file- "
+             "times are being compared and with what results, which "
+             "files  actually  need  to  be  remade, which implicit "
+             "rules are considered and which  are  applied---every­ "
+             "thing  interesting about how make decides what to do."));
 
-  QWhatsThis::add(m_optional_label, i18n("Set any other additional options for your\nmake-program here."));
-  QWhatsThis::add(m_optional_line, i18n("Set any other additional options for your\nmake-program here."));
+  QWhatsThis::add(m_optional_label, i18n("Set any other additional options for your make-program here."));
+  QWhatsThis::add(m_optional_line, i18n("Set any other additional options for your make-program here."));
 
-  QString m_rebuildMsg = i18n("Set the rebuild type on pressing run/debug here. This allows you to select if you either\n"
-  					"want to rebuild always on run/debug or rebuild only on modifications or\n"
-					"give you first a warning on modification of your sources.");
+  QString m_rebuildMsg = i18n("Set the rebuild type on pressing run/debug here. This allows you to select if you either "
+            "want to rebuild always on run/debug or rebuild only on modifications or "
+          "give you first a warning on modification of your sources.");
   QWhatsThis::add(m_rebuild_label, m_rebuildMsg);
   QWhatsThis::add(m_rebuild_combo, m_rebuildMsg);
 
-  QWhatsThis::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that\n"
-					  "results from reading the makefiles; then  execute  as\n"
-					  "usual  or  as  otherwise specified.  This also prints\n"
-					  "the version information."));
+  QWhatsThis::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that "
+            "results from reading the makefiles; then  execute  as "
+            "usual  or  as  otherwise specified.  This also prints "
+            "the version information."));
 
-  QWhatsThis::add(m_no_rules, i18n("Eliminate  use  of the built-in implicit rules.  Also\n"
-				   "clear out the default list  of  suffixes  for  suffix\n"
-				   "rules."));
+  QWhatsThis::add(m_no_rules, i18n("Eliminate  use  of the built-in implicit rules.  Also "
+           "clear out the default list  of  suffixes  for  suffix "
+           "rules."));
 
-  QWhatsThis::add(m_env_variables, i18n("Give variables taken from the environment  precedence\n"
-					"over variables from makefiles."));
+  QWhatsThis::add(m_env_variables, i18n("Give variables taken from the environment  precedence "
+          "over variables from makefiles."));
 
-  QWhatsThis::add(m_cont_after_error, i18n("Continue  as  much as possible after an error. While\n"
-					   "the target that failed, and those that depend on it,\n"
-					   "cannot  be  remade, the  other dependencies of these\n"
-					   "targets can be processed all the same."));
+  QWhatsThis::add(m_cont_after_error, i18n("Continue  as  much as possible after an error. While "
+             "the target that failed, and those that depend on it, "
+             "cannot  be  remade, the  other dependencies of these "
+             "targets can be processed all the same."));
 
-  QWhatsThis::add(m_touch_files, i18n("Touch  files  (mark  them  up  to date without really\n"
-				      "changing them) instead  of  running  their  commands.\n"
-				      "This  is used to pretend that the commands were done,\n"
-				      "in order to fool future invocations of make."));
+  QWhatsThis::add(m_touch_files, i18n("Touch  files  (mark  them  up  to date without really "
+              "changing them) instead  of  running  their  commands. "
+              "This  is used to pretend that the commands were done, "
+              "in order to fool future invocations of make."));
 
-  QWhatsThis::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory\n"
-					 "before and after other processing.  This may be  use­\n"
-					 "ful  for  tracking down errors from complicated nests\n"
-					 "of recursive make commands."));
+  QWhatsThis::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory "
+           "before and after other processing.  This may be  use­ "
+           "ful  for  tracking down errors from complicated nests "
+           "of recursive make commands."));
 
-  QWhatsThis::add(m_silent_operation, i18n("Silent operation; do not print the commands as they\n"
-					   "are executed."));
+  QWhatsThis::add(m_silent_operation, i18n("Silent operation; do not print the commands as they "
+             "are executed."));
 
-  QWhatsThis::add(m_ignor_errors, i18n("Ignore all errors in commands executed to\n"
-				       "remake files."));
+  QWhatsThis::add(m_ignor_errors, i18n("Ignore all errors in commands executed to "
+               "remake files."));
 
-  QString m_job_numberMsg = i18n("Specifies the number of jobs (commands) to run\n"
-					   "simultaneously. If you have a single CPU-System\n"
-					   "it is not recommended to choose more then 2.");
+  QString m_job_numberMsg = i18n("Specifies the number of jobs (commands) to run "
+             "simultaneously. If you have a single CPU-System "
+             "it is not recommended to choose more then 2.");
   QWhatsThis::add(m_job_number_label, m_job_numberMsg);
   QWhatsThis::add(m_job_number, m_job_numberMsg);
 
-  QWhatsThis::add(m_set_modify_label, i18n("Pretend that the target file has just been  modified.\n"
-					   "It  is  almost the same as running a touch command on\n"
-					   "the given file before running make, except  that  the\n"
-					   "modification  time is changed only in the imagination\n"
-					   "of make."));
+  QWhatsThis::add(m_set_modify_label, i18n("Pretend that the target file has just been  modified. "
+             "It  is  almost the same as running a touch command on "
+             "the given file before running make, except  that  the "
+             "modification  time is changed only in the imagination "
+             "of make."));
 
-  QString m_makestartpointMsg = i18n("Often if you click on 'Build' or 'Make Clean',\n"
-                  "you just want to run a Makefile from a certain subdirectory.\n"
-                  "Specify the location of that Makefile here.\n"
+  QString m_makestartpointMsg = i18n("Often if you click on 'Build' or 'Make Clean', "
+                  "you just want to run a Makefile from a certain subdirectory. "
+                  "Specify the location of that Makefile here. "
                   "It will be your new root-Makefile then.");
   QWhatsThis::add(m_makestartpoint_label, m_makestartpointMsg);
   QWhatsThis::add(m_makestartpoint_line, m_makestartpointMsg);
@@ -1244,81 +1309,91 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   settings->setGroup("MakeOptionsSettings");
 
   if (settings->readBoolEntry("PrintDebugInfo")) {
-  	m_print_debug_info->setChecked(TRUE);
+    m_print_debug_info->setChecked(TRUE);
   }
- 	else m_print_debug_info->setChecked(FALSE);
+   else m_print_debug_info->setChecked(FALSE);
 
- 	if (settings->readBoolEntry("PrintDataBase")) {
- 	  m_print_data_base->setChecked(TRUE);
+   if (settings->readBoolEntry("PrintDataBase")) {
+     m_print_data_base->setChecked(TRUE);
   }
   else m_print_data_base->setChecked(FALSE);
 
   if (settings->readBoolEntry("NoRules")) {
-  	m_no_rules->setChecked(TRUE);
+    m_no_rules->setChecked(TRUE);
   }
   else m_no_rules->setChecked(FALSE);
 
   if (settings->readBoolEntry("EnvVariables")) {
-  	m_env_variables->setChecked(TRUE);
+    m_env_variables->setChecked(TRUE);
   }
   else m_env_variables->setChecked(FALSE);
 
   if (settings->readBoolEntry("ContAfterError")) {
-  	m_cont_after_error->setChecked(TRUE);
-	}
-	else m_cont_after_error->setChecked(FALSE);
-
-	if (settings->readBoolEntry("TouchFiles")) {
-		m_touch_files->setChecked(TRUE);
+    m_cont_after_error->setChecked(TRUE);
   }
-	else m_touch_files->setChecked(FALSE);
+  else m_cont_after_error->setChecked(FALSE);
 
-	if (settings->readBoolEntry("PrintWorkDir")){
-		m_print_work_dir->setChecked(TRUE);
-	}
-	else m_print_work_dir->setChecked(FALSE);
+  if (settings->readBoolEntry("TouchFiles")) {
+    m_touch_files->setChecked(TRUE);
+  }
+  else m_touch_files->setChecked(FALSE);
 
-	if (settings->readBoolEntry("SilentOperation")) {
-		m_silent_operation->setChecked(TRUE);
-	}
-	else m_silent_operation->setChecked(FALSE);
+  if (settings->readBoolEntry("PrintWorkDir")){
+    m_print_work_dir->setChecked(TRUE);
+  }
+  else m_print_work_dir->setChecked(FALSE);
 
-	if (settings->readBoolEntry("IgnorErrors")) {
-		m_ignor_errors->setChecked(TRUE);
-	}
-	else m_ignor_errors->setChecked(FALSE);
+  if (settings->readBoolEntry("SilentOperation")) {
+    m_silent_operation->setChecked(TRUE);
+  }
+  else m_silent_operation->setChecked(FALSE);
 
-	m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
-	m_optional_line->setText(settings->readEntry("OptionalLine"));
-	m_job_number->setValue(settings->readNumEntry ("JobNumber"));
+  if (settings->readBoolEntry("IgnorErrors")) {
+    m_ignor_errors->setChecked(TRUE);
+  }
+  else m_ignor_errors->setChecked(FALSE);
 
-	m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
-	
-	m_makestartpoint_line->setText(
-	      prj_info->getDirWhereMakeWillBeCalled(prj_info->getProjectDir()));
+  m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
+  m_optional_line->setText(settings->readEntry("OptionalLine"));
+  m_job_number->setValue(settings->readNumEntry ("JobNumber"));
 
-//************************** binary selection *************************//
-  QWidget* w6 = new QWidget( this, "bin" );
+  m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
+  
+  m_makestartpoint_line->setText(
+        prj_info->getDirWhereMakeWillBeCalled(prj_info->getProjectDir()));
 
-  QGroupBox* binary_box= new QGroupBox(w6,"binary_box");
+  if (!prj_info->isCustomProject())
+  {
+    m_makestartpoint_line->setEnabled(false);
+    m_makestartpoint_dir->setEnabled(false);
+  }
+}
+
+//
+//************************** binary selection *************************
+//
+void CPrjOptionsDlg::addBinPage()
+{
+  QFrame* binaryOptions = addPage(i18n("Binary"));
+  QGroupBox* binary_box= new QGroupBox(binaryOptions,"binary_box");
   binary_box->setGeometry(10,10,560,150);
-  binary_box->setMinimumSize(0,0);
+//  binary_box->setMinimumSize(0,0);
   binary_box->setTitle(i18n("Name"));
 
-  QLabel* binary = new QLabel(w6,"binary_label");
+  QLabel* binary = new QLabel(binaryOptions,"binary_label");
   binary->setGeometry(30,40,500,30);
-  binary->setMinimumSize(0,0);
+//  binary->setMinimumSize(0,0);
   binary->setText(i18n("Path and Filename of binary:"));
 
-  binary_edit= new QLineEdit(w6,"binary_edit");
+  binary_edit= new QLineEdit(binaryOptions,"binary_edit");
   binary_edit->setGeometry(30,70,470,30);
-  binary_edit->setMinimumSize(0,0);
-  binary_edit->setMaxLength( 32767 );
+//  binary_edit->setMinimumSize(0,0);
+//  binary_edit->setMaxLength( 32767 );
 
-  QString underDir=prj->pathToBinPROGRAM();
+  QString underDir=prj_info->pathToBinPROGRAM();
   if (underDir.isEmpty())
   {
-    underDir = prj->getProjectDir() + prj->getSubDir();
+    underDir = prj_info->getProjectDir() + prj_info->getSubDir();
     if (underDir[0] == '/')
       underDir = CToolClass::getRelativePath(prj_info->getProjectDir(), underDir);
   }
@@ -1326,62 +1401,41 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   if (underDir.right(1)!="/")
     underDir+="/";
 
-  binary_edit->setText(underDir+prj->getBinPROGRAM());
+  binary_edit->setText(underDir+prj_info->getBinPROGRAM());
 
-  QPushButton* binary_button= new QPushButton(w6,"binary_button");
+  QPushButton* binary_button= new QPushButton(binaryOptions,"binary_button");
   binary_button->setGeometry(510,70,30,30);
-  binary_button->setMinimumSize(0,0);
-  binary_button->setPixmap(pix);
+//  binary_button->setMinimumSize(0,0);
+  binary_button->setPixmap(BarIcon("open"));
 
-  QString binaryMsg = i18n("Set the path and filename of the binary that will be started on Run or Debug.\n"
-			      "Hint: Use a relative path starting from your project base directory to be location independent.");
+  QString binaryMsg = i18n("Set the path and filename of the binary that will be started on Run or Debug. "
+            "Hint: Use a relative path starting from your project base directory to be location independent.");
   QWhatsThis::add(binary_edit, binaryMsg);
   QWhatsThis::add(binary_button, binaryMsg);
   QWhatsThis::add(binary, binaryMsg);
 
   connect(binary_button,SIGNAL(clicked()),SLOT(slotBinaryClicked()));
-  addTab(w6, i18n("Binary"));
-
-
-  // **************set the button*********************
-  setOkButton(i18n("OK"));
-  setCancelButton(i18n("Cancel"));
-  connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
-
-  // **************set tabs enlabe/disable*********************
-
-  if(prj->isCustomProject()){
-    setTabEnabled("Compiler options",false);
-    setTabEnabled("Warnings",false);
-    setTabEnabled("Linker",false);
-  }
-  else
-  {
-    setTabEnabled("bin",false);
-    m_makestartpoint_line->setEnabled(false);
-    m_makestartpoint_dir->setEnabled(false);
-  }
-
+  if (!prj_info->isCustomProject())
+    binaryOptions->setEnabled(false);
 }
 
 void CPrjOptionsDlg::slotOptimize_level_changed(int v) {
 
-    if (v>3) {
-	optimize_level->setValue(3);
-    }
-    if (v<1) {
-	optimize_level->setValue(1);
-    }
-
+  if (v>3) {
+    optimize_level->setValue(3);
+  }
+  if (v<1) {
+    optimize_level->setValue(1);
+  }
 }
 
 void CPrjOptionsDlg::slotDebug_level_changed(int v) {
 
     if (v>3) {
-	debug_level->setValue(3);
+  debug_level->setValue(3);
     }
     if (v<1) {
-	debug_level->setValue(1);
+  debug_level->setValue(1);
     }
 
 }
@@ -1618,36 +1672,36 @@ void CPrjOptionsDlg::ok(){
   else settings->writeEntry("EnvVariables",FALSE);
 
   if (m_cont_after_error->isChecked()) {
-		settings->writeEntry("ContAfterError",TRUE);
-	}
-	else settings->writeEntry("ContAfterError",FALSE);
+    settings->writeEntry("ContAfterError",TRUE);
+  }
+  else settings->writeEntry("ContAfterError",FALSE);
 
-	if (m_touch_files->isChecked()) {
-		settings->writeEntry("TouchFiles", TRUE);
+  if (m_touch_files->isChecked()) {
+    settings->writeEntry("TouchFiles", TRUE);
   }
   else settings->writeEntry("TouchFiles", FALSE);
 
-	if (m_print_work_dir->isChecked()){
-  	settings->writeEntry("PrintWorkDir", TRUE);
-	}
-	else settings->writeEntry("PrintWorkDir", FALSE);
+  if (m_print_work_dir->isChecked()){
+    settings->writeEntry("PrintWorkDir", TRUE);
+  }
+  else settings->writeEntry("PrintWorkDir", FALSE);
 
-	if (m_silent_operation->isChecked()) {
-		settings->writeEntry("SilentOperation", TRUE);
-	}
-	else settings->writeEntry("SilentOperation", FALSE);
+  if (m_silent_operation->isChecked()) {
+    settings->writeEntry("SilentOperation", TRUE);
+  }
+  else settings->writeEntry("SilentOperation", FALSE);
 
-	if (m_ignor_errors->isChecked()) {
-		settings->writeEntry("IgnorErrors", TRUE);
-	}
-	else settings->writeEntry("IgnorErrors", FALSE);
+  if (m_ignor_errors->isChecked()) {
+    settings->writeEntry("IgnorErrors", TRUE);
+  }
+  else settings->writeEntry("IgnorErrors", FALSE);
 
-	settings->writeEntry("RebuildType", m_rebuild_combo->currentItem());
-	settings->writeEntry("SetModifyLine", m_set_modify_line->text());
-	settings->writeEntry("OptionalLine", m_optional_line->text());
-	settings->writeEntry("JobNumber", m_job_number->text());	
+  settings->writeEntry("RebuildType", m_rebuild_combo->currentItem());
+  settings->writeEntry("SetModifyLine", m_set_modify_line->text());
+  settings->writeEntry("OptionalLine", m_optional_line->text());
+  settings->writeEntry("JobNumber", m_job_number->text());  
   settings->sync();
-  // reject();	
+  // reject();  
 
   text = "";
 
@@ -1716,7 +1770,7 @@ void CPrjOptionsDlg::ok(){
                     i18n("The path\n\n") + makeDir +
                       i18n("\n\nwhich you set as directory where make should "
                             "run is not a relative path.\nThis can cause problems, "
-                            "if you move the project.\nWhat path do you want to save "
+                            "if you move the project. What path do you want to save "
                             "to your project file?"),
                     i18n("&Absolute path"), i18n("&Relative path")))
         {
@@ -1735,8 +1789,8 @@ void CPrjOptionsDlg::ok(){
       if(QMessageBox::warning(this,i18n("Path decision"),
                 i18n("The path\n\n") + binaryPath +
                 i18n("\n\nto your binary which should be run on 'Execute' "
-                      "is not a relative path.\nThis can cause problems, "
-                      "if you move the project.\nWhat path do you want to "
+                      "is not a relative path. This can cause problems, "
+                      "if you move the project. What path do you want to "
                       "save to your project file?"),
                 i18n("&Absolute path"),i18n("&Relative path")))
         binaryPath = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryPath);
@@ -1783,7 +1837,15 @@ void CPrjOptionsDlg::slotBinaryClicked(){
       if ('/' != dir[0])
         isRelativePath = true;
     if (!isRelativePath) {
-      if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + dir + i18n("\n\nto your binary which should be run on 'Execute' is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
+      if(QMessageBox::warning(this,
+                              i18n("Path decision"),
+                              i18n("The path\n\n") + dir +
+                                i18n("\n\nto your binary which should be run on "
+                                "'Execute' is not a relative path. This can cause "
+                                "problems, if you move the project. What path do "
+                                "you want to save to your project file?"),
+                              i18n("&Absolute path"),
+                              i18n("&Relative path")))
         dir = CToolClass::getRelativePath(prj_info->getProjectDir(), dir);
     }
     binary_edit->setText(dir);
@@ -1800,7 +1862,15 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked() {
       if ('/' != dir[0])
         isRelativePath = true;
     if (!isRelativePath) {
-      if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + file + i18n("\n\nwhich you set as directory where make should run is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
+      if(QMessageBox::warning(this,
+                              i18n("Path decision"),
+                              i18n("The path\n\n") + file +
+                              i18n("\n\nwhich you set as directory where make should "
+                                "run is not a relative path. This can cause problems, "
+                                "if you move the project. What path do you want "
+                                "to save to your project file?"),
+                              i18n("&Absolute path"),
+                              i18n("&Relative path")))
         file = CToolClass::getRelativePath(prj_info->getProjectDir(), file);
     }
     m_makestartpoint_line->setText(file);
