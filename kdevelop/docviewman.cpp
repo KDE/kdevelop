@@ -676,6 +676,7 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
   pMDICover->setTabCaption( shortName);
+	pMDICover->setCaption(pNewView->caption());
   connect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
           this, SLOT(slot_viewActivated(QextMdiChildView*)));
 
