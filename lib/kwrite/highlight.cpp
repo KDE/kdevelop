@@ -1386,82 +1386,71 @@ void PascalHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType)
 
 
 PHPHighlight::PHPHighlight(const char * name) : CHighlight(name) {
-  kdDebug()<<"PHPHighlight:************************************************:PHPHighlight"<<endl;
   iWildcards = "*.php;*.php4;*.php3;*.inc";
   iMimetypes = "text/x-php4-src;text/x-php3-src";
 }
 
 PHPHighlight::~PHPHighlight() {
-  kdDebug()<<"PHPHighlight:************************************************:~PHPHighlight"<<endl;
 }
 
 void PHPHighlight::createItemData(ItemDataList &list) {
-
   list.append(new ItemData(I18N_NOOP("Normal Text"),dsNormal));
-  list.append(new ItemData(I18N_NOOP("Keyword"    ),dsKeyword, Qt::darkRed,Qt::red,false,false));
-  list.append(new ItemData(I18N_NOOP("Identifier" ),dsOthers));
-  list.append(new ItemData(I18N_NOOP("Types"   ),dsDataType));
-  list.append(new ItemData(I18N_NOOP("String Char" ),dsChar, Qt::darkGreen,Qt::green,false,false));
-  list.append(new ItemData(I18N_NOOP("String"     ),dsString, Qt::darkGreen,Qt::green,false,false));
-  list.append(new ItemData(I18N_NOOP("Comment"    ),dsComment, Qt::darkBlue,Qt::blue,false,false));
+  list.append(new ItemData(I18N_NOOP("Keyword"    ),dsKeyword,Qt::darkRed,Qt::red,false,false));
+  list.append(new ItemData(I18N_NOOP("Types"   ),dsDataType,Qt::darkMagenta,Qt::magenta,false,false));
+  list.append(new ItemData(I18N_NOOP("String"     ),dsString,Qt::darkGreen,Qt::green,false,false));
+  list.append(new ItemData(I18N_NOOP("Comment"    ),dsOthers,Qt::darkBlue,Qt::blue,false,false));
+  list.append(new ItemData(I18N_NOOP("Number"),dsDecVal));
+  list.append(new ItemData(I18N_NOOP("String Char" ),dsChar,Qt::darkGreen,Qt::green,false,false));
+  list.append(new ItemData(I18N_NOOP("Include"),dsOthers,Qt::darkYellow,Qt::yellow,false,false));
 }
 
-void PHPHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType)
+void PHPHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType, HlKeyword *includeType)
 {
-    kdDebug()<<"PHPHighlight:************************************************:setKeywords"<<endl;
     keyword->addList(HlManager::self()->syntax->finddata("PHP","keyword"));
     dataType->addList(HlManager::self()->syntax->finddata("PHP","type"));
+    includeType->addList(HlManager::self()->syntax->finddata("PHP","includetype"));
 }
 
 void PHPHighlight::makeContextList() {
-        HlContext *c;
-  HlKeyword *keyword, *dataType;
-
-  //normal context
-  contextList[0] = c = new HlContext(dsNormal,0);
-  c->items.append(keyword = new HlKeyword(dsKeyword,0));
-  c->items.append(dataType = new HlKeyword(dsDataType,0));
-  c->items.append(new HlCFloat(6,0));
-  c->items.append(new HlCOct(4,0));
-  c->items.append(new HlCHex(5,0));
-  c->items.append(new HlCInt(3,0));
-  c->items.append(new HlCChar(7,0));
-  c->items.append(new HlCharDetect(8,1,'"'));
-  c->items.append(new Hl2CharDetect(10,2, '/', '/'));
-  c->items.append(new Hl2CharDetect(10,3, '/', '*'));
-  c->items.append(new HlCSymbol(11,0));
-  c->items.append(new HlCPrep(12,4));
-  //string context
-  contextList[1] = c = new HlContext(8,0);
-  c->items.append(new HlLineContinue(8,6));
-  c->items.append(new HlCStringChar(9,1));
-  c->items.append(new HlCharDetect(8,0,'"'));
-  //one line comment context
-  contextList[2] = new HlContext(10,0);
-  //multi line comment context
-  contextList[3] = c = new HlContext(10,3);
-  c->items.append(new Hl2CharDetect(10,0, '*', '/'));
-  //preprocessor context
-  contextList[4] = c = new HlContext(12,0);
-  c->items.append(new HlLineContinue(12,7));
-  c->items.append(new HlRangeDetect(13,4, '\"', '\"'));
-  c->items.append(new HlRangeDetect(13,4, '<', '>'));
-  c->items.append(new Hl2CharDetect(10,2, '/', '/'));
-  c->items.append(new Hl2CharDetect(10,5, '/', '*'));
-  //preprocessor multiline comment context
-  contextList[5] = c = new HlContext(10,5);
-  c->items.append(new Hl2CharDetect(10,4, '*', '/'));
+  HlContext *c;
+  HlKeyword *keyword, *dataType, *includeType;
+  // normal context
+  contextList[0] = c = new HlContext(0,0);
+  c->items.append(keyword = new HlCaseInsensitiveKeyword(1,0));
+  c->items.append(dataType = new HlCaseInsensitiveKeyword(2,0));
+  c->items.append(includeType = new HlCaseInsensitiveKeyword(7,0));
+  c->items.append(new HlCFloat(5,0));
+  c->items.append(new HlCInt(5,0));
+  c->items.append(new HlCChar(3,0));
+  c->items.append(new HlCharDetect(3,1,'"'));
+  c->items.append(new HlCharDetect(6,5,'\''));
+  c->items.append(new Hl2CharDetect(4,2, '/', '/'));
+  c->items.append(new Hl2CharDetect(4,3, '/', '*'));
+  c->items.append(new HlCharDetect(4,2, '#'));
+  // parsed string context
+  contextList[1] = c = new HlContext(3,0);
+  c->items.append(new HlLineContinue(3,4));
+  c->items.append(new HlCStringChar(3,1));
+  c->items.append(new HlCharDetect(3,0,'"'));
+  // one line comment context
+  contextList[2] = new HlContext(4,0);
+  // multiline comment
+  contextList[3] = c = new HlContext(4,3);
+  c->items.append(new Hl2CharDetect(4,0, '*', '/'));
   //string line continue
-  contextList[6] = new HlContext(0,1);
-  //preprocessor string line continue
-  contextList[7] = new HlContext(0,4);
+  contextList[4] = new HlContext(0,1);
+  // cstring context
+  contextList[5] = c = new HlContext(6,0);
+  c->items.append(new HlLineContinue(6,4));
+  c->items.append(new HlCStringChar(6,5));
+  c->items.append(new HlCharDetect(6,0,'\''));
 
-  setKeywords(keyword, dataType);
+  setKeywords(keyword, dataType, includeType);
 }
 
 
 PovrayHighlight::PovrayHighlight(const char *name) : CHighlight(name) {
-  iWildcards = "*.pov;*.inc";
+  iWildcards = "*.pov";
   iMimetypes = "text/x-povray";
 }
  

@@ -489,12 +489,12 @@ class PHPHighlight : public CHighlight {
   public:
     PHPHighlight(const char *name);
     virtual ~PHPHighlight();
-    virtual QString getCommentStart() { return QString("//"); };
-    virtual QString getCommentEnd() { return QString(""); };
+    virtual QString getCommentStart() { return QString("/*"); };
+    virtual QString getCommentEnd() { return QString("*/"); };
   protected:
     virtual void createItemData(ItemDataList &);
     virtual void makeContextList();
-    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
+    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType, HlKeyword *includeType);
 };
 
 class PovrayHighlight : public CHighlight {   

@@ -541,7 +541,7 @@
 </itemDatas>
 </language>
 
-<language name="PHP" extensions="*.php;*.php3;*.php4;*.inc" mimetype="text/x-php4-src;text/x-php3-src" casesensitive="1">
+<language name="PHP" extensions="*.php;*.php3;*.php4;*.inc" mimetype="text/x-php4-src;text/x-php3-src" casesensitive="0">
 <keywords>
            <keyword> AddCSlashes </keyword>
            <keyword> AddSlashes </keyword>
@@ -1298,8 +1298,6 @@
            <keyword> imap_utf8 </keyword>
            <keyword> implode </keyword>
            <keyword> in_array </keyword>
-           <keyword> include </keyword>
-           <keyword> include_once </keyword>
            <keyword> ingres_autocommit </keyword>
            <keyword> ingres_close </keyword>
            <keyword> ingres_commit </keyword>
@@ -1878,8 +1876,6 @@
            <keyword> recode_string </keyword>
            <keyword> register_shutdown_function </keyword>
            <keyword> rename </keyword>
-           <keyword> require </keyword>
-           <keyword> require_once </keyword>
            <keyword> reset </keyword>
            <keyword> restore_error_handler </keyword>
            <keyword> return </keyword>
@@ -2207,36 +2203,12 @@
     <type> object </type>
     <type> static </type>
 </types>
-    <contexts>
-       <context attribute="0" lineEndContext="0">
-         <RegExpr attribute="1" context="6" String="&lt;\s*\?"/>
-         <RegExpr attribute="1" context="1" String="&lt;\s*\/?\s*[a-zA-Z0-9_]*" />
-       </context>
-
-       <context attribute="2" lineEndContext="1">
-         <DetectChar attribute="1" context="0" char="&gt;"/>
-         <RegExpr attribute="0" context="2" String="\s*=\s*"/>
-       </context>
-
-       <context attribute="8" lineEndContext="2">
-         <RegExpr attribute="3" context="1" String="\s*#?[a-zA-Z0-9]*" />
-         <DetectChar attribute="3" context="3" char="&quot;" />
-       </context>
-
-       <context attribute="3" lineEndContext="3">
-         <DetectChar attribute="3" context="1" char="&quot;" />
-       </context>
-
-       <context attribute="5" lineEndContext="0"/>
-       <context attribute="4" lineEndContext="0">
-         <DetectChar attribute="4" context="0" char="'"/>
-       </context>
-       <context attribute="0" lineEndContext="0">
-         <keyword attribute="1" context="6" String="keywords"/>
-         <keyword attribute="2" context="6" String="types"/>
-         <RegExpr attribute="1" context="0" String="\?\s*&gt;"/>
-       </context>
-    </contexts>
+<includetypes>
+  <includetype> include </includetype>
+  <includetype> include_once </includetype>
+  <includetype> require </includetype>
+  <includetype> require_once </includetype>
+</includetypes>
 </language>
 
 <language name="Perl" extensions="*.pl" mimetype="text/x-perl-src" casesensitive="1">
@@ -2559,7 +2531,7 @@
 </types>
 </language>
 
-<language name="Povray" extensions="*.pov;*.inc" mimetype="text/x-povray" casesensitive="1">
+<language name="Povray" extensions="*.pov" mimetype="text/x-povray" casesensitive="1">
 <keywords>
   <keyword> aa_level </keyword>
   <keyword> aa_treshold </keyword>
