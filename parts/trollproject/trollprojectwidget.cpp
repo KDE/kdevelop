@@ -45,6 +45,7 @@
 #include "trollprojectpart.h"
 #include "kdevlanguagesupport.h"
 #include "kdevcreatefile.h"
+#include "subclassesdlg.h"
 
 #define VALUES_PER_ROW  1
 
@@ -1223,6 +1224,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
         int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget..."));
         int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
+        int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
         int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
         int idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
 
@@ -1232,6 +1234,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         if(!fitem->name.contains(".ui"))
         {
+          popup.removeItem(idUISubclasses);
           popup.removeItem(idViewUIH);
           popup.removeItem(idSubclassWidget);
         }
@@ -1281,7 +1284,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
                     DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
                     newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
-                    QDomDocument &dom = *(m_part->projectDom());
                 }
                 m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                                                                 "subclass","sourcefile", "uifile");
@@ -1303,8 +1305,26 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           }
           m_part->languageSupport()->updateWidget(m_shownSubproject->path + "/" + uifile, noext);
         }
-
-
+        else if (r == idUISubclasses)
+        {
+            QDomDocument &dom = *(m_part->projectDom());
+            DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                                                    "subclass","sourcefile", "uifile");
+            SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length()),
+                list, projectDirectory());
+                
+            if (sbdlg->exec())
+            {
+                QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
+                QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
+                if ( (!el.isNull()) && (!el2.isNull()) ) 
+                {
+                    el.removeChild(el2);
+                }
+                
+                DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
+            }
+        }
     }
 }
 
@@ -1314,6 +1334,37 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
     emitRemovedFile(spitem->path + "/" + fitem->text(0));
+    
+    
+    //remove subclassing info
+    QDomDocument &dom = *(m_part->projectDom());
+    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                                            "subclass","sourcefile", "uifile");
+    QPtrList<DomUtil::Pair> pairsToRemove;
+    DomUtil::PairList::iterator it;
+    QString file = QString(spitem->path + "/" + fitem->name).remove(0,projectDirectory().length());
+    for ( it = list.begin(); it != list.end(); ++it )
+    {
+        if ( ((*it).first == file) || ((*it).second == file) )
+        {
+            pairsToRemove.append(&(*it));
+        }
+    }
+    DomUtil::Pair *pair;
+    for ( pair = pairsToRemove.first(); pair; pair = pairsToRemove.next() )
+    {
+        list.remove(*pair);
+    }
+    QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
+    QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
+    if ( (!el.isNull()) && (!el2.isNull()) ) 
+    {
+        el.removeChild(el2);
+    }
+    DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
+    
+    
+    
     switch (gitem->groupType)
     {
       case GroupItem::Sources:
