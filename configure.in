@@ -104,7 +104,5 @@ doc/ru/welcome/Makefile \
 doc/ru/tutorial/Makefile \
 doc/ru/manual/Makefile \
 kdevelop/plugins/Makefile \
-kdevelop/plugins/prjstat/Makefile \
-kdevelop/widgets/Makefile \
-kdevelop/widgets/checklistbox/Makefile
+kdevelop/plugins/prjstat/Makefile 
 ) 

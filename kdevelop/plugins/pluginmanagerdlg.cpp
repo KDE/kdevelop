@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 #include "pluginmanagerdlg.h"
+#include <qheader.h>
+#include "folder.xpm" 
 
 PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
     	ok_button = new QPushButton( this, "ok_button" );
@@ -42,8 +44,7 @@ PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog
 	cancel_button->setAutoRepeat( FALSE );
 	cancel_button->setAutoResize( FALSE );
 
-	plugin_listbox = new CheckListBox( this, "plugin_listbox" );
-	plugin_listbox->setGeometry( 10, 10, 290, 360 );
+
 	
 
 	QLabel* qtarch_Label_1;
@@ -221,20 +222,62 @@ PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name ) : QDialog
 	qtarch_Label_17->setAlignment( 289 );
 	qtarch_Label_17->setMargin( -1 );
 
-	resize( 680,420 );
-	setMinimumSize( 680, 420 );
-	setMaximumSize( 680, 420 );
+
 
 	setCaption( "Plugin Manager" );
-	CheckListBoxItem* item;
-	
+
+	plugin_listbox = new QListView( this, "plugin_listbox" );
+	plugin_listbox->setGeometry( 10, 10, 290, 360 );
+
+	plugin_listbox->addColumn( "clmn0" );
+	plugin_listbox->header()->hide();
+	(void) new QCheckListItem(plugin_listbox,"item1 sdasd",QCheckListItem::CheckBox);
+	(void) new QCheckListItem(plugin_listbox,"item2 sdff",QCheckListItem::CheckBox);
+	(void) new QCheckListItem(plugin_listbox,"item3 sdfdsfdf",QCheckListItem::CheckBox);
 	//item = plugin_listbox->insertItem( "Project Statistic (plugin example)", true );
 	
 	//	item = plugin_listbox->insertItem( "File Info (plugin example)", true );
+
+	resize( 680,420 );
+	setMinimumSize( 680, 420 );
+	setMaximumSize( 680, 420 );
 	
-	item = plugin_listbox->insertItem( "item3", false );
 	
-	item = plugin_listbox->insertItem( "item4", true );
+
+	searchPlugins();
+}
+void PluginManagerDlg::searchPlugins(){
+    // void *handle;
+//     NullPlugin* (*create_function)( void );
+//     char* error;
+//     NullPlugin* instance;
+    
+//     handle = dlopen( "libmenuplugin.so", RTLD_LAZY );
+//     if (!handle ) {
+// 	cerr << "Application !init lib!: " << dlerror() << endl;
+// 	//exit(1);
+	
+// 	QMessageBox::information( this, "LD-ERROR !!!",	
+// 				  "Das PlugIn ( \"libmenuplugin.so\" ) wurde nicht gefunden !!!" );
+	
+	
+	
+//     } else {
+	
+// 	create_function = (NullPlugin* (*)(void)) dlsym( handle, "create" ) ;
+// 	if ( (error = dlerror()) != NULL ) {
+// 	    cerr << "Application !sym lib!: " << error << endl;
+// 	    exit(1);
+// 	}
+	
+// 	instance = (*create_function) ();
+// 	cerr << instance << endl;
+	
+// 	instance->test( 4 );
+	
+// 	instance->init( this );
+//     }
 }
 PluginManagerDlg::~PluginManagerDlg(){
 }
+    

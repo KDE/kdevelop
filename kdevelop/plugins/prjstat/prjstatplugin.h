@@ -14,6 +14,9 @@ class PrjStatPlugin : public KDevPlugin  {
     ~PrjStatPlugin();
     virtual void start();
     virtual void stop();
+    
+    public slots:
+	void slotMenuActivated();
 };
 
 #endif

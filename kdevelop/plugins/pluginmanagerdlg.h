@@ -25,8 +25,9 @@
 #include <qmultilinedit.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qlistview.h>
 
-#include "../widgets/checklistbox/checklistbox.h"
+
 
 /**
   *@author Sandy Meier
@@ -37,11 +38,12 @@ class PluginManagerDlg : public QDialog  {
 public: 
 	PluginManagerDlg(QWidget *parent=0, const char *name=0);
 	~PluginManagerDlg();
+	void searchPlugins();
 
 protected:
     QPushButton* ok_button;
     QPushButton* cancel_button;
-    CheckListBox* plugin_listbox;
+    QListView* plugin_listbox;
     QLabel* author_label;
     QLabel* version_label;
     QLabel* copyright_label;
