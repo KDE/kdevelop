@@ -34,27 +34,67 @@ class KDlgItem_Base;
 class QButton;
 class QLineEdit;
 class QComboBox;
-
-
+class KDlgPropertyEntry;
+class KRestrictedLine;
+class KColorButton;
 
 class AdvLvi_Base : public QWidget
 {
   Q_OBJECT
   public:
-    AdvLvi_Base(QWidget *parent=0, const char *name=0);
+    AdvLvi_Base(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText() { return QString(); }
 
   protected:
     virtual void paintEvent ( QPaintEvent * );
+    KDlgPropertyEntry *propEntry;
 };
 
+
+class AdvLvi_String : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_String(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
+
+
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    QLineEdit *leInput;
+
+  public slots:
+    void returnPressed();
+};
+
+class AdvLvi_Int : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_Int(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
+
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    KRestrictedLine *leInput;
+    QPushButton *up, *down;
+
+  public slots:
+    void returnPressed();
+    void valInc();
+    void valDec();
+};
 
 class AdvLvi_ExtEdit : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_ExtEdit(QWidget *parent=0, const char *name=0);
+    AdvLvi_ExtEdit(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -64,13 +104,16 @@ class AdvLvi_ExtEdit : public AdvLvi_Base
 
     QButton *btnMore;
     QLineEdit *leInput;
+
+  public slots:
+    void returnPressed();
 };
 
 class AdvLvi_Bool : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_Bool(QWidget *parent=0, const char *name=0);
+    AdvLvi_Bool(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -79,35 +122,82 @@ class AdvLvi_Bool : public AdvLvi_Base
     virtual void resizeEvent ( QResizeEvent * );
 
     QComboBox *cbBool;
+
+  public slots:
+    void activated( const char* );
 };
 
 class AdvLvi_Filename : public AdvLvi_ExtEdit
 {
   Q_OBJECT
   public:
-    AdvLvi_Filename(QWidget *parent=0, const char *name=0 );
+    AdvLvi_Filename(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0 );
 
   public slots:
     void btnPressed();
 };
 
-class KColorButton;
+class AdvLvi_Font : public AdvLvi_ExtEdit
+{
+  Q_OBJECT
+  public:
+    AdvLvi_Font(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0 );
+
+  public slots:
+    void btnPressed();
+};
 
 class AdvLvi_ColorEdit : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_ColorEdit(QWidget *parent=0, const char *name=0 );
+    AdvLvi_ColorEdit(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0 );
 
     virtual QString getText();
 
   protected:
     virtual void resizeEvent ( QResizeEvent * );
     KColorButton *btn;
+
+  public slots:
+    void changed ( const QColor &newColor );
 };
 
+class AdvLvi_BgMode : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_BgMode(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
 
 
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    QComboBox *cbBool;
+
+  public slots:
+    void activated( const char* );
+};
+
+class AdvLvi_Cursor : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_Cursor(QWidget *parent, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
+
+
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    QComboBox *cbBool;
+
+  public slots:
+    void activated( const char* );
+};
 
 
 #endif

@@ -21,9 +21,10 @@
 
 class QWidget;
 
-KDlgItem_Widget::MyWidget::MyWidget(QWidget* parent , bool isMainWidget, const char* name )
+KDlgItem_Widget::MyWidget::MyWidget( KDlgItem_Widget* wid, QWidget* parent , bool isMainWidget, const char* name )
   : QFrame(parent,name)
 {
+  parentObject = wid;
   isItemActive = false;
 
   if (isMainWidget)
@@ -52,13 +53,13 @@ void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
 }
 
 
-KDlgItem_Widget::KDlgItem_Widget( QWidget *parent , bool ismainwidget = false, const char* name )
-   : KDlgItem_Base(parent,ismainwidget,name)
+KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , bool ismainwidget = false, const char* name )
+   : KDlgItem_Base(editwid, parent,ismainwidget,name)
 {
   childs = new KDlgItemDatabase();
-  item = new MyWidget(parent, ismainwidget);
+  item = new MyWidget(this, parent, ismainwidget);
   item->show();
-  props = new KDlgPropertyBase();
+  item->setMouseTracking(true);
   repaintItem();
 }
 

@@ -21,9 +21,11 @@
 #include "itemsglobal.h"
 
 
-KDlgItem_PushButton::MyWidget::MyWidget(QWidget* parent, const char* name )
+KDlgItem_PushButton::MyWidget::MyWidget(KDlgItem_PushButton* wid, QWidget* parent, const char* name )
   : QPushButton("Button", parent,name)
 {
+  parentObject = wid;
+  isItemActive = false;
 }
 
 
@@ -35,12 +37,12 @@ void KDlgItem_PushButton::MyWidget::paintEvent ( QPaintEvent *e )
     KDlgItemsPaintRects(this,e);
 }
 
-KDlgItem_PushButton::KDlgItem_PushButton( QWidget *parent , const char* name )
-  : KDlgItem_Base(0,false,name)
+KDlgItem_PushButton::KDlgItem_PushButton( KDlgEditWidget* editwid, QWidget *parent , const char* name )
+  : KDlgItem_Base(editwid, parent,false,name)
 {
-  item = new MyWidget(parent);
-//  item->setGeometry(10,10,100,50);
+  item = new MyWidget(this, parent);
   item->show();
+  item->setMouseTracking(true);
   repaintItem();
 }
 

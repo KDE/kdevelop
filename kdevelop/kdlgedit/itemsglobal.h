@@ -38,7 +38,7 @@ class KDlgItemDatabase
 {
   public:
     KDlgItemDatabase();
-    ~KDlgItemDatabase() {}
+    ~KDlgItemDatabase();
 
     int numItems();
     bool addItem(KDlgItem_Base *item);
@@ -70,11 +70,11 @@ class KDlgPropertyBase
 
     virtual void fillWithStandardEntrys();
 
-    int getNumEntrys() { return numEntrys; }
+    int getEntryCount() { return numEntrys; }
 
     #define testIfNrIsValid0(nr) if ((nr<0) || (nr>numEntrys)) return 0;
     #define testIfNrIsValid(nr) if ((nr<0) || (nr>numEntrys)) return;
-    KDlgPropertyEntry* getProp(int nr) { testIfNrIsValid0(nr); return &props[nr]; }
+    KDlgPropertyEntry* getProp(int nr) { testIfNrIsValid0(nr); return &props[nr];  }
     KDlgPropertyEntry* getProp(QString name);
     void setProp(int nr, QString name, QString value, QString group, int allowed)
        { testIfNrIsValid(nr); props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; }

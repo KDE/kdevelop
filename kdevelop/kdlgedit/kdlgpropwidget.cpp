@@ -23,8 +23,25 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <kfiledialog.h>
+#include <krestrictedline.h>
+#include <kspinbox.h>
 #include <stdio.h>
+#include "../ckdevelop.h"
 #include "kdlgproplv.h"
+#include "item_base.h"
+#include "defines.h"
+
+
+bool isValueTrue(QString val)
+{
+  QString v(val.upper());
+
+  if (v=="FALSE" || v=="0" || v=="NO" || v=="NULL" || v.isEmpty())
+    return false;
+
+  return true;
+}
+
 
 AdvListView::AdvListView( QWidget * parent , const char * name )
   : QListView( parent, name )
@@ -230,11 +247,10 @@ void AdvListViewItem::testAndResizeWidget(int column)
         {
           colwid[column]->hide();
 
-          if (colwid[column]->hasFocus())
-            colwid[column]->clearFocus();
-
           if (colwid[column])
             setText(column, colwid[column]->getText());
+
+          colwid[column]->clearFocus();
         }
 
     }
@@ -336,7 +352,9 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
           //   line (see above) we must  set the focus to the one in
           //   this line and column.
           if (flag)
-              colwid[column]->setFocus();
+            colwid[column]->setFocus();
+          else
+            colwid[column]->clearFocus();
         }
       else
         {
@@ -345,8 +363,7 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
           //   to hide the widget and take the focus away from it
           colwid[column]->hide();
 
-          if (colwid[column]->hasFocus())
-            colwid[column]->clearFocus();
+          colwid[column]->clearFocus();
         }
     }
 
@@ -354,29 +371,86 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
   QListViewItem::paintCell(p,cg,column, width,align);
 }
 
-KDlgPropWidget::KDlgPropWidget(QWidget *parent, const char *name ) : QWidget(parent,name)
+KDlgPropWidget::KDlgPropWidget(CKDevelop* parCKD, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
+  pCKDevel = parCKD;
   lv = new AdvListView(this);
-  lv->addColumn("Property");
-  lv->addColumn("Value");
+  lv->addColumn(i18n("Property"));
+  lv->addColumn(i18n("Value"));
   lv->show();
 
-  lv->setRootIsDecorated(true);
+  lv->setRootIsDecorated(false);
+}
 
-  AdvListViewItem *lvi1 = new AdvListViewItem(lv,"Prop 1","Val 1");
-  lvi1->setColumnWidget(1, new AdvLvi_Filename( lv ));
-  AdvListViewItem *lvi2 = new AdvListViewItem(lv,"Prop 2","Val 2");
-  lvi2->setColumnWidget(1, new AdvLvi_ColorEdit( lv ));
-  AdvListViewItem *lvi3 = new AdvListViewItem(lvi2,"Prop 3","Val 3");
-  lvi3->setColumnWidget(1, new AdvLvi_Filename( lv ));
-  AdvListViewItem *lvi4 = new AdvListViewItem(lvi2,"Prop 4","Val 4");
-  lvi4->setColumnWidget(1, new AdvLvi_Filename( lv ));
-  AdvListViewItem *lvi5 = new AdvListViewItem(lvi2,"Prop 5","Val 5");
-  lvi5->setColumnWidget(1, new AdvLvi_Filename( lv ));
-  AdvListViewItem *lvi6 = new AdvListViewItem(lvi2,"Prop 6","Val 6");
-  lvi6->setColumnWidget(1, new AdvLvi_Filename( lv ));
-  AdvListViewItem *lvi7 = new AdvListViewItem(lv,"Prop 7","Val 7");
-  lvi7->setColumnWidget(1, new AdvLvi_Bool( lv ));
+void KDlgPropWidget::refillList(KDlgItem_Base* source)
+{
+  if (!source)
+    return;
+
+  lv->clear();
+
+  QString grps[32];
+  AdvListViewItem *grpLvis[32];
+  int grpsCnt = 0;
+  int numGrp;
+
+
+  KDlgPropertyEntry *prop;
+  for (int i = 0; i<=source->getProps()->getEntryCount(); i++)
+    {
+      prop = source->getProps()->getProp(i);
+
+      numGrp = -1;
+      for (int n = 0; n<grpsCnt; n++)
+        if (prop->group.upper()==grps[n].upper())
+          {
+            numGrp = n;
+            break;
+          }
+
+      if (numGrp == -1)
+        {
+          numGrp = grpsCnt++;
+          grps[numGrp] = prop->group;
+          if (grps[numGrp].length()!=0)
+            grpLvis[numGrp] = new AdvListViewItem(lv,grps[numGrp],"");
+          else
+            continue;
+        }
+
+      AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,prop->value);
+      switch (prop->allowed)
+        {
+          case ALLOWED_STRING:
+            lvi->setColumnWidget(1, new AdvLvi_String( lv, prop ));
+            break;
+          case ALLOWED_BOOL:
+            lvi->setColumnWidget(1, new AdvLvi_Bool( lv, prop ));
+            break;
+          case ALLOWED_INT:
+            lvi->setColumnWidget(1, new AdvLvi_Int( lv, prop ));
+            break;
+          case ALLOWED_FILE:
+            lvi->setColumnWidget(1, new AdvLvi_Filename( lv, prop ));
+            break;
+          case ALLOWED_COLOR:
+            lvi->setColumnWidget(1, new AdvLvi_ColorEdit( lv, prop ));
+            break;
+          case ALLOWED_FONT:
+            lvi->setColumnWidget(1, new AdvLvi_Font( lv, prop ));
+            break;
+          case ALLOWED_CONNECTIONS:
+    //        lvi->setColumnWidget(1, new AdvLvi_Connections( lv, prop ));
+            break;
+          case ALLOWED_CURSOR:
+            lvi->setColumnWidget(1, new AdvLvi_Cursor( lv, prop ));
+            break;
+          case ALLOWED_BGMODE:
+            lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, prop ));
+            break;
+       }
+
+    }
 }
 
 KDlgPropWidget::~KDlgPropWidget()
@@ -399,9 +473,11 @@ void KDlgPropWidget::resizeEvent ( QResizeEvent *e )
 
 
 
-AdvLvi_Base::AdvLvi_Base(QWidget *parent, const char *name)
+AdvLvi_Base::AdvLvi_Base(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
   : QWidget( parent, name )
 {
+  setGeometry(0,0,0,0);
+  propEntry = dpe;
   setBackgroundColor( colorGroup().base() );
 //  setFocusPolicy(NoFocus);
   setEnabled(false);
@@ -415,11 +491,135 @@ void AdvLvi_Base::paintEvent ( QPaintEvent * e )
 
 
 
-AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, const char *name )
-  : AdvLvi_Base( parent, name )
+AdvLvi_String::AdvLvi_String(QWidget *parent, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, dpe, name )
 {
+  setGeometry(0,0,0,0);
+  leInput = new QLineEdit( this );
+  leInput->setText(dpe->value);
+  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
+}
+
+QString AdvLvi_String::getText()
+{
+  if (leInput)
+    return leInput->text();
+  else
+    return QString();
+}
+
+void AdvLvi_String::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (leInput)
+    leInput->setGeometry(0,0,width(),height()+1);
+}
+
+void AdvLvi_String::returnPressed()
+{
+  propEntry->value = leInput->text();
+}
+
+
+AdvLvi_Int::AdvLvi_Int(QWidget *parent, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, dpe, name )
+{
+  setGeometry(0,0,0,0);
+
+  leInput = new KRestrictedLine( this, 0, " 01234567890-" );
+  leInput->setText(dpe->value.stripWhiteSpace());
+
+  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
+
+  up = new QPushButton("",this);
+  down = new QPushButton("",this);
+  connect(up, SIGNAL(clicked()), SLOT(valInc()));
+  connect(down, SIGNAL(clicked()), SLOT(valDec()));
+}
+
+void AdvLvi_Int::valInc()
+{
+  QString val = leInput->text();
+
+  int dest = 0;
+
+  if (val.length() != 0)
+    {
+      bool ok = true;
+      dest = val.toInt(&ok);
+
+      if (!ok)
+        dest = 0;
+    }
+
+  dest++;
+  leInput->setText(QString().setNum(dest));
+}
+
+void AdvLvi_Int::valDec()
+{
+  QString val = leInput->text();
+
+  int dest = 0;
+
+  if (val.length() != 0)
+    {
+      bool ok = true;
+      dest = val.toInt(&ok);
+
+      if (!ok)
+        dest = 0;
+    }
+
+  dest--;
+  leInput->setText(QString().setNum(dest));
+}
+
+
+QString AdvLvi_Int::getText()
+{
+  if (leInput)
+    {
+      return leInput->text();
+    }
+  else
+    return QString();
+}
+
+void AdvLvi_Int::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (leInput)
+    leInput->setGeometry(0,0,width()-15,height()+1);
+
+  if (up)
+    up->setGeometry(width()-15,0,15,(int)(height()/2));
+
+  if (down)
+    down->setGeometry(width()-15,(int)(height()/2)+1,15,(int)(height()/2));
+}
+
+void AdvLvi_Int::returnPressed()
+{
+  propEntry->value = leInput->text();
+}
+
+
+
+AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, dpe, name )
+{
+  setGeometry(0,0,0,0);
   btnMore = new QPushButton("...",this);
   leInput = new QLineEdit( this );
+  leInput->setText(dpe->value);
+
+  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 //  connect( leInput, SIGNAL( textChanged ( const char * ) ), SLOT( updateParentLvi() ) );
 }
 
@@ -441,10 +641,14 @@ void AdvLvi_ExtEdit::resizeEvent ( QResizeEvent *e )
     leInput->setGeometry(0,0,width()-15,height()+1);
 }
 
+void AdvLvi_ExtEdit::returnPressed()
+{
+  propEntry->value = leInput->text();
+}
 
 
-AdvLvi_Filename::AdvLvi_Filename(QWidget *parent, const char *name)
-  : AdvLvi_ExtEdit( parent, name )
+AdvLvi_Filename::AdvLvi_Filename(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_ExtEdit( parent, dpe, name )
 {
   connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
 }
@@ -459,12 +663,14 @@ void AdvLvi_Filename::btnPressed()
 }
 
 
-AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, const char *name)
-  : AdvLvi_Base( parent, name )
+AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, dpe, name )
 {
+  setGeometry(0,0,0,0);
   cbBool = new QComboBox( FALSE, this );
-  cbBool->insertItem("TRUE");
-  cbBool->insertItem("FALSE");
+  cbBool->insertItem(i18n("TRUE"));
+  cbBool->insertItem(i18n("FALSE"));
+  cbBool->setCurrentItem(isValueTrue(dpe->value) ? 0 : 1);
 }
 
 void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
@@ -483,12 +689,16 @@ QString AdvLvi_Bool::getText()
     return QString();
 }
 
-AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, const char *name)
-  : AdvLvi_Base( parent, name )
+void AdvLvi_Bool::activated( const char* s )
 {
-  btn = new KColorButton(this);
+  propEntry->value = cbBool->currentItem() ? "FALSE" : "TRUE";
+}
 
-//  connect( btn, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
+AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, dpe, name )
+{
+  setGeometry(0,0,0,0);
+  btn = new KColorButton(this);
 }
 
 void AdvLvi_ColorEdit::resizeEvent ( QResizeEvent *e )
@@ -507,7 +717,6 @@ QString AdvLvi_ColorEdit::getText()
   return QString(s);
 }
 
-/*
 QString AdvLvi_intToHex(int i)
 {
   char s[10];
@@ -515,17 +724,123 @@ QString AdvLvi_intToHex(int i)
   return QString(s);
 }
 
-void AdvLvi_ColorEdit::btnPressed()
+void AdvLvi_ColorEdit::changed ( const QColor &newColor )
 {
-  int l=0;
-  sscanf((const char*)getText(), "%i", &l);
+//  int l=0;
+//  sscanf((const char*)getText(), "%i", &l);
+//  QColor myColor(QColor((unsigned char)(l>>16),(unsigned char)(l>>8),(unsigned char)(l)));
+//  int res = KColorDialog::getColor( myColor );
+  propEntry->value = "0x"+AdvLvi_intToHex(newColor.red())+AdvLvi_intToHex(newColor.green())+AdvLvi_intToHex(newColor.blue());
+}
 
-  QColor myColor(QColor((unsigned char)(l>>16),(unsigned char)(l>>8),(unsigned char)(l)));
-  int res = KColorDialog::getColor( myColor );
+
+AdvLvi_Font::AdvLvi_Font(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_ExtEdit( parent, dpe, name )
+{
+  connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
+}
+
+void AdvLvi_Font::btnPressed()
+{
+  QFont myFont;
+  int res = KFontDialog::getFont( myFont );
+
   if (res)
     {
-      QString st = "0x"+AdvLvi_intToHex(myColor.red())+AdvLvi_intToHex(myColor.green())+AdvLvi_intToHex(myColor.blue());
+      QString st = QString("\"") + myFont.family()    + QString("\" \"") +
+                              QString().setNum(myFont.pointSize()) + QString("\" \"") +
+                              QString().setNum(myFont.weight())   + QString("\" \"") +
+                              QString(myFont.bold() ? QString("TRUE") : QString("FALSE")) + QString("\"");
       leInput->setText(st);
+      propEntry->value=st;
     }
-}     */
+}
+
+
+
+AdvLvi_BgMode::AdvLvi_BgMode(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, dpe, name )
+{
+  setGeometry(0,0,0,0);
+  cbBool = new QComboBox( FALSE, this );
+  cbBool->insertItem(i18n("(not set)"));
+  cbBool->insertItem("FixedColor");
+  cbBool->insertItem("FixedPixmap");
+  cbBool->insertItem("NoBackground");
+  cbBool->insertItem("PaletteForeground");
+  cbBool->insertItem("PaletteBackground");
+  cbBool->insertItem("PaletteLight");
+  cbBool->insertItem("PaletteMidlight");
+  cbBool->insertItem("PaletteDark");
+  cbBool->insertItem("PaletteMid");
+  cbBool->insertItem("PaletteText");
+  cbBool->insertItem("PaletteBase");
+  cbBool->setCurrentItem(0);
+}
+
+void AdvLvi_BgMode::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (cbBool)
+    cbBool->setGeometry(0,0,width(),height()+1);
+}
+
+QString AdvLvi_BgMode::getText()
+{
+  if (cbBool)
+    return cbBool->currentItem() ? QString(cbBool->currentText()) : QString();
+  else
+    return QString();
+}
+
+void AdvLvi_BgMode::activated( const char* s )
+{
+  propEntry->value = getText();
+}
+
+
+AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, dpe, name )
+{
+  setGeometry(0,0,0,0);
+  cbBool = new QComboBox( FALSE, this );
+  cbBool->insertItem(i18n("(not set)"));
+  cbBool->insertItem("handCursor");
+  cbBool->insertItem("arrowCursor");
+  cbBool->insertItem("upArrowCursor");
+  cbBool->insertItem("crossCursor");
+  cbBool->insertItem("waitCursor");
+  cbBool->insertItem("ibeamCursor");
+  cbBool->insertItem("sizeVerCursor");
+  cbBool->insertItem("sizeHorCursor");
+  cbBool->insertItem("sizeBDiagCursor");
+  cbBool->insertItem("sizeFDiagCursor");
+  cbBool->insertItem("sizeAllCursor");
+  cbBool->insertItem("blankCursor");
+  cbBool->setCurrentItem(0);
+}
+
+void AdvLvi_Cursor::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (cbBool)
+    cbBool->setGeometry(0,0,width(),height()+1);
+}
+
+QString AdvLvi_Cursor::getText()
+{
+  if (cbBool)
+    return cbBool->currentItem() ? QString(cbBool->currentText()) : QString();
+  else
+    return QString();
+}
+
+
+void AdvLvi_Cursor::activated( const char* s )
+{
+  propEntry->value = getText();
+}
+
 

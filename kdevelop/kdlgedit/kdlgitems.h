@@ -20,8 +20,10 @@
 #define KDLGITEMS_H
 
 #include <qwidget.h>
+#include <qpixmap.h>
 
 class KTreeList;
+class KTreeListItem;
 class KDlgItem_Widget;
 
 /**
@@ -36,11 +38,13 @@ class KDlgItems : public QWidget  {
 
     KTreeList *getTreeList() { return treelist; }
 
-    void addWidgetChilds(KDlgItem_Widget *wd);
+    void addWidgetChilds(KDlgItem_Widget *wd, KTreeListItem *itm=0);
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 
     KTreeList *treelist;
+    QPixmap folder_pix;
+    QPixmap entry_pix;
 };
 
 #endif

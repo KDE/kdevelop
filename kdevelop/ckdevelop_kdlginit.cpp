@@ -38,7 +38,7 @@ void CKDevelop::initKDlg(){
   kdlg_top_panner = new KNewPanner(top_panner,"kdlg_top_panner",KNewPanner::Vertical,KNewPanner::Percent,
   			      config->readNumEntry("kdlg_top_panner_pos", 80));
 
-  kdlg_prop_widget = new KDlgPropWidget(kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
+  kdlg_prop_widget = new KDlgPropWidget(this,kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
   kdlg_edit_widget = new KDlgEditWidget(this,kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
 
   kdlg_top_panner->showLabels(true);

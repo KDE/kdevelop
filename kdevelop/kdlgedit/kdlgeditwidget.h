@@ -28,6 +28,7 @@
 
 class KDlgItemDatabase;
 class KDlgItem_Widget;
+class KDlgItem_Base;
 class CKDevelop;
 class KRuler;
 
@@ -41,17 +42,20 @@ class KDlgEditWidget : public QWidget  {
 
     bool addItem(int type);
     KDlgItem_Widget *mainWidget() { return main_widget; }
+    KDlgItem_Base *selectedWidget() { return selected_widget; }
 
     CKDevelop *getCKDevel() { return pCKDevel; }
 
+    KRuler *horizontalRuler() { return rulh; }
+    KRuler *verticalRuler() { return rulv; }
   public slots:
     void choiseAndAddItem();
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 
-
     KDlgItemDatabase *dbase;
     KDlgItem_Widget *main_widget;
+    KDlgItem_Base *selected_widget;
     CKDevelop *pCKDevel;
     KRuler *rulh, *rulv;
 };

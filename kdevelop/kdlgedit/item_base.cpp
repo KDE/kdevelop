@@ -20,13 +20,14 @@
 #include <qwidget.h>
 #include "itemsglobal.h"
 
-KDlgItem_Base::KDlgItem_Base( QWidget *parent , bool ismainwidget, const char* name )
+KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool ismainwidget, const char* name )
   : QObject(parent,name)
 {
+  editWidget = editwid;
+  childs = 0;
   isMainWidget = ismainwidget;
   item = new QWidget(parent);
   item->setMouseTracking(true);
-  item->setBackgroundMode(QWidget::PaletteDark);
 
   props = new KDlgPropertyBase();
   repaintItem();
@@ -39,8 +40,8 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   if ((!itm) || (!props))
     return;
 
-  itm->setGeometry(isMainWidget ? RULER_WIDTH : props->getIntFromProp("X",itm->x()),
-                   isMainWidget ? RULER_HEIGHT : props->getIntFromProp("Y",itm->y()),
+  itm->setGeometry(isMainWidget ? RULER_WIDTH : (props->getIntFromProp("X",itm->x())),
+                   isMainWidget ? RULER_HEIGHT : (props->getIntFromProp("Y",itm->y())),
                    props->getIntFromProp("Width",itm->width()),
                    props->getIntFromProp("Height",itm->height()));
 }

@@ -20,9 +20,11 @@
 #define ITEM_PUSHBUTTON_H
 
 #include "item_base.h"
+#include "kdlgeditwidget.h"
 #include <qpushbutton.h>
 #include <qpainter.h>
-
+#include <kruler.h>
+#include "item_widget.h"
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
@@ -34,19 +36,21 @@ class KDlgItem_PushButton : public KDlgItem_Base
   protected:
     class MyWidget : public QPushButton
     {
+      ITEMSTDSTUFF
       public:
-        MyWidget(QWidget* parent = 0, const char* name = 0);
+        MyWidget(KDlgItem_PushButton* wid, QWidget* parent = 0, const char* name = 0);
 
-        bool isItemActive;
       protected:
+        KDlgItem_PushButton* parentObject;
         virtual void paintEvent ( QPaintEvent * );
         virtual void mousePressEvent ( QMouseEvent * ) { isItemActive = !isItemActive; repaint(); }
+        virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
     };
 
     MyWidget *item;
 
   public:
-    KDlgItem_PushButton( QWidget *parent = 0, const char* name = 0 );
+    KDlgItem_PushButton( KDlgEditWidget* editwid = 0, QWidget *parent = 0, const char* name = 0 );
     virtual ~KDlgItem_PushButton() {}
 
     virtual QString itemClass() { return QString("PushButton"); }

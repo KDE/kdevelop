@@ -20,20 +20,19 @@
 #define ITEM_BASE_H
 
 #include <qobject.h>
-
+#include "itemsglobal.h"
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
 
-
-class KDlgPropertyBase;
+class KDlgEditWidget;
 
 
 class KDlgItem_Base : public QObject
 {
   Q_OBJECT
   public:
-    KDlgItem_Base( QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
+    KDlgItem_Base( KDlgEditWidget* editwid = 0, QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
     virtual ~KDlgItem_Base() {}
 
     virtual QString itemClass() { return QString("[Base]"); }
@@ -43,11 +42,18 @@ class KDlgItem_Base : public QObject
 
     KDlgPropertyBase *getProps() { return props; }
 
+    KDlgItemDatabase *getChildDb() { return childs; }
+    int getNrOfChilds() { return childs->numItems(); }
+    bool addChild(KDlgItem_Base *itm) { return childs->addItem(itm); }
+
+    KDlgEditWidget* getEditWidget() { return editWidget; }
 
   protected:
+    KDlgItemDatabase *childs;
     QWidget *item;
     KDlgPropertyBase *props;
     bool isMainWidget;
+    KDlgEditWidget* editWidget;
 };
 
 

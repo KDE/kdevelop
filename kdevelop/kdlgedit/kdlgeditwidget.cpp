@@ -40,7 +40,7 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   setBackgroundMode(PaletteLight);
 
-  main_widget = new KDlgItem_Widget( this, true );
+  selected_widget = main_widget = new KDlgItem_Widget( this, this, true );
 
   main_widget->getProps()->setProp_Value("X","0");
   main_widget->getProps()->setProp_Value("Y","0");
@@ -49,8 +49,11 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 //  main_widget->addChild( new KDlgItem_PushButton ( wid->getItem() ) );
   main_widget->repaintItem();
 
-  if ((parCKD) && ((CKDevelop*)parCKD)->kdlg_get_items_view())
-    ((CKDevelop*)parCKD)->kdlg_get_items_view()->addWidgetChilds(main_widget);
+  if ((parCKD) && parCKD->kdlg_get_items_view())
+    parCKD->kdlg_get_items_view()->addWidgetChilds(main_widget);
+
+  if ((parCKD) && parCKD->kdlg_get_prop_widget())
+    parCKD->kdlg_get_prop_widget()->refillList(selected_widget);
 
   rulh = new KRuler(KRuler::horizontal, this);
   rulh->setRulerStyle(KRuler::pixel);
@@ -86,16 +89,24 @@ void KDlgEditWidget::choiseAndAddItem()
 bool KDlgEditWidget::addItem(int type)
 {
 
-  KDlgItem_Widget *wid2 = new KDlgItem_Widget( main_widget->getItem(), false );
+  KDlgItem_Widget *wid2 = new KDlgItem_Widget( this, main_widget->getItem(), false );
 
   wid2->getProps()->setProp_Value("X","150");
   wid2->getProps()->setProp_Value("Y","50");
   wid2->getProps()->setProp_Value("Width","150");
   wid2->getProps()->setProp_Value("Height","100");
-  wid2->addChild( new KDlgItem_PushButton ( wid2->getItem() ) );
+  wid2->addChild( new KDlgItem_PushButton ( this, wid2->getItem() ) );
+  KDlgItem_Widget* btn1 = new KDlgItem_Widget ( this, wid2->getItem() );
+  btn1->getProps()->setProp_Value("X","50");
+  btn1->getProps()->setProp_Value("Y","50");
+  btn1->repaintItem();
+  wid2->addChild( btn1 );
   wid2->repaintItem();
 
   main_widget->addChild( wid2 );
+
+  if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
+    ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);
 
   return true;
 }

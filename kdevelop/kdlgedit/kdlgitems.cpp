@@ -17,9 +17,11 @@
 
 
 #include "kdlgitems.h"
+
 #include <ktreelist.h>
 #include <kiconloader.h>
 #include <kapp.h>
+#include <qstring.h>
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
 #include "item_widget.h"
@@ -39,38 +41,8 @@ KDlgItems::KDlgItems(QWidget *parent, const char *name ) : QWidget(parent,name)
 
   KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
 
-  QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
-  QPixmap book_pix = icon_loader->loadMiniIcon("mini-default.xpm");
-  str = i18n("Main Widget");
-  path.push(&str);
-  treelist->insertItem(i18n("Main Widget"),&folder_pix);
-
-
-  treelist->addChildItem(new KTreeListItem(i18n("KDevelop"),&folder_pix),&path);
-  treelist->addChildItem(i18n("Qt/KDE Libraries"),&folder_pix,&path);
-  treelist->addChildItem(i18n("Others"),&folder_pix,&path);
-  treelist->addChildItem(i18n("Current Project"),&folder_pix,&path);
-
-
-  //  add KDevelop
-  str_path = i18n("KDevelop");
-  path.push(&str_path);
-  treelist->addChildItem(i18n("Manual"),&book_pix,&path);
-  treelist->addChildItem(i18n("Tutorial"),&book_pix,&path);
-  treelist->addChildItem(i18n("C/C++ Reference"),&book_pix,&path);
-
-  //  add the Libraries
-  str_path = i18n("Qt/KDE Libraries");
-  path.pop();
-  path.push(&str_path);
-  treelist->addChildItem(i18n("Qt-Library"),&book_pix,&path);
-  treelist->addChildItem(i18n("KDE-Core-Library"),&book_pix,&path);
-  treelist->addChildItem(i18n("KDE-UI-Library"),&book_pix,&path);
-  treelist->addChildItem(i18n("KDE-KFile-Library"),&book_pix,&path);
-
-  treelist->setExpandLevel(2);
-  treelist->setUpdatesEnabled( TRUE );
-  treelist->repaint();
+  folder_pix = icon_loader->loadMiniIcon("folder.xpm");
+  entry_pix = icon_loader->loadMiniIcon("mini-default.xpm");
 
 //  ((CKDevelop*)parent)->kdlg_get_items_view()->addWidgetChilds(
 }
@@ -86,17 +58,56 @@ void KDlgItems::resizeEvent ( QResizeEvent *e )
   treelist->setGeometry( 0,0, width(), height() );
 }
 
-void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd)
+void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, KTreeListItem *itm)
 {
   if ((!wd) || (!wd->getChildDb()))
     return;
 
-//  KDlgItem_Widget *w = (KDlgItem_Widget*)wd->getChildDb()->getFirst();
-//  do {
-//    if (w)
-//      if (w->getProps()) w->getProps()->getProp(1);
-//      printf("****** %s\n",(const char*)w->getProps()->getProp(1));
-//    w = (KDlgItem_Widget*)wd->getChildDb()->getNext();
-//  } while (w);
+  QString s;
+  QString str;
+  KTreeListItem *item = itm;
+
+  if (!itm)
+    {
+      s.sprintf("%s [%s]", (const char*)i18n("Main Widget"), (const char*)wd->getProps()->getProp("Name")->value);
+      item=new KTreeListItem(QString(s),&folder_pix);
+      treelist->setUpdatesEnabled( FALSE );
+      treelist->clear();
+      treelist->insertItem(item);
+    }
+
+
+  KDlgItem_Base *w = wd->getChildDb()->getFirst();
+  do {
+    if (w)
+      {
+        if (w->getProps())
+          {
+            s.sprintf("%s [%s]", (const char*)w->itemClass(), (const char*)w->getProps()->getProp("Name")->value);
+          }
+
+        if (w->getChildDb())
+          {
+            KTreeListItem *it=new KTreeListItem(s,&folder_pix);
+            item->appendChild(it);
+            addWidgetChilds((KDlgItem_Widget*)w, it);
+          }
+        else
+          {
+            KTreeListItem *it=new KTreeListItem(s,&entry_pix);
+            item->appendChild(it);
+          }
+      }
+
+    w = wd->getChildDb()->getNext();
+  } while (w);
+
+  if (!itm)
+    {
+//      treelist->setExpandLevel(2);
+      treelist->setUpdatesEnabled( TRUE );
+      treelist->expandItem(0);
+      treelist->repaint();
+    }
 }
 

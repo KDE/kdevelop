@@ -22,7 +22,8 @@
 #include <qwidget.h>
 
 class AdvListView;
-class KDlgItem_Widget;
+class KDlgItem_Base;
+class CKDevelop;
 
 /**
   *@author Pascal Krahmer
@@ -31,14 +32,16 @@ class KDlgItem_Widget;
 class KDlgPropWidget : public QWidget  {
    Q_OBJECT
 public:
-	KDlgPropWidget(QWidget *parent=0, const char *name=0);
+	KDlgPropWidget(CKDevelop* parCKD, QWidget *parent=0, const char *name=0);
 	~KDlgPropWidget();
 
+        void refillList(KDlgItem_Base* source);
 protected:
         virtual void resizeEvent ( QResizeEvent * );
 
 private:
         AdvListView *lv;
+        CKDevelop *pCKDevel;
 };
 
 #endif

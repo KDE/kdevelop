@@ -37,6 +37,15 @@
 #define RULER_WIDTH  20
 #define RULER_HEIGHT  20
 
+#define ITEMSTDSTUFF\
+ public: \
+   int recPosX(int px) { int xnew = px+x(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((KDlgItem_Widget::MyWidget*)parent())->recPosX(xnew); else return px; } \
+   int recPosY(int py) { int ynew = py+y(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((KDlgItem_Widget::MyWidget*)parent())->recPosY(ynew); else return py; } \
+   bool isItemActive; \
+ protected: \
+   void moveRulers( QMouseEvent *e ) { if (!parentObject) return; parentObject->getEditWidget()->horizontalRuler()->setValue(e->pos().x()+recPosX(0));parentObject->getEditWidget()->verticalRuler()->setValue(e->pos().y()+recPosY(0)); } \
+ public:
+
 #endif
 
 
