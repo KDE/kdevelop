@@ -8,10 +8,10 @@ libkdev%{APPNAMELC}_la_SOURCES = %{APPNAMELC}part.cpp %{APPNAMELC}widget.cpp %{A
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_%{APPNAMELC}.desktop
+service_DATA = kdev%{APPNAMELC}.desktop
 
 rcdir = $(kde_datadir)/kdev%{APPNAMELC}
-rc_DATA = kdevpart_%{APPNAMELC}.rc
+rc_DATA = kdev%{APPNAMELC}.rc
 
 appsharedir = $(kde_datadir)/kdev%{APPNAMELC}
 appshare_DATA =
