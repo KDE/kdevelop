@@ -541,7 +541,7 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
     // remove the view from MDI and delete the view
     QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
     m_pParent->removeWindowFromMdi( pMDICover);
-    delete pMDICover;
+    m_MDICoverList.remove( pMDICover);
   }
 
   if(pDoc) {
@@ -606,7 +606,7 @@ void DocViewMan::closeCDocBrowser(CDocBrowser* pDoc)
         pView->reparent(0L, 0, QPoint(0,0));
         QApplication::sendPostedEvents();
         m_pParent->removeWindowFromMdi( pMDICover);
-        delete pMDICover;
+        m_MDICoverList.remove( pMDICover);
       }
     }
     debug("deleting pDoc !\n");
@@ -807,7 +807,7 @@ void DocViewMan::closeEditView(CEditWidget* pView)
 
   // remove the view from MDI and delete the view
   m_pParent->removeWindowFromMdi( pMDICover);
-  delete pMDICover;
+  m_MDICoverList.remove( pMDICover);
 
   if (pDoc->viewCount() == 0) {
     closeKWriteDoc(pDoc);
@@ -836,7 +836,7 @@ void DocViewMan::closeBrowserView(KHTMLView* pView)
   
   // remove the view from MDI and delete the view
   m_pParent->removeWindowFromMdi( pMDICover);
-  delete pMDICover;
+  m_MDICoverList.remove( pMDICover);
 
   closeCDocBrowser(pDoc);
 }
