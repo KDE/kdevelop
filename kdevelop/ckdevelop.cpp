@@ -18,7 +18,7 @@
 
 #include <iostream.h>
 
-#include <qclipboard.h>
+#include <qclipbrd.h>
 #include <qevent.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -1696,6 +1696,63 @@ void CKDevelop::slotNewStatus()
   setMainCaption();
 }
 
+void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
+{
+
+  int item=s_tab_view->getCurrentTab();
+  if (item==CPP)
+  {
+    if(bMarked){
+      enableCommand(ID_EDIT_CUT);
+      enableCommand(ID_EDIT_COPY);
+    }
+    else{
+      disableCommand(ID_EDIT_CUT);
+      disableCommand(ID_EDIT_COPY);
+    }
+  }		
+}
+
+void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
+{
+  int item=s_tab_view->getCurrentTab();
+  if (item==HEADER)
+  {
+      if(bMarked){
+        enableCommand(ID_EDIT_CUT);
+        enableCommand(ID_EDIT_COPY);
+      }
+      else{
+        disableCommand(ID_EDIT_CUT);
+        disableCommand(ID_EDIT_COPY);
+      }		
+  }
+}
+
+void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
+{
+  int item=s_tab_view->getCurrentTab();
+  if (item==BROWSER)
+  {
+      if(bMarked){
+        enableCommand(ID_EDIT_COPY);
+      }
+      else{
+        disableCommand(ID_EDIT_COPY);
+      }		
+  }
+}
+
+void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
+{
+  int item=s_tab_view->getCurrentTab();
+  QString text=QApplication::clipboard()->text();
+  if(!bContents || item==BROWSER || item==TOOLS)
+    disableCommand(ID_EDIT_PASTE);
+  else
+    enableCommand(ID_EDIT_PASTE);
+}
+
 void CKDevelop::slotNewLineColumn()
 {
   QString linenumber;
@@ -2242,6 +2299,26 @@ void CKDevelop::slotSTabSelected(int item){
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
   enableCommand(ID_FILE_SAVE_AS);
   enableCommand(ID_FILE_CLOSE);
+
+  enableCommand(ID_FILE_PRINT);
+
+  QString text=QApplication::clipboard()->text();
+  if(text.isEmpty())
+    disableCommand(ID_EDIT_PASTE);
+  else
+    enableCommand(ID_EDIT_PASTE);
+
+  enableCommand(ID_EDIT_INSERT_FILE);
+  enableCommand(ID_EDIT_SEARCH);
+  enableCommand(ID_EDIT_REPEAT_SEARCH);
+  enableCommand(ID_EDIT_REPLACE);
+  enableCommand(ID_EDIT_SPELLCHECK);
+  enableCommand(ID_EDIT_INDENT);
+  enableCommand(ID_EDIT_UNINDENT);
+  enableCommand(ID_EDIT_SELECT_ALL);
+  enableCommand(ID_EDIT_DESELECT_ALL);
+  enableCommand(ID_EDIT_INVERT_SELECTION);
+
   }
 
   if (item == HEADER){
@@ -2276,21 +2353,74 @@ void CKDevelop::slotSTabSelected(int item){
 //    setMainCaption();  is called by slotNewStatus()
     slotNewLineColumn();
   }
+
+  if (item == HEADER || item == CPP)
+  {
+    int state;
+    state = edit_widget->undoState();
+    //undo
+    if(state & 1)
+      enableCommand(ID_EDIT_UNDO);
+    else
+      disableCommand(ID_EDIT_UNDO);
+    //redo
+    if(state & 2)
+      enableCommand(ID_EDIT_REDO);
+    else
+      disableCommand(ID_EDIT_REDO);
+
+    QString str = edit_widget->markedText();
+    if(str.isEmpty()){
+      disableCommand(ID_EDIT_CUT);
+      disableCommand(ID_EDIT_COPY);
+    }
+    else{
+      enableCommand(ID_EDIT_CUT);
+      enableCommand(ID_EDIT_COPY);
+    }		
+  }
+
+  if(item == BROWSER || item == TOOLS)
+  {
+    disableCommand(ID_BUILD_COMPILE_FILE);
+
+    disableCommand(ID_FILE_SAVE);
+    disableCommand(ID_FILE_SAVE_AS);
+    disableCommand(ID_FILE_CLOSE);
+
+    disableCommand(ID_FILE_PRINT);
+
+    disableCommand(ID_EDIT_UNDO);
+    disableCommand(ID_EDIT_REDO);
+    disableCommand(ID_EDIT_CUT);
+    disableCommand(ID_EDIT_PASTE);
+    disableCommand(ID_EDIT_INSERT_FILE);
+    disableCommand(ID_EDIT_SEARCH);
+    disableCommand(ID_EDIT_REPEAT_SEARCH);
+    disableCommand(ID_EDIT_REPLACE);
+    disableCommand(ID_EDIT_SPELLCHECK);
+    disableCommand(ID_EDIT_INDENT);
+    disableCommand(ID_EDIT_UNINDENT);
+    disableCommand(ID_EDIT_SELECT_ALL);
+    disableCommand(ID_EDIT_DESELECT_ALL);
+    disableCommand(ID_EDIT_INVERT_SELECTION);
+  }
+
   if(item == BROWSER){
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
-    disableCommand(ID_BUILD_COMPILE_FILE);
-    disableCommand(ID_FILE_SAVE);
-    disableCommand(ID_FILE_SAVE_AS);
-    disableCommand(ID_FILE_CLOSE);
     browser_widget->setFocus();
+
+    if (browser_widget->isTextSelected())
+      enableCommand(ID_EDIT_COPY);
+    else
+      disableCommand(ID_EDIT_COPY);
+
     setMainCaption(BROWSER);
   }
+
   if(item == TOOLS){
-    disableCommand(ID_BUILD_COMPILE_FILE);
-    disableCommand(ID_FILE_SAVE);
-    disableCommand(ID_FILE_SAVE_AS);
-    disableCommand(ID_FILE_CLOSE);
+    disableCommand(ID_EDIT_COPY);
     setMainCaption(TOOLS);
   }
   //  s_tab_current = item;
