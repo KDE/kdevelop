@@ -239,7 +239,7 @@ void CKDevelop::slotClassChoiceCombo(int index){
   
   QString classname = class_combo->text(index);
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",classname.data());
-  if (classname == "Classes") return; 
+  if (classname == i18n("Classes")) return; 
   TClassInfo* class_info=0,*info_found=0;
   TMethodInfo* method_info;
   // search the class_info

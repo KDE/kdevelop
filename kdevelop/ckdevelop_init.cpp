@@ -98,9 +98,9 @@ void CKDevelop::init(){
   stderr_widget->setReadOnly(TRUE);
   stderr_widget->setFocusPolicy(QWidget::NoFocus);
 
-  o_tab_view->addTab(messages_widget,"messages");
-  o_tab_view->addTab(stdin_stdout_widget,"stdin/stdout");
-  o_tab_view->addTab(stderr_widget,"stderr");
+  o_tab_view->addTab(messages_widget,i18n("messages"));
+  o_tab_view->addTab(stdin_stdout_widget,i18n("stdin/stdout"));
+  o_tab_view->addTab(stderr_widget,i18n("stderr"));
   
   //  s_tab_current = 0;
   top_panner = new KNewPanner(view,"top_panner",KNewPanner::Vertical,KNewPanner::Absolute,
@@ -753,11 +753,11 @@ void CKDevelop::initToolbar(){
   }
 
   // the second toolbar
-  toolBar(ID_BROWSER_TOOLBAR)->insertCombo("Classes",TOOLBAR_CLASS_CHOICE,true,SIGNAL(activated(int))
+  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),TOOLBAR_CLASS_CHOICE,true,SIGNAL(activated(int))
 			  ,this,SLOT(slotClassChoiceCombo(int)),true,i18n("choice the class"),160 );
   KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::NoFocus);
-  toolBar(ID_BROWSER_TOOLBAR)->insertCombo("Methods",TOOLBAR_METHOD_CHOICE,true,SIGNAL(activated(int))
+  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),TOOLBAR_METHOD_CHOICE,true,SIGNAL(activated(int))
 			  ,this,SLOT(slotMethodChoiceCombo(int)),true,i18n("choice the methods"),240 );
   KCombo* choice_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
