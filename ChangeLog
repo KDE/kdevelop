@@ -2,7 +2,7 @@
     * getActivedir() corrected in trollproject
 
 2002-12-07 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
-    * Altered the Appname/location confussion in appwizard
+    * Altered the Appname/location confusion in appwizard
 
 2002-12-05 F@lk Brettschneider <falk@kdevelop.org>
     * now also parts can load/save the project-related session by overriding the base class method in KDevPlugin
