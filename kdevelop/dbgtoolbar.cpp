@@ -281,7 +281,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   DbgButton*    bFinish     = new DbgButton(i18n("Step out"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
-  DbgButton*    bView       = new DbgButton(i18n("View"), pm, this);
+  DbgButton*    bView       = new DbgButton(i18n("Viewers"), pm, this);
 
   pm.load(KApplication::kde_icondir() + "/mini/kdevelop.xpm");
   bKDevFocus_ = new DbgButton(0, pm,  this);
@@ -309,7 +309,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   QToolTip::add( bStep,       i18n("Execute one line of code, stepping into fn if appropriate") );
   QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into fn if appropriate") );
   QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
-  QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewer") );
+  QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewers") );
   QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
   QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when \"kdev\" was pressed") );
 
