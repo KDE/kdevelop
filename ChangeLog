@@ -1,3 +1,8 @@
+2001-06-27  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix in QextMDI: call base class method in ::focusInEvent(), otherwise focus problems can occur
+      (bugfix supplied by Peter Zimmermann <peter.zimmermann@dr-baldeweg.de>)
+    * 0x0 access crash avoided in CKDevelop::slotProcessExited, actual reason lies deeper in the mechanism though
+
 2001-06-25  F@lk Brettschneider <falk@kdevelop.org>
     * Now Options->Editor... also works without opened views
     * minor changes in QextMDI
