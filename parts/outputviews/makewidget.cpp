@@ -293,7 +293,8 @@ void MakeWidget::startNextJob()
 
 void MakeWidget::killJob()
 {
-	childproc->kill();
+	if (!childproc->kill(SIGINT))
+		childproc->kill();
 }
 
 bool MakeWidget::isRunning()
