@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=Simple KDE Application
+Category=C++/KDE
+Comment=Generates a simple KDE application with one widget.
+FileTemplates=h,CStyle,cpp,CStyle

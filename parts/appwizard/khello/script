@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+use gideon;
+
+
+initGideon();
+installFileTemplate();
+installLicense();
+installAdmin();
+installGNU();
+installDocbook();
+
+print "Installing project file\n";
+install( "${src}/template-khello/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
+
+print "Installing application\n";
+mkdir( "${dest}/src", 0777 );
+mkdir( "${dest}/po", 0777 );
+install( "${src}/template-common/kde-Makefile.cvs",    "${dest}/Makefile.cvs" );
+install( "${src}/template-common/kde-Makefile.am",     "${dest}/Makefile.am" );
+install( "${src}/template-common/kde-configure.in.in", "${dest}/configure.in.in" );
+install( "${src}/template-common/kde-app.lsm",         "${dest}/src/${APPNAMELC}.lsm" );
+install( "${src}/template-common/lo16-app-app.png",    "${dest}/src/lo16-app-${APPNAMELC}.png");
+install( "${src}/template-common/lo32-app-app.png",    "${dest}/src/lo32-app-${APPNAMELC}.png");
+install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
+install( "${src}/template-khello/subdirs",             "${dest}/subdirs" );
+
+print "Installing application sources\n";
+install( "${src}/template-khello/src-Makefile.am",   "${dest}/src/Makefile.am" );
+install( "${src}/template-khello/app.cpp",           "${dest}/src/${APPNAMELC}.cpp" );
+install( "${src}/template-khello/app.h",             "${dest}/src/${APPNAMELC}.h" );
+install( "${src}/template-khello/main.cpp",          "${dest}/src/main.cpp" );
+install( "${src}/template-khello/appui.rc",          "${dest}/src/${APPNAMELC}ui.rc" );
+install( "${src}/template-khello/app.desktop",       "${dest}/src/${APPNAMELC}.desktop" );
+
+print "Finished\n";
