@@ -1,3 +1,6 @@
+2004-03-05 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Reimplemented how FileTree finds selected items. Fixes crash when a file changes name from an external event.
+	
 2004-02-24 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added FileList plugin
     * Added CTags2 plugin
