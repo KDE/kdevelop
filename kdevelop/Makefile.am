@@ -16,7 +16,7 @@
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools templates toolbar pics kwrite classparser print vc gfxview classwizard plugins widgets dlgedit
+SUBDIRS = tools templates toolbar pics kwrite classparser print vc dbg gfxview classwizard plugins widgets dlgedit
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -50,7 +50,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
+kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./dbg/libdbg.a ./vc/libvc.a ./print/libprint.a \
 	./gfxview/libgfxview.a ./kwrite/libkwrite.a \
 	./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dlgedit/libdlgedit.a \
 	$(LIB_KHTML) -lkspell -lkfile -lfl -ldl

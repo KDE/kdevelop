@@ -70,6 +70,7 @@ kdevelop/classwizard/Makefile \
 kdevelop/gfxview/Makefile \
 kdevelop/kwrite/Makefile \
 kdevelop/print/Makefile \
+kdevelop/dbg/Makefile \
 kdevelop/vc/Makefile \
 kdevelop/plugins/Makefile \
 kdevelop/plugins/prjstat/Makefile \
