@@ -69,8 +69,8 @@ EXTRACLASSLIST         =
 # browser from inside the device, connect to the site and choose the appropriate
 # cab file. The browser will then download and install the file.
 # The /Z parameter works on in the Windows platform.
-# SWZFILE                = myClass.swz
-# CABFLAGS               = /Z $(SWZFILE)
+SWZFILE                = 
+CABFLAGS               = /Z $(SWZFILE)
 
 # ------------------------------------------------------
 #   Most of the stuff below this line will not change
@@ -87,7 +87,7 @@ EXTRACLASSLIST         =
 # don't just blindly assume that what I have here will work
 # with your setup.
 
-JAVADIR         = /usr/lib/java
+JAVADIR         = %{JAVADIR}
 JAVABINDIR      = $(JAVADIR)/bin
 JAVAC           = $(JAVABINDIR)/javac
 JAR             = $(JAVABINDIR)/jar
@@ -105,7 +105,7 @@ AVFLAGS         = -J-classpath -J$(CLASSPATH)
 
 
 # next, where are all  the WABA bits and pieces?
-WABADIR         = /mnt/network/home/geiseri/superwaba/
+WABADIR         = %{WABADIR}
 WABABINDIR      = $(WABADIR)/superwaba/bin
 WABAEXTRADIR    = $(WABADIR)/superwaba
 

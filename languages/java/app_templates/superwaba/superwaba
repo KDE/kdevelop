@@ -8,3 +8,46 @@ Comment=A simple template for building SuperWaba Java based apps on WinCE and Pa
 Comment[fr]=Génère un simple modéle d'application JAVA en utilisant SuperWaba pour les environnements WinCE et PalmOS. Plus d'informations peuvent être trouvé à l'URL suivante : http://www.superwaba.org.
 FileTemplates=java
 ShowFilesAfterGeneration=APPNAME.java
+
+[JAVA]
+Type=value
+Value=JAVA
+Comment=Path to your java root
+Default=/usr/lib/java
+ValueType=QString
+
+[WABA]
+Type=Value
+Value=WABA
+Comment=Path to your SuperWaba root
+Default=/usr/lib
+ValueType=QString
+
+[GNU]
+Type=install archive
+Source=%{kdevelop}/template-common/gnu.tar.gz
+Dest=%{dest}
+
+[PROJECT]
+Type=install
+Source=%{src}/template-superwaba/sw.kdevelop
+Dest=%{dest}/${APPNAMELC}.kdevelop
+
+[FILELIST]
+Type=install
+Source=%{src}/template-superwaba/sw.filelist
+Dest=%{dest}/${APPNAMELC}.filelist
+
+[MAKEFILE]
+Type=install
+Source=%{src}/template-superwaba/src-Makefile
+Dest=%{dest}/Makefile
+
+[SOURCE]
+Type=install
+Source=%{src}/template-superwaba/sw.java
+Dest=%{dest}/${APPNAME}.java
+
+[MESSAGE]
+Type=Message
+Comment=Your application is setup to build. Edit the make targets to customize the file.
