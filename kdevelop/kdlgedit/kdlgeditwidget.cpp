@@ -29,12 +29,13 @@
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
-#include <kquickhelp.h>
+
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
-  qhw = new KQuickHelpWindow();
+#warning FIXME
+    //  qhw = new KQuickHelpWindow();
   dlgfilelinecnt = 0;
   pCKDevel = parCKD;
 
@@ -222,6 +223,7 @@ void KDlgEditWidget::slot_copySelected()
   if (!selected_widget)
     return;
 
+#warning Using non-unique names for temporaries is evil!
   QFile f("/tmp/kdevdlgedt_copyitem.tmp");
   if ( f.open(IO_WriteOnly) )
     {
@@ -327,7 +329,8 @@ void KDlgEditWidget::slot_helpSelected()
 
   helptext = KDlgLimitLines(helptext,60);
 
-  qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
+#warning FIXME
+  //  qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
 }
 
 

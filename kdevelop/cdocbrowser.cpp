@@ -37,7 +37,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <kcolorbtn.h>
 #include <kcursor.h>
 #include <kprocess.h>

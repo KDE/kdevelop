@@ -19,15 +19,12 @@
 #ifndef CBUGREPORTDLG_H
 #define CBUGREPORTDLG_H
 
-#include <qwidget.h>
 #include <qtabdialog.h>
-#include <qdialog.h>
 #include <qmultilinedit.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
-#include <qcombo.h>
-#include <kapp.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
+#include <qcombobox.h>
 #include <qstring.h>
 
 #include "cproject.h"

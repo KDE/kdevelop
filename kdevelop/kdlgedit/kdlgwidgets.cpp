@@ -16,14 +16,14 @@
  ***************************************************************************/
 
 
-#include "kdlgwidgets.h"
 #include <kapp.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
-#include <kquickhelp.h>
-#include "../ckdevelop.h"
-#include "kdlgeditwidget.h"
 #include <qtooltip.h>
+#include <qwhatsthis.h>
+#include "../ckdevelop.h"
+#include "kdlgwidgets.h"
+#include "kdlgeditwidget.h"
 
 #define btnsize 34
 
@@ -33,7 +33,7 @@ KDlgWidgets::KDlgWidgets(CKDevelop *parCKD, QWidget *parent, const char *name ) 
   pCKDevel = parCKD;
   scrview = new myScrollView(this);
 
-  KQuickHelp::add(scrview->viewport(),
+  QWhatsThis::add(scrview->viewport(),
     i18n("<brown><b>\"Widgets\" tab<black></b>\n\n"
          "In this tab you will find all items\n"
          "you can add to the dialog. They are\n"
@@ -232,7 +232,7 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   #define macroAddButton(fn, wd, mt, ht) \
     addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd, kdebtn); \
     connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt())); \
-    KQuickHelp::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht)); \
+    QWhatsThis::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht)); \
   QToolTip::add(buttons[btnsCount-1],QString(wd));
   macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget        ,i18n(
                  "This will insert a QWidget to the dialog.\n"

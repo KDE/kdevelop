@@ -19,7 +19,8 @@
 #include <iostream.h>
 #include <stdlib.h>
 #include <qfile.h>
-#include <qmessagebox.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include "ctoolclass.h"
 #include "misc.h"
 

@@ -19,7 +19,7 @@
 #include <iostream.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qcheckbox.h>
+#include <qwhatsthis.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
@@ -28,7 +28,6 @@
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qstrlist.h>
-#include <kquickhelp.h>
 #include <kapp.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -39,16 +38,16 @@
 #include "debug.h"
 
 
-class Flagbox : public QCheckBox
+class FlagBox : public QCheckBox
 {
 public:
-    Flagbox(const char *flag, const char *cxxflags,
+    FlagBox(const char *flag, QString cxxflags,
             QWidget *parent, const char *name=0);
 };
 
 
-Flagbox:: Flagbox(const char *flag, const char *cxxflags,
-                  QWidget *parent, const char *name=0)
+FlagBox::FlagBox(const char *flag, QString cxxflags,
+                 QWidget *parent, const char *name=0)
     : QCheckBox(flag, parent, name)
 {
     setChecked(cxxflags.contains(flag));
@@ -82,18 +81,21 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   
   // ****************** the General_Widget ********************
   QWidget *w = new QWidget( this, "general" );
-  KQuickHelp::add(w, i18n("Set the general options of your project here."));
+  QWhatsThis::add(w, i18n("Set the general options of your project here."));
 
   QLabel* prjname_label;
   prjname_label = new QLabel( w, "prjname_label" );
   prjname_label->setGeometry( 10, 10, 170, 20 );
-  prjname_label->setText( i18n("Projectname:") );
+  prjname_label->setText( i18n("Project name:") );
   
   prjname_edit = new QLineEdit( w, "prjname_edit" );
   prjname_edit->setGeometry( 10, 30, 170, 30 );
   prjname_edit->setText( prj_info->getProjectName() );
-  KQuickHelp::add(prjname_label,
-  KQuickHelp::add(prjname_edit, i18n("Set the project name here.")));
+  
+  QString text;
+  text = i18n("Set the project name here.");
+  QWhatsThis::add(prjname_label, text);
+  QWhatsThis::add(prjname_edit, text);
   
 
   QLabel* version_label;
@@ -104,9 +106,10 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   version_edit = new QLineEdit( w, "version_edit" );
   version_edit->setGeometry( 190, 30, 60, 30 );
   version_edit->setText( prj_info->getVersion() );
-  KQuickHelp::add(version_label,
-  KQuickHelp::add(version_edit, i18n("Set your project version\n"
-				     "number here.")));
+
+  text = i18n("Set your project version\nnumber here.");
+  QWhatsThis::add(version_label, text);
+  QWhatsThis::add(version_edit, text);
 
 
   QLabel* author_label;
@@ -117,11 +120,11 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   author_edit = new QLineEdit( w, "author_edit" );
   author_edit->setGeometry( 10, 100, 240, 30 );
   author_edit->setText( prj_info->getAuthor() );
-  KQuickHelp::add(author_label,
-  KQuickHelp::add(author_edit, i18n("Insert your name or the name of your team here")));
+
+  text = i18n("Insert your name or the name of your team here");
+  QWhatsThis::add(author_label, text);
+  QWhatsThis::add(author_edit, text);
    
-
-
   QLabel* email_label;
   email_label = new QLabel( w, "email_label" );
   email_label->setGeometry( 10, 150, 240, 20 );
@@ -130,9 +133,10 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   email_edit = new QLineEdit( w, "email_edit");
   email_edit->setGeometry( 10, 170, 240, 30 );
   email_edit->setText( prj_info->getEmail() );
-  KQuickHelp::add(email_label,
-  KQuickHelp::add(email_edit, i18n("Insert your email-address here")));
 
+  text = i18n("Insert your email address here");
+  QWhatsThis::add(email_label, text);
+  QWhatsThis::add(email_edit, text);
 
   modifymakefiles_checkbox = new QCheckBox( w, "" );
   modifymakefiles_checkbox->setGeometry( 10, 215, 290, 20 );
@@ -166,11 +170,13 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   do {
     info_edit->append(short_info.current());
   } while(short_info.next());
-  KQuickHelp::add(info_label,
-  KQuickHelp::add(info_edit, i18n("Insert some useful information about\n"
-				  "your project here. This is only for the\n"
-				  "information in the project file-<b>not\n"
-				  "\nfor README etc.")));  
+
+  text = i18n("Insert some useful information about\n"
+              "your project here. This is only for the\n"
+              "information in the project file-<b>not\n"
+              "\nfor README etc.");
+  QWhatsThis::add(info_label, text);
+  QWhatsThis::add(info_edit, text);
 
 
   addTab( w, i18n("General"));
@@ -178,13 +184,13 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   // *************** Compiler options *********************
 
   QWidget *w2= new QWidget(this,"Compiler options");
-  KQuickHelp::add(w2, i18n("Set your Compiler options here"));
+  QWhatsThis::add(w2, i18n("Set your Compiler options here"));
 
   QGroupBox* target_group;
   target_group=new QGroupBox(w2,"target_group");
   target_group->setGeometry(10,10,240,140);
   target_group->setTitle(i18n("Target"));
-  KQuickHelp::add(target_group, i18n("Set your target options here\n"
+  QWhatsThis::add(target_group, i18n("Set your target options here\n"
 				     "by specifying your machine type\n"
 				     "and GCC optimization level (0-3)"));
 
@@ -204,18 +210,20 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     target->setCurrentItem(0);
   }
-  KQuickHelp::add(target_label,
-  KQuickHelp::add(target, i18n("Specify the machine type for your program.\n"
-			       "Other machine types than your machine is\n"
-			       "usually only needed for precompiled\n"
-			       "distribution packages. i386v is intended for\n"
-			       "cross-compilers to build a binary for an intel\n"
-			       "machine running Unix System V.")));
+
+  text = i18n("Specify the machine type for your program.\n"
+              "Other machine types than your machine is\n"
+              "usually only needed for precompiled\n"
+              "distribution packages. i386v is intended for\n"
+              "cross-compilers to build a binary for an intel\n"
+              "machine running Unix System V.");
+  QWhatsThis::add(target_label, text);
+  QWhatsThis::add(target, text);
 
   syntax_check=new FlagBox("-fsyntax-only", cxxflags, w2,"syntax_check");
   syntax_check->setGeometry(20,60,220,20);
   syntax_check->setText(i18n("only syntax check"));
-  KQuickHelp::add(syntax_check, i18n("This option sets the compiler\n"
+  QWhatsThis::add(syntax_check, i18n("This option sets the compiler\n"
 			     	"to <i>-fsyntax-only</i>\n"
 				"which lets you check your code for\n"
 				"syntax-errors but doesn't do anything\n"
@@ -238,29 +246,26 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   optimize_level_label=new QLabel(w2,"optimize_level_label");
   optimize_level_label->setGeometry(100,120,140,20);
   optimize_level_label->setText(i18n("Optimization-level"));
-  KQuickHelp::add(optimize,
-  KQuickHelp::add(optimize_level,
-  KQuickHelp::add(optimize_level_label, i18n("Set the -O option for the GCC\n"
-  					"here. Turning off optimization\n"	
-				     	"equals -O0. The higher the level\n"
-					"the more time you need to compile\n"
-				 	"but increases program speed."))));
+
+  text = i18n("Set the -O option for the GCC\n"
+              "here. Turning off optimization\n"	
+              "equals -O0. The higher the level\n"
+              "the more time you need to compile\n"
+              "but increases program speed.");
+  QWhatsThis::add(optimize, text);
+  QWhatsThis::add(optimize_level, text);
+  QWhatsThis::add(optimize_level_label, text);
 
   QGroupBox* debug_group;
   debug_group=new QGroupBox(w2,"debug_group");
   debug_group->setGeometry(260,10,240,140);
   debug_group->setTitle(i18n("Debugging"));
-  KQuickHelp::add(debug_group, i18n("Set your debugging options here."));
+  QWhatsThis::add(debug_group, i18n("Set your debugging options here."));
 
-  debug=new QCheckBox(w2,"debug");
+  debug=new FlagBox("-g", cxxflags, w2,"debug");
   debug->setGeometry(270,30,220,20);
   debug->setText(i18n("generate debugging information"));
-  if (cxxflags.contains("-g")) {
-    debug->setChecked(true);
-  } else {
-    debug->setChecked(false);
-  }
-  KQuickHelp::add(debug, i18n("Checking this turns on the -g flag\n"
+  QWhatsThis::add(debug, i18n("Checking this turns on the -g flag\n"
 														"to generate debugging information."));
 
   debug_level=new QSpinBox(w2,"debug_level");
@@ -275,34 +280,26 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   debug_level_label=new QLabel(w2,"debug_level_label");
   debug_level_label->setGeometry(350,60,140,20);
   debug_level_label->setText(i18n("Debug-level"));
-  KQuickHelp::add(debug_level,
-  KQuickHelp::add(debug_level_label, i18n("Set the debugging level here.\n"
-					"You can choose from level 1-3 which\n"
-					"sets option -g1 to -g3 debugging\n"
-					"level.")));
+
+  text = i18n("Set the debugging level here.\n"
+              "You can choose from level 1-3 which\n"
+              "sets option -g1 to -g3 debugging\n"
+              "level.");
+  QWhatsThis::add(debug_level, text);
+  QWhatsThis::add(debug_level_label, text);
 
 
-  gprof_info=new QCheckBox(w2,"gprof_info");
+  gprof_info=new FlagBox("-pg", cxxflags, w2,"gprof_info");
   gprof_info->setGeometry(270,90,220,20);
   gprof_info->setText(i18n("generate extra information for gprof"));
-  if (cxxflags.contains("-pg")) {
-    gprof_info->setChecked(true);
-  } else {
-    gprof_info->setChecked(false);
-  }
-  KQuickHelp::add(gprof_info, i18n("Generate extra code to write profile\n"
+  QWhatsThis::add(gprof_info, i18n("Generate extra code to write profile\n"
 				"information for the analysis program\n"
 				"<i>gprof</i>.")); 
 
-  save_temps=new QCheckBox(w2,"save_temps");
+  save_temps=new FlagBox("-save-temps", cxxflags, w2,"save_temps");
   save_temps->setGeometry(270,120,220,20);
   save_temps->setText(i18n("store temporary intermediate files"));
-  if (cxxflags.contains("-save-temps")) {
-    save_temps->setChecked(true);
-  } else {
-    save_temps->setChecked(false);
-  }
-  KQuickHelp::add(save_temps, i18n("Store the usually temporary intermediate\n"
+  QWhatsThis::add(save_temps, i18n("Store the usually temporary intermediate\n"
 				"files in the current directory. This means\n"
 				"compiling a file <i>foo.c</i> will produce\n"
 				"the files <i>foo.o, foo.i</i> and<i>foo.s"));
@@ -315,10 +312,12 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   addit_gcc_options=new QLineEdit(w2,"addit_gcc_options");
   addit_gcc_options->setGeometry(10,210,490,30);
   addit_gcc_options->setText(prj_info->getAdditCXXFLAGS());
-  KQuickHelp::add(addit_gcc_options_label,
-  KQuickHelp::add(addit_gcc_options, i18n("Insert other GCC-options here\n"
-					"to invoke GCC with by setting the\n"
-					"CXXFLAGS-environment variable.")));
+
+  text = i18n("Insert other GCC options here\n"
+              "to invoke GCC with by setting the\n"
+              "CXXFLAGS environment variable.");
+  QWhatsThis::add(addit_gcc_options_label, text);
+  QWhatsThis::add(addit_gcc_options, text);
 
   addTab(w2,i18n("Compiler Options"));
 
@@ -326,38 +325,38 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   // *************** Compiler Warnings *********************
 
   QWidget *w3= new QWidget(this,"Warnings");
-  KQuickHelp::add(w3, i18n("Set the Compiler warnings here by checking\n"
+  QWhatsThis::add(w3, i18n("Set the Compiler warnings here by checking\n"
 			"the -W options you want to use."));
  
   w_all=new FlagBox("-Wall", cxxflags, w3,"w_all");
   w_all->setGeometry(10,10,230,20);
-  KQuickHelp::add(w_all, i18n("Compile with -Wall. This option\n"
+  QWhatsThis::add(w_all, i18n("Compile with -Wall. This option\n"
 			"includes several different warning\n"
 			"parameters which are recommended to\n"
 			"turn on."));
 
   w_=new FlagBox("-W", cxxflags, w3,"w_");
   w_->setGeometry(10,30,230,20);
-  KQuickHelp::add(w_, i18n("Compile with -W. This option\n"
+  QWhatsThis::add(w_, i18n("Compile with -W. This option\n"
 			"sets options not included in -Wall\n"
 			"which are very specific. Please read\n"
 			"GCC-Info for more information."));
 
   w_traditional=new FlagBox("-Wtraditional", cxxflags, w3,"w_traditional");
   w_traditional->setGeometry(10,50,230,20);
-  KQuickHelp::add(w_traditional, i18n("Warn about certain constructs\n"
+  QWhatsThis::add(w_traditional, i18n("Warn about certain constructs\n"
 				"that behave differently in traditional\n"
 				"and ANSI C."));
 
 
   w_undef=new FlagBox("-Wundef", cxxflags, w3,"w_undef");
   w_undef->setGeometry(10,70,230,20);
-  KQuickHelp::add(w_undef, i18n("Warn if an undefined identifier is\n"
+  QWhatsThis::add(w_undef, i18n("Warn if an undefined identifier is\n"
 				"evaluated in an `#if' directive"));
 
   w_shadow=new FlagBox("-Wshadow", cxxflags, w3,"w_shadow");
   w_shadow->setGeometry(10,90,230,20);
-  KQuickHelp::add(w_shadow, i18n("Warn whenever a local variable\n"
+  QWhatsThis::add(w_shadow, i18n("Warn whenever a local variable\n"
 				"shadows another local variable."));
 
   /*  w_id_clash_len=new QCheckBox(w3,"w_id_clash_len");
@@ -368,7 +367,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     w_id_clash_len->setChecked(false);
   }
-  KQuickHelp::add(w_id_clash_len, i18n("Warn whenever two distinct\n"
+  QWhatsThis::add(w_id_clash_len, i18n("Warn whenever two distinct\n"
 				"identifiers match in the first LEN\n"
 				"characters. This may help you prepare\n"
 				"a program that will compile with\n"
@@ -383,14 +382,14 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     w_larger_than_len->setChecked(false);
   }
-  KQuickHelp::add(w_larger_than_len, i18n("Warn whenever an object\n"
+  QWhatsThis::add(w_larger_than_len, i18n("Warn whenever an object\n"
 					"of larger than LEN bytes \n"
 					"is defined."));
   */
 
   w_pointer_arith=new FlagBox("-Wpointer-arith", cxxflags, w3,"w_pointer_arith");
   w_pointer_arith->setGeometry(10,110,230,20);
-  KQuickHelp::add(w_pointer_arith, i18n("Warn about anything that\n"
+  QWhatsThis::add(w_pointer_arith, i18n("Warn about anything that\n"
 				"depends on the <i>size of</i> a\n"
 				"function type or of <i>void</i>.\n"
 				"GNU C assigns these types a size of 1,\n"
@@ -401,7 +400,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_bad_function_cast=new FlagBox("-Wbad-function-cast", cxxflags, w3,"w_bad_function_cast");
   w_bad_function_cast->setGeometry(10,130,230,20);
-  KQuickHelp::add(w_bad_function_cast, i18n("Warn whenever a function call is\n"
+  QWhatsThis::add(w_bad_function_cast, i18n("Warn whenever a function call is\n"
 					"cast to a non-matching type. For\n"
 					"example, warn if <i>int malloc()</i>\n"
 					"is cast to <i>anything *."));
@@ -409,7 +408,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_cast_qual=new FlagBox("-Wcast-equal", cxxflags, w3,"w_cast_qual");
   w_cast_qual->setGeometry(10,150,230,20);
-  KQuickHelp::add(w_cast_qual, i18n("Warn whenever a pointer is cast\n"
+  QWhatsThis::add(w_cast_qual, i18n("Warn whenever a pointer is cast\n"
 				"so as to remove a type qualifier\n"
 				"from the target type. For example,\n"
 				"warn if a <i>const char *</i> is\n"
@@ -418,7 +417,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_cast_align=new FlagBox("-Wcast-align", cxxflags, w3,"w_cast_align");
   w_cast_align->setGeometry(10,170,230,20);
-  KQuickHelp::add(w_cast_align, i18n("Warn whenever a pointer is cast such\n"
+  QWhatsThis::add(w_cast_align, i18n("Warn whenever a pointer is cast such\n"
 				"that the required alignment of the target\n"
 				"is increased. For example, warn if a\n"
 				"<i>char *</i> is cast to an <i>int *</i> on\n"
@@ -428,7 +427,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_write_strings=new FlagBox("-Wwrite-strings", cxxflags, w3,"w_write_strings");
   w_write_strings->setGeometry(10,190,230,20);
-  KQuickHelp::add(w_write_strings, 
+  QWhatsThis::add(w_write_strings, 
 	i18n("Give string constants the type <i>const char[LENGTH]</i>\n"
 	     	"so that copying the address of one into a non-<i>const\n"
 	     	"char *</i> pointer will get a warning. These warnings\n"
@@ -442,7 +441,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_conversion=new FlagBox("-Wconversion", cxxflags, w3,"w_conversion");
   w_conversion->setGeometry(10,210,230,20);
-  KQuickHelp::add(w_conversion,
+  QWhatsThis::add(w_conversion,
 	 i18n("Warn if a prototype causes a type conversion that is different\n"
 		"from what would happen to the same argument in the absence\n"
 		"of a prototype. This includes conversions of fixed point to\n"
@@ -455,7 +454,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_sign_compare=new FlagBox("-Wsign-compare", cxxflags, w3,"w_sign_compare");
   w_sign_compare->setGeometry(260,10,230,20);
-  KQuickHelp::add(w_sign_compare,
+  QWhatsThis::add(w_sign_compare,
 	i18n("Warn when a comparison between signed and unsigned values\n"
 	     "could produce an incorrect result when the signed value\n"
 	     "is converted to unsigned."));
@@ -463,7 +462,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_aggregate_return=new FlagBox("-Waggregate-return", cxxflags, w3,"w_aggregate_return");
   w_aggregate_return->setGeometry(260,30,230,20);
-  KQuickHelp::add(w_aggregate_return,
+  QWhatsThis::add(w_aggregate_return,
 	i18n("Warn if any functions that return structures or unions are\n"
 		"defined or called. (In languages where you can return an\n"
 		"array, this also elicits a warning.)"));
@@ -472,7 +471,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   w_strict_prototypes=new FlagBox("-Wstrict-prototypes", cxxflags, w3,"w_strict_prototypes");
   w_strict_prototypes->setGeometry(260,50,230,20);
   w_strict_prototypes->setText("-Wstrict-prototypes");
-  KQuickHelp::add(w_strict_prototypes,
+  QWhatsThis::add(w_strict_prototypes,
 	i18n("Warn if a function is declared or defined without specifying\n"
 		"the argument types. (An old-style function definition is\n"
 		"permitted without a warning if preceded by a declaration\n"
@@ -481,7 +480,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_missing_prototypes=new FlagBox("-Wmisssing-prototypes", cxxflags, w3,"w_missing_prototypes");
   w_missing_prototypes->setGeometry(260,70,230,20);
-  KQuickHelp::add(w_missing_prototypes,
+  QWhatsThis::add(w_missing_prototypes,
 	i18n("Warn if a global function is defined without a previous\n"
 		"prototype declaration. This warning is issued even if\n"
 		"the definition itself provides a prototype. The aim\n"
@@ -491,7 +490,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_missing_declarations=new FlagBox("-Wmissing-declarations", cxxflags, w3,"w_missing_declarations");
   w_missing_declarations->setGeometry(260,90,230,20);
-  KQuickHelp::add(w_missing_declarations,
+  QWhatsThis::add(w_missing_declarations,
 	i18n("Warn if a global function is defined without a previous\n"
 		"declaration. Do so even if the definition itself pro-\n"
 		"vides a prototype. Use this option to detect global\n"
@@ -500,7 +499,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_redundant_decls=new FlagBox("-Wredundant-decls", cxxflags, w3,"w_redundant_decls");
   w_redundant_decls->setGeometry(260,110,230,20);
-  KQuickHelp::add(w_redundant_decls,
+  QWhatsThis::add(w_redundant_decls,
 	i18n("Warn if anything is declared more than once in the same scope\n"
 		"even in cases where multiple declaration is valid and\n"
 		"changes nothing."));
@@ -508,14 +507,14 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_nested_externs=new FlagBox("-Wnested-externs", cxxflags, w3,"w_nested_externs");
   w_nested_externs->setGeometry(260,130,230,20);
-  KQuickHelp::add(w_nested_externs,
+  QWhatsThis::add(w_nested_externs,
 	i18n("Warn if an <i>extern</i> declaration is\n"
 		"encountered within a function."));
 
 
   w_inline=new FlagBox("-Winline", cxxflags, w3,"w_inline");
   w_inline->setGeometry(260,150,230,20);
-  KQuickHelp::add(w_inline,
+  QWhatsThis::add(w_inline,
 	i18n("Warn if a function can not be inlined, and either\n"
 		"it was declared as inline, or else the\n"
 		"<i>-finline-functions</i> option was given."));
@@ -523,14 +522,14 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_old_style_cast=new FlagBox("-Wold-style-cast", cxxflags, w3,"w_old_style_cast");
   w_old_style_cast->setGeometry(260,170,230,20);
-  KQuickHelp::add(w_old_style_cast,
+  QWhatsThis::add(w_old_style_cast,
 	i18n("Warn if an old-style (C-style) cast is used\n"
 	     "within a program"));
 
 
   w_overloaded_virtual=new FlagBox("-Woverloaded-virtual", cxxflags, w3,"w_overloaded_virtual");
   w_overloaded_virtual->setGeometry(260,190,230,20);
-  KQuickHelp::add(w_overloaded_virtual,
+  QWhatsThis::add(w_overloaded_virtual,
 	i18n("Warn when a derived class function declaration may be an\n"
 		"error in defining a virtual function (C++ only). In\n"
 		"a derived class, the definitions of virtual functions\n"
@@ -543,7 +542,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   w_synth=new FlagBox("-Wsynth", cxxflags, w3,"w_synth");
   w_synth->setGeometry(260,210,230,20);
-  KQuickHelp::add(w_synth,
+  QWhatsThis::add(w_synth,
 	i18n("Warn when g++'s synthesis behavoir does\n"
 		"not match that of cfront."));
 
@@ -551,7 +550,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   w_error=new FlagBox("-Werror", cxxflags, w3,"w_error");
   w_error->setGeometry(260,250,230,20);
   w_error->setText(i18n("make all Warnings into errors"));
-  KQuickHelp::add(w_error,
+  QWhatsThis::add(w_error,
 	i18n("Make all warnings into errors."));
 
   addTab(w3,i18n("Compiler Warnings"));
@@ -560,7 +559,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   // *************** Linker Options *********************
 
   QWidget *w4= new QWidget(this,"Linker");
-  KQuickHelp::add(w4, i18n("Set the Linker options and choose the\n"
+  QWhatsThis::add(w4, i18n("Set the Linker options and choose the\n"
 			"libraries to add to your project."));
   ldflags = " " + ldflags + " ";
   ldadd = " " + ldadd + " ";
@@ -570,7 +569,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   ldflags_group=new QGroupBox(w4,"ldflags_group");
   ldflags_group->setGeometry(10,10,490,100);
   ldflags_group->setTitle(i18n("library flags"));
-  KQuickHelp::add(ldflags_group, i18n("Set your library flags here."));
+  QWhatsThis::add(ldflags_group, i18n("Set your library flags here."));
  
   l_remove_symbols=new QCheckBox(w4,"l_remove_symbols");
   l_remove_symbols->setGeometry(20,30,470,20);
@@ -583,7 +582,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_remove_symbols->setChecked(false);
   }
-  KQuickHelp::add(l_remove_symbols, i18n("If you want to use a debugger, you\n"
+  QWhatsThis::add(l_remove_symbols, i18n("If you want to use a debugger, you\n"
 			"should keep those informations in the object files.\n"
 			"It's useless to let the compiler generate debug\n"
 			"informations and to remove it with this option."));
@@ -599,7 +598,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_static->setChecked(false);
   }
-  KQuickHelp::add(l_static, i18n("On systems that support dynamic linking,\n"
+  QWhatsThis::add(l_static, i18n("On systems that support dynamic linking,\n"
 				 "this prevents linking with the shared libraries.\n"
 				 "On other systems, this option has no effect."));
  
@@ -613,16 +612,18 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   ldflags.remove(ldflags.length()-1,1);
   ldflags.remove(0,1);
   addit_ldflags->setText(ldflags);
-  KQuickHelp::add(addit_ldflags_label,
-  KQuickHelp::add(addit_ldflags, i18n("Insert other linker options here\n"
-				      "to invoke the linker with by setting the\n"
-				      "LDFLAGS-environment variable.")));
+
+  text = i18n("Insert other linker options here\n"
+              "to invoke the linker with by setting the\n"
+              "LDFLAGS environment variable.");
+  QWhatsThis::add(addit_ldflags_label, text);
+  QWhatsThis::add(addit_ldflags, text);
 
   QGroupBox* libs_group;
   libs_group=new QGroupBox(w4,"libs_group");
   libs_group->setGeometry(10,120,490,150);
   libs_group->setTitle(i18n("libraries"));
-  KQuickHelp::add(libs_group, i18n("Choose your libraries here."));
+  QWhatsThis::add(libs_group, i18n("Choose your libraries here."));
  
   l_X11=new QCheckBox(w4,"l_X11");
   l_X11->setGeometry(20,140,110,20);
@@ -635,7 +636,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_X11->setChecked(false);
   }
-  KQuickHelp::add(l_X11, i18n("X11 basics\n"));
+  QWhatsThis::add(l_X11, i18n("X11 basics\n"));
 
   l_Xext=new QCheckBox(w4,"l_Xext");
   l_Xext->setGeometry(20,160,110,20);
@@ -648,7 +649,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_Xext->setChecked(false);
   }
-  KQuickHelp::add(l_Xext, i18n("X11 extensions\n"));
+  QWhatsThis::add(l_Xext, i18n("X11 extensions\n"));
   
   l_qt=new QCheckBox(w4,"l_qt");
   l_qt->setGeometry(20,180,110,20);
@@ -661,7 +662,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_qt->setChecked(false);
   }
-  KQuickHelp::add(l_qt, i18n("Qt"));
+  QWhatsThis::add(l_qt, i18n("Qt"));
 
   l_kdecore=new QCheckBox(w4,"l_kdecore");
   l_kdecore->setGeometry(20,200,110,20);
@@ -674,7 +675,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_kdecore->setChecked(false);
   }
-  KQuickHelp::add(l_kdecore, i18n("KDE basics"));
+  QWhatsThis::add(l_kdecore, i18n("KDE basics"));
 
   l_kdeui=new QCheckBox(w4,"l_kdeui");
   l_kdeui->setGeometry(140,140,110,20);
@@ -687,7 +688,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_kdeui->setChecked(false);
   }
-  KQuickHelp::add(l_kdeui, i18n("KDE user interface"));
+  QWhatsThis::add(l_kdeui, i18n("KDE user interface"));
 
   l_khtmlw=new QCheckBox(w4,"l_khtmlw");
   l_khtmlw->setGeometry(140,160,110,20);
@@ -700,7 +701,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_khtmlw->setChecked(false);
   }
-  KQuickHelp::add(l_khtmlw, i18n("KDE HTML widget :\n"
+  QWhatsThis::add(l_khtmlw, i18n("KDE HTML widget :\n"
 				 "this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
 				 "-ltiff, -lpng, -lm, -ljscript."));
  
@@ -715,7 +716,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_kfm->setChecked(false);
   }
-  KQuickHelp::add(l_kfm, i18n("KDE kfm functionality"));
+  QWhatsThis::add(l_kfm, i18n("KDE kfm functionality"));
  
   l_kfile=new QCheckBox(w4,"l_kfile");
   l_kfile->setGeometry(140,200,110,20);
@@ -728,7 +729,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_kfile->setChecked(false);
   }
-  KQuickHelp::add(l_kfile, i18n("KDE file handling"));
+  QWhatsThis::add(l_kfile, i18n("KDE file handling"));
 
   l_kspell=new QCheckBox(w4,"l_kspell");
   l_kspell->setGeometry(260,140,110,20);
@@ -741,7 +742,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_kspell->setChecked(false);
   }
-  KQuickHelp::add(l_kspell, i18n("KDE Spell checking"));
+  QWhatsThis::add(l_kspell, i18n("KDE Spell checking"));
  
   l_kab=new QCheckBox(w4,"l_kab");
   l_kab->setGeometry(260,160,110,20);
@@ -754,7 +755,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     l_kab->setChecked(false);
   }
-  KQuickHelp::add(l_kab, i18n("KDE addressbook"));
+  QWhatsThis::add(l_kab, i18n("KDE addressbook"));
  
   QLabel* addit_ldadd_label;
   addit_ldadd_label=new QLabel(w4,"addit_ldadd_label");
@@ -767,14 +768,16 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   ldadd.remove(0,1);
  
   addit_ldadd->setText(ldadd);
-  KQuickHelp::add(addit_ldadd_label,
-  KQuickHelp::add(addit_ldadd, i18n("Add additional libraries here.")));
+
+  text = i18n("Add additional libraries here.");
+  QWhatsThis::add(addit_ldadd_label, text);
+  QWhatsThis::add(addit_ldadd, text);
 
   addTab(w4,i18n("Linker Options"));
 
   // ****************** the Make_Widget ********************
   QWidget *w5 = new QWidget( this, "make" );
-  KQuickHelp::add(w5, i18n("This dialog is for setting\nyour make options."));
+  QWhatsThis::add(w5, i18n("This dialog is for setting\nyour make options."));
 
   m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
   m_print_debug_info->setGeometry( 20, 20, 150, 30 );
@@ -977,11 +980,11 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   
   addTab(w5,i18n("Make Options"));
 
-  KQuickHelp::add(m_set_modify_dir, i18n("Pressing the folder button lets you choose\n"
+  QWhatsThis::add(m_set_modify_dir, i18n("Pressing the folder button lets you choose\n"
   																			"a file which will be set modified. This will\n"
   																			"recompile the file on the next build run."));
 
-  KQuickHelp::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal\n"
+  QWhatsThis::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal\n"
 					   "processing. The debugging information tells you which\n"
 					   "files  are being considered for remaking, which file-\n"
 					   "times are being compared and with what results, which\n"
@@ -989,50 +992,52 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 					   "rules are considered and which  are  applied---every­\n"
 					   "thing  interesting about how make decides what to do."));
 
-  KQuickHelp::add(m_optional_label,
-  KQuickHelp::add(m_optional_line, i18n("Set any other additional options for your\n"
-  																			"make-program here.")));
+  text = i18n("Set any other additional options for your\n"
+              "make program here.");
+  QWhatsThis::add(m_optional_label, text);
+  QWhatsThis::add(m_optional_line, text);
 
 
-  KQuickHelp::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that\n"
+  QWhatsThis::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that\n"
 					  "results from reading the makefiles; then  execute  as\n"
 					  "usual  or  as  otherwise specified.  This also prints\n"
 					  "the version information."));
 
-  KQuickHelp::add(m_no_rules, i18n("Eliminate  use  of the built-in implicit rules.  Also\n"
+  QWhatsThis::add(m_no_rules, i18n("Eliminate  use  of the built-in implicit rules.  Also\n"
 				   "clear out the default list  of  suffixes  for  suffix\n"
 				   "rules."));
 
-  KQuickHelp::add(m_env_variables, i18n("Give variables taken from the environment  precedence\n"
+  QWhatsThis::add(m_env_variables, i18n("Give variables taken from the environment  precedence\n"
 					"over variables from makefiles."));
 
-  KQuickHelp::add(m_cont_after_error, i18n("Continue  as  much as possible after an error. While\n"
+  QWhatsThis::add(m_cont_after_error, i18n("Continue  as  much as possible after an error. While\n"
 					   "the target that failed, and those that depend on it,\n"
 					   "cannot  be  remade, the  other dependencies of these\n"
 					   "targets can be processed all the same."));
 
-  KQuickHelp::add(m_touch_files, i18n("Touch  files  (mark  them  up  to date without really\n"
+  QWhatsThis::add(m_touch_files, i18n("Touch  files  (mark  them  up  to date without really\n"
 				      "changing them) instead  of  running  their  commands.\n"
 				      "This  is used to pretend that the commands were done,\n"
 				      "in order to fool future invocations of make."));
 
-  KQuickHelp::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory\n"
+  QWhatsThis::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory\n"
 					 "before and after other processing.  This may be  use­\n"
 					 "ful  for  tracking down errors from complicated nests\n"
 					 "of recursive make commands."));
 
-  KQuickHelp::add(m_silent_operation, i18n("Silent operation; do not print the commands as they\n"
+  QWhatsThis::add(m_silent_operation, i18n("Silent operation; do not print the commands as they\n"
 					   "are executed."));
 
-  KQuickHelp::add(m_ignor_errors, i18n("Ignore all errors in commands executed to\n"
+  QWhatsThis::add(m_ignor_errors, i18n("Ignore all errors in commands executed to\n"
 				       "remake files."));
 
-  KQuickHelp::add(m_job_number_label,
-  KQuickHelp::add(m_job_number, i18n("Specifies the number of jobs (commands) to run\n"
-					   "simultaneously. If you have a single CPU-System\n"
-					   "it is not recommended to choose more then 2.")));
+  text = i18n("Specifies the number of jobs (commands) to run\n"
+              "simultaneously. If you have a single CPU-System\n"
+              "it is not recommended to choose more then 2.");
+  QWhatsThis::add(m_job_number_label, text);
+  QWhatsThis::add(m_job_number, text);
 
-  KQuickHelp::add(m_set_modify_label, i18n("Pretend that the target file has just been  modified.\n"
+  QWhatsThis::add(m_set_modify_label, i18n("Pretend that the target file has just been  modified.\n"
 					   "It  is  almost the same as running a touch command on\n"
 					   "the given file before running make, except  that  the\n"
 					   "modification  time is changed only in the imagination\n"

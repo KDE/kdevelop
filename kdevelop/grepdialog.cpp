@@ -25,7 +25,7 @@
 #include <qlistbox.h>
 #include <qregexp.h>
 #include <qlabel.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <kprocess.h>
@@ -185,7 +185,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 
     layout->activate();
 
-    KQuickHelp::add(pattern_edit,
+    QWhatsThis::add(pattern_edit,
 		    i18n("Enter the regular expression you want to search for here.\n"
 			 "Possible meta characters are:\n"
 			 "<bold>.</bold> - Matches any character\n"
@@ -207,15 +207,15 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 			 "Furthermore, backreferences to bracketed subexpressions are\n"
 			 "available via the notation \\\\<i>n</i>."
 			 ));
-    KQuickHelp::add(files_combo,
+    QWhatsThis::add(files_combo,
 		    i18n("Enter the file name pattern of the files to search here.\n"
 			 "You may give several patterns separated by commas"));
-    KQuickHelp::add(template_edit,
+    QWhatsThis::add(template_edit,
 		    i18n("You can choose a template for the pattern from the combo box\n"
 			 "and edit it here. The string %s in the template is replaced\n"
 			 "by the pattern input field, resulting in the regular expression\n"
 			 "to search for."));
-    KQuickHelp::add(resultbox,
+    QWhatsThis::add(resultbox,
 		    i18n("The results of the grep run are listed here. Select a\n"
 			 "filename/line number combination and press Enter or doubleclick\n"
 			 "on the item to show the respective line in the editor."));

@@ -21,7 +21,7 @@
 
 
 #include "ccvaddfolderdlg.h"
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <qlayout.h>

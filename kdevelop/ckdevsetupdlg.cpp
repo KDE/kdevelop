@@ -21,13 +21,13 @@
 #include <qlineedit.h>
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
-#include <qmessagebox.h>
+#include <qwhatsthis.h>
 #include <klocale.h>
 #include <kaccel.h>
 #include <kkeydialog.h>
-#include <kquickhelp.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 #include "ckdevsetupdlg.h"
 #include "resource.h"
 
@@ -72,14 +72,16 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   makeSelectLineEdit->setGeometry( 270, 30, 130, 25 );
   makeSelectLineEdit->setText(make_cmd);
 
-  KQuickHelp::add(makeGroup,
-		  KQuickHelp::add(makeSelectLabel,
-				  KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
-									  "Select your system's make-command.\n"
-									  "Usually, this is make, FreeBSD users\n"
-									  "may use gmake. Mind that you can also\n"
-									  "add option parameters to your make-binary\n"
-					  "as well."))));
+  QString text;
+  text = i18n("Make-Command\n\n"
+              "Select your system's make-command.\n"
+              "Usually, this is make, FreeBSD users\n"
+              "may use gmake. Mind that you can also\n"
+              "add option parameters to your make-binary\n"
+              "as well.");
+  QWhatsThis::add(makeGroup, text);
+  QWhatsThis::add(makeSelectLabel, text);
+  QWhatsThis::add(makeSelectLineEdit, text);
   
   bool autoSave=config->readBoolEntry("Autosave",true);
   
@@ -126,16 +128,17 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   if(configTime==30*60*1000)
     autosaveTimeCombo->setCurrentItem(3);
 
-  KQuickHelp::add(autosaveTimeLabel,	
-		  KQuickHelp::add(autosaveTimeCombo,	
-				  KQuickHelp::add(autoSaveCheck,	
-						  KQuickHelp::add(autosaveGroup,i18n("Autosave\n\n"
-										     "If autosave is enabled, your currently\n"
-										     "changed files will be saved after the\n"
-										     "time-interval selected times out.\n\n"
-										     "Please select your timeout-value.\n"
-										     "Available are: 3 minutes, 5 minutes,\n"
-										     "15 minutes and 30 minutes.")))));
+  text = i18n("Autosave\n\n"
+              "If autosave is enabled, your currently\n"
+              "changed files will be saved after the\n"
+              "time-interval selected times out.\n\n"
+              "Please select your timeout-value.\n"
+              "Available are: 3 minutes, 5 minutes,\n"
+              "15 minutes and 30 minutes.");
+  QWhatsThis::add(autosaveTimeLabel, text);
+  QWhatsThis::add(autosaveTimeCombo, text);
+  QWhatsThis::add(autoSaveCheck, text);
+  QWhatsThis::add(autosaveGroup, text);
   
   QButtonGroup* autoswitchGroup;
   autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
@@ -162,7 +165,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
   defaultClassViewCheck->setChecked( defaultcv );
-  KQuickHelp::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
+  QWhatsThis::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
 					      "If this is enabled, KDevelop\n"
 					      "will automatically switch to\n"
 					      "the Class Viewer when switching.\n"
@@ -170,16 +173,17 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
 					      "use Logical File Viewer for\n"
 					      "autoswitching."));
 
-  KQuickHelp::add(autoSwitchCheck,
-		  KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
-						       "If autoswitch is enabled, KDevelop\n"
-						       "will open windows in the working\n"
-						       "view automatically according to\n"
-						       "most needed functionality.\n\n"
-						       "Disableing autoswitch means you\n"
-						       "will have to switch to windows\n"
-						       "yourself, including turning on and\n"
-						       "off the outputwindow.")));	
+  text = i18n("Autoswitch\n\n"
+              "If autoswitch is enabled, KDevelop\n"
+              "will open windows in the working\n"
+              "view automatically according to\n"
+              "most needed functionality.\n\n"
+              "Disableing autoswitch means you\n"
+              "will have to switch to windows\n"
+              "yourself, including turning on and\n"
+              "off the outputwindow.");
+  QWhatsThis::add(autoSwitchCheck, text);
+  QWhatsThis::add(autoswitchGroup, text);
 
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   
@@ -192,7 +196,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   //	startupGroup->insert( lastProjectCheck );
   startupGroup->lower();
   
-  KQuickHelp::add(startupGroup, i18n("Startup\n\n"
+  QWhatsThis::add(startupGroup, i18n("Startup\n\n"
 	                  "The Startup group offers options for\n"
 				     "starting KDevelop"));
   
@@ -207,7 +211,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   logoCheck->setAutoResize( FALSE );
   logoCheck->setChecked( logo );
   
-  KQuickHelp::add(logoCheck, i18n("Startup Logo\n\n"
+  QWhatsThis::add(logoCheck, i18n("Startup Logo\n\n"
 	                  "If Startup Logo is enabled, KDevelop will show the\n"
 	                  "logo picture while it is starting."));
   
@@ -218,7 +222,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   lastProjectCheck->setAutoResize( FALSE );
   lastProjectCheck->setChecked( lastprj );
   
-  KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
+  QWhatsThis::add(lastProjectCheck, i18n("Load last project\n\n"
                     "If Load last project is enabled, KDevelop will load\n"
                     "the last project used."));
 
@@ -234,7 +238,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
 	tipDayCheck->setAutoResize( FALSE );
 	tipDayCheck->setChecked( tip );
 
-	KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
+	QWhatsThis::add(tipDayCheck, i18n("Tip of the Day\n\n"
 	                  "If Tip of the Day is enabled, KDevelop will show the\n"
 	                  "Tip of the Day every time it starts."));
 	
@@ -259,9 +263,9 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   w = new QWidget( this, "documentaion" );
   config->setGroup("Doc_Location");
   
-  KQuickHelp::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
+  QWhatsThis::add(w, i18n("Enter the path to your Qt and KDE-Libs\n"
 				"Documentation for the Documentation Browser.\n"
-				"QT usually comes with complete Documentation\n"
+				"Qt usually comes with complete Documentation\n"
 				"whereas for KDE you can create the Documentation\n"
 				"easiely by pressing the Update button below."));
 	
@@ -281,15 +285,15 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   qt_label->setGeometry( 20, 40, 140, 30 );
   qt_label->setText( i18n("Qt-Library-Doc:") );
   
-  
-  KQuickHelp::add(qt_edit,
-  KQuickHelp::add(qt_button,
-  KQuickHelp::add(qt_label, i18n("Enter the path to your QT-Documentation\n"
-				 "here. To access the path easier please\n"
-				 "press the pushbutton on the right to change\n"
-				 "directories.\n\n"
-				 "Usually the QT-Documentation is\n"
-				 "located in <i><blue>$QTDIR/html</i>"))));	
+  text = i18n("Enter the path to your Qt documentation\n"
+              "here. To access the path easier please\n"
+              "press the pushbutton on the right to change\n"
+              "directories.\n\n"
+              "Usually the Qt documentation is\n"
+              "located in <i><blue>$QTDIR/html</i>");
+  QWhatsThis::add(qt_edit, text);
+  QWhatsThis::add(qt_button, text);
+  QWhatsThis::add(qt_label, text);
   
   kde_edit = new QLineEdit( w, "kde_edit");
   kde_edit->setGeometry( 170, 90, 190, 30 );
@@ -309,15 +313,16 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   kde_label->setGeometry( 20, 90, 140, 30 );
   kde_label->setText( i18n("KDE-Libraries-Doc:") );
   
-  KQuickHelp::add(kde_edit,
-  KQuickHelp::add(kde_button,
-  KQuickHelp::add(kde_label,i18n("Enter the path to your KDE-Documentation\n"
-				 "here. To access the path easier please\n"
-				 "press the pushbutton on the right to change\n"
-				 "directories.\n\n"
-				 "If you have no kdelibs Documentation installed,\n"
-				 "you can create it by selecting the Update button\n"
-				 "below."))));
+  text = i18n("Enter the path to your KDE documentation\n"
+              "here. To access the path easier please\n"
+              "press the pushbutton on the right to change\n"
+              "directories.\n\n"
+              "If you have no kdelibs documentation installed,\n"
+              "you can create it by selecting the Update button\n"
+              "below.");
+  QWhatsThis::add(kde_edit, text);
+  QWhatsThis::add(kde_button, text);
+  QWhatsThis::add(kde_label, text);
   
   QLabel* update_label;
   update_label = new QLabel( w, "update_label" );
@@ -334,17 +339,18 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   update_button->setAutoRepeat( FALSE );
   update_button->setAutoResize( FALSE );
   
-  KQuickHelp::add(update_label,
-  KQuickHelp::add(update_button,i18n("Update KDE-Documentation\n\n"
-				     "This lets you create or update the\n"
-				     "HTML-documentation of the KDE-libs.\n"
-				     "Mind that you have kdoc installed to\n"
-				     "use this function. Also, the kdelibs\n"
-				     "sources have to be available to create\n"
-				     "the documentation, as well as the \n"
-				     "Qt-Documentation path has to be set to\n"
-				     "cross-reference the KDE-Documentation\n"
-				     "with the Qt-classes.")));
+  text = i18n("Update KDE documentation\n\n"
+              "This lets you create or update the\n"
+              "HTML documentation of the KDE-libs.\n"
+              "Mind that you have kdoc installed to\n"
+              "use this function. Also, the kdelibs\n"
+              "sources have to be available to create\n"
+              "the documentation, as well as the \n"
+              "Qt documentation path has to be set to\n"
+              "cross-reference the KDE documentation\n"
+              "with the Qt classes.");
+  QWhatsThis::add(update_label, text);
+  QWhatsThis::add(update_button, text);
   
   QLabel* create_label;
   create_label = new QLabel( w, "create_label" );
@@ -361,14 +367,15 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
   
-  KQuickHelp::add(create_label,
-		  KQuickHelp::add(create_button,i18n("Create Search Database\n\n"
-						     "This will create a search database for glimpse\n"
-						     "which will be used to look up marked text in\n"
-						     "the documentation. We recommend updating the\n"
-						     "database each time you've changed the documentation\n"
-						     "e.g. after a kdelibs-update or installing a new\n"
-						     "Qt-library version.")));
+  text = i18n("Create Search Database\n\n"
+              "This will create a search database for glimpse\n"
+              "which will be used to look up marked text in\n"
+              "the documentation. We recommend updating the\n"
+              "database each time you've changed the documentation\n"
+              "e. g. after a kdelibs update or installing a new\n"
+              "Qt library version.");
+  QWhatsThis::add(create_label, text);
+  QWhatsThis::add(create_button, text);
   
   QButtonGroup* docOptionsGroup;
   docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
@@ -497,7 +504,7 @@ void CKDevSetupDlg::slotQtClicked(){
       config->writeEntry("doc_qt",dir);
     else{
       KMessageBox::information(this, i18n("The chosen path does not lead to the\n"
-                                          "Qt-library documentation. Please choose the\n"
+                                          "Qt library documentation. Please choose the\n"
                                           "correct path."));
     }
   }
@@ -516,7 +523,7 @@ void CKDevSetupDlg::slotKDEClicked(){
       config->writeEntry("doc_kde",dir);
     else{
       KMessageBox::information(this, i18n("The chosen path does not lead to the\n"
-                                          "KDE-library documentation. Please choose the\n"
+                                          "KDE library documentation. Please choose the\n"
                                           "correct path or choose 'Update' to create a new\n"
                                           "documentation"));
     }

@@ -428,7 +428,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
       KMessageBox::error( NULL, i18n("Method missing - Couldn't find the method to delete.") );
   }
   else
-      KMessageBox::warning( NULL, i18n( "Class missing - Couldn't find the class which has the method to delete.") );
+      KMessageBox::error( NULL, i18n( "Class missing - Couldn't find the class which has the method to delete.") );
 
 }
 

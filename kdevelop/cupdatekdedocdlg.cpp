@@ -22,11 +22,11 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qwhatsthis.h>
 #include <qdir.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kconfig.h>
-#include <kquickhelp.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -105,15 +105,16 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,
     del_recent_radio_button->setBackgroundMode( QWidget::PaletteBackground );
     del_recent_radio_button->setFontPropagation( QWidget::NoChildren );
     del_recent_radio_button->setPalettePropagation( QWidget::NoChildren );
-    del_recent_radio_button->setText(i18n("Delete old Documentation and install to recent Documentation path"));
+    del_recent_radio_button->setText(i18n("Delete old documentation and install to recent documentation path"));
     del_recent_radio_button->setAutoRepeat( FALSE );
     del_recent_radio_button->setAutoResize( FALSE );
     del_recent_radio_button->setChecked( TRUE );
-    KQuickHelp::add(del_recent_radio_button,
-		    i18n("Checking this will delete the current documentation\n"
-			 "and replacing it with the new generated documentation\n" 
-			 "in the same path.")); 
-    
+
+    QString text;
+    text = i18n("Checking this will delete the current documentation\n"
+                "and replacing it with the new generated documentation\n" 
+                "in the same path."); 
+    QWhatsThis::add(del_recent_radio_button, text);
     
     del_new_radio_button = new QRadioButton( this, "del_new_radio_button" );
     del_new_radio_button->setGeometry( 40, 150, 440, 30 );
@@ -123,14 +124,15 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,
     del_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
     del_new_radio_button->setFontPropagation( QWidget::NoChildren );
     del_new_radio_button->setPalettePropagation( QWidget::NoChildren );
-    del_new_radio_button->setText(i18n("Delete old Documentation and install to new Documentation path") );
+    del_new_radio_button->setText(i18n("Delete old documentation and install to new documentation path") );
     del_new_radio_button->setAutoRepeat( FALSE );
     del_new_radio_button->setAutoResize( FALSE );
-    KQuickHelp::add(del_new_radio_button,
-		    i18n("Checking this will delete the current documentation\n"
-			 "and lets you choose a path in the input field below\n"
-			 "where the new generated documentation will be"
-			 "installed."));  
+
+    text = i18n("Checking this will delete the current documentation\n"
+                "and lets you choose a path in the input field below\n"
+                "where the new generated documentation will be"
+                "installed.");  
+    QWhatsThis::add(del_new_radio_button, text);
     
     leave_new_radio_button = new QRadioButton( this, "leave_new_radio_button" );
     leave_new_radio_button->setGeometry( 40, 190, 450, 30 );
@@ -140,15 +142,16 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,
     leave_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
     leave_new_radio_button->setFontPropagation( QWidget::NoChildren );
     leave_new_radio_button->setPalettePropagation( QWidget::NoChildren );
-    leave_new_radio_button->setText(i18n("Leave old Documention untouched and install to new Documention path") );
+    leave_new_radio_button->setText(i18n("Leave old documentation untouched and install to new documention path") );
     leave_new_radio_button->setAutoRepeat( FALSE );
     leave_new_radio_button->setAutoResize( FALSE );
-    KQuickHelp::add(leave_new_radio_button,
-		    i18n("This doesn't delete your current documentation and leaves it\n"
-			 "is now and you can select a new path for the new kdelibs\n"
-			 "documentation. CAUTION: Don't insert the same path where\n"
-			 "your recent documentation is installed- this may mess up\n"
-			 "the documentation by mixing old and new files!"));
+
+    text = i18n("This doesn't delete your current documentation and leaves it\n"
+                "is now and you can select a new path for the new kdelibs\n"
+                "documentation. CAUTION: Don't insert the same path where\n"
+                "your recent documentation is installed- this may mess up\n"
+                "the documentation by mixing old and new files!");
+    QWhatsThis::add(leave_new_radio_button, text);
     
     doc_label = new QLabel( this, "doc_label" );
     doc_label->setGeometry( 30, 270, 210, 30 );
@@ -194,21 +197,22 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,
     install_box->insert( del_new_radio_button );
     install_box->insert( leave_new_radio_button );
     
+    text = i18n("Insert the path to the current\n"
+                "KDE-Libs sourcecodes here. This is\n"
+                "where you have unpacked e.g. a kdelibs\n"
+                "snapshot a la /snapshot/kdelibs.");
+    QWhatsThis::add(source_label, text);
+    QWhatsThis::add(source_edit, text);
+    QWhatsThis::add(source_button, text);
     
-    KQuickHelp::add(source_label,
-		    KQuickHelp::add(source_edit,
-				    KQuickHelp::add(source_button, i18n("Insert the path to the current\n"
-		       						"KDE-Libs sourcecodes here. This is\n"
-		       						"where you have unpacked e.g. a kdelibs\n"
-		       						"snapshot a la /snapshot/kdelibs."))));
-    
-    KQuickHelp::add(doc_label,
-		KQuickHelp::add(doc_edit,
-	  KQuickHelp::add(doc_button, i18n("Insert the path where you want to have\n"
-				   "the new generated documentation installed\n"
-				   "Note: the path information in Setup will\n"
-               			   "be updated automatically, you don't have\n"
-				   "to change them to the new doc path."))));
+    text = i18n("Insert the path where you want to have\n"
+                "the new generated documentation installed\n"
+                "Note: the path information in Setup will\n"
+                "be updated automatically, you don't have\n"
+                "to change them to the new doc path.");
+    QWhatsThis::add(doc_label, text);
+    QWhatsThis::add(doc_edit, text);
+    QWhatsThis::add(doc_button, text);
 
     ok_button = new QPushButton( this, "ok_button" );
     ok_button->setGeometry( 140, 320, 100, 30 );
@@ -262,7 +266,7 @@ void CUpdateKDEDocDlg::OK(){
     QString kdelibs_path = source_edit->text();
   
   if(kdelibs_path.right(1) != "/"){
-    kdelibs_path = kdelibs_path +"/";
+    kdelibs_path += "/";
   }
   // check if path set corectly
   QString kde_testfile=kdelibs_path+"/kfile/kdir.cpp"; // test if the path really is the kdelibs path
@@ -305,12 +309,12 @@ void CUpdateKDEDocDlg::OK(){
   QString cmd;
   if(! qt_test)
       {
-          int qt_set=KMessageBox::yestionYesNo(this, i18n("The Qt-Documentation path is not set correctly.\n"
+          int qt_set=KMessageBox::yestionYesNo(this, i18n("The Qt documentation path is not set correctly.\n"
                                                                "If you want your KDE-library documentation to\n"
-                                                               "be cross-referenced to the Qt-library, you have\n"
-                                                               "to set the correct path to your Qt-library\n"
+                                                               "be cross-referenced to the Qt library, you have\n"
+                                                               "to set the correct path to your Qt library\n"
                                                                "documentation first.\n"
-                                                               "Do you want to set the Qt-Documentation path first ?"));
+                                                               "Do you want to set the Qt documentation path first ?"));
           if(qt_set==KMessageBox::Yes)
               return;
       }
@@ -334,12 +338,12 @@ void CUpdateKDEDocDlg::OK(){
 #else
   
   if(!qt_test){ // don't cross-reference to qt
-    int qt_set=KMessageBox::questionYesNo(this, i18n("The Qt-Documentation path is not set correctly.\n"
+    int qt_set=KMessageBox::questionYesNo(this, i18n("The Qt documentation path is not set correctly.\n"
                                                     "If you want your KDE-library documentation to\n"
-                                                    "be cross-referenced to the Qt-library, you have\n"
-                                                    "to set the correct path to your Qt-library\n"
+                                                    "be cross-referenced to the Qtlibrary, you have\n"
+                                                    "to set the correct path to your Qt library\n"
                                                     "documentation first.\n"
-                                                    "Do you want to set the Qt-Documentation path first ?"));
+                                                    "Do you want to set the Qt documentation path first ?"));
     if(qt_set==KMessageBox::Yes)
       return;  // exit the update dialog
     else{  // don't return to the setup to set the qt-path and index without qt
@@ -450,6 +454,3 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
-
-
-

@@ -19,10 +19,10 @@
 #include <iostream.h>
 #include <stdlib.h>
 #include <qmessagebox.h>
+#include <qwhatsthis.h>
 #include <qfile.h>
 #include <kconfig.h>
 #include <kapp.h>
-#include <kquickhelp.h>
 #include <klocale.h>
 
 #include "../ctoolclass.h"
@@ -597,48 +597,49 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_65->insert( filenameLine );
   qtarch_ButtonGroup_66->insert( hostnameButton );
 
-  KQuickHelp::add(headerButton,
+  QWhatsThis::add(headerButton,
 	i18n("If you wish to have a page header, then check it."));
 
-  KQuickHelp::add(headertextLine,
+  QWhatsThis::add(headertextLine,
 	i18n("Here you can enter the headertext."));
 
-  KQuickHelp::add(headertextButton,
+  QWhatsThis::add(headertextButton,
 	i18n("If you wish to have a headertext, then check it."));
 
-  KQuickHelp::add(loginButton,
+  QWhatsThis::add(loginButton,
 	i18n("If you wish to print a userlogin, then check it."));
 
-  KQuickHelp::add(fancyHeaderButton,
+  QWhatsThis::add(fancyHeaderButton,
 	i18n("If you will a fancy header, then check it."));
 
-  KQuickHelp::add(filenameLine,
+  QWhatsThis::add(filenameLine,
 	i18n("If you wish to print the filenames, then check it."));
 
-  KQuickHelp::add(qtarch_Label_21,
-  KQuickHelp::add(filenameSize,
-	i18n("Here you can choose, if the filename from the last '/'\n"
-	     "is print, or if the full filename is print.")));
+  QString text;
+  text = i18n("Here you can choose, if the filename from the last '/'\n"
+              "is print, or if the full filename is print.");
+  QWhatsThis::add(qtarch_Label_21, text);
+  QWhatsThis::add(filenameSize, text);
 
-  KQuickHelp::add(qtarch_Label_25,
-  KQuickHelp::add(filenamePosition,
-	i18n("Here you can set the position in the header.")));
+  text = i18n("Here you can set the position in the header.");
+  QWhatsThis::add(qtarch_Label_25, text);
+  QWhatsThis::add(filenamePosition, text);
 
-  KQuickHelp::add(hostnamePosition,
+  QWhatsThis::add(hostnamePosition,
 	i18n("Here you can set the position in the header."));
 
-  KQuickHelp::add(qtarch_Label_23,
-  KQuickHelp::add(hostnameSize,
-	i18n("Here you can choose, if the hostname up to the first\n"
-	     "'.' is print, or the full hostname is print.")));
+  text = i18n("Here you can choose, if the hostname up to the first\n"
+              "'.' is print, or the full hostname is print.");
+  QWhatsThis::add(qtarch_Label_23, text);
+  QWhatsThis::add(hostnameSize, text);
 
-  KQuickHelp::add(loginPosition,
+  QWhatsThis::add(loginPosition,
 	i18n("Here you can set the position in the header."));
 
-  KQuickHelp::add(hostnameButton,
+  QWhatsThis::add(hostnameButton,
 	i18n("If you wish to print the hostname, then check it."));
 
-  KQuickHelp::add(headertextPosition,
+  QWhatsThis::add(headertextPosition,
 	i18n("Here you can set the position in the header."));
 
 }
@@ -1009,34 +1010,35 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   qtarch_ButtonGroup_76->insert( modificationDateButton );
   qtarch_ButtonGroup_74->insert( currentDateButton );
 
-  KQuickHelp::add(currentTimeButton,
+  QWhatsThis::add(currentTimeButton,
 	i18n("If you wish to print the current time, then check it."));
 
-  KQuickHelp::add(modificationTimeButton,
+  QWhatsThis::add(modificationTimeButton,
 	i18n("If you wish to print the modification time, then check it."));
 
-  KQuickHelp::add(modificationDateButton,
+  QWhatsThis::add(modificationDateButton,
 	i18n("If you wish to print the modification date, then check it."));
 
-  KQuickHelp::add( currentDateButton,
+  QWhatsThis::add( currentDateButton,
 	i18n("If you wish to print the current date, then check it."));
 
-  KQuickHelp::add(modificationTimeFormat,
-  KQuickHelp::add(modificationDateFormat,
-  KQuickHelp::add(currentTimeFormat,
-  KQuickHelp::add(currentDateFormat,
-	i18n("Here you can set the format.")))));
+  QString text;
+  text = i18n("Here you can set the format.");
+  QWhatsThis::add(modificationTimeFormat, text);
+  QWhatsThis::add(modificationDateFormat, text);
+  QWhatsThis::add(currentTimeFormat, text);
+  QWhatsThis::add(currentDateFormat, text);
 
-  KQuickHelp::add(currentTimePosition,
-  KQuickHelp::add(modificationTimePosition,
-  KQuickHelp::add(currentDatePosition,
-  KQuickHelp::add(modificationDatePosition,
-	i18n("Here you can set the position in the header.")))));
+  text = i18n("Here you can set the position in the header.");
+  QWhatsThis::add(currentTimePosition, text);
+  QWhatsThis::add(modificationTimePosition, text);
+  QWhatsThis::add(currentDatePosition, text);
+  QWhatsThis::add(modificationDatePosition, text);
 
-  KQuickHelp::add(currentTimeAmpm,
-  KQuickHelp::add(modificationTimeAmpm,
-	i18n("Here you can choose, if you time will be printed in\n"
-	     "am/pm format or in 24h format.")));
+  text = i18n("Here you can choose, if you time will be printed in\n"
+              "am/pm format or in 24h format.");
+  QWhatsThis::add(currentTimeAmpm, text);
+  QWhatsThis::add(modificationTimeAmpm, text);
 }
 
 void CConfigEnscriptDlg::initTab3(QWidget*parent) {
@@ -1422,60 +1424,61 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_21->insert( cutLinesButton );
   qtarch_ButtonGroup_21->insert( replaceButton );
 
-  KQuickHelp::add(bordersButton,
+  QWhatsThis::add(bordersButton,
 	i18n("If button is checked, borders around columns are printed."));
 
-  KQuickHelp::add(tocButton,
+  QWhatsThis::add(tocButton,
 	i18n("If button is checked, a summary is printed at the end."));
 
-  KQuickHelp::add(markedWrappedLinesButton,
+  QWhatsThis::add(markedWrappedLinesButton,
 	i18n("If button is checked, wrapped lines are marked in the output."));
 
-  KQuickHelp::add(numberingPagesButton,
+  QWhatsThis::add(numberingPagesButton,
 	i18n("If button is checked, the sides are numbered."));
 
-  KQuickHelp::add(numberingLineButton,
+  QWhatsThis::add(numberingLineButton,
 	i18n("Precede each line with its line number."));
 
-  KQuickHelp::add(qtarch_label,
-  KQuickHelp::add(linesPerPage,
-	i18n("Print setting number lines per each page.")));
+  QString text;
+  text = i18n("Print setting number lines per each page.");
+  QWhatsThis::add(qtarch_label, text);
+  QWhatsThis::add(linesPerPage, text);
 
-  KQuickHelp::add(alignFileList,
+  QWhatsThis::add(alignFileList,
 	i18n("Align separate input files to even align page count.\n"
 	     "This is handy for two-side and 2-up printings."));
 
-  KQuickHelp::add(valueForWrappedLine,
+  QWhatsThis::add(valueForWrappedLine,
 	i18n("Set the style of the wrap value."));
 
-  KQuickHelp::add(qtarch_Label_14,
-  KQuickHelp::add(cycleOfChange,
-	i18n("Specify  how high highlight bars are in lines.")));
+  text = i18n("Specify  how high highlight bars are in lines.");
+  QWhatsThis::add(qtarch_Label_14, text);
+  QWhatsThis::add(cycleOfChange, text);
 
-  KQuickHelp::add(numberingPagesList,
+  QWhatsThis::add(numberingPagesList,
 	i18n("Set the position in the header."));
 
-  KQuickHelp::add(highlightBarsButton,
+  QWhatsThis::add(highlightBarsButton,
 	i18n("If button is checked, highlight bars are printed."));
 
-  KQuickHelp::add(qtarch_Label_2,
-  KQuickHelp::add(setTabSize,
-	i18n("Set tabulator size to specify number.")));
+  text = i18n("Set tabulator size to specify number.");
+  QWhatsThis::add(qtarch_Label_2, text);
+  QWhatsThis::add(setTabSize, text);
 
-  KQuickHelp::add(cutLinesButton,
+  QWhatsThis::add(cutLinesButton,
 	i18n("If button is checked, lines that are too long will\n"
 	     "be cut. Otherwise enscript wraps long lines  so no\n"
 	     "information is lost."));
 
-  KQuickHelp::add(replaceButton,
+  QWhatsThis::add(replaceButton,
 	i18n("If button is checked, non printing characters are\n"
 	     "replace by space."));
 
-  KQuickHelp::add(fontForBodyButton,
+  QWhatsThis::add(fontForBodyButton,
 	i18n("If you clicked the button, a fontdialog is shown\n"
 	     "and you can select a font that is used for body text."));
 
-  KQuickHelp::add(fontForHeaderButton,
+  QWhatsThis::add(fontForHeaderButton,
 	i18n("If you clicked the button, a fontdialog is shown\n"
 	     "and you can select a font that is used for header text."));
 
@@ -1807,41 +1810,42 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_ButtonGroup_134->insert( underlayFontButton );
   qtarch_ButtonGroup_131->insert( underlayPositionDefaultButton );
 
-  KQuickHelp::add(underlayButton,
+  QWhatsThis::add(underlayButton,
 	i18n("If you wish to print underlayed text, then check it."));
 
-  KQuickHelp::add(qtarch_Label_71,
-  KQuickHelp::add(underlayAngle,
-	i18n("Here you can set the angle of the underlayed text.")));
+  QString text;
+  text = i18n("Here you can set the angle of the underlayed text.");
+  QWhatsThis::add(qtarch_Label_71, text);
+  QWhatsThis::add(underlayAngle, text);
 
-  KQuickHelp::add(qtarch_ButtonGroup_133,
-  KQuickHelp::add(underlayXPosition,
-	i18n("Here you can set the x-position of the underlayed text.")));
+  text = i18n("Here you can set the x-position of the underlayed text.");
+  QWhatsThis::add(qtarch_ButtonGroup_133, text);
+  QWhatsThis::add(underlayXPosition, text);
 
-  KQuickHelp::add(qtarch_ButtonGroup_132,
-  KQuickHelp::add(underlayYPosition,
-	i18n("Here you can set the y-position of the underlayed text.")));
+  text = i18n("Here you can set the y-position of the underlayed text.");
+  QWhatsThis::add(qtarch_ButtonGroup_132, text);
+  QWhatsThis::add(underlayYPosition, text);
 
-  KQuickHelp::add(qtarch_Label_74,
-  KQuickHelp::add(underlayGray,
-	i18n("Here you can set the underlayed text gray.\n"
-	     "The lower the darker is the text.")));
+  text = i18n("Here you can set the underlayed text gray.\n"
+              "The lower the darker is the text.");
+  QWhatsThis::add(qtarch_Label_74, text);
+  QWhatsThis::add(underlayGray, text);
 
-  KQuickHelp::add(underlayAngleDefault,
+  QWhatsThis::add(underlayAngleDefault,
 	i18n("If you wish to print the underlayed text with the\n"
 	     "default angle, then check it."));
 
-  KQuickHelp::add(underlayStyle,
+  QWhatsThis::add(underlayStyle,
 	i18n("Here you can set the style of the underlayed text."));
 
-  KQuickHelp::add(underlayPositionDefaultButton,
+  QWhatsThis::add(underlayPositionDefaultButton,
 	i18n("If you wish to print the underlayed text with the\n"
 	     "default position, then check it."));
 
-  KQuickHelp::add(underlaytextLine,
+  QWhatsThis::add(underlaytextLine,
 	i18n("Here you can enter the text."));
 
-  KQuickHelp::add(underlayFontButton,
+  QWhatsThis::add(underlayFontButton,
 	i18n("Here you can set another font by clicking on it."));
 
   
@@ -2751,9 +2755,12 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
   }
   QString dir,data1,data2,param,text;
   createParameters(0);
+#warning FIXME: temporary files
+#if 0
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
   data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
   data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
+#endif
   param = (QString) " --output="+ dir;
   process = new KShellProcess();
   *process << "enscript " + globalpara + param + " " + data1 + " " + data2;

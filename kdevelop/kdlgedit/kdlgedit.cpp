@@ -1336,7 +1336,8 @@ class PreviewDlg : public QDialog
                                  "you can also get the library on the KDevelop website." ));
             return;
           }
-	
+
+#warning Why not save this in /tmp?
         ldr->openDialog(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg");
         wid->move(0,0);
         setGeometry(wid->geometry());

@@ -21,11 +21,11 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qmessagebox.h>
+#include <qwhatsthis.h>
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>
 #include <klocale.h>
-#include <kquickhelp.h>
 #include "../misc.h"
 #include "../ctoolclass.h"
 #include "../cproject.h"
@@ -552,69 +552,70 @@ void CPrintDlg::init(){
   cancelButton->setGeometry( 480, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
 
-  KQuickHelp::add(printingConfButton,
+  QWhatsThis::add(printingConfButton,
 	i18n("If you click this button a configdialog will be shown.\n"
-	     "Which configdialog will be shown is depend on the\n"
-	     "choosen program."));
+	     "Which configdialog will be shown depends on the\n"
+	     "chosen program."));
 
-  KQuickHelp::add(printToFileDlg,
+  QWhatsThis::add(printToFileDlg,
 	i18n("If you click this button a filedialog will be shown."));
 
-  KQuickHelp::add(filesConfButton,
+  QWhatsThis::add(filesConfButton,
 	i18n("If you click this button the fileprintdialog will be shown."));
 
-  KQuickHelp::add(printToFileLine,
+  QWhatsThis::add(printToFileLine,
 	i18n("In this file the printing is gone."));
 
-  KQuickHelp::add(qtarch_Label_1,
-  KQuickHelp::add(printerLine,
-	i18n("In this line you can specify the printer, with which\n"
-	     "you will print. If default is written in the line, the\n"
-	     "default printer ($PRINTER) is choosen.")));
+  QString text;
+  text = i18n("In this line you can specify the printer, with which\n"
+              "you will print. If default is written in the line, the\n"
+              "default printer ($PRINTER) is choosen.");
+  QWhatsThis::add(qtarch_Label_1, text);
+  QWhatsThis::add(printerLine, text);
 
-  KQuickHelp::add(paperCombBox,
+  QWhatsThis::add(paperCombBox,
 	i18n("Here you can change the paper direction."));
 
-  KQuickHelp::add(programCombBox,
+  QWhatsThis::add(programCombBox,
 	i18n("Here you can set the program, you whish to use."));
 
-  KQuickHelp::add(formatCombBox,
+  QWhatsThis::add(formatCombBox,
 	i18n("Here you can choose, if you print out in postscript or html."));
 
-  KQuickHelp::add(defaultCombBox,
+  QWhatsThis::add(defaultCombBox,
 	i18n("Here you can choose, if you print with your personal\n"
 	     "settings. Or with some other settings."));
 
-  KQuickHelp::add(qtarch_ButtonGroup_11,
-  KQuickHelp::add(pageSide,
-	i18n("Here you can set the sides, which you will print.\n"
-	     "You can also specify an interval like:\n"
-	     "5-    :print from side 5 to end\n"
-	     "5-10 :print from side 5 to side 10\n"
-	     "-5    :print from side 1 to side 10")));
+  text = i18n("Here you can set the sides, which you will print.\n"
+              "You can also specify an interval like:\n"
+              "5-    :print from side 5 to end\n"
+              "5-10 :print from side 5 to side 10\n"
+              "-5    :print from side 1 to side 10");
+  QWhatsThis::add(qtarch_ButtonGroup_11, text);
+  QWhatsThis::add(pageSide, text);
 
-  KQuickHelp::add(pagePerSide,
+  QWhatsThis::add(pagePerSide,
 	i18n("Here you can choose, if you wish to print 1 page per\n"
 	     "physical side or 2 page."));
 
-  KQuickHelp::add(prettyCombBox,
+  QWhatsThis::add(prettyCombBox,
 	i18n("Here you can set the pretty-print-mode."));
 
-  KQuickHelp::add(mediaCombBox,
+  QWhatsThis::add(mediaCombBox,
 	i18n("Here you can change the paperformat."));
 
-  KQuickHelp::add(qtarch_ButtonGroup_7,
-  KQuickHelp::add(copySpinBox,
-	i18n("Here you can set, how many times you will print the files.")));
+  text = i18n("Here you can set, how many times you will print the files.");
+  QWhatsThis::add(qtarch_ButtonGroup_7, text);
+  QWhatsThis::add(copySpinBox, text);
 
-  KQuickHelp::add(prettyPrintCheckBox,
+  QWhatsThis::add(prettyPrintCheckBox,
 	i18n("If you wish to print in pretty-print-mode then check this button."));
 
-  KQuickHelp::add(prettyColorCheckBox,
+  QWhatsThis::add(prettyColorCheckBox,
 	i18n("If you wish to print in pretty-print-color-mode,\n"
 	     "then check this button."));
 
-  KQuickHelp::add(printToFileButton,
+  QWhatsThis::add(printToFileButton,
 	i18n("If you wish to print to file, then check this button."));
 
   mainwidget->show();

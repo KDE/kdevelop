@@ -16,11 +16,11 @@
  ***************************************************************************/
 
 
-#include <qmessagebox.h>
 #include <qfile.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 #include "cmakemanualdlg.h"
 #include "ctoolclass.h"
 

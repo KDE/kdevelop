@@ -25,11 +25,11 @@
 #include <qcombobox.h>
 #include <qbuttongroup.h>
 #include <qmessagebox.h>
+#include <qwhatsthis.h>
 #include <qfile.h>
 #include <klocale.h>
 #include <kprocess.h>
 #include <kconfig.h>
-#include <kquickhelp.h>
 #include <kapp.h>
 
 #include "../ctoolclass.h"
@@ -538,104 +538,106 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_60->insert( headertextButton );
 	qtarch_ButtonGroup_20->insert( fontsizeButton );
 
-  KQuickHelp::add(boltFontButton,
+  QString text;
+  
+  QWhatsThis::add(boltFontButton,
 	i18n("Print using bold font."));
 
-  KQuickHelp::add(printAsISOLatin,
+  QWhatsThis::add(printAsISOLatin,
 	i18n("Print non ascii characters (with the high bit set)\n"
              "as ISO Latin 1 characters. These characters are\n"
 	     "printed as M- (for meta) followed by  the character\n"
 	     "of the low 7 bits."));
 
-  KQuickHelp::add(interpretButton,
+  QWhatsThis::add(interpretButton,
 	i18n("Interpret   TAB,   BS  and  FF  characters TAB\n"
              "is replaced by enough spaces  to  reach next\n"
              "tab stop while BS and FF have their meanings."));
 
-  KQuickHelp::add(currentDateButton,
+  QWhatsThis::add(currentDateButton,
 	i18n("Print the current date and time at the bottom of the\n"
              "page. This option is affected by the no surrounding\n"
              "border and the no header options."));
 
-  KQuickHelp::add(headertextButton,
+  QWhatsThis::add(headertextButton,
 	i18n("If button is checked, no filename is printed in the\n"
 	     "pages headers.Now you can use a text instead of the\n"
 	     "filename."));
 
-  KQuickHelp::add(qtarch_Label_20,
-  KQuickHelp::add(headertextLine,
-	i18n("Use this text instead of the file name in the page\n"
-             "headers for printing next (and only next) file.")));
+  text = i18n("Use this text instead of the file name in the page\n"
+              "headers for printing next (and only next) file.");
+  QWhatsThis::add(qtarch_Label_20, text);
+  QWhatsThis::add(headertextLine, text);
 
-  KQuickHelp::add(loginButton,
+  QWhatsThis::add(loginButton,
 	i18n("Print user login ID in the upper right corner of\n"
 	     "the page.  (available for Unix systems only)"));
 
-  KQuickHelp::add(filenameLine,
+  QWhatsThis::add(filenameLine,
 	i18n("Print filename ,centered, at bottom of page."));
 
-  KQuickHelp::add(headerButton,
+  QWhatsThis::add(headerButton,
 	i18n("If button is checked ,print page headers."));
 
-  KQuickHelp::add(replaceButton,
-	i18n("If button is checked ,non-printing characters are\n"
-	     "replaced by a space.Otherwise non-printing characters\n"
+  QWhatsThis::add(replaceButton,
+	i18n("If button is checked, non-printing characters are\n"
+	     "replaced by a space. Otherwise non-printing characters\n"
 	     "are replaced so that they are visible and easy to\n"
-	     "identify. Control characters are printed  like ^X\n"
+	     "identify. Control characters are printed like ^X\n"
 	     "for ctrl-x; the delete character is printed as ^?.\n"
 	     "Non ascii characters are printed as M- (for meta)\n"
              "followed by the character of the low 7 bits."));
 
-  KQuickHelp::add(cutLinesButton,
-	i18n("If button checked ,lines too large will be truncate.\n"
-	     "Otherwise lines  too large will be fold and be printed\n"
+  QWhatsThis::add(cutLinesButton,
+	i18n("If button checked, lines too large will be truncated.\n"
+	     "Otherwise lines too large will be folded and printed\n"
 	     "inside the borders. Max line size depends on format\n"
 	     "and font size used and whether line numbering has been\n"
 	     "suppressed."));
 
-  KQuickHelp::add(alignFilesButton,
-	i18n("Compact mode for a sequence of  files.  This  option\n"
-             "allows  the printing of two files in the same physical\n"
-	     "page: last page of the first file  in  the  left\n"
-             "(or  up)  side  and first page of the second file in\n"
-             "the right (or down) side. This option is valid  only\n"
+  QWhatsThis::add(alignFilesButton,
+	i18n("Compact mode for a sequence of files. This option\n"
+             "allows the printing of two files in the same physical\n"
+	     "page: last page of the first file in the  left\n"
+             "(or up)  side  and first page of the second file in\n"
+             "the right (or down) side. This option is valid only\n"
              "for twinpage mode (two pages per physical page)."));
 
-  KQuickHelp::add(qtarch_Label_2,
-  KQuickHelp::add(setTabSize,
-	i18n("Set TAB size to value. This option is\n"
-	     "ignored if TAB is not interpreted.")));
+  text = i18n("Set TAB size to value. This option is\n"
+              "ignored if TAB is not interpreted.");
+  QWhatsThis::add(qtarch_Label_2, text);
+  QWhatsThis::add(setTabSize, text);
 
-  KQuickHelp::add(qtarch_Label_3,
-  KQuickHelp::add(a2psFontSize,
-	i18n("Changes font size to this value.")));
+  text = i18n("Changes font size to this value.");
+  QWhatsThis::add(qtarch_Label_3, text);
+  QWhatsThis::add(a2psFontSize, text);
 
-  KQuickHelp::add(numberingLineButton,
+  QWhatsThis::add(numberingLineButton,
 	i18n("Output lines are preceded by line numbers,\n"
 	     "numbered sequentially from 1."));
 
-  KQuickHelp::add(bordersButton,
+  QWhatsThis::add(bordersButton,
 	i18n("Print page surrounding borders."));
 
-  KQuickHelp::add(qtarch_Label_113,
-  KQuickHelp::add(numberingPagesList,
-	i18n("Reset sheet numbering for each new file. Sheet\n"
-	     "numbering is used to number physical pages (sheets)\n"
-	     "as they are printed. Page numbering numbers the\n"
-	     "logical pages, of which there are usually two per\n"
-	     "physical page.")));
+  text = i18n("Reset sheet numbering for each new file. Sheet\n"
+              "numbering is used to number physical pages (sheets)\n"
+              "as they are printed. Page numbering numbers the\n"
+              "logical pages, of which there are usually two per\n"
+              "physical page.");
+  QWhatsThis::add(qtarch_Label_113, text);
+  QWhatsThis::add(numberingPagesList, text);
 
-  KQuickHelp::add(qtarch_label,
-  KQuickHelp::add(linesPerPage,
-	i18n("Set  the  lines per page for printing. The font size\n"
-             "is automatically scaled up to fill in the whole page.\n"
-	     "The  minimum number of lines per page is set at 40\n"
-	     "and maximum is at 160.")));
+  text = i18n("Set the lines per page for printing. The font size\n"
+              "is automatically scaled up to fill in the whole page.\n"
+              "The  minimum number of lines per page is set at 40\n"
+              "and maximum is at 160.");
+  QWhatsThis::add(qtarch_label, text);
+  QWhatsThis::add(linesPerPage, text);
 
-  KQuickHelp::add(fontsizeButton,
+  QWhatsThis::add(fontsizeButton,
 	i18n("Check this button if you wish to change the fontsize."));
 
-  KQuickHelp::add(linesButton,
+  QWhatsThis::add(linesButton,
 	i18n("Check this button if you wish to change the number of\n"
 	     "the lines per page."));
 
@@ -828,9 +830,12 @@ void CConfigA2psDlg::slotPreviewClicked() {
   }
   QString dir,data1,data2,text;
   slotCreateParameters();
+#warning FIXME: temporary files
+#if 0
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
   data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
   data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
+#endif
   process = new KShellProcess();
   *process << "a2ps -nP" + globalpara + " " + data1 + " " + data2 + " >" + dir;
   process->start(KProcess::Block,KProcess::AllOutput);

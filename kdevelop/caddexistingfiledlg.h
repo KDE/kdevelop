@@ -21,15 +21,12 @@
 #ifndef CADDEXISTINGFILEDLG_H
 #define CADDEXISTINGFILEDLG_H
 
-#include <kquickhelp.h>
-#include <qwidget.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 
-//#include "cproject.h"
 class CProject;
 
 /** Dlg for adding file(s) to a existing project
@@ -61,5 +58,3 @@ protected:
 };
 
 #endif
-
-

@@ -248,7 +248,7 @@ help();
       updateWidgets();
     }
 }
-#include <kquickhelp.h>
+
 
 void AdvListView::linkclicked(QString str)
 {
@@ -321,9 +321,12 @@ void AdvListView::help()
 
       QString helptext = KDlgLimitLines(st);
 
+#warning FIXME
+#if 0
       KQuickHelpWindow *qhw = new KQuickHelpWindow();
       connect(qhw, SIGNAL(hyperlink(QString)), SLOT(linkclicked(QString)));
       qhw->popup(QString("<b><brown>")+it->text(0)+QString("</b><black>\n\n") + helptext, QCursor::pos().x(),QCursor::pos().y());
+#endif
     }
 }
 

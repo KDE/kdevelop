@@ -16,14 +16,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
-#include <qmessagebox.h>
-#include <kfiledialog.h>
 #include <iostream.h>
-#include <kquickhelp.h>
+#include <qdir.h>
+#include <qwhatsthis.h>
+#include <kfiledialog.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 #include "ccreatedocdatabasedlg.h"
 
 #if HAVE_CONFIG_H
@@ -251,14 +251,14 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_edit->setFocus();
 
 	/*doc*/
-	KQuickHelp::add(medium_radio_button,
+	QWhatsThis::add(medium_radio_button,
 	i18n("builds a medium-size index (20-30% of the size\n"
 	     "of all files), allowing faster search."));
-	KQuickHelp::add(small_radio_button,
+	QWhatsThis::add(small_radio_button,
 			i18n("Build a small index rather than tiny (meaning 7-9%\n"
 			     "of the sizes of all files - your mileage may vary)\n"
 			     "allowing faster search."));
-	KQuickHelp::add(tiny_radio_button,
+	QWhatsThis::add(tiny_radio_button,
 			i18n("a tiny index (2-3% of the total size of all files)"));
 	
 	

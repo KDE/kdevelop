@@ -25,8 +25,8 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
+#include <qwhatsthis.h>
 #include <ktabctl.h>
-#include <kquickhelp.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -72,7 +72,12 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
-  KQuickHelp::add(list_cpp,KQuickHelp::add(list_manuals,KQuickHelp::add(list_linux,i18n("Choose the type of the new file here."))));
+
+  QString text;
+  text = i18n("Choose the type of the new file here.");
+  QWhatsThis::add(list_cpp, text);
+  QWhatsThis::add(list_manuals, text);
+  QWhatsThis::add(list_linux, text);
 
   tab->addTab(list_cpp,i18n("General"));
   tab->addTab(list_manuals,i18n("Manuals"));
@@ -105,8 +110,11 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	edit->setMaxLength( 32767 );
 	edit->setEchoMode( QLineEdit::Normal );
 	edit->setFrame( TRUE );
-        KQuickHelp::add(label_filename,KQuickHelp::add(edit,i18n("Enter a name for your new file here.")));
-  edit->setMinimumSize( edit->sizeHint() );
+
+        text = i18n("Enter a name for your new file here.");
+        QWhatsThis::add(label_filename, text);
+        QWhatsThis::add(edit, text);
+        edit->setMinimumSize( edit->sizeHint() );
 	vlayout->addWidget( edit, 0 );
 	
 	check_use_template = new QCheckBox( this, "check_use_template" );
@@ -117,7 +125,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	check_use_template->setText(i18n("use Template") );
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
-	KQuickHelp::add(check_use_template,i18n("Check this if you want to use a template."));
+	QWhatsThis::add(check_use_template, i18n("Check this if you want to use a template."));
 	check_use_template->setMinimumSize( check_use_template->sizeHint() );
 	vlayout->addWidget( check_use_template, 0 );
 
@@ -151,7 +159,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	check_add_project->setText(i18n("add to Project") );
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
-	KQuickHelp::add(check_add_project,i18n("Check this if you want to add the new file to your project."));
+	QWhatsThis::add(check_add_project, i18n("Check this if you want to add the new file to your project."));
 	check_add_project->setMinimumSize( check_add_project->sizeHint() );
 	glayout->addWidget( check_add_project, 1, 0 );	
 	
@@ -173,7 +181,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	prj_loc_edit->setMaxLength( 32767 );
 	prj_loc_edit->setEchoMode( QLineEdit::Normal );
 	prj_loc_edit->setFrame( TRUE );
-	KQuickHelp::add(prj_loc_edit,i18n("Enter the directory where the new file will be located."));
+	QWhatsThis::add(prj_loc_edit, i18n("Enter the directory where the new file will be located."));
 	prj_loc_edit->setMinimumSize( prj_loc_edit->sizeHint() );
 	glayout->addWidget( prj_loc_edit, 3, 0 );
 
@@ -185,7 +193,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	loc_button->setPixmap(BarIcon("open"));
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
-	KQuickHelp::add(loc_button,i18n("Here you can choose a directory where the new file will be located."));
+	QWhatsThis::add(loc_button, i18n("Here you can choose a directory where the new file will be located."));
 	loc_button->setMinimumSize( loc_button->sizeHint().height(), loc_button->sizeHint().height() );
 	glayout->addWidget( loc_button, 3, 1 );
 
@@ -296,7 +304,7 @@ void CNewFileDlg::slotOKClicked(){
     return;
   }
   if(addToProject() == true && (location().contains(prj->getProjectDir())) == 0 ){
-    QMessageBox::information(this, i18n("You must choose a location,that is in your project-dir!"));
+    KMessageBox::information(this, i18n("You must choose a location,that is in your project-dir!"));
     return;
   }
   QString filename = fileName();

@@ -31,10 +31,10 @@
 #include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qstringlist.h>
 #include <keditcl.h>
 #include <kseparator.h>
-#include <kquickhelp.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -464,62 +464,83 @@ void CKAppWizard::initPages(){
   
   separator2 = new KSeparator (widget1);
   separator2->setGeometry(0,255,515,5);
-  
-  KQuickHelp::add(name,
-		  KQuickHelp::add(nameline,
-				  i18n("Insert your project name here. This is\n"
-				       "also the name of the directory where your Project\n"
-				       "will be created.")));
-  KQuickHelp::add(directory,
-		  KQuickHelp::add(directoryline,
-				  KQuickHelp::add(directoryload,
-						  i18n("Enter the toplevel-directory of your project.\n"))));
-  KQuickHelp::add(versionnumber,
-		  KQuickHelp::add(versionline,
-				  i18n("Set the initial version number of your project here.\n"
-				       "The number will be used in the about-dialog as well as for\n"
-				       "determining the project's package numbering for distribution.")));
-  KQuickHelp::add(authorname,
-		  KQuickHelp::add(authorline,
-				  i18n("Insert your name or the development team name here. This will be used\n"
-				  			"for adding your name as the author to all generated files of your project.")));
-  KQuickHelp::add(email,
-		  KQuickHelp::add(emailline,
-				  i18n("Enter your email adress here. This will be\n"
-				  "used for file header information.")));
-  
-  KQuickHelp::add(apidoc, i18n("Generate a HTML-based documentation set\n"
-  													"for your project classes including cross-references to\n"
-  													"the used libraries."));
-  													
-  KQuickHelp::add(userdoc, i18n("Generate a preset documentation handbook in HTML\n"
-  																"by an SGML file included with your package."));
-  KQuickHelp::add(lsmfile, i18n("Create a lsm-file for your project. The Linux Software Map\n"
-  														"is a file generally used for projects for distribution purpose and contains\n"
-  														"a short description of the project including the requirements on the side of\n"
-  														"the end-user."));
-  KQuickHelp::add(gnufiles, i18n("Generate a set of GNU standard files for your project.\n"
-  																"These will give the end-user of the sourcepackage an overview about\n"
-  																"the licensing, readme's etc, as well as a ChangeLog file for you to\n"
-  																"protocol your changes."));
-  KQuickHelp::add(progicon, i18n("Add a program icon to your project that represents\n"
-  														"your application in the window manager."));
-  KQuickHelp::add(miniicon, i18n("Add a mini program icon to your project that is used\n"
-  															"for window-manager popup menus."));
-  KQuickHelp::add(datalink, i18n("Add a KDE link file which is installed in\n"
-  															"the KDE panel of the end-user. By default, your application's\n"
-  															"link file will be installed in the Applications-menu. You can\n"
-  															"change this destination by editing the installation properties\n"
-  															"for the link file later."));
-  KQuickHelp::add(iconload, i18n("Lets you select another icon for your program\n"
-  														"than the sample program icon provided by the Application\n"
-  														"Wizard."));
-  KQuickHelp::add(miniload, i18n("Lets you select another mini-icon for your program\n"
-  														"than the sample program icon provided by the Application\n"
-  														"Wizard."));
-  
-  
 
+  QString text;
+
+  text = i18n("Insert your project name here. This is\n"
+              "also the name of the directory where your project\n"
+              "will be created.");
+  QWhatsThis::add(name, text);
+  QWhatsThis::add(nameline, text);
+  
+  text = i18n("Enter the toplevel directory of your project.\n");
+  QWhatsThis::add(directory, text);
+  QWhatsThis::add(directoryline, text);
+  QWhatsThis::add(directoryload, text);
+  
+  text =  i18n("Set the initial version number of your project here.\n"
+               "The number will be used in the about-dialog as well as for\n"
+               "determining the project's package numbering for distribution.");
+  QWhatsThis::add(versionnumber, text);
+  QWhatsThis::add(versionline, text);
+
+  text = i18n("Insert your name or the development team name here. This will be used\n"
+              "for adding your name as the author to all generated files of your project.");
+  QWhatsThis::add(authorname, text);
+  QWhatsThis::add(authorline, text);
+      
+  text = i18n("Enter your email adress here. This will be\n"
+              "used for file header information.");
+  QWhatsThis::add(email, text);
+  QWhatsThis::add(emailline, text);
+  
+  text = i18n("Generate a HTML-based documentation set\n"
+              "for your project classes including cross-references to\n"
+              "the used libraries.");
+  QWhatsThis::add(apidoc, text);
+
+  text = i18n("Generate a preset documentation handbook in HTML\n"
+                                "by an SGML file included with your package.");
+  QWhatsThis::add(userdoc, text);
+  
+  text = i18n("Create a lsm-file for your project. The Linux Software Map\n"
+              "is a file generally used for projects for distribution purpose and contains\n"
+              "a short description of the project including the requirements on the side of\n"
+              "the end-user.");
+  QWhatsThis::add(lsmfile, text);
+
+  
+  text = i18n("Generate a set of GNU standard files for your project.\n"
+              "These will give the end-user of the sourcepackage an overview about\n"
+              "the licensing, readme's etc, as well as a ChangeLog file for you to\n"
+              "protocol your changes.");
+  QWhatsThis::add(gnufiles, text);
+                
+  text = i18n("Add a program icon to your project that represents\n"
+              "your application in the window manager.");
+  QWhatsThis::add(progicon, text);
+
+  text = i18n("Add a mini program icon to your project that is used\n"
+                                 "for window-manager popup menus.");
+  QWhatsThis::add(miniicon, text);
+                
+  text = i18n("Add a KDE link file which is installed in\n"
+              "the KDE panel of the end user. By default, your application's\n"
+              "link file will be installed in the Applications menu. You can\n"
+              "change this destination by editing the installation properties\n"
+              "for the link file later.");
+  QWhatsThis::add(datalink, text);
+
+  text = i18n("Lets you select another icon for your program\n"
+              "than the sample program icon provided by the Application\n"
+              "Wizard.");
+  QWhatsThis::add(iconload, text);
+  
+  text = i18n("Lets you select another mini-icon for your program\n"
+              "than the sample program icon provided by the Application\n"
+              "Wizard.");
+  QWhatsThis::add(miniload, text);  
+  
   connect(nameline,SIGNAL(textChanged(const char*)),SLOT(slotProjectnameEntry()));
 	connect(directoryline,SIGNAL(textChanged(const char*)),SLOT(slotDirectoryEntry()));
   connect(directoryload,SIGNAL(clicked()),SLOT(slotDirDialogClicked()));
@@ -714,40 +735,40 @@ void CKAppWizard::initPages(){
 	connect(vendorline,SIGNAL(textChanged(const char*)),SLOT(slotVendorEntry()));
 	
 	projectlocationline->setEnabled(false);
-	
-	KQuickHelp::add(messageline,
-		  KQuickHelp::add(logMessage,
-				  i18n("Here you can enter the log message for the\n"
-				  		 "version control system.")));
+
+        text = i18n("Here you can enter the log message for the\n"
+                    "version control system.");
+	QWhatsThis::add(messageline, text);
+        QWhatsThis::add(logMessage, text);
 				
-	KQuickHelp::add(vendorTag,
-		  KQuickHelp::add(vendorline,
-				  i18n("Here you can choose the vendor tag, which your project\n"
-				  		 "has in the version control system.")));
+	text = i18n("Here you can choose the vendor tag, which your project\n"
+                    "has in the version control system.");
+	QWhatsThis::add(vendorTag, text);
+        QWhatsThis::add(vendorline, text);
+
+        text = i18n("Here you can choose a special pointer for the first\n"
+                    "entry in the version control system.");
+	QWhatsThis::add(releaseTag, text);
+        QWhatsThis::add(releaseline, text);
 				
-	KQuickHelp::add(releaseTag,
-		  KQuickHelp::add(releaseline,
-				  i18n("Here you can choose a special pointer for the first\n"
-				  		 "entry in the version control system.")));
+	text = i18n("Here you can choose the version control system,\n"
+                    "which you want to use.");
+	QWhatsThis::add(vsBox, text);
+        QWhatsThis::add(vsSupport, text);
 				
-	KQuickHelp::add(vsBox,
-		  KQuickHelp::add(vsSupport,
-				  i18n("Here you can choose the version control system,\n"
-				  		 "which you want to use.")));
+        text = i18n("Here you can choose where your vcsroot loction should be.\n"
+                    "At the moment we only support local vs. And be sure, you\n"
+                    "have read and write access in the location.");
+	QWhatsThis::add(vsInstall, text);
+        QWhatsThis::add(vsLocation, text);
+        QWhatsThis::add(locationbutton, text);
 				
-	KQuickHelp::add(vsInstall,
-		  KQuickHelp::add(vsLocation,
-		  		KQuickHelp::add(locationbutton,
-				  		i18n("Here you can choose where your vcsroot loction should be.\n"
-				  				 "At the moment we only support local vs. And be sure, you\n"
-				  				 "have read and write access in the location."))));
-				
-	KQuickHelp::add(projectVSLocation,
-		  KQuickHelp::add(projectlocationline,
-				  i18n("Here you can see the repository of your project in the\n"
-				  		 "version control system. The repository is dependend on\n"
-				  		 "the directory of your project. You can not change the\n"
-				  		 "repository direct.")));
+        text = i18n("Here you can see the repository of your project in the\n"
+                    "version control system. The repository is dependend on\n"
+                    "the directory of your project. You can not change the\n"
+                    "repository directly.");
+	QWhatsThis::add(projectVSLocation, text);
+        QWhatsThis::add(projectlocationline, text);
 				
 				
   /************************************************************/
@@ -811,7 +832,7 @@ void CKAppWizard::initPages(){
   QToolTip::add(hnew,i18n("Clears the pre-set headertemplate"));
   QToolTip::add(hedit,i18n("Edit your headertemplate here"));
   
-  KQuickHelp::add(hheader, i18n("Use a standard\n"
+  QWhatsThis::add(hheader, i18n("Use a standard\n"
 				"headertemplate for your headerfiles"));
   
   
@@ -879,7 +900,7 @@ void CKAppWizard::initPages(){
   QToolTip::add(cppnew,i18n("Clears the pre-set headertemplate"));
   QToolTip::add(cppedit,i18n("Edit your headertemplate here"));
 
-  KQuickHelp::add(cppheader, i18n("Use a standard\n"
+  QWhatsThis::add(cppheader, i18n("Use a standard\n"
 				"headertemplate for your implementation files"));
 
 

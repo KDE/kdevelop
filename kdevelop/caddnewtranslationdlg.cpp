@@ -17,7 +17,7 @@
 
 
 #include <kapp.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <klocale.h>
 #include "caddnewtranslationdlg.h"
 #include "cproject.h"
