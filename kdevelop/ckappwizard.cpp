@@ -1655,8 +1655,8 @@ void CKAppWizard::slotApplicationClicked() {
     progicon->setChecked(true);
     miniicon->setEnabled(false);
     miniicon->setChecked(false);
-    miniload->setEnabled(true);
-    iconload->setEnabled(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(true);
     lsmfile->setChecked(true);
     gnufiles->setChecked(true);
     userdoc->setChecked(true);
