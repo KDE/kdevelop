@@ -11,21 +11,13 @@
  *                                                                         *
  ***************************************************************************/
 
- /**
-  * @todo This piece of code is quite bulky: it should be refactored,
-  * putting in a separate class hierarchy the knowledge about vcs file info
-  * provider objects and provide ad-hoc factory classes. (This is a memo for
-  * myself (mario) or for whoever has some nice ideas about fixing this
-  * rather hacked code ;-)
- */
-
 #include "filetreewidget.h"
 
 #include <qheader.h>
 #include <qpainter.h>
 #include <qregexp.h>
 #include <qstringlist.h>
-#include "qcolor.h"
+#include <qcolor.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -43,14 +35,14 @@
 #include "urlutil.h"
 
 #include "fileviewpart.h"
+#include "fileitemfactory.h"
+#include "vcsfiletreewidgetimpl.h"
+#include "stdfiletreewidgetimpl.h"
 
-#define FILENAME_COLUMN     0
-#define STATUS_COLUMN       1
-#define WORKREVISION_COLUMN 2
-#define REPOREVISION_COLUMN 3
+using namespace filetreeview;
 
 ///////////////////////////////////////////////////////////////////////////////
-// class MyFileTreeViewItem
+// class FileTreeViewItem
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <kdeversion.h>
@@ -59,285 +51,43 @@
 #define KURL KdevKURL
 #endif
 
-
-class MyFileTreeViewItem : public KFileTreeViewItem
-{
-public:
-    MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
-       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf ),
-         m_statusColor( FileViewPart::vcsColors.unknown )
-    {
-        hideOrShow();
-    }
-    MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( false ),
-       m_statusColor( FileViewPart::vcsColors.defaultColor )
-    {
-        hideOrShow();
-    }
-
-    virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
-    //! Update content
-    void hideOrShow();
-    //! update VCS info for this directory
-    void setVCSInfo( const VCSFileInfo &info );
-    bool setProjectFile( QString const & path, bool pf );
-
-    FileTreeWidget* listView() const { return static_cast<FileTreeWidget*>( QListViewItem::listView() ); }
-    bool isProjectFile() const { return m_isProjectFile; }
-
-    QString fileName() const { return text( FILENAME_COLUMN ); }
-    QString workingRev() const { return text( WORKREVISION_COLUMN ); }
-    QString repositoryRev() const { return text( REPOREVISION_COLUMN ); }
-    QString status() const { return text( STATUS_COLUMN ); }
-    void setFileName( const QString &p ) { setText( FILENAME_COLUMN, p ); }
-    void setWorkingRev( const QString &p ) { setText( WORKREVISION_COLUMN, p ); }
-    void setRepositoryRev( const QString &p ) { setText( REPOREVISION_COLUMN, p ); }
-    void setStatus( const VCSFileInfo::FileState status );
-
-protected:
-    virtual int compare( QListViewItem *i, int col, bool ascending ) const;
-
-private:
-    bool m_isProjectFile;
-    QColor &m_statusColor; // cached
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-void MyFileTreeViewItem::hideOrShow()
-{
-    kdDebug( 9017 ) << "MyFileTreeViewItem::hideOrShow(): " + path() << endl;
-    setVisible( listView()->shouldBeShown( this ) );
-
-    MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>( firstChild() );
-    while (item)
-    {
-        //kdDebug( 9017 ) << "MyFileTreeViewItem::hideOrShow(): " + item->path() << endl;
-        item->hideOrShow();
-        item = static_cast<MyFileTreeViewItem*>( item->nextSibling() );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void MyFileTreeViewItem::setVCSInfo( const VCSFileInfo &info )
-{
-    //setFileName( info.fileName );
-    setRepositoryRev( info.repoRevision );
-    setWorkingRev( info.workRevision );
-    setStatus( info.state );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void MyFileTreeViewItem::setStatus( const VCSFileInfo::FileState status )
-{
-    setText( STATUS_COLUMN, VCSFileInfo::state2String( status ) );
-    // Update color too
-    switch (status)
-    {
-        case VCSFileInfo::Added:
-            m_statusColor = FileViewPart::vcsColors.added;
-            break;
-        case VCSFileInfo::Uptodate:
-            m_statusColor = FileViewPart::vcsColors.updated;
-            break;
-        case VCSFileInfo::Modified:
-            m_statusColor = FileViewPart::vcsColors.modified;
-            break;
-        case VCSFileInfo::Conflict:
-            m_statusColor = FileViewPart::vcsColors.conflict;
-            break;
-        case VCSFileInfo::Sticky:
-            m_statusColor = FileViewPart::vcsColors.sticky;
-            break;
-        case VCSFileInfo::Unknown:
-            m_statusColor = FileViewPart::vcsColors.unknown;
-            break;
-        case VCSFileInfo::Directory:
-        default:
-            // No color change
-            m_statusColor = FileViewPart::vcsColors.defaultColor;
-            //kdDebug() << "MyFileTreeViewItem::paintCell(): Unknown color!" << endl;
-            break;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool MyFileTreeViewItem::setProjectFile( QString const & path, bool pf )
-{
-    kdDebug( 9017 ) << "MyFileTreeViewItem::setProjectFile(): " + path << endl;
-
-    if ( this->path() == path )
-    {
-        m_isProjectFile = pf;
-        setVisible( listView()->shouldBeShown( this ) );
-        repaint();
-        return true;
-    }
-
-    MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>( firstChild() );
-    while( item )
-    {
-        if ( item->setProjectFile( path, pf ) )
-            return true;
-        else
-            item = static_cast<MyFileTreeViewItem*>(item->nextSibling());
-    }
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
-    int column, int width, int alignment)
-{
-    if ( listView()->showNonProjectFiles() && isProjectFile() )
-    {
-        QFont font( p->font() );
-        font.setBold( true );
-        p->setFont( font );
-    }
-
-    // paint cell in a different color
-    QColorGroup mycg( cg );
-//    kdDebug() << "MyFileTreeViewItem::paintCell(): itemColor == " << itemColor.name() << endl;
-    // strage: setting QColorGroup::Text works instead ... :-/
-    mycg.setColor( QColorGroup::Background, m_statusColor );
-//    kdDebug() << "MyFileTreeViewItem::paintCell(): mycg.background() == " << mycg.background().name() << endl;
-//    p->setBackgroundColor( itemColor );
-
-    QListViewItem::paintCell( p, mycg, column, width, alignment );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-int MyFileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) const
-{
-    KFileTreeViewItem* rhs = dynamic_cast<KFileTreeViewItem*>( i );
-    if (rhs)
-    {
-        if (rhs->isDir() && !isDir())
-            return (ascending) ? 1 : -1;
-        else
-            if (!rhs->isDir() && isDir())
-                return (ascending) ? -1 : 1;
-    }
-
-    return QListViewItem::compare( i, col, ascending );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// class MyFileTreeBranch
-///////////////////////////////////////////////////////////////////////////////
-
-class MyFileTreeBranch : public KFileTreeBranch
-{
-public:
-    MyFileTreeBranch( KFileTreeView* view, const KURL& url, const QString& name, const QPixmap& pix )
-        : KFileTreeBranch( view, url, name, pix, false,
-            new MyFileTreeViewItem( view, new KFileItem( url, "inode/directory", S_IFDIR ), this ) )
-    {
-        kdDebug( 9017 ) << "MyFileTreeBranch::MyFileTreeBranch(): " << url.path() << endl;
-    }
-
-    virtual ~MyFileTreeBranch()
-    {
-        if (root())
-            delete root()->fileItem();
-    }
-
-    virtual KFileTreeViewItem* createTreeViewItem( KFileTreeViewItem* parent, KFileItem* fileItem )
-    {
-//        kdDebug(9017) << "MyFileTreeBranch::createTreeViewItem(): " + fileItem->url().path() << endl;
-        if (!parent || !fileItem)
-            return 0;
-
-        FileTreeWidget *lv = static_cast<MyFileTreeViewItem*>( parent )->listView();
-        const KURL fileURL = fileItem->url();
-        bool isDirectory = lv->projectFiles().contains( fileURL.path() ) > 0;
-        KDevVCSFileInfoProvider *infoProvider = lv->vcsFileInfoProvider();
-
-        MyFileTreeViewItem *newItem = new MyFileTreeViewItem( parent, fileItem, this, isDirectory );
-
-        if (infoProvider)
-        {
-            QString fileName = fileURL.fileName();
-            QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileURL.directory() );
-//            kdDebug(9017) << "searching for file: " + fileName + " in directory " + dirName << endl;
-
-            const VCSFileInfoMap &vcsFiles = *infoProvider->status( dirName );
-//            kdDebug(9017) << "Dir has " << vcsFiles.count() << " registered files!" << endl;
-
-            if (vcsFiles.contains( fileName ))
-                newItem->setVCSInfo( vcsFiles[ fileName ] );
-//            else
-//                kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
-        }
-        return newItem;
-    }
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 // class FileTreeWidget
 ///////////////////////////////////////////////////////////////////////////////
 
-FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *name)
-    : KFileTreeView(parent, name), m_part( part ), m_rootBranch( 0 ),
-    m_isReloadingTree( false ), m_isSyncingWithRepository( false ),
-    m_actionToggleShowVCSFields( 0 ), m_actionToggleShowNonProjectFiles( 0 )
+FileTreeWidget::FileTreeWidget( FileViewPart *part, QWidget *parent, KDevVCSFileInfoProvider *infoProvider )
+    : KFileTreeView( parent, "filetreewidget" ), m_part( part ), m_rootBranch( 0 )
 {
+    kdDebug(9017) << "Requested FileTree for: " << projectDirectory() << endl;
+    if (versionControl() && infoProvider)
+        kdDebug(9017) << "Valid VCS directory: " << versionControl()->isValidDirectory( projectDirectory() ) << endl;
+
+    if (infoProvider && versionControl() && versionControl()->isValidDirectory( projectDirectory() ))
+        m_impl = new VCSFileTreeWidgetImpl( this, infoProvider );
+    else
+        m_impl = new StdFileTreeWidgetImpl( this );
+
     //setResizeMode( QListView::LastColumn );
     setSorting( 0 );
     setAllColumnsShowFocus( true );
     setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
     setDragEnabled( false );
-    // Update the #define order on top if you change this order!
-    addColumn( "Filename" );
-    addColumn( "Status" );
-    addColumn( "Work" );
-    addColumn( "Repo." );
 
     // Slot connections
-    connect( this, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
-    connect( this, SIGNAL(selectionChanged()),
-             this, SLOT(slotSelectionChanged()) );
     // Intercepts KDevelop core signals and VCS notifications (if available)
     connect( m_part->project(), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addProjectFiles( const QStringList & ) ) );
     connect( m_part->project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
              this, SLOT( removeProjectFiles( const QStringList & ) ) );
-    // We can do this since the version control has global scope while the file tree has project scope: hence
-    // the former is always loaded first.
-    if (vcsFileInfoProvider())
-    {
-        connect( vcsFileInfoProvider(), SIGNAL(statusReady(const VCSFileInfoMap&, void *)),
-            this, SLOT(vcsDirStatusReady(const VCSFileInfoMap&, void*)) );
-    }
+    // Safeguard against VCS plug-in unloading at run-time
+    connect( m_impl, SIGNAL(implementationInvalidated()), this, SLOT(slotImplementationInvalidated()) );
 
-    // Actions
-    m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
-        this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
-    m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
-
-    m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
-        this, SLOT(slotToggleShowVCSFields()), this, "actiontoggleshowvcsfieldstoggleaction" );
-    m_actionToggleShowVCSFields->setWhatsThis(i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository."));
-    connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );
-
-    // Reload good ol' settings
-    QDomDocument &dom = *m_part->projectDom();
-    m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
-    m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
-    slotToggleShowVCSFields( showVCSFields() ); // show or hide fields depending on read settings
     // Hide pattern for files
+    QDomDocument &dom = *m_part->projectDom();
     QString defaultHidePattern = "*.o,*.lo,CVS";
     QString hidePattern = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns", defaultHidePattern );
     m_hidePatterns = QStringList::split( ",", hidePattern );
@@ -347,10 +97,12 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
 
 FileTreeWidget::~FileTreeWidget()
 {
+    kdDebug(9017) << "FileTreeWidget::~FileTreeWidget()" << endl;
+
     QDomDocument &dom = *m_part->projectDom();
-    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/hidenonprojectfiles", !showNonProjectFiles() );
-    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/showvcsfields", showVCSFields() );
     DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", hidePatterns() );
+
+//    delete m_impl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -373,7 +125,8 @@ void FileTreeWidget::openDirectory( const QString& dirName )
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
 
     // this is a bit odd, but the order of these calls seems to be important
-    MyFileTreeBranch *b = new MyFileTreeBranch( this, url, url.prettyURL(), pix );
+    //FileTreeBranch *b = new FileTreeBranch( this, url, url.prettyURL(), pix );
+    FileTreeBranchItem *b = m_impl->branchItemFactory()->makeBranchItem( this, url, url.prettyURL(), pix );
     b->setChildRecurse( false );
     m_rootBranch = addBranch( b );
     m_rootBranch->setOpen( true );
@@ -383,9 +136,9 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
 {
-    MyFileTreeViewItem * i = static_cast<MyFileTreeViewItem *>( item );
-    return( (showNonProjectFiles() || i->isDir() || i->isProjectFile() )
-             && !matchesHidePattern( i->fileName() ) );
+    FileTreeViewItem * i = static_cast<FileTreeViewItem *>( item );
+    return( (m_impl->showNonProjectFiles() || i->isDir() || i->isProjectFile() )
+             && !matchesHidePattern( i->url().fileName() ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -407,18 +160,18 @@ bool FileTreeWidget::matchesHidePattern(const QString &fileName)
 void FileTreeWidget::hideOrShow()
 {
     // This is called the first time the tree branch is expanded
-    MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
+    FileTreeViewItem* item = static_cast<FileTreeViewItem*>(firstChild());
     if( !item )
       return;
 
     // Need to skip the root item (which is the sub-directory)
     // i.e. "/home/devmario/src/kdevelop/parts/cvsservice"
-    item = static_cast<MyFileTreeViewItem*>( item->firstChild() );
+    item = static_cast<FileTreeViewItem*>( item->firstChild() );
     // Now fill the sub-tree
     while (item)
     {
         item->hideOrShow();
-        item = static_cast<MyFileTreeViewItem*>(item->nextSibling());
+        item = static_cast<FileTreeViewItem*>(item->nextSibling());
     }
 }
 
@@ -446,55 +199,16 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
 
     KPopupMenu popup( i18n("File Tree"), this );
 
-    // Show the "reload tree" menu-item only if it is requested for the root object
-    // and we don't have a sync-with-repository operation pending (which otherwise will
-    // kill the call-back's from working)
-    if (item == this->firstChild() && !m_isSyncingWithRepository)
-    {
-        int id = popup.insertItem( i18n( "Reload Tree"), this, SLOT( slotReloadTree() ) );
-        popup.setWhatsThis( id, i18n("<b>Reload tree</b><p>Reloads the project files tree.") );
-    }
+    m_impl->fillPopupMenu( &popup, item );
 
-    // Submenu for visualization options
-    m_actionToggleShowVCSFields->plug( &popup );
-    m_actionToggleShowNonProjectFiles->plug( &popup );
-
-    // Give a change for syncing status with remote repository: a file info provider must
-    // be available and the item must be a directory
-    const MyFileTreeViewItem *myFileItem = static_cast<MyFileTreeViewItem *>( item );
-    if (vcsFileInfoProvider() && myFileItem->isDir())
-    {
-        m_vcsStatusRequestedItem = item;
-        popup.insertSeparator();
-        int id = popup.insertItem( i18n( "Sync with repository"), this, SLOT( slotSyncWithRepository() ) );
-        popup.setWhatsThis( id,
-            i18n("<b>Sync with repository</b><p>Synchronize file status with remote repository.") );
-    }
     // If an item is selected, fill the file context with selected files' list
     if (item != 0)
     {
-        FileContext context( selectedPathUrls() );
+        FileContext context( m_impl->selectedPathUrls() );
         m_part->core()->fillContextMenu( &popup, &context );
     }
 
     popup.exec( p );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void FileTreeWidget::slotToggleShowNonProjectFiles()
-{
-    hideOrShow();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void FileTreeWidget::slotReloadTree()
-{
-//    m_isReloadingTree = true;
-    m_selectedItems.clear();
-    openDirectory( projectDirectory() );
-//    m_isReloadingTree = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -529,7 +243,7 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
 
         if ( !constructing )
         {
-            MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
+            FileTreeViewItem* item = static_cast<FileTreeViewItem*>(firstChild());
             if( item )
             {
                 item->setProjectFile( file, true );
@@ -551,85 +265,12 @@ void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
         m_projectFiles.remove( file );
         kdDebug(9017) << "file removed: " << file << endl;
 
-        MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
+        FileTreeViewItem* item = static_cast<FileTreeViewItem*>(firstChild());
         if( item )
         {
             item->setProjectFile( file, false );
         }
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void FileTreeWidget::slotSelectionChanged()
-{
-    kdDebug(9017) << "FileTreeWidget::slotSelectionChanged()" << endl;
-
-    if (m_isReloadingTree)
-        return;
-
-    // Check for this item
-    MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem*>( currentItem() );
-    if (!item)
-        return;
-    if (item->isSelected())
-    {
-        if (m_selectedItems.find( item ) != -1)
-            return;
-        m_selectedItems.append( item );
-    }
-    else // It has	 been removed
-        m_selectedItems.remove( item );
-
-    // Now we clean-up the selection of old elements which are no more selected.
-    KFileTreeViewItem *it = m_selectedItems.first();
-    while (it != 0)
-    {
-        if (!it->isSelected()) {
-            KFileTreeViewItem *toDelete = it;
-            it = m_selectedItems.next();
-            m_selectedItems.remove( toDelete );
-        }
-        else
-            it = m_selectedItems.next();
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KURL::List FileTreeWidget::selectedPathUrls()
-{
-    kdDebug(9017) << "FileTreeWidget::selectedPathUrls()" << endl;
-
-    if (m_isReloadingTree)
-        return KURL::List();
-
-    QStringList pathUrls;
-
-    // They should be all selected but I want to be sure about this.
-    MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem *>( m_selectedItems.first() );
-    while (item)
-    {
-        if (item->isSelected())
-            pathUrls << item->path();
-        item = static_cast<MyFileTreeViewItem *>( m_selectedItems.next() );
-    }
-
-    return KURL::List( pathUrls );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool FileTreeWidget::showVCSFields() const
-{
-    return m_actionToggleShowVCSFields->isChecked();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool FileTreeWidget::showNonProjectFiles() const
-{
-    return m_actionToggleShowNonProjectFiles->isChecked();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -649,79 +290,45 @@ QString FileTreeWidget::hidePatterns() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeWidget::slotToggleShowVCSFields( bool checked )
+KDevVersionControl *FileTreeWidget::versionControl() const
 {
-    kdDebug(9017) << "FileTreeWidget::slotToggleShowVCSFields()" << endl;
-    kdDebug(9017) << "Yet to be implemented!!" << endl;
-
-    if (checked)
-    {
-        setColumnWidth( 0, contentsWidth() / 3 ); // "Filename"
-        setColumnWidth( 1, contentsWidth() / 3 ); // "Revision"
-        setColumnWidth( 2, contentsWidth() / 3 ); // "Timestamp"
-
-        header()->show();
-    }
-    else
-    {
-        header()->hide();
-        setColumnWidth( 2 ,0 ); // Hide columns
-        setColumnWidth( 1, 0 );
-        setColumnWidth( 0, contentsWidth() ); // Make the column to occupy all the row
-    }
-
-    triggerUpdate();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void FileTreeWidget::vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData )
-{
-    kdDebug(9017) << "FileTreeWidget::vcsDirStatusReady(const VCSFileInfoMap &, void*)" << endl;
-
-    MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem*>( callerData );
-    Q_ASSERT( item ); // this must _not_ fail!
-    // Update vcs file info for all childs in this tree folder ...
-    item = static_cast<MyFileTreeViewItem*>( item->firstChild() );
-    while (item)
-    {
-        const QString fileName = item->fileName();
-        kdDebug(9017) << "Widget item filename is: " << fileName << endl;
-        if (modifiedFiles.contains( fileName ))
-        {
-            const VCSFileInfo &vcsInfo = modifiedFiles[ fileName ];
-            kdDebug(9017) << "Nice! Found info for this file: " << vcsInfo.toString() << endl;
-            item->setVCSInfo( modifiedFiles[ fileName ] );
-        }
-        else
-            kdDebug(9017) << "Map does not contain anything useful about this file ;-(" << fileName << endl;
-        item = static_cast<MyFileTreeViewItem*>( item->nextSibling() );
-    }
-    triggerUpdate();
-
-    m_isSyncingWithRepository = false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void FileTreeWidget::slotSyncWithRepository()
-{
-    kdDebug(9017) << "FileTreeWidget::slotSyncWithRepository()" << endl;
-    const MyFileTreeViewItem *myFileItem = static_cast<MyFileTreeViewItem *>( m_vcsStatusRequestedItem );
-    const QString relDirPath = URLUtil::extractPathNameRelative( projectDirectory(), myFileItem->fileItem()->url().path() );
-    kdDebug(9017) << "VCS Info requested for: " << relDirPath << endl;
-    vcsFileInfoProvider()->requestStatus( relDirPath, m_vcsStatusRequestedItem );
-    m_isSyncingWithRepository = true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevVCSFileInfoProvider *FileTreeWidget::vcsFileInfoProvider() const
-{
-    if (part() && part()->versionControl() && part()->versionControl()->fileInfoProvider())
-        return part()->versionControl()->fileInfoProvider();
+    if (part() && part()->versionControl())
+        return part()->versionControl();
     else
         return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool FileTreeWidget::showNonProjectFiles() const
+{
+    return m_impl->showNonProjectFiles();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void FileTreeWidget::slotImplementationInvalidated()
+{
+    kdDebug(9017) << "FileTreeWidget::slotImplementationInvalidated()" << endl;
+
+    // Destroy old implementation, create the simpler default impl. and
+    // reload list view
+    // remove old branch
+    removeBranch( m_rootBranch );
+    m_rootBranch = 0; // avoid openDirectory() trying to release the branch
+
+    // Restore a clean situation for an eventual new & different implementation
+    // @fixme this for-loop should really go in ~FileTreeViewWidgetImpl() but
+    // it crashes there: here it works :-/
+    for (int i=columns()-1; i>=0; --i)
+    {
+        kdDebug(9017) << "Removing column: " << i << endl;
+        removeColumn( i );
+    }
+
+    delete m_impl;
+    m_impl = new StdFileTreeWidgetImpl( this );
+    openDirectory( projectDirectory() );
 }
 
 #include "filetreewidget.moc"

@@ -20,6 +20,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+#include "kdevvcsfileinfoprovider.h"
+#include "kdevversioncontrol.h"
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
@@ -36,7 +38,13 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     : QVBox( parent, "fileviewpartwidget" ), m_filetree( 0 ),
     m_filter( 0 ), m_btnFilter( 0 ), m_part( part )
 {
-    m_filetree = new FileTreeWidget( m_part, this );
+    Q_ASSERT( part && parent );
+
+    KDevVCSFileInfoProvider *infoProvider = 0;
+    if (part && part->versionControl() && part->versionControl()->fileInfoProvider())
+        infoProvider = part->versionControl()->fileInfoProvider();
+
+    m_filetree = new FileTreeWidget( m_part, this, infoProvider );
     m_filetree->setCaption(i18n("File Tree"));
     m_filetree->setIcon(SmallIcon("folder"));
     QWhatsThis::add(m_filetree, i18n("<b>File tree</b><p>"

@@ -14,36 +14,56 @@
 #ifndef _FILETREEWIDGET_H_
 #define _FILETREEWIDGET_H_
 
-#include <qstringlist.h>
+#include <qguardedptr.h>
 #include <kfiletreeview.h>
-// VCS Support
+
 #include <kdevvcsfileinfoprovider.h>
 
 class FileViewPart;
-class KToggleAction;
+class FileTreeViewWidgetImpl;
+class KDevVersionControl;
 
+/**
+* This is FileTree widget for listing files belonging to the project. It does feature:
+*   - dynamic updates reflecting the state of the project dir and subdirs
+*   - VCS support for showing VCS fields like state, working and repository revisions
+*   - bolding the filenames belonging to project to distinguish them from the others
+*   - dynamic filtering so the user has not to care about temporary files eating screen space ;-)
+*
+* Design notes
+* The class uses two different implementations (referred by m_impl data member):
+* - @see VCSFileTreeWidgetImpl for VCS support
+*   VCS support is detencted by the constructor looking for the @see KDevPlugin::versionControl() member:
+*   if the current VCS plug-in does offer a @see KDevVCSFileInfoProvider object than this will be used for
+*   querying about files' data. If neither VCS plugin nor valid info provider is found then the filetreeview
+*   will fallback to the standard implementation
+* - @see StdFileTreeWidgetImpl for standard visualization, just like the KFileTreeView
+*
+* Each implementation must provide a branch item factory which the file filetree will delegate the creation
+* of specific KFileTreeViewItem-derived objects: currently they are both defined in the same .h/.cpp files
+* of the implementations listed above.
+*
+*/
 class FileTreeWidget : public KFileTreeView
 {
     Q_OBJECT
 public:
-    FileTreeWidget( FileViewPart *part, QWidget *parent, const char *name=0 );
+    FileTreeWidget( FileViewPart *part, QWidget *parent, KDevVCSFileInfoProvider *infoProvider );
     virtual ~FileTreeWidget();
 
     void openDirectory(const QString &dirName);
     bool shouldBeShown( KFileTreeViewItem* item );
-
-    bool showVCSFields() const;
-    bool showNonProjectFiles() const;
 
     QString projectDirectory();
     QStringList projectFiles();
 
     FileViewPart *part() const { return m_part; }
 
-    KURL::List selectedPathUrls();
-    KDevVCSFileInfoProvider *vcsFileInfoProvider() const;
+    //KDevVCSFileInfoProvider *vcsFileInfoProvider() const;
     void applyHidePatterns( const QString &hidePatterns );
     QString hidePatterns() const;
+
+    bool showNonProjectFiles() const;
 
 public slots:
     void hideOrShow();
@@ -51,37 +71,24 @@ public slots:
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void slotSelectionChanged();
-
-    void slotReloadTree();
-    void slotToggleShowNonProjectFiles();
-    void slotToggleShowVCSFields( bool checked );
 
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
-    void slotSyncWithRepository();
-    void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
+
+    //! We must guard against unloading the used VCS plug-in when using it: we
+    //! fall back to the implementation (a file view without VCS fields, only filenames)
+    void slotImplementationInvalidated();
 
 private:
     bool matchesHidePattern(const QString &fileName);
-
-    FileViewPart *m_part;
-    KFileTreeBranch * m_rootBranch;
-
-    //! @fixme Is this guard really useful?
-    bool m_isReloadingTree;
-    //! We use this guard to avoid enabling the "reload tree" action when performing
-    // syncing with remote repositories.
-    bool m_isSyncingWithRepository;
-    QListViewItem *m_vcsStatusRequestedItem;
+    KDevVersionControl *versionControl() const;
 
     QStringList m_hidePatterns;
     QStringList m_projectFiles;
 
-    QPtrList<KFileTreeViewItem> m_selectedItems;
-
-    KToggleAction *m_actionToggleShowVCSFields,
-        *m_actionToggleShowNonProjectFiles;
+    FileViewPart *m_part;
+    KFileTreeBranch *m_rootBranch;
+    QGuardedPtr<FileTreeViewWidgetImpl> m_impl;
 };
 
 #endif
