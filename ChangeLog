@@ -1,3 +1,7 @@
+2001-05-30  F@lk Brettschneider <falk@kdevelop.org>
+    * kdevelop-speed-drop bug fixed (wandering through the popup menu)
+    * from-the-department:-"pointers are evil" bug fixed (reported by rokrau)
+
 2001-05-30  Christian Couder <christian@kdevelop.org>
     * Improved a little code bookmarks.
 
