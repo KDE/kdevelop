@@ -616,10 +616,17 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
    //resize to match the client
    int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
-  if(w->size().isEmpty() || (w->size() == QSize(1,1)))
-   resize(m_pManager->m_defaultChildFrmSize.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
-  else
-   resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+   if (w->size().isEmpty() || (w->size() == QSize(1,1))) {
+      if (m_pManager->topChild()) {
+         resize(m_pManager->topChild()->size());
+      }
+      else {
+         resize(m_pManager->m_defaultChildFrmSize.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,m_pManager->m_defaultChildFrmSize.height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+      }
+   }
+   else {
+      resize(w->width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,w->height()+QEXTMDI_MDI_CHILDFRM_BORDER+clientYPos);
+   }
 
    // memorize the focuses in a dictionary because they will get lost during reparenting
    QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;

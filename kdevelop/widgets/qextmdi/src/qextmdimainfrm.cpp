@@ -72,7 +72,7 @@ QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
 #endif
 
 //============ constructor ============//
-QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
+ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
 : KParts::DockMainWindow( parentWidget, name, flags)
    ,m_pMdi(0L)
    ,m_pTaskBar(0L)
@@ -371,6 +371,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 
    // decide whether window shall be cascaded
    bool bCascade = FALSE;
+   QApplication::sendPostedEvents();
    QRect frameGeo = pWnd->frameGeometry();
    QPoint topLeftScreen = pWnd->mapToGlobal(QPoint(0,0));
    QPoint topLeftMdiChildArea = m_pMdi->mapFromGlobal(topLeftScreen);
@@ -401,6 +402,13 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    }
 
    m_pMdi->manageChild(lpC,FALSE,bCascade);
+   if (m_pMdi->topChild() && m_pMdi->topChild()->isMaximized()) {
+	   QRect r = lpC->geometry();
+  	 lpC->setGeometry(-lpC->m_pClient->x(), -lpC->m_pClient->y(),
+    	                 m_pMdi->width() + lpC->width() - lpC->m_pClient->width(),
+      	               m_pMdi->height() + lpC->height() - lpC->m_pClient->height());
+		 lpC->setRestoreGeometry(r);
+	 }		
 
    if (m_bMaximizedChildFrmMode && (m_pMdi->m_pZ->count() > 1)) {
 //     updateSysButtonConnections( m_pMdi->topChild(), lpC);
@@ -431,8 +439,13 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
       }
    }
    else {
-      if( pWnd->geometry() == QRect(0,0,1,1)) {
-         pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), defaultChildFrmSize()));
+      if (pWnd->size().isEmpty() || (pWnd->size() == QSize(1,1))) {
+         if (m_pCurrentWindow) {
+            pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), m_pCurrentWindow->size()));
+         }
+         else {
+            pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), defaultChildFrmSize()));
+         }
       }
    }
 
