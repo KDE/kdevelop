@@ -348,10 +348,10 @@ bool ProjectManager::closeProject( bool exiting )
   Core::getInstance()->doEmitProjectClosed();
 
 //  PluginController::getInstance()->unloadAllLocalParts();
+  unloadVCSSupport();
   PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
   unloadLanguageSupport();
   unloadProjectPart();
-  unloadVCSSupport();
 
   /// @todo if this fails, user is screwed
   saveProjectFile();
@@ -664,7 +664,8 @@ void ProjectManager::loadVCSSupport()
     return;
   }
 
-  PluginController::getInstance()->integratePart( vcsPart );
+  PluginController::getInstance()->integrateAndRememberPart( vcsService->name(), vcsPart );
+  m_vcsName = vcsService->name();
   m_vcsPlugin = vcsPart;
 }
 
@@ -672,7 +673,7 @@ void ProjectManager::unloadVCSSupport()
 {
   if (m_vcsPlugin)
   {
-    PluginController::getInstance()->removePart(m_vcsPlugin);
+    PluginController::getInstance()->removeAndForgetPart(m_vcsName, m_vcsPlugin);
     delete m_vcsPlugin;
   }
 }

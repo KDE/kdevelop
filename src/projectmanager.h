@@ -100,6 +100,7 @@ private:
   ProjectSession* m_pProjectSession;
   
   KDevPlugin *m_vcsPlugin;
+  QString m_vcsName;
 };
 
 

@@ -43,7 +43,9 @@ public:
   void unloadPlugins( QStringList const & );
   
   void integratePart(KXMLGUIClient *part);
+  void integrateAndRememberPart(const QString &name, KDevPlugin *part);
   void removePart(KXMLGUIClient* part);
+  void removeAndForgetPart(const QString &name, KDevPlugin* part);
 
   const QValueList<KDevPlugin*> loadedPlugins();
 

@@ -26,6 +26,7 @@
 #include <kdevdifffrontend.h>
 #include <kdevsourceformatter.h>
 #include <kdevcreatefile.h>
+#include <kdevplugininfo.h>
 #include <kaction.h>
 
 #include "core.h"
@@ -312,9 +313,22 @@ void PluginController::integratePart(KXMLGUIClient *part)
         TopLevel::getInstance()->main()->actionCollection(), SIGNAL( actionStatusText( const QString & ) ) );
 }
 
+void PluginController::integrateAndRememberPart(const QString &name, KDevPlugin *part)
+{
+    m_parts.insert(name, part);
+    integratePart(part);
+}
+
 void PluginController::removePart(KXMLGUIClient *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
+}
+
+void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part)
+{
+    kdDebug() << "removing: " << name << endl;
+    m_parts.remove(name);
+    removePart(part);
 }
 
 const QValueList<KDevPlugin*> PluginController::loadedPlugins()
@@ -332,10 +346,12 @@ const QValueList<KDevPlugin*> PluginController::loadedPlugins()
 KDevPlugin * PluginController::extension( const QString & serviceType, const QString & constraint )
 {
     KTrader::OfferList offers = KDevPluginController::query(serviceType, constraint);
-    if (offers.count() > 0)
-        return m_parts[offers.first()->name()];
-    else 
-        return 0;
+    for (KTrader::OfferList::const_iterator it = offers.constBegin(); it != offers.end(); ++it)
+    {
+        KDevPlugin *ext = m_parts[(*it)->name()];
+        if (ext) return ext;
+    }
+    return 0;
 }
 
 
