@@ -103,6 +103,11 @@ KDevPartController *KDevPlugin::partController() const
     return m_api->partController();
 }
 
+KDevPluginController *KDevPlugin::pluginController() const
+{
+    return m_api->pluginController();
+}
+
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 {
     // there's still nothing to do in the base class

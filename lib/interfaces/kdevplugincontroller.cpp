@@ -35,3 +35,15 @@ KTrader::OfferList KDevPluginController::queryPlugins(const QString &constraint)
 {
     return query("KDevelop/Plugin", constraint);
 }
+
+KURL::List KDevPluginController::profileResources(const QString &/*nameFilter*/)
+{
+    return KURL::List();
+}
+
+KURL::List KDevPluginController::profileResourcesRecursive(const QString &/*nameFilter*/)
+{
+    return KURL::List();
+}
+
+#include "kdevplugincontroller.moc"

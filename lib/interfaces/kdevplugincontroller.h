@@ -19,6 +19,9 @@
 #ifndef KDEVPLUGINCONTROLLER_H
 #define KDEVPLUGINCONTROLLER_H
 
+#include <qobject.h>
+
+#include <kurl.h>
 #include <ktrader.h>
 
 /**
@@ -32,8 +35,9 @@ class KDevPlugin;
 The base class for KDevelop plugin controller.
 Plugin controller is responsible for quering, loading and unloading available plugins.
 */
-class KDevPluginController
+class KDevPluginController: public QObject
 {
+    Q_OBJECT
 public:
     
     /**Unloads plugins specified by @p list.
@@ -69,6 +73,25 @@ public:
     is done automatically.
     @return The list of plugin offers.*/
     static KTrader::OfferList queryPlugins(const QString &constraint);
+    
+    /**Reimplement this function only if your shell supports plugin profiles.
+    @return The list of URLs to the profile resources (files) with given @p extension.
+    @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
+    for name filters syntax.*/    
+    virtual KURL::List profileResources(const QString &nameFilter);
+    
+    /**Reimplement this function only if your shell supports plugin profiles.
+    @return The list of URLs to the resources (files) with given @p extension.
+    This list is obtained by a recursive search that process given profile
+    and all it's subprofiles.
+    @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
+    for name filters syntax.*/
+    virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
+    
+signals:
+    /**Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).
+    Should work only on shells with plugin profiles support.*/
+    void profileChanged();
     
 protected:
     /**Constructor.*/

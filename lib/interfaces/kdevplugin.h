@@ -147,6 +147,9 @@ public:
     /**@return A reference to the part controller which is used to manipulate loaded KParts.*/
     KDevPartController *partController() const;
 
+    /**@return A reference to the plugin controller which is used to manipulate loaded plugin.*/
+    virtual KDevPluginController *pluginController() const;
+    
     /**@return A reference to the code repository (accessor to persistant symbol stores).*/
     KDevCodeRepository* codeRepository() const;
 
