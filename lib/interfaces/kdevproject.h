@@ -31,8 +31,7 @@ public:
 	virtual void closeProject() = 0;
 
 	/**
-	* Returns the path (relative to the project directory)
-	* to main binary program of the project.
+	* Returns the absolute path to main binary program of the project.
 	*/
 	virtual QString mainProgram() = 0;
 	/**

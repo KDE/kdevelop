@@ -29,12 +29,21 @@ public:
 public slots:
     void accept();
 
+private slots:
+    void slotProjectDirectoryChanged( const QString& text );
+    void slotProjectDirectoryComboChanged();
+
 private:
 
     QDomDocument m_projectDom;
 
     void readConfig();
     void writeConfig();
+
+    bool isProjectDirectoryAbsolute();
+    QString projectDirectory();
+    void setProjectDirectoryError( const QString& error );
+    void setProjectDirectorySuccess();
 };
 
 #endif

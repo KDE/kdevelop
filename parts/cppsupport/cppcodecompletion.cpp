@@ -910,6 +910,28 @@ CppCodeCompletion::completeText( )
 
     uint nLine, nCol;
     m_pCursorIface->cursorPositionReal( &nLine, &nCol );
+
+    m_pSupport->backgroundParser()->lock();
+    TranslationUnitAST* ast = m_pSupport->backgroundParser()->translationUnit( m_currentFileName );
+    AST* node = findNodeAt( ast, nLine, nCol );
+
+    if( node ){
+        kdDebug(9007) << "current node is = " << nodeTypeToString( (NodeType)(node->nodeType()) ) << endl;
+    }
+
+    if( node && node->nodeType() == NodeType_FunctionDefinition ){
+	int startLine, startColumn;
+	node->getStartPosition( &startLine, &startColumn );
+
+	int endLine, endColumn;
+	node->getEndPosition( &endLine, &endColumn );
+
+	QStringList scope;
+	scopeOfNode( node, scope );
+	kdDebug(9007) << "------> scope = " << scope.join( "::" ) << endl;
+    }
+    m_pSupport->backgroundParser()->unlock();
+
     QString strCurLine = m_pEditIface->textLine( nLine );
 
     QString className;

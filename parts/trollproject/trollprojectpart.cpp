@@ -16,6 +16,8 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
+#include <qdir.h>
+
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
@@ -142,7 +144,7 @@ QString TrollProjectPart::mainProgram()
 {
    
     QDomDocument &dom = *projectDom();
-    return DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
+    return QDir::cleanDirPath(projectDirectory() + "/" + DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram"));
 }
 
 

@@ -22,6 +22,8 @@ public:
 
   ~ProjectManager();
 
+  static QString projectDirectory( const QString& path, bool absolute );
+
   static ProjectManager *getInstance();
 
   void loadSettings();

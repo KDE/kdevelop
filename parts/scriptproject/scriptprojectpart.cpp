@@ -175,7 +175,7 @@ QString ScriptProjectPart::mainProgram()
 {
     QDomDocument &dom = *projectDom();
 
-    return DomUtil::readEntry(dom, "/kdevscriptproject/run/mainprogram");
+    return QDir::cleanDirPath(projectDirectory() + "/" + DomUtil::readEntry(dom, "/kdevscriptproject/run/mainprogram"));
 }
 
 

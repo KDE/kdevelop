@@ -211,7 +211,7 @@ void MakeWidget::startNextJob()
 
     currentCommand = *it;
     commandList.remove(it);
-    
+
     int i = currentCommand.findRev(" gmake");
     if (i == -1) {
 	i = currentCommand.findRev(" make");
@@ -221,9 +221,9 @@ void MakeWidget::startNextJob()
 	QString s = currentCommand.right(currentCommand.length() - i);
 	if (s.contains("configure ")        || s.contains(" Makefile.cvs") ||
 	    s.contains(" clean")            || s.contains(" distclean") ||
-	    s.contains(" package-messages") ||  s.contains(" install")) 
+	    s.contains(" package-messages") ||  s.contains(" install"))
 	{ m_bCompiling = false; }
-	else { m_bCompiling = true; }	    
+	else { m_bCompiling = true; }
     }
 
     it =  dirList.begin();
@@ -234,7 +234,7 @@ void MakeWidget::startNextJob()
     items.clear();
     parags = 0;
     moved = false;
-    
+
     m_veryShortOutput.clear();
     m_shortOutput.clear(); // clear the shadow string lists
     m_fullOutput.clear();
@@ -273,11 +273,11 @@ void MakeWidget::copy()
   getSelection(&parafrom, &indexfrom, &parato, &indexto);
   if(parafrom < 0 || indexfrom < 0 || parato < 0 || indexto < 0)
     QTextEdit::copy();
-  
+
   QString selection;
   for(int i = parafrom; i<=parato; i++)
     selection += text(i) + "\n";
-  
+
   selection.remove(0, indexfrom);
   int removeend = text(parato).length() - indexto;
 
@@ -349,6 +349,8 @@ void MakeWidget::prevError()
 void MakeWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     QTextEdit::contentsMousePressEvent(e);
+    if ( e->button() != LeftButton )
+        return;
     int parag, index;
     getCursorPosition(&parag, &index);
     searchItem(parag);
@@ -695,7 +697,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
 	    shortOutput = i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup));
 	}
     }
-    
+
     // append it to this textedit widget
     bool bShortOutputExprMatched = !shortOutput.isEmpty();
     bool bConfiguring = line.startsWith("checking "); // hack to consider an implicite configure call
@@ -705,7 +707,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     else if (bConfiguring || !(m_bCompiling && m_compilerOutputLevel == eVeryShort && type == Diagnostic)){
 	insertLine2(line, type);
     }
-    
+
     // also store the short and long version in stringlists to allow switching on the fly
     insertLine2(line, type, &m_fullOutput);
     QString ln = line; // because line is const
@@ -714,7 +716,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
 	type = StyledDiagnostic;
     }
     insertLine2(ln, type, &m_shortOutput);
-    if (bConfiguring || !(m_bCompiling && type == Diagnostic)) 
+    if (bConfiguring || !(m_bCompiling && type == Diagnostic))
     {
 	insertLine2(ln, type, &m_veryShortOutput);
     }
@@ -771,13 +773,13 @@ void MakeWidget::insertLine2(const QString &line, Type type, QStringList* pStrin
 #else
     static const QString br;
 #endif
-    
+
     if (pStringList) {
 	// just store it in a stringlist, if the user wants to switch between short and full output on the fly
 	pStringList->append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(type == StyledDiagnostic ? line : eLine).arg(br));
 	return;
     }
-    
+
     ++parags;
 
     int para, index;
@@ -804,11 +806,11 @@ QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 {
     QPopupMenu* pMenu = QTextEdit::createPopupMenu(pos);
     pMenu->setCheckable(true);
-    
+
     pMenu->insertSeparator();
     int id = pMenu->insertItem(i18n("Line wrapping"), this, SLOT(toggleLineWrapping()) );
     pMenu->setItemChecked(id, m_bLineWrapping);
-    
+
     pMenu->insertSeparator();
     id = pMenu->insertItem(i18n("Very short compiler output"), this, SLOT(slotVeryShortCompilerOutput()) );
     pMenu->setItemChecked(id, m_compilerOutputLevel == eVeryShort);
@@ -816,11 +818,11 @@ QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
     pMenu->setItemChecked(id, m_compilerOutputLevel == eShort);
     id = pMenu->insertItem(i18n("Full compiler output"), this, SLOT(slotFullCompilerOutput()) );
     pMenu->setItemChecked(id, m_compilerOutputLevel == eFull);
-    
+
     pMenu->insertSeparator();
     id = pMenu->insertItem(i18n("Show directory navigation messages"), this, SLOT(toggleShowDirNavigMessages()));
     pMenu->setItemChecked(id, m_bShowDirNavMsg);
-    
+
     return pMenu;
 }
 
@@ -882,7 +884,7 @@ void MakeWidget::setCompilerOutputLevel(EOutputLevel level)
 
 void MakeWidget::toggleShowDirNavigMessages()
 {
-    m_bShowDirNavMsg = !m_bShowDirNavMsg;    
+    m_bShowDirNavMsg = !m_bShowDirNavMsg;
     KConfig *pConfig = kapp->config();
     pConfig->setGroup("MakeOutputView");
     pConfig->writeEntry("ShowDirNavigMsg", m_bShowDirNavMsg);

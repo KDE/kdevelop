@@ -35,6 +35,7 @@ class QDomDocument;
 #include "partselectwidget.h"
 #include "generalinfowidget.h"
 #include "projectsession.h"
+#include "domutil.h"
 
 #include "projectmanager.h"
 
@@ -48,6 +49,18 @@ public:
   QStringList  m_ignoreParts, m_loadParts, m_keywords;
   QDict<KDevPlugin> m_localParts;
 };
+
+
+QString ProjectManager::projectDirectory( const QString& path, bool absolute ) {
+    if(absolute)
+        return path;
+    QFileInfo projectFile(ProjectManager::getInstance()->projectFile());
+    KURL url;
+    url.setPath(projectFile.dirPath());
+    url.addPath(path);
+    url.cleanPath();
+    return url.path(-1);
+}
 
 ProjectManager *ProjectManager::s_instance = 0;
 
@@ -364,7 +377,10 @@ bool ProjectManager::loadProjectPart()
   API::getInstance()->setProject( projectPart );
 
   QFileInfo fi(m_info->m_fileName);
-  QString projectDir = fi.dir().canonicalPath();
+  QDomDocument& dom = *API::getInstance()->projectDom();
+  QString path = DomUtil::readEntry(dom,"/general/projectdirectory",".");
+  bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
+  QString projectDir = projectDirectory( path, absolute );
   QString projectName = fi.baseName();
   kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 

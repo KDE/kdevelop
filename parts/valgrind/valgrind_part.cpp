@@ -99,11 +99,7 @@ void ValgrindPart::slotExecValgrind()
 {
   ValgrindDialog* dlg = new ValgrindDialog();
   if ( project() && _lastExec.isEmpty() ) {
-    QString pExec = project()->projectDirectory();
-    if ( !pExec.endsWith( "/" ) && !project()->mainProgram().startsWith( "/" ) )
-      pExec += "/";
-    pExec += project()->mainProgram();
-    dlg->setExecutable( pExec );
+    dlg->setExecutable( project()->mainProgram() );
   } else {
     dlg->setExecutable( _lastExec );
   }

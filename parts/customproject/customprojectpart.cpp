@@ -245,7 +245,7 @@ QString CustomProjectPart::mainProgram()
 {
     QDomDocument &dom = *projectDom();
 
-    return DomUtil::readEntry(dom, "/kdevcustomproject/run/mainprogram");
+    return QDir::cleanDirPath(projectDirectory() + "/" + DomUtil::readEntry(dom, "/kdevcustomproject/run/mainprogram"));
 }
 
 
@@ -421,7 +421,7 @@ void CustomProjectPart::slotExecute()
         return;
     }
 
-    QString program = projectDirectory() + "/" + project()->mainProgram();
+    QString program = project()->mainProgram();
 
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 

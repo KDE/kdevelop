@@ -32,14 +32,6 @@ High priority tasks!
 * misc:
   - Trying Java projects results in mysterious error messages
   - Project name should be able to contain spaces
-  - Should be able to keep project file in a separate directory and
-    specify what the project root directory is.
-  - Also, should be able to have a separate project root and top build dir.
-    E.g. I want to have a kate project in kdebase, but I want to project file
-    to live in ~/src/projects. So I set projectDir = ~/src/kdebase/kate and
-    topBuildDir = ~/src/kdebase. Should be able to specify these paths as
-    absolute or relative to home or relative to the project file or relative
-    to each other, for portability across team projects.
 
 2. KDevelop 2 compatibility
 ---------------------------
@@ -52,7 +44,7 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - toplevel UI mode broken
   - [Modified] missing in mainframe caption
   - captions missing for toolbar buttons
-  
+
 * cppsupport:
   - new class dialog belongs in File menu
 
@@ -67,14 +59,14 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 * build/configuration:
   - cross-compiling feature missing
   - make "MIN_VERSION" configurable on new project creation
-    
+
 * interoperability:
   - import/export 2.1-projects<-->Gideon-projects
   - version control: integration with Cervisia?
 
 * classview:
   - delete method/class menu items
-  
+
 3. Missing UIs (other than 2)
 -----------------------------
 
@@ -82,19 +74,19 @@ UIs that intuitively ought to be there
 
 * automakemanager:
   - install, etc. targets besides "build" for subproject menus & toolbar
-  
+
 * TopLevel SDI UI-mode:
    -> Extend KDevPlugin-API in order to have a preferred border for at least the selection parts
        (Automake Manager, Class Browser, File Groups, etc...)
 
-  
+
 Other Issues
 ============
 
 
 4. New features
 ---------------
-  
+
 * short-term:
 
   - improve documentation browsing
@@ -109,7 +101,7 @@ Other Issues
   - write a lot more plugins ;) ideas here for which ones
   - sourcenav database and navigation tools
 
-  
+
 5. Code refactoring/improvements
 --------------------------------
 
@@ -124,7 +116,7 @@ Other Issues
   - find a nicer way to remove dynamic menu entries from context menus
   - make all functions using filenames use KURLs instead
 
-* optimization:  
+* optimization:
 
 * Import existing directory: Should be named "Import existing project" and more intuitive (wizard-like)
   - Question from the wizard: "I have found C++ files in your project directory. Should C++ be the primary language

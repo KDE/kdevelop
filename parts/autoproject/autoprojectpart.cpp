@@ -26,6 +26,7 @@
 #include <qpopupmenu.h>
 #include <qstringlist.h>
 #include <qwhatsthis.h>
+#include <qdir.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -209,7 +210,7 @@ QString AutoProjectPart::mainProgram()
 {
     QDomDocument &dom = *projectDom();
 
-    return DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+    return QDir::cleanDirPath(buildDirectory() + "/" + DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram"));
 }
 
 
@@ -586,7 +587,7 @@ void AutoProjectPart::slotExecute()
 	return;
     }
 
-    QString program = buildDirectory() + "/" + mainProgram();
+    QString program = mainProgram();
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 
     DomUtil::PairList envvars =

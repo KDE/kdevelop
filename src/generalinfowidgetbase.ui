@@ -8,129 +8,183 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>437</width>
-            <height>374</height>
+            <width>659</width>
+            <height>444</height>
         </rect>
     </property>
     <property name="caption">
         <string>General Settings</string>
     </property>
-    <widget class="QTextEdit">
+    <grid>
         <property name="name">
-            <cstring>description_edit</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>170</y>
-                <width>390</width>
-                <height>180</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>author_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>20</y>
-                <width>220</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>version_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>100</y>
-                <width>100</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>email_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>60</y>
-                <width>220</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>author_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>20</y>
-                <width>62</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Author:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>email_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>60</y>
-                <width>51</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Email:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>version_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>100</y>
-                <width>67</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Version:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>description_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>140</y>
-                <width>90</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Description:</string>
-        </property>
-    </widget>
+        <widget class="QComboBox" row="0" column="4">
+            <item>
+                <property name="text">
+                    <string>Absolute Path</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Relative to Project File</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>project_directory_combo</cstring>
+            </property>
+        </widget>
+        <spacer row="4" column="3" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>408</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="5" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>description_label</cstring>
+            </property>
+            <property name="text">
+                <string>Description:</string>
+            </property>
+        </widget>
+        <widget class="QTextEdit" row="6" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>description_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>project_directory_label</cstring>
+            </property>
+            <property name="text">
+                <string>Project Directory:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>author_label</cstring>
+            </property>
+            <property name="text">
+                <string>Author:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>email_label</cstring>
+            </property>
+            <property name="text">
+                <string>Email:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>version_label</cstring>
+            </property>
+            <property name="text">
+                <string>Version:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>version_edit</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>100</width>
+                    <height>32767</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>email_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>author_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="1">
+            <property name="name">
+                <cstring>project_directory_diagnostic_icon</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>16</width>
+                    <height>16</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>16</width>
+                    <height>16</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image0</pixmap>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>project_directory_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="2" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>project_directory_diagnostic_label</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
+            <property name="text">
+                <string>Please select a project directory</string>
+            </property>
+        </widget>
+    </grid>
 </widget>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="2802">789c7d96494f2b391080effc8a88baa1513dbbddab4673605f038400098ce660f79204086b0284a7f9efe3aeaa34a10f6313c4d72ed75e1d7e6d7486e7ddcec6afb5b7999d4df24e3eb6af9d8d623e9d2efefee7afdf6beb3aeed43f26e904eb7facade3a493774e9f1e4b82f92ac02abcaf406fb602d6dbe880a24592773557b46a86b8751efd643bfac9a05b3c6f715bbea50fae6bd679636f2c9ca884ce03e2a0914f88c3c69f823869eef75bfaeae0214c4d6632e2fd9aa328cc4262085bf13962ddd853c4a6d167395f4996b0be03669d69e67be6d42fe20f6697388ac796e44fdcd8ab6a364563ef8ab86cec853fe581e3f9f6af6a7197b8c997257f23a30265e8fc96385832527daad8bbe7e8fc9438f219d0c4839aedb73f6f35bb2c2c43ea277897f8fd05e2712b1f31736002b6e7243f611a1257ad7ce5c259caf74b619b5ae242d8a5ecef2e73d32f69cd59a44245fac190bf4d3ef0823834da507cb8577311c57e51be90ce954a15d9b340acbd7e62b81496733821360d67acdf33fbb7c3f952b1a2f880f2971b1529b20737c2cb738a372f54ae72f28ffc2f0a5d069cdf21c5dbd4033e25fe259f092febd7175ee6e355385211f1b1702cfeec09678ae743de0faa5005b1f4b38e35cbbf08a79afd7f16b69af3b1102e35f7cb83f44318b03f13e138607d323f411ab03ea977e002ca275e329bc8b0fffbc2b1e1fbd23fcb79871eb30f9feb9f0a7b078803e124a4fba8997d7a389f4fc23ae27e4984fd22be128e23be7f239c44d48f28f6a334e2fe3e177611c7c3f356c565ccf991f94874c2f68e848384fd957e4ffc22ee0adb84e7634758e6194f848b84ea8787323f26e5f7c1b67092b2be252fe7f1ab358f67adf9bb10ce53eed72de122657b9bc27e135f33fbf6e27a487f642e637d126f9667a40fa6ccbe9d381fd2afd6587e9f483fdbd0f2fb44e6c1fa45f751d86f3a97fe73c6f17de95f173abe9f09fb0089c5beb38ef32bfded0ac7f320f5f4e3caf13c0aeb9cfd1d0a0739d74ffa293739e75ff2ebd571bd947059703f00731994741fe4fbc6bf7e797e24bf95aab85fa5be95ae78fec59fca541cefad7058f17df93eab0b442cf5abf28aeb391096ff0f7ab3ffdfdf320868d1618e059658e108c738e1bd94c13bbcc7079ce2233ee133bee02bbee10ce7df32f88e1ff8890bfcc24ddcc26ddcc15dbff7707f45e6c09f1fe2111ee30976f114cffcef73ece105f61b994bafe10aaf718043bcf1b2b7a850638006438c4426c60453ffc970000800161ce4504009158c5806c630813bb88707987aa947788267788157788319cc45e61d3ee0d3ef057cc1266cc136d127ecacc8ecc29e7fb20f0770e87d3bf4ba8ee0d83f39816e23730a67fec904cea157dfc7055c40dfff7509578d3fd73020dd7db151ef21dcc02d28d012d70402302be7f5ae254288205eca78a90452c82cca063f400e229b3739a4dad9c2d6f998d5db56b58e5ae2a78c971ac108e6b447a02196bafffbe7da7f032f7817</data>
+    </image>
+</images>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

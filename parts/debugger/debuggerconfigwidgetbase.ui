@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>DebuggerConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,14 +8,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>606</width>
-            <height>241</height>
+            <width>718</width>
+            <height>421</height>
         </rect>
     </property>
     <property name="caption">
         <string>Debugger Configuration</string>
     </property>
-    <hbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -25,217 +25,151 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>Layout4</cstring>
+                <cstring>asmDemangle_box</cstring>
             </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>programArgs_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Program &amp;arguments:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>programArgs_edit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Arguments that are given to the application when it is debugged.</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>programArgs_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>debuggingShell_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Debugging &amp;shell:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>debuggingShell_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>debuggingShell_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>gdbPath_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Path to &amp;gdb:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>gdbPath_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>gdbPath_edit</cstring>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name" stdset="0">
-                        <cstring>Spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </vbox>
+            <property name="text">
+                <string>Display &amp;demangled names</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>When displaying the disassembled code you
+can select to see the methods' mangled names.
+However, non-mangled names are easier to read.</string>
+            </property>
         </widget>
-        <spacer>
-            <property name="name" stdset="0">
-                <cstring>Spacer3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Minimum</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>Layout5</cstring>
+                <cstring>enableFloatingToolBar_box</cstring>
             </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>displayStaticMembers_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Display static &amp;members</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Displaying static members makes GDB slower in
+            <property name="text">
+                <string>Enable &amp;floating toolbar</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Use the floating toolbar. This toolbar always stays
+on top of all windows so that if the app covers KDevelop
+you have control of the app through the small toolbar. It
+can also be docked into the panel.
+
+This toolbar is in addition to the toolbar in KDevelop.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>displayStaticMembers_box</cstring>
+            </property>
+            <property name="text">
+                <string>Display static &amp;members</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Displaying static members makes GDB slower in
 producing data within KDE and Qt.
 It may change the "signature" of the data
 which QString and friends rely on,
 but if you need to debug into these values then
 check this option.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>asmDemangle_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Display &amp;demangled names</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>When displaying the disassembled code you
-can select to see the methods' mangled names.
-However, non-mangled names are easier to read.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>breakOnLoadingLibrary_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Try settings &amp;breakpoints on library loading</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>If GDB hasn't seen a library that will be loaded via
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>dbgTerminal_box</cstring>
+            </property>
+            <property name="text">
+                <string>Enable separate &amp;terminal for application IO</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This allows you to enter terminal input when your
+application contains terminal input code (e.g. cin, fgets, etc.).
+If you use terminal input in your application then check this option.
+Otherwise leave it unchecked.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>breakOnLoadingLibrary_box</cstring>
+            </property>
+            <property name="text">
+                <string>Try settings &amp;breakpoints on library loading</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If GDB hasn't seen a library that will be loaded via
 "dlopen" then it will refuse to set a breakpoint in that code.
 We can get GDB to stop on a library load and hence
 try to set the pending breakpoints. See the documentation
 for more details and a "gotcha" relating to this behavior.
 
 If you are not "dlopen"ing libs then leave this unchecked.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>enableFloatingToolBar_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Enabled &amp;floating toolbar</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Use the floating toolbar. This toolbar always stays
-on top of all windows so that if the app covers KDevelop
-you have control of the app through the small toolbar. It
-can also be docked into the panel.
-
-This toolbar is in addition to the toolbar in KDevelop.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>dbgTerminal_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Enabled separate &amp;terminal for application IO</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This allows you to enter terminal input when your
-application contains terminal input code (e.g. cin, fgets, etc.).
-If you use terminal input in your application then check this option.
-Otherwise leave it unchecked.</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name" stdset="0">
-                        <cstring>Spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </vbox>
+            </property>
         </widget>
-    </hbox>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>gdbPath_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>gdbPath_label</cstring>
+            </property>
+            <property name="text">
+                <string>Path to &amp;gdb:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>gdbPath_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="1">
+            <property name="name">
+                <cstring>debuggingShell_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>debuggingShell_label</cstring>
+            </property>
+            <property name="text">
+                <string>Debugging &amp;shell:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>debuggingShell_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>programArgs_label</cstring>
+            </property>
+            <property name="text">
+                <string>Program &amp;arguments:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>programArgs_edit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Arguments that are given to the application when it is debugged.</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>programArgs_edit</cstring>
+            </property>
+        </widget>
+        <spacer row="8" column="1">
+            <property name="name">
+                <cstring>Spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>60</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
