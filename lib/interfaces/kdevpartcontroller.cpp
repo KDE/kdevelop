@@ -1,8 +1,8 @@
 #include "kdevpartcontroller.h"
 
 
-KDevPartController::KDevPartController(QObject *parent)
-  : QObject(parent)
+KDevPartController::KDevPartController(QWidget *parent)
+  : KParts::PartManager(parent)
 {
 }
 
