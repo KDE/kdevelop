@@ -102,6 +102,7 @@ private:
     int m_prevColumn;
     int m_sequenceLength;
     bool m_autoWordCompletionEnabled;
+    QString m_completionFile;
 
     KTextEditor::Document* docIface;
     KTextEditor::EditInterface* editIface;

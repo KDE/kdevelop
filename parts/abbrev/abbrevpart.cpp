@@ -52,6 +52,9 @@ public:
         KStandardDirs *dirs = instance->dirs();
         dirs->addResourceType( "codetemplates",
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/templates/" );
+        dirs->addResourceType( "sources",
+                               KStandardDirs::kde_default( "data" ) + "kdevabbrev/sources" );
+			       
         return instance;
     }
 };
@@ -152,6 +155,26 @@ void AbbrevPart::load()
         files << localTemplatesFile;
     else
         files = dirs->findAllResources("codetemplates", QString::null, false, true);
+	
+    QString localSourcesFile = locateLocal("sources", "sources", AbbrevFactory::instance());
+    QStringList sourceFiles;
+    if (KIO::NetAccess::exists(localSourcesFile))
+        sourceFiles << localSourcesFile;
+    else
+        sourceFiles = dirs->findAllResources("sources", QString::null, false, true);
+    kdDebug(9028) << "=========> sourceFiles: " << sourceFiles << endl;
+
+    this->m_completionFile = QString::null;
+    for( QStringList::Iterator it=sourceFiles.begin(); it!=sourceFiles.end(); ++it ) {
+        QString fn = *it;
+	kdDebug(9028) << "===> load file: " << fn << endl;
+        QFile f( fn );
+        if ( f.open(IO_ReadOnly) ) {
+		QTextStream stream( &f );
+		m_completionFile += ( stream.read() + QString("\n") );
+		f.close();
+	}
+    }
 
     QStringList::ConstIterator it;
     for (it = files.begin(); it != files.end(); ++it) {
@@ -287,6 +310,22 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
+    
+    idx = 0;
+    pos = 0;
+    len = 0;
+    while ( (pos = rx.search(m_completionFile, idx)) != -1 ) {
+	len = rx.matchedLength();
+	QString word = m_completionFile.mid(pos, len);
+        if (map.find(word) == map.end()) {
+            KTextEditor::CompletionEntry e;
+            e.text = word;
+            entries << e;
+            map[ word ] = TRUE;
+        }
+        idx = pos + len + 1;
+    }
+    
 
     QMap<QString, CodeTemplate*> m = m_templates[suffix];
     for (QMap<QString, CodeTemplate*>::const_iterator it = m.begin(); it != m.end() ; ++it) {
