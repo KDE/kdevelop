@@ -65,19 +65,12 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
 	friend class QextMdiChildArea;
 	friend class QextMdiChildFrmCaption;
 	Q_OBJECT
+
+// attributes	
 public:
 	enum MdiWindowState { Normal,Maximized,Minimized };
-	/**
-	* Creates a new QextMdiChildFrm class.<br>
-	*/
-	QextMdiChildFrm(QextMdiChildArea *parent);
-	/**
-	* Delicato : destroys this QextMdiChildFrm
-	* If a child is still here managed (no recreation was made) it is destroyed too.
-	*/
-	~QextMdiChildFrm();	
-public:
 	QextMdiChildView       *m_pClient;
+
 protected:
 	QextMdiChildArea       *m_pManager;
 	QextMdiChildFrmCaption *m_pCaption;
@@ -112,7 +105,18 @@ protected:
    QPixmap*       m_pUndockButtonPixmap;
    /** imitates a system menu for child frame windows */
    QPopupMenu* m_pSystemMenu;
+
+// methods
 public:
+	/**
+	* Creates a new QextMdiChildFrm class.<br>
+	*/
+	QextMdiChildFrm(QextMdiChildArea *parent);
+	/**
+	* Delicato : destroys this QextMdiChildFrm
+	* If a child is still here managed (no recreation was made) it is destroyed too.
+	*/
+	~QextMdiChildFrm();	
 	/**
 	* Reparents the widget w to this QextMdiChildFrm (if this is not already done)
 	* Installs an event filter to catch focus events.
@@ -158,20 +162,23 @@ public:
 	* It may be useful when setting the mdiCaptionFont of the MdiManager
 	*/
 	void updateRects(){ resizeEvent(0); };
-  /** sets an ID that is submitted to QextMdiChildArea::menuActivated( int) when the menu item for this child frame was clicked */
-  void setWindowMenuID( int id);
-private:
-	void linkChildren( QDict<FocusPolicy>* pFocPolDict);
-	QDict<QWidget::FocusPolicy>* unlinkChildren();
-	int getResizeCorner(int ax,int ay);
-protected slots:
-	void maximizePressed();
-	void minimizePressed();
-	void closePressed();
-	void undockPressed();
-	void raiseAndActivate();
-  /** Shows a system menu for child frame windows. */
-  void showSystemMenu();
+   /** sets an ID that is submitted to QextMdiChildArea::menuActivated( int) when the menu item for this child frame was clicked */
+   void setWindowMenuID( int id);
+
+public slots: // Public slots
+   /** called if someone click on the "Window" menu item for this child frame window */
+   void slot_clickedInWindowMenu();
+   /**
+    * emits a signal that tells the outside that the buttons from the MDI child
+    * frame in the main menu must be placed and connected with new slots
+    */
+   void setSysButtonsInMainMenu();
+   /**
+    * emits a signal that tells the outside that the buttons from the MDI child
+    * frame in the main menu must be reconnected with new slots
+    */
+   void updateSysButtonsInMainMenu();
+
 protected:
 	virtual void resizeEvent(QResizeEvent *);
 	virtual void mouseMoveEvent(QMouseEvent *e);
@@ -179,18 +186,30 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent *);
    virtual void leaveEvent(QEvent *);
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
-  //   virtual bool focusNextPrevChild( bool next ) { return true; };
+   //   virtual bool focusNextPrevChild( bool next ) { return true; };
 	void resizeWindow(int resizeCorner, int x, int y);
 	void moveWindow(QPoint diff, QPoint relativeMousePos);
 	void setResizeCursor(int resizeCorner);
-public slots: // Public slots
-  /** called if someone click on the "Window" menu item for this child frame window */
-  void slot_clickedInWindowMenu();
+
+protected slots:
+	void maximizePressed();
+	void minimizePressed();
+	void closePressed();
+	void undockPressed();
+	void raiseAndActivate();
+   /** Shows a system menu for child frame windows. */
+   void showSystemMenu();
+
+private:
+	void linkChildren( QDict<FocusPolicy>* pFocPolDict);
+	QDict<QWidget::FocusPolicy>* unlinkChildren();
+	int getResizeCorner(int ax,int ay);
+
 signals: // Signals
-  /** is automatically emitted when slot_clickedInWindowMenu is called */
-  void clickedInWindowMenu(int);
-  /** forces a mouse release event call */
-  void releaseMouse();
+   /** is automatically emitted when slot_clickedInWindowMenu is called */
+   void clickedInWindowMenu(int);
+   /** forces a mouse release event call */
+   void releaseMouse();
 };
 
 
