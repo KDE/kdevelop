@@ -1,3 +1,6 @@
+2001-07-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: memory leaks were detected in QextMDI by Purify
+
 2001-07-24  Harald Fernengel  <harry@bnro.de>
     * fix: Save-Button is now enabled when current document gets changed
     * fix: KDevelop now opens project files that come in as URL from konqueror (ignores the "file:")
