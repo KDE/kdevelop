@@ -271,8 +271,10 @@ void CCConfigWidget::interfaceFile()
     QFile f(interface_url->url());
     if ( f.open(IO_ReadOnly) ) { 
         int size = f.size();
-        char buf[size];
+        char *buf = new char[size];
         f.readBlock(&buf[0], size);
+        QString text = QString::fromLocal8Bit(buf, size);
+        delete[] buf;
         f.close();
         interface_file->setText(buf);
     }
@@ -283,10 +285,12 @@ void CCConfigWidget::implementationFile()
     QFile f(implementation_url->url());
     if ( f.open(IO_ReadOnly) ) { 
         int size = f.size();
-        char buf[size];
+        char *buf = new char[size];
         f.readBlock(&buf[0], size);
+        QString text = QString::fromLocal8Bit(buf, size);
+        delete[] buf;
         f.close();
-        implementation_file->setText(buf);
+        implementation_file->setText(text);
     }
 }
 
