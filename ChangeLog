@@ -1,3 +1,6 @@
+2001-26-12  Harald Fernengel <harry@bnro.de>
+    * bugfix: Setup wizard builds documentation now using the right paths
+
 2001-12-18  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: now Childframe mode considers font set by user for MDI-view caption
     * bugfix: special focus problem that came up here in a QTable
