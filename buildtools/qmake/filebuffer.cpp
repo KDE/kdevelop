@@ -759,7 +759,7 @@ void FileBuffer::filterOutIgnoreValues(QString& line,QStringList& valuesignore)
 {
   QStringList qmakeFunctions =
     QStringList::split(',',"join(,member(,find(,contains(,count(,error(,exists(,"
-                       "include(,isEmpty(,system(,message(,infile(,$(");
+                       "include(,isEmpty(,system(,message(,infile(");
 
   int len=0;
   int closestMatch = -1;
