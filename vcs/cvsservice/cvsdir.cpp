@@ -82,7 +82,7 @@ QString CVSDir::entriesFileName() const
 
 QString CVSDir::rootFileName() const
 {
-    return m_cvsDir + QDir::separator()  + "Entries";
+    return m_cvsDir + QDir::separator()  + "Root";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
