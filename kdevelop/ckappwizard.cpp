@@ -535,7 +535,8 @@ void CKAppWizard::slotHeaderDialogClicked() {
   KFileDialog *headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true);
   headerdialog->setCaption (i18n("Select your template for Header-file headers"));
   if(headerdialog->exec()){
-    hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
+#warning FIXME: KEdit::loadFile does not exist anymore
+	  //    hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
   }
   delete (headerdialog);
 }
@@ -549,7 +550,8 @@ void CKAppWizard::slotCppDialogClicked() {
                          i18n("Select your template for Cpp-file headers")
 			);
   if(cppdialog->exec()){
-    cppedit->loadFile(cppdialog->selectedFile(),cppedit->OPEN_READWRITE);
+#warning FIXME: KEdit::loadFile does not exist anymore
+	  //    cppedit->loadFile(cppdialog->selectedFile(),cppedit->OPEN_READWRITE);
   }
   delete (cppdialog);
 }
@@ -618,11 +620,13 @@ void CKAppWizard::okPermited() {
   kdevelop.mkdir(locateLocal("appdata", ""));
   // cerr << locateLocal("appdata", "");
   cppedit->setName(locateLocal("appdata","cpp"));
-  cppedit->toggleModified(true);
-  cppedit->doSave();
+  cppedit->setModified(true);
+#warning FIXME: KEdit::doSave does not exist any more
+  //  cppedit->doSave();
   hedit->setName(locateLocal("appdata","header"));
-  hedit->toggleModified(true);
-  hedit->doSave();
+  hedit->setModified(true);
+#warning FIXME: KEdit::doSave does not exist any more
+//  hedit->doSave();
   ofstream entries (locateLocal("appdata", "entries"));
   entries << "APPLICATION\n";
   if (kdenormalitem->isSelected()) {
@@ -1194,8 +1198,9 @@ void CKAppWizard::slotDefaultClicked(int page) {
 //  finishButton()->setEnabled(false);
   miniload->setPixmap(BarIcon(locate("mini","application_settings.png")));
   iconload->setPixmap(locate("icon","xedit.png"));
-  cppedit->loadFile(locate("appdata", "templates/cpp_template"),cppedit->OPEN_READWRITE);
-  hedit->loadFile(locate("appdata", "templates/header_template"),hedit->OPEN_READWRITE);
+#warning FIXME: KEdit::loadFile does not exist any more
+//  cppedit->loadFile(locate("appdata", "templates/cpp_template"),cppedit->OPEN_READWRITE);
+//  hedit->loadFile(locate("appdata", "templates/header_template"),hedit->OPEN_READWRITE);
   authorline->setText(m_author_name);
   emailline->setText(m_author_email);
   versionline->setText("0.1");
