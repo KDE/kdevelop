@@ -114,7 +114,9 @@ void EditorProxy::installPopup( KParts::Part * part )
 
 			KAction * action = NULL;
 			//If there is a tab for this file, we don't need to plug the closing menu entries here
-			switch (dynamic_cast<NewMainWindow*>(TopLevel::getInstance())->getTabWidgetVisibility())
+			NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance());
+			if (mw) {
+			switch (mw->getTabWidgetVisibility())
 			{
 			case KMdi::AlwaysShowTabs:
 				break;
@@ -137,7 +139,24 @@ void EditorProxy::installPopup( KParts::Part * part )
 			default:
 				break;
 			}
-
+			}
+			else {
+				KConfig *config = KGlobal::config();
+				config->setGroup("UI");
+				bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
+				if (!m_tabBarShown)
+				{
+					action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
+					if ( action && !action->isPlugged( popup ) )
+					{
+						popup->insertSeparator( 0 );
+						action->plug( popup, 0 );
+					}
+					action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
+					if ( action && !action->isPlugged( popup ) )
+						action->plug( popup, 1 );
+				}
+			}
 
 			iface->installPopup( popup );
 

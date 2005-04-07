@@ -1,7 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/interfaces \
 	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external \
 	-I$(top_srcdir)/lib/interfaces/extras -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets \
-	-I$(top_srcdir)/src/profileengine/lib $(KDEVMDI_INCLUDES) $(all_includes)
+	-I$(top_srcdir)/src/profileengine/lib -I$(top_srcdir)/src/newui $(KDEVMDI_INCLUDES) $(all_includes)
 
 KDE_OPTIONS=nofinal
 
@@ -10,12 +10,12 @@ libkdevshell_la_LDFLAGS = $(all_libraries)
 libkdevshell_la_LIBADD = \
 	$(top_builddir)/src/profileengine/lib/libprofileengine.la $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/lib/widgets/libkdevwidgets.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la \
-        $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
+	$(top_builddir)/src/newui/libd.la $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
 libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
 	newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
 	projectmanager.cpp projectsession.cpp splashscreen.cpp statusbar.cpp toplevel.cpp \
-	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp
+	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp
 
 bin_PROGRAMS = kdevelop kdevassistant
 
@@ -32,7 +32,7 @@ rc_DATA = kdevelopui.rc eventsrc
 kdevelopdatadir = $(kde_confdir)
 kdevelopdata_DATA = kdeveloprc
 
-SUBDIRS = profiles profileengine
+SUBDIRS = profiles profileengine newui
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevassistant_SOURCES = main_assistant.cpp kdevassistantextension.cpp
 kdevassistant_LDADD = libkdevshell.la
@@ -45,7 +45,7 @@ shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h\
 	newmainwindow.h partcontroller.h partselectwidget.h plugincontroller.h\
 	projectmanager.h projectsession.h settingswidget.ui.h shellextension.h\
 	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h\
-	mimewarningdialog.h settingswidget.h
+	mimewarningdialog.h settingswidget.h simplemainwindow.h
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevextensions
 DOXYGEN_PROJECTNAME = KDevelop Generic Shell

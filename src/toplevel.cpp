@@ -6,6 +6,7 @@
 #include "core.h"
 
 #include "newmainwindow.h"
+#include "simplemainwindow.h"
 
 KDevMainWindow *TopLevel::s_instance = 0;
 
@@ -19,17 +20,24 @@ KDevMainWindow *TopLevel::getInstance()
   if (!s_instance)
   {
 
-	KConfig *config = kapp->config();
-	config->setGroup("UI");
-	int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
-    
-	NewMainWindow *mainWindow = new NewMainWindow( 0, "MainWindow", (KMdi::MdiMode)mdimode );
+    KConfig *config = kapp->config();
 
-    s_instance = mainWindow;
-
-    mainWindow->init();
-
-    kapp->setMainWidget(mainWindow);
+    config->setGroup("UI");
+    if (config->readBoolEntry("UseSimpleMainWindow", false))
+    {
+        SimpleMainWindow *mainWindow = new SimpleMainWindow(0, "SimpleMainWindow");
+        s_instance = mainWindow;
+        mainWindow->init();
+        kapp->setMainWidget(mainWindow);
+    }
+    else
+    {
+        int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
+        NewMainWindow *mainWindow = new NewMainWindow( 0, "MainWindow", (KMdi::MdiMode)mdimode );
+        s_instance = mainWindow;
+        mainWindow->init();
+        kapp->setMainWidget(mainWindow);
+    }
   }
 
   return s_instance;
