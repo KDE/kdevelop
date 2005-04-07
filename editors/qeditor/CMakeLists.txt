@@ -1,5 +1,7 @@
 SUBDIRS( data )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/compat )
+
 SET(qeditorpart_PART_SRCS
 cindent.cpp
 cpp_colorizer.cpp
@@ -41,14 +43,14 @@ sql_colorizer.cpp
 
 KDE_AUTOMOC(${qeditorpart_PART_SRCS})
 
-SET(
+SET( qeditorpart_UI
 generalconfigpage.ui
 gotolinedialog.ui
 highlightingconfigpage.ui
 indentconfigpage.ui
 )
 
-KDE_ADD_UI_FILES(qeditorpart_PART_SRCS ${qeditorpart_UI}
+KDE_ADD_UI_FILES(qeditorpart_PART_SRCS ${qeditorpart_UI} )
 
 ADD_LIBRARY(qeditorpart SHARED ${qeditorpart_PART_SRCS})
 
@@ -87,7 +89,3 @@ ADD_LIBRARY(qeditorpart SHARED ${qeditorpart_PART_SRCS})
 ## this is where the part's XML-GUI resource file goes
 #partrcdir = $(kde_datadir)/qeditorpart
 #partrc_DATA = qeditor_part.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-

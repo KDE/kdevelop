@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(kdeveditorchooser_PART_SRCS
 editorchooser_part.cpp
 editorchooser_widget.cpp
@@ -5,11 +7,11 @@ editorchooser_widget.cpp
 
 KDE_AUTOMOC(${kdeveditorchooser_PART_SRCS})
 
-SET(
+SET( kdeveditorchooser_UI
 editchooser.ui
 )
 
-KDE_ADD_UI_FILES(kdeveditorchooser_PART_SRCS ${kdeveditorchooser_UI}
+KDE_ADD_UI_FILES(kdeveditorchooser_PART_SRCS ${kdeveditorchooser_UI} )
 
 ADD_LIBRARY(kdeveditorchooser SHARED ${kdeveditorchooser_PART_SRCS})
 
@@ -30,7 +32,3 @@ ADD_LIBRARY(kdeveditorchooser SHARED ${kdeveditorchooser_PART_SRCS})
 #servicedir = $(kde_servicesdir)
 #service_DATA = kdeveditorchooser.desktop
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

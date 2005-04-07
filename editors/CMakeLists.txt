@@ -1,4 +1,6 @@
-SUBDIRS( editor-chooser $(QEDITOR_SUBDIR) )
+SET(QEDITOR_SUBDIR qeditor)
+
+SUBDIRS( editor-chooser ${QEDITOR_SUBDIR} )
 
 
 
@@ -10,7 +12,3 @@ SUBDIRS( editor-chooser $(QEDITOR_SUBDIR) )
 ### endif
 #
 #SUBDIRS = editor-chooser $(QEDITOR_SUBDIR)
-
-#######################
-#previous CMakeLists.txt contents follow:
-
