@@ -64,6 +64,9 @@ void UIChooserWidget::load()
     break;
   }
   
+  if (config->readBoolEntry("UseSimpleMainWindow", false))
+      modeSimple->setChecked(true);
+  
 	int mdistyle = config->readNumEntry( "MDIStyle", 1 );
 	switch( mdistyle )
 	{
@@ -120,6 +123,7 @@ void UIChooserWidget::save()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
+  config->writeEntry("UseSimpleMainWindow", modeSimple->isChecked());
   if (modeTab->isChecked())
     config->writeEntry("MDIMode", KMdi::TabPageMode);
   else if (modeToplevel->isChecked())

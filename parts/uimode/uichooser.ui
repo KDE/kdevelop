@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>UIChooser</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,6 +11,9 @@
             <width>540</width>
             <height>529</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>UIChooser</string>
     </property>
     <vbox>
         <property name="name">
@@ -35,10 +38,30 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
+                        <cstring>modeSimple</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Simplified IDEAl window mode</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This is a simplified version of the IDEA user interface. It is designed to be simple and clean. It also does not uses docked toolviews.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>modeIDEAl</cstring>
                     </property>
                     <property name="text">
                         <string>I&amp;DEAl window mode</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -54,6 +77,9 @@
                     <property name="text">
                         <string>C&amp;hildframe window mode</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>All tool views are initially docked to the mainframe.
 Editor and browser views will live like toplevel windows within a view area of the mainframe.
@@ -66,6 +92,9 @@ A typical example of this user interface mode is MS Visual Studio 6.0.</string>
                     </property>
                     <property name="text">
                         <string>&amp;Tabbed pages mode</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>All tool views are initially docked to the mainframe.
@@ -426,6 +455,96 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
         <sender>ShowTabIcons</sender>
         <signal>toggled(bool)</signal>
         <receiver>HoverCloseGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AlwaysShowTabs</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ShowWhenMoreThanOneTab</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>NeverShowTabs</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>IDEAlButtonGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabbedBrowsingGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>UIChooser</receiver>
+        <slot>maybeEnableCloseOnHover(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>DoDelayedCloseOnHover</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeSimple</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabModeGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>TabModeGroup</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AlwaysShowTabs</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ShowWhenMoreThanOneTab</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeIDEAl</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>NeverShowTabs</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AlwaysShowTabs</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ShowWhenMoreThanOneTab</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>modeTab</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>NeverShowTabs</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
