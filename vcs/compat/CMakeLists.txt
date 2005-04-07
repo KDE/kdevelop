@@ -1,10 +1,7 @@
-SUBDIRS( svn netacces )
+SUBDIRS( svn netaccess )
 
 
 
 #original Makefile.am contents follow:
 
 #SUBDIRS=svn netaccess
-#######################
-#previous CMakeLists.txt contents follow:
-

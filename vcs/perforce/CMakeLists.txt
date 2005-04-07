@@ -1,4 +1,6 @@
-SUBDIRS( integrato )
+SUBDIRS( integrator )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
 
 SET(kdevperforce_PART_SRCS
 perforcepart.cpp
@@ -32,6 +34,3 @@ ADD_LIBRARY(kdevperforce SHARED ${kdevperforce_PART_SRCS})
 #rcdir = $(kde_datadir)/kdevperforce
 #
 #SUBDIRS = integrator
-#######################
-#previous CMakeLists.txt contents follow:
-

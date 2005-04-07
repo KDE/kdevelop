@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(cvsserviceintegrator_PART_SRCS
 cvsserviceintegrator.cpp
 integratordlg.cpp
@@ -5,13 +7,13 @@ integratordlg.cpp
 
 KDE_AUTOMOC(${cvsserviceintegrator_PART_SRCS})
 
-SET(
+SET( cvsserviceintegrator_UI
 integratordlgbase.ui
 fetcherdlgbase.ui
 initdlg.ui
 )
 
-KDE_ADD_UI_FILES(cvsserviceintegrator_PART_SRCS ${cvsserviceintegrator_UI}
+KDE_ADD_UI_FILES(cvsserviceintegrator_PART_SRCS ${cvsserviceintegrator_UI} )
 
 ADD_LIBRARY(cvsserviceintegrator SHARED ${cvsserviceintegrator_PART_SRCS})
 
@@ -31,7 +33,3 @@ ADD_LIBRARY(cvsserviceintegrator SHARED ${cvsserviceintegrator_PART_SRCS})
 #libcvsserviceintegrator_la_SOURCES = cvsserviceintegrator.cpp \
 #	integratordlgbase.ui fetcherdlgbase.ui integratordlg.cpp initdlg.ui
 #kde_services_DATA = kdevcvsserviceintegrator.desktop
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -15,7 +15,3 @@
 #
 #kded_DATA = ksvnd.desktop
 #kdeddir = $(kde_servicesdir)/kded
-
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(clearcaseintegrator_PART_SRCS
 clearcaseintegrator.cpp
 ccintegratordlg.cpp
@@ -5,11 +7,11 @@ ccintegratordlg.cpp
 
 KDE_AUTOMOC(${clearcaseintegrator_PART_SRCS})
 
-SET(
+SET( clearcaseintegrator_UI
 ccintegratordlgbase.ui
 )
 
-KDE_ADD_UI_FILES(clearcaseintegrator_PART_SRCS ${clearcaseintegrator_UI}
+KDE_ADD_UI_FILES(clearcaseintegrator_PART_SRCS ${clearcaseintegrator_UI} )
 
 ADD_LIBRARY(clearcaseintegrator SHARED ${clearcaseintegrator_PART_SRCS})
 
@@ -30,7 +32,3 @@ ADD_LIBRARY(clearcaseintegrator SHARED ${clearcaseintegrator_PART_SRCS})
 #noinst_HEADERS = clearcaseintegrator.h ccintegratordlg.h
 #libclearcaseintegrator_la_SOURCES = clearcaseintegrator.cpp \
 #	ccintegratordlgbase.ui ccintegratordlg.cpp
-
-#######################
-#previous CMakeLists.txt contents follow:
-

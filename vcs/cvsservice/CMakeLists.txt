@@ -1,5 +1,7 @@
 SUBDIRS( integrator )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets )
+
 SET(kdevcvsservice_PART_SRCS
 cvspart.cpp
 cvspartimpl.cpp
@@ -22,13 +24,12 @@ diffwidget.cpp
 jobscheduler.cpp
 bufferedstringreader.cpp
 cvsfileinfoprovider.cpp
-cvsservicedcopIface.skel
 editorsdialog.cpp
 )
 
 KDE_AUTOMOC(${kdevcvsservice_PART_SRCS})
 
-SET(
+SET( kdevcvsservice_UI
 cvsformbase.ui
 commitdialogbase.ui
 cvsoptionswidgetbase.ui
@@ -39,7 +40,13 @@ releaseinputdialogbase.ui
 editorsdialogbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevcvsservice_PART_SRCS ${kdevcvsservice_UI}
+KDE_ADD_UI_FILES(kdevcvsservice_PART_SRCS ${kdevcvsservice_UI} )
+
+SET( kdevcvsservice_DCOP_SRCS
+cvsservicedcopIface.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevcvsservice_PART_SRCS ${kdevcvsservice_DCOP_SRCS})
 
 ADD_LIBRARY(kdevcvsservice SHARED ${kdevcvsservice_PART_SRCS})
 
@@ -87,7 +94,3 @@ ADD_LIBRARY(kdevcvsservice SHARED ${kdevcvsservice_PART_SRCS})
 #rc_DATA = buildcvs.sh
 #
 #SUBDIRS = integrator
-
-#######################
-#previous CMakeLists.txt contents follow:
-

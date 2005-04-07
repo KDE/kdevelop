@@ -1,4 +1,6 @@
-SUBDIRS( integrato )
+SUBDIRS( integrator )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util )
 
 SET(kdevclearcase_PART_SRCS
 clearcasepart.cpp
@@ -30,6 +32,3 @@ ADD_LIBRARY(kdevclearcase SHARED ${kdevclearcase_PART_SRCS})
 #service_DATA = kdevclearcase.desktop
 #
 #SUBDIRS = integrator
-#######################
-#previous CMakeLists.txt contents follow:
-

@@ -16,7 +16,3 @@ ADD_LIBRARY(netaccess STATIC ${netaccess_STAT_SRCS})
 #libnetaccess_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(LIB_KIO)
 #libnetaccess_la_SOURCES = netaccess.cpp
 #METASOURCES = AUTO
-
-#######################
-#previous CMakeLists.txt contents follow:
-

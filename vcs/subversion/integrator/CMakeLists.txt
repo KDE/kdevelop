@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util )
+
 SET(subversionintegrator_PART_SRCS
 subversionintegrator.cpp
 svnintegratordlg.cpp
@@ -5,11 +7,11 @@ svnintegratordlg.cpp
 
 KDE_AUTOMOC(${subversionintegrator_PART_SRCS})
 
-SET(
+SET( subversionintegrator_UI
 svnintegratordlgbase.ui
 )
 
-KDE_ADD_UI_FILES(subversionintegrator_PART_SRCS ${subversionintegrator_UI}
+KDE_ADD_UI_FILES(subversionintegrator_PART_SRCS ${subversionintegrator_UI} )
 
 ADD_LIBRARY(subversionintegrator SHARED ${subversionintegrator_PART_SRCS})
 
@@ -35,7 +37,3 @@ ADD_LIBRARY(subversionintegrator SHARED ${subversionintegrator_PART_SRCS})
 #noinst_HEADERS = subversionintegrator.h svnintegratordlg.h
 #libsubversionintegrator_la_SOURCES = subversionintegrator.cpp \
 #	svnintegratordlgbase.ui svnintegratordlg.cpp
-
-#######################
-#previous CMakeLists.txt contents follow:
-

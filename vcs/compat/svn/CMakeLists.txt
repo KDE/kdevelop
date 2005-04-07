@@ -19,7 +19,3 @@ SUBDIRS( ksvnd )
 #
 #messages: rc.cpp
 #	$(XGETTEXT) *.cpp -o $(podir)/kio_svn.pot
-
-#######################
-#previous CMakeLists.txt contents follow:
-

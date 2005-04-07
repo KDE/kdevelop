@@ -1,24 +1,31 @@
 SUBDIRS( integrator )
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_CURRENT_SOURCE_DIR})
+
 SET(kdevsubversion_PART_SRCS
-subversion_core.skel
 subversion_part.cpp
 subversion_widget.cpp
 subversion_core.cpp
 subversionoptionswidgetimpl.cpp
 subversion_fileinfo.cpp
-subversion_fileinfo.skel
 )
 
 KDE_AUTOMOC(${kdevsubversion_PART_SRCS})
 
-SET(
+SET( kdevsubversion_UI
 svn_co.ui
 subversionprojectwidget.ui
 subversionoptionswidget.ui
 )
 
-KDE_ADD_UI_FILES(kdevsubversion_PART_SRCS ${kdevsubversion_UI}
+KDE_ADD_UI_FILES(kdevsubversion_PART_SRCS ${kdevsubversion_UI} )
+
+SET( kdevsubversion_DCOP_SRCS
+subversion_core.h
+subversion_fileinfo.h
+)
+
+KDE_ADD_DCOP_SKELS(kdevsubversion_PART_SRCS ${kdevsubversion_DCOP_SRCS})
 
 ADD_LIBRARY(kdevsubversion SHARED ${kdevsubversion_PART_SRCS})
 
@@ -45,7 +52,3 @@ ADD_LIBRARY(kdevsubversion SHARED ${kdevsubversion_PART_SRCS})
 #
 #rcdir = $(kde_datadir)/kdevsubversion
 #SUBDIRS = integrator
-
-#######################
-#previous CMakeLists.txt contents follow:
-
