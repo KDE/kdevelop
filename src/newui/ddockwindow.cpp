@@ -247,4 +247,11 @@ void DDockWindow::showWidget(QWidget *widget)
     widget->show();
 }
 
+void DDockWindow::setMovingEnabled(bool b)
+{
+    //some operations on KMainWindow cause moving to be enabled
+    //but we always don't want DDockWindow instances to be movable
+    QDockWindow::setMovingEnabled(false);
+}
+
 #include "ddockwindow.moc"

@@ -100,10 +100,7 @@ void SimpleMainWindow::init()
         SIGNAL(documentChangedState(const KURL &, DocumentState)),
         this, SLOT(documentChangedState(const KURL&, DocumentState)));
 
-    //seems that smth in init makes docks movable so we need to disable moving again
-    toolWindow(DDockWindow::Left)->setMovingEnabled(false);
-    toolWindow(DDockWindow::Right)->setMovingEnabled(false);
-    toolWindow(DDockWindow::Bottom)->setMovingEnabled(false);
+    loadSettings();
 }
 
 void SimpleMainWindow::embedPartView(QWidget *view, const QString &title, const QString &/*toolTip*/)
@@ -406,6 +403,17 @@ void SimpleMainWindow::slotNewToolbarConfig()
 //    setupWindowMenu();
     m_mainWindowShare->slotGUICreated(PartController::getInstance()->activePart());
     applyMainWindowSettings(KGlobal::config(), "SimpleMainWindow");
+}
+
+bool SimpleMainWindow::queryClose()
+{
+    saveSettings();
+    return Core::getInstance()->queryClose();
+}
+
+bool SimpleMainWindow::queryExit()
+{
+    return true;
 }
 
 #include "simplemainwindow.moc"

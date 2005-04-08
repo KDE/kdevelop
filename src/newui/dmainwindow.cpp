@@ -32,6 +32,7 @@
 DMainWindow::DMainWindow(QWidget *parent, const char *name)
     :KParts::MainWindow(parent, name), m_currentWidget(0)
 {
+    loadSettings();
     createToolWindows();
     m_central = new Ideal::DockSplitter(Qt::Horizontal, this);
     m_activeTabWidget = createTab();
@@ -49,8 +50,8 @@ void DMainWindow::loadSettings()
 
 DMainWindow::~DMainWindow()
 {
-    for (QValueList<QWidget*>::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
-        removeWidget(*it);
+/*    for (QValueList<QWidget*>::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it)
+        removeWidget(*it);*/
 }
 
 DDockWindow *DMainWindow::toolWindow(DDockWindow::Position position) const

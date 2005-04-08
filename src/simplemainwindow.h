@@ -55,6 +55,10 @@ public:
     
     void init();
 
+protected:
+    virtual bool queryClose();
+    virtual bool queryExit();
+    
 protected slots:
     virtual void closeTab();
     virtual void tabContext(QWidget *w, const QPoint &p);

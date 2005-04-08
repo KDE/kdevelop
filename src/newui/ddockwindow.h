@@ -54,6 +54,8 @@ public:
     virtual void showWidget(QWidget *widget);
     
     virtual QWidget *currentWidget() const;
+    
+    virtual void setMovingEnabled(bool b);
 
 private slots:
     void selectWidget();
