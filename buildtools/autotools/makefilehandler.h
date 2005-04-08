@@ -31,7 +31,12 @@ public:
     ~MakefileHandler();
 
     /**
-     * Parse a folder that has supported makefiles in it.
+     * Parse a folder that has supported makefiles in it. The following files
+     * will be looked for in the following order:
+     * \li Makefile.am.in
+     * \li Makefile.am
+     * \li Makefile.in
+     *
      * \param folder, the folder to parse
      * \param recursive if true, subfolders will be parsed - defaults to true
      */
@@ -40,16 +45,21 @@ public:
     /**
      * Get the AST for a certain path
      * \param folderPath the path of the folder to get an AST for
+     * \return the AST that represents a particular folder
      */
     AutoTools::ProjectAST* astForFolder( const QString& folderPath );
 
     /**
      * Check if a string is an automake variable
+     * \return true if it is an automake variable, false otherwise
      */
     bool isVariable( const QString& item ) const;
 
     /**
      * Find the value for the variable specified by \p variable
+     * \param variable The name of the variable to look for
+     * \param ast the AST to use to look for the variable in
+     * \return the value to substitute for the variable
      */
     QString resolveVariable( const QString& variable,
                              AutoTools::ProjectAST* ast );
