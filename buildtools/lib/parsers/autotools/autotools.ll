@@ -98,7 +98,7 @@ rule              [\t]+[^\n]*
 
 <list>{id_list} {
 	yylval.value = yytext;
-	yylval.value = yylval.value.mid(0, yylval.value.findRev("\\")-1);
+	yylval.value = yylval.value.mid(0, yylval.value.findRev("\\"));
 	unput('\\');
 	BEGIN(INITIAL);
 	return (ID_LIST); 

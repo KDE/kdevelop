@@ -107,6 +107,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 %debug
 */
 %}
+
 %token ID_SIMPLE
 %token ID_LIST
 %token LBRACE
