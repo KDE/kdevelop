@@ -1,431 +1,500 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SettingsWidget</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>settings_widget</cstring>
+        <cstring>Form2</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>559</width>
-            <height>456</height>
+            <width>492</width>
+            <height>489</height>
         </rect>
     </property>
     <property name="caption">
-        <string>settings_widget</string>
+        <string>Form2</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QCheckBox">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QCheckBox" row="2" column="1">
             <property name="name">
                 <cstring>lastProjectCheckbox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Load last project on startup</string>
+                <string>Lo&amp;ad last project on startup</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
         </widget>
-        <widget class="QLabel">
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>textLabel2</cstring>
             </property>
             <property name="text">
-                <string>Default &amp;projects directory:</string>
+                <string>&lt;qt&gt;&lt;h3&gt;Project Settings&lt;/h3&gt;&lt;/qt&gt;</string>
             </property>
-            <property name="buddy" stdset="0">
-                <cstring>projects_url</cstring>
-            </property>
-        </widget>
-        <widget class="KURLRequester">
-            <property name="name">
-                <cstring>projects_url</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
             </property>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>GroupBox1</cstring>
+                <cstring>line7</cstring>
             </property>
-            <property name="title">
-                <string>&amp;Message Output View</string>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="8" column="1">
+            <property name="name">
+                <cstring>lineWrappingCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Line &amp;wrapping</string>
+            </property>
+            <property name="accel">
+                <string>Alt+W</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="9" column="1">
+            <property name="name">
+                <cstring>dirNavigMsgCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Directory &amp;navigation messages</string>
+            </property>
+            <property name="accel">
+                <string>Alt+N</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="6" column="1">
+            <property name="name">
+                <cstring>layout9</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>Layout9</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <property name="margin">
-                                    <number>0</number>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>buttonLabel</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Window &amp;font:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>changeMessageFontButton</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>changeMessageFontButton</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>5</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                </widget>
-                                <spacer>
-                                    <property name="name">
-                                        <cstring>Spacer2</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Preferred</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>10</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </hbox>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>lineWrappingCheckBox</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Line &amp;wrapping</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>dirNavigMsgCheckBox</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Directory navigation messages</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>compilerOutputButtonGroup</cstring>
+                        <cstring>buttonLabel</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>7</hsizetype>
+                            <hsizetype>4</hsizetype>
                             <vsizetype>5</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
-                    <property name="title">
-                        <string>&amp;Compiler Output</string>
+                    <property name="text">
+                        <string>Window &amp;font:</string>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>veryShortCompilerOutputRadioButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Very short</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>0</number>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Display only warnings, errors and the file names which are compiled.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>shortCompilerOutputRadioButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Short</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>1</number>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Suppress all the compiler flags and formats to something readable.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>fullCompilerOutputRadioButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>F&amp;ull</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>2</number>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Display unmodified compiler output.</string>
-                            </property>
-                        </widget>
-                    </vbox>
+                    <property name="buddy" stdset="0">
+                        <cstring>outputViewFontCombo</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KFontCombo">
+                    <property name="name">
+                        <cstring>outputViewFontCombo</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The font to use for the output views</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QLayoutWidget" row="7" column="1">
             <property name="name">
-                <cstring>GroupBox2</cstring>
+                <cstring>layout10</cstring>
             </property>
-            <property name="title">
-                <string>&amp;Application Output View</string>
-            </property>
-            <vbox>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>Layout10</cstring>
+                        <cstring>compilerLabel</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>buttonLabel_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Window f&amp;ont:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>changeApplicationFontButton</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>changeApplicationFontButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>Spacer3</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>190</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
+                    <property name="text">
+                        <string>&amp;Compiler output:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>compileOutputCombo</cstring>
+                    </property>
                 </widget>
-            </vbox>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Very Short</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Short</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Long</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>compileOutputCombo</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string></string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QLabel" row="10" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>groupBox3</cstring>
+                <cstring>textLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;qt&gt;&lt;h3&gt;UI Designer Integration&lt;/h3&gt;&lt;/qt&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>AlignTop</set>
+            </property>
+        </widget>
+        <widget class="Line" row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>line7_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <spacer row="6" column="0" rowspan="4" colspan="1">
+            <property name="name">
+                <cstring>spacer13_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>80</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QButtonGroup" row="12" column="1">
+            <property name="name">
+                <cstring>designerButtonGroup</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
             </property>
             <property name="title">
-                <string>&amp;GUI Designer Integration</string>
+                <string></string>
+            </property>
+            <property name="flat">
+                <bool>false</bool>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox" row="0" column="0">
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
-                        <cstring>embedDesignerCheckBox</cstring>
+                        <cstring>embeddedDesignerRadioButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Use &amp;embedded KDevelop Designer</string>
+                        <string>Use KDe&amp;velop's embedded designer</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+V</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>KDevelop comes with it's own UI designer that can either be embedded or run as a seperate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>seperateAppRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Run KDevelop's &amp;designer as a seperate application</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>KDevelop comes with it's own UI designer that can either be embedded or run as a seperate program. Check this button if you wish to run KDevelop's UI designer as a seperate program.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>qtDesignerRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Run Qt Desi&amp;gner</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Check this button if you wish to use Qt Designer rather than KDevelop's integrated designer.</string>
                     </property>
                 </widget>
             </grid>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="Line" row="11" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>buttonGroup3</cstring>
+                <cstring>line7_2_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <spacer row="12" column="0">
+            <property name="name">
+                <cstring>spacer13_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>60</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="15" column="0">
+            <property name="name">
+                <cstring>spacer13_2_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>50</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QButtonGroup" row="15" column="1">
+            <property name="name">
+                <cstring>terminalButtonGroup</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
             </property>
             <property name="title">
-                <string>Terminal Emulator</string>
+                <string></string>
             </property>
-            <property name="whatsThis" stdset="0">
-                <string>This setting decides what terminal emulator will be used when KDevelop needs to launch an external terminal.&lt;br&gt;The default is to use whatever KDE is set to use. Alternatively you can enter the name of the binary to launch.</string>
-            </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
-                        <cstring>layout7</cstring>
+                        <cstring>useOtherTerminal</cstring>
                     </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>useOtherTerminal</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Other:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="1">
-                            <property name="name">
-                                <cstring>terminalEdit</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>useKDETerminal</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Use KDE setting</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                    </grid>
+                    <property name="text">
+                        <string>&amp;Other:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
                 </widget>
-            </vbox>
+                <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>useKDETerminal</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use &amp;KDE setting</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>terminalEdit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-    </vbox>
+        <widget class="QLabel" row="13" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel5_2</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;qt&gt;&lt;h3&gt;Terminal Emulation&lt;/h3&gt;&lt;/qt&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>AlignTop</set>
+            </property>
+        </widget>
+        <widget class="Line" row="14" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>line13</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <spacer row="16" column="1">
+            <property name="name">
+                <cstring>spacer23</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>61</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel2_2</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;qt&gt;&lt;h3&gt;Output View Settings&lt;/h3&gt;&lt;/qt&gt;</string>
+            </property>
+            <property name="textFormat">
+                <enum>AutoText</enum>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignBottom|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="3" column="1">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Default pro&amp;jects directory:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>projectsURL</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>projectsURL</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer row="2" column="0" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>spacer13</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
-<connections>
-    <connection>
-        <sender>changeMessageFontButton</sender>
-        <signal>clicked()</signal>
-        <receiver>settings_widget</receiver>
-        <slot>changeMessageFontSlot()</slot>
-    </connection>
-    <connection>
-        <sender>changeApplicationFontButton</sender>
-        <signal>clicked()</signal>
-        <receiver>settings_widget</receiver>
-        <slot>changeApplicationFontSlot()</slot>
-    </connection>
-    <connection>
-        <sender>useOtherTerminal</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>terminalEdit</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>lastProjectCheckbox</tabstop>
-    <tabstop>projects_url</tabstop>
-    <tabstop>changeMessageFontButton</tabstop>
-    <tabstop>lineWrappingCheckBox</tabstop>
-    <tabstop>dirNavigMsgCheckBox</tabstop>
-    <tabstop>veryShortCompilerOutputRadioButton</tabstop>
-    <tabstop>shortCompilerOutputRadioButton</tabstop>
-    <tabstop>fullCompilerOutputRadioButton</tabstop>
-    <tabstop>changeApplicationFontButton</tabstop>
-</tabstops>
-<includes>
-    <include location="global" impldecl="in declaration">kfontdialog.h</include>
-    <include location="global" impldecl="in declaration">qfont.h</include>
-    <include location="global" impldecl="in declaration">qpushbutton.h</include>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-    <include location="local" impldecl="in implementation">settingswidget.ui.h</include>
-</includes>
-<variables>
-    <variable>QFont _messageFont;</variable>
-    <variable>QFont _applicationFont;</variable>
-</variables>
-<slots>
-    <slot>changeMessageFontSlot()</slot>
-    <slot>changeApplicationFontSlot()</slot>
-    <slot returnType="QFont">applicationFont()</slot>
-    <slot returnType="QFont">messageFont()</slot>
-    <slot>setMessageFont( const QFont &amp; fnt )</slot>
-    <slot>setApplicationFont( const QFont &amp; fnt )</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>kfontcombo.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

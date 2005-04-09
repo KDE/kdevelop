@@ -41,7 +41,7 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
 		SLOT(slotContextMenu( QListBoxItem *, const QPoint & )));
 	KConfig *config = kapp->config();
 	config->setGroup("General Options");
-	setFont(config->readFontEntry("Application Font"));
+	setFont(config->readFontEntry("OutputViewFont"));
 }
 
 

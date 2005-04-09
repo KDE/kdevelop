@@ -1,0 +1,8 @@
+#Update the KDevelop General Settings page to work with the
+#new UI file created on 20050406
+Id=kdev-gen-settings-update/5
+File=kdeveloprc
+Script=kdev-gen-settings-kconf_update
+Options=overwrite
+AllKeys
+

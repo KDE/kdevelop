@@ -819,8 +819,9 @@ void MakeWidget::toggleShowDirNavigMessages()
 void MakeWidget::updateSettingsFromConfig()
 {
 	KConfig *pConfig = kapp->config();
+	pConfig->setGroup("General Options");
+	setFont(pConfig->readFontEntry("Application Font"));
 	pConfig->setGroup("MakeOutputView");
-	setFont(pConfig->readFontEntry("Messages Font"));
 	m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
 	m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eShort);
 	DirectoryItem::setShowDirectoryMessages( pConfig->readBoolEntry("ShowDirNavigMsg", false) );

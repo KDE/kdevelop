@@ -30,6 +30,7 @@
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kapplication.h>
+#include <kfontcombo.h>
 
 #include <kdevplugin.h>
 #include <kdevmakefrontend.h>
@@ -54,46 +55,38 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     QVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
     gsw = new SettingsWidget(vbox, "general settings widget");
 
-    gsw->projects_url->setMode((int)KFile::Directory);
+    gsw->projectsURL->setMode((int)KFile::Directory);
 
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
+    gsw->outputViewFontCombo->setCurrentFont( config->readFontEntry( "OutputViewFont" ).family() );
     config->setGroup("MakeOutputView");
-    gsw->setMessageFont(config->readFontEntry("Messages Font"));
     gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
     gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
-    gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
-    gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",2));
+    gsw->compileOutputCombo->setCurrentItem(config->readNumEntry("CompilerOutputLevel",2));
     config->setGroup("General Options");
-    gsw->setApplicationFont(config->readFontEntry("Application Font"));
-    gsw->changeMessageFontButton->setText(gsw->messageFont().family());
-    gsw->changeMessageFontButton->setFont(gsw->messageFont());
-    gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
-    gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
-    gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
-    gsw->embedDesignerCheckBox->setChecked(config->readBoolEntry("Embed KDevDesigner", true));    
+    gsw->projectsURL->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+    gsw->designerButtonGroup->setButton( config->readNumEntry( "DesignerApp", 0 ) );
 
     config->setGroup("TerminalEmulator");
-    gsw->useKDETerminal->setChecked( config->readBoolEntry( "UseKDESetting", true ) );
-    gsw->useOtherTerminal->setChecked( !gsw->useKDETerminal->isChecked() );
+    gsw->terminalButtonGroup->setButton( config->readNumEntry( "UseKDESetting", 0 ) );
     gsw->terminalEdit->setText( config->readEntry( "TerminalApplication", QString::fromLatin1("konsole") ) );
 }
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
 {
     KConfig* config = kapp->config();
-    
+
     config->setGroup("General Options");
-    config->writeEntry("Embed KDevDesigner", gsw->embedDesignerCheckBox->isChecked());
+    config->writeEntry("DesignerApp", gsw->designerButtonGroup->selectedId());
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-    config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
-    config->writeEntry("Application Font", gsw->applicationFont());
+    config->writePathEntry("DefaultProjectsDir", gsw->projectsURL->url());
+    config->writeEntry("OutputViewFont", gsw->outputViewFontCombo->currentFont());
     config->setGroup("MakeOutputView");
-    config->writeEntry("Messages Font",gsw->messageFont());
     config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
     config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
-    QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
-    config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
+    //current item id must be in sync with the enum!
+    config->writeEntry("CompilerOutputLevel",gsw->compileOutputCombo->currentItem());
     config->sync();
     if( KDevPlugin *makeExt = API::getInstance()->pluginController()->extension("KDevelop/MakeFrontend"))
     {

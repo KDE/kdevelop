@@ -32,7 +32,7 @@ rc_DATA = kdevelopui.rc eventsrc
 kdevelopdatadir = $(kde_confdir)
 kdevelopdata_DATA = kdeveloprc
 
-SUBDIRS = profiles profileengine newui
+SUBDIRS = profiles profileengine newui kconf_update
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevassistant_SOURCES = main_assistant.cpp kdevassistantextension.cpp
 kdevassistant_LDADD = libkdevshell.la
@@ -43,7 +43,7 @@ shellincludedir = $(includedir)/kdevelop/shell
 shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h\
 	generalinfowidget.h languageselectwidget.h mainwindowshare.h\
 	newmainwindow.h partcontroller.h partselectwidget.h plugincontroller.h\
-	projectmanager.h projectsession.h settingswidget.ui.h shellextension.h\
+	projectmanager.h projectsession.h shellextension.h\
 	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h\
 	mimewarningdialog.h settingswidget.h simplemainwindow.h
 
