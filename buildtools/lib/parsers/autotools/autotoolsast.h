@@ -53,7 +53,7 @@ public:
 		TargetAST,                  ///< Automake target
 		MakefileConditionalAST,     ///< Makefile.am conditional 
 		NewLineAST,                 ///< Line feed.
-		CommentAST,                 ///< Comment.
+		CommentAST                  ///< Comment.
 	};
 	
 	/** Constructs AST with given node type.*/
