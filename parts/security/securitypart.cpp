@@ -51,8 +51,8 @@ SecurityPart::SecurityPart(QObject *parent, const char *name, const QStringList 
     
     m_checker = new SecurityChecker(this);
         
-    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
-        this, SLOT(activePartChanged(KParts::Part*)));
+//    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
+//        this, SLOT(activePartChanged(KParts::Part*)));
     
     mainWindow()->embedOutputView(m_widget, "Security Problems", i18n("Potential security problems") );
 }
