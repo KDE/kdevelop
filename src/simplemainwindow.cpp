@@ -39,6 +39,7 @@
 #include <profileengine.h>
 #include <designer.h>
 
+#include "api.h"
 #include "core.h"
 #include "plugincontroller.h"
 #include "mainwindowshare.h"
@@ -218,6 +219,13 @@ void SimpleMainWindow::createActions()
     connect(m_mainWindowShare, SIGNAL(gotoPreviousWindow()), this, SLOT(gotoPreviousWindow()));
     connect(m_mainWindowShare, SIGNAL(gotoFirstWindow()), this, SLOT(gotoFirstWindow()));
     connect(m_mainWindowShare, SIGNAL(gotoLastWindow()), this, SLOT(gotoLastWindow()));
+}
+
+void SimpleMainWindow::raiseEditor()
+{
+    KDevPartController *partcontroller = API::getInstance()->partController();
+    if (partcontroller->activePart() && partcontroller->activePart()->widget())
+        partcontroller->activePart()->widget()->setFocus();
 }
 
 void SimpleMainWindow::gotoNextWindow()

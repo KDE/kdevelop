@@ -75,6 +75,7 @@ private slots:
     void tabContextActivated(int);
     void configureToolbars();
     void slotNewToolbarConfig();
+    void raiseEditor();
 
 private:
     void createFramework();

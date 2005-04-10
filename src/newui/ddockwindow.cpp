@@ -175,7 +175,7 @@ void DDockWindow::raiseWidget(QWidget *widget)
 {
     kdDebug() << k_funcinfo << endl;
     Ideal::Button *button = m_buttons[widget];
-    if (button != 0)
+    if ((button != 0) && (!button->isOn()))
     {
         button->setOn(true);
         selectWidget(button);

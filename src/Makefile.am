@@ -30,7 +30,7 @@ rc_DATA = kdevelopui.rc eventsrc
 
 # default KDevelop configuration
 kdevelopdatadir = $(kde_confdir)
-kdevelopdata_DATA = kdeveloprc
+kdevelopdata_DATA = kdeveloprc kdevassistantrc
 
 SUBDIRS = profiles profileengine newui kconf_update
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
