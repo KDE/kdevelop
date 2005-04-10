@@ -26,6 +26,7 @@
 #include <kdevpartcontroller.h>
 
 class KAction;
+class QPopupMenu;
 class MainWindowShare;
 
 namespace KParts {
@@ -76,16 +77,21 @@ private slots:
     void configureToolbars();
     void slotNewToolbarConfig();
     void raiseEditor();
+    void openURL(int w);
+    void fillWindowMenu();
 
 private:
     void createFramework();
     void createActions();
+    void setupWindowMenu();
     
     MainWindowShare *m_mainWindowShare;
     
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
+    QPopupMenu *m_windowMenu;
+    QValueList<QPair<int, KURL> > m_windowList;
 };
 
 #endif

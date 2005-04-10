@@ -76,6 +76,7 @@ void SimpleMainWindow::init()
     createGUI(0);
     
     m_mainWindowShare->init();
+    setupWindowMenu();
     menuBar()->setEnabled( false );
 
     //FIXME: this checks only for global offers which is not quite correct because
@@ -160,13 +161,17 @@ void SimpleMainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 
 void SimpleMainWindow::raiseView(QWidget *view)
 {
-    DDockWindow *dock;
     if (m_docks.contains(view))
-        dock = toolWindow(m_docks[view]);
-    else
-        return;
-    
-    dock->raiseWidget(view);
+    {
+        DDockWindow *dock = toolWindow(m_docks[view]);
+        dock->raiseWidget(view);
+    }
+    else if (m_widgets.contains(view))
+    {
+        for (QValueList<DTabWidget*>::const_iterator it = m_tabs.begin(); it != m_tabs.end(); ++it)
+            if ((*it)->indexOf(view) != -1)
+                (*it)->showPage(view);
+    }
 }
 
 void SimpleMainWindow::lowerView(QWidget */*view*/)
@@ -422,6 +427,88 @@ bool SimpleMainWindow::queryClose()
 bool SimpleMainWindow::queryExit()
 {
     return true;
+}
+
+void SimpleMainWindow::setupWindowMenu()
+{
+    // get the xmlgui created one instead
+    m_windowMenu = static_cast<QPopupMenu*>(main()->child("window", "KPopupMenu"));
+
+    if (!m_windowMenu)
+    {
+        kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
+
+        m_windowMenu = new QPopupMenu(main(), "window");
+        menuBar()->insertItem(i18n("&Window"), m_windowMenu);
+    }
+
+    actionCollection()->action("file_close")->plug(m_windowMenu);
+    actionCollection()->action("file_close_all")->plug(m_windowMenu);
+    actionCollection()->action("file_closeother")->plug(m_windowMenu);
+
+    QObject::connect(m_windowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int)));
+    QObject::connect(m_windowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()));
+}
+
+void SimpleMainWindow::openURL(int w)
+{
+    QValueList<QPair<int, KURL> >::ConstIterator it = m_windowList.begin();
+    while (it != m_windowList.end())
+    {
+        if ((*it).first == w)
+        {
+            KURL url((*it).second);
+            if (!url.isEmpty())
+            {
+                PartController::getInstance()->editDocument(url);
+                return;
+            }
+        }
+        ++it;
+    }
+}
+
+void SimpleMainWindow::fillWindowMenu()
+{
+    // clear menu
+    QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+    while (it != m_windowList.end())
+    {
+        m_windowMenu->removeItem( (*it).first );
+        ++it;
+    }
+
+    int temp = 0;
+
+    QMap<QString, KURL> map;
+    QStringList string_list;
+    KURL::List list = PartController::getInstance()->openURLs();
+    KURL::List::Iterator itt = list.begin();
+    while (itt != list.end())
+    {
+        map[(*itt).fileName()] = *itt;
+        string_list.append((*itt).fileName());
+        ++itt;
+    }
+    string_list.sort();
+
+    list.clear();
+    for(uint i = 0; i != string_list.size(); ++i)
+        list.append(map[string_list[i]]);
+
+    itt = list.begin();
+    int i = 0;
+
+    if (list.count() > 0)
+        m_windowList << qMakePair(m_windowMenu->insertSeparator(), KURL());
+    
+    while (itt != list.end())
+    {
+        temp = m_windowMenu->insertItem( i < 10 ? QString("&%1 %2").arg(i).arg((*itt).fileName()) : (*itt).fileName() );
+        m_windowList << qMakePair(temp, *itt);
+        ++i;
+        ++itt;
+    }
 }
 
 #include "simplemainwindow.moc"
