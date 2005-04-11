@@ -100,6 +100,12 @@ KDevelop Technotes</a>.
 - <a href="kdevbtwidgets/html/index.html"><b>Buildtool Widgets Library</b></a>
    (<a href="kdevbtwidgets/html/classes.html">classes</a>)\n
    <i>Widgets commonly used in buildtool support plugins.</i>
+- <a href="kdevparserautotools/html/index.html"><b>Autotools parser Library</b></a>
+   (<a href="kdevparserautotools/html/classes.html">classes</a>)\n
+   <i>Parser for Autotools based support plugins.</i>
+- <a href="kdevparserqmake/html/index.html"><b>QMake parser Library</b></a>
+   (<a href="kdevparserqmake/html/classes.html">classes</a>)\n
+   <i>Parser for QMake based support plugins.</i>
 .
 
 \section shellapi Shell API
