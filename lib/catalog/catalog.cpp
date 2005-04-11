@@ -166,6 +166,7 @@ void  Catalog::setEnabled( bool isEnabled )
 
 /*!
     \fn  Catalog::addIndex( const QString& name )
+    @todo document these functions
  */
  void  Catalog::addIndex( const QCString& name )
 {

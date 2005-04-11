@@ -43,7 +43,7 @@ public:
 /**Profile resource listing operation.
 Used to get a list of urls to the profile resources.
 
-Resource urls can be filtered by an @filter parameter
+Resource urls can be filtered by an @p filter parameter
 passed to the constructor. Filter can have values
 as described in @ref QDir::setNameFilter function documentation.*/
 class ProfileListingEx {
@@ -146,7 +146,7 @@ public:
     Profile *findProfile(const QString &profileName);
     
     /**Walks profiles tree and applies operation @p op to each profile found 
-    in the tree below @root (@p root profile itself is not processed).
+    in the tree below @p root (@p root profile itself is not processed).
     
     Operation is a class that have operator(Profile *).
     Example of operation class which is used to build a plain list of profiles:
@@ -172,7 +172,7 @@ public:
     profileengine.h header file.
     
     @param op An operation to apply.
-    @param root A profile to start walking from. Complete subtree of the @root is traversed.
+    @param root A profile to start walking from. Complete subtree of the @p root is traversed.
     */
     template<class Operation>
     void walkProfiles(Operation &op, Profile *root)
@@ -185,7 +185,7 @@ public:
         }
     }
     /**Walks profiles tree and applies operation @p op to each profile 
-    found in the tree below @root (@p root profile itself is not processed)
+    found in the tree below @p root (@p root profile itself is not processed)
     but the operation in this case returns a result of type defined by
     "Result" template parameter.
     
@@ -238,8 +238,8 @@ public:
     @endcode
     
     @param op An operation to apply.
-    @param result A result of the operation as it would have been applied to the @root.
-    @param root A profile to start walking from. Complete subtree of the @root is traversed.
+    @param result A result of the operation as it would have been applied to the @p root.
+    @param root A profile to start walking from. Complete subtree of the @p root is traversed.
     */
     template<class Operation, class Result>
     void walkProfiles(Operation &op, Result *result, Profile *root)

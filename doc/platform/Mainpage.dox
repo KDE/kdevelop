@@ -5,6 +5,7 @@
 /**
 \mainpage The KDevelop Platform %API %Documentation
 
+
 KDevelop Platform is set of libraries and tools that are used to build IDEs (Integrated Development Environments),
 applications similar to IDEs (web development enviroment, text editors for programmers and designers, etc.)
 and/or IDE plugins for all possible purposes.
@@ -25,6 +26,8 @@ can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=m
 modifications to the Platform %API.
 
 An on-line, updated every 24H, html version of this documentation can be found at: http://www.kdevelop.org/HEAD/doc/platform/html/index.html
+
+You can also download a local browseable copy form http://www.kdevelop.org/HEAD/doc/platform/kdevplatformdoc.tar.bz2 . It gets updated every single day too.
 
 More information about the KDevelop Platform architecture in form of tutorials, Wikis, HOWTOs,
 and FAQs can be found at
@@ -112,9 +115,9 @@ KDevelop Technotes</a>.
 \section PlannedTasks Planned tasks
 
 Here is a priority ordered list:
-  -# fix the dispersed \ref fixme
+  -# fix the dispersed fixme
   -# <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>
-  -# fix the dispersed \ref todo all over the code.
+  -# fix the dispersed todo all over the code.
   .
 
 \section howTobuildAPIlocalcopy How to build a local copy of this documentation

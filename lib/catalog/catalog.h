@@ -26,7 +26,19 @@
 
 
 #include "tag.h"
+/**
+@file catalog.h
+Catalog database - the persistant symbol store database.
+*/
 
+/**
+Catalog objects represent separate symbol databases.
+Catalogs can be created/loaded/unloaded dynamically.
+To find a symbol in the repository each catalog should be queried.
+
+Persistant symbol store is useful to keep information about code that
+never or rarely changes. System libraries are perfect examples of such code.
+*/
 class Catalog
 {
 public:

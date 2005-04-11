@@ -87,13 +87,14 @@ private:
 Project AST node.
 Represents complete projects, scopes and function scopes.
 Examples:
-<pre>
+@code
 scopename{
 var=value
 }
 function(args){
 var=value
 }
+@endcode
 */
 class ProjectAST: public AST {
 public:
