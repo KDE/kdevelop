@@ -1,0 +1,230 @@
+------------------------------------------
+SUMMARY :
+
+scons
+scons install
+
+ ... and now the details
+
+CONFIGURING AND COMPILING THE PROJECT(S)
+CONTENTS OF BKSYS
+OVERVIEW OF THE MODULE SYSTEM
+SCONS TIPS
+MOC PROCESSING
+SCONS MINIMUM DISTRIBUTION 
+CONVERTING AUTOMAKE-BASED PROJECTS
+
+------------------------------------------
+CONFIGURING AND COMPILING THE PROJECT(S)
+
+The program scons is usually launched as "scons"
+When it is not intalled globally, one can run
+"python scons.py" instead (ie : to use the local scons
+that comes with bksys - see below SCONS MINIMUM DISTRIBUTION
+if you do not have scons already)
+
+To compile the project, you will then only need to launch
+scons on the top-level directory, the scripts find and
+cache the environment detected *automatically* :
+-> scons
+
+To clean the project
+-> scons -c
+
+To install the project
+-> scons install
+
+To uninstall the project
+-> scons -c install
+
+To (re)configure the project and give particular arguments, use :
+-> scons configure debug=1
+or -> python scons.py configure debug=1
+The variables are saved automatically after the first run
+in files named *.cache.py (look at kde.cache.py, ..)
+
+------------------------------------------
+CONTENTS OF BKSYS
+
+There are currently 6 examples, with some taken from the kdevelop templates :
+
+test1-kconfigxt : simple kde program with KconfigXT settings
+test2-kdcop     : kde application having a dcop interface, and a client
+test3-kparts    : complex kde application having a kparts shell
+test4-libtool   : compile a project using libtool - if you dare
+test5-kioslave  : kde ioslave
+test6-mocfiesta : moc handling demo ("file.moc")
+test7-kmdi      : no comment :)
+test8-kate      : kate plugins - the version '8b' has a kate config dialog page
+
+There are also scons script that show how to process specific data :
+
+doc/en          : documentation compilation and installation
+po              : kde translation handling (gettext)
+
+There is also usual files that you may want to modify 
+and ship with your project : INSTALL, VERSION, AUTHORS
+
+------------------------------------------
+OVERVIEW OF THE MODULE SYSTEM
+
+The modules are used to detect the configuration, and to load
+the necessary compilation flags, builders, display some help.
+
+Each module (kde.py, generic.py, sound.py..) tries to load a stored
+configuration when run.
+
+If the stored configuration does not exist or if 'configure' is
+given on the command line (scons configure), the module launches 
+the verifications and detectioins and stores the results.
+Modules also call exit when the detection fail.
+
+
+For example, kde.py stores its config into kde.cache.py
+
+This has several advantages for both developers and users :
+ - Users do not have to run ./configure to compile
+ - The build is insensitive to environment changes
+ - The cache maintains the objects so the config can be changed often
+ - Each module adds its own help via env.Help("message")
+
+------------------------------------------
+SCONS TIPS
+
+In a subdirectory, it is necessary to launch scons with the -u flag :
+scons -u
+
+This is annoying and you probably want to add this to your .bashrc
+export SCONSFLAGS=-u
+and forget about it :)
+
+To make .deb or .rpm packages of your program, use :
+checkinstall --fstrans=no --nodoc scons install
+(if you have checkinstall on your system of course)
+
+To make scons run (much) faster, consult ./addons/README
+
+If the following error ever occurs :
+   TypeError: Tried to lookup Dir 'dir/subdir' as a File
+then make sure the things are like this :
+   KDEshlib( "libtest8bplugin", ['plugin_test8b.cpp'], myenv8 )
+and not like that (square brackets) :
+KDEshlib( "libtest8bplugin", ['plugin_test8b.cpp'], myenv8 )
+
+------------------------------------------
+MOC PROCESSING
+
+In qt programs, when a header 'foo.h' contains a class that has
+signals and slots, then 'foo.h' must contain the macro Q_OBJECT
+in order to compile. foo_moc.cpp is usually generated, and is 
+used to produce foo_moc.o which is linked with the 
+program or the library.
+
+In kde programs, 'foo.moc' is generated instead of foo_moc.cpp, 
+and it must be included at the very end of foo.cpp 
+(add #include "foo.moc" : this increases the speed of 
+compilation a *lot* and makes less object files.
+
+Both modes are provided though, see test6-mocfiesta/
+
+------------------------------------------
+MINIMUM SCONS DISTRIBUTION
+
+A minimum scons distribution is included in the archive
+for convenience to those who do not have scons packages 
+for their operating system or their linux
+distribution. For a full and more recent version of scons,
+please consult http://www.scons.org
+
+Including this scons distribution to your archive will add
+about 63kb (compressed) , while including the necessary 
+kdescripts (admin/ directory, configure, autom4 cache stuff, 
+Makefile.in) can add easily 500kb (compressed).
+
+To compile with the scons distribution :
+* unpack it with :
+  tar xjvf scons-mini.tar.bz2
+* compile the program with :
+  python scons.py
+* install the program with :
+  python scons.py install
+
+More options :
+* clean the object files with :
+  python scons.py -c
+* uninstall the program with with :
+  python scons.py -c install
+* create a package :
+  python scons.py dist
+
+------------------------------------------
+CONVERTING AUTOMAKE-BASED PROJECTS
+
+Basically you only will need to copy some files :
+SConstruct generic.py kde.py (and some other .py files as add-ons)
+at the root of your project directory, and to add 
+some SConscript files to replace the Makefile.am
+
+Do not forget to modify the following files to match your settings :
+SConstruct, INSTALL, AUTHORS (and all SConscript)
+
+Adding a VERSION file can be useful if you want to use the tool
+for the creation of distribution tarballs : scons dist -
+look at the bottom of the SConstruct file
+
+Optionally you can add : 
+* unpack_local_scons.sh and scons-mini.tar.bz2 to distribute scons (adds 63kb)
+
+** static libraries **
+With Makefile.am, one had to make static libraries all the time
+because it did not allow having source code in other directories.
+This is not the case anymore with scons, so you can specify
+sources in other directories relative to the sconscript file, ie:
+ test1_sources = ['mainfiles/main.cpp', 'otherfile/program.cpp']
+ myenv.Program( target = "test1", source = test1_sources )
+To encourage you to switch to the new scheme, the static library
+helper has been omitted (look at the end of kde.py if you need one)
+
+** libtool **
+The LaFile build tool is a cheat that allows klibloader to load
+.so files without complaints. If you need real libtool support
+you can have a look to the libtool directory : it can work but
+remember that libtool is broken on many systems (invalid flags
+among others), so when you can work without libtool
+(small projects especially), just do it.
+
+** moc processing **
+As stated above, you should always add #include "foo.moc"
+for your qt classes (Q_OBJECT) to save precious compilation time.
+
+** using a cache **
+It is a good idea to enable the cache feature in SConstruct,
+especially if you are doing experiments (it saves your computer
+from recompiling the same files over and over again ..).
+
+** threading **
+myenv.AppendUnique( CPPFLAGS = ['-DQT_THREAD_SUPPORT', '-D_REENTRANT'] )
+
+** final notes ***
+A medium-sized project containing several targets, libraries and data
+files can be converted very quickly.
+Also, remember that SConscript files are actually python scripts ..
+you can use whatever python feature you want in them, ie: "for" loops,
+this is how the kde helpers work (KDEprogram, KDEshlib ..).
+
+If you are stuck, you can also have a look at more complicated 
+bksys-based projects like kdissert or kshaderdesigner
+
+The scons man page and the wiki can be very useful, do not forget to
+consult them when you encounter an issue
+
+------------------------------------------
+
+I hope you will enjoy this alternative to the autotools
+scripts for kde programming, at least as much as I do : 
+http://81.66.36.65/~tnagy/kdissert/index.html
+
+Happy kde hacking,
+
+Thomas Nagy, 2004, 2005 <tnagyemail-mail@yahoo^fr>
+

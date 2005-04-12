@@ -1,0 +1,23 @@
+## This script demonstrates to build and install
+## a simple kde program having KconfigXT settings
+## with scons
+##
+## Thomas Nagy, 2004, 2005
+
+## This file can be reused freely for any project (see COPYING)
+
+
+## First load the environment set in the top-level SConstruct file
+Import( "env KDElang" )
+myenv=env.Copy()
+
+## Make translations for the program "test1" in french (requires fr.po)
+myenv['APPNAME'] = "%{APPNAMELC}"
+#KDElang( ['fr'], myenv )
+
+## NOTE1 :
+# KDElang( ['fr','de','nl','pl'], myenv )
+
+## NOTE2 :
+## updating the translation files must be done manually
+## for the moment, using the messages.sh script

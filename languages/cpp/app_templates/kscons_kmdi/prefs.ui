@@ -1,0 +1,33 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>prefs</class>
+<widget class="QWidget">
+<property name="name">
+<cstring>prefs</cstring>
+</property>
+<property name="geometry">
+<rect>
+<x>0</x>
+<y>0</y>
+<width>241</width>
+<height>47</height>
+</rect>
+</property>
+<property name="caption">
+<string>Form1</string>
+</property>
+<grid>
+<property name="name">
+<cstring>unnamed</cstring>
+</property>
+<widget class="QCheckBox" row="0" column="0">
+<property name="name">
+<cstring>kcfg_showCloseTabsButton</cstring>
+</property>
+<property name="text">
+<string>Show close buttons on tabs</string>
+</property>
+</widget>
+</grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

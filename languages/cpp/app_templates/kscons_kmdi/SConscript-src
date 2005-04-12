@@ -1,0 +1,15 @@
+## This script is a quick test to demonstrate (and test) 
+## the bksys moc handling '#include "file.moc"' can be added .. or not
+##
+## Thomas Nagy, 2005
+## This file can be reused freely for any project (see COPYING)
+
+Import( '*' )
+myenv=env.Copy()
+%{APPNAMELC}_sources = [ 'main.cpp', '%{APPNAMELC}kmdi.cpp', '%{APPNAMELC}kmdiView.cpp', 
+'kmdikonsole.cpp', 'settings.kcfgc', 'prefs.ui' ]
+KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources, myenv ) # main program
+KDEaddpaths( ['./', '../'], myenv ) # additional paths
+KDEaddlibs( ['qt-mt', 'kdecore', 'kio', 'kparts', 'kmdi'], myenv ) # libraries
+KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}ui.rc', myenv )
+KDEinstall( env['KDEKCFG'], '%{APPNAMELC}.kcfg', myenv)

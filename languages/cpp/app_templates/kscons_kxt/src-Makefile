@@ -1,0 +1,26 @@
+## Thomas Nagy, 2004
+
+## This file can be reused freely for any project (see COPYING)
+
+# default target : use scons to build the programs
+all: config.py
+	scons -Q 
+
+# there are several possibilities to help debugging :
+# scons --debug=explain, scons --debug=tree ..
+debug: config.py
+	scons -Q --debug=tree
+
+clean: config.py
+	scons -c
+
+install: config.py
+	scons install
+
+uninstall: config.py
+	scons -c install
+
+## This target creates a tarball of the project
+## Clean the object files before using it (scons -c)
+dist: config.py
+	scons dist

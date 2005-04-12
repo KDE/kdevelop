@@ -1,0 +1,84 @@
+%{APPNAME} REQUIREMENTS
+------------------------
+
+kde >= 3.2 is needed to run %{APPNAME}
+
+To compile %{APPNAME}, the kde development packages
+are needed: kdelibs-devel, kdebase-devel and python
+
+scons is also needed http://www.scons.org
+(this tool also used by Blender, ..)
+Make sure scons is at least v0.96.1, otherwise
+the compilation will fail. In case if you do not have
+it, a minimum distribution is provided (see SCONS below)
+
+-> One should only have to run :
+$ scons
+# scons install
+(do "scons install" as root - the menus may not
+show up if you skip this step)
+
+
+SCONS
+-----
+
+-> If scons is missing, use the one bundled with PROGRAMNAME :
+./unpack_local_scons.sh
+python scons.py
+python scons.py install
+(run the last command as root)
+
+
+-> For your convenience, a quick makefile is created :
+./unpack_local_scons.sh
+make
+make install
+
+
+USEFUL SCONS COMMANDS
+---------------------
+
+build the targets   : scons
+install them        : scons install
+clean the project   : scons -c
+uninstall           : scons -c install
+build in parallel   : scons -j2
+
+CONFIGURATION NOTES
+-------------------
+
+The installation scripts are relying on the kde-config program.
+The programs kde-config, qmake, uic and moc must be accesssible
+through your PATH.
+
+Qt and kde may not be installed as expected (in QTDIR and KDEDIR)
+So until kde-config is able to give that information, you may
+have to give those paths.
+
+Here are some examples :
+On Fedora/Redhat
+   scons configure kdeincludes=/usr/include/kde/
+On Debian
+   scons configure qtincludes=/usr/include/qt/ kdeinclude=/usr/include/kde/
+To install in some particular location with additional include paths
+   scons configure prefix=~/tmp extraincludes=/tmp/include:/usr/local/include
+
+For more options to tune the build look at the .py files available on 
+the top-level directory :
+generic.py, kde.py, ...
+
+The build system is based on bksys, a build system that replaces
+autoconf, automake and make in a row. Feel free to report your opinion
+about it to the authors.
+
+BUILDING RPMS OR DEBS WITH CHECKINSTALL
+---------------------------------------
+
+With checkinstall 1.6, use
+$ scons
+# checkinstall --fstrans=no --nodoc scons install
+# scons uninstall
+
+---------------------------------------
+enjoy PROGRAMNAME
+PROGRAMNAME AUTHORS

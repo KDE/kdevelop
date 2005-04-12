@@ -27,6 +27,10 @@ incadmin.tar.gz:
 		ltmain.sh  missing  mkinstalldirs
 	gzip incadmin.tar
 
+scons.tar.gz:
+	$(TAR) -cf scons.tar -C $(srcdir)/scons unpack_local_scons.sh scons-mini.tar.bz2 generic.py kde.py
+	gzip scons.tar
+
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
 commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz gnome2.tar.gz wxwidgets.tar.gz \
@@ -38,5 +42,5 @@ commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz gnome2.ta
 	wx-configure.in wx-Makefile.am wx-Makefile.cvs \
 	COPYING COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic \
 	admin.kdevtemplate gnu.kdevtemplate dockbook.kdevtemplate\
-	incadmin.kdevtemplate gnome2.kdevtemplate
+	incadmin.kdevtemplate gnome2.kdevtemplate scons.kdevtemplate scons.tar.gz
 

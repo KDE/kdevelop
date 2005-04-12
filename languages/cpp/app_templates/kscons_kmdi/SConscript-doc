@@ -1,0 +1,29 @@
+#! /usr/bin/env python
+# SConscript for %{APPNAMELC} documentation
+
+############################
+## load the config
+
+## use the environment set in the top-level
+## SConstruct file
+
+Import( "env" )
+myenv=env.Copy()
+
+#############################
+## the documentation to build
+
+myenv.Meinproc( "en/index.docbook" )
+
+#############################
+## the install targets 
+##  * %{APPNAMELC} is the name of our app
+##  * en are the initials of the language targetted
+
+env['INST_TARGETS'].append( env.Install( myenv['KDEDOC']+'/en/%{APPNAMELC}/', 'en/index.cache.bz2' ) )
+env['INST_TARGETS'].append( env.Install( myenv['KDEDOC']+'/en/%{APPNAMELC}/', 'en/index.docbook' ) )
+
+## use the next line for installing pictures
+#env['INST_TARGETS'].append( env.Install( myenv['KDEDOC']+'/en/%{APPNAMELC}', 'en/screenshot.png' ) )
+
+
