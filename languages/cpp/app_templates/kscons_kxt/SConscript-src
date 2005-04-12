@@ -7,7 +7,7 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env" )
+Import( "*" )
 myenv=env.Copy()
 
 #############################
@@ -17,7 +17,7 @@ myenv=env.Copy()
 'settings.kcfgc',
 'main.cpp',
 'prefs.cpp',
-'app.skel', # Dcop file
+'%{APPNAMELC}.skel', # Dcop file
 '%{APPNAMELC}.cpp',
 '%{APPNAMELC}view.cpp',
 'prefs-base.ui',
@@ -51,7 +51,7 @@ KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint'], myenv )
 ## The program is installed automatically
 
 ## The ui.rc file and the tips go into datadir/appname/
-KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}.rc', myenv )
+KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}ui.rc', myenv )
 KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', 'tips', myenv )
 
 ## The kcfg file is installed in a global kcfg directory

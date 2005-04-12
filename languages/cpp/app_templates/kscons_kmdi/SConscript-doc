@@ -1,29 +1,22 @@
 #! /usr/bin/env python
 # SConscript for %{APPNAMELC} documentation
 
-############################
-## load the config
-
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env" )
+Import( "env KDEdoc" )
 myenv=env.Copy()
+myenv['APPNAME'] = '%{APPNAMELC}'
 
-#############################
-## the documentation to build
-
+## Install targets
+##  * '%{APPNAMELC}' is the name of our app
+##  * 'en' are the initials of the language targetted
 myenv.Meinproc( "en/index.docbook" )
+KDEdoc( 'en', 'en/index.cache.bz2', myenv )
+KDEdoc( 'en', 'en/index.docbook', myenv )
+#KDEdoc( 'en', 'en/screenshot.png', myenv )
 
-#############################
-## the install targets 
-##  * %{APPNAMELC} is the name of our app
-##  * en are the initials of the language targetted
-
-env['INST_TARGETS'].append( env.Install( myenv['KDEDOC']+'/en/%{APPNAMELC}/', 'en/index.cache.bz2' ) )
-env['INST_TARGETS'].append( env.Install( myenv['KDEDOC']+'/en/%{APPNAMELC}/', 'en/index.docbook' ) )
-
-## use the next line for installing pictures
-#env['INST_TARGETS'].append( env.Install( myenv['KDEDOC']+'/en/%{APPNAMELC}', 'en/screenshot.png' ) )
-
-
+#myenv.Meinproc( "fr/index.docbook" )
+#KDEdoc( 'fr', 'fr/index.cache.bz2', myenv )
+#KDEdoc( 'fr', 'fr/index.docbook', myenv )
+#KDEdoc( 'fr', 'fr/screenshot.png', myenv )

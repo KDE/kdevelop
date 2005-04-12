@@ -21,13 +21,13 @@
 	// this routine will find and load our Part.  it finds the Part by
 	// name which is a bad idea usually.. but it's alright in this
 	// case since our Part is made for this Shell
-	KLibFactory *factory = KLibLoader::self()->factory("lib%{APPNAMELC}3part");
+	KLibFactory *factory = KLibLoader::self()->factory("libkatepart");
 	if (factory)
 	{
 		// now that the Part is loaded, we cast it to a Part to get
 		// our hands on it
 		m_part = static_cast<KParts::ReadWritePart *>(factory->create(
-			this, "%{APPNAMELC}3_part", "KParts::ReadWritePart" ));
+			this, "katepart", "KParts::ReadWritePart" ));
 
 		if (m_part)
 		{

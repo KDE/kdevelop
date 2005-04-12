@@ -45,7 +45,7 @@
 #include "%{APPNAMELC}kmdi.h"
 
 %{APPNAMELC}kmdi::%{APPNAMELC}kmdi(KMdi::MdiMode mode)
-	: KMdiMainFrm( 0, "%{APPNAMELC}7", mode )
+	: KMdiMainFrm( 0, "%{APPNAMELC}", mode )
 {
 	resize( 800, 600 ); // start at 800x600 the first time
 
@@ -110,7 +110,7 @@
 
 void %{APPNAMELC}kmdi::setupActions()
 {
-	setXMLFile("%{APPNAMELC}7ui.rc");
+	setXMLFile("%{APPNAMELC}ui.rc");
 
 	KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
 

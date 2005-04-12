@@ -1,11 +1,11 @@
 # KDE Config File
 [General]
-Name=Scons-based KDE application using kmdi
-Name[fr]=Application KDE avec scripts de construction scons et utilisant kmdi
-Category=C++/KDE Scons
+Name=Scons-based KMDI application
+Name[fr]=Application KMDI avec scripts de construction scons
+Category=C++/KDE
 Icon=kscons_kmdi.png
-Comment=Generates a simple KDE application with one widget, a configuration dialog and a dcop interface. Scons scripts are provided for compiling and installing the application.
-Comment[fr]=Génère une simple application KDE avec un "widget", un dialogue de configuration et une interface pour des greffons. Des scripts scons sont fournis pour compiler et installer l'application.
+Comment=Generates a complex KMDI application. Scons scripts are provided for compiling and installing the application.
+Comment[fr]=Génère une application KMDI. Des scripts scons sont fournis pour compiler et installer l'application.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/QUICKSTART
 Archive=kscons_kmdi.tar.gz
@@ -103,16 +103,6 @@ Type=install
 Source=%{src}/appkmdiView.h
 Dest=%{dest}/src/%{APPNAMELC}kmdiView.h
 
-[FILE17]
-Type=install
-Source=%{src}/prefs.cpp
-Dest=%{dest}/src/prefs.cpp
-
-[FILE18]
-Type=install
-Source=%{src}/prefs.h
-Dest=%{dest}/src/prefs.h
-
 [FILE19]
 Type=install
 Source=%{src}/main.cpp
@@ -168,6 +158,16 @@ Dest=%{dest}/QUICKSTART
 Type=install
 Source=%{src}/messages.sh
 Dest=%{dest}/po/messages.sh
+
+[FILE31]
+Type=install
+Source=%{src}/kmdikonsole.cpp
+Dest=%{dest}/src/kmdikonsole.cpp
+
+[FILE32]
+Type=install
+Source=%{src}/kmdikonsole.h
+Dest=%{dest}/src/kmdikonsole.h
 
 [MSG]
 Type=message

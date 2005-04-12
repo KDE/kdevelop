@@ -6,7 +6,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-#include "testkmdi.h"
+#include "%{APPNAMELC}kmdi.h"
 
 static const char description[] =
 I18N_NOOP("A simple kmdi app");
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 		// no session.. just start up normally
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-		testkmdi *widget = new testkmdi( KMdi::IDEAlMode );
+		%{APPNAMELC}kmdi *widget = new %{APPNAMELC}kmdi( KMdi::IDEAlMode );
 
 		if (args->count() != 0)
 		{

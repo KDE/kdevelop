@@ -7,12 +7,10 @@ scons install
  ... and now the details
 
 CONFIGURING AND COMPILING THE PROJECT(S)
-CONTENTS OF BKSYS
-OVERVIEW OF THE MODULE SYSTEM
 SCONS TIPS
 MOC PROCESSING
-SCONS MINIMUM DISTRIBUTION 
-CONVERTING AUTOMAKE-BASED PROJECTS
+SCONS MINIMUM DISTRIBUTION
+MORE TIPS
 
 ------------------------------------------
 CONFIGURING AND COMPILING THE PROJECT(S)
@@ -44,51 +42,6 @@ The variables are saved automatically after the first run
 in files named *.cache.py (look at kde.cache.py, ..)
 
 ------------------------------------------
-CONTENTS OF BKSYS
-
-There are currently 6 examples, with some taken from the kdevelop templates :
-
-test1-kconfigxt : simple kde program with KconfigXT settings
-test2-kdcop     : kde application having a dcop interface, and a client
-test3-kparts    : complex kde application having a kparts shell
-test4-libtool   : compile a project using libtool - if you dare
-test5-kioslave  : kde ioslave
-test6-mocfiesta : moc handling demo ("file.moc")
-test7-kmdi      : no comment :)
-test8-kate      : kate plugins - the version '8b' has a kate config dialog page
-
-There are also scons script that show how to process specific data :
-
-doc/en          : documentation compilation and installation
-po              : kde translation handling (gettext)
-
-There is also usual files that you may want to modify 
-and ship with your project : INSTALL, VERSION, AUTHORS
-
-------------------------------------------
-OVERVIEW OF THE MODULE SYSTEM
-
-The modules are used to detect the configuration, and to load
-the necessary compilation flags, builders, display some help.
-
-Each module (kde.py, generic.py, sound.py..) tries to load a stored
-configuration when run.
-
-If the stored configuration does not exist or if 'configure' is
-given on the command line (scons configure), the module launches 
-the verifications and detectioins and stores the results.
-Modules also call exit when the detection fail.
-
-
-For example, kde.py stores its config into kde.cache.py
-
-This has several advantages for both developers and users :
- - Users do not have to run ./configure to compile
- - The build is insensitive to environment changes
- - The cache maintains the objects so the config can be changed often
- - Each module adds its own help via env.Help("message")
-
-------------------------------------------
 SCONS TIPS
 
 In a subdirectory, it is necessary to launch scons with the -u flag :
@@ -102,7 +55,7 @@ To make .deb or .rpm packages of your program, use :
 checkinstall --fstrans=no --nodoc scons install
 (if you have checkinstall on your system of course)
 
-To make scons run (much) faster, consult ./addons/README
+To make scons run (much) faster, consult ./addons/README in bksys
 
 If the following error ever occurs :
    TypeError: Tried to lookup Dir 'dir/subdir' as a File
@@ -158,22 +111,7 @@ More options :
   python scons.py dist
 
 ------------------------------------------
-CONVERTING AUTOMAKE-BASED PROJECTS
-
-Basically you only will need to copy some files :
-SConstruct generic.py kde.py (and some other .py files as add-ons)
-at the root of your project directory, and to add 
-some SConscript files to replace the Makefile.am
-
-Do not forget to modify the following files to match your settings :
-SConstruct, INSTALL, AUTHORS (and all SConscript)
-
-Adding a VERSION file can be useful if you want to use the tool
-for the creation of distribution tarballs : scons dist -
-look at the bottom of the SConstruct file
-
-Optionally you can add : 
-* unpack_local_scons.sh and scons-mini.tar.bz2 to distribute scons (adds 63kb)
+MORE TIPS
 
 ** static libraries **
 With Makefile.am, one had to make static libraries all the time
