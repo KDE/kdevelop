@@ -34,6 +34,9 @@ public:
 public slots:
   virtual void show();
 
+protected:
+  virtual void focusInEvent(QFocusEvent *ev);
+  
 private:
   QGuardedPtr<KTextEditor::Document> m_doc;
   QGuardedPtr<KTextEditor::View> m_view;

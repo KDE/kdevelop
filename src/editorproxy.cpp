@@ -401,4 +401,10 @@ bool EditorProxy::isDelayedViewCapable( )
 	return m_delayedViewCreationCompatibleUI;
 }
 
+void EditorWrapper::focusInEvent( QFocusEvent * ev )
+{
+	if (visibleWidget())
+		visibleWidget()->setFocus();
+}
+
 #include "editorproxy.moc"

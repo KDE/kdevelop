@@ -83,6 +83,7 @@ void DTabWidget::insertTab(QWidget *child, const QString &label, int index)
     if (m_closeButtonShown)
         m_closeButton->show();
     KTabWidget::insertTab(child, label, index);
+    if (index != -1) tabBar()->repaint();
 }
 
 void DTabWidget::insertTab(QWidget *child, const QIconSet &iconset, 
@@ -91,6 +92,7 @@ void DTabWidget::insertTab(QWidget *child, const QIconSet &iconset,
     if (m_closeButtonShown)
         m_closeButton->show();
     KTabWidget::insertTab(child, iconset, label, index);
+    if (index != -1) tabBar()->repaint();
 }
 
 /*void DTabWidget::updateHistory(QWidget *w)

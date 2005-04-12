@@ -107,6 +107,7 @@ void SimpleMainWindow::init()
 
 void SimpleMainWindow::embedPartView(QWidget *view, const QString &title, const QString &/*toolTip*/)
 {
+    kdDebug() << "SimpleMainWindow::embedPartView: " << view << endl;
     if (!view )
         return;
 
@@ -161,6 +162,17 @@ void SimpleMainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
 
 void SimpleMainWindow::raiseView(QWidget *view)
 {
+    //adymo: a workaround to make editor wrappers work:
+    //editor view is passed to this function but the ui library knows only
+    //of its parent which is an editor wrapper, simply replacing the view
+    //by its wrapper helps here
+    if (view->parent() && view->parent()->isA("EditorWrapper"))
+    {
+//         kdDebug() << "parent is editor wrapper: " << 
+//             static_cast<EditorWrapper*>(view->parent()) << endl;
+        view = (QWidget*)view->parent();
+    }
+    
     if (m_docks.contains(view))
     {
         DDockWindow *dock = toolWindow(m_docks[view]);
@@ -170,7 +182,10 @@ void SimpleMainWindow::raiseView(QWidget *view)
     {
         for (QValueList<DTabWidget*>::const_iterator it = m_tabs.begin(); it != m_tabs.end(); ++it)
             if ((*it)->indexOf(view) != -1)
+            {
+                kdDebug() << "show page" << endl;
                 (*it)->showPage(view);
+            }
     }
 }
 
@@ -332,7 +347,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
     while (KParts::Part* part = it.current())
     {
         QWidget *top_widget = EditorProxy::getInstance()->topWidgetForPart(part);
-        if (top_widget && top_widget->parentWidget() == w)
+        if (top_widget == w)
         {
             if (KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part))
             {
@@ -342,20 +357,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
                 if (PartController::getInstance()->parts()->count() > 1)
                     tabMenu.insertItem(i18n("Close All Others"), 4);
 
-                if (!dynamic_cast<HTMLDocumentationPart*>(ro_part))
-                {
-                    if (KParts::ReadWritePart *rw_part = 
-                            dynamic_cast<KParts::ReadWritePart*>(ro_part))
-                        if(!dynamic_cast<KInterfaceDesigner::Designer*>(ro_part))
-                        {
-                            //FIXME: we do workaround the inability of the KDevDesigner part
-                            // to deal with these global actions here.
-                            if(rw_part->isModified())
-                                    tabMenu.insertItem(i18n("Save"), 1);
-                            tabMenu.insertItem(i18n("Reload"), 2);
-                        }
-                }
-                else
+                if (dynamic_cast<HTMLDocumentationPart*>(ro_part))
                 {
                     tabMenu.insertItem(i18n("Duplicate"), 3);
                     break;
