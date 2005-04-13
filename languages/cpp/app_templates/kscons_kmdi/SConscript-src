@@ -5,11 +5,41 @@
 ## This file can be reused freely for any project (see COPYING)
 
 Import( '*' )
+
+## First build : the shell
+## Each tab in it will hold an instance of the part ..
+
 myenv=env.Copy()
 %{APPNAMELC}_sources = [ 'main.cpp', '%{APPNAMELC}kmdi.cpp', '%{APPNAMELC}kmdiView.cpp', 
 'kmdikonsole.cpp', 'settings.kcfgc', 'prefs.ui' ]
 KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources, myenv ) # main program
 KDEaddpaths( ['./', '../'], myenv ) # additional paths
-KDEaddlibs( ['qt-mt', 'kdecore', 'kio', 'kparts', 'kmdi'], myenv ) # libraries
-KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}ui.rc', myenv )
+KDEaddlibs( ['qt-mt', 'kdecore', 'kio', 'kparts', 'kmdi'], myenv ) # additional libraries
+
+## Next, the kpart library
+## using KDEshlib, the .so and .la are installed automatically when needed
+
+myenv2=env.Copy()
+%{APPNAMELC}part_sources = [ '%{APPNAMELC}_part.cpp' ]
+KDEshlib( "lib%{APPNAMELC}part", %{APPNAMELC}part_sources, myenv2 )
+KDEaddpaths( ['./', '../'], myenv2 )
+KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint', 'kparts'], myenv2 )
+
+#############################
+## Data files to install
+
+## the .kcfg file
 KDEinstall( env['KDEKCFG'], '%{APPNAMELC}.kcfg', myenv)
+
+## the program .desktop file
+KDEinstall( env['KDEMENU']+'/Utilities', '%{APPNAMELC}.desktop', myenv )
+
+## the rc file - named *_shell.rc instead of *ui.rc for kpart apps
+KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}_shell.rc', myenv )
+
+## this servicetype desktop file goes in KDEXDG whether the other one goes in KDEMENU
+KDEinstall( env['KDEXDG'], '%{APPNAMELC}_part.desktop', myenv )
+
+## the kpart resource file
+KDEinstall( env['KDEDATA']+'/%{APPNAMELC}part', '%{APPNAMELC}_part.rc', myenv )
+

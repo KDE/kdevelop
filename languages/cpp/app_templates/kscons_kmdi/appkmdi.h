@@ -78,5 +78,5 @@ class %{APPNAMELC}kmdi : public KMdiMainFrm
 		kmdikonsole *m_console;
 };
 
-#endif // _TESTKMDI_H
+#endif // _%{APPNAMEUC}KMDI_H
 

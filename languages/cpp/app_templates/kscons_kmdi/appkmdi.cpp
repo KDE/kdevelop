@@ -110,7 +110,7 @@
 
 void %{APPNAMELC}kmdi::setupActions()
 {
-	setXMLFile("%{APPNAMELC}ui.rc");
+	setXMLFile("%{APPNAMELC}_shell.rc");
 
 	KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
 

@@ -111,8 +111,8 @@ Dest=%{dest}/src/main.cpp
 [FILE20]
 Type=install
 EscapeXML=true
-Source=%{src}/appui.rc
-Dest=%{dest}/src/%{APPNAMELC}ui.rc
+Source=%{src}/app_shell.rc
+Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 
 [FILE21]
 Type=install
@@ -168,6 +168,31 @@ Dest=%{dest}/src/kmdikonsole.cpp
 Type=install
 Source=%{src}/kmdikonsole.h
 Dest=%{dest}/src/kmdikonsole.h
+
+[FILE34]
+Type=install
+Source=%{src}/app_part.cpp
+Dest=%{dest}/src/%{APPNAMELC}_part.cpp
+
+[FILE35]
+Type=install
+Source=%{src}/app_part.h
+Dest=%{dest}/src/%{APPNAMELC}_part.h
+
+[FILE36]
+Type=install
+Source=%{kdevelop}/template-common/kde-app.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[FILE37]
+Type=install
+Source=%{kdevelop}/template-common/kde-part.desktop
+Dest=%{dest}/src/%{APPNAMELC}_part.desktop
+
+[FILE38]
+Type=install
+Source=%{src}/app_part.rc
+Dest=%{dest}/src/%{APPNAMELC}_part.rc
 
 [MSG]
 Type=message
