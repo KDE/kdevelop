@@ -16,6 +16,7 @@
 #include <qguardedptr.h>
 #include <qmap.h>
 #include <qdatetime.h>
+#include <qvaluestack.h>
 
 #include <kdevbuildtool.h>
 
@@ -83,6 +84,7 @@ private:
     void populateProject();
     void saveProject();
     void startMakeCommand(const QString &dir, const QString &target);
+    void parseMakefile(const QString& file);
     QString makeEnvironment() const;
 
     QString m_projectDirectory;
@@ -96,6 +98,7 @@ private:
     QStringList m_targets;
     QStringList m_targetsObjectFiles;
     QStringList m_targetsOtherFiles;
+
     QStringList m_contextAddFiles;
     QStringList m_contextRemoveFiles;
     QString m_contextDirName;
@@ -104,6 +107,9 @@ private:
     bool m_executeAfterBuild;
     QString m_buildCommand;
     bool m_lastCompilationFailed;
+
+    QMap<QString, int> m_parsedMakefiles;
+    QValueStack<QString> m_makefilesToParse;
 };
 
 #endif

@@ -713,7 +713,6 @@ void CustomProjectPart::slotExecute()
     appFrontend()->startAppCommand(runDirectory(), program, inTerminal);
 }
 
-
 void CustomProjectPart::updateTargetMenu()
 {
     m_targets.clear();
@@ -747,52 +746,19 @@ void CustomProjectPart::updateTargetMenu()
             node = node.nextSibling();
         }
     } else {
-    	kdDebug(9025) << "Trying to load a makefile... " << endl;
-        QFile f(buildDirectory() + "/Makefile");
-	if (!f.exists())
-	    f.setName( buildDirectory() + "/makefile" );
-        if (!f.open(IO_ReadOnly)) {
-            kdDebug(9025) << "No Makefile" << endl;
-            return;
-        }
-        QTextStream stream(&f);
-        //QRegExp re(".PHONY\\s*:(.*)");
-	QRegExp re("^([^($%.#][^)\\s]+) *:.*$");
-	re.setMinimal(true);
-	QString str = "";
-        while (!stream.atEnd()) {
-            QString str = stream.readLine();
-            // Read all continuation lines
-	    // kdDebug(9025) << "Trying: " << str.simplifyWhiteSpace() << endl;
-            //while (str.right(1) == "\\" && !stream.atEnd()) {
-            //    str.remove(str.length()-1, 1);
-            //    str += stream.readLine();
-            //}
-            if (re.search(str) != -1)
-            {
-                QString tmpTarget=re.cap(1).simplifyWhiteSpace();
-	        kdDebug(9025) << "Adding target: " << tmpTarget << endl;
-                if (tmpTarget.endsWith(".o"))
-                {
-                   if (m_targetsObjectFiles.find(tmpTarget)==m_targetsObjectFiles.end())
-                      m_targetsObjectFiles += tmpTarget;
-                }
-                else if (tmpTarget.contains('.'))
-                {
-                   if (m_targetsOtherFiles.find(tmpTarget)==m_targetsOtherFiles.end())
-                      m_targetsOtherFiles += tmpTarget;
-                }
-                else
-                {
-                   if (m_targets.find(tmpTarget)==m_targets.end())
-                      m_targets += tmpTarget;
-                }
-            }
-        }
-        f.close();
+       kdDebug(9025) << "Trying to load a makefile... " << endl;
+
+       m_parsedMakefiles.clear();
+       m_makefilesToParse.clear();
+       m_makefilesToParse.push("Makefile");
+       m_makefilesToParse.push("makefile");
+       while (!m_makefilesToParse.isEmpty())
+          parseMakefile(m_makefilesToParse.pop());
+
         m_targets.sort();
         m_targetsObjectFiles.sort();
         m_targetsOtherFiles.sort();
+
     }
 
     m_targetMenu->insertItem(i18n("Object Files"), m_targetObjectFilesMenu);
@@ -812,6 +778,64 @@ void CustomProjectPart::updateTargetMenu()
         m_targetOtherFilesMenu->insertItem(*it, id++);
 }
 
+void CustomProjectPart::parseMakefile(const QString& filename)
+{
+   if (m_parsedMakefiles.contains(filename))
+      return;
+
+   m_parsedMakefiles.insert(filename, 1);
+
+
+   QString absFilename=filename;
+   if (!filename.startsWith("/"))
+      absFilename=buildDirectory() + "/"+filename;
+
+   QFile f(absFilename);
+   if (!f.open(IO_ReadOnly)) {
+      kdDebug(9025) << "could not open " << absFilename<<endl;
+      return;
+   }
+   QRegExp re("^([^($%.#][^)\\s]+) *:.*$");
+   re.setMinimal(true);
+
+   QRegExp includedMakefilesRe("^include\\s+(\\S+)");
+   QString str = "";
+   while (!f.atEnd()) {
+      f.readLine(str, 200);
+
+      // Read all continuation lines
+      // kdDebug(9025) << "Trying: " << str.simplifyWhiteSpace() << endl;
+      //while (str.right(1) == "\\" && !stream.atEnd()) {
+      //    str.remove(str.length()-1, 1);
+      //    str += stream.readLine();
+      //}
+
+      if (includedMakefilesRe.search(str) != -1)
+      {
+         m_makefilesToParse.push(includedMakefilesRe.cap(1).simplifyWhiteSpace());
+      }
+      else if (re.search(str) != -1)
+      {
+         QString tmpTarget=re.cap(1).simplifyWhiteSpace();
+         if (tmpTarget.endsWith(".o"))
+         {
+            if (m_targetsObjectFiles.find(tmpTarget)==m_targetsObjectFiles.end())
+               m_targetsObjectFiles += tmpTarget;
+         }
+         else if (tmpTarget.contains('.'))
+         {
+            if (m_targetsOtherFiles.find(tmpTarget)==m_targetsOtherFiles.end())
+               m_targetsOtherFiles += tmpTarget;
+         }
+         else
+         {
+            if (m_targets.find(tmpTarget)==m_targets.end())
+               m_targets += tmpTarget;
+         }
+      }
+   }
+   f.close();
+}
 
 void CustomProjectPart::targetMenuActivated(int id)
 {
