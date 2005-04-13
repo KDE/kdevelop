@@ -684,7 +684,7 @@ AC_DEFUN([KDEV_CHECK_SVN],
             AC_MSG_CHECKING([for Subversion libraries])
             SVN_LIB=""
             for VALUE in $SVN_LIBS ; do
-                    if ls $VALUE/libsvn_client-1.* 1>/dev/null 2>1; then
+                    if ls $VALUE/libsvn_client-1.* 1>/dev/null 2>&1; then
                             SVN_LIB=$VALUE
                             break
                     fi
@@ -772,6 +772,7 @@ AC_DEFUN([KDEV_CHECK_VCSCOMPAT],
       VCSCOMPAT=vcscompat
       AC_MSG_RESULT(yes)
     else
+      DISABLE_SUBVERSION="yes"
       AC_MSG_RESULT(no)
     fi
   fi
