@@ -80,6 +80,7 @@ protected:
     bool m_showIconsOnTabs;
     
     QValueList<QWidget*> m_widgets;
+    QMap<QWidget*, DTabWidget*> m_widgetTabs;
     QWidget *m_currentWidget;
 
 private slots:    

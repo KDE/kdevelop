@@ -97,6 +97,7 @@ void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &tit
         tab->insertTab(widget, title, idx);
     }
     m_widgets.append(widget);
+    m_widgetTabs[widget] = tab;
     widget->installEventFilter(this);
     tab->showPage(widget);
 }
@@ -106,9 +107,9 @@ void DMainWindow::removeWidget(QWidget *widget)
     if (!m_widgets.contains(widget))
         return; //not a widget in main window
     
-    for (QValueList<DTabWidget*>::iterator it = m_tabs.begin(); it != m_tabs.end(); ++it)
+    if (m_widgetTabs.contains(widget))
     {
-        DTabWidget *tab = *it;
+        DTabWidget *tab = m_widgetTabs[widget];
         if (tab->indexOf(widget) >= 0)
         {
             tab->removePage(widget);
@@ -121,7 +122,9 @@ void DMainWindow::removeWidget(QWidget *widget)
             }
         }
     }
+    
     m_widgets.remove(widget);
+    m_widgetTabs.remove(widget);
 }
 
 DTabWidget *DMainWindow::splitHorizontal() 
@@ -147,14 +150,11 @@ void DMainWindow::invalidateActiveTabWidget()
         return;
     if (!m_widgets.contains(focused))
         return;
-    for (QValueList<DTabWidget*>::iterator it = m_tabs.begin(); it != m_tabs.end(); ++it)
+    if (m_widgetTabs.contains(focused))
     {
-        DTabWidget *tab = *it;
+        DTabWidget *tab = m_widgetTabs[focused];
         if (tab->indexOf(focused) >= 0)
-        {
             m_activeTabWidget = tab;
-            return;
-        }
     }
 }
 
@@ -171,11 +171,26 @@ DTabWidget *DMainWindow::createTab()
 
 bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ((m_currentWidget != (QWidget*)obj) && 
-            m_widgets.contains((QWidget*)obj) && (ev->type() == QEvent::FocusIn))
+    QWidget *w = (QWidget*)obj;
+    if (!m_widgets.contains(w))
+        return KParts::MainWindow::eventFilter(obj, ev);
+    
+    if ((m_currentWidget != w) && (ev->type() == QEvent::FocusIn))
     {
-        m_currentWidget = (QWidget*)obj;
-        emit widgetChanged((QWidget*)obj);
+        m_currentWidget = w;
+        emit widgetChanged(w);
+    }
+    else if (ev->type() == QEvent::IconChange)
+    {
+        if (m_widgetTabs.contains(w))
+        {
+            DTabWidget *tab = m_widgetTabs[w];
+            tab->setTabIconSet(w, w->icon() ? (*(w->icon())) : QPixmap());
+        }
+    }
+    else if (ev->type() == QEvent::CaptionChange)
+    {
+        kdDebug() << "caption change" << endl;
     }
 
     return KParts::MainWindow::eventFilter(obj, ev);

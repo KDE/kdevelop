@@ -178,15 +178,8 @@ void SimpleMainWindow::raiseView(QWidget *view)
         DDockWindow *dock = toolWindow(m_docks[view]);
         dock->raiseWidget(view);
     }
-    else if (m_widgets.contains(view))
-    {
-        for (QValueList<DTabWidget*>::const_iterator it = m_tabs.begin(); it != m_tabs.end(); ++it)
-            if ((*it)->indexOf(view) != -1)
-            {
-                kdDebug() << "show page" << endl;
-                (*it)->showPage(view);
-            }
-    }
+    else if (m_widgets.contains(view) && m_widgetTabs.contains(view))
+        m_widgetTabs[view]->showPage(view);
 }
 
 void SimpleMainWindow::lowerView(QWidget */*view*/)
@@ -294,6 +287,7 @@ void SimpleMainWindow::documentChangedState(const KURL &url, DocumentState state
 {
     QWidget * widget = EditorProxy::getInstance()->topWidgetForPart(
         PartController::getInstance()->partForURL(url));
+    kdDebug() << "SimpleMainWindow::documentChangedState: " << widget << endl;
     if (widget)
     {
         //calculate the icon size if showTabIcons is false
