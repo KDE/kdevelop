@@ -520,6 +520,16 @@ void CvsServicePartImpl::unedit( const KURL::List& urlList)
 {
     kdDebug(9006) << k_funcinfo << endl;
 
+    int s = KMessageBox::questionYesNo( 0,
+        i18n("Do you really want to unedit the selected files?"),
+        i18n("CVS - Unedit Files"),
+        KStdGuiItem::yes(),
+        KStdGuiItem::no(),
+        "askUneditingFiles" );
+    if (s == KMessageBox::Yes) {
+        return;
+    }
+
     if (!prepareOperation( urlList, opUnEdit ))
         return;
 
