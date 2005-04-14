@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/external_interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/lib/structure )
+
 SET(profileengine_LIB_SRCS
 profileengine.cpp
 profile.cpp
@@ -26,7 +28,3 @@ ADD_LIBRARY(profileengine SHARED ${profileengine_LIB_SRCS})
 #DOXYGEN_PROJECTNAME = KDevelop Shell Profiles Library
 #DOXYGEN_DOCDIRPREFIX = kdevprofiles
 #include ../../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

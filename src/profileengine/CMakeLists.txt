@@ -7,7 +7,3 @@ SUBDIRS( lib editor )
 #SUBDIRS = lib editor
 #DOXYGEN_EMPTY = YES
 #include ../../Doxyfile.am
-
-#######################
-#previous CMakeLists.txt contents follow:
-

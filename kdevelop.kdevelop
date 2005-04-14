@@ -1,17 +1,17 @@
 <!DOCTYPE kdevelop>
 <kdevelop>
   <general>
-    <projectmanagement>KDevCustomProject</projectmanagement>
-    <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-    <absoluteprojectpath>true</absoluteprojectpath>
     <author>KDevelop Authors</author>
     <email>kdevelop-devel@kdevelop.org</email>
     <version>CVS</version>
+    <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
       <keyword>Qt</keyword>
       <keyword>KDE</keyword>
     </keywords>
+    <projectdirectory>.</projectdirectory>
+    <absoluteprojectpath>false</absoluteprojectpath>
     <description>KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.</description>
     <ignoreparts/>
     <secondaryLanguages/>
@@ -115,15 +115,13 @@
       </runarguments>
     </run>
     <general>
-      <projectmanagement>KDevCustomProject</projectmanagement>
-      <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-      <absoluteprojectpath>true</absoluteprojectpath>
       <useconfiguration>default</useconfiguration>
       <activetarget>parts/annotation/libkdevannotation.la</activetarget>
     </general>
     <configurations>
       <default>
         <configargs>--enable-debug=full --prefix=/home/gremlin/kde3 --with-kdelibsdoxy-dir=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs</configargs>
+        <builddir>build</builddir>
         <topsourcedir/>
         <cppflags/>
         <ldflags/>
@@ -187,7 +185,10 @@
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
-    <references/>
+    <references>
+      <pcs>Qt</pcs>
+      <pcs>KDElibs</pcs>
+    </references>
     <designerintegration>
       <qtdesigner>
         <implementation class="SelectTopic" path="/develop/kde/kdevelop/parts/documentation/selecttopicbase.ui" implementationpath="/develop/kde/kdevelop/parts/documentation/selecttopic.h" />
@@ -212,9 +213,6 @@
   </kdevcvsservice>
   <kdevdebugger>
     <general>
-      <projectmanagement>KDevCustomProject</projectmanagement>
-      <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-      <absoluteprojectpath>true</absoluteprojectpath>
       <programargs/>
       <gdbpath/>
       <dbgshell>libtool</dbgshell>
@@ -238,10 +236,4 @@
       <usermanualurl>help:/kdevelop</usermanualurl>
     </projectdoc>
   </kdevdocumentation>
-  <kdevcustomproject>
-    <filelistdirectory>/usr/src/kde3-HEAD/kdevelop</filelistdirectory>
-    <run>
-      <directoryradio>executable</directoryradio>
-    </run>
-  </kdevcustomproject>
 </kdevelop>

@@ -1,4 +1,6 @@
-SUBDIRS( profiles profileengine )
+SUBDIRS( profiles profileengine newui )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/src/profileengine/lib ${CMAKE_SOURCE_DIR}/src/newui ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(kdevshell_LIB_SRCS
 api.cpp
@@ -18,14 +20,17 @@ splashscreen.cpp
 statusbar.cpp
 toplevel.cpp
 shellextension.cpp
+simplemainwindow.cpp
 )
 
-SET(
+SET( kdevshell_UI
 generalinfowidgetbase.ui
 mimewarningdialog.ui
 )
 
-KDE_ADD_UI_FILES(kdevshell_LIB_SRCS ${kdevshell_UI}
+KDE_ADD_UI_FILES(kdevshell_LIB_SRCS ${kdevshell_UI} )
+
+KDE_AUTOMOC(${kdevshell_LIB_SRCS})
 
 ADD_LIBRARY(kdevshell SHARED ${kdevshell_LIB_SRCS})
 
@@ -34,11 +39,11 @@ main.cpp
 kdevideextension.cpp
 )
 
-SET(
+SET( kdevelop_UI
 settingswidget.ui
 )
 
-KDE_ADD_UI_FILES(kdevelop_SRCS ${kdevelop_UI}
+KDE_ADD_UI_FILES(kdevelop_SRCS ${kdevelop_UI} )
 
 ADD_EXECUTABLE(kdevelop ${kdevelop_SRCS})
 
@@ -49,6 +54,8 @@ kdevassistantextension.cpp
 
 ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevassistant kdevshell)
+
 
 
 #original Makefile.am contents follow:
@@ -56,7 +63,7 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 #INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/interfaces \
 #	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external \
 #	-I$(top_srcdir)/lib/interfaces/extras -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets \
-#	-I$(top_srcdir)/src/profileengine/lib $(KDEVMDI_INCLUDES) $(all_includes)
+#	-I$(top_srcdir)/src/profileengine/lib -I$(top_srcdir)/src/newui $(KDEVMDI_INCLUDES) $(all_includes)
 #
 #KDE_OPTIONS=nofinal
 #
@@ -65,12 +72,12 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 #libkdevshell_la_LIBADD = \
 #	$(top_builddir)/src/profileengine/lib/libprofileengine.la $(top_builddir)/lib/libkdevelop.la \
 #	$(top_builddir)/lib/widgets/libkdevwidgets.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la \
-#        $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
+#	$(top_builddir)/src/newui/libd.la $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
 #libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 #	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
 #	newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
 #	projectmanager.cpp projectsession.cpp splashscreen.cpp statusbar.cpp toplevel.cpp \
-#	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp
+#	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp
 #
 #bin_PROGRAMS = kdevelop kdevassistant
 #
@@ -87,7 +94,7 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 #kdevelopdatadir = $(kde_confdir)
 #kdevelopdata_DATA = kdeveloprc
 #
-#SUBDIRS = profiles profileengine
+#SUBDIRS = profiles profileengine newui
 #kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 #kdevassistant_SOURCES = main_assistant.cpp kdevassistantextension.cpp
 #kdevassistant_LDADD = libkdevshell.la
@@ -100,7 +107,7 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 #	newmainwindow.h partcontroller.h partselectwidget.h plugincontroller.h\
 #	projectmanager.h projectsession.h settingswidget.ui.h shellextension.h\
 #	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h\
-#	mimewarningdialog.h settingswidget.h
+#	mimewarningdialog.h settingswidget.h simplemainwindow.h
 #
 #DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevextensions
 #DOXYGEN_PROJECTNAME = KDevelop Generic Shell
@@ -108,7 +115,3 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 #include ../Doxyfile.am
 #profilesdatadir = $(kde_datadir)/kdevelop/profiles
 #profilesdata_DATA = projectprofiles
-
-#######################
-#previous CMakeLists.txt contents follow:
-

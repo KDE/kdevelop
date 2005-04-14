@@ -13,7 +13,7 @@ CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_SOURCE_DIR}/config.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
 
-SUBDIRS( bdb lib parts languages buildtools editors vcs)
+SUBDIRS( bdb lib parts languages buildtools editors vcs src)
 # src pics doc mimetypes embedded kdevdesigner )
 
 

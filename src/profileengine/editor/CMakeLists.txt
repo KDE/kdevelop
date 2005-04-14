@@ -1,15 +1,17 @@
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/external_interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/src/profileengine/lib ${CMAKE_SOURCE_DIR}/lib/structure )
+
 SET(profileeditor_STAT_SRCS
 profileeditor.cpp
 )
 
 KDE_AUTOMOC(${profileeditor_STAT_SRCS})
 
-SET(
+SET( profileeditor_UI
 profileeditorbase.ui
 addprofilewidget.ui
 )
 
-KDE_ADD_UI_FILES(profileeditor_STAT_SRCS ${profileeditor_UI}
+KDE_ADD_UI_FILES(profileeditor_STAT_SRCS ${profileeditor_UI} )
 
 ADD_LIBRARY(profileeditor STATIC ${profileeditor_STAT_SRCS})
 
@@ -46,7 +48,3 @@ ADD_EXECUTABLE(kdevprofileeditor ${kdevprofileeditor_SRCS})
 #kdevprofileeditor_SOURCES = main.cpp
 #
 #
-
-#######################
-#previous CMakeLists.txt contents follow:
-

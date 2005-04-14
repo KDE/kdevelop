@@ -8,7 +8,3 @@ SUBDIRS( RubyIDE PerlIDE PHPIDE PythonIDE ShellIDE )
 #profiles_DATA = profile.config
 #
 #SUBDIRS = RubyIDE PerlIDE PHPIDE PythonIDE ShellIDE
-
-#######################
-#previous CMakeLists.txt contents follow:
-

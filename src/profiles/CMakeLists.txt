@@ -7,7 +7,3 @@ SUBDIRS( IDE KDevAssistant )
 #profilesdir = $(kde_datadir)/kdevelop/profiles
 #profiles_DATA = profile.config
 #SUBDIRS = IDE KDevAssistant
-
-#######################
-#previous CMakeLists.txt contents follow:
-

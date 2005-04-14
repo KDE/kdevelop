@@ -7,7 +7,3 @@ SUBDIRS( KDECppIDE )
 #profilesdir = $(kde_datadir)/kdevelop/profiles/IDE/CompiledLanguageIDE/CandCppIDE/CppIDE
 #profiles_DATA = profile.config
 #SUBDIRS = KDECppIDE
-
-#######################
-#previous CMakeLists.txt contents follow:
-

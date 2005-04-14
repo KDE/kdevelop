@@ -8,7 +8,3 @@ SUBDIRS( CandCppIDE JavaIDE CandCppIDE AdaIDE FortranIDE HaskellIDE PascalIDE )
 #profiles_DATA = profile.config
 #
 #SUBDIRS = CandCppIDE JavaIDE CandCppIDE AdaIDE FortranIDE HaskellIDE PascalIDE
-
-#######################
-#previous CMakeLists.txt contents follow:
-
