@@ -54,9 +54,11 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
     if ((line.find(subString)!=-1)
         //adymo: do not match substrings if the next character is not a letter or number
         //this is supposed to fix handling of similar words like TARGET and TARGETDEPS
-        && ( ! (searchForVariable && line[idxSeek+subString.length()].isLetterOrNumber()) ) )
+        && ( ! (searchForVariable && line[idxSeek+subString.length()].isLetterOrNumber()) )
+        //erbsland: do not match substrings if the previous character is a letter or number.
+        //          fix problems with SOURCES and RESOURCES.
+        && ( ! (searchForVariable && idxSeek > 0 && line[idxSeek-1].isLetterOrNumber()) ) )
     {
-
       //qWarning("FILEBUFFER: next char is %c, index %d", line[idxSeek+subString.length()].latin1(), idxSeek+subString.length());
       if (startPos.m_row == (int) i-1)
         // first line in search so start idx should be added to result idx
