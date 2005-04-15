@@ -59,6 +59,11 @@ SecurityPart::SecurityPart(QObject *parent, const char *name, const QStringList 
 
 SecurityPart::~SecurityPart()
 {
+	if ( m_widget )
+	{
+		mainWindow()->removeView( m_widget );
+	}
+
     delete m_widget;
 }
 
