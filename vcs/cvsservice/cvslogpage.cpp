@@ -68,6 +68,7 @@ void CVSLogPage::startLog( const QString &workDir, const QString &pathName )
 //    CvsOptions *options = CvsOptions::instance();
     // "cvs log" needs to be done on relative-path basis
     m_pathName = pathName;
+	m_diffStrings.clear();
 
     DCOPRef job = m_cvsService->log( pathName );
     m_cvsLogJob = new CvsJob_stub( job.app(), job.obj() );
@@ -75,7 +76,7 @@ void CVSLogPage::startLog( const QString &workDir, const QString &pathName )
     // establish connections to the signals of the cvs m_job
     connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
     // We'll read the ouput directly from the job ...
-//    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
+    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
 
     kdDebug(9006) << "Running: " << m_cvsLogJob->cvsCommand() << endl;
@@ -123,9 +124,8 @@ void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
     static QRegExp rx_rev( "revision ((\\d+\\.?)+)" );
     m_textBrowser->setTextFormat( QTextBrowser::PlainText );
 
-    QStringList lines = m_cvsLogJob->output();
-    for (size_t i=0; i<lines.count(); ++i) {
-        QString s = lines[i];
+    for (size_t i=0; i<m_diffStrings.count(); ++i) {
+        QString s = m_diffStrings[i];
         kdDebug(9006) << "Examining line: " << s << endl;
         if ( rx_rev.exactMatch(s) )
         {
@@ -191,6 +191,7 @@ void CVSLogPage::slotReceivedOutput( QString someOutput )
     kdDebug(9006) << "CVSLogPage::slotReceivedOutput(QString)" << endl;
 
     kdDebug(9006) << "OUTPUT: " << someOutput << endl;
+	m_diffStrings += m_outputBuffer.process(someOutput);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

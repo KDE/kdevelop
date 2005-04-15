@@ -14,6 +14,7 @@
 
 #include "cvsservicedcopIface.h"
 #include <qwidget.h>
+#include "bufferedstringreader.h"
 
 class CvsJob_stub;
 class CvsService_stub;
@@ -52,6 +53,8 @@ private:
     QString m_pathName;
     QTextBrowser *m_textBrowser;
     QString m_logTextBackup;
+	BufferedStringReader m_outputBuffer;
+	QStringList m_diffStrings;
 
     CvsService_stub *m_cvsService;
     CvsJob_stub *m_cvsLogJob;
