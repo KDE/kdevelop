@@ -158,6 +158,8 @@ env.Append( CPPFLAGS = ['-DQT_NO_TRANSLATION'] )
 
 ## Add this define if you want to use qthreads
 #env.Append( CPPFLAGS = ['-DQT_THREAD_SUPPORT', '-D_REENTRANT'] )
+#if os.uname()[0] == "FreeBSD":
+#	env.Append(LINKFLAGS=["-pthread"])
 
 ## To use kdDebug(intvalue)<<"some trace"<<endl; you need to define -DDEBUG - it is done
 ## in generic.py automatically when you do scons configure debug=1

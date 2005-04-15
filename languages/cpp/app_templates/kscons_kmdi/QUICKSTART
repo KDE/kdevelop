@@ -4,7 +4,11 @@ SUMMARY :
 scons
 scons install
 
- ... and now the details
+
+The online documentation of bksys can be found at:
+http://freehackers.org/~tnagy/bksys_manual.html
+
+ ... and now for the quickstart:
 
 CONFIGURING AND COMPILING THE PROJECT(S)
 SCONS TIPS

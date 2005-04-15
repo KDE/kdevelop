@@ -34,6 +34,8 @@ The variables used when configuring are :
 * datadir    : install path for the data, eg: /usr/local/share
 * libdir     : install path for the libs, eg: /usr/lib
 
+* libsuffix  : for those who need /usr/lib64 and the like ..
+
 * kdeincludes: path to the kde includes (/usr/include/kde on debian, ...)
 * qtincludes : same punishment, for qt includes (/usr/include/qt on debian, ...)
 
@@ -61,10 +63,14 @@ def detect_kde(env):
 	execprefix  = env['ARGS'].get('execprefix', None)
 	datadir     = env['ARGS'].get('datadir', None)
 	libdir      = env['ARGS'].get('libdir', None)
+	libsuffix   = env['ARGS'].get('libsuffix', '')
 	kdeincludes = env['ARGS'].get('kdeincludes', None)
 	kdelibs     = env['ARGS'].get('kdelibs', None)
 	qtincludes  = env['ARGS'].get('qtincludes', None)
 	qtlibs      = env['ARGS'].get('qtlibs', None)
+
+	if libdir:
+		libdir = libdir+libsuffix
 
 	## Detect the kde libraries
 	print "Checking for kde-config           : ",
@@ -178,7 +184,7 @@ def detect_kde(env):
 		if not datadir:
 			datadir = prefix  + "/share"
 		if not libdir:
-			libdir = execprefix + "/lib"
+			libdir = execprefix + "/lib"+libsuffix
 
 		subst_vars = lambda x: x.replace('${exec_prefix}', execprefix).replace('${datadir}', 
 			datadir).replace('${libdir}', libdir)
@@ -239,6 +245,7 @@ def generate(env):
 """+BOLD+"""* execprefix """+NORMAL+""": install path for binaries, ie: /usr/bin
 """+BOLD+"""* datadir    """+NORMAL+""": install path for the data, ie: /usr/local/share
 """+BOLD+"""* libdir     """+NORMAL+""": install path for the libs, ie: /usr/lib
+"""+BOLD+"""* libsuffix  """+NORMAL+""": suffix of libraries on amd64, ie: 64, 32
 """+BOLD+"""* kdeincludes"""+NORMAL+""": path to the kde includes (/usr/include/kde on debian, ...)
 """+BOLD+"""* qtincludes """+NORMAL+""": same punishment, for qt includes (/usr/include/qt on debian, ...)
 """+BOLD+"""* kdelibs    """+NORMAL+""": path to the kde libs, for linking the programs
@@ -527,7 +534,13 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			if not os.path.isfile(str(source[0])):
 				print RED+'kcfg file given'+str(source[0])+' does not exist !'+NORMAL
 				return target, source
-			kcfgfilename = os.popen("cat "+str(source[0])+"|grep File|sed 's/File.*=//i'").read().rstrip()
+			kfcgfilename = ""
+			kcfgFileDeclRx = re.compile("^[fF]ile\s*=\s*(.+)\s*$")
+			for line in file(str(source[0]), "r").readlines():
+				match = kcfgFileDeclRx.match(line.strip())
+				if match:
+					kcfgfilename = match.group(1)
+					break
 			source.append( str(source[0].get_dir())+'/'+kcfgfilename )
 		return target, source
 
@@ -683,21 +696,39 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		
 		return src
 
+	# Special trick for installing rpms ...
+	env['DESTDIR']=''
+	if 'install' in env['TARGS'] and os.environ.has_key('DESTDIR'):
+		env['DESTDIR']=os.environ['DESTDIR']+'/'
+		print CYAN+'** Enabling DESTDIR for the project **' + NORMAL + env['DESTDIR']
+
+	def KDEinstall(path, file, lenv):
+		""" Quick wrapper """
+		if 'install' in lenv['TARGS']:
+			lenv.Alias('install', lenv.Install( lenv['DESTDIR']+path, file ) )
+
+	def KDEinstallas(destfile, file, lenv):
+		""" Quick wrapper """
+		if 'install' in lenv['TARGS']:
+			lenv.Alias('install', lenv.InstallAs( lenv['DESTDIR']+destfile, file ) )
+
 	def KDEprogram(target, source, lenv):
-		""" Makes a kde program """
+		""" Makes a kde program 
+		The program is installed except if one sets env['NOAUTOINSTALL'] """
 		src = KDEfiles(target, source, lenv)
 		lenv.Program(target, src)
-		if 'install' in env['TARGS']:
-			env.Alias('install', env.Install( env['KDEBIN'], target ) )
+		if not lenv.has_key('NOAUTOINSTALL'):
+			KDEinstall(env['KDEBIN'], target, lenv)
 
 	def KDEshlib(target, source, lenv):
-		""" Makes a shared library for kde (.la file for klibloader) """
+		""" Makes a shared library for kde (.la file for klibloader)
+		The library is installed except if one sets env['NOAUTOINSTALL'] """
 		src = KDEfiles(target, source, lenv)
 		lenv.SharedLibrary( target, src )
 		lenv.LaFile( target, target+'.so' )
-		if 'install' in env['TARGS']:
-			env.Alias('install', env.Install( env['KDEMODULE'], target+'.so' ) )
-			env.Alias('install', env.Install( env['KDEMODULE'], target+'.la' ) )
+		if not lenv.has_key('NOAUTOINSTALL'):
+			KDEinstall(env['KDEMODULE'], target+'.so', lenv)
+			KDEinstall(env['KDEMODULE'], target+'.la', lenv)
 
 	def KDEstaticlib(target, source, lenv):
 		""" Makes a static library for kde - in practice you should not use static libraries 
@@ -707,26 +738,16 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		src = KDEfiles(target, source, lenv)
 		lenv.StaticLibrary( target, src )
 #		# do not install static libraries
-#		if 'install' in env['TARGS']:
-#			env.Alias('install', env.Install( env['KDEMODULE'], target+'.a' ) )
+#		if not lenv.has_key('NOAUTOINSTALL'):
+#			KDEinstall(env['KDEMODULE'], target+'.a', lenv)
 
-	def KDEaddlibs(libs, env):
+	def KDEaddlibs(libs, lenv):
 		""" Helper function """
-		env.AppendUnique(LIBS = libs)
+		lenv.AppendUnique(LIBS = libs)
 
-	def KDEaddpaths(paths, env):
+	def KDEaddpaths(paths, lenv):
 		""" Helper function """
-		env.AppendUnique(CPPPATH = paths)
-
-	def KDEinstall(path, file, lenv):
-		""" Quick wrapper """
-		if 'install' in env['TARGS']:
-			env.Alias('install', env.Install( path, file ) )
-
-	def KDEinstallas(destfile, file, lenv):
-		""" Quick wrapper """
-		if 'install' in env['TARGS']:
-			env.Alias('install', env.InstallAs( destfile, file ) )
+		lenv.AppendUnique(CPPPATH = paths)
 
 	def KDElang(transfiles, lenv):
 		""" Process translations (.po files) in a po/ dir """
@@ -742,8 +763,9 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		""" Install the documentation """
 		if not lenv['APPNAME']:
 			print "define lenv['APPNAME'] before using KDEdoc !!"
-			return
+			env.Exit(1)
 		KDEinstall( lenv['KDEDOC']+'/'+lang+'/'+lenv['APPNAME'], file, lenv )
 
 	# Export variables so that sconscripts in subdirectories can use them
 	env.Export("KDEprogram KDEshlib KDEaddpaths KDEaddlibs KDEinstall KDEinstallas KDElang KDEdoc")
+
