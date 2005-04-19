@@ -13,8 +13,11 @@ addtemplatedlgbase.ui
 
 KDE_ADD_UI_FILES(kdevabbrev_PART_SRCS ${kdevabbrev_UI} )
 
-ADD_LIBRARY(kdevabbrev SHARED ${kdevabbrev_PART_SRCS})
+ADD_LIBRARY(kdevabbrev MODULE ${kdevabbrev_PART_SRCS})
 
+#SET_TARGET_PROPERTIES(kdevabbrev PROPERTIES PREFIX "")
+
+TARGET_LINK_LIBRARIES(kdevabbrev ${QT_LIBRARIES} kdecore kdeui kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 
 #original Makefile.am contents follow:

@@ -4,6 +4,7 @@ tag.cpp
 
 ADD_LIBRARY(kdevcatalog SHARED ${kdevcatalog_LIB_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevcatalog ${QT_LIBRARIES})
 
 
 #original Makefile.am contents follow:

@@ -6,7 +6,7 @@ KDE_AUTOMOC(${kinterfacedesigner_LIB_SRCS})
 
 ADD_LIBRARY(kinterfacedesigner SHARED ${kinterfacedesigner_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kinterfacedesigner ${QT_LIBRARIES} kdecore kdeui kparts)
 
 #original Makefile.am contents follow:
 

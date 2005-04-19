@@ -36,10 +36,11 @@ qeditlistbox.cpp
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 KDE_AUTOMOC(${kdevpropertyeditor_LIB_SRCS})
+KDE_ADD_MOC_FILES(kdevpropertyeditor_LIB_SRCS qeditlistbox.h)
 
 ADD_LIBRARY(kdevpropertyeditor SHARED ${kdevpropertyeditor_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevpropertyeditor ${QT_LIBRARIES} kdecore kdeui kio)
 
 #original Makefile.am contents follow:
 

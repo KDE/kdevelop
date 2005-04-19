@@ -15,9 +15,8 @@ custommakeconfigwidgetbase.ui
 
 KDE_ADD_UI_FILES(kdevcustomproject_PART_SRCS ${kdevcustomproject_UI} )
 
+
 ADD_LIBRARY(kdevcustomproject SHARED ${kdevcustomproject_PART_SRCS})
-
-
 
 #original Makefile.am contents follow:
 

@@ -8,7 +8,14 @@ dummy.cpp
 
 ADD_LIBRARY(kdevelop SHARED ${kdevelop_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevelop
+${QT_LIBRARIES} kdecore kdeui kscript ktexteditor
+${CMAKE_BINARY_DIR}/lib/interfaces/libkdevinterfaces.a
+${CMAKE_BINARY_DIR}/lib/interfaces/external/libkinterfacedesigner.so
+${CMAKE_BINARY_DIR}/lib/interfaces/extensions/libkdevextensions.a
+${CMAKE_BINARY_DIR}/lib/util/libkdevutil.a
+${CMAKE_BINARY_DIR}/lib/widgets/propeditor/libkdevpropertyeditor.so
+)
 
 #original Makefile.am contents follow:
 
@@ -38,7 +45,7 @@ ADD_LIBRARY(kdevelop SHARED ${kdevelop_LIB_SRCS})
 #
 #
 #SUBDIRS = interfaces widgets util $(QEXTMDI_SUBDIR) antlr catalog \
-#	cppparser $(COMPAT_SUBDIR) astyle 
+#	cppparser $(COMPAT_SUBDIR) astyle
 #
 #DOXYGEN_EMPTY = YES
 #include ../Doxyfile.am

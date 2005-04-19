@@ -5,9 +5,11 @@ kdevvcsintegrator.cpp
 
 KDE_AUTOMOC(${kdevextras_LIB_SRCS})
 
+KDE_ADD_MOC_FILES(kdevextras_LIB_SRCS kdevcompileroptions.h)
+
 ADD_LIBRARY(kdevextras SHARED ${kdevextras_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevextras ${QT_LIBRARIES} )
 
 #original Makefile.am contents follow:
 

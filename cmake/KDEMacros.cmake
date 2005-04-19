@@ -1,3 +1,10 @@
+#this file contains the following macros:
+# ADD_FILE_DEPENDANCY
+# KDE_ADD_DCOP_SKELS
+# KDE_ADD_MOC_FILES
+# KDE_ADD_UI_FILES
+# KDE_AUTOMOC
+
 #neundorf@kde.org
 
 #this should better be part of cmake:
@@ -59,24 +66,24 @@ MACRO(KDE_ADD_MOC_FILES _sources)
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_ADD_MOC_FILES)
 
-#create the moc files aka automoc from automake
-#usage: KDE_CREATE_AUTOMOC_FILES(${foo_automoc_SRCS})
-MACRO(KDE_CREATE_AUTOMOC_FILES )
-   FOREACH (_current_FILE ${ARGN})
-      GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-      SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc)
-      SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
-
-      ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
-         COMMAND moc
-         ARGS ${_header} -o ${_moc}
-         DEPENDS ${_header}
-      )
-
-      ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
-
-   ENDFOREACH (_current_FILE)
-ENDMACRO(KDE_CREATE_AUTOMOC_FILES)
+##create the moc files aka automoc from automake
+##usage: KDE_CREATE_AUTOMOC_FILES(${foo_automoc_SRCS})
+#MACRO(KDE_CREATE_AUTOMOC_FILES )
+#   FOREACH (_current_FILE ${ARGN})
+#      GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
+#      SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc)
+#      SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
+#
+#      ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
+#         COMMAND moc
+#         ARGS ${_header} -o ${_moc}
+#         DEPENDS ${_header}
+#      )
+#
+#      ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
+#
+#   ENDFOREACH (_current_FILE)
+#ENDMACRO(KDE_CREATE_AUTOMOC_FILES)
 
 #create the implementation files from the ui files and add them to the list of sources
 #usage: KDE_ADD_UI_FILES(foo_SRCS ${ui_files})
