@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     // see if we are starting with session management
     if (app.isRestored())
     {
-        RESTORE(%{APPNAME});
+        RESTORE(%{APPNAMELC});
     }
     else
     {
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
         if (args->count() == 0)
         {
-            %{APPNAME} *widget = new %{APPNAME};
+            %{APPNAMELC} *widget = new %{APPNAMELC};
             widget->show();
         }
         else
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
             int i = 0;
             for (; i < args->count(); i++)
             {
-                %{APPNAME} *widget = new %{APPNAME};
+                %{APPNAMELC} *widget = new %{APPNAMELC};
                 widget->show();
             }
         }

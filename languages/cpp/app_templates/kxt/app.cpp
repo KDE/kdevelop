@@ -24,9 +24,9 @@
 #include <kaction.h>
 #include <kstdaction.h>
 
-%{APPNAME}::%{APPNAME}()
-    : KMainWindow( 0, "%{APPNAME}" ),
-      m_view(new %{APPNAME}View(this)),
+%{APPNAMELC}::%{APPNAMELC}()
+    : KMainWindow( 0, "%{APPNAMELC}" ),
+      m_view(new %{APPNAMELC}View(this)),
       m_printer(0)
 {
     // accept dnd
@@ -54,11 +54,11 @@
 
 }
 
-%{APPNAME}::~%{APPNAME}()
+%{APPNAMELC}::~%{APPNAMELC}()
 {
 }
 
-void %{APPNAME}::setupActions()
+void %{APPNAMELC}::setupActions()
 {
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
     KStdAction::quit(kapp, SLOT(quit()), actionCollection());
@@ -70,7 +70,7 @@ void %{APPNAME}::setupActions()
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
-    // custom menu and menu item - the slot is in the class %{APPNAME}View
+    // custom menu and menu item - the slot is in the class %{APPNAMELC}View
     KAction *custom = new KAction(i18n("Swi&tch Colors"), 0,
                                   m_view, SLOT(switchColors()),
                                   actionCollection(), "switch_action");
@@ -78,17 +78,17 @@ void %{APPNAME}::setupActions()
     createGUI();
 }
 
-void %{APPNAME}::fileNew()
+void %{APPNAMELC}::fileNew()
 {
     // this slot is called whenever the File->New menu is selected,
     // the New shortcut is pressed (usually CTRL+N) or the New toolbar
     // button is clicked
 
     // create a new window
-    (new %{APPNAME})->show();
+    (new %{APPNAMELC})->show();
 }
 
-void %{APPNAME}::optionsShowToolbar()
+void %{APPNAMELC}::optionsShowToolbar()
 {
     // this is all very cut and paste code for showing/hiding the
     // toolbar
@@ -98,7 +98,7 @@ void %{APPNAME}::optionsShowToolbar()
         toolBar()->hide();
 }
 
-void %{APPNAME}::optionsShowStatusbar()
+void %{APPNAMELC}::optionsShowStatusbar()
 {
     // show/hide the statusbar
     if (m_statusbarAction->isChecked())
@@ -107,18 +107,18 @@ void %{APPNAME}::optionsShowStatusbar()
         statusBar()->hide();
 }
 
-void %{APPNAME}::optionsConfigureKeys()
+void %{APPNAMELC}::optionsConfigureKeys()
 {
     KKeyDialog::configure(actionCollection());
 }
 
-void %{APPNAME}::optionsConfigureToolbars()
+void %{APPNAMELC}::optionsConfigureToolbars()
 {
     // use the standard toolbar editor
     saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
 }
 
-void %{APPNAME}::newToolbarConfig()
+void %{APPNAMELC}::newToolbarConfig()
 {
     // this slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
     // recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
@@ -127,7 +127,7 @@ void %{APPNAME}::newToolbarConfig()
     applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
 }
 
-void %{APPNAME}::optionsPreferences()
+void %{APPNAMELC}::optionsPreferences()
 {
 	// The preference dialog is derived from prefs-base.ui which is subclassed into Prefs
 	//
@@ -139,13 +139,13 @@ void %{APPNAME}::optionsPreferences()
         dialog->show();
 }
 
-void %{APPNAME}::changeStatusbar(const QString& text)
+void %{APPNAMELC}::changeStatusbar(const QString& text)
 {
     // display the text on the statusbar
     statusBar()->message(text, 2000);
 }
 
-void %{APPNAME}::changeCaption(const QString& text)
+void %{APPNAMELC}::changeCaption(const QString& text)
 {
     // display the text on the caption
     setCaption(text);

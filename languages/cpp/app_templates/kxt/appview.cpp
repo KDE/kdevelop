@@ -6,18 +6,18 @@
 #include <klocale.h>
 #include <qlabel.h>
 
-%{APPNAME}View::%{APPNAME}View(QWidget *parent)
-    : %{APPNAME}view_base(parent)
+%{APPNAMELC}View::%{APPNAMELC}View(QWidget *parent)
+    : %{APPNAMELC}view_base(parent)
 {
 	settingsChanged();
 }
 
-%{APPNAME}View::~%{APPNAME}View()
+%{APPNAMELC}View::~%{APPNAMELC}View()
 {
 
 }
 
-void %{APPNAME}View::switchColors()
+void %{APPNAMELC}View::switchColors()
 {
 	// switch the foreground/background colors of the label
 	QColor color = Settings::col_background();
@@ -27,7 +27,7 @@ void %{APPNAME}View::switchColors()
 	settingsChanged();
 }
 
-void %{APPNAME}View::settingsChanged()
+void %{APPNAMELC}View::settingsChanged()
 {
 	sillyLabel->setPaletteBackgroundColor( Settings::col_background() );
 	sillyLabel->setPaletteForegroundColor( Settings::col_foreground() );

@@ -24,19 +24,19 @@ class KURL;
  * @author %{AUTHOR} <%{EMAIL}>
  * @version %{VERSION}
  */
-class %{APPNAME} : public KMainWindow
+class %{APPNAMELC} : public KMainWindow
 {
     Q_OBJECT
 public:
     /**
      * Default Constructor
      */
-    %{APPNAME}();
+    %{APPNAMELC}();
 
     /**
      * Default Destructor
      */
-    virtual ~%{APPNAME}();
+    virtual ~%{APPNAMELC}();
 
 private slots:
     void fileNew();
@@ -55,7 +55,7 @@ private:
     void setupActions();
 
 private:
-    %{APPNAME}View *m_view;
+    %{APPNAMELC}View *m_view;
 
     KPrinter   *m_printer;
     KToggleAction *m_toolbarAction;

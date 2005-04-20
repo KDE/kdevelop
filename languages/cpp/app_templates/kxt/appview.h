@@ -19,19 +19,19 @@ class KURL;
  * @author %{AUTHOR} <%{EMAIL}>
  * @version %{VERSION}
  */
-class %{APPNAME}View : public %{APPNAME}view_base
+class %{APPNAMELC}View : public %{APPNAMELC}view_base
 {
     Q_OBJECT
 public:
 	/**
 	 * Default constructor
 	 */
-    %{APPNAME}View(QWidget *parent);
+    %{APPNAMELC}View(QWidget *parent);
 
 	/**
 	 * Destructor
 	 */
-    virtual ~%{APPNAME}View();
+    virtual ~%{APPNAMELC}View();
 
 signals:
     /**
