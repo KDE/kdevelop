@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=HTML Help Document
+Comment[br]=Teul skoazell HTML
 Comment[ca]=Document d'ajuda HTML
 Comment[da]=HTML Hjælpedokument
 Comment[de]=HTML-Hilfedatei
@@ -24,7 +25,7 @@ Comment[sr@Latn]=HTML dokument pomoći
 Comment[sv]=HTML hjälpdokument
 Comment[ta]=HTML  உதவி ஆவணம்
 Comment[tg]=Ҳуҷҷати HTML Help
-Comment[xx]=xxHTML Help Documentxx
+Comment[uk]=Документ HTML-довідки
 Comment[zh_CN]=HTML 帮助文档
 Hidden=false
 Icon=help

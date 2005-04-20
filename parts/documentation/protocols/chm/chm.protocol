@@ -22,4 +22,5 @@ Description[ru]=Обработчик ввода-вывода для файлов
 Description[sr]=KIOSlave за приказ WinHelp фајлова
 Description[sr@Latn]=KIOSlave za prikaz WinHelp fajlova
 Description[sv]=En I/O-slav för att visa WinHelp-filer
+Description[uk]=kioslave для показу файлів WinHelp
 Icon=help

@@ -17,12 +17,12 @@ Name[pl]=Interfejs do programów
 Name[pt]=Interface da Aplicação
 Name[pt_BR]=Interface Frontend para Aplicativos
 Name[ru]=Интерфейс менеджера приложений
-Name[sr]=Интерфејс сучеља програма
-Name[sr@Latn]=Интерфејс сучеља програма
+Name[sr]=Кориснички интерфејс програма
+Name[sr@Latn]=Korisnički interfejs programa
 Name[sv]=Programgränssnitt
 Name[ta]=ஆப் முன்னிருந்த இடைமுகம்
 Name[tg]=Интерфейси мудири гузориш
-Name[xx]=xxApp Frontend Interfacexx
+Name[uk]=Інтерфейс користувача для App
 Name[zh_CN]=应用程序前端接口
 
 # versioning - prevent DLL hell
