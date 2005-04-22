@@ -31,6 +31,7 @@
 #include <kiconloader.h>
 #include <kedittoolbar.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 #include <kapplication.h>
 
 #include <ddockwindow.h>
@@ -222,7 +223,13 @@ void SimpleMainWindow::createActions()
         this, SLOT(raiseEditor()), actionCollection(), "raise_editor");
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
+    
+    new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
+        this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h");
 
+    new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
+        this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
+    
     KStdAction::configureToolbars(this, SLOT(configureToolbars()), 
         actionCollection(), "set_configure_toolbars");
     
@@ -505,6 +512,26 @@ void SimpleMainWindow::fillWindowMenu()
         ++i;
         ++itt;
     }
+}
+
+void SimpleMainWindow::slotSplitVertical()
+{
+    DTabWidget *tab = splitVertical();
+/*    KParts::Part *activePart = PartController::getInstance()->activePart();
+    if (!activePart)
+        return;
+    KTextEditor::Document *activeDoc = dynamic_cast<KTextEditor::Document *>(activePart);
+    if (!activeDoc)
+        return;
+
+    QWidget *view = activeDoc->createView(0);
+    addWidget(tab, view, "");
+    view->show();*/
+}
+
+void SimpleMainWindow::slotSplitHorizontal()
+{
+    DTabWidget *tab = splitHorizontal();
 }
 
 #include "simplemainwindow.moc"

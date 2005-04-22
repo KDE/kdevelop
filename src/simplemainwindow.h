@@ -79,6 +79,8 @@ private slots:
     void raiseEditor();
     void openURL(int w);
     void fillWindowMenu();
+    void slotSplitVertical();
+    void slotSplitHorizontal();
 
 private:
     void createFramework();

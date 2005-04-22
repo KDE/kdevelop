@@ -113,12 +113,17 @@ void DMainWindow::removeWidget(QWidget *widget)
         if (tab->indexOf(widget) >= 0)
         {
             tab->removePage(widget);
+            widget->reparent(0,QPoint(0,0),false);
             if (tab->count() == 0)
             {
                 tab->closeButton()->hide();
-                //@fixme only secondary tabwidgets should be removed
-/*                QPair<uint, uint> idx = m_central->indexOf(tab);
-                m_central->removeDock(idx.first, idx.second, true);*/
+                if (tab != m_tabs.first())
+                {
+                    QPair<uint, uint> idx = m_central->indexOf(tab);
+                    m_tabs.remove(tab);
+                    m_activeTabWidget = m_tabs.first();
+                    m_central->removeDock(idx.first, idx.second, true);
+                }
             }
         }
     }
