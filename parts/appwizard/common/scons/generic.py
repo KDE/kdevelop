@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 ## Thomas Nagy, 2005
 
 """
@@ -12,7 +13,7 @@ ie: scons configure debug=full prefix=/usr/local extraincludes=/tmp/include:/usr
 BOLD   ="\033[1m"
 RED    ="\033[91m"
 GREEN  ="\033[92m"
-YELLOW ="\033[93m"
+YELLOW ="\033[1m"  #"\033[93m" # replaced by bold because yellow is unreadable on white
 CYAN   ="\033[96m"
 NORMAL ="\033[0m"
 

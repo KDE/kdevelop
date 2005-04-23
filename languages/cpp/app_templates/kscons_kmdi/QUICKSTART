@@ -102,17 +102,17 @@ To compile with the scons distribution :
 * unpack it with :
   tar xjvf scons-mini.tar.bz2
 * compile the program with :
-  python scons.py
+  ./scons (instead of just 'scons')
 * install the program with :
-  python scons.py install
+  ./scons install (instead of just 'scons install')
 
 More options :
 * clean the object files with :
-  python scons.py -c
+  ./scons -c
 * uninstall the program with with :
-  python scons.py -c install
+  ./scons -c install
 * create a package :
-  python scons.py dist
+  ./scons dist
 
 ------------------------------------------
 MORE TIPS

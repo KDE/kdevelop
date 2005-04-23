@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # Copyright (c) 2001, 2002, 2003, 2004 The SCons Foundation
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -48,7 +49,7 @@ eg: scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 BOLD   ="\033[1m"
 RED    ="\033[91m"
 GREEN  ="\033[92m"
-YELLOW ="\033[93m"
+YELLOW ="\033[1m" #"\033[93m" # replaced by bold because yellow is unreadable on white
 CYAN   ="\033[96m"
 NORMAL ="\033[0m"
 

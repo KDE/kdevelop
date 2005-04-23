@@ -19,7 +19,7 @@ cat > Makefile << EOF
 ### To use scons when installed globally use
 #SCONS=scons
 ### To run the local version instead, define
-SCONS=python scons.py
+SCONS=./scons
 
 # scons            : compile
 # scons -c         : clean
@@ -52,10 +52,9 @@ dist:
 	\$(SCONS) dist
 EOF
 
-
 echo ""
 echo -e $GREEN"A minimum scons distribution has been unpacked right here"
 echo -e $GREEN"you can now run : "$NORMAL
-echo -e $YELLOW"python scons.py"$NORMAL
-echo -e $YELLOW"python scons.py install$NORMAL (as root probably)"
+echo -e $BOLD"./scons"$NORMAL
+echo -e $BOLD"./scons install$NORMAL (as root probably)"
 
