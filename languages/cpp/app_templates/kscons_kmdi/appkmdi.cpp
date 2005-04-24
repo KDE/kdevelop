@@ -77,19 +77,15 @@
 	// and a status bar
 	statusBar()->show();
 
-	// apply the saved mainwindow settings, if any, and ask the mainwindow
-	// to automatically save settings if changed: window size, toolbar
-	// position, icon size, etc.
-	setAutoSaveSettings();
-
-	connect( this, SIGNAL( viewActivated( KMdiChildView * ) ),
-			this, SLOT( currentChanged( KMdiChildView * ) ) );
+	connect( this, SIGNAL( viewActivated( KMdiChildView * ) ), this, SLOT( currentChanged( KMdiChildView * ) ) );
 
 	m_console = new kmdikonsole(this, "konsole");
 	m_console->setIcon( SmallIcon("konsole") );
 	m_console->setCaption( i18n("Terminal") );
 	addToolWindow( m_console, KDockWidget::DockBottom, getMainDockWidget(), 20 );
 
+
+#if KDE_IS_VERSION(3, 3, 0)
 	if (Settings::showCloseTabsButton())
 	{
 		QToolButton *but = new QToolButton(tabWidget());
@@ -99,12 +95,28 @@
 		connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
 		tabWidget()->setCornerWidget(but, TopRight);
 	}
+#endif
+
+	// apply the saved mainwindow settings, if any, and ask the mainwindow
+	// to automatically save settings if changed: window size, toolbar
+	// position, icon size, etc.
+	setAutoSaveSettings();
+
+	// Read the dock config only if the app was started at least only once - kmdi is tricky
+        KConfig *cfg = new KConfig("%{APPNAMELC}_dockposrc");
+        if (cfg->readNumEntry("%{APPNAMELC}_main_dock_settings", 0) == 1) manager()->readConfig(cfg);
+        cfg->writeEntry("%{APPNAMELC}_main_dock_settings", 1);
+        delete cfg;
 
 	showTipOnStart();
 }
 
 %{APPNAMELC}kmdi::~%{APPNAMELC}kmdi()
 {
+	// Write the dock config on exit
+        KConfig *cfg = new KConfig("%{APPNAMELC}_dockposrc");
+        manager()->writeConfig(cfg);
+        delete cfg;
 	delete m_console;
 }
 

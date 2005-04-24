@@ -24,7 +24,7 @@
 <cstring>kcfg_showCloseTabsButton</cstring>
 </property>
 <property name="text">
-<string>Show close buttons on tabs</string>
+<string>Show close buttons on the right of tabs</string>
 </property>
 </widget>
 </grid>

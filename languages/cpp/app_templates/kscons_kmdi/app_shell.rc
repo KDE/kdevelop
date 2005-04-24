@@ -5,7 +5,11 @@
     <Action name="file_new"/>
     <Merge/>
     <Separator/>
+    <Action name="file_close"/>
+    <Separator/>
     <Action name="file_quit"/>
+  </Menu>
+  <Menu name="view" noMerge="1"><text>&amp;View</text>
   </Menu>
   <Menu noMerge="1" name="settings"><text>&amp;Settings</text>
     <Action name="options_show_toolbar"/>
@@ -22,6 +26,7 @@
 </MenuBar>
 <ToolBar noMerge="1" name="mainToolBar"><text>Main Toolbar</text>
   <Action name="file_new"/>
+  <Action name="file_close"/>
   <Merge/>
   <Action name="help"/>
 </ToolBar>

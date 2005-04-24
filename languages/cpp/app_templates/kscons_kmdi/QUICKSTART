@@ -30,18 +30,17 @@ scons on the top-level directory, the scripts find and
 cache the environment detected *automatically* :
 -> scons
 
-To clean the project
--> scons -c
+To clean the project      ->  scons -c
 
-To install the project
--> scons install
-
-To uninstall the project
--> scons -c install
+To install the project    ->  scons install
+To install as root user   ->  su -c 'scons install'
+To uninstall the project  ->  scons -c install
+To uninstall (as root)    ->  su -c 'scons -c install'
 
 To (re)configure the project and give particular arguments, use :
--> scons configure debug=1
-or -> python scons.py configure debug=1
+        -> scons configure debug=1
+or      -> python scons.py configure debug=1
+
 The variables are saved automatically after the first run
 in files named *.cache.py (look at kde.cache.py, ..)
 
