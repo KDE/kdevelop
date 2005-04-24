@@ -44,20 +44,6 @@
                 <set>WordBreak|AlignVCenter</set>
             </property>
         </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line7</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
         <widget class="QCheckBox" row="8" column="1">
             <property name="name">
                 <cstring>lineWrappingCheckBox</cstring>
@@ -183,23 +169,6 @@
                 <set>AlignTop</set>
             </property>
         </widget>
-        <widget class="Line" row="5" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line7_2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
         <spacer row="6" column="0" rowspan="4" colspan="1">
             <property name="name">
                 <cstring>spacer13_2</cstring>
@@ -280,23 +249,6 @@
                     </property>
                 </widget>
             </grid>
-        </widget>
-        <widget class="Line" row="11" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line7_2_2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
         </widget>
         <spacer row="12" column="0">
             <property name="name">
@@ -393,23 +345,6 @@
             </property>
             <property name="alignment">
                 <set>AlignTop</set>
-            </property>
-        </widget>
-        <widget class="Line" row="14" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>line13</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
             </property>
         </widget>
         <spacer row="16" column="1">
