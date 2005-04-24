@@ -9,12 +9,12 @@ dummy.cpp
 ADD_LIBRARY(kdevelop SHARED ${kdevelop_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevelop
-${QT_LIBRARIES} kdecore kdeui kscript ktexteditor
-${CMAKE_BINARY_DIR}/lib/interfaces/libkdevinterfaces.a
+${QT_LIBRARIES} kdecore kdeui kscript ktexteditor DCOP kio
 ${CMAKE_BINARY_DIR}/lib/interfaces/external/libkinterfacedesigner.so
+${CMAKE_BINARY_DIR}/lib/widgets/propeditor/libkdevpropertyeditor.so
+${CMAKE_BINARY_DIR}/lib/interfaces/libkdevinterfaces.a
 ${CMAKE_BINARY_DIR}/lib/interfaces/extensions/libkdevextensions.a
 ${CMAKE_BINARY_DIR}/lib/util/libkdevutil.a
-${CMAKE_BINARY_DIR}/lib/widgets/propeditor/libkdevpropertyeditor.so
 )
 
 #original Makefile.am contents follow:
