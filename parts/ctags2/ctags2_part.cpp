@@ -241,23 +241,26 @@ void CTags2Part::slotGotoDeclaration( )
 int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pattern )
 {
 	if ( pattern.isEmpty() ) return -1;
+
+	// ctags interestingly escapes "/", but apparently nothing else. lets revert that
+	QString unescaped = pattern;
+	unescaped.replace( "\\/", "/" );
 	
 	// most of the time, the ctags pattern has the form /^foo$/
 	// but this isn't true for some macro definitions
 	// where the form is only /^foo/
 	// I have no idea if this is a ctags bug or not, but we have to deal with it
-	
+
 	QString reduced, escaped, re_string;
-	if ( pattern.endsWith( "$/" ) )
+	if ( unescaped.endsWith( "$/" ) )
 	{
-			
-		reduced = pattern.mid( 2, pattern.length() -4 );
+		reduced = unescaped.mid( 2, unescaped.length() -4 );
 		escaped = QRegExp::escape( reduced );
 		re_string = QString( "^" + escaped + "$" );
 	}
 	else
 	{
-		reduced = pattern.mid( 2, pattern.length() -3 );
+		reduced = unescaped.mid( 2, unescaped.length() -3 );
 		escaped = QRegExp::escape( reduced );
 		re_string = QString( "^" + escaped );
 	}
@@ -267,7 +270,6 @@ int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pa
 	int n = 0;
 	while ( !istream.atEnd() )
 	{
-//		if ( re.exactMatch( istream.readLine() ) )
 		if ( re.search( istream.readLine() ) > -1 )
 		{
 			return n;
