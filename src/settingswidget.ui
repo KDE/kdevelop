@@ -217,7 +217,7 @@
                         <string>Alt+V</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>KDevelop comes with it's own UI designer that can either be embedded or run as a seperate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
+                        <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
@@ -225,13 +225,13 @@
                         <cstring>seperateAppRadioButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Run KDevelop's &amp;designer as a seperate application</string>
+                        <string>Run KDevelop's &amp;designer as a separate application</string>
                     </property>
                     <property name="accel">
                         <string>Alt+D</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>KDevelop comes with it's own UI designer that can either be embedded or run as a seperate program. Check this button if you wish to run KDevelop's UI designer as a seperate program.</string>
+                        <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="2" column="0">

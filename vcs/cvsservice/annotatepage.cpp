@@ -208,7 +208,7 @@ void AnnotatePage::parseAnnotateOutput(QStringList& lines)
     //if the upper loop hit the ent of the list, this can only mean, that
     //the selected revision is unknown to CVS
     if (!notEof) {
-        KMessageBox::error(this, i18n("The selected revision does not exist!"));
+        KMessageBox::error(this, i18n("The selected revision does not exist."));
         ((KListView*)m_annotateView)->clear();
         return;
     }

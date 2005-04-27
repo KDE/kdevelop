@@ -85,10 +85,10 @@ void SimpleMainWindow::init()
     if ( PluginController::getInstance()->engine().allOffers(ProfileEngine::Global).isEmpty() ) 
     {
         KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop will not work"
-            " properly!\nPlease make sure "
-            "that KDevelop is installed in your KDE directory, otherwise you have "
+            " properly.\nPlease make sure "
+            "that KDevelop is installed in your KDE directory; otherwise, you have "
             "to add KDevelop's installation "
-            "path to the environment variable KDEDIRS and run kbuildsycoca. Restart" 
+            "path to the environment variable KDEDIRS and run kbuildsycoca. Restart " 
             "KDevelop afterwards.\n"
             "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
             i18n("Could Not Find Plugins") );
