@@ -1255,8 +1255,12 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 		if ( invokedOnDemand && trueMatches.size() == 1 )
 		{
+			// erbsland: get the cursor position now, because m_ccLine and m_ccColumn
+			//           are not set until the first typed char.
+			unsigned int nLine, nCol;
+			m_activeCursor->cursorPositionReal( &nLine, &nCol );
 			// there is only one entry -> complete immediately
-			m_activeEditor->insertText( m_ccLine, m_ccColumn,
+			m_activeEditor->insertText( nLine, nCol,
 				trueMatches[0].right( trueMatches[0].length() - word.length() ) );
 		}
 		else if ( entryList.size() )
