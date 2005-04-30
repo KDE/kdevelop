@@ -8,6 +8,7 @@ KDE_AUTOMOC(${kdevsecurity_PART_SRCS})
 
 ADD_LIBRARY(kdevsecurity SHARED ${kdevsecurity_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevsecurity ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

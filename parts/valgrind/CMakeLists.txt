@@ -5,16 +5,17 @@ valgrind_dialog.cpp
 valgrinditem.cpp
 )
 
-KDE_AUTOMOC(${kdevvalgrind_PART_SRCS})
-
 SET( kdevvalgrind_UI
 dialog_widget.ui
 )
+
+KDE_AUTOMOC(${kdevvalgrind_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevvalgrind_PART_SRCS ${kdevvalgrind_UI} )
 
 ADD_LIBRARY(kdevvalgrind SHARED ${kdevvalgrind_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevvalgrind ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

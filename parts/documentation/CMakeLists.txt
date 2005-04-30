@@ -19,8 +19,6 @@ KDevDocumentationIface.cpp
 addcatalogdlg.cpp
 )
 
-KDE_AUTOMOC(${kdevdocumentation_PART_SRCS})
-
 SET( kdevdocumentation_UI
 docglobalconfigwidgetbase.ui
 editcatalogdlgbase.ui
@@ -32,11 +30,13 @@ docprojectconfigwidgetbase.ui
 addcatalogdlgbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevdocumentation_PART_SRCS ${kdevdocumentation_UI} )
-
 SET( kdevdocumentation_DCOP_SRCS
 KDevDocumentationIface.h
 )
+
+KDE_AUTOMOC(${kdevdocumentation_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevdocumentation_PART_SRCS ${kdevdocumentation_UI} )
 
 KDE_ADD_DCOP_SKELS(kdevdocumentation_PART_SRCS ${kdevdocumentation_DCOP_SRCS})
 
@@ -44,6 +44,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/parts/documentation/interfaces/)
 
 ADD_LIBRARY(kdevdocumentation SHARED ${kdevdocumentation_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevdocumentation ${KDEV_PART_LIBS} DCOP khtml kdevpropertyeditor kresources kinterfacedesigner )
 
 
 #original Makefile.am contents follow:

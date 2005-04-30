@@ -8,6 +8,7 @@ KDE_AUTOMOC(${kdevgccoptions_PART_SRCS})
 
 ADD_LIBRARY(kdevgccoptions SHARED ${kdevgccoptions_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevgccoptions ${QT_LIBRARIES} kdecore kdeui kdevextras kdevwidgets)
 
 
 #original Makefile.am contents follow:

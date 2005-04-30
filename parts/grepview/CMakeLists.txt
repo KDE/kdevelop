@@ -10,7 +10,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/widgets/)
 
 ADD_LIBRARY(kdevgrepview SHARED ${kdevgrepview_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevgrepview ${KDEV_PART_LIBS} kdevwidgets)
 
 #original Makefile.am contents follow:
 

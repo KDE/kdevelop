@@ -25,9 +25,10 @@ jobscheduler.cpp
 bufferedstringreader.cpp
 cvsfileinfoprovider.cpp
 editorsdialog.cpp
+annotatedialog.cpp
+annotatepage.cpp
+annotateview.cpp
 )
-
-KDE_AUTOMOC(${kdevcvsservice_PART_SRCS})
 
 SET( kdevcvsservice_UI
 cvsformbase.ui
@@ -40,17 +41,19 @@ releaseinputdialogbase.ui
 editorsdialogbase.ui
 )
 
-KDE_ADD_UI_FILES(kdevcvsservice_PART_SRCS ${kdevcvsservice_UI} )
-
 SET( kdevcvsservice_DCOP_SRCS
 cvsservicedcopIface.h
 )
+
+KDE_AUTOMOC(${kdevcvsservice_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevcvsservice_PART_SRCS ${kdevcvsservice_UI} )
 
 KDE_ADD_DCOP_SKELS(kdevcvsservice_PART_SRCS ${kdevcvsservice_DCOP_SRCS})
 
 ADD_LIBRARY(kdevcvsservice SHARED ${kdevcvsservice_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevcvsservice ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP ${CMAKE_BINARY_DIR}/lib/libkdevelop.so cvsservice)
 
 #original Makefile.am contents follow:
 
@@ -79,7 +82,7 @@ ADD_LIBRARY(kdevcvsservice SHARED ${kdevcvsservice_PART_SRCS})
 #	diffdialog.h cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h diffwidget.h \
 #	cvsfileinfoprovider.h cvsservicedcopIface.h bufferedstringreader.h editorsdialog.h \
 #	editorsdialogbase.h
-#    
+#
 #METASOURCES = AUTO
 #
 #ICONS = AUTO

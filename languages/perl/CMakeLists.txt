@@ -8,15 +8,17 @@ perlsupportpart.cpp
 perlconfigwidget.cpp
 )
 
-KDE_AUTOMOC(${kdevperlsupport_PART_SRCS})
-
 SET( kdevperlsupport_UI
 perlconfigwidgetbase.ui
 )
 
+KDE_AUTOMOC(${kdevperlsupport_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevperlsupport_PART_SRCS ${kdevperlsupport_UI} )
 
 ADD_LIBRARY(kdevperlsupport SHARED ${kdevperlsupport_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevperlsupport ${KDEV_LANG_LIBS} )
 
 
 

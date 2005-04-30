@@ -6,24 +6,25 @@ scriptoptionswidget.cpp
 scriptnewfiledlg.cpp
 )
 
-KDE_AUTOMOC(${kdevscriptproject_PART_SRCS})
-
 SET( kdevscriptproject_UI
 scriptoptionswidgetbase.ui
 )
+
+KDE_AUTOMOC(${kdevscriptproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevscriptproject_PART_SRCS ${kdevscriptproject_UI} )
 
 ADD_LIBRARY(kdevscriptproject SHARED ${kdevscriptproject_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevscriptproject ${KDEV_BUILDTOOLS_LIBS})
 
 
 #original Makefile.am contents follow:
 
 ## Here resides the script project part.
-## This is a generic part for various scripting languages that simply 
+## This is a generic part for various scripting languages that simply
 ## includes all files from the project directory without managing
-## them. If a language needs more specific features, it deserves 
+## them. If a language needs more specific features, it deserves
 ## its own part (or the respective features should be added to the
 ## language support part)
 #

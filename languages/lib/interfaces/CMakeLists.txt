@@ -6,7 +6,7 @@ KDE_AUTOMOC(${lang_interfaces_LIB_SRCS})
 
 ADD_LIBRARY(lang_interfaces SHARED ${lang_interfaces_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(lang_interfaces ${QT_LIBRARIES})
 
 #original Makefile.am contents follow:
 

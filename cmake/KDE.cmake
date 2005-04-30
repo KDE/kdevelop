@@ -22,7 +22,6 @@ ADD_DEFINITIONS(-Wnon-virtual-dtor -Wno-long-long -Wundef -ansi -D_XOPEN_SOURCE=
 SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -avoid-version -Wl,--no-undefined")
 SET(CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -avoid-version -Wl,--no-undefined")
 
-
 #now try to find some kde stuff
 
 #at first the KDE include direcory

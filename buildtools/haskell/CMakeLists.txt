@@ -5,16 +5,17 @@ haskellproject_part.cpp
 haskellprojectoptionsdlg.cpp
 )
 
-KDE_AUTOMOC(${kdevhaskellproject_PART_SRCS})
-
 SET( kdevhaskellproject_UI
 haskellproject_optionsdlgbase.ui
 )
+
+KDE_AUTOMOC(${kdevhaskellproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevhaskellproject_PART_SRCS ${kdevhaskellproject_UI} )
 
 ADD_LIBRARY(kdevhaskellproject SHARED ${kdevhaskellproject_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevhaskellproject ${KDEV_BUILDTOOLS_LIBS} kparts)
 
 
 #original Makefile.am contents follow:

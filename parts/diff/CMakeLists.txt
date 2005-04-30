@@ -10,7 +10,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevdiff SHARED ${kdevdiff_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevdiff ${KDEV_PART_LIBS} )
 
 #original Makefile.am contents follow:
 

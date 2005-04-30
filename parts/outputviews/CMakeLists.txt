@@ -12,15 +12,17 @@ makeactionfilter.cpp
 otherfilter.cpp
 )
 
-KDE_AUTOMOC(${kdevmakeview_PART_SRCS})
-
 SET( kdevmakeview_UI
 filterdlg.ui
 )
 
+KDE_AUTOMOC(${kdevmakeview_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevmakeview_PART_SRCS ${kdevmakeview_UI} )
 
 ADD_LIBRARY(kdevmakeview SHARED ${kdevmakeview_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevmakeview ${KDEV_PART_LIBS} kdevwidgets)
 
 SET(kdevappview_PART_SRCS
 appoutputviewpart.cpp
@@ -34,17 +36,19 @@ makeactionfilter.cpp
 otherfilter.cpp
 )
 
-KDE_AUTOMOC(${kdevappview_PART_SRCS})
-
 SET( kdevappview_UI
 filterdlg.ui
 )
+
+KDE_AUTOMOC(${kdevappview_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevappview_PART_SRCS ${kdevappview_UI} )
 
 ADD_LIBRARY(kdevappview SHARED ${kdevappview_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevappview ${KDEV_PART_LIBS} kdevwidgets)
 
+KDE_TARGET_LINK_CONV_LIBRARIES(kdevappview)
 
 #original Makefile.am contents follow:
 

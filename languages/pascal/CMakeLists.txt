@@ -13,16 +13,17 @@ backgroundparser.cpp
 problemreporter.cpp
 )
 
-KDE_AUTOMOC(${kdevpascalsupport_PART_SRCS})
-
 SET( kdevpascalsupport_UI
 configproblemreporter.ui
 )
+
+KDE_AUTOMOC(${kdevpascalsupport_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevpascalsupport_PART_SRCS ${kdevpascalsupport_UI} )
 
 ADD_LIBRARY(kdevpascalsupport SHARED ${kdevpascalsupport_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevpascalsupport ${KDEV_LANG_LIBS} antlr kdevcatalog)
 
 
 #original Makefile.am contents follow:

@@ -27,6 +27,7 @@ KDE_ADD_UI_FILES(kdevappwizard_PART_SRCS ${kdevappwizard_UI} )
 
 ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevappwizard ${KDEV_PART_LIBS} kdevpropertyeditor)
 
 
 #original Makefile.am contents follow:

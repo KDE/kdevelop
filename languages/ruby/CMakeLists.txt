@@ -9,16 +9,18 @@ qtdesignerrubyintegration.cpp
 rubyimplementationwidget.cpp
 )
 
-KDE_AUTOMOC(${kdevrubysupport_PART_SRCS})
-
 SET( kdevrubysupport_UI
 rubyconfigwidgetbase.ui
 )
+
+KDE_AUTOMOC(${kdevrubysupport_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevrubysupport_PART_SRCS ${kdevrubysupport_UI} )
 
 ADD_LIBRARY(kdevrubysupport SHARED ${kdevrubysupport_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevrubysupport ${KDEV_LANG_LIBS} designerintegration)
+#khtml kdevwidgets designerintegration)
 
 
 #original Makefile.am contents follow:

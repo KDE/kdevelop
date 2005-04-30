@@ -9,6 +9,7 @@ KDE_AUTOMOC(${kdevfileselector_PART_SRCS})
 
 ADD_LIBRARY(kdevfileselector SHARED ${kdevfileselector_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevfileselector ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

@@ -12,7 +12,8 @@ KDE_AUTOMOC(${kdevprojectmanager_PART_SRCS})
 
 ADD_LIBRARY(kdevprojectmanager SHARED ${kdevprojectmanager_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevprojectmanager ${QT_LIBRARIES} kdecore kdeui kio
+${CMAKE_BINARY_DIR}/lib/libkdevelop.so projectmanager_interfaces)
 
 #original Makefile.am contents follow:
 
@@ -31,7 +32,7 @@ ADD_LIBRARY(kdevprojectmanager SHARED ${kdevprojectmanager_PART_SRCS})
 #    kdevprojectmanager_part.cpp \
 #    kdevprojectmanager_widget.cpp \
 #    importprojectjob.cpp
-#    
+#
 #METASOURCES = AUTO
 #
 #servicedir = $(kde_servicesdir)

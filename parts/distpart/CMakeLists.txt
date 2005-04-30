@@ -6,11 +6,11 @@ lsmsupport.cpp
 specsupport.cpp
 )
 
-KDE_AUTOMOC(${kdevdistpart_PART_SRCS})
-
 SET( kdevdistpart_UI
 distpart_ui.ui
 )
+
+KDE_AUTOMOC(${kdevdistpart_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevdistpart_PART_SRCS ${kdevdistpart_UI} )
 
@@ -18,6 +18,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevdistpart SHARED ${kdevdistpart_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevdistpart ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

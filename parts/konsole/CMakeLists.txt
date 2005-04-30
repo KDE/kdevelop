@@ -7,6 +7,7 @@ KDE_AUTOMOC(${kdevkonsoleview_PART_SRCS})
 
 ADD_LIBRARY(kdevkonsoleview SHARED ${kdevkonsoleview_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevkonsoleview ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

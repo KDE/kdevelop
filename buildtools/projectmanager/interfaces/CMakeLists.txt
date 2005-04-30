@@ -11,7 +11,7 @@ KDE_AUTOMOC(${projectmanager_interfaces_LIB_SRCS})
 
 ADD_LIBRARY(projectmanager_interfaces SHARED ${projectmanager_interfaces_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(projectmanager_interfaces ${QT_LIBRARIES})
 
 #original Makefile.am contents follow:
 

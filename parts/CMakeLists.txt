@@ -1,7 +1,10 @@
+SET(KDEV_PART_LIBS ${QT_LIBRARIES} kdecore kdeui kparts kio ktexteditor ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+
+
 SUBDIRS( abbrev appwizard astyle bookmarks classview diff filecreate fileview fullscreen outputviews grepview valgrind distpart
  konsole tools regexptest doxygen fileselector tipofday filter openwith texttools replace partexplorer quickopen snippet
- filelist ctags2 documentation scripting vcsmanager security)
-# uimode)
+ filelist ctags2 scripting vcsmanager security)
+# documentation uimode)
 
 
 

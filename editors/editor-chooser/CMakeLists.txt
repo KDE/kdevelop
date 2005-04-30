@@ -5,17 +5,17 @@ editorchooser_part.cpp
 editorchooser_widget.cpp
 )
 
-KDE_AUTOMOC(${kdeveditorchooser_PART_SRCS})
-
 SET( kdeveditorchooser_UI
 editchooser.ui
 )
+
+KDE_AUTOMOC(${kdeveditorchooser_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdeveditorchooser_PART_SRCS ${kdeveditorchooser_UI} )
 
 ADD_LIBRARY(kdeveditorchooser SHARED ${kdeveditorchooser_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdeveditorchooser ${QT_LIBRARIES} kdecore kdeui kio ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 #original Makefile.am contents follow:
 

@@ -7,7 +7,7 @@ KDE_AUTOMOC(${kdevtexttools_PART_SRCS})
 
 ADD_LIBRARY(kdevtexttools SHARED ${kdevtexttools_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevtexttools ${KDEV_PART_LIBS})
 
 #original Makefile.am contents follow:
 

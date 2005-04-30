@@ -13,8 +13,6 @@ trolllistview.cpp
 pathutil.cpp
 )
 
-KDE_AUTOMOC(${kdevtrollproject_PART_SRCS})
-
 SET( kdevtrollproject_UI
 projectconfigurationdlgbase.ui
 filepropertybase.ui
@@ -22,11 +20,13 @@ newwidgetdlgbase.ui
 choosesubprojectdlgbase.ui
 )
 
+KDE_AUTOMOC(${kdevtrollproject_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevtrollproject_PART_SRCS ${kdevtrollproject_UI} )
 
 ADD_LIBRARY(kdevtrollproject SHARED ${kdevtrollproject_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevtrollproject ${KDEV_BUILDTOOLS_LIBS})
 
 #original Makefile.am contents follow:
 

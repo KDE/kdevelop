@@ -8,16 +8,17 @@ pascalglobaloptionsdlg.cpp
 service.cpp
 )
 
-KDE_AUTOMOC(${kdevpascalproject_PART_SRCS})
-
 SET( kdevpascalproject_UI
 pascalproject_optionsdlgbase.ui
 )
+
+KDE_AUTOMOC(${kdevpascalproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevpascalproject_PART_SRCS ${kdevpascalproject_UI} )
 
 ADD_LIBRARY(kdevpascalproject SHARED ${kdevpascalproject_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevpascalproject ${KDEV_BUILDTOOLS_LIBS})
 
 
 #original Makefile.am contents follow:

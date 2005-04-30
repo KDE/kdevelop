@@ -18,6 +18,7 @@ KDE_ADD_UI_FILES(kdevadaproject_PART_SRCS ${kdevadaproject_UI} )
 
 ADD_LIBRARY(kdevadaproject SHARED ${kdevadaproject_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevadaproject ${KDEV_BUILDTOOLS_LIBS} )
 
 
 #original Makefile.am contents follow:

@@ -11,8 +11,6 @@ envvartools.cpp
 removesubprojectdialog.cpp
 )
 
-KDE_AUTOMOC(${kdevbuildtoolswidgets_LIB_SRCS})
-
 SET( kdevbuildtoolswidgets_UI
 runoptionswidgetbase.ui
 makeoptionswidgetbase.ui
@@ -21,11 +19,13 @@ environmentvariableswidgetbase.ui
 removesubprojectdlgbase.ui
 )
 
+KDE_AUTOMOC(${kdevbuildtoolswidgets_LIB_SRCS})
+
 KDE_ADD_UI_FILES(kdevbuildtoolswidgets_LIB_SRCS ${kdevbuildtoolswidgets_UI} )
 
 ADD_LIBRARY(kdevbuildtoolswidgets SHARED ${kdevbuildtoolswidgets_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevbuildtoolswidgets ${QT_LIBRARIES} kdecore kdeui kdeui kio ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 #original Makefile.am contents follow:
 

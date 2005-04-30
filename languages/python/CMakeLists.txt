@@ -9,16 +9,17 @@ pythonimplementationwidget.cpp
 qtdesignerpythonintegration.cpp
 )
 
-KDE_AUTOMOC(${kdevpythonsupport_PART_SRCS})
-
 SET( kdevpythonsupport_UI
 pythonconfigwidgetbase.ui
 )
+
+KDE_AUTOMOC(${kdevpythonsupport_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevpythonsupport_PART_SRCS ${kdevpythonsupport_UI} )
 
 ADD_LIBRARY(kdevpythonsupport SHARED ${kdevpythonsupport_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevpythonsupport ${KDEV_LANG_LIBS} khtml kdevwidgets designerintegration)
 
 
 #original Makefile.am contents follow:

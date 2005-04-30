@@ -7,12 +7,12 @@ ctagskinds.cpp
 ctags2_settingswidget.cpp
 )
 
-KDE_AUTOMOC(${kdevctags2_PART_SRCS})
-
 SET( kdevctags2_UI
 ctags2_widgetbase.ui
 ctags2_settingswidgetbase.ui
 )
+
+KDE_AUTOMOC(${kdevctags2_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevctags2_PART_SRCS ${kdevctags2_UI} )
 
@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevctags2 SHARED ${kdevctags2_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevctags2 ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

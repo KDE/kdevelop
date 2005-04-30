@@ -21,23 +21,23 @@ gdboutputwidget.cpp
 gdbtable.cpp
 )
 
-KDE_AUTOMOC(${kdevdebugger_PART_SRCS})
-
 SET( kdevdebugger_UI
 debuggerconfigwidgetbase.ui
 )
-
-KDE_ADD_UI_FILES(kdevdebugger_PART_SRCS ${kdevdebugger_UI} )
 
 SET( kdevdebugger_DCOP_SRCS
 debuggerdcopinterface.h
 )
 
+KDE_AUTOMOC(${kdevdebugger_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevdebugger_PART_SRCS ${kdevdebugger_UI} )
+
 KDE_ADD_DCOP_SKELS(kdevdebugger_PART_SRCS ${kdevdebugger_DCOP_SRCS})
 
 ADD_LIBRARY(kdevdebugger SHARED ${kdevdebugger_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevdebugger ${KDEV_LANG_LIBS} DCOP kdevwidgets lang_debugger)
 
 #original Makefile.am contents follow:
 

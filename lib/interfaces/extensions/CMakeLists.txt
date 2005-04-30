@@ -7,6 +7,8 @@ kdevmakefrontend.cpp
 
 KDE_AUTOMOC(${kdevextensions_STAT_SRCS})
 
+KDE_ADD_MOC_FILES(kdevextensions_STAT_SRCS kdevversioncontrol.h)
+
 ADD_LIBRARY(kdevextensions STATIC ${kdevextensions_STAT_SRCS})
 
 

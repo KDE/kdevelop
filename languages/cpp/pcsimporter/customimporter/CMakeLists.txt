@@ -5,17 +5,17 @@ kdevcustomimporter.cpp
 settingsdialog.cpp
 )
 
-KDE_AUTOMOC(${kdevcustompcsimporter_LIB_SRCS})
-
 SET( kdevcustompcsimporter_UI
 settingsdialogbase.ui
 )
+
+KDE_AUTOMOC(${kdevcustompcsimporter_LIB_SRCS})
 
 KDE_ADD_UI_FILES(kdevcustompcsimporter_LIB_SRCS ${kdevcustompcsimporter_UI} )
 
 ADD_LIBRARY(kdevcustompcsimporter SHARED ${kdevcustompcsimporter_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevcustompcsimporter ${KDEV_LANG_LIBS} lang_interfaces)
 
 #original Makefile.am contents follow:
 

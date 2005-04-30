@@ -8,7 +8,7 @@ KDE_AUTOMOC(${kdevghcoptions_PART_SRCS})
 
 ADD_LIBRARY(kdevghcoptions SHARED ${kdevghcoptions_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevghcoptions ${KDEV_LANG_LIBS} kdevextras)
 
 #original Makefile.am contents follow:
 

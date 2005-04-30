@@ -6,6 +6,7 @@ KDE_AUTOMOC(${kdevfullscreen_PART_SRCS})
 
 ADD_LIBRARY(kdevfullscreen SHARED ${kdevfullscreen_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevfullscreen ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

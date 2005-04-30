@@ -22,7 +22,7 @@ KDE_AUTOMOC(${kdevjavadebugger_PART_SRCS})
 
 ADD_LIBRARY(kdevjavadebugger SHARED ${kdevjavadebugger_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevjavadebugger ${KDEV_LANG_LIBS} lang_debugger)
 
 #original Makefile.am contents follow:
 

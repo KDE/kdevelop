@@ -8,6 +8,7 @@ KDE_AUTOMOC(${kdevcustomimporter_LIB_SRCS})
 
 ADD_LIBRARY(kdevcustomimporter SHARED ${kdevcustomimporter_LIB_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevcustomimporter ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/lib/libkdevelop.so projectmanager_interfaces)
 
 
 #original Makefile.am contents follow:
@@ -18,7 +19,7 @@ ADD_LIBRARY(kdevcustomimporter SHARED ${kdevcustomimporter_LIB_SRCS})
 #    -I$(top_srcdir)/lib/project \
 #    -I$(top_srcdir)/lib/util \
 #    $(all_includes)
-#    
+#
 #METASOURCES = AUTO
 #
 #lib_LTLIBRARIES = \
@@ -26,7 +27,7 @@ ADD_LIBRARY(kdevcustomimporter SHARED ${kdevcustomimporter_LIB_SRCS})
 #
 #noinst_HEADERS = \
 #    kdevcustomimporter.h
-#    
+#
 #libkdevcustomimporter_la_SOURCES = \
 #    kdevcustomimporter.cpp
 #
@@ -35,6 +36,6 @@ ADD_LIBRARY(kdevcustomimporter SHARED ${kdevcustomimporter_LIB_SRCS})
 #libkdevcustomimporter_la_LIBADD = \
 #    $(top_builddir)/buildtools/projectmanager/interfaces/libprojectmanager_interfaces.la \
 #    $(top_builddir)/lib/libkdevelop.la
-#    
+#
 #libkdevcustomimporter_la_LDFLAGS = \
 #    -module $(all_libraries) $(KDE_PLUGIN)

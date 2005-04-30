@@ -13,6 +13,10 @@ CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_SOURCE_DIR}/config.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
 
+EXEC_PROGRAM(cmake ARGS -E copy ${CMAKE_SOURCE_DIR}/admin/install-sh ${CMAKE_SOURCE_DIR})
+EXEC_PROGRAM(cmake ARGS -E copy ${CMAKE_SOURCE_DIR}/admin/config.sub ${CMAKE_SOURCE_DIR})
+EXEC_PROGRAM(cmake ARGS -E copy ${CMAKE_SOURCE_DIR}/admin/config.guess ${CMAKE_SOURCE_DIR})
+
 SUBDIRS( bdb lib parts languages buildtools editors vcs src)
 # src pics doc mimetypes embedded kdevdesigner )
 

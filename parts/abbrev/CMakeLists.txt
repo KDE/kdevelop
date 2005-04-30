@@ -17,7 +17,7 @@ ADD_LIBRARY(kdevabbrev MODULE ${kdevabbrev_PART_SRCS})
 
 #SET_TARGET_PROPERTIES(kdevabbrev PROPERTIES PREFIX "")
 
-TARGET_LINK_LIBRARIES(kdevabbrev ${QT_LIBRARIES} kdecore kdeui kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(kdevabbrev ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

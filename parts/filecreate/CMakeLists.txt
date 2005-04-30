@@ -13,20 +13,23 @@ fctemplateedit.cpp
 filecreate_newfile.cpp
 )
 
-KDE_AUTOMOC(${kdevfilecreate_PART_SRCS})
-
 SET( kdevfilecreate_UI
 fcconfigwidgetbase.ui
 fctypeeditbase.ui
 fctemplateeditbase.ui
 )
 
+KDE_AUTOMOC(${kdevfilecreate_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevfilecreate_PART_SRCS ${kdevfilecreate_UI} )
+
+KDE_ADD_MOC_FILES(kdevfilecreate_PART_SRCS filecreate_typechoosersig.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevfilecreate ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

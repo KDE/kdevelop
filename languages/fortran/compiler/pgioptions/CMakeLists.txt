@@ -9,7 +9,7 @@ KDE_AUTOMOC(${kdevpgioptions_PART_SRCS})
 
 ADD_LIBRARY(kdevpgioptions SHARED ${kdevpgioptions_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevpgioptions ${KDEV_LANG_LIBS} kdevextras)
 
 #original Makefile.am contents follow:
 

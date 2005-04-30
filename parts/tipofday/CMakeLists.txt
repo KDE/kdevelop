@@ -6,7 +6,7 @@ KDE_AUTOMOC(${kdevtipofday_PART_SRCS})
 
 ADD_LIBRARY(kdevtipofday SHARED ${kdevtipofday_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevtipofday ${KDEV_PART_LIBS})
 
 #original Makefile.am contents follow:
 

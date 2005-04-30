@@ -7,12 +7,12 @@ quickopenfunctiondialog.cpp
 quickopenfunctionchooseform.cpp
 )
 
-KDE_AUTOMOC(${kdevquickopen_PART_SRCS})
-
 SET( kdevquickopen_UI
 quickopenbase.ui
 quickopenfunctionchooseformbase.ui
 )
+
+KDE_AUTOMOC(${kdevquickopen_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevquickopen_PART_SRCS ${kdevquickopen_UI} )
 
@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_
 
 ADD_LIBRARY(kdevquickopen SHARED ${kdevquickopen_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevquickopen ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

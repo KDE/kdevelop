@@ -3,16 +3,17 @@ regexptestpart.cpp
 regexptestdlg.cpp
 )
 
-KDE_AUTOMOC(${kdevregexptest_PART_SRCS})
-
 SET( kdevregexptest_UI
 regexptestdlgbase.ui
 )
+
+KDE_AUTOMOC(${kdevregexptest_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevregexptest_PART_SRCS ${kdevregexptest_UI} )
 
 ADD_LIBRARY(kdevregexptest SHARED ${kdevregexptest_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevregexptest ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

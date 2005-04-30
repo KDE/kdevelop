@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR})
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/lib ${CMAKE_SOURCE_DIR}/buildtools/lib/parsers/autotools ${CMAKE_SOURCE_DIR}/buildtools/lib/base ${CMAKE_SOURCE_DIR}/buildtools/lib/widgets ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR})
 
 SET(kdevautoproject_PART_SRCS
 autoprojectpart.cpp
@@ -29,9 +29,8 @@ autodetailsview.cpp
 autolistviewitems.cpp
 managecustomcommand.cpp
 autotoolsaction.cpp
+makefilehandler.cpp
 )
-
-KDE_AUTOMOC(${kdevautoproject_PART_SRCS})
 
 SET( kdevautoproject_UI
 configureoptionswidgetbase.ui
@@ -51,11 +50,15 @@ managecustomcommandsbase.ui
 autoprojectviewbase.ui
 )
 
+KDE_AUTOMOC(${kdevautoproject_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevautoproject_PART_SRCS ${kdevautoproject_UI} )
 
 ADD_LIBRARY(kdevautoproject SHARED ${kdevautoproject_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevautoproject ${KDEV_BUILDTOOLS_LIBS})
 
+KDE_TARGET_LINK_CONV_LIBRARIES(kdevautoproject kdevautotoolsparser)
 
 #original Makefile.am contents follow:
 

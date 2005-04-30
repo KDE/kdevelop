@@ -5,16 +5,17 @@ subversionintegrator.cpp
 svnintegratordlg.cpp
 )
 
-KDE_AUTOMOC(${subversionintegrator_PART_SRCS})
-
 SET( subversionintegrator_UI
 svnintegratordlgbase.ui
 )
+
+KDE_AUTOMOC(${subversionintegrator_PART_SRCS})
 
 KDE_ADD_UI_FILES(subversionintegrator_PART_SRCS ${subversionintegrator_UI} )
 
 ADD_LIBRARY(subversionintegrator SHARED ${subversionintegrator_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(subversionintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextras)
 
 
 #original Makefile.am contents follow:

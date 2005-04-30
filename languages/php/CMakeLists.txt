@@ -14,8 +14,6 @@ phpparser.cpp
 phpnewclassdlg.cpp
 )
 
-KDE_AUTOMOC(${kdevphpsupport_PART_SRCS})
-
 SET( kdevphpsupport_UI
 phpconfigwidgetbase.ui
 phpconfigparserwidgetbase.ui
@@ -23,11 +21,13 @@ phpinfodlg.ui
 phpnewclassdlgbase.ui
 )
 
+KDE_AUTOMOC(${kdevphpsupport_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevphpsupport_PART_SRCS ${kdevphpsupport_UI} )
 
 ADD_LIBRARY(kdevphpsupport SHARED ${kdevphpsupport_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevphpsupport ${KDEV_LANG_LIBS} khtml kdevwidgets)
 
 #original Makefile.am contents follow:
 

@@ -10,7 +10,7 @@ KDE_AUTOMOC(${kdevbashsupport_PART_SRCS})
 
 ADD_LIBRARY(kdevbashsupport SHARED ${kdevbashsupport_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevbashsupport ${KDEV_LANG_LIBS})
 
 #original Makefile.am contents follow:
 

@@ -13,7 +13,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURC
 
 ADD_LIBRARY(kdevdoxygen SHARED ${kdevdoxygen_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevdoxygen ${KDEV_PART_LIBS})
 
 #original Makefile.am contents follow:
 

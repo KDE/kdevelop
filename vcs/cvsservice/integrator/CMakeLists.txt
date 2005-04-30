@@ -5,19 +5,19 @@ cvsserviceintegrator.cpp
 integratordlg.cpp
 )
 
-KDE_AUTOMOC(${cvsserviceintegrator_PART_SRCS})
-
 SET( cvsserviceintegrator_UI
 integratordlgbase.ui
 fetcherdlgbase.ui
 initdlg.ui
 )
 
+KDE_AUTOMOC(${cvsserviceintegrator_PART_SRCS})
+
 KDE_ADD_UI_FILES(cvsserviceintegrator_PART_SRCS ${cvsserviceintegrator_UI} )
 
 ADD_LIBRARY(cvsserviceintegrator SHARED ${cvsserviceintegrator_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(cvsserviceintegrator ${QT_LIBRARIES} kdecore kdeui kio kdevextras cvsservice ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 #original Makefile.am contents follow:
 

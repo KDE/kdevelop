@@ -19,6 +19,8 @@ KDE_ADD_UI_FILES(kdevfileview_PART_SRCS ${kdevfileview_UI} )
 
 ADD_LIBRARY(kdevfileview SHARED ${kdevfileview_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevfileview ${KDEV_PART_LIBS})
+
 SET(kdevfilegroups_PART_SRCS
 filegroupswidget.cpp
 addfilegroupdlg.cpp
@@ -38,6 +40,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ )
 
 ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevfilegroups ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:
@@ -56,7 +59,7 @@ ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
 #libkdevfilegroups_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 #
 #libkdevfileview_la_SOURCES = fileviewpart.cpp filetreewidget.cpp partwidget.cpp vcscolorsconfigwidgetbase.ui vcscolorsconfigwidget.cpp stdfiletreewidgetimpl.cpp filetreeviewwidgetimpl.cpp vcsfiletreewidgetimpl.cpp fileitemfactory.cpp
-#                             
+#
 #libkdevfilegroups_la_SOURCES = filegroupswidget.cpp addfilegroupdlg.cpp filegroupsconfigwidget.cpp filegroupsconfigwidgetbase.ui filegroupspart.cpp
 #
 #METASOURCES = AUTO

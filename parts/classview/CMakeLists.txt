@@ -13,6 +13,7 @@ KDE_AUTOMOC(${kdevclassview_PART_SRCS})
 
 ADD_LIBRARY(kdevclassview SHARED ${kdevclassview_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevclassview ${KDEV_PART_LIBS} kdevwidgets)
 
 
 #original Makefile.am contents follow:
@@ -43,4 +44,4 @@ ADD_LIBRARY(kdevclassview SHARED ${kdevclassview_PART_SRCS})
 #foo: digraphview.cpp digraphview.h
 #	$(QTDIR)/bin/moc digraphview.h > digraphview.moc ; \
 #	g++ digraphview.cpp -I$(QTDIR)/include -L$(QTDIR)/lib -L/usr/X11R6/lib -lqt -lX11 -lXext -o foo
-#noinst_HEADERS = viewcombos.h navigator.h 
+#noinst_HEADERS = viewcombos.h navigator.h

@@ -11,6 +11,7 @@ KDE_AUTOMOC(${kdevperforce_PART_SRCS})
 
 ADD_LIBRARY(kdevperforce SHARED ${kdevperforce_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevperforce ${QT_LIBRARIES} kdecore kdeui kio kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 
 #original Makefile.am contents follow:

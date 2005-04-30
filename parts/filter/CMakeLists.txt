@@ -5,16 +5,17 @@ shellinsertdlg.cpp
 kdevfilterIface.cpp
 )
 
-KDE_AUTOMOC(${kdevfilter_PART_SRCS})
-
 SET( kdevfilter_DCOP_SRCS
 kdevfilterIface.h
 )
+
+KDE_AUTOMOC(${kdevfilter_PART_SRCS})
 
 KDE_ADD_DCOP_SKELS(kdevfilter_PART_SRCS ${kdevfilter_DCOP_SRCS})
 
 ADD_LIBRARY(kdevfilter SHARED ${kdevfilter_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevfilter ${KDEV_PART_LIBS} DCOP)
 
 
 #original Makefile.am contents follow:

@@ -3,16 +3,17 @@ vcsmanagerpart.cpp
 vcsmanagerprojectconfig.cpp
 )
 
-KDE_AUTOMOC(${kdevvcsmanager_PART_SRCS})
-
 SET( kdevvcsmanager_UI
 vcsmanagerprojectconfigbase.ui
 )
+
+KDE_AUTOMOC(${kdevvcsmanager_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevvcsmanager_PART_SRCS ${kdevvcsmanager_UI} )
 
 ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevvcsmanager ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:
@@ -29,7 +30,7 @@ ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
 #METASOURCES = AUTO
 #
 #appsharedir = $(kde_datadir)/kdevvcsmanager
-#appshare_DATA = 
+#appshare_DATA =
 #
 #servicedir = $(kde_servicesdir)
 #service_DATA = kdevvcsmanager.desktop

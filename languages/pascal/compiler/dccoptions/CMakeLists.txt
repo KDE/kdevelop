@@ -9,7 +9,7 @@ KDE_AUTOMOC(${kdevdccoptions_PART_SRCS})
 
 ADD_LIBRARY(kdevdccoptions SHARED ${kdevdccoptions_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevdccoptions ${KDEV_LANG_LIBS} kdevwidgets kdevextras)
 
 #original Makefile.am contents follow:
 

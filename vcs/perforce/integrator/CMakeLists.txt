@@ -5,16 +5,17 @@ perforceintegrator.cpp
 pfintegratordlg.cpp
 )
 
-KDE_AUTOMOC(${perforceintegrator_PART_SRCS})
-
 SET( perforceintegrator_UI
 pfintegratordlgbase.ui
 )
+
+KDE_AUTOMOC(${perforceintegrator_PART_SRCS})
 
 KDE_ADD_UI_FILES(perforceintegrator_PART_SRCS ${perforceintegrator_UI} )
 
 ADD_LIBRARY(perforceintegrator SHARED ${perforceintegrator_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(perforceintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextras)
 
 
 #original Makefile.am contents follow:

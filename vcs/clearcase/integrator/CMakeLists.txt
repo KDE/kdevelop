@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(clearcaseintegrator_PART_SRCS ${clearcaseintegrator_UI} )
 
 ADD_LIBRARY(clearcaseintegrator SHARED ${clearcaseintegrator_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(clearcaseintegrator ${QT_LIBRARIES} kdecore kdevextras ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 #original Makefile.am contents follow:
 

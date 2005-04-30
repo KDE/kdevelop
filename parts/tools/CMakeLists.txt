@@ -5,12 +5,12 @@ toolsconfigwidget.cpp
 kapplicationtree.cpp
 )
 
-KDE_AUTOMOC(${kdevtools_PART_SRCS})
-
 SET( kdevtools_UI
 toolsconfigwidgetbase.ui
 addtooldlg.ui
 )
+
+KDE_AUTOMOC(${kdevtools_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevtools_PART_SRCS ${kdevtools_UI} )
 
@@ -18,7 +18,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
 ADD_LIBRARY(kdevtools SHARED ${kdevtools_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevtools ${KDEV_PART_LIBS})
 
 #original Makefile.am contents follow:
 

@@ -4,6 +4,7 @@
 # KDE_ADD_MOC_FILES
 # KDE_ADD_UI_FILES
 # KDE_AUTOMOC
+# KDE_TARGET_LINK_CONV_LIBRARIES
 
 #neundorf@kde.org
 
@@ -18,6 +19,17 @@ MACRO(ADD_FILE_DEPENDANCY file)
       "${${file}_deps}"
    )
 ENDMACRO(ADD_FILE_DEPENDANCY)
+
+
+#this is a hack right now to support the behaviour of libtool convenience libs
+#for other platforms:
+#Darwin: -all_load $convenience
+#GNU ld:  --whole-archive $convenience --no-whole-archive (depending on the ld version! must test if it supports the flag)
+#Solaris 2: -z allextract $convenience -z defaultextract
+#cmake 2,2 will come with some feature to support this in some way
+ MACRO (KDE_TARGET_LINK_CONV_LIBRARIES _target)
+   TARGET_LINK_LIBRARIES(${_target} "-Wl,--whole-archive" ${ARGN} "-Wl,--no-whole-archive")
+ENDMACRO (KDE_TARGET_LINK_CONV_LIBRARIES)
 
 
 #create the kidl and skeletion file for dcop stuff

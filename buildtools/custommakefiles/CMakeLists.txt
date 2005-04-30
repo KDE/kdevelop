@@ -6,17 +6,18 @@ custombuildoptionswidget.cpp
 custommakeconfigwidget.cpp
 )
 
-KDE_AUTOMOC(${kdevcustomproject_PART_SRCS})
-
 SET( kdevcustomproject_UI
 custombuildoptionswidgetbase.ui
 custommakeconfigwidgetbase.ui
 )
 
+KDE_AUTOMOC(${kdevcustomproject_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevcustomproject_PART_SRCS ${kdevcustomproject_UI} )
 
-
 ADD_LIBRARY(kdevcustomproject SHARED ${kdevcustomproject_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevcustomproject ${KDEV_BUILDTOOLS_LIBS})
 
 #original Makefile.am contents follow:
 

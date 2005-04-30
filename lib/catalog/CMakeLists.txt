@@ -1,10 +1,13 @@
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+
 SET(kdevcatalog_LIB_SRCS
 tag.cpp
+catalog.cpp
 )
 
 ADD_LIBRARY(kdevcatalog SHARED ${kdevcatalog_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcatalog ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(kdevcatalog ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/bdb/build_unix/libdb.a)
 
 
 #original Makefile.am contents follow:

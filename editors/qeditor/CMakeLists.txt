@@ -41,8 +41,6 @@ ada_indent.cpp
 sql_colorizer.cpp
 )
 
-KDE_AUTOMOC(${qeditorpart_PART_SRCS})
-
 SET( qeditorpart_UI
 generalconfigpage.ui
 gotolinedialog.ui
@@ -50,10 +48,13 @@ highlightingconfigpage.ui
 indentconfigpage.ui
 )
 
+KDE_AUTOMOC(${qeditorpart_PART_SRCS})
+
 KDE_ADD_UI_FILES(qeditorpart_PART_SRCS ${qeditorpart_UI} )
 
 ADD_LIBRARY(qeditorpart SHARED ${qeditorpart_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(qeditorpart ${QT_LIBRARIES} kdecore kdeui kio kparts ktexteditor ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
 
 
 #original Makefile.am contents follow:

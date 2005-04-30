@@ -34,6 +34,7 @@ KDE_AUTOMOC(${kdevshell_LIB_SRCS})
 
 ADD_LIBRARY(kdevshell SHARED ${kdevshell_LIB_SRCS})
 
+
 SET(kdevelop_SRCS
 main.cpp
 kdevideextension.cpp

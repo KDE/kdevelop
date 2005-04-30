@@ -9,7 +9,7 @@ KDE_AUTOMOC(${lang_debugger_LIB_SRCS})
 
 ADD_LIBRARY(lang_debugger SHARED ${lang_debugger_LIB_SRCS})
 
-
+TARGET_LINK_LIBRARIES(lang_debugger ${QT_LIBRARIES} kdecore kdeui kparts ktexteditor)
 
 #original Makefile.am contents follow:
 

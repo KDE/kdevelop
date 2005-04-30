@@ -15,6 +15,7 @@ KDE_ADD_UI_FILES(kdevbookmarks_PART_SRCS ${kdevbookmarks_UI} )
 
 ADD_LIBRARY(kdevbookmarks SHARED ${kdevbookmarks_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevbookmarks ${KDEV_PART_LIBS} )
 
 
 #original Makefile.am contents follow:

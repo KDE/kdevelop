@@ -18,23 +18,23 @@ driver.cpp
 kdevdriver.cpp
 )
 
-KDE_AUTOMOC(${kdevjavasupport_PART_SRCS})
-
 SET( kdevjavasupport_UI
 configproblemreporter.ui
 )
-
-KDE_ADD_UI_FILES(kdevjavasupport_PART_SRCS ${kdevjavasupport_UI} )
 
 SET( kdevjavasupport_DCOP_SRCS
 KDevJavaSupportIface.h
 )
 
+KDE_AUTOMOC(${kdevjavasupport_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevjavasupport_PART_SRCS ${kdevjavasupport_UI} )
+
 KDE_ADD_DCOP_SKELS(kdevjavasupport_PART_SRCS ${kdevjavasupport_DCOP_SRCS})
 
 ADD_LIBRARY(kdevjavasupport SHARED ${kdevjavasupport_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevjavasupport ${KDEV_LANG_LIBS} DCOP antlr kdevcatalog)
 
 #original Makefile.am contents follow:
 

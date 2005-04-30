@@ -10,25 +10,26 @@ subversionoptionswidgetimpl.cpp
 subversion_fileinfo.cpp
 )
 
-KDE_AUTOMOC(${kdevsubversion_PART_SRCS})
-
 SET( kdevsubversion_UI
 svn_co.ui
 subversionprojectwidget.ui
 subversionoptionswidget.ui
 )
 
-KDE_ADD_UI_FILES(kdevsubversion_PART_SRCS ${kdevsubversion_UI} )
-
 SET( kdevsubversion_DCOP_SRCS
 subversion_core.h
 subversion_fileinfo.h
 )
 
+KDE_AUTOMOC(${kdevsubversion_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevsubversion_PART_SRCS ${kdevsubversion_UI} )
+
 KDE_ADD_DCOP_SKELS(kdevsubversion_PART_SRCS ${kdevsubversion_DCOP_SRCS})
 
 ADD_LIBRARY(kdevsubversion SHARED ${kdevsubversion_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevsubversion ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextensions)
 
 
 #original Makefile.am contents follow:

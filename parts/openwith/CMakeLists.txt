@@ -6,7 +6,7 @@ KDE_AUTOMOC(${kdevopenwith_PART_SRCS})
 
 ADD_LIBRARY(kdevopenwith SHARED ${kdevopenwith_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevopenwith ${KDEV_PART_LIBS})
 
 #original Makefile.am contents follow:
 

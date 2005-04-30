@@ -1,5 +1,10 @@
-SUBDIRS( build_unix )
+#SUBDIRS( build_unix )
 
+EXEC_PROGRAM(chmod ARGS 755 ${CMAKE_CURRENT_SOURCE_DIR}/dist/configure)
+
+#EXEC_PROGRAM(${CMAKE_CURRENT_SOURCE_DIR}/dist/configure ${CMAKE_CURRENT_SOURCE_DIR}/build_unix/ ARGS --prefix=${CMAKE_INSTALL_PREFIX}/kdevbdb)
+
+ADD_CUSTOM_TARGET(bdb3 ALL COMMAND make -C build_unix)
 
 
 #original Makefile.am contents follow:

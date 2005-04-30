@@ -4,17 +4,18 @@ SET(kdevantproject_PART_SRCS
 antprojectpart.cpp
 )
 
-KDE_AUTOMOC(${kdevantproject_PART_SRCS})
-
 SET( kdevantproject_UI
 antoptionswidget.ui
 classpathwidget.ui
 )
 
+KDE_AUTOMOC(${kdevantproject_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevantproject_PART_SRCS ${kdevantproject_UI} )
 
 ADD_LIBRARY(kdevantproject SHARED ${kdevantproject_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevantproject ${KDEV_BUILDTOOLS_LIBS} )
 
 
 #original Makefile.am contents follow:

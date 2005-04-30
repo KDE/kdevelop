@@ -33,8 +33,6 @@ creategettersetterdialog.h
 storeconverter.cpp
 )
 
-KDE_AUTOMOC(${kdevcppsupport_PART_SRCS})
-
 SET( kdevcppsupport_UI
 ccconfigwidgetbase.ui
 configproblemreporter.ui
@@ -47,15 +45,20 @@ createpcsdialogbase.ui
 creategettersetter.ui
 )
 
-KDE_ADD_UI_FILES(kdevcppsupport_PART_SRCS ${kdevcppsupport_UI} )
-
 SET( kdevcppsupport_DCOP_SRCS
 KDevCppSupportIface.h
 )
 
+KDE_AUTOMOC(${kdevcppsupport_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevcppsupport_PART_SRCS ${kdevcppsupport_UI} )
+
 KDE_ADD_DCOP_SKELS(kdevcppsupport_PART_SRCS ${kdevcppsupport_DCOP_SRCS})
 
 ADD_LIBRARY(kdevcppsupport SHARED ${kdevcppsupport_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevcppsupport ${KDEV_LANG_LIBS} DCOP kdevcatalog kdevcppparser lang_interfaces designerintegration)
+
 
 #ADD_EXECUTABLE(r++ ${r++_SRCS})
 

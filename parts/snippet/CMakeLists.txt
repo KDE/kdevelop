@@ -6,17 +6,18 @@ snippetsettings.cpp
 snippetconfig.cpp
 )
 
-KDE_AUTOMOC(${kdevsnippet_PART_SRCS})
-
 SET( kdevsnippet_UI
 snippetdlg.ui
 snippetsettingsbase.ui
 )
 
+KDE_AUTOMOC(${kdevsnippet_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevsnippet_PART_SRCS ${kdevsnippet_UI} )
 
 ADD_LIBRARY(kdevsnippet SHARED ${kdevsnippet_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevsnippet ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:

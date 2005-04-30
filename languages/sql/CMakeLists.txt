@@ -18,6 +18,8 @@ KDE_ADD_UI_FILES(kdevsqlsupport_PART_SRCS ${kdevsqlsupport_UI} )
 
 ADD_LIBRARY(kdevsqlsupport SHARED ${kdevsqlsupport_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevsqlsupport ${KDEV_LANG_LIBS})
+
 
 
 #original Makefile.am contents follow:

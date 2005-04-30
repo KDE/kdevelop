@@ -17,18 +17,20 @@ AdaTreeParserSuper.cpp
 AdaStoreWalker.cpp
 )
 
-KDE_AUTOMOC(${kdevadasupport_PART_SRCS})
-
 SET( kdevadasupport_UI
 addclassdlg.ui
 configproblemreporter.ui
 )
 
+KDE_AUTOMOC(${kdevadasupport_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevadasupport_PART_SRCS ${kdevadasupport_UI} )
 
 ADD_LIBRARY(kdevadasupport SHARED ${kdevadasupport_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevadasupport ${KDEV_LANG_LIBS})
 
+KDE_TARGET_LINK_CONV_LIBRARIES(kdevadasupport antlr)
 
 #original Makefile.am contents follow:
 

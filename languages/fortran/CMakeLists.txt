@@ -8,17 +8,17 @@ fixedformparser.cpp
 ftnchekconfigwidget.cpp
 )
 
-KDE_AUTOMOC(${kdevfortransupport_PART_SRCS})
-
 SET( kdevfortransupport_UI
 ftnchekconfigwidgetbase.ui
 )
+
+KDE_AUTOMOC(${kdevfortransupport_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevfortransupport_PART_SRCS ${kdevfortransupport_UI} )
 
 ADD_LIBRARY(kdevfortransupport SHARED ${kdevfortransupport_PART_SRCS})
 
-
+TARGET_LINK_LIBRARIES(kdevfortransupport ${KDEV_LANG_LIBS})
 
 #original Makefile.am contents follow:
 

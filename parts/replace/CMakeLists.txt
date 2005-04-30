@@ -6,16 +6,17 @@ replaceview.cpp
 replacedlgimpl.cpp
 )
 
-KDE_AUTOMOC(${kdevreplace_PART_SRCS})
-
 SET( kdevreplace_UI
 replacedlg.ui
 )
+
+KDE_AUTOMOC(${kdevreplace_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevreplace_PART_SRCS ${kdevreplace_UI} )
 
 ADD_LIBRARY(kdevreplace SHARED ${kdevreplace_PART_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevreplace ${KDEV_PART_LIBS})
 
 
 #original Makefile.am contents follow:
