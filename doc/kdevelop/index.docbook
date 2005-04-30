@@ -1299,6 +1299,12 @@ associate file names and line numbers with addresses in the executable.
 The debugger frontend offers several views <quote>into</quote> the process:
 </para>
 
+
+<para>If you try to debug a project without debugging information,
+you get the message "No source..." in the status bar.
+If you try to set a breakpoint, it is shown as "Pending (add)"
+in the breakpoint window (see below).
+</para>
 <itemizedlist>
 <listitem>
 <formalpara>
@@ -1337,18 +1343,71 @@ via the context menu.
 <title>Frame Stack</title>
 <indexterm zone="debugger"><primary>frame stack</primary></indexterm>
 <para>
-(... to be written ...)
+This window allows you to see and manipulate the breakpoints. 
+Remember that KDevelop uses GDB, so to fully understand the 
+KDevelop debugging features, you should know a little bit about the 
+<ulink url="http://www.gnu.org/software/gdb">GDB</ulink>.
 </para>
 </formalpara>
+<para>If you want to look at the source code,
+breakpoints are defined in <filename>kdevelop/languages/cpp/debugger/breakpoint.h</filename>.
+</para>
+
+<para>
+At the left edge, the window has buttons to:
+<itemizedlist>
+<listitem><para>Add an empty breakpoint</para></listitem>
+<listitem><para>Edit the selected breakpoint</para></listitem>
+<listitem><para>Delete the selected breakpoint</para></listitem>
+<listitem><para>Remove all breakpoints</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+The main part of the window is a table with 7 columns.
+Each line in the table is a breakpoint.
+The columns are:
+<orderedlist>
+<listitem><para>Selection checkbox</para></listitem>
+<listitem><para>Type: one of: Invalid, File:Line, Watchpoint, Address, Function</para></listitem>
+<listitem><para>Status. Values are:
+<itemizedlist>
+<listitem><para>Active</para></listitem>
+<listitem><para>Disabled: Each breakpoint may be "enabled" or "disabled"; if
+disabled, it has no effect on your program until you enable it again.</para></listitem>
+<listitem><para>Pending (add): a breakpoint is marked like this if no debugging information is available.
+From GDB Info page:
+<blockquote><para>If a specified breakpoint location cannot be found, it may be due to
+the fact that the location is in a shared library that is yet to be
+loaded.  In such a case, you may want GDB to create a special
+breakpoint (known as a "pending breakpoint") that attempts to resolve
+itself in the future when an appropriate shared library gets loaded.</para>
+</blockquote>
+</para></listitem>
+<listitem><para>Pending (clear)</para></listitem>
+<listitem><para>Pending (modify)</para></listitem>
+
+</itemizedlist>
+
+</para></listitem>
+<listitem><para>Location in the format filename:linenumber</para></listitem>
+<listitem><para>Condition</para></listitem>
+<listitem><para>Ignore Count: If this is a number COUNT greater than zero, the next
+     COUNT times the breakpoint is reached, your program's execution
+     does not stop; other than to decrement the ignore count, GDB takes
+     no action.</para></listitem>
+<listitem><para>Hits: counts how many times a breakopint has been hit.</para></listitem>
+
+</orderedlist>
+</para>
+
 </listitem>
 
 <listitem>
+<indexterm zone="debugger"><primary>disassemble</primary></indexterm>
 <formalpara>
 <title>Disassemble</title>
-<indexterm zone="debugger"><primary>disassemble</primary></indexterm>
-<para>
-(... to be written ...)
-</para>
+<para>(... to be written ...)</para>
 </formalpara>
 </listitem>
 
