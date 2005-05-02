@@ -1,45 +1,59 @@
+#! /usr/bin/env python
 ## This script is a quick test to demonstrate (and test) 
 ## the bksys moc handling '#include "file.moc"' can be added .. or not
 ##
 ## Thomas Nagy, 2005
 ## This file can be reused freely for any project (see COPYING)
 
-Import( '*' )
+Import('env')
 
 ## First build : the shell
 ## Each tab in it will hold an instance of the part ..
 
 myenv=env.Copy()
-%{APPNAMELC}_sources = [ 'main.cpp', '%{APPNAMELC}kmdi.cpp', '%{APPNAMELC}kmdiView.cpp', 
-'kmdikonsole.cpp', 'settings.kcfgc', 'prefs.ui' ]
-KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources, myenv ) # main program
-KDEaddpaths( ['./', '../'], myenv ) # additional paths
-KDEaddlibs( ['qt-mt', 'kdecore', 'kio', 'kparts', 'kmdi'], myenv ) # additional libraries
+%{APPNAMELC}_sources = """
+main.cpp
+%{APPNAMELC}kmdi.cpp
+%{APPNAMELC}kmdiView.cpp
+kmdikonsole.cpp
+settings.kcfgc
+prefs.ui
+""".split()
+# Now that we have our list of sources we can build the program
+myenv.KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources ) # main program
+myenv.KDEaddpaths( ['./', '../'] ) # additional paths
+myenv.KDEaddlibs( ['qt-mt', 'kdecore', 'kio', 'kparts', 'kmdi'] ) # additional libraries
 
 ## Next, the kpart library
 ## using KDEshlib, the .so and .la are installed automatically when needed
 
 myenv2=env.Copy()
 %{APPNAMELC}part_sources = [ '%{APPNAMELC}_part.cpp' ]
-KDEshlib( "lib%{APPNAMELC}part", %{APPNAMELC}part_sources, myenv2 )
-KDEaddpaths( ['./', '../'], myenv2 )
-KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint', 'kparts'], myenv2 )
+myenv2.KDEshlib( "lib%{APPNAMELC}part", %{APPNAMELC}part_sources)
+myenv2.KDEaddpaths( ['./', '#/']) # the '#' means the top-level directory
+myenv2.KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint', 'kparts'])
 
 #############################
 ## Data files to install
 
+## NOTE: KDEinstall( resource_type, subdir, list of files )
+
 ## the .kcfg file
-KDEinstall( env['KDEKCFG'], '%{APPNAMELC}.kcfg', myenv)
+myenv.KDEinstall( 'KDEKCFG', '', '%{APPNAMELC}.kcfg' )
 
 ## the program .desktop file
-KDEinstall( env['KDEMENU']+'/Utilities', '%{APPNAMELC}.desktop', myenv )
+myenv.KDEinstall( 'KDEMENU', '/Utilities', '%{APPNAMELC}.desktop' )
 
 ## the rc file - named *_shell.rc instead of *ui.rc for kpart apps
-KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}_shell.rc', myenv )
+myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}', '%{APPNAMELC}_shell.rc' )
 
 ## this servicetype desktop file goes in KDEXDG whether the other one goes in KDEMENU
-KDEinstall( env['KDEXDG'], '%{APPNAMELC}_part.desktop', myenv )
+myenv.KDEinstall( 'KDEXDG', '', '%{APPNAMELC}_part.desktop' )
 
 ## the kpart resource file
-KDEinstall( env['KDEDATA']+'/%{APPNAMELC}part', '%{APPNAMELC}_part.rc', myenv )
+myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}part', '%{APPNAMELC}_part.rc' )
 
+## Installing icons is easy (hi-16-app-%{APPNAMELC}.png, hi-22-app-%{APPNAMELC}.png)
+#myenv.KDEicon('%{APPNAMELC}')
+
+## do not forget that this is a python script so even loops are allowed... :)

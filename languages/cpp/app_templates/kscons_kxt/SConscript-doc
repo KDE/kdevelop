@@ -4,7 +4,7 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env KDEdoc" )
+Import('env')
 myenv=env.Copy()
 myenv['APPNAME'] = '%{APPNAMELC}'
 
@@ -12,12 +12,12 @@ myenv['APPNAME'] = '%{APPNAMELC}'
 ##  * '%{APPNAMELC}' is the name of our app
 ##  * 'en' are the initials of the language targetted
 
-myenv.Meinproc( "en/index.docbook" )
-KDEdoc( 'en', 'en/index.cache.bz2', myenv )
-KDEdoc( 'en', 'en/index.docbook', myenv )
-#KDEdoc( 'en', 'en/screenshot.png', myenv )
+myenv.Meinproc( 'en/index.docbook' )
+myenv.KDEdoc( 'en', 'en/index.cache.bz2' )
+myenv.KDEdoc( 'en', 'en/index.docbook' )
+#myenv.KDEdoc( 'en', 'en/screenshot.png' )
 
 #myenv.Meinproc( "fr/index.docbook" )
-#KDEdoc( 'fr', 'fr/index.cache.bz2', myenv )
-#KDEdoc( 'fr', 'fr/index.docbook', myenv )
-#KDEdoc( 'fr', 'fr/screenshot.png', myenv )
+#myenv.KDEdoc( 'fr', 'fr/index.cache.bz2' )
+#myenv.KDEdoc( 'fr', 'fr/index.docbook' )
+#myenv.KDEdoc( 'fr', 'fr/screenshot.png' )

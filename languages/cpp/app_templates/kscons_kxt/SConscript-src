@@ -7,66 +7,66 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "*" )
+Import('env')
 myenv=env.Copy()
 
 #############################
 ## Programs to build
 
-%{APPNAMELC}_sources = [
-'settings.kcfgc',
-'main.cpp',
-'prefs.cpp',
-'%{APPNAMELC}.skel', # Dcop file
-'%{APPNAMELC}.cpp',
-'%{APPNAMELC}view.cpp',
-'prefs-base.ui',
-'%{APPNAMELC}view_base.ui'
-]
+%{APPNAMELC}_sources = """
+settings.kcfgc
+main.cpp
+prefs.cpp
+%{APPNAMELC}.skel
+%{APPNAMELC}.cpp
+%{APPNAMELC}view.cpp
+prefs-base.ui
+%{APPNAMELC}view_base.ui
+""".split()
 
 # Our main program
 # KDEprogram add the file to the install targets automatically,
-# so you do not need to write KDEinstall( env['KDEBIN'], %{APPNAMELC}, myenv)
-KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources, myenv )
+# so you do not need to write myenv.KDEinstall( env['KDEBIN'], %{APPNAMELC})
+myenv.KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources )
 
 ############################
 ## Customization
 
 ## Additional include paths for compiling the source files
 ## Always add '../' (top-level directory) because moc makes code that needs it
-KDEaddpaths( ['./', '../'], myenv )
+myenv.KDEaddpaths( ['./', '../'] )
 
 ## Necessary libraries to link against
-KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint'], myenv )
+myenv.KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint'] )
 
 ## This shows how to add other link flags to the program
-# myenv['LINKFLAGS'].append('-export-dynamic')
+# myenv.KDEaddldflags('-export-dynamic')
 
 ## If you are using QThread, add this line
-# myenv.AppendUnique( CPPFLAGS = ['-DQT_THREAD_SUPPORT'] )
+# myenv.KDEaddflags( ['-DQT_THREAD_SUPPORT'] )
 
 #############################
 ## Installation
 
-## The program is installed automatically
+## NOTE 1: The program is installed automatically
+## NOTE 2: KDEinstall( resource_type, subdirectory, list_of_files )
 
 ## The ui.rc file and the tips go into datadir/appname/
-KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', '%{APPNAMELC}ui.rc', myenv )
-KDEinstall( env['KDEDATA']+'/%{APPNAMELC}', 'tips', myenv )
+myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}', '%{APPNAMELC}ui.rc' )
+myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}', 'tips' )
 
 ## The kcfg file is installed in a global kcfg directory
-KDEinstall( env['KDEKCFG'], '%{APPNAMELC}.kcfg', myenv)
+myenv.KDEinstall( 'KDEKCFG', '', '%{APPNAMELC}.kcfg' )
 
 ## Warning : there is a difference between the normal destop file used for the menu
 ##     and the servicetype desktop file, so they go in different directories
-##     you will find more information in 'test3'
-KDEinstall( env['KDEMENU']+'/Utilities', '%{APPNAMELC}.desktop', myenv)
+myenv.KDEinstall( 'KDEMENU', 'Utilities/', '%{APPNAMELC}.desktop' )
 
 ## Use this when you need to install a mimetype file
-#KDEinstall( env['KDEMIME']+'/application', 'x-%{APPNAMELC}.desktop', myenv )
+#myenv.KDEinstall( 'KDEMIME', 'application', 'x-%{APPNAMELC}.desktop' )
 
 ## Installing icons is easy (hi-16-app-%{APPNAMELC}.png, hi-22-app-%{APPNAMELC}.png)
-## do not forget that this is a python script so loops are allowed here :)
-# for size in ['16', '32', '64', '128']:
-#      KDEinstallas( env['KDEICONS']+'/hicolor/'+size+'x'+size+'/apps/%{APPNAMELC}.png', 'hi'+size+'-app-%{APPNAMELC}.png', myenv
+#myenv.KDEicon('%{APPNAMELC}')
+
+## do not forget that this is a python script so even loops are allowed... :)
 

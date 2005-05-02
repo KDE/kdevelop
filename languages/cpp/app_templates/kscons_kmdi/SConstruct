@@ -19,22 +19,19 @@ How to enjoy bksys full and plenty
 
 The program scons is usually launched as "scons"
 When it is not intalled globally, one can run
-"python scons.py" instead (ie : to use the local scons 
+"./scons" instead (ie : to use the local scons 
 that comes with bksys - try ./unpack_local_scons.sh)
 
 To compile the project, you will then only need to launch
 scons on the top-level directory, the scripts find and
 cache the proper environment automatically :
 -> scons
-(or python scons.py)
 
 To clean the project
 -> scons -c
-(or python scons.py -c)
 
 To install the project
 -> scons install
-(or python scons.py scons install)
 
 To uninstall the project
 -> scons -c install
@@ -45,22 +42,11 @@ To compile while being in a subdirectory
 To (re)configure the project and give particular arguments, use ie :
 -> scons configure debug=1
 -> scons configure prefix=/tmp/ita debug=full extraincludes=/usr/local/include:/tmp/include prefix=/usr/local
-or -> python scons.py configure debug=1
 etc ..
 The variables are saved automatically after the first run
 (look at kde.cache.py, ..)
 
-Here is a quick list of options used (look at generic.py and kde.py) :
-prefix
-exec_prefix
-datadir
-libdir
-kdeincludes
-qtincludes
-kdelibs
-qtlibs
-extraincludes (a list of paths separated by ':')
-
+For a quick list of options to use, run scons -h
 """
 
 ###########################################
@@ -97,9 +83,6 @@ This has several advantages for both developers and users :
 ## Use the variables available in the environment - unsafe, but moc, meinproc need it :-/
 import os
 env.AppendUnique( ENV = os.environ )
-
-## The target make dist requires the python module shutil which is in 2.3
-env.EnsurePythonVersion(2, 3)
 
 ## Bksys requires scons 0.96
 env.EnsureSConsVersion(0, 96)
@@ -151,15 +134,15 @@ for dir in dirs:
 ## If we had only one program (named kvigor) to build, 
 ## we could add before exporting the env (some kde 
 ## helpers in kde.py need it) :
-# env['APPNAME'] = 'kvigor'
+# env['APPNAME'] = '%{APPNAMELC}'
 
 ## Use this define if you are using the kde translation scheme (.po files)
-env.Append( CPPFLAGS = ['-DQT_NO_TRANSLATION'] )
+env.KDEaddflags( ['-DQT_NO_TRANSLATION'] )
 
 ## Add this define if you want to use qthreads
-#env.Append( CPPFLAGS = ['-DQT_THREAD_SUPPORT', '-D_REENTRANT'] )
+#env.KDEaddflags( ['-DQT_THREAD_SUPPORT', '-D_REENTRANT'] )
 #if os.uname()[0] == "FreeBSD":
-#	env.Append(LINKFLAGS=["-pthread"])
+#	env.KDEaddldflags(['-pthread'])
 
 ## To use kdDebug(intvalue)<<"some trace"<<endl; you need to define -DDEBUG - it is done
 ## in generic.py automatically when you do scons configure debug=1
@@ -170,7 +153,7 @@ env.Append( CPPFLAGS = ['-DQT_NO_TRANSLATION'] )
 
 ## Important : export the environment so that SConscript files can the 
 ## configuration and builders in it
-Export("env")
+Export('env')
 
 
 ####################################################
@@ -193,6 +176,9 @@ do not forget to remove the object files by scons -c
 
 ### To make a tarball of your %{APPNAME}
 if 'dist' in COMMAND_LINE_TARGETS:
+	
+	## The target make dist requires the python module shutil which is in 2.3
+	env.EnsurePythonVersion(2, 3)
 
         APPNAME = '%{APPNAMELC}'
         VERSION = os.popen("cat VERSION").read().rstrip()
@@ -217,7 +203,7 @@ if 'dist' in COMMAND_LINE_TARGETS:
         os.popen("find "+FOLDER+" -name \"{arch}\" | xargs rm -rf")
         os.popen("find "+FOLDER+" -name \".arch-ids\" | xargs rm -rf")
         os.popen("find "+FOLDER+" -name \".arch-inventory\" | xargs rm -f")
-        os.popen("find "+FOLDER+" -name \"sconsign*\" | xargs rm -f")
+        os.popen("find "+FOLDER+" -name \"scons_signatures*\" | xargs rm -f")
         os.popen("find "+FOLDER+" -name \"*cache*\" | xargs rm -rf")
         os.popen("find "+FOLDER+" -name \"kdiss*-data\" | xargs rm -rf")
         os.popen("find "+FOLDER+" -name \"*.pyc\" | xargs rm -f")
