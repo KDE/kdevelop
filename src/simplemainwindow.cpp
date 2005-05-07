@@ -98,6 +98,8 @@ void SimpleMainWindow::init()
     connect(Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart *)),
         this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )));
+    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+        this, SLOT(activePartChanged(KParts::Part*)));
 
     connect(PartController::getInstance(), 
         SIGNAL(documentChangedState(const KURL &, DocumentState)),
@@ -284,9 +286,10 @@ void SimpleMainWindow::projectOpened()
     setCaption(QString::null);
 }
 
-void SimpleMainWindow::slotPartURLChanged(KParts::ReadOnlyPart */*part*/)
+void SimpleMainWindow::slotPartURLChanged(KParts::ReadOnlyPart *part)
 {
-//    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part))
+    if (QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part))
+        widget->setCaption(part->url().fileName());
         //do smth with caption: ro_part->url().fileName()
 }
 
@@ -517,6 +520,11 @@ void SimpleMainWindow::fillWindowMenu()
 void SimpleMainWindow::slotSplitVertical()
 {
     DTabWidget *tab = splitVertical();
+    PartController::getInstance()->openEmptyTextDocument();
+    
+    //FIXME: adymo: we can't put another kate view into the tab just added - weird crashes :(
+    //more: kdevelop part controller doesn't handle such situation - it assumes the part to
+    //have only one widget
 /*    KParts::Part *activePart = PartController::getInstance()->activePart();
     if (!activePart)
         return;
@@ -532,6 +540,38 @@ void SimpleMainWindow::slotSplitVertical()
 void SimpleMainWindow::slotSplitHorizontal()
 {
     DTabWidget *tab = splitHorizontal();
+    PartController::getInstance()->openEmptyTextDocument();
+}
+
+void SimpleMainWindow::closeTab(QWidget *w)
+{
+    const QPtrList<KParts::Part> *partlist = PartController::getInstance()->parts();
+    QPtrListIterator<KParts::Part> it(*partlist);
+    while (KParts::Part* part = it.current())
+    {
+        QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part);
+        if (widget && widget == w)
+        {
+            PartController::getInstance()->closePart(part);
+            return;
+        }
+        ++it;
+    }
+}
+
+void SimpleMainWindow::activePartChanged(KParts::Part *part)
+{
+    if (!part)
+        return;
+    QWidget *w = part->widget();
+    kdDebug() << "active part widget is : " << w << endl;
+    if (!m_widgets.contains(w))
+        return;
+    if (m_widgetTabs[w] != 0)
+    {
+        kdDebug() << " setting m_activeTabWidget " << endl;
+        m_activeTabWidget = m_widgetTabs[w];
+    }
 }
 
 #include "simplemainwindow.moc"

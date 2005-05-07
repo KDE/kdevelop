@@ -1565,4 +1565,43 @@ KParts::ReadOnlyPart *PartController::qtDesignerPart()
 	return 0;
 }
 
+void PartController::openEmptyTextDocument()
+{
+	KTextEditor::Editor * editorpart = createEditorPart(true);
+
+	if ( editorpart )
+	{
+		if ( !m_presetEncoding.isNull() )
+		{
+			KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
+			if ( extension )
+			{
+				KParts::URLArgs args;
+				args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
+				extension->setURLArgs(args);
+			}
+			m_presetEncoding = QString::null;
+		}
+                
+//		editorpart->openURL( url );
+
+		QWidget* widget = editorpart->widget();
+	
+		if (!widget) {
+			// We're being lazy about creating the view, but kmdi _needs_ a widget to
+			// create a tab for it, so use a QWidgetStack subclass instead
+			kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
+			widget = new EditorWrapper(static_cast<KTextEditor::Document*>(editorpart), true, TopLevel::getInstance()->main());
+		}
+
+		addHistoryEntry();
+		integratePart(editorpart, KURL(i18n("unnamed")), widget, true, true);
+
+		EditorProxy::getInstance()->setLineNumber(editorpart, 0, 0);
+		
+//		m_openRecentAction->addURL( url );
+//		m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
+	}
+}
+
 #include "partcontroller.moc"

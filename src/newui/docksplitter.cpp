@@ -103,7 +103,15 @@ void DockSplitter::removeDock(uint row, uint col, bool alsoDelete)
     m_docks[row].remove(m_docks[row].at(col));
     
     if (alsoDelete)
+    {
         delete w;
+        w = 0;
+    }
+    else
+    {
+        w->reparent(0, QPoint(0,0), false);
+        w->hide();
+    }
 
     m_splitters[row]->setMinimumSize(m_splitters[row]->minimumSizeHint());
 

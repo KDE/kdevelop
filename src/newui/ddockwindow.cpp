@@ -23,6 +23,7 @@
 #include <qlayout.h>
 #include <qstyle.h>
 #include <qwidgetstack.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -99,7 +100,7 @@ void DDockWindow::setVisible(bool v)
     config->setGroup(group);
     
     if (m_visible)
-        config->writeEntry("Width", m_position == DDockWindow::Bottom ? height() : width() );
+        config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width() );
 
     v ? m_widgetStack->show() : m_widgetStack->hide();
     m_visible = v;
@@ -116,12 +117,12 @@ void DDockWindow::setVisible(bool v)
         int size = 0;
         if (m_position == DDockWindow::Bottom)
         {
-            size = config->readNumEntry("Width", m_internalLayout->sizeHint().height());
+            size = config->readNumEntry("ViewWidth", m_internalLayout->sizeHint().height());
             setFixedExtentHeight(size);
         }
         else
         {
-            size = config->readNumEntry("Width", m_internalLayout->sizeHint().width());
+            size = config->readNumEntry("ViewWidth", m_internalLayout->sizeHint().width());
             setFixedExtentWidth(size);
         }
     }
@@ -135,11 +136,19 @@ void DDockWindow::saveSettings()
 {
     KConfig *config = kapp->config();
     QString group = QString("%1").arg(m_name);
-    config->deleteGroup(group);
+    int invisibleWidth = 0;
     config->setGroup(group);
-    config->writeEntry("Width", m_position == DDockWindow::Bottom ? height() : width());
+    if (config->hasKey("ViewWidth"))
+        invisibleWidth = config->readNumEntry("ViewWidth");
+    config->deleteEntry("ViewWidth");
+    config->deleteEntry("ViewLastWidget");
     if (m_toggledButton && m_visible)
-        config->writeEntry("LastWidget", m_toggledButton->realText());
+    {
+        config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width());
+        config->writeEntry("ViewLastWidget", m_toggledButton->realText());
+    }
+    else if (invisibleWidth != 0)
+        config->writeEntry("ViewWidth", invisibleWidth);
 }
 
 QWidget *DDockWindow::currentWidget() const
@@ -150,7 +159,21 @@ QWidget *DDockWindow::currentWidget() const
 void DDockWindow::addWidget(const QString &title, QWidget *widget)
 {
     kdDebug() << k_funcinfo << endl;
-    Ideal::Button *button = new Ideal::Button(m_bar, title);
+    QPixmap *pm = const_cast<QPixmap*>(widget->icon());
+    Ideal::Button *button;
+    if (pm != 0)
+    {
+        //force 16pt for now
+        if (pm->height() > 16)
+        {
+            QImage img = pm->convertToImage();
+            img = img.smoothScale(16, 16);
+            pm->convertFromImage(img);
+        }
+        button = new Ideal::Button(m_bar, title, *pm);
+    }
+    else
+        button = new Ideal::Button(m_bar, title);
     m_widgets[button] = widget;
     m_buttons[widget] = button;
     m_bar->addButton(button);
@@ -163,7 +186,7 @@ void DDockWindow::addWidget(const QString &title, QWidget *widget)
     KConfig *config = kapp->config();
     QString group = QString("%1").arg(m_name);
     config->setGroup(group);
-    if (config->readEntry("LastWidget") == title)
+    if (config->readEntry("ViewLastWidget") == title)
     {
         kdDebug() << k_funcinfo << " : activating last widget " << title << endl;
         button->setOn(true);

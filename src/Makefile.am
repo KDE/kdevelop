@@ -1,7 +1,8 @@
 INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/interfaces \
 	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external \
 	-I$(top_srcdir)/lib/interfaces/extras -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets \
-	-I$(top_srcdir)/src/profileengine/lib -I$(top_srcdir)/src/newui $(KDEVMDI_INCLUDES) $(all_includes)
+	-I$(top_srcdir)/src/newui -I$(top_srcdir)/src/profileengine/lib $(KDEVMDI_INCLUDES) \
+	$(all_includes)
 
 KDE_OPTIONS=nofinal
 
@@ -53,3 +54,4 @@ DOXYGEN_DOCDIRPREFIX = kdevshell
 include ../Doxyfile.am
 profilesdatadir = $(kde_datadir)/kdevelop/profiles
 profilesdata_DATA = projectprofiles
+AM_CXXFLAGS = -w

@@ -169,7 +169,7 @@ QSize Button::sizeHint(const QString &text) const
     constPolish();
     int w = 0, h = 0;
 
-    if ( iconSet() && !iconSet()->isNull() ) {
+    if ( iconSet() && !iconSet()->isNull() && (m_buttonBar->mode() != Text) ) {
         int iw = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal ).width() + 4;
         int ih = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal ).height();
         w += iw;
@@ -181,7 +181,7 @@ QSize Button::sizeHint(const QString &text) const
         QPixmap *pm = (QPixmap *)pixmap();
         w += pm->width();
         h += pm->height();
-    } else {
+    } else if (m_buttonBar->mode() != Icons) {
         QString s( text );
         bool empty = s.isEmpty();
         if ( empty )

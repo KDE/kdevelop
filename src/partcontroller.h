@@ -89,6 +89,8 @@ public:
   bool closeFile( const KURL & );
   bool closeAllOthers( const KURL & );
   void reloadFile( const KURL & url );
+  
+  void openEmptyTextDocument();
 
 public slots:
 

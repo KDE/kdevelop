@@ -51,9 +51,13 @@ public slots:
     DTabWidget *splitVertical();
     
 protected slots:
-    /**reimplement this in subclass*/
+    /**This does nothing. Reimplement in subclass to close the tab 
+    when corner close button is pressed.*/
     virtual void closeTab();
-    /**reimplement this in subclass*/
+    /**This does nothing. Reimplement in subclass to close the tab
+    when hover close button is pressed.*/
+    virtual void closeTab(QWidget*);
+    /**This does nothing. Reimplement in subclass to show tab context menu.*/
     virtual void tabContext(QWidget*,const QPoint &);
 
 signals:
@@ -78,12 +82,13 @@ protected:
     
     bool m_openTabAfterCurrent;
     bool m_showIconsOnTabs;
+    bool m_firstRemoved;
     
     QValueList<QWidget*> m_widgets;
     QMap<QWidget*, DTabWidget*> m_widgetTabs;
     QWidget *m_currentWidget;
 
-private slots:    
+private slots:
     void invalidateActiveTabWidget();
 
 };

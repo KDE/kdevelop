@@ -30,7 +30,7 @@
 #include "docksplitter.h"
 
 DMainWindow::DMainWindow(QWidget *parent, const char *name)
-    :KParts::MainWindow(parent, name), m_currentWidget(0)
+    :KParts::MainWindow(parent, name), m_firstRemoved(false), m_currentWidget(0)
 {
     loadSettings();
     createToolWindows();
@@ -76,7 +76,13 @@ void DMainWindow::createToolWindows()
 
 void DMainWindow::addWidget(QWidget *widget, const QString &title)
 {
-    invalidateActiveTabWidget();
+//     invalidateActiveTabWidget();
+    if (m_firstRemoved && m_activeTabWidget == m_tabs.first())
+    {
+        m_central->addDock(0, 0, m_activeTabWidget);
+        m_firstRemoved = false;
+    }
+        
     addWidget(m_activeTabWidget, widget, title);
 }
 
@@ -92,10 +98,7 @@ void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &tit
         tab->insertTab(widget, icons, title, idx);
     }
     else
-    {
-        kdDebug() << "tab exists with number of widgets " << tab->count() << endl;
         tab->insertTab(widget, title, idx);
-    }
     m_widgets.append(widget);
     m_widgetTabs[widget] = tab;
     widget->installEventFilter(this);
@@ -116,13 +119,30 @@ void DMainWindow::removeWidget(QWidget *widget)
             widget->reparent(0,QPoint(0,0),false);
             if (tab->count() == 0)
             {
-                tab->closeButton()->hide();
+                if (tab->closeButton())
+                    tab->closeButton()->hide();
+                //remove and delete tabwidget if it is not the first one
                 if (tab != m_tabs.first())
                 {
                     QPair<uint, uint> idx = m_central->indexOf(tab);
                     m_tabs.remove(tab);
                     m_activeTabWidget = m_tabs.first();
                     m_central->removeDock(idx.first, idx.second, true);
+                }
+                //only temporarily remove the first tabwidget
+                else
+                {
+                    m_central->removeDock(0, 0, false);
+                    m_firstRemoved = true;
+                }
+                //focus smth in m_activeTabWidget
+                if (m_activeTabWidget)
+                {
+                    if (m_activeTabWidget->currentPage())
+                    {
+                        kdDebug() << "trying best!" << endl;
+                        m_activeTabWidget->currentPage()->setFocus();
+                    }
                 }
             }
         }
@@ -141,7 +161,7 @@ DTabWidget *DMainWindow::splitHorizontal()
 
 DTabWidget *DMainWindow::splitVertical() 
 {
-    invalidateActiveTabWidget();
+//     invalidateActiveTabWidget();
     int row = m_central->indexOf(m_activeTabWidget).first;
     m_activeTabWidget = createTab();
     m_central->addDock(row, m_central->numCols(row), m_activeTabWidget);
@@ -150,17 +170,23 @@ DTabWidget *DMainWindow::splitVertical()
 
 void DMainWindow::invalidateActiveTabWidget()
 {
-    QWidget *focused = m_central->focusWidget();
+/*    QWidget *focused = m_central->focusWidget();
+    kdDebug() << "invalidate: " << focused << endl;
     if (focused == 0)
         return;
     if (!m_widgets.contains(focused))
+    {
+        kdDebug() << "    focused is not in m_widgets" << endl;
         return;
+    }
     if (m_widgetTabs.contains(focused))
     {
+        kdDebug() << "    focused is in m_widgets and m_widgetTabs" << endl;
         DTabWidget *tab = m_widgetTabs[focused];
         if (tab->indexOf(focused) >= 0)
             m_activeTabWidget = tab;
-    }
+        kdDebug() << "    tab: " << tab << endl;
+    }*/
 }
 
 DTabWidget *DMainWindow::createTab()
@@ -169,6 +195,7 @@ DTabWidget *DMainWindow::createTab()
     m_tabs.append(tab);
     if (tab->closeButton())
         connect(tab->closeButton(), SIGNAL(clicked()), this, SLOT(closeTab()));
+    connect(tab, SIGNAL(closeRequest(QWidget*)), this, SLOT(closeTab(QWidget*)));
     connect(tab, SIGNAL(contextMenu(QWidget*,const QPoint &)), 
         this, SLOT(tabContext(QWidget*,const QPoint &)));
     return tab;
@@ -207,6 +234,11 @@ void DMainWindow::closeTab()
 }
 
 void DMainWindow::tabContext(QWidget *, const QPoint &)
+{
+    //nothing to do here, should be reimplemented
+}
+
+void DMainWindow::closeTab(QWidget *)
 {
     //nothing to do here, should be reimplemented
 }

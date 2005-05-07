@@ -61,6 +61,8 @@ void DTabWidget::loadSettings()
     m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
     m_closeOnHover = config->readBoolEntry("CloseOnHover", false);
     m_closeButtonShown = config->readBoolEntry("ShowCloseTabsButton", true);
+    //we do not delay hover close buttons - that looks and feels ugly
+    setHoverCloseButtonDelayed(false);
 }
 
 void DTabWidget::saveSettings()
@@ -80,7 +82,7 @@ void DTabWidget::setFocus(QWidget *w)
 
 void DTabWidget::insertTab(QWidget *child, const QString &label, int index)
 {
-    if (m_closeButtonShown)
+    if (m_closeButton && m_closeButtonShown)
         m_closeButton->show();
     KTabWidget::insertTab(child, label, index);
     if (index != -1) tabBar()->repaint();
@@ -89,7 +91,7 @@ void DTabWidget::insertTab(QWidget *child, const QString &label, int index)
 void DTabWidget::insertTab(QWidget *child, const QIconSet &iconset, 
     const QString &label, int index)
 {
-    if (m_closeButtonShown)
+    if (m_closeButton && m_closeButtonShown)
         m_closeButton->show();
     KTabWidget::insertTab(child, iconset, label, index);
     if (index != -1) tabBar()->repaint();

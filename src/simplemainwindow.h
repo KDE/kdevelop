@@ -62,6 +62,7 @@ protected:
     
 protected slots:
     virtual void closeTab();
+    virtual void closeTab(QWidget *w);
     virtual void tabContext(QWidget *w, const QPoint &p);
     
 private slots:
@@ -72,6 +73,7 @@ private slots:
     void slotCoreInitialized();
     void projectOpened();
     void slotPartURLChanged(KParts::ReadOnlyPart *part);
+    void activePartChanged(KParts::Part *part);
     void documentChangedState(const KURL &url, DocumentState state);
     void tabContextActivated(int);
     void configureToolbars();
