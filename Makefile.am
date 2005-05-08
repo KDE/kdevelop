@@ -35,7 +35,7 @@ dist-hook:
 	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
 
 messages:
-	find . -type d | grep -v CVS | sed -e 's,$$,/,' > dirs
+	find . -type d | grep -v CVS | grep -v '\.svn' | sed -e 's,$$,/,' > dirs
 	mfs=`find . -name Makefile.am | xargs egrep -l '^messages:'` ;\
 	for dir in $$mfs; do \
 	  if test ! "$$dir" = "./Makefile.am"; then \
