@@ -9,6 +9,7 @@ ADD_LIBRARY(kdevcatalog SHARED ${kdevcatalog_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevcatalog ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/bdb/build_unix/libdb.a)
 
+INSTALL_TARGETS(/lib kdevcatalog)
 
 #original Makefile.am contents follow:
 

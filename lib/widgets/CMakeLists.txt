@@ -18,6 +18,7 @@ ADD_LIBRARY(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevwidgets ${QT_LIBRARIES} kdecore kdeui kparts khtml kio)
 
+INSTALL_TARGETS(/lib kdevwidgets)
 
 #original Makefile.am contents follow:
 

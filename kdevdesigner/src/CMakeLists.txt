@@ -7,6 +7,7 @@ KDE_AUTOMOC(${kdevdesigner_SRCS})
 
 ADD_EXECUTABLE(kdevdesigner ${kdevdesigner_SRCS})
 
+INSTALL_TARGETS(/bin kdevdesigner)
 
 
 #original Makefile.am contents follow:
@@ -37,7 +38,7 @@ ADD_EXECUTABLE(kdevdesigner ${kdevdesigner_SRCS})
 #kdevdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 #kdevdesigner_LDADD   = $(LIB_KPARTS)
 #
-## this is where the desktop file will go 
+## this is where the desktop file will go
 ##shelldesktopdir = $(kde_appsdir)/Development
 ##shelldesktop_DATA = kdevdesigner.desktop
 #xdg_apps_DATA = kdevdesigner.desktop
@@ -53,7 +54,7 @@ ADD_EXECUTABLE(kdevdesigner ${kdevdesigner_SRCS})
 ## the Part's source, library search path, and link libraries
 #
 #
-## this is where the desktop file will go 
+## this is where the desktop file will go
 #partdesktopdir   = $(kde_servicesdir)
 #
 ## this is where the part's XML-GUI resource file goes

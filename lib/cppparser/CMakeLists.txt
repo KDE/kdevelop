@@ -10,8 +10,9 @@ tree_parser.cpp
 
 ADD_LIBRARY(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 
-
 TARGET_LINK_LIBRARIES(kdevcppparser ${QT_LIBRARIES} kdecore)
+
+INSTALL_TARGETS(/lib kdevcppparser)
 
 #original Makefile.am contents follow:
 

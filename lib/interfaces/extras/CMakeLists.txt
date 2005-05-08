@@ -11,6 +11,8 @@ ADD_LIBRARY(kdevextras SHARED ${kdevextras_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevextras ${QT_LIBRARIES} )
 
+INSTALL_TARGETS(/lib kdevextras)
+
 #original Makefile.am contents follow:
 
 #INCLUDES = -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \

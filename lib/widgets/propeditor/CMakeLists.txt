@@ -42,6 +42,8 @@ ADD_LIBRARY(kdevpropertyeditor SHARED ${kdevpropertyeditor_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevpropertyeditor ${QT_LIBRARIES} kdecore kdeui kio)
 
+INSTALL_TARGETS(/lib kdevpropertyeditor)
+
 #original Makefile.am contents follow:
 
 #INCLUDES = -I$(top_srcdir)/lib/compat $(all_includes)

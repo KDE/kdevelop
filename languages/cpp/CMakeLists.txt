@@ -60,9 +60,13 @@ ADD_LIBRARY(kdevcppsupport SHARED ${kdevcppsupport_PART_SRCS})
 TARGET_LINK_LIBRARIES(kdevcppsupport ${KDEV_LANG_LIBS} DCOP kdevcatalog kdevcppparser lang_interfaces designerintegration)
 
 
-#ADD_EXECUTABLE(r++ ${r++_SRCS})
+SET(rpp_SRCS main.cpp)
 
+ADD_EXECUTABLE(r++ ${rpp_SRCS})
 
+TARGET_LINK_LIBRARIES(r++ ${QT_LIBRARIES} kdecore kdevcppsupport kdevcatalog kdevcppparser ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+
+INSTALL_TARGETS(/bin r++)
 
 #original Makefile.am contents follow:
 

@@ -21,6 +21,8 @@ kdevutil
 kdevdcopextensions
 )
 
+INSTALL_FILES(/lib kdevelop)
+
 #original Makefile.am contents follow:
 
 ## Here resides the library of general KDevelop-related utilities,

@@ -34,6 +34,8 @@ KDE_AUTOMOC(${kdevshell_LIB_SRCS})
 
 ADD_LIBRARY(kdevshell SHARED ${kdevshell_LIB_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevshell ${QT_LIBRARIES} kdecore kdeui kparts kio ktexteditor kmdi ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextras kdevwidgets profileengine d kinterfacedesigner )
+
 
 SET(kdevelop_SRCS
 main.cpp
@@ -48,6 +50,9 @@ KDE_ADD_UI_FILES(kdevelop_SRCS ${kdevelop_UI} )
 
 ADD_EXECUTABLE(kdevelop ${kdevelop_SRCS})
 
+TARGET_LINK_LIBRARIES(kdevelop ${QT_LIBRARIES} kdecore kdeui kparts kio kdevshell)
+
+
 SET(kdevassistant_SRCS
 main_assistant.cpp
 kdevassistantextension.cpp
@@ -57,7 +62,7 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevassistant kdevshell)
 
-
+INSTALL_TARGETS(/bin kdevassistant kdevelop)
 
 #original Makefile.am contents follow:
 
