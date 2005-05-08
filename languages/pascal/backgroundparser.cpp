@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <strstream>
+#include <sstream>
 
 #include "backgroundparser.h"
 #include "problemreporter.h"
@@ -41,7 +41,7 @@ void BackgroundParser::run()
     std::string fn( _fn.data() );
 
     QCString text = m_source.utf8();
-    std::istrstream stream( text );
+    std::istringstream stream( text );
 
     kdDebug() << "12" << endl;
 

@@ -28,7 +28,7 @@
 #include <qdir.h>
 
 #include <string>
-#include <strstream>
+#include <sstream>
 
 class DefaultSourceProvider: public SourceProvider
 {
@@ -166,7 +166,7 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
     m_currentFileName = fileName;
 
     std::string source( sourceProvider()->contents(fileName).utf8() );
-    std::istrstream in( source.c_str() );
+    std::istringstream in( source.c_str() );
 
     JavaLexer lex( in );
     lex.setDriver( this );
