@@ -259,7 +259,8 @@ void DDockWindow::hideWidget(QWidget *widget)
         button->hide();
     }
     widget->hide();
-    setVisible(false);
+    if (button == m_toggledButton)
+        setVisible(false);
 }
 
 void DDockWindow::showWidget(QWidget *widget)
