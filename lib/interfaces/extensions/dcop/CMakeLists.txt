@@ -13,7 +13,7 @@ KDE_AUTOMOC(${kdevdcopextensions_STAT_SRCS})
 
 ADD_LIBRARY(kdevdcopextensions STATIC ${kdevdcopextensions_STAT_SRCS})
 
-
+INSTALL_FILES(/include/kdevelop/interfaces/extensions/dcop/ FILES KDevAppFrontendIface.h KDevMakeFrontendIface.h)
 
 #original Makefile.am contents follow:
 
@@ -23,7 +23,7 @@ ADD_LIBRARY(kdevdcopextensions STATIC ${kdevdcopextensions_STAT_SRCS})
 #noinst_LTLIBRARIES = libkdevdcopextensions.la
 #libkdevdcopextensions_la_LDFLAGS = $(all_libraries)
 #libkdevdcopextensions_la_SOURCES = KDevAppFrontendIface.cpp \
-#		KDevMakeFrontendIface.cpp KDevAppFrontendIface.skel KDevMakeFrontendIface.skel 
+#		KDevMakeFrontendIface.cpp KDevAppFrontendIface.skel KDevMakeFrontendIface.skel
 #
 #dcopincludeextdir = $(includedir)/kdevelop/interfaces/extensions/dcop
 #dcopincludeext_HEADERS = KDevAppFrontendIface.h KDevMakeFrontendIface.h

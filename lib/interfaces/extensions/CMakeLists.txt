@@ -11,6 +11,15 @@ KDE_ADD_MOC_FILES(kdevextensions_STAT_SRCS kdevversioncontrol.h)
 
 ADD_LIBRARY(kdevextensions STATIC ${kdevextensions_STAT_SRCS})
 
+INSTALL_FILES(/include/kdevelop/interfaces/extensions FILES
+kdevsourceformatter.h
+kdevappfrontend.h
+kdevmakefrontend.h
+kdevdifffrontend.h
+kdevcreatefile.h
+kdevversioncontrol.h)
+
+INSTALL_FILES(/share/servicetypes/ ".+\\.desktop")
 
 
 #original Makefile.am contents follow:

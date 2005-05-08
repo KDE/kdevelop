@@ -13,6 +13,17 @@ ADD_LIBRARY(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 TARGET_LINK_LIBRARIES(kdevcppparser ${QT_LIBRARIES} kdecore)
 
 INSTALL_TARGETS(/lib kdevcppparser)
+INSTALL_FILES(/include/kdevelop/cppparser FILES
+ast.h
+driver.h
+lexer.h
+parser.h
+tree_parser.h
+errors.h
+keywords.lut.h
+lookup.h )
+
+
 
 #original Makefile.am contents follow:
 

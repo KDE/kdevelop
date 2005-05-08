@@ -19,6 +19,16 @@ ADD_LIBRARY(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
 TARGET_LINK_LIBRARIES(kdevwidgets ${QT_LIBRARIES} kdecore kdeui kparts khtml kio)
 
 INSTALL_TARGETS(/lib kdevwidgets)
+INSTALL_FILES(/include/kdevelop/widgets FILES
+klistviewaction.h
+qcomboview.h
+flagboxes.h
+ksavealldialog.h
+resizablecombo.h
+kcomboview.h
+kdevhtmlpart.h
+processlinemaker.h
+processwidget.h )
 
 #original Makefile.am contents follow:
 

@@ -12,6 +12,8 @@ ADD_LIBRARY(kdevextras SHARED ${kdevextras_LIB_SRCS})
 TARGET_LINK_LIBRARIES(kdevextras ${QT_LIBRARIES} )
 
 INSTALL_TARGETS(/lib kdevextras)
+INSTALL_FILES(/include/kdevelop/interfaces/extras FILES kdevcompileroptions.h kdevvcsintegrator.h )
+INSTALL_FILES(/share/servicetypes FILES kdevelopcompileroptions.desktop kdevelopvcsintegrator.desktop)
 
 #original Makefile.am contents follow:
 

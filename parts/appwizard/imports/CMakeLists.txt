@@ -1,4 +1,8 @@
 
+INSTALL_FILES(/share/apps/kdevappwizard/importfiles ".+\\.kdevelop")
+INSTALL_FILES(/share/apps/kdevappwizard/imports FILES
+c-auto cpp-auto fortran-auto java-auto kde gnome c cpp fortran python
+php perl java java-ant qttmake qtqmake ruby pascal ada )
 
 #original Makefile.am contents follow:
 

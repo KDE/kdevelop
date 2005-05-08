@@ -43,6 +43,7 @@ ADD_LIBRARY(kdevpropertyeditor SHARED ${kdevpropertyeditor_LIB_SRCS})
 TARGET_LINK_LIBRARIES(kdevpropertyeditor ${QT_LIBRARIES} kdecore kdeui kio)
 
 INSTALL_TARGETS(/lib kdevpropertyeditor)
+INSTALL_FILES(/include/kdevelop/propeditor ".+\\.h")
 
 #original Makefile.am contents follow:
 

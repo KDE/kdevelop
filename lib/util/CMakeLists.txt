@@ -13,7 +13,14 @@ KDE_AUTOMOC(${kdevutil_STAT_SRCS})
 
 ADD_LIBRARY(kdevutil STATIC ${kdevutil_STAT_SRCS})
 
-
+INSTALL_FILES(/include/kdevelop/util FILES
+domutil.h
+execcommand.h
+filetemplate.h
+urlutil.h
+configwidgetproxy.h
+rurl.h
+kscriptactionmanager.h )
 
 #original Makefile.am contents follow:
 

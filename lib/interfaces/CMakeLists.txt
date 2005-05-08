@@ -38,6 +38,26 @@ KDE_AUTOMOC(${kdevinterfaces_STAT_SRCS})
 
 ADD_LIBRARY(kdevinterfaces STATIC ${kdevinterfaces_STAT_SRCS})
 
+INSTALL_FILES(/share/servicetypes/ ".+\\.desktop")
+INSTALL_FILES(/include/kdevelop/interfaces
+kdevlanguagesupport.h
+kdevmainwindow.h
+kdevpartcontroller.h
+kdevplugin.h
+kdevproject.h
+kdevcore.h
+kdevcoderepository.h
+codemodel.h
+codemodel_utils.h
+codemodel_treeparser.h
+kdevgenericfactory.h
+kdevapi.h
+kdevdesignerintegration.h
+kdevplugincontroller.h
+kdevplugininfo.h
+KDevCoreIface.h
+KDevPartControllerIface.h
+katedocumentmanagerinterface.h )
 
 
 #original Makefile.am contents follow:
@@ -83,26 +103,26 @@ ADD_LIBRARY(kdevinterfaces STATIC ${kdevinterfaces_STAT_SRCS})
 
 #SUBDIRS(extensions external)
 #
-#SET(kdevinterfaces_SOURCES 
+#SET(kdevinterfaces_SOURCES
 #kdevcore.cpp
-#kdevproject.cpp 
+#kdevproject.cpp
 #kdevlanguagesupport.cpp
 #kdevpartcontroller.cpp
 #kdevapi.cpp
 #kdevmainwindow.cpp
 #kdevplugin.cpp
-#kdevcoderepository.cpp 
+#kdevcoderepository.cpp
 #codemodel.cpp
 #codemodel_treeparser.cpp
-#codemodel_utils.cpp 
+#codemodel_utils.cpp
 #kdevdesignerintegration.cpp
 #kdevplugincontroller.cpp
 #kdevplugininfo.cpp
-#KDevCoreIface.cpp 
+#KDevCoreIface.cpp
 #KDevPartControllerIface.cpp
 #katedocumentmanagerinterface.cpp
 #kdevprojectiface.cpp
-#kdevdesignerintegrationiface.cpp 
+#kdevdesignerintegrationiface.cpp
 #)
 #
 #SET(kdevinterfaces_DCOP_SRCS

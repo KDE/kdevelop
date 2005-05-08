@@ -10,6 +10,8 @@ ADD_LIBRARY(kdevcatalog SHARED ${kdevcatalog_LIB_SRCS})
 TARGET_LINK_LIBRARIES(kdevcatalog ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/bdb/build_unix/libdb.a)
 
 INSTALL_TARGETS(/lib kdevcatalog)
+INSTALL_FILES(/include/kdevelop/catalog FILES gcatalog.h gcatalog.tcc catalog.h tag.h)
+
 
 #original Makefile.am contents follow:
 

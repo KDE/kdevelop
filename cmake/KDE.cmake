@@ -1,6 +1,7 @@
 #this file defines the following variables:
 #KDE_INCLUDE_DIR
 #KDE_LIB_DIR
+#KDE_SERVICETYPES_DIR
 #DCOPIDL
 #DCOPIDL2CPP
 #
@@ -40,6 +41,13 @@ FIND_PATH(KDE_LIB_DIR libkdecore.so
   $ENV{KDEDIR}/lib
   /opt/kde/lib
   /opt/kde3/lib
+)
+
+#now the KDE service types directory
+FIND_PATH(KDE_SERVICETYPES_DIR ktexteditor.desktop
+  $ENV{KDEDIR}/share/servicetypes/
+  /opt/kde/share/servicetypes/
+  /opt/kde3/share/servicetypes/
 )
 
 #now search for the dcop utilities

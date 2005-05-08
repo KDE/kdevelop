@@ -1,5 +1,7 @@
 SUBDIRS( imports common licenses )
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extras/ ${CMAKE_SOURCE_DIR}/lib/widgets/)
+
 SET(kdevappwizard_PART_SRCS
 appwizardfactory.cpp
 appwizardpart.cpp
@@ -12,8 +14,6 @@ kdevlicense.cpp
 profilesupport.cpp
 )
 
-KDE_AUTOMOC(${kdevappwizard_PART_SRCS})
-
 SET( kdevappwizard_UI
 filepropspagebase.ui
 appwizarddlgbase.ui
@@ -21,13 +21,20 @@ importdlgbase.ui
 vcs_form.ui
 )
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extras/ ${CMAKE_SOURCE_DIR}/lib/widgets/)
+KDE_AUTOMOC(${kdevappwizard_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevappwizard_PART_SRCS ${kdevappwizard_UI} )
 
-ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_PART_SRCS})
+ADD_LIBRARY(kdevappwizard MODULE ${kdevappwizard_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevappwizard ${KDEV_PART_LIBS} kdevpropertyeditor)
+
+KDE_CREATE_LIBTOOL_FILE(kdevappwizard)
+
+INSTALL_TARGETS(/lib/kde3 kdevappwizard)
+INSTALL_FILES(/share/apps/kdevappwizard FILES kdevappwizard.rc)
+INSTALL_FILES(/share/services FILES kdevappwizard.desktop)
+
 
 
 #original Makefile.am contents follow:
