@@ -16,7 +16,7 @@
 #include <kiconloader.h>
 
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "kdevgenericfactory.h"
 #include "kdevcore.h"
@@ -264,7 +264,7 @@ void AdaSupportPart::parseContents (const QString& contents, const QString& file
     std::string fn (_fn.data ());
 
     QCString text = contents.utf8 ();
-    std::istrstream stream (text);
+    std::istringstream stream ((const char *)text);
 
     AdaLexer lexer (stream);
     lexer.setFilename (fn);
