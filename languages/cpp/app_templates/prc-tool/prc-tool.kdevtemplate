@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=Hello world program
-Name[fr]=Un simple programme de test « Hello world
 Icon= # got none
 Category=C/PalmOS
 Comment=Generates a template for palm application
-Comment[fr]=Génère un modèle d'application pour l'environnement PALM.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.c
 Archive=prc-tool.tar.gz

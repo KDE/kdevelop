@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=KIO slave
-Name[fr]=Une interface KIO
 Icon=kioslave.png
 Category=C++/KDE
 Comment=Generates a framework for an IO slave
-Comment[fr]=Génère un squelette d'interface d'entrée / sortie du type « KIO slave ».
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kioslave.tar.gz

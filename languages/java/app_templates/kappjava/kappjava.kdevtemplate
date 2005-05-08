@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=Application framework
-Name[fr]=Squelette d'application
 Icon=kappjava.png
 Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
-Comment[fr]=Génère une simple application KDE dans le language JAVA avec une fenêtre principale, des menus, et des barres d'outils.
 FileTemplates=java,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAME}View.java
 Archive=kappjava.tar.gz

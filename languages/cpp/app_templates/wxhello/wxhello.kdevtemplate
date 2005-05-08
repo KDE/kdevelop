@@ -1,10 +1,8 @@
 # KDE Config File
 [General]
 Name=Simple Hello wxWidgets Application
-Name[fr]=Un simple programme de test « Hello world »
 Category=C++/wxWidgets
 Comment=Generates a simple wxWidgets Hello application.
-Comment[fr]=Génère un simple programme de test du type « Hello world » en utilisant la bibliothéque wxWidgets.
 FileTemplates=h,CStyle,cpp,CStyle
 Icon=wxhello.png
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp

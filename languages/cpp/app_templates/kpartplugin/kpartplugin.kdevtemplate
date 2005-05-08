@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
-Name[fr]=Un module externe du type « KHTMLPart »
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
-Comment[fr]=Génère un module externe pour le composant logiciel « KHTML ».
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kpartplugin.tar.gz

@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=KConfig XT application
-Name[fr]=Application KConfig XT
 Category=C++/KDE
 Icon=preview.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
-Comment[fr]=Génère une simple application KDE avec un "widget" et un dialogue de configuration.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kxt.tar.gz
