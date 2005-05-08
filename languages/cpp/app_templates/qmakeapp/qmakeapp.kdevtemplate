@@ -1,12 +1,10 @@
 # KDE Config File
 [General]
 Name=Application
-Name[fr]=Une Application Qt / QMake
 Icon=qmakeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt based application (crossplatform compatible)
-Comment[fr]=Génère une application basée sur Qt / QMake. Ce programme est multi platte-forme.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=qmakeapp.tar.gz

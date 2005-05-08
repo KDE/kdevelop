@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=Kate plugin
-Name[fr]=Un module externe pour Kate
 Icon=kateplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.
-Comment[fr]=Génère un module externe pour l'éditeur de texte Kate.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kateplugin.tar.gz

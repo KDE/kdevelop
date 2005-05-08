@@ -1,12 +1,10 @@
 # KDE Config File
 [General]
 Name=QtRuby Application
-Name[fr]=Une Application QtRuby
 Icon=qtrubyapp.png
 Category=Ruby/Qt
 Category[fr]=Ruby/Qt
 Comment=Generate a QtRuby based application (crossplatform compatible)
-Comment[fr]=Génère une application basée sur QtRuby. Ce programme est multi platte-forme.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
 Archive=qtrubyapp.tar.gz

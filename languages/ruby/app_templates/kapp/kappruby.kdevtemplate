@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=Application framework
-Name[fr]=Un squelette d'application KDE
 Icon=kapp.png
 Category=Ruby/KDE
 Comment=Generates a simple Korundum application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
-Comment[fr]=Génère une simple application Korundum avec une fenêtre principale, des menus, et des barres d'outils. Une interface DCOP est aussi disponible et l'application peut être facilement contrôlée par des scripts.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
 Archive=kappruby.tar.gz

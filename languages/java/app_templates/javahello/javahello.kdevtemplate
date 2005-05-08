@@ -1,12 +1,10 @@
 # KDE Config File
 [General]
 Name=Application
-Name[fr]=Une application JAVA / Ant
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant
 Comment=Generate a Java application
-Comment[fr]=Génère une application dans le language JAVA en utilisant Ant
 FileTemplates=java,JavaStyle
 ShowFilesAfterGeneration=%{dest}/Main.java
 Archive=javahello.tar.gz

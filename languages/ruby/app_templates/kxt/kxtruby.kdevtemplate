@@ -2,11 +2,9 @@
 [General]
 
 Name=KConfig XT application
-Name[fr]=Application KConfig XT
 Category=Ruby/KDE
 Icon=previewruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
-Comment[fr]=G�n�re une simple application KDE avec un "widget" et un dialogue  configuration.
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
 Archive=kxtruby.tar.gz
 

@@ -1,11 +1,9 @@
 # KDE Config File
 [General]
 Name=Scons-based KDE application
-Name[fr]=Application KDE avec scripts de construction scons
 Category=C++/KDE
 Icon=kscons_kxt.png
 Comment=Generates a simple KDE application with one widget, a configuration dialog and a dcop interface. Scons scripts are provided for compiling and installing the application.
-Comment[fr]=Génère une simple application KDE avec un "widget", un dialogue de configuration et une interface pour des greffons. Des scripts scons sont fournis pour compiler et installer l'application.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/QUICKSTART
 Archive=kscons_kxt.tar.gz
