@@ -1,4 +1,4 @@
-SET(KDEV_PART_LIBS ${QT_LIBRARIES} kdecore kdeui kparts kio ktexteditor ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+SET(KDEV_PART_LIBS ${QT_LIBRARIES} kdecore kdeui kparts kio ktexteditor kdevelop)
 
 
 SUBDIRS( abbrev appwizard astyle bookmarks classview diff filecreate fileview fullscreen outputviews grepview valgrind distpart

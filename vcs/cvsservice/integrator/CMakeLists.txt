@@ -17,7 +17,7 @@ KDE_ADD_UI_FILES(cvsserviceintegrator_PART_SRCS ${cvsserviceintegrator_UI} )
 
 ADD_LIBRARY(cvsserviceintegrator SHARED ${cvsserviceintegrator_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(cvsserviceintegrator ${QT_LIBRARIES} kdecore kdeui kio kdevextras cvsservice ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(cvsserviceintegrator ${QT_LIBRARIES} kdecore kdeui kio kdevextras cvsservice kdevelop)
 
 #original Makefile.am contents follow:
 

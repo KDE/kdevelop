@@ -29,7 +29,7 @@ KDE_ADD_DCOP_SKELS(kdevsubversion_PART_SRCS ${kdevsubversion_DCOP_SRCS})
 
 ADD_LIBRARY(kdevsubversion SHARED ${kdevsubversion_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevsubversion ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextensions)
+TARGET_LINK_LIBRARIES(kdevsubversion ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP kdevelop kdevextensions)
 
 
 #original Makefile.am contents follow:

@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(designerintegration_LIB_SRCS ${designerintegration_UI} )
 
 ADD_LIBRARY(designerintegration SHARED ${designerintegration_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(designerintegration ${QT_LIBRARIES} kdecore kdeui ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(designerintegration ${QT_LIBRARIES} kdecore kdeui kdevelop)
 
 
 #original Makefile.am contents follow:

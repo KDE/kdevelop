@@ -25,7 +25,7 @@ KDE_ADD_UI_FILES(kdevbuildtoolswidgets_LIB_SRCS ${kdevbuildtoolswidgets_UI} )
 
 ADD_LIBRARY(kdevbuildtoolswidgets SHARED ${kdevbuildtoolswidgets_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevbuildtoolswidgets ${QT_LIBRARIES} kdecore kdeui kdeui kio ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(kdevbuildtoolswidgets ${QT_LIBRARIES} kdecore kdeui kdeui kio kdevelop)
 
 #original Makefile.am contents follow:
 

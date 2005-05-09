@@ -1,5 +1,68 @@
-SUBDIRS( profiles profileengine newui kdevelop)
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/interfaces/extras ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets ${CMAKE_SOURCE_DIR}/src/profileengine/lib ${CMAKE_SOURCE_DIR}/src/newui ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+SET(kdevshell_LIB_SRCS
+../api.cpp
+../core.cpp
+../documentationpart.cpp
+../editorproxy.cpp
+../generalinfowidget.cpp
+../languageselectwidget.cpp
+../mainwindowshare.cpp
+../newmainwindow.cpp
+../partcontroller.cpp
+../partselectwidget.cpp
+../plugincontroller.cpp
+../projectmanager.cpp
+../projectsession.cpp
+../splashscreen.cpp
+../statusbar.cpp
+../toplevel.cpp
+../shellextension.cpp
+../simplemainwindow.cpp
+)
+
+SET( kdevshell_UI
+../generalinfowidgetbase.ui
+../mimewarningdialog.ui
+)
+
+KDE_ADD_UI_FILES(kdevshell_LIB_SRCS ${kdevshell_UI} )
+
+KDE_AUTOMOC(${kdevshell_LIB_SRCS})
+
+ADD_LIBRARY(kdevshell SHARED ${kdevshell_LIB_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevshell ${QT_LIBRARIES} kdecore kdeui kparts kio ktexteditor kmdi kdevelop kdevextras kdevwidgets profileengine d kinterfacedesigner )
+
+
+SET(kdevelop3_SRCS
+../main.cpp
+../kdevideextension.cpp
+)
+
+SET( kdevelop3_UI
+../settingswidget.ui
+)
+
+KDE_ADD_UI_FILES(kdevelop3_SRCS ${kdevelop3_UI} )
+
+ADD_EXECUTABLE(kdevelop3 ${kdevelop3_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevelop3 ${QT_LIBRARIES} kdecore kdeui kparts kio kdevshell)
+
+SET_TARGET_PROPERTIES(kdevelop3 PROPERTIES INSTALL_AS kdevelop)
+
+SET(kdevassistant_SRCS
+../main_assistant.cpp
+../kdevassistantextension.cpp
+)
+
+ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevassistant kdevshell)
+
+INSTALL_TARGETS(/bin kdevassistant kdevelop)
 
 #original Makefile.am contents follow:
 

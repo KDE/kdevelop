@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(kdeveditorchooser_PART_SRCS ${kdeveditorchooser_UI} )
 
 ADD_LIBRARY(kdeveditorchooser SHARED ${kdeveditorchooser_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdeveditorchooser ${QT_LIBRARIES} kdecore kdeui kio ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(kdeveditorchooser ${QT_LIBRARIES} kdecore kdeui kio kdevelop)
 
 #original Makefile.am contents follow:
 

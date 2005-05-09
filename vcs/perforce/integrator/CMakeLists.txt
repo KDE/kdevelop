@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(perforceintegrator_PART_SRCS ${perforceintegrator_UI} )
 
 ADD_LIBRARY(perforceintegrator SHARED ${perforceintegrator_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(perforceintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextras)
+TARGET_LINK_LIBRARIES(perforceintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop kdevextras)
 
 
 #original Makefile.am contents follow:

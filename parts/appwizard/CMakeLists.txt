@@ -35,8 +35,6 @@ INSTALL_TARGETS(/lib/kde3 kdevappwizard)
 INSTALL_FILES(/share/apps/kdevappwizard FILES kdevappwizard.rc)
 INSTALL_FILES(/share/services FILES kdevappwizard.desktop)
 
-
-
 #original Makefile.am contents follow:
 
 #

@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(subversionintegrator_PART_SRCS ${subversionintegrator_UI} )
 
 ADD_LIBRARY(subversionintegrator SHARED ${subversionintegrator_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(subversionintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts ${CMAKE_BINARY_DIR}/lib/libkdevelop.so kdevextras)
+TARGET_LINK_LIBRARIES(subversionintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop kdevextras)
 
 
 #original Makefile.am contents follow:

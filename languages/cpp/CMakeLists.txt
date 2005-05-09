@@ -64,7 +64,7 @@ SET(rpp_SRCS main.cpp)
 
 ADD_EXECUTABLE(r++ ${rpp_SRCS})
 
-TARGET_LINK_LIBRARIES(r++ ${QT_LIBRARIES} kdecore kdevcppsupport kdevcatalog kdevcppparser ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(r++ ${QT_LIBRARIES} kdecore kdevcppsupport kdevcatalog kdevcppparser kdevelop)
 
 INSTALL_TARGETS(/bin r++)
 

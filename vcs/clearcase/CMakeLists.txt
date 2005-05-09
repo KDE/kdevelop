@@ -11,7 +11,7 @@ KDE_AUTOMOC(${kdevclearcase_PART_SRCS})
 
 ADD_LIBRARY(kdevclearcase SHARED ${kdevclearcase_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevclearcase ${QT_LIBRARIES} kdecore kdeui ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(kdevclearcase ${QT_LIBRARIES} kdecore kdeui kdevelop)
 
 #original Makefile.am contents follow:
 

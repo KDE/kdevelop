@@ -54,7 +54,7 @@ KDE_ADD_UI_FILES(qeditorpart_PART_SRCS ${qeditorpart_UI} )
 
 ADD_LIBRARY(qeditorpart SHARED ${qeditorpart_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(qeditorpart ${QT_LIBRARIES} kdecore kdeui kio kparts ktexteditor ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(qeditorpart ${QT_LIBRARIES} kdecore kdeui kio kparts ktexteditor kdevelop)
 
 
 #original Makefile.am contents follow:

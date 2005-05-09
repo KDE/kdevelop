@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/project ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(projectmanager_interfaces_LIB_SRCS
 kdevprojectimporter.cpp

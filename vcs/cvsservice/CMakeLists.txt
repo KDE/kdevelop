@@ -53,7 +53,7 @@ KDE_ADD_DCOP_SKELS(kdevcvsservice_PART_SRCS ${kdevcvsservice_DCOP_SRCS})
 
 ADD_LIBRARY(kdevcvsservice SHARED ${kdevcvsservice_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcvsservice ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP ${CMAKE_BINARY_DIR}/lib/libkdevelop.so cvsservice)
+TARGET_LINK_LIBRARIES(kdevcvsservice ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP kdevelop cvsservice)
 
 #original Makefile.am contents follow:
 

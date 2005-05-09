@@ -148,13 +148,22 @@ MACRO(KDE_AUTOMOC)
 
          FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} _contents)
 
+         IF(${_current_FILE} MATCHES "^/.+")
+            SET(_tmp_FILE ${_current_FILE})
+         ELSE(${_current_FILE} MATCHES "^/.+")
+            SET(_tmp_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
+         ENDIF(${_current_FILE} MATCHES "^/.+")
+         GET_FILENAME_COMPONENT(_abs_FILE ${_tmp_FILE} ABSOLUTE)
+         GET_FILENAME_COMPONENT(_abs_PATH ${_abs_FILE} PATH)
+
          STRING(REGEX MATCHALL "#include +[^ ]+\\.moc[\">]" _match "${_contents}")
          IF(_match)
             FOREACH (_current_MOC_INC ${_match})
                STRING(REGEX MATCH "[^ <\"]+\\.moc" _current_MOC "${_current_MOC_INC}")
 
                GET_FILENAME_COMPONENT(_basename ${_current_MOC} NAME_WE)
-               SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
+#               SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
+               SET(_header ${_abs_PATH}/${_basename}.h)
                SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/${_current_MOC})
 
                ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
@@ -167,13 +176,6 @@ MACRO(KDE_AUTOMOC)
 
             ENDFOREACH (_current_MOC_INC)
          ENDIF(_match)
-
-#         GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-#         SET(_moc ${_basename}.moc)
-#         STRING(REGEX MATCH "#include.+${_moc}" _match "${_contents}")
-#         IF(_match)
-#            KDE_CREATE_AUTOMOC_FILES(${_current_FILE})
-#         ENDIF(_match)
 
       ENDIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
    ENDFOREACH (_current_FILE)

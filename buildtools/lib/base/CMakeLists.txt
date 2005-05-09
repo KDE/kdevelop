@@ -8,7 +8,7 @@ KDE_AUTOMOC(${kdevbuildbase_LIB_SRCS})
 
 ADD_LIBRARY(kdevbuildbase SHARED ${kdevbuildbase_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevbuildbase ${QT_LIBRARIES} kdecore kdeui ${CMAKE_BINARY_DIR}/lib/libkdevelop.so)
+TARGET_LINK_LIBRARIES(kdevbuildbase ${QT_LIBRARIES} kdecore kdeui kdevelop)
 
 #original Makefile.am contents follow:
 
