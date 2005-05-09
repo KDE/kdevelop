@@ -1,27 +1,25 @@
 #SET(QEXTMDI_SUBDIR qextmdi)
 
-SUBDIRS( interfaces widgets util ${QEXTMDI_SUBDIR} antlr catalog cppparser ${COMPAT_SUBDIR} astyle kdevelop)
+SET(kdevelop_LIB_SRCS
+../dummy.cpp
+)
 
-#SET(kdevelop_LIB_SRCS
-#dummy.cpp
-#)
+ADD_LIBRARY(kdevelop SHARED ${kdevelop_LIB_SRCS})
 
-#ADD_LIBRARY(kdevelop SHARED ${kdevelop_LIB_SRCS})
+TARGET_LINK_LIBRARIES(kdevelop
+${QT_LIBRARIES} kdecore kdeui kscript ktexteditor DCOP kio kparts
+kinterfacedesigner
+kdevpropertyeditor
+)
 
-#TARGET_LINK_LIBRARIES(kdevelop
-#${QT_LIBRARIES} kdecore kdeui kscript ktexteditor DCOP kio kparts
-#kinterfacedesigner
-#kdevpropertyeditor
-#)
+KDE_TARGET_LINK_CONV_LIBRARIES(kdevelop
+kdevinterfaces
+kdevextensions
+kdevutil
+kdevdcopextensions
+)
 
-#KDE_TARGET_LINK_CONV_LIBRARIES(kdevelop
-#kdevinterfaces
-#kdevextensions
-#kdevutil
-#kdevdcopextensions
-#)
-
-#INSTALL_FILES(/lib kdevelop)
+INSTALL_FILES(/lib kdevelop)
 
 #original Makefile.am contents follow:
 
