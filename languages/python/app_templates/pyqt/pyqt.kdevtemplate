@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Python Qt application
+Name[ga]=Feidhmchlár Qt Python
 Icon=pyqt.png
 Category=Python
 Comment=This generates an application framework using Python and Qt

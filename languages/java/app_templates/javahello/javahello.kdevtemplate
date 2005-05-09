@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application
+Name[ga]=Feidhmchlár
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant

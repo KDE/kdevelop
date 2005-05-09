@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KBear Import Filter
+Name[ga]=Scagaire Iompórtála KBear
 Category=C++/KDE
 Icon=kbearimportfilter.png
 Comment=Generates a simple KBear import filter.

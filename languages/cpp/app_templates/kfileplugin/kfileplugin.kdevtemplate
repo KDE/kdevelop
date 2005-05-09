@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KFile plugin
+Name[ga]=Breiseán KFile
 Icon=kfileplugin.png
 Category=C++/KDE
 Comment=Generates a KFile plugin for konqueror to display meta information.

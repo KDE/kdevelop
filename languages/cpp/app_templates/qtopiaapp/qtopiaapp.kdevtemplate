@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Qtopia Application
+Name[ga]=FeidhmchlÃ¡r Qtopia
 Icon=qmakeapp.png
 Category=C++/Embedded
 Category[fr]=C++/Environnement embarqué

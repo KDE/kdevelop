@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=GTK+ application
+Name[ga]=Feidhmchlár GTK+
 Category=Pascal/Free Pascal
 Comment=Generates a GTK+ based GUI application in Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle

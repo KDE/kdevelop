@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Kate plugin
+Name[ga]=Breiseán Kate
 Icon=kateplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.

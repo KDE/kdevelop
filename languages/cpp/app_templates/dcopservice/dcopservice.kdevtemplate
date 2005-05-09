@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KDE DCOP Service
+Name[ga]=Seirbhís DCOP KDE
 Icon=kdcop.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE dcop service and client access library.

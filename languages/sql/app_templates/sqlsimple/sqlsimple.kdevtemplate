@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple SQL Project
+Name[ga]=Tionscadal Simplí SQL
 Category=Database
 Comment=Generates a simple SQL project.
 FileTemplates=sql,AdaStyle

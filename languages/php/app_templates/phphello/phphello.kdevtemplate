@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple PHP script
+Name[ga]=Script Simplí PHP
 Category=PHP
 Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php.net)
 DefaultDestinatonDir=HOMEDIR/public_html

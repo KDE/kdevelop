@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KBear Plugin
+Name[ga]=Breiseán KBear
 Category=C++/KDE
 Icon=kbearplugin.png
 Comment=Generates a simple KBear plugin with a config page and an output widget.

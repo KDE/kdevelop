@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
+Name[ga]=Breiseán KHTMLPart
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
