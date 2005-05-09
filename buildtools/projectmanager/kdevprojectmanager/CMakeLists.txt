@@ -1,4 +1,17 @@
-SUBDIRS( interfaces importers builders kdevprojectmanager)
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/buildtools/projectmanager/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/util ${CMAKE_SOURCE_DIR}/lib/widgets/propeditor )
+
+SET(kdevprojectmanager_PART_SRCS
+../kdevprojectmanager_part.cpp
+../kdevprojectmanager_widget.cpp
+../importprojectjob.cpp
+)
+
+KDE_AUTOMOC(${kdevprojectmanager_PART_SRCS})
+
+ADD_LIBRARY(kdevprojectmanager SHARED ${kdevprojectmanager_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevprojectmanager ${QT_LIBRARIES} kdecore kdeui kio kdevelop projectmanager_interfaces)
 
 #original Makefile.am contents follow:
 

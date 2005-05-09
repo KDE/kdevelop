@@ -8,7 +8,7 @@ KDE_AUTOMOC(${kdevcustomimporter_LIB_SRCS})
 
 ADD_LIBRARY(kdevcustomimporter SHARED ${kdevcustomimporter_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcustomimporter ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/lib/libkdevelop.so projectmanager_interfaces)
+TARGET_LINK_LIBRARIES(kdevcustomimporter ${QT_LIBRARIES} kdecore kdevelop projectmanager_interfaces)
 
 
 #original Makefile.am contents follow:

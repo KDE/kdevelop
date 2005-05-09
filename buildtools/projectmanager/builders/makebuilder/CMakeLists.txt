@@ -10,7 +10,7 @@ KDE_ADD_MOC_FILES(kdevmakebuilder_LIB_SRCS  kdevmakebuilder.h)
 
 ADD_LIBRARY(kdevmakebuilder SHARED ${kdevmakebuilder_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevmakebuilder ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/lib/libkdevelop.so projectmanager_interfaces kdevbuildtoolswidgets)
+TARGET_LINK_LIBRARIES(kdevmakebuilder ${QT_LIBRARIES} kdecore kdevelop projectmanager_interfaces kdevbuildtoolswidgets)
 
 
 #original Makefile.am contents follow:
