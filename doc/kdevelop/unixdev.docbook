@@ -51,7 +51,7 @@ As time has gone by, both worlds have evolved. While C is still used mainly as a
 In the scripting area, there has been a shift away from the shell, which suffers from portability concerns, to languages which unify all commonly needed functionality in their standard libraries, while still being able to interface to the outside through pipes when necessary.
 </para>
 <para>
-All these scripting languages have in common that they are widely portable between &UNIX; variants, Microsoft &Windows;, &Mac; OS or even VMS. Also, they all have implementations that are freely distributable.
+All these scripting languages have in common that they are widely portable between &UNIX; variants, Microsoft &Windows;, &MacOS; or even VMS. Also, they all have implementations that are freely distributable.
 </para>
 
 <sect2 id="unixdev-SL-Perl">
@@ -66,7 +66,7 @@ All these scripting languages have in common that they are widely portable betwe
 <ulink url="http://www.perl.com">&perl;</ulink> has become popular as a text processing and system administration language. In the beginning of the World Wide Web, CGI scripts written in &perl; were a widely used method to create dynamic web pages from databases. Today, this method has been replaced mostly by the <command>mod_perl</command> plugin for the &apache; web server. Among &perl;'s strengths are its built-in support for advanced regular expression matching and its rich archive of freely distributed modules.
 </para>
 <para>
-For more information see the <ulink url="http://cpan.org">Comprehensive Perl Archive Network (CPAN)</ulink> website.
+For more information see the <ulink url="http://cpan.org">Comprehensive Perl Archive Network (<acronym>CPAN</acronym>)</ulink> website.
 </para>
 </sect2> <!-- unixdev-SL-Perl -->
 
@@ -79,7 +79,7 @@ For more information see the <ulink url="http://cpan.org">Comprehensive Perl Arc
   <secondary>Python</secondary></indexterm>
 
 <para>
-<ulink url="http://www.python.org">&python;</ulink> shines by the elegance of its class system and the ease and flexibility with which external libraries can be wrapped in a way that they appear like standard &python; classes and functions. In contrast to &perl;, &python; has a clear and concise embedding API, which makes it the language of choice for making C and C++ programs scriptable.
+<ulink url="http://www.python.org">&python;</ulink> shines by the elegance of its class system and the ease and flexibility with which external libraries can be wrapped in a way that they appear like standard &python; classes and functions. In contrast to &perl;, &python; has a clear and concise embedding &API;, which makes it the language of choice for making C and C++ programs scriptable.
 </para>
 </sect2> <!-- unixdev-SL-Python -->
 
@@ -92,7 +92,7 @@ For more information see the <ulink url="http://cpan.org">Comprehensive Perl Arc
   <secondary>PHP</secondary></indexterm>
 
 <para>
-<ulink url="http://www.php.net">&php;</ulink> was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content on the web.
+<ulink url="http://www.php.net">&php;</ulink> was invented as a language directly embeddable into &HTML; pages and consequently has its main uses in delivering dynamic content on the web.
 </para>
 </sect2> <!-- unixdev-SL-PHP -->
 </sect1> <!-- unixdev-scripting-languages -->
@@ -105,7 +105,7 @@ For more information see the <ulink url="http://cpan.org">Comprehensive Perl Arc
 Higher-level &UNIX; applications usually miss the speed and flexibility of the traditional character-oriented shell scripting mechanisms. This is especially true in the world of graphical user interfaces (&GUI;) such as &eg; &kde;.
 </para>
 <para>
-There have been attempts to provide similar mechanisms which will work on a higher application level, most notably <link linkend="unixdev-corba">CORBA</link> and, in the &kde; environment, <link linkend="unixdev-dcop">DCOP</link>.
+There have been attempts to provide similar mechanisms which will work on a higher application level, most notably <link linkend="unixdev-corba">CORBA</link> and, in the &kde; environment, <link linkend="unixdev-dcop">&DCOP;</link>.
 </para>
 
 <sect2 id="unixdev-corba">
@@ -132,7 +132,7 @@ The main drawback of CORBA is its rather low speed. While this may be tolerable 
 </sect2> <!-- unixdev-corba -->
 
 <sect2 id="unixdev-dcop">
-<title>The DCOP Interface</title>
+<title>The &DCOP; Interface</title>
 
 <indexterm zone="unixdev-dcop"><primary>DCOP</primary></indexterm>
 <indexterm zone="unixdev-dcop">
@@ -146,16 +146,16 @@ The main drawback of CORBA is its rather low speed. While this may be tolerable 
 Another evolution on &UNIX;-like scripting is the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html"><emphasis>DCOP</emphasis></ulink> protocol which was devised for communication between &kde; applications to overcome the limitations of CORBA.
 </para>
 <para>
-DCOP stands for <emphasis>Desktop Communication Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional &UNIX; pipe mechanism.
+&DCOP; stands for <emphasis>Desktop Communication Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional &UNIX; pipe mechanism.
 </para>
 <para>
-Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables &eg; a &kde; program to send messages to another &kde; program, or receive data from it for its own purposes.
+Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. &DCOP; allows elaborate graphical programs to communicate with each other in a quite similar way. This enables &eg; a &kde; program to send messages to another &kde; program, or receive data from it for its own purposes.
 </para>
 <para>
-There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly (although a lot faster than CORBA). But it returns much of the power and flexibility of &UNIX; scripting to high-level programs which are based on a graphical user interface.
+There are drawbacks, however. To use &DCOP; a program must be designed to contain a special &DCOP; interface. And the &DCOP; communication process runs somewhat slowly (although a lot faster than CORBA). But it returns much of the power and flexibility of &UNIX; scripting to high-level programs which are based on a graphical user interface.
 </para>
 <para>
-For more information, see the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html">DCOP: Desktop COmmunications Protocol</ulink> paper or <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html">The DCOP Desktop Communication Protocol library</ulink> API reference of the &kde; dcop library.
+For more information, see the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html">DCOP: Desktop COmmunications Protocol</ulink> paper or <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html">The &DCOP; Desktop Communication Protocol library</ulink> &API; reference of the &kde; dcop library.
 </para>
 </sect2> <!--  unixdev-dcop -->
 
@@ -304,10 +304,10 @@ Much repetitive work has to be done when designing, compiling, and debugging a p
 For example&mdash;would it not be convenient if a debugger were able to open the source file in question in an editor and place the cursor directly at the position of that bug just found?
 </para>
 <para>
-To more easily accomplish such a scheme, <emphasis>Integrated Development Environments</emphasis> (IDEs) were devised. Such an IDE integrates all templates, tools, and scripts which are commonly needed in the development process into one single environment.
+To more easily accomplish such a scheme, <emphasis>Integrated Development Environments</emphasis> (&IDE;s) were devised. Such an &IDE; integrates all templates, tools, and scripts which are commonly needed in the development process into one single environment.
 </para>
 <para>
-For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
+For the &kde; platform &kdevelop; is such an &IDE;. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
 </para>
 
 <sect2 id="unixdev-ide-kdevelop">
@@ -329,7 +329,7 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <para>Provides an <emphasis>&appwizard;</emphasis> which generates complete, ready-to-go sample applications.</para>
   </listitem>
   <listitem>
-  <para>Allows the user to select an <emphasis>integrated editor</emphasis> based on the &kde; programmer's editor KWrite, Trolltec's QEditor, or others.</para>
+  <para>Allows the user to select an <emphasis>integrated editor</emphasis> based on the &kde; programmer's editor &kwrite;, Trolltec's <application>QEditor</application>, or others.</para>
   </listitem>
   <listitem>
   <para>A <emphasis>class generator</emphasis>, for creating new classes and integrating them into the current project.</para>
@@ -338,16 +338,16 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <para><emphasis>File management</emphasis> for sources, headers, documentation &etc; to be included in the project.</para>
   </listitem>
   <listitem>
-  <para>Assistance in <emphasis>creating application user manuals</emphasis> written with KDE tools.</para>
+  <para>Assistance in <emphasis>creating application user manuals</emphasis> written with &kde; tools.</para>
   </listitem>
   <listitem>
-  <para>Automatic HTML-based <emphasis>API-documentation</emphasis> for a project's classes with cross-references to the used libraries.</para>
+  <para>Automatic &HTML; based <emphasis>&API; documentation</emphasis> for a project's classes with cross-references to the used libraries.</para>
   </listitem>
   <listitem>
-  <para><emphasis>Internationalization support</emphasis>, allowing translators to add their target language to a project easily, including support for KBabel.</para>
+  <para><emphasis>Internationalization support</emphasis>, allowing translators to add their target language to a project easily, including support for &kbabel;.</para>
   </listitem>
   <listitem>
-  <para>Support for managing a project via one of several <emphasis>versioning systems</emphasis> (&eg; CVS) by providing an easy-to-use frontend for the most needed functions.</para>
+  <para>Support for managing a project via one of several <emphasis>versioning systems</emphasis> (&eg; &CVS;) by providing an easy-to-use frontend for the most needed functions.</para>
   </listitem>
   <listitem>
   <para>An integrated <emphasis>debugger</emphasis> frontend.</para>
@@ -362,7 +362,7 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <para>An <emphasis>auto-code completion</emphasis> facility for class variables, class methods, function arguments and more.</para>
   </listitem>
   <listitem>
-  <para><emphasis>Templates for creating various projects</emphasis> (KControl modules, Kicker (panel) applets, KIOSlaves, Konqueror plugins and desktop styles).</para>
+  <para><emphasis>Templates for creating various projects</emphasis> (&kcontrol; modules, &kicker; (panel) applets, KIOSlaves, &konqueror; plugins and desktop styles).</para>
   </listitem>
   <listitem>
   <para>Four <emphasis>navigation tree views</emphasis> for easily switching between source files, header files, classes and documentation, obviating the need for an external file manager.</para>

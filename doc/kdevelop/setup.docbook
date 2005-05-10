@@ -18,6 +18,9 @@
     <imageobject>
       <imagedata fileref="configure-select.png" format="PNG"/>
     </imageobject>
+<textobject>
+<phrase>Select a configuration item</phrase>
+</textobject>
     <caption><para>
     Select a configuration item
     </para></caption>
@@ -59,10 +62,8 @@ General configuration concerns the more common tasks of tailoring &kdevelop; as 
   <link linkend="setup-ui">Selecting the User Interface</link>
   </para></listitem>
   <listitem>
-    <para>
-    Source Edit Tasks
-    </para>
     <itemizedlist>
+<title>Source Edit Tasks</title>
       <listitem><para>
       <link linkend="setup-editor">Selecting an Editor</link>
       </para></listitem>
@@ -85,11 +86,11 @@ General configuration concerns the more common tasks of tailoring &kdevelop; as 
 <para>
 The <guilabel>General</guilabel> configuration dialog allows you to define some basic &kdevelop; behaviour which seldom will change in everyday work. This concerns:
 </para>
-<itemizedlist>
-  <listitem>
-    <para>
-    General project options as
-    </para>
+
+<variablelist>
+<varlistentry>
+<term>General project options such as</term>
+<listitem>
     <itemizedlist>
       <listitem><para>
       defining a <link linkend="setup-main-projects">default parent directory</link> &kdevelop; shall use for new projects.
@@ -99,36 +100,50 @@ The <guilabel>General</guilabel> configuration dialog allows you to define some 
       </para></listitem>
    </itemizedlist>
   </listitem>
-  <listitem>
-    <para>
-    Selecting a font for the most commonly used output view windows, namely
-    </para>
-    <itemizedlist>
-      <listitem><para>
-      the <link linkend="setup-main-messages-font">Messages Output View</link> &kdevelop; uses to communicate &eg; compilation progresses, and
-      </para></listitem>
-      <listitem><para>
-      the <link linkend="setup-main-applications-font">Application Output View</link> which will show error and state information concerning a running application.
-      </para></listitem>
-    </itemizedlist>
-  </listitem>
-  <listitem>
-    <para>
-    Some common behaviour concerning the displayed lines in the <guilabel>Messages Output View</guilabel> window, namely
-    </para>
-    <itemizedlist>
-      <listitem><para>
-      whether long lines will <link linkend="setup-main-wrap">wrap around</link>, and
-      </para></listitem>
-      <listitem><para>
-      if <link linkend="setup-main-navigation">directory entry and exit messages</link> issued by <command>Make</command> will be shown.
-      </para></listitem>
-    </itemizedlist>
-  </listitem>
-  <listitem><para>
-  The <link linkend="setup-main-compile">level of detail</link> of messages concerning the compilation process shown in the <guilabel>Messages Output View</guilabel> window.
-  </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Selecting a font for the most commonly used output view windows,
+namely:</term>
+<listitem>
+
+<itemizedlist>
+<listitem>
+<para>the <link linkend="setup-main-messages-font">Messages Output
+View</link> &kdevelop; uses to communicate &eg; compilation progresses,
+and</para>
+</listitem>
+<listitem>
+<para>the <link linkend="setup-main-applications-font">Application Output
+View</link> which will show error and state information concerning a running
+application.</para>
+</listitem>
 </itemizedlist>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Some common behaviour concerning the displayed lines in the
+<guilabel>Messages Output View</guilabel> window, namely:</term>
+<listitem>
+    <itemizedlist>
+<listitem>
+<para>whether long lines will <link linkend="setup-main-wrap">wrap
+      around</link>, and </para>
+</listitem>
+<listitem>
+<para>if <link linkend="setup-main-navigation">directory entry and exit
+messages</link> issued by <command>make</command> will be shown.</para>
+</listitem>
+</itemizedlist>
+
+<para>The <link linkend="setup-main-compile">level of detail</link> of
+  messages concerning the compilation process shown in the
+  <guilabel>Messages Output View</guilabel> window.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 
 <screenshot>
   <mediaobject>
@@ -141,60 +156,75 @@ The <guilabel>General</guilabel> configuration dialog allows you to define some 
   </mediaobject>
 </screenshot>
 
-<formalpara id="setup-main-preload">
-<title>Load Last Project on Startup</title>
-
+<variablelist>
+<varlistentry>
+<term id="setup-main-preload"><guilabel>Load last project on
+startup</guilabel></term>
+<listitem>
 <para>
 Mark this checkbox if you want to continue to work with the last project you worked on. This will cause &kdevelop; to automatically load this project on start-up. It will usually be shown in the state you left work so you can readily proceed.
 </para>
-</formalpara>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-main-projects">
-<title>Default Projects Directory</title>
+<varlistentry>
+<term id="setup-main-projects">
+<guilabel>Default projects directory:</guilabel></term>
+<listitem>
 <para>
-By default, &kdevelop; uses a common parent directory for all new projects. Enter the absolute path of this common directory in the box or select it from your directory structure. &kdevelop; will place the any new project here as a subdirectory.
-</para>
-</formalpara>
+By default, &kdevelop; uses a common parent directory for all new
+projects. Enter the absolute path of this common directory in the box or
+select it from your directory structure. &kdevelop; will place the any new
+project here as a subdirectory.</para>
 <note><para>
 You may of course change the directory path of a new project at the time you set it up in the <link linkend="applicationwizard">&appwizard;</link>.
 </para></note>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-main-messages-font">
-<title>Messages Output View Window Font</title>
+<varlistentry>
+<term id="setup-main-messages-font"><guilabel>Window font:</guilabel></term>
+<listitem>
 <para>
 To select a font suitable for the <guilabel>Messages Output View</guilabel> window click the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
 </para>
-</formalpara>
 <note><para>
 On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Messages Output View</guilabel> window font.
 </para></note>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-main-wrap">
-<title>Line Wrapping</title>
+<varlistentry>
+<term id="setup-main-wrap"><guilabel>Line wrapping</guilabel></term>
+<listitem>
 <para>
 By default, &kdevelop; will wrap long lines around in the <guilabel>Messages Output View</guilabel> window so that valuable information will not be easily overlooked. In some cases this will clutter long message lists. Remove the checkbox mark if you do not want the lines wrap around.
 </para>
-</formalpara>
 <tip><para>
-There is an alternative way to switch the line wrapping. Just right click in the <guilabel>Messages Output View</guilabel> window and mark/unmark the <guimenuitem>Line Wrapping</guimenuitem> entry in the menu which will pop up.
+There is an alternative way to switch the line wrapping. Just &RMB; click in the <guilabel>Messages Output View</guilabel> window and mark/unmark the <guimenuitem>Line Wrapping</guimenuitem> entry in the menu which will pop up.
 </para></tip>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-main-navigation">
-<title>Directory Navigation Messages</title>
+<varlistentry>
+<term id="setup-main-navigation"><guilabel>Directory navigation
+messages</guilabel></term>
+<listitem>
 <para>
-The <command>Make</command> tool usually will display messages like <quote>Entering directory</quote>, or <quote>Leaving directory</quote> when it switches the directories it currently works in. As this clutters the messages list in the <guilabel>Messages Output View</guilabel> window, &kdevelop; suppresses those messages by default. Mark the checkbox if you want to protocol which directories <command>Make</command> worked in.
+The <command>make</command> tool usually will display messages like <quote>Entering directory</quote>, or <quote>Leaving directory</quote> when it switches the directories it currently works in. As this clutters the messages list in the <guilabel>Messages Output View</guilabel> window, &kdevelop; suppresses those messages by default. Mark the checkbox if you want to protocol which directories <command>make</command> worked in.
 </para>
-</formalpara>
 <note><para>
 Changes in this setting effect the processing of new messages only. Old directory navigation messages will be kept visible when you switch this feature off.
 </para></note>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-main-compile">
-<title>Compiler Output</title>
+<varlistentry>
+<term id="setup-main-compile"><guilabel>Compiler Output</guilabel></term>
+<listitem>
 <para>
 &kdevelop; preprocesses the messages the <guilabel>Messages Output View</guilabel> window receives during the build processes in order to filter superfluous information. You can control the level of detail &kdevelop; will display using the radio buttons in this field.
 </para>
-</formalpara>
 <variablelist>
   <varlistentry>
     <term><guilabel>Very Short</guilabel></term>
@@ -219,19 +249,26 @@ Changes in this setting effect the processing of new messages only. Old director
 <tip><para>
 There is an alternative way to switch the compiler output detail. Just right click in the <guilabel>Messages Output View</guilabel> window and select the according detail level from the popup menu.
 </para></tip>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-main-applications-font">
-<title>Application Output View Window Font</title>
+<varlistentry>
+<term id="setup-main-applications-font"><guilabel>Application Output
+View</guilabel> <guilabel>Window font:</guilabel></term>
+<listitem>
 <para>
 The <guilabel>Application Output View</guilabel> window is used to display error and state information from applications which are run from inside &kdevelop;. These are informations the applications usually sends to the console when run stand-alone. So you do not need to leave the IDE when testing the application you currently work on.
 </para>
-</formalpara>
+
 <para>
 To select a font suitable for the <guilabel>Application Output View</guilabel> window click the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
 </para>
 <note><para>
 On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Application Output View</guilabel> window font.
 </para></note>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect2> <!-- setup-main -->
 
@@ -263,14 +300,14 @@ As already said in the <link linkend="uimodes-survey">Available User Interface M
 </itemizedlist>
 
 <para>
-To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the followig settings dialog to the right.
-</para>
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the following settings dialog to the right.</para>
 
 <screenshot>
   <mediaobject>
     <imageobject>
       <imagedata fileref="select-user-interface-0.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Select a user interface mode</phrase></textobject>
     <caption><para>
     Select a user interface mode
     </para></caption>
@@ -288,17 +325,18 @@ Do not forget to restart &kdevelop; in order to let any of these selections take
 <para>
 When you selected either the <guilabel>IDEAl window mode</guilabel> or the <guilabel>Tabbed pages mode</guilabel> two more configuration sections will become available: <link linkend="setup-ui-tabs">Use Tabs</link> and <link linkend="setup-ui-hover">Use Close On Hover</link>. These allow to configure under which circumstances tabs will be shown on top of the document windows and whether you may close the document by a click on the tab icon.
 </para>
+
 <para>
 In <guilabel>IDEAl window mode</guilabel> only yet another configuration section will be available, <link linkend="setup-ui-toolview">Toolview Tab Layout</link> which effectively allows to select between different sizes of the toolview tabs which surround the main working area in this mode.
 </para>
 
-<formalpara id="setup-ui-tabs">
-<title>Configuring the Documents Tab Bar Display</title>
-
+<variablelist>
+<varlistentry>
+<term id="setup-ui-tabs">Configuring the Documents Tab Bar Display</term>
+<listitem>
 <para>
 In the IDEAl and tabbed pages modes there will be named tabs on top of the document windows by default, so you can easily select different documents with a &LMB; click. If you prefer to provide more space for the document windows in the &kdevelop; main work area, you may change to another behaviour in the <guilabel>Use Tabs</guilabel> configuration section.
 </para>
-</formalpara>
 
 <variablelist>
 <varlistentry>
@@ -320,13 +358,17 @@ In the IDEAl and tabbed pages modes there will be named tabs on top of the docum
   </para></listitem>
 </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-ui-hover">
-<title>Setting Up to Close a Document by a Click On Its Tab</title>
+<varlistentry>
+<term id="setup-ui-hover">Setting Up to Close a Document by a Click On Its
+Tab</term>
+<listitem>
 <para>
 When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
 </para>
-</formalpara>
+
 <variablelist>
 <varlistentry>
   <term><guilabel>No</guilabel></term>
@@ -347,14 +389,16 @@ When you configured &kdevelop; to display the documents tab bar, either always o
   </para></listitem>
 </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-ui-toolview">
-<title>Configuring the Toolview Tab Layout</title>
-
+<varlistentry>
+<term id="setup-ui-toolview">Configuring the Toolview Tab Layout</term>
+<listitem>
 <para>
 The <guilabel>Toolview Tab Layout</guilabel> configuration section will be available in IDEAl mode only. Use these radio buttons to set up the look of the toolview tabs which surround the main working area in this mode.
 </para>
-</formalpara>
+
 <variablelist>
 <varlistentry>
   <term><guilabel>Icons</guilabel></term>
@@ -380,18 +424,22 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
   </para></listitem>
 </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Folded Toolview Tabs</title>
+<varlistentry>
+<term>Folded Toolview Tabs</term>
+<listitem>
 <para>
 If you selected the IDEAl mode toolview tabs to display texts (with or without accompanying icons) you need not worry about them being hidden behind some toolview window. If one of the bottom toolview windows occupies more space than is available to display all (vertical) tabs, they will fold around as this illustration shows:
 </para>
-</formalpara>
+
 <screenshot>
   <mediaobject id="folded-toolview-tabs">
     <imageobject>
       <imagedata fileref="folded-tabs.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Toolview tabs fold to not be hidden behind another view window</phrase></textobject>
     <caption><para>
     Toolview tabs fold to not be hidden behind another view window
     </para></caption>
@@ -401,14 +449,16 @@ If you selected the IDEAl mode toolview tabs to display texts (with or without a
 <note><para>
 The active toolview window must be shown fixed (non-overlap mode), sharing the work area with the other windows, to force such tab folding. Press the small square in the window border to accomplish this as shown in the example.
 </para></note>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect2> <!-- setup-ui -->
 
 <sect2 id="setup-editor">
 <title>Selecting an Editor</title>
 
-<para>
-&kdevelop; allows you to select your favorite text editor tool. Mark the <guilabel>Editor</guilabel> entry in the left hand side selections tree of the <guilabel>Configure KDevelop</guilabel> window. The following dialog will be displayed to the right.
+<para>&kdevelop; allows you to select your favorite text editor tool. Mark the <guilabel>Editor</guilabel> entry in the left hand side selections tree of the <guilabel>Configure KDevelop</guilabel> window. The following dialog will be displayed to the right.
 </para>
 
 <screenshot>
@@ -416,6 +466,7 @@ The active toolview window must be shown fixed (non-overlap mode), sharing the w
     <imageobject>
       <imagedata fileref="configure-editor.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Select an editor</phrase></textobject>
     <caption><para>
     Select an editor
     </para></caption>
@@ -425,6 +476,7 @@ The active toolview window must be shown fixed (non-overlap mode), sharing the w
 <para>
 To select a new editor, click on the arrow on the drop down list field. Depending on the editor parts interfaces your &kde; version has compiled in you will be provided with a list of editors you may select from (see the <link linkend="setup-editor-kparts">Important</link> note below for this). Click on the editor of your liking and click <guilabel>OK</guilabel>. Currently there are tree possibilities:
 </para>
+
 <variablelist>
   <varlistentry>
   <term><guilabel>Embedded Advanced Text Editor</guilabel></term>
@@ -436,7 +488,7 @@ To select a new editor, click on the arrow on the drop down list field. Dependin
   <term><guilabel>Embedded Vim Component</guilabel></term>
   <listitem>
     <para>
-    This provides the look and feel of the base Linux <application>vi</application> editor.
+    This provides the look and feel of the base &Linux; <application>vi</application> editor.
     </para>
     <note><itemizedlist>
       <listitem><para>
@@ -451,7 +503,7 @@ To select a new editor, click on the arrow on the drop down list field. Dependin
   <varlistentry>
   <term><guilabel>Qt Designer Based Text Editor</guilabel></term>
   <listitem><para>
-  This is the editor Qt provides in its <application>Designer</application> component.
+  This is the editor &Qt; provides in its <application>Designer</application> component.
   </para></listitem>
   </varlistentry>
 </variablelist>
@@ -508,6 +560,7 @@ The <guilabel>General</guilabel> tab of the <guilabel>Source Formatter</guilabel
     <imageobject>
       <imagedata fileref="SF-general.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Source format style general setup</phrase></textobject>
     <caption><para>
     Source format style general setup
     </para></caption>
@@ -536,18 +589,20 @@ Proper indentation is the main means to enhance readability of a source text. I 
     <imageobject>
       <imagedata fileref="SF-indent.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Source format indentation style setup</phrase></textobject>
     <caption><para>
     Source format indentation style setup
     </para></caption>
   </mediaobject>
 </screenshot>
 
-<formalpara>
-<title>Default Settings</title>
-<para>
-The preset format choices will cause the source text to resemble the ANSI formatting style:
-</para>
-</formalpara>
+<variablelist>
+<varlistentry>
+<term>Default Settings</term>
+<listitem>
+<para>The preset format choices will cause the source text to resemble the
+ANSI formatting style:</para>
+
 <screen>
 namespace foospace
 {
@@ -563,20 +618,23 @@ namespace foospace
   }
 }
 </screen>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-format-indent-filling">
-<title>Defining Indentation Width and Characters</title>
-<para>
-The radio buttons grouped in the <guilabel>Filling</guilabel> group define how indents in the source text will be drawn.
-</para>
-</formalpara>
+<varlistentry>
+<term id="setup-format-indent-filling">Defining Indentation Width and Characters</term>
+<listitem>
+<para>The radio buttons grouped in the <guilabel>Filling</guilabel> group
+define how indents in the source text will be drawn.</para>
 
 <variablelist>
   <varlistentry>
     <term><guilabel>Use tabs</guilabel></term>
     <listitem>
     <para>
-    This will cause the editor to insert a tab character for each indentation level. The tab width is predefined in the editor settings (8 or 4 character columns usually). Use <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Editor...</guimenuitem></menuchoice> to redefine it.
+    This will cause the editor to insert a tab character for each
+indentation level. The tab width is predefined in the editor settings (8 or
+4 character columns usually). Use <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Editor...</guimenuitem></menuchoice> to redefine it.
     </para>
     <note><para>
     The actual tab width definition procedure depends on the editor you selected in the <link linkend="setup-editor">Selecting an Editor</link> configuration step. You will have to look up the corresponding editor help to find out.
@@ -590,26 +648,31 @@ The radio buttons grouped in the <guilabel>Filling</guilabel> group define how i
     </para></listitem>
   </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Indented Entities</title>
-<para>
-This defines which of the (C/C++) entities will be formatted with an extra indent beyond the current indentation level.
-</para>
-</formalpara>
-<para>
-By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> will be extra indented. You may want to experiment with various settings to tailor those extra indents to your liking.
-</para>
+<varlistentry>
+<term>Indented Entities</term>
+<listitem>
+<para>This defines which of the (C/C++) entities will be formatted with an
+extra indent beyond the current indentation level.</para>
 
-<formalpara>
-<title>Continuation</title>
+<para>By default only <guilabel>namespaces</guilabel> and
+<guilabel>labels</guilabel> will be extra indented. You may want to
+experiment with various settings to tailor those extra indents to your
+liking.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Continuation</term>
+<listitem>
 <para>
 The settings grouped here apply to those cases where the source formatter automatically wraps around long source lines. It takes two special cases in account, namely that in deeply nested indents there should remain enough room for the source and that conditionals should get extra indent levels on continuation to make them stand out properly.
 </para>
-</formalpara>
 
 <note><para>
-This applies to <emphasis>static word wrap cases</emphasis> only where a fixed maximum line width is used in the source text. If you set up your editor to dynamically wrap around long lines in display only (which is possible in the Kate editor part) the effects of these settings usually will not show.
+This applies to <emphasis>static word wrap cases</emphasis> only where a fixed maximum line width is used in the source text. If you set up your editor to dynamically wrap around long lines in display only (which is possible in the &kate; editor part) the effects of these settings usually will not show.
 </para></note>
 
 <variablelist>
@@ -636,6 +699,9 @@ This applies to <emphasis>static word wrap cases</emphasis> only where a fixed m
     </listitem>
   </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect3> <!-- setup-format-indent -->
 
@@ -647,24 +713,29 @@ This applies to <emphasis>static word wrap cases</emphasis> only where a fixed m
     <imageobject>
       <imagedata fileref="SF-other.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Other source format style settings</phrase></textobject>
     <caption><para>
     Other source format style settings
     </para></caption>
   </mediaobject>
 </screenshot>
 
-<formalpara>
-<title>Controlling the Position of Braces</title>
-<para>
-The radio buttons the (somewhat misnamed) <guilabel>Brackets</guilabel> group control the position of block delimiting braces in a (C/C++) source text. There are three possibilities from which you can select.
-</para>
-</formalpara>
+<variablelist>
+<varlistentry>
+<term>Controlling the position of braces</term>
+<listitem>
+<para>The radio buttons the (somewhat misnamed)
+<guilabel>Brackets</guilabel> group control the position of block delimiting
+braces in a (C/C++) source text. There are three possibilities from which
+you can select.</para>
+
 <variablelist>
   <varlistentry>
     <term><guilabel>Break</guilabel></term>
     <listitem>
     <para>This inserts a line break before each opening brace. Both delimiting braces of any block will be put at the same indentation level as the block head statement.</para>
-    <screen>
+
+<screen>
 namespace foospace
 {
   int Foo()
@@ -678,7 +749,7 @@ namespace foospace
       return 0;
   }
 }
-    </screen>
+</screen>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -687,7 +758,7 @@ namespace foospace
     <para>
     This will keep the opening brace of a block in line with the block head statement. Closing braces will be on the same indentation level as the block head statement. The <token>else</token> of an <token>if</token> statement will be kept in line with the closing brace of the preceding block.
     </para>
-    <screen>
+<screen>
 namespace foospace {
   int Foo() {
     if (isBar) {
@@ -697,7 +768,7 @@ namespace foospace {
       return 0;
   }
 }
-    </screen>
+</screen>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -706,7 +777,7 @@ namespace foospace {
     <para>
     This is a compromise of the above listed styles. Functional block delimiting braces will be put on extra lines. Braces opening a block in a conditional or loop statement will be kept in line.
     </para>
-    <screen>
+<screen>
 namespace foospace
 {
   int Foo()
@@ -718,53 +789,56 @@ namespace foospace
       return 0;
   }
 }
-    </screen>
+</screen>
     </listitem>
   </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Controlling Extra Spaces</title>
+<varlistentry>
+<term>Controlling Extra Spaces</term>
+<listitem>
 <para>
 By default &kdevelop; does minimize the use of spaces in source texts.
 </para>
-</formalpara>
+
 
 <screen>
 if (isBar(fooArg)==barValue)
 </screen>
 
-<para>
-You may enhance readability if you force the source formatter to insert extra spaces in special positions.
-</para>
+<para>You may enhance readability if you force the source formatter to
+insert extra spaces in special positions.</para>
 
 <variablelist>
   <varlistentry>
     <term><guilabel>Add spaces around parentheses</guilabel></term>
     <listitem>
     <para>In fact what is meant is to add spaces around the text put in parentheses. This enhances the readabilitiy of function arguments and conditionals.</para>
-    <screen>
+<screen>
 if ( isBar( fooArg )==barValue )
-    </screen>
+</screen>
     </listitem>
   </varlistentry>
   <varlistentry>
     <term><guilabel>Add spaces around operators</guilabel></term>
     <listitem>
     <para>This will put spaces around assignment and comparison operators to enhance the readability.</para>
-    <screen>
+<screen>
 if (isBar(fooArg) == barValue)
-    </screen>
+</screen>
     </listitem>
   </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Controlling the Formatting of One-Line Constructs</title>
-<para>
-There are a few cases where you don't want the source formatter to split a long line apart. For C/C++ code this can be controlled here.
-</para>
-</formalpara>
+<varlistentry>
+<term>Controlling the formatting of one-line constructs</term>
+<listitem>
+<para>There are a few cases where you don't want the source formatter to
+split a long line apart. For C/C++ code this can be controlled here.</para>
 
 <variablelist>
   <varlistentry>
@@ -780,6 +854,10 @@ There are a few cases where you don't want the source formatter to split a long 
     </para></listitem>
   </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
 
 </sect3> <!-- setup-format-other -->
 
@@ -797,25 +875,31 @@ When editing in &kdevelop; you can store often used parts of code as <link linke
     <imageobject>
       <imagedata fileref="configure-snippets.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Configuring the code snippets tool</phrase></textobject>
     <caption><para>
     Configuring the Code Snippets tool
     </para></caption>
   </mediaobject>
 </screenshot>
 
-<formalpara>
-<title>Activate Snippet Preview</title>
-<para>
-Mark the <quote><guilabel>Show snippet's text in tooltip</guilabel></quote> checkbox if you want to view the stored text in a tooltip window whenever you keep the mouse cursor over the title of that snippet.
-</para>
-</formalpara>
+<variablelist>
+<varlistentry>
+<term>Activate Snippet Preview</term>
+<listitem>
+<para>Mark the <guilabel>Show snippet's text in tooltip</guilabel> checkbox
+if you want to view the stored text in a tooltip window whenever you keep
+the mouse cursor over the title of that snippet.</para>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Working With Snippet Variables</title>
-<para>
-The <guilabel>Code Snippets</guilabel> tool allows for a variable text in predefined places any time you insert a snippet into a file. To accomplish this  <guilabel>Code Snippets</guilabel> provides its own variables' mechanism. You can set up it's behaviour in the <guilabel>Variables</guilabel> group.
-</para>
-</formalpara>
+<varlistentry>
+<term>Working with Snippet Variables</term>
+<listitem>
+<para>The <guilabel>Code Snippets</guilabel> tool allows for a variable text
+in predefined places any time you insert a snippet into a file. To
+accomplish this  <guilabel>Code Snippets</guilabel> provides its own
+variables' mechanism. You can set up it's behaviour in the
+<guilabel>Variables</guilabel> group.</para>
 
 <variablelist>
   <varlistentry>
@@ -836,6 +920,9 @@ The <guilabel>Code Snippets</guilabel> tool allows for a variable text in predef
     </itemizedlist></listitem>
   </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect2> <!-- setup-snippets -->
 
@@ -843,7 +930,9 @@ The <guilabel>Code Snippets</guilabel> tool allows for a variable text in predef
 <title>Configuring the File Selector</title>
 
 <para>
-&kdevelop; provides a <guilabel>File Selector</guilabel> plugin which, when loaded at start-up, allows to navigate to any file or directory in the system.
+&kdevelop; provides a <guilabel>File Selector</guilabel> plugin which, when
+loaded at start-up, allows to navigate to any file or directory in the
+system.
 </para>
 
 <screenshot id="setup-fileselector-image">
@@ -851,33 +940,40 @@ The <guilabel>Code Snippets</guilabel> tool allows for a variable text in predef
     <imageobject>
       <imagedata fileref="file-selector.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>The file selector in IDEAl mode</phrase></textobject>
     <caption><para>
     The file selector (IDEAl mode)
     </para></caption>
   </mediaobject>
 </screenshot>
 
-<para>
-The behaviour of the <guilabel>File Selector</guilabel> can be highly configured. Select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>File Selector</guilabel> in the left hand tree. This will show the following dialog in the right hand side.
-</para>
+<para>The behaviour of the <guilabel>File Selector</guilabel> can be highly
+configured. Select <menuchoice> <guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the
+menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up,
+where you have to select <guilabel>File Selector</guilabel> in the left hand
+tree. This will show the following dialog in the right hand side.</para>
+
 
 <screenshot>
   <mediaobject>
     <imageobject>
       <imagedata fileref="configure-file-selector.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Configuring the file selector</phrase></textobject>
     <caption><para>
     Configuring the file selector
     </para></caption>
   </mediaobject>
 </screenshot>
 
-<formalpara>
-<title>Configuring the Toolbar</title>
-<para>
-There is a toolbar on top of the <guilabel>File Selector</guilabel> which can be configured as usual in the <guilabel>Toolbar</guilabel> group.
-</para>
-</formalpara>
+<variablelist>
+<varlistentry>
+<term>Configuring the Toolbar</term>
+<listitem>
+<para>There is a toolbar on top of the <guilabel>File Selector</guilabel>
+which can be configured as usual in the <guilabel>Toolbar</guilabel>
+group.</para>
 
 <procedure id="setup-fileselector-add-action">
   <title>Add an Action to the Toolbar</title>
@@ -931,13 +1027,16 @@ There is a toolbar on top of the <guilabel>File Selector</guilabel> which can be
     </para>
   </step>
 </procedure>
+</listitem>
+</varlistentry>
 
-<formalpara id="setup-fileselector-autosync">
-<title>Defining When the Contents Should Change</title>
+<varlistentry>
+<term id="setup-fileselector-autosync">Defining When the Contents Should
+Change</term>
+<listitem>
 <para>
 Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitely want to refresh its contents.
 </para>
-</formalpara>
 
 <note><para>
 Click the <guilabel>Reload</guilabel> button in the toolbar to update the contents of the <guilabel>File Selector</guilabel>. This toolbar button is not available by default, however. You must <link linkend="setup-fileselector-add-action">insert it there</link> first.
@@ -971,13 +1070,18 @@ You can configure the <guilabel>File Selector</guilabel> to immediately reflect 
 <para>
 You may freely combine these settings to tailor the actualization behaviour of the <guilabel>File Selector</guilabel> to your liking.
 </para>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Controlling the History in the Comboboxes</title>
-<para>
-There are two comboboxes on top and bottom of the <guilabel>File Selector</guilabel> contents window which control the directory to be displayed (top combobox) and the filters to be applied to the file display (bottom combobox). A history of the most recent settings is kept in the selection field of each combobox. You can configure the number of history entries as follows.
-</para>
-</formalpara>
+<varlistentry>
+<term>Controlling the History in the Comboboxes</term>
+<listitem>
+<para>There are two comboboxes on top and bottom of the <guilabel>File
+Selector</guilabel> contents window which control the directory to be
+displayed (top combobox) and the filters to be applied to the file display
+(bottom combobox). A history of the most recent settings is kept in the
+selection field of each combobox. You can configure the number of history
+entries as follows.</para>
 
 <variablelist>
   <varlistentry>
@@ -992,20 +1096,20 @@ There are two comboboxes on top and bottom of the <guilabel>File Selector</guila
     Enter here the maximum number of filter definitions the lower combobox shall remember.
     </para></listitem>
   </varlistentry>
-</variablelist>
 
-<formalpara>
-<title>Controlling What Should be Remembered Between Sessions</title>
+<varlistentry>
+<term>Controlling What Should be Remembered Between Sessions</term>
+<listitem>
 <para>
 By default the <guilabel>File Selector</guilabel> is set up so that it shows the display of the most recent session again at the next &kdevelop; start-up. You may change this behaviour in the <guilabel>Session</guilabel> configuration group.
 </para>
-</formalpara>
 
 <note><para>
-If &kdevelop; was automatically restarted by the KDE session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent KDE session will always be restored.
+If &kdevelop; was automatically restarted by the &kde; session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent &kde; session will always be restored.
 </para></note>
+</listitem>
+</varlistentry>
 
-<variablelist>
   <varlistentry>
     <term><guilabel>Restore location</guilabel></term>
     <listitem>
@@ -1025,6 +1129,9 @@ If &kdevelop; was automatically restarted by the KDE session manager the changes
     </para>
     </listitem>
   </varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
 </variablelist>
 
 </sect2> <!-- setup-fileselector -->
@@ -1054,6 +1161,7 @@ If &kdevelop; was automatically restarted by the KDE session manager the changes
     <imageobject>
       <imagedata fileref="documents-contents.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>The &kdevelop; documentation window in IDEAl mode</phrase></textobject>
     <caption><para>
     The &kdevelop; documentation window (IDEAl mode)
     </para></caption>
@@ -1088,10 +1196,10 @@ The documentation configuration settings have been divided into a series of docu
 The <guilabel>Documentation</guilabel> tab provides a series of configuration pages which are ordered vertically like a stack of index cards. One page at a time will open after a click on its index card title:
 </para>
 <simplelist>
-  <member><link linkend="setup-docu-general-qt">Qt Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-qt">&Qt; Documentation Collection</link></member>
   <member><link linkend="setup-docu-general-chm">CHM Documentation Collection</link></member>
   <member><link linkend="setup-docu-general-dox">Doxygen Documentation Collection</link></member>
-  <member><link linkend="setup-docu-general-toc">KDevelop TOC Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-toc">&kdevelop; TOC Documentation Collection</link></member>
   <member><link linkend="setup-docu-general-devhelp">Devhelp Documentation Collection</link></member>
   <member><link linkend="setup-docu-general-custom">Custom Documentation Collection</link></member>
 </simplelist>
@@ -1102,6 +1210,7 @@ The <guilabel>Documentation</guilabel> tab provides a series of configuration pa
     <imageobject>
       <imagedata fileref="configure-docu-general.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Setting up documentation collections</phrase></textobject>
     <caption><para>
     Setting up documentation collections
     </para></caption>
@@ -1116,13 +1225,13 @@ The <guilabel>Documentation</guilabel> tab provides a series of configuration pa
 All configurations pages on the <guilabel>Documentation</guilabel> tab use a common layout. You will find the currently available documentation items of this type listed on the open page to the left and a set of buttons to the right.
 </para>
 
-<formalpara id="setup-docu-buttons">
-<title>Buttons to Maintain Documentation List Contents</title>
-
+<variablelist>
+<varlistentry>
+<term id="setup-docu-buttons">Buttons to Maintain Documentation List Contents</term>
+<listitem>
 <para>
 There are three buttons available to maintain the contents of the documentation setup pages:
 </para>
-</formalpara>
 
 <variablelist>
   <varlistentry>
@@ -1165,14 +1274,14 @@ The button to the right of the <guilabel>Location</guilabel> field opens a direc
 <para>
 The <guilabel>Title</guilabel> field may not be accessible, depending on the documentation type to be maintained.
 </para>
-
-<formalpara id="setup-docu-columns">
-<title>Documentation List Structure</title>
-
+</listitem>
+</varlistentry>
+<varlistentry>
+<term id="setup-docu-columns">Documentation List Structure</term>
+<listitem>
 <para>
 Every documentation setup page shows the listed documentation items in a table with four columns:
 </para>
-</formalpara>
 
 <variablelist>
   <varlistentry>
@@ -1229,11 +1338,14 @@ Every documentation setup page shows the listed documentation items in a table w
 <note><para>
 Former &kdevelop; versions allowed to select the documentation items to be displayed on a per-project basis. This is not available any more.
 </para></note>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect3> <!-- setup-docu-general-common -->
 
 <sect3 id="setup-docu-general-qt">
-<title>Qt Documentation Collections</title>
+<title>&Qt; Documentation Collections</title>
 
 <para>
 On this configuration page all &Qt; documentation is set up.
@@ -1244,6 +1356,7 @@ On this configuration page all &Qt; documentation is set up.
     <imageobject>
       <imagedata fileref="configure-docu-general.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Setting up the &Qt; documentation collection</phrase></textobject>
     <caption><para>
     Setting up the &Qt; documentation collection
     </para></caption>
@@ -1284,6 +1397,7 @@ On this configuration page you may collect documentation according to the &Micro
     <imageobject>
       <imagedata fileref="configure-docu-chm.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Setting up &Microsoft; CHM standard documentation files</phrase></textobject>
     <caption><para>
     Setting up &Microsoft; CHM standard documentation files
     </para></caption>
@@ -1304,7 +1418,7 @@ For more information on the format of &Microsoft; <filename>*.chm</filename> fil
 <title>Documentation Generated by Doxygen</title>
 
 <para>
-On this configuration page all API documentation generated by &doxygen; is set up.
+On this configuration page all &API; documentation generated by &doxygen; is set up.
 </para>
 
 <screenshot>
@@ -1312,51 +1426,54 @@ On this configuration page all API documentation generated by &doxygen; is set u
     <imageobject>
       <imagedata fileref="configure-docu-dox.png" format="PNG"/>
     </imageobject>
+<textobject><phrase>Setting up Doxygen generated &API; documentation</phrase></textobject>
     <caption><para>
-    Setting up Doxygen generated API documentation
+    Setting up Doxygen generated &API; documentation
     </para></caption>
   </mediaobject>
 </screenshot>
 
 <para>
-In short, such an API documents the interface to certain library functions. The API documentation on this page should be produced by the externally provided <ulink url="http://www.stack.nl/~dimitri/doxygen/">&doxygen;</ulink> tool.
+In short, such an &API; documents the interface to certain library functions. The &API; documentation on this page should be produced by the externally provided <ulink url="http://www.stack.nl/~dimitri/doxygen/">&doxygen;</ulink> tool.
 </para>
 <para>
-&doxygen; generated API documentationconsists of a series of <filename>html</filename> files, starting with <filename>index.html</filename>. Additionally there may exist <filename>tag</filename> files which contain information to link to already existing API documentations. Thus &kdevelop; will look for <filename>index.html</filename> and <filename>*.tag</filename> files when seaching for &doxygen; generated API documentation.
+&doxygen; generated &API; documentationconsists of a series of <filename>html</filename> files, starting with <filename>index.html</filename>. Additionally there may exist <filename>tag</filename> files which contain information to link to already existing &API; documentations. Thus &kdevelop; will look for <filename>index.html</filename> and <filename>*.tag</filename> files when seaching for &doxygen; generated &API; documentation.
 </para>
 <para>
-There are some structural constraints assumed when searching for &doxygen; generated API documentation. The directory in which the <filename>index.html</filename> file resides should contain subdirectories with separate documentation collections. Each of these subdirectories is assumed to contain a <filename>.tag</filename> file and a <filename class="directory">html/</filename> subdirectory.
+There are some structural constraints assumed when searching for &doxygen; generated &API; documentation. The directory in which the <filename>index.html</filename> file resides should contain subdirectories with separate documentation collections. Each of these subdirectories is assumed to contain a <filename>.tag</filename> file and a <filename class="directory">html/</filename> subdirectory.
 </para>
 <para>
-You may have a look at <filename class="directory">$KDEDIR/share/doc/HTML/en/kdelibs-apidocs</filename> for an example of such a &doxygen; API documentation layout.
+You may have a look at <filename class="directory">$<envar>KDEDIR</envar>/share/doc/HTML/en/kdelibs-apidocs</filename> for an example of such a &doxygen; &API; documentation layout.
 </para>
 
 <note><para>
-The older &kde; <ulink url="http://sirtaj.net/projects/kdoc/">KDoc</ulink> generated API format is not directly supported any more. If you still want to use such documentation, you may add it on the <link linkend="setup-docu-general-custom">Custom Documentation Collection</link> page.
+The older &kde; <ulink url="http://sirtaj.net/projects/kdoc/">KDoc</ulink> generated &API; format is not directly supported any more. If you still want to use such documentation, you may add it on the <link linkend="setup-docu-general-custom">Custom Documentation Collection</link> page.
 </para></note>
 
 <para>
-&kdevelop; will have filled in a link to the current &kde; Libraries API, provided it found one. There are several ways for &kdevelop; to find out:
+&kdevelop; will have filled in a link to the current &kde; Libraries &API;, provided it found one. There are several ways for &kdevelop; to find out:
 </para>
 
 <itemizedlist>
   <listitem><para>
-  Either you provided the <command>configure</command> command with the <option>--with-kdelibsdoxy-dir</option> option when you compiled &kdevelop; (see the <link linkend="make-api">How to Obtain a KDevelop API Documentation</link> chapter).
+  Either you provided the <command>configure</command> command with the
+  <option>--with-kdelibsdoxy-dir</option> option when you compiled
+  &kdevelop; (see the <link linkend="make-api">How to Obtain a &kdevelop; &API; Documentation</link> chapter).
   </para></listitem>
   <listitem><para>
-  Or the <command>configure</command> command did automatically find a &doxygen; generated &kde; Libraries API in one of several standard locations it knows of.
+  Or the <command>configure</command> command did automatically find a &doxygen; generated &kde; Libraries &API; in one of several standard locations it knows of.
   </para></listitem>
   <listitem><para>
-  Or as a last resort the <filename class="directory">$KDEDIR/share/doc/HTML/en/kdelibs-apidocs/</filename> was found at the first &kdevelop; startup.
+  Or as a last resort the <filename class="directory">$<envar>KDEDIR</envar>/share/doc/HTML/en/kdelibs-apidocs/</filename> was found at the first &kdevelop; startup.
   </para></listitem>
 </itemizedlist>
 
 <para>
-If &kdevelop; did not find a valid &doxygen; generated &kde; Libraries API at its first start-up the <guilabel>Doxygen Documentation Collection</guilabel> list will be empty.
+If &kdevelop; did not find a valid &doxygen; generated &kde; Libraries &API; at its first start-up the <guilabel>Doxygen Documentation Collection</guilabel> list will be empty.
 </para>
 
 <para>
-You may add your own API documentation entries (&eg; from your current projects) by using the <link linkend="setup-docu-buttons">buttons</link> to the right. If you want to have them included in the indexed and/or full text search mark the <guilabel>Index</guilabel> or <guilabel>Search</guilabel> check boxes in the <link linkend="setup-docu-columns">setup table</link>.
+You may add your own &API; documentation entries (&eg; from your current projects) by using the <link linkend="setup-docu-buttons">buttons</link> to the right. If you want to have them included in the indexed and/or full text search mark the <guilabel>Index</guilabel> or <guilabel>Search</guilabel> check boxes in the <link linkend="setup-docu-columns">setup table</link>.
 </para>
 
 <note><para>
@@ -1365,14 +1482,15 @@ You may add your own API documentation entries (&eg; from your current projects)
 
 <tip>
   <para>
-  The &kde; system provides more API documentation than the &kde; Libraries API only. You will need additional interfaces information if you want to &eg; include the &kate; part into you programs. For this &kate; part API for example you should compile and install the &kde; Base Libraries API from the <ulink url="http://developer.kde.org/source/index.html">sources</ulink> (using the <command>make apidox</command> and <command>make install</command> commands on the <filename class="directory">kdebase</filename> sources) and then add an entry to the <guilabel>Doxygen Documentation Collection</guilabel> list like this:
+  The &kde; system provides more &API; documentation than the &kde; Libraries &API; only. You will need additional interfaces information if you want to &eg; include the &kate; part into you programs. For this &kate; part &API; for example you should compile and install the &kde; Base Libraries &API; from the <ulink url="http://developer.kde.org/source/index.html">sources</ulink> (using the <command>make apidox</command> and <command>make install</command> commands on the <filename class="directory">kdebase</filename> sources) and then add an entry to the <guilabel>Doxygen Documentation Collection</guilabel> list like this:
   </para>
   <screenshot><mediaobject>
       <imageobject>
         <imagedata fileref="configure-adddialog-baselibs.png" format="PNG"/>
       </imageobject>
+<textobject><phrase>Adding a &kde; base &API; to the list</phrase></textobject>
       <caption><para>
-      Adding a &kde; Base API to the list
+      Adding a &kde; Base &API; to the list
       </para></caption>
     </mediaobject></screenshot>
   <para>
@@ -1381,7 +1499,7 @@ You may add your own API documentation entries (&eg; from your current projects)
 </tip>
 
 <note><para>
-You must put the API of your current project into this <guilabel>Doxygen Documentation Collection</guilabel> as well. Former &kdevelop; versions did put it into the documentation tree on a per-project basis. This is not provided any more.
+You must put the &API; of your current project into this <guilabel>Doxygen Documentation Collection</guilabel> as well. Former &kdevelop; versions did put it into the documentation tree on a per-project basis. This is not provided any more.
 </para></note>
 
 </sect3> <!-- setup-docu-general-dox -->
@@ -1440,12 +1558,19 @@ The rationale behind this is not only to locally navigate remote documentation w
 Such structured access is made possible through the use of special <quote>table of content</quote> files, which are denoted by <filename>.toc</filename> filename extensions. Any such &kdevelop; TOC file contains an &XML; structured description of the document to be accessed.
 </para>
 
-<formalpara>
-<title>Standard Directory of &kdevelop; TOC Files</title>
+<variablelist>
+<varlistentry>
+<term>Standard Directory of &kdevelop; TOC Files</term>
+<listitem>
 <para>
 When &kdevelop; was installed usually a series of predefined <filename>.toc</filename> files has been put into the <filename class="directory">$KDEDIR/share/apps/kdevdocumentation/tocs</filename> directory. These are fairly simple, structured text files. You may look at them using a text editor or other text display facility.
 </para>
-</formalpara>
+</listitem>
+</varlistentry></variablelist>
+
+<!-- FIXME: Lauri Watts (2005-05-03) This could be marked up a whole lot -->
+<!-- more clearly with the sgmltags stuff.  Making a note to do that once -->
+<!-- this first revision is done. -->
 
 <variablelist id="toc-file-structure">
   <title>Basic Structure of &kdevelop; TOC Files</title>
@@ -1579,6 +1704,7 @@ When &kdevelop; was installed usually a series of predefined <filename>.toc</fil
     </listitem>
   </varlistentry>
 </variablelist>
+<!-- FIXME: End -->
 
 </sect3> <!-- setup-docu-general-toc-files  -->
 
@@ -1603,12 +1729,9 @@ You can control which DevHelp files should be accessible on the <guilabel>DevHel
   </mediaobject>
 </screenshot>
 
-<formalpara>
-<title>How to aquire DevHelp documentation</title>
 <para>
 DevHelp files originally were accessible on the <ulink url="http://lidn.sourceforge.net/">LiDN</ulink> website, but this seems to be not maintained for some time now. More recent DevHelp documentation is available at the <ulink url="http://htmlhelp.berlios.de/books/devhelp.php">DevHelp Books Download</ulink> web page.
 </para>
-</formalpara>
 
 <para>
 When &kdevelop; is installed it will attempt to find all <filename>.devhelp</filename> files in some standard places in the system, &eg; in the subdirectories of <filename class="directory">/opt/gnome/share/</filename>. Initially these files will not be marked for display.  If you want to see another documentation, mark the <guilabel>TOC</guilabel> check box in the <link linkend="setup-docu-columns">setup table</link>.

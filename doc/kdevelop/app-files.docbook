@@ -1,4 +1,7 @@
 <appendix id="app-files">
+<!-- LWatts (2005-04-30): A lot of this might be better as variable lists, -->
+<!-- but  it's not that big a deal.  Something to be done only when there's -->
+<!-- a lot of textual changes needed here (e.g., maybe never ) -->
 
 <appendixinfo>
   <authorgroup>
@@ -25,20 +28,20 @@
 <title>&kdevelop; Default Configuration</title>
 
 <para>
-On installation, &kdevelop; writes some default information files for setup and configuration purposes into subdirectories of the <filename class="directory">$KDEDIR</filename> installation directory (usually something like <filename class="directory">/opt/kde</filename>, <filename class="directory">/usr/local/kde</filename>, or some other user-defined installation directory, see <link linkend="kdevelop-install">Installing &kdevelop;</link>).
+On installation, &kdevelop; writes some default information files for setup and configuration purposes into subdirectories of the <filename class="directory">$<envar>KDEDIR</envar></filename> installation directory (usually something like <filename class="directory">/opt/kde</filename>, <filename class="directory">/usr/local/kde</filename>, or some other user-defined installation directory, see <link linkend="kdevelop-install">Installing &kdevelop;</link>).
 </para>
 
 <sect2 id="app-files-default-config">
 <title>Default &kdevelop; Configuration</title>
 
 <para>
-There is only one &kdevelop; specific default configuration file in the <filename class="directory">$KDEDIR/share/config/</filename> directory:
+There is only one &kdevelop; specific default configuration file in the <filename class="directory">$<envar>KDEDIR</envar>/share/config/</filename> directory:
 </para>
 <variablelist>
   <varlistentry>
   <term><filename>kdeveloprc</filename></term>
   <listitem><para>
-  This file contains the basic settings &kdevelop; needs to start. It will be copied to the user's <filename class="directory">$KDEHOME/share/config</filename> directory when &kdevelop; does not find a <filename>kdeveloprc</filename> file there on startup.
+  This file contains the basic settings &kdevelop; needs to start. It will be copied to the user's <filename class="directory">$<envar>KDEHOME</envar>/share/config</filename> directory when &kdevelop; does not find a <filename>kdeveloprc</filename> file there on startup.
   </para></listitem>
   </varlistentry>
 </variablelist>
@@ -49,11 +52,11 @@ There is only one &kdevelop; specific default configuration file in the <filenam
 <title>Application Specific Defaults</title>
 
 <para>
-Most &kdevelop; features are provided by KParts. These are basically applications specially designed to run in the &kdevelop; framework (see the overview in the <link linkend="plugin-tools">Plugin Tools</link> appendix). Each KPart application has its own set of configuration files whose defaults will be stored in several subdirectories of the <filename class="directory">$KDEDIR/share/apps/</filename> installation directory.
+Most &kdevelop; features are provided by KParts. These are basically applications specially designed to run in the &kdevelop; framework (see the overview in the <link linkend="plugin-tools">Plugin Tools</link> appendix). Each KPart application has its own set of configuration files whose defaults will be stored in several subdirectories of the <filename class="directory">$<envar>KDEDIR</envar>/share/apps/</filename> installation directory.
 </para>
 
 <para>
-There are quite a lot of default configuration subdirectories in <filename class="directory">$KDEDIR/share/apps/</filename> whose names all start with a <filename>kdev</filename> sequence. Most of them are for &kdevelop; internal use only. They might be deliberately grouped for readability as:
+There are quite a lot of default configuration subdirectories in <filename class="directory">$<envar>KDEDIR</envar>/share/apps/</filename> whose names all start with a <filename>kdev</filename> sequence. Most of them are for &kdevelop; internal use only. They might be deliberately grouped for readability as:
 <simplelist>
   <member><link linkend="app-files-default-apps-stdalone">Stand-alone Applications</link></member>
   <member><link linkend="app-files-default-apps-task">Task Specific Parts</link></member>
@@ -66,14 +69,14 @@ There are quite a lot of default configuration subdirectories in <filename class
   <listitem id="app-files-default-apps-stdalone"><itemizedlist>
     <title>Stand-alone Applications</title>
     <listitem>
-      <para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE:</para>
+      <para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; &IDE;:</para>
       <itemizedlist>
         <listitem><para><filename class="directory">licenses/</filename> &mdash; contains various licenses texts.</para></listitem>
-        <listitem><para><filename class="directory">pics/</filename> &mdash; contains the picture files used for the &kdevelop;, KDevelop Assistant, and KDevelop Designer splash screens.</para></listitem>
+        <listitem><para><filename class="directory">pics/</filename> &mdash; contains the picture files used for the &kdevelop;, &kdevelop; Assistant, and &kdevelop; Designer splash screens.</para></listitem>
         <listitem><para><filename class="directory">profiles/</filename> &mdash; contains default plugin profile settings. (Currently there is only a <filename>tiny</filename> profile provided which defines a minimum set of active &kdevelop; plugins.)</para></listitem>
         <listitem><para><filename>eventsrc</filename> &mdash; holds a lot of <quote>Process successful</quote> localization strings.</para></listitem>
         <listitem><para><filename>kdevelopui.rc</filename> &mdash; provides the basic menu and tool bar entries &kdevelop; uses.</para></listitem>
-        <listitem><para><filename>kdevhtml_partui.rc</filename> &mdash; provides a <guimenuitem>Print...</guimenuitem> entry in the <guimenu>File</guimenu> menu, a <guimenuitem>Copy</guimenuitem> entry in the <guimenu>Edit</guimenu> menu, and <guilabel>Back</guilabel> and <guilabel>Forward</guilabel> arrows in the <guilabel>Browser Toolbar</guilabel> in case a HTML file is browsed from the <guilabel>Documentation</guilabel> plugin.</para></listitem>
+        <listitem><para><filename>kdevhtml_partui.rc</filename> &mdash; provides a <guimenuitem>Print...</guimenuitem> entry in the <guimenu>File</guimenu> menu, a <guimenuitem>Copy</guimenuitem> entry in the <guimenu>Edit</guimenu> menu, and <guilabel>Back</guilabel> and <guilabel>Forward</guilabel> arrows in the <guilabel>Browser Toolbar</guilabel> in case a &HTML; file is browsed from the <guilabel>Documentation</guilabel> plugin.</para></listitem>
       </itemizedlist>
     </listitem>
     <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; Assistant documentation browser.</para></listitem>
@@ -88,7 +91,7 @@ There are quite a lot of default configuration subdirectories in <filename class
         <listitem><para><filename class="directory">sources/</filename> &mdash; contains keyword definition files used by the <guilabel>Expand Text</guilabel> command.</para></listitem>
         <listitem><para><filename class="directory">templates/</filename> &mdash; contains template definition files used by the <guilabel>Expand Abbreviation</guilabel> command.</para></listitem>
         <listitem><para><filename>kdevabbrev.rc</filename> &mdash; provides the <guimenuitem>Expand Text</guimenuitem> and <guimenuitem>Expand Abbreviation</guimenuitem> entries in the <guimenu>Edit</guimenu> menu.</para></listitem>
-      </itemizedlist>
+</itemizedlist>
     </listitem>
     <listitem id="app-files-default-appwizard">
       <para><filename class="directory">kdevappwizard/</filename> &mdash; contains files used by the &appwizard; part:</para>
@@ -102,7 +105,7 @@ There are quite a lot of default configuration subdirectories in <filename class
       </itemizedlist>
     </listitem>
     <listitem><para><filename class="directory">kdevastyle/</filename> &mdash; provides the <guimenuitem>Reformat Source</guimenuitem> entry in the <guimenu>Edit</guimenu> menu.</para></listitem>
-    <listitem><para><filename class="directory">kdevautoproject/</filename> &mdash; provides most of the entries in the <guimenu>Build</guimenu> menu and the <guilabel>Build Toolbar (KDeveleop)</guilabel> toolbar.</para></listitem>
+    <listitem><para><filename class="directory">kdevautoproject/</filename> &mdash; provides most of the entries in the <guimenu>Build</guimenu> menu and the <guilabel>Build Toolbar (&kdevelop;)</guilabel> toolbar.</para></listitem>
     <listitem>
       <para><filename class="directory">kdevclassview/</filename> &mdash; contains files used by the <guilabel>Class View</guilabel> project plugin:</para>
       <itemizedlist>
@@ -198,10 +201,10 @@ There are quite a lot of default configuration subdirectories in <filename class
 <title>User Oriented Configuration</title>
 
 <para>
-All information about user defined settings is kept in two subdirectories of <filename class="directory">$KDEHOMR</filename>, namely:
+All information about user defined settings is kept in two subdirectories of <filename class="directory">$<envar>KDEHOME</envar></filename>, namely:
 <simplelist>
-  <member><link linkend="app-files-user-apps">Application Specific Configuration</link> in the <filename class="directory">$KDEHOME/share/apps/</filename> directory, and</member>
-  <member><link linkend="app-files-user-config">Resource Configuration File</link> in the <filename class="directory">$KDEHOME/share/config/</filename> directory.</member>
+  <member><link linkend="app-files-user-apps">Application Specific Configuration</link> in the <filename class="directory">$<envar>KDEHOME</envar>/share/apps/</filename> directory, and</member>
+  <member><link linkend="app-files-user-config">Resource Configuration File</link> in the <filename class="directory">$<envar>KDEHOME</envar>/share/config/</filename> directory.</member>
 </simplelist>
 </para>
 
@@ -209,13 +212,13 @@ All information about user defined settings is kept in two subdirectories of <fi
 <title>Application Specific Configuration</title>
 
 <para>
-Any user changes to the <link linkend="app-files-default">&kdevelop; Default Configuration</link> settings as well as user specific settings which are not kept in any of the <link linkend="app-files-user-config">Resource Configuration Files</link> are found in <filename>kdev...</filename> subdirectories of the <filename class="directory">$KDEHOME/share/apps/</filename> directory.
+Any user changes to the <link linkend="app-files-default">&kdevelop; Default Configuration</link> settings as well as user specific settings which are not kept in any of the <link linkend="app-files-user-config">Resource Configuration Files</link> are found in <filename>kdev...</filename> subdirectories of the <filename class="directory">$<envar>KDEHOME</envar>/share/apps/</filename> directory.
 </para>
 <para>
 Most of these configuration files are however used by various &kdevelop; plugins in order to provide some specific menu and/or toolbar entries. Thus they are of interest only in case something went really wrong with the user interface.
 </para>
 <note><para>
-In case the contents of these directories mirror those of the Default Configuration settings, &kdevelop; will have copied them from <filename class="directory">$KDEDIR/apps/</filename> into the <filename class="directory">$KDEHOME/apps/</filename> directory on its initial start. Any subsequent changes will be made to these copies only. The Default Configuration settings remain unchanged in any case.
+In case the contents of these directories mirror those of the Default Configuration settings, &kdevelop; will have copied them from <filename class="directory">$<envar>KDEDIR</envar>/apps/</filename> into the <filename class="directory">$<envar>KDEHOME</envar>/apps/</filename> directory on its initial start. Any subsequent changes will be made to these copies only. The Default Configuration settings remain unchanged in any case.
 </para></note>
 
 <itemizedlist>
@@ -267,7 +270,7 @@ In case the contents of these directories mirror those of the Default Configurat
   </listitem>
   <listitem>
     <para><filename class="directory">kdevdocumentation/</filename> &mdash; contains the actual files used by the <guilabel>Documentation</guilabel> plugin in addition to the <link linkend="app-files-default-kdevdoc"> default configuration files</link>. See there for more detail.</para>
-    <para>The directories in <filename class="directory">kdevdocumentation/</filename> mainly hold actual bookkeeping information. The actually set up documentation files are kept in <link linkend="app-files-user-config-doc"> <quote><filename>doc...pluginrc</filename></quote> files</link> in the <filename class="directory">$KDEHOME/share/config/</filename> directory.</para>
+    <para>The directories in <filename class="directory">kdevdocumentation/</filename> mainly hold actual bookkeeping information. The actually set up documentation files are kept in <link linkend="app-files-user-config-doc"> <quote><filename>doc...pluginrc</filename></quote> files</link> in the <filename class="directory">$<envar>KDEHOME</envar>/share/config/</filename> directory.</para>
     <itemizedlist>
       <listitem>
         <para><filename class="directory">bookmarks/</filename> &mdash; maintains the entries in the <guilabel>Bookmarks</guilabel> tab of the &kdevelop; <guilabel>Documentation</guilabel> plugin.</para>
@@ -342,7 +345,7 @@ In case the contents of these directories mirror those of the Default Configurat
 <title>Resource Configuration Files</title>
 
 <para>
-There are two groups of &kdevelop; configuration files in the <filename class="directory">$KDEHOME/share/config/</filename> directory, distiguished by their surrounding character sequences:
+There are two groups of &kdevelop; configuration files in the <filename class="directory">$<envar>KDEHOME</envar>/share/config/</filename> directory, distiguished by their surrounding character sequences:
 <simplelist>
   <member><quote><filename>doc...pluginrc</filename></quote> denotes <link linkend="app-files-user-config-doc">files used by the documentation plugin.</link></member>
   <member><quote><filename>kdev...rc</filename></quote> denotes configuration <link linkend="app-files-user-config-kdev">files used by &kdevelop;</link> itself and its available plugins.</member>
@@ -353,7 +356,7 @@ There are two groups of &kdevelop; configuration files in the <filename class="d
 <title>Configuration Files Used by &kdevelop;</title>
   <listitem>
     <para><filename>kdevabbrevrc</filename> &mdash; holds the current state of the <guilabel>Abbreviations</guilabel> configuration provided by the <guilabel>Abbreviation Expansion</guilabel> plugin.</para>
-    <note><para>This only records whether the abbreviations will be used or not. The actual definitions of new abbreviations will go into the <filename>$KDEHOME/share/apps/kdevabbrev/templates/templates</filename> file.</para></note>
+    <note><para>This only records whether the abbreviations will be used or not. The actual definitions of new abbreviations will go into the <filename>$<envar>KDEHOME</envar>/share/apps/kdevabbrev/templates/templates</filename> file.</para></note>
   </listitem>
   <listitem>
     <para><filename>kdevassistantrc</filename> &mdash; holds some configuration states specific of the stand-alone  &kdevelop; Assistant documentation browser.</para>
@@ -406,16 +409,16 @@ Most project dependend configuration is kept in the <filename>&lt;project-name&g
 Both are &XML; coded files. They can be viewed and (cautiously) altered using any text editor.
 </para>
 
-<formalpara>
-<title>Persistant Code Store Files</title>
+<sect2>
+<title>Persistent Code Store Files</title>
 
 <para>There is a third project dependend configuration file, the <filename>&lt;project-name&gt;.kdevelop.pcs</filename> Persistant Code Store. This is a binary coded file holding an internal parser cache for the most part in order to speed up the loading sequence of the project. Additionally, this Persistant Code Store keeps information use by the <guilabel>Code Completion</guilabel> facility of &kdevelop;.
 </para>
-</formalpara>
 
 <note><para>
-There can be additional Persistant Code Store files be set up on the <guilabel>Code Completion</guilabel> tab of the <guilabel>C++ Specific</guilabel> project configuration page. Information about these additional <filename>.pcs</filename> is kept globally in the <filename class="directory">$KDEHOME/share/apps/kdevcppsupport/pcs/</filename> directory.
+There can be additional Persistant Code Store files be set up on the <guilabel>Code Completion</guilabel> tab of the <guilabel>C++ Specific</guilabel> project configuration page. Information about these additional <filename>.pcs</filename> is kept globally in the <filename class="directory">$<envar>KDEHOME</envar>/share/apps/kdevcppsupport/pcs/</filename> directory.
 </para></note>
+</sect2>
 
 </sect1> <!-- app-files-project -->
 

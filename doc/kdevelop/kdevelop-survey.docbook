@@ -62,7 +62,6 @@
   </itemizedlist>
 </note>
 
-
 <sect1 id="uimodes-survey">
 <title>Available User Interface Modes</title>
 
@@ -208,19 +207,29 @@ Do not forget to restart &kdevelop; in order to let your selections take effect.
 To maximize space, there is a full-screen window mode available which expands the mainframe area to the screen borders. Additional space can be reclaimed by hiding the menubar. And you can of course hide any toolbar as usual in <application>KDE</application> applications.
 </para>
 
-<formalpara>
-<title>Full Screen Mode</title>
+<variablelist>
+<varlistentry>
+<term>Full Screen Mode</term>
+<listitem>
 <para>
-To switch to or from full screen mode select <menuchoice> <guimenu>View</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>Shift</keycap> <keycap>F</keycap> </keycombo>. There is also a <guiicon>Full-Screen Mode</guiicon> icon in the <guilabel>Browse Toolbar</guilabel> available.
-</para>
-</formalpara>
+To switch to or from full screen mode select <menuchoice>
+<guimenu>View</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem>
+</menuchoice> from the menus or press
+<keycombo>&Ctrl;&Shift;<keycap>F</keycap> </keycombo>. There is also a
+<guiicon>Full-Screen Mode</guiicon> icon in the <guilabel>Browse
+Toolbar</guilabel> available.</para>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Hide/Unhide the Menubar</title>
+<varlistentry>
+<term>Hide/Unhide the Menubar</term>
+<listitem>
 <para>
-To <emphasis>hide</emphasis> the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, &eg; the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
+To <emphasis>hide</emphasis> the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo>&Ctrl;<keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, &eg; the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> &Ctrl;<keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
 </para>
-</formalpara>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect2> <!-- maximize-workspace -->
 

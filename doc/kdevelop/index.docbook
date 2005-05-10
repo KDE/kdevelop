@@ -3,6 +3,7 @@
   <!ENTITY kdevelop "<application>KDevelop</application>">
   <!ENTITY kdevrelease "3.1.0">
   <!ENTITY apache "<application>Apache</application>">
+  <!ENTITY API "<acronym>API</acronym>">
   <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
   <!ENTITY automake "<command>automake</command>">
@@ -10,10 +11,12 @@
   <!ENTITY ctags "<command>ctags</command>">
   <!ENTITY CVS "<application>CVS</application>">
   <!ENTITY cvs "CVS">
-  <!ENTITY doxygen "<application>Doxygen</application>">
+  <!ENTITY doxygen "<application>Doxygen</application>">	
   <!ENTITY doxywizard "<application>doxywizard</application>">
   <!ENTITY egrep "<command>egrep</command>">
   <!ENTITY grep "<command>grep</command>">
+  <!ENTITY HTML "<acronym>HTML</acronym>">
+  <!ENTITY IDE "<acronym>IDE</acronym>">
   <!ENTITY libtool "<command>libtool</command>">
   <!ENTITY nfwizard "New File Wizard">
   <!ENTITY python "<application>Python</application>">
@@ -83,7 +86,7 @@ Entries which require special treatment are marked with comments starting with '
     <year>2002</year>
     <holder>Bernd Gehrmann</holder>
   </copyright>
-  <copyright>
+<copyright>	
     <year>2002</year>
     <holder>Caleb Tennis</holder>
   </copyright>
@@ -99,7 +102,6 @@ Entries which require special treatment are marked with comments starting with '
   <abstract>
     <para>&kdevelop; is an Integrated Development Environment to be used for a wide variety of programming tasks.</para>
   </abstract>
-
   <keywordset>
     <keyword>KDE</keyword>
     <keyword>KDevelop</keyword>
@@ -116,126 +118,267 @@ Entries which require special treatment are marked with comments starting with '
 <title>What This Manual Contains</title>
 
 <para>
-This user manual is intended to describe the contents and use of the &kdevelop; &kdevrelease; Integrated Development Environment (IDE) from a user's point of view. It is not a programming manual, nor does it describe the development process in detail. Its only aim is to guide you in the handling of the IDE.
+This user manual is intended to describe the contents and use of the &kdevelop; &kdevrelease; Integrated Development Environment (&IDE;) from a user's point of view. It is not a programming manual, nor does it describe the development process in detail. Its only aim is to guide you in the handling of the &IDE;.
 </para>
 <para>
 Here you will find information on the following topics:
 </para>
-<itemizedlist>
-  <listitem><para>
-  <link linkend="nutshell">In a Nutshell &mdash; Tips and Tricks</link> &mdash; a quick reference to commonly used commands and actions. And a short guide to solve common problems when working with &kdevelop;.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="unixdev">Development on &UNIX;</link> &mdash; a historical overview of &UNIX; program development, the main tools necessary and why you need an IDE.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="kdevelop-install">Installing &kdevelop;</link> &mdash; tells you where to obtain &kdevelop; and how to get it up and running.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="getting-started">Getting Started with &kdevelop; &mdash; a Guided Tour</link> &mdash; gives you a quick start on the use of this IDE, introducing the basic steps of how to work on a project.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="kdevelop-survey">Overview of the Features of &kdevelop;</link> &mdash; extends the guided tour in the previous chapter, giving an overall view of what is built-in within &kdevelop; and gets you acquainted with the look and feel of this IDE.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="app-menus">Menus and Toolbars Overview</link> &mdash; (in the appendix) provides you with a short overall view of the menu and toolbar selections available.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="app-shortcuts">Shortcut Keys</link> &mdash; (in the appendix) lists the key sequences you may use to quickly access specific &kdevelop; operations.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="setup">Configuring &kdevelop;</link> &mdash; shows how you can tailor the IDE to suit your needs.
-  </para></listitem>
 
 
-  <listitem><para>
-      <link linkend="kdevelop-scripting">Scripting &kdevelop;</link> &mdash; describes how to add scripts to automate &kdevelop;.
-  </para></listitem>
+<variablelist>
+<varlistentry>
+<term><link linkend="nutshell">In a Nutshell &mdash; Tips and
+Tricks</link></term>
+<listitem>
+<para>A quick reference to commonly used commands and actions. And a short
+guide to solve common problems when working with
+&kdevelop;.</para>
+</listitem>
+</varlistentry>
 
-<!--  <listitem><para>
-  <link linkend="applicationwizard">Getting started: the &appwizard;</link> &mdash; describes the basics of how to set up a new project in &kdevelop; using the built-in &appwizard;.
-  </para></listitem>-->
+<varlistentry>
+<term><link linkend="unixdev">Development on &UNIX;</link></term>
+<listitem>
+<para>A historical overview of &UNIX; program development, the main tools
+necessary and why you need an &IDE;.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="projects-advanced">Advanced Project Management</link> &mdash; shows how to load existing projects, convert projects from older &kdevelop; versions, and import other existing projects. Furthermore the configuration of a project's options to suit your needs is covered.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="kdevelop-install">Installing &kdevelop;</link></term>
+<listitem>
+<para>Tells you where to obtain &kdevelop; and how to get it up and
+running.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="editing">Editing tools</link> &mdash; all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="getting-started">Getting Started with &kdevelop;
+ &mdash; a Guided Tour</link></term>
+<listitem>
+<para>Gives you a quick start on the use of this &IDE;, introducing the basic
+steps of how to work on a project.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="file-browsers">The File Browsers</link> &mdash; demonstrates various tools to look at the structure of your project and how to access the files you want to work with.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="kdevelop-survey">Overview of the Features of
+ &kdevelop;</link></term>
+<listitem>
+<para>Extends the guided tour in the previous chapter, giving an overall
+view of what is built-in within &kdevelop; and gets you acquainted with the
+look and feel of this &IDE;.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="class-browsers">The Class Browsers</link> &mdash; describes one of the most powerful tools of &kdevelop; which lets you navigate through class dependencies and allows you to easily create and access the classes and methods you need.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="app-menus">Menus and Toolbars Overview</link></term>
+<listitem>
+<para>(in the appendix) provides you with a short overall view of the menu
+and toolbar selections available.
+</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="documentation">Documentation</link> &mdash; shows how to access the rich built-in documentation &kdevelop; provides and tells you how to create documentation of your project, concise and powerful API documentation providing you an overall view of all your project sources as well as docbook-based user documentation.
-  </para></listitem>
-  <listitem><para>
-  <link linkend="project-management">Building and Project Management</link> &mdash; deals with the creation and management of your project; describing the basics of autoconf and automake as well as how to set up custom make files and how to use compiler or make options to tailor your application to suit your needs.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="app-shortcuts">Shortcut Keys</link></term>
+<listitem>
+<para>(in the appendix) lists the key sequences you may use to quickly
+access specific &kdevelop; operations.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="adv-build-management">Advanced Build Management</link> &mdash; looks at ways to keep multiple build configurations, to cross-compile for diverse platforms, or to make an embedded system using the <application>Qt/embedded</application> library.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="setup">Configuring &kdevelop;</link></term>
+<listitem>
+<para>Shows how you can tailor the &IDE; to suit your needs.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="debugger">The Debugger Interface</link> &mdash; describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop;.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="kdevelop-scripting">Scripting &kdevelop;</link></term>
+<listitem>
+<para>Describes how to add scripts to automate &kdevelop;.</para>
+</listitem>
+</varlistentry>
 
-<!-- ### Currently disabled. Probably too specialized programming stuff. Check later again.
-  <listitem><para>
-  <link linkend="python">Python</link> &mdash; an overview of how to create Python-based applications in &kdevelop;.
-  </para></listitem>
-  <listitem><para>
-  <link linkend="php">PHP</link> &mdash;  an overview of how to create PHP-based HTML applications in &kdevelop;.
-  </para></listitem>//-->
+<!-- 
+<varlistentry>
+<term><link linkend="applicationwizard">Getting started: the
+&appwizard;</link></term>
+<listitem>
+<para>Describes the basics of how to set up a new project in &kdevelop;
+using the built-in &appwizard;.</para>
+</listitem>
+</varlistentry>
+-->
 
-  <listitem><para>
-  <link linkend="cvs">Using CVS</link> &mdash; tells you how you can maintain your project using the CVS versioning system; a must, especially if many developers work on the same project.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="projects-advanced">Advanced Project
+ Management</link></term>
+<listitem>
+<para>Shows how to load existing projects, convert projects from older
+&kdevelop; versions, and import other existing projects. Furthermore the
+configuration of a project's options to suit your needs is covered.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="external-progs">Leveraging External Programs</link> &mdash; shows how to access external programs and tools from within &kdevelop; thus greatly extending its capabilities.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="editing">Editing tools</link></term>
+<listitem>
+<para>All you need to write your source files: using the editor, searching
+for text both locally and project-wide, up to integrating new files and
+classes into the project.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  <link linkend="plugin-tools">Plugin tools</link> &mdash; provides you with an overview of the parts which make up &kdevelop; and how you can tailor it to suit your needs by only loading the parts that are necessary, both IDE and project-wide.
-  </para></listitem>
+<varlistentry>
+<term><link linkend="file-browsers">The File Browsers</link></term>
+<listitem>
+<para>Demonstrates various tools to look at the structure of your project
+and how to access the files you want to work with.</para>
+</listitem>
+</varlistentry>
 
-  <listitem><para>
-  Some commonly used information has been put into the <emphasis>appendix</emphasis>. Amongst others this consists of:
+<varlistentry>
+<term><link linkend="class-browsers">The Class Browsers</link></term>
+<listitem>
+<para>Describes one of the most powerful tools of &kdevelop; which lets you
+navigate through class dependencies and allows you to easily create and
+access the classes and methods you need.
+</para>
+</listitem>
+</varlistentry>
 
-  <itemizedlist>
-    <listitem><para>
-    <link linkend="app-menus">Menus and Toolbars Overview</link> &mdash; provides you with a short overall view of the menu and toolbar selections available.
-    </para></listitem>
+<varlistentry>
+<term><link linkend="documentation">Documentation</link></term>
+<listitem>
+<para>Shows how to access the rich built-in documentation &kdevelop;
+provides and tells you how to create documentation of your project, concise
+and powerful &API; documentation providing you an overall view of all your
+project sources as well as docbook-based user documentation.</para>
+</listitem>
+</varlistentry>
 
-    <listitem><para>
-      <link linkend="app-shortcuts">Shortcut Keys</link> &mdash; the keys you can use to work with &kdevelop; without resorting to the mouse.
-    </para></listitem>
+<varlistentry>
+<term><link linkend="project-management">Building and Project
+ Management</link></term>
+<listitem>
+<para>Deals with the creation and management of your project; describing the
+basics of autoconf and automake as well as how to set up custom make files
+and how to use compiler or make options to tailor your application to suit
+your needs.</para>
+</listitem>
+</varlistentry>
 
-    <listitem><para>
-    <link linkend="app-files">Configuration Files Used by &kdevelop;</link> &mdash; lists the files kdevelop uses to save its internal information. This is particularly useful in case something went wrong with your setup.
-    </para></listitem>
+<varlistentry>
+<term><link linkend="adv-build-management">Advanced Build
+ Management</link></term>
+<listitem>
+<para>Looks at ways to keep multiple build configurations, to cross-compile
+for diverse platforms, or to make an embedded system using the
+<application>Qt/embedded</application> library.</para>
+</listitem>
+</varlistentry>
 
-    <listitem><para>
-    <link linkend="plugin-tools">Plugin Tools</link> &mdash; lists the pluggable tools you can use to taylor the capabilities of &kdevelop; to your needs.
-    </para></listitem>
-  </itemizedlist>
-  </para></listitem>
-</itemizedlist>
+<varlistentry>
+<term><link linkend="debugger">The Debugger Interface</link></term>
+<listitem>
+<para>Describes how to use the integrated <application>gdb</application>
+debugger interface so you can hunt down bugs without leaving
+&kdevelop;.</para>
+</listitem>
+</varlistentry>
+
+<!-- ### Currently disabled.  Probably too specialized programming stuff. -->
+<!-- Check again later 
+<varlistentry>
+<term><link linkend="python">Python</link></term>
+<listitem>
+<para>An overview of how to create a Python based application in
+&kdevelop;</para
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="php">PHP</link></term>
+<listitem>
+<para>An overview of how to create a PHP based HTML application in
+&kdevelop;</para>
+</listitem>
+-->
+
+<varlistentry>
+<term><link linkend="cvs">Using CVS</link></term>
+<listitem>
+<para>Tells you how you can maintain your project using the CVS versioning
+system; a must, especially if many developers work on the same
+project.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="external-progs">Leveraging External
+ Programs</link></term>
+<listitem>
+<para>Shows how to access external programs and tools from within &kdevelop;
+thus greatly extending its capabilities.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="plugin-tools">Plugin tools</link></term>
+<listitem>
+<para>Provides you with an overview of the parts which make up &kdevelop;
+and how you can tailor it to suit your needs by only loading the parts that
+are necessary, both &IDE; and project-wide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Further information:</term>
+<listitem>
+<para>Some commonly used information has been put into the
+<emphasis>appendix</emphasis>. Amongst others this consists of:</para>
+
+<variablelist>
+<varlistentry>
+<term><link linkend="app-menus">Menus and Toolbars Overview</link></term>
+<listitem>
+<para>Provides you with a short overall view of the menu and toolbar
+selections available.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="app-shortcuts">Shortcut Keys</link></term>
+<listitem>
+<para>The keys you can use to work with &kdevelop; without resorting to the
+mouse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="app-files">Configuration Files Used by
+ &kdevelop;</link></term>
+<listitem><para>Lists the files &kdevelop; uses to save its internal
+ information. This is particularly useful in case something went wrong with
+ your setup.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="plugin-tools">Plugin Tools</link></term>
+<listitem>
+<para>Lists the pluggable tools you can use to taylor the capabilities of
+&kdevelop; to your needs.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
 </chapter>
 
 <!-- ====================================================================== -->
@@ -243,9 +386,13 @@ Here you will find information on the following topics:
 <chapter id="nutshell">
 <title>In a Nutshell &mdash; Tips and Tricks</title>
 
-<!-- Traditionally, most of this stuff will have been put into a FAQ section. It is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for.
-This chapter is meant to provide short hints and tips together with (mandatory) navigation links.
-There should be an additional FAQ section near the end nevertheless which contains more general stuff not directly related to navigating the manual. -->
+<!-- Traditionally, most of this stuff will have been put into a FAQ
+section. It is more useful, however, to put it at the very start of a
+manual, as this is the place the (inexperienced) user first looks for.  This
+chapter is meant to provide short hints and tips together with (mandatory)
+navigation links.  There should be an additional FAQ section near the end
+nevertheless which contains more general stuff not directly related to
+navigating the manual. -->
 
 <para>
 The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. There are also short hints on how to solve some common problems when working with &kdevelop;.
@@ -265,182 +412,217 @@ Information on these topics is availabe:
   <member><link linkend="nutshellitem-others">Other Topics</link></member>
 </simplelist>
 
-<itemizedlist id="nutshellitem-look-and-feel">
-  <title>Look and Feel</title>
+<variablelist id="nutshellitem-look-and-feel">
+<title>Look and Feel</title>
 
-  <listitem>
-    <formalpara id="nutshell-IDEAl-tabs">
-    <title><link linkend="setup-ui-toolview">Force Smaller Tool View Tabs in IDEAl Mode</link></title>
-    <para>
-      By default &kdevelop; starts with large text-based tool tip tabs around the work area. You may change this look to &eg; save space in the &kdevelop; configuration dialog (<menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User Interface</guimenuitem></menuchoice>).
-    </para>
-    </formalpara>
-    <para>
-      If you use an older &kdevelop; 3 version, this configuration dialog may not be available. To change the toolview tabs display manually, place a <computeroutput>MDIStyle</computeroutput> entry under the <computeroutput>[UI]</computeroutput> tag in your <filename>$KDEHOME/share/config/kdeveloprc</filename> configuration file as follows:
-    </para>
-    <simplelist>
-      <member><computeroutput>MDIStyle=0</computeroutput>: icons only</member>
-      <member><computeroutput>MDIStyle=1</computeroutput>: text only (default)</member>
-      <!--<member><computeroutput>MDIStyle=2</computeroutput>: icons only on smaller tabs (not very useful)</member>-->
-      <member><computeroutput>MDIStyle=3</computeroutput>: icons and text</member>
-    </simplelist>
-  </listitem>
+<varlistentry>
+<term id="nutshell-ideal-tabs"><link linkend="setup-ui-toolview">Force
+smaller tool view tabs in IDEAl Mode</link></term>
+<listitem>
+<para>By default &kdevelop; starts with large text-based tool tip tabs
+around the work area. You may change this look to &eg; save space in the
+&kdevelop; configuration dialog (<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User
+Interface</guimenuitem></menuchoice>).</para>
+<para>If you use an older &kdevelop; 3 version, this configuration dialog
+may not be available. To change the toolview tabs display manually, place a
+<option>MDIStyle</option> entry under the
+<option>[UI]</option> tag in your
+<filename>$KDEHOME/share/config/kdeveloprc</filename> configuration file as
+follows:</para>
 
-  <!-- ### remove this entry when the bug is repaired -->
-  <listitem>
-    <formalpara id="nutshell-weird-style">
-    <title>Weird Colored Characters and/or Display Style</title>
-    <para>
-    If you notice random colored letters everywhere (&ie; on tabs, on tool bars, etc.) and the &kdevelop; window seemingly uses a wrong display style, this may help:
-    </para>
-    </formalpara>
-    <itemizedlist>
-      <listitem><para>
-      In your  <filename>$KDEHOME/share/config/kdeveloprc</filename> configuration file find the line containing <quote><computeroutput>Style=Checked</computeroutput></quote> and remove it. Then restart &kdevelop;.
-      </para></listitem>
-    </itemizedlist>
-    <para>
-    (This behaviour does sometimes occur after you left clicked a .ui file in one of the file navigators and &kdevelop; did load <application>KUIViewer</application> to show the &GUI; which was produced from this file.)
-    </para>
-  </listitem>
+<simplelist>
+<member><option>MDIStyle=0</option>: icons only</member>
+<member><option>MDIStyle=1</option>: text only (default)</member>
+<!--<member><computeroutput>MDIStyle=2</computeroutput>: icons only on smaller tabs (not very useful)</member>-->
+<member><option>MDIStyle=3</option>: icons and text</member>
+</simplelist>
+</listitem>
+</varlistentry>
 
-  <listitem>
-    <formalpara id="nutshell-full-screen">
-    <title><link linkend="maximize-workspace">Full Screen Mode</link></title>
-    <para>
-      Select <menuchoice> <guimenu>View</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>Shift</keycap> <keycap>F</keycap> </keycombo>.
-    </para>
-    </formalpara>
-  </listitem>
+<varlistentry>  <!-- ### remove this entry when the bug is repaired -->
+<term id="nutshell-weird-style">Weird colored characters and/or display
+style</term>
+<listitem>
+<para>If you notice random colored letters everywhere (&ie; on tabs, on tool
+bars, etc.) and the &kdevelop; window seemingly uses a wrong display style,
+this may help:</para>
 
-  <listitem>
-    <formalpara id="nutshell-hide-menu">
-    <title><link linkend="maximize-workspace">Hide/Unhide the Menubar</link></title>
-    <para>
-      To hide the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. To redisplay the menubar only <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> is available.
-    </para>
-    </formalpara>
-  </listitem>
-
+<itemizedlist>
+<listitem><para>In your
+<filename>$<envar>KDEHOME</envar>/share/config/kdeveloprc</filename>
+configuration file find the line containing
+<quote><computeroutput>Style=Checked</computeroutput></quote> and remove
+it. Then restart &kdevelop;.
+</para>
+</listitem>
 </itemizedlist>
+<para>(This behaviour does sometimes occur after you left clicked a .ui file
+in one of the file navigators and &kdevelop; did load
+<application>KUIViewer</application> to show the &GUI; which was produced
+from this file.)</para>
+</listitem>
+</varlistentry>
 
-<itemizedlist id="nutshellitem-projects">
-<title>Projects</title>
+<varlistentry>
+<term id="nutshell-full-screen"><link linkend="maximize-workspace">Full
+screen mode</link></term>
+<listitem>
+<para>Select <menuchoice><guimenu>View</guimenu><guimenuitem>Full-Screen
+Mode</guimenuitem></menuchoice> from the menus or press
+<keycombo>&Ctrl;&Shift;<keycap>F</keycap></keycombo>.</para>
+</listitem>
+</varlistentry>
 
-  <listitem>
-    <formalpara id="nutshell-new-project">
-    <title><link linkend="new-projects">Create New Project</link></title>
-    <para>
-    <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> will start the <link linkend="applicationwizard">&appwizard;</link>.
-    </para>
-    </formalpara>
-  </listitem>
+<varlistentry>
+<term id="nutshell-hide-menu"><link linkend="maximize-workspace">Hide/Unhide
+the menubar</link></term>
+<listitem>
+<para>To hide the menubar select
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Show
+Menubar</guimenuitem></menuchoice> from the menus or press
+<keycombo>&Ctrl;<keycap>M</keycap></keycombo>. To redisplay the menubar only
+<keycombo>&Ctrl;<keycap>M</keycap> </keycombo> is available.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 
-  <listitem>
-    <formalpara id="nutshell-new-custom-project">
-      <title>Create a Custom Project</title>
-      <para>
-      There is no direct way to create a custom project (&ie; a project which does use its own makefiles). Use <menuchoice><guimenu>Project</guimenu> <guimenuitem>Import Existing Project</guimenuitem></menuchoice> instead. Remember to set the appropriate <guilabel>Project Type</guilabel>, labeled by an additional <quote>(Custom Makefiles)</quote>, in the dialog.
-      </para>
-    </formalpara>
-  </listitem>
+<variablelist>
+<title id="nutshellitem-projects">Projects</title>
+<varlistentry>
+<term><link linkend="new-projects">Create New Project</link></term>
+<listitem>
+<para><menuchoice><guimenu>Project</guimenu><guimenuitem>New
+Project...</guimenuitem></menuchoice> will start the <link
+linkend="applicationwizard">&appwizard;</link>.</para>
+</listitem>
+</varlistentry>
 
-  <listitem>
-    <formalpara id="nutshell-project-options">
-    <title><link linkend="project-options">Use Project Options Early</link></title>
-    <para>
-    Whenever you start a new project do not forget to set the <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project Options...</guimenuitem></menuchoice> to your needs.
-    </para>
-    </formalpara>
-  </listitem>
-</itemizedlist>
+<varlistentry>
+<term id="nutshell-new-custom-project">Create a custom project</term>
+<listitem>
+<para>There is no direct way to create a custom project (&ie; a project
+which does use its own makefiles). Use
+<menuchoice><guimenu>Project</guimenu> <guimenuitem>Import Existing
+Project</guimenuitem></menuchoice> instead. Remember to set the appropriate
+<guilabel>Project Type</guilabel>, labeled by an additional <quote>(Custom
+Makefiles)</quote>, in the dialog.</para>
+</listitem>
+</varlistentry>
 
-<itemizedlist id="nutshellitem-compilation">
+<varlistentry>
+<term id="nutshell-project-options">Use project options early</term>
+<listitem>
+<para>Whenever you start a new project do not forget to set the
+<menuchoice><guimenu>Project</guimenu> <guimenuitem>Project
+Options...</guimenuitem></menuchoice> to your needs.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist id="nutshellitem-compilation">
 <title>Compilation</title>
-  <listitem>
-    <formalpara id="nutshell-compilemsg-detail">
-    <title><link linkend="setup-main-compile">Missing detail in compilation messages</link></title>
-    <para>
-    If during compilations you notice some valuable information is missing in the <guilabel>Messages Output View</guilabel> window, it may be that the level of message detail is set too low. Right-click in the window and select another detail level from the context menu.<!-- they are programmers, so they should know what a context menu is. (Re: But they keep on asking just about this one all the time!! bp) -->
-    </para>
-    </formalpara>
-  </listitem>
-</itemizedlist>
+<varlistentry>
+<term id="nutshell-compilemsg-detail"><link
+linkend="setup-main-compile">Missing detail in compilation
+messages</link></term>
+<listitem>
+<para>If during compilations you notice some valuable information is missing
+in the <guilabel>Messages Output View</guilabel> window, it may be that the
+level of message detail is set too low. &RMB; click in the window and select
+another detail level from the context menu.<!-- they are programmers, so -->
+<!-- they should know what a context menu is. (Re: But they keep on asking -->
+<!-- just about this one all the time!! bp) -->
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
 
-<itemizedlist id="nutshellitem-automake">
+<variablelist id="nutshellitem-automake">
 <title><link linkend="automake-manager">&automanag;</link></title>
 
-    <listitem>
-      <formalpara id="nutshell-new-project-file">
-      <title>Create New Files in a Project</title>
-      <para>
-      Select the sub-project in the upper half of the &automanag;, then right-click in the lower half on the groups title you want to have the files added and select <guimenuitem>Create New File...</guimenuitem>.
-      </para>
-      </formalpara>
-    </listitem>
+<varlistentry>
+<term>Create new files in a project</term>
+<listitem>
+<para>Select the sub-project in the upper half of the &automanag;, then
+&RMB; click in the lower half on the groups title you want to have the files
+added and select <guimenuitem>Create New File...</guimenuitem>.</para>
+</listitem>
+</varlistentry>
 
-    <listitem>
-      <formalpara id="nutshell-add-project-file">
-      <title>Add Existing Files to a Project</title>
+<varlistentry id="nutshell-add-project-file">
+<term>Add existing files to a project</term>
+<listitem>
+<para>Select the sub-project in the upper half of the &automanag;, then
+&RMB; click in the lower half on the groups title you want to have the files
+added and select <guimenuitem>Add Existing Files...</guimenuitem>.</para>
+</listitem>
+</varlistentry>
 
-      <para>
-      Select the sub-project in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Add Existing Files...</guimenuitem>.
-      </para>
-      </formalpara>
-    </listitem>
+<varlistentry>
+<term>Remove a file from a project</term>
+<listitem>
+<para>Select the sub-project in the upper half of the &automanag;, then in
+the lower half open the groups list you want to have the file removed from,
+&RMB; click on the file in this list and select
+<guimenuitem>Remove</guimenuitem>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 
-    <listitem>
-      <formalpara id="nutshell-del-project-file">
-      <title>Remove a File from a Project</title>
-
-      <para>
-      Select the sub-project in the upper half of the &automanag;, then in the lower half open the groups list you want to have the file removed from, right click on the file in this list and select <guimenuitem>Remove</guimenuitem>.
-      </para>
-      </formalpara>
-    </listitem>
-  </itemizedlist>
-
-<itemizedlist id="nutshellitem-compilemake">
-  <title>Compile/Make Problems</title>
-
-  <listitem>
-    <formalpara id="nutshell-builddirproblems">
-    <!-- ### Change the following link once a more comprehensive sourcedir != builddir description is available. -->
-    <title><link linkend="defaultbuild-warning">Project does not build again after switching to/from default target</link></title>
-    <para>
-    There is a problem with the &automake;/&autoconf; machinery. If <menuchoice> <guimenu>Project</guimenu> <guimenuitem>Build Configuration</guimenuitem></menuchoice> provides to select from three build directories: <guimenuitem>default</guimenuitem>, <guimenuitem>optimized</guimenuitem>, and <guimenuitem>debug</guimenuitem>, by all means stick to <emphasis>either</emphasis> the default <emphasis>or</emphasis> the debug/optimized targets.
-    </para>
-    </formalpara>
-    <itemizedlist>
-      <listitem><para>
-      Once you configured your project with default it will no longer build with debug or optimzed.
-      </para></listitem>
-      <listitem><para>Once you configured your project with debug or optimzed it will no longer build with default.</para></listitem>
-     </itemizedlist>
-  </listitem>
-
-  <listitem>
-    <formalpara id="nutshell-autoconf-problem">
-    <title><quote>Wrong <command>autoconf</command> version</quote> &etc; Error</title>
-
-    <para>
-    There are several error messages concerning too old versions of <application>autoconf</application> &etc; prohibiting <command>configure</command> to work properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
-    </para>
-    </formalpara>
-  </listitem>
+<variablelist id="nutshellitem-compilemake">
+<title>Compile/Make Problems</title>
+<varlistentry>
+<term id="nutshell-builddirproblems"><link
+linkend="defaultbuild-warning">Project does not build again after switching
+to/from default target</link></term>
+<listitem>
+<para>There is a problem with the &automake;/&autoconf; machinery. If
+<menuchoice> <guimenu>Project</guimenu> <guimenuitem>Build
+Configuration</guimenuitem></menuchoice> provides to select from three build
+directories: <guimenuitem>default</guimenuitem>,
+<guimenuitem>optimized</guimenuitem>, and <guimenuitem>debug</guimenuitem>,
+by all means stick to <emphasis>either</emphasis> the default
+<emphasis>or</emphasis> the debug/optimized targets.</para>
+<itemizedlist>
+<listitem>
+<para>Once you configured your project with default it will no longer build
+with debug or optimzed.</para>
+</listitem>
+<listitem>
+<para>Once you configured your project with debug or optimzed it will no
+longer build with default.</para>
+</listitem>
 </itemizedlist>
+</listitem>
+</varlistentry>
 
-<itemizedlist id="nutshellitem-others">
+<varlistentry>
+<term id="nutshell-autoconf-problem"><quote>Wrong
+<command>autoconf</command> version</quote> &etc; Error</term>
+<listitem>
+<para>There are several error messages concerning too old versions of
+<application>autoconf</application> &etc; prohibiting
+<command>configure</command> to work properly. Run
+<command>autoreconf</command> in the directory tree where the
+<filename>configure.in</filename> files in question are. This command will
+try to update the information in the &GNU; Build System files. See
+<command>man autoreconf</command> for more information.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist id="nutshellitem-others">
 <title>Other Topics</title>
-  <listitem>
-    <formalpara id="nutshell-others-files">
-    <title><link linkend="app-files">Configuration Files used by &kdevelop;</link></title>
-    <para>
-    Usually you should not need to care, but this is very useful to know in case something went wrong with your setup.
-    </para>
-    </formalpara>
-  </listitem>
-</itemizedlist>
+<varlistentry>
+<term id="nutshell-others-files"><link linkend="app-files">Configuration
+Files used by &kdevelop;</link></term>
+<listitem>
+<para>Usually you should not need to care, but this is very useful to know
+in case something went wrong with your setup.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </chapter> <!-- nutshell -->
 
@@ -482,7 +664,7 @@ Information on these topics is availabe:
   Snippets are stored in the users home-directory, so every user can have his own snippets
   </para></listitem>
   <listitem><para>
-  Snippets can contain variables in the style of $VARNAME$. On using the snippet the user is prompted to enter replacement value for the variables
+  Snippets can contain variables in the style of $<varname>VARNAME</varname>$. On using the snippet the user is prompted to enter replacement value for the variables
   </para></listitem>
 </itemizedlist>
 </sect1> <!-- editing-snippets -->
@@ -514,18 +696,16 @@ default editor. You can configure them as you like (how?)
   Moves one character right
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>
+&Ctrl;<keycap>
   Left
 </keycap></keycombo></para></entry>
 <entry><para>
   Moves one word left
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>
+&Ctrl;<keycap>
   Right
 </keycap></keycombo></para></entry>
 <entry><para>
@@ -547,32 +727,29 @@ default editor. You can configure them as you like (how?)
 </para></entry></row>
 
 <row><entry><para><keycap>
-  PgUp
+  Page Up
 </keycap></para></entry>
 <entry><para>
   Moves up one page
 </para></entry></row>
 
 <row><entry><para><keycap>
-    PgDn
+    Page Down
 </keycap></para></entry>
 <entry><para>
   Moves down one page
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  PgUp
+<row><entry><para><keycombo>&Ctrl;<keycap>
+  Page Down
 </keycap></keycombo></para></entry>
 <entry><para>
   Moves to the beginning of the file
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  PgDn
+<row><entry><para><keycombo>&Ctrl;
+<keycap>
+  Page Down
 </keycap></keycombo></para></entry>
 <entry><para>
   Moves to the end of the file
@@ -597,7 +774,7 @@ default editor. You can configure them as you like (how?)
 </informaltable>
 
 <para>
-For all the keys above, the Shift can be pressed additionally,
+For all the keys above, the &Shift; key can be pressed additionally,
 to mark from the current cursor position to the one afterwards.
 </para>
 
@@ -619,47 +796,37 @@ to mark from the current cursor position to the one afterwards.
   Deletes the character under the cursor
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>
+&Ctrl;
+<keycap>
   C
 </keycap></keycombo></para></entry>
 <entry><para>
   Copies the selected text to the clipboard
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>&Ctrl;<keycap>
   V
 </keycap></keycombo></para></entry>
 <entry><para>
   Pastes the selected text from the clipboard
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>&Ctrl;<keycap>
   X
 </keycap></keycombo></para></entry>
 <entry><para>
   Deletes the selected text and puts it into the clipboard
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>&Ctrl;<keycap>
   Z
 </keycap></keycombo></para></entry>
 <entry><para>
   Undo
 </para></entry></row>
 
-<row><entry><para><keycombo><keycap>
-  Shift
-</keycap><keycap>
-  Ctrl
-</keycap><keycap>
+<row><entry><para><keycombo>&Shift;&Ctrl;<keycap>
   Z
 </keycap></keycombo></para></entry>
 <entry><para>
@@ -693,8 +860,8 @@ Redo
 <title>Searching for Text</title>
 
 <para>
-<keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>- Find
-<keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>- Replace
+<keycombo>&Ctrl;<keycap>F</keycap></keycombo>- Find
+<keycombo>&Ctrl;<keycap>R</keycap></keycombo>- Replace
 </para>
 
 </sect2> <!-- searching -->
@@ -884,22 +1051,21 @@ On the left side of the main window, &kdevelop; can display various kinds of
 lists and trees for the selection of files:
 </para>
 
-<itemizedlist>
+<variablelist>
+<varlistentry>
+<term>File Tree</term>
 <listitem>
-<formalpara>
-<title>File Tree</title>
 <para>
 This shows a tree view of the file hierarchy below the project directory. If
 you click on a file, it is loaded into the editor. For files which do not
-contain text, KDevelop starts an application that can handle the respective
+contain text, &kdevelop; starts an application that can handle the respective
 MIME type.
 </para>
-</formalpara>
 
 <para>
 The file tree is regularly updated whenever something changes in the file
 system. For example, if you create new files or directories (even outside
-&kdevelop;), this is immediately reflected in the file list. On Linux,
+&kdevelop;), this is immediately reflected in the file list. On &Linux;,
 this feature makes use of the FAM library. On other operating systems or over
 NFS, the directories shown are polled in small intervals.
 </para>
@@ -921,20 +1087,20 @@ the right mouse button on the root item of the tree.
 <title>A Screenshot of the File Tree</title>
 <mediaobject>
 <imageobject><imagedata fileref="filetree.png"/></imageobject>
+<textobject><phrase>A Screenshot of the File Tree</phrase></textobject>
 </mediaobject>
 </figure>
 
 </listitem>
-
+</varlistentry>
+<varlistentry>
+<term>File Groups</term>
 <listitem>
-<formalpara>
-<title>File Groups</title>
 <para>
 This shows the files belonging to the project, grouped by their file name
 extension. As in the file tree, you can edit a file by clicking on it
-with the left mouse button.
+with the &LMB;.
 </para>
-</formalpara>
 
 <para>
 The groups shown in this view can be configured under
@@ -950,8 +1116,8 @@ be put below more specific ones. For example, an asterisk for the
 </para>
 
 </listitem>
-
-</itemizedlist>
+</varlistentry>
+</variablelist>
 
 </chapter> <!-- file-browsers -->
 
@@ -988,12 +1154,14 @@ methods and attributes of the respective class is shown.
 
 <para>
 The class view works in two different modes. By default, all symbols are
-grouped into <quote>Classes</quote>, <quote>Structs</quote>, <quote>Functions</quote>, <quote>Variables</quote> and <quote>Namespaces</quote>.
-In the context menu of the view, you can choose
+grouped into <quote>Classes</quote>, <quote>Structs</quote>,
+<quote>Functions</quote>, <quote>Variables</quote> and
+<quote>Namespaces</quote>.  In the context menu of the view, you can choose
 <guimenuitem>List by Namespaces</guimenuitem>. In this mode, the namespace
-hierarchy is shown and the symbols grouped into the respective namespace where
-they are defined. This may be more useful in projects which make heavy use of
-(nested) namespaces. It is less useful in projects without namespaces.
+hierarchy is shown and the symbols grouped into the respective namespace
+where they are defined. This may be more useful in projects which make heavy
+use of (nested) namespaces. It is less useful in projects without
+namespaces.
 </para>
 
 <para>
@@ -1011,7 +1179,7 @@ Clicking on a class or method in the class view brings you to its definition.
 You can also jump to the declaration of a method by choosing
 <guimenuitem>Go to declaration</guimenuitem> from the context menu. In the
 context menu for classes are also the items
-<guimenuitem>Add method..</guimenuitem> and
+<guimenuitem>Add method...</guimenuitem> and
 <guimenuitem>Add attribute...</guimenuitem>. This opens dialogs where you can
 generate new method and variable declaration in the respective class, together
 with an empty implementation.
@@ -1050,8 +1218,11 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 <title>Documentation</title>
 
 <para>
-Documention unfortunately belongs to the most-overlooked programming issues. Yet, once properly set up and maintained internal and external documentation provides most valuable help.
+Documention unfortunately belongs to the most-overlooked programming
+issues. Yet, once properly set up and maintained internal and external
+documentation provides most valuable help.
 </para>
+
 <para>
 Documentation has multiple facets. There is
 <itemizedlist>
@@ -1062,7 +1233,8 @@ Documentation has multiple facets. There is
     <emphasis>comments</emphasis> in header/source files
     </para></listitem>
     <listitem><para>
-    <emphasis>internal API documentation</emphasis> of your project generated from the program file by special tools, &eg; &doxygen;
+    <emphasis>internal &API; documentation</emphasis> of your project
+    generated from the program file by special tools, &eg; &doxygen;
     </para></listitem>
   </itemizedlist>
   </para></listitem>
@@ -1070,7 +1242,7 @@ Documentation has multiple facets. There is
   <emphasis>project external documentation</emphasis>, comprising among others
   <itemizedlist>
     <listitem><para>
-    <emphasis>external API documentation</emphasis> of &eg; common system libraries (<application>KDE</application>, <application>Qt</application>, &etc;)
+    <emphasis>external &API; documentation</emphasis> of &eg; common system libraries (&kde;, &Qt;, &etc;)
     </para></listitem>
     <listitem><para>
     any other documentation (programming language manuals, general system information, how-to articles and the like)
@@ -1134,27 +1306,24 @@ programs for processors and operating systems different from the system where
 &kdevelop; and the compiler is running. The &GNU; compiler collection &gcc; can
 be configured and compiled as a cross compiler if you compile it yourself.
 Consult the <ulink url="info://gcc/Cross-Compiler">GCC info pages</ulink> for
-more information. Some Linux distributions also provide binary packages.
+more information. Some &Linux; distributions also provide binary packages.
 </para>
 
 <para>
-An automake based package can easily be cross-compiled by specifying the
-<option>--host</option> option to the configure script and setting the
-<envar>CC</envar> and <envar>CXX</envar> environment variables to the
-respective cross compiler binaries. Often you want to switch between a
-the cross-compiled version of your application and one compiled for your
-development system. For this, it is advantageous to use &kdevelop; capability
-of creating multiple build configurations, as explained in
-<xref linkend="buildconfigurations"/>. Once you have created a new build
-configuration for cross-compiling in the
-<menuchoice><guimenu>Project</guimenu>
-<guimenuitem>Project Options...</guimenuitem></menuchoice> dialog, add
-the option
+An <application>automake</application> based package can easily be
+cross-compiled by specifying the <option>--host</option> option to the
+configure script and setting the <envar>CC</envar> and <envar>CXX</envar>
+environment variables to the respective cross compiler binaries. Often you
+want to switch between a the cross-compiled version of your application and
+one compiled for your development system. For this, it is advantageous to
+use &kdevelop; capability of creating multiple build configurations, as
+explained in <xref linkend="buildconfigurations"/>. Once you have created a
+new build configuration for cross-compiling in the
+<menuchoice><guimenu>Project</guimenu><guimenuitem>Project
+Options...</guimenuitem></menuchoice> dialog, add the option
 </para>
 
-<para><screen>
-<option>--host=</option><replaceable>platform</replaceable>
-</screen></para>
+<screen><option>--host=</option><replaceable>platform</replaceable></screen>
 
 <para>
 to the configure options. The <replaceable>platform</replaceable> name
@@ -1183,9 +1352,9 @@ For many combinations, you can use a short form, for instance
 
 <para>
 &qte; is a version of the &Qt; library that does not use the X window
-system, but draws directly to the framebuffer on Linux systems. It is
+system, but draws directly to the framebuffer on &Linux; systems. It is
 therefore interesting for embedded systems which have tight restrictions
-on the memory usage of the whole system. Its API is fully compatible with
+on the memory usage of the whole system. Its &API; is fully compatible with
 the one of the X11 version.
 </para>
 
@@ -1207,13 +1376,11 @@ After configuring and compiling your application with these options, it will
 link with the <filename>libqpe.so</filename> library. This version of your
 application will not normally run when you use X11. In order to test it,
 run it under the control of the program <application>qvfb</application>
-(Qt Virtual Frame Buffer). This is done by starting
+(&Qt; Virtual Frame Buffer). This is done by starting
 <application>qvfb</application> and then starting your application with
 </para>
 
-<para><screen><command>
-app <option>-qws</option> <option>-display QVFb:0</option>
-</command></screen></para>
+<screen><command>app <option>-qws</option> <option>-display QVFb:0</option></command></screen>
 
 <para>
 Naturally, when you have a working version of your application, you
@@ -1299,16 +1466,16 @@ associate file names and line numbers with addresses in the executable.
 The debugger frontend offers several views <quote>into</quote> the process:
 </para>
 
-
-<para>If you try to debug a project without debugging information,
-you get the message "No source..." in the status bar.
-If you try to set a breakpoint, it is shown as "Pending (add)"
-in the breakpoint window (see below).
+<para>If you try to debug a project without debugging information, you get
+the message <computeroutput>No source...</computeroutput> in the status
+bar.If you try to set a breakpoint, it is shown as <computeroutput>Pending
+(add)</computeroutput> in the breakpoint window (see below).
 </para>
-<itemizedlist>
+
+<variablelist>
+<varlistentry>
+<term>Variables</term>
 <listitem>
-<formalpara>
-<title>Variables</title>
 <indexterm zone="debugger"><primary>watch variables</primary></indexterm>
 <para>
 This window lists the values of all local variables at the current execution
@@ -1316,102 +1483,99 @@ point of the program. It covers the variables in the complete call stack,
 &ie;  the function where the process was interrupted, the function that called
 this function, and so on up to <function>main()</function> function.
 </para>
-</formalpara>
 
 <para>
 Another branch in the variables contains watch variables. You can configure
 yourself which variables are shown here. Both local and global variables can
 be watched. You can add variables either by clicking on the
-<guibutton>Add</guibutton> button or pressing <keycap>RETURN</keycap> while
+<guibutton>Add</guibutton> button or pressing <keycap>Return</keycap> while
 the <guilabel>Watch</guilabel> item is selected. They can be removed again
 via the context menu.
 </para>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>Breakpoints</term>
 <listitem>
-<formalpara>
-<title>Breakpoints</title>
 <indexterm zone="debugger"><primary>breakpoints</primary></indexterm>
 <para>
 (... to be written ...)
 </para>
-</formalpara>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>Frame Stack</term>
 <listitem>
-<formalpara>
-<title>Frame Stack</title>
 <indexterm zone="debugger"><primary>frame stack</primary></indexterm>
 <para>
-This window allows you to see and manipulate the breakpoints. 
-Remember that KDevelop uses GDB, so to fully understand the 
-KDevelop debugging features, you should know a little bit about the 
-<ulink url="http://www.gnu.org/software/gdb">GDB</ulink>.
-</para>
-</formalpara>
-<para>If you want to look at the source code,
-breakpoints are defined in <filename>kdevelop/languages/cpp/debugger/breakpoint.h</filename>.
+This window allows you to see and manipulate the breakpoints.  Remember that
+&kdevelop; uses <application>GDB</application>, so to fully understand the
+&kdevelop; debugging features, you should know a little bit about the <ulink
+url="http://www.gnu.org/software/gdb">GDB</ulink>.
 </para>
 
-<para>
-At the left edge, the window has buttons to:
+<para>If you want to look at the source code, breakpoints are defined in
+<filename>kdevelop/languages/cpp/debugger/breakpoint.h</filename>.
+</para>
+
+<para>At the left edge, the window has buttons to:</para>
+
 <itemizedlist>
 <listitem><para>Add an empty breakpoint</para></listitem>
 <listitem><para>Edit the selected breakpoint</para></listitem>
-<listitem><para>Delete the selected breakpoint</para></listitem>
+ <listitem><para>Delete the selected breakpoint</para></listitem>
 <listitem><para>Remove all breakpoints</para></listitem>
 </itemizedlist>
-</para>
 
-<para>
-The main part of the window is a table with 7 columns.
-Each line in the table is a breakpoint.
-The columns are:
+<para>The main part of the window is a table with 7 columns.  Each line in
+the table is a breakpoint.  The columns are:</para>
+
 <orderedlist>
 <listitem><para>Selection checkbox</para></listitem>
 <listitem><para>Type: one of: Invalid, File:Line, Watchpoint, Address, Function</para></listitem>
-<listitem><para>Status. Values are:
+<listitem><para>Status. Values are:</para>
 <itemizedlist>
-<listitem><para>Active</para></listitem>
-<listitem><para>Disabled: Each breakpoint may be "enabled" or "disabled"; if
-disabled, it has no effect on your program until you enable it again.</para></listitem>
-<listitem><para>Pending (add): a breakpoint is marked like this if no debugging information is available.
-From GDB Info page:
-<blockquote><para>If a specified breakpoint location cannot be found, it may be due to
-the fact that the location is in a shared library that is yet to be
-loaded.  In such a case, you may want GDB to create a special
-breakpoint (known as a "pending breakpoint") that attempts to resolve
-itself in the future when an appropriate shared library gets loaded.</para>
-</blockquote>
-</para></listitem>
+  <listitem><para>Active</para></listitem>
+  <listitem><para>Disabled: Each breakpoint may be <quote>enabled</quote> or
+  <quote>disabled</quote>; if disabled, it has no effect on your program until
+  you enable it again.</para></listitem>
+  <listitem><para>Pending (add): a breakpoint is marked like this if no
+  debugging information is available. From GDB Info page:
+  <blockquote><para>If a specified breakpoint location cannot be found, it may be due to
+  the fact that the location is in a shared library that is yet to be
+  loaded.  In such a case, you may want GDB to create a special
+  breakpoint (known as a <quote>pending breakpoint</quote>) that attempts to resolve
+  itself in the future when an appropriate shared library gets loaded.</para>
+  </blockquote>
+  </para></listitem>
+</itemizedlist>
+</listitem>
 <listitem><para>Pending (clear)</para></listitem>
 <listitem><para>Pending (modify)</para></listitem>
-
-</itemizedlist>
-
-</para></listitem>
 <listitem><para>Location in the format filename:linenumber</para></listitem>
 <listitem><para>Condition</para></listitem>
-<listitem><para>Ignore Count: If this is a number COUNT greater than zero, the next
-     COUNT times the breakpoint is reached, your program's execution
-     does not stop; other than to decrement the ignore count, GDB takes
-     no action.</para></listitem>
+<listitem><para>Ignore Count: If this is a number <varname>COUNT</varname>
+greater than zero, the next <varname>COUNT</varname> times the breakpoint is
+reached, your program's execution does not stop; other than to decrement the
+ignore count, <application>gdb</application> takes no action.</para></listitem>
 <listitem><para>Hits: counts how many times a breakopint has been hit.</para></listitem>
-
 </orderedlist>
-</para>
+
 
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>Disassemble</term>
 <listitem>
 <indexterm zone="debugger"><primary>disassemble</primary></indexterm>
-<formalpara>
-<title>Disassemble</title>
 <para>(... to be written ...)</para>
-</formalpara>
-</listitem>
 
-</itemizedlist>
+</listitem>
+</varlistentry>
+</variablelist>
 
 
 <sect1 id="settingbreakpoints">
@@ -1428,28 +1592,32 @@ itself in the future when an appropriate shared library gets loaded.</para>
 <sect1 id ="debuggeroptions">
 <title>Options</title>
 
-<formalpara>
-<title>Display Mangled Names</title>
+<variablelist>
+<varlistentry>
+<term>Display Mangled Names</term>
+<listitem>
 <indexterm zone="debugger"><primary>name mangling</primary></indexterm>
 <indexterm zone="debugger"><primary>mangling</primary><secondary>name</secondary></indexterm>
 
 <para>
-In C++, function names in the executable are <quote>mangled</quote>, &ie; the function
-names include information about the argument types. This is necessary in
-order to support overloading of functions. The mangling algorithm is not
-standardized and differs even between different versions of the
-&GNU; C++ compiler.
+In C++, function names in the executable are <quote>mangled</quote>, &ie;
+the function names include information about the argument types. This is
+necessary in order to support overloading of functions. The mangling
+algorithm is not standardized and differs even between different versions of
+the &GNU; C++ compiler.
 </para>
-</formalpara>
 
 <para>
 In the disassembling window, normally unmangled names are displayed, so
 function signatures appear in the similar way as in the source code, so
 they are easily readable. Alternatively, you can decide to see mangled names.
 </para>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Try Setting Breakpoints on Lib Load</title>
+<varlistentry>
+<term>Try Setting Breakpoints on Lib Load</term>
+<listitem>
 <indexterm zone="debugger"><primary>lazy breakpoints</primary></indexterm>
 <indexterm zone="debugger"><primary>breakpoints</primary><secondary>lazy</secondary></indexterm>
 
@@ -1464,17 +1632,21 @@ libraries which are not loaded. Then, whenever <application>gdb</application>
 notifies that a library is loaded, &kdevelop; tries to set the pending
 breakpoints.
 </para>
-</formalpara>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Enable Floating Toolbar</title>
+<varlistentry>
+<term>Enable Floating Toolbar</term>
+<listitem>
 <indexterm zone="debugger"><primary>debugger toolbar</primary></indexterm>
 <indexterm zone="debugger"><primary>toolbar</primary><secondary>debugger</secondary></indexterm>
 
 <para>
 (... to be written ...)
 </para>
-</formalpara>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect1> <!-- debuggeroptions -->
 
@@ -1502,7 +1674,7 @@ breakpoints.
 <!-- ====================================================================== -->
 
 <chapter id="cvs">
-<title>Using CVS</title>
+<title>Using &CVS;</title>
 <indexterm zone="cvs"><primary>CVS</primary></indexterm>
 <indexterm zone="cvs"><primary>revision control</primary></indexterm>
 
@@ -1532,7 +1704,7 @@ be committed.
 <para>
 So far, this has been a description of the basic features of &CVS; one usually
 has to cope with. But &CVS; can provide a lot more: One can  maintain several
-branches of a project (e. g. &kde; 1.1.2 and &kde; 2 were branches in &kde;'s
+branches of a project (&eg; &kde; 1.1.2 and &kde; 2 were branches in &kde;'s
 development tree), merge changes from one branch to another, ask for
 differences between revisions, the revision history of files &etc;
 </para>
@@ -1540,17 +1712,16 @@ differences between revisions, the revision history of files &etc;
 <para>
 &CVS; is implemented as a client-server system. As a user, all communication
 with the repository goes through the command line program &cvs;. A higher
-level user interface is available through frontends like
-<application>Cervisia</application> (<ulink url="http://cervisia.sf.net"/>)
-or <application>TkCVS</application> (<ulink url="http://tkcvs.sf.net"/>).
-In &kdevelop;, only a small part of the &cvs; functionality which is
-important for your daily work can be used directly.
+level user interface is available through frontends like &cervisia; (<ulink
+url="http://cervisia.sf.net"/>) or <application>TkCVS</application> (<ulink
+url="http://tkcvs.sf.net"/>).  In &kdevelop;, only a small part of the &cvs;
+functionality which is important for your daily work can be used directly.
 </para>
 
 <para>
 Basic knowledge of &CVS; usage is assumed. In particular, you should know
 how to checkout a given project from the repository. We recommend the
-book <quote>Open Source Development With CVS</quote> by Karl Fogel which is freely
+book <quote>Open Source Development With &CVS;</quote> by Karl Fogel which is freely
 distributed (except for the non-technical chapters). See
 <ulink url="http://cvsbook.red-bean.com/cvsbook.html"/>.
 </para>
@@ -1566,53 +1737,51 @@ distributed (except for the non-technical chapters). See
 In the file views, the following context menu items are available:
 </para>
 
-<itemizedlist>
-
+<variablelist>
+<varlistentry>
+<term>Add to Repository</term>
 <listitem>
-<formalpara>
-<title>Add to Repository</title>
 <para>Prepares the marked file for addition to the repository. The file
 is transferred to the repository when you commit it (or the containing
 directory) the next time.
 </para>
-</formalpara>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>Remove from Repository</term>
 <listitem>
-<formalpara>
-<title>Remove from Repository</title>
 <para>
 Prepares a file for removal from the repository. This also deletes
 the file on the local file system, so use this feature with care!
 </para>
-</formalpara>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>Update</term>
 <listitem>
-<formalpara>
-<title>Update</title>
 <para>
 Runs <command>cvs update</command> to merge any changes from other
 users into your working directory. When you use this menu item over
 a directory, the update normally happens recursively, except if you
 have disabled this in the configuration file <filename>.cvsrc</filename>.
 </para>
-</formalpara>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>Commit</term>
 <listitem>
-<formalpara>
-<title>Commit</title>
 <para>
 Runs <command>cvs commit</command> to upload any locally made changes
 to the repository. Note that you should update before doing this.
 Otherwise, when another user has committed his own changes before,
 &CVS; may give you an error message.
 </para>
-</formalpara>
 </listitem>
-
-</itemizedlist>
+</varlistentry>
+</variablelist>
 
 <para>
 All these commands are invoked as subprocesses by &kdevelop; without any
@@ -1621,7 +1790,7 @@ problem when the connection with the &CVS; server goes through a
 &ssh; connection and requires that you enter your password each time
 you commit or update. This is for instance necessary when your project is
 hosted on <filename>sourceforge.net</filename>. Workarounds for this
-problem are described on the CVS/SSH FAQ which you can find in the
+problem are described on the &CVS;/SSH FAQ which you can find in the
 SourceForge documentation.
 </para>
 
@@ -1651,19 +1820,21 @@ SourceForge documentation.
 <indexterm zone="external-progs"><primary>programs</primary><secondary>external</secondary></indexterm>
 
 <para>
-Although &kdevelop; is a so-called <quote>Integrated</quote> development environment, it
-will never contain all features that you may want to use, and the
-capabilities of its editor will never suffice to perform often-used text
-processing tasks. As a genuine &UNIX; program, &kdevelop; contains several
-possibilities to start external programs, plugin external programs to work
-on files, or use external filters to process the content of the editor.
+Although &kdevelop; is a so-called <quote>Integrated</quote> development
+environment, it will never contain all features that you may want to use,
+and the capabilities of its editor will never suffice to perform often-used
+text processing tasks. As a genuine &UNIX; program, &kdevelop; contains
+several possibilities to start external programs, plugin external programs
+to work on files, or use external filters to process the content of the
+editor.
 </para>
 
 <para>
-The most general and simple feature of this kind is the tool menu, which you
-can freely configure. This is done in the <menuchoice><guimenu>Settings</guimenu>
-<guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>.
-dialog under <guibutton>External tools</guibutton>.
+The most general and simple feature of this kind is the
+<guimenu>Tool</guimenu> menu, which you can freely configure. This is done
+in the <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure
+KDevelop...</guimenuitem></menuchoice>.  dialog under <guibutton>External
+tools</guibutton>.
 </para>
 
 <para>
@@ -1737,24 +1908,23 @@ Plugins which are switched off do not clutter your menus and are not loaded
 into memory.
 </para>
 
-<itemizedlist>
+<variablelist>
+<varlistentry>
+<term>The <command>abbrev</command> Plugin</term>
 <listitem>
-<formalpara>
-<title>The <command>abbrev</command> Plugin</title>
 <indexterm zone="plugin-tools"><primary><command>abbrev</command></primary></indexterm>
 
 <para>
 This plugin expands abbreviations into frequently used code snippets. It is
-activated by pressing <keycombo><keycap>Ctrl</keycap>
-<keycap>Space</keycap></keycombo>. For example, when you enter
-<literal>"ife"</literal> into a C++ in the editor and press
-<keycombo><keycap>Ctrl</keycap><keycap>Space</keycap></keycombo>, you obtain
+activated by pressing <keycombo>&Ctrl;<keycap>Space</keycap></keycombo>. For example, when you enter
+<literal>ife</literal> into a C++ in the editor and press
+<keycombo>&Ctrl;<keycap>Space</keycap></keycombo>, you obtain
 an <literal>if-else</literal> code template and save some key strokes. The set
 of supported abbreviations depends on the programming language of the edited
 file. For example, for PHP you will obviously be interested in other code
 templates than for &Java;.
 </para>
-</formalpara>
+
 
 <para>
 The set of code templates is configurable. You can see
@@ -1763,10 +1933,11 @@ which ones are available in the <menuchoice><guimenu>Settings</guimenu>
 dialog under <guibutton>Abbreviations</guibutton>
 </para>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>The <command>filter</command> Plugin</term>
 <listitem>
-<formalpara>
-<title>The <command>filter</command> Plugin</title>
 <indexterm zone="plugin-tools"><primary><command>filter</command></primary></indexterm>
 
 <para>
@@ -1775,7 +1946,6 @@ This offers two features. If you select <menuchoice><guimenu>Tools</guimenu>
 command. The output of this command is inserted into the editor buffer when
 you hit the <guibutton>Start</guibutton> button.
 </para>
-</formalpara>
 
 <para>
 A related feature is available under
@@ -1787,23 +1957,23 @@ selection used as the standard input for it. The standard output of the
 command is then inserted into the editor.
 </para>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>The &doxygen; Plugin</term>
 <listitem>
-<formalpara>
-<title>The &doxygen; Plugin</title>
 <indexterm zone="plugin-tools"><primary>&doxygen;</primary></indexterm>
 <indexterm zone="plugin-tools"><primary>documentation tool</primary></indexterm>
-<indexterm zone="plugin-tools"><primary>API documentation</primary></indexterm>
+<indexterm zone="plugin-tools"><primary>&API; documentation</primary></indexterm>
 
 <para>
-This one helps you to use the &doxygen; API documentation tool
+This one helps you to use the &doxygen; &API; documentation tool
 (<ulink url="http://www.doxygen.org"/>). You can select
 <menuchoice><guimenu>Project</guimenu>
-<guimenuitem>Run Doxygen</guimenuitem></menuchoice> to generate API
+<guimenuitem>Run Doxygen</guimenuitem></menuchoice> to generate &API;
 documentation for your current project, based on the configuration given by
 the file <filename>Doxyfile</filename> in your project directory.
 </para>
-</formalpara>
 
 <para>
 Furthermore, you can configure &doxygen; in the
@@ -1812,10 +1982,11 @@ Furthermore, you can configure &doxygen; in the
 is very similar to the &doxywizard; tool.
 </para>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>The &ctags; Plugin</term>
 <listitem>
-<formalpara>
-<title>The &ctags; Plugin</title>
 <indexterm zone="plugin-tools"><primary>&ctags;</primary></indexterm>
 
 <para>
@@ -1823,7 +1994,7 @@ Although the class browser gives you extensive insight into the symbols and
 classes of your project, you may also want to use the ctags tool. In particular,
 this one supports a lot more language than the class browser.
 </para>
-</formalpara>
+
 
 <para>
 You activate this plugin under <menuchoice><guimenu>Tools</guimenu>
@@ -1863,10 +2034,11 @@ update the <filename>tags</filename> file in regular intervals by pressing
 the button <guibutton>Regenerate</guibutton>.
 </para>
 </listitem>
+</varlistentry>
 
+<varlistentry>
+<term>The <command>astyle</command> Plugin</term>
 <listitem>
-<formalpara>
-<title>The <command>astyle</command> Plugin</title>
 <indexterm zone="plugin-tools"><primary><command>astyle</command></primary></indexterm>
 <indexterm zone="plugin-tools"><primary><application>Artistic Style</application></primary></indexterm>
 <indexterm zone="plugin-tools"><primary>indentation</primary></indexterm>
@@ -1874,12 +2046,13 @@ the button <guibutton>Regenerate</guibutton>.
 <para>
 (... to be written ...)
 </para>
-</formalpara>
 </listitem>
+</varlistentry>
+
+<varlistentry>
+<term>The <command>regexptest</command> Plugin</term>
 
 <listitem>
-<formalpara>
-<title>The <command>regexptest</command> Plugin</title>
 <indexterm zone="plugin-tools"><primary><command>regexptest</command></primary></indexterm>
 <indexterm zone="plugin-tools"><primary>debugging</primary><secondary>regular expressions</secondary></indexterm>
 <indexterm zone="plugin-tools"><primary>regular expressions</primary><secondary>debugging</secondary></indexterm>
@@ -1893,7 +2066,6 @@ changes in a regular expression. It is activated by choosing
 <menuchoice><guimenu>Tools</guimenu>
 <guimenuitem>Debug Regular Expression...</guimenuitem></menuchoice>.
 </para>
-</formalpara>
 
 <para>
 In the flavor group box, you can choose the flavor of the regular expression
@@ -1910,20 +2082,21 @@ your regular expression includes groups, such as <literal>([a-z])</literal>,
 the content of the matched subgroups will be shown in a list box.
 </para>
 </listitem>
+</varlistentry>
+
+<varlistentry>
+<term>The &konsole; Plugin</term>
 
 <listitem>
-<formalpara>
-<title>The <command>konsole</command> Plugin</title>
 <indexterm zone="plugin-tools"><primary><command>konsole</command></primary></indexterm>
 <indexterm zone="plugin-tools"><primary>terminal</primary><secondary>embedded</secondary></indexterm>
 
 <para>
 (... to be written ...)
 </para>
-</formalpara>
 </listitem>
-
-</itemizedlist>
+</varlistentry>
+</variablelist>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1931,19 +2104,29 @@ the content of the matched subgroups will be shown in a list box.
 <title>Overview</title>
 
 <para>
-&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
+&kdevelop; offers extensible modules, or parts, to be loaded at runtime and
+on demand.  This allows developers to only turn on features that they need
+or want for their development.
 </para>
 
 <para>
-Some of the parts are considered <link linkend="table-global-parts">global</link> &mdash; that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
+Some of the parts are considered <link
+linkend="table-global-parts">global</link> &mdash; that is, they effect the
+entire operation of &kdevelop;. For example, the uimode part allows a
+developer to select which user interface they wish to use.
 </para>
 
 <para>
-Other parts are <link linkend="table-project-parts">project specific</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
+Other parts are <link linkend="table-project-parts">project specific</link>,
+and are only utilized when a project of that type is loaded.  The Automake
+Manager, for example, only needs to be active when an Automake based project
+is currently loaded.  Otherwise, this part will not be active.
 </para>
 
 <para>
-Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, &etc;
+Active parts can have many effects on &kdevelop;.  Depending on their
+function, they may add extra menus, extra menu items, extra tool buttons,
+&etc;
 </para>
 
 <table id="table-project-parts">
@@ -1976,7 +2159,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <row><entry>Part Name</entry><entry>Description</entry></row>
 <row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
 <row><entry>history</entry><entry></entry></row>
-<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
+<row><entry>konsole</entry><entry>Embedded &konsole;</entry></row>
 <row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
 <row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
 <row><entry>openwith</entry><entry></entry></row>
@@ -1985,7 +2168,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <row><entry>texttools</entry><entry>Additional text tools</entry></row>
 <row><entry>tipofday</entry><entry>A tip of the day</entry></row>
 <row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
-<row><entry>cvs</entry><entry>CVS Support</entry></row>
+<row><entry>cvs</entry><entry>&CVS; Support</entry></row>
 <row><entry>tools</entry><entry></entry></row>
 <row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
 <row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
@@ -2075,10 +2258,16 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 </screenshot>
 
 <para>
-This example screenshot demonstrates one of the main virtues of IDEAl mode. There is a maximum workspace available. Yet any tool view is readily available by clicking on the according tab.
+This example screenshot demonstrates one of the main virtues of IDEAl
+mode. There is a maximum workspace available. Yet any tool view is readily
+available by clicking on the according tab.
 </para>
 <para>
-You will most probably need some time to get accustomed to the icons in the tab bar. If you got lost, just position the mouse over a tab and wait a few seconds. A short tool tip description will pop up. In this screenshot the <quote>Automake Manager</quote> tool tip is shown as an example. It describes the lower tab in the right tab bar.
+You will most probably need some time to get accustomed to the icons in the
+tab bar. If you got lost, just position the mouse over a tab and wait a few
+seconds. A short tool tip description will pop up. In this screenshot the
+<quote>Automake Manager</quote> tool tip is shown as an example. It
+describes the lower tab in the right tab bar.
 </para>
 
 <para>
@@ -2107,7 +2296,8 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
+Click <link linkend="uimodes-survey">here</link> to return to the modes
+overview.
 </para>
 
 </sect1> <!-- mdi-desc -->
@@ -2118,7 +2308,8 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 <title>Tabbed Pages Mode</title>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
+Click <link linkend="uimodes-survey">here</link> to return to the modes
+overview.
 </para>
 
 <screenshot>
@@ -2132,7 +2323,8 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
+Click <link linkend="uimodes-survey">here</link> to return to the modes
+overview.
 </para>
 
 </sect1> <!-- tabbed-desc -->
@@ -2143,7 +2335,8 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 <title>Toplevel Windows Mode</title>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
+Click <link linkend="uimodes-survey">here</link> to return to the modes
+overview.
 </para>
 
 <screenshot>
@@ -2157,7 +2350,8 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
+Click <link linkend="uimodes-survey">here</link> to return to the modes
+overview.
 </para>
 
 </sect1> <!-- toplevel-desc -->
@@ -2207,14 +2401,18 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 
 <!-- ====================================================================== -->
 
-<!--  Note (bp, 2003-09-04): <bibliography> should remain the last appendix section because of a (meinproc???) bug which sends the Next selection in circles back to it. -->
+<!--  Note (bp, 2003-09-04): <bibliography> should remain the last appendix -->
+<!--  section because of a (meinproc???) bug which sends the Next selection -->
+<!--  in circles back to it. -->
+<!-- (LWatts: 2005-04-30) This is probably due to a missing id= somewhere, -->
+<!-- so I've added a couple in hopes it goes away. -->
 
 <appendix id="app-bibliography">
 <title>Bibliography</title>
 
 <para>(... to be written ...)</para>
 
-<bibliography>
+<bibliography id="bibliography">
 
 <biblioentry>
 <title><ulink url="info://make/Top">GNU Make Manual</ulink></title>

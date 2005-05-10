@@ -332,10 +332,11 @@ The fields following this are not so critical. Just supply your name (&ie; the n
 <note>
 <orderedlist>
   <listitem><para>
-  The &appwizard; fills these fields with some default values, taken from the Email presets in the KDE control center. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
+  The &appwizard; fills these fields with some default values, taken from
+  the Email presets in the &kcontrolcenter;. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the &kcontrolcenter;.
   </para></listitem>
   <listitem><para>
-  The &appwizard; will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
+  The &appwizard; will integrate this information into the starting program templates if applicable. In &kde; C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
   </para></listitem>
   <listitem><para>
   Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
@@ -392,7 +393,7 @@ In a second step the &appwizard; will lead you to the <guilabel>Version Control 
 </para>
 
 <note><para>
-This discussion concentrates on the needs for project creation only. For more information on CVS see the <link linkend="cvs">Using CVS</link> chapter below.
+This discussion concentrates on the needs for project creation only. For more information on &CVS; see the <link linkend="cvs">Using &CVS;</link> chapter below.
 </para></note>
 
 <formalpara>
@@ -403,7 +404,7 @@ Initially there is <quote>None</quote> selected in the <guilabel>Version control
 </formalpara>
 
 <formalpara>
-<title>Using CVS</title>
+<title>Using &CVS;</title>
 <para>
 Otherwise you must reselect the version control system you want to use from the <guilabel>Version control system</guilabel> tab. We use <quote>&cvs;</quote> for our example. If you select this, the &appwizard; will redisplay the page, now showing a series of fields you must fill in.
 </para>
@@ -445,37 +446,37 @@ A version control system such as &CVS; (which means <quote>Concurrent Versions S
   <secondary>:local:</secondary></indexterm>
 
 <formalpara id="new-projects-start-cvs-root">
-<title>CVS Root</title>
+<title>&CVS; Root</title>
 <para>
-&cvs; needs to <emphasis>manage</emphasis> the versioning database it keeps from your project files. To accomplish this it keeps some special database information in an own directory, called the <emphasis>&cvs; root</emphasis>. The first step on setting up &cvs; for your new project thus is to tell &kdevelop; where this root is located.
+&CVS; needs to <emphasis>manage</emphasis> the versioning database it keeps from your project files. To accomplish this it keeps some special database information in an own directory, called the <emphasis>&CVS; root</emphasis>. The first step on setting up &CVS; for your new project thus is to tell &kdevelop; where this root is located.
 </para>
 </formalpara>
 
 <para>
-<emphasis>Local &cvs; root.</emphasis> There are two basic possibilities. Either you want to use a <emphasis>local</emphasis> CVS database or you use a database which is held on a <emphasis>remote server</emphasis>. If you develop for your own, you may want use the &cvs; database as some sort of a backup system on your own computer. Usually this is set up in your home directory root and given the name <filename>cvsroot</filename>. This may look as follows:
+<emphasis>Local &CVS; root.</emphasis> There are two basic possibilities. Either you want to use a <emphasis>local</emphasis> &CVS; database or you use a database which is held on a <emphasis>remote server</emphasis>. If you develop for your own, you may want use the &CVS; database as some sort of a backup system on your own computer. Usually this is set up in your home directory root and given the name <filename>cvsroot</filename>. This may look as follows:
 </para>
 <para><userinput><filename class="directory">/home/devel/cvsroot</filename></userinput> (where <filename>devel</filename> simply denotes the <quote>developing</quote> user, just for example)
 </para>
 
 <note><para>
-In fact, this is a short form. Exactly, the local &cvs; root should be addressed using the <computeroutput>:local:</computeroutput> prefix. The short form is only allowed in cases where the filename starts with a slash (<computeroutput>/</computeroutput>). The full name for our example local &cvs; root would exactly look like: <filename class="directory">:local:/home/devel/cvsroot</filename>
+In fact, this is a short form. Exactly, the local &CVS; root should be addressed using the <computeroutput>:local:</computeroutput> prefix. The short form is only allowed in cases where the filename starts with a slash (<computeroutput>/</computeroutput>). The full name for our example local &CVS; root would exactly look like: <filename class="directory">:local:/home/devel/cvsroot</filename>
 </para></note>
 
 <para>
-Enter the name of the &cvs; root directory your system has been set up for in the <guilabel>CVS root</guilabel> field. In principle you can select any name, even use multiple &cvs; databases, but it is advisable that you stick to the &cvs; root once set up.
+Enter the name of the &CVS; root directory your system has been set up for in the <guilabel>CVS root</guilabel> field. In principle you can select any name, even use multiple &CVS; databases, but it is advisable that you stick to the &CVS; root once set up.
 </para>
 <para>
-<emphasis>Initialize a new &cvs; root.</emphasis> If there does not exist a &cvs; root yet, &kdevelop; can command the &CVS; system to create one for you in the given directory. Just check the <guilabel>Init root</guilabel> checkbox below the <guilabel>CVS root</guilabel> field.
+<emphasis>Initialize a new &CVS; root.</emphasis> If there does not exist a &CVS; root yet, &kdevelop; can command the &CVS; system to create one for you in the given directory. Just check the <guilabel>Init root</guilabel> checkbox below the <guilabel>CVS root</guilabel> field.
 </para>
 <note><para>
-As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initialize a new &cvs; root. It does nothing by itself to this directory. Fortunately &cvs; is clever enough to check whether the &cvs; root directory already exists. Hence it does no harm if you should have inadvertently checked <guilabel>Init root</guilabel> on an already existing &cvs; root directory.
+As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initialize a new &CVS; root. It does nothing by itself to this directory. Fortunately &CVS; is clever enough to check whether the &CVS; root directory already exists. Hence it does no harm if you should have inadvertently checked <guilabel>Init root</guilabel> on an already existing &CVS; root directory.
 </para></note>
 
 <para>
-<emphasis>Remote &cvs; root.</emphasis> There are occasions where the &cvs; database is to be kept on a remote server, especially when several developers work at the same project. Then you must enter the &cvs; root URL of this server in the <guilabel>CVS root</guilabel> field. For example, if you want access to the &kde; &cvs; server:
+<emphasis>Remote &CVS; root.</emphasis> There are occasions where the &CVS; database is to be kept on a remote server, especially when several developers work at the same project. Then you must enter the &CVS; root &URL; of this server in the <guilabel>CVS root</guilabel> field. For example, if you want access to the &kde; &CVS; server:
 </para>
 <para>
-<userinput><filename class="directory">:pserver:mylogin@cvs.kde.org:/home/kde</filename></userinput> (where <filename>mylogin</filename> denotes the login name set up in your &kde; &cvs; account)
+<userinput><filename class="directory">:pserver:<replaceable>mylogin</replaceable>@cvs.kde.org:/home/kde</filename></userinput> (where <replaceable>mylogin</replaceable> denotes the login name set up in your &kde; &CVS; account)
 </para>
 
 <indexterm zone="new-projects-start-cvs-remote">
@@ -495,9 +496,12 @@ As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initi
   <secondary>:ext:</secondary></indexterm>
 
 <formalpara id="new-projects-start-cvs-remote">
-<title>Remote &cvs; Server Types</title>
+<title>Remote &CVS; Server Types</title>
 <para>
-Basically there are two widely used remote &cvs; server types, the <emphasis>pserver</emphasis> which uses a password-secured non-encrypted protocol, and the <emphasis>ext</emphasis> server which uses an rsh or ssh encrypted data transfer. They are distinguished by the URL prefix they use:
+Basically there are two widely used remote &CVS; server types, the
+<emphasis>pserver</emphasis> which uses a password-secured non-encrypted
+protocol, and the <emphasis>ext</emphasis> server which uses an rsh or ssh
+encrypted data transfer. They are distinguished by the &URL; prefix they use:
 </para>
 </formalpara>
 <para>
@@ -513,17 +517,17 @@ for the <quote>password protected server</quote> non-encrypted type, and
 for an rsh or ssh encrypted server type. For example
 </para>
 <para>
-<userinput><filename class="directory">:ext:mylogin@cvs.cervisia.sourceforge.net:/cvsroot/cervisia</filename></userinput>
+<userinput><filename class="directory">:ext:<replaceable>mylogin</replaceable>@cvs.cervisia.sourceforge.net:/cvsroot/cervisia</filename></userinput>
 </para>
 <para>
-accesses the &cvs; root of the widely used <application>Cervisia</application> &cvs; management tool on the SourceForge server.
+accesses the &CVS; root of the widely used <application>Cervisia</application> &CVS; management tool on the SourceForge server.
 </para>
 <para>
-If you want to use an rsh or ssh encrypted server for &cvs; access you must tell &kdevelop; the encryption protocol to be used. Just enter <userinput>rsh</userinput> or <userinput>ssh</userinput> in the <guilabel>CVS_RSH</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page.
+If you want to use an rsh or ssh encrypted server for &CVS; access you must tell &kdevelop; the encryption protocol to be used. Just enter <userinput>rsh</userinput> or <userinput>ssh</userinput> in the <guilabel>CVS_RSH</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page.
 </para>
 
 <note><para>
-There is a caveat if you use an encrypted server for &cvs; from within &kdevelop;. See the <link linkend="cvs">Using CVS</link> chapter for details.
+There is a caveat if you use an encrypted server for &CVS; from within &kdevelop;. See the <link linkend="cvs">Using &CVS;</link> chapter for details.
 </para></note>
 
 <indexterm zone="new-projects-start-cvs-repository">
@@ -534,13 +538,13 @@ There is a caveat if you use an encrypted server for &cvs; from within &kdevelop
   <secondary>CVS</secondary></indexterm>
 
 <formalpara id="new-projects-start-cvs-repository">
-<title>The &cvs; Repository</title>
+<title>The &CVS; Repository</title>
 <para>
-So far you have told &kdevelop; where the &cvs; root resides which manages the versioning database and how to access it. Now you need to tell &kdevelop; under which name you want &CVS; save your project files in that database. Such a place your project files will be held in &cvs; is called a <emphasis>repository</emphasis>.
+So far you have told &kdevelop; where the &CVS; root resides which manages the versioning database and how to access it. Now you need to tell &kdevelop; under which name you want &CVS; save your project files in that database. Such a place your project files will be held in &CVS; is called a <emphasis>repository</emphasis>.
 </para>
 </formalpara>
 <para>
-In principle you can use any name for the &cvs; repository of your project files as long as it adheres to the specifications of naming a file. Yet, most developers simply use the name of the application itself. &CVS; will build a directory with this name in the &cvs; root, hence it is more easily found if you keep the application name for it.
+In principle you can use any name for the &CVS; repository of your project files as long as it adheres to the specifications of naming a file. Yet, most developers simply use the name of the application itself. &CVS; will build a directory with this name in the &CVS; root, hence it is more easily found if you keep the application name for it.
 </para>
 <para>
 Just enter the repository name you want to use in the <guilabel>CVS repository</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page. In our example this is: <userinput>MyApp</userinput>
@@ -560,10 +564,10 @@ There is not much work left to do. &appwizard; has already set up the remaining 
 The <guilabel>Vendor</guilabel> field is used for compatibility reasons only. You can stick to the <quote>vendor</quote> default the &appwizard; puts in here.
 </para>
 <para>
-The <guilabel>Message</guilabel> field allows you to comment the initial &cvs; contents. Use any text you like or just stick to the <quote>new project</quote> default the &appwizard; did put in.
+The <guilabel>Message</guilabel> field allows you to comment the initial &CVS; contents. Use any text you like or just stick to the <quote>new project</quote> default the &appwizard; did put in.
 </para>
 <para>
-The <guilabel>Release tag</guilabel> holds the name which tags the initial state of your project. Such a <emphasis>tag</emphasis> names a certain point within the &CVS; repository by which you can later access this state of your development. (See more in  the <link linkend="cvs">Using CVS</link> chapter.)
+The <guilabel>Release tag</guilabel> holds the name which tags the initial state of your project. Such a <emphasis>tag</emphasis> names a certain point within the &CVS; repository by which you can later access this state of your development. (See more in  the <link linkend="cvs">Using &CVS;</link> chapter.)
 </para>
 <para>
 The &appwizard; has put a default <quote>start</quote> tag in here which is a worthy proposal. Just stick to it.
@@ -574,7 +578,7 @@ The &appwizard; has put a default <quote>start</quote> tag in here which is a wo
 When any information of all these is wrong &kdevelop; usually will not know about until project construction time. It is the &CVS; system which will figure out those errors when it tries to build the repository. Hence you must keep an eye to the <guilabel>Messages</guilabel> window of &kdevelop; when the project is created in the final setup step. If anything was in error with &CVS; you will in most cases see an error message like this:
 </para>
 
-<screen><computeroutput><literal>
+<screen><computeroutput>
 * cd '/home/devel/test' &amp;&amp; cvs -d '/home/devel/mycvsroot' \
   import -m 'new project' '' 'vendor' 'start' &amp;&amp;\
   sh /opt/kde3/share/apps/kdevcvs/buildcvs.sh . '' \
@@ -582,10 +586,10 @@ When any information of all these is wrong &kdevelop; usually will not know abou
 * cvs [import aborted]: /home/devel/mycvsroot/CVSROOT: No such file or
   directory
 * *** Exited with status: 1 ***
-</literal></computeroutput></screen>
+</computeroutput></screen>
 
 <para>
-If this happens you will have to either manually set up &cvs; (&kdevelop; should have successfully initialized your project files at this time) or delete the project directory and start over again with <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.
+If this happens you will have to either manually set up &CVS; (&kdevelop; should have successfully initialized your project files at this time) or delete the project directory and start over again with <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.
 </para>
 </note>
 
@@ -660,56 +664,65 @@ The templates you set up in the <guilabel>Create New Project</guilabel> dialog w
 You are not restricted to plain text however. &kdevelop; knows of several variables which allow you to include actual information in the file. The &appwizard; did in fact use some such variables to insert the <guilabel>Author</guilabel>, <guilabel>Email</guilabel>, and <guilabel>License</guilabel> informations into the initial template text.
 </para>
 
-<formalpara>
-<title>Include &doxygen; File Information</title>
+<variablelist>
+<varlistentry>
+<term>Include &doxygen; File Information</term>
+<listitem>
 <para>
-If, for example, you want the &doxygen;-built API documentation to display some further information about the file's contents in its filenames list, you may include the following lines in the source file template:
+If, for example, you want the &doxygen;-built &API; documentation to display some further information about the file's contents in its filenames list, you may include the following lines in the source file template:
 </para>
-</formalpara><screen><computeroutput><literal>
+<screen><computeroutput>
 /**
  * \file $MODULE$.cpp
  * \brief (put some short descripion here).
  **/
-</literal></computeroutput></screen>
+</computeroutput></screen>
 <para>
-Whenever you create a new source file, &kdevelop; will replace the <computeroutput>$MODULE$</computeroutput> variable by the name body of the newly created file. For example, if you created a new C++ class named <classname>ASimpleTest</classname> you will see the following lines in the <filename>asimpletest.cpp</filename> file:
+Whenever you create a new source file, &kdevelop; will replace the <varname>$MODULE$</varname> variable by the name body of the newly created file. For example, if you created a new C++ class named <classname>ASimpleTest</classname> you will see the following lines in the <filename>asimpletest.cpp</filename> file:
 </para>
-<screen><computeroutput><literal>
+<screen><computeroutput>
 /**
  * \file asimpletest.cpp
  * \brief (put some short descripion here).
  **/
-</literal></computeroutput></screen>
+</computeroutput></screen>
 <para>
 You will still have to provide the short description after the <quote>\brief</quote> keyword, but part of the job is automatically done for you.
 </para>
-<formalpara>
-<title>The License Text File</title>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>The License Text File</term>
+<listitem>
 <para>
-As another example you could include an explicit hint to the license text you want to use into the template. Use the <computeroutput>$LICENSEFILE$</computeroutput> variable for this and add for example this line:
+As another example you could include an explicit hint to the license text you want to use into the template. Use the <varname>$LICENSEFILE$</varname> variable for this and add for example this line:
 </para>
-</formalpara>
-<screen><computeroutput><literal>
+
+<screen><computeroutput>
 //   See $LICENSEFILE$ for the full license text.
-</literal></computeroutput></screen>
+</computeroutput></screen>
 <para>
-The &appwizard; will replace the <computeroutput>$LICENSEFILE$</computeroutput> with the name of the file where the full license text is to be found, namely:
+The &appwizard; will replace the <varname>$LICENSEFILE$</varname> with the name of the file where the full license text is to be found, namely:
 </para>
-<screen><computeroutput><literal>
+<screen><computeroutput>
 //   See COPYING for the full license text.
-</literal></computeroutput></screen>
+</computeroutput></screen>
 <para>
-for the GPL license, or
+for the <acronym>GPL</acronym> license, or
 </para>
-<screen><computeroutput><literal>
+<screen><computeroutput>
 //   See LICENSE.BSD for the full license text.
-</literal></computeroutput></screen>
+</computeroutput></screen>
 <para>
-if you decided to put your application under the BSD license.
+if you decided to put your application under the <acronym>BSD</acronym> license.
 </para>
 <para>
 Thee are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
 </para>
+</listitem>
+</varlistentry>
+</variablelist>
 
 <note><para>
 The templates you define here will come in effect only after the &appwizard; has created the new project. You will find this information on top of the files you created yourself in the development process. When creating the initial files the &appwizard; will use some predefined standard templates. You will have to manually adapt those initial files to your needs.
@@ -733,7 +746,7 @@ The templates you define here will come in effect only after the &appwizard; has
 Almost everything is done now. On the last templates page the <guibutton>Next &gt;</guibutton> button will have changed to read <guibutton>Finish</guibutton> now.
 </para>
 <para>
-<emphasis>Think twice before you click on it!</emphasis> You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again. In case you use local CVS, do not forget to double-check the <emphasis>CVS repository</emphasis> name (there should be no subdirectory with that name in the CVS root directory already&mdash;if it does, try another repository name).
+<emphasis>Think twice before you click on it!</emphasis> You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again. In case you use local &CVS;, do not forget to double-check the <emphasis>&CVS; repository</emphasis> name (there should be no subdirectory with that name in the &CVS; root directory already&mdash;if it does, try another repository name).
 </para>
 <para>
 If ever you don't want the new project be built, abort the <guilabel>Create New Project</guilabel> dialog by the <guibutton>Cancel</guibutton> button. Otherwise click <guibutton>Finish</guibutton> and watch in the <guilabel>Messages</guilabel> window how the &appwizard; initiates the project.
@@ -750,7 +763,7 @@ In many cases when your new project has been set up this way, &kdevelop; will au
 Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
 </para>
 <para>
-Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
+Then it is advisable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
 </para>
 
 <warning id="defaultbuild-warning"> <!-- ### remove this when "default" works again -->

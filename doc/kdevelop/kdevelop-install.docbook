@@ -26,7 +26,7 @@ In this chapter we will discuss the steps necessary to compile and install the &
   <link linkend="compile-and-install">&kdevelop; compilation and installation</link> leads you through all the steps of compilation and installation of the application.
   </para></listitem>
   <listitem><para>
-  <link linkend="make-api">How to obtain a &kdevelop; API documentation</link> tells what an API is and how you get such a useful tool for navigating the &kdevelop; sources.
+<link linkend="make-api">How to obtain a &kdevelop; &API; documentation</link> tells what an API is and how you get such a useful tool for navigating the &kdevelop; sources.
   </para></listitem>
 </itemizedlist>
 </para>
@@ -444,13 +444,14 @@ In the following discussion we assume that you have put your &kdevelop; sources 
 In case you use a &kdevelop; snapshot from &CVS; the initial compilation steps depend on whether you just did a complete checkout or only updated the source.
 </para>
 
-<formalpara id="compile-and-install-make-cvs-co">
-<title>After a CVS Checkout</title>
-
+<variablelist>
+<varlistentry>
+<term id="compile-and-install-make-cvs-co">After a CVS Checkout</term>
+<listitem>
 <para>
 You must <emphasis>initialize the make system</emphasis> after a fresh checkout. The same is true every time you need to start over from scratch. Type:
 </para>
-</formalpara>
+
 <informalexample><simplelist><member>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>make -f admin/Makefile.common cvs-clean</userinput>
@@ -464,13 +465,16 @@ You might need access to the &CVS; repository for the clean-up if any corrupted 
 <important><para>
 The <command>cvs-clean</command> command will <emphasis>remove every file</emphasis> not in &CVS; from the directory! Make sure to back up any valuable information before you issue this clean-up command.
 </para></important>
+</listitem>
+</varlistentry>
 
-<formalpara id="compile-and-install-make-cvs-up">
-<title>After a CVS Update</title>
+<varlistentry>
+<term id="compile-and-install-make-cvs-up">After a CVS Update</term>
+<listitem>
 <para>
 The next step depends on the output of the &CVS; update sequence. If you got something like (there may be a U or a P marker in the leftmost column, both denoting the file has been changed):
 </para>
-</formalpara>
+
 <screen>
 U /some_directory_path/Makefile.am
 </screen>
@@ -484,7 +488,9 @@ or if you just did a full checkout, you must enter:
 <para>
 before you proceed with <emphasis>all of the following steps</emphasis>.
 </para>
-
+</listitem>
+</varlistentry>
+</variablelist>
 </sect3> <!-- compile-and-install-make-cvs -->
 
 <sect3 id="compile-and-install-make-basic">
@@ -498,23 +504,28 @@ Once the basic make system is set up you must decide which type of the &kdevelop
 You may drop the <option>--prefix</option> option in the following <command>configure</command> command lines if you want &kdevelop; be installed in the default &kde; directory. See the <link linkend="compile-and-install-options">Some notes on configure options</link> chapter for this.
 </para></note>
 
-<formalpara>
-<title>A Debug-Compiled Version</title>
+<variablelist>
+<varlistentry>
+<term>A Debug-Compiled Version</term>
+<listitem>
 <para>
 If you want to keep track of what your &kdevelop; application does at run-time you may build a debug-compiled version. Just command <command>configure</command> to do so:
 </para>
-</formalpara>
+
 <informalexample><simplelist><member>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>./configure --enable-debug=full --prefix=</userinput>(where-your-kde3-is)
 </member></simplelist></informalexample>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>A Release-Compiled Version</title>
-<para>
-If you only want to use &kdevelop; as-is a (smaller and faster running) release version suffices. <command>configure</command> defaults to this.
-</para>
-</formalpara>
+<varlistentry>
+<term>A Release-Compiled Version</term>
+<listitem>
+<para>If you only want to use &kdevelop; as-is a (smaller and faster
+running) release version suffices. <command>configure</command> defaults to
+this.</para>
+
 <informalexample><simplelist><member>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>./configure --prefix=</userinput>(where-your-kde3-is)
@@ -529,13 +540,16 @@ If you want to build your own <link linkend="make-api">API documentation</link> 
   <userinput>./configure --</userinput>(options-as-above) <userinput>\</userinput></member> <member><userinput>--with-kdelibsdoxy-dir=$KDEDIR/share/doc/HTML/en/kdelibs-apidocs</userinput></member>
 </simplelist></informalexample>
 </note>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Make and Install &kdevelop;</title>
+<varlistentry>
+<term>Make and Install &kdevelop;</term>
+<listitem>
 <para>
 <command>configure</command> will check the system and build some <filename>Makefile</filename>s according to what it found. The <command>make</command> command will use the main <filename>Makefile</filename> by default. Thus
 </para>
-</formalpara>
+
 <informalexample><simplelist><member>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>make</userinput>
@@ -568,6 +582,10 @@ That's all. If you installed &kdevelop; in the default &kde; directory you may n
     <listitem><para>The &kdevelop; Designer &mdash; enhances the &Qt; User Interface Designer by &kde; specific elements and integrates nicely in the &kdevelop; IDE.</para></listitem>
   </itemizedlist>
 </note>
+</listitem>
+</varlistentry>
+</variablelist>
+
 
 </sect3> <!-- compile-and-install-make-basic -->
 </sect2> <!-- compile-and-install-make -->

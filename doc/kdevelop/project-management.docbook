@@ -17,7 +17,7 @@ PHP work very differently.
 </para>
 
 <para>
-You will find here information on:
+You will find here information on:</para>
 <itemizedlist>
   <listitem><para>
   <link linkend="automake-manager-summary">Summary of &automanag;</link> containing an initial overall view of &automanag;,
@@ -26,7 +26,7 @@ You will find here information on:
   <link linkend="automake-manager-operation">Automake Manager Operation</link> describing the basics of how to work with &automanag;,
   </para></listitem>
 </itemizedlist>
-</para>
+
 <sect1 id="automake-manager-summary">
 <title>Summary of &automanag;</title>
 
@@ -44,7 +44,7 @@ There is some confusion about how to name such things. &GNU; calls them <quote>b
 If you have a simple <quote>Hello World</quote> program, written in C, you can compile and link it using &gcc; <parameter>-o hello hello.c</parameter> and execute it using the command <command>./hello</command>, so you do not even need a <filename>Makefile</filename>.
 </para>
 <para>
-If you have a C application with several modules and header files and you are only going to run it on your own machine (&ie; it is an in-house application), you will only need a simple <filename>Makefile</filename>, which is fairly easy to write by hand (use <userinput>info Make</userinput> to find out more).
+If you have a C application with several modules and header files and you are only going to run it on your own machine (&ie; it is an in-house application), you will only need a simple <filename>Makefile</filename>, which is fairly easy to write by hand (use <userinput>info make</userinput> to find out more).
 </para>
 <para>
 The complications begin when:
@@ -155,15 +155,19 @@ Your project's directories and source files may be structured to any depth, or y
 <para>
 The aim of the &GNU; Build System is to produce source-code file structures that can be compiled, built and installed on any &UNIX; or &Linux; system by using the simple commands:
 </para>
+
 <screen>
 ./configure
 make
 make install    # Usually as "root".
 </screen>
+
 <para>and can be uninstalled by the command <command>make uninstall</command> (usually as root).
 </para>
+
 <para>
 How does this work? Well <command>configure</command> is a script that
+
 <itemizedlist>
   <listitem><para>
   works out the details of whatever system it is in, such as what compiler and libraries to use and where they are located, and then
@@ -284,8 +288,10 @@ AM_CXXFLAGS = -DMY_C++_PREPROCESSOR_OPTION
 <para>
 As you can see, many of the items on the right hand side are symbols of the form <varname>$(xxx)</varname>. These are <emphasis>environment variables</emphasis> which are defined in the actual &kde; environment and are substituted with real values when <command>./configure</command> generates the final <filename>Makefile</filename> files in the receiving machine.
 </para>
+
 <para>
 Also, sometime after you have started with &kdevelop;, it is a good idea to run the command <command>./configure --help</command>, which will show you the range of things you can change at build and installation time, such as for a test environment. In particular, the command:
+
 <screen>
 ./configure --prefix=/where/you/wish
 </screen>
@@ -388,13 +394,14 @@ The overall view window serves&mdash;amongst other things&mdash;as a navigation 
 The detail view contains a tree-list of all the files in the subproject currently selected in the overall view as well as the compilation, build and installation rules for this subproject. Thus the two views together can give you access to all the components of your application and all the information on how to compile, build and install it.
 </para>
 
-<formalpara>
+<sect3>
 <title>Targets</title>
+
 <para>The tree-list in the detail view has two levels. The top level consists of so-called &automanag; <emphasis>targets</emphasis> and the next level contains lists of files that go to make up each target.
 </para>
-</formalpara>
+
 <para>
-This concept of an &automanag; target differs somewhat from what a <filename>Makefile</filename> target usually is. In short:
+This concept of an &automanag; target differs somewhat from what a <filename>Makefile</filename> target usually is. In short:</para>
 <itemizedlist>
   <listitem><para>
   The definition of how a set of files is to be compiled, built or installed is known as a <emphasis>target</emphasis> in &automanag;, but as a <emphasis>variable</emphasis> in <command>Automake</command> itself.
@@ -406,8 +413,8 @@ This concept of an &automanag; target differs somewhat from what a <filename>Mak
   However some <filename>Makefile.am</filename> variables do represent an underlying <emphasis>sub-target</emphasis> in <command>make</command>.
   </para></listitem>
 </itemizedlist>
-</para>
 
+</sect3>
 </sect2> <!-- automake-manager-operation-detail-window -->
 
 <sect2 id="automake-manager-operation-navigate">
@@ -417,19 +424,22 @@ This concept of an &automanag; target differs somewhat from what a <filename>Mak
 In both the overall and the detail view you can left-click on the <symbol>+</symbol> or <symbol>-</symbol> next to a subproject or target name to expand or contract the tree view. If you do that with a <emphasis>subproject</emphasis> in the overall view, it shows or hides the subprojects at the next level down (if any). If you do it with a <emphasis>target</emphasis> in the detail view, it shows or hides the list of files that go into that target.
 </para>
 
-<formalpara>
-<title>Opening a File for Edit</title>
-<para>
-If you <emphasis>left-click</emphasis> on a file name in the detail view, the corresponding file opens up in &kdevelop;'s editing window.
-</para>
-</formalpara>
+<variablelist>
+<varlistentry>
+<term>Opening a file for Edit</term>
+<listitem>
+<para>If you <emphasis>&LMB; click</emphasis> on a file name in the detail
+view, the corresponding file opens up in &kdevelop;'s editing window.</para>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Activating the &automanag; Toolbar Buttons</title>
+<varlistentry>
+<term>Activating the &automanag; Toolbar Buttons</term>
+<listitem>
 <para>
-If you <emphasis>left-click</emphasis> on the name of a subproject in the overall view or target in the detail view, the name is highlighted and some toolbar buttons become active in the top part of that view.
-</para>
-</formalpara>
+If you <emphasis>&LMB; click</emphasis> on the name of a subproject in the
+overall view or target in the detail view, the name is highlighted and some
+toolbar buttons become active in the top part of that view.</para>
 
 <note>
   <para>
@@ -439,13 +449,18 @@ If you <emphasis>left-click</emphasis> on the name of a subproject in the overal
   Operations on subprojects and targets have far-reaching effects on the structure, compilation, building and installation of your application.
   </para>
 </note>
+</listitem>
+</varlistentry>
 
-<formalpara>
-<title>Selecting Actions/Popup Menus</title>
+<varlistentry>
+<term>Selecting Actions/Popup Menus</term>
+<listitem>
 <para>
-If you <emphasis>right-click</emphasis> on the name of a subproject, target or file, a menu pops up and you can then select actions to perform on the subproject, target or file, such as add a target to the subproject, add a file to a target or logically remove the selected file from its target.
+If you <emphasis>&RMB; click</emphasis> on the name of a subproject, target or file, a menu pops up and you can then select actions to perform on the subproject, target or file, such as add a target to the subproject, add a file to a target or logically remove the selected file from its target.
 </para>
-</formalpara>
+</listitem>
+</varlistentry>
+</variablelist>
 
 </sect2> <!-- automake-manager-operation-navigate -->
 
@@ -461,7 +476,7 @@ The following sections explain in short terms which operations the menus make av
 <title>The Popup Menu for a File</title>
 
 <para>
-When you right-click on a <emphasis>file name</emphasis> in the detail view the following menu will pop up allowing you to select one of several operations to be performed on that file. In the illustration below the <filename>hi-16app-myapp.png</filename> icon file was selected from the <guilabel>Icon data in myapp</guilabel> target of the <guilabel>myapp/src</guilabel> subproject.
+When you &RMB; click on a <emphasis>file name</emphasis> in the detail view the following menu will pop up allowing you to select one of several operations to be performed on that file. In the illustration below the <filename>hi-16app-myapp.png</filename> icon file was selected from the <guilabel>Icon data in myapp</guilabel> target of the <guilabel>myapp/src</guilabel> subproject.
 </para>
 
 <informaltable frame="none">
@@ -533,7 +548,7 @@ When you right-click on a <emphasis>target</emphasis> in the detail view the fol
 <title>The Popup Menu for a Subproject</title>
 
 <para>
-When you right-click on a <emphasis>subproject</emphasis> in the overall view window the following menu will pop up which allows you to make major changes to the structure of your project and the way it is compiled, built and installed. You can use it to expand or modify the basic project structure that the &appwizard; has created.
+When you &RMB; click on a <emphasis>subproject</emphasis> in the overall view window the following menu will pop up which allows you to make major changes to the structure of your project and the way it is compiled, built and installed. You can use it to expand or modify the basic project structure that the &appwizard; has created.
 </para>
 
 
