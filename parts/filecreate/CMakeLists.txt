@@ -25,7 +25,7 @@ KDE_ADD_UI_FILES(kdevfilecreate_PART_SRCS ${kdevfilecreate_UI} )
 
 KDE_ADD_MOC_FILES(kdevfilecreate_PART_SRCS filecreate_typechoosersig.h)
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_CURRENT_SOURCE_DIR})
 
 ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
 

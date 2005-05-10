@@ -80,7 +80,7 @@ ENDIF(NOT DCOPIDL)
 
 
 #add the found Qt and KDE include directories to the current include path
-INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${KDE_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${KDE_INCLUDE_DIR} .)
 
 LINK_DIRECTORIES(${KDE_LIB_DIR})
 
