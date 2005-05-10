@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application
+Name[hu]=Alkalmazások
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant

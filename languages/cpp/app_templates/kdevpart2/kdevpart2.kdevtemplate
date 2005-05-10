@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KDevelop Plugin (Standalone build)
+Name[hu]=KDevelop-bővítőmodul (önálló)
 Category=C++/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
 FileTemplates=h,CStyle,cpp,CStyle

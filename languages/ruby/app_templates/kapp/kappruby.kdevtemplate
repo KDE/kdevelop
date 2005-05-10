@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[hu]=Alkalmazás-keretrendszer
 Icon=kapp.png
 Category=Ruby/KDE
 Comment=Generates a simple Korundum application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface

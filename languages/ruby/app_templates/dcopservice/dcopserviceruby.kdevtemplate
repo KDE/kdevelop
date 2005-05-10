@@ -4,6 +4,7 @@ Name=DCOP Service
 Icon=kdcop.png
 Category=Ruby/KDE
 Comment=Generates a framework for a KDE dcop service and client access library.
+Comment[hu]=Létrehoz egy kiindulási KDE DCOP-szolgálatást és klienselérési programkönyvtárat.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/src/main.rb
 Archive=dcopserviceruby.tar.gz
@@ -112,3 +113,4 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
+Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}

@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Opie Input
+Name[hu]=Opie-s bemeneti modul
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie input method plugin.
+Comment[hu]=Létrehoz egy Opie-s bemeneti modult.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieinput.tar.gz

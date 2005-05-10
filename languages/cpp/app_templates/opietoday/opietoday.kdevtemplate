@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Opie Today Plugin
+Name[hu]=Opie Today-modul
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie today plugin.
+Comment[hu]=Létrehoz egy Opie Today-modult.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opietoday.tar.gz

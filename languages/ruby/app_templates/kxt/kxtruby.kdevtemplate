@@ -2,6 +2,7 @@
 [General]
 
 Name=KConfig XT application
+Name[hu]=KConfig XT-alapú alkalmazás
 Category=Ruby/KDE
 Icon=previewruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog

@@ -69,3 +69,4 @@ Dest=%{dest}/src/kbear%{APPNAMELC}importfilter.desktop
 [MSG]
 Type=message
 Comment=An import filter for KBear was created in %{dest}
+Comment[hu]=Létrejött egy KBear-importszűrő itt: %{dest}

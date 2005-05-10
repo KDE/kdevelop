@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework (KParts)
+Name[hu]=Alkalmazás-keretrendszer (objektumokkal)
 Icon=kpartapp.png
 Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.

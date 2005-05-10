@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=A shared library template
+Name[hu]=Osztott programkönyvtár-sablon
 Icon=cmakelibc.png
 Category=C/CMake based projects
 FileTemplates=h,CStyle,c,CStyle
@@ -50,3 +51,4 @@ Directory=%{dest}
 [MSG]
 Type=message
 Comment=A CMake based shared library template was created in %{dest}
+Comment[hu]=Létrejött egy CMake-alapú osztott programkönyvtár-sablon itt: %{dest}

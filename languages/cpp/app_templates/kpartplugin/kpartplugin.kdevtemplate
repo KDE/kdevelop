@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
+Name[hu]=KHTML-bővítőmodul
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
+Comment[hu]=Létrehoz egy KHTML-bővítőmodult.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kpartplugin.tar.gz
@@ -118,3 +120,4 @@ Dest=%{dest}/src/hi32-action-plugin.png
 [MSG]
 Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
+Comment[hu]=Létrejött egy KHTML-bővítőmodul itt: %{dest}

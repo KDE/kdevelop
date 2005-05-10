@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Kate plugin
+Name[hu]=Kate-bővítőmodul
 Icon=kateplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.
+Comment[hu]=Létrehoz egy bővítőmodult a Kate szövegszerkesztőhöz.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kateplugin.tar.gz
@@ -123,3 +125,4 @@ Dest=%{dest}/src/hi32-action-plugin.png
 [MSG]
 Type=message
 Comment=A plugin for Kate was created at %{dest}
+Comment[hu]=Létrejött egy Kate-bővítőmodul itt: %{dest}

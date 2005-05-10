@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[hu]=Alkalmazás-keretrendszer
 Icon=kapp.png
 Category=C++/KDE
 Comment=Generates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
@@ -163,3 +164,4 @@ Dest=%{dest}/src/README
 [MSG]
 Type=message
 Comment=A KDE Application was created at %{dest}
+Comment[hu]=Létrejött egy KDE-s alkalmazás itt: %{dest}

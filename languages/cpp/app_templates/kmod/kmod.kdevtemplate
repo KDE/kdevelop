@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Linux Kernel module
+Name[hu]=Linuxos kernelmodul
 Icon=
 Category=C
 Comment=Generates a template for a Linux kernel module.

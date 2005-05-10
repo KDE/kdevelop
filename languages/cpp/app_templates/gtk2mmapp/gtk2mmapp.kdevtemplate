@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Gtk-- Application framework
+Name[hu]=Gtk - alkalmazás-keretrendszer
 Category=C++/GTK+
 Icon=gtk2mmapp.png
 Comment=Generates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
@@ -94,3 +95,4 @@ Dest=%{dest}/src/main_window_glade.cc
 [MSG]
 Type=message
 Comment=A Gtk-- application framework was created in %{dest}
+Comment[hu]=Létrejött egy Gtk-s alkalmazás-keretrendszer itt: %{dest}

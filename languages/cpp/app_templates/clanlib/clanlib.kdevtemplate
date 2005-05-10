@@ -4,6 +4,7 @@ Name=Simple ClanLib application
 Category=C++
 Icon=clanlib.png
 Comment=Generates a simple ClanLib application.
+Comment[hu]=Létrehoz egy egyszerű Clanlib-alkalmazást.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.cpp
 Archive=clanlib.tar.gz
@@ -50,3 +51,4 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A simple clanlib application was created in %{dest}
+Comment[hu]=Létrejött egy egyszerű Clanlib-alkalmazás itt: %{dest}

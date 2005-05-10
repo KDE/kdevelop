@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KOffice Part
+Name[hu]=KOffice-objektum
 Icon=kopart.png
 Category=C++/KDE
 Comment=Generates a framework for a full KOffice Application.
+Comment[hu]=Létrehoz egy kiindulási keretprogramot teljes KOffice-alkalmazás készítéséhez.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
 Archive=kopart.tar.gz
@@ -148,3 +150,4 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A KOffice part was created in %{dest}
+Comment[hu]=Létrejött egy KOffice-objektum itt: %{dest}

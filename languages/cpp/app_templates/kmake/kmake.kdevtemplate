@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=QMake based KDE template
+Name[hu]=QMake-alapú KDE-s sablon
 Icon=kmake.png
 Category=C++/QMake project
 Comment=Generates a simple KDE application using QMake based project manager

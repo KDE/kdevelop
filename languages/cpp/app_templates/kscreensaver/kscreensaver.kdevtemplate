@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KDE Screen Saver
+Name[hu]=KDE-s képernyővédő
 Icon=kscreensaver.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE screensaver.

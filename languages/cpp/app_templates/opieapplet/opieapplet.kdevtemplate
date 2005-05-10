@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Opie Applet
+Name[hu]=Opie-s kisalkalmazás
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
+Comment[hu]=Létrehoz egy Opie-s kisalkalmazást.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapplet.tar.gz
@@ -45,3 +47,4 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie applet was created in %{dest}
+Comment[hu]=Létrejött egy Opie-s kisalkalmazás itt: %{dest}

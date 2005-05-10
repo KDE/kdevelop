@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KIO slave
+Name[hu]=KDE-protokoll (KIOslave)
 Icon=kioslave.png
 Category=C++/KDE
 Comment=Generates a framework for an IO slave
+Comment[hu]=Létrehoz egy kiindulási keretprogramot KIOslave készítéséhez
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kioslave.tar.gz
@@ -107,3 +109,4 @@ Dest=%{dest}/src/%{APPNAMELC}.protocol
 [MSG]
 Type=message
 Comment=A KIO slave was created in %{dest}
+Comment[hu]=Létrejött egy KIOslave itt: %{dest}

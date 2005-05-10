@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KConfig XT application
+Name[hu]=KConfig XT-alapú alkalmazás
 Category=C++/KDE
 Icon=preview.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
@@ -180,3 +181,4 @@ Dest=%{dest}/configure.in.in
 [MSG]
 Type=message
 Comment=A KConfig XT application was created in %{dest}
+Comment[hu]=Létrejött egy KConfig XT-alapú alkalmazás itt: %{dest}

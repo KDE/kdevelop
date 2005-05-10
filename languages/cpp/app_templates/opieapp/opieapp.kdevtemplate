@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Opie Application
+Name[hu]=Opie-alkalmazás
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie application.
+Comment[hu]=Létrehoz egy Opie-alkalmazást.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapp.tar.gz
@@ -59,3 +61,4 @@ Dest=%{dest}/apps/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=An opie application was created in %{dest}
+Comment[hu]=Létrejött egy Opie-alkalmazás itt: %{dest}

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Networksettings
+Name[hu]=Opie-s hálózati beállítómodul
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie network config plugin.
