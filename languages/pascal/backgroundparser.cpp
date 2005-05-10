@@ -41,7 +41,7 @@ void BackgroundParser::run()
     std::string fn( _fn.data() );
 
     QCString text = m_source.utf8();
-    std::istringstream stream( text );
+    std::istringstream stream( text.data() );
 
     kdDebug() << "12" << endl;
 
