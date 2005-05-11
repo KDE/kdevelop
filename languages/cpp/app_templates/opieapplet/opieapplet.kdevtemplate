@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Opie Applet
+Name[da]=Opie-applet
 Name[hu]=Opie-s kisalkalmazás
 Icon=qmakeapp.png
 Category=C++/Embedded
@@ -47,4 +48,5 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie applet was created in %{dest}
+Comment[da]=En opie-applet blev oprettet i %{dest}
 Comment[hu]=Létrejött egy Opie-s kisalkalmazás itt: %{dest}

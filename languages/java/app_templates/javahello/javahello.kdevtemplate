@@ -1,11 +1,14 @@
 # KDE Config File
 [General]
 Name=Application
+Name[da]=Program
 Name[hu]=Alkalmazások
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant
 Comment=Generate a Java application
+Comment[da]=Generér et Java-program
+Comment[hu]=Létrehoz egy Java-alkalmazást
 FileTemplates=java,JavaStyle
 ShowFilesAfterGeneration=%{dest}/Main.java
 Archive=javahello.tar.gz
@@ -34,3 +37,5 @@ Dest=%{dest}/build.xml
 [msg]
 Type=message
 Comment=A JAVA application was created in %{dest}
+Comment[da]=Et JAVA-program blev oprettet i %{dest}
+Comment[hu]=Létrejött egy Java-alkalmazás itt: %{dest}

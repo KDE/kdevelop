@@ -1,10 +1,15 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
+Name[hu]=Egyszerű Hello world program
+Name[nl]=Eenvoudig 'Hello World' programma
 Icon=cpphello.png
 Category=C++
 Comment=Generates a simple Hello world program in C++
+Comment[da]=Genererer et simpelt Goddag verden program in C++
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
+Comment[nl]=Genereert een eenvoudig Hello World-programma in C++
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=cpphello.tar.gz
@@ -55,5 +60,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A Simple Hello World program was created in %{dest}
+Comment[da]=Et simpelt Goddag verden program blev oprettet i %{dest}
 Comment[hu]=Létrejött egy egyszerű Hello world program itt: %{dest}
+Comment[nl]=Een eenvoudig Hello World-programma is aangemaakt in %{dest}
 

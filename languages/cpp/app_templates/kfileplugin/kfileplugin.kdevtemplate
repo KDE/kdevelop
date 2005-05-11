@@ -5,6 +5,7 @@ Name[hu]=KFile-bővítőmodul
 Icon=kfileplugin.png
 Category=C++/KDE
 Comment=Generates a KFile plugin for konqueror to display meta information.
+Comment[da]=Genererer et KFile-plugin for konqueror til at vise meta-information.
 Comment[hu]=Létrehoz egy KFile-bővítőmodult, mellyel a Konquerorban dokumentumjellemzőket lehet megjeleníteni.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=${dest}/README.devel,%{dest}/src/kfile_%{APPNAMELC}.cpp

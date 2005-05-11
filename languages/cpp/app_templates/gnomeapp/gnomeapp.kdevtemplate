@@ -1,10 +1,15 @@
 # KDE Config File
 [General]
 Name=GNOME 1 Application framework
+Name[da]=GNOME 1 programskelet
 Name[hu]=GNOME 1 alkalmazás-keretrendszer
+Name[nl]=GNOME 1 Applicationframework
 Icon=gnomeapp.png
 Category=C/GNOME
 Comment=Generates a simple GNOME application with one toplevel window, menus and toolbars.
+Comment[da]=Genererer et simpelt GNOME program med et vindue på topniveau, menuer og værktøjslinjer.
+Comment[hu]=Létrehoz egy egyszerű GNOME-os alkalmazást egy főablakkal, menükkel és eszköztárakkal.
+Comment[nl]=Genereert een eenvoudige GNOME-toepassing met één toplevel window, menu's en toolbars.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.c
 Archive=gnomeapp.tar.gz
@@ -103,5 +108,7 @@ Dest=%{dest}/src/main.c
 [MSG]
 Type=message
 Comment=A GNOME application framework was created in %{dest}
+Comment[da]=Et GNOME programskelet blev oprettet i %{dest}
 Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
+Comment[nl]=Een GNOME applicationframework is aangemaakt in %{dest}
 

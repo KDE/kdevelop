@@ -1,9 +1,12 @@
 # KDE Config File
 [General]
 Name=KDevelop Language Support Plugin (Standalone build)
+Name[da]=KDevelop plugin for sprogstøttet (alenestående bygning)
 Name[hu]=KDevelop nyelvtámogató modul (önálló)
 Category=C++/KDevelop/
 Comment=This generates a language support plugin for KDevelop, to be built outside of the KDevelop source tree.
+Comment[da]=Dette genererer en sprogstøtte-plugin for KDevelop, der skal bygges  udenfor KDevelop's kildetræ.
+Comment[hu]=Létrehoz egy nyelvtámogató modult a KDevelophoz, mely a KDevelopos forráskönyvtáron kívül fordítható le.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
 Archive=kdevlang.tar.gz
@@ -75,3 +78,5 @@ Dest=%{dest}/src/README.dox
 [MSG]
 Type=message
 Comment=A language plugin for KDevelop for standalone build was created in %{dest}
+Comment[da]=Et sprog-plugin for KDevelop for alenestående bygning blev oprettet i %{dest}
+Comment[hu]=Létrejött egy KDevelopos nyelvtámogató modul (önálló lefordításra) itt: %{dest}

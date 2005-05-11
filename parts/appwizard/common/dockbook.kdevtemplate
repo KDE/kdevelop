@@ -3,6 +3,7 @@ Type = value
 ValueType=bool
 Value=INSTALL_DOCS
 Comment= Install Docbook documentation templates.
+Comment[hu]=DocBook-alapú dokumentációsablonok telepítése.
 Default=true
 
 [DOCSDIR]

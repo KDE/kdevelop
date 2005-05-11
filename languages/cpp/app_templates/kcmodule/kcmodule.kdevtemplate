@@ -1,11 +1,15 @@
 # KDE Config File
 [General]
 Name=Control Center module
+Name[da]=Kontrolcenter-modul
 Name[hu]=KControl-beállítómodul
+Name[nl]=Configuratiemodule
 Icon=kcmodule.png
 Category=C++/KDE
 Comment=Generates a framework for a module which can be embedded into the KDE Control Center.
+Comment[da]=Genererer et skelet for et modul som kan indlejres i KDE's kontrolcenter.
 Comment[hu]=Létrehoz egy kiindulási KDE vezérlőpult-beállítómodult
+Comment[nl]=Genereert een framework voor een module die kan worden ingebed in het configuratiecentrum van KDE.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kcmodule.tar.gz
@@ -109,3 +113,6 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A control center module was created in %{dest}
+Comment[da]=Et kontrolcenter-modul blev oprettet i %{dest}
+Comment[hu]=Létrejött egy KControl-beállítómodul itt: %{dest}
+Comment[nl]=Een configuratiemodule is aangemaakt in %{dest}

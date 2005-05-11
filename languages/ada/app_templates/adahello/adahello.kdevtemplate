@@ -1,9 +1,15 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
+Name[hu]=Egyszerű Hello world program
+Name[nl]=Eenvoudig 'Hello World' programma
 Icon=adahello.png
 Category=Ada
 Comment=Generates a simple Hello world program in Ada
+Comment[da]=Genererer et simpelt Goddag verden program i Ada
+Comment[hu]=Létrehoz egy egyszerű Hello world programot ADA nyelven
+Comment[nl]=Genereert een eenvoudig Hello World programma in Ada
 FileTemplates=adb,AdaStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.adb
 Archive=adahello.tar.gz
@@ -40,3 +46,6 @@ Dest=%{dest}/src/%{APPNAMELC}.adb
 [MSG]
 Type=message
 Comment=A simple "Hello world" program in ADA was created in %{dest}
+Comment[da]=Et simpelt "Goddag verden" program i ADA blev oprettet i %{dest}
+Comment[hu]=Létrejött egy egyszerű Hello world program ADA nyelven itt: %{dest}
+Comment[nl]=Een eenvoudig "Hello World" programma in Ada is aangemaakt in %{dest}

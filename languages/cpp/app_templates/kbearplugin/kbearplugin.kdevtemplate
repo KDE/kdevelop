@@ -1,10 +1,15 @@
 # KDE Config File
 [General]
 Name=KBear Plugin
+Name[da]=KBear plugin
 Name[hu]=Kbear-bővítőmodul
+Name[nl]=KBear-plugin
 Category=C++/KDE
 Icon=kbearplugin.png
 Comment=Generates a simple KBear plugin with a config page and an output widget.
+Comment[da]=Genererer et simpelt KBear plugin med en indstillingsside og en output-kontrol.
+Comment[hu]=Létrehoz egy egyszerű KBear-bővítőmodult beállítólappal és kimeneti grafikus elemmel.
+Comment[nl]=Genereert een eenvoudige KBear-plugin met een config page en een output widget.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/kbear%{APPNAMELC}plugin.cpp
 Archive=kbearplugin.tar.gz
@@ -110,4 +115,6 @@ Dest=%{dest}/src/hi32-action-kbear%{APPNAMELC}.png
 [MSG]
 Type=message
 Comment=A plugin for KBear was created in %{dest}
+Comment[da]=Et plugin for KBear blev oprettet i %{dest}
 Comment[hu]=Létrejött egy KBear-bővítőmodul itt: %{dest}
+Comment[nl]=Een plugin voor KBear is aangemaakt in %{dest}

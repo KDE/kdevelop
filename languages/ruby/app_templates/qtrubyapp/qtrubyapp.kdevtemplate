@@ -1,10 +1,13 @@
 # KDE Config File
 [General]
 Name=QtRuby Application
+Name[da]=QtRuby-program
+Name[hu]=QtRuby-alapú alkalmazás
 Icon=qtrubyapp.png
 Category=Ruby/Qt
 Category[fr]=Ruby/Qt
 Comment=Generate a QtRuby based application (crossplatform compatible)
+Comment[hu]=Létrehoz egy QtRuby-alapú, keresztfordításra is megfelelő alkalmazást
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
 Archive=qtrubyapp.tar.gz
@@ -52,3 +55,4 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
 [MSG]
 Type=message
 Comment=A QtRuby based application was created in %{dest}
+Comment[hu]=Létrejött egy QtRuby-alapú alkalmazás itt: %{dest}

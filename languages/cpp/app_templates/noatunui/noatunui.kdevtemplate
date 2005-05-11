@@ -114,3 +114,4 @@ Dest=%{dest}/src/%{APPNAMELC}.plugin
 [MSG]
 Type=message
 Comment=A Noatun UI plugin was created in %{dest}
+Comment[hu]=Létrejött egy Noatun UI-modul itt: %{dest}

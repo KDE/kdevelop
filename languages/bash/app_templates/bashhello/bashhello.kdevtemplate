@@ -1,9 +1,15 @@
 # KDE Config File
 [General]
 Name=Simple Bash Shell Script
+Name[da]=Simpelt Bash skalscript
+Name[hu]=Egyszerű Bash-szkript
+Name[nl]=Eenvoudig Bash-shellscript
 Category=Shell
 Category[fr]=Interpr�teur BASH
 Comment=This generates a simplistic 'Hello world' program in Bash shell
+Comment[da]=Dette genererer et simplistisk 'Goddag verden' program i en Bash skal
+Comment[hu]=Létrehoz egy egyszerű Hello world programot a Bash parancsértelmezőhöz
+Comment[nl]=Dit genereert een eenvoudig "Hello World" programma in Bash-shell
 FileTemplates=sh,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sh
 Archive=bashhello.tar.gz
@@ -22,3 +28,6 @@ Dest=%{dest}/%{APPNAMELC}.sh
 [MSG]
 Type=message
 Comment=A simple bash shell script project was created in %{dest}
+Comment[da]=Et simpelt bash skalscript-projekt blev oprettet i %{dest}
+Comment[hu]=Létrejött egy egyszerű Bash-szkript (projekt) itt: %{dest}
+Comment[nl]=Een eenvoudig Bash-shellscript is aangemaakt in %{dest}

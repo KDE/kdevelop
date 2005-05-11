@@ -1,9 +1,15 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
+Name[hu]=Egyszerű Hello world program
+Name[nl]=Eenvoudig 'Hello World' programma
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
+Comment[da]=Genererer et simpelt Goddag verden program i C
+Comment[hu]=Létrehoz egy egyszerű Hello world programot C nyelven
+Comment[nl]=Genereert een eenvoudig Hello World programma in C
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
@@ -13,6 +19,9 @@ Type = value
 ValueType=QString
 Value= OPT_LIBS
 Comment= Optional libraries to link to.
+Comment[da]= Mulige biblioteker at linke til.
+Comment[hu]=Linkelési programkönyvtárak (opcionális).
+Comment[nl]=Optionele bibliotheken om naar te linken
 Default= -lm
 
 [INCLUDES]
@@ -20,6 +29,9 @@ Type = value
 ValueType=QString
 Value= OPT_INCS
 Comment= Optional include path.
+Comment[da]= Mulig include-sti.
+Comment[hu]=Include fájlok könyvtárai (opcionális).
+Comment[nl]=Optioneel Include-pad
 Default= -I/usr/include
 
 [CFLAGS]
@@ -27,11 +39,17 @@ Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
+Comment[da]= Mulige CFLAGS at definere i makefile.
+Comment[hu]=A Makefile-hoz definiálható CFLAGS információ (opcionális).
+Comment[nl]=Optionele CFLAGS om te definiëren in het makefile.
 Default=
 
 [MGS]
 Type=message
 Comment=A simple C project was created in %{dest}.
+Comment[da]=Et simpelt C projekt blev oprette i %{dest}.
+Comment[hu]=Létrejött egy egyszerű C-projekt itt: %{dest}.
+Comment[nl]=Een eenvoudig C-project is aangemaakt in %{dest}.
 Archive=chello.tar.gz
 
 [INCADMIN]

@@ -1,9 +1,12 @@
 # KDE Config File
 [General]
 Name=Python Qt application
+Name[da]=Python Qt program
+Name[hu]=Python/Qt-alapú alkalmazás
 Icon=pyqt.png
 Category=Python
 Comment=This generates an application framework using Python and Qt
+Comment[hu]=Létrehoz egy alkalmazás-keretrendszert Python nyelven, a Qt felhasználásával
 FileTemplates=py,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
 Archive=pyqt.tar.gz
@@ -82,3 +85,4 @@ Dest=%{dest}/filesave.pyxpm
 [MSG]
 Type=message
 Comment=A Python Qt application was created in %{dest}
+Comment[hu]=Létrejött egy Python/Qt-alkalmazás itt: %{dest}

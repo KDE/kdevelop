@@ -1,10 +1,13 @@
 # KDE Config File
 [General]
 Name=Konqueror Navigation Panel Plugin
-Name[hu]=Konqueror navigációs bővítőmodul
+Name[da]=Konqueror navigationspanel plugin
+Name[hu]=Konqueroros navigációs bővítőmodul
 Icon=konqnavpanel.png
 Category=C++/KDE
 Comment=Generates a framework for a plugin  that embeds into Konqueror's navigation panel
+Comment[da]=Genererer et skelet for et plugin der indlejres i Konqueror's navigationspanel
+Comment[hu]=Létrehoz egy alapprogramot konqueroros navigációs panelmodul készítéséhez
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=konqnavpanel.tar.gz
@@ -108,4 +111,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A konqueror navigation panel plugin was created in %{dest}
-Comment[hu]=Létrejött egy Konqueror navigációs modul itt: %{dest}
+Comment[da]=Et Konqueror navigationspanel plugin bleb oprettet i %{dest}
+Comment[hu]=Létrejött egy konqueroros navigációs modul itt: %{dest}

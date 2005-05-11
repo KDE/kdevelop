@@ -5,6 +5,7 @@ Name[hu]=Alkalmazás-keretrendszer (objektumokkal)
 Icon=kpartapp.png
 Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
+Comment[hu]=Létrehoz egy komplex, objektumok használatát támogató KDE-s alkalmazást és egy KPart objektumot.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
 Archive=kpartapp.tar.gz
@@ -150,4 +151,5 @@ Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 [MSG]
 Type=message
 Comment=A complex KDE application using KParts was created in %{dest}
+Comment[hu]=Létrejött egy komplex, objektumok használatát támogató KDE-s alkalmazás itt: %{dest}
 

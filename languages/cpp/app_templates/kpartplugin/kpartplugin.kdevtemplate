@@ -5,6 +5,7 @@ Name[hu]=KHTML-bővítőmodul
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
+Comment[da]=Genererer et plugin for KHTML parten.
 Comment[hu]=Létrehoz egy KHTML-bővítőmodult.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
@@ -120,4 +121,5 @@ Dest=%{dest}/src/hi32-action-plugin.png
 [MSG]
 Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
+Comment[da]=Et KHTMLPart plugin bleb oprettet i %{dest}
 Comment[hu]=Létrejött egy KHTML-bővítőmodul itt: %{dest}

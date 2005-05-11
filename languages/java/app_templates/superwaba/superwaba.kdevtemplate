@@ -4,6 +4,7 @@ Name=SuperWaba
 Icon=superwaba.png
 Category=Java
 Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
+Comment[hu]=Egyszerű sablon SuperWaba Java-alkalmazások készítéséhez, WinCE és PalmOS platformra. Részletes információ itt található: http://www.superwaba.org
 FileTemplates=java
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.java
 Archive=superwaba.tar.gz
@@ -12,6 +13,8 @@ Archive=superwaba.tar.gz
 Type=value
 Value=JAVA
 Comment=Path to your java root
+Comment[da]=Sti til din java-rod
+Comment[hu]=A Java-alapkönyvtár elérési útja
 Default=/usr/lib/java
 ValueType=QString
 
@@ -19,6 +22,8 @@ ValueType=QString
 Type=value
 Value=WABA
 Comment=Path to your SuperWaba root
+Comment[da]=Sti til din SuperWaba-rod
+Comment[hu]=A SuperWaba-alapkönyvtár elérési útja
 Default=/usr/lib
 ValueType=QString
 
@@ -51,6 +56,7 @@ Dest=%{dest}/%{APPNAME}.java
 [MESSAGE]
 Type=Message
 Comment=Your application is setup to build. Edit the make targets to customize the file.
+Comment[hu]=Az alkalmazás készen áll a lefordításra. A make-célpontok szerkeszthetők, ha szükséges.
 Archive=superwaba.tar.gz
 
 [GNU]

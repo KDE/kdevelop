@@ -5,6 +5,7 @@ Name[hu]=KConfig XT-alapú alkalmazás
 Category=C++/KDE
 Icon=preview.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
+Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és egy beállítóablakkal
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kxt.tar.gz

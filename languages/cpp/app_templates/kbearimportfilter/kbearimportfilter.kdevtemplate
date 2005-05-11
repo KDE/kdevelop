@@ -1,9 +1,15 @@
 # KDE Config File
 [General]
 Name=KBear Import Filter
+Name[da]=KBear importfilter
+Name[hu]=KBear-importszűrő
+Name[nl]=KBear-importfilter
 Category=C++/KDE
 Icon=kbearimportfilter.png
 Comment=Generates a simple KBear import filter.
+Comment[da]=Genererer et simpelt KBear importfilter.
+Comment[hu]=Létrehoz egy egyszerű KBear-importszűrőt.
+Comment[nl]=Genereert een eenvoudig KBear-importfilter.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kbearimportfilter.tar.gz
@@ -69,4 +75,6 @@ Dest=%{dest}/src/kbear%{APPNAMELC}importfilter.desktop
 [MSG]
 Type=message
 Comment=An import filter for KBear was created in %{dest}
+Comment[da]=Et importfilter for KBear blev oprettet i %{dest}
 Comment[hu]=Létrejött egy KBear-importszűrő itt: %{dest}
+Comment[nl]=Een importfilter voor KBear is aangemaakt in %{dest}

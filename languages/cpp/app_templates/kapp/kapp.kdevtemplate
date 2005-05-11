@@ -1,10 +1,15 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[da]=Programskelet
 Name[hu]=Alkalmazás-keretrendszer
+Name[nl]=Applicationframework
 Icon=kapp.png
 Category=C++/KDE
 Comment=Generates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
+Comment[da]=Genererer et simpelt KDE program med et vindue på topniveau, menuer og værktøjslinjer. Der sørges også for en DCOP-grænseflade, så dit program kan sørge for en script-grænseflade
+Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy főablakkal, menükkel és eszköztárakkal. DCOP-felület is létre lesz hozva, ezért az alkalmazás szkriptelési felületet is biztosíthat.
+Comment[nl]=Genereert een eenvoudige KDE-toepassing met één toplevel window, menu's en toolbars. Er wordt ook een DCOP-interface aangeleverd, zodat uw toepassing een scripting interface kan aanleveren.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}view.cpp,%{dest}/src/README
 Archive=kapp.tar.gz
@@ -164,4 +169,6 @@ Dest=%{dest}/src/README
 [MSG]
 Type=message
 Comment=A KDE Application was created at %{dest}
+Comment[da]=Et KDE program blev oprettet i %{dest}
 Comment[hu]=Létrejött egy KDE-s alkalmazás itt: %{dest}
+Comment[nl]=Een KDE-toepassing is aangemaakt in %{dest}

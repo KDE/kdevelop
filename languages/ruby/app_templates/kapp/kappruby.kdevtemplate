@@ -1,10 +1,13 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[da]=Programskelet
 Name[hu]=Alkalmazás-keretrendszer
+Name[nl]=Applicationframework
 Icon=kapp.png
 Category=Ruby/KDE
 Comment=Generates a simple Korundum application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
+Comment[hu]=Létrehoz egy egyszerű Korundum-alkalmazást egy főablakkal, menükkel és eszköztárakkal. DCOP-felület is tartozik az alkalmazáshoz, így könnyen kialakítható hozzá szkriptelési felület.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
 Archive=kappruby.tar.gz
@@ -154,3 +157,4 @@ Dest=%{dest}/src/README
 [MSG]
 Type=message
 Comment=A Korundum Application was created at %{dest}
+Comment[hu]=Létrejött egy Korundum-alapú alkalmazás itt: %{dest}

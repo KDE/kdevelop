@@ -1,10 +1,13 @@
 # KDE Config File
 [General]
 Name=Kicker Applet
+Name[da]=Kicker-applet
 Name[hu]=Panel-kisalkalmazás
 Icon=kicker.png
 Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
+Comment[da]=Genererer et skelet for en applet der indlejres i KDE's panel
+Comment[hu]=Létrehoz egy keretprogramot KDE-s panel-kisalkalmazás készítéséhez
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kicker.tar.gz
@@ -108,4 +111,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Kicker Applet was created in %{dest}
+Comment[da]=En Kicker applet blev oprettet i %{dest}
 Comment[hu]=Létrejött egy panel-kisalkalmazás itt: %{dest}

@@ -1,11 +1,15 @@
 # KDE Config File
 [General]
 Name=KDE DCOP Service
+Name[da]=KDE DCOP-service
 Name[hu]=KDE DCOP-szolgáltatás
+Name[nl]=KDE DCOP-service
 Icon=kdcop.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE dcop service and client access library.
+Comment[da]=Genererer et skelet for en KDE dcop-tjeneste og klientadgangsbibliotek.
 Comment[hu]=Létrehoz egy kiindulási KDE DCOP-szolgálatást és klienselérési programkönyvtárat.
+Comment[nl]=Genereert een framework voor een KDE DCOP-service- en client acces-bibliotheek.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=dcopservice.tar.gz
@@ -114,4 +118,6 @@ Dest=%{dest}/src/main.cpp
 [MSG]
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
+Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
 Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
+Comment[nl]=Een DCOP-service is aangemaakt in  %{dest}

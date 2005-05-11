@@ -1,11 +1,15 @@
 # KDE Config File
 [General]
 Name=Simple SDL program
+Name[da]=Simpelt SDL-program
 Name[hu]=Egyszerű SDL-alkalmazás
+Name[nl]=Eenvoudig SDL-programma
 Icon=cppsdl.png
 Category=C++
 Comment=Generates a simple SDL program in C++
+Comment[da]=Genererer et simpelt SDL program i C++
 Comment[hu]=Létrehoz egy egyszerű SDL-alkalmazást C++-ban
+Comment[nl]=Genereert een eenvoudig SDL-programma in C++
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=cppsdlhello.tar.gz
@@ -62,4 +66,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A simple SDL program was created in %{dest}
+Comment[da]=Et simpelt SDL-program blev oprettet i %{dest}
 Comment[hu]=Létrejött egy egyszerű SDL-alkalmazás itt: %{dest}
+Comment[nl]=Een eenvoudig SDL-programma is aangemaakt in %{dest}

@@ -1,9 +1,15 @@
 # KDE Config File
 [General]
 Name=Simple ncurses Hello world program
+Name[da]=Simpelt ncurses Goddag verden program
+Name[hu]=Egyszerű, Ncurses-alapú Hello world program
+Name[nl]=Een eenvoudig ncurses Hello World-programma
 Icon=
 Category=C++
 Comment=Generates a simple ncurses based Hello world program in C++
+Comment[da]=Genererer et simpelt ncurses baseret Goddag verden program in C++
+Comment[hu]=Létrehoz egy egyszerű, Ncurses-alapú Hello world programot C++-ban
+Comment[nl]=Genereert een eenvoudig ncurses-gebaseerd Hello World-programma in C++
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=cppcurseshello.tar.gz
@@ -54,3 +60,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A simple hello world program using ncurses was created in %{dest}
+Comment[da]=Et simpelt Goddag verden program ved brug af ncurses blev oprettet i %{dest}
+Comment[hu]=Létrejött egy egyszerű, Ncurses-alapú Hello world program itt: %{dest}
+Comment[nl]=Een eenvoudig Hallo Wereld-programma gebruikmakend van ncurses is aangemaakt in %{dest}

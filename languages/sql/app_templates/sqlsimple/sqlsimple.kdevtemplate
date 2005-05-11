@@ -1,8 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple SQL Project
+Name[da]=Simpelt SQL-projekt
+Name[hu]=Egyszerű SQL-projekt
 Category=Database
 Comment=Generates a simple SQL project.
+Comment[da]=Genererer et simpelt SQL projekt.
+Comment[hu]=Létrehoz egy egyszerű SQL-projektet.
 FileTemplates=sql,AdaStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sql
 Archive=sqlsimple.tar.gz
@@ -21,3 +25,4 @@ Dest=%{dest}/%{APPNAMELC}.sql
 [MSG]
 Type=install
 Comment=A simple SQL project was created in %{dest}
+Comment[hu]=Létrejött egy egyszerű SQL-projekt itt: %{dest}

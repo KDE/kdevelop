@@ -1,10 +1,13 @@
 # KDE Config File
 [General]
 Name=Hello world program
+Name[da]=Goddag verden program
+Name[nl]=Hello World-programma
 Icon=qmakesimple.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generates a simple Hello world program in C++ using QMake based project manager
+Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban, QMake-alapú projektkezelővel
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=qmakesimple.tar.gz
@@ -37,3 +40,4 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A Qmake based hello world program was created in %{dest}
+Comment[hu]=Létrejött egy Qmake-alapú Hello world program itt: %{dest}

@@ -1,9 +1,13 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
+Name[hu]=Egyszerű Hello world program
+Name[nl]=Eenvoudig 'Hello World' programma
 Icon=pascalhello.png
 Category=Pascal
 Comment=Generates a simple Hello world program in Pascal
+Comment[hu]=Létrehoz egy egyszerű Hello world programot Pascalban
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
 Archive=pascalhello.tar.gz
@@ -30,3 +34,4 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A simple 'hello world' program in Pascal was created in %{dest}
+Comment[hu]=Létrejött egy egyszerű Hello world Pascal-program itt: %{dest}

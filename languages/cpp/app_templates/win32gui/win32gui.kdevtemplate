@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple Win32 GUI App.
+Name[hu]=Egyszerű Win32-alapú, grafikus felületű alkalmazás
 Icon=win32gui.png
 Category=C++
 Comment=Generates a shell project for crosscompiling Win32 projects.
+Comment[hu]=Létrehoz egy konzolos projektet Win32-projektek keresztfordításához.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
 Archive=win32gui.tar.gz
@@ -54,4 +56,5 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
+Comment[hu]=A projekt lefordításához és futtatásához szükség van a Wine és a MinGW telepítésére.
 
