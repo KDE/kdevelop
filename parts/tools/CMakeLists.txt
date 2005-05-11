@@ -14,7 +14,7 @@ KDE_AUTOMOC(${kdevtools_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevtools_PART_SRCS ${kdevtools_UI} )
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_CURRENT_SOURCE_DIR})
 
 ADD_LIBRARY(kdevtools SHARED ${kdevtools_PART_SRCS})
 

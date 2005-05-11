@@ -1,6 +1,6 @@
 SUBDIRS( app_templates file_templates doc )
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/languages/lib/designer_integration ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/languages/lib/designer_integration ${CMAKE_BINARY_DIR}/languages/lib/designer_integration ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
 
 SET(kdevpythonsupport_PART_SRCS
 pythonsupportpart.cpp

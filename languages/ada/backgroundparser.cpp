@@ -19,11 +19,7 @@
 
 #include <config.h>
 
-#ifdef HAVE_SSTREAM
 #include <sstream>
-#else
-#include <strstream.h>
-#endif
 
 BackgroundParser::BackgroundParser( ProblemReporter* reporter,
                                     const QString& source,
@@ -43,11 +39,7 @@ void BackgroundParser::run()
     QCString _fn = QFile::encodeName(m_fileName);
     std::string fn( _fn.data() );
 
-#ifdef HAVE_SSTREAM
     std::istringstream stream( m_source.utf8().data() );
-#else
-    istrstream stream( m_source.utf8().data() );
-#endif
 
     AdaLexer lexer( stream );
     lexer.setFilename( fn );
