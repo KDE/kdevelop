@@ -2,11 +2,13 @@
 [General]
 Name=KHTMLPart plugin
 Name[hu]=KHTML-bővítőmodul
+Name[sv]=Insticksprogram för KHTML-delprogram
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
 Comment[da]=Genererer et plugin for KHTML parten.
 Comment[hu]=Létrehoz egy KHTML-bővítőmodult.
+Comment[sv]=Skapar ett insticksprogram för KHTML-delprogrammet
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kpartplugin.tar.gz
@@ -123,3 +125,4 @@ Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
 Comment[da]=Et KHTMLPart plugin bleb oprettet i %{dest}
 Comment[hu]=Létrejött egy KHTML-bővítőmodul itt: %{dest}
+Comment[sv]=Ett insticksprogram för KHTML-delprogrammet skapades i %{dest}

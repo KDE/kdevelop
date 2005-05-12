@@ -3,10 +3,12 @@
 Name=Opie Input
 Name[da]=Opie-input
 Name[hu]=Opie-s bemeneti modul
+Name[sv]=Opie-inmatning
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie input method plugin.
 Comment[hu]=Létrehoz egy Opie-s bemeneti modult.
+Comment[sv]=Skapa ett insticksprogram för Opie-inmatning.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieinput.tar.gz
@@ -49,4 +51,5 @@ Dest=%{dest}/%{APPNAMELC}.h
 Type=message
 Comment=An opie input method plugin was created in %{dest}
 Comment[hu]=Létrejött egy Opie-s bemeneti modul itt: %{dest}
+Comment[sv]=Ett insticksprogram för Opie-inmatning skapades i %{dest}
 

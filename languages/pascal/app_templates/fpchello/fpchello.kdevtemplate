@@ -2,9 +2,11 @@
 [General]
 Name=Simple program
 Name[hu]=Egyszerű program
+Name[sv]=Enkelt program
 Category=Pascal/Free Pascal
 Comment=Generates a simple program in Pascal
 Comment[hu]=Létrehoz egy egyszerű programot Pascalban
+Comment[sv]=Skapar ett enkelt program i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
 Archive=fpchello.tar.gz
@@ -32,3 +34,4 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 Type=message
 Comment=A simple pascal program was created in %{dest}
 Comment[hu]=Létrejött egy egyszerű Pascal-program itt: %{dest}
+Comment[sv]=Ett enkelt Pascal-program skapades i %{dest}

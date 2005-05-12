@@ -4,12 +4,18 @@ Name=Simple Hello world program
 Name[da]=Simpelt Goddag verden program
 Name[hu]=Egyszerű Hello world program
 Name[nl]=Eenvoudig 'Hello World' programma
+Name[pt_BR]=programa 'Olá mundo' simples
+Name[ru]=Простая программа Hello world
+Name[sv]=Enkelt Hello world-program
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
 Comment[da]=Genererer et simpelt Goddag verden program i C
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C nyelven
 Comment[nl]=Genereert een eenvoudig Hello World programma in C
+Comment[pt_BR]=Gera um programa 'Olá Mundo' em C
+Comment[ru]=Создаёт программу Hello world на C
+Comment[sv]=Skapar ett enkelt Hello world-program i C
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
@@ -22,6 +28,9 @@ Comment= Optional libraries to link to.
 Comment[da]= Mulige biblioteker at linke til.
 Comment[hu]=Linkelési programkönyvtárak (opcionális).
 Comment[nl]=Optionele bibliotheken om naar te linken
+Comment[pt_BR]= Bibliotecas opcionais para linkar.
+Comment[ru]=Необязательные библиотеки для компоновки.
+Comment[sv]= Valfria bibliotek att länka till.
 Default= -lm
 
 [INCLUDES]
@@ -32,6 +41,9 @@ Comment= Optional include path.
 Comment[da]= Mulig include-sti.
 Comment[hu]=Include fájlok könyvtárai (opcionális).
 Comment[nl]=Optioneel Include-pad
+Comment[pt_BR]= Caminho do include opcional.
+Comment[ru]=Необязательные пути для включения.
+Comment[sv]= Valfri sökväg till deklarationsfiler.
 Default= -I/usr/include
 
 [CFLAGS]
@@ -42,6 +54,9 @@ Comment= Optional CFLAGS to define in the makefile.
 Comment[da]= Mulige CFLAGS at definere i makefile.
 Comment[hu]=A Makefile-hoz definiálható CFLAGS információ (opcionális).
 Comment[nl]=Optionele CFLAGS om te definiëren in het makefile.
+Comment[pt_BR]= CFLAGS opcional para definição em um makefile.
+Comment[ru]=Необязательные CFLAGS для makefile.
+Comment[sv]= Valfria CFLAGS att definiera i byggfilen.
 Default=
 
 [MGS]
@@ -50,6 +65,9 @@ Comment=A simple C project was created in %{dest}.
 Comment[da]=Et simpelt C projekt blev oprette i %{dest}.
 Comment[hu]=Létrejött egy egyszerű C-projekt itt: %{dest}.
 Comment[nl]=Een eenvoudig C-project is aangemaakt in %{dest}.
+Comment[pt_BR]=Um projeto em C simples foi criado em %{dest}.
+Comment[ru]=Простой проект на C создан в %{dest}.
+Comment[sv]=Ett enkelt C-projekt skapades i %{dest}.
 Archive=chello.tar.gz
 
 [INCADMIN]

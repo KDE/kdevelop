@@ -3,10 +3,12 @@
 
 Name=KConfig XT application
 Name[hu]=KConfig XT-alapú alkalmazás
+Name[sv]=KConfig XT-program
 Category=Ruby/KDE
 Icon=previewruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
 Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és egy beállítóablakkal
+Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
 Archive=kxtruby.tar.gz
 
@@ -166,3 +168,4 @@ Dest=%{dest}/src/settings.kcfgc
 Type=message
 Comment=A Korundum KConfig XT Application was created at %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú KConfig XT-s alkalmazás itt: %{dest}
+Comment[sv]=Ett Korundum KConfig XT-program skapades i %{dest}

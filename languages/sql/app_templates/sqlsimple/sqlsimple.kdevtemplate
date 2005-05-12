@@ -3,10 +3,12 @@
 Name=Simple SQL Project
 Name[da]=Simpelt SQL-projekt
 Name[hu]=Egyszerű SQL-projekt
+Name[sv]=Enkelt SQL-projekt
 Category=Database
 Comment=Generates a simple SQL project.
 Comment[da]=Genererer et simpelt SQL projekt.
 Comment[hu]=Létrehoz egy egyszerű SQL-projektet.
+Comment[sv]=Skapar ett enkelt SQL-projekt.
 FileTemplates=sql,AdaStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sql
 Archive=sqlsimple.tar.gz
@@ -26,3 +28,4 @@ Dest=%{dest}/%{APPNAMELC}.sql
 Type=install
 Comment=A simple SQL project was created in %{dest}
 Comment[hu]=Létrejött egy egyszerű SQL-projekt itt: %{dest}
+Comment[sv]=Ett enkelt SQL-projekt skapades i %{dest}
