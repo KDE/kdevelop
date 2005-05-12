@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Kate plugin with config page
+Name[sv]=Kate-insticksprogram med inställningssida
 Icon=kateplugin2.png
 Category=C++/KDE
 Comment=Generates a plugin with config page for Kate the text editor.
+Comment[sv]=Skapar ett insticksprogram för texteditorn Kate med en inställningssida.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kateplugin2.tar.gz
@@ -123,3 +125,4 @@ Dest=%{dest}/src/hi32-action-plugin.png
 [MSG]
 Type=message
 Comment=A plugin for Kate with a config page was created in %{dest}
+Comment[sv]=Ett insticksprogram för Kate med en inställningssida skapades i %{dest}

@@ -1,8 +1,10 @@
 # KDE Config File
 [General]
 Name=Simple program
+Name[sv]=Enkelt program
 Category=Pascal/Free Pascal
 Comment=Generates a simple program in Pascal
+Comment[sv]=Skapar ett enkelt program i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
 Archive=fpchello.tar.gz
@@ -29,3 +31,4 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A simple pascal program was created in %{dest}
+Comment[sv]=Ett enkelt Pascal-program skapades i %{dest}

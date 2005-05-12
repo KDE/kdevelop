@@ -2,9 +2,11 @@
 [General]
 Name=Opie Applet
 Name[ga]=Feidhmchláirín Opie
+Name[sv]=Opie-miniprogram
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
+Comment[sv]=Skapa ett Opie-miniprogram.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapplet.tar.gz
@@ -46,3 +48,4 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie applet was created in %{dest}
+Comment[sv]=Ett Opie-miniprogram skapades i %{dest}

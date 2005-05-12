@@ -2,9 +2,11 @@
 [General]
 Name=Opie Input
 Name[ga]=Ionchur Opie
+Name[sv]=Opie-inmatning
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie input method plugin.
+Comment[sv]=Skapa ett insticksprogram för Opie-inmatning.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieinput.tar.gz
@@ -46,4 +48,5 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie input method plugin was created in %{dest}
+Comment[sv]=Ett insticksprogram för Opie-inmatning skapades i %{dest}
 

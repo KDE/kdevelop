@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Application framework (KParts)
+Name[sv]=Programramverk (KParts)
 Icon=kpartapp.png
 Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
+Comment[sv]=Skapar ett komplext KDE-program med ett KPart-skal och en KPart-komponent.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
 Archive=kpartapp.tar.gz
@@ -149,4 +151,5 @@ Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 [MSG]
 Type=message
 Comment=A complex KDE application using KParts was created in %{dest}
+Comment[sv]=Ett komplext KDE-program som använder KParts skapades i %{dest}
 

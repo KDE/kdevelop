@@ -2,9 +2,11 @@
 [General]
 Name=KHTMLPart plugin
 Name[ga]=Breiseán KHTMLPart
+Name[sv]=Insticksprogram för KHTML-delprogram
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
+Comment[sv]=Skapar ett insticksprogram för KHTML-delprogrammet
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
 Archive=kpartplugin.tar.gz
@@ -119,3 +121,4 @@ Dest=%{dest}/src/hi32-action-plugin.png
 [MSG]
 Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
+Comment[sv]=Ett insticksprogram för KHTML-delprogrammet skapades i %{dest}

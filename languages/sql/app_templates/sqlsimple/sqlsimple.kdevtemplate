@@ -2,8 +2,10 @@
 [General]
 Name=Simple SQL Project
 Name[ga]=Tionscadal Simplí SQL
+Name[sv]=Enkelt SQL-projekt
 Category=Database
 Comment=Generates a simple SQL project.
+Comment[sv]=Skapar ett enkelt SQL-projekt.
 FileTemplates=sql,AdaStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sql
 Archive=sqlsimple.tar.gz
@@ -22,3 +24,4 @@ Dest=%{dest}/%{APPNAMELC}.sql
 [MSG]
 Type=install
 Comment=A simple SQL project was created in %{dest}
+Comment[sv]=Ett enkelt SQL-projekt skapades i %{dest}

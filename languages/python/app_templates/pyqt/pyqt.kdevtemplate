@@ -2,9 +2,11 @@
 [General]
 Name=Python Qt application
 Name[ga]=Feidhmchlár Qt Python
+Name[sv]=Python Qt-program
 Icon=pyqt.png
 Category=Python
 Comment=This generates an application framework using Python and Qt
+Comment[sv]=Detta skapar ett programramverk med användning av Python och Qt
 FileTemplates=py,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
 Archive=pyqt.tar.gz
@@ -83,3 +85,4 @@ Dest=%{dest}/filesave.pyxpm
 [MSG]
 Type=message
 Comment=A Python Qt application was created in %{dest}
+Comment[sv]=Ett Python Qt-program skapades i %{dest}

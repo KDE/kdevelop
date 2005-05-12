@@ -1,11 +1,14 @@
 # KDE Config File
 [General]
 Name=Application
+Name[br]=Arload
 Name[ga]=Feidhmchlár
+Name[sv]=Program
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant
 Comment=Generate a Java application
+Comment[sv]=Skapa ett Java-program
 FileTemplates=java,JavaStyle
 ShowFilesAfterGeneration=%{dest}/Main.java
 Archive=javahello.tar.gz
@@ -34,3 +37,4 @@ Dest=%{dest}/build.xml
 [msg]
 Type=message
 Comment=A JAVA application was created in %{dest}
+Comment[sv]=Ett Java-program skapades i %{dest}

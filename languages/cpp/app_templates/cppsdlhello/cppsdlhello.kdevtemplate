@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple SDL program
+Name[sv]=Enkelt SDL-program
 Icon=cppsdl.png
 Category=C++
 Comment=Generates a simple SDL program in C++
+Comment[sv]=Skapar ett enkelt SDL-program i C++
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=cppsdlhello.tar.gz
@@ -60,3 +62,4 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A simple SDL program was created in %{dest}
+Comment[sv]=Ett enkelt SDL-program skapades i %{dest}

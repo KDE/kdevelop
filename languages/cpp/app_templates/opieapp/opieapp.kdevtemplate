@@ -2,9 +2,11 @@
 [General]
 Name=Opie Application
 Name[ga]=Feidhmchlár Opie
+Name[sv]=Opie-program
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie application.
+Comment[sv]=Skapa ett Opie-program.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieapp.tar.gz
@@ -60,3 +62,4 @@ Dest=%{dest}/apps/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=An opie application was created in %{dest}
+Comment[sv]=Ett Opie-program skapades i %{dest}

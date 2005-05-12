@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[sv]=Enkelt Hello world-program
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
+Comment[sv]=Skapar ett enkelt Hello world-program i C
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
@@ -13,6 +15,7 @@ Type = value
 ValueType=QString
 Value= OPT_LIBS
 Comment= Optional libraries to link to.
+Comment[sv]= Valfria bibliotek att länka till.
 Default= -lm
 
 [INCLUDES]
@@ -20,6 +23,7 @@ Type = value
 ValueType=QString
 Value= OPT_INCS
 Comment= Optional include path.
+Comment[sv]= Valfri sökväg till deklarationsfiler.
 Default= -I/usr/include
 
 [CFLAGS]
@@ -27,11 +31,13 @@ Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
+Comment[sv]= Valfria CFLAGS att definiera i byggfilen.
 Default=
 
 [MGS]
 Type=message
 Comment=A simple C project was created in %{dest}.
+Comment[sv]=Ett enkelt C-projekt skapades i %{dest}.
 Archive=chello.tar.gz
 
 [INCADMIN]

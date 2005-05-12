@@ -4,6 +4,7 @@ Name=SuperWaba
 Icon=superwaba.png
 Category=Java
 Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
+Comment[sv]=En enkel mall för att bygga SuperWaba Java-baserade program på WinCE och PalmOS. Mer information hittas på http://www.superwaba.org.
 FileTemplates=java
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.java
 Archive=superwaba.tar.gz
@@ -12,6 +13,7 @@ Archive=superwaba.tar.gz
 Type=value
 Value=JAVA
 Comment=Path to your java root
+Comment[sv]=Sökväg till Java-rotkatalog
 Default=/usr/lib/java
 ValueType=QString
 
@@ -19,6 +21,7 @@ ValueType=QString
 Type=value
 Value=WABA
 Comment=Path to your SuperWaba root
+Comment[sv]=Sökväg till SuperWaba-rotkatalog
 Default=/usr/lib
 ValueType=QString
 
@@ -51,6 +54,7 @@ Dest=%{dest}/%{APPNAME}.java
 [MESSAGE]
 Type=Message
 Comment=Your application is setup to build. Edit the make targets to customize the file.
+Comment[sv]=Programmet är inställt att byggas. Redigera byggmålen för att anpassa filen.
 Archive=superwaba.tar.gz
 
 [GNU]

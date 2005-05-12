@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=KConfig XT application
+Name[sv]=KConfig XT-program
 Category=C++/KDE
 Icon=kxt.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
+Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kxt.tar.gz
@@ -180,3 +182,4 @@ Dest=%{dest}/configure.in.in
 [MSG]
 Type=message
 Comment=A KConfig XT application was created in %{dest}
+Comment[sv]=Ett KConfig XT-program skapades i %{dest}

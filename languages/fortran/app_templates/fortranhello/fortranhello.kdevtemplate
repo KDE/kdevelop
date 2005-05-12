@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[sv]=Enkelt Hello world-program
 Icon=fortranhello.png
 Category=Fortran
 Comment=Generates a simple Hello world program in Fortran
+Comment[sv]=Skapar ett enkelt Hello world-program i Fortran
 FileTemplates=f,None
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.f
 Archive=fortranhello.tar.gz
@@ -54,3 +56,4 @@ Dest=%{dest}/src/%{APPNAMELC}.f
 [MSG]
 Type=message
 Comment=a simple "Hello world" program in fortran was created in %{dest}
+Comment[sv]=Ett enkelt "Hello world"-program i Fortran skapades i %{dest}

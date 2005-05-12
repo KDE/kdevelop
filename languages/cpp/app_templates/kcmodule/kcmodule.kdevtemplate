@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Control Center module
+Name[sv]=Modul i inställningscentralen
 Icon=kcmodule.png
 Category=C++/KDE
 Comment=Generates a framework for a module which can be embedded into the KDE Control Center.
+Comment[sv]=Skapar ett ramverk för en modul som kan inbäddas i KDE:s inställningscentral.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=kcmodule.tar.gz
@@ -107,3 +109,4 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A control center module was created in %{dest}
+Comment[sv]=En modul i inställningscentralen skapades i %{dest}

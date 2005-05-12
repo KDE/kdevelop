@@ -1,8 +1,10 @@
 # KDE Config File
 [General]
 Name=KDevelop Plugin (Standalone build)
+Name[sv]=KDevelop-insticksprogram (att bygga fristående)
 Category=C++/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
+Comment[sv]=Detta skapar ett KDevelop-delprogram, att bygga utanför KDevelops källkodsträd.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
 Archive=kdevpart2.tar.gz
@@ -12,6 +14,7 @@ Type = value
 ValueType=QString
 Value= SCOPE
 Comment= The scope of a plugin (Global, Project, Core)
+Comment[sv]= Insticksprogrammets omfattning (Global, Projekt, Kärna)
 Default= Global
 
 [PROPS]
@@ -19,6 +22,7 @@ Type = value
 ValueType=QString
 Value= PROPS
 Comment= The list of supported KDevelop properties
+Comment[sv]= Listan med egenskaper i KDevelop som stöds
 Default=
 
 [ADMIN]
@@ -135,3 +139,4 @@ Dest=%{dest}/src/README.dox
 [MSG]
 Type=message
 Comment=A KDevelop plugin was created in %{dest}
+Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}

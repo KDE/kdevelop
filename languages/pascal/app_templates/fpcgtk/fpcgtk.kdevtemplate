@@ -2,8 +2,10 @@
 [General]
 Name=GTK+ application
 Name[ga]=Feidhmchlár GTK+
+Name[sv]=GTK+ program
 Category=Pascal/Free Pascal
 Comment=Generates a GTK+ based GUI application in Pascal
+Comment[sv]=Skapar ett GTK+ baserat program med grafiskt användargränssnitt i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
 Archive=fpcgtk.tar.gz
@@ -30,3 +32,4 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A GTK+ application written in pascal was created in %{dest}
+Comment[sv]=Ett GTK+ program skrivet i Pascal skapades i %{dest}

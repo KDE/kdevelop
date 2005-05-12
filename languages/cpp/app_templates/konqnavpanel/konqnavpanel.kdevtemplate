@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Konqueror Navigation Panel Plugin
+Name[sv]=Konqueror-insticksprogram för navigeringspanelen
 Icon=konqnavpanel.png
 Category=C++/KDE
 Comment=Generates a framework for a plugin  that embeds into Konqueror's navigation panel
+Comment[sv]=Skapar ett ramverk för ett insticksprogram som inbäddas i Konquerors navigeringspanel
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=konqnavpanel.tar.gz
@@ -107,3 +109,4 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A konqueror navigation panel plugin was created in %{dest}
+Comment[sv]=Ett Konqueror-insticksprogram för navigeringspanelen skapades i %{dest}
