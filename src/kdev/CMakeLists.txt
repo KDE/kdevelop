@@ -35,7 +35,7 @@ KDE_AUTOMOC(${kdevshell_LIB_SRCS})
 
 ADD_LIBRARY(kdevshell SHARED ${kdevshell_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevshell ${QT_LIBRARIES} kdecore kdeui kparts kio ktexteditor kmdi kdevelop kdevextras kdevwidgets profileengine d kinterfacedesigner )
+TARGET_LINK_LIBRARIES(kdevshell kmdi kdevelop kdevextras kdevwidgets profileengine d kinterfacedesigner )
 
 
 SET(kdevelop3_SRCS
@@ -51,7 +51,7 @@ KDE_ADD_UI_FILES(kdevelop3_SRCS ${kdevelop3_UI} )
 
 ADD_EXECUTABLE(kdevelop3 ${kdevelop3_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevelop3 ${QT_LIBRARIES} kdecore kdeui kparts kio kdevshell)
+TARGET_LINK_LIBRARIES(kdevelop3 kdevshell)
 
 SET_TARGET_PROPERTIES(kdevelop3 PROPERTIES INSTALL_AS kdevelop)
 
@@ -64,7 +64,7 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevassistant kdevshell)
 
-INSTALL_TARGETS(/bin kdevassistant kdevelop)
+INSTALL_TARGETS(/bin kdevassistant kdevelop3)
 
 #original Makefile.am contents follow:
 
