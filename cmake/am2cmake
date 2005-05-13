@@ -230,7 +230,8 @@ class CMakeFile
             file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
          elsif buildTarget.type==Part
             file.printf("ADD_LIBRARY(%s MODULE ${%s})\n\n", buildTarget.name, srcsName)
-            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\"\n\n")
+            file.printf("KDE_CREATE_LIBTOOL_FILE (${%s})\n\n", buildTarget.name)
+#            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\"\n\n")
          else
             file.printf("ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
          end
