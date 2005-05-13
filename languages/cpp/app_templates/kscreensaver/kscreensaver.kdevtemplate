@@ -2,12 +2,17 @@
 [General]
 Name=KDE Screen Saver
 Name[da]=KDE pauseskærm
+Name[et]=KDE ekraanisäästja
 Name[hu]=KDE-s képernyővédő
+Name[pt_BR]=Protetor de Tela do KDE
 Name[sv]=KDE-skärmsläckare
 Icon=kscreensaver.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE screensaver.
+Comment[da]=Genererer et skelet for en KDE-pauseskærm.
+Comment[et]=KDE ekraanisäästja raamistiku loomine.
 Comment[hu]=Létrehoz egy alap KDE-s képernyővédőt.
+Comment[pt_BR]=Gera um framework para um protetor de tela do  KDE.
 Comment[sv]=Skapar ett ramverk för en KDE-skärmsläckare
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -119,5 +124,8 @@ Dest=%{dest}/src/%{APPNAMELC}ui.ui
 [MSG]
 Type=message
 Comment=A screensaver application was created in %{dest}
+Comment[da]=Et pauseskærmsprogram blev oprettet i %{dest}
+Comment[et]=Ekraanisäästja rakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy alap képernyővédő program itt: %{dest}
+Comment[pt_BR]=Um aplicativo protetor de tela foi criado em  %{dest}
 Comment[sv]=Ett skärmsläckarprogram skapades i %{dest}

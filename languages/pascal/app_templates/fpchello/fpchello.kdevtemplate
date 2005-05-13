@@ -1,11 +1,17 @@
 # KDE Config File
 [General]
 Name=Simple program
+Name[da]=Simpelt program
+Name[et]=Lihtne programm
 Name[hu]=Egyszerű program
+Name[pt_BR]=Programa Simples 
 Name[sv]=Enkelt program
 Category=Pascal/Free Pascal
 Comment=Generates a simple program in Pascal
+Comment[da]=Genererer et simpelt program i Pascal
+Comment[et]=Lihtsa programmi loomine Pascalis
 Comment[hu]=Létrehoz egy egyszerű programot Pascalban
+Comment[pt_BR]=Gera um programa simples em Pascal
 Comment[sv]=Skapar ett enkelt program i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
@@ -33,5 +39,8 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A simple pascal program was created in %{dest}
+Comment[da]=Et simpelt pascal program blev oprettet i %{dest}
+Comment[et]=Lihtne Pascali programm loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Pascal-program itt: %{dest}
+Comment[pt_BR]=Um programa simples em Pascal foi criado em %{dest}
 Comment[sv]=Ett enkelt Pascal-program skapades i %{dest}

@@ -2,13 +2,17 @@
 [General]
 Name=KOffice Part
 Name[da]=KOffice part
+Name[et]=KOffice'i komponent
 Name[hu]=KOffice-objektum
+Name[pt_BR]=Componente do KOffice
 Name[sv]=Koffice-delprogram
 Icon=kopart.png
 Category=C++/KDE
 Comment=Generates a framework for a full KOffice Application.
 Comment[da]=Genererer et skelet for et fuldstændigt KOffice-program.
+Comment[et]=KOffice'i rakenduse raamistiku loomine.
 Comment[hu]=Létrehoz egy kiindulási keretprogramot teljes KOffice-alkalmazás készítéséhez.
+Comment[pt_BR]=Gera um framewor para um aplicativo completo do  KOffice
 Comment[sv]=Skapar ett ramverk för ett fullständigt Koffice-program.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
@@ -155,5 +159,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=A KOffice part was created in %{dest}
 Comment[da]=En KOffice part blev oprettet i %{dest}
+Comment[et]=KOffice'i komponent loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KOffice-objektum itt: %{dest}
+Comment[pt_BR]=Um componente do KOffice foi criado em %{dest}
 Comment[sv]=Ett Koffice-delprogram skapades i %{dest}

@@ -2,13 +2,17 @@
 [General]
 Name=Kicker Applet
 Name[da]=Kicker-applet
+Name[et]=Kickeri aplett
 Name[hu]=Panel-kisalkalmazás
+Name[pt_BR]=Mini-aplicativo do Kicker (painel)
 Name[sv]=Miniprogram för Kicker
 Icon=kicker.png
 Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
 Comment[da]=Genererer et skelet for en applet der indlejres i KDE's panel
+Comment[et]=Apleti raamistiku loomine, mida saab põimida KDE paneelile
 Comment[hu]=Létrehoz egy keretprogramot KDE-s panel-kisalkalmazás készítéséhez
+Comment[pt_BR]=Gera um framework para um mini-aplicativo que pode ser integrado ao Painel do KDE
 Comment[sv]=Skapar ett ramverk för ett miniprogram som inbäddas i KDE:s panel
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -114,5 +118,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=A Kicker Applet was created in %{dest}
 Comment[da]=En Kicker applet blev oprettet i %{dest}
+Comment[et]=Kickeri aplett loodi asukohta %{dest}
 Comment[hu]=Létrejött egy panel-kisalkalmazás itt: %{dest}
+Comment[pt_BR]=Um mini-aplicativo para o Kicker (painel) foi criado em %{dest}
 Comment[sv]=Ett miniprogram för Kicker skapades i %{dest}

@@ -2,6 +2,7 @@
 [General]
 Name=KBear Plugin
 Name[da]=KBear plugin
+Name[et]=KBeari plugin
 Name[hu]=Kbear-bővítőmodul
 Name[nl]=KBear-plugin
 Name[pt_BR]=Plug-in do KBear
@@ -10,6 +11,7 @@ Category=C++/KDE
 Icon=kbearplugin.png
 Comment=Generates a simple KBear plugin with a config page and an output widget.
 Comment[da]=Genererer et simpelt KBear plugin med en indstillingsside og en output-kontrol.
+Comment[et]=Lihtsa KBeari plugina loomine koos seadistustedialoogi ja väljundvidinaga.
 Comment[hu]=Létrehoz egy egyszerű KBear-bővítőmodult beállítólappal és kimeneti grafikus elemmel.
 Comment[nl]=Genereert een eenvoudige KBear-plugin met een config page en een output widget.
 Comment[pt_BR]=Gera um plug-in simples do KBear com uma página de config e um widget de saída.
@@ -120,6 +122,7 @@ Dest=%{dest}/src/hi32-action-kbear%{APPNAMELC}.png
 Type=message
 Comment=A plugin for KBear was created in %{dest}
 Comment[da]=Et plugin for KBear blev oprettet i %{dest}
+Comment[et]=KBeari plugin loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KBear-bővítőmodul itt: %{dest}
 Comment[nl]=Een plugin voor KBear is aangemaakt in %{dest}
 Comment[pt_BR]=Um plug-in para o KBear foi criado em %{dest}

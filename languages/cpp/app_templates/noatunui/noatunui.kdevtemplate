@@ -1,12 +1,17 @@
 # KDE Config File
 [General]
 Name=Noatun UI plugin
+Name[et]=Noatuni kasutajaliidese plugin
 Name[hu]=Noatun UI-modul
+Name[pt_BR]=Plug-in do Noatun
 Name[sv]=Noatun-insticksprogram för användargränssnitt
 Icon=noatunui.png
 Category=C++/KDE
 Comment=Generates a simple user interface plugin for noatun.
+Comment[da]=Genererer en simpel brugergrænseflade-plugin  for noatun.
+Comment[et]=Noatuni lihtsa kasutajaliidese plugina loomine.
 Comment[hu]=Létrehoz egy egyszerű felületbővítő modult a Noatun programhoz.
+Comment[pt_BR]=Gera um simples plug-in de interface de usuário para o noatun.
 Comment[sv]=Skapar ett enkelt insticksprogram för användargränssnitt till Noatun.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}_impl.cpp
@@ -116,5 +121,8 @@ Dest=%{dest}/src/%{APPNAMELC}.plugin
 [MSG]
 Type=message
 Comment=A Noatun UI plugin was created in %{dest}
+Comment[da]=Et Noatun UI-plugin blev oprettet i %{dest}
+Comment[et]=Noatuni kasutajaliidese plugin loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Noatun UI-modul itt: %{dest}
+Comment[pt_BR]=Um plug-in do Noatun foi criado em %{dest}
 Comment[sv]=Ett Noatun-insticksprogram för användargränssnitt skapades i %{dest}

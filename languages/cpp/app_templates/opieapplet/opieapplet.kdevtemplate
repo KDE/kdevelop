@@ -2,12 +2,17 @@
 [General]
 Name=Opie Applet
 Name[da]=Opie-applet
+Name[et]=Opie aplett
 Name[hu]=Opie-s kisalkalmazás
+Name[pt_BR]=Mini-aplicativo Opie
 Name[sv]=Opie-miniprogram
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
+Comment[da]=Generér en Opie-applet.
+Comment[et]=Opie apleti loomine.
 Comment[hu]=Létrehoz egy Opie-s kisalkalmazást.
+Comment[pt_BR]=Gera um mini-aplicativo Opie.
 Comment[sv]=Skapa ett Opie-miniprogram.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
@@ -51,5 +56,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 Type=message
 Comment=An opie applet was created in %{dest}
 Comment[da]=En opie-applet blev oprettet i %{dest}
+Comment[et]=Opie aplett loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Opie-s kisalkalmazás itt: %{dest}
+Comment[pt_BR]=Um mini-aplicativo Opie foi criado em %{dest}
 Comment[sv]=Ett Opie-miniprogram skapades i %{dest}

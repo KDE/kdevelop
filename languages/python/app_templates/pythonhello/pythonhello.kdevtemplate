@@ -1,12 +1,18 @@
 # KDE Config File
 [General]
 Name=Simple Python script
+Name[da]=Simpelt Python script
+Name[et]=Lihtne Pythoni skript
 Name[hu]=Egyszerű Python-szkript
+Name[pt_BR]=Script Python
 Name[sv]=Enkelt Python-skript
 Icon=pythonhello.png
 Category=Python
 Comment=This generates a simplistic "Hello world" program in Python
+Comment[da]=Dette genererer et simplistisk "Goddag verden" program i Python
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine Pythonis
 Comment[hu]=Létrehoz egy egyszerű Hello world programot Python nyelven
+Comment[pt_BR]=Isto gera um programa "Olá Mundo" simples em Python
 Comment[sv]=Detta skapar ett förenklat "Hello world"-program i Python
 FileTemplates=py,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
@@ -26,5 +32,8 @@ Dest=%{dest}/%{APPNAMELC}.py
 [MSG]
 Type=message
 Comment=A simple python script was created in %{dest}
+Comment[da]=Et simpelt python script blev oprettet i %{dest}
+Comment[et]=Lihtne Pythoni skript loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Python-szkript itt: %{dest}
+Comment[pt_BR]=Um script python foi criado em  %{dest}
 Comment[sv]=Ett enkelt Python-skript skapades i %{dest}

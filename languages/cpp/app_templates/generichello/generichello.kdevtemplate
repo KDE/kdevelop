@@ -2,6 +2,7 @@
 [General]
 Name=C++ program (shell script build system)
 Name[da]=C++ program (skalscript byggesystem)
+Name[et]=C++ programm (shelliskripti ehitussüsteem)
 Name[hu]=C++-program (parancssoros fordítási szkripttel)
 Name[nl]=C++-programma (shellscript build system)
 Name[pt_BR]=Programa C++ (sistema de build de shell script)
@@ -10,6 +11,7 @@ Icon=cpphello.png
 Category=C++/Generic
 Comment=Generates a simple Hello world program in C++
 Comment[da]=Genererer et simpelt Goddag verden program in C++
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
 Comment[nl]=Genereert een eenvoudig Hello World-programma in C++
 Comment[pt_BR]=Gera um simples programa do tipo Olá Mundo em C++

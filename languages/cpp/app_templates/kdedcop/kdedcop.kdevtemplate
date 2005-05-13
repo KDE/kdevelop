@@ -2,6 +2,7 @@
 [General]
 Name=Simple DCOP server
 Name[da]=Simpel DCOP-server
+Name[et]=Lihtne DCOP-server
 Name[hu]=Egyszerű DCOP-kiszolgáló
 Name[nl]=Eenvoudige DCOP-server
 Name[pt_BR]=Servidor DCOP Simples
@@ -10,6 +11,7 @@ Icon=kdedcop.png
 Category=C++/KDE
 Comment=Generates a basic KDE DCOP server. This is an ideal starting point for a DCOP server that does not require a GUI interface.
 Comment[da]=Genererer en basal KDE DCOP-server. Dette er et ideelt startpunkt for en DCOP-server der ikke kræver en GUI-grænseflade.
+Comment[et]=Lihtsa KDE DCOP-serveri loomine. See on ideaalne algus DCOP-serverile, mis ei eelda graafilist kasutajaliidest.
 Comment[hu]=Létrehoz egy egyszerű KDE DCOP-os kiszolgálót. Jó kiindulópont grafikus felület nélküli DCOP-kiszolgáló készítéséhez.
 Comment[nl]=Genereert een basis KDE DCOP-server. Dit is een ideaal startpunt voor een DCOP-server die geen GUI-interface vereist.
 Comment[pt_BR]=Gera um servidor DCOP simples do KDE. Este é um ponto de início ideal para a construção de um servidor DCOP que não necessite de uma interface (GUI).
@@ -148,6 +150,7 @@ Dest=%{dest}/src/main.cpp
 Type=message
 Comment=A simple DCOP server was created in %{dest}
 Comment[da]=En simpel DCOP-server blev oprettet i %{dest}
+Comment[et]=Lihtne DCOP-server loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű DCOP-kiszolgáló itt: %{dest}
 Comment[nl]=Een eenvoudige DCOP-server is aangemaakt in %{dest}
 Comment[pt_BR]=Um servidor DCOP simples foi criado em %{dest}

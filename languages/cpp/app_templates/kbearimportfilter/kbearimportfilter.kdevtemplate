@@ -2,6 +2,7 @@
 [General]
 Name=KBear Import Filter
 Name[da]=KBear importfilter
+Name[et]=KBeari impordifilter
 Name[hu]=KBear-importszűrő
 Name[nl]=KBear-importfilter
 Name[pt_BR]=Filrto de Importação do KBear
@@ -10,6 +11,7 @@ Category=C++/KDE
 Icon=kbearimportfilter.png
 Comment=Generates a simple KBear import filter.
 Comment[da]=Genererer et simpelt KBear importfilter.
+Comment[et]=Lihtsa KBeari impordifiltri loomine.
 Comment[hu]=Létrehoz egy egyszerű KBear-importszűrőt.
 Comment[nl]=Genereert een eenvoudig KBear-importfilter.
 Comment[pt_BR]=Gera um filtro de importação simples para o KBear.
@@ -80,6 +82,7 @@ Dest=%{dest}/src/kbear%{APPNAMELC}importfilter.desktop
 Type=message
 Comment=An import filter for KBear was created in %{dest}
 Comment[da]=Et importfilter for KBear blev oprettet i %{dest}
+Comment[et]=KBeari impordifilter loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KBear-importszűrő itt: %{dest}
 Comment[nl]=Een importfilter voor KBear is aangemaakt in %{dest}
 Comment[pt_BR]=Um filtro de importação simples para o KBear foi criado em %{dest}

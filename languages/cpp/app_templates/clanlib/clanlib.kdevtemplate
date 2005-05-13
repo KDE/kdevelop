@@ -1,12 +1,16 @@
 # KDE Config File
 [General]
 Name=Simple ClanLib application
+Name[da]=Simpelt ClanLib program
+Name[et]=Lihtne ClanLib rakendus
 Name[nl]=Eenvoudige ClanLib-toepassing
+Name[pt_BR]=Simples Aplicativo ClanLib
 Name[sv]=Enkelt ClanLib-program
 Category=C++
 Icon=clanlib.png
 Comment=Generates a simple ClanLib application.
 Comment[da]=Genererer et simpelt ClanLib program
+Comment[et]=Lihtsa ClanLib'i rakenduse loomine.
 Comment[hu]=Létrehoz egy egyszerű Clanlib-alkalmazást.
 Comment[nl]=Genereert een eenvoudige ClanLib-toepassing
 Comment[pt_BR]=Gera um simples aplicativo ClanLib.
@@ -58,6 +62,7 @@ Dest=%{dest}/src/main.cpp
 Type=message
 Comment=A simple clanlib application was created in %{dest}
 Comment[da]=Et simpelt clanlib program blev oprettet i %{dest}
+Comment[et]=Lihtne ClanLib'i rakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Clanlib-alkalmazás itt: %{dest}
 Comment[nl]=Een voorbeeld ClanLib-toepassing is aangemaakt in %{dest}
 Comment[pt_BR]=Um simples aplicativo clanlib foi criado em %{dest}

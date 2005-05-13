@@ -2,13 +2,17 @@
 [General]
 Name=Konqueror Navigation Panel Plugin
 Name[da]=Konqueror navigationspanel plugin
+Name[et]=Konquerori liikumispaneeli plugin
 Name[hu]=Konqueroros navigációs bővítőmodul
+Name[pt_BR]=Plug-in de Painel de Navegação do Konqueror
 Name[sv]=Konqueror-insticksprogram för navigeringspanelen
 Icon=konqnavpanel.png
 Category=C++/KDE
 Comment=Generates a framework for a plugin  that embeds into Konqueror's navigation panel
 Comment[da]=Genererer et skelet for et plugin der indlejres i Konqueror's navigationspanel
+Comment[et]=Plugina raamistiku loomine, mida saab põimida Konquerori liikumispaneelile.
 Comment[hu]=Létrehoz egy alapprogramot konqueroros navigációs panelmodul készítéséhez
+Comment[pt_BR]=Gera um framework para um plug-in que é embutido no painel de navegação do Konqueror
 Comment[sv]=Skapar ett ramverk för ett insticksprogram som inbäddas i Konquerors navigeringspanel
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -114,5 +118,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=A konqueror navigation panel plugin was created in %{dest}
 Comment[da]=Et Konqueror navigationspanel plugin bleb oprettet i %{dest}
+Comment[et]=Konquerori liikumispaneeli plugin loodi asukohta %{dest}
 Comment[hu]=Létrejött egy konqueroros navigációs modul itt: %{dest}
+Comment[pt_BR]=Um plug-in de painel de navegação do konqueror foi criado em %{dest}
 Comment[sv]=Ett Konqueror-insticksprogram för navigeringspanelen skapades i %{dest}

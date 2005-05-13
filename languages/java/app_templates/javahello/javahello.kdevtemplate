@@ -2,14 +2,18 @@
 [General]
 Name=Application
 Name[da]=Program
+Name[et]=Rakendus
 Name[hu]=Alkalmazások
+Name[pt_BR]=Aplicativo
 Name[sv]=Program
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant
 Comment=Generate a Java application
 Comment[da]=Generér et Java-program
+Comment[et]=Java rakenduse loomine
 Comment[hu]=Létrehoz egy Java-alkalmazást
+Comment[pt_BR]=Gera um aplicativo em Java
 Comment[sv]=Skapa ett Java-program
 FileTemplates=java,JavaStyle
 ShowFilesAfterGeneration=%{dest}/Main.java
@@ -40,5 +44,7 @@ Dest=%{dest}/build.xml
 Type=message
 Comment=A JAVA application was created in %{dest}
 Comment[da]=Et JAVA-program blev oprettet i %{dest}
+Comment[et]=Java rakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Java-alkalmazás itt: %{dest}
+Comment[pt_BR]=Um aplicativo em Java foi criado em %{dest}
 Comment[sv]=Ett Java-program skapades i %{dest}
