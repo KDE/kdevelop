@@ -18,10 +18,16 @@ KDE_ADD_UI_FILES(kdevquickopen_PART_SRCS ${kdevquickopen_UI} )
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_DIR}/lib/widgets/)
 
-ADD_LIBRARY(kdevquickopen SHARED ${kdevquickopen_PART_SRCS})
+ADD_LIBRARY(kdevquickopen MODULE ${kdevquickopen_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevquickopen ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevquickopen)
+
+INSTALL_TARGETS(/lib/kde3 kdevquickopen)
+
+INSTALL_FILES(/share/servicetypes FILES kdevquickopen.desktop )
+INSTALL_FILES(/share/apps/kdevquickopen FILES kdevpart_quickopen.rc)
 
 #original Makefile.am contents follow:
 

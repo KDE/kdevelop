@@ -11,10 +11,15 @@ KDE_AUTOMOC(${kdevvcsmanager_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevvcsmanager_PART_SRCS ${kdevvcsmanager_UI} )
 
-ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
+ADD_LIBRARY(kdevvcsmanager MODULE ${kdevvcsmanager_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevvcsmanager ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevvcsmanager)
+
+INSTALL_TARGETS(/lib/kde3 kdevvcsmanager)
+
+INSTALL_FILES(/share/servicetypes FILES kdevvcsmanager.desktop)
 
 #original Makefile.am contents follow:
 
@@ -38,21 +43,3 @@ TARGET_LINK_LIBRARIES(kdevvcsmanager ${KDEV_PART_LIBS})
 #rcdir = $(kde_datadir)/kdevvcsmanager
 #
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevvcsmanager_PART_SRCS
-#vcsmanagerpart.cpp
-#vcsmanagerprojectconfig.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevvcsmanager_PART_SRCS})
-#
-#SET( kdevvcsmanager_UI
-#vcsmanagerprojectconfigbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevvcsmanager_PART_SRCS ${kdevvcsmanager_UI} )
-#
-#ADD_LIBRARY(kdevvcsmanager SHARED ${kdevvcsmanager_PART_SRCS})
-#

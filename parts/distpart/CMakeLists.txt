@@ -16,10 +16,16 @@ KDE_ADD_UI_FILES(kdevdistpart_PART_SRCS ${kdevdistpart_UI} )
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
-ADD_LIBRARY(kdevdistpart SHARED ${kdevdistpart_PART_SRCS})
+ADD_LIBRARY(kdevdistpart MODULE ${kdevdistpart_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevdistpart ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevdistpart)
+
+INSTALL_TARGETS(/lib/kde3 kdevdistpart)
+
+INSTALL_FILES(/share/servicetypes FILES kdevdistpart.desktop)
+INSTALL_FILES(/share/apps/kdevdistpart FILES kdevpart_distpart.rc)
 
 #original Makefile.am contents follow:
 

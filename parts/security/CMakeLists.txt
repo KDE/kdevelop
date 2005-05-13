@@ -6,10 +6,16 @@ securitychecker.cpp
 
 KDE_AUTOMOC(${kdevsecurity_PART_SRCS})
 
-ADD_LIBRARY(kdevsecurity SHARED ${kdevsecurity_PART_SRCS})
+ADD_LIBRARY(kdevsecurity MODULE ${kdevsecurity_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevsecurity ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevsecurity)
+
+INSTALL_TARGETS(/lib/kde3 kdevsecurity)
+
+INSTALL_FILES(/share/servicetypes FILES kdevsecurity.desktop )
+INSTALL_FILES(/share/apps/kdevsecurity FILES kdevsecurity.rc)
 
 #original Makefile.am contents follow:
 
@@ -29,14 +35,3 @@ TARGET_LINK_LIBRARIES(kdevsecurity ${KDEV_PART_LIBS})
 
 #######################
 #previous CMakeLists.txt contents follow:
-
-#SET(kdevsecurity_PART_SRCS
-#securitypart.cpp
-#securitywidget.cpp
-#securitychecker.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevsecurity_PART_SRCS})
-#
-#ADD_LIBRARY(kdevsecurity SHARED ${kdevsecurity_PART_SRCS})
-#

@@ -15,9 +15,14 @@ annotationprojectconfigbase.ui
 
 KDE_ADD_UI_FILES(kdevannotation_PART_SRCS ${kdevannotation_UI} )
 
-ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
+ADD_LIBRARY(kdevannotation MODULE ${kdevannotation_PART_SRCS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevannotation)
 
+INSTALL_TARGETS(/lib/kde3 kdevannotation)
+
+INSTALL_FILES(/share/servicetypes FILES kdevannotation.desktop)
+INSTALL_FILES(/share/apps/kdevannotation FILES kdevannotation.rc)
 
 #original Makefile.am contents follow:
 
@@ -34,7 +39,7 @@ ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
 #METASOURCES = AUTO
 #
 #appsharedir = $(kde_datadir)/kdevannotation
-#appshare_DATA = 
+#appshare_DATA =
 #
 #servicedir = $(kde_servicesdir)
 #service_DATA = kdevannotation.desktop
@@ -43,25 +48,3 @@ ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
 #rc_DATA = kdevannotation.rc
 #noinst_HEADERS = annotationitem.h
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevannotation_PART_SRCS
-#annotationpart.cpp
-#annotationwidget.cpp
-#annotationglobalconfig.cpp
-#annotationprojectconfig.cpp
-#annotationitem.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevannotation_PART_SRCS})
-#
-#SET( kdevannotation_UI
-#annotationglobalconfigbase.ui
-#annotationprojectconfigbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevannotation_PART_SRCS ${kdevannotation_UI} )
-#
-#ADD_LIBRARY(kdevannotation SHARED ${kdevannotation_PART_SRCS})
-#

@@ -4,9 +4,16 @@ tipofday_part.cpp
 
 KDE_AUTOMOC(${kdevtipofday_PART_SRCS})
 
-ADD_LIBRARY(kdevtipofday SHARED ${kdevtipofday_PART_SRCS})
+ADD_LIBRARY(kdevtipofday MODULE ${kdevtipofday_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevtipofday ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevtipofday)
+
+INSTALL_TARGETS(/lib/kde3 kdevtipofday)
+
+INSTALL_FILES(/share/servicetypes FILES kdevtipofday.desktop)
+INSTALL_FILES(/share/apps/kdevtipofday FILES kdevpart_tipofday.rc)
 
 #original Makefile.am contents follow:
 
@@ -35,14 +42,3 @@ TARGET_LINK_LIBRARIES(kdevtipofday ${KDEV_PART_LIBS})
 #	$(XGETTEXT) *.cpp *.h tips.cc -o $(podir)/kdevtipofday.pot
 #	rm -f tips.cc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevtipofday_PART_SRCS
-#tipofday_part.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevtipofday_PART_SRCS})
-#
-#ADD_LIBRARY(kdevtipofday SHARED ${kdevtipofday_PART_SRCS})
-#

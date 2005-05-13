@@ -13,9 +13,13 @@ KDE_AUTOMOC(${kdevvalgrind_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevvalgrind_PART_SRCS ${kdevvalgrind_UI} )
 
-ADD_LIBRARY(kdevvalgrind SHARED ${kdevvalgrind_PART_SRCS})
+ADD_LIBRARY(kdevvalgrind MODULE ${kdevvalgrind_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevvalgrind ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevvalgrind)
+
+INSTALL_TARGETS(/lib/kde3 kdevvalgrind)
 
 
 #original Makefile.am contents follow:

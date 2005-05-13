@@ -11,10 +11,16 @@ KDE_AUTOMOC(${kdevregexptest_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevregexptest_PART_SRCS ${kdevregexptest_UI} )
 
-ADD_LIBRARY(kdevregexptest SHARED ${kdevregexptest_PART_SRCS})
+ADD_LIBRARY(kdevregexptest MODULE ${kdevregexptest_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevregexptest ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevregexptest)
+
+INSTALL_TARGETS(/lib/kde3 kdevregexptest)
+
+INSTALL_FILES(/share/servicetypes FILES kdevregexptest.desktop )
+INSTALL_FILES(/share/apps/kdevregexptest FILES kdevregexptest.rc)
 
 #original Makefile.am contents follow:
 
@@ -36,21 +42,3 @@ TARGET_LINK_LIBRARIES(kdevregexptest ${KDEV_PART_LIBS})
 #rcdir = $(kde_datadir)/kdevregexptest
 #rc_DATA = kdevregexptest.rc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevregexptest_PART_SRCS
-#regexptestpart.cpp
-#regexptestdlg.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevregexptest_PART_SRCS})
-#
-#SET( kdevregexptest_UI
-#regexptestdlgbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevregexptest_PART_SRCS ${kdevregexptest_UI} )
-#
-#ADD_LIBRARY(kdevregexptest SHARED ${kdevregexptest_PART_SRCS})
-#

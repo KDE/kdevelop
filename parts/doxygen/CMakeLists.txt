@@ -11,9 +11,16 @@ KDE_AUTOMOC(${kdevdoxygen_PART_SRCS})
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_SOURCE_DIR}/src/)
 
-ADD_LIBRARY(kdevdoxygen SHARED ${kdevdoxygen_PART_SRCS})
+ADD_LIBRARY(kdevdoxygen MODULE ${kdevdoxygen_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevdoxygen ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevdoxygen)
+
+INSTALL_TARGETS(/lib/kde3 kdevdoxygen)
+
+INSTALL_FILES(/share/servicetypes FILES kdevdoxygen.desktop)
+INSTALL_FILES(/share/apps/kdevdoxygen FILES kdevdoxygen.rc)
 
 #original Makefile.am contents follow:
 

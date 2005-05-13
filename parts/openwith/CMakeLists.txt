@@ -4,9 +4,15 @@ openwithpart.cpp
 
 KDE_AUTOMOC(${kdevopenwith_PART_SRCS})
 
-ADD_LIBRARY(kdevopenwith SHARED ${kdevopenwith_PART_SRCS})
+ADD_LIBRARY(kdevopenwith MODULE ${kdevopenwith_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevopenwith ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevopenwith)
+
+INSTALL_TARGETS(/lib/kde3 kdevopenwith)
+
+INSTALL_FILES(/share/servicetypes FILES kdevopenwith.desktop)
 
 #original Makefile.am contents follow:
 
@@ -26,14 +32,3 @@ TARGET_LINK_LIBRARIES(kdevopenwith ${KDEV_PART_LIBS})
 #service_DATA = kdevopenwith.desktop
 #
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevopenwith_PART_SRCS
-#openwithpart.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevopenwith_PART_SRCS})
-#
-#ADD_LIBRARY(kdevopenwith SHARED ${kdevopenwith_PART_SRCS})
-#

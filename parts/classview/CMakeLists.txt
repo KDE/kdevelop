@@ -11,10 +11,16 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/external/ ${CMAKE_SOURCE_
 
 KDE_AUTOMOC(${kdevclassview_PART_SRCS})
 
-ADD_LIBRARY(kdevclassview SHARED ${kdevclassview_PART_SRCS})
+ADD_LIBRARY(kdevclassview MODULE ${kdevclassview_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevclassview ${KDEV_PART_LIBS} kdevwidgets)
 
+KDE_CREATE_LIBTOOL_FILE(kdevclassview)
+
+INSTALL_TARGETS(/lib/kde3 kdevclassview)
+
+INSTALL_FILES(/share/servicetypes FILES kdevclassview.desktop)
+INSTALL_FILES(/share/apps/kdevclassview FILES kdevclassview.rc)
 
 #original Makefile.am contents follow:
 

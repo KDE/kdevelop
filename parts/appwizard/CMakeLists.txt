@@ -65,33 +65,3 @@ INSTALL_FILES(/share/services FILES kdevappwizard.desktop)
 #rc_DATA = kdevappwizard.rc
 #noinst_HEADERS = profilesupport.h
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SUBDIRS( . imports common licenses )
-#
-#SET(kdevappwizard_PART_SRCS
-#appwizardfactory.cpp
-#appwizardpart.cpp
-#appwizarddlg.cpp
-#importdlg.cpp
-#filepropspage.cpp
-#misc.cpp
-#kdevfile.cpp
-#kdevlicense.cpp
-#profilesupport.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevappwizard_PART_SRCS})
-#
-#SET( kdevappwizard_UI
-#filepropspagebase.ui
-#appwizarddlgbase.ui
-#importdlgbase.ui
-#vcs_form.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevappwizard_PART_SRCS ${kdevappwizard_UI} )
-#
-#ADD_LIBRARY(kdevappwizard SHARED ${kdevappwizard_PART_SRCS})
-#

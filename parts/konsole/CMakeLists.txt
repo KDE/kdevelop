@@ -5,10 +5,15 @@ konsoleviewwidget.cpp
 
 KDE_AUTOMOC(${kdevkonsoleview_PART_SRCS})
 
-ADD_LIBRARY(kdevkonsoleview SHARED ${kdevkonsoleview_PART_SRCS})
+ADD_LIBRARY(kdevkonsoleview MODULE ${kdevkonsoleview_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevkonsoleview ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevkonsoleview)
+
+INSTALL_TARGETS(/lib/kde3 kdevkonsoleview)
+
+INSTALL_FILES(/share/servicetypes FILES kdevkonsoleview.desktop)
 
 #original Makefile.am contents follow:
 
@@ -28,15 +33,3 @@ TARGET_LINK_LIBRARIES(kdevkonsoleview ${KDEV_PART_LIBS})
 #service_DATA = kdevkonsoleview.desktop
 #
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevkonsoleview_PART_SRCS
-#konsoleviewpart.cpp
-#konsoleviewwidget.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevkonsoleview_PART_SRCS})
-#
-#ADD_LIBRARY(kdevkonsoleview SHARED ${kdevkonsoleview_PART_SRCS})
-#

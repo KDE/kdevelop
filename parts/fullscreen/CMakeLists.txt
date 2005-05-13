@@ -4,10 +4,16 @@ fullscreen_part.cpp
 
 KDE_AUTOMOC(${kdevfullscreen_PART_SRCS})
 
-ADD_LIBRARY(kdevfullscreen SHARED ${kdevfullscreen_PART_SRCS})
+ADD_LIBRARY(kdevfullscreen MODULE ${kdevfullscreen_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfullscreen ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevfullscreen)
+
+INSTALL_TARGETS(/lib/kde3 kdevfullscreen)
+
+INSTALL_FILES(/share/servicetypes FILES kdevfullscreen.desktop)
+INSTALL_FILES(/share/apps/kdevfullscreen FILES kdevpart_fullscreen.rc)
 
 #original Makefile.am contents follow:
 
@@ -27,14 +33,3 @@ TARGET_LINK_LIBRARIES(kdevfullscreen ${KDEV_PART_LIBS})
 #rcdir = $(kde_datadir)/kdevfullscreen
 #rc_DATA = kdevpart_fullscreen.rc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevfullscreen_PART_SRCS
-#fullscreen_part.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfullscreen_PART_SRCS})
-#
-#ADD_LIBRARY(kdevfullscreen SHARED ${kdevfullscreen_PART_SRCS})
-#

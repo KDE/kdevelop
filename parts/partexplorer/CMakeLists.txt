@@ -11,10 +11,16 @@ KDE_AUTOMOC(${kdevpartexplorer_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevpartexplorer_PART_SRCS ${kdevpartexplorer_UI} )
 
-ADD_LIBRARY(kdevpartexplorer SHARED ${kdevpartexplorer_PART_SRCS})
+ADD_LIBRARY(kdevpartexplorer MODULE ${kdevpartexplorer_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevpartexplorer ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevpartexplorer)
+
+INSTALL_TARGETS(/lib/kde3 kdevpartexplorer)
+
+INSTALL_FILES(/share/servicetypes FILES kdevpartexplorer.desktop )
+INSTALL_FILES(/share/apps/kdevpartexplorer FILES kdevpartexplorer.rc)
 
 #original Makefile.am contents follow:
 
@@ -35,22 +41,3 @@ TARGET_LINK_LIBRARIES(kdevpartexplorer ${KDEV_PART_LIBS})
 #
 #rcdir = $(kde_datadir)/kdevpartexplorer
 #rc_DATA = kdevpartexplorer.rc
-
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevpartexplorer_PART_SRCS
-#partexplorerform.cpp
-#partexplorer_plugin.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevpartexplorer_PART_SRCS})
-#
-#SET( kdevpartexplorer_UI
-#partexplorerformbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevpartexplorer_PART_SRCS ${kdevpartexplorer_UI} )
-#
-#ADD_LIBRARY(kdevpartexplorer SHARED ${kdevpartexplorer_PART_SRCS})
-#

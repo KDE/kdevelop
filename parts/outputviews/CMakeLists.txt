@@ -20,9 +20,12 @@ KDE_AUTOMOC(${kdevmakeview_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevmakeview_PART_SRCS ${kdevmakeview_UI} )
 
-ADD_LIBRARY(kdevmakeview SHARED ${kdevmakeview_PART_SRCS})
+ADD_LIBRARY(kdevmakeview MODULE ${kdevmakeview_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevmakeview ${KDEV_PART_LIBS} kdevwidgets)
+
+KDE_CREATE_LIBTOOL_FILE(kdevmakeview)
+
 
 SET(kdevappview_PART_SRCS
 appoutputviewpart.cpp
@@ -44,11 +47,19 @@ KDE_AUTOMOC(${kdevappview_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevappview_PART_SRCS ${kdevappview_UI} )
 
-ADD_LIBRARY(kdevappview SHARED ${kdevappview_PART_SRCS})
+ADD_LIBRARY(kdevappview MODULE ${kdevappview_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevappview ${KDEV_PART_LIBS} kdevwidgets)
 
 KDE_TARGET_LINK_CONV_LIBRARIES(kdevappview)
+
+KDE_CREATE_LIBTOOL_FILE(kdevappview)
+
+INSTALL_TARGETS(/lib/kde3 kdevappview kdevmakeview)
+
+INSTALL_FILES(/share/servicetypes FILES kdevappoutputview.desktop kdevmakeview.desktop)
+INSTALL_FILES(/share/apps/kdevappoutputview FILES kdevmakeview.rc)
+INSTALL_FILES(/share/apps/kdevmakeview FILES kdevmakeview.rc)
 
 #original Makefile.am contents follow:
 

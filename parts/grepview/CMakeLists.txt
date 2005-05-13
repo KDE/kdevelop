@@ -8,9 +8,16 @@ KDE_AUTOMOC(${kdevgrepview_PART_SRCS})
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/widgets/)
 
-ADD_LIBRARY(kdevgrepview SHARED ${kdevgrepview_PART_SRCS})
+ADD_LIBRARY(kdevgrepview MODULE ${kdevgrepview_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevgrepview ${KDEV_PART_LIBS} kdevwidgets)
+
+KDE_CREATE_LIBTOOL_FILE(kdevgrepview)
+
+INSTALL_TARGETS(/lib/kde3 kdevgrepview)
+
+INSTALL_FILES(/share/servicetypes FILES kdevgrepview.desktop)
+INSTALL_FILES(/share/apps/kdevgrepview FILES kdevgrepview.rc)
 
 #original Makefile.am contents follow:
 

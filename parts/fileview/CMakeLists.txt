@@ -9,15 +9,17 @@ vcsfiletreewidgetimpl.cpp
 fileitemfactory.cpp
 )
 
-KDE_AUTOMOC(${kdevfileview_PART_SRCS})
-
 SET( kdevfileview_UI
 vcscolorsconfigwidgetbase.ui
 )
 
+KDE_AUTOMOC(${kdevfileview_PART_SRCS})
+
 KDE_ADD_UI_FILES(kdevfileview_PART_SRCS ${kdevfileview_UI} )
 
-ADD_LIBRARY(kdevfileview SHARED ${kdevfileview_PART_SRCS})
+ADD_LIBRARY(kdevfileview MODULE ${kdevfileview_PART_SRCS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevfileview)
 
 TARGET_LINK_LIBRARIES(kdevfileview ${KDEV_PART_LIBS})
 
@@ -38,9 +40,15 @@ KDE_ADD_UI_FILES(kdevfilegroups_PART_SRCS ${kdevfilegroups_UI} )
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ )
 
-ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
+ADD_LIBRARY(kdevfilegroups MODULE ${kdevfilegroups_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfilegroups ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevfilegroups)
+
+INSTALL_TARGETS(/lib/kde3 kdevfilegroups kdevfileview)
+
+INSTALL_FILES(/share/servicetypes FILES kdevfileview.desktop kdevfilegroups.desktop)
 
 
 #original Makefile.am contents follow:
@@ -72,44 +80,3 @@ TARGET_LINK_LIBRARIES(kdevfilegroups ${KDEV_PART_LIBS})
 ##rc_DATA = kdevfileview.rc
 #noinst_HEADERS = vcscolorsconfigwidget.h stdfiletreewidgetimpl.h filetreeviewwidgetimpl.h vcsfiletreewidgetimpl.h fileitemfactory.h
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevfileview_PART_SRCS
-#fileviewpart.cpp
-#filetreewidget.cpp
-#partwidget.cpp
-#vcscolorsconfigwidget.cpp
-#stdfiletreewidgetimpl.cpp
-#filetreeviewwidgetimpl.cpp
-#vcsfiletreewidgetimpl.cpp
-#fileitemfactory.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfileview_PART_SRCS})
-#
-#SET( kdevfileview_UI
-#vcscolorsconfigwidgetbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevfileview_PART_SRCS ${kdevfileview_UI} )
-#
-#ADD_LIBRARY(kdevfileview SHARED ${kdevfileview_PART_SRCS})
-#
-#SET(kdevfilegroups_PART_SRCS
-#filegroupswidget.cpp
-#addfilegroupdlg.cpp
-#filegroupsconfigwidget.cpp
-#filegroupspart.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfilegroups_PART_SRCS})
-#
-#SET( kdevfilegroups_UI
-#filegroupsconfigwidgetbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevfilegroups_PART_SRCS ${kdevfilegroups_UI} )
-#
-#ADD_LIBRARY(kdevfilegroups SHARED ${kdevfilegroups_PART_SRCS})
-#

@@ -13,10 +13,16 @@ KDE_AUTOMOC(${kdevfilter_PART_SRCS})
 
 KDE_ADD_DCOP_SKELS(kdevfilter_PART_SRCS ${kdevfilter_DCOP_SRCS})
 
-ADD_LIBRARY(kdevfilter SHARED ${kdevfilter_PART_SRCS})
+ADD_LIBRARY(kdevfilter MODULE ${kdevfilter_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfilter ${KDEV_PART_LIBS} DCOP)
 
+KDE_CREATE_LIBTOOL_FILE(kdevfilter)
+
+INSTALL_TARGETS(/lib/kde3 kdevfilter)
+
+INSTALL_FILES(/share/servicetypes FILES kdevfilter.desktop)
+INSTALL_FILES(/share/apps/kdevfilter FILES kdevfilter.rc)
 
 #original Makefile.am contents follow:
 
@@ -38,23 +44,3 @@ TARGET_LINK_LIBRARIES(kdevfilter ${KDEV_PART_LIBS} DCOP)
 #rcdir = $(kde_datadir)/kdevfilter
 #rc_DATA = kdevfilter.rc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevfilter_PART_SRCS
-#filterpart.cpp
-#shellfilterdlg.cpp
-#shellinsertdlg.cpp
-#kdevfilterIface.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfilter_PART_SRCS})
-#
-#SET( kdevfilter_DCOP_SRCS
-#kdevfilterIface.h
-#)
-#
-#KDE_ADD_DCOP_SKELS(kdevfilter_PART_SRCS ${kdevfilter_DCOP_SRCS})
-#
-#ADD_LIBRARY(kdevfilter SHARED ${kdevfilter_PART_SRCS})
-#

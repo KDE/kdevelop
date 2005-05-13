@@ -6,10 +6,15 @@ filelist_item.cpp
 
 KDE_AUTOMOC(${kdevfilelist_PART_SRCS})
 
-ADD_LIBRARY(kdevfilelist SHARED ${kdevfilelist_PART_SRCS})
+ADD_LIBRARY(kdevfilelist MODULE ${kdevfilelist_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfilelist ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevfilelist)
+
+INSTALL_TARGETS(/lib/kde3 kdevfilelist)
+
+INSTALL_FILES(/share/servicetypes FILES kdevfilelist.desktop)
 
 #original Makefile.am contents follow:
 
@@ -30,16 +35,3 @@ TARGET_LINK_LIBRARIES(kdevfilelist ${KDEV_PART_LIBS})
 #
 #noinst_HEADERS =  filelist_item.h filelist_widget.h filelist_part.h
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevfilelist_PART_SRCS
-#filelist_part.cpp
-#filelist_widget.cpp
-#filelist_item.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfilelist_PART_SRCS})
-#
-#ADD_LIBRARY(kdevfilelist SHARED ${kdevfilelist_PART_SRCS})
-#

@@ -5,9 +5,15 @@ texttoolswidget.cpp
 
 KDE_AUTOMOC(${kdevtexttools_PART_SRCS})
 
-ADD_LIBRARY(kdevtexttools SHARED ${kdevtexttools_PART_SRCS})
+ADD_LIBRARY(kdevtexttools MODULE ${kdevtexttools_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevtexttools ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevtexttools)
+
+INSTALL_TARGETS(/lib/kde3 kdevtexttools)
+
+INSTALL_FILES(/share/servicetypes FILES kdevtexttools.desktop)
 
 #original Makefile.am contents follow:
 
@@ -30,15 +36,3 @@ TARGET_LINK_LIBRARIES(kdevtexttools ${KDEV_PART_LIBS})
 ##rcdir = $(kde_datadir)/kdevtexttools
 ##rc_DATA = kdevtexttools.rc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevtexttools_PART_SRCS
-#texttoolspart.cpp
-#texttoolswidget.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevtexttools_PART_SRCS})
-#
-#ADD_LIBRARY(kdevtexttools SHARED ${kdevtexttools_PART_SRCS})
-#

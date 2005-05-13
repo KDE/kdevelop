@@ -16,9 +16,16 @@ KDE_ADD_UI_FILES(kdevtools_PART_SRCS ${kdevtools_UI} )
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_CURRENT_SOURCE_DIR})
 
-ADD_LIBRARY(kdevtools SHARED ${kdevtools_PART_SRCS})
+ADD_LIBRARY(kdevtools MODULE ${kdevtools_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevtools ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevtools)
+
+INSTALL_TARGETS(/lib/kde3 kdevtools)
+
+INSTALL_FILES(/share/servicetypes FILES kdevtools.desktop )
+INSTALL_FILES(/share/apps/kdevtools FILES kdevpart_tools.rc)
 
 #original Makefile.am contents follow:
 

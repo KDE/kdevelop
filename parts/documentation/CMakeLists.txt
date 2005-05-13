@@ -42,10 +42,16 @@ KDE_ADD_DCOP_SKELS(kdevdocumentation_PART_SRCS ${kdevdocumentation_DCOP_SRCS})
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/parts/documentation/interfaces/)
 
-ADD_LIBRARY(kdevdocumentation SHARED ${kdevdocumentation_PART_SRCS})
+ADD_LIBRARY(kdevdocumentation MODULE ${kdevdocumentation_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevdocumentation ${KDEV_PART_LIBS} DCOP khtml kdevpropertyeditor kresources kinterfacedesigner )
 
+KDE_CREATE_LIBTOOL_FILE(kdevdocumentation)
+
+INSTALL_TARGETS(/lib/kde3 kdevdocumentation)
+
+INSTALL_FILES(/share/servicetypes FILES kdevdocumentation.desktop)
+INSTALL_FILES(/share/apps/kdevdocumentation FILES kdevpart_documentation.rc)
 
 #original Makefile.am contents follow:
 

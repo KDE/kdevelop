@@ -18,10 +18,16 @@ KDE_ADD_UI_FILES(kdevctags2_PART_SRCS ${kdevctags2_UI} )
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
-ADD_LIBRARY(kdevctags2 SHARED ${kdevctags2_PART_SRCS})
+ADD_LIBRARY(kdevctags2 MODULE ${kdevctags2_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevctags2 ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevctags2)
+
+INSTALL_TARGETS(/lib/kde3 kdevctags2)
+
+INSTALL_FILES(/share/servicetypes FILES kdevctags2.desktop)
+INSTALL_FILES(/share/apps/kdevctags2 FILES kdevpart_ctags2.rc)
 
 #original Makefile.am contents follow:
 

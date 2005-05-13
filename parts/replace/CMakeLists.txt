@@ -14,10 +14,16 @@ KDE_AUTOMOC(${kdevreplace_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevreplace_PART_SRCS ${kdevreplace_UI} )
 
-ADD_LIBRARY(kdevreplace SHARED ${kdevreplace_PART_SRCS})
+ADD_LIBRARY(kdevreplace MODULE ${kdevreplace_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevreplace ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevreplace)
+
+INSTALL_TARGETS(/lib/kde3 kdevreplace)
+
+INSTALL_FILES(/share/servicetypes FILES kdevreplace.desktop )
+INSTALL_FILES(/share/apps/kdevreplace FILES kdevpart_replace.rc)
 
 #original Makefile.am contents follow:
 
@@ -38,24 +44,3 @@ TARGET_LINK_LIBRARIES(kdevreplace ${KDEV_PART_LIBS})
 #rcdir = $(kde_datadir)/kdevreplace
 #rc_DATA = kdevpart_replace.rc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevreplace_PART_SRCS
-#replace_part.cpp
-#replace_widget.cpp
-#replaceitem.cpp
-#replaceview.cpp
-#replacedlgimpl.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevreplace_PART_SRCS})
-#
-#SET( kdevreplace_UI
-#replacedlg.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevreplace_PART_SRCS ${kdevreplace_UI} )
-#
-#ADD_LIBRARY(kdevreplace SHARED ${kdevreplace_PART_SRCS})
-#

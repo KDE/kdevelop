@@ -27,10 +27,16 @@ KDE_ADD_MOC_FILES(kdevfilecreate_PART_SRCS filecreate_typechoosersig.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/ ${CMAKE_CURRENT_SOURCE_DIR})
 
-ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
+ADD_LIBRARY(kdevfilecreate MODULE ${kdevfilecreate_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfilecreate ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevfilecreate)
+
+INSTALL_TARGETS(/lib/kde3 kdevfilecreate)
+
+INSTALL_FILES(/share/servicetypes FILES kdevfilecreate.desktop)
+INSTALL_FILES(/share/apps/kdevfilecreate FILES kdevpart_filecreate.rc template-info.xml)
 
 #original Makefile.am contents follow:
 
@@ -55,33 +61,3 @@ TARGET_LINK_LIBRARIES(kdevfilecreate ${KDEV_PART_LIBS})
 #rcdir = $(kde_datadir)/kdevfilecreate
 #rc_DATA = kdevpart_filecreate.rc template-info.xml
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SUBDIRS( file-templates )
-#
-#SET(kdevfilecreate_PART_SRCS
-#filecreate_part.cpp
-#filecreate_listitem.cpp
-#filecreate_widget3.cpp
-#filecreate_widget2.cpp
-#filecreate_filetype.cpp
-#filecreate_filedialog.cpp
-#fcconfigwidget.cpp
-#fctypeedit.cpp
-#fctemplateedit.cpp
-#filecreate_newfile.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfilecreate_PART_SRCS})
-#
-#SET( kdevfilecreate_UI
-#fcconfigwidgetbase.ui
-#fctypeeditbase.ui
-#fctemplateeditbase.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevfilecreate_PART_SRCS ${kdevfilecreate_UI} )
-#
-#ADD_LIBRARY(kdevfilecreate SHARED ${kdevfilecreate_PART_SRCS})
-#

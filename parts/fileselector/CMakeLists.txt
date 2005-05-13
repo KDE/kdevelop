@@ -7,10 +7,16 @@ kbookmarkhandler.cpp
 
 KDE_AUTOMOC(${kdevfileselector_PART_SRCS})
 
-ADD_LIBRARY(kdevfileselector SHARED ${kdevfileselector_PART_SRCS})
+ADD_LIBRARY(kdevfileselector MODULE ${kdevfileselector_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfileselector ${KDEV_PART_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevfileselector)
+
+INSTALL_TARGETS(/lib/kde3 kdevfileselector)
+
+INSTALL_FILES(/share/servicetypes FILES kdevfileselector.desktop)
+INSTALL_FILES(/share/apps/kdevfileselector FILES kdevfileselector.rc)
 
 #original Makefile.am contents follow:
 
@@ -33,17 +39,3 @@ TARGET_LINK_LIBRARIES(kdevfileselector ${KDEV_PART_LIBS})
 ##rcdir = $(kde_datadir)/kdevfileselector
 ##rc_DATA = kdevfileselector.rc
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevfileselector_PART_SRCS
-#fileselector_part.cpp
-#fileselector_widget.cpp
-#kactionselector.cpp
-#kbookmarkhandler.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevfileselector_PART_SRCS})
-#
-#ADD_LIBRARY(kdevfileselector SHARED ${kdevfileselector_PART_SRCS})
-#

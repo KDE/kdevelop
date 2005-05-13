@@ -14,10 +14,16 @@ KDE_ADD_UI_FILES(kdevastyle_PART_SRCS ${kdevastyle_UI} )
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lib/astyle/ ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions/)
 
-ADD_LIBRARY(kdevastyle SHARED ${kdevastyle_PART_SRCS})
+ADD_LIBRARY(kdevastyle MODULE ${kdevastyle_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevastyle ${KDEV_PART_LIBS} astyle)
 
+KDE_CREATE_LIBTOOL_FILE(kdevastyle)
+
+INSTALL_TARGETS(/lib/kde3 kdevastyle)
+
+INSTALL_FILES(/share/servicetypes FILES kdevastyle.desktop)
+INSTALL_FILES(/share/apps/kdevastyle FILES kdevpart_astyle.rc)
 
 #original Makefile.am contents follow:
 
@@ -38,22 +44,3 @@ TARGET_LINK_LIBRARIES(kdevastyle ${KDEV_PART_LIBS} astyle)
 #rc_DATA = kdevpart_astyle.rc
 #rcdir = $(kde_datadir)/kdevastyle
 
-#######################
-#previous CMakeLists.txt contents follow:
-
-#SET(kdevastyle_PART_SRCS
-#astyle_part.cpp
-#astyle_widget.cpp
-#astyle_adaptor.cpp
-#)
-#
-#KDE_AUTOMOC(${kdevastyle_PART_SRCS})
-#
-#SET( kdevastyle_UI
-#astyleconfig.ui
-#)
-#
-#KDE_ADD_UI_FILES(kdevastyle_PART_SRCS ${kdevastyle_UI} )
-#
-#ADD_LIBRARY(kdevastyle SHARED ${kdevastyle_PART_SRCS})
-#
