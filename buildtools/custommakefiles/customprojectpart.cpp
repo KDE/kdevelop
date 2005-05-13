@@ -812,7 +812,12 @@ void CustomProjectPart::parseMakefile(const QString& filename)
 
       if (includedMakefilesRe.search(str) != -1)
       {
-         m_makefilesToParse.push(includedMakefilesRe.cap(1).simplifyWhiteSpace());
+         QString includedMakefile=includedMakefilesRe.cap(1).simplifyWhiteSpace();
+         /*special optimization for makefiles generated with the new cmake makefile generator:
+          it creates a tiny makefile for each object and a tiny dependency file for each object,
+          these dependency files can be skipped here, Alex */
+         if (!includedMakefile.endsWith(".depends.make"))
+            m_makefilesToParse.push(includedMakefile);
       }
       else if (re.search(str) != -1)
       {
