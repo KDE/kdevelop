@@ -2,11 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevPerforceIntegrator
-Name[da]=KDevelop Perforce-integration
 Name[sv]=KDevelop Perforce-integration
 Name[xx]=xxKDevPerforceIntegratorxx
 Comment=Perforce Project Integration Facility
-Comment[da]=Perforce projektintegration
 Comment[de]=Perforce-Projektintegration
 Comment[es]=Entorno para integración con proyectos Perforce
 Comment[et]=Perforce projekti põimimisvahend

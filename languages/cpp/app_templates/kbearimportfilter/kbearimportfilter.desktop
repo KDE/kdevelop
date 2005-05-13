@@ -6,7 +6,6 @@ X-KDE-Library=libkbear%{APPNAMELC}importfilter
 Name=%{APPNAME} Import Filter
 Name[br]=Sil enporzh evit %{APPNAME}
 Name[ca]=Filtre d'importació per a %{APPNAME}
-Name[da]=%{APPNAME} importfilter
 Name[de]=%{APPNAME} Import-Filter
 Name[es]=Filtro de importación de %{APPNAME}
 Name[et]=%{APPNAME} importfilter

@@ -4,7 +4,6 @@ Type=Service
 Exec=gcc
 Comment=GNU C Compiler
 Comment[ca]=Compilador C de GNU
-Comment[da]=GNU C compiler
 Comment[de]=GNU C-Compiler
 Comment[es]=Compilador de C de GNU
 Comment[et]=GNU C kompilaator

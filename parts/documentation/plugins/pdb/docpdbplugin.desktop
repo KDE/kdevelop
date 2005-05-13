@@ -2,13 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=DocPDBPlugin
-Name[da]=DocPDB-plugin
 Name[sv]=DocPDB-insticksmodul
 Name[ta]=DocQt  சொருகு
 Name[xx]=xxDocPDBPluginxx
 Exec=blubb
 Comment=Documentation plugin for Palmdoc format
-Comment[da]=Dokumentations-plugin for Palmdoc-format
 Comment[de]=Komponente für das Palmdoc-Dokumentationsformat
 Comment[es]=Extensión de documentación para el formato Palmdoc
 Comment[et]=PalmDOC-vormingus dokumentatsiooni plugin

@@ -3,7 +3,6 @@ Type=Service
 Exec=foobar
 Comment=Embeddable HTMLHelp Viewer
 Comment[ca]=Visor encastat de l'ajuda HTML
-Comment[da]=Indlejrbar HTMLHjælp-fremviser
 Comment[de]=Eingebetteter Betrachter für HTMLHelp
 Comment[es]=Visor de ayuda HTML empotrable
 Comment[et]=Põimitav HTML-abifailide näitaja

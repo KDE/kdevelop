@@ -2,13 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=DocDjvuPlugin
-Name[da]=DocDjvu-plugin
 Name[sv]=DocDjvu-insticksmodul
 Name[ta]=DocQt  சொருகு
 Name[xx]=xxDocDjvuPluginxx
 Exec=blubb
 Comment=Documentation plugin for djvu format
-Comment[da]=Dokumentations-plugin for djvu-dokumentation
 Comment[de]=Komponente für das djvu-Dokumentationsformat
 Comment[es]=Extensión de documentación para el formato djvu
 Comment[et]=Djvu vormingus dokumentatsiooni plugin

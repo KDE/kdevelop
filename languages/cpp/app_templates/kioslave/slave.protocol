@@ -7,7 +7,6 @@ reading=true
 defaultMimetype=text/plain
 Icon=remote
 Description=A kioslave for %{APPNAMELC}
-Description[da]=En kioslave til %{APPNAMELC}
 Description[de]=Ein Ein-/Ausgabemodul für %{APPNAMELC}
 Description[es]=Un kioslave para %{APPNAMELC}
 Description[et]=%{APPNAMELC} IO-moodul

@@ -2,11 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevCVSIntegrator
-Name[da]=KDevelop CVS-integration
 Name[sv]=KDevelop CVS-integration
 Name[xx]=xxKDevCVSIntegratorxx
 Comment=CVS Service Project Integration Facility
-Comment[da]=CVS service projektintegration
 Comment[de]=CVS-Dienst Projektintegration
 Comment[es]=Facilidad de integración con proyectos que utilicen CVS
 Comment[et]=CVS teenuse projekti põimimisvahend

@@ -1,11 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevMakeBuilder
-Name[da]=KDevelop MakeBuilder
 Name[sv]=KDevelop MakeBuilder
 Name[xx]=xxKDevMakeBuilderxx
 Comment=KDevelop Automake Importer
-Comment[da]=KDevelop Automake importør
 Comment[de]=Automake-Import für KDevelop
 Comment[es]=Importador de Automake de KDevelop
 Comment[et]=KDevelopi Automake'i importija

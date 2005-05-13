@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=KDevKDELibsImporter
-Name[da]=KDevelop KDELibs-importør
 Name[de]=KDELIBS-PCS-Import (KDevelop)
 Name[hi]=के-डेव-केडीई-लिब्स-इम्पोर्टर
 Name[ja]=KDev KDE 
@@ -11,7 +10,6 @@ Name[ta]=கெடெவ் கெடெலிப்ஸ் இறக்கும
 Name[xx]=xxKDevKDELibsImporterxx
 Comment=KDevelop KDELibs PCS Importer
 Comment[ca]=Importador PCS de KDELibs per a KDevelop
-Comment[da]=KDevelop KDELibs PCS importør
 Comment[de]=KDELIBS-Import für persistenten Klassenspeicher
 Comment[es]=Importador de PCS de KDELibs de KDevelop
 Comment[et]=KDevelopi kdelibs PCS importija

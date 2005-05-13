@@ -2,11 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevSubversionIntegrator
-Name[da]=KDevelop Subversion-integration
 Name[sv]=KDevelop Subversion-integration
 Name[xx]=xxKDevSubversionIntegratorxx
 Comment=Subversion Project Integration Facility
-Comment[da]=Subversion projektintegration
 Comment[de]=Cervisia-Projektintegration
 Comment[es]=Facilidad para integración con proyectos que utilicen Subversion
 Comment[et]=Subversion projekti põimimisvahend

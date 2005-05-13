@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=Service
 Name=DocCHMPlugin
-Name[da]=DocCHM-plugin
 Name[hu]=DocCHMPPlugin
 Name[sv]=CHM-dokumentationsinsticksmodul
 Name[ta]=DocCHM  சொருகு
@@ -10,7 +9,6 @@ Name[xx]=xxDocCHMPluginxx
 Exec=blubb
 Comment=Documentation plugin for CHM documentation
 Comment[ca]=Connector de documentació per a documentació CHM
-Comment[da]=Dokumentations-plugin for CHM-dokumentation
 Comment[de]=Dokumentations-Plugin für CHM-Dokumentation
 Comment[es]=Extensión de documentación para CHM
 Comment[et]=CHM dokumentatsiooni plugin

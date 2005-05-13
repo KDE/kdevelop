@@ -2,11 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevClearcaseIntegrator
-Name[da]=KDevelop Clearcase-integration
 Name[sv]=KDevelop Clearcase-integration
 Name[xx]=xxKDevClearcaseIntegratorxx
 Comment=Clearcase Project Integration Facility
-Comment[da]=Clearcase projektintegration
 Comment[de]=Clearcase-Integration
 Comment[es]=Facilidad para integración con proyectos Clearcase
 Comment[et]=Clearcase projekti põimimisvahend
