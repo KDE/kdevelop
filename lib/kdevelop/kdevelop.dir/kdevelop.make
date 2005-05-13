@@ -4,21 +4,21 @@
 # Rule file for target kdevelop.
 
 # Include make rules for object files.
-include kdevelop.dir/../dummy.o.make
+include kdevelop.dir/dummy.o.make
 
-kdevelop.dir/kdevelop.depends: kdevelop.dir/../dummy.o.depends
+kdevelop.dir/kdevelop.depends: kdevelop.dir/dummy.o.depends
 
 # Include this target in the "depend" pass for this directory.
 depend.local: kdevelop.dir/kdevelop.depends
 
 # Object files for target kdevelop
 kdevelop_OBJECTS = \
-"kdevelop.dir/../dummy.o"
+"kdevelop.dir/dummy.o"
 
 # External object files for target kdevelop
 kdevelop_EXTERNAL_OBJECTS =
 
-libkdevelop.so: kdevelop.dir/../dummy.o
+libkdevelop.so: kdevelop.dir/dummy.o
 libkdevelop.so: /usr/lib/qt/lib/libqt-mt.so
 libkdevelop.so: /usr/X11R6/lib/libX11.so
 libkdevelop.so: /usr/X11R6/lib/libXext.so
