@@ -6,6 +6,7 @@ output=filesystem
 reading=true
 defaultMimetype=text/html
 Description=A kioslave for displaying WinHelp files
+Description[da]=En kioslave til visning af Windows hjælpefiler
 Description[de]=Ein Ein-/Ausgabemodul zur Anzeige von WinHelp-Dateien
 Description[es]=Un kioslave para mostrar archivos WinHelp
 Description[et]=WinHelp-failide kuvamise IO-moodul

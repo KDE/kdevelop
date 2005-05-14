@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple Win32 GUI App.
+Name[da]=Simpelt Win32 GUI-program.
 Name[sv]=Enkelt Win32-program med grafiskt gränssnitt
 Icon=win32gui.png
 Category=C++
 Comment=Generates a shell project for crosscompiling Win32 projects.
+Comment[da]=Genererer et skalprojekt for krydskompilering af Win32-projekter.
 Comment[sv]=Skapar ett skalprojekt för korskompilering av Win32-projekt.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
@@ -56,5 +58,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
+Comment[da]=For at dette projekt skal kompilere og køre har du brug for at have både Wine og MinGW installeret.
 Comment[sv]=För att projektet ska kompileras och köras behöver du ha installerat både Wine och MinGW.
 

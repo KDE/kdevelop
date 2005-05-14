@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Type=Service
 Name=DevHelpPlugin
+Name[da]=DevHelp-plugin
 Name[sv]=DevHelp-insticksmodul
 Name[ta]=Devஉதவி சொருகு
 Name[xx]=xxDevHelpPluginxx
 Comment=Documentation plugin for DevHelp documentation
 Comment[ca]=Connector de documentació per a documentació DevHelp
+Comment[da]=Dokumentations-plugin for DevHelp-dokumentation
 Comment[de]=Komponente für DevHelp-Dokumentation
 Comment[es]=Extensión de documentación para documentación DevHelp
 Comment[et]=DevHelp dokumentatsiooni plugin

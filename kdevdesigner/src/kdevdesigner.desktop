@@ -43,6 +43,7 @@ Type=Application
 DocPath=kdevdesigner/kdevdesigner.html
 Comment=GUI Designer for Qt/KDE
 Comment[ca]=Dissenyador de GUI per Qt/KDE
+Comment[da]=Grafisk brugerfladedesigner til Qt/KDE
 Comment[de]=Auf Qt-Designer basierender GUI-Designer
 Comment[es]=Diseñador de interfaces para Qt/KDE
 Comment[et]=Qt/KDE graafilise kasutajaliidese disainer

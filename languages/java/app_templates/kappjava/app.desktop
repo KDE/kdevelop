@@ -8,6 +8,7 @@ Type=Application
 DocPath=%{APPNAMELC}/%{APPNAMELC}.html
 Comment=A Java KDE KPart Application
 Comment[ca]=Una aplicació KPart en Java per a KDE
+Comment[da]=Et Java KDE KPart program
 Comment[de]=Eine KDE Komponten-Anwendung in Java
 Comment[es]=Una aplicación KPart en Java para KDE
 Comment[et]=Java KDE KPart rakendus

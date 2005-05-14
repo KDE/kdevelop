@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=KOffice Part
+Name[da]=KOffice part
 Name[sv]=Koffice-delprogram
 Icon=kopart.png
 Category=C++/KDE
 Comment=Generates a framework for a full KOffice Application.
+Comment[da]=Genererer et skelet for et fuldstændigt KOffice-program.
 Comment[sv]=Skapar ett ramverk för ett fullständigt Koffice-program.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
@@ -150,4 +152,5 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 [MSG]
 Type=message
 Comment=A KOffice part was created in %{dest}
+Comment[da]=En KOffice part blev oprettet i %{dest}
 Comment[sv]=Ett Koffice-delprogram skapades i %{dest}

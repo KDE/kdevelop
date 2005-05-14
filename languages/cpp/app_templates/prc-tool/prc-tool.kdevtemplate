@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Hello world program
+Name[da]=Goddag verden program
 Name[sv]=Hello world-program
 Icon= # got none
 Category=C/PalmOS
 Comment=Generates a template for palm application
+Comment[da]=Genererer en skabelon for et palm-program
 Comment[sv]=Skapar en mall för ett Palm-program
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.c
@@ -53,4 +55,5 @@ Dest=%{dest}/callback.h
 [MSG]
 Type=message
 Comment=A palm application was created in %{dest}
+Comment[da]=Et palm-program blev oprettet i %{dest}
 Comment[sv]=Ett Palm-program skapades i %{dest}

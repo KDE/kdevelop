@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[da]=Programskelet
 Name[sv]=Programramverk
 Icon=kapp.png
 Category=Ruby/KDE
 Comment=Generates a simple Korundum application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
+Comment[da]=Generere et simpelt Korundum program med et vindue på topniveau, menuer og værktøjslinjer. Der sørges også for en DCOP-grænseflade, så dit program kan give en script-grænseflade
 Comment[sv]=Skapar ett enkelt Korundum-program med ett toppnivåfönster, menyer och verktygsrader. Ett DCOP-gränssnitt tillhandahålls också, så att programmet kan tillhandahålla ett skriptgränssnitt.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
@@ -155,4 +157,5 @@ Dest=%{dest}/src/README
 [MSG]
 Type=message
 Comment=A Korundum Application was created at %{dest}
+Comment[da]=Et Korundum program blev oprettet i %{dest}
 Comment[sv]=Ett Korundum-program skapades i %{dest}

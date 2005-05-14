@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Application framework
+Name[da]=Programskelet
 Name[sv]=Programramverk
 Icon=kappjava.png
 Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
+Comment[da]=Genererer et simpelt Java KDE program med et vindue på topniveau, menuer og værktøjslinjer.
 Comment[sv]=Skapar ett enkelt Java KDE-program med ett toppnivåfönster, menyer och verktygsrader.
 FileTemplates=java,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAME}View.java

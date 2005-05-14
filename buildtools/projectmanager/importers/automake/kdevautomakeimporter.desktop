@@ -1,10 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=KDevAutomakeImporter
+Name[da]=KDevelop Automake-importør
 Name[pl]=KDevImportAutomake
 Name[sv]=KDevelop Automake-import
 Name[xx]=xxKDevAutomakeImporterxx
 Comment=KDevelop Automake Importer
+Comment[da]=KDevelop Automake importør
 Comment[de]=Automake-Import für KDevelop
 Comment[es]=Importador de Automake de KDevelop
 Comment[et]=KDevelopi Automake'i importija

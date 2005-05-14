@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Shared library
+Name[da]=Delt bibliotek
 Name[sv]=Delat bibliotek
 Category=Pascal/Free Pascal
 Comment=Generates a shared library in Pascal
+Comment[da]=Genererer et delt bibliotek i Pascal
 Comment[sv]=Skapar ett delat bibliotek i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
@@ -31,4 +33,5 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A shared library project written in pascal was created in %{dest}
+Comment[da]=Et delt biblioteksprojekt skrevet i pascal blev oprettet i %{dest}
 Comment[sv]=Ett projekt med delat bibliotek skrivet i Pascal skapades i %{dest}

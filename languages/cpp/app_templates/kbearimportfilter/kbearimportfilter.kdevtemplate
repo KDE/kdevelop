@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KBear Import Filter
+Name[da]=KBear importfilter
 Name[ga]=Scagaire Iompórtála KBear
 Name[sv]=KBear-importfilter
 Category=C++/KDE
 Icon=kbearimportfilter.png
 Comment=Generates a simple KBear import filter.
+Comment[da]=Genererer et simpelt KBear importfilter.
 Comment[sv]=Skapar ett enkelt KBear-importfilter.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
@@ -72,4 +74,5 @@ Dest=%{dest}/src/kbear%{APPNAMELC}importfilter.desktop
 [MSG]
 Type=message
 Comment=An import filter for KBear was created in %{dest}
+Comment[da]=Et importfilter for KBear blev oprettet i %{dest}
 Comment[sv]=Ett importfilter för KBear skapades i %{dest}

@@ -5,6 +5,7 @@ X-KDE-ServiceType=KDevelop/VersionControl
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Version Control Interface
 Name[ca]=Interfície del control de versions per a KDevelop
+Name[da]=KDevelop versionskontrol grænseflade
 Name[de]=Versionsverwaltung-Schnittstelle (KDevelop)
 Name[es]=Interfaz del control de versiones de KDevelop
 Name[et]=KDevelopi versioonide kontrollimise liides

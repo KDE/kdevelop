@@ -6,6 +6,7 @@ Name[sv]=Kate-insticksprogram
 Icon=kateplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.
+Comment[da]=Genererer et plugin for teksteditoren kate
 Comment[sv]=Skapar ett insticksprogram för texteditorn Kate.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}.cpp
@@ -126,4 +127,5 @@ Dest=%{dest}/src/hi32-action-plugin.png
 [MSG]
 Type=message
 Comment=A plugin for Kate was created at %{dest}
+Comment[da]=Et plugin for Kate blev oprettet på %{dest}
 Comment[sv]=Ett insticksprogram för Kate skapades i %{dest}

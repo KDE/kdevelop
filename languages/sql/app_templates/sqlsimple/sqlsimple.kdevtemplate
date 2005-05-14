@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple SQL Project
+Name[da]=Simpelt SQL-projekt
 Name[ga]=Tionscadal Simplí SQL
 Name[sv]=Enkelt SQL-projekt
 Category=Database
 Comment=Generates a simple SQL project.
+Comment[da]=Genererer et simpelt SQL projekt.
 Comment[sv]=Skapar ett enkelt SQL-projekt.
 FileTemplates=sql,AdaStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sql
@@ -24,4 +26,5 @@ Dest=%{dest}/%{APPNAMELC}.sql
 [MSG]
 Type=install
 Comment=A simple SQL project was created in %{dest}
+Comment[da]=Et simpelt SQL projekt blev oprettet i %{dest}
 Comment[sv]=Ett enkelt SQL-projekt skapades i %{dest}

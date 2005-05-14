@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Opie Input
+Name[da]=Opie-input
 Name[ga]=Ionchur Opie
 Name[sv]=Opie-inmatning
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie input method plugin.
+Comment[da]=Generér en Opie input-metode-plugin.
 Comment[sv]=Skapa ett insticksprogram för Opie-inmatning.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
@@ -48,5 +50,6 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie input method plugin was created in %{dest}
+Comment[da]=At opie input-metode-plugin blev oprettet i %{dest}
 Comment[sv]=Ett insticksprogram för Opie-inmatning skapades i %{dest}
 

@@ -2,12 +2,14 @@
 Encoding=UTF-8
 Type=Service
 Name=DocQtPlugin
+Name[da]=DocQt-plugin
 Name[sv]=Qt-dokumentationsinsticksmodul
 Name[ta]=DocQt  சொருகு
 Name[xx]=xxDocQtPluginxx
 Exec=blubb
 Comment=Documentation plugin for Qt DCF documentation
 Comment[ca]=Connector de documentació per a documentació Qt DCF
+Comment[da]=Dokumentations-plugin for Qt DCF dokumentation
 Comment[de]=Komponente für QT DCF-Dokumentation
 Comment[es]=Extensión de documentación para Qt DCF
 Comment[et]=Qt DCF dokumentatsiooni plugin

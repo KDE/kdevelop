@@ -1,8 +1,10 @@
 # KDE Config File
 [General]
 Name=QtRuby Hello World
+Name[da]=QtRuby Goddag verden
 Category=Ruby/Qt
 Comment=This generates a simple QtRuby Hello World application
+Comment[da]=Dette generere et simpelt QtRuby Goddag verden program
 Comment[sv]=Detta skapar ett enkelt Hello World-program i QtRuby
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
@@ -33,4 +35,5 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
 [MSG]
 Type=message
 Comment=A simple QtRuby application was created in %{dest}
+Comment[da]=Et simpelt QtRuby program blev oprettet i %{dest}
 Comment[sv]=Ett enkelt QtRuby-program skapades i %{dest}

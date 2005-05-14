@@ -5,6 +5,7 @@ X-KDE-ServiceType=KDevelop/LanguageSupport
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Language Support Interface
 Name[ca]=Interfície del suport de llenguatges per a KDevelop
+Name[da]=KDevelop grænseflade for sprogunderstøttelse
 Name[de]=Schnittstelle für Sprachunterstützung (KDevelop)
 Name[es]=Interfaz del soporte de lenguajes de KDevelop
 Name[et]=KDevelopi keeletoetuse liides

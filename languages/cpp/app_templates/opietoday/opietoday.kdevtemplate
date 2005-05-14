@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Opie Today Plugin
+Name[da]=Opie Today-plugin
 Name[sv]=Opie Idag-insticksprogram
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie today plugin.
+Comment[da]=Generér et Opie today-plugin.
 Comment[sv]=Skapar ett Opie Idag-insticksprogram.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
@@ -67,4 +69,5 @@ Dest=%{dest}/%{APPNAMELC}impl.h
 [MSG]
 Type=message
 Comment=An opie today plugin was created in %{dest}
+Comment[da]=Et opie today-plugin blev oprettet i %{dest}
 Comment[sv]=Ett Opie Idag-insticksprogram skapades i %{dest}

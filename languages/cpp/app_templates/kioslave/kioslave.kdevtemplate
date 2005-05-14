@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=KIO slave
+Name[da]=KIO-slave
 Name[sv]=I/O-slav
 Icon=kioslave.png
 Category=C++/KDE
 Comment=Generates a framework for an IO slave
+Comment[da]=Genererer et skelet for en IO-slave
 Comment[sv]=Skapar ett ramverk för en I/O-slav
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -109,4 +111,5 @@ Dest=%{dest}/src/%{APPNAMELC}.protocol
 [MSG]
 Type=message
 Comment=A KIO slave was created in %{dest}
+Comment[da]=En KIO-slave blev oprettet i %{dest}
 Comment[sv]=En I/O-slav skapades i %{dest}

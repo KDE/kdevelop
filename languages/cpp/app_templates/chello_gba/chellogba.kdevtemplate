@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Hello world program
+Name[da]=Goddag verden program
 Name[sv]=Hello world-program
 Icon=chellogba.png
 Category=C/GBA
 Comment=Generates a simple "Hello world" program for the Gameboy Advance. You will need the "devkitadvance" to compile it. See README.devel for more details.
+Comment[da]=Genererer et simpelt "Goddag verden" program for Gameboy Advance. Du vil skulle  bruge "devkitadvance" for at kompilere det. Se README.devel for flere detaljer.
 ShowFileAfterGeneration=README.devel
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.c
@@ -86,4 +88,3 @@ Dest=%{dest}/src/master.pal.c
 [MSG]
 Type=message
 Comment=A Hello World program was created in %{dest}
-Comment[sv]=Ett Hello World-program skapades i %{dest}

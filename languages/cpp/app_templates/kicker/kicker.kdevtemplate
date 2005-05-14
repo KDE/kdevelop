@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Kicker Applet
+Name[da]=Kicker-applet
 Name[sv]=Miniprogram för Kicker
 Icon=kicker.png
 Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
+Comment[da]=Genererer et skelet for en applet der indlejres i KDE's panel
 Comment[sv]=Skapar ett ramverk för ett miniprogram som inbäddas i KDE:s panel
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -109,4 +111,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A Kicker Applet was created in %{dest}
+Comment[da]=En Kicker applet blev oprettet i %{dest}
 Comment[sv]=Ett miniprogram för Kicker skapades i %{dest}

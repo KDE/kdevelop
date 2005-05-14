@@ -1,12 +1,14 @@
 [Desktop Entry]
 Type=Service
 Name=DocDoxygenPlugin
+Name[da]=DocDoxygen-plugin
 Name[sv]=Doxygen-dokumentationsinsticksmodul
 Name[ta]=DocDoxygen  சொருகு
 Name[xx]=xxDocDoxygenPluginxx
 Exec=blubb
 Comment=Documentation plugin for Doxygen documentation
 Comment[ca]=Connector de documentació per a documentació Doxygen
+Comment[da]=Dokumentations-plugin for Doxygen-dokumentation
 Comment[de]=Komponente für Doxygen-Dokumentation
 Comment[es]=Extensión de documentación para Doxygen
 Comment[et]=Doxygeni dokumentatsiooni plugin

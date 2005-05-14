@@ -1,9 +1,11 @@
 # KDE Config File
 [General]
 Name=Simple Hello wxWidgets Application
+Name[da]=Simpelt Goddag wxWidgets program
 Name[sv]=Enkelt Hello-program för wxWidgets
 Category=C++/wxWidgets
 Comment=Generates a simple wxWidgets Hello application.
+Comment[da]=Genererer et simpelt wxWidgets Goddag-program.
 Comment[sv]=Skapar ett enkelt Hello-program för wxWidgets.
 FileTemplates=h,CStyle,cpp,CStyle
 Icon=wxhello.png
@@ -109,4 +111,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=Simple hello wxWidgets application was created in %{dest}
+Comment[da]=Simpelt Goddag wxWidgets program blev oprettet i %{dest}
 Comment[sv]=Ett enkelt Hello-program för wxWidgets.skapades i %{dest}

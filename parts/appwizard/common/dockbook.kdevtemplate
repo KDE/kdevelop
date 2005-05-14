@@ -3,6 +3,7 @@ Type = value
 ValueType=bool
 Value=INSTALL_DOCS
 Comment= Install Docbook documentation templates.
+Comment[da]= Installerer Docbook dokumentationsskabeloner.
 Comment[sv]= Installera Docbook-dokumentationsmallar.
 Default=true
 

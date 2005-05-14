@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=KDE Screen Saver
+Name[da]=KDE pauseskærm
 Name[ga]=Spárálaí Scáileáin KDE
 Name[sv]=KDE-skärmsläckare
 Icon=kscreensaver.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE screensaver.
+Comment[da]=Genererer et skelet for en KDE-pauseskærm.
 Comment[sv]=Skapar ett ramverk för en KDE-skärmsläckare
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -117,4 +119,5 @@ Dest=%{dest}/src/%{APPNAMELC}ui.ui
 [MSG]
 Type=message
 Comment=A screensaver application was created in %{dest}
+Comment[da]=Et pauseskærmsprogram blev oprettet i %{dest}
 Comment[sv]=Ett skärmsläckarprogram skapades i %{dest}

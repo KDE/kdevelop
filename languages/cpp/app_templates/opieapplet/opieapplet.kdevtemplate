@@ -1,11 +1,13 @@
 # KDE Config File
 [General]
 Name=Opie Applet
+Name[da]=Opie-applet
 Name[ga]=Feidhmchláirín Opie
 Name[sv]=Opie-miniprogram
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie applet.
+Comment[da]=Generér en Opie-applet.
 Comment[sv]=Skapa ett Opie-miniprogram.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
@@ -48,4 +50,5 @@ Dest=%{dest}/%{APPNAMELC}.h
 [MSG]
 Type=message
 Comment=An opie applet was created in %{dest}
+Comment[da]=En opie-applet blev oprettet i %{dest}
 Comment[sv]=Ett Opie-miniprogram skapades i %{dest}

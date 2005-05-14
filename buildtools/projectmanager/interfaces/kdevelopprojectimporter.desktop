@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/ProjectImporter
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project Importer
+Name[da]=KDevelop Projektimportør
 Name[de]=Projekt-Import für KDevelop
 Name[es]=Importador de proyectos de KDevelop
 Name[et]=KDevelopi projekti importija

@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple KDE Application
+Name[da]=Et simpelt KDE program
 Name[sv]=Enkelt KDE-program
 Category=C++/KDE
 Icon=khello.png
 Comment=Generates a simple KDE application with one widget.
+Comment[da]=Genererer et simpelt KDE program men en kontrol
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -130,5 +132,6 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 [MSG]
 Type=message
 Comment=A KDE Hello world program was created in %{dest}
+Comment[da]=Et KDE Goddag verden program blev oprettet i %{dest}
 Comment[sv]=Ett KDE Hello world-program skapades i %{dest}
 

@@ -2,10 +2,13 @@
 [General]
 
 Name=KConfig XT application
+Name[da]=KConfig XT program
 Name[sv]=KConfig XT-program
 Category=Ruby/KDE
 Icon=previewruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
+Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
+Comment[en_GB]=Generates a simple KDE application with one widget and a configuration dialogue
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
 Archive=kxtruby.tar.gz
@@ -165,4 +168,5 @@ Dest=%{dest}/src/settings.kcfgc
 [MSG]
 Type=message
 Comment=A Korundum KConfig XT Application was created at %{dest}
+Comment[da]=Et Korundum KConfig XT program blev oprettet i %{dest}
 Comment[sv]=Ett Korundum KConfig XT-program skapades i %{dest}

@@ -1,11 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=KDevPCSCustomImporter
+Name[da]=KDevelop brugerdefineret PCS-importør
 Name[pl]=KDevWłasnyImportPCS
 Name[sv]=KDevelop egen import av PCS
 Name[xx]=xxKDevPCSCustomImporterxx
 Comment=KDevelop Custom Directory PCS Importer
 Comment[ca]=Importador PCS de directori personalitzat per a KDevelop
+Comment[da]=KDevelop brugerdefineret mappe-PCS-importør
 Comment[de]=Import für persistenten Klassenspeicher aus benutzerdefinierten Ordnern
 Comment[es]=Importador de PCS de directorio personalizado de KDevelop
 Comment[et]=KDevelopi kohandatud kataloogi PCS importija

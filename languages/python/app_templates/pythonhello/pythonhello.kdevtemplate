@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple Python script
+Name[da]=Simpelt Python script
 Name[sv]=Enkelt Python-skript
 Icon=pythonhello.png
 Category=Python
 Comment=This generates a simplistic "Hello world" program in Python
+Comment[da]=Dette genererer et simplistisk "Goddag verden" program i Python
 Comment[sv]=Detta skapar ett förenklat "Hello world"-program i Python
 FileTemplates=py,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
@@ -24,4 +26,5 @@ Dest=%{dest}/%{APPNAMELC}.py
 [MSG]
 Type=message
 Comment=A simple python script was created in %{dest}
+Comment[da]=Et simpelt python script blev oprettet i %{dest}
 Comment[sv]=Ett enkelt Python-skript skapades i %{dest}

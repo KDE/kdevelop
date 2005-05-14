@@ -2,12 +2,14 @@
 Encoding=UTF-8
 Type=Service
 Name=DocCustomPlugin
+Name[da]=Brugerdefineret doc-plugin
 Name[sv]=Egen dokumentationsinsticksmodul
 Name[ta]=ஆவண தனிப்பயன் சொருகுப்பொருள்
 Name[xx]=xxDocCustomPluginxx
 Exec=blubb
 Comment=Documentation plugin for all types of documentation
 Comment[ca]=Connector de documentació per a tot tipus de documentació
+Comment[da]=Dokumentations-plugin for alle typer dokumentation
 Comment[de]=Komponente für alle Arten von Dokumentation
 Comment[es]=Extensión de documentación para todos los tipos de documentación
 Comment[et]=Igat tüüpi dokumentatsiooni plugin

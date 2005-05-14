@@ -1,10 +1,12 @@
 # KDE Config File
 [General]
 Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
 Name[sv]=Enkelt Hello world-program
 Icon=pascalhello.png
 Category=Pascal
 Comment=Generates a simple Hello world program in Pascal
+Comment[da]=Genererer et simpelt Goddag verden program i Pascal
 Comment[sv]=Skapar ett enkelt Hello world-program i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
@@ -32,4 +34,5 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 [MSG]
 Type=message
 Comment=A simple 'hello world' program in Pascal was created in %{dest}
+Comment[da]=Et simpelt 'goddag verden' program i Pascal blev oprettet i %{dest}
 Comment[sv]=Ett enkelt 'Hello world'-program i Pascal skapades i %{dest}

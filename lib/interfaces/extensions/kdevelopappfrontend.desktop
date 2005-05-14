@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/AppFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=App Frontend Interface
+Name[da]=Programbrugerflade-grænseflade
 Name[de]=Oberflächen-Schnittstelle (KDevelop)
 Name[es]=Interfaz de entorno de aplicación
 Name[et]=Rakenduse kasutajaliides

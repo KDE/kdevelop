@@ -1,10 +1,14 @@
 # KDE Config File
 [General]
 Name=Noatun visualization plugin
+Name[da]=Noatun visualiserings-plugin
+Name[en_GB]=Noatun visualisation plugin
 Name[sv]=Noatun-insticksprogram för visningar
 Icon=noatunvisual.png
 Category=C++/KDE
 Comment=Generates a visualization plugin for noatun using SDL
+Comment[da]=Generere et visualiserings-plugin for noatun ved brug af SDL
+Comment[en_GB]=Generates a visualisation plugin for noatun using SDL
 Comment[sv]=Skapar ett Noatun-insticksprogram för visningar som använder SDL
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/plugin_%{APPNAMELC}_impl.cpp
@@ -119,4 +123,6 @@ Dest=%{dest}/src/%{APPNAMELC}.plugin
 [MSG]
 Type=message
 Comment=A Noatun visualization plugin was created in %{dest}
+Comment[da]=Et Noatun visualiserings-plugin blev oprettet i %{dest}
+Comment[en_GB]=A Noatun visualisation plugin was created in %{dest}
 Comment[sv]=Ett Noatun-insticksprogram för visningar skapades i %{dest}

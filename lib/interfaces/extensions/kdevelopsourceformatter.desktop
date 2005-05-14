@@ -5,6 +5,7 @@ X-KDE-ServiceType=KDevelop/SourceFormatter
 X-KDE-Derived=KDevelop/Plugin
 Name=Source Formatter Interface
 Name[ca]=Interfície del formatador de codi font
+Name[da]=Kildekodeformatering grænseflade
 Name[de]=Quelltext-Formatierer-Schnittstelle (KDevelop)
 Name[es]=Interfaz del formateador de código fuente
 Name[et]=Koodi vormindamise liides

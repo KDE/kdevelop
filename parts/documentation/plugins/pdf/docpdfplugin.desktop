@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Type=Service
 Name=DocPDFPlugin
+Name[da]=DocPDF-plugin
 Name[sv]=DocPDF-insticksmodul
 Name[ta]=DocQt  சொருகுபொருள்
 Name[xx]=xxDocPDFPluginxx
 Exec=blubb
 Comment=Documentation plugin for PDF format
+Comment[da]=Dokumentations-plugin for PDF-format
 Comment[de]=Komponente für das PDF-Dokumentationsformat
 Comment[es]=Extensión de documentación para el formato PDF
 Comment[et]=PDF-vormingus dokumentatsiooni plugin

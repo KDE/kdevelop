@@ -2,12 +2,14 @@
 [General]
 Name=Application
 Name[br]=Arload
+Name[da]=Program
 Name[ga]=Feidhmchlár
 Name[sv]=Program
 Icon=qmakeapp.png
 Category=C++/QMake project
 Category[fr]=C++/QMake
 Comment=Generate a QMake/Qt based application (crossplatform compatible)
+Comment[da]=Generér et QMake/Qt baseret program (krydsplatform kompatibel)
 Comment[sv]=Skapar ett QMake/Qt-baserat program (fungerar på andra plattformar)
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
@@ -65,4 +67,5 @@ Dest=%{dest}/src/fileprint.xpm
 [MSG]
 Type=message
 Comment=A Qt/Qmake based application was created in %{dest}
+Comment[da]=Et Qt/Qmake baseret program blev oprettet i %{dest}
 Comment[sv]=Ett QMake/Qt-baserat program skapades i %{dest}

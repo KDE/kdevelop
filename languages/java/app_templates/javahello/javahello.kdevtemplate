@@ -2,12 +2,14 @@
 [General]
 Name=Application
 Name[br]=Arload
+Name[da]=Program
 Name[ga]=Feidhmchlár
 Name[sv]=Program
 Icon=qmakeapp.png
 Category=Java/Ant project
 Category[fr]=Java/Ant
 Comment=Generate a Java application
+Comment[da]=Generér et Java-program
 Comment[sv]=Skapa ett Java-program
 FileTemplates=java,JavaStyle
 ShowFilesAfterGeneration=%{dest}/Main.java
@@ -37,4 +39,5 @@ Dest=%{dest}/build.xml
 [msg]
 Type=message
 Comment=A JAVA application was created in %{dest}
+Comment[da]=Et JAVA-program blev oprettet i %{dest}
 Comment[sv]=Ett Java-program skapades i %{dest}
