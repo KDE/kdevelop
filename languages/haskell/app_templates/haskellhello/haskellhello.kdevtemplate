@@ -33,6 +33,6 @@ Dest=%{dest}/src/%{APPNAMELC}.hs
 
 [MSG]
 Type=message
-Comment=A simple 'hello world' program in Haskell was createed in %{dest}
+Comment=A simple 'hello world' program in Haskell was created in %{dest}
 Comment[da]=Et simpelt 'goddag verden' program i Haskell blev oprettet i %{dest}
 Comment[sv]=Ett enkelt 'Hello World'-program i Haskell skapades i %{dest}
