@@ -88,3 +88,5 @@ Dest=%{dest}/src/master.pal.c
 [MSG]
 Type=message
 Comment=A Hello World program was created in %{dest}
+Comment[da]=Et Goddag verden program blev oprettet i %{dest}
+Comment[sv]=Ett Hello World-program skapades i %{dest}

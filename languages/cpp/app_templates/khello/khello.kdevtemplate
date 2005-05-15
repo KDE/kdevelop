@@ -2,6 +2,7 @@
 [General]
 Name=Simple KDE Application
 Name[da]=Et simpelt KDE program
+Name[ga]=Feidhmchlár Simplí KDE
 Name[sv]=Enkelt KDE-program
 Category=C++/KDE
 Icon=khello.png

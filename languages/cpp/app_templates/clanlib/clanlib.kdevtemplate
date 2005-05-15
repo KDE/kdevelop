@@ -2,6 +2,7 @@
 [General]
 Name=Simple ClanLib application
 Name[da]=Simpelt ClanLib program
+Name[ga]=Feidhmchlár simplí ClanLib
 Name[sv]=Enkelt ClanLib-program
 Category=C++
 Icon=clanlib.png
