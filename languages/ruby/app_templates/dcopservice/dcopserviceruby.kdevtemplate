@@ -2,7 +2,6 @@
 [General]
 Name=DCOP Service
 Name[et]=DCOP-teenus
-Name[hu]=DCOP-szolgáltatás
 Name[pt_BR]=Serviço DCOP
 Name[sv]=DCOP-tjänst
 Icon=kdcop.png
@@ -10,7 +9,6 @@ Category=Ruby/KDE
 Comment=Generates a framework for a KDE dcop service and client access library.
 Comment[da]=Genererer et skelet for en KDE dcop-tjeneste og klientadgangsbibliotek.
 Comment[et]=KDE DCOP-teenuse raamistiku ja kliendi ligipääsu teegi loomine.
-Comment[hu]=Létrehoz egy kiindulási KDE DCOP-szolgálatást és klienselérési programkönyvtárat.
 Comment[nl]=Genereert een framework voor een KDE DCOP-service- en client acces-bibliotheek.
 Comment[pt_BR]=Gera um framework para um serviço DCOP do KDE e uma biblioteca de acesso para o cliente
 Comment[sv]=Skapar ett ramverk för en KDE DCOP-tjänst och klientåtkomstbibliotek.
@@ -124,7 +122,6 @@ Type=message
 Comment=A KDE DCOP Service was created in %{dest}
 Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
 Comment[et]=KDE DCOP-teenus loodi asukohta %{dest}
-Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
 Comment[nl]=Een DCOP-service is aangemaakt in  %{dest}
 Comment[pt_BR]=Um serviço DCOP do KDE foi criado em  %{dest}
 Comment[sv]=En KDE DCOP-tjänst skapades i %{dest}

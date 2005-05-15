@@ -3,7 +3,6 @@
 Name=Application framework
 Name[da]=Programskelet
 Name[et]=Rakenduse raamistik
-Name[hu]=Alkalmazás-keretrendszer
 Name[nl]=Applicationframework
 Name[pt_BR]=Framework de Aplicativo
 Name[sv]=Programramverk
@@ -12,7 +11,6 @@ Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
 Comment[da]=Genererer et simpelt Java KDE program med et vindue på topniveau, menuer og værktøjslinjer.
 Comment[et]=Lihtsa Java KDE rakenduse loomine ühe tipptaseme akna, menüüde ja tööriistaribadega.
-Comment[hu]=Létrehoz egy egyszerű Java-alapú KDE-alkalmazást egy főablakkal, menükkel és eszköztárakkal.
 Comment[pt_BR]=Gera um aplicativo em Java simples para o KDE, com uma janela, menus e barras de ferramentas.
 Comment[sv]=Skapar ett enkelt Java KDE-program med ett toppnivåfönster, menyer och verktygsrader.
 FileTemplates=java,CStyle

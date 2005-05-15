@@ -1,7 +1,7 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
-Name[hu]=KHTML-bővítőmodul
+Name[nl]=KHTMLPart-plugin
 Name[pt_BR]=Plug-in KHTMLPart
 Name[sv]=Insticksprogram för KHTML-delprogram
 Icon=kpartplugin.png
@@ -9,7 +9,7 @@ Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
 Comment[da]=Genererer et plugin for KHTML parten.
 Comment[et]=KHTML-komponendi plugina loomine.
-Comment[hu]=Létrehoz egy KHTML-bővítőmodult.
+Comment[nl]=Genereert een plugin voor de KHTML-part.
 Comment[pt_BR]=Gera um plug-in para o componente KHTML.
 Comment[sv]=Skapar ett insticksprogram för KHTML-delprogrammet
 FileTemplates=h,CStyle,cpp,CStyle
@@ -128,6 +128,6 @@ Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
 Comment[da]=Et KHTMLPart plugin bleb oprettet i %{dest}
 Comment[et]=KHTMLPart plugin loodi asukohta %{dest}
-Comment[hu]=Létrejött egy KHTML-bővítőmodul itt: %{dest}
+Comment[nl]=Een KHTMLPart-plugin is aangemaakt in %{dest}
 Comment[pt_BR]=Um plug-in KHTMLPart foi criado em %{dest}
 Comment[sv]=Ett insticksprogram för KHTML-delprogrammet skapades i %{dest}

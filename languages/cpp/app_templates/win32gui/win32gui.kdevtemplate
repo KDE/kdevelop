@@ -3,7 +3,7 @@
 Name=Simple Win32 GUI App.
 Name[da]=Simpelt Win32 GUI-program.
 Name[et]=Lihtne Win32 graafilise kasutajaliidese rakendus
-Name[hu]=Egyszerű Win32-alapú, grafikus felületű alkalmazás
+Name[nl]=Eenvoudige Win32 GUI-toepassing
 Name[pt_BR]=Interface Win32 simples.
 Name[sv]=Enkelt Win32-program med grafiskt gränssnitt
 Icon=win32gui.png
@@ -11,7 +11,7 @@ Category=C++
 Comment=Generates a shell project for crosscompiling Win32 projects.
 Comment[da]=Genererer et skalprojekt for krydskompilering af Win32-projekter.
 Comment[et]=Shelliprojekti loomine Win32 projektide kompileerimiseks.
-Comment[hu]=Létrehoz egy konzolos projektet Win32-projektek keresztfordításához.
+Comment[nl]=Genereert een shellproject voor crosscompilerende Win32-projecten.
 Comment[pt_BR]=Gera um projeto de shell para projetos Win32 multiplataforma.
 Comment[sv]=Skapar ett skalprojekt för korskompilering av Win32-projekt.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -66,7 +66,7 @@ Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
 Comment[da]=For at dette projekt skal kompilere og køre har du brug for at have både Wine og MinGW installeret.
 Comment[et]=Selle projekti kompileerimiseks ja käivitamiseks peab olema paigaldatud nii Wine kui MinGW.
-Comment[hu]=A projekt lefordításához és futtatásához szükség van a Wine és a MinGW telepítésére.
+Comment[nl]=Om dit project te kunnen compileren en uitvoeren hebt u Wine en MinGW nodig.
 Comment[pt_BR]=Neste projeto, para compilar e executar os arquivos, você precisa tanto do Wine como do MinGW instalados.
 Comment[sv]=För att projektet ska kompileras och köras behöver du ha installerat både Wine och MinGW.
 

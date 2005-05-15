@@ -3,7 +3,6 @@
 Name=Gtk-- Application framework
 Name[da]=Gtk-- programskelet
 Name[et]=Gtk-- rakenduse raamistik
-Name[hu]=Gtk-- - alkalmazás-keretrendszer
 Name[nl]=Gtk-- Applicationframework
 Name[pt_BR]=Framework de Aplicativo Gtk--
 Name[sv]=Gtk-- programramverk
@@ -12,7 +11,6 @@ Icon=gtk2mmapp.png
 Comment=Generates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
 Comment[da]=Genererer et simpelt Gtk-- program. Gtkmm >= 1.2.8 og < 1.3.0 skal være installeret. For at redigere glade file glade-- kræves (http://home.wtal.de/petig/Gtk/).
 Comment[et]=Lihtsa Gtk-- rakenduse loomine. Paigaldatud peab olema Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
-Comment[hu]=Létrehoz egy egyszerű Gtk---os alkalmazást. Gtkmm >= 1.2.8 és < 1.3.0 szükséges hozzá. Glade-fájl szerkesztéséhez glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
 Comment[nl]=Genereert een eenvoudige Gtk-- toepassing. Gtkmm >= 1.2.8 en < 1.3.0 dienen te zijn geïnstalleerd. Om glade file te kunnen bewerken hebt u glade-- (http://home.wtal.de/petig/Gtk/) nodig.
 Comment[pt_BR]=Gera um aplicativo simples em GTk--. O Gtkmm >= 1.2.8 e < 1.3.0 deve estar instalado. Para editar o arquivo do glade, é necessário o glade--(http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt Gtk-- program. Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
@@ -108,7 +106,6 @@ Type=message
 Comment=A Gtk-- application framework was created in %{dest}
 Comment[da]=Et Gtk-- programskelet blev oprettet i %{dest}
 Comment[et]=Gtk-- rakenduse raamistik loodi asukohta %{dest}
-Comment[hu]=Létrejött egy Gtk-s alkalmazás-keretrendszer itt: %{dest}
 Comment[nl]=Een Gtk-- toepassing is aangemaakt in %{dest}
 Comment[pt_BR]=Um framework de aplicativo do Gtk-- foi criado em %{dest}
 Comment[sv]=Ett Gtk-- programramverk skapades i %{dest}
