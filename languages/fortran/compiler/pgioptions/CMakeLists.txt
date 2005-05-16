@@ -11,6 +11,10 @@ ADD_LIBRARY(kdevpgioptions SHARED ${kdevpgioptions_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevpgioptions ${KDEV_LANG_LIBS} kdevextras)
 
+KDE_CREATE_LIBTOOL_FILE(kdevpgioptions)
+
+INSTALL_TARGETS(/lib/kde3 kdevpgioptions)
+
 #original Makefile.am contents follow:
 
 ## Here resides the pgi option dialog plugin.

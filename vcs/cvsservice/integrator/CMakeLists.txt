@@ -15,9 +15,14 @@ KDE_AUTOMOC(${cvsserviceintegrator_PART_SRCS})
 
 KDE_ADD_UI_FILES(cvsserviceintegrator_PART_SRCS ${cvsserviceintegrator_UI} )
 
-ADD_LIBRARY(cvsserviceintegrator SHARED ${cvsserviceintegrator_PART_SRCS})
+ADD_LIBRARY(cvsserviceintegrator MODULE ${cvsserviceintegrator_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(cvsserviceintegrator ${QT_LIBRARIES} kdecore kdeui kio kdevextras cvsservice kdevelop)
+
+KDE_CREATE_LIBTOOL_FILE(cvsserviceintegrator)
+
+INSTALL_TARGETS(/lib/kde3 cvsserviceintegrator)
+INSTALL_FILES(/share/services FILES kdevcvsserviceintegrator.desktop )
 
 #original Makefile.am contents follow:
 

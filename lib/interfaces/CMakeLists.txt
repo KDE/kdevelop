@@ -39,7 +39,7 @@ KDE_AUTOMOC(${kdevinterfaces_STAT_SRCS})
 ADD_LIBRARY(kdevinterfaces STATIC ${kdevinterfaces_STAT_SRCS})
 
 INSTALL_FILES(/share/servicetypes/ ".+\\.desktop")
-INSTALL_FILES(/include/kdevelop/interfaces
+INSTALL_FILES(/include/kdevelop/interfaces FILES
 kdevlanguagesupport.h
 kdevmainwindow.h
 kdevpartcontroller.h

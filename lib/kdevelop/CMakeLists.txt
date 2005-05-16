@@ -19,7 +19,7 @@ kdevutil
 kdevdcopextensions
 )
 
-INSTALL_FILES(/lib kdevelop)
+INSTALL_TARGETS(/lib kdevelop)
 
 #original Makefile.am contents follow:
 

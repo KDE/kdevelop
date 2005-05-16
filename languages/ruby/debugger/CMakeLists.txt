@@ -24,6 +24,10 @@ ADD_LIBRARY(kdevrbdebugger SHARED ${kdevrbdebugger_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevrbdebugger ${KDEV_LANG_LIBS} lang_debugger DCOP kdevwidgets)
 
+KDE_CREATE_LIBTOOL_FILE(kdevrbdebugger)
+
+INSTALL_TARGETS(/lib/kde3 kdevrbdebugger)
+
 #original Makefile.am contents follow:
 
 ## Here resides the debugger part.

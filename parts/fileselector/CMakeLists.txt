@@ -15,8 +15,8 @@ KDE_CREATE_LIBTOOL_FILE(kdevfileselector)
 
 INSTALL_TARGETS(/lib/kde3 kdevfileselector)
 
-INSTALL_FILES(/share/servicetypes FILES kdevfileselector.desktop)
-INSTALL_FILES(/share/apps/kdevfileselector FILES kdevfileselector.rc)
+INSTALL_FILES(/share/services FILES kdevfileselector.desktop)
+INSTALL_FILES(/share/apps/kdevfileselector FILES kdevpart_fileselector.rc)
 
 #original Makefile.am contents follow:
 

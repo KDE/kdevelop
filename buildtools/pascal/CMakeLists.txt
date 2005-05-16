@@ -16,10 +16,15 @@ KDE_AUTOMOC(${kdevpascalproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevpascalproject_PART_SRCS ${kdevpascalproject_UI} )
 
-ADD_LIBRARY(kdevpascalproject SHARED ${kdevpascalproject_PART_SRCS})
+ADD_LIBRARY(kdevpascalproject MODULE ${kdevpascalproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevpascalproject ${KDEV_BUILDTOOLS_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevpascalproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevpascalproject)
+INSTALL_FILES(/share/services FILES kdevpascalproject.desktop )
+INSTALL_FILES(/share/apps/kdevpascalproject FILES kdevpascalproject.rc )
 
 #original Makefile.am contents follow:
 

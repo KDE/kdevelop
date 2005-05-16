@@ -24,9 +24,16 @@ KDE_AUTOMOC(${kdevtrollproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevtrollproject_PART_SRCS ${kdevtrollproject_UI} )
 
-ADD_LIBRARY(kdevtrollproject SHARED ${kdevtrollproject_PART_SRCS})
+ADD_LIBRARY(kdevtrollproject MODULE ${kdevtrollproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevtrollproject ${KDEV_BUILDTOOLS_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevtrollproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevtrollproject)
+INSTALL_FILES(/share/services FILES kdevtrollproject.desktop kdevtmakeproject.desktop)
+INSTALL_FILES(/share/apps/kdevpascalproject FILES kdevtrollproject.rc )
+
 
 #original Makefile.am contents follow:
 

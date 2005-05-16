@@ -21,6 +21,9 @@ ADD_LIBRARY(kdevpythonsupport SHARED ${kdevpythonsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevpythonsupport ${KDEV_LANG_LIBS} khtml kdevwidgets designerintegration)
 
+KDE_CREATE_LIBTOOL_FILE(kdevpythonsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevpythonsupport)
 
 #original Makefile.am contents follow:
 

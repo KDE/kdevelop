@@ -20,6 +20,12 @@ KDE_ADD_UI_FILES(kdevrubysupport_PART_SRCS ${kdevrubysupport_UI} )
 ADD_LIBRARY(kdevrubysupport SHARED ${kdevrubysupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevrubysupport ${KDEV_LANG_LIBS} designerintegration)
+
+KDE_CREATE_LIBTOOL_FILE(kdevrubysupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevrubysupport)
+
+
 #khtml kdevwidgets designerintegration)
 
 

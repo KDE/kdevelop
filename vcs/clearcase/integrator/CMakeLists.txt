@@ -13,9 +13,14 @@ ccintegratordlgbase.ui
 
 KDE_ADD_UI_FILES(clearcaseintegrator_PART_SRCS ${clearcaseintegrator_UI} )
 
-ADD_LIBRARY(clearcaseintegrator SHARED ${clearcaseintegrator_PART_SRCS})
+ADD_LIBRARY(clearcaseintegrator MODULE ${clearcaseintegrator_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(clearcaseintegrator ${QT_LIBRARIES} kdecore kdevextras kdevelop)
+
+KDE_CREATE_LIBTOOL_FILE(clearcaseintegrator)
+
+INSTALL_TARGETS(/lib/kde3 clearcaseintegrator)
+INSTALL_FILES(/share/services FILES kdevclearcaseintegrator.desktop )
 
 #original Makefile.am contents follow:
 

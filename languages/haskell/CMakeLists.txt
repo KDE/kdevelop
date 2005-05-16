@@ -12,6 +12,9 @@ ADD_LIBRARY(kdevhaskellsupport SHARED ${kdevhaskellsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevhaskellsupport ${KDEV_LANG_LIBS} )
 
+KDE_CREATE_LIBTOOL_FILE(kdevhaskellsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevhaskellsupport)
 
 #original Makefile.am contents follow:
 

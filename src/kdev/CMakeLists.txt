@@ -65,6 +65,7 @@ ADD_EXECUTABLE(kdevassistant ${kdevassistant_SRCS})
 TARGET_LINK_LIBRARIES(kdevassistant kdevshell)
 
 INSTALL_TARGETS(/bin kdevassistant kdevelop3)
+INSTALL_TARGETS(/lib kdevshell)
 
 #original Makefile.am contents follow:
 

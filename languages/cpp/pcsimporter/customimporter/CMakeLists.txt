@@ -13,9 +13,13 @@ KDE_AUTOMOC(${kdevcustompcsimporter_LIB_SRCS})
 
 KDE_ADD_UI_FILES(kdevcustompcsimporter_LIB_SRCS ${kdevcustompcsimporter_UI} )
 
-ADD_LIBRARY(kdevcustompcsimporter SHARED ${kdevcustompcsimporter_LIB_SRCS})
+ADD_LIBRARY(kdevcustompcsimporter MODULE ${kdevcustompcsimporter_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevcustompcsimporter ${KDEV_LANG_LIBS} lang_interfaces)
+
+KDE_CREATE_LIBTOOL_FILE(kdevcustomimporter)
+
+INSTALL_TARGETS(/lib/kde3 kdevcustomimporter)
 
 #original Makefile.am contents follow:
 

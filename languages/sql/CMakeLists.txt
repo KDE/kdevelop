@@ -20,7 +20,9 @@ ADD_LIBRARY(kdevsqlsupport SHARED ${kdevsqlsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevsqlsupport ${KDEV_LANG_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevsqlsupport)
 
+INSTALL_TARGETS(/lib/kde3 kdevsqlsupport)
 
 #original Makefile.am contents follow:
 

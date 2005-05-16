@@ -9,9 +9,15 @@ SET(kdevprojectmanager_PART_SRCS
 
 KDE_AUTOMOC(${kdevprojectmanager_PART_SRCS})
 
-ADD_LIBRARY(kdevprojectmanager SHARED ${kdevprojectmanager_PART_SRCS})
+ADD_LIBRARY(kdevprojectmanager MODULE ${kdevprojectmanager_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevprojectmanager ${QT_LIBRARIES} kdecore kdeui kio kdevelop projectmanager_interfaces)
+
+KDE_CREATE_LIBTOOL_FILE(kdevprojectmanager)
+
+INSTALL_TARGETS(/lib/kde3 kdevprojectmanager)
+INSTALL_FILES(/share/services FILES ../kdevprojectmanager.desktop )
+INSTALL_FILES(/share/apps/kdevprojectmanger FILES ../kdevprojectmanager.rc )
 
 #original Makefile.am contents follow:
 

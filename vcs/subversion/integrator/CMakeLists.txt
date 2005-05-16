@@ -13,10 +13,14 @@ KDE_AUTOMOC(${subversionintegrator_PART_SRCS})
 
 KDE_ADD_UI_FILES(subversionintegrator_PART_SRCS ${subversionintegrator_UI} )
 
-ADD_LIBRARY(subversionintegrator SHARED ${subversionintegrator_PART_SRCS})
+ADD_LIBRARY(subversionintegrator MODULE ${subversionintegrator_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(subversionintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop kdevextras)
 
+KDE_CREATE_LIBTOOL_FILE(subversionintegrator)
+
+INSTALL_TARGETS(/lib/kde3 subversionintegrator)
+INSTALL_FILES(/share/services FILES kdevsubversionintegrator.desktop )
 
 #original Makefile.am contents follow:
 

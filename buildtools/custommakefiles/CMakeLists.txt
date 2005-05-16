@@ -15,9 +15,15 @@ KDE_AUTOMOC(${kdevcustomproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevcustomproject_PART_SRCS ${kdevcustomproject_UI} )
 
-ADD_LIBRARY(kdevcustomproject SHARED ${kdevcustomproject_PART_SRCS})
+ADD_LIBRARY(kdevcustomproject MODULE ${kdevcustomproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevcustomproject ${KDEV_BUILDTOOLS_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevcustomproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevcustomproject)
+INSTALL_FILES(/share/services FILES kdevcustomproject.desktop )
+INSTALL_FILES(/share/apps/kdevcustomproject FILES kdevcustomproject.rc )
 
 #original Makefile.am contents follow:
 

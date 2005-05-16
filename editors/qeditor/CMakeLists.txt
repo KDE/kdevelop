@@ -52,10 +52,15 @@ KDE_AUTOMOC(${qeditorpart_PART_SRCS})
 
 KDE_ADD_UI_FILES(qeditorpart_PART_SRCS ${qeditorpart_UI} )
 
-ADD_LIBRARY(qeditorpart SHARED ${qeditorpart_PART_SRCS})
+ADD_LIBRARY(qeditorpart MODULE ${qeditorpart_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(qeditorpart ${QT_LIBRARIES} kdecore kdeui kio kparts ktexteditor kdevelop)
 
+KDE_CREATE_LIBTOOL_FILE(qeditorpart)
+
+INSTALL_TARGETS(/lib/kde3 qeditorpart)
+INSTALL_FILES(/share/services FILES qeditor_part.desktop )
+INSTALL_FILES(/share/apps/kdevpascalproject FILES qeditor_part.rc )
 
 #original Makefile.am contents follow:
 

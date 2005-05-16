@@ -13,10 +13,13 @@ KDE_AUTOMOC(${kdevkdelibsimporter_LIB_SRCS})
 
 KDE_ADD_UI_FILES(kdevkdelibsimporter_LIB_SRCS ${kdevkdelibsimporter_UI} )
 
-ADD_LIBRARY(kdevkdelibsimporter SHARED ${kdevkdelibsimporter_LIB_SRCS})
+ADD_LIBRARY(kdevkdelibsimporter MODULE ${kdevkdelibsimporter_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevkdelibsimporter ${KDEV_LANG_LIBS} lang_interfaces)
 
+KDE_CREATE_LIBTOOL_FILE(kdevkdelibsimporter)
+
+INSTALL_TARGETS(/lib/kde3 kdevkdelibsimporter)
 
 #original Makefile.am contents follow:
 

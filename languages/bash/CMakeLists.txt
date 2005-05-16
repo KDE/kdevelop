@@ -8,9 +8,14 @@ bashsupport_part.cpp
 
 KDE_AUTOMOC(${kdevbashsupport_PART_SRCS})
 
-ADD_LIBRARY(kdevbashsupport SHARED ${kdevbashsupport_PART_SRCS})
+ADD_LIBRARY(kdevbashsupport MODULE ${kdevbashsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevbashsupport ${KDEV_LANG_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevbashsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevbashsupport)
+
 
 #original Makefile.am contents follow:
 

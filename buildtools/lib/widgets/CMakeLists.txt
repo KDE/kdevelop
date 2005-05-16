@@ -27,6 +27,8 @@ ADD_LIBRARY(kdevbuildtoolswidgets SHARED ${kdevbuildtoolswidgets_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevbuildtoolswidgets ${QT_LIBRARIES} kdecore kdeui kdeui kio kdevelop)
 
+INSTALL_TARGETS(/lib kdevbuildtoolswidgets)
+
 #original Makefile.am contents follow:
 
 ## This directory collects some classes related to

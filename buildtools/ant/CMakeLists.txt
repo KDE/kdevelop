@@ -13,10 +13,16 @@ KDE_AUTOMOC(${kdevantproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevantproject_PART_SRCS ${kdevantproject_UI} )
 
-ADD_LIBRARY(kdevantproject SHARED ${kdevantproject_PART_SRCS})
+ADD_LIBRARY(kdevantproject MODULE ${kdevantproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevantproject ${KDEV_BUILDTOOLS_LIBS} )
 
+KDE_CREATE_LIBTOOL_FILE(kdevantproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevantproject)
+
+INSTALL_FILES(/share/services FILES kdevantproject.desktop )
+INSTALL_FILES(/share/apps/kdevantproject FILES kdevantproject.rc )
 
 #original Makefile.am contents follow:
 

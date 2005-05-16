@@ -13,9 +13,14 @@ KDE_AUTOMOC(${perforceintegrator_PART_SRCS})
 
 KDE_ADD_UI_FILES(perforceintegrator_PART_SRCS ${perforceintegrator_UI} )
 
-ADD_LIBRARY(perforceintegrator SHARED ${perforceintegrator_PART_SRCS})
+ADD_LIBRARY(perforceintegrator MODULE ${perforceintegrator_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(perforceintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop kdevextras)
+
+KDE_CREATE_LIBTOOL_FILE(perforceintegrator)
+
+INSTALL_TARGETS(/lib/kde3 perforceintegrator)
+INSTALL_FILES(/share/services FILES kdevperforceintegrator.desktop )
 
 
 #original Makefile.am contents follow:

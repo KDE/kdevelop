@@ -14,9 +14,15 @@ KDE_AUTOMOC(${kdevscriptproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevscriptproject_PART_SRCS ${kdevscriptproject_UI} )
 
-ADD_LIBRARY(kdevscriptproject SHARED ${kdevscriptproject_PART_SRCS})
+ADD_LIBRARY(kdevscriptproject MODULE ${kdevscriptproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevscriptproject ${KDEV_BUILDTOOLS_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevscriptproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevscriptproject)
+INSTALL_FILES(/share/services FILES kdevscriptproject.desktop )
+INSTALL_FILES(/share/apps/kdevscriptproject FILES kdevscriptproject.rc )
 
 
 #original Makefile.am contents follow:

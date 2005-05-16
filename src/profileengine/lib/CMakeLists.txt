@@ -11,6 +11,8 @@ ADD_LIBRARY(profileengine SHARED ${profileengine_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(profileengine ${QT_LIBRARIES} kdecore kdeui kio kparts)
 
+INSTALL_TARGETS(/lib profileengine)
+
 #original Makefile.am contents follow:
 
 #INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/external_interfaces \

@@ -29,6 +29,10 @@ ADD_LIBRARY(kdevphpsupport SHARED ${kdevphpsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevphpsupport ${KDEV_LANG_LIBS} khtml kdevwidgets)
 
+KDE_CREATE_LIBTOOL_FILE(kdevphpsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevphpsupport)
+
 #original Makefile.am contents follow:
 
 ## Here resides the PHP support part.

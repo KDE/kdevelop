@@ -12,6 +12,9 @@ ADD_LIBRARY(kdevmakebuilder SHARED ${kdevmakebuilder_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevmakebuilder ${QT_LIBRARIES} kdecore kdevelop projectmanager_interfaces kdevbuildtoolswidgets)
 
+INSTALL_TARGETS(/lib kdevmakebuilder)
+
+INSTALL_FILES(/share/services FILES kdevmakebuilder.desktop )
 
 #original Makefile.am contents follow:
 

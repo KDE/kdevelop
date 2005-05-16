@@ -36,6 +36,10 @@ ADD_LIBRARY(kdevjavasupport SHARED ${kdevjavasupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevjavasupport ${KDEV_LANG_LIBS} DCOP antlr kdevcatalog)
 
+KDE_CREATE_LIBTOOL_FILE(kdevjavasupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevjavasupport)
+
 #original Makefile.am contents follow:
 
 ## Here resides the Java support part.

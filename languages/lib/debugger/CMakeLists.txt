@@ -11,6 +11,8 @@ ADD_LIBRARY(lang_debugger SHARED ${lang_debugger_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(lang_debugger ${QT_LIBRARIES} kdecore kdeui kparts ktexteditor)
 
+INSTALL_TARGETS(/lib lang_debugger)
+
 #original Makefile.am contents follow:
 
 #INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)

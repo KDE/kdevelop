@@ -15,7 +15,6 @@ KDE_CREATE_LIBTOOL_FILE(kdevsecurity)
 INSTALL_TARGETS(/lib/kde3 kdevsecurity)
 
 INSTALL_FILES(/share/servicetypes FILES kdevsecurity.desktop )
-INSTALL_FILES(/share/apps/kdevsecurity FILES kdevsecurity.rc)
 
 #original Makefile.am contents follow:
 

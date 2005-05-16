@@ -13,6 +13,9 @@ ADD_LIBRARY(projectmanager_interfaces SHARED ${projectmanager_interfaces_LIB_SRC
 
 TARGET_LINK_LIBRARIES(projectmanager_interfaces ${QT_LIBRARIES})
 
+INSTALL_TARGETS(/lib projectmanager_interfaces)
+
+
 #original Makefile.am contents follow:
 
 #INCLUDES = \

@@ -27,10 +27,14 @@ KDE_ADD_UI_FILES(kdevsubversion_PART_SRCS ${kdevsubversion_UI} )
 
 KDE_ADD_DCOP_SKELS(kdevsubversion_PART_SRCS ${kdevsubversion_DCOP_SRCS})
 
-ADD_LIBRARY(kdevsubversion SHARED ${kdevsubversion_PART_SRCS})
+ADD_LIBRARY(kdevsubversion MODULE ${kdevsubversion_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevsubversion ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP kdevelop kdevextensions)
 
+KDE_CREATE_LIBTOOL_FILE(kdevsubversion)
+
+INSTALL_TARGETS(/lib/kde3 kdevsubversion)
+INSTALL_FILES(/share/services FILES kdevsubversion.desktop )
 
 #original Makefile.am contents follow:
 

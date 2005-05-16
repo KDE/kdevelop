@@ -54,11 +54,17 @@ KDE_AUTOMOC(${kdevautoproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevautoproject_PART_SRCS ${kdevautoproject_UI} )
 
-ADD_LIBRARY(kdevautoproject SHARED ${kdevautoproject_PART_SRCS})
+ADD_LIBRARY(kdevautoproject MODULE ${kdevautoproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevautoproject ${KDEV_BUILDTOOLS_LIBS})
 
 KDE_TARGET_LINK_CONV_LIBRARIES(kdevautoproject kdevautotoolsparser)
+
+KDE_CREATE_LIBTOOL_FILE(kdevautoproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevautoproject)
+INSTALL_FILES(/share/services FILES kdevautoproject.desktop kdevkdeautoproject.desktop )
+INSTALL_FILES(/share/apps/kdevautoproject FILES kdevautoproject.rc )
 
 #original Makefile.am contents follow:
 

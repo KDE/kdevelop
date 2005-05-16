@@ -13,10 +13,15 @@ KDE_AUTOMOC(${kdevhaskellproject_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdevhaskellproject_PART_SRCS ${kdevhaskellproject_UI} )
 
-ADD_LIBRARY(kdevhaskellproject SHARED ${kdevhaskellproject_PART_SRCS})
+ADD_LIBRARY(kdevhaskellproject MODULE ${kdevhaskellproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevhaskellproject ${KDEV_BUILDTOOLS_LIBS} kparts)
 
+KDE_CREATE_LIBTOOL_FILE(kdevhaskellproject)
+
+INSTALL_TARGETS(/lib/kde3 kdevhaskellproject)
+INSTALL_FILES(/share/services FILES kdevhaskellproject.desktop )
+INSTALL_FILES(/share/apps/kdevhaskellproject FILES kdevhaskellproject.rc )
 
 #original Makefile.am contents follow:
 

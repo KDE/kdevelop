@@ -11,6 +11,10 @@ ADD_LIBRARY(kdevautomakeimporter SHARED ${kdevautomakeimporter_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevautomakeimporter ${QT_LIBRARIES} kdecore kdevelop projectmanager_interfaces)
 
+INSTALL_TARGETS(/lib kdevautomakeimporter)
+
+INSTALL_FILES(/share/services FILES kdevautomakeimporter.desktop )
+
 #original Makefile.am contents follow:
 
 #INCLUDES = \

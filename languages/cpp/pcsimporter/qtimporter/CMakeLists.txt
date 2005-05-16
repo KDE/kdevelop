@@ -13,9 +13,13 @@ KDE_AUTOMOC(${kdevqtimporter_LIB_SRCS})
 
 KDE_ADD_UI_FILES(kdevqtimporter_LIB_SRCS ${kdevqtimporter_UI} )
 
-ADD_LIBRARY(kdevqtimporter SHARED ${kdevqtimporter_LIB_SRCS})
+ADD_LIBRARY(kdevqtimporter MODULE ${kdevqtimporter_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevqtimporter ${KDEV_LANG_LIBS} lang_interfaces)
+
+KDE_CREATE_LIBTOOL_FILE(kdevqtimporter)
+
+INSTALL_TARGETS(/lib/kde3 kdevqtimporter)
 
 #original Makefile.am contents follow:
 

@@ -9,10 +9,14 @@ commitdlg.cpp
 
 KDE_AUTOMOC(${kdevperforce_PART_SRCS})
 
-ADD_LIBRARY(kdevperforce SHARED ${kdevperforce_PART_SRCS})
+ADD_LIBRARY(kdevperforce MODULE ${kdevperforce_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevperforce ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop)
 
+KDE_CREATE_LIBTOOL_FILE(kdevperforce)
+
+INSTALL_TARGETS(/lib/kde3 kdevperforce)
+INSTALL_FILES(/share/services FILES kdevperforce.desktop )
 
 #original Makefile.am contents follow:
 

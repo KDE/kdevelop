@@ -8,6 +8,8 @@ ADD_LIBRARY(lang_interfaces SHARED ${lang_interfaces_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(lang_interfaces ${QT_LIBRARIES})
 
+INSTALL_TARGETS(/lib lang_interfaces)
+
 #original Makefile.am contents follow:
 
 #

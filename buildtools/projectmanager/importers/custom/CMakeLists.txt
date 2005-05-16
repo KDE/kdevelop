@@ -10,6 +10,9 @@ ADD_LIBRARY(kdevcustomimporter SHARED ${kdevcustomimporter_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevcustomimporter ${QT_LIBRARIES} kdecore kdevelop projectmanager_interfaces)
 
+INSTALL_TARGETS(/lib kdevcustomimporter)
+
+INSTALL_FILES(/share/services FILES kdevcustomimporter.desktop )
 
 #original Makefile.am contents follow:
 

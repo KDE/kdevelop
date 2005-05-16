@@ -20,6 +20,10 @@ ADD_LIBRARY(kdevfortransupport SHARED ${kdevfortransupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfortransupport ${KDEV_LANG_LIBS})
 
+KDE_CREATE_LIBTOOL_FILE(kdevfortransupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevfortransupport)
+
 #original Makefile.am contents follow:
 
 ## Here resides the Fortran support part.

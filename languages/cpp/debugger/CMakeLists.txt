@@ -35,9 +35,13 @@ KDE_ADD_UI_FILES(kdevdebugger_PART_SRCS ${kdevdebugger_UI} )
 
 KDE_ADD_DCOP_SKELS(kdevdebugger_PART_SRCS ${kdevdebugger_DCOP_SRCS})
 
-ADD_LIBRARY(kdevdebugger SHARED ${kdevdebugger_PART_SRCS})
+ADD_LIBRARY(kdevdebugger MODULE ${kdevdebugger_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevdebugger ${KDEV_LANG_LIBS} DCOP kdevwidgets lang_debugger)
+
+KDE_CREATE_LIBTOOL_FILE(kdevdebugger)
+
+INSTALL_TARGETS(/lib/kde3 kdevdebugger)
 
 #original Makefile.am contents follow:
 

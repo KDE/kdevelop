@@ -25,6 +25,9 @@ ADD_LIBRARY(kdevpascalsupport SHARED ${kdevpascalsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevpascalsupport ${KDEV_LANG_LIBS} antlr kdevcatalog)
 
+KDE_CREATE_LIBTOOL_FILE(kdevpascalsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevpascalsupport)
 
 #original Makefile.am contents follow:
 

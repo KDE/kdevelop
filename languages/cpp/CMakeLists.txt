@@ -55,10 +55,11 @@ KDE_ADD_UI_FILES(kdevcppsupport_PART_SRCS ${kdevcppsupport_UI} )
 
 KDE_ADD_DCOP_SKELS(kdevcppsupport_PART_SRCS ${kdevcppsupport_DCOP_SRCS})
 
-ADD_LIBRARY(kdevcppsupport SHARED ${kdevcppsupport_PART_SRCS})
+ADD_LIBRARY(kdevcppsupport MODULE ${kdevcppsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevcppsupport ${KDEV_LANG_LIBS} DCOP kdevcatalog kdevcppparser lang_interfaces designerintegration)
 
+KDE_CREATE_LIBTOOL_FILE(kdevcppsupport)
 
 SET(rpp_SRCS main.cpp)
 
@@ -67,6 +68,7 @@ ADD_EXECUTABLE(r++ ${rpp_SRCS})
 TARGET_LINK_LIBRARIES(r++ ${QT_LIBRARIES} kdecore kdevcppsupport kdevcatalog kdevcppparser kdevelop)
 
 INSTALL_TARGETS(/bin r++)
+INSTALL_TARGETS(/lib/kde3 kdevcppsupport)
 
 #original Makefile.am contents follow:
 

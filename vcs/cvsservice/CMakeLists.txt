@@ -51,9 +51,14 @@ KDE_ADD_UI_FILES(kdevcvsservice_PART_SRCS ${kdevcvsservice_UI} )
 
 KDE_ADD_DCOP_SKELS(kdevcvsservice_PART_SRCS ${kdevcvsservice_DCOP_SRCS})
 
-ADD_LIBRARY(kdevcvsservice SHARED ${kdevcvsservice_PART_SRCS})
+ADD_LIBRARY(kdevcvsservice MODULE ${kdevcvsservice_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevcvsservice ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP kdevelop cvsservice)
+
+KDE_CREATE_LIBTOOL_FILE(kdevcvsservice)
+
+INSTALL_TARGETS(/lib/kde3 kdevcvsservice)
+INSTALL_FILES(/share/services FILES kdevcvsservice.desktop )
 
 #original Makefile.am contents follow:
 

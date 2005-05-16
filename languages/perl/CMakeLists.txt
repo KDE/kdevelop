@@ -20,6 +20,9 @@ ADD_LIBRARY(kdevperlsupport SHARED ${kdevperlsupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevperlsupport ${KDEV_LANG_LIBS} )
 
+KDE_CREATE_LIBTOOL_FILE(kdevperlsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevperlsupport)
 
 
 #original Makefile.am contents follow:

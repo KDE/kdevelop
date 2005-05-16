@@ -20,9 +20,13 @@ dbgpsdlg.cpp
 
 KDE_AUTOMOC(${kdevjavadebugger_PART_SRCS})
 
-ADD_LIBRARY(kdevjavadebugger SHARED ${kdevjavadebugger_PART_SRCS})
+ADD_LIBRARY(kdevjavadebugger MODULE ${kdevjavadebugger_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevjavadebugger ${KDEV_LANG_LIBS} lang_debugger)
+
+KDE_CREATE_LIBTOOL_FILE(kdevjavadebugger)
+
+INSTALL_TARGETS(/lib/kde3 kdevjavadebugger)
 
 #original Makefile.am contents follow:
 

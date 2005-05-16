@@ -13,9 +13,14 @@ KDE_AUTOMOC(${kdeveditorchooser_PART_SRCS})
 
 KDE_ADD_UI_FILES(kdeveditorchooser_PART_SRCS ${kdeveditorchooser_UI} )
 
-ADD_LIBRARY(kdeveditorchooser SHARED ${kdeveditorchooser_PART_SRCS})
+ADD_LIBRARY(kdeveditorchooser MODULE ${kdeveditorchooser_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdeveditorchooser ${QT_LIBRARIES} kdecore kdeui kio kdevelop)
+
+KDE_CREATE_LIBTOOL_FILE(kdeveditorchooser)
+
+INSTALL_TARGETS(/lib/kde3 kdeveditorchooser)
+INSTALL_FILES(/share/services FILES kdeveditorchooser.desktop )
 
 #original Makefile.am contents follow:
 

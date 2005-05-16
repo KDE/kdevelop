@@ -11,6 +11,10 @@ ADD_LIBRARY(kdevfpcoptions SHARED ${kdevfpcoptions_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevfpcoptions ${KDEV_LANG_LIBS} kdevwidgets kdevextras)
 
+KDE_CREATE_LIBTOOL_FILE(kdevfpcoptions)
+
+INSTALL_TARGETS(/lib/kde3 kdevfpcoptions)
+
 #original Makefile.am contents follow:
 
 ## Here resides the gcc option dialog plugin.

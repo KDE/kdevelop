@@ -10,6 +10,9 @@ ADD_LIBRARY(kdevbuildbase SHARED ${kdevbuildbase_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevbuildbase ${QT_LIBRARIES} kdecore kdeui kdevelop)
 
+INSTALL_TARGETS(/lib kdevbuildbase)
+
+
 #original Makefile.am contents follow:
 
 #INCLUDES = -I$(top_srcdir)/lib/interfaces \
