@@ -83,25 +83,30 @@ int main(int argc, char *argv[])
   KApplication app;
 
   KDevIDEExtension::init();
- 
-  QPixmap pm;
-  pm.load(locate("appdata", "pics/kdevelop-splash.png"));
-  SplashScreen * splash = new SplashScreen( pm );
+
+  SplashScreen *splash = 0;
+  QString splashFile = locate("appdata", "pics/kdevelop-splash.png");
+  if (!splashFile.isEmpty())
+  {
+    QPixmap pm;
+    pm.load(splashFile);
+    splash = new SplashScreen( pm );
+  }
   
   app.processEvents();
 
-  splash->message( i18n( "Loading Settings" ) );
+  if (splash) splash->message( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
     splash, SLOT(message(const QString &)));
-  splash->show();
+  if (splash) splash->show();
   
   PluginController::getInstance()->loadInitialPlugins();
   
   Core::getInstance()->doEmitCoreInitialized();
 
-  splash->message( i18n( "Starting GUI" ) );
+  if (splash) splash->message( i18n( "Starting GUI" ) );
 //BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now
   NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
   if (mw)
@@ -109,7 +114,7 @@ int main(int argc, char *argv[])
 //END workaround
   TopLevel::getInstance()->main()->show();
 
-  delete splash;
+  if (splash) delete splash;
 
   for( int i=0; i<args->count(); ++i ){
       kdDebug(9000) << "------> arg " << args->arg(i) << endl;

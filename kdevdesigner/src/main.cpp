@@ -55,10 +55,15 @@ int main(int argc, char **argv)
     else
     {
         // no session.. just start up normally
-        QPixmap pm;
-        pm.load(locate("data", "kdevelop/pics/kdevdesigner-splash.png"));
-        QSplashScreen * splash = new QSplashScreen( pm );
-        splash->show();
+        QSplashScreen * splash = 0;
+        QString splashFile = locate("data", "kdevelop/pics/kdevdesigner-splash.png");
+        if (!splashFile.isNull())
+        {
+            QPixmap pm;
+            pm.load(splashFile);
+            splash = new QSplashScreen( pm );
+            splash->show();
+        }
 
         app.processEvents();
 
@@ -80,7 +85,8 @@ int main(int argc, char **argv)
             }
         }
         args->clear();
-        delete splash;
+        if (splash)
+            delete splash;
     }
 
     return app.exec();
