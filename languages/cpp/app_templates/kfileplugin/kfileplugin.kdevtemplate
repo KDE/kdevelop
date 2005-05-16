@@ -1,18 +1,28 @@
 # KDE Config File
 [General]
 Name=KFile plugin
+Name[de]=KFile-Plugin
 Name[et]=KFile'i plugin
+Name[hu]=KFile-bővítőmodul
 Name[nl]=KFile-plugin
+Name[pt]='Plugin' do KFile
 Name[pt_BR]=Plug-in do KFile
+Name[sr]=Прикључак за KFile
+Name[sr@Latn]=Прикључак за KFile
 Name[sv]=KFile-insticksprogram
 Icon=kfileplugin.png
 Category=C++/KDE
 Comment=Generates a KFile plugin for konqueror to display meta information.
 Comment[da]=Genererer et KFile-plugin for konqueror til at vise meta-information.
+Comment[de]=Erstellt ein KFile-Plugin für Konqueror zur Anzeige von Meta-Daten.
 Comment[en_GB]=Generates a KFile plugin for Konqueror to display meta information.
 Comment[et]=Konqueroro KFile'i plugina loomine, mis näitab metainfot.
+Comment[hu]=Létrehoz egy KFile-bővítőmodult, mellyel a Konquerorban dokumentumjellemzőket lehet megjeleníteni.
 Comment[nl]=Genereert een KFile-plugin voor konqueror voor het weergeven van meta-informatie.
+Comment[pt]=Gera um 'plugin' do KFile para o Konqueror poder mostrar meta-informações.
 Comment[pt_BR]=Gera um plug-in do KFile para o konqueror, para exibir informações meta (genéricas).
+Comment[sr]=Прави прикључак за KFile за приказ метаинформација у Konqueror-у.
+Comment[sr@Latn]=Прави прикључак за KFile за приказ метаинформација у Konqueror-у.
 Comment[sv]=Skapar ett KFile-insticksprogram till Konqueror för att visa metainformation.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=${dest}/README.devel,%{dest}/src/kfile_%{APPNAMELC}.cpp

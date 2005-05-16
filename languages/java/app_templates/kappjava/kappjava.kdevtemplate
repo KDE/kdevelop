@@ -2,16 +2,27 @@
 [General]
 Name=Application framework
 Name[da]=Programskelet
+Name[de]=Anwendungsgrundgerüst
 Name[et]=Rakenduse raamistik
+Name[hu]=Alkalmazás-keretrendszer
 Name[nl]=Applicationframework
+Name[pt]=Plataforma de aplicações
 Name[pt_BR]=Framework de Aplicativo
+Name[sr]=Оквир програма
+Name[sr@Latn]=Оквир програма
 Name[sv]=Programramverk
 Icon=kappjava.png
 Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
 Comment[da]=Genererer et simpelt Java KDE program med et vindue på topniveau, menuer og værktøjslinjer.
+Comment[de]=Erstellt eine einfache Java KDE-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten.
 Comment[et]=Lihtsa Java KDE rakenduse loomine ühe tipptaseme akna, menüüde ja tööriistaribadega.
+Comment[hu]=Létrehoz egy egyszerű Java-alapú KDE-alkalmazást egy főablakkal, menükkel és eszköztárakkal.
+Comment[nl]=Genereert een eenvoudige Java KDE-toepassing met een toplevel window, menu's en toolbars.
+Comment[pt]=Gera uma aplicação para KDE simples em Java, com uma janela de topo, menus e barras de ferramentas.
 Comment[pt_BR]=Gera um aplicativo em Java simples para o KDE, com uma janela, menus e barras de ferramentas.
+Comment[sr]=Прави једноставан KDE програм у Java-и, са једним прозором највишег нивоа, менијима и тракама са алатом.
+Comment[sr@Latn]=Прави једноставан KDE програм у Java-и, са једним прозором највишег нивоа, менијима и тракама са алатом.
 Comment[sv]=Skapar ett enkelt Java KDE-program med ett toppnivåfönster, menyer och verktygsrader.
 FileTemplates=java,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAME}View.java
