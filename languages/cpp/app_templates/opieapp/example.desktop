@@ -22,7 +22,6 @@ Comment[sr@Latn]=%{APPNAME} program
 Comment[sv]=Ett %{APPNAME}-program
 Comment[ta]=ஒரு %{APPNAME}  நிரல் 
 Comment[tg]=Барномаи %{APPNAME} 
-Comment[uk]=Програма %{APPNAME}
 Comment[zh_CN]=一个%{APPNAME}程序
 Exec=%{APPNAMELC}
 Icon=%{APPNAME}

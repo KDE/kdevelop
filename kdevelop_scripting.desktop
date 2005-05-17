@@ -21,7 +21,6 @@ Name[sl]=KDevelop: Skriptiranje
 Name[sr]=KDevelop: Скриптовање
 Name[sr@Latn]=KDevelop: Skriptovanje
 Name[sv]=KDevelop: skript
-Name[uk]=KDevelop: Скрипти
 GenericName=IDE for Scripting Language
 GenericName[da]=Integreret udviklingsmiljø til scriptsprog
 GenericName[de]=IDE für Skript-Sprachen
@@ -40,7 +39,6 @@ GenericName[sl]=IDE za skriptni jezik
 GenericName[sr]=IDE за скриптне језике
 GenericName[sr@Latn]=IDE za skriptne jezike
 GenericName[sv]=Utvecklingsmiljö för skriptspråk
-GenericName[uk]=Середовище розробки для скриптових мов
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

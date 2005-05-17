@@ -27,7 +27,6 @@ Comment[sr@Latn]=Glazgovski prevodilac Haskell-a
 Comment[sv]=Glasgow Haskell-kompilator
 Comment[ta]=கிலாஸ்கொ ஹாஸ்கெல் தொகுப்பி
 Comment[tg]=Талфифгари Glasgow Haskell
-Comment[uk]=Компілятор Glasgow Haskell
 Comment[zh_CN]=Glasgow Haskell 编译器
 Name=GhcOptions
 Name[da]=Glasgow Haskell indstillinger

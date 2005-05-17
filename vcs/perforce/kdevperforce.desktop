@@ -55,7 +55,6 @@ GenericName[sr@Latn]=Integracija perforce-a
 GenericName[sv]=Integrering av Perforce
 GenericName[ta]=Perforce ஒருங்கிணைப்பு
 GenericName[tg]=Интегратсия Perforce
-GenericName[uk]=Інтеграція Perforce
 GenericName[zh_CN]=Perforce 集成
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevperforce

@@ -27,7 +27,6 @@ GenericName[sl]=IDE za razvijanje KDE
 GenericName[sr]=IDE за KDE развој
 GenericName[sr@Latn]=IDE za KDE razvoj
 GenericName[sv]=Utvecklingsmiljö för KDE
-GenericName[uk]=Інтегроване проектувальне середовище для KDE
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

@@ -55,7 +55,6 @@ GenericName[sr@Latn]=Interfejs CTags-a
 GenericName[sv]=Ctags-gränssnitt
 GenericName[ta]=CTags முன்பகுதி
 GenericName[tg]=Интерфейс дар CTags 
-GenericName[uk]=Інтерфейс користувача для CTags
 GenericName[zh_CN]=CTags前端
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Project

@@ -58,7 +58,6 @@ GenericName[sr@Latn]=Ugrađena konzola
 GenericName[sv]=Inbäddad terminal
 GenericName[ta]=கன்சோல் உட்பொதி
 GenericName[tg]=Бино намудани Embedded
-GenericName[uk]=Вбудована Konsole
 GenericName[zh_CN]=嵌入的KDE终端
 Icon=konsole
 ServiceTypes=KDevelop/Plugin

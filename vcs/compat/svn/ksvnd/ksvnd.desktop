@@ -17,7 +17,6 @@ Name[ru]=Модуль KDED Subversion
 Name[sr]=KDED модул за Subversion
 Name[sr@Latn]=KDED modul za Subversion
 Name[sv]=KDevelop Subversion-modul
-Name[uk]=Модуль KDED Subversion
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=ksvnd

@@ -58,7 +58,6 @@ GenericName[sr@Latn]=Grupe fajlova
 GenericName[sv]=Filgrupper
 GenericName[ta]=கோப்புக்குழுக்கள்
 GenericName[tg]=Гурӯҳи файлҳо
-GenericName[uk]=Групи файлів
 GenericName[zh_CN]=文件分类
 ServiceTypes=KDevelop/Plugin
 Icon=attach

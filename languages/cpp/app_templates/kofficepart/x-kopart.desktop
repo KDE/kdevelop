@@ -20,7 +20,6 @@ Comment[sl]=Sijajen program za KOffice
 Comment[sr]= Заиста невиђен KOffice програм
 Comment[sr@Latn]=Stvarno sjajan program za KOffice
 Comment[sv]=Ett riktigt suveränt Koffice-program
-Comment[uk]=Дійсно чудова програма для KOffice
 Type=MimeType
 #You need to change the mime type below to match what your application will handle...
 Patterns=*.xmpl;

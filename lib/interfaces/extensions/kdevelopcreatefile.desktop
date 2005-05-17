@@ -21,7 +21,6 @@ Name[sl]=Vmesnik za ustvarjanje datotek v KDevelopu
 Name[sr]=KDevelop-ов интерфејс за прављење фајла
 Name[sr@Latn]=KDevelop-ov interfejs za pravljenje fajla
 Name[sv]=KDevelop gränssnitt för att skapa filer
-Name[uk]=Інтерфейс засобу створення файлів для KDevelop
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

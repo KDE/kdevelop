@@ -28,7 +28,6 @@ Comment[sr@Latn]=Dokumentacioni priključak za Qt DCF dokumentaciju
 Comment[sv]=Dokumentationsinsticksmodul för Qt DCF-dokumentation
 Comment[ta]= Qt DCF ஆவணத்திற்கான ஆவணச் சொருகு
 Comment[tg]=Модул барои наоиши QT DCF
-Comment[uk]=Втулок для документації Qt DCF
 Comment[zh_CN]=Qt DCF 文档的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=3

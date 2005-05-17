@@ -35,7 +35,6 @@ Comment[sr@Latn]=%{APPNAME} — modul za kcontrol
 Comment[sv]=%{APPNAME} - en modul i Inställningscentralen
 Comment[ta]=%{APPNAME} - ஒரு கேகன்ட்ரோல் கூறு
 Comment[tg]=%{APPNAME} - модули kcontrol
-Comment[uk]=%{APPNAME} - модуль kcontrol
 Comment[zh_CN]=%{APPNAME} - 一个 KDE 控制中心模块
 Keywords=%{APPNAME},%{APPNAMELC}
 Name=The %{APPNAME} Applet
@@ -58,7 +57,6 @@ Name[sl]=Vstavek %{APPNAME}
 Name[sr]=%{APPNAME} аплет
 Name[sr@Latn]=%{APPNAME} aplet
 Name[sv]=Miniprogram %{APPNAME}
-Name[uk]=Аплет %{APPNAME}
 
 
 Categories=Qt;KDE;X-KDE-settings-components;

@@ -57,7 +57,6 @@ GenericName[sr@Latn]=Korisnički interfejs za grep
 GenericName[sv]=Gränssnitt till grep
 GenericName[ta]=Grep முன் பகுதி
 GenericName[tg]=Интегратсияи Grep 
-GenericName[uk]=Інтерфейс користувача для Grep
 GenericName[zh_CN]=Grep前端
 Icon=find
 ServiceTypes=KDevelop/Plugin

@@ -54,7 +54,6 @@ GenericName[sr@Latn]=Tester regularnih izraza
 GenericName[sv]=Test av reguljära uttryck
 GenericName[ta]=வாடிக்கையான தொடர்களை பரிசோதிப்பவர்.
 GenericName[tg]=Тафтиши баёни ботартиб
-GenericName[uk]=Перевірка формальних виразів
 GenericName[zh_CN]=正则表达式测试
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevregexptest

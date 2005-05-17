@@ -55,7 +55,6 @@ GenericName[sr@Latn]=Dodatak za meni „Otvori pomoću“
 GenericName[sv]=Menytillägg till "Öppna med"
 GenericName[ta]="Open with"  பட்டியல் அடான்
 GenericName[tg]=Менюи иловагӣ "Кушодан бо фармони Ёрӣ" 
-GenericName[uk]=Додаток меню "Відкрити з"
 GenericName[zh_CN]=“打开方式”菜单项
 icon=kdevelop
 ServiceTypes=KDevelop/Plugin

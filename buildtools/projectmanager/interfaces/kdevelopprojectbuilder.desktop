@@ -20,7 +20,6 @@ Name[sl]=Projektni graditelj v KDevelopu
 Name[sr]=KDevelop-ов градилац пројекта
 Name[sr@Latn]=KDevelop-ov gradilac projekta
 Name[sv]=KDevelop projektbyggare
-Name[uk]=Програма збирання проектів KDevelop
 
 [PropertyDef::X-KDevelop-ProjectBuilder]
 Type=QString

@@ -27,7 +27,6 @@ Comment[sr@Latn]=Dokumentacioni priključak za DevHelp dokumentaciju
 Comment[sv]=Dokumentationsinsticksmodul för DevHelp-dokumentation
 Comment[ta]= DevHelp ஆவணத்திற்கான ஆவணச் சொருகு
 Comment[tg]=Модул барои наоиш намудани DevHelp-и асоснок карда шуда
-Comment[uk]=Втулок для документації DevHelp
 Comment[zh_CN]=DevHelp 文档的文档插件
 Exec=blubb
 ServiceTypes=KDevelop/DocumentationPlugins

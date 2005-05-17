@@ -54,7 +54,6 @@ GenericName[sr@Latn]=Integracija ClearCase-a
 GenericName[sv]=Integrering av ClearCase
 GenericName[ta]=தெளிவான எழுத்து ஒருங்கிணைப்பு
 GenericName[tg]=Интегратсияи ClearCase 
-GenericName[uk]=Інтеграція ClearCase
 GenericName[zh_CN]=ClearCase集成
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevclearcase

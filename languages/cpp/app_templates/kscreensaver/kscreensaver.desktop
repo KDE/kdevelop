@@ -31,7 +31,6 @@ Name[sl]=Nastavi ...
 Name[sr]=Постављање...
 Name[sr@Latn]=Postavljanje...
 Name[sv]=Inställning...
-Name[uk]=Налаштувати...
 Icon=kscreensaver
 
 [Desktop Action InWindow]
@@ -58,7 +57,6 @@ Name[sl]=Prikaži v določenem oknu
 Name[sr]=Прикажи у наведеном прозору
 Name[sr@Latn]=Prikaži u navedenom prozoru
 Name[sv]=Visa i angivet fönster
-Name[uk]=Відобразити у вказаному вікні
 NoDisplay=true
 
 [Desktop Action Root]
@@ -85,5 +83,4 @@ Name[sl]=Prikaži v korenskem oknu
 Name[sr]=Прикажи у кореном прозору
 Name[sr@Latn]=Prikaži u korenom prozoru
 Name[sv]=Visa i rotfönster
-Name[uk]=Відобразити в кореневому вікні
 NoDisplay=true

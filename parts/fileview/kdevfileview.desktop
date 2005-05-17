@@ -58,7 +58,6 @@ GenericName[sr@Latn]=Drvo fajlova
 GenericName[sv]=Filträd
 GenericName[ta]=கோப்பு மரம்
 GenericName[tg]=Дарахти файлҳо
-GenericName[uk]=Дерево файлів
 GenericName[zh_CN]=文件树
 ServiceTypes=KDevelop/Plugin
 Icon=folder

@@ -21,7 +21,6 @@ GenericName[sl]=Skriptiranje
 GenericName[sr]=Скриптовање
 GenericName[sr@Latn]=Skriptovanje
 GenericName[sv]=Skriptanvändning
-GenericName[uk]=Скрипти
 Comment=The Scripting plugin offers KScript based scripting of the KDevelop application
 Comment[da]=Scriptning-plugin stiller KScript-baseret scriptning til rådighed for KDevelop
 Comment[de]=Die Komponente Skript bietet KScript-basierte Automatisierung für KDevelop

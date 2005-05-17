@@ -56,7 +56,6 @@ GenericName[sr@Latn]=Pregled klasa
 GenericName[sv]=Klassvisning
 GenericName[ta]=வகுப்புக்காட்சி
 GenericName[tg]=Намоиши синфҳо
-GenericName[uk]=Перегляд класів
 GenericName[zh_CN]=类查看器
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevclassview

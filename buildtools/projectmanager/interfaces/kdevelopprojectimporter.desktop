@@ -20,7 +20,6 @@ Name[sl]=Uvoz projektov v KDevelop
 Name[sr]=KDevelop-ов увозник за пројекте
 Name[sr@Latn]=KDevelop-ov uvoznik za projekte
 Name[sv]=KDevelop projektimport
-Name[uk]=Імпорт проектів для KDevelop
 
 [PropertyDef::X-KDevelop-ProjectImporter]
 Type=QString

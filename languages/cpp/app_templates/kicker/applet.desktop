@@ -27,7 +27,6 @@ Comment[sr@Latn]=Panelni aplet pod nazivom $NAME$
 Comment[sv]=Ett panelminiprogram som kallas $NAME$
 Comment[ta]=ஒரு பானல் ஆப்லெட்  $NAME$ என்ற்உ அழைக்கப்படுகிறது
 Comment[tg]=Пайраҳаи апплети $NAME$
-Comment[uk]=Аплет панелі $NAME$
 Comment[zh_CN]=一个称作$NAME$的面板小程序
 Name=%{APPNAMELC}
 X-KDE-Library=%{APPNAMELC}_panelapplet

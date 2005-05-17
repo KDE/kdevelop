@@ -61,7 +61,6 @@ GenericName[sr@Latn]=Birač fajlova
 GenericName[sv]=Filväljare
 GenericName[ta]=கோப்பு தேர்வாளர்
 GenericName[tg]=Селектори файлҳо
-GenericName[uk]=Вибір файлів
 GenericName[zh_CN]=文件选择器
 Icon=fileopen
 ServiceTypes=KDevelop/Plugin

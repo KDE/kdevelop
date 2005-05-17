@@ -25,7 +25,6 @@ Comment[sr@Latn]=Ugradivi prikazivač HTMLHelp-a
 Comment[sv]=Inbäddningsbar HTML-hjälpvisning
 Comment[ta]=HTML உதவி பார்வையாளரை உட்பொதி
 Comment[tg]=Намоиши ҳамвори HTMLHelp 
-Comment[uk]=Переглядач HTMLHelp, який можна вбудовувати
 Comment[zh_CN]=嵌入的HTML帮助查看器
 MimeType=application/chm
 Name=KChmPart

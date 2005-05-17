@@ -50,7 +50,6 @@ GenericName[sr@Latn]=Prikazivač dokumentacije
 GenericName[sv]=Dokumentationsvisning
 GenericName[ta]=ஆவணமாக்கல் காட்சியமைப்பாளர்
 GenericName[tg]=Аз назар бо ҳуҷҷатнок гузарондан 
-GenericName[uk]=Перегляд документації
 GenericName[zh_CN]=文档查看器
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;Documentation;X-KDE-KDevelopIDE;

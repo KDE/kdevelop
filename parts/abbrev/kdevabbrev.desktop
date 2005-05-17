@@ -56,7 +56,6 @@ GenericName[sr@Latn]=Proširenje skraćenica
 GenericName[sv]=Expansion av förkortningar
 GenericName[ta]=சுருக்கத்தின் விரிவாக்கம்
 GenericName[tg]=Васеъкунии кӯтоҳ карда шуда
-GenericName[uk]=Розширення абревіацій
 GenericName[zh_CN]=缩写扩展
 ServiceTypes=KDevelop/Plugin
 Icon=fontsizeup

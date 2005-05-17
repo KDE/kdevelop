@@ -25,7 +25,6 @@ GenericName[sl]=Vstavek %{APPNAME}
 GenericName[sr]=Прикључак за %{APPNAME}
 GenericName[sr@Latn]=%{APPNAME} priključak
 GenericName[sv]=%{APPNAME} insticksprogram
-GenericName[uk]=Втулок %{APPNAME}
 Comment=%{APPNAME} Description
 Comment[br]=Deskrivadur %{APPNAME}
 Comment[da]=%{APPNAME} beskrivelse
@@ -45,7 +44,6 @@ Comment[sl]=Opis %{APPNAME}
 Comment[sr]=Опис за %{APPNAME}
 Comment[sr@Latn]=Opis za %{APPNAME}
 Comment[sv]=%{APPNAME} beskrivning
-Comment[uk]=Опис %{APPNAME}
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 

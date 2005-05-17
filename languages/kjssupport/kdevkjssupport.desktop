@@ -29,7 +29,6 @@ GenericName[sl]=Podpora javascriptu v KDE
 GenericName[sr]=KDE-ова подршка за Javascript
 GenericName[sr@Latn]=KDE-ova podrška za Javascript
 GenericName[sv]=KDE Javaskript-stöd
-GenericName[uk]=Підтримка мови JavaScript
 Icon=kdevelop
 ServiceTypes=KDevelop/LanguageSupport
 X-KDevelop-Language=Javascript

@@ -20,7 +20,6 @@ Comment[ru]=Импорт проектов Automake
 Comment[sr]=KDevelop-ов automake увозник
 Comment[sr@Latn]=KDevelop-ov automake uvoznik
 Comment[sv]=KDevelop Automake-import
-Comment[uk]=Імпорт проекту Automake для KDevelop
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
 X-KDE-Library=libkdevautomakeimporter

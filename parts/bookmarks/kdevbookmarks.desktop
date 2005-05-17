@@ -60,7 +60,6 @@ GenericName[sr@Latn]=Markeri
 GenericName[sv]=Bokmärken
 GenericName[ta]=புத்தகக்குறியின்
 GenericName[tg]=Поягузор
-GenericName[uk]=Закладки
 GenericName[zh_CN]=书签
 Icon=bookmark
 ServiceTypes=KDevelop/Plugin

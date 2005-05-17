@@ -44,7 +44,6 @@ GenericName[sr@Latn]=Integracija CVS-a (Cervisia)
 GenericName[sv]=Integrering av CVS (Cervisia)
 GenericName[ta]=CVS ஒருங்கிணை (செர்விசியா)
 GenericName[tg]=Интегратсияи CVS (Cervisia)
-GenericName[uk]=Інтеграція CVS (Cervisia)
 GenericName[zh_CN]=CVS 集成(Cervisia)
 Icon=cervisia
 ServiceTypes=KDevelop/VersionControl
