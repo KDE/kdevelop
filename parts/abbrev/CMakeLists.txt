@@ -1,24 +1,32 @@
+#the source files for this part
 SET(kdevabbrev_PART_SRCS
 abbrevpart.cpp
 abbrevconfigwidget.cpp
 addtemplatedlg.cpp
 )
 
+#the ui files for this part
 SET( kdevabbrev_UI
 abbrevconfigwidgetbase.ui
 addtemplatedlgbase.ui
 )
 
+#automatically generated the rules for the moc files for the sources
 KDE_AUTOMOC(${kdevabbrev_PART_SRCS})
 
+#add the ui files to the project
 KDE_ADD_UI_FILES(kdevabbrev_PART_SRCS ${kdevabbrev_UI} )
 
+#create a shared library/module/plugin
 ADD_LIBRARY(kdevabbrev MODULE ${kdevabbrev_PART_SRCS})
 
+#link it to some kde libs
 TARGET_LINK_LIBRARIES(kdevabbrev ${KDEV_PART_LIBS})
 
+#create the libtool la file for this plugin
 KDE_CREATE_LIBTOOL_FILE(kdevabbrev)
 
+#install rules, relative to CMAKE_INSTALL_PREFIX
 INSTALL_TARGETS(/lib/kde3 kdevabbrev)
 INSTALL_FILES(/share/apps/kdevabbrev FILES kdevabbrev.rc)
 INSTALL_FILES(/share/services FILES kdevabbrev.desktop)
