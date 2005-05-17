@@ -6,10 +6,8 @@ INCLUDE(${CMAKE_SOURCE_DIR}/cmake/KDEMacros.cmake)
 SET(CMAKE_SKIP_RULE_DEPENDENCY 1)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
-SET(CONFIG_QT_DOCDIR "\"/usr/lib/qt/doc/html/\"")
-SET(CONFIG_KDELIBS_DOXYDIR "\"/tmp/\"")
-
-CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_SOURCE_DIR}/config.h)
+#create config.h and do other system checks
+INCLUDE(CheckSystem.cmake)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
 
@@ -18,7 +16,7 @@ EXEC_PROGRAM(cmake ARGS -E copy ${CMAKE_SOURCE_DIR}/admin/config.sub ${CMAKE_SOU
 EXEC_PROGRAM(cmake ARGS -E copy ${CMAKE_SOURCE_DIR}/admin/config.guess ${CMAKE_SOURCE_DIR})
 
 SUBDIRS( bdb lib parts languages buildtools editors vcs src)
-# src pics doc mimetypes embedded kdevdesigner )
+# pics doc mimetypes embedded kdevdesigner )
 
 
 
