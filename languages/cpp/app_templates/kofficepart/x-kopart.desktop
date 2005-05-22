@@ -18,7 +18,7 @@ Comment[pt_BR]=Um aplicativo realmente do tipo do KOffice
 Comment[ru]=Внушительное приложение KOffice
 Comment[sl]=Sijajen program za KOffice
 Comment[sr]= Заиста невиђен KOffice програм
-Comment[sr@Latn]=Stvarno sjajan program za KOffice
+Comment[sr@Latn]= Zaista neviđen KOffice program
 Comment[sv]=Ett riktigt suveränt Koffice-program
 Type=MimeType
 #You need to change the mime type below to match what your application will handle...

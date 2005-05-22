@@ -55,7 +55,7 @@ Type=QString
 
 # defines a list of properties which the plugin has
 # a profile will query all plugins for properties and will load only
-# those that have queried properties 
+# those that have queried properties
 [PropertyDef::X-KDevelop-Properties]
 Type=QStringList
 
