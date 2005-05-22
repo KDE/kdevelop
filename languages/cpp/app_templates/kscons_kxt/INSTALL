@@ -1,48 +1,45 @@
-%{APPNAME} REQUIREMENTS
-------------------------
+REQUIREMENTS
+------------
 
-kde >= 3.2 is needed to run %{APPNAME}
+* KDE headers & libraries for kdelibs
+* A Python interpreter for the compilation
 
-To compile %{APPNAME}, the kde development packages
-are needed: kdelibs-devel, kdebase-devel and python
+scons v0.96.1 or newer is recommended, but it's not required since a
+minimum scons distribution is included in the package.
 
-scons is also needed http://www.scons.org
-(this tool also used by Blender, ..)
-Make sure scons is at least v0.96.1, otherwise
-the compilation will fail. In case if you do not have
-it, a minimum distribution is provided (see SCONS below)
+BUILDING AND INSTALLING
+-----------------------
 
--> One should only have to run :
+For configuring, compiling and installing the application and
+if you do have Scons 0.96.1 or newer installed, just run:
+
 $ scons
-# scons install
-(do "scons install" as root - the menus may not
-show up if you skip this step)
+$ scons install (as root user)
 
+In case you don't have Scons installed, you can use
+the accompanying minimum scons by running:
 
-SCONS
------
+$ tar xjvf admin/scons-mini.tar.bz2
+$ ./scons
+$ ./scons install
 
--> If scons is missing, use the one bundled with PROGRAMNAME :
-./unpack_local_scons.sh
-python scons.py
-python scons.py install
-(run the last command as root)
+ADVANCED BUILD FEATURES & DEINSTALLING
+--------------------------------------
 
+In case you want to execute many compilation jobs in parallel (because you
+want to make use of a SMP system or a compile cluster, for instance),
+you can use ('N' is the number of jobs which should be run in parallel):
 
--> For your convenience, a quick makefile is created :
-./unpack_local_scons.sh
-make
-make install
+$ scons -jN
 
+A debug build of the program can be created by running:
 
-USEFUL SCONS COMMANDS
----------------------
+$ scons configure debug=1
+$ scons
 
-build the targets   : scons
-install them        : scons install
-clean the project   : scons -c
-uninstall           : scons -c install
-build in parallel   : scons -j2
+Finally, the software can be removed from your system by running
+
+$ scons -c install
 
 CONFIGURATION NOTES
 -------------------
@@ -53,32 +50,34 @@ through your PATH.
 
 Qt and kde may not be installed as expected (in QTDIR and KDEDIR)
 So until kde-config is able to give that information, you may
-have to give those paths.
+have to give those paths. You may also want to tune the build.
+
+In these cases, you must first run "scons configure" with some options
+before running "scons" and "scons install"
 
 Here are some examples :
 On Fedora/Redhat
-   scons configure kdeincludes=/usr/include/kde/
+$   scons configure kdeincludes=/usr/include/kde/
 On Debian
-   scons configure qtincludes=/usr/include/qt/ kdeinclude=/usr/include/kde/
+$   scons configure qtincludes=/usr/include/qt/ kdeinclude=/usr/include/kde/
 To install in some particular location with additional include paths
-   scons configure prefix=~/tmp extraincludes=/tmp/include:/usr/local/include
+$   scons configure prefix=~/tmp extraincludes=/tmp/include:/usr/local/include
+For AMD64 and platforms where folders are like /usr/lib64
+$   scons configure libsuffix=64
 
-For more options to tune the build look at the .py files available on 
-the top-level directory :
-generic.py, kde.py, ...
+For more options, run
+scons --help
 
 The build system is based on bksys, a build system that replaces
 autoconf, automake and make in a row. Feel free to report your opinion
-about it to the authors.
+about it to the bksys authors.
 
-BUILDING RPMS OR DEBS WITH CHECKINSTALL
----------------------------------------
+PACKAGE CREATION
+----------------
 
-With checkinstall 1.6, use
-$ scons
-# checkinstall --fstrans=no --nodoc scons install
-# scons uninstall
+RPM packagers can use the DESTDIR environment variable
+$ DESTDIR=/tmp/build-rpm/ scons install
 
----------------------------------------
-enjoy PROGRAMNAME
-PROGRAMNAME AUTHORS
+To use checkinstall, pass the following option
+$ checkinstall --fstrans=no --nodoc scons install
+

@@ -1,7 +1,7 @@
 dataFiles = app.cpp app.h main.cpp appui.rc app.kdevelop \
 appview.h appview.cpp appview_base.ui prefs-base.ui \
 prefs.cpp prefs.h app.kcfg settings.kcfgc messages.sh \
-src-Makefile SConstruct SConscript-doc SConscript-po SConscript-src tips VERSION \
+SConstruct SConscript-doc SConscript-src tips VERSION \
 QUICKSTART INSTALL README
 
 templateName= kscons_kxt

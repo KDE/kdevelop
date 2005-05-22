@@ -21,7 +21,7 @@ CONFIGURING AND COMPILING THE PROJECT(S)
 
 The program scons is usually launched as "scons"
 When it is not intalled globally, one can run
-"python scons.py" instead (ie : to use the local scons
+"./scons" instead of "scons" (ie : to use the local scons
 that comes with bksys - see below SCONS MINIMUM DISTRIBUTION
 if you do not have scons already)
 
@@ -36,10 +36,10 @@ To install the project    ->  scons install
 To install as root user   ->  su -c 'scons install'
 To uninstall the project  ->  scons -c install
 To uninstall (as root)    ->  su -c 'scons -c install'
+To consult the help       ->  scons -h
 
 To (re)configure the project and give particular arguments, use :
         -> scons configure debug=1
-or      -> python scons.py configure debug=1
 
 The variables are saved automatically after the first run
 in files named *.cache.py (look at kde.cache.py, ..)
@@ -59,13 +59,6 @@ checkinstall --fstrans=no --nodoc scons install
 (if you have checkinstall on your system of course)
 
 To make scons run (much) faster, consult ./addons/README in bksys
-
-If the following error ever occurs :
-   TypeError: Tried to lookup Dir 'dir/subdir' as a File
-then make sure the things are like this :
-   KDEshlib( "libtest8bplugin", ['plugin_test8b.cpp'], myenv8 )
-and not like that (square brackets) :
-KDEshlib( "libtest8bplugin", ['plugin_test8b.cpp'], myenv8 )
 
 ------------------------------------------
 MOC PROCESSING
@@ -99,7 +92,7 @@ Makefile.in) can add easily 500kb (compressed).
 
 To compile with the scons distribution :
 * unpack it with :
-  tar xjvf scons-mini.tar.bz2
+  tar xjvf admin/scons-mini.tar.bz2
 * compile the program with :
   ./scons (instead of just 'scons')
 * install the program with :
@@ -163,7 +156,7 @@ consult them when you encounter an issue
 
 I hope you will enjoy this alternative to the autotools
 scripts for kde programming, at least as much as I do : 
-http://81.66.36.65/~tnagy/kdissert/index.html
+http://freehackers.org/~tnagy/kdissert/index.html
 
 Happy kde hacking,
 

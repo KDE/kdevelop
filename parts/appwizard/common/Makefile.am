@@ -28,7 +28,7 @@ incadmin.tar.gz:
 	gzip incadmin.tar
 
 scons.tar.gz:
-	$(TAR) -cf scons.tar -C $(srcdir)/scons unpack_local_scons.sh scons-mini.tar.bz2 generic.py kde.py
+	$(TAR) -cf scons.tar -C $(srcdir)/scons configure admin/scons-mini.tar.bz2 admin/generic.py admin/kde.py
 	gzip scons.tar
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard

@@ -1,223 +1,112 @@
 #! /usr/bin/env python
-## The kde detection is located in kde.py (have a look!)
-## Delete the comments following as you see it fit
 
 """
-scons files are python scripts, comments begin by a "#" symbol
-or are enclosed between sequences of triple quotes, so 
-this is a comment :)
+help       -> scons -h
+compile    -> scons
+clean      -> scons -c
+install    -> scons install
+uninstall  -> scons -c install
+configure  -> scons configure prefix=/tmp/ita debug=full extraincludes=/usr/local/include:/tmp/include prefix=/usr/local
 
-There is a lot of documentation and comments, but you can
-remove them when you convert your program
+Run from a subdirectory -> scons -u
+The variables are saved automatically after the first run (look at cache/kde.cache.py, ..)
 """
 
-"""
-----------------------------------
-How to enjoy bksys full and plenty
-(and forget about the autohell ? :)
------------------------------------
-
-The program scons is usually launched as "scons"
-When it is not intalled globally, one can run
-"./scons" instead (ie : to use the local scons 
-that comes with bksys - try ./unpack_local_scons.sh)
-
-To compile the project, you will then only need to launch
-scons on the top-level directory, the scripts find and
-cache the proper environment automatically :
--> scons
-
-To clean the project
--> scons -c
-
-To install the project
--> scons install
-
-To uninstall the project
--> scons -c install
-
-To compile while being in a subdirectory
--> cd src; scons -u
-
-To (re)configure the project and give particular arguments, use ie :
--> scons configure debug=1
--> scons configure prefix=/tmp/ita debug=full extraincludes=/usr/local/include:/tmp/include prefix=/usr/local
-etc ..
-The variables are saved automatically after the first run
-(look at kde.cache.py, ..)
-
-For a quick list of options to use, run scons -h
-"""
-
-###########################################
-## Common section, for loading the tools
+###################################################################
+# LOAD THE ENVIRONMENT AND SET UP THE TOOLS
+###################################################################
 
 ## Load the builders in config
-env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools=['default', 'generic', 'kde'], toolpath=['./'])
-#env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools=['default', 'generic', 'kde', 'cg'], toolpath=['./'])
-#env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools=['default', 'generic', 'kde', 'sound'], toolpath=['./'])
-#env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools=['default', 'generic', 'kde', 'libxml'], toolpath=['./'])
+env = Environment( tools=['default', 'generic', 'kde'], toolpath=['./', './admin'])
+#env = Environment( tools=['default', 'generic', 'kde', 'othertool'], toolpath=['./', './admin'])
 
-## the configuration should be done by now, quit
-if 'configure' in COMMAND_LINE_TARGETS:
-	env.Exit(0)
+env.KDEuse("environ rpath")
+#env.KDEuse("environ rpath lang_qt thread nohelp")
 
+###################################################################
+# SCRIPTS FOR BUILDING THE TARGETS
+###################################################################
+
+dirs="""
+src
+doc
 """
-Overview of the module system :
+env.subdirs(dirs)
 
-Each module (kde.py, generic.py, sound.py..) tries to load a stored 
-configuration when run. If the stored configuration does not exist
-or if 'configure' is given on the command line (scons configure), 
-the module launches the verifications and detectioins and stores 
-the results. Modules also call exit when the detection fail.
+## Process the translations in the po/ directory
+env.KDElang('po/', '%{APPNAMELC}')
 
-For example, kde.py stores its config into kde.cache.py
+###################################################################
+# CONVENIENCE FUNCTIONS TO EMULATE 'make dist' and 'make distclean'
+###################################################################
 
-This has several advantages for both developers and users :
-  - Users do not have to run ./configure to compile
-  - The build is insensitive to environment changes
-  - The cache maintains the objects so the config can be changed often
-  - Each module adds its own help via env.Help("message")
-"""
-
-## Use the variables available in the environment - unsafe, but moc, meinproc need it :-/
-import os
-env.AppendUnique( ENV = os.environ )
-
-## Bksys requires scons 0.96
-env.EnsureSConsVersion(0, 96)
-
-"""
-Explanation of the 'env = Environment...' line :
-* the command line arguments and targets are stored in env['TARGS'] and env['ARGS'] for use by the tools
-* the part 'tools=['default', 'generic ..' detect and load the necessary functions for doing the things
-* the part "toolpath=['./']" tells that the tools can be found in the current directory (generic.py, kde.py ..)
-"""
-
-"""
-To load more configuration modules one should only have to add the appropriate tool
-ie: to detect alsa and add the proper cflags, ldflags .. 
-    a file alsa.py file will be needed, and one should then use :
-    env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools=['default', 'generic', 'kde', 'alsa'], toolpath=['./'])
-
-You can also load environments that are targetted to different platforms
-ie: if os.sys.platform = "darwin":
-	env = Environment(...
-    elsif os.sys.platform = "linux":
-	env = Environment(...
-
-"""
-
-## Setup the cache directory - this avoids recompiling the same files over and over again
-## this is very handy when working with cvs
-env.CacheDir('cache')
-
-## Avoid spreading .sconsign files everywhere - keep this line
-env.SConsignFile('scons_signatures')
-
-## If you need more libs and they rely on pkg-config
-## ie: add support for GTK (source: the scons wiki on www.scons.org)
-# env.ParseConfig('pkg-config --cflags --libs gtk+-2.0')
-
-"""
-This tell scons that there are no rcs or sccs files - this trick 
-can speed up things a bit when having lots of #include
-in the source code and for network file systems
-"""
-env.SourceCode(".", None)
-
-dirs = [ '.', 'src', 'po', 'doc']
-
-for dir in dirs:
-	env.SourceCode(dir, None)
-
-## If we had only one program (named kvigor) to build, 
-## we could add before exporting the env (some kde 
-## helpers in kde.py need it) :
-# env['APPNAME'] = '%{APPNAMELC}'
-
-## Use this define if you are using the kde translation scheme (.po files)
-env.Append( CPPFLAGS = ['-DQT_NO_TRANSLATION'] )
-
-## Add this define if you want to use qthreads
-#env.KDEaddflags( ['-DQT_THREAD_SUPPORT', '-D_REENTRANT'] )
-#if os.uname()[0] == "FreeBSD":
-#	env.KDEaddldflags(["-pthread"])
-
-## To use kdDebug(intvalue)<<"some trace"<<endl; you need to define -DDEBUG - it is done
-## in generic.py automatically when you do scons configure debug=1
-
-## There are also many other defines :
-### -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -DQT_CLEAN_NAMESPACE -DQT_NO_ASCII_CAST -DQT_NO_STL -DQT_NO_COMPAT -DQT_NO_TRANSLATION
-# where are they documented ? if you know, mail tnagyemail-mail@yahoo@fr please
-
-## Important : export the environment so that SConscript files can the 
-## configuration and builders in it
-Export('env')
-
-
-####################################################
-## Process the SConscript files to build the targets
-## the sconscript files are comparable to Makefile.am_s
-## except that no makefile is generated here :)
-
-env.SConscript("src/SConscript")
-env.SConscript("doc/SConscript")
-env.SConscript("po/SConscript")
-
-####################################################
-## Quick helper to distribute the program
-
-"""
-'scons dist' creates a tarball named bksys-version.tar.bz2 
-containing the source code - this is handy
-do not forget to remove the object files by scons -c
-"""
-
-### To make a tarball of your %{APPNAME}
+### To make a tarball of your masterpiece, use 'scons dist'
 if 'dist' in COMMAND_LINE_TARGETS:
-	
-	## The target make dist requires the python module shutil which is in 2.3
+
+	## The target scons dist requires the python module shutil which is in 2.3
 	env.EnsurePythonVersion(2, 3)
 
+	import os
+	APPNAME = 'bksys'
+	VERSION = os.popen("cat VERSION").read().rstrip()
+	FOLDER  = APPNAME+'-'+VERSION
+	ARCHIVE = FOLDER+'.tar.bz2'
 
-        APPNAME = '%{APPNAMELC}'
-        VERSION = os.popen("cat VERSION").read().rstrip()
-        FOLDER  = APPNAME+'-'+VERSION
-        ARCHIVE = FOLDER+'.tar.bz2'
+	## If your app name and version number are defined in 'version.h', use this instead:
+	## (contributed by Dennis Schridde devurandom@gmx@net)
+	#import re
+	#INFO = dict( re.findall( '(?m)^#define\s+(\w+)\s+(.*)(?<=\S)', open(r"version.h","rb").read() ) )
+	#APPNAME = INFO['APPNAME']
+	#VERSION = INFO['VERSION']
 
-        GREEN  ="\033[92m"
-        NORMAL ="\033[0m"
+	import shutil
+	import glob
 
-        import shutil
-        import glob
+	## check if the temporary directory already exists
+	if os.path.isdir(FOLDER):
+		shutil.rmtree(FOLDER)
+	if os.path.isfile(ARCHIVE):
+		os.remove(ARCHIVE)
 
-        ## check if the temporary directory already exists
-        if os.path.isdir(FOLDER):
-                shutil.rmtree(FOLDER)
+	## create a temporary directory
+	startdir = os.getcwd()
+	shutil.copytree(startdir, FOLDER)
 
-        ## create a temporary directory
-        startdir = os.getcwd()
-        shutil.copytree(startdir, FOLDER)
+	## remove our object files first
+	os.popen("find "+FOLDER+" -name \"*cache*\" | xargs rm -rf")
+	os.popen("find "+FOLDER+" -name \"*.pyc\" | xargs rm -f")
+	#os.popen("pushd %s && scons -c " % FOLDER) # TODO
 
-        ## remove the unnecessary files
-        os.popen("find "+FOLDER+" -name \"{arch}\" | xargs rm -rf")
-        os.popen("find "+FOLDER+" -name \".arch-ids\" | xargs rm -rf")
-        os.popen("find "+FOLDER+" -name \".arch-inventory\" | xargs rm -f")
-        os.popen("find "+FOLDER+" -name \"scons_signatures*\" | xargs rm -f")
-        os.popen("find "+FOLDER+" -name \"*cache*\" | xargs rm -rf")
-        os.popen("find "+FOLDER+" -name \"kdiss*-data\" | xargs rm -rf")
-        os.popen("find "+FOLDER+" -name \"*.pyc\" | xargs rm -f")
-        os.popen("rm -f "+FOLDER+"/config.py*")
+	## CVS cleanup
+	os.popen("find "+FOLDER+" -name \"CVS\" | xargs rm -rf")
+	os.popen("find "+FOLDER+" -name \".cvsignore\" | xargs rm -rf")
 
-        ## make the tarball
-        print GREEN+"Writing archive "+ARCHIVE+NORMAL
-        os.popen("tar cjf "+ARCHIVE+" "+FOLDER)
+	## Subversion cleanup
+	os.popen("find %s -name .svn -type d | xargs rm -rf" % FOLDER)
 
-        ## remove the temporary directory
-        if os.path.isdir(FOLDER):
-                shutil.rmtree(FOLDER)
+	## GNU Arch cleanup
+	os.popen("find "+FOLDER+" -name \"{arch}\" | xargs rm -rf")
+	os.popen("find "+FOLDER+" -name \".arch-i*\" | xargs rm -rf")
 
-        env.Default(None)
-        env.Exit(0)
+	## Create the tarball (coloured output)
+	print "\033[92m"+"Writing archive "+ARCHIVE+"\033[0m"
+	os.popen("tar cjf "+ARCHIVE+" "+FOLDER)
+
+	## Remove the temporary directory
+	if os.path.isdir(FOLDER):
+		shutil.rmtree(FOLDER)
+
+	env.Default(None)
+	env.Exit(0)
+
+### Emulate "make distclean"
+if 'distclean' in COMMAND_LINE_TARGETS:
+	## Remove the cache directory
+	import os, shutil
+	if os.path.isdir(env['CACHEDIR']):
+		shutil.rmtree(env['CACHEDIR'])
+	os.popen("find . -name \"*.pyc\" | xargs rm -rf")
+
+	env.Default(None)
+	env.Exit(0)
 

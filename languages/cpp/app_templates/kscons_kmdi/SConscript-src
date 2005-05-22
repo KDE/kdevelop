@@ -6,32 +6,33 @@
 ## This file can be reused freely for any project (see COPYING)
 
 Import('env')
+myenv=env.Copy()
 
 ## First build : the shell
 ## Each tab in it will hold an instance of the part ..
 
-myenv=env.Copy()
-%{APPNAMELC}_sources = """
+%{APPNAMELC}_sources="""
 main.cpp
 %{APPNAMELC}kmdi.cpp
 %{APPNAMELC}kmdiView.cpp
 kmdikonsole.cpp
 settings.kcfgc
 prefs.ui
-""".split()
+"""
 # Now that we have our list of sources we can build the program
-myenv.KDEprogram( "%{APPNAMELC}", %{APPNAMELC}_sources ) # main program
-myenv.KDEaddpaths( ['./', '../'] ) # additional paths
-myenv.KDEaddlibs( ['qt-mt', 'kdecore', 'kio', 'kparts', 'kmdi'] ) # additional libraries
+myenv.KDEprogram( '%{APPNAMELC}', %{APPNAMELC}_sources ) # main program
+myenv.KDEaddpaths_includes( './ ../' ) # additional paths
+myenv.KDEaddlibs( 'qt-mt kdecore kio kparts kmdi' ) # additional libraries
 
 ## Next, the kpart library
 ## using KDEshlib, the .so and .la are installed automatically when needed
 
 myenv2=env.Copy()
-%{APPNAMELC}part_sources = [ '%{APPNAMELC}_part.cpp' ]
-myenv2.KDEshlib( "lib%{APPNAMELC}part", %{APPNAMELC}part_sources)
-myenv2.KDEaddpaths( ['./', '#/']) # the '#' means the top-level directory
-myenv2.KDEaddlibs( ['qt-mt', 'kio', 'kdecore', 'kdeprint', 'kparts'])
+%{APPNAMELC}part_sources = '%{APPNAMELC}_part.cpp'
+myenv2.KDEshlib( 'lib%{APPNAMELC}part', %{APPNAMELC}part_sources)
+myenv2.KDEaddpaths_includes( './ #/' ) # the '#' means the top-level directory
+myenv2.KDEaddlibs( 'qt-mt kio kdecore kdeprint kparts' )
+# myenv2.KDEaddflags_link( '-DQT_THREAD_SUPPORT' )
 
 #############################
 ## Data files to install
@@ -54,6 +55,6 @@ myenv.KDEinstall( 'KDEXDG', '', '%{APPNAMELC}_part.desktop' )
 myenv.KDEinstall( 'KDEDATA', '/%{APPNAMELC}part', '%{APPNAMELC}_part.rc' )
 
 ## Installing icons is easy (hi-16-app-%{APPNAMELC}.png, hi-22-app-%{APPNAMELC}.png)
-#myenv.KDEicon('%{APPNAMELC}')
+#myenv.KDEicon()
 
 ## do not forget that this is a python script so even loops are allowed... :)

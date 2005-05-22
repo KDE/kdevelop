@@ -69,11 +69,6 @@ Dest=%{dest}/src/hi32-app-%{APPNAMELC}.png
 Type=mkdir
 Dir=%{dest}/po
 
-[FILE9]
-Type=install
-Source=%{src}/SConscript-po
-Dest=%{dest}/po/SConscript
-
 [FILE10]
 Type=install
 Source=%{src}/SConscript-src
@@ -135,11 +130,6 @@ Dest=%{dest}/src/settings.kcfgc
 Type=install
 Source=%{src}/tips
 Dest=%{dest}/src/tips
-
-[FILE26]
-Type=install
-Source=%{src}/src-Makefile
-Dest=%{dest}/Makefile
 
 [FILE27]
 Type=install

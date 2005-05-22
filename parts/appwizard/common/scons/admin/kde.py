@@ -1,48 +1,8 @@
-# Copyright (c) 2001, 2002, 2003, 2004 The SCons Foundation
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
-# KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
-
-# Shamelessly stolen from qt.py and (heavily) modified into kde.py :)
+# Made from scons qt.py and (heavily) modified into kde.py
 # Thomas Nagy, 2004, 2005 <tnagy2^8@yahoo.fr>
 
 """
-Here follow the basic rules for building kde programs
-The detection is done in detect_kde when needed
-We wan to use the cached variables as much as possible
-
-The variables used when configuring are :
-* prefix     : base install path,         eg: /usr/local
-* execprefix : install path for binaries, eg: /usr/bin
-* datadir    : install path for the data, eg: /usr/local/share
-* libdir     : install path for the libs, eg: /usr/lib
-
-* libsuffix  : for those who need /usr/lib64 and the like ..
-
-* kdeincludes: path to the kde includes (/usr/include/kde on debian, ...)
-* qtincludes : same punishment, for qt includes (/usr/include/qt on debian, ...)
-
-* kdelibs    : path to the kde libs, for linking the programs
-* qtlibs     : same punishment, for qt libraries
-
-eg: scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
+Run scons -h to display the associated help, or look below ..
 """
 
 BOLD   ="\033[1m"
@@ -52,12 +12,22 @@ YELLOW ="\033[1m" #"\033[93m" # unreadable on white backgrounds
 CYAN   ="\033[96m"
 NORMAL ="\033[0m"
 
+import os, re, types
+
+# Returns the name of the shared object (i.e. libkdeui.so.4)
+# referenced by a libtool archive (like libkdeui.la)
+def getSOfromLA(lafile):
+	contents = open(lafile, 'r').read()
+	match = re.search("^dlname='([^']*)'$", contents, re.M)
+	if match:
+		return match.group(1)
+	return None
+
 def exists(env):
 	return True
 
 def detect_kde(env):
 	""" Detect the qt and kde environment using kde-config mostly """
-	import os, sys, re
 
 	prefix      = env['ARGS'].get('prefix', None)
 	execprefix  = env['ARGS'].get('execprefix', None)
@@ -76,56 +46,57 @@ def detect_kde(env):
 	print "Checking for kde-config           : ",
 	kde_config = os.popen("which kde-config 2>/dev/null").read().strip()
 	if len(kde_config):
-		print GREEN + "kde-config was found" + NORMAL
+		print GREEN+"kde-config was found"+NORMAL
 	else:
-		print RED + "kde-config was NOT found in your PATH"+ NORMAL
+		print RED+"kde-config was NOT found in your PATH"+NORMAL
 		print "Make sure kde is installed properly"
 		print "(missing package kdebase-devel?)"
-		# TODO : prompt the user for the path of kde-config ?
-		sys.exit(1)
+		env.Exit(1)
 	env['KDEDIR'] = os.popen('kde-config -prefix').read().strip()
 
 	print "Checking for kde version          : ",
 	kde_version = os.popen("kde-config --version|grep KDE").read().strip().split()[1]
 	if int(kde_version[0]) != 3 or int(kde_version[2]) < 2:
-		print RED + kde_version
-		print RED + "Your kde version can be too old" + NORMAL
-		print RED + "Please make sure kde is at least 3.2" + NORMAL
+		print RED+kde_version
+		print RED+"Your kde version can be too old"+NORMAL
+		print RED+"Please make sure kde is at least 3.2"+NORMAL
 	else:
-		print GREEN + kde_version + NORMAL
+		print GREEN+kde_version+NORMAL
 
 	## Detect the qt library
 	print "Checking for the qt library       : ",
 	qtdir = os.getenv("QTDIR")
 	if qtdir:
-		print GREEN + "qt is in " + qtdir + NORMAL
+		print GREEN+"qt is in "+qtdir+NORMAL
 	else:
-		m = re.search('(.*)/lib/libqt.*', os.popen('ldd `kde-config --expandvars --install lib`' + '/libkdeui.so.4 | grep libqt').read().strip().split()[2])
+		libdir = os.popen('kde-config --expandvars --install lib').read().strip()
+		libkdeuiSO = libdir+'/'+getSOfromLA(libdir+'/libkdeui.la')
+		m = re.search('(.*)/lib/libqt.*', os.popen('ldd ' + libkdeuiSO + ' | grep libqt').read().strip().split()[2])
 		if m:
 			qtdir = m.group(1)
-			print YELLOW + "qt was found as " + m.group(1) + NORMAL
+			print YELLOW+"qt was found as "+m.group(1)+NORMAL
 		else:
-			print RED + "qt was not found" + NORMAL
-			print RED + "Please set QTDIR first (/usr/lib/qt3?)" + NORMAL
-			sys.exit(1)
+			print RED+"qt was not found"+NORMAL
+			print RED+"Please set QTDIR first (/usr/lib/qt3?)"+NORMAL
+			env.Exit(1)
 	env['QTDIR'] = qtdir.strip()
 
 	## Find the necessary programs uic and moc
 	print "Checking for uic                  : ",
 	uic = qtdir + "/bin/uic"
 	if os.path.isfile(uic):
-		print GREEN + "uic was found as " + uic + NORMAL
+		print GREEN+"uic was found as "+uic+NORMAL
 	else:
 		uic = os.popen("which uic 2>/dev/null").read().strip()
 		if len(uic):
-			print YELLOW + "uic was found as " + uic + NORMAL
+			print YELLOW+"uic was found as "+uic+NORMAL
 		else:
 			uic = os.popen("which uic 2>/dev/null").read().strip()
 			if len(uic):
-				print YELLOW + "uic was found as " + uic + NORMAL
+				print YELLOW+"uic was found as "+uic+NORMAL
 			else:
-				print RED + "uic was not found - set QTDIR put it in your PATH ?" + NORMAL
-				sys.exit(1)
+				print RED+"uic was not found - set QTDIR put it in your PATH ?"+NORMAL
+				env.Exit(1)
 	env['QT_UIC'] = uic
 
 	print "Checking for moc                  : ",
@@ -141,7 +112,7 @@ def detect_kde(env):
 			print YELLOW + "moc was found as " + moc + NORMAL
 		else:
 			print RED + "moc was not found - set QTDIR or put it in your PATH ?" + NORMAL
-			sys.exit(1)
+			env.Exit(1)
 	env['QT_MOC'] = moc
 
 	## check for the qt and kde includes
@@ -160,7 +131,7 @@ def detect_kde(env):
 			qtincludes = "/usr/include/qt3"
 		else:
 			print RED + "the qt headers were not found" + NORMAL
-			sys.exit(1)
+			env.Exit(1)
 
 	print "Checking for the kde includes     : ",
 	kdeprefix = os.popen("kde-config --prefix").read().strip()
@@ -175,19 +146,18 @@ def detect_kde(env):
 			kdeincludes = kdeprefix + "/include/kde/"
 		else:
 			print RED + "The kde includes were NOT found" + NORMAL
-			sys.exit(1)
+			env.Exit(1)
 
 	if prefix:
 		## use the user-specified prefix
 		if not execprefix:
 			execprefix = prefix
 		if not datadir:
-			datadir = prefix  + "/share"
+			datadir=prefix+"/share"
 		if not libdir:
-			libdir = execprefix + "/lib"+libsuffix
+			libdir=execprefix+"/lib"+libsuffix
 
-		subst_vars = lambda x: x.replace('${exec_prefix}', execprefix).replace('${datadir}', 
-			datadir).replace('${libdir}', libdir)
+		subst_vars = lambda x: x.replace('${exec_prefix}', execprefix).replace('${datadir}',datadir).replace('${libdir}', libdir)
 		debian_fix = lambda x: x.replace('/usr/share', '${datadir}')
 		env['KDEBIN']   = subst_vars(os.popen('kde-config --install exe').read().strip())
 		env['KDEAPPS']  = subst_vars(os.popen('kde-config --install apps').read().strip())		
@@ -197,6 +167,7 @@ def detect_kde(env):
 		env['KDEDOC']   = subst_vars( debian_fix(os.popen('kde-config --install html').read().strip()) )
 		env['KDEKCFG']  = subst_vars(os.popen('kde-config --install kcfg').read().strip())
 		env['KDEXDG']   = subst_vars(os.popen('kde-config --install xdgdata-apps').read().strip())
+		env['KDEXDGDIR']= subst_vars(os.popen('kde-config --install xdgdata-dirs').read().strip())
 		env['KDEMENU']  = subst_vars(os.popen('kde-config --install apps').read().strip())
 		env['KDEMIME']  = subst_vars(os.popen('kde-config --install mime').read().strip())
 		env['KDEICONS'] = subst_vars(os.popen('kde-config --install icon').read().strip())
@@ -204,7 +175,6 @@ def detect_kde(env):
 	else:
 		# the user has given no prefix, install as a normal kde app
 		env['PREFIX'] = os.popen('kde-config --prefix').read().strip()
-	
 		env['KDEBIN']   = os.popen('kde-config --expandvars --install exe').read().strip()
 		env['KDEAPPS']  = os.popen('kde-config --expandvars --install apps').read().strip()
 		env['KDEDATA']  = os.popen('kde-config --expandvars --install data').read().strip()
@@ -213,6 +183,7 @@ def detect_kde(env):
 		env['KDEDOC']   = os.popen('kde-config --expandvars --install html').read().strip()
 		env['KDEKCFG']  = os.popen('kde-config --expandvars --install kcfg').read().strip()
 		env['KDEXDG']   = os.popen('kde-config --expandvars --install xdgdata-apps').read().strip()
+		env['KDEXDGDIR']= os.popen('kde-config --expandvars --install xdgdata-dirs').read().strip()
 		env['KDEMENU']  = os.popen('kde-config --expandvars --install apps').read().strip()
 		env['KDEMIME']  = os.popen('kde-config --expandvars --install mime').read().strip()
 		env['KDEICONS'] = os.popen('kde-config --expandvars --install icon').read().strip()
@@ -221,26 +192,23 @@ def detect_kde(env):
 	env['QTPLUGINS']=os.popen('kde-config --expandvars --install qtplugins').read().strip()
 
 	## kde libs and includes
-	env['KDEINCLUDEPATH']= kdeincludes
+	env['KDEINCLUDEPATH']=kdeincludes
 	if not kdelibs:
-		kdelibs = os.popen('kde-config --expandvars --install lib').read().strip()
-	env['KDELIBPATH']= kdelibs
+		kdelibs=os.popen('kde-config --expandvars --install lib').read().strip()
+	env['KDELIBPATH']=kdelibs
 
 	## qt libs and includes
-	env['QTINCLUDEPATH']= qtincludes
+	env['QTINCLUDEPATH']=qtincludes
 	if not qtlibs:
-		qtlibs = qtdir+ "/lib"
-	env['QTLIBPATH']= qtlibs
-
+		qtlibs=qtdir+"/lib"
+	env['QTLIBPATH']=qtlibs
 
 def generate(env):
 	""""Set up the qt and kde environment and builders - the moc part is difficult to understand """
-
-	env.Help("""
-"""+BOLD+
-"""*** KDE options ***
--------------------"""
-+NORMAL+"""
+	if env['HELP']:
+		print """
+"""+BOLD+"""*** KDE options ***
+-------------------"""+NORMAL+"""
 """+BOLD+"""* prefix     """+NORMAL+""": base install path,         ie: /usr/local
 """+BOLD+"""* execprefix """+NORMAL+""": install path for binaries, ie: /usr/bin
 """+BOLD+"""* datadir    """+NORMAL+""": install path for the data, ie: /usr/local/share
@@ -251,18 +219,15 @@ def generate(env):
 """+BOLD+"""* kdelibs    """+NORMAL+""": path to the kde libs, for linking the programs
 """+BOLD+"""* qtlibs     """+NORMAL+""": same punishment, for qt libraries
 ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
-"""+NORMAL)
-
-	import os.path
-	import re
+"""+NORMAL
 
 	import SCons.Defaults
 	import SCons.Tool
 	import SCons.Util
 
-	ui_extensions = [".ui", ".Ui", ".UI"]
-	header_extensions = [".h", ".hxx", ".hpp", ".hh", ".H", ".HH"]
-	source_extensions = [".cpp", ".cxx", ".cc", ".CPP", ".CXX", ".CC"]
+	ui_extensions = [".ui"]
+	header_extensions = [".h", ".hxx", ".hpp", ".hh"]
+	source_extensions = [".cpp", ".cxx", ".cc"]
 
 	def find_file(filename, paths, node_factory):
 		retval = None
@@ -302,12 +267,7 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			# Q_OBJECT detection
 			q_object_search = re.compile(r'[^A-Za-z0-9]Q_OBJECT[^A-Za-z0-9]')
 
-			# cxx and c comment 'eater'
-			#comment = re.compile(r'(//.*)|(/\*(([^*])|(\*[^/]))*\*/)')
-			# CW: something must be wrong with the regexp. See also bug #998222
-			# CURRENTLY THERE IS NO TEST CASE FOR THAT
-
-			# The following is kind of hacky to get builders working properly (FIXME)
+			# The following is kind of hacky to get builders working properly (FIXME) ??
 			objBuilderEnv = objBuilder.env
 			objBuilder.env = env
 			mocBuilderEnv = env.Moc.env
@@ -398,44 +358,45 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	splitext = SCons.Util.splitext
 	Builder = SCons.Builder.Builder
 	
-	# Detect the environment - replaces ./configure implicitely
-	# and store the options into a cache
+	# Detect the environment - replaces ./configure implicitely and store the options into a cache
 	from SCons.Options import Options
-	opts = Options('kde.cache.py')
+	cachefile=env['CACHEDIR']+'kde.cache.py'
+	opts = Options(cachefile)
 	opts.AddOptions(
-		( 'QTDIR', 'root of qt directory' ),
-		( 'QTLIBPATH', 'path to the qt libraries' ),
-		( 'QTINCLUDEPATH', 'path to the qt includes' ),
-		( 'QT_UIC', 'moc directory'),
-		( 'QT_MOC', 'moc executable command'),
-		( 'QTPLUGINS', 'uic executable command'),
-		( 'KDEDIR', 'root of kde directory' ),
-		( 'KDELIBPATH', 'path to the kde libs' ),
-		( 'KDEINCLUDEPATH', 'path to the kde includes' ),
+		('PREFIX', 'root of the program installation'),
 
-		( 'PREFIX', 'root of the program installation'),
+		('QTDIR', 'root of qt directory'),
+		('QTLIBPATH', 'path to the qt libraries'),
+		('QTINCLUDEPATH', 'path to the qt includes'),
+		('QT_UIC', 'moc directory'),
+		('QT_MOC', 'moc executable command'),
+		('QTPLUGINS', 'uic executable command'),
+		('KDEDIR', 'root of kde directory'),
+		('KDELIBPATH', 'path to the kde libs'),
+		('KDEINCLUDEPATH', 'path to the kde includes'),
 
-		( 'KDEBIN', 'installation path of the kde binaries'),
-		( 'KDEMODULE', 'installation path of the parts and libs'),
-		( 'KDEAPPS', ''),
-		( 'KDEDATA', 'installation path of the application data'),
-		( 'KDELOCALE', ''),
-		( 'KDEDOC', 'installation path of the application documentation'),
-		( 'KDEKCFG', 'installation path of the .kcfg files'),
-		( 'KDEXDG', 'installation path of the service types'),
-		( 'KDEMENU', ''),
-		( 'KDEMIME', 'installation path of to the mimetypes'),
-		( 'KDEICONS', ''),
-		( 'KDESERV', ''),
+		('KDEBIN', 'installation path of the kde binaries'),
+		('KDEMODULE', 'installation path of the parts and libs'),
+		('KDEAPPS', ''),
+		('KDEDATA', 'installation path of the application data'),
+		('KDELOCALE', ''),
+		('KDEDOC', 'installation path of the application documentation'),
+		('KDEKCFG', 'installation path of the .kcfg files'),
+		('KDEXDG', 'installation path of the service types'),
+		('KDEXDGDIR', 'installation path of the xdg service directories'),
+		('KDEMENU', ''),
+		('KDEMIME', 'installation path of to the mimetypes'),
+		('KDEICONS', ''),
+		('KDESERV', ''),
 	)
 	opts.Update(env)
 
 	# reconfigure when things are missing
-	if 'configure' in env['TARGS'] or not env.has_key('QTDIR') or not env.has_key('KDEDIR'):
+	if not env['HELP'] and (env['_CONFIGURE'] or not env.has_key('QTDIR') or not env.has_key('KDEDIR')):
 		detect_kde(env)
 
-	# finally save the configuration
-	opts.Save('kde.cache.py', env)
+		# finally save the configuration to the cache file
+		opts.Save(cachefile, env)
 
 	## set default variables, one can override them in sconscript files
 	env.Append(CXXFLAGS = ['-I'+env['KDEINCLUDEPATH'], '-I'+env['QTINCLUDEPATH'] ])
@@ -443,17 +404,14 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	
 	env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME'] = 1
 	
-	env['QT_AUTOSCAN']     = 1
-	env['QT_DEBUG']        = 0
-	
+	env['QT_AUTOSCAN'] = 1
+	env['QT_DEBUG']    = 0
 	env['QT_UIC_HFLAGS']   = '-L $QTPLUGINS -nounload'
 	env['QT_UIC_CFLAGS']   = '$QT_UIC_HFLAGS -tr tr2i18n'
-	env['QT_LIBS']         = 'qt-mt'
-	
-	env['LIBTOOL_FLAGS']   = '--silent --mode=compile --tag=CXX'
-	
+	env['QT_LIBS']      = 'qt-mt'
 	env['QT_UICIMPLPREFIX'] = ''
 	env['QT_UICIMPLSUFFIX'] = '.cpp'
+
 	env['QT_MOCHPREFIX']    = ''
 	env['QT_MOCHSUFFIX']    = '.moc'
 	env['KDE_KCFG_IMPLPREFIX'] = ''
@@ -463,20 +421,32 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	env['MEINPROC']              = 'meinproc'
 	env['MSGFMT']                = 'msgfmt'
 
+	## ui file processing
+	def uic_processing(target, source, env):
+		inc_kde  = '#include <klocale.h>\n#include <kdialog.h>\n'
+		inc_moc  = '#include "%s"\n' % target[2].name
+		comp_h   = '$QT_UIC $QT_UIC_HFLAGS -o %s %s' % (target[0].path, source[0].path)
+		comp_c   = '$QT_UIC $QT_UIC_CFLAGS -impl %s %s' % (target[0].path, source[0].path)
+		comp_moc = '$QT_MOC -o %s %s' % (target[2].path, target[0].path)
+		
+		ret = env.Execute(comp_h)
+		if ret:
+			return ret
+		
+		dest = open( target[1].path, "w" )
+		dest.write(inc_kde)
+		dest.close()
 
-	###### ui file processing
-	def uicGenerator(target, source, env, for_signature):
-		act=[]
-		act.append('$QT_UIC $QT_UIC_HFLAGS -o '+target[0].path+' '+source[0].path)
-		act.append('rm -f '                           +target[1].path)
-		act.append('echo \'#include <klocale.h>\' >> '+target[1].path)
-		act.append('echo \'#include <kdialog.h>\' >> '+target[1].path)
-		act.append('$QT_UIC $QT_UIC_CFLAGS -impl '+target[0].path+' -o '+target[1].path+'.tmp '+source[0].path)
-		act.append('cat '+target[1].path+'.tmp >> '+target[1].path)
-		act.append('rm -f '+target[1].path+'.tmp')
-		act.append('echo \'#include "' + target[2].name + '"\' >> '+target[1].path)
-		act.append('$QT_MOC -o '+target[2].path+' '+target[0].path)
-		return act
+		ret = env.Execute( comp_c+" >> "+target[1].path )
+		if ret:
+			return ret
+
+		dest = open( target[1].path, "a" )
+		dest.write(inc_moc)
+		dest.close()
+
+		ret = env.Execute( comp_moc )
+		return ret
 	
 	def uicEmitter(target, source, env):
 		adjustixes = SCons.Util.adjustixes
@@ -496,25 +466,25 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		return target, source
 	
 	UIC_BUILDER = Builder(
-		generator  = uicGenerator,
+		action     = uic_processing,
 		emitter    = uicEmitter,
 		suffix     = '.h',
-		src_suffix = '.ui' )
+		src_suffix = '.ui')
 	
-	###### moc file processing
+	## moc file processing
 	env['QT_MOCCOM'] = ('$QT_MOC -o ${TARGETS[0]} $SOURCE')
 	
 	MOC_BUILDER = Builder(
 		action     = '$QT_MOCCOM',
 		suffix     = '.moc',
-		src_suffix = '.h' )
+		src_suffix = '.h')
 	
 	MOCCPP_BUILDER = Builder(
 		action     = '$QT_MOCCOM',
 		suffix     = '_moc.cpp',
-		src_suffix = '.h' )
+		src_suffix = '.h')
 	
-	###### kcfg file processing
+	## kcfg file processing
 	def kcfgGenerator(target, source, env, for_signature):
 		act=[]
 		act.append('kconfig_compiler -d'+str(source[0].get_dir())+' '+source[1].path+' '+source[0].path)
@@ -524,36 +494,35 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		adjustixes = SCons.Util.adjustixes
 		bs = SCons.Util.splitext(str(source[0].name))[0]
 		bs = os.path.join(str(target[0].get_dir()),bs)
-		# first target is automatically added by builder (.h file)
+		# .h file is automatically added
 		if len(target) < 2:
-			# second target is .cpp file
+			# add .cpp file
 			target.append(adjustixes(bs, env.subst('$KDE_KCFG_IMPLPREFIX'), env.subst('$KDE_KCFG_IMPL_CSUFFIX')))
 	
-		#    find_file(kcfgfile, (source[0].get_dir(),) ,SCons.Node.FS.default_fs)
 		if len(source) <2:
 			if not os.path.isfile(str(source[0])):
 				print RED+'kcfg file given'+str(source[0])+' does not exist !'+NORMAL
 				return target, source
-			kfcgfilename = ""
+			kfcgfilename=""
 			kcfgFileDeclRx = re.compile("^[fF]ile\s*=\s*(.+)\s*$")
 			for line in file(str(source[0]), "r").readlines():
 				match = kcfgFileDeclRx.match(line.strip())
 				if match:
 					kcfgfilename = match.group(1)
 					break
-			source.append( str(source[0].get_dir())+'/'+kcfgfilename )
+			source.append(str(source[0].get_dir())+'/'+kcfgfilename)
 		return target, source
 
 	KCFG_BUILDER = Builder(
 		generator  = kcfgGenerator,
 		emitter    = kcfgEmitter,
 		suffix     = '.h',
-		src_suffix = '.kcfgc' )
+		src_suffix = '.kcfgc')
 	
-	###### dcop processing
+	## dcop processing
 	def dcopGenerator(target, source, env, for_signature):
 		act=[]
-		act.append('dcopidl '+source[0].path+' > '+target[1].path+'|| ( rm -f '+target[1].path+' ; false )')
+		act.append('dcopidl '+source[0].path+' > '+target[1].path+'|| ( rm -f '+target[1].path+' ; false)')
 		act.append('dcopidl2cpp --c++-suffix cpp --no-signals --no-stub '+target[1].path)
 		return act
 
@@ -568,64 +537,52 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		generator  = dcopGenerator,
 		emitter    = dcopEmitter,
 		suffix     = '_skel.cpp',
-		src_suffix = '.h' )
+		src_suffix = '.h')
 
-	###### documentation (meinproc) processing
+	## documentation processing
 	MEINPROC_BUILDER = Builder(
 		action     = '$MEINPROC --check --cache $TARGET $SOURCE',
-		suffix     = '.cache.bz2',
-		src_suffix = '.docbook' )
+		suffix     = '.cache.bz2')
 
-	###### translation files builder
+	## translation files builder
 	TRANSFILES_BUILDER = Builder(
 		action     = '$MSGFMT $SOURCE -o $TARGET',
 		suffix     = '.gmo',
-		src_suffix = '.po' )
+		src_suffix = '.po')
 
-	###### libtool file builder
-	def laGenerator(target, source, env, for_signature):
-		act=[]
-		act.append('echo "dlname=\''+source[0].name+'\'" > '+target[0].path)
-		act.append('echo "library_names=\''+source[0].name+' '+source[0].name+' '+source[0].name+'\'" >> '+target[0].path)
-		act.append('echo "old_library=\'\'">> '+target[0].path)
-		act.append('echo "dependency_libs=\'\'">> '+target[0].path)
-		act.append('echo "current=0">> '+target[0].path)
-		act.append('echo "age=0">> '+target[0].path)
-		act.append('echo "revision=0">> '+target[0].path)
-		act.append('echo "installed=yes">> '+target[0].path)
-		act.append('echo "shouldnotlink=no">> '+target[0].path)
-		act.append('echo "dlopen=\'\'">> '+target[0].path)
-		act.append('echo "dlpreopen=\'\'">> '+target[0].path)
-		act.append('echo "libdir=\''+env['KDEMODULE']+'\'" >> '+target[0].path)
+	## libtool file builder
+	def la_file(target, source, env):
+		dest=open(target[0].path, 'w')
+		sname=source[0].name
+		dest.write("dlname='%s'\n" % sname)
+		dest.write("library_names='%s %s %s'\n" % (sname, sname, sname))
+		dest.write("old_library=''\n")
+		dest.write("dependency_libs=''\n")
+		dest.write("current=0\n")
+		dest.write("age=0\n")
+		dest.write("revision=0\n")
+		dest.write("installed=yes\n")
+		dest.write("shouldnotlink=no\n")
+		dest.write("dlopen=''\n")
+		dest.write("dlpreopen=''\n")
+		dest.write("libdir='%s'" % env['KDEMODULE'])
+		dest.close()
+		return 0
 
-		env.Depends(target, source)
-		return act
-	
 	LA_BUILDER = Builder(
-		generator  = laGenerator,
+		action     = la_file,
 		suffix     = '.la',
-		src_suffix = env['SHLIBSUFFIX'] )
+		src_suffix = env['SHLIBSUFFIX'])
 	
-####### TODO : real libtool builder (but i hate libtool - ita)
-#	def libtoolGenerator(target, source, env, for_signature):
-#		act=[]
-#		act.append('libtool $LIBTOOL_FLAGS $CXX $CXXFLAGS $CPPFLAGS $_CPPDEFFLAGS $_CPPINCFLAGS -c -o '+target[0].path+' '+source[0].path)
-#		return act
-#	LIBTOOL_BUILDER = Builder(
-#		generator  = libtoolGenerator,
-#		suffix     = '.lo',
-#		src_suffix = '.cpp' )
-
-	##### register the builders
-	env['BUILDERS']['Uic']        = UIC_BUILDER
-	env['BUILDERS']['Moc']        = MOC_BUILDER
-	env['BUILDERS']['Moccpp']     = MOCCPP_BUILDER
-	env['BUILDERS']['Dcop']       = DCOP_BUILDER
-	env['BUILDERS']['Kcfg']       = KCFG_BUILDER
-	env['BUILDERS']['LaFile']     = LA_BUILDER
-	#env['BUILDERS']['Libtool']    = LIBTOOL_BUILDER
-	env['BUILDERS']['Meinproc']   = MEINPROC_BUILDER
-	env['BUILDERS']['Transfiles'] = TRANSFILES_BUILDER
+	## register the builders
+	env['BUILDERS']['Uic']       = UIC_BUILDER
+	env['BUILDERS']['Moc']       = MOC_BUILDER
+	env['BUILDERS']['Moccpp']    = MOCCPP_BUILDER
+	env['BUILDERS']['Dcop']      = DCOP_BUILDER
+	env['BUILDERS']['Kcfg']      = KCFG_BUILDER
+	env['BUILDERS']['LaFile']    = LA_BUILDER
+	env['BUILDERS']['Meinproc']  = MEINPROC_BUILDER
+	env['BUILDERS']['Transfiles']= TRANSFILES_BUILDER
 
 	static_obj, shared_obj = SCons.Tool.createObjBuilders(env)
 	static_obj.src_builder.append('Uic')
@@ -639,29 +596,36 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	static_obj.src_builder.append('Transfiles')
 	shared_obj.src_builder.append('Transfiles')
 
-	## find the files to moc, dcop, and link against kde and qt
+	## Find the files to moc, dcop, and link against kde and qt
 	env.AppendUnique(PROGEMITTER = [MetasourcesStatic], SHLIBEMITTER=[MetasourcesShared], LIBEMITTER =[MetasourcesStatic])
 
-	###########################################
 	## Handy helpers for building kde programs
 	## You should not have to modify them ..
 
-	import SCons.Util
+	## return a list of things
+	def make_list(e):
+		if type(e) is types.ListType:
+			return e
+		else:
+			return e.split()
+
+	#import SCons.Util
 	skel_ext = [".skel", ".SKEL"]
 	def KDEfiles(lenv, target, source):
-		"""
-		Returns a list of files for scons (handles kde tricks like .skel) 
+		""" Returns a list of files for scons (handles kde tricks like .skel) 
 		It also makes custom checks against double includes like : ['file.ui', 'file.cpp']
-		(file.cpp is already included because of file.ui)
-		"""
+		(file.cpp is already included because of file.ui) """
+
 		src=[]
 		ui_files=[]
 		kcfg_files=[]
 		skel_files=[]
 		other_files=[]
 
+		source_=make_list(source)
+
 		# For each file, check wether it is a dcop file or not, and create the complete list of sources
-		for file in source:
+		for file in source_:
 			bs  = SCons.Util.splitext(file)[0]
 			ext = SCons.Util.splitext(file)[1]
 			if ext in skel_ext:
@@ -695,19 +659,14 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 					print "Files generated by kconfig_compiler (settings.h, settings.cpp) must not be included"
 		return src
 
-	# Special trick for installing rpms ...
-	env['DESTDIR']=''
-	if 'install' in env['TARGS'] and os.environ.has_key('DESTDIR'):
-		env['DESTDIR']=os.environ['DESTDIR']+'/'
-		print CYAN+'** Enabling DESTDIR for the project **' + NORMAL + env['DESTDIR']
 
 	"""
 	In the future, these functions will contain the code that will dump the
 	configuration for re-use from an IDE
 	"""
+	import glob
 	def KDEinstall(lenv, restype, subdir, files):
-		""" Use this wrapper """
-		if not 'install' in env['TARGS']:
+		if not env['_INSTALL']:
 			return
 		basedir=env['DESTDIR']
 		if len(restype)>0:
@@ -716,13 +675,12 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			else:
 				basedir += lenv[restype]+'/'
 		#print file # <- useful to trace stuff :)
-		install_list =  env.Install( basedir+subdir, files )
+		install_list =  env.Install(basedir+subdir+'/', files)
 		env.Alias('install', install_list)
 		return install_list
 
 	def KDEinstallas(lenv, restype, destfile, file):
-		""" Use this wrapper """
-		if not 'install' in env['TARGS']:
+		if not env['_INSTALL']:
 			return
 		basedir=env['DESTDIR']
 		if len(restype)>0:
@@ -730,8 +688,8 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 				print RED+"unknown resource type "+restype+NORMAL
 			else:
 				basedir += lenv[restype]+'/'
-		install_list = env.InstallAs( basedir+destfile, file )
-		env.Alias('install', install_list )
+		install_list = env.InstallAs(basedir+destfile, file)
+		env.Alias('install', install_list)
 		return install_list
 
 	def KDEprogram(lenv, target, source):
@@ -743,114 +701,138 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			KDEinstall(lenv, 'KDEBIN', '', target)
 		return program_list
 
-	def KDEshlib(lenv, target, source, kdelib=0):
+	def KDEshlib(lenv, target, source, kdelib=0, libprefix='lib'):
 		""" Makes a shared library for kde (.la file for klibloader)
 		The library is installed except if one sets env['NOAUTOINSTALL'] """
 		src = KDEfiles(lenv, target, source)
-		library_list = lenv.SharedLibrary( target, src )
-		lenv.LaFile( target, target+env['SHLIBSUFFIX'] )
+		lenv['LIBPREFIX']=libprefix
+		library_list = lenv.SharedLibrary(target, src)
+		lafile_list  = lenv.LaFile(target, library_list)
 		if not lenv.has_key('NOAUTOINSTALL'):
+			install_dir = 'KDEMODULE'
 			if kdelib==1:
-				KDEinstall(lenv, 'KDELIBPATH', '', target+env['SHLIBSUFFIX'])
-				KDEinstall(lenv, 'KDELIBPATH', '', target+'.la')
-			else:
-				KDEinstall(lenv, 'KDEMODULE', '', target+env['SHLIBSUFFIX'])
-				KDEinstall(lenv, 'KDEMODULE', '', target+'.la')
+				install_dir = 'KDELIBPATH'
+			KDEinstall(lenv, install_dir, '', library_list)
+			KDEinstall(lenv, install_dir, '', lafile_list)
 		return library_list
 
 	def KDEstaticlib(lenv, target, source):
 		""" Makes a static library for kde - in practice you should not use static libraries 
 		1. they take more memory than shared ones
-		2. makefile.am needed it because of stupid limitations
+		2. makefile.am needed it because of limitations
 		(cannot handle sources in separate folders - takes extra processing) """
 		src = KDEfiles(lenv, target, source)
-		return lenv.StaticLibrary( target, src )
+		return lenv.StaticLibrary(target, src)
 		# do not install static libraries by default
 
-	def KDEaddflags(lenv, fl):
-		""" Helper function """
-		lenv.AppendUnique(CXXFLAGS = fl)
+	def KDEaddflags_cxx(lenv, fl):
+		""" Compilation flags for C++ programs """
+		lenv.AppendUnique(CXXFLAGS = make_list(fl))
 	
 	def KDEaddflags_c(lenv, fl):
-		""" Helper function """
-		lenv.AppendUnique(CXXFLAGS = fl)
-	
-	def KDEaddldflags(lenv, fl):
-		""" Helper function """
-		lenv.AppendUnique(LINKFLAGS = fl)
+		""" Compilation flags for C programs """
+		lenv.AppendUnique(CFLAGS = make_list(fl))
+
+	def KDEaddflags_link(lenv, fl):
+		""" Add link flags - Use this if KDEaddlibs below is not enough """
+		lenv.AppendUnique(LINKFLAGS = make_list(fl))
 
 	def KDEaddlibs(lenv, libs):
 		""" Helper function """
-		lenv.AppendUnique(LIBS = libs)
+		lenv.AppendUnique(LIBS = make_list(libs))
 
-	def KDEaddpaths(lenv, paths):
-		""" Helper function """
-		lenv.AppendUnique(CPPPATH = paths)
+	def KDEaddpaths_includes(lenv, paths):
+		""" Add new include paths """
+		lenv.AppendUnique(CPPPATH = make_list(paths))
 
-	def KDElang(lenv, transfiles):
+	def KDEaddpaths_libs(lenv, paths):
+		""" Add paths to libraries """
+		lenv.AppendUnique(LIBPATH = make_list(paths))
+
+	def KDElang(lenv, folder, appname):
 		""" Process translations (.po files) in a po/ dir """
-		if not lenv['APPNAME']:
-			print "define lenv['APPNAME'] before using KDElang !!"
-			return
+		transfiles = glob.glob(folder+'/*.po')
 		for lang in transfiles:
-			lenv.Transfiles( lang+'.po' )
-			KDEinstallas(lenv, 'KDELOCALE', lang+'/LC_MESSAGES/'+lenv['APPNAME']+'.mo', lang+'.gmo')
+			result = lenv.Transfiles(lang)
+			country = SCons.Util.splitext(result[0].name)[0]
+			KDEinstallas(lenv, 'KDELOCALE', country+'/LC_MESSAGES/'+appname+'.mo', result)
 
-	def KDEdoc(lenv, lang, file):
-		""" Install the documentation """
-		if not lenv['APPNAME']:
-			print "define lenv['APPNAME'] before using KDEdoc !!"+file+" "+lang
-			env.Exit(1)
-		KDEinstall( lenv, 'KDEDOC', lang+'/'+lenv['APPNAME'], file )
+	def subdirs(lenv, folderlist):
+		flist=make_list(folderlist)
+		for i in flist:
+			lenv.SConscript(i+"/SConscript")
 
-	def KDEicon(lenv, icname):
+	def KDEicon(lenv, icname='*', path='./'):
 		""" Emulates the behaviour of Makefile.am to install icons
 		Contributed by: "Andrey Golovizin" <grooz@gorodok@net> """
 		type_dic = { 'action' : 'actions', 'app' : 'apps', 'device' : 
 			'devices', 'filesys' : 'filesystems', 'mime' : 'mimetypes' } 
 		dir_dic = {
-		'los' : 'locolor/16x16',
-		'lom' : 'locolor/32x32',
-		'him' : 'hicolor/32x32',
-		'hil' : 'hicolor/48x48',
-		'lo16' : 'locolor/16x16',
-		'lo22' : 'locolor/22x22',
-		'lo32' : 'locolor/32x32',
-		'hi16' : 'hicolor/16x16',
-		'hi22' : 'hicolor/22x22',
-		'hi32' : 'hicolor/32x32',
-		'hi48' : 'hicolor/48x48',
-		'hi64' : 'hicolor/64x64',
-		'hi128' : 'hicolor/128x128',
-		'hisc' : 'hicolor/scalable',
-		'cr16' : 'crystalsvg/16x16',
-		'cr22' : 'crystalsvg/22x22',
-		'cr32' : 'crystalsvg/32x32',
-		'cr48' : 'crystalsvg/48x48',
-		'cr64' : 'crystalsvg/64x64',
-		'cr128' : 'crystalsvg/128x128',
-		'crsc' : 'crystalsvg/scalable'
+		'los'  :'locolor/16x16',
+		'lom'  :'locolor/32x32',
+		'him'  :'hicolor/32x32',
+		'hil'  :'hicolor/48x48',
+		'lo16' :'locolor/16x16',
+		'lo22' :'locolor/22x22',
+		'lo32' :'locolor/32x32',
+		'hi16' :'hicolor/16x16',
+		'hi22' :'hicolor/22x22',
+		'hi32' :'hicolor/32x32',
+		'hi48' :'hicolor/48x48',
+		'hi64' :'hicolor/64x64',
+		'hi128':'hicolor/128x128',
+		'hisc' :'hicolor/scalable',
+		'cr16' :'crystalsvg/16x16',
+		'cr22' :'crystalsvg/22x22',
+		'cr32' :'crystalsvg/32x32',
+		'cr48' :'crystalsvg/48x48',
+		'cr64' :'crystalsvg/64x64',
+		'cr128':'crystalsvg/128x128',
+		'crsc' :'crystalsvg/scalable'
 		}
 
-		import glob
 		iconfiles = []
-		for ext in ['png', 'xpm', 'mng', 'svg', 'svgz']:
-			files = glob.glob('*-*-%s.%s' % (icname, ext))
+		for ext in "png xpm mng svg svgz".split():
+			files = glob.glob(path+'/'+'*-*-%s.%s' % (icname, ext))
 			iconfiles += files
 		for iconfile in iconfiles:
-			tmp = iconfile.split('-')
-			if len(tmp) != 3:
-				print RED + 'WARNING: icon filename has unknown format: ' + iconfile + NORMAL
+			lst = iconfile.split('/')
+			filename = lst[ len(lst) - 1 ]
+			tmp = filename.split('-')
+			if len(tmp)!=3:
+				print RED+'WARNING: icon filename has unknown format: '+iconfile+NORMAL
 				continue
-			[icon_dir, icon_type, icon_filename] = tmp
+			[icon_dir, icon_type, icon_filename]=tmp
 			try:
 				destfile = '%s/%s/%s/%s' % (lenv['KDEICONS'], dir_dic[icon_dir], type_dic[icon_type], icon_filename)
 			except KeyError:
-				print RED + 'WARNING: unknown icon type: ' + iconfile + NORMAL
+				print RED+'WARNING: unknown icon type: '+iconfile+NORMAL
 				continue
-			## do not use KDEinstallas here, as parsing from an ide will be necessary
-			if 'install' in env['TARGS']:
+			## Do not use KDEinstallas here, as parsing from an ide will be necessary
+			if env['_INSTALL']: 
 				env.Alias('install', env.InstallAs( env['DESTDIR']+'/'+destfile, iconfile ) )
+
+	def KDEuse(lenv, flags):
+		_flags=make_list(flags)
+		if 'environ' in _flags:
+			## The scons developers advise against using this but it is mostly innocuous :)
+			import os
+			lenv.AppendUnique( ENV = os.environ )
+		if not 'lang_qt' in _flags:
+			## Use this define if you are using the kde translation scheme (.po files)
+			lenv.Append( CPPFLAGS = '-DQT_NO_TRANSLATION' )
+		if 'rpath' in _flags:
+			## Use this to set rpath - this may cause trouble if folders are moved (chrpath)
+			lenv.Append( RPATH = [env['QTLIBPATH'], env['KDELIBPATH'], env['KDEMODULE']] )
+		if 'thread' in _flags:
+			## Uncomment the following if you need threading support
+			lenv.KDEaddflags_cxx( ['-DQT_THREAD_SUPPORT', '-D_REENTRANT'] )
+		if not 'nohelp' in _flags:
+			if lenv['_CONFIGURE'] or lenv['HELP']:
+				env.Exit(0)
+
+		## To use kdDebug(intvalue)<<"some trace"<<endl; you need to define -DDEBUG
+		## it is done in admin/generic.py automatically when you do scons configure debug=1
 
 	# Attach the functions to the environment so that sconscripts can use them
 	from SCons.Script.SConscript import SConsEnvironment
@@ -859,13 +841,16 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	SConsEnvironment.KDEstaticlib = KDEstaticlib
 	SConsEnvironment.KDEinstall = KDEinstall
 	SConsEnvironment.KDEinstallas = KDEinstallas
-	SConsEnvironment.KDEdoc = KDEdoc
 	SConsEnvironment.KDElang = KDElang
 	SConsEnvironment.KDEicon = KDEicon
 
-	SConsEnvironment.KDEaddflags = KDEaddflags
+	SConsEnvironment.KDEaddflags_cxx = KDEaddflags_cxx
 	SConsEnvironment.KDEaddflags_c = KDEaddflags_c
-	SConsEnvironment.KDEaddldflags = KDEaddldflags
+	SConsEnvironment.KDEaddflags_link = KDEaddflags_link
 	SConsEnvironment.KDEaddlibs = KDEaddlibs
-	SConsEnvironment.KDEaddpaths = KDEaddpaths
+	SConsEnvironment.KDEaddpaths_includes = KDEaddpaths_includes
+	SConsEnvironment.KDEaddpaths_libs = KDEaddpaths_libs
+
+	SConsEnvironment.subdirs = subdirs
+	SConsEnvironment.KDEuse = KDEuse
 

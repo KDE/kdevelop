@@ -1,23 +1,92 @@
 #! /usr/bin/env python
-# SConscript for %{APPNAMELC} documentation
+## This script demonstrates to build and install
+## the documentation of a kde program with scons
+##
+## Thomas Nagy, 2005
 
-## use the environment set in the top-level
-## SConstruct file
+## This file can be reused freely for any project (see COPYING)
 
-Import('env')
+## First load the environment set in the top-level SConstruct file
+Import( 'env' )
 myenv=env.Copy()
-myenv['APPNAME'] = '%{APPNAMELC}'
 
-## Install targets
-##  * '%{APPNAMELC}' is the name of our app
-##  * 'en' are the initials of the language targetted
+## The following looks complicated but it is not
+## We first define a function to install all files as documentation
+## The documentation is of course lying in subfolders from here
+## * normal files are installed under KDEDOC/destination
+## * meinproc files are not installed, but processed into a single 
+##   index.cache.bz2 which is installed afterwards
 
-myenv.Meinproc( 'en/index.docbook' )
-myenv.KDEdoc( 'en', 'en/index.cache.bz2' )
-myenv.KDEdoc( 'en', 'en/index.docbook' )
-#myenv.KDEdoc( 'en', 'en/screenshot.png' )
+## This is far more maintainable to have *one* file than
+## having lots of almost empty SConscript in several folders
 
-#myenv.Meinproc( "fr/index.docbook" )
-#myenv.KDEdoc( 'fr', 'fr/index.cache.bz2' )
-#myenv.KDEdoc( 'fr', 'fr/index.docbook' )
-#myenv.KDEdoc( 'fr', 'fr/screenshot.png' )
+###################################################################
+# COMMON PART FOR PROCESSING DOCUMENTATION FOLDERS
+###################################################################
+
+import os
+import sys
+import glob
+import SCons.Util
+
+## Define this to 1 if you are writing documentation else to 0 :)
+i_am_a_documentation_writer = 0
+
+## This function uses env imported above
+def processfolder(folder, lang, destination=""):
+	# folder is the folder to process
+	# lang is the language
+	# destination is the subdirectory in KDEDOC
+	
+	docfiles = glob.glob(folder+"/???*.*") # file files that are at least 4 chars wide :)
+
+	# warn about errors
+	#if len(lang) != 2:
+	#	print "error, lang must be a two-letter string, like 'en'"
+
+	# when the destination is not given, use the folder
+	if len(destination) == 0:
+		destination=folder
+	
+	docbook_list = []
+	for file in docfiles:
+
+		# do not process folders
+		if not os.path.isfile(file):
+			continue
+		# do not process the cache file
+		if file == 'index.cache.bz2':
+			continue
+		# ignore invalid files (TODO??)
+		if len( SCons.Util.splitext( file ) ) <= 1 :
+			continue
+
+		ext = SCons.Util.splitext( file )[1]
+		
+		# docbook files are processed by meinproc
+		if ext == '.docbook':
+			docbook_list.append( file )
+			continue
+
+		myenv.KDEinstall('KDEDOC', lang+'/'+destination, file)
+
+	# Now process the index.docbook files ..
+	if len(docbook_list) == 0:
+		return
+	if not os.path.isfile( folder+'/index.docbook' ):
+		print "Error, index.docbook was not found in "+folder+'/index.docbook'
+		return
+	if i_am_a_documentation_writer:
+		for file in docbook_list:
+			myenv.Depends( folder+'index.cache.bz2', file )
+	myenv.Meinproc( folder+'/index.cache.bz2', folder+'/index.docbook' )
+	myenv.KDEinstall( 'KDEDOC', lang+'/'+destination, folder+'/index.cache.bz2' )
+
+###################################################################
+# TELL WHICH FOLDERS TO PROCESS
+###################################################################
+
+## Use processfolder for each documentation directory
+processfolder('en/', 'en', '%{APPNAMELC}')
+processfolder('fr/', 'fr', '%{APPNAMELC}')
+
