@@ -14,6 +14,8 @@
 
 class QString;
 
+class SnippetGroup;
+
 /**
 This class represents one CodeSnippet-Item in the listview.
 It also holds the needed data for one snippet.
