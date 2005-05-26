@@ -20,7 +20,6 @@ lexer.h
 parser.h
 tree_parser.h
 errors.h
-keywords.lut.h
 lookup.h )
 
 

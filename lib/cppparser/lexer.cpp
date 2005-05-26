@@ -19,7 +19,6 @@
 
 #include "lexer.h"
 #include "lookup.h"
-#include "keywords.lut.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -273,7 +272,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	int start = currentPosition();
 	readIdentifier();
 	QString ide = m_source.mid( start, currentPosition() - start );
-	int k = Lookup::find( &keyword, ide );
+	int k = Lookup::find( ide );
 	if( m_preprocessorEnabled && m_driver->hasMacro(ide) &&
 	    (k == -1 || !m_driver->macro(ide).body().isEmpty()) ){
 

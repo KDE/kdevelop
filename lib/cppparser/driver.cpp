@@ -347,6 +347,10 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "Q_VARIANT_AS", SkipWordAndArguments );
     lexer->addSkipWord( "CALLBACK_CALL_TYPE" );
 
+    // qt4 [erbsland]
+    lexer->addSkipWord( "Q_DECLARE_FLAGS", SkipWordAndArguments );
+    lexer->addSkipWord( "Q_DECLARE_OPERATORS_FOR_FLAGS", SkipWordAndArguments );
+    
     // flex
     lexer->addSkipWord( "yyconst" );
     lexer->addSkipWord( "YY_RULE_SETUP" );

@@ -83,6 +83,8 @@ QString nodeTypeToString( int type )
 	return "DoStatement";
     case NodeType_ForStatement:
 	return "ForStatement";
+    case NodeType_ForEachStatement: // qt4 [erbsland]
+	return "ForEachStatement";
     case NodeType_SwitchStatement:
 	return "SwitchStatement";
     case NodeType_CatchStatement:
@@ -898,6 +900,29 @@ void ForStatementAST::setStatement( StatementAST::Node& statement )
 }
 
 void ForStatementAST::setInitStatement( StatementAST::Node& initStatement )
+{
+    m_initStatement = initStatement;
+    if( m_initStatement.get() ) m_initStatement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+ForEachStatementAST::ForEachStatementAST()
+{
+}
+
+void ForEachStatementAST::setExpression( AST::Node& expression )
+{
+    m_expression = expression;
+    if( m_expression.get() ) m_expression->setParent( this );
+}
+
+void ForEachStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}
+
+void ForEachStatementAST::setInitStatement( StatementAST::Node& initStatement )
 {
     m_initStatement = initStatement;
     if( m_initStatement.get() ) m_initStatement->setParent( this );

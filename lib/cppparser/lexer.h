@@ -60,6 +60,7 @@ enum Type {
     Token_signals,
     Token_slots,
     Token_emit,
+    Token_foreach, // qt4 [erbsland]
 
     Token_and,
     Token_and_eq,

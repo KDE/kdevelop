@@ -1,3 +1,14 @@
+2005-05-26 Tobias Erbsland <te@profzone.ch>
+ * Replaced static hash table in lexer by a QMap
+   I found no performance impacts by this replacement, but the code
+   was getting much smaller and cleaner.
+ * Added Q_DECLARE_FLAGS and Q_DECLARE_OPERATORS_FOR_FLAGS macros
+   that are used in Qt4 for the special QFlags template.
+ * Added the keyword (macro) "foreach" to the lexer and parser that
+   is introduced by Qt4.
+   In a later step I will add the correct parsing, that the initial
+   variable is identified by the parser that code completion works.
+
 2005-04-05 Robert Gruber <rgruber@users.sourceforge.net>
  * Added support for CVS' annotate command
 

@@ -2411,6 +2411,9 @@ bool Parser::parseStatement( StatementAST::Node& node ) // thanks to fiore@8080.
     case Token_for:
 	return parseForStatement( node );
 
+    case Token_foreach:
+	return parseForEachStatement( node );
+    
     case Token_if:
 	return parseIfStatement( node );
 
@@ -2594,6 +2597,32 @@ bool Parser::parseForStatement( StatementAST::Node& node )
     ast->setInitStatement( init );
     ast->setCondition( cond );
     // ast->setExpression( expression );
+    ast->setStatement( body );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
+    return true;
+}
+
+// qt4 [erbsland]
+///@todo add the right parsing for the foreach statement
+bool Parser::parseForEachStatement( StatementAST::Node& node )
+{
+    int start = lex->index();
+
+    ADVANCE( Token_foreach, "foreach" );
+    ADVANCE( '(', "(" );
+    
+    AST::Node expr;
+    // replace with the right parsing
+    skipCommaExpression( expr );
+    ADVANCE( ')', ")" );
+
+    StatementAST::Node body;
+    parseStatement(body);
+
+    ForEachStatementAST::Node ast = CreateNode<ForEachStatementAST>();
+    // add here the parser results
     ast->setStatement( body );
     UPDATE_POS( ast, start, lex->index() );
     node = ast;

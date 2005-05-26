@@ -156,6 +156,7 @@ enum NodeType
     NodeType_WhileStatement,
     NodeType_DoStatement,
     NodeType_ForStatement,
+    NodeType_ForEachStatement, // qt4 [erbsland]
     NodeType_SwitchStatement,
 	NodeType_CatchStatement,
     NodeType_CatchStatementList,
@@ -1305,6 +1306,37 @@ private:
 private:
     ForStatementAST( const ForStatementAST& source );
     void operator = ( const ForStatementAST& source );
+};
+
+// qt4 [erbsland]
+class ForEachStatementAST: public StatementAST
+{
+public:
+    typedef AUTO_PTR<ForEachStatementAST> Node;
+    enum { Type = NodeType_ForEachStatement };
+
+    DECLARE_ALLOC( ForEachStatementAST )
+    
+public:
+    ForEachStatementAST();
+
+    StatementAST* initStatement() { return m_initStatement.get(); }
+    void setInitStatement( StatementAST::Node& statement );
+
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+    
+    AST* expression() const { return m_expression.get(); }
+    void setExpression( AST::Node& expression );
+
+private:
+    StatementAST::Node m_initStatement;
+    StatementAST::Node m_statement;
+    AST::Node m_expression;
+
+private:
+    ForEachStatementAST( const ForEachStatementAST& source );
+    void operator = ( const ForEachStatementAST& source );
 };
 
 class SwitchStatementAST: public StatementAST

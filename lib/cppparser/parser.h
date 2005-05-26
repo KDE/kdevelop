@@ -146,6 +146,7 @@ public /*rules*/ :
     bool parseWhileStatement( StatementAST::Node& node );
     bool parseDoStatement( StatementAST::Node& node );
     bool parseForStatement( StatementAST::Node& node );
+    bool parseForEachStatement( StatementAST::Node& node ); // qt4 [erbsland]
     bool parseCompoundStatement( StatementAST::Node& node );
     bool parseForInitStatement( StatementAST::Node& node );
     bool parseIfStatement( StatementAST::Node& node );
