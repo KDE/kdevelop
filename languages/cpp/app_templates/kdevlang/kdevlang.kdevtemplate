@@ -101,6 +101,7 @@ Type=message
 Comment=A language plugin for KDevelop for standalone build was created in %{dest}
 Comment[da]=Et sprog-plugin for KDevelop for alenestående bygning blev oprettet i %{dest}
 Comment[de]=Ein Sprachunterstützungs-Plugin für KDevelop (unabhängige Erstellung) wurde in %{dest} erstellt.
+Comment[et]=KDevelopi autonoomne keeleplugin loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KDevelopos nyelvtámogató modul (önálló lefordításra) itt: %{dest}
 Comment[it]=È stato creato un plugin di linguaggio per KDevelop per compilazione indipendente %{dest}
 Comment[nl]=Een taalplugin voor KDevelop voor standalone build is aangemaakt in %{dest}
