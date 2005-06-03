@@ -41,10 +41,10 @@
 #include <codemodel.h>
 #include <domutil.h>
 #include <kdevplugininfo.h>
+#include <kiconloader.h>
 
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
-#include "phpconfigparserwidget.h"
 #include "phpcodecompletion.h"
 #include "phpparser.h"
 #include "phpnewclassdlg.h"
@@ -53,6 +53,7 @@
 #include "phphtmlview.h"
 #include "phperrorview.h"
 
+#include "phpsupport_event.h"
 
 using namespace std;
 
@@ -63,9 +64,10 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
     : KDevLanguageSupport(&data, parent, name ? name : "PHPSupportPart")
 {
   m_htmlView=0;
+  m_parser=0;
   phpExeProc=0;
   setInstance(PHPSupportFactory::instance());
-
+  
   setXMLFile("kdevphpsupport.rc");
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
@@ -90,10 +92,10 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   action->setWhatsThis(i18n("<b>New class</b><p>Runs New Class wizard."));
 
   m_phpErrorView = new PHPErrorView(this);
+  m_phpErrorView->setIcon( SmallIcon("info") );
+
   QWhatsThis::add(m_phpErrorView, i18n("<b>PHP problems</b><p>This view shows PHP parser warnings, errors, and fatal errors."));
-  mainWindow()->embedOutputView(m_phpErrorView, i18n("PHP Problems"), i18n("PHP Problems"));
-  connect(m_phpErrorView,SIGNAL(fileSelected(const QString&,int)),
-	  this,SLOT(slotErrorMessageSelected(const QString&,int)));
+  mainWindow()->embedOutputView(m_phpErrorView, i18n("Problems"), i18n("Problems"));
 
   phpExeProc = new KShellProcess("/bin/sh");
   connect(phpExeProc, SIGNAL(receivedStdout (KProcess*, char*, int)),
@@ -102,9 +104,9 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 	  this, SLOT(slotReceivedPHPExeStderr (KProcess*, char*, int)));
   connect(phpExeProc, SIGNAL(processExited(KProcess*)),
 	  this, SLOT(slotPHPExeExited(KProcess*)));
-
+  
   m_htmlView = new PHPHTMLView(this);
-  mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"), "PHP");	// @fixme after stringfreeze - last argument should be i18n() 
+  mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"), i18n("PHP"));
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
@@ -112,7 +114,6 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   connect(configData,  SIGNAL(configStored()),
 	  this, SLOT(slotConfigStored()));
 
-  m_parser = new  PHPParser(core(),codeModel());
   m_codeCompletion = new  PHPCodeCompletion(configData, core(),codeModel());
 
   new KAction(i18n("Complete Text"), CTRL+Key_Space, m_codeCompletion, SLOT(cursorPositionChanged()),
@@ -120,12 +121,23 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(slotActivePartChanged(KParts::Part *)));
+   
+  connect(this, SIGNAL(fileParsed( PHPFile* )), this, SLOT(slotfileParsed( PHPFile* )));
 }
-
 
 PHPSupportPart::~PHPSupportPart()
 {
-    delete( m_parser );
+   if (m_parser) {
+      m_parser->terminate() ;
+      delete( m_parser );
+   }    
+
+    if(m_phpErrorView){
+      mainWindow()->removeView( m_phpErrorView );
+      delete( m_phpErrorView );
+      m_phpErrorView = 0;
+    }
+
     delete( m_codeCompletion );
     delete( configData );
 
@@ -136,12 +148,6 @@ PHPSupportPart::~PHPSupportPart()
     }
 
     delete( phpExeProc );
-
-    if(m_phpErrorView){
-      mainWindow()->removeView( m_phpErrorView );
-      //Seems, that removeView already frees the pointer, so we don't need to free it here
-      m_phpErrorView = 0;
-    }
 }
 
 void PHPSupportPart::slotActivePartChanged(KParts::Part *part){
@@ -160,35 +166,19 @@ void PHPSupportPart::slotActivePartChanged(KParts::Part *part){
 }
 
 void PHPSupportPart::slotTextChanged(){
-  kdDebug(9018) << "enter text changed" << endl;
+   kdDebug(9018) << "enter text changed" << endl;
+   
+   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+   if (!ro_part)
+      return;
 
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
-  if (!ro_part)
-    return;
+   QString fileName = ro_part->url().directory() + "/" + ro_part->url().fileName();
 
-  QString fileName = ro_part->url().directory() + "/" + ro_part->url().fileName();
-  kdDebug(9018) << "filename:" << fileName << endl;
-  int numLines = m_editInterface->numLines();
+   if (m_parser) {
+      if (m_parser->hasFile( fileName ))
+         m_parser->reparseFile( fileName );
+   }
 
-  //Abort if the file which was changed is not part of the project
-  if (!project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
-    kdDebug(9018) << "Not Parsing file " << fileName << ", file is not part of the project" << endl;
-    return;
-  }
-
-  QStringList lines;
-  for(int i=0;i<numLines;i++){
-    lines.append(m_editInterface->textLine(i));
-  }
-
-  if( codeModel()->hasFile(fileName) ){
-      emit aboutToRemoveSourceInfo( fileName );
-      codeModel()->removeFile( codeModel()->fileByName(fileName) );
-  }
-  m_parser->parseLines(&lines,fileName);
-
-  emit addedSourceInfo( fileName );
-  kdDebug(9018) << "exit text changed" << endl;
 }
 
 void PHPSupportPart::slotConfigStored(){
@@ -196,19 +186,10 @@ void PHPSupportPart::slotConfigStored(){
   slotActivePartChanged(partController()->activePart());
 }
 
-
-void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
-  kdDebug(9018) << endl << "slotWebResult()" << filename.latin1() << line;
-  partController()->editDocument(KURL( filename ),line);
-}
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
-  QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));
+  QVBox *vbox = dlg->addVBoxPage(i18n( "PHP Specific" ), i18n("PHP Settings"), BarIcon( "source", KIcon::SizeMedium ));
   PHPConfigWidget* w = new PHPConfigWidget(configData,vbox, "php config widget");
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-
-  vbox = dlg->addVBoxPage(i18n("PHP Parser"));
-  PHPConfigParserWidget* wp = new PHPConfigParserWidget(configData,vbox, "php parser config widget");
-  connect( dlg, SIGNAL(okClicked()), wp, SLOT(accept()) );
 }
 
 void PHPSupportPart::slotNewClass(){
@@ -257,18 +238,8 @@ void PHPSupportPart::executeOnWebserver(){
        return; //user cancelled
   
   // Figure out the name of the remote file
-  QString file;
-  PHPConfigData::WebFileMode mode = configData->getWebFileMode();
   QString weburl = configData->getWebURL();
-  if(mode == PHPConfigData::Current){
-    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
-    if(ro_part){
-      file = QFileInfo(ro_part->url().url()).fileName();
-    }
-  }
-  if(mode == PHPConfigData::Default){
-    file = configData->getWebDefaultFile();
-  }
+  QString file = getExecuteFile();
   
   // Force KHTMLPart to reload the page
   KParts::BrowserExtension* be = m_htmlView->browserExtension();
@@ -283,6 +254,23 @@ void PHPSupportPart::executeOnWebserver(){
   m_htmlView->openURL(KURL(weburl + file));
   m_htmlView->show();
 }
+
+QString PHPSupportPart::getExecuteFile() {
+   QString file;
+   PHPConfigData::StartupFileMode mode = configData->getStartupFileMode();
+  
+   QString weburl = configData->getWebURL();
+   if (mode == PHPConfigData::Current) {
+      KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+      if (ro_part) {
+         file = QFileInfo(ro_part->url().url()).fileName();
+      }
+   }
+   if (mode == PHPConfigData::Default) {
+      file = configData->getStartupFile();
+   }
+   return file;
+ }
 
 void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
   if (job && job->className() == QString("KIO::TransferJob")){
@@ -302,21 +290,28 @@ void PHPSupportPart::slotWebData(KIO::Job* /*job*/,const QByteArray& data){
 }
 
 void PHPSupportPart::slotWebResult(KIO::Job* /*job*/){
-  kdDebug(9018) << "slotWebResult()" << endl;
-  m_phpErrorView->parse(m_phpExeOutput);
+   kdDebug(9018) << "slotWebResult()" << endl;
+   QString file = getExecuteFile();
+   PHPFile *pfile = new PHPFile(this, file);
+   pfile->ParseStdout(m_phpExeOutput);
+   KApplication::postEvent( this, new FileParsedEvent(file, pfile->getActions()) );
+   delete pfile;
 }
 
 void PHPSupportPart::executeInTerminal(){
   kdDebug(9018) << "slotExecuteInTerminal()" << endl;
 
   // Save all files once
-  partController()->saveAllFiles();
+  if (partController()->saveAllFiles()==false)
+       return; //user cancelled
       
-  QString file;
-  if(m_htmlView==0){
+  QString file = getExecuteFile();
+  
+  if(m_htmlView == 0) {
     m_htmlView = new PHPHTMLView(this);
     mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
   }
+  
   m_htmlView->show();
   m_htmlView->begin();
 
@@ -325,36 +320,41 @@ void PHPSupportPart::executeInTerminal(){
   *phpExeProc << configData->getPHPExecPath();
   *phpExeProc << "-f";
 
-
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
-  if(ro_part){
-    file = ro_part->url().path();
-  }
-
   *phpExeProc << KShellProcess::quote(file);
   kdDebug(9018) << "" << file.latin1() << endl;
   phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
 
-
-
   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
 }
+
 void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* /*proc*/, char* buffer, int buflen){
   kdDebug(9018) << "slotPHPExeStdout()" << endl;
-  m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QString::fromLocal8Bit(buffer,buflen+1);
+
+   QString buf = buffer;
+   if(configData->getInvocationMode() == PHPConfigData::Shell)
+     buf.replace("\n", "<br>");
+    m_htmlView->write(buf);
 }
 
 void PHPSupportPart::slotReceivedPHPExeStderr (KProcess* /*proc*/, char* buffer, int buflen){
   kdDebug(9018) << "slotPHPExeStderr()" << endl;
-  m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QString::fromLocal8Bit(buffer,buflen+1);
+
+   QString buf = buffer;
+   if(configData->getInvocationMode() == PHPConfigData::Shell)
+     buf.replace("\n", "<br>");
+    m_htmlView->write(buf);
 }
 
 void PHPSupportPart::slotPHPExeExited (KProcess* /*proc*/){
-  kdDebug(9018) << "slotPHPExeExited()" << endl;
-  m_htmlView->end();
-  m_phpErrorView->parse(m_phpExeOutput);
+   kdDebug(9018) << "slotPHPExeExited()" << endl;
+   m_htmlView->end();
+   QString file = getExecuteFile();
+   PHPFile *pfile = new PHPFile(this, file);
+   pfile->ParseStdout(m_phpExeOutput);
+   KApplication::postEvent( this, new FileParsedEvent(file, pfile->getActions()) );
+   delete pfile;
 }
 
 void PHPSupportPart::projectOpened()
@@ -366,6 +366,11 @@ void PHPSupportPart::projectOpened()
     connect( project(), SIGNAL(removedFilesFromProject(const QStringList &)),
              this, SLOT(removedFilesFromProject(const QStringList &)) );
 
+    if (!m_parser) {
+       m_parser = new  PHPParser( this );
+       m_parser->start();
+    }
+
     // We want to parse only after all components have been
     // properly initialized
     QTimer::singleShot(0, this, SLOT(initialParse()));
@@ -374,32 +379,18 @@ void PHPSupportPart::projectOpened()
 
 void PHPSupportPart::projectClosed()
 {
+   kdDebug(9018) << "projectClosed()" << endl;
+   if (m_parser) {
+      m_parser->close() ;
+      delete( m_parser );
+      m_parser = 0;
+   }   
 }
-
-
-void PHPSupportPart::maybeParse(const QString fileName)
-{
-  //    kdDebug(9007) << "maybeParse()" << endl;
-    QFileInfo fi(fileName);
-    QString path = fi.filePath();
-    if ((fi.extension().contains("inc") || fi.extension().contains("php")
-	|| fi.extension().contains("html")
-	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
-      kdDebug(9018) << "remove and parse" << fileName.latin1() << endl;
-        if( codeModel()->hasFile(fileName) ){
-	    emit aboutToRemoveSourceInfo( fileName );
-	    codeModel()->removeFile( codeModel()->fileByName(fileName) );
-	}
-        m_parser->parseFile(fileName);
-    }
-}
-
 
 void PHPSupportPart::initialParse(){
   kdDebug(9018) << "initialParse()" << endl;
 
   if (project()) {
-    kdDebug(9018) << "project" << endl;
     kapp->setOverrideCursor(waitCursor);
     QStringList files = project()->allFiles();
     int n = 0;
@@ -408,13 +399,12 @@ void PHPSupportPart::initialParse(){
     bar->setCenterIndicator(true);
     mainWindow()->statusBar()->addWidget(bar);
     bar->show();
-
-    for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
+   for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it ) {
       QFileInfo fileInfo( project()->projectDirectory(), *it );
-      kdDebug(9018) << "maybe parse " << fileInfo.absFilePath() << endl;
       bar->setProgress(n);
       kapp->processEvents();
-      maybeParse( fileInfo.absFilePath() );
+      if (m_parser)
+         m_parser->addFile( fileInfo.filePath() );
       ++n;
     }
     mainWindow()->statusBar()->removeWidget(bar);
@@ -424,8 +414,9 @@ void PHPSupportPart::initialParse(){
   } else {
     kdDebug(9018) << "No project" << endl;
   }
+  if (m_parser)
+     m_parser->startParse();
 }
-
 
 void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 {
@@ -436,13 +427,14 @@ void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		QFileInfo fileInfo( project()->projectDirectory(), *it );
-		maybeParse( fileInfo.absFilePath() );
-		emit addedSourceInfo( fileInfo.absFilePath() );
+      if (m_parser) {
+         m_parser->addFile( fileInfo.absFilePath() );
+         emit addedSourceInfo( fileInfo.absFilePath() );
+      }
 	}
 
     //emit updatedSourceInfo();
 }
-
 
 void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
@@ -463,17 +455,26 @@ void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
     //emit updatedSourceInfo();
 }
 
-
 void PHPSupportPart::savedFile(const KURL &fileName)
 {
-    kdDebug(9018) << "savedFile()" << endl;
+    kdDebug(9018) << "savedFile()" << fileName.fileName() << endl;
 
-    if (project()->allFiles().contains(fileName.path().mid ( project()->projectDirectory().length() + 1 ))) {
-        maybeParse(fileName.path());
-        emit addedSourceInfo( fileName.path() );
+    if (m_parser) {
+       if (m_parser->hasFile( fileName.path() )) {
+          m_parser->reparseFile( fileName.path() );
+       }
     }
 }
 
+QString PHPSupportPart::getIncludePath()
+{
+  return configData->getPHPIncludePath();
+}
+
+QString PHPSupportPart::getExePath()
+{
+  return configData->getPHPExecPath();
+}
 
 KDevLanguageSupport::Features PHPSupportPart::features()
 {
@@ -491,6 +492,132 @@ KMimeType::List PHPSupportPart::mimeTypes( )
     if( mime )
 	list << mime;
     return list;
+}
+
+void PHPSupportPart::customEvent( QCustomEvent* ev )
+{
+   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ")" << endl;
+
+   if ( ev->type() == int(Event_FileParsed) ){
+      FileParsedEvent* event = (FileParsedEvent*) ev;
+      
+      QString fileName = event->fileName();
+         
+      // ClassView work with absolute path not links
+      QString abso = URLUtil::canonicalPath(fileName);
+
+      if (codeModel()->hasFile( abso )) {
+         emit aboutToRemoveSourceInfo( abso );
+         codeModel()->removeFile( codeModel()->fileByName(abso) );
+         emit removedSourceInfo( abso );
+      }
+      
+      FileDom m_file = codeModel()->fileByName(abso);
+      if (!m_file) {
+         m_file = codeModel()->create<FileModel>();
+         m_file->setName( abso );
+         codeModel()->addFile( m_file );
+      }
+
+      m_phpErrorView->removeAllProblems( abso );
+
+      NamespaceDom ns = codeModel()->globalNamespace();
+      
+      ClassDom nClass = 0;
+      FunctionDom nMethod = 0;
+      ArgumentDom nArgument = 0;
+      VariableDom nVariable = 0;
+      QString arguments;
+
+            
+      QValueList<Action> actions = event->actions();
+      QValueList<Action>::ConstIterator it = actions.begin();
+      while( it != actions.end() ){
+         const Action& p = *it++;
+         switch (p.level()) {
+            case Action::Level_Class:
+            nClass = codeModel()->create<ClassModel>();
+            nClass->setFileName(abso);
+            nClass->setName(p.text());
+            nClass->setStartPosition(p.line(), 0);
+            m_file->addClass(nClass);
+            if (!p.args().isEmpty())
+               nClass->addBaseClass(p.args());
+
+            ns->addClass(nClass);
+            break;
+            
+            case Action::Level_Var:
+            nVariable  = codeModel()->create<VariableModel>();
+            nVariable->setFileName(abso);
+            nVariable->setName(p.text());
+            nVariable->setStartPosition( p.line(), 0 );
+            nClass->addVariable( nVariable );
+            break;
+            
+            case Action::Level_VarType:
+            if (p.column() == true) {
+               QString varname = p.text();
+               
+               if ( !nClass->hasVariable(varname) ) {
+                  nVariable  = codeModel()->create<VariableModel>();
+                  nVariable->setFileName(abso);
+                  nVariable->setName(varname);
+                  nVariable->setStartPosition( p.line(), 0 );
+                  nClass->addVariable( nVariable );
+               }
+               
+               if ( !nClass->hasVariable(varname) ) {
+                  break;
+               }
+               
+               nClass->variableByName(varname)->setType( p.args() );
+            }
+            break;
+            
+            case Action::Level_Method:
+            nMethod = codeModel()->create<FunctionModel>();
+            nMethod->setFileName( abso );
+            nMethod->setName(p.text());
+            nMethod->setStartPosition( p.line(), 0 );
+            if (p.column() == true) {
+               nClass->addFunction(nMethod);
+            } else {
+               m_file->addFunction(nMethod);
+            
+               if (ns->hasFunction(p.text()))
+                  ns->removeFunction(ns->functionByName(p.text())[0]);
+               
+               ns->addFunction(nMethod);
+            }
+            
+            nArgument = codeModel()->create<ArgumentModel>();
+            arguments = p.args();
+            nArgument->setType(arguments.stripWhiteSpace().local8Bit());
+            nMethod->addArgument( nArgument );
+            break;
+            
+            case Action::Level_Include:
+            m_parser->addFile( p.text() );
+            break;
+            
+            case Action::Level_ErrorNoSuchFunction:
+            case Action::Level_ErrorParse:
+            case Action::Level_Error:
+            m_phpErrorView->reportProblem( abso, p.line(), p.level(), p.args() );
+            break;
+            
+            case Action::Level_Fixme:
+            case Action::Level_Todo:
+            m_phpErrorView->reportProblem( abso, p.line(), p.level(), p.text() );
+            break;
+         }
+         
+         emit addedSourceInfo( abso );
+
+      }
+     
+    }
 }
 
 #include "phpsupportpart.moc"

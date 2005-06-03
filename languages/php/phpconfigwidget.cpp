@@ -1,6 +1,7 @@
 #include "domutil.h"
 #include <kprocess.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 #include <qmultilineedit.h>
 #include <qcstring.h>
 #include <iostream>
@@ -20,8 +21,8 @@ PHPConfigWidget::PHPConfigWidget(PHPConfigData* data,QWidget* parent,  const cha
   m_phpInfo="";
  
   PHPConfigData::InvocationMode mode = configData->getInvocationMode();
+  
   // page "Invocation"
-
   if(mode == PHPConfigData::Shell){
     callPHPDirectly_radio->setChecked(true);
   }
@@ -31,25 +32,35 @@ PHPConfigWidget::PHPConfigWidget(PHPConfigData* data,QWidget* parent,  const cha
   
   // page webserver
   QString weburl = configData->getWebURL();
-  PHPConfigData::WebFileMode webFileMode = configData->getWebFileMode();
-  QString webDefaultFile = configData->getWebDefaultFile();
-  
   if(weburl.isEmpty()) weburl = "http://localhost/"; 
-  weburl_edit->setText(weburl);
-  useDefaultFile_edit->setText(webDefaultFile);
+   weburl_edit->setText(weburl);
   
-  if(webFileMode == PHPConfigData::Current){
-    useCurrentFile_radio->setChecked(true);
-  }
-  if(webFileMode == PHPConfigData::Default){
-    useDefaultFile_radio->setChecked(true);
-  }
  
   // page shell
   /// @todo check were the php.exe is located
   QString exepath = configData->getPHPExecPath();
   if(exepath.isEmpty()) exepath = "/usr/local/bin/php"; 
   exe_edit->setText(exepath);
+
+  // page options
+  PHPConfigData::StartupFileMode phpStartupFileMode = configData->getStartupFileMode();
+  QString phpStartupFile = configData->getStartupFile();
+
+  useDefaultFile_edit->setText(phpStartupFile);
+  
+  if(phpStartupFileMode == PHPConfigData::Current){
+    useCurrentFile_radio->setChecked(true);
+  }
+  if(phpStartupFileMode == PHPConfigData::Default){
+    useDefaultFile_radio->setChecked(true);
+  }
+  
+  QString includepath = configData->getPHPIncludePath();
+  include_path_edit->setText(includepath);
+  
+  codeCompletion_checkbox->setChecked(configData->getCodeCompletion());
+  codeHinting_checkbox->setChecked(configData->getCodeHinting());
+  realtimeParsing_checkbox->setChecked(configData->getRealtimeParsing());
 }
 
 /*  
@@ -73,18 +84,25 @@ void PHPConfigWidget::accept()
 
   // webserver
   configData->setWebURL(weburl_edit->text());  
-  configData->setWebDefaultFile(useDefaultFile_edit->text());  
-  
-  if(useCurrentFile_radio->isChecked()){
-    configData->setWebFileMode(PHPConfigData::Current);
-  }
-  if(useDefaultFile_radio->isChecked()){
-    configData->setWebFileMode(PHPConfigData::Default);
-  }
   
   // shell
   configData->setPHPExePath(exe_edit->text());  
 
+  // options
+  configData->setStartupFile(useDefaultFile_edit->text());
+  
+  if(useCurrentFile_radio->isChecked()){
+    configData->setStartupFileMode(PHPConfigData::Current);
+  }
+  if(useDefaultFile_radio->isChecked()){
+    configData->setStartupFileMode(PHPConfigData::Default);
+  }
+  
+  configData->setPHPIncludePath(include_path_edit->text());
+  configData->setCodeCompletion(codeCompletion_checkbox->isChecked());
+  configData->setCodeHinting(codeHinting_checkbox->isChecked());
+  configData->setRealtimeParsing(realtimeParsing_checkbox->isChecked());
+  
   configData->storeConfig();
     
 }

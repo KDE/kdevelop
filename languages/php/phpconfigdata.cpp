@@ -26,11 +26,13 @@ PHPConfigData::PHPConfigData(QDomDocument* dom){
   invocationMode = (InvocationMode) DomUtil::readIntEntry(*dom, "/kdevphpsupport/general/invocationMode");
 
   webURL = DomUtil::readEntry(*document, "/kdevphpsupport/webInvocation/weburl");
-  webFileMode = (WebFileMode)DomUtil::readIntEntry(*document, "/kdevphpsupport/webInvocation/webFileMode");
-  webDefaultFile = DomUtil::readEntry(*document, "/kdevphpsupport/webInvocation/defaultFile");
 
-  phpExePath = DomUtil::readEntry(*document, "/kdevphpsupport/shell/phpexe");  
+  phpExePath = DomUtil::readEntry(*document, "/kdevphpsupport/shell/phpexe"); 
   
+  phpIncludePath = DomUtil::readEntry(*document, "/kdevphpsupport/options/phpincludepath");
+  phpStartupFile = DomUtil::readEntry(*document, "/kdevphpsupport/options/defaultFile");
+  phpStartupFileMode = (StartupFileMode)DomUtil::readIntEntry(*document, "/kdevphpsupport/options/startupFileMode");
+
   m_codeCompletion = DomUtil::readBoolEntry(*document,"kdevphpsupport/codeHelp/codeCompletion");
   m_codeHinting = DomUtil::readBoolEntry(*document,"kdevphpsupport/codeHelp/codeHinting");;
   m_realtimeParsing = DomUtil::readBoolEntry(*document,"kdevphpsupport/codeHelp/realtimeParsing");
@@ -43,10 +45,13 @@ void PHPConfigData::storeConfig(){
   DomUtil::writeIntEntry(*document, "/kdevphpsupport/general/invocationMode",(int) invocationMode);
 
   DomUtil::writeEntry(*document, "/kdevphpsupport/webInvocation/weburl",webURL);
-  DomUtil::writeIntEntry(*document, "/kdevphpsupport/webInvocation/webFileMode",(int) webFileMode);
-  DomUtil::writeEntry(*document, "/kdevphpsupport/webInvocation/defaultFile",webDefaultFile);
 
-  DomUtil::writeEntry(*document, "/kdevphpsupport/shell/phpexe",phpExePath);  
+  DomUtil::writeEntry(*document, "/kdevphpsupport/shell/phpexe",phpExePath);
+  
+  DomUtil::writeEntry(*document, "/kdevphpsupport/options/phpincludepath",phpIncludePath);
+  DomUtil::writeEntry(*document, "/kdevphpsupport/options/defaultFile",phpStartupFile);
+  DomUtil::writeIntEntry(*document, "/kdevphpsupport/options/startupFileMode",(int) phpStartupFileMode);
+
   DomUtil::writeBoolEntry(*document,"kdevphpsupport/codeHelp/codeCompletion",m_codeCompletion);
   DomUtil::writeBoolEntry(*document,"kdevphpsupport/codeHelp/codeHinting",m_codeHinting);
   DomUtil::writeBoolEntry(*document,"kdevphpsupport/codeHelp/realtimeParsing",m_realtimeParsing);
@@ -61,7 +66,7 @@ bool PHPConfigData::validateConfig(){
   }
   if(valid){
     if(invocationMode == Web){
-      if(!(!webURL.isEmpty() && (webFileMode == Default || webFileMode == Current))){
+      if(!(!webURL.isEmpty() && (phpStartupFileMode == Default || phpStartupFileMode == Current))){
 	valid = false;
       }
     }

@@ -74,6 +74,8 @@ protected slots:
   QString searchCurrentClassName();
   QString searchClassNameForVariable(QString varName);
   bool doGlobalMethodCompletion(QString methodStart);
+  void PHPCodeCompletion::setStatusBar();
+  
  private:
   int m_currentLine;
   QValueList<FunctionCompletionEntry> m_globalFunctions;

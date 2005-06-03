@@ -401,7 +401,7 @@ bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
   QValueList<KTextEditor::CompletionEntry> list;
   QValueList<FunctionCompletionEntry>::Iterator it;
   for( it = m_globalFunctions.begin(); it != m_globalFunctions.end(); ++it ){
-    if((*it).text.startsWith(methodStart)){
+    if((*it).text.startsWith(methodStart, FALSE)){
       KTextEditor::CompletionEntry e;
       e = (*it);
       list.append(e);
@@ -411,7 +411,7 @@ bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
   FunctionList methodList = m_model->globalNamespace()->functionList();
   FunctionList::Iterator methodIt;
   for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
-    if ((*methodIt)->name().startsWith(methodStart)){
+    if ((*methodIt)->name().startsWith(methodStart, FALSE)){
       KTextEditor::CompletionEntry e;
       e.text = (*methodIt)->name();
       e.postfix ="()";
@@ -469,7 +469,9 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
 bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/){
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
-  QRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)");
+  QRegExp newre("=[ \t]*&[ \t]*new[ \t]+([A-Za-z_]+)");
+  QStringList added;
+  
   if(newre.search(start.local8Bit()) != -1){
     QString classStart = newre.cap(1);
     if(start.right(2) == classStart){
@@ -478,10 +480,16 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/
       ClassList classList = m_model->globalNamespace()->classList();
       ClassList::Iterator classIt;
       for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
-	if((*classIt)->name().startsWith(classStart)){
+	if((*classIt)->name().startsWith(classStart, FALSE)){
 	  KTextEditor::CompletionEntry e;
-	  e.text = (*classIt)->name();
+     
+   QString name = (*classIt)->name();
+   QStringList::Iterator it = added.find(name);
+   if (it == added.end())  {
+	  e.text = name;
 	  list.append(e);
+      added.append(name);
+   }
 	}
       }
       if(classStart == "ob") {
@@ -507,20 +515,27 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/
 QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariables(QString className){
   QValueList<KTextEditor::CompletionEntry> list;
   ClassDom pClass;
+      kdDebug(9018)  << "getClassMethodsAndVariables:" << className << ":" << endl;
+      
   do {
     if(m_model->globalNamespace()->hasClass(className) ){
+    kdDebug(9018)  << "hasClass:" << className << ":" << endl;
       pClass = m_model->globalNamespace()->classByName(className)[ 0 ];
       FunctionList methodList = pClass->functionList();
       FunctionList::Iterator methodIt;
       for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
 	KTextEditor::CompletionEntry e;
-	e.text = (*methodIt)->name();
-	//	ParsedArgument* pArg = pMethod->arguments.first();
+   FunctionDom pMethod = (*methodIt);  
+	e.text = pMethod->name();
+   
+   kdDebug(9018)  << "methode:" << e.text << ":" << endl;
+	
+   //	ParsedArgument* pArg = pMethod->arguments.first();
 	//	if(pArg->type() == ""){
-	e.postfix ="()";
-	//	}else{
-	//      e.postfix ="(...)";
-	//	}
+   ArgumentDom arg = pMethod->argumentList().first();
+
+   e.postfix = "(" + arg->type() + ")";
+	
 	list.append(e);
       }
       VariableList attrList = pClass->variableList();
@@ -546,5 +561,9 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVa
   } while (pClass != 0);
   return list;
 }
+
+void PHPCodeCompletion::setStatusBar() {
+//   m_phpSupport->mainWindow()->statusBar()->message( i18n("Type of %1 is %2").arg(expr).arg(type.join("::")), 1000 );
+}   
 
 #include "phpcodecompletion.moc"

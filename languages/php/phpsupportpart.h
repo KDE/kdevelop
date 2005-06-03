@@ -27,6 +27,7 @@ class PHPErrorView;
 class PHPConfigData;
 class PHPCodeCompletion;
 class PHPParser;
+class PHPFile;
 
 class PHPSupportPart : public KDevLanguageSupport
 {
@@ -36,6 +37,12 @@ public:
     PHPSupportPart( QObject *parent, const char *name, const QStringList & );
     ~PHPSupportPart();
 
+    QString getIncludePath();
+    QString getExePath();
+    
+    void emitFileParsed( PHPFile *file );
+    virtual void customEvent( QCustomEvent* ev );
+    
 protected:
     virtual Features features();
     virtual KMimeType::List mimeTypes();
@@ -52,7 +59,6 @@ private slots:
     void slotReceivedPHPExeStderr (KProcess* proc, char* buffer, int buflen);
     void slotReceivedPHPExeStdout (KProcess* proc, char* buffer, int buflen);
     void slotPHPExeExited (KProcess* proc);
-    void slotErrorMessageSelected(const QString&filename,int line);
     void slotWebData(KIO::Job* job,const QByteArray& data);
     void slotWebResult(KIO::Job* job);
     void slotWebJobStarted(KIO::Job* job);
@@ -67,7 +73,7 @@ private slots:
     void slotConfigStored();
 
 private:
-    void maybeParse(const QString fileName);
+    QString getExecuteFile();
     void executeOnWebserver();
     void executeInTerminal();
     bool validateConfig();

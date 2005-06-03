@@ -33,7 +33,7 @@ Q_OBJECT
 
 public: 
   enum InvocationMode {Web=1,Shell=2};
-  enum WebFileMode {Current=1,Default=2};
+  enum StartupFileMode {Current=1,Default=2};
   
   
   PHPConfigData(QDomDocument* document);
@@ -55,25 +55,13 @@ public:
   }
   
   // web
-  WebFileMode getWebFileMode(){
-    return webFileMode;
-  }
   QString getWebURL(){
     return webURL;
-  }
-  QString getWebDefaultFile(){
-    return webDefaultFile;
-  }
-  void setWebFileMode(WebFileMode mode){
-    webFileMode = mode;
   }
   void setWebURL(QString weburl){
     webURL = weburl;
   }
-  void setWebDefaultFile(QString defaultFile){
-    webDefaultFile = defaultFile;
-  }
-  
+
   // shell
   QString getPHPExecPath(){
     return phpExePath;
@@ -82,6 +70,28 @@ public:
     phpExePath = path;
   }
 
+  // options
+  QString getPHPIncludePath(){
+    return phpIncludePath;
+  }
+  void setPHPIncludePath(QString path){
+    phpIncludePath = path;
+  }
+
+  QString getStartupFile(){
+    return phpStartupFile;
+  }
+  void setStartupFile(QString defaultFile){
+    phpStartupFile = defaultFile;
+  }
+
+  StartupFileMode getStartupFileMode(){
+    return phpStartupFileMode;
+  }
+  void setStartupFileMode(StartupFileMode mode){
+    phpStartupFileMode = mode;
+  }
+    
   // code help
   void setCodeCompletion(bool enable){
     m_codeCompletion = enable; 
@@ -107,13 +117,17 @@ public:
   QDomDocument* document;
   InvocationMode invocationMode;
   // web
-  WebFileMode webFileMode;
   QString webURL;
-  QString webDefaultFile;
   
   // shell
   QString phpExePath;
+  QString phpStartupFile;
   
+  // options
+  QString phpIncludePath;
+  QString phpDefaultFile;
+  StartupFileMode phpStartupFileMode;
+
   // code help
   bool m_codeCompletion;
   bool m_codeHinting;
