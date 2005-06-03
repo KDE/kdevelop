@@ -40,7 +40,9 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   setXMLFile("kdevrubysupport.rc");
 
   KAction *action;
-  action = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
+  action = new KAction( i18n("&Run"), "exec", SHIFT + Key_F9,
+                        this, SLOT(slotRun()),
+                        actionCollection(), "build_execute" );
   action->setToolTip(i18n("Run"));
   action->setWhatsThis(i18n("<b>Run</b><p>Starts an application."));
   action->setIcon("ruby_run.png");
@@ -444,15 +446,19 @@ void RubySupportPart::parse(const QString &fileName)
 }
 
 
-void RubySupportPart::slotRun () {
-	QFileInfo program(mainProgram());
+void RubySupportPart::slotRun ()
+{
+    // if we can't save all parts, then the user canceled
+    if ( partController()->saveAllFiles() == false )
+        return;
+    QFileInfo program(mainProgram());
     QString cmd = QString("%1 -K%2 -C%3 -I%4 %5 %6")
-	                      .arg(interpreter())
-						  .arg(characterCoding())
-						  .arg(program.dirPath())
-						  .arg(program.dirPath())
-						  .arg(program.fileName())
-						  .arg(programArgs());
+                      .arg(interpreter())
+                      .arg(characterCoding())
+                      .arg(program.dirPath())
+                      .arg(program.dirPath())
+                      .arg(program.fileName())
+                      .arg(programArgs());
     startApplication(cmd);
 }
 
