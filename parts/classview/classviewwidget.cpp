@@ -166,15 +166,13 @@ void ClassViewWidget::slotProjectClosed( )
 void ClassViewWidget::insertFile( const QString& fileName )
 {
     QString fn = URLUtil::canonicalPath( fileName );
-    if( !m_part->project()->isProjectFile(fn) )
-	return;
     //kdDebug() << "======================== insertFile(" << fn << ")" << endl;
 
     FileDom dom = m_part->codeModel()->fileByName( fn );
     if( !dom )
 	return;
 
-    fn = m_part->project()->relativeProjectFile( fn );
+    fn = URLUtil::relativePathToFile(m_part->project()->projectDirectory(), fn);
     QStringList path;
 
     switch( viewMode() )
@@ -209,15 +207,13 @@ void ClassViewWidget::insertFile( const QString& fileName )
 void ClassViewWidget::removeFile( const QString& fileName )
 {
     QString fn = URLUtil::canonicalPath( fileName );
-    if( !m_part->project()->isProjectFile(fn) )
-	return;
     //kdDebug() << "======================== removeFile(" << fn << ")" << endl;
 
     FileDom dom = m_part->codeModel()->fileByName( fn );
     if( !dom )
 	return;
 
-    fn = m_part->project()->relativeProjectFile( fn );
+    fn = URLUtil::relativePathToFile(m_part->project()->projectDirectory(), fn);
     QStringList path;
 
     switch( viewMode() )
