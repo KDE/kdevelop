@@ -16,8 +16,14 @@ INCLUDE(FindQt)
 
 #add the definitions found by FindQt to the current definitions
 ADD_DEFINITIONS(${QT_DEFINITIONS})
-#add some KDe specific stuff
-ADD_DEFINITIONS(-Wnon-virtual-dtor -Wno-long-long -Wundef -ansi -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -Wcast-align -Wconversion -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -O2 -Wformat-security -Wmissing-format-attribute -fno-exceptions -fno-check-new -fno-common)
+
+#add some KDE specific stuff
+ADD_DEFINITIONS(-Wnon-virtual-dtor -Wno-long-long -Wundef -ansi -Wcast-align -Wconversion -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -O2 -Wformat-security -Wmissing-format-attribute -fno-exceptions -fno-check-new -fno-common)
+#only on linux:
+IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  ADD_DEFINITIONS(-D_XOPEN_SOURCE=500 -D_BSD_SOURCE)
+ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+
 
 #SET(CMAKE_SHARED_LINKER_FLAGS "-avoid-version -module -Wl,--no-undefined -Wl,--allow-shlib-undefined")
 SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -avoid-version -Wl,--no-undefined")
