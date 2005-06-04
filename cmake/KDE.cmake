@@ -41,6 +41,8 @@ FIND_PATH(KDE_LIB_DIR libkdecore.so
   $ENV{KDEDIR}/lib
   /opt/kde/lib
   /opt/kde3/lib
+  /usr/lib
+  /usr/local/lib
 )
 
 #now the KDE service types directory
