@@ -6,20 +6,18 @@ SET(kdevphpsupport_PART_SRCS
 phpsupportpart.cpp
 phpconfigwidget.cpp
 phphtmlview.cpp
-phpconfigparserwidget.cpp
 phperrorview.cpp
 phpconfigdata.cpp
 phpcodecompletion.cpp
 phpparser.cpp
 phpnewclassdlg.cpp
+phpfile.cpp
 )
 
 SET( kdevphpsupport_UI
 phpconfigwidgetbase.ui
-phpconfigparserwidgetbase.ui
-phpinfodlg.ui
-phpnewclassdlgbase.ui
-)
+phpinfodlg.ui 
+phpnewclassdlgbase.ui )
 
 KDE_AUTOMOC(${kdevphpsupport_PART_SRCS})
 

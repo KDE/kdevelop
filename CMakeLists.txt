@@ -1,6 +1,7 @@
 PROJECT(kdevelop)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/cmake/KDE.cmake)
+
 INCLUDE(${CMAKE_SOURCE_DIR}/cmake/KDEMacros.cmake)
 
 SET(CMAKE_SKIP_RULE_DEPENDENCY 1)

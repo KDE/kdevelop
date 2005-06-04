@@ -1,3 +1,4 @@
+INCLUDE(CheckIncludeFiles)
 
 #check for libz using the cmake supplied FindZLIB.cmake
 INCLUDE(FindZLIB)
@@ -18,7 +19,7 @@ ENDIF(PNG_FOUND)
 
 #now check for dlfcn.h using the cmake supplied CHECK_INCLUDE_FILE() macro
 
-CHECK_INCLUDE_FILE(dlfcn.h HAVE_DLFCN_H)
+CHECK_INCLUDE_FILES(dlfcn.h HAVE_DLFCN_H)
 
 SET(CONFIG_QT_DOCDIR "\"/usr/lib/qt/doc/html/\"")
 SET(CONFIG_KDELIBS_DOXYDIR "\"/tmp/\"")
