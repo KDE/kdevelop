@@ -11,7 +11,6 @@ Description[da]=En kioslave til %{APPNAMELC}
 Description[de]=Ein Ein/Ausgabe-Modul für %{APPNAMELC}
 Description[es]=Un kioslave para %{APPNAMELC}
 Description[et]=%{APPNAMELC} IO-moodul
-Description[eu]=%{APPNAMELC}-(r)entzako kioslave bat
 Description[fr]=Un module d'entrée / sortie pour %{APPNAMELC}
 Description[hu]=%{APPNAMELC}-támogató KIOslave
 Description[it]=Un kioslave per %{APPNAMELC}
