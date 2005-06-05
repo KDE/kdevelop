@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(kdeveditorchooser_PART_SRCS ${kdeveditorchooser_UI} )
 
 ADD_LIBRARY(kdeveditorchooser MODULE ${kdeveditorchooser_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdeveditorchooser ${QT_LIBRARIES} kdecore kdeui kio kdevelop)
+TARGET_LINK_LIBRARIES(kdeveditorchooser ${QT_AND_KDECORE_LIBS} kdeui kio kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(kdeveditorchooser)
 

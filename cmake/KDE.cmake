@@ -17,6 +17,8 @@ INCLUDE(FindQt)
 #add the definitions found by FindQt to the current definitions
 ADD_DEFINITIONS(${QT_DEFINITIONS})
 
+SET(QT_AND_KDECORE_LIBS ${QT_LIBRARIES} kdecore)
+
 #add some KDE specific stuff
 ADD_DEFINITIONS(-Wnon-virtual-dtor -Wno-long-long -Wundef -ansi -Wcast-align -Wconversion -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -O2 -Wformat-security -Wmissing-format-attribute -fno-exceptions -fno-check-new -fno-common)
 #only on linux:

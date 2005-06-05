@@ -10,7 +10,7 @@ KDE_AUTOMOC(${qmakeimporter_LIB_SRCS})
 
 ADD_LIBRARY(qmakeimporter SHARED ${qmakeimporter_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(qmakeimporter ${QT_LIBRARIES} kdecore kdevelop projectmanager_interfaces kdevqmakeparser)
+TARGET_LINK_LIBRARIES(qmakeimporter ${QT_AND_KDECORE_LIBS} kdevelop projectmanager_interfaces kdevqmakeparser)
 
 
 #original Makefile.am contents follow:

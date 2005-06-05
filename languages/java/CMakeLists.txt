@@ -34,7 +34,7 @@ KDE_ADD_DCOP_SKELS(kdevjavasupport_PART_SRCS ${kdevjavasupport_DCOP_SRCS})
 
 ADD_LIBRARY(kdevjavasupport SHARED ${kdevjavasupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevjavasupport ${KDEV_LANG_LIBS} DCOP antlr kdevcatalog)
+TARGET_LINK_LIBRARIES(kdevjavasupport kdevelop DCOP antlr kdevcatalog)
 
 KDE_CREATE_LIBTOOL_FILE(kdevjavasupport)
 

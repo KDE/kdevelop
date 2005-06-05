@@ -25,7 +25,7 @@ KDE_ADD_UI_FILES(kdevbuildtoolswidgets_LIB_SRCS ${kdevbuildtoolswidgets_UI} )
 
 ADD_LIBRARY(kdevbuildtoolswidgets SHARED ${kdevbuildtoolswidgets_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevbuildtoolswidgets ${QT_LIBRARIES} kdecore kdeui kdeui kio kdevelop)
+TARGET_LINK_LIBRARIES(kdevbuildtoolswidgets ${QT_AND_KDECORE_LIBS} kdeui kdeui kio kdevelop)
 
 INSTALL_TARGETS(/lib kdevbuildtoolswidgets)
 

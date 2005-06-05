@@ -22,7 +22,7 @@ KDE_AUTOMOC(${kdevrbdebugger_PART_SRCS})
 
 ADD_LIBRARY(kdevrbdebugger SHARED ${kdevrbdebugger_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevrbdebugger ${KDEV_LANG_LIBS} lang_debugger DCOP kdevwidgets)
+TARGET_LINK_LIBRARIES(kdevrbdebugger kdevelop lang_debugger DCOP kdevwidgets)
 
 KDE_CREATE_LIBTOOL_FILE(kdevrbdebugger)
 

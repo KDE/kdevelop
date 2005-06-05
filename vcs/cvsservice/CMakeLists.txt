@@ -53,7 +53,7 @@ KDE_ADD_DCOP_SKELS(kdevcvsservice_PART_SRCS ${kdevcvsservice_DCOP_SRCS})
 
 ADD_LIBRARY(kdevcvsservice MODULE ${kdevcvsservice_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcvsservice ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP kdevelop cvsservice)
+TARGET_LINK_LIBRARIES(kdevcvsservice ${QT_AND_KDECORE_LIBS} kdeui kio kparts DCOP kdevelop cvsservice)
 
 KDE_CREATE_LIBTOOL_FILE(kdevcvsservice)
 

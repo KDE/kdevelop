@@ -11,7 +11,7 @@ KDE_AUTOMOC(${kdevclearcase_PART_SRCS})
 
 ADD_LIBRARY(kdevclearcase MODULE ${kdevclearcase_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevclearcase ${QT_LIBRARIES} kdecore kdeui kdevelop)
+TARGET_LINK_LIBRARIES(kdevclearcase ${QT_AND_KDECORE_LIBS} kdeui kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(kdevclearcase)
 

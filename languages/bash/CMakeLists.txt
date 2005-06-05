@@ -10,7 +10,7 @@ KDE_AUTOMOC(${kdevbashsupport_PART_SRCS})
 
 ADD_LIBRARY(kdevbashsupport MODULE ${kdevbashsupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevbashsupport ${KDEV_LANG_LIBS})
+TARGET_LINK_LIBRARIES(kdevbashsupport kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(kdevbashsupport)
 

@@ -8,7 +8,7 @@ KDE_AUTOMOC(${kdevbuildbase_LIB_SRCS})
 
 ADD_LIBRARY(kdevbuildbase SHARED ${kdevbuildbase_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevbuildbase ${QT_LIBRARIES} kdecore kdeui kdevelop)
+TARGET_LINK_LIBRARIES(kdevbuildbase ${QT_AND_KDECORE_LIBS} kdeui kdevelop)
 
 INSTALL_TARGETS(/lib kdevbuildbase)
 

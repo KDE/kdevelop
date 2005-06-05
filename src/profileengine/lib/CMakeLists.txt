@@ -9,7 +9,7 @@ KDE_AUTOMOC(${profileengine_LIB_SRCS})
 
 ADD_LIBRARY(profileengine SHARED ${profileengine_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(profileengine ${QT_LIBRARIES} kdecore kdeui kio kparts)
+TARGET_LINK_LIBRARIES(profileengine ${QT_AND_KDECORE_LIBS} kdeui kio kparts)
 
 INSTALL_TARGETS(/lib profileengine)
 

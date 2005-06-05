@@ -6,7 +6,7 @@ KDE_AUTOMOC(${kinterfacedesigner_LIB_SRCS})
 
 ADD_LIBRARY(kinterfacedesigner SHARED ${kinterfacedesigner_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kinterfacedesigner ${QT_LIBRARIES} kdecore kdeui kparts)
+TARGET_LINK_LIBRARIES(kinterfacedesigner ${QT_AND_KDECORE_LIBS} kdeui kparts)
 
 INSTALL_TARGETS(/lib kinterfacedesigner)
 

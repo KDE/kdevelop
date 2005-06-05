@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(clearcaseintegrator_PART_SRCS ${clearcaseintegrator_UI} )
 
 ADD_LIBRARY(clearcaseintegrator MODULE ${clearcaseintegrator_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(clearcaseintegrator ${QT_LIBRARIES} kdecore kdevextras kdevelop)
+TARGET_LINK_LIBRARIES(clearcaseintegrator ${QT_AND_KDECORE_LIBS} kdevextras kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(clearcaseintegrator)
 

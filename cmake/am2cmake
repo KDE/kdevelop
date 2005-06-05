@@ -142,6 +142,10 @@ class CMakeFile
       end
    end
 
+   def addInstallFiles(prefix, files)
+      INSTALL
+   end
+
    def evalLine(line)
       if line =~ /^\s*METASOURCES\s*=\s*AUTO\s*$/
          @automoc=true
@@ -162,6 +166,11 @@ class CMakeFile
          return
       end
 
+      if line =~ /^\s*(\S+)_DATA\s*=\s*(\S+.*)$/
+         addInstallFiles($1, $2)
+         return
+      end
+
       if line =~ /^\s*SUBDIRS\s*=\s*(\S+.*)$/
          ($1).split.each{|dir| @subDirs.push(dir) if dir!="."}
       end
@@ -177,14 +186,13 @@ class CMakeFile
 
       file=File.new(@listsFile, "w+");
       if not @subDirs.empty?
-         file.printf("SUBDIRS( ")
-         @subDirs.each{ |dir| file.printf("%s ", dir) }
-         file.printf(")\n\n")
+         @subDirs.each{ |dir| file.printf("ADD_SUBDIRECTORY( %s ) \n", dir)}
+         file.printf(")\n")
       end
       if not @includeDirs.empty?
          file.printf("INCLUDE_DIRECTORIES( ")
          @includeDirs.each{ |dir| file.printf("%s ", dir) }
-         file.printf(")\n\n")
+         file.printf(" ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )\n\n")
       end
       @targets.each do |buildTarget|
          if buildTarget.type==SharedLib
@@ -226,15 +234,23 @@ class CMakeFile
 
          if buildTarget.type==SharedLib
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
+            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("INSTALL_TARGETS(/lib %s )\n\n", buildTarget.name)
          elsif buildTarget.type==StaticLib
             file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
          elsif buildTarget.type==Part
             file.printf("ADD_LIBRARY(%s MODULE ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("KDE_CREATE_LIBTOOL_FILE (${%s})\n\n", buildTarget.name)
+            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("INSTALL_TARGETS(/lib/kde3 %s )\n\n", buildTarget.name)
 #            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\"\n\n")
          else
             file.printf("ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
+            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("INSTALL_TARGETS(/bin %s )\n\n", buildTarget.name)
+
          end
+
       end
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}

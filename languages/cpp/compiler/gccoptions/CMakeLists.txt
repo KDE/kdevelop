@@ -8,7 +8,7 @@ KDE_AUTOMOC(${kdevgccoptions_PART_SRCS})
 
 ADD_LIBRARY(kdevgccoptions MODULE ${kdevgccoptions_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevgccoptions ${QT_LIBRARIES} kdecore kdeui kdevextras kdevwidgets)
+TARGET_LINK_LIBRARIES(kdevgccoptions ${QT_AND_KDECORE_LIBS} kdeui kdevextras kdevwidgets)
 
 KDE_CREATE_LIBTOOL_FILE(kdevgccoptions)
 

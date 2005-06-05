@@ -10,7 +10,7 @@ tree_parser.cpp
 
 ADD_LIBRARY(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcppparser ${QT_LIBRARIES} kdecore)
+TARGET_LINK_LIBRARIES(kdevcppparser ${QT_AND_KDECORE_LIBS})
 
 INSTALL_TARGETS(/lib kdevcppparser)
 INSTALL_FILES(/include/kdevelop/cppparser FILES

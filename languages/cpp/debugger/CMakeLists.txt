@@ -37,7 +37,7 @@ KDE_ADD_DCOP_SKELS(kdevdebugger_PART_SRCS ${kdevdebugger_DCOP_SRCS})
 
 ADD_LIBRARY(kdevdebugger MODULE ${kdevdebugger_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevdebugger ${KDEV_LANG_LIBS} DCOP kdevwidgets lang_debugger)
+TARGET_LINK_LIBRARIES(kdevdebugger kdevelop DCOP kdevwidgets lang_debugger)
 
 KDE_CREATE_LIBTOOL_FILE(kdevdebugger)
 

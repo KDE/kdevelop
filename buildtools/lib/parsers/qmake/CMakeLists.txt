@@ -10,7 +10,7 @@ KDE_AUTOMOC(${kdevqmakeparser_LIB_SRCS})
 
 ADD_LIBRARY(kdevqmakeparser SHARED ${kdevqmakeparser_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevqmakeparser ${QT_LIBRARIES} kdecore kio)
+TARGET_LINK_LIBRARIES(kdevqmakeparser ${QT_AND_KDECORE_LIBS} kio)
 
 #original Makefile.am contents follow:
 

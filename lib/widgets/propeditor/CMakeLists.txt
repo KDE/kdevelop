@@ -40,7 +40,7 @@ KDE_ADD_MOC_FILES(kdevpropertyeditor_LIB_SRCS qeditlistbox.h)
 
 ADD_LIBRARY(kdevpropertyeditor SHARED ${kdevpropertyeditor_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevpropertyeditor ${QT_LIBRARIES} kdecore kdeui kio)
+TARGET_LINK_LIBRARIES(kdevpropertyeditor ${QT_AND_KDECORE_LIBS} kdeui kio)
 
 INSTALL_TARGETS(/lib kdevpropertyeditor)
 INSTALL_FILES(/include/kdevelop/propeditor ".+\\.h")

@@ -18,7 +18,7 @@ KDE_ADD_UI_FILES(kdevperlsupport_PART_SRCS ${kdevperlsupport_UI} )
 
 ADD_LIBRARY(kdevperlsupport SHARED ${kdevperlsupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevperlsupport ${KDEV_LANG_LIBS} )
+TARGET_LINK_LIBRARIES(kdevperlsupport kdevelop )
 
 KDE_CREATE_LIBTOOL_FILE(kdevperlsupport)
 

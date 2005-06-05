@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(kdevcustompcsimporter_LIB_SRCS ${kdevcustompcsimporter_UI} )
 
 ADD_LIBRARY(kdevcustompcsimporter MODULE ${kdevcustompcsimporter_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcustompcsimporter ${KDEV_LANG_LIBS} lang_interfaces)
+TARGET_LINK_LIBRARIES(kdevcustompcsimporter kdevelop lang_interfaces)
 
 KDE_CREATE_LIBTOOL_FILE(kdevcustomimporter)
 

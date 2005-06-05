@@ -9,7 +9,7 @@ KDE_AUTOMOC(${kdevpgioptions_PART_SRCS})
 
 ADD_LIBRARY(kdevpgioptions SHARED ${kdevpgioptions_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevpgioptions ${KDEV_LANG_LIBS} kdevextras)
+TARGET_LINK_LIBRARIES(kdevpgioptions kdevelop kdevextras)
 
 KDE_CREATE_LIBTOOL_FILE(kdevpgioptions)
 

@@ -13,7 +13,7 @@ KDE_AUTOMOC(${d_LIB_SRCS})
 
 ADD_LIBRARY(d SHARED ${d_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(d ${QT_LIBRARIES} kdecore kdeui kio kparts)
+TARGET_LINK_LIBRARIES(d ${QT_AND_KDECORE_LIBS} kdeui kio kparts)
 
 #original Makefile.am contents follow:
 

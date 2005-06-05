@@ -19,7 +19,7 @@ KDE_ADD_UI_FILES(kdevrubysupport_PART_SRCS ${kdevrubysupport_UI} )
 
 ADD_LIBRARY(kdevrubysupport SHARED ${kdevrubysupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevrubysupport ${KDEV_LANG_LIBS} designerintegration)
+TARGET_LINK_LIBRARIES(kdevrubysupport kdevelop designerintegration)
 
 KDE_CREATE_LIBTOOL_FILE(kdevrubysupport)
 

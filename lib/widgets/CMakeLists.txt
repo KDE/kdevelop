@@ -16,7 +16,7 @@ KDE_AUTOMOC(${kdevwidgets_LIB_SRCS})
 
 ADD_LIBRARY(kdevwidgets SHARED ${kdevwidgets_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevwidgets ${QT_LIBRARIES} kdecore kdeui kparts khtml kio)
+TARGET_LINK_LIBRARIES(kdevwidgets ${QT_AND_KDECORE_LIBS} kdeui kparts khtml kio)
 
 INSTALL_TARGETS(/lib kdevwidgets)
 INSTALL_FILES(/include/kdevelop/widgets FILES

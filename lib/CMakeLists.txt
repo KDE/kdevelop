@@ -21,7 +21,7 @@ dummy.cpp
 ADD_LIBRARY(kdevelop SHARED ${kdevelop_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevelop
-${QT_LIBRARIES} kdecore kdeui kscript ktexteditor DCOP kio kparts
+${QT_AND_KDECORE_LIBS} kdeui kscript ktexteditor DCOP kio kparts
 kinterfacedesigner
 kdevpropertyeditor
 )

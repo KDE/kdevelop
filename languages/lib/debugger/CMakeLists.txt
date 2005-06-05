@@ -9,7 +9,7 @@ KDE_AUTOMOC(${lang_debugger_LIB_SRCS})
 
 ADD_LIBRARY(lang_debugger SHARED ${lang_debugger_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(lang_debugger ${QT_LIBRARIES} kdecore kdeui kparts ktexteditor)
+TARGET_LINK_LIBRARIES(lang_debugger ${QT_AND_KDECORE_LIBS} kdeui kparts ktexteditor)
 
 INSTALL_TARGETS(/lib lang_debugger)
 

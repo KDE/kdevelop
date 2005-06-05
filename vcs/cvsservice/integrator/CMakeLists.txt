@@ -17,7 +17,7 @@ KDE_ADD_UI_FILES(cvsserviceintegrator_PART_SRCS ${cvsserviceintegrator_UI} )
 
 ADD_LIBRARY(cvsserviceintegrator MODULE ${cvsserviceintegrator_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(cvsserviceintegrator ${QT_LIBRARIES} kdecore kdeui kio kdevextras cvsservice kdevelop)
+TARGET_LINK_LIBRARIES(cvsserviceintegrator ${QT_AND_KDECORE_LIBS} kdeui kio kdevextras cvsservice kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(cvsserviceintegrator)
 

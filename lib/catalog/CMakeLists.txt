@@ -7,7 +7,7 @@ catalog.cpp
 
 ADD_LIBRARY(kdevcatalog SHARED ${kdevcatalog_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevcatalog ${QT_LIBRARIES} kdecore ${CMAKE_BINARY_DIR}/bdb/build_unix/libdb.a)
+TARGET_LINK_LIBRARIES(kdevcatalog ${QT_AND_KDECORE_LIBS} ${CMAKE_BINARY_DIR}/bdb/build_unix/libdb.a)
 
 INSTALL_TARGETS(/lib kdevcatalog)
 INSTALL_FILES(/include/kdevelop/catalog FILES catalog.h tag.h)

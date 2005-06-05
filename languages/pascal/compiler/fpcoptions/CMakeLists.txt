@@ -9,7 +9,7 @@ KDE_AUTOMOC(${kdevfpcoptions_PART_SRCS})
 
 ADD_LIBRARY(kdevfpcoptions SHARED ${kdevfpcoptions_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevfpcoptions ${KDEV_LANG_LIBS} kdevwidgets kdevextras)
+TARGET_LINK_LIBRARIES(kdevfpcoptions kdevelop kdevwidgets kdevextras)
 
 KDE_CREATE_LIBTOOL_FILE(kdevfpcoptions)
 

@@ -18,7 +18,7 @@ KDE_ADD_UI_FILES(kdevsqlsupport_PART_SRCS ${kdevsqlsupport_UI} )
 
 ADD_LIBRARY(kdevsqlsupport SHARED ${kdevsqlsupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevsqlsupport ${KDEV_LANG_LIBS})
+TARGET_LINK_LIBRARIES(kdevsqlsupport kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(kdevsqlsupport)
 

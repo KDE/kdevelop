@@ -19,7 +19,7 @@ KDE_ADD_UI_FILES(kdevpythonsupport_PART_SRCS ${kdevpythonsupport_UI} )
 
 ADD_LIBRARY(kdevpythonsupport SHARED ${kdevpythonsupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevpythonsupport ${KDEV_LANG_LIBS} khtml kdevwidgets designerintegration)
+TARGET_LINK_LIBRARIES(kdevpythonsupport kdevelop khtml kdevwidgets designerintegration)
 
 KDE_CREATE_LIBTOOL_FILE(kdevpythonsupport)
 

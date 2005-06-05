@@ -18,7 +18,7 @@ KDE_ADD_UI_FILES(kdevfortransupport_PART_SRCS ${kdevfortransupport_UI} )
 
 ADD_LIBRARY(kdevfortransupport SHARED ${kdevfortransupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevfortransupport ${KDEV_LANG_LIBS})
+TARGET_LINK_LIBRARIES(kdevfortransupport kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(kdevfortransupport)
 

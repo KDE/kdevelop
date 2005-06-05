@@ -11,7 +11,7 @@ KDE_AUTOMOC(${kdevprojectmanager_PART_SRCS})
 
 ADD_LIBRARY(kdevprojectmanager MODULE ${kdevprojectmanager_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevprojectmanager ${QT_LIBRARIES} kdecore kdeui kio kdevelop projectmanager_interfaces)
+TARGET_LINK_LIBRARIES(kdevprojectmanager ${QT_AND_KDECORE_LIBS} kdeui kio kdevelop projectmanager_interfaces)
 
 KDE_CREATE_LIBTOOL_FILE(kdevprojectmanager)
 

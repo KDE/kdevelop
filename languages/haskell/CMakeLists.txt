@@ -10,7 +10,7 @@ KDE_AUTOMOC(${kdevhaskellsupport_PART_SRCS})
 
 ADD_LIBRARY(kdevhaskellsupport SHARED ${kdevhaskellsupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevhaskellsupport ${KDEV_LANG_LIBS} )
+TARGET_LINK_LIBRARIES(kdevhaskellsupport kdevelop )
 
 KDE_CREATE_LIBTOOL_FILE(kdevhaskellsupport)
 

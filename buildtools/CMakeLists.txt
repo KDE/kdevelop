@@ -37,7 +37,7 @@ SET(QMAKE_BUILDTOOL qmake)
 SET(SCRIPT_BUILDTOOL script)
 #endif
 
-SET(KDEV_BUILDTOOLS_LIBS ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop kdevbuildbase kdevbuildtoolswidgets)
+SET(KDEV_BUILDTOOLS_LIBS ${QT_AND_KDECORE_LIBS} kdeui kio kparts kdevelop kdevbuildbase kdevbuildtoolswidgets)
 
 SUBDIRS( lib projectmanager ${ADA_BUILDTOOL} ${ANT_BUILDTOOL}  	${AUTOTOOLS_BUILDTOOL} ${CUSTOMMAKEFILES_BUILDTOOL} ${HASKELL_BUILDTOOL} ${PASCAL_BUILDTOOL} ${QMAKE_BUILDTOOL} ${SCRIPT_BUILDTOOL} )
 

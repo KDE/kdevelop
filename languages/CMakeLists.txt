@@ -1,4 +1,6 @@
 
+ADD_SUBDIRECTORY(lib)
+
 OPTION(WITH_ADA "Compile support for the Ada language" ON)
 OPTION(WITH_BASH "Compile support for shell script language" ON)
 OPTION(WITH_CPP "Compile support for the C/C++ language" ON)
@@ -13,59 +15,52 @@ OPTION(WITH_RUBY    "Compile support for the Ruby language" ON)
 OPTION(WITH_SQL     "Compile support for the SQL language" ON)
 
 IF (WITH_ADA)
-   SET(LANGS ${LANGS} ada)
+   ADD_SUBDIRECTORY(ada)
 ENDIF(WITH_ADA)
 
 IF (WITH_BASH)
-   SET(LANGS ${LANGS} bash)
+   ADD_SUBDIRECTORY( bash)
 ENDIF(WITH_BASH)
 
 IF (WITH_CPP)
-   SET(LANGS ${LANGS} cpp)
+   ADD_SUBDIRECTORY( cpp)
 ENDIF(WITH_CPP)
 
 IF (WITH_FORTRAN)
-   SET(LANGS ${LANGS} fortran)
+   ADD_SUBDIRECTORY( fortran)
 ENDIF(WITH_FORTRAN)
 
 IF (WITH_HASKELL)
-   SET(LANGS ${LANGS} haskell)
+   ADD_SUBDIRECTORY(haskell)
 ENDIF(WITH_HASKELL)
 
 IF (WITH_JAVA)
-   SET(LANGS ${LANGS} java)
+   ADD_SUBDIRECTORY(java)
 ENDIF(WITH_JAVA)
 
 IF (WITH_PASCAL)
-   SET(LANGS ${LANGS} pascal)
+   ADD_SUBDIRECTORY( pascal)
 ENDIF(WITH_PASCAL)
 
 IF (WITH_PERL)
-   SET(LANGS ${LANGS} perl)
+   ADD_SUBDIRECTORY(perl)
 ENDIF(WITH_PERL)
 
 IF (WITH_PHP)
-   SET(LANGS ${LANGS} php)
+   ADD_SUBDIRECTORY( php)
 ENDIF(WITH_PHP)
 
 IF (WITH_PYTHON)
-   SET(LANGS ${LANGS} python)
+   ADD_SUBDIRECTORY(python)
 ENDIF(WITH_PYTHON)
 
 IF (WITH_RUBY)
-   SET(LANGS ${LANGS} ruby)
+   ADD_SUBDIRECTORY(ruby)
 ENDIF(WITH_RUBY)
 
 IF (WITH_SQL)
-   SET(LANGS ${LANGS} sql)
+   ADD_SUBDIRECTORY(sql)
 ENDIF(WITH_SQL)
-
-
-SET(KDEV_LANG_LIBS ${QT_LIBRARIES} kdecore kdeui kparts ktexteditor kio kdevelop )
-
-SUBDIRS( lib ${LANGS})
-
-
 
 #original Makefile.am contents follow:
 

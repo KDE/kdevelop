@@ -11,7 +11,7 @@ KDE_AUTOMOC(${kdevperforce_PART_SRCS})
 
 ADD_LIBRARY(kdevperforce MODULE ${kdevperforce_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevperforce ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop)
+TARGET_LINK_LIBRARIES(kdevperforce ${QT_AND_KDECORE_LIBS} kdeui kio kparts kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(kdevperforce)
 

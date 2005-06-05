@@ -8,7 +8,7 @@ KDE_AUTOMOC(${kdevghcoptions_PART_SRCS})
 
 ADD_LIBRARY(kdevghcoptions SHARED ${kdevghcoptions_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevghcoptions ${KDEV_LANG_LIBS} kdevextras)
+TARGET_LINK_LIBRARIES(kdevghcoptions kdevelop kdevextras)
 
 KDE_CREATE_LIBTOOL_FILE(kdevghcoptions)
 

@@ -54,7 +54,7 @@ KDE_ADD_UI_FILES(qeditorpart_PART_SRCS ${qeditorpart_UI} )
 
 ADD_LIBRARY(qeditorpart MODULE ${qeditorpart_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(qeditorpart ${QT_LIBRARIES} kdecore kdeui kio kparts ktexteditor kdevelop)
+TARGET_LINK_LIBRARIES(qeditorpart ${QT_AND_KDECORE_LIBS} kdeui kio kparts ktexteditor kdevelop)
 
 KDE_CREATE_LIBTOOL_FILE(qeditorpart)
 

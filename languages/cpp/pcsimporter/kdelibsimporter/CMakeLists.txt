@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(kdevkdelibsimporter_LIB_SRCS ${kdevkdelibsimporter_UI} )
 
 ADD_LIBRARY(kdevkdelibsimporter MODULE ${kdevkdelibsimporter_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevkdelibsimporter ${KDEV_LANG_LIBS} lang_interfaces)
+TARGET_LINK_LIBRARIES(kdevkdelibsimporter kdevelop lang_interfaces)
 
 KDE_CREATE_LIBTOOL_FILE(kdevkdelibsimporter)
 

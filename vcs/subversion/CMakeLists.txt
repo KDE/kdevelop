@@ -29,7 +29,7 @@ KDE_ADD_DCOP_SKELS(kdevsubversion_PART_SRCS ${kdevsubversion_DCOP_SRCS})
 
 ADD_LIBRARY(kdevsubversion MODULE ${kdevsubversion_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevsubversion ${QT_LIBRARIES} kdecore kdeui kio kparts DCOP kdevelop kdevextensions)
+TARGET_LINK_LIBRARIES(kdevsubversion ${QT_AND_KDECORE_LIBS} kdeui kio kparts DCOP kdevelop kdevextensions)
 
 KDE_CREATE_LIBTOOL_FILE(kdevsubversion)
 

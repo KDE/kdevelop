@@ -16,7 +16,7 @@ KDE_ADD_UI_FILES(kdevprofileeditor_SRCS ${kdevprofileeditor_UI} )
 
 ADD_EXECUTABLE(kdevprofileeditor ${kdevprofileeditor_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevprofileeditor ${QT_LIBRARIES} kdecore kdeui kio kparts profileengine)
+TARGET_LINK_LIBRARIES(kdevprofileeditor ${QT_AND_KDECORE_LIBS} kdeui kio kparts profileengine)
 
 INSTALL_TARGETS(/bin kdevprofileeditor)
 

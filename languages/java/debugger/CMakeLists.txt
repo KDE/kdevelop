@@ -22,7 +22,7 @@ KDE_AUTOMOC(${kdevjavadebugger_PART_SRCS})
 
 ADD_LIBRARY(kdevjavadebugger MODULE ${kdevjavadebugger_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevjavadebugger ${KDEV_LANG_LIBS} lang_debugger)
+TARGET_LINK_LIBRARIES(kdevjavadebugger kdevelop lang_debugger)
 
 KDE_CREATE_LIBTOOL_FILE(kdevjavadebugger)
 

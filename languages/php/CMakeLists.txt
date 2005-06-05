@@ -16,7 +16,7 @@ phpfile.cpp
 
 SET( kdevphpsupport_UI
 phpconfigwidgetbase.ui
-phpinfodlg.ui 
+phpinfodlg.ui
 phpnewclassdlgbase.ui )
 
 KDE_AUTOMOC(${kdevphpsupport_PART_SRCS})
@@ -25,7 +25,7 @@ KDE_ADD_UI_FILES(kdevphpsupport_PART_SRCS ${kdevphpsupport_UI} )
 
 ADD_LIBRARY(kdevphpsupport SHARED ${kdevphpsupport_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kdevphpsupport ${KDEV_LANG_LIBS} khtml kdevwidgets)
+TARGET_LINK_LIBRARIES(kdevphpsupport kdevelop khtml kdevwidgets)
 
 KDE_CREATE_LIBTOOL_FILE(kdevphpsupport)
 

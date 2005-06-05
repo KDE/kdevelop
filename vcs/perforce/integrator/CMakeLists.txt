@@ -15,7 +15,7 @@ KDE_ADD_UI_FILES(perforceintegrator_PART_SRCS ${perforceintegrator_UI} )
 
 ADD_LIBRARY(perforceintegrator MODULE ${perforceintegrator_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(perforceintegrator ${QT_LIBRARIES} kdecore kdeui kio kparts kdevelop kdevextras)
+TARGET_LINK_LIBRARIES(perforceintegrator ${QT_AND_KDECORE_LIBS} kdeui kio kparts kdevelop kdevextras)
 
 KDE_CREATE_LIBTOOL_FILE(perforceintegrator)
 
