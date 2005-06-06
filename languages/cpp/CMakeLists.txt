@@ -65,7 +65,7 @@ SET(rpp_SRCS main.cpp)
 
 ADD_EXECUTABLE(r++ ${rpp_SRCS})
 
-TARGET_LINK_LIBRARIES(r++ kdevelop)
+TARGET_LINK_LIBRARIES(r++ kdevelop kdevcppparser kdevcatalog kdevcppsupport)
 
 INSTALL_TARGETS(/bin r++)
 INSTALL_TARGETS(/lib/kde3 kdevcppsupport)
