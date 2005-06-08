@@ -1,20 +1,37 @@
 #!/usr/bin/env ruby
 
 
+class InstallTarget
+   def initialize
+      @files=""
+      @location=""
+   end
+   def addFiles(files)
+      @files=@files+files
+   end
+   def setLocation(location)
+      @location=location
+   end
+   attr_reader :location, :files
+end
+
 NoTarget   = 0
 Executable = 1
 StaticLib  = 2
 SharedLib  = 3
 Part       = 4
+KDEInitModule = 5
 
 class BuildTarget
-   def initialize(name, type)
+   def initialize(name, type, stdPrefix=true)
       @name=name
       @type=type
       @sources=Array.new
       @uis=Array.new
       @skels=Array.new
+      @stubs=Array.new
       @am=Array.new
+      @stdPrefix=stdPrefix
    end
 
    def addSourceFiles(files)
@@ -23,29 +40,40 @@ class BuildTarget
             @uis.push(currentSource)
          elsif currentSource =~ /^(\S+)\.skel$/
             @skels.push($1+".h")
+         elsif currentSource =~ /^(\S+)\.stub$/
+            @stubs.push($1+".h")
+         elsif currentSource =~ /^(\S+)\.kcfgc$/
+            printf("skipped: %s\n", currentSource)
+#            @stubs.push($1+".h")
          else
             @sources.push(currentSource)
          end
       end
    end
 
-   attr_reader :name, :type, :sources, :uis, :skels
+   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs
 
 end
 
 class CMakeFile
    def initialize(amFile)
+      printf("-------- #{amFile} -------------\n")
       @amFile=amFile
       amFile =~ /(.*)Makefile.am/
       @path=$1
       @listsFile=@path+"CMakeLists.txt"
 
       @targets=Array.new
+      @installs=Hash.new
 
       @includeDirs=Array.new
       @subDirs=Array.new
+      @skippedSubDirs=Array.new
 
       parseFile
+
+      @includeDirs.push("${CMAKE_CURRENT_SOURCE_DIR}")
+      @includeDirs.push("${CMAKE_CURRENT_BINARY_DIR}")
    end
 
    def parseFile
@@ -67,26 +95,32 @@ class CMakeFile
       end
    end
 
-   def findTarget(line)
+   def findTargetForSources(line)
       type=SharedLib
       if line =~ /^\s*lib(\S+)_la_\S+\s*=\s*\S+.*$/
          targetName=$1
-         type=SharedLib
+#         type=SharedLib
+      elsif line =~ /^\s*(\S+)_la_\S+\s*=\s*\S+.*$/
+         targetName=$1
+#         type=Executable
       elsif line =~ /^\s*(\S+)_\S+\s*=\s*\S+.*$/
          targetName=$1
-         type=Executable
+#         type=Executable
       end
-
       @targets.each do |buildTarget|
-         if (type==Executable)
-            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
-               return buildTarget
-            end
-         else
-            if (buildTarget.name==targetName)
-               return buildTarget
-            end
+         amBuildTargetName=buildTarget.name.gsub(/\./, "_")
+         if (amBuildTargetName==targetName)
+            return buildTarget
          end
+#         if (type==Executable)
+#            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
+#               return buildTarget
+#            end
+#         else
+#            if (buildTarget.name==targetName)
+#               return buildTarget
+#            end
+#         end
       end
 
       return BuildTarget.new("Dummy", NoTarget)
@@ -99,14 +133,18 @@ class CMakeFile
       if line =~ /^\s*lib_LTLIBRARIES\s*=\s*(\S+.*)/
          targets=$1
          type=SharedLib
+         printf("shared: %s\n", $1)
       elsif line =~ /^\s*noinst_LTLIBRARIES\s*=\s*(\S+.*)/
          targets=$1
          type=StaticLib
+         printf("static: %s\n", $1)
       elsif line =~ /^\s*kde_module_LTLIBRARIES\s*=\s*(\S+.*)/
+         printf("part: %s\n", $1)
          targets=$1
          type=Part
       elsif line =~ /^\s*bin_PROGRAMS\s*=\s*(\S+.*)$/
          targets=$1
+         printf("exec: %s\n", $1)
          type=Executable
       else
          return false
@@ -115,23 +153,33 @@ class CMakeFile
       if type==Executable
          targets.split.each{ |current| @targets.push(BuildTarget.new(current, type)) }
       else
-         targets.split.each{ |current| @targets.push(BuildTarget.new($1, type)) if current =~ /lib(\S+)\.la/  }
+         targets.split.each do |current|
+            if current =~ /lib(\S+)\.la/
+               @targets.push(BuildTarget.new($1, type))
+             else
+               if current =~ /\s*(\S+)\.la/
+                  @targets.push(BuildTarget.new($1, type, false))
+               end
+             end
+         end
       end
       return true
    end
 
    def addSourcesToTarget(line)
-      buildTarget=findTarget(line)
+      printf("sources: %s\n", line)
+      buildTarget=findTargetForSources(line)
       if buildTarget.type==NoTarget
+         printf("target not found\n")
          return
       end
 
-      if buildTarget.type==Executable
-         line =~ /^\s*\S+_SOURCES\s*=\s*(\S+.*)$/
-      else
-         line =~ /^\s*lib\S+_la_SOURCES\s*=\s*(\S+.*)$/
-      end
-      buildTarget.addSourceFiles($1)
+#      if buildTarget.type==Executable
+         line =~ /^\s*(lib)?\S+(_la)?_SOURCES\s*=\s*(\S+.*)$/
+#      else
+#         line =~ /^\s*lib\S+_la_SOURCES\s*=\s*(\S+.*)$/
+#      end
+      buildTarget.addSourceFiles($3)
    end
 
    def addIncludeDirectories(includeDirs)
@@ -142,8 +190,39 @@ class CMakeFile
       end
    end
 
-   def addInstallFiles(prefix, files)
-      INSTALL
+   def addInstallFiles(key, files)
+      if @installs.has_key?(key)
+         inst=@installs[key]
+      else
+         inst=InstallTarget.new
+      end
+      inst.addFiles(files)
+      @installs[key]=inst
+   end
+
+   def addInstallLocation(key, location)
+#      printf("adding loc: %s \n", location)
+      if @installs.has_key?(key)
+         inst=@installs[key]
+      else
+         inst=InstallTarget.new
+      end
+
+      if location =~ /\$\((\S+)\)(\/?\S*)/
+         baseDir=$1
+         subDir=$2
+#         printf("base: %s sub: %s\n", baseDir, subDir)
+         if baseDir=="kde_servicesdir"
+            inst.setLocation("/share/services"+subDir)
+            @installs[key]=inst
+         elsif baseDir=="kde_servicetypesdir"
+            inst.setLocation("/share/servicetypes"+subDir)
+            @installs[key]=inst
+         elsif baseDir=="kde_datadir"
+            inst.setLocation("/share/apps"+subDir)
+            @installs[key]=inst
+         end
+      end
    end
 
    def evalLine(line)
@@ -166,13 +245,23 @@ class CMakeFile
          return
       end
 
+      if line =~ /^\s*(\S+)dir\s*=\s*(\S+.*)$/
+         addInstallLocation($1, $2)
+         return
+      end
       if line =~ /^\s*(\S+)_DATA\s*=\s*(\S+.*)$/
          addInstallFiles($1, $2)
          return
       end
 
       if line =~ /^\s*SUBDIRS\s*=\s*(\S+.*)$/
-         ($1).split.each{|dir| @subDirs.push(dir) if dir!="."}
+         ($1).split.each do |dir|
+            if dir =~ /\$\(.+\)/
+               @skippedSubDirs.push(dir)
+            else
+               @subDirs.push(dir) if dir!="."
+            end
+         end
       end
 
    end
@@ -187,14 +276,22 @@ class CMakeFile
       file=File.new(@listsFile, "w+");
       if not @subDirs.empty?
          @subDirs.each{ |dir| file.printf("ADD_SUBDIRECTORY( %s ) \n", dir)}
-         file.printf(")\n")
+         file.printf("\n")
       end
+      if not @skippedSubDirs.empty?
+         @skippedSubDirs.each{ |dir| file.printf("MESSAGE(STATUS \"Skipped subdir %s\")\n", dir)}
+      end
+
+
       if not @includeDirs.empty?
          file.printf("INCLUDE_DIRECTORIES( ")
          @includeDirs.each{ |dir| file.printf("%s ", dir) }
-         file.printf(" ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )\n\n")
+         file.printf(" )\n\n")
       end
       @targets.each do |buildTarget|
+         file.printf("\n########### next target ###############\n\n")
+         printf("target name: %s\n", buildTarget.name)
+
          if buildTarget.type==SharedLib
             srcsName=buildTarget.name+"_LIB_SRCS"
          elsif buildTarget.type==StaticLib
@@ -205,7 +302,9 @@ class CMakeFile
             srcsName=buildTarget.name+"_SRCS"
          end
          uisName=buildTarget.name+"_UI"
-         skelsName=buildTarget.name+"_DCOP_SRCS"
+         skelsName=buildTarget.name+"_DCOP_SKEL_SRCS"
+         stubsName=buildTarget.name+"_DCOP_STUB_SRCS"
+
 
          if not buildTarget.sources.empty?
             file.printf("SET(%s\n", srcsName)
@@ -220,7 +319,6 @@ class CMakeFile
             file.printf("SET( %s\n", uisName)
             buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
             file.printf(")\n\n")
-
             file.printf("KDE_ADD_UI_FILES(%s ${%s} )\n\n", srcsName, uisName)
          end
 
@@ -232,6 +330,14 @@ class CMakeFile
             file.printf("KDE_ADD_DCOP_SKELS(%s ${%s})\n\n", srcsName, skelsName)
          end
 
+         if not buildTarget.stubs.empty?
+            file.printf("SET( %s\n", stubsName)
+            buildTarget.stubs.each{ |currentFile| file.printf("%s\n", currentFile)}
+            file.printf(")\n\n")
+
+            file.printf("KDE_ADD_DCOP_STUBS(%s ${%s})\n\n", srcsName, stubsName)
+         end
+
          if buildTarget.type==SharedLib
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
@@ -240,7 +346,10 @@ class CMakeFile
             file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
          elsif buildTarget.type==Part
             file.printf("ADD_LIBRARY(%s MODULE ${%s})\n\n", buildTarget.name, srcsName)
-            file.printf("KDE_CREATE_LIBTOOL_FILE (${%s})\n\n", buildTarget.name)
+            if !buildTarget.stdPrefix
+               file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\")\n", buildTarget.name)
+            end
+            file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib/kde3 %s )\n\n", buildTarget.name)
 #            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\"\n\n")
@@ -252,12 +361,20 @@ class CMakeFile
          end
 
       end
+
+      file.printf("\n########### install files ###############\n\n")
+
+      @installs.each do |key, install|
+         file.printf("INSTALL_FILES( %s FILES %s )\n", install.location, install.files)
+      end
+      file.printf("\n")
+
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}
-      if !prevLines.empty?
-         file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
-         prevLines.each{ |line| file.printf("#%s", line)}
-      end
+#      if !prevLines.empty?
+#         file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
+#         prevLines.each{ |line| file.printf("#%s", line)}
+#      end
    end
 end
 

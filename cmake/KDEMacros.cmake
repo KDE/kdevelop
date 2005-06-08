@@ -1,6 +1,7 @@
 #this file contains the following macros:
 # ADD_FILE_DEPENDANCY
 # KDE_ADD_DCOP_SKELS
+# KDE_ADD_DCOP_STUBS
 # KDE_ADD_MOC_FILES
 # KDE_ADD_UI_FILES
 # KDE_AUTOMOC
@@ -60,6 +61,43 @@ MACRO(KDE_ADD_DCOP_SKELS _sources)
 
 ENDMACRO(KDE_ADD_DCOP_SKELS)
 
+MACRO(KDE_ADD_DCOP_STUBS _sources)
+   FOREACH (_current_FILE ${ARGN})
+
+      IF(${_current_FILE} MATCHES "^/.+") #abs path
+         SET(_tmp_FILE ${_current_FILE})
+      ELSE(${_current_FILE} MATCHES "^/.+")
+         SET(_tmp_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
+      ENDIF(${_current_FILE} MATCHES "^/.+")
+
+      GET_FILENAME_COMPONENT(_basename ${_tmp_FILE} NAME_WE)
+
+	  SET(_stub_CPP ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.cpp)
+#	  SET(_stub_H ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.h)
+      SET(_kidl ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.kidl)
+
+	  ADD_CUSTOM_COMMAND(OUTPUT ${_kidl}
+         COMMAND ${DCOPIDL}
+         ARGS ${tmp_FILE} > ${_kidl}
+         DEPENDS ${tmp_FILE}
+      )
+
+	  ADD_CUSTOM_COMMAND(OUTPUT ${_stub_CPP}
+         COMMAND ${DCOPIDL2CPP}
+         ARGS --c++-suffix cpp --no-signals --no-skel ${_kidl}
+         DEPENDS ${_kidl}
+      )
+
+      SET(${_sources} ${${_sources}} ${_stub_CPP})
+
+   ENDFOREACH (_current_FILE)
+
+ENDMACRO(KDE_ADD_DCOP_STUBS)
+
+
+
+
+
 #create the moc files and add them to the list of sources
 #usage: KDE_ADD_MOC_FILES(foo_SRCS ${moc_headers})
 MACRO(KDE_ADD_MOC_FILES _sources)
@@ -78,25 +116,6 @@ MACRO(KDE_ADD_MOC_FILES _sources)
 
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_ADD_MOC_FILES)
-
-##create the moc files aka automoc from automake
-##usage: KDE_CREATE_AUTOMOC_FILES(${foo_automoc_SRCS})
-#MACRO(KDE_CREATE_AUTOMOC_FILES )
-#   FOREACH (_current_FILE ${ARGN})
-#      GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-#      SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc)
-#      SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
-#
-#      ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
-#         COMMAND moc
-#         ARGS ${_header} -o ${_moc}
-#         DEPENDS ${_header}
-#      )
-#
-#      ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
-#
-#   ENDFOREACH (_current_FILE)
-#ENDMACRO(KDE_CREATE_AUTOMOC_FILES)
 
 #create the implementation files from the ui files and add them to the list of sources
 #usage: KDE_ADD_UI_FILES(foo_SRCS ${ui_files})
