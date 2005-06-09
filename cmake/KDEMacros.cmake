@@ -4,6 +4,7 @@
 # KDE_ADD_DCOP_STUBS
 # KDE_ADD_MOC_FILES
 # KDE_ADD_UI_FILES
+# KDE_ADD_KCFG_FILES
 # KDE_AUTOMOC
 # KDE_TARGET_LINK_CONV_LIBRARIES
 # KDE_CREATE_LIBTOOL_FILE
@@ -93,6 +94,40 @@ MACRO(KDE_ADD_DCOP_STUBS _sources)
    ENDFOREACH (_current_FILE)
 
 ENDMACRO(KDE_ADD_DCOP_STUBS)
+
+MACRO(KDE_ADD_KCFG_FILES _sources)
+   FOREACH (_current_FILE ${ARGN})
+
+      IF(${_current_FILE} MATCHES "^/.+") #abs path
+         SET(_tmp_FILE ${_current_FILE})
+      ELSE(${_current_FILE} MATCHES "^/.+")
+         SET(_tmp_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
+      ENDIF(${_current_FILE} MATCHES "^/.+")
+
+      GET_FILENAME_COMPONENT(_basename ${_tmp_FILE} NAME_WE)
+
+	  SET(_kcfg_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.kcfg)
+	  SET(_src_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.cpp)
+#	  SET(_stub_H ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.h)
+      SET(_header_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.h)
+
+#	  ADD_CUSTOM_COMMAND(OUTPUT ${_kidl}
+#         COMMAND ${DCOPIDL}
+#         ARGS ${tmp_FILE} > ${_kidl}
+#         DEPENDS ${tmp_FILE}
+#      )
+
+	  ADD_CUSTOM_COMMAND(OUTPUT ${_src_FILE}
+         COMMAND ${KCFGC}
+         ARGS ${_kcfg_FILE} ${_tmp_FILE}
+         DEPENDS ${_tmp_FILE}
+      )
+
+      SET(${_sources} ${${_sources}} ${_src_FILE})
+
+   ENDFOREACH (_current_FILE)
+
+ENDMACRO(KDE_ADD_KCFG_FILES)
 
 
 

@@ -30,6 +30,7 @@ class BuildTarget
       @uis=Array.new
       @skels=Array.new
       @stubs=Array.new
+      @kcfgs=Array.new
       @am=Array.new
       @stdPrefix=stdPrefix
    end
@@ -43,15 +44,14 @@ class BuildTarget
          elsif currentSource =~ /^(\S+)\.stub$/
             @stubs.push($1+".h")
          elsif currentSource =~ /^(\S+)\.kcfgc$/
-            printf("skipped: %s\n", currentSource)
-#            @stubs.push($1+".h")
+            @kcfgs.push(currentSource)
          else
             @sources.push(currentSource)
          end
       end
    end
 
-   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs
+   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs, :kcfgs
 
 end
 
@@ -304,7 +304,7 @@ class CMakeFile
          uisName=buildTarget.name+"_UI"
          skelsName=buildTarget.name+"_DCOP_SKEL_SRCS"
          stubsName=buildTarget.name+"_DCOP_STUB_SRCS"
-
+         kcfgsName=buildTarget.name+"_KCFG_SRCS"
 
          if not buildTarget.sources.empty?
             file.printf("SET(%s\n", srcsName)
@@ -336,6 +336,14 @@ class CMakeFile
             file.printf(")\n\n")
 
             file.printf("KDE_ADD_DCOP_STUBS(%s ${%s})\n\n", srcsName, stubsName)
+         end
+
+         if not buildTarget.kcfgs.empty?
+            file.printf("SET( %s\n", kcfgsName)
+            buildTarget.kcfgs.each{ |currentFile| file.printf("%s\n", currentFile)}
+            file.printf(")\n\n")
+
+            file.printf("KDE_ADD_KCFG_FILES(%s ${%s})\n\n", srcsName, kcfgsName)
          end
 
          if buildTarget.type==SharedLib
