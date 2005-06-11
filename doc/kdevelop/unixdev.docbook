@@ -1,11 +1,11 @@
-<chapter id="unixdev">
+<appendix id="unixdev">
 
-<chapterinfo>
+<appendixinfo>
   <authorgroup>
     <author><firstname>Bernd</firstname><surname>Pol</surname></author>
     <!-- ROLES_OF_TRANSLATORS -->
   </authorgroup>
-</chapterinfo>
+</appendixinfo>
 
 <title>Development on &UNIX;</title>
 
@@ -382,5 +382,5 @@ For the &kde; platform &kdevelop; is such an &IDE;. It provides a wide range of 
 
 </sect1> <!-- unixdev-ide -->
 
-</chapter> <!-- unixdev -->
+</appendix> <!-- unixdev -->
 

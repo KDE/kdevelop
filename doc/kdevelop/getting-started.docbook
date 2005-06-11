@@ -1,5 +1,31 @@
 <chapter id="getting-started">
 
+<!-- ToDo: 
+Put the AppWizard section at the beginning.
+Before anything else, let the user generate
+a hello program like this:
+- assumes KDevelop is properly installed,
+  e.g. from a good Linux distribution
+  (list those that include KDevelop?)
+- start KDevelop
+- if settings are needed, accept default ones
+- Project - New Project
+- C++ - KDE - Simple KDE application
+- name: hello, location: default (/home/user). Next
+- Project Options: Leave as default. Next
+- .h Template: Leave as default. Next
+- .cpp Template: Leave as default. Finish
+- Build - Execute Program (Yes to run automake & friends)
+- Messages window appears. Wait until program is compiled.
+- Finally, program pops up, saying "Hello World".
+
+After this, explore the KDevelop functionality
+with the hello program as an example.
+
+Also: Links to detailed descriptions in the main part.
+Volker Paul
+-->
+
 <chapterinfo>
   <authorgroup>
     <author><firstname>Bernd</firstname><surname>Pol</surname></author>
@@ -10,20 +36,22 @@
 <title>Getting Started with &kdevelop; &mdash; a Guided Tour</title>
 
 <para>
-Now that you have installed your &kdevelop; &IDE;, how are you going to make good use of it? As this is a complex application, the learning curve may be somewhat steep, especially if you are not already used to this type of an Integrated Development Environment.
+Now that you have installed your &kdevelop; IDE, how are you going to make good use of it? As this is a complex application, the learning curve may be somewhat steep, especially if you are not already used to this type of an Integrated Development Environment.
 </para>
 <para>
-We will try to soften this learning curve a bit by stepping through the makings of a simple &kde; C++ application. Thereby we will have a (cursory) look at:
-</para>	
+We will try to soften this learning curve a bit by stepping through the makings of a simple KDE C++ application. Thereby we will have a (cursory) look at:
+</para>
 <simplelist>
-  <member><link linkend="gettingstarted-overview">What is there seen on the surface of the &kdevelop; &IDE;.</link></member>
-<member><link linkend="gettingstarted-configure">Some initial configuration steps.</link></member>
+  <member><link linkend="gettingstarted-overview">What is there seen on the surface of the &kdevelop; IDE.</link></member>
+<!--  <member><link linkend="gettingstarted-configure">Some initial configuration steps.</link></member> -->
   <member><link linkend="gettingstarted-new">How to create a new project.</link></member>
+<!--  
   <member><link linkend="gettingstarted-edit">How to work with documents.</link></member>
   <member><link linkend="gettingstarted-compile">How to compile the application in this project.</link></member>
   <member><link linkend="gettingstarted-extend">How to add classes and other detail to your project.</link></member>
   <member><link linkend="gettingstarted-debug">What to do to debug the application.</link></member>
   <member><link linkend="gettingstarted-doc">Some basic tools to build program or user documentation.</link></member>
+-->
 </simplelist>
 
 <sect1 id="gettingstarted-overview">
@@ -41,42 +69,32 @@ When you start &kdevelop; for the first time you will get a display similar to t
     <imageobject>
       <imagedata fileref="empty-ide.png" format="PNG"/>
     </imageobject>
-<textobject><phrase>The &kdevelop; initial layout</phrase></textobject>
     <caption><para>
     The &kdevelop; initial layout
     </para></caption>
   </mediaobject>
 </screenshot>
 
-<variablelist>
-<varlistentry>
-<term>Workspace Area and Tool View Tabs</term>
-<listitem>
+<formalpara>
+<title>Workspace Area and Tool View Tabs</title>
 <para>
 In this intitial case &kdevelop; uses the so-called <link linkend="uimodes-survey">IDEAl user interface mode</link>. A workspace area of maximum possible size is surrounded left, bottom, and right by a series of buttons which act similar to tabs on a tabbed display. If you click on one of those tabs, a so-called <emphasis>tool view window</emphasis> will open which allows you to work on a specific task.
 </para>
-</listitem>
-</varlistentry>
+</formalpara>
 
-<varlistentry>
-<term>Menu and Toolbars</term>
-<listitem>
+<formalpara>
+<title>Menu and Toolbars</title>
 <para>
 On top there is the usual menubar, followed by several rows of toolbars, some being initially empty. They will get populated once there is a project opened for actual work.
 </para>
-</listitem>
-</varlistentry>
+</formalpara>
 
-<varlistentry>
-<term>Status Bar</term>
-<listitem>
+<formalpara>
+<title>Status Bar</title>
 <para>
 Finally there is a status bar on the bottom of the window displaying short informations on several tasks.
 </para>
-</listitem>
-</varlistentry>
-</variablelist>
-
+</formalpara>
 </sect2> <!-- gettingstarted-overview-basic -->
 
 <sect2 id="gettingstarted-overview-help">
@@ -86,28 +104,20 @@ Finally there is a status bar on the bottom of the window displaying short infor
 Besides the <guimenu>Help</guimenu> which offers answers to specific questions, the status bar and two kinds of tooltips provide some quick information.
 </para>
 
-<variablelist>
-<varlistentry>
-<term>What Does This Menu Entry Do?</term>
-<listitem>
+<formalpara>
+<title>What Does This Menu Entry Do?</title>
 <para>When you place the mouse cursor on a menu entry, there will usually some short information be displayed in the status bar. While in most cases this repeats just the name of the selection, in some cases it will provide additional information about the purpose of the menu command.</para>
-</listitem>
-</varlistentry>
+</formalpara>
 
-<varlistentry>
-<term>What Is the Name of This Item?</term>
-<listitem>
-<para>On many items a short function name tooltip will pop up when you place the cursor on it for a few seconds. This is useful for quick orientation on toolbar or tool view tabs in IDEAl mode when the &IDE; has been set up to display icons only on these buttons.</para>
-</listitem>
-</varlistentry>
+<formalpara>
+<title>What Is the Name of This Item?</title>
+<para>On many items a short function name tooltip will pop up when you place the cursor on it for a few seconds. This is useful for quick orientation on toolbar or tool view tabs in IDEAl mode when the IDE has been set up to display icons only on these buttons.</para>
+</formalpara>
 
-<varlistentry>
-<term>What Does This Item Do?</term>
-<listitem>
-<para>More information is available through expanded tooltip help for many items on the &IDE;. Select <menuchoice><guimenu>Help</guimenu> <guimenuitem>What's This?</guimenuitem></menuchoice> or press <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo>, then with the question mark cursor select the item you want to know more of. You can as well open any menu this way and click on a specific menu entry (active as well as greyed disabled ones) to see if more information is available.</para>
-</listitem>
-</varlistentry>
-</variablelist>
+<formalpara>
+<title>What Does This Item Do?</title>
+<para>More information is available through expanded tooltip help for many items on the IDE. Select <menuchoice><guimenu>Help</guimenu> <guimenuitem>What's This?</guimenuitem></menuchoice> or press <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo>, then with the question mark cursor select the item you want to know more of. You can as well open any menu this way and click on a specific menu entry (active as well as greyed disabled ones) to see if more information is available.</para>
+</formalpara>
 
 </sect2> <!-- gettingstarted-overview-help -->
 
@@ -118,28 +128,17 @@ Besides the <guimenu>Help</guimenu> which offers answers to specific questions, 
 There are ten menus selectable on the menubar. Most of them get fully populated once a project is opened for actual work while others need a document opened at least. In short, they will allow the following action types.
 </para>
 
+<para>This is only an overview. For a detailed listing of the menus and their items,
+see the <link linkend="commands">Command Reference</link>.</para>
+
 <variablelist>
   <varlistentry>
   <term><guimenu>File</guimenu></term>
   <listitem>
-
-<variablelist>
-<varlistentry>
-<term>Usual Actions</term>
-<listitem>
-    <para>This is pretty standard. It allows to create, open, save, print,
-    and close document files as well as quitting the &kdevelop; application
-    as usual.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><guimenuitem>Revert Changes</guimenuitem></term>
-<listitem>
-    <para>Additionally it allows to revert changes by reloading file
-    contents in an orderly way.</para>
-</listitem>
-</varlistentry>
-</variablelist>
+    <formalpara><title>Usual Actions</title>
+    <para>This is pretty standard. It allows to create, open, save, print, and close document files as well as quitting the &kdevelop; application as usual.</para></formalpara>
+    <formalpara><title>Revert Changes</title>
+    <para>Additionally it allows to revert changes by reloading file contents in an orderly way.</para></formalpara>
   </listitem>
   </varlistentry>
   
@@ -147,178 +146,89 @@ There are ten menus selectable on the menubar. Most of them get fully populated 
   <term><guimenu>Edit</guimenu></term>
   <listitem>
     <para>This menu is useful only if a document is opened.</para>
-<variablelist>
-<varlistentry>
-<term>Usual Actions</term>
-<listitem>
-    <para>It provides the usual undo/redo and cut/copy/paste
-    actions. Furthermore it allows to select text blocks in various
-    ways.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><guimenuitem>Search and Replace</guimenuitem></term>
-<listitem>
-    <para>There is a very powerful search facilitiy available on the
-    <guimenu>Edit</guimenu> menu. In addition to the usual search and
-    replace actions limited to the the current document you may as well
-    conduct global search and replace actions. This allows to work on all
-    files of the project in a single turn.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-    <term>Advanced Text Edit</term>
-<listitem>
-    <para>There are provisions to reformat the current document and to
-    automatically complete partially typed texts in various ways.</para>
-</listitem>
-</varlistentry>
-</variablelist>
+    <formalpara><title>Usual Actions</title>
+    <para>It provides the usual undo/redo and cut/copy/paste actions. Furthermore it allows to select text blocks in various ways.</para></formalpara>
+    <formalpara><title>Search and Replace</title>
+    <para>There is a very powerful search facilitiy available on the <guimenu>Edit</guimenu> menu. In addition to the usual search and replace actions limited to the the current document you may as well conduct global search and replace actions. This allows to work on all files of the project in a single turn.</para></formalpara>
+    <formalpara><title>Advanced Text Edit</title>
+    <para>There are provisions to reformat the current document and to automatically complete partially typed texts in various ways.</para></formalpara>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>View</guimenu></term>
   <listitem>
-    <para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if
-    there is a project currently open. In this case there will be the
-    following actions available (amongst others):</para>
-<variablelist>
-<varlistentry>
-<term>Navigation History</term>
-<listitem>
-<para>Switch back and forth through the documents &etc; you visited.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Error Tracking</term>
-<listitem>
+    <para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there is a project currently open. I this case there will be the following actions available (amongst others):</para>
+    <formalpara><title>Navigation History</title>
+    <para>Switch back and forth through the documents &etc; you visited.</para>
+    </formalpara>
+    <formalpara><title>Error Tracking</title>
     <para>Navigate to the source lines of the errors encountered in the most recent compilation/build process.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Manage Tool View</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Manage Tool View</title>
     <para>Select or hide tool view windows or tool view docks.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Editor Related Acions</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Editor Related Acions</title>
     <para>Some entries in the <guimenu>View</guimenu> menu control the look and view of the editor you use. In case of the &kate; Part (Embedded Advanced Text Editor) there will be the following controls available:</para>
+    </formalpara>
     <itemizedlist>
       <listitem><para>Control the word wrap behaviour in the document window.</para></listitem>
       <listitem><para>Show or hide several border displays in the document windows: line numbers, icons, and, additionally, bookmark marks in the scroll bar.</para></listitem>
       <listitem><para>Control the display of folded (temporarily hidden) sections in a source text.</para></listitem>
     </itemizedlist>
-</listitem>
-</varlistentry>
-</variablelist>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Project</guimenu></term>
   <listitem>
-    <para>All work of &kdevelop; is based on <emphasis>projects</emphasis>
-    which basically collect source files, build management files, and other
-    information in one project directory. In this menu you control which
-    project to use, which properties it has, and some other managing
-    actions. In particular:</para>
-<variablelist>
-<varlistentry>
-<term>Open a Project</term>
-<listitem>
+    <para>All work of &kdevelop; is based on <emphasis>projects</emphasis> which basically collect source files, build management files, and other information in one project directory. In this menu you control which project to use, which properties it has, and some other managing actions. In particular:</para>
+    <formalpara><title>Open a Project</title>
     <para>Allows to create new projects, open existing ones, and import projects from other environments.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Project Options</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Project Options</title>
     <para>Allows to define a whole bunch of different project properties.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Classes Management</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Classes Management</title>
     <para>Add new classes to the project and traverse the inheritance tree of a class.</para>
-    </listitem>
-</varlistentry>
-<varlistentry>
-    <term>Distribute Project</term>
-<listitem>
-    <para>Helps to build distribution packages of the project.</para>
-</listitem>
-</varlistentry>
-</variablelist>
+    </formalpara>
+    <formalpara><title>Distribute Project</title>
+    <para>Helps to build distribution packages of the project.</para></formalpara>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Build</guimenu></term>
   <listitem>
-    <para>This menu is all about compiling and documenting the project. Thus
-    it is of use only when a project is actually open. In this case it
-    provides the following actions:</para>
-<variablelist>
-<varlistentry>
-<term>Compile, Link, Execute</term>
-<listitem>
-    <para>Allows to compile and link the whole project or parts of it as well as run the application from within the &IDE;.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Prepare Build Operations</term>
-<listitem>
+    <para>This menu is all about compiling and documenting the project. Thus it is of use only when a project is actually open. In this case it provides the following actions:</para>
+    <formalpara><title>Compile, Link, Execute</title>
+    <para>Allows to compile and link the whole project or parts of it as well as run the application from within the IDE.</para>
+    </formalpara>
+    <formalpara><title>Prepare Build Operations</title>
     <para>This actually depends on the make system you use for this project. In the case of automake projects it allows to run <filename>Makefile.cvs</filename> and <filename>configure</filename> on their own. There are also provisions to remove translated files from the project in various stages of intensity.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Install the Application</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Install the Application</title>
     <para>Allows to install the application both in local directories as well as in system directories only accessible to the root user.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>&API; Documentation</term>
-<listitem>
-    <para>Build or remove a doxygen-based &API; documentation of the project as defined in the project options.</para>
-</listitem>
-</varlistentry>
-</variablelist>
+    </formalpara>
+    <formalpara><title>API Documentation</title>
+    <para>Build or remove a doxygen-based API documentation of the project as defined in the project options.</para>
+    </formalpara>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Debug</guimenu></term>
   <listitem>
-    <para>Although this menu will be filled once a project is active, it of
-    course is useful only if the actual project has been previously compiled
-    with debugging information (this is basically set up in
-    <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project
-    Options...</guimenuitem></menuchoice>). There are the following actions
-    available in this case:</para>
-<variablelist>
-<varlistentry>
-<term>Usual Debugger Actions</term>
-<listitem>
+    <para>Although this menu will be filled once a project is active, it of course is useful only if the actual project has been previously compiled with debugging information (this is basically set up in <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project Options..</guimenuitem></menuchoice>). There are the following actions available in this case:</para>
+    <formalpara><title>Usual Debugger Actions</title>
     <para>The first section in the <guimenu>Debug</guimenu> provides a graphical interface to the GDB &GNU; symbolic debugger. It allows to start and stop your application in the debugger and step through it in various ways.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Breakpoints</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Breakpoints</title>
     <para>&kdevelop; provides several means to set breakpoints in your application sources. One is through the use of the <guimenuitem>Toggle Breakpoint</guimenuitem> menu entry.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Advanced Debugging</term>
-<listitem>
-    <para>Other <guimenu>Debug</guimenu> menu entries allow more sophisticated program analysis. Use <keycombo>&Shift;<keycap>F1</keycap></keycombo> to get more information about their purpose.</para>
-</listitem>
-</varlistentry>
-</variablelist>
+    </formalpara>
+    <formalpara><title>Advanced Debugging</title>
+    <para>Other <guimenu>Debug</guimenu> menu entries allow more sophisticated program analysis. Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more information about their purpose.</para>
+    </formalpara>
   </listitem>
   </varlistentry>
   
@@ -332,48 +242,34 @@ There are ten menus selectable on the menubar. Most of them get fully populated 
   <varlistentry>
   <term><guimenu>Tools</guimenu></term>
   <listitem>
-    <para>&kdevelop; is highly customizable. You may select a favorite
-    editor for your documents as well as provide external and plugged-in
-    tools to extend the basic &IDE; capabilities. The <guimenu>Tools</guimenu>
-    menu reflects most of this setup.</para>
-<variablelist>
-<varlistentry>
-<term>Advanced Editing</term>
-<listitem>
+    <para>&kdevelop; is highly customizable. You may select a favorite editor for your documents as well as provide external and plugged-in tools to extend the basic IDE capabilities. The <guimenu>Tools</guimenu> menu reflects most of this setup.</para>
+    <formalpara><title>Advanced Editing</title>
     <para>The upper set of <guimenu>Tools</guimenu> menu entries will be provided by the editor plugin which is in use. You may select your favorite editor via <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guilabel>Editor</guilabel></menuchoice>. Once an editable document file is selected, the upper part of the  <guimenu>Tools</guimenu> menu will provide advanced editing commands specific to the editor part in use.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Web Site Handling</term>
-<listitem>
+    </formalpara>
+    <formalpara><title>Web Side Handling</title>
     <para>In case the active document window contains a HTML page (&eg; displayed from a <guilabel>Documentation</guilabel> selection), the <guimenu>Tools</guimenu> will show additional menu entries which provide various means to handle Web pages.</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>Other Tools</term>
-<listitem>
-    <para>Usually there will be a bunch of other entries according to the
-    currently available tools. Use
-    <keycombo>&Shift;<keycap>F1</keycap></keycombo> to get more information
-    about their purposes.</para>
-</listitem>
-    </varlistentry>
-</variablelist>
-
+    </formalpara>
+    <formalpara><title>Other Tools</title>
+    <para>Usually there will be a bunch of other entries according to the currently available tools. Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more information about their purposes.</para>
+    </formalpara>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Settings</guimenu></term>
   <listitem>
-    <para></para>
+    <para>This menu allows you to show and hide menubar, toolbars and statusbar. Also, you can configure
+    shortcuts, toolbars, notifications, the editor and KDevelop's general behavior.</para>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Help</guimenu></term>
   <listitem>
-    <para></para>
+    <para>Here you can open this KDevelop manual, read Qt documentation, 
+    open man pages (the traditional UNIX manual format) and
+    info pages (the GNU manual format), report bugs and get
+    some info about your current KDevelop version and its authors.</para>
   </listitem>
   </varlistentry>
 </variablelist>
@@ -382,128 +278,154 @@ There are ten menus selectable on the menubar. Most of them get fully populated 
 
 </sect1> <!-- gettingstarted-overview -->
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!--
+This is covered elsewhere, so unless someone convinces me that 
+it is useful to have it here as well, I will eventually delete it. Volker Paul.
 
 <sect1 id="gettingstarted-configure">
 <title>A Bit of Configuration</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect1> <!-- gettingstarted-configure -->
+</sect1> 
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+ -->
 
 <sect1 id="gettingstarted-new">
 <title>How to Start a New Project &mdash; the &appwizard;</title>
 
-<para>(--- to be written ---)</para>
+<para>This is to show you how easy it is to make KDevelop
+create a running program for you.</para>
+
+<para>The <link linkend="applicationwizard">&appwizard;</link> can quickly create a project for you
+from a list of predefined project templates. All you have to do 
+is select the type of project you want, how to name it, and where to put it.
+</para>
+
+<para>Select Project - New Project. The Create New Project Window appears.
+Let's assume you want to create a normal KDE project.
+So select the type: C++ - KDE - Simple KDE Application.
+Enter the name, e.g. helloworld. The default location will be /home/yourhome/helloworld.
+If you finished the settings in this window, click next.
+In the next window you can set some options which are preset to useful default values.
+Click next.
+Then you are shown the template for .h files, and for .cpp files.
+Again, you can leave them as default, and click Finish.
+You will see the message that your program has been created.
+</para>
+
+<para>To run your program, select Build - Execute Program.
+You receive a message that automake &amp; friends must be run first.
+Click OK.
+Your program is built and executed and a window of your new program pops up,
+saying "Hello World".
+You can now edit your program and add some more useful functionality.
+</para>
 
 </sect1> <!-- gettingstarted-new -->
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- 
+Again, this will be deleted, if nobody complains.
 
 <sect1 id="gettingstarted-edit">
 <title>Working With Documents</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
 <sect2 id="gettingstarted-edit-codecompletion">
 <title>How to Automate Some Typing Tasks</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect2> <!-- gettingstarted-edit-codecompletion -->
+</sect2> 
 
-</sect1> <!-- gettingstarted-edit -->
+</sect1> 
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="gettingstarted-compile">
 <title>How to Compile a Project</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
 <sect2 id="gettingstarted-compile-messages">
 <title>What the Messages Tell</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect2> <!-- gettingstarted-compile-messages -->
+</sect2> 
 
-</sect1> <!-- gettingstarted-compile -->
+</sect1> 
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="gettingstarted-extend">
 <title>How to Extend a Project &mdash; the &automanag;</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
 <sect2 id="gettingstarted-extend-automake">
 <title>A Short Look at the Automake Machinery</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect2> <!-- gettingstarted-extend-automake -->
+</sect2> 
 
 <sect2 id="gettingstarted-extend-pics">
 <title>How to Place Icons in a Separate Directory</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect2> <!-- gettingstarted-extend-pics -->
+</sect2> 
 
 <sect2 id="gettingstarted-extend-class">
 <title>How to Add New Classes</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
 <caution><para>
 Be careful when you select your class file names. It is extremely difficult to change them later.
 </para></caution>
 
-</sect2> <!-- gettingstarted-extend-class -->
+</sect2> 
 
 <sect2 id="gettingstarted-extend-subproject">
 <title>What is in a Subproject?</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
 <sect3 id="gettingstarted-extend-subproject-active">
 <title>Concentrate on Your Work &mdash; the Active Target</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect3> <!-- gettingstarted-extend-subproject-active -->
+</sect3> 
 
-</sect2> <!-- gettingstarted-extend-subproject -->
+</sect2> 
 
 <sect2 id="gettingstarted-extend-restructure">
 <title>Some Steps to Restructure a Project</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect2> <!-- gettingstarted-extend-restructure -->
+</sect2> 
 
 
-</sect1> <!-- gettingstarted-extend -->
+</sect1> 
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 
 <sect1 id="gettingstarted-debug">
 <title>How to Debug</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect1> <!-- gettingstarted-debug -->
+</sect1>
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="gettingstarted-doc">
 <title>A Note on Documentation</title>
 
-<para>(--- to be written ---)</para>
+<para>(- to be written -)</para>
 
-</sect1> <!-- gettingstarted-doc -->
-
+</sect1>
+-->
 </chapter>

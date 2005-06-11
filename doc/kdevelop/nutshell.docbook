@@ -1,0 +1,242 @@
+<appendix id="nutshell">
+<title>In a Nutshell &mdash; Tips and Tricks</title>
+
+<!-- Traditionally, most of this stuff will have been put into a FAQ section. It is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for.
+
+I disagree. What is useful for a quick start, should go in "Getting started".
+Troubleshooting hints go in the appendix or a FAQ. Volker Paul.
+
+This chapter is meant to provide short hints and tips together with (mandatory) navigation links.
+There should be an additional FAQ section near the end nevertheless which contains more general stuff not directly related to navigating the manual. -->
+
+<para>
+The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. There are also short hints on how to solve some common problems when working with &kdevelop;.
+</para>
+<para>
+If you want more information on a topic, just follow the link in the title starting that advice.
+</para>
+<para>
+Information on these topics is availabe:
+</para>
+<simplelist>
+  <member><link linkend="nutshellitem-look-and-feel">Look and Feel</link></member>
+  <member><link linkend="nutshellitem-projects">Projects</link></member>
+  <member><link linkend="nutshellitem-compilation">Compilation</link></member>
+  <member><link linkend="nutshellitem-automake">&automanag;</link></member>
+  <member><link linkend="nutshellitem-compilemake">Compile/Make Problems</link></member>
+  <member><link linkend="nutshellitem-others">Other Topics</link></member>
+</simplelist>
+
+<variablelist id="nutshellitem-look-and-feel">
+<title>Look and Feel</title>
+
+<varlistentry>
+<term id="nutshell-ideal-tabs"><link linkend="setup-ui-toolview">Force
+smaller tool view tabs in IDEAl Mode</link></term>
+<listitem>
+<para>By default &kdevelop; starts with large text-based tool tip tabs
+around the work area. You may change this look to &eg; save space in the
+&kdevelop; configuration dialog (<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User
+Interface</guimenuitem></menuchoice>).</para>
+<para>If you use an older &kdevelop; 3 version, this configuration dialog
+may not be available. To change the toolview tabs display manually, place a
+<option>MDIStyle</option> entry under the
+<option>[UI]</option> tag in your
+<filename>$KDEHOME/share/config/kdeveloprc</filename> configuration file as
+follows:</para>
+
+<simplelist>
+<member><option>MDIStyle=0</option>: icons only</member>
+<member><option>MDIStyle=1</option>: text only (default)</member>
+<!--<member><computeroutput>MDIStyle=2</computeroutput>: icons only on smaller tabs (not very useful)</member>-->
+<member><option>MDIStyle=3</option>: icons and text</member>
+</simplelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>  <!-- ### remove this entry when the bug is repaired -->
+<term id="nutshell-weird-style">Weird colored characters and/or display
+style</term>
+<listitem>
+<para>If you notice random colored letters everywhere (&ie; on tabs, on tool
+bars, etc.) and the &kdevelop; window seemingly uses a wrong display style,
+this may help:</para>
+
+<itemizedlist>
+<listitem><para>In your
+<filename>$<envar>KDEHOME</envar>/share/config/kdeveloprc</filename>
+configuration file find the line containing
+<quote><computeroutput>Style=Checked</computeroutput></quote> and remove
+it. Then restart &kdevelop;.
+</para>
+</listitem>
+</itemizedlist>
+<para>(This behaviour does sometimes occur after you left clicked a .ui file
+in one of the file navigators and &kdevelop; did load
+<application>KUIViewer</application> to show the &GUI; which was produced
+from this file.)</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="nutshell-full-screen"><link linkend="maximize-workspace">Full
+screen mode</link></term>
+<listitem>
+<para>Select <menuchoice><guimenu>View</guimenu><guimenuitem>Full-Screen
+Mode</guimenuitem></menuchoice> from the menus or press
+<keycombo>&Ctrl;&Shift;<keycap>F</keycap></keycombo>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="nutshell-hide-menu"><link linkend="maximize-workspace">Hide/Unhide
+the menubar</link></term>
+<listitem>
+<para>To hide the menubar select
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Show
+Menubar</guimenuitem></menuchoice> from the menus or press
+<keycombo>&Ctrl;<keycap>M</keycap></keycombo>. To redisplay the menubar only
+<keycombo>&Ctrl;<keycap>M</keycap> </keycombo> is available.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist>
+<title id="nutshellitem-projects">Projects</title>
+<varlistentry>
+<term><link linkend="new-projects">Create New Project</link></term>
+<listitem>
+<para><menuchoice><guimenu>Project</guimenu><guimenuitem>New
+Project...</guimenuitem></menuchoice> will start the <link
+linkend="applicationwizard">&appwizard;</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="nutshell-new-custom-project">Create a custom project</term>
+<listitem>
+<para>There is no direct way to create a custom project (&ie; a project
+which does use its own makefiles). Use
+<menuchoice><guimenu>Project</guimenu> <guimenuitem>Import Existing
+Project</guimenuitem></menuchoice> instead. Remember to set the appropriate
+<guilabel>Project Type</guilabel>, labeled by an additional <quote>(Custom
+Makefiles)</quote>, in the dialog.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="nutshell-project-options">Use project options early</term>
+<listitem>
+<para>Whenever you start a new project do not forget to set the
+<menuchoice><guimenu>Project</guimenu> <guimenuitem>Project
+Options...</guimenuitem></menuchoice> to your needs.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist id="nutshellitem-compilation">
+<title>Compilation</title>
+<varlistentry>
+<term id="nutshell-compilemsg-detail"><link
+linkend="setup-main-compile">Missing detail in compilation
+messages</link></term>
+<listitem>
+<para>If during compilations you notice some valuable information is missing
+in the <guilabel>Messages Output View</guilabel> window, it may be that the
+level of message detail is set too low. &RMB; click in the window and select
+another detail level from the context menu.<!-- they are programmers, so -->
+<!-- they should know what a context menu is. (Re: But they keep on asking -->
+<!-- just about this one all the time!! bp) -->
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist id="nutshellitem-automake">
+<title><link linkend="automake-manager">&automanag;</link></title>
+
+<varlistentry>
+<term>Create new files in a project</term>
+<listitem>
+<para>Select the sub-project in the upper half of the &automanag;, then
+&RMB; click in the lower half on the groups title you want to have the files
+added and select <guimenuitem>Create New File...</guimenuitem>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="nutshell-add-project-file">
+<term>Add existing files to a project</term>
+<listitem>
+<para>Select the sub-project in the upper half of the &automanag;, then
+&RMB; click in the lower half on the groups title you want to have the files
+added and select <guimenuitem>Add Existing Files...</guimenuitem>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Remove a file from a project</term>
+<listitem>
+<para>Select the sub-project in the upper half of the &automanag;, then in
+the lower half open the groups list you want to have the file removed from,
+&RMB; click on the file in this list and select
+<guimenuitem>Remove</guimenuitem>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist id="nutshellitem-compilemake">
+<title>Compile/Make Problems</title>
+<varlistentry>
+<term id="nutshell-builddirproblems"><link
+linkend="defaultbuild-warning">Project does not build again after switching
+to/from default target</link></term>
+<listitem>
+<para>There is a problem with the &automake;/&autoconf; machinery. If
+<menuchoice> <guimenu>Project</guimenu> <guimenuitem>Build
+Configuration</guimenuitem></menuchoice> provides to select from three build
+directories: <guimenuitem>default</guimenuitem>,
+<guimenuitem>optimized</guimenuitem>, and <guimenuitem>debug</guimenuitem>,
+by all means stick to <emphasis>either</emphasis> the default
+<emphasis>or</emphasis> the debug/optimized targets.</para>
+<itemizedlist>
+<listitem>
+<para>Once you configured your project with default it will no longer build
+with debug or optimzed.</para>
+</listitem>
+<listitem>
+<para>Once you configured your project with debug or optimzed it will no
+longer build with default.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="nutshell-autoconf-problem"><quote>Wrong
+<command>autoconf</command> version</quote> &etc; Error</term>
+<listitem>
+<para>There are several error messages concerning too old versions of
+<application>autoconf</application> &etc; prohibiting
+<command>configure</command> to work properly. Run
+<command>autoreconf</command> in the directory tree where the
+<filename>configure.in</filename> files in question are. This command will
+try to update the information in the &GNU; Build System files. See
+<command>man autoreconf</command> for more information.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist id="nutshellitem-others">
+<title>Other Topics</title>
+<varlistentry>
+<term id="nutshell-others-files"><link linkend="app-files">Configuration
+Files used by &kdevelop;</link></term>
+<listitem>
+<para>Usually you should not need to care, but this is very useful to know
+in case something went wrong with your setup.</para>
+</listitem>	
+</varlistentry>
+</variablelist>
+
+</appendix> <!-- nutshell -->

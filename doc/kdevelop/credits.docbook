@@ -1,0 +1,24 @@
+<chapter id="credits">
+<title>Credits</title>
+
+<sect1 id="credits-contributions">
+<title>Contributions</title>
+
+<para>
+<itemizedlist>
+  <listitem><para>
+  The initial contents of this manual were witten by Bernd Gehrmann <email>bernd@kdevelop.org</email> and Caleb Tennis <email>caleb@aei-tech.com</email>.
+  </para></listitem>
+  <listitem><para>
+  The <link linkend="automake-manager-summary">Summary of &automanag;</link> and <link linkend="automake-manager-operation">Automake Manager Operation</link> chapters were written by Ian Wadham, <email>ianw@netspace.net.au</email>).
+  </para></listitem>
+</itemizedlist>
+</para>
+
+</sect1> <!-- credits-contributions -->
+
+<!--CREDITS_FOR_TRANSLATORS-->
+
+</chapter> <!-- credits -->
+
+<!-- ====================================================================== -->

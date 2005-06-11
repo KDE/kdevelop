@@ -1,11 +1,11 @@
-<chapter id="kdevelop-install">
+<appendix id="kdevelop-install">
 
-<chapterinfo>
+<appendixinfo>
   <authorgroup>
     <author><firstname>Bernd</firstname><surname>Pol</surname></author>
     <!-- ROLES_OF_TRANSLATORS -->
   </authorgroup>
-</chapterinfo>
+</appendixinfo>
 
 <title>Installing &kdevelop;</title>
 
@@ -346,7 +346,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   <secondary>installation</secondary></indexterm>
 
 <para>
-Once all requirements are met, you are ready to compile and install &kdevelop;. This chapter will discuss the necessary steps to do so.
+Once all requirements are met, you are ready to compile and install &kdevelop;. This appendix will discuss the necessary steps to do so.
 </para>
 <itemizedlist>
   <listitem><para>
@@ -749,4 +749,4 @@ You will most probably see a lot of warning and/or error messages during the API
 
 </sect1> <!-- make-api -->
 
-</chapter> <!-- kdevelop-install -->
+</appendix> <!-- kdevelop-install -->

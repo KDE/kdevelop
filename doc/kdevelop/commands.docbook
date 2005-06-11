@@ -1,0 +1,1987 @@
+<chapter id="commands">
+
+<!-- ToDo: Complete descriptions, e.g. from What's This.
+           Link to more detailed description, e.g. in plugin chapter.
+	 
+-->
+
+<chapterinfo>
+<authorgroup>
+<author><firstname>Volker</firstname> <surname>Paul</surname></author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<date>2005-04-03</date>
+</chapterinfo>
+
+<title>Command Reference</title>
+
+<note><para>The shortcut key combinations shown in this chapter are the 
+default ones. They can be changed.
+</para></note>
+
+
+
+<sect1 id="menubar">
+<title>The Menubar</title> <para>Note that some menu entries only appear when
+they are applicable. Especially, some entries are linked to
+<link linkend="plugin-tools">plugin</link>
+functionality which is only available when the plugin is enabled.</para>
+
+
+
+
+
+
+<!--  =======================   F I L E    ============================= -->
+
+<sect2 id="menu-file">
+<title>The <guimenu>File</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para>Create a new file. 
+The user is prompted to select the directory (default: the current project's
+source directory) and enter a file name. The file type can be selected from a list.
+Also, the user can choose whether the file is to be added to the project.
+Then the Automake Manager asks which target to add the new file to.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open</guimenuitem>
+</menuchoice></term>
+<listitem><para>Open an existing file in a simple dialog
+box.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para>Displays a submenu showing the files recently opened.
+Selecting one of these will make KDevelop open that file.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quick Open</guimenuitem>
+</menuchoice></term>
+<listitem><para>Presents a list of files in the current project's
+source directory. The user can select from this list
+or type a filename. That file is then opened.
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para>Saves the current file.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Uses the
+<guilabel>Save As...</guilabel> dialog box to let you save a copy
+under a new name.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save All</guimenuitem>
+</menuchoice></term>
+<listitem><para>Saves all open files.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycap>F5</keycap></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para>Reloads current file to show changes 
+made by different programs.
+(Note that such changes are normally detected automatically
+and the user is prompted whether the file is to be reloaded.)
+.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Revert all</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Reverts all changes in opened files.
+Prompts to save changes so the
+reversion can be canceled for each
+modified file.
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Print.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Export
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F4</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Closes current file.
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Close All</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Closes all open files.
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Close All Others</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Closes all files except the current one.
+Very useful if you opened a lot of files and you want 
+to concentrate on the current one.
+Without this, you would have to close them all
+and re-open the current one.
+</para>
+<para>Note there is a similar command in the Window menu.
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para>Close KDevelop.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+
+
+<!--  =======================   E D I T    ============================= -->
+
+
+<sect2 id="menu-edit">
+<title>The <guimenu>Edit</guimenu> Menu</title>
+
+
+<variablelist>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Undo</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Undo
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Redo</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Redo
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>X</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Cut
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Copy
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Paste
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Select All</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Select All
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>A</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Deselect</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Deselect
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>B</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Block Selection Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Block Selection Mode
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>Insert</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Overwrite Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Overwrite Mode
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Find
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find Next</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Find Next
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find Previous</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Find Previous
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Replace</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Replace
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>G</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Go to Line</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Go to Line
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find in Files</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Find in Files
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find-Select-Replace</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Find-Select-Replace
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Reformat Source</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Reformat Source
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>J</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Expand Text</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Expand Text
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Expand Abbreviation</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Expand Abbreviation
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Space</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Complete Text</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Complete Text
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F2</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Make Member</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Make Member
+</para></listitem>
+</varlistentry>
+
+
+</variablelist>
+
+</sect2>
+
+
+
+<!--  =======================   V I E W   ============================= -->
+
+
+<sect2 id="menu-view">
+
+<title>The <guimenu>View</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Back</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Back
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Forward</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Forward
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>/</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Switch to...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Switch to...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Raise Editor</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Raise Editor
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F4</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Next Error</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Next Error
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F4</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Previous Error</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Previous Error
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Full Screen Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Full Screen Mode
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F12</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Switch Header/Implementation</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Switch Header/Implementation
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Tool Views</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Tool Views
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Tool Docks</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Tool Docks
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F7</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Switch to Command Line</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Switch to Command Line
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Schema</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Schema
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F10</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Dynamic Word Wrap</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Dynamic Word Wrap
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Dynamic Word Wrap Indicators</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Dynamic Word Wrap Indicators
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show/Hide Static Word Wrap Marker</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Show/Hide Static Word Wrap Marker
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F6</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Show/Hide Icon Border</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Show/Hide Icon Border
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F11</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Show/Hide Line Numbers</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Show/Hide Line Numbers
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show/Hide Scrollbar Marks</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Show/Hide Scrollbar Marks
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F9</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Show/Hide Folding Marks</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Show/Hide Folding Marks
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Code Folding</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Code Folding
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Set Encoding</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Set Encoding
+</para></listitem>
+</varlistentry>
+
+
+
+</variablelist>
+
+</sect2>
+
+
+
+
+<!--  =======================   P R O J E C T    ============================= -->
+
+
+<sect2 id="menu-project">
+<title>The <guimenu>Project</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>New Project...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+New Project...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Open Project...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Open Project...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Open Recent Project</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Open Recent Project
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Active Language</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Active Language
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Import Existing Project...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Import Existing Project...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>New Class...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+New Class...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Class Inheritance Diagram</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Class Inheritance Diagram
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Add Translation...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Add Translation...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Build Configuration</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Build Configuration
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Distribution &amp; Publishing</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Distribution &amp; Publishing
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Project Options...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Project Options...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Close Project</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Close Project
+</para></listitem>
+</varlistentry>
+
+
+
+
+</variablelist>
+
+</sect2>
+
+
+<!--  =======================   B U I L D    ============================= -->
+
+
+<sect2 id="menu-build">
+<title>The <guimenu>Project</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F8</keycap></keycombo>
+</shortcut>
+<guimenu>Build</guimenu>
+<guimenuitem>Build Project</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Build Project
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F7</keycap></keycombo>
+</shortcut>
+<guimenu>Build</guimenu>
+<guimenuitem>Build Active Target</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Build Active Target
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Compile File</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Compile File
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Run Configure</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Run Configure
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Run automake &amp; friends</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Run automake &amp; friends
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Install</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Install
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Install (as root user)</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Install (as root user)
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Clean project</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Clean project
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Distclean</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Distclean
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F9</keycap></keycombo>
+</shortcut>
+<guimenu>Build</guimenu>
+<guimenuitem>Make Messages &amp; Merge</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Make Messages &amp; Merge
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Execute Program</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Execute Program
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Build API Documentation</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Build API Documentation
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Build</guimenu>
+<guimenuitem>Clean API Documentation</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Clean API Documentation
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>Escape</keycap></keycombo>
+</shortcut>
+<guimenu>Build</guimenu>
+<guimenuitem>Stop</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Stop
+</para></listitem>
+</varlistentry>
+
+
+
+
+</variablelist>
+
+</sect2>
+
+
+
+<!--  =======================   D E B U G    ============================= -->
+
+
+<sect2 id="menu-debug">
+<title>The <guimenu>Project</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Start</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Start
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Stop</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Stop
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Interrupt</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Interrupt
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Run to Cursor</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Run to Cursor
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Step Over</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Step Over
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Step over Instruction</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Step over Instruction
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Step Into</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Step Into
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Step into Instruction</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Step into Instruction
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Step Out</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Step Out
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Toggle Breakpoint</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Toggle Breakpoint
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Viewers</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Viewers
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Examine Core File...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Examine Core File...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Attach to Process</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Attach to Process
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Valgrind Memory Leak Check</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Valgrind Memory Leak Check
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Debug</guimenu>
+<guimenuitem>Profile with KCachegrind</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Profile with KCachegrind
+</para></listitem>
+</varlistentry>
+
+
+
+
+</variablelist>
+
+</sect2>
+
+
+
+
+
+<!--  =======================   B O O K M A R K S   ============================= -->
+
+
+
+<sect2 id="menu-bookmarks">
+<title>The <guimenu>Bookmarks</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>B</keycap></keycombo>
+</shortcut>
+<guimenu>Bookmarks</guimenu>
+<guimenuitem>Set Bookmark</guimenuitem>
+</menuchoice></term>
+<listitem><para>Add current selection to your
+bookmarks.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Bookmarks</guimenu>
+<guimenuitem>Clear All Bookmarks</guimenuitem>
+</menuchoice></term>
+<listitem><para>Clear All Bookmarks.</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+
+
+
+<!--  =======================   W I N D O W   ============================= -->
+
+
+<sect2 id="menu-window">
+<title>The <guimenu>Window</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>Window</guimenu>
+<guimenuitem>Close Selected Windows...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Close Selected Windows...</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F4</keycap></keycombo></shortcut>
+<guimenu>Window</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para>Close</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Window</guimenu>
+<guimenuitem>Close All</guimenuitem>
+</menuchoice></term>
+<listitem><para>Close All</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Window</guimenu>
+<guimenuitem>Close All Others</guimenuitem>
+</menuchoice></term>
+<listitem><para>Close All Others</para></listitem>
+</varlistentry>
+
+
+</variablelist>
+
+</sect2>
+
+
+
+
+
+
+<!--  =======================   T O O L S   ============================= -->
+
+
+<sect2 id="menu-tools">
+<title>The <guimenu>Tools</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Read Only Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Read Only Mode
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Filetype Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Filetype Mode
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Highlight Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Highlight Mode
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>End of Line</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+End of Line
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Spelling</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Spelling
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Indent</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Indent
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>I</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>unindent</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+unindent
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Clean Indentation</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Clean Indentation
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Tab</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Align</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Align
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>D</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Comment</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Comment
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>D</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Uncomment</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Uncomment
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>U</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Uppercase</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Uppercase
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>U</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Lowercase</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Lowercase
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>U</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Capitalize</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Capitalize
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>J</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Join Lines</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Join Lines
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Word Wrap Document</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Word Wrap Document
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Difference Viewer...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Difference Viewer...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Execute Command...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Execute Command...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Filter Selection Through Command...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Filters selection through external command using 
+<link linkend="KDevFilter">the Filter plugin</link>.
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Debug Regular Expression...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Debug Regular Expression...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Part Explorer</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Part Explorer
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Quick Open Class...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Quick Open Class...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>M</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Quick Open Method...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Quick Open Method...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Preview Doxygen Output</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Preview Doxygen Output
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Document Current Function</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Document Current Function
+</para></listitem>
+</varlistentry>
+
+
+
+</variablelist>
+
+</sect2>
+
+
+
+
+<!--  =======================   S E T T I N G S   ============================= -->
+
+
+<sect2 id="menu-settings">
+<title>The <guimenu>Settings</guimenu> Menu</title>
+
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo></shortcut>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show/Hide Menubar</guimenuitem>
+</menuchoice></term>
+<listitem><para>Show/Hide the menubar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Toolbars</guimenuitem>
+</menuchoice></term>
+<listitem><para>Opens a sub menu where you can choose to show or hide 
+the various Toolbars.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Statusbar</guimenuitem>
+</menuchoice></term>
+<listitem><para>Show the Statusbar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Configure Shortcuts...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbar...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Configure Toolbar...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Notifications...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Configure Notifications...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Editor...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Configure Editor...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure KDevelop...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Configure KDevelop...
+</para></listitem>
+</varlistentry>
+
+
+
+
+</variablelist>
+
+</sect2>
+
+
+<!--  =======================   H E L P   ============================= -->
+
+
+<sect2 id="menu-help">
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>KDevelop Handbook</guimenuitem>
+</menuchoice></term>
+<listitem><para>View this document.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo
+ action="simul">&Shift;<keycap>F1</keycap></keycombo></shortcut>
+<guimenu>Help</guimenu>
+<guimenuitem>What's This?</guimenuitem>
+</menuchoice></term>
+<listitem><para>Draws a question mark (?) beside the mouse
+pointer, clicking on a window item such as the
+<guiicon>Stop</guiicon> button will then display a brief explanation. 
+<!-- See
+<link linkend="bubble">Tooltips and What's This?</link>.-->
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>Tip of the Day</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Tip of the Day
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>I</keycap></keycombo>
+</shortcut>
+<guimenu>Help</guimenu>
+<guimenuitem>Look in Documentation Index...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Look in Documentation Index...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>Help</guimenu>
+<guimenuitem>Search in Documentation...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Search in Documentation...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>Man Page...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Man Page...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>Info Page...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+Info Page...
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>Report Bug...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Report bug.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>About KDevelop...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Display some brief information about
+KDevelop's version number, authors and license agreement.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>About KDE...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Show some information about the version of &kde; that
+you are running.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+
+
+</sect1>
+
+
+
+
+</chapter>

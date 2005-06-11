@@ -1,0 +1,24 @@
+<appendix id="app-misc-info">
+<title>Further Information</title>
+<sect1 id="gettinginformation">
+<title>Getting Information</title>
+<para>
+(... to be written ...)
+</para>
+</sect1> <!-- gettinginformation -->
+
+<sect1 id="app-reporting-bugs">
+<title>Reporting Bugs</title>
+<para>
+(... to be written ...)
+</para>
+</sect1> <!-- app-reporting-bugs -->
+
+<sect1 id="app-licensing">
+<title>Licensing</title>
+&underFDL;
+&underGPL;
+</sect1> <!-- app-licensing -->
+</appendix> <!-- app-misc-info -->
+
+<!-- ====================================================================== -->
