@@ -20,7 +20,7 @@ Executable = 1
 StaticLib  = 2
 SharedLib  = 3
 Part       = 4
-KDEInitModule = 5
+KDEInit    = 5
 
 class BuildTarget
    def initialize(name, type, stdPrefix=true)
@@ -142,6 +142,10 @@ class CMakeFile
          printf("part: %s\n", $1)
          targets=$1
          type=Part
+      elsif line =~ /^\s*kdeinit_LTLIBRARIES\s*=\s*(\S+.*)/
+         printf("part: %s\n", $1)
+         targets=$1
+         type=KDEInit
       elsif line =~ /^\s*bin_PROGRAMS\s*=\s*(\S+.*)$/
          targets=$1
          printf("exec: %s\n", $1)
@@ -167,10 +171,10 @@ class CMakeFile
    end
 
    def addSourcesToTarget(line)
-      printf("sources: %s\n", line)
+#      printf("sources: %s\n", line)
       buildTarget=findTargetForSources(line)
       if buildTarget.type==NoTarget
-         printf("target not found\n")
+         printf("target not found: %s\n", line)
          return
       end
 
@@ -298,6 +302,8 @@ class CMakeFile
             srcsName=buildTarget.name+"_STAT_SRCS"
          elsif buildTarget.type==Part
             srcsName=buildTarget.name+"_PART_SRCS"
+         elsif buildTarget.type==KDEInit
+            srcsName=buildTarget.name+"_KDEINIT_SRCS"
          else
             srcsName=buildTarget.name+"_SRCS"
          end
@@ -360,7 +366,19 @@ class CMakeFile
             file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib/kde3 %s )\n\n", buildTarget.name)
-#            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\"\n\n")
+         elsif buildTarget.type==KDEInit
+            file.printf("ADD_LIBRARY(kdeinit_%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
+#            file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
+            file.printf("TARGET_LINK_LIBRARIES(kdeinit_%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("INSTALL_TARGETS(/lib kdeinit_%s )\n\n", buildTarget.name)
+
+#now create the dummy main.cpp and the application
+#            file.fprintf("FILE(WRITE, %s_dummy.cpp, \"extern \"C\" int kdemain(int argc, char* argv[]);\n extern \"C\" int kdeinitmain(int argc, char* argv[]) { return kdemain(argc,argv); } \")", buildTarget.name)
+            file.printf("FILE(WRITE %s_dummy.cpp \"extern \\\"C\\\" int kdemain(int argc, char* argv[]);\\n extern \\\"C\\\" int kdeinitmain(int argc, char* argv[]) { return kdemain(argc,argv); }\\n \")\n", buildTarget.name)
+            file.printf("ADD_EXECUTABLE( %s %s_dummy.cpp )\n", buildTarget.name, buildTarget.name)
+            file.printf("TARGET_LINK_LIBRARIES( %s kdeinit_%s )\n", buildTarget.name, buildTarget.name)
+            file.printf("INSTALL_TARGETS(/bin %s )\n", buildTarget.name)
+
          else
             file.printf("ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)

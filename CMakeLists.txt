@@ -8,7 +8,7 @@ SET(CMAKE_SKIP_RULE_DEPENDENCY 1)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #create config.h and do other system checks
-INCLUDE(CheckSystem.cmake)
+INCLUDE(ConfigureChecks.cmake)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
 
