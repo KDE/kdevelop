@@ -15,15 +15,15 @@ SET(QT_MT_REQUIRED TRUE)
 INCLUDE(FindQt)
 
 #add the definitions found by FindQt to the current definitions
-ADD_DEFINITIONS(${QT_DEFINITIONS})
+ADD_DEFINITIONS(${QT_DEFINITIONS} -DQT_CLEAN_NAMESPACE)
 
 SET(QT_AND_KDECORE_LIBS ${QT_LIBRARIES} kdecore)
 
 #add some KDE specific stuff
-ADD_DEFINITIONS(-Wnon-virtual-dtor -Wno-long-long -Wundef -ansi -Wcast-align -Wconversion -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -O2 -Wformat-security -Wmissing-format-attribute -fno-exceptions -fno-check-new -fno-common)
+ADD_DEFINITIONS(-Wnon-virtual-dtor -Wno-long-long -Wundef -ansi -Wcast-align -Wconversion -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -O2 -Wformat-security -Wmissing-format-attribute -fno-exceptions -fno-check-new -fno-common )
 #only on linux:
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  ADD_DEFINITIONS(-D_XOPEN_SOURCE=500 -D_BSD_SOURCE)
+  ADD_DEFINITIONS(-D_XOPEN_SOURCE=500 -D_BSD_SOURCE -D_GNU_SOURCE)
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 
@@ -70,6 +70,12 @@ FIND_PROGRAM(DCOPIDL2CPP NAME dcopidl2cpp PATHS
   $ENV{KDEDIR}/bin
   /opt/kde/bin
   /opt/kde3/bin)
+
+FIND_PROGRAM(KCFGC NAME kconfig_compiler PATHS
+  $ENV{KDEDIR}/bin
+  /opt/kde/bin
+  /opt/kde3/bin)
+
 
 #bail out if something wasn't found
 IF(NOT KDE_INCLUDE_DIR)

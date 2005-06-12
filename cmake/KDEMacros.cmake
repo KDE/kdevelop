@@ -106,22 +106,18 @@ MACRO(KDE_ADD_KCFG_FILES _sources)
 
       GET_FILENAME_COMPONENT(_basename ${_tmp_FILE} NAME_WE)
 
-	  SET(_kcfg_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.kcfg)
+      STRING(REGEX REPLACE "(.+)settings" "${CMAKE_CURRENT_SOURCE_DIR}/\\1.kcfg" _kcfg_FILE "${_basename}")
+
 	  SET(_src_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.cpp)
 #	  SET(_stub_H ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.h)
       SET(_header_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.h)
 
-#	  ADD_CUSTOM_COMMAND(OUTPUT ${_kidl}
-#         COMMAND ${DCOPIDL}
-#         ARGS ${tmp_FILE} > ${_kidl}
-#         DEPENDS ${tmp_FILE}
-#      )
-
-	  ADD_CUSTOM_COMMAND(OUTPUT ${_src_FILE}
+#MESSAGE(STATUS "____________ kcfg: ${_kcfg_FILE}")
+      ADD_CUSTOM_COMMAND(OUTPUT ${_src_FILE}
          COMMAND ${KCFGC}
          ARGS ${_kcfg_FILE} ${_tmp_FILE}
-         DEPENDS ${_tmp_FILE}
-      )
+         DEPENDS ${_tmp_FILE} )
+
 
       SET(${_sources} ${${_sources}} ${_src_FILE})
 
