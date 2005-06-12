@@ -6,18 +6,11 @@
 #ifndef __KDEVPART_RUBYSUPPORT_H__
 #define __KDEVPART_RUBYSUPPORT_H__
 
-
-#include <qguardedptr.h>
-
-#include <kprocess.h>
-#include <kdialogbase.h>
-
-#include "kdevplugin.h"
 #include "kdevlanguagesupport.h"
 
-
-class RubySupportWidget;
-
+class KDialogBase;
+class QPopupMenu;
+class Context;
 
 class RubySupportPart : public KDevLanguageSupport
 {

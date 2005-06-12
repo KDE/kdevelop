@@ -20,7 +20,6 @@
 #ifndef QTDESIGNERRUBYINTEGRATION_H
 #define QTDESIGNERRUBYINTEGRATION_H
 
-#include <qmap.h>
 #include <qtdesignerintegration.h>
 
 class QtDesignerRubyIntegration : public QtDesignerIntegration

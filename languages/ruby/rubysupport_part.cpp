@@ -1,3 +1,18 @@
+#include "rubysupport_part.h"
+#include "rubyconfigwidget.h"
+#include "domutil.h"
+
+#include "qtdesignerrubyintegration.h"
+#include "rubyimplementationwidget.h"
+
+#include "kdevcore.h"
+#include "kdevmainwindow.h"
+#include "kdevlanguagesupport.h"
+#include "kdevpartcontroller.h"
+#include "kdevproject.h"
+#include "kdevappfrontend.h"
+#include "kdevplugininfo.h"
+
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
@@ -13,21 +28,6 @@
 #include <kdialogbase.h>
 #include <kapplication.h>
 #include <qregexp.h>
-
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
-#include "kdevlanguagesupport.h"
-#include "kdevpartcontroller.h"
-#include "kdevproject.h"
-#include "kdevappfrontend.h"
-#include "kdevplugininfo.h"
-
-#include "rubysupport_part.h"
-#include "rubyconfigwidget.h"
-#include "domutil.h"
-
-#include "qtdesignerrubyintegration.h"
-#include "rubyimplementationwidget.h"
 
 typedef KDevGenericFactory<RubySupportPart> RubySupportFactory;
 static const KDevPluginInfo data("kdevrubysupport");

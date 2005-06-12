@@ -1,10 +1,11 @@
 
-
 #include "rubyconfigwidget.h"
 #include "domutil.h"
+
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
+
 #include <kdebug.h>
 
 RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, const char* name)
@@ -19,11 +20,6 @@ RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, co
     enableFloatingToolBarBox->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/floatingtoolbar", false));
 }
 
-RubyConfigWidget::~RubyConfigWidget()
-{
-}
-
-/*$SPECIALIZATION$*/
 void RubyConfigWidget::accept() {
     DomUtil::writeEntry(dom, "/kdevrubysupport/run/interpreter", interpreterEdit->text());
     DomUtil::writeEntry(dom, "/kdevrubysupport/run/mainprogram", mainProgramEdit->text());
@@ -33,7 +29,6 @@ void RubyConfigWidget::accept() {
     DomUtil::writeIntEntry(dom, "/kdevrubysupport/run/charactercoding", characterCodingRadioBox->selectedId());
     DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/floatingtoolbar", enableFloatingToolBarBox->isChecked());
 }
-
 
 #include "rubyconfigwidget.moc"
 
