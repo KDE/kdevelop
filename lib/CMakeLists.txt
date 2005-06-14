@@ -26,7 +26,7 @@ kinterfacedesigner
 kdevpropertyeditor
 )
 
-KDE_TARGET_LINK_CONV_LIBRARIES(kdevelop
+LT_TARGET_LINK_CONV_LIBRARIES(kdevelop
 kdevinterfaces
 kdevextensions
 kdevutil

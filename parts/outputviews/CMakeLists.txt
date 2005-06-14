@@ -51,7 +51,7 @@ ADD_LIBRARY(kdevappview MODULE ${kdevappview_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevappview ${KDEV_PART_LIBS} kdevwidgets)
 
-KDE_TARGET_LINK_CONV_LIBRARIES(kdevappview)
+LT_TARGET_LINK_CONV_LIBRARIES(kdevappview)
 
 KDE_CREATE_LIBTOOL_FILE(kdevappview)
 
