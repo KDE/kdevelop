@@ -29,8 +29,7 @@ KDE_ADD_UI_FILES(kdevadasupport_PART_SRCS ${kdevadasupport_UI} )
 ADD_LIBRARY(kdevadasupport MODULE ${kdevadasupport_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevadasupport kdevelop)
-
-KDE_TARGET_LINK_CONV_LIBRARIES(kdevadasupport antlr)
+LT_TARGET_LINK_CONV_LIBRARIES(kdevadasupport antlr)
 
 KDE_CREATE_LIBTOOL_FILE(kdevadasupport)
 

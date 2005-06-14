@@ -57,8 +57,7 @@ KDE_ADD_UI_FILES(kdevautoproject_PART_SRCS ${kdevautoproject_UI} )
 ADD_LIBRARY(kdevautoproject MODULE ${kdevautoproject_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(kdevautoproject ${KDEV_BUILDTOOLS_LIBS})
-
-KDE_TARGET_LINK_CONV_LIBRARIES(kdevautoproject kdevautotoolsparser)
+LT_TARGET_LINK_CONV_LIBRARIES(kdevautoproject kdevautotoolsparser)
 
 KDE_CREATE_LIBTOOL_FILE(kdevautoproject)
 
