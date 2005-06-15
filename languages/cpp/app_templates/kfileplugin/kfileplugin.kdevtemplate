@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KFile plugin
+Name[br]=Lugent KFile
 Name[ga]=Breiseán KFile
 Name[sv]=KFile-insticksprogram
 Icon=kfileplugin.png

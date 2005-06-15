@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KIO slave
+Name[br]=Sklav KIO
 Name[da]=KIO-slave
 Name[sv]=I/O-slav
 Icon=kioslave.png

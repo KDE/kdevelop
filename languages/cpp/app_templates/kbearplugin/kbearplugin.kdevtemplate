@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KBear Plugin
+Name[br]=Lugent KBear
 Name[da]=KBear plugin
 Name[ga]=Breiseán KBear
 Name[sv]=KBear-insticksprogram

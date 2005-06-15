@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Kate plugin
+Name[br]=Lugent Kate
 Name[ga]=Breiseán Kate
 Name[sv]=Kate-insticksprogram
 Icon=kateplugin.png

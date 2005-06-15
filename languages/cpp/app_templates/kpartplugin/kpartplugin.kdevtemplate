@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
+Name[br]=Lugent KHTMLPart
 Name[ga]=Breiseán KHTMLPart
 Name[sv]=Insticksprogram för KHTML-delprogram
 Icon=kpartplugin.png

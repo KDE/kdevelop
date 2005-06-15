@@ -4,6 +4,7 @@ Name=Application
 Name[br]=Arload
 Name[da]=Program
 Name[ga]=Feidhmchlár
+Name[rw]=Porogaramu
 Name[sv]=Program
 Icon=qmakeapp.png
 Category=Java/Ant project
