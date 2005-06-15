@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KBear Import Filter
+Name[br]=Sil enporzh KBear
 Name[da]=KBear importfilter
 Name[de]=Import-Filter für KBear
 Name[et]=KBeari impordifilter

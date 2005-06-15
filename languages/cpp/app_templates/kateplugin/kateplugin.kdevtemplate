@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Kate plugin
+Name[br]=Lugent Kate
 Name[de]=Kate-Plugin
 Name[hu]=Kate-bővítőmodul
 Name[it]=Plugin per Kate
@@ -25,7 +26,7 @@ Comment[nl]=Genereert een plugin voor de Kate-teksteditor
 Comment[pl]=Generuje wtyczkę do edytora tekstu Kate
 Comment[pt]=Gera um 'plugin' para o Kate, o editor de texto.
 Comment[pt_BR]=Gera um plug-in para o editor de textos Kate.
-Comment[sl]=Ustvari vstavek za urejevalnik besedil Kate
+Comment[sl]=Ustvari vstavek za urejevalnik besedil Kate.
 Comment[sr]=Прави прикључак за уређивач текста Kate.
 Comment[sr@Latn]=Pravi priključak za uređivač teksta Kate.
 Comment[sv]=Skapar ett insticksprogram för texteditorn Kate.
