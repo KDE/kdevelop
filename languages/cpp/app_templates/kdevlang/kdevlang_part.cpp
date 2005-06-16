@@ -6,9 +6,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
-#include <kdevelop/kdevcore.h>
-#include <kdevelop/kdevpartcontroller.h>
-#include <kdevelop/kdevproject.h>
+#include <kdevcore.h>
+#include <kdevpartcontroller.h>
+#include <kdevplugininfo.h>
+#include <kdevproject.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kapplication.h>
@@ -18,9 +19,10 @@
 
 typedef KGenericFactory<%{APPNAME}Part> %{APPNAME}Factory;
 K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( "kdev%{APPNAMELC}" ) );
+static const KDevPluginInfo data("kdev%{APPNAMELC}");
 
 %{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList& )
-: KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "%{APPNAME}Part" )
+: KDevLanguageSupport(&data, parent, name ? name : "%{APPNAME}Part" )
 {
 	setInstance(%{APPNAME}Factory::instance());
 	setXMLFile("kdevlang_%{APPNAMELC}.rc");

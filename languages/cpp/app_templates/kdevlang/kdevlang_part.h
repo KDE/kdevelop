@@ -4,9 +4,9 @@
 #define __KDEVPART_%{APPNAMEUC}_H__
 
 
-#include <kdevelop/kdevplugin.h>
-#include <kdevelop/codemodel.h>
-#include <kdevelop/kdevlanguagesupport.h>
+#include <kdevplugin.h>
+#include <codemodel.h>
+#include <kdevlanguagesupport.h>
 #include <qstringlist.h>
 #include <kdialogbase.h>
 
