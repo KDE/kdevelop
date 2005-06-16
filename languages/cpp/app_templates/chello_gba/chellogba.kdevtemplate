@@ -7,6 +7,7 @@ Icon=chellogba.png
 Category=C/GBA
 Comment=Generates a simple "Hello world" program for the Gameboy Advance. You will need the "devkitadvance" to compile it. See README.devel for more details.
 Comment[da]=Genererer et simpelt "Goddag verden" program for Gameboy Advance. Du vil skulle  bruge "devkitadvance" for at kompilere det. Se README.devel for flere detaljer.
+Comment[hu]=Létrehoz egy egyszerű Hello world programot a Gameboy Advance-hoz. Lefordításához szükség van a "devkitadvance" csomag telepítésére. További információ a README.devel fájlban található.
 ShowFileAfterGeneration=README.devel
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.c

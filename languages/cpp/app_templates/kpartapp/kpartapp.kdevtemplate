@@ -2,11 +2,13 @@
 [General]
 Name=Application framework (KParts)
 Name[da]=Programskelet (KParts)
+Name[hu]=Alkalmazás-keretrendszer (objektumokkal)
 Name[sv]=Programramverk (KParts)
 Icon=kpartapp.png
 Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
 Comment[da]=Genererer et komplekst KDE-program med en KParts-skal og en KPart-komponent.
+Comment[hu]=Létrehoz egy komplex, objektumok használatát támogató KDE-s alkalmazást és egy KPart objektumot.
 Comment[sv]=Skapar ett komplext KDE-program med ett KPart-skal och en KPart-komponent.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
@@ -154,5 +156,6 @@ Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 Type=message
 Comment=A complex KDE application using KParts was created in %{dest}
 Comment[da]=Et komplekst KDE-program ved brug af KParts blev oprettet i %{dest}
+Comment[hu]=Létrejött egy komplex, objektumok használatát támogató KDE-s alkalmazás itt: %{dest}
 Comment[sv]=Ett komplext KDE-program som använder KParts skapades i %{dest}
 

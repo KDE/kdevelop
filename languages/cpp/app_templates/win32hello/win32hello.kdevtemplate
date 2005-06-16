@@ -2,11 +2,13 @@
 [General]
 Name=Simple Win32 Hello World
 Name[da]=Simpelt Win32 Goddag verden
+Name[hu]=Win32-alapú Hello world program
 Name[sv]=Enkelt Win32 Hello World
 Icon=win32hello.png
 Category=C++
 Comment=Generates a shell project for crosscompiling Win32 projects.
 Comment[da]=Genererer et skalprojekt for krydskompilering af Win32-projekter.
+Comment[hu]=Létrehoz egy konzolos projektet Win32-projektek keresztfordításához.
 Comment[sv]=Skapar ett skalprojekt för korskompilering av Win32-projekt.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/%{APPNAMELC}.cpp
@@ -59,5 +61,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
 Comment[da]=For at dette projekt skal kompilere og køre har du brug for at have både Wine og MinGW installeret.
+Comment[hu]=A projekt lefordításához és futtatásához szükség van a Wine és a MinGW telepítésére.
 Comment[sv]=För att projektet ska kompileras och köras behöver du ha installerat både Wine och MinGW.
 

@@ -2,11 +2,13 @@
 [General]
 Name=Simple Bash Shell Script
 Name[da]=Simpelt Bash skalscript
+Name[hu]=Egyszerű Bash-szkript
 Name[sv]=Enkelt Bash-skalskript
 Category=Shell
 Category[fr]=Interpr�teur BASH
 Comment=This generates a simplistic 'Hello world' program in Bash shell
 Comment[da]=Dette genererer et simplistisk 'Goddag verden' program i en Bash skal
+Comment[hu]=Létrehoz egy egyszerű Hello world programot a Bash parancsértelmezőhöz
 Comment[sv]=Detta skapar ett förenklat 'Hello world'-program för Bash-skalet
 FileTemplates=sh,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sh
@@ -27,4 +29,5 @@ Dest=%{dest}/%{APPNAMELC}.sh
 Type=message
 Comment=A simple bash shell script project was created in %{dest}
 Comment[da]=Et simpelt bash skalscript-projekt blev oprettet i %{dest}
+Comment[hu]=Létrejött egy egyszerű Bash-szkript (projekt) itt: %{dest}
 Comment[sv]=Ett enkelt Bash skalskriptprojekt skapades i %{dest}

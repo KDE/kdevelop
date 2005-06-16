@@ -2,11 +2,13 @@
 [General]
 Name=GNOME 1 Application framework
 Name[da]=GNOME 1 programskelet
+Name[hu]=GNOME 1 alkalmazás-keretrendszer
 Name[sv]=GNOME 1 programramverk
 Icon=gnomeapp.png
 Category=C/GNOME
 Comment=Generates a simple GNOME application with one toplevel window, menus and toolbars.
 Comment[da]=Genererer et simpelt GNOME program med et vindue på topniveau, menuer og værktøjslinjer.
+Comment[hu]=Létrehoz egy egyszerű GNOME-os alkalmazást egy főablakkal, menükkel és eszköztárakkal.
 Comment[sv]=Skapar ett enkelt GNOME-program med ett toppnivåfönster, menyer och verktygsrader.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/main.c
@@ -107,5 +109,6 @@ Dest=%{dest}/src/main.c
 Type=message
 Comment=A GNOME application framework was created in %{dest}
 Comment[da]=Et GNOME programskelet blev oprettet i %{dest}
+Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
 Comment[sv]=Ett GNOME-programramverk skapades i %{dest}
 
