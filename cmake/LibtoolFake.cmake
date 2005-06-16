@@ -1,3 +1,10 @@
+#this file contains the following macros
+#KDE_CREATE_LIBTOOL_FILE(target) - create the la file for a plugin
+#LT_TARGET_LINK_CONV_LIBRARIES(target convenicene libs...) - use this to link to static conv. libs
+#LT_TARGET_LINK_LIBRARIES(target libs... )
+# replacement for TARGET_LINK_LIBRARIES() - handles static libs like libtool conv. libs, DOESN'T WORK YET
+
+
 #this is a hack right now to support the behaviour of libtool convenience libs
 #for other platforms:
 #Darwin: -all_load $convenience
@@ -11,13 +18,13 @@ ENDMACRO (LT_TARGET_LINK_CONV_LIBRARIES)
 
 MACRO(LT_TARGET_LINK_LIBRARIES _target_NAME)
    GET_TARGET_PROPERTY(_target_TYPE ${_target_NAME} TYPE)
-   MESSAGE(STATUS "type: ${_target_TYPE}")
+#   MESSAGE(STATUS "type: ${_target_TYPE}")
    IF (${_target_TYPE} STREQUAL "SHARED_LIBRARY" OR ${_target_TYPE} STREQUAL "MODULE_LIBRARY")
 
       FOREACH (_current_LIB ${ARGN})
          GET_TARGET_PROPERTY(_lib_TYPE ${_current_LIB} TYPE)
 
-         MESSAGE(STATUS "linking to lib: ${_current_LIB} type: ${_lib_TYPE}")
+#         MESSAGE(STATUS "linking to lib: ${_current_LIB} type: ${_lib_TYPE}")
 
          IF (${_lib_TYPE} STREQUAL "STATIC_LIBRARY")
             SET(_fake_LIBS ${_fake_LIBS} ${_current_LIB})

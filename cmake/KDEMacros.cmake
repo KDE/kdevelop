@@ -101,7 +101,6 @@ MACRO(KDE_ADD_KCFG_FILES _sources)
 #	  SET(_stub_H ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.h)
       SET(_header_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.h)
 
-#MESSAGE(STATUS "____________ kcfg: ${_kcfg_FILE}")
       ADD_CUSTOM_COMMAND(OUTPUT ${_src_FILE}
          COMMAND ${KCFGC}
          ARGS ${_kcfg_FILE} ${_tmp_FILE}

@@ -2,17 +2,17 @@ OPTION(KDE_ENABLE_FINAL "Enable final all-in-one compilation")
 
 MACRO(KDE_ADD_KPART _target_NAME )
    FOREACH (_current_FILE ${ARGN})
-      MESSAGE(STATUS "next: ${_current_FILE}")
+#      MESSAGE(STATUS "next: ${_current_FILE}")
 
 	  GET_FILENAME_COMPONENT(_ext ${_current_FILE} EXT)
 
       IF(${_ext} STREQUAL ".ui")
-         MESSAGE(STATUS "adding ui: ${_current_FILE}")
+#         MESSAGE(STATUS "adding ui: ${_current_FILE}")
          SET(_magic_UIS ${_magic_UIS} ${_current_FILE})
       ENDIF(${_ext} STREQUAL ".ui")
 
       IF(${_ext} STREQUAL ".c" OR ${_ext} STREQUAL ".C" OR ${_ext} STREQUAL ".cpp" OR ${_ext} STREQUAL ".cxx" )
-            MESSAGE(STATUS "adding src: ${_current_FILE}")
+#            MESSAGE(STATUS "adding src: ${_current_FILE}")
             SET(_magic_SRCS ${_magic_SRCS} ${_current_FILE})
       ENDIF(${_ext} STREQUAL ".c" OR ${_ext} STREQUAL ".C" OR ${_ext} STREQUAL ".cpp" OR ${_ext} STREQUAL ".cxx" )
 
@@ -22,7 +22,7 @@ MACRO(KDE_ADD_KPART _target_NAME )
       KDE_ADD_UI_FILES(_magic_SRCS ${_magic_UIS} )
    ENDIF(_magic_UIS)
 
-   MESSAGE(STATUS "srcs: ${_magic_SRCS}")
+#   MESSAGE(STATUS "srcs: ${_magic_SRCS}")
 
    KDE_AUTOMOC(${_magic_SRCS})
 
