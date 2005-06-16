@@ -144,6 +144,7 @@ void PHPParser::run() {
             it = m_files.end();
          }
       }
+
    }
 }
 

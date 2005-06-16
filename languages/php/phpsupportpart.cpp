@@ -1,13 +1,21 @@
-/***************************************************************************
- *   Copyright (C) 2001 by Sandy Meier                                     *
- *   smeier@kdevelop.org                                                   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*
+   Copyright (C) 2005 by Nicolas Escuder <n.escuder@intra-links.com>
+   Copyright (C) 2001 by smeier@kdevelop.org
+   
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   version 2, License as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "phpsupportpart.h"
 
@@ -114,7 +122,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   connect(configData,  SIGNAL(configStored()),
 	  this, SLOT(slotConfigStored()));
 
-  m_codeCompletion = new  PHPCodeCompletion(configData, core(),codeModel());
+  m_codeCompletion = new  PHPCodeCompletion(this, configData);
 
   new KAction(i18n("Complete Text"), CTRL+Key_Space, m_codeCompletion, SLOT(cursorPositionChanged()),
 	actionCollection(), "edit_complete_text");
@@ -387,7 +395,8 @@ void PHPSupportPart::projectClosed()
    }   
 }
 
-void PHPSupportPart::initialParse(){
+void PHPSupportPart::initialParse()
+{
   kdDebug(9018) << "initialParse()" << endl;
 
   if (project()) {
@@ -496,121 +505,49 @@ KMimeType::List PHPSupportPart::mimeTypes( )
 
 void PHPSupportPart::customEvent( QCustomEvent* ev )
 {
-   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ")" << endl;
+//   kdDebug(9018) << "phpSupportPart::customEvent(" << ev->type() << ")" << endl;
 
    if ( ev->type() == int(Event_FileParsed) ){
       FileParsedEvent* event = (FileParsedEvent*) ev;
       
       QString fileName = event->fileName();
-         
+
       // ClassView work with absolute path not links
       QString abso = URLUtil::canonicalPath(fileName);
-
       if (codeModel()->hasFile( abso )) {
          emit aboutToRemoveSourceInfo( abso );
          codeModel()->removeFile( codeModel()->fileByName(abso) );
          emit removedSourceInfo( abso );
       }
-      
-      FileDom m_file = codeModel()->fileByName(abso);
-      if (!m_file) {
-         m_file = codeModel()->create<FileModel>();
-         m_file->setName( abso );
-         codeModel()->addFile( m_file );
-      }
 
       m_phpErrorView->removeAllProblems( abso );
 
-      NamespaceDom ns = codeModel()->globalNamespace();
-      
-      ClassDom nClass = 0;
-      FunctionDom nMethod = 0;
-      ArgumentDom nArgument = 0;
-      VariableDom nVariable = 0;
-      QString arguments;
-
-            
-      QValueList<Action> actions = event->actions();
-      QValueList<Action>::ConstIterator it = actions.begin();
+      PHPFile m_phpfile(this, abso);
+           
+      QValueList<Action *> actions = event->actions();
+      QValueList<Action *>::ConstIterator it = actions.begin();
       while( it != actions.end() ){
-         const Action& p = *it++;
-         switch (p.level()) {
-            case Action::Level_Class:
-            nClass = codeModel()->create<ClassModel>();
-            nClass->setFileName(abso);
-            nClass->setName(p.text());
-            nClass->setStartPosition(p.line(), 0);
-            m_file->addClass(nClass);
-            if (!p.args().isEmpty())
-               nClass->addBaseClass(p.args());
+         Action *p = *it++;
+         switch (p->quoi()) {
+            case Add_Include:
+            m_parser->addFile( p->name() );
+            break;
+            
+            case Add_ErrorNoSuchFunction:
+            case Add_ErrorParse:
+            case Add_Error:
+            m_phpErrorView->reportProblem( fileName, p->start(), p->quoi(), p->args() );
+            break;
+            
+            case Add_Fixme:
+            case Add_Todo:
+            m_phpErrorView->reportProblem( fileName, p->start(), p->quoi(), p->name() );
+            break;
 
-            ns->addClass(nClass);
+            default:
+            m_phpfile.doAction(fileName, p);
             break;
             
-            case Action::Level_Var:
-            nVariable  = codeModel()->create<VariableModel>();
-            nVariable->setFileName(abso);
-            nVariable->setName(p.text());
-            nVariable->setStartPosition( p.line(), 0 );
-            nClass->addVariable( nVariable );
-            break;
-            
-            case Action::Level_VarType:
-            if (p.column() == true) {
-               QString varname = p.text();
-               
-               if ( !nClass->hasVariable(varname) ) {
-                  nVariable  = codeModel()->create<VariableModel>();
-                  nVariable->setFileName(abso);
-                  nVariable->setName(varname);
-                  nVariable->setStartPosition( p.line(), 0 );
-                  nClass->addVariable( nVariable );
-               }
-               
-               if ( !nClass->hasVariable(varname) ) {
-                  break;
-               }
-               
-               nClass->variableByName(varname)->setType( p.args() );
-            }
-            break;
-            
-            case Action::Level_Method:
-            nMethod = codeModel()->create<FunctionModel>();
-            nMethod->setFileName( abso );
-            nMethod->setName(p.text());
-            nMethod->setStartPosition( p.line(), 0 );
-            if (p.column() == true) {
-               nClass->addFunction(nMethod);
-            } else {
-               m_file->addFunction(nMethod);
-            
-               if (ns->hasFunction(p.text()))
-                  ns->removeFunction(ns->functionByName(p.text())[0]);
-               
-               ns->addFunction(nMethod);
-            }
-            
-            nArgument = codeModel()->create<ArgumentModel>();
-            arguments = p.args();
-            nArgument->setType(arguments.stripWhiteSpace().local8Bit());
-            nMethod->addArgument( nArgument );
-            break;
-            
-            case Action::Level_Include:
-            m_parser->addFile( p.text() );
-            break;
-            
-            case Action::Level_ErrorNoSuchFunction:
-            case Action::Level_ErrorParse:
-            case Action::Level_Error:
-            m_phpErrorView->reportProblem( abso, p.line(), p.level(), p.args() );
-            break;
-            
-            case Action::Level_Fixme:
-            case Action::Level_Todo:
-            m_phpErrorView->reportProblem( abso, p.line(), p.level(), p.text() );
-            break;
          }
          
          emit addedSourceInfo( abso );

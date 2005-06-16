@@ -37,23 +37,36 @@ enum
 class FileParsedEvent: public QCustomEvent
 {
 public:
-    FileParsedEvent( const QString& fileName, const QValueList<Action>& actions )
-    : QCustomEvent(Event_FileParsed), m_fileName( fileName )
-    {
-        QValueListConstIterator<Action> it = actions.begin();
-        while (it != actions.end()) {
-            Action p = *it;
-            m_actions.append(Action(p.text(), p.args(), p.line(), p.column(), p.level()));
-            ++it;
-        }
-    }
+   FileParsedEvent( const QString& fileName, const QValueList<Action *>& actions )
+   : QCustomEvent(Event_FileParsed), m_fileName( fileName )
+   {
+       QValueListConstIterator<Action *> it = actions.begin();
+       while (it != actions.end()) {
+           Action *p = *it;
+           Action *a = new Action(p->quoi(), p->name(), p->parent(), p->args(), p->start(), p->flags());
+           a->setEnd( p->end() );
+           a->setResult( p->result() );
+           m_actions.append(a);
+           ++it;
+       }
+   }
+
+   ~FileParsedEvent()
+   {
+      QValueListConstIterator<Action *> it = m_actions.begin();
+      while (it != m_actions.end()) {
+         Action *p = *it;
+         delete p;
+         ++it;
+      }
+   }
 
     QString fileName() const { return m_fileName; }
-    QValueList<Action> actions() const { return m_actions; }
+    QValueList<Action *> actions() const { return m_actions; }
 
 private:
     QString m_fileName;
-    QValueList<Action> m_actions;
+    QValueList<Action *> m_actions;
 
 private:
     FileParsedEvent( const FileParsedEvent& source );

@@ -129,6 +129,8 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
     m_tabBar->setTabEnabled(0,false);
     m_tabBar->setTabEnabled(4,false);
 
+    m_tabBar->setCurrentTab(0);
+    
     m_filterEdit = new QLineEdit(this);
 
     QLabel* m_filterLabel = new QLabel(i18n("Lookup:"),this);
@@ -270,15 +272,15 @@ void PHPErrorView::initCurrentList()
     m_tabBar->setTabEnabled(0,true);
 
     QString relFileName = m_fileName;
-    relFileName.remove(m_phpSupport->project()->projectDirectory());
+
+    if (m_phpSupport->project())
+      relFileName.remove(m_phpSupport->project()->projectDirectory());
 
     m_currentList->clear();
 
     updateCurrentWith(m_errorList, i18n("Error"),relFileName);
     updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
     updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
-
-    m_tabBar->setCurrentTab(0);
 }
 
 void PHPErrorView::updateCurrentWith(QListView* listview, const QString& level, const QString& filename)
@@ -301,7 +303,7 @@ void PHPErrorView::slotSelected( QListViewItem* item )
       is_current = true;
 
 
-    KURL url( is_current ? m_fileName : m_phpSupport->project()->projectDirectory() + item->text(0 + is_filtered) );
+    KURL url( is_current ? m_fileName : item->text(0 + is_filtered) );
     int line = item->text( 1 + is_filtered).toInt();
     // int column = item->text( 3 ).toInt();
     m_phpSupport->partController()->editDocument( url, line-1 );
@@ -324,19 +326,19 @@ void PHPErrorView::reportProblem( const QString& fileName, int line, int level, 
 
     switch( level )
     {
-    case Action::Level_Error:
-    case Action::Level_ErrorNoSuchFunction:
-    case Action::Level_ErrorParse:
+    case Add_Error:
+    case Add_ErrorNoSuchFunction:
+    case Add_ErrorParse:
    list = m_errorList;
    m_tabBar->setCurrentTab(m_tabBar->tab(1));
    break;
-    case Action::Level_Warning:
+    case Add_Warning:
    list = m_errorList;
    break;
-    case Action::Level_Todo:
+    case Add_Todo:
    list = m_todoList;
    break;
-    case Action::Level_Fixme:
+    case Add_Fixme:
    list = m_fixmeList;
    break;
     default:
@@ -379,17 +381,17 @@ QString PHPErrorView::levelToString( int level ) const
 {
     switch( level )
     {
-    case Action::Level_ErrorNoSuchFunction:
+    case Add_ErrorNoSuchFunction:
    return QString( i18n("Undefined function") );
-    case Action::Level_ErrorParse:
+    case Add_ErrorParse:
    return QString( i18n("Parse Error") );
-    case Action::Level_Error:
+    case Add_Error:
    return QString( i18n("Error") );
-    case Action::Level_Warning:
+    case Add_Warning:
    return QString( i18n("Warning") );
-    case Action::Level_Todo:
+    case Add_Todo:
    return QString( i18n("Todo") );
-    case Action::Level_Fixme:
+    case Add_Fixme:
    return QString( i18n("Fixme") );
     default:
         return QString::null;
@@ -400,15 +402,15 @@ int PHPErrorView::levelToMarkType( int level ) const
 {
     switch( level )
     {
-    case Action::Level_ErrorNoSuchFunction:
-    case Action::Level_ErrorParse:
-    case Action::Level_Error:
+    case Add_ErrorNoSuchFunction:
+    case Add_ErrorParse:
+    case Add_Error:
    return KTextEditor::MarkInterface::markType07;
-    case Action::Level_Warning:
+    case Add_Warning:
         return -1;
-    case Action::Level_Todo:
+    case Add_Todo:
         return -1;
-    case Action::Level_Fixme:
+    case Add_Fixme:
         return -1;
     default:
         return -1;

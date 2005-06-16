@@ -22,12 +22,11 @@ all include files from your script.
 
 \todo extended classtools (new class,new function...) based on filetemplates
 \todo debugger and profiler support dbg (http://dd.cron.ru/dbg)
-\todo codecompletion (key words, functions (mysql_*), and current project)
 \todo html form support (dialogs for generating html code, tables...)
 \todo support for phpdoc
 \todo documentation viewer for php (maybe plugins for the current docviewer) (tf)
 \todo integrated filemanager with ftp client (maybe a konqueror part)
 \todo code template factory (contains useful php code snippet like array_display,trace,validator)
-\todo new 'character' based parser, the current is 'line' based
+\todo new functions list from php 5 documentation
 
 */

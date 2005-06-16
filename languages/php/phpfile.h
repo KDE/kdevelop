@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include <kdevproject.h>
+#include <kdevlanguagesupport.h>
 #include <kdevpartcontroller.h>
 
 #include <ktexteditor/editinterface.h>
@@ -39,58 +40,130 @@
 
 class PHPSupportPart;
 
+enum
+{
+   Flags_None =       0x000,
+   Flags_Class =      0x010,
+   Flags_Method =     0x020,
+   Flags_Public =     0x040,
+   Flags_Private =    0x080,
+   Flags_Protected =  0x100,
+   Flags_Static =     0x200,
+   Flags_Final =      0x400,
+   Flags_Abstract =   0x800
+};
+
+enum Actions
+{
+   Add_Error = 0,
+   Add_ErrorParse = 1,
+   Add_ErrorNoSuchFunction = 2,
+   Add_Warning = 3,
+   Add_Todo = 4,
+   Add_Fixme = 5,
+   Add_Class = 6,
+   Add_Function = 7,
+   Add_Var = 8,
+   Add_Include = 9,
+   Set_ClassEnd = 10,
+   Set_FuncEnd = 11
+};
+        
 class Action
 {
-public:
-    enum
-    {
-        Level_Error = 0,
-        Level_ErrorParse,
-        Level_ErrorNoSuchFunction,
-        Level_Warning,
-        Level_Todo,
-        Level_Fixme,
-        Level_Class,
-        Level_Method,
-        Level_Var,
-        Level_VarType,
-        Level_Include
-    };
 
 public:
     Action() {}
-    Action( const Action& source )
-        : m_text( source.m_text ), m_args( source.m_args ), m_line( source.m_line ),
-          m_column( source.m_column ), m_level( source.m_level ) {}
-    Action( const QString& text, const QString &args, int line, int column, int level=Level_Error )
-        : m_text( text ), m_args( args ), m_line( line ), m_column( column ), m_level(level) {}
+    
+    Action( const Actions what, const QString& name, const QString& parent, const QString &args, int start, int flags = 0)
+        : m_what ( what ), m_name( name ), m_parent ( parent ), m_args( args ), m_start( start ), m_flags( flags ) { m_end = 0; }
 
-    Action& operator = ( const Action& source )
+    bool isPrivate()
     {
-        m_text = source.m_text;
-        m_args = source.m_args;
-        m_line = source.m_line;
-        m_column = source.m_column;
-        m_level = source.m_level;
-        return( *this );
+       if (m_flags & Flags_Private)
+          return true;
+       return false;
     }
 
-    bool operator == ( const Action& p ) const
+    bool isPublic()
     {
-        return m_text == p.m_text && m_args == p.m_args && m_line == p.m_line && m_column == p.m_column && m_level == p.m_level;
+       if (m_flags & Flags_Public)
+          return true;
+       return false;
+    }
+        
+    bool isProtected()
+    {
+       if (m_flags & Flags_Protected)
+          return true;
+       return false;
+    }
+    
+    bool isStatic()
+    {
+       if (m_flags & Flags_Static)
+          return true;
+       return false;
     }
 
-    QString text() const { return m_text; }
+    bool isFinal()
+    {
+       if (m_flags & Flags_Final)
+          return true;
+       return false;
+    }
+
+    bool isAbstract()
+    {
+       if (m_flags & Flags_Abstract)
+          return true;
+       return false;
+    }
+
+    bool isClass()
+    {
+       if (m_flags & Flags_Class)
+          return true;
+       return false;
+    }
+
+    void inClass()
+    {
+       if (m_flags & Flags_Class)
+          return;
+       m_flags |= Flags_Class;
+    }
+
+    void setEnd(int end)
+    {
+       m_end = end;
+    }
+
+    void setResult(QString result)
+    {
+       m_result = result;
+    }
+    
+    Actions quoi() const { return m_what; }
+    QString parent() const { return m_parent; }
+    QString name() const { return m_name; }
     QString args() const { return m_args; }
-    int line() const { return m_line; }
-    int column() const { return m_column; }
+    QString result() const { return m_result; }
+    int start() const { return m_start; }
+    int end() const { return m_end; }
+    int flags() const { return m_flags; }
     int level() const { return m_level; }
 
+    void dump() { printf("%d Name: %s Parent : %s Args : %s Start : %d End : %d Flags : %d\n", m_what, m_name.ascii(), m_parent.ascii(), m_args.ascii(), m_start, m_end, m_flags); return; };
 private:
-    QString m_text;
+    Actions m_what;
+    QString m_name;
+    QString m_parent;
     QString m_args;
-    int m_line;
-    int m_column;
+    QString m_result;
+    int m_start;
+    int m_end;
+    int m_flags;
     int m_level;
 };
 
@@ -106,13 +179,29 @@ public:
    ~PHPFile();
 
    QStringList getContents();
-   QValueList<Action> getActions();
+   QValueList<Action *> getActions();
    
    bool isModified();
    void setModified(bool value);
    QString fileName();
    void Analyse();
    void ParseStdout(QString phpOutput);
+
+   static Action *ParseClass(QString line, int lineNo = 0);
+   static Action *ParseFunction(QString current, QString line, int lineNo = 0);
+   static Action *ParseVariable(QString current, QString line, int lineNo = 0);
+   static Action *ParseThisMember(QString current, QString line, int lineNo = 0);
+   static Action *ParseMember(QString current, QString line, int lineNo = 0);
+   QString ParseReturn(QString current, QString line, int lineNo = 0);
+   
+   static Action *ParseTodo(QString line, int lineNo = 0);
+   static Action *ParseFixme(QString line, int lineNo = 0);
+
+   ClassDom PHPFile::classByName(QString filename, QString classname);
+   QValueList<ClassDom> PHPFile::classByName(QString classname);
+   
+   bool doAction(QString filename, Action *p);
+   
 /*   
 private slots:
     void slotReceivedPHPCheckStderr (KProcess* proc, char* buffer, int buflen);
@@ -123,18 +212,27 @@ private:
    QStringList readFromEditor();
    QStringList readFromDisk();
 
+   QString buildParent(Action *Class, Action *Func);
+
    void ParseSource();
    void PHPCheck();
    
    bool modified;
    PHPSupportPart *m_phpSupport;
    CodeModel *m_model;
+
+   ClassDom nClass;
+   FunctionDom nMethod;
+   ArgumentDom nArgument;
+   VariableDom nVariable;
+   
    QFileInfo* m_fileinfo;
    QStringList m_contents;
    QString m_phpCheckOutput;
 //   KShellProcess* phpCheckProc;
    
-   QValueList<Action> m_actions;
+   QValueList<Action *> m_actions;
+   QValueList<Action *> m_vars;
 };
 
 #endif
