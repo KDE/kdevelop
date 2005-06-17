@@ -514,7 +514,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
 
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
-                           QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == %2").arg(m_info->m_language).arg(KDEVELOP_PLUGIN_VERSION));
+                           QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == %2").arg(lang).arg(KDEVELOP_PLUGIN_VERSION));
 
   if (languageSupportOffers.isEmpty()) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
@@ -533,7 +533,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   if ( !langSupport ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("Could not create language plugin for %1.")
-            .arg(m_info->m_language));
+            .arg(lang));
     return false;
   }
 
