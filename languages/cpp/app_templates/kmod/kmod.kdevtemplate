@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Linux Kernel module
+Name[br]=Mollad ar galon Linux
 Name[da]=Linux kernemodul
 Name[hu]=Linuxos kernelmodul
 Name[sv]=Modul för Linux kärna
