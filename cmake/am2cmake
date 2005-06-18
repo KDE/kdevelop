@@ -23,7 +23,7 @@ Part       = 4
 KDEInit    = 5
 
 class BuildTarget
-   def initialize(name, type, stdPrefix=true)
+   def initialize(name, type, withStdPrefix=true, install=true)
       @name=name
       @type=type
       @sources=Array.new
@@ -33,6 +33,7 @@ class BuildTarget
       @kcfgs=Array.new
       @am=Array.new
       @stdPrefix=stdPrefix
+      @install=install
    end
 
    def addSourceFiles(files)
@@ -51,13 +52,13 @@ class BuildTarget
       end
    end
 
-   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs, :kcfgs
+   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs, :kcfgs, :install
 
 end
 
 class CMakeFile
    def initialize(amFile)
-      printf("-------- #{amFile} -------------\n")
+      printf("converting #{amFile}\n")
       @amFile=amFile
       amFile =~ /(.*)Makefile.am/
       @path=$1
@@ -112,15 +113,6 @@ class CMakeFile
          if (amBuildTargetName==targetName)
             return buildTarget
          end
-#         if (type==Executable)
-#            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
-#               return buildTarget
-#            end
-#         else
-#            if (buildTarget.name==targetName)
-#               return buildTarget
-#            end
-#         end
       end
 
       return BuildTarget.new("Dummy", NoTarget)
@@ -129,33 +121,57 @@ class CMakeFile
    def addTarget(line)
       type=NoTarget
       targets=""
+      installTarget=true
 
       if line =~ /^\s*lib_LTLIBRARIES\s*=\s*(\S+.*)/
          targets=$1
          type=SharedLib
-         printf("shared: %s\n", $1)
+#         printf("shared: %s\n", $1)
       elsif line =~ /^\s*noinst_LTLIBRARIES\s*=\s*(\S+.*)/
          targets=$1
          type=StaticLib
-         printf("static: %s\n", $1)
+#         printf("static: %s\n", $1)
       elsif line =~ /^\s*kde_module_LTLIBRARIES\s*=\s*(\S+.*)/
-         printf("part: %s\n", $1)
+#         printf("part: %s\n", $1)
+         targets=$1
+         type=Part
+      elsif line =~ /^\s*kde_style_LTLIBRARIES\s*=\s*(\S+.*)/
+#         printf("style: %s\n", $1)
+         targets=$1
+         type=Part
+      elsif line =~ /^\s*kde_widget_LTLIBRARIES\s*=\s*(\S+.*)/
+#         printf("style: %s\n", $1)
          targets=$1
          type=Part
       elsif line =~ /^\s*kdeinit_LTLIBRARIES\s*=\s*(\S+.*)/
-         printf("part: %s\n", $1)
+#         printf("kdeinitpart: %s\n", $1)
          targets=$1
          type=KDEInit
       elsif line =~ /^\s*bin_PROGRAMS\s*=\s*(\S+.*)$/
          targets=$1
-         printf("exec: %s\n", $1)
+#         printf("exec: %s\n", $1)
+         type=Executable
+      elsif line =~ /^\s*noinst_PROGRAMS\s*=\s*(\S+.*)$/
+         targets=$1
+         installTargets=false
+#         printf("exec: %s\n", $1)
+         type=Executable
+      elsif line =~ /^\s*check_PROGRAMS\s*=\s*(\S+.*)$/
+         targets=$1
+         installTargets=false
+#         printf("exec: %s\n", $1)
+         type=Executable
+      elsif line =~ /^\s*EXTRA_PROGRAMS\s*=\s*(\S+.*)$/
+         targets=$1
+         installTargets=false
+#         printf("exec: %s\n", $1)
          type=Executable
       else
          return false
       end
 
       if type==Executable
-         targets.split.each{ |current| @targets.push(BuildTarget.new(current, type)) }
+         targets.split.each{ |current| @targets.push(BuildTarget.new(current, type, true, installTargets)) }
       else
          targets.split.each do |current|
             if current =~ /lib(\S+)\.la/
@@ -174,7 +190,7 @@ class CMakeFile
 #      printf("sources: %s\n", line)
       buildTarget=findTargetForSources(line)
       if buildTarget.type==NoTarget
-         printf("target not found: %s\n", line)
+         printf("PROBLEM: target not found: %s\n", line)
          return
       end
 
@@ -294,7 +310,7 @@ class CMakeFile
       end
       @targets.each do |buildTarget|
          file.printf("\n########### next target ###############\n\n")
-         printf("target name: %s\n", buildTarget.name)
+#         printf("target name: %s\n", buildTarget.name)
 
          if buildTarget.type==SharedLib
             srcsName=buildTarget.name+"_LIB_SRCS"
@@ -316,7 +332,7 @@ class CMakeFile
             buildTarget.sources.push("dummy.cpp")
          end
 
-         if not buildTarget.sources.empty?
+         if buildTarget.type==Part || buildTarget.type==KDEInit || buildTarget.type==Executable
             file.printf("SET(%s\n", srcsName)
             needToCreateDummyFile=false
             buildTarget.sources.each do |currentFile|
@@ -325,81 +341,122 @@ class CMakeFile
                   needToCreateDummyFile=true if not FileTest.exists?(@path+"/dummy.cpp")
                end
             end
+
+            buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
+            buildTarget.skels.each{ |currentFile| file.printf("%s\n", currentFile)}
+            buildTarget.stubs.each{ |currentFile| file.printf("%s\n", currentFile)}
+            buildTarget.kcfgs.each{ |currentFile| file.printf("%s\n", currentFile)}
+
             file.printf(")\n\n")
+#            if @automoc
+            file.printf("KDE_AUTOMOC(${%s})\n\n", srcsName)
+#            end
+
+            if needToCreateDummyFile
+#               printf("creating dummy file in #{@path} ________\n")
+               file.printf("FILE(WRITE dummy.cpp \"//autogenerated file by cmake\\n\")\n")
+            end
+
+         else
+
+            if not buildTarget.sources.empty?
+               file.printf("SET(%s\n", srcsName)
+               needToCreateDummyFile=false
+               buildTarget.sources.each do |currentFile|
+                  file.printf("%s\n", currentFile)
+                  if currentFile=="dummy.cpp"
+
+                     needToCreateDummyFile=true if not FileTest.exists?(@path+"/dummy.cpp")
+                  end
+               end
+               file.printf(")\n\n")
 #            if @automoc
                file.printf("KDE_AUTOMOC(${%s})\n\n", srcsName)
 #            end
-         end
 
-         if needToCreateDummyFile
-            printf("creating dummy file in #{@path} ________\n")
-            file.printf("FILE(WRITE dummy.cpp \"//autogenerated file by cmake\\n\")\n")
-         end
+               if needToCreateDummyFile
+#                  printf("creating dummy file in #{@path} ________\n")
+                  file.printf("FILE(WRITE dummy.cpp \"//autogenerated file by cmake\\n\")\n")
+               end
+            end
 
-         if not buildTarget.uis.empty?
-            file.printf("SET( %s\n", uisName)
-            buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
-            file.printf(")\n\n")
-            file.printf("KDE_ADD_UI_FILES(%s ${%s} )\n\n", srcsName, uisName)
-         end
+            if not buildTarget.uis.empty?
+               file.printf("SET( %s\n", uisName)
+               buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
+               file.printf(")\n\n")
+               file.printf("KDE_ADD_UI_FILES(%s ${%s} )\n\n", srcsName, uisName)
+            end
 
-         if not buildTarget.skels.empty?
-            file.printf("SET( %s\n", skelsName)
-            buildTarget.skels.each{ |currentFile| file.printf("%s\n", currentFile)}
-            file.printf(")\n\n")
+            if not buildTarget.skels.empty?
+               file.printf("SET( %s\n", skelsName)
+               buildTarget.skels.each{ |currentFile| file.printf("%s\n", currentFile)}
+               file.printf(")\n\n")
 
-            file.printf("KDE_ADD_DCOP_SKELS(%s ${%s})\n\n", srcsName, skelsName)
-         end
+               file.printf("KDE_ADD_DCOP_SKELS(%s ${%s})\n\n", srcsName, skelsName)
+            end
 
-         if not buildTarget.stubs.empty?
-            file.printf("SET( %s\n", stubsName)
-            buildTarget.stubs.each{ |currentFile| file.printf("%s\n", currentFile)}
-            file.printf(")\n\n")
+            if not buildTarget.stubs.empty?
+               file.printf("SET( %s\n", stubsName)
+               buildTarget.stubs.each{ |currentFile| file.printf("%s\n", currentFile)}
+               file.printf(")\n\n")
 
-            file.printf("KDE_ADD_DCOP_STUBS(%s ${%s})\n\n", srcsName, stubsName)
-         end
+               file.printf("KDE_ADD_DCOP_STUBS(%s ${%s})\n\n", srcsName, stubsName)
+            end
 
-         if not buildTarget.kcfgs.empty?
-            file.printf("SET( %s\n", kcfgsName)
-            buildTarget.kcfgs.each{ |currentFile| file.printf("%s\n", currentFile)}
-            file.printf(")\n\n")
+            if not buildTarget.kcfgs.empty?
+               file.printf("SET( %s\n", kcfgsName)
+               buildTarget.kcfgs.each{ |currentFile| file.printf("%s\n", currentFile)}
+               file.printf(")\n\n")
 
-            file.printf("KDE_ADD_KCFG_FILES(%s ${%s})\n\n", srcsName, kcfgsName)
+               file.printf("KDE_ADD_KCFG_FILES(%s ${%s})\n\n", srcsName, kcfgsName)
+            end
          end
 
          if buildTarget.type==SharedLib
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES VERSION 4.2.0 SOVERSION 4 \"\")\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib %s )\n\n", buildTarget.name)
          elsif buildTarget.type==StaticLib
             file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
          elsif buildTarget.type==Part
-            file.printf("ADD_LIBRARY(%s MODULE ${%s})\n\n", buildTarget.name, srcsName)
+            file.printf("KDE_ADD_KPART(%s ${srcsName})\n\n", buildTarget.name, srcsName)
+#            file.printf("ADD_LIBRARY(%s MODULE ${%s})\n\n", buildTarget.name, srcsName)
             if !buildTarget.stdPrefix
                file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\")\n", buildTarget.name)
             end
-            file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
+#            file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib/kde3 %s )\n\n", buildTarget.name)
          elsif buildTarget.type==KDEInit
-            file.printf("ADD_LIBRARY(kdeinit_%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
-#            file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
+            file.printf("KDE_ADD_KLM( %s ${%s})\n\n", buildTarget.name, srcsName)
+
+#            file.printf("ADD_LIBRARY(kdeinit_%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("TARGET_LINK_LIBRARIES(kdeinit_%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib kdeinit_%s )\n\n", buildTarget.name)
 
 #now create the dummy main.cpp and the application
 #            file.fprintf("FILE(WRITE, %s_dummy.cpp, \"extern \"C\" int kdemain(int argc, char* argv[]);\n extern \"C\" int kdeinitmain(int argc, char* argv[]) { return kdemain(argc,argv); } \")", buildTarget.name)
-            file.printf("CONFIGURE_FILE(${KDE_CMAKE_PATH}/kdeinit_dummy.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/%s_dummy.cpp)\n", buildTarget.name)
+#            file.printf("CONFIGURE_FILE(${KDE_CMAKE_PATH}/kdeinit_dummy.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/%s_dummy.cpp)\n", buildTarget.name)
 
 #file.printf("FILE(WRITE %s_dummy.cpp \"extern \\\"C\\\" int kdemain(int argc, char* argv[]);\\n extern \\\"C\\\" int kdeinitmain(int argc, char* argv[]) { return kdemain(argc,argv); }\\n \")\n", buildTarget.name)
-            file.printf("ADD_EXECUTABLE( %s ${CMAKE_CURRENT_BINARY_DIR}/%s_dummy.cpp )\n", buildTarget.name, buildTarget.name)
+#            file.printf("ADD_EXECUTABLE( %s ${CMAKE_CURRENT_BINARY_DIR}/%s_dummy.cpp )\n", buildTarget.name, buildTarget.name)
             file.printf("TARGET_LINK_LIBRARIES( %s kdeinit_%s )\n", buildTarget.name, buildTarget.name)
             file.printf("INSTALL_TARGETS(/bin %s )\n", buildTarget.name)
 
-         else
-            file.printf("ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
+         else  #executable
+            if not buildTarget.install
+               file.printf("IF(KDE_BUILD_TESTS)\n")
+            end
+
+            file.printf("KDE_ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
-            file.printf("INSTALL_TARGETS(/bin %s )\n\n", buildTarget.name)
+
+            if buildTarget.install
+               file.printf("INSTALL_TARGETS(/bin %s )\n\n", buildTarget.name)
+            else
+               file.printf("ENDIF(KDE_BUILD_TESTS)\n")
+            end
 
          end
 
@@ -411,6 +468,8 @@ class CMakeFile
          file.printf("INSTALL_FILES( %s FILES %s )\n", install.location, install.files)
       end
       file.printf("\n")
+
+      file.printf("KDE_PLACEHOLDER()\n")
 
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}
