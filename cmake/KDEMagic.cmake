@@ -68,7 +68,7 @@ MACRO(KDE_ADD_KLM _target_NAME )
       ADD_LIBRARY(kdeinit_${_target_NAME} SHARED ${_magic_SRCS} )
    ENDIF (KDE_ENABLE_FINAL)
 
-   CONFIGURE_FILE(${KDE_CMAKE_PATH}/kdeinit_dummy.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/${_target_NAME}_dummy.cpp)
+   CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/cmake&kdeinit_dummy.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/${_target_NAME}_dummy.cpp)
 
    ADD_EXECUTABLE( ${_target_NAME} ${CMAKE_CURRENT_BINARY_DIR}/${_target_NAME}_dummy.cpp )
    TARGET_LINK_LIBRARIES( ${_target_NAME} kdeinit_${_target_NAME} )

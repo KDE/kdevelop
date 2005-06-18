@@ -82,6 +82,7 @@ class CMakeFile
       cummLine=""
       appendNextLine=false
       for line in @lines do
+#         line=line
          appendNextLine=(line[line.length-2, 1]=='\\')
 
          if appendNextLine
@@ -415,7 +416,7 @@ class CMakeFile
          if buildTarget.type==SharedLib
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
             file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
-            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES VERSION 4.2.0 SOVERSION 4 \"\")\n", buildTarget.name)
+            file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES VERSION 4.2.0 SOVERSION 4 )\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib %s )\n\n", buildTarget.name)
          elsif buildTarget.type==StaticLib
             file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
