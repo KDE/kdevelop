@@ -82,7 +82,13 @@ class CMakeFile
       cummLine=""
       appendNextLine=false
       for line in @lines do
-#         line=line
+         if line.include?("#")
+            line=line[0, line.index("#")]
+         end
+         if line.length<2
+            next
+         end
+
          appendNextLine=(line[line.length-2, 1]=='\\')
 
          if appendNextLine
