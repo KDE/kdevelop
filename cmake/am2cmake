@@ -245,8 +245,20 @@ class CMakeFile
          elsif baseDir=="kde_servicetypesdir"
             inst.setLocation("/share/servicetypes"+subDir)
             @installs[key]=inst
+         elsif baseDir=="kde_mimedir"
+            inst.setLocation("/share/mimelink"+subDir)
+            @installs[key]=inst
+         elsif baseDir=="kde_htmldir"
+            inst.setLocation("/share/doc/HTML"+subDir)
+            @installs[key]=inst
+         elsif baseDir=="kde_icondir"
+            inst.setLocation("/share/icons"+subDir)
+            @installs[key]=inst
          elsif baseDir=="kde_datadir"
             inst.setLocation("/share/apps"+subDir)
+            @installs[key]=inst
+         elsif baseDir=="datadir"
+            inst.setLocation("/share"+subDir)
             @installs[key]=inst
          end
       end

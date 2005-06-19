@@ -220,6 +220,17 @@ MACRO(KDE_AUTOMOC)
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_AUTOMOC)
 
+MACRO(KDE_INSTALL_ICONS)
+   FILE(GLOB _icons *.png)
+   FOREACH(_current_ICON ${_icons} )
+      STRING(REGEX REPLACE "^.*/[a-zA-Z]+([0-9]+)\\-([a-z]+)\\-(.+\\.png)$" "\\1" _size "${_current_ICON}")
+      STRING(REGEX REPLACE "^.*/[a-zA-Z]+([0-9]+)\\-([a-z]+)\\-(.+\\.png)$" "\\2" _group "${_current_ICON}")
+      STRING(REGEX REPLACE "^.*/[a-zA-Z]+([0-9]+)\\-([a-z]+)\\-(.+\\.png)$" "\\3" _name "${_current_ICON}")
+      MESSAGE(STATUS "icon: ${_current_ICON} size: ${_size} group: ${_group} name: ${_name}" )
+#      ADD_DEPENDENCIES(install install_icons)
+   ENDFOREACH (_current_ICON)
+ENDMACRO(KDE_INSTALL_ICONS)
+
 MACRO(KDE_PLACEHOLDER)
 ENDMACRO(KDE_PLACEHOLDER)
 
