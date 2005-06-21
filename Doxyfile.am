@@ -122,7 +122,7 @@ apidox:
 	fi
 	@set fnord $(MAKEFLAGS); amf=$$2; if test -n '$(SUBDIRS)'; then \
 	    list='$(SUBDIRS)'; \
-	    if test "$(GENERATE_FLAG)" == "no" -o "$(subdir)" == "."; then \
+	    if test "$(GENERATE_FLAG)" = "no" -o "$(subdir)" = "."; then \
 	    for subdir in $$list; do \
 		if grep '^include .*Doxyfile.am' $(srcdir)/$$subdir/Makefile.am; then \
 		echo "Making apidox (tag) in $$subdir"; \
@@ -131,7 +131,7 @@ apidox:
 		fi ; fi ;\
 	    done; \
 	    fi; \
-	    if test "$(GENERATE_FLAG)" == "yes" -o "$(subdir)" == "."; then \
+	    if test "$(GENERATE_FLAG)" = "yes" -o "$(subdir)" = "."; then \
 	    for subdir in $$list; do \
 		if grep '^include .*Doxyfile.am' $(srcdir)/$$subdir/Makefile.am; then \
 		echo "Making apidox (html) in $$subdir"; \
