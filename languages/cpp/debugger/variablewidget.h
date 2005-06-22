@@ -59,6 +59,8 @@ protected:
 public slots:
     void slotAddWatchVariable();
     void slotAddWatchVariable(const QString &ident);
+    void slotEvaluateExpression();
+    void slotEvaluateExpression(const QString &ident);
 
 private:
     VariableTree *varTree_;
@@ -91,13 +93,10 @@ public:
     QListViewItem *findRoot(QListViewItem *item) const;
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
-    void setCurrentThread(int currentThread)
-                                        { currentThread_ = currentThread; }
 
     // Remove items that are not active
     void trim();
     void trimExcessFrames();
-    void setLocalViewState(bool localsOn, int frameNo, int threadNo);
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item
 	virtual void maybeTip(const QPoint &);
@@ -108,6 +107,9 @@ signals:
     void expandItem(TrimmableItem *item);
     void expandUserItem(VarItem *item, const QCString &request);
     void setLocalViewState(bool localsOn);
+    // Emitted when *this is interested in args and locals for the
+    // current frame.
+    void produceVariablesInfo();
 
     // jw
     void varItemConstructed(VarItem *item);
@@ -116,9 +118,15 @@ signals:
     void toggleRadix(QListViewItem *item);
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
+    void slotEvaluateExpression(const QString& expression);
 
     //rgr
     void slotToggleRadix(QListViewItem *item);
+
+    void slotDbgStatus(const QString &status, int statusFlag);
+    void slotParametersReady(const char* data);
+    void slotLocalsReady(const char* data);
+    void slotCurrentFrame(int frameNo, int threadNo);
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
@@ -126,11 +134,22 @@ private slots:
     // jw
     void slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c);
 
+private: // helper functions
+    /** Get (if exists) and create (otherwise) frame root for
+        the specified frameNo/threadNo combination.
+    */    
+    VarFrameRoot* demand_frame_root(int frameNo, int threadNo);
+
 private:
     int activeFlag_;
     int currentThread_;
+    int currentFrame_;
     int iOutRadix;
+    bool justPaused_;
     //DbgController *controller;
+
+    // Root of all recently printed expressions.
+    TrimmableItem* recentExpressions_;
 
     friend class VarFrameRoot;
     friend class VarItem;
@@ -141,6 +160,24 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
+/** List view item that can 'trim' outdated children.
+
+    The instances of this class hold a number of children corresponding
+    to variables. When program state changes, such as after a step in source,
+    some variable values can change, and some variables can go out of scope.
+    We need
+    - highlight modified variables
+    - remove gone variables
+
+    We could just remove all children and repopulate the list from
+    the data from debugger, but then we'd loose information about previous
+    variable values.
+
+    So, we first update the values, highlighting the modified variables, and
+    keeping track which variables were recieved from gdb. After that, the
+    'trim' method is called, removing all variables which were not recieved
+    from gdbr.    
+ */
 class TrimmableItem : public KListViewItem
 {
 public:
@@ -236,8 +273,10 @@ public:
     VarFrameRoot(VariableTree *parent, int frameNo, int threadNo);
     virtual ~VarFrameRoot();
 
-    void setLocals(char *locals);
-    void setParams(char *params);
+    // Sets parameter information as passed from gdb.
+    void setParams(const char *params);
+    void setLocals(const char *locals);
+
     void setOpen(bool open);
 
     void setFrameName(const QString &frameName)

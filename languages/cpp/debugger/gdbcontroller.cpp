@@ -139,7 +139,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         badCore_(QString()),
         state_(s_dbgNotStarted|s_appNotStarted|s_silent),
         programHasExited_(false),
-        backtraceDueToProgramStop_(false),
         dom(projectDom),
         config_breakOnLoadingLibrary_(true),
         config_forceBPSet_(true),
@@ -408,22 +407,17 @@ void GDBController::actOnProgramPause(const QString &msg)
         // and we must reset the active flag
         viewedThread_ = -1;
         currentFrame_ = 0;
-        varTree_->setActiveFlag();
-        backtraceDueToProgramStop_ = true;
 
         // These two need to be actioned immediately. The order _is_ important
         if (stateIsOn(s_viewThreads))
             queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD), true);
 
         queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
-        if (stateIsOn(s_viewLocals))
-        {
-            queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-            queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-        }
 
-        varTree_->findWatch()->requestWatchVars();
-        varTree_->findWatch()->setActive();
+        // The above should have changed viewedThread_, if we're in MT
+        // program. 
+        emit currentFrame(currentFrame_, viewedThread_);
+
         emit acceptPendingBPs();
     }
 }
@@ -443,13 +437,6 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     // and we must reset the active flag
     viewedThread_ = -1;
     currentFrame_ = 0;
-    varTree_->setActiveFlag();
-
-    // Now wipe the tree out
-    varTree_->viewport()->setUpdatesEnabled(false);
-    varTree_->trim();
-    varTree_->viewport()->setUpdatesEnabled(true);
-    varTree_->repaint();
 
     frameStack_->clear();
 
@@ -818,15 +805,6 @@ void GDBController::parseProgramLocation(char *buf)
 void GDBController::parseBacktraceList(char *buf)
 {
     frameStack_->parseGDBBacktraceList(buf);
-    if (backtraceDueToProgramStop_)
-    {
-        varTree_->trimExcessFrames();
-        VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
-        if (frame)
-            frame->setFrameName(
-                frameStack_->getFrameName(currentFrame_, viewedThread_));
-        backtraceDueToProgramStop_ = false;
-    }
 }
 
 // **************************************************************************
@@ -835,7 +813,6 @@ void GDBController::parseThreadList(char *buf)
 {
     frameStack_->parseGDBThreadList(buf);
     viewedThread_ = frameStack_->viewedThread();
-    varTree_->setCurrentThread(viewedThread_);
 }
 
 // **************************************************************************
@@ -933,40 +910,14 @@ void GDBController::parseFrameSelected(char *buf)
 // inactive.
 void GDBController::parseLocals(char type, char *buf)
 {
-    varTree_->viewport()->setUpdatesEnabled(false);
-
-    // The locals are always attached to the currentFrame
-    VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
-    if (!frame)
-    {
-        frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
-        frame->setFrameName(
-                frameStack_->getFrameName(currentFrame_, viewedThread_));
-    }
-
-    Q_ASSERT(frame);
-
     if (type == (char) ARGS)
     {
-        frame->setParams(buf);
+        emit parametersReady(buf);
     }
     else
     {
-        frame->setLocals(buf);
-        // Trim the whole tree when we're on the top most
-        // frame so that they always see only "frame 0" on a program stop.
-        // User selects frame 1, will show both frame 0 and frame 1.
-        // Reselecting a frame 0 regenerates the data and therefore trims
-        // the whole tree _but_ all the items in every frame will be active
-        // so nothing will be deleted.
-        if (currentFrame_ == 0 || viewedThread_ == -1)
-            varTree_->trim();
-        else
-            frame->trim();
+        emit localsReady(buf);
     }
-
-    varTree_->viewport()->setUpdatesEnabled(true);
-    varTree_->repaint();
 }
 
 // **************************************************************************
@@ -1758,28 +1709,32 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
     viewedThread_ = threadNo;
     currentFrame_ = frameNo;
 
-    // Find or add the frame details. hold onto whether it existed because
-    // we're about to create one if it didn't.
-    VarFrameRoot *frame = varTree_->findFrame(frameNo, viewedThread_);
-    if (!frame)
-    {
-        frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
-        frame->setFrameName(
-                frameStack_->getFrameName(currentFrame_, viewedThread_));
-    }
+    emit currentFrame(frameNo, threadNo);
+}
 
-    Q_ASSERT(frame);
-    if (stateIsOn(s_viewLocals))
+/** Produces backtrace for the specified thread, or for main
+    thread if threadNo is -1. Does not change the current thread or
+    the current thread.
+*/
+void GDBController::slotProduceBacktrace(int threadNo)
+{
+    QString command;
+    if (threadNo != -1)
     {
-        // Have we already got these details?
-        if (frame->needLocals())
-        {
-            // Add the frame params to the variable list
-            // and ask for the locals
-            queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-            queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-        }
+        command = QString("thread apply %1 backtrace").arg(threadNo);
     }
+    else
+    {
+        command = "backtrace";
+    }
+    queueCmd(new GDBCommand(command.local8Bit(), 
+             NOTRUNCMD, INFOCMD, BACKTRACE));    
+}
+
+void GDBController::slotProduceVariablesInfo()
+{
+    queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));    
 }
 
 // **************************************************************************

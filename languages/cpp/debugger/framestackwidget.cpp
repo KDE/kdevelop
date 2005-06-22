@@ -114,6 +114,22 @@ void FramestackWidget::slotSelectFrame(int frameNo, int threadNo)
     emit selectFrame(frameNo, threadNo, !(frame));
 }
 
+void FramestackWidget::getBacktrace(int threadNo)
+{
+    if (threadNo != -1)
+    {
+        viewedThread_ = findThread(threadNo);
+        if (!viewedThread_)
+        {
+            Q_ASSERT(!viewedThread_);
+            return;                 // fatal
+        }
+    }
+
+    emit produceBacktrace(threadNo);    
+}
+
+
 /***************************************************************************/
 
 void FramestackWidget::parseGDBThreadList(char *str)
@@ -353,8 +369,10 @@ QListViewItem *ThreadStackItem::lastChild() const
 
 void ThreadStackItem::setOpen(bool open)
 {
-    if (open)
-        ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
+    // If we're openining, and have no child yet, get backtrace from
+    // gdb.
+    if (open && !firstChild())
+        ((FramestackWidget*)listView())->getBacktrace(threadNo());
 
     QListViewItem::setOpen(open);
 }

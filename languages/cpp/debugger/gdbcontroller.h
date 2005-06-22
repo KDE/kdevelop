@@ -116,6 +116,10 @@ public slots:
     void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
     void slotSetLocalViewState(bool onOff);
+    void slotProduceBacktrace(int threadNo);
+    /** Produces information about local variables of the current frame
+        by means of emitting localsReady and parametersReady signals. */
+    void slotProduceVariablesInfo();
 
     // jw - type determination requires a var object, so we do it here
     void slotVarItemConstructed(VarItem *item);
@@ -132,6 +136,15 @@ signals:
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
     void debuggerRunError(int errorCode);
+    // Emitted whenever parameters info for the current frame is ready.
+    void parametersReady(const char* buf);
+    // Emitted whenever local vars info for the the current frame is ready.
+    void localsReady(const char* buf);
+    // Emitted to annouce what is the current frame, either after it's
+    // explicitly changed, of after it could possible changed (such as after
+    // "continue"). The singal can be emitted twice with the same parameters,
+    // and recievers should be prepared to handle it.
+    void currentFrame(int frameNo, int threadNo);
 
 private:
     FramestackWidget* frameStack_;
@@ -154,7 +167,6 @@ private:
     // Some state variables
     int               state_;
     bool              programHasExited_;
-    bool              backtraceDueToProgramStop_;
 
     // Configuration values
     QDomDocument &dom;

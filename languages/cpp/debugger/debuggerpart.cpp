@@ -507,6 +507,8 @@ void DebuggerPart::setupController()
              controller,            SLOT(slotSetLocalViewState(bool)));
     connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
              controller,            SLOT(slotVarItemConstructed(VarItem*)));     // jw
+    connect( variableTree,          SIGNAL(produceVariablesInfo()),
+             controller,            SLOT(slotProduceVariablesInfo()));
 
     // variableTree -> gdbBreakpointWidget
     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
@@ -515,6 +517,9 @@ void DebuggerPart::setupController()
     // framestackWidget -> controller
     connect( framestackWidget,      SIGNAL(selectFrame(int,int,bool)),
              controller,            SLOT(slotSelectFrame(int,int,bool)));
+    connect( framestackWidget,      SIGNAL(produceBacktrace(int)),
+             controller,            SLOT(slotProduceBacktrace(int)));
+
 
     // gdbBreakpointWidget -> controller
     connect( gdbBreakpointWidget,   SIGNAL(clearAllBreakpoints()),
@@ -569,6 +574,16 @@ void DebuggerPart::setupController()
              gdbOutputWidget,       SLOT(slotReceivedStderr(const char*)) );
     connect( controller,            SIGNAL(dbgStatus(const QString&, int)),
              gdbOutputWidget,       SLOT(slotDbgStatus(const QString&, int)));
+
+    // controller -> variableTree
+    connect( controller, SIGNAL(dbgStatus(const QString&, int)),
+             variableTree, SLOT(slotDbgStatus(const QString&, int)));
+    connect( controller, SIGNAL(parametersReady(const char*)),
+             variableTree, SLOT(slotParametersReady(const char*)));
+    connect( controller, SIGNAL(localsReady(const char*)),
+             variableTree, SLOT(slotLocalsReady(const char*)));
+    connect( controller, SIGNAL(currentFrame(int, int)),
+             variableTree, SLOT(slotCurrentFrame(int, int)));
 
     // gdbBreakpointWidget -> disassembleWidget
     connect( gdbBreakpointWidget,   SIGNAL(publishBPState(const Breakpoint&)),

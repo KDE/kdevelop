@@ -36,6 +36,30 @@
 #include <qclipboard.h>
 #include <kapplication.h>
 
+
+/** The variables widget is passive, and is invoked by the rest of the
+    code via two main slots:
+    - slotDbgStatus
+    - slotCurrentFrame
+
+    The first is received the program status changes and the second is
+    recieved after current frame in the debugger can possibly changes.
+
+    The widget has a list item for each frame/thread combination, with
+    variables as children. However, at each moment only one item is shown.
+    When handling the slotCurrentFrame, we check if variables for the
+    current frame are available. If yes, we simply show the corresponding item.
+    Otherwise, we fetch the new data from debugger.
+
+    Fetching the data is done by emitting the produceVariablesInfo signal.
+    In response, we get slotParametersReady and slotLocalsReady signal,
+    in that order.
+
+    The data is parsed and changed variables are highlighted. After that,
+    we 'trim' variable items that were not reported by gdb -- that is, gone
+    out of scope.
+*/
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -47,39 +71,41 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
     varTree_ = new VariableTree(this);
-    QLabel *label = new QLabel(i18n("E&xpression to watch:"), this);
 
-    QHBox *watchEntry = new QHBox( this );
-
-    watchVarEditor_ = new KHistoryCombo( watchEntry, "var-to-watch editor");
+    
+    QHBox* expression_entry = new QHBox(this);
+    
+    QLabel *label = new QLabel(i18n("E&xpression:"), expression_entry);    
+    label->adjustSize();
+    label->setFixedWidth(label->width());
+    watchVarEditor_ = new KHistoryCombo( expression_entry, 
+                                         "var-to-watch editor");
     label->setBuddy(watchVarEditor_);
 
-//    watchVarEntry_ = new KLineEdit(this);
+    QHBox* buttons = new QHBox(this);
 
-    QPushButton *addButton = new QPushButton(i18n("&Add"), watchEntry );
+    QSpacerItem* spacer = new QSpacerItem( 5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    buttons->layout()->addItem(spacer);
+
+    QPushButton *evalButton = new QPushButton(i18n("&Evaluate"), buttons );
+    evalButton->adjustSize();
+    evalButton->setFixedWidth(evalButton->width());
+
+    QPushButton *addButton = new QPushButton(i18n("&Watch"), buttons );
     addButton->adjustSize();
     addButton->setFixedWidth(addButton->width());
 
-    QBoxLayout * vbox = new QVBoxLayout();
-
-//    QBoxLayout *watchEntry = new QHBoxLayout();
-//    watchEntry->addWidget(label);
-//    watchEntry->addWidget(watchVarEntry_);
-//    watchEntry->addWidget(watchVarEditor_);
-//    watchEntry->setStretchFactor(watchVarEditor_, 1);
-//    watchEntry->addWidget(addButton);
-
-    vbox->addWidget( label );
-    vbox->addWidget( watchEntry );
-
     QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
     topLayout->addWidget(varTree_, 10);
-    topLayout->addLayout( vbox );
+    topLayout->addWidget(expression_entry);
+    topLayout->addWidget(buttons);
+    
 
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
-    connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
-//    connect( watchVarEntry_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
+    connect( evalButton, SIGNAL(clicked()), SLOT(slotEvaluateExpression()) );
 
+    connect( watchVarEditor_, SIGNAL(returnPressed()), 
+             SLOT(slotEvaluateExpression()) );
 }
 
 // **************************************************************************
@@ -134,12 +160,33 @@ void VariableWidget::slotAddWatchVariable(const QString &ident)
     }
 }
 
+void VariableWidget::slotEvaluateExpression()
+{
+    QString exp(watchVarEditor_->currentText());
+    if (!exp.isEmpty())
+    {
+        slotEvaluateExpression(exp);
+    }
+}
+
+void VariableWidget::slotEvaluateExpression(const QString &ident)
+{
+    if (!ident.isEmpty())
+    {
+        watchVarEditor_->addToHistory(ident);
+        varTree_->slotEvaluateExpression(ident);
+        watchVarEditor_->clearEdit();
+    }    
+}
+
 // **************************************************************************
 
 void VariableWidget::focusInEvent(QFocusEvent */*e*/)
 {
     varTree_->setFocus();
 }
+
+
 
 
 // **************************************************************************
@@ -150,7 +197,9 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     : KListView(parent, name),
       QToolTip( viewport() ),
       activeFlag_(0),
-      currentThread_(-1)
+      currentThread_(-1),
+      justPaused_(false),
+      recentExpressions_(0)
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
@@ -193,16 +242,22 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     if (item->parent())
     {
         KPopupMenu popup(item->text(VarNameCol), this);
-        int idRemoveWatch = -2;
-        if (dynamic_cast<WatchRoot*>(findRoot(item)))
-            idRemoveWatch = popup.insertItem( i18n("Remove Watch Variable") );
+        int idRemove = -2;
+        int idReevaluate = -2;
+        QListViewItem* root = findRoot(item);
+        if (dynamic_cast<WatchRoot*>(root))
+            idRemove = popup.insertItem( i18n("Remove Watch Variable") );
+        if (root == recentExpressions_) {
+            idRemove = popup.insertItem( i18n("Remove Expression") );
+            idReevaluate = popup.insertItem( i18n("Reevaluate Expression") );
+        }
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
         int idToggleRadix = popup.insertItem( i18n("Toggle Hex/Decimal") );
         int	idCopyToClipboard = popup.insertItem( i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
-        if (res == idRemoveWatch)
+        if (res == idRemove)
             delete item;
         if (res == idToggleRadix)
             emit toggleRadix(item);
@@ -224,6 +279,13 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
                 emit toggleWatchpoint(item->fullName());
         }
+        else if (res == idReevaluate)
+        {
+            if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
+            {
+                emit expandItem(item);
+            }
+        }
     }
 }
 
@@ -235,6 +297,21 @@ void VariableTree::slotAddWatchVariable(const QString &watchVar)
     VarItem *varItem = new VarItem(findWatch(), watchVar, typeUnknown);
     emit expandItem(varItem);
 }
+
+void VariableTree::slotEvaluateExpression(const QString &expression)
+{
+    if (recentExpressions_ == 0)
+    {
+        recentExpressions_ = new TrimmableItem(this);
+        recentExpressions_->setText(0, "Recent");
+        recentExpressions_->setOpen(true);
+    }
+
+    VarItem *varItem = new VarItem(recentExpressions_, expression, typeUnknown);
+    varItem->setRenameEnabled(0, 1);
+    emit expandItem(varItem);
+}
+
 
 // **************************************************************************
 
@@ -254,30 +331,6 @@ void VariableTree::slotDoubleClicked(QListViewItem *item, const QPoint &pos, int
         }
     }
 }
-
-// **************************************************************************
-
-void VariableTree::setLocalViewState(bool localsOn, int frameNo, int threadNo)
-{
-    // When they want to _close_ a frame then we need to check the state of
-    // all other frames to determine whether we still need the locals.
-    if (!localsOn) {
-        QListViewItem *sibling = firstChild();
-        while (sibling) {
-            VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (sibling);
-            if (frame && frame->isOpen()) {
-                localsOn = true;
-                break;
-            }
-
-            sibling = sibling->nextSibling();
-        }
-    }
-
-    emit setLocalViewState(localsOn);
-    emit selectFrame(frameNo, threadNo);
-}
-
 
 // **************************************************************************
 
@@ -333,8 +386,9 @@ void VariableTree::trim()
     while (child) {
         QListViewItem *nextChild = child->nextSibling();
 
-        // don't trim the watch root
-        if (!(dynamic_cast<WatchRoot*> (child))) {
+        // don't trim the watch root, or 'recent expressions' root.
+        if (!(dynamic_cast<WatchRoot*> (child)) 
+            && child != recentExpressions_) {
             if (TrimmableItem *item = dynamic_cast<TrimmableItem*> (child)) {
                 if (item->isActive())
                     item->trim();
@@ -432,6 +486,122 @@ void VariableTree::slotToggleRadix(QListViewItem * item)
 
   delete item;  //remove the old one so that is seam as if it was replaced by the new item
   pOldItem=NULL;
+}
+
+void VariableTree::slotDbgStatus(const QString&, int statusFlag)
+{
+    if (statusFlag & s_appNotStarted)
+    {
+        // The application no longer exists. Remove all locals.
+        setActiveFlag();
+
+        // Now wipe the tree out
+        viewport()->setUpdatesEnabled(false);
+        trim();
+        setUpdatesEnabled(true);
+        repaint();
+    }
+    else
+    {
+        // Application still exists.
+        if (!(statusFlag & s_appBusy))
+        {
+            // But is not busy. This means application has just stopped for
+            // some reason. Need to refresh locals when
+            // slotChangedFrame is called. Cannot do it here, because
+            // we don't know which thread we're in.
+            justPaused_ = true;
+        }
+    }
+}
+
+VarFrameRoot* VariableTree::demand_frame_root(int frameNo, int threadNo)
+{
+    VarFrameRoot *frame = findFrame(frameNo, threadNo); 
+    if (!frame)
+    {
+        frame = new VarFrameRoot(this, frameNo, threadNo);
+        frame->setFrameName("Locals");
+        // Make sure "Locals" item is always the top item, before
+        // "watch" and "recent experessions" items.
+       this->takeItem(frame);
+       this->insertItem(frame);
+    }
+    return frame;
+}
+
+void VariableTree::slotParametersReady(const char* data)
+{
+    viewport()->setUpdatesEnabled(false);
+
+    // The locals are always attached to the currentFrame
+    VarFrameRoot *frame = demand_frame_root(currentFrame_, currentThread_);
+    frame->setParams(data);
+
+    viewport()->setUpdatesEnabled(true);
+    viewport()->repaint();
+}
+
+void VariableTree::slotLocalsReady(const char* data)
+{
+    viewport()->setUpdatesEnabled(false);
+
+    VarFrameRoot *frame = demand_frame_root(currentFrame_, currentThread_);
+    frame->setLocals(data);
+    frame->setOpen(true);
+    
+    // If we're regetting locals for the frame 0, it surely means
+    // the application was just paused. Otherwise, 
+    // (say after selecting frame 1 and then frame 0) we'd have locals
+    // for frame 0 already. If app was just paused, then other frames
+    // are out-of-date, and we trim them. If user later selects frame 1,
+    // we get locals for that frame.
+    // TODO: should we reset data for other threads?
+    if (currentFrame_ == 0 || currentThread_ == -1)
+        trim();
+    else 
+       frame->trim();
+
+    viewport()->setUpdatesEnabled(true);
+    viewport()->repaint();
+}
+
+void VariableTree::slotCurrentFrame(int frameNo, int threadNo)
+{
+    // It's quite likely that frameNo == currentFrame_ and
+    // threadNo == currentThread_. For example, this happens
+    // when the 'step' command is executed.
+    if (frameNo != currentFrame_ || threadNo != currentThread_)
+    {
+        // Hide the current frame vars root.
+        demand_frame_root(currentFrame_, currentThread_)->setVisible(false);
+        
+        currentFrame_ = frameNo;
+        currentThread_ = threadNo;
+    }
+
+    // Show the current frame.
+    VarFrameRoot* frame = demand_frame_root(currentFrame_, currentThread_);
+    frame->setVisible(true);
+        
+    // If no locals for frame were obtained, reget the local.
+    // Also reget the locals if the program was just paused. In that
+    // case we're always on frame 0, and the setLocals function
+    // we eventually remove frames 1, N, if they are present. They
+    // will be repopulated if needed.
+    if (frame->needLocals() || justPaused_) 
+    {
+        setActiveFlag();
+        // This will eventually call back to slotParametersReady and 
+        // slotLocalsReady
+        emit produceVariablesInfo();
+
+        if (justPaused_)
+        {
+            findWatch()->requestWatchVars();
+        }
+        justPaused_ = false;
+    }
 }
 
 // **************************************************************************
@@ -915,7 +1085,7 @@ VarFrameRoot::~VarFrameRoot()
 
 // **************************************************************************
 
-void VarFrameRoot::setParams(char *params)
+void VarFrameRoot::setParams(const char *params)
 {
     setActive();
     params_ = params;
@@ -923,7 +1093,7 @@ void VarFrameRoot::setParams(char *params)
 
 // **************************************************************************
 
-void VarFrameRoot::setLocals(char *locals)
+void VarFrameRoot::setLocals(const char *locals)
 {
     setActive();
 
@@ -953,11 +1123,7 @@ void VarFrameRoot::setLocals(char *locals)
 // state. This
 void VarFrameRoot::setOpen(bool open)
 {
-    bool localStateChange = (isOpen() != open);
     QListViewItem::setOpen(open);
-
-    if (localStateChange)
-        ((VariableTree*)listView())->setLocalViewState(open, frameNo_, threadNo_);
 
     if (!open)
         return;

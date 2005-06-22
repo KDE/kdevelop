@@ -93,11 +93,14 @@ public:
     int viewedThread()
     { return viewedThread_ ? viewedThread_->threadNo() : -1; }
 
+    void getBacktrace(int threadNo);
+
 public slots:
     void slotSelectFrame(int frameNo, int threadNo);
     void slotSelectionChanged(QListViewItem *thisItem);
 
 signals:
+    void produceBacktrace(int threadNo);
     void selectFrame(int frameNo, int threadNo, bool needFrames);
 
 #if QT_VERSION < 300
