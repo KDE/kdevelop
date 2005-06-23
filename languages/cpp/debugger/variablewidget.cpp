@@ -279,6 +279,30 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             }
         }
     }
+    else if (item == recentExpressions_)
+    {
+        KPopupMenu popup(this);
+        popup.insertTitle(i18n("Recent expressions"));
+        int idRemove = popup.insertItem(i18n("Remove all"));
+        int idReevaluate = popup.insertItem(i18n("Reevaluate all"));
+        int res = popup.exec(QCursor::pos());
+        
+        if (res == idRemove)
+        {
+            delete recentExpressions_;
+            recentExpressions_ = 0;
+        }
+        else if (res == idReevaluate)
+        {
+            for(QListViewItemIterator it(item); *it; ++it)
+            {
+                VarItem* var = dynamic_cast<VarItem*>(*it);                    
+                Q_ASSERT(var && 
+                         "only VarItem allowed under 'Recent expressions'");
+                emit expandItem(var);
+            }
+        }
+    }
 }
 
 // **************************************************************************
