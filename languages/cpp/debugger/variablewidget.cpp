@@ -241,7 +241,8 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
     if (item->parent())
     {
-        KPopupMenu popup(item->text(VarNameCol), this);
+        KPopupMenu popup(this);
+        popup.insertTitle(item->text(VarNameCol));
         int idRemove = -2;
         int idReevaluate = -2;
         QListViewItem* root = findRoot(item);
