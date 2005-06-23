@@ -112,19 +112,10 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 
 void VariableWidget::clear()
 {
-//  varTree_->clear();
-  QListViewItemIterator it(varTree_);
-  while (it.current())
-  {
-    if (!dynamic_cast<WatchRoot*>(varTree_->findRoot(it.current())))
-    {
-      QListViewItem *item = it.current();
-      delete item;
-    } else
-    {
-      ++it;
-    }
-  }
+  // Use 'trim' so that logic about which top-level items are 
+  // always retained is contained only in that function.
+  varTree_->setActiveFlag();
+  varTree_->trim();
 }
 
 // **************************************************************************
