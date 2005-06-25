@@ -1,3 +1,8 @@
+2005-06-25 Pieter Pareit <pieter.pareit@scarlet.be>
+  * Added ruby_{run,config} icons, the .png files are used by kdevelop,
+    the .psd files can be used by artists when icons need to be changed
+    Thanks Zoran Karavla for the artwork!
+
 2005-05-26 Tobias Erbsland <te@profzone.ch>
  * Replaced static hash table in lexer by a QMap
    I found no performance impacts by this replacement, but the code
