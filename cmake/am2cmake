@@ -23,7 +23,7 @@ Part       = 4
 KDEInit    = 5
 
 class BuildTarget
-   def initialize(name, type, withStdPrefix=true, install=true)
+   def initialize(name, type, withStdPrefix=true, install=true, test=false)
       @name=name
       @type=type
       @sources=Array.new
@@ -34,6 +34,10 @@ class BuildTarget
       @am=Array.new
       @stdPrefix=stdPrefix
       @install=install
+      @test=test
+      @libs=Array.new
+
+     @libs.push("${QT_AND_KDECORE_LIBS}")
    end
 
    def addSourceFiles(files)
@@ -52,7 +56,32 @@ class BuildTarget
       end
    end
 
-   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs, :kcfgs, :install
+   def addLibs(libs)
+      lib=""
+      libs.split.each do |currentLib|
+         lib=case currentLib
+         when "${LIB_KDEUI}" then "kdeui"
+#         when "${LIB_KDECORE}" then "${QT_AND_KDECORE_LIBS}"
+         when "${LIB_KIO}" then "kio"
+         when "${LIB_KDEPRINT}" then "kdeprint"
+         when "${LIB_KPARTS}" then "kparts"
+         else
+            if currentLib =~ /^-l(\S+)$/
+               $1
+            else
+               ""
+            end
+         end
+      end
+
+      if !lib.empty?
+         @libs.push(lib)
+         printf("--- lib: #{lib}\n")
+      end
+   end
+
+
+   attr_reader :name, :type, :sources, :uis, :skels, :stdPrefix, :stubs, :kcfgs, :install, :test, :libs
 
 end
 
@@ -63,6 +92,8 @@ class CMakeFile
       amFile =~ /(.*)Makefile.am/
       @path=$1
       @listsFile=@path+"CMakeLists.txt"
+      @iconDir="hicolor"
+      @installIcons=false
 
       @targets=Array.new
       @installs=Hash.new
@@ -103,7 +134,7 @@ class CMakeFile
       end
    end
 
-   def findTargetForSources(line)
+   def findTarget(line)
       type=SharedLib
       if line =~ /^\s*lib(\S+)_la_\S+\s*=\s*\S+.*$/
          targetName=$1
@@ -129,6 +160,7 @@ class CMakeFile
       type=NoTarget
       targets=""
       installTarget=true
+      testTarget=false
 
       if line =~ /^\s*lib_LTLIBRARIES\s*=\s*(\S+.*)/
          targets=$1
@@ -160,17 +192,20 @@ class CMakeFile
          type=Executable
       elsif line =~ /^\s*noinst_PROGRAMS\s*=\s*(\S+.*)$/
          targets=$1
-         installTargets=false
+         installTarget=false
 #         printf("exec: %s\n", $1)
          type=Executable
       elsif line =~ /^\s*check_PROGRAMS\s*=\s*(\S+.*)$/
          targets=$1
-         installTargets=false
+         installTarget=false
+         testTarget=true
+
 #         printf("exec: %s\n", $1)
          type=Executable
       elsif line =~ /^\s*EXTRA_PROGRAMS\s*=\s*(\S+.*)$/
          targets=$1
-         installTargets=false
+         installTarget=false
+         testTarget=true
 #         printf("exec: %s\n", $1)
          type=Executable
       else
@@ -178,7 +213,7 @@ class CMakeFile
       end
 
       if type==Executable
-         targets.split.each{ |current| @targets.push(BuildTarget.new(current, type, true, installTargets)) }
+         targets.split.each{ |current| @targets.push(BuildTarget.new(current, type, true, installTarget, testTarget)) }
       else
          targets.split.each do |current|
             if current =~ /lib(\S+)\.la/
@@ -195,17 +230,13 @@ class CMakeFile
 
    def addSourcesToTarget(line)
 #      printf("sources: %s\n", line)
-      buildTarget=findTargetForSources(line)
+      buildTarget=findTarget(line)
       if buildTarget.type==NoTarget
          printf("PROBLEM: target not found: %s\n", line)
          return
       end
 
-#      if buildTarget.type==Executable
-         line =~ /^\s*(lib)?\S+(_la)?_SOURCES\s*=\s*(\S+.*)$/
-#      else
-#         line =~ /^\s*lib\S+_la_SOURCES\s*=\s*(\S+.*)$/
-#      end
+      line =~ /^\s*(lib)?\S+(_la)?_SOURCES\s*=\s*(\S+.*)$/
       buildTarget.addSourceFiles($3)
    end
 
@@ -254,6 +285,7 @@ class CMakeFile
          elsif baseDir=="kde_icondir"
             inst.setLocation("/share/icons"+subDir)
             @installs[key]=inst
+            @iconDir=key
          elsif baseDir=="kde_datadir"
             inst.setLocation("/share/apps"+subDir)
             @installs[key]=inst
@@ -274,12 +306,33 @@ class CMakeFile
          return
       end
 
-      if line =~ /^\s*\S+_SOURCES\s*=/
+      if line =~ /^\s*KDE_ICON\s*=/
+         @installIcons=true
+         return
+      end
+
+      if (line =~ /^\s*\S+_SOURCES\s*=/)
          addSourcesToTarget(line)
          return
       end
 
-      if line =~ /^\s*INCLUDES\s*=\s*(\S+.*)$/
+      if (line =~ /^\s*(\S+)_LDFLAGS\s*=\s*(\S+.*)$/) ||
+         (line =~ /^\s*(\S+)_LIBADD\s*=\s*(\S+.*)$/) ||
+         (line =~ /^\s*(\S+)_LDADD\s*=\s*(\S+.*)$/)
+
+         if $1 != "AM"
+            buildTarget=findTarget(line)
+            if buildTarget.type==NoTarget
+               printf("PROBLEM: target %s not found: %s\n", $1, line)
+               return
+            end
+
+            buildTarget.addLibs($2)
+         end
+         return
+      end
+
+      if (line =~ /^\s*INCLUDES\s*=\s*(\S+.*)$/)
          addIncludeDirectories($1)
          return
       end
@@ -318,7 +371,7 @@ class CMakeFile
          file.printf("\n")
       end
       if not @skippedSubDirs.empty?
-         @skippedSubDirs.each{ |dir| file.printf("MESSAGE(STATUS \"Skipped subdir %s\")\n", dir)}
+         @skippedSubDirs.each{ |dir| file.printf("MESSAGE(STATUS \"${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir %s\")\n", dir)}
       end
 
 
@@ -433,7 +486,11 @@ class CMakeFile
 
          if buildTarget.type==SharedLib
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
-            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+#            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("TARGET_LINK_LIBRARIES(%s ", buildTarget.name)
+            buildTarget.libs.each { |currentLib| file.printf(" %s", currentLib) }
+            file.printf(" )\n\n")
+
             file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES VERSION 4.2.0 SOVERSION 4 )\n", buildTarget.name)
             file.printf("INSTALL_TARGETS(/lib %s )\n\n", buildTarget.name)
          elsif buildTarget.type==StaticLib
@@ -445,13 +502,21 @@ class CMakeFile
                file.printf("SET_TARGET_PROPERTIES(%s PROPERTIES PREFIX \"\")\n", buildTarget.name)
             end
 #            file.printf("KDE_CREATE_LIBTOOL_FILE( %s )\n\n", buildTarget.name)
-            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+#            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("TARGET_LINK_LIBRARIES(%s ", buildTarget.name)
+            buildTarget.libs.each { |currentLib| file.printf(" %s", currentLib) }
+            file.printf(" )\n\n")
+
             file.printf("INSTALL_TARGETS(/lib/kde3 %s )\n\n", buildTarget.name)
          elsif buildTarget.type==KDEInit
             file.printf("KDE_ADD_KLM( %s ${%s})\n\n", buildTarget.name, srcsName)
 
 #            file.printf("ADD_LIBRARY(kdeinit_%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
-            file.printf("TARGET_LINK_LIBRARIES(kdeinit_%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+#            file.printf("TARGET_LINK_LIBRARIES(kdeinit_%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+            file.printf("TARGET_LINK_LIBRARIES(kdeinit_%s ", buildTarget.name)
+            buildTarget.libs.each { |currentLib| file.printf(" %s", currentLib) }
+            file.printf(" )\n\n")
+
             file.printf("INSTALL_TARGETS(/lib kdeinit_%s )\n\n", buildTarget.name)
 
 #now create the dummy main.cpp and the application
@@ -461,19 +526,25 @@ class CMakeFile
 #file.printf("FILE(WRITE %s_dummy.cpp \"extern \\\"C\\\" int kdemain(int argc, char* argv[]);\\n extern \\\"C\\\" int kdeinitmain(int argc, char* argv[]) { return kdemain(argc,argv); }\\n \")\n", buildTarget.name)
 #            file.printf("ADD_EXECUTABLE( %s ${CMAKE_CURRENT_BINARY_DIR}/%s_dummy.cpp )\n", buildTarget.name, buildTarget.name)
             file.printf("TARGET_LINK_LIBRARIES( %s kdeinit_%s )\n", buildTarget.name, buildTarget.name)
+
             file.printf("INSTALL_TARGETS(/bin %s )\n", buildTarget.name)
 
          else  #executable
-            if not buildTarget.install
+            if buildTarget.test
                file.printf("IF(KDE_BUILD_TESTS)\n")
             end
 
             file.printf("KDE_ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
-            file.printf("TARGET_LINK_LIBRARIES(%s ${QT_AND_KDECORE_LIBS})\n\n", buildTarget.name)
+
+            file.printf("TARGET_LINK_LIBRARIES(%s ", buildTarget.name)
+            buildTarget.libs.each { |currentLib| file.printf(" %s", currentLib) }
+            file.printf(" )\n\n")
 
             if buildTarget.install
                file.printf("INSTALL_TARGETS(/bin %s )\n\n", buildTarget.name)
-            else
+            end
+
+            if buildTarget.test
                file.printf("ENDIF(KDE_BUILD_TESTS)\n")
             end
 
@@ -488,7 +559,11 @@ class CMakeFile
       end
       file.printf("\n")
 
-      file.printf("KDE_PLACEHOLDER()\n")
+      if @installIcons
+         file.printf("KDE_INSTALL_ICONS( %s )\n\n",@iconDir )
+      end
+        
+      file.printf("KDE_PLACEHOLDER()\n\n")
 
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}
