@@ -2,12 +2,14 @@
 [General]
 Name=Simple Hello world program
 Name[da]=Simpelt Goddag verden program
+Name[et]=Lihtne "Tere, maailm" programm
 Name[hu]=Egyszerű Hello world program
 Name[sv]=Enkelt Hello world-program
 Icon=pascalhello.png
 Category=Pascal
 Comment=Generates a simple Hello world program in Pascal
 Comment[da]=Genererer et simpelt Goddag verden program i Pascal
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine Pascalis
 Comment[hu]=Létrehoz egy egyszerű Hello world programot Pascalban
 Comment[sv]=Skapar ett enkelt Hello world-program i Pascal
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
@@ -37,5 +39,6 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 Type=message
 Comment=A simple 'hello world' program in Pascal was created in %{dest}
 Comment[da]=Et simpelt 'goddag verden' program i Pascal blev oprettet i %{dest}
+Comment[et]=Lihtne "Tere, maailm" programm Pascalis loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Hello world Pascal-program itt: %{dest}
 Comment[sv]=Ett enkelt 'Hello world'-program i Pascal skapades i %{dest}

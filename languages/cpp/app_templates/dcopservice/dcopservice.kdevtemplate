@@ -3,6 +3,7 @@
 Name=KDE DCOP Service
 Name[br]=Servij DCOP KDE
 Name[da]=KDE DCOP-service
+Name[et]=KDE DCOP-teenus
 Name[ga]=Seirbhís DCOP KDE
 Name[hu]=KDE DCOP-szolgáltatás
 Name[sv]=KDE:s DCOP-tjänst
@@ -120,5 +121,6 @@ Dest=%{dest}/src/main.cpp
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
 Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
+Comment[et]=KDE DCOP-teenus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
 Comment[sv]=En KDE DCOP-tjänst skapades i %{dest}

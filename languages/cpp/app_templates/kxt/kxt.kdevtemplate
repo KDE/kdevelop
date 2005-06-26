@@ -2,6 +2,7 @@
 [General]
 Name=KConfig XT application
 Name[da]=KConfig XT program
+Name[et]=KConfig XT rakendus
 Name[hu]=KConfig XT-alapú alkalmazás
 Name[sv]=KConfig XT-program
 Category=C++/KDE
@@ -9,6 +10,7 @@ Icon=kxt.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
 Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
 Comment[en_GB]=Generates a simple KDE application with one widget and a configuration dialogue
+Comment[et]=Lihtsa KDE rakenduse loomine ühe vidina ja seadistustedialoogiga.
 Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és egy beállítóablakkal
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
 FileTemplates=h,CStyle,cpp,CStyle
@@ -188,5 +190,6 @@ Dest=%{dest}/configure.in.in
 Type=message
 Comment=A KConfig XT application was created in %{dest}
 Comment[da]=Et KConfig XT-program blev oprettet i %{dest}
+Comment[et]=A KConfig XT rakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KConfig XT-alapú alkalmazás itt: %{dest}
 Comment[sv]=Ett KConfig XT-program skapades i %{dest}

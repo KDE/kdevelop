@@ -3,12 +3,14 @@
 Name=Linux Kernel module
 Name[br]=Mollad ar galon Linux
 Name[da]=Linux kernemodul
+Name[et]=Linuxi kerneli moodul
 Name[hu]=Linuxos kernelmodul
 Name[sv]=Modul för Linux kärna
 Icon=
 Category=C
 Comment=Generates a template for a Linux kernel module.
 Comment[da]=Genererer en skabelon for en Linux kernemodul.
+Comment[et]=Linuxi kerneli mooduli malli loomine.
 Comment[hu]=Létrehoz egy sablont linuxos kernelmodul készítéséhez.
 Comment[sv]=Skapar en mall för en modul i Linux kärna.
 FileTemplates=h,CStyle,c,CStyle

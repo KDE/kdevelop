@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=DCOP Service
+Name[et]=DCOP-teenus
 Name[ga]=Seirbhís DCOP
 Name[hu]=DCOP-szolgáltatás
 Name[sv]=DCOP-tjänst
@@ -118,5 +119,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=A KDE DCOP Service was created in %{dest}
 Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
+Comment[et]=KDE DCOP-teenus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
 Comment[sv]=En KDE DCOP-tjänst skapades i %{dest}

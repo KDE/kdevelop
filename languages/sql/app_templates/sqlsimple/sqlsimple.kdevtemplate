@@ -2,12 +2,14 @@
 [General]
 Name=Simple SQL Project
 Name[da]=Simpelt SQL-projekt
+Name[et]=Lihtne SQL projekt
 Name[ga]=Tionscadal Simplí SQL
 Name[hu]=Egyszerű SQL-projekt
 Name[sv]=Enkelt SQL-projekt
 Category=Database
 Comment=Generates a simple SQL project.
 Comment[da]=Genererer et simpelt SQL projekt.
+Comment[et]=Lihtsa SQL projekti loomine.
 Comment[hu]=Létrehoz egy egyszerű SQL-projektet.
 Comment[sv]=Skapar ett enkelt SQL-projekt.
 FileTemplates=sql,AdaStyle
@@ -29,5 +31,6 @@ Dest=%{dest}/%{APPNAMELC}.sql
 Type=install
 Comment=A simple SQL project was created in %{dest}
 Comment[da]=Et simpelt SQL projekt blev oprettet i %{dest}
+Comment[et]=Lihtne SQL projekt loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű SQL-projekt itt: %{dest}
 Comment[sv]=Ett enkelt SQL-projekt skapades i %{dest}

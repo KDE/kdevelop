@@ -2,11 +2,13 @@
 [General]
 Name=Simple Hello wxWidgets Application
 Name[da]=Simpelt Goddag wxWidgets program
+Name[et]=Lihtne wxWidgets'i tervitusrakendus
 Name[hu]=wxWidgets-alapú Hello world program
 Name[sv]=Enkelt Hello-program för wxWidgets
 Category=C++/wxWidgets
 Comment=Generates a simple wxWidgets Hello application.
 Comment[da]=Genererer et simpelt wxWidgets Goddag-program.
+Comment[et]=Lihtsa wxWidgets'i tervitusrakenduse loomine.
 Comment[hu]=Létrehoz egy egyszerű wxWidgets-alkalmazást.
 Comment[sv]=Skapar ett enkelt Hello-program för wxWidgets.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -114,5 +116,6 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=Simple hello wxWidgets application was created in %{dest}
 Comment[da]=Simpelt Goddag wxWidgets program blev oprettet i %{dest}
+Comment[et]=Lihtne wxWidgets'i tervitusrakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű wxWidgets-alkalmazás itt: %{dest}
 Comment[sv]=Ett enkelt Hello-program för wxWidgets.skapades i %{dest}

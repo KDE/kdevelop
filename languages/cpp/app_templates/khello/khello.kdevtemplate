@@ -2,6 +2,7 @@
 [General]
 Name=Simple KDE Application
 Name[da]=Et simpelt KDE program
+Name[et]=Lihtne KDE rakendus
 Name[ga]=Feidhmchlár Simplí KDE
 Name[hu]=Egyszerű KDE-s alkalmazás
 Name[sv]=Enkelt KDE-program
@@ -9,6 +10,7 @@ Category=C++/KDE
 Icon=khello.png
 Comment=Generates a simple KDE application with one widget.
 Comment[da]=Genererer et simpelt KDE program men en kontrol
+Comment[et]=Lihtsa KDE rakenduse loomine ühe vidinaga.
 Comment[hu]=Létrehoz egy egyszerű KDE-s alkalmazást, egy grafikus elemmel.
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -136,6 +138,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=A KDE Hello world program was created in %{dest}
 Comment[da]=Et KDE Goddag verden program blev oprettet i %{dest}
+Comment[et]=KDE "Tere, maailm" programm loodi asukohta %{dest}
 Comment[hu]=Létrejött egy KDE Hello world program itt: %{dest}
 Comment[sv]=Ett KDE Hello world-program skapades i %{dest}
 

@@ -2,12 +2,14 @@
 [General]
 Name=Simple Hello World Program
 Name[da]=Simpelt Goddag verden program
+Name[et]=Lihtne "Tere, maailm" programm
 Name[hu]=Egyszerű Hello world program
 Name[sv]=Enkelt Hello World-program
 Icon=haskellhello.png
 Category=Haskell
 Comment=This generates a simple 'Hello World' program in Haskell
 Comment[da]=Dette genererer et simpelt 'Goddag verden' program i Haskell
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine Haskellis
 Comment[hu]=Létrehoz egy egyszerű Hello world programot Haskell nyelven
 Comment[sv]=Detta skapar ett enkelt 'Hello World'-program i Haskell
 FileTemplates=hs,HaskellStyle

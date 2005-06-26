@@ -2,11 +2,13 @@
 [General]
 Name=Hello world program
 Name[da]=Goddag verden program
+Name[et]="Tere,maailm" programm
 Name[sv]=Hello world-program
 Icon=chellogba.png
 Category=C/GBA
 Comment=Generates a simple "Hello world" program for the Gameboy Advance. You will need the "devkitadvance" to compile it. See README.devel for more details.
 Comment[da]=Genererer et simpelt "Goddag verden" program for Gameboy Advance. Du vil skulle  bruge "devkitadvance" for at kompilere det. Se README.devel for flere detaljer.
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine Gameboy Advance'i jaoks. Kompileerimiseks on vajalik "devkitadvance". Täpsemalt räägib sellest fail README.devel.
 Comment[hu]=Létrehoz egy egyszerű Hello world programot a Gameboy Advance-hoz. Lefordításához szükség van a "devkitadvance" csomag telepítésére. További információ a README.devel fájlban található.
 ShowFileAfterGeneration=README.devel
 FileTemplates=h,CStyle,c,CStyle

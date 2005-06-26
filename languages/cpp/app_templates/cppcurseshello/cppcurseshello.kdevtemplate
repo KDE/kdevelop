@@ -2,12 +2,14 @@
 [General]
 Name=Simple ncurses Hello world program
 Name[da]=Simpelt ncurses Goddag verden program
+Name[et]=Lihtne "Tere, maailm" programm ncurses'i põhjal
 Name[hu]=Egyszerű, Ncurses-alapú Hello world program
 Name[sv]=Enkelt ncurses Hello world-program
 Icon=
 Category=C++
 Comment=Generates a simple ncurses based Hello world program in C++
 Comment[da]=Genererer et simpelt ncurses baseret Goddag verden program in C++
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine ncurses'i põhjal C++-s
 Comment[hu]=Létrehoz egy egyszerű, Ncurses-alapú Hello world programot C++-ban
 Comment[sv]=Skapar ett enkelt ncurses-baserat Hello world-program i C++
 FileTemplates=h,CStyle,cpp,CStyle
@@ -61,5 +63,6 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=A simple hello world program using ncurses was created in %{dest}
 Comment[da]=Et simpelt Goddag verden program ved brug af ncurses blev oprettet i %{dest}
+Comment[et]=Lihtne "Tere, maailm" programm ncurses'i põhjas loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű, Ncurses-alapú Hello world program itt: %{dest}
 Comment[sv]=Ett enkelt Hello world-program som använder ncurses skapades i %{dest}

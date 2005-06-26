@@ -2,12 +2,14 @@
 [General]
 Name=Opie Today Plugin
 Name[da]=Opie Today-plugin
+Name[et]=Opie Today plugin
 Name[hu]=Opie Today-modul
 Name[sv]=Opie Idag-insticksprogram
 Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie today plugin.
 Comment[da]=Generér et Opie today-plugin.
+Comment[et]=Opie Today plugina loomine.
 Comment[hu]=Létrehoz egy Opie Today-modult.
 Comment[sv]=Skapar ett Opie Idag-insticksprogram.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -72,5 +74,6 @@ Dest=%{dest}/%{APPNAMELC}impl.h
 Type=message
 Comment=An opie today plugin was created in %{dest}
 Comment[da]=Et opie today-plugin blev oprettet i %{dest}
+Comment[et]=Opie Today plugin loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Opie Today-modul itt: %{dest}
 Comment[sv]=Ett Opie Idag-insticksprogram skapades i %{dest}

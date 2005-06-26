@@ -2,12 +2,14 @@
 [General]
 Name=Simple Python/Tkinter script
 Name[da]=Simpelt Python/Tkinter script
+Name[et]=Lihtne Pythoni/Tkinteri skript
 Name[hu]=Egyszerű Python/Tkinter-szkript
 Name[sv]=Enkelt Python/Tkinter-skript
 Icon=pytk.png
 Category=Python
 Comment=This generates a simplistic "Hello world" program in Python/Tkinter
 Comment[da]=Dette genererer et simplistisk "Goddag verden" program i Python/Tkinter
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine Pythonis/Tkinteris
 Comment[hu]=Létrehoz egy egyszerű Hello world programot Python/Tkinter nyelven
 Comment[sv]=Detta skapar ett förenklat "Hello world"-program i Python/Tkinter
 FileTemplates=py,ShellStyle
@@ -29,5 +31,6 @@ Dest=%{dest}/%{APPNAMELC}.py
 Type=message
 Comment=A simple Python/Tkinter script was created in %{dest}
 Comment[da]=Et simpelt Python/Tkinter script blev oprettet i %{dest}
+Comment[et]=Lihtne Pythoni/Tkinteri skript loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Python/Tkinter-szkript itt: %{dest}
 Comment[sv]=Ett enkelt Python/Tkinter-skript skapades i %{dest}

@@ -2,6 +2,7 @@
 [General]
 Name=Opie Menu Applet
 Name[da]=Opie menu-applet
+Name[et]=Opie menüüaplett
 Name[ga]=Feidhmchláirín Roghchláir Opie
 Name[hu]=Opie-s menü-kisalkalmazás
 Name[sv]=Opie-menyminiprogram
@@ -9,6 +10,7 @@ Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie menu applet.
 Comment[da]=Generér en Opie menu-applet.
+Comment[et]=Opie menüüapleti loomine.
 Comment[hu]=Létrehoz egy Opie-s menü-kisalkalmazást.
 Comment[sv]=Skapa ett Opie-menyminiprogram.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -53,6 +55,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 Type=message
 Comment=An opie menu applet was created in %{dest}
 Comment[da]=En opie menu-applet blev oprettet i %{dest}
+Comment[et]=Opie menüüaplett loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Opie-s menü-kisalkalmazás itt: %{dest}
 Comment[sv]=Ett Opie-menyprogram skapades i %{dest}
 

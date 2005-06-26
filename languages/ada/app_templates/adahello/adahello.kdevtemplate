@@ -2,12 +2,14 @@
 [General]
 Name=Simple Hello world program
 Name[da]=Simpelt Goddag verden program
+Name[et]=Lihtne "Tere, maailm" programm
 Name[hu]=Egyszerű Hello world program
 Name[sv]=Enkelt Hello world-program
 Icon=adahello.png
 Category=Ada
 Comment=Generates a simple Hello world program in Ada
 Comment[da]=Genererer et simpelt Goddag verden program i Ada
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine ADA-s
 Comment[hu]=Létrehoz egy egyszerű Hello world programot ADA nyelven
 Comment[sv]=Skapar ett enkelt Hello world-program i Ada
 FileTemplates=adb,AdaStyle
@@ -47,5 +49,6 @@ Dest=%{dest}/src/%{APPNAMELC}.adb
 Type=message
 Comment=A simple "Hello world" program in ADA was created in %{dest}
 Comment[da]=Et simpelt "Goddag verden" program i ADA blev oprettet i %{dest}
+Comment[et]=Lihtne "Tere, maailm" programm ADA-s loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Hello world program ADA nyelven itt: %{dest}
 Comment[sv]=Ett enkelt "Hello world"-program in Ada skapades i %{dest}

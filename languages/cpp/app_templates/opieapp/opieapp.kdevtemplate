@@ -2,6 +2,7 @@
 [General]
 Name=Opie Application
 Name[da]=Opie-program
+Name[et]=Opie rakendus
 Name[ga]=Feidhmchlár Opie
 Name[hu]=Opie-alkalmazás
 Name[sv]=Opie-program
@@ -9,6 +10,7 @@ Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie application.
 Comment[da]=Generér et Opie-program.
+Comment[et]=Opie rakenduse loomine.
 Comment[hu]=Létrehoz egy Opie-alkalmazást.
 Comment[sv]=Skapa ett Opie-program.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -67,5 +69,6 @@ Dest=%{dest}/apps/%{APPNAMELC}.desktop
 Type=message
 Comment=An opie application was created in %{dest}
 Comment[da]=Et opie-program blev oprettet i %{dest}
+Comment[et]=Opie rakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Opie-alkalmazás itt: %{dest}
 Comment[sv]=Ett Opie-program skapades i %{dest}
