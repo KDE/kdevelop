@@ -197,8 +197,8 @@ public:
    static Action *ParseTodo(QString line, int lineNo = 0);
    static Action *ParseFixme(QString line, int lineNo = 0);
 
-   ClassDom PHPFile::classByName(QString filename, QString classname);
-   QValueList<ClassDom> PHPFile::classByName(QString classname);
+   ClassDom classByName(QString filename, QString classname);
+   QValueList<ClassDom> classByName(QString classname);
    
    bool doAction(QString filename, Action *p);
    

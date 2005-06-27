@@ -50,7 +50,7 @@ public:
     virtual ~PHPErrorView();
 
     void removeAllProblems( const QString& filename );
-    void PHPErrorView::reportProblem( const QString& fileName, int line, int level,  const QString& text);
+    void reportProblem( const QString& fileName, int line, int level,  const QString& text);
 
 private slots:
     void slotPartAdded( KParts::Part* );
