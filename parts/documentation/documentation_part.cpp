@@ -72,7 +72,7 @@
 static const KDevPluginInfo data("kdevdocumentation");
 
 typedef KDevGenericFactory<DocumentationPart> DocumentationFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( data ) )
 
 DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QStringList& )
     :KDevPlugin(&data, parent, name ? name : "DocumentationPart" ),

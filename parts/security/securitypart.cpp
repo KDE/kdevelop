@@ -39,7 +39,7 @@
 
 typedef KDevGenericFactory<SecurityPart> SecurityFactory;
 KDevPluginInfo data("kdevsecurity");
-K_EXPORT_COMPONENT_FACTORY( libkdevsecurity, SecurityFactory( data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevsecurity, SecurityFactory( data ) )
 
 SecurityPart::SecurityPart(QObject *parent, const char *name, const QStringList &/*args*/)
     :KDevPlugin(&data, parent, name ? name : "SecurityPart"), 

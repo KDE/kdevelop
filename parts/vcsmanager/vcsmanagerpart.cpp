@@ -43,7 +43,7 @@
 
 typedef KDevGenericFactory<VCSManagerPart> VCSManagerFactory;
 KDevPluginInfo data("kdevvcsmanager");
-K_EXPORT_COMPONENT_FACTORY( libkdevvcsmanager, VCSManagerFactory( data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevvcsmanager, VCSManagerFactory( data ) )
 
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2
