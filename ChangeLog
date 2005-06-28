@@ -1,3 +1,16 @@
+2005-06-28  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+  * Fixed bug in 'run main program' project option where the .ui file was out of 
+    sync with the code
+  * Add a 'show constants in debugger' project option. This is needed because there
+    are so many constants in the qtruby/korundum classes that it slows the debugger
+    right down and clutters the variables view.
+  * Added a 'Trace into Ruby' project option to show ruby code from installed libraries
+    in the debugger.
+  * The debugger can now expand instance variables nested within instance variables
+    using get_instance_variable().
+  * Improved the parsing of pretty printed items that are all on one line, as opposed to
+    one line per name=value pair.
+
 2005-06-25 Pieter Pareit <pieter.pareit@scarlet.be>
   * Added ruby_{run,config} icons, the .png files are used by kdevelop,
     the .psd files can be used by artists when icons need to be changed

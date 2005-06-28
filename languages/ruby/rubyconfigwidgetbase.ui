@@ -119,6 +119,17 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+				<widget class="QRadioButton" row="0" column="0">
+					<property name="name">
+						<cstring>mainProgramRadio</cstring>
+					</property>
+					<property name="text">
+						<string>Main pr&amp;ogram</string>
+					</property>
+					<property name="accel">
+						<string>Alt+O</string>
+					</property>
+				</widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
                         <cstring>selectedWindowRadio</cstring>
@@ -127,20 +138,9 @@
                         <string>&amp;Selected window</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>mainProgramRadio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Main pr&amp;ogram</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
-                </widget>
             </grid>
         </widget>
-        <widget class="QButtonGroup" row="6" column="0">
+        <widget class="QButtonGroup" row="8" column="0">
             <property name="name">
                 <cstring>characterCodingRadioBox</cstring>
             </property>
@@ -216,18 +216,40 @@
                 <string>Check this if you want your applications to be opened in terminal window.</string>
             </property>
         </widget>
-        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>enableFloatingToolBarBox</cstring>
-            </property>
-            <property name="text">
-                <string>Enable debugger &amp;floating toolbar</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Check this if you want your applications to be opened in terminal window.</string>
-            </property>
-        </widget>
-        <spacer row="7" column="0">
+		<widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
+			<property name="name">
+				<cstring>enableFloatingToolBarBox</cstring>
+			</property>
+			<property name="text">
+				<string>Enable debugger &amp;floating toolbar</string>
+			</property>
+			<property name="whatsThis" stdset="0">
+				<string>Check this if you want your applications to be opened in terminal window.</string>
+			</property>
+		</widget>
+		<widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="2">
+			<property name="name">
+				<cstring>showConstants</cstring>
+			</property>
+			<property name="text">
+				<string>Show &amp;constants in the debugger</string>
+			</property>
+			<property name="whatsThis" stdset="0">
+				<string>Check this if you want the debugger to show constants (with many constants this may be slow).</string>
+			</property>
+		</widget>
+		<widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="2">
+			<property name="name">
+				<cstring>traceIntoRuby</cstring>
+			</property>
+			<property name="text">
+				<string>Trace &amp;into Ruby</string>
+			</property>
+			<property name="whatsThis" stdset="0">
+				<string>Trace through the Ruby code installed under sitedir in the debugger</string>
+			</property>
+		</widget>
+        <spacer row="9" column="0">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -253,7 +275,9 @@
     <tabstop>mainProgramRadio</tabstop>
     <tabstop>selectedWindowRadio</tabstop>
     <tabstop>terminalCheckbox</tabstop>
-    <tabstop>enableFloatingToolBarBox</tabstop>
+	<tabstop>enableFloatingToolBarBox</tabstop>
+	<tabstop>showConstants</tabstop>
+	<tabstop>traceIntoRuby</tabstop>
     <tabstop>asciiOption</tabstop>
     <tabstop>eucOption</tabstop>
     <tabstop>sjisOption</tabstop>

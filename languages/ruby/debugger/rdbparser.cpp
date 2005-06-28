@@ -106,32 +106,23 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
     case REFERENCE_TYPE:
 	{
 		// Look for a reference type which has been printed via a 'pp' command, to
-		// expand its sub items. For example:
+		// expand its sub items on multiple lines. For example:
 		//     #<MyClass:0x30093540
 		//		@foobar="hello",
 		//		@sleeper=#<Thread:0x3008fd18 sleep>,
 		//		@temp={"z"=>"zed", "p"=>"pee"}>
 		//
 		QRegExp ppvalue_re("\\s*([^\\n\\s=]+)=([^\\n]+)[,>]");
-	
+
 		pos = ppref_re.search(buf);
 		if (pos != -1) {
-			if (ppref_re.cap(4) != "" && ppvalue_re.search(ppref_re.cap(0)) != -1) {
-				// The line ends with a '>', but we have this case now..
-				// If there is only one instance variable, pp puts everything
-				// on a single line:
-				//     #<MyClass:0x30094b90 @foobar="hello">
-				// So search for '@foobar="hello"', to use as the
-				// first name=value pair
-				pos = 0;
-			} else {
-				// Either a single line like:
-				//     #<Thread:0x3008fd18 sleep>
-				// Or on multiple lines with name=value pairs:
-				//     #<MyClass:0x30093540
-				//		@foobar="hello",
-				pos = ppvalue_re.search(buf, pos);
+			if (ppref_re.cap(4) != "") {
+				// The value is all on one line, so match against name=value 
+				// pairs which can't have commas in their values
+				ppvalue_re = QRegExp("\\s*([^\\s=]+)=([^,>]+)([,>])");
 			}
+
+			pos = ppvalue_re.search(buf, pos);
 					
 			while (pos != -1) {
 				varName = ppvalue_re.cap(1);

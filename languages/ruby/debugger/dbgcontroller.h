@@ -103,13 +103,16 @@ public slots:
      * \param debuggee_path Absolute path to debuggee.rb debugger script
      * \param application Absolute path to application
      * \param run_arguments Command line arguments to be passed to the application
+     * \param show_constants Show ruby constants in the variables view
      */
     virtual void slotStart(const QString& ruby_interpreter,
 	                       const QString& character_coding,
                            const QString& run_directory,
 						   const QString& debuggee_path,
                            const QString& application,
-                           const QString& run_arguments)                    = 0;
+                           const QString& run_arguments,
+                           bool show_constants,
+                           bool trace_into_ruby)                            = 0;
 
     virtual void slotStopDebugger()                                         = 0;
 

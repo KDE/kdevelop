@@ -20,6 +20,7 @@ end
 
 require 'tracer'
 require 'pp'
+require 'rbconfig'
 
 class Tracer
   def Tracer.trace_func(*vars)
@@ -105,6 +106,7 @@ class Context
     @frames = []
     @finish_pos = 0
     @trace = false
+    @trace_ruby = false
     @catch = "StandardError"
     @suspend_next = false
   end
@@ -145,6 +147,14 @@ class Context
 
   def set_trace(arg)
     @trace = arg
+  end
+
+  def trace_ruby?
+    @trace_ruby
+  end
+
+  def set_trace_ruby(arg)
+    @trace_ruby = arg
   end
 
   def stdout
@@ -374,6 +384,15 @@ class Context
 	end
 
 	case input
+	when /^\s*trace_ruby(?:\s+(on|off))?$/
+          if defined?( $1 )
+            if $1 == 'on'
+              set_trace_ruby true
+            else
+              set_trace_ruby false
+            end
+          end
+
 	when /^\s*tr(?:ace)?(?:\s+(on|off))?(?:\s+(all))?$/
           if defined?( $2 )
             if $1 == 'on'
@@ -826,7 +845,10 @@ EOHELP
 	Tracer.trace_func(event, file, line, id, binding, klass) if trace?
     context(Thread.current).check_suspend
   
-	if file =~ %r{/qtruby.rb|/korundum.rb|/debuggee.rb}
+	if not trace_ruby? and 
+		(	file =~ /#{Config::CONFIG['sitelibdir']}/ or        
+			file =~ /#{Config::CONFIG['rubylibdir']}/ or          
+			file =~ %r{/debuggee.rb} )
     	case event
     	when 'line'
       		frame_set_pos(file, line)
@@ -1142,7 +1164,7 @@ require 'socket'
 		@debugger = UNIXSocket.open(path)
 		@debugger.sync=true
 	end
-	
+
 	def detach
 #		@debugger.close
 	end

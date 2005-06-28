@@ -100,7 +100,8 @@ public slots:
 
     void slotStart(	const QString& shell, const QString& characterCoding, 
 					const QString& run_directory, const QString& debuggee_path, 
-					const QString &application, const QString& run_arguments );
+					const QString &application, const QString& run_arguments,
+                    bool show_constants, bool trace_into_ruby );
     //void slotStart(const QString& shell, const QString &application);
 
     void slotStopDebugger();
@@ -173,6 +174,8 @@ private:
 	QString          debuggeePath_;
 	QString          application_;
 	QString          runArguments_;
+    bool             showConstants_;
+    bool             traceIntoRuby_;
 
     // Some state variables
     int               state_;

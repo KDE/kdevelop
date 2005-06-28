@@ -18,6 +18,8 @@ RubyConfigWidget::RubyConfigWidget(QDomDocument &projectDom, QWidget* parent, co
     terminalCheckbox->setChecked(DomUtil::readBoolEntry(dom, "/kdevrubysupport/run/terminal"));
     characterCodingRadioBox->setButton(DomUtil::readIntEntry(dom, "/kdevrubysupport/run/charactercoding"));
     enableFloatingToolBarBox->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/floatingtoolbar", false));
+    showConstants->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/showconstants", false));
+    traceIntoRuby->setChecked( DomUtil::readBoolEntry(dom, "/kdevrbdebugger/general/traceintoruby", false));
 }
 
 void RubyConfigWidget::accept() {
@@ -28,6 +30,8 @@ void RubyConfigWidget::accept() {
     DomUtil::writeBoolEntry(dom, "/kdevrubysupport/run/terminal", terminalCheckbox->isChecked());
     DomUtil::writeIntEntry(dom, "/kdevrubysupport/run/charactercoding", characterCodingRadioBox->selectedId());
     DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/floatingtoolbar", enableFloatingToolBarBox->isChecked());
+    DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/showconstants", showConstants->isChecked());
+    DomUtil::writeBoolEntry(dom, "/kdevrbdebugger/general/traceintoruby", traceIntoRuby->isChecked());
 }
 
 #include "rubyconfigwidget.moc"

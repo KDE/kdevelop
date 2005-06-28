@@ -377,8 +377,9 @@ void RDBController::parseProgramLocation(char *buf)
 	}
 
 	if ( !sourceFile.isNull() 
-		&& !sourceFile.endsWith("/qtruby.rb")
-		&& !sourceFile.endsWith("/korundum.rb")
+		&& (	traceIntoRuby_ 
+				|| (	!sourceFile.endsWith("/qtruby.rb")
+						&& !sourceFile.endsWith("/korundum.rb") ) )
 		&& !sourceFile.endsWith("/debuggee.rb") ) 
 	{
         actOnProgramPause(QString());
@@ -441,8 +442,9 @@ void RDBController::parseFrameMove(char *buf)
 		sourceLine = sourcepos_re.cap(2).toInt();
 		
 		if (	!sourceFile.isNull()
-				&& !sourceFile.endsWith("/qtruby.rb")
-				&& !sourceFile.endsWith("/korundum.rb")
+				&& (	traceIntoRuby_ 
+						|| (	!sourceFile.endsWith("/qtruby.rb")
+								&& !sourceFile.endsWith("/korundum.rb") ) )
 				&& !sourceFile.endsWith("/debuggee.rb") )
 		{ 
         	emit showStepInSource(sourceFile, sourceLine, "");
@@ -680,7 +682,7 @@ void RDBController::modifyBreakpoint( const Breakpoint& BP )
 
 // **************************************************************************
 
-void RDBController::slotStart(const QString& ruby_interpreter, const QString& character_coding, const QString& run_directory, const QString& debuggee_path, const QString &application, const QString& run_arguments)
+void RDBController::slotStart(const QString& ruby_interpreter, const QString& character_coding, const QString& run_directory, const QString& debuggee_path, const QString &application, const QString& run_arguments, bool show_constants, bool trace_into_ruby)
 {
     Q_ASSERT (!dbgProcess_ && !tty_);
 	
@@ -726,6 +728,8 @@ void RDBController::slotStart(const QString& ruby_interpreter, const QString& ch
 	debuggeePath_ = debuggee_path;
 	application_ = application;
 	runArguments_ = run_arguments;
+	showConstants_ = show_constants;
+	traceIntoRuby_ = trace_into_ruby;
 
 	*dbgProcess_ << ruby_interpreter;
 	*dbgProcess_ << character_coding;
@@ -836,7 +840,7 @@ void RDBController::slotRun()
         return;
 		
 	if (stateIsOn(s_programExited)) {
-		slotStart(rubyInterpreter_, characterCoding_, runDirectory_, debuggeePath_, application_, runArguments_);
+		slotStart(rubyInterpreter_, characterCoding_, runDirectory_, debuggeePath_, application_, runArguments_, showConstants_, traceIntoRuby_);
 		return;
 	}
 
@@ -1047,7 +1051,11 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, const QString& fr
 	// Have we already got these details?
 	if (frame->needsVariables()) {
 		// Ask for the locals
-        queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
+
+		if (showConstants_) {
+        	queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
+		}
+
 		queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
 		queueCmd(new RDBCommand("var class self.class", NOTRUNCMD, INFOCMD));
 		queueCmd(new RDBCommand("var local", NOTRUNCMD, INFOCMD));
@@ -1196,6 +1204,10 @@ void RDBController::slotAcceptConnection(int masterSocket)
 	
 	// Organise any breakpoints.
     emit acceptPendingBPs();
+
+	if (traceIntoRuby_) {
+        queueCmd(new RDBCommand("trace_ruby on", NOTRUNCMD, NOTINFOCMD));
+	}
 		
     queueCmd(new RDBCommand("cont", RUNCMD, NOTINFOCMD));
 	

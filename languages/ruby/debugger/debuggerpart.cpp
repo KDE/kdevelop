@@ -438,6 +438,8 @@ bool RubyDebuggerPart::startDebugger()
     QString run_arguments;          // Command line arguments to be passed to the application
     QString ruby_interpreter;       // Absolute path to the ruby interpreter
     QString debuggee_path;          // Absolute path to debuggee.rb debugger script
+    bool show_constants;            // Show constants in the debugger
+    bool trace_into_ruby;           // Trace into the ruby code installed under sitedir
 
     if (project()) {
         build_dir     = project()->buildDirectory();
@@ -530,8 +532,11 @@ bool RubyDebuggerPart::startDebugger()
 //	ruby_interpreter.append(QString(" -K") + code);
 	
 	debuggee_path = ::locate("data", "kdevrbdebugger/debuggee.rb", instance());
+
+    show_constants = DomUtil::readBoolEntry(*projectDom(), "/kdevrbdebugger/general/showconstants");
+    trace_into_ruby = DomUtil::readBoolEntry(*projectDom(), "/kdevrbdebugger/general/traceintoruby");
 	
-    controller->slotStart(ruby_interpreter, character_coding, run_directory, debuggee_path, program, run_arguments);
+    controller->slotStart(ruby_interpreter, character_coding, run_directory, debuggee_path, program, run_arguments, show_constants, trace_into_ruby);
     return true;
 }
 
