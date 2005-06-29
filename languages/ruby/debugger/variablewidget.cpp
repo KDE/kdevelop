@@ -617,8 +617,15 @@ QString VarItem::fullName() const
 	// Change 'self.@foobar' to '@foobar'
 	vPath.replace(QRegExp("^self\\.@"), "@");
 	
-	// Strip out any '@'s in the middle of a path	
-	vPath.replace(QRegExp("\\.@+"), ".");		
+	// Use instance_variable_get() to access any '@var's in the middle of a path	
+	QRegExp re_instance_var("\\.(@[^.]+)");
+	int pos = re_instance_var.search(vPath);	
+	while (pos != -1) {	
+		vPath.replace(	pos, 
+						re_instance_var.matchedLength(), 
+						QString(".instance_variable_get(:") + re_instance_var.cap(1) + ")" );
+		pos = re_instance_var.search(vPath, pos);	
+	}		
 
     return vPath;
 }

@@ -1047,7 +1047,7 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, const QString& fr
 	// Have we already got these details?
 	if (frame->needsVariables()) {
 		// Ask for the locals
-        queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
+//        queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
 		queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
 		queueCmd(new RDBCommand("var class self.class", NOTRUNCMD, INFOCMD));
 		queueCmd(new RDBCommand("var local", NOTRUNCMD, INFOCMD));
