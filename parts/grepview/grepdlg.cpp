@@ -153,22 +153,22 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     layout->addLayout(dir_checks_layout, 4, 1);
 	
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
-    recursive_box->setChecked(true);
+    recursive_box->setChecked(config->readBoolEntry("recursive", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(recursive_box);
 
     case_sens_box = new QCheckBox(i18n("C&ase sensitive"), this);
-    case_sens_box->setChecked(true);
+    case_sens_box->setChecked(config->readBoolEntry("case_sens", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(case_sens_box);
     
     keep_output_box = new QCheckBox(i18n("New view"), this);
-    keep_output_box->setChecked(true);
+    keep_output_box->setChecked(config->readBoolEntry("new_view", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(keep_output_box);
     
     ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
-    ignore_scm_box->setChecked(true);
+    ignore_scm_box->setChecked(config->readBoolEntry("vcs_dirs", true));
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(ignore_scm_box);
 
@@ -246,6 +246,10 @@ GrepDialog::~GrepDialog()
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
     config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
+	config->writeEntry("recursive", recursive_box->isChecked());
+	config->writeEntry("case_sens", case_sens_box->isChecked());
+	config->writeEntry("new_view", keep_output_box->isChecked());
+	config->writeEntry("vcs_dirs", ignore_scm_box->isChecked());
 }
 
 void GrepDialog::slotPatternChanged( const QString & _text )
