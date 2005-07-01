@@ -240,8 +240,8 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         if (dynamic_cast<WatchRoot*>(root))
             idRemove = popup.insertItem( i18n("Remove Watch Variable") );
         if (root == recentExpressions_) {
-            idRemove = popup.insertItem( i18n("Remove Expression") );
             idReevaluate = popup.insertItem( i18n("Reevaluate Expression") );
+            idRemove = popup.insertItem( i18n("Remove Expression") );
         }
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );

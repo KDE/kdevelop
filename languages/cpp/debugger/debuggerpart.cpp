@@ -454,7 +454,8 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (!m_contextIdent.isEmpty())
     {
         QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
-        int id = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
+        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed), this, SLOT(contextEvaluate()) );
+        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
         popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Adds an expression under the cursor to the Variables/Watch list."));
     }
 }
@@ -482,6 +483,10 @@ void DebuggerPart::contextWatch()
     variableWidget->slotAddWatchVariable(m_contextIdent);
 }
 
+void DebuggerPart::contextEvaluate()
+{
+    variableWidget->slotEvaluateExpression(m_contextIdent);
+}
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
