@@ -526,7 +526,7 @@ void CvsServicePartImpl::unedit( const KURL::List& urlList)
         KStdGuiItem::yes(),
         KStdGuiItem::no(),
         "askUneditingFiles" );
-    if (s == KMessageBox::Yes) {
+    if (s == KMessageBox::No) {
         return;
     }
 
