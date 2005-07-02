@@ -112,7 +112,7 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
                 }
                 if( fdlg.exec() ){
                         int id = fdlg.argBox->currentItem();
-                        if( id>-1 && id < funcList->count() ){
+                        if( id>-1 && id < (int) funcList->count() ){
                                 FunctionDefinitionModel *model = (*funcList)[id].data();
                                 int line, col;
                                 model->getStartPosition( &line, &col );

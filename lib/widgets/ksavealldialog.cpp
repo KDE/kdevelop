@@ -62,7 +62,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	_listview->header()->hide();
 	_listview->setResizeMode( QListView::LastColumn );
 
-	setButtonOKText( i18n("Save &Selected"), i18n("Saves all selected files") );
+	setButtonOK( KGuiItem(i18n("Save &Selected"), QString::null, i18n("Saves all selected files")) );
 	setButtonText( User1, i18n("Save &None") );
 	setButtonText( Close, KStdGuiItem::cancel().text() );
 	setButtonTip( User1, i18n("Lose all modifications") );
@@ -153,7 +153,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
   lb->setMinimumHeight( lb->fontMetrics().height() * 5 );
   lb->insertStringList( filenames );
 
-  setButtonOKText( i18n("Save &All"), i18n("Saves all modified files") );
+  setButtonOK( KGuiItem(i18n("Save &All"), QString::null, i18n("Saves all modified files")) );
   setButtonText( User1, i18n("Save &None") );
   setButtonText( Close, KStdGuiItem::cancel().text() );
   setButtonTip( User1, i18n("Lose all modifications") );

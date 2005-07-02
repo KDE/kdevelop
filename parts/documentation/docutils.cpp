@@ -76,7 +76,7 @@ void DocUtils::docItemPopup(DocumentationPart *part, const QString &title, const
     const QPoint &pos, bool showBookmark, bool showSearch)
 {
     KPopupMenu menu;
-    menu.setTitle(i18n("Documentation"));
+    menu.insertTitle(i18n("Documentation"));
     menu.insertItem(i18n("Open in Current Tab"), 1);
     menu.insertItem(i18n("Open in New Tab"), 2);
     if (showBookmark)

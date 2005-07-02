@@ -37,6 +37,7 @@
 SVNFileInfoProvider::SVNFileInfoProvider(subversionPart *parent, const char *name)
     : KDevVCSFileInfoProvider( parent, "svnfileinfoprovider" ),
 	m_cachedDirEntries( 0 ) {
+  Q_UNUSED(name);
 	m_part = parent;
 }
 

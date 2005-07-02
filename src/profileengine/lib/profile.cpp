@@ -139,6 +139,7 @@ QStringList &Profile::listByType(List type)
         case ExplicitDisable:
             return m_explicitDisable;
     }
+//FIXME: What to return here?
 }
 
 bool Profile::hasInEntryList(EntryList &list, QString value)

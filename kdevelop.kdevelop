@@ -1,226 +1,78 @@
-<!DOCTYPE kdevelop>
+<?xml version = '1.0'?>
 <kdevelop>
   <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-  <absoluteprojectpath>true</absoluteprojectpath>
-    <author>KDevelop Authors</author>
+    <author>The KDevelop Authors</author>
     <email>kdevelop-devel@kdevelop.org</email>
-    <version>CVS</version>
+    <version>$VERSION$</version>
+    <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
       <keyword>Qt</keyword>
       <keyword>KDE</keyword>
     </keywords>
-    <description>KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.</description>
+    <projectdirectory>.</projectdirectory>
+    <absoluteprojectpath>false</absoluteprojectpath>
+    <description/>
     <ignoreparts/>
-    <secondaryLanguages/>
   </general>
   <kdevfileview>
     <groups>
-      <group pattern="*.cpp;*.cxx" name="Sources" />
-      <group pattern="*.h;*.hpp" name="Headers" />
+      <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
       <group pattern="*.ui" name="User Interface" />
-      <group pattern="*.desktop" name="desktop" />
-      <group pattern="*.rc" name="Resources" />
       <group pattern="*.png" name="Icons" />
-      <group pattern="*.kdevelop" name="Project templates" />
-      <group pattern="*.toc;*.index" name="Documentation" />
       <group pattern="*.po;*.ts" name="Translations" />
-      <group pattern="*script" name="scripts" />
       <group pattern="*" name="Others" />
-      <hidenonprojectfiles>true</hidenonprojectfiles>
-      <hidenonlocation>true</hidenonlocation>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
+      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns>*.o,*.lo,CVS,autom4te.cache</hidepatterns>
-      <showvcsfields>true</showvcsfields>
     </tree>
   </kdevfileview>
   <kdevdoctreeview>
     <ignoretocs>
-      <toc>gtk</toc>
-      <toc>gnustep</toc>
-      <toc>python</toc>
-      <toc>php</toc>
-      <toc>perl</toc>
+      <toc>ada</toc>
+      <toc>ada_bugs_gcc</toc>
       <toc>bash</toc>
+      <toc>bash_bugs</toc>
+      <toc>clanlib</toc>
+      <toc>fortran_bugs_gcc</toc>
       <toc>gnome1</toc>
+      <toc>gnustep</toc>
+      <toc>gtk</toc>
+      <toc>gtk_bugs</toc>
+      <toc>haskell</toc>
+      <toc>haskell_bugs_ghc</toc>
+      <toc>java_bugs_gcc</toc>
+      <toc>java_bugs_sun</toc>
+      <toc>opengl</toc>
+      <toc>pascal_bugs_fp</toc>
+      <toc>php</toc>
+      <toc>php_bugs</toc>
+      <toc>perl</toc>
+      <toc>perl_bugs</toc>
+      <toc>python</toc>
+      <toc>python_bugs</toc>
+      <toc>ruby</toc>
+      <toc>ruby_bugs</toc>
+      <toc>sdl</toc>
+      <toc>stl</toc>
       <toc>sw</toc>
       <toc>w3c-dom-level2-html</toc>
       <toc>w3c-svg</toc>
       <toc>w3c-uaag10</toc>
-      <toc>Ruby</toc>
-      <toc>Ruby</toc>
-      <toc>Ruby</toc>
-      <toc>opengl</toc>
-      <toc>ruby</toc>
-      <toc>sdl</toc>
-      <toc>stl</toc>
-      <toc>ada</toc>
-      <toc>clanlib</toc>
-      <toc>haskell</toc>
-      <toc>ada_bugs_gcc</toc>
-      <toc>bash_bugs</toc>
-      <toc>fortran_bugs_gcc</toc>
-      <toc>gtk_bugs</toc>
-      <toc>haskell_bugs_ghc</toc>
-      <toc>java_bugs_gcc</toc>
-      <toc>java_bugs_sun</toc>
-      <toc>php_bugs</toc>
-      <toc>pascal_bugs_fp</toc>
-      <toc>perl_bugs</toc>
-      <toc>python_bugs</toc>
-      <toc>ruby_bugs</toc>
       <toc>wxwidgets_bugs</toc>
     </ignoretocs>
-    <projectdoc>
-      <userdocDir>html/</userdocDir>
-      <apidocDir>apidocs/html/</apidocDir>
-    </projectdoc>
-    <ignoredocs/>
     <ignoreqt_xml>
-      <toc>Guide to the Qt Translation Tools</toc>
-      <toc>Qt Assistant Manual</toc>
       <toc>qmake User Guide</toc>
     </ignoreqt_xml>
-    <ignorekdocs/>
-    <ignoredevhelp/>
-    <ignoredoxygen/>
   </kdevdoctreeview>
-  <kdevautoproject>
-    <make>
-      <envvars>
-        <envvar value="1" name="WANT_AUTOCONF_2_5" />
-        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
-      </envvars>
-      <abortonerror>true</abortonerror>
-      <numberofjobs>1</numberofjobs>
-      <dontact>false</dontact>
-      <makebin/>
-    </make>
-    <run>
-      <mainprogram/>
-      <programargs/>
-      <terminal>false</terminal>
-      <envvars/>
-      <autocompile>false</autocompile>
-      <directoryradio>build</directoryradio>
-      <customdirectory>/</customdirectory>
-      <runarguments>
-        <kdevassistant/>
-        <kdevelop/>
-        <kdevprofileeditor/>
-      </runarguments>
-    </run>
-    <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-  <absoluteprojectpath>true</absoluteprojectpath>
-      <useconfiguration>default</useconfiguration>
-      <activetarget>parts/annotation/libkdevannotation.la</activetarget>
-    </general>
-    <configurations>
-      <default>
-        <configargs>--enable-debug=full --prefix=/home/gremlin/kde3 --with-kdelibsdoxy-dir=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs</configargs>
-        <topsourcedir/>
-        <cppflags/>
-        <ldflags/>
-        <ccompiler>kdevgccoptions</ccompiler>
-        <cxxcompiler>kdevgppoptions</cxxcompiler>
-        <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
-        <cflags/>
-        <cxxflags>-O0 -g3</cxxflags>
-        <f77flags/>
-        <envvars/>
-      </default>
-    </configurations>
-    <subclassing>
-      <subclass uifile="/parts/documentation/docglobalconfigwidgetbase.ui" sourcefile="/parts/documentation/docglobalconfigwidget.cpp" />
-      <subclass uifile="/parts/documentation/docglobalconfigwidgetbase.ui" sourcefile="/parts/documentation/docglobalconfigwidget.h" />
-      <subclass uifile="/parts/documentation/editcatalogdlgbase.ui" sourcefile="/parts/documentation/editcatalogdlg.cpp" />
-      <subclass uifile="/parts/documentation/editcatalogdlgbase.ui" sourcefile="/parts/documentation/editcatalogdlg.h" />
-    </subclassing>
-  </kdevautoproject>
-  <kdevfilecreate>
-    <filetypes>
-      <type icon="source_h" ext="h" create="template" name="C/C++ header" >
-        <descr>A new empty header file for C or C++.</descr>
-      </type>
-      <type icon="source_cpp" ext="cpp" create="template" name="C++ source" >
-        <descr>A new empty C++ file.</descr>
-      </type>
-    </filetypes>
-    <useglobaltypes>
-      <type ext="ui" />
-    </useglobaltypes>
-  </kdevfilecreate>
-  <cppsupportpart>
-    <codecompletion/>
-    <filetemplates>
-      <choosefiles>false</choosefiles>
-      <interfaceURL/>
-      <implementationURL/>
-      <interfacesuffix>.h</interfacesuffix>
-      <implementationsuffix>.cpp</implementationsuffix>
-      <lowercasefilenames>true</lowercasefilenames>
-    </filetemplates>
-  </cppsupportpart>
-  <kdevclassview>
-    <folderhierarchy>true</folderhierarchy>
-    <depthoffolders>2</depthoffolders>
-  </kdevclassview>
-  <kdevcppsupport>
-    <codecompletion>
-      <includeGlobalFunctions>true</includeGlobalFunctions>
-      <includeTypes>true</includeTypes>
-      <includeEnums>true</includeEnums>
-      <includeTypedefs>false</includeTypedefs>
-      <automaticCodeCompletion>true</automaticCodeCompletion>
-      <automaticArgumentsHint>true</automaticArgumentsHint>
-      <automaticHeaderCompletion>true</automaticHeaderCompletion>
-      <codeCompletionDelay>250</codeCompletionDelay>
-      <argumentsHintDelay>400</argumentsHintDelay>
-      <headerCompletionDelay>250</headerCompletionDelay>
-    </codecompletion>
-    <references>
-      <pcs>Qt</pcs>
-      <pcs>KDElibs</pcs>
-    </references>
-    <designerintegration>
-      <qtdesigner>
-        <implementation class="SelectTopic" path="/develop/kde/kdevelop/parts/documentation/selecttopicbase.ui" implementationpath="/develop/kde/kdevelop/parts/documentation/selecttopic.h" />
-        <implementation class="ProfileEditor" path="/develop/kde/kdevelop/src/profileengine/editor/profileeditorbase.ui" implementationpath="/develop/kde/kdevelop/src/profileengine/editor/profileeditor.h" />
-      </qtdesigner>
-    </designerintegration>
-    <creategettersetter>
-      <prefixGet/>
-      <prefixSet>set</prefixSet>
-      <prefixVariable>m_,_</prefixVariable>
-      <parameterName>theValue</parameterName>
-      <inlineGet>true</inlineGet>
-      <inlineSet>true</inlineSet>
-    </creategettersetter>
-  </kdevcppsupport>
-  <kdevcvsservice>
-    <recursivewhenupdate>true</recursivewhenupdate>
-    <prunedirswhenupdate>true</prunedirswhenupdate>
-    <createdirswhenupdate>true</createdirswhenupdate>
-    <recursivewhencommitremove>true</recursivewhencommitremove>
-    <revertoptions>-C</revertoptions>
-  </kdevcvsservice>
   <kdevdebugger>
     <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <projectdirectory>/usr/src/kde3-HEAD/kdevelop</projectdirectory>
-  <absoluteprojectpath>true</absoluteprojectpath>
+      <dbgshell>libtool</dbgshell>
       <programargs/>
       <gdbpath/>
-      <dbgshell>libtool</dbgshell>
       <configGdbScript/>
       <runShellScript/>
       <runGdbScript/>
@@ -234,11 +86,88 @@
       <outputradix>10</outputradix>
     </display>
   </kdevdebugger>
-  <kdevdocumentation>
-    <projectdoc>
-      <docsystem/>
-      <docurl/>
-      <usermanualurl>help:/kdevelop</usermanualurl>
-    </projectdoc>
-  </kdevdocumentation>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="ui" />
+      <type ext="cpp" />
+      <type ext="h" />
+    </useglobaltypes>
+  </kdevfilecreate>
+  <kdevautoproject>
+    <make>
+      <envvars>
+        <envvar value="1" name="WANT_AUTOCONF_2_5" />
+        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
+      </envvars>
+      <abortonerror>true</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin/>
+      <prio>0</prio>
+    </make>
+    <run>
+      <directoryradio>build</directoryradio>
+      <customdirectory>/</customdirectory>
+      <mainprogram>src/kdevelop</mainprogram>
+      <programargs/>
+      <terminal>false</terminal>
+      <autocompile>true</autocompile>
+      <envvars/>
+    </run>
+    <general>
+      <useconfiguration>default</useconfiguration>
+    </general>
+    <configurations>
+      <default>
+        <envvars/>
+        <configargs>--prefix=/opt/kde3 --enable-debug=full --enable-final</configargs>
+        <builddir>/home/andris/development/build/kde-head/kdevelop</builddir>
+        <topsourcedir>/home/andris/development/sources/kde-head/kdevelop</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags/>
+        <f77flags/>
+      </default>
+    </configurations>
+  </kdevautoproject>
+  <cppsupportpart>
+    <filetemplates>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+    </filetemplates>
+  </cppsupportpart>
+  <kdevcppsupport>
+    <codecompletion>
+      <includeGlobalFunctions>true</includeGlobalFunctions>
+      <includeTypes>true</includeTypes>
+      <includeEnums>true</includeEnums>
+      <includeTypedefs>false</includeTypedefs>
+      <automaticCodeCompletion>true</automaticCodeCompletion>
+      <automaticArgumentsHint>true</automaticArgumentsHint>
+      <automaticHeaderCompletion>true</automaticHeaderCompletion>
+      <codeCompletionDelay>250</codeCompletionDelay>
+      <argumentsHintDelay>400</argumentsHintDelay>
+      <headerCompletionDelay>250</headerCompletionDelay>
+    </codecompletion>
+    <creategettersetter>
+      <prefixGet/>
+      <prefixSet>set</prefixSet>
+      <prefixVariable>m_,_</prefixVariable>
+      <parameterName>theValue</parameterName>
+      <inlineGet>true</inlineGet>
+      <inlineSet>true</inlineSet>
+    </creategettersetter>
+    <references>
+      <pcs>Qt</pcs>
+      <pcs>KDevelop API</pcs>
+      <pcs>KDElibs</pcs>
+    </references>
+  </kdevcppsupport>
 </kdevelop>
