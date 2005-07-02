@@ -127,7 +127,8 @@ void NewMainWindow::init() {
     createActions();
     createStatusBar();
 
-    createGUI(0);
+//    createGUI(0);
+    createShellGUI(true);
 
     //adymo: commented by me - this is a hell, we don't want to enter it, do we?
 /*    QString appstr = "kdev";

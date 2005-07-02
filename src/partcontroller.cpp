@@ -579,11 +579,6 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   
   emit loadedFile( ro_part->url() );
   
-  if ( ro_part->url().isLocalFile() ) 
-  {
-	emit loadedFile(ro_part->url().path());
-  }
-
   connect( part, SIGNAL(modifiedOnDisc(Kate::Document*, bool, unsigned char)), this, SLOT(slotDocumentDirty(Kate::Document*, bool, unsigned char)) );
   
   // let's get notified when a document has been changed
