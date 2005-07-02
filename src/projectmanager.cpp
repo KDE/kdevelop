@@ -1,5 +1,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qdir.h>
 #include <qdom.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
@@ -202,10 +203,18 @@ void ProjectManager::loadDefaultProject()
   }
 }
 
-bool ProjectManager::loadProject(const KURL &url)
+bool ProjectManager::loadProject(const KURL &projectURL)
 {
+  KURL url = projectURL;
+  
   if (!url.isValid())
     return false;
+
+  if (url.isLocalFile()) 
+  {
+    QDir dir(url.path());
+    url.setPath(dir.canonicalPath());
+  }
 
   // reopen the already opened project?
   if( url.path() == projectFile().path() )
