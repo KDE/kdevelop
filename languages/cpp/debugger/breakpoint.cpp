@@ -169,8 +169,8 @@ QString FilePosBreakpoint::dbgSetCommand() const
     if (fileName_.isEmpty())
         cmdStr = QString("break %1").arg(lineNo_);  // gdb command - not translatable
     else {
-        QFileInfo fi(fileName_);
-        cmdStr = QString("break %1:%2").arg(fi.fileName()).arg(lineNo_); // gdb command
+//        QFileInfo fi(fileName_);
+        cmdStr = QString("break %1:%2").arg(fileName_).arg(lineNo_); // gdb command
     }
 
     if (isTemporary())
