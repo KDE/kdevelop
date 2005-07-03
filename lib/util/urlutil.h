@@ -166,8 +166,9 @@ namespace URLUtil
   /**
    * Same as QDir::canonicalPath in later versions of Qt. Earlier versions of Qt
    * had this broken, so it's reproduced here.
+   * Deprecated, use QDir::canonicalPath instead.    
    */
-  QString canonicalPath( const QString & path );
+  QString canonicalPath( const QString & path ) KDE_DEPRECATED; 
 
     /**
      * Performs environment variable expansion on @p variable.
