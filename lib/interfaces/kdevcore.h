@@ -117,7 +117,7 @@ public:
 
     /**@return The type of this Context, so clients can discriminate
     between different file contexts.*/
-    bool hasType(int type) const;
+    virtual bool hasType(int type) const;
 
 protected:
     /**Constructor.*/
