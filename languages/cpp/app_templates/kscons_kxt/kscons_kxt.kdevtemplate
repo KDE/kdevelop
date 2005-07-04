@@ -2,12 +2,14 @@
 [General]
 Name=Scons-based KDE application
 Name[da]=Scons-baseret KDE program
+Name[et]=KDE rakendus Sconsi põhjal
 Name[sv]=Scons-baserat KDE-program
 Category=C++/KDE
 Icon=kscons_kxt.png
 Comment=Generates a simple KDE application with one widget, a configuration dialog and a dcop interface. Scons scripts are provided for compiling and installing the application.
 Comment[da]=Genererer et simpelt KDE program med en kontrol, en indstillingsdialog og en dcop-grænseflade. Der sørges for scons-scripter til at kompilere og installere programmet.
 Comment[en_GB]=Generates a simple KDE application with one widget, a configuration dialogue and a dcop interface. Scons scripts are provided for compiling and installing the application.
+Comment[et]=Lihtsa KDE rakenduse loomine ühe vidina, seadistusdialoogi ja DCOP-liidesega. Luuakse ka Sconsi skriptid rakenduse kompileerimiseks ja paigaldamiseks.
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent, en inställningsdialogruta och ett DCOP-gränssnitt. Scons-script tillhandahålls för att kompilera och installera programmet.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/QUICKSTART
@@ -172,4 +174,5 @@ Dest=%{dest}/po/messages.sh
 Type=message
 Comment=A KDE application with scons scripts was created in %{dest}
 Comment[da]=Et KDE program med scons-scripter blev oprette i %{dest}
+Comment[et]=KDE rakendus Sconsi skriptidega loodi asukohta %{dest}
 Comment[sv]=Ett KDE-program med Scons-skript skapades i %{dest}
