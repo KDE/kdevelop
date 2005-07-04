@@ -141,6 +141,35 @@ QCString GDBParser::getValue(char **buf, bool requested)
     if (*start == '{')
         return QCString(start+1, *buf - start -1);
 
+    if (*start == '(')
+    {
+        // Strip the type of the pointer from the value.
+        //
+        // When printing values of pointers, gdb prints the pointer
+        // type as well. This is not necessary for kdevelop -- after
+        // all, there's separate column with value type. But that behaviour
+        // is not configurable. The only way to change it is to explicitly
+        // pass the 'x' format specifier to the 'print' command. 
+        //
+        // We probably can achieve that by sending an 'print in hex' request
+        // as soon as we know the type of variable, but that would be complex
+        // and probably conflict with 'toggle hex/decimal' command.
+        // So, address this problem as close to debugger as possible.
+
+        // We can't find the first ')', because type can contain '(' and ')'
+        // characters if its function pointer. So count opening and closing
+        // parentheses.
+
+        ++start;
+        for(unsigned count = 1; *start && count > 0; ++start)
+        {
+            if (*start == '(')
+                ++count;
+            else if (*start == ')')
+                --count;
+        }
+    }
+
     QCString value(start, *buf - start + 1);
 
     // QT2.x string handling
