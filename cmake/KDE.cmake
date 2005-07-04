@@ -64,7 +64,8 @@ FIND_PATH(KDE_SERVICETYPES_DIR ktexteditor.desktop
 FIND_PROGRAM(DCOPIDL NAME dcopidl PATHS
   $ENV{KDEDIR}/bin
   /opt/kde/bin
-  /opt/kde3/bin)
+  /opt/kde3/bin
+  )
 
 FIND_PROGRAM(DCOPIDL2CPP NAME dcopidl2cpp PATHS
   $ENV{KDEDIR}/bin
@@ -87,11 +88,19 @@ IF(NOT KDE_LIB_DIR)
 ENDIF(NOT KDE_LIB_DIR)
 
 IF(NOT DCOPIDL2CPP)
-   MESSAGE(FATAL_ERROR "Didn't find the dcopidl2cpp preprocessor")
+#   IF(EXISTS ${CMAKE_SOURCE_DIR}/kdecore/kurl.h)
+#      SET(DCOPIDL2CPP ${CMAKE_BINARY_DIR}/bin/dcopidl2cpp)
+#   ELSE(EXISTS ${CMAKE_SOURCE_DIR}/kdecore/kurl.h)
+      MESSAGE(FATAL_ERROR "Didn't find the dcopidl2cpp preprocessor")
+#   ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kdecore/kurl.h)
 ENDIF(NOT DCOPIDL2CPP)
 
 IF(NOT DCOPIDL)
-   MESSAGE(FATAL_ERROR "Didn't find the dcopidl preprocessor")
+#   IF(EXISTS ${CMAKE_SOURCE_DIR}/kdecore/kurl.h)
+#      SET(DCOPIDL ${CMAKE_BINARY_DIR}/bin/dcopidl)
+#   ELSE(EXISTS ${CMAKE_SOURCE_DIR}/kdecore/kurl.h)
+      MESSAGE(FATAL_ERROR "Didn't find the dcopidl preprocessor")
+#   ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kdecore/kurl.h)
 ENDIF(NOT DCOPIDL)
 
 

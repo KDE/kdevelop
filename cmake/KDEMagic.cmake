@@ -12,17 +12,19 @@ OPTION(KDE_ENABLE_FINAL "Enable final all-in-one compilation")
 OPTION(KDE_BUILD_TESTS  "Build the tests")
 
 MACRO(KDE_MAGIC_FILE_HANDLING _srcs_NAME)
+
+   SET( ${_srcs_NAME} )
    FOREACH (_current_FILE ${ARGN})
 
-	  GET_FILENAME_COMPONENT(_ext ${_current_FILE} EXT)
+      GET_FILENAME_COMPONENT(_ext ${_current_FILE} EXT)
 
       IF(${_ext} STREQUAL ".ui")
          SET(_magic_UIS ${_magic_UIS} ${_current_FILE})
       ENDIF(${_ext} STREQUAL ".ui")
 
-      IF(${_ext} STREQUAL ".c" OR ${_ext} STREQUAL ".C" OR ${_ext} STREQUAL ".cpp" OR ${_ext} STREQUAL ".cxx" )
+      IF(${_ext} STREQUAL ".c" OR ${_ext} STREQUAL ".C" OR ${_ext} STREQUAL ".cpp" OR ${_ext} STREQUAL ".cxx" OR ${_ext} STREQUAL ".cc" )
          SET(${_srcs_NAME} ${${_srcs_NAME}} ${_current_FILE})
-      ENDIF(${_ext} STREQUAL ".c" OR ${_ext} STREQUAL ".C" OR ${_ext} STREQUAL ".cpp" OR ${_ext} STREQUAL ".cxx" )
+      ENDIF(${_ext} STREQUAL ".c" OR ${_ext} STREQUAL ".C" OR ${_ext} STREQUAL ".cpp" OR ${_ext} STREQUAL ".cxx"  OR ${_ext} STREQUAL ".cc")
 
    ENDFOREACH (_current_FILE)
 

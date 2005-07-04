@@ -31,8 +31,8 @@ MACRO(KDE_ADD_DCOP_SKELS _sources)
    FOREACH (_current_FILE ${ARGN})
       GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
 
-	  SET(_skel ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_skel.cpp)
-      SET(_kidl ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.kidl)
+	  SET(_skel ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_skel_skel.cpp)
+      SET(_kidl ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_skel.kidl)
 
 	  ADD_CUSTOM_COMMAND(OUTPUT ${_kidl}
          COMMAND ${DCOPIDL}
@@ -65,7 +65,7 @@ MACRO(KDE_ADD_DCOP_STUBS _sources)
 
 	  SET(_stub_CPP ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.cpp)
 #	  SET(_stub_H ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.h)
-      SET(_kidl ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.kidl)
+      SET(_kidl ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.kidl)
 
 	  ADD_CUSTOM_COMMAND(OUTPUT ${_kidl}
          COMMAND ${DCOPIDL}
@@ -96,10 +96,10 @@ MACRO(KDE_ADD_KCFG_FILES _sources)
 
       GET_FILENAME_COMPONENT(_basename ${_tmp_FILE} NAME_WE)
 
-      STRING(REGEX REPLACE "(.+)settings" "${CMAKE_CURRENT_SOURCE_DIR}/\\1.kcfg" _kcfg_FILE "${_basename}")
+      FILE(READ ${_tmp_FILE} _contents)
+      STRING(REGEX REPLACE "^(.*\n)?File=([^\n]+)\n.*$" "\\2"  _kcfg_FILE "${_contents}")
 
-	  SET(_src_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.cpp)
-#	  SET(_stub_H ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_stub.h)
+      SET(_src_FILE    ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.cpp)
       SET(_header_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.h)
 
       ADD_CUSTOM_COMMAND(OUTPUT ${_src_FILE}
@@ -209,7 +209,7 @@ MACRO(KDE_AUTOMOC)
                   COMMAND moc
                   ARGS ${_header} -o ${_moc}
                   DEPENDS ${_header}
-               )
+               )                                                      
 
                ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
 
@@ -220,16 +220,45 @@ MACRO(KDE_AUTOMOC)
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_AUTOMOC)
 
-MACRO(KDE_INSTALL_ICONS)
-   FILE(GLOB _icons *.png)
+MACRO(KDE_INSTALL_ICONS _theme)
+   ADD_CUSTOM_TARGET(install_icons )                 
+   SET_TARGET_PROPERTIES(install_icons PROPERTIES POST_INSTALL_SCRIPT install_icons.cmake )
+   FILE(WRITE install_icons.cmake "# icon installations rules\n")
+
+   FILE(GLOB _icons *.png)                                         
    FOREACH(_current_ICON ${_icons} )
       STRING(REGEX REPLACE "^.*/[a-zA-Z]+([0-9]+)\\-([a-z]+)\\-(.+\\.png)$" "\\1" _size "${_current_ICON}")
       STRING(REGEX REPLACE "^.*/[a-zA-Z]+([0-9]+)\\-([a-z]+)\\-(.+\\.png)$" "\\2" _group "${_current_ICON}")
       STRING(REGEX REPLACE "^.*/[a-zA-Z]+([0-9]+)\\-([a-z]+)\\-(.+\\.png)$" "\\3" _name "${_current_ICON}")
-      MESSAGE(STATUS "icon: ${_current_ICON} size: ${_size} group: ${_group} name: ${_name}" )
-#      ADD_DEPENDENCIES(install install_icons)
+                                                                                                                             
+      SET(_icon_GROUP "actions")
+      
+      IF(${_group} STREQUAL "mime")
+         SET(_icon_GROUP  "mimetypes")
+      ENDIF(${_group} STREQUAL "mime")                    
+      
+      IF(${_group} STREQUAL "filesys")
+         SET(_icon_GROUP  "filesystems")
+      ENDIF(${_group} STREQUAL "filesys")                    
+      
+      IF(${_group} STREQUAL "device")
+         SET(_icon_GROUP  "devices")
+      ENDIF(${_group} STREQUAL "device")                    
+
+      IF(${_group} STREQUAL "app")
+         SET(_icon_GROUP  "apps")
+      ENDIF(${_group} STREQUAL "app")                    
+
+      IF(${_group} STREQUAL "action")
+         SET(_icon_GROUP  "actions")
+      ENDIF(${_group} STREQUAL "action")                    
+      
+#      MESSAGE(STATUS "icon: ${_current_ICON} size: ${_size} group: ${_group} name: ${_name}" )                            
+      
+      FILE(APPEND install_icons.cmake "CONFIGURE_FILE( ${_current_ICON} ${CMAKE_INSTALL_PREFIX}/share/icons/${_theme}/${_size}x${_size}/${_icon_GROUP}/${_name} COPYONLY) \n")
+      
    ENDFOREACH (_current_ICON)
-ENDMACRO(KDE_INSTALL_ICONS)
+ENDMACRO(KDE_INSTALL_ICONS _theme)
 
 MACRO(KDE_PLACEHOLDER)
 ENDMACRO(KDE_PLACEHOLDER)

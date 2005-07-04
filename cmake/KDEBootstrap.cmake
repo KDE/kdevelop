@@ -41,9 +41,9 @@ SET(KDE_LIB_DIR ${CMAKE_BINARY_DIR} )
 SET(KDE_SERVICETYPES_DIR ${CMAKE_INSTALL_PREFIX} )
 
 #now search for the dcop utilities
-SET(DCOPIDL ${CMAKE_BINARY_DIR}/dcopidl )
-SET(DCOPIDL2CPP ${CMAKE_BINARY_DIR}/dcopidl2cpp )
-SET(KCFGC ${CMAKE_BINARY_DIR}/kconfig_compiler )
+SET(DCOPIDL ${CMAKE_BINARY_DIR}/bin/dcopidl )
+SET(DCOPIDL2CPP ${CMAKE_BINARY_DIR}/bin/dcopidl2cpp )
+SET(KCFGC ${CMAKE_BINARY_DIR}/bin/kconfig_compiler )
 
 #bail out if something wasn't found
 IF(NOT KDE_INCLUDE_DIR)
