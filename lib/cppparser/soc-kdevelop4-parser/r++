@@ -1,0 +1,72 @@
+#!/bin/sh
+
+me=$(dirname $0)
+CPP="$(which cpp)"
+TIME=
+GDB=
+
+outfile=""
+cxx_flags="-include $me/r++.macros"
+rxx_flags=""
+while :; do
+    case "$1" in
+      -tm|-time)
+        shift
+        TIME="$(which time)";;
+      -x|-include)
+        shift
+        shift;;
+      -f*)
+        shift;;
+      -o)
+	shift
+	outfile="$1"
+	shift;;
+      -dump)
+        rxx_flags="$rxx_flags -dump"
+        shift;;
+      -I*|-D*|-U*)
+        cxx_flags="$cxx_flags $1"
+	shift;;
+      -*)
+        shift;;
+      *.o|*.a|*.s)
+        shift;;
+      *.h|*.hh)
+        filename=$1
+	break;;
+      *.cpp|*.c)
+        filename=$1
+	break;;
+      *)
+        break;
+    esac
+done
+
+#echo "the file is $filename"
+#echo "the flags are $cxx_flags"
+#echo "the out file is $outfile"
+
+if [ -z $filename ]; then
+    echo "usage: r++ [-dump] file.cpp"
+    exit 255
+fi
+
+tmp=$(mktemp)
+
+#echo "the out file is $outfile"
+#echo "the temp file is $tmp"
+
+$TIME $CPP -I$me/include -I$($CPP -print-file-name=include) \
+    -U__GNUC__ $cxx_flags "$filename" > "$tmp"
+echo -n "preprocessed. "
+
+echo $TIME $GDB $me/rpp0 $rxx_flags "$tmp"
+$TIME $GDB $me/rpp0 $rxx_flags "$tmp"
+rtn=$?
+
+echo "compiled $(wc -l $tmp | awk '{print $1;}' ) loc"
+rm "$tmp"
+
+exit $rtn
+
