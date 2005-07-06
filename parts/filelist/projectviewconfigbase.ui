@@ -1,0 +1,64 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ProjectviewConfigBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ProjectviewConfigBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>File List</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>inToolview</cstring>
+            </property>
+            <property name="text">
+                <string>Displa&amp;y toolbar in toolview. (Note: Change needs a restart!)</string>
+            </property>
+            <property name="accel">
+                <string>Alt+Y</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>onlyProject</cstring>
+            </property>
+            <property name="text">
+                <string>Only save project files in a view.</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer10</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>260</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

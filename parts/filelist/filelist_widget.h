@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Jens Dagerbo                                    *
  *   jens.dagerbo@swipnet.se                                               *
+ *   Copyright (C) 2005 by Jens Herden                                     *
+ *   jens@kdewebdev.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,11 +17,13 @@
 
 #include <klistview.h>
 #include <kurl.h>
+#include <kdevpartcontroller.h> // for DocumentState
+
 #include <qstring.h>
 #include <qtooltip.h>
 #include <qtimer.h>
 
-#include "filelist_part.h"
+#include "projectviewpart.h"
 		 
 class KDevProject;
 class FileListItem;
@@ -32,7 +36,7 @@ class FileListWidget : public KListView, public QToolTip
     
 public:
 		  
-	FileListWidget(FileListPart *part);
+	FileListWidget(ProjectviewPart *part, QWidget *parent=0);
   	~FileListWidget();
 	
 protected:
@@ -56,7 +60,7 @@ private:
 	FileListItem * itemForURL( KURL const & url );
 
 	QTimer m_refreshTimer;
-	FileListPart * _part;
+	ProjectviewPart * _part;
 
 };
 

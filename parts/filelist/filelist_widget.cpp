@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Jens Dagerbo                                    *
  *   jens.dagerbo@swipnet.se                                               *
+ *   Copyright (C) 2005 by Jens Herden                                     *
+ *   jens@kdewebdev.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +24,7 @@
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
 
-#include "filelist_part.h"
+#include "projectviewpart.h"
 #include "filelist_widget.h"
 #include "filelist_item.h"
 
@@ -32,8 +34,8 @@
  * @param part 
  * @return 
  */
-FileListWidget::FileListWidget(FileListPart *part)
- : KListView(0, "filelist widget"), QToolTip( viewport() ), _part( part )
+FileListWidget::FileListWidget(ProjectviewPart *part, QWidget *parent)
+ : KListView(parent), QToolTip( viewport() ), _part( part )
 {
 	addColumn( "" );
 	header()->hide();
@@ -127,7 +129,7 @@ FileListItem * FileListWidget::itemForURL( KURL const & url )
 
 void FileListWidget::refreshFileList( )
 {
-	kdDebug() << k_funcinfo << endl;
+// 	kdDebug() << k_funcinfo << endl;
 
 	KListView::clear();
 
