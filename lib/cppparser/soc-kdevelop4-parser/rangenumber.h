@@ -35,8 +35,8 @@ class SingleRange
 
   public:
     SingleRange<T>() { m_valid = false; }
-    SingleRange<T>(const T& start, const T& end) {
-      m_valid = true;
+    SingleRange<T>(const T& start, const T& end, bool valid=true) {
+      m_valid = valid;
       if(start < end) { 
         m_start = start;
         m_end = end;
@@ -153,8 +153,9 @@ class SingleRange
       
     }
  
-    SingleRange doif (const SingleRange &range1, const SingleRange &range2) const {
-      if(!m_valid) return SingleRange();
+    template <class T2>
+    SingleRange<T2> doif (const SingleRange<T2> &range1, const SingleRange<T2> &range2) const {
+      if(!m_valid) return SingleRange<T2>();
       
       if(m_start == m_end && m_start)
         return range1;
@@ -173,7 +174,7 @@ class SingleRange
       return  SingleRange( (m_start < range.m_start)?m_start:range.m_start, m_end > range.m_end?m_end:range.m_end);
     }
     
-    SingleRange operator + (const SingleRange &range) const {
+    SingleRange operator +(const SingleRange &range) const {
       if(!m_valid || !range.m_valid) return SingleRange();
       
       return SingleRange(m_start+range.m_start, m_end+range.m_end);
@@ -298,18 +299,96 @@ class SingleRange
  */
 class RangeNumber 
 {
+  typedef enum { Bool, Int, Double } Type; //Put in order so that (a*b)  ends up the type with the highest numerical value
   private:
-    SingleRange<int> m_value;
-  public:
-    RangeNumber(const SingleRange<int> &value) : m_value(value) { };
-    RangeNumber(int start, int end) : m_value(start, end) { };
-    RangeNumber() { };
+    Type m_type;
+    
+    SingleRange<int>  m_int_value;
+    SingleRange<bool> m_bool_value;
+    SingleRange<double> m_double_value;
 
-    RangeNumber operator +(const RangeNumber &range) const { return RangeNumber( m_value + range.m_value ); }
-    RangeNumber operator -(const RangeNumber &range) const { return RangeNumber( m_value - range.m_value ); }
-    RangeNumber operator /(const RangeNumber &range) const { return RangeNumber( m_value / range.m_value ); }
-    RangeNumber operator *(const RangeNumber &range) const { return RangeNumber( m_value * range.m_value ); }
-    RangeNumber operator %(const RangeNumber &range) const { return RangeNumber( m_value % range.m_value ); }
+  public:
+    RangeNumber() : m_type(Int), m_bool_value(0,0, false) { };
+    RangeNumber(const SingleRange<bool> &value) : m_type(Bool), m_bool_value(value) { };
+    RangeNumber(const SingleRange<int> &value) : m_type(Int), m_int_value(value) { };
+    RangeNumber(const SingleRange<double> &value) : m_type(Double), m_double_value(value) { };
+    
+    RangeNumber(bool start, bool end, bool valid=true) : m_type(Bool), m_bool_value(start, end, valid) { };
+    RangeNumber(int start, int end, bool valid=true) : m_type(Int), m_int_value(start, end, valid) { };
+    RangeNumber(double start, double end, bool valid=true) : m_type(Double), m_double_value(start, end, valid) { };
+    
+    RangeNumber cast_to_highest(const RangeNumber &range) const {
+      if(m_type >= range.m_type) return *this;
+
+      if(range.m_type == Double && m_type == Int) return RangeNumber((double) m_int_value.m_start, (double) m_int_value.m_end);
+      if(range.m_type == Double /*must be bool*/) return RangeNumber((double) m_bool_value.m_start, (double) m_bool_value.m_end);
+      //Must now be range.m_type == Int and m_type == Bool
+      return RangeNumber((int) m_bool_value.m_start, (int) m_bool_value.m_end);
+    }
+
+    RangeNumber cast_to_bool() const {
+      if(m_type == Bool) return *this;
+      if(m_type == Int) return RangeNumber((bool) !(m_int_value.m_start <=0 && m_int_value.m_end >= 0) /* false if it can be false */, (bool) (m_int_value.m_start != 0 || m_int_value.m_end != 0) /* can it be true*/);
+      /*m_type == Double*/
+      return RangeNumber((bool) !(m_double_value.m_start <=0 && m_double_value.m_end >= 0) /* false if it can be false */, (bool) (m_double_value.m_start != 0 || m_double_value.m_end != 0) /* can it be true*/);
+
+    }
+
+    RangeNumber operator +(const RangeNumber &range) const {
+            RangeNumber r1 = cast_to_highest(range);
+            RangeNumber r2 = range.cast_to_highest(*this);
+            if(r1.m_type == Bool) 
+              return RangeNumber( r1.m_bool_value + r2.m_bool_value );
+            else if(r1.m_type == Int)
+              return RangeNumber( r1.m_int_value + r2.m_int_value );
+            else
+              return RangeNumber( r1.m_double_value + r2.m_double_value );
+                    
+    }
+    RangeNumber operator -(const RangeNumber &range) const {
+            RangeNumber r1 = cast_to_highest(r1);
+            RangeNumber r2 = range.cast_to_highest(*this);
+            if(r1.m_type == Bool) 
+              return RangeNumber( r1.m_bool_value - r2.m_bool_value );
+            else if(r1.m_type == Int)
+              return RangeNumber( r1.m_int_value - r2.m_int_value );
+            else
+              return RangeNumber( r1.m_double_value - r2.m_double_value );
+                    
+    }
+    RangeNumber operator /(const RangeNumber &range) const {
+            RangeNumber r1 = cast_to_highest(r1);
+            RangeNumber r2 = range.cast_to_highest(*this);
+            if(r1.m_type == Bool) 
+              return RangeNumber( r1.m_bool_value / r2.m_bool_value );
+            else if(r1.m_type == Int)
+              return RangeNumber( r1.m_int_value / r2.m_int_value );
+            else
+              return RangeNumber( r1.m_double_value / r2.m_double_value );
+                    
+    }
+    RangeNumber operator *(const RangeNumber &range) const { 
+            RangeNumber r1 = cast_to_highest(r1);
+            RangeNumber r2 = range.cast_to_highest(*this);
+            if(r1.m_type == Bool) 
+              return RangeNumber( r1.m_bool_value * r2.m_bool_value );
+            else if(r1.m_type == Int)
+              return RangeNumber( r1.m_int_value * r2.m_int_value );
+            else
+              return RangeNumber( r1.m_double_value * r2.m_double_value );
+                    
+    }
+    RangeNumber operator %(const RangeNumber &range) const {
+            RangeNumber r1 = cast_to_highest(r1);
+            RangeNumber r2 = range.cast_to_highest(*this);
+            if(r1.m_type == Bool) 
+              return RangeNumber( r1.m_bool_value % r2.m_bool_value );
+            else if(r1.m_type == Int)
+              return RangeNumber( r1.m_int_value % r2.m_int_value );
+            else
+              return RangeNumber(); //You can't use doubles on % 
+                    
+    }
 //    RangeNumber operator !() const { return RangeNumber( !m_value ); }
 //    RangeNumber operator !=(const RangeNumber &range) const { return RangeNumber( m_value != range.m_value ); }
 //    RangeNumber operator ==(const RangeNumber &range) const { return RangeNumber( m_value == range.m_value ); }
@@ -319,9 +398,38 @@ class RangeNumber
 //    RangeNumber operator <(const RangeNumber &range) const { return RangeNumber( m_value < range.m_value; ); }
 //    RangeNumber operator >(const RangeNumber &range) const { return RangeNumber( m_value > range.m_value; ); }
 
-    RangeNumber operator =(const RangeNumber &range) { m_value = range.m_value; return *this; }
-    void display() { m_value.toString(); }
-    RangeNumber doif(const RangeNumber &range1, const RangeNumber &range2) const { return RangeNumber( m_value.doif(range1.m_value, range2.m_value)); }
+    RangeNumber operator =(const RangeNumber &range) {
+      
+      if(m_type == Bool) {    
+        if(range.m_type == Bool) { m_bool_value.m_start = range.m_bool_value.m_start; m_bool_value.m_end = range.m_bool_value.m_end; m_bool_value.m_valid = range.m_bool_value.m_valid; }
+        if(range.m_type == Int) { m_bool_value.m_start = range.m_int_value.m_start; m_bool_value.m_end = range.m_int_value.m_end; m_bool_value.m_valid = range.m_int_value.m_valid; }
+        if(range.m_type == Double) { m_bool_value.m_start = range.m_double_value.m_start; m_bool_value.m_end = range.m_double_value.m_end; m_bool_value.m_valid = range.m_double_value.m_valid; }
+      } else if(m_type == Int) {
+        if(range.m_type == Bool) { m_int_value.m_start = range.m_bool_value.m_start; m_int_value.m_end = range.m_bool_value.m_end; m_int_value.m_valid = range.m_bool_value.m_valid;}
+        if(range.m_type == Int) { m_int_value.m_start = range.m_int_value.m_start; m_int_value.m_end = range.m_int_value.m_end; m_int_value.m_valid = range.m_int_value.m_valid;}
+        if(range.m_type == Double) { m_int_value.m_start = (int)range.m_double_value.m_start; m_int_value.m_end = (int)range.m_double_value.m_end; m_int_value.m_valid = range.m_double_value.m_valid; }
+      } else if(m_type == Double) {
+        if(range.m_type == Bool) { m_double_value.m_start = (double)range.m_bool_value.m_start; m_double_value.m_end = (double)range.m_bool_value.m_end; m_double_value.m_valid = range.m_bool_value.m_valid; }
+        if(range.m_type == Int) { m_double_value.m_start = (double)range.m_int_value.m_start; m_double_value.m_end = (double)range.m_int_value.m_end; m_double_value.m_valid = range.m_int_value.m_valid; }
+        if(range.m_type == Double) { m_double_value.m_start = range.m_double_value.m_start; m_double_value.m_end = range.m_double_value.m_end; m_double_value.m_valid = range.m_double_value.m_valid; }
+      }
+      return *this;
+    }
+    void display() { 
+      if(m_type == Bool) m_bool_value.toString();
+      else if (m_type == Int) m_int_value.toString();
+      else m_double_value.toString();
+    }
+    RangeNumber doif(const RangeNumber &range1, const RangeNumber &range2) const { 
+
+      RangeNumber r1 = cast_to_bool();
+      RangeNumber r2 = range1.cast_to_highest(range2);
+      RangeNumber r3 = range2.cast_to_highest(range1);
+      
+      if(r2.m_type == Bool) return RangeNumber( r1.m_bool_value.doif(r2.m_bool_value, r3.m_bool_value));
+      if(r2.m_type == Int) return RangeNumber( r1.m_bool_value.doif(r2.m_int_value, r3.m_int_value));
+      /*r2.m_type == Double)*/ return RangeNumber( r1.m_bool_value.doif(r2.m_double_value, r3.m_double_value));
+    }
 };
 
 
