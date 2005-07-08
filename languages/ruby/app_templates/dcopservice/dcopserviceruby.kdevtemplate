@@ -3,6 +3,7 @@
 Name=DCOP Service
 Name[de]=DCOP-Dienst
 Name[et]=DCOP-teenus
+Name[fr]=Service DCOP
 Name[ga]=Seirbhís DCOP
 Name[hu]=DCOP-szolgáltatás
 Name[it]=Servizio DCOP
@@ -140,6 +141,7 @@ Comment=A KDE DCOP Service was created in %{dest}
 Comment[da]=En KDE DCOP tjeneste blev oprettet i %{dest}
 Comment[de]=Ein KDE DCOP-Dienst wurde in %{dest} erstellt.
 Comment[et]=KDE DCOP-teenus loodi asukohta %{dest}
+Comment[fr]=Un service DCOP KDE a été créé dans %{dest}
 Comment[hu]=Létrejött egy KDE DCOP-szolgáltatás itt: %{dest}
 Comment[it]=È stato creato un servizio DCOP di KDE in %{dest}
 Comment[nl]=Een DCOP-service is aangemaakt in  %{dest}

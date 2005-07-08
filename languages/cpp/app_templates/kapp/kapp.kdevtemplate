@@ -191,6 +191,7 @@ Comment=A KDE Application was created at %{dest}
 Comment[da]=Et KDE program blev oprettet i %{dest}
 Comment[de]=Eine KDE-Anwendung wurde in %{dest} erstellt.
 Comment[et]=KDE rakendus loodi asukohta %{dest}
+Comment[fr]=Une application KDE a été créée dans %{dest}
 Comment[hu]=Létrejött egy KDE-s alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione KDE in %{dest}
 Comment[nl]=Een KDE-toepassing is aangemaakt in %{dest}

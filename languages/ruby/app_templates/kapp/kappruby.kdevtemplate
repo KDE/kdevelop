@@ -181,6 +181,7 @@ Comment=A Korundum Application was created at %{dest}
 Comment[da]=Et Korundum program blev oprettet i %{dest}
 Comment[de]=Eine Korundum-Anwendung wurde in %{dest} erstellt.
 Comment[et]=Korundumi rakendus loodi asukohta %{dest}
+Comment[fr]=Une application Korundum a été créée dans %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione Korundum in %{dest}
 Comment[nl]=Een Korundum-toepassing is aangemaakt in %{dest}
