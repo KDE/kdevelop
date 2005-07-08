@@ -3,6 +3,7 @@
 Name=Simple DCOP server
 Name[da]=Simpel DCOP-server
 Name[et]=Lihtne DCOP-server
+Name[fr]=Serveur DCOP simple
 Name[hu]=Egyszerű DCOP-kiszolgáló
 Name[sv]=Enkel DCOP-server
 Icon=kdedcop.png
@@ -147,5 +148,6 @@ Type=message
 Comment=A simple DCOP server was created in %{dest}
 Comment[da]=En simpel DCOP-server blev oprettet i %{dest}
 Comment[et]=Lihtne DCOP-server loodi asukohta %{dest}
+Comment[fr]=Un serveur DCOP simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű DCOP-kiszolgáló itt: %{dest}
 Comment[sv]=En enkel DCOP-server skapades i %{dest}

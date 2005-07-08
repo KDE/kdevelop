@@ -10,6 +10,7 @@ Category=C++/Generic
 Comment=Generates a simple Hello world program in C++
 Comment[da]=Genererer et simpelt Goddag verden program in C++
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s
+Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
 Comment[sv]=Skapar ett enkelt Hello world-program i C++
 FileTemplates=h,CStyle,cpp,CStyle

@@ -3,6 +3,7 @@
 Name=QtRuby Application
 Name[da]=QtRuby-program
 Name[et]=QtRuby rakendus
+Name[fr]=Application QtRuby
 Name[hu]=QtRuby-alapú alkalmazás
 Name[sv]=QtRuby-program
 Icon=qtrubyapp.png
@@ -62,5 +63,6 @@ Type=message
 Comment=A QtRuby based application was created in %{dest}
 Comment[da]=Et QtRuby baseret program blev oprettet i %{dest}
 Comment[et]=Rakendus QtRuby põhjal loodi asukohta %{dest}
+Comment[fr]=Une application basée sur QtRuby a été créée dans %{dest}
 Comment[hu]=Létrejött egy QtRuby-alapú alkalmazás itt: %{dest}
 Comment[sv]=Ett program baserat på QtRuby skapades i %{dest}

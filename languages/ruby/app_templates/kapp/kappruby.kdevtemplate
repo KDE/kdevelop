@@ -163,5 +163,6 @@ Type=message
 Comment=A Korundum Application was created at %{dest}
 Comment[da]=Et Korundum program blev oprettet i %{dest}
 Comment[et]=Korundumi rakendus loodi asukohta %{dest}
+Comment[fr]=Une application Korundum a été créée dans %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú alkalmazás itt: %{dest}
 Comment[sv]=Ett Korundum-program skapades i %{dest}

@@ -3,6 +3,7 @@
 Name=A shared library template
 Name[da]=En delt biblitekskabelon
 Name[et]=Jagatud teegi mall
+Name[fr]=Un modèle de bibliothèque partagée
 Name[hu]=Osztott programkönyvtár-sablon
 Name[sv]=En mall för ett delat bibliotek
 Icon=cmakelibc.png

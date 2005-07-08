@@ -2,6 +2,7 @@
 [General]
 Name=KHTMLPart plugin
 Name[br]=Lugent KHTMLPart
+Name[fr]=Module pour le composant KHTML
 Name[ga]=Breiseán KHTMLPart
 Name[hu]=KHTML-bővítőmodul
 Name[sv]=Insticksprogram för KHTML-delprogram
@@ -10,6 +11,7 @@ Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
 Comment[da]=Genererer et plugin for KHTML parten.
 Comment[et]=KHTML-komponendi plugina loomine.
+Comment[fr]=Génère un module pour le composant KHTML.
 Comment[hu]=Létrehoz egy KHTML-bővítőmodult.
 Comment[sv]=Skapar ett insticksprogram för KHTML-delprogrammet
 FileTemplates=h,CStyle,cpp,CStyle
@@ -128,5 +130,6 @@ Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
 Comment[da]=Et KHTMLPart plugin bleb oprettet i %{dest}
 Comment[et]=KHTMLPart plugin loodi asukohta %{dest}
+Comment[fr]=Un module pour le composant KHTML a été créé dans %{dest}
 Comment[hu]=Létrejött egy KHTML-bővítőmodul itt: %{dest}
 Comment[sv]=Ett insticksprogram för KHTML-delprogrammet skapades i %{dest}

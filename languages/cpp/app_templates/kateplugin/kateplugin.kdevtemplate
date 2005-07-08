@@ -2,6 +2,7 @@
 [General]
 Name=Kate plugin
 Name[br]=Lugent Kate
+Name[fr]=Module Kate
 Name[ga]=Breiseán Kate
 Name[hu]=Kate-bővítőmodul
 Name[sv]=Kate-insticksprogram
@@ -10,6 +11,7 @@ Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.
 Comment[da]=Genererer et plugin for teksteditoren kate
 Comment[et]=Plugina loomine tekstiredaktorile Kate.
+Comment[fr]=Génère un module pou l'éditeur de texte Kate.
 Comment[hu]=Létrehoz egy bővítőmodult a Kate szövegszerkesztőhöz.
 Comment[sv]=Skapar ett insticksprogram för texteditorn Kate.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -133,5 +135,6 @@ Type=message
 Comment=A plugin for Kate was created at %{dest}
 Comment[da]=Et plugin for Kate blev oprettet på %{dest}
 Comment[et]=Kate plugin loodi asukohta %{dest}
+Comment[fr]=Un module pour Kate a été créé dans %{dest}
 Comment[hu]=Létrejött egy Kate-bővítőmodul itt: %{dest}
 Comment[sv]=Ett insticksprogram för Kate skapades i %{dest}

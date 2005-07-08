@@ -117,5 +117,6 @@ Type=message
 Comment=A konqueror navigation panel plugin was created in %{dest}
 Comment[da]=Et Konqueror navigationspanel plugin bleb oprettet i %{dest}
 Comment[et]=Konquerori liikumispaneeli plugin loodi asukohta %{dest}
+Comment[fr]=Un module pour le panneau de navigation de Konqueror a été créé dans %{dest}
 Comment[hu]=Létrejött egy konqueroros navigációs modul itt: %{dest}
 Comment[sv]=Ett Konqueror-insticksprogram för navigeringspanelen skapades i %{dest}

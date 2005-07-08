@@ -3,6 +3,7 @@
 Name=Hello world program
 Name[da]=Goddag verden program
 Name[et]="Tere,maailm" programm
+Name[fr]=Programme « Hello world »
 Name[sv]=Hello world-program
 Icon=qmakesimple.png
 Category=C++/QMake project

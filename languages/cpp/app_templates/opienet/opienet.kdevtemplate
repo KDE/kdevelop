@@ -3,6 +3,7 @@
 Name=Opie Networksettings
 Name[da]=Opie netværksopsætning
 Name[et]=Opie võrguseadustused
+Name[fr]=Paramètres réseau Opie
 Name[hu]=Opie-s hálózati beállítómodul
 Name[sv]=Opie nätverksinställningar
 Icon=qmakeapp.png
@@ -10,6 +11,7 @@ Category=C++/Embedded
 Comment=Generate an Opie network config plugin.
 Comment[da]=Generér en Opie netværks-config-plugin.
 Comment[et]=Opie võrguseadistuste plugina loomine.
+Comment[fr]=Génère un module de configuration réseau pour Opie.
 Comment[hu]=Létrehoz egy Opie-s hálózati beállítómodult.
 Comment[sv]=Skapa ett Opie-insticksprogram för nätverksinställning.
 FileTemplates=h,CStyle,cpp,CStyle
@@ -65,6 +67,7 @@ Type=message
 Comment=An opie network settings plugin was created in %{dest}
 Comment[da]=En opie netværksopsætning-plugin blev oprettet i %{dest}
 Comment[et]=Opie võrguseadistuste plugin loodi asukohta %{dest}
+Comment[fr]=Un module de configuration réseau pour Opie a été créé dans %{dest}
 Comment[hu]=Létrejött egy Opie-s hálózati beállítómodul itt: %{dest}
 Comment[sv]=Ett Opie-insticksprogram för nätverksinställning skapades i %{dest}
 

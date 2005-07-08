@@ -10,6 +10,7 @@ Category=C++
 Comment=Generates a simple ncurses based Hello world program in C++
 Comment[da]=Genererer et simpelt ncurses baseret Goddag verden program in C++
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine ncurses'i põhjal C++-s
+Comment[fr]=Génère un simple programme « Hello world » basé sur ncurses en C++
 Comment[hu]=Létrehoz egy egyszerű, Ncurses-alapú Hello world programot C++-ban
 Comment[sv]=Skapar ett enkelt ncurses-baserat Hello world-program i C++
 FileTemplates=h,CStyle,cpp,CStyle

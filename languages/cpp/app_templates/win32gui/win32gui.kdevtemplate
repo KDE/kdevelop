@@ -3,6 +3,7 @@
 Name=Simple Win32 GUI App.
 Name[da]=Simpelt Win32 GUI-program.
 Name[et]=Lihtne Win32 graafilise kasutajaliidese rakendus
+Name[fr]=Interface graphique Win32 simple
 Name[hu]=Egyszerű Win32-alapú, grafikus felületű alkalmazás
 Name[sv]=Enkelt Win32-program med grafiskt gränssnitt
 Icon=win32gui.png

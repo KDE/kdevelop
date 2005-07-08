@@ -4,6 +4,7 @@
 Name=KConfig XT application
 Name[da]=KConfig XT program
 Name[et]=KConfig XT rakendus
+Name[fr]=Application KConfig XT
 Name[hu]=KConfig XT-alapú alkalmazás
 Name[sv]=KConfig XT-program
 Category=Ruby/KDE
@@ -174,5 +175,6 @@ Type=message
 Comment=A Korundum KConfig XT Application was created at %{dest}
 Comment[da]=Et Korundum KConfig XT program blev oprettet i %{dest}
 Comment[et]=Korundumi KConfig XT rakendus loodi asukohta %{dest}
+Comment[fr]=Une application KConfig XT Korundum a été créée dans %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú KConfig XT-s alkalmazás itt: %{dest}
 Comment[sv]=Ett Korundum KConfig XT-program skapades i %{dest}

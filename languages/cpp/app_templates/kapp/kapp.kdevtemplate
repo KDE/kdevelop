@@ -173,5 +173,6 @@ Type=message
 Comment=A KDE Application was created at %{dest}
 Comment[da]=Et KDE program blev oprettet i %{dest}
 Comment[et]=KDE rakendus loodi asukohta %{dest}
+Comment[fr]=Une application KDE a été créée dans %{dest}
 Comment[hu]=Létrejött egy KDE-s alkalmazás itt: %{dest}
 Comment[sv]=Ett KDE-program skapades i %{dest}

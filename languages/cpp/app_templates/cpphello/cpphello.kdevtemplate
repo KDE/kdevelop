@@ -3,6 +3,7 @@
 Name=Simple Hello world program
 Name[da]=Simpelt Goddag verden program
 Name[et]=Lihtne "Tere, maailm" programm
+Name[fr]=Simple programme « Hello world »
 Name[hu]=Egyszerű Hello world program
 Name[sv]=Enkelt Hello world-program
 Icon=cpphello.png
@@ -10,6 +11,7 @@ Category=C++
 Comment=Generates a simple Hello world program in C++
 Comment[da]=Genererer et simpelt Goddag verden program in C++
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s
+Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
 Comment[sv]=Skapar ett enkelt Hello world-program i C++
 FileTemplates=h,CStyle,cpp,CStyle

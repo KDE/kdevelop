@@ -3,6 +3,7 @@
 Name=Simple KDE Application
 Name[da]=Et simpelt KDE program
 Name[et]=Lihtne KDE rakendus
+Name[fr]=Application KDE simple
 Name[ga]=Feidhmchlár Simplí KDE
 Name[hu]=Egyszerű KDE-s alkalmazás
 Name[sv]=Enkelt KDE-program
@@ -139,6 +140,7 @@ Type=message
 Comment=A KDE Hello world program was created in %{dest}
 Comment[da]=Et KDE Goddag verden program blev oprettet i %{dest}
 Comment[et]=KDE "Tere, maailm" programm loodi asukohta %{dest}
+Comment[fr]=Un programme KDE « Hello world » a été créé dans %{dest}
 Comment[hu]=Létrejött egy KDE Hello world program itt: %{dest}
 Comment[sv]=Ett KDE Hello world-program skapades i %{dest}
 
