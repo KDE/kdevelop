@@ -434,10 +434,7 @@ char* JDBController::parseLine(char *buf)
                                           ex.cap(3).toInt(), "");
                     actOnProgramPause(QString("Reached Breakpoint in line ")+ex.cap(3));
 
-                    char *retStr;
-		    QString retQString =  QString( buf + ex.cap(ex.numCaptures()) );
-		    memcpy( retStr, retQString.latin1(), retQString.length() );
-                    return retStr;
+                    return  buf + ex.matchedLength();
                 }
 
             }
