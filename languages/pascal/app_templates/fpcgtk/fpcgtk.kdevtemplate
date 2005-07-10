@@ -3,6 +3,7 @@
 Name=GTK+ application
 Name[da]=GTK+ program
 Name[de]=GTK+-Anwendung
+Name[es]=Aplicación GTK+
 Name[et]=GTK+ rakendus
 Name[fr]=Application GTK+
 Name[ga]=Feidhmchlár GTK+
@@ -58,6 +59,7 @@ Type=message
 Comment=A GTK+ application written in pascal was created in %{dest}
 Comment[da]=Et GTK+ program skrevet i pascal blev oprettet i %{dest}
 Comment[de]=Eine in Pascal geschriebene GTK+-Anwendung wurde in %{dest} erstellt.
+Comment[es]=Una aplicación GTK+ escrita en Pascal ha sido creada en %{dest}
 Comment[et]=GTK+ rakendus Pascalis loodi asukohta %{dest}
 Comment[fr]=Une application GTK+ écrite en Pascal a été créée dans %{dest}
 Comment[hu]=Létrejött egy egyszerű, Pascal nyelvű, GTK+-alapú alkalmazás itt: %{dest}

@@ -3,6 +3,7 @@
 Name=KFile plugin
 Name[br]=Lugent KFile
 Name[de]=KFile-Plugin
+Name[es]=Plugin para KFile
 Name[et]=KFile'i plugin
 Name[fr]=Module KFile
 Name[ga]=Breiseán KFile
@@ -22,6 +23,7 @@ Comment=Generates a KFile plugin for konqueror to display meta information.
 Comment[da]=Genererer et KFile-plugin for konqueror til at vise meta-information.
 Comment[de]=Erstellt ein KFile-Plugin für Konqueror zur Anzeige von Meta-Daten.
 Comment[en_GB]=Generates a KFile plugin for Konqueror to display meta information.
+Comment[es]=Genera un plugin KFile de Konqueror para mostrar metainformación.
 Comment[et]=Konqueroro KFile'i plugina loomine, mis näitab metainfot.
 Comment[hu]=Létrehoz egy KFile-bővítőmodult, mellyel a Konquerorban dokumentumjellemzőket lehet megjeleníteni.
 Comment[it]=Genera un plugin KFile per Konqueror per mostrare meta informazioni.

@@ -3,6 +3,7 @@
 Name=Kicker Applet
 Name[da]=Kicker-applet
 Name[de]=Kicker-Miniprogramm
+Name[es]=Applet para Kicker
 Name[et]=Kickeri aplett
 Name[fr]=Applet Kicker
 Name[hu]=Panel-kisalkalmazás
@@ -135,6 +136,7 @@ Type=message
 Comment=A Kicker Applet was created in %{dest}
 Comment[da]=En Kicker applet blev oprettet i %{dest}
 Comment[de]=Ein Miniprogramm für Kicker wurde in %{dest} erstellt.
+Comment[es]=Un applet para Kicker ha sido creado en %{dest}
 Comment[et]=Kickeri aplett loodi asukohta %{dest}
 Comment[fr]=Une applet Kicker a été créée dans %{dest}
 Comment[hu]=Létrejött egy panel-kisalkalmazás itt: %{dest}

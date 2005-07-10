@@ -2,6 +2,7 @@
 [General]
 Name=QtRuby Hello World
 Name[da]=QtRuby Goddag verden
+Name[es]=«Hola mundo» en QtRuby
 Name[et]=QtRuby "Tere, maailm"
 Name[fr]=« Hello world » en QtRuby
 Name[hu]=QtRuby-alapú Hello world program
@@ -15,6 +16,7 @@ Category=Ruby/Qt
 Comment=This generates a simple QtRuby Hello World application
 Comment[da]=Dette generere et simpelt QtRuby Goddag verden program
 Comment[de]=Hiermit wird eine einfache auf QtRuby basierende Hello-World-Anwendung erstellt
+Comment[es]=Genera una sencilla aplicación «Hola mundo» en QtRuby
 Comment[et]=Lihtsa QtRuby "Tere, maailm" rakenduse loomine
 Comment[fr]=Génère un simple programme « Hello world » en QtRuby
 Comment[hu]=Létrehoz egy egyszerű QtRuby-alapú Hello world programot
@@ -57,6 +59,7 @@ Type=message
 Comment=A simple QtRuby application was created in %{dest}
 Comment[da]=Et simpelt QtRuby program blev oprettet i %{dest}
 Comment[de]=Eine einfache QtRuby-Anwendung wurde in %{dest} erstellt.
+Comment[es]=Una sencilla aplicación en QtRuby ha sido creada en %{dest}
 Comment[et]=Lihtne KQtRuby rakendus loodi asukohta %{dest}
 Comment[fr]=Une application QtRuby simple a été créée dans %{dest}
 Comment[hu]=Létrejött egy egyszerű QtRuby-alapú alkalmazás itt: %{dest}

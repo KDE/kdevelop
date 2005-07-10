@@ -175,6 +175,7 @@ Type=message
 Comment=A complex KDE application using KParts was created in %{dest}
 Comment[da]=Et komplekst KDE-program ved brug af KParts blev oprettet i %{dest}
 Comment[de]=Eine aufwändige KDE-Anwendung, die KParts verwendet, wurde in %{dest} erstellt.
+Comment[es]=Una aplicación compleja para KDE que usa KParts ha sido creada en %{dest}
 Comment[et]=KParts'i kasutav keeruline KDE rakendus loodi asukohta %{dest}
 Comment[hu]=Létrejött egy komplex, objektumok használatát támogató KDE-s alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione KDE complessa usando KParts in %{dest}

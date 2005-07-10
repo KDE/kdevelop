@@ -4,6 +4,7 @@
 Name=KConfig XT application
 Name[da]=KConfig XT program
 Name[de]=KConfig XT Anwendung
+Name[es]=Aplicación KConfig XT
 Name[et]=KConfig XT rakendus
 Name[fr]=Application KConfig XT
 Name[hu]=KConfig XT-alapú alkalmazás
@@ -21,6 +22,7 @@ Comment=Generates a simple KDE application with one widget and a configuration d
 Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
 Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget und einem Einstellungsdialog.
 Comment[en_GB]=Generates a simple KDE application with one widget and a configuration dialogue
+Comment[es]=Genera una sencilla aplicación para KDE con una ventana y un diálogo de configuración
 Comment[et]=Lihtsa KDE rakenduse loomine ühe vidina ja seadistustedialoogiga.
 Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és egy beállítóablakkal
 Comment[it]=Genera una semplice applicazione KDE con un elemento grafico e una finestra di configurazione

@@ -3,6 +3,7 @@
 Name=Simple Win32 Hello World
 Name[da]=Simpelt Win32 Goddag verden
 Name[de]=Einfaches Win32 Hello-World-Programm
+Name[es]=Sencillo programa «Hola mundo» para Win32
 Name[et]=Lihtne Win32 "Tere, maailm"
 Name[fr]=Simple « Hello world » Win32
 Name[hu]=Win32-alapú Hello world program
@@ -81,6 +82,7 @@ Type=message
 Comment=For this project to compile and run you need both Wine and MinGW installed.
 Comment[da]=For at dette projekt skal kompilere og køre har du brug for at have både Wine og MinGW installeret.
 Comment[de]=Um dieses Projekt zu kompilieren und auszuführen, muss sowohl Wine als auch MinGW installiert sein.
+Comment[es]=Para compilar y ejecutar este proyecto necesitará tener instalados Wine y MinGW.
 Comment[et]=Selle projekti kompileerimiseks ja käivitamiseks peab olema paigaldatud nii Wine kui MinGW.
 Comment[hu]=A projekt lefordításához és futtatásához szükség van a Wine és a MinGW telepítésére.
 Comment[it]=Per compilare ed eseguire questo progetto dei avere sia Wine che MinGW installati.

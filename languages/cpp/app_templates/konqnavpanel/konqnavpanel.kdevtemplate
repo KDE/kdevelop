@@ -134,6 +134,7 @@ Comment=A konqueror navigation panel plugin was created in %{dest}
 Comment[da]=Et Konqueror navigationspanel plugin bleb oprettet i %{dest}
 Comment[de]=Ein Plugin für den Navigationsbereich von Konqueror wurde in %{dest} erstellt.
 Comment[en_GB]=A Konqueror navigation panel plugin was created in %{dest}
+Comment[es]=Un plugin para el panel de navegación de Konqueror ha sido creado en %{dest}
 Comment[et]=Konquerori liikumispaneeli plugin loodi asukohta %{dest}
 Comment[fr]=Un module pour le panneau de navigation de Konqueror a été créé dans %{dest}
 Comment[hu]=Létrejött egy konqueroros navigációs modul itt: %{dest}

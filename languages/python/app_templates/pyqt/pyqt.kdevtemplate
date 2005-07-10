@@ -3,6 +3,7 @@
 Name=Python Qt application
 Name[da]=Python Qt program
 Name[de]=Python Qt-Anwendung
+Name[es]=Aplicación Qt en Python
 Name[et]=Pythoni Qt rakendus
 Name[fr]=Application Qt Python
 Name[ga]=Feidhmchlár Qt Python
@@ -110,6 +111,7 @@ Type=message
 Comment=A Python Qt application was created in %{dest}
 Comment[da]=Et Python Qt program blev oprettet i %{dest}
 Comment[de]=Eine Python Qt-Anwendung wurde in %{dest} erstellt.
+Comment[es]=Una aplicación Qt en Python ha sido creada en %{dest}
 Comment[et]=Pythoni Qt rakendus loodi asukohta %{dest}
 Comment[fr]=Une application Qt Python a été créée dans %{dest}
 Comment[hu]=Létrejött egy Python/Qt-alkalmazás itt: %{dest}
