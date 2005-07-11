@@ -337,26 +337,7 @@ DomUtil::PairList AutoProjectPart::runEnvironmentVars() const
   */
 QString AutoProjectPart::runDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevautoproject/run/customdirectory");
-
-    if ( DomMainProgram.isEmpty() )
-        // No Main Program was specified, return the directory of the active target
-        return buildDirectory() + "/" + activeDirectory();
-
-    // A Main Program was specified, return it's run directory
-    int pos = DomMainProgram.findRev('/');
-    if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
-    return buildDirectory() + "/" + DomMainProgram;
+    return defaultRunDirectory("kdevautoproject");
 }
 
 

@@ -189,23 +189,7 @@ DomUtil::PairList AdaProjectPart::runEnvironmentVars() const
   */
 QString AdaProjectPart::runDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevadaproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevadaproject/run/customdirectory");
-
-    int pos = DomMainProgram.findRev('/');
-    if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
-
-    return buildDirectory() + "/" + DomMainProgram;
-
+    return defaultRunDirectory("kdevadaproject");
 }
 
 

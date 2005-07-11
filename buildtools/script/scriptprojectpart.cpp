@@ -207,23 +207,7 @@ DomUtil::PairList ScriptProjectPart::runEnvironmentVars() const
   */
 QString ScriptProjectPart::runDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevscriptproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevscriptproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevscriptproject/run/customdirectory");
-
-    int pos = DomMainProgram.findRev('/');
-    if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
-
-    return buildDirectory() + "/" + DomMainProgram;
-
+    return defaultRunDirectory("kdevscriptproject");
 }
 
 

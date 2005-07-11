@@ -422,23 +422,7 @@ DomUtil::PairList CustomProjectPart::runEnvironmentVars() const
   */
 QString CustomProjectPart::runDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevcustomproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevcustomproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevcustomproject/run/customdirectory");
-
-    int pos = DomMainProgram.findRev('/');
-    if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
-
-    return buildDirectory() + "/" + DomMainProgram;
-
+    return defaultRunDirectory("kdevcustomproject");
 }
 
 

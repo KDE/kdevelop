@@ -196,23 +196,7 @@ DomUtil::PairList PascalProjectPart::runEnvironmentVars() const
   */
 QString PascalProjectPart::runDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevpascalproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevpascalproject/run/customdirectory");
-
-    int pos = DomMainProgram.findRev('/');
-    if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
-
-    return buildDirectory() + "/" + DomMainProgram;
-
+    return defaultRunDirectory("kdevpascalproject");
 }
 
 

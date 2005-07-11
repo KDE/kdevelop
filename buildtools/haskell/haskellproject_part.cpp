@@ -173,22 +173,7 @@ QString HaskellProjectPart::mainProgram( bool relative ) const
 
 QString HaskellProjectPart::runDirectory() const
 {
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevhaskellproject/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevhaskellproject/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(dom, "/kdevhaskellproject/run/customdirectory");
-
-    int pos = DomMainProgram.findRev('/');
-    if (pos != -1)
-        return buildDirectory() + "/" + DomMainProgram.left(pos);
-
-    return buildDirectory() + "/" + DomMainProgram;
+    return defaultRunDirectory("kdevhaskellproject");
 }
 
 /** Retuns a QString with the run command line arguments */

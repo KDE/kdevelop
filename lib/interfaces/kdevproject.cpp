@@ -121,6 +121,31 @@ QStringList KDevProject::symlinkProjectFiles( )
     return d->m_symlinkList;
 }
 
+QString KDevProject::defaultRunDirectory(const QString& projectPluginName) const
+{
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(
+        dom, "/" + projectPluginName + "/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(
+        dom, "/" + projectPluginName + "/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(
+            dom, "/" + projectPluginName + "/run/customdirectory");
+
+    Q_ASSERT( directoryRadioString == "executable" );
+
+    QString executable = buildDirectory() + "/" + DomMainProgram;
+    // Now remove the part after last '/' to get directory.
+    int pos = executable.findRev('/');        
+    return executable.left(pos);
+
+}
+
 void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
 {
 	QStringList::ConstIterator it = fileList.begin();

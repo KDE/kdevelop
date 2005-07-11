@@ -159,6 +159,22 @@ public:
 
     /**@return The list of files known to the project through symlinks.*/
     virtual QStringList symlinkProjectFiles();
+
+protected:
+
+    /** Default implementation of runDirectory method.
+     *  Uses 'projectPluginName' to obtain configuration from
+     *  project DOM and returns:
+     *
+     *   if /<projectPluginName>/run/directoryradio == executable
+     *        The directory where the executable is.
+     *   if /<projectPluginName>/run/directoryradio == build
+     *        The build directory.
+     *   if /kdevautoproject/run/directoryradio == custom
+     *        The custom directory absolute path.
+     * Derived classes are supposed to explicitly call this implementation
+     */
+    QString defaultRunDirectory(const QString& projectPluginName) const;
     
 private slots:
     void buildFileMap();
