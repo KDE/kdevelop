@@ -20,7 +20,9 @@
 #include "qmakeprojectmodel.h"
 
 #include <qmakeast.h>
+#include <kdevprojectmodel.h>
 
+using namespace QMake;
 //QMakeFolderModel
 
 QMakeFolderModel::QMakeFolderModel(ProjectModel* projectModel)
@@ -52,4 +54,157 @@ QMakeTargetModel::QMakeTargetModel(ProjectModel *projectModel)
 QMakeTargetModel::~QMakeTargetModel()
 {
 //     delete ast;
+}
+
+QStringList QMakeFolderModel::readAssignment( const QString& scopeid, QString &mode ) const
+{
+	QStringList values;
+	if( ast == 0)
+		return values;
+	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
+	for(; it != ast->statements.end(); ++it)
+	{
+		if( (*it)->nodeType() == AST::AssignmentAST )
+		{
+			QMake::AssignmentAST *assn = (QMake::AssignmentAST*)(*it);
+			if( assn->scopedID == scopeid)
+			{
+				mode = assn->op;
+				QStringList::ConstIterator item = assn->values.begin();
+				for(; item != assn->values.end(); ++item)
+				{
+					QString splitString = (*item).simplifyWhiteSpace();
+					QStringList splitItems = QStringList::split(' ', splitString);
+					QStringList::ConstIterator subItem = splitItems.begin();
+					for(; subItem != splitItems.end(); ++subItem)
+					{
+						QString subItemText = (*subItem).simplifyWhiteSpace();
+						if( !subItemText.isEmpty() && subItemText != "\\")
+						{
+							values += subItemText;
+						}
+					}
+				}
+			}
+		}
+	}
+	return values;
+}
+
+QStringList QMakeFolderModel::config() const
+{
+	QStringList confvars;
+	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
+	for(; it != ast->statements.end(); ++it)
+	{
+		if( (*it)->nodeType() == AST::AssignmentAST )
+		{
+			QMake::AssignmentAST *assn = (QMake::AssignmentAST*)(*it);
+			if( assn->scopedID == "CONFIG")
+			{
+				QStringList::ConstIterator item = assn->values.begin();
+				for(; item != assn->values.end(); ++item)
+				{
+					QString splitString = (*item).simplifyWhiteSpace();
+					QStringList splitItems = QStringList::split(' ', splitString);
+					QStringList::ConstIterator subItem = splitItems.begin();
+					for(; subItem != splitItems.end(); ++subItem)
+					{
+						QString subItemText = (*subItem).simplifyWhiteSpace();
+						if( !subItemText.isEmpty() && subItemText != "\\")
+						{
+							confvars += subItemText;
+						}
+					}
+				}
+			}
+		}
+	}
+	return confvars;
+}
+
+void QMakeFolderModel::setConfig( const QStringList &conf )
+{
+	QMake::AssignmentAST *assn = 0;
+	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
+	for(; it != ast->statements.end(); ++it)
+	{
+		if( (*it)->nodeType() == AST::AssignmentAST )
+		{
+			assn = (QMake::AssignmentAST*)(*it);
+			if( assn->scopedID == "CONFIG")
+			{
+				break;
+			}
+		}
+	}
+
+	if( conf.isEmpty() && assn )
+	{
+		ast->statements.remove(assn);
+		delete assn;
+		return;
+	}
+	
+	if( assn == 0 )
+	{
+		assn = new QMake::AssignmentAST();
+		assn->scopedID = "CONFIG";
+		assn->op = "+=";
+		ast->statements += assn;
+	}
+	
+	assn->values = conf;
+
+}
+
+void QMakeFolderModel::writeScopeID( const QString &scopeid, const QString &mode, const QStringList values )
+{	
+	QMake::AssignmentAST *assn = 0;
+	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
+	for(; it != ast->statements.end(); ++it)
+	{
+		if( (*it)->nodeType() == AST::AssignmentAST )
+		{
+			assn = (QMake::AssignmentAST*)(*it);
+			if( assn->scopedID == scopeid)
+			{
+				break;
+			}
+		}
+	}
+	
+	if( values.isEmpty() && assn )
+	{
+		ast->statements.remove(assn);
+		delete assn;
+		return;
+	}
+	
+	if( assn == 0 )
+	{
+		assn = new QMake::AssignmentAST();
+		assn->scopedID = scopeid;
+		assn->op = mode;
+		ast->statements += assn;
+	}
+
+	QStringList::ConstIterator value = values.begin();
+	for(; value != values.end(); ++value)
+		assn->values += (*value) + " \\";
+}
+QStringList  QMakeFolderModel::assignmentNames( ) const
+{
+	QStringList returnList;
+	QMake::AssignmentAST *assn = 0;
+	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
+	for(; it != ast->statements.end(); ++it)
+	{
+		if( (*it)->nodeType() == AST::AssignmentAST )
+		{
+			assn = (QMake::AssignmentAST*)(*it);
+			returnList += assn->scopedID;
+		}
+	}
+	return returnList;
 }

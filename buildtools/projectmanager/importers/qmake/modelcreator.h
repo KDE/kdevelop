@@ -36,7 +36,10 @@ QMake::ProjectAST * buildProjectAST(const QString &projectDir);
 void newFolderDom(ProjectFolderList &folderList,
     ProjectFolderDom &folderDom, QMake::AST *ast, QFileInfo *info = 0);
 
+void newFileDom(QMakeFileList &fileList,
+                QMakeFileDom &fileDom, QMake::AST *ast, QFileInfo *info = 0);
 
+void addFileItem( const QString &field, const QString &icon, QMakeFolderDom &folder );
 }
 
 #endif

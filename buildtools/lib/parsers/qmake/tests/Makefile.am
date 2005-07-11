@@ -16,6 +16,6 @@ runner_LDFLAGS = $(all_libraries) $(LIB_KDECORE) $(KDE_RPATH)
 runner_LDADD = $(top_builddir)/buildtools/lib/parsers/qmake/libkdevqmakeparser.la
 runner_SOURCES = runner.cpp
 
-viewer_LDFLAGS = $(all_libraries) $(LIB_KDECORE) $(KDE_RPATH)
+viewer_LDFLAGS = --no-undefined $(all_libraries) $(LIB_KDECORE) $(KDE_RPATH)
 viewer_LDADD = $(top_builddir)/buildtools/lib/parsers/qmake/libkdevqmakeparser.la
 viewer_SOURCES = viewer.cpp viewer_main.cpp viewerbase.ui

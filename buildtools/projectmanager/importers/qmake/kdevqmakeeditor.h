@@ -53,7 +53,7 @@ public:
     virtual ProjectItemDom import(ProjectModel *model, const QString &fileName);
     virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
-            
+    virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
 private:
     KDevProject *m_project;
     QMake::ProjectAST *m_ast;

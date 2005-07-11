@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ProjectConfigurationDlgBase</class>
 <author>Jakob Simon-Gaarde</author>
 <widget class="QDialog">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>500</height>
+            <width>578</width>
+            <height>424</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -73,7 +73,7 @@
                     <cstring>buildTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Basics</string>
+                    <string>&amp;Basics</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -117,7 +117,7 @@
                                     <cstring>radioSubdirs</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Subdirectories</string>
+                                    <string>S&amp;ubdirectories</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This project holds subdirectories</string>
@@ -181,7 +181,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>Browse...</string>
+                                    <string>&amp;Browse...</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Browse</string>
@@ -279,7 +279,7 @@
                             <cstring>checkDontInheritConfig</cstring>
                         </property>
                         <property name="text">
-                            <string>Do not inherit the configuration options of top level projects</string>
+                            <string>Do &amp;not inherit the configuration options of top level projects</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string></string>
@@ -486,7 +486,7 @@
                                             <cstring>pluginRadio</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Plugin</string>
+                                            <string>Pl&amp;ugin</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -507,10 +507,10 @@
                                             <bool>true</bool>
                                         </property>
                                         <property name="text">
-                                            <string>Make libtool archive</string>
+                                            <string>Ma&amp;ke libtool archive</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Alt+K</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Support required for X11 application or library</string>
@@ -562,17 +562,17 @@
                                             <bool>true</bool>
                                         </property>
                                         <property name="text">
-                                            <string>Build as DLL</string>
+                                            <string>&amp;Build as DLL</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Alt+B</string>
                                         </property>
                                     </widget>
                                 </hbox>
                             </widget>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout29</cstring>
+                                    <cstring>layout32</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
@@ -594,6 +594,23 @@
                                             <cstring>m_targetLibraryVersion</cstring>
                                         </property>
                                     </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer20</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>231</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
                                 </hbox>
                             </widget>
                         </vbox>
@@ -622,7 +639,7 @@
                     <cstring>incaddTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Includes</string>
+                    <string>I&amp;ncludes</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -639,23 +656,6 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer2_3</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>insideIncMoveUpBtn</cstring>
@@ -737,23 +737,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer1_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>30</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>outsideIncAddBtn</cstring>
@@ -820,7 +803,7 @@
                     <cstring>libAddTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Libraries</string>
+                    <string>Libr&amp;aries</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -837,7 +820,7 @@
                             <widget class="QListView">
                                 <column>
                                     <property name="text">
-                                        <string>Library Directories Outside Project</string>
+                                        <string>External Libraries</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -945,7 +928,7 @@
                             <widget class="QListView">
                                 <column>
                                     <property name="text">
-                                        <string>Link Libraries Outside Project</string>
+                                        <string>Internal Libraries</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -1109,211 +1092,278 @@
                     <cstring>depTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Dependencies</string>
+                    <string>&amp;Dependencies</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QListView" row="1" column="0">
-                        <column>
-                            <property name="text">
-                                <string>Targets in Project</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>intDeps_view</cstring>
+                            <cstring>layout26</cstring>
                         </property>
-                        <property name="resizeMode">
-                            <enum>LastColumn</enum>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="1" column="1">
-                        <property name="name">
-                            <cstring>Layout9_3_2</cstring>
-                        </property>
-                        <vbox>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <spacer>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Targets in Project</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
                                 <property name="name">
-                                    <cstring>Spacer5_2_2_2</cstring>
+                                    <cstring>intDeps_view</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>intMoveUp_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move &amp;Up</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
                                 </property>
                             </widget>
-                            <widget class="KPushButton">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>intMoveDown_button</cstring>
+                                    <cstring>Layout9_3_2</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Move &amp;Down</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
-                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>intMoveUp_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move &amp;Up</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+U</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>intMoveDown_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move &amp;Down</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer6_2_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
                             </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer6_2_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </vbox>
+                        </hbox>
                     </widget>
-                    <widget class="QListView" row="3" column="0">
-                        <column>
-                            <property name="text">
-                                <string>Miscellaneous Targets</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>extDeps_view</cstring>
+                            <cstring>layout27</cstring>
                         </property>
-                        <property name="resizeMode">
-                            <enum>LastColumn</enum>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="3" column="1">
-                        <property name="name">
-                            <cstring>layout9_2</cstring>
-                        </property>
-                        <vbox>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <spacer>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Miscellaneous Targets</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
                                 <property name="name">
-                                    <cstring>Spacer7_2_2</cstring>
+                                    <cstring>extDeps_view</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extAdd_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Add...</string>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
                                 </property>
                             </widget>
-                            <widget class="KPushButton">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>extRemove_button</cstring>
+                                    <cstring>layout9_2</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>&amp;Remove</string>
-                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>extAdd_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add...</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>extRemove_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>extEdit_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Edit</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>extMoveUp_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move U&amp;p</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>extMoveDown_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move Dow&amp;n</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer8_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>64</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
                             </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extEdit_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Edit</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extMoveUp_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move U&amp;p</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extMoveDown_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move Dow&amp;n</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer8_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>64</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </vbox>
+                        </hbox>
                     </widget>
-                </grid>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout28_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Order in Which Sub Projects Are Built</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>buildorder_listview</cstring>
+                                </property>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>Layout9_2</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>buildmoveup_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move &amp;Up</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+U</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>buildmovedown_button</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move &amp;Down</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+D</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer3_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>buildOptsTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Build</string>
+                    <string>Bu&amp;ild Options</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1332,7 +1382,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Compiler</string>
+                            <string>Compiler Options</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -1420,7 +1470,7 @@
                             <cstring>groupBox8</cstring>
                         </property>
                         <property name="title">
-                            <string>Intermediate Files</string>
+                            <string>Intermediate File Directories</string>
                         </property>
                         <hbox>
                             <property name="name">
@@ -1565,104 +1615,10 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>buildOrderTab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Build Order</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout14</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Order in Which Sub Projects Are Built</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>buildorder_listview</cstring>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>Layout9_2</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>buildmoveup_button</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move &amp;Up</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+U</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>buildmovedown_button</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move &amp;Down</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+D</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer3_2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
                     <cstring>custVarsTab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Custom Variables</string>
+                    <string>Custom &amp;Variables</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -1720,23 +1676,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer7_2_2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>107</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
                                     <widget class="QLayoutWidget">
                                         <property name="name">
                                             <cstring>layout22</cstring>
@@ -1873,6 +1812,216 @@
         <slot>reject()</slot>
     </connection>
     <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>updateProjectConfiguration()</slot>
+    </connection>
+    <connection>
+        <sender>varEdit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>editCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>varMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>upCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>varMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>downCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>varRemove_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>removeCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>varAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>addCustomValueClicked()</slot>
+    </connection>
+    <connection>
+        <sender>customVariables</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>newCustomVariableActive()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extEdit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extEdit_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extRemove_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extRemove_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extAdd_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncEditBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncEditClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncRemoveBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncRemoveClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideIncAddBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideIncAddClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveDownClicked()</slot>
+    </connection>
+    <connection>
+        <sender>insideIncMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>insideIncMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>staticRadio</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>slotStaticLibClicked(int)</slot>
+    </connection>
+    <connection>
+        <sender>checkInstallTarget</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>slotInstallTargetClicked()</slot>
+    </connection>
+    <connection>
         <sender>Browse</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
@@ -1889,228 +2038,6 @@
         <signal>stateChanged(int)</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>templateLibraryClicked(int)</slot>
-    </connection>
-    <connection>
-        <sender>insideIncMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideIncMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideIncMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideIncMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideLibMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>insideLibMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>insideLibMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncAddBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncAddClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncRemoveBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncRemoveClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibAddBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibAddClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibRemoveBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibRemoveClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>updateProjectConfiguration()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibEditBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibEditClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideIncEditBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideIncEditClicked()</slot>
-    </connection>
-    <connection>
-        <sender>staticRadio</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>slotStaticLibClicked(int)</slot>
-    </connection>
-    <connection>
-        <sender>checkInstallTarget</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>slotInstallTargetClicked()</slot>
-    </connection>
-    <connection>
-        <sender>intMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>intMoveUp_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>intMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>intMoveDown_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extAdd_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extAdd_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extRemove_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extRemove_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extEdit_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extEdit_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extMoveUp_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>extMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>extMoveDown_button_clicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirAddBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirAddClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirRemoveBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirRemoveClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirEditBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirEditClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirMoveUpBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>outsideLibDirMoveDownBtn</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>outsideLibDirMoveDownClicked()</slot>
-    </connection>
-    <connection>
-        <sender>varAdd_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>addCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>varRemove_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>removeCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>varMoveDown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>upCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>varMoveUp_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>downCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>customVariables</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>newCustomVariableActive()</slot>
-    </connection>
-    <connection>
-        <sender>varEdit_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>editCustomValueClicked()</slot>
-    </connection>
-    <connection>
-        <sender>buildmoveup_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>buildorderMoveUpClicked()</slot>
-    </connection>
-    <connection>
-        <sender>buildmovedown_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>buildorderMoveDownClicked()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -2186,9 +2113,6 @@
     <tabstop>objdir_url</tabstop>
     <tabstop>idlCmdEdit</tabstop>
     <tabstop>idlCmdOptionsEdit</tabstop>
-    <tabstop>buildorder_listview</tabstop>
-    <tabstop>buildmoveup_button</tabstop>
-    <tabstop>buildmovedown_button</tabstop>
     <tabstop>customVariables</tabstop>
     <tabstop>varAdd_button</tabstop>
     <tabstop>varRemove_button</tabstop>
@@ -2288,6 +2212,8 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
@@ -2303,8 +2229,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>

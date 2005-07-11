@@ -848,7 +848,6 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
       }
 
   }
-  	else buildOrderTab->setEnabled(false);
 }
 
 void ProjectConfigurationDlg::updateLibDirAddControl()
@@ -920,7 +919,6 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
   if (radioLibrary->isChecked())
   {
 //    staticRadio->setChecked(true);
-    TabBuild->setTabEnabled(buildOrderTab, false);
     TabBuild->setTabEnabled(custVarsTab, true);
     TabBuild->setTabEnabled(depTab,true);
     TabBuild->setTabEnabled(libAddTab,true);
@@ -936,7 +934,6 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
 {
   if (radioSubdirs->isChecked())
   {
-    TabBuild->setTabEnabled(buildOrderTab, true);
     TabBuild->setTabEnabled(custVarsTab, true);
     TabBuild->setTabEnabled(depTab,false);
     TabBuild->setTabEnabled(libAddTab,false);
@@ -946,7 +943,6 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
   }
   else
   {
-    TabBuild->setTabEnabled(buildOrderTab, false);
     TabBuild->setTabEnabled(custVarsTab, true);
     TabBuild->setTabEnabled(depTab,true);
     TabBuild->setTabEnabled(libAddTab,true);

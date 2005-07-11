@@ -37,6 +37,8 @@
 #include "newwidgetdlg.h"
 #include "domutil.h"
 
+#include "qmakeast.h"
+
 class TrollProjectPart;
 class KListView;
 class SubqmakeprojectItem;
@@ -50,40 +52,38 @@ class FileBuffer;
  */
 struct ProjectConfiguration
 {
-  QMakeTemplate   m_template;
-  QMakeBuildMode  m_buildMode;
-  QMakeWarnings   m_warnings;
-  int             m_requirements;
-  QString         m_destdir;
-  QString         m_target;
-  QString         m_subdirName;
-  QStringList     m_includepath;
-  QString         m_libraryversion;
-  QStringList     m_librarypath;
-  QString         m_objectpath;
-  QString         m_uipath;
-  QString         m_mocpath;
-  QString         m_makefile;
-  QStringList     m_defines;
-  QStringList     m_cxxflags_debug;
-  QStringList     m_cxxflags_release;
-  QStringList     m_lflags_debug;
-  QStringList     m_lflags_release;
-  QStringList     m_libadd;
-  QStringList     m_incadd;
+	AssignmentAST   *m_template;
+	AssignmentAST   *m_buildMode;
+	AssignmentAST   *m_warnings;
+	AssignmentAST   *m_requirements;
+	AssignmentAST   *m_destdir;
+	AssignmentAST   *m_target;
+	AssignmentAST   *m_subdirName;
+	AssignmentAST   *m_includepath;
+	AssignmentAST   *m_libraryversion;
+	AssignmentAST   *m_librarypath;
+	AssignmentAST   *m_objectpath;
+	AssignmentAST   *m_uipath;
+	AssignmentAST   *m_mocpath;
+	AssignmentAST   *m_makefile;
+	AssignmentAST   *m_defines;
+	AssignmentAST   *m_cxxflags_debug;
+	AssignmentAST   *m_cxxflags_release;
+	AssignmentAST   *m_lflags_debug;
+	AssignmentAST   *m_lflags_release;
+	AssignmentAST   *m_libadd;
+	AssignmentAST   *m_incadd;
+	AssignmentAST   *idl_compiler;
+	AssignmentAST   *idl_options;
+	AssignmentAST   *m_prjdeps;
+	AssignmentAST   *m_incdeps;
+	AssignmentAST   *m_target_install_path;
 
-  QString         idl_compiler;
-  QString         idl_options;
-  QStringList     m_prjdeps;
-  QStringList     m_incdeps;
-  bool            m_inheritconfig;
-  bool            m_target_install;
-  QString         m_target_install_path;
-
-  QMap<QString,QString> m_variables;
-  QStringList    m_removed_variables;
-  QStringList    m_projectInclude;
-
+	QMap<QString,AssignmentAST*> m_variables;
+	QStringList      m_removed_variables;
+	AssignmentAST   *m_projectInclude;
+	bool             m_inheritconfig;
+	bool             m_target_install;
 };
 
 

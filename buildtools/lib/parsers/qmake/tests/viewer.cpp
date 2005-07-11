@@ -31,6 +31,7 @@
 
 #include <qmakeast.h>
 #include <qmakedriver.h>
+#include <qmakeastvisitor.h>
 
 using namespace QMake;
 
@@ -46,7 +47,7 @@ Viewer::Viewer(QWidget *parent, const char *name)
             files->insertItem(str.readLine());
     }
     ast->setSorting(-1);
-    parentProject.push((QListViewItem*)0);
+//    parentProject.push((QListViewItem*)0);
 }
 
 void Viewer::addAll_clicked()
@@ -70,13 +71,13 @@ void Viewer::choose_clicked()
 void Viewer::files_currentChanged(QListBoxItem* item)
 {
     ast->clear();
-    
+
     QFile f(item->text());
     f.open(IO_ReadOnly);
     QTextStream str(&f);
     source->setText(str.read());
     f.close();
-    
+
     int result = QMake::Driver::parseFile(item->text().ascii(), &projectAST);
     if (projectAST && (result == 0))
     {
@@ -96,57 +97,91 @@ void Viewer::tabWidget2_selected(const QString& text)
     }
 }
 
+class ViewerVisitor: public ASTVisitor {
+public:
+    ViewerVisitor(Viewer *v): ASTVisitor()
+    {
+        this->v = v;
+        parentProject.push((QListViewItem*)0);
+    }
+
+    virtual void processProject(ProjectAST *project)
+    {
+        ASTVisitor::processProject(project);
+    }
+
+    virtual void enterRealProject(ProjectAST *project)
+    {
+        QListViewItem *projectIt;
+        if (!parentProject.top())
+        {
+            projectIt = new QListViewItem(v->ast, "Project");
+            projectIt->setOpen(true);
+            parentProject.push(projectIt);
+        }
+
+        ASTVisitor::enterRealProject(project);
+    }
+    virtual void enterScope(ProjectAST *scope)
+    {
+        QListViewItem *projectIt = new QListViewItem(parentProject.top(), scope->scopedID, "scope");
+        parentProject.push(projectIt);
+        ASTVisitor::enterScope(scope);
+    }
+    virtual void leaveScope(ProjectAST *scope)
+    {
+        parentProject.pop();
+    }
+    virtual void enterFunctionScope(ProjectAST *fscope)
+    {
+        QListViewItem *projectIt = new QListViewItem(parentProject.top(),
+            fscope->scopedID + "(" + fscope->args + ")", "function scope");
+        parentProject.push(projectIt);
+        ASTVisitor::enterFunctionScope(fscope);
+    }
+    virtual void leaveFunctionScope(ProjectAST *fscope)
+    {
+        parentProject.pop();
+    }
+    virtual void processAssignment(AssignmentAST *assignment)
+    {
+        QListViewItem *item = new QListViewItem(parentProject.top(),
+                assignment->scopedID, assignment->op, assignment->values.join(""),
+                "assignment");
+        item->setMultiLinesEnabled(true);
+
+        ASTVisitor::processAssignment(assignment);
+    }
+    virtual void processNewLine(NewLineAST *newline)
+    {
+        new QListViewItem(parentProject.top(), "<newline>");
+        ASTVisitor::processNewLine(newline);
+    }
+    virtual void processComment(CommentAST *comment)
+    {
+        new QListViewItem(parentProject.top(), "<comment>");
+        ASTVisitor::processComment(comment);
+    }
+    virtual void processFunctionCall(FunctionCallAST *fcall)
+    {
+        new QListViewItem(parentProject.top(), "<funccall>");
+        ASTVisitor::processFunctionCall(fcall);
+    }
+    virtual void processInclude(IncludeAST *include)
+    {
+        new QListViewItem(parentProject.top(), "<include>", include->projectName);
+        QMake::ASTVisitor::processInclude(include);
+    }
+
+    Viewer *v;
+    QValueStack<QListViewItem *> parentProject;
+};
+
+
 void Viewer::processAST(QMake::ProjectAST *projectAST, QListViewItem *globAfter)
 {
-    QListViewItem *projectIt;
-    if (!parentProject.top())
-        projectIt = new QListViewItem(ast, "Project");
-    else
-    {
-        if (projectAST->isScope())
-            projectIt = new QListViewItem(parentProject.top(), globAfter, projectAST->scopedID);
-        if (projectAST->isFunctionScope())
-            projectIt = new QListViewItem(parentProject.top(), globAfter, 
-                projectAST->scopedID + "(" + projectAST->args + ")");
-    }
-    projectIt->setOpen(true);
-    
-    QListViewItem *after = 0;
-    for (QValueList<QMake::AST*>::const_iterator it = projectAST->statements.constBegin();
-            it != projectAST->statements.constEnd(); ++it)
-    {
-        AST *ast = *it;
-        if (ast == 0)
-            continue;
-        switch (ast->nodeType()) {
-            case AST::AssignmentAST: {
-                AssignmentAST *assignmentAST = static_cast<QMake::AssignmentAST*>(ast);
-                QListViewItem *item = new QListViewItem(projectIt, after,
-                        assignmentAST->scopedID, assignmentAST->op, assignmentAST->values.join(""));
-                item->setMultiLinesEnabled(true);
-                after = item; }
-                break;
-                
-            case AST::NewLineAST:
-//                 after = new QListViewItem(projectIt, after, "<newline>");
-                break;
-                
-            case AST::CommentAST:
-//                 after = new QListViewItem(projectIt, after, "<comment>");
-                break;
-                
-            case AST::ProjectAST: {
-                ProjectAST *projectAST = static_cast<QMake::ProjectAST*>(ast);
-                parentProject.push(projectIt);
-                processAST(projectAST, after);
-                parentProject.pop(); }
-                break;
-        
-            case AST::FunctionCallAST:
-                after = new QListViewItem(projectIt, after, "<funccall>");
-                break;
-        }
-    }
+    ViewerVisitor visitor(this);
+    visitor.processProject(projectAST);
 }
 
 #include "viewer.moc"

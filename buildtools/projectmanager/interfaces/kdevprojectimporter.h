@@ -27,7 +27,8 @@
 class KDevProjectEditor;
 class KDevProject;
 class KDialogBase;
-
+class QPopupMenu;
+class Context;
 /**
 @author Roberto Raggi
 
@@ -74,6 +75,10 @@ public:
     /** @return The list of the makefiles from the item model @p dom.
         @note The makefile list must contains absolute file names */
     virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
+	/**
+	 * Will populate a popup menu with the current context via the default importer
+	 */
+	virtual void fillContextMenu(QPopupMenu *popup, const Context *context) {;}
     
 signals:
     void projectItemConfigWidget(ProjectItemDom dom, KDialogBase *dialog);

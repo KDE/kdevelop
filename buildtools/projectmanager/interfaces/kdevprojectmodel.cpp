@@ -26,9 +26,9 @@ QString ProjectModelItem::shortDescription() const
 }
 
 // ---------------------------------------------------------------------------
-ProjectFolderList ProjectFolderModel::folderList() const    
+ProjectFolderList ProjectFolderModel::folderList() const
 {
-    return m_folders.values();
+    return m_foldersList;
 }
 
 ProjectFolderDom ProjectFolderModel::folderByName(const QString &name) const
@@ -39,16 +39,18 @@ ProjectFolderDom ProjectFolderModel::folderByName(const QString &name) const
 void ProjectFolderModel::addFolder(ProjectFolderDom dom)
 {
     m_folders.insert(dom->name(), dom);
+    m_foldersList.append(dom);
 }
 
 void ProjectFolderModel::removeFolder(ProjectFolderDom dom)
 {
     m_folders.remove(dom->name());
+    m_foldersList.remove(dom);
 }
 
-ProjectFileList ProjectFolderModel::fileList() const    
+ProjectFileList ProjectFolderModel::fileList() const
 {
-    return m_files.values();
+    return m_filesList;
 }
 
 ProjectFileDom ProjectFolderModel::fileByName(const QString &name) const
@@ -59,16 +61,18 @@ ProjectFileDom ProjectFolderModel::fileByName(const QString &name) const
 void ProjectFolderModel::addFile(ProjectFileDom dom)
 {
     m_files.insert(dom->name(), dom);
+    m_filesList.append(dom);
 }
 
 void ProjectFolderModel::removeFile(ProjectFileDom dom)
 {
     m_files.remove(dom->name());
+    m_filesList.remove(dom);
 }
 
-ProjectTargetList ProjectFolderModel::targetList() const    
+ProjectTargetList ProjectFolderModel::targetList() const
 {
-    return m_targets.values();
+    return m_targetsList;
 }
 
 ProjectTargetDom ProjectFolderModel::targetByName(const QString &name) const
@@ -79,11 +83,13 @@ ProjectTargetDom ProjectFolderModel::targetByName(const QString &name) const
 void ProjectFolderModel::addTarget(ProjectTargetDom dom)
 {
     m_targets.insert(dom->name(), dom);
+    m_targetsList.append(dom);
 }
 
 void ProjectFolderModel::removeTarget(ProjectTargetDom dom)
 {
     m_targets.remove(dom->name());
+    m_targetsList.remove(dom);
 }
 
 // ---------------------------------------------------------------------------
@@ -109,16 +115,16 @@ void ProjectModel::addItem(ProjectItemDom dom)
 {
     if (!dom->toTarget())
         m_items.insert(dom->name(), dom);
-    
+
     if (ProjectFolderDom folder = dom->toFolder()) {
         ProjectFolderList folder_list = folder->folderList();
         for (ProjectFolderList::Iterator it=folder_list.begin(); it!=folder_list.end(); ++it)
             addItem((*it)->toItem());
-            
+
         ProjectTargetList target_list = folder->targetList();
         for (ProjectTargetList::Iterator it=target_list.begin(); it!=target_list.end(); ++it)
-            addItem((*it)->toItem());        
-            
+            addItem((*it)->toItem());
+
         ProjectFileList file_list = folder->fileList();
         for (ProjectFileList::Iterator it=file_list.begin(); it!=file_list.end(); ++it)
             addItem((*it)->toItem());
@@ -133,16 +139,16 @@ void ProjectModel::removeItem(ProjectItemDom dom)
 {
     if (!dom->toTarget())
         m_items.remove(dom->name());
-    
+
     if (ProjectFolderDom folder = dom->toFolder()) {
         ProjectFolderList folder_list = folder->folderList();
         for (ProjectFolderList::Iterator it=folder_list.begin(); it!=folder_list.end(); ++it)
             removeItem((*it)->toItem());
-            
+
         ProjectTargetList target_list = folder->targetList();
         for (ProjectTargetList::Iterator it=target_list.begin(); it!=target_list.end(); ++it)
             removeItem((*it)->toItem());
-            
+
         ProjectFileList file_list = folder->fileList();
         for (ProjectFileList::Iterator it=file_list.begin(); it!=file_list.end(); ++it)
             removeItem((*it)->toItem());
@@ -153,9 +159,11 @@ void ProjectModel::removeItem(ProjectItemDom dom)
     }
 }
 
-ProjectFileList ProjectTargetModel::fileList() const    
+// ---------------------------------------------------------------------------
+
+ProjectFileList ProjectTargetModel::fileList() const
 {
-    return m_files.values();
+    return m_filesList;
 }
 
 ProjectFileDom ProjectTargetModel::fileByName(const QString &name) const
@@ -166,11 +174,13 @@ ProjectFileDom ProjectTargetModel::fileByName(const QString &name) const
 void ProjectTargetModel::addFile(ProjectFileDom dom)
 {
     m_files.insert(dom->name(), dom);
+    m_filesList.append(dom);
 }
 
 void ProjectTargetModel::removeFile(ProjectFileDom dom)
 {
     m_files.remove(dom->name());
+    m_filesList.append(dom);
 }
 
 QString ProjectFileModel::shortDescription() const

@@ -42,7 +42,7 @@ public slots:
     virtual void addAll_clicked();
 private:
     QMake::ProjectAST *projectAST;
-    QValueStack<QListViewItem *> parentProject;
+    friend class ViewerVisitor;
 };
 
 #endif

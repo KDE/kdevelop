@@ -38,7 +38,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kurl.h>
-
+#include <kmimetype.h>
 #include <qlayout.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -431,20 +431,21 @@ void ProjectViewItem::setup()
 {
     QListViewItem::setup();
     
-    if (dom()) {    
-        if (ProjectWorkspaceDom workspace = dom()->toWorkspace())
+    if (dom()) {
+        if (dom()->hasAttribute("Icon"))
+             setPixmap(0, SmallIcon(dom()->attribute("Icon").toString()));
+        else if (ProjectWorkspaceDom workspace = dom()->toWorkspace())
             setPixmap(0, SmallIcon("window"));
-        else if (ProjectFolderDom folder = dom()->toFolder())
-        {
-            if (dom()->hasAttribute("Icon"))
-                setPixmap(0, SmallIcon(dom()->attribute("Icon").toString()));
-            else
-                setPixmap(0, SmallIcon("folder"));
-        }
         else if (ProjectTargetDom target = dom()->toTarget())
             setPixmap(0, SmallIcon("target_kdevelop"));
+        else if (ProjectFolderDom folder = dom()->toFolder())
+                setPixmap(0, SmallIcon("folder"));
         else if (ProjectFileDom file = dom()->toFile())
-            setPixmap(0, SmallIcon("document"));
+        {
+	        setPixmap(0, KMimeType::pixmapForURL( file->name(), 0, KIcon::Small ) );
+        }
+        else
+                setPixmap(0, SmallIcon("document")); // Use kio's mime type to get file type.
     }
 }
 
@@ -718,7 +719,8 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
             urls.append(folder->name());
             FileContext fileContext(urls);
             part()->core()->fillContextMenu(&menu, &fileContext);
-
+            part()->defaultImporter()->fillContextMenu( &menu, &fileContext );
+	        
             menu.insertItem(i18n("Edit"), 1000);
             
             if (part()->defaultBuilder()) {
@@ -750,7 +752,6 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
         return;
         
     ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
-        
     if (ProjectFileDom file = projectItem->dom()->toFile()) {
         KPopupMenu menu(this);
         menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
@@ -762,7 +763,7 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
         urls.append(file->name());
         FileContext fileContext(urls);
         part()->core()->fillContextMenu(&menu, &fileContext);
-        
+        part()->defaultImporter()->fillContextMenu( &menu, &fileContext );
         if (part()->defaultBuilder()) {
             menu.insertSeparator();
             menu.insertItem(i18n("Build"), 1010);
@@ -776,6 +777,9 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
             
             default: break;
         } // end switch
+    }
+    else if (ProjectTargetDom target = projectItem->dom()->toTarget()) {
+	    kdDebug(9024) << "Target" << endl;
     }
 }
 

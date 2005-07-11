@@ -68,7 +68,17 @@ void ProjectAST::writeBack(QString &buffer)
     AST::writeBack(buffer);
     if (isScope())
         buffer += indentation() + "}";
-    if (isFunctionScope() && (statements.count() > 0))
+
+    bool hasActualStatements = false;
+    for (QValueList<QMake::AST*>::const_iterator it = statements.begin(); it != statements.end(); ++it)
+    {
+        if ((*it)->nodeType() != AST::IncludeAST)
+        {
+            hasActualStatements = true;
+            break;
+        }
+    }
+    if (isFunctionScope() && (hasActualStatements))
         buffer += indentation() + "}";
 }
 
@@ -112,4 +122,11 @@ void FunctionCallAST::writeBack(QString &buffer)
         assignment->writeBack(buffer);
 }
 
+//IncludeAST
+
+void IncludeAST::writeBack(QString &/*buffer*/)
+{
 }
+
+}
+

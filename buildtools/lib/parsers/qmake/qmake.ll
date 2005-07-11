@@ -31,7 +31,7 @@ There are 3 types of identifiers recognized by this lexer:
 at the left of the operator in assignments (like "SOURCES" in "SOURCES+=foo.cpp goo.cpp");
 -id_list: those are "value list identifiers" at the right side in assignments
 (like "foo.cpp goo.cpp" in "SOURCES+=foo.cpp goo.cpp");
--id_args: function arguments recognized as one identifier 
+-id_args: function arguments recognized as one identifier
 (example: ""${QMAKE_FILE} is intended only for Windows!""
 in "!win32-*:!wince-*:error("${QMAKE_FILE} is intended only for Windows!")" statements).
 .
@@ -76,27 +76,27 @@ cont              \\{ws}*\n
     yylval.value = yylval.value.mid(0, yylval.value.findRev("\\")-1);
     unput('\\');
     BEGIN(INITIAL);
-    return (ID_LIST); 
+    return (ID_LIST);
     }
 
-<list>{comment_cont} { 
+<list>{comment_cont} {
     yylval.value = yytext;
     BEGIN(list);
-    return (LIST_COMMENT); 
+    return (LIST_COMMENT);
     }
 
 <list>{id_list_single} {
     yylval.value = yytext;
     BEGIN(INITIAL);
-    return (ID_LIST_SINGLE); 
+    return (ID_LIST_SINGLE);
     }
-    
-<funcargs>{id_args} { 
+
+<funcargs>{id_args} {
     yylval.value = yytext;
     yylval.value = yylval.value.mid(0, yylval.value.length()-1);
     unput(')');
     BEGIN(INITIAL);
-    return (ID_ARGS); 
+    return (ID_ARGS);
     }
 
 "="                      { BEGIN(list); yylval.value = yytext; return EQ; }

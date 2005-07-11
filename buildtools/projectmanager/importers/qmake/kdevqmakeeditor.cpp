@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY(libqmakeimporter, KGenericFactory<KDevQMakeEditor>("k
 
 using namespace QMake;
 
-KDevQMakeEditor::KDevQMakeEditor(QObject* parent, const char* name, const QStringList &): 
+KDevQMakeEditor::KDevQMakeEditor(QObject* parent, const char* name, const QStringList &):
     KDevProjectEditor(parent, name), m_ast(0)
 {
     m_project = ::qt_cast<KDevProject*>(parent);
@@ -50,14 +50,14 @@ bool KDevQMakeEditor::hasFeature(Features f) const
     return f & features();
 }
 
-bool KDevQMakeEditor::addFile(ProjectFileDom /*file*/, ProjectFolderDom /*parent*/)
+bool KDevQMakeEditor::addFile(ProjectFileDom file, ProjectFolderDom parent)
 {
-    return false;
+	return false;
 }
 
-bool KDevQMakeEditor::addFile(ProjectFileDom /*file*/, ProjectTargetDom /*parent*/)
-{
-    return false;
+bool KDevQMakeEditor::addFile( ProjectFileDom file, ProjectTargetDom parent )
+{	
+	return false;
 }
 
 bool KDevQMakeEditor::addFolder(ProjectFolderDom /*folder*/, ProjectFolderDom /*parent*/)
@@ -102,45 +102,47 @@ KDevProjectEditor * KDevQMakeEditor::editor() const
 
 ProjectItemDom KDevQMakeEditor::import(ProjectModel *model, const QString &fileName)
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(9024) << k_funcinfo << endl;
     QFileInfo fileInfo(fileName);
-    
+
     ProjectItemDom item;
-    
+
     if (fileInfo.isDir()) {
         QMakeFolderDom folder = model->create<QMakeFolderModel>();
         folder->setName(fileName);
         item = folder->toItem();
-        
+
         //building the project ast
         folder->ast = buildProjectAST(fileName);
-        
+        folder->setAbsPath(fileName);
+
     } else if (fileInfo.isFile()) {
         QMakeFileDom file = model->create<QMakeFileModel>();
         file->setName(fileName);
+//         file->setAbsPath(fileName);
         item = file->toItem();
-        
+
         //creating ast for one file in case a filename is given
         //@fixme it's unclear when does this situation happen
         if (m_ast)
             delete m_ast;
         QMake::Driver::parseFile(fileName, &m_ast);
     }
-    
+
     return item;
 }
 
 ProjectFolderList KDevQMakeEditor::parse(ProjectFolderDom dom)
-{    
-    kdDebug() << k_funcinfo << endl;
+{
+    kdDebug(9024) << k_funcinfo << endl;
     ProjectFolderList folderList;
     if (!dom)
         return folderList;
-    
-    kdDebug() << 1 << endl;
+
+    kdDebug(9024) << 1 << endl;
     QMakeFolderDom qmakeDom = QMakeFolderModel::from(dom);
-    kdDebug() << 2 << " folder is: " << qmakeDom->name() << ", ast is: " << qmakeDom->ast << endl;
-    
+    kdDebug(9024) << 2 << " folder is: " << qmakeDom->name() << ", ast is: " << qmakeDom->ast << endl;
+
     //-------------
     //adding scopes and function scopes
     for (QValueList<QMake::AST*>::iterator it = qmakeDom->ast->statements.begin();
@@ -150,33 +152,35 @@ ProjectFolderList KDevQMakeEditor::parse(ProjectFolderDom dom)
             newFolderDom(folderList, dom, *it);
     }
     //-------------
-    kdDebug() << 3 << endl;
-    
-    QDir d(dom->name());
-    if (d.exists())
+
+    QDir d(qmakeDom->absPath());
+    if (!qmakeDom->absPath().isEmpty() && d.exists())
     {
-    kdDebug() << 4 << endl;
+    kdDebug(9024) << 4 << endl;
         const QFileInfoList *subdirs = d.entryInfoList(QDir::Dirs);
-        for (QFileInfoList::const_iterator it = subdirs->constBegin(); 
+        for (QFileInfoList::const_iterator it = subdirs->constBegin();
             it != subdirs->constEnd(); ++it)
         {
-    kdDebug() << 5 << endl;
+    kdDebug(9024) << 5 << endl;
             QFileInfo *info = *it;
             if (info->isDir() && (info->fileName() != ".") && (info->fileName() != "..") )
             {
-    kdDebug() << 6 << " info: " << info->fileName() << endl;
+    kdDebug(9024) << 6 << " info: " << info->fileName() << endl;
                 newFolderDom(folderList, dom, 0, info);
-    kdDebug() << 7 << endl;
+    kdDebug(9024) << 7 << endl;
             }
         }
     }
-    
+
     return folderList;
 }
 
 QString KDevQMakeEditor::findMakefile(ProjectFolderDom dom) const
 {
-    return dom->name() + "/" + dom->name() + ".pro";
+	kdDebug(9024) << "Makefile: " << dom->name() + "/" + dom->name() + ".pro";
+	QString path = dom->name();
+	QString project = path.section('/',-1);
+	return path + "/" + project + ".pro";
 }
 
 QStringList KDevQMakeEditor::findMakefiles(ProjectFolderDom /*dom*/) const
@@ -184,4 +188,8 @@ QStringList KDevQMakeEditor::findMakefiles(ProjectFolderDom /*dom*/) const
     return "";
 }
 
+void KDevQMakeEditor::fillContextMenu(QPopupMenu *popup, const Context *context)
+{
+	kdDebug(9024) << "Ask for context menu." << endl;;
+}
 #include "kdevqmakeeditor.moc"

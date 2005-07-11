@@ -47,13 +47,14 @@ public:
         AssignmentAST     /**<Variable assignment.*/,
         NewLineAST        /**<Line feed.*/,
         CommentAST        /**<Comment.*/,
+        IncludeAST        /**<.pri include.*/,
         FunctionCallAST   /**<Simple function call without scope.*/
     };
-    
+
     /**Constructs AST with given node type.*/
     AST(NodeType nodeType): m_nodeType(nodeType), m_depth(0) {}
     virtual ~AST();
-    
+
     /**Adds child AST node to this node. Despite this function is virtual,
     reimplementations should call it to make automatic destruction of
     AST tree possible.*/
@@ -62,21 +63,21 @@ public:
     This is a default implementation which iterates over child nodes
     and calls writeBack for each child node.*/
     virtual void writeBack(QString &buffer);
-    
+
     /**@return The type of the node.*/
     virtual NodeType nodeType() const { return m_nodeType; }
-    
+
     /**Sets the depth of the node in AST.*/
     void setDepth(int depth) { m_depth = depth; }
     /**@return The depth of the node in AST.*/
     int depth() const { return m_depth; }
     /**@return The indentation string based on node depth.*/
     virtual QString indentation();
-        
+
 protected:
     NodeType m_nodeType;
     QValueList<AST*> m_children;
-    
+
 private:
     int m_depth;
 
@@ -99,16 +100,16 @@ var=value
 class ProjectAST: public AST {
 public:
     /**The kind of a project node.*/
-    enum Kind { 
-        Project        /**<Project*/, 
-        Scope          /**<Scope*/, 
+    enum Kind {
+        Project        /**<Project*/,
+        Scope          /**<Scope*/,
         FunctionScope  /**<FunctionScope*/,
         Empty          /**<Project does not exist, the AST is empty*/
     };
-    
+
     /**Constructs a project node of given @p kind.*/
     ProjectAST(Kind kind = Project): AST(AST::ProjectAST), m_kind(kind) {}
-    
+
     virtual void writeBack(QString &buffer);
     virtual void addChildAST(AST *node);
 
@@ -120,14 +121,14 @@ public:
     bool isFunctionScope() const { return m_kind == FunctionScope; }
     /**@return true if this node is empty.*/
     bool isEmpty() const { return m_kind == Empty; }
-    
+
     /**Scoped identifier (scope name or function name).*/
     QString scopedID;
     /**Function arguments. Empty for other kinds of projects.*/
     QString args;
     /**List of statements.*/
     QValueList<QMake::AST*> statements;
-    
+
 private:
     Kind m_kind;
 
@@ -176,7 +177,7 @@ Represents line feeds in files.
 class NewLineAST: public AST {
 public:
     NewLineAST(): AST(AST::NewLineAST) {}
-    
+
     virtual void writeBack(QString &buffer);
 
 };
@@ -189,9 +190,9 @@ Represents comments.
 class CommentAST: public AST {
 public:
     CommentAST(): AST(AST::CommentAST) {}
-    
+
     virtual void writeBack(QString &buffer);
-    
+
     /**Comment text.*/
     QString comment;
 
@@ -208,15 +209,28 @@ myfunc(args):VAR=foo
 class FunctionCallAST: public AST {
 public:
     FunctionCallAST(): AST(AST::FunctionCallAST), assignment(0) {}
-    
+
     virtual void writeBack(QString &buffer);
-    
+
     /**Assignment node.*/
     QMake::AssignmentAST *assignment;
     /**Function name as scoped identifier.*/
     QString scopedID;
     /**Function arguments.*/
     QString args;
+};
+
+/**
+Include AST node.
+Represents pri include.
+ */
+class IncludeAST: public AST {
+public:
+    IncludeAST(): AST(AST::IncludeAST) {}
+
+    virtual void writeBack(QString &buffer);
+
+    QString projectName;
 };
 
 }

@@ -139,6 +139,7 @@ SOURCES = foo #regognize me
 
 #include <qvaluestack.h>
 #include "qmakeast.h"
+#include <qregexp.h>
 
 #define YYSTYPE_IS_DECLARED
 
@@ -156,7 +157,7 @@ struct Result {
     AST *node;
     /**Type of semantic value for "multiline_values" grammar rule.
     Each line of multiline value is stored as a string in the list.
-    
+
     For example we have in .pro file:
     @code
     SOURCE = foo1.cpp \
@@ -188,7 +189,7 @@ ProjectAST is created and filled with statements.
 Parser creates root ProjectAST for a .pro file, pushes it onto the stack and starts
 adding statements. Each statement is added as a child StatementAST to the ProjectAST
 currently on the top in the stack.
- 
+
 When a scope or function scope statement is parsed, the child ProjectAST is created
 and pushed onto the stack. Therefore all statements which belong to the scope
 or function scope are added as childs to their direct parent (scope or function scope).
@@ -236,7 +237,7 @@ typedef int YYSTYPE;
 
 
 /* Line 214 of yacc.c.  */
-#line 239 "qmake_yacc.cpp"
+#line 240 "qmake_yacc.cpp"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -417,11 +418,11 @@ static const yysigned_char yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
-       0,   134,   134,   134,   141,   146,   149,   153,   157,   161,
-     165,   171,   181,   183,   184,   187,   191,   194,   195,   196,
-     197,   198,   202,   202,   202,   202,   202,   206,   205,   220,
-     219,   233,   243,   244,   247,   248,   252,   251,   264,   273,
-     278,   286
+       0,   135,   135,   135,   142,   147,   150,   154,   158,   162,
+     166,   172,   182,   184,   185,   188,   192,   195,   196,   197,
+     198,   199,   203,   203,   203,   203,   203,   207,   206,   221,
+     220,   243,   271,   272,   275,   276,   280,   279,   292,   301,
+     306,   314
 };
 #endif
 
@@ -1154,7 +1155,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 134 "qmake.yy"
+#line 135 "qmake.yy"
     {
         ProjectAST *projectAST = new ProjectAST();
         projects.push(projectAST);
@@ -1162,7 +1163,7 @@ yyreduce:
     break;
 
   case 4:
-#line 142 "qmake.yy"
+#line 143 "qmake.yy"
     {
             projects.top()->addChildAST(yyvsp[0].node);
             yyvsp[0].node->setDepth(depth);
@@ -1170,42 +1171,42 @@ yyreduce:
     break;
 
   case 6:
-#line 150 "qmake.yy"
+#line 151 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 7:
-#line 154 "qmake.yy"
+#line 155 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 8:
-#line 158 "qmake.yy"
+#line 159 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 9:
-#line 162 "qmake.yy"
+#line 163 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 10:
-#line 166 "qmake.yy"
+#line 167 "qmake.yy"
     {
             yyval.node = new NewLineAST();
         ;}
     break;
 
   case 11:
-#line 172 "qmake.yy"
+#line 173 "qmake.yy"
     {
             AssignmentAST *node = new AssignmentAST();
             node->scopedID = yyvsp[-2].value;
@@ -1216,49 +1217,49 @@ yyreduce:
     break;
 
   case 12:
-#line 182 "qmake.yy"
+#line 183 "qmake.yy"
     { yyval.value = yyvsp[-2].value + yyvsp[-1].value + yyvsp[0].value; ;}
     break;
 
   case 13:
-#line 183 "qmake.yy"
+#line 184 "qmake.yy"
     { yyval.value = yyvsp[-1].value + yyvsp[0].value; ;}
     break;
 
   case 15:
-#line 188 "qmake.yy"
+#line 189 "qmake.yy"
     {
             yyval.values.append(yyvsp[0].value);
         ;}
     break;
 
   case 16:
-#line 191 "qmake.yy"
+#line 192 "qmake.yy"
     { yyval.values.clear(); ;}
     break;
 
   case 17:
-#line 194 "qmake.yy"
+#line 195 "qmake.yy"
     { yyval.value = yyvsp[-1].value + " \\\n"; ;}
     break;
 
   case 18:
-#line 195 "qmake.yy"
+#line 196 "qmake.yy"
     { yyval.value = yyvsp[-1].value + "\n"; ;}
     break;
 
   case 19:
-#line 196 "qmake.yy"
+#line 197 "qmake.yy"
     { yyval.value = "\\\n"; ;}
     break;
 
   case 21:
-#line 198 "qmake.yy"
+#line 199 "qmake.yy"
     { yyval.value = ""; ;}
     break;
 
   case 27:
-#line 206 "qmake.yy"
+#line 207 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
             projects.push(projectAST);
@@ -1268,7 +1269,7 @@ yyreduce:
     break;
 
   case 28:
-#line 213 "qmake.yy"
+#line 214 "qmake.yy"
     {
             yyval.node = projects.pop();
             depth--;
@@ -1276,18 +1277,27 @@ yyreduce:
     break;
 
   case 29:
-#line 220 "qmake.yy"
+#line 221 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
             projects.top()->scopedID = yyvsp[-3].value;
             projects.top()->args = yyvsp[-1].value;
             depth++;
+
+            qWarning("%s", yyvsp[-3].value.ascii());
+            if (yyvsp[-3].value.contains("include"))
+            {
+                IncludeAST *includeAST = new IncludeAST();
+                includeAST->projectName = yyvsp[-1].value;
+                projects.top()->addChildAST(includeAST);
+                includeAST->setDepth(depth);
+            }
         ;}
     break;
 
   case 30:
-#line 229 "qmake.yy"
+#line 239 "qmake.yy"
     {
             yyval.node = projects.pop();
             depth--;
@@ -1295,28 +1305,46 @@ yyreduce:
     break;
 
   case 31:
-#line 234 "qmake.yy"
+#line 244 "qmake.yy"
     {
             FunctionCallAST *node = new FunctionCallAST();
             node->scopedID = yyvsp[-5].value;
             node->args = yyvsp[-3].value;
             node->assignment = static_cast<AssignmentAST*>(yyvsp[0].node);
             yyval.node = node;
+
+            if (yyvsp[-5].value.contains("include"))
+            {
+                IncludeAST *includeAST = new IncludeAST();
+                includeAST->projectName = yyvsp[-3].value;
+                projects.top()->addChildAST(includeAST);
+                includeAST->setDepth(depth);
+            }
+            if (yyvsp[0].value.contains("include"))
+            {
+                QRegExp r("include\\((.*)\\)");
+                r.search(yyvsp[0].value);
+                IncludeAST *includeAST = new IncludeAST();
+                includeAST->projectName = r.cap(1);
+                projects.top()->addChildAST(includeAST);
+                includeAST->setDepth(depth);
+            }
+
         ;}
     break;
 
   case 32:
-#line 243 "qmake.yy"
+#line 271 "qmake.yy"
     { yyval.value = yyvsp[0].value; ;}
     break;
 
   case 33:
-#line 244 "qmake.yy"
+#line 272 "qmake.yy"
     { yyval.value = ""; ;}
     break;
 
   case 36:
-#line 252 "qmake.yy"
+#line 280 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
             projects.push(projectAST);
@@ -1327,7 +1355,7 @@ yyreduce:
     break;
 
   case 37:
-#line 260 "qmake.yy"
+#line 288 "qmake.yy"
     {
             yyval.node = projects.pop();
             depth--;
@@ -1335,7 +1363,7 @@ yyreduce:
     break;
 
   case 38:
-#line 265 "qmake.yy"
+#line 293 "qmake.yy"
     {
             FunctionCallAST *node = new FunctionCallAST();
             node->scopedID = "else";
@@ -1346,14 +1374,14 @@ yyreduce:
     break;
 
   case 39:
-#line 273 "qmake.yy"
+#line 301 "qmake.yy"
     {
             yyval.node = new FunctionCallAST();
         ;}
     break;
 
   case 40:
-#line 279 "qmake.yy"
+#line 307 "qmake.yy"
     {
             CommentAST *node = new CommentAST();
             node->comment = yyvsp[-1].value + "\n";
@@ -1365,7 +1393,7 @@ yyreduce:
     }
 
 /* Line 991 of yacc.c.  */
-#line 1368 "qmake_yacc.cpp"
+#line 1396 "qmake_yacc.cpp"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1575,7 +1603,7 @@ yyreturn:
 }
 
 
-#line 289 "qmake.yy"
+#line 317 "qmake.yy"
 
 
 #include "qmake_lex.cpp"

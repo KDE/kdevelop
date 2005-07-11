@@ -21,6 +21,7 @@
 #define DOCQTPLUGIN_H
 
 #include <kdevdocumentationplugin.h>
+#include <qdom.h>
 
 class KConfig;
 
@@ -32,20 +33,22 @@ public:
     ~DocQtPlugin();
 
     virtual QString pluginName() const;
-    
+
     virtual DocumentationCatalogItem *createCatalog(KListView *contents, const QString &title, const QString &url);
-    
+
     virtual void createTOC(DocumentationCatalogItem *item);
-    virtual void setCatalogURL(DocumentationCatalogItem *item);    
-       
+    virtual void setCatalogURL(DocumentationCatalogItem *item);
+
     virtual bool needRefreshIndex(DocumentationCatalogItem *item);
     virtual void createIndex(IndexBox *index, DocumentationCatalogItem *item);
-   
+    virtual void createSectionIndex(QFileInfo &fi, IndexBox *index, DocumentationCatalogItem *item,
+        QDomElement section);
+
     virtual QStringList fullTextSearchLocations();
 
     virtual QPair<KFile::Mode, QString> catalogLocatorProps();
     virtual QString catalogTitle(const QString &url);
-        
+
     virtual void autoSetupPlugin();
 
 };

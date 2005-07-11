@@ -52,12 +52,25 @@ public:
     { return QMakeFolderDom(dynamic_cast<QMakeFolderModel*>(dom.data())); }
 
     bool isRoot() const { return m_isRoot; }
-    void setRoot() { m_isRoot = true; } 
-    
+    void setRoot() { m_isRoot = true; }
+
+    QString absPath() const { return m_absPath; }
+    void setAbsPath(const QString &path) { m_absPath = path; }
+
     QMake::ProjectAST *ast;
-    
+
+    QStringList config() const;
+    void setConfig( const QStringList &conf );
+
+    QStringList readAssignment( const QString& scopeid, QString &mode ) const;
+    void writeScopeID( const QString &scopeid, const QString &mode, const QStringList values );
+/**
+* Get the names of all the assignments in the current folder scope
+*/
+    QStringList assignmentNames( ) const;
 private:
     bool m_isRoot;
+    QString m_absPath;
 friend class ProjectModel;
 };
 
@@ -67,7 +80,7 @@ protected:
 
 public:
     typedef QMakeFileDom Ptr;
-    
+
     static QMakeFileDom from(ProjectFileDom dom)
     { return QMakeFileDom(dynamic_cast<QMakeFileModel*>(dom.data())); }
 friend class ProjectModel;
@@ -80,10 +93,10 @@ protected:
 
 public:
     typedef QMakeTargetDom Ptr;
-    
+
     static QMakeTargetDom from(ProjectTargetDom dom)
     { return QMakeTargetDom(dynamic_cast<QMakeTargetModel*>(dom.data())); }
-    
+
     QMake::AssignmentAST *ast;
 friend class ProjectModel;
 };
