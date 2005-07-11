@@ -193,6 +193,7 @@ Type=message
 Comment=A Korundum KConfig XT Application was created at %{dest}
 Comment[da]=Et Korundum KConfig XT program blev oprettet i %{dest}
 Comment[de]=Eine Korundum KConfig-XT-Anwendung wurde in %{dest} erstellt.
+Comment[es]=Una aplicación Korundum con KConfig XT ha sido creada en %{dest}
 Comment[et]=Korundumi KConfig XT rakendus loodi asukohta %{dest}
 Comment[fr]=Une application KConfig XT Korundum a été créée dans %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú KConfig XT-s alkalmazás itt: %{dest}

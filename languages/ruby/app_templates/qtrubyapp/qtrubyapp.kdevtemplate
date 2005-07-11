@@ -21,6 +21,7 @@ Category[fr]=Ruby/Qt
 Comment=Generate a QtRuby based application (crossplatform compatible)
 Comment[da]=Genererer et QtRuby baseret program (krydsplatform kompatibelt)
 Comment[de]=Erstelle eine auf QtRuby basierende Anwendung (Crossplattform kompatibel)
+Comment[es]=Genera una aplicación basada en QtRuby (compatible multiplataforma)
 Comment[et]=Rakenduse loomine QtRuby põhjal (mitmeplatvormne)
 Comment[hu]=Létrehoz egy QtRuby-alapú, keresztfordításra is megfelelő alkalmazást
 Comment[it]=Genera un'applicazione basata su QtRuby (compatibile multipiattaforma)

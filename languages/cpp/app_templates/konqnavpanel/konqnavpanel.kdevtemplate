@@ -3,6 +3,7 @@
 Name=Konqueror Navigation Panel Plugin
 Name[da]=Konqueror navigationspanel plugin
 Name[de]=Plugin für den Navigationsbereich von Konqueror
+Name[es]=Un plugin para el panel de navegación de Konqueror
 Name[et]=Konquerori liikumispaneeli plugin
 Name[hu]=Konqueroros navigációs bővítőmodul
 Name[it]=Plugin per il pannello di navigazioen di Konqueror
@@ -18,6 +19,7 @@ Category=C++/KDE
 Comment=Generates a framework for a plugin  that embeds into Konqueror's navigation panel
 Comment[da]=Genererer et skelet for et plugin der indlejres i Konqueror's navigationspanel
 Comment[de]=Erstellt das Gerüst für ein Plugin, das in den Navigationsbereich von Konqueror eingebunden werden kann.
+Comment[es]=Genera una infraestructura para un plugin empotrado en el panel de navegación de Konqueror
 Comment[et]=Plugina raamistiku loomine, mida saab põimida Konquerori liikumispaneelile.
 Comment[hu]=Létrehoz egy alapprogramot konqueroros navigációs panelmodul készítéséhez
 Comment[it]=Genera un'infrastruttura per un plugin che si integra nel pannello di navigazione di Konqueror

@@ -18,6 +18,7 @@ Category=C++/KDE
 Comment=Generates a framework for an IO slave
 Comment[da]=Genererer et skelet for en IO-slave
 Comment[de]=Erstellt das Grundgerüst für ein Ein/Ausgabe-Modul.
+Comment[es]=Genera una infraestructura para un esclavo de E/S
 Comment[et]=IO-mooduli raamistiku loomine
 Comment[hu]=Létrehoz egy kiindulási keretprogramot KIOslave készítéséhez
 Comment[it]=Genera un'infrastruttura per uno slave di I/O

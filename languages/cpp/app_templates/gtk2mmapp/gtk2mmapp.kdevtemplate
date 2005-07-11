@@ -3,6 +3,7 @@
 Name=Gtk-- Application framework
 Name[da]=Gtk-- programskelet
 Name[de]=Gtk-- Anwendungsgrundgerüst
+Name[es]=Infraestructura de aplicación Gtk--
 Name[et]=Gtk-- rakenduse raamistik
 Name[hu]=Gtk-- - alkalmazás-keretrendszer
 Name[it]=Gtk-- infrastruttura d'applicazione
@@ -19,6 +20,7 @@ Icon=gtk2mmapp.png
 Comment=Generates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
 Comment[da]=Genererer et simpelt Gtk-- program. Gtkmm >= 1.2.8 og < 1.3.0 skal være installeret. For at redigere glade file glade-- kræves (http://home.wtal.de/petig/Gtk/).
 Comment[de]=Erstellt eine einfache Gtk-Anwendung. Gtkmm >= 1.2.8 und < 1.3.0 sollte installiert sein. Zum Bearbeiten der glade-Datei ist glade-- (http://home.wtal.de/petig/Gtk/) erforderlich.
+Comment[es]=Genera una sencilla aplicación Gtk--. Debe tener instalado Gtkmm >= 1.2.8 y < 1.3.0. Para editar archivos glade se necesita glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[et]=Lihtsa Gtk-- rakenduse loomine. Paigaldatud peab olema Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[hu]=Létrehoz egy egyszerű Gtk---os alkalmazást. Gtkmm >= 1.2.8 és < 1.3.0 szükséges hozzá. Glade-fájl szerkesztéséhez glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
 Comment[it]=Genera una semplice applicazione Gtk. Dovrebbe essere installato gtkmm >= 1.2.8 e < 1.3.0. Per modificare il file di glade bisogna avere glade installato (http://home.wtal.de/petig/Gtk/).
@@ -121,6 +123,7 @@ Type=message
 Comment=A Gtk-- application framework was created in %{dest}
 Comment[da]=Et Gtk-- programskelet blev oprettet i %{dest}
 Comment[de]=Ein Gtk-Anwendungsgerüst wurde in %{dest} erstellt.
+Comment[es]=Una infraestructura de aplicación Gtk-- ha sido creada en %{dest}
 Comment[et]=Gtk-- rakenduse raamistik loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Gtk-s alkalmazás-keretrendszer itt: %{dest}
 Comment[it]=È stata crata una infrastruttura applicativa Gtk in %{dest}

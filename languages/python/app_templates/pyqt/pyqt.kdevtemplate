@@ -21,6 +21,7 @@ Category=Python
 Comment=This generates an application framework using Python and Qt
 Comment[da]=Dette genererer et programskelet ved brug af  Python og Qt
 Comment[de]=Hiermit wird ein Anwendungsgerüst unter Verwendung von Python und Qt erstellt
+Comment[es]=Genera una infraestructura de aplicación que usa Python y Qt
 Comment[et]=Rakenduse raamistiku loomine Pythoni ja Qt abil
 Comment[hu]=Létrehoz egy alkalmazás-keretrendszert Python nyelven, a Qt felhasználásával
 Comment[it]=Genera un'infrastruttura applicativa usando Python e Qt

@@ -3,6 +3,7 @@
 Name=Application framework (KParts)
 Name[da]=Programskelet (KParts)
 Name[de]=Anwendungsgerüst (KParts)
+Name[es]=Infraestructura de aplicación (KParts)
 Name[et]=Rakenduse raamistik (KParts)
 Name[hu]=Alkalmazás-keretrendszer (objektumokkal)
 Name[it]=Infrastruttura applicativa (KParts)
@@ -18,6 +19,7 @@ Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
 Comment[da]=Genererer et komplekst KDE-program med en KParts-skal og en KPart-komponent.
 Comment[de]=Erstellt eine aufwändige KDE-Anwendung mit einer Shell für KParts und einer KPart-Komponente.
+Comment[es]=Genera una aplicación KDE compleja con un contenedor KParts y un componente KPart.
 Comment[et]=Keerulise KDE rakenduse loomine KParts-shelliga ja KPart-komponendiga.
 Comment[hu]=Létrehoz egy komplex, objektumok használatát támogató KDE-s alkalmazást és egy KPart objektumot.
 Comment[it]=Genera un'applicazione complessa di KDE con una shell di KParts e un componente KPart.

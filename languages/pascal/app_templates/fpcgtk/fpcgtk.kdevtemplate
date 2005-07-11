@@ -20,6 +20,7 @@ Category=Pascal/Free Pascal
 Comment=Generates a GTK+ based GUI application in Pascal
 Comment[da]=Genereree et GTK+ baseret GUI program i Pascal
 Comment[de]=Erstellt eine auf GTK+ basierende GUI-Anwendung in Pascal
+Comment[es]=Genera una aplicación gráfica en Pascal basada en GTK+
 Comment[et]=Graafilise rakenduse loomine GTK+ põhjal Pascalis
 Comment[fr]=Génère une interface graphique GTK+ en Pascal
 Comment[hu]=Létrehoz egy GTK+-alapú grafikus felületű alkalmazást Pascalban

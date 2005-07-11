@@ -21,6 +21,7 @@ Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
 Comment[da]=Genererer et skelet for en applet der indlejres i KDE's panel
 Comment[de]=Erstellt das Grundgerüst für ein Miniprogramm, das in die KDE-Kontrollleiste eingebettet wird.
+Comment[es]=Genera una infraestructura para un applet empotrado en el panel de KDE
 Comment[et]=Apleti raamistiku loomine, mida saab põimida KDE paneelile
 Comment[hu]=Létrehoz egy keretprogramot KDE-s panel-kisalkalmazás készítéséhez
 Comment[it]=Genera un'infrastruttura per un'applet che si integra nel pannello di KDE
