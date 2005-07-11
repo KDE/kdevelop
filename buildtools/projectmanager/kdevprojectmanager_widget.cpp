@@ -131,7 +131,10 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
         
     m_addFolder = new KAction(i18n("Add Folder"), SmallIcon("folder"), 0, this, SLOT(createFolder()),
         part->actionCollection(), "project_add_folder");
-
+     
+    m_actionConfigure = new KAction(i18n("Configure"), SmallIcon("configure"), 0, this, SLOT(configureFolder()),
+        part->actionCollection(), "project_configure_folder");
+	
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     m_overview = new ProjectOverview(this, splitter);
     m_details = new ProjectDetails(this, splitter);
@@ -225,6 +228,7 @@ void KDevProjectManagerWidget::createFolder()
         QFileInfo fileInfo(activeFolder()->name() + "/" + name);
         
         if (QDir::current().mkdir(fileInfo.absFilePath())) {
+            editor->createProjectFile( fileInfo.absFilePath() );
             ProjectItemDom item = editor->import(projectModel(), fileInfo.absFilePath());
             
             if (item && item->toFolder()) {                
@@ -243,8 +247,18 @@ void KDevProjectManagerWidget::createFolder()
 
 void KDevProjectManagerWidget::createTarget()
 {
+	KDevProjectEditor *editor = part()->defaultImporter()->editor();
+	QString name = KInputDialog::getText(i18n("Add Target"), i18n("Add Target"));
+	if (!name.isEmpty()) {
+		// Create the target in the AST and then add it to the DOM
+	}
 }
 
+void KDevProjectManagerWidget::configureFolder()
+{
+	KDevProjectEditor *editor = part()->defaultImporter()->editor();
+	editor->configureFolder(activeFolder());
+}
 // ---------------------------------------------------------------------------------
 class ProjectRoot: public ProjectViewItem
 {
@@ -469,6 +483,7 @@ ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *par
         part()->actionCollection()->action("project_buildall")->plug(tb);
         tb->insertSeparator();
         part()->actionCollection()->action("project_reload")->plug(tb);
+        part()->actionCollection()->action("project_configure_folder")->plug(tb);
         
 #if 0 // ###
         tb->insertButton(SmallIcon("folder_new"), -1, true);
@@ -750,37 +765,41 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
     
     if (!item)
         return;
-        
-    ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
-    if (ProjectFileDom file = projectItem->dom()->toFile()) {
-        KPopupMenu menu(this);
-        menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
-                    
-        ProjectModelItemContext context(file.data());
-        part()->core()->fillContextMenu(&menu, &context);
-        
-        KURL::List urls;
-        urls.append(file->name());
-        FileContext fileContext(urls);
-        part()->core()->fillContextMenu(&menu, &fileContext);
-        part()->defaultImporter()->fillContextMenu( &menu, &fileContext );
-        if (part()->defaultBuilder()) {
-            menu.insertSeparator();
-            menu.insertItem(i18n("Build"), 1010);
-        }
-        
-        switch (menu.exec(pt)) {
-            case 1010: {
-                if (KDevProjectBuilder *builder = part()->defaultBuilder())
-                    builder->build(m_currentItem); // ### TODO: compile the target not subproject
-            } break;
-            
-            default: break;
-        } // end switch
-    }
-    else if (ProjectTargetDom target = projectItem->dom()->toTarget()) {
-	    kdDebug(9024) << "Target" << endl;
-    }
+	KPopupMenu menu(this);
+	ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
+	if (ProjectTargetDom target = projectItem->dom()->toTarget()) {
+		
+		menu.insertTitle(i18n("Target: %1").arg(target->shortDescription()));
+		ProjectModelItemContext context(target.data());
+		part()->defaultImporter()->fillContextMenu(&menu, &context);
+	}
+	else if (ProjectFileDom file = projectItem->dom()->toFile()) {
+		menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
+		ProjectModelItemContext context(file.data());
+		part()->core()->fillContextMenu(&menu, &context);
+		KURL::List urls;
+		urls.append(file->name());
+		FileContext fileContext(urls);
+		part()->core()->fillContextMenu(&menu, &fileContext);
+		part()->defaultImporter()->fillContextMenu( &menu, &fileContext );
+    	}
+	
+	if (part()->defaultBuilder()) {
+		menu.insertSeparator();
+		menu.insertItem(i18n("Build"), 1010);
+	}
+
+	if( menu.count() != 0)
+	{
+		switch (menu.exec(pt)) {
+		case 1010: {
+			if (KDevProjectBuilder *builder = part()->defaultBuilder())
+				builder->build(m_currentItem); // ### TODO: compile the target not subproject
+		} break;
+			
+		default: break;
+		} // end switch
+	}
 }
 
 

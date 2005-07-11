@@ -47,7 +47,8 @@ public:
     virtual bool removeTarget(ProjectTargetDom target, ProjectFolderDom parent);
     virtual bool removeFile(ProjectFileDom file, ProjectFolderDom parent);
     virtual bool removeFile(ProjectFileDom file, ProjectTargetDom parent);
-
+    bool createProjectFile( const QString &folder );
+    bool configureFolder( ProjectFolderDom folder);
 //
 // KDevProjectImporter interface
 //

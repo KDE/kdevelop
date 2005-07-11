@@ -61,7 +61,7 @@ private:
     void parsePrimary(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parsePrefix(ProjectItemDom item, const QString &lhs, const QString &rhs);
     ProjectFolderList parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs);
-    
+	
 private:
     KDevProject *m_project;
     QStringList headers; // ### remove me!!

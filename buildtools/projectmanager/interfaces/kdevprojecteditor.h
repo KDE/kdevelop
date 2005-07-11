@@ -49,6 +49,19 @@ public:
     { return (features() & f) == f; }
     
     virtual Features features() const = 0;
+	/**
+	 * Implement this method to configure folders properties.
+	 * You should read the information from the DOM and write back
+	 * to the AST.  Then save the project to disk, and reparse it.
+	 */
+    virtual bool configureFolder( ProjectFolderDom folder) = 0;
+	/**
+	 * Implement this to create the actual build system's project file on the
+	 * file system.  You can assume that the current folder is created, and
+	 * you can just create a file in that directory.  At that point it will
+	 * be added as a target.
+	 */
+    virtual bool createProjectFile( const QString &folder ) = 0;
     
     virtual bool addFolder(ProjectFolderDom folder, ProjectFolderDom parent) = 0;
     virtual bool addTarget(ProjectTargetDom target, ProjectFolderDom parent) = 0;

@@ -70,6 +70,7 @@ public slots:
     void createFolder();
     void createTarget();
 
+    void configureFolder();
 protected slots:
     void updateDetails(QListViewItem *item);
     void updateActions();
@@ -82,10 +83,15 @@ private:
     KAction *m_actionReload;
     KAction *m_actionBuild;
     KAction *m_actionBuildAll;
+    KAction *m_actionConfigure;
     
     KAction *m_addFile;
     KAction *m_addTarget;
     KAction *m_addFolder;
+
+    KAction *m_removeFile;
+    KAction *m_removeTarget;
+    KAction *m_removeFolder;
 };
 
 class ProjectViewItem: public QListViewItem

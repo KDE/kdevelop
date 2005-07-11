@@ -98,70 +98,73 @@ void newFolderDom(ProjectFolderList &folderList,
     folder->ast = projectAST;
     if (info)
         folder->setAbsPath(info->absFilePath());
+    folderList.append(folder->toFolder());
+    folderDom->addFolder(folder->toFolder());
+	
     QString mode;
-	QStringList sources = folder->readAssignment("TEMPLATE", mode);
+    QStringList sources = folder->readAssignment("TEMPLATE", mode);
+    if( !sources.isEmpty() )
+    {
+        if( sources[0] != "SUBDIRS" || sources[0] != "subdirs" )
+        {
+            addFileItem( "SOURCES", "source_cpp", folder );
+            addFileItem( "HEADERS", "source_h", folder );
+            addFileItem( "FORMS", "dlgedit", folder );
+            addFileItem( "LEXSOURCES", "dlgedit", folder );
+            addFileItem( "YACCSOURCES", "dlgedit", folder );
 
-	if( !sources.isEmpty() )
-	{
-		folderList.append(folder->toFolder());
-		folderDom->addFolder(folder->toFolder());
-		if( sources[0] != "SUBDIRS" || sources[0] != "subdirs" )
-		{
-			addFileItem( "SOURCES", "source_cpp", folder );
-			addFileItem( "HEADERS", "source_h", folder );
-			addFileItem( "FORMS", "dlgedit", folder );
-			addFileItem( "LEXSOURCES", "dlgedit", folder );
-			addFileItem( "YACCSOURCES", "dlgedit", folder );
-		
-			QStringList assns = folder->assignmentNames();
-			assns.remove("SOURCES");
-			assns.remove("HEADERS");
-			assns.remove("FORMS");
-			assns.remove("LEXSOURCES");
-			assns.remove("YACCSOURCES");
-			QStringList::ConstIterator it = assns.begin();
-			for( ; it != assns.end(); ++it)
-				addFileItem( *it, "gear", folder);
-		}
-	}
+            QStringList assns = folder->assignmentNames();
+            assns.remove("SOURCES");
+            assns.remove("HEADERS");
+            assns.remove("FORMS");
+            assns.remove("LEXSOURCES");
+            assns.remove("YACCSOURCES");
+            QStringList::ConstIterator it = assns.begin();
+            for( ; it != assns.end(); ++it)
+                addFileItem( *it, "gear", folder);
+        }
+    }
 }
 
 void addFileItem( const QString &field, const QString &icon, QMakeFolderDom &folder )
 {
-	QString mode;
-	QStringList sources = folder->readAssignment(field, mode);
-	if( !sources.isEmpty() )
-	{
-		bool hasFiles = false;
-		QMakeTargetDom target = folder->projectModel()->create<QMakeTargetModel>();
-		target->setName(field);
-		target->setAttribute("Icon", icon);
-		QStringList::ConstIterator srcIt = sources.begin();
-		for(; srcIt != sources.end(); ++srcIt)
-		{
-			QMakeFileDom fileModel = folder->projectModel()->create<QMakeFileModel>();
-			QFileInfo fileItemInfo( folder->name(), *srcIt);
-			if( fileItemInfo.exists() && fileItemInfo.isFile())
-			{
-				fileModel->setName(fileItemInfo.absFilePath());
-				hasFiles = true;
-			}
-			target->addFile(fileModel->toFile());
-		}
-		if( hasFiles )
-			folder->addTarget(target->toTarget());
-	}
+    QString mode;
+    QStringList sources = folder->readAssignment(field, mode);
+    if( !sources.isEmpty() )
+    {
+        bool hasFiles = false;
+        QMakeTargetDom target = folder->projectModel()->create<QMakeTargetModel>();
+        target->setName(field);
+        target->setAttribute("Icon", icon);
+        QStringList::ConstIterator srcIt = sources.begin();
+        for(; srcIt != sources.end(); ++srcIt)
+        {
+            QMakeFileDom fileModel = folder->projectModel()->create<QMakeFileModel>();
+            QFileInfo fileItemInfo( folder->name(), *srcIt);
+            if( fileItemInfo.exists() && fileItemInfo.isFile())
+            {
+                fileModel->setName(fileItemInfo.absFilePath());
+                hasFiles = true;
+            }
+            else
+                hasFiles = false;
+            target->addFile(fileModel->toFile());
+        }
+        if( hasFiles )
+            folder->addTarget(target->toTarget());
+    }
 }
 
 void newFileDom(QMakeFileList &fileList,
                 QMakeFileDom &fileDom, QMake::AST *ast, QFileInfo *info)
 {
-	kdDebug(9024) << "Add assignment." <<  fileDom->name() << endl;
-	QMake::AssignmentAST *assnAST = 0;
-	if (ast)
-	{
-		assnAST = (QMake::AssignmentAST*)(ast);
-	}
+    kdDebug(9024) << "Add assignment." <<  fileDom->name() << endl;
+    QMake::AssignmentAST *assnAST = 0;
+    if (ast)
+    {
+        assnAST = (QMake::AssignmentAST*)(ast);
+    }
 }
-	
+
 }
+//kate: space-indent on; indent-width 4; mixedindent off;

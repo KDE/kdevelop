@@ -204,4 +204,14 @@ bool KDevCustomImporter::removeFile(ProjectFileDom // file
     return false;
 }
 
+bool KDevCustomImporter::createProjectFile( const QString &folder )
+{
+	return false;
+}
+
+bool KDevCustomImporter::configureFolder( ProjectFolderDom folder)
+{
+	return true;
+}
+
 #include "kdevcustomimporter.moc"

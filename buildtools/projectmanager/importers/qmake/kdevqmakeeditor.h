@@ -54,6 +54,9 @@ public:
     virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
     virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
+    bool createProjectFile( const QString &folder );
+    bool configureFolder( ProjectFolderDom folder);
+	
 private:
     KDevProject *m_project;
     QMake::ProjectAST *m_ast;

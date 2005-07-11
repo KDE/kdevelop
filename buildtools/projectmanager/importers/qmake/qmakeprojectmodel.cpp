@@ -179,32 +179,34 @@ void QMakeFolderModel::writeScopeID( const QString &scopeid, const QString &mode
 		ast->statements.remove(assn);
 		delete assn;
 		return;
-	}
-	
-	if( assn == 0 )
-	{
-		assn = new QMake::AssignmentAST();
-		assn->scopedID = scopeid;
-		assn->op = mode;
-		ast->statements += assn;
-	}
+    }
 
-	QStringList::ConstIterator value = values.begin();
-	for(; value != values.end(); ++value)
-		assn->values += (*value) + " \\";
+    if( assn == 0 )
+    {
+        assn = new QMake::AssignmentAST();
+        assn->scopedID = scopeid;
+        assn->op = mode;
+        ast->statements += assn;
+    }
+
+    QStringList::ConstIterator value = values.begin();
+    for(; value != values.end(); ++value)
+            assn->values += (*value) + " \\";
 }
 QStringList  QMakeFolderModel::assignmentNames( ) const
 {
-	QStringList returnList;
-	QMake::AssignmentAST *assn = 0;
-	QValueList<QMake::AST*>::iterator it = ast->statements.begin();
-	for(; it != ast->statements.end(); ++it)
-	{
-		if( (*it)->nodeType() == AST::AssignmentAST )
-		{
-			assn = (QMake::AssignmentAST*)(*it);
-			returnList += assn->scopedID;
-		}
-	}
-	return returnList;
+    QStringList returnList;
+    QMake::AssignmentAST *assn = 0;
+    QValueList<QMake::AST*>::iterator it = ast->statements.begin();
+    for(; it != ast->statements.end(); ++it)
+    {
+        if( (*it)->nodeType() == AST::AssignmentAST )
+        {
+            assn = (QMake::AssignmentAST*)(*it);
+            returnList += assn->scopedID;
+        }
+    }
+    return returnList;
 }
+//kate: space-indent on; indent-width 4; mixedindent off;
+
