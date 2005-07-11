@@ -17,6 +17,40 @@
     Thanks Zoran Karavla for the artwork!
 
 2005-05-26 Tobias Erbsland <te@profzone.ch>
+ * Added new class QtBuildConfig. This class stores the configuration
+   about the used Qt library. Is Qt used, which major version and
+   where the Qt library path (QTDIR) for this project is. 
+   In a later step, it's possible to use different qt installations
+   for each project. E.g. you develop on a KDE4.x programm under KDE3.x.
+ * Added a new tab in the C++ options dialog (CCConfigWidget).
+   The user can edit the configuration QtBuildConfig in this tab.
+ * New class wizard:
+   - Qt checkboxes are disabled (hide them?) on non-qt projects.
+   - Different code is generated for Qt3.x and Qt4.x projects.
+   - Includes of classes that starting with "Q" bypasses the 
+     normal template settings. In Qt3.x the include file has always
+     a lowercase include name with a ".h" suffix, and Qt4.x has
+     a mixed case include name without any suffix.
+   - Added the email address to the author's name if it exists.
+
+2005-05-26 Tobias Erbsland <te@profzone.ch>
+ * Added new class QtBuildConfig. This class stores the configuration
+   about the used Qt library. Is Qt used, which major version and
+   where the Qt library path (QTDIR) for this project is. 
+   In a later step, it's possible to use different qt installations
+   for each project. E.g. you develop on a KDE4.x programm under KDE3.x.
+ * Added a new tab in the C++ options dialog (CCConfigWidget).
+   The user can edit the configuration QtBuildConfig in this tab.
+ * New class wizard:
+   - Qt checkboxes are disabled (hide them?) on non-qt projects.
+   - Different code is generated for Qt3.x and Qt4.x projects.
+   - Includes of classes that starting with "Q" bypasses the 
+     normal template settings. In Qt3.x the include file has always
+     a lowercase include name with a ".h" suffix, and Qt4.x has
+     a mixed case include name without any suffix.
+   - Added the email address to the author's name if it exists.
+
+2005-05-26 Tobias Erbsland <te@profzone.ch>
  * Replaced static hash table in lexer by a QMap
    I found no performance impacts by this replacement, but the code
    was getting much smaller and cleaner.

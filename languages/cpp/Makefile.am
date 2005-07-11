@@ -27,7 +27,7 @@ libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 			addmethoddialog.cpp cppsupport_utils.cpp createpcsdialogbase.ui createpcsdialog.cpp \
 			cppimplementationwidget.cpp qtdesignercppintegration.cpp creategettersetterconfiguration.cpp \
 		creategettersetterconfiguration.h creategettersetterdialog.cpp creategettersetterdialog.h \
-		creategettersetter.ui storeconverter.cpp
+		creategettersetter.ui storeconverter.cpp qtbuildconfig.cpp
 
 METASOURCES = AUTO
 

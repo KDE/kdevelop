@@ -43,9 +43,12 @@
 #include <kdevmainwindow.h>
 #include <kdevcoderepository.h>
 #include <catalog.h>
+// std includes
+#include <stdlib.h>
 
 #include "cppsupportfactory.h"
 #include "ccconfigwidget.h"
+#include "qtbuildconfig.h"
 #include "cppsupportpart.h"
 #include "cppcodecompletionconfig.h"
 #include "createpcsdialog.h"
@@ -64,6 +67,7 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	         this, SLOT( catalogUnregistered( Catalog* ) ) );
 
 	initGeneralTab( );
+	initQtTab();
 	initCodeCompletionTab( );
 	initGetterSetterTab( );
 	inputCodeCompletion->setRange( 0, 2000, 100, false );
@@ -91,6 +95,7 @@ CCConfigWidget::~CCConfigWidget( )
 void CCConfigWidget::accept( )
 {
 	saveFileTemplatesTab();
+	saveQtTab();
 	saveCodeCompletionTab();
 	saveGetterSetterTab();
 }
@@ -310,6 +315,50 @@ void CCConfigWidget::saveGetterSetterTab( )
 	config->setPrefixVariable( QStringList::split( ",", m_edtRemovePrefix->text().replace( " ", "" ) ) );
 	config->setParameterName( m_edtParameterName->text() );
 	config->store();
+}
+
+void CCConfigWidget::initQtTab()
+{
+	QtBuildConfig* c = m_pPart->qtBuildConfig();
+
+	m_qtUsed->setChecked( c->isUsed() );
+	if( c->version() == 4 )
+	{
+		m_qtVersion4->setChecked( true );
+	}
+	else
+	{
+		m_qtVersion3->setChecked( true );
+	}
+	
+	m_qtRoot->setURL( c->root() );
+	slotToogleQtUsed();
+}
+
+void CCConfigWidget::saveQtTab()
+{
+	QtBuildConfig* c = m_pPart->qtBuildConfig();
+	
+	c->setUsed( m_qtUsed->isChecked() );
+	if( m_qtVersion4->isChecked() )
+	{
+		c->setVersion( 4 );
+	}
+	else
+	{
+		c->setVersion( 3 );
+	}
+	
+	c->setRoot( m_qtRoot->url() );
+	
+	c->store();
+}
+
+void CCConfigWidget::slotToogleQtUsed()
+{
+	bool enabled = m_qtUsed->isChecked();
+	m_qtVersionBox->setEnabled( enabled );
+	m_qtInstallationBox->setEnabled( enabled );
 }
 
 

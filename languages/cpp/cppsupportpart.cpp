@@ -37,6 +37,7 @@
 #include "creategettersetterconfiguration.h"
 #include "kdevsourceformatter.h"
 #include "kdevcreatefile.h" 
+#include "qtbuildconfig.h"
 // wizards
 #include "cppnewclassdlg.h"
 #include "subclassingdlg.h"
@@ -154,6 +155,7 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
 	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration( this );
 	connect( m_pCompletionConfig, SIGNAL( stored() ), this, SLOT( codeCompletionConfigStored() ) );
+	m_qtBuildConfig = new QtBuildConfig( this, projectDom() );
 	
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
@@ -493,7 +495,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 	{
 		int id;
 		
-		popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
+		id = popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
 		popup->setWhatsThis( id, i18n( "<b>Switch Header/Implementation</b><p>"
 		                               "If you are currently looking at a header file, this "
 		                               "brings you to the corresponding implementation file. "
@@ -883,7 +885,7 @@ void CppSupportPart::slotSwitchHeader()
 				int startline, column, endLine, endColumn;
 				( *it_decl ) ->getStartPosition( &startline, &column );
 				( *it_decl ) ->getEndPosition( &endLine, &endColumn );
-				if ( currentline >= startline && currentline <= endLine )
+				if ( (int)currentline >= startline && (int)currentline <= endLine )
 				{
 					// found it. can we find a matching defintion?
 					FileDom source = codeModel() ->fileByName( candidate );
@@ -919,7 +921,7 @@ void CppSupportPart::slotSwitchHeader()
 				int startline, column, endLine, endColumn;
 				( *it_def ) ->getStartPosition( &startline, &column );
 				( *it_def ) ->getEndPosition( &endLine, &endColumn );
-				if ( currentline >= startline && currentline <= endLine )
+				if ( (int)currentline >= startline && (int)currentline <= endLine )
 				{
 					// found it. can we find a matching declaration?
 					FileDom source = codeModel() ->fileByName( candidate );
@@ -2108,11 +2110,11 @@ VariableDom CppSupportPart::currentAttribute( ClassDom curClass ) const
 	{
 		int startLine, startCol;
 		( *i ) ->getStartPosition( &startLine, &startCol );
-		if ( startLine < line || ( startLine == line && startCol <= col ) )
+		if ( startLine < (int)line || ( startLine == (int)line && startCol <= (int)col ) )
 		{
 			int endLine, endCol;
 			( *i ) ->getEndPosition( &endLine, &endCol );
-			if ( endLine > line || ( endLine == line && endCol >= col ) )
+			if ( endLine > (int)line || ( endLine == (int)line && endCol >= (int)col ) )
 				return * i;
 		}
 	}

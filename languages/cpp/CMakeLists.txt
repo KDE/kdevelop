@@ -31,6 +31,7 @@ creategettersetterconfiguration.h
 creategettersetterdialog.cpp
 creategettersetterdialog.h
 storeconverter.cpp
+qtbuildconfig.cpp
 )
 
 SET( kdevcppsupport_UI

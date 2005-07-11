@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CCConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>484</width>
-            <height>482</height>
+            <width>545</width>
+            <height>470</height>
         </rect>
     </property>
     <property name="caption">
@@ -142,6 +142,129 @@
                             <size>
                                 <width>20</width>
                                 <height>131</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>m_pageQt</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Qt</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>m_qtUsed</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Use Qt in this project.</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>m_qtVersionBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Version</string>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Select which Qt version your project is using.</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtVersion3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt 3.x</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select this if your project is using Qt version 3.x.</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_qtVersion4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt 4.x</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Select this if your project is using Qt version 4.x.</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_qtInstallationBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Installation</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The path where your choosen Qt version is installed.</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Qt Root Path:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>kURLRequester1</cstring>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>The path where your choosen Qt version is installed.</string>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester">
+                                <property name="name">
+                                    <cstring>m_qtRoot</cstring>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>The path where your choosen Qt version is installed.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer12_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>130</height>
                             </size>
                         </property>
                     </spacer>
@@ -717,6 +840,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
@@ -772,6 +897,12 @@
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotRemovePCS()</slot>
     </connection>
+    <connection>
+        <sender>m_qtUsed</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotToogleQtUsed()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>interface_suffix</tabstop>
@@ -803,10 +934,14 @@
     <slot>slotNewPCS()</slot>
     <slot access="protected">slotGetterSetterValuesChanged()</slot>
     <slot access="protected">slotRemovePCS()</slot>
+    <slot>slotToogleQtUsed()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

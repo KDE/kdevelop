@@ -47,6 +47,7 @@
 #include "domutil.h"
 #include "filetemplate.h"
 #include "storeconverter.h"
+#include "qtbuildconfig.h"
 
 #include "classgeneratorconfig.h"
 
@@ -112,6 +113,10 @@ CppNewClassDialog::CppNewClassDialog( CppSupportPart *part, QWidget *parent, con
 	compNamespace = namespace_edit->completionObject();
 	setCompletionNamespaceRecursive( m_part->codeModel() ->globalNamespace() );
 	classname_edit->setFocus();
+	
+	// enable/disable qt options for non qt projects
+	childclass_box->setEnabled( m_part->qtBuildConfig()->isUsed() );
+	qobject_box->setEnabled( m_part->qtBuildConfig()->isUsed() );
 }
 
 
@@ -279,23 +284,39 @@ void CppNewClassDialog::baseclassname_changed( const QString &text )
 	if ( ( basename_edit->hasFocus() ) && ( !baseincludeModified ) )
 	{
 		QString header = text;
-		if ( header.contains( QRegExp( "::" ) ) )
-			header = header.mid( header.findRev( QRegExp( "::" ) ) + 2 );
-		header = header.replace( QRegExp( " *<.*>" ), "" );
-		header += interface_suffix;
-
-		switch ( gen_config->superCase() )
+		
+		// handle Qt classes in a special way.
+		if( m_part->qtBuildConfig()->isUsed() && header.startsWith( "Q" ) )
 		{
-		case ClassGeneratorConfig::LowerCase:
-			header = header.lower();
-			break;
-		case ClassGeneratorConfig::UpperCase:
-			header = header.upper();
-			break;
-		default:
-			;
+			if( m_part->qtBuildConfig()->version() == 3 )
+			{
+				header = header.lower() + ".h";
+			}
+			else if( m_part->qtBuildConfig()->version() == 4 )
+			{
+				// 1:1, e.g QObject is #include <QObject>
+			}
 		}
-
+		else
+		{
+			if ( header.contains( QRegExp( "::" ) ) )
+				header = header.mid( header.findRev( QRegExp( "::" ) ) + 2 );
+			header = header.replace( QRegExp( " *<.*>" ), "" );
+			header += interface_suffix;
+	
+			switch ( gen_config->superCase() )
+			{
+			case ClassGeneratorConfig::LowerCase:
+				header = header.lower();
+				break;
+			case ClassGeneratorConfig::UpperCase:
+				header = header.upper();
+				break;
+			default:
+				;
+			}
+		}
+		
 		baseinclude_edit->setText( header );
 	}
 }
@@ -331,9 +352,9 @@ void CppNewClassDialog::implementationChanged()
 
 void CppNewClassDialog::checkObjCInheritance( int val )
 {
-	childclass_box->setEnabled( !val );
+	childclass_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
 	gtk_box->setEnabled( !val );
-	qobject_box->setEnabled( !val );
+	qobject_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
 	namespace_edit->setEnabled( !val );
 	class_tabs->setTabEnabled( tab2, !val );
 	/*    virtual_box->setEnabled(!val);
@@ -351,8 +372,8 @@ void CppNewClassDialog::checkQWidgetInheritance( int val )
 {
 	if ( val )
 	{
-		qobject_box->setEnabled( val );
-		qobject_box->setChecked( val );
+		qobject_box->setEnabled( val && m_part->qtBuildConfig()->isUsed() );
+		qobject_box->setChecked( val && m_part->qtBuildConfig()->isUsed() );
 		objc_box->setEnabled( !val );
 		gtk_box->setEnabled( !val );
 	}
@@ -406,9 +427,9 @@ void CppNewClassDialog::qobject_box_stateChanged( int val )
 void CppNewClassDialog::gtk_box_stateChanged( int val )
 {
 	class_tabs->setTabEnabled( tab2, !val );
-	childclass_box->setEnabled( !val );
+	childclass_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
 	objc_box->setEnabled( !val );
-	qobject_box->setEnabled( !val );
+	qobject_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
 	namespace_edit->setEnabled( !val );
 
 	basename_edit->setEnabled( !val );
@@ -1411,8 +1432,12 @@ void CppNewClassDialog::ClassGenerator::common_text()
 				doc.append( "\n\n" );
 		}
 		QString author = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/author" );
+		QString email = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/email" );
+		if( !email.isEmpty() )
+			author += QString( " <%1>" ).arg( email );
+			
 		if ( dlg.gen_config->author_box->isChecked() )
-			doc.append( "@author " + author + "\n" );
+			doc.append( "\t@author " + author + "\n" );
 		doc.append( "*/" );
 	}
 
@@ -1659,13 +1684,29 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
 	if ( childClass )
 	{
-		argsH = "QWidget *parent = 0, const char *name = 0";
-		argsCpp = "QWidget *parent, const char *name";
+		if( dlg.m_part->qtBuildConfig()->version() == 3 )
+		{
+			argsH = "QWidget *parent = 0, const char *name = 0";
+			argsCpp = "QWidget *parent, const char *name";
+		}
+		else
+		{
+			argsH = "QWidget *parent = 0";
+			argsCpp = "QWidget *parent";
+		}
 	}
 	else if ( qobject )
 	{
-		argsH = "QObject *parent = 0, const char *name = 0";
-		argsCpp = "QObject *parent, const char *name";
+		if( dlg.m_part->qtBuildConfig()->version() == 3 )
+		{
+			argsH = "QObject *parent = 0, const char *name = 0";
+			argsCpp = "QObject *parent, const char *name";
+		}
+		else
+		{
+			argsH = "QObject *parent = 0";
+			argsCpp = "QObject *parent";
+		}
 	}
 	else
 	{
@@ -1675,9 +1716,19 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 	QString baseInitializer;
 
 	if ( childClass && ( dlg.baseclasses_view->childCount() == 0 ) )
-		baseInitializer = "  : QWidget(parent, name)";
+	{
+		if( dlg.m_part->qtBuildConfig()->version() == 3 )
+			baseInitializer = "  : QWidget(parent, name)";
+		else
+			baseInitializer = "  : QWidget(parent)";
+	}
 	else if ( qobject && ( dlg.baseclasses_view->childCount() == 0 ) )
-		baseInitializer = "  : QObject(parent, name)";
+	{
+		if( dlg.m_part->qtBuildConfig()->version() == 3 )
+			baseInitializer = "  : QObject(parent, name)";
+		else
+			baseInitializer = "  : QObject(parent)";
+	}
 	else if ( dlg.baseclasses_view->childCount() != 0 )
 	{
 		QListViewItemIterator it( dlg.baseclasses_view );
@@ -1687,13 +1738,28 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 			if ( !it.current() ->text( 0 ).isEmpty() )
 			{
 				if ( baseInitializer != " : " )
+				{
 					baseInitializer += ", ";
+				}
+				
 				if ( childClass && ( baseInitializer == " : " ) )
-					baseInitializer += it.current() ->text( 0 ) + "(parent, name)";
+				{
+					if( dlg.m_part->qtBuildConfig()->version() == 3 )
+						baseInitializer += it.current()->text( 0 ) + "(parent, name)";
+					else
+						baseInitializer += it.current()->text( 0 ) + "(parent)";
+				}
 				else if ( qobject && ( baseInitializer == " : " ) )
-					baseInitializer += it.current() ->text( 0 ) + "(parent, name)";
+				{
+					if( dlg.m_part->qtBuildConfig()->version() == 3 )
+						baseInitializer += it.current()->text( 0 ) + "(parent, name)";
+					else
+						baseInitializer += it.current()->text( 0 ) + "(parent)";
+				}
 				else
-					baseInitializer += it.current() ->text( 0 ) + "()";
+				{
+					baseInitializer += it.current()->text( 0 ) + "()";
+				}
 			}
 			++it;
 		}
@@ -1835,15 +1901,24 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	headerGuard.replace( QRegExp( "\\." ), "_" );
 	headerGuard.replace( QRegExp( "::" ), "_" );
 	QString includeBaseHeader;
-	if ( childClass && ( dlg.baseclasses_view->childCount() == 0 ) )  /// @todo do this only if this is a Qt class
+	if( dlg.m_part->qtBuildConfig()->isUsed() )
 	{
-		includeBaseHeader = "#include <qwidget.h>";
+		if( childClass && ( dlg.baseclasses_view->childCount() == 0 ) )
+		{
+			if( dlg.m_part->qtBuildConfig()->version() == 3 )
+				includeBaseHeader = "#include <qwidget.h>";
+			else
+				includeBaseHeader = "#include <QWidget>";
+		}
+		else if( qobject && ( dlg.baseclasses_view->childCount() == 0 ) )
+		{
+			if( dlg.m_part->qtBuildConfig()->version() == 3 )
+				includeBaseHeader = "#include <qobject.h>";
+			else
+				includeBaseHeader = "#include <QObject>";
+		}
 	}
-	else if ( qobject && ( dlg.baseclasses_view->childCount() == 0 ) )
-	{
-		includeBaseHeader = "#include <qobject.h>";
-	}
-
+	
 	if ( objc )
 	{
 		if ( dlg.baseclasses_view->firstChild() )
@@ -1871,7 +1946,10 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	}
 
 	QString author = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/author" );
-
+	QString email = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/email" );
+	if( !email.isEmpty() )
+		author += QString( " <%1>" ).arg( email );
+	
 	QString inheritance;
 	if ( dlg.baseclasses_view->childCount() > 0 )
 	{

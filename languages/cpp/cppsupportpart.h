@@ -33,6 +33,7 @@ class Context;
 class CppCodeCompletion;
 class CppCodeCompletionConfig;
 class CreateGetterSetterConfiguration;
+class QtBuildConfig;
 class ProblemReporter;
 class BackgroundParser;
 class Catalog;
@@ -98,6 +99,12 @@ public:
 	{
 		return m_pCreateGetterSetterConfiguration;
 	}
+	
+	/**
+		Get a pointer to the QtBuildConfig object
+		@return A pointer to the QtBuildConfig object.
+	*/
+	inline QtBuildConfig* qtBuildConfig() const { return m_qtBuildConfig; }
 
 	const QPtrList<Catalog>& catalogList()
 	{
@@ -265,6 +272,8 @@ private:
 
 	CreateGetterSetterConfiguration* m_pCreateGetterSetterConfiguration;
 	class KAction* m_createGetterSetterAction;
+	
+	QtBuildConfig* m_qtBuildConfig;
 
 	bool withcpp;
 	QString m_contextFileName;

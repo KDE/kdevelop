@@ -38,11 +38,15 @@ protected slots:
 private slots:
 	void catalogRegistered( Catalog* c );
 	void catalogUnregistered( Catalog* c );
+	void slotToogleQtUsed();
 
 private:
 	void initGeneralTab();
 	void saveFileTemplatesTab();
 
+	void initQtTab();
+	void saveQtTab();
+    
 	void initCodeCompletionTab();
 	void saveCodeCompletionTab();
 
