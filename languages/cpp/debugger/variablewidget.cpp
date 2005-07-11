@@ -68,7 +68,7 @@ namespace GDBDebugger
 {
 
 VariableWidget::VariableWidget(QWidget *parent, const char *name)
-    : QWidget(parent, name)
+    : QWidget(parent, name), firstShow_(true)
 {
     varTree_ = new VariableTree(this);
 
@@ -120,13 +120,21 @@ void VariableWidget::clear()
 
 // **************************************************************************
 
-void VariableWidget::setEnabled(bool bEnabled)
+// When the variables view is shown the first time, 
+// set the width of 'variable name' column to half the total
+// width.
+// Ideally, KMDI should emit 'initial size set' signal, but
+// it does not, so we rely on the fact that size is already
+// set when the widget is first shown.
+void VariableWidget::showEvent(QShowEvent *)
 {
-    QWidget::setEnabled(bEnabled);
-    if (bEnabled && parentWidget()) {
-        varTree_->setColumnWidth(0, parentWidget()->width()/2);
-  }
+    if (firstShow_)
+    {
+        firstShow_ = false;
+        varTree_->setColumnWidth(0, width()/2);
+    }
 }
+
 // **************************************************************************
 
 void VariableWidget::slotAddWatchVariable()
