@@ -27,6 +27,7 @@ GenericName[sl]=IDE za Ruby
 GenericName[sr]=IDE за Ruby
 GenericName[sr@Latn]=IDE za Ruby
 GenericName[sv]=Utvecklingsmiljö för Ruby
+GenericName[tr]=Ruby için Bütünleşik Geliştirme Ortamı
 GenericName[xx]=xxIDE for Rubyxx
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;

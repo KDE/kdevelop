@@ -8,6 +8,7 @@ Comment[et]= Docbook-dokumendimallide paigaldamine.
 Comment[fr]=Installer les modèles de documentation Docbook.
 Comment[hu]=DocBook-alapú dokumentációsablonok telepítése.
 Comment[sv]= Installera Docbook-dokumentationsmallar.
+Comment[tr]=Docbook belgelendirme şablonlarını yükle.
 Default=true
 
 [DOCSDIR]

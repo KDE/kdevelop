@@ -26,6 +26,7 @@ Comment[sr@Latn]=Prevodilac Fortran-a 77 od Portland Group-a
 Comment[sv]=Portland gruppens Fortran 77-kompilator
 Comment[ta]=பொர்ட்லான்ட் குழு பொர்ட்ரான் 77 தொகுப்பி
 Comment[tg]=Талфифгари Portland Group Fortran77
+Comment[tr]=Portland Grubu Fortran 77 Derleyicisi
 Comment[xx]=xxPortland Group Fortran77 Compilerxx
 Comment[zh_CN]=Portland Group Fortran77 编译器
 Name=Pgf77Options

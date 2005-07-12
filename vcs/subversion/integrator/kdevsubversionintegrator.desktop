@@ -21,6 +21,7 @@ Comment[ru]=Интеграция Subversion
 Comment[sr]=Интеграција Subversion-а у пројекат
 Comment[sr@Latn]=Integracija Subversion-a u projekat
 Comment[sv]=Funktion för integrering av Subversion i projekt
+Comment[tr]=Subversion Proje Bütünleştirme Aracı
 Comment[xx]=xxSubversion Project Integration Facilityxx
 Icon=misc
 Exec=blubb

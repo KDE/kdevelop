@@ -37,6 +37,7 @@ Name[pl]=Opcje Gcc
 Name[sl]=Možnosti Gcc
 Name[sv]=Alternativ för gcc
 Name[ta]=Gccவிருப்பங்கள் 
+Name[tr]=GccSeçenekleri
 Name[xx]=xxGccOptionsxx
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevgccoptions

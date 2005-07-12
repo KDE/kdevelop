@@ -6,6 +6,7 @@ Name[et]=Lihtne "Tere, maailm" programm
 Name[fr]=Simple programme « Hello world »
 Name[hu]=Egyszerű Hello world program
 Name[sv]=Enkelt Hello world-program
+Name[tr]=Basit Merhaba dünya programı
 Icon=chello.png
 Category=C
 Comment=Generates a simple Hello world program in C
@@ -14,6 +15,7 @@ Comment[et]=Lihtsa "Tere, maailm" programmi loomine C-s
 Comment[fr]=Génère un simple programme « Hello world » en C
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C nyelven
 Comment[sv]=Skapar ett enkelt Hello world-program i C
+Comment[tr]=C'de basit bir Merhaba Dünya programı yaratır.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.c
 Archive=chello.tar.gz
@@ -28,6 +30,7 @@ Comment[et]=Täiendavad lingitavad teegid.
 Comment[fr]=Bibliothèques optionnelles à lier.
 Comment[hu]=Linkelési programkönyvtárak (opcionális).
 Comment[sv]= Valfria bibliotek att länka till.
+Comment[tr]=Bağlanılacak isteğe bağlı kütüphaneler.
 Default= -lm
 
 [INCLUDES]
@@ -39,6 +42,7 @@ Comment[da]= Mulig include-sti.
 Comment[et]=Täiendavate päisefailide asukoht.
 Comment[hu]=Include fájlok könyvtárai (opcionális).
 Comment[sv]= Valfri sökväg till deklarationsfiler.
+Comment[tr]=İsteğe bağlı include yolu.
 Default= -I/usr/include
 
 [CFLAGS]
@@ -50,6 +54,7 @@ Comment[da]= Mulige CFLAGS at definere i makefile.
 Comment[et]=Täiendavad Makefile'is defineeritavad CFLAGS'id.
 Comment[hu]=A Makefile-hoz definiálható CFLAGS információ (opcionális).
 Comment[sv]= Valfria CFLAGS att definiera i byggfilen.
+Comment[tr]=Makefile'da tanımlanacak isteğe bağlı CFLAGS değerleri
 Default=
 
 [MGS]
@@ -60,6 +65,7 @@ Comment[et]=Lihtne C-projekt loodi asukohta %{dest}.
 Comment[fr]=Un projet C simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű C-projekt itt: %{dest}.
 Comment[sv]=Ett enkelt C-projekt skapades i %{dest}.
+Comment[tr]=Basit bir C projesi %{dest} içinde oluşturuldu.
 Archive=chello.tar.gz
 
 [INCADMIN]

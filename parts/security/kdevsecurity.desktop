@@ -6,10 +6,12 @@ GenericName=Security Checker
 GenericName[da]=Sikkerhedstjekker
 GenericName[et]=Turvalisuse kontroll
 GenericName[sv]=Säkerhetskontroll
+GenericName[tr]=Güvenlik Denetimcisi
 Comment=Code security checker
 Comment[da]=Sikkerhedstjekker af kode
 Comment[et]=Koodi turvalisuse kontroll
 Comment[sv]=Kodsäkerhetskontroll
+Comment[tr]=Kod Güvenlik Denetimcisi
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 

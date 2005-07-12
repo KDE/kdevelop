@@ -27,6 +27,7 @@ Comment[sr@Latn]=Dokumentacioni priključak za Palmdoc format
 Comment[sv]=Dokumentationsinsticksmodul för Palmdoc-format
 Comment[ta]= CHM ஆவணத்திற்கான ஆவணச் சொருகு
 Comment[tg]=Модул барои наоиш намудани ҳуҷҷатҳо дар формати Palmdoc
+Comment[tr]=Palmdoc biçimi için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for Palmdoc formatxx
 Comment[zh_CN]=Palmdoc 格式的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins

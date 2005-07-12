@@ -19,6 +19,7 @@ Name[ru]=Интерфейс средства создания файлов дл�
 Name[sr]=KDevelop-ов интерфејс за прављење фајла
 Name[sr@Latn]=KDevelop-ov interfejs za pravljenje fajla
 Name[sv]=KDevelop gränssnitt för att skapa filer
+Name[tr]=KDevelop Dosya Yaratma Arayüzü
 
 # versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

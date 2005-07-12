@@ -29,6 +29,7 @@ Comment[sr@Latn]=Dokumentacioni priključak za sve tipove dokumentacije
 Comment[sv]=Dokumentationsinsticksmodul för alla typer av dokumentation
 Comment[ta]=எல்லா வகை ஆவணமயமாக்கலுக்கான ஆவணமயமாக்கல் சொருகுப்பொருள்
 Comment[tg]=Модул барои кор кардан бо ҳуҷҷатҳо
+Comment[tr]=Her tür belgelendirme için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for all types of documentationxx
 Comment[zh_CN]=全部类型文档的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins

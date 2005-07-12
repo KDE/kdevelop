@@ -20,6 +20,7 @@ Comment[sl]=Konquerorjev vstavek pulta za navigacijo z imenom $NAME$
 Comment[sr]=Кonqueror-ов прикључак за навигациони панел по имену $NAME$
 Comment[sr@Latn]=Konqueror-ov priključak za navigacioni panel po imenu $NAME$
 Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter $NAME$
+Comment[tr]=$NAME$ adında bir konqueror gezinme paneli eklentisi
 Comment[xx]=xxA konqueror navigation panel plugin  called $NAME$xx
 Name=%{APPNAMELC}
 Name[xx]=xx%{APPNAMELC}xx

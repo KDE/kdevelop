@@ -23,6 +23,7 @@ Comment[sr@Latn]=Daje listu svih otvorenih fajlova. (Zgodno kad traka sa jezičc
 Comment[sv]=Tillhandahåller en lista av alla för närvarande öppna filer. (Praktiskt när flikraden inte är riktigt bred nog.)
 Comment[ta]=தற்போது திறக்கப்பட்ட கோப்புகளின் பட்டியலை வழங்குகிறது. (தத்தல் போதுமான வசதியை வழங்க இயலாத பொழுது)
 Comment[tg]=Рӯйхати кушодашудагиҳои ҳозир будаи файлҳо (вақте ки онҳо дар панелмонӣ омехта намешаванд, фоидаовар аст.)
+Comment[tr]=Bütün açık dosyaların bir listesini sunar. (Sekme çubuğu yeteri kadar geniş olmadığında işe yarar)
 Comment[xx]=xxProvides a list of all currently open files. (Handy when the tab bar is not quite wide enough.)xx
 Comment[zh_CN]=提供目前已打开全部文件的列表。(当标签栏不够宽时非常实用。)
 Name=KDevfilelist

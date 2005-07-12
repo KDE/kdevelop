@@ -19,6 +19,7 @@ Comment[ru]=Импорт проектов Automake
 Comment[sr]=KDevelop-ов automake увозник
 Comment[sr@Latn]=KDevelop-ov automake uvoznik
 Comment[sv]=KDevelop Automake-import
+Comment[tr]=KDevelop Automake Aktarıcısı
 Comment[xx]=xxKDevelop Automake Importerxx
 Icon=gear
 ServiceTypes=KDevelop/ProjectBuilder

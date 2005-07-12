@@ -21,6 +21,7 @@ Comment[ru]=Интеграция Perforce
 Comment[sr]=Интеграција Perforce-а у пројекат
 Comment[sr@Latn]=Integracija Perforce-a u projekat
 Comment[sv]=Funktion för integrering av Perforce i projekt
+Comment[tr]=Perforce Proje Bütünleştirme Aracı
 Comment[xx]=xxPerforce Project Integration Facilityxx
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator

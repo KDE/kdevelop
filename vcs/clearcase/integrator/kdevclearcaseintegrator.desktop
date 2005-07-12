@@ -21,6 +21,7 @@ Comment[ru]=Интеграция Clearcase
 Comment[sr]=Интеграција Clearcase-а у пројекат
 Comment[sr@Latn]=Integracija Clearcase-a u projekat
 Comment[sv]=Funktion för integrering av Clearcase i projekt
+Comment[tr]=Clearcase Proje Bütünleştirilmesi Aracı
 Comment[xx]=xxClearcase Project Integration Facilityxx
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator

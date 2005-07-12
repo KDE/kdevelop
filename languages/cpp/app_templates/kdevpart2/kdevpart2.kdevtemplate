@@ -5,12 +5,14 @@ Name[da]=KDevelop plugin (Alenestående)
 Name[et]=KDevelopi plugin (autonoomne)
 Name[hu]=KDevelop-bővítőmodul (önálló)
 Name[sv]=KDevelop-insticksprogram (att bygga fristående)
+Name[tr]=KDevelop Eklentisi (Kendi başına çalışabilen)
 Category=C++/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
 Comment[da]=Dette genererer en KPart for KDevelop, til at bygges udenfor  KDevelop's kildetræ.
 Comment[et]=KDevelopi KPart'i loomine, mida saab ehitada väljaspool KDevelopi lähtekoodipuud.
 Comment[hu]=Létrehoz egy KDevelop-bővítőmodult, mely a KDevelopos forráskönyvtáron kívül fordítható le.
 Comment[sv]=Detta skapar ett KDevelop-delprogram, att bygga utanför KDevelops källkodsträd.
+Comment[tr]=Bu, KDevelop için, KDevelop kaynak ağacının dışında yapılacak, bir KPart yaratır.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
 Archive=kdevpart2.tar.gz
@@ -24,6 +26,7 @@ Comment[da]= Et plugins omfang (Globalt, Projekt, Kerne)
 Comment[et]=Plugina skoop (globaalne, projekt, tuum)
 Comment[hu]=A modul hatóköre (globális, projektszintű, alap)
 Comment[sv]= Insticksprogrammets omfattning (Global, Projekt, Kärna)
+Comment[tr]=Bir eklentinin alanı (Genel, Proje, İç)
 Default= Global
 
 [PROPS]
@@ -36,6 +39,7 @@ Comment[et]= KDevelopi toetatud omaduste nimekiri
 Comment[fr]= La liste des propriétés KDevelop prises en charge
 Comment[hu]=A támogatott KDevelop-tulajdonságok
 Comment[sv]= Listan med egenskaper i KDevelop som stöds
+Comment[tr]=Desteklenen KDevelop özellikleri
 Default=
 
 [ADMIN]
@@ -157,3 +161,4 @@ Comment[et]=KDevelopi plugin loodi asukohta %{dest}
 Comment[fr]=Un module KDevelop a été créé dans %{dest}
 Comment[hu]=Létrejött egy KDevelop-bővítőmodul itt: %{dest}
 Comment[sv]=Ett insticksprogram för KDevelop skapades i %{dest}
+Comment[tr]=Bir KDevelop eklentisi %{dest} içinde yaratıldı.

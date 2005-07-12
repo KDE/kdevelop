@@ -21,6 +21,7 @@ Comment[ru]=Интеграция CVS
 Comment[sr]=Интеграција Cervisia-је у пројекат
 Comment[sr@Latn]=Integracija Cervisia-je u projekat
 Comment[sv]=Funktion för integrering av CVS-tjänst i projekt
+Comment[tr]=CVS Servis Projesi Bütünleştirme Aracı
 Comment[xx]=xxCVS Service Project Integration Facilityxx
 Icon=cervisia
 Exec=blubb

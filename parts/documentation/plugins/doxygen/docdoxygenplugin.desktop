@@ -28,6 +28,7 @@ Comment[sr@Latn]=Dokumentacioni priključak za Doxygen dokumentaciju
 Comment[sv]=Dokumentationsinsticksmodul för Doxygen-dokumentation
 Comment[ta]= Doxygen ஆவணத்திற்கான ஆவணச் சொருகு
 Comment[tg]=Модул барои наоиш намудани ҳуҷҷатҳо дар Doxygen
+Comment[tr]=Doxygen belgelendirmesi için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for Doxygen documentationxx
 Comment[zh_CN]=Doxygen 文档的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins

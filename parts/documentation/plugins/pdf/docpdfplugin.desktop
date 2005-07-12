@@ -27,6 +27,7 @@ Comment[sr@Latn]=Dokumentacioni priključak za PDF format
 Comment[sv]=Dokumentationsinsticksmodul för PDF-format
 Comment[ta]= Qt DCF ஆவணத்திற்கான ஆவணச் சொருகு
 Comment[tg]=Модул барои наоиши PDF
+Comment[tr]=PDF biçimi için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for PDF formatxx
 Comment[zh_CN]=PDF 格式的文档插件
 ServiceTypes=KDevelop/DocumentationPlugins

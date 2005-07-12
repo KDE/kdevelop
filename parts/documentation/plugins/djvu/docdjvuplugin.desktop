@@ -27,6 +27,7 @@ Comment[sr@Latn]=Dokumentacioni priključak za djvu format
 Comment[sv]=Dokumentationsinsticksmodul för djvu-format
 Comment[ta]= CHM ஆவணத்திற்கான ஆவணச் சொருகு
 Comment[tg]=Модул барои наоиш намудани ҳуҷҷатҳо дар формати DJVU
+Comment[tr]=djvu biçimi için belgelendirme eklentisi
 Comment[xx]=xxDocumentation plugin for djvu formatxx
 Comment[zh_CN]=djvu 格式文档插件
 ServiceTypes=KDevelop/DocumentationPlugins
