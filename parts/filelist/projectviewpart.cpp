@@ -108,8 +108,10 @@ ProjectviewPart::~ProjectviewPart()
 
 void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
 {
+    m_projectViews.clear();
     if (!el)
     {
+        adjustViewActions();
         return;
     }
     // get the base of the project
@@ -118,14 +120,13 @@ void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
     {
         m_projectBase.setProtocol("file");
         m_projectBase.setPath(urlStr);
-    }else
+    } else
     {
         m_projectBase = KURL::fromPathOrURL(urlStr);
     }
     m_projectBase.adjustPath(+1);  // just in case
     
     // read all the views
-    m_projectViews.clear();
     QDomNodeList domList = el->elementsByTagName("projectview");
     
     uint len = domList.length();
@@ -281,8 +282,6 @@ void ProjectviewPart::setupActions()
     
     m_deleteCurrentPrjViewAction->setToolTip(i18n("Delete Project View"));
     
-    
-    // adjust the actions
     adjustViewActions();
 }
 
@@ -360,12 +359,8 @@ void ProjectviewPart::projectOpened()
 void ProjectviewPart::projectClosed()
 {
     m_projectBase = KURL();
-    
-    m_projectViews.clear();
-    readConfig();
-    m_currentProjectView = "";
     m_defaultProjectView = "";
-    adjustViewActions();
+    readConfig();  // read the global project views
 }
 
 void ProjectviewPart::slotOpenProjectView(const QString &view)
@@ -406,7 +401,6 @@ void ProjectviewPart::slotOpenProjectView(const QString &view)
             }
         }
     }
-    // adjust the actions
     adjustViewActions();
 }
 
@@ -430,8 +424,12 @@ void ProjectviewPart::adjustViewActions()
     }
     m_deletePrjViewAction->clear();
     m_deletePrjViewAction->setItems(viewList);
-    
-    bool haveView = !(m_currentProjectView.isEmpty() || m_currentProjectView.isNull());
+    m_currentProjectView = m_openPrjViewAction->currentText();
+    if (m_currentProjectView.isEmpty() && !viewList.empty())
+    {
+        m_currentProjectView = viewList.front();
+    }
+    bool haveView = !m_currentProjectView.isEmpty();
     m_savePrjViewAction->setEnabled(haveView);
     m_deleteCurrentPrjViewAction->setEnabled(haveView);
 }
@@ -439,7 +437,7 @@ void ProjectviewPart::adjustViewActions()
 
 void ProjectviewPart::slotDeleteProjectViewCurent()
 {
-  slotDeleteProjectView(m_currentProjectView);
+    slotDeleteProjectView(m_currentProjectView);
 }
 
 void ProjectviewPart::slotDeleteProjectView(const QString& view)
@@ -505,7 +503,7 @@ void ProjectviewPart::slotSaveAsProjectView(bool askForName)
 
 void ProjectviewPart::writeConfig()
 {
-  KConfig * config = projectviewFactory::instance()->config();
+  KConfig * config = kapp->config();
   config->deleteGroup("ProjectViews", true);
   config->setGroup("ProjectViews");
     
@@ -526,7 +524,7 @@ void ProjectviewPart::writeConfig()
 
 void ProjectviewPart::readConfig()
 {
-  KConfig * config = projectviewFactory::instance()->config();
+  KConfig * config = kapp->config();
   QMap<QString, QString> entries = config->entryMap("ProjectViews");
   
   m_projectViews.clear();
