@@ -54,7 +54,7 @@ scriptingPart::scriptingPart(QObject *parent, const char *name, const QStringLis
     setXMLFile("kdevscripting.rc");
 
     m_configProxy = new ConfigWidgetProxy(core());
-    m_configProxy->createGlobalConfigPage(i18n("scripting"), GLOBALDOC_OPTIONS, info()->icon());
+    m_configProxy->createGlobalConfigPage(i18n("Scripting"), GLOBALDOC_OPTIONS, info()->icon());
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
         this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
 
