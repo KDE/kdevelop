@@ -288,7 +288,7 @@ extern "C"
     {
         return new KDevDesignerPartFactory;
     }
-};
+}
 
 //actions
 

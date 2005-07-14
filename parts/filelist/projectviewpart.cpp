@@ -62,7 +62,7 @@
 
 typedef KDevGenericFactory<ProjectviewPart> projectviewFactory;
 KDevPluginInfo data("kdevfilelist");
-K_EXPORT_COMPONENT_FACTORY(libkdevfilelist, projectviewFactory(data));
+K_EXPORT_COMPONENT_FACTORY(libkdevfilelist, projectviewFactory(data))
 
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2
