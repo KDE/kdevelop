@@ -243,7 +243,7 @@
 				<cstring>traceIntoRuby</cstring>
 			</property>
 			<property name="text">
-				<string>Trace &amp;into Ruby</string>
+				<string>Trace &amp;into Ruby libraries</string>
 			</property>
 			<property name="whatsThis" stdset="0">
 				<string>Trace through the Ruby code installed under sitedir in the debugger</string>
