@@ -14,13 +14,19 @@
 		 
 #include "filelist_item.h"
 
+#include <kiconloader.h>
+#include <kfileitem.h>
+
 FileListItem * FileListItem::s_activeItem = 0;
 
 FileListItem::FileListItem( QListView * parent, KURL const & url, DocumentState state )
 	: QListViewItem( parent, url.fileName() ),
 	_url( url )
+
 {
-	setState( state );
+	KFileItem fileItem( KFileItem::Unknown, KFileItem::Unknown, _url );
+    _icon = fileItem.pixmap(KIcon::SizeSmall);
+    setState( state );
 }
 	
 KURL FileListItem::url()
@@ -36,11 +42,12 @@ DocumentState FileListItem::state( )
 void FileListItem::setState( DocumentState state )
 {
 	_state = state;
-	
+    	
 	switch( state )
 	{
 		case Clean:
-			setPixmap( 0, 0L );
+            setPixmap( 0, _icon);   
+// 			setPixmap( 0, 0L );
 			break;
 		case Modified:
 			setPixmap( 0, SmallIcon("filesave") );

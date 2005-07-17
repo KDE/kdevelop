@@ -14,9 +14,10 @@
 
 
 #include <qlistview.h>
+#include <qpixmap.h>
 
 #include <kurl.h>
-		 
+ 
 #include <kdevpartcontroller.h>
 		 
 class FileListItem : public QListViewItem
@@ -38,7 +39,8 @@ private:
 	
 	KURL _url;
 	DocumentState _state;
-	
+    QPixmap _icon;
+    
 	static FileListItem * s_activeItem;
 	
 };
