@@ -3,6 +3,7 @@
 Name=Hello world program
 Name[da]=Goddag verden program
 Name[de]=Hello-world-Programm
+Name[el]=Πρόγραμμα 'Hello world'
 Name[es]=Programa «Hola mundo»
 Name[et]="Tere,maailm" programm
 Name[fr]=Programme « Hello world »
@@ -115,6 +116,7 @@ Type=message
 Comment=A Hello World programm was created in %{dest}
 Comment[da]=Et Goddag verden program blev oprettet i %{dest}
 Comment[de]=Ein Hello-World-Programm wurde in %{dest} erstellt.
+Comment[el]=Ένα πρόγραμμα 'Hello World' δημιουργήθηκε στο %{dest}
 Comment[en_GB]=A Hello World program was created in %{dest}
 Comment[es]=Un programa «Hola mundo» ha sido creado en %{dest}
 Comment[et]="Tere, maailm" programm loodi asukohta %{dest}
