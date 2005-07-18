@@ -36,6 +36,7 @@ Name[pl]=Opcje Pghpf
 Name[sv]=Alternativ för pghpf
 Name[ta]=Pghpf விருப்பங்கள் 
 Name[tg]=PghpfИнтихобҳо
+Name[tr]=PghpfOptions
 Name[xx]=xxPghpfOptionsxx
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevpgioptions
