@@ -213,14 +213,8 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
     connect( this, SIGNAL(toggleRadix(QListViewItem*)), SLOT(slotToggleRadix(QListViewItem*)) );
-
-/*
-    work in progress - disabled for now
-
-    // jw
-    connect( this, SIGNAL(doubleClicked(QListViewItem *item, const QPoint &pos, int c)),
-             SLOT(slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c)) );
-*/
+    connect( this, SIGNAL(itemRenamed( QListViewItem*, int, const QString&)),
+             this, SLOT(slotItemRenamed( QListViewItem*, int, const QString&)));
 }
 
 // **************************************************************************
@@ -334,26 +328,6 @@ void VariableTree::slotEvaluateExpression(const QString &expression)
     VarItem *varItem = new VarItem(recentExpressions_, expression, typeUnknown);
     varItem->setRenameEnabled(0, 1);
     emit expandItem(varItem);
-}
-
-
-// **************************************************************************
-
-// jw
-void VariableTree::slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c)
-{
-    kdDebug(9012) << " ### VariableTree::slotDoubleClicked 1" << endl;
-
-    if (item)
-    {
-        kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
-        TrimmableItem *titem = dynamic_cast<TrimmableItem*>(item);
-        if (titem)
-        {
-            kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
-            titem->handleDoubleClicked(pos, c);
-        }
-    }
 }
 
 // **************************************************************************
@@ -628,6 +602,27 @@ void VariableTree::slotCurrentFrame(int frameNo, int threadNo)
     }
 }
 
+void 
+VariableTree::slotItemRenamed(QListViewItem* item, int col, const QString& text)
+{
+    if (col == ValueCol)
+    {
+        VarItem* v = dynamic_cast<VarItem*>(item);
+        Q_ASSERT(v);
+        if (v)
+        {
+            // Set the value
+            emit setValue(v->originalName(), text);
+            // And immediately reload it from gdb, 
+            // so that it's display format is the one gdb uses,
+            // not the one user has typed. Otherwise, on the next
+            // step, the visible value might change and be highlighted
+            // as changed, which is bogus.
+            emit expandItem(v);
+        }
+    }
+}
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -805,16 +800,14 @@ QString TrimmableItem::key (int, bool) const
 
 VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataType)
     : TrimmableItem (parent),
+      name_(varName),
       cache_(QCString()),
       dataType_(dataType),
       highlight_(false)
 {
     setText(VarNameCol, varName);
-
-/*
-    setRenameEnabled(VarTypeCol, true);
-    setRenameEnabled(VarNameCol, true);
-*/
+    // Allow to change variable name by editing.
+    setRenameEnabled(ValueCol, true);
 
     kdDebug(9012) << " ### VarItem::VarItem *CONSTR*" << endl;
     emit ((VariableTree*)listView())->varItemConstructed(this);
@@ -862,6 +855,13 @@ QString VarItem::fullName() const
         return itemName.replace(QRegExp("^static "), "");
 
     return varPath() + "." + itemName.replace(QRegExp("^static "), "");
+}
+
+// **************************************************************************
+
+const QString& VarItem::originalName() const
+{
+    return name_;
 }
 
 // **************************************************************************
@@ -946,18 +946,6 @@ void VarItem::updateType(char *buf)
 
 // **************************************************************************
 
-void VarItem::handleDoubleClicked(const QPoint &/*pos*/, int c)
-{
-    kdDebug(9012) << " ### VarItem::handleDoubleClicked 1" << endl;
-    if (c == VarTypeCol || c == ValueCol)
-    {
-        kdDebug(9012) << " ### VarItem::handleDoubleClicked 2" << endl;
-        static_cast<KListView*>(listView())->rename(this, c);
-    }
-}
-
-// **************************************************************************
-
 void VarItem::setCache(const QCString &value)
 {
     cache_ = value;
@@ -972,7 +960,12 @@ void VarItem::setCache(const QCString &value)
 
 void VarItem::setOpen(bool open)
 {
+    QListViewItem::setOpen(open);
+
     if (open) {
+        // Opening an item can be potentially expensive, so cache value
+        // received from gdb. If we have value already, just parse it,
+        // don't issue another request.
         if (cache_) {
             QCString value = cache_;
             cache_ = QCString();
@@ -984,9 +977,14 @@ void VarItem::setOpen(bool open)
                 emit ((VariableTree*)listView())->expandItem(this);
             }
         }
+    } else {
+        // Closing item. For pointer/references, it means we switch from
+        // display the pointer-to value to displaying the pointer itself.
+        if (dataType_ == typePointer || dataType_ == typeReference) {
+            waitingForData();
+            emit ((VariableTree*)listView())->expandItem(this);
+        }
     }
-
-    QListViewItem::setOpen(open);
 }
 
 // **************************************************************************
@@ -1077,8 +1075,7 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 QString VarItem::tipText() const
 {
     const unsigned int maxTooltipSize = 70;
-    /// \FIXME Column #1 is "Value": perhaps some kind of const somewhere is better ...
-    QString tip = text( 1 );
+    QString tip = text( ValueCol );
 
     if (tip.length() < maxTooltipSize )
 	    return tip;

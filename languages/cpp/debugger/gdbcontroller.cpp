@@ -1739,6 +1739,18 @@ void GDBController::slotProduceVariablesInfo()
 
 // **************************************************************************
 
+void GDBController::slotSetValue(const QString& expression, 
+                                 const QString& value)
+{
+    queueCmd(new GDBCommand(QString("set %1=%2").arg(expression).arg(value)
+                            .local8Bit(),
+                            NOTRUNCMD,
+                            INFOCMD,
+                            SETVALUE));
+}
+
+// **************************************************************************
+
 void GDBController::slotVarItemConstructed(VarItem *item)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
@@ -1768,8 +1780,11 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
         switch (varItem->getDataType())
         {
         case typePointer:
-            queueCmd(new GDBPointerCommand(varItem));
-            break;
+            if (varItem->isOpen())
+            {
+                queueCmd(new GDBPointerCommand(varItem));
+                break;
+            }
 
         default:
              //rgr: we need to do this in order to move the output modifier

@@ -116,6 +116,10 @@ signals:
 
     //rgr
     void toggleRadix(QListViewItem *item);
+
+    // Emitted when we want to change value of 'expression'.
+    void setValue(const QString& expression, const QString& value);
+
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
     void slotEvaluateExpression(const QString& expression);
@@ -127,12 +131,10 @@ public slots:
     void slotParametersReady(const char* data);
     void slotLocalsReady(const char* data);
     void slotCurrentFrame(int frameNo, int threadNo);
+    void slotItemRenamed(QListViewItem* item, int col, const QString& text);
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
-
-    // jw
-    void slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c);
 
 private: // helper functions
     /** Get (if exists) and create (otherwise) frame root for
@@ -204,9 +206,6 @@ public:
     virtual QCString getCache();
     virtual QString key( int column, bool ascending ) const;
 
-    // jw
-    virtual void handleDoubleClicked(const QPoint &, int ) {}
-
 protected:
 
     void paintCell( QPainter *p, const QColorGroup &cg,
@@ -227,10 +226,12 @@ public:
     VarItem( TrimmableItem *parent, const QString &varName, DataType dataType );
 
     virtual ~VarItem();
-
+    
     QString varPath() const;
     QString fullName() const;
     DataType getDataType() const;
+    /// Returns the name with which *this was created.
+    const QString& originalName() const;
 
     void updateValue(char *data);
 
@@ -243,9 +244,6 @@ public:
     void setOpen(bool open);
     void setText (int column, const QString& text);
 
-    // jw - overriden from TrimmableItem to handle renaming
-    void handleDoubleClicked(const QPoint &pos, int c);
-
     // Returns the text to be displayed as tooltip (the value)
     QString tipText() const;
 
@@ -255,6 +253,9 @@ private:
                     int column, int width, int align );
 
 private:
+    // The name of expression can potentially be edited, so
+    // we need to store the original name.
+    QString name_;
     QCString  cache_;
     DataType  dataType_;
     bool      highlight_;

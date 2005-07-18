@@ -69,7 +69,10 @@ enum GDBCmd
 
   WAIT            = '0',
 
-  WHATIS          = 'H'
+  WHATIS          = 'H',
+
+  SETVALUE        = 'V'
+  
 };
 
 #define RUNCMD      (true)

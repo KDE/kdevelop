@@ -121,6 +121,13 @@ public slots:
         by means of emitting localsReady and parametersReady signals. */
     void slotProduceVariablesInfo();
 
+    /** Sets the value of specified 'expression' to 'value'. This operation
+        may fail, because gdb does not provide information about writability
+        of an expression.
+    */
+    void slotSetValue(const QString& expression, const QString& value);
+
+
     // jw - type determination requires a var object, so we do it here
     void slotVarItemConstructed(VarItem *item);
 

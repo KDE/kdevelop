@@ -514,6 +514,10 @@ void DebuggerPart::setupController()
              controller,            SLOT(slotVarItemConstructed(VarItem*)));     // jw
     connect( variableTree,          SIGNAL(produceVariablesInfo()),
              controller,            SLOT(slotProduceVariablesInfo()));
+    connect( variableTree,          SIGNAL(setValue(const QString&, 
+                                                    const QString&)),
+             controller,            SLOT(slotSetValue(const QString&, 
+                                                      const QString&)));
 
     // variableTree -> gdbBreakpointWidget
     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
