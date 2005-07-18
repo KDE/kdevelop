@@ -15,6 +15,7 @@
 
 #include "gdbparser.h"
 #include "variablewidget.h"
+#include <kdebug.h>
 
 #include <qregexp.h>
 
@@ -86,7 +87,7 @@ void GDBParser::parseData(TrimmableItem *parent, char *buf,
             dataType = determineType(buf);
         }
 
-        QCString value = getValue(&buf, requested);
+        QCString value = getValue(dataType, &buf, requested);
         setItem(parent, varName, dataType, value, requested, params);
     }
 }
@@ -103,7 +104,7 @@ void GDBParser::parseArray(TrimmableItem *parent, char *buf)
                 return;
 
             DataType dataType = determineType(buf);
-            QCString value = getValue(&buf, false);
+            QCString value = getValue(dataType, &buf, false);
             QString varName = elementRoot.arg(idx);
             setItem(parent, varName, dataType, value, false, false);
 
@@ -133,15 +134,30 @@ QString GDBParser::getName(char **buf)
 
 // **************************************************************************
 
-QCString GDBParser::getValue(char **buf, bool requested)
+QCString GDBParser::getValue(DataType type, char **buf, bool requested)
 {
     char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 
     if (*start == '{')
-        return QCString(start+1, *buf - start -1);
-
-    if (*start == '(')
+    {
+        // Gdb uses '{' in two cases:
+        // - composites (arrays and structures)
+        // - pointers to functions. In this case type is
+        //   enclosed in "{}". Not sure why it's so, as
+        //   when printing pointer, type is in parenthesis.
+        if (type == typePointer)
+        {
+            // Looks like type in braces at the beginning. Strip it.
+            start = skipDelim(start, '{', '}');
+        }
+        else
+        {
+            // Looks like composite, strip the braces and return.
+            return QCString(start+1, *buf - start -1);
+        }
+    }
+    else if (*start == '(')
     {
         // Strip the type of the pointer from the value.
         //
@@ -160,14 +176,7 @@ QCString GDBParser::getValue(char **buf, bool requested)
         // characters if its function pointer. So count opening and closing
         // parentheses.
 
-        ++start;
-        for(unsigned count = 1; *start && count > 0; ++start)
-        {
-            if (*start == '(')
-                ++count;
-            else if (*start == ')')
-                --count;
-        }
+        start = skipDelim(start, '(', ')');
     }
 
     QCString value(start, *buf - start + 1);
