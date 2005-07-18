@@ -1255,6 +1255,8 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
                             NOTINFOCMD));
     queueCmd(new GDBCommand("handle SIG41 pass nostop noprint", NOTRUNCMD,
                             NOTINFOCMD));
+    queueCmd(new GDBCommand("handle SIG42 pass nostop noprint", NOTRUNCMD,
+                            NOTINFOCMD));
     queueCmd(new GDBCommand("handle SIG43 pass nostop noprint", NOTRUNCMD,
                             NOTINFOCMD));
 
