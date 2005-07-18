@@ -230,8 +230,8 @@ public:
     QString varPath() const;
     QString fullName() const;
     DataType getDataType() const;
-    /// Returns the name with which *this was created.
-    const QString& originalName() const;
+    /// Returns the gdb expression for *this.
+    QString gdbExpression() const;
 
     void updateValue(char *data);
 

@@ -612,7 +612,7 @@ VariableTree::slotItemRenamed(QListViewItem* item, int col, const QString& text)
         if (v)
         {
             // Set the value
-            emit setValue(v->originalName(), text);
+            emit setValue(v->gdbExpression(), text);
             // And immediately reload it from gdb, 
             // so that it's display format is the one gdb uses,
             // not the one user has typed. Otherwise, on the next
@@ -859,9 +859,13 @@ QString VarItem::fullName() const
 
 // **************************************************************************
 
-const QString& VarItem::originalName() const
+QString VarItem::gdbExpression() const
 {
-    return name_;
+    if (isOpen() && dataType_ == typePointer)
+        // We're currently showing pointed-to value        
+        return "*" + name_;
+    else
+        return name_;
 }
 
 // **************************************************************************
