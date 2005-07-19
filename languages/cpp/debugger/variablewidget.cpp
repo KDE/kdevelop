@@ -957,6 +957,7 @@ void VarItem::setCache(const QCString &value)
     checkForRequests();
     if (isOpen())
         setOpen(true);
+    repaint();
     setActive();
 }
 
