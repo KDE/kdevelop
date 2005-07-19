@@ -923,6 +923,8 @@ void VarItem::updateValue(char *buf)
         if (dataType_ == typePointer && varName[0] == '/')
             dataType_ = typeValue;
     }
+    if (dataType_ == typeArray)
+        buf++;
 
     GDBParser::getGDBParser()->parseData(this, buf, true, false);
     setActive();

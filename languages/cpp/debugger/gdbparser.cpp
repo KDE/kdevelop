@@ -96,12 +96,6 @@ void GDBParser::parseData(TrimmableItem *parent, char *buf,
 
 void GDBParser::parseArray(TrimmableItem *parent, char *buf)
 {
-    // Skip over '{' that starts array. For nested arrays,
-    // the stored value is result of 'getValue' that strips
-    // {}, so '{' is not always present.
-    if (*buf == '{')    
-        ++buf;
-        
     QString elementRoot = parent->getName() + "[%1]";
     int idx = 0;
     while (*buf) {
