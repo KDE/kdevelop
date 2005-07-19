@@ -227,11 +227,10 @@ public:
 
     virtual ~VarItem();
     
-    QString varPath() const;
-    QString fullName() const;
-    DataType getDataType() const;
     /// Returns the gdb expression for *this.
     QString gdbExpression() const;
+        
+    DataType getDataType() const;
 
     void updateValue(char *data);
 

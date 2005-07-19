@@ -1744,7 +1744,12 @@ void GDBController::slotProduceVariablesInfo()
 void GDBController::slotSetValue(const QString& expression, 
                                  const QString& value)
 {
-    queueCmd(new GDBCommand(QString("set %1=%2").arg(expression).arg(value)
+    // Need explicit "set var", not just "set" because gdb is
+    // confused on
+    // 
+    //    set B::k=10
+    //
+    queueCmd(new GDBCommand(QString("set var %1=%2").arg(expression).arg(value)
                             .local8Bit(),
                             NOTRUNCMD,
                             INFOCMD,
@@ -1761,7 +1766,7 @@ void GDBController::slotVarItemConstructed(VarItem *item)
     // jw - name and value come from "info local", for the type we
     // send a "whatis <varName>" here.
     //rgr: remove any format modifier
-    QString strName = item->fullName();
+    QString strName = item->gdbExpression();
     strName.remove( QRegExp("/[xd] ", FALSE) );
     queueCmd(new GDBItemCommand(item, QCString("whatis ") + strName.latin1(),
                                 false, WHATIS));
@@ -1779,26 +1784,15 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
     VarItem *varItem;
     if ((varItem = dynamic_cast<VarItem*>(genericItem)))
     {
-        switch (varItem->getDataType())
-        {
-        case typePointer:
-            if (varItem->isOpen())
-            {
-                queueCmd(new GDBPointerCommand(varItem));
-                break;
-            }
-
-        default:
-             //rgr: we need to do this in order to move the output modifier
-             //     from the middle to the beginning
-             QString strCmd = varItem->fullName();
-             int iFound = strCmd.find( QRegExp("./[xd] ", FALSE) );
-             if (iFound != -1) {
-               strCmd.prepend( strCmd.mid(iFound+1, 3) );
-               strCmd.replace( QRegExp("./[xd] "), "." );
-             }
-             queueCmd(new GDBItemCommand(varItem, QCString("print ") + strCmd.latin1()));            break;
+        //rgr: we need to do this in order to move the output modifier
+        //     from the middle to the beginning
+        QString strCmd = varItem->gdbExpression();
+        int iFound = strCmd.find( QRegExp("./[xd] ", FALSE) );
+        if (iFound != -1) {
+            strCmd.prepend( strCmd.mid(iFound+1, 3) );
+            strCmd.replace( QRegExp("./[xd] "), "." );
         }
+        queueCmd(new GDBItemCommand(varItem, QCString("print ") + strCmd.latin1()));
         return;
     }
 

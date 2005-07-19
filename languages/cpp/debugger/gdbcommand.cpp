@@ -65,24 +65,6 @@ GDBItemCommand::~GDBItemCommand()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBPointerCommand::GDBPointerCommand(VarItem *item)
-    : GDBItemCommand(item,
-                     QCString("print *")+QCString(item->fullName().latin1()),
-                     false,
-                     DATAREQUEST)
-{
-}
-
-/***************************************************************************/
-
-GDBPointerCommand::~GDBPointerCommand()
-{
-}
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
-
 //GDBReferenceCommand::GDBReferenceCommand(VarItem *item) :
 //  GDBItemCommand(item, "print "+item->fullName(), false,
 //                                                  DATAREQUEST)

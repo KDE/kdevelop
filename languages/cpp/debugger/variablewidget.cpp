@@ -271,7 +271,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         else if (res == idToggleWatch)
         {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
-                emit toggleWatchpoint(item->fullName());
+                emit toggleWatchpoint(item->gdbExpression());
         }
         else if (res == idReevaluate)
         {
@@ -821,51 +821,37 @@ VarItem::~VarItem()
 
 // **************************************************************************
 
-QString VarItem::varPath() const
+QString VarItem::gdbExpression() const
 {
     QString vPath("");
-    const VarItem *item = this;
+    for(const VarItem* item = this; 
+        item; 
+        item = dynamic_cast<const VarItem*>(item->parent()))
+    {
+        // Children of array item have array names in them,
+        // e.g. "p[0]", so when visiting parent we don't need to
+        // add parent name. However, when 'gdbExpression' is called
+        // on array itself, we do need the name.
+        if (item->getDataType() == typeArray && item != this)
+            continue;
 
-    // This stops at the root item (FrameRoot or WatchRoot)
-    while ((item = dynamic_cast<const VarItem*> (item->parent()))) {
-        if (item->getDataType() != typeArray) {
-            if ((item->text(VarNameCol))[0] != '<') {
-                QString itemName = item->text(VarNameCol);
-                if (vPath.isEmpty())
-                    vPath = itemName.replace(QRegExp("^static "), "");
-                else
-                    vPath = itemName.replace(QRegExp("^static "), "") + "." + vPath;
-            }
+        // VP, 2005/07/19: I don't know the reason for this
+        // check. But retaining to avoid breaking anything.
+        if ((item->text(VarNameCol))[0] != '<') {
+            QString itemName = item->name_;
+            if (vPath.isEmpty())
+                vPath = itemName.replace(QRegExp("^static "), "");
+            else
+                vPath = itemName.replace(QRegExp("^static "), "") 
+                    + "." + vPath;
         }
     }
 
-    return vPath;
-}
-
-// **************************************************************************
-
-QString VarItem::fullName() const
-{
-    QString itemName = getName();
-    QString vPath = varPath();
-    if (itemName[0] == '<')
-        return vPath;
-
-    if (vPath.isEmpty())
-        return itemName.replace(QRegExp("^static "), "");
-
-    return varPath() + "." + itemName.replace(QRegExp("^static "), "");
-}
-
-// **************************************************************************
-
-QString VarItem::gdbExpression() const
-{
     if (isOpen() && dataType_ == typePointer)
         // We're currently showing pointed-to value        
-        return "*" + name_;
+        return "*" + vPath;
     else
-        return name_;
+        return vPath;
 }
 
 // **************************************************************************
@@ -1012,15 +998,17 @@ void VarItem::checkForRequests()
     // Signature for a QT1.44 QString
     if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         fullName().latin1()+QCString(".shd.data"));
+        emit ((VariableTree*)listView())->expandUserItem(
+            this,
+            gdbExpression().latin1()+QCString(".shd.data"));
     }
 
     // Signature for a QT1.44 QDir
     if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0) {
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         fullName().latin1()+QCString(".dPath.shd.data"));
+        emit ((VariableTree*)listView())->expandUserItem(
+            this,
+            gdbExpression().latin1()+QCString(".dPath.shd.data"));
     }
 
     // Signature for a QT2.x QT3.x QString
@@ -1028,26 +1016,28 @@ void VarItem::checkForRequests()
     // at the moment to leave it here, and it won't cause bad things to happen.
     if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         // QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-                                                         QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-                                                                            fullName().latin1()));
+        emit ((VariableTree*)listView())->expandUserItem(
+            this,
+            QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+                               gdbExpression().latin1()));
     }
 
     // Signature for a QT2.0.x QT2.1 QCString
     if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0) {
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         fullName().latin1()+QCString(".shd.data"));
+        emit ((VariableTree*)listView())->expandUserItem(
+            this,
+            gdbExpression().latin1()+QCString(".shd.data"));
     }
 
     // Signature for a QT2.0.x QT2.1 QDir
     if (strncmp(cache_, "dPath = {d = 0x", 15) == 0) {
         waitingForData();
-        ((VariableTree*)listView())->expandUserItem(this,
-                                                    // QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-                                                    QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-                                                                       fullName().latin1()));
+        ((VariableTree*)listView())->expandUserItem(
+            this,
+            // QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+            QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+                               gdbExpression().latin1()));
   }
 }
 
