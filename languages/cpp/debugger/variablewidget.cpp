@@ -261,16 +261,21 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         int idRemove = -2;
         int idReevaluate = -2;
         QListViewItem* root = findRoot(item);
-        if (dynamic_cast<WatchRoot*>(root))
-            idRemove = popup.insertItem( i18n("Remove Watch Variable") );
+        if (dynamic_cast<WatchRoot*>(root)) {
+            idRemove = popup.insertItem( 
+                SmallIcon("editdelete"), i18n("Remove Watch Variable") );
+        }
         if (root == recentExpressions_) {
-            idReevaluate = popup.insertItem( i18n("Reevaluate Expression") );
-            idRemove = popup.insertItem( i18n("Remove Expression") );
+            idReevaluate = popup.insertItem( 
+                SmallIcon("reload"), i18n("Reevaluate Expression") );
+            idRemove = popup.insertItem( 
+                SmallIcon("editdelete"), i18n("Remove Expression") );
         }
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
         int idToggleRadix = popup.insertItem( i18n("Toggle Hex/Decimal") );
-        int	idCopyToClipboard = popup.insertItem( i18n("Copy to Clipboard") );
+        int	idCopyToClipboard = popup.insertItem( 
+            SmallIcon("editcopy"), i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemove)
@@ -307,8 +312,10 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     {
         KPopupMenu popup(this);
         popup.insertTitle(i18n("Recent expressions"));
-        int idRemove = popup.insertItem(i18n("Remove all"));
-        int idReevaluate = popup.insertItem(i18n("Reevaluate all"));
+        int idRemove = popup.insertItem(
+            SmallIcon("editdelete"), i18n("Remove all"));
+        int idReevaluate = popup.insertItem(
+            SmallIcon("reload"), i18n("Reevaluate all"));
         int res = popup.exec(QCursor::pos());
         
         if (res == idRemove)
