@@ -73,32 +73,23 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     varTree_ = new VariableTree(this);
 
     
-    QHBox* expression_entry = new QHBox(this);
-    
-    QLabel *label = new QLabel(i18n("E&xpression:"), expression_entry);    
-    label->adjustSize();
-    label->setFixedWidth(label->width());
-    watchVarEditor_ = new KHistoryCombo( expression_entry, 
+    watchVarEditor_ = new KHistoryCombo( this, 
                                          "var-to-watch editor");
-    label->setBuddy(watchVarEditor_);
 
-    QHBox* buttons = new QHBox(this);
+    QHBoxLayout* buttons = new QHBoxLayout();
 
-    QSpacerItem* spacer = new QSpacerItem( 5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    buttons->layout()->addItem(spacer);
+    buttons->addStretch();
 
-    QPushButton *evalButton = new QPushButton(i18n("&Evaluate"), buttons );
-    evalButton->adjustSize();
-    evalButton->setFixedWidth(evalButton->width());
+    QPushButton *evalButton = new QPushButton(i18n("&Evaluate"), this );
+    buttons->addWidget(evalButton);   
 
-    QPushButton *addButton = new QPushButton(i18n("&Watch"), buttons );
-    addButton->adjustSize();
-    addButton->setFixedWidth(addButton->width());
+    QPushButton *addButton = new QPushButton(i18n("&Watch"), this );
+    buttons->addWidget(addButton);
 
     QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
     topLayout->addWidget(varTree_, 10);
-    topLayout->addWidget(expression_entry);
-    topLayout->addWidget(buttons);
+    topLayout->addWidget(watchVarEditor_);
+    topLayout->addItem(buttons);
     
 
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
