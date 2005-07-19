@@ -87,23 +87,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     // Setup widgets and dbgcontroller
     variableWidget = new VariableWidget( 0, "variablewidget");
-//     /*variableWidget*/->setEnabled(false);
-    variableWidget->setIcon(SmallIcon("math_brace"));
-    variableWidget->setCaption(i18n("Variable Tree"));
-    QWhatsThis::add
-        (variableWidget, i18n("<b>Variable tree</b><p>"
-                              "The variable tree allows you to see "
-                              "the variable values as you step "
-                              "through your program using the internal "
-                              "debugger. Click the right mouse button on items in "
-                              "this view to get a popup menu.\n"
-                              "To speed up stepping through your code "
-                              "leave the tree items closed and add the "
-                              "variable(s) to the watch section.\n"
-                              "To change a variable value in your "
-                              "running app use a watch variable (&eg; a=5)."));
     mainWindow()->embedSelectView(variableWidget, i18n("Variables"), i18n("Debugger variable-view"));
-//    mainWindow()->setViewAvailable(variableWidget, false);
+
 
     gdbBreakpointWidget = new GDBBreakpointWidget( 0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));

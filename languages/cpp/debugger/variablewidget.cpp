@@ -21,6 +21,7 @@
 #include <kpopupmenu.h>
 #include <klineedit.h>
 #include <kdeversion.h>
+#include <kiconloader.h>
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -30,6 +31,7 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qcursor.h>
+#include <qwhatsthis.h>
 #include <klocale.h>
 
 #include <qpoint.h>
@@ -70,8 +72,10 @@ namespace GDBDebugger
 VariableWidget::VariableWidget(QWidget *parent, const char *name)
     : QWidget(parent, name), firstShow_(true)
 {
-    varTree_ = new VariableTree(this);
+    setIcon(SmallIcon("math_brace"));
+    setCaption(i18n("Variable Tree"));
 
+    varTree_ = new VariableTree(this);
     
     watchVarEditor_ = new KHistoryCombo( this, 
                                          "var-to-watch editor");
@@ -97,6 +101,33 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 
     connect( watchVarEditor_, SIGNAL(returnPressed()), 
              SLOT(slotEvaluateExpression()) );
+
+    // Setup help items.
+
+    QWhatsThis::add(this, i18n(
+        "<b>Variable tree</b><p>"
+        "The variable tree allows you to see the values of local "
+        "variables and arbitrary expressions."              
+        "<p>Local variables are displayed automatically and are updated "
+        "as you step through your program. "
+        "For each expression you enter, you can either evaluate it once, "
+        "or \"watch\" it (make it auto-updated). Expressions that are not "
+        "auto-updated can be updated manually from the context menu. "
+        "Expressions can be renamed to more descriptive names by clicking "
+        "on the name column."
+        "<p>To change the value of a variable or an expression, "
+        "click on the value."));
+
+    QWhatsThis::add(watchVarEditor_, 
+                    i18n("<b>Expression entry</b>"
+                         "<p>Type in expression to evaluate."));
+
+    QWhatsThis::add(evalButton, 
+                    i18n("Evaluate the expression."));
+
+    QWhatsThis::add(addButton, 
+                    i18n("Evaluate the expression and "
+                         "auto-update the value when stepping."));
 }
 
 // **************************************************************************
