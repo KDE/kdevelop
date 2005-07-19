@@ -71,7 +71,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
-    controller(0)
+    controller(0), justRestarted_(false)
 {
     setObjId("DebuggerInterface");
     setInstance(DebuggerFactory::instance());
@@ -919,11 +919,40 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
                                            "Restarts the program in the debugger") );
         slotStop();
+        mainWindow()->lowerView(variableWidget);
     }
     else
     {
         stateIndicator = "P";
         stateChanged( QString("paused") );
+        // On the first stop, show the variables view.
+        // We do it on first stop, and not at debugger start, because
+        // a program might just successfully run till completion. If we show
+        // the var views on start and hide on stop, this will look like flicker.
+        // On the other hand, if application is paused, it's very
+        // likely that the user wants to see variables.
+        if (justRestarted_)
+        {
+            justRestarted_ = false;
+            mainWindow()->raiseView(variableWidget);
+        }
+    }
+
+    // As soon as debugger clears 's_appNotStarted' flag, we
+    // set 'justRestarted' variable. 
+    // The other approach would be to set justRestarted in slotRun, slotCore
+    // and slotAttach.
+    // Note that setting this var in startDebugger is not OK, because the 
+    // initial state of debugger is exactly the same as state after pause,
+    // so we'll always show varaibles view.
+    if ((previousDebuggerState_ & s_appNotStarted) &&
+        !(state & s_appNotStarted))
+    {
+        justRestarted_ = true;
+    }
+    if (state & s_appNotStarted)
+    {
+        justRestarted_ = false;
     }
 
     // And now? :-)
@@ -933,6 +962,8 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     statusBarIndicator->setText(stateIndicator);
     if (!msg.isEmpty())
         mainWindow()->statusBar()->message(msg, 3000);
+
+    previousDebuggerState_ = state;
 }
 
 

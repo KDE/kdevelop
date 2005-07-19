@@ -115,6 +115,11 @@ private:
     QCString m_drkonqi;
     
     KDevDebugger *m_debugger;
+    int previousDebuggerState_;
+    // Set to true after each debugger restart
+    // Currently used to auto-show variables view
+    // on the first pause.
+    bool justRestarted_;
 };
 
 }

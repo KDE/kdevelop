@@ -674,9 +674,14 @@ void NewMainWindow::raiseView(QWidget *view)
 }
 
 
-void NewMainWindow::lowerView(QWidget *)
+void NewMainWindow::lowerView(QWidget* view)
 {
-  // seems there's nothing to do here
+    if( !view || !view->parentWidget() )
+        return;
+
+    if( QGuardedPtr<KDockWidget> dockWidget = static_cast<KDockWidget*>(view->parentWidget()->qt_cast("KDockWidget")) ) {
+        makeDockInvisible( dockWidget );
+    }
 }
 
 
