@@ -916,8 +916,6 @@ void VarItem::updateValue(char *buf)
 
     if (dataType_ == typeUnknown) {
         dataType_ = GDBParser::getGDBParser()->determineType(buf);
-        if (dataType_ == typeArray)
-            buf++;
 
         // Try fixing a format string here by overriding the dataType calculated
         // from this data
