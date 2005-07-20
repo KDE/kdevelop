@@ -256,6 +256,21 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
     case typeStruct:
     case typeArray:
         item->setCache(value);
+        // Explicitly reset the text. 
+        // When setting a value of composite, we reload the value
+        // and want it to be shown in exactly the same format as it 
+        // was before.
+        //
+        // For composites, that means that value column for the variable
+        // itself it empty. However, after setting a value is not empty,
+        // so we need explicit reset.
+        //
+        // Two other approaches would be:
+        // - show the full value, but most real classes won't fit in
+        //   the column anyway
+        // - show {...} to give user a hint that something is there,
+        //   but that looks ugly on the screen.
+        item->setText(ValueCol, "");
         break;
 
     case typeReference:
