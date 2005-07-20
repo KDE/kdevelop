@@ -21,12 +21,40 @@
 //#define DEBUG
 
 MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QString& _tool, const char * regExp, int file )
-	: action( _action )
-	, tool( _tool )
-	, expression( regExp )
-	, fileGroup( file )
+	: m_action( _action )
+	, m_expression( regExp )
+        , m_tool( _tool )
+        , m_toolGroup(-1)
+	, m_fileGroup( file )
 {
 }
+
+MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, int tool, int file, const char * regExp)
+	: m_action( _action )
+	, m_expression( regExp )
+        , m_tool()
+        , m_toolGroup(tool)
+	, m_fileGroup( file )
+{
+}
+
+QString MakeActionFilter::ActionFormat::tool()
+{
+   if (m_toolGroup==-1)
+      return m_tool;
+   return m_expression.cap(m_toolGroup);
+}
+
+QString MakeActionFilter::ActionFormat::file()
+{
+   return m_expression.cap(m_fileGroup);
+}
+
+bool MakeActionFilter::ActionFormat::matches(const QString& line)
+{
+   return ( m_expression.search( line ) != -1 );
+}
+
 
 MakeActionFilter::MakeActionFilter( OutputFilter& next )
 	: OutputFilter( next )
@@ -93,13 +121,12 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 	ActionFormat* aFormats = actionFormats();
 	ActionFormat* format = &aFormats[i];
 
-	while ( !format->action.isNull() )
+	while ( !format->action().isNull() )
 	{
 //		kdDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
-		QRegExp& regExp = format->expression;
-		if ( regExp.search( line ) != -1 )
+		if ( format->matches( line ) )
 		{
-                   ActionItem *actionItem = new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
+                   ActionItem *actionItem = new ActionItem( format->action(), format->file(), format->tool(), line );
 	     	   kdDebug( 9004 ) << "Found: " << actionItem->m_action << " " << actionItem->m_file << "(" << actionItem->m_tool << ")" << endl;
 		   return actionItem;
 		}
