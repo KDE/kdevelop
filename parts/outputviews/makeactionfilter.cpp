@@ -73,12 +73,12 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
 	static ActionFormat formats[] = {
 		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "distcc",   "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
-		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
+		ActionFormat( i18n("compiling"), "distcc",   "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
 		ActionFormat( i18n("compiling"), "unknown", "^compiling (.*)", 1 ),
 		ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 ),
