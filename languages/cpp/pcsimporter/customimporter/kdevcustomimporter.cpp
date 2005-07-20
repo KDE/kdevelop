@@ -98,12 +98,12 @@ void KDevCustomImporter::processDir( const QString path, QStringList & files )
 			QString fileName = it.current() ->fileName();
 			if ( fileName == "." || fileName == ".." )
 				continue;
-			QString path = it.current() ->absFilePath();
 			if ( it.current() ->isDir() )
 			{
-				kdDebug( 9015 ) << "Pushing: " << path << endl;
-				s.push( path );
-				files += fileList( path );
+                                QString tmpPath = it.current() ->absFilePath();
+				kdDebug( 9015 ) << "Pushing: " << tmpPath << endl;
+				s.push( tmpPath );
+				files += fileList( tmpPath );
 			}
 		}
 	}
