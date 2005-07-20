@@ -72,19 +72,18 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
 	static ActionFormat formats[] = {
-		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "distcc",   "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
-		ActionFormat( i18n("compiling"), "distcc",   "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
+		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)"),
+		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)"),
+		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)"),
 		ActionFormat( i18n("compiling"), "unknown", "^compiling (.*)", 1 ),
-		ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 ),
-		ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 ),
+
+                //moc and uic
+		ActionFormat( i18n("generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
+
 		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
-		ActionFormat( i18n("linking"), "g++", "g\\+\\+\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
-		ActionFormat( i18n("linking"), "gcc", "g\\c\\c\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
+                //can distcc link too ?
+		ActionFormat( i18n("linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)"),
+
 		ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
