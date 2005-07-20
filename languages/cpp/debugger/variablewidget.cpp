@@ -938,10 +938,8 @@ void VarItem::updateValue(char *buf)
         if (dataType_ == typePointer && varName[0] == '/')
             dataType_ = typeValue;
     }
-    if (dataType_ == typeArray)
-        buf++;
 
-    GDBParser::getGDBParser()->parseData(this, buf, true, false);
+    GDBParser::getGDBParser()->parseValue(this, buf);
     setActive();
 }
 
@@ -989,7 +987,7 @@ void VarItem::setOpen(bool open)
         if (cache_) {
             QCString value = cache_;
             cache_ = QCString();
-            GDBParser::getGDBParser()->parseData(this, value.data(), false, false);
+            GDBParser::getGDBParser()->parseCompositeValue(this, value.data());
             trim();
         } else {
             if (dataType_ == typePointer || dataType_ == typeReference) {
@@ -1173,8 +1171,10 @@ void VarFrameRoot::setOpen(bool open)
     if (!open)
         return;
 
-    GDBParser::getGDBParser()->parseData(this, params_.data(), false, true);
-    GDBParser::getGDBParser()->parseData(this, locals_.data(), false, false);
+    if (!params_.isNull())
+        GDBParser::getGDBParser()->parseCompositeValue(this, params_.data());
+    if (!locals_.isNull())
+        GDBParser::getGDBParser()->parseCompositeValue(this, locals_.data());
 
     locals_ = QCString();
     params_ = QCString();

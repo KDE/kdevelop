@@ -61,35 +61,66 @@ GDBParser::~GDBParser()
 
 // **************************************************************************
 
-void GDBParser::parseData(TrimmableItem *parent, char *buf,
-                          bool requested, bool params)
+void GDBParser::parseValue(TrimmableItem *item, char *buf)
 {
     static const char *unknown = "?";
 
-    Q_ASSERT(parent);
-    if (!buf)
-        return;
+    Q_ASSERT(item);
+    Q_ASSERT(buf);
 
-    if (parent->getDataType() == typeArray) {
+    if (!*buf)
+    {
+        buf = (char*)unknown;    
+    }
+    else 
+    {
+        QString varName;
+        DataType dataType = determineType(buf);
+        QCString value = getValue(dataType, &buf);
+        setItem(item, varName, dataType, value, true);
+    }
+}
+
+void GDBParser::parseCompositeValue(TrimmableItem* parent, char* buf)
+{
+    Q_ASSERT(parent);
+    Q_ASSERT(buf);
+
+    // Arrays are just sequences of values, there are no names,
+    // so we need special processing.
+    if (parent->getDataType() == typeArray)
+    {
         parseArray(parent, buf);
         return;
     }
 
-    if (requested && !*buf)
-        buf = (char*)unknown;
-
+    // Iterate over all items.
     while (*buf) {
-        QString varName = "";
+        buf = skipNextTokenStart(buf);
+        if (!buf)
+            break;
+        
         DataType dataType = determineType(buf);
 
+        // A field of composite should have a name, unless it's array.
+        // But arrays are already handled above.
+        Q_ASSERT(dataType == typeName);
         if (dataType == typeName) {
-            varName = getName(&buf);
-            dataType = determineType(buf);
-        }
 
-        QCString value = getValue(dataType, &buf, requested);
-        setItem(parent, varName, dataType, value, requested, params);
-    }
+            QString varName = getName(&buf);
+            // Figure out real type of value.
+            dataType = determineType(buf);
+
+            QCString value = getValue(dataType, &buf);
+            setItem(parent, varName, dataType, value, false);
+        }
+        else
+        {
+            // Assert failed, preventing infinite loop is the
+            // only thing we can do.
+            break;
+        }
+    }        
 }
 
 // **************************************************************************
@@ -104,9 +135,9 @@ void GDBParser::parseArray(TrimmableItem *parent, char *buf)
                 return;
 
             DataType dataType = determineType(buf);
-            QCString value = getValue(dataType, &buf, false);
+            QCString value = getValue(dataType, &buf);
             QString varName = elementRoot.arg(idx);
-            setItem(parent, varName, dataType, value, false, false);
+            setItem(parent, varName, dataType, value, false);
 
             int pos = value.find(" <repeats", 0);
             if (pos > -1) {
@@ -134,7 +165,7 @@ QString GDBParser::getName(char **buf)
 
 // **************************************************************************
 
-QCString GDBParser::getValue(DataType type, char **buf, bool requested)
+QCString GDBParser::getValue(DataType type, char **buf)
 {
     char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
@@ -180,12 +211,7 @@ QCString GDBParser::getValue(DataType type, char **buf, bool requested)
     }
 
     QCString value(start, *buf - start + 1);
-
-    // QT2.x string handling
-    // A very bad hack alert!
-    if (requested)
-        return value.replace( QRegExp("\\\\000|\\\\0"), "" );
-
+  
     return value;
 }
 
@@ -211,7 +237,7 @@ TrimmableItem *GDBParser::getItem(TrimmableItem *parent, DataType dataType,
 
 void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
                         DataType dataType, const QCString &value,
-                        bool requested, bool)
+                        bool requested)
 {
     TrimmableItem *item = getItem(parent, dataType, varName, requested);
     if (!item) {

@@ -24,8 +24,27 @@ namespace GDBDebugger
 class GDBParser
 {
 public:
-    void parseData(TrimmableItem *parent, char *buf,
-                   bool requested, bool params);
+    /** Strips gdb decorations from value of a single variable
+        and sets text of 'item' appropriately.
+        For values of composite types also calls item->setCache.
+        Does not recurse into composite types and does not creates
+        child items of 'item' (that will be done in item->setOpen,
+        when that's method is called.
+
+        "Decorations" are {} around arrays and structures and value
+        type that is printed before value itself in some cases.
+    */
+    void parseValue(TrimmableItem *item, char *buf);
+
+    /** Parses gdb-provided value 'buf' of a composite type
+        (struct/array), and assigns proper values to children
+        of 'parent'. As a special hack, the output from
+        "info locals" and "info args" can be passed to this
+        method, as the output looks like just value of some
+        imaginary 'struct local_variables'.
+    */
+    void parseCompositeValue(TrimmableItem* parent, char* buf);
+
     DataType  determineType(char *buf) const;
 
     char *skipString(char *buf) const;
@@ -46,9 +65,9 @@ private:
     char *skipNextTokenStart(char *buf) const;
 
     QString getName(char **buf);
-    QCString getValue(DataType type, char **buf, bool requested);
+    QCString getValue(DataType type, char **buf);
     void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
-                 const QCString &value, bool requested, bool params);
+                 const QCString &value, bool requested);
 
 protected:
     GDBParser();
