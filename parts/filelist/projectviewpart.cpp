@@ -103,7 +103,10 @@ ProjectviewPart::~ProjectviewPart()
 {
   delete m_configProxy;
   delete m_guibuilder;
-  delete m_widget;  // deletes the children as well
+  if ( m_widget ) {
+    mainWindow()->removeView( m_widget );
+    delete m_widget;  // deletes the children as well
+  }
 }
 
 void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
