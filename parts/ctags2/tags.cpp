@@ -78,7 +78,7 @@ Tags::TagList Tags::getMatches( const QString & tagpart, bool partial, const QSt
 	{
 		do 
 		{
-			QString type( CTagsKinds::findKind( *(entry.kind), QString( entry.file ).section( '.', -1 ) ) );
+			QString type( CTagsKinds::findKind( entry.kind, QString( entry.file ).section( '.', -1 ) ) );
 			QString file( entry.file );
 			
 			if ( type.isEmpty() && file.endsWith( "Makefile" ) )
