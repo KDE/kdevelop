@@ -321,8 +321,12 @@ public:
     @param context The pointer to a Context object of this popup menu.*/
     virtual void fillContextMenu(QPopupMenu *popup, const Context *context) = 0;
 
-    /**Closes the current project and open the new one
-    @param projectFileName The file name of the project to open.*/
+    /**Closes the current project and open the new one. You cannot use the @ref KDevPlugin::project() 
+    * method right after opening a new project, as it will return a null pointer.
+    *You must wait for the eventloop to be reentered, so use a signleshot timer
+    *to do the job needed after the project is opened or connect a slot to the
+    *@ref projectOpened signal.
+    * @param projectFileName The file name of the project to open.*/
     virtual void openProject(const QString& projectFileName) = 0;
 
     /**Marks the component as running (or not running). As long as at least one
