@@ -1443,7 +1443,7 @@ void CppSupportPart::setupCatalog( )
 	if ( pcsList.size() && pcsVersion() < KDEV_DB_VERSION )
 	{
 		QStringList l = pcsList + pcsIdxList;
-		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ) );
+		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ), KStdGuiItem::del(), KStdGuiItem::cancel() );
 		if ( rtn == KMessageBox::Yes )
 		{
 			QStringList::Iterator it = l.begin();

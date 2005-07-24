@@ -3314,7 +3314,7 @@ void TrollProjectWidget::createMakefileIfMissing(const QString &dir, Subqmakepro
     fi2.setFile(dir + "/" + item->configuration.m_makefile);
   }
   if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
+      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"), QString::null, i18n("Run qmake"), i18n("Do Not Run"));
       if (r == KMessageBox::No)
           return;
       m_part->startQMakeCommand(dir);

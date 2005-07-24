@@ -472,7 +472,7 @@ void ProjectviewPart::slotSaveAsProjectView(bool askForName)
         }
         newProjectView = newProjectView.remove("="); // we use this string in config files and = would confuse it
         if (m_projectViews.contains(newProjectView) > 0 &&
-            KMessageBox::warningYesNo(mainWindow()->main(), i18n("<qt>A project view named <b>%1</b> already exists.<br>Do you want to overwrite it?</qt>").arg(newProjectView)) != KMessageBox::Yes)
+            KMessageBox::warningContinueCancel(mainWindow()->main(), i18n("<qt>A project view named <b>%1</b> already exists.<br>Do you want to overwrite it?</qt>").arg(newProjectView), QString::null, i18n("Overwrite")) != KMessageBox::Continue)
         {
             return;
         }

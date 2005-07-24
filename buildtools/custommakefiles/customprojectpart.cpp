@@ -299,7 +299,7 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
         int r = KMessageBox::questionYesNo(mainWindow()->main(),
                                            i18n("This project does not contain any files yet.\n"
                                                 "Populate it with all C/C++/Java files below "
-                                                "the project directory?"));
+                                                "the project directory?"), QString::null, i18n("Populate"), i18n("Do Not Populate"));
         if (r == KMessageBox::Yes)
             populateProject();
     }

@@ -872,7 +872,7 @@ void AppWizardDialog::destButtonClicked(const QString& dir)
         kdDebug(9010) << "DevPrjDir == newdir?: " << defPrjDir.absPath() << " == " << newDir.absPath() << endl;
         if (defPrjDir != newDir) {
             if (KMessageBox::questionYesNo(this, i18n("Set default project location to: %1?").arg( newDir.absPath() ),
-                                           i18n("New Project")) == KMessageBox::Yes)
+                                           i18n("New Project"), i18n("Set"), i18n("Do Not Set")) == KMessageBox::Yes)
             {
                 config->writePathEntry("DefaultProjectsDir", newDir.absPath() + "/");
                 config->sync();

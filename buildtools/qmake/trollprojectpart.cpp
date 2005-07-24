@@ -441,7 +441,7 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 
     QFileInfo fi(dir + "/Makefile");
     if (!fi.exists()) {
-        int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run qmake first?"));
+        int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run qmake first?"), QString::null, i18n("Run qmake"), i18n("Do Not Run"));
         if (r == KMessageBox::No)
             return;
         startQMakeCommand(dir);

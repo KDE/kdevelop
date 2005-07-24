@@ -425,7 +425,7 @@ void ImportDialog::createProjectInfrastructure( )
     QDir dir (urlinput_edit->url());
     QStringList files = dir.entryList(cmd.existingPattern);
     if (!files.isEmpty()) {
-        if (KMessageBox::questionYesNo(this, i18n("Project infrastrucure already exists in target directory.\nGenerate new project infrastructure and overwrite old?")) == KMessageBox::No)
+        if (KMessageBox::questionYesNo(this, i18n("Project infrastrucure already exists in target directory.\nGenerate new project infrastructure and overwrite old?"), QString::null, i18n("Generate"), i18n("Do Not Generate")) == KMessageBox::No)
             return;
     }
     

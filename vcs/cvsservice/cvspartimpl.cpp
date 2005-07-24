@@ -523,8 +523,8 @@ void CvsServicePartImpl::unedit( const KURL::List& urlList)
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you really want to unedit the selected files?"),
         i18n("CVS - Unedit Files"),
-        KStdGuiItem::yes(),
-        KStdGuiItem::no(),
+        i18n("Unedit"),
+        i18n("Do Not Unedit"),
         "askUneditingFiles" );
     if (s == KMessageBox::No) {
         return;
@@ -840,8 +840,8 @@ void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want to be added to CVS repository too?"),
         i18n("CVS - New Files Added to Project"),
-        KStdGuiItem::yes(),
-        KStdGuiItem::no(),
+        KStdGuiItem::add(),
+        i18n("Do Not Add"),
         i18n("askWhenAddingNewFiles") );
     if (s == KMessageBox::Yes)
     {

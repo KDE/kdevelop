@@ -220,7 +220,7 @@ bool ProjectManager::loadProject(const KURL &projectURL)
   if( url.path() == projectFile().path() )
   {
     if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
-        i18n("Are you sure you want to reopen the current project?")) == KMessageBox::No)
+        i18n("Are you sure you want to reopen the current project?"), QString::null, i18n("Reopen"), i18n("Do Not Reopen")) == KMessageBox::No)
       return false;
   }
 

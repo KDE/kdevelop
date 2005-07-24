@@ -830,7 +830,7 @@ void PartController::reloadFile( const KURL & url )
 		{
 			if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(),
 				i18n( "The file \"%1\" is modified in memory. Are you sure you want to reload it? (Local changes will be lost.)" ).arg( url.path() ), 
-				i18n( "File is Modified" ) ) == KMessageBox::Yes )
+				i18n( "File is Modified" ), i18n("Reload"), i18n("Do Not Reload") ) == KMessageBox::Yes )
 			{
 				part->setModified( false );
 			}
@@ -945,7 +945,7 @@ bool PartController::saveFile( const KURL & url, bool force )
 			{
 				int code = KMessageBox::warningYesNoCancel( TopLevel::getInstance()->main(),
 					i18n("The file \"%1\" is modified on disk.\n\nAre you sure you want to overwrite it? (External changes will be lost.)").arg( url.path() ),
-					i18n("File Externally Modified") );
+					i18n("File Externally Modified"), i18n("Overwrite"), i18n("Do Not Overwrite") );
 				if ( code == KMessageBox::Yes )
 				{
 					kdDebug(9000) << "Dirty save!!" << endl;
@@ -1287,7 +1287,7 @@ bool PartController::reactToDirty( KURL const & url, unsigned char reason )
 	{
 		if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(), 
 	   		i18n("The file \"%1\" has changed on disk.\n\nDo you want to reload it?").arg( url.path() ), 
-			i18n("File Changed") ) == KMessageBox::No )
+			i18n("File Changed"), i18n("Reload"), i18n("Do Not Reload") ) == KMessageBox::No )
 		{
 			return false;
 		}

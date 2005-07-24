@@ -153,7 +153,7 @@ void PerforcePart::revert( const QString& filename )
 {
     if ( KMessageBox::questionYesNo( 0,
             i18n("Do you really want to revert "
-                 "the file %1 and lose all your changes?").arg( filename ) ) == KMessageBox::Yes ) {
+                 "the file %1 and lose all your changes?").arg( filename ), QString::null, i18n("Revert"), i18n("Do Not Revert") ) == KMessageBox::Yes ) {
         execCommand( "revert", filename );
     }
 }

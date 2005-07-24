@@ -603,7 +603,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
         {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
                                                "and no configure script for this project.\n"
-                                               "Run automake & friends and configure first?"));
+                                               "Run automake & friends and configure first?"), QString::null, i18n("Run Them"), i18n("Do Not Run"));
             if (r == KMessageBox::No)
                 return QString::null;
             preCommand = makefileCvsCommand();
@@ -614,7 +614,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
         }
         else
         {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"));
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"), QString::null, i18n("Run configure"), i18n("Do Not Run"));
             if (r == KMessageBox::No)
                 return QString::null;
             preCommand = configureCommand() + " && ";
@@ -1013,7 +1013,7 @@ void AutoProjectPart::slotExecute()
     }
 
     if (appFrontend()->isRunning()) {
-        if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application already running"), i18n("&Restart application"), i18n("Do &Nothing")) == KMessageBox::No)
+        if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application Already Running"), i18n("&Restart Application"), i18n("Do &Nothing")) == KMessageBox::No)
             return;
         connect(appFrontend(), SIGNAL(processExited()), SLOT(slotExecute2()));
         appFrontend()->stopApplication();

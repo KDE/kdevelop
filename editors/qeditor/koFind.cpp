@@ -370,7 +370,7 @@ KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
         User1 | Close,
         User1,
         false,
-        KStdGuiItem::yes())
+        i18n("Find"))
 {
     setMainWidget( new QLabel( i18n("Find next '%1'").arg(pattern), this ) );
 
