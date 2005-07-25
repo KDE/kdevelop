@@ -1,6 +1,6 @@
 ## Makefile.am of kdebase/kioslave/chm
 
-INCLUDES = $(all_includes) -I$(top_srcdir)/lib/widgets
+INCLUDES = -I$(top_srcdir)/lib/widgets $(all_includes) 
 
 kde_module_LTLIBRARIES = kio_chm.la libkchmpart.la
 

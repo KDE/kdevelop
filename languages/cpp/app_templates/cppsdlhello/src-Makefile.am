@@ -2,7 +2,7 @@ bin_PROGRAMS = %{APPNAMELC}
 %{APPNAMELC}_SOURCES = %{APPNAMELC}.cpp
 
 # set the include path found by configure
-AM_CPPFLAGS = $(all_includes) $(LIBSDL_CFLAGS)
+AM_CPPFLAGS =  $(LIBSDL_CFLAGS) $(all_includes)
 
 # the library search path.
 %{APPNAMELC}_LDFLAGS = $(all_libraries) $(LIBSDL_RPATH)

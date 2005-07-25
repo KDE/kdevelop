@@ -46,7 +46,7 @@ void FileTreeViewItem::hideOrShow()
 
 bool FileTreeViewItem::setProjectFile( QString const & path, bool pf )
 {
-    kdDebug( 9017 ) << "FileTreeViewItem::setProjectFile(): " + path << endl;
+    kdDebug( 9017 ) << "FileTreeViewItem::setProjectFile(): " + path << " projectfile: " << pf << endl;
 
     if ( this->path() == path )
     {
