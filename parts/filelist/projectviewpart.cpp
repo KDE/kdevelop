@@ -111,10 +111,8 @@ ProjectviewPart::~ProjectviewPart()
 
 void ProjectviewPart::restorePartialProjectSession(const QDomElement * el)
 {
-    m_projectViews.clear();
     if (!el)
     {
-        adjustViewActions();
         return;
     }
     // get the base of the project
@@ -357,6 +355,8 @@ void ProjectviewPart::contextMenu(QPopupMenu */*popup*/, const Context */*contex
 
 void ProjectviewPart::projectOpened()
 {
+    m_projectViews.clear(); // remove the global views
+    adjustViewActions();
 }
 
 void ProjectviewPart::projectClosed()
