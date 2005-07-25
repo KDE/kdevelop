@@ -235,7 +235,7 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
         if ( !m_projectFiles.contains( file ) )
         {
             m_projectFiles.append( file );
-            kdDebug(9017) << "file added: " << file << endl;
+//            kdDebug(9017) << "file added: " << file << endl;
         }
 
         if ( !constructing )
