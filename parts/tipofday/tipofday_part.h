@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>   
+ *  Copyright (C) 2001 Matthias Hï¿½zer-Klpfel <mhk@caldera.de>   
  */
  
 
@@ -23,6 +23,9 @@ public slots:
 
   void showTip();
   void showOnStart();
+
+private:
+  QString getFilename();
 
 };
 

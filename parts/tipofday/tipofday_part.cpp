@@ -44,16 +44,24 @@ TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList 
 }
 
 
+QString TipOfDayPart::getFilename()
+{
+  KConfig * config = KApplication::kApplication()->config();
+  config->setGroup("Tip of day plugin");
+  return config->readEntry("TipsFile", "kdevtipofday/tips");
+}
+
 void TipOfDayPart::showTip()
 {
-  KTipDialog::showTip("kdevtipofday/tips", true);
+  KTipDialog::showTip(getFilename(), true);
 }
 
 
 void TipOfDayPart::showOnStart()
 {
-  KTipDialog::showTip("kdevtipofday/tips");
+  KTipDialog::showTip(getFilename());
 }
+
 
 
 #include "tipofday_part.moc"
