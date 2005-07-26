@@ -840,7 +840,11 @@ void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want to be added to CVS repository too?"),
         i18n("CVS - New Files Added to Project"),
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
         KStdGuiItem::add(),
+#else
+        i18n( "Add file(s)"),
+#endif
         i18n("Do Not Add"),
         i18n("askWhenAddingNewFiles") );
     if (s == KMessageBox::Yes)
