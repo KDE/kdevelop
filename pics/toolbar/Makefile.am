@@ -2,7 +2,7 @@ kdevelopdir = $(kde_datadir)/kdevelop/icons
 kdevelop_ICON = AUTO
 
 kdevdebuggerdir = $(kde_datadir)/kdevdebugger/icons
-kdevdebugger_ICON = dbgnext dbgwatchvar dbgrun dbgstepout dbgmemview dbgparam dbgrunto dbgstep dbgnextinst dbgrestart dbgstepinst dbgvar debugger
+kdevdebugger_ICON = dbgnext dbgwatchvar dbgrun dbgstepout dbgmemview dbgparam dbgrunto dbgstep dbgnextinst dbgrestart dbgstepinst dbgvar debugger dbgjumpto
 
 cppsupportdir = $(kde_datadir)/kdevcppsupport/icons
 cppsupport_ICON = classnew classwiz

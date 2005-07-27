@@ -74,6 +74,7 @@ private slots:
     void slotStop(KDevPlugin* which = 0);
     void slotPause();
     void slotRunToCursor();
+    void slotJumpToCursor();
     void slotStepOver();
     void slotStepOverInstruction();
     void slotStepIntoInstruction();

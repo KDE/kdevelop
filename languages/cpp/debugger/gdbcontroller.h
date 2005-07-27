@@ -97,6 +97,7 @@ public slots:
 
     void slotRun();
     void slotRunUntil(const QString &filename, int lineNum);
+    void slotJumpTo(const QString &filename, int lineNum);
     void slotStepInto();
     void slotStepOver();
     void slotStepIntoIns();

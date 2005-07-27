@@ -194,6 +194,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached."));
 
 
+    action = new KAction(i18n("Set E&xecution Position to Cursor"), "dbgjumpto", 0,
+                         this, SLOT(slotJumpToCursor()),
+                         actionCollection(), "debug_jumptocursor");
+    action->setToolTip( i18n("Jump to cursor") );
+    action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position."));
+
+
     action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
@@ -805,7 +812,23 @@ void DebuggerPart::slotRunToCursor()
     uint line, col;
     cursorIface->cursorPosition(&line, &col);
 
-    controller->slotRunUntil(rwpart->url().path(), line);
+    controller->slotRunUntil(rwpart->url().path(), ++line);
+}
+
+void DebuggerPart::slotJumpToCursor()
+{
+    KParts::ReadWritePart *rwpart
+            = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    KTextEditor::ViewCursorInterface *cursorIface
+            = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
+
+    if (!rwpart || !rwpart->url().isLocalFile() || !cursorIface)
+        return;
+
+    uint line, col;
+    cursorIface->cursorPositionReal(&line, &col);
+
+    controller->slotJumpTo(rwpart->url().path(), ++line);
 }
 
 void DebuggerPart::slotStepOver()
