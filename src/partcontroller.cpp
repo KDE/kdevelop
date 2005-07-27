@@ -368,8 +368,12 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		m_openNextAsText = true;
 	}
   
+	bool isText = false;
+  	QVariant v = MimeType->property("X-KDE-text");
+     	if (v.isValid())
+           isText = v.toBool();
 	// is this regular text - open in editor
-	if ( m_openNextAsText || MimeType->is( "text/plain" ) || MimeType->is( "text/html" ) || MimeType->is( "application/x-zerosize" ) )
+	if ( m_openNextAsText || isText || MimeType->is( "application/x-zerosize" ) )
 	{
 		KTextEditor::Editor * editorpart = createEditorPart(activate);
 
