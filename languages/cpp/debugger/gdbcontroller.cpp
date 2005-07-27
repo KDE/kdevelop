@@ -1492,6 +1492,19 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
 
 // **************************************************************************
 
+void GDBController::slotJumpTo(const QString &fileName, int lineNum)
+{
+    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    if (!fileName.isEmpty()) {
+        queueCmd(new GDBCommand(QCString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum), NOTRUNCMD, NOTINFOCMD, 0));
+        queueCmd(new GDBCommand(QCString().sprintf("jump %s:%d", fileName.latin1(), lineNum), RUNCMD, NOTINFOCMD, 0));
+    }
+}
+
+// **************************************************************************
+
 void GDBController::slotStepInto()
 {
     if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
