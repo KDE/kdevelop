@@ -24,10 +24,7 @@
                 <cstring>inToolview</cstring>
             </property>
             <property name="text">
-                <string>Displa&amp;y toolbar in toolview. (Note: Change needs a restart!)</string>
-            </property>
-            <property name="accel">
-                <string>Alt+Y</string>
+                <string>Displa&amp;y toolbar in toolview (note: change needs a restart)</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -35,7 +32,7 @@
                 <cstring>onlyProject</cstring>
             </property>
             <property name="text">
-                <string>Only save project files in a view.</string>
+                <string>Only save project files in a view</string>
             </property>
             <property name="accel">
                 <string></string>

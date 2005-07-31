@@ -163,7 +163,7 @@
                             <cstring>m_qtUsed</cstring>
                         </property>
                         <property name="text">
-                            <string>Use Qt in this project.</string>
+                            <string>Use Qt in this project</string>
                         </property>
                     </widget>
                     <widget class="QButtonGroup">
@@ -232,7 +232,7 @@
                                     <cstring>textLabel1_3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Qt Root Path:</string>
+                                    <string>Qt root path:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>kURLRequester1</cstring>

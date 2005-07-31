@@ -66,9 +66,6 @@
                                 <property name="text">
                                     <string>Use &amp;this file as default:</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+T</string>
-                                </property>
                             </widget>
                             <widget class="QLineEdit">
                                 <property name="name">
@@ -98,9 +95,6 @@
                                 <property name="text">
                                     <string>&amp;Enable code completion</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                             </widget>
                             <widget class="QCheckBox">
                                 <property name="name">
@@ -108,9 +102,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Enable code &amp;hinting</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+H</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -148,9 +139,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Ena&amp;ble realtime parser</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -233,9 +221,6 @@
                                 <property name="text">
                                     <string>Ca&amp;lling the PHP interpreter directly</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+L</string>
-                                </property>
                             </widget>
                             <widget class="QLabel">
                                 <property name="name">
@@ -259,9 +244,6 @@ You need a correctly installed php cgi version.&lt;/font&gt;</string>
                                 </property>
                                 <property name="text">
                                     <string>Using an &amp;existing webserver (local or remote)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
                                 </property>
                             </widget>
                             <widget class="QLabel">
@@ -465,9 +447,6 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         </property>
                         <property name="text">
                             <string>Load &amp;Zend extension:</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+Z</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">
