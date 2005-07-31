@@ -119,7 +119,7 @@
                             <cstring>tab</cstring>
                         </property>
                         <attribute name="title">
-                            <string>Source to be written back</string>
+                            <string>Source to Be Written Back</string>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -157,7 +157,7 @@
                 </size>
             </property>
             <property name="text">
-                <string>Add all from the directory</string>
+                <string>Add All From Directory</string>
             </property>
         </widget>
         <widget class="QPushButton" row="2" column="0">
@@ -171,7 +171,7 @@
                 </size>
             </property>
             <property name="text">
-                <string>Choose file to add...</string>
+                <string>Choose File to Add...</string>
             </property>
         </widget>
         <widget class="QListBox" row="3" column="0">

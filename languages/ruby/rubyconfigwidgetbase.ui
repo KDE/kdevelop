@@ -12,9 +12,6 @@
             <height>447</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>RubyConfigWidgetBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -125,9 +122,6 @@
 					</property>
 					<property name="text">
 						<string>Main pr&amp;ogram</string>
-					</property>
-					<property name="accel">
-						<string>Alt+O</string>
 					</property>
 				</widget>
                 <widget class="QRadioButton" row="1" column="0">

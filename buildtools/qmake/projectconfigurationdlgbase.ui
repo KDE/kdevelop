@@ -509,9 +509,6 @@
                                         <property name="text">
                                             <string>Ma&amp;ke libtool archive</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+K</string>
-                                        </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Support required for X11 application or library</string>
                                         </property>
@@ -563,9 +560,6 @@
                                         </property>
                                         <property name="text">
                                             <string>&amp;Build as DLL</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+B</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -851,9 +845,6 @@
                                         <property name="text">
                                             <string>&amp;Add...</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+A</string>
-                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -861,9 +852,6 @@
                                         </property>
                                         <property name="text">
                                             <string>&amp;Remove</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+R</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -873,9 +861,6 @@
                                         <property name="text">
                                             <string>&amp;Edit</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+E</string>
-                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -883,9 +868,6 @@
                                         </property>
                                         <property name="text">
                                             <string>Move U&amp;p</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+P</string>
                                         </property>
                                     </widget>
                                     <widget class="KPushButton">
@@ -1143,9 +1125,6 @@
                                         <property name="text">
                                             <string>Move &amp;Up</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+U</string>
-                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1153,9 +1132,6 @@
                                         </property>
                                         <property name="text">
                                             <string>Move &amp;Down</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+D</string>
                                         </property>
                                     </widget>
                                     <spacer>
@@ -1320,9 +1296,6 @@
                                         <property name="text">
                                             <string>Move &amp;Up</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+U</string>
-                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1330,9 +1303,6 @@
                                         </property>
                                         <property name="text">
                                             <string>Move &amp;Down</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+D</string>
                                         </property>
                                     </widget>
                                     <spacer>

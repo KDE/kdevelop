@@ -141,9 +141,6 @@
                     <property name="text">
                         <string>Local cop&amp;y and HEAD</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+Y</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
@@ -151,9 +148,6 @@
                     </property>
                     <property name="text">
                         <string>Local copy a&amp;nd BASE</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
