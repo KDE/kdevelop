@@ -2,6 +2,7 @@
 [General]
 Name=KHTMLPart plugin
 Name[br]=Lugent KHTMLPart
+Name[de]=KHTMLPart-Plugin
 Name[fr]=Module pour le composant KHTML
 Name[ga]=Breiseán KHTMLPart
 Name[hu]=KHTML-bővítőmodul
@@ -11,6 +12,7 @@ Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
 Comment[da]=Genererer et plugin for KHTML parten.
+Comment[de]=Erstellt ein Plugin für die Komponente KHTML
 Comment[et]=KHTML-komponendi plugina loomine.
 Comment[fr]=Génère un module pour le composant KHTML.
 Comment[hu]=Létrehoz egy KHTML-bővítőmodult.
@@ -130,6 +132,7 @@ Dest=%{dest}/src/hi32-action-plugin.png
 Type=message
 Comment=A KHTMLPart plugin was created in %{dest}
 Comment[da]=Et KHTMLPart plugin bleb oprettet i %{dest}
+Comment[de]=Ein Plugin für die Komponente KHTML wurde in %{dest} erstellt.
 Comment[et]=KHTMLPart plugin loodi asukohta %{dest}
 Comment[fr]=Un module pour le composant KHTML a été créé dans %{dest}
 Comment[hu]=Létrejött egy KHTML-bővítőmodul itt: %{dest}

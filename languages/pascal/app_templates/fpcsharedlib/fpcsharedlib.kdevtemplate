@@ -2,6 +2,7 @@
 [General]
 Name=Shared library
 Name[da]=Delt bibliotek
+Name[de]=Shared Library
 Name[et]=Jagatud teek
 Name[fr]=Bibliothèque partagée
 Name[hu]=Osztott programkönyvtár
@@ -10,6 +11,7 @@ Name[tr]=Paylaşılan Kütüphane
 Category=Pascal/Free Pascal
 Comment=Generates a shared library in Pascal
 Comment[da]=Genererer et delt bibliotek i Pascal
+Comment[de]=Erstellt eine Shared Library in Pascal
 Comment[et]=Jagatud teegi loomine Pascalis
 Comment[fr]=Génère une bibliothèque partagée en Pascal
 Comment[hu]=Létrehoz egy osztott programkönyvtárt Pascalban
@@ -42,6 +44,7 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 Type=message
 Comment=A shared library project written in pascal was created in %{dest}
 Comment[da]=Et delt biblioteksprojekt skrevet i pascal blev oprettet i %{dest}
+Comment[de]=Ein Projekt für eine in Pascal geschriebene Shared Library wurde in %{dest} erstellt.
 Comment[et]=Jagatud teegi projekt Pascalis loodi asukohta %{dest}
 Comment[fr]=Un projet de bibliothèque partagée écrit en Pascal a été créé dans %{dest}
 Comment[hu]=Létrejött egy Pascal nyelvű projekt osztott programkönyvtár készítéséhez itt: %{dest}

@@ -2,6 +2,7 @@
 [General]
 Name=Simple Python script
 Name[da]=Simpelt Python script
+Name[de]=Einfaches Python-Skript
 Name[et]=Lihtne Pythoni skript
 Name[fr]=Script Python simple
 Name[hu]=Egyszerű Python-szkript
@@ -11,6 +12,7 @@ Icon=pythonhello.png
 Category=Python
 Comment=This generates a simplistic "Hello world" program in Python
 Comment[da]=Dette genererer et simplistisk "Goddag verden" program i Python
+Comment[de]=Hiermit wird ein einfaches  "Hello world"-Programm in Python erstellt
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine Pythonis
 Comment[fr]=Génère un simple programme « Hello world » en Python
 Comment[hu]=Létrehoz egy egyszerű Hello world programot Python nyelven
@@ -35,6 +37,7 @@ Dest=%{dest}/%{APPNAMELC}.py
 Type=message
 Comment=A simple python script was created in %{dest}
 Comment[da]=Et simpelt python script blev oprettet i %{dest}
+Comment[de]=Ein einfaches python-Skript wurde in %{dest} erstellt
 Comment[et]=Lihtne Pythoni skript loodi asukohta %{dest}
 Comment[fr]=Un script Python simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű Python-szkript itt: %{dest}

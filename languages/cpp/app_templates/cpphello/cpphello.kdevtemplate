@@ -2,6 +2,7 @@
 [General]
 Name=Simple Hello world program
 Name[da]=Simpelt Goddag verden program
+Name[de]=Ein einfaches Hello-world-Programm
 Name[et]=Lihtne "Tere, maailm" programm
 Name[fr]=Simple programme « Hello world »
 Name[hu]=Egyszerű Hello world program
@@ -11,6 +12,7 @@ Icon=cpphello.png
 Category=C++
 Comment=Generates a simple Hello world program in C++
 Comment[da]=Genererer et simpelt Goddag verden program in C++
+Comment[de]=Erstellt ein einfaches Hello-World-Programm in C++
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s
 Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
@@ -67,6 +69,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=A Simple Hello World program was created in %{dest}
 Comment[da]=Et simpelt Goddag verden program blev oprettet i %{dest}
+Comment[de]=Ein einfaches Hello-World-Programm wurde in %{dest} erstellt.
 Comment[et]=Lihtne "Tere, maailm" programm loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű Hello world program itt: %{dest}
 Comment[sv]=Ett enkelt Hello world-program skapades i %{dest}

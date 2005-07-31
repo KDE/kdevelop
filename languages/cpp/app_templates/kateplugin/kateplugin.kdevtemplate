@@ -2,6 +2,7 @@
 [General]
 Name=Kate plugin
 Name[br]=Lugent Kate
+Name[de]=Kate-Plugin
 Name[fr]=Module Kate
 Name[ga]=Breiseán Kate
 Name[hu]=Kate-bővítőmodul
@@ -11,6 +12,7 @@ Icon=kateplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for Kate the text editor.
 Comment[da]=Genererer et plugin for teksteditoren kate
+Comment[de]=Erstellt ein Plugin für den Texteditor Kate
 Comment[et]=Plugina loomine tekstiredaktorile Kate.
 Comment[fr]=Génère un module pou l'éditeur de texte Kate.
 Comment[hu]=Létrehoz egy bővítőmodult a Kate szövegszerkesztőhöz.
@@ -136,6 +138,7 @@ Dest=%{dest}/src/hi32-action-plugin.png
 Type=message
 Comment=A plugin for Kate was created at %{dest}
 Comment[da]=Et plugin for Kate blev oprettet på %{dest}
+Comment[de]=Ein Plugin für Kate wurde in %{dest} erstellt.
 Comment[et]=Kate plugin loodi asukohta %{dest}
 Comment[fr]=Un module pour Kate a été créé dans %{dest}
 Comment[hu]=Létrejött egy Kate-bővítőmodul itt: %{dest}

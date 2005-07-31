@@ -2,6 +2,7 @@
 [General]
 Name=Application framework
 Name[da]=Programskelet
+Name[de]=Anwendungsgrundgerüst
 Name[et]=Rakenduse raamistik
 Name[hu]=Alkalmazás-keretrendszer
 Name[sv]=Programramverk
@@ -10,6 +11,7 @@ Icon=kapp.png
 Category=C++/KDE
 Comment=Generates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
 Comment[da]=Genererer et simpelt KDE program med et vindue på topniveau, menuer og værktøjslinjer. Der sørges også for en DCOP-grænseflade, så dit program kan sørge for en script-grænseflade
+Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Toplevel-Fenster, Menüs und Werkzeugleisten. Dazu kommt eine DCOP-Schnittstelle, so dass Ihre Anwendung eine Schnittstelle für Skripte anbieten kann.
 Comment[et]=Lihtsa KDE rakenduse loomine ühe tipptaseme akna, menüüde ja tööriistaribadega. Lisatakse ka DCOP-liides, mis võimaldab pakkuda rakenduses ka skriptikeelte tuge.
 Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy főablakkal, menükkel és eszköztárakkal. DCOP-felület is létre lesz hozva, ezért az alkalmazás szkriptelési felületet is biztosíthat.
 Comment[sv]=Skapar ett enkelt KDE-program med ett toppnivåfönster, menyer och verktygsrader. Ett DCOP-gränssnitt tillhandahålls också, så att programmet kan tillhandahålla ett skriptgränssnitt.
@@ -174,6 +176,7 @@ Dest=%{dest}/src/README
 Type=message
 Comment=A KDE Application was created at %{dest}
 Comment[da]=Et KDE program blev oprettet i %{dest}
+Comment[de]=Eine KDE-Anwendung wurde in %{dest} erstellt.
 Comment[et]=KDE rakendus loodi asukohta %{dest}
 Comment[fr]=Une application KDE a été créée dans %{dest}
 Comment[hu]=Létrejött egy KDE-s alkalmazás itt: %{dest}

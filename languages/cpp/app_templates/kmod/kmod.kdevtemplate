@@ -3,6 +3,7 @@
 Name=Linux Kernel module
 Name[br]=Mollad ar galon Linux
 Name[da]=Linux kernemodul
+Name[de]=Linux Kernelmodul
 Name[et]=Linuxi kerneli moodul
 Name[fr]=Module du noyau Linux
 Name[hu]=Linuxos kernelmodul
@@ -12,6 +13,7 @@ Icon=
 Category=C
 Comment=Generates a template for a Linux kernel module.
 Comment[da]=Genererer en skabelon for en Linux kernemodul.
+Comment[de]=Erstellt eine Vorlage für ein Linux Kernelmodul.
 Comment[et]=Linuxi kerneli mooduli malli loomine.
 Comment[fr]=Génère un modèle de module pour le noyau Linux.
 Comment[hu]=Létrehoz egy sablont linuxos kernelmodul készítéséhez.

@@ -2,6 +2,7 @@
 [General]
 Name=Simple SQL Project
 Name[da]=Simpelt SQL-projekt
+Name[de]=Einfaches SQL-Projekt
 Name[et]=Lihtne SQL projekt
 Name[fr]=Projet SQL simple
 Name[ga]=Tionscadal Simplí SQL
@@ -11,6 +12,7 @@ Name[tr]=Basit SQL Projesi
 Category=Database
 Comment=Generates a simple SQL project.
 Comment[da]=Genererer et simpelt SQL projekt.
+Comment[de]=Erstellt ein einfaches SQL-Projekt.
 Comment[et]=Lihtsa SQL projekti loomine.
 Comment[fr]=Génère un projet SQL simple
 Comment[hu]=Létrehoz egy egyszerű SQL-projektet.
@@ -35,6 +37,7 @@ Dest=%{dest}/%{APPNAMELC}.sql
 Type=install
 Comment=A simple SQL project was created in %{dest}
 Comment[da]=Et simpelt SQL projekt blev oprettet i %{dest}
+Comment[de]=Ein einfaches SQL-Projekt wurde in %{dest} erstellt.
 Comment[et]=Lihtne SQL projekt loodi asukohta %{dest}
 Comment[fr]=Un projet SQL simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű SQL-projekt itt: %{dest}

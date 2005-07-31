@@ -2,6 +2,7 @@
 [General]
 Name=Control Center module
 Name[da]=Kontrolcenter-modul
+Name[de]=Kontrollzentrum-Modul
 Name[en_GB]=Control Centre module
 Name[et]=Juhtimiskeskuse moodul
 Name[fr]=Module du centre de configuration
@@ -12,6 +13,7 @@ Icon=kcmodule.png
 Category=C++/KDE
 Comment=Generates a framework for a module which can be embedded into the KDE Control Center.
 Comment[da]=Genererer et skelet for et modul som kan indlejres i KDE's kontrolcenter.
+Comment[de]=Erstellt das Gerüst für ein Modul, das in das KDE Kontrollzentrum integriert werden kann.
 Comment[en_GB]=Generates a framework for a module which can be embedded into the KDE Control Centre.
 Comment[et]=Mooduli raamistiku loomine, mida saab põimida KDE juhtimiskeskusse.
 Comment[hu]=Létrehoz egy kiindulási KDE vezérlőpult-beállítómodult
@@ -121,6 +123,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=A control center module was created in %{dest}
 Comment[da]=Et kontrolcenter-modul blev oprettet i %{dest}
+Comment[de]=Ein Kontrollzentrum-Modul wurde in %{dest} erstellt.
 Comment[en_GB]=A control centre module was created in %{dest}
 Comment[et]=Juhtimiskeskuse moodul loodi asukohta %{dest}
 Comment[fr]=Un module du centre de configuration a été créé dans %{dest}

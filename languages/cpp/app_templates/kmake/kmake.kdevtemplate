@@ -2,6 +2,7 @@
 [General]
 Name=QMake based KDE template
 Name[da]=QMake baseret KDE-skabelon
+Name[de]=QMake-basierte KDE-Vorlage
 Name[et]=KDE mall QMake'i põhjal
 Name[fr]=Modèle KDE basé sur QMake
 Name[hu]=QMake-alapú KDE-s sablon
@@ -11,6 +12,7 @@ Icon=kmake.png
 Category=C++/QMake project
 Comment=Generates a simple KDE application using QMake based project manager
 Comment[da]=Genererer et simpelt KDE program ved brug af QMake baseret projekthåndtering
+Comment[de]=Erstellt eine einfache KDE-Anwendung unter Verwendung der QMake-Projektverwaltung
 Comment[et]=Lihtsa KDE rakenduse loomine projektihalduriga QMake'i põhjal
 Comment[fr]=Génère une application KDE simple utilisant un gestionnaire de projet basé sur QMake
 Comment[hu]=Létrehoz egy egyszerű KDE-s alkalmazást Qmake-alapú projektkezelővel
@@ -76,6 +78,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=A Qmake based KDE application was created in %{dest}
 Comment[da]=Et Qmake baseret KDE program blev oprettet i %{dest}
+Comment[de]=Eine auf Qmake basierende KDE-Anwendung wurde in %{dest} erstellt.
 Comment[et]=KDE rakendus QMake'i põhjal loodi asukohta %{dest}
 Comment[fr]=Une application KDE basée sur QMake a été créée dans %{dest}
 Comment[hu]=Létrejött egy Qmake-alapú KDE-s alkalmazás itt: %{dest}

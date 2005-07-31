@@ -2,6 +2,7 @@
 [General]
 Name=KFile plugin
 Name[br]=Lugent KFile
+Name[de]=KFile-Plugin
 Name[et]=KFile'i plugin
 Name[fr]=Module KFile
 Name[ga]=Breiseán KFile
@@ -12,6 +13,7 @@ Icon=kfileplugin.png
 Category=C++/KDE
 Comment=Generates a KFile plugin for konqueror to display meta information.
 Comment[da]=Genererer et KFile-plugin for konqueror til at vise meta-information.
+Comment[de]=Erstellt ein KFile-Plugin für Konqueror zur Anzeige von Meta-Daten.
 Comment[et]=Konqueroro KFile'i plugina loomine, mis näitab metainfot.
 Comment[hu]=Létrehoz egy KFile-bővítőmodult, mellyel a Konquerorban dokumentumjellemzőket lehet megjeleníteni.
 Comment[sv]=Skapar ett KFile-insticksprogram till Konqueror för att visa metainformation.

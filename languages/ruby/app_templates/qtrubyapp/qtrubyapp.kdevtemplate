@@ -2,6 +2,7 @@
 [General]
 Name=QtRuby Application
 Name[da]=QtRuby-program
+Name[de]=QtRuby-Anwendung
 Name[et]=QtRuby rakendus
 Name[fr]=Application QtRuby
 Name[hu]=QtRuby-alapú alkalmazás
@@ -12,6 +13,7 @@ Category=Ruby/Qt
 Category[fr]=Ruby/Qt
 Comment=Generate a QtRuby based application (crossplatform compatible)
 Comment[da]=Genererer et QtRuby baseret program (krydsplatform kompatibelt)
+Comment[de]=Erstelle eine auf QtRuby basierende Anwendung (Crossplattform kompatibel)
 Comment[et]=Rakenduse loomine QtRuby põhjal (mitmeplatvormne)
 Comment[hu]=Létrehoz egy QtRuby-alapú, keresztfordításra is megfelelő alkalmazást
 Comment[sv]=Skapa ett program baserat på QtRuby (fungerar på andra plattformar)
@@ -64,6 +66,7 @@ Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
 Type=message
 Comment=A QtRuby based application was created in %{dest}
 Comment[da]=Et QtRuby baseret program blev oprettet i %{dest}
+Comment[de]=Eine auf QtRuby basierende Anwendung wurde in %{dest} erstellt.
 Comment[et]=Rakendus QtRuby põhjal loodi asukohta %{dest}
 Comment[fr]=Une application basée sur QtRuby a été créée dans %{dest}
 Comment[hu]=Létrejött egy QtRuby-alapú alkalmazás itt: %{dest}

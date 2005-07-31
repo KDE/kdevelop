@@ -2,6 +2,7 @@
 [General]
 Name=Simple Ruby script
 Name[da]=Simpelt Ruby script
+Name[de]=Einfaches Ruby-Skript
 Name[et]=Lihtne Ruby skript
 Name[fr]=Script Ruby simple
 Name[hu]=Egyszerű Ruby-szkript
@@ -10,6 +11,7 @@ Name[tr]=Basit Ruby Betiği
 Category=Ruby
 Comment=This generates a simplistic 'Hello world' program in Ruby
 Comment[da]=Dette genererer et simplistisk 'Goddag verden' program i Ruby
+Comment[de]=Hiermit wird ein einfaches "Hello world"'-Programm in Ruby erstellt
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine Rubys
 Comment[fr]=Ceci génère un simple programme « Hello world » en Ruby
 Comment[hu]=Létrehoz egy egyszerű 'Hello world' programot Rubyban
@@ -34,6 +36,7 @@ Dest=%{dest}/%{APPNAMELC}.rb
 Type=message
 Comment=A simple ruby script was created in %{dest}
 Comment[da]=Et simpelt ruby script blev oprettet i %{dest}
+Comment[de]=Ein einfaches ruby-Skript wurde in %{dest} erstellt.
 Comment[et]=Lihtne Ruby skript loodi asukohta %{dest}
 Comment[fr]=Un script Ruby simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű Ruby-szkript itt: %{dest}

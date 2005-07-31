@@ -2,6 +2,7 @@
 [General]
 Name=Opie Input
 Name[da]=Opie-input
+Name[de]=Opie Eingabe
 Name[et]=Opie sisestus
 Name[fr]=Entrée Opie
 Name[ga]=Ionchur Opie
@@ -12,6 +13,7 @@ Icon=qmakeapp.png
 Category=C++/Embedded
 Comment=Generate an Opie input method plugin.
 Comment[da]=Generér en Opie input-metode-plugin.
+Comment[de]=Erstellt ein Eingabemethode-Plugin für Opie
 Comment[et]=Opie sisestusmeetodi plugina loomine.
 Comment[hu]=Létrehoz egy Opie-s bemeneti modult.
 Comment[sv]=Skapa ett insticksprogram för Opie-inmatning.
@@ -58,6 +60,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 Type=message
 Comment=An opie input method plugin was created in %{dest}
 Comment[da]=At opie input-metode-plugin blev oprettet i %{dest}
+Comment[de]=Ein Eingabemethode-Plugin für Opie wurde in %{dest} erstellt.
 Comment[et]=Opie sisestusmeetodi plugin loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Opie-s bemeneti modul itt: %{dest}
 Comment[sv]=Ett insticksprogram för Opie-inmatning skapades i %{dest}

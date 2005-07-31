@@ -2,6 +2,7 @@
 [General]
 Name=Python Qt application
 Name[da]=Python Qt program
+Name[de]=Python Qt-Anwendung
 Name[et]=Pythoni Qt rakendus
 Name[fr]=Application Qt Python
 Name[ga]=Feidhmchlár Qt Python
@@ -12,6 +13,7 @@ Icon=pyqt.png
 Category=Python
 Comment=This generates an application framework using Python and Qt
 Comment[da]=Dette genererer et programskelet ved brug af  Python og Qt
+Comment[de]=Hiermit wird ein Anwendungsgerüst unter Verwendung von Python und Qt erstellt
 Comment[et]=Rakenduse raamistiku loomine Pythoni ja Qt abil
 Comment[hu]=Létrehoz egy alkalmazás-keretrendszert Python nyelven, a Qt felhasználásával
 Comment[sv]=Detta skapar ett programramverk med användning av Python och Qt
@@ -95,6 +97,7 @@ Dest=%{dest}/filesave.pyxpm
 Type=message
 Comment=A Python Qt application was created in %{dest}
 Comment[da]=Et Python Qt program blev oprettet i %{dest}
+Comment[de]=Eine Python Qt-Anwendung wurde in %{dest} erstellt.
 Comment[et]=Pythoni Qt rakendus loodi asukohta %{dest}
 Comment[fr]=Une application Qt Python a été créée dans %{dest}
 Comment[hu]=Létrejött egy Python/Qt-alkalmazás itt: %{dest}

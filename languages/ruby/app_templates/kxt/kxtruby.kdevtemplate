@@ -3,6 +3,7 @@
 
 Name=KConfig XT application
 Name[da]=KConfig XT program
+Name[de]=KConfig XT Anwendung
 Name[et]=KConfig XT rakendus
 Name[fr]=Application KConfig XT
 Name[hu]=KConfig XT-alapú alkalmazás
@@ -12,6 +13,7 @@ Category=Ruby/KDE
 Icon=previewruby.png
 Comment=Generates a simple KDE application with one widget and a configuration dialog
 Comment[da]=Genererer et simpelt KDE-program med en kontrol og en indstillingsdialog
+Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem Widget und einem Einstellungsdialog.
 Comment[en_GB]=Generates a simple KDE application with one widget and a configuration dialogue
 Comment[et]=Lihtsa KDE rakenduse loomine ühe vidina ja seadistustedialoogiga.
 Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és egy beállítóablakkal
@@ -176,6 +178,7 @@ Dest=%{dest}/src/settings.kcfgc
 Type=message
 Comment=A Korundum KConfig XT Application was created at %{dest}
 Comment[da]=Et Korundum KConfig XT program blev oprettet i %{dest}
+Comment[de]=Eine Korundum KConfig-XT-Anwendung wurde in %{dest} erstellt.
 Comment[et]=Korundumi KConfig XT rakendus loodi asukohta %{dest}
 Comment[fr]=Une application KConfig XT Korundum a été créée dans %{dest}
 Comment[hu]=Létrejött egy Korundum-alapú KConfig XT-s alkalmazás itt: %{dest}

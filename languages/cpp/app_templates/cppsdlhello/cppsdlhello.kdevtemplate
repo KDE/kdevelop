@@ -2,6 +2,7 @@
 [General]
 Name=Simple SDL program
 Name[da]=Simpelt SDL-program
+Name[de]=Einfaches SDL-Programm
 Name[et]=Lihtne SDL programm
 Name[fr]=Programme SDL simple
 Name[hu]=Egyszerű SDL-alkalmazás
@@ -11,6 +12,7 @@ Icon=cppsdl.png
 Category=C++
 Comment=Generates a simple SDL program in C++
 Comment[da]=Genererer et simpelt SDL program i C++
+Comment[de]=Erstellt ein einfaches SDL-Programm in C++
 Comment[et]=Lihtsa SDL programmi loomise C++-s
 Comment[fr]=Génère un programme SDL simpe en C++
 Comment[hu]=Létrehoz egy egyszerű SDL-alkalmazást C++-ban
@@ -73,6 +75,7 @@ Dest=%{dest}/src/%{APPNAMELC}.cpp
 Type=message
 Comment=A simple SDL program was created in %{dest}
 Comment[da]=Et simpelt SDL-program blev oprettet i %{dest}
+Comment[de]=Ein einfaches SDL-Programm wurde in %{dest} erstellt.
 Comment[et]=Lihtne SDL programm loodi asukohta %{dest}
 Comment[fr]=Un programme SDL simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű SDL-alkalmazás itt: %{dest}

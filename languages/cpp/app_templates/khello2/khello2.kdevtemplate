@@ -2,6 +2,7 @@
 [General]
 Name=Simple Designer based KDE Application
 Name[da]=Simpelt Designer-baseret KDE program
+Name[de]=Einfache, Designer-basierte KDE-Anwendung
 Name[et]=Lihtne KDE rakendus Disaineri põhjal
 Name[hu]=Egyszerű Qt Designer-alapú KDE-s alkalmazás
 Name[sv]=Enkelt KDE-program baserat på Designer
@@ -10,6 +11,7 @@ Category=C++/KDE
 Icon=khello2.png
 Comment=Generates a simple KDE application with one Qt-designer based widget.
 Comment[da]=Genererer et simpelt KDE program med en Qt-designer baseret kontrol.
+Comment[de]=Erstellt eine einfache KDE-Anwendung mit einem auf Qt-Designer basierenden Widget.
 Comment[et]=Lihtsa KDE rakenduse loomine ühe vidinaga Qt Disaineri põhjal.
 Comment[hu]=Létrehoz egy egyszerű KDE-s alkalmazást, mely egy Qt Designerrel készített grafikus elemre épül.
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent baserad på Qt-Designer.
@@ -155,6 +157,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 Type=message
 Comment=A simple designer based KDE application was created in %{dest}
 Comment[da]=Et simpelt designer-baseret KDE program blev oprettet i %{dest}
+Comment[de]=Eine einfache Designer-basierte KDE-Anwendung wurde in %{dest} erstellt.
 Comment[et]=Lihtne KDE rakendus Disaineri põhjal loodi asukohta %{dest}
 Comment[hu]=Létrejött egy egyszerű, Qt Designer-alapú KDE-s alkalmazás itt: %{dest}
 Comment[sv]=Ett enkelt KDE-program baserat på Designer skapades i %{dest}

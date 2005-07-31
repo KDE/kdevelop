@@ -2,6 +2,7 @@
 [General]
 Name=Hello world program
 Name[da]=Goddag verden program
+Name[de]=Hello-world-Programm
 Name[et]="Tere,maailm" programm
 Name[fr]=Programme « Hello world »
 Name[sv]=Hello world-program
@@ -10,6 +11,7 @@ Icon= # got none
 Category=C/PalmOS
 Comment=Generates a template for palm application
 Comment[da]=Genererer en skabelon for et palm-program
+Comment[de]=Erstellt das Gerüst für eine Palm-Anwendung
 Comment[et]=Palmi rakenduse malli loomine.
 Comment[fr]=Génère un modèle d'application Palm
 Comment[hu]=Létrehoz egy Palm-os alkalmazássablont
@@ -63,6 +65,7 @@ Dest=%{dest}/callback.h
 Type=message
 Comment=A palm application was created in %{dest}
 Comment[da]=Et palm-program blev oprettet i %{dest}
+Comment[de]=Eine Palm-Anwendung wurde in %{dest} erstellt.
 Comment[et]=Palmi rakendus loodi asukohta %{dest}
 Comment[fr]=Une application Palm a été créée dans %{dest}
 Comment[hu]=Létrejött egy Palmos alkalmazássablon itt: %{dest}

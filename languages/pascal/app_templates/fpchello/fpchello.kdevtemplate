@@ -2,6 +2,7 @@
 [General]
 Name=Simple program
 Name[da]=Simpelt program
+Name[de]=Einfaches Programm
 Name[et]=Lihtne programm
 Name[fr]=Programme simple
 Name[hu]=Egyszerű program
@@ -10,6 +11,7 @@ Name[tr]=Basit program
 Category=Pascal/Free Pascal
 Comment=Generates a simple program in Pascal
 Comment[da]=Genererer et simpelt program i Pascal
+Comment[de]=Erstellt ein einfaches Programm in Pascal
 Comment[et]=Lihtsa programmi loomine Pascalis
 Comment[fr]=Génère un programme simple en Pascal
 Comment[hu]=Létrehoz egy egyszerű programot Pascalban
@@ -42,6 +44,7 @@ Dest=%{dest}/src/%{APPNAMELC}.pp
 Type=message
 Comment=A simple pascal program was created in %{dest}
 Comment[da]=Et simpelt pascal program blev oprettet i %{dest}
+Comment[de]=Ein einfaches Programm in Pascal wurde in %{dest} erstellt.
 Comment[et]=Lihtne Pascali programm loodi asukohta %{dest}
 Comment[fr]=Un programme Pascal simple a été créé dans %{dest}
 Comment[hu]=Létrejött egy egyszerű Pascal-program itt: %{dest}
