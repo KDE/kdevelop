@@ -137,7 +137,7 @@ void subversionPart::setupActions() {
 	actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in Subversion operations") );
 	actionRemoveFromIgnoreList->setWhatsThis( i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s).") );
 
-	actionResolve = new KAction( i18n("Re&solve conflicting state"), 0,
+	actionResolve = new KAction( i18n("Re&solve Conflicting State"), 0,
 			this, SLOT(slotActionResolve()), actionCollection(), "subversion_resolve" );
 	actionResolve->setToolTip( i18n("Resolve the conflicting state of a file after a merge") );
 	actionResolve->setWhatsThis( i18n("<b>Resolve the conflicting state</b><p>Remove the conflict state that can be set on a file after a merge failed.") );

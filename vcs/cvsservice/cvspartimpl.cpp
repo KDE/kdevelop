@@ -843,7 +843,7 @@ void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
         KStdGuiItem::add(),
 #else
-        i18n( "Add file(s)"),
+        i18n( "Add Files"),
 #endif
         i18n("Do Not Add"),
         i18n("askWhenAddingNewFiles") );

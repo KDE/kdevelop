@@ -91,7 +91,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     
     m_widget = new KDevProjectManagerWidget(this);
 
-    QWhatsThis::add(m_widget, i18n("Project Manager"));
+    QWhatsThis::add(m_widget, i18n("Project manager"));
 
     mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 

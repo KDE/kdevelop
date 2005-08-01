@@ -299,7 +299,7 @@ void MainWindow::setupSearchActions()
     actionSearchFind->addTo( tb );*/
     incrementalSearch = new QLineEdit( 0 );
     incrementalSearch->hide();
-    QToolTip::add( incrementalSearch, i18n( "Incremental Search (Alt+I)" ) );
+    QToolTip::add( incrementalSearch, i18n( "Incremental search (Alt+I)" ) );
     connect( incrementalSearch, SIGNAL( textChanged( const QString & ) ),
 	     this, SLOT( searchIncremetalFind() ) );
     connect( incrementalSearch, SIGNAL( returnPressed() ),
@@ -627,7 +627,7 @@ void MainWindow::setupFileActions()
     if ( !singleProject ) {
 	DesignerAction *a = new DesignerAction( this, 0 );
 	a->setText( i18n( "New" ) );
-	a->setToolTip( i18n( "New Dialog or File" ) );
+	a->setToolTip( i18n( "New dialog or file" ) );
 	a->setMenuText( i18n( "&New..." ) );
 	a->setIconSet( createIconSet("designer_filenew.png") );
 	a->setAccel( CTRL + Key_N );

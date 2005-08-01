@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
   aboutData.addCredit("Sascha Cunz" , I18N_NOOP("Cleanup and bugfixes for qEditor, AutoMake and much other stuff"), "mail@sacu.de");
   aboutData.addCredit("Robert Gruber" , I18N_NOOP("SnippetPart, debugger and usability patches"), "rgruber@users.sourceforge.net");
-  aboutData.addCredit("Zoran Karavla", I18N_NOOP("Artwork for the ruby language"), "webmaster@the-error.net", "http://the-error.net");
+  aboutData.addCredit("Zoran Karavla", I18N_NOOP("Artwork for the Ruby language"), "webmaster@the-error.net", "http://the-error.net");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );

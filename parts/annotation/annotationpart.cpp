@@ -61,7 +61,7 @@ annotationPart::annotationPart(QObject *parent, const char *name, const QStringL
     m_widget->setCaption("Annotations");
     m_widget->setIcon(SmallIcon("notes"));
 
-    QWhatsThis::add(m_widget, i18n("some annotation about the code"));
+    QWhatsThis::add(m_widget, i18n("Some annotation about the code"));
     
     // now you decide what should happen to the widget. Take a look at kdevcore.h
     // or at other plugins how to embed it.
@@ -187,7 +187,7 @@ void annotationPart::projectClosed()
 void annotationPart::doSomething()
 {
 // do something useful here instead of showing the message box
-    KMessageBox::information(m_widget, i18n("This action does nothing."), i18n("annotation Plugin"));
+    KMessageBox::information(m_widget, i18n("This action does nothing."), i18n("Annotation Plugin"));
 }
 
 #include "annotationpart.moc"
@@ -199,14 +199,14 @@ void annotationPart::doSomething()
 void annotationPart::SlotDoAnnotate()
 {
   kdDebug()<< "Annotation: Editor Windows";
-  KMessageBox::information(m_widget,m_itemAnnotationFilename +":"+  m_itemAnnotationName , i18n("annotation Plugin"));
+  KMessageBox::information(m_widget,m_itemAnnotationFilename +":"+  m_itemAnnotationName , i18n("Annotation Plugin"));
 }
 
 void annotationPart::SlotDoAnnotate(QString itemname)
 {
   kdDebug()<< "Annotation: "<<itemname;
 
-  KMessageBox::information(0 ,itemname,i18n("annotation Plugin"));
+  KMessageBox::information(0 ,itemname,i18n("Annotation Plugin"));
 //  kdDebug()<< context->item()->name();
 }
 /*!

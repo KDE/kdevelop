@@ -267,7 +267,7 @@ void ProjectviewPart::setupActions()
     
     connect(m_openPrjViewAction, SIGNAL(activated(const QString &)), this, SLOT(slotOpenProjectView(const QString &)));
     
-    m_openPrjViewAction->setToolTip(i18n("Open Project View"));
+    m_openPrjViewAction->setToolTip(i18n("Open project view"));
     
     m_savePrjViewAction = new KAction(i18n("Save Project View"), "filesave", 0, this, SLOT(slotSaveProjectView()), actionCollection(), "projectviews_save");
     
@@ -277,11 +277,11 @@ void ProjectviewPart::setupActions()
     
     connect(m_deletePrjViewAction, SIGNAL(activated(const QString &)), this, SLOT(slotDeleteProjectView(const QString &)));
     
-    m_deletePrjViewAction->setToolTip(i18n("Delete Project View"));
+    m_deletePrjViewAction->setToolTip(i18n("Delete project view"));
     
     m_deleteCurrentPrjViewAction = new KAction(i18n("Delete Project View"), "editdelete", 0, this, SLOT(slotDeleteProjectViewCurent()), actionCollection(), "projectviews_deletecurrent");
     
-    m_deleteCurrentPrjViewAction->setToolTip(i18n("Delete Project View"));
+    m_deleteCurrentPrjViewAction->setToolTip(i18n("Delete project view"));
     
     adjustViewActions();
 }
