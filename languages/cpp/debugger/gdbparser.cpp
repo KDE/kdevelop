@@ -94,6 +94,17 @@ void GDBParser::parseCompositeValue(TrimmableItem* parent, char* buf)
         return;
     }
 
+    if (parent->getDataType() == typeReference)
+    {
+        // If the reference points to a struct or class, to loop below runs into a problem
+        // because the composition does not have a name
+        DataType dataType = determineType(buf);
+        if (dataType == typeStruct) {
+            // Remove the brace from the struct to make the loop below work
+            buf[0] = ' ';
+        }
+    }
+
     // Iterate over all items.
     while (*buf) {
         buf = skipNextTokenStart(buf);
@@ -355,6 +366,13 @@ DataType GDBParser::determineType(char *buf) const
                 break;
             case '<':
                 buf = skipDelim(buf, '<', '>');
+                // gdb may produce this output:
+                // $1 = 0x804ddf3 ' ' <repeats 20 times>, "TESTSTRING"
+                // after having finished with the "repeats"-block we need
+                // to check if the string continues
+                if ( buf[0] == ',' && buf[2] == '"' ) {
+                    buf++; //set the buffer behind the comma to indicate that the string continues
+                }
                 break;
             default:
                 buf++;
@@ -514,7 +532,15 @@ char *GDBParser::skipTokenEnd(char *buf) const
         case '{':
             return skipDelim(buf, '{', '}');
         case '<':
-            return skipDelim(buf, '<', '>');
+            buf = skipDelim(buf, '<', '>');
+            // gdb may produce this output:
+            // $1 = 0x804ddf3 ' ' <repeats 20 times>, "TESTSTRING"
+            // after having finished with the "repeats"-block we need
+            // to check if the string continues
+            if ( buf[0] == ',' && buf[2] == '"' ) {
+                buf++; //set the buffer behind the comma to indicate that the string continues
+            }
+            return buf;
         case '(':
             return skipDelim(buf, '(', ')');
         }
