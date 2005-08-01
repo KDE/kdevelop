@@ -2,6 +2,7 @@
 [General]
 Name=Scons-based KMDI application
 Name[da]=Scons-baseret KMDI-program
+Name[de]=scons-basierte KMDI-Anwendung
 Name[et]=KMDI rakendus Sconsi põhjal
 Name[sv]=Scons-baserat KMDI-program
 Name[tr]=Scons tabanlı KMDI uygulaması
@@ -9,6 +10,7 @@ Category=C++/KDE
 Icon=kscons_kmdi.png
 Comment=Generates a complex KMDI application. Scons scripts are provided for compiling and installing the application.
 Comment[da]=Genererer et komplekst KDE-program. Der sørges for scons-scripter til at kompilere og installere programmet.
+Comment[de]=Erstellt eine aufwändige KMDI-Anwendung. Scons-Skripte für das Kompileren und Installieren der Anwendung werden zur Verfügung gestellt.
 Comment[et]=Keerulise KMDI rakenduse loomine. Luuakse ka Sconsi skriptid rakenduse kompileerimiseks ja paigaldamiseks.
 Comment[sv]=Skapar ett komplext KMDI-program. Scons-skript tillhandahålls för att kompilera och installera programmet.
 Comment[tr]=Karmaşık bir KMDI uygulaması yaratır. Uygulamayı derlemek ve kurmak için scons betikleri sağlanmıştır.
@@ -194,6 +196,7 @@ Dest=%{dest}/src/%{APPNAMELC}_part.rc
 Type=message
 Comment=A KDE application with scons scripts was created in %{dest}
 Comment[da]=Et KDE program med scons-scripter blev oprette i %{dest}
+Comment[de]=Eine KDE-Anwendung mit scons-Skripten wurde in %{dest} erstellt.
 Comment[et]=KDE rakendus Sconsi skriptidega loodi asukohta %{dest}
 Comment[sv]=Ett KDE-program med Scons-skript skapades i %{dest}
 Comment[tr]=Scons betikleri olan bir KDE uygulaması %{dest} içinde yaratıldı.

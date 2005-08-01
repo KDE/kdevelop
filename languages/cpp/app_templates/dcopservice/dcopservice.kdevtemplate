@@ -14,6 +14,7 @@ Icon=kdcop.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE DCOP service and client access library.
 Comment[da]=Genererer et skelet for en KDE dcop-tjeneste og klientadgangsbibliotek.
+Comment[de]=Erstellt das Grundgerüst für einen KDE DCOP-Dienst und eine Bibliothek für den Client-Zugriff.
 Comment[et]=KDE DCOP-teenuse raamistiku ja kliendi ligipääsu teegi loomine.
 Comment[sv]=Skapar ett ramverk för en KDE DCOP-tjänst och klientåtkomstbibliotek.
 Comment[tr]=Bir KDE DCOP hizmeti ve istemci erişim kütüphanesi için bir çatı yaratır.

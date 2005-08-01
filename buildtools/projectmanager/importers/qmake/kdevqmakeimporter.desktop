@@ -4,6 +4,7 @@ Name=KDevQMakeEditor
 Name[sv]=KDevelop Qmake-editor
 Comment=Imports and edits qmake projects
 Comment[da]=Importerer og redigere qmake-projekter
+Comment[de]=Importiert und bearbeitet qmake-Projekte
 Comment[et]=QMkae'i projektide import ja redigeerimine.
 Comment[sl]=Uvozi in uredi projekte qmake
 Comment[sv]=Importerar och redigerar Qmake-projekt
