@@ -311,11 +311,11 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     else if (item == recentExpressions_)
     {
         KPopupMenu popup(this);
-        popup.insertTitle(i18n("Recent expressions"));
+        popup.insertTitle(i18n("Recent Expressions"));
         int idRemove = popup.insertItem(
-            SmallIcon("editdelete"), i18n("Remove all"));
+            SmallIcon("editdelete"), i18n("Remove All"));
         int idReevaluate = popup.insertItem(
-            SmallIcon("reload"), i18n("Reevaluate all"));
+            SmallIcon("reload"), i18n("Reevaluate All"));
         int res = popup.exec(QCursor::pos());
         
         if (res == idRemove)

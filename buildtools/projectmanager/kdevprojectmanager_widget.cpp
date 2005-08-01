@@ -248,7 +248,7 @@ void KDevProjectManagerWidget::createFolder()
 void KDevProjectManagerWidget::createTarget()
 {
 	KDevProjectEditor *editor = part()->defaultImporter()->editor();
-	QString name = KInputDialog::getText(i18n("Add Target"), i18n("Add Target"));
+	QString name = KInputDialog::getText(i18n("Add Target"), i18n("Add target:"));
 	if (!name.isEmpty()) {
 		// Create the target in the AST and then add it to the DOM
 	}
