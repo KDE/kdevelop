@@ -76,7 +76,7 @@ void GDBParser::parseValue(TrimmableItem *item, char *buf)
     {
         QString varName;
         DataType dataType = determineType(buf);
-        QCString value = getValue(dataType, &buf);
+        QCString value = getValue(&buf);
         setItem(item, varName, dataType, value, true);
     }
 }
@@ -86,23 +86,22 @@ void GDBParser::parseCompositeValue(TrimmableItem* parent, char* buf)
     Q_ASSERT(parent);
     Q_ASSERT(buf);
 
+    // Determine type and undecorate the value here, as opposed as
+    // peeking at parent->getDataType().
+    // This approach is more robust, as for reference to array
+    // the parent->getDataType() will be typeReference, but this
+    // method will be called with array value.
+    DataType dataType = determineType(buf);
+
+    QCString raw = undecorateValue(dataType, buf);
+    buf = raw.data();
+
     // Arrays are just sequences of values, there are no names,
     // so we need special processing.
-    if (parent->getDataType() == typeArray)
+    if (dataType == typeArray)
     {
         parseArray(parent, buf);
         return;
-    }
-
-    if (parent->getDataType() == typeReference)
-    {
-        // If the reference points to a struct or class, to loop below runs into a problem
-        // because the composition does not have a name
-        DataType dataType = determineType(buf);
-        if (dataType == typeStruct) {
-            // Remove the brace from the struct to make the loop below work
-            buf[0] = ' ';
-        }
     }
 
     // Iterate over all items.
@@ -122,8 +121,9 @@ void GDBParser::parseCompositeValue(TrimmableItem* parent, char* buf)
             // Figure out real type of value.
             dataType = determineType(buf);
 
-            QCString value = getValue(dataType, &buf);
+            QCString value = getValue(&buf);
             setItem(parent, varName, dataType, value, false);
+            
         }
         else
         {
@@ -146,7 +146,7 @@ void GDBParser::parseArray(TrimmableItem *parent, char *buf)
                 return;
 
             DataType dataType = determineType(buf);
-            QCString value = getValue(dataType, &buf);
+            QCString value = getValue(&buf);
             QString varName = elementRoot.arg(idx);
             setItem(parent, varName, dataType, value, false);
 
@@ -176,10 +176,19 @@ QString GDBParser::getName(char **buf)
 
 // **************************************************************************
 
-QCString GDBParser::getValue(DataType type, char **buf)
+QCString GDBParser::getValue(char **buf)
 {
     char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
+
+    QCString value(start, *buf - start + 1);
+    return value;
+}
+
+QCString GDBParser::undecorateValue(DataType type, const QCString& s)
+{
+    char* start = s.data();
+    char* end = s.data() + s.length();
 
     if (*start == '{')
     {
@@ -196,7 +205,7 @@ QCString GDBParser::getValue(DataType type, char **buf)
         else
         {
             // Looks like composite, strip the braces and return.
-            return QCString(start+1, *buf - start -1);
+            return QCString(start+1, end - start -1);
         }
     }
     else if (*start == '(')
@@ -221,10 +230,11 @@ QCString GDBParser::getValue(DataType type, char **buf)
         start = skipDelim(start, '(', ')');
     }
 
-    QCString value(start, *buf - start + 1);
+    QCString value(start, end - start + 1);
   
-    return value;
+    return value.stripWhiteSpace();
 }
+
 
 // ***************************************************************************
 
@@ -260,12 +270,14 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
 
     switch (dataType) {
     case typePointer:
-        item->setText(ValueCol, value);
+        item->setText(ValueCol, undecorateValue(dataType, value.data()));
         item->setExpandable(varName != "_vptr.");
         break;
 
     case typeStruct:
     case typeArray:
+        // Don't strip {} here, it will be done in parseCompositeValue
+        // if the value is expanded.
         item->setCache(value);
         // Explicitly reset the text. 
         // When setting a value of composite, we reload the value
@@ -289,29 +301,32 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
             int pos;
             if ((pos = value.find(':', 0)) != -1) {
                 QCString rhs((value.mid(pos+2, value.length()).data()));
-// -- I don't understand this code, but this seems to make sense
+                
                 DataType dataType = determineType( rhs.data() );
+                QCString undecoratedValue = undecorateValue(dataType,
+                                                            value.left(pos));
+
                 if ( dataType == typeUnknown )
                 {
-                    item->setText(ValueCol, value.left(pos));
+                    // Typically, this means that reference is invalid
+                    // (e.g. not initialized) yet, and so there's no value.
+                    item->setText(ValueCol, undecoratedValue);
                     item->setExpandable( false );
                     break;
                 }
                 if ( dataType != typeValue) {
-// -- end clueless patch
-//                if (determineType(rhs.data()) != typeValue) {
                     item->setCache(rhs);
-                    item->setText(ValueCol, value.left(pos));
+                    item->setText(ValueCol, undecoratedValue);
                     break;
                 }
             }
-            item->setText(ValueCol, value);
+            item->setText(ValueCol, undecorateValue(dataType, value));
             item->setExpandable(!value.isEmpty() && (value[0] == '@'));
             break;
         }
 
     case typeValue:
-        item->setText(ValueCol, value);
+        item->setText(ValueCol, undecorateValue(dataType, value));
         break;
 
     default:
@@ -320,6 +335,23 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
 }
 
 // **************************************************************************
+
+// Given a value that starts with 0xNNNNNN determines if
+// it looks more like pointer, or a string value.
+DataType pointerOrValue(char *buf)
+{
+    while (*buf) {
+        if (!isspace(*buf))
+            buf++;
+        else if (*(buf+1) == '\"')
+            return typeValue;
+        else
+            break;
+    }
+    
+    return typePointer;
+}
+
 
 DataType GDBParser::determineType(char *buf) const
 {
@@ -386,16 +418,7 @@ DataType GDBParser::determineType(char *buf) const
     // a 0x888888 "this is a char*" type which we'll term a value
     // or whether we just have an address
     if (strncmp(buf, "0x", 2) == 0) {
-        while (*buf) {
-            if (!isspace(*buf))
-                buf++;
-            else if (*(buf+1) == '\"')
-                return typeValue;
-            else
-                break;
-        }
-
-        return typePointer;
+        return pointerOrValue(buf);
     }
 
     // Pointers and references - references are a bit odd
@@ -404,6 +427,19 @@ DataType GDBParser::determineType(char *buf) const
     // (void (*)(void)) 0x804a944 <f(E *, char)> - this is a fn pointer
     if (*buf == '(') {
         buf = skipDelim(buf, '(', ')');
+        // This 'if' handles values like this:
+        // (int (&)[3]) @0xbffff684: {5, 6, 7}
+        // which is a reference to array.
+        if (buf[1] == '@')
+            return typeReference;
+        // This 'if' handles values like this:
+        // (int (*)[3]) 0xbffff810
+        if (strncmp(buf, " 0x", 3) == 0)
+        {
+            ++buf;
+            return pointerOrValue(buf);
+        }
+
         switch (*(buf-2)) {
         case '*':
             return typePointer;

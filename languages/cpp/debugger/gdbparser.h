@@ -42,6 +42,8 @@ public:
         "info locals" and "info args" can be passed to this
         method, as the output looks like just value of some
         imaginary 'struct local_variables'.
+        The value should contain all the decorations from gdb
+        (opening braces of arrays, and so on).
     */
     void parseCompositeValue(TrimmableItem* parent, char* buf);
 
@@ -65,7 +67,11 @@ private:
     char *skipNextTokenStart(char *buf) const;
 
     QString getName(char **buf);
-    QCString getValue(DataType type, char **buf);
+    /** Assuming 'buf' points to a value, return a pointer
+        to the position right after the value.
+    */
+    QCString getValue(char **buf);
+    QCString GDBParser::undecorateValue(DataType type, const QCString& s);
     void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
                  const QCString &value, bool requested);
 
