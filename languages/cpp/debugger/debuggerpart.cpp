@@ -447,8 +447,10 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     {
         QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
         int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed), this, SLOT(contextEvaluate()) );
+        popup->setWhatsThis(id, i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
         int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
-        popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Adds an expression under the cursor to the Variables/Watch list."));
+        popup->setWhatsThis(id2, i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list."));
+
     }
 }
 
