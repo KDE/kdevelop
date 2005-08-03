@@ -71,7 +71,8 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
-    controller(0), justRestarted_(false)
+    controller(0), previousDebuggerState_(s_dbgNotStarted), 
+    justRestarted_(false)
 {
     setObjId("DebuggerInterface");
     setInstance(DebuggerFactory::instance());
@@ -437,21 +438,56 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
     m_contextIdent = econtext->currentWord();
 
-    popup->insertSeparator();
+    bool running = !(previousDebuggerState_ & s_dbgNotStarted);
+
+    // If debugger is running, we insert items at the top. 
+    // The reason is user has explicitly run the debugger, so he's
+    // surely debugging, not editing code or something. So, first
+    // menu items should be about debugging, not some copy/paste/cut
+    // things.
+    if (!running)
+        popup->insertSeparator();
+
+    int index = running ? 0 : -1;        
+    if (running)
+    {
+        // Too bad we can't add QAction to popup menu in Qt3.
+        KAction* act = actionCollection()->action("debug_runtocursor");
+        Q_ASSERT(act);
+        if (act)
+        {
+            int id = popup->insertItem( act->iconSet(), i18n("Run to &Cursor"),
+                                        this, SLOT(slotRunToCursor()),
+                                        0, -1, index);
+
+            popup->setWhatsThis(id, act->whatsThis());
+            index += running;
+        }
+    }
     if (econtext->url().isLocalFile())
     {
-        int id = popup->insertItem( i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()) );
+        int id = popup->insertItem( i18n("Toggle Breakpoint"), 
+                                    this, SLOT(toggleBreakpoint()),
+                                    0, -1, index);
+        index += running;
         popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Toggles breakpoint at the current line."));
     }
     if (!m_contextIdent.isEmpty())
     {
         QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
-        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed), this, SLOT(contextEvaluate()) );
+        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed), 
+                                    this, SLOT(contextEvaluate()),
+                                    0, -1, index);
+        index += running;
         popup->setWhatsThis(id, i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
-        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
+        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed), 
+                                     this, SLOT(contextWatch()),
+                                    0, -1, index);
+        index += running;
         popup->setWhatsThis(id2, i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list."));
-
     }
+    if (running)
+        popup->insertSeparator(index);
 }
 
 
