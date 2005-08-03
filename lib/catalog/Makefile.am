@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(DB3INCLUDES) $(all_includes)
 lib_LTLIBRARIES = libkdevcatalog.la
 libkdevcatalog_la_SOURCES = tag.cpp catalog.cpp
 libkdevcatalog_la_LDFLAGS = -no-undefined $(all_libraries)
