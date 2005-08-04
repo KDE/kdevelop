@@ -9,7 +9,7 @@
 #include <qstring.h>
 #include <klineedit.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include "snippetsettings.h"
 #include "snippet_widget.h"

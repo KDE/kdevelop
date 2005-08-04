@@ -13,8 +13,8 @@
 
 #include "fileviewpart.h"
 
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
 #include <qtoolbutton.h>
 #include <qdom.h>
 #include <kcombobox.h>

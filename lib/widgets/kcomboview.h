@@ -39,9 +39,9 @@ class KComboView: public QComboView
 public:
     KComboView( bool rw, int defaultWidth = 100, QWidget* parent=0, const char* name=0 );
 
-    virtual void addItem(QListViewItem *it);
-    virtual void removeItem(QListViewItem *it);
-    virtual void renameItem(QListViewItem *it, const QString &newName);
+    virtual void addItem(Q3ListViewItem *it);
+    virtual void removeItem(Q3ListViewItem *it);
+    virtual void renameItem(Q3ListViewItem *it, const QString &newName);
 
     virtual void setDefaultText(const QString &text);
 

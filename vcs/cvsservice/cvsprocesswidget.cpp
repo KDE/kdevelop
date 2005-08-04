@@ -45,39 +45,39 @@ int g_dcopErrCounter = 0;
 
 CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsServicePart *part, QWidget *parent, const char *name )
     : DCOPObject( "CvsProcessWidgetDCOPIface" ),
-    QTextEdit( parent, name ),
+    Q3TextEdit( parent, name ),
 	m_part( part ), m_service( service ), m_job( 0 )
 {
     setReadOnly( true );
     setTextFormat( Qt::LogText );
 
-    QStyleSheetItem *style = 0;
-    style = new QStyleSheetItem( styleSheet(), "goodtag" );
+    Q3StyleSheetItem *style = 0;
+    style = new Q3StyleSheetItem( styleSheet(), "goodtag" );
     style->setColor( "black" );
 
-    style = new QStyleSheetItem( styleSheet(), "errortag" );
+    style = new Q3StyleSheetItem( styleSheet(), "errortag" );
     style->setColor( "red" );
     style->setFontWeight( QFont::Bold );
 
-    style = new QStyleSheetItem( styleSheet(), "infotag" );
+    style = new Q3StyleSheetItem( styleSheet(), "infotag" );
     style->setColor( "blue" );
 
-    style = new QStyleSheetItem( styleSheet(), "cvs_conflict" );
+    style = new Q3StyleSheetItem( styleSheet(), "cvs_conflict" );
     style->setColor( "red" );
 
-    style = new QStyleSheetItem( styleSheet(), "cvs_added" );
+    style = new Q3StyleSheetItem( styleSheet(), "cvs_added" );
     style->setColor( "green" );
 
-    style = new QStyleSheetItem( styleSheet(), "cvs_removed" );
+    style = new Q3StyleSheetItem( styleSheet(), "cvs_removed" );
     style->setColor( "yellow" );
 
-    style = new QStyleSheetItem( styleSheet(), "cvs_updated" );
+    style = new Q3StyleSheetItem( styleSheet(), "cvs_updated" );
     style->setColor( "lightblue" );
 
-    style = new QStyleSheetItem( styleSheet(), "cvs_modified" );
+    style = new Q3StyleSheetItem( styleSheet(), "cvs_modified" );
     style->setColor( "darkgreen" );
 
-    style = new QStyleSheetItem( styleSheet(), "cvs_unknown" );
+    style = new Q3StyleSheetItem( styleSheet(), "cvs_unknown" );
     style->setColor( "gray" );
 }
 
@@ -105,7 +105,7 @@ bool CvsProcessWidget::isAlreadyWorking() const
 
 void CvsProcessWidget::clear()
 {
-    QTextEdit::clear();
+    Q3TextEdit::clear();
     this->m_errors = QString::null;
     this->m_output = QString::null;
 }

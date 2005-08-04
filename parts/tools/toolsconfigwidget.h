@@ -14,7 +14,9 @@
 
 #include "toolsconfigwidgetbase.h"
 #include "tools_part.h"
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <QEvent>
 
 
 struct ToolsConfigEntry;
@@ -41,18 +43,18 @@ private:
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-    void readGroup(const QString &group, QDict<ToolsConfigEntry> *entryDict);
-    void storeGroup(const QString &group, const QDict<ToolsConfigEntry> &entryDict);
-    void fillListBox(QListBox *lb, const QDict<ToolsConfigEntry> &entryDict);
-    bool addEntry(ToolsConfigEntry *entry, QDict<ToolsConfigEntry> *entryDict);
+    void readGroup(const QString &group, Q3Dict<ToolsConfigEntry> *entryDict);
+    void storeGroup(const QString &group, const Q3Dict<ToolsConfigEntry> &entryDict);
+    void fillListBox(Q3ListBox *lb, const Q3Dict<ToolsConfigEntry> &entryDict);
+    bool addEntry(ToolsConfigEntry *entry, Q3Dict<ToolsConfigEntry> *entryDict);
 
     void readConfig();
     void storeConfig();
     void updateListBoxes();
     
-    QDict<ToolsConfigEntry> m_toolsmenuEntries;
-    QDict<ToolsConfigEntry> m_filecontextEntries;
-    QDict<ToolsConfigEntry> m_dircontextEntries;
+    Q3Dict<ToolsConfigEntry> m_toolsmenuEntries;
+    Q3Dict<ToolsConfigEntry> m_filecontextEntries;
+    Q3Dict<ToolsConfigEntry> m_dircontextEntries;
     
     ToolsPart *m_part;
 };

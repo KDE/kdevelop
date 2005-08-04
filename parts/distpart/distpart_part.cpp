@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "distpart_part.h"
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kiconloader.h>
 #include <klocale.h>

@@ -33,7 +33,7 @@ IconText=IconOnly
 Index=0
 NewLine=false
 Offset=-1
-Position=Top
+Position=Qt::DockTop
 
 [Mainwindow Toolbar QextMdiTaskBar]
 Hidden=true
@@ -42,7 +42,7 @@ IconText=IconOnly
 Index=1
 NewLine=false
 Offset=-1
-Position=Bottom
+Position=Qt::DockBottom
 
 [Mainwindow Toolbar browserToolBar]
 Hidden=false
@@ -51,7 +51,7 @@ IconText=IconOnly
 Index=2
 NewLine=true
 Offset=-1
-Position=Top
+Position=Qt::DockTop
 
 [Plugins]
 KDevScripting=false

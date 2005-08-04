@@ -19,7 +19,7 @@
 // class CvsForm
 ///////////////////////////////////////////////////////////////////////////////
 
-CvsForm::CvsForm( QWidget *parent, const char *name, WFlags f )
+CvsForm::CvsForm( QWidget *parent, const char *name, Qt::WFlags f )
     : CvsFormBase( parent, name, f )
 {
     setWFlags( getWFlags() | WDestructiveClose );

@@ -24,9 +24,11 @@
 
 #include <qstring.h>
 #include <qmap.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qpair.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 enum Type {
     Token_eof = 0,
@@ -288,7 +290,7 @@ private:
 private:
     LexerData* d;
     Driver* m_driver;
-    QPtrVector< Token > m_tokens;
+    Q3PtrVector< Token > m_tokens;
     int m_size;
     int m_index;
     QString m_source;
@@ -304,8 +306,8 @@ private:
     bool m_skipWordsEnabled;
 
     // preprocessor
-    QMemArray<bool> m_skipping;
-    QMemArray<bool> m_trueTest;
+    Q3MemArray<bool> m_skipping;
+    Q3MemArray<bool> m_trueTest;
     int m_ifLevel;
     bool m_preprocessorEnabled;
     bool m_inPreproc;

@@ -19,8 +19,8 @@
  *
  */
 
-#include <qwhatsthis.h>
-#include <qlistview.h>
+#include <q3whatsthis.h>
+#include <q3listview.h>
 #include <qfileinfo.h>
 #include <qlineedit.h>
 
@@ -76,7 +76,7 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     m_widget->setIcon( SmallIcon("view_tree") );
     m_widget->setCaption(i18n("Class Browser"));
     mainWindow()->embedSelectView( m_widget, i18n("Classes"), i18n("Class browser") );
-    QWhatsThis::add(m_widget, i18n("<b>Class browser</b><p>"
+    Q3WhatsThis::add(m_widget, i18n("<b>Class browser</b><p>"
             "The class browser shows all namespaces, classes and namespace and class members in a project."));
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
@@ -110,7 +110,7 @@ void ClassViewPart::slotProjectClosed( )
 void ClassViewPart::setupActions( )
 {
     m_functionsnav = new KListViewAction( new KComboView(true, 150, 0, "m_functionsnav_combo"), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
-    connect(m_functionsnav->view(), SIGNAL(activated(QListViewItem*)), navigator, SLOT(selectFunctionNav(QListViewItem*)));
+    connect(m_functionsnav->view(), SIGNAL(activated(Q3ListViewItem*)), navigator, SLOT(selectFunctionNav(Q3ListViewItem*)));
 //    m_functionsnav->view()->setEditable(false);
     connect(m_functionsnav->view(), SIGNAL(focusGranted()), navigator, SLOT(functionNavFocused()));
     connect(m_functionsnav->view(), SIGNAL(focusLost()), navigator, SLOT(functionNavUnFocused()));

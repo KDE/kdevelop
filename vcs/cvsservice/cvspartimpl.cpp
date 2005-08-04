@@ -12,6 +12,10 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -228,7 +232,7 @@ void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::Li
         kdDebug(9006) << "This is a Cvs Add operation and will not be checked against repository ;-)" << endl;
         return;
     }
-    QValueList<KURL>::iterator it = urls.begin();
+    Q3ValueList<KURL>::iterator it = urls.begin();
     while (it != urls.end())
     {
         if (!CvsServicePartImpl::isRegisteredInRepository( projectDirectory, (*it) ))
@@ -494,7 +498,7 @@ void CvsServicePartImpl::annotate( const KURL::List& urlList )
     QFile fileTag(tagFilename);
     QString strRev = "";  //default revision is empty ...
     if (fileTag.exists()) { //... but if there is a Tag file, we get the revision from there
-        if ( fileTag.open( IO_ReadOnly ) ) {
+        if ( fileTag.open( QIODevice::ReadOnly ) ) {
             QTextStream stream( &fileTag );
             QString line;
             line = stream.readLine();
@@ -786,7 +790,7 @@ void CvsServicePartImpl::createNewProject( const QString &dirName,
 
 bool CvsServicePartImpl::requestCvsService()
 {
-    QCString appId;
+    Q3CString appId;
     QString error;
 
     if (KApplication::startServiceByDesktopName( "cvsservice",

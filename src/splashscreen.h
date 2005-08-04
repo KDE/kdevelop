@@ -5,6 +5,8 @@
 #include <qsplashscreen.h>
 #include <qpainter.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class QPixmap;
 
@@ -16,7 +18,7 @@ class SplashScreen : public QSplashScreen
 Q_OBJECT
 
 public:
-	SplashScreen(const QPixmap& pixmap, WFlags f = 0);
+	SplashScreen(const QPixmap& pixmap, Qt::WFlags f = 0);
 	virtual ~SplashScreen();
 
 protected:
@@ -24,8 +26,8 @@ protected:
 
 public slots:
 	void animate();
-	void message( const QString &str, int flags = AlignLeft,
-		const QColor &color = black );
+	void message( const QString &str, int flags = Qt::AlignLeft,
+		const QColor &color = Qt::black );
 
 private:
 	int state;

@@ -20,7 +20,7 @@
 
 
 #include <qstring.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <kdebug.h>
 #include <kdialogbase.h>

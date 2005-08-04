@@ -19,7 +19,7 @@
 #include "bookmarks_settings.h"
 
 
-BookmarkSettings::BookmarkSettings( BookmarksPart * part, QWidget* parent, const char* name, WFlags fl )
+BookmarkSettings::BookmarkSettings( BookmarksPart * part, QWidget* parent, const char* name, Qt::WFlags fl )
 : BookmarkSettingsBase( parent, name, fl ), m_part( part )
 {
 	m_part->config()->readConfig();

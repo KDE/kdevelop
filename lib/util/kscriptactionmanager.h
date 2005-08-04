@@ -22,7 +22,7 @@
 
 #include <scriptclientinterface.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class KAction;
 class KActionCollection;
@@ -108,7 +108,7 @@ public:
     * the manager will search in $KDEPATH/data/coolapp/data for all desktop
     * files that are scripts.
      */
-    QPtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
+    Q3PtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
 
 signals:
     /**
@@ -133,7 +133,7 @@ signals:
     void scriptDone( KScriptClientInterface::Result result, const QVariant &returned );
 
 private:
-    mutable QPtrList<KScriptAction> m_actions;
+    mutable Q3PtrList<KScriptAction> m_actions;
     KActionCollection *m_ac;
 };
 #endif

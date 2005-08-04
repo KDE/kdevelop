@@ -35,7 +35,7 @@
 #include "quickopenfiledialog.h"
 #include "quickopen_part.h"
 
-QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
+QuickOpenFileDialog::QuickOpenFileDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
     : QuickOpenDialog( part, parent, name, modal, fl )
 {
     nameLabel->setText( i18n("File &name:") );
@@ -59,7 +59,7 @@ QuickOpenFileDialog::~QuickOpenFileDialog()
     m_completion = 0;
 }
 
-void QuickOpenFileDialog::slotExecuted( QListBoxItem* item )
+void QuickOpenFileDialog::slotExecuted( Q3ListBoxItem* item )
 {
     m_part->partController()->editDocument( KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + item->text() ) );
     accept();

@@ -22,6 +22,8 @@
 
 #include <qlabel.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <klineedit.h>
 #include <kurlrequester.h>
@@ -31,11 +33,11 @@
 #include "docutils.h"
 #include "kdevdocumentationplugin.h"
 
-AddCatalogDlg::AddCatalogDlg( QValueList<DocumentationPlugin*> const & plugins, 
-	QWidget* parent, const char* name, bool modal, WFlags fl)
+AddCatalogDlg::AddCatalogDlg( Q3ValueList<DocumentationPlugin*> const & plugins, 
+	QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 	:AddCatalogDlgBase(parent,name, modal,fl), m_plugins( plugins )
 {
-	for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
+	for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
 	{
 		docTypeCombo->insertItem( (*it)->pluginName() );
 	}
@@ -82,7 +84,7 @@ void AddCatalogDlg::setURL(const QString &url)
 
 DocumentationPlugin * AddCatalogDlg::plugin( )
 {
-	for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
+	for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
 	{
 		if ( docTypeCombo->currentText() == (*it)->pluginName() )
 		{

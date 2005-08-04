@@ -12,11 +12,15 @@
 #ifndef _MAKEWIDGET_H_
 #define _MAKEWIDGET_H_
 
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 #include <qregexp.h>
-#include <qtextedit.h>
-#include <qvaluevector.h>
-#include <qintdict.h>
+#include <q3textedit.h>
+#include <q3valuevector.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <Q3PopupMenu>
 
 #include "outputfilter.h"
 #include "directorystatusmessagefilter.h"
@@ -34,7 +38,7 @@ class KURL;
 
 namespace KTextEditor { class Document; }
 
-class MakeWidget : public QTextEdit
+class MakeWidget : public Q3TextEdit
 {
     Q_OBJECT
 
@@ -55,7 +59,7 @@ public slots:
     void copy();
 
 protected:
-    virtual QPopupMenu *createPopupMenu( const QPoint& pos );
+    virtual Q3PopupMenu *createPopupMenu( const QPoint& pos );
     virtual void contentsMouseReleaseEvent( QMouseEvent* e );
 
 private slots:
@@ -106,10 +110,10 @@ private:
     QString currentCommand;
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
-    QPtrStack<QString> dirstack;
+    Q3PtrStack<QString> dirstack;
     MakeItem* m_pendingItem;
-    QValueVector<MakeItem*> m_items;
-    QIntDict<MakeItem> m_paragraphToItem;
+    Q3ValueVector<MakeItem*> m_items;
+    Q3IntDict<MakeItem> m_paragraphToItem;
     long m_paragraphs;
     int m_lastErrorSelected;
 

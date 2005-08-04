@@ -2,7 +2,7 @@
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kaboutdata.h>
 #include <kaction.h>

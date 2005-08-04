@@ -12,11 +12,13 @@
 #ifndef _FILEVIEWPARTWIDGET_H_
 #define _FILEVIEWPARTWIDGET_H_
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class FileViewPart;
 
-class PartWidget : public QVBox
+class PartWidget : public Q3VBox
 {
     Q_OBJECT
 public:

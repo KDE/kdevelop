@@ -18,7 +18,7 @@
 class CvsService_stub;
 class CvsJob_stub;
 class CheckoutDialogBase;
-class QListViewItem;
+class Q3ListViewItem;
 //class QStringList;
 
 /**
@@ -32,7 +32,7 @@ class CheckoutDialog : public KDialogBase, virtual public CVSServiceDCOPIface
     Q_OBJECT
 public:
     CheckoutDialog( CvsService_stub *cvsService, QWidget *parent = 0,
-        const char *name = 0, WFlags f = 0 );
+        const char *name = 0, Qt::WFlags f = 0 );
     virtual ~CheckoutDialog();
 
 	virtual void slotOk();
@@ -67,7 +67,7 @@ public:
     QString tag() const;
 
 private slots:
-    void slotModuleSelected( QListViewItem *item );
+    void slotModuleSelected( Q3ListViewItem *item );
     void slotFetchModulesList();
     // DCOP Iface
     virtual void slotJobExited( bool normalExit, int exitStatus );

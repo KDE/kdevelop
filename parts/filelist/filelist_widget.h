@@ -46,8 +46,8 @@ private slots:
 //	void partAdded(KParts::Part*);
 //	void partRemoved();
 	void activePartChanged(KParts::Part*);
-	void itemClicked( QListViewItem * );
-	void popupMenu( QListViewItem * , const QPoint & , int );
+	void itemClicked( Q3ListViewItem * );
+	void popupMenu( Q3ListViewItem * , const QPoint & , int );
 	void closeSelectedFiles();
 	void saveSelectedFiles();
 	void reloadSelectedFiles();

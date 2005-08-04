@@ -38,7 +38,7 @@
                 <string>Revision</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignLeft</set>
+                <set>Qt::AlignVCenter|Qt::AlignLeft</set>
             </property>
             <vbox>
                 <property name="name">
@@ -153,7 +153,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -166,10 +166,10 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
+                        <cstring>Qt::Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

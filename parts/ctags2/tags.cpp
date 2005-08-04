@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /***************************************************************************
  *   Copyright (C) 2004 by Jens Dagerbo                                    *
  *   jens.dagerbo@swipnet.se                                               *
@@ -18,7 +20,7 @@ namespace ctags
 
 #include "tags.h"
 
-QCString Tags::_tagsfile;
+Q3CString Tags::_tagsfile;
 
 Tags::TagEntry::TagEntry() {}
 

@@ -18,7 +18,7 @@
 #include <qstringlist.h>
 #include "commitdialogbase.h"
 
-class QTextEdit;
+class Q3TextEdit;
 class QCheckBox;
 
 class CommitDialog : public CommitDialogBase

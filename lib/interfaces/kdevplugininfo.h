@@ -20,6 +20,8 @@
 #define KDEVPLUGININFO_H
 
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kaboutdata.h>
 
@@ -79,9 +81,9 @@ public:
     QStringList propertyNames() const;
 
     /**@return A list of plugin authors.*/
-    const QValueList<KAboutPerson> authors() const;
+    const Q3ValueList<KAboutPerson> authors() const;
     /**@return A list of other plugin contributors.*/
-    const QValueList<KAboutPerson> credits() const;
+    const Q3ValueList<KAboutPerson> credits() const;
 
     /**Adds an author to the list of authors.
     You can call this function as many times you need. Each entry is appended to a list.

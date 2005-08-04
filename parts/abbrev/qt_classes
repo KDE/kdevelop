@@ -1,49 +1,85 @@
-QAccel
+//Added by qt3to4:
+#include <QTranslator>
+#include <QImageIO>
+#include <Q3SqlForm>
+#include <QDragLeaveEvent>
+#include <QBoxLayout>
+#include <QTimerEvent>
+#include <QKeyEvent>
+#include <Q3SqlPropertyMap>
+#include <Q3ValueList>
+#include <QSqlQuery>
+#include <Q3StrList>
+#include <QLabel>
+#include <Q3SqlEditorFactory>
+#include <Q3SqlCursor>
+#include <QHBoxLayout>
+#include <Q3PointArray>
+#include <QVBoxLayout>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QEventLoop>
+#include <QResizeEvent>
+#include <Q3PopupMenu>
+#include <QSqlError>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QGridLayout>
+#include <QEvent>
+#include <QTextStream>
+#include <Q3SqlRecordInfo>
+#include <QShowEvent>
+#include <QPaintEvent>
+#include <QWheelEvent>
+Q3Accel
 QAccessible
 QApplication
-QAsciiDict
+Q3AsciiDict
 QAsyncIO 
 QAuBucket 
 QBackInsertIterator
-QBaseBucket				
+Q3BaseBucket				
 QBitArray
 QBitVal
 QBitmap
 QBoxLayout
 QBoxLayoutData
 QBrush
-QButton
+Q3Button
 QButtonData
-QButtonGroup
+Q3ButtonGroup
 QButtonList
 QCDict
 QCList					
 QCListIt
-QCString
-QCache
-QCanvas
+Q3CString
+Q3Cache
+Q3Canvas
 QCanvasChunk
 QCanvasData
-QCanvasEllipse
-QCanvasItem
+Q3CanvasEllipse
+Q3CanvasItem
 QCanvasItemExtra
-QCanvasLine
-QCanvasPixmap
-QCanvasPixmapArray
-QCanvasPolygon
-QCanvasPolygonalItem
-QCanvasRectangle
-QCanvasSprite
-QCanvasText
+Q3CanvasLine
+Q3CanvasPixmap
+Q3CanvasPixmapArray
+Q3CanvasPolygon
+Q3CanvasPolygonalItem
+Q3CanvasRectangle
+Q3CanvasSprite
+Q3CanvasText
 QCanvasTextExtra
-QCanvasView
+Q3CanvasView
 QCanvasViewData
 QChar 
 QCharRef
 QCharRef 
 QCheckBox
-QCheckListItem
-QCleanupHandler
+Q3CheckListItem
+Q3CleanupHandler
 QClipboard
 QColor
 QColorGroup
@@ -61,12 +97,12 @@ QDate
 QDateTime
 QDeepCopy
 QDialog
-QDict
+Q3Dict
 QDir
 QDiskFont
-QDockArea
-QDockAreaLayout
-QDockWindow
+Q3DockArea
+Q3DockAreaLayout
+Q3DockWindow
 QDockWindowHandle
 QDockWindowResizeHandle
 QDockWindowTitleBar
@@ -90,15 +126,15 @@ QDomText
 QDragEnterEvent
 QDragLeaveEvent
 QDragMoveEvent
-QDragObject
+Q3DragObject
 QDragObjectData
-QDropSite 
+Q3DropSite 
 QEvent
 QEventLoop
-QFileDialog
+Q3FileDialog
 QFileDialogQFileListView
 QFileInfo
-QFilePreview
+Q3FilePreview
 QFocusData
 QFocusData 
 QFocusEvent
@@ -110,39 +146,39 @@ QFontMetrics
 QFontPrivate                                     
 QFontStylePrivate 
 QFtpCommand
-QGArray					
-QGCacheIterator			
+Q3GArray					
+Q3GCacheIterator			
 QGDItList
-QGDict
-QGDictIterator
-QGDictIterator			
+Q3GDict
+Q3GDictIterator
+Q3GDictIterator			
 QGL
 QGLCmap
 QGLColormap
 QGLOverlayWidget
-QGList
-QGListIterator			
+Q3GList
+Q3GListIterator			
 QGListIteratorList 
-QGListStdIterator
-QGVector
+Q3GListStdIterator
+Q3GVector
 QGfx
 QGridLayout
 QGridLayoutBox
 QGridLayoutData
-QGroupBox
-QGuardedPtr
+Q3GroupBox
+QPointer
 QHBoxLayout
-QHeader
+Q3Header
 QHeaderData
 QHostAddress
-QHttpHeader
+Q3HttpHeader
 QHttpRequest
 QIODevice
-QIconDragItem
+Q3IconDragItem
 QIconFactory
-QIconSet
-QIconView
-QIconViewItem
+QIcon
+Q3IconView
+Q3IconViewItem
 QIconViewItemLineEdit
 QIconViewPrivate          
 QIconViewToolTip
@@ -150,36 +186,36 @@ QImage
 QImageConsumer 
 QImageDataMisc 
 QImageDecoder 
-QImageDrag
+Q3ImageDrag
 QImageDragData
 QImageFormat
 QImageFormat 
 QImageFormatType 
 QImageIO
 QImageTextKeyLang 
-QIntDict
+Q3IntDict
 QInternal 
 QJpUnicodeConv 
 QKeyEvent
 QKeySequence
-QLNode
+Q3LNode
 QLabel
 QLayout
 QLayoutItem
 QLayoutIterator
 QLibrary
 QLineEdit
-QListBox
-QListBoxItem
-QListView
-QListViewItem
-QListViewItemIterator
+Q3ListBox
+Q3ListBoxItem
+Q3ListView
+Q3ListViewItem
+Q3ListViewItemIterator
 QListViewToolTip
 QLocale
 QMacDndExtra
 QMacMime 
 QMacSavedPortInfo
-QMainWindow
+Q3MainWindow
 QMainWindowLayout
 QMap
 QMapConstIterator
@@ -198,8 +234,8 @@ QMetaObjectCleanUp
 QMetaProperty
 QMetaProperty			
 QMimeSource
-QMimeSourceFactory
-QMimeSourceFactory 
+Q3MimeSourceFactory
+Q3MimeSourceFactory 
 QMimeSourceFactoryData
 QMouseEvent
 QMovie
@@ -212,9 +248,9 @@ QMutexLocker
 QNPInstance
 QNPStream 
 QNPlugin 
-QNetworkOperation
-QNetworkProtocol
-QNetworkProtocolFactoryBase
+Q3NetworkOperation
+Q3NetworkProtocol
+Q3NetworkProtocolFactoryBase
 QObject
 QObjectList
 QObjectListIt
@@ -223,30 +259,30 @@ QObjectUserData
 QOleDropTarget
 QPaintDevice
 QPaintDevice				
-QPaintDeviceMetrics
-QPaintDeviceMetrics			
+Q3PaintDeviceMetrics
+Q3PaintDeviceMetrics			
 QPaintEvent
 QPainter
 QPalette
 QPen
-QPicture
+Q3Picture
 QPixmap
 QPixmapCache				
 QPoint
-QPointArray
-QPolygonScanner 
+Q3PointArray
+Q3PolygonScanner 
 QPolygonalProcessor
-QPopupMenu
+Q3PopupMenu
 QPostEventList
 QPrinter
-QProcess
+Q3Process
 QProgressDialogData
-QPtrCollection			
-QPtrDict
-QPtrList
-QPtrVector
+Q3PtrCollection			
+Q3PtrDict
+Q3PtrList
+Q3PtrVector
 QPushButton
-QRangeControl
+Q3RangeControl
 QRect
 QRect					
 QRegExp
@@ -269,16 +305,16 @@ QSessionManagerData
 QSettings
 QSharedCleanupHandler
 QShowEvent
-QSignal
+Q3Signal
 QSignalMapperData
 QSignalVec
-QSimpleRichText
+Q3SimpleRichText
 QSimpleRichTextData
-QSingleCleanupHandler
+Q3SingleCleanupHandler
 QSize
 QSizePolicy
-QSocket
-QSocketDevice
+Q3Socket
+Q3SocketDevice
 QSocketNotifier
 QSoundData
 QSpacerItem
@@ -287,45 +323,45 @@ QSplitter
 QSplitterHandle
 QSplitterLayoutStruct
 QSql
-QSqlCursor
+Q3SqlCursor
 QSqlDatabase
 QSqlDriver
 QSqlDriverCreatorBase
 QSqlDriverExtension
-QSqlEditorFactory
+Q3SqlEditorFactory
 QSqlError
 QSqlExtension
 QSqlField
-QSqlFieldInfo
-QSqlForm
+Q3SqlFieldInfo
+Q3SqlForm
 QSqlIndex
-QSqlPropertyMap
-QSqlPropertyMap 
+Q3SqlPropertyMap
+Q3SqlPropertyMap 
 QSqlQuery
 QSqlRecord
-QSqlRecordInfo
+Q3SqlRecordInfo
 QSqlResult
 QStatusBar
 QStoredDragData
-QStrList
+Q3StrList
 QString
 QStringList
 QStyle
 QStyleFactory
 QStyleHintReturn 
 QStyleOption 
-QStyleSheet
+Q3StyleSheet
 QStyleSheetItemData
-QSyntaxHighlighter
+Q3SyntaxHighlighter
 QSyntaxHighlighterInternal
 QTSManip
 QTab
 QTabBar
 QTabWidgetData
-QTable
+Q3Table
 QTableHeader
-QTableSelection
-QTextBrowser
+Q3TableSelection
+Q3TextBrowser
 QTextBrowserData
 QTextCodec
 QTextCodec 
@@ -336,8 +372,8 @@ QTextCustomItem
 QTextDecoder
 QTextDecoder 
 QTextDocument
-QTextDrag
-QTextEdit
+Q3TextDrag
+Q3TextEdit
 QTextEncoder 
 QTextFormat
 QTextFormatCollection
@@ -347,7 +383,7 @@ QTextParag
 QTextParagraph
 QTextStream
 QTextString
-QTextView
+Q3TextView
 QThread
 QThreadInstance
 QThreadStorage
@@ -356,24 +392,24 @@ QTime
 QTimer
 QTimerEvent
 QTipManager
-QToolBar
+Q3ToolBar
 QToolButton
 QToolTipGroup
 QTranslator
 QTranslatorMessage
-QUrl
+Q3Url
 QUrlInfo
-QUrlOperator
+Q3UrlOperator
 QVBoxLayout
 QValidator
-QValueList
-QValueListConstIterator
-QValueListIterator
+Q3ValueList
+Q3ValueListConstIterator
+Q3ValueListIterator
 QValueListNode
-QValueVector
+Q3ValueVector
 QVariant
-QWMatrix
-QWMatrix					
+QMatrix
+QMatrix					
 QWSDecoration
 QWSDisplay
 QWSManager
@@ -386,7 +422,7 @@ QWidgetList
 QWidgetListIt
 QWidgetMapper
 QWidgetResizeHandler
-QWidgetStack
+Q3WidgetStack
 QWindowsMime 
 QWindowsXPStyle
 QWorkspaceChild

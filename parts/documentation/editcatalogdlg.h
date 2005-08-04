@@ -29,7 +29,7 @@ class EditCatalogDlg : public EditCatalogBase
     Q_OBJECT
 public:
     EditCatalogDlg(DocumentationPlugin *plugin, 
-        QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+        QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
     ~EditCatalogDlg();
     /*$PUBLIC_FUNCTIONS$*/
 

@@ -3,22 +3,26 @@
 
 
 #include <qobject.h>
-#include <qmemarray.h>
-#include <qguardedptr.h>
+#include <q3memarray.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
-class QPopupMenu;
+class Q3PopupMenu;
 
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
 #include <kdeversion.h>
 # include <ktexteditor/markinterfaceextension.h>
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 
 /**
 Editor proxy for delayed loading of editor parts.
 */
-class EditorWrapper : public QWidgetStack
+class EditorWrapper : public Q3WidgetStack
 {
   Q_OBJECT
 
@@ -38,8 +42,8 @@ protected:
   virtual void focusInEvent(QFocusEvent *ev);
   
 private:
-  QGuardedPtr<KTextEditor::Document> m_doc;
-  QGuardedPtr<KTextEditor::View> m_view;
+  QPointer<KTextEditor::Document> m_doc;
+  QPointer<KTextEditor::View> m_view;
   int m_line;
   int m_col;
   bool m_first;
@@ -76,10 +80,10 @@ private:
 
   static EditorProxy *s_instance;
 
-  QMemArray<int> m_popupIds;
+  Q3MemArray<int> m_popupIds;
 
   // This list is used to save line/col information for not yet activated editor views.
-  QValueList< EditorWrapper* > m_editorParts;
+  Q3ValueList< EditorWrapper* > m_editorParts;
   
   bool m_delayedViewCreationCompatibleUI;
 };

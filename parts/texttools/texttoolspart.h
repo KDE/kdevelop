@@ -12,7 +12,7 @@
 #ifndef _TEXTTOOLSPART_H_
 #define _TEXTTOOLSPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kparts/part.h>
 #include "kdevplugin.h"
 
@@ -33,7 +33,7 @@ private slots:
 private:
     void createWidget();
     
-    QGuardedPtr<TextToolsWidget> m_widget;
+    QPointer<TextToolsWidget> m_widget;
 };
 
 #endif

@@ -21,7 +21,7 @@
 #include "resizablecombo.h"
 
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
@@ -70,8 +70,8 @@ void KListViewAction::setToolTip( const QString & str )
 
 void KListViewAction::setWhatsThis( const QString & str )
 {
-    QWhatsThis::remove(m_view);
-    QWhatsThis::add(m_view, str);
+    Q3WhatsThis::remove(m_view);
+    Q3WhatsThis::add(m_view, str);
 }
 
 void KListViewAction::loadComboWidth( )

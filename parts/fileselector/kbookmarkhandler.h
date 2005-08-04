@@ -23,6 +23,9 @@
 #include <kbookmarkmanager.h>
 #include <kbookmarkmenu.h>
 #include "fileselector_widget.h"
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 class QTextStream;
 class KPopupMenu;
@@ -46,7 +49,7 @@ signals:
     void openURL( const QString& url );
 
 private slots:
-    void slotNewBookmark( const QString& text, const QCString& url,
+    void slotNewBookmark( const QString& text, const Q3CString& url,
                           const QString& additionalInfo );
     void slotNewFolder( const QString& text, bool open,
                         const QString& additionalInfo );

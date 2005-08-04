@@ -13,25 +13,29 @@
 
 #include "appwizarddlg.h"
 
-#include <qvbox.h>
-#include <qbuttongroup.h>
+#include <q3vbox.h>
+#include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qtabwidget.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qgrid.h>
-#include <qheader.h>
+#include <q3grid.h>
+#include <q3header.h>
 #include <qmap.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qregexp.h>
 #include <qtextstream.h>
-#include <qtextview.h>
+#include <q3textview.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QHBoxLayout>
+#include <Q3ValueList>
 #include <klistview.h>
 #include <kiconview.h>
 #include <kconfig.h>
@@ -94,7 +98,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 	helpButton()->hide();
     templates_listview->header()->hide();
-	templates_listview->setColumnWidthMode(0, QListView::Maximum);	//to provide horiz scrollbar.
+	templates_listview->setColumnWidthMode(0, Q3ListView::Maximum);	//to provide horiz scrollbar.
 
 	m_templatesMenu = new KPopupMenu(templates_listview);
 	m_templatesMenu->insertItem(i18n("&Add to Favorites"), this, SLOT(addTemplateToFavourites()));
@@ -256,9 +260,9 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         insertCategoryIntoTreeView(*it);
 
     // Insert items into list view
-    QPtrListIterator<ApplicationInfo> ait(m_appsInfo);
+    Q3PtrListIterator<ApplicationInfo> ait(m_appsInfo);
     for (; ait.current(); ++ait) {
-        QListViewItem *item = m_categoryMap.find(ait.current()->category);
+        Q3ListViewItem *item = m_categoryMap.find(ait.current()->category);
         if (item)
 		{
             item = new KListViewItem(item, ait.current()->name);
@@ -301,8 +305,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     appname_edit->setValidator(appname_edit_validator);
 
     // insert the licenses into the license_combo
-    QDict< KDevLicense > lics( licenses() );
-    QDictIterator< KDevLicense > dit(lics);
+    Q3Dict< KDevLicense > lics( licenses() );
+    Q3DictIterator< KDevLicense > dit(lics);
     int idx=1;
     for( ; dit.current(); ++dit )
     {
@@ -401,19 +405,19 @@ void AppWizardDialog::textChanged()
 
 void AppWizardDialog::licenseChanged()
 {
-	QValueList<AppWizardFileTemplate>::Iterator it;
+	Q3ValueList<AppWizardFileTemplate>::Iterator it;
 	if( license_combo->currentItem() == 0 )
 	{
 		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it)
 		{
-			QMultiLineEdit *edit = (*it).edit;
+			Q3MultiLineEdit *edit = (*it).edit;
 			edit->setText( QString::null );
 		}
 	} else {
 		KDevLicense* lic = licenses()[ license_combo->currentText() ];
 		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
 			QString style = (*it).style;
-			QMultiLineEdit *edit = (*it).edit;
+			Q3MultiLineEdit *edit = (*it).edit;
 
 			KDevFile::CommentingStyle commentStyle = KDevFile::CPPStyle;
 			if (style == "PStyle") {
@@ -460,7 +464,7 @@ void AppWizardDialog::accept()
 	KTempDir archDir;
 	archDir.setAutoDelete(true);
 	KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
-	if( templateArchive.open( IO_ReadOnly ) )
+	if( templateArchive.open( QIODevice::ReadOnly ) )
 	{
 		//templateArchive.directory()->copyTo(archDir.name(), true);
 		unpackArchive(templateArchive.directory(), archDir.name(), false);
@@ -524,14 +528,14 @@ void AppWizardDialog::accept()
 	QDomDocument tempProjectDom;
 	tempProjectDom.setContent( tempProjectDomSource ); 
 	
-    QValueList<AppWizardFileTemplate>::Iterator it;
+    Q3ValueList<AppWizardFileTemplate>::Iterator it;
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
         KTempFile *tempFile = new KTempFile();
         m_tempFiles.append(tempFile);
 
 		QString templateText( FileTemplate::makeSubstitutions( tempProjectDom, (*it).edit->text() ) );
 		QFile f;
-		f.open(IO_WriteOnly, tempFile->handle());
+		f.open(QIODevice::WriteOnly, tempFile->handle());
 		QTextStream temps(&f);
 		temps << templateText;
 		f.flush();
@@ -573,21 +577,21 @@ void AppWizardDialog::accept()
     }
 
 	// Run macro expander on both the dir map and file maps
-	QValueList<installFile>::Iterator fileIt = m_pCurrentAppInfo->fileList.begin();
+	Q3ValueList<installFile>::Iterator fileIt = m_pCurrentAppInfo->fileList.begin();
 	for( ; fileIt != m_pCurrentAppInfo->fileList.end(); ++fileIt)
 	{
 		(*fileIt).source = KMacroExpander::expandMacros((*fileIt).source , m_pCurrentAppInfo->subMap);
 		(*fileIt).dest = KMacroExpander::expandMacros((*fileIt).dest , m_pCurrentAppInfo->subMap);
 	}
 
-	QValueList<installArchive>::Iterator archIt = m_pCurrentAppInfo->archList.begin();
+	Q3ValueList<installArchive>::Iterator archIt = m_pCurrentAppInfo->archList.begin();
 	for( ; archIt != m_pCurrentAppInfo->archList.end(); ++archIt)
 	{
 		(*archIt).source = KMacroExpander::expandMacros((*archIt).source , m_pCurrentAppInfo->subMap);
 		(*archIt).dest = KMacroExpander::expandMacros((*archIt).dest , m_pCurrentAppInfo->subMap);
 	}
 
-	QValueList<installDir>::Iterator dirIt = m_pCurrentAppInfo->dirList.begin();
+	Q3ValueList<installDir>::Iterator dirIt = m_pCurrentAppInfo->dirList.begin();
 	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
 	{
 		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
@@ -625,7 +629,7 @@ void AppWizardDialog::accept()
 		{
 			kdDebug( 9010 ) << "unpacking archive " << (*archIt).source << endl;
 			KTar archive( (*archIt).source, "application/x-gzip" );
-			if( archive.open( IO_ReadOnly ) )
+			if( archive.open( QIODevice::ReadOnly ) )
 			{
 				unpackArchive( archive.directory(), (*archIt).dest, (*archIt).process );
 			}
@@ -692,7 +696,7 @@ void AppWizardDialog::accept()
 	else
 		kdDebug(9010) << "vcs integrator wasn't selected" << endl;
 
-	QWizard::accept();
+	Q3Wizard::accept();
 }
 
 bool AppWizardDialog::copyFile( const installFile& file )
@@ -716,7 +720,7 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
 
 		const QMap<QString,QString> &subMap = isXML ?
 			m_pCurrentAppInfo->subMapXML : m_pCurrentAppInfo->subMap;
-		if( inputFile.open( IO_ReadOnly ) && outputFile.open(IO_WriteOnly) )
+		if( inputFile.open( QIODevice::ReadOnly ) && outputFile.open(QIODevice::WriteOnly) )
 		{
 			QTextStream input( &inputFile );
 			QTextStream output( &outputFile );
@@ -786,14 +790,14 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 	tdir.unlink();
 }
 
-void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
+void AppWizardDialog::templatesTreeViewClicked(Q3ListViewItem *item)
 {
 	if( m_customOptions )
 		delete m_customOptions;
 
     // Delete old file template pages
     while (!m_fileTemplates.isEmpty()) {
-        QMultiLineEdit *edit = m_fileTemplates.first().edit;
+        Q3MultiLineEdit *edit = m_fileTemplates.first().edit;
         removePage(edit);
         delete edit;
         m_fileTemplates.remove(m_fileTemplates.begin());
@@ -839,8 +843,8 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             } else
                 fileTemplate.style = "";
 
-            QMultiLineEdit *edit = new QMultiLineEdit(this);
-            edit->setWordWrap(QTextEdit::NoWrap);
+            Q3MultiLineEdit *edit = new Q3MultiLineEdit(this);
+            edit->setWordWrap(Q3TextEdit::NoWrap);
             edit->setFont(KGlobalSettings::fixedFont());
             if (it == l.end())
                 m_lastPage = edit;
@@ -915,12 +919,12 @@ void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategory
     kdDebug(9010) << "TemplateCategory: " << completeCategoryPath << endl;
     QStringList categories = QStringList::split("/", completeCategoryPath);
     QString category ="";
-    QListViewItem* pParentItem=0;
+    Q3ListViewItem* pParentItem=0;
 
     QStringList::ConstIterator it;
     for (it = categories.begin(); it != categories.end(); ++it) {
         category = category + "/" + *it;
-        QListViewItem *item = m_categoryMap.find(category);
+        Q3ListViewItem *item = m_categoryMap.find(category);
         if (!item) { // not found, create it
             if (!pParentItem)
                 pParentItem = new KListViewItem(templates_listview,*it);
@@ -939,9 +943,9 @@ void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategory
 }
 
 
-ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
+ApplicationInfo *AppWizardDialog::templateForItem(Q3ListViewItem *item)
 {
-    QPtrListIterator<ApplicationInfo> it(m_appsInfo);
+    Q3PtrListIterator<ApplicationInfo> it(m_appsInfo);
     for (; it.current(); ++it)
         if (it.current()->item == item)
             return it.current();
@@ -955,7 +959,7 @@ void AppWizardDialog::openAfterGeneration()
 
 	// Read the DOM of the newly created project
 	QFile file( projectFile );
-	if( !file.open( IO_ReadOnly ) )
+	if( !file.open( QIODevice::ReadOnly ) )
 		return;
 	QDomDocument projectDOM;
 	
@@ -1019,7 +1023,7 @@ void AppWizardDialog::openAfterGeneration()
 //END Plugin Profile
 
 	// write the dom back
-	if( !file.open( IO_WriteOnly ) )
+	if( !file.open( QIODevice::WriteOnly ) )
 		return;
 	QTextStream ts( &file );
 	ts << projectDOM.toString(2);
@@ -1057,7 +1061,7 @@ void AppWizardDialog::addTemplateToFavourites()
 	addFavourite(templates_listview->currentItem());
 }
 
-void AppWizardDialog::addFavourite(QListViewItem* item, QString favouriteName)
+void AppWizardDialog::addFavourite(Q3ListViewItem* item, QString favouriteName)
 {
 	if(item->childCount())
 		return;
@@ -1074,9 +1078,9 @@ void AppWizardDialog::addFavourite(QListViewItem* item, QString favouriteName)
 	}
 }
 
-ApplicationInfo* AppWizardDialog::findFavouriteInfo(QIconViewItem* item)
+ApplicationInfo* AppWizardDialog::findFavouriteInfo(Q3IconViewItem* item)
 {
-    QPtrListIterator<ApplicationInfo> info(m_appsInfo);
+    Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
     for (; info.current(); ++info)
         if (info.current()->favourite == item)
             return info.current();
@@ -1084,7 +1088,7 @@ ApplicationInfo* AppWizardDialog::findFavouriteInfo(QIconViewItem* item)
 	return 0;
 }
 
-void AppWizardDialog::favouritesIconViewClicked( QIconViewItem* item)
+void AppWizardDialog::favouritesIconViewClicked( Q3IconViewItem* item)
 {
 	ApplicationInfo* info = findFavouriteInfo(item);
 	templatesTreeViewClicked(info->item);
@@ -1092,10 +1096,10 @@ void AppWizardDialog::favouritesIconViewClicked( QIconViewItem* item)
 
 void AppWizardDialog::removeFavourite()
 {
-	QIconViewItem* curFavourite = favourites_iconview->currentItem();
+	Q3IconViewItem* curFavourite = favourites_iconview->currentItem();
 
 	//remove reference to favourite from associated appinfo
-	QPtrListIterator<ApplicationInfo> info(m_appsInfo);
+	Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
 	for (; info.current(); ++info)
 	{
         if(info.current()->favourite && info.current()->favourite == curFavourite)
@@ -1124,7 +1128,7 @@ void AppWizardDialog::populateFavourites()
 	QStringList::Iterator curIconName = iconNamesList.begin();
 	while(curTemplate != templatesList.end())
 	{
-		QPtrListIterator<ApplicationInfo> info(m_appsInfo);
+		Q3PtrListIterator<ApplicationInfo> info(m_appsInfo);
 		for (; info.current(); ++info)
 		{
 			if(info.current()->templateName == *curTemplate)
@@ -1148,7 +1152,7 @@ void AppWizardDialog::done(int r)
 	QStringList iconNamesList;
 
 	//Built the stringlists for each template that has a favourite.
-	QPtrListIterator<ApplicationInfo> it(m_appsInfo);
+	Q3PtrListIterator<ApplicationInfo> it(m_appsInfo);
 	for (; it.current(); ++it)
 	{
         if(it.current()->favourite)
@@ -1168,13 +1172,13 @@ void AppWizardDialog::done(int r)
 	QDialog::done(r);
 }
 
-void AppWizardDialog::templatesContextMenu(QListViewItem* item, const QPoint& point, int)
+void AppWizardDialog::templatesContextMenu(Q3ListViewItem* item, const QPoint& point, int)
 {
 	if(item && !item->childCount())
 		m_templatesMenu->popup(point);
 }
 
-void AppWizardDialog::favouritesContextMenu(QIconViewItem* item, const QPoint& point)
+void AppWizardDialog::favouritesContextMenu(Q3IconViewItem* item, const QPoint& point)
 {
 	if(item)
 		m_favouritesMenu->popup(point);
@@ -1227,7 +1231,7 @@ void AppWizardDialog::setPermissions(const installFile &file)
 	}
 }
 
-QDict<KDevLicense> AppWizardDialog::licenses()
+Q3Dict<KDevLicense> AppWizardDialog::licenses()
 {
 	return m_licenses;
 }
@@ -1255,7 +1259,7 @@ void AppWizardDialog::showTemplates(bool all)
 {
 	if (all)
 	{
-		QListViewItemIterator it(templates_listview);
+		Q3ListViewItemIterator it(templates_listview);
 		while ( it.current() ) {
 			it.current()->setVisible(true);
 			++it;
@@ -1263,19 +1267,19 @@ void AppWizardDialog::showTemplates(bool all)
 	}
 	else
 	{
-		QPtrListIterator<ApplicationInfo> ait(m_appsInfo);
+		Q3PtrListIterator<ApplicationInfo> ait(m_appsInfo);
 		for (; ait.current(); ++ait) 
 		{
 			ait.current()->item->setVisible(m_profileSupport->isInTemplateList(ait.current()->templateName));
 		}
 		
-		QDictIterator<QListViewItem> dit(m_categoryMap);
+		Q3DictIterator<Q3ListViewItem> dit(m_categoryMap);
 		for (; dit.current(); ++dit) 
 		{
 			//checking whether all children are not visible
 			kdDebug(9010) << "check: " << dit.current()->text(0) << endl;
 			bool visible = false;
-			QListViewItemIterator it(dit.current());
+			Q3ListViewItemIterator it(dit.current());
 			while ( it.current() ) {
 				if ((it.current()->childCount() == 0) && it.current()->isVisible())
 				{
@@ -1291,9 +1295,9 @@ void AppWizardDialog::showTemplates(bool all)
 	}
 }
 
-void AppWizardDialog::checkAndHideItems(QListView *view)
+void AppWizardDialog::checkAndHideItems(Q3ListView *view)
 {
-	QListViewItem *item = view->firstChild();
+	Q3ListViewItem *item = view->firstChild();
 	while (item)
 	{
 		if (!m_categoryItems.contains(item))
@@ -1303,11 +1307,11 @@ void AppWizardDialog::checkAndHideItems(QListView *view)
 	}
 }
 
-bool AppWizardDialog::checkAndHideItems(QListViewItem *item)
+bool AppWizardDialog::checkAndHideItems(Q3ListViewItem *item)
 {
 	if (!m_categoryItems.contains(item))
 		return !item->isVisible();
-	QListViewItem *child = item->firstChild();
+	Q3ListViewItem *child = item->firstChild();
 	bool hide = true;
 	while (child)
 	{

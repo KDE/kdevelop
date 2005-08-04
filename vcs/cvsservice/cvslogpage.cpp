@@ -9,11 +9,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 #include <kmessagebox.h>
 #include <kcursor.h>
@@ -39,7 +41,7 @@ CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char
 {
     QLayout *thisLayout = new QVBoxLayout( this );
 
-    m_textBrowser = new QTextBrowser( this, "logbrowser" );
+    m_textBrowser = new Q3TextBrowser( this, "logbrowser" );
     thisLayout->add( m_textBrowser );
 
     /// \FIXME a better way?
@@ -122,7 +124,7 @@ void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
     static QRegExp rx_date( "date: .* author: .* state: .* lines: .*" );
     // "revision" followed by one or more decimals followed by a optional dot
     static QRegExp rx_rev( "revision ((\\d+\\.?)+)" );
-    m_textBrowser->setTextFormat( QTextBrowser::PlainText );
+    m_textBrowser->setTextFormat( Q3TextBrowser::PlainText );
 
     for (size_t i=0; i<m_diffStrings.count(); ++i) {
         QString s = m_diffStrings[i];
@@ -136,22 +138,22 @@ void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
                 QString lv = ver.left( ver.findRev( "." ) + 1 ) + QString::number( lastVer );
                 dstr += " [<a href=\"diff:/" + m_pathName + "/" + lv + "_" + ver + "\">diff to " + lv + "</a>]";
             }
-            m_textBrowser->setTextFormat( QTextBrowser::RichText );
+            m_textBrowser->setTextFormat( Q3TextBrowser::RichText );
             m_textBrowser->append( dstr );
-            m_textBrowser->setTextFormat( QTextBrowser::PlainText );
+            m_textBrowser->setTextFormat( Q3TextBrowser::PlainText );
         }
         else if ( rx_date.exactMatch(s) )
         {
-            m_textBrowser->setTextFormat( QTextBrowser::RichText );
+            m_textBrowser->setTextFormat( Q3TextBrowser::RichText );
             m_textBrowser->append( "<i>" + s + "</i>" );
-            m_textBrowser->setTextFormat( QTextBrowser::PlainText );
+            m_textBrowser->setTextFormat( Q3TextBrowser::PlainText );
         }
         else if ( rx_sep.exactMatch(s) || rx_sep2.exactMatch(s) )
         {
             m_textBrowser->append( "\n" );
-            m_textBrowser->setTextFormat( QTextBrowser::RichText );
+            m_textBrowser->setTextFormat( Q3TextBrowser::RichText );
             m_textBrowser->append( "<hr>" );
-            m_textBrowser->setTextFormat( QTextBrowser::PlainText );
+            m_textBrowser->setTextFormat( Q3TextBrowser::PlainText );
         } else
         {
             m_textBrowser->append( s );

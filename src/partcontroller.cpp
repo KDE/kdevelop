@@ -2,13 +2,17 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qfile.h>
 #include <qlayout.h>
 #include <qmap.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QGridLayout>
+#include <Q3PtrList>
 
 #include <kmimetype.h>
 #include <kservice.h>
@@ -627,8 +631,8 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   // signals are dynamic, if we try to connect to an editorpart that lacks this signal,
   // all we get is a runtime warning. At this point in time we are only really supported
   // by katepart anyway so IMHO this hack is justified. //teatime
-  QPtrList<KTextEditor::View> list = doc->views();
-  QPtrListIterator<KTextEditor::View> it( list );
+  Q3PtrList<KTextEditor::View> list = doc->views();
+  Q3PtrListIterator<KTextEditor::View> it( list );
   while ( it.current() )
   {
     connect( it, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
@@ -703,7 +707,7 @@ void PartController::slotUploadFinished()
 
 KParts::ReadOnlyPart *PartController::partForURL(const KURL &url)
 {
-	QPtrListIterator<KParts::Part> it(*parts());
+	Q3PtrListIterator<KParts::Part> it(*parts());
 	for ( ; it.current(); ++it)
 	{
 		KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
@@ -715,7 +719,7 @@ KParts::ReadOnlyPart *PartController::partForURL(const KURL &url)
 
 KParts::Part * PartController::partForWidget( const QWidget * widget )
 {
-	QPtrListIterator<KParts::Part> it(*parts());
+	Q3PtrListIterator<KParts::Part> it(*parts());
 	for ( ; it.current(); ++it)
 	{
 		if ( it.current()->widget() == widget )
@@ -798,7 +802,7 @@ void PartController::updateMenuItems()
   bool hasWriteParts = false;
   bool hasReadOnlyParts = false;
 
-  QPtrListIterator<KParts::Part> it(*parts());
+  Q3PtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
   {
     if (it.current()->inherits("KParts::ReadWritePart"))
@@ -883,7 +887,7 @@ KURL::List PartController::modifiedDocuments()
 {
 	KURL::List modFiles;
 	
-	QPtrListIterator<KParts::Part> it( *parts() );
+	Q3PtrListIterator<KParts::Part> it( *parts() );
 	while( it.current() )
 	{
 		KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
@@ -1035,8 +1039,8 @@ bool PartController::closeFilesDialog( KURL::List const & ignoreList )
 {
 	if ( !saveFilesDialog( ignoreList ) ) return false;
 				
-	QPtrList<KParts::Part> partList( *parts() );
-	QPtrListIterator<KParts::Part> it( partList );
+	Q3PtrList<KParts::Part> partList( *parts() );
+	Q3PtrListIterator<KParts::Part> it( partList );
 	while ( KParts::Part* part = it.current() )
 	{
 		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
@@ -1136,7 +1140,7 @@ void PartController::slotSwitchTo()
 {
     QMap<QString,KParts::ReadOnlyPart*> parts_map;
     QStringList part_list;
-    QPtrList<KParts::Part> pl = *parts();
+    Q3PtrList<KParts::Part> pl = *parts();
     KParts::Part *part;
     for(part=pl.first();part;part=pl.next()) {
         kdDebug(9000) << "Part..." << endl;
@@ -1172,7 +1176,7 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
     return; // to avoid later crash
   }
 
-  QPtrListIterator<KParts::Part> it(*parts());
+  Q3PtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
   {
     if( it.current() == part ){
@@ -1194,7 +1198,7 @@ void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, uns
 	//	KTextEditor::Document * doc = reinterpret_cast<KTextEditor::Document*>( d ); // theoretically unsafe in MI scenario
 	KTextEditor::Document * doc = 0;
 	
-	QPtrListIterator<KParts::Part> it( *parts() );
+	Q3PtrListIterator<KParts::Part> it( *parts() );
 	while( it.current() )
 	{
 		if ( (void*)it.current() == (void*)d )
@@ -1352,7 +1356,7 @@ void PartController::doEmitState( KURL const & url )
 KURL::List PartController::openURLs( )
 {
 	KURL::List list;
-	QPtrListIterator<KParts::Part> it(*parts());
+	Q3PtrListIterator<KParts::Part> it(*parts());
 	for ( ; it.current(); ++it)
 	{
 		if ( KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current()) )
@@ -1413,7 +1417,7 @@ void PartController::slotBackAboutToShow()
 	if ( m_backHistory.isEmpty()) return;
 	
 	int i = 0;
-	QValueList<HistoryEntry>::ConstIterator it = m_backHistory.begin();
+	Q3ValueList<HistoryEntry>::ConstIterator it = m_backHistory.begin();
 	while( i < 10 && it != m_backHistory.end() )
 	{
 		popup->insertItem( (*it).url.fileName() + QString(" (%1)").arg( (*it).line +1), (*it).id );
@@ -1430,7 +1434,7 @@ void PartController::slotForwardAboutToShow( )
 	if ( m_forwardHistory.isEmpty() ) return;
 
 	int i = 0;
-	QValueList<HistoryEntry>::ConstIterator it = m_forwardHistory.begin();
+	Q3ValueList<HistoryEntry>::ConstIterator it = m_forwardHistory.begin();
 	while( i < 10 && it != m_forwardHistory.end() )
 	{
 		popup->insertItem( (*it).url.fileName() + QString(" (%1)").arg( (*it).line +1), (*it).id );
@@ -1441,7 +1445,7 @@ void PartController::slotForwardAboutToShow( )
 
 void PartController::slotBackPopupActivated( int id )
 {
-	QValueList<HistoryEntry>::Iterator it = m_backHistory.begin();
+	Q3ValueList<HistoryEntry>::Iterator it = m_backHistory.begin();
 	while( it != m_backHistory.end() )
 	{
 		if ( (*it).id == id )
@@ -1466,7 +1470,7 @@ void PartController::slotBackPopupActivated( int id )
 
 void PartController::slotForwardPopupActivated( int id )
 {
-	QValueList<HistoryEntry>::Iterator it = m_forwardHistory.begin();
+	Q3ValueList<HistoryEntry>::Iterator it = m_forwardHistory.begin();
 	while( it != m_forwardHistory.end() )
 	{
 		if ( (*it).id == id )
@@ -1550,7 +1554,7 @@ void PartController::slotWaitForFactoryHack( )
 
 KParts::ReadOnlyPart *PartController::qtDesignerPart()
 {
-	QPtrListIterator<KParts::Part> it(*parts());
+	Q3PtrListIterator<KParts::Part> it(*parts());
 	for ( ; it.current(); ++it)
 	{
 		KInterfaceDesigner::Designer *des =  dynamic_cast<KInterfaceDesigner::Designer*>(it.current());

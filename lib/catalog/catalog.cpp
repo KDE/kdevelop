@@ -21,6 +21,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <krandomsequence.h>
 #include <kdebug.h>
@@ -37,7 +40,7 @@ struct _Catalog_Private
     QString dbName;
 
     DB* dbp;
-    QMap<QCString, DB*> indexList;
+    QMap<Q3CString, DB*> indexList;
     KRandomSequence rnd;
     bool enabled;
 
@@ -46,17 +49,17 @@ struct _Catalog_Private
     {
     }
 
-    bool hasIndex( const QCString& name ) const
+    bool hasIndex( const Q3CString& name ) const
     {
         return indexList.contains( name );
     }
 
-    DB* index( const QCString& name )
+    DB* index( const Q3CString& name )
     {
         return indexList[ name ];
     }
 
-    bool addItem( DB* dbp, const QCString& id, const Tag& tag )
+    bool addItem( DB* dbp, const Q3CString& id, const Tag& tag )
     {
 	Q_ASSERT( dbp != 0 );
 
@@ -68,7 +71,7 @@ struct _Catalog_Private
 
 	QByteArray a1;
 	{
-	    QDataStream stream( a1, IO_WriteOnly );
+	    QDataStream stream( a1, QIODevice::WriteOnly );
 	    stream << id;
 	    key.data = a1.data();
 	    key.size = a1.size();
@@ -76,7 +79,7 @@ struct _Catalog_Private
 
 	QByteArray a2;
 	{
-	    QDataStream stream( a2, IO_WriteOnly );
+	    QDataStream stream( a2, QIODevice::WriteOnly );
 	    tag.store( stream );
 	    data.data = a2.data();
 	    data.size = a2.size();
@@ -87,7 +90,7 @@ struct _Catalog_Private
 	return ret == 0;
     }
 
-    bool addItem( DB* dbp, const QVariant& id, const QCString& v )
+    bool addItem( DB* dbp, const QVariant& id, const Q3CString& v )
     {
 	Q_ASSERT( dbp != 0 );
 
@@ -99,7 +102,7 @@ struct _Catalog_Private
 
 	QByteArray a1;
 	{
-	    QDataStream stream( a1, IO_WriteOnly );
+	    QDataStream stream( a1, QIODevice::WriteOnly );
 	    stream << id;
 	    key.data = a1.data();
 	    key.size = a1.size();
@@ -107,7 +110,7 @@ struct _Catalog_Private
 
 	QByteArray a2;
 	{
-	    QDataStream stream( a2, IO_WriteOnly );
+	    QDataStream stream( a2, QIODevice::WriteOnly );
 	    stream << v;
 	    data.data = a2.data();
 	    data.size = a2.size();
@@ -142,10 +145,10 @@ struct _Catalog_Private
 /*!
     \fn  Catalog::indexList() const
  */
- QValueList<QCString>  Catalog::indexList() const
+ Q3ValueList<Q3CString>  Catalog::indexList() const
 {
-    QValueList<QCString> l;
-    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    Q3ValueList<Q3CString> l;
+    QMap<Q3CString, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){
         l << it.key();
         ++it;
@@ -168,11 +171,11 @@ void  Catalog::setEnabled( bool isEnabled )
     \fn  Catalog::addIndex( const QString& name )
     @todo document these functions
  */
- void  Catalog::addIndex( const QCString& name )
+ void  Catalog::addIndex( const Q3CString& name )
 {
     Q_ASSERT( d->dbp != 0 );
 
-    QMap<QCString, DB*>::Iterator it = d->indexList.find( name );
+    QMap<Q3CString, DB*>::Iterator it = d->indexList.find( name );
     if( it == d->indexList.end() ){
         DB* dbp = 0;
 
@@ -215,7 +218,7 @@ void  Catalog::setEnabled( bool isEnabled )
 {
     d->dbName = QString::null;
 
-    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    QMap<Q3CString, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){
         if( it.data() ){
 	    it.data()->close( it.data(), 0 );
@@ -292,11 +295,11 @@ void  Catalog::setEnabled( bool isEnabled )
     if( tag.name().isEmpty() )
         return;
 
-    QCString id = generateId();
+    Q3CString id = generateId();
 
     tag.setId( id );
     if( d->addItem(d->dbp, id, tag) ){
-	QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+	QMap<Q3CString, DB*>::Iterator it = d->indexList.begin();
 	while( it != d->indexList.end() ){
 	    if( tag.hasAttribute(it.key()) )
 	        d->addItem( it.data(), tag.attribute(it.key()), id );
@@ -309,7 +312,7 @@ void  Catalog::setEnabled( bool isEnabled )
     \fn  Catalog::getItemById( const QString& id )
  */
  
- Tag  Catalog::getItemById( const QCString& id )
+ Tag  Catalog::getItemById( const Q3CString& id )
 {
     Q_ASSERT( d->dbp != 0 );
 
@@ -319,7 +322,7 @@ void  Catalog::setEnabled( bool isEnabled )
 
     QByteArray a1;
     {
-	QDataStream stream( a1, IO_WriteOnly );
+	QDataStream stream( a1, QIODevice::WriteOnly );
 	stream << id;
 	key.data = a1.data();
 	key.size = a1.size();
@@ -333,7 +336,7 @@ void  Catalog::setEnabled( bool isEnabled )
     if( ret == 0 ){
 	QByteArray a;
 	a.setRawData( (const char*) data.data, data.size );
-	QDataStream stream( a, IO_ReadOnly );
+	QDataStream stream( a, QIODevice::ReadOnly );
 	tag.load( stream );
 	a.resetRawData( (const char*) data.data, data.size );
     }
@@ -350,7 +353,7 @@ void  Catalog::setEnabled( bool isEnabled )
     Q_ASSERT( d->dbp != 0 );
     d->dbp->sync( d->dbp, 0 );
 
-    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    QMap<Q3CString, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){
  	it.data()->sync( it.data(), 0 );
         ++it;
@@ -361,18 +364,18 @@ void  Catalog::setEnabled( bool isEnabled )
     \fn  Catalog::query( const QValueList<QueryArgument>& args )
 */
  
- QValueList<Tag>  Catalog::query( const QValueList<QueryArgument>& args )
+ Q3ValueList<Tag>  Catalog::query( const Q3ValueList<QueryArgument>& args )
 {
-    QValueList<Tag> tags;
+    Q3ValueList<Tag> tags;
 
     DBT key, data;
 
     DBC** cursors = new DBC* [ args.size() + 1 ];
 
-    QValueList< QPair<QCString,QVariant> >::ConstIterator it = args.begin();
+    Q3ValueList< QPair<Q3CString,QVariant> >::ConstIterator it = args.begin();
     int current = 0;
     while( it != args.end() ){
-        QCString indexName = (*it).first;
+        Q3CString indexName = (*it).first;
 	QVariant value = (*it).second;
 
         if( d->hasIndex(indexName) ){
@@ -384,7 +387,7 @@ void  Catalog::setEnabled( bool isEnabled )
 
 	    QByteArray a1;
 	    {
-		QDataStream stream( a1, IO_WriteOnly );
+		QDataStream stream( a1, QIODevice::WriteOnly );
 		stream << value;
 		key.data = a1.data();
 		key.size = a1.size();
@@ -419,7 +422,7 @@ void  Catalog::setEnabled( bool isEnabled )
         QByteArray a2;
 	{
 	    a2.setRawData( (const char*) data.data, data.size );
-	    QDataStream s( a2, IO_ReadOnly );
+	    QDataStream s( a2, QIODevice::ReadOnly );
 	    Tag tag;
 	    tag.load( s );
 	    a2.resetRawData( (const char*) data.data, data.size );
@@ -438,10 +441,10 @@ void  Catalog::setEnabled( bool isEnabled )
     return tags;
 }
 
- QCString  Catalog::generateId()
+ Q3CString  Catalog::generateId()
 {
     static int n = 1;
-    QCString asStr;
+    Q3CString asStr;
     asStr.sprintf( "%05d", n++ );
     return asStr;
 }

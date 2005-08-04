@@ -21,7 +21,7 @@
 #ifndef __KDEVPART_QUICKOPEN_H__
 #define __KDEVPART_QUICKOPEN_H__
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdevplugin.h>
 
 class KAction;

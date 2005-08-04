@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
+#include <q3whatsthis.h>
+#include <q3popupmenu.h>
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
@@ -72,11 +72,11 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
 
 	m_widget = new CTags2Widget(this);
 
-	QWhatsThis::add(m_widget, i18n("<b>CTags</b><p>Result view for a tag lookup. Click a line to go to the corresponding place in the code."));
+	Q3WhatsThis::add(m_widget, i18n("<b>CTags</b><p>Result view for a tag lookup. Click a line to go to the corresponding place in the code."));
 	m_widget->setCaption(i18n("CTags Lookup"));
 	mainWindow()->embedOutputView( m_widget, i18n( "CTags" ), i18n( "CTags lookup results" ) );
 
-	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+	connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)), this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("CTags"), CTAGSSETTINGSPAGE, info()->icon() );
@@ -152,7 +152,7 @@ bool CTags2Part::createTagsFile()
 	return true;
 }
 
-void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
+void CTags2Part::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
 	if (!context->hasType( Context::EditorContext ))
 		return;
@@ -285,7 +285,7 @@ int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & patter
 	if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partController()->partForURL( url ) ) )
 	{
 		QString ibuffer = ei->text();
-		QTextStream istream( &ibuffer, IO_ReadOnly );
+		QTextStream istream( &ibuffer, QIODevice::ReadOnly );
 		return getFileLineFromStream( istream, pattern );
 	}
 	else // else the file is not open - get the line from the file on disk
@@ -293,7 +293,7 @@ int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & patter
 		QFile file( url.path() );
 		QString buffer;
 
-		if ( file.open( IO_ReadOnly ) )
+		if ( file.open( QIODevice::ReadOnly ) )
 		{
 			QTextStream istream( &file );
 			return getFileLineFromStream( istream, pattern );

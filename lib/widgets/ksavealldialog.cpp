@@ -17,9 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
-#include <qheader.h>
+#include <q3header.h>
 
 #include <klocale.h>
 #include <kpushbutton.h>
@@ -32,11 +32,11 @@
 namespace
 {
 
-class CheckURL : public QCheckListItem
+class CheckURL : public Q3CheckListItem
 {
 public:
-	CheckURL( QListView * lv, KURL const & url )
-		: QCheckListItem( lv, url.path(), QCheckListItem::CheckBox),
+	CheckURL( Q3ListView * lv, KURL const & url )
+		: Q3CheckListItem( lv, url.path(), Q3CheckListItem::CheckBox),
 		_url( url )
 	{}
 
@@ -53,14 +53,14 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
   KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
 	       Ok | User1 | Close )
 {
-  QVBox *top = makeVBoxMainWidget();
+  Q3VBox *top = makeVBoxMainWidget();
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
 
 	_listview = new KListView( top );
 	_listview->addColumn( "" );
 	_listview->header()->hide();
-	_listview->setResizeMode( QListView::LastColumn );
+	_listview->setResizeMode( Q3ListView::LastColumn );
 
 	setButtonOK( KGuiItem(i18n("Save &Selected"), QString::null, i18n("Saves all selected files")) );
 	setButtonText( User1, i18n("Save &None") );
@@ -73,7 +73,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	{
 		if ( !ignorelist.contains( *it ) )
 		{
-			QCheckListItem * x = new CheckURL( _listview, *it );
+			Q3CheckListItem * x = new CheckURL( _listview, *it );
 			x->setOn( true );
 		}
 		++it;
@@ -146,7 +146,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
 {
   m_result = Cancel;
 
-  QVBox *top = makeVBoxMainWidget();
+  Q3VBox *top = makeVBoxMainWidget();
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
   KListBox* lb = new KListBox( top );

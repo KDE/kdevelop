@@ -17,7 +17,9 @@
 	 Boston, MA 02110-1301, USA.
 	 */
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
@@ -32,7 +34,7 @@
 #include "subversionoptionswidgetimpl.h"
 #include "subversionprojectwidget.h"
 #include "urlutil.h"
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kdialogbase.h>
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -82,7 +84,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
 
 	// Context menu
-	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+	connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)), this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 	connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)), this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 	connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
@@ -90,7 +92,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 
 	m_impl->processWidget()->setCaption(i18n( "Subversion Output" ));
 	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
-    QWhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
+    Q3WhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
 }
 
 subversionPart::~subversionPart() {
@@ -150,7 +152,7 @@ QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
 }
 
 void subversionPart::projectConfigWidget( KDialogBase *dlg ) {
-	QVBox *vbox = dlg->addVBoxPage( i18n("Subversion"), i18n("Subversion"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+	Q3VBox *vbox = dlg->addVBoxPage( i18n("Subversion"), i18n("Subversion"), BarIcon( info()->icon(), KIcon::SizeMedium) );
 	subversionOptionsWidgetImpl *w = new subversionOptionsWidgetImpl( (QWidget *)vbox, this, "svn config widget" );
 	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -171,7 +173,7 @@ KDevVCSFileInfoProvider * subversionPart::fileInfoProvider() const {
 	return m_impl->fileInfoProvider();
 }
 
-void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
+void subversionPart::contextMenu( Q3PopupMenu *popup, const Context *context ) {
 // If the current project doesn't support SVN, we don't
 // want to confuse the user with a SVN popup menu.
 if(!project() || !isValidDirectory(project()->projectDirectory()))

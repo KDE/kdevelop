@@ -33,10 +33,10 @@
 #include <kmessagebox.h>
 
 #include <kdevcore.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
-#include <qnetwork.h>
-#include <qurloperator.h>
+#include <q3network.h>
+#include <q3urloperator.h>
 #include <qmessagebox.h>
 #include "distpart_part.h"
 #include <qdir.h>
@@ -130,7 +130,7 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
 		       ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz");
 
     KTar tar(filename, dist);
-    if ( tar.open(IO_WriteOnly) )
+    if ( tar.open(QIODevice::WriteOnly) )
     {
     	QStringList files = m_part->project()->distFiles();
 	KProgressDialog *prog = new KProgressDialog( 0, "dialog", i18n("Building Package"), "", true );

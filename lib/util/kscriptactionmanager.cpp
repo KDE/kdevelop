@@ -31,6 +31,8 @@
 #include <kaction.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *interface, KActionCollection *ac )
     : QObject(interface), KScriptClientInterface( )
@@ -129,10 +131,10 @@ KScriptActionManager::~ KScriptActionManager( )
     m_actions.clear();
 }
 
-QPtrList< KAction > KScriptActionManager::scripts( QObject * interface , const QStringList &dirs) const
+Q3PtrList< KAction > KScriptActionManager::scripts( QObject * interface , const QStringList &dirs) const
 {
     m_actions.clear();
-    QPtrList<KAction> actions;
+    Q3PtrList<KAction> actions;
     QStringList scripts;
 
     scripts += KGlobal::dirs()->findAllResources("data",

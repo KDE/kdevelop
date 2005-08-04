@@ -19,6 +19,9 @@
  */
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
  
 #include <klistbox.h>
 #include <klineedit.h>
@@ -26,7 +29,7 @@
 
 #include "quickopendialog.h"
 
-QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
+QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
     nameEdit->installEventFilter(this);

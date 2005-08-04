@@ -12,12 +12,14 @@
 #ifndef _GREPVIEWPART_H_
 #define _GREPVIEWPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 #include <kdevgenericfactory.h>
 #include "kdevplugin.h"
 
 class KDialogBase;
-class QPopupMenu;
+class Q3PopupMenu;
 class Context;
 class GrepViewWidget;
 
@@ -34,13 +36,13 @@ private slots:
     void stopButtonClicked(KDevPlugin *which);
     void projectOpened();
     void projectClosed();
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
 
     void slotGrep();
     void slotContextGrep();
 
 private:
-    QGuardedPtr<GrepViewWidget> m_widget;
+    QPointer<GrepViewWidget> m_widget;
     QString m_popupstr;
     friend class GrepViewWidget;
 };

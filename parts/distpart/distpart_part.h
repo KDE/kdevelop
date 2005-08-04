@@ -23,7 +23,7 @@
 #define __KDEVPART_DISTPART_H__
 
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdevplugin.h>
 #include <kaction.h>
 
@@ -46,9 +46,9 @@ public slots:
 
 private:
     packageBase *RpmPackage, *LsmPackage;
-    QGuardedPtr<DistpartDialog> m_dialog;
+    QPointer<DistpartDialog> m_dialog;
     KAction *m_action;
-    QGuardedPtr<KDialogBase> m_dlg;
+    QPointer<KDialogBase> m_dlg;
 };
 
 

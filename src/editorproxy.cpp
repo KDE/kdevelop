@@ -6,8 +6,11 @@
 #undef protected
 
 #include <qwidget.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QFocusEvent>
 
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -82,7 +85,7 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
     iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
   else {
     // Save the position for a rainy day (or when the view gets activated and wants its position)
-    for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+    for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
       if ((*it)->document() == part) {
         (*it)->setLine(lineNum);
         (*it)->setCol(col);
@@ -104,7 +107,7 @@ void EditorProxy::installPopup( KParts::Part * part )
 		{
 			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
 
-			QPopupMenu * popup = static_cast<QPopupMenu*>( part->factory()->container("ktexteditor_popup", view ) );
+			Q3PopupMenu * popup = static_cast<Q3PopupMenu*>( part->factory()->container("ktexteditor_popup", view ) );
 
 			if (!popup)
 			{
@@ -172,7 +175,7 @@ void EditorProxy::installPopup( KParts::Part * part )
 
 void EditorProxy::popupAboutToShow()
 {
-  QPopupMenu *popup = (QPopupMenu*)sender();
+  Q3PopupMenu *popup = (Q3PopupMenu*)sender();
   if (!popup)
     return;
 
@@ -274,7 +277,7 @@ void EditorProxy::showPopup( )
 		if ( iface )
 		{
 			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
-			QPopupMenu * popup = static_cast<QPopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
+			Q3PopupMenu * popup = static_cast<Q3PopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
 
 			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
 		}
@@ -293,7 +296,7 @@ void EditorProxy::deregisterEditor(EditorWrapper* wrapper)
 }
 
 EditorWrapper::EditorWrapper(KTextEditor::Document* editor, bool activate, QWidget* parent, const char* name)
-  : QWidgetStack(parent, name)
+  : Q3WidgetStack(parent, name)
   , m_doc(editor)
   , m_view(0L)
   , m_line(0)
@@ -327,18 +330,18 @@ void EditorWrapper::setCol(int col)
 void EditorWrapper::show()
 {
   if ( !m_doc ) {
-    QWidgetStack::show();
+    Q3WidgetStack::show();
     return;
   }
 
   if (m_first) {
     m_first = false;
-    QWidgetStack::show();
+    Q3WidgetStack::show();
     return;
   }
 
   if (m_doc->widget()) {
-    QWidgetStack::show();
+    Q3WidgetStack::show();
     return;
   }
 
@@ -365,7 +368,7 @@ void EditorWrapper::show()
     Q_ASSERT(false);
   }
 
-  QWidgetStack::show();
+  Q3WidgetStack::show();
 }
 
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )
@@ -375,7 +378,7 @@ QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 	if (part->widget())
 		return part->widget();
 
-	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+	for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
 		if ((*it)->document() == part)
 			return *it;
 
@@ -386,7 +389,7 @@ QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
 	if ( !part ) return 0;
 
-	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+	for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
 		if ((*it)->document() == part)
 			return *it;
 

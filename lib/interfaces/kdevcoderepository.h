@@ -20,7 +20,7 @@
 #define KDEVCODEREPOSITORY_H
 
 #include <qobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 /**
 @file kdevcoderepository.h
@@ -62,7 +62,7 @@ public:
     void setMainCatalog( Catalog* mainCatalog );
 
     /**@return The list of registered catalogs.*/
-    QValueList<Catalog*> registeredCatalogs();
+    Q3ValueList<Catalog*> registeredCatalogs();
 
     /**Registers catalog in the repository.
     @param catalog The catalog to register.*/

@@ -65,7 +65,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -110,9 +110,9 @@
     </connection>
     <connection>
         <sender>result_list</sender>
-        <signal>executed(QListViewItem*)</signal>
+        <signal>executed(Q3ListViewItem*)</signal>
         <receiver>FindDocumentationBase</receiver>
-        <slot>clickOnItem(QListViewItem*)</slot>
+        <slot>clickOnItem(Q3ListViewItem*)</slot>
     </connection>
     <connection>
         <sender>butten_options</sender>
@@ -122,9 +122,9 @@
     </connection>
     <connection>
         <sender>result_list</sender>
-        <signal>mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</signal>
+        <signal>mouseButtonPressed(int,Q3ListViewItem*,const QPoint&amp;,int)</signal>
         <receiver>FindDocumentationBase</receiver>
-        <slot>buttonPressedOnItem(int,QListViewItem*,const QPoint&amp;,int)</slot>
+        <slot>buttonPressedOnItem(int,Q3ListViewItem*,const QPoint&amp;,int)</slot>
     </connection>
     <connection>
         <sender>search_term</sender>
@@ -134,9 +134,9 @@
     </connection>
     <connection>
         <sender>result_list</sender>
-        <signal>returnPressed(QListViewItem*)</signal>
+        <signal>returnPressed(Q3ListViewItem*)</signal>
         <receiver>FindDocumentationBase</receiver>
-        <slot>clickOnItem(QListViewItem*)</slot>
+        <slot>clickOnItem(Q3ListViewItem*)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -156,8 +156,8 @@
     <slot>searchInInfo()</slot>
     <slot>procManReadFromStdout()</slot>
     <slot>procInfoReadFromStdout()</slot>
-    <slot>clickOnItem( QListViewItem * item )</slot>
-    <slot>buttonPressedOnItem( int button, QListViewItem * item, const QPoint &amp; pos, int c )</slot>
+    <slot>clickOnItem( Q3ListViewItem * item )</slot>
+    <slot>buttonPressedOnItem( int button, Q3ListViewItem * item, const QPoint &amp; pos, int c )</slot>
 </slots>
 <layoutdefaults spacing="1" margin="1"/>
 </UI>

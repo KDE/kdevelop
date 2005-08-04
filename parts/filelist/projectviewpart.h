@@ -23,15 +23,17 @@
 
 #include "fileinfo.h" 
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include <kdevplugin.h>
 #include <kurl.h>
 
 
-class QPopupMenu;
+class Q3PopupMenu;
 class KAction;
 class KSelectAction;
 class KDialogBase;
@@ -39,7 +41,7 @@ class Context;
 class ConfigWidgetProxy;
 class FileListWidget;
 class KToolBar;
-class QVBox;
+class Q3VBox;
 class ToolbarGUIBuilder;
 
 
@@ -91,7 +93,7 @@ private slots:
   void init();
   
   void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
-  void contextMenu(QPopupMenu *popup, const Context *context);
+  void contextMenu(Q3PopupMenu *popup, const Context *context);
   void projectOpened();
   void projectClosed();
   
@@ -158,8 +160,8 @@ private:
   KURL m_projectBase;  // project base folder
   ConfigWidgetProxy *m_configProxy;
 
-  QGuardedPtr<QWidget> m_widget;
-  QGuardedPtr<ToolbarGUIBuilder> m_guibuilder;
+  QPointer<QWidget> m_widget;
+  QPointer<ToolbarGUIBuilder> m_guibuilder;
   QWidget * m_toolbarWidget;
 };
 

@@ -17,10 +17,13 @@
 #include <regex.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <Q3CString>
 #include <kdeversion.h>
 #include <kregexp.h>
 #include <kdebug.h>
@@ -96,7 +99,7 @@ void RegexpTestDialog::checkQRegExp()
     int numCaptures = 10;
 #endif
     for ( int i = 0; i < numCaptures; ++i ) {
-	new QListViewItem( subgroups_listview, QString::number( i ), rx.cap( i ) );
+	new Q3ListViewItem( subgroups_listview, QString::number( i ), rx.cap( i ) );
     }
 }
 
@@ -115,7 +118,7 @@ void RegexpTestDialog::checkKRegExp()
     for ( int i = 0; i <= 9; ++i ) {
 	const char* grp = rx.group( i );
 	if ( grp )
-	    new QListViewItem( subgroups_listview, QString::number( i ), QString( grp ) );
+	    new Q3ListViewItem( subgroups_listview, QString::number( i ), QString( grp ) );
     }
 }
 
@@ -124,7 +127,7 @@ void RegexpTestDialog::checkPOSIX()
     regex_t compiledPattern;
     regmatch_t matches[20];
     int cflags = extendedposix_button->isChecked()? REG_EXTENDED : 0;
-    QCString regexp = pattern_edit->text().local8Bit();
+    Q3CString regexp = pattern_edit->text().local8Bit();
     int res = regcomp(&compiledPattern, regexp, cflags);
     if (res != 0) {
         QString regcompMessage;
@@ -181,7 +184,7 @@ void RegexpTestDialog::checkPOSIX()
         matches[i].rm_eo = -1;
     }
 
-    QCString testString = teststring_edit->text().local8Bit();
+    Q3CString testString = teststring_edit->text().local8Bit();
     res = regexec(&compiledPattern, testString, 20, matches, 0);
     if (res != 0) {
         success_label->setText(i18n("No match"));
@@ -194,8 +197,8 @@ void RegexpTestDialog::checkPOSIX()
         if (matches[i].rm_so >= 0 && matches[i].rm_so <= len &&
             matches[i].rm_eo >= 0 && matches[i].rm_eo <= len &&
             matches[i].rm_so <= matches[i].rm_eo) {
-            QCString subGroup = testString.mid(matches[i].rm_so, matches[i].rm_eo - matches[i].rm_so);
-            new QListViewItem(subgroups_listview, QString::number(i), subGroup);
+            Q3CString subGroup = testString.mid(matches[i].rm_so, matches[i].rm_eo - matches[i].rm_so);
+            new Q3ListViewItem(subgroups_listview, QString::number(i), subGroup);
         }
     }
     regfree(&compiledPattern);

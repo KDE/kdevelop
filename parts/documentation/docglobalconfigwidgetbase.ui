@@ -95,7 +95,7 @@
                                     <cstring>spacer1</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -127,7 +127,7 @@
                             <cstring>spacer20</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -163,7 +163,7 @@
                                     <cstring>htsearchbinEdit</cstring>
                                 </property>
                                 <property name="focusPolicy">
-                                    <enum>StrongFocus</enum>
+                                    <enum>Qt::StrongFocus</enum>
                                 </property>
                             </widget>
                             <spacer row="1" column="1">
@@ -171,7 +171,7 @@
                                     <cstring>spacer6</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
@@ -188,7 +188,7 @@
                                     <cstring>databaseDirEdit</cstring>
                                 </property>
                                 <property name="focusPolicy">
-                                    <enum>StrongFocus</enum>
+                                    <enum>Qt::StrongFocus</enum>
                                 </property>
                             </widget>
                             <widget class="KURLRequester" row="3" column="1">
@@ -196,7 +196,7 @@
                                     <cstring>htmergebinEdit</cstring>
                                 </property>
                                 <property name="focusPolicy">
-                                    <enum>StrongFocus</enum>
+                                    <enum>Qt::StrongFocus</enum>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="2" column="0">
@@ -215,7 +215,7 @@
                                     <cstring>htdigbinEdit</cstring>
                                 </property>
                                 <property name="focusPolicy">
-                                    <enum>StrongFocus</enum>
+                                    <enum>Qt::StrongFocus</enum>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0">
@@ -260,7 +260,7 @@
                             <cstring>spacer4</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>

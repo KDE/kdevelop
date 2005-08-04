@@ -19,6 +19,8 @@
  ***************************************************************************/
 
 #include <kurl.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 struct FileInfo
 {
@@ -32,4 +34,4 @@ struct FileInfo
   int col;
 };
 
-typedef QValueList<FileInfo> FileInfoList;
+typedef Q3ValueList<FileInfo> FileInfoList;

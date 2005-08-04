@@ -24,7 +24,10 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 
@@ -60,7 +63,7 @@ ResizableCombo::ResizableCombo(KComboView *view, QWidget *parent, const char *na
 
     m_sizer = new MyPushButton(this);
     m_sizer->setPixmap(QPixmap(resize_xpm));
-    QWhatsThis::add(m_sizer, i18n("Drag this to resize the combobox."));
+    Q3WhatsThis::add(m_sizer, i18n("Drag this to resize the combobox."));
     l->addWidget(m_sizer);
 }
 

@@ -19,6 +19,8 @@
 #include "kdevplugininfo.h"
 
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kservice.h>
 #include <kdebug.h>
@@ -39,8 +41,8 @@ struct KDevPluginInfo::Private {
     QString m_homePageAddress;
     QString m_bugsEmailAddress;
     
-    QValueList<KAboutPerson> m_authors;
-    QValueList<KAboutPerson> m_credits;
+    Q3ValueList<KAboutPerson> m_authors;
+    Q3ValueList<KAboutPerson> m_credits;
     
     KAboutData *m_data;
 };

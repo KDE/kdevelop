@@ -5,10 +5,13 @@
 
 #include <qwidget.h>
 #include <qdatetime.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 #include <kurl.h>
 #include <qmap.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 namespace KParts
 {
@@ -28,7 +31,7 @@ namespace KTextEditor
 namespace Kate { class Document; }
 
 class QTabWidget;
-class QPopupMenu;
+class Q3PopupMenu;
 class KAction;
 class KToolBarPopupAction;
 class KRecentFilesAction;
@@ -175,11 +178,11 @@ private:
   
   bool m_openNextAsText;
   
-  QValueList<KParts::ReadWritePart*> _dirtyDocuments;
+  Q3ValueList<KParts::ReadWritePart*> _dirtyDocuments;
   
   QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)
   
-  QGuardedPtr<KParts::Factory> _editorFactory;
+  QPointer<KParts::Factory> _editorFactory;
     
 	struct HistoryEntry 
 	{
@@ -196,8 +199,8 @@ private:
 	HistoryEntry createHistoryEntry();
 	void jumpTo( const HistoryEntry & );
 		
-	QValueList<HistoryEntry> m_backHistory;
-	QValueList<HistoryEntry> m_forwardHistory;
+	Q3ValueList<HistoryEntry> m_backHistory;
+	Q3ValueList<HistoryEntry> m_forwardHistory;
 	bool m_isJumping;  
 };
 

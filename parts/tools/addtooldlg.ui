@@ -63,7 +63,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -118,7 +118,7 @@ executed.&lt;/p&gt;</string>
                         <cstring>Spacer4</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -172,7 +172,7 @@ executed.&lt;/p&gt;</string>
                 </sizepolicy>
             </property>
             <property name="focusPolicy">
-                <enum>StrongFocus</enum>
+                <enum>Qt::StrongFocus</enum>
             </property>
         </widget>
     </grid>
@@ -228,12 +228,12 @@ executed.&lt;/p&gt;</string>
     <include location="local" impldecl="in implementation">addtooldlg.ui.h</include>
 </includes>
 <forwards>
-    <forward>class QListViewItem;</forward>
+    <forward>class Q3ListViewItem;</forward>
 </forwards>
 <slots>
     <slot>init()</slot>
     <slot returnType="QString">getApp()</slot>
-    <slot access="private">treeSelectionChanged( QListViewItem * lvi )</slot>
+    <slot access="private">treeSelectionChanged( Q3ListViewItem * lvi )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

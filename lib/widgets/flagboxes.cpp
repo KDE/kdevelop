@@ -26,12 +26,17 @@
 
 #include <qapplication.h>
 #include <qtooltip.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qregexp.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QVBoxLayout>
 
 // only for KDE < 3.1
 #if KDE_VERSION <= 305
@@ -74,7 +79,7 @@ FlagListToolTip::FlagListToolTip(QWidget *parent)
 void FlagListToolTip::maybeTip(const QPoint &pos)
 {
     FlagListBox *listbox = static_cast<FlagListBox*>(parentWidget());
-    QListViewItem *item = listbox->itemAt(pos);
+    Q3ListViewItem *item = listbox->itemAt(pos);
     FlagListItem *flitem = static_cast<FlagListItem*>(item);
 
     if (item)
@@ -84,20 +89,20 @@ void FlagListToolTip::maybeTip(const QPoint &pos)
 
 FlagListItem::FlagListItem(FlagListBox *parent, const QString &flagstr,
                            const QString &description)
-    : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
+    : Q3CheckListItem(parent, flagstr, Q3CheckListItem::CheckBox),
       flag(flagstr), desc(description)
 {}
 
 
 FlagListItem::FlagListItem(FlagListBox *parent, const QString &flagstr,
                            const QString &description, const QString &offstr)
-    : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
+    : Q3CheckListItem(parent, flagstr, Q3CheckListItem::CheckBox),
       flag(flagstr), off(offstr), desc(description)
 {}
 
 
 FlagListBox::FlagListBox(QWidget *parent, const char *name)
-    : QListView(parent, name)
+    : Q3ListView(parent, name)
 {
     setResizeMode(LastColumn);
     header()->hide();
@@ -108,7 +113,7 @@ FlagListBox::FlagListBox(QWidget *parent, const char *name)
 
 void FlagListBox::readFlags(QStringList *list)
 {
-    QListViewItem *item = firstChild();
+    Q3ListViewItem *item = firstChild();
     for (; item; item = item->nextSibling()) {
         FlagListItem *flitem = static_cast<FlagListItem*>(item);
         QStringList::Iterator sli = list->find(flitem->flag);
@@ -127,7 +132,7 @@ void FlagListBox::readFlags(QStringList *list)
 
 void FlagListBox::writeFlags(QStringList *list)
 {
-    QListViewItem *item = firstChild();
+    Q3ListViewItem *item = firstChild();
     for (; item; item = item->nextSibling()) {
         FlagListItem *flitem = static_cast<FlagListItem*>(item);
         if (flitem->isOn())
@@ -208,7 +213,7 @@ void FlagCheckBoxController::readFlags(QStringList *list)
         kdDebug() << "KEYS: " << *sli << endl;
     }
 */
-    QPtrListIterator<FlagCheckBox> it(cblist);
+    Q3PtrListIterator<FlagCheckBox> it(cblist);
     for (; it.current(); ++it) {
         FlagCheckBox *fitem = it.current();
         QStringList::Iterator sli = list->find(fitem->flag);
@@ -238,7 +243,7 @@ void FlagCheckBoxController::readFlags(QStringList *list)
 
 void FlagCheckBoxController::writeFlags(QStringList *list)
 {
-    QPtrListIterator<FlagCheckBox> it(cblist);
+    Q3PtrListIterator<FlagCheckBox> it(cblist);
     for (; it.current(); ++it) {
         FlagCheckBox *fitem = it.current();
         if (fitem->isChecked() && (!fitem->useDef))
@@ -265,7 +270,7 @@ void FlagCheckBoxController::writeFlags(QStringList *list)
 void FlagPathEditController::readFlags( QStringList * list )
 {
 //    kdDebug() << "read path flags" << endl;
-    QPtrListIterator<FlagPathEdit> it(plist);
+    Q3PtrListIterator<FlagPathEdit> it(plist);
     for (; it.current(); ++it) {
         FlagPathEdit *peitem = it.current();
 
@@ -292,7 +297,7 @@ void FlagPathEditController::readFlags( QStringList * list )
 
 void FlagPathEditController::writeFlags( QStringList * list )
 {
-    QPtrListIterator<FlagPathEdit> it(plist);
+    Q3PtrListIterator<FlagPathEdit> it(plist);
     for (; it.current(); ++it) {
         FlagPathEdit *pitem = it.current();
         if (!pitem->isEmpty())
@@ -444,7 +449,7 @@ void FlagRadioButtonController::readFlags(QStringList *list)
         kdDebug() << "KEYS: " << *sli << endl;
     }
 */
-    QPtrListIterator<FlagRadioButton> it(cblist);
+    Q3PtrListIterator<FlagRadioButton> it(cblist);
     for (; it.current(); ++it) {
         FlagRadioButton *fitem = it.current();
         QStringList::Iterator sli = list->find(fitem->flag);
@@ -458,7 +463,7 @@ void FlagRadioButtonController::readFlags(QStringList *list)
 
 void FlagRadioButtonController::writeFlags(QStringList *list)
 {
-    QPtrListIterator<FlagRadioButton> it(cblist);
+    Q3PtrListIterator<FlagRadioButton> it(cblist);
     for (; it.current(); ++it) {
         FlagRadioButton *fitem = it.current();
         if (fitem->isChecked())
@@ -476,7 +481,7 @@ void FlagRadioButtonController::writeFlags(QStringList *list)
 
 void FlagEditController::readFlags( QStringList * list )
 {
-    QPtrListIterator<FlagListEdit> it(plist);
+    Q3PtrListIterator<FlagListEdit> it(plist);
     for (; it.current(); ++it) {
         FlagListEdit *peitem = it.current();
 
@@ -494,7 +499,7 @@ void FlagEditController::readFlags( QStringList * list )
     }
 
 
-    QPtrListIterator<FlagSpinEdit> it2(slist);
+    Q3PtrListIterator<FlagSpinEdit> it2(slist);
     for (; it2.current(); ++it2) {
         FlagSpinEdit *sitem = it2.current();
 
@@ -514,14 +519,14 @@ void FlagEditController::readFlags( QStringList * list )
 
 void FlagEditController::writeFlags( QStringList * list )
 {
-    QPtrListIterator<FlagListEdit> it(plist);
+    Q3PtrListIterator<FlagListEdit> it(plist);
     for (; it.current(); ++it) {
         FlagListEdit *pitem = it.current();
         if (!pitem->isEmpty())
             (*list) += pitem->flags();
     }
 
-    QPtrListIterator<FlagSpinEdit> it2(slist);
+    Q3PtrListIterator<FlagSpinEdit> it2(slist);
     for (; it2.current(); ++it2) {
         FlagSpinEdit *sitem = it2.current();
         if (!sitem->isDefault())

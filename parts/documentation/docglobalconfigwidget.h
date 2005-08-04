@@ -34,7 +34,7 @@ class DocGlobalConfigWidget : public DocGlobalConfigWidgetBase
     Q_OBJECT
 public:
     DocGlobalConfigWidget(DocumentationPart *part, DocumentationWidget *widget,
-        QWidget *parent = 0, const char *name = 0, WFlags fl = 0);
+        QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
     ~DocGlobalConfigWidget();
     /*$PUBLIC_FUNCTIONS$*/
 

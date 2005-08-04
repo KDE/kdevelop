@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include <klineedit.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <kcompletionbox.h>
 
 #include "kcomboview.h"
@@ -30,18 +30,18 @@ KComboView::KComboView( bool rw, int defaultWidth, QWidget* parent, const char* 
         KLineEdit *ed = new KLineEdit(this, "combo edit");
         ed->setCompletionMode(KGlobalSettings::CompletionPopup);
         ed->setCompletionObject(&m_comp);
-        ed->completionBox()->setHScrollBarMode(QListBox::Auto);
+        ed->completionBox()->setHScrollBarMode(Q3ListBox::Auto);
         setLineEdit(ed);
     }
     setMinimumWidth(defaultWidth);
 }
 
-void KComboView::addItem(QListViewItem *it)
+void KComboView::addItem(Q3ListViewItem *it)
 {
     m_comp.addItem(it->text(0));
 }
 
-void KComboView::removeItem(QListViewItem *it)
+void KComboView::removeItem(Q3ListViewItem *it)
 {
     if (it == currentItem())
     {
@@ -52,7 +52,7 @@ void KComboView::removeItem(QListViewItem *it)
     delete it;
 }
 
-void KComboView::renameItem(QListViewItem *it, const QString &newName)
+void KComboView::renameItem(Q3ListViewItem *it, const QString &newName)
 {
     m_comp.removeItem(it->text(0));
     it->setText(0, newName);

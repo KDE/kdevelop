@@ -14,6 +14,8 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 #include <klistview.h>
 
@@ -41,7 +43,7 @@ namespace FileCreate {
         virtual void resizeEvent(QResizeEvent *event);
 
       public slots:
-	void slotTypeSelected(QListViewItem * item);
+	void slotTypeSelected(Q3ListViewItem * item);
 
     };
 

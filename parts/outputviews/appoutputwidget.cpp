@@ -22,7 +22,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kpopupmenu.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <klineedit.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -36,9 +36,9 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
     : ProcessWidget(0, "app output widget")
 	, m_part(part)
 {
-	connect(this, SIGNAL(executed(QListBoxItem*)), SLOT(slotRowSelected(QListBoxItem*)));
-	connect(this, SIGNAL(rightButtonClicked( QListBoxItem *, const QPoint & )), 
-		SLOT(slotContextMenu( QListBoxItem *, const QPoint & )));
+	connect(this, SIGNAL(executed(Q3ListBoxItem*)), SLOT(slotRowSelected(Q3ListBoxItem*)));
+	connect(this, SIGNAL(rightButtonClicked( Q3ListBoxItem *, const QPoint & )), 
+		SLOT(slotContextMenu( Q3ListBoxItem *, const QPoint & )));
 	KConfig *config = kapp->config();
 	config->setGroup("General Options");
 	setFont(config->readFontEntry("OutputViewFont"));
@@ -55,7 +55,7 @@ void AppOutputWidget::childFinished(bool normal, int status)
 }
 
 
-void AppOutputWidget::slotRowSelected(QListBoxItem* row)
+void AppOutputWidget::slotRowSelected(Q3ListBoxItem* row)
 {
 	static QRegExp assertMatch("ASSERT: \\\"([^\\\"]+)\\\" in ([^\\( ]+) \\(([\\d]+)\\)");
 	static QRegExp lineInfoMatch("\\[([^:]+):([\\d]+)\\]");
@@ -90,7 +90,7 @@ void AppOutputWidget::insertStderrLine(const QString &line)
 }
 
 
-void AppOutputWidget::slotContextMenu( QListBoxItem *, const QPoint &p )
+void AppOutputWidget::slotContextMenu( Q3ListBoxItem *, const QPoint &p )
 {
 	//generate the popupmenu first
 	KPopupMenu popup(this, "filter output");

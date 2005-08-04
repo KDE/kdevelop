@@ -6,17 +6,17 @@
  *  Copyright: See COPYING file that comes with this distribution
  */
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kdialogbase.h>
 #include <klineedit.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <ktrader.h>
 
 #include "kdevcore.h"
@@ -47,7 +47,7 @@ SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
   m_widget->setCaption(i18n("Code Snippets"));
   m_widget->setIcon(SmallIcon( info()->icon() ));
 
-  QWhatsThis::add(m_widget, i18n("<b>Code Snippet</b><p>This is a list of available snippets."));
+  Q3WhatsThis::add(m_widget, i18n("<b>Code Snippet</b><p>This is a list of available snippets."));
 
   mainWindow()->embedSelectViewRight( m_widget, i18n("Code Snippets"), i18n("Insert a code snippet") );
 
@@ -90,7 +90,7 @@ KAboutData* SnippetPart::aboutData()
  */
 void SnippetPart::slotConfigWidget( KDialogBase *dlg )
 {
-  QVBox *vbox = dlg->addVBoxPage( i18n("Code Snippets"), i18n("Code Snippets"), BarIcon( info()->icon(), KIcon::SizeMedium ) );
+  Q3VBox *vbox = dlg->addVBoxPage( i18n("Code Snippets"), i18n("Code Snippets"), BarIcon( info()->icon(), KIcon::SizeMedium ) );
 
   SnippetSettings * w = new SnippetSettings( m_widget, vbox );
 

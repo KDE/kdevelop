@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qdir.h>
 #include <qstringlist.h>
 
@@ -30,7 +30,7 @@ AnnotateDialog::AnnotateDialog( CvsService_stub *cvsService, QWidget *parent, co
 {
     setWFlags( getWFlags() | WDestructiveClose );
 
-    QVBox *vbox = addVBoxPage( i18n("Annotate") );
+    Q3VBox *vbox = addVBoxPage( i18n("Annotate") );
     m_cvsAnnotatePage = new AnnotatePage( m_cvsService, vbox );
 
     connect( m_cvsAnnotatePage, SIGNAL(requestAnnotate(const QString)),
@@ -57,7 +57,7 @@ void AnnotateDialog::slotAnnotate(const QString rev)
 {
     kdDebug(9006) << "AnnotateDialog::slotAnnotate(QString) revision = " << rev << endl;
 
-    QVBox *vbox = addVBoxPage( i18n("Annotate")+" "+rev );
+    Q3VBox *vbox = addVBoxPage( i18n("Annotate")+" "+rev );
     AnnotatePage * page = new AnnotatePage( m_cvsService, vbox );
     page->startAnnotate(m_pathName, rev);
 

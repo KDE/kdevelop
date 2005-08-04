@@ -41,7 +41,7 @@
                         <string>Template &amp;name:</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignBottom</set>
+                        <set>Qt::AlignBottom</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>templatename_edit</cstring>
@@ -78,7 +78,7 @@
                         <string>Set template content from &amp;file:</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignBottom</set>
+                        <set>Qt::AlignBottom</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>template_url</cstring>
@@ -103,7 +103,7 @@
                         </size>
                     </property>
                     <property name="focusPolicy">
-                        <enum>StrongFocus</enum>
+                        <enum>Qt::StrongFocus</enum>
                     </property>
                 </widget>
             </vbox>
@@ -121,7 +121,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

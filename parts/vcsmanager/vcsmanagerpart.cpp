@@ -21,8 +21,8 @@
 #include "vcsmanagerpart.h"
 
 #include <qtimer.h>
-#include <qpopupmenu.h>
-#include <qwhatsthis.h>
+#include <q3popupmenu.h>
+#include <q3whatsthis.h>
 
 #include <klocale.h>
 #include <kaction.h>

@@ -30,7 +30,7 @@ public:
     ~DocConfigListView();
 
 protected slots:
-    void clickedItem(QListViewItem *item, const QPoint &pnt, int c);
+    void clickedItem(Q3ListViewItem *item, const QPoint &pnt, int c);
 };
 
 #endif

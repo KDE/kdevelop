@@ -8,9 +8,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qtimer.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -30,7 +32,7 @@
 namespace FileCreate {
 
   FriendlyWidget::FriendlyWidget(FileCreatePart *part)
-    : QTable(0,4,0), TypeChooser(part), m_selected(NULL)
+    : Q3Table(0,4,0), TypeChooser(part), m_selected(NULL)
   {
 
     setReadOnly(true);
@@ -45,7 +47,7 @@ namespace FileCreate {
 
     m_iconLoader = KGlobal::iconLoader();
 
-    QWhatsThis::add(this, i18n("Use this to create new files within your project."));
+    Q3WhatsThis::add(this, i18n("Use this to create new files within your project."));
 
     setDefaultColumnWidths();
 
@@ -93,7 +95,7 @@ namespace FileCreate {
     empty();
 
     int row = 0;
-    QPtrList<FileType> filetypes = m_part->getFileTypes();
+    Q3PtrList<FileType> filetypes = m_part->getFileTypes();
     for(FileType * filetype = filetypes.first();
 	filetype;
 	filetype=filetypes.next()) {
@@ -103,7 +105,7 @@ namespace FileCreate {
 	if (filetype->subtypes().count()==0)
 	  setRow(row++, filetype);
 
-	QPtrList<FileType> subtypes = filetype->subtypes();
+	Q3PtrList<FileType> subtypes = filetype->subtypes();
 	for(FileType * subtype = subtypes.first();
 	    subtype;
 	    subtype=subtypes.next()) {
@@ -187,7 +189,7 @@ namespace FileCreate {
     int maxHeight = 0;
 
     for(int c=0;c<numCols();c++) {
-      QTableItem* i = item( row, c );
+      Q3TableItem* i = item( row, c );
       if( !i )
          continue;
 
@@ -202,7 +204,7 @@ namespace FileCreate {
     int maxWidth = 0;
     for(int r=0;r<numRows();r++) {
 
-      QTableItem* i = item( r, col );
+      Q3TableItem* i = item( r, col );
       if( !i )
          continue;
 
@@ -215,7 +217,7 @@ namespace FileCreate {
 #if QT_VERSION < 0x030100
   void FriendlyWidget::selectRow(int row) {
     if (numCols()>0 && row<numRows()) {
-      QTableSelection sel;
+      Q3TableSelection sel;
       sel.init(row,0);
       sel.expandTo(row,numCols());
       addSelection(sel);

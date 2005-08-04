@@ -21,7 +21,7 @@ class BookmarkSettings : public BookmarkSettingsBase
   Q_OBJECT
 
 public:
-  BookmarkSettings( BookmarksPart * part, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+  BookmarkSettings( BookmarksPart * part, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
   ~BookmarkSettings();
 
 public slots:

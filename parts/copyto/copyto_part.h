@@ -23,6 +23,8 @@
 
 #include <kdevplugin.h>
 #include <kurl.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 class CopyToPart : public KDevPlugin
 {
@@ -35,7 +37,7 @@ public:
 
 
 private slots:
-	void contextMenu( QPopupMenu* popup, const Context* context );
+	void contextMenu( Q3PopupMenu* popup, const Context* context );
 	void doCopy();
 	
 private:

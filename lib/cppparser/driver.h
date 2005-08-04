@@ -23,9 +23,11 @@
 #include "ast.h"
 
 #include <qpair.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qstringlist.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class Lexer;
 class Parser;
@@ -153,21 +155,21 @@ public:
     bool hasArguments() const { return m_hasArguments; }
     void setHasArguments( bool hasArguments ) { m_hasArguments = hasArguments; }
     /** Get a list of arguments passed to this macro */
-    QValueList<Argument> argumentList() const { return m_argumentList; }
+    Q3ValueList<Argument> argumentList() const { return m_argumentList; }
 
     /** Clear the list of arguments this macro has */
     void clearArgumentList() { m_argumentList.clear(); m_hasArguments = false; }
     /** Add an argument to this macro */
     void addArgument( const Argument& argument ) { m_argumentList << argument; }
     /** Add a list of arguments to this macro */
-    void addArgumentList( const QValueList<Argument>& arguments ) { m_argumentList += arguments; }
+    void addArgumentList( const Q3ValueList<Argument>& arguments ) { m_argumentList += arguments; }
 
 private:
     QString m_name;
     QString m_fileName;
     QString m_body;
     bool m_hasArguments;
-    QValueList<Argument> m_argumentList;
+    Q3ValueList<Argument> m_argumentList;
 };
 
 /**
@@ -295,7 +297,7 @@ public:
      * @param fileName The filename to get problems for
      * @return The list of problems for @p fileName
      */
-    QValueList<Problem> problems( const QString& fileName ) const;
+    Q3ValueList<Problem> problems( const QString& fileName ) const;
 
     /**
      * Check if we have a macro in the driver
@@ -363,14 +365,14 @@ protected:
 
 private:
     QMap<QString, Dependence>& findOrInsertDependenceList( const QString& fileName );
-    QValueList<Problem>& findOrInsertProblemList( const QString& fileName );
+    Q3ValueList<Problem>& findOrInsertProblemList( const QString& fileName );
     QString findIncludeFile( const Dependence& dep ) const;
 
 private:
     QString m_currentFileName;
     QMap< QString, QMap<QString, Dependence> > m_dependences;
     QMap<QString, Macro> m_macros;
-    QMap< QString, QValueList<Problem> > m_problems;
+    QMap< QString, Q3ValueList<Problem> > m_problems;
     QMap<QString, TranslationUnitAST*> m_parsedUnits;
     QStringList m_includePaths;
     uint depresolv : 1;

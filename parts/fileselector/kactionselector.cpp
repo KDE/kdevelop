@@ -25,16 +25,20 @@
 #include <kdebug.h>
 #include <qapplication.h>
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qevent.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QKeyEvent>
 
 class KActionSelectorPrivate {
   public:
-  QListBox *availableListBox, *selectedListBox;
+  Q3ListBox *availableListBox, *selectedListBox;
   QToolButton *btnAdd, *btnRemove, *btnUp, *btnDown;
   QLabel *lAvailable, *lSelected;
   bool moveOnDoubleClick, keyboardEnabled;
@@ -69,7 +73,7 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
   QVBoxLayout *loAv = new QVBoxLayout( lo );
   d->lAvailable = new QLabel( i18n("&Available:"), this );
   loAv->addWidget( d->lAvailable );
-  d->availableListBox = new QListBox( this );
+  d->availableListBox = new Q3ListBox( this );
   loAv->addWidget( d->availableListBox );
   d->lAvailable->setBuddy( d->availableListBox );
 
@@ -84,7 +88,7 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
   QVBoxLayout *loS = new QVBoxLayout( lo );
   d->lSelected = new QLabel( i18n("&Selected:"), this );
   loS->addWidget( d->lSelected );
-  d->selectedListBox = new QListBox( this );
+  d->selectedListBox = new Q3ListBox( this );
   loS->addWidget( d->selectedListBox );
   d->lSelected->setBuddy( d->selectedListBox );
 
@@ -102,14 +106,14 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
   connect( d->btnRemove, SIGNAL(clicked()), this, SLOT(buttonRemoveClicked()) );
   connect( d->btnUp, SIGNAL(clicked()), this, SLOT(buttonUpClicked()) );
   connect( d->btnDown, SIGNAL(clicked()), this, SLOT(buttonDownClicked()) );
-  connect( d->availableListBox, SIGNAL(doubleClicked(QListBoxItem*)),
-           this, SLOT(itemDoubleClicked(QListBoxItem*)) );
-  connect( d->selectedListBox, SIGNAL(doubleClicked(QListBoxItem*)),
-           this, SLOT(itemDoubleClicked(QListBoxItem*)) );
-  connect( d->availableListBox, SIGNAL(currentChanged(QListBoxItem*)),
-           this, SLOT(slotCurrentChanged(QListBoxItem *)) );
-  connect( d->selectedListBox, SIGNAL(currentChanged(QListBoxItem*)),
-           this, SLOT(slotCurrentChanged(QListBoxItem *)) );
+  connect( d->availableListBox, SIGNAL(doubleClicked(Q3ListBoxItem*)),
+           this, SLOT(itemDoubleClicked(Q3ListBoxItem*)) );
+  connect( d->selectedListBox, SIGNAL(doubleClicked(Q3ListBoxItem*)),
+           this, SLOT(itemDoubleClicked(Q3ListBoxItem*)) );
+  connect( d->availableListBox, SIGNAL(currentChanged(Q3ListBoxItem*)),
+           this, SLOT(slotCurrentChanged(Q3ListBoxItem *)) );
+  connect( d->selectedListBox, SIGNAL(currentChanged(Q3ListBoxItem*)),
+           this, SLOT(slotCurrentChanged(Q3ListBoxItem *)) );
 
   d->availableListBox->installEventFilter( this );
   d->selectedListBox->installEventFilter( this );
@@ -124,12 +128,12 @@ KActionSelector::~KActionSelector()
 
 //BEGIN Public Methods
 
-QListBox *KActionSelector::availableListBox()
+Q3ListBox *KActionSelector::availableListBox()
 {
   return d->availableListBox;
 }
 
-QListBox *KActionSelector::selectedListBox()
+Q3ListBox *KActionSelector::selectedListBox()
 {
   return d->selectedListBox;
 }
@@ -159,7 +163,7 @@ void KActionSelector::setButtonIcon( const QString &icon, MoveButton button )
   }
 }
 
-void KActionSelector::setButtonIconSet( const QIconSet &iconset, MoveButton button )
+void KActionSelector::setButtonIconSet( const QIcon &iconset, MoveButton button )
 {
   switch ( button )
   {
@@ -206,16 +210,16 @@ void KActionSelector::setButtonWhatsThis( const QString &text, MoveButton button
   switch ( button )
   {
     case ButtonAdd:
-    QWhatsThis::add( d->btnAdd, text );
+    Q3WhatsThis::add( d->btnAdd, text );
     break;
     case ButtonRemove:
-    QWhatsThis::add( d->btnRemove, text );
+    Q3WhatsThis::add( d->btnRemove, text );
     break;
     case ButtonUp:
-    QWhatsThis::add( d->btnUp, text );
+    Q3WhatsThis::add( d->btnUp, text );
     break;
     case ButtonDown:
-    QWhatsThis::add( d->btnDown, text );
+    Q3WhatsThis::add( d->btnDown, text );
     break;
     default:
     kdDebug()<<"KActionSelector::setButtonWhatsThis: DAINBREAD!"<<endl;
@@ -369,20 +373,20 @@ bool KActionSelector::eventFilter( QObject *o, QEvent *e )
 {
   if ( d->keyboardEnabled && e->type() == QEvent::KeyPress )
   {
-    if  ( (((QKeyEvent*)e)->state() & Qt::ControlButton) )
+    if  ( (((QKeyEvent*)e)->state() & Qt::ControlModifier) )
     {
       switch ( ((QKeyEvent*)e)->key() )
       {
-        case Key_Right:
+        case Qt::Key_Right:
         buttonAddClicked();
         break;
-        case Key_Left:
+        case Qt::Key_Left:
         buttonRemoveClicked();
         break;
-        case Key_Up:
+        case Qt::Key_Up:
         buttonUpClicked();
         break;
-        case Key_Down:
+        case Qt::Key_Down:
         buttonDownClicked();
         break;
         default:
@@ -395,9 +399,9 @@ bool KActionSelector::eventFilter( QObject *o, QEvent *e )
     {
       switch ( ((QKeyEvent*)e)->key() )
       {
-        case Key_Return:
-        case Key_Enter:
-        QListBox *lb = (QListBox*)o;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+        Q3ListBox *lb = (Q3ListBox*)o;
         int index = lb->currentItem();
         if ( index < 0 ) break;
         moveItem( lb->item( index ) );
@@ -415,7 +419,7 @@ bool KActionSelector::eventFilter( QObject *o, QEvent *e )
 void KActionSelector::buttonAddClicked()
 {
   // move all selected items from available to selected listbox
-  QListBoxItem *item = d->availableListBox->firstItem();
+  Q3ListBoxItem *item = d->availableListBox->firstItem();
   while ( item ) {
     if ( item->isSelected() ) {
       d->availableListBox->takeItem( item );
@@ -433,7 +437,7 @@ void KActionSelector::buttonAddClicked()
 void KActionSelector::buttonRemoveClicked()
 {
   // move all selected items from selected to available listbox
-  QListBoxItem *item = d->selectedListBox->firstItem();
+  Q3ListBoxItem *item = d->selectedListBox->firstItem();
   while ( item ) {
     if ( item->isSelected() ) {
       d->selectedListBox->takeItem( item );
@@ -452,7 +456,7 @@ void KActionSelector::buttonUpClicked()
 {
   int c = d->selectedListBox->currentItem();
   if ( c < 0 ) return;
-  QListBoxItem *item = d->selectedListBox->item( c );
+  Q3ListBoxItem *item = d->selectedListBox->item( c );
   d->selectedListBox->takeItem( item );
   d->selectedListBox->insertItem( item, c-1 );
   d->selectedListBox->setCurrentItem( item );
@@ -463,14 +467,14 @@ void KActionSelector::buttonDownClicked()
 {
   int c = d->selectedListBox->currentItem();
   if ( c < 0 ) return;
-  QListBoxItem *item = d->selectedListBox->item( c );
+  Q3ListBoxItem *item = d->selectedListBox->item( c );
   d->selectedListBox->takeItem( item );
   d->selectedListBox->insertItem( item, c+1 );
   d->selectedListBox->setCurrentItem( item );
   emit movedDown( item );
 }
 
-void KActionSelector::itemDoubleClicked( QListBoxItem *item )
+void KActionSelector::itemDoubleClicked( Q3ListBoxItem *item )
 {
   if ( d->moveOnDoubleClick )
     moveItem( item );
@@ -488,10 +492,10 @@ void KActionSelector::loadIcons()
   d->btnDown->setIconSet( SmallIconSet( d->downIcon, d->iconSize ) );
 }
 
-void KActionSelector::moveItem( QListBoxItem *item )
+void KActionSelector::moveItem( Q3ListBoxItem *item )
 {
-  QListBox *lbFrom = item->listBox();
-  QListBox *lbTo;
+  Q3ListBox *lbFrom = item->listBox();
+  Q3ListBox *lbTo;
   if ( lbFrom == d->availableListBox )
     lbTo = d->selectedListBox;
   else if ( lbFrom == d->selectedListBox )
@@ -515,7 +519,7 @@ void KActionSelector::moveItem( QListBoxItem *item )
     emit removed( item );
 }
 
-int KActionSelector::insertionIndex( QListBox *lb, InsertionPolicy policy )
+int KActionSelector::insertionIndex( Q3ListBox *lb, InsertionPolicy policy )
 {
   int index;
   switch ( policy )

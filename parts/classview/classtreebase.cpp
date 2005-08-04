@@ -14,8 +14,10 @@
 #include "classtreebase.h"
 
 #include <qtooltip.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kpopupmenu.h>
@@ -171,39 +173,39 @@ void ClassTreeScopeItem::setOpen(bool o)
         KDevLanguageSupport::Features features = classTree()->m_part->languageSupport()->features();
         
         // Add namespaces
-        QValueList<ParsedScopeContainer*> scopeList = pScope->getSortedScopeList();
-        QValueList<ParsedScopeContainer*>::ConstIterator it;
+        Q3ValueList<ParsedScopeContainer*> scopeList = pScope->getSortedScopeList();
+        Q3ValueList<ParsedScopeContainer*>::ConstIterator it;
         for (it = scopeList.begin(); it != scopeList.end(); ++it)
             lastItem = new ClassTreeScopeItem(this, lastItem, *it);
 
         if (features & KDevLanguageSupport::Classes) {
             // Add classes
-            QValueList<ParsedClass*> classList = pScope->getSortedClassList();
-            QValueList<ParsedClass*>::ConstIterator it;
+            Q3ValueList<ParsedClass*> classList = pScope->getSortedClassList();
+            Q3ValueList<ParsedClass*>::ConstIterator it;
             for (it = classList.begin(); it != classList.end(); ++it)
                 lastItem = new ClassTreeClassItem(this, lastItem, *it);
         }
             
         if (features & KDevLanguageSupport::Structs) {
             // Add structs
-            QValueList<ParsedClass*> structList = pScope->getSortedStructList();
-            QValueList<ParsedClass*>::ConstIterator it;
+            Q3ValueList<ParsedClass*> structList = pScope->getSortedStructList();
+            Q3ValueList<ParsedClass*>::ConstIterator it;
             for (it = structList.begin(); it != structList.end(); ++it)
                 lastItem = new ClassTreeClassItem(this, lastItem, *it, true);
         }
 
         if (features & KDevLanguageSupport::Functions) {
             // Add functions
-            QValueList<ParsedMethod*> methodList = pScope->getSortedMethodList();
-            QValueList<ParsedMethod*>::ConstIterator it;
+            Q3ValueList<ParsedMethod*> methodList = pScope->getSortedMethodList();
+            Q3ValueList<ParsedMethod*>::ConstIterator it;
             for (it = methodList.begin(); it != methodList.end(); ++it)
                 lastItem = new ClassTreeMethodItem(this, lastItem, *it);
         }
 
         if (features & KDevLanguageSupport::Variables) {
             // Add attributes
-            QValueList<ParsedAttribute*> attrList = pScope->getSortedAttributeList();
-            QValueList<ParsedAttribute*>::ConstIterator it;
+            Q3ValueList<ParsedAttribute*> attrList = pScope->getSortedAttributeList();
+            Q3ValueList<ParsedAttribute*>::ConstIterator it;
             for (it = attrList.begin(); it != attrList.end(); ++it)
                 lastItem = new ClassTreeAttrItem(this, lastItem, *it);
         }
@@ -232,38 +234,38 @@ void ClassTreeClassItem::setOpen(bool o)
         ClassTreeItem *lastItem = 0;
 
         // Add nested classes
-        QValueList<ParsedClass*> classList = pClass->getSortedClassList();
-        QValueList<ParsedClass*>::ConstIterator classIt;
+        Q3ValueList<ParsedClass*> classList = pClass->getSortedClassList();
+        Q3ValueList<ParsedClass*>::ConstIterator classIt;
         for (classIt = classList.begin(); classIt != classList.end(); ++classIt)
             lastItem = new ClassTreeClassItem(this, lastItem, *classIt);
 
         // Add nested structs
-        QValueList<ParsedClass*> structList = pClass->getSortedStructList();
-        QValueList<ParsedClass*>::ConstIterator structIt;
+        Q3ValueList<ParsedClass*> structList = pClass->getSortedStructList();
+        Q3ValueList<ParsedClass*>::ConstIterator structIt;
         for (structIt = structList.begin(); structIt != structList.end(); ++structIt)
             lastItem = new ClassTreeClassItem(this, lastItem, *structIt, true);
 
         // Add methods
-        QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
-        QValueList<ParsedMethod*>::ConstIterator methodIt;
+        Q3ValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+        Q3ValueList<ParsedMethod*>::ConstIterator methodIt;
         for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt)
             lastItem = new ClassTreeMethodItem(this, lastItem, *methodIt);
 
         // Add slots
-        QValueList<ParsedMethod*> slotList = pClass->getSortedSlotList();
-        QValueList<ParsedMethod*>::ConstIterator slotIt;
+        Q3ValueList<ParsedMethod*> slotList = pClass->getSortedSlotList();
+        Q3ValueList<ParsedMethod*>::ConstIterator slotIt;
         for (slotIt = slotList.begin(); slotIt != slotList.end(); ++slotIt)
             lastItem = new ClassTreeMethodItem(this, lastItem, *slotIt);
 
         // Add signals
-        QValueList<ParsedMethod*> signalList = pClass->getSortedSignalList();
-        QValueList<ParsedMethod*>::ConstIterator signalIt;
+        Q3ValueList<ParsedMethod*> signalList = pClass->getSortedSignalList();
+        Q3ValueList<ParsedMethod*>::ConstIterator signalIt;
         for (signalIt = signalList.begin(); signalIt != signalList.end(); ++signalIt)
             lastItem = new ClassTreeMethodItem(this, lastItem, *signalIt);
 
         // Add attributes
-        QValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
-        QValueList<ParsedAttribute*>::ConstIterator attrIt;
+        Q3ValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
+        Q3ValueList<ParsedAttribute*>::ConstIterator attrIt;
         for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt)
             lastItem = new ClassTreeAttrItem(this, lastItem, *attrIt);
         
@@ -402,14 +404,14 @@ void ClassTreeScriptItem::setOpen(bool o)
         ClassTreeItem *lastItem = 0;
 
         // Add methods
-        QValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
-        QValueList<ParsedMethod*>::ConstIterator methodIt;
+        Q3ValueList<ParsedMethod*> methodList = pClass->getSortedMethodList();
+        Q3ValueList<ParsedMethod*>::ConstIterator methodIt;
         for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt)
             lastItem = new ClassTreeMethodItem(this, lastItem, *methodIt);
 
         // Add attributes
-        QValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
-        QValueList<ParsedAttribute*>::ConstIterator attrIt;
+        Q3ValueList<ParsedAttribute*> attrList = pClass->getSortedAttributeList();
+        Q3ValueList<ParsedAttribute*>::ConstIterator attrIt;
         for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt)
             lastItem = new ClassTreeAttrItem(this, lastItem, *attrIt);
 
@@ -435,7 +437,7 @@ void ClassToolTip::maybeTip(const QPoint &p)
 {
     ClassTreeBase *ctw = static_cast<ClassTreeBase*>(parentWidget());
 
-    QListViewItem *item = ctw->itemAt(p);
+    Q3ListViewItem *item = ctw->itemAt(p);
     QRect r = ctw->itemRect(item);
 
     if (item && r.isValid()) {
@@ -452,21 +454,21 @@ ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *n
 {
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setSorting(-1);
     header()->hide();
     addColumn(QString::null);
 
     (void) new ClassToolTip(this);
     
-    connect( this, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int)),
-             this, SLOT(slotItemPressed(int, QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed( QListViewItem*)), 
-             SLOT( slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-             this, SLOT(slotContextMenuRequested(QListViewItem*, const QPoint&)) );
+    connect( this, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
+    connect( this, SIGNAL(mouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int)),
+             this, SLOT(slotItemPressed(int, Q3ListViewItem*)) );
+    connect( this, SIGNAL(returnPressed( Q3ListViewItem*)), 
+             SLOT( slotItemExecuted(Q3ListViewItem*)) );
+    connect( this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+             this, SLOT(slotContextMenuRequested(Q3ListViewItem*, const QPoint&)) );
 
     m_part = part;
 }
@@ -481,11 +483,11 @@ ClassTreeBase::TreeState ClassTreeBase::treeState() const
     TreeState state;
 
     ClassTreeBase *that = const_cast<ClassTreeBase*>(this);
-    QListViewItemIterator it(that);
+    Q3ListViewItemIterator it(that);
     for (; it.current(); ++it)
         if (it.current()->isOpen()) {
             QStringList path;
-            QListViewItem *item = it.current();
+            Q3ListViewItem *item = it.current();
             while (item) {
                 path.prepend(item->text(0));
                 item = item->parent();
@@ -501,10 +503,10 @@ void ClassTreeBase::setTreeState(TreeState state)
 {
     TreeStateIterator tsit;
     for (tsit = state.begin(); tsit != state.end(); ++tsit) {
-        QListViewItemIterator it(this);
+        Q3ListViewItemIterator it(this);
         for (; it.current(); ++it) {
             QStringList path;
-            QListViewItem *item = it.current();
+            Q3ListViewItem *item = it.current();
             while (item) {
                 path.prepend(item->text(0));
                 item = item->parent();
@@ -520,7 +522,7 @@ void ClassTreeBase::setTreeState(TreeState state)
 
 
   
-void ClassTreeBase::slotItemExecuted( QListViewItem* item )
+void ClassTreeBase::slotItemExecuted( Q3ListViewItem* item )
 {
     if (!item)
         return;
@@ -548,7 +550,7 @@ void ClassTreeBase::slotItemExecuted( QListViewItem* item )
 }
 
 
-void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
+void ClassTreeBase::slotItemPressed(int button, Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -568,7 +570,7 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
     }
 }
 
-void ClassTreeBase::slotContextMenuRequested(QListViewItem *item, const QPoint &p)
+void ClassTreeBase::slotContextMenuRequested(Q3ListViewItem *item, const QPoint &p)
 {
     contextItem = static_cast<ClassTreeItem*>(item);
     

@@ -316,7 +316,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 <string>Note: Changes will take effect after KDevelop is restarted</string>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignCenter</set>
+                <set>Qt::TextWordWrap|Qt::AlignCenter</set>
             </property>
         </widget>
     </vbox>

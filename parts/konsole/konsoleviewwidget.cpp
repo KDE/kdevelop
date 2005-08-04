@@ -10,8 +10,10 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -61,7 +63,7 @@ void KonsoleViewWidget::activate()
     part->widget()->setFocus();
 
     if (part->widget()->inherits("QFrame"))
-        ((QFrame*)part->widget())->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+        ((Q3Frame*)part->widget())->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
     vbox->addWidget(part->widget());
 

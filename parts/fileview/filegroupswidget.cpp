@@ -13,10 +13,12 @@
 
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qtimer.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -73,19 +75,19 @@ private:
 	const QString m_pattern;
 };
 
-class FileViewFolderItem : public QListViewItem
+class FileViewFolderItem : public Q3ListViewItem
 {
 public:
-    FileViewFolderItem(QListView *parent, const QString &name, const QString &pattern);
+    FileViewFolderItem(Q3ListView *parent, const QString &name, const QString &pattern);
     bool matches(const QString &fileName);
 
 private:
-    QPtrList<FileComparator> m_patterns;
+    Q3PtrList<FileComparator> m_patterns;
 };
 
 
-FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, const QString &pattern)
-    : QListViewItem(parent, name)
+FileViewFolderItem::FileViewFolderItem(Q3ListView *parent, const QString &name, const QString &pattern)
+    : Q3ListViewItem(parent, name)
 {
     setPixmap(0, SmallIcon("folder"));
     m_patterns.setAutoDelete(true);
@@ -120,8 +122,8 @@ bool FileViewFolderItem::matches(const QString &fileName)
     // Test with the file path, so that "*ClientServer/*.h" patterns work
     QString fName = QFileInfo(fileName).filePath();
 
-    QPtrList<FileComparator>::ConstIterator theend = m_patterns.end();
-    for (QPtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci)
+    Q3PtrList<FileComparator>::ConstIterator theend = m_patterns.end();
+    for (Q3PtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci)
     	if ((*ci)->matches(fName))
 		return true;
 
@@ -129,10 +131,10 @@ bool FileViewFolderItem::matches(const QString &fileName)
 }
 
 
-class FileGroupsFileItem : public QListViewItem
+class FileGroupsFileItem : public Q3ListViewItem
 {
 public:
-    FileGroupsFileItem(QListViewItem *parent, const QString &fileName);
+    FileGroupsFileItem(Q3ListViewItem *parent, const QString &fileName);
     QString fileName() const
     { return fullname; }
 
@@ -141,8 +143,8 @@ private:
 };
 
 
-FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fileName)
-    : QListViewItem(parent), fullname(fileName)
+FileGroupsFileItem::FileGroupsFileItem(Q3ListViewItem *parent, const QString &fileName)
+    : Q3ListViewItem(parent), fullname(fileName)
 {
     setPixmap(0, SmallIcon("document"));
     QFileInfo fi(fileName);
@@ -163,19 +165,19 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
 
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setSorting(-1);
     addColumn(i18n("Name"));
 	setAllColumnsShowFocus( true );
 
 //    addColumn(i18n("Location"));
 
-    connect( this, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    connect( this, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
+    connect( this, SIGNAL(returnPressed(Q3ListViewItem*)),
+             this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
+    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+             this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
 	this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
@@ -205,7 +207,7 @@ FileGroupsWidget::~FileGroupsWidget()
 }
 
 
-void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
+void FileGroupsWidget::slotItemExecuted(Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -223,7 +225,7 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
 }
 
 
-void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void FileGroupsWidget::slotContextMenu(KListView *, Q3ListViewItem *item, const QPoint &p)
 {
     KPopupMenu popup(i18n("File Groups"), this);
     /// @todo Add, remove groups
@@ -241,7 +243,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     }
     else{
         QStringList file_list;
-        QListViewItem* i = item->firstChild();
+        Q3ListViewItem* i = item->firstChild();
         while(i){
             FileGroupsFileItem *fvgitem = static_cast<FileGroupsFileItem*>(i);
             file_list << fvgitem->fileName();
@@ -259,7 +261,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
         KDialogBase dlg(KDialogBase::TreeList, i18n("Customize File Groups"),
                         KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                         "customization dialog");
-        QVBox *vbox = dlg.addVBoxPage(i18n("File Groups"));
+        Q3VBox *vbox = dlg.addVBoxPage(i18n("File Groups"));
         FileGroupsConfigWidget *w = new FileGroupsConfigWidget(m_part, vbox, "file groups config widget");
         connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()));
         dlg.exec();
@@ -273,7 +275,7 @@ QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
 
 	// recursively fetch all files in subdirectories
 	QStringList subdirs = QDir( dir ).entryList( QDir::Dirs );
-	QValueListIterator<QString> it = subdirs.begin();
+	Q3ValueListIterator<QString> it = subdirs.begin();
 	while ( it != subdirs.end() )
 	{
 		if ( *it != "." && *it != ".." )
@@ -285,7 +287,7 @@ QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
 
 	// append the project relative directory path to all files in the current directory
 	QStringList dirlist = QDir( dir ).entryList( QDir::Files );
-	QValueListIterator<QString> itt = dirlist.begin();
+	Q3ValueListIterator<QString> itt = dirlist.begin();
 	while ( itt != dirlist.end() )
 	{
 		if ( reldir.isEmpty() )
@@ -342,7 +344,7 @@ void FileGroupsWidget::refresh()
     }
     QStringList::ConstIterator fit;
     for (fit = allFiles.begin(); fit != allFiles.end(); ++fit) {
-        QListViewItem *item = firstChild();
+        Q3ListViewItem *item = firstChild();
         while (item) {
             FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
             if (fvgitem->matches(*fit)) {
@@ -353,7 +355,7 @@ void FileGroupsWidget::refresh()
         }
     }
 
-    QListViewItem *item = firstChild();
+    Q3ListViewItem *item = firstChild();
     while (item) {
         item->sortChildItems(0, true);
         item = item->nextSibling();
@@ -365,7 +367,7 @@ void FileGroupsWidget::addFile(const QString &fileName)
 {
     kdDebug(9017) << "FileView add " << fileName << endl;
 
-    QListViewItem *item = firstChild();
+    Q3ListViewItem *item = firstChild();
     while (item) {
         FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
         if (fvgitem->matches(fileName))
@@ -395,11 +397,11 @@ void FileGroupsWidget::removeFile(const QString &fileName)
 {
     kdDebug(9017) << "FileView remove " << fileName << endl;
 
-    QListViewItem *item = firstChild();
+    Q3ListViewItem *item = firstChild();
     while (item)
     {
         FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
-        QListViewItem *childItem = fvgitem->firstChild();
+        Q3ListViewItem *childItem = fvgitem->firstChild();
         while (childItem)
         {
             FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(childItem);

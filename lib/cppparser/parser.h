@@ -24,8 +24,8 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
-#include <qvaluestack.h>
+#include <q3valuelist.h>
+#include <q3valuestack.h>
 
 struct ParserPrivateData;
 

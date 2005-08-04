@@ -24,7 +24,7 @@
 #include "ctags2_settingswidget.h"
 #include "ctags2_part.h"
 
-CTags2SettingsWidget::CTags2SettingsWidget( CTags2Part * part, QWidget* parent, const char* name, WFlags fl )
+CTags2SettingsWidget::CTags2SettingsWidget( CTags2Part * part, QWidget* parent, const char* name, Qt::WFlags fl )
 	: CTags2SettingsWidgetBase( parent, name, fl ), m_part( part )
 {
 	binaryPath->completionObject()->setMode( KURLCompletion::FileCompletion );

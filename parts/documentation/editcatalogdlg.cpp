@@ -29,7 +29,7 @@
 #include "kdevdocumentationplugin.h"
 
 EditCatalogDlg::EditCatalogDlg(DocumentationPlugin *plugin, QWidget* parent,
-    const char* name, bool modal, WFlags fl)
+    const char* name, bool modal, Qt::WFlags fl)
     :EditCatalogBase(parent,name, modal,fl), m_plugin(plugin)
 {
     if (m_plugin->hasCapability(DocumentationPlugin::CustomDocumentationTitles))

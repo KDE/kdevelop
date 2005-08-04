@@ -27,6 +27,8 @@
 
 #include "securitypart.h"
 #include "securitywidget.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class SecurityPattern {
 public:
@@ -77,7 +79,7 @@ void SecurityChecker::check()
     int lines = m_part->activeEditor()->numLines();
     for (int i = 0; i < lines; ++i)
     {
-        for (QValueList<SecurityPattern*>::iterator it = m_patterns.begin();
+        for (Q3ValueList<SecurityPattern*>::iterator it = m_patterns.begin();
                 it != m_patterns.end(); ++it)
         {
             kdDebug() << "applying pattern for line " << i << ": " << endl;

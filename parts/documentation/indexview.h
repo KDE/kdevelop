@@ -21,10 +21,13 @@
 #define INDEXVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QEvent>
 
 class IndexBox;
 class KLineEdit;
-class QListBoxItem;
+class Q3ListBoxItem;
 class DocumentationWidget;
 class FindDocumentation;
 
@@ -44,10 +47,10 @@ public slots:
     void askSearchTerm();
     
 protected slots:
-    void searchInIndex(QListBoxItem *item);
+    void searchInIndex(Q3ListBoxItem *item);
     void showIndex(const QString &term);
 
-    void itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos);
+    void itemMouseButtonPressed(int button, Q3ListBoxItem *item, const QPoint &pos);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

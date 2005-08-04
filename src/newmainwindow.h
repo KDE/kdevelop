@@ -23,7 +23,9 @@
 
 #include <qdatetime.h>
 #include <qmap.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdevpartcontroller.h>
 #include "kdevmainwindow.h"
@@ -135,7 +137,7 @@ private:
   
   KAction *m_raiseEditor;
 
-  QValueList< QPair< int, KURL > > m_windowList;
+  Q3ValueList< QPair< int, KURL > > m_windowList;
   MainWindowShare*   m_pMainWindowShare;
   
   bool openNewTabAfterCurrent;

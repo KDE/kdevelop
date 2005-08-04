@@ -12,7 +12,7 @@
 #ifndef _FILEGROUPSPART_H_
 #define _FILEGROUPSPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 //#include <kdialogbase.h>
 #include <configwidgetproxy.h>
 #include "kdevplugin.h"
@@ -35,7 +35,7 @@ private slots:
 	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
 
 private:
-    QGuardedPtr<FileGroupsWidget> m_filegroups;
+    QPointer<FileGroupsWidget> m_filegroups;
     bool deleteRequested;
 	ConfigWidgetProxy * _configProxy;
 };

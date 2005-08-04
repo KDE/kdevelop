@@ -15,9 +15,11 @@
 
 #include "annotateview.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qdatetime.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3Frame>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -25,7 +27,7 @@
 
 #include "annotatepage.h"
 
-class AnnotateViewItem : public QListViewItem
+class AnnotateViewItem : public Q3ListViewItem
 {
     friend class AnnotateView;
 
@@ -36,8 +38,8 @@ public:
             QDateTime date, QString content, QString comment, 
             bool odd, int linenumber);
 
-    virtual int compare(QListViewItem *item, int col, bool ascending) const;
-    virtual int width(const QFontMetrics &, const QListView *, int col) const;
+    virtual int compare(Q3ListViewItem *item, int col, bool ascending) const;
+    virtual int width(const QFontMetrics &, const Q3ListView *, int col) const;
     virtual QString text(int col) const;
     virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
 
@@ -60,7 +62,7 @@ const int AnnotateViewItem::BORDER = 4;
 AnnotateViewItem::AnnotateViewItem(AnnotateView *parent, QString rev, 
     QString author, QDateTime date, QString content, QString comment, 
     bool odd, int linenumber)
-    : QListViewItem(parent)
+    : Q3ListViewItem(parent)
     , m_revision(rev)
     , m_author(author)
     , m_content(content)
@@ -71,7 +73,7 @@ AnnotateViewItem::AnnotateViewItem(AnnotateView *parent, QString rev,
 {}
 
 
-int AnnotateViewItem::compare(QListViewItem *item, int, bool) const
+int AnnotateViewItem::compare(Q3ListViewItem *item, int, bool) const
 {
     int linenum1 = m_lineNumber;
     int linenum2 = static_cast<AnnotateViewItem*>(item)->m_lineNumber;
@@ -123,14 +125,14 @@ void AnnotateViewItem::paintCell(QPainter *p, const QColorGroup &, int col, int 
     if (str.isEmpty())
         return;
 
-    if (align & (AlignTop || AlignBottom) == 0)
-            align |= AlignVCenter;
+    if (align & (Qt::AlignTop || Qt::AlignBottom) == 0)
+            align |= Qt::AlignVCenter;
 
     p->drawText(BORDER, 0, width - 2*BORDER, height(), align, str);
 }
 
 
-int AnnotateViewItem::width(const QFontMetrics &fm, const QListView *, int col) const
+int AnnotateViewItem::width(const QFontMetrics &fm, const Q3ListView *, int col) const
 {
     return fm.width(text(col)) + 2*BORDER;
 }
@@ -144,7 +146,7 @@ AnnotateView::AnnotateView(AnnotatePage *parent, const char *name)
     : KListView(parent, name), QToolTip( viewport() ), 
     m_page(parent)
 {
-    setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
     setAllColumnsShowFocus(true);
     setShowToolTips(false);
     header()->hide();
@@ -157,8 +159,8 @@ AnnotateView::AnnotateView(AnnotatePage *parent, const char *name)
     setSorting(AnnotateViewItem::LineNumberColumn);
     setColumnAlignment(AnnotateViewItem::LineNumberColumn, Qt::AlignRight);
 
-    connect( this, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(itemClicked(QListViewItem*)) );
+    connect( this, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(itemClicked(Q3ListViewItem*)) );
 }
 
 
@@ -205,7 +207,7 @@ void AnnotateView::maybeTip( const QPoint & p )
     }
 }
 
-void AnnotateView::itemClicked(QListViewItem *item)
+void AnnotateView::itemClicked(Q3ListViewItem *item)
 {
     kdDebug(9006) << "itemClicked()" << endl;
 

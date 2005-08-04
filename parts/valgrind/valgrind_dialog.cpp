@@ -1,7 +1,7 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qregexp.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 
 #include <kprocess.h>
 #include <klocale.h>

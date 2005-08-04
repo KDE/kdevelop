@@ -21,6 +21,8 @@
 #define BOOKMARKVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 #include <kbookmarkmanager.h>
 
@@ -28,7 +30,7 @@ class KListView;
 class KPushButton;
 class DocumentationPart;
 class DocumentationWidget;
-class QListViewItem;
+class Q3ListViewItem;
 
 class DocBookmarkManager: public KBookmarkManager {
 public:
@@ -62,11 +64,11 @@ protected:
     virtual void focusInEvent(QFocusEvent *e);
 
 protected slots:
-    void itemExecuted(QListViewItem *item, const QPoint &p, int col);
+    void itemExecuted(Q3ListViewItem *item, const QPoint &p, int col);
     void addBookmark();
     void editBookmark();
     void removeBookmark();
-    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
+    void itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int c);
 
 private:
     DocumentationWidget *m_widget;

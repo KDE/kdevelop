@@ -48,7 +48,7 @@ private:
     AnnotatePage * m_page;
 
 public slots:
-    void itemClicked(QListViewItem *item);
+    void itemClicked(Q3ListViewItem *item);
 };
 
 

@@ -13,7 +13,7 @@
 #include "commentdlg.h"
 
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 #include <kpopupmenu.h>
 #include <kdebug.h>
@@ -43,8 +43,8 @@ ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringLi
         default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
 {
     setInstance(ClearcaseFactory::instance());
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
 }
 
@@ -52,7 +52,7 @@ ClearcasePart::~ClearcasePart()
 {}
 
 
-void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
+void ClearcasePart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);

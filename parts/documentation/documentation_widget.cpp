@@ -22,6 +22,9 @@
 #include <qlayout.h>
 #include <qtoolbox.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QFocusEvent>
 
 #include <kparts/part.h>
 #include <klibloader.h>

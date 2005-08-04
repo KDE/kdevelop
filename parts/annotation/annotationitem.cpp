@@ -20,8 +20,8 @@
 #include "annotationitem.h"
 #include <qstring.h>
 
-annotationItem::annotationItem(QListView *parent,QString name, QString text)
- : QListViewItem(parent, name)
+annotationItem::annotationItem(Q3ListView *parent,QString name, QString text)
+ : Q3ListViewItem(parent, name)
 {
   m_itemName=name;
   m_itemText=text;
@@ -29,7 +29,7 @@ annotationItem::annotationItem(QListView *parent,QString name, QString text)
   
 }
 
-annotationItem::annotationItem(QListViewItem *parent,QString name,QString text):QListViewItem( parent, name)
+annotationItem::annotationItem(Q3ListViewItem *parent,QString name,QString text):Q3ListViewItem( parent, name)
 {
   m_itemName=name;
   m_itemText=text;

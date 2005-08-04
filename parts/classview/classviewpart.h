@@ -24,7 +24,7 @@
 #include "kdevlanguagesupport.h"
 #include "viewcombos.h"
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qmap.h>
 
 #include <kdevplugin.h>
@@ -44,7 +44,7 @@ namespace KTextEditor
 
 class ClassViewWidget;
 class KListViewAction;
-class QListViewItem;
+class Q3ListViewItem;
 class KToolBarPopupAction;
 class NamespaceItem;
 class Navigator;
@@ -71,7 +71,7 @@ private slots:
 private:
     void setupActions();
 
-    QGuardedPtr<ClassViewWidget> m_widget;
+    QPointer<ClassViewWidget> m_widget;
 
     QString m_activeFileName;
     KTextEditor::Document* m_activeDocument;

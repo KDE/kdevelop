@@ -21,6 +21,8 @@
 #define __DOCUMENTATION_WIDGET_H__
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class FindDocumentation;
 class KDevProject;

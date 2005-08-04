@@ -14,7 +14,7 @@
 #ifndef _FILETREEWIDGET_H_
 #define _FILETREEWIDGET_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kfiletreeview.h>
 
 #include <kdevversioncontrol.h>
@@ -69,8 +69,8 @@ public slots:
     void hideOrShow();
 
 private slots:
-    void slotItemExecuted(QListViewItem *item);
-    void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotItemExecuted(Q3ListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item, const QPoint &p);
 
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
@@ -88,7 +88,7 @@ private:
 
     FileViewPart *m_part;
     KFileTreeBranch *m_rootBranch;
-    QGuardedPtr<FileTreeViewWidgetImpl> m_impl;
+    QPointer<FileTreeViewWidgetImpl> m_impl;
 };
 
 #endif

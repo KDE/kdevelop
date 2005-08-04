@@ -40,9 +40,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qdir.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
 
 // namespace ?!?
 
@@ -57,8 +59,8 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
 
     m_projectItem = 0;
 
-    connect( this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
+    connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
     connect( m_part->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( m_part->core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
     connect( m_part->core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
@@ -103,7 +105,7 @@ ClassViewWidget::~ ClassViewWidget( )
     config->sync();
 }
 
-void ClassViewWidget::slotExecuted( QListViewItem* item )
+void ClassViewWidget::slotExecuted( Q3ListViewItem* item )
 {
     if( ClassViewItem* cbitem = dynamic_cast<ClassViewItem*>( item ) ){
 	if( cbitem->hasImplementation() )
@@ -1042,7 +1044,7 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 
 	if ( item && r.isValid() && !tooltip.isEmpty() )
 	{
-		tip( r, QString("<qt><pre>") + QStyleSheet::escape( tooltip ) + QString("</pre></qt>") );
+		tip( r, QString("<qt><pre>") + Q3StyleSheet::escape( tooltip ) + QString("</pre></qt>") );
 	}
 }
 

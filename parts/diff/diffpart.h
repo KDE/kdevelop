@@ -12,15 +12,17 @@
 #ifndef _DIFFPART_H_
 #define _DIFFPART_H_
 
-#include <qguardedptr.h>
-#include <qcstring.h>
+#include <qpointer.h>
+#include <q3cstring.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include "kdevplugin.h"
 #include "kdevdifffrontend.h"
 
 class KProcess;
 class DiffWidget;
-class QCString;
+class Q3CString;
 
 class DiffPart : public KDevDiffFrontend
 {
@@ -38,7 +40,7 @@ public slots:
     void slotExecDiff();
 
 private slots:
-    void contextMenu( QPopupMenu* popup, const Context* context );
+    void contextMenu( Q3PopupMenu* popup, const Context* context );
     void localDiff();
     void processExited( KProcess* p );
     void receivedStdout( KProcess* p, char* buf, int buflen );
@@ -46,10 +48,10 @@ private slots:
     void wroteStdin( KProcess* p );
 
 private:
-    QGuardedPtr<DiffWidget> diffWidget;
+    QPointer<DiffWidget> diffWidget;
     KURL popupFile;
     KProcess* proc;
-    QCString buffer;
+    Q3CString buffer;
     QString resultBuffer;
     QString resultErr;
 };

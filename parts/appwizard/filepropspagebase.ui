@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QLabel>
 <!DOCTYPE UI><UI>
 <class>FilePropsPageBase</class>
 <widget>
@@ -22,7 +24,7 @@
     <grid>
 
         <widget row="2"  column="0"  rowspan="1"  colspan="2" >
-            <class>QGroupBox</class>
+            <class>Q3GroupBox</class>
             <property stdset="1">
                 <name>name</name>
                 <cstring>GroupBox7</cstring>
@@ -130,7 +132,7 @@
             </property>
         </widget>
         <widget row="1"  column="0" >
-            <class>QListBox</class>
+            <class>Q3ListBox</class>
             <property stdset="1">
                 <name>name</name>
                 <cstring>classes_listbox</cstring>
@@ -144,7 +146,7 @@
             </property>
         </widget>
         <widget row="1"  column="1" >
-            <class>QMultiLineEdit</class>
+            <class>Q3MultiLineEdit</class>
             <property stdset="1">
                 <name>name</name>
                 <cstring>desc_textview</cstring>
@@ -177,7 +179,7 @@
     </connection>
     <connection>
         <sender>classes_listbox</sender>
-        <signal>mouseButtonClicked(int,QListBoxItem*,const QPoint&amp;)</signal>
+        <signal>mouseButtonClicked(int,Q3ListBoxItem*,const QPoint&amp;)</signal>
         <receiver>Form1</receiver>
         <slot>slotSelectionChanged()</slot>
     </connection>

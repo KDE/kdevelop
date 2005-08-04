@@ -17,9 +17,11 @@
 
 #include <kconfig.h>
 
-#include <qlistview.h>
-#include <qmultilineedit.h>
+#include <q3listview.h>
+#include <q3multilineedit.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "addtemplatedlg.h"
 #include "abbrevpart.h"
@@ -30,12 +32,12 @@ AbbrevConfigWidget::AbbrevConfigWidget(AbbrevPart *part, QWidget *parent, const 
     m_part = part;
 
     qWarning("creating abbrevconfigwidget for %d abbrevs", part->templates().allTemplates().count());
-    QPtrList<CodeTemplate> templates = part->templates().allTemplates();
+    Q3PtrList<CodeTemplate> templates = part->templates().allTemplates();
     CodeTemplate *templ;
     for (templ = templates.first(); templ; templ = templates.next())
     {
         qWarning("creating item for code template ");
-        new QListViewItem( listTemplates,
+        new Q3ListViewItem( listTemplates,
                            templ->name,
                            templ->description,
                            templ->suffixes,
@@ -61,7 +63,7 @@ void AbbrevConfigWidget::addTemplate()
         QString description = dlg.description();
         QString suffixes = dlg.suffixes();
         if( !(templ.isEmpty() || description.isEmpty()) || suffixes.isEmpty()) {
-            QListViewItem* item = new QListViewItem( listTemplates, templ, description, suffixes );
+            Q3ListViewItem* item = new Q3ListViewItem( listTemplates, templ, description, suffixes );
             listTemplates->setSelected( item, true );
             editCode->setFocus();
         }
@@ -79,7 +81,7 @@ void AbbrevConfigWidget::removeTemplate()
 
 void AbbrevConfigWidget::selectionChanged()
 {
-    QListViewItem* item = listTemplates->selectedItem();
+    Q3ListViewItem* item = listTemplates->selectedItem();
     if( item ){
         editCode->setText( item->text(3) );
     }
@@ -88,7 +90,7 @@ void AbbrevConfigWidget::selectionChanged()
 
 void AbbrevConfigWidget::codeChanged()
 {
-    QListViewItem* item = listTemplates->selectedItem();
+    Q3ListViewItem* item = listTemplates->selectedItem();
     if( item ){
         item->setText( 3, editCode->text() );
     }
@@ -99,7 +101,7 @@ void AbbrevConfigWidget::accept()
 {
     m_part->clearTemplates();
 
-    QListViewItem* item = listTemplates->firstChild();
+    Q3ListViewItem* item = listTemplates->firstChild();
     while( item ){
         m_part->addTemplate( item->text(0),
                              item->text(1),

@@ -15,6 +15,8 @@
 #include <qfileinfo.h>
 #include <qdatetime.h>
 #include <qfocusdata.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -28,10 +30,10 @@
 #include "ctags2_widget.h"
 #include "tags.h"
 
-class TagItem : public QListViewItem
+class TagItem : public Q3ListViewItem
 {
 public:
-    TagItem(QListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern );
+    TagItem(Q3ListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern );
 
 	QString tag;
 	QString type;
@@ -39,18 +41,18 @@ public:
 	QString pattern;
 };
 
-TagItem::TagItem( QListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern )
-	: QListViewItem( lv, tag, type, file ), tag(tag), type(type), file(file), pattern(pattern)
+TagItem::TagItem( Q3ListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern )
+	: Q3ListViewItem( lv, tag, type, file ), tag(tag), type(type), file(file), pattern(pattern)
 {}
 
-CTags2Widget::CTags2Widget( CTags2Part * part, const char* name, WFlags fl)
+CTags2Widget::CTags2Widget( CTags2Part * part, const char* name, Qt::WFlags fl)
 : CTags2WidgetBase(0,name,fl), _part(part)
 {
 	_typeTimeout = new QTimer( this );
 	connect( _typeTimeout, SIGNAL(timeout()), this, SLOT(line_edit_changed()) );
 
-	connect( output_view, SIGNAL(executed(QListViewItem*)), this, SLOT(itemExecuted(QListViewItem*)) );
-	connect( output_view, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(itemExecuted(QListViewItem*)) );
+	connect( output_view, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(itemExecuted(Q3ListViewItem*)) );
+	connect( output_view, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(itemExecuted(Q3ListViewItem*)) );
 
 	updateDBDateLabel();
 }
@@ -102,7 +104,7 @@ int CTags2Widget::calculateHitCount( )
 	return Tags::numberOfPartialMatches( input_edit->text() ) ;
 }
 
-void CTags2Widget::itemExecuted( QListViewItem * item )
+void CTags2Widget::itemExecuted( Q3ListViewItem * item )
 {
 	TagItem * tagItem = static_cast<TagItem*>( item );
 
@@ -144,7 +146,7 @@ void CTags2Widget::focusInEvent( QFocusEvent* )
 
 void CTags2Widget::goToNext( )
 {
-	QListViewItem * item = output_view->firstChild();
+	Q3ListViewItem * item = output_view->firstChild();
 	while( item )
 	{
 		if ( item->isSelected() )

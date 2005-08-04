@@ -23,11 +23,15 @@
 
 #include <qtimer.h>
 #include <qdir.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlayout.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtabwidget.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -85,8 +89,8 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
 	m_configProxy->createGlobalConfigPage(i18n("Documentation"), GLOBALDOC_OPTIONS, info()->icon() );
 	m_configProxy->createProjectConfigPage(i18n("Project Documentation"), PROJECTDOC_OPTIONS, info()->icon() );
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
-    connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-        this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+    connect(core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+        this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
     connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
 
@@ -94,7 +98,7 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
 	m_widget->setIcon(SmallIcon( info()->icon() ));
     m_widget->setCaption(i18n("Documentation"));
 
-    QWhatsThis::add(m_widget, i18n("<b>Documentation browser</b><p>"
+    Q3WhatsThis::add(m_widget, i18n("<b>Documentation browser</b><p>"
         "The documentation browser gives access to various "
         "documentation sources (Qt DCF, Doxygen, KDoc, KDevelopTOC and DevHelp "
         "documentation) and the KDevelop manuals. It also provides documentation index "
@@ -345,7 +349,7 @@ void DocumentationPart::findInDocumentation(const QString &term)
     m_widget->findInDocumentation(term);
 }
 
-void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
+void DocumentationPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (context->hasType(Context::EditorContext))
     {
@@ -487,7 +491,7 @@ void DocumentationPart::projectOpened()
         projectDocURL = QDir::cleanDirPath(project()->projectDirectory() + "/" + projectDocURL);
     QString userManualURL = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/usermanualurl");
     
-    for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin();
+    for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin();
         it != m_plugins.constEnd(); ++it)
     {
         if ((*it)->hasCapability(DocumentationPlugin::ProjectDocumentation) &&
@@ -536,9 +540,9 @@ void DocumentationPart::saveProjectDocumentationInfo()
         DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/usermanualurl", "");
 }
 
-QCString DocumentationPart::startAssistant()
+Q3CString DocumentationPart::startAssistant()
 {
-    static QCString lastAssistant = "";
+    static Q3CString lastAssistant = "";
     
     if (!lastAssistant.isEmpty() && KApplication::dcopClient()->isApplicationRegistered(lastAssistant))
         return lastAssistant;
@@ -549,8 +553,8 @@ QCString DocumentationPart::startAssistant()
     QStringList URLs;
 
     QByteArray data, replyData;
-    QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
+    Q3CString replyType;
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << app << URLs;
 
     if (!KApplication::dcopClient()->call("klauncher", "klauncher", function,  data, replyType, replyData))
@@ -560,7 +564,7 @@ QCString DocumentationPart::startAssistant()
     } 
     else 
     {
-        QDataStream reply(replyData, IO_ReadOnly);
+        QDataStream reply(replyData, QIODevice::ReadOnly);
 
         if ( replyType != "serviceResult" )
         {
@@ -568,7 +572,7 @@ QCString DocumentationPart::startAssistant()
             lastAssistant = "";
         }
         int result;
-        QCString dcopName;
+        Q3CString dcopName;
         QString error;
         reply >> result >> dcopName >> error;
         if (result != 0)
@@ -609,15 +613,15 @@ void DocumentationPart::setAssistantUsed(bool b)
     config->writeEntry("UseAssistant", isAssistantUsed());
 }
 
-void DocumentationPart::activateAssistantWindow(const QCString &ref)
+void DocumentationPart::activateAssistantWindow(const Q3CString &ref)
 {
     kdDebug() << "DocumentationPart::activateAssistantWindow" << endl;
     QByteArray data, replyData;
-    QCString replyType;
+    Q3CString replyType;
     if (KApplication::dcopClient()->call(ref, "MainWindow", "getWinID()", data, replyType, replyData))
     {
         kdDebug() << "    call successful " << endl;
-        QDataStream reply(replyData, IO_ReadOnly);
+        QDataStream reply(replyData, QIODevice::ReadOnly);
         
         int winId;
         reply >> winId;
@@ -628,9 +632,9 @@ void DocumentationPart::activateAssistantWindow(const QCString &ref)
     }
 }
 
-void DocumentationPart::callAssistant(const QCString &interface, const QCString &method)
+void DocumentationPart::callAssistant(const Q3CString &interface, const Q3CString &method)
 {
-    QCString ref = startAssistant();
+    Q3CString ref = startAssistant();
     QByteArray data;
     if (KApplication::dcopClient()->send(ref, interface, method, data))
         activateAssistantWindow(ref);
@@ -638,11 +642,11 @@ void DocumentationPart::callAssistant(const QCString &interface, const QCString 
         kdDebug() << "problem communicating with: " << ref;
 }
 
-void DocumentationPart::callAssistant(const QCString &interface, const QCString &method, const QString &dataStr)
+void DocumentationPart::callAssistant(const Q3CString &interface, const Q3CString &method, const QString &dataStr)
 {
-    QCString ref = startAssistant();
+    Q3CString ref = startAssistant();
     QByteArray data;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << dataStr;
     if (KApplication::dcopClient()->send(ref, interface, method, data))
         activateAssistantWindow(ref);

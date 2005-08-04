@@ -25,7 +25,7 @@
 
 class QTimer;
 class ClassViewPart;
-class QListViewItem;
+class Q3ListViewItem;
 
 #define NAV_NODEFINITION "(no function)"
 
@@ -45,7 +45,7 @@ public:
     QString fullFunctionDeclarationName(FunctionDom fun);
 
 public slots:
-    void selectFunctionNav(QListViewItem *item);
+    void selectFunctionNav(Q3ListViewItem *item);
     void syncFunctionNav();
     void syncFunctionNavDelayed(int delay);
     void functionNavFocused();
@@ -74,8 +74,8 @@ private:
 
     bool m_navNoDefinition;
 
-    QMap<QString, QListViewItem*> m_functionNavDefs;
-    QMap<QString, QListViewItem*> m_functionNavDecls;
+    QMap<QString, Q3ListViewItem*> m_functionNavDefs;
+    QMap<QString, Q3ListViewItem*> m_functionNavDecls;
 };
 
 #endif

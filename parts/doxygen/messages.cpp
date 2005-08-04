@@ -1,23 +1,25 @@
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 #include <kdebug.h>
 #include <klocale.h>
 
 
-static QMap<QCString,QString> messages;
+static QMap<Q3CString,QString> messages;
 
 
 // Note: this function seems to be completely unnecessary, but messages.insert
 // is a template function, so doing the template expansion just once reduced
 // the compile time of this trivial file from >5m to <30s on my machine. mhk.
-static void addMessage(const QCString key, const QString &message)
+static void addMessage(const Q3CString key, const QString &message)
 {
   messages.insert(key, message);
 }
 
 
-QString message(const QCString &key)
+QString message(const Q3CString &key)
 {
   static bool initialized = false;
 

@@ -12,7 +12,7 @@
 #ifndef _CVSPROCESSWIDGET_H_
 #define _CVSPROCESSWIDGET_H_
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qstringlist.h>
 
 #include "cvsservicedcopIface.h"
@@ -22,9 +22,9 @@ class CvsServicePart;
 class DCOPRef;
 class CvsJob_stub;
 class CvsService_stub;
-class QStyleSheetItem;
+class Q3StyleSheetItem;
 
-class CvsProcessWidget : public QTextEdit, virtual public CVSServiceDCOPIface
+class CvsProcessWidget : public Q3TextEdit, virtual public CVSServiceDCOPIface
 {
     Q_OBJECT
 public:

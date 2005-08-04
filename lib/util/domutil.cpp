@@ -17,6 +17,8 @@
 #include <kdebug.h>
 #include <qstringlist.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 
 void DomUtil::makeEmpty( QDomElement& e )
@@ -313,7 +315,7 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
 bool DomUtil::openDOMFile(QDomDocument &doc, QString filename)
 {
   QFile file( filename );
-  if ( !file.open( IO_ReadOnly ) )
+  if ( !file.open( QIODevice::ReadOnly ) )
     return false;
   if ( !doc.setContent( &file ) ) {
     file.close();
@@ -326,7 +328,7 @@ bool DomUtil::openDOMFile(QDomDocument &doc, QString filename)
 bool DomUtil::saveDOMFile(QDomDocument &doc, QString filename)
 {
   QFile file( filename );
-  if ( !file.open( IO_ReadWrite | IO_Truncate ) )
+  if ( !file.open( QIODevice::ReadWrite | QIODevice::Truncate ) )
     return false;
   QTextStream t( &file );
   t << doc.toString();

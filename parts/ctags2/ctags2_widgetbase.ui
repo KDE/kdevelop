@@ -106,7 +106,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -131,7 +131,7 @@
                         <cstring>generate_button</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>NoFocus</enum>
+                        <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>Regenerate</string>

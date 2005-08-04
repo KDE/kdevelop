@@ -11,7 +11,7 @@
 
 #include "makeitem.h"
 
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -62,7 +62,7 @@ QString MakeItem::icon()
 
 QString MakeItem::text( EOutputLevel )
 {
-	return QStyleSheet::escape( m_text );
+	return Q3StyleSheet::escape( m_text );
 }
 
 QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )

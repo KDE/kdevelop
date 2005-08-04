@@ -197,25 +197,25 @@
     </connection>
     <connection>
         <sender>argBox</sender>
-        <signal>returnPressed(QListBoxItem*)</signal>
+        <signal>returnPressed(Q3ListBoxItem*)</signal>
         <receiver>QuickOpenFunctionChooseFormBase</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>argBox</sender>
-        <signal>clicked(QListBoxItem*)</signal>
+        <signal>clicked(Q3ListBoxItem*)</signal>
         <receiver>QuickOpenFunctionChooseFormBase</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>fileBox</sender>
-        <signal>returnPressed(QListBoxItem*)</signal>
+        <signal>returnPressed(Q3ListBoxItem*)</signal>
         <receiver>QuickOpenFunctionChooseFormBase</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>fileBox</sender>
-        <signal>clicked(QListBoxItem*)</signal>
+        <signal>clicked(Q3ListBoxItem*)</signal>
         <receiver>QuickOpenFunctionChooseFormBase</receiver>
         <slot>accept()</slot>
     </connection>

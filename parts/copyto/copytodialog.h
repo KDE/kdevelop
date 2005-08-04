@@ -30,7 +30,7 @@ class CopyToDialog : public CopyToDialogBase
 	Q_OBJECT
 
 public:
-	CopyToDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	CopyToDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 	~CopyToDialog();
 
 private slots:

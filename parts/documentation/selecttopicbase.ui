@@ -38,10 +38,10 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
+                        <cstring>Qt::Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -119,13 +119,13 @@
     </connection>
     <connection>
         <sender>topicBox</sender>
-        <signal>doubleClicked(QListBoxItem*)</signal>
+        <signal>doubleClicked(Q3ListBoxItem*)</signal>
         <receiver>SelectTopicBase</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>topicBox</sender>
-        <signal>returnPressed(QListBoxItem*)</signal>
+        <signal>returnPressed(Q3ListBoxItem*)</signal>
         <receiver>SelectTopicBase</receiver>
         <slot>accept()</slot>
     </connection>

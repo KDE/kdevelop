@@ -24,9 +24,12 @@
 #include <kdevplugin.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
 class KAction;
-class QPopupMenu;
+class Q3PopupMenu;
 class MainWindowShare;
 
 namespace KParts {
@@ -94,8 +97,8 @@ private:
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
-    QPopupMenu *m_windowMenu;
-    QValueList<QPair<int, KURL> > m_windowList;
+    Q3PopupMenu *m_windowMenu;
+    Q3ValueList<QPair<int, KURL> > m_windowList;
 };
 
 #endif

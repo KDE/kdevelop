@@ -34,7 +34,7 @@
 #include "quickopenclassdialog.h"
 #include "quickopen_part.h"
 
-QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
+QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
     : QuickOpenDialog( part, parent, name, modal, fl )
 {
     nameLabel->setText( i18n("Class &name:") );
@@ -59,14 +59,14 @@ QuickOpenClassDialog::~QuickOpenClassDialog()
     m_completion = 0;
 }
 
-void QuickOpenClassDialog::slotExecuted( QListBoxItem* /*item*/ )
+void QuickOpenClassDialog::slotExecuted( Q3ListBoxItem* /*item*/ )
 {
     accept();
 }
 
 void QuickOpenClassDialog::accept()
 {
-    if( QListBoxItem* item = itemList->selectedItem() )
+    if( Q3ListBoxItem* item = itemList->selectedItem() )
     {
         ClassDom klass = findClass( item->text() );
         if( klass )

@@ -20,11 +20,11 @@
 #ifndef __SUBVERSION_WIDGET_H__
 #define __SUBVERSION_WIDGET_H__
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 
 class subversionPart;
 
-class subversionWidget : public QTextEdit
+class subversionWidget : public Q3TextEdit
 {
   Q_OBJECT
     

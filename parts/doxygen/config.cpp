@@ -58,6 +58,9 @@
  #pragma warn -use
 #include <io.h>
 #include <stdlib.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 #define YY_USE_CONST
 #define YY_USE_PROTOS
 #endif
@@ -534,7 +537,7 @@ char *yytext;
 #include <qdir.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
   
 #include "config.h"
 #include "version.h"
@@ -575,14 +578,14 @@ void config_warn(const char *fmt, ...)
 /* -----------------------------------------------------------------
  */
 
-QCString ConfigOption::convertToComment(const QCString &s)
+Q3CString ConfigOption::convertToComment(const Q3CString &s)
 {
-  QCString result;
+  Q3CString result;
   if (s.isEmpty()) return result;
   else
   {
     result+="# ";
-    QCString tmp=s.stripWhiteSpace();
+    Q3CString tmp=s.stripWhiteSpace();
     char *p=tmp.data();
     char c;
     while ((c=*p++))
@@ -605,7 +608,7 @@ void ConfigOption::writeIntValue(QTextStream &t,int i)
   t << i;
 }
 
-void ConfigOption::writeStringValue(QTextStream &t,QCString &s)
+void ConfigOption::writeStringValue(QTextStream &t,Q3CString &s)
 {
   const char *p=s.data();
   char c;
@@ -632,13 +635,13 @@ void ConfigOption::writeStringValue(QTextStream &t,QCString &s)
   }
 }
 
-void ConfigOption::writeStringList(QTextStream &t,QStrList &l)
+void ConfigOption::writeStringList(QTextStream &t,Q3StrList &l)
 {
   const char *p = l.first();
   bool first=TRUE;
   while (p)
   {
-    QCString s=p;
+    Q3CString s=p;
     if (!first) t << "                         ";
     first=FALSE;
     writeStringValue(t,s);
@@ -669,7 +672,7 @@ void ConfigInt::convertStrToVal()
 
 void ConfigBool::convertStrToVal()
 {
-  QCString val = m_valueString.stripWhiteSpace().lower();
+  Q3CString val = m_valueString.stripWhiteSpace().lower();
   if (!val.isEmpty())
   {
     if (val=="yes" || val=="true" || val=="1") 
@@ -688,7 +691,7 @@ void ConfigBool::convertStrToVal()
   }
 }
 
-QCString &Config::getString(const char *fileName,int num,const char *name) const
+Q3CString &Config::getString(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
   if (opt==0) 
@@ -704,7 +707,7 @@ QCString &Config::getString(const char *fileName,int num,const char *name) const
   return *((ConfigString *)opt)->valueRef();
 }
 
-QStrList &Config::getList(const char *fileName,int num,const char *name) const
+Q3StrList &Config::getList(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
   if (opt==0) 
@@ -720,7 +723,7 @@ QStrList &Config::getList(const char *fileName,int num,const char *name) const
   return *((ConfigList *)opt)->valueRef();
 }
 
-QCString &Config::getEnum(const char *fileName,int num,const char *name) const
+Q3CString &Config::getEnum(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
   if (opt==0) 
@@ -779,31 +782,31 @@ struct ConfigFileState
   FILE *filePtr;
   YY_BUFFER_STATE oldState;
   YY_BUFFER_STATE newState;
-  QCString fileName;
+  Q3CString fileName;
 };  
 
 static const char       *inputString;
 static int	         inputPosition;
 static int               yyLineNr;
-static QCString          yyFileName;
-static QCString          tmpString;
-static QCString         *s=0;
+static Q3CString          yyFileName;
+static Q3CString          tmpString;
+static Q3CString         *s=0;
 static bool             *b=0;
-static QStrList         *l=0;
+static Q3StrList         *l=0;
 static int               lastState;
-static QCString          elemStr;
-static QCString          includeName;
-static QStrList          includePathList;
-static QPtrStack<ConfigFileState> includeStack;
+static Q3CString          elemStr;
+static Q3CString          includeName;
+static Q3StrList          includePathList;
+static Q3PtrStack<ConfigFileState> includeStack;
 static int               includeDepth;
 
-static QCString     tabSizeString;
-static QCString     maxInitLinesString;
-static QCString     colsInAlphaIndexString;
-static QCString     enumValuesPerLineString;
-static QCString     treeViewWidthString;
-static QCString     maxDotGraphWidthString;
-static QCString     maxDotGraphHeightString;
+static Q3CString     tabSizeString;
+static Q3CString     maxInitLinesString;
+static Q3CString     colsInAlphaIndexString;
+static Q3CString     enumValuesPerLineString;
+static Q3CString     treeViewWidthString;
+static Q3CString     maxDotGraphWidthString;
+static Q3CString     maxDotGraphHeightString;
 
 static Config      *config;
 
@@ -835,7 +838,7 @@ static int yyread(char *buf,int max_size)
 
 static FILE *tryPath(const char *path,const char *fileName)
 {
-  QCString absName=(QCString)path+"/"+fileName;
+  Q3CString absName=(Q3CString)path+"/"+fileName;
   QFileInfo fi(absName);
   if (fi.exists() && fi.isFile())
   {
@@ -846,8 +849,8 @@ static FILE *tryPath(const char *path,const char *fileName)
   return 0;
 }
 
-static void substEnvVarsInStrList(QStrList &sl);
-static void substEnvVarsInString(QCString &s);
+static void substEnvVarsInStrList(Q3StrList &sl);
+static void substEnvVarsInString(Q3CString &s);
 
 static FILE *findFile(const char *fileName)
 {
@@ -871,7 +874,7 @@ static void readIncludeFile(const char *incName)
     exit(1);
   } 
 
-  QCString inc = incName;
+  Q3CString inc = incName;
   substEnvVarsInString(inc);
   inc = inc.stripWhiteSpace();
   uint incLen = inc.length();
@@ -1180,7 +1183,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 428 "config.l"
-{ QCString cmd=yytext;
+{ Q3CString cmd=yytext;
                                            cmd=cmd.left(cmd.length()-1).stripWhiteSpace(); 
 					   ConfigOption *option = config->get(cmd);
 					   if (option==0) // oops not known
@@ -1236,7 +1239,7 @@ YY_RULE_SETUP
 case 4:
 YY_RULE_SETUP
 #line 480 "config.l"
-{ QCString cmd=yytext;
+{ Q3CString cmd=yytext;
                                           cmd=cmd.left(cmd.length()-2).stripWhiteSpace(); 
 					  ConfigOption *option = config->get(cmd);
 					  if (option==0) // oops not known
@@ -1409,7 +1412,7 @@ case 17:
 YY_RULE_SETUP
 #line 589 "config.l"
 { 
-  					  QCString bs=yytext; 
+  					  Q3CString bs=yytext; 
   					  bs=bs.upper();
   					  if (bs=="YES" || bs=="1")
 					    *b=TRUE;
@@ -2361,7 +2364,7 @@ static void writeIntValue(QTextStream &t,int i)
   t << i;
 }
 
-static void writeStringValue(QTextStream &t,QCString &s)
+static void writeStringValue(QTextStream &t,Q3CString &s)
 {
   const char *p=s.data();
   char c;
@@ -2376,7 +2379,7 @@ static void writeStringValue(QTextStream &t,QCString &s)
   }
 }
 
-static void writeStringList(QTextStream &t,QStrList &l)
+static void writeStringList(QTextStream &t,Q3StrList &l)
 {
   const char *p = l.first();
   bool first=TRUE;
@@ -2429,7 +2432,7 @@ void Config::convertStrToVal()
   }
 }
 
-static void substEnvVarsInString(QCString &s)
+static void substEnvVarsInString(Q3CString &s)
 {
   static QRegExp re("\\$\\([a-z_A-Z0-9]+\\)");
   if (s.isEmpty()) return;
@@ -2440,7 +2443,7 @@ static void substEnvVarsInString(QCString &s)
   {
     l = re.matchedLength();
     //printf("Found environment var s.mid(%d,%d)=`%s'\n",i+2,l-3,s.mid(i+2,l-3).data());
-    QCString env=getenv(s.mid(i+2,l-3));
+    Q3CString env=getenv(s.mid(i+2,l-3));
     substEnvVarsInString(env); // recursively expand variables if needed.
     s = s.left(i)+env+s.right(s.length()-i-l);
     p=i+env.length(); // next time start at the end of the expanded string
@@ -2448,12 +2451,12 @@ static void substEnvVarsInString(QCString &s)
   //printf("substEnvVarInString(%s) end\n",s.data());
 }
 
-static void substEnvVarsInStrList(QStrList &sl)
+static void substEnvVarsInStrList(Q3StrList &sl)
 {
   char *s = sl.first();
   while (s)
   {
-    QCString result(s);
+    Q3CString result(s);
     bool wasQuoted = (result.find(' ')!=-1) || (result.find('\t')!=-1);
     substEnvVarsInString(result);
 
@@ -2563,7 +2566,7 @@ void Config::substituteEnvironmentVars()
   }
 }
 
-static void cleanUpPaths(QStrList &str)
+static void cleanUpPaths(Q3StrList &str)
 {
   char *sfp = str.first();
   while (sfp)
@@ -2578,7 +2581,7 @@ static void cleanUpPaths(QStrList &str)
 	p++;
       }
     }
-    QCString path = sfp;
+    Q3CString path = sfp;
     if ((path.at(0)!='/' && (path.length()<=2 || path.at(1)!=':')) ||
 	path.at(path.length()-1)!='/'
        )
@@ -2605,7 +2608,7 @@ void Config::check()
   //  projectName[0]=toupper(projectName[0]);
   //}
 
-  QCString &warnFormat = Config_getString("WARN_FORMAT");
+  Q3CString &warnFormat = Config_getString("WARN_FORMAT");
   if (warnFormat.isEmpty())
   {
     warnFormat="$file:$line $text";
@@ -2629,7 +2632,7 @@ void Config::check()
     }
   }
 
-  QCString &manExtension = Config_getString("MAN_EXTENSION");
+  Q3CString &manExtension = Config_getString("MAN_EXTENSION");
   
   // set default man page extension if non is given by the user
   if (manExtension.isEmpty())
@@ -2637,7 +2640,7 @@ void Config::check()
     manExtension=".3";
   }
   
-  QCString &paperType = Config_getEnum("PAPER_TYPE");
+  Q3CString &paperType = Config_getEnum("PAPER_TYPE");
   paperType=paperType.lower().stripWhiteSpace(); 
   if (paperType.isEmpty())
   {
@@ -2649,14 +2652,14 @@ void Config::check()
     config_err("Error: Unknown page type specified");
   }
   
-  QCString &outputLanguage=Config_getEnum("OUTPUT_LANGUAGE");
+  Q3CString &outputLanguage=Config_getEnum("OUTPUT_LANGUAGE");
   outputLanguage=outputLanguage.stripWhiteSpace();
   if (outputLanguage.isEmpty())
   {
     outputLanguage = "English";
   }
 
-  QCString &htmlFileExtension=Config_getString("HTML_FILE_EXTENSION");
+  Q3CString &htmlFileExtension=Config_getString("HTML_FILE_EXTENSION");
   htmlFileExtension=htmlFileExtension.stripWhiteSpace();
   if (htmlFileExtension.isEmpty())
   {
@@ -2664,7 +2667,7 @@ void Config::check()
   }
   
   // expand the relative stripFromPath values
-  QStrList &stripFromPath = Config_getList("STRIP_FROM_PATH");
+  Q3StrList &stripFromPath = Config_getList("STRIP_FROM_PATH");
   char *sfp = stripFromPath.first();
   if (sfp==0) // by default use the current path
   {
@@ -2676,11 +2679,11 @@ void Config::check()
   }
 
   // expand the relative stripFromPath values
-  QStrList &stripFromIncPath = Config_getList("STRIP_FROM_INC_PATH");
+  Q3StrList &stripFromIncPath = Config_getList("STRIP_FROM_INC_PATH");
   cleanUpPaths(stripFromIncPath);
   
   // Test to see if HTML header is valid
-  QCString &headerFile = Config_getString("HTML_HEADER");
+  Q3CString &headerFile = Config_getString("HTML_HEADER");
   if (!headerFile.isEmpty())
   {
     QFileInfo fi(headerFile);
@@ -2692,7 +2695,7 @@ void Config::check()
     }
   }
   // Test to see if HTML footer is valid
-  QCString &footerFile = Config_getString("HTML_FOOTER");
+  Q3CString &footerFile = Config_getString("HTML_FOOTER");
   if (!footerFile.isEmpty())
   {
     QFileInfo fi(footerFile);
@@ -2704,7 +2707,7 @@ void Config::check()
     }
   }
   // Test to see if LaTeX header is valid
-  QCString &latexHeaderFile = Config_getString("LATEX_HEADER");
+  Q3CString &latexHeaderFile = Config_getString("LATEX_HEADER");
   if (!latexHeaderFile.isEmpty())
   {
     QFileInfo fi(latexHeaderFile);
@@ -2716,7 +2719,7 @@ void Config::check()
     }
   }
   // check include path
-  QStrList &includePath = Config_getList("INCLUDE_PATH");
+  Q3StrList &includePath = Config_getList("INCLUDE_PATH");
   char *s=includePath.first();
   while (s)
   {
@@ -2727,12 +2730,12 @@ void Config::check()
   }
 
   // check aliases
-  QStrList &aliasList = Config_getList("ALIASES");
+  Q3StrList &aliasList = Config_getList("ALIASES");
   s=aliasList.first();
   while (s)
   {
     QRegExp re("[a-z_A-Z][a-z_A-Z0-9]*[ \t]*=");
-    QCString alias=s;
+    Q3CString alias=s;
     alias=alias.stripWhiteSpace();
     if (alias.find(re)!=0)
     {
@@ -2743,7 +2746,7 @@ void Config::check()
   }
 
   // check dot image format
-  QCString &dotImageFormat=Config_getEnum("DOT_IMAGE_FORMAT");
+  Q3CString &dotImageFormat=Config_getEnum("DOT_IMAGE_FORMAT");
   dotImageFormat=dotImageFormat.stripWhiteSpace();
   if (dotImageFormat.isEmpty())
   {
@@ -2757,7 +2760,7 @@ void Config::check()
   
   
   // check dot path
-  QCString &dotPath = Config_getString("DOT_PATH");
+  Q3CString &dotPath = Config_getString("DOT_PATH");
   if (!dotPath.isEmpty())
   {
     if (dotPath.find('\\')!=-1)
@@ -2799,7 +2802,7 @@ void Config::check()
   }
   
   // check input
-  QStrList &inputSources=Config_getList("INPUT");
+  Q3StrList &inputSources=Config_getList("INPUT");
   if (inputSources.count()==0)
   {
     // use current dir as the default
@@ -2821,7 +2824,7 @@ void Config::check()
   }
 
   // add default pattern if needed
-  QStrList &filePatternList = Config_getList("FILE_PATTERNS");
+  Q3StrList &filePatternList = Config_getList("FILE_PATTERNS");
   if (filePatternList.isEmpty())
   {
     filePatternList.append("*.c");
@@ -2868,7 +2871,7 @@ void Config::check()
   }
 
   // add default pattern if needed
-  QStrList &examplePatternList = Config_getList("EXAMPLE_PATTERNS");
+  Q3StrList &examplePatternList = Config_getList("EXAMPLE_PATTERNS");
   if (examplePatternList.isEmpty())
   {
     examplePatternList.append("*");
@@ -2912,7 +2915,7 @@ void Config::check()
   }
   
   // add default words if needed
-  QStrList &annotationFromBrief = Config_getList("ABBREVIATE_BRIEF");
+  Q3StrList &annotationFromBrief = Config_getList("ABBREVIATE_BRIEF");
   if (annotationFromBrief.isEmpty())
   {
     annotationFromBrief.append("The $name class");
@@ -4477,7 +4480,7 @@ void Config::create()
   // The IMAGE_PATTERNS tag is now officially obsolete.
 }
 
-static QCString configFileToString(const char *name)
+static Q3CString configFileToString(const char *name)
 {
   if (name==0 || name[0]==0) return 0;
   QFile f;
@@ -4485,11 +4488,11 @@ static QCString configFileToString(const char *name)
   bool fileOpened=FALSE;
   if (name[0]=='-' && name[1]==0) // read from stdin
   {
-    fileOpened=f.open(IO_ReadOnly,stdin);
+    fileOpened=f.open(QIODevice::ReadOnly,stdin);
     if (fileOpened)
     {
       const int bSize=4096;
-      QCString contents(bSize);
+      Q3CString contents(bSize);
       int totalSize=0;
       int size;
       while ((size=f.readBlock(contents.data()+totalSize,bSize))==bSize)
@@ -4513,11 +4516,11 @@ static QCString configFileToString(const char *name)
       return "";
     }
       f.setName(name);
-      fileOpened=f.open(IO_ReadOnly);
+      fileOpened=f.open(QIODevice::ReadOnly);
       if (fileOpened)
       {
         int fsize=f.size();
-        QCString contents(fsize+2);
+        Q3CString contents(fsize+2);
         f.readBlock(contents.data(),fsize);
         f.close();
         if (fsize==0 || contents[fsize-1]=='\n') 
@@ -4538,7 +4541,7 @@ static QCString configFileToString(const char *name)
 
 bool Config::parse(const char *fn)
 {
-  QCString contents = configFileToString(fn);
+  Q3CString contents = configFileToString(fn);
   config = Config::instance();
   inputString   = contents.data();
   inputPosition = 0;

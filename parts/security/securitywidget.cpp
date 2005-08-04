@@ -25,6 +25,8 @@
 #include <kdevpartcontroller.h>
 
 #include "securitypart.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 SecurityWidget::SecurityWidget(SecurityPart* part, const char* name)
     :KListView(0, name), m_part(part)
@@ -34,20 +36,20 @@ SecurityWidget::SecurityWidget(SecurityPart* part, const char* name)
     addColumn(i18n("Description"));
     addColumn(i18n("Suggestion"));
     
-    connect(this, SIGNAL(executed( QListViewItem* )), this, SLOT(gotoLine( QListViewItem* )));
+    connect(this, SIGNAL(executed( Q3ListViewItem* )), this, SLOT(gotoLine( Q3ListViewItem* )));
 }
 
 void SecurityWidget::clearResultsForFile(const QString &file)
 {
-    QValueList<QListViewItem*> del;
-    QListViewItemIterator it(this);
+    Q3ValueList<Q3ListViewItem*> del;
+    Q3ListViewItemIterator it(this);
     while (it.current()) 
     {
         if (it.current()->text(0) == file)
             del.append(it.current());
         ++it;
     }
-    for (QValueList<QListViewItem*>::iterator it = del.begin(); it != del.end(); ++it)
+    for (Q3ValueList<Q3ListViewItem*>::iterator it = del.begin(); it != del.end(); ++it)
         delete *it;
 }
 
@@ -63,7 +65,7 @@ void SecurityWidget::reportProblem(const QString &file, int line, const QString 
     it->setPixmap(0, SmallIcon("messagebox_critical"));
 }
 
-void SecurityWidget::gotoLine(QListViewItem *item)
+void SecurityWidget::gotoLine(Q3ListViewItem *item)
 {
     m_part->partController()->editDocument(KURL::fromPathOrURL(item->text(0)), item->text(1).toInt(), 0);
 }

@@ -1,7 +1,7 @@
 #include "astyle_part.h"
 
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
 #include <qtextstream.h>
 
 #include <kdeversion.h>
@@ -76,7 +76,7 @@ void AStylePart::beautifySource()
   formatter.init(&is);
 
   QString output;
-  QTextStream os(&output, IO_WriteOnly);
+  QTextStream os(&output, QIODevice::WriteOnly);
 
   while (formatter.hasMoreLines())
 	os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
@@ -106,7 +106,7 @@ void AStylePart::beautifySource()
 
 void AStylePart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Formatting"), i18n("Formatting"), BarIcon( info()->icon(), KIcon::SizeMedium));
+	Q3VBox *vbox = dlg->addVBoxPage(i18n("Formatting"), i18n("Formatting"), BarIcon( info()->icon(), KIcon::SizeMedium));
   AStyleWidget *w = new AStyleWidget(this, vbox, "astyle config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
@@ -153,7 +153,7 @@ QString AStylePart::formatSource( const QString text, AStyleWidget * widget )
 	formatter->init(&is);
 	
 	QString output;
-	QTextStream os(&output, IO_WriteOnly);
+	QTextStream os(&output, QIODevice::WriteOnly);
 	
 	while ( formatter->hasMoreLines() )
 		os << QString::fromUtf8( formatter->nextLine().c_str() ) << endl;

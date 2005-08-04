@@ -24,7 +24,7 @@ class DiffDialog : public DiffDialogBase
 {
     Q_OBJECT
 public:
-    DiffDialog(const CVSEntry &entry, QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    DiffDialog(const CVSEntry &entry, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0 );
     virtual ~DiffDialog();
 
     QString revA() const;

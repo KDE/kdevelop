@@ -32,23 +32,23 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
     addColumn(i18n("Search"));
     addColumn(i18n("Title"));
 //    addColumn(i18n("URL"));
-    setColumnWidthMode(0, QListView::Maximum);
-    setColumnWidthMode(1, QListView::Maximum);
-    setColumnWidthMode(2, QListView::Maximum);
-    setColumnWidthMode(3, QListView::Maximum);
+    setColumnWidthMode(0, Q3ListView::Maximum);
+    setColumnWidthMode(1, Q3ListView::Maximum);
+    setColumnWidthMode(2, Q3ListView::Maximum);
+    setColumnWidthMode(3, Q3ListView::Maximum);
 //    setColumnWidthMode(4, QListView::Maximum);
     setAllColumnsShowFocus(true);
-    setResizeMode( QListView::LastColumn );
+    setResizeMode( Q3ListView::LastColumn );
 
-    connect(this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),
-        this, SLOT(clickedItem(QListViewItem*, const QPoint&, int )));
+    connect(this, SIGNAL(clicked(Q3ListViewItem*, const QPoint&, int)),
+        this, SLOT(clickedItem(Q3ListViewItem*, const QPoint&, int )));
 }
 
 DocConfigListView::~DocConfigListView()
 {
 }
 
-void DocConfigListView::clickedItem(QListViewItem *item, const QPoint &// pnt
+void DocConfigListView::clickedItem(Q3ListViewItem *item, const QPoint &// pnt
                                     , int c)
 {
     if (!item)

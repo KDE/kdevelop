@@ -16,9 +16,12 @@
  ***************************************************************************/
 
 #include <qdom.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qfile.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 #include <kparts/part.h>
 #include <kurl.h>
@@ -67,12 +70,12 @@ void ProjectSession::initXMLTree()
 }
 
 //---------------------------------------------------------------------------
-bool ProjectSession::restoreFromFile( const QString & sessionFileName, const QValueList< KDevPlugin * > plugins )
+bool ProjectSession::restoreFromFile( const QString & sessionFileName, const Q3ValueList< KDevPlugin * > plugins )
 {
   bool bFileOpenOK = true;
 
   QFile f(sessionFileName);
-  if ( f.open(IO_ReadOnly) ) {  // file opened successfully
+  if ( f.open(QIODevice::ReadOnly) ) {  // file opened successfully
     bool ok = domdoc.setContent( &f);
     f.close();
     if (!ok) {
@@ -104,7 +107,7 @@ bool ProjectSession::restoreFromFile( const QString & sessionFileName, const QVa
 
 	// now also let the plugins load their session stuff
 	QDomElement pluginListEl = session.namedItem("pluginList").toElement();
-	QValueList<KDevPlugin*>::ConstIterator it = plugins.begin();
+	Q3ValueList<KDevPlugin*>::ConstIterator it = plugins.begin();
 	while( it != plugins.end() )
 	{
 		KDevPlugin* pPlugin = (*it);
@@ -228,7 +231,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
 }
 
 //---------------------------------------------------------------------------
-bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueList< KDevPlugin * > plugins )
+bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueList< KDevPlugin * > plugins )
 {
   QString section, keyword;
   QDomElement session = domdoc.documentElement();
@@ -262,7 +265,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
     }
   }
 
-	QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
+	Q3PtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
 	for ( ; it.current(); ++it ) 
 	{
 	
@@ -380,7 +383,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
     }
   }
 
-	QValueList<KDevPlugin*>::ConstIterator itt = plugins.begin();
+	Q3ValueList<KDevPlugin*>::ConstIterator itt = plugins.begin();
 	while( itt != plugins.end() )
 	{
 		KDevPlugin* pPlugin = (*itt);
@@ -400,7 +403,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
 
   // Write it out to the session file on disc
   QFile f(sessionFileName);
-  if ( f.open(IO_WriteOnly) ) {    // file opened successfully
+  if ( f.open(QIODevice::WriteOnly) ) {    // file opened successfully
     QTextStream t( &f );        // use a text stream
     t << domdoc.toCString();
     f.close();

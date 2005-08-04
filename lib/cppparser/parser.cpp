@@ -26,7 +26,7 @@
 // qt
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 
 #include <kdebug.h>
 #include <klocale.h>

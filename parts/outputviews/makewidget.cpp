@@ -37,11 +37,14 @@
 #include <qapplication.h>
 #include <qdir.h>
 #include <qimage.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
 #include <qclipboard.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 #include <private/qrichtext_p.h>
 
 #include <stdlib.h>
@@ -116,7 +119,7 @@ static const char *const message_xpm[] =
 class SelectionPreserver
 {
 public:
-	SelectionPreserver( QTextEdit& textEdit, bool stayAtEnd )
+	SelectionPreserver( Q3TextEdit& textEdit, bool stayAtEnd )
 		: m_textEdit( textEdit )
 		, m_atEnd( false )
 	{
@@ -136,18 +139,18 @@ public:
 
 		if ( m_atEnd )
 		{
-			m_textEdit.moveCursor(QTextEdit::MoveEnd, false);
-			m_textEdit.moveCursor(QTextEdit::MoveLineStart, false);//if linewrap is off we must avoid the jumping of the vertical scrollbar
+			m_textEdit.moveCursor(Q3TextEdit::MoveEnd, false);
+			m_textEdit.moveCursor(Q3TextEdit::MoveLineStart, false);//if linewrap is off we must avoid the jumping of the vertical scrollbar
 		}
 	}
 
-	QTextEdit& m_textEdit;
+	Q3TextEdit& m_textEdit;
 	bool m_atEnd;
 	int paraFrom, indexFrom, paraTo, indexTo;
 };
 
 MakeWidget::MakeWidget(MakeViewPart *part)
-	: QTextEdit(0, "make widget")
+	: Q3TextEdit(0, "make widget")
 	, m_directoryStatusFilter( m_errorFilter )
 	, m_errorFilter( m_continuationFilter )
 	, m_continuationFilter( m_actionFilter )
@@ -175,7 +178,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 		setWordWrap(WidgetWidth);
 	setWrapPolicy(Anywhere);
 	setReadOnly(true);
-	setMimeSourceFactory(new QMimeSourceFactory);
+	setMimeSourceFactory(new Q3MimeSourceFactory);
 	mimeSourceFactory()->setImage("error", QImage((const char**)error_xpm));
 	mimeSourceFactory()->setImage("warning", QImage((const char**)warning_xpm));
 	mimeSourceFactory()->setImage("message", QImage((const char**)message_xpm));
@@ -271,7 +274,7 @@ void MakeWidget::startNextJob()
 	dirList.remove(it);
 
 	clear(); // clear the widget
-	for ( QValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it )
+	for ( Q3ValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it )
 		delete *it;
 	m_items.clear();
 	m_paragraphToItem.clear();
@@ -388,7 +391,7 @@ void MakeWidget::prevError()
 
 void MakeWidget::contentsMouseReleaseEvent( QMouseEvent* e )
 {
-	QTextEdit::contentsMouseReleaseEvent(e);
+	Q3TextEdit::contentsMouseReleaseEvent(e);
 	if ( e->button() != LeftButton )
 		return;
 	searchItem(paragraphAt(e->pos()));
@@ -403,13 +406,13 @@ void MakeWidget::keyPressEvent(QKeyEvent *e)
 		searchItem(parag);
 	}
 	else
-		QTextEdit::keyPressEvent(e);
+		Q3TextEdit::keyPressEvent(e);
 }
 
 // returns the current directory for parag
 QString MakeWidget::directory(int parag) const
 {
-	QValueVector<MakeItem*>::const_iterator it = qFind( m_items.begin(), m_items.end(), m_paragraphToItem[parag] );
+	Q3ValueVector<MakeItem*>::const_iterator it = qFind( m_items.begin(), m_items.end(), m_paragraphToItem[parag] );
 	if ( it == m_items.end() )
 		return QString::null;
 	// run backwards over directories and figure out where we are
@@ -674,7 +677,7 @@ void MakeWidget::slotDocumentOpened( const KURL & filename )
 
 	connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(slotDocumentClosed(QObject*)) );
 
-	for (QValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
+	for (Q3ValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
 		ErrorItem* e = dynamic_cast<ErrorItem*>(*it);
 
 		if (!e || e->m_cursor) continue;
@@ -715,7 +718,7 @@ void MakeWidget::slotDocumentClosed(QObject* doc)
 {
 	KTextEditor::Document* document = static_cast<KTextEditor::Document*>(doc);
 
-	for (QValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
+	for (Q3ValueVector<MakeItem*>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
 		ErrorItem* e = dynamic_cast<ErrorItem*>(*it);
 
 		if (!e || e->m_doc != document) continue;
@@ -732,9 +735,9 @@ bool MakeWidget::brightBg()
 	return (v > 127);
 }
 
-QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
+Q3PopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 {
-	QPopupMenu* pMenu = QTextEdit::createPopupMenu(pos);
+	Q3PopupMenu* pMenu = Q3TextEdit::createPopupMenu(pos);
 	pMenu->setCheckable(true);
 
 	pMenu->insertSeparator();
