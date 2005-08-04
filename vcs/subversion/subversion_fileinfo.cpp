@@ -34,6 +34,7 @@
 #include "../compat/netaccess/netaccess.h"
 #else
 #include <kio/netaccess.h>
+#include <q3tl.h>
 #endif
 
 SVNFileInfoProvider::SVNFileInfoProvider(subversionPart *parent, const char *name)

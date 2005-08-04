@@ -7,7 +7,7 @@
 #include <config.h>
 #endif
 
-#include <kpanelapplet.h>
+#include <plasma/kpanelapplet.h>
 #include <qstring.h>
 #include <kconfig.h>
 

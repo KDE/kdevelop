@@ -30,6 +30,7 @@
 
 #include <qregexp.h>
 #include <qlabel.h>
+#include <q3tl.h>
 
 #include "quickopenclassdialog.h"
 #include "quickopen_part.h"

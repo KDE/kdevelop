@@ -54,6 +54,7 @@
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
 #include <kdevcoderepository.h>
+#include <q3tl.h>
 
 class SimpleVariable
 {

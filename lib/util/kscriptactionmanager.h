@@ -29,7 +29,7 @@ class KActionCollection;
 class KScriptInterface;
 class KScriptActionManager;
 class QTimer;
-
+class QStringList;
 /**
 * Connects a KAction to a script runner.
 * 

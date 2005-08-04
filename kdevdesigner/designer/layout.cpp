@@ -37,6 +37,7 @@
 #include <qsplitter.h>
 #include <qvaluevector.h>
 #include <qmainwindow.h>
+#include <q3tl.h>
 
 bool operator<( const QGuardedPtr<QWidget> &p1, const QGuardedPtr<QWidget> &p2 )
 {
