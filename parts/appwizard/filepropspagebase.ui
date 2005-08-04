@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <QLabel>
 <!DOCTYPE UI><UI>
 <class>FilePropsPageBase</class>
 <widget>
