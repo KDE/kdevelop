@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef __phpsupport_events_h
@@ -31,46 +31,30 @@
 
 enum
 {
-    Event_FileParsed = QEvent::User + 1000
+    Event_StartParse =  QEvent::User + 1000,
+    Event_EndParse =    QEvent::User + 1001
 };
 
-class FileParsedEvent: public QCustomEvent
+class FileParseEvent: public QCustomEvent
 {
 public:
-   FileParsedEvent( const QString& fileName, const QValueList<Action *>& actions )
-   : QCustomEvent(Event_FileParsed), m_fileName( fileName )
+   FileParseEvent(long event, const QString& fileName )
+   : QCustomEvent(event), m_fileName( fileName )
    {
-       QValueListConstIterator<Action *> it = actions.begin();
-       while (it != actions.end()) {
-           Action *p = *it;
-           Action *a = new Action(p->quoi(), p->name(), p->parent(), p->args(), p->start(), p->flags());
-           a->setEnd( p->end() );
-           a->setResult( p->result() );
-           m_actions.append(a);
-           ++it;
-       }
    }
 
-   ~FileParsedEvent()
+   ~FileParseEvent()
    {
-      QValueListConstIterator<Action *> it = m_actions.begin();
-      while (it != m_actions.end()) {
-         Action *p = *it;
-         delete p;
-         ++it;
-      }
    }
 
     QString fileName() const { return m_fileName; }
-    QValueList<Action *> actions() const { return m_actions; }
 
 private:
     QString m_fileName;
-    QValueList<Action *> m_actions;
 
 private:
-    FileParsedEvent( const FileParsedEvent& source );
-    void operator = ( const FileParsedEvent& source );
+    FileParseEvent( const FileParseEvent& source );
+    void operator = ( const FileParseEvent& source );
 };
 
 

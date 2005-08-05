@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
+   Boston, MA 02110-1301, USA.
 */
 
 #include "phperrorview.h"
@@ -309,112 +309,123 @@ void PHPErrorView::slotSelected( QListViewItem* item )
     m_phpSupport->partController()->editDocument( url, line-1 );
 }
 
-void PHPErrorView::reportProblem( const QString& fileName, int line, int level,  const QString& text)
+void PHPErrorView::reportProblem( int level, const QString& fileName, int line, const QString& text)
 {
-    int markType = levelToMarkType( level );
-    if ( markType != -1 && m_document && m_markIface && m_fileName == fileName ){
+   int markType = levelToMarkType( level );
+   if ( markType != -1 && m_document && m_markIface && m_fileName == fileName ) {
       m_markIface->addMark( line, markType );
-    }
+   }
 
-    QString msg = text;
-    msg = msg.replace( QRegExp("\n"), "" );
+   QString msg = text;
+   msg = msg.replace( QRegExp("\n"), "" );
 
-    QString relFileName = fileName;
-    relFileName.remove(m_phpSupport->project()->projectDirectory());
+   QString relFileName = fileName;
+   relFileName.remove(m_phpSupport->project()->projectDirectory());
 
-    KListView* list;
+   KListView* list;
+   switch( level )
+   {
+      case Error:
+      case ErrorNoSuchFunction:
+      case ErrorParse:
+      list = m_errorList;
+      m_tabBar->setCurrentTab(m_tabBar->tab(1));
+      break;
 
-    switch( level )
-    {
-    case Add_Error:
-    case Add_ErrorNoSuchFunction:
-    case Add_ErrorParse:
-   list = m_errorList;
-   m_tabBar->setCurrentTab(m_tabBar->tab(1));
-   break;
-    case Add_Warning:
-   list = m_errorList;
-   break;
-    case Add_Todo:
-   list = m_todoList;
-   break;
-    case Add_Fixme:
-   list = m_fixmeList;
-   break;
-    default:
-        list = NULL;
-    }
+      case Warning:
+      list = m_errorList;
+      break;
 
-    if(list)
-    new ProblemItem( list,
-           relFileName,
-           QString::number( line + 1 ),
-           0,
-           msg );
+      case Todo:
+      list = m_todoList;
+      break;
 
-    if(fileName == m_fileName)
-    new QListViewItem(m_currentList, levelToString( level ),
-           QString::number( line + 1 ),
-           0,
-           msg);
+      case Fixme:
+      list = m_fixmeList;
+      break;
+
+      default:
+      list = NULL;
+      break;
+   }
+
+   if (list) {
+      kdDebug(9018) << "PB " << msg << endl;
+      new ProblemItem( list, relFileName, QString::number( line + 1 ), 0, msg );
+   }
+
+   if (fileName == m_fileName)
+      new QListViewItem(m_currentList, levelToString( level ), QString::number( line + 1 ), 0, msg);
 }
 
 void PHPErrorView::slotPartAdded( KParts::Part* part )
 {
-    KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
+   KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
 
-    if( !iface )
-   return;
+   if ( !iface )
+      return;
 
-    iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
+   iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
 }
 
 void PHPErrorView::slotPartRemoved( KParts::Part* part )
 {
-    kdDebug(9007) << "PHPErrorView::slotPartRemoved()" << endl;
-    if( part == m_document ){
-   m_document = 0;
-    }
+   kdDebug(9007) << "PHPErrorView::slotPartRemoved()" << endl;
+   if ( part == m_document ){
+      m_document = 0;
+   }
 }
 
 QString PHPErrorView::levelToString( int level ) const
 {
-    switch( level )
-    {
-    case Add_ErrorNoSuchFunction:
-   return QString( i18n("Undefined function") );
-    case Add_ErrorParse:
-   return QString( i18n("Parse Error") );
-    case Add_Error:
-   return QString( i18n("Error") );
-    case Add_Warning:
-   return QString( i18n("Warning") );
-    case Add_Todo:
-   return QString( i18n("Todo") );
-    case Add_Fixme:
-   return QString( i18n("Fixme") );
-    default:
-        return QString::null;
+   switch( level )
+   {
+      case ErrorNoSuchFunction:
+      return QString( i18n("Undefined function") );
+
+      case ErrorParse:
+      return QString( i18n("Parse Error") );
+
+      case Error:
+      return QString( i18n("Error") );
+
+      case Warning:
+      return QString( i18n("Warning") );
+
+      case Todo:
+      return QString( i18n("Todo") );
+
+      case Fixme:
+      return QString( i18n("Fixme") );
+
+      default:
+      return QString::null;
     }
+
 }
 
 int PHPErrorView::levelToMarkType( int level ) const
 {
-    switch( level )
-    {
-    case Add_ErrorNoSuchFunction:
-    case Add_ErrorParse:
-    case Add_Error:
-   return KTextEditor::MarkInterface::markType07;
-    case Add_Warning:
-        return -1;
-    case Add_Todo:
-        return -1;
-    case Add_Fixme:
-        return -1;
-    default:
-        return -1;
+   switch( level )
+   {
+      case ErrorNoSuchFunction:
+      case ErrorParse:
+      case Error:
+      return KTextEditor::MarkInterface::markType07;
+
+      case Warning:
+      return -1;
+
+      case Todo:
+      return -1;
+
+      case Fixme:
+      return -1;
+
+      default:
+      return -1;
     }
+
 }
 
 #include "phperrorview.moc"

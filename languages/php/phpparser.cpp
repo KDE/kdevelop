@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
+   Boston, MA 02110-1301, USA.
 */
 
 #include "phpparser.h"
@@ -61,7 +61,7 @@ bool PHPParser::hasFile( const QString& fileName )
 void PHPParser::addFile( const QString& fileName )
 {  
    QString abso = URLUtil::canonicalPath(fileName);
-   
+
    if ( hasFile(abso) )
       return;
 
@@ -91,7 +91,7 @@ void PHPParser::removeAllFiles()
 {
    kdDebug(9018) << "removeAllFiles" << endl;
    QMap<QString, PHPFile *>::Iterator it = m_files.begin();
-   
+
    while( it != m_files.end() ){
       PHPFile * file = it.data();
       ++it;
@@ -118,12 +118,12 @@ void PHPParser::reparseFile( const QString& fileName )
 void PHPParser::run() {
    kdDebug(9018) << "run thread " << getpid() << endl;
    QMap<QString, PHPFile *>::Iterator it;
-   
+
    while ( !m_close ) {
       m_parse = false;
       m_canParse.wait();
       m_parse = true;
-    
+
       if ( m_close )
          break;
 
@@ -133,8 +133,13 @@ void PHPParser::run() {
          PHPFile * file = it.data();
          if (!m_close) {
             if ( file->isModified() ) {
+//               m_mutex.lock();
+               KApplication::sendEvent( m_part, new FileParseEvent(  Event_StartParse, file->fileName() ));
+               KApplication::sendPostedEvents();
                file->Analyse();
-               KApplication::sendEvent( m_part, new FileParsedEvent(file->fileName(), file->getActions()) );
+               KApplication::sendEvent( m_part, new FileParseEvent( Event_EndParse, file->fileName() ));
+               KApplication::sendPostedEvents();
+//               m_mutex.unlock();
                it = m_files.begin();
             } else {
               ++it;

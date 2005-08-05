@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef PHPERRORVIEW_H
@@ -43,6 +43,17 @@ namespace KTextEditor{
     class Document;
 }
 
+
+enum Errors
+{
+   Error = 0,
+   ErrorParse = 1,
+   ErrorNoSuchFunction = 2,
+   Warning = 3,
+   Todo = 4,
+   Fixme = 5,
+};
+
 class PHPErrorView: public QWidget{
     Q_OBJECT
 public:
@@ -50,7 +61,7 @@ public:
     virtual ~PHPErrorView();
 
     void removeAllProblems( const QString& filename );
-    void reportProblem( const QString& fileName, int line, int level,  const QString& text);
+    void reportProblem( int level,  const QString& fileName, int line, const QString& text);
 
 private slots:
     void slotPartAdded( KParts::Part* );
