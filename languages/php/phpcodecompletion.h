@@ -1,7 +1,7 @@
 /*
    Copyright (C) 2005 by Nicolas Escuder <n.escuder@intra-links.com>
    Copyright (C) 2001 by smeier@kdevelop.org
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    version 2, License as published by the Free Software Foundation.
@@ -55,14 +55,14 @@ public:
 
 public slots:
    void cursorPositionChanged();
-  
+
 protected slots:  
    void argHintHided();
    void completionBoxHided();
 
- protected:
+protected:
    bool showCompletionBox(QValueList<KTextEditor::CompletionEntry> list, unsigned long max);
- 
+
    bool checkForVariable(QString line, int col);
    bool checkForStaticFunction(QString line, int col);
    bool checkForNew(QString line, int col);
@@ -78,25 +78,26 @@ protected slots:
    QString getClassName(QString varName, QString classname);
    QValueList<ClassDom> getClassByName(QString classname);
 
-  
    void readGlobalPHPFunctionsFile();
    void setStatusBar(QString expr, QString type);
-  
+
  private:
    int m_currentLine;
    QValueList<FunctionCompletionEntry> m_globalFunctions;
-   
+
    PHPSupportPart* m_phpSupport;
    PHPConfigData* m_config;
    CodeModel* m_model;
-   
+
    bool m_argWidgetShow;
    bool m_completionBoxShow;
-   
+
    KTextEditor::EditInterface *m_editInterface;
    KTextEditor::CodeCompletionInterface *m_codeInterface;
    KTextEditor::ViewCursorInterface *m_cursorInterface;
    KTextEditor::SelectionInterface *m_selectionInterface;
+
+   QString findDeclaration(QString name, int line = -1);
 };
 
 #endif
