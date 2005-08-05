@@ -24,7 +24,7 @@
 #include "subversion_widget.h"
 
 subversionWidget::subversionWidget(subversionPart *part, QWidget *parent, const char* name)
- : Q3TextEdit(parent, name)
+ : QTextEdit(parent, name)
 {
 	m_part = part;
 	setReadOnly( true );

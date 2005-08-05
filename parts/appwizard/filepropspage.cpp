@@ -1,20 +1,18 @@
 #include "filepropspage.h"
-#include <q3listbox.h>
+#include <qlistbox.h>
 #include <qlineedit.h>
-#include <q3textview.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtextview.h>
 #include <klocale.h>
 #include <qlabel.h>
-#include <q3multilineedit.h>
+#include <qmultilineedit.h>
 
 /* 
  *  Constructs a FilePropsPage which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 
  */
-FilePropsPage::FilePropsPage( QWidget* parent,  const char* name, Qt::WFlags fl )
+FilePropsPage::FilePropsPage( QWidget* parent,  const char* name, WFlags fl )
     : FilePropsPageBase( parent, name, fl ){
-  m_props = new Q3PtrList<ClassFileProp>;
+  m_props = new QPtrList<ClassFileProp>;
   m_current_class = 9999; // no current  
 }
 
@@ -62,7 +60,7 @@ void FilePropsPage::slotSelectionChanged()
   m_current_class = item;
 }
 
-void FilePropsPage::setClassFileProps(Q3PtrList<ClassFileProp> props,bool different_header_impl){
+void FilePropsPage::setClassFileProps(QPtrList<ClassFileProp> props,bool different_header_impl){
   *m_props = props;
   m_different_header_impl = different_header_impl;
   if (!m_different_header_impl){
@@ -80,7 +78,7 @@ void FilePropsPage::setClassFileProps(Q3PtrList<ClassFileProp> props,bool differ
   slotSelectionChanged();
 }
 
-Q3PtrList<ClassFileProp> FilePropsPage::getClassFileProps(){
+QPtrList<ClassFileProp> FilePropsPage::getClassFileProps(){
   return *m_props;
 }
 void FilePropsPage::slotClassnameChanged(const QString& text){

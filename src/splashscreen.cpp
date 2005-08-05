@@ -6,13 +6,11 @@
 
 #include <qtimer.h>
 #include <qfont.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-SplashScreen::SplashScreen(const QPixmap& pixmap, Qt::WFlags f) : QSplashScreen(pixmap, f)
+SplashScreen::SplashScreen(const QPixmap& pixmap, WFlags f) : QSplashScreen(pixmap, f)
 {
 	QTimer *timer = new QTimer( this );
 	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(animate()));

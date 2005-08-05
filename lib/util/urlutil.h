@@ -22,7 +22,7 @@
 #define _URLUTIL_H_
 
 #include <qstring.h>
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include <kurl.h>
 
 /**

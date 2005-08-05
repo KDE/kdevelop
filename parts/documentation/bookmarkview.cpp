@@ -20,13 +20,9 @@
 #include "bookmarkview.h"
 
 #include <qlayout.h>
-#include <q3header.h>
+#include <qheader.h>
 #include <qlineedit.h>
 #include <qpoint.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QFocusEvent>
-#include <QHBoxLayout>
 
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -122,7 +118,7 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
     m_view->addColumn(i18n("Title"));
     m_view->setSorting(-1);
     m_view->header()->hide();
-    m_view->setResizeMode(Q3ListView::AllColumns);
+    m_view->setResizeMode(QListView::AllColumns);
     m_view->setAllColumnsShowFocus( true );
     l->addWidget(m_view);
     QHBoxLayout *l2 = new QHBoxLayout(l, KDialog::spacingHint());
@@ -137,16 +133,16 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
 
     showBookmarks();
 
-    connect(m_view, SIGNAL(executed(Q3ListViewItem*, const QPoint&, int )),
-        this, SLOT(itemExecuted(Q3ListViewItem*, const QPoint&, int )));
+    connect(m_view, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));
     connect(m_addButton, SIGNAL(pressed()), this, SLOT(addBookmark()));
     connect(m_editButton, SIGNAL(clicked()), this, SLOT(editBookmark()));
     connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeBookmark()));
 
     connect(m_widget->part(), SIGNAL(bookmarkLocation(const QString&, const KURL& )),
         this, SLOT(addBookmark(const QString&, const KURL& )));
-    connect(m_view, SIGNAL(mouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int )),
-        this, SLOT(itemMouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int )));
+    connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
 BookmarkView::~BookmarkView()
@@ -170,7 +166,7 @@ void BookmarkView::showBookmarks()
     }
 }
 
-void BookmarkView::itemExecuted(Q3ListViewItem *item, const QPoint &// p
+void BookmarkView::itemExecuted(QListViewItem *item, const QPoint &// p
                                 , int // col
                                 )
 {
@@ -269,7 +265,7 @@ void BookmarkView::addBookmark(const QString &title, const KURL &url)
     item->setBookmark(bm);
 }
 
-void BookmarkView::itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int // c
+void BookmarkView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int // c
                                           )
 {
     if ((button != Qt::RightButton) || (!item))

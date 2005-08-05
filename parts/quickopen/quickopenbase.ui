@@ -65,10 +65,10 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Qt::Horizontal Spacing2</cstring>
+                        <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -135,9 +135,9 @@
     </connection>
     <connection>
         <sender>itemList</sender>
-        <signal>returnPressed(Q3ListBoxItem*)</signal>
+        <signal>returnPressed(QListBoxItem*)</signal>
         <receiver>QuickOpenDialogBase</receiver>
-        <slot>slotExecuted(Q3ListBoxItem*)</slot>
+        <slot>slotExecuted(QListBoxItem*)</slot>
     </connection>
     <connection>
         <sender>buttonOk</sender>
@@ -147,9 +147,9 @@
     </connection>
     <connection>
         <sender>itemList</sender>
-        <signal>doubleClicked(Q3ListBoxItem*)</signal>
+        <signal>doubleClicked(QListBoxItem*)</signal>
         <receiver>QuickOpenDialogBase</receiver>
-        <slot>slotExecuted(Q3ListBoxItem*)</slot>
+        <slot>slotExecuted(QListBoxItem*)</slot>
     </connection>
     <connection>
         <sender>nameEdit</sender>
@@ -173,8 +173,8 @@
 <slots>
     <slot>slotTextChanged(const QString&amp;)</slot>
     <slot>slotReturnPressed()</slot>
-    <slot>executed(Q3ListBoxItem*)</slot>
-    <slot>slotExecuted(Q3ListBoxItem*)</slot>
+    <slot>executed(QListBoxItem*)</slot>
+    <slot>slotExecuted(QListBoxItem*)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

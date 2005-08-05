@@ -128,13 +128,13 @@ void ImportDialog::accept()
     importdir.cdUp();
     QFile src(importdir.filePath("importfiles/" + finfo.fileName() + ".kdevelop"));
     kdDebug(9010) << "Import template " << src.name() << endl;
-    if (!src.open(QIODevice::ReadOnly)) {
+    if (!src.open(IO_ReadOnly)) {
         KMessageBox::sorry(this, i18n("Cannot open project template."));
         return;
     }
 
     QFile dest(dir.filePath(projectName + ".kdevelop"));
-    if (!dest.open(QIODevice::WriteOnly)) {
+    if (!dest.open(IO_WriteOnly)) {
         KMessageBox::sorry(this, i18n("Cannot write the project file."));
         return;
     }
@@ -304,7 +304,7 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
     }
 
     QFile af(dirName + "/AUTHORS");
-    if (!af.open(QIODevice::ReadOnly))
+    if (!af.open(IO_ReadOnly))
         return;
     QTextStream astream(&af);
 
@@ -320,7 +320,7 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
     af.close();
 
     QFile cf(dirName + "/configure.in");
-    if (!cf.open(QIODevice::ReadOnly))
+    if (!cf.open(IO_ReadOnly))
         return;
     QTextStream cstream(&cf);
 

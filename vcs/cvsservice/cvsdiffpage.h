@@ -18,7 +18,7 @@
 
 class CvsJob_stub;
 class CvsService_stub;
-class Q3TextEdit;
+class QTextEdit;
 class DiffWidget;
 
 /**

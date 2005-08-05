@@ -19,12 +19,7 @@
  ***************************************************************************/
 #include "simplemainwindow.h"
 
-#include <q3textedit.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3ValueList>
-#include <Q3PopupMenu>
-#include <Q3PtrList>
+#include <qtextedit.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -352,7 +347,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
     //Find the document on whose tab the user clicked
     m_currentTabURL = QString::null;
-    Q3PtrListIterator<KParts::Part> it(*PartController::getInstance()->parts());
+    QPtrListIterator<KParts::Part> it(*PartController::getInstance()->parts());
     while (KParts::Part* part = it.current())
     {
         QWidget *top_widget = EditorProxy::getInstance()->topWidgetForPart(part);
@@ -443,13 +438,13 @@ bool SimpleMainWindow::queryExit()
 void SimpleMainWindow::setupWindowMenu()
 {
     // get the xmlgui created one instead
-    m_windowMenu = static_cast<Q3PopupMenu*>(main()->child("window", "KPopupMenu"));
+    m_windowMenu = static_cast<QPopupMenu*>(main()->child("window", "KPopupMenu"));
 
     if (!m_windowMenu)
     {
         kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
 
-        m_windowMenu = new Q3PopupMenu(main(), "window");
+        m_windowMenu = new QPopupMenu(main(), "window");
         menuBar()->insertItem(i18n("&Window"), m_windowMenu);
     }
 
@@ -463,7 +458,7 @@ void SimpleMainWindow::setupWindowMenu()
 
 void SimpleMainWindow::openURL(int w)
 {
-    Q3ValueList<QPair<int, KURL> >::ConstIterator it = m_windowList.begin();
+    QValueList<QPair<int, KURL> >::ConstIterator it = m_windowList.begin();
     while (it != m_windowList.end())
     {
         if ((*it).first == w)
@@ -482,7 +477,7 @@ void SimpleMainWindow::openURL(int w)
 void SimpleMainWindow::fillWindowMenu()
 {
     // clear menu
-    Q3ValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+    QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
     while (it != m_windowList.end())
     {
         m_windowMenu->removeItem( (*it).first );
@@ -550,8 +545,8 @@ void SimpleMainWindow::slotSplitHorizontal()
 
 void SimpleMainWindow::closeTab(QWidget *w)
 {
-    const Q3PtrList<KParts::Part> *partlist = PartController::getInstance()->parts();
-    Q3PtrListIterator<KParts::Part> it(*partlist);
+    const QPtrList<KParts::Part> *partlist = PartController::getInstance()->parts();
+    QPtrListIterator<KParts::Part> it(*partlist);
     while (KParts::Part* part = it.current())
     {
         QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part);

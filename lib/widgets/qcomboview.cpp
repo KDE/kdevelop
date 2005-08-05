@@ -14,22 +14,13 @@
 **********************************************************************/
 
 #include "qcomboview.h"
-//Added by qt3to4:
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QFocusEvent>
-#include <Q3Frame>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QWheelEvent>
 #include <kdeversion.h>
 #ifndef QT_NO_COMBOBOX
-#include "q3popupmenu.h"
-#include "q3listview.h"
+#include "qpopupmenu.h"
+#include "qlistview.h"
 #include "qpainter.h"
 #include "qdrawutil.h"
-#include "q3strlist.h"
+#include "qstrlist.h"
 #include "qpixmap.h"
 #include "qtimer.h"
 #include "qapplication.h"
@@ -39,7 +30,7 @@
 #include "qstringlist.h"
 #include "qcombobox.h"
 #include "qstyle.h"
-#include "q3header.h"
+#include "qheader.h"
 #include <limits.h>
 
 class QComboViewData
@@ -51,13 +42,13 @@ public:
         cb->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
     }
 
-    inline Q3ListView * listView() { return lView; }
+    inline QListView * listView() { return lView; }
     void updateLinedGeometry();
 
-    void setListView( Q3ListView *l ) { lView = l ;
+    void setListView( QListView *l ) { lView = l ;
         l->setMouseTracking( TRUE );}
 
-    Q3ListViewItem *current;
+    QListViewItem *current;
     int maxCount;
     int sizeLimit;
     QComboView::Policy p;
@@ -81,7 +72,7 @@ public:
 
 private:
     bool	usinglView;
-    Q3ListView   *lView;
+    QListView   *lView;
     QComboView *combo;
 
 };
@@ -148,7 +139,7 @@ static inline bool checkIndex( const char *method, const char * name,
 
 
 QComboView::QComboView( bool rw, QWidget *parent, const char *name )
-    : QWidget( parent, name, Qt::WResizeNoErase )
+    : QWidget( parent, name, WResizeNoErase )
 {
     d = new QComboViewData( this );
     setUpListView();
@@ -167,12 +158,12 @@ QComboView::QComboView( bool rw, QWidget *parent, const char *name )
     d->completeNow = FALSE;
     d->completionTimer = new QTimer( this );
 
-    setFocusPolicy( Qt::StrongFocus );
+    setFocusPolicy( StrongFocus );
 
     d->ed = 0;
     if ( rw )
 	setUpLineEdit();
-    setBackgroundMode( Qt::PaletteButton, Qt::PaletteBase );
+    setBackgroundMode( PaletteButton, PaletteBase );
 }
 
 
@@ -219,12 +210,12 @@ void QComboView::clear()
     currentChanged();
 }
 
-Q3ListViewItem *QComboView::currentItem() const
+QListViewItem *QComboView::currentItem() const
 {
     return d->current;
 }
 
-void QComboView::setCurrentItem( Q3ListViewItem *item )
+void QComboView::setCurrentItem( QListViewItem *item )
 {
     if ( item == d->current && !d->ed ) {
         return;
@@ -312,7 +303,7 @@ QSize QComboView::sizeHint() const
   the activated() signal.
 */
 
-void QComboView::internalActivate( Q3ListViewItem * item )
+void QComboView::internalActivate( QListViewItem * item )
 {
     if (!item)
     {
@@ -346,7 +337,7 @@ void QComboView::internalActivate( Q3ListViewItem * item )
   the highlighted() signal.
 */
 
-void QComboView::internalHighlight( Q3ListViewItem * item )
+void QComboView::internalHighlight( QListViewItem * item )
 {
     if (!item)
     {
@@ -424,11 +415,11 @@ void QComboView::paintEvent( QPaintEvent * )
     const QColorGroup & g = colorGroup();
     p.setPen(g.text());
 
-    QStyle::State flags = QStyle::State_None;
+    QStyle::SFlags flags = QStyle::Style_Default;
     if (isEnabled())
-        flags |= QStyle::State_Enabled;
+        flags |= QStyle::Style_Enabled;
     if (hasFocus())
-        flags |= QStyle::State_HasFocus;
+        flags |= QStyle::Style_HasFocus;
 
     if ( width() < 5 || height() < 5 ) {
         qDrawShadePanel( &p, rect(), g, FALSE, 2,
@@ -449,15 +440,15 @@ void QComboView::paintEvent( QPaintEvent * )
     p.setClipRect( re );
 
     if ( !d->ed ) {
-        Q3ListViewItem * item = d->current;
+        QListViewItem * item = d->current;
         if ( item ) {
             // we calculate the QListBoxTexts height (ignoring strut)
             int itemh = d->listView()->fontMetrics().lineSpacing() + 2;
             p.translate( re.x(), re.y() + (re.height() - itemh)/2  );
-            item->paintCell( &p, d->listView()->colorGroup(), 0, width(), Qt::AlignLeft | Qt::AlignVCenter );
+            item->paintCell( &p, d->listView()->colorGroup(), 0, width(), AlignLeft | AlignVCenter );
         }
     } else if ( d->listView() && d->listView()->currentItem( ) && d->current ) {
-        Q3ListViewItem * item = d->current ;
+        QListViewItem * item = d->current ;
         const QPixmap *pix = item->pixmap(0);
         if ( pix ) {
             p.fillRect( re.x(), re.y(), pix->width() + 4, re.height(),
@@ -475,7 +466,7 @@ void QComboView::paintEvent( QPaintEvent * )
 
 void QComboView::mousePressEvent( QMouseEvent *e )
 {
-    if ( e->button() != Qt::LeftButton )
+    if ( e->button() != LeftButton )
         return;
     if ( d->discardNextMousePress ) {
         d->discardNextMousePress = FALSE;
@@ -533,22 +524,22 @@ void QComboView::mouseDoubleClickEvent( QMouseEvent *e )
 
 void QComboView::keyPressEvent( QKeyEvent *e )
 {
-    Q3ListViewItem *c = currentItem();
-    if ( ( e->key() == Qt::Key_F4 && e->state() == 0 ) ||
-        ( e->key() == Qt::Key_Down && (e->state() & Qt::AltModifier) ) ||
-        ( !d->ed && e->key() == Qt::Key_Space ) ) {
+    QListViewItem *c = currentItem();
+    if ( ( e->key() == Key_F4 && e->state() == 0 ) ||
+        ( e->key() == Key_Down && (e->state() & AltButton) ) ||
+        ( !d->ed && e->key() == Key_Space ) ) {
         if ( childCount() ) {
             popup();
         }
         return;
-    } else if ( e->key() == Qt::Key_Up ) {
+    } else if ( e->key() == Key_Up ) {
 /*        if ((!c) && (listView()->firstChild()))
             setCurrentItem(listView()->firstChild());*/
         if (c && c->itemAbove() )
             setCurrentItem( c->itemAbove() );
         else
             return;
-    } else if ( e->key() == Qt::Key_Down ) {
+    } else if ( e->key() == Key_Down ) {
         if ((!c) && (listView()->firstChild()))
         {
             setCurrentItem(listView()->firstChild());
@@ -558,12 +549,12 @@ void QComboView::keyPressEvent( QKeyEvent *e )
             setCurrentItem( c->itemBelow() );
         else
             return;
-    } else if ( e->key() == Qt::Key_Home && ( !d->ed || !d->ed->hasFocus() ) ) {
+    } else if ( e->key() == Key_Home && ( !d->ed || !d->ed->hasFocus() ) ) {
         if (listView()->firstChild())
             setCurrentItem( listView()->firstChild() );
         else
             return;
-    } else if ( e->key() == Qt::Key_End && ( !d->ed || !d->ed->hasFocus() ) ) {
+    } else if ( e->key() == Key_End && ( !d->ed || !d->ed->hasFocus() ) ) {
         if (listView()->lastItem())
             setCurrentItem( listView()->lastItem() );
         else
@@ -649,14 +640,14 @@ void QComboView::wheelEvent( QWheelEvent *e )
         QApplication::sendEvent( d->listView(), e );
     } else {
         if ( e->delta() > 0 ) {
-            Q3ListViewItem *c = currentItem();
+            QListViewItem *c = currentItem();
             if ( c && c->itemAbove() ) {
                 setCurrentItem( c->itemAbove() );
                 emit activated( currentItem() );
                 emit activated( currentText() );
             }
         } else {
-            Q3ListViewItem *c = currentItem();
+            QListViewItem *c = currentItem();
             if ( c && c->itemBelow() ) {
                 setCurrentItem( c->itemBelow() );
                 emit activated( currentItem() );
@@ -667,10 +658,10 @@ void QComboView::wheelEvent( QWheelEvent *e )
     }
 }
 
-int childCount(Q3ListViewItem *it)
+int childCount(QListViewItem *it)
 {
     int count = 1;
-    Q3ListViewItem * myChild = it->firstChild();
+    QListViewItem * myChild = it->firstChild();
     while( myChild ) {
         count += childCount(myChild);
         myChild = myChild->nextSibling();
@@ -678,10 +669,10 @@ int childCount(Q3ListViewItem *it)
     return count;
 }
 
-int childCount(Q3ListView *lv)
+int childCount(QListView *lv)
 {
     int count = 0;
-    Q3ListViewItem * myChild = lv->firstChild();
+    QListViewItem * myChild = lv->firstChild();
     while( myChild ) {
         count += childCount(myChild);
 //        count += 1;
@@ -695,7 +686,7 @@ int childCount(Q3ListView *lv)
    Calculates the listbox height needed to contain all items, or as
    many as the list box is supposed to contain.
 */
-static int listHeight( Q3ListView *l, int /*sl*/ )
+static int listHeight( QListView *l, int /*sl*/ )
 {
 /*    if ( l->childCount() > 0 )
         return QMIN( l->childCount(), (uint)sl) * l->firstChild()->height();
@@ -731,7 +722,7 @@ void QComboView::popup()
         return;
 
     // Send all listbox events to eventFilter():
-    Q3ListView* lb = d->listView();
+    QListView* lb = d->listView();
     lb->triggerUpdate( );
     lb->installEventFilter( this );
     lb->viewport()->installEventFilter( this );
@@ -777,13 +768,13 @@ void QComboView::popup()
     lb->raise();
     bool block = lb->signalsBlocked();
     lb->blockSignals( TRUE );
-    Q3ListViewItem *currentLBItem = d->current ;
+    QListViewItem *currentLBItem = d->current ;
     lb->setCurrentItem( currentLBItem );
     // set the current item to also be the selected item if it isn't already
     if ( currentLBItem && currentLBItem->isSelectable() && !currentLBItem->isSelected() )
         lb->setSelected( currentLBItem, TRUE );
     lb->blockSignals( block );
-    lb->setVScrollBarMode(Q3ScrollView::Auto);
+    lb->setVScrollBarMode(QScrollView::Auto);
 
 //#ifndef QT_NO_EFFECTS
 /*    if ( QApplication::isEffectEnabled( UI_AnimateCombo ) ) {
@@ -804,7 +795,7 @@ void QComboView::popup()
 void QComboView::updateMask()
 {
     QBitmap bm( size() );
-    bm.fill( Qt::color0 );
+    bm.fill( color0 );
 
     {
         QPainter p( &bm, this );
@@ -875,7 +866,7 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
             if ( ((QKeyEvent *)event)->isAccepted() ) {
                 d->completeNow = FALSE;
                 return TRUE;
-            } else if ( ((QKeyEvent *)event)->key() != Qt::Key_End ) {
+            } else if ( ((QKeyEvent *)event)->key() != Key_End ) {
                 d->completeNow = TRUE;
                 d->completeAt = d->ed->cursorPosition();
             }
@@ -897,7 +888,7 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
             d->ed->cursorPosition() == (int)d->ed->text().length() ) {
                 d->completeNow = FALSE;
                 QString ct( d->ed->text() );
-                Q3ListViewItem *i = completionIndex( ct, currentItem() );
+                QListViewItem *i = completionIndex( ct, currentItem() );
                 if ( i ) {
                     QString it = i->text(0);
                     d->ed->validateAndSet( it, ct.length(),
@@ -935,13 +926,13 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
                         }
                     }
                 }
-            } else if ((e->state() & ( Qt::RightButton | Qt::LeftButton | Qt::MidButton ) ) == 0 &&
+            } else if ((e->state() & ( RightButton | LeftButton | MidButton ) ) == 0 &&
                 style().styleHint(QStyle::SH_ComboBox_ListMouseTracking, this)) {
 //                qWarning("event filter:: emu");
                 QWidget *mouseW = QApplication::widgetAt( e->globalPos(), TRUE );
 //                if ( mouseW == d->listView()->viewport() ) { //###
                 if ( mouseW == d->listView()->viewport() ) {
-                    Q3ListViewItem *sel = d->listView()->itemAt(e->pos());
+                    QListViewItem *sel = d->listView()->itemAt(e->pos());
                     if (sel)
                     {
                         d->listView()->setCurrentItem(sel);
@@ -985,19 +976,19 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
             break;
         case QEvent::KeyPress:
             switch( ((QKeyEvent *)event)->key() ) {
-                case Qt::Key_Up:
-                case Qt::Key_Down:
-                    if ( !(((QKeyEvent *)event)->state() & Qt::AltModifier) )
+                case Key_Up:
+                case Key_Down:
+                    if ( !(((QKeyEvent *)event)->state() & AltButton) )
                         break;
-                case Qt::Key_F4:
-                case Qt::Key_Escape:
+                case Key_F4:
+                case Key_Escape:
                     if ( d->poppedUp ) {
                         popDownListView();
                         return TRUE;
                     }
                 break;
-                case Qt::Key_Enter:
-                case Qt::Key_Return:
+                case Key_Enter:
+                case Key_Return:
                     // work around QDialog's enter handling
                     return FALSE;
                 default:
@@ -1021,10 +1012,10 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
     items start with \a prefix.
 */
 
-Q3ListViewItem *QComboView::completionIndex( const QString & prefix,
-                    Q3ListViewItem *startingAt ) const
+QListViewItem *QComboView::completionIndex( const QString & prefix,
+                    QListViewItem *startingAt ) const
 {
-    Q3ListViewItem *start = startingAt;
+    QListViewItem *start = startingAt;
 /*    if ( start < 0 || start >= count() )
         start = 0;
     if ( start >= count() )
@@ -1040,7 +1031,7 @@ Q3ListViewItem *QComboView::completionIndex( const QString & prefix,
         return start;
 
     QString current;
-    Q3ListViewItem *i = start;
+    QListViewItem *i = start;
     do {
         current = i->text(0).lower();
         if ( current.startsWith( match ) )
@@ -1100,7 +1091,7 @@ void QComboView::returnPressed()
     if ( s.isEmpty() )
         return;
 
-    Q3ListViewItem *c = 0;
+    QListViewItem *c = 0;
     bool doInsert = TRUE;
     if ( !d->duplicatesEnabled ) {
         c = listView()->findItem(s, 0);
@@ -1131,11 +1122,11 @@ void QComboView::returnPressed()
                 return;
 //                break;
             case AtBottom:
-                c = new Q3ListViewItem(listView(), listView()->lastItem(), s);
+                c = new QListViewItem(listView(), listView()->lastItem(), s);
                 break;
             case BeforeCurrent:
                 if (currentItem() && currentItem()->itemAbove())
-                    c = new Q3ListViewItem(listView(), currentItem()->itemAbove(), s);
+                    c = new QListViewItem(listView(), currentItem()->itemAbove(), s);
                 else
                 {
                     c = 0;
@@ -1144,7 +1135,7 @@ void QComboView::returnPressed()
                 break;
             case AfterCurrent:
                 if (currentItem() && currentItem()->itemBelow())
-                    c = new Q3ListViewItem(listView(), currentItem()->itemBelow(), s);
+                    c = new QListViewItem(listView(), currentItem()->itemBelow(), s);
                 else
                 {
                     c = 0;
@@ -1223,19 +1214,19 @@ void QComboView::clearValidator()
     necessary because of the line edit in QComboView.
 */
 
-void QComboView::setListView( Q3ListView * newListView )
+void QComboView::setListView( QListView * newListView )
 {
     clear();
 
     delete d->listView();
 
-    newListView->reparent( this, Qt::WType_Popup, QPoint(0,0), FALSE );
+    newListView->reparent( this, WType_Popup, QPoint(0,0), FALSE );
     d->setListView( newListView );
     d->listView()->setFont( font() );
     d->listView()->setPalette( palette() );
 /*    d->listView()->setVScrollBarMode(QScrollView::AlwaysOff);
     d->listView()->setHScrollBarMode(QScrollView::AlwaysOff);*/
-    d->listView()->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
+    d->listView()->setFrameStyle( QFrame::Box | QFrame::Plain );
     d->listView()->setLineWidth( 1 );
 /*    d->listView()->setRootIsDecorated( true );
     d->listView()->setAllColumnsShowFocus(true);*/
@@ -1259,16 +1250,16 @@ void QComboView::setListView( Q3ListView * newListView )
     d->listView()->resize( 100, 10 );
 */
 
-    connect( d->listView(), SIGNAL(returnPressed(Q3ListViewItem*)),
-            SLOT(internalActivate(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(doubleClicked(Q3ListViewItem*)),
-            SLOT(internalActivate(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(doubleClicked(Q3ListViewItem*)),
-            SLOT(checkState(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(currentChanged(Q3ListViewItem*)),
-            SLOT(internalHighlight(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(selectionChanged(Q3ListViewItem*)),
-            SLOT(internalHighlight(Q3ListViewItem*)));
+    connect( d->listView(), SIGNAL(returnPressed(QListViewItem*)),
+            SLOT(internalActivate(QListViewItem*)));
+    connect( d->listView(), SIGNAL(doubleClicked(QListViewItem*)),
+            SLOT(internalActivate(QListViewItem*)));
+    connect( d->listView(), SIGNAL(doubleClicked(QListViewItem*)),
+            SLOT(checkState(QListViewItem*)));
+    connect( d->listView(), SIGNAL(currentChanged(QListViewItem*)),
+            SLOT(internalHighlight(QListViewItem*)));
+    connect( d->listView(), SIGNAL(selectionChanged(QListViewItem*)),
+            SLOT(internalHighlight(QListViewItem*)));
 }
 
 
@@ -1280,7 +1271,7 @@ void QComboView::setListView( Q3ListView * newListView )
     \sa setlistView()
 */
 
-Q3ListView * QComboView::listView() const
+QListView * QComboView::listView() const
 {
     return d ? d->listView() : 0;
 }
@@ -1377,7 +1368,7 @@ void QComboView::setEditable( bool y )
         d->ed = 0;
     }
 
-    setFocusPolicy( Qt::StrongFocus );
+    setFocusPolicy( StrongFocus );
     updateGeometry();
     update();
 }
@@ -1385,35 +1376,35 @@ void QComboView::setEditable( bool y )
 
 void QComboView::setUpListView()
 {
-    d->setListView( new Q3ListView( this, "in-combo", Qt::WType_Popup ) );
+    d->setListView( new QListView( this, "in-combo", WType_Popup ) );
 
     d->listView()->setFont( font() );
     d->listView()->setPalette( palette() );
 /*    d->listView()->setVScrollBarMode( QScrollView::AlwaysOff );
     d->listView()->setHScrollBarMode( QScrollView::AlwaysOff );*/
-    d->listView()->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
+    d->listView()->setFrameStyle( QFrame::Box | QFrame::Plain );
     d->listView()->setLineWidth( 1 );
     d->listView()->setRootIsDecorated( false );
     d->listView()->setAllColumnsShowFocus(true);
     d->listView()->addColumn("");
     d->listView()->resize( 100, 10 );
-    d->listView()->setResizeMode(Q3ListView::LastColumn);
+    d->listView()->setResizeMode(QListView::LastColumn);
 
     if (d->listView()->firstChild())
         d->current = d->listView()->firstChild();
 
     d->listView()->header()->hide();
 
-    connect( d->listView(), SIGNAL(returnPressed(Q3ListViewItem*)),
-            SLOT(internalActivate(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(doubleClicked(Q3ListViewItem*)),
-            SLOT(internalActivate(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(doubleClicked(Q3ListViewItem*)),
-            SLOT(checkState(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(currentChanged(Q3ListViewItem*)),
-            SLOT(internalHighlight(Q3ListViewItem*)));
-    connect( d->listView(), SIGNAL(selectionChanged(Q3ListViewItem*)),
-            SLOT(internalHighlight(Q3ListViewItem*)));
+    connect( d->listView(), SIGNAL(returnPressed(QListViewItem*)),
+            SLOT(internalActivate(QListViewItem*)));
+    connect( d->listView(), SIGNAL(doubleClicked(QListViewItem*)),
+            SLOT(internalActivate(QListViewItem*)));
+    connect( d->listView(), SIGNAL(doubleClicked(QListViewItem*)),
+            SLOT(checkState(QListViewItem*)));
+    connect( d->listView(), SIGNAL(currentChanged(QListViewItem*)),
+            SLOT(internalHighlight(QListViewItem*)));
+    connect( d->listView(), SIGNAL(selectionChanged(QListViewItem*)),
+            SLOT(internalHighlight(QListViewItem*)));
 }
 
 
@@ -1461,7 +1452,7 @@ void QComboView::setLineEdit( QLineEdit *edit )
     d->updateLinedGeometry();
     edit->installEventFilter( this );
     setFocusProxy( edit );
-    setFocusPolicy( Qt::StrongFocus );
+    setFocusPolicy( StrongFocus );
 
     setUpListView();
 
@@ -1474,7 +1465,7 @@ void QComboView::setLineEdit( QLineEdit *edit )
 
 void QComboView::setCurrentText( const QString& txt )
 {
-    Q3ListViewItem *i;
+    QListViewItem *i;
     i = listView()->findItem(txt, 0);
     if ( i )
         setCurrentItem( i );
@@ -1484,12 +1475,12 @@ void QComboView::setCurrentText( const QString& txt )
         currentItem()->setText(0, txt);
 }
 
-void QComboView::checkState( Q3ListViewItem * item)
+void QComboView::checkState( QListViewItem * item)
 {
     item->setOpen(!item->isOpen());
 }
 
-void QComboView::setCurrentActiveItem( Q3ListViewItem * item )
+void QComboView::setCurrentActiveItem( QListViewItem * item )
 {
     if ( item == d->current && !d->ed ) {
         return;

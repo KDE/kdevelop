@@ -9,13 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
-#include <q3vbox.h>
+#include <qwhatsthis.h>
+#include <qvbox.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qdom.h>
-//Added by qt3to4:
-#include <QFocusEvent>
 #include <kcombobox.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -36,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
-    : Q3VBox( parent, "fileviewpartwidget" ), m_filetree( 0 ),
+    : QVBox( parent, "fileviewpartwidget" ), m_filetree( 0 ),
     m_filter( 0 ), m_btnFilter( 0 ), m_part( part )
 {
     Q_ASSERT( part && parent );
@@ -49,11 +47,11 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     setCaption(i18n("File Tree"));
     m_filetree->setCaption(i18n("File Tree"));
     m_filetree->setIcon(SmallIcon("folder"));
-    Q3WhatsThis::add(m_filetree, i18n("<b>File tree</b><p>"
+    QWhatsThis::add(m_filetree, i18n("<b>File tree</b><p>"
                                     "The file viewer shows all files of the project "
                                     "in a tree layout."));
 
-    Q3HBox* filterBox = new Q3HBox( this );
+    QHBox* filterBox = new QHBox( this );
     m_btnFilter = new QToolButton( filterBox );
     m_btnFilter->setIconSet( SmallIconSet("filter" ) );
     m_btnFilter->setToggleButton( true );
@@ -66,12 +64,12 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     connect( m_filter, SIGNAL( returnPressed(const QString&) ),
              m_filter, SLOT( addToHistory(const QString&) ) );
 
-    Q3WhatsThis::add
+    QWhatsThis::add
         ( m_filter,
                 i18n("<p>Here you can enter a name filter to limit which files are <b>not displayed</b>."
                      "<p>To clear the filter, toggle off the filter button to the left."
                      "<p>To reapply the last filter used, toggle on the filter button." ) );
-    Q3WhatsThis::add
+    QWhatsThis::add
         ( m_btnFilter,
                 i18n("<p>This button clears the name filter when toggled off, or "
                      "reapplies the last filter used when toggled on.") );

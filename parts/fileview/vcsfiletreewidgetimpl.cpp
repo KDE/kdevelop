@@ -10,10 +10,8 @@
  ***************************************************************************/
 
 #include <qpainter.h>
-#include <q3header.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qheader.h>
+#include <qpopupmenu.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -242,7 +240,7 @@ bool VCSFileTreeWidgetImpl::canReloadTree() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void VCSFileTreeWidgetImpl::fillPopupMenu( Q3PopupMenu *popupMenu, Q3ListViewItem *item ) const
+void VCSFileTreeWidgetImpl::fillPopupMenu( QPopupMenu *popupMenu, QListViewItem *item ) const
 {
     FileTreeViewWidgetImpl::fillPopupMenu( popupMenu, item );
 

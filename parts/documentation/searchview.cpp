@@ -29,11 +29,6 @@
 #include <qtextstream.h>
 #include <qdir.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <QFocusEvent>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 
 #include <kpushbutton.h>
 #include <klistview.h>
@@ -102,18 +97,18 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     m_view->setSorting(-1);
     m_view->addColumn(i18n("Relevance"));
     m_view->addColumn(i18n("Title"));
-    m_view->setColumnWidthMode(0, Q3ListView::Maximum);
-    m_view->setColumnWidthMode(1, Q3ListView::Maximum);
+    m_view->setColumnWidthMode(0, QListView::Maximum);
+    m_view->setColumnWidthMode(1, QListView::Maximum);
     m_view->setAllColumnsShowFocus(true);
-    m_view->setResizeMode( Q3ListView::LastColumn );
+    m_view->setResizeMode( QListView::LastColumn );
 
     connect(m_configButton, SIGNAL(clicked()), this, SLOT(updateConfig()));
     connect(m_indexButton, SIGNAL(clicked()), this, SLOT(updateIndex()));
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(search()));
     connect(m_goSearchButton, SIGNAL(clicked()), this, SLOT(search()));
-    connect(m_view, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(executed(Q3ListViewItem*)));
-    connect(m_view, SIGNAL(mouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int )),
-        this, SLOT(itemMouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int )));
+    connect(m_view, SIGNAL(executed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));
+    connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
 SearchView::~SearchView()
@@ -240,7 +235,7 @@ void SearchView::search()
 
     // dump the search result
     QFile f(savedir + "/results.html");
-    if (f.open(QIODevice::WriteOnly))
+    if (f.open(IO_WriteOnly))
     {
         QTextStream ts(&f);
         ts << searchResult << endl;
@@ -265,7 +260,7 @@ void SearchView::htsearchExited(KProcess *)
 void SearchView::analyseSearchResults()
 {
     m_view->clear();
-    QTextStream str(searchResult, QIODevice::ReadOnly);
+    QTextStream str(searchResult, IO_ReadOnly);
     DocumentationItem *former = 0;
     while (!str.eof())
     {
@@ -294,7 +289,7 @@ void SearchView::analyseSearchResults()
     }
 }
 
-void SearchView::executed(Q3ListViewItem *item)
+void SearchView::executed(QListViewItem *item)
 {
     DocumentationItem *d = dynamic_cast<DocumentationItem*>(item);
     if (!d)
@@ -303,7 +298,7 @@ void SearchView::executed(Q3ListViewItem *item)
     m_part->partController()->showDocument(d->url());
 }
 
-void SearchView::itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int // c
+void SearchView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int // c
                                         )
 {
     if ((button != Qt::RightButton) || (!item))

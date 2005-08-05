@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <kmdidefines.h>
 #include <kapplication.h>

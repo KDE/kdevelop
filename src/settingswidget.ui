@@ -35,7 +35,7 @@
                 <string>&lt;qt&gt;&lt;h3&gt;Project Settings&lt;/h3&gt;&lt;/qt&gt;</string>
             </property>
             <property name="alignment">
-                <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
+                <set>WordBreak|AlignVCenter</set>
             </property>
         </widget>
         <widget class="QCheckBox" row="8" column="1">
@@ -154,7 +154,7 @@
                 <string>&lt;qt&gt;&lt;h3&gt;UI Designer Integration&lt;/h3&gt;&lt;/qt&gt;</string>
             </property>
             <property name="alignment">
-                <set>Qt::AlignTop</set>
+                <set>AlignTop</set>
             </property>
         </widget>
         <spacer row="6" column="0" rowspan="4" colspan="1">
@@ -162,7 +162,7 @@
                 <cstring>spacer13_2</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Fixed</enum>
@@ -234,7 +234,7 @@
                 <cstring>spacer13_2_2</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Fixed</enum>
@@ -251,7 +251,7 @@
                 <cstring>spacer13_2_2_2</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Fixed</enum>
@@ -317,7 +317,7 @@
                 <string>&lt;qt&gt;&lt;h3&gt;Terminal Emulation&lt;/h3&gt;&lt;/qt&gt;</string>
             </property>
             <property name="alignment">
-                <set>Qt::AlignTop</set>
+                <set>AlignTop</set>
             </property>
         </widget>
         <spacer row="16" column="1">
@@ -325,7 +325,7 @@
                 <cstring>spacer23</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -345,10 +345,10 @@
                 <string>&lt;qt&gt;&lt;h3&gt;Output View Settings&lt;/h3&gt;&lt;/qt&gt;</string>
             </property>
             <property name="textFormat">
-                <enum>Qt::AutoText</enum>
+                <enum>AutoText</enum>
             </property>
             <property name="alignment">
-                <set>Qt::TextWordWrap|Qt::AlignBottom|Qt::AlignLeft</set>
+                <set>WordBreak|AlignBottom|AlignLeft</set>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="3" column="1">
@@ -375,7 +375,7 @@
                         <cstring>projectsURL</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>Qt::WheelFocus</enum>
+                        <enum>WheelFocus</enum>
                     </property>
                 </widget>
             </hbox>
@@ -385,7 +385,7 @@
                 <cstring>spacer13</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Fixed</enum>

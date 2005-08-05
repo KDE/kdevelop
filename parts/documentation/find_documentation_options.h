@@ -23,7 +23,7 @@
 
 #include "find_documentation_optionsbase.h"
 
-class Q3CheckListItem;
+class QCheckListItem;
 class KConfig;
 
 class FindDocumentationOptions : public FindDocumentationOptionsBase
@@ -33,11 +33,11 @@ public:
     FindDocumentationOptions(QWidget* parent = 0, const char* name = 0, bool modal = FALSE);
     ~FindDocumentationOptions();
     /*$PUBLIC_FUNCTIONS$*/
-    virtual bool isContents( Q3CheckListItem * item );
-    virtual bool isGoogle( Q3CheckListItem * item );
-    virtual bool isIndex( Q3CheckListItem * item );
-    virtual bool isInfo( Q3CheckListItem * item );
-    virtual bool isMan( Q3CheckListItem * item );
+    virtual bool isContents( QCheckListItem * item );
+    virtual bool isGoogle( QCheckListItem * item );
+    virtual bool isIndex( QCheckListItem * item );
+    virtual bool isInfo( QCheckListItem * item );
+    virtual bool isMan( QCheckListItem * item );
 
 public slots:
     /*$PUBLIC_SLOTS$*/
@@ -53,11 +53,11 @@ protected slots:
   /*$PROTECTED_SLOTS$*/
 
 private:
-    Q3CheckListItem *m_man_item;
-    Q3CheckListItem *m_info_item;
-    Q3CheckListItem *m_index_item;
-    Q3CheckListItem *m_google_item;
-    Q3CheckListItem *m_contents_item;
+    QCheckListItem *m_man_item;
+    QCheckListItem *m_info_item;
+    QCheckListItem *m_index_item;
+    QCheckListItem *m_google_item;
+    QCheckListItem *m_contents_item;
     
     KConfig* config;    
 };

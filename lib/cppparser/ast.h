@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <qstring.h>
-#include <q3ptrlist.h>
+#include <qptrlist.h>
 
 #if defined( Q_OS_WIN32 ) || defined( Q_CC_SUN )
 
@@ -236,7 +236,7 @@ public:
     void getEndPosition( int* line, int* col ) const;
 
 #ifndef CPPPARSER_NO_CHILDREN
-    Q3PtrList<AST> children() { return m_children; }
+    QPtrList<AST> children() { return m_children; }
     void appendChild( AST* child );
     void removeChild( AST* child );
 #endif
@@ -264,7 +264,7 @@ private:
     int m_endLine, m_endColumn;
     Slice m_slice;
 #ifndef CPPPARSER_NO_CHILDREN
-    Q3PtrList<AST> m_children;
+    QPtrList<AST> m_children;
 #endif
 
 private:
@@ -283,13 +283,13 @@ public:
 public:
     GroupAST();
 
-    Q3PtrList<AST> nodeList() { return m_nodeList; }
+    QPtrList<AST> nodeList() { return m_nodeList; }
     void addNode( AST::Node& node );
 
     virtual QString text() const;
 
 private:
-    Q3PtrList<AST> m_nodeList;
+    QPtrList<AST> m_nodeList;
 
 private:
     GroupAST( const GroupAST& source );
@@ -309,12 +309,12 @@ public:
     TemplateArgumentListAST();
 
     void addArgument( AST::Node& arg );
-    Q3PtrList<AST> argumentList() { return m_argumentList; }
+    QPtrList<AST> argumentList() { return m_argumentList; }
 
     virtual QString text() const;
 
 private:
-    Q3PtrList<AST> m_argumentList;
+    QPtrList<AST> m_argumentList;
 
 private:
     TemplateArgumentListAST( const TemplateArgumentListAST& source );
@@ -364,7 +364,7 @@ public:
     void setGlobal( bool b );
 
     void addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName );
-    Q3PtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
+    QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
 
     ClassOrNamespaceNameAST* unqualifiedName() { return m_unqualifiedName.get(); }
     void setUnqualifiedName( ClassOrNamespaceNameAST::Node& unqualifiedName );
@@ -374,7 +374,7 @@ public:
 private:
     bool m_global;
     ClassOrNamespaceNameAST::Node m_unqualifiedName;
-    Q3PtrList<ClassOrNamespaceNameAST> m_classOrNamespaceNameList;
+    QPtrList<ClassOrNamespaceNameAST> m_classOrNamespaceNameList;
 
 private:
     NameAST( const NameAST& source );
@@ -442,13 +442,13 @@ public:
 public:
     AccessDeclarationAST();
 
-    Q3PtrList<AST> accessList() { return m_accessList; }
+    QPtrList<AST> accessList() { return m_accessList; }
     void addAccess( AST::Node& access );
 
     virtual QString text() const;
 
 private:
-    Q3PtrList<AST> m_accessList;
+    QPtrList<AST> m_accessList;
 
 private:
     AccessDeclarationAST( const AccessDeclarationAST& source );
@@ -529,10 +529,10 @@ public:
     BaseClauseAST();
 
     void addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier );
-    Q3PtrList<BaseSpecifierAST> baseSpecifierList() { return m_baseSpecifierList; }
+    QPtrList<BaseSpecifierAST> baseSpecifierList() { return m_baseSpecifierList; }
 
 private:
-    Q3PtrList<BaseSpecifierAST> m_baseSpecifierList;
+    QPtrList<BaseSpecifierAST> m_baseSpecifierList;
 
 private:
     BaseClauseAST( const BaseClauseAST& source );
@@ -559,14 +559,14 @@ public:
     BaseClauseAST* baseClause() { return m_baseClause.get(); }
     void setBaseClause( BaseClauseAST::Node& baseClause );
 
-    Q3PtrList<DeclarationAST> declarationList() { return m_declarationList; }
+    QPtrList<DeclarationAST> declarationList() { return m_declarationList; }
     void addDeclaration( DeclarationAST::Node& declaration );
 
 private:
     GroupAST::Node m_winDeclSpec;
     AST::Node m_classKey;
     BaseClauseAST::Node m_baseClause;
-    Q3PtrList<DeclarationAST> m_declarationList;
+    QPtrList<DeclarationAST> m_declarationList;
 
 private:
     ClassSpecifierAST( const ClassSpecifierAST& source );
@@ -611,10 +611,10 @@ public:
     EnumSpecifierAST();
 
     void addEnumerator( EnumeratorAST::Node& enumerator );
-    Q3PtrList<EnumeratorAST> enumeratorList() { return m_enumeratorList; }
+    QPtrList<EnumeratorAST> enumeratorList() { return m_enumeratorList; }
 
 private:
-    Q3PtrList<EnumeratorAST> m_enumeratorList;
+    QPtrList<EnumeratorAST> m_enumeratorList;
 
 private:
     EnumSpecifierAST( const EnumSpecifierAST& source );
@@ -658,10 +658,10 @@ public:
     LinkageBodyAST();
 
     void addDeclaration( DeclarationAST::Node& ast );
-    Q3PtrList<DeclarationAST> declarationList() { return m_declarationList; }
+    QPtrList<DeclarationAST> declarationList() { return m_declarationList; }
 
 private:
-    Q3PtrList<DeclarationAST> m_declarationList;
+    QPtrList<DeclarationAST> m_declarationList;
 
 private:
     LinkageBodyAST( const LinkageBodyAST& source );
@@ -809,7 +809,7 @@ public:
 public:
     DeclaratorAST();
 
-    Q3PtrList<AST> ptrOpList() { return m_ptrOpList; }
+    QPtrList<AST> ptrOpList() { return m_ptrOpList; }
     void addPtrOp( AST::Node& ptrOp );
 
     DeclaratorAST* subDeclarator() { return m_subDeclarator.get(); }
@@ -821,7 +821,7 @@ public:
     AST* bitfieldInitialization() { return m_bitfieldInitialization.get(); }
     void setBitfieldInitialization( AST::Node& bitfieldInitialization );
 
-    Q3PtrList<AST> arrayDimensionList() { return m_arrayDimensionList; }
+    QPtrList<AST> arrayDimensionList() { return m_arrayDimensionList; }
     void addArrayDimension( AST::Node& arrayDimension );
 
     class ParameterDeclarationClauseAST* parameterDeclarationClause() { return m_parameterDeclarationClause.get(); }
@@ -835,11 +835,11 @@ public:
     void setExceptionSpecification( GroupAST::Node& exceptionSpecification );
 
 private:
-    Q3PtrList<AST> m_ptrOpList;
+    QPtrList<AST> m_ptrOpList;
     AUTO_PTR<DeclaratorAST> m_subDeclarator;
     NameAST::Node m_declaratorId;
     AST::Node m_bitfieldInitialization;
-    Q3PtrList<AST> m_arrayDimensionList;
+    QPtrList<AST> m_arrayDimensionList;
     AUTO_PTR<class ParameterDeclarationClauseAST> m_parameterDeclarationClause;
     AST::Node m_constant;
     GroupAST::Node m_exceptionSpecification;
@@ -892,13 +892,13 @@ public:
 public:
     ParameterDeclarationListAST();
 
-    Q3PtrList<ParameterDeclarationAST> parameterList() { return m_parameterList; }
+    QPtrList<ParameterDeclarationAST> parameterList() { return m_parameterList; }
     void addParameter( ParameterDeclarationAST::Node& parameter );
 
     virtual QString text() const;
 
 private:
-    Q3PtrList<ParameterDeclarationAST> m_parameterList;
+    QPtrList<ParameterDeclarationAST> m_parameterList;
 
 private:
     ParameterDeclarationListAST( const ParameterDeclarationListAST& source );
@@ -971,11 +971,11 @@ public:
 public:
     InitDeclaratorListAST();
 
-    Q3PtrList<InitDeclaratorAST> initDeclaratorList() { return m_initDeclaratorList; }
+    QPtrList<InitDeclaratorAST> initDeclaratorList() { return m_initDeclaratorList; }
     void addInitDeclarator( InitDeclaratorAST::Node& decl );
 
 private:
-    Q3PtrList<InitDeclaratorAST> m_initDeclaratorList;
+    QPtrList<InitDeclaratorAST> m_initDeclaratorList;
 
 private:
     InitDeclaratorListAST( const InitDeclaratorListAST& source );
@@ -1045,11 +1045,11 @@ public:
 public:
     TemplateParameterListAST();
 
-    Q3PtrList<TemplateParameterAST> templateParameterList() { return m_templateParameterList; }
+    QPtrList<TemplateParameterAST> templateParameterList() { return m_templateParameterList; }
     void addTemplateParameter( TemplateParameterAST::Node& templateParameter );
 
 private:
-    Q3PtrList<TemplateParameterAST> m_templateParameterList;
+    QPtrList<TemplateParameterAST> m_templateParameterList;
 
 private:
     TemplateParameterListAST( const TemplateParameterListAST& source );
@@ -1376,11 +1376,11 @@ public:
 public:
     StatementListAST();
 
-    Q3PtrList<StatementAST> statementList() { return m_statementList; }
+    QPtrList<StatementAST> statementList() { return m_statementList; }
     void addStatement( StatementAST::Node& statement );
 
 private:
-    Q3PtrList<StatementAST> m_statementList;
+    QPtrList<StatementAST> m_statementList;
 
 private:
     StatementListAST( const StatementListAST& source );
@@ -1424,11 +1424,11 @@ public:
 public:
     CatchStatementListAST();
 
-    Q3PtrList<CatchStatementAST> statementList() { return m_statementList; }
+    QPtrList<CatchStatementAST> statementList() { return m_statementList; }
     void addStatement( CatchStatementAST::Node& statement );
 
 private:
-    Q3PtrList<CatchStatementAST> m_statementList;
+    QPtrList<CatchStatementAST> m_statementList;
 
 private:
     CatchStatementListAST( const CatchStatementListAST& source );
@@ -1538,10 +1538,10 @@ public:
     TranslationUnitAST();
 
     void addDeclaration( DeclarationAST::Node& ast );
-    Q3PtrList<DeclarationAST> declarationList() { return m_declarationList; }
+    QPtrList<DeclarationAST> declarationList() { return m_declarationList; }
 
 private:
-    Q3PtrList<DeclarationAST> m_declarationList;
+    QPtrList<DeclarationAST> m_declarationList;
 
 private:
     TranslationUnitAST( const TranslationUnitAST& source );

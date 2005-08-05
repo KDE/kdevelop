@@ -18,7 +18,7 @@
 
 class CvsJob_stub;
 class CvsService_stub;
-class Q3TextBrowser;
+class QTextBrowser;
 
 /**
 Implementation for the form displaying 'cvs log' output.
@@ -51,7 +51,7 @@ private slots:
 
 private:
     QString m_pathName;
-    Q3TextBrowser *m_textBrowser;
+    QTextBrowser *m_textBrowser;
     QString m_logTextBackup;
 	BufferedStringReader m_outputBuffer;
 	QStringList m_diffStrings;

@@ -21,8 +21,8 @@
 #include "annotationpart.h"
 
 #include <qtimer.h>
-#include <q3popupmenu.h>
-#include <q3whatsthis.h>
+#include <qpopupmenu.h>
+#include <qwhatsthis.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -61,7 +61,7 @@ annotationPart::annotationPart(QObject *parent, const char *name, const QStringL
     m_widget->setCaption("Annotations");
     m_widget->setIcon(SmallIcon("notes"));
 
-    Q3WhatsThis::add(m_widget, i18n("Some annotation about the code"));
+    QWhatsThis::add(m_widget, i18n("Some annotation about the code"));
     
     // now you decide what should happen to the widget. Take a look at kdevcore.h
     // or at other plugins how to embed it.
@@ -86,8 +86,8 @@ annotationPart::annotationPart(QObject *parent, const char *name, const QStringL
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
         this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
 
-    connect(core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-        this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
+    connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+        this, SLOT(contextMenu(QPopupMenu *, const Context *)));
     connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
   
@@ -136,7 +136,7 @@ void annotationPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, u
     }
 }
 
-void annotationPart::contextMenu(Q3PopupMenu *popup, const Context *context)
+void annotationPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
 // put actions into the context menu here
     if (context->hasType(Context::EditorContext))

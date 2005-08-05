@@ -25,7 +25,7 @@
 
 #include <qregexp.h>
 #include <qmap.h>
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 
 #if defined( KDEVELOP_BGPARSER )
 #include <qthread.h>
@@ -54,7 +54,7 @@ using namespace std;
 struct LexerData
 {
     typedef QMap<QString, QString> Scope;
-    typedef Q3ValueList<Scope> StaticChain;
+    typedef QValueList<Scope> StaticChain;
 
     StaticChain staticChain;
 

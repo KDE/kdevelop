@@ -18,9 +18,9 @@
  *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
-#include <q3listbox.h>
-#include <q3popupmenu.h>
+#include <qwhatsthis.h>
+#include <qlistbox.h>
+#include <qpopupmenu.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qradiobutton.h>
@@ -50,7 +50,7 @@ CopyToPart::CopyToPart(QObject *parent, const char *name, const QStringList& )
 	setInstance(CopyToFactory::instance());
 //	setXMLFile("kdevpart_copyto.rc");
 
-	connect( core(), SIGNAL(contextMenu(Q3PopupMenu*, const Context* )), this, SLOT(contextMenu(Q3PopupMenu*, const Context* )) );  
+	connect( core(), SIGNAL(contextMenu(QPopupMenu*, const Context* )), this, SLOT(contextMenu(QPopupMenu*, const Context* )) );  
 }
 
 
@@ -58,7 +58,7 @@ CopyToPart::~CopyToPart()
 {
 }
 
-void CopyToPart::contextMenu( Q3PopupMenu * popup, const Context * context )
+void CopyToPart::contextMenu( QPopupMenu * popup, const Context * context )
 {
 	if ( context->hasType( Context::FileContext ) )
 	{

@@ -56,7 +56,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -73,7 +73,7 @@
                 <cstring>spacer4</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

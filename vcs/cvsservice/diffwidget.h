@@ -13,11 +13,8 @@
 #define _DIFFWIDGET_H_
 
 #include <qwidget.h>
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QContextMenuEvent>
-#include <Q3PopupMenu>
 
 #include <kurl.h>
 
@@ -32,7 +29,7 @@ namespace KParts {
 }
 
 // Helper class that displays a modified RMB popup menu
-class KDiffTextEdit: public Q3TextEdit
+class KDiffTextEdit: public QTextEdit
 {
   Q_OBJECT
 public:
@@ -45,8 +42,8 @@ signals:
   void externalPartRequested( const QString& partName );
 
 protected:
-  virtual Q3PopupMenu* createPopupMenu( const QPoint& );
-  virtual Q3PopupMenu* createPopupMenu();
+  virtual QPopupMenu* createPopupMenu( const QPoint& );
+  virtual QPopupMenu* createPopupMenu();
 
 private slots:
   void popupActivated( int );
@@ -65,7 +62,7 @@ class DiffWidget : public QWidget
     Q_OBJECT
 
 public:
-    DiffWidget( QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0 );
+    DiffWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
     virtual ~DiffWidget();
 
 public slots:

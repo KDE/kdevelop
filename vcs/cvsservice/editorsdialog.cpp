@@ -15,7 +15,7 @@
 #include <kdebug.h>
 #include <dcopref.h>
 
-#include <q3textbrowser.h>
+#include <qtextbrowser.h>
 #include <qregexp.h>
 
 #include "editorsdialog.h"

@@ -21,10 +21,6 @@
 
 #include <kurl.h>
 #include <klistview.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QLabel>
-#include <QResizeEvent>
 
 class KURLRequester;
 
@@ -40,7 +36,7 @@ class QStringList;
 /**
  * @internal
  */
-class KDevAppTreeListItem : public Q3ListViewItem
+class KDevAppTreeListItem : public QListViewItem
 {
     bool parsed;
     bool directory;
@@ -56,7 +52,7 @@ protected:
 public:
     KDevAppTreeListItem( KListView* parent, const QString & name, const QPixmap& pixmap,
                       bool parse, bool dir, const QString& p, const QString& c, const QString& dE );
-    KDevAppTreeListItem( Q3ListViewItem* parent, const QString & name, const QPixmap& pixmap,
+    KDevAppTreeListItem( QListViewItem* parent, const QString & name, const QPixmap& pixmap,
                       bool parse, bool dir, const QString& p, const QString& c, const QString& dE );
     bool isDirectory();
 
@@ -93,8 +89,8 @@ protected:
     KDevAppTreeListItem* currentitem;
 
 public slots:
-    void slotItemHighlighted(Q3ListViewItem* i);
-    void slotSelectionChanged(Q3ListViewItem* i);
+    void slotItemHighlighted(QListViewItem* i);
+    void slotSelectionChanged(QListViewItem* i);
 
 signals:
     void selected( const QString& _name, const QString& _exec );

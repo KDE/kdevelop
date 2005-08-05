@@ -125,7 +125,7 @@
                 </sizepolicy>
             </property>
             <property name="tabPosition">
-                <enum>Qt::DockTop</enum>
+                <enum>Top</enum>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -220,7 +220,7 @@
                                     <cstring>Spacer37</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Qt::Vertical</enum>
+                                    <enum>Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -831,7 +831,7 @@ Build Files</string>
                                             <cstring>Spacer7</cstring>
                                         </property>
                                         <property name="orientation">
-                                            <enum>Qt::Horizontal</enum>
+                                            <enum>Horizontal</enum>
                                         </property>
                                         <property name="sizeType">
                                             <enum>Fixed</enum>
@@ -850,7 +850,7 @@ Build Files</string>
                                     <cstring>Spacer8</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Qt::Horizontal</enum>
+                                    <enum>Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -958,7 +958,7 @@ Build Files</string>
                                             <cstring>Spacer24</cstring>
                                         </property>
                                         <property name="orientation">
-                                            <enum>Qt::Horizontal</enum>
+                                            <enum>Horizontal</enum>
                                         </property>
                                         <property name="sizeType">
                                             <enum>Minimum</enum>
@@ -1036,7 +1036,7 @@ Build Files</string>
                                             <cstring>Spacer6</cstring>
                                         </property>
                                         <property name="orientation">
-                                            <enum>Qt::Vertical</enum>
+                                            <enum>Vertical</enum>
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>

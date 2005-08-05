@@ -18,9 +18,6 @@
 #include <kglobal.h>
 #include <kpopupmenu.h>
 #include "classstore.h"
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 
 ClassToolWidget::ClassToolWidget(ClassViewPart *part, QWidget *parent)
@@ -44,13 +41,13 @@ KPopupMenu *ClassToolWidget::createPopup()
 }
 
 
-void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, Q3ValueList<ParsedClass*> classList)
+void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QValueList<ParsedClass*> classList)
 {
     ClassTreeItem *root = new ClassTreeClassItem(this, 0, parsedClass);
     
     ClassTreeItem *lastItem = 0;
 
-    Q3ValueList<ParsedClass*>::ConstIterator it;
+    QValueList<ParsedClass*>::ConstIterator it;
     for (it = classList.begin(); it != classList.end(); ++it) {
         lastItem = new ClassTreeClassItem(root, lastItem, *it);
         lastItem->setExpandable(false);
@@ -63,13 +60,13 @@ void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, Q3ValueLis
 }
 
 
-void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, const Q3PtrList<ParsedParent> &parentList)
+void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, const QPtrList<ParsedParent> &parentList)
 {
     ClassTreeItem *root = new ClassTreeClassItem(this, 0, parsedClass);
     
     ClassTreeItem *lastItem = 0;
 
-    Q3PtrListIterator<ParsedParent> it(parentList);
+    QPtrListIterator<ParsedParent> it(parentList);
     for (; it.current(); ++it) {
         ParsedClass *parentClass = m_part->classStore()->getClassByName((*it)->name());
         lastItem = new ClassTreeClassItem(root, lastItem, parentClass);
@@ -89,8 +86,8 @@ void ClassToolWidget::addClassAndAttributes(ParsedClass *parsedClass, PIAccess f
 
     ClassTreeItem *ilastItem = 0;
     
-    Q3ValueList<ParsedAttribute*> attrList = parsedClass->getSortedAttributeList();
-    Q3ValueList<ParsedAttribute*>::ConstIterator it;
+    QValueList<ParsedAttribute*> attrList = parsedClass->getSortedAttributeList();
+    QValueList<ParsedAttribute*>::ConstIterator it;
     for (it = attrList.begin(); it != attrList.end(); ++it) {
         if (filter == (PIAccess)-1 || filter == (*it)->access())
             ilastItem = new ClassTreeAttrItem(*lastItem, ilastItem, *it);
@@ -109,8 +106,8 @@ void ClassToolWidget::addClassAndMethods(ParsedClass *parsedClass, PIAccess filt
     
     ClassTreeItem *ilastItem = 0;
     
-    Q3ValueList<ParsedMethod*> methodList = parsedClass->getSortedMethodList();
-    Q3ValueList<ParsedMethod*>::ConstIterator it;
+    QValueList<ParsedMethod*> methodList = parsedClass->getSortedMethodList();
+    QValueList<ParsedMethod*>::ConstIterator it;
     for (it = methodList.begin(); it != methodList.end(); ++it) {
         if (filter == (PIAccess)-1 || filter == (*it)->access())
             ilastItem = new ClassTreeMethodItem(*lastItem, ilastItem, *it);

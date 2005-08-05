@@ -10,8 +10,6 @@
  ***************************************************************************/
 
 #include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <kdebug.h>
 
 #include "makeactionfilter.h"
@@ -159,7 +157,7 @@ struct TestItem
 
 void MakeActionFilter::test()
 {
-	static Q3ValueList<TestItem> testItems = Q3ValueList<TestItem>()
+	static QValueList<TestItem> testItems = QValueList<TestItem>()
 
 	<< TestItem( // simple qmake compile
 		"g++ -c -pipe -Wall -W -O2 -DQT_NO_DEBUG -I/home/john/src/kde/qt-copy/mkspecs/default -I. "
@@ -273,7 +271,7 @@ void MakeActionFilter::test()
 	"compiling", "g++", "quanta_init.cpp")
 	;
 
-	Q3ValueList<TestItem>::const_iterator it = testItems.begin();
+	QValueList<TestItem>::const_iterator it = testItems.begin();
 	for( ; it != testItems.end(); ++it )
 	{
 		ActionItem* actionItem = matchLine( (*it).line );

@@ -1,8 +1,8 @@
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qslider.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -47,7 +47,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
     m_filetree->setCaption( i18n("File Selector") );
 	m_filetree->setIcon( SmallIcon( info()->icon() ) );
     mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
-    Q3WhatsThis::add(m_filetree, i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
+    QWhatsThis::add(m_filetree, i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
     m_filetree->readConfig( instance()->config(), "fileselector" );
 }
@@ -77,7 +77,7 @@ void FileSelectorPart::slotProjectOpened()
 
 void FileSelectorPart::slotConfigWidget( KDialogBase * dlg )
 {
-	Q3VBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+	QVBox* vbox = dlg->addVBoxPage( i18n("File Selector"), i18n("File Selector"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
     connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );
     // ### implement reload

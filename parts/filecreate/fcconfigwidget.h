@@ -12,15 +12,13 @@
 #define FCCONFIGWIDGET_H
 
 #include <qwidget.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qvaluelist.h>
 #include <kurl.h>
 
 #include "fcconfigwidgetbase.h"
 
 class FileCreatePart;
-class Q3ListView;
+class QListView;
 class QDomDocument;
 class QDomElement;
 
@@ -52,23 +50,23 @@ public slots:
     void edit_type_content_button_clicked();
 
 protected:
-    void loadGlobalConfig(Q3ListView *view, bool checkmarks = false);
-    void loadProjectConfig(Q3ListView *view);
-    void loadProjectTemplates(Q3ListView *view);
+    void loadGlobalConfig(QListView *view, bool checkmarks = false);
+    void loadProjectConfig(QListView *view);
+    void loadProjectTemplates(QListView *view);
     void saveGlobalConfig();
     void saveProjectConfig();
-    void loadFileTypes(Q3PtrList<FileCreate::FileType> list, Q3ListView *view, bool checkmarks = false);
+    void loadFileTypes(QPtrList<FileCreate::FileType> list, QListView *view, bool checkmarks = false);
     void copyTemplate(QString templateUrl, QString dest, QString destName);
     void saveConfiguration(QDomDocument &dom, QDomElement &element, bool global);
 
 private:
     FileCreatePart * m_part;
-    Q3PtrList<FileCreate::FileType> m_globalfiletypes;
-    Q3PtrList<FileCreate::FileType> m_projectfiletypes;
-    Q3PtrList<FileCreate::FileType> m_projectfiletemplates;
+    QPtrList<FileCreate::FileType> m_globalfiletypes;
+    QPtrList<FileCreate::FileType> m_projectfiletypes;
+    QPtrList<FileCreate::FileType> m_projectfiletemplates;
     bool m_global;
 
-    Q3ValueList<KURL> urlsToEdit;
+    QValueList<KURL> urlsToEdit;
 };
 
 #endif

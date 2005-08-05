@@ -22,14 +22,14 @@
 
 #include <scriptclientinterface.h>
 #include <qobject.h>
-#include <q3ptrlist.h>
+#include <qptrlist.h>
 
 class KAction;
 class KActionCollection;
 class KScriptInterface;
 class KScriptActionManager;
 class QTimer;
-class QStringList;
+
 /**
 * Connects a KAction to a script runner.
 * 
@@ -108,7 +108,7 @@ public:
     * the manager will search in $KDEPATH/data/coolapp/data for all desktop
     * files that are scripts.
      */
-    Q3PtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
+    QPtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
 
 signals:
     /**
@@ -133,7 +133,7 @@ signals:
     void scriptDone( KScriptClientInterface::Result result, const QVariant &returned );
 
 private:
-    mutable Q3PtrList<KScriptAction> m_actions;
+    mutable QPtrList<KScriptAction> m_actions;
     KActionCollection *m_ac;
 };
 #endif

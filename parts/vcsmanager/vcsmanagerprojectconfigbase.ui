@@ -27,7 +27,7 @@
                 <string>Version control system to use for this project:</string>
             </property>
             <property name="alignment">
-                <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
+                <set>WordBreak|AlignVCenter</set>
             </property>
         </widget>
         <widget class="QComboBox">
@@ -40,7 +40,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

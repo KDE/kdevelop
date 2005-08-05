@@ -6,7 +6,7 @@
 #include <kdialogbase.h>
 #include <kfileitem.h>
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 
 class KDevFileSelector;
 class KDialogBase;
@@ -29,7 +29,7 @@ private slots:
     void slotConfigWidget( KDialogBase * );
 
 private:
-    QPointer<KDevFileSelector> m_filetree;
+    QGuardedPtr<KDevFileSelector> m_filetree;
 };
 
 

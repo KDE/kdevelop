@@ -22,8 +22,6 @@
 #define QUICKOPENDIALOG_H
 
 #include "quickopenbase.h"
-//Added by qt3to4:
-#include <QEvent>
 
 class QuickOpenPart;
 class KCompletion;
@@ -33,7 +31,7 @@ class QuickOpenDialog : public QuickOpenDialogBase
   Q_OBJECT
 
 public:
-  QuickOpenDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, Qt::WFlags fl = 0 );
+  QuickOpenDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
   virtual ~QuickOpenDialog();
 
   virtual bool eventFilter(QObject *watched, QEvent *e);

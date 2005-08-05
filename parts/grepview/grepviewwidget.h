@@ -14,8 +14,6 @@
 
 #include "processwidget.h"
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
 
 class GrepDialog;
 class GrepViewPart;
@@ -77,8 +75,8 @@ private slots:
 	 * If item is a valid result of a search run, it opens the file at the position, where the stuff was found.
 	 * @param item item containing filename and linenumber of the file to open.
 	 */
-	void slotExecuted(Q3ListBoxItem *item);
-	void popupMenu(Q3ListBoxItem*, const QPoint& p);
+	void slotExecuted(QListBoxItem *item);
+	void popupMenu(QListBoxItem*, const QPoint& p);
 	/**
 	 * Creates a new tab containing the current output in the main tab and clears the main tab.
 	 */

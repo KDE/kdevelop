@@ -1,7 +1,7 @@
 #ifndef _VALGRINDITEM_H_
 #define _VALGRINDITEM_H_
 
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include <qstring.h>
 
 class ValgrindBacktraceItem
@@ -35,7 +35,7 @@ public:
   ValgrindItem( const QString& message );
   ~ValgrindItem();
 
-  typedef Q3ValueList<ValgrindBacktraceItem> BacktraceList;  
+  typedef QValueList<ValgrindBacktraceItem> BacktraceList;  
   BacktraceList& backtrace() { return _backtrace; }
   const BacktraceList& backtrace() const { return _backtrace; }
   QString message() const { return _message; }

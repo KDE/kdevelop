@@ -76,13 +76,13 @@ void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, i
     if ( !p )
         return;
 
-    Q3ListView *lvv = listView();
+    QListView *lvv = listView();
     if ( !lvv )
         return;
 
     ReplaceView * lv = static_cast<ReplaceView*>(lvv);
 
-    const Qt::BackgroundMode bgmode = lv->viewport()->backgroundMode();
+    const BackgroundMode bgmode = lv->viewport()->backgroundMode();
     const QColorGroup::ColorRole crole = QPalette::backgroundRoleFromMode( bgmode );
 
     if ( cg.brush( crole ) != lv->colorGroup().brush( crole ) )
@@ -96,22 +96,22 @@ void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, i
     int r = marg;
 
     // Draw controller / checkbox / radiobutton ---------------------
-    int styleflags = QStyle::State_None;
+    int styleflags = QStyle::Style_Default;
     if ( isOn() )
-        styleflags |= QStyle::State_On;
+        styleflags |= QStyle::Style_On;
     else
-        styleflags |= QStyle::State_Off;
+        styleflags |= QStyle::Style_Off;
     if ( isSelected() )
-        styleflags |= QStyle::State_Selected;
+        styleflags |= QStyle::Style_Selected;
     if ( isEnabled() && lv->isEnabled() )
-        styleflags |= QStyle::State_Enabled;
+        styleflags |= QStyle::Style_Enabled;
 
     int x = 0;
     int y = 0;
 
     x += 3;
 
-    if ( align & Qt::AlignVCenter )
+    if ( align & AlignVCenter )
         y = ( ( height() - boxsize ) / 2 ) + marg;
 
     else
@@ -132,13 +132,13 @@ void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, i
     mcg.setColor( QColorGroup::Text, ( isFile() ? Qt::darkGreen : Qt::blue ) );
     mcg.setColor( QColorGroup::HighlightedText, ( isFile() ? Qt::darkGreen : Qt::blue ) );
 
-    Q3ListViewItem::paintCell( p, mcg, column, width - r, align );
+    QListViewItem::paintCell( p, mcg, column, width - r, align );
 }
 #endif
 
 void ReplaceItem::activate( int, QPoint const & localPos )
 {
-    Q3ListView * lv = listView();
+    QListView * lv = listView();
     QCheckBox cb(0);
     int boxsize = cb.sizeHint().width();
 //that's KDE-3.1 only    int boxsize = lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv);

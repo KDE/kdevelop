@@ -32,9 +32,6 @@
 #include <qcheckbox.h>
 #include <qtooltip.h>
 #include <qstyle.h>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <kbuttonbox.h>
@@ -61,7 +58,7 @@
 
 #include "kapplicationtree.h"
 
-template class Q3PtrList<QString>;
+template class QPtrList<QString>;
 
 #define SORT_SPEC (QDir::DirsFirst | QDir::Name | QDir::IgnoreCase)
 
@@ -70,7 +67,7 @@ template class Q3PtrList<QString>;
 
 KDevAppTreeListItem::KDevAppTreeListItem( KListView* parent, const QString & name,
                                     const QPixmap& pixmap, bool parse, bool dir, const QString& p, const QString& c, const QString& dE )
-    : Q3ListViewItem( parent, name )
+    : QListViewItem( parent, name )
 {
     init(pixmap, parse, dir, p, c, dE);
 }
@@ -78,9 +75,9 @@ KDevAppTreeListItem::KDevAppTreeListItem( KListView* parent, const QString & nam
 
 // ----------------------------------------------------------------------
 
-KDevAppTreeListItem::KDevAppTreeListItem( Q3ListViewItem* parent, const QString & name,
+KDevAppTreeListItem::KDevAppTreeListItem( QListViewItem* parent, const QString & name,
                                     const QPixmap& pixmap, bool parse, bool dir, const QString& p, const QString& c, const QString& dE )
-    : Q3ListViewItem( parent, name )
+    : QListViewItem( parent, name )
 {
     init(pixmap, parse, dir, p, c, dE);
 }
@@ -124,7 +121,7 @@ void KDevAppTreeListItem::setOpen( bool o )
         ((KDevApplicationTree *) parent())->addDesktopGroup( path, this );
         parsed = true;
     }
-    Q3ListViewItem::setOpen( o );
+    QListViewItem::setOpen( o );
 }
 
 bool KDevAppTreeListItem::isDirectory()
@@ -142,8 +139,8 @@ KDevApplicationTree::KDevApplicationTree( QWidget *parent, const char* name )
 
     addDesktopGroup( QString::null );
 
-    connect( this, SIGNAL( currentChanged(Q3ListViewItem*) ), SLOT( slotItemHighlighted(Q3ListViewItem*) ) );
-    connect( this, SIGNAL( selectionChanged(Q3ListViewItem*) ), SLOT( slotSelectionChanged(Q3ListViewItem*) ) );
+    connect( this, SIGNAL( currentChanged(QListViewItem*) ), SLOT( slotItemHighlighted(QListViewItem*) ) );
+    connect( this, SIGNAL( selectionChanged(QListViewItem*) ), SLOT( slotSelectionChanged(QListViewItem*) ) );
 }
 
 // ----------------------------------------------------------------------
@@ -216,7 +213,7 @@ void KDevApplicationTree::addDesktopGroup( QString relPath, KDevAppTreeListItem 
 
 // ----------------------------------------------------------------------
 
-void KDevApplicationTree::slotItemHighlighted(Q3ListViewItem* i)
+void KDevApplicationTree::slotItemHighlighted(QListViewItem* i)
 {
     // i may be 0 (see documentation)
     if(!i)
@@ -233,7 +230,7 @@ void KDevApplicationTree::slotItemHighlighted(Q3ListViewItem* i)
 
 // ----------------------------------------------------------------------
 
-void KDevApplicationTree::slotSelectionChanged(Q3ListViewItem* i)
+void KDevApplicationTree::slotSelectionChanged(QListViewItem* i)
 {
     // i may be 0 (see documentation)
     if(!i)

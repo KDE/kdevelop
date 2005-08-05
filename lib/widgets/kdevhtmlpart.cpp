@@ -1,9 +1,6 @@
 #include <qfile.h>
 #include <qclipboard.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QTextStream>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -273,7 +270,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
       FILE *fs = popen(QFile::encodeName(cmd).data(), "r");
       if (fs)
       {
-         QTextStream ts(fs, QIODevice::ReadOnly);
+         QTextStream ts(fs, IO_ReadOnly);
          result = ts.read().stripWhiteSpace();
          pclose(fs);
       }
@@ -410,7 +407,7 @@ void KDevHTMLPart::slotBackAboutToShow()
 
 	if ( m_Current == m_history.begin() ) return;
 
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
 	--it;
 	
 	int i = 0;
@@ -435,7 +432,7 @@ void KDevHTMLPart::slotForwardAboutToShow()
 
 	if ( m_Current == m_history.fromLast() ) return;
 
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
 	++it;
 	
 	int i = 0;
@@ -457,7 +454,7 @@ void KDevHTMLPart::slotPopupActivated( int id )
 {
 	kdDebug(9000) << "id: " << id << endl;
 
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
 	while( it != m_history.end() )
 	{
 		kdDebug(9000) << "(*it).id: " << (*it).id << endl;
@@ -475,7 +472,7 @@ void KDevHTMLPart::slotPopupActivated( int id )
 
 void KDevHTMLPart::addHistoryEntry()
 {
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	QValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
 	
 	// if We're not already the last entry, we truncate the list here before adding an entry
 	if ( it != m_history.end() && it != m_history.fromLast() )

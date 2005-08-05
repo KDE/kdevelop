@@ -16,11 +16,9 @@
 
 #include <qwidget.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QFocusEvent>
 
 class QPushButton;
-class Q3ListViewItem;
+class QListViewItem;
 class QDialog;
 
 class ReplacePart;

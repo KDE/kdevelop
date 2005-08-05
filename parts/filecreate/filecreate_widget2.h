@@ -12,7 +12,7 @@
 #define __FILECREATE_WIDGET2_H__
 
 #include <kdeversion.h>
-#include <q3table.h>
+#include <qtable.h>
 #include <qstring.h>
 #include <qmap.h>
 
@@ -28,7 +28,7 @@ namespace FileCreate {
 
   class FileType;
 
-  class FriendlyWidget : public Q3Table, public TypeChooser
+  class FriendlyWidget : public QTable, public TypeChooser
     {
       Q_OBJECT
 

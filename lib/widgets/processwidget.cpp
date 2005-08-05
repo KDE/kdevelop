@@ -30,7 +30,7 @@
 
 
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
-    : Q3ListBoxText(s), t(type)
+    : QListBoxText(s), t(type)
 {}
 
 
@@ -44,7 +44,7 @@ void ProcessListBoxItem::paint(QPainter *p)
 {
     p->setPen((t==Error)? Qt::darkRed :
               (t==Diagnostic)? Qt::black : Qt::darkBlue);
-    Q3ListBoxText::paint(p);
+    QListBoxText::paint(p);
 }
 
 
@@ -171,7 +171,7 @@ QSize ProcessWidget::minimumSizeHint() const
     // I'm not sure about this, but when I don't use override minimumSizeHint(),
     // the initial size in clearly too small
 
-    return QSize( Q3ListBox::sizeHint().width(),
+    return QSize( QListBox::sizeHint().width(),
                   (fontMetrics().lineSpacing()+2)*4 );
 }
 

@@ -64,7 +64,7 @@ signals:
 	
 private:
 
-	QPointer<subversionWidget> m_widget;
+	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
 	SVNFileInfoProvider *m_fileInfoProvider;

@@ -11,7 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3header.h>
+#include <qheader.h>
 #include <qpixmap.h>
 
 #include <kparts/part.h>
@@ -40,10 +40,10 @@ FileListWidget::FileListWidget(ProjectviewPart *part, QWidget *parent)
 	addColumn( "" );
 	header()->hide();
 	setRootIsDecorated( false );
-	setResizeMode( Q3ListView::LastColumn );
+	setResizeMode( QListView::LastColumn );
 	setAllColumnsShowFocus( true );
 
-	setSelectionMode( Q3ListView::Extended );
+	setSelectionMode( QListView::Extended );
 
 //	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
 //	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
@@ -51,11 +51,11 @@ FileListWidget::FileListWidget(ProjectviewPart *part, QWidget *parent)
 	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(startRefreshTimer()) );
 	connect( _part->partController(), SIGNAL( activePartChanged(KParts::Part*) ), this, SLOT( activePartChanged(KParts::Part* )) );
 
-	connect( this, SIGNAL( executed( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
-	connect( this, SIGNAL( returnPressed( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
+	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	connect( this, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 
-	connect( this, SIGNAL( contextMenuRequested ( Q3ListViewItem *, const QPoint & , int ) ),
-		this, SLOT( popupMenu(Q3ListViewItem *, const QPoint & , int ) ) );
+	connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
+		this, SLOT( popupMenu(QListViewItem *, const QPoint & , int ) ) );
 
 	connect( _part->partController(), SIGNAL(documentChangedState(const KURL &, DocumentState)),
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
@@ -134,7 +134,7 @@ void FileListWidget::refreshFileList( )
 	KListView::clear();
 
 	KURL::List list = _part->partController()->openURLs();
-	Q3ValueListIterator<KURL> it = list.begin();
+	QValueListIterator<KURL> it = list.begin();
 	while ( it != list.end() )
 	{
 		FileListItem * item = new FileListItem( this, *it );
@@ -174,7 +174,7 @@ void FileListWidget::partRemoved()
 }
 */
 
-void FileListWidget::itemClicked( Q3ListViewItem * item )
+void FileListWidget::itemClicked( QListViewItem * item )
 {
 	if ( !item ) return;
 
@@ -210,7 +210,7 @@ void FileListWidget::documentChangedState( const KURL & url, DocumentState state
 	}
 }
 
-void FileListWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
+void FileListWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 {
 	if ( item )
 	{

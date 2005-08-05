@@ -14,14 +14,10 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
-#include <q3hbox.h>
-#include <q3whatsthis.h>
+#include <qhbox.h>
+#include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QBoxLayout>
 #include <kfiledialog.h>
 #include <kbuttonbox.h>
 #include <kpushbutton.h>
@@ -187,7 +183,7 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 
     resize(sizeHint());
 
-    Q3WhatsThis::add(pattern_combo,
+    QWhatsThis::add(pattern_combo,
 		    i18n("<qt>Enter the regular expression you want to search for here.<p>"
 			 "Possible meta characters are:"
                          "<ul>"
@@ -211,10 +207,10 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 			 "Furthermore, backreferences to bracketed subexpressions are "
 			 "available via the notation \\<i>n</i>.</qt>"
 			 ));
-    Q3WhatsThis::add(files_combo,
+    QWhatsThis::add(files_combo,
 		    i18n("Enter the file name pattern of the files to search here. "
 			 "You may give several patterns separated by commas"));
-    Q3WhatsThis::add(template_edit,
+    QWhatsThis::add(template_edit,
 		    i18n("You can choose a template for the pattern from the combo box "
 			 "and edit it here. The string %s in the template is replaced "
 			 "by the pattern input field, resulting in the regular expression "

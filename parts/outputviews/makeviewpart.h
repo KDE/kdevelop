@@ -12,7 +12,7 @@
 #ifndef _MAKEVIEWPART_H_
 #define _MAKEVIEWPART_H_
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 
 #include "kdevmakefrontend.h"
 #include "KDevMakeFrontendIface.h"
@@ -38,7 +38,7 @@ protected:
     virtual bool isRunning();
 
 private:
-    QPointer<MakeWidget> m_widget;
+    QGuardedPtr<MakeWidget> m_widget;
     KDevMakeFrontendIface *m_dcop;
     friend class MakeWidget;
 };

@@ -11,8 +11,6 @@
 
 #include <klistview.h>
 #include <klocale.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 class QString;
 
@@ -23,10 +21,10 @@ This class represents one CodeSnippet-Item in the listview.
 It also holds the needed data for one snippet.
 @author Robert Gruber
 */
-class SnippetItem : public Q3ListViewItem {
+class SnippetItem : public QListViewItem {
 friend class SnippetGroup;
 public:
-    SnippetItem(Q3ListViewItem * parent, QString name, QString text);
+    SnippetItem(QListViewItem * parent, QString name, QString text);
 
     ~SnippetItem();
     QString getName();
@@ -35,11 +33,11 @@ public:
     void resetParent();
     void setText(QString text);
     void setName(QString name);
-    static SnippetItem * findItemByName(QString name, Q3PtrList<SnippetItem> &list);
-    static SnippetGroup * findGroupById(int id, Q3PtrList<SnippetItem> &list);
+    static SnippetItem * findItemByName(QString name, QPtrList<SnippetItem> &list);
+    static SnippetGroup * findGroupById(int id, QPtrList<SnippetItem> &list);
     
 private:
-  SnippetItem(Q3ListView * parent, QString name, QString text);
+  SnippetItem(QListView * parent, QString name, QString text);
   QString strName;
   QString strText;
   int iParent;
@@ -53,7 +51,7 @@ it in the main QPtrList<SnippetItem>.
 */
 class SnippetGroup : public SnippetItem {
 public:
-    SnippetGroup(Q3ListView * parent, QString name, int id, QString lang=i18n("All"));
+    SnippetGroup(QListView * parent, QString name, int id, QString lang=i18n("All"));
     ~SnippetGroup();
 
     int getId() { return iId; }

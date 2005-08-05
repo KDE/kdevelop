@@ -15,17 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 #include <qlayout.h>
-#include <q3multilineedit.h>
-#include <q3vbox.h>
+#include <qmultilineedit.h>
+#include <qvbox.h>
 #include <qcheckbox.h>
-#include <q3valuelist.h>
-#include <qobject.h>
+#include <qvaluelist.h>
+#include <qobjectlist.h>
 #include <qtabbar.h>
 #include <qtoolbutton.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3PopupMenu>
-#include <Q3PtrList>
 
 #include <kaboutdata.h>
 #include <kdeversion.h>
@@ -225,7 +221,7 @@ void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
 
 	//Find the document on whose tab the user clicked
 	m_currentTabURL = QString::null;
-	Q3PtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
+	QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
 	while ( KParts::Part* part = it.current()
 	      )
 	{
@@ -318,7 +314,7 @@ void NewMainWindow::slotCoreInitialized( )
 
 void NewMainWindow::openURL( int id )
 {
-	Q3ValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+	QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
 	while ( it != m_windowList.end() )
 	{
 		if ( (*it).first == id )
@@ -337,13 +333,13 @@ void NewMainWindow::openURL( int id )
 void NewMainWindow::setupWindowMenu( )
 {
 	// get the xmlgui created one instead
-	m_pWindowMenu = static_cast<Q3PopupMenu*>(main()->child( "window", "KPopupMenu" ));
+	m_pWindowMenu = static_cast<QPopupMenu*>(main()->child( "window", "KPopupMenu" ));
 
 	if( !m_pWindowMenu )
 	{
 		kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
 
-		m_pWindowMenu = new Q3PopupMenu( main(), "window");
+		m_pWindowMenu = new QPopupMenu( main(), "window");
 		menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
 	}
 
@@ -360,7 +356,7 @@ void NewMainWindow::fillWindowMenu()
 	bool hasWidget = ( PartController::getInstance()->activeWidget() != 0 );	// hmmm... works??
 
 	// clear menu
-	Q3ValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+	QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
 	while ( it != m_windowList.end() )
 	{
 		m_pWindowMenu->removeItem( (*it).first );
@@ -572,8 +568,8 @@ void NewMainWindow::embedView( KDockWidget::DockPosition pos, QWidget *view, con
 
 void NewMainWindow::childWindowCloseRequest( KMdiChildView * childView )
 {
-	const Q3PtrList<KParts::Part> * partlist = PartController::getInstance()->parts();
-	Q3PtrListIterator<KParts::Part> it( *partlist );
+	const QPtrList<KParts::Part> * partlist = PartController::getInstance()->parts();
+	QPtrListIterator<KParts::Part> it( *partlist );
 	while ( KParts::Part* part = it.current() )
 	{
 		QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( part );
@@ -671,7 +667,7 @@ void NewMainWindow::raiseView(QWidget *view)
 
     view->parentWidget()->setFocus();
 
-    if( QPointer<KDockWidget> dockWidget = static_cast<KDockWidget*>(view->parentWidget()->qt_cast("KDockWidget")) ) {
+    if( QGuardedPtr<KDockWidget> dockWidget = static_cast<KDockWidget*>(view->parentWidget()->qt_cast("KDockWidget")) ) {
         if( !dockWidget->isVisible() )
             makeDockVisible( dockWidget );
     }
@@ -683,7 +679,7 @@ void NewMainWindow::lowerView(QWidget* view)
     if( !view || !view->parentWidget() )
         return;
 
-    if( QPointer<KDockWidget> dockWidget = static_cast<KDockWidget*>(view->parentWidget()->qt_cast("KDockWidget")) ) {
+    if( QGuardedPtr<KDockWidget> dockWidget = static_cast<KDockWidget*>(view->parentWidget()->qt_cast("KDockWidget")) ) {
         makeDockInvisible( dockWidget );
     }
 }
@@ -720,8 +716,8 @@ void NewMainWindow::saveSettings()
 	KConfig uiConfig( uimode );
 //	writeDockConfig( &uiConfig );
 
-	Q3ValueList<QWidget*> widgetList = m_pToolViews->keys();
-	Q3ValueList<QWidget*>::Iterator it = widgetList.begin();
+	QValueList<QWidget*> widgetList = m_pToolViews->keys();
+	QValueList<QWidget*>::Iterator it = widgetList.begin();
 	while( it != widgetList.end() )
 	{
 		rememberToolViewPosition( (*it)->name(), getDockWidgetDockingBorder( *it ) );

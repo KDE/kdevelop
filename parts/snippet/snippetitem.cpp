@@ -7,22 +7,20 @@
  */
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 
 #include "snippetitem.h"
 
-SnippetItem::SnippetItem(Q3ListView * parent, QString name, QString text )
-			: Q3ListViewItem( parent, name )
+SnippetItem::SnippetItem(QListView * parent, QString name, QString text )
+			: QListViewItem( parent, name )
 {
   strName = name;
   strText = text;
   iParent = -1;
 }
 
-SnippetItem::SnippetItem(Q3ListViewItem * parent, QString name, QString text)
-			: Q3ListViewItem( parent, name )
+SnippetItem::SnippetItem(QListViewItem * parent, QString name, QString text)
+			: QListViewItem( parent, name )
 {
   strName = name;
   strText = text;
@@ -76,7 +74,7 @@ void SnippetItem::resetParent()
     iParent = group->getId();
 }
 
-SnippetItem * SnippetItem::findItemByName(QString name, Q3PtrList<SnippetItem> &list)
+SnippetItem * SnippetItem::findItemByName(QString name, QPtrList<SnippetItem> &list)
 {
   for ( SnippetItem * item = list.first(); item; item = list.next() ) {  //write the snippet-list
     if (item->getName() == name)
@@ -85,7 +83,7 @@ SnippetItem * SnippetItem::findItemByName(QString name, Q3PtrList<SnippetItem> &
   return NULL;
 }
 
-SnippetGroup * SnippetItem::findGroupById(int id, Q3PtrList<SnippetItem> &list)
+SnippetGroup * SnippetItem::findGroupById(int id, QPtrList<SnippetItem> &list)
 {
   for ( SnippetItem * item = list.first(); item; item = list.next() ) {  //write the snippet-list
     SnippetGroup * group = dynamic_cast<SnippetGroup*>(item);
@@ -102,7 +100,7 @@ Deklaration for class SnippetGroup
 
 int SnippetGroup::iMaxId = 1;
 
-SnippetGroup::SnippetGroup(Q3ListView * parent, QString name, int id, QString lang)
+SnippetGroup::SnippetGroup(QListView * parent, QString name, int id, QString lang)
  : SnippetItem(parent, name, "GROUP")
 {
     if (id > 0) {

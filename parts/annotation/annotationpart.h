@@ -23,11 +23,9 @@
 
 #include <kdevplugin.h>
 
-#include <qpointer.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <qguardedptr.h>
 
-class Q3PopupMenu;
+class QPopupMenu;
 class KAction;
 class KDialogBase;
 class Context;
@@ -50,7 +48,7 @@ private slots:
     void init();
     
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
-    void contextMenu(Q3PopupMenu *popup, const Context *context);
+    void contextMenu(QPopupMenu *popup, const Context *context);
     void projectOpened();
     void projectClosed();
     
@@ -64,7 +62,7 @@ private:
     QString m_itemAnnotationName;
     QString m_itemAnnotationFilename;
     
-    QPointer<annotationWidget> m_widget;
+    QGuardedPtr<annotationWidget> m_widget;
     ConfigWidgetProxy *m_configProxy;
 public slots:
     void SlotDoAnnotate();

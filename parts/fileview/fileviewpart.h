@@ -12,7 +12,7 @@
 #ifndef _FILEVIEWPART_H_
 #define _FILEVIEWPART_H_
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <configwidgetproxy.h>
 #include "kdevplugin.h"
 #include "vcscolorsconfigwidget.h"
@@ -42,7 +42,7 @@ private:
     void loadSettings();
     void storeSettings();
 
-    QPointer<PartWidget> m_widget;
+    QGuardedPtr<PartWidget> m_widget;
 	ConfigWidgetProxy * _configProxy;
 };
 

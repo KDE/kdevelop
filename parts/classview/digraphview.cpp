@@ -15,12 +15,8 @@
 #include <stdlib.h>
 #include <qapplication.h>
 #include <qpainter.h>
-#include <q3paintdevicemetrics.h>
+#include <qpaintdevicemetrics.h>
 #include <qtextstream.h>
-//Added by qt3to4:
-#include <Q3PointArray>
-#include <Q3MemArray>
-#include <QMouseEvent>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -42,16 +38,16 @@ struct DigraphNode
 
 struct DigraphEdge
 {
-    Q3PointArray points;
+    QPointArray points;
 };
 
 
 DigraphView::DigraphView(QWidget *parent, const char *name)
-    : Q3ScrollView(parent, name, Qt::WNoAutoErase|Qt::WStaticContents|Qt::WResizeNoErase)
+    : QScrollView(parent, name, WRepaintNoErase|WStaticContents|WResizeNoErase)
 {
     viewport()->setBackgroundMode(PaletteBase);
 
-    Q3PaintDeviceMetrics m(this);
+    QPaintDeviceMetrics m(this);
     xscale = m.logicalDpiX();
     yscale = m.logicalDpiY();
 
@@ -103,7 +99,7 @@ void DigraphView::addRenderedNode(const QString &name,
 
 
 void DigraphView::addRenderedEdge(const QString &/*name1*/, const QString &/*name2*/,
-                                  Q3MemArray<double> coords)
+                                  QMemArray<double> coords)
 {
     if (coords.count() < 4)
         return;
@@ -141,7 +137,7 @@ void DigraphView::clear()
 
 void DigraphView::setSelected(const QString &name)
 {
-    Q3PtrListIterator<DigraphNode> it(nodes);
+    QPtrListIterator<DigraphNode> it(nodes);
     for (; it.current(); ++it) {
         if (it.current()->name == name) {
             updateContents(selNode->x-selNode->w/2, selNode->y-selNode->h/2,
@@ -157,10 +153,10 @@ void DigraphView::setSelected(const QString &name)
 
 void DigraphView::ensureVisible(const QString &name)
 {
-    Q3PtrListIterator<DigraphNode> it(nodes);
+    QPtrListIterator<DigraphNode> it(nodes);
     for (; it.current(); ++it) {
         if (it.current()->name == name) {
-            Q3ScrollView::ensureVisible((*it)->x, (*it)->y, (*it)->w, (*it)->h);
+            QScrollView::ensureVisible((*it)->x, (*it)->y, (*it)->w, (*it)->h);
             return;
         }
     }
@@ -212,7 +208,7 @@ void DigraphView::parseDotResults(const QStringList &list)
         } else if (tokens[0] == "edge") {
             if (tokens.count() < 8)
                 continue;
-            Q3MemArray<double> coords(tokens.count()-6);
+            QMemArray<double> coords(tokens.count()-6);
             for (uint i=0; i != tokens.count()-6; ++i)
                 coords[i] = tokens[i+4].toDouble();
             addRenderedEdge(tokens[1], tokens[2], coords);
@@ -266,7 +262,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
     p->eraseRect(clipRect);
 
     p->setFont(KGlobalSettings::generalFont());
-    Q3PtrListIterator<DigraphNode> it1(nodes);
+    QPtrListIterator<DigraphNode> it1(nodes);
     for (; it1.current(); ++it1) {
         QRect r((*it1)->x-(*it1)->w/2, (*it1)->y-(*it1)->h/2, (*it1)->w, (*it1)->h);
         if (r.intersects(clipRect)) {
@@ -278,13 +274,13 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
         }
     }
     p->setBrush(QBrush(black, SolidPattern));
-    Q3PtrListIterator<DigraphEdge> it2(edges);
+    QPtrListIterator<DigraphEdge> it2(edges);
     for (; it2.current(); ++it2) {
         int n = (*it2)->points.count();
         for (int i=0; i+3 < n; i+=3)
             {
-                Q3PointArray a(4);
-                Q3PointArray &b = (*it2)->points;
+                QPointArray a(4);
+                QPointArray &b = (*it2)->points;
                 for (int j=0; j<4; ++j)
                     a.setPoint(j, b.point(i+j));
                 if (a.boundingRect().intersects(clipRect))
@@ -298,7 +294,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
         double d12 = (10.0)/l*d.y();
         double d21 = -(3.0/l)*d.y();
         double d22 = (3.0/l)*d.x();
-        Q3PointArray triangle(3);
+        QPointArray triangle(3);
         triangle[0] = p2 + QPoint((int)(d11+d21),(int)(d12+d22));
         triangle[1] = p2 + QPoint((int)(d11-d21),(int)(d12-d22));
         triangle[2] = p2;
@@ -309,7 +305,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
 
 void DigraphView::contentsMousePressEvent(QMouseEvent *e)
 {
-    Q3PtrListIterator<DigraphNode> it1(nodes);
+    QPtrListIterator<DigraphNode> it1(nodes);
     for (; it1.current(); ++it1) {
         QRect r((*it1)->x-(*it1)->w/2, (*it1)->y-(*it1)->h/2, (*it1)->w, (*it1)->h);
         if (r.contains(e->pos())) {

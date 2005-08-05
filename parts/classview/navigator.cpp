@@ -59,19 +59,19 @@ private:
 
 
 
-class FunctionNavItem: public Q3ListViewItem {
+class FunctionNavItem: public QListViewItem {
 public:
     enum Type { Declaration, Definition };
 
-    FunctionNavItem(ClassViewPart *part, Q3ListView *parent, QString name, Type type)
-        :Q3ListViewItem(parent, name), m_part(part), m_type(type) {}
-    FunctionNavItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, Type type)
-        :Q3ListViewItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(ClassViewPart *part, QListView *parent, QString name, Type type)
+        :QListViewItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(ClassViewPart *part, QListViewItem *parent, QString name, Type type)
+        :QListViewItem(parent, name), m_part(part), m_type(type) {}
     ~FunctionNavItem() {}
 
     virtual void setup()
     {
-        Q3ListViewItem::setup();
+        QListViewItem::setup();
         setPixmap( 0, UserIcon("CVpublic_meth", KIcon::DefaultState, m_part->instance()) );
     }
     Type type() { return m_type; }
@@ -96,7 +96,7 @@ Navigator::~Navigator()
 {
 }
 
-void Navigator::selectFunctionNav(Q3ListViewItem *item)
+void Navigator::selectFunctionNav(QListViewItem *item)
 {
     FunctionNavItem *nav = dynamic_cast<FunctionNavItem*>(item);
     if (!nav)
@@ -245,10 +245,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
 
     //remove items not in toLeave list
-    QMap<QString, Q3ListViewItem*>::iterator it = m_functionNavDecls.begin();
+    QMap<QString, QListViewItem*>::iterator it = m_functionNavDecls.begin();
     while ( it != m_functionNavDecls.end() )
     {
-        QMap<QString, Q3ListViewItem*>::iterator it2 = it;
+        QMap<QString, QListViewItem*>::iterator it2 = it;
         ++it;
         if ( !toLeave.contains( it2.key() ) )
         {
@@ -286,10 +286,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
 
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
     //remove items not in toLeave list
-    QMap<QString, Q3ListViewItem*>::iterator itt = m_functionNavDefs.begin();
+    QMap<QString, QListViewItem*>::iterator itt = m_functionNavDefs.begin();
     while ( itt != m_functionNavDefs.end() )
     {
-        QMap<QString, Q3ListViewItem*>::iterator it2 = itt;
+        QMap<QString, QListViewItem*>::iterator it2 = itt;
         ++itt;
         if ( !toLeave.contains( it2.key() ) )
         {

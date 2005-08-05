@@ -22,13 +22,11 @@
 #define FINDDOCUMENTATION_H
 
 #include "find_documentationbase.h"
-//Added by qt3to4:
-#include <QFocusEvent>
 
 class DocumentationWidget;
 class KListViewItem;
 class FindDocumentationOptions;
-class Q3Process;
+class QProcess;
 
 class FindDocumentation : public FindDocumentationBase
 {
@@ -40,8 +38,8 @@ public:
 
 public slots:
     /*$PUBLIC_SLOTS$*/
-    virtual void buttonPressedOnItem( int button, Q3ListViewItem * item, const QPoint & pos, int c );
-    virtual void clickOnItem( Q3ListViewItem * item );
+    virtual void buttonPressedOnItem( int button, QListViewItem * item, const QPoint & pos, int c );
+    virtual void clickOnItem( QListViewItem * item );
     virtual void procInfoReadFromStdout();
     virtual void procManReadFromStdout();
     virtual void searchInInfo();
@@ -61,8 +59,8 @@ protected slots:
   /*$PROTECTED_SLOTS$*/
 
 private:
-    Q3Process* proc_man;
-    Q3Process* proc_info;
+    QProcess* proc_man;
+    QProcess* proc_info;
     KListViewItem* man_item;
     KListViewItem* info_item;
     KListViewItem* index_item;

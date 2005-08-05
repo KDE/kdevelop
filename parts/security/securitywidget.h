@@ -35,7 +35,7 @@ public:
     void reportProblem(const QString &file, int line, const QString &problem, const QString &suggestion);
     
 public slots:
-    void gotoLine(Q3ListViewItem *item);
+    void gotoLine(QListViewItem *item);
     
 private:
     SecurityPart *m_part;

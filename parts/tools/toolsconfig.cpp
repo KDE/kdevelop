@@ -3,13 +3,9 @@
 #include <qapplication.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3listbox.h>
+#include <qlistbox.h>
 #include <qpushbutton.h>
-#include <q3header.h>
-//Added by qt3to4:
-#include <QShowEvent>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <qheader.h>
 
 #include <kapplication.h>
 #include <kdesktopfile.h>
@@ -63,7 +59,7 @@ void ToolsConfig::showEvent(QShowEvent *e)
       connect(_toTree, SIGNAL(clicked()), this, SLOT(toTree()));
 
       vbox = new QVBoxLayout(hbox);
-      _list = new Q3ListBox(this);
+      _list = new QListBox(this);
       l = new QLabel(_list, i18n("&Tools menu:"), this);
       l->show();
       _list->show();
@@ -146,7 +142,7 @@ void ToolsConfig::accept()
   config->setGroup("Tools");
 
   QStringList l;
-  Q3PtrListIterator<Entry> it(_entries);
+  QPtrListIterator<Entry> it(_entries);
     for ( ; it.current(); ++it)
 	  l.append(it.current()->desktopFile);
 
@@ -161,7 +157,7 @@ void ToolsConfig::updateList()
 
   _list->clear();
 
-  Q3PtrListIterator<Entry> it(_entries);
+  QPtrListIterator<Entry> it(_entries);
   for ( ; it.current(); ++it)
 	_list->insertItem(it.current()->icon, it.current()->name);
 

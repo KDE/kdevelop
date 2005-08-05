@@ -21,7 +21,7 @@ class KDevLanguageSupport;
 class DigraphView;
 class ClassToolWidget;
 class KComboView;
-class Q3ListViewItem;
+class QListViewItem;
 
 class HierarchyDialog : public QDialog
 {
@@ -33,8 +33,8 @@ public:
 
 private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
-    void slotClassComboChoice(Q3ListViewItem *item);
-    void slotNamespaceComboChoice(Q3ListViewItem *item);
+    void slotClassComboChoice(QListViewItem *item);
+    void slotNamespaceComboChoice(QListViewItem *item);
     void classSelected(const QString &className);
 
 private:

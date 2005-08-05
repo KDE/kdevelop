@@ -13,8 +13,6 @@
 #define _REGEXPTESTDLG_H_
 
 #include "regexptestdlgbase.h"
-//Added by qt3to4:
-#include <QShowEvent>
 
 class KDevPlugin;
 

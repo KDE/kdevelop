@@ -19,8 +19,8 @@
 
 FileListItem * FileListItem::s_activeItem = 0;
 
-FileListItem::FileListItem( Q3ListView * parent, KURL const & url, DocumentState state )
-	: Q3ListViewItem( parent, url.fileName() ),
+FileListItem::FileListItem( QListView * parent, KURL const & url, DocumentState state )
+	: QListViewItem( parent, url.fileName() ),
 	_url( url )
 
 {
@@ -63,7 +63,7 @@ void FileListItem::setState( DocumentState state )
 
 void FileListItem::setHeight( int )
 {
-	Q3ListViewItem::setHeight( KIcon::SizeSmall > listView()->fontMetrics().height() ? KIcon::SizeSmall : listView()->fontMetrics().height() );
+	QListViewItem::setHeight( KIcon::SizeSmall > listView()->fontMetrics().height() ? KIcon::SizeSmall : listView()->fontMetrics().height() );
 }
 
 void FileListItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
@@ -75,7 +75,7 @@ void FileListItem::paintCell( QPainter * p, const QColorGroup & cg, int column, 
 		mcg.setColor( QColorGroup::Base, Qt::yellow );
 	}
 	
-	Q3ListViewItem::paintCell( p, mcg, column, width, align );
+	QListViewItem::paintCell( p, mcg, column, width, align );
 }
 
 bool FileListItem::isActive( )

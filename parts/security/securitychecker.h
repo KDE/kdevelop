@@ -22,8 +22,6 @@
 
 #include <qobject.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 class SecurityPart;
 class SecurityPattern;
@@ -42,7 +40,7 @@ protected:
     
 private:
     SecurityPart *m_part;
-    Q3ValueList<SecurityPattern*> m_patterns;
+    QValueList<SecurityPattern*> m_patterns;
 };
 
 #endif

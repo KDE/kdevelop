@@ -10,11 +10,11 @@
  ***************************************************************************/
 
 #include <qlineedit.h>
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qlayout.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlabel.h>
 
 #include <klistview.h>
@@ -119,7 +119,7 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     m_resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
         (QSizePolicy::SizeType)3, 0, 0,
         m_resultsList->sizePolicy().hasHeightForWidth() ) );
-    Q3WhatsThis::add( m_resultsList, i18n("<b>Matching services</b><p>Results (if any) are shown grouped by matching service name.") );
+    QWhatsThis::add( m_resultsList, i18n("<b>Matching services</b><p>Results (if any) are shown grouped by matching service name.") );
     m_base->resultsLabel->setBuddy(m_resultsList);
     m_base->layout()->add( m_resultsList );
     setMainWidget( m_base );

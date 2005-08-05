@@ -30,7 +30,7 @@
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"
 
-QuickOpenFunctionChooseForm::QuickOpenFunctionChooseForm(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
+QuickOpenFunctionChooseForm::QuickOpenFunctionChooseForm(QWidget* parent, const char* name, bool modal, WFlags fl)
 : QuickOpenFunctionChooseFormBase(parent,name, modal,fl)
 {
 	setCaption( i18n("Select One Argument or File of Function %1").arg( name ) );

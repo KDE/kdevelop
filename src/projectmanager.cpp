@@ -3,12 +3,10 @@
 #include <qdir.h>
 #include <qdom.h>
 #include <qstringlist.h>
-#include <q3ptrlist.h>
-#include <q3vbox.h>
+#include <qptrlist.h>
+#include <qvbox.h>
 #include <qsize.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <QTextStream>
 
 class QDomDocument;
 
@@ -150,11 +148,11 @@ void ProjectManager::slotProjectOptions()
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
-	Q3VBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
+	QVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
-  Q3VBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
+  QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
@@ -358,7 +356,7 @@ bool ProjectManager::loadProjectFile()
   }
 
   QFile fin(path);
-  if (!fin.open(QIODevice::ReadOnly))
+  if (!fin.open(IO_ReadOnly))
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
@@ -400,7 +398,7 @@ bool ProjectManager::saveProjectFile()
 
   if (m_info->m_projectURL.isLocalFile()) {
     QFile fout(m_info->m_projectURL.path());
-    if( !fout.open(QIODevice::WriteOnly) ) {
+    if( !fout.open(IO_WriteOnly) ) {
       KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
       return false;
     }

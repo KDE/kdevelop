@@ -13,8 +13,6 @@
 #define FILEITEMFACTORY_H
 
 #include <kfiletreeview.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 class FileTreeWidget;
 
@@ -50,7 +48,7 @@ namespace filetreeview
         bool setProjectFile( QString const &path, bool pf );
 
     protected:
-        virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
+        virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
     private:
         bool m_isProjectFile;

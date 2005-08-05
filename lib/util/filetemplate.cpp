@@ -55,7 +55,7 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
     QDomDocument &dom = *part->projectDom();
 
     QFile f(fileName);
-    if (!f.open(QIODevice::ReadOnly))
+    if (!f.open(IO_ReadOnly))
         return QString::null;
     QTextStream stream(&f);
     QString str = stream.read();
@@ -88,7 +88,7 @@ bool FileTemplate::copy(KDevPlugin *part, const QString &name,
     QString text = read(part, name, p);
 
     QFile f(dest);
-    if (!f.open(QIODevice::WriteOnly))
+    if (!f.open(IO_WriteOnly))
         return false;
 
     QFileInfo fi(f);

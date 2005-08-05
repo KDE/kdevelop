@@ -11,8 +11,8 @@
 
 #include "tagitem.h"
 
-TagItem::TagItem( Q3ListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern )
-	: Q3ListViewItem( lv ), tag(tag), type(type), file(file), pattern(pattern)
+TagItem::TagItem( QListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern )
+	: QListViewItem( lv ), tag(tag), type(type), file(file), pattern(pattern)
 {}
 
 TagItem::~TagItem()

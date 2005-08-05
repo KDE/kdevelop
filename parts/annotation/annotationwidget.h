@@ -23,8 +23,6 @@
 
 #include <qwidget.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <klistview.h>
 #include <qtooltip.h>
 #include <qrect.h>
@@ -39,10 +37,10 @@ class annotationWidget: public KListView
 public:  
     annotationWidget(annotationPart *part);
     ~annotationWidget();
-    void AnnotShowPopup(Q3ListViewItem* item, const QPoint &p,int);
+    void AnnotShowPopup(QListViewItem* item, const QPoint &p,int);
 private:
     annotationPart *m_part;
-    Q3PtrList<annotationItem> m_list;
+    QPtrList<annotationItem> m_list;
 };
 
 

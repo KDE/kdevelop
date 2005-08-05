@@ -14,12 +14,10 @@
 #define __KDEVPART_BOOKMARKS_H__
 
 
-#include <qpointer.h>
-#include <q3valuelist.h>
-#include <q3dict.h>
+#include <qguardedptr.h>
+#include <qvaluelist.h>
+#include <qdict.h>
 #include <qpair.h>
-//Added by qt3to4:
-#include <QTextStream>
 
 #include <kparts/part.h>
 #include <kurl.h>
@@ -34,7 +32,7 @@ class ConfigWidgetProxy;
 struct EditorData
 {
 	KURL url;
-	Q3ValueList< QPair<int,QString> > marks;
+	QValueList< QPair<int,QString> > marks;
 };
 
 class BookmarksWidget;
@@ -93,8 +91,8 @@ private:
 	KParts::ReadOnlyPart * partForURL( KURL const & url );
 	bool partIsSane( KParts::ReadOnlyPart * );
 
-	QPointer<BookmarksWidget> _widget;
-	Q3Dict<EditorData> _editorMap;
+	QGuardedPtr<BookmarksWidget> _widget;
+	QDict<EditorData> _editorMap;
 	bool _settingMarks;	//	are we currently in the process of setting bookmarks?
 	
 	BookmarksConfig * _config;
@@ -102,7 +100,7 @@ private:
 	ConfigWidgetProxy * _configProxy;
 	
 	QTimer * _marksChangeTimer;
-	Q3ValueList<KParts::ReadOnlyPart*> _dirtyParts;
+	QValueList<KParts::ReadOnlyPart*> _dirtyParts;
 };
 
 

@@ -20,11 +20,7 @@
 #ifndef __KDEVPART_DOCUMENTATION_H__
 #define __KDEVPART_DOCUMENTATION_H__
 
-#include <qpointer.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PopupMenu>
-#include <Q3CString>
+#include <qguardedptr.h>
 #include <kdevplugin.h>
 
 
@@ -38,7 +34,7 @@ class DocumentationPlugin;
 class ProjectDocumentationPlugin;
 class KURL;
 class Context;
-class Q3PopupMenu;
+class QPopupMenu;
 
 /*
  Please read the README.dox file for more info about this part
@@ -92,23 +88,23 @@ protected:
     void loadSettings();
     void saveProjectDocumentationInfo();
     
-    Q3CString startAssistant();
-    void activateAssistantWindow(const Q3CString &ref);
-    void callAssistant(const Q3CString &interface, const Q3CString &method);
-    void callAssistant(const Q3CString &interface, const Q3CString &method, const QString &dataStr);
+    QCString startAssistant();
+    void activateAssistantWindow(const QCString &ref);
+    void callAssistant(const QCString &interface, const QCString &method);
+    void callAssistant(const QCString &interface, const QCString &method, const QString &dataStr);
     
 protected slots:
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
-    void contextMenu(Q3PopupMenu *popup, const Context *context);
+    void contextMenu(QPopupMenu *popup, const Context *context);
     
 private slots:
     void init();
     
 private:
-    QPointer<DocumentationWidget> m_widget;
+    QGuardedPtr<DocumentationWidget> m_widget;
     ConfigWidgetProxy *m_configProxy;
     
-    Q3ValueList<DocumentationPlugin*> m_plugins;
+    QValueList<DocumentationPlugin*> m_plugins;
     ProjectDocumentationPlugin *m_projectDocumentationPlugin;
     ProjectDocumentationPlugin *m_userManualPlugin;
     

@@ -2,8 +2,6 @@
 #define _CORE_H_
 
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
 
 #include <kparts/partmanager.h>
 
@@ -29,7 +27,7 @@ public:
   ~Core();
 
   virtual void running(KDevPlugin *which, bool runs);
-  virtual void fillContextMenu(Q3PopupMenu *popup, const Context *context);
+  virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
   virtual void openProject(const QString& projectFileName);
 
   void doEmitProjectOpened() { emit projectOpened(); }

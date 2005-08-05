@@ -4,15 +4,13 @@
 #include <qwidget.h>
 #include <qstring.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
 
 #include "valgrinditem.h"
 
 class ValgrindPart;
 class KListView;
-class Q3ListViewItem;
-class Q3PopupMenu;
+class QListViewItem;
+class QPopupMenu;
 
 class ValgrindWidget : public QWidget
 {
@@ -29,8 +27,8 @@ signals:
   void jumpToFile( const QString& url, int line );
   
 private slots:
-  void executed( Q3ListViewItem* item );
-  void slotContextMenu( KListView* l, Q3ListViewItem* i, const QPoint& p );
+  void executed( QListViewItem* item );
+  void slotContextMenu( KListView* l, QListViewItem* i, const QPoint& p );
   void expandAll();
   void collapseAll();
   void aboutToShowPopup();
@@ -39,7 +37,7 @@ private:
   KListView* lv;
   int msgNumber;
   ValgrindPart* _part;
-  Q3PopupMenu* popup;
+  QPopupMenu* popup;
 };
 
 

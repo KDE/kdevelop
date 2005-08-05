@@ -13,13 +13,11 @@
 
 #include "filetreewidget.h"
 
-#include <q3header.h>
+#include <qheader.h>
 #include <qpainter.h>
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <qcolor.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -72,14 +70,14 @@ FileTreeWidget::FileTreeWidget( FileViewPart *part, QWidget *parent, KDevVCSFile
     //setResizeMode( QListView::LastColumn );
     setSorting( 0 );
     setAllColumnsShowFocus( true );
-    setSelectionMode( Q3ListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
+    setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
     setDragEnabled( false );
 
     // Slot connections
-    connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
-    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+    connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotItemExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
     // Intercepts KDevelop core signals and VCS notifications (if available)
     connect( m_part->project(), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addProjectFiles( const QStringList & ) ) );
@@ -178,7 +176,7 @@ void FileTreeWidget::hideOrShow()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeWidget::slotItemExecuted( Q3ListViewItem* item )
+void FileTreeWidget::slotItemExecuted( QListViewItem* item )
 {
     if (!item)
         return;
@@ -193,7 +191,7 @@ void FileTreeWidget::slotItemExecuted( Q3ListViewItem* item )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeWidget::slotContextMenu( KListView *, Q3ListViewItem* item, const QPoint &p )
+void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QPoint &p )
 {
     kdDebug(9017) << "FileTreeWidget::slotContextMenu(...)" << endl;
 

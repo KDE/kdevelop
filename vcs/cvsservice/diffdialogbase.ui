@@ -166,7 +166,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -179,10 +179,10 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Qt::Horizontal Spacing2</cstring>
+                        <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

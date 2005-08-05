@@ -1,7 +1,5 @@
 #include <qfile.h>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <qvbox.h>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -151,7 +149,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
 
 void PluginController::unloadPlugins()
 {
-  for( Q3DictIterator<KDevPlugin> it( m_parts ); !it.isEmpty(); )
+  for( QDictIterator<KDevPlugin> it( m_parts ); !it.isEmpty(); )
   {
     KDevPlugin* part = it.current();
     removePart( part );
@@ -251,10 +249,10 @@ void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part
     removePart(part);
 }
 
-const Q3ValueList<KDevPlugin*> PluginController::loadedPlugins()
+const QValueList<KDevPlugin*> PluginController::loadedPlugins()
 {
-	Q3ValueList<KDevPlugin*> plugins;
-	Q3DictIterator<KDevPlugin> itt(m_parts);
+	QValueList<KDevPlugin*> plugins;
+	QDictIterator<KDevPlugin> itt(m_parts);
 	while( itt.current() )
 	{
 		plugins.append( itt.current() );

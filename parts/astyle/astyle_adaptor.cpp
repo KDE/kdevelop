@@ -7,8 +7,6 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <QTextStream>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -18,7 +16,7 @@
 ASStringIterator::ASStringIterator(const QString &text)
   : ASSourceIterator(), _content(text)
 {
-  _is = new QTextStream(&_content, QIODevice::ReadOnly);
+  _is = new QTextStream(&_content, IO_ReadOnly);
 }
 
 

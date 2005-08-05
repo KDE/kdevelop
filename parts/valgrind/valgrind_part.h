@@ -5,7 +5,7 @@
 #ifndef __KDEVPART_VALGRIND_H__
 #define __KDEVPART_VALGRIND_H__
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <kdevplugin.h>
@@ -50,7 +50,7 @@ private:
   QString lastPiece;
   QStringList activeFiles;
   int currentPid;
-  QPointer<ValgrindWidget> m_widget;
+  QGuardedPtr<ValgrindWidget> m_widget;
   struct {
       bool runKc;
       QString kcPath;

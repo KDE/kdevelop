@@ -21,8 +21,6 @@
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <kdevproject.h>
 #include <unistd.h>
 #include <kapplication.h>
@@ -34,7 +32,6 @@
 #include "../compat/netaccess/netaccess.h"
 #else
 #include <kio/netaccess.h>
-#include <q3tl.h>
 #endif
 
 SVNFileInfoProvider::SVNFileInfoProvider(subversionPart *parent, const char *name)
@@ -60,7 +57,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		m_previousDirPath = dirPath;
 		KURL servURL = "svn+http://fakeserver_this_is_normal_behavior/";
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 9;
 		QString rPath = projectDirectory( );
 		rPath += QDir::separator() + dirPath;
@@ -77,9 +74,9 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		KIO::NetAccess::synchronousRun(job2, m_part->mainWindow()->main(), 0, 0, &ma );
 #endif
 
-		Q3ValueList<QString> keys = ma.keys();
+		QValueList<QString> keys = ma.keys();
 		qHeapSort( keys );
-		Q3ValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 		QString path;
 		int text_status, prop_status, repos_text_status, repos_prop_status;
@@ -127,7 +124,7 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
     }
 
 	QByteArray parms;
-	QDataStream s( parms, QIODevice::WriteOnly );
+	QDataStream s( parms, IO_WriteOnly );
 	int cmd = 9;
 	QString rPath = projectDirectory( );
 	rPath += QDir::separator() + dirPath;
@@ -146,9 +143,9 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 		j->showErrorDialog( m_part->mainWindow()->main() );
 
 	KIO::MetaData ma = j->metaData();
-	Q3ValueList<QString> keys = ma.keys();
+	QValueList<QString> keys = ma.keys();
 	qHeapSort( keys );
-	Q3ValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 	QString path;
 	int text_status, prop_status, repos_text_status, repos_prop_status;

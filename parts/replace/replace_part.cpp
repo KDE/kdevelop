@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -39,7 +39,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     m_widget->setIcon( SmallIcon("filefind") );
     m_widget->setCaption(i18n("Replace"));
     
-    Q3WhatsThis::add
+    QWhatsThis::add
         (m_widget, i18n("<b>Replace</b><p>"
                         "This window shows a preview of a string replace "
                         "operation. Uncheck a line to exclude that replacement. "

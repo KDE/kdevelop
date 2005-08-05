@@ -13,7 +13,7 @@
 #define __KONSOLEVIEWPART_H__
 
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include "kdevplugin.h"
 
 
@@ -28,7 +28,7 @@ public:
     virtual ~KonsoleViewPart();
 
 private:
-    QPointer<KonsoleViewWidget> m_widget;
+    QGuardedPtr<KonsoleViewWidget> m_widget;
 };
 
 #endif

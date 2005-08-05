@@ -14,9 +14,6 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <Q3CString>
 #include <kconfig.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -99,7 +96,7 @@ int ShellInsertDialog::exec()
 void ShellInsertDialog::slotStartClicked()
 {
     start_button->setEnabled(false);
-    m_str = Q3CString();
+    m_str = QCString();
 
     delete m_proc;
     m_proc = new KShellProcess("/bin/sh");
@@ -114,7 +111,7 @@ void ShellInsertDialog::slotStartClicked()
 
 void ShellInsertDialog::slotReceivedStdout(KProcess *, char *text, int len)
 {
-    m_str += Q3CString(text, len+1);
+    m_str += QCString(text, len+1);
 }
 
 

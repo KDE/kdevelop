@@ -13,11 +13,9 @@
 #define _CLEARCASEPART_H_
 
 #include <kdevversioncontrol.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
 
 class Context;
-class Q3PopupMenu;
+class QPopupMenu;
 
 class ClearcasePart : public KDevVersionControl {
     Q_OBJECT
@@ -40,7 +38,7 @@ public:
     virtual bool isValidDirectory(const QString &dirPath) const { return true; }
 
 private slots:
-    void contextMenu(Q3PopupMenu *popup, const Context *context);
+    void contextMenu(QPopupMenu *popup, const Context *context);
 
     void slotCheckin();
     void slotCheckout();

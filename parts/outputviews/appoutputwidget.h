@@ -34,10 +34,10 @@ public:
     ~AppOutputWidget();
 
 public slots:
-	void slotRowSelected(Q3ListBoxItem* row);
+	void slotRowSelected(QListBoxItem* row);
 	void insertStdoutLine(const QString &line);
 	void insertStderrLine(const QString &line);
-	void slotContextMenu(Q3ListBoxItem *, const QPoint &);
+	void slotContextMenu(QListBoxItem *, const QPoint &);
 
 private:
 	virtual void childFinished(bool normal, int status);

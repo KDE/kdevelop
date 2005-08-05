@@ -14,10 +14,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QBoxLayout>
 #include <kapplication.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
@@ -35,7 +31,7 @@ CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
   messagelabel->setMinimumSize(messagelabel->sizeHint());
   layout->addWidget(messagelabel, 0);
 
-  _edit = new Q3MultiLineEdit(this);
+  _edit = new QMultiLineEdit(this);
   QFontMetrics fm(_edit->fontMetrics());
   _edit->setMinimumSize(fm.width("0")*40, fm.lineSpacing()*3);
   layout->addWidget(_edit, 10);

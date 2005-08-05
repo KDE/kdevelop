@@ -13,7 +13,7 @@
 #define __KDEVPART_REPLACE_H__
 
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <kdevplugin.h>
 
 
@@ -32,7 +32,7 @@ public slots:
     void slotReplace();
 
 private:
-    QPointer<ReplaceWidget> m_widget;
+    QGuardedPtr<ReplaceWidget> m_widget;
 
 };
 

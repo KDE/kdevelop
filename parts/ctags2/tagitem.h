@@ -12,12 +12,12 @@
 #ifndef TAGITEM_H
 #define TAGITEM_H
 
-#include <q3listview.h>
+#include <qlistview.h>
 
-class TagItem : public Q3ListViewItem
+class TagItem : public QListViewItem
 {
 public:
-    TagItem(Q3ListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern );
+    TagItem(QListView * lv, QString const & tag, QString const & type, QString const & file, QString const & pattern );
     ~TagItem();
 
 	QString tag;

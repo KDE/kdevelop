@@ -13,13 +13,9 @@
 
 #include "classtooldlg.h"
 
-#include <q3listbox.h>
+#include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <Q3ValueList>
-#include <QHBoxLayout>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -152,7 +148,7 @@ void ClassToolDialog::setClassName(const QString &name)
 {
     if ( class_combo->count() == 0 ) refresh();
 
-    Q3ListBox *lb = class_combo->listBox();
+    QListBox *lb = class_combo->listBox();
 
     for (int i=0; i < (int)lb->count(); ++i)
         if (lb->text(i) == name) {
@@ -347,19 +343,19 @@ void ClassToolDialog::buildTree()
             break;
         case ViewChildren:
             {
-                Q3ValueList<ParsedClass*> list = m_part->classStore()->getClassesByParent(currentClass->name());
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassesByParent(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
             }
             break;
         case ViewClients:
             {
-                Q3ValueList<ParsedClass*> list = m_part->classStore()->getClassClients(currentClass->name());
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassClients(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
             }
             break;
         case ViewSuppliers:
             {
-                Q3ValueList<ParsedClass*> list = m_part->classStore()->getClassSuppliers(currentClass->name());
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassSuppliers(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
             }
             break;

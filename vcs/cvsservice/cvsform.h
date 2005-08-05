@@ -22,7 +22,7 @@ class CvsForm : public CvsFormBase
 {
     Q_OBJECT
 public:
-    CvsForm( QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0 );
+    CvsForm( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
     virtual ~CvsForm();
 
     QString module() const;

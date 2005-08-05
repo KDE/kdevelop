@@ -9,10 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3popupmenu.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QMouseEvent>
+#include <qpopupmenu.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -31,7 +28,7 @@ KDevTabWidget::KDevTabWidget(QWidget *parent, const char *name) : QTabWidget(par
 
 KTabBar::KTabBar(QWidget *parent, const char *name) : QTabBar(parent,name)
 {
-  m_pPopupMenu = new Q3PopupMenu(this);
+  m_pPopupMenu = new QPopupMenu(this);
 
   QPixmap closePixmap = KGlobal::instance()->iconLoader()->loadIcon( "tab_remove", KIcon::Small, 0, KIcon::DefaultState, 0, true ); 
   if (closePixmap.isNull())

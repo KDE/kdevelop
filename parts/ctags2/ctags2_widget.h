@@ -15,18 +15,16 @@
 #include "ctags2_widgetbase.h"
 #include "ctags2_part.h"
 #include "tags.h"
-//Added by qt3to4:
-#include <QFocusEvent>
 
 class QTimer;
-class Q3ListViewItem;
+class QListViewItem;
 
 class CTags2Widget : public CTags2WidgetBase
 {
 	Q_OBJECT
 
 public:
-	CTags2Widget( CTags2Part * part, const char* name = 0, Qt::WFlags fl = 0 );
+	CTags2Widget( CTags2Part * part, const char* name = 0, WFlags fl = 0 );
 	~CTags2Widget();
 
 	void displayHits( Tags::TagList const & );
@@ -42,7 +40,7 @@ private slots:
     virtual void line_edit_changed();
     virtual void line_edit_changed_delayed();
 	virtual void regeneratebutton_clicked();	  
-	void itemExecuted( Q3ListViewItem * );
+	void itemExecuted( QListViewItem * );
 
 private: 
 	void showHitCount( int );

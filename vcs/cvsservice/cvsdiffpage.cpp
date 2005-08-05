@@ -9,13 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 #include <kmessagebox.h>
 #include <kcursor.h>

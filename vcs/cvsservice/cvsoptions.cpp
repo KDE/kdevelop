@@ -273,7 +273,7 @@ QString CvsOptions::guessLocation( const QString &projectDir ) const
     QString rootFileName( projectDir + "/CVS/Root" );
 
     QFile f( rootFileName );
-    if (f.open( QIODevice::ReadOnly ))
+    if (f.open( IO_ReadOnly ))
     {
         QTextStream t( &f );
         QString serverLocation = t.readLine();

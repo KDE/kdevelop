@@ -11,7 +11,7 @@
 
 #include "texttoolswidget.h"
 
-#include <q3header.h>
+#include <qheader.h>
 #include <qregexp.h>
 #include <qtimer.h>
 #include <kdebug.h>
@@ -27,16 +27,16 @@
 #include "texttoolspart.h"
 
 
-class TextStructItem : public Q3ListViewItem
+class TextStructItem : public QListViewItem
 {
 public:
-    TextStructItem(Q3ListView *parent)
-        : Q3ListViewItem(parent)
+    TextStructItem(QListView *parent)
+        : QListViewItem(parent)
     {}
-    TextStructItem(Q3ListViewItem *parent)
-        : Q3ListViewItem(parent)
+    TextStructItem(QListViewItem *parent)
+        : QListViewItem(parent)
     {
-        Q3ListViewItem *item = this;
+        QListViewItem *item = this;
         while (item->nextSibling())
             item = item->nextSibling();
         if (item != this)
@@ -60,7 +60,7 @@ public:
 TextToolsWidget::TextToolsWidget(TextToolsPart *part, QWidget *parent, const char *name)
     : KListView(parent, name)
 {
-    setResizeMode(Q3ListView::LastColumn);
+    setResizeMode(QListView::LastColumn);
     setSorting(-1);
     header()->hide();
     addColumn(QString::null);
@@ -68,14 +68,14 @@ TextToolsWidget::TextToolsWidget(TextToolsPart *part, QWidget *parent, const cha
     m_part = part;
 
     m_timer = new QTimer(this);
-    connect( this, SIGNAL(mouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int)),
-             this, SLOT(slotItemPressed(int,Q3ListViewItem*)) );
+    connect( this, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int)),
+             this, SLOT(slotItemPressed(int,QListViewItem*)) );
     //    connect( this, SIGNAL(doubleClicked(QListViewItem*)),
     //             this, SLOT(slotItemPressed(int,QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(Q3ListViewItem*)),
-             this, SLOT(slotReturnPressed(Q3ListViewItem*)) );
-    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+    connect( this, SIGNAL(returnPressed(QListViewItem*)),
+             this, SLOT(slotReturnPressed(QListViewItem*)) );
+    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
 
@@ -83,7 +83,7 @@ TextToolsWidget::~TextToolsWidget()
 {}
 
 
-void TextToolsWidget::slotItemPressed(int button, Q3ListViewItem *item)
+void TextToolsWidget::slotItemPressed(int button, QListViewItem *item)
 {
     if (!item)
         return;
@@ -142,13 +142,13 @@ void TextToolsWidget::slotItemPressed(int button, Q3ListViewItem *item)
 }
 
 
-void TextToolsWidget::slotReturnPressed(Q3ListViewItem *item)
+void TextToolsWidget::slotReturnPressed(QListViewItem *item)
 {
     slotItemPressed(LeftButton, item);
 }
 
 
-void TextToolsWidget::slotContextMenu(KListView *, Q3ListViewItem *item, const QPoint &)
+void TextToolsWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &)
 {
     if (!item)
         return;
@@ -347,7 +347,7 @@ void TextToolsWidget::parseXML()
     }
 
     //    firstChild()->setOpen(true);
-    Q3ListViewItemIterator it(this);
+    QListViewItemIterator it(this);
     for (; it.current(); ++it)
         it.current()->setOpen(true);
 }
@@ -392,7 +392,7 @@ void TextToolsWidget::parseLaTeX()
         pos = pos+re.matchedLength();
     }
 
-    Q3ListViewItemIterator it(this);
+    QListViewItemIterator it(this);
     for (; it.current(); ++it)
         it.current()->setOpen(true);
 }

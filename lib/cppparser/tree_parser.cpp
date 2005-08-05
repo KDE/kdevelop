@@ -19,8 +19,6 @@
 
 #include "tree_parser.h"
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 TreeParser::TreeParser()
 {
@@ -34,8 +32,8 @@ void TreeParser::parseTranslationUnit( TranslationUnitAST* translationUnit )
 {
     //kdDebug(9007) << "TreeParser::parseTranslationUnit()" << endl;
 
-    Q3PtrList<DeclarationAST> declarations = translationUnit->declarationList();
-    Q3PtrListIterator<DeclarationAST> it( declarations );
+    QPtrList<DeclarationAST> declarations = translationUnit->declarationList();
+    QPtrListIterator<DeclarationAST> it( declarations );
     while( it.current() ){
 	parseDeclaration( it.current() );
 	++it;
@@ -155,8 +153,8 @@ void TreeParser::parseFunctionDefinition( FunctionDefinitionAST* def )
 void TreeParser::parseLinkageBody( LinkageBodyAST* linkageBody )
 {
     //kdDebug(9007) << "TreeParser::parseLinkageBody()" << endl;
-    Q3PtrList<DeclarationAST> declarations = linkageBody->declarationList();
-    for( Q3PtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
+    QPtrList<DeclarationAST> declarations = linkageBody->declarationList();
+    for( QPtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
 	parseDeclaration( it.current() );
     }
 }
@@ -183,8 +181,8 @@ void TreeParser::parseTypeSpecifier( TypeSpecifierAST* typeSpec )
 void TreeParser::parseClassSpecifier( ClassSpecifierAST* classSpec )
 {
     //kdDebug(9007) << "TreeParser::parseClassSpecifier()" << endl;
-    Q3PtrList<DeclarationAST> declarations = classSpec->declarationList();
-    for( Q3PtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
+    QPtrList<DeclarationAST> declarations = classSpec->declarationList();
+    for( QPtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
 	parseDeclaration( it.current() );
     }
 }

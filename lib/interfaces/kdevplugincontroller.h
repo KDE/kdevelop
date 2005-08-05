@@ -20,8 +20,6 @@
 #define KDEVPLUGINCONTROLLER_H
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kurl.h>
 #include <ktrader.h>
@@ -60,7 +58,7 @@ public:
     virtual void unloadPlugins(QStringList const &list) = 0;
     
     /**@return The list of currently loaded plugins.*/
-    virtual const Q3ValueList<KDevPlugin*> loadedPlugins() = 0;
+    virtual const QValueList<KDevPlugin*> loadedPlugins() = 0;
     
     /**Queries for the plugin which supports given service type.
     All already loaded plugins will be queried and the first one to support the service type

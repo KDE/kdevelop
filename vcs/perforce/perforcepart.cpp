@@ -13,7 +13,7 @@
 #include "perforcepart.h"
 
 #include <qfileinfo.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qregexp.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
@@ -44,8 +44,8 @@ PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList
     setInstance(PerforceFactory::instance());
     setupActions();
 
-    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 }
 
 
@@ -84,7 +84,7 @@ void PerforcePart::setupActions()
     actionRemove->setWhatsThis(i18n("<b>Remove from repository</b><p>Open file(s) in a client workspace for deletion from the depot."));
 }
 
-void PerforcePart::contextMenu(Q3PopupMenu *popup, const Context *context)
+void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);

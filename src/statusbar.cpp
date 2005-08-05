@@ -14,8 +14,6 @@
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qfontmetrics.h>
-//Added by qt3to4:
-#include <QLabel>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>

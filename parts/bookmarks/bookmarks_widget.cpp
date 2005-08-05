@@ -9,13 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3dict.h>
-#include <q3header.h>
+#include <qdict.h>
+#include <qheader.h>
 #include <qtooltip.h>
 #include <qpair.h>
-#include <q3stylesheet.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qstylesheet.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -58,16 +56,16 @@ static const char* const bookmark_xpm[]={
 
 }
 
-class BookmarkItem : public Q3ListViewItem
+class BookmarkItem : public QListViewItem
 {
 public:
-	BookmarkItem( Q3ListView * parent, KURL const & url )
-			: Q3ListViewItem( parent, url.fileName() ),
+	BookmarkItem( QListView * parent, KURL const & url )
+			: QListViewItem( parent, url.fileName() ),
 			_url( url ), _line( -1 ), _isBookmark( false )
 	{}
 
-	BookmarkItem( Q3ListViewItem * parent, KURL const & url, QPair<int,QString> mark )
-			: Q3ListViewItem( parent, QString::number( mark.first +1 ).rightJustify( 5 ) ),
+	BookmarkItem( QListViewItem * parent, KURL const & url, QPair<int,QString> mark )
+			: QListViewItem( parent, QString::number( mark.first +1 ).rightJustify( 5 ) ),
 			_url( url ), _line( mark.first ), _isBookmark( true ) 
 	{
 		BookmarksWidget * lv = static_cast<BookmarksWidget*>( listView() );
@@ -109,7 +107,7 @@ public:
 			QString code = "<qt><table><tr><td><pre>";
 			for ( uint i = 0; i < list.count(); i++)
 			{
-				QString temp = Q3StyleSheet::escape( list[i] );
+				QString temp = QStyleSheet::escape( list[i] );
 				
 				if ( i == (list.count() / 2) )	// count() is always odd
 				{
@@ -148,13 +146,13 @@ BookmarksWidget::BookmarksWidget(BookmarksPart *part)
 	addColumn( QString::null );
 	header()->hide();
 	setRootIsDecorated( true );
-	setResizeMode( Q3ListView::LastColumn );
+	setResizeMode( QListView::LastColumn );
 	setAllColumnsShowFocus( true );
 
-	connect( this, SIGNAL( executed( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
-	connect( this, SIGNAL( returnPressed( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
-	connect( this, SIGNAL( contextMenuRequested ( Q3ListViewItem *, const QPoint & , int ) ),
-		this, SLOT( popupMenu(Q3ListViewItem *, const QPoint & , int ) ) );
+	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	connect( this, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
+		this, SLOT( popupMenu(QListViewItem *, const QPoint & , int ) ) );
 }
 
 
@@ -176,13 +174,13 @@ void BookmarksWidget::maybeTip(const QPoint &p)
 	}
 }
 
-void BookmarksWidget::update( Q3Dict<EditorData> const & map )
+void BookmarksWidget::update( QDict<EditorData> const & map )
 {
 //	kdDebug(0) << "BookmarksWidget::update()" << endl;
 
-	Q3ListView::clear();
+	QListView::clear();
 
-	Q3DictIterator<EditorData> it( map );
+	QDictIterator<EditorData> it( map );
 	while ( it.current() )
 	{
 		if ( ! it.current()->marks.isEmpty() )
@@ -210,14 +208,14 @@ void BookmarksWidget::createURL( EditorData * data )
 
 	if ( data )
 	{
-		Q3ListViewItem * file = new BookmarkItem( this, data->url );
+		QListViewItem * file = new BookmarkItem( this, data->url );
 		file->setOpen( true );
 		file->setPixmap( 0, SmallIcon( "document" ) );
 
-		Q3ValueListIterator< QPair<int,QString> > it = data->marks.begin();
+		QValueListIterator< QPair<int,QString> > it = data->marks.begin();
 		while ( it != data->marks.end() )
 		{
-			Q3ListViewItem * item = new BookmarkItem( file, data->url, *it );
+			QListViewItem * item = new BookmarkItem( file, data->url, *it );
 			item->setPixmap( 0, QPixmap((const char**)bookmark_xpm) );
 			++it;
 		}
@@ -228,7 +226,7 @@ bool BookmarksWidget::removeURL( KURL const & url )
 {
 //	kdDebug(0) << "BookmarksWidget::removeURL()" << endl;
 
-	Q3ListViewItem * item = firstChild();
+	QListViewItem * item = firstChild();
 	while ( item )
 	{
 		BookmarkItem * bm = static_cast<BookmarkItem*>(item);
@@ -256,7 +254,7 @@ void BookmarksWidget::doEmitRemoveBookMark()
 	}
 }
 
-void BookmarksWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
+void BookmarksWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 {
 //	kdDebug(0) << "BookmarksWidget::contextMenuRequested()" << endl;
 
@@ -289,7 +287,7 @@ void BookmarksWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
 
 }
 
-void BookmarksWidget::itemClicked( Q3ListViewItem * clickedItem )
+void BookmarksWidget::itemClicked( QListViewItem * clickedItem )
 {
 //	kdDebug(0) << "BookmarksWidget::itemClicked()" << endl;
 
@@ -313,7 +311,7 @@ QStringList BookmarksWidget::getContext( KURL const & url, unsigned int line )
 
 void BookmarksWidget::collapseAll( )
 {
-	Q3ListViewItem * it = firstChild();
+	QListViewItem * it = firstChild();
 	while( it )
 	{
 		it->setOpen( false );
@@ -323,7 +321,7 @@ void BookmarksWidget::collapseAll( )
 
 void BookmarksWidget::expandAll( )
 {
-	Q3ListViewItem * it = firstChild();
+	QListViewItem * it = firstChild();
 	while( it )
 	{
 		it->setOpen( true );

@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 #include <qlabel.h>
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 
 #include <kcompletion.h>
 #include <kdebug.h>
@@ -37,7 +37,7 @@
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"
 
-QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
+QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* parent, const char* name, bool modal, WFlags fl)
 : QuickOpenDialog(part, parent, name, modal, fl)
 {
         nameLabel->setText( i18n("Function &name:") );
@@ -127,19 +127,19 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
 
         accept();
 }
-void QuickOpenFunctionDialog::slotExecuted(Q3ListBoxItem* item)
+void QuickOpenFunctionDialog::slotExecuted(QListBoxItem* item)
 {
         if( item ){
                 gotoFile( item->text() );
         }
 }
-void QuickOpenFunctionDialog::executed(Q3ListBoxItem*)
+void QuickOpenFunctionDialog::executed(QListBoxItem*)
 {
 }
 
 void QuickOpenFunctionDialog::slotReturnPressed()
 {
-        Q3ListBoxItem *listboxItem = itemList->selectedItem();
+        QListBoxItem *listboxItem = itemList->selectedItem();
         slotExecuted( listboxItem );
 }
 

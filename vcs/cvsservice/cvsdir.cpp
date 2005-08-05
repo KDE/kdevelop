@@ -113,7 +113,7 @@ QString CVSDir::repository() const
         return QString::null;
 
     QByteArray bytes = cacheFile( repoFileName() );
-    QTextStream t( bytes, QIODevice::ReadOnly );
+    QTextStream t( bytes, IO_ReadOnly );
     content += t.readLine();
 
     return content;
@@ -132,7 +132,7 @@ QString CVSDir::root() const
         return QString::null;
 
     QByteArray bytes = cacheFile( repoFileName() );
-    QTextStream t( bytes, QIODevice::ReadOnly );
+    QTextStream t( bytes, IO_ReadOnly );
     content += t.readLine();
 
     return content;
@@ -143,7 +143,7 @@ QString CVSDir::root() const
 QByteArray CVSDir::cacheFile( const QString &fileName )
 {
     QFile f( fileName );
-    if (!f.open( QIODevice::ReadOnly ))
+    if (!f.open( IO_ReadOnly ))
         return QByteArray();
     return f.readAll();
 }
@@ -157,7 +157,7 @@ QStringList CVSDir::registeredEntryList() const
         return l;
 
     QByteArray bytes = cacheFile( entriesFileName() );
-    QTextStream t( bytes, QIODevice::ReadOnly );
+    QTextStream t( bytes, IO_ReadOnly );
     CVSEntry entry;
     while (!t.eof())
     {
@@ -184,7 +184,7 @@ void CVSDir::refreshEntriesCache() const
     m_cachedEntries.clear();
 
     QByteArray bytes = cacheFile( entriesFileName() );
-    QTextStream t( bytes, QIODevice::ReadOnly );
+    QTextStream t( bytes, IO_ReadOnly );
     CVSEntry entry;
     while (!t.eof())
     {
@@ -218,11 +218,11 @@ void CVSDir::ignoreFile( const QString &fileName )
         return;
 
     QFile f( cvsIgnoreFileName() );
-    if (!f.open( QIODevice::ReadOnly))
+    if (!f.open( IO_ReadOnly))
         return;
 
     QByteArray cachedFile = f.readAll();
-    QTextStream t( cachedFile, QIODevice::ReadOnly | QIODevice::WriteOnly );
+    QTextStream t( cachedFile, IO_ReadOnly | IO_WriteOnly );
 
     QString readFileName;
     bool found = false;
@@ -236,7 +236,7 @@ void CVSDir::ignoreFile( const QString &fileName )
     f.close();
     if (!found)
     {
-        f.open( QIODevice::WriteOnly );
+        f.open( IO_WriteOnly );
 
         t << fileName << "\n";
 
@@ -254,7 +254,7 @@ void CVSDir::doNotIgnoreFile( const QString &fileName )
 
     // 1. Read all .ignore file in memory
     QFile f( cvsIgnoreFileName() );
-    if (!f.open( QIODevice::ReadOnly ))
+    if (!f.open( IO_ReadOnly ))
         return; // No .cvsignore file? Nothing to do then!
 
     QByteArray cachedFile = f.readAll();
@@ -276,7 +276,7 @@ void CVSDir::doNotIgnoreFile( const QString &fileName )
     f.close();
     if (removed)
     {
-        f.open( QIODevice::WriteOnly );
+        f.open( IO_WriteOnly );
         f.writeBlock( cachedOutputFile );
         f.close();
     }

@@ -13,8 +13,6 @@
 #define VCSFILETREEWIDGETIMPL_H
 
 #include "filetreeviewwidgetimpl.h"
-//Added by qt3to4:
-#include <Q3PopupMenu>
 
 class KDevVCSFileInfoProvider;
 class KAction;
@@ -39,7 +37,7 @@ public:
     /*
     * Add "sync with repository" and "show VCS fields" options to the context menu.
     */
-    virtual void fillPopupMenu( Q3PopupMenu *popupMenu, Q3ListViewItem *item ) const;
+    virtual void fillPopupMenu( QPopupMenu *popupMenu, QListViewItem *item ) const;
 
 private slots:
     //! show/hide the header and the additional fields (status and versions)

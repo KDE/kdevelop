@@ -1,13 +1,11 @@
 #include "tools_part.h"
 
 #include <qfile.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qregexp.h>
 #include <qtimer.h>
-#include <q3vbox.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qvbox.h>
+#include <qwhatsthis.h>
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -55,8 +53,8 @@ ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
 
   connect(core(), SIGNAL(coreInitialized()), this, SLOT(updateMenu()));
 
-  connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-           this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
+  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+           this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
   // Apparently action lists can only be plugged after the
   // xmlgui client has been registered
@@ -86,7 +84,7 @@ void ToolsPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, uns
 
 void ToolsPart::updateMenu()
 {
-  Q3PtrList<KAction> actions;
+  QPtrList<KAction> actions;
 
   unplugActionList("tools_list");
 
@@ -199,7 +197,7 @@ void ToolsPart::updateToolsMenu()
     config->setGroup("External Tools");
     QStringList l = config->readListEntry("Tool Menu");
 
-    Q3PtrList<KAction> actions;
+    QPtrList<KAction> actions;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
         QString menutext = *it;
@@ -221,7 +219,7 @@ void ToolsPart::updateToolsMenu()
 }
 
 
-void ToolsPart::contextMenu(Q3PopupMenu *popup, const Context *context)
+void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::FileContext ))
         return;

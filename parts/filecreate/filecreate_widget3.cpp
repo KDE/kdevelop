@@ -9,10 +9,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <q3ptrlist.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
-#include <QResizeEvent>
+#include <qptrlist.h>
+#include <qwhatsthis.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -43,12 +41,12 @@ namespace FileCreate {
     addColumn("");
     addColumn("");
 
-    Q3WhatsThis::add(this, i18n("<b>New file</b><p>This part makes the creation of new files easier. Select a type in the list to create a file. "
+    QWhatsThis::add(this, i18n("<b>New file</b><p>This part makes the creation of new files easier. Select a type in the list to create a file. "
         "The list of project file types can be configured in project settings dialog, <b>New File Wizard</b> tab. "
         "Globally available file types are listed and can be configured in KDevelop settings dialog, <b>New File Wizard</b> tab."));
 
 
-    connect( this, SIGNAL(clicked(Q3ListViewItem*)), this, SLOT(slotTypeSelected(Q3ListViewItem*)) );
+    connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotTypeSelected(QListViewItem*)) );
   }
 
 
@@ -59,7 +57,7 @@ namespace FileCreate {
   void ListWidget::setCurrent(const FileType * current) {
 
     bool found = false;
-    Q3ListViewItem * lvi = firstChild();
+    QListViewItem * lvi = firstChild();
     while(lvi && !found) {
       ListItem * li = dynamic_cast<ListItem*>(lvi);
       if (li) {
@@ -89,12 +87,12 @@ namespace FileCreate {
 
   void ListWidget::refresh() {
     clear();
-    Q3PtrList<FileType> filetypes = m_part->getFileTypes();
+    QPtrList<FileType> filetypes = m_part->getFileTypes();
     for(FileType * filetype = filetypes.first();
 	filetype!=NULL;
 	filetype=filetypes.next()) {
       if (filetype->enabled()) {
-	Q3PtrList<FileType> subtypes = filetype->subtypes();
+	QPtrList<FileType> subtypes = filetype->subtypes();
         if (subtypes.count()==0)
           new ListItem( this, filetype );
 	for(FileType * subtype = subtypes.first();
@@ -107,7 +105,7 @@ namespace FileCreate {
     }
   }
 
-  void ListWidget::slotTypeSelected(Q3ListViewItem * item) {
+  void ListWidget::slotTypeSelected(QListViewItem * item) {
     ListItem * fileitem = dynamic_cast<ListItem*>(item);
     if (!fileitem) return;
 

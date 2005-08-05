@@ -21,12 +21,10 @@
 #define CONTENTSVIEW_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QFocusEvent>
 
 class FindDocumentation;
 class DocumentationWidget;
-class Q3ListViewItem;
+class QListViewItem;
 class KListView;
 
 class ContentsView : public QWidget
@@ -39,8 +37,8 @@ public:
     KListView *view() const { return m_view; }
 
 protected slots:
-    void itemExecuted(Q3ListViewItem *item, const QPoint &p, int col);
-    void itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int c);
+    void itemExecuted(QListViewItem *item, const QPoint &p, int col);
+    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

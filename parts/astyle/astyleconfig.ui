@@ -138,248 +138,248 @@
                                     <palette>
                                         <active>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>220</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>220</Qt::blue>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>237</Qt::red>
-                                                <Qt::green>237</Qt::green>
-                                                <Qt::blue>237</Qt::blue>
+                                                <red>237</red>
+                                                <green>237</green>
+                                                <blue>237</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>110</Qt::red>
-                                                <Qt::green>110</Qt::green>
-                                                <Qt::blue>110</Qt::blue>
+                                                <red>110</red>
+                                                <green>110</green>
+                                                <blue>110</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>146</Qt::red>
-                                                <Qt::green>146</Qt::green>
-                                                <Qt::blue>146</Qt::blue>
+                                                <red>146</red>
+                                                <green>146</green>
+                                                <blue>146</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>217</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>194</Qt::blue>
+                                                <red>217</red>
+                                                <green>220</green>
+                                                <blue>194</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>220</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>220</Qt::blue>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>84</Qt::red>
-                                                <Qt::green>112</Qt::green>
-                                                <Qt::blue>152</Qt::blue>
+                                                <red>84</red>
+                                                <green>112</green>
+                                                <blue>152</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                         </active>
                                         <disabled>
                                             <color>
-                                                <Qt::red>128</Qt::red>
-                                                <Qt::green>128</Qt::green>
-                                                <Qt::blue>128</Qt::blue>
+                                                <red>128</red>
+                                                <green>128</green>
+                                                <blue>128</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>220</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>220</Qt::blue>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>253</Qt::red>
-                                                <Qt::green>253</Qt::green>
-                                                <Qt::blue>253</Qt::blue>
+                                                <red>253</red>
+                                                <green>253</green>
+                                                <blue>253</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>110</Qt::red>
-                                                <Qt::green>110</Qt::green>
-                                                <Qt::blue>110</Qt::blue>
+                                                <red>110</red>
+                                                <green>110</green>
+                                                <blue>110</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>146</Qt::red>
-                                                <Qt::green>146</Qt::green>
-                                                <Qt::blue>146</Qt::blue>
+                                                <red>146</red>
+                                                <green>146</green>
+                                                <blue>146</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>128</Qt::red>
-                                                <Qt::green>128</Qt::green>
-                                                <Qt::blue>128</Qt::blue>
+                                                <red>128</red>
+                                                <green>128</green>
+                                                <blue>128</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>217</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>194</Qt::blue>
+                                                <red>217</red>
+                                                <green>220</green>
+                                                <blue>194</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>220</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>220</Qt::blue>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>84</Qt::red>
-                                                <Qt::green>112</Qt::green>
-                                                <Qt::blue>152</Qt::blue>
+                                                <red>84</red>
+                                                <green>112</green>
+                                                <blue>152</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                         </disabled>
                                         <inactive>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>220</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>220</Qt::blue>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>253</Qt::red>
-                                                <Qt::green>253</Qt::green>
-                                                <Qt::blue>253</Qt::blue>
+                                                <red>253</red>
+                                                <green>253</green>
+                                                <blue>253</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>110</Qt::red>
-                                                <Qt::green>110</Qt::green>
-                                                <Qt::blue>110</Qt::blue>
+                                                <red>110</red>
+                                                <green>110</green>
+                                                <blue>110</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>146</Qt::red>
-                                                <Qt::green>146</Qt::green>
-                                                <Qt::blue>146</Qt::blue>
+                                                <red>146</red>
+                                                <green>146</green>
+                                                <blue>146</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>217</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>194</Qt::blue>
+                                                <red>217</red>
+                                                <green>220</green>
+                                                <blue>194</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>220</Qt::red>
-                                                <Qt::green>220</Qt::green>
-                                                <Qt::blue>220</Qt::blue>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>84</Qt::red>
-                                                <Qt::green>112</Qt::green>
-                                                <Qt::blue>152</Qt::blue>
+                                                <red>84</red>
+                                                <green>112</green>
+                                                <blue>152</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>255</Qt::red>
-                                                <Qt::green>255</Qt::green>
-                                                <Qt::blue>255</Qt::blue>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                             <color>
-                                                <Qt::red>0</Qt::red>
-                                                <Qt::green>0</Qt::green>
-                                                <Qt::blue>0</Qt::blue>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
                                             </color>
                                         </inactive>
                                     </palette>
@@ -506,7 +506,7 @@
                                     <cstring>Fill_Spaces</cstring>
                                 </property>
                                 <property name="focusPolicy">
-                                    <enum>Qt::NoFocus</enum>
+                                    <enum>NoFocus</enum>
                                 </property>
                                 <property name="text">
                                     <string>Use s&amp;paces:</string>
@@ -706,7 +706,7 @@
                             <cstring>Spacer3</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Qt::Vertical</enum>
+                            <enum>Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>

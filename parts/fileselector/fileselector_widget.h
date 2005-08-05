@@ -23,15 +23,10 @@
 #define FILESELECTOR_WIDGET_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QShowEvent>
-#include <QFocusEvent>
-#include <QResizeEvent>
-#include <QEvent>
 #include <kfile.h>
 #include <kurl.h>
 #include <ktoolbar.h>
-#include <q3frame.h>
+#include <qframe.h>
 #include <kdiroperator.h>
 
 class KDevMainWindow;
@@ -72,7 +67,7 @@ public:
     virtual void setMovingEnabled( bool b );
 };
 
-class KDevFileSelectorToolBarParent: public Q3Frame
+class KDevFileSelectorToolBarParent: public QFrame
 {
     Q_OBJECT
 public:

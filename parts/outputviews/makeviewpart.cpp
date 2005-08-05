@@ -11,7 +11,7 @@
 
 #include "makeviewpart.h"
 
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qdir.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -42,7 +42,7 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     m_widget = new MakeWidget(this);
     m_widget->setIcon( SmallIcon("exec") );
     m_widget->setCaption(i18n("Messages Output"));
-    Q3WhatsThis::add(m_widget, i18n("<b>Messages output</b><p>"
+    QWhatsThis::add(m_widget, i18n("<b>Messages output</b><p>"
                                    "The messages window shows the output of the compiler and "
                                    "used build tools like make, ant, uic, dcopidl etc. "
                                    "For compiler error messages, click on the error message. "

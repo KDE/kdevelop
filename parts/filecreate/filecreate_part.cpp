@@ -8,15 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qdom.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3PtrList>
 
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -199,7 +196,7 @@ void FileCreatePart::slotAboutToShowNewPopupMenu()
 			} else
 			{
 				KPopupMenu* subMenu = NULL;
-				Q3PtrList<FileType> subtypes = filetype->subtypes();
+				QPtrList<FileType> subtypes = filetype->subtypes();
 				for(FileType * subtype = subtypes.first(); subtype; subtype=subtypes.next())
 				{
 					if (subtype->enabled()){
@@ -217,7 +214,7 @@ void FileCreatePart::slotAboutToShowNewPopupMenu()
 				{
 					if( !m_subPopups )
 					{
-						m_subPopups = new Q3PtrList<KPopupMenu>;
+						m_subPopups = new QPtrList<KPopupMenu>;
 						m_subPopups->setAutoDelete(true);
 					}
 					m_subPopups->append( subMenu );
@@ -283,7 +280,7 @@ void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & created
   }
 }
 
-int FileCreatePart::readTypes(const QDomDocument & dom, Q3PtrList<FileType> &m_filetypes, bool enable) {
+int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_filetypes, bool enable) {
   int numRead = 0;
   QDomElement fileTypes = DomUtil::elementByPath(dom,"/kdevfilecreate/filetypes");
   if (!fileTypes.isNull()) {
@@ -339,13 +336,13 @@ FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
     subtypeRef = ex.mid(dashPos+1);
   }
 
-  Q3PtrList<FileType> filetypes = getFileTypes();
+  QPtrList<FileType> filetypes = getFileTypes();
   for(FileType * filetype = filetypes.first();
       filetype;
       filetype=filetypes.next()) {
     if (filetype->ext()==ext) {
       if (subtypeRef.isNull()) return filetype;
-      Q3PtrList<FileType> subtypes = filetype->subtypes();
+      QPtrList<FileType> subtypes = filetype->subtypes();
       for(FileType * subtype = subtypes.first();
           subtype;
           subtype=subtypes.next()) {
@@ -366,13 +363,13 @@ FileType * FileCreatePart::getEnabledType(const QString & ex, const QString subt
     subtypeRef = ex.mid(dashPos+1);
   }
 
-  Q3PtrList<FileType> filetypes = getFileTypes();
+  QPtrList<FileType> filetypes = getFileTypes();
   for(FileType * filetype = filetypes.first();
       filetype;
       filetype=filetypes.next()) {
     if (filetype->ext()==ext) {
       if ( (subtypeRef.isNull()) && (filetype->enabled()) ) return filetype;
-      Q3PtrList<FileType> subtypes = filetype->subtypes();
+      QPtrList<FileType> subtypes = filetype->subtypes();
       for(FileType * subtype = subtypes.first();
           subtype;
           subtype=subtypes.next()) {
@@ -467,7 +464,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
       !FileTemplate::copy(this, ext, fullPath) ) {
       // no template, create a blank file instead
       QFile f(fullPath);
-      f.open( QIODevice::WriteOnly );
+      f.open( IO_WriteOnly );
       f.close();
   }
   if (dialog.addToProject())

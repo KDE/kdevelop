@@ -57,10 +57,10 @@ void ChangeLogEntry::addToLog( const QString &logFilePath, const bool prepend, c
         QFile fakeFile( fakeLogFilePath );
         QFile changeLogFile( logFilePath );
         {
-            if (!fakeFile.open( QIODevice::WriteOnly | QIODevice::Append))
+            if (!fakeFile.open( IO_WriteOnly | IO_Append))
                 return;
 
-            if (changeLogFile.open( QIODevice::ReadOnly )) // A Changelog already exist
+            if (changeLogFile.open( IO_ReadOnly )) // A Changelog already exist
             {
                 QTextStream is( &changeLogFile );
                 QTextStream os( &fakeFile );
@@ -80,10 +80,10 @@ void ChangeLogEntry::addToLog( const QString &logFilePath, const bool prepend, c
         }
         // Ok, now we have the change log we need in fakeLogFilePath: we should ask for a
         // 'mv fakeLogFilePath logFilePath'-like command ... :-/
-        if (!fakeFile.open( QIODevice::ReadOnly ))
+        if (!fakeFile.open( IO_ReadOnly ))
             return;
 
-        if (changeLogFile.open( QIODevice::WriteOnly ))
+        if (changeLogFile.open( IO_WriteOnly ))
         {
             QTextStream os( &changeLogFile );
             QTextStream is( &fakeFile );
@@ -98,7 +98,7 @@ void ChangeLogEntry::addToLog( const QString &logFilePath, const bool prepend, c
     else // add on tail
     {
         QFile f( logFilePath );
-        if (!f.open( QIODevice::WriteOnly | QIODevice::Append))
+        if (!f.open( IO_WriteOnly | IO_Append))
             return;
 
         QTextStream t( &f );

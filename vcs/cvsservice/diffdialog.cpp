@@ -14,13 +14,13 @@
 
 #include "diffdialog.h"
 #include <klocale.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // class DiffDialog
 ///////////////////////////////////////////////////////////////////////////////
 
-DiffDialog::DiffDialog( const CVSEntry &entry, QWidget *parent, const char *name, Qt::WFlags f )
+DiffDialog::DiffDialog( const CVSEntry &entry, QWidget *parent, const char *name, WFlags f )
     : DiffDialogBase( parent, name, true, f)
 {
     m_entry = entry;

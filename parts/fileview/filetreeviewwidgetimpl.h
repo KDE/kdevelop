@@ -13,9 +13,7 @@
 #define FILETREEVIEWWIDGETIMPL_H
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <qvaluelist.h>
 #include <kfiletreeview.h>
 #include <qdom.h>
 
@@ -29,9 +27,9 @@ namespace filetreeview
     class BranchItemFactory;
 }
 class FileViewPart;
-class Q3Header;
+class QHeader;
 class KToggleAction;
-class Q3PopupMenu;
+class QPopupMenu;
 
 /**
 * @author Mario Scalas
@@ -50,7 +48,7 @@ public:
     // shortcuts
     FileTreeWidget *fileTree() const;
     QDomDocument &projectDom() const;
-    Q3Header *header() const { return fileTree()->header(); }
+    QHeader *header() const { return fileTree()->header(); }
     void setColumnWidth( int column, int w ) { fileTree()->setColumnWidth( column, w ); }
     int contentsWidth() const { return fileTree()->contentsWidth(); }
     void triggerUpdate() { fileTree()->triggerUpdate(); }
@@ -72,7 +70,7 @@ public:
     * @param popupMenu the menu to fill
     * @param item the QListViewItem which this menu has been requested upon
     */
-    virtual void fillPopupMenu( Q3PopupMenu *popupMenu, Q3ListViewItem *item ) const;
+    virtual void fillPopupMenu( QPopupMenu *popupMenu, QListViewItem *item ) const;
     /**
     * @return true if non project files are to be shown, false otherwise
     */
@@ -94,7 +92,7 @@ protected:
     QString projectDirectory() const;
 
 private:
-	Q3ValueList<Q3ListViewItem*> allSelectedItems( Q3ListViewItem * item ) const;
+	QValueList<QListViewItem*> allSelectedItems( QListViewItem * item ) const;
     filetreeview::BranchItemFactory *m_branchItemFactory;
 
     FileViewPart *m_part;

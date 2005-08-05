@@ -25,19 +25,16 @@
 #include "toolbarguibuilder.h"
 
 #include <qtimer.h>
-#include <q3popupmenu.h>
-#include <q3whatsthis.h>
-#include <q3valuelist.h>
+#include <qpopupmenu.h>
+#include <qwhatsthis.h>
+#include <qvaluelist.h>
 #include <qmap.h>
 #include <qdir.h>
 #include <qdom.h>
-#include <q3vbox.h>
-#include <q3hbox.h>
+#include <qvbox.h>
+#include <qhbox.h>
 #include <qpoint.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QBoxLayout>
 
 #include <kmainwindow.h>
 #include <kinputdialog.h>
@@ -84,8 +81,8 @@ ProjectviewPart::ProjectviewPart(QObject *parent, const char *name, const QStrin
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)),
             this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
     
-    connect(core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-            this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
+    connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+            this, SLOT(contextMenu(QPopupMenu *, const Context *)));
             
     connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
@@ -94,7 +91,7 @@ ProjectviewPart::ProjectviewPart(QObject *parent, const char *name, const QStrin
     config->setGroup("File List Plugin");
     if (config->readBoolEntry("ToolbarInToolview", true))
     {
-      m_toolbarWidget = new Q3VBox(0, "toolbarContainer");
+      m_toolbarWidget = new QVBox(0, "toolbarContainer");
       m_toolbarWidget->setHidden(true);
       m_guibuilder = new ToolbarGUIBuilder(m_toolbarWidget, mainWindow()->main()); 
       setClientBuilder(m_guibuilder);
@@ -249,13 +246,13 @@ void ProjectviewPart::init()
   {
     m_toolbarWidget->reparent(m_widget, QPoint(0, 0), true);
     l->addWidget(m_toolbarWidget);
-    Q3WhatsThis::add(m_toolbarWidget, i18n("<b>Project View Toolbar</b><p>This allows to create and work with project views. A project view is a set of open documents.</p>"));
+    QWhatsThis::add(m_toolbarWidget, i18n("<b>Project View Toolbar</b><p>This allows to create and work with project views. A project view is a set of open documents.</p>"));
   }
   
   // create the listview 
   QWidget * fileListWidget = new FileListWidget(this, m_widget);
   fileListWidget->setCaption(i18n("File List"));
-  Q3WhatsThis::add(fileListWidget, i18n("<b>File List</b><p>This is the list of opened files.</p>"));
+  QWhatsThis::add(fileListWidget, i18n("<b>File List</b><p>This is the list of opened files.</p>"));
   l->addWidget(fileListWidget);
   
   mainWindow()->embedSelectView(m_widget, i18n("File List"), i18n("Open files"));
@@ -309,7 +306,7 @@ void ProjectviewPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, 
     }
 }
 
-void ProjectviewPart::contextMenu(Q3PopupMenu */*popup*/, const Context */*context*/)
+void ProjectviewPart::contextMenu(QPopupMenu */*popup*/, const Context */*context*/)
 {
 // put actions into the context menu here
 //     if (context->hasType(Context::EditorContext))

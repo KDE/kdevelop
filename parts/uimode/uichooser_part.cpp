@@ -1,6 +1,6 @@
 #include "uichooser_part.h"
 
-#include <q3vbox.h>
+#include <qvbox.h>
 
 #include <kdialogbase.h>
 #include <kdevgenericfactory.h>

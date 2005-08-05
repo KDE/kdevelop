@@ -12,13 +12,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QGridLayout>
-#include <QDropEvent>
 #include <kpushbutton.h>
 #include <klistview.h>
-#include <q3header.h>
+#include <qheader.h>
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <kmessagebox.h>
@@ -34,8 +30,8 @@
 #include <qinputdialog.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <q3whatsthis.h>
-#include <q3dragobject.h>
+#include <qwhatsthis.h>
+#include <qdragobject.h>
 #include <qtimer.h>
 #include <kcombobox.h>
 #include <kdeversion.h>
@@ -68,12 +64,12 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
     setRootIsDecorated(true);
 
     //connect the signals
-    connect( this, SIGNAL( contextMenuRequested ( Q3ListViewItem *, const QPoint & , int ) ),
-             this, SLOT( showPopupMenu(Q3ListViewItem *, const QPoint & , int ) ) );
-    connect( this, SIGNAL( doubleClicked (Q3ListViewItem *, const QPoint &, int) ),
-             this, SLOT( slotListDblClicked( Q3ListViewItem *, const QPoint &, int) ) );
-    connect( this, SIGNAL( dropped(QDropEvent *, Q3ListViewItem *) ),
-             this, SLOT( slotDropped(QDropEvent *, Q3ListViewItem *) ) );
+    connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
+             this, SLOT( showPopupMenu(QListViewItem *, const QPoint & , int ) ) );
+    connect( this, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int) ),
+             this, SLOT( slotListDblClicked( QListViewItem *, const QPoint &, int) ) );
+    connect( this, SIGNAL( dropped(QDropEvent *, QListViewItem *) ),
+             this, SLOT( slotDropped(QDropEvent *, QListViewItem *) ) );
 
     _cfg = NULL;
 
@@ -157,7 +153,7 @@ void SnippetWidget::slotAddGroup()
 void SnippetWidget::slotRemove()
 {
   //get current data
-  Q3ListViewItem * item = currentItem();
+  QListViewItem * item = currentItem();
   SnippetItem *snip = dynamic_cast<SnippetItem*>( item );
   SnippetGroup *group = dynamic_cast<SnippetGroup*>( item );
   if (!snip)
@@ -197,7 +193,7 @@ void SnippetWidget::slotRemove()
 void SnippetWidget::slotEdit()
 {
   //get current data
-  Q3ListViewItem * item = currentItem();
+  QListViewItem * item = currentItem();
 
   SnippetGroup *pGroup = dynamic_cast<SnippetGroup*>(item);
   SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
@@ -244,7 +240,7 @@ void SnippetWidget::slotEdit()
 void SnippetWidget::slotEditGroup()
 {
   //get current data
-  Q3ListViewItem * item = currentItem();
+  QListViewItem * item = currentItem();
 
   SnippetGroup *pGroup = dynamic_cast<SnippetGroup*>( item );
   if (!pGroup) /*selected item MUST be a SnippetGroup*/
@@ -277,7 +273,7 @@ void SnippetWidget::slotEditGroup()
     On a DoubleClick the clicked snippet gets inserted at the
     current cursor position of the active view
 */
-void SnippetWidget::slotListDblClicked(Q3ListViewItem * item, const QPoint &, int)
+void SnippetWidget::slotListDblClicked(QListViewItem * item, const QPoint &, int)
 {
   SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
   if (!pSnippet || dynamic_cast<SnippetGroup*>(item))
@@ -553,7 +549,7 @@ void SnippetWidget::maybeTip( const QPoint & p )
     \fn SnippetWidget::showPopupMenu( QListViewItem * item, const QPoint & p, int )
     Shows the Popup-Menu depending item is a valid pointer
 */
-void SnippetWidget::showPopupMenu( Q3ListViewItem * item, const QPoint & p, int )
+void SnippetWidget::showPopupMenu( QListViewItem * item, const QPoint & p, int )
 {
 	KPopupMenu popup;
 
@@ -720,7 +716,7 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
     mapVar2Cb[it.key()] = cb;
 
     QToolTip::add( cb, i18n("Enable this to save the value entered to the right as the default value for this variable") );
-    Q3WhatsThis::add( cb, i18n("If you enable this option, the value entered to the right will be saved. "
+    QWhatsThis::add( cb, i18n("If you enable this option, the value entered to the right will be saved. "
                               "If you use the same variable later, even in another snippet, the value entered to the right "
 			      "will be the default value for that variable.") );
 
@@ -838,7 +834,7 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
   }
 
   QToolTip::add( cb, i18n("Enable this to save the value entered to the right as the default value for this variable") );
-  Q3WhatsThis::add( cb, i18n("If you enable this option, the value entered to the right will be saved. "
+  QWhatsThis::add( cb, i18n("If you enable this option, the value entered to the right will be saved. "
                             "If you use the same variable later, even in another snippet, the value entered to the right "
                             "will be the default value for that variable.") );
 
@@ -901,7 +897,7 @@ bool SnippetWidget::acceptDrag (QDropEvent *event) const
 {
   kdDebug(9035) << "Format: " << event->format() << "" << event->pos() << endl;
 
-  Q3ListViewItem * item = itemAt(event->pos());
+  QListViewItem * item = itemAt(event->pos());
 
   if (item &&
       QString(event->format()).startsWith("text/plain") &&
@@ -921,13 +917,13 @@ bool SnippetWidget::acceptDrag (QDropEvent *event) const
     If it is emitted, we need to construct a new snippet entry with
     the data given
  */
-void SnippetWidget::slotDropped(QDropEvent *e, Q3ListViewItem *item)
+void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *item)
 {
   SnippetGroup *group = dynamic_cast<SnippetGroup *>(item);
   if (!group)
     group = dynamic_cast<SnippetGroup *>(item->parent());
 
-  Q3CString dropped;
+  QCString dropped;
   QByteArray data = e->encodedData("text/plain");
   if ( e->provides("text/plain") && data.size()>0 ) {
     //get the data from the event...

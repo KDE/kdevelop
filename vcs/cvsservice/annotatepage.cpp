@@ -14,9 +14,6 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 
 #include <kmessagebox.h>
 #include <kcursor.h>

@@ -21,7 +21,7 @@ class CTags2SettingsWidget : public CTags2SettingsWidgetBase
 	Q_OBJECT
 
 public:
-	CTags2SettingsWidget( CTags2Part * part, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+	CTags2SettingsWidget( CTags2Part * part, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
 	~CTags2SettingsWidget();
 
 signals:

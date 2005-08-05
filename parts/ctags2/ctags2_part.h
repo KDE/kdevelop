@@ -12,16 +12,13 @@
 #ifndef __KDEVPART_CTAGS2_H__
 #define __KDEVPART_CTAGS2_H__
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QTextStream>
-#include <Q3PopupMenu>
 
 #include <kdevplugin.h>
 #include "tags.h"
 
-class Q3PopupMenu;
+class QPopupMenu;
 class Context;
 class KURL;
 class QTextStream;
@@ -50,7 +47,7 @@ private slots:
 	void slotGotoDefinition();
 	void slotGotoDeclaration();
 	void slotGotoTag();
-	void contextMenu(Q3PopupMenu *, const Context *);
+	void contextMenu(QPopupMenu *, const Context *);
 	void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
 	void updateTagsfileName( const QString & name );
 	
@@ -60,7 +57,7 @@ private:
 	void showHits( Tags::TagList const & tags );
 	QString currentWord();
     
-	QPointer<CTags2Widget> m_widget;
+	QGuardedPtr<CTags2Widget> m_widget;
 	QString m_contextString ;
 	
 	ConfigWidgetProxy * _configProxy;

@@ -34,7 +34,7 @@ class QuickOpenFunctionDialog : public QuickOpenDialog
   Q_OBJECT
 
 public:
-  QuickOpenFunctionDialog( QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+  QuickOpenFunctionDialog( QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
   ~QuickOpenFunctionDialog();
   
   void gotoFile( QString name );
@@ -43,8 +43,8 @@ public:
   QuickOpenPart* part(){ return m_part; };
   
 public slots:
-  virtual void slotExecuted(Q3ListBoxItem*);//itemList executed, returnPressed
-  virtual void executed(Q3ListBoxItem*);	//
+  virtual void slotExecuted(QListBoxItem*);//itemList executed, returnPressed
+  virtual void executed(QListBoxItem*);	//
   virtual void slotReturnPressed();			//buttonOk clicked, nameEdit returnPressed
 
 protected:

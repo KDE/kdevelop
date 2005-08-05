@@ -12,8 +12,8 @@
 #ifndef TAGS_H
 #define TAGS_H
 
-#include <q3valuelist.h>
-#include <q3cstring.h>
+#include <qvaluelist.h>
+#include <qcstring.h>
 #include <qstring.h>
 #include <qstringlist.h>
 
@@ -32,7 +32,7 @@ public:
 		QString pattern;
 	};
 	
-	typedef Q3ValueList<TagEntry> TagList;
+	typedef QValueList<TagEntry> TagList;
 	
 	/**
 	 *    Method to set the tag database filename
@@ -58,7 +58,7 @@ public:
 	static TagList getMatches( const QString & tagpart, bool partial, const QStringList & types = QStringList() );	
 
 private:
-	static Q3CString _tagsfile;
+	static QCString _tagsfile;
 };
 
 #endif

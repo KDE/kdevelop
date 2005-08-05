@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3header.h>
+#include <qheader.h>
 #include <qtextstream.h>
 #include <qdir.h>
 #include <qstringlist.h>
@@ -23,7 +23,7 @@
 
 ReplaceItem * ReplaceView::firstChild() const
 {
-    return static_cast<ReplaceItem*>( Q3ListView::firstChild() );
+    return static_cast<ReplaceItem*>( QListView::firstChild() );
 }
 
 
@@ -40,9 +40,9 @@ ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent ), _latestfile(
     pal.setActive( cg );
     setPalette( pal );
 
-    connect( this, SIGNAL( clicked( Q3ListViewItem * ) ), SLOT( slotClicked( Q3ListViewItem * ) ) );
-    connect( this, SIGNAL( mouseButtonPressed( int, Q3ListViewItem *, const QPoint &, int) ),
-             SLOT( slotMousePressed(int, Q3ListViewItem *, const QPoint &, int) ) );
+    connect( this, SIGNAL( clicked( QListViewItem * ) ), SLOT( slotClicked( QListViewItem * ) ) );
+    connect( this, SIGNAL( mouseButtonPressed( int, QListViewItem *, const QPoint &, int) ),
+             SLOT( slotMousePressed(int, QListViewItem *, const QPoint &, int) ) );
 }
 
 void ReplaceView::makeReplacementsForFile( QTextStream & istream, QTextStream & ostream, ReplaceItem const * fileitem )
@@ -106,7 +106,7 @@ void ReplaceView::setReplacementData( QRegExp const & re, QString const & replac
     _replacement = replacement;
 }
 
-void ReplaceView::slotMousePressed(int btn, Q3ListViewItem* i, const QPoint& pos, int col)
+void ReplaceView::slotMousePressed(int btn, QListViewItem* i, const QPoint& pos, int col)
 {
     kdDebug(0) << "ReplaceView::slotMousePressed()" << endl;
 
@@ -124,7 +124,7 @@ void ReplaceView::slotMousePressed(int btn, Q3ListViewItem* i, const QPoint& pos
     }
 }
 
-void ReplaceView::slotClicked( Q3ListViewItem * item )
+void ReplaceView::slotClicked( QListViewItem * item )
 {
     kdDebug(0) << "ReplaceView::slotClicked()" << endl;
 

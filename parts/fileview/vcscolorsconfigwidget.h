@@ -40,7 +40,7 @@ class VCSColorsConfigWidget : public VCSColorsConfigWidgetBase
 
 public:
   VCSColorsConfigWidget( FileViewPart *part, const VCSColors &vcsColors,
-      QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+      QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
   virtual ~VCSColorsConfigWidget();
   /*$PUBLIC_FUNCTIONS$*/
 

@@ -31,11 +31,11 @@ class QuickOpenClassDialog : public QuickOpenDialog
 {
     Q_OBJECT
 public:
-    QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, Qt::WFlags fl = 0 );
+    QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
     virtual ~QuickOpenClassDialog();
 
 public slots:
-    virtual void slotExecuted( Q3ListBoxItem* );
+    virtual void slotExecuted( QListBoxItem* );
     virtual void slotReturnPressed();
 
 protected:

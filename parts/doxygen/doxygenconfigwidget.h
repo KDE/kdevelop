@@ -15,10 +15,8 @@
 #define _DOXYGENCONFIGWIDGET_H_
 
 #include <qtabwidget.h>
-#include <q3dict.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qdict.h>
+#include <qptrlist.h>
 
 class IInput;
 
@@ -43,14 +41,14 @@ private:
     void loadFile();
     void saveFile();
     void init();
-    void addDependency(Q3Dict<QObject> *switches,
-                       const Q3CString &dep, const Q3CString &name);
+    void addDependency(QDict<QObject> *switches,
+                       const QCString &dep, const QCString &name);
 
     QString m_fileName;
     bool m_hasChanged;
-    Q3Dict<IInput> *m_inputWidgets;
-    Q3Dict< Q3PtrList<IInput> > *m_dependencies;
-    Q3Dict<QObject> *m_switches;
+    QDict<IInput> *m_inputWidgets;
+    QDict< QPtrList<IInput> > *m_dependencies;
+    QDict<QObject> *m_switches;
 };
 
 #endif

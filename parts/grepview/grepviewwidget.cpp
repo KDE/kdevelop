@@ -14,8 +14,6 @@
 #include <qregexp.h>
 #include <qpainter.h>
 #include <qtoolbutton.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kprocess.h>
@@ -116,13 +114,13 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part) :  QWidget(0, "grepview widge
 
 	connect( m_tabWidget, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotOutputTabChanged()) );
 
-	connect( m_curOutput, SIGNAL(clicked(Q3ListBoxItem*)),
-	         this, SLOT(slotExecuted(Q3ListBoxItem*)) );
-	connect( m_curOutput, SIGNAL(returnPressed(Q3ListBoxItem*)),
-	         this, SLOT(slotExecuted(Q3ListBoxItem*)) );
+	connect( m_curOutput, SIGNAL(clicked(QListBoxItem*)),
+	         this, SLOT(slotExecuted(QListBoxItem*)) );
+	connect( m_curOutput, SIGNAL(returnPressed(QListBoxItem*)),
+	         this, SLOT(slotExecuted(QListBoxItem*)) );
 
 
-	connect( m_curOutput, SIGNAL(contextMenuRequested( Q3ListBoxItem*, const QPoint&)), this, SLOT(popupMenu(Q3ListBoxItem*, const QPoint&)));
+	connect( m_curOutput, SIGNAL(contextMenuRequested( QListBoxItem*, const QPoint&)), this, SLOT(popupMenu(QListBoxItem*, const QPoint&)));
 	m_part = part;
 
 	m_closeButton = new QToolButton(m_tabWidget);//@todo change text/icon
@@ -265,7 +263,7 @@ void GrepViewWidget::searchActivated()
 }
 
 
-void GrepViewWidget::slotExecuted(Q3ListBoxItem* item)
+void GrepViewWidget::slotExecuted(QListBoxItem* item)
 {
 	ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item);
 	if (!i || !i->isCustomItem())
@@ -316,7 +314,7 @@ void GrepViewWidget::projectChanged(KDevProject *project)
 	grepdlg->setDirectory(dir);
 }
 
-void GrepViewWidget::popupMenu(Q3ListBoxItem*, const QPoint& p)
+void GrepViewWidget::popupMenu(QListBoxItem*, const QPoint& p)
 {
 	if(m_curOutput->isRunning()) return;
 
@@ -339,10 +337,10 @@ void GrepViewWidget::slotKeepOutput( )
 	m_curOutput = new GrepViewProcessWidget(m_tabWidget);
 	m_tabWidget->insertTab(m_curOutput, i18n("Search Results"), 0);
 
-	connect( m_curOutput, SIGNAL(clicked(Q3ListBoxItem*)), this, SLOT(slotExecuted(Q3ListBoxItem*)) );
-	connect( m_curOutput, SIGNAL(returnPressed(Q3ListBoxItem*)), this, SLOT(slotExecuted(Q3ListBoxItem*)) );
+	connect( m_curOutput, SIGNAL(clicked(QListBoxItem*)), this, SLOT(slotExecuted(QListBoxItem*)) );
+	connect( m_curOutput, SIGNAL(returnPressed(QListBoxItem*)), this, SLOT(slotExecuted(QListBoxItem*)) );
 	connect( m_curOutput, SIGNAL(processExited(KProcess* )), this, SLOT(slotSearchProcessExited()) );
-	connect( m_curOutput, SIGNAL(contextMenuRequested( Q3ListBoxItem*, const QPoint&)), this, SLOT(popupMenu(Q3ListBoxItem*, const QPoint&)));
+	connect( m_curOutput, SIGNAL(contextMenuRequested( QListBoxItem*, const QPoint&)), this, SLOT(popupMenu(QListBoxItem*, const QPoint&)));
 }
 
 void GrepViewWidget::slotCloseCurrentOutput( )

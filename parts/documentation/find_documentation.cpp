@@ -20,13 +20,11 @@
 #include "find_documentation.h"
 
 #include <stdlib.h>
-#include <q3process.h>
+#include <qprocess.h>
 #include <qcheckbox.h>
-#include <q3header.h>
+#include <qheader.h>
 #include <qlineedit.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <QFocusEvent>
 
 #include <klistbox.h>
 
@@ -49,8 +47,8 @@ FindDocumentation::FindDocumentation(DocumentationWidget* parent, const char* na
 {
     QWidget* tmp = QApplication::desktop();
     setGeometry(tmp->width()/2 - width()/2, tmp->height()/2 - height()/2, width(), height());
-    proc_man = new Q3Process( this );
-    proc_info = new Q3Process( this );
+    proc_man = new QProcess( this );
+    proc_info = new QProcess( this );
 
     connect( proc_man, SIGNAL(processExited()),
                 this, SLOT(procManReadFromStdout()) );
@@ -69,7 +67,7 @@ FindDocumentation::~FindDocumentation()
 }
 
 /*$SPECIALIZATION$*/
-void FindDocumentation::buttonPressedOnItem( int button, Q3ListViewItem * item, const QPoint & pos, int // c
+void FindDocumentation::buttonPressedOnItem( int button, QListViewItem * item, const QPoint & pos, int // c
                                              )
 {
     if ((button != Qt::RightButton) || (!item))
@@ -81,7 +79,7 @@ void FindDocumentation::buttonPressedOnItem( int button, Q3ListViewItem * item, 
     DocUtils::docItemPopup(m_widget->part(), docItem->text(0), docItem->url(), pos, true, false);
 }
 
-void FindDocumentation::clickOnItem( Q3ListViewItem * item )
+void FindDocumentation::clickOnItem( QListViewItem * item )
 {
     if(!item)
         return;
@@ -216,7 +214,7 @@ void FindDocumentation::searchInContents()
     contents_item->setOpen(true);
     last_item = contents_item;
 
-    Q3ListViewItemIterator it( m_widget->m_contents->m_view );
+    QListViewItemIterator it( m_widget->m_contents->m_view );
     while ( it.current() )
     {
         DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(it.current());
@@ -298,19 +296,19 @@ void FindDocumentation::startSearch()
     last_item = NULL;
     first_match_found = false;
 
-    Q3ListViewItem* item = m_options->source_list->firstChild();
+    QListViewItem* item = m_options->source_list->firstChild();
 
     while ( item && ( !m_options->goto_first_match->isOn() || !first_match_found ))
     {
-        if ( m_options->isMan(dynamic_cast<Q3CheckListItem*>(item)) )
+        if ( m_options->isMan(dynamic_cast<QCheckListItem*>(item)) )
             searchInMan();
-        else if ( m_options->isInfo(dynamic_cast<Q3CheckListItem*>(item)) )
+        else if ( m_options->isInfo(dynamic_cast<QCheckListItem*>(item)) )
             searchInInfo();
-        else if ( m_options->isIndex(dynamic_cast<Q3CheckListItem*>(item)) )
+        else if ( m_options->isIndex(dynamic_cast<QCheckListItem*>(item)) )
             searchInIndex();
-        else if ( m_options->isGoogle(dynamic_cast<Q3CheckListItem*>(item)) )
+        else if ( m_options->isGoogle(dynamic_cast<QCheckListItem*>(item)) )
             searchInGoogle();
-        else if ( m_options->isContents(dynamic_cast<Q3CheckListItem*>(item)) )
+        else if ( m_options->isContents(dynamic_cast<QCheckListItem*>(item)) )
             searchInContents();
 
         item = item->itemBelow();

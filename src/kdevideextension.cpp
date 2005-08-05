@@ -19,9 +19,9 @@
  ***************************************************************************/
 #include "kdevideextension.h"
 
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h>
 
 #include <klocale.h>
@@ -52,7 +52,7 @@ void KDevIDEExtension::init()
 void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 {
     KConfig* config = kapp->config();
-    Q3VBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
+    QVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
     gsw = new SettingsWidget(vbox, "general settings widget");
 
     gsw->projectsURL->setMode((int)KFile::Directory);

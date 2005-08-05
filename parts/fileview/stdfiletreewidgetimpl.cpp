@@ -9,9 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
- #include <q3header.h>
-//Added by qt3to4:
-#include <QPixmap>
+ #include <qheader.h>
  #include <kdebug.h>
 
 #include "fileitemfactory.h"

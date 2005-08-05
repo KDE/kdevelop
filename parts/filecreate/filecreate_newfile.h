@@ -10,10 +10,8 @@
 #ifndef FILECREATE_NEWFILE_H
 #define FILECREATE_NEWFILE_H
 
-#include <q3ptrlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
-//Added by qt3to4:
-#include <QGridLayout>
 #include <kurl.h>
 #include <kdialogbase.h>
 
@@ -31,7 +29,7 @@ namespace FileCreate {
   public:
     NewFileChooser(QWidget *parent=0);
     virtual ~NewFileChooser();
-    void setFileTypes(Q3PtrList<FileType> typelist);
+    void setFileTypes(QPtrList<FileType> typelist);
     KURL url() const;
     bool addToProject() const;
     const FileType *selectedType() const;

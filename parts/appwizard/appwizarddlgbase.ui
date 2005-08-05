@@ -152,7 +152,7 @@
                     </size>
                 </property>
                 <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                    <enum>LineEditPanel</enum>
                 </property>
                 <property name="frameShadow">
                     <enum>Sunken</enum>
@@ -161,7 +161,7 @@
                     <bool>true</bool>
                 </property>
                 <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>AlignCenter</set>
                 </property>
                 <property name="hAlign" stdset="0">
                 </property>
@@ -299,7 +299,7 @@
                     </size>
                 </property>
                 <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
+                    <enum>NoFocus</enum>
                 </property>
                 <property name="text">
                     <string></string>
@@ -542,9 +542,9 @@
 <connections>
     <connection>
         <sender>templates_listview</sender>
-        <signal>selectionChanged(Q3ListViewItem*)</signal>
+        <signal>selectionChanged(QListViewItem*)</signal>
         <receiver>AppWizardDialogBase</receiver>
-        <slot>templatesTreeViewClicked(Q3ListViewItem*)</slot>
+        <slot>templatesTreeViewClicked(QListViewItem*)</slot>
     </connection>
     <connection>
         <sender>author_edit</sender>
@@ -590,27 +590,27 @@
     </connection>
     <connection>
         <sender>favourites_iconview</sender>
-        <signal>selectionChanged(Q3IconViewItem*)</signal>
+        <signal>selectionChanged(QIconViewItem*)</signal>
         <receiver>AppWizardDialogBase</receiver>
-        <slot>favouritesIconViewClicked(Q3IconViewItem*)</slot>
+        <slot>favouritesIconViewClicked(QIconViewItem*)</slot>
     </connection>
     <connection>
         <sender>templates_listview</sender>
-        <signal>contextMenuRequested(Q3ListViewItem*,const QPoint&amp;,int)</signal>
+        <signal>contextMenuRequested(QListViewItem*,const QPoint&amp;,int)</signal>
         <receiver>AppWizardDialogBase</receiver>
-        <slot>templatesContextMenu(Q3ListViewItem*,const QPoint&amp;,int)</slot>
+        <slot>templatesContextMenu(QListViewItem*,const QPoint&amp;,int)</slot>
     </connection>
     <connection>
         <sender>favourites_iconview</sender>
-        <signal>contextMenuRequested(Q3IconViewItem*,const QPoint&amp;)</signal>
+        <signal>contextMenuRequested(QIconViewItem*,const QPoint&amp;)</signal>
         <receiver>AppWizardDialogBase</receiver>
-        <slot>favouritesContextMenu(Q3IconViewItem*,const QPoint&amp;)</slot>
+        <slot>favouritesContextMenu(QIconViewItem*,const QPoint&amp;)</slot>
     </connection>
     <connection>
         <sender>favourites_iconview</sender>
-        <signal>contextMenuRequested(Q3IconViewItem*,const QPoint&amp;)</signal>
+        <signal>contextMenuRequested(QIconViewItem*,const QPoint&amp;)</signal>
         <receiver>AppWizardDialogBase</receiver>
-        <slot>favouritesContextMenu(Q3IconViewItem*,const QPoint&amp;)</slot>
+        <slot>favouritesContextMenu(QIconViewItem*,const QPoint&amp;)</slot>
     </connection>
     <connection>
         <sender>showAll_box</sender>
@@ -640,10 +640,10 @@
     <slot access="protected">projectLocationChanged()</slot>
     <slot access="protected">projectNameChanged()</slot>
     <slot access="protected">textChanged()</slot>
-    <slot access="protected">templatesTreeViewClicked( Q3ListViewItem * )</slot>
-    <slot access="protected">favouritesIconViewClicked( Q3IconViewItem * )</slot>
-    <slot access="protected">templatesContextMenu( Q3ListViewItem *, const QPoint &amp;, int )</slot>
-    <slot access="protected">favouritesContextMenu( Q3IconViewItem *, const QPoint &amp; )</slot>
+    <slot access="protected">templatesTreeViewClicked( QListViewItem * )</slot>
+    <slot access="protected">favouritesIconViewClicked( QIconViewItem * )</slot>
+    <slot access="protected">templatesContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
+    <slot access="protected">favouritesContextMenu( QIconViewItem *, const QPoint &amp; )</slot>
     <slot>showTemplates(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

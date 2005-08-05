@@ -27,8 +27,6 @@
 #include <qstringlist.h>
 #include <qmap.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <QContextMenuEvent>
 #include <codemodel.h>
 
 class KDevProject;
@@ -83,7 +81,7 @@ private slots:
     void refresh();
     void insertFile( const QString& fileName );
     void removeFile( const QString& fileName );
-    void slotExecuted( Q3ListViewItem* item );
+    void slotExecuted( QListViewItem* item );
 
 private:
     ClassViewPart* m_part;
@@ -110,9 +108,9 @@ private:
 class ClassViewItem: public KListViewItem
 {
 public:
-    ClassViewItem( Q3ListView* parent, const QString& text=QString::null )
+    ClassViewItem( QListView* parent, const QString& text=QString::null )
     	: KListViewItem( parent, text ) {}
-    ClassViewItem( Q3ListViewItem* parent, const QString& text=QString::null )
+    ClassViewItem( QListViewItem* parent, const QString& text=QString::null )
     	: KListViewItem( parent, text ) {}
     
     virtual const CodeModelItem* model() const { return 0; }
@@ -138,9 +136,9 @@ public:
 class FolderBrowserItem: public ClassViewItem
 {
 public:
-    FolderBrowserItem( ClassViewWidget* widget, Q3ListView* parent, const QString& name=QString::null )
+    FolderBrowserItem( ClassViewWidget* widget, QListView* parent, const QString& name=QString::null )
     	: ClassViewItem( parent, name ), m_widget(widget) {}
-    FolderBrowserItem( ClassViewWidget* widget, Q3ListViewItem* parent, const QString& name=QString::null )
+    FolderBrowserItem( ClassViewWidget* widget, QListViewItem* parent, const QString& name=QString::null )
     	: ClassViewItem( parent, name ), m_widget(widget) {}
 
     virtual bool isFolder() const { return true; }
@@ -169,9 +167,9 @@ private:
 class NamespaceDomBrowserItem: public ClassViewItem
 {
 public:
-    NamespaceDomBrowserItem( Q3ListView* parent, NamespaceDom dom )
+    NamespaceDomBrowserItem( QListView* parent, NamespaceDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    NamespaceDomBrowserItem( Q3ListViewItem* parent, NamespaceDom dom )
+    NamespaceDomBrowserItem( QListViewItem* parent, NamespaceDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -201,9 +199,9 @@ private:
 class ClassDomBrowserItem: public ClassViewItem
 {
 public:
-    ClassDomBrowserItem( Q3ListView* parent, ClassDom dom )
+    ClassDomBrowserItem( QListView* parent, ClassDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    ClassDomBrowserItem( Q3ListViewItem* parent, ClassDom dom )
+    ClassDomBrowserItem( QListViewItem* parent, ClassDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -233,9 +231,9 @@ private:
 class TypeAliasDomBrowserItem: public ClassViewItem
 {
 public:
-    TypeAliasDomBrowserItem( Q3ListView* parent, TypeAliasDom dom )
+    TypeAliasDomBrowserItem( QListView* parent, TypeAliasDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    TypeAliasDomBrowserItem( Q3ListViewItem* parent, TypeAliasDom dom )
+    TypeAliasDomBrowserItem( QListViewItem* parent, TypeAliasDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -256,9 +254,9 @@ private:
 class FunctionDomBrowserItem: public ClassViewItem
 {
 public:
-    FunctionDomBrowserItem( Q3ListView* parent, FunctionDom dom )
+    FunctionDomBrowserItem( QListView* parent, FunctionDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    FunctionDomBrowserItem( Q3ListViewItem* parent, FunctionDom dom )
+    FunctionDomBrowserItem( QListViewItem* parent, FunctionDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -282,9 +280,9 @@ private:
 class VariableDomBrowserItem: public ClassViewItem
 {
 public:
-    VariableDomBrowserItem( Q3ListView* parent, VariableDom dom )
+    VariableDomBrowserItem( QListView* parent, VariableDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    VariableDomBrowserItem( Q3ListViewItem* parent, VariableDom dom )
+    VariableDomBrowserItem( QListViewItem* parent, VariableDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }

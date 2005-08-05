@@ -20,10 +20,10 @@
 #define __KDEVPART_SUBVERSION_H__
 
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <kdevplugin.h>
 #include <kurl.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <kdialogbase.h>
 #include "kdevversioncontrol.h"
 
@@ -56,7 +56,7 @@ signals:
 //		void finishedFetching( QString destinationDir );
 
 private slots:
-		void contextMenu( Q3PopupMenu *popup, const Context *context );
+		void contextMenu( QPopupMenu *popup, const Context *context );
 		void slotActionUpdate();
 		void slotActionRevert();
 		void slotActionCommit();
@@ -74,7 +74,7 @@ private slots:
 		void projectConfigWidget( KDialogBase *dlg );
 
 private:
-		QPointer<subversionCore> m_impl;
+		QGuardedPtr<subversionCore> m_impl;
 		KURL::List m_urls;
 
 		KAction *actionCommit,
@@ -87,7 +87,7 @@ private:
 		*actionRevert,
 		*actionResolve;
 
-		QPointer<subversionProjectWidget> m_projWidget;
+		QGuardedPtr<subversionProjectWidget> m_projWidget;
 		KURL base;
 
 public:

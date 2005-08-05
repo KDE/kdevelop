@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include <qlineedit.h>
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qfileinfo.h>

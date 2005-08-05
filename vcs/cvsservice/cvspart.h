@@ -14,15 +14,13 @@
 #ifndef _CVSPART_H_
 #define _CVSPART_H_
 
-#include <qpointer.h>
-#include <q3cstring.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <qguardedptr.h>
+#include <qcstring.h>
 
 #include "kdevversioncontrol.h"
 
 class Context;
-class Q3PopupMenu;
+class QPopupMenu;
 class QDir;
 class KDialogBase;
 class KURL;
@@ -78,7 +76,7 @@ private slots:
      * Not that @p context _must_ be FileContext-type, otherwise will do
      * nothing.
      */
-    void contextMenu( Q3PopupMenu *popup, const Context *context );
+    void contextMenu( QPopupMenu *popup, const Context *context );
 
     // Cvs operations (menubar)
     void slotActionLogin();
@@ -147,7 +145,7 @@ private:
     /** This is a pointer to the d->form used for collecting data about CVS project creation (used
      * by the ApplicationWizard in example)
      */
-    QPointer<CvsForm> m_cvsConfigurationForm;
+    QGuardedPtr<CvsForm> m_cvsConfigurationForm;
 
     // Actions
     KAction *actionCommit,

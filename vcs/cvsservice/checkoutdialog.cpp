@@ -68,7 +68,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
-    QWidget *parent, const char *name, Qt::WFlags ) :
+    QWidget *parent, const char *name, WFlags ) :
     DCOPObject( "CheckoutDialogDCOPIface" ),
     KDialogBase( parent, name? name : "checkoutdialog", true, i18n("CVS Checkout"),
         Ok | Cancel, Ok, true ),
@@ -79,8 +79,8 @@ CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
 
     connect( m_base->fetchModulesButton, SIGNAL(clicked()),
         this, SLOT(slotFetchModulesList()) );
-    connect( m_base->modulesListView, SIGNAL(executed(Q3ListViewItem*)),
-        this, SLOT(slotModuleSelected(Q3ListViewItem*)) );
+    connect( m_base->modulesListView, SIGNAL(executed(QListViewItem*)),
+        this, SLOT(slotModuleSelected(QListViewItem*)) );
 
     // Avoid displaying 'file:/' when displaying the file
     m_base->workURLRequester->setShowLocalProtocol( false );
@@ -215,7 +215,7 @@ void CheckoutDialog::slotReceivedErrors( QString someErrors )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CheckoutDialog::slotModuleSelected( Q3ListViewItem * )
+void CheckoutDialog::slotModuleSelected( QListViewItem * )
 {
 	ModuleListViewItem *aModuleItem = static_cast<ModuleListViewItem*>(
 		m_base->modulesListView->selectedItem()
@@ -233,7 +233,7 @@ void CheckoutDialog::fetchUserCvsRepositories()
 	QStringList repositories;
 
 	QFile cvspass( QDir::homeDirPath() + QDir::separator() + ".cvspass" );
-	if (!cvspass.open( QIODevice::ReadOnly ))
+	if (!cvspass.open( IO_ReadOnly ))
 		return;
 	QByteArray data = cvspass.readAll();
 	cvspass.close();

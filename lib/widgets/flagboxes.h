@@ -28,10 +28,10 @@
 Support classes for compiler plugins.
 */
 
-#include <q3listview.h>
+#include <qlistview.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <q3ptrlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
 class QSpinBox;
@@ -46,7 +46,7 @@ class QPushButton;
 class KURLRequester;
 
 /**List item holding a compiler flag.*/
-class FlagListItem : public Q3CheckListItem
+class FlagListItem : public QCheckListItem
 {
 public:
     FlagListItem(FlagListBox *parent, const QString &flagstr,
@@ -65,7 +65,7 @@ private:
 
 
 /**List box item holding a compiler flag.*/
-class FlagListBox : public Q3ListView
+class FlagListBox : public QListView
 {
     Q_OBJECT
 public:
@@ -213,7 +213,7 @@ public:
 
 private:
     void addPathEdit(FlagPathEdit *item);
-    Q3PtrList<FlagPathEdit> plist;
+    QPtrList<FlagPathEdit> plist;
     friend class FlagPathEdit;
 };
 
@@ -230,8 +230,8 @@ public:
 private:
     void addListEdit(FlagListEdit *item);
     void addSpinBox(FlagSpinEdit *item);
-    Q3PtrList<FlagListEdit> plist;
-    Q3PtrList<FlagSpinEdit>  slist;
+    QPtrList<FlagListEdit> plist;
+    QPtrList<FlagSpinEdit>  slist;
     friend class FlagListEdit;
     friend class FlagSpinEdit;
 };
@@ -253,7 +253,7 @@ public:
 
     void addCheckBox(FlagCheckBox *item);
 private:
-    Q3PtrList<FlagCheckBox> cblist;
+    QPtrList<FlagCheckBox> cblist;
 
     QStringList m_multiKeys;
 };
@@ -275,7 +275,7 @@ public:
 
     void addRadioButton(FlagRadioButton *item);
 private:
-    Q3PtrList<FlagRadioButton> cblist;
+    QPtrList<FlagRadioButton> cblist;
 
     QStringList m_multiKeys;
 };

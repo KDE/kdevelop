@@ -1,7 +1,7 @@
 INCLUDES = $(DB3INCLUDES) $(all_includes)
 lib_LTLIBRARIES = libkdevcatalog.la
 libkdevcatalog_la_SOURCES = tag.cpp catalog.cpp
-libkdevcatalog_la_LDFLAGS = -no-undefined $(all_libraries)
+libkdevcatalog_la_LDFLAGS = -no-undefined $(all_libraries) -L$(top_srcdir)/bdb/dist
 libkdevcatalog_la_LIBADD = -ldb $(LIB_KDECORE) $(LIB_QT)
 
 kdevcatalogincludedir = $(includedir)/kdevelop/catalog

@@ -21,7 +21,7 @@
 #ifndef ADDCATALOGDLG_H
 #define ADDCATALOGDLG_H
 
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include "addcatalogdlgbase.h"
 
 class DocumentationPlugin;
@@ -30,7 +30,7 @@ class AddCatalogDlg: public AddCatalogDlgBase
 {
 	Q_OBJECT
 	public:
-		AddCatalogDlg( Q3ValueList<DocumentationPlugin*> const & plugins, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0);
+		AddCatalogDlg( QValueList<DocumentationPlugin*> const & plugins, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
 		~AddCatalogDlg();
 	
 		QString title() const;
@@ -47,7 +47,7 @@ class AddCatalogDlg: public AddCatalogDlgBase
 		virtual void accept();
 	
 	private:
-		Q3ValueList<DocumentationPlugin*> const & m_plugins;
+		QValueList<DocumentationPlugin*> const & m_plugins;
 };
 
 #endif

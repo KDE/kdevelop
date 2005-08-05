@@ -1,0 +1,30 @@
+/* XPM */
+#ifndef _KDE_CLOSEBUTTON_XPM_
+#define _KDE_CLOSEBUTTON_XPM_
+
+static const char *kde_closebutton[] = {
+/* width height num_colors chars_per_pixel */
+"16 16 3 1",
+/* colors */
+" 	s None	c None",
+".	c white",
+"X	c #707070",
+/* pixels */
+"                ",
+"                ",
+"  .X        .X  ",
+"  .XX      .XX  ",
+"   .XX    .XX   ",
+"    .XX  .XX    ",
+"     .XX.XX     ",
+"      .XXX      ",
+"      .XXX      ",
+"     .XX.XX     ",
+"    .XX  .XX    ",
+"   .XX    .XX   ",
+"  .XX      .XX  ",
+"  .X        .X  ",
+"                ",
+"                "};
+
+#endif

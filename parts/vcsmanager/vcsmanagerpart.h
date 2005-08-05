@@ -23,11 +23,9 @@
 
 #include <kdevplugin.h>
 
-#include <qpointer.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <qguardedptr.h>
 
-class Q3PopupMenu;
+class QPopupMenu;
 class KAction;
 class KDialogBase;
 class Context;

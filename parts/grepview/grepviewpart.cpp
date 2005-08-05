@@ -11,9 +11,9 @@
 
 #include "grepviewpart.h"
 
-#include <q3popupmenu.h>
-#include <q3vbox.h>
-#include <q3whatsthis.h>
+#include <qpopupmenu.h>
+#include <qvbox.h>
+#include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -42,13 +42,13 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
              this, SLOT(stopButtonClicked(KDevPlugin*)) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
     m_widget = new GrepViewWidget(this);
     m_widget->setIcon(SmallIcon("grep"));
     m_widget->setCaption(i18n("Grep Output"));
-    Q3WhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
+    QWhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
                                    "This window contains the output of a grep "
                                    "command. Clicking on an item in the list "
                                    "will automatically open the corresponding "
@@ -102,7 +102,7 @@ void GrepViewPart::projectClosed()
 }
 
 
-void GrepViewPart::contextMenu(Q3PopupMenu *popup, const Context *context)
+void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     kdDebug(9001) << "context in grepview" << endl;
     if (!context->hasType( Context::EditorContext ))

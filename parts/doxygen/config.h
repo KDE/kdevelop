@@ -1,13 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <q3strlist.h>
+#include <qstrlist.h>
 #include <qfile.h>
-#include <q3dict.h>
-#include <q3ptrlist.h>
+#include <qdict.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 /*! \brief Abstract base class for any configuration option.
  *
@@ -46,10 +44,10 @@ class ConfigOption
 
     /*! returns the kind of option this is. */
     OptionType kind() const { return m_kind; }
-    Q3CString name() const { return m_name; }
-    Q3CString docs() const { return m_doc; }
+    QCString name() const { return m_name; }
+    QCString docs() const { return m_doc; }
 
-    Q3CString dependsOn() const { return m_dependency; }
+    QCString dependsOn() const { return m_dependency; }
     void addDependency(const char *dep) { m_dependency = dep; }
 
   protected:
@@ -58,16 +56,16 @@ class ConfigOption
     virtual void substEnvVars() = 0;
     virtual void init() {}
 
-    Q3CString convertToComment(const Q3CString &s);
+    QCString convertToComment(const QCString &s);
     void writeBoolValue(QTextStream &t,bool v);
     void writeIntValue(QTextStream &t,int i);
-    void writeStringValue(QTextStream &t,Q3CString &s);
-    void writeStringList(QTextStream &t,Q3StrList &l);
+    void writeStringValue(QTextStream &t,QCString &s);
+    void writeStringList(QTextStream &t,QStrList &l);
 
-    Q3CString m_spaces;
-    Q3CString m_name;
-    Q3CString m_doc;
-    Q3CString m_dependency;
+    QCString m_spaces;
+    QCString m_name;
+    QCString m_doc;
+    QCString m_dependency;
     OptionType m_kind;
 };
 
@@ -113,7 +111,7 @@ class ConfigList : public ConfigOption
     void addValue(const char *v) { m_value.append(v); }
     void setWidgetType(WidgetType w) { m_widgetType = w; }
     WidgetType widgetType() const { return m_widgetType; }
-    Q3StrList *valueRef() { return &m_value; }
+    QStrList *valueRef() { return &m_value; }
     void writeTemplate(QTextStream &t,bool sl,bool)
     {
       if (!sl)
@@ -129,7 +127,7 @@ class ConfigList : public ConfigOption
     void substEnvVars();
     void init() { m_value.clear(); }
   private:
-    Q3StrList m_value;
+    QStrList m_value;
     WidgetType m_widgetType;
 };
 
@@ -152,7 +150,7 @@ class ConfigEnum : public ConfigOption
     {
       return QStrListIterator(m_valueRange);
     }
-    Q3CString *valueRef() { return &m_value; }
+    QCString *valueRef() { return &m_value; }
     void substEnvVars();
     void writeTemplate(QTextStream &t,bool sl,bool)
     {
@@ -169,9 +167,9 @@ class ConfigEnum : public ConfigOption
     void init() { m_value = m_defValue.copy(); }
 
   private:
-    Q3StrList m_valueRange;
-    Q3CString m_value;
-    Q3CString m_defValue;
+    QStrList m_valueRange;
+    QCString m_value;
+    QCString m_defValue;
 };
 
 /*! \brief Option of the string type.
@@ -194,7 +192,7 @@ class ConfigString : public ConfigOption
     void setWidgetType(WidgetType w) { m_widgetType = w; }
     WidgetType widgetType() const { return m_widgetType; }
     void setDefaultValue(const char *v) { m_defValue = v; }
-    Q3CString *valueRef() { return &m_value; }
+    QCString *valueRef() { return &m_value; }
     void writeTemplate(QTextStream &t,bool sl,bool)
     {
       if (!sl)
@@ -211,8 +209,8 @@ class ConfigString : public ConfigOption
     void init() { m_value = m_defValue.copy(); }
   
   private:
-    Q3CString m_value;
-    Q3CString m_defValue;
+    QCString m_value;
+    QCString m_defValue;
     WidgetType m_widgetType;
 };
 
@@ -232,7 +230,7 @@ class ConfigInt : public ConfigOption
       m_minVal = minVal;
       m_maxVal = maxVal;
     }
-    Q3CString *valueStringRef() { return &m_valueString; }
+    QCString *valueStringRef() { return &m_valueString; }
     int *valueRef() { return &m_value; }
     int minVal() const { return m_minVal; }
     int maxVal() const { return m_maxVal; }
@@ -263,7 +261,7 @@ class ConfigInt : public ConfigOption
     int m_defValue;
     int m_minVal;
     int m_maxVal;
-    Q3CString m_valueString;
+    QCString m_valueString;
 };
 
 /*! \brief Option of the boolean type.
@@ -280,11 +278,11 @@ class ConfigBool : public ConfigOption
       m_value = defVal;
       m_defValue = defVal;
     }
-    Q3CString *valueStringRef() { return &m_valueString; }
+    QCString *valueStringRef() { return &m_valueString; }
     bool *valueRef() { return &m_value; }
     void convertStrToVal();
     void substEnvVars();
-    void setValueString(const Q3CString &v) { m_valueString = v; }
+    void setValueString(const QCString &v) { m_valueString = v; }
     void writeTemplate(QTextStream &t,bool sl,bool upd)
     {
       if (!sl)
@@ -308,7 +306,7 @@ class ConfigBool : public ConfigOption
   private:
     bool m_value;
     bool m_defValue;
-    Q3CString m_valueString;
+    QCString m_valueString;
 };
 
 /*! \brief Section marker for obsolete options
@@ -363,9 +361,9 @@ class Config
     /*! Returns an iterator that can by used to iterate over the 
      *  configuration options.
      */
-    Q3PtrListIterator<ConfigOption> iterator()
+    QPtrListIterator<ConfigOption> iterator()
     {
-      return Q3PtrListIterator<ConfigOption>(*m_options);
+      return QPtrListIterator<ConfigOption>(*m_options);
     }
 
     /*! 
@@ -377,19 +375,19 @@ class Config
      *  The arguments \a num and \a name are for debugging purposes only.
      *  There is a convenience function Config_getString() for this.
      */
-    Q3CString &getString(const char *fileName,int num,const char *name) const;
+    QCString &getString(const char *fileName,int num,const char *name) const;
 
     /*! Returns the value of the list option with name \a fileName. 
      *  The arguments \a num and \a name are for debugging purposes only.
      *  There is a convenience function Config_getList() for this.
      */
-    Q3StrList &getList(const char *fileName,int num,const char *name) const;
+    QStrList &getList(const char *fileName,int num,const char *name) const;
 
     /*! Returns the value of the enum option with name \a fileName. 
      *  The arguments \a num and \a name are for debugging purposes only.
      *  There is a convenience function Config_getEnum() for this.
      */
-    Q3CString &getEnum(const char *fileName,int num,const char *name) const;
+    QCString &getEnum(const char *fileName,int num,const char *name) const;
 
     /*! Returns the value of the integer option with name \a fileName. 
      *  The arguments \a num and \a name are for debugging purposes only.
@@ -546,9 +544,9 @@ class Config
 
     Config()
     { 
-      m_options  = new Q3PtrList<ConfigOption>;
-      m_obsolete = new Q3PtrList<ConfigOption>;
-      m_dict     = new Q3Dict<ConfigOption>(257);
+      m_options  = new QPtrList<ConfigOption>;
+      m_obsolete = new QPtrList<ConfigOption>;
+      m_dict     = new QDict<ConfigOption>(257);
       m_options->setAutoDelete(TRUE);
       m_obsolete->setAutoDelete(TRUE);
       m_initialized = FALSE;
@@ -562,9 +560,9 @@ class Config
     }
 
   private:
-    Q3PtrList<ConfigOption> *m_options;
-    Q3PtrList<ConfigOption> *m_obsolete;
-    Q3Dict<ConfigOption> *m_dict;
+    QPtrList<ConfigOption> *m_options;
+    QPtrList<ConfigOption> *m_obsolete;
+    QDict<ConfigOption> *m_dict;
     static Config *m_instance;
     bool m_initialized;
 };

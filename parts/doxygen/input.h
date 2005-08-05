@@ -15,16 +15,12 @@
 #define _INPUT_H
  
 #include <qcheckbox.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3StrList>
-#include <QLabel>
-#include <Q3CString>
+#include <qdict.h>
 
 class QComboBox;
 class QLabel;
 class QLineEdit;
-class Q3ListBox;
+class QListBox;
 class QPushButton;
 class QSpinBox;
  
@@ -42,7 +38,7 @@ class InputBool : public QWidget, public IInput
     Q_OBJECT
 
 public:
-    InputBool(const Q3CString &key, const QString &text, QWidget *parent, bool &flag);
+    InputBool(const QCString &key, const QString &text, QWidget *parent, bool &flag);
     ~InputBool();
     
     void init();
@@ -59,7 +55,7 @@ private slots:
 
 private:
     bool &state;
-    Q3CString key;
+    QCString key;
     QCheckBox *cb;
 };
 
@@ -104,7 +100,7 @@ public:
                     };
 
     InputString(const QString &text, QWidget *parent,
-                Q3CString &s, StringMode m=StringFree);
+                QCString &s, StringMode m=StringFree);
     ~InputString();
     
     void init();
@@ -125,9 +121,9 @@ private:
     QLineEdit *le;
     QPushButton *br;
     QComboBox *com;
-    Q3CString &str;
+    QCString &str;
     StringMode sm;
-    Q3Dict<int> *m_values;
+    QDict<int> *m_values;
     int m_index; 
 };
 
@@ -144,7 +140,7 @@ public:
                   };
     
     InputStrList(const QString &text, QWidget *parent, 
-                 Q3StrList &sl, ListMode v=ListString);
+                 QStrList &sl, ListMode v=ListString);
     ~InputStrList();
 
     void init();
@@ -170,8 +166,8 @@ private:
     QPushButton *upd;
     QPushButton *brFile;
     QPushButton *brDir;
-    Q3ListBox *lb;
-    Q3StrList &strList;
+    QListBox *lb;
+    QStrList &strList;
 };
 
 #endif

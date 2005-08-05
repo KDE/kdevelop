@@ -23,7 +23,7 @@ using namespace filetreeview;
 
 FileTreeWidget* FileTreeViewItem::listView() const
 {
-    return static_cast<FileTreeWidget*>( Q3ListViewItem::listView() );
+    return static_cast<FileTreeWidget*>( QListViewItem::listView() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,13 +79,13 @@ void FileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
         p->setFont( font );
     }
 
-    Q3ListViewItem::paintCell( p, cg, column, width, alignment );
+    QListViewItem::paintCell( p, cg, column, width, alignment );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int FileTreeViewItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
+int FileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) const
 {
     KFileTreeViewItem* rhs = dynamic_cast<KFileTreeViewItem*>( i );
     if (rhs)
@@ -97,7 +97,7 @@ int FileTreeViewItem::compare( Q3ListViewItem *i, int col, bool ascending ) cons
                 return (ascending) ? -1 : 1;
     }
 
-    return Q3ListViewItem::compare( i, col, ascending );
+    return QListViewItem::compare( i, col, ascending );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

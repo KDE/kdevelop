@@ -12,7 +12,7 @@
 #ifndef _APPWIZARDPART_H_
 #define _APPWIZARDPART_H_
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include "kdevplugin.h"
 #include <qstring.h>
 #include <qstringlist.h>

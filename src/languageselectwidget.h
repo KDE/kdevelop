@@ -15,10 +15,8 @@
 #include <qdialog.h>
 #include <qdom.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QLabel>
 
-class Q3ListView;
+class QListView;
 
 class LanguageSelectWidget : public QWidget
 {
@@ -36,7 +34,7 @@ signals:
    void accepted();
 
 private slots:
-    void itemSelected( Q3ListViewItem * );
+    void itemSelected( QListViewItem * );
 
 private:
     void init();
@@ -44,7 +42,7 @@ private:
     void saveProjectConfig();
 
     QDomDocument m_projectDom;
-    Q3ListView * _pluginList;
+    QListView * _pluginList;
     QLabel * _pluginDescription;
     QLabel * _currentLanguage;
 

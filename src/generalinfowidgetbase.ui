@@ -39,7 +39,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

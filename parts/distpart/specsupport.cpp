@@ -33,11 +33,9 @@
 #include <qregexp.h>
 #include <qpushbutton.h>
 //#include <qvbox.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qtabwidget.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <QTextStream>
 
 /// \FIXME This is at least the fifth place in the kdevelop code something like this exists
 QString QRegExp_escape(const QString& str )
@@ -111,7 +109,7 @@ void SpecSupport::slotexportSPECPushButtonPressed() {
     specname += ("/" + m_part->project()->projectName() + ".spec");
     QFile file(specname);
 
-    if(file.open(QIODevice::WriteOnly)) {
+    if(file.open(IO_WriteOnly)) {
         QTextStream stream(&file);
 	stream << generatePackage();
         file.close();
@@ -134,7 +132,7 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
                return;
     QFile file(fileName);
  
-    if(file.open(QIODevice::ReadOnly)) {
+    if(file.open(IO_ReadOnly)) {
         QTextStream stream(&file);
 
         while (!stream.atEnd()) {
@@ -202,7 +200,7 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
 void SpecSupport::parseDotRpmmacros() {
     QFile dotfile(QDir::homeDirPath() + "/.rpmmacros");
 
-    if (!dotfile.open(QIODevice::ReadOnly)) {
+    if (!dotfile.open(IO_ReadOnly)) {
 //        QErrorMessage * msg = new QErrorMessage(this);
 //        msg->message("It seems you don't have a ~/.rpmmacros\nYou may experience problems building packages.\n");
 //        msg->exec();

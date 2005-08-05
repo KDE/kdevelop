@@ -7,14 +7,12 @@
 #define __KDEVPART_TOOLS_H__
 
 
-#include <qpointer.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+#include <qguardedptr.h>
 #include <kdevplugin.h>
 #include <kdevgenericfactory.h>
 
 
-class Q3PopupMenu;
+class QPopupMenu;
 class KDialogBase;
 class Context;
 class ConfigWidgetProxy;
@@ -38,7 +36,7 @@ private slots:
 
 	void slotToolActivated();
 
-    void contextMenu(Q3PopupMenu *popup, const Context *context);
+    void contextMenu(QPopupMenu *popup, const Context *context);
     void updateToolsMenu();
     void toolsMenuActivated();
     void fileContextActivated(int id);
@@ -47,7 +45,7 @@ private slots:
 private:
     void startCommand(QString cmdline, bool captured, QString fileName);
 
-    Q3PopupMenu *m_contextPopup;
+    QPopupMenu *m_contextPopup;
     QString m_contextFileName;
 	ConfigWidgetProxy * m_configProxy;
   };

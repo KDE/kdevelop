@@ -30,11 +30,11 @@
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <qcombobox.h>
-#include <q3progressbar.h>
+#include <qprogressbar.h>
 
 class KDevProject;
 class DistpartPart;
-class Q3UrlOperator;
+class QUrlOperator;
 class KProcess;
 class QTabWidget;
 class SpecSupport;

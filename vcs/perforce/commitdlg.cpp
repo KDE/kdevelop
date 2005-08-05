@@ -14,11 +14,9 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
 #include <kprocess.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -36,7 +34,7 @@ CommitDialog::CommitDialog( QWidget *parent, const char *name )
     QWidget *w = new QWidget( this, "main widget" );
     setMainWidget( w );
 
-    edit = new Q3TextEdit( w );
+    edit = new QTextEdit( w );
     QFontMetrics fm(edit->fontMetrics());
     edit->setMinimumSize(fm.width("0")*40, fm.lineSpacing()*3);
 

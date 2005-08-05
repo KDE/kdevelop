@@ -48,7 +48,7 @@
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Qt::Vertical</enum>
+                        <enum>Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -113,10 +113,10 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Qt::Horizontal Spacing2</cstring>
+                        <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

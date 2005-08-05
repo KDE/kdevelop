@@ -1,8 +1,6 @@
 #include <qlayout.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
+#include <qpopupmenu.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -23,15 +21,15 @@
 #define VALLISTVIEWITEMRTTI 130977
 
 // helper class to sort the ListView by item number instead of the string representation of the item number
-class ValListViewItem: public Q3ListViewItem
+class ValListViewItem: public QListViewItem
 {
 public:
-  ValListViewItem( Q3ListView* parent, int key, int pid, const QString& message ):
-    Q3ListViewItem( parent, QString::number( key ), QString::number( pid ), message ),
+  ValListViewItem( QListView* parent, int key, int pid, const QString& message ):
+    QListViewItem( parent, QString::number( key ), QString::number( pid ), message ),
     _key( key ), _pid ( pid ), backtrace( false ), _line( -1 ), _active( false ) {}
 
   ValListViewItem( ValListViewItem* parent, int key, int pid, const QString& message, const QString& filename, int line, bool active ):
-    Q3ListViewItem( parent, QString::number( key ), QString::null, message ),
+    QListViewItem( parent, QString::number( key ), QString::null, message ),
     _key( key ), _pid( pid ), backtrace( true ), _filename( filename ), _line( line ), _active( active )
   {
     if ( parent->_pid != _pid && _pid > 0 )
@@ -50,14 +48,14 @@ public:
       return 0;
   }
 
-  int compare( Q3ListViewItem* i, int col, bool ascending ) const
+  int compare( QListViewItem* i, int col, bool ascending ) const
   {
     if ( !i || i->rtti() != VALLISTVIEWITEMRTTI )
-      return Q3ListViewItem::compare( i, col, ascending );
+      return QListViewItem::compare( i, col, ascending );
     switch ( col ) {
       case 0 : return intCompare( ((ValListViewItem*)i)->_key, _key );
       case 1 : return intCompare( ((ValListViewItem*)i)->_pid, _pid );
-      default: return Q3ListViewItem::compare( i, col, ascending );
+      default: return QListViewItem::compare( i, col, ascending );
     }
   }
 
@@ -68,7 +66,7 @@ public:
       fnt.setBold( true );
       p->setFont( fnt );
     }
-    Q3ListViewItem::paintCell( p, cg, column, width, align );
+    QListViewItem::paintCell( p, cg, column, width, align );
   }
 
   int rtti() const { return VALLISTVIEWITEMRTTI; }
@@ -102,7 +100,7 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
   lv->setAllColumnsShowFocus( true );
   vbl->addWidget( lv );
 
-  popup = new Q3PopupMenu( lv, "valPopup" );
+  popup = new QPopupMenu( lv, "valPopup" );
   popup->insertItem( i18n( "&Open Valgrind Output..." ), _part, SLOT(loadOutput()), 0, 0 );
   popup->insertSeparator();
   popup->insertItem( i18n( "Expand All Items" ), this, SLOT(expandAll()), 0, 2 );
@@ -110,10 +108,10 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
 
   connect( popup, SIGNAL(aboutToShow()),
            this, SLOT(aboutToShowPopup()) );
-  connect( lv, SIGNAL(executed(Q3ListViewItem*)),
-           this, SLOT(executed(Q3ListViewItem*)) );
-  connect( lv, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-           this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( lv, SIGNAL(executed(QListViewItem*)),
+           this, SLOT(executed(QListViewItem*)) );
+  connect( lv, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+           this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
 
@@ -144,7 +142,7 @@ void ValgrindWidget::addMessage( const ValgrindItem& vi )
   }
 }
 
-void ValgrindWidget::executed( Q3ListViewItem* lvi )
+void ValgrindWidget::executed( QListViewItem* lvi )
 {
   Q_ASSERT( _part );
   Q_ASSERT( _part->partController() );
@@ -157,7 +155,7 @@ void ValgrindWidget::executed( Q3ListViewItem* lvi )
     vli = (ValListViewItem*)lvi;
   } else if ( lvi->isExpandable() ) {
     // find the memleak position
-    Q3ListViewItemIterator it( lv );
+    QListViewItemIterator it( lv );
     while ( vli == 0 && it.current() ) {
       if ( it.current()->rtti() == VALLISTVIEWITEMRTTI && ((ValListViewItem*)it.current())->isHighlighted() )
           vli = (ValListViewItem*)it.current();
@@ -174,7 +172,7 @@ void ValgrindWidget::executed( Q3ListViewItem* lvi )
 
 void ValgrindWidget::expandAll()
 {
-  Q3ListViewItem* child = lv->firstChild();
+  QListViewItem* child = lv->firstChild();
   while ( child ) {
     child->setOpen( true );
     child = child->nextSibling();
@@ -183,7 +181,7 @@ void ValgrindWidget::expandAll()
 
 void ValgrindWidget::collapseAll()
 {
-  Q3ListViewItem* child = lv->firstChild();
+  QListViewItem* child = lv->firstChild();
   while ( child ) {
     child->setOpen( false );
     child = child->nextSibling();
@@ -197,7 +195,7 @@ void ValgrindWidget::aboutToShowPopup()
   popup->setItemEnabled( 3, en );
 }
 
-void ValgrindWidget::slotContextMenu( KListView* l, Q3ListViewItem* /*i*/, const QPoint& p )
+void ValgrindWidget::slotContextMenu( KListView* l, QListViewItem* /*i*/, const QPoint& p )
 {
   if ( l != lv )
     return;

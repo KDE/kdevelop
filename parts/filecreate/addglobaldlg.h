@@ -12,16 +12,12 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
-class Q3ListView;
-class Q3ListViewItem;
+class QListView;
+class QListViewItem;
 class QPushButton;
 
 class AddGlobalDlg : public QDialog
@@ -29,13 +25,13 @@ class AddGlobalDlg : public QDialog
     Q_OBJECT
 
 public:
-    AddGlobalDlg( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+    AddGlobalDlg( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~AddGlobalDlg();
 
     QPushButton* buttonHelp;
     QPushButton* buttonOk;
     QPushButton* buttonCancel;
-    Q3ListView* fcglobal_view;
+    QListView* fcglobal_view;
 
 protected:
     QGridLayout* AddGlobalDlgLayout;

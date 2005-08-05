@@ -38,14 +38,11 @@
 #include <kdialogbase.h>
 #include <kdevplugininfo.h>
 
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3StrList>
-#include <Q3CString>
 
 #define PROJECTOPTIONS 1
 
@@ -96,7 +93,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     QString fileName = project()->projectDirectory() + "/Doxyfile";
 
     QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly)) {
+    if (file.open(IO_ReadOnly)) {
         QTextStream is(&file);
 
         Config::instance()->parse(QFile::encodeName(fileName));
@@ -204,7 +201,7 @@ void DoxygenPart::adjustDoxyfile()
   
   // write doxy file
   QFile f2(fileName);
-  if (!f2.open(QIODevice::WriteOnly))
+  if (!f2.open(IO_WriteOnly))
     KMessageBox::information(mainWindow()->main(), i18n("Cannot write Doxyfile."));
   else
   {
@@ -228,7 +225,7 @@ void DoxygenPart::slotDoxygen()
     Config::instance()->init();
 
     QFile f(fileName);
-    if (f.open(QIODevice::ReadOnly))
+    if (f.open(IO_ReadOnly))
     {
       QTextStream is(&f);
 
@@ -379,16 +376,16 @@ void DoxygenPart::slotRunPreview( )
     ConfigString* pStyle = dynamic_cast<ConfigString*>(config->get("HTML_STYLESHEET"));
 
     //store config values to restore them later | override config values to get only the current file processed
-    Q3CString dirVal;
+    QCString dirVal;
     if (poDir != 0) {
         dirVal = *poDir->valueRef();
         *poDir->valueRef() = m_tmpDir.name().ascii();
     }
 
-   Q3StrList inputVal;
+   QStrList inputVal;
     if (pInput != 0) {
         inputVal = *pInput->valueRef();
-         Q3StrList xl;
+         QStrList xl;
          xl.append(m_file.ascii());
         *pInput->valueRef() = xl;
     } else {
@@ -397,14 +394,14 @@ void DoxygenPart::slotRunPreview( )
                                                      "# directories like \"/usr/src/myproject\". Separate the files or directories\n"
                                                      "# with spaces.");
         pInput = dynamic_cast<ConfigList*>(config->get("INPUT")); //pinput now has to be != 0
-        Q3StrList xl;
+        QStrList xl;
          xl.append(m_file.ascii());
         *pInput->valueRef() = xl;
     }
 
-    Q3CString header;
-    Q3CString footer;
-    Q3CString stylesheet;
+    QCString header;
+    QCString footer;
+    QCString stylesheet;
     //if header/footer/stylesheets are set, make sure they get found in the doxygen run
     QString projectDir = project()->projectDirectory();
     if (pHeader != 0 && !pHeader->valueRef()->isEmpty()){
@@ -435,7 +432,7 @@ void DoxygenPart::slotRunPreview( )
     }
 
     QFile file(m_tmpDir.name() +"PreviewDoxyfile"); //file gets deleted automatically 'cause of tempdir
-    if (!file.open(QIODevice::WriteOnly)){
+    if (!file.open(IO_WriteOnly)){
         //restore config values
         if (pInput != 0)
             *pInput->valueRef() = inputVal;
@@ -450,7 +447,7 @@ void DoxygenPart::slotRunPreview( )
     config->writeTemplate(&file, false, false);
 
     if (inputVal.count() == 0) //pInput is always != 0
-        *pInput->valueRef() = Q3StrList();
+        *pInput->valueRef() = QStrList();
     else
         *pInput->valueRef() = inputVal;
 

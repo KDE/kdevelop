@@ -9,13 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <q3whatsthis.h>
-#include <q3vbox.h>
+#include <qwhatsthis.h>
+#include <qvbox.h>
 #include <qtimer.h>
 #include <qtextstream.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -58,7 +56,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	_marksChangeTimer = new QTimer( this );
 
-	Q3WhatsThis::add(_widget, i18n("<b>Bookmarks</b><p>"
+	QWhatsThis::add(_widget, i18n("<b>Bookmarks</b><p>"
 			"The bookmark viewer shows all the source bookmarks in the project."));
 
 	mainWindow()->embedSelectView(_widget, i18n("Bookmarks"), i18n("Source bookmarks"));
@@ -157,7 +155,7 @@ void BookmarksPart::marksChanged()
 {
 	//kdDebug(0) << "BookmarksPart::marksChanged()" << endl;
 
-	Q3ValueListIterator<KParts::ReadOnlyPart*> it = _dirtyParts.begin();
+	QValueListIterator<KParts::ReadOnlyPart*> it = _dirtyParts.begin();
 	while ( it != _dirtyParts.end() )
 	{
 		KParts::ReadOnlyPart * ro_part = *it;
@@ -237,14 +235,14 @@ void BookmarksPart::savePartialProjectSession( QDomElement * el )
 
 	QDomElement bookmarksList = domDoc.createElement( "bookmarks" );
 
-	Q3DictIterator<EditorData> it( _editorMap );
+	QDictIterator<EditorData> it( _editorMap );
 	while ( it.current() )
 	{
 		QDomElement bookmark = domDoc.createElement( "bookmark" );
 		bookmark.setAttribute( "url", it.current()->url.path() );
 		bookmarksList.appendChild( bookmark );
 
-		Q3ValueListIterator< QPair<int,QString> > it2 = it.current()->marks.begin();
+		QValueListIterator< QPair<int,QString> > it2 = it.current()->marks.begin();
 		while ( it2 != it.current()->marks.end() )
 		{
 			QDomElement line = domDoc.createElement( "mark" );
@@ -277,7 +275,7 @@ void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
 
 	if ( EditorData * data = _editorMap.find( url.path() ) )
 	{
-		Q3ValueListIterator< QPair<int,QString> > it = data->marks.begin();
+		QValueListIterator< QPair<int,QString> > it = data->marks.begin();
 		while ( it != data->marks.end() )
 		{
 			if ( (*it).first == line )
@@ -311,7 +309,7 @@ void BookmarksPart::updateContextStringForURL( KParts::ReadOnlyPart * ro_part )
 
 	if ( ! ( data && ed ) ) return;
 
-	Q3ValueListIterator< QPair<int,QString> > it = data->marks.begin();
+	QValueListIterator< QPair<int,QString> > it = data->marks.begin();
 	while ( it != data->marks.end() )
 	{
 		(*it).second = ed->textLine( (*it).first );
@@ -326,7 +324,7 @@ void BookmarksPart::updateContextStringForURL( KURL const & url )
 
 void BookmarksPart::updateContextStringForAll()
 {
-	Q3DictIterator<EditorData> it( _editorMap );
+	QDictIterator<EditorData> it( _editorMap );
 	while ( it.current() )
 	{
 		if ( ! it.current()->marks.isEmpty() )
@@ -349,7 +347,7 @@ bool BookmarksPart::setBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 		{
 			// we've seen this one before, apply stored bookmarks
 
-			Q3ValueListIterator< QPair<int,QString> > it = data->marks.begin();
+			QValueListIterator< QPair<int,QString> > it = data->marks.begin();
 			while ( it != data->marks.end() )
 			{
 				mi->addMark( (*it).first, KTextEditor::MarkInterface::markType01 );
@@ -373,8 +371,8 @@ bool BookmarksPart::clearBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 	{
 		_settingMarks = true;
 
-		Q3PtrList<KTextEditor::Mark> marks = mi->marks();
-		Q3PtrListIterator<KTextEditor::Mark> it( marks );
+		QPtrList<KTextEditor::Mark> marks = mi->marks();
+		QPtrListIterator<KTextEditor::Mark> it( marks );
 		while ( it.current() )
 		{
 			if ( it.current()->type & KTextEditor::MarkInterface::markType01 )
@@ -404,8 +402,8 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 		// removing previous data for this url, if any
 		_editorMap.remove( data->url.path() );
 
-		Q3PtrList<KTextEditor::Mark> marks = mi->marks();
-		Q3PtrListIterator<KTextEditor::Mark> it( marks );
+		QPtrList<KTextEditor::Mark> marks = mi->marks();
+		QPtrListIterator<KTextEditor::Mark> it( marks );
 		while ( it.current() )
 		{
 			if ( it.current()->type & KTextEditor::MarkInterface::markType01 )
@@ -432,9 +430,9 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 
 void BookmarksPart::setBookmarksForAllURLs()
 {
-	if( const Q3PtrList<KParts::Part> * partlist = partController()->parts() )
+	if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
 	{
-		Q3PtrListIterator<KParts::Part> it( *partlist );
+		QPtrListIterator<KParts::Part> it( *partlist );
 		while ( KParts::Part* part = it.current() )
 		{
 			if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( part ) )
@@ -448,9 +446,9 @@ void BookmarksPart::setBookmarksForAllURLs()
 
 void BookmarksPart::storeBookmarksForAllURLs()
 {
-	if( const Q3PtrList<KParts::Part> * partlist = partController()->parts() )
+	if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
 	{
-		Q3PtrListIterator<KParts::Part> it( *partlist );
+		QPtrListIterator<KParts::Part> it( *partlist );
 		while ( KParts::Part* part = it.current() )
 		{
 			if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( part ) )
@@ -465,7 +463,7 @@ void BookmarksPart::storeBookmarksForAllURLs()
 // reimplemented from PartController::partForURL to avoid linking
 KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
 {
-	Q3PtrListIterator<KParts::Part> it( *partController()->parts() );
+	QPtrListIterator<KParts::Part> it( *partController()->parts() );
 	while( it.current() )
 	{
 		KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
@@ -541,7 +539,7 @@ QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsi
 		kdDebug() << "the file is open - get the line from the editor buffer" << endl;
 
 		QString ibuffer = ei->text();
-		QTextStream istream( &ibuffer, QIODevice::ReadOnly );
+		QTextStream istream( &ibuffer, IO_ReadOnly );
 		return getContextFromStream( istream, line, context );
 	}
 	else if ( url.isLocalFile() ) // else the file is not open - get the line from the file on disk
@@ -551,7 +549,7 @@ QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsi
 		QFile file( url.path() );
 		QString buffer;
 
-		if ( file.open( QIODevice::ReadOnly ) )
+		if ( file.open( IO_ReadOnly ) )
 		{
 			QTextStream istream( &file );
 			return getContextFromStream( istream, line, context );

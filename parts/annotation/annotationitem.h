@@ -26,10 +26,10 @@ class QString;
 /**
 @author KDevelop Authors
 */
-class annotationItem : public Q3ListViewItem
+class annotationItem : public QListViewItem
 {
 public:
-    annotationItem(Q3ListView *parent,QString name, QString text);
+    annotationItem(QListView *parent,QString name, QString text);
     QString getName();
     QString getText();
     void setText(QString text);
@@ -38,7 +38,7 @@ public:
 
     ~annotationItem();
   private:
-    annotationItem(Q3ListViewItem *parent,QString name,QString text);
+    annotationItem(QListViewItem *parent,QString name,QString text);
     QString m_itemName;
     QString m_itemText;
     int m_itemParent;

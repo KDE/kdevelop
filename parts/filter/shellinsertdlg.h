@@ -13,8 +13,6 @@
 #define _SHELLINSERTDLG_H_
 
 #include <qdialog.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class QComboBox;
 class QPushButton;
@@ -45,7 +43,7 @@ private:
     QPushButton *start_button, *cancel_button;
     QComboBox *combo;
     KProcess *m_proc;
-    Q3CString m_str;
+    QCString m_str;
 };
 
 #endif

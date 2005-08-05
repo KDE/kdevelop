@@ -11,7 +11,7 @@
 
 #include "texttoolspart.h"
 
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
@@ -59,7 +59,7 @@ void TextToolsPart::createWidget()
 
     m_widget = new TextToolsWidget(this);
     m_widget->setCaption(i18n("Text Structure"));
-    Q3WhatsThis::add(m_widget, i18n("<b>Text Structure</b><p>"
+    QWhatsThis::add(m_widget, i18n("<b>Text Structure</b><p>"
                                      "This browser shows the structure of the text."));
     mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("Text structure"));
 }

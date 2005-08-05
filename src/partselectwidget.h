@@ -15,10 +15,8 @@
 #include <qdialog.h>
 #include <qdom.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QLabel>
 
-class Q3ListView;
+class QListView;
 class QComboView;
 class KURLLabel;
 
@@ -40,9 +38,9 @@ signals:
    void accepted();
 
 private slots:
-    void itemSelected( Q3ListViewItem * );
+    void itemSelected( QListViewItem * );
     void openURL( const QString & );
-    void selectProfile(Q3ListViewItem* item);
+    void selectProfile(QListViewItem* item);
     void setAsDefault();
 
 private:
@@ -53,7 +51,7 @@ private:
 
     QDomDocument m_projectDom;
 
-    Q3ListView * _pluginList;
+    QListView * _pluginList;
 //    QComboView *_pluginProfile;
     QLabel * _pluginDescription;
     KURLLabel * _urlLabel;

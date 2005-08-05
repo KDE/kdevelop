@@ -21,8 +21,6 @@
 
 #include <qdir.h>
 #include <qcombobox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kurlrequester.h>
@@ -38,7 +36,7 @@
 DocProjectConfigWidget::DocProjectConfigWidget(DocumentationPart *part, QWidget *parent, const char *name)
     :DocProjectConfigWidgetBase(parent, name), m_part(part)
 {
-    for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+    for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
         it != m_part->m_plugins.constEnd(); ++it)
     {
         if ((*it)->hasCapability(DocumentationPlugin::ProjectDocumentation))
@@ -106,7 +104,7 @@ void DocProjectConfigWidget::accept()
             delete m_part->m_userManualPlugin;
             m_part->m_userManualPlugin = 0;
         }
-        for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+        for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
             it != m_part->m_plugins.constEnd(); ++it)
         {
             if ((*it)->hasCapability(DocumentationPlugin::ProjectUserManual))

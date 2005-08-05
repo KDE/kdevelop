@@ -3,13 +3,11 @@
 
 
 #include <qwidget.h>
-#include <q3ptrlist.h>
+#include <qptrlist.h>
 #include <qpixmap.h>
-//Added by qt3to4:
-#include <QShowEvent>
 
 
-class Q3ListBox;
+class QListBox;
 class QPushButton;
 class KDevApplicationTree;
 
@@ -62,10 +60,10 @@ private slots:
 private:
 
     KDevApplicationTree *_tree;
-    Q3ListBox *_list;
+    QListBox *_list;
     QPushButton *_toList, *_toTree;
 
-    Q3PtrList<Entry> _entries;
+    QPtrList<Entry> _entries;
 
   };
 

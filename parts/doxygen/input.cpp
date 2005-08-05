@@ -18,12 +18,6 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3CString>
-#include <QGridLayout>
-#include <Q3StrList>
-#include <QHBoxLayout>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -116,7 +110,7 @@ static const char* const update_xpm_data[] =
 const char **update_xpm = (const char **)update_xpm_data;
 
 
-InputBool::InputBool(const Q3CString &k, const QString &text, QWidget * parent, bool &flag)
+InputBool::InputBool(const QCString &k, const QString &text, QWidget * parent, bool &flag)
     : QWidget(parent), state(flag), key(k)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -203,7 +197,7 @@ void InputInt::setEnabled(bool state)
 
 
 InputString::InputString(const QString & label, 
-                         QWidget *parent, Q3CString &s, StringMode m)
+                         QWidget *parent, QCString &s, StringMode m)
     : QWidget(parent), str(s), sm(m), m_values(0), m_index(0)
 {
     le = 0; br = 0; com = 0;
@@ -265,7 +259,7 @@ void InputString::addValue(const char *s)
 {
     if (sm == StringFixed) {
         if (!m_values)
-            m_values = new Q3Dict<int>;
+            m_values = new QDict<int>;
         m_values->setAutoDelete(true);
         m_values->insert(s, new int(m_index++));
         com->insertItem(s);
@@ -330,7 +324,7 @@ void InputString::browse()
 
 
 InputStrList::InputStrList(const QString & label, 
-                           QWidget *parent, Q3StrList &sl, ListMode lm)
+                           QWidget *parent, QStrList &sl, ListMode lm)
     : QWidget(parent), strList(sl)
 {
     QGridLayout *layout = new QGridLayout(this, 2, 2, 5);
@@ -357,11 +351,11 @@ InputStrList::InputStrList(const QString & label,
     QToolTip::add(upd, i18n("Update selected item"));
     boxlayout->addWidget(upd);
     
-    lb  = new Q3ListBox(this);
+    lb  = new QListBox(this);
     lb->setMinimumSize(400, 100);
     init();
-    lb->setVScrollBarMode(Q3ScrollView::Auto);
-    lb->setHScrollBarMode(Q3ScrollView::Auto);
+    lb->setVScrollBarMode(QScrollView::Auto);
+    lb->setHScrollBarMode(QScrollView::Auto);
     
     brFile = 0;
     brDir = 0;

@@ -14,7 +14,7 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <kurl.h>
 
 #include <kdevversioncontrol.h>
@@ -332,7 +332,7 @@ private:
 
     //! Reference to widget integrated in the "bottom tabbar" (IDEAL)
     //! (_Must_ be initialized by derived class)
-    QPointer<CvsProcessWidget> m_widget;
+    QGuardedPtr<CvsProcessWidget> m_widget;
 
     //! Urls which to work upon
     const KURL::List &urlList() const;

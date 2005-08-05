@@ -19,11 +19,8 @@
  ***************************************************************************/
 #include "contentsview.h"
 
-#include <q3header.h>
+#include <qheader.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QFocusEvent>
 
 #include <kdebug.h>
 #include <klistview.h>
@@ -45,15 +42,15 @@ ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
 
     m_view->addColumn(i18n( "Contents" ));
     m_view->header()->hide();
-    m_view->setResizeMode(Q3ListView::AllColumns);
+    m_view->setResizeMode(QListView::AllColumns);
     m_view->setRootIsDecorated(true);
     m_view->setSorting(-1);
     m_view->setAllColumnsShowFocus( true );
 
-    connect(m_view, SIGNAL(executed(Q3ListViewItem*, const QPoint&, int )),
-        this, SLOT(itemExecuted(Q3ListViewItem*, const QPoint&, int )));
-    connect(m_view, SIGNAL(mouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int )),
-        this, SLOT(itemMouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int )));
+    connect(m_view, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));
+    connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
 ContentsView::~ContentsView()
@@ -62,7 +59,7 @@ ContentsView::~ContentsView()
         m_widget->index()->clear();
 }
 
-void ContentsView::itemExecuted(Q3ListViewItem *item, const QPoint &// p
+void ContentsView::itemExecuted(QListViewItem *item, const QPoint &// p
                                 , int // col
                                 )
 {
@@ -75,7 +72,7 @@ void ContentsView::itemExecuted(Q3ListViewItem *item, const QPoint &// p
     m_widget->part()->partController()->showDocument(url);
 }
 
-void ContentsView::itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int // c
+void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int // c
                                           )
 {
     if ((button != Qt::RightButton) || (!item))

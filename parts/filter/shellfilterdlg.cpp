@@ -14,9 +14,6 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <Q3CString>
 #include <kbuttonbox.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -83,7 +80,7 @@ ShellFilterDialog::~ShellFilterDialog()
 void ShellFilterDialog::slotStartClicked()
 {
     start_button->setEnabled(false);
-    m_outstr = Q3CString();
+    m_outstr = QCString();
 
     delete m_proc;
     m_proc = new KShellProcess("/bin/sh");

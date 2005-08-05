@@ -18,9 +18,6 @@
 #define __MAINWINDOWSHARE_H__
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
-#include <Q3PtrList>
 
 class KAction;
 class KToggleAction;
@@ -71,7 +68,7 @@ private slots:
   void slotToggleBrowserToolbar();
   void slotToggleStatusbar();
 
-  void contextMenu(Q3PopupMenu *, const Context *);
+  void contextMenu(QPopupMenu *, const Context *);
 
 private:
   KToggleAction*   m_toggleMainToolbar;
@@ -85,7 +82,7 @@ private:
   KToolBarPopupAction*  m_stopProcesses;                 //!< Stops all running processes
 
   KParts::MainWindow*   m_pMainWnd;
-  Q3PtrList<KDevPlugin>  activeProcesses;
+  QPtrList<KDevPlugin>  activeProcesses;
 };
 
 #endif // __MAINWINDOWSHARE_H__

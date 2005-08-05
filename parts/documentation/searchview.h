@@ -21,8 +21,6 @@
 #define SEARCHVIEW_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QFocusEvent>
 
 class DocumentationPart;
 class KLineEdit;
@@ -30,7 +28,7 @@ class KComboBox;
 class KListView;
 class KPushButton;
 class KProcess;
-class Q3ListViewItem;
+class QListViewItem;
 
 class SearchView: public QWidget
 {
@@ -50,9 +48,9 @@ protected slots:
 
     void htsearchStdout(KProcess *, char *buffer, int len);
     void htsearchExited(KProcess *);
-    void executed(Q3ListViewItem *item);
+    void executed(QListViewItem *item);
     
-    void itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int c);
+    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

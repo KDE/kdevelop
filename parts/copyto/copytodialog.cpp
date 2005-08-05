@@ -27,7 +27,7 @@
 
 #include "copytodialog.h"
 
-CopyToDialog::CopyToDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
+CopyToDialog::CopyToDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
 : CopyToDialogBase(parent,name, modal,fl)
 {
 	_urlCompletion = new KURLCompletion( KURLCompletion::DirCompletion );

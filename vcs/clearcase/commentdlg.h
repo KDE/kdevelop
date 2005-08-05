@@ -14,7 +14,7 @@
 
 #include <qcheckbox.h>
 #include <qdialog.h>
-#include <q3multilineedit.h>
+#include <qmultilineedit.h>
 
 class CcaseCommentDlg : public QDialog
 {
@@ -25,7 +25,7 @@ public:
   bool isReserved() { return (_check) ?  _check->isChecked() : FALSE;  };
 
 private:
-  Q3MultiLineEdit *_edit;
+  QMultiLineEdit *_edit;
   QCheckBox* _check;
 };
 

@@ -11,7 +11,7 @@
 #define __KDEVPART_SNIPPET_H__
 
 
-#include <qpointer.h>
+#include <qguardedptr.h>
 #include <kdevplugin.h>
 
 
@@ -37,7 +37,7 @@ public:
     QStringList getProjectLanguages();
 
 private:
-  QPointer<SnippetWidget> m_widget;
+  QGuardedPtr<SnippetWidget> m_widget;
 
 public slots:
   void slotConfigWidget( KDialogBase *dlg );

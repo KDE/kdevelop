@@ -32,9 +32,6 @@
 #include <kmainwindow.h>
 #include <kapplication.h>
 #include <dcopclient.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <q3tl.h>
 
 using namespace KIO;
 
@@ -88,10 +85,10 @@ void subversionCore::resolve( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( Q3ValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "resolving: " << (*it).prettyURL() << endl;
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 11;
 		bool recurse = true;
 		s << cmd << *it << recurse;
@@ -108,10 +105,10 @@ void subversionCore::update( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( Q3ValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "updating : " << (*it).prettyURL() << endl;
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 2;
 		int rev = -1;
 		s << cmd << *it << rev << QString( "HEAD" );
@@ -128,10 +125,10 @@ void subversionCore::commit( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( Q3ValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "commiting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 3;
 		s << cmd << *it;
 		SimpleJob * job = KIO::special(servURL, parms, true);
@@ -147,10 +144,10 @@ void subversionCore::add( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( Q3ValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "adding : " << (*it).prettyURL() << endl;
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 6;
 		s << cmd << *it;
 		SimpleJob * job = KIO::special(servURL, parms, true);
@@ -166,10 +163,10 @@ void subversionCore::del( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( Q3ValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "deleting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 7;
 		s << cmd << *it;
 		SimpleJob * job = KIO::special(servURL, parms, true);
@@ -185,10 +182,10 @@ void subversionCore::revert( const KURL::List& list ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
 	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
-	for ( Q3ValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
 		kdDebug(9036) << "reverting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 8;
 		s << cmd << *it;
 		SimpleJob * job = KIO::special(servURL, parms, true);
@@ -203,7 +200,7 @@ void subversionCore::checkout() {
 	if ( checkoutDlg.exec() == QDialog::Accepted ) {
 		//checkout :)
 		QByteArray parms;
-		QDataStream s( parms, QIODevice::WriteOnly );
+		QDataStream s( parms, IO_WriteOnly );
 		KURL servURL ( checkoutDlg.serverURL->url() );
 		wcPath = checkoutDlg.localDir->url() + "/" + checkoutDlg.newDir->text();
 		int cmd = 1;
@@ -228,9 +225,9 @@ void subversionCore::slotResult( KIO::Job * job ) {
 		if ( job->error() )
 			job->showErrorDialog( m_part->mainWindow()->main() );
 		KIO::MetaData ma = job->metaData();
-		Q3ValueList<QString> keys = ma.keys();
+		QValueList<QString> keys = ma.keys();
 		qHeapSort( keys );
-		Q3ValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 		for ( it = begin; it != end; ++it ) {
 			kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
