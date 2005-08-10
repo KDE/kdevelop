@@ -38,6 +38,7 @@ GenericName[sv]=Gränssnittsdesign
 GenericName[tr]=Arayüz Tasarlayıcısı
 GenericName[uk]=Дизайн інтерфейсу
 GenericName[xx]=xxInterface Designerxx
+GenericName[zh_CN]=界面设计师
 Exec=kdevdesigner %i %m -caption "%c"
 Icon=kdevdesigner
 Type=Application

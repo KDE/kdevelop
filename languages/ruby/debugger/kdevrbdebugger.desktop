@@ -43,6 +43,7 @@ GenericName[sr@Latn]=Interfejs ispravljača za Ruby
 GenericName[sv]=Gränssnitt för Ruby-avlusare
 GenericName[tr]=Ruby Hata Ayıklayıcı Önucu
 GenericName[xx]=xxRuby Debugger Frontendxx
+GenericName[zh_CN]=Ruby 调试器前端
 Icon=
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevrbdebugger

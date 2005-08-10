@@ -24,6 +24,7 @@ GenericName[sr@Latn]=Skriptovanje
 GenericName[sv]=Skriptanvändning
 GenericName[tr]=Betik Yazma
 GenericName[xx]=xxScriptingxx
+GenericName[zh_CN]=脚本
 Comment=The Scripting plugin offers KScript based scripting of the KDevelop application
 Comment[da]=Scriptning-plugin stiller KScript-baseret scriptning til rådighed for KDevelop
 Comment[de]=Die Komponente Skript bietet KScript-basierte Automatisierung für KDevelop
@@ -42,6 +43,7 @@ Comment[sr@Latn]=Priključak za skriptovanje nudi skriptovanje pomoću KScript-a
 Comment[sv]=Skriptinsticksprogrammet erbjuder KScript-baserad styrning av programmet KDevelop.
 Comment[tr]=Betik Yazma eklentisi KDevelop uygulamasına KScript tabanlı betik yazmayı sunar.
 Comment[xx]=xxThe Scripting plugin offers KScript based scripting of the KDevelop applicationxx
+Comment[zh_CN]=脚本插件可为 KDevelop 应用程序提供基于 KScript 的脚本。
 Icon=shellscript
 ServiceTypes=KDevelop/Plugin
 

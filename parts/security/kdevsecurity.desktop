@@ -8,12 +8,14 @@ GenericName[de]=Security-Überprüfung
 GenericName[et]=Turvalisuse kontroll
 GenericName[sv]=Säkerhetskontroll
 GenericName[tr]=Güvenlik Denetimcisi
+GenericName[zh_CN]=安全性检查器
 Comment=Code security checker
 Comment[da]=Sikkerhedstjekker af kode
 Comment[de]=Prüfen auf unsichere Programmierung
 Comment[et]=Koodi turvalisuse kontroll
 Comment[sv]=Kodsäkerhetskontroll
 Comment[tr]=Kod Güvenlik Denetimcisi
+Comment[zh_CN]=代码安全性检查器
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 

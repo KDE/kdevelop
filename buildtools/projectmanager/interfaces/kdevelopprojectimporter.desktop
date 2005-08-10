@@ -21,6 +21,7 @@ Name[sr@Latn]=KDevelop-ov uvoznik za projekte
 Name[sv]=KDevelop projektimport
 Name[tr]=KDevelop Proje Aktarıcısı
 Name[xx]=xxKDevelop Project Importerxx
+Name[zh_CN]=KDevelop 工程导入器
 
 [PropertyDef::X-KDevelop-ProjectImporter]
 Type=QString

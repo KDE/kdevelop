@@ -5,8 +5,10 @@ Name[da]=Gtk-- programskelet
 Name[de]=Gtk-- Anwendungsgrundgerüst
 Name[et]=Gtk-- rakenduse raamistik
 Name[hu]=Gtk-- - alkalmazás-keretrendszer
+Name[it]=Gtk-- infrastruttura d'applicazione
 Name[sv]=Gtk-- programramverk
 Name[tr]=Gtk-- Uygulama Çatısı
+Name[zh_CN]=Gtk-- 应用程序框架
 Category=C++/GTK+
 Icon=gtk2mmapp.png
 Comment=Generates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
@@ -14,8 +16,10 @@ Comment[da]=Genererer et simpelt Gtk-- program. Gtkmm >= 1.2.8 og < 1.3.0 skal v
 Comment[de]=Erstellt eine einfache Gtk-Anwendung. Gtkmm >= 1.2.8 und < 1.3.0 sollte installiert sein. Zum Bearbeiten der glade-Datei ist glade-- (http://home.wtal.de/petig/Gtk/) erforderlich.
 Comment[et]=Lihtsa Gtk-- rakenduse loomine. Paigaldatud peab olema Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[hu]=Létrehoz egy egyszerű Gtk---os alkalmazást. Gtkmm >= 1.2.8 és < 1.3.0 szükséges hozzá. Glade-fájl szerkesztéséhez glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
+Comment[it]=Genera una semplice applicazione Gtk. Dovrebbe essere installato gtkmm >= 1.2.8 e < 1.3.0. Per modificare il file di glade bisogna avere glade installato (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt Gtk-- program. Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[tr]=Basit bir Gtk-- uygulaması yaratır. Gtkmm >= 1.2.8 ve < 1.3.0 yüklü olmalı. Glade dosyasını düzenlemek için glade-- (http://home.wtal.de/petig/Gtk/) gereklidir.
+Comment[zh_CN]=生成简单的 Gtk-- 应用程序。必须安装 1.2.8 到 1.3.0 之间的 Gtkmm。要编辑 glade 文件，需要使用 glade-- (http://home.wtal.de/petig/Gtk/)。
 FileTemplates=hh,CStyle,cc,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=gtk2mmapp.tar.gz
@@ -110,5 +114,7 @@ Comment[da]=Et Gtk-- programskelet blev oprettet i %{dest}
 Comment[de]=Ein Gtk-Anwendungsgerüst wurde in %{dest} erstellt.
 Comment[et]=Gtk-- rakenduse raamistik loodi asukohta %{dest}
 Comment[hu]=Létrejött egy Gtk-s alkalmazás-keretrendszer itt: %{dest}
+Comment[it]=È stata crata una infrastruttura applicativa Gtk in %{dest}
 Comment[sv]=Ett Gtk-- programramverk skapades i %{dest}
 Comment[tr]=Bir Gtk-- uygulama çatısı %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 创建了一个 Gtk-- 应用程序框架

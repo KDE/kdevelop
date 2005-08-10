@@ -21,6 +21,7 @@ Comment[sr@Latn]=Integracija CVS-a pomoću Cervisia-jinog cvsservice. http://www
 Comment[sv]=Integrering av CVS med användning av Cervisias CVS-tjänst. http://www.kde.org/apps/cervisia/
 Comment[tr]=Cervisia'nın cvsservice'i kullanılarak CVS bütünleştirilmesi http://www.kde.org/apps/cervisia/
 Comment[xx]=xxCVS Integration using Cervisia's cvsservice. http://www.kde.org/apps/cervisia/xx
+Comment[zh_CN]=使用 Cervisia 的 cvsservice 的 CVS 集成。http://www.kde.org/apps/cervisia/
 Name=KDevCvsService
 Name[da]=KDevelop CVS-service
 Name[sv]=KDevelop CVS-tjänst

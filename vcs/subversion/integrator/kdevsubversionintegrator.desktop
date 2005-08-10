@@ -23,6 +23,7 @@ Comment[sr@Latn]=Integracija Subversion-a u projekat
 Comment[sv]=Funktion för integrering av Subversion i projekt
 Comment[tr]=Subversion Proje Bütünleştirme Aracı
 Comment[xx]=xxSubversion Project Integration Facilityxx
+Comment[zh_CN]=Subversion 工程集成功能
 Icon=misc
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator

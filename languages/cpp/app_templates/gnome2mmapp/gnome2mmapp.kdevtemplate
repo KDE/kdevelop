@@ -5,8 +5,10 @@ Name[da]=GNOME-- Programskelet
 Name[de]=GNOME-- Anwendungsgrundgerüst
 Name[et]=GNOME-- rakenduse raamistik
 Name[hu]=GNOME - Alkalmazás-keretrendszer
+Name[it]=GNOME-- Infrastruttura di applicazione
 Name[sv]=GNOME-- programramverk
 Name[tr]=GNOME-- Uygulama Çatısı
+Name[zh_CN]=GNOME-- 应用程序框架
 Category=C++/GTK+
 Icon=gnome2mmapp.png
 Comment=Generates a simple GNOME-- application. Gnomemm, Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.
@@ -14,8 +16,10 @@ Comment[da]=Genererer et simpelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 og < 1
 Comment[de]=Erstellt eine einfache GNOME-Anwendung. Gnomemm, Gtkmm >= 1.2.8 und < 1.3.0 sollten installiert sein. Zum Bearbeiten der glade-Datei ist glade-- (http://home.wtal.de/petig/Gtk/) erforderlich.
 Comment[et]=Lihtsa GNOME-- rakenduse loomine. Paigaldatud peavad olema Gnomemm, Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[hu]=Létrehoz egy egyszerű GNOME--os -alkalmazást. A Gnomemm, a Gtkmm (>= 1.2.8 és < 1.3.0) szükséges hozzá. Glade-fájl szerkesztéséhez a glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
+Comment[it]=Genera una semplice applicazione GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
 Comment[sv]=Skapar ett enkelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[tr]=Basit bir GNOME-- uygulaması yaratır. Gnomemm, Gtkmm>=1.28 ve <1.3.0 yüklü olmalıdır. Glade dosyasını düzenlemek için glade-- (http://home.wtal.de/petig/Gtk/) gereklidir.
+Comment[zh_CN]=生成简单的 GNOME-- 应用程序。必须安装 Gnomemm、1.2.8 到 1.3.0 之间的 Gtkmm。要编辑 glade 文件，需要使用 glade-- (http://home.wtal.de/petig/Gtk/)。
 FileTemplates=hh,CStyle,cc,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
 Archive=gnome2mmapp.tar.gz
@@ -114,5 +118,7 @@ Comment[da]=Et GNOME-- programskelet blev oprettet i %{dest}
 Comment[de]=Ein GNOME-Anwendungsgerüst wurde in %{dest} erstellt.
 Comment[et]=GNOME-- rakenduse raamistik loodi asukohta %{dest}
 Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
+Comment[it]=È stato creata una infrastruttura applicativa GNOME in %{dest}
 Comment[sv]=Ett GNOME-- programramverk skapades i %{dest}
 Comment[tr]=Bir GNOME-- uygulama çatısı %{dest} içinde yaratılmıştır.
+Comment[zh_CN]=在 %{dest} 中创建了 GNOME-- 应用程序框架

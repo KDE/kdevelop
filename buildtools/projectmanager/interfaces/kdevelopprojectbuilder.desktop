@@ -21,6 +21,7 @@ Name[sr@Latn]=KDevelop-ov gradilac projekta
 Name[sv]=KDevelop projektbyggare
 Name[tr]=KDevelop Proje Kurucusu
 Name[xx]=xxKDevelop Project Builderxx
+Name[zh_CN]=KDevelop 工程创建器
 
 [PropertyDef::X-KDevelop-ProjectBuilder]
 Type=QString

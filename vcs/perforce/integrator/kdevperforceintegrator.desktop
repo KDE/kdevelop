@@ -23,6 +23,7 @@ Comment[sr@Latn]=Integracija Perforce-a u projekat
 Comment[sv]=Funktion för integrering av Perforce i projekt
 Comment[tr]=Perforce Proje Bütünleştirme Aracı
 Comment[xx]=xxPerforce Project Integration Facilityxx
+Comment[zh_CN]=Perforce 工程集成功能
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator
 X-KDE-Library=libperforceintegrator

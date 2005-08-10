@@ -26,6 +26,7 @@ Comment[sr@Latn]=KDevelop-ov prilagođeni uvoznik
 Comment[sv]=KDevelop egen import
 Comment[tr]=KDevelop Özel Aktarıcı
 Comment[xx]=xxKDevelop Custom Importerxx
+Comment[zh_CN]=KDevelop 自定义导入器
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
 X-KDE-Library=libkdevcustomimporter
