@@ -130,7 +130,7 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
     m_tabBar->setTabEnabled(4,false);
 
     m_tabBar->setCurrentTab(0);
-    
+
     m_filterEdit = new QLineEdit(this);
 
     QLabel* m_filterLabel = new QLabel(i18n("Lookup:"),this);
@@ -146,8 +146,6 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
     connect( part->partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)) );
     connect( part->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)) );
     connect( part->partController(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)) );
-
-//    configure();
 
     slotActivePartChanged( part->partController()->activePart() );
 }
@@ -206,107 +204,104 @@ PHPErrorView::~PHPErrorView()
 
 void PHPErrorView::slotActivePartChanged( KParts::Part* part )
 {
-    if( !part )
-    {
-        m_tabBar->setTabEnabled(0,false);
-   return;
-    }
+   if ( !part ) {
+      m_tabBar->setTabEnabled(0,false);
+      return;
+   }
 
-    if( m_document )
-   disconnect( m_document, 0, this, 0 );
+   if ( m_document )
+      disconnect( m_document, 0, this, 0 );
 
-    m_document = dynamic_cast<KTextEditor::Document*>( part );
-    m_markIface = 0;
+   m_document = dynamic_cast<KTextEditor::Document*>( part );
+   m_markIface = 0;
 
-    if( !m_document )
-     {
-        m_tabBar->setTabEnabled(0,false);
-        return;
-     }
+   if ( !m_document ) {
+      m_tabBar->setTabEnabled(0,false);
+      return;
+   }
 
-    m_fileName = m_document->url().path();
+   m_fileName = m_document->url().path();
 
-    initCurrentList();
+   initCurrentList();
 
-    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+   m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
 }
 
 void PHPErrorView::removeAllItems( QListView* listview, const QString& filename )
 {
-    QListViewItem* current = listview->firstChild();
-    while( current ){
-   QListViewItem* i = current;
-   current = current->nextSibling();
+   QListViewItem* current = listview->firstChild();
+   while( current ){
+      QListViewItem* i = current;
+      current = current->nextSibling();
 
-   if( i->text(0) == filename )
-       delete( i );
-    }
+      if( i->text(0) == filename )
+         delete( i );
+   }
 }
 
 void PHPErrorView::removeAllProblems( const QString& filename )
 {
-  QString relFileName = filename;
-  relFileName.remove(m_phpSupport->project()->projectDirectory());
+   QString relFileName = filename;
+   relFileName.remove(m_phpSupport->project()->projectDirectory());
 
-    kdDebug(9008) << "PHPErrorView::removeAllProblems()" << relFileName << endl;
+   kdDebug(9008) << "PHPErrorView::removeAllProblems()" << relFileName << endl;
 
-    if(filename == m_fileName)
+   if (filename == m_fileName)
       m_currentList->clear();
-      
-  removeAllItems(m_errorList,relFileName);
-  removeAllItems(m_fixmeList,relFileName);
-  removeAllItems(m_todoList,relFileName);
 
-    if( m_document && m_markIface ){
-   QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
-   QPtrListIterator<KTextEditor::Mark> it( marks );
-   while( it.current() ){
-       m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
-       ++it;
+   removeAllItems(m_errorList,relFileName);
+   removeAllItems(m_fixmeList,relFileName);
+   removeAllItems(m_todoList,relFileName);
+
+   if ( m_document && m_markIface ) {
+      QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
+      QPtrListIterator<KTextEditor::Mark> it( marks );
+      while( it.current() ) {
+         m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
+         ++it;
+      }
    }
-    }
 }
 
 void PHPErrorView::initCurrentList()
 {
-    m_tabBar->setTabEnabled(0,true);
+   m_tabBar->setTabEnabled(0,true);
 
-    QString relFileName = m_fileName;
+   QString relFileName = m_fileName;
 
-    if (m_phpSupport->project())
+   if (m_phpSupport->project())
       relFileName.remove(m_phpSupport->project()->projectDirectory());
 
-    m_currentList->clear();
+   m_currentList->clear();
 
-    updateCurrentWith(m_errorList, i18n("Error"),relFileName);
-    updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
-    updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
+   updateCurrentWith(m_errorList, i18n("Error"),relFileName);
+   updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
+   updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
 }
 
 void PHPErrorView::updateCurrentWith(QListView* listview, const QString& level, const QString& filename)
 {
-    QListViewItemIterator it(listview);
-    while ( it.current() ) {
-        if( it.current()->text(0) == filename)
-   new QListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
-        ++it;
-    }
+   QListViewItemIterator it(listview);
+   while ( it.current() ) {
+      if ( it.current()->text(0) == filename)
+         new QListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
+      ++it;
+   }
 }
 
 void PHPErrorView::slotSelected( QListViewItem* item )
 {
-    bool is_filtered = false;
-    bool is_current = false;
-    if(item->listView() == m_filteredList)
+   bool is_filtered = false;
+   bool is_current = false;
+
+   if (item->listView() == m_filteredList)
       is_filtered = true;
-    else if(item->listView() == m_currentList)
+   else if(item->listView() == m_currentList)
       is_current = true;
 
-
-    KURL url( is_current ? m_fileName : item->text(0 + is_filtered) );
-    int line = item->text( 1 + is_filtered).toInt();
-    // int column = item->text( 3 ).toInt();
-    m_phpSupport->partController()->editDocument( url, line-1 );
+   KURL url( is_current ? m_fileName : item->text(0 + is_filtered) );
+   int line = item->text( 1 + is_filtered).toInt();
+   m_phpSupport->partController()->editDocument( url, line-1 );
 }
 
 void PHPErrorView::reportProblem( int level, const QString& fileName, int line, const QString& text)

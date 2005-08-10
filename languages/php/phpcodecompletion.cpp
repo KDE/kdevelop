@@ -153,11 +153,6 @@ void PHPCodeCompletion::cursorPositionChanged(){
          checkForArgHint(line, col);
       }
 
-      /*
-      if (checkForArgHint(lineStr, col)) {
-         return;
-      }
-      */
    }
 
    if (m_config->getCodeCompletion()) {
@@ -509,21 +504,16 @@ QStringList PHPCodeCompletion::getArguments(QString classname, QString function)
 
 QString PHPCodeCompletion::getCurrentClassName() {
    kdDebug(9018) << "getCurrentClassName" << endl;
-   /// @todo recactivate
-   /*
-   Action *action;
+   QRegExp Class("^[ \t]*(abstract|)[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
+   Class.setCaseSensitive(FALSE);
+
    for(int i = m_currentLine; i >= 0; i--){
       QString lineStr = m_editInterface->textLine(i);
       if (!lineStr.isNull()) {
-         action = PHPFile::ParseClass(lineStr.local8Bit(), 0);
-         if (action != NULL) {
-            QString name = action->name();
-            delete action;
-            return name;
-         }
+         if (Class.search(line) != -1)
+            return Class.cap(2);
       }
    }
-   */
    return QString::null;
 }
 

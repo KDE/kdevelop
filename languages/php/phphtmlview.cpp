@@ -20,20 +20,20 @@
 #include "phpsupportpart.h"
 #include "kdevpartcontroller.h"
 
-PHPHTMLView::PHPHTMLView(PHPSupportPart *part):m_part(part){
-    setOptions(CanOpenInNewWindow);
+PHPHTMLView::PHPHTMLView(PHPSupportPart *part):m_part(part) {
+   setOptions(CanOpenInNewWindow);
 }
 PHPHTMLView::~PHPHTMLView(){
 }
 
 void PHPHTMLView::slotDuplicate( )
 {
-    m_part->partController()->showDocument(url(), true);
+   m_part->partController()->showDocument(url(), true);
 }
 
 void PHPHTMLView::slotOpenInNewWindow( const KURL & url )
 {
-    m_part->partController()->showDocument(url, true);
+   m_part->partController()->showDocument(url, true);
 }
 
 #include "phphtmlview.moc"

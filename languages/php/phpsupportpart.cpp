@@ -1,7 +1,7 @@
 /*
    Copyright (C) 2005 by Nicolas Escuder <n.escuder@intra-links.com>
    Copyright (C) 2001 by smeier@kdevelop.org
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    version 2, License as published by the Free Software Foundation.
@@ -298,38 +298,36 @@ void PHPSupportPart::slotWebResult(KIO::Job* /*job*/) {
    QString file = getExecuteFile();
    PHPFile *pfile = new PHPFile(this, file);
    pfile->ParseStdout(m_phpExeOutput);
-/// todo recactivate
-//   KApplication::postEvent( this, new FileParsedEvent(file, pfile->getActions()) );
    delete pfile;
 }
 
 void PHPSupportPart::executeInTerminal() {
-  kdDebug(9018) << "slotExecuteInTerminal()" << endl;
+   kdDebug(9018) << "slotExecuteInTerminal()" << endl;
 
-  // Save all files once
-  if (partController()->saveAllFiles()==false)
+   // Save all files once
+   if (partController()->saveAllFiles()==false)
        return; //user cancelled
 
-  QString file = getExecuteFile();
+   QString file = getExecuteFile();
 
-  if (m_htmlView == 0) {
-    m_htmlView = new PHPHTMLView(this);
-    mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
-  }
+   if (m_htmlView == 0) {
+      m_htmlView = new PHPHTMLView(this);
+      mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
+   }
 
-  m_htmlView->show();
-  m_htmlView->begin();
+   m_htmlView->show();
+   m_htmlView->begin();
 
-  m_phpExeOutput="";
-  phpExeProc->clearArguments();
-  *phpExeProc << configData->getPHPExecPath();
-  *phpExeProc << "-f";
+   m_phpExeOutput = "";
+   phpExeProc->clearArguments();
+   *phpExeProc << configData->getPHPExecPath();
+   *phpExeProc << "-f";
 
-  *phpExeProc << KShellProcess::quote(file);
-  kdDebug(9018) << "" << file.latin1() << endl;
-  phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
+   *phpExeProc << KShellProcess::quote(file);
+   kdDebug(9018) << "" << file.latin1() << endl;
+   phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
 
-  //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
+   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
 }
 
 void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* /*proc*/, char* buffer, int buflen) {
@@ -358,8 +356,6 @@ void PHPSupportPart::slotPHPExeExited (KProcess* /*proc*/) {
    QString file = getExecuteFile();
    PHPFile *pfile = new PHPFile(this, file);
    pfile->ParseStdout(m_phpExeOutput);
-/// todo recactivate
-//   KApplication::postEvent( this, new FileParsedEvent(file, pfile->getActions()) );
    delete pfile;
 }
 
@@ -461,12 +457,14 @@ void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 void PHPSupportPart::savedFile(const KURL &fileName)
 {
    kdDebug(9018) << "savedFile()" << fileName.fileName() << endl;
-
+/// @fixme when activated could cause stop
+/*
    if (m_parser) {
       if (m_parser->hasFile( fileName.path() )) {
          m_parser->reparseFile( fileName.path() );
       }
    }
+*/
 }
 
 QString PHPSupportPart::getIncludePath()
@@ -521,10 +519,10 @@ void PHPSupportPart::customEvent( QCustomEvent* ev )
 
 PHPErrorView *PHPSupportPart::ErrorView( ) {
    return m_phpErrorView;
-};
+}
 
 PHPParser *PHPSupportPart::Parser( ) {
    return m_parser;
-};
+}
 
 #include "phpsupportpart.moc"

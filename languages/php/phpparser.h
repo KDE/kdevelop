@@ -23,7 +23,7 @@
 
 #if QT_VERSION < 0x030100
 #include <kdevmutex.h>
-#else       
+#else
 #include <qmutex.h>
 #endif
 
@@ -45,15 +45,15 @@ class PHPSupportPart;
 class PHPParser: public QThread {
 
 public:
-	PHPParser(PHPSupportPart *part);
-	~PHPParser();
-   
+   PHPParser(PHPSupportPart *part);
+   ~PHPParser();
+
    void addFile( const QString& fileName );
    bool hasFile( const QString& fileName );
    void reparseFile( const QString& fileName );
    void removeFile( const QString& fileName );
    void removeAllFiles();
-   
+
    void run();
    void close();
    void startParse();
@@ -62,7 +62,7 @@ private:
    CodeModel* m_model;
    KDevCore* m_core;
    PHPSupportPart* m_part;
-  
+
    QMutex m_mutex;
    QWaitCondition m_canParse;
    bool m_close;
