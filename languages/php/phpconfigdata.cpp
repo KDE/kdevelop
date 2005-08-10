@@ -23,8 +23,6 @@
 #include <iostream>
 
 PHPConfigData::PHPConfigData(QDomDocument* dom) {
-  //  cerr << endl << "kdevelop (phpsupport): enter PHPConfigData::PHPConfigData";
-
    QString file = KStandardDirs::findExe("php");
 
    if (file.isEmpty())

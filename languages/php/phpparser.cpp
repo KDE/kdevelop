@@ -48,24 +48,24 @@ PHPParser::~PHPParser(){
 }
 
 bool PHPParser::hasFile( const QString& fileName )
-{       
+{
 //   kdDebug(9018) << "hasFile " << fileName.latin1() << endl;
    QString abso = URLUtil::canonicalPath(fileName);
    QMap<QString, PHPFile *>::Iterator it = m_files.find(abso);
-   
+
    if ( it == m_files.end() )
        return false;
    return true;
 }
 
 void PHPParser::addFile( const QString& fileName )
-{  
+{
    QString abso = URLUtil::canonicalPath(fileName);
 
    if ( hasFile(abso) )
       return;
 
-//   kdDebug(9018) << "addFile " << fileName.latin1() << endl;
+   kdDebug(9018) << "addFile " << fileName.latin1() << endl;
 
    QFileInfo fi( abso );
    if ((fi.extension().contains("inc") || fi.extension().contains("php") || fi.extension().contains("html") || fi.extension().contains("php3") || !fi.extension()) && !fi.extension().contains("~")) {
@@ -78,7 +78,7 @@ void PHPParser::removeFile( const QString& fileName )
 //   kdDebug(9018) << "removeFile " << fileName.latin1() << endl;
    QString abso = URLUtil::canonicalPath(fileName);
    QMap<QString, PHPFile *>::Iterator it = m_files.find(abso);
-  
+
    if ( it != m_files.end()) {
       PHPFile *file = it.data();
       m_files.remove( abso );
@@ -106,7 +106,7 @@ void PHPParser::reparseFile( const QString& fileName )
    kdDebug(9018) << "reparseFile" << endl;
    QString abso = URLUtil::canonicalPath(fileName);
    QMap<QString, PHPFile *>::Iterator it = m_files.find(abso);
-  
+
    if ( it != m_files.end()) {
       PHPFile *file = it.data();
       file->setModified(true);
@@ -158,7 +158,7 @@ void PHPParser::close()
    kdDebug(9018) << "closing thread " << getpid() << endl;
    while (m_parse)
       QThread::usleep(500);
-      
+
    m_close = true;
    m_canParse.wakeAll();
    while (running())
