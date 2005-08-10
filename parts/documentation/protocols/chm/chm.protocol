@@ -10,6 +10,7 @@ Description[da]=En kioslave til visning af Windows hjælpefiler
 Description[de]=Ein Ein-/Ausgabemodul zur Anzeige von WinHelp-Dateien
 Description[es]=Un kioslave para mostrar archivos WinHelp
 Description[et]=WinHelp-failide kuvamise IO-moodul
+Description[eu]=WinHelp fitxategiak bistaratzeko kioslave bat
 Description[fr]=Un module d'entrée / sortie pour l'affichage des fichiers WinHelp
 Description[hu]=KDE-protokoll WinHelp-fájlok megjelenítéséhez
 Description[it]=Un kioslave per mostrare i file WinHelp

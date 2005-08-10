@@ -5,6 +5,7 @@ Name[da]=GNOME-- Programskelet
 Name[de]=GNOME-- Anwendungsgrundgerüst
 Name[es]=Infraestructura para aplicación GNOME--
 Name[et]=GNOME-- rakenduse raamistik
+Name[eu]=GNOME-- Aplikazioen lan-markoa
 Name[hu]=GNOME - Alkalmazás-keretrendszer
 Name[it]=GNOME-- Infrastruttura di applicazione
 Name[nl]=GNOME-- Applicationframework
@@ -22,6 +23,7 @@ Comment[da]=Genererer et simpelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 og < 1
 Comment[de]=Erstellt eine einfache GNOME-Anwendung. Gnomemm, Gtkmm >= 1.2.8 und < 1.3.0 sollten installiert sein. Zum Bearbeiten der glade-Datei ist glade-- (http://home.wtal.de/petig/Gtk/) erforderlich.
 Comment[es]=Genera una sencilla aplicación GNOME--. Debe tener instalados Gnomemm, Gtkmm >= 1.2.8 y < 1.3.0. Para editar archivos glade se necesita glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[et]=Lihtsa GNOME-- rakenduse loomine. Paigaldatud peavad olema Gnomemm, Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
+Comment[eu]=GNOME-- applicazio sinple bat sortzen du. Gnomemm, Gtkmm >= 1.2.8 and < 1.3.0 instalatu behar dira. Glade fitxategia editatzeko glade-- (http://home.wtal.de/petig/Gtk/) behar da.
 Comment[hu]=Létrehoz egy egyszerű GNOME--os -alkalmazást. A Gnomemm, a Gtkmm (>= 1.2.8 és < 1.3.0) szükséges hozzá. Glade-fájl szerkesztéséhez a glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
 Comment[it]=Genera una semplice applicazione GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
 Comment[nl]=Genereert een eenvoudige GNOME-- toepassing. Gnomemm, Gtkmm >= 1.2.8 en < 1.3.0 dienen te zijn geïnstalleerd. Voor het bewerken van glade file is glade-- (http://home.wtal.de/petig/Gtk/) nodig.
@@ -129,6 +131,7 @@ Comment[da]=Et GNOME-- programskelet blev oprettet i %{dest}
 Comment[de]=Ein GNOME-Anwendungsgerüst wurde in %{dest} erstellt.
 Comment[es]=Una infraestructura de aplicación GNOME-- ha sido creada en %{dest}
 Comment[et]=GNOME-- rakenduse raamistik loodi asukohta %{dest}
+Comment[eu]=GNOME-- applicazioen lan-marko bat sortu da hemen: %{dest}
 Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
 Comment[it]=È stato creata una infrastruttura applicativa GNOME in %{dest}
 Comment[nl]=Een GNOME-- applicationframework is aangemaakt in %{dest}

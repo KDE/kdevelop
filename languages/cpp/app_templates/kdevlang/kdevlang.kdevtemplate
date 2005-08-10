@@ -21,6 +21,7 @@ Comment[da]=Dette genererer en sprogstøtte-plugin for KDevelop, der skal bygges
 Comment[de]=Hiermit wird ein Sprachunterstützungs-Plugin für KDevelop generiert, das außerhalb des Quelltextbaumes von KDevelop erstellt wird.
 Comment[es]=Genera un plugin de soporte de lenguaje para KDevelop, para ser construido fuera del árbol de código fuente de KDevelop.
 Comment[et]=KDevelopi keeletoetuse plugina loomine, mida saab ehitada väljaspool KDevelopi lähtekoodipuud.
+Comment[eu]=Honek KDevelop-en lengoai-euskarrirako plugin bat sortzen du, KDevelop-en iturburu zuhaitzetik at eraikitzeko.
 Comment[hu]=Létrehoz egy nyelvtámogató modult a KDevelophoz, mely a KDevelopos forráskönyvtáron kívül fordítható le.
 Comment[it]=Genera un plugin di supporto per linguaggio per KDevelop, deve essere compilato fuori dell'albero sorgente di KDevelop.
 Comment[nl]=Dit genereert een taalondersteuningsplugin voor KDEvelop, welke buiten de KDevelop sourcetree wordt gebouwd.
