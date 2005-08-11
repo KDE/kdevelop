@@ -508,8 +508,8 @@ QString PHPCodeCompletion::getCurrentClassName() {
    Class.setCaseSensitive(FALSE);
 
    for(int i = m_currentLine; i >= 0; i--){
-      QString lineStr = m_editInterface->textLine(i);
-      if (!lineStr.isNull()) {
+      QString line = m_editInterface->textLine(i);
+      if (!line.isNull()) {
          if (Class.search(line) != -1)
             return Class.cap(2);
       }
