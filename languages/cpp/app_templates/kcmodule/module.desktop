@@ -45,6 +45,7 @@ Name[es]=Applet %{APPNAME}
 Name[et]=%{APPNAME} aplett
 Name[eu]=%{APPNAME} applet-a
 Name[fr]=L'applet %{APPNAME}
+Name[ga]=An Feidhmchláirín %{APPNAME}
 Name[hu]=%{APPNAME} kisalkalmazás
 Name[it]=L'applet %{APPNAME}
 Name[nl]=De %{APPNAME}-applet

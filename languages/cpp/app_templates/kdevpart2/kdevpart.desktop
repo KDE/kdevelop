@@ -13,6 +13,7 @@ GenericName[es]=Plugin %{APPNAME}
 GenericName[et]=%{APPNAME} plugin
 GenericName[eu]=%{APPNAME} plugina
 GenericName[fr]=Module de %{APPNAME}
+GenericName[ga]=Breiseán %{APPNAME}
 GenericName[hu]=%{APPNAME}-bővítőmodul
 GenericName[it]=Plugin %{APPNAME}
 GenericName[nl]=%{APPNAME}-plugin
