@@ -21,6 +21,7 @@ Comment[hu]=Létrehoz egy Opie-s bemeneti modult.
 Comment[it]=Genera un plugin per il metodo di input Opie.
 Comment[sv]=Skapa ett insticksprogram för Opie-inmatning.
 Comment[tr]=Bir Opie girdi yöntemi eklentisi yarat
+Comment[zh_CN]=生成一个 Opie 输入法插件。
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.cpp
 Archive=opieinput.tar.gz
@@ -69,4 +70,5 @@ Comment[hu]=Létrejött egy Opie-s bemeneti modul itt: %{dest}
 Comment[it]=È stato creato un plugin per il metodo di input Opie in %{dest}
 Comment[sv]=Ett insticksprogram för Opie-inmatning skapades i %{dest}
 Comment[tr]=Bir opie girdi yöntemi eklentisi %{dest} içinde yaratıldı.
+Comment[zh_CN]=在 %{dest} 中创建了一个 opie 输入法
 

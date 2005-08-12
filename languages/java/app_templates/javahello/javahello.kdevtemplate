@@ -25,6 +25,7 @@ Comment[hu]=Létrehoz egy Java-alkalmazást
 Comment[it]=Genera un'applicazione Java
 Comment[sv]=Skapa ett Java-program
 Comment[tr]=Bir Java uygulaması yarat
+Comment[zh_CN]=生成一个 Java 应用程序
 FileTemplates=java,JavaStyle
 ShowFilesAfterGeneration=%{dest}/Main.java
 Archive=javahello.tar.gz

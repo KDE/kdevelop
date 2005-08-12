@@ -27,6 +27,7 @@ Comment[fr]=Chemin vers votre racine Java
 Comment[hu]=A Java-alapkönyvtár elérési útja
 Comment[it]=Percorso alla radire java
 Comment[sv]=Sökväg till Java-rotkatalog
+Comment[zh_CN]=您的 Java 根路径
 Default=/usr/lib/java
 ValueType=QString
 
@@ -42,6 +43,7 @@ Comment[hu]=A SuperWaba-alapkönyvtár elérési útja
 Comment[it]=Percorso alla radice SuperWaba
 Comment[sv]=Sökväg till SuperWaba-rotkatalog
 Comment[tr]=SuperWaba kök dizininizin yolu
+Comment[zh_CN]=您的 SuperWaba 根路径
 Default=/usr/lib
 ValueType=QString
 

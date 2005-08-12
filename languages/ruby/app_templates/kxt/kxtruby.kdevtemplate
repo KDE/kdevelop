@@ -22,6 +22,7 @@ Comment[hu]=Létrehoz egy egyszerű KDE-alkalmazást egy grafikus elemmel és eg
 Comment[it]=Genera una semplice applicazione KDE con un elemento grafico e una finestra di configurazione
 Comment[sv]=Skapar ett enkelt KDE-program med en grafisk komponent och en inställningsdialogruta
 Comment[tr]=Bir parçacığı ve ayar penceresi olan basit bir KDE uygulaması yaratır.
+Comment[zh_CN]=生成带一个部件和一个配置对话框的简单 KDE 应用程序
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
 Archive=kxtruby.tar.gz
 
