@@ -1,2 +1,0 @@
-KDE_DOCS = %{APPNAMELC}
-KDE_LANG = en

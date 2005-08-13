@@ -1,9 +1,0 @@
-@todo:
-
-1. add information to src/kfile_%{APPNAMELC}.desktop
-MimeType=
-PreferredGroups=
-PreferredItems=
-
-2. plugin
-Note: Please change to "Optimized" compilation if you want to make a release.

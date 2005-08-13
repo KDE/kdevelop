@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartplugin name="scripting" library="libscriptingplugin" version="1.0">
-<MenuBar>
- <Menu name="scripts"><Text>S&amp;cripts</Text>
-     <ActionList name="script_actions"/>
- </Menu>
-</MenuBar>
-</kpartplugin>

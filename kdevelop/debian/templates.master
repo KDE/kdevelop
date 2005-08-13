@@ -1,7 +1,0 @@
-Template: kdevelop3/use_global_index
-Type: boolean
-Default: false
-Description: Create a global documentation index?
- Do you want to create a global index of the KDE, QT and KDevelop
- documentation. This will allow all users to search the documentation.
-

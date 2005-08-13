@@ -1,9 +1,0 @@
-# KDE Config File
-[General]
-Name=GTK+ application
-Name[fr]=Une application GTK+
-Category=Pascal/Free Pascal
-Comment=Generates a GTK+ based GUI application in Pascal
-Comment[fr]=Génère une application basée sur la bibliothéque GTK+ dans le language PASCAL.
-FileTemplates=pp-program,PStyle,pp-unit,PStyle
-ShowFilesAfterGeneration=src/APPNAMELC.pp

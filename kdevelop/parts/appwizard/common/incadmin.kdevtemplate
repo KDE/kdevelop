@@ -1,5 +1,0 @@
-[INCADMIN]
-Type=install archive
-Source=%{kdevelop}/template-common/incadmin.tar.gz
-Dest=%{dest}
-Process=false

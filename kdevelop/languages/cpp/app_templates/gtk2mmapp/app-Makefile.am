@@ -1,4 +1,0 @@
-
-SUBDIRS = src 
-
-EXTRA_DIST = AUTHORS TODO README configure 

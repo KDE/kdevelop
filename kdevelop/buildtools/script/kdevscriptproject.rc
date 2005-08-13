@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCustomProject" version="1">
-<MenuBar>
-  <Menu name="file" >
-    <Action name="file_newfile" />
-  </Menu>
-</MenuBar>
-</kpartgui>
-

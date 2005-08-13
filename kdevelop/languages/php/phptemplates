@@ -1,4 +1,0 @@
-<!DOCTYPE Templates>
-<Templates>
- <Template code="&lt;table&gt;&lt;tr&gt;&lt;td&gt;|&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" name="tab" description="table" suffixes="HTML (html)"/>
-</Templates>

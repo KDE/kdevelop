@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>Pascal bugs (fp)</title>
-<base href="http://www.freepascal.org/"/>
-<tocsect1 name="Query" url="bugs.html">
-</tocsect1>
-</kdeveloptoc>

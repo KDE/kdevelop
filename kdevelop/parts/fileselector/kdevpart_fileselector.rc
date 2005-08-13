@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartplugin name="fileselector" library="libfileselectorplugin" version="1">
-<MenuBar>
- <Menu name="help"><Text>&amp;Help</Text>
-  <Action name="help_fileselector"/>
- </Menu>
-</MenuBar>
-</kpartplugin>

@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>Perl bugs</title>
-<base href="http://www.nntp.perl.org/"/>
-<tocsect1 name="Query" url="group">
-</tocsect1>
-</kdeveloptoc>

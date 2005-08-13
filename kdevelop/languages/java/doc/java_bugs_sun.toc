@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>Java bugs (Sun)</title>
-<base href="http://developer.java.sun.com/developer/bugParade/"/>
-<tocsect1 name="Query" url="index.jshtml">
-</tocsect1>
-</kdeveloptoc>

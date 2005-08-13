@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDiff" version="1">
-<MenuBar>
-  <Menu name="tools" >
-    <Action name="tools_diff" group="tools_file_operations"/>
-  </Menu>
-</MenuBar>
-</kpartgui>
-

@@ -1,5 +1,0 @@
-[ADMIN]
-Type=install archive
-Source=%{kdevelop}/template-common/admin.tar.gz
-Dest=%{dest}
-Process=false

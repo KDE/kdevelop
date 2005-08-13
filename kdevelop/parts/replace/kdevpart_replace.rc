@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartplugin name="replace" library="libreplaceplugin" version="1">
-<MenuBar>
- <Menu name="edit">
-  <Action name="edit_replace_across" group="kdev_edit_find_merge"/>
- </Menu>
-</MenuBar>
-</kpartplugin>

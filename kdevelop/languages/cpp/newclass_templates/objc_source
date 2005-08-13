@@ -1,4 +1,0 @@
-#include "$HEADER$"
-
-@implementation $CLASSNAME$
-@end

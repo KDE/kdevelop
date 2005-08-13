@@ -1,8 +1,0 @@
-?package(kdevelop):\
-        needs=x11\
-        section=Apps/Programming\
-        hints="KDE,Development"\
-	kderemove="y"\
-        title="KDevelop 3.0"\
-	icon="/usr/share/icons/hicolor/16x16/apps/kdevelop3.png"\
-        command=kdevelop3
