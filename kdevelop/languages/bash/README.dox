@@ -1,0 +1,15 @@
+/** \class BashSupportPart
+
+Supports bash language
+
+\authors <a href="mailto:geiseri AT kde.org">Ian Reinhart Geiser</a>
+
+\maintainer <a href="mailto:geiseri AT kde.org">Ian Reinhart Geiser</a>
+
+\feature function browser support
+\feature runs bash script in external terminal
+\feature syntax highlighting and code folding via katepart
+\feature Code completion works for variables
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
+
+*/

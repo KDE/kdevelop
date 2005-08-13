@@ -1,0 +1,354 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>CustomMakeConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>CustomMakeConfigWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>659</width>
+            <height>600</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Make Options</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>abort_box</cstring>
+            </property>
+            <property name="text">
+                <string>A&amp;bort on first error</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>dontact_box</cstring>
+            </property>
+            <property name="text">
+                <string>Only di&amp;splay commands without actually executing them</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>defaultTarget_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>makebin_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>makeoptions_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>A&amp;dditional make options:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>makeoptions_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>makeoptions_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>makebin_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name of make e&amp;xecutable:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>makebin_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>defTarget_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Default make &amp;target:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>defaultTarget_edit</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>jobs_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number of simultaneous &amp;jobs:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>jobs_box</cstring>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>jobs_box</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maxValue">
+                        <number>30</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>prio_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Make &amp;priority:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>jobs_box</cstring>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>prio_box</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maxValue">
+                        <number>19</number>
+                    </property>
+                    <property name="minValue">
+                        <number>-20</number>
+                    </property>
+                    <property name="value">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>envs_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>E&amp;nvironment:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>envs_combo</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>envs_combo</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>addenvs_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Add</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>copyenvs_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Co&amp;py</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>removeenvs_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Re&amp;move</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>env_var_group</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Environment &amp;Variables</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>envs_combo</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CustomMakeConfigWidgetBase</receiver>
+        <slot>envNameChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>envs_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>CustomMakeConfigWidgetBase</receiver>
+        <slot>envChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>copyenvs_button</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomMakeConfigWidgetBase</receiver>
+        <slot>envCopied()</slot>
+    </connection>
+    <connection>
+        <sender>addenvs_button</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomMakeConfigWidgetBase</receiver>
+        <slot>envAdded()</slot>
+    </connection>
+    <connection>
+        <sender>removeenvs_button</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomMakeConfigWidgetBase</receiver>
+        <slot>envRemoved()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>abort_box</tabstop>
+    <tabstop>dontact_box</tabstop>
+    <tabstop>makebin_edit</tabstop>
+    <tabstop>makeoptions_edit</tabstop>
+    <tabstop>jobs_box</tabstop>
+    <tabstop>envs_combo</tabstop>
+    <tabstop>addenvs_button</tabstop>
+    <tabstop>copyenvs_button</tabstop>
+    <tabstop>removeenvs_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<slots>
+    <slot access="protected">envNameChanged(const QString &amp;)</slot>
+    <slot access="protected">envChanged(const QString&amp;)</slot>
+    <slot access="protected">envAdded()</slot>
+    <slot access="protected">envRemoved()</slot>
+    <slot access="protected">envCopied()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

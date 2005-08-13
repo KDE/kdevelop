@@ -1,0 +1,116 @@
+# KDE Config File
+[General]
+Name=Application framework
+Name[da]=Programskelet
+Name[et]=Rakenduse raamistik
+Name[hu]=Alkalmazás-keretrendszer
+Name[sv]=Programramverk
+Name[tr]=Uygulama Çatısı
+Icon=kappjava.png
+Category=Java/KDE
+Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
+Comment[da]=Genererer et simpelt Java KDE program med et vindue på topniveau, menuer og værktøjslinjer.
+Comment[et]=Lihtsa Java KDE rakenduse loomine ühe tipptaseme akna, menüüde ja tööriistaribadega.
+Comment[hu]=Létrehoz egy egyszerű Java-alapú KDE-alkalmazást egy főablakkal, menükkel és eszköztárakkal.
+Comment[sv]=Skapar ett enkelt Java KDE-program med ett toppnivåfönster, menyer och verktygsrader.
+Comment[tr]=Bir üst seviye penceresi, menüleri ve araç çubukları olan basit bir Java KDE uygulaması yaratır.
+FileTemplates=java,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAME}View.java
+Archive=kappjava.tar.gz
+
+[ADMIN]
+Type=include
+File=%{kdevelop}/template-common/admin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[DOCBOOK]
+Type=include
+File=%{kdevelop}/template-common/dockbook.kdevtemplate
+
+[FILE4]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE5]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE7]
+Type=install
+Source=%{kdevelop}/template-common/kde-configure.in.in
+Dest=%{dest}/configure.in.in
+
+[MkDir3]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE8]
+Type=install
+Source=%{kdevelop}/template-common/kde-app.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[FILE9]
+Type=install
+Source=%{kdevelop}/template-common/kde-app.lsm
+Dest=%{dest}/src/%{APPNAMELC}.lsm
+
+[FILE10]
+Type=install
+Source=%{kdevelop}/template-common/hi16-app-app.png
+Dest=%{dest}/src/hi16-app-%{APPNAMELC}.png
+
+[FILE11]
+Type=install
+Source=%{kdevelop}/template-common/hi32-app-app.png
+Dest=%{dest}/src/hi32-app-%{APPNAMELC}.png
+
+[MkDir4]
+Type=mkdir
+Dir=%{dest}/po
+
+[FILE12]
+Type=install
+Source=%{kdevelop}/template-common/kde-po-Makefile.am
+Dest=%{dest}/po/Makefile.am
+
+[FILE13]
+Type=install
+Source=%{src}/subdirs
+Dest=%{dest}/subdirs
+
+[FILE14]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE15]
+Type=install
+Source=%{src}/app.java
+Dest=%{dest}/src/%{APPNAME}.java
+
+[FILE16]
+Type=install
+Source=%{src}/appview.java
+Dest=%{dest}/src/%{APPNAME}View.java
+
+[FILE17]
+Type=install
+Source=%{src}/pref.java
+Dest=%{dest}/src/%{APPNAME}Preferences.java
+
+[FILE18]
+Type=install
+Source=%{src}/appui.rc
+Dest=%{dest}/src/%{APPNAMELC}ui.rc
+

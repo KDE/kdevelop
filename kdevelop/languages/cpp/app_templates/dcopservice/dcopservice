@@ -1,0 +1,10 @@
+# KDE Config File
+[General]
+Name=KDE DCOP Service
+Name[fr]=Un service DCOP pour KDE
+Icon=kdcop.png
+Category=C++/KDE
+Comment=Generates a framework for a KDE dcop service and client access library.
+Comment[fr]=Génère un squelette de programme pour la gestion d'un service DCOP pour KDE et un programme d'accés au bibliothéque.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp

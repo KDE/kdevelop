@@ -1,0 +1,1446 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Scalable Vector Graphics (SVG) 1.1 Specification</title>
+<base href="http://www.w3.org/TR/SVG11" url="index.html"/>
+ 
+<tocsect1 name="1 Introduction" url="intro.html">
+ 
+ 
+ <tocsect2 name="1.1 About SVG" url="intro.html#AboutSVG">
+ 
+ 
+ <tocsect3 name="1.1.1 Modularization" url="intro.html#Modularization">
+ </tocsect3>
+ 
+ <tocsect3 name="1.1.2 Element and Attribute Collections" url="intro.html#ElementAndAttributeCollections">
+ </tocsect3>
+ 
+ <tocsect3 name="1.1.3 Profiling the SVG specification" url="intro.html#Profiling">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="1.2 SVG MIME type, file name extension and Macintosh file type" url="intro.html#MIMEType">
+ </tocsect2>
+ 
+ <tocsect2 name="1.3 SVG Namespace, Public Identifier and System Identifier" url="intro.html#Namespace">
+ </tocsect2>
+ 
+ <tocsect2 name="1.4 Compatibility with Other Standards Efforts" url="intro.html#W3CCompatibility">
+ </tocsect2>
+ 
+ <tocsect2 name="1.5 Terminology" url="intro.html#Terminology">
+ </tocsect2>
+ 
+ <tocsect2 name="1.6 Definitions" url="intro.html#Definitions">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="2 Concepts" url="concepts.html">
+ 
+ 
+ <tocsect2 name="2.1 Explaining the name: SVG" url="concepts.html#Intro">
+ </tocsect2>
+ 
+ <tocsect2 name="2.2 Important SVG concepts" url="concepts.html#Concepts">
+ </tocsect2>
+ 
+ <tocsect2 name="2.3 Options for using SVG in Web pages" url="concepts.html#UsageOptions">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="3 Rendering Model" url="render.html">
+ 
+ 
+ <tocsect2 name="3.1 Introduction" url="render.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="3.2 The painters model" url="render.html#PaintersModel">
+ </tocsect2>
+ 
+ <tocsect2 name="3.3 Rendering Order" url="render.html#RenderingOrder">
+ </tocsect2>
+ 
+ <tocsect2 name="3.4 How groups are rendered" url="render.html#Grouping">
+ </tocsect2>
+ 
+ <tocsect2 name="3.5 How elements are rendered" url="render.html#Elements">
+ </tocsect2>
+ 
+ <tocsect2 name="3.6 Types of graphics elements" url="render.html#TypesOfGraphicsElements">
+ 
+ 
+ <tocsect3 name="3.6.1 Painting shapes and text" url="render.html#PaintingShapesAndText">
+ </tocsect3>
+ 
+ <tocsect3 name="3.6.2 Painting raster images" url="render.html#PaintingRasterImages">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="3.7 Filtering painted regions" url="render.html#FilteringPaintRegions">
+ </tocsect2>
+ 
+ <tocsect2 name="3.8 Clipping, masking and object opacity" url="render.html#ClippingMaskingObjectOpacity">
+ </tocsect2>
+ 
+ <tocsect2 name="3.9 Parent Compositing" url="render.html#ParentCompositing">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="4 Basic Data Types and Interfaces" url="types.html">
+ 
+ 
+ <tocsect2 name="4.1 Basic data types" url="types.html#BasicDataTypes">
+ </tocsect2>
+ 
+ <tocsect2 name="4.2 Recognized color keyword names" url="types.html#ColorKeywords">
+ </tocsect2>
+ 
+ <tocsect2 name="4.3 Basic DOM interfaces" url="types.html#BasicDOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="5 Document Structure" url="struct.html">
+ 
+ 
+ <tocsect2 name="5.1 Defining an SVG document fragment: the 'svg' element" url="struct.html#NewDocument">
+ 
+ 
+ <tocsect3 name="5.1.1 Overview" url="struct.html#NewDocumentOverview">
+ </tocsect3>
+ 
+ <tocsect3 name="5.1.2 The 'svg' element" url="struct.html#SVGElement">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="5.2 Grouping: the 'g' element" url="struct.html#Groups">
+ 
+ 
+ <tocsect3 name="5.2.1 Overview" url="struct.html#GroupsOverview">
+ </tocsect3>
+ 
+ <tocsect3 name="5.2.2 The 'g' element" url="struct.html#GElement">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="5.3 References and the 'defs' element" url="struct.html#Head">
+ 
+ 
+ <tocsect3 name="5.3.1 Overview" url="struct.html#HeadOverview">
+ </tocsect3>
+ 
+ <tocsect3 name="5.3.2 URI reference attributes" url="struct.html#xlinkRefAttrs">
+ </tocsect3>
+ 
+ <tocsect3 name="5.3.3 The 'defs' element" url="struct.html#DefsElement">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="5.4 The 'desc' and 'title' elements" url="struct.html#DescriptionAndTitleElements">
+ </tocsect2>
+ 
+ <tocsect2 name="5.5 The 'symbol' element" url="struct.html#SymbolElement">
+ </tocsect2>
+ 
+ <tocsect2 name="5.6 The 'use' element" url="struct.html#UseElement">
+ </tocsect2>
+ 
+ <tocsect2 name="5.7 The 'image' element" url="struct.html#ImageElement">
+ </tocsect2>
+ 
+ <tocsect2 name="5.8 Conditional processing" url="struct.html#ConditionalProcessing">
+ 
+ 
+ <tocsect3 name="5.8.1 Conditional processing overview" url="struct.html#ConditionalProcessingOverview">
+ </tocsect3>
+ 
+ <tocsect3 name="5.8.2 The 'switch' element" url="struct.html#SwitchElement">
+ </tocsect3>
+ 
+ <tocsect3 name="5.8.3 The requiredFeatures attribute" url="struct.html#RequiredFeaturesAttribute">
+ </tocsect3>
+ 
+ <tocsect3 name="5.8.4 The requiredExtensions attribute" url="struct.html#RequiredExtensionsAttribute">
+ </tocsect3>
+ 
+ <tocsect3 name="5.8.5 The systemLanguage attribute" url="struct.html#SystemLanguageAttribute">
+ </tocsect3>
+ 
+ <tocsect3 name="5.8.6 Applicability of test attributes" url="struct.html#ApplicabilityOfTestAttributes">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="5.9 Specifying whether external resources are required for proper rendering" url="struct.html#ExternalResourcesRequired">
+ </tocsect2>
+ 
+ <tocsect2 name="5.10 Common attributes" url="struct.html#CommonAttributes">
+ 
+ 
+ <tocsect3 name="5.10.1 Attributes common to all elements: id and xml:base" url="struct.html#Core.attrib">
+ </tocsect3>
+ 
+ <tocsect3 name="5.10.2 The xml:lang and xml:space attributes" url="struct.html#LangSpaceAttrs">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="5.11 Core Attribute Module" url="struct.html#core-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="5.12 Structure Module" url="struct.html#structure-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="5.13 Basic Structure Module" url="struct.html#basic-structure-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="5.14 Container Attribute Module" url="struct.html#container-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="5.15 Conditional Processing Module" url="struct.html#conditional-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="5.16 Image Module" url="struct.html#image-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="5.17 DOM interfaces" url="struct.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="6 Styling" url="styling.html">
+ 
+ 
+ <tocsect2 name="6.1 SVG's styling properties" url="styling.html#SVGStylingProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="6.2 Usage scenarios for styling" url="styling.html#StylingScenarios">
+ </tocsect2>
+ 
+ <tocsect2 name="6.3 Alternative ways to specify styling properties" url="styling.html#AlternativesForStyling">
+ </tocsect2>
+ 
+ <tocsect2 name="6.4 Specifying properties using the presentation attributes" url="styling.html#UsingPresentationAttributes">
+ </tocsect2>
+ 
+ <tocsect2 name="6.5 Entity definitions for the presentation attributes" url="styling.html#EntityDefinitionsPresentationAttributes">
+ </tocsect2>
+ 
+ <tocsect2 name="6.6 Styling with XSL" url="styling.html#StylingWithXSL">
+ </tocsect2>
+ 
+ <tocsect2 name="6.7 Styling with CSS" url="styling.html#StylingWithCSS">
+ </tocsect2>
+ 
+ <tocsect2 name="6.8 Case sensitivity of property names and values" url="styling.html#CaseSensitivity">
+ </tocsect2>
+ 
+ <tocsect2 name="6.9 Facilities from CSS and XSL used by SVG" url="styling.html#SVGUseOfCSS">
+ </tocsect2>
+ 
+ <tocsect2 name="6.10 Referencing external style sheets" url="styling.html#ReferencingExternalStyleSheets">
+ </tocsect2>
+ 
+ <tocsect2 name="6.11 The 'style' element" url="styling.html#StyleElement">
+ </tocsect2>
+ 
+ <tocsect2 name="6.12 The class attribute" url="styling.html#ClassAttribute">
+ </tocsect2>
+ 
+ <tocsect2 name="6.13 The style attribute" url="styling.html#StyleAttribute">
+ </tocsect2>
+ 
+ <tocsect2 name="6.14 Specifying the default style sheet language" url="styling.html#DefaultStyleSheetLanguage">
+ </tocsect2>
+ 
+ <tocsect2 name="6.15 Property inheritance" url="styling.html#Inheritance">
+ </tocsect2>
+ 
+ <tocsect2 name="6.16 The scope/range of styles" url="styling.html#Scope">
+ </tocsect2>
+ 
+ <tocsect2 name="6.17 User agent style sheet" url="styling.html#UAStyleSheet">
+ </tocsect2>
+ 
+ <tocsect2 name="6.18 Aural style sheets" url="styling.html#AuralStyleSheets">
+ </tocsect2>
+ 
+ <tocsect2 name="6.19 Style Module" url="styling.html#style-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="6.20 DOM interfaces" url="styling.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="7 Coordinate Systems, Transformations and Units" url="coords.html">
+ 
+ 
+ <tocsect2 name="7.1 Introduction" url="coords.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="7.2 The initial viewport" url="coords.html#ViewportSpace">
+ </tocsect2>
+ 
+ <tocsect2 name="7.3 The initial coordinate system" url="coords.html#InitialCoordinateSystem">
+ </tocsect2>
+ 
+ <tocsect2 name="7.4 Coordinate system transformations" url="coords.html#EstablishingANewUserSpace">
+ </tocsect2>
+ 
+ <tocsect2 name="7.5 Nested transformations" url="coords.html#NestedTransformations">
+ </tocsect2>
+ 
+ <tocsect2 name="7.6 The transform attribute" url="coords.html#TransformAttribute">
+ </tocsect2>
+ 
+ <tocsect2 name="7.7 The viewBox attribute" url="coords.html#ViewBoxAttribute">
+ </tocsect2>
+ 
+ <tocsect2 name="7.8 The preserveAspectRatio attribute" url="coords.html#PreserveAspectRatioAttribute">
+ </tocsect2>
+ 
+ <tocsect2 name="7.9 Establishing a new viewport" url="coords.html#EstablishingANewViewport">
+ </tocsect2>
+ 
+ <tocsect2 name="7.10 Units" url="coords.html#Units">
+ </tocsect2>
+ 
+ <tocsect2 name="7.11 Object bounding box units" url="coords.html#ObjectBoundingBox">
+ </tocsect2>
+ 
+ <tocsect2 name="7.12 Geographic Coordinate Systems" url="coords.html#GeographicCoordinates">
+ </tocsect2>
+ 
+ <tocsect2 name="7.13 Viewport Attribute Module" url="coords.html#viewport-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="7.14 DOM interfaces" url="coords.html#DOMInterfaces">
+ </tocsect2>
+
+</tocsect1> 
+
+<tocsect1 name="8 Paths" url="paths.html">
+ 
+ <tocsect2 name="8.1 Introduction" url="paths.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="8.2 The 'path' element" url="paths.html#PathElement">
+ </tocsect2>
+ 
+ <tocsect2 name="8.3 Path Data" url="paths.html#PathData">
+ 
+ 
+ <tocsect3 name="8.3.1 General information about path data" url="paths.html#PathDataGeneralInformation">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.2 The &quot;moveto&quot; commands" url="paths.html#PathDataMovetoCommands">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.3 The &quot;closepath&quot; command" url="paths.html#PathDataClosePathCommand">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.4 The &quot;lineto&quot; commands" url="paths.html#PathDataLinetoCommands">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.5 The curve commands" url="paths.html#PathDataCurveCommands">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.6 The cubic Bézier curve commands" url="paths.html#PathDataCubicBezierCommands">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.7 The quadratic Bézier curve commands" url="paths.html#PathDataQuadraticBezierCommands">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.8 The elliptical arc curve commands" url="paths.html#PathDataEllipticalArcCommands">
+ </tocsect3>
+ 
+ <tocsect3 name="8.3.9 The grammar for path data" url="paths.html#PathDataBNF">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="8.4 Distance along a path" url="paths.html#DistanceAlongAPath">
+ </tocsect2>
+ 
+ <tocsect2 name="8.5 DOM interfaces" url="paths.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="9 Basic Shapes" url="shapes.html">
+ 
+ 
+ <tocsect2 name="9.1 Introduction" url="shapes.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="9.2 The 'rect' element" url="shapes.html#RectElement">
+ </tocsect2>
+ 
+ <tocsect2 name="9.3 The 'circle' element" url="shapes.html#CircleElement">
+ </tocsect2>
+ 
+ <tocsect2 name="9.4 The 'ellipse' element" url="shapes.html#EllipseElement">
+ </tocsect2>
+ 
+ <tocsect2 name="9.5 The 'line' element" url="shapes.html#LineElement">
+ </tocsect2>
+ 
+ <tocsect2 name="9.6 The 'polyline' element" url="shapes.html#PolylineElement">
+ </tocsect2>
+ 
+ <tocsect2 name="9.7 The 'polygon' element" url="shapes.html#PolygonElement">
+ </tocsect2>
+ 
+ <tocsect2 name="9.8 The grammar for points specifications in 'polyline' and 'polygon' elements" url="shapes.html#PointsBNF">
+ </tocsect2>
+ 
+ <tocsect2 name="9.9 Shape Module" url="shapes.html#shape-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="9.10 DOM interfaces" url="shapes.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="10 Text" url="text.html">
+ 
+ 
+ <tocsect2 name="10.1 Introduction" url="text.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="10.2 Characters and their corresponding glyphs" url="text.html#CharactersAndGlyphs">
+ </tocsect2>
+ 
+ <tocsect2 name="10.3 Fonts, font tables and baselines" url="text.html#FontsTablesBaselines">
+ </tocsect2>
+ 
+ <tocsect2 name="10.4 The 'text' element" url="text.html#TextElement">
+ </tocsect2>
+ 
+ <tocsect2 name="10.5 The 'tspan' element" url="text.html#TSpanElement">
+ </tocsect2>
+ 
+ <tocsect2 name="10.6 The 'tref' element" url="text.html#TRefElement">
+ </tocsect2>
+ 
+ <tocsect2 name="10.7 Text layout" url="text.html#TextLayout">
+ 
+ 
+ <tocsect3 name="10.7.1 Text layout introduction" url="text.html#TextLayoutIntroduction">
+ </tocsect3>
+ 
+ <tocsect3 name="10.7.2 Setting the inline-progression-direction" url="text.html#SettingInlineProgressionDirection">
+ </tocsect3>
+ 
+ <tocsect3 name="10.7.3 Glyph orientation within a text run" url="text.html#GlyphOrientation">
+ </tocsect3>
+ 
+ <tocsect3 name="10.7.4 Relationship with bidirectionality" url="text.html#RelationshipWithBiDirectionality">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="10.8 Text rendering order" url="text.html#TextRenderingOrder">
+ </tocsect2>
+ 
+ <tocsect2 name="10.9 Alignment properties" url="text.html#AlignmentProperties">
+ 
+ 
+ <tocsect3 name="10.9.1 Text alignment properties" url="text.html#TextAlignmentProperties">
+ </tocsect3>
+ 
+ <tocsect3 name="10.9.2 Baseline alignment properties" url="text.html#BaselineAlignmentProperties">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="10.10 Font selection properties" url="text.html#FontPropertiesUsedBySVG">
+ </tocsect2>
+ 
+ <tocsect2 name="10.11 Spacing properties" url="text.html#SpacingProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="10.12 Text decoration" url="text.html#TextDecorationProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="10.14 Text on a path" url="text.html#TextOnAPath">
+ 
+ 
+ <tocsect3 name="10.14.1 Introduction to text on a path" url="text.html#TextOnAPathIntroduction">
+ </tocsect3>
+ 
+ <tocsect3 name="10.14.2 The 'textPath' element" url="text.html#TextPathElement">
+ </tocsect3>
+ 
+ <tocsect3 name="10.14.3 Text on a path layout rules" url="text.html#TextpathLayoutRules">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="10.14 Alternate glyphs" url="text.html#AlternateGlyphs">
+ </tocsect2>
+ 
+ <tocsect2 name="10.15 White space handling" url="text.html#WhiteSpace">
+ </tocsect2>
+ 
+ <tocsect2 name="10.16 Text selection and clipboard operations" url="text.html#TextSelection">
+ </tocsect2>
+ 
+ <tocsect2 name="10.17 Text Module" url="text.html#text-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="10.18 Basic Text Module" url="text.html#basic-text-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="10.19 DOM interfaces" url="text.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="11 Painting: Filling, Stroking and Marker Symbols" url="painting.html">
+ 
+ 
+ <tocsect2 name="11.1 Introduction" url="painting.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="11.2 Specifying paint" url="painting.html#SpecifyingPaint">
+ </tocsect2>
+ 
+ <tocsect2 name="11.3 Fill Properties" url="painting.html#FillProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="11.4 Stroke Properties" url="painting.html#StrokeProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="11.5 Controlling visibility" url="painting.html#VisibilityControl">
+ </tocsect2>
+ 
+ <tocsect2 name="11.6 Markers" url="painting.html#Markers">
+ 
+ 
+ <tocsect3 name="11.6.1 Introduction" url="painting.html#MarkersIntroduction">
+ </tocsect3>
+ 
+ <tocsect3 name="11.6.2 The 'marker' element" url="painting.html#MarkerElement">
+ </tocsect3>
+ 
+ <tocsect3 name="11.6.3 Marker properties" url="painting.html#MarkerProperties">
+ </tocsect3>
+ 
+ <tocsect3 name="11.6.4 Details on how markers are rendered" url="painting.html#MarkerAlgorithm">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="11.7 Rendering properties" url="painting.html#RenderingProperties">
+ 
+ 
+ <tocsect3 name="11.7.1 Color interpolation properties: 'color-interpolation' and 'color-interpolation-filters'" url="painting.html#ColorInterpolationProperties">
+ </tocsect3>
+ 
+ <tocsect3 name="11.7.2 The 'color-rendering' property" url="painting.html#ColorRenderingProperty">
+ </tocsect3>
+ 
+ <tocsect3 name="11.7.3 The 'shape-rendering' property" url="painting.html#ShapeRenderingProperty">
+ </tocsect3>
+ 
+ <tocsect3 name="11.7.4 The 'text-rendering' property" url="painting.html#TextRenderingProperty">
+ </tocsect3>
+ 
+ <tocsect3 name="11.7.5 The 'image-rendering' property" url="painting.html#ImageRenderingProperty">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="11.8 Inheritance of painting properties" url="painting.html#InheritanceOfPaintingProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="11.9 Paint Attribute Module" url="painting.html#paint-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="11.10 Basic Paint Attribute Module" url="painting.html#basic-paint-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="11.11 Opacity Attribute Module" url="painting.html#opacity-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="11.12 Graphics Attribute Module" url="painting.html#graphics-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="11.13 Basic Graphics Attribute Module" url="painting.html#basic-graphics-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="11.14 Marker Module" url="painting.html#marker-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="11.15 DOM interfaces" url="painting.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="12 Color" url="color.html">
+ 
+ <tocsect2 name="12.1 Introduction" url="color.html#ColorIntroduction">
+ </tocsect2>
+ 
+ <tocsect2 name="12.2 The 'color' property" url="color.html#ColorProperty">
+ </tocsect2>
+ 
+ <tocsect2 name="12.3 Color profile descriptions" url="color.html#ColorProfileDescriptions">
+ 
+ 
+ <tocsect3 name="12.3.1 Overview of color profile descriptions" url="color.html#ColorProfileDescriptionsOverview">
+ </tocsect3>
+ 
+ <tocsect3 name="12.3.2 Alternative ways for defining a color profile description" url="color.html#ColorProfileAlternatives">
+ </tocsect3>
+ 
+ <tocsect3 name="12.3.3 The 'color-profile' element" url="color.html#ColorProfileElement">
+ </tocsect3>
+ 
+ <tocsect3 name="12.3.4 @color-profile when using CSS styling" url="color.html#ColorProfileAtRule">
+ </tocsect3>
+ 
+ <tocsect3 name="12.3.5 'color-profile' property" url="color.html#ColorProfileProperty">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="12.4 Color Profile Module" url="color.html#color-profile-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="12.7 DOM interfaces" url="color.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="13 Gradients and Patterns" url="pservers.html">
+ 
+ 
+ <tocsect2 name="13.1 Introduction" url="pservers.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="13.2 Gradients" url="pservers.html#Gradients">
+ 
+ 
+ <tocsect3 name="13.2.1 Introduction" url="pservers.html#GradientsIntroduction">
+ </tocsect3>
+ 
+ <tocsect3 name="13.2.2 Linear gradients" url="pservers.html#LinearGradients">
+ </tocsect3>
+ 
+ <tocsect3 name="13.2.3 Radial gradients" url="pservers.html#RadialGradients">
+ </tocsect3>
+ 
+ <tocsect3 name="13.2.4 Gradient stops" url="pservers.html#GradientStops">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="13.3 Patterns" url="pservers.html#Patterns">
+ </tocsect2>
+ 
+ <tocsect2 name="13.4 Gradient Module" url="pservers.html#gradient-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="13.5 Pattern Module" url="pservers.html#pattern-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="13.6 DOM interfaces" url="pservers.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="14 Clipping, Masking and Compositing" url="masking.html">
+ 
+ 
+ <tocsect2 name="14.1 Introduction" url="masking.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="14.2 Simple alpha compositing" url="masking.html#SimpleAlphaBlending">
+ </tocsect2>
+ 
+ <tocsect2 name="14.3 Clipping paths" url="masking.html#ClippingPaths">
+ 
+ 
+ <tocsect3 name="14.3.1 Introduction" url="masking.html#ClippingPathsIntro">
+ </tocsect3>
+ 
+ <tocsect3 name="14.3.2 The initial clipping path" url="masking.html#InitialClippingPath">
+ </tocsect3>
+ 
+ <tocsect3 name="14.3.3 The 'overflow' and 'clip' properties" url="masking.html#OverflowAndClipProperties">
+ </tocsect3>
+ 
+ <tocsect3 name="14.3.4 Clip to viewport vs. clip to viewBox" url="masking.html#AutoClipAtViewportNotViewBox">
+ </tocsect3>
+ 
+ <tocsect3 name="14.3.5 Establishing a new clipping path" url="masking.html#EstablishingANewClippingPath">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="14.4 Masking" url="masking.html#Masking">
+ </tocsect2>
+ 
+ <tocsect2 name="14.5 Object and group opacity: the 'opacity' property" url="masking.html#ObjectAndGroupOpacityProperties">
+ </tocsect2>
+ 
+ <tocsect2 name="14.6 Clip Module" url="masking.html#clip-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="14.7 Basic Clip Module" url="masking.html#basic-clip-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="14.8 Mask Module" url="masking.html#mask-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="14.9 DOM interfaces" url="masking.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="15 Filter Effects" url="filters.html">
+ 
+ 
+ <tocsect2 name="15.1 Introduction" url="filters.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="15.2 An example" url="filters.html#AnExample">
+ </tocsect2>
+ 
+ <tocsect2 name="15.3 The 'filter' element" url="filters.html#FilterElement">
+ </tocsect2>
+ 
+ <tocsect2 name="15.4 The 'filter' property" url="filters.html#FilterProperty">
+ </tocsect2>
+ 
+ <tocsect2 name="15.5 Filter effects region" url="filters.html#FilterEffectsRegion">
+ </tocsect2>
+ 
+ <tocsect2 name="15.6 Accessing the background image" url="filters.html#AccessingBackgroundImage">
+ </tocsect2>
+ 
+ <tocsect2 name="15.7 Filter primitives overview" url="filters.html#FilterPrimitivesOverview">
+ 
+ 
+ <tocsect3 name="15.7.1 Overview" url="filters.html#FilterPrimitivesOverviewIntro">
+ </tocsect3>
+ 
+ <tocsect3 name="15.7.2 Common attributes" url="filters.html#CommonAttributes">
+ </tocsect3>
+ 
+ <tocsect3 name="15.7.3 Filter primitive subregion" url="filters.html#FilterPrimitiveSubRegion">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="15.8 Light source elements and properties" url="filters.html#LightSourceDefinitions">
+ 
+ 
+ <tocsect3 name="15.8.1 Introduction" url="filters.html#LightSourceIntro">
+ </tocsect3>
+ 
+ <tocsect3 name="15.8.2 Light source 'feDistantLight'" url="filters.html#feDistantLight">
+ </tocsect3>
+ 
+ <tocsect3 name="15.8.3 Light source 'fePointLight'" url="filters.html#fePointLight">
+ </tocsect3>
+ 
+ <tocsect3 name="15.8.4 Light source 'feSpotLight'" url="filters.html#feSpotLight">
+ </tocsect3>
+ 
+ <tocsect3 name="15.8.5 The 'lighting-color' property" url="filters.html#LightingColorProperty">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="15.9 Filter primitive 'feBlend'" url="filters.html#feBlend">
+ </tocsect2>
+ 
+ <tocsect2 name="15.10 Filter primitive 'feColorMatrix'" url="filters.html#feColorMatrix">
+ </tocsect2>
+ 
+ <tocsect2 name="15.11 Filter primitive 'feComponentTransfer'" url="filters.html#feComponentTransfer">
+ </tocsect2>
+ 
+ <tocsect2 name="15.12 Filter primitive 'feComposite'" url="filters.html#feComposite">
+ </tocsect2>
+ 
+ <tocsect2 name="15.13 Filter primitive 'feConvolveMatrix'" url="filters.html#feConvolveMatrix">
+ </tocsect2>
+ 
+ <tocsect2 name="15.14 Filter primitive 'feDiffuseLighting'" url="filters.html#feDiffuseLighting">
+ </tocsect2>
+ 
+ <tocsect2 name="15.15 Filter primitive 'feDisplacementMap'" url="filters.html#feDisplacementMap">
+ </tocsect2>
+ 
+ <tocsect2 name="15.16 Filter primitive 'feFlood'" url="filters.html#feFlood">
+ </tocsect2>
+ 
+ <tocsect2 name="15.17 Filter primitive 'feGaussianBlur'" url="filters.html#feGaussianBlur">
+ </tocsect2>
+ 
+ <tocsect2 name="15.18 Filter primitive 'feImage'" url="filters.html#feImage">
+ </tocsect2>
+ 
+ <tocsect2 name="15.19 Filter primitive 'feMerge'" url="filters.html#feMerge">
+ </tocsect2>
+ 
+ <tocsect2 name="15.20 Filter primitive 'feMorphology'" url="filters.html#feMorphology">
+ </tocsect2>
+ 
+ <tocsect2 name="15.21 Filter primitive 'feOffset'" url="filters.html#feOffset">
+ </tocsect2>
+ 
+ <tocsect2 name="15.22 Filter primitive 'feSpecularLighting'" url="filters.html#feSpecularLighting">
+ </tocsect2>
+ 
+ <tocsect2 name="15.23 Filter primitive 'feTile'" url="filters.html#feTile">
+ </tocsect2>
+ 
+ <tocsect2 name="15.24 Filter primitive 'feTurbulence'" url="filters.html#feTurbulence">
+ </tocsect2>
+ 
+ <tocsect2 name="15.25 Filter Module" url="filters.html#filter-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="15.26 Basic Filter Module" url="filters.html#basic-filter-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="15.27 DOM interfaces" url="filters.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="16 Interactivity" url="interact.html">
+ 
+ 
+ <tocsect2 name="16.1 Introduction" url="interact.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="16.2 Complete list of supported events" url="interact.html#SVGEvents">
+ </tocsect2>
+ 
+ <tocsect2 name="16.3 User interface events" url="interact.html#UIEvents">
+ </tocsect2>
+ 
+ <tocsect2 name="16.4 Pointer events" url="interact.html#PointerEvents">
+ </tocsect2>
+ 
+ <tocsect2 name="16.5 Processing order for user interface events" url="interact.html#UIEventProcessing">
+ </tocsect2>
+ 
+ <tocsect2 name="16.6 The 'pointer-events' property" url="interact.html#PointerEventsProperty">
+ </tocsect2>
+ 
+ <tocsect2 name="16.7 Magnification and panning" url="interact.html#EnableZoomAndPanControls">
+ </tocsect2>
+ 
+ <tocsect2 name="16.8 Cursors" url="interact.html#Cursors">
+ 
+ 
+ <tocsect3 name="16.8.1 Introduction to cursors" url="interact.html#CursorIntro">
+ </tocsect3>
+ 
+ <tocsect3 name="16.8.2 The 'cursor' property" url="interact.html#CursorProperty">
+ </tocsect3>
+ 
+ <tocsect3 name="16.8.3 The 'cursor' element" url="interact.html#CursorElement">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="16.9 Document Events Attribute Module" url="interact.html#document-events-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="16.10 Graphical Events Attribute Module" url="interact.html#graphical-events-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="16.11 Animation Events Attribute Module" url="interact.html#animation-events-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="16.12 Cursor Module" url="interact.html#cursor-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="16.13 DOM interfaces" url="interact.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="17 Linking" url="linking.html">
+ 
+ 
+ <tocsect2 name="17.1 Links out of SVG content: the 'a' element" url="linking.html#Links">
+ </tocsect2>
+ 
+ <tocsect2 name="17.2 Linking into SVG content: URI fragments and SVG views" url="linking.html#LinksIntoSVG">
+ 
+ 
+ <tocsect3 name="17.2.1 Introduction: URI fragments and SVG views" url="linking.html#IntroFragmentsViews">
+ </tocsect3>
+ 
+ <tocsect3 name="17.2.2 SVG fragment identifiers" url="linking.html#SVGFragmentIdentifiers">
+ </tocsect3>
+ 
+ <tocsect3 name="17.2.3 Predefined views: the 'view' element" url="linking.html#ViewElement">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="17.3 Hyperlinking Module" url="linking.html#hyperlinking-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="17.4 Xlink Attribute Module" url="linking.html#xlink-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="17.5 ExternalResourcesRequired Attribute Module" url="linking.html#err-att-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="17.6 View Module" url="linking.html#view-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="17.7 DOM interfaces" url="linking.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="18 Scripting" url="script.html">
+ 
+ 
+ <tocsect2 name="18.1 Specifying the scripting language" url="script.html#ScriptingLanguage">
+ 
+ 
+ <tocsect3 name="18.1.1 Specifying the default scripting language" url="script.html#DefaultScriptingLanguage">
+ </tocsect3>
+ 
+ <tocsect3 name="18.1.2 Local declaration of a scripting language" url="script.html#SpecifiedScriptingLanguage">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="18.2 The 'script' element" url="script.html#ScriptElement">
+ </tocsect2>
+ 
+ <tocsect2 name="18.3 Event handling" url="script.html#EventHandling">
+ </tocsect2>
+ 
+ <tocsect2 name="18.4 Event attributes" url="script.html#EventAttributes">
+ </tocsect2>
+ 
+ <tocsect2 name="18.5 Scripting Module" url="script.html#scripting-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="18.6 DOM interfaces" url="script.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="19 Animation" url="animate.html">
+ 
+ 
+ <tocsect2 name="19.1 Introduction" url="animate.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="19.2 Animation elements" url="animate.html#Animation.class">
+ 
+ 
+ <tocsect3 name="19.2.1 Overview" url="animate.html#AnimateElementsIntro">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.2 Relationship to SMIL Animation" url="animate.html#RelationshipToSMILAnimation">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.3 Animation elements example" url="animate.html#Animation.classExample">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.4 Attributes to identify the target element for an animation" url="animate.html#TargetElement">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.5 Attributes to identify the target attribute or property for an animation" url="animate.html#TargetAttributes">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.6 Attributes to control the timing of the animation" url="animate.html#TimingAttributes">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.7 Attributes that define animation values over time" url="animate.html#ValueAttributes">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.8 Attributes that control whether animations are additive" url="animate.html#AdditionAttributes">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.9 Inheritance" url="animate.html#Inheritance">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.10 The 'animate' element" url="animate.html#AnimateElement">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.11 The 'set' element" url="animate.html#SetElement">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.12 The 'animateMotion' element" url="animate.html#AnimateMotionElement">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.13 The 'animateColor' element" url="animate.html#AnimateColorElement">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.14 The 'animateTransform' element" url="animate.html#AnimateTransformElement">
+ </tocsect3>
+ 
+ <tocsect3 name="19.2.15 Elements, attributes and properties that can be animated" url="animate.html#AnimationAttributesAndProperties">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="19.3 Animation using the SVG DOM" url="animate.html#DOMAnimationExample">
+ </tocsect2>
+ 
+ <tocsect2 name="19.4 Animation Module" url="animate.html#animation-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="19.5 DOM interfaces" url="animate.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="20 Fonts" url="fonts.html">
+ 
+ 
+ <tocsect2 name="20.1 Introduction" url="fonts.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="20.2 Overview of SVG fonts" url="fonts.html#SVGFontsOverview">
+ </tocsect2>
+ 
+ <tocsect2 name="20.3 The 'font' element" url="fonts.html#FontElement">
+ </tocsect2>
+ 
+ <tocsect2 name="20.4 The 'glyph' element" url="fonts.html#GlyphElement">
+ </tocsect2>
+ 
+ <tocsect2 name="20.5 The 'missing-glyph' element" url="fonts.html#MissingGlyphElement">
+ </tocsect2>
+ 
+ <tocsect2 name="20.6 Glyph selection rules" url="fonts.html#GlyphSelectionRules">
+ </tocsect2>
+ 
+ <tocsect2 name="20.7 The 'hkern' and 'vkern' elements" url="fonts.html#KernElements">
+ </tocsect2>
+ 
+ <tocsect2 name="20.8 Describing a font" url="fonts.html#FontDescriptions">
+ 
+ 
+ <tocsect3 name="20.8.1 Overview of font descriptions" url="fonts.html#FontDescriptionsOverview">
+ </tocsect3>
+ 
+ <tocsect3 name="20.8.2 Alternative ways for providing a font description" url="fonts.html#FontDescriptionsAlternatives">
+ </tocsect3>
+ 
+ <tocsect3 name="20.8.3 The 'font-face' element" url="fonts.html#FontFaceElement">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="20.9 Full Font Module" url="fonts.html#font-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="20.10 Basic Font Module" url="fonts.html#basic-font-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="20.11 DOM interfaces" url="fonts.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="21 Metadata" url="metadata.html">
+ 
+ 
+ <tocsect2 name="21.1 Introduction" url="metadata.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="21.2 The 'metadata' element" url="metadata.html#MetadataElement">
+ </tocsect2>
+ 
+ <tocsect2 name="21.3 An example" url="metadata.html#Example">
+ </tocsect2>
+ 
+ <tocsect2 name="21.4 DOM interfaces" url="metadata.html#DOMInterfaces">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="22 Backwards Compatibility" url="backward.html">
+</tocsect1>
+ 
+<tocsect1 name="23 Extensibility" url="extend.html">
+ 
+ 
+ <tocsect2 name="23.1 Foreign namespaces and private data" url="extend.html#PrivateData">
+ </tocsect2>
+ 
+ <tocsect2 name="23.2 Embedding foreign object types" url="extend.html#EmbeddingForeignObjects">
+ </tocsect2>
+ 
+ <tocsect2 name="23.3 The 'foreignObject' element" url="extend.html#ForeignObjectElement">
+ </tocsect2>
+ 
+ <tocsect2 name="23.4 An example" url="extend.html#AnExample">
+ </tocsect2>
+ 
+ <tocsect2 name="23.5 Adding private elements and attributes to the DTD" url="extend.html#PrivateElementsAndAttribute">
+ </tocsect2>
+ 
+ <tocsect2 name="23.6 Extensibility Module" url="extend.html#extensibility-mod">
+ </tocsect2>
+ 
+ <tocsect2 name="23.7 DOM interfaces" url="extend.html#DOMInterfaces">
+ 
+ </tocsect2>
+
+</tocsect1>
+ 
+<tocsect1 name="Appendix A: DTD" url="svgdtd.html">
+ <tocsect2 name="A.1 SVG 1.1 DTD Module Implementations" url="svgdtd.html#DTD.1">
+
+ <tocsect3 name="A.1.1 Modular Framework Module" url="svgdtd.html#DTD.1.1">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.2 Datatypes Module" url="svgdtd.html#DTD.1.2">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.3 Qualified Name Module" url="svgdtd.html#DTD.1.3">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.4 Core Attribute Module" url="svgdtd.html#DTD.1.4">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.5 Container Attribute Module" url="svgdtd.html#DTD.1.5">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.6 Viewport Attribute Module" url="svgdtd.html#DTD.1.6">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.7 Paint Attribute Module" url="svgdtd.html#DTD.1.7">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.8 Basic Paint Attribute Module" url="svgdtd.html#DTD.1.8">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.9 Paint Opacity Attribute Module" url="svgdtd.html#DTD.1.9">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.10 Graphics Attribute Module" url="svgdtd.html#DTD.1.10">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.11 Basic Graphics Attribute Module" url="svgdtd.html#DTD.1.11">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.12 Document Events Attribute Module" url="svgdtd.html#DTD.1.12">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.13 Graphical Element Events Attribute Module" url="svgdtd.html#DTD.1.13">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.14 Animation Events Attribute Module" url="svgdtd.html#DTD.1.14">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.15 XLink Attribute Module" url="svgdtd.html#DTD.1.15">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.16 External Resources Attribute Module" url="svgdtd.html#DTD.1.16">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.17 Structure Module" url="svgdtd.html#DTD.1.17">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.18 Basic Structure Module" url="svgdtd.html#DTD.1.18">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.19 Conditional Processing Module" url="svgdtd.html#DTD.1.19">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.20 Image Module" url="svgdtd.html#DTD.1.20">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.21 Style Module" url="svgdtd.html#DTD.1.21">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.22 Shape Module" url="svgdtd.html#DTD.1.22">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.23 Text Module" url="svgdtd.html#DTD.1.23">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.24 Basic Text Module" url="svgdtd.html#DTD.1.24">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.25 Marker Module" url="svgdtd.html#DTD.1.25">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.26 Color Profile Module" url="svgdtd.html#DTD.1.26">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.27 Gradient Module" url="svgdtd.html#DTD.1.27">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.28 Pattern Module" url="svgdtd.html#DTD.1.28">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.29 Clip Module" url="svgdtd.html#DTD.1.29">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.30 Basic Clip Module" url="svgdtd.html#DTD.1.30">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.31 Mask Module" url="svgdtd.html#DTD.1.31">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.32 Filter Module" url="svgdtd.html#DTD.1.32">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.33 Basic Filter Module" url="svgdtd.html#DTD.1.33">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.34 Cursor Module" url="svgdtd.html#DTD.1.34">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.35 Hyperlinking Module" url="svgdtd.html#DTD.1.35">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.36 View Module" url="svgdtd.html#DTD.1.36">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.37 Scripting Module" url="svgdtd.html#DTD.1.37">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.38 Animation Module" url="svgdtd.html#DTD.1.38">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.39 Font Module" url="svgdtd.html#DTD.1.39">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.40 Basic Font Module" url="svgdtd.html#DTD.1.40">
+ </tocsect3>
+ 
+ <tocsect3 name="A.1.41 Extensibility Module" url="svgdtd.html#DTD.1.41">
+ </tocsect3>
+ </tocsect2>
+ 
+ <tocsect2 name="A.2 SVG 1.1 Document Type Definition" url="svgdtd.html#DTD.2">
+ 
+ 
+ <tocsect3 name="A.2.1 SVG 1.1 DTD Driver" url="svgdtd.html#DTD.2.1">
+ </tocsect3>
+ 
+ <tocsect3 name="A.2.2 SVG 1.1 Document Model" url="svgdtd.html#DTD.2.2">
+ </tocsect3>
+ 
+ <tocsect3 name="A.2.3 SVG 1.1 Attribute Collection" url="svgdtd.html#DTD.2.3">
+ </tocsect3>
+ </tocsect2>
+</tocsect1>
+ 
+<tocsect1 name="Appendix B: SVG Document Object Model (DOM)" url="svgdom.html">
+ 
+ 
+ <tocsect2 name="B.1 SVG DOM Overview" url="svgdom.html#SVGDOMOverview">
+ </tocsect2>
+ 
+ <tocsect2 name="B.2 Naming Conventions" url="svgdom.html#SVGDOMNamingConventions">
+ </tocsect2>
+ 
+ <tocsect2 name="B.3 Interface SVGException" url="svgdom.html#InterfaceSVGException">
+ </tocsect2>
+ 
+ <tocsect2 name="B.4 Feature strings for the hasFeature method call" url="svgdom.html#FeatureStrings">
+ </tocsect2>
+ 
+ <tocsect2 name="B.5 Relationship with DOM2 events" url="svgdom.html#RelationShipWithDOM2Events">
+ </tocsect2>
+ 
+ <tocsect2 name="B.6 Relationship with DOM2 CSS object model (CSS OM)" url="svgdom.html#RelationShipWithCSSOM">
+ 
+ 
+ <tocsect3 name="B.6.1 Introduction" url="svgdom.html#CSSDOMIntro">
+ </tocsect3>
+ 
+ <tocsect3 name="B.6.2 User agents that do not support styling with CSS" url="svgdom.html#CSSDOMFeaturesNoCSSSupport">
+ </tocsect3>
+ 
+ <tocsect3 name="B.6.3 User agents that support styling with CSS" url="svgdom.html#CSSDOMFeaturesWithCSSSupport">
+ </tocsect3>
+ 
+ <tocsect3 name="B.6.4 Extended interfaces" url="svgdom.html#ExtendedInterfaces">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="B.7 Invalid values" url="svgdom.html#InvalidValues">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix C: IDL Definitions" url="idl.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix D: Java Language Binding" url="java.html">
+ 
+ 
+ <tocsect2 name="D.1 Using SVG with Java" url="java.html#UsingSVGWithJava">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix E: ECMAScript Language Binding" url="escript.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix F: Implementation Requirements" url="implnote.html">
+ 
+ 
+ <tocsect2 name="F.1 Introduction" url="implnote.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="F.2 Error processing" url="implnote.html#ErrorProcessing">
+ </tocsect2>
+ 
+ <tocsect2 name="F.3 Version control" url="implnote.html#VersionControl">
+ </tocsect2>
+ 
+ <tocsect2 name="F.4 Clamping values which are restricted to a particular range" url="implnote.html#RangeClamping">
+ </tocsect2>
+ 
+ <tocsect2 name="F.5 'path' element implementation notes" url="implnote.html#PathElementImplementationNotes">
+ </tocsect2>
+ 
+ <tocsect2 name="F.6 Elliptical arc implementation notes" url="implnote.html#ArcImplementationNotes">
+ 
+ 
+ <tocsect3 name="F.6.1 Elliptical arc syntax" url="implnote.html#ArcSyntax">
+ </tocsect3>
+ 
+ <tocsect3 name="F.6.2 Out-of-range parameters" url="implnote.html#ArcOutOfRangeParameters">
+ </tocsect3>
+ 
+ <tocsect3 name="F.6.3 Parameterization alternatives" url="implnote.html#ArcParameterizationAlternatives">
+ </tocsect3>
+ 
+ <tocsect3 name="F.6.4 Conversion from center to endpoint parameterization" url="implnote.html#ArcConversionCenterToEndpoint">
+ </tocsect3>
+ 
+ <tocsect3 name="F.6.5 Conversion from endpoint to center parameterization" url="implnote.html#ArcConversionEndpointToCenter">
+ </tocsect3>
+ 
+ <tocsect3 name="F.6.6 Correction of out-of-range radii" url="implnote.html#ArcCorrectionOutOfRangeRadii">
+ </tocsect3>
+ 
+ </tocsect2>
+ 
+ <tocsect2 name="F.7 Text selection implementation notes" url="implnote.html#TextSelectionImplementationNotes">
+ </tocsect2>
+ 
+ <tocsect2 name="F.8 Printing implementation notes" url="implnote.html#PrintingImplementationNotes">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix G: Conformance Criteria" url="conform.html">
+ 
+ 
+ <tocsect2 name="G.1 Introduction" url="conform.html#Introduction">
+ </tocsect2>
+ 
+ <tocsect2 name="G.2 Conforming SVG Document Fragments" url="conform.html#ConformingSVGDocuments">
+ </tocsect2>
+ 
+ <tocsect2 name="G.3 Conforming SVG Stand-Alone Files" url="conform.html#ConformingSVGStandAloneFiles">
+ </tocsect2>
+ 
+ <tocsect2 name="G.4 Conforming SVG Included Document Fragments" url="conform.html#ConformingSVGIncludedDocuments">
+ </tocsect2>
+ 
+ <tocsect2 name="G.5 Conforming SVG Generators" url="conform.html#ConformingSVGGenerators">
+ </tocsect2>
+ 
+ <tocsect2 name="G.6 Conforming SVG Interpreters" url="conform.html#ConformingSVGInterpreters">
+ </tocsect2>
+ 
+ <tocsect2 name="G.7 Conforming SVG Viewers" url="conform.html#ConformingSVGViewers">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix H: Accessibility Support" url="access.html">
+ 
+ 
+ <tocsect2 name="H.1 WAI Accessibility Guidelines" url="access.html#AccessibilityAndSVG">
+ </tocsect2>
+ 
+ <tocsect2 name="H.2 SVG Content Accessibility Guidelines" url="access.html#SVGAccessibilityGuidelines">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix I: Internationalization Support" url="i18n.html">
+ 
+ 
+ <tocsect2 name="I.1 Introduction" url="i18n.html#Intro">
+ </tocsect2>
+ 
+ <tocsect2 name="I.2 Internationalization and SVG" url="i18n.html#InternationalizationAndSVG">
+ </tocsect2>
+ 
+ <tocsect2 name="I.3 SVG Internationalization Guidelines" url="i18n.html#SVGInternationalizationGuidelines">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix J: Minimizing SVG File Sizes" url="minimize.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix K: References" url="refs.html">
+ 
+ 
+ <tocsect2 name="K.1 Normative references" url="refs.html#q1">
+ </tocsect2>
+ 
+ <tocsect2 name="K.2 Informative references" url="refs.html#q2">
+ </tocsect2>
+ 
+</tocsect1>
+ 
+<tocsect1 name="Appendix L: Element Index" url="eltindex.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix M: Attribute Index" url="attindex.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix N: Property Index" url="propidx.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix O: Feature Strings" url="propidx.html">
+</tocsect1>
+ 
+<tocsect1 name="Appendix P: Index" url="indexlist.html">
+</tocsect1>
+
+<tocsect1 name="Expanded Table of Contents" url="expanded-toc.html">
+</tocsect1>
+<tocsect1 name="Copyright notice" url="copyright-notice.html">
+ <tocsect2 name="W3C Document Copyright Notice and License" url="copyright-notice.html#Copyright-notice-document">
+ </tocsect2>
+ <tocsect2 name="W3C Software Copyright Notice and License" url="copyright-notice.html#Copyright-notice-software">
+ </tocsect2>
+</tocsect1>
+
+</kdeveloptoc>
+ 

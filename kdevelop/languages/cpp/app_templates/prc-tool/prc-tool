@@ -1,0 +1,11 @@
+# KDE Config File
+[General]
+Name=Hello world program
+Name[fr]=Un simple programme de test « Hello world
+Icon=chellogba.png
+Category=C/PalmOS
+Comment=Generates a template for palm application
+Comment[fr]=Génère un modèle d'application pour l'environnement PALM.
+#tShowFileAfterGeneration=README.devel
+FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=APPNAME.c

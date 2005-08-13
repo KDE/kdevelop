@@ -1,0 +1,60 @@
+# KDE Config File
+[General]
+Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
+Name[et]=Lihtne "Tere, maailm" programm
+Name[fr]=Simple programme « Hello world »
+Name[hu]=Egyszerű Hello world program
+Name[sv]=Enkelt Hello world-program
+Name[tr]=Basit Merhaba dünya programı
+Icon=adahello.png
+Category=Ada
+Comment=Generates a simple Hello world program in Ada
+Comment[da]=Genererer et simpelt Goddag verden program i Ada
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine ADA-s
+Comment[fr]=Génère un simple programme « Hello world » en Ada
+Comment[hu]=Létrehoz egy egyszerű Hello world programot ADA nyelven
+Comment[sv]=Skapar ett enkelt Hello world-program i Ada
+Comment[tr]=Ada dilinde basit bir Merhaba Dünya programı üretir.
+FileTemplates=adb,AdaStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.adb
+Archive=adahello.tar.gz
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/ada-Makefile
+Dest=%{dest}/Makefile
+
+[FILE3]
+Type=install
+Source=%{src}/app.kdevelop.filelist
+Dest=%{dest}/%{APPNAMELC}.kdevelop.filelist
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE4]
+Type=install
+Source=%{src}/main.adb
+Dest=%{dest}/src/%{APPNAMELC}.adb
+
+[MSG]
+Type=message
+Comment=A simple "Hello world" program in ADA was created in %{dest}
+Comment[da]=Et simpelt "Goddag verden" program i ADA blev oprettet i %{dest}
+Comment[et]=Lihtne "Tere, maailm" programm ADA-s loodi asukohta %{dest}
+Comment[fr]=Un script ADA simple a été créé dans %{dest}
+Comment[hu]=Létrejött egy egyszerű Hello world program ADA nyelven itt: %{dest}
+Comment[sv]=Ett enkelt "Hello world"-program in Ada skapades i %{dest}
+Comment[tr]=ADA'da basit bir "Merhaba Dünya" programı %{dest} içinde yaratılmıştır.

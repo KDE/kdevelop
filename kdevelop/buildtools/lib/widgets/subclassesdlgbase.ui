@@ -1,0 +1,224 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>SubclassesDlgBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>SubclassesDlgBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>514</width>
+            <height>278</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Related Subclasses</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>add_button</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Add Relation</string>
+            </property>
+            <property name="autoDefault">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="0">
+            <property name="name">
+                <cstring>remove_button</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Remove Relation</string>
+            </property>
+            <property name="autoDefault">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QListBox" row="1" column="1" rowspan="3" colspan="1">
+            <property name="name">
+                <cstring>subclasses_box</cstring>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="0" column="1">
+            <property name="name">
+                <cstring>subclass_url</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+        </widget>
+        <spacer row="3" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>90</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Related subclass &amp;location:</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>subclass_url</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>310</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>SubclassesDlgBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>subclass_url</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>SubclassesDlgBase</receiver>
+        <slot>changeCurrentURL(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>remove_button</sender>
+        <signal>clicked()</signal>
+        <receiver>SubclassesDlgBase</receiver>
+        <slot>removeRelation()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>SubclassesDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>add_button</sender>
+        <signal>clicked()</signal>
+        <receiver>SubclassesDlgBase</receiver>
+        <slot>newRelation()</slot>
+    </connection>
+    <connection>
+        <sender>subclasses_box</sender>
+        <signal>clicked(QListBoxItem*)</signal>
+        <receiver>SubclassesDlgBase</receiver>
+        <slot>currentRelationChanged(QListBoxItem*)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>subclasses_box</tabstop>
+    <tabstop>add_button</tabstop>
+    <tabstop>subclass_url</tabstop>
+    <tabstop>remove_button</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<slots>
+    <slot access="protected">changeCurrentURL(const QString &amp;str)</slot>
+    <slot access="protected">removeRelation()</slot>
+    <slot access="protected">newRelation()</slot>
+    <slot access="protected">currentRelationChanged(QListBoxItem *item)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

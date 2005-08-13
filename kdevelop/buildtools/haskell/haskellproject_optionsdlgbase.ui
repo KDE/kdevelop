@@ -1,0 +1,471 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>HaskellProjectOptionsDlgBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>HaskellProjectOptionsDlgBase</cstring>
+    </property>
+    <property name="enabled">
+        <bool>true</bool>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>793</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Haskell Compiler/Interpreter</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>configuration_layout</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>config_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Configuration:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>config_combo</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer17_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>addconfig_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>removeconfig_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Remove</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer18_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QPushButton" row="6" column="4">
+            <property name="name">
+                <cstring>options_button</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>30</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>...</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="6" column="0">
+            <property name="name">
+                <cstring>options_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>compiler_box</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>compiler_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Haskell &amp;compiler/interpreter:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>compiler_box</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>exec_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="6" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>options_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>compiler_box</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>exec_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Co&amp;mmand:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>compiler_box</cstring>
+            </property>
+        </widget>
+        <widget class="Line" row="1" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>configuration_line</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <spacer row="3" column="1">
+            <property name="name">
+                <cstring>spacer11</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="5" column="3">
+            <property name="name">
+                <cstring>spacer12</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="8" column="2">
+            <property name="name">
+                <cstring>spacer13</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>30</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="7" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>spacer7</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>400</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="7" column="3" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>defaultopts_button</cstring>
+            </property>
+            <property name="text">
+                <string>Load Default Compiler Options</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="9" column="1" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>mainSourceUrl</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>26</height>
+                </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+        </widget>
+        <widget class="QLabel" row="9" column="0">
+            <property name="name">
+                <cstring>mainSourceLabel</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Main &amp;source file:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>compiler_box</cstring>
+            </property>
+        </widget>
+        <spacer row="12" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>compiler_box</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>compiler_box_activated(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>removeconfig_button</sender>
+        <signal>clicked()</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>configRemoved()</slot>
+    </connection>
+    <connection>
+        <sender>config_combo</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>configComboTextChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>config_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>configChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>addconfig_button</sender>
+        <signal>clicked()</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>configAdded()</slot>
+    </connection>
+    <connection>
+        <sender>options_button</sender>
+        <signal>clicked()</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>optionsButtonClicked()</slot>
+    </connection>
+    <connection>
+        <sender>exec_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>options_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>mainSourceUrl</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>mainSourceUrl</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>compiler_box</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>compiler_box</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>defaultopts_button</sender>
+        <signal>clicked()</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDefaultOptions()</slot>
+    </connection>
+    <connection>
+        <sender>defaultopts_button</sender>
+        <signal>clicked()</signal>
+        <receiver>HaskellProjectOptionsDlgBase</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>compiler_box</tabstop>
+    <tabstop>exec_edit</tabstop>
+    <tabstop>options_edit</tabstop>
+    <tabstop>options_button</tabstop>
+    <tabstop>defaultopts_button</tabstop>
+    <tabstop>mainSourceUrl</tabstop>
+    <tabstop>config_combo</tabstop>
+    <tabstop>addconfig_button</tabstop>
+    <tabstop>removeconfig_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<slots>
+    <slot access="protected">compiler_box_activated(const QString&amp;)</slot>
+    <slot access="protected">addconfig_button_clicked()</slot>
+    <slot access="protected">configRemoved()</slot>
+    <slot access="protected">configComboTextChanged(const QString&amp;)</slot>
+    <slot access="protected">configChanged(const QString&amp;)</slot>
+    <slot access="protected">optionsButtonClicked()</slot>
+    <slot access="protected">configAdded()</slot>
+    <slot access="protected">setDirty()</slot>
+    <slot access="protected">setDefaultOptions()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

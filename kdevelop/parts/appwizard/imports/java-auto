@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Comment=Java Application (Automake based)
+Comment[fr]=Une application JAVA (Makefiles bas� sur Automake)
+
+#[Infrastructure]
+#Comment=Attempt to generate Autotools project infrastructure
+#Command=autoscan && cp configure.scan configure.in

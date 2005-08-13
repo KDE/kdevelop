@@ -1,0 +1,10 @@
+/** \class AStylePart
+A plugin for formatting of sourcecode according to a specified set of rules.
+
+\authors <a href="mailto: <mhk AT caldera.de>">Matthias Hölzer-Klüpfel</a>
+
+\feature formats source code according to a specified set of rules
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=astyle&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">astyle component at Bugzilla database</a>
+
+*/

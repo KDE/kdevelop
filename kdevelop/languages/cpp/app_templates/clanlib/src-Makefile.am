@@ -1,0 +1,4 @@
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = main.cpp
+%{APPNAMELC}_LDADD = -lclanCore -lclanApp -lclanDisplay -lclanGL -lclanSound -lclanSignals
+

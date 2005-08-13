@@ -1,0 +1,190 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>subversionOptionsWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>subversionOptionsWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>515</width>
+            <height>455</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Subversion Options</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>commit_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive commits</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>update_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive updates</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>switch_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive switch</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>diff_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive diff</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>merge_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive merge</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>add_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive add</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>remove_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive remove</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>revert_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive revert</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>resolve_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive resolve</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>propset_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive propset</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>propget_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive propget</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>proplist_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive proplist</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>relocate_recurse</cstring>
+            </property>
+            <property name="text">
+                <string>Recursive relocate</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>remove_force</cstring>
+            </property>
+            <property name="text">
+                <string>Force remove (delete locally modified files/non versioned files)</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>merge_force</cstring>
+            </property>
+            <property name="text">
+                <string>Force merge (overwrite locally modified/unversioned files)</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

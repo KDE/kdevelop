@@ -1,0 +1,39 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Qt Designer-3 and KDevelop-3</title>
+<base href="http://women.kde.org/articles/tutorials/kdevelop3"/>
+<tocsect1 name="Index" url="index.html">
+</tocsect1>
+<tocsect1 name="Introduction" url="introduction.html">
+</tocsect1>
+<tocsect1 name="Requirements" url="requirements.html">
+	<tocsect2 name="How to get Qt Designer" url="requirements.html"/>
+	<tocsect2 name="How to get KDevelop 3" url="get-kevelop.html"/>
+	<tocsect2 name="Lexicon" url="lexicon.html"/>
+</tocsect1>
+<tocsect1 name="Creating the application" url="creating.html">
+	<tocsect2 name="Starting the project" url="creating.htm"/>
+	<tocsect2 name="Designing the program" url="design-program.html"/>
+	<tocsect2 name="Adding widgets" url="adding-widgets.html"/>
+	<tocsect2 name="Getting spaced out" url="spaced-out.html"/>
+	<tocsect2 name="Signals and slots" url="signals-and-slots.html"/>
+	<tocsect2 name="Generating the source" url="source.html"/>
+	<tocsect2 name="Implementing the slot" url="slots.html"/>
+</tocsect1>
+<tocsect1 name="In short" url="in-short.html">
+</tocsect1>
+<tocsect1 name="Make the translations for a simple KDE project" url="translations.html">
+</tocsect1>
+<tocsect1 name="A few general tips" url="a_few_tips.html">
+	<tocsect2 name="General hints" url="a_few_tips.html#id2771559"/>
+	<tocsect2 name="Importing your project in KDE CVS" url="importing.html"/>
+	<tocsect2 name="How do I release my application as a tarball?" url="release-tarball.html"/>
+	<tocsect2 name="Useful links" url="links.html"/>
+</tocsect1>
+<tocsect1 name="Generating the source (alternate)" url="without_subclass.html">
+	<tocsect2 name="Without using the KDevelop subclassing capability" url="without_subclass.html"/>
+	<tocsect2 name="Implementing the slot" url="slots2.html"/>
+</tocsect1>
+<tocsect1 name="Credits and License" url="credits.html">
+</tocsect1>
+</kdeveloptoc>

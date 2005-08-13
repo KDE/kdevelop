@@ -1,0 +1,130 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>EditChooser</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>EditChooser</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>514</width>
+            <height>383</height>
+        </rect>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>GroupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Embedded Editor</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>EditorPart</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;i&gt;Note:&lt;/i&gt; Changing the preferred editor will not affect
+already open files.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>external_changes_group</cstring>
+            </property>
+            <property name="title">
+                <string>On External Changes</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;&lt;b&gt;Action to take when an open file is changed on disk&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Do nothing&lt;/b&gt; - The file will be marked as externally changed and the user will be asked to verify any attempt to overwrite it &lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Alert the user&lt;/b&gt; - A dialog will alert the user that a file has changed and offer the user to reload the file&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Automatically reload&lt;/b&gt; - Any files that are not modified in memory are reloaded, and an alert is shown for any conflicts&lt;/p&gt;</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>nothing</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Do nothing</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>alert</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>Alert the user</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>reload</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Automatically reload the file if safe, alert the user if not</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>31</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>EditorPart</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>EditChooser</receiver>
+        <slot>slotEditPartChanged(const QString&amp;)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<slots>
+    <slot>slotEditPartChanged(const QString &amp;)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

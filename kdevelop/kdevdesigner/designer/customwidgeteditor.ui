@@ -1,0 +1,1378 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>CustomWidgetEditorBase</class>
+<comment>*********************************************************************
+** Copyright (C) 2000 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CustomWidgetEditorBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>712</width>
+            <height>386</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Custom Widgets</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>&lt;b&gt;Edit Custom Widgets&lt;/b&gt;&lt;p&gt;Add or delete custom widgets from &lt;i&gt;Qt Designer&lt;/i&gt;'s database, and edit the properties of existing widgets.&lt;/p&gt;</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QListBox" row="0" column="0" rowspan="5" colspan="1">
+            <property name="name">
+                <cstring>boxWidgets</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The list of all custom widgets known to Qt Designer.</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="0" column="1">
+            <property name="name">
+                <cstring>buttonNewWidget</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;New Widget</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Add new custom widget.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Create an empty custom widget and add it to the list.&lt;/b&gt;&lt;p&gt;New custom widgets have a default name and header file, which must both be changed to appropriate values.&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonDeleteWidget</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Delete Widget</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Delete custom widget</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Delete the selected custom widget.&lt;/b&gt;&lt;p&gt;You can only delete widgets that are not used in any open form.&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>helpButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Close</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Closes the Dialog.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>Vertical Spacing1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="3" column="1">
+            <property name="name">
+                <cstring>buttonLoad</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Load Descriptions...</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Loads widget description file</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Load Descriptions&lt;/b&gt;&lt;p&gt;Loads a file which contains descriptions of custom widgets, so that these custom widgets can be used in the Qt Designer.&lt;/p&gt;
+&lt;p&gt;Since it is a lot of work to type in all the information for custom widgets, you should consider using the createcw tool which is in $QTDIR/tools/designer/tools/createcw. Using createcw you can create custom widget description files for your custom widgets without the need to type in all the information manually. For more information about the README file in the createcw directory&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="1">
+            <property name="name">
+                <cstring>buttonSave</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Save Descriptions...</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Saves widget description file</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Save Descriptions&lt;/b&gt;&lt;p&gt;Saves all the descriptions of the shown custom widgets to a file which can then be used to import the custom widgets elsewhere.</string>
+            </property>
+        </widget>
+        <widget class="QTabWidget" row="0" column="2" rowspan="5" colspan="1">
+            <property name="name">
+                <cstring>TabWidget1</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Change the properties of the selected custom widget.</string>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget2</cstring>
+                </property>
+                <attribute name="title">
+                    <string>De&amp;finition</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QLayoutWidget" row="2" column="1" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>Layout4</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>previewPixmap</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonChoosePixmap</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>...</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Select a Pixmap</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Select a pixmap file.&lt;/b&gt;&lt;p&gt;The pixmap will be used to represent the widget in forms.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="1" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>Layout5</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>editHeader</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Enter filename</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Change the header file's name for the selected custom widget.&lt;/b&gt;&lt;p&gt;The header file will be included by forms using the widget.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonChooseHeader</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>...</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Choose headerfile</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Look for the header file using a file dialog.</string>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Global</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Local</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>localGlobalCombo</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Select access</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Change how the include file will be included.&lt;/b&gt;&lt;p&gt;Global include files will be included using &amp;lt;&amp;gt;-brackets, while local files will included using quotation marks.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>editClass</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Change classname</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Enter the classname for the selected custom widget.&lt;/b&gt;&lt;p&gt;A class of that name must be defined in the header file.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>Label11</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Heade&amp;rfile:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>editHeader</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>Label10</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Cl&amp;ass:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>editClass</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>Label2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Pixmap:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="0">
+                        <property name="name">
+                            <cstring>Label7</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Si&amp;ze hint:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>spinWidth</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="4" column="0">
+                        <property name="name">
+                            <cstring>TextLabel1_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Size p&amp;olicy:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>sizeHor</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="4" column="2">
+                        <item>
+                            <property name="text">
+                                <string>Fixed</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Minimum</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Maximum</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Preferred</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>MinimumExpanding</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Expanding</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>sizeVer</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Vertical Sizepolicy</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Choose the Vertical size policy</string>
+                        </property>
+                    </widget>
+                    <widget class="QSpinBox" row="3" column="1">
+                        <property name="name">
+                            <cstring>spinWidth</cstring>
+                        </property>
+                        <property name="maxValue">
+                            <number>32767</number>
+                        </property>
+                        <property name="minValue">
+                            <number>-1</number>
+                        </property>
+                        <property name="value">
+                            <number>-1</number>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Size hint width</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Set the size hint for the selected widget.&lt;/b&gt;&lt;p&gt;The size hint provides the recommended size for the widget. Enter a sizehint of -1/-1 if no size is recommended.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QSpinBox" row="3" column="2">
+                        <property name="name">
+                            <cstring>spinHeight</cstring>
+                        </property>
+                        <property name="maxValue">
+                            <number>32767</number>
+                        </property>
+                        <property name="minValue">
+                            <number>-1</number>
+                        </property>
+                        <property name="value">
+                            <number>-1</number>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Size hint height</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Set the size hint for the selected widget.&lt;/b&gt;&lt;p&gt;The size hint provides the recommended size for the widget. Enter a sizehint of -1/-1 if no size is recommended.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="4" column="1">
+                        <item>
+                            <property name="text">
+                                <string>Fixed</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Minimum</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Maximum</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Preferred</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>MinimumExpanding</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Expanding</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>sizeHor</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Horizontal Sizepolicy</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Choose the horizontal size policy for the widget</string>
+                        </property>
+                    </widget>
+                    <spacer row="6" column="2">
+                        <property name="name">
+                            <cstring>Spacer1</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QCheckBox" row="5" column="1">
+                        <property name="name">
+                            <cstring>checkContainer</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Con&amp;tainer widget</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Container Widget</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;p&gt;&lt;b&gt;Container Widget&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;If this custom widget is able to contain other widgets (children), check this checkbox.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget3</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Si&amp;gnals</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QListBox">
+                        <property name="name">
+                            <cstring>listSignals</cstring>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The list of all the signals that the selected widget can emit.</string>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>Layout40</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer1_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonAddSignal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>N&amp;ew Signal</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Add new signal</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Add a new signal for the current custom widget.&lt;/b&gt;&lt;p&gt;An argument list should be provided in the signal's name, and the name must be unique.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonRemoveSignal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Dele&amp;te Signal</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Delete signal</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Delete the signal.&lt;/b&gt;&lt;p&gt;All connections using this signal will also be deleted.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>Layout38</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>S&amp;ignal:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>editSignal</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>editSignal</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Change signal name</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Change the name of the selected slot.&lt;/b&gt;&lt;p&gt;An argument list should be provided in the signal's name, and the name must be unique.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget4</cstring>
+                </property>
+                <attribute name="title">
+                    <string>S&amp;lots</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QListView" row="0" column="0" rowspan="1" colspan="4">
+                        <column>
+                            <property name="text">
+                                <string>Slot</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizeable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Access</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizeable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>listSlots</cstring>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>true</bool>
+                        </property>
+                        <property name="showSortIndicator">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>The list of all the custom widget's slots.</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>TextLabel2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Sl&amp;ot:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>editSlot</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>editSlot</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Change slot name</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Change the name of the selected slot.&lt;/b&gt;&lt;p&gt;An argument list should be provided in the signal's name, and the name must be unique.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="2">
+                        <property name="name">
+                            <cstring>TextLabel3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Access:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>comboAccess</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="2" column="3">
+                        <item>
+                            <property name="text">
+                                <string>public</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>protected</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>comboAccess</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Change slot access</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Change the slot's access policy.&lt;/b&gt;&lt;p&gt;You can only connect to the widget's public slots.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="4">
+                        <property name="name">
+                            <cstring>Layout7</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonAddSlot</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>N&amp;ew Slot</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Add new slot</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Add a new slot to the current custom widget.&lt;/b&gt;&lt;p&gt;An argument list should be provided in the signal's name, and the name must be unique.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonRemoveSlot</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Dele&amp;te Slot</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Delete slot</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Delete the slot.&lt;/b&gt;&lt;p&gt;All connections using this slot will also be deleted.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget5</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Properties</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="4">
+                        <property name="name">
+                            <cstring>Layout7_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonAddProperty</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>N&amp;ew Property</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Add new property</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;b&gt;Add a new property to the current custom widget.&lt;/b&gt;&lt;p&gt;The properties must be implemented in the class using Qt's property system.&lt;/p&gt;</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>buttonRemoveProperty</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Dele&amp;te Property</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Delete property</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Deletes the selected property.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QComboBox" row="2" column="3">
+                        <item>
+                            <property name="text">
+                                <string>String</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>CString</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>StringList</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Bool</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Int</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>UInt</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Font</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Color</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Rect</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Point</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Size</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Pixmap</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Palette</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Cursor</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>SizePolicy</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>comboType</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Select property type</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Select the type of the property.&lt;/b&gt;&lt;p&gt;The property must be implemented in the class using Qt's property system.&lt;/p&gt;&lt;p&gt;You can use integer types to support enumeration properties in the property editor.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="0" column="0" rowspan="1" colspan="4">
+                        <column>
+                            <property name="text">
+                                <string>Property</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizeable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Type</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizeable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>listProperties</cstring>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>true</bool>
+                        </property>
+                        <property name="showSortIndicator">
+                            <bool>true</bool>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;The list of the current widget's properties.&lt;/b&gt;&lt;p&gt;The properties of the custom widget can be changed in the property editor.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>editProperty</cstring>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Change property name</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;b&gt;Enter a name for the property.&lt;/b&gt;&lt;p&gt;The properties must be implemented in the class using Qt's property system.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>TextLabel2_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>P&amp;roperty name:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>editProperty</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="2">
+                        <property name="name">
+                            <cstring>TextLabel3_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>T&amp;ype:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>comboType</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>boxWidgets</sender>
+        <signal>selectionChanged(QListBoxItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentWidgetChanged(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>boxWidgets</sender>
+        <signal>currentChanged(QListBoxItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentWidgetChanged(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>buttonNewWidget</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>addWidgetClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buttonDeleteWidget</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>deleteWidgetClicked()</slot>
+    </connection>
+    <connection>
+        <sender>editClass</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>classNameChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>editHeader</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>headerFileChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>spinWidth</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>widthChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>spinHeight</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>heightChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>buttonChoosePixmap</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>pixmapChoosen()</slot>
+    </connection>
+    <connection>
+        <sender>localGlobalCombo</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>includePolicyChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>buttonChooseHeader</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>chooseHeader()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>closeClicked()</slot>
+    </connection>
+    <connection>
+        <sender>listSignals</sender>
+        <signal>currentChanged(QListBoxItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentSignalChanged(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>listSignals</sender>
+        <signal>selectionChanged(QListBoxItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentSignalChanged(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>buttonRemoveSignal</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>removeSignal()</slot>
+    </connection>
+    <connection>
+        <sender>editSignal</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>signalNameChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>listSlots</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentSlotChanged(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>listSlots</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentSlotChanged(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>buttonRemoveSlot</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>removeSlot()</slot>
+    </connection>
+    <connection>
+        <sender>editSlot</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>slotNameChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>comboAccess</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>slotAccessChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>listProperties</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentPropertyChanged(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>listProperties</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>currentPropertyChanged(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>buttonRemoveProperty</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>removeProperty()</slot>
+    </connection>
+    <connection>
+        <sender>editProperty</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>propertyNameChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>comboType</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>propertyTypeChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>buttonLoad</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>loadDescription()</slot>
+    </connection>
+    <connection>
+        <sender>buttonSave</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>saveDescription()</slot>
+    </connection>
+    <connection>
+        <sender>sizeHor</sender>
+        <signal>activated(int)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>horDataChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>sizeVer</sender>
+        <signal>activated(int)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>verDataChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>buttonAddProperty</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>addProperty()</slot>
+    </connection>
+    <connection>
+        <sender>checkContainer</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>widgetIsContainer(bool)</slot>
+    </connection>
+    <connection>
+        <sender>buttonAddSignal</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>addSignal()</slot>
+    </connection>
+    <connection>
+        <sender>buttonAddSlot</sender>
+        <signal>clicked()</signal>
+        <receiver>CustomWidgetEditorBase</receiver>
+        <slot>addSlot()</slot>
+    </connection>
+    <slot access="protected" language="C++" returnType="void">init()</slot>
+    <slot access="protected" language="C++" returnType="void">destroy()</slot>
+    <slot access="protected" language="C++" returnType="void">addProperty()</slot>
+    <slot access="public" language="C++" returnType="void">addSignal()</slot>
+    <slot access="protected" language="C++" returnType="void">addWidgetClicked()</slot>
+    <slot access="protected" language="C++" returnType="void">chooseHeader()</slot>
+    <slot access="protected" language="C++" returnType="void">classNameChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">closeClicked()</slot>
+    <slot access="protected" language="C++" returnType="void">currentPropertyChanged( QListViewItem * )</slot>
+    <slot access="protected" language="C++" returnType="void">currentSignalChanged( QListBoxItem * )</slot>
+    <slot access="protected" language="C++" returnType="void">currentSlotChanged( QListViewItem * )</slot>
+    <slot access="protected" language="C++" returnType="void">currentWidgetChanged( QListBoxItem * )</slot>
+    <slot access="protected" language="C++" returnType="void">deleteWidgetClicked()</slot>
+    <slot access="protected" language="C++" returnType="void">headerFileChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">heightChanged( int )</slot>
+    <slot access="protected" language="C++" returnType="void">horDataChanged(int)</slot>
+    <slot access="protected" language="C++" returnType="void">includePolicyChanged( int )</slot>
+    <slot access="public" language="C++" returnType="void">loadDescription()</slot>
+    <slot access="public" language="C++" returnType="void">addSlot()</slot>
+    <slot access="protected" language="C++" returnType="void">pixmapChoosen()</slot>
+    <slot access="protected" language="C++" returnType="void">propertyNameChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">propertyTypeChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">removeProperty()</slot>
+    <slot access="protected" language="C++" returnType="void">removeSignal()</slot>
+    <slot access="protected" language="C++" returnType="void">removeSlot()</slot>
+    <slot access="protected" language="C++" returnType="void">saveDescription()</slot>
+    <slot access="protected" language="C++" returnType="void">signalNameChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">slotAccessChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">slotNameChanged( const QString &amp; )</slot>
+    <slot access="protected" language="C++" returnType="void">verDataChanged(int)</slot>
+    <slot access="protected" language="C++" returnType="void">widgetIsContainer(bool)</slot>
+    <slot access="protected" language="C++" returnType="void">widthChanged( int )</slot>
+</connections>
+<tabstops>
+    <tabstop>buttonCancel</tabstop>
+    <tabstop>boxWidgets</tabstop>
+    <tabstop>buttonNewWidget</tabstop>
+    <tabstop>buttonDeleteWidget</tabstop>
+    <tabstop>buttonLoad</tabstop>
+    <tabstop>buttonSave</tabstop>
+    <tabstop>TabWidget1</tabstop>
+    <tabstop>editClass</tabstop>
+    <tabstop>editHeader</tabstop>
+    <tabstop>buttonChooseHeader</tabstop>
+    <tabstop>localGlobalCombo</tabstop>
+    <tabstop>buttonChoosePixmap</tabstop>
+    <tabstop>spinWidth</tabstop>
+    <tabstop>spinHeight</tabstop>
+    <tabstop>sizeHor</tabstop>
+    <tabstop>sizeVer</tabstop>
+    <tabstop>checkContainer</tabstop>
+    <tabstop>helpButton</tabstop>
+    <tabstop>listSignals</tabstop>
+    <tabstop>buttonAddSignal</tabstop>
+    <tabstop>buttonRemoveSignal</tabstop>
+    <tabstop>editSignal</tabstop>
+    <tabstop>listSlots</tabstop>
+    <tabstop>buttonAddSlot</tabstop>
+    <tabstop>buttonRemoveSlot</tabstop>
+    <tabstop>editSlot</tabstop>
+    <tabstop>comboAccess</tabstop>
+    <tabstop>listProperties</tabstop>
+    <tabstop>buttonAddProperty</tabstop>
+    <tabstop>buttonRemoveProperty</tabstop>
+    <tabstop>editProperty</tabstop>
+    <tabstop>comboType</tabstop>
+</tabstops>
+</UI>

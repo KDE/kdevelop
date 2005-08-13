@@ -1,0 +1,209 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>AddCatalogDlgBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>AddCatalogDlgBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>398</width>
+            <height>222</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Documentation Catalog Properties</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout20</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KLineEdit" row="3" column="0">
+                    <property name="name">
+                        <cstring>titleEdit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Type:</string>
+                    </property>
+                </widget>
+                <spacer row="6" column="0">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>18</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KURLRequester" row="1" column="0">
+                    <property name="name">
+                        <cstring>locationURL</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Locatio&amp;n:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>locationURL</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>titleLabel</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Title:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>titleEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="5" column="0">
+                    <property name="name">
+                        <cstring>docTypeCombo</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>AddCatalogDlgBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>AddCatalogDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>locationURL</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AddCatalogDlgBase</receiver>
+        <slot>locationURLChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>docTypeCombo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>AddCatalogDlgBase</receiver>
+        <slot>docTypeChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>locationURL</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>AddCatalogDlgBase</receiver>
+        <slot>locationURLChanged(const QString&amp;)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>locationURLChanged( const QString &amp; )</slot>
+    <slot>docTypeChanged( const QString &amp; )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,41 @@
+
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+
+## The part
+kde_module_LTLIBRARIES = lib%{APPNAMELC}part.la
+lib%{APPNAMELC}part_la_SOURCES = %{APPNAMELC}_part.cpp \
+	%{APPNAMELC}_view.cpp %{APPNAMELC}_factory.cpp
+lib%{APPNAMELC}part_la_LDFLAGS = $(KDE_PLUGIN)
+lib%{APPNAMELC}part_la_LIBADD = -lkofficeui
+
+## The kdeinit loadable module
+lib_LTLIBRARIES = %{APPNAMELC}.la
+%{APPNAMELC}_la_SOURCES = %{APPNAMELC}.cpp
+%{APPNAMELC}_la_LDFLAGS = -module -avoid-version -no-undefined $(all_libraries)
+%{APPNAMELC}_la_LIBADD = -lkofficecore
+
+## The executable
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = dummy.cpp
+%{APPNAMELC}_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+%{APPNAMELC}_LDADD = %{APPNAMELC}.la
+
+dummy.cpp:
+	echo > dummy.cpp
+
+METASOURCES = AUTO
+noinst_HEADERS =  %{APPNAMELC}_part.h \
+	%{APPNAMELC}_view.h %{APPNAMELC}_factory.h %{APPNAMELC}_aboutdata.h
+
+kdelnk_DATA = %{APPNAMELC}.desktop
+kdelnkdir = $(kde_appsdir)/Office
+
+kdemime_DATA = x-%{APPNAMELC}.desktop
+kdemimedir = $(kde_mimedir)/application
+
+rc_DATA = %{APPNAMELC}.rc
+rcdir = $(kde_datadir)/%{APPNAMELC}
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(XGETTEXT) *.cpp %{APPNAMELC}_aboutdata.h -o $(podir)/%{APPNAMELC}.pot

@@ -1,0 +1,7 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Bash bugs</title>
+<base href="http://groups.google.com/"/>
+<tocsect1 name="Query" url="groups?group=gnu.bash.bug">
+</tocsect1>
+</kdeveloptoc>

@@ -1,0 +1,226 @@
+# Makefile template
+#
+# for using WABA and SUPERWABA on Linux systems
+#
+# Doug Lawson (dlawson@cablespeed.com)
+# Modified for use with KDevelop by Ian Reinhart Geiser <geiseri@kde.org>
+
+# Copyright (c) Doug Lawson 2003
+# developed for classes I teach.
+#
+# may be distributed under GPL
+# (http://www.gnu.org/licenses/gpl.html)
+# or any other license that allows it to be freely used.
+#
+# please let me know about any improvements you make
+
+VERSION                = %{VERSION}
+# What are we building? We put the names here at the
+# top to make it easy to change
+
+MAINCLASSNAME          = %{APPNAME}
+
+# ExtraClassList will be blank if the app consists of
+# only one class
+EXTRACLASSLIST         =
+
+# Is there an icon for this program? If there
+# is, create an icon argument for exegen
+#
+# Exegen will automatically look for icons
+# so this may not be needed. Run
+#        java Exegen /?
+# for help on Exegen
+#
+# If you use this line, make sure to un-comment it!
+#
+# ICONFLAG               = /I Icon
+
+# Like ICONFLAG, height and width may be specified, or
+# you may accept the default. On PalmOS, the app will run
+# full-screen by default, which is usually what you want.
+#
+# If you want the same look on PalmOS as on
+# Windows CE, you should specify height and width
+#
+# run
+#       java Exegen /?
+# for more information, or see the docs.
+#
+# HEIGHT                 = /h 160
+# WIDTH                  = /w 160
+
+# CAB Options
+# The /Z parameter is used to create eight cab files so your application can
+# easily be installed in all compatible Windows CE platforms. You may pass,
+# optionally, a .swz file with some global and local libraries used by your
+# app. For example, if you need to install the TinyLarge.pdb font and also a
+# custom database, E.g. mydata.pdb, you must copy all files to the current
+# directory, then create a myapp.swz file with the following contents:
+#
+# [G]TinyLarge.pdb
+# [L]mydata.pdb
+#
+# The [G] denotes a global library (fonts are always global libraries), and the
+# [L] denotes a local library.
+# The user will then have two options to start the installation process:
+# 1. Run the created xxx_install.bat file, or
+# 2. If the cab files are available in the internet, the user may launch the
+# browser from inside the device, connect to the site and choose the appropriate
+# cab file. The browser will then download and install the file.
+# The /Z parameter works on in the Windows platform.
+SWZFILE                = 
+CABFLAGS               = /Z $(SWZFILE)
+
+# ------------------------------------------------------
+#   Most of the stuff below this line will not change
+#   very often. If you change Java SDKs or re-install
+#   waba or superwaba, you may need to change it.
+
+# first, the locations of the various java components.
+# On a *NIX system, they will usually be in something
+# like the directories listed here.
+
+
+# The flags and arguments here have been developed for use with
+# the SUN jdk v1.3. Read your java documentation carefully,
+# don't just blindly assume that what I have here will work
+# with your setup.
+
+JAVADIR         = %{JAVADIR}
+JAVABINDIR      = $(JAVADIR)/bin
+JAVAC           = $(JAVABINDIR)/javac
+JAR             = $(JAVABINDIR)/jar
+
+# Java Compiler flags and arguments. For these makefiles,
+# it is easiest if we include the CLASSPATH in the command
+# line.
+JCFLAGS         = -classpath $(CLASSPATH)
+
+JAVA            = $(JAVABINDIR)/java
+JAVAFLAGS       = -classpath $(CLASSPATH)
+
+APPLETVIEWER    = $(JAVABINDIR)/appletviewer
+AVFLAGS         = -J-classpath -J$(CLASSPATH)
+
+
+# next, where are all  the WABA bits and pieces?
+WABADIR         = %{WABADIR}
+WABABINDIR      = $(WABADIR)/superwaba/bin
+WABAEXTRADIR    = $(WABADIR)/superwaba
+
+################################################################################
+# You should not have to change anything below this line.
+################################################################################
+# the classpath will have to tell java where to find the waba stuff.
+#
+# the CLASSPATH here is set to let java find
+# - the classes it needs to produce the executable class files
+# - the waba.applet class, Warp.class, and Exegen.class
+#
+# This strategy works so far, but it may (conceivably) produce a
+# conflict at some point. Be warned. You may want to use a CLASSPATH
+# that leaves out waba.applet, Warp and/or Exegen.
+#
+CLASSPATH       = $(WABADIR):$(WABAEXTRADIR):$(WABAEXTRADIR)/classes:$(WABABINDIR):.
+
+# exegen and warp
+#
+# exegen is the EXEcutable GENerator. It takes the
+# main waba/java class (which usually extends MainWindow)
+# and makes it into a program that will automagically run
+# itself under waba or superwaba on a PalmOS gadget.
+#
+# Since the palm program has a .prc extension, it is called
+# PRCFILE here.
+#
+# Exegen also creates a .exe file for Window CE
+#
+# warp is the Waba Application Resource Packager.
+# It bundles  the classes and other resources into
+# a single PALM database file (which is also used
+# by the Win CE executable). This file has a .pdb
+# extension. In this makefile it is called PDBFILE
+#
+# The standard  waba SDK has only the MS-Windows *.exe files.
+# for exegen and warp
+#
+# Although there are exegen and warp native binaries for Linux,
+# they don't seem to work very well. The solution has been to
+# write those programs in Java.
+#
+# for waba, use the java apps
+# from http://www.wn.com.au/rnielsen/wextras/
+# (Rob Nielsen). Getting all the paths to fall into the right
+# place takes a little tuning, though (which is why this makefile
+# is here, I suppose)
+#
+# For superwaba, the same programs are included in the
+# distribution
+
+
+EXEGEN          = $(JAVA) $(JAVAFLAGS) Exegen
+EXEGENFLAGS     = $(HEIGHT) $(WIDTH) $(ICONFLAG) /L /V $(VERSION) $(CABFLAGS)
+
+WARP            = $(JAVA) $(JAVAFLAGS) Warp
+WARPFLAGS       = c
+
+MAINCLASS       =  $(MAINCLASSNAME).class
+EXTRACLASSES    =  $(EXTRACLASSLIST)
+
+WEBPAGE         =  $(MAINCLASSNAME).html
+
+PRCBASENAME     = $(MAINCLASSNAME)
+PDBBASENAME     = $(MAINCLASSNAME)
+
+PDBFILE         = $(PDBBASENAME).pdb
+PRCFILE         = $(PRCBASENAME).prc
+
+
+all: $(PDBFILE) $(PRCFILE)
+
+$(PRCFILE): $(PDBFILE)
+	$(EXEGEN) $(EXEGENFLAGS) $(PRCBASENAME) $(MAINCLASSNAME) $(PDBBASENAME)
+
+# you may want to change this one so that Warp only handles
+# the classes you tell it to (instead of using the wildcard '*.class')
+# Use the second pair of lines below, which are commented out.
+#
+# Note that there is a potential problem if your program generates
+# inner classes (which have names like
+# 'ClockPanel$SettingsWindow.class'.
+# If that is the case, the wildcard  *.class filespec is guaranteed to
+# include them in the make dependency.
+
+$(PDBFILE): $(MAINCLASS) $(EXTRACLASSES)
+	$(WARP) $(WARPFLAGS) $(PDBBASENAME) *.class
+
+# $(PDBFILE): $(MAINCLASS) $(EXTRACLASSES)
+#	$(WARP) $(WARPFLAGS) $(PDBBASENAME) $(MAINCLASS) $(EXTRACLASSES)
+
+#  Below, we just tell make how to create foo.class if it can find
+#  foo.java
+
+%.class: %.java
+	$(JAVAC) $(JCFLAGS) $<
+
+# note that the 'test' target DOES NOT INCLUDE A DEPENDENCY
+# for the java classes. This way, you can keep doing tests of the old
+# class while you rewrite the source (foo.java).
+
+test:
+	echo "running this test does not rebuild any of the targets" ;\
+	$(JAVA) $(JAVAFLAGS) waba.applet.Applet  $(MAINCLASSNAME)
+
+# Since I haven't (yet) got the code written to generate the
+# web page, target 'applettest' is commented out. If you want
+# to create the web page by hand and test it, be my guest.
+
+# applettest: $(WEBPAGE)
+# 	$(APPLETVIEWER) $(AVFLAGS) $(webpage)
+
+clean:
+	rm -f *.class *.pdb *.prc *.lnk
+
+jar: $(MAINCLASS) $(EXTRACLASSES)
+	$(JAR) -cvfm $(MAINCLASSNAME).jar $(MAINCLASSNAME).mft $(MAINCLASS) $(EXTRACLASSES)

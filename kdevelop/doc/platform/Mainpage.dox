@@ -1,0 +1,148 @@
+/** \file Mainpage.dox
+    \brief The main page of the doxygen generated %API Documentation
+*/
+
+/**
+\mainpage The KDevelop Platform %API %Documentation
+
+
+KDevelop Platform is set of libraries and tools that are used to build IDEs (Integrated Development Environments),
+applications similar to IDEs (web development enviroment, text editors for programmers and designers, etc.)
+and/or IDE plugins for all possible purposes.
+
+Platform provides:
+- the plugin architecture (interfaces);
+- the common support libraries;
+- the generic shell with plugin profiles support.
+.
+
+\section intro Introduction
+
+This document is targeted at all those that want to build their own IDE or improve KDevelop's source code.
+If you are instead looking for a user manual, just go to the help menu of your KDevelop and select KDevelop handbook.
+This documentation contains the KDevelop Platform online class reference for the current
+development version of KDevelop.  Additionally, you
+can subscribe or read the <a href="http://www.kdevelop.org/index.html?filename=mailinglist.html">mailing list</a> for any additions and/or
+modifications to the Platform %API.
+
+An on-line, updated every 24H, html version of this documentation can be found at: http://www.kdevelop.org/HEAD/doc/platform/html/index.html
+
+You can also download a local browseable copy form http://www.kdevelop.org/HEAD/doc/platform/kdevplatformdoc.tar.bz2 . It gets updated every single day too.
+
+More information about the KDevelop Platform architecture in form of tutorials, Wikis, HOWTOs,
+and FAQs can be found at
+the <a href="http://www.kdevelop.org">KDevelop website</a>.
+
+Quick overviews of the architecture can also be found in the issues of <a href="http://www.kdevelop.org/doc/tehcnotes">
+KDevelop Technotes</a>.
+
+\section platformapi Platform Libraries API
+
+- <a href="kdevinterfaces/html/index.html"><b>Interfaces Library</b></a>
+   (<a href="kdevinterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces and classes that form KDevelop plugin architecture.</i>
+- <a href="kdevextensions/html/index.html"><b>Extension Interfaces Library</b></a>
+   (<a href="kdevextensions/html/classes.html">classes</a>)\n
+   <i>Extension interfaces used by KDevelop plugin architecture.</i>
+- <a href="kdevutil/html/index.html"><b>Utility Library</b></a>
+   (<a href="kdevutil/html/classes.html">classes</a>)\n
+   <i>Utility classes for the KDevelop architecture.</i>
+- <a href="kdevextras/html/index.html"><b>Extra Interfaces Library</b></a>
+   (<a href="kdevextras/html/classes.html">classes</a>)\n
+   <i>Extra interfaces that are not the part of KDevelop plugin architecture
+   but that can be implemented by extra plugins or "plugins for plugins".</i>
+- <a href="kdevwidgets/html/index.html"><b>Widgets Library</b></a>
+   (<a href="kdevwidgets/html/classes.html">classes</a>)\n
+   <i>A collection of widgets.</i>
+- <a href="propeditor/html/index.html"><b>Property Editing Library</b></a>
+   (<a href="propeditor/html/classes.html">classes</a>)\n
+   <i>A collection of facilities to store and edit the properties of various objects.</i>
+- <a href="kdevcatalog/html/index.html"><b>Catalog Library</b></a>
+   (<a href="kdevcatalog/html/classes.html">classes</a>)\n
+   <i>The persistant symbol store library working with BerkeleyDb backend.</i>
+.
+
+\section designerapi GUI Designer Integration API
+
+- <a href="external/html/index.html"><b>KInterfaceDesigner Library</b></a>
+   (<a href="external/html/classes.html">classes</a>)\n
+   <i>KInterfaceDesigner classes and interfaces which form the core of GUI Designer integration framework.</i>
+- <a href="designer_integration/html/index.html"><b>Designer Integration Support Library</b></a>
+   (<a href="designer_integration/html/classes.html">classes</a>)\n
+   <i>The base classes to implement GUI designer integration in language support plugins.</i>
+.
+
+\section pluginsapi Platform Plugins API
+
+- <a href="kdevdocinterfaces/html/index.html"><b>Documentation Part Interfaces Library</b></a>
+   (<a href="kdevdocinterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces to implement KDevelop documentation plugins.</i>
+.
+
+\section langapi Programming Language Support API
+
+- <a href="kdevlanginterfaces/html/index.html"><b>Language Support Interfaces Library</b></a>
+   (<a href="kdevlanginterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces for KDevelop language support facilities.</i>
+- <a href="kdevlangdebugger/html/index.html"><b>Debugger Support Library</b></a>
+   (<a href="kdevlangdebugger/html/classes.html">classes</a>)\n
+   <i>Classes to implement debugger support for a programming language.</i>
+.
+
+\section buildtoolapi Buildtool Support API
+
+- <a href="kdevbtbase/html/index.html"><b>Buildtool Base Library</b></a>
+   (<a href="kdevbtbase/html/classes.html">classes</a>)\n
+   <i>Base classes for KDevelop builtool support plugins.</i>
+- <a href="kdevpminterfaces/html/index.html"><b>Project Manager Interfaces Library</b></a>
+   (<a href="kdevpminterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces to implement plugins for the KDevelop generic project manager.</i>
+- <a href="kdevbtwidgets/html/index.html"><b>Buildtool Widgets Library</b></a>
+   (<a href="kdevbtwidgets/html/classes.html">classes</a>)\n
+   <i>Widgets commonly used in buildtool support plugins.</i>
+- <a href="kdevparserautotools/html/index.html"><b>Autotools parser Library</b></a>
+   (<a href="kdevparserautotools/html/classes.html">classes</a>)\n
+   <i>Parser for Autotools based support plugins.</i>
+- <a href="kdevparserqmake/html/index.html"><b>QMake parser Library</b></a>
+   (<a href="kdevparserqmake/html/classes.html">classes</a>)\n
+   <i>Parser for QMake based support plugins.</i>
+.
+
+\section shellapi Shell API
+
+- <a href="kdevshellsrc/html/index.html"><b>Generic Shell</b></a>
+   (<a href="kdevshellsrc/html/classes.html">classes</a>)\n
+   <i>The Shell - a profile-based implementation of KDevelop plugin architecture.</i>
+- <a href="kdevprofileslib/html/index.html"><b>Shell Profiles Library</b></a>
+   (<a href="kdevprofileslib/html/classes.html">classes</a>)\n
+   <i>Plugin profiles implementation for KDevelop shell.</i>
+.
+
+\section PlannedTasks Planned tasks
+
+Here is a priority ordered list:
+  -# fix the dispersed fixme
+  -# <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>
+  -# fix the dispersed todo all over the code.
+  .
+
+\section howTobuildAPIlocalcopy How to build a local copy of this documentation
+
+This documentation is large and changes with every cvs commit, therefore is not available for download.
+To build your local copy of this documentation you need to fetch KDevelop sources and 
+if you have doxygen >= 1.3.4 and (optionally) PHP >= 4.10 plus a local running webserver then
+- make apidox
+- make install-apidox (as root)
+.
+
+The advantage of the webserver is that you'll get a search engine in your documentation if you read your
+documentation using your local webserver.
+
+\section License
+
+Permission is granted to copy, distribute and/or modify this document under
+the terms of the GNU Free %Documentation License, Version 1.2 or any later
+version published by the Free Software Foundation; For details see
+http://www.gnu.org/copyleft/fdl.html .
+
+*/

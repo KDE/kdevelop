@@ -1,0 +1,25 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevCppSupport" version="8">
+<MenuBar>
+ <Menu name="edit">
+  <Action name="edit_complete_text"/>
+ </Menu>
+
+ <Menu name="edit">
+  <Action name="edit_make_member"/>
+ </Menu>
+
+ <Menu name="view">
+  <Action name="edit_switchheader"/>
+ </Menu>
+
+ <Menu name="project">
+  <Action name="project_newclass" group="project_classes"/>
+ </Menu>
+</MenuBar>
+
+<ToolBar name="browserToolBar" position="Top" iconText="IconOnly">
+  <Action name="project_newclass"/>
+</ToolBar>
+</kpartgui>
+

@@ -1,0 +1,88 @@
+Bernd Gehrmann <bernd@physik.hu-berlin.de>
+
+Debugger frontend:
+  John Birch <jbb@kdevelop.org>
+
+C++ source parser:
+  Jonas Nordin <jonas.nordin@cenacle.se>
+
+Java support:
+  Richard Dale <Richard_Dale@tipitina.demon.co.uk>
+
+Framework, dialogs, PHP support:
+  Sandy Meier <smeier@kdevelop.org>
+
+Several parts, htdig searching & indexing:
+  Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
+
+Help with Automake manager:
+  Victor Roeder <victor_roeder@gmx.de>
+
+KDE application templates:
+  Kurth Granroth <kurt@granroth.org>
+
+editing component:
+  The KWrite authors <kwrite-devel@kde.org>
+
+QEditor part, help for code-completion, abbrev part:
+  Roberto Raggi <roberto@kdevelop.org>
+
+Qt 3 port, various patches:
+  Harald Fernengel <harry@kdevelop.org>
+
+Help with KParts, KGenericFactory and other KDE infrastructure:
+  Simon Hausmann <hausmann@kde.org>
+
+Subversion KPart:
+  Mickael Marchand <marchand@kde.org>
+
+Patches:
+  Dominic Seichter <domseichter@t-online.de>
+  Yann Hodique <Yann.Hodique@lifl.fr>
+  Heinz Hornung <Hornung-Heinz@t-online.de>
+
+SplashScreens:
+  Marion Klein <MarionKlein@wanadoo.fr>
+  Ram� Lamana Villar <ramon@alumnos.upm.es>
+
+KDevTabBar, bug fixes, Gideon Release:
+  Caleb Tennis <caleb@aei-tech.com>
+
+PartExplorer, (bugs for) CvsPart:
+  Mario Scalas <mario.scalas@libero.it>
+
+Pascal support and project parts, Filecreate GUI,
+Documentation viewer improvements
+  Alexander Dymo <cloudtemple@mksat.net>
+
+Application wizard improvementes, application templates, documentation, bug fixes:
+  Dominik Haumann <dhdev@gmx.de>
+
+DistPart, Bash Shell Support:
+  Ian Reinhart Geiser <geiseri@kde.org>
+
+API Documentation, Run Options, code reorganization. Fixes for project templates, autotools and doxygen. 
+  Amilcar Lucas <a.lucas@tu-bs.de>
+
+Replace plugin, Bookmarks plugin, FileList plugin, CTags2 plugin, Overall improvements and patches
+  Jens Dagerbo  <jens.dagerbo@swipnet.se>
+
+SnippetPart, debugger and usability patches
+  Robert Gruber <rgruber@users.sourceforge.net>
+
+  
+Other software included in the source package:
+
+* KDE 2.0 Development Book
+  David Sweet, et al.
+  Copyright notices see in doc/kde2book
+
+* GNU libc documentation
+  Sandra Loosemore, Richard M. Stallman, Roland McGrath,
+  Andrew Oram, and Ulrich Drepper
+  Copyright notices see in doc/libc
+
+* STL documentation
+  SGI, Inc.
+  Copyright notices see in doc/stl
+

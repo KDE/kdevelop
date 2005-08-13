@@ -1,0 +1,2 @@
+SOURCES=%{APPNAMELC}.cpp
+TARGET=../bin/%{APPNAMELC}

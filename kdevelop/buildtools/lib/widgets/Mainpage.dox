@@ -1,0 +1,10 @@
+/**
+@mainpage The KDevelop Buildtool Widgets Library
+
+This library contains widgets commonly used in buildtool support plugins.
+
+<b>Link with</b>: -lkdevbuildtoolswidgets
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/buildtools/widgets
+*/
+

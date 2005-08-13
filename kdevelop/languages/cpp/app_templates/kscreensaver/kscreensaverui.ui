@@ -1,0 +1,79 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>%{APPNAME}UI</class>
+<comment>This is the main UI for setting up your screen saver.</comment>
+<author>Ian Reinhart Geiser</author>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>%{APPNAMELC}cfg</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>257</width>
+            <height>58</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Screen Saver Config</string>
+    </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>0</y>
+                <width>255</width>
+                <height>57</height>
+            </rect>
+        </property>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QCheckBox" row="0" column="0">
+                <property name="name">
+                    <cstring>CheckBox1</cstring>
+                </property>
+                <property name="text">
+                    <string>Set some setting</string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget" row="1" column="0">
+                <property name="name">
+                    <cstring>Layout1</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>OkayPushButton</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;OK</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>CancelPushButton</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Cancel</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+        </grid>
+    </widget>
+</widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

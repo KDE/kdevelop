@@ -1,0 +1,84 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>SettingsDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SettingsDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>394</width>
+            <height>342</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KListBox" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>kdeListBox</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="2">
+            <item>
+                <property name="text">
+                    <string>KDE Libs Headers</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>All KDE Headers</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cbParsingScope</cstring>
+            </property>
+        </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>120</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="1" column="1">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Parse:</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>kdeListBox</sender>
+        <signal>clicked(QListBoxItem*)</signal>
+        <receiver>SettingsDialogBase</receiver>
+        <slot>slotSelectionChanged(QListBoxItem*)</slot>
+    </connection>
+</connections>
+<signals>
+    <signal>enabled(int)</signal>
+</signals>
+<slots>
+    <slot>slotSelectionChanged(QListBoxItem*)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistbox.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="KDevAdaProject" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_build" />
+    <Separator/>
+    <Action name="build_execute" />
+  </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar" noMerge="1">
+    <Action name="build_build" group="build_operations" />
+    <Action name="build_execute" group="build_operations" />
+</ToolBar>
+</kpartplugin>

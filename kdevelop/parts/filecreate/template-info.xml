@@ -1,0 +1,137 @@
+<?xml version = '1.0'?>
+<kdevelop>
+  <kdevfilecreate>
+    <filetypes>
+      <type ext="" name="Blank File" create="template">
+        <descr>A new blank file.</descr>
+      </type>
+      <type ext="py" name="Python" create="template" icon="source_py">
+        <descr>A new empty Python source file.</descr>
+      </type>
+      <type ext="rb" name="Ruby" create="template" icon="template_source">
+        <descr>A new empty Ruby source file.</descr>
+      </type>
+      <type ext="ui" name="Qt Designer" create="no" icon="widget_doc">
+        <descr>
+        </descr>
+        <subtype ref="widget" name="Widget" icon="widget_doc">
+          <descr>A new widget.</descr>
+        </subtype>
+        <subtype ref="dialog" name="Dialog" icon="widget_doc">
+          <descr>A new empty Dialog box.</descr>
+        </subtype>
+        <subtype ref="tabdialog" name="Tab Dialog" icon="widget_doc">
+          <descr>A new empty Tab Dialog box.</descr>
+        </subtype>
+        <subtype ref="dialogr" name="Dialog with Buttons (right)" icon="widget_doc">
+          <descr>A new Dialog box with buttons on the right.</descr>
+        </subtype>
+        <subtype ref="dialogb" name="Dialog with Buttons (bottom)" icon="widget_doc">
+          <descr>A new Dialog box with buttons on the bottom.</descr>
+        </subtype>
+        <subtype ref="confdialog" name="Configuration Dialog" icon="widget_doc">
+          <descr>A new Configuration Dialog box.</descr>
+        </subtype>
+        <subtype ref="wizard" name="Wizard" icon="widget_doc">
+          <descr>A new empty Wizard dialog.</descr>
+        </subtype>
+        <subtype ref="mainwin" name="Main Window" icon="widget_doc">
+          <descr>A new empty main window.</descr>
+        </subtype>
+      </type>
+      <type ext="cpp" name="C++ Source" create="template" icon="source_cpp">
+        <descr>A new empty C++ file.</descr>
+      </type>
+      <type ext="c" name="C Source" create="template" icon="source_c">
+        <descr>A new empty C file.</descr>
+      </type>
+      <type ext="h" name="C/C++ Header" create="template" icon="source_h">
+        <descr>A new empty header file for C or C++.</descr>
+      </type>
+      <type ext="php" name="PHP" create="template" icon="php">
+        <descr>A new empty PHP source file.</descr>
+      </type>
+      <type ext="java" name="Java Source" create="template" icon="source_java">
+        <descr>A new empty Java source file.</descr>
+      </type>
+      <type ext="ads" name="Ada Spec" create="template" icon="source_ads">
+        <descr>A new empty Ada spec file.</descr>
+      </type>
+      <type ext="adb" name="Ada Body" create="template" icon="source_adb">
+        <descr>A new empty Ada body file.</descr>
+      </type>
+      <type ext="F" name="Fortran Source" create="template" icon="source_f">
+        <descr>A new empty Fortran source file.</descr>
+      </type>
+      <type ext="f" name="Preprocessed Fortran" create="template" icon="source_f">
+        <descr>A new empty preprocessed Fortran file.</descr>
+      </type>
+      <type ext="f77" name="Fortran77 Source" create="template" icon="source_f">
+        <descr>A new empty Fortran77 source file.</descr>
+      </type>
+      <type ext="f90" name="Fortran90 Source" create="template" icon="source_f">
+        <descr>A new empty Fortran90 source file.</descr>
+      </type>
+      <type ext="f95" name="Fortran95 Source" create="template" icon="source_f">
+        <descr>A new empty Fortran95 source file.</descr>
+      </type>
+      <type ext="for" name="Preprocessed Fortran" create="template" icon="source_f">
+        <descr>A new empty preprocessed Fortran file.</descr>
+      </type>
+      <type ext="ftn" name="Fortran77 Source" create="template" icon="source_f">
+        <descr>A new empty Fortran77 source file.</descr>
+      </type>
+      <type ext="fpp" name="Fortran Source" create="template" icon="source_f">
+        <descr>A new empty Fortran source file.</descr>
+      </type>
+      <type ext="pl" name="Perl Script" create="template" icon="template_source">
+        <descr>A new Perl script.</descr>
+      </type>
+      <type ext="pm" name="Perl Module" create="template" icon="template_source">
+        <descr>A new perl module.</descr>
+      </type>
+      <type ext="pp" name="Pascal Source" create="no" icon="source_p">
+        <descr/>
+        <subtype ref="program" name="Pascal Program" icon="source_p">
+          <descr>A new pascal program.</descr>
+        </subtype>
+        <subtype ref="unit" name="Pascal Unit" icon="source_p">
+          <descr>A new pascal unit.</descr>
+        </subtype>
+      </type>
+      <type ext="pas" name="Pascal Source" create="no" icon="source_p">
+        <descr/>
+        <subtype ref="program" name="Pascal Program" icon="source_p">
+          <descr>A new pascal program.</descr>
+        </subtype>
+        <subtype ref="unit" name="Pascal Unit" icon="source_p">
+          <descr>A new pascal unit.</descr>
+        </subtype>
+      </type>
+      <type ext="dpr" name="Delphi Project" create="template" icon="source_p">
+        <descr>A new Delphi project.</descr>
+      </type>
+      <type ext="l" name="flex C Source" create="template" icon="source_l">
+        <descr>A new empty flex C source source file.</descr>
+      </type>
+      <type ext="ll" name="flex C++ Source" create="template" icon="source_l">
+        <descr>A new empty flex C++ source source file.</descr>
+      </type>
+      <type ext="y" name="bison C Source" create="template" icon="source_y">
+        <descr>A new empty bison C source source file.</descr>
+      </type>
+      <type ext="yy" name="bison C++ Source" create="template" icon="source_y">
+        <descr>A new empty bison C++ source source file.</descr>
+      </type>
+      <type ext="dox" name="Doxygen Documentation Page" create="template" icon="document">
+        <descr>A new empty Doxygen documentation page.</descr>
+      </type>
+      <type ext="hs" name="Haskell Source" create="template" icon="source_hs">
+        <descr>A new empty Haskell source file.</descr>
+      </type>
+      <type ext="ts" name="Qt Linguist Translation" create="template" icon="template_source">
+        <descr>A new empty Qt Linguist translation source file.</descr>
+      </type>
+    </filetypes>
+  </kdevfilecreate>
+</kdevelop>

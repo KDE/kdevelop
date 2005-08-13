@@ -1,0 +1,1399 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Ruby</title>
+<base href="http://www.ruby-doc.org/docs/ProgrammingRuby/"/>
+<tocsect1 name="Pickaxe Book" url="">
+<tocsect2 name="Contents" url="html/index.html"></tocsect2>
+<tocsect2 name="Foreword" url="html/foreword.html"></tocsect2>
+<tocsect2 name="Preface" url="html/preface.html"></tocsect2>
+<tocsect2 name="Roadmap" url="html/roadmap.html"></tocsect2>
+<tocsect2 name="Ruby.new" url="html/intro.html"></tocsect2>
+<tocsect2 name="Classes, Objects, and Variables" url="html/tut_classes.html"></tocsect2>
+<tocsect2 name="Containers, Blocks, and Iterators" url="html/tut_containers.html"></tocsect2>
+<tocsect2 name="Standard Types" url="html/tut_stdtypes.html"></tocsect2>
+<tocsect2 name="More About Methods" url="html/tut_methods.html"></tocsect2>
+<tocsect2 name="Expressions" url="html/tut_expressions.html"></tocsect2>
+<tocsect2 name="Exceptions, Catch, and Throw" url="html/tut_exceptions.html"></tocsect2>
+<tocsect2 name="Modules" url="html/tut_modules.html"></tocsect2>
+<tocsect2 name="Basic Input and Output" url="html/tut_io.html"></tocsect2>
+<tocsect2 name="Threads and Processes" url="html/tut_threads.html"></tocsect2>
+<tocsect2 name="When Trouble Strikes" url="html/trouble.html"></tocsect2>
+<tocsect2 name="Ruby and Its World" url="html/rubyworld.html"></tocsect2>
+<tocsect2 name="Ruby and the Web" url="html/web.html"></tocsect2>
+<tocsect2 name="Ruby Tk" url="html/ext_tk.html"></tocsect2>
+<tocsect2 name="Ruby and Microsoft Windows" url="html/win32.html"></tocsect2>
+<tocsect2 name="Extending Ruby" url="html/ext_ruby.html"></tocsect2>
+<tocsect2 name="The Ruby Language" url="html/language.html"></tocsect2>
+<tocsect2 name="Classes and Objects" url="html/classes.html"></tocsect2>
+<tocsect2 name="Locking Ruby in the Safe" url="html/taint.html"></tocsect2>
+<tocsect2 name="Reflection, ObjectSpace, and Distributed  Ruby" url="html/ospace.html"></tocsect2>
+<tocsect2 name="Built-in Classes and Methods" url="html/builtins.html"></tocsect2>
+<tocsect2 name="Standard Library" url="html/lib_standard.html"></tocsect2>
+<tocsect2 name="Object-Oriented Design Libraries" url="html/lib_patterns.html"></tocsect2>
+<tocsect2 name="Network and Web Libraries" url="html/lib_network.html"></tocsect2>
+<tocsect2 name="Microsoft Windows Support" url="html/lib_windows.html"></tocsect2>
+<tocsect2 name="Embedded Documentation" url="html/rdtool.html"></tocsect2>
+<tocsect2 name="Interactive Ruby Shell" url="html/irb.html"></tocsect2>
+<tocsect2 name="Support" url="html/support.html"></tocsect2>
+</tocsect1>
+<index>
+<entry name="$CFLAGS (mkmf)" url="html/lib_standard.html#mkmf.$CFLAGS"/>
+<entry name="$LDFLAGS (mkmf)" url="html/lib_standard.html#mkmf.$LDFLAGS"/>
+<entry name="% (String)" url="html/ref_c_string.html#String._pc"/>
+<entry name="&amp; (Array)" url="html/ref_c_array.html#Array._et"/>
+<entry name="&amp; (FalseClass)" url="html/ref_c_falseclass.html#FalseClass._et"/>
+<entry name="&amp; (NilClass)" url="html/ref_c_nilclass.html#NilClass._et"/>
+<entry name="&amp; (TrueClass)" url="html/ref_c_trueclass.html#TrueClass._et"/>
+<entry name="* (Array)" url="html/ref_c_array.html#Array._st"/>
+<entry name="* (String)" url="html/ref_c_string.html#String._st"/>
+<entry name="+ (Array)" url="html/ref_c_array.html#Array._pl"/>
+<entry name="+ (Date)" url="html/lib_standard.html#Date._pl"/>
+<entry name="+ (String)" url="html/ref_c_string.html#String._pl"/>
+<entry name="+ (Time)" url="html/ref_c_time.html#Time._pl"/>
+<entry name="+@ (Numeric)" url="html/ref_c_numeric.html#Numeric._pl_at"/>
+<entry name="- (Array)" url="html/ref_c_array.html#Array._mi"/>
+<entry name="- (Time)" url="html/ref_c_time.html#Time._mi"/>
+<entry name="-- (Array)" url="html/ref_c_array.html#Array._mi_mi"/>
+<entry name="-- (Date)" url="html/lib_standard.html#Date._mi_mi"/>
+<entry name="-- (Time)" url="html/ref_c_time.html#Time._mi_mi"/>
+<entry name="--@ (Numeric)" url="html/ref_c_numeric.html#Numeric._mi_mi_at"/>
+<entry name="-@ (Numeric)" url="html/ref_c_numeric.html#Numeric._mi_at"/>
+<entry name="&lt;, &lt;=, &gt;, &gt;= (Module)" url="html/ref_c_module.html#Module._lt_cm_lt_eq_cm_lt_cm_lt_eq"/>
+<entry name="&lt;&lt; (Array)" url="html/ref_c_array.html#Array._lt_lt"/>
+<entry name="&lt;&lt; (Date)" url="html/lib_standard.html#Date._lt_lt"/>
+<entry name="&lt;&lt; (IO)" url="html/ref_c_io.html#IO._lt_lt"/>
+<entry name="&lt;&lt; (String)" url="html/ref_c_string.html#String._lt_lt"/>
+<entry name="&lt;=&gt; (Array)" url="html/ref_c_array.html#Array._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Bignum)" url="html/ref_c_bignum.html#Bignum._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Complex)" url="html/lib_standard.html#Complex._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Date)" url="html/lib_standard.html#Date._lt_eq_lt"/>
+<entry name="&lt;=&gt; (File::Stat)" url="html/ref_c_file__stat.html#File::Stat._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Fixnum)" url="html/ref_c_fixnum.html#Fixnum._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Float)" url="html/ref_c_float.html#Float._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Module)" url="html/ref_c_module.html#Module._lt_eq_lt"/>
+<entry name="&lt;=&gt; (String)" url="html/ref_c_string.html#String._lt_eq_lt"/>
+<entry name="&lt;=&gt; (Time)" url="html/ref_c_time.html#Time._lt_eq_lt"/>
+<entry name="== (Array)" url="html/ref_c_array.html#Array._eq_eq"/>
+<entry name="== (Comparable)" url="html/ref_m_comparable.html#Comparable._eq_eq"/>
+<entry name="== (Complex)" url="html/lib_standard.html#Complex._eq_eq"/>
+<entry name="== (Hash)" url="html/ref_c_hash.html#Hash._eq_eq"/>
+<entry name="== (Object)" url="html/ref_c_object.html#Object._eq_eq"/>
+<entry name="== (Regexp)" url="html/ref_c_regexp.html#Regexp._eq_eq"/>
+<entry name="== (String)" url="html/ref_c_string.html#String._eq_eq"/>
+<entry name="== (Struct)" url="html/ref_c_struct.html#Struct._eq_eq"/>
+<entry name="=== (Array)" url="html/ref_c_array.html#Array._eq_eq_eq"/>
+<entry name="=== (Date)" url="html/lib_standard.html#Date._eq_eq_eq"/>
+<entry name="=== (Module)" url="html/ref_c_module.html#Module._eq_eq_eq"/>
+<entry name="=== (Object)" url="html/ref_c_object.html#Object._eq_eq_eq"/>
+<entry name="=== (Range)" url="html/ref_c_range.html#Range._eq_eq_eq"/>
+<entry name="=== (Regexp)" url="html/ref_c_regexp.html#Regexp._eq_eq_eq"/>
+<entry name="=== (String)" url="html/ref_c_string.html#String._eq_eq_eq"/>
+<entry name="=~ (Object)" url="html/ref_c_object.html#Object._eq_sd"/>
+<entry name="=~ (Regexp)" url="html/ref_c_regexp.html#Regexp._eq_sd"/>
+<entry name="=~ (String)" url="html/ref_c_string.html#String._eq_sd"/>
+<entry name="&gt;&gt; (Date)" url="html/lib_standard.html#Date._lt_lt"/>
+<entry name="abort (Kernel)" url="html/ref_m_kernel.html#Kernel.abort"/>
+<entry name="abort (PStore)" url="html/lib_standard.html#PStore.abort"/>
+<entry name="abort_on_exception (Thread)" url="html/ref_c_thread.html#Thread.abort_on_exception"/>
+<entry name="abort_on_exception= (Thread)" url="html/ref_c_thread.html#Thread.abort_on_exception_eq"/>
+<entry name="abs (Complex)" url="html/lib_standard.html#Complex.abs"/>
+<entry name="abs (Numeric)" url="html/ref_c_numeric.html#Numeric.abs"/>
+<entry name="abs2 (Complex)" url="html/lib_standard.html#Complex.abs2"/>
+<entry name="accept (Socket)" url="html/lib_network.html#Socket.accept"/>
+<entry name="accept (TCPServer)" url="html/lib_network.html#TCPServer.accept"/>
+<entry name="accept (UNIXServer)" url="html/lib_network.html#UNIXServer.accept"/>
+<entry name="Access Control (classes)" url="html/tut_classes.html#S4"/>
+<entry name="Accessors (Date)" url="html/lib_standard.html#Date.Accessors"/>
+<entry name="Acknowledgments (preface)" url="html/preface.html#S9"/>
+<entry name="add (ThreadGroup)" url="html/ref_c_threadgroup.html#ThreadGroup.add"/>
+<entry name="Adding Information to Exceptions (exceptions)" url="html/tut_exceptions.html#UC"/>
+<entry name="addr (IPSocket)" url="html/lib_network.html#IPSocket.addr"/>
+<entry name="addr (UNIXSocket)" url="html/lib_network.html#UNIXSocket.addr"/>
+<entry name="alias_method (Module)" url="html/ref_c_module.html#Module.alias_method"/>
+<entry name="alive? (Thread)" url="html/ref_c_thread.html#Thread.alive_qm"/>
+<entry name="all (Net::POPMail)" url="html/lib_network.html#Net::POPMail.all"/>
+<entry name="Alternation (stdtypes)" url="html/tut_stdtypes.html#UI"/>
+<entry name="An Example (ruby)" url="html/ext_ruby.html#UF"/>
+<entry name="An Example (win32)" url="html/win32.html#UD"/>
+<entry name="ancestors (Module)" url="html/ref_c_module.html#Module.ancestors"/>
+<entry name="Anchors (stdtypes)" url="html/tut_stdtypes.html#UF"/>
+<entry name="append_features (Module)" url="html/ref_c_module.html#Module.append_features"/>
+<entry name="arg (Complex)" url="html/lib_standard.html#Complex.arg"/>
+<entry name="ARGV (rubyworld)" url="html/rubyworld.html#UB"/>
+<entry name="Arithmetic operations (Bignum)" url="html/ref_c_bignum.html#Bignum.Arithmeticoperations"/>
+<entry name="Arithmetic operations (Complex)" url="html/lib_standard.html#Complex.Arithmeticoperations"/>
+<entry name="Arithmetic operations (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.Arithmeticoperations"/>
+<entry name="Arithmetic operations (Float)" url="html/ref_c_float.html#Float.Arithmeticoperations"/>
+<entry name="arity (Method)" url="html/ref_c_method.html#Method.arity"/>
+<entry name="arity (Proc)" url="html/ref_c_proc.html#Proc.arity"/>
+<entry name="Array" url="html/ref_c_array.html"/>
+<entry name="Array (Kernel)" url="html/ref_m_kernel.html#Kernel.Array"/>
+<entry name="Arrays (containers)" url="html/tut_containers.html#UA"/>
+<entry name="Arrays (language)" url="html/language.html#UF"/>
+<entry name="Arrays and Hashes (intro)" url="html/intro.html#S3"/>
+<entry name="asctime (Time)" url="html/ref_c_time.html#Time.asctime"/>
+<entry name="Assignment (expressions)" url="html/tut_expressions.html#S3"/>
+<entry name="assoc (Array)" url="html/ref_c_array.html#Array.assoc"/>
+<entry name="at (Array)" url="html/ref_c_array.html#Array.at"/>
+<entry name="at (Time)" url="html/ref_c_time.html#Time.at"/>
+<entry name="atan2 (Math)" url="html/ref_m_math.html#Math.atan2"/>
+<entry name="atime (File)" url="html/ref_c_file.html#File.atime"/>
+<entry name="atime (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.atime"/>
+<entry name="attr (Module)" url="html/ref_c_module.html#Module.attr"/>
+<entry name="attr_accessor (Module)" url="html/ref_c_module.html#Module.attr_accessor"/>
+<entry name="attr_reader (Module)" url="html/ref_c_module.html#Module.attr_reader"/>
+<entry name="attr_writer (Module)" url="html/ref_c_module.html#Module.attr_writer"/>
+<entry name="at_exit (Kernel)" url="html/ref_m_kernel.html#Kernel.at_exit"/>
+<entry name="autoload (Kernel)" url="html/ref_m_kernel.html#Kernel.autoload"/>
+<entry name="Backquotes Are Soft (expressions)" url="html/tut_expressions.html#UB"/>
+<entry name="Backslash Sequences in the Substitution (stdtypes)" url="html/tut_stdtypes.html#UL"/>
+<entry name="backtrace (Exception)" url="html/ref_c_exception.html#Exception.backtrace"/>
+<entry name="basename (File)" url="html/ref_c_file.html#File.basename"/>
+<entry name="Basic Input and Output (io)" url="html/tut_io.html"/>
+<entry name="begin (MatchData)" url="html/ref_c_matchdata.html#MatchData.begin"/>
+<entry name="begin (Range)" url="html/ref_c_range.html#Range.begin"/>
+<entry name="BEGIN and END Blocks (language)" url="html/language.html#UA"/>
+<entry name="between? (Comparable)" url="html/ref_m_comparable.html#Comparable.between_qm"/>
+<entry name="Bignum" url="html/ref_c_bignum.html"/>
+<entry name="bind (Socket)" url="html/lib_network.html#Socket.bind"/>
+<entry name="bind (UDPSocket)" url="html/lib_network.html#UDPSocket.bind"/>
+<entry name="Binding" url="html/ref_c_binding.html"/>
+<entry name="binding (Kernel)" url="html/ref_m_kernel.html#Kernel.binding"/>
+<entry name="Binding Events (tk)" url="html/ext_tk.html#S3"/>
+<entry name="binmode (IO)" url="html/ref_c_io.html#IO.binmode"/>
+<entry name="binmode (Net::Telnet)" url="html/lib_network.html#Net::Telnet.binmode"/>
+<entry name="binmode= (Net::Telnet)" url="html/lib_network.html#Net::Telnet.binmode_eq"/>
+<entry name="Bit operations (Bignum)" url="html/ref_c_bignum.html#Bignum.Bitoperations"/>
+<entry name="Bit operations (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.Bitoperations"/>
+<entry name="blksize (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.blksize"/>
+<entry name="blockdev? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.blockdev_qm"/>
+<entry name="blockdev? (FileTest)" url="html/ref_m_filetest.html#FileTest.blockdev_qm"/>
+<entry name="blocks (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.blocks"/>
+<entry name="Blocks and Iterators (containers)" url="html/tut_containers.html#S2"/>
+<entry name="Blocks and Iterators (intro)" url="html/intro.html#S6"/>
+<entry name="Blocks and Subprocesses (threads)" url="html/tut_threads.html#UI"/>
+<entry name="Blocks Can Be Closures (containers)" url="html/tut_containers.html#UG"/>
+<entry name="Blocks for Transactions (containers)" url="html/tut_containers.html#UF"/>
+<entry name="block_given? (Kernel)" url="html/ref_m_kernel.html#Kernel.block_given_qm"/>
+<entry name="Boolean Expressions (expressions)" url="html/tut_expressions.html#UF"/>
+<entry name="Break, Redo, and Next (expressions)" url="html/tut_expressions.html#UL"/>
+<entry name="Bridging Ruby to Other Languages (ruby)" url="html/ext_ruby.html#S7"/>
+<entry name="broadcast (ConditionVariable)" url="html/lib_standard.html#ConditionVariable.broadcast"/>
+<entry name="Bug Reporting (support)" url="html/support.html#S5"/>
+<entry name="Build Environment (rubyworld)" url="html/rubyworld.html#S5"/>
+<entry name="Building Ruby (preface)" url="html/preface.html#UA"/>
+<entry name="Built-in Classes and Methods (builtins)" url="html/builtins.html"/>
+<entry name="But I Miss My C++ Iostream (io)" url="html/tut_io.html#UC"/>
+<entry name="But It Doesn't Work! (trouble)" url="html/trouble.html#S3"/>
+<entry name="But It's Too Slow! (trouble)" url="html/trouble.html#S4"/>
+<entry name="call (Continuation)" url="html/ref_c_continuation.html#Continuation.call"/>
+<entry name="call (Method)" url="html/ref_c_method.html#Method.call"/>
+<entry name="call (Proc)" url="html/ref_c_proc.html#Proc.call"/>
+<entry name="Call (Win32API)" url="html/lib_windows.html#Win32API.Call"/>
+<entry name="call (Win32API)" url="html/lib_windows.html#Win32API.call"/>
+<entry name="callcc (Kernel)" url="html/ref_m_kernel.html#Kernel.callcc"/>
+<entry name="caller (Kernel)" url="html/ref_m_kernel.html#Kernel.caller"/>
+<entry name="Calling a Method (methods)" url="html/tut_methods.html#S2"/>
+<entry name="Calling Methods Dynamically (ospace)" url="html/ospace.html#S3"/>
+<entry name="Canvas (tk)" url="html/ext_tk.html#S4"/>
+<entry name="capitalize (String)" url="html/ref_c_string.html#String.capitalize"/>
+<entry name="capitalize! (String)" url="html/ref_c_string.html#String.capitalize_oh"/>
+<entry name="Case Expressions (expressions)" url="html/tut_expressions.html#S5"/>
+<entry name="casefold? (Regexp)" url="html/ref_c_regexp.html#Regexp.casefold_qm"/>
+<entry name="catch (Kernel)" url="html/ref_m_kernel.html#Kernel.catch"/>
+<entry name="Catch and Throw (exceptions)" url="html/tut_exceptions.html#S4"/>
+<entry name="ceil (Float)" url="html/ref_c_float.html#Float.ceil"/>
+<entry name="center (String)" url="html/ref_c_string.html#String.center"/>
+<entry name="CGI Development (network)" url="html/lib_network.html#S3"/>
+<entry name="Character Classes (stdtypes)" url="html/tut_stdtypes.html#UG"/>
+<entry name="chardev? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.chardev_qm"/>
+<entry name="chardev? (FileTest)" url="html/ref_m_filetest.html#FileTest.chardev_qm"/>
+<entry name="chdir (Dir)" url="html/ref_c_dir.html#Dir.chdir"/>
+<entry name="chmod (File)" url="html/ref_c_file.html#File.chmod"/>
+<entry name="chomp (Kernel)" url="html/ref_m_kernel.html#Kernel.chomp"/>
+<entry name="chomp (String)" url="html/ref_c_string.html#String.chomp"/>
+<entry name="chomp! (Kernel)" url="html/ref_m_kernel.html#Kernel.chomp_oh"/>
+<entry name="chomp! (String)" url="html/ref_c_string.html#String.chomp_oh"/>
+<entry name="chop (Kernel)" url="html/ref_m_kernel.html#Kernel.chop"/>
+<entry name="chop (String)" url="html/ref_c_string.html#String.chop"/>
+<entry name="chop! (Kernel)" url="html/ref_m_kernel.html#Kernel.chop_oh"/>
+<entry name="chop! (String)" url="html/ref_c_string.html#String.chop_oh"/>
+<entry name="chown (File)" url="html/ref_c_file.html#File.chown"/>
+<entry name="chr (Integer)" url="html/ref_c_integer.html#Integer.chr"/>
+<entry name="chroot (Dir)" url="html/ref_c_dir.html#Dir.chroot"/>
+<entry name="Class" url="html/ref_c_class.html"/>
+<entry name="class (Object)" url="html/ref_c_object.html#Object.class"/>
+<entry name="Class and Module Definitions (classes)" url="html/classes.html#S2"/>
+<entry name="Class Methods (classes)" url="html/tut_classes.html#UE"/>
+<entry name="Class Names Are Constants (classes)" url="html/classes.html#UE"/>
+<entry name="Class Variables (classes)" url="html/tut_classes.html#UD"/>
+<entry name="Class Variables and Class Methods (classes)" url="html/tut_classes.html#S3"/>
+<entry name="Classes and Objects (classes)" url="html/classes.html"/>
+<entry name="Classes, Objects, and Variables (classes)" url="html/tut_classes.html"/>
+<entry name="class_eval (Module)" url="html/ref_c_module.html#Module.class_eval"/>
+<entry name="class_variables (Module)" url="html/ref_c_module.html#Module.class_variables"/>
+<entry name="clear (Array)" url="html/ref_c_array.html#Array.clear"/>
+<entry name="clear (Hash)" url="html/ref_c_hash.html#Hash.clear"/>
+<entry name="clone (IO)" url="html/ref_c_io.html#IO.clone"/>
+<entry name="clone (Module)" url="html/ref_c_module.html#Module.clone"/>
+<entry name="clone (Object)" url="html/ref_c_object.html#Object.clone"/>
+<entry name="close (Dir)" url="html/ref_c_dir.html#Dir.close"/>
+<entry name="close (IO)" url="html/ref_c_io.html#IO.close"/>
+<entry name="close (Net::FTP)" url="html/lib_network.html#Net::FTP.close"/>
+<entry name="close (SOCKSSocket)" url="html/lib_network.html#SOCKSSocket.close"/>
+<entry name="close (Tempfile)" url="html/lib_standard.html#Tempfile.close"/>
+<entry name="closed? (IO)" url="html/ref_c_io.html#IO.closed_qm"/>
+<entry name="closed? (Net::FTP)" url="html/lib_network.html#Net::FTP.closed_qm"/>
+<entry name="close_read (BasicSocket)" url="html/lib_network.html#BasicSocket.close_read"/>
+<entry name="close_read (IO)" url="html/ref_c_io.html#IO.close_read"/>
+<entry name="close_write (BasicSocket)" url="html/lib_network.html#BasicSocket.close_write"/>
+<entry name="close_write (IO)" url="html/ref_c_io.html#IO.close_write"/>
+<entry name="cmd (Net::Telnet)" url="html/lib_network.html#Net::Telnet.cmd"/>
+<entry name="cmp (File)" url="html/lib_standard.html#File.cmp"/>
+<entry name="code (Net::HTTPResponse)" url="html/lib_network.html#Net::HTTPResponse.code"/>
+<entry name="coerce (Numeric)" url="html/ref_c_numeric.html#Numeric.coerce"/>
+<entry name="collect (Array)" url="html/ref_c_array.html#Array.collect"/>
+<entry name="collect (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.collect"/>
+<entry name="collect! (Array)" url="html/ref_c_array.html#Array.collect_oh"/>
+<entry name="Collecting Hash Arguments (methods)" url="html/tut_methods.html#UE"/>
+<entry name="Command Expansion (expressions)" url="html/tut_expressions.html#UA"/>
+<entry name="Command Line (irb)" url="html/irb.html#S1"/>
+<entry name="Command-Line Arguments (rubyworld)" url="html/rubyworld.html#S1"/>
+<entry name="Command-Line Options (rubyworld)" url="html/rubyworld.html#UA"/>
+<entry name="Commands (irb)" url="html/irb.html#S3"/>
+<entry name="commit (PStore)" url="html/lib_standard.html#PStore.commit"/>
+<entry name="compact (Array)" url="html/ref_c_array.html#Array.compact"/>
+<entry name="compact! (Array)" url="html/ref_c_array.html#Array.compact_oh"/>
+<entry name="Comparable" url="html/ref_m_comparable.html"/>
+<entry name="compare (File)" url="html/ref_c_file.html#File.compare"/>
+<entry name="Comparisons (Comparable)" url="html/ref_m_comparable.html#Comparable.Comparisons"/>
+<entry name="compile (Regexp)" url="html/ref_c_regexp.html#Regexp.compile"/>
+<entry name="Compile Time? Runtime? Anytime! (ospace)" url="html/ospace.html#S7"/>
+<entry name="concat (Array)" url="html/ref_c_array.html#Array.concat"/>
+<entry name="concat (String)" url="html/ref_c_string.html#String.concat"/>
+<entry name="Condition Variables (threads)" url="html/tut_threads.html#UF"/>
+<entry name="Conditional Execution (expressions)" url="html/tut_expressions.html#S4"/>
+<entry name="Configuring the Prompt (irb)" url="html/irb.html#UA"/>
+<entry name="conjugate (Complex)" url="html/lib_standard.html#Complex.conjugate"/>
+<entry name="connect (Net::FTP)" url="html/lib_network.html#Net::FTP.connect"/>
+<entry name="connect (Socket)" url="html/lib_network.html#Socket.connect"/>
+<entry name="connect (UDPSocket)" url="html/lib_network.html#UDPSocket.connect"/>
+<entry name="connect (WIN32OLE)" url="html/lib_windows.html#WIN32OLE.connect"/>
+<entry name="constants (Module)" url="html/ref_c_module.html#Module.constants"/>
+<entry name="const_defined? (Module)" url="html/ref_c_module.html#Module.const_defined_qm"/>
+<entry name="const_get (Module)" url="html/ref_c_module.html#Module.const_get"/>
+<entry name="const_load (WIN32OLE)" url="html/lib_windows.html#WIN32OLE.const_load"/>
+<entry name="const_set (Module)" url="html/ref_c_module.html#Module.const_set"/>
+<entry name="Containers" url="html/tut_containers.html#S1"/>
+<entry name="Containers, Blocks, and Iterators (containers)" url="html/tut_containers.html"/>
+<entry name="Continuation" url="html/ref_c_continuation.html"/>
+<entry name="Control Structures (intro)" url="html/intro.html#S4"/>
+<entry name="Controlling the Thread Scheduler (threads)" url="html/tut_threads.html#S2"/>
+<entry name="cookies (CGI)" url="html/lib_network.html#CGI.cookies"/>
+<entry name="Cookies (web)" url="html/web.html#UE"/>
+<entry name="copy (File)" url="html/ref_c_file.html#File.copy"/>
+<entry name="cos (Math)" url="html/ref_m_math.html#Math.cos"/>
+<entry name="count (String)" url="html/ref_c_string.html#String.count"/>
+<entry name="cp (File)" url="html/lib_standard.html#File.cp"/>
+<entry name="Create Locals Outside Blocks (trouble)" url="html/trouble.html#UB"/>
+<entry name="create_makefile (mkmf)" url="html/lib_standard.html#mkmf.create_makefile"/>
+<entry name="Creating a Makefile with extconf.rb (ruby)" url="html/ext_ruby.html#UG"/>
+<entry name="Creating an Extension (ruby)" url="html/ext_ruby.html#S5"/>
+<entry name="Creating Forms and HTML (web)" url="html/web.html#UD"/>
+<entry name="Creating Ruby Threads (threads)" url="html/tut_threads.html#UA"/>
+<entry name="critical (Thread)" url="html/ref_c_thread.html#Thread.critical"/>
+<entry name="critical= (Thread)" url="html/ref_c_thread.html#Thread.critical_eq"/>
+<entry name="Cross References (rdtool)" url="html/rdtool.html#S2"/>
+<entry name="crypt (String)" url="html/ref_c_string.html#String.crypt"/>
+<entry name="ctime (File)" url="html/ref_c_file.html#File.ctime"/>
+<entry name="ctime (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.ctime"/>
+<entry name="ctime (Time)" url="html/ref_c_time.html#Time.ctime"/>
+<entry name="current (Thread)" url="html/ref_c_thread.html#Thread.current"/>
+<entry name="Custom Serialization Strategy (ospace)" url="html/ospace.html#UF"/>
+<entry name="day (Time)" url="html/ref_c_time.html#Time.day"/>
+<entry name="debug_mode (Net::FTP)" url="html/lib_network.html#Net::FTP.debug_mode"/>
+<entry name="debug_mode= (Net::FTP)" url="html/lib_network.html#Net::FTP.debug_mode_eq"/>
+<entry name="default (Hash)" url="html/ref_c_hash.html#Hash.default"/>
+<entry name="Default (ThreadGroup)" url="html/ref_c_threadgroup.html#ThreadGroup.Default"/>
+<entry name="default= (Hash)" url="html/ref_c_hash.html#Hash.default_eq"/>
+<entry name="Defined?, And, Or, and Not (expressions)" url="html/tut_expressions.html#UG"/>
+<entry name="define_finalizer (ObjectSpace)" url="html/ref_m_objectspace.html#ObjectSpace.define_finalizer"/>
+<entry name="Defining a Method (methods)" url="html/tut_methods.html#S1"/>
+<entry name="delete (Array)" url="html/ref_c_array.html#Array.delete"/>
+<entry name="delete (CGI::Session)" url="html/lib_network.html#CGI::Session.delete"/>
+<entry name="delete (Dir)" url="html/ref_c_dir.html#Dir.delete"/>
+<entry name="delete (File)" url="html/ref_c_file.html#File.delete"/>
+<entry name="delete (Hash)" url="html/ref_c_hash.html#Hash.delete"/>
+<entry name="delete (Net::POPMail)" url="html/lib_network.html#Net::POPMail.delete"/>
+<entry name="delete (String)" url="html/ref_c_string.html#String.delete"/>
+<entry name="delete! (Net::POPMail)" url="html/lib_network.html#Net::POPMail.delete_oh"/>
+<entry name="delete! (String)" url="html/ref_c_string.html#String.delete_oh"/>
+<entry name="delete_at (Array)" url="html/ref_c_array.html#Array.delete_at"/>
+<entry name="delete_if (Array)" url="html/ref_c_array.html#Array.delete_if"/>
+<entry name="delete_if (Hash)" url="html/ref_c_hash.html#Hash.delete_if"/>
+<entry name="detect (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.detect"/>
+<entry name="dev (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.dev"/>
+<entry name="Dir" url="html/ref_c_dir.html"/>
+<entry name="dir (Net::FTP)" url="html/lib_network.html#Net::FTP.dir"/>
+<entry name="Directly Sharing Variables (ruby)" url="html/ext_ruby.html#UD"/>
+<entry name="directory? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.directory_qm"/>
+<entry name="directory? (FileTest)" url="html/ref_m_filetest.html#FileTest.directory_qm"/>
+<entry name="dirname (File)" url="html/ref_c_file.html#File.dirname"/>
+<entry name="dir_config (mkmf)" url="html/lib_standard.html#mkmf.dir_config"/>
+<entry name="disable (GC)" url="html/ref_m_gc.html#GC.disable"/>
+<entry name="display (Object)" url="html/ref_c_object.html#Object.display"/>
+<entry name="Distributed Ruby (ospace)" url="html/ospace.html#UG"/>
+<entry name="divmod (Numeric)" url="html/ref_c_numeric.html#Numeric.divmod"/>
+<entry name="downcase (String)" url="html/ref_c_string.html#String.downcase"/>
+<entry name="downcase! (String)" url="html/ref_c_string.html#String.downcase_oh"/>
+<entry name="Download Sites (support)" url="html/support.html#S2"/>
+<entry name="downto (Date)" url="html/lib_standard.html#Date.downto"/>
+<entry name="downto (Integer)" url="html/ref_c_integer.html#Integer.downto"/>
+<entry name="do_not_reverse_lookup (BasicSocket)" url="html/lib_network.html#BasicSocket.do_not_reverse_lookup"/>
+<entry name="do_not_reverse_lookup= (BasicSocket)" url="html/lib_network.html#BasicSocket.do_not_reverse_lookup_eq"/>
+<entry name="dump (Marshal)" url="html/ref_m_marshal.html#Marshal.dump"/>
+<entry name="dump (String)" url="html/ref_c_string.html#String.dump"/>
+<entry name="dup (Object)" url="html/ref_c_object.html#Object.dup"/>
+<entry name="E (Math)" url="html/ref_m_math.html#Math.E"/>
+<entry name="each (Array)" url="html/ref_c_array.html#Array.each"/>
+<entry name="each (Dir)" url="html/ref_c_dir.html#Dir.each"/>
+<entry name="each (GetoptLong)" url="html/lib_standard.html#GetoptLong.each"/>
+<entry name="each (Hash)" url="html/ref_c_hash.html#Hash.each"/>
+<entry name="each (IO)" url="html/ref_c_io.html#IO.each"/>
+<entry name="each (Net::HTTPResponse)" url="html/lib_network.html#Net::HTTPResponse.each"/>
+<entry name="each (Net::POP)" url="html/lib_network.html#Net::POP.each"/>
+<entry name="each (Range)" url="html/ref_c_range.html#Range.each"/>
+<entry name="each (String)" url="html/ref_c_string.html#String.each"/>
+<entry name="each (Struct)" url="html/ref_c_struct.html#Struct.each"/>
+<entry name="each (WIN32OLE)" url="html/lib_windows.html#WIN32OLE.each"/>
+<entry name="each_byte (IO)" url="html/ref_c_io.html#IO.each_byte"/>
+<entry name="each_byte (String)" url="html/ref_c_string.html#String.each_byte"/>
+<entry name="each_index (Array)" url="html/ref_c_array.html#Array.each_index"/>
+<entry name="each_key (Hash)" url="html/ref_c_hash.html#Hash.each_key"/>
+<entry name="each_line (IO)" url="html/ref_c_io.html#IO.each_line"/>
+<entry name="each_line (String)" url="html/ref_c_string.html#String.each_line"/>
+<entry name="each_object (ObjectSpace)" url="html/ref_m_objectspace.html#ObjectSpace.each_object"/>
+<entry name="each_pair (Hash)" url="html/ref_c_hash.html#Hash.each_pair"/>
+<entry name="each_value (Hash)" url="html/ref_c_hash.html#Hash.each_value"/>
+<entry name="each_with_index (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.each_with_index"/>
+<entry name="Editor Support (trouble)" url="html/trouble.html#UA"/>
+<entry name="egid (Process)" url="html/ref_m_process.html#Process.egid"/>
+<entry name="egid= (Process)" url="html/ref_m_process.html#Process.egid_eq"/>
+<entry name="Embedded Documentation (rdtool)" url="html/rdtool.html"/>
+<entry name="Embedding a Ruby Interpreter (ruby)" url="html/ext_ruby.html#S6"/>
+<entry name="Embedding Ruby in HTML (web)" url="html/web.html#S2"/>
+<entry name="empty? (Array)" url="html/ref_c_array.html#Array.empty_qm"/>
+<entry name="empty? (Hash)" url="html/ref_c_hash.html#Hash.empty_qm"/>
+<entry name="empty? (String)" url="html/ref_c_string.html#String.empty_qm"/>
+<entry name="enable (GC)" url="html/ref_m_gc.html#GC.enable"/>
+<entry name="end (MatchData)" url="html/ref_c_matchdata.html#MatchData.end"/>
+<entry name="end (Range)" url="html/ref_c_range.html#Range.end"/>
+<entry name="england (Date)" url="html/lib_standard.html#Date.england"/>
+<entry name="entries (Dir)" url="html/ref_c_dir.html#Dir.entries"/>
+<entry name="entries (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.entries"/>
+<entry name="Enumerable" url="html/ref_m_enumerable.html"/>
+<entry name="Environment Variables (rubyworld)" url="html/rubyworld.html#S3"/>
+<entry name="eof (IO)" url="html/ref_c_io.html#IO.eof"/>
+<entry name="eof? (IO)" url="html/ref_c_io.html#IO.eof_qm"/>
+<entry name="eql? (Array)" url="html/ref_c_array.html#Array.eql_qm"/>
+<entry name="eql? (Numeric)" url="html/ref_c_numeric.html#Numeric.eql_qm"/>
+<entry name="eql? (Object)" url="html/ref_c_object.html#Object.eql_qm"/>
+<entry name="equal? (Object)" url="html/ref_c_object.html#Object.equal_qm"/>
+<entry name="Errno" url="html/ref_m_errno.html"/>
+<entry name="error? (GetoptLong)" url="html/lib_standard.html#GetoptLong.error_qm"/>
+<entry name="error_message (GetoptLong)" url="html/lib_standard.html#GetoptLong.error_message"/>
+<entry name="escape (CGI)" url="html/lib_network.html#CGI.escape"/>
+<entry name="escape (Regexp)" url="html/ref_c_regexp.html#Regexp.escape"/>
+<entry name="escapeElement (CGI)" url="html/lib_network.html#CGI.escapeElement"/>
+<entry name="escapeHTML (CGI)" url="html/lib_network.html#CGI.escapeHTML"/>
+<entry name="euid (Process)" url="html/ref_m_process.html#Process.euid"/>
+<entry name="euid= (Process)" url="html/ref_m_process.html#Process.euid_eq"/>
+<entry name="eval (Kernel)" url="html/ref_m_kernel.html#Kernel.eval"/>
+<entry name="Evaluating Ruby Expressions in C (ruby)" url="html/ext_ruby.html#UC"/>
+<entry name="Exception" url="html/ref_c_exception.html"/>
+<entry name="exception" url="html/ref_c_exception.html#Exception.exception"/>
+<entry name="Exceptions, Catch, and Throw (exceptions)" url="html/tut_exceptions.html"/>
+<entry name="exclude_end? (Range)" url="html/ref_c_range.html#Range.exclude_end_qm"/>
+<entry name="exec (Kernel)" url="html/ref_m_kernel.html#Kernel.exec"/>
+<entry name="executable? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.executable_qm"/>
+<entry name="executable? (FileTest)" url="html/ref_m_filetest.html#FileTest.executable_qm"/>
+<entry name="executable_real? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.executable_real_qm"/>
+<entry name="executable_real? (FileTest)" url="html/ref_m_filetest.html#FileTest.executable_real_qm"/>
+<entry name="exist2? (Date)" url="html/lib_standard.html#Date.exist2_qm"/>
+<entry name="exist? (Date)" url="html/lib_standard.html#Date.exist_qm"/>
+<entry name="exist? (FileTest)" url="html/ref_m_filetest.html#FileTest.exist_qm"/>
+<entry name="exists? (FileTest)" url="html/ref_m_filetest.html#FileTest.exists_qm"/>
+<entry name="existw? (Date)" url="html/lib_standard.html#Date.existw_qm"/>
+<entry name="exit (Kernel)" url="html/ref_m_kernel.html#Kernel.exit"/>
+<entry name="exit (Thread)" url="html/ref_c_thread.html#Thread.exit"/>
+<entry name="exit! (Kernel)" url="html/ref_m_kernel.html#Kernel.exit_oh"/>
+<entry name="exit! (Process)" url="html/ref_m_process.html#Process.exit_oh"/>
+<entry name="exp (Math)" url="html/ref_m_math.html#Math.exp"/>
+<entry name="Expanding Arrays in Method Calls (methods)" url="html/tut_methods.html#UC"/>
+<entry name="expand_path (File)" url="html/ref_c_file.html#File.expand_path"/>
+<entry name="Expressions" url="html/tut_expressions.html"/>
+<entry name="extend (Object)" url="html/ref_c_object.html#Object.extend"/>
+<entry name="EXTENDED (Regexp)" url="html/ref_c_regexp.html#Regexp.EXTENDED"/>
+<entry name="Extending Objects (classes)" url="html/classes.html#UD"/>
+<entry name="Extending Ruby (ruby)" url="html/ext_ruby.html"/>
+<entry name="extend_object (Module)" url="html/ref_c_module.html#Module.extend_object"/>
+<entry name="Extensions (language)" url="html/language.html#UN"/>
+<entry name="fail (Kernel)" url="html/ref_m_kernel.html#Kernel.fail"/>
+<entry name="FalseClass" url="html/ref_c_falseclass.html"/>
+<entry name="fcntl (IO)" url="html/ref_c_io.html#IO.fcntl"/>
+<entry name="fetch (Hash)" url="html/ref_c_hash.html#Hash.fetch"/>
+<entry name="File" url="html/ref_c_file.html"/>
+<entry name="file? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.file_qm"/>
+<entry name="file? (FileTest)" url="html/ref_m_filetest.html#FileTest.file_qm"/>
+<entry name="fileno (IO)" url="html/ref_c_io.html#IO.fileno"/>
+<entry name="FileTest" url="html/ref_m_filetest.html"/>
+<entry name="fill (Array)" url="html/ref_c_array.html#Array.fill"/>
+<entry name="find" url="html/lib_standard.html#Find.find"/>
+<entry name="find (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.find"/>
+<entry name="find_all (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.find_all"/>
+<entry name="find_library (mkmf)" url="html/lib_standard.html#mkmf.find_library"/>
+<entry name="finish (Net::POP)" url="html/lib_network.html#Net::POP.finish"/>
+<entry name="finite? (Float)" url="html/ref_c_float.html#Float.finite_qm"/>
+<entry name="first (Array)" url="html/ref_c_array.html#Array.first"/>
+<entry name="first (Range)" url="html/ref_c_range.html#Range.first"/>
+<entry name="Fixnum" url="html/ref_c_fixnum.html"/>
+<entry name="flatten (Array)" url="html/ref_c_array.html#Array.flatten"/>
+<entry name="flatten! (Array)" url="html/ref_c_array.html#Array.flatten_oh"/>
+<entry name="Float" url="html/ref_c_float.html"/>
+<entry name="Float (Kernel)" url="html/ref_m_kernel.html#Kernel.Float"/>
+<entry name="flock (File)" url="html/ref_c_file.html#File.flock"/>
+<entry name="floor (Float)" url="html/ref_c_float.html#Float.floor"/>
+<entry name="flush (IO)" url="html/ref_c_io.html#IO.flush"/>
+<entry name="For ... In (expressions)" url="html/tut_expressions.html#UK"/>
+<entry name="for each (win32)" url="html/win32.html#UC"/>
+<entry name="foreach (Dir)" url="html/ref_c_dir.html#Dir.foreach"/>
+<entry name="foreach (IO)" url="html/ref_c_io.html#IO.foreach"/>
+<entry name="Foreword" url="html/foreword.html"/>
+<entry name="fork (Kernel)" url="html/ref_m_kernel.html#Kernel.fork"/>
+<entry name="fork (Process)" url="html/ref_m_process.html#Process.fork"/>
+<entry name="fork (Thread)" url="html/ref_c_thread.html#Thread.fork"/>
+<entry name="format (Kernel)" url="html/ref_m_kernel.html#Kernel.format"/>
+<entry name="Forms (web)" url="html/web.html#UC"/>
+<entry name="for_fd (Socket)" url="html/lib_network.html#Socket.for_fd"/>
+<entry name="freeze (Object)" url="html/ref_c_object.html#Object.freeze"/>
+<entry name="Freezing Objects (classes)" url="html/classes.html#S5"/>
+<entry name="frexp (Math)" url="html/ref_m_math.html#Math.frexp"/>
+<entry name="frozen? (Object)" url="html/ref_c_object.html#Object.frozen_qm"/>
+<entry name="FTP_PORT (Net::FTP)" url="html/lib_network.html#Net::FTP.FTP_PORT"/>
+<entry name="ftype (File)" url="html/ref_c_file.html#File.ftype"/>
+<entry name="ftype (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.ftype"/>
+<entry name="garbage_collect (GC)" url="html/ref_m_gc.html#GC.garbage_collect"/>
+<entry name="garbage_collect (ObjectSpace)" url="html/ref_m_objectspace.html#ObjectSpace.garbage_collect"/>
+<entry name="GC" url="html/ref_m_gc.html"/>
+<entry name="General Delimited Input (language)" url="html/language.html#UB"/>
+<entry name="get (GetoptLong)" url="html/lib_standard.html#GetoptLong.get"/>
+<entry name="get (Net::HTTP)" url="html/lib_network.html#Net::HTTP.get"/>
+<entry name="getaddress (IPSocket)" url="html/lib_network.html#IPSocket.getaddress"/>
+<entry name="getaddrinfo (Socket)" url="html/lib_network.html#Socket.getaddrinfo"/>
+<entry name="getbinaryfile (Net::FTP)" url="html/lib_network.html#Net::FTP.getbinaryfile"/>
+<entry name="getc (IO)" url="html/ref_c_io.html#IO.getc"/>
+<entry name="gethostbyaddr (Socket)" url="html/lib_network.html#Socket.gethostbyaddr"/>
+<entry name="gethostbyname (Socket)" url="html/lib_network.html#Socket.gethostbyname"/>
+<entry name="gethostbyname (TCPSocket)" url="html/lib_network.html#TCPSocket.gethostbyname"/>
+<entry name="gethostname (Socket)" url="html/lib_network.html#Socket.gethostname"/>
+<entry name="getnameinfo (Socket)" url="html/lib_network.html#Socket.getnameinfo"/>
+<entry name="getpeername (BasicSocket)" url="html/lib_network.html#BasicSocket.getpeername"/>
+<entry name="getpgid (Process)" url="html/ref_m_process.html#Process.getpgid"/>
+<entry name="getpgrp (Process)" url="html/ref_m_process.html#Process.getpgrp"/>
+<entry name="getpriority (Process)" url="html/ref_m_process.html#Process.getpriority"/>
+<entry name="gets (IO)" url="html/ref_c_io.html#IO.gets"/>
+<entry name="gets (Kernel)" url="html/ref_m_kernel.html#Kernel.gets"/>
+<entry name="getservbyname (Socket)" url="html/lib_network.html#Socket.getservbyname"/>
+<entry name="getsockname (BasicSocket)" url="html/lib_network.html#BasicSocket.getsockname"/>
+<entry name="getsockopt (BasicSocket)" url="html/lib_network.html#BasicSocket.getsockopt"/>
+<entry name="gettextfile (Net::FTP)" url="html/lib_network.html#Net::FTP.gettextfile"/>
+<entry name="Getting and Setting Properties (win32)" url="html/win32.html#UA"/>
+<entry name="Getting Widget Data (tk)" url="html/ext_tk.html#UB"/>
+<entry name="getwd (Dir)" url="html/ref_c_dir.html#Dir.getwd"/>
+<entry name="get_option (GetoptLong)" url="html/lib_standard.html#GetoptLong.get_option"/>
+<entry name="gid (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.gid"/>
+<entry name="gid (Process)" url="html/ref_m_process.html#Process.gid"/>
+<entry name="gid= (Process)" url="html/ref_m_process.html#Process.gid_eq"/>
+<entry name="glob (Dir)" url="html/ref_c_dir.html#Dir.glob"/>
+<entry name="global_variables (Kernel)" url="html/ref_m_kernel.html#Kernel.global_variables"/>
+<entry name="gm (Time)" url="html/ref_c_time.html#Time.gm"/>
+<entry name="gmt? (Time)" url="html/ref_c_time.html#Time.gmt_qm"/>
+<entry name="gmtime (Time)" url="html/ref_c_time.html#Time.gmtime"/>
+<entry name="gregorian (Date)" url="html/lib_standard.html#Date.gregorian"/>
+<entry name="gregorian_leap? (Date)" url="html/lib_standard.html#Date.gregorian_leap_qm"/>
+<entry name="grep (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.grep"/>
+<entry name="Grouping (stdtypes)" url="html/tut_stdtypes.html#UJ"/>
+<entry name="grpowned? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.grpowned_qm"/>
+<entry name="grpowned? (FileTest)" url="html/ref_m_filetest.html#FileTest.grpowned_qm"/>
+<entry name="gsub (Kernel)" url="html/ref_m_kernel.html#Kernel.gsub"/>
+<entry name="gsub (String)" url="html/ref_c_string.html#String.gsub"/>
+<entry name="gsub! (Kernel)" url="html/ref_m_kernel.html#Kernel.gsub_oh"/>
+<entry name="gsub! (String)" url="html/ref_c_string.html#String.gsub_oh"/>
+<entry name="Handling Exceptions (exceptions)" url="html/tut_exceptions.html#S2"/>
+<entry name="Hash" url="html/ref_c_hash.html"/>
+<entry name="hash (Object)" url="html/ref_c_object.html#Object.hash"/>
+<entry name="hash (String)" url="html/ref_c_string.html#String.hash"/>
+<entry name="Hashes (containers)" url="html/tut_containers.html#UB"/>
+<entry name="Hashes (language)" url="html/language.html#UG"/>
+<entry name="has_key? (CGI)" url="html/lib_network.html#CGI.has_key_qm"/>
+<entry name="has_key? (Hash)" url="html/ref_c_hash.html#Hash.has_key_qm"/>
+<entry name="has_value? (Hash)" url="html/ref_c_hash.html#Hash.has_value_qm"/>
+<entry name="have_func (mkmf)" url="html/lib_standard.html#mkmf.have_func"/>
+<entry name="have_header (mkmf)" url="html/lib_standard.html#mkmf.have_header"/>
+<entry name="have_library (mkmf)" url="html/lib_standard.html#mkmf.have_library"/>
+<entry name="head (Net::HTTP)" url="html/lib_network.html#Net::HTTP.head"/>
+<entry name="header (CGI)" url="html/lib_network.html#CGI.header"/>
+<entry name="header (Net::POPMail)" url="html/lib_network.html#Net::POPMail.header"/>
+<entry name="hex (String)" url="html/ref_c_string.html#String.hex"/>
+<entry name="Higher-Level Access (network)" url="html/lib_network.html#S2"/>
+<entry name="hour (Time)" url="html/ref_c_time.html#Time.hour"/>
+<entry name="How Classes and Objects Interact (classes)" url="html/classes.html#S1"/>
+<entry name="How Did We Get Here? (ospace)" url="html/ospace.html#UE"/>
+<entry name="HTML Output Methods (network)" url="html/lib_network.html#UA"/>
+<entry name="I (Complex)" url="html/lib_standard.html#Complex.Complex::I"/>
+<entry name="id (Object)" url="html/ref_c_object.html#Object.id"/>
+<entry name="id2name (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.id2name"/>
+<entry name="id2name (Symbol)" url="html/ref_c_symbol.html#Symbol.id2name"/>
+<entry name="If and Unless Expressions (expressions)" url="html/tut_expressions.html#UH"/>
+<entry name="If and Unless Modifiers (expressions)" url="html/tut_expressions.html#UI"/>
+<entry name="IGNORECASE (Regexp)" url="html/ref_c_regexp.html#Regexp.IGNORECASE"/>
+<entry name="im (Numeric)" url="html/ref_c_numeric.html#Numeric.im"/>
+<entry name="image (Complex)" url="html/lib_standard.html#Complex.image"/>
+<entry name="Implementing a SongList Container (containers)" url="html/tut_containers.html#UC"/>
+<entry name="Implementing Iterators (containers)" url="html/tut_containers.html#UD"/>
+<entry name="Improving Performance (web)" url="html/web.html#S3"/>
+<entry name="include (Module)" url="html/ref_c_module.html#Module.include"/>
+<entry name="include? (Array)" url="html/ref_c_array.html#Array.include_qm"/>
+<entry name="include? (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.include_qm"/>
+<entry name="include? (Hash)" url="html/ref_c_hash.html#Hash.include_qm"/>
+<entry name="include? (String)" url="html/ref_c_string.html#String.include_qm"/>
+<entry name="included_modules (Module)" url="html/ref_c_module.html#Module.included_modules"/>
+<entry name="Including Other Files (modules)" url="html/tut_modules.html#S4"/>
+<entry name="Including Other Files (rdtool)" url="html/rdtool.html#S4"/>
+<entry name="Independent Children (threads)" url="html/tut_threads.html#UH"/>
+<entry name="index (Array)" url="html/ref_c_array.html#Array.index"/>
+<entry name="index (Hash)" url="html/ref_c_hash.html#Hash.index"/>
+<entry name="index (String)" url="html/ref_c_string.html#String.index"/>
+<entry name="indexes (Array)" url="html/ref_c_array.html#Array.indexes"/>
+<entry name="indexes (Hash)" url="html/ref_c_hash.html#Hash.indexes"/>
+<entry name="indices (Array)" url="html/ref_c_array.html#Array.indices"/>
+<entry name="indices (Hash)" url="html/ref_c_hash.html#Hash.indices"/>
+<entry name="infinite? (Float)" url="html/ref_c_float.html#Float.infinite_qm"/>
+<entry name="Inheritance and Messages (classes)" url="html/tut_classes.html#S1"/>
+<entry name="Inheritance and Mixins (classes)" url="html/tut_classes.html#UA"/>
+<entry name="Inheritance and Visibility (classes)" url="html/classes.html#S4"/>
+<entry name="inherited (Class)" url="html/ref_c_class.html#Class.inherited"/>
+<entry name="Initialization File (irb)" url="html/irb.html#S2"/>
+<entry name="Inline Formatting (rdtool)" url="html/rdtool.html#S1"/>
+<entry name="ino (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.ino"/>
+<entry name="inspect (Object)" url="html/ref_c_object.html#Object.inspect"/>
+<entry name="inspect (Symbol)" url="html/ref_c_symbol.html#Symbol.inspect"/>
+<entry name="install (File)" url="html/lib_standard.html#File.install"/>
+<entry name="Installing eruby in Apache (web)" url="html/web.html#UH"/>
+<entry name="Installing Ruby (preface)" url="html/preface.html#S6"/>
+<entry name="Instance Variables in Mixins (modules)" url="html/tut_modules.html#UA"/>
+<entry name="instance_eval (Object)" url="html/ref_c_object.html#Object.instance_eval"/>
+<entry name="instance_methods (Module)" url="html/ref_c_module.html#Module.instance_methods"/>
+<entry name="instance_of? (Object)" url="html/ref_c_object.html#Object.instance_of_qm"/>
+<entry name="instance_variables (Object)" url="html/ref_c_object.html#Object.instance_variables"/>
+<entry name="Integer" url="html/ref_c_integer.html"/>
+<entry name="Integer (Kernel)" url="html/ref_m_kernel.html#Kernel.Integer"/>
+<entry name="Integer and Floating Point Numbers (language)" url="html/language.html#UC"/>
+<entry name="integer? (Integer)" url="html/ref_c_integer.html#Integer.integer_qm"/>
+<entry name="integer? (Numeric)" url="html/ref_c_numeric.html#Numeric.integer_qm"/>
+<entry name="Interactive Ruby (preface)" url="html/preface.html#UB"/>
+<entry name="Interactive Ruby (trouble)" url="html/trouble.html#S2"/>
+<entry name="Interactive Ruby Shell (irb)" url="html/irb.html"/>
+<entry name="intern (String)" url="html/ref_c_string.html#String.intern"/>
+<entry name="invert (Hash)" url="html/ref_c_hash.html#Hash.invert"/>
+<entry name="invoke (WIN32OLE)" url="html/lib_windows.html#WIN32OLE.invoke"/>
+<entry name="IO" url="html/ref_c_io.html"/>
+<entry name="ioctl (IO)" url="html/ref_c_io.html#IO.ioctl"/>
+<entry name="Is Ruby for Me? (preface)" url="html/preface.html#S3"/>
+<entry name="isatty (IO)" url="html/ref_c_io.html#IO.isatty"/>
+<entry name="isdst (Time)" url="html/ref_c_time.html#Time.isdst"/>
+<entry name="is_a? (Object)" url="html/ref_c_object.html#Object.is_a_qm"/>
+<entry name="italy (Date)" url="html/lib_standard.html#Date.italy"/>
+<entry name="iterator? (Kernel)" url="html/ref_m_kernel.html#Kernel.iterator_qm"/>
+<entry name="Iterators (expressions)" url="html/tut_expressions.html#UJ"/>
+<entry name="Iterators and the Enumerable Module (modules)" url="html/tut_modules.html#S3"/>
+<entry name="Iterators for Reading (io)" url="html/tut_io.html#UA"/>
+<entry name="jd (Date)" url="html/lib_standard.html#Date.jd"/>
+<entry name="join (Array)" url="html/ref_c_array.html#Array.join"/>
+<entry name="join (File)" url="html/ref_c_file.html#File.join"/>
+<entry name="join (Thread)" url="html/ref_c_thread.html#Thread.join"/>
+<entry name="julian (Date)" url="html/lib_standard.html#Date.julian"/>
+<entry name="julian_leap? (Date)" url="html/lib_standard.html#Date.julian_leap_qm"/>
+<entry name="Just One More Thing (tk)" url="html/ext_tk.html#UE"/>
+<entry name="kcode (Regexp)" url="html/ref_c_regexp.html#Regexp.kcode"/>
+<entry name="Kernel" url="html/ref_m_kernel.html"/>
+<entry name="key? (Hash)" url="html/ref_c_hash.html#Hash.key_qm"/>
+<entry name="key? (Net::HTTPResponse)" url="html/lib_network.html#Net::HTTPResponse.key_qm"/>
+<entry name="key? (Thread)" url="html/ref_c_thread.html#Thread.key_qm"/>
+<entry name="keys (CGI)" url="html/lib_network.html#CGI.keys"/>
+<entry name="keys (Hash)" url="html/ref_c_hash.html#Hash.keys"/>
+<entry name="kill (Process)" url="html/ref_m_process.html#Process.kill"/>
+<entry name="kill (Thread)" url="html/ref_c_thread.html#Thread.kill"/>
+<entry name="kind_of? (Object)" url="html/ref_c_object.html#Object.kind_of_qm"/>
+<entry name="lambda (Kernel)" url="html/ref_m_kernel.html#Kernel.lambda"/>
+<entry name="last (Array)" url="html/ref_c_array.html#Array.last"/>
+<entry name="last (Range)" url="html/ref_c_range.html#Range.last"/>
+<entry name="lastresp (Net::FTP)" url="html/lib_network.html#Net::FTP.lastresp"/>
+<entry name="last_match (Regexp)" url="html/ref_c_regexp.html#Regexp.last_match"/>
+<entry name="ldexp (Math)" url="html/ref_m_math.html#Math.ldexp"/>
+<entry name="leap? (Date)" url="html/lib_standard.html#Date.leap_qm"/>
+<entry name="length (Array)" url="html/ref_c_array.html#Array.length"/>
+<entry name="length (Hash)" url="html/ref_c_hash.html#Hash.length"/>
+<entry name="length (MatchData)" url="html/ref_c_matchdata.html#MatchData.length"/>
+<entry name="length (Range)" url="html/ref_c_range.html#Range.length"/>
+<entry name="length (String)" url="html/ref_c_string.html#String.length"/>
+<entry name="length (Struct)" url="html/ref_c_struct.html#Struct.length"/>
+<entry name="lineno (IO)" url="html/ref_c_io.html#IO.lineno"/>
+<entry name="lineno= (IO)" url="html/ref_c_io.html#IO.lineno_eq"/>
+<entry name="link (File)" url="html/ref_c_file.html#File.link"/>
+<entry name="list (Net::FTP)" url="html/lib_network.html#Net::FTP.list"/>
+<entry name="list (Thread)" url="html/ref_c_thread.html#Thread.list"/>
+<entry name="list (ThreadGroup)" url="html/ref_c_threadgroup.html#ThreadGroup.list"/>
+<entry name="listen (Socket)" url="html/lib_network.html#Socket.listen"/>
+<entry name="ljust (String)" url="html/ref_c_string.html#String.ljust"/>
+<entry name="load (Kernel)" url="html/ref_m_kernel.html#Kernel.load"/>
+<entry name="load (Marshal)" url="html/ref_m_marshal.html#Marshal.load"/>
+<entry name="local (Time)" url="html/ref_c_time.html#Time.local"/>
+<entry name="localtime (Time)" url="html/ref_c_time.html#Time.localtime"/>
+<entry name="local_variables (Kernel)" url="html/ref_m_kernel.html#Kernel.local_variables"/>
+<entry name="lock (Mutex)" url="html/lib_standard.html#Mutex.lock"/>
+<entry name="locked? (Mutex)" url="html/lib_standard.html#Mutex.locked_qm"/>
+<entry name="Locking Ruby in the Safe (taint)" url="html/taint.html"/>
+<entry name="log (Math)" url="html/ref_m_math.html#Math.log"/>
+<entry name="log10 (Math)" url="html/ref_m_math.html#Math.log10"/>
+<entry name="login (Net::FTP)" url="html/lib_network.html#Net::FTP.login"/>
+<entry name="login (Net::Telnet)" url="html/lib_network.html#Net::Telnet.login"/>
+<entry name="Looking at Classes (ospace)" url="html/ospace.html#S2"/>
+<entry name="Looking at Objects (ospace)" url="html/ospace.html#S1"/>
+<entry name="Looking Inside Classes (ospace)" url="html/ospace.html#UB"/>
+<entry name="Looking Inside Objects (ospace)" url="html/ospace.html#UA"/>
+<entry name="lookup_order (BasicSocket)" url="html/lib_network.html#BasicSocket.lookup_order"/>
+<entry name="lookup_order= (BasicSocket)" url="html/lib_network.html#BasicSocket.lookup_order_eq"/>
+<entry name="loop (Kernel)" url="html/ref_m_kernel.html#Kernel.loop"/>
+<entry name="Loops (expressions)" url="html/tut_expressions.html#S6"/>
+<entry name="ls (Net::FTP)" url="html/lib_network.html#Net::FTP.ls"/>
+<entry name="lstat (File)" url="html/ref_c_file.html#File.lstat"/>
+<entry name="Mailing Lists (support)" url="html/support.html#S4"/>
+<entry name="mails (Net::POP)" url="html/lib_network.html#Net::POP.mails"/>
+<entry name="main (Thread)" url="html/ref_c_thread.html#Thread.main"/>
+<entry name="makedirs (File)" url="html/ref_c_file.html#File.makedirs"/>
+<entry name="Making Blocks More Dynamic (methods)" url="html/tut_methods.html#UD"/>
+<entry name="Mandatory Disclaimer (rdtool)" url="html/rdtool.html#S6"/>
+<entry name="Manipulating Threads (threads)" url="html/tut_threads.html#UB"/>
+<entry name="map (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.map"/>
+<entry name="map! (Array)" url="html/ref_c_array.html#Array.map_oh"/>
+<entry name="Marshal" url="html/ref_m_marshal.html"/>
+<entry name="Marshaling and Distributed Ruby (ospace)" url="html/ospace.html#S6"/>
+<entry name="match (Regexp)" url="html/ref_c_regexp.html#Regexp.match"/>
+<entry name="MatchData" url="html/ref_c_matchdata.html"/>
+<entry name="Math" url="html/ref_m_math.html"/>
+<entry name="max (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.max"/>
+<entry name="mday (Time)" url="html/ref_c_time.html#Time.mday"/>
+<entry name="member? (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.member_qm"/>
+<entry name="member? (Hash)" url="html/ref_c_hash.html#Hash.member_qm"/>
+<entry name="members (Struct)" url="html/ref_c_struct.html#Struct.members"/>
+<entry name="Memory Allocation (ruby)" url="html/ext_ruby.html#S4"/>
+<entry name="message (Exception)" url="html/ref_c_exception.html#Exception.message"/>
+<entry name="message (Net::HTTPResponse)" url="html/lib_network.html#Net::HTTPResponse.message"/>
+<entry name="message_loop (WIN32OLE_EVENT)" url="html/lib_windows.html#WIN32OLE_EVENT.message_loop"/>
+<entry name="Method" url="html/ref_c_method.html"/>
+<entry name="method (Object)" url="html/ref_c_object.html#Object.method"/>
+<entry name="Method Names (rdtool)" url="html/rdtool.html#S3"/>
+<entry name="methods (Object)" url="html/ref_c_object.html#Object.methods"/>
+<entry name="Methods and Blocks (methods)" url="html/tut_methods.html#UB"/>
+<entry name="method_added (Module)" url="html/ref_c_module.html#Module.method_added"/>
+<entry name="method_defined? (Module)" url="html/ref_c_module.html#Module.method_defined_qm"/>
+<entry name="method_missing (Object)" url="html/ref_c_object.html#Object.method_missing"/>
+<entry name="Microsoft Windows Support (windows)" url="html/lib_windows.html"/>
+<entry name="min (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.min"/>
+<entry name="min (Time)" url="html/ref_c_time.html#Time.min"/>
+<entry name="Miscellaneous Expressions (expressions)" url="html/tut_expressions.html#S2"/>
+<entry name="Mixin Modules (classes)" url="html/classes.html#UC"/>
+<entry name="Mixins (modules)" url="html/tut_modules.html#S2"/>
+<entry name="mjd (Date)" url="html/lib_standard.html#Date.mjd"/>
+<entry name="mkdir (Dir)" url="html/ref_c_dir.html#Dir.mkdir"/>
+<entry name="mkpath (File)" url="html/lib_standard.html#File.mkpath"/>
+<entry name="mktime (Time)" url="html/ref_c_time.html#Time.mktime"/>
+<entry name="mode (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.mode"/>
+<entry name="Module" url="html/ref_c_module.html"/>
+<entry name="Modules" url="html/tut_modules.html"/>
+<entry name="module_eval (Module)" url="html/ref_c_module.html#Module.module_eval"/>
+<entry name="module_function (Module)" url="html/ref_c_module.html#Module.module_function"/>
+<entry name="modulo (Numeric)" url="html/ref_c_numeric.html#Numeric.modulo"/>
+<entry name="mon (Time)" url="html/ref_c_time.html#Time.mon"/>
+<entry name="month (Time)" url="html/ref_c_time.html#Time.month"/>
+<entry name="More About Methods (methods)" url="html/tut_methods.html"/>
+<entry name="move (File)" url="html/ref_c_file.html#File.move"/>
+<entry name="mtime (File)" url="html/ref_c_file.html#File.mtime"/>
+<entry name="mtime (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.mtime"/>
+<entry name="mtime (Net::FTP)" url="html/lib_network.html#Net::FTP.mtime"/>
+<entry name="MULTILINE (Regexp)" url="html/ref_c_regexp.html#Regexp.MULTILINE"/>
+<entry name="Multipart Form Values (network)" url="html/lib_network.html#UB"/>
+<entry name="Multithreading (threads)" url="html/tut_threads.html#S1"/>
+<entry name="Mutual Exclusion (threads)" url="html/tut_threads.html#S3"/>
+<entry name="mv (File)" url="html/lib_standard.html#File.mv"/>
+<entry name="name (Module)" url="html/ref_c_module.html#Module.name"/>
+<entry name="Named Arguments (win32)" url="html/win32.html#UB"/>
+<entry name="Names (language)" url="html/language.html#S3"/>
+<entry name="Namespaces (modules)" url="html/tut_modules.html#S1"/>
+<entry name="nan? (Float)" url="html/ref_c_float.html#Float.nan_qm"/>
+<entry name="Nested Assignments (expressions)" url="html/tut_expressions.html#UD"/>
+<entry name="nesting (Module)" url="html/ref_c_module.html#Module.nesting"/>
+<entry name="Network and Web Libraries (network)" url="html/lib_network.html"/>
+<entry name="new (Array)" url="html/ref_c_array.html#Array.new"/>
+<entry name="new (CGI)" url="html/lib_network.html#CGI.new"/>
+<entry name="new (CGI::Session)" url="html/lib_network.html#CGI::Session.new"/>
+<entry name="new (Class)" url="html/ref_c_class.html#Class.new"/>
+<entry name="new (Complex)" url="html/lib_standard.html#Complex.new"/>
+<entry name="new (Date)" url="html/lib_standard.html#Date.new"/>
+<entry name="new (Dir)" url="html/ref_c_dir.html#Dir.new"/>
+<entry name="new (File)" url="html/ref_c_file.html#File.new"/>
+<entry name="new (GetoptLong)" url="html/lib_standard.html#GetoptLong.new"/>
+<entry name="new (Hash)" url="html/ref_c_hash.html#Hash.new"/>
+<entry name="new (intro)" url="html/intro.html"/>
+<entry name="new (IO)" url="html/ref_c_io.html#IO.new"/>
+<entry name="new (Module)" url="html/ref_c_module.html#Module.new"/>
+<entry name="new (Net::FTP)" url="html/lib_network.html#Net::FTP.new"/>
+<entry name="new (Net::HTTP)" url="html/lib_network.html#Net::HTTP.new"/>
+<entry name="new (Net::POP)" url="html/lib_network.html#Net::POP.new"/>
+<entry name="new (Net::SMTP)" url="html/lib_network.html#Net::SMTP.new"/>
+<entry name="new (Net::Telnet)" url="html/lib_network.html#Net::Telnet.new"/>
+<entry name="new (Proc)" url="html/ref_c_proc.html#Proc.new"/>
+<entry name="new (PStore)" url="html/lib_standard.html#PStore.new"/>
+<entry name="new (Range)" url="html/ref_c_range.html#Range.new"/>
+<entry name="new (Regexp)" url="html/ref_c_regexp.html#Regexp.new"/>
+<entry name="new (Socket)" url="html/lib_network.html#Socket.new"/>
+<entry name="new (SOCKSSocket)" url="html/lib_network.html#SOCKSSocket.new"/>
+<entry name="new (String)" url="html/ref_c_string.html#String.new"/>
+<entry name="new (Struct)" url="html/ref_c_struct.html#Struct.new"/>
+<entry name="new (TCPServer)" url="html/lib_network.html#TCPServer.new"/>
+<entry name="new (TCPSocket)" url="html/lib_network.html#TCPSocket.new"/>
+<entry name="new (Tempfile)" url="html/lib_standard.html#Tempfile.new"/>
+<entry name="new (Thread)" url="html/ref_c_thread.html#Thread.new"/>
+<entry name="new (ThreadGroup)" url="html/ref_c_threadgroup.html#ThreadGroup.new"/>
+<entry name="new (Time)" url="html/ref_c_time.html#Time.new"/>
+<entry name="new (UDPSocket)" url="html/lib_network.html#UDPSocket.new"/>
+<entry name="new (UNIXServer)" url="html/lib_network.html#UNIXServer.new"/>
+<entry name="new (UNIXSocket)" url="html/lib_network.html#UNIXSocket.new"/>
+<entry name="new (WeakRef)" url="html/lib_standard.html#WeakRef.new"/>
+<entry name="new (Win32API)" url="html/lib_windows.html#Win32API.new"/>
+<entry name="new (WIN32OLE)" url="html/lib_windows.html#WIN32OLE.new"/>
+<entry name="new (WIN32OLE_EVENT)" url="html/lib_windows.html#WIN32OLE_EVENT.new"/>
+<entry name="new1 (Date)" url="html/lib_standard.html#Date.new1"/>
+<entry name="new2 (Date)" url="html/lib_standard.html#Date.new2"/>
+<entry name="new3 (Date)" url="html/lib_standard.html#Date.new3"/>
+<entry name="newsg (Date)" url="html/lib_standard.html#Date.newsg"/>
+<entry name="neww (Date)" url="html/lib_standard.html#Date.neww"/>
+<entry name="next (Date)" url="html/lib_standard.html#Date.next"/>
+<entry name="next (Integer)" url="html/ref_c_integer.html#Integer.next"/>
+<entry name="next (String)" url="html/ref_c_string.html#String.next"/>
+<entry name="next! (String)" url="html/ref_c_string.html#String.next_oh"/>
+<entry name="nil? (NilClass)" url="html/ref_c_nilclass.html#NilClass.nil_qm"/>
+<entry name="nil? (Object)" url="html/ref_c_object.html#Object.nil_qm"/>
+<entry name="NilClass" url="html/ref_c_nilclass.html"/>
+<entry name="nitems (Array)" url="html/ref_c_array.html#Array.nitems"/>
+<entry name="nlink (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.nlink"/>
+<entry name="nonzero? (Numeric)" url="html/ref_c_numeric.html#Numeric.nonzero_qm"/>
+<entry name="Notation Conventions (preface)" url="html/preface.html#S10"/>
+<entry name="now (Time)" url="html/ref_c_time.html#Time.now"/>
+<entry name="NO_ARGUMENT (GetoptLong)" url="html/lib_standard.html#GetoptLong.NO_ARGUMENT"/>
+<entry name="ns? (Date)" url="html/lib_standard.html#Date.ns_qm"/>
+<entry name="Numbers (stdtypes)" url="html/tut_stdtypes.html#S1"/>
+<entry name="Numeric" url="html/ref_c_numeric.html"/>
+<entry name="Object" url="html/ref_c_object.html"/>
+<entry name="Object Creation (tk)" url="html/ext_tk.html#UF"/>
+<entry name="Object-Oriented Design Libraries (patterns)" url="html/lib_patterns.html"/>
+<entry name="Object-Oriented Regular Expressions (stdtypes)" url="html/tut_stdtypes.html#UM"/>
+<entry name="Object-Specific Classes (classes)" url="html/classes.html#UB"/>
+<entry name="Objects and Attributes (classes)" url="html/tut_classes.html#S2"/>
+<entry name="ObjectSpace" url="html/ref_m_objectspace.html"/>
+<entry name="oct (String)" url="html/ref_c_string.html#String.oct"/>
+<entry name="offset (MatchData)" url="html/ref_c_matchdata.html#MatchData.offset"/>
+<entry name="Onward and Upward (intro)" url="html/intro.html#S8"/>
+<entry name="on_event (WIN32OLE_EVENT)" url="html/lib_windows.html#WIN32OLE_EVENT.on_event"/>
+<entry name="open (Dir)" url="html/ref_c_dir.html#Dir.open"/>
+<entry name="open (File)" url="html/ref_c_file.html#File.open"/>
+<entry name="open (Kernel)" url="html/ref_m_kernel.html#Kernel.open"/>
+<entry name="open (Net::FTP)" url="html/lib_network.html#Net::FTP.open"/>
+<entry name="open (Socket)" url="html/lib_network.html#Socket.open"/>
+<entry name="open (SOCKSSocket)" url="html/lib_network.html#SOCKSSocket.open"/>
+<entry name="open (TCPServer)" url="html/lib_network.html#TCPServer.open"/>
+<entry name="open (TCPSocket)" url="html/lib_network.html#TCPSocket.open"/>
+<entry name="open (Tempfile)" url="html/lib_standard.html#Tempfile.open"/>
+<entry name="open (UDPSocket)" url="html/lib_network.html#UDPSocket.open"/>
+<entry name="open (UNIXServer)" url="html/lib_network.html#UNIXServer.open"/>
+<entry name="open (UNIXSocket)" url="html/lib_network.html#UNIXSocket.open"/>
+<entry name="Opening and Closing Files (io)" url="html/tut_io.html#S2"/>
+<entry name="Operator Expressions (expressions)" url="html/tut_expressions.html#S1"/>
+<entry name="Optimizing (win32)" url="html/win32.html#UE"/>
+<entry name="OPTIONAL_ARGUMENT (GetoptLong)" url="html/lib_standard.html#GetoptLong.OPTIONAL_ARGUMENT"/>
+<entry name="Options (tk)" url="html/ext_tk.html#UG"/>
+<entry name="ordering (GetoptLong)" url="html/lib_standard.html#GetoptLong.ordering"/>
+<entry name="ordering= (GetoptLong)" url="html/lib_standard.html#GetoptLong.ordering_eq"/>
+<entry name="os? (Date)" url="html/lib_standard.html#Date.os_qm"/>
+<entry name="Other Forms of Assignment (expressions)" url="html/tut_expressions.html#UE"/>
+<entry name="out (CGI)" url="html/lib_network.html#CGI.out"/>
+<entry name="owned? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.owned_qm"/>
+<entry name="owned? (FileTest)" url="html/ref_m_filetest.html#FileTest.owned_qm"/>
+<entry name="p (Kernel)" url="html/ref_m_kernel.html#Kernel.p"/>
+<entry name="pack (Array)" url="html/ref_c_array.html#Array.pack"/>
+<entry name="pair (Socket)" url="html/lib_network.html#Socket.pair"/>
+<entry name="Parallel Assignment (expressions)" url="html/tut_expressions.html#UC"/>
+<entry name="params (CGI)" url="html/lib_network.html#CGI.params"/>
+<entry name="parse (CGI)" url="html/lib_network.html#CGI.parse"/>
+<entry name="parsedate" url="html/lib_standard.html#ParseDate.parsedate"/>
+<entry name="pass (Thread)" url="html/ref_c_thread.html#Thread.pass"/>
+<entry name="passive (Net::FTP)" url="html/lib_network.html#Net::FTP.passive"/>
+<entry name="passive= (Net::FTP)" url="html/lib_network.html#Net::FTP.passive_eq"/>
+<entry name="path (File)" url="html/ref_c_file.html#File.path"/>
+<entry name="path (PStore)" url="html/lib_standard.html#PStore.path"/>
+<entry name="path (Tempfile)" url="html/lib_standard.html#Tempfile.path"/>
+<entry name="path (UNIXSocket)" url="html/lib_network.html#UNIXSocket.path"/>
+<entry name="Pattern-Based Substitution (stdtypes)" url="html/tut_stdtypes.html#UK"/>
+<entry name="Patterns (stdtypes)" url="html/tut_stdtypes.html#UE"/>
+<entry name="peeraddr (IPSocket)" url="html/lib_network.html#IPSocket.peeraddr"/>
+<entry name="peeraddr (UNIXSocket)" url="html/lib_network.html#UNIXSocket.peeraddr"/>
+<entry name="Performance Considerations (ospace)" url="html/ospace.html#UC"/>
+<entry name="PERMUTE (GetoptLong)" url="html/lib_standard.html#GetoptLong.PERMUTE"/>
+<entry name="PI (Math)" url="html/ref_m_math.html#Math.PI"/>
+<entry name="pid (IO)" url="html/ref_c_io.html#IO.pid"/>
+<entry name="pid (Process)" url="html/ref_m_process.html#Process.pid"/>
+<entry name="pipe (IO)" url="html/ref_c_io.html#IO.pipe"/>
+<entry name="pipe? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.pipe_qm"/>
+<entry name="pipe? (FileTest)" url="html/ref_m_filetest.html#FileTest.pipe_qm"/>
+<entry name="PLATFORM (mkmf)" url="html/lib_standard.html#mkmf.PLATFORM"/>
+<entry name="Play It Again (exceptions)" url="html/tut_exceptions.html#UB"/>
+<entry name="polar (Complex)" url="html/lib_standard.html#Complex.polar"/>
+<entry name="pop (Array)" url="html/ref_c_array.html#Array.pop"/>
+<entry name="popen (IO)" url="html/ref_c_io.html#IO.popen"/>
+<entry name="port (Net::HTTP)" url="html/lib_network.html#Net::HTTP.port"/>
+<entry name="pos (IO)" url="html/ref_c_io.html#IO.pos"/>
+<entry name="pos= (IO)" url="html/ref_c_io.html#IO.pos_eq"/>
+<entry name="post (Net::HTTP)" url="html/lib_network.html#Net::HTTP.post"/>
+<entry name="post_match (MatchData)" url="html/ref_c_matchdata.html#MatchData.post_match"/>
+<entry name="ppid (Process)" url="html/ref_m_process.html#Process.ppid"/>
+<entry name="Preface" url="html/preface.html"/>
+<entry name="pretty (CGI)" url="html/lib_network.html#CGI.pretty"/>
+<entry name="pre_match (MatchData)" url="html/ref_c_matchdata.html#MatchData.pre_match"/>
+<entry name="print (IO)" url="html/ref_c_io.html#IO.print"/>
+<entry name="print (Kernel)" url="html/ref_m_kernel.html#Kernel.print"/>
+<entry name="print (Net::Telnet)" url="html/lib_network.html#Net::Telnet.print"/>
+<entry name="printf (IO)" url="html/ref_c_io.html#IO.printf"/>
+<entry name="printf (Kernel)" url="html/ref_m_kernel.html#Kernel.printf"/>
+<entry name="priority (Thread)" url="html/ref_c_thread.html#Thread.priority"/>
+<entry name="priority= (Thread)" url="html/ref_c_thread.html#Thread.priority_eq"/>
+<entry name="PRIO_PGRP (Process)" url="html/ref_m_process.html#Process.PRIO_PGRP"/>
+<entry name="PRIO_PROCESS (Process)" url="html/ref_m_process.html#Process.PRIO_PROCESS"/>
+<entry name="PRIO_USER (Process)" url="html/ref_m_process.html#Process.PRIO_USER"/>
+<entry name="private (Module)" url="html/ref_c_module.html#Module.private"/>
+<entry name="private_class_method (Module)" url="html/ref_c_module.html#Module.private_class_method"/>
+<entry name="private_instance_methods (Module)" url="html/ref_c_module.html#Module.private_instance_methods"/>
+<entry name="private_methods (Object)" url="html/ref_c_object.html#Object.private_methods"/>
+<entry name="Proc" url="html/ref_c_proc.html"/>
+<entry name="proc (Kernel)" url="html/ref_m_kernel.html#Kernel.proc"/>
+<entry name="Process" url="html/ref_m_process.html"/>
+<entry name="Program Termination (rubyworld)" url="html/rubyworld.html#S2"/>
+<entry name="protected (Module)" url="html/ref_c_module.html#Module.protected"/>
+<entry name="protected_instance_methods (Module)" url="html/ref_c_module.html#Module.protected_instance_methods"/>
+<entry name="protected_methods (Object)" url="html/ref_c_object.html#Object.protected_methods"/>
+<entry name="prune (Find)" url="html/lib_standard.html#Find.prune"/>
+<entry name="public (Module)" url="html/ref_c_module.html#Module.public"/>
+<entry name="public_class_method (Module)" url="html/ref_c_module.html#Module.public_class_method"/>
+<entry name="public_instance_methods (Module)" url="html/ref_c_module.html#Module.public_instance_methods"/>
+<entry name="public_methods (Object)" url="html/ref_c_object.html#Object.public_methods"/>
+<entry name="push (Array)" url="html/ref_c_array.html#Array.push"/>
+<entry name="putbinaryfile (Net::FTP)" url="html/lib_network.html#Net::FTP.putbinaryfile"/>
+<entry name="putc (IO)" url="html/ref_c_io.html#IO.putc"/>
+<entry name="putc (Kernel)" url="html/ref_m_kernel.html#Kernel.putc"/>
+<entry name="puts (IO)" url="html/ref_c_io.html#IO.puts"/>
+<entry name="puts (Kernel)" url="html/ref_m_kernel.html#Kernel.puts"/>
+<entry name="puttextfile (Net::FTP)" url="html/lib_network.html#Net::FTP.puttextfile"/>
+<entry name="pwd (Dir)" url="html/ref_c_dir.html#Dir.pwd"/>
+<entry name="quiet (GetoptLong)" url="html/lib_standard.html#GetoptLong.quiet"/>
+<entry name="quiet= (GetoptLong)" url="html/lib_standard.html#GetoptLong.quiet_eq"/>
+<entry name="quiet? (GetoptLong)" url="html/lib_standard.html#GetoptLong.quiet_qm"/>
+<entry name="quote (Regexp)" url="html/ref_c_regexp.html#Regexp.quote"/>
+<entry name="Quoting (web)" url="html/web.html#UB"/>
+<entry name="raise (Kernel)" url="html/ref_m_kernel.html#Kernel.raise"/>
+<entry name="raise (Thread)" url="html/ref_c_thread.html#Thread.raise"/>
+<entry name="Raising Exceptions (exceptions)" url="html/tut_exceptions.html#S3"/>
+<entry name="rand (Kernel)" url="html/ref_m_kernel.html#Kernel.rand"/>
+<entry name="Range" url="html/ref_c_range.html"/>
+<entry name="Ranges (language)" url="html/language.html#UE"/>
+<entry name="Ranges (stdtypes)" url="html/tut_stdtypes.html#S3"/>
+<entry name="Ranges as Conditions (stdtypes)" url="html/tut_stdtypes.html#UC"/>
+<entry name="Ranges as Intervals (stdtypes)" url="html/tut_stdtypes.html#UD"/>
+<entry name="Ranges as Sequences (stdtypes)" url="html/tut_stdtypes.html#UB"/>
+<entry name="rassoc (Array)" url="html/ref_c_array.html#Array.rassoc"/>
+<entry name="rdev (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.rdev"/>
+<entry name="read (Dir)" url="html/ref_c_dir.html#Dir.read"/>
+<entry name="read (IO)" url="html/ref_c_io.html#IO.read"/>
+<entry name="readable? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.readable_qm"/>
+<entry name="readable? (FileTest)" url="html/ref_m_filetest.html#FileTest.readable_qm"/>
+<entry name="readable_real? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.readable_real_qm"/>
+<entry name="readable_real? (FileTest)" url="html/ref_m_filetest.html#FileTest.readable_real_qm"/>
+<entry name="readchar (IO)" url="html/ref_c_io.html#IO.readchar"/>
+<entry name="Reading and 'Riting (intro)" url="html/intro.html#S7"/>
+<entry name="Reading and Writing Files (io)" url="html/tut_io.html#S3"/>
+<entry name="readline (IO)" url="html/ref_c_io.html#IO.readline"/>
+<entry name="readline (Kernel)" url="html/ref_m_kernel.html#Kernel.readline"/>
+<entry name="readlines (IO)" url="html/ref_c_io.html#IO.readlines"/>
+<entry name="readlines (Kernel)" url="html/ref_m_kernel.html#Kernel.readlines"/>
+<entry name="readlink (File)" url="html/ref_c_file.html#File.readlink"/>
+<entry name="ready (Net::SMTP)" url="html/lib_network.html#Net::SMTP.ready"/>
+<entry name="real (Complex)" url="html/lib_standard.html#Complex.real"/>
+<entry name="recv (BasicSocket)" url="html/lib_network.html#BasicSocket.recv"/>
+<entry name="recvfrom (Socket)" url="html/lib_network.html#Socket.recvfrom"/>
+<entry name="recvfrom (TCPSocket)" url="html/lib_network.html#TCPSocket.recvfrom"/>
+<entry name="recvfrom (UDPSocket)" url="html/lib_network.html#UDPSocket.recvfrom"/>
+<entry name="recvfrom (UNIXSocket)" url="html/lib_network.html#UNIXSocket.recvfrom"/>
+<entry name="Reflection, ObjectSpace, and Distributed  Ruby (ospace)" url="html/ospace.html"/>
+<entry name="Regexp" url="html/ref_c_regexp.html"/>
+<entry name="Regular Expression Options (language)" url="html/language.html#UK"/>
+<entry name="Regular Expression Patterns (language)" url="html/language.html#UL"/>
+<entry name="Regular Expressions (intro)" url="html/intro.html#S5"/>
+<entry name="Regular Expressions (language)" url="html/language.html#UJ"/>
+<entry name="Regular Expressions (stdtypes)" url="html/tut_stdtypes.html#S4"/>
+<entry name="rehash (Hash)" url="html/ref_c_hash.html#Hash.rehash"/>
+<entry name="reject (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.reject"/>
+<entry name="reject (Hash)" url="html/ref_c_hash.html#Hash.reject"/>
+<entry name="reject! (Array)" url="html/ref_c_array.html#Array.reject_oh"/>
+<entry name="reject! (Hash)" url="html/ref_c_hash.html#Hash.reject_oh"/>
+<entry name="remainder (Numeric)" url="html/ref_c_numeric.html#Numeric.remainder"/>
+<entry name="remove_const (Module)" url="html/ref_c_module.html#Module.remove_const"/>
+<entry name="remove_method (Module)" url="html/ref_c_module.html#Module.remove_method"/>
+<entry name="rename (File)" url="html/ref_c_file.html#File.rename"/>
+<entry name="reopen (IO)" url="html/ref_c_io.html#IO.reopen"/>
+<entry name="Repetition (stdtypes)" url="html/tut_stdtypes.html#UH"/>
+<entry name="replace (Array)" url="html/ref_c_array.html#Array.replace"/>
+<entry name="replace (Hash)" url="html/ref_c_hash.html#Hash.replace"/>
+<entry name="replace (String)" url="html/ref_c_string.html#String.replace"/>
+<entry name="require (Kernel)" url="html/ref_m_kernel.html#Kernel.require"/>
+<entry name="REQUIRED_ARGUMENT (GetoptLong)" url="html/lib_standard.html#GetoptLong.REQUIRED_ARGUMENT"/>
+<entry name="Requirements for a Hash Key (language)" url="html/language.html#UH"/>
+<entry name="REQUIRE_ORDER (GetoptLong)" url="html/lib_standard.html#GetoptLong.REQUIRE_ORDER"/>
+<entry name="Resources (preface)" url="html/preface.html#S8"/>
+<entry name="respond_to? (Object)" url="html/ref_c_object.html#Object.respond_to_qm"/>
+<entry name="restore (Marshal)" url="html/ref_m_marshal.html#Marshal.restore"/>
+<entry name="Restrictions (irb)" url="html/irb.html#S4"/>
+<entry name="resume (Net::FTP)" url="html/lib_network.html#Net::FTP.resume"/>
+<entry name="resume= (Net::FTP)" url="html/lib_network.html#Net::FTP.resume_eq"/>
+<entry name="retrbinary (Net::FTP)" url="html/lib_network.html#Net::FTP.retrbinary"/>
+<entry name="retrlines (Net::FTP)" url="html/lib_network.html#Net::FTP.retrlines"/>
+<entry name="Retry (expressions)" url="html/tut_expressions.html#UM"/>
+<entry name="return_code (Net::FTP)" url="html/lib_network.html#Net::FTP.return_code"/>
+<entry name="RETURN_IN_ORDER (GetoptLong)" url="html/lib_standard.html#GetoptLong.RETURN_IN_ORDER"/>
+<entry name="reverse (Array)" url="html/ref_c_array.html#Array.reverse"/>
+<entry name="reverse (String)" url="html/ref_c_string.html#String.reverse"/>
+<entry name="reverse! (Array)" url="html/ref_c_array.html#Array.reverse_oh"/>
+<entry name="reverse! (String)" url="html/ref_c_string.html#String.reverse_oh"/>
+<entry name="reverse_each (Array)" url="html/ref_c_array.html#Array.reverse_each"/>
+<entry name="rewind (Dir)" url="html/ref_c_dir.html#Dir.rewind"/>
+<entry name="rewind (IO)" url="html/ref_c_io.html#IO.rewind"/>
+<entry name="rfc1123_date (CGI)" url="html/lib_network.html#CGI.rfc1123_date"/>
+<entry name="rindex (Array)" url="html/ref_c_array.html#Array.rindex"/>
+<entry name="rindex (String)" url="html/ref_c_string.html#String.rindex"/>
+<entry name="rjust (String)" url="html/ref_c_string.html#String.rjust"/>
+<entry name="rmdir (Dir)" url="html/ref_c_dir.html#Dir.rmdir"/>
+<entry name="rm_f (File)" url="html/lib_standard.html#File.rm_f"/>
+<entry name="Roadmap" url="html/roadmap.html"/>
+<entry name="root? (PStore)" url="html/lib_standard.html#PStore.root_qm"/>
+<entry name="roots (PStore)" url="html/lib_standard.html#PStore.roots"/>
+<entry name="round (Float)" url="html/ref_c_float.html#Float.round"/>
+<entry name="rtags (irb)" url="html/irb.html#UB"/>
+<entry name="rtags, xmp, and the Frame Class (irb)" url="html/irb.html#S5"/>
+<entry name="Ruby and Its World (rubyworld)" url="html/rubyworld.html"/>
+<entry name="Ruby and Microsoft Windows (win32)" url="html/win32.html"/>
+<entry name="Ruby and the Web (web)" url="html/web.html"/>
+<entry name="Ruby C Language API (ruby)" url="html/ext_ruby.html#S8"/>
+<entry name="Ruby Compared with C++ and Java (containers)" url="html/tut_containers.html#UE"/>
+<entry name="Ruby Debugger (trouble)" url="html/trouble.html#S1"/>
+<entry name="Ruby Is an Object-Oriented Language (intro)" url="html/intro.html#S1"/>
+<entry name="Ruby Objects in C (ruby)" url="html/ext_ruby.html#S1"/>
+<entry name="Ruby Ports (win32)" url="html/win32.html#S1"/>
+<entry name="Ruby Programs (preface)" url="html/preface.html#UC"/>
+<entry name="Ruby Sparkles (preface)" url="html/preface.html#S1"/>
+<entry name="Ruby Tk (tk)" url="html/ext_tk.html"/>
+<entry name="Ruby Versions (preface)" url="html/preface.html#S5"/>
+<entry name="run (Thread)" url="html/ref_c_thread.html#Thread.run"/>
+<entry name="Running Multiple Processes (threads)" url="html/tut_threads.html#S4"/>
+<entry name="Running Ruby (preface)" url="html/preface.html#S7"/>
+<entry name="Running Ruby Under Windows (win32)" url="html/win32.html#S2"/>
+<entry name="Runtime Callbacks (ospace)" url="html/ospace.html#UD"/>
+<entry name="Safe Levels (taint)" url="html/taint.html#S1"/>
+<entry name="safe_level (Thread)" url="html/ref_c_thread.html#Thread.safe_level"/>
+<entry name="safe_unlink (File)" url="html/ref_c_file.html#File.safe_unlink"/>
+<entry name="Sample Application (tk)" url="html/ext_tk.html#UD"/>
+<entry name="scan (Kernel)" url="html/ref_m_kernel.html#Kernel.scan"/>
+<entry name="scan (String)" url="html/ref_c_string.html#String.scan"/>
+<entry name="Scope of Constants and Variables (language)" url="html/language.html#UP"/>
+<entry name="Scrolling (tk)" url="html/ext_tk.html#S5"/>
+<entry name="sec (Time)" url="html/ref_c_time.html#Time.sec"/>
+<entry name="seek (Dir)" url="html/ref_c_dir.html#Dir.seek"/>
+<entry name="seek (IO)" url="html/ref_c_io.html#IO.seek"/>
+<entry name="SEEK_CUR (IO)" url="html/ref_c_io.html#IO.SEEK_CUR"/>
+<entry name="SEEK_END (IO)" url="html/ref_c_io.html#IO.SEEK_END"/>
+<entry name="SEEK_SET (IO)" url="html/ref_c_io.html#IO.SEEK_SET"/>
+<entry name="select (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.select"/>
+<entry name="select (IO)" url="html/ref_c_io.html#IO.select"/>
+<entry name="select (Kernel)" url="html/ref_m_kernel.html#Kernel.select"/>
+<entry name="send (BasicSocket)" url="html/lib_network.html#BasicSocket.send"/>
+<entry name="send (Object)" url="html/ref_c_object.html#Object.send"/>
+<entry name="send (UDPSocket)" url="html/lib_network.html#UDPSocket.send"/>
+<entry name="sendmail (Net::SMTP)" url="html/lib_network.html#Net::SMTP.sendmail"/>
+<entry name="SEPARATOR (File)" url="html/ref_c_file.html#File.SEPARATOR"/>
+<entry name="Server commands (Net::FTP)" url="html/lib_network.html#Net::FTP.Servercommands"/>
+<entry name="Sessions (web)" url="html/web.html#UF"/>
+<entry name="setgid? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.setgid_qm"/>
+<entry name="setgid? (FileTest)" url="html/ref_m_filetest.html#FileTest.setgid_qm"/>
+<entry name="setpgid (Process)" url="html/ref_m_process.html#Process.setpgid"/>
+<entry name="setpgrp (Process)" url="html/ref_m_process.html#Process.setpgrp"/>
+<entry name="setpriority (Process)" url="html/ref_m_process.html#Process.setpriority"/>
+<entry name="setsid (Process)" url="html/ref_m_process.html#Process.setsid"/>
+<entry name="setsockopt (BasicSocket)" url="html/lib_network.html#BasicSocket.setsockopt"/>
+<entry name="Setting Widget Options (tk)" url="html/ext_tk.html#UA"/>
+<entry name="Setting/Getting Options Dynamically (tk)" url="html/ext_tk.html#UC"/>
+<entry name="setuid? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.setuid_qm"/>
+<entry name="setuid? (FileTest)" url="html/ref_m_filetest.html#FileTest.setuid_qm"/>
+<entry name="set_backtrace (Exception)" url="html/ref_c_exception.html#Exception.set_backtrace"/>
+<entry name="set_options (GetoptLong)" url="html/lib_standard.html#GetoptLong.set_options"/>
+<entry name="set_trace_func (Kernel)" url="html/ref_m_kernel.html#Kernel.set_trace_func"/>
+<entry name="sg (Date)" url="html/lib_standard.html#Date.sg"/>
+<entry name="Sharing Data Between Ruby and C (ruby)" url="html/ext_ruby.html#S3"/>
+<entry name="shift (Array)" url="html/ref_c_array.html#Array.shift"/>
+<entry name="shift (Hash)" url="html/ref_c_hash.html#Hash.shift"/>
+<entry name="shutdown (BasicSocket)" url="html/lib_network.html#BasicSocket.shutdown"/>
+<entry name="signal (ConditionVariable)" url="html/lib_standard.html#ConditionVariable.signal"/>
+<entry name="Simple Tk Application (tk)" url="html/ext_tk.html#S1"/>
+<entry name="sin (Math)" url="html/ref_m_math.html#Math.sin"/>
+<entry name="Singletons and Other Constructors (classes)" url="html/tut_classes.html#UF"/>
+<entry name="singleton_methods (Object)" url="html/ref_c_object.html#Object.singleton_methods"/>
+<entry name="singleton_method_added (Kernel)" url="html/ref_m_kernel.html#Kernel.singleton_method_added"/>
+<entry name="size (Array)" url="html/ref_c_array.html#Array.size"/>
+<entry name="size (Bignum)" url="html/ref_c_bignum.html#Bignum.size"/>
+<entry name="size (File)" url="html/ref_c_file.html#File.size"/>
+<entry name="size (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.size"/>
+<entry name="size (FileTest)" url="html/ref_m_filetest.html#FileTest.size"/>
+<entry name="size (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.size"/>
+<entry name="size (Hash)" url="html/ref_c_hash.html#Hash.size"/>
+<entry name="size (MatchData)" url="html/ref_c_matchdata.html#MatchData.size"/>
+<entry name="size (Net::POPMail)" url="html/lib_network.html#Net::POPMail.size"/>
+<entry name="size (Range)" url="html/ref_c_range.html#Range.size"/>
+<entry name="size (String)" url="html/ref_c_string.html#String.size"/>
+<entry name="size (Struct)" url="html/ref_c_struct.html#Struct.size"/>
+<entry name="size? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.size_qm"/>
+<entry name="size? (FileTest)" url="html/ref_m_filetest.html#FileTest.size_qm"/>
+<entry name="sleep (Kernel)" url="html/ref_m_kernel.html#Kernel.sleep"/>
+<entry name="slice (Array)" url="html/ref_c_array.html#Array.slice"/>
+<entry name="slice (String)" url="html/ref_c_string.html#String.slice"/>
+<entry name="slice! (Array)" url="html/ref_c_array.html#Array.slice_oh"/>
+<entry name="slice! (String)" url="html/ref_c_string.html#String.slice_oh"/>
+<entry name="Socket-Level Access (network)" url="html/lib_network.html#S1"/>
+<entry name="socket? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.socket_qm"/>
+<entry name="socket? (FileTest)" url="html/ref_m_filetest.html#FileTest.socket_qm"/>
+<entry name="socketpair (Socket)" url="html/lib_network.html#Socket.socketpair"/>
+<entry name="Some Basic Ruby (intro)" url="html/intro.html#S2"/>
+<entry name="sort (Array)" url="html/ref_c_array.html#Array.sort"/>
+<entry name="sort (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.sort"/>
+<entry name="sort (Hash)" url="html/ref_c_hash.html#Hash.sort"/>
+<entry name="sort! (Array)" url="html/ref_c_array.html#Array.sort_oh"/>
+<entry name="source (Regexp)" url="html/ref_c_regexp.html#Regexp.source"/>
+<entry name="Source Layout (language)" url="html/language.html#S1"/>
+<entry name="Spawning New Processes (threads)" url="html/tut_threads.html#UG"/>
+<entry name="Specifying Access Control (classes)" url="html/tut_classes.html#UG"/>
+<entry name="split (File)" url="html/ref_c_file.html#File.split"/>
+<entry name="split (Kernel)" url="html/ref_m_kernel.html#Kernel.split"/>
+<entry name="split (String)" url="html/ref_c_string.html#String.split"/>
+<entry name="sprintf (Kernel)" url="html/ref_m_kernel.html#Kernel.sprintf"/>
+<entry name="sqrt (Math)" url="html/ref_m_math.html#Math.sqrt"/>
+<entry name="squeeze (String)" url="html/ref_c_string.html#String.squeeze"/>
+<entry name="squeeze! (String)" url="html/ref_c_string.html#String.squeeze_oh"/>
+<entry name="srand (Kernel)" url="html/ref_m_kernel.html#Kernel.srand"/>
+<entry name="Standard Library (standard)" url="html/lib_standard.html"/>
+<entry name="Standard Types (stdtypes)" url="html/tut_stdtypes.html"/>
+<entry name="start (GC)" url="html/ref_m_gc.html#GC.start"/>
+<entry name="start (Net::APOP)" url="html/lib_network.html#Net::APOP.start"/>
+<entry name="start (Net::HTTP)" url="html/lib_network.html#Net::HTTP.start"/>
+<entry name="start (Net::POP)" url="html/lib_network.html#Net::POP.start"/>
+<entry name="start (Net::SMTP)" url="html/lib_network.html#Net::SMTP.start"/>
+<entry name="start (Thread)" url="html/ref_c_thread.html#Thread.start"/>
+<entry name="Stat" url="html/ref_c_file__stat.html"/>
+<entry name="stat (File)" url="html/ref_c_file.html#File.stat"/>
+<entry name="stat (IO)" url="html/ref_c_io.html#IO.stat"/>
+<entry name="Static Linking (ruby)" url="html/ext_ruby.html#UH"/>
+<entry name="status (Thread)" url="html/ref_c_thread.html#Thread.status"/>
+<entry name="step (Date)" url="html/lib_standard.html#Date.step"/>
+<entry name="step (Integer)" url="html/ref_c_integer.html#Integer.step"/>
+<entry name="sticky? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.sticky_qm"/>
+<entry name="sticky? (FileTest)" url="html/ref_m_filetest.html#FileTest.sticky_qm"/>
+<entry name="stop (Thread)" url="html/ref_c_thread.html#Thread.stop"/>
+<entry name="stop? (Thread)" url="html/ref_c_thread.html#Thread.stop_qm"/>
+<entry name="storbinary (Net::FTP)" url="html/lib_network.html#Net::FTP.storbinary"/>
+<entry name="store (Hash)" url="html/ref_c_hash.html#Hash.store"/>
+<entry name="storlines (Net::FTP)" url="html/lib_network.html#Net::FTP.storlines"/>
+<entry name="strftime (Time)" url="html/ref_c_time.html#Time.strftime"/>
+<entry name="String" url="html/ref_c_string.html"/>
+<entry name="String (Kernel)" url="html/ref_m_kernel.html#Kernel.String"/>
+<entry name="string (MatchData)" url="html/ref_c_matchdata.html#MatchData.string"/>
+<entry name="Strings (language)" url="html/language.html#UD"/>
+<entry name="Strings (stdtypes)" url="html/tut_stdtypes.html#S2"/>
+<entry name="strip (String)" url="html/ref_c_string.html#String.strip"/>
+<entry name="strip! (String)" url="html/ref_c_string.html#String.strip_oh"/>
+<entry name="Struct" url="html/ref_c_struct.html"/>
+<entry name="sub (Kernel)" url="html/ref_m_kernel.html#Kernel.sub"/>
+<entry name="sub (String)" url="html/ref_c_string.html#String.sub"/>
+<entry name="sub! (Kernel)" url="html/ref_m_kernel.html#Kernel.sub_oh"/>
+<entry name="sub! (String)" url="html/ref_c_string.html#String.sub_oh"/>
+<entry name="Substitutions (language)" url="html/language.html#UM"/>
+<entry name="succ (Date)" url="html/lib_standard.html#Date.succ"/>
+<entry name="succ (Integer)" url="html/ref_c_integer.html#Integer.succ"/>
+<entry name="succ (String)" url="html/ref_c_string.html#String.succ"/>
+<entry name="succ! (String)" url="html/ref_c_string.html#String.succ_oh"/>
+<entry name="sum (String)" url="html/ref_c_string.html#String.sum"/>
+<entry name="superclass (Class)" url="html/ref_c_class.html#Class.superclass"/>
+<entry name="Support" url="html/support.html"/>
+<entry name="swapcase (String)" url="html/ref_c_string.html#String.swapcase"/>
+<entry name="swapcase! (String)" url="html/ref_c_string.html#String.swapcase_oh"/>
+<entry name="Symbol" url="html/ref_c_symbol.html"/>
+<entry name="Symbols (language)" url="html/language.html#UI"/>
+<entry name="symlink (File)" url="html/ref_c_file.html#File.symlink"/>
+<entry name="symlink? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.symlink_qm"/>
+<entry name="symlink? (FileTest)" url="html/ref_m_filetest.html#FileTest.symlink_qm"/>
+<entry name="sync (IO)" url="html/ref_c_io.html#IO.sync"/>
+<entry name="sync= (IO)" url="html/ref_c_io.html#IO.sync_eq"/>
+<entry name="synchronize (Mutex)" url="html/lib_standard.html#Mutex.synchronize"/>
+<entry name="syscall (Kernel)" url="html/ref_m_kernel.html#Kernel.syscall"/>
+<entry name="syscopy (File)" url="html/ref_c_file.html#File.syscopy"/>
+<entry name="sysread (IO)" url="html/ref_c_io.html#IO.sysread"/>
+<entry name="system (Kernel)" url="html/ref_m_kernel.html#Kernel.system"/>
+<entry name="System Hooks (ospace)" url="html/ospace.html#S4"/>
+<entry name="syswrite (IO)" url="html/ref_c_io.html#IO.syswrite"/>
+<entry name="taint (Object)" url="html/ref_c_object.html#Object.taint"/>
+<entry name="Tainted Objects (taint)" url="html/taint.html#S2"/>
+<entry name="tainted? (Object)" url="html/ref_c_object.html#Object.tainted_qm"/>
+<entry name="Talking to Networks (io)" url="html/tut_io.html#S4"/>
+<entry name="tan (Math)" url="html/ref_m_math.html#Math.tan"/>
+<entry name="tell (Dir)" url="html/ref_c_dir.html#Dir.tell"/>
+<entry name="tell (IO)" url="html/ref_c_io.html#IO.tell"/>
+<entry name="telnetmode (Net::Telnet)" url="html/lib_network.html#Net::Telnet.telnetmode"/>
+<entry name="telnetmode= (Net::Telnet)" url="html/lib_network.html#Net::Telnet.telnetmode_eq"/>
+<entry name="terminate (GetoptLong)" url="html/lib_standard.html#GetoptLong.terminate"/>
+<entry name="terminated? (GetoptLong)" url="html/lib_standard.html#GetoptLong.terminated_qm"/>
+<entry name="test (Kernel)" url="html/ref_m_kernel.html#Kernel.test"/>
+<entry name="thaw (Object)" url="html/ref_c_object.html#Object.thaw"/>
+<entry name="The Basic Types (language)" url="html/language.html#S2"/>
+<entry name="The Exception Class (exceptions)" url="html/tut_exceptions.html#S1"/>
+<entry name="The Frame Class (irb)" url="html/irb.html#UD"/>
+<entry name="The Mutex Class (threads)" url="html/tut_threads.html#UE"/>
+<entry name="The Ruby Language (language)" url="html/language.html"/>
+<entry name="The Visitor Pattern (patterns)" url="html/lib_patterns.html#S1"/>
+<entry name="Thread" url="html/ref_c_thread.html"/>
+<entry name="Thread Variables (threads)" url="html/tut_threads.html#UC"/>
+<entry name="ThreadGroup" url="html/ref_c_threadgroup.html"/>
+<entry name="Threads and Exceptions (threads)" url="html/tut_threads.html#UD"/>
+<entry name="Threads and Processes (threads)" url="html/tut_threads.html"/>
+<entry name="throw (Kernel)" url="html/ref_m_kernel.html#Kernel.throw"/>
+<entry name="Tidying Up (exceptions)" url="html/tut_exceptions.html#UA"/>
+<entry name="Time" url="html/ref_c_time.html"/>
+<entry name="times (Integer)" url="html/ref_c_integer.html#Integer.times"/>
+<entry name="times (Time)" url="html/ref_c_time.html#Time.times"/>
+<entry name="Tms" url="html/ref_c_struct__tms.html"/>
+<entry name="today (Date)" url="html/lib_standard.html#Date.today"/>
+<entry name="top (Net::POPMail)" url="html/lib_network.html#Net::POPMail.top"/>
+<entry name="Top-Level Execution Environment (classes)" url="html/classes.html#S3"/>
+<entry name="to_a (Array)" url="html/ref_c_array.html#Array.to_a"/>
+<entry name="to_a (Enumerable)" url="html/ref_m_enumerable.html#Enumerable.to_a"/>
+<entry name="to_a (Hash)" url="html/ref_c_hash.html#Hash.to_a"/>
+<entry name="to_a (MatchData)" url="html/ref_c_matchdata.html#MatchData.to_a"/>
+<entry name="to_a (NilClass)" url="html/ref_c_nilclass.html#NilClass.to_a"/>
+<entry name="to_a (Object)" url="html/ref_c_object.html#Object.to_a"/>
+<entry name="to_a (Struct)" url="html/ref_c_struct.html#Struct.to_a"/>
+<entry name="to_a (Time)" url="html/ref_c_time.html#Time.to_a"/>
+<entry name="to_ary (Array)" url="html/ref_c_array.html#Array.to_ary"/>
+<entry name="to_f (Bignum)" url="html/ref_c_bignum.html#Bignum.to_f"/>
+<entry name="to_f (Complex)" url="html/lib_standard.html#Complex.to_f"/>
+<entry name="to_f (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.to_f"/>
+<entry name="to_f (Float)" url="html/ref_c_float.html#Float.to_f"/>
+<entry name="to_f (String)" url="html/ref_c_string.html#String.to_f"/>
+<entry name="to_f (Time)" url="html/ref_c_time.html#Time.to_f"/>
+<entry name="to_i (Bignum)" url="html/ref_c_bignum.html#Bignum.to_i"/>
+<entry name="to_i (Complex)" url="html/lib_standard.html#Complex.to_i"/>
+<entry name="to_i (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.to_i"/>
+<entry name="to_i (Float)" url="html/ref_c_float.html#Float.to_i"/>
+<entry name="to_i (IO)" url="html/ref_c_io.html#IO.to_i"/>
+<entry name="to_i (NilClass)" url="html/ref_c_nilclass.html#NilClass.to_i"/>
+<entry name="to_i (String)" url="html/ref_c_string.html#String.to_i"/>
+<entry name="to_i (Symbol)" url="html/ref_c_symbol.html#Symbol.to_i"/>
+<entry name="to_i (Time)" url="html/ref_c_time.html#Time.to_i"/>
+<entry name="to_io (IO)" url="html/ref_c_io.html#IO.to_io"/>
+<entry name="to_proc (Method)" url="html/ref_c_method.html#Method.to_proc"/>
+<entry name="to_r (Complex)" url="html/lib_standard.html#Complex.to_r"/>
+<entry name="to_s (Array)" url="html/ref_c_array.html#Array.to_s"/>
+<entry name="to_s (Bignum)" url="html/ref_c_bignum.html#Bignum.to_s"/>
+<entry name="to_s (Complex)" url="html/lib_standard.html#Complex.to_s"/>
+<entry name="to_s (Date)" url="html/lib_standard.html#Date.to_s"/>
+<entry name="to_s (Fixnum)" url="html/ref_c_fixnum.html#Fixnum.to_s"/>
+<entry name="to_s (Float)" url="html/ref_c_float.html#Float.to_s"/>
+<entry name="to_s (Hash)" url="html/ref_c_hash.html#Hash.to_s"/>
+<entry name="to_s (MatchData)" url="html/ref_c_matchdata.html#MatchData.to_s"/>
+<entry name="to_s (NilClass)" url="html/ref_c_nilclass.html#NilClass.to_s"/>
+<entry name="to_s (Object)" url="html/ref_c_object.html#Object.to_s"/>
+<entry name="to_s (String)" url="html/ref_c_string.html#String.to_s"/>
+<entry name="to_s (Symbol)" url="html/ref_c_symbol.html#Symbol.to_s"/>
+<entry name="to_s (Time)" url="html/ref_c_time.html#Time.to_s"/>
+<entry name="to_str (String)" url="html/ref_c_string.html#String.to_str"/>
+<entry name="tr (String)" url="html/ref_c_string.html#String.tr"/>
+<entry name="tr! (String)" url="html/ref_c_string.html#String.tr_oh"/>
+<entry name="trace_var (Kernel)" url="html/ref_m_kernel.html#Kernel.trace_var"/>
+<entry name="Tracing Your Program's Execution (ospace)" url="html/ospace.html#S5"/>
+<entry name="transaction (PStore)" url="html/lib_standard.html#PStore.transaction"/>
+<entry name="Translating from Perl/Tk Documentation (tk)" url="html/ext_tk.html#S6"/>
+<entry name="trap (Kernel)" url="html/ref_m_kernel.html#Kernel.trap"/>
+<entry name="TrueClass" url="html/ref_c_trueclass.html"/>
+<entry name="truncate (File)" url="html/ref_c_file.html#File.truncate"/>
+<entry name="try_lock (Mutex)" url="html/lib_standard.html#Mutex.try_lock"/>
+<entry name="tr_s (String)" url="html/ref_c_string.html#String.tr_s"/>
+<entry name="tr_s! (String)" url="html/ref_c_string.html#String.tr_s_oh"/>
+<entry name="tty? (IO)" url="html/ref_c_io.html#IO.tty_qm"/>
+<entry name="tv_sec (Time)" url="html/ref_c_time.html#Time.tv_sec"/>
+<entry name="tv_usec (Time)" url="html/ref_c_time.html#Time.tv_usec"/>
+<entry name="type (Object)" url="html/ref_c_object.html#Object.type"/>
+<entry name="uid (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.uid"/>
+<entry name="uid (Process)" url="html/ref_m_process.html#Process.uid"/>
+<entry name="uid= (Process)" url="html/ref_m_process.html#Process.uid_eq"/>
+<entry name="uidl (Net::POPMail)" url="html/lib_network.html#Net::POPMail.uidl"/>
+<entry name="umask (File)" url="html/ref_c_file.html#File.umask"/>
+<entry name="undefine_finalizer (ObjectSpace)" url="html/ref_m_objectspace.html#ObjectSpace.undefine_finalizer"/>
+<entry name="undef_method (Module)" url="html/ref_c_module.html#Module.undef_method"/>
+<entry name="unescape (CGI)" url="html/lib_network.html#CGI.unescape"/>
+<entry name="unescapeElement (CGI)" url="html/lib_network.html#CGI.unescapeElement"/>
+<entry name="unescapeHTML (CGI)" url="html/lib_network.html#CGI.unescapeHTML"/>
+<entry name="ungetc (IO)" url="html/ref_c_io.html#IO.ungetc"/>
+<entry name="uniq (Array)" url="html/ref_c_array.html#Array.uniq"/>
+<entry name="uniq! (Array)" url="html/ref_c_array.html#Array.uniq_oh"/>
+<entry name="unlink (Dir)" url="html/ref_c_dir.html#Dir.unlink"/>
+<entry name="unlink (File)" url="html/ref_c_file.html#File.unlink"/>
+<entry name="unlock (Mutex)" url="html/lib_standard.html#Mutex.unlock"/>
+<entry name="unpack (String)" url="html/ref_c_string.html#String.unpack"/>
+<entry name="unshift (Array)" url="html/ref_c_array.html#Array.unshift"/>
+<entry name="untaint (Object)" url="html/ref_c_object.html#Object.untaint"/>
+<entry name="untrace_var (Kernel)" url="html/ref_m_kernel.html#Kernel.untrace_var"/>
+<entry name="upcase (String)" url="html/ref_c_string.html#String.upcase"/>
+<entry name="upcase! (String)" url="html/ref_c_string.html#String.upcase_oh"/>
+<entry name="update (CGI::Session)" url="html/lib_network.html#CGI::Session.update"/>
+<entry name="update (Hash)" url="html/ref_c_hash.html#Hash.update"/>
+<entry name="upto (Date)" url="html/lib_standard.html#Date.upto"/>
+<entry name="upto (Integer)" url="html/ref_c_integer.html#Integer.upto"/>
+<entry name="upto (String)" url="html/ref_c_string.html#String.upto"/>
+<entry name="Use the Profiler (trouble)" url="html/trouble.html#UC"/>
+<entry name="usec (Time)" url="html/ref_c_time.html#Time.usec"/>
+<entry name="Usenet Newsgroup (support)" url="html/support.html#S3"/>
+<entry name="Using cgi.rb (web)" url="html/web.html#UA"/>
+<entry name="Using eruby (web)" url="html/web.html#UG"/>
+<entry name="Using rdtool (rdtool)" url="html/rdtool.html#S5"/>
+<entry name="utc (Time)" url="html/ref_c_time.html#Time.utc"/>
+<entry name="utc? (Time)" url="html/ref_c_time.html#Time.utc_qm"/>
+<entry name="utime (File)" url="html/ref_c_file.html#File.utime"/>
+<entry name="value (Thread)" url="html/ref_c_thread.html#Thread.value"/>
+<entry name="VALUE as a Pointer (ruby)" url="html/ext_ruby.html#UA"/>
+<entry name="VALUE as an Immediate Object (ruby)" url="html/ext_ruby.html#UB"/>
+<entry name="value? (Hash)" url="html/ref_c_hash.html#Hash.value_qm"/>
+<entry name="values (Hash)" url="html/ref_c_hash.html#Hash.values"/>
+<entry name="values (Struct)" url="html/ref_c_struct.html#Struct.values"/>
+<entry name="Variable References (tk)" url="html/ext_tk.html#UH"/>
+<entry name="Variable Scope and Loops (expressions)" url="html/tut_expressions.html#S7"/>
+<entry name="Variable-Length Argument Lists (methods)" url="html/tut_methods.html#UA"/>
+<entry name="Variable/Method Ambiguity (language)" url="html/language.html#UO"/>
+<entry name="Variables (classes)" url="html/tut_classes.html#S5"/>
+<entry name="Variables and Constants (language)" url="html/language.html#S4"/>
+<entry name="VERSION (WIN32OLE)" url="html/lib_windows.html#WIN32OLE.WIN32OLE::VERSION"/>
+<entry name="Virtual Attributes (classes)" url="html/tut_classes.html#UC"/>
+<entry name="wait (ConditionVariable)" url="html/lib_standard.html#ConditionVariable.wait"/>
+<entry name="wait (Process)" url="html/ref_m_process.html#Process.wait"/>
+<entry name="wait2 (Process)" url="html/ref_m_process.html#Process.wait2"/>
+<entry name="waitfor (Net::Telnet)" url="html/lib_network.html#Net::Telnet.waitfor"/>
+<entry name="waitpid (Process)" url="html/ref_m_process.html#Process.waitpid"/>
+<entry name="waitpid2 (Process)" url="html/ref_m_process.html#Process.waitpid2"/>
+<entry name="wakeup (Thread)" url="html/ref_c_thread.html#Thread.wakeup"/>
+<entry name="wday (Time)" url="html/ref_c_time.html#Time.wday"/>
+<entry name="weakref_alive? (WeakRef)" url="html/lib_standard.html#WeakRef.weakref_alive_qm"/>
+<entry name="Web Sites (support)" url="html/support.html#S1"/>
+<entry name="welcome (Net::FTP)" url="html/lib_network.html#Net::FTP.welcome"/>
+<entry name="What Is an IO Object? (io)" url="html/tut_io.html#S1"/>
+<entry name="What Kind of Language Is Ruby? (preface)" url="html/preface.html#S2"/>
+<entry name="When Trouble Strikes (trouble)" url="html/trouble.html"/>
+<entry name="Where Ruby Finds Its Modules (rubyworld)" url="html/rubyworld.html#S4"/>
+<entry name="Why Did We Write This Book? (preface)" url="html/preface.html#S4"/>
+<entry name="Widgets (tk)" url="html/ext_tk.html#S2"/>
+<entry name="Win32API (win32)" url="html/win32.html#S3"/>
+<entry name="Windows Automation (win32)" url="html/win32.html#S4"/>
+<entry name="WNOHANG (Process)" url="html/ref_m_process.html#Process.WNOHANG"/>
+<entry name="Working with Strings (stdtypes)" url="html/tut_stdtypes.html#UA"/>
+<entry name="Wrapping C Structures (ruby)" url="html/ext_ruby.html#UE"/>
+<entry name="Writable Attributes (classes)" url="html/tut_classes.html#UB"/>
+<entry name="writable? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.writable_qm"/>
+<entry name="writable? (FileTest)" url="html/ref_m_filetest.html#FileTest.writable_qm"/>
+<entry name="writable_real? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.writable_real_qm"/>
+<entry name="writable_real? (FileTest)" url="html/ref_m_filetest.html#FileTest.writable_real_qm"/>
+<entry name="write (IO)" url="html/ref_c_io.html#IO.write"/>
+<entry name="write (Net::Telnet)" url="html/lib_network.html#Net::Telnet.write"/>
+<entry name="Writing CGI Scripts (web)" url="html/web.html#S1"/>
+<entry name="Writing Ruby in C (ruby)" url="html/ext_ruby.html#S2"/>
+<entry name="Writing to Environment Variables (rubyworld)" url="html/rubyworld.html#UC"/>
+<entry name="Writing to Files (io)" url="html/tut_io.html#UB"/>
+<entry name="WUNTRACED (Process)" url="html/ref_m_process.html#Process.WUNTRACED"/>
+<entry name="xmp (irb)" url="html/irb.html#UC"/>
+<entry name="yday (Time)" url="html/ref_c_time.html#Time.yday"/>
+<entry name="year (Time)" url="html/ref_c_time.html#Time.year"/>
+<entry name="Your Basic, Everyday Object (classes)" url="html/classes.html#UA"/>
+<entry name="zero? (File::Stat)" url="html/ref_c_file__stat.html#File::Stat.zero_qm"/>
+<entry name="zero? (FileTest)" url="html/ref_m_filetest.html#FileTest.zero_qm"/>
+<entry name="zero? (Numeric)" url="html/ref_c_numeric.html#Numeric.zero_qm"/>
+<entry name="zone (Time)" url="html/ref_c_time.html#Time.zone"/>
+<entry name="[] (Array)" url="html/ref_c_array.html#Array._ob_cb"/>
+<entry name="[] (Bignum)" url="html/ref_c_bignum.html#Bignum._ob_cb"/>
+<entry name="[] (CGI)" url="html/lib_network.html#CGI._ob_cb"/>
+<entry name="[] (CGI::Session)" url="html/lib_network.html#CGI::Session._ob_cb"/>
+<entry name="[] (Dir)" url="html/ref_c_dir.html#Dir._ob_cb"/>
+<entry name="[] (Fixnum)" url="html/ref_c_fixnum.html#Fixnum._ob_cb"/>
+<entry name="[] (Hash)" url="html/ref_c_hash.html#Hash._ob_cb"/>
+<entry name="[] (MatchData)" url="html/ref_c_matchdata.html#MatchData._ob_cb"/>
+<entry name="[] (Method)" url="html/ref_c_method.html#Method._ob_cb"/>
+<entry name="[] (Net::HTTPResponse)" url="html/lib_network.html#Net::HTTPResponse._ob_cb"/>
+<entry name="[] (Proc)" url="html/ref_c_proc.html#Proc._ob_cb"/>
+<entry name="[] (PStore)" url="html/lib_standard.html#PStore._ob_cb"/>
+<entry name="[] (String)" url="html/ref_c_string.html#String._ob_cb"/>
+<entry name="[] (Struct)" url="html/ref_c_struct.html#Struct._ob_cb"/>
+<entry name="[] (Thread)" url="html/ref_c_thread.html#Thread._ob_cb"/>
+<entry name="[] (WIN32OLE)" url="html/lib_windows.html#WIN32OLE._ob_cb"/>
+<entry name="[]= (Array)" url="html/ref_c_array.html#Array._ob_cb_eq"/>
+<entry name="[]= (CGI::Session)" url="html/lib_network.html#CGI::Session._ob_cb_eq"/>
+<entry name="[]= (Hash)" url="html/ref_c_hash.html#Hash._ob_cb_eq"/>
+<entry name="[]= (Net::HTTPResponse)" url="html/lib_network.html#Net::HTTPResponse._ob_cb_eq"/>
+<entry name="[]= (PStore)" url="html/lib_standard.html#PStore._ob_cb_eq"/>
+<entry name="[]= (String)" url="html/ref_c_string.html#String._ob_cb_eq"/>
+<entry name="[]= (Struct)" url="html/ref_c_struct.html#Struct._ob_cb_eq"/>
+<entry name="[]= (Thread)" url="html/ref_c_thread.html#Thread._ob_cb_eq"/>
+<entry name="[]= (WIN32OLE)" url="html/lib_windows.html#WIN32OLE._ob_cb_eq"/>
+<entry name="^ (FalseClass)" url="html/ref_c_falseclass.html#FalseClass._up"/>
+<entry name="^ (NilClass)" url="html/ref_c_nilclass.html#NilClass._up"/>
+<entry name="^ (TrueClass)" url="html/ref_c_trueclass.html#TrueClass._up"/>
+<entry name="_id2ref (ObjectSpace)" url="html/ref_m_objectspace.html#ObjectSpace._id2ref"/>
+<entry name="__id__ (Object)" url="html/ref_c_object.html#Object.__id__"/>
+<entry name="__send__ (Object)" url="html/ref_c_object.html#Object.__send__"/>
+<entry name="` (backquote) (Kernel)" url="html/ref_m_kernel.html#Kernel._bq"/>
+<entry name="` (Kernel)" url="html/ref_m_kernel.html#Kernel._bq"/>
+<entry name="| (Array)" url="html/ref_c_array.html#Array._ba"/>
+<entry name="| (FalseClass)" url="html/ref_c_falseclass.html#FalseClass._ba"/>
+<entry name="| (NilClass)" url="html/ref_c_nilclass.html#NilClass._ba"/>
+<entry name="| (TrueClass)" url="html/ref_c_trueclass.html#TrueClass._ba"/>
+<entry name="~ (Regexp)" url="html/ref_c_regexp.html#Regexp._sd"/>
+<entry name="~ (String)" url="html/ref_c_string.html#String._sd"/>
+</index>
+</kdeveloptoc>
+

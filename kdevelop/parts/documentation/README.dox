@@ -1,0 +1,21 @@
+/** \class Documentation
+Documentation plugin for KDevelop.
+
+\authors <a href="mailto:cloudtemple@mksat.net">Alexander Dymo</a>
+
+\maintainer <a href="mailto:cloudtemple@mksat.net">Alexander Dymo</a>
+
+\feature Qt API browsing
+\feature KDE API browsing
+\feature Devhelp books browsing (GTK/GNOME API)
+\feature KDevelopTOC browsing
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=documentation&
+bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">
+Documentation viewer at Bugzilla database</a>
+
+\requirement Ht://Dig requires htdig to be installed.
+
+\todo Add support for documentation profiles. Application wizard or an application template
+can select necessary profile to modify the list of enabled documentation catalogs.
+*/

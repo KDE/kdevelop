@@ -1,0 +1,35 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=kdevelop --profile KDECppIDE %u
+MimeType=application/x-kdevelop;
+Icon=kdevelop
+DocPath=kdevelop/index.html
+Terminal=false
+Name=KDevelop: KDE/C++
+Name[br]=KDevelop : KDE/C++
+Name[fr]=KDevelop : KDE / C++
+Name[xx]=xxKDevelop: KDE/C++xx
+GenericName=IDE for KDE Development
+GenericName[da]=Integreret udviklingsmiljø til KDE
+GenericName[de]=IDE für KDE-Softwareentwicklung
+GenericName[es]=IDE para desarrollo en KDE
+GenericName[et]=KDE arendamise IDE
+GenericName[fr]=IDE pour le développement pour KDE
+GenericName[hu]=Fejlesztőkörnyezet a KDE-hez
+GenericName[it]=IDE per lo sviluppo di KDE
+GenericName[nl]=IDE voor KDE Development
+GenericName[pl]=IDE do tworzenia programów dla KDE
+GenericName[pt]=IDE para Desenvolvimento KDE
+GenericName[pt_BR]=IDE para Desenvolvimento no KDE
+GenericName[ru]=Среда разработки KDE-приложений
+GenericName[sl]=IDE za razvijanje KDE
+GenericName[sr]=IDE за KDE развој
+GenericName[sr@Latn]=IDE za KDE razvoj
+GenericName[sv]=Utvecklingsmiljö för KDE
+GenericName[tr]=KDE Geliştirmek için Bütünleşik Geliştirme Ortamı
+GenericName[uk]=Інтегроване проектувальне середовище для KDE
+GenericName[xx]=xxIDE for KDE Developmentxx
+X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
+

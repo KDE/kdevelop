@@ -1,0 +1,68 @@
+package $MODULE$;
+
+use strict;
+
+require Exporter;
+use vars       qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+# set the version for version checking
+$VERSION     = $VERSION$;
+
+@ISA         = qw(Exporter);
+@EXPORT      = qw(&hello);
+%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+
+# your exported package globals go here,
+# as well as any optionally exported functions
+@EXPORT_OK   = qw($Var1 %Hashit &func3);
+
+use vars qw($Var1 %Hashit);
+# non-exported package globals go here
+use vars qw(@more $stuff);
+
+# initialize package globals, first exported ones
+$Var1   = '';
+%Hashit = ();
+
+# then the others (which are still accessible as $Some::Module::stuff)
+$stuff  = '';
+@more   = ();
+
+
+# file-private lexicals go here
+my $priv_var    = '';
+my %secret_hash = ();
+
+
+sub hello {
+ print "hello world\n"; 
+}
+
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+
+__END__
+
+=head1 NAME
+
+ModuleName - short discription of your program
+
+=head1 SYNOPSIS
+
+ how to us your module
+
+=head1 DESCRIPTION
+
+ long description of your module
+
+=head1 SEE ALSO
+
+ need to know things before somebody uses your program
+
+=head1 AUTHOR
+
+ $AUTHOR$
+
+=cut

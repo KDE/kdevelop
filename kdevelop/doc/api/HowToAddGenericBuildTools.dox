@@ -1,0 +1,21 @@
+/** \file HowToAddGenericBuildTools.dox
+  * \brief How to add a generic build tool plugins to the generic build tool part
+  */
+
+/** \page howToAddGenericBuildTools How to add a generic build tool plugins to the generic build tool part
+
+This part offers build tool facilities using project files in xml format (dtd is located in buildtools/generic/kdevxmlproject.dtd).
+Those xml files can be converted into makefiles, ant xml files or simply shell scripts using build system plugins.
+Build system plugin is an object that implements KDevBuildSystem interface.
+Build system plugins are located in buildtools/generic/buildsystem.
+
+\section sectionStep1 Step 1: Make your plugin loadable
+
+For a plugin <code>foo</code>, create a file <code>foo.desktop</code> which contains KDevelop/Part in its list of ServiceTypes.
+
+The rest of this document is to be written.
+
+Document your plugin in the way described at \ref howToDocument (doc/api/HowToDocument.dox file).
+
+*/
+

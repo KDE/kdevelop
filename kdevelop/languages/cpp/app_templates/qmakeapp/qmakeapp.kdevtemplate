@@ -1,0 +1,82 @@
+# KDE Config File
+[General]
+Name=Application
+Name[br]=Arload
+Name[cy]=Cymhwysiad
+Name[da]=Program
+Name[et]=Rakendus
+Name[ga]=Feidhmchlár
+Name[hu]=Alkalmazások
+Name[rw]=Porogaramu
+Name[sv]=Program
+Name[tr]=Uygulama
+Icon=qmakeapp.png
+Category=C++/QMake project
+Category[fr]=C++/QMake
+Comment=Generate a QMake/Qt based application (crossplatform compatible)
+Comment[da]=Generér et QMake/Qt baseret program (krydsplatform kompatibel)
+Comment[et]=Rakenduse loomine QMake'i/Qt põhjal (multiplatvormne)
+Comment[hu]=Létrehoz egy QMake/Qt-alapú, keresztfordításra is megfelelő alkalmazást
+Comment[sv]=Skapar ett QMake/Qt-baserat program (fungerar på andra plattformar)
+Comment[tr]=QMake/Qt tabanlı bir uygulama yarat (Platformlararası geçimli)
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=qmakeapp.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/qmakeapp.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/qmakeapp.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/main.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/qmakeapp.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/qmakeapp.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE7]
+Type=install
+Source=%{src}/fileopen.xpm
+Dest=%{dest}/src/fileopen.xpm
+
+[FILE8]
+Type=install
+Source=%{src}/filesave.xpm
+Dest=%{dest}/src/filesave.xpm
+
+[FILE9]
+Type=install
+Source=%{src}/fileprint.xpm
+Dest=%{dest}/src/fileprint.xpm
+
+[MSG]
+Type=message
+Comment=A Qt/Qmake based application was created in %{dest}
+Comment[da]=Et Qt/Qmake baseret program blev oprettet i %{dest}
+Comment[et]=Rakendus QMkae'i põhjal loodi asukohta %{dest}
+Comment[hu]=Létrejött egy Qt/Qmake-alapú alkalmazás itt: %{dest}
+Comment[sv]=Ett QMake/Qt-baserat program skapades i %{dest}
+Comment[tr]=Bir Qt/QMake tabanlı uygulama %{dest} içinde yaratıldı.

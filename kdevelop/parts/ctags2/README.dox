@@ -1,0 +1,16 @@
+/** \class ctags2
+This is a CTAGS frontend based on the 'readtags' library.
+
+\authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a>
+
+\maintainer <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a>
+
+\feature A very fast CTAGS lookup plugin
+\feature Through the use of regular expressions, it is clever enough to find matches even 
+if the match-containing file is open and edited (and the editor contents do not match the file on disk).
+
+\requirement Needs "Exuberant CTAGS" to work. http://ctags.sourceforge.net/
+
+\todo Probably a lot, but mainly configurability.
+
+*/

@@ -1,0 +1,126 @@
+#MIN_CONFIG(3.2.0)
+
+AM_INIT_AUTOMAKE(kdevelop, CVS)
+KDE_NEED_FLEX
+
+KDEV_CHECK_DOCBASE
+#KDEV_CHECK_SCRIPTING
+#KDEV_CHECK_JAVA
+#KDEV_CHECK_SVN
+#KDEV_CHECK_QEDITOR
+KDEV_CHECK_COMPAT
+KDEV_CHECK_SVN
+KDEV_CHECK_VCSCOMPAT
+KDEV_CHECK_BDB
+KDEV_CHECK_MDI
+#KDEV_PATH_PYTHONDOCDIR
+#KDEV_PATH_PHPDOCDIR
+#KDEV_PATH_GNUSTEPDOCDIR
+#KDEV_PATH_GTKDOCDIR
+KDEV_PATH_QTDOC
+KDEV_PATH_KDELIBSDOXY
+KDEV_PATH_KDELIBSDOC
+
+
+dnl  **********
+dnl  Check which programming languages support should be compiled
+dnl  **********
+
+AC_ARG_ENABLE(ada, AC_HELP_STRING([--disable-ada], [disable programming language support for Ada]), [ada=${enableval}], [ada=yes])
+AM_CONDITIONAL(include_ada, test "$ada" = "yes")
+
+AC_ARG_ENABLE(bash, AC_HELP_STRING([--disable-bash], [disable programming language support for bash]), [bash=${enableval}], [bash=yes])
+AM_CONDITIONAL(include_bash, test "$bash" = "yes")
+
+AC_ARG_ENABLE(cpp, AC_HELP_STRING([--disable-cpp], [disable programming language support for C and C++]), [cpp=${enableval}], [cpp=yes])
+AM_CONDITIONAL(include_cpp, test "$cpp" = "yes")
+
+AC_ARG_ENABLE(fortran, AC_HELP_STRING([--disable-fortran], [disable programming language support for Fortran]), [fortran=${enableval}], [fortran=yes])
+AM_CONDITIONAL(include_fortran, test "$fortran" = "yes")
+
+AC_ARG_ENABLE(haskell, AC_HELP_STRING([--disable-haskell], [disable programming language support for haskell]), [haskell=${enableval}], [haskell=yes])
+AM_CONDITIONAL(include_haskell, test "$haskell" = "yes")
+
+AC_ARG_ENABLE(java, AC_HELP_STRING([--disable-java], [disable programming language support for Java]), [java=${enableval}], [java=yes])
+AM_CONDITIONAL(include_java, test "$java" = "yes")
+
+AC_ARG_ENABLE(pascal, AC_HELP_STRING([--disable-pascal], [disable programming language support for Pascal]), [pascal=${enableval}], [pascal=yes])
+AM_CONDITIONAL(include_pascal, test "$pascal" = "yes")
+
+AC_ARG_ENABLE(perl, AC_HELP_STRING([--disable-perl], [disable programming language support for perl]), [perl=${enableval}], [perl=yes])
+AM_CONDITIONAL(include_perl, test "$perl" = "yes")
+
+AC_ARG_ENABLE(php, AC_HELP_STRING([--disable-php], [disable programming language support for PHP]), [php=${enableval}], [php=yes])
+AM_CONDITIONAL(include_php, test "$php" = "yes")
+
+AC_ARG_ENABLE(python, AC_HELP_STRING([--disable-python], [disable programming language support for Python]), [python=${enableval}], [python=yes])
+AM_CONDITIONAL(include_python, test "$python" = "yes")
+
+AC_ARG_ENABLE(ruby, AC_HELP_STRING([--disable-ruby], [disable programming language support for ruby]), [ruby=${enableval}], [ruby=yes])
+AM_CONDITIONAL(include_ruby, test "$ruby" = "yes")
+
+AC_ARG_ENABLE(sql, AC_HELP_STRING([--disable-sql], [disable programming language support for SQL]), [sql=${enableval}], [sql=yes])
+AM_CONDITIONAL(include_sql, test "$sql" = "yes")
+
+
+dnl  **********
+dnl  Check which build tools support should be compiled
+dnl  **********
+
+AC_ARG_ENABLE(antproject, AC_HELP_STRING([--disable-antproject], [disable build tool support for ant]), [antproject=${enableval}], [antproject=yes])
+AM_CONDITIONAL(include_ant, test "$antproject" = "yes")
+
+AC_ARG_ENABLE(autoproject, AC_HELP_STRING([--disable-autoproject], [disable build tool support for autotools]), [autoproject=${enableval}], [autoproject=yes])
+AM_CONDITIONAL(include_autoproject, test "$autoproject" = "yes")
+
+AC_ARG_ENABLE(customproject, AC_HELP_STRING([--disable-customproject], [disable build tool support for custom makefiles]), [customproject=${enableval}], [customproject=yes])
+AM_CONDITIONAL(include_customproject, test "$customproject" = "yes")
+
+AC_ARG_ENABLE(scriptproject, AC_HELP_STRING([--disable-scriptproject], [disable build tool support for script]), [scriptproject=${enableval}], [scriptproject=yes])
+AM_CONDITIONAL(include_scriptproject, test "$scriptproject" = "yes")
+
+AC_ARG_ENABLE(trollproject, AC_HELP_STRING([--disable-trollproject], [disable build tool support for qmake]), [trollproject=${enableval}], [trollproject=yes])
+AM_CONDITIONAL(include_trollproject, test "$trollproject" = "yes")
+
+
+dnl  **********
+dnl  Check which version control systems support should be compiled
+dnl  **********
+
+dnl cervisia is currently disabled
+dnl AC_ARG_ENABLE(cervisia, AC_HELP_STRING([--disable-cervisia], [disable vcs support for cervisia]), [with_cervisia=${enableval}], [with_cervisia=yes])
+
+AC_ARG_ENABLE(clearcase, AC_HELP_STRING([--disable-clearcase], [disable vcs support for clearcase]), [with_clearcase=${enableval}], [with_clearcase=yes])
+AM_CONDITIONAL(include_clearcase, test "$with_clearcase" = "yes")
+
+AC_ARG_ENABLE(cvs, AC_HELP_STRING([--disable-cvs], [disable vcs support for cvs]), [with_cvs=${enableval}], [with_cvs=yes])
+AM_CONDITIONAL(include_cvsclient, test "$with_cvs" = "yes")
+
+dnl  This one is automatic and depends is cervisia is installed or not
+KDE_CHECK_HEADER(cvsservice_stub.h, [cvsservice_stub_h="found"], [cvsservice_stub_h="none"])
+AM_CONDITIONAL(include_cvsservice, test "$cvsservice_stub_h" = "found")
+
+AC_ARG_ENABLE(perforce, AC_HELP_STRING([--disable-perforce], [disable vcs support for perforce]), [with_perforce=${enableval}], [with_perforce=yes])
+AM_CONDITIONAL(include_perforce, test "$with_perforce" = "yes")
+
+AC_ARG_ENABLE(subversion, AC_HELP_STRING([--disable-subversion], [disable vcs support for subversion]), [with_subversion=${enableval}], [with_subversion=yes])
+AM_CONDITIONAL(include_subversion, test "$with_subversion" = "yes" -a "$DISABLE_SUBVERSION" != "yes" )
+
+
+dnl  **********
+dnl  Check which embedded support should be compiled
+dnl  **********
+
+AC_ARG_ENABLE(vba, AC_HELP_STRING([--enable-vba], [enable visualboy advance support]), [with_vba=${enableval}], [with_vba=no])
+AM_CONDITIONAL(include_vba, test "$with_vba" = "yes")
+
+
+AC_PATH_PROG(DOT_FOUND, dot, no)
+AC_CHECK_PROG(gmake_prog, gmake, gmake, make)
+AC_CHECK_PROGS(TAR, gnutar gtar tar, [AM_MISSING_PROG(tar)])
+AC_CHECK_PROGS(GZIP, gzip, [AM_MISSING_PROG(gzip)])
+AC_DEFINE_UNQUOTED(MAKE_COMMAND, "$gmake_prog", [GNU make command])
+
+CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
+
+KDE_INIT_DOXYGEN([KDevelop], [Version $VERSION])

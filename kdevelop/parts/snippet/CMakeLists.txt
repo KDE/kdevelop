@@ -1,0 +1,46 @@
+SET(kdevsnippet_PART_SRCS
+snippet_part.cpp
+snippet_widget.cpp
+snippetitem.cpp
+snippetsettings.cpp
+snippetconfig.cpp
+)
+
+SET( kdevsnippet_UI
+snippetdlg.ui
+snippetsettingsbase.ui
+)
+
+KDE_AUTOMOC(${kdevsnippet_PART_SRCS})
+
+KDE_ADD_UI_FILES(kdevsnippet_PART_SRCS ${kdevsnippet_UI} )
+
+ADD_LIBRARY(kdevsnippet MODULE ${kdevsnippet_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevsnippet ${KDEV_PART_LIBS})
+
+KDE_CREATE_LIBTOOL_FILE(kdevsnippet)
+
+INSTALL_TARGETS(/lib/kde3 kdevsnippet)
+
+INSTALL_FILES(/share/servicetypes FILES kdevsnippet.desktop )
+
+#original Makefile.am contents follow:
+
+#INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+#
+#kde_module_LTLIBRARIES = libkdevsnippet.la
+#libkdevsnippet_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+#libkdevsnippet_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+#
+#libkdevsnippet_la_SOURCES = snippet_part.cpp snippet_widget.cpp snippetdlg.ui snippetitem.cpp snippetsettingsbase.ui snippetsettings.cpp snippetconfig.cpp
+#
+#METASOURCES = AUTO
+#
+#servicedir = $(kde_servicesdir)
+#service_DATA = kdevsnippet.desktop
+#
+#rcdir = $(kde_datadir)/kdevsnippet
+#
+#noinst_HEADERS = snippetdlg.h snippetitem.h snippetsettingsbase.h snippetsettings.h snippetconfig.h
+

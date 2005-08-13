@@ -1,0 +1,249 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>VBAConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>VBAConfigWigdet</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>510</width>
+            <height>367</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+
+        <widget class="QLineEdit" row="1" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>binaryEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="2" column="0" rowspan="3" colspan="1">
+            <property name="name">
+                <cstring>ButtonGroup3</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Graphic Filter</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>normalModeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Normal mode</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>tvModeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>TV mode</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>salModeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>2xSaI</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>superSalModeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Super 2xSal</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>superEagleModeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Super Eagle</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>GBA binary:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>emuPathEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>Additional parameters:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>VisualBoy Advance (emulator):</string>
+            </property>
+        </widget>
+        <widget class="QToolButton" row="0" column="4">
+            <property name="name">
+                <cstring>emuPathButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>22</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>...</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="2" column="1" rowspan="3" colspan="2">
+            <property name="name">
+                <cstring>ButtonGroup4</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="title">
+                <string>Scaling</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>scaling1Button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>1x</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>scaling2Button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>2x</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>scaling3Button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>3x</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>scaling4Button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>4x</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QCheckBox" row="2" column="3">
+            <property name="name">
+                <cstring>fullscreenCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Full screen</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="3">
+            <property name="name">
+                <cstring>terminalCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Start in external terminal</string>
+            </property>
+        </widget>
+        <spacer row="4" column="3">
+            <property name="name">
+                <cstring>Spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+        </spacer>
+        <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>addOptionsEdit</cstring>
+            </property>
+        </widget>
+        <spacer row="6" column="2">
+            <property name="name">
+                <cstring>Spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+
+</UI>

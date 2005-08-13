@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+
+my $prefix = '';
+GetOptions( 'title=s'  => \$title,
+            'main=s'   => \$main ) || die "Wrong options\n";
+
+$file = $ARGV[0];
+open(FILE, "$file") || die "File not found: $file\n";
+
+print "<tocsect1 name=\"$title\" url=\"$main.html\">\n";
+
+while (<FILE>) {
+
+      if (/\<item\>\<uref url=\"(.+)\.html\"\>(.+)\<\/uref\>\<\/item\>/) {
+            $name = $1;
+            $url = "$1.html";
+            print "  <tocsect2 name=\"$name\" url=\"$url\"/>\n";
+      }
+
+}
+
+print "</tocsect1>\n";

@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="KDevHaskellSupport" version="2">
+<MenuBar>
+ <Menu name="tools"><Text>&amp;Tools</Text>
+  <Action name="plugin_action"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="extraToolBar">
+  <Action name="plugin_action"/>
+</ToolBar>
+</kpartplugin>
+

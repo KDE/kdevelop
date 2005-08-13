@@ -1,0 +1,12 @@
+/** \class ToolsPart
+This plugin provides an easy way to add external applications to the Tools menu and toolbar.
+
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
+
+\unmaintained This part is currently un-maintained.
+
+\feature Provides an easy way to add external applications to the Tools menu and toolbar.
+\feature Tool menu and the file and directory context menus can now be populated with any shell command.
+\feature Output can be sent to the app output part. %S, %D, %T and %W magic works.
+
+*/

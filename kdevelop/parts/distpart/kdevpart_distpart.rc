@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="distpart" library="libdistpartplugin" version="2">
+<MenuBar>
+ <Menu name="project"><Text>&amp;Project</Text>
+  <Action name="make_dist" group="tools_project_operations"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>

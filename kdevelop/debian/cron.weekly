@@ -1,0 +1,7 @@
+#!/bin/sh
+# Used to update the documentation index for KDevelop
+
+if [ -e "/var/lib/kdevelop3/helpindex/global_doc_index_enabled" ]; then
+  test -f "/usr/share/kdevelop3/update_doc_index.sh" && "/usr/share/kdevelop3/update_doc_index.sh" > /dev/null 2>&1
+fi
+

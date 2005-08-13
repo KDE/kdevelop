@@ -1,0 +1,16 @@
+/**
+@mainpage The KDevelop QMake Parser
+
+This library contains qmake parser.
+
+<b>Link with</b>: -lkdevqmakeparser
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/buildtools/parsers/qmake
+
+\section qmakeparseroverview Overview
+Here resides a parser for qmake .pro (.pri) files. This parser
+reads project files, builds an AST which then can be written
+back to the project file.
+
+*/
+

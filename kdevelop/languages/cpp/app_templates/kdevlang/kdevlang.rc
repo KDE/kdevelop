@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevBashSupport" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_execute" />
+  </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar">
+    <Action name="build_execute" group="build_operations" />
+</ToolBar>
+</kpartgui>

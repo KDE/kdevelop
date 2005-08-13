@@ -1,0 +1,16 @@
+#!/bin/sh
+
+action=$1
+version=$2
+
+# Source the debconf library
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+if [ -x /usr/bin/htdig -a -x /usr/bin/htmerge ]; then
+  db_input medium kdevelop3/use_global_index || true
+  db_go || true
+fi
+
+exit 0
+

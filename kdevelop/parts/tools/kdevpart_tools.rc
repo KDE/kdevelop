@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="tools" library="libtoolsplugin" version="1">
+<MenuBar>
+  <Menu name="tools">
+    <text>&amp;Tools</text>
+    <ActionList name="tools_list"/>
+    <ActionList name="tools2_list"/>
+  </Menu>
+</MenuBar>
+<ToolBar position="Top" iconText="IconOnly" noMerge="1" name="extraToolBar" fullWidth="false" hidden="true" >
+  <text>Tools Toolbar</text>
+  <ActionList name="tools_list"/>
+</ToolBar>
+</kpartplugin>

@@ -1,0 +1,61 @@
+/**
+@mainpage The KDevelop Extension Interfaces Library
+
+This library contains extension interfaces used by KDevelop plugin architecture.
+
+<b>Link with</b>: -lkdevelop
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/interfaces/extensions
+
+\section whatisextension What is the KDevelop extension
+
+Extension is a KDevelop plugin which implements one of extension interfaces.
+Extension is usually not important enough to be returned by @ref KDevApi and @ref KDevPlugin
+methods. Therefore extension instance can be obtained by @ref KDevPlugin::extension method.
+
+Note: extension plugins can be either core, global and project plugins. They are loaded
+in the same way other plugins are. But extensions differ from usual plugins.
+
+Note: many plugins implementing extension interface can be created but only one of
+those should be loaded at a time. This can be accomplished by:
+- using a shell plugin profile (as done in current generic shell implementation) - define
+  different X-KDevelop-Properties for different extension implementations;
+- writing project manager which looks into the project file and loads the neccesary extension.
+
+\section creatingextension Creating and using an extension
+- Define a service, use following .desktop file:
+  @code
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=ServiceType
+  X-KDE-ServiceType=KDevelop/MyExtension
+  X-KDE-Derived=KDevelop/Plugin
+  Name=My Extension Interface
+  [PropertyDef::X-KDevelop-Version]
+  Type=int
+  @endcode
+- Define an abstract base class for an extension like:
+  @code
+  class KDevMyExtension: public KDevPlugin {
+  public:
+      KDevMyExtension(const KDevPluginInfo *info, QObject* parent, const char* name)
+          :KDevPlugin(info, parent, name) {}
+      
+      virtual void doSomething() = 0;
+  };
+  @endcode  
+- Create an usual plugin, but instead of setting service type to "KDevelop/Plugin", set:
+  @code
+  ServiceTypes=KDevelop/MyExtension
+  @endcode
+- Use your extension:
+  @code
+  KDevMyExtension *myext = extension<KDevMyExtension>("KDevelop/MyExtension");
+  if (sf) {
+      // do something
+  } else {
+      // fail
+  }  
+  @endcode
+*/
+

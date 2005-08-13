@@ -1,0 +1,4 @@
+# KDE Config File
+[General]
+Comment=Java Application (Automake based)
+Comment[fr]=Une application JAVA (Makefiles basés sur Automake)

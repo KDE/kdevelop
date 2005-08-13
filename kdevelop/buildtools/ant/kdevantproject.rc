@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevAntProject" version="2">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_build" />
+<!--    <Action name="build_compilefile" /> -->
+    <Action name="build_target" />
+<!--    <Action name="build_clean" />
+    <Separator/>
+    <Action name="build_execute" /> -->
+  </Menu>
+</MenuBar>
+</kpartgui>
+

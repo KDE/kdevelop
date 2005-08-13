@@ -1,0 +1,457 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ListBoxEditorBase</class>
+<comment>*********************************************************************
+** Copyright (C) 2000 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ListBoxEditorBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>482</width>
+            <height>229</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Listbox</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>&lt;b&gt;Edit Listbox&lt;/b&gt;&lt;p&gt;Add, edit or delete items in the listbox.&lt;/p&gt;&lt;p&gt;Click the &lt;b&gt;New Item&lt;/b&gt;-button to create a new listbox entry, then enter text and choose a pixmap.&lt;/p&gt;&lt;p&gt;Select an item from the list and click the &lt;b&gt;Delete Item&lt;/b&gt;-button to remove the item from the list.&lt;/p&gt;</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>helpButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Close the dialog and apply all the changes.</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonApply</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Apply</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Apply all changes.</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Close the dialog and discard any changes.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QListBox" row="0" column="0" rowspan="5" colspan="1">
+            <property name="name">
+                <cstring>preview</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Delete Item</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The list of items.</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="0" column="2" rowspan="5" colspan="1">
+            <property name="name">
+                <cstring>GroupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Item Properties</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>Label2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Pixmap:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>itemChoosePixmap</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>itemPixmap</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Label4</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="2">
+                    <property name="name">
+                        <cstring>itemDeletePixmap</cstring>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>30</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>"designer_s_editcut.png"</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Delete Pixmap</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Delete the selected item's pixmap.</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="3">
+                    <property name="name">
+                        <cstring>itemChoosePixmap</cstring>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>30</width>
+                            <height>22</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>...</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Select a Pixmap</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Choose a pixmap file for the selected item.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>Label1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Text:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>itemText</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>itemText</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Change text</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Change the selected item's text.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QPushButton" row="0" column="1">
+            <property name="name">
+                <cstring>itemNew</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;New Item</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Add an item</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Add a new item.&lt;/b&gt;&lt;p&gt;New items are appended to the list.&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>itemDelete</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Delete Item</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Delete Item</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Delete the selected item</string>
+            </property>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>Vertical Spacing1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="3" column="1">
+            <property name="name">
+                <cstring>itemUp</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>"designer_s_up.png"</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move up</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Moves the selected item up.</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="1">
+            <property name="name">
+                <cstring>itemDown</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>"designer_s_down.png"</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move down</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Move the selected item down.</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>itemNew</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>insertNewItem()</slot>
+    </connection>
+    <connection>
+        <sender>itemDelete</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>deleteCurrentItem()</slot>
+    </connection>
+    <connection>
+        <sender>itemText</sender>
+        <signal>textChanged( const QString &amp; )</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>currentTextChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>okClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buttonApply</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>applyClicked()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>cancelClicked()</slot>
+    </connection>
+    <connection>
+        <sender>itemChoosePixmap</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>choosePixmap()</slot>
+    </connection>
+    <connection>
+        <sender>itemDeletePixmap</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>deletePixmap()</slot>
+    </connection>
+    <connection>
+        <sender>itemUp</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>moveItemUp()</slot>
+    </connection>
+    <connection>
+        <sender>itemDown</sender>
+        <signal>clicked()</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>moveItemDown()</slot>
+    </connection>
+    <connection>
+        <sender>preview</sender>
+        <signal>selectionChanged(QListBoxItem*)</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>currentItemChanged(QListBoxItem*)</slot>
+    </connection>
+    <connection>
+        <sender>preview</sender>
+        <signal>currentChanged( QListBoxItem * )</signal>
+        <receiver>ListBoxEditorBase</receiver>
+        <slot>currentItemChanged(QListBoxItem*)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+    <tabstop>preview</tabstop>
+    <tabstop>itemNew</tabstop>
+    <tabstop>itemDelete</tabstop>
+    <tabstop>itemUp</tabstop>
+    <tabstop>itemDown</tabstop>
+    <tabstop>itemText</tabstop>
+    <tabstop>itemDeletePixmap</tabstop>
+    <tabstop>itemChoosePixmap</tabstop>
+    <tabstop>helpButton</tabstop>
+    <tabstop>buttonApply</tabstop>
+</tabstops>
+<slots>
+    <slot access="protected">init()</slot>
+    <slot access="protected">destroy()</slot>
+    <slot access="protected">insertNewItem()</slot>
+    <slot access="protected">deleteCurrentItem()</slot>
+    <slot access="protected">currentItemChanged( QListBoxItem * )</slot>
+    <slot access="protected">currentTextChanged( const QString &amp; )</slot>
+    <slot access="protected">okClicked()</slot>
+    <slot access="protected">cancelClicked()</slot>
+    <slot access="protected">applyClicked()</slot>
+    <slot access="protected">choosePixmap()</slot>
+    <slot access="protected">deletePixmap()</slot>
+    <slot access="protected">moveItemUp()</slot>
+    <slot access="protected">moveItemDown()</slot>
+</slots>
+<includes>
+    <include location="local" impldecl="in implementation">myiconloader.h</include>
+</includes>
+<pixmapfunction>BarIcon2</pixmapfunction>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,5 @@
+debian/tmp/etc/kde3/*
+debian/tmp/usr/bin/*
+debian/tmp/usr/lib/lib*.so.*
+debian/tmp/usr/lib/lib*.so
+debian/tmp/usr/share/kdevelop3

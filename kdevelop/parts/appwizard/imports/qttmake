@@ -1,0 +1,4 @@
+# KDE Config File
+[General]
+Comment=Qt C++ Application (TMake based)
+Comment[fr]=Une application C++ pour Qt (Makefiles basés sur TMake)

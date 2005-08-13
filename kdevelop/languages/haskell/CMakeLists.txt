@@ -1,0 +1,40 @@
+SUBDIRS( app_templates file_templates compiler doc )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/lib/antlr ${CMAKE_SOURCE_DIR}/lib/interfaces ${CMAKE_SOURCE_DIR}/lib/interfaces/extensions ${CMAKE_SOURCE_DIR}/lib/interfaces/external ${CMAKE_SOURCE_DIR}/lib/util )
+
+SET(kdevhaskellsupport_PART_SRCS
+haskellsupport_part.cpp
+)
+
+KDE_AUTOMOC(${kdevhaskellsupport_PART_SRCS})
+
+ADD_LIBRARY(kdevhaskellsupport SHARED ${kdevhaskellsupport_PART_SRCS})
+
+TARGET_LINK_LIBRARIES(kdevhaskellsupport kdevelop )
+
+KDE_CREATE_LIBTOOL_FILE(kdevhaskellsupport)
+
+INSTALL_TARGETS(/lib/kde3 kdevhaskellsupport)
+
+#original Makefile.am contents follow:
+
+#KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+#
+#INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces \
+#	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
+#	$(all_includes)
+#SUBDIRS = app_templates file_templates compiler doc
+#
+#kde_module_LTLIBRARIES = libkdevhaskellsupport.la
+#libkdevhaskellsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
+#libkdevhaskellsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la
+#
+#libkdevhaskellsupport_la_SOURCES = haskellsupport_part.cpp
+#
+#METASOURCES = AUTO
+#
+#servicedir = $(kde_servicesdir)
+#service_DATA = kdevhaskellsupport.desktop
+#
+#rcdir = $(kde_datadir)/kdevhaskellsupport
+#rc_DATA = kdevhaskellsupport.rc

@@ -1,0 +1,128 @@
+# KDE Config File
+[General]
+Name=Control Center module
+Name[da]=Kontrolcenter-modul
+Name[en_GB]=Control Centre module
+Name[et]=Juhtimiskeskuse moodul
+Name[fr]=Module du centre de configuration
+Name[hu]=KControl-beállítómodul
+Name[sv]=Modul i inställningscentralen
+Name[tr]=Kontrol Merkezi Birimi
+Icon=kcmodule.png
+Category=C++/KDE
+Comment=Generates a framework for a module which can be embedded into the KDE Control Center.
+Comment[da]=Genererer et skelet for et modul som kan indlejres i KDE's kontrolcenter.
+Comment[en_GB]=Generates a framework for a module which can be embedded into the KDE Control Centre.
+Comment[et]=Mooduli raamistiku loomine, mida saab põimida KDE juhtimiskeskusse.
+Comment[hu]=Létrehoz egy kiindulási KDE vezérlőpult-beállítómodult
+Comment[sv]=Skapar ett ramverk för en modul som kan inbäddas i KDE:s inställningscentral.
+Comment[tr]=KDE Kontrol Merkezine gömülebilen bir birim için bir çatı yaratır.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=kcmodule.tar.gz
+
+[ADMIN]
+Type=include
+File=%{kdevelop}/template-common/admin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[MKDIR_DOCBOOK1]
+Type=mkdir
+Dir=%{dest}/doc
+
+[MKDIR_DOCBOOK2]
+Type=mkdir
+Dir=%{dest}/doc/en
+
+[FILE1]
+Type=install
+Source=%{kdevelop}/template-common/kde-doc-Makefile.am
+Dest=%{dest}/doc/Makefile.am
+
+[FILE2]
+Type=install
+Source=%{kdevelop}/template-common/kde-doc-en-Makefile.am
+Dest=%{dest}/doc/en/Makefile.am
+
+[FILE3]
+Type=install
+EscapeXML=true
+Source=%{kdevelop}/template-common/kde-index.docbook
+Dest=%{dest}/doc/en/index.docbook
+
+[FILE4]
+Type=install
+EscapeXML=true
+Source=%{src}/module.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir3]
+Type=mkdir
+Dir=%{dest}/po
+
+[FILE5]
+Type=install
+Source=%{kdevelop}/template-common/kde-po-Makefile.am
+Dest=%{dest}/po/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE7]
+Type=install
+Source=%{kdevelop}/template-common/kde-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE8]
+Type=install
+Source=%{kdevelop}/template-common/kde-configure.in.in
+Dest=%{dest}/configure.in.in
+
+[MkDir4]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE9]
+Type=install
+Source=%{src}/module.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[FILE10]
+Type=install
+Source=%{src}/subdirs
+Dest=%{dest}/subdirs
+
+[FILE11]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE12]
+Type=install
+Source=%{src}/module.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE13]
+Type=install
+Source=%{src}/module.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE14]
+Type=install
+Source=%{src}/module.desktop
+Dest=%{dest}/src/%{APPNAMELC}.desktop
+
+[MSG]
+Type=message
+Comment=A control center module was created in %{dest}
+Comment[da]=Et kontrolcenter-modul blev oprettet i %{dest}
+Comment[en_GB]=A control centre module was created in %{dest}
+Comment[et]=Juhtimiskeskuse moodul loodi asukohta %{dest}
+Comment[fr]=Un module du centre de configuration a été créé dans %{dest}
+Comment[hu]=Létrejött egy KControl-beállítómodul itt: %{dest}
+Comment[sv]=En modul i inställningscentralen skapades i %{dest}

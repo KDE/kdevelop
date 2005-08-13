@@ -1,0 +1,57 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+
+my $prefix = '';
+GetOptions( 'prefix=s' => \$prefix,
+            'title=s'  => \$title,
+            'main=s'   => \$main ) || die "Wrong options\n";
+
+$file = $ARGV[0];
+open(FILE, "$file") || die "File not found: $file\n";
+
+$prevdepth = 1;
+$depth = 1;
+print "<tocsect${depth} name=\"$title\" url=\"$main.html\"";
+
+while (<FILE>) {
+
+      if (/^\s*href/ && !/.*\<\/A\>$/i) {
+              chop;
+              $_ = $_ . <FILE>;
+      }
+      if (/\<UL\>/i) {
+              $depth++;
+      } elsif (/\<\/UL\>/i) {
+              print "/" if ($prevdepth == $depth);
+              $depth--;
+              print ">\n</tocsect${depth}";
+      } elsif (/^\s*href=\"([^\"]+)\"\>(.+)\<\/A\>$/i) {
+              $url = "$prefix/$1";
+              $name = dehtml($2);
+              $name =~ s/\s+/ /g;
+              print "/" if ($prevdepth == $depth);
+              print ">\n<tocsect${depth} name=\"$name\" url=\"$url\"";
+              $prevdepth = $depth;
+      }
+}
+
+print ">\n";
+close(FILE);
+
+sub dehtml
+{
+        my ( $str ) = @_;
+
+        $str =~ s/\<(tt|b) class=\"([^\"]*)\"\>//g;
+        $str =~ s/\<\/(tt|b)\>//g;
+        $str =~ s/\<i\>//g;
+        $str =~ s/\<\/i\>//g;
+
+        return $str;
+}
+
+# Local Variables:
+# mode: perl
+# fill-column: 120
+# End:

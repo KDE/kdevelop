@@ -1,0 +1,112 @@
+JDB Support for KDevelop 3
+===================================
+
+1) Status of the java debugger for KDevelop
+2) Happy hacking
+3) A word on Regular Expressions
+
+
+1) Status of the java debugger for KDevelop
+-------------------------------------------
+
+The java debugger integration was developed with the jdb version
+from IBM's JDK 1.3.0. I ran a short test to see whether Sun's jdb
+uses the same output and I guess all recent jdb versions from sun
+should work as well (that does not apply to JDK 1.1.x however).
+
+You can currently use the Java debugger to start a java program 
+inside KDevelop, step through the code using the step over command 
+and inspect variable data. No watches, no breakpoints at the moment.
+Also note that all local variables are evaluated after ever single
+step so it's probably not a good idea to use KDevelop for debugging
+programs using large arrays, as evaluation is pretty slow and memory
+is not properly freed at the moment.
+
+The debugger does not properly detect when an application is exited and
+sometimes loses state. If that happens it is not possible to continue
+debuging anymore. If you test the debugger you should start it from a
+terminal and ALWAYS wait for the message "Commandlist empty..." to appear
+before executing the next step, otherwise state will most probably be lost.
+
+Note that the debugger currently leaks a lot of memory (I did not test this
+but I am pretty sure). IT IS NOT MEANT TO BE A WORKING DEBUGGER!
+
+To get the debugger function properly you need to adjust some strings
+in the source file jdbcontroller.cpp. As jdb only outputs classnames, 
+but not the names of the corresponding files this relation is currently
+hard coded and should be adjusted in the method JDBController::getFile.
+This data will eventually come from the KDevelop class store.
+
+2) Happy Hacking
+----------------
+
+The java debugger support is work in progress and could definitely use
+some additional help. For you to be able to start adding functionality 
+to it or to track down and fix bugs in the code here is a short 
+introduction to the flow of control in the jdbcontroller code.
+
+* Starting an application
+
+When the user starts an application inside the debugger jdb is started 
+and fed with the application name. As it takes some time for jdb to start
+up we have to wait for jdb to be ready for accepting input. So we set
+the state to dbgNotStarted and wait for jdb output.
+
+All output is collected and fed to the parse method in slotDbgStdout. 
+Parse performs different parsing upon the current state. So consider jdb
+still starting up: Now parse tries to match the data coming from jdb with
+the first prompt. If it succeeds it adjusts the state and emits a debugger
+started signal which triggers the code in slotDebuggerStarted to set a
+breakpoint in the main function of the application and start the program by
+issueing the "run" command.
+
+If we have a running application parse feeds all information to parseLine 
+which tries to find jdb output indicating that the app has stopped again. If
+this is the case the current position in source code is emitted and
+actOnProgramPause will be called. Now things get really complicated...
+
+* zzzzzz....
+
+So the application has halted: As we are all curious about what our program
+is actually doing we want to inspect variables and have the debugger print
+out a nice stack trace. Unfortunately jdb does not provide a magic dumpall
+command so we have to collect all the data required by hand. As a first step
+we issue a "where" command, clear out data structures for local variable
+data and add an additional "locals" command. Then we wait for the data to
+flow in...
+
+All parsing of data output is done in parseInfo and the methods parseDump,
+parseBacktrace and parseLocalVars. Detecting and parsing the stack trace is
+pretty straight-forward. Things get a bit more confusing when it comes to
+parsing variable data (btw. we can distinguish the data flowing in by
+checking the type of the current command).
+
+* Is it an integer?
+
+The "locals" command returns the name _and_ the value of primitive types but
+gives us the name only for instances of all classes or arrays. So if we find
+a variable of primitive type we call analyzeDump() immediately to add it to
+our list of local variable (actually it is a tree built using a QDict). If
+however we find an instance of a class or an array we simply add the name of
+that var to our nameQueue to be processed again later. If we come to these
+vars we issue "dump" commands for them and parse the output accordingly in
+parseDump() and forward it to analyzeDump afterwards to be added to our
+local vars. This is recursively done for complex structures and a new "dump"
+command is issued for every single element in an array.
+
+If all local vars have been processed the same procedure will be started for
+the current object's variables by issueing a "dump this" command.
+
+After the last data has been received a gdb like string will be assembled in
+varUpdateDone() and the data will be passed to the var widget for being
+parsed.
+
+3) A word on Regular Expressions
+================================
+
+The java debugger makes heavy use of regular expressions for parsing jdb
+output. While this certainly adds a substantial overhead to the parsing
+time it makes programming the parser much easier. Also don't forget that
+debugging with jdb is already pretty slow so the time required for actually 
+parsing is not that important.
+

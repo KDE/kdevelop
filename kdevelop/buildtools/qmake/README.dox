@@ -1,0 +1,39 @@
+/** \class TrollProjectPart
+A projectmanager for qmake based projects.
+
+Loads and maintains .pro files (qmake project files). The trollprojectpart
+supports subprojects and qmake scopes. Qmake projects can be configured on
+project, subproject and file level.
+It will regenerate a projects .pro files dynamically as you add,remove or
+reconfigure (sub)projects. Unsupported qmake features will be left unchanged
+(hopefully) no major testing has been run yet.
+
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
+\authors <a href="mailto:thasart AT gmx.de">Thomas Hasart</a>
+
+\maintainer <a href="mailto:jsgaarde AT tdcspace.dk">Jakob Simon-Gaarde </a>
+
+\feature Loads and maintains .pro files (qmake project files).
+\feature Supports subprojects and qmake scopes.
+\feature Qmake projects can be configured on project, subproject and file level.
+\feature Regenerates a projects .pro files dynamically as you add,
+remove or reconfigure (sub)projects.
+\feature Unsupported qmake features will be left unchanged (hopefully)
+ no major testing has been run yet.
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=trollproject&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">trollproject component at Bugzilla database</a>
+
+\requirement <a href="http://www.trolltech.com">QMake</a> >= 3.0.3
+
+\todo <b>Relative directories (priority 1)</b>
+  By default a qmake projects created with kdevelop must be distributable,
+  therefore all directory-selections must be relative the subproject where
+  it is used (user can override this ofcourse). So when a select-directory
+  dialog is opened getRelativeDirectory() (#include pathutil.h) should be
+  called.
+\todo <b>Ignore shell-expressions and qmake-functions (priority 2-3)</b>
+  FileBuffer should recognize and ignore shell-expressions and qmake-functions.
+  (Jakob Simon-Gaarde says: I'm on this one)
+
+
+*/

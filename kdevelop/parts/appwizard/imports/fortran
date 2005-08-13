@@ -1,0 +1,4 @@
+# KDE Config File
+[General]
+Comment=Fortran Application (Custom Makefiles)
+Comment[fr]=Une application FORTRAN (Makefiles personnalisés)

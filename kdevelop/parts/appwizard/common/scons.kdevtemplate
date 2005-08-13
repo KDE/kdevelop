@@ -1,0 +1,5 @@
+[SCONS]
+Type=install archive
+Source=%{kdevelop}/template-common/scons.tar.gz
+Dest=%{dest}
+Process=false

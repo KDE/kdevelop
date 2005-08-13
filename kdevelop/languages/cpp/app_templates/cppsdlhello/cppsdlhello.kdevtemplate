@@ -1,0 +1,80 @@
+# KDE Config File
+[General]
+Name=Simple SDL program
+Name[da]=Simpelt SDL-program
+Name[et]=Lihtne SDL programm
+Name[fr]=Programme SDL simple
+Name[hu]=Egyszerű SDL-alkalmazás
+Name[sv]=Enkelt SDL-program
+Name[tr]=Basit bir SDL Programı
+Icon=cppsdl.png
+Category=C++
+Comment=Generates a simple SDL program in C++
+Comment[da]=Genererer et simpelt SDL program i C++
+Comment[et]=Lihtsa SDL programmi loomise C++-s
+Comment[fr]=Génère un programme SDL simpe en C++
+Comment[hu]=Létrehoz egy egyszerű SDL-alkalmazást C++-ban
+Comment[sv]=Skapar ett enkelt SDL-program i C++
+Comment[tr]=C++'da basit bir SDL programı yaratır
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=cppsdlhello.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/cpp-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/cpp-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/configure.in
+Dest=%{dest}/configure.in
+
+[FILE5]
+Type=install
+Source=%{src}/acinclude.m4
+Dest=%{dest}/acinclude.m4
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE6]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE7]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+
+[MSG]
+Type=message
+Comment=A simple SDL program was created in %{dest}
+Comment[da]=Et simpelt SDL-program blev oprettet i %{dest}
+Comment[et]=Lihtne SDL programm loodi asukohta %{dest}
+Comment[fr]=Un programme SDL simple a été créé dans %{dest}
+Comment[hu]=Létrejött egy egyszerű SDL-alkalmazás itt: %{dest}
+Comment[sv]=Ett enkelt SDL-program skapades i %{dest}
+Comment[tr]=Basit bir SDL programı %{dest} içinde yaratılmıştır.

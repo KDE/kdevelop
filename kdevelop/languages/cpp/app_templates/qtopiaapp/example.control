@@ -1,0 +1,11 @@
+Files: bin/%{APPNAMELC} apps/Applications/%{APPNAMELC}.desktop pics/%{APPNAME}.png help/html/%{APPNAMELC}.html
+Priority: optional
+Section: qpe/applications
+Maintainer: Your Name <you@your.domain.com>
+Architecture: $CPU_ARCH
+Arch: $DEVICE_ARCH
+Version: 1.0.0
+License: Public Domain
+Description: %{APPNAME} program
+ An %{APPNAMELC} program for the Qtopia environment.
+ Does nothing interesting.

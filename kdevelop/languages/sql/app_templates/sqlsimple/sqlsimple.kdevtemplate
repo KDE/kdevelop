@@ -1,0 +1,42 @@
+# KDE Config File
+[General]
+Name=Simple SQL Project
+Name[da]=Simpelt SQL-projekt
+Name[et]=Lihtne SQL projekt
+Name[fr]=Projet SQL simple
+Name[ga]=Tionscadal Simplí SQL
+Name[hu]=Egyszerű SQL-projekt
+Name[sv]=Enkelt SQL-projekt
+Name[tr]=Basit SQL Projesi
+Category=Database
+Comment=Generates a simple SQL project.
+Comment[da]=Genererer et simpelt SQL projekt.
+Comment[et]=Lihtsa SQL projekti loomine.
+Comment[fr]=Génère un projet SQL simple
+Comment[hu]=Létrehoz egy egyszerű SQL-projektet.
+Comment[sv]=Skapar ett enkelt SQL-projekt.
+Comment[tr]=Basit bir SQL Projesi yaratır
+FileTemplates=sql,AdaStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.sql
+Archive=sqlsimple.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/app.sql
+Dest=%{dest}/%{APPNAMELC}.sql
+
+[MSG]
+Type=install
+Comment=A simple SQL project was created in %{dest}
+Comment[da]=Et simpelt SQL projekt blev oprettet i %{dest}
+Comment[et]=Lihtne SQL projekt loodi asukohta %{dest}
+Comment[fr]=Un projet SQL simple a été créé dans %{dest}
+Comment[hu]=Létrejött egy egyszerű SQL-projekt itt: %{dest}
+Comment[sv]=Ett enkelt SQL-projekt skapades i %{dest}
+Comment[tr]=Basit bir SQL projesi %{dest} içinde yaratıldı.

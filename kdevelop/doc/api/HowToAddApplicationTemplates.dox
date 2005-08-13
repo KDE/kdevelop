@@ -1,0 +1,285 @@
+/** \file HowToAddApplicationTemplates.dox
+  * \brief How to add application templates to the application wizard part
+  */
+/** \page howToAddApplicationTemplates How to add application templates to the application wizard part
+
+Project templates provide the developer with a basic application framework.
+This is necessary for rapid application development (RAD) and makes it even possible
+for an inexperienced 3rd party developer to create standard conforming
+applications like kedit as well as plugins for example for kdevelop or noatun.\n\n
+\ref templates_1\n
+    - \ref templates_1_1
+    - \ref templates_1_2
+        - \ref templates_1_2a
+        - \ref templates_1_2b
+        - \ref templates_1_2c
+        - \ref templates_1_2d
+        - \ref templates_1_2e
+        .
+    .
+\ref templates_2\n
+\ref templates_3\n
+\ref templates_4\n
+<!-- @todo <b>Developer information:</b> The documentation for the related
+<code>"Project"->"Import Existing Project..."</code> is available here: \ref appwizard_imports
+-->
+<hr>
+
+\section templates_1 I. Example: How To Create a Simple KDE Application Template "KHello"
+
+You can find this template in <code>$KDEDIR/share/apps/kdevappwizard/template-khello</code>.
+
+\subsection templates_1_1 I.1. Step 1: Basic Skeleton
+
+Create a directory <code>template-khello</code> with the files
+<code><pre>
+    - template-khello/app.cpp
+    - template-khello/app.h
+    - template-khello/app.desktop
+    - template-khello/app.kdevelop
+    - template-khello/appui.rc
+    - template-khello/khello
+    - template-khello/main.cpp
+    - template-khello/preview.png
+    - template-khello/script
+    - template-khello/src-Makefile.am
+    - template-khello/subdirs
+    .
+</pre></code>
+\note The directory name must begin with <code>"template-"</code>.
+
+\subsection templates_1_2 I.2. Step 2: The Files in Detail
+
+Have a look into the files! There are some variables which the application
+wizard will replace:
+<code><pre>
+    - \%{AUTHOR} ...... by the author
+    - \%{EMAIL} ....... by the e-mail address 
+    - \%{VERSION} ..... by the version
+    - \%{APPNAME} ..... by the project name (KHello)
+    - \%{APPNAMELC} ... by the project name in lowercase (khello)
+    - \%{APPNAMEUC} ... by the project name in uppercase (KHELLO)
+    - \%{LICENSE} ..... by the license (GPL, BSD, QPL, LGPL, ...)
+    - \%{LICENSEFILE} . by the licensefile
+    - \%{YEAR} ........ by the year
+    .
+</pre></code>
+All this can be found in <code>$KDEDIR/share/apps/kdevappwizard/template-common/kdevelop.pm</code>.
+\subsubsection templates_1_2a I.2.1. The Source Files
+
+The files <code>template-khello/app.cpp, template-khello/app.h</code> and
+<code>template-khello/main.cpp</code> contain the source code that should not
+be too special so that the user can implement his own ideas.\n
+(There may be variables included - see \ref templates_1_2 "Step 2: The Files in Detail").
+
+\subsubsection templates_1_2b I.2.2. The File template-khello/khello
+
+It may look like this:
+\verbinclude khello/khello
+
+The application wizard looks into this file to get
+    - the information where to integrate the plugin into the the listview (<code>Category=</code>)
+    - the name (<code>Name=</code>) and the comment (<code>Comment=</code>)
+    - the preview image (<code>Icon=</code>)
+    - and the file templates the project uses (<code>FileTemplates=</code>).
+    .
+Further information could be (not required):
+    - <code>Comment=</code> a small comment for the template. Longer comments should go into a README.devel and shown on startup
+    - <code>ShowFilesAfterGeneration=</code> a comma-separated list (without whitespaces) of files that should be opened immediately after the generation, for instance a README.devel or a source file the user has to modify, the path is relative to the project directory (example: <code>ShowFilesAfterGeneration=src/main.cpp,src/plugin.cpp</code>). And
+        - <code>APPNAMEUC</code> will be replaced with the projectname in uppercase,
+        - <code>APPNAMELC</code> will be replaced with the projectname in lowercase,
+        - <code>APPNAME</code> will be replaced with the projectname.
+        .
+    - <code>DefaultDestinatonDir</code> changes the default destination dir for the project (~) to your value, whereas <code>HOMEDIR</code> is a keyword
+    .
+
+\attention The file <code>template-khello/khello</code> must have the same name as
+the right half of the directory! If the directory is <code>template-foobar</code>
+the file must be <code>template-foobar/foobar</code>.
+
+\see AppWizardPart for more information.
+
+\subsubsection templates_1_2c I.2.3. Some Additional Files
+
+The file
+    - <code>template-khello/appui.rc</code> contains information about the toolbar and the menu.
+    - <code>template-khello/preview.png</code> will be shown in the aplication wizard.
+    - <code>template-khello/app.desktop</code> describes the application.
+    - <code>template-khello/subdirs</code> contains a list of the subdirectories (usually <code>doc, po, src</code>) and can be found in the project root directory. It is necessary for the autotools.
+    .
+
+\subsubsection templates_1_2d I.2.4. The File template-khello/src-Makefile.am
+
+This file will be copied to the <code>$PROJECTDIR/src/</code>.
+\verbinclude khello/src-Makefile.am
+
+\subsubsection templates_1_2e I.2.5. The File template-khello/script
+
+The following script is used to install the template and replaces all
+variables by the corresponding value. The result is a hopefully working
+kdevelop project!
+\verbinclude khello/script
+<br>
+\note There are several application templates which use some identical
+files - that's why some files are taken from the <code>"template-common"</code>-directory.
+
+\section templates_2 II. Registration/Installation Of The Application Template
+
+The easiest way to install your template is to provide an "install.sh" shell script.\n
+Example:
+\code
+#!/bin/sh
+
+kde_prefix=`kde-config --prefix`
+if  [ `id -u` = 0 ]; then
+  # we are root so install the template into the global kde directory
+  kde_dir=`kde-config --prefix`
+else
+  # we are a user so install it into $HOME/.kde/share/apps/kdevappwizard directory
+  kde_dir=`kde-config --localprefix`
+  echo "Note: It would be better to install as root. Press CTRL+C to abort"
+fi
+
+# use usual path or another one?
+echo "Install dir [${kde_dir}/share/apps/kdevappwizard]:"
+read newdir
+
+if [ "$newdir"a = a ]; then newdir="${kde_dir}/share/apps/kdevappwizard/"; fi
+
+# make sure the directories exist
+if [ ! -e "${newdir}/template-khello" ]; then mkdir -p "${newdir}/template-khello" ; fi;
+if [ ! -e "${newdir}/templates" ]; then mkdir -p "${newdir}/templates" ; fi;
+if [ ! -e "${newdir}" ]; then mkdir -p "$newdir" ; fi;
+if [ ! -e "${newdir}/template-common" ]; then ln -s "${kde_prefix}/share/apps/kdevappwizard/template-common" "${newdir}/template-common" ; fi;
+
+# install now
+cp -R --target-directory "$newdir" template-khello
+# the file template-khello/khello must go to the "templates" directory that
+# kdevelop knows that it exists
+mv "$newdir/template-khello/khello" "$newdir/templates/"
+echo "done"
+\endcode
+\n
+\attention Please test your template whether it installs and behaves correctly! Test, test and test again! ;)
+
+\section templates_3 III. How To Add The Template To KDevelop CVS HEAD
+
+This section is for kdevelop developers only. Most probably you don't have to read this!.\n
+Move the directory <code>"template-khello"</code> to <code>kdevelop/languages/cpp/app_templates/</code>
+and then add the following files in <code>kdevelop/languages/cpp/app_templates/template-khello/</code>
+(in this example the language is c++ if you use other language replace cpp with the language name):
+    - <code>".kdev_ignore"</code> is an empty file. It prevents KDevelop's
+    C++-parser from parsing the C++ template files. This is necessary because the template files are just code templates and not real code (yet).
+    - <code>".cvsignore"</code> looks like this:
+\code
+Makefile
+Makefile.in
+script.local
+\endcode
+    - <code>"Makefile.am"</code> looks like this:
+    \verbinclude khello/Makefile.am
+    .
+Finally add <code>"template-khello"</code> to "SUBDIRS = " in <code>kdevelop/languages/cpp/app_templates/Makefile.am</code>.\n
+\attention Please test your template whether it installs and behaves correctly!
+Test, test and test again! It works? Well - now talk to the kdevelop guys so
+that they know what's going on and probably you may commit. ;)
+
+\section templates_4 IV. Changes to the template system (VERY IMPORTANT)
+
+The entire app template system described above has been changed.
+To port a template to the new system the
+information from the script file will need to be moved into the ini file.
+The example is as follows:
+\code
+install(
+"${src}/template-chello/app.kdevelop","${dest}/${APPNAMELC}.kdevelop" );
+\endcode
+becomes
+\code
+[PROJECT]
+Type=install
+Source=%{src}/template-chello/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+\endcode
+
+Things like <code>installIncAdmin();</code> and <code>installGNU();</code> now involve unpacking
+the tar archives.  This is done by creating a target in the ini file as
+follows:
+\code
+[GNU]
+Type=install archive
+Source=%{src}/template-common/gnu.tar.gz
+Dest=%{dest}
+\endcode
+
+The popular script functions convert as follows:
+\code
+installIncAdmin(); %{src}/template-common/incadmin.tar.gz
+installGNU();  %{src}/template-common/gnu.tar.gz
+installAdmin(); %{src}/template-common/admin.tar.gz
+installGnome(); %{src}/template-common/gnome.tar.gz
+installWX(); %{src}/template-common/wxwidgets.tar.gz
+\endcode
+
+
+To create directories is now:
+\code
+[SRC]
+Type= mkdir
+Dir=%{dest}/src
+\endcode
+
+New additions are as follows:
+\code
+[MGS]
+Type=message
+Comment=A simple C project was created in %{dest}.
+\endcode
+
+Will allow you to display a custom message when the template has
+finished installing.  This is very handy for projects that require
+custom variables to be set.
+
+The concept of custom variables was also introduced.  To create a
+variable that can be edited from the project wizard you need to add an
+entry as follows:
+\code
+[LIBS]
+Type = value
+ValueType=<Qt Data type>
+Value= <Value Name that will be substituted in the code>
+Comment= <The label in the UI>
+Default= <The default value>
+\endcode
+
+One special value can be used to turn targets on and off.  This is done
+by adding a value as follows:
+\code
+[DOCSOPT]
+Type = value
+ValueType=bool
+Value=INSTALL_DOCS
+Comment= Install Docbook documentation templates.
+Default=true
+\endcode
+
+Then in the targets you wish to make optional you add the Option
+property with the value's name as the data. This will look as follows:
+\code
+[DOCSDIREN]
+Type=mkdir
+Dir=%{dest}/doc/en
+Option=INSTALL_DOCS
+\endcode
+
+The Option target is available to the mkdir, install, and install
+archive targets.
+
+The last new addition is the optional post processing of the files as
+they are copied.  For install and install archive you can add a
+<code>Process=true</code> or <code>Process=false</code> to turn the processing on or off.
+
+A note on the UI. its not final, it will get better.  Suggestions or
+bugs should be noted asap.
+
+*/

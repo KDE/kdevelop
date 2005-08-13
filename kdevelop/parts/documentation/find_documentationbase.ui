@@ -1,0 +1,163 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>FindDocumentationBase</class>
+<author>Tobias Gläßer</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>FindDocumentationBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>222</width>
+            <height>504</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>1</hsizetype>
+            <vsizetype>1</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Find Documentation</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Search term:</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>button_search</cstring>
+            </property>
+            <property name="text">
+                <string>Search</string>
+            </property>
+            <property name="default">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>search_term</cstring>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="0">
+            <property name="name">
+                <cstring>butten_options</cstring>
+            </property>
+            <property name="text">
+                <string>Options</string>
+            </property>
+        </widget>
+        <spacer row="3" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>100</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KListView" row="2" column="0" rowspan="1" colspan="3">
+            <column>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>result_list</cstring>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="resizeMode">
+                <enum>LastColumn</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>button_search</sender>
+        <signal>clicked()</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>startSearch()</slot>
+    </connection>
+    <connection>
+        <sender>result_list</sender>
+        <signal>executed(QListViewItem*)</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>clickOnItem(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>butten_options</sender>
+        <signal>clicked()</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>clickOptions()</slot>
+    </connection>
+    <connection>
+        <sender>result_list</sender>
+        <signal>mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>buttonPressedOnItem(int,QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
+    <connection>
+        <sender>search_term</sender>
+        <signal>returnPressed()</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>startSearch()</slot>
+    </connection>
+    <connection>
+        <sender>result_list</sender>
+        <signal>returnPressed(QListViewItem*)</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>clickOnItem(QListViewItem*)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>search_term</tabstop>
+    <tabstop>button_search</tabstop>
+    <tabstop>result_list</tabstop>
+    <tabstop>butten_options</tabstop>
+</tabstops>
+<slots>
+    <slot>clickOptions()</slot>
+    <slot>setSearchTerm( const QString &amp; term )</slot>
+    <slot>startSearch()</slot>
+    <slot>searchInIndex()</slot>
+    <slot>searchInContents()</slot>
+    <slot>searchInGoogle()</slot>
+    <slot>searchInMan()</slot>
+    <slot>searchInInfo()</slot>
+    <slot>procManReadFromStdout()</slot>
+    <slot>procInfoReadFromStdout()</slot>
+    <slot>clickOnItem( QListViewItem * item )</slot>
+    <slot>buttonPressedOnItem( int button, QListViewItem * item, const QPoint &amp; pos, int c )</slot>
+</slots>
+<layoutdefaults spacing="1" margin="1"/>
+</UI>

@@ -1,0 +1,35 @@
+/*
+ *
+ * flex Implementation: $MODULE$
+ *
+ * Description:
+ *
+ *
+ * Author: $AUTHOR$ <$EMAIL$>, (C) $YEAR$
+ *
+ * Copyright: See COPYING file that comes with this distribution
+ *
+ */
+
+/*
+ *
+ * Use options
+ *
+ * 	%option prefix="foo"
+ * 	%option outfile="lex.yy.c"
+ *
+ * to create multiple flex scanner in one project.
+ *
+ */
+
+%{
+
+
+%}
+
+%option debug
+
+%%
+
+
+%%

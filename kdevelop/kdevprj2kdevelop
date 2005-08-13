@@ -1,0 +1,299 @@
+#!/usr/bin/perl
+
+if ($#ARGV != 0) {
+        die "Need one argument";
+}
+
+$filename = $ARGV[0];
+unless ($filename =~ /\.kdevprj/) {
+        die "Not a .kdevprj file";
+}
+
+
+$ingeneral = 0;
+$inlfvgroups = 0;
+
+open(FILE, "<$filename") || die "File not found";
+while (<FILE>) {
+        if (/\[General\]/) {
+                $ingeneral = 1;
+                $inlfvgroups = 0;
+                $inbin = 0;
+        } elsif (/\[LFV Groups\]/) {
+                $ingeneral = 0;
+                $inlfvgroups = 1;
+                $inbin = 0;
+        } elsif (/\[Config for BinMakefileAm\]/) {
+                $ingeneral = 0;
+                $inlfvgroups = 0;
+                $inbin = 1;
+        } elsif (/\[(.*)\]/) {
+                push(@sourcefiles, $1);
+                $ingeneral = 0;
+                $inlfvgroups = 0;
+                $inbin = 0;
+        }
+
+        if ($ingeneral) {
+                if (/^author=(.*)/) {
+                        $author = $1;
+                } elsif (/^configure_args=(.*)/) {
+                        $configure_args = $1;
+                } elsif (/^email=(.*)/) {
+                        $email = $1;
+                } elsif (/^make_options=(.*)/) {
+                        $make_options = $1;
+                        if ($makeoptions =~ /-n/) {
+                                $dontact = "true";
+                        }
+                        if ($makeoptions =~ /-j([0-9]+)/) {
+                                $numberofjobs = $1;
+                        }
+                        if ($makeoptions =~ /-f/) {
+                                $abortonerror = "true";
+                        }
+                } elsif (/^project_name=(.*)/) {
+                        $project_name = $1;
+                } elsif (/^project_type=(.*)/) {
+                        $project_type = $1;
+                } elsif (/^sub_dir=([^\/]*)/) {
+                        $subdir = $1;
+                }
+        }
+
+        if ($inlfvgroups) {
+                if (/^groups=(.*)/) {
+                        $lfvgroups = $1;
+                } elsif (/(.*)=(.*)/) {
+                        $group = $1;
+                        $pattern = $2;
+                        $pattern =~ s/^(.*),$/$1/;
+                        $lfvgrouppattern{$group} = $pattern;
+                }
+        }
+
+        if ($inbin) {
+                if (/^bin_program=(.*)/) {
+                        $bin_program = $1;
+                } elsif (/^path_to_bin_program=(.*)/) {
+                        $path_to_bin_program = $1;
+                        $path_to_bin_program =~ s#^\./(.*)$#$1#;
+                        $path_to_bin_program =~ s#^(.*)/#$1#;
+                        $path_to_bin_program = $path_to_bin_program . "/";
+                } elsif (/^cflags=(.*)/) {
+                        $cflags = $1;
+                } elsif (/^cxxflags=(.*)/) {
+                        $cxxflags = $1;
+                }
+        }
+
+}
+close FILE;
+
+# Choose language support
+$primarylanguage = "C++";
+if ($project_type eq "normal_c" 
+    || $project_type eq "normal_gnome") {
+        $primarylanguage = "C";
+}
+
+# Choose project management
+$projectmanagement = "KDevCustomProject";
+if ($project_type =~ /normal_kde|mini_kde|normalogl_kde|normal_kde2|mini_kde2|mdi_kde2/
+    || $project_type =~ /kde2_normal|kicker_app|kio_slave|kc_module|kpart_plugin|ktheme/) {
+        $projectmanagement = "KDevKDEAutoProject";
+}
+if ($project_type =~ /normal_cpp/) {
+        $projectmanagement = "KDevAutoProject";
+}
+
+# Keywords
+if ($project_type =~ /normal_kde|mini_kde|normalogl_kde|normal_kde2|mini_kde2|mdi_kde2/
+    || $project_type =~ /kde2_normal|kicker_app|kio_slave|kc_module|kpart_plugin|ktheme/) {
+        $keywords = $keywords . ",KDE";
+}
+if ($project_type =~ /normal_kde|mini_kde|normalogl_kde|normal_kde2|mini_kde2|mdi_kde2/
+    || $project_type =~ /kde2_normal|kicker_app|kio_slave|kc_module|kpart_plugin|ktheme/
+    || $project_type =~ /normal_qt|normal_qt2|mdi_qt2|mdi_qextmdi/) {
+        $keywords = $keywords . ",Qt";
+}
+
+
+##
+## Let's go: write project file
+##
+
+$projectfilename = $filename;
+$projectfilename =~ s/^(.*)\.kdevprj$/$1.kdevelop/;
+open(FILE, ">$projectfilename");
+
+print FILE <<EOF;
+<!DOCTYPE kdevelop>
+<kdevelop>
+ <general>
+  <author>$author</author>
+  <email>$email</email>
+  <projectmanagement>$projectmanagement</projectmanagement>
+  <primarylanguage>$primarylanguage</primarylanguage>
+  <keywords>
+EOF
+
+foreach $key (split(/,/, $keywords)) {
+        next if ($key eq "");
+        print FILE <<EOF;
+   <keyword>$key</keyword>
+EOF
+}
+
+print FILE <<EOF;
+  </keywords>
+ </general>
+EOF
+
+# auto project specific
+
+if ($projectmanagement eq "KDevAutoProject" || $projectmanagement eq "KDevKDEAutoProject") {
+        print FILE <<EOF;
+ <kdevautoproject>
+  <general>
+   <mainprogram>$path_to_bin_program$bin_program</mainprogram>
+  </general>
+  <configure>
+   <configargs>$configure_args</configargs>
+  </configure>
+  <make>
+   <abortonerror>$abortonerror</abortonerror>
+   <numberofjobs>$numberofjobs</numberofjobs>
+   <dontact>$dontact</dontact>
+   <makebin/>
+  </make>
+  <compiler>
+   <cflags>$cflags</cflags>
+   <cxxflags>$cxxflags</cxxflags>
+  </compiler>
+ </kdevautoproject>
+EOF
+}
+
+if ($project_management eq "KDevCustomProject") {
+      print FILE <<EOF;
+ <kdevcustomproject>
+  <general>
+   <mainprogram>$path_to_bin_program/$bin_program</mainprogram>
+  </general>
+  <make>
+   <abortonerror>$abortonerror</abortonerror>
+   <numberofjobs>$numberofjobs</numberofjobs>
+   <dontact>$dontact</dontact>
+   <makebin/>
+  </make>
+ </kdevcustomproject>
+EOF
+}
+
+
+# file view
+print FILE <<EOF;
+ <kdevfileview>
+  <groups>
+EOF
+
+for $group (split /,/, $lfvgroups) { 
+        next if ($group eq "");
+        $pattern = $lfvgrouppattern{$group};
+        $pattern =~ s/,/;/g;
+        print FILE <<EOF;
+   <group pattern="$pattern" name="$group" />
+EOF
+}
+
+print FILE <<EOF;
+  </groups>
+ </kdevfileview>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
+EOF
+
+if ($projectmanagement eq "KDevAutoProject"
+    || $projectmanagement eq "KDevKDEAutoProject") {
+        print FILE <<EOF;
+ <kdevdebugger>
+  <general>
+   <dbgshell>libtool</dbgshell>
+  </general>
+ </kdevdebugger>
+EOF
+}
+
+print FILE <<EOF;
+</kdevelop>
+EOF
+close FILE;
+
+
+##
+## Write file list
+##
+
+if ($projectmanagement eq "KDevCustomProject") {
+        $filelistfilename = $filename;
+        $filelistfilename =~ s/^(.*).kdevprj$/$1.filelist/;
+        open(FILE, ">$filelistfilename");
+        for $file (@sourcefiles) {
+                print FILE "$file\n";
+        }
+        close FILE;
+}
+
+
+##
+## Convert templates
+##
+
+$projectdir = "";
+if ($filename =~ m#(.*/)[^/]*#) {
+        $projectdir = $1;
+}
+
+$oldtemplatedir = "${projectdir}$subdir/templates";
+
+if (open(FILE, "$oldtemplatedir/cpp_template")) {
+        mkdir "${projectdir}templates";
+        if (open(OFILE, ">${projectdir}templates/cpp")) {
+                  while(<FILE>) {
+                          s/\|EMAIL\|/\$EMAIL\$/;
+                          s/\|AUTHOR\|/\$AUTHOR\$/;
+                          s/\|VERSION\|/\$VERSION\$/;
+                          s/\|DATE\|/\$DATE\$/;
+                          s/\|YEAR\|/\$YEAR\$/;
+                          s/\|FILENAME\|/\$FILENAME\$/;
+                          print OFILE $_;
+                  }
+                  close OFILE;
+        }
+        close FILE;
+}
+
+if (open(FILE, "$oldtemplatedir/header_template")) {
+        mkdir "${projectdir}templates";
+        if (open(OFILE, ">${projectdir}templates/h")) {
+                  while(<FILE>) {
+                          s/\|EMAIL\|/\$EMAIL\$/;
+                          s/\|AUTHOR\|/\$AUTHOR\$/;
+                          s/\|VERSION\|/\$VERSION\$/;
+                          s/\|DATE\|/\$DATE\$/;
+                          s/\|YEAR\|/\$YEAR\$/;
+                          s/\|FILENAME\|/\$FILENAME\$/;
+                          print OFILE $_;
+                  }
+                  close OFILE;
+        }
+        close FILE;
+}

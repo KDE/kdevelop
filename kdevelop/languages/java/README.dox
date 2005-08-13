@@ -1,0 +1,48 @@
+/** \class JavaSupportPart
+This is Java language support plugin.
+
+Put a more detailed description of your part in these lines. It can span
+over several lines. You can even use some html commands in these lines like:
+<code>This is code</code>, html links <a href="http://somelocation">link text</a>,
+and images.
+
+\authors <a href="mailto:jonas.nordin AT syncom.se">Jonas Nordin</a> Copyright (C) 1999
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a> Copyright (C) 2000-2001
+\authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a> Copyright (C) 2002-2003
+
+\maintainer <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a> Copyright (C) 2002-2003
+
+\feature Java language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=javasupport&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">javasupport component at Bugzilla database</a>
+\bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
+..
+\bug Describe a the nth bug that you know of, but probably hasn't been reported yet.
+
+\requirement Describe a the 1st requirement of your part.
+\requirement Describe a the 2nd requirement of your part.
+...
+\requirement Describe a the nth requirement of your part.
+
+\todo Describe a the 1st TODO of your part.
+\todo Describe a the 2nd TODO of your part.
+...
+\todo Describe a the nth TODO of your part.
+
+\faq <b>First frequenly asked question about your part ?</b> Answer.
+\faq <b>Second frequenly asked question about your part ?</b> Answer.
+...
+\faq <b>Last frequenly asked question about your part ?</b> Answer.
+
+\note First note text.
+\note Second note text.
+...
+\note Last note text.
+
+\warning First warning text.
+\warning Second warning text.
+...
+\warning Last warning text.
+
+*/

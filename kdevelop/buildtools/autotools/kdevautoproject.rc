@@ -1,0 +1,30 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevAutoProject" version="2">
+<MenuBar>
+  <Menu name="project" >
+    <Action name="project_addtranslation" />
+    <Action name="project_configuration" />
+  </Menu>
+  <Menu name="build" >
+    <Action name="build_build" />
+    <Action name="build_buildactivetarget" />
+    <Action name="build_compilefile" />
+    <Action name="build_configure" />
+    <Action name="build_makefilecvs" />
+    <Action name="build_install" />
+    <Action name="build_install_kdesu" />
+    <Separator/>
+    <Action name="build_clean" />
+    <Action name="build_distclean" />
+    <Action name="build_messages" />
+    <Separator/>
+    <Action name="build_execute" />
+  </Menu>
+</MenuBar>
+<ToolBar name="buildToolBar" noMerge="1">
+    <Action name="build_build" group="build_operations" />
+    <Action name="build_buildactivetarget" group="build_operations" />
+    <Action name="build_execute" group="build_operations" />
+</ToolBar>
+</kpartgui>
+

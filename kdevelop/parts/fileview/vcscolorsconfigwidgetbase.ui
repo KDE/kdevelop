@@ -1,0 +1,267 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>VCSColorsConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>VCSColorsConfigWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>410</width>
+            <height>324</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Colors for VCS Visual Feedback</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Colors to Use for Version Control Feedback</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Updated:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileUpdatedColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Modified:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileModifiedColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Co&amp;nflict:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileConflictColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Added:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileAddedColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Sticky:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileStickyColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="6" column="0">
+                    <property name="name">
+                        <cstring>textLabel5_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Needs checkout:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileStickyColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>textLabel5_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Needs patch:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileStickyColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="7" column="0">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Un&amp;known:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>fileUnknownColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="8" column="0">
+                    <property name="name">
+                        <cstring>textLabel6_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Default:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>defaultColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="2" column="1">
+                    <property name="name">
+                        <cstring>fileModifiedColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="3" column="1">
+                    <property name="name">
+                        <cstring>fileConflictColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="7" column="1">
+                    <property name="name">
+                        <cstring>fileUnknownColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="6" column="1">
+                    <property name="name">
+                        <cstring>fileNeedsCheckoutColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="8" column="1">
+                    <property name="name">
+                        <cstring>defaultColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="4" column="1">
+                    <property name="name">
+                        <cstring>fileStickyColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="5" column="1">
+                    <property name="name">
+                        <cstring>fileNeedsPatchColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="0" column="1">
+                    <property name="name">
+                        <cstring>fileAddedColorCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="1" column="1">
+                    <property name="name">
+                        <cstring>fileUpdatedColorCombo</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+</includehints>
+</UI>

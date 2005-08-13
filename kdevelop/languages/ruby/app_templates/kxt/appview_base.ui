@@ -1,0 +1,33 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>%{APPNAME}view_base</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>%{APPNAMESC}view_base</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>268</width>
+            <height>164</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>%{APPNAMESC}_base</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>sillyLabel</cstring>
+            </property>
+            <property name="text">
+                <string>hello, world</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

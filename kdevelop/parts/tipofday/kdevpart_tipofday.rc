@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="tipofday" library="libtipofdayplugin" version="1">
+<MenuBar>
+ <Menu name="help"><Text>&amp;Help</Text>
+  <Action name="help_tipofday"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>

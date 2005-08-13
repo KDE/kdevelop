@@ -1,0 +1,70 @@
+# KDE Config File
+[General]
+Name=Hello world program
+Name[da]=Goddag verden program
+Name[et]="Tere,maailm" programm
+Name[fr]=Programme « Hello world »
+Name[sv]=Hello world-program
+Name[tr]=Merhaba Dünya Programı
+Icon= # got none
+Category=C/PalmOS
+Comment=Generates a template for palm application
+Comment[da]=Genererer en skabelon for et palm-program
+Comment[et]=Palmi rakenduse malli loomine.
+Comment[fr]=Génère un modèle d'application Palm
+Comment[hu]=Létrehoz egy Palm-os alkalmazássablont
+Comment[sv]=Skapar en mall för ett Palm-program
+Comment[tr]=Bir avuçiçi uygulaması için bir şablon yaratır
+FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAME}.c
+Archive=prc-tool.tar.gz
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/prc-tool.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/src-Makefile
+Dest=%{dest}/Makefile
+
+[FILE3]
+Type=install
+Source=%{src}/palmhello.c
+Dest=%{dest}/%{APPNAME}.c
+
+[FILE4]
+Type=install
+Source=%{src}/palmhello.pbitm
+Dest=%{dest}/%{APPNAME}.pbitm
+
+[FILE5]
+Type=install
+Source=%{src}/palmhello.rcp
+Dest=%{dest}/%{APPNAME}.rcp
+
+[FILE6]
+Type=install
+Source=%{src}/palmhelloRsc.h
+Dest=%{dest}/%{APPNAME}Rsc.h
+
+[FILE7]
+Type=install
+Source=%{src}/callback.h
+Dest=%{dest}/callback.h
+
+[MSG]
+Type=message
+Comment=A palm application was created in %{dest}
+Comment[da]=Et palm-program blev oprettet i %{dest}
+Comment[et]=Palmi rakendus loodi asukohta %{dest}
+Comment[fr]=Une application Palm a été créée dans %{dest}
+Comment[hu]=Létrejött egy Palmos alkalmazássablon itt: %{dest}
+Comment[sv]=Ett Palm-program skapades i %{dest}
+Comment[tr]=Bir avuçiçi uygulaması %{dest} içinde yaratıldı

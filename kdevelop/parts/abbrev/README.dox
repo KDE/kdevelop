@@ -1,0 +1,20 @@
+/** \class AbbrevPart
+Provides support for customizable abbrevations - short words which expand into commonly needed code structures.
+
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
+
+\maintainer <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
+
+\feature Feature 1
+\feature Feature 2
+
+\bug Bug1
+\bug Bug2
+
+\note
+Put you notes here (if you have them!) :)
+\verbatim
+Verbatin code here
+\endverbatim
+
+*/

@@ -1,0 +1,14 @@
+
+EXEEXT=
+
+pyui_files= documentdetails.py
+
+%.py : %.ui
+	pyuic $< >$@
+
+
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = %{APPNAMELC}.py documentdetails.ui
+
+%{APPNAMELC}$(EXEEXT): $(pyui_files)
+	echo "Done"

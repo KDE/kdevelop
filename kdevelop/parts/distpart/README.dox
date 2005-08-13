@@ -1,0 +1,24 @@
+/** \class DistpartPart
+This part aims to provide some help to the developpers for packaging
+and publishing their projects by ftp protocol.
+
+Only RPM package format is supported for now. More to come.
+If you want to develop a new package support, please have a look at
+specsupport.h and specsupport.cpp. Help is always welcome :-)
+
+\authors <a href="mailto:geiseri AT yahoo.com">Ian Reinart Geiser</a>
+
+\maintainer <a href="mailto:Yann.Hodique AT lifl.fr">Yann Hodique</a>
+
+\feature provide some help to the developpers for packaging and publishing their projects by ftp protocol
+\feature support RPM package format
+
+\bug Development package, documentation package, application icon and local
+options (in publishing tab) are currently ignored.
+
+\bug The creation of the source archive is just a
+call to "dist" or "dist-bzip2" target of the Makefile. If those
+targets don't exist, nothing is done to solve the problem (for
+example when the project is QMake-based)
+
+*/

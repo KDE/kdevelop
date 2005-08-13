@@ -1,0 +1,13 @@
+/* XPM */
+static const char * const sticky[] = {
+/* width height num_colors chars_per_pixel */
+"    4    4        2            1",
+/* colors */
+". c #ffffff",
+"x c #000000",
+/* pixels */
+".xx.",
+"xxxx",
+"xxxx",
+".xx."
+};

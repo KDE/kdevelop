@@ -1,0 +1,34 @@
+* Improve configure scripts => KICK OUT automake!
+
+* Add allocators to the objects
+
+* Look more at exception handling
+
+* TreeParser.cpp around line 76 the MismatchedTokenException here does not
+  use ttype to improve it's errormessage. Would require changing a bit in
+  MismatchedTokenException.cpp
+
+* On Thu, Sep 21, 2000 at 12:33:48AM -0700, John Lambert <JohnL@jBASE.com> wrote:
+  > 1) The literal EOF is not defined and causes the define of EOF_CHAR  in
+  > CharScanner.hpp to fail.
+
+  ANTLR with STL Port. Changing the EOF define to char_traits<char>::eof()
+  breaks things for gcc-2.95.2. Fix this in next release portably.
+  http://www.egroups.com/message/antlr-interest/2520
+
+* John Millaway requested some mechanism to add code to the constructor
+  of the parser/lexer/treewalker. This can be usefull.
+  http://www.egroups.com/message/antlr-interest/2501
+
+* Fix heterogeneous AST stuff. It boils down to adding a method to AST
+  types that knows how to duplicate the sucker. Atm duptree cannot work
+  because of this. Knowing one factory is not enough. Also look at having
+  to set the astfactory by hand (this is not 100% necessary).
+  http://www.egroups.com/message/antlr-interest/2496
+
+* Look at messageLog stuff Ross Bencina proposed. Looks good at first glance.
+  http://www.egroups.com/message/antlr-interest/2555
+
+* Add RW_STL & CC 4.2 patch from Ulrich Teichert:
+  See my mailbox.. and these comments from Ross Bencina:
+  http://www.egroups.com/message/antlr-interest/2494

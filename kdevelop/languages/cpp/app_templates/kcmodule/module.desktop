@@ -1,0 +1,66 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=kcmshell %{APPNAMELC}
+Icon=misc
+Type=Application
+
+X-KDE-ModuleType=Library
+X-KDE-Library=%{APPNAMELC}
+X-KDE-HasReadOnlyMode=false
+X-KDE-ParentApp=kcontrol
+
+
+
+[Desktop Entry]
+Encoding=UTF-8
+Comment=%{APPNAME} - a kcontrol module
+Comment[ca]=%{APPNAME} - un mòdul de kcontrol
+Comment[da]=%{APPNAME} - et kcontrol-modul
+Comment[de]=%{APPNAME} - ein KControl-Modul
+Comment[es]=%{APPNAME} - un módulo de kcontrol
+Comment[et]=%{APPNAME} - KDE juhtimiskeskuse moodul
+Comment[eu]=%{APPNAME} - kcontrol modulu bat
+Comment[fr]=%{APPNAME} - un module du centre de configuration de KDE
+Comment[hu]=%{APPNAME} - beállítómodul
+Comment[it]=%{APPNAME} - un modulo per kcontrol
+Comment[ja]=%}APPNAME] kcontrol モジュール
+Comment[nl]=%{APPNAME} - een kcontrol module
+Comment[pl]=Moduł Centrum Sterowania dla %{APPNAME}
+Comment[pt]=%{APPNAME} - um módulo do kcontrol
+Comment[pt_BR]=%{APPNAME} - um módulo do kcontrol
+Comment[ru]=%{APPNAME} - модуль kcontrol
+Comment[sl]=%{APPNAME} - modul za kcontrol
+Comment[sr]=%{APPNAME} — модул за kcontrol
+Comment[sr@Latn]=%{APPNAME} — modul za kcontrol
+Comment[sv]=%{APPNAME} - en modul i Inställningscentralen
+Comment[ta]=%{APPNAME} - ஒரு கேகன்ட்ரோல் கூறு
+Comment[tg]=%{APPNAME} - модули kcontrol
+Comment[tr]=%{APPNAME} - bir kcontrol birimi
+Comment[uk]=%{APPNAME} - модуль kcontrol
+Comment[xx]=xx%{APPNAME} - a kcontrol modulexx
+Comment[zh_CN]=%{APPNAME} - 一个 KDE 控制中心模块
+Keywords=%{APPNAME},%{APPNAMELC}
+Keywords[xx]=xx%{APPNAME},%{APPNAMELC}xx
+Name=The %{APPNAME} Applet
+Name[br]=An arloadig %{APPNAME}
+Name[da]=%{APPNAME}-appletten
+Name[de]=Das Miniprogramm %{APPNAME}
+Name[es]=Applet %{APPNAME}
+Name[et]=%{APPNAME} aplett
+Name[fr]=L'applet %{APPNAME}
+Name[ga]=An Feidhmchláirín %{APPNAME}
+Name[hu]=%{APPNAME} kisalkalmazás
+Name[it]=L'applet %{APPNAME}
+Name[nl]=De %{APPNAME}-applet
+Name[pl]=Aplet %{APPNAME}
+Name[pt]='Applet' %{APPNAME}
+Name[pt_BR]=O Mini-Aplicativo %{APPNAME}
+Name[ru]=Апплет %{APPNAME}
+Name[sl]=Vstavek %{APPNAME}
+Name[sr]=%{APPNAME} аплет
+Name[sr@Latn]=%{APPNAME} aplet
+Name[sv]=Miniprogram %{APPNAME}
+Name[tr]=%{APPNAME} Küçük Uygulaması
+
+
+Categories=Qt;KDE;X-KDE-settings-components;

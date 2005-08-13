@@ -1,0 +1,54 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Perl</title>
+<tocsect1 name="Data structures" url="man:perldata"/>
+<tocsect1 name="Syntax" url="man:perlsyn"/>
+<tocsect1 name="Operators and Precedence" url="man:perlop"/>
+<tocsect1 name="Regular Expressions" url="man:perlre"/>
+<tocsect1 name="Execution and Options" url="man:perlrun"/>
+<tocsect1 name="Builtin Functions" url="man:perlfunc"/>
+<tocsect1 name="open() Tutorial" url="man:perlopentut"/>
+<tocsect1 name="Predefined Variables" url="man:perlvar"/>
+<tocsect1 name="Subroutines" url="man:perlsub"/>
+<tocsect1 name="Modules: how they work" url="man:perlmod"/>
+<tocsect1 name="Modules: how to write and use" url="man:perlmodlib"/>
+<tocsect1 name="Modules: how to install from CPAN" url="man:perlmodinstall"/>
+<tocsect1 name="Formats" url="man:perlform"/>
+<tocsect1 name="Unicode Support" url="man:perlunicode"/>
+<tocsect1 name="Locale Support" url="man:perllocale"/>
+<tocsect1 name="References Introduction" url="man:perlreftut"/>
+<tocsect1 name="References, the rest of the story" url="man:perlref"/>
+<tocsect1 name="Data Structures: introduction" url="man:perldsc"/>
+<tocsect1 name="Data Structures: arrrays of arrays" url="man:perllol"/>
+<tocsect1 name="OO tutorial 1" url="man:perlboot"/>
+<tocsect1 name="OO tutorial 2" url="man:perltoot"/>
+<tocsect1 name="OO tutorial 3" url="man:perltootc"/>
+<tocsect1 name="Objects" url="man:perlobj"/>
+<tocsect1 name="Objects hidden behind simple variables" url="man:perltie"/>
+<tocsect1 name="OO tricks and examples" url="man:perlbot"/>
+<tocsect1 name="Interprocess Communication" url="man:perlipc"/>
+<tocsect1 name="fork() Information" url="man:perlfork"/>
+<tocsect1 name="Threads Tutorial" url="man:perlthrtut"/>
+<tocsect1 name="Warnings and their Control" url="man:perllexwarn"/>
+<tocsect1 name="Source Filters" url="man:perlfilter"/>
+<tocsect1 name="DBM Filters" url="man:perldbmfilter"/>
+<tocsect1 name="Compiler Suite Introduction" url="man:perlcompile"/>
+<tocsect1 name="Debugging" url="man:perldebug"/>
+<tocsect1 name="Diagnostic Messages" url="man:perldiag"/>
+<tocsect1 name="Number semantics" url="man:perlnumber"/>
+<tocsect1 name="Security" url="man:perlsec"/>
+<tocsect1 name="Traps for the Unwary" url="man:perltrap"/>
+<tocsect1 name="Portability Guide" url="man:perlport"/>
+<tocsect1 name="Style Guide" url="man:perlstyle"/>
+<tocsect1 name="POD" url="man:perlpod"/>
+<tocsect1 name="Embed Perl in C" url="man:perlembed"/>
+<tocsect1 name="Internal IO abstraction interface" url="man:perlapio"/>
+<tocsect1 name="Debugging guts and tips" url="man:perldebguts"/>
+<tocsect1 name="XS API" url="man:perlxs"/>
+<tocsect1 name="XS Tutorial" url="man:perlxstut"/>
+<tocsect1 name="Internal Functions" url="man:perlguts"/>
+<tocsect1 name="Calling conventions from C" url="man:perlcall"/>
+<tocsect1 name="API listing" url="man:perlapi"/>
+<tocsect1 name="Internal functions" url="man:perlintern"/>
+</kdeveloptoc>
+

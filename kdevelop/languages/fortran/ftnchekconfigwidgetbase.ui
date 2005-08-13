@@ -1,0 +1,584 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>FtnchekConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ftcheck_config_widget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>798</width>
+            <height>507</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Ftnchek Options</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>TabWidget4</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;1</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox" row="0" column="2">
+                        <property name="name">
+                            <cstring>extern_box</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;External subprograms without definition</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="2">
+                        <property name="name">
+                            <cstring>division_box</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Divisions</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>declare_box</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Identifiers without explicit type</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>pure_box</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Assume functions have no side effects</string>
+                        </property>
+                    </widget>
+                    <spacer row="2" column="0">
+                        <property name="name">
+                            <cstring>Spacer2_3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="3" column="0">
+                        <property name="name">
+                            <cstring>TextLabel1</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Ar&amp;guments:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>argumentsall_button</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="4" column="0">
+                        <property name="name">
+                            <cstring>argumentsall_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="5" column="0">
+                        <property name="name">
+                            <cstring>argumentsonly_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Only the following:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <spacer row="6" column="1">
+                        <property name="name">
+                            <cstring>Spacer4</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <spacer row="2" column="2">
+                        <property name="name">
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QRadioButton" row="4" column="2">
+                        <property name="name">
+                            <cstring>commonall_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="5" column="2">
+                        <property name="name">
+                            <cstring>commononly_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Only the following:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="6" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>arguments_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>NoColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="6" column="2">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>common_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>NoColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="2">
+                        <property name="name">
+                            <cstring>TextLabel2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Common &amp;blocks:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>commonall_button</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;2</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QRadioButton" row="2" column="0">
+                        <property name="name">
+                            <cstring>truncationonly_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Only the following:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>TextLabel4</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Truncation and roundoff errors:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>truncationall_button</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="1" column="0">
+                        <property name="name">
+                            <cstring>truncationall_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="2">
+                        <property name="name">
+                            <cstring>TextLabel3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Use of variables:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>usageall_button</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="1" column="2">
+                        <property name="name">
+                            <cstring>usageall_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="3" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>truncation_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>NoColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="2" column="2">
+                        <property name="name">
+                            <cstring>usageonly_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Only the following:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>Spacer1_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QListView" row="3" column="2">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>usage_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>NoColumn</enum>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;3</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>f77all_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>f77only_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Only the following:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="3" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>f77_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>NoColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="3" column="2">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>portability_listview</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>NoColumn</enum>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>Spacer2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>TextLabel4_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Fortran 77 language &amp;extensions:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>f77all_button</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="2">
+                        <property name="name">
+                            <cstring>TextLabel3_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Other &amp;portability warnings:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>portabilityall_button</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="1" column="2">
+                        <property name="name">
+                            <cstring>portabilityall_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>All</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton" row="2" column="2">
+                        <property name="name">
+                            <cstring>portabilityonly_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Only the following:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<tabstops>
+    <tabstop>declare_box</tabstop>
+    <tabstop>pure_box</tabstop>
+    <tabstop>extern_box</tabstop>
+    <tabstop>division_box</tabstop>
+    <tabstop>argumentsall_button</tabstop>
+    <tabstop>argumentsonly_button</tabstop>
+    <tabstop>arguments_listview</tabstop>
+    <tabstop>commonall_button</tabstop>
+    <tabstop>commononly_button</tabstop>
+    <tabstop>common_listview</tabstop>
+    <tabstop>TabWidget4</tabstop>
+    <tabstop>truncationall_button</tabstop>
+    <tabstop>truncationonly_button</tabstop>
+    <tabstop>truncation_listview</tabstop>
+    <tabstop>usageall_button</tabstop>
+    <tabstop>usageonly_button</tabstop>
+    <tabstop>usage_listview</tabstop>
+    <tabstop>f77all_button</tabstop>
+    <tabstop>f77only_button</tabstop>
+    <tabstop>f77_listview</tabstop>
+    <tabstop>portabilityall_button</tabstop>
+    <tabstop>portabilityonly_button</tabstop>
+    <tabstop>portability_listview</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

@@ -1,0 +1,79 @@
+<chapter id="file-browsers">
+<title>The File Browsers</title>
+
+<para>
+On the left side of the main window, &kdevelop; can display various kinds of
+lists and trees for the selection of files:
+</para>
+
+<variablelist>
+<varlistentry>
+<term>File Tree</term>
+<listitem>
+<para>
+This shows a tree view of the file hierarchy below the project directory. If
+you click on a file, it is loaded into the editor. For files which do not
+contain text, &kdevelop; starts an application that can handle the respective
+MIME type.
+</para>
+
+<para>
+The file tree is regularly updated whenever something changes in the file
+system. For example, if you create new files or directories (even outside
+&kdevelop;), this is immediately reflected in the file list. On &Linux;,
+this feature makes use of the FAM library. On other operating systems or over
+NFS, the directories shown are polled in small intervals.
+</para>
+
+<para>
+The file tree hides files which are usually not interesting, like object
+files. In the <guimenuitem>Project options</guimenuitem> under
+<guibutton>File views</guibutton>, you can configure (as a comma separated
+list of wildcards) which patterns are used to filter out irrelevant files.
+</para>
+
+<para>
+Furthermore, you can decide to restrict the file tree to show only files which
+belong to the currently loaded project. This can be toggled by clicking with
+the right mouse button on the root item of the tree.
+</para>
+
+<figure id="screenshot-filetree" float="1">
+<title>A Screenshot of the File Tree</title>
+<mediaobject>
+<imageobject><imagedata fileref="filetree.png"/></imageobject>
+<textobject><phrase>A Screenshot of the File Tree</phrase></textobject>
+</mediaobject>
+</figure>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>File Groups</term>
+<listitem>
+<para>
+This shows the files belonging to the project, grouped by their file name
+extension. As in the file tree, you can edit a file by clicking on it
+with the &LMB;.
+</para>
+
+<para>
+The groups shown in this view can be configured under
+<guibutton>File views</guibutton> in the
+<guimenuitem>Project options</guimenuitem> dialog. In order to customize the
+view to your needs, it is helpful to understand how files are distributed on
+the groups. For each file, &kdevelop; goes through all groups from top to
+bottom. In each group, it looks whether the file name matches one of the
+patterns. If there is a match, the file is shown in this group and the
+iteration is aborted. This makes it clear that more general patterns should
+be put below more specific ones. For example, an asterisk for the
+<guilabel>Other</guilabel> group should  be the last pattern.
+</para>
+
+</listitem>
+</varlistentry>
+</variablelist>
+
+</chapter> <!-- file-browsers -->
+
+<!-- ====================================================================== -->

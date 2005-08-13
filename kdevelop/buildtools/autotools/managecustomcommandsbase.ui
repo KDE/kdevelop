@@ -1,0 +1,125 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>ManageCustomBuildCommandsBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ManageCustomBuildCommandsBase</cstring>
+    </property>
+    <property name="enabled">
+        <bool>true</bool>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>435</width>
+            <height>218</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QPushButton" row="0" column="1">
+            <property name="name">
+                <cstring>addButton</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Add</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>removeButton</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Remove</string>
+            </property>
+        </widget>
+        <widget class="QTable" row="0" column="0" rowspan="3" colspan="1">
+            <column>
+                <property name="text">
+                    <string>Menu Text</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Command</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Command Type</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>commandsTable</cstring>
+            </property>
+            <property name="numRows">
+                <number>0</number>
+            </property>
+            <property name="numCols">
+                <number>3</number>
+            </property>
+            <property name="rowMovingEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="selectionMode">
+                <enum>SingleRow</enum>
+            </property>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>addButton</sender>
+        <signal>clicked()</signal>
+        <receiver>ManageCustomBuildCommandsBase</receiver>
+        <slot>addButton_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>removeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>ManageCustomBuildCommandsBase</receiver>
+        <slot>removeButton_clicked()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>commandsTable</tabstop>
+    <tabstop>addButton</tabstop>
+    <tabstop>removeButton</tabstop>
+</tabstops>
+<slots>
+    <slot>addButton_clicked()</slot>
+    <slot>removeButton_clicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

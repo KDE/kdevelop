@@ -1,0 +1,32 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-%{APPNAMELC}
+Comment= A really awesome KOffice application
+Comment[da]=Et helt fantastisk KOffice program
+Comment[de]=Eine wirklich großartige KOffice-Anwendung
+Comment[es]=Una aplicación de KOffice realmente intesesante
+Comment[et]=Tõesti imeline KOffice'i rakendus
+Comment[fr]=Une application pour KOffice vraiment superbe
+Comment[hu]=Egy bámulatos KOffice-alkalmazás
+Comment[it]=Un'applicazione di KOffice veramente bella
+Comment[nl]=Een fantastische KOffice-toepassing
+Comment[pl]=Wspaniały program KOffice
+Comment[pt]=Uma aplicação fantástica para o KOffice
+Comment[pt_BR]=Um aplicativo realmente do tipo do KOffice
+Comment[ru]=Внушительное приложение KOffice
+Comment[sl]=Sijajen program za KOffice
+Comment[sr]=Стварно сјајан програм за KOffice
+Comment[sr@Latn]=Stvarno sjajan program za KOffice
+Comment[sv]= Ett riktigt suveränt Koffice-program
+Comment[tr]=Gerçekten harika bir KOffice uygulaması
+Comment[uk]=Дійсно чудова програма для KOffice
+Comment[xx]=xx A really awesome KOffice applicationxx
+Type=MimeType
+#You need to change the mime type below to match what your application will handle...
+Patterns=*.xmpl;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+#You need to change the mime type below to match what your application will handle...
+Value=.xmpl

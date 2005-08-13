@@ -1,0 +1,12 @@
+# KDE Config File
+[General]
+Name=Simple Python script
+Name[fr]=Un simple script de test "Hello world"
+Name[de]=Ein einfaches Python-Script "Hello world" 
+Icon=pythonhello.png
+Category=Python
+Comment=This generates a simplistic "Hello world" program in Python
+Comment[fr]=Génère un simple script de test du type "Hello world" dans le language PYTHON.
+Comment[de]=Es wird ein einfaches "Hello world"-Programm in Python erzeugt.
+FileTemplates=py,ShellStyle
+ShowFilesAfterGeneration=APPNAMELC.py

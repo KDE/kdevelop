@@ -1,0 +1,102 @@
+# KDE Config File
+[General]
+Name=Python Qt application
+Name[da]=Python Qt program
+Name[et]=Pythoni Qt rakendus
+Name[fr]=Application Qt Python
+Name[ga]=Feidhmchlár Qt Python
+Name[hu]=Python/Qt-alapú alkalmazás
+Name[sv]=Python Qt-program
+Name[tr]=Python Qt Uygulaması
+Icon=pyqt.png
+Category=Python
+Comment=This generates an application framework using Python and Qt
+Comment[da]=Dette genererer et programskelet ved brug af  Python og Qt
+Comment[et]=Rakenduse raamistiku loomine Pythoni ja Qt abil
+Comment[hu]=Létrehoz egy alkalmazás-keretrendszert Python nyelven, a Qt felhasználásával
+Comment[sv]=Detta skapar ett programramverk med användning av Python och Qt
+Comment[tr]=Bu Python ve Qt kullanan bir uygulama çatısı yaratır.
+FileTemplates=py,ShellStyle
+ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.py
+Archive=pyqt.tar.gz
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/app.py
+Dest=%{dest}/%{APPNAMELC}.py
+
+[FILE3]
+Type=install
+EscapeXML=true
+Source=%{src}/documentdetails.ui
+Dest=%{dest}/documentdetails.ui
+
+[FILE4]
+Type=install
+Source=%{src}/app-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE5]
+Type=install
+Source=%{src}/app-configure.ac
+Dest=%{dest}/configure.ac
+
+[FILE6]
+Type=install
+Source=%{src}/app-autogen.sh
+Dest=%{dest}/autogen.sh
+
+[FILE7]
+Type=install
+Source=%{src}/mkinstalldirs
+Dest=%{dest}/mkinstalldirs
+
+[FILE8]
+Type=install
+Source=%{src}/missing
+Dest=%{dest}/missing
+
+[FILE9]
+Type=install
+Source=%{src}/install-sh
+Dest=%{dest}/install-sh
+
+[FILE10]
+Type=install
+Source=%{src}/pyqt-am-preproc.py
+Dest=%{dest}/pyqt-am-preproc.py
+
+[FILE11]
+Type=install
+Source=%{src}/fileopen.pyxpm
+Dest=%{dest}/fileopen.pyxpm
+
+[FILE12]
+Type=install
+Source=%{src}/fileprint.pyxpm
+Dest=%{dest}/fileprint.pyxpm
+
+[FILE13]
+Type=install
+Source=%{src}/filesave.pyxpm
+Dest=%{dest}/filesave.pyxpm
+
+[MSG]
+Type=message
+Comment=A Python Qt application was created in %{dest}
+Comment[da]=Et Python Qt program blev oprettet i %{dest}
+Comment[et]=Pythoni Qt rakendus loodi asukohta %{dest}
+Comment[fr]=Une application Qt Python a été créée dans %{dest}
+Comment[hu]=Létrejött egy Python/Qt-alkalmazás itt: %{dest}
+Comment[sv]=Ett Python Qt-program skapades i %{dest}
+Comment[tr]=Bir Python Qt uygulaması %{dest} içinde yaratıldı.

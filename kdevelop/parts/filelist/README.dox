@@ -1,0 +1,13 @@
+/** \class filelist
+This plugin provides a filelist selectview of the currently open files. This is quite handy
+when the tabbar isn't wide enough to show all open files. 
+
+\feature Provides filestate feedback
+\feature Provides context menu for file operations
+
+\authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a>
+
+\maintainer <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a>
+
+
+*/

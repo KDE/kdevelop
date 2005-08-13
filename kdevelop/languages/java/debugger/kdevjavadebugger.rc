@@ -1,0 +1,18 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevJavaDebugger" version="1">
+<MenuBar>
+ <Menu name="javadebug">
+  <text>&amp;Java Debug</text>
+  <Action name="debug_run"/>
+  <Action name="debug_stop"/>
+  <Action name="debug_pause"/>
+  <Separator/>
+  <Action name="debug_cont"/>
+  <Action name="debug_stepover"/>
+  <Action name="debug_stepintoinst"/>
+  <Action name="debug_stepinto"/>
+  <Action name="debug_stepout"/>
+ </Menu>
+</MenuBar>
+</kpartgui>
+

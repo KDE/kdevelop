@@ -1,0 +1,54 @@
+# KDE Config File
+[General]
+Name=Hello world program
+Name[da]=Goddag verden program
+Name[et]="Tere,maailm" programm
+Name[fr]=Programme « Hello world »
+Name[sv]=Hello world-program
+Name[tr]=Merhaba Dünya Programı
+Icon=qmakesimple.png
+Category=C++/QMake project
+Category[fr]=C++/QMake
+Comment=Generates a simple Hello world program in C++ using QMake based project manager
+Comment[da]=Genererer et simpelt Goddag verden program in C++ ved brug af QMake baseret projekthåndtering
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s projektihalduriga QMake'i põhjal
+Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban, QMake-alapú projektkezelővel
+Comment[sv]=Skapar ett enkelt Hello world-program i C++ baserat på QMake projekthantering
+Comment[tr]=QMake tabanlı proje yöneticisini kullanarak, C++'da basit bir Merhaba Dünya programı yarat
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=qmakesimple.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[MSG]
+Type=message
+Comment=A Qmake based hello world program was created in %{dest}
+Comment[da]=et Qmake baseret Goddag verden program blev oprettet i %{dest}
+Comment[et]="Tere, maailm" programm QMake'i põhjal loodi asukohta %{dest}
+Comment[hu]=Létrejött egy Qmake-alapú Hello world program itt: %{dest}
+Comment[sv]=Ett Qmake-baserat Hello world-program skapades i %{dest}
+Comment[tr]=QMake tabanlı merhaba dünya programı %{dest} içinde yaratıldı

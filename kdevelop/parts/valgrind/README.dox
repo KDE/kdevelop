@@ -1,0 +1,45 @@
+/** \class ValgrindPart
+Valgrind is a tool that helps you find memory management problems in programs. http://developer.kde.org/~sewardj/
+
+\authors <a href="mailto:$EMAIL$">$AUTHOR$</a>
+\authors <a href="mailto:2nd author AT provider.com">2nd author full name</a>
+...
+\authors <a href="mailto:nth author AT provider.com">nth author full name</a>
+
+\maintainer <a href="mailto:$EMAIL$">$AUTHOR$</a>
+\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
+...
+\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
+
+\feature Integrates Valgrind into KDevelop
+
+\bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
+..
+\bug Describe a the nth bug that you know of, but probably hasn't been reported yet.
+
+\requirement Describe a the 1st requirement of your part.
+\requirement Describe a the 2nd requirement of your part.
+...
+\requirement Describe a the nth requirement of your part.
+
+\todo Describe a the 1st TODO of your part.
+\todo Describe a the 2nd TODO of your part.
+...
+\todo Describe a the nth TODO of your part.
+
+\faq <b>First frequenly asked question about your part ?</b> Answer.
+\faq <b>Second frequenly asked question about your part ?</b> Answer.
+...
+\faq <b>Last frequenly asked question about your part ?</b> Answer.
+
+\note First note text.
+\note Second note text.
+...
+\note Last note text.
+
+\warning First warning text.
+\warning Second warning text.
+...
+\warning Last warning text.
+
+*/

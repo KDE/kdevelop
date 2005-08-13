@@ -1,0 +1,56 @@
+# KDE Config File
+[General]
+Name=Application
+Name[br]=Arload
+Name[cy]=Cymhwysiad
+Name[da]=Program
+Name[et]=Rakendus
+Name[ga]=Feidhmchlár
+Name[hu]=Alkalmazások
+Name[rw]=Porogaramu
+Name[sv]=Program
+Name[tr]=Uygulama
+Icon=qmakeapp.png
+Category=Java/Ant project
+Category[fr]=Java/Ant
+Comment=Generate a Java application
+Comment[da]=Generér et Java-program
+Comment[et]=Java rakenduse loomine
+Comment[fr]=Génèrer une application Java
+Comment[hu]=Létrehoz egy Java-alkalmazást
+Comment[sv]=Skapa ett Java-program
+Comment[tr]=Bir Java uygulaması yarat
+FileTemplates=java,JavaStyle
+ShowFilesAfterGeneration=%{dest}/Main.java
+Archive=javahello.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/javahello.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/javahello.filelist
+Dest=%{dest}/%{APPNAMELC}.filelist
+
+[FILE3]
+Type=install
+Source=%{src}/Main.java
+Dest=%{dest}/Main.java
+
+[FILE4]
+Type=install
+Source=%{src}/build.xml
+Dest=%{dest}/build.xml
+
+[msg]
+Type=message
+Comment=A JAVA application was created in %{dest}
+Comment[da]=Et JAVA-program blev oprettet i %{dest}
+Comment[et]=Java rakendus loodi asukohta %{dest}
+Comment[fr]=Une application Java a été créée dans %{dest}
+Comment[hu]=Létrejött egy Java-alkalmazás itt: %{dest}
+Comment[sv]=Ett Java-program skapades i %{dest}
+Comment[tr]=Bir JAVA uygulaması %{dest} içinde yaratıldı.

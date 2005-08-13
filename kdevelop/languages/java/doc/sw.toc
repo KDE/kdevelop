@@ -1,0 +1,146 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>SuperWaba 3.4.1 API</title>
+<base href="http://www.superwaba.com.br/doc/"/>
+<tocsect1 name="java.lang" url="java/lang/package-summary.html">
+  <tocsect2 name="Class" url="java/lang/Class.html"/>
+  <tocsect2 name="Math" url="java/lang/Math.html"/>
+  <tocsect2 name="Object" url="java/lang/Object.html"/>
+  <tocsect2 name="String" url="java/lang/String.html"/>
+  <tocsect2 name="StringBuffer" url="java/lang/StringBuffer.html"/>
+  <tocsect2 name="Throwable" url="java/lang/Throwable.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.palm.io.builtin" url="superwaba/ext/palm/io/builtin/package-summary.html">
+	<tocsect2 name="Address" url="superwaba/ext/palm/io/builtin/Address.html"/>
+	<tocsect2 name="Datebook" url="superwaba/ext/palm/io/builtin/Datebook.html"/>
+	<tocsect2 name="Mail" url="superwaba/ext/palm/io/builtin/Mail.html"/>
+	<tocsect2 name="Memo" url="superwaba/ext/palm/io/builtin/Memo.html"/>
+	<tocsect2 name="ToDo" url="superwaba/ext/palm/io/builtin/ToDo.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.palm.io.scanner" url="superwaba/ext/palm/io/scanner/package-summary.html">
+	<tocsect2 name="ScanEvent" url="superwaba/ext/palm/io/scanner/ScanEvent.html"/>
+	<tocsect2 name="Scan" url="superwaba/ext/palm/io/scanner/Scan.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.game" url="superwaba/ext/xplat/game/package-summary.html">
+	<tocsect2 name="AnimatedButton" url="superwaba/ext/xplat/game/AnimatedButton.html"/>
+	<tocsect2 name="AnimatedSprite" url="superwaba/ext/xplat/game/AnimatedSprite.html"/>
+	<tocsect2 name="Animation" url="superwaba/ext/xplat/game/Animation.html"/>
+	<tocsect2 name="AnimationEvent" url="superwaba/ext/xplat/game/AnimationEvent.html"/>
+	<tocsect2 name="GameEngine" url="superwaba/ext/xplat/game/GameEngine.html"/>
+	<tocsect2 name="HighScoreEntry" url="superwaba/ext/xplat/game/HightScoreEntry.html"/>
+	<tocsect2 name="HighScores" url="superwaba/ext/xplat/game/HighScores.html"/>
+	<tocsect2 name="Options" url="superwaba/ext/xplat/game/Options.html"/>
+	<tocsect2 name="Sprite" url="superwaba/ext/xplat/game/Sprite.html"/>
+	<tocsect2 name="TextRenderer" url="superwaba/ext/xplat/game/TextRenderer.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.io" url="superwaba/ext/xplat/io/package-summary.html">
+	<tocsect2 name="Storable" url="superwaba/ext/xplat/io/Storable.html"/>
+	<tocsect2 name="DataStream" url="superwaba/ext/xplat/io/DataStream.html"/>
+	<tocsect2 name="SerialPDB" url="superwaba/ext/xplat/io/SerialPDB.html"/>
+	<tocsect2 name="ObjectCatalog" url="superwaba/ext/xplat/io/ObjectCatalog.html"/>
+	<tocsect2 name="SerialPDBServer" url="superwaba/ext/xplat/io/SerialPDBServer.html"/>
+	<tocsect2 name="SerialSocketServer" url="superwaba/ext/xplat/io/SerialSocketServer.html"/>
+	<tocsect2 name="SerialSocket" url="superwaba/ext/xplat/io/SerialSocket.html"/>
+	<tocsect2 name="BufferStream" url="superwaba/ext/xplat/io/BufferStream.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.io.gps" url="superwaba/ext/xplat.io.gps/package-summary.html">
+	<tocsect2 name="GPS" url="superwaba/ext/xplat/io/gps/GPS.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.io.gps.garmin" url="superwaba/ext/xplat/io/gps/garmin/package-summary.html">
+	<tocsect2 name="Waypoint" url="superwaba/ext/xplat/io/gps/garmin/Waypoint.html"/>
+	<tocsect2 name="Route" url="superwaba/ext/xplat/io/gps/garmin/Route.html"/>
+	<tocsect2 name="Packet" url="superwaba/ext/xplat/io/gps/garmin/Packet.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.sql" url="superwaba/ext/.xplat/sql/package-summary.html">
+	<tocsect2 name="BatchUpdateException" url="superwaba/ext/xplat/sql/BatchUpdateException.html"/>
+	<tocsect2 name="Connection" url="superwaba/ext/xplat/sql/Connection.html"/>
+	<tocsect2 name="ResultSet" url="superwaba/ext/xplat/sql/ResultSet.html"/>
+	<tocsect2 name="SQLWarning" url="superwaba/ext/xplat/sql/SQLWarning.html"/>
+	<tocsect2 name="Driver" url="superwaba/ext/xplat/sql/Driver.html"/>
+	<tocsect2 name="Timestamp" url="superwaba/ext/xplat/sql/Timestamp.html"/>
+	<tocsect2 name="Blob" url="superwaba/ext/xplat/sql/Blob.html"/>
+	<tocsect2 name="DriverPropertyInfo" url="superwaba/ext/xplat/sql/DriverPropertyInfo.html"/>
+	<tocsect2 name="Ref" url="superwaba/ext/xplat/sql/Ref.html"/>
+	<tocsect2 name="Statement" url="superwaba/ext/xplat/sql/Statement.html"/>
+	<tocsect2 name="Types" url="superwaba/ext/xplat/sql/Types.html"/>
+	<tocsect2 name="PreparedStatement" url="superwaba/ext/xplat/sql/PreparedStatement.htm"/>l
+	<tocsect2 name="SQLException" url="superwaba/ext/xplat/sql/SQLException.html"/>
+	<tocsect2 name="c" url="superwaba/ext/xplat/sql/c.html"/>
+	<tocsect2 name="DataTruncation" url="superwaba/ext/xplat/sql/DatabaseMetaData.html"/>
+	<tocsect2 name="Time" url="superwaba/ext/xplat/sql/Time.html"/>
+	<tocsect2 name="ResultSetMetaData" url="superwaba/ext/xplat/sql/ResultSetMetaData.html"/>
+	<tocsect2 name="ParameterMetaData" url="superwaba/ext/xplat/sql/ParameterMetaData.html"/>
+	<tocsect2 name="DriverManager" url="superwaba/ext/xplat/sql/DriverManager.html"/>
+	<tocsect2 name="Date" url="superwaba/ext/xplat/sql/Date.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.sql.db2e" url="superwaba/ext/.xplat/sql/db2e/package-summary.html">
+	<tocsect2 name="Driver" url="superwaba/ext/xplat/sql/db2e/wdbc/Driver.html"/>
+	<tocsect2 name="BoundDate" url="superwaba/ext/xplat/sql/db2e/BoundDate.html"/>
+	<tocsect2 name="BoundTimestamp" url="superwaba/ext/xplat/sql/db2e/BoundTimestamp.html"/>
+	<tocsect2 name="c" url="superwaba/ext/xplat/sql/db2e/c.html"/>
+	<tocsect2 name="BoundInt" url="superwaba/ext/xplat/sql/db2e/BoundInt.html"/>
+	<tocsect2 name="DB2Exception" url="superwaba/ext/xplat/sql/db2e/DB2Exception.html"/>
+	<tocsect2 name="BoundBlob" url="superwaba/ext/xplat/sql/db2e/BoundBlob.html"/>
+	<tocsect2 name="Db2e" url="superwaba/ext/xplat/sql/db2e/Db2e.html"/>
+	<tocsect2 name="BoundString" url="superwaba/ext/xplat/sql/db2e/BoundString.html"/>
+	<tocsect2 name="BoundTime" url="superwaba/ext/xplat/sql/db2e/BoundTime.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.sql.db2e.wdbc" url="superwaba/ext/xplat/sql/db2e/wdbc/package-summary.html">
+	<tocsect2 name="Db2eConnection" url="superwaba/ext/xplat/sql/db2e/wdbc/Db2eConnection.html"/>
+	<tocsect2 name="Db2eMetaData" url="superwaba/ext/xplat/sql/db2e/wdbc/Db2eMetaData.html"/>
+	<tocsect2 name="Db2eStatement" url="superwaba/ext/xplat/sql/db2e/wdbc/Db2eStatement.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.ui" url="superwaba/ext/xplat/ui/package-summary.html">
+	<tocsect2 name="MultiEditMenu" url="superwaba/ext/xplat/ui/MultiEditMenu.html"/>
+	<tocsect2 name="ChoicesDialog" url="superwaba/ext/xplat/ui/ChoicesDialog.html"/>
+	<tocsect2 name="Grid" url="superwaba/ext/xplat/ui/Grid.html"/>
+	<tocsect2 name="ProgressBar" url="superwaba/ext/xplat/ui/ProgressBar.html"/>
+	<tocsect2 name="JustifiedContainer" url="superwaba/ext/xplat/ui/JustifiedContainer.html"/>
+	<tocsect2 name="BigNumber" url="superwaba/ext/xplat/ui/BigNumber.html"/>
+	<tocsect2 name="MultiEdit" url="superwaba/ext/xplat/ui/MultiEdit.html"/>
+	<tocsect2 name="SpinList" url="superwaba/ext/xplat/ui/SpinList.html"/>
+	<tocsect2 name="GridModel" url="superwaba/ext/xplat/ui/GridModel.html"/>
+	<tocsect2 name="GridContainer" url="superwaba/ext/xplat/ui/GridContainer.html"/>
+	<tocsect2 name="ColorList" url="superwaba/ext/xplat/ui/ColorList.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.util" url="superwaba/ext/xplat/util/package-summary.html">
+	<tocsect2 name="Compression" url="superwaba/ext/xplat/util/Compression.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.util.crypto" url="superwaba/ext/xplat/util/crypto/package-summary.html">
+	<tocsect2 name="MD5" url="superwaba/ext/xplat/util/crypto/MD5.html"/>
+	<tocsect2 name="BlowfishECB" url="superwaba/ext/xplat/util/crypto/BlowfishECB.html"/>
+	<tocsect2 name="SHA1" url="superwaba/ext/xplat/util/crypto/SHA1.html"/>
+	<tocsect2 name="BinConverter" url="superwaba/ext/xplat/util/crypto/BinConverter.html"/>
+	<tocsect2 name="TEA" url="superwaba/ext/xplat/util/crypto/TEA.html"/>
+	<tocsect2 name="BlowfishCBC" url="superwaba/ext/xplat/util/crypto/BlowfishCBC.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.util.datergf" url="superwaba/ext/xplat/util/datergf/package-summary.html">
+	<tocsect2 name="DateTime" url="superwaba/ext/xplat/util/datergf/DateTime.html"/>
+	<tocsect2 name="DTC" url="superwaba/ext/xplat/util/datergf/DTC.html"/>
+	<tocsect2 name="Calendar" url="superwaba/ext/xplat/util/datergf/Calendar.html"/>
+	<tocsect2 name="Time" url="superwaba/ext/xplat/util/datergf/Time.html"/>
+	<tocsect2 name="Date" url="superwaba/ext/xplat/util/datergf/Date.html"/>
+	<tocsect2 name="DateFormat" url="superwaba/ext/xplat/util/datergf/DateFormat.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.util.xml" url="superwaba/ext/xplat/util/xml/package-summary.html">
+	<tocsect2 name="XmlListener" url="superwaba/ext/xplat/util/xml/XmlListener.html"/>
+	<tocsect2 name="LiteParser" url="superwaba/ext/xplat/util/xml/LiteParser.html"/>
+	<tocsect2 name="HttpLiteParser" url="superwaba/ext/xplat/util/xml/HttpLiteParser.html"/>
+	<tocsect2 name="StreamBuffer" url="superwaba/ext/xplat/util/xml/StreamBuffer.html"/>
+	<tocsect2 name="HttpListener" url="superwaba/ext/xplat/util/xml/HttpListener.html"/>
+	<tocsect2 name="XmlLiteParser" url="superwaba/ext/xplat/util/xml/XmlLiteParser.html"/>
+	<tocsect2 name="HttpXmlListener" url="superwaba/ext/xplat/util/xml/HttpXmlListener.html"/>
+	<tocsect2 name="HttpXmlLiteParser" url="superwaba/ext/xplat/util/xml/HttpXmlLiteParser.html"/>
+	<tocsect2 name="ParserException" url="superwaba/ext/xplat/util/xml/ParserException.html"/>
+</tocsect1>
+<tocsect1 name="superwaba.ext.xplat.util.props" url="superwaba/ext/xplat/util/props/package-summary.html">
+	<tocsect2 name="Properties.Value" url="superwaba/ext/xplat/util/props/Properties.Value.html"/>
+	<tocsect2 name="Properties" url="superwaba/ext/xplat/util/props/Properties.html"/>
+	<tocsect2 name="Properties.Double" url="superwaba/ext/xplat/util/props/Properties.Double.html"/>
+	<tocsect2 name="Properties.Long" url="superwaba/ext/xplat/util/props/Properties.Long.html"/>
+	<tocsect2 name="Properties.Str" url="superwaba/ext/xplat/util/props/Properties.Str.html"/>
+	<tocsect2 name="Properties.Int" url="superwaba/ext/xplat/util/props/Properties.Int.html"/>
+	<tocsect2 name="Properties.Boolean" url="superwaba/ext/xplat/util/props/Properties.Boolean.html"/>
+</tocsect1>
+</kdeveloptoc>
+

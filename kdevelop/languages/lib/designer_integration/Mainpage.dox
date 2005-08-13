@@ -1,0 +1,48 @@
+/**
+@mainpage The KDevelop Designer Integration Support Library
+
+This library contains base classes to implement GUI designer integration in language support plugins.
+
+<b>Link with</b>: -ldesignerintegration
+
+<b>Include path</b>: -I\$(kde_includes)/languages/designer_integration
+
+\section usingintegration Using designer integration support library
+Each language support which wants to use integrated designer, must reimplement 
+@code
+virtual KDevDesignerIntegration *KDevLanguageSupport::designer(KInterfaceDesigner::DesignerType type)
+@endcode
+method and return designer integration object (@ref KDevLanguageSupport base class returns 0).
+
+Qt designer integration can be easily implemented by reusing @ref QtDesignerIntegration
+base class.
+
+For example, designer method of a language support could look like:
+@code
+KDevDesignerIntegration * MyLanguageSupportPart::designer(KInterfaceDesigner::DesignerType type)
+{
+    KDevDesignerIntegration *des = 0;
+    switch (type)
+    {
+        case KInterfaceDesigner::QtDesigner:
+            des = m_designers[type];
+            if (des == 0)
+            {
+                MyLanguageImplementationWidget *impl = new MyLanguageImplementationWidget(this);
+                des = new MyLanguageQtDesignerIntegration(this, impl);
+                m_designers[type] = des;
+            }
+            break;
+    }
+    return des;
+}
+return des;
+@endcode
+In the code above m_designers is a designer cache declared as:
+@code
+QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*> m_designers;
+@endcode
+MyLanguageImplementationWidget and MyLanguageQtDesignerIntegration classes are subclasses
+of @ref QtDesignerIntegration and @ref ImplementationWidget base classes.
+*/
+

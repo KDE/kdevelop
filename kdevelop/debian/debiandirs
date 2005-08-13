@@ -1,0 +1,32 @@
+export kde_confdir=/etc/kde3
+export kde_prefix=/usr
+export kde_bindir=/usr/bin
+export kde_includedir=/usr/include/kde
+export kde_libdir=/usr/lib
+export kde_cgidir=/usr/lib/cgi-bin
+export kde_moduledir=/usr/lib/kde3
+export kde_appsdir=/usr/share/applnk
+export kde_datadir=/usr/share/apps
+export kde_htmldir=/usr/share/doc/kde/HTML
+export kde_icondir=/usr/share/icons
+export kde_locale=/usr/share/locale
+export kde_mimedir=/usr/share/mimelnk
+export kde_servicesdir=/usr/share/services
+export kde_servicetypesdir=/usr/share/servicetypes
+export kde_sounddir=/usr/share/sounds
+export kde_templatesdir=/usr/share/templates
+export kde_wallpaperdir=/usr/share/wallpapers
+export mandir=/usr/share/man
+export infodir=/usr/share/info
+export sysconfdir=/etc
+export QTDIR=/usr/share/qt3
+export IDL=/usr/bin/cuteidl
+export DCOPIDL=/usr/bin/dcopidl
+export DCOPIDL2CPP=/usr/bin/dcopidl2cpp
+export KDB2HTML=/usr/bin/kdb2html
+export MCOPIDL=/usr/bin/mcopidl
+export ARTSCCONFIG=/usr/bin/artsc-config
+export INSTALL_DATA=install -p -c -m 644
+configkde=--disable-debug  --disable-rpath --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --sysconfdir=$(sysconfdir) --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --infodir=$(infodir) --with-xinerama
+configkdevelop=--disable-debug  --disable-rpath --enable-docbase --enable-kdoc2 --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html --with-xinerama
+configkdepim=--disable-debug  --disable-rpath --with-extra-includes=/usr/include/libpisock --enable-shared --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --infodir=$(infodir) --with-xinerama

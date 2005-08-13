@@ -1,0 +1,18 @@
+KScript In KDevelop
+
+KScriptInterface allows us to have a generic way to add scripting languages to KDE applications.  KScriptInterface is not really a scripting language per say, but an interface so that applications can embed scripting languages without explicitly linking to them.  This allows all runtime linkage to the different interpreters.  Currently the most effective way for scripts to communicate with applications is via DCOP.  KScriptInterface script engines provide some convinences methods to access the dcop interfaces of the embedding application.  
+
+In KDevelop we have the ability to use scripts written for Kate, since the KateText interface is fully exported to DCOP.  By default KDevelop will import Kate scripts.  Users can also add other search paths for loading scripts.
+
+To add a new script to KDevelop you need two parts.  The first part is a simple desktop file that has the meta-information for the script.  The basic format is like this:
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Import Weather
+Comment=Import current weather icon graphic into an album.
+Type=ShellScript/bash
+X-KDE-ScriptName=importweather.sh
+
+The "Name" is the part that will appear in the KDevelop "Scripts" menu, and the "X-KDE-ScriptName" is the name of the script you wish to attach to that menu action.  The last part the "Type" is the type of the script runner you wish to execute the script with.
+                          
+The second part is the actual script that has a script runner.  Currently shell and KJSEmbed are supported, but Kommander support is rumored to be happening.  There are also perl and python script runners in kdenonbeta.

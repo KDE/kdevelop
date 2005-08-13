@@ -1,0 +1,23 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevPerforcePart" version="1">
+<MenuBar>
+	<Menu name="tools">
+		<Menu name="version_control" group="tools_project_operations">
+			<Text>&amp;Version Control</Text>
+			<Merge />
+			<Menu name="version_control_tools_perforce">
+				<Text>&amp;Perforce</Text>
+				<Action name="perforce_submit" />
+				<Action name="perforce_diff" />
+				<Action name="perforce_edit" />
+				<Action name="perforce_revert" />
+				<Action name="perforce_sync" />
+				<Action name="perforce_add" />
+				<Action name="perforce_remove" />
+			</Menu>
+		</Menu>
+	</Menu>
+</MenuBar>
+
+</kpartgui>
+

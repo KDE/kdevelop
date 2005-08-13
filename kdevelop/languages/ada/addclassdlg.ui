@@ -1,0 +1,434 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>AddClassDlg</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>AddClassDlg</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>656</width>
+            <height>684</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Add Class</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KEditListBox" row="1" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>Implements</cstring>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="title">
+                <string>&amp;Implements</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>GroupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Class</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+
+                <widget class="KComboBox" row="2" column="1" rowspan="1" colspan="5">
+                    <property name="name">
+                        <cstring>Extends</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="autoCompletion">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer row="4" column="4" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="3" column="2">
+                    <property name="name">
+                        <cstring>Abstract</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Abstract</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="1">
+                    <property name="name">
+                        <cstring>Interface</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Interface</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Name:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>ClassName</cstring>
+                    </property>
+                </widget>
+                <widget class="QButtonGroup" row="4" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>ButtonGroup1</cstring>
+                    </property>
+                    <property name="lineWidth">
+                        <number>0</number>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>Public</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Public</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>Protected</cstring>
+                            </property>
+                            <property name="text">
+                                <string>P&amp;rotected</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>Private</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Pri&amp;vate</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QCheckBox" row="3" column="3">
+                    <property name="name">
+                        <cstring>Final</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Final</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="5">
+                    <property name="name">
+                        <cstring>ClassName</cstring>
+                    </property>
+                </widget>
+                <spacer row="3" column="4" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Extends:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>Extends</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="5">
+                    <property name="name">
+                        <cstring>BrowseSourcePath</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>...</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>SourcePath</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Source path:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>SourcePath</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>GroupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Options</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>Constructor</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Create default constructor</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>Main</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Create &amp;main method</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>GroupBox4</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Documentation</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>TextLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;License:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>License</cstring>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="1" column="1">
+                    <item>
+                        <property name="text">
+                            <string>LGPL</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>GPL</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>QPL</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>License</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QTextEdit" row="0" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>Documentation</cstring>
+                    </property>
+                </widget>
+                <spacer row="1" column="2">
+                    <property name="name">
+                        <cstring>Spacer4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+        <widget class="Line" row="4" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>Line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="5" column="3">
+            <property name="name">
+                <cstring>PushButton3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Help</string>
+            </property>
+        </widget>
+        <spacer row="5" column="2">
+            <property name="name">
+                <cstring>Spacer5</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="5" column="0">
+            <property name="name">
+                <cstring>PushButton1</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Add</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="5" column="1">
+            <property name="name">
+                <cstring>PushButton2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>Interface</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>Abstract</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>Interface</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>Final</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>PushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>AddClassDlg</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>PushButton2</sender>
+        <signal>clicked()</signal>
+        <receiver>AddClassDlg</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>Interface</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>Constructor</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>Interface</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>Main</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>Interface</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>Implements</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>SourcePath</tabstop>
+    <tabstop>BrowseSourcePath</tabstop>
+    <tabstop>ClassName</tabstop>
+    <tabstop>Extends</tabstop>
+    <tabstop>Interface</tabstop>
+    <tabstop>Abstract</tabstop>
+    <tabstop>Final</tabstop>
+    <tabstop>Public</tabstop>
+    <tabstop>Protected</tabstop>
+    <tabstop>Private</tabstop>
+    <tabstop>Constructor</tabstop>
+    <tabstop>Main</tabstop>
+    <tabstop>License</tabstop>
+    <tabstop>PushButton1</tabstop>
+    <tabstop>PushButton2</tabstop>
+    <tabstop>PushButton3</tabstop>
+</tabstops>
+<slots>
+    <slot>Public_toggled( bool )</slot>
+</slots>
+<includes>
+    <include location="global" impldecl="in implementation">keditlistbox.h</include>
+    <include location="global" impldecl="in implementation">kcombobox.h</include>
+    <include location="global" impldecl="in implementation">klineedit.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

@@ -1,0 +1,16 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevPythonSupport" version="3">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_exec" />
+    <Action name="build_runinterpreter" />
+    <Action name="build_execstring" />
+  </Menu>
+  <Menu name="help">
+    <Action name="help_pydoc"/>
+  </Menu>
+</MenuBar>
+<ToolBar name="buildToolBar">
+    <Action name="build_exec" group="build_operations" />
+</ToolBar>
+</kpartgui>

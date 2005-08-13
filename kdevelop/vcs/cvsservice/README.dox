@@ -1,0 +1,82 @@
+/** \class CvsServicePart
+This plugin integrates Cervisia (version >= 2.1) cvsservice DCOP service into kdevelop (read FAQ at the bottom
+of this document): so, this part _does_ require cvsservice installed on your system: the configure script
+in the main source directory should automagically detect the presence of Cervisia and build this plugin.
+If Cervisia wasn't installed in $KDEDIR than you need to specify paths for lib and include
+files, for example:
+<code>
+    --with-extra-libs=$HOME/kde/lib --with-extra-includes=$HOME/kde/include
+</code>
+(where $HOME/kde is where I install my own kde stuff so I don't mess with working kde installation)
+
+<b>WARNING:</b> So, if you have already compiled kdevelop *without* cvsservice and have now
+installed cervisia to try this nice piece of software, you need to re-run configure so it
+can detect cervisia installation and enable compilation for vcs/cvsservice.
+
+<b>WARNING:</b> This plugin will quite surely change when the upcoming modifications in Cervisia's own
+architecture (separation of core and front-ends and user applications' library) are done (probably
+starting from kde >= 3.3). If you want to partecipate please join discussions on the cervisia@kde.org
+mailing list. Contributions are always welcome :-)
+
+<b>WARNING2:</b> If it doesn't compile try to update your cervisia installation.
+
+Implementation of this component is done by:
+  - class CvsServicePart, which does provide integration within kdevelop, set-up GUI
+    integration, forward cvs commands to the implementation (m_impl). It does also
+    intercepts signals like "new files added to project" and "... removed from ...".
+  - class CvsServicePartImpl implements the actual feature: more general speaking
+    functions (like checking for whether files are in repository, provide checks
+    on file lists, ...).
+  - class CvsProcessWidget provides output wrapping for commands (ok, it is useful
+    for debugging too ;-). It simply starts a DCOP job and awaits notification for
+    its termination.
+  - class CvsOptions* provide info about the user preferences when executing commands:
+    settings are stored in myprj.kdevses file, loaded when project is opened and
+    saved when project is closed.
+  - There is a bunch of dialog classes for collecting useful data about the operations
+    one wants to perform: exception to this are the cvslog* classes which do start
+    cvs jobs independently archiving parallelism with the CvsProcesssWidget.
+  - CVSDir and CVSEntry provide abstraction for accessing to local CVS information
+  - CVSFileInfoProvider is an implementation of KDevVCSFileInfoProvider interface
+    and collects data about files stats: for CVS, both synch (fetch data from local sandbox)
+    and asynch (fetch from repository server) are working with some minor bugs in the parsing
+    of 'cvs status' output for the latter. (Sync means that information are collected
+    from local CVS dirs which do not provide much information; async mean that a
+    "cvs status <dir-name>" request is launched, output parsed and information returned
+    to the client in _different_ times). Obviously this stuff requires the client
+    (actually only the FileTree viewer) to be aware of this feature (see parts/fileview for
+    additional info).
+
+\todo
+    - Fix the "cvs update" function which behave strangely for sub-directories of the main
+      project dir.
+    - (> 3.0) Replace the menu entries text with shorter ones
+    - Fix bugs on bugs.kde.org ;-)
+
+
+\authors <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
+
+\maintainer <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
+
+\feature All that provided by parts/cvs
+\feature it is possible to 'add as binary' files to repository
+\feature checkout from remote repository ability added to the appwizard/importdlg
+\feature should handle :ext: repositories thanks to cvsservice
+\feature can tag / un-tag files
+\feature can revert and diff between specific releases
+\feature can do multiple diff from a common cvs log output text
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">cvs part component at Bugzilla database</a>
+
+\requirement <a href="http://www.cvshome.org">CVS</a> >= 1.10.6
+\requirement Cervisia >= 2.1 (from kdesdk package included in <a href="http://www.kde.org">KDE</a> >= 3.2)
+
+\todo Test with SSH repositories!
+\todo Share a common outputview between VCS: CvsProcessWidget should be reworked :-/
+\todo Additional slots for more complex stuff as status, revert, patch creation, ...
+
+\faq <b>Does cvsservicepart support login with :pserver: or :ext: ?</b>
+   Well, I dunno ;-) I have no ssh repositories to test so feel free to provide feedback on the subject :-)
+   Update: Ok, it seems at least one user has tried :ext: reporting it to work (with ssh-agent avoiding some
+   typing headache ;-))
+*/

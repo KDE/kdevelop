@@ -1,0 +1,9 @@
+# KDE Config File
+[General]
+Name=Simple Ruby script
+Name[fr]=Un simple script de test « Hello world »
+Category=Ruby
+Comment=This generates a simplistic 'Hello world' program in Ruby
+Comment[fr]=Génère un simple script de test du type « Hello world » dans le language RUBY.
+FileTemplates=rb,ShellStyle
+ShowFilesAfterGeneration=APPNAMELC.rb

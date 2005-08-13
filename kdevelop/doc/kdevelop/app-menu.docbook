@@ -1,0 +1,61 @@
+<appendix id="app-menus">
+
+<appendixinfo>
+  <authorgroup>
+    <author><firstname>Bernd</firstname><surname>Pol</surname></author>
+    <!-- ROLES_OF_TRANSLATORS -->
+  </authorgroup>
+</appendixinfo>
+
+<title>Menus and Toolbars Overview</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<sect1 id="app-menus-menu">
+<title>Menus</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<sect2 id="app-menus-menu-common">
+<title>Commonly Available Menus</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- app-menus-menu-common -->
+
+<sect2 id="app-menus-menu-project">
+<title>Project Specific Menus</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- app-menus-menu-project -->
+
+<sect2 id="app-menus-menu-specific">
+<title>Plugin Tools Specific Menus</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- app-menus-menu-specific -->
+
+</sect1> <!-- app-menus-menu -->
+
+<sect1 id="app-menus-tool">
+<title>Toolbars</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect1> <!-- app-menus-tool -->
+
+</appendix> <!-- app-menus -->

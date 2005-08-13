@@ -1,0 +1,24 @@
+/** \class ReplacePart
+This plugin replaces a search pattern with a specified string, after letting the
+user preview and choose which replacements should take place.
+
+The operation is only carried out on files that are part of the current project.
+
+\authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
+
+\maintainer <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
+
+\feature Replaces a search pattern with a specified string, after letting the
+user preview and choose which replacements should take place.
+
+\todo Better user feedback
+\todo Better commenting (doxygen style comments).
+
+
+\warning The operation is only carried out on files that are part of the current project.
+
+\warning Search/Replace will work on all matches on a line.
+There is no (nor will there likely be) a way to limit matching to only some matches on the same line.
+In practice this is not a very big problem.
+
+*/

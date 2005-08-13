@@ -1,0 +1,42 @@
+[DOCSOPT]
+Type = value
+ValueType=bool
+Value=INSTALL_DOCS
+Comment= Install Docbook documentation templates.
+Comment[da]= Installerer Docbook dokumentationsskabeloner.
+Comment[et]= Docbook-dokumendimallide paigaldamine.
+Comment[fr]=Installer les modèles de documentation Docbook.
+Comment[hu]=DocBook-alapú dokumentációsablonok telepítése.
+Comment[sv]= Installera Docbook-dokumentationsmallar.
+Comment[tr]=Docbook belgelendirme şablonlarını yükle.
+Default=true
+
+[DOCSDIR]
+Type=mkdir
+Dir=%{dest}/doc
+Option=INSTALL_DOCS
+
+[DOCSDIREN]
+Type=mkdir
+Dir=%{dest}/doc/en
+Option=INSTALL_DOCS
+
+[DOCSMAKEFILE.AM1]
+Type=install
+Source=%{kdevelop}/template-common/kde-doc-Makefile.am
+Dest=%{dest}/doc/Makefile.am
+Option=INSTALL_DOCS
+
+[DOCSMAKEFILE.AM2]
+Type=install
+Source=%{kdevelop}/template-common/kde-doc-en-Makefile.am
+Dest=%{dest}/doc/en/Makefile.am
+Option=INSTALL_DOCS
+
+[DOCS]
+Type=install
+Source=%{kdevelop}/template-common/kde-index.docbook
+Dest=%{dest}/doc/en/index.docbook
+Option=INSTALL_DOCS
+
+

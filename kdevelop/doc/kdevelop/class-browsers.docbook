@@ -1,0 +1,90 @@
+<chapter id="class-browsers">
+<title>The Class Browsers</title>
+<indexterm zone="class-browsers"><primary>class browser</primary></indexterm>
+
+<para>
+When working on a project in an object-oriented language, your emphasis when
+working on a project is not on the source files and their names, but on the
+classes and their relationships. In order to help you navigating in the space
+of defined classes and symbols, &kdevelop; includes various class browsers
+that visualize the class structure in different ways.
+</para>
+
+<sect1 id="classview">
+<title>Class View</title>
+
+<para>
+This view is shown on the left side of the main window and contains a linear
+list of all classes, variables and functions in your project. It is designed
+as a tree view. If you open a class node by clicking on it, a list with all
+methods and attributes of the respective class is shown.
+</para>
+
+<figure id="screenshot-classview" float="1">
+<title>A Screenshot of the Class View</title>
+<mediaobject>
+<imageobject><imagedata fileref="classview.png"/></imageobject>
+</mediaobject>
+</figure>
+
+<para>
+The class view works in two different modes. By default, all symbols are
+grouped into <quote>Classes</quote>, <quote>Structs</quote>,
+<quote>Functions</quote>, <quote>Variables</quote> and
+<quote>Namespaces</quote>.  In the context menu of the view, you can choose
+<guimenuitem>List by Namespaces</guimenuitem>. In this mode, the namespace
+hierarchy is shown and the symbols grouped into the respective namespace
+where they are defined. This may be more useful in projects which make heavy
+use of (nested) namespaces. It is less useful in projects without
+namespaces.
+</para>
+
+<para>
+You can also change the way in which class names are displayed. Normally, the
+names of the classes are shown, without the namespace in which they are defined.
+This means, you cannot immediately distinguish classes with the same name in
+different namespaces. If you rest for a while with the mouse over an item, the
+full scoped name is shown as a tooltip though. You can decide to always
+display the fully scoped class name by choosing
+<guimenuitem>Full Identifier scopes</guimenuitem> from the context menu.
+</para>
+
+<para>
+Clicking on a class or method in the class view brings you to its definition.
+You can also jump to the declaration of a method by choosing
+<guimenuitem>Go to declaration</guimenuitem> from the context menu. In the
+context menu for classes are also the items
+<guimenuitem>Add method...</guimenuitem> and
+<guimenuitem>Add attribute...</guimenuitem>. This opens dialogs where you can
+generate new method and variable declaration in the respective class, together
+with an empty implementation.
+</para>
+
+</sect1> <!-- classview -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="classtools">
+<title>Class Tools</title>
+
+<para>
+The class tool dialog is activated by right clicking on a class in the class
+view and choosing <guimenuitem>Class tool...</guimenuitem>.
+</para>
+
+</sect1> <!-- classtools -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="classhierarchy">
+<title>Class Hierarchy</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect1> <!-- classhierarchy -->
+
+</chapter> <!-- class-browsers -->
+
+<!-- ====================================================================== -->

@@ -1,0 +1,375 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>AddAttributeDialogBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>AddAttributeDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>619</width>
+            <height>413</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Add Attribute</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QListView">
+            <column>
+                <property name="text">
+                    <string>Access</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Storage</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Type</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Declarator</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>attributes</cstring>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="resizeMode">
+                <enum>LastColumn</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>111</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>addAttributeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Add Attribute</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>deleteAttributeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Delete Attribute</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Attribute Properties</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>T&amp;ype:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>returnType</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>returnType</cstring>
+                            </property>
+                            <property name="editable">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>declarator</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="1">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>D&amp;eclarator:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>declarator</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>storage</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="1">
+                            <property name="name">
+                                <cstring>textLabel5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>S&amp;torage:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>storage</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Acce&amp;ss:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>access</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>access</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>addAttributeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>addAttribute()</slot>
+    </connection>
+    <connection>
+        <sender>deleteAttributeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>deleteCurrentAttribute()</slot>
+    </connection>
+    <connection>
+        <sender>attributes</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>currentChanged(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>returnType</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>updateGUI()</slot>
+    </connection>
+    <connection>
+        <sender>declarator</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>updateGUI()</slot>
+    </connection>
+    <connection>
+        <sender>access</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>updateGUI()</slot>
+    </connection>
+    <connection>
+        <sender>storage</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>updateGUI()</slot>
+    </connection>
+    <connection>
+        <sender>returnType</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AddAttributeDialogBase</receiver>
+        <slot>updateGUI()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>attributes</tabstop>
+    <tabstop>addAttributeButton</tabstop>
+    <tabstop>deleteAttributeButton</tabstop>
+    <tabstop>returnType</tabstop>
+    <tabstop>declarator</tabstop>
+    <tabstop>access</tabstop>
+    <tabstop>storage</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<slots>
+    <slot access="protected">init()</slot>
+    <slot access="protected">destroy()</slot>
+    <slot>addAttribute()</slot>
+    <slot>deleteCurrentAttribute()</slot>
+    <slot>currentChanged(QListViewItem*)</slot>
+    <slot>updateGUI()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

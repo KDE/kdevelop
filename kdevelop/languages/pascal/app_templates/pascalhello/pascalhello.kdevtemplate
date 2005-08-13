@@ -1,0 +1,50 @@
+# KDE Config File
+[General]
+Name=Simple Hello world program
+Name[da]=Simpelt Goddag verden program
+Name[et]=Lihtne "Tere, maailm" programm
+Name[fr]=Simple programme « Hello world »
+Name[hu]=Egyszerű Hello world program
+Name[sv]=Enkelt Hello world-program
+Name[tr]=Basit Merhaba dünya programı
+Icon=pascalhello.png
+Category=Pascal
+Comment=Generates a simple Hello world program in Pascal
+Comment[da]=Genererer et simpelt Goddag verden program i Pascal
+Comment[et]=Lihtsa "Tere, maailm" programmi loomine Pascalis
+Comment[fr]=Génère un simple programme « Hello world » en Pascal
+Comment[hu]=Létrehoz egy egyszerű Hello world programot Pascalban
+Comment[sv]=Skapar ett enkelt Hello world-program i Pascal
+Comment[tr]=Pascal'da basit bir Merhaba Dünya programı yaratır.
+FileTemplates=pp-program,PStyle,pp-unit,PStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.pp
+Archive=pascalhello.tar.gz
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE2]
+Type=install
+Source=%{src}/main.pp
+Dest=%{dest}/src/%{APPNAMELC}.pp
+
+[MSG]
+Type=message
+Comment=A simple 'hello world' program in Pascal was created in %{dest}
+Comment[da]=Et simpelt 'goddag verden' program i Pascal blev oprettet i %{dest}
+Comment[et]=Lihtne "Tere, maailm" programm Pascalis loodi asukohta %{dest}
+Comment[fr]=Un programme « Hello world » simple en Pascal a été créé dans %{dest}
+Comment[hu]=Létrejött egy egyszerű Hello world Pascal-program itt: %{dest}
+Comment[sv]=Ett enkelt 'Hello world'-program i Pascal skapades i %{dest}
+Comment[tr]=Pascal'da basit bir "Merhaba Dünya" uygulaması %{dest} içinde yaratıldı.

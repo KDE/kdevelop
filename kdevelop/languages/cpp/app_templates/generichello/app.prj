@@ -1,0 +1,8 @@
+<kdevproject>
+  <group name = "src">
+    <target name = "cpphello">
+      <file name = "%{APPNAMELC}.cpp"/>
+      <attribute name = "buildscript">gcc -o %{APPNAMELC} %{APPNAMELC}.cpp</attribute>
+    </target>
+  </group>
+</kdevproject>

@@ -1,0 +1,10 @@
+/**
+@mainpage The KDevelop Project Manager Interfaces Library
+
+This library contains all interfaces to implement plugins for the KDevelop generic project manager.
+
+<b>Link with</b>: -lprojectmanager_interfaces
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/buildtools/projectmanager/interfaces
+*/
+

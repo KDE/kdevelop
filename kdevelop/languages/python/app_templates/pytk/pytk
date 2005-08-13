@@ -1,0 +1,12 @@
+# KDE Config File
+[General]
+Name=Simple Python/Tkinter script
+Name[fr]=Un simple Python/Tkinter script de test "Hello world"
+Name[de]=Ein einfaches Python/Tkinter Script « Hello world »
+Icon=pytk.png
+Category=Python
+Comment=This generates a simplistic "Hello world" program in Python/Tkinter
+Comment[fr]=Génère un simple script de test du type "Hello world" dans le language PYTHON/Tkinter.
+Comment[de]=Es wird ein einfaches "Hello world"-Programm in Python/Tkinter erzeugt.
+FileTemplates=py,ShellStyle
+ShowFilesAfterGeneration=APPNAMELC.py

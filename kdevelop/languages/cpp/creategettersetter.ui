@@ -1,0 +1,232 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>CreateGetterSetterDialogBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CreateGetterSetterDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>428</width>
+            <height>105</height>
+        </rect>
+    </property>
+    <property name="modal">
+        <bool>true</bool>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>61</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QCheckBox" row="0" column="5">
+            <property name="name">
+                <cstring>m_chkInlineGet</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;inline</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>create an inline get method</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If this is checked the get method will be created inline; otherwise, it will not.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="0" column="0">
+            <property name="name">
+                <cstring>m_chkGet</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;get method</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>create get method</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If this is checked a getter method will be created.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="0">
+            <property name="name">
+                <cstring>m_chkSet</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;set method</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>create set method</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If this is checked a set method will be created</string>
+            </property>
+        </widget>
+        <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>m_edtGet</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>name of the get method</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The name of the created get method</string>
+            </property>
+        </widget>
+        <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>m_edtSet</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>name of the set method</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The name of the created set method</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="5">
+            <property name="name">
+                <cstring>m_chkInlineSet</cstring>
+            </property>
+            <property name="text">
+                <string>i&amp;nline</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>create an inline set method</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If this is checked the set method will be created inline; otherwise, it will not.</string>
+            </property>
+        </widget>
+        <spacer row="2" column="2">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KPushButton" row="2" column="4" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_btnCancel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="2" column="3">
+            <property name="name">
+                <cstring>m_btnOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;OK</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>m_chkGet</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_edtGet</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_chkSet</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_edtSet</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_btnOk</sender>
+        <signal>clicked()</signal>
+        <receiver>CreateGetterSetterDialogBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>m_btnCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>CreateGetterSetterDialogBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>m_chkGet</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_chkInlineGet</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_chkSet</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_chkInlineSet</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_chkInlineGet</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>CreateGetterSetterDialogBase</receiver>
+        <slot>slotInlineChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_chkInlineSet</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>CreateGetterSetterDialogBase</receiver>
+        <slot>slotInlineChanged()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>m_chkGet</tabstop>
+    <tabstop>m_edtGet</tabstop>
+    <tabstop>m_chkSet</tabstop>
+    <tabstop>m_edtSet</tabstop>
+    <tabstop>m_btnCancel</tabstop>
+    <tabstop>m_btnOk</tabstop>
+</tabstops>
+<slots>
+    <slot access="protected">slotInlineChanged()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

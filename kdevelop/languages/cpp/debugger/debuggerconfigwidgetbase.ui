@@ -1,0 +1,392 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>DebuggerConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>debugger_config_widget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>536</width>
+            <height>501</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Debugger Configuration</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string></string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string></string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>programArgs_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>Program &amp;arguments:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>programArgs_edit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>debuggingShell_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Debugging &amp;shell:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>debuggingShell_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>gdbPath_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Directory where &amp;gdb resides (e.g. /usr/bin/):</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>gdbPath_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>programArgs_edit</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Arguments that are given to the application when it is debugged.</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="1" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>debuggingShell_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Run gdb in a special shell</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If you want gdb to be executed by a special shell or tool insert it here.</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>gdbPath_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Path to gdb</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If gdb is installed in a standard location, you don't have to insert anything here.
+If gdb is not reachable via $PATH or if you need a special gdb (e.g. for remote  debugging on a different architecture)  insert the path to the corresponding gdb here.
+Note that its name has to be gdb, so you might have to create a symlink named gdb which points to your specific gdb, e.g. arm-elf-gdb.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>displayStaticMembers_box</cstring>
+            </property>
+            <property name="text">
+                <string>Display static &amp;members</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Displaying static members makes GDB slower in
+producing data within KDE and Qt.
+It may change the "signature" of the data
+which QString and friends rely on,
+but if you need to debug into these values then
+check this option.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>breakOnLoadingLibrary_box</cstring>
+            </property>
+            <property name="text">
+                <string>Try settings &amp;breakpoints on library loading</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If GDB has not seen a library that will be loaded via
+"dlopen" then it will refuse to set a breakpoint in that code.
+We can get GDB to stop on a library load and hence
+try to set the pending breakpoints. See the documentation
+for more details relating to this behavior.
+
+If you are not "dlopen"ing libs then leave this unchecked.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>asmDemangle_box</cstring>
+            </property>
+            <property name="text">
+                <string>Display &amp;demangled names</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>When displaying the disassembled code you
+can select to see the methods' mangled names.
+However, non-mangled names are easier to read.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>enableFloatingToolBar_box</cstring>
+            </property>
+            <property name="text">
+                <string>Enable &amp;floating toolbar</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Use the floating toolbar. This toolbar always stays
+on top of all windows so that if the app covers KDevelop
+you have control of the app through the small toolbar. It
+can also be docked into the panel.
+
+This toolbar is in addition to the toolbar in KDevelop.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="8" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>dbgTerminal_box</cstring>
+            </property>
+            <property name="text">
+                <string>Enable separate &amp;terminal for application IO</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This allows you to enter terminal input when your
+application contains terminal input code (e.g. cin, fgets, etc.).
+If you use terminal input in your application then check this option.
+Otherwise leave it unchecked.</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="10" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>globalOutputRadix</cstring>
+            </property>
+            <property name="title">
+                <string>Global Output Radix</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>outputRadixOctal</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Octal</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>outputRadixDecimal</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Decimal</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>outputRadixHexadecimal</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hexadecimal</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="12" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Remote Debugging</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This script is intended for the actual commands needed to connect to a remotely running executable.
+	shell sleep 5	wait for remote program to start
+	target remote ...	connect to the remote debugger
+	continue	[optional] run debugging to the first breakpoint.</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>runShellScript_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Run shell script:</string>
+                                <comment>Shell script to be executed at run time</comment>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>runShellScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester" row="2" column="1">
+                            <property name="name">
+                                <cstring>runGdbScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Script to connect with remote application</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This script is sourced by gdb after the two preceding scripts have been executed.
+This script is intended for the actual commands needed to connect to a remotely running executable.
+	shell sleep 5	wait for remote program to start
+	target remote ...	connect to the remote debugger
+	continue	[optional] run debugging to the first breakpoint.</string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester" row="1" column="1">
+                            <property name="name">
+                                <cstring>runShellScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Script to start remote application</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This shell script is run after the Config gdb script has been sourced by gdb.
+When debugging remotely this script is intended to actually start the remote process.
+[It is expected that the debug executable can be reached on the target, maybe by downloading it as a final build step]
+1) Find a way to execute a command remotely - rsh, ssh, telnet, ...
+2a) Execute "gdbserver ... application" on target.
+or if your executable contains the gdb stub
+2b) Execute "application" on target.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>runGdbScript_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Run gdb script:</string>
+                                <comment>Gdb script to be executed at run time.</comment>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>runGdbScript_edit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>configGdbScript_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Config gdb script:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>configGdbScript_edit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester" row="0" column="1">
+                            <property name="name">
+                                <cstring>configGdbScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Gdb configure script</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This script is sourced by gdb when the debugging starts.</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>programArgs_edit</tabstop>
+    <tabstop>debuggingShell_edit</tabstop>
+    <tabstop>gdbPath_edit</tabstop>
+    <tabstop>displayStaticMembers_box</tabstop>
+    <tabstop>asmDemangle_box</tabstop>
+    <tabstop>breakOnLoadingLibrary_box</tabstop>
+    <tabstop>enableFloatingToolBar_box</tabstop>
+    <tabstop>dbgTerminal_box</tabstop>
+    <tabstop>outputRadixOctal</tabstop>
+    <tabstop>outputRadixDecimal</tabstop>
+    <tabstop>outputRadixHexadecimal</tabstop>
+    <tabstop>configGdbScript_edit</tabstop>
+    <tabstop>runShellScript_edit</tabstop>
+    <tabstop>runGdbScript_edit</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

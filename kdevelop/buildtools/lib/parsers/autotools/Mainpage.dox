@@ -1,0 +1,11 @@
+/**
+@mainpage The KDevelop Makefile.am Parser
+
+This library contains a parser that handles Makefile.am.
+
+<b>Link with</b>: -lkdevautotoolsparser
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/buildtools/parsers/autotools
+
+*/
+

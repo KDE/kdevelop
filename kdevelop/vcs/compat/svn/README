@@ -1,0 +1,39 @@
+This is a kio_subversion. It allows you to browse a (remote) Subversion repository. 
+The expected URLs are something like : svn+http://svn.collab.net/repos/svn
+This will show you the current HEAD version of the repository (just like the one you would get 
+with http://svn.collab.net/repos/svn). 
+You can also try : svn+http://svn.collab.net/repos/svn?rev=500 so that it displays the revision 500.
+
+REQUIREMENTS:
+------------
+Subversion libraries >= 0.37.0 (http://subversion.tigris.org)
+
+FEATURES:
+---------
+Supported protocols :
+svn+http://hostname/path?rev=revision_number
+svn+https://hostname/path?rev=revision_number
+svn+ssh://hostname/path?rev=revision_number
+svn://hostname/path?rev=revision_number
+svn+file://repository/path?rev=revision_number
+
+INSTALL:
+--------
+you need the svn client library which is distributed by subversion. 
+on Debian : apt-get install libsvn0-dev will do everything you need.
+
+you can pass the following arguments to configure to help it find your 
+subversion/apr installations :
+
+--with-apr-config=FILE    Use the given path to apr-config when determining APR configuration; defaults to "apr-config"
+--with-apu-config=FILE    Use the given path to apu-config when determining APR util configuration; defaults to "apu-config"
+--with-subversion-dir=DIR where Subversion is installed
+--with-svn-include=DIR    Use the given path to the subversion headers.
+--with-svn-lib=DIR  	  Use the given path to the subversion libraries.
+
+BUGS:
+-----
+- file modifications time are wrong in konqui
+any other ?
+please report
+

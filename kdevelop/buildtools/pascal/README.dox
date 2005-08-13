@@ -1,0 +1,13 @@
+/** \class PascalProjectPart
+This is the Pascal build tool part.
+
+Common build tool part part for all available pascal compilers (gpc, fpc, dcc).
+It holds no project file list and tries to abstract from their specifics.
+
+\authors <a href="mailto:cloudtemple AT mksat.net">Alexander Dymo</a>
+
+\maintainer <a href="mailto:cloudtemple AT mksat.net">Alexander Dymo</a>
+
+\deprecated This class is deprecated, use GenericProjectPart (buildtools/generic) instead.
+
+*/
