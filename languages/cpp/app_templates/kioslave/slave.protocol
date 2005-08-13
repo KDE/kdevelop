@@ -24,6 +24,5 @@ Description[sr]=KIOSlave за %{APPNAMELC}
 Description[sr@Latn]=KIOSlave za %{APPNAMELC}
 Description[sv]=En I/O-slav för %{APPNAMELC}
 Description[tr]=%{APPNAMELC} için bir kioslave
-Description[uk]=Підлеглий В/В (kioslave) для %{APPNAMELC}
 Description[xx]=xxA kioslave for %{APPNAMELC}xx
 Description[zh_CN]=%{APPNAMELC} 的 kioslave

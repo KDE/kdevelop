@@ -33,7 +33,6 @@ GenericName[hu]=Fejlesztőkörnyezet
 GenericName[ru]=Интегрировання среда разработки
 GenericName[sv]=Utvecklingsmiljö
 GenericName[tr]=Bütünleşik Geliştirme Ortamı
-GenericName[uk]=Інтегроване проектувальне середовище (IDE)
 GenericName[xx]=xxIDExx
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;

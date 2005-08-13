@@ -36,7 +36,6 @@ Comment[sv]=%{APPNAME} - en modul i Inställningscentralen
 Comment[ta]=%{APPNAME} - ஒரு கேகன்ட்ரோல் கூறு
 Comment[tg]=%{APPNAME} - модули kcontrol
 Comment[tr]=%{APPNAME} - bir kcontrol birimi
-Comment[uk]=%{APPNAME} - модуль kcontrol
 Comment[xx]=xx%{APPNAME} - a kcontrol modulexx
 Comment[zh_CN]=%{APPNAME} - 一个 KDE 控制中心模块
 Keywords=%{APPNAME},%{APPNAMELC}
