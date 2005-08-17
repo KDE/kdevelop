@@ -5,6 +5,7 @@
 #### TODO    appwizard
 
 SUBDIRS = fullscreen \
+    outputviews \
     diff \
     classview
 
