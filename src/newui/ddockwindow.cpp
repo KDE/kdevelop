@@ -43,7 +43,7 @@
 #include "button.h"
 
 DDockWindow::DDockWindow(QWidget *parent, Position position)
-    :Q3DockWindow(Q3DockWindow::InDock, parent), m_position(position), m_visible(false),
+    :Q3DockWindow(Q3DockWindow::InDock, parent), m_position(position), m_expanded(false),
     m_toggledButton(0)
 {
     setMovingEnabled(false);
@@ -88,7 +88,7 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
     m_widgetStack = new QStackedWidget(this);
     m_internalLayout->addWidget(m_widgetStack);
 
-    setVisible(m_visible);
+    setExpanded(m_expanded);
 
     loadSettings();
 }
@@ -98,21 +98,21 @@ DDockWindow::~DDockWindow()
     saveSettings();
 }
 
-void DDockWindow::setVisible(bool v)
+void DDockWindow::setExpanded(bool v)
 {
     //write dock width to the config file
     KConfig *config = kapp->config();
     QString group = QString("%1").arg(m_name);
     config->setGroup(group);
 
-    if (m_visible)
+    if (m_expanded)
         config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width() );
 
     v ? m_widgetStack->show() : m_widgetStack->hide();
-    m_visible = v;
+    m_expanded = v;
 
     m_internalLayout->invalidate();
-    if (!m_visible)
+    if (!m_expanded)
         if (m_position == DDockWindow::Bottom)
             setFixedExtentHeight(m_internalLayout->sizeHint().height());
         else
@@ -132,7 +132,6 @@ void DDockWindow::setVisible(bool v)
             setFixedExtentWidth(size);
         }
     }
-    Q3DockWindow::setVisible(v);
 }
 
 void DDockWindow::loadSettings()
@@ -149,7 +148,7 @@ void DDockWindow::saveSettings()
         invisibleWidth = config->readNumEntry("ViewWidth");
     config->deleteEntry("ViewWidth");
     config->deleteEntry("ViewLastWidget");
-    if (m_toggledButton && m_visible)
+    if (m_toggledButton && m_expanded)
     {
         config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width());
         config->writeEntry("ViewLastWidget", m_toggledButton->realText());
@@ -240,7 +239,7 @@ void DDockWindow::selectWidget(Ideal::Button *button)
     kdDebug() << k_funcinfo << endl;
     if (m_toggledButton == button)
     {
-        setVisible(!m_visible);
+        setExpanded(!m_expanded);
         return;
     }
 

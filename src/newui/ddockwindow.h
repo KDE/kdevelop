@@ -43,21 +43,22 @@ public:
     DDockWindow(QWidget *parent, Position position);
     virtual ~DDockWindow();
 
-    virtual void setVisible(bool v);
-    bool visible() const { return m_visible; }
+    inline void expand() { setExpanded(true); }
+    inline void collapse() { setExpanded(false); }
+    bool isExpanded() const { return m_expanded; }
     Position position() const { return m_position; }
 
-    virtual void addWidget(const QString &title, QWidget *widget);
-    virtual void raiseWidget(QWidget *widget);
+    void addWidget(const QString &title, QWidget *widget);
+    void raiseWidget(QWidget *widget);
     /**Removes the widget from dock. Does not delete it.*/
-    virtual void removeWidget(QWidget *widget);
+    void removeWidget(QWidget *widget);
 
-    virtual void hideWidget(QWidget *widget);
-    virtual void showWidget(QWidget *widget);
+    void hideWidget(QWidget *widget);
+    void showWidget(QWidget *widget);
 
-    virtual QWidget *currentWidget() const;
+    QWidget *currentWidget() const;
 
-    virtual void setMovingEnabled(bool b);
+    void setMovingEnabled(bool b);
 
 private slots:
     void selectWidget();
@@ -66,6 +67,7 @@ private slots:
 protected:
     virtual void loadSettings();
     virtual void saveSettings();
+    virtual void setExpanded(bool v);
 
     Ideal::ButtonBar *m_bar;
     QStackedWidget *m_widgetStack;
@@ -75,7 +77,7 @@ protected:
 
 private:
     Position m_position;
-    bool m_visible;
+    bool m_expanded;
     QString m_name;
 
     Ideal::Button *m_toggledButton;
