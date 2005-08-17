@@ -16,7 +16,7 @@ noinst_HEADERS = \
 libkdevcustomimporter_la_SOURCES = \
     kdevcustomimporter.cpp
 
-kde_services_DATA =  kdevcustomimporter.desktop
+kde_services_DATA = kdevcustomimporter.desktop
 
 libkdevcustomimporter_la_LIBADD = \
     $(top_builddir)/lib/projectmanager/interfaces/libprojectmanager_interfaces.la \
