@@ -56,6 +56,7 @@ public:
   { return const_cast<KDevProjectFolderItem*>(this); }
 
   QDir directory() const { return m_directory; }
+  virtual QIcon icon() const;
 
 private:
   QDir m_directory;
@@ -82,6 +83,8 @@ public:
   virtual KDevProjectFileItem *file() const
   { return const_cast<KDevProjectFileItem*>(this); }
 
+  virtual QIcon icon() const;
+
 private:
   QFileInfo m_fileInfo;
 };
@@ -93,9 +96,7 @@ public:
   KDevProjectModel(QObject *parent = 0);
   virtual ~KDevProjectModel();
 
-  bool isProjectFolderItem(KDevItem *item) const;
-  bool isProjectFileItem(KDevItem *item) const;
-  bool isProjectTargetItem(KDevItem *item) const;
+  virtual KDevProjectItem *item(const QModelIndex &index) const;
 };
 
 #endif // KDEVPROJECTMODEL_H

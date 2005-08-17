@@ -95,8 +95,10 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
     QDir dir = item->directory();
 
+#if 0 // ### port me
     KDevProjectTargetItem *target = new KDevProjectTargetItem("files");
     item->add(target);
+#endif
 
     QList<KDevProjectFolderItem*> folder_list;
     QFileInfoList entries = dir.entryInfoList();
@@ -112,7 +114,7 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
             folder_list.append(folder);
         } else if (fileInfo.isFile()) {
             KDevProjectFileItem *file = new KDevProjectFileItem(fileInfo);
-            target->add(file);
+            item->add(file);
         }
     }
 

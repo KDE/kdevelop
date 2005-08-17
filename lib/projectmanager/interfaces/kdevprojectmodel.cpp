@@ -19,6 +19,19 @@
 
 #include "kdevprojectmodel.h"
 
+#include <kmimetype.h>
+#include <kiconloader.h>
+
+QIcon KDevProjectFolderItem::icon() const
+{
+  return KMimeType::pixmapForURL(directory().absolutePath(), 0, KIcon::Small);
+}
+
+QIcon KDevProjectFileItem::icon() const
+{
+  return KMimeType::pixmapForURL(fileInfo().absoluteFilePath(), 0, KIcon::Small);
+}
+
 QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
 {
   QList<KDevProjectFolderItem*> lst;
@@ -69,19 +82,9 @@ KDevProjectModel::~KDevProjectModel()
 {
 }
 
-bool KDevProjectModel::isProjectFolderItem(KDevItem *item) const
+KDevProjectItem *KDevProjectModel::item(const QModelIndex &index) const
 {
-  return dynamic_cast<KDevProjectFolderItem*>(item) != 0; // ### hmm, dynamic_cast
-}
-
-bool KDevProjectModel::isProjectFileItem(KDevItem *item) const
-{
-  return dynamic_cast<KDevProjectFileItem*>(item) != 0; // ### hmm, dynamic_cast
-}
-
-bool KDevProjectModel::isProjectTargetItem(KDevItem *item) const
-{
-  return dynamic_cast<KDevProjectTargetItem*>(item) != 0; // ### hmm, dynamic_cast
+  return reinterpret_cast<KDevProjectItem*>(index.internalPointer());
 }
 
 #include "kdevprojectmodel.moc"
