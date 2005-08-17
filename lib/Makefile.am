@@ -20,7 +20,6 @@ SUBDIRS = \
     language \
     widgets \
     catalog \
-    astyle \
     cppparser \
     projectmanager
 
