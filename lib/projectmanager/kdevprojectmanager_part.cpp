@@ -55,63 +55,69 @@ K_EXPORT_COMPONENT_FACTORY(libkdevprojectmanager, KDevProjectManagerFactory(data
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name, const QStringList&)
     : KDevProject(&data, parent)
 {
-    setObjectName(QString::fromUtf8(name));
+  setObjectName(QString::fromUtf8(name));
 
-    m_workspace = 0;
-    m_projectModel = new KDevProjectModel(this);
-    m_dirty = false;
+  m_workspace = 0;
+  m_projectModel = new KDevProjectModel(this);
+  m_dirty = false;
 
-    setInstance(KDevProjectManagerFactory::instance());
+  setInstance(KDevProjectManagerFactory::instance());
 
-    { // load the importers
-        KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
+  { // load the importers
+    KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
 
-        for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it) {
-            KService::Ptr ptr = *it;
+    for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it)
+      {
+        KService::Ptr ptr = *it;
 
-            int error = 0;
-            if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this,
-                                                ptr->name().latin1(), QStringList(), &error))
-            {
-                m_importers.insert(ptr->name(), i);
-            } else {
-                kdDebug(9000) << "error:" << error << endl;
-            }
-        }
-    }
+        int error = 0;
+        if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this,
+            ptr->name().latin1(), QStringList(), &error))
+          {
+            m_importers.insert(ptr->name(), i);
+          }
+        else
+          {
+            kdDebug(9000) << "error:" << error << endl;
+          }
+      }
+  }
 
-    { // load the builders
-        KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectBuilder");
+  { // load the builders
+    KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectBuilder");
 
-        for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it) {
-            KService::Ptr ptr = *it;
+    for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it)
+      {
+        KService::Ptr ptr = *it;
 
-            int error = 0;
-            if (KDevProjectBuilder *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectBuilder>(ptr, this,
-                                                ptr->name().latin1(), QStringList(), &error))
-            {
-                m_builders.insert(ptr->name(), i);
-            } else {
-                kdDebug(9000) << "error:" << error << endl;
-            }
-        }
-    }
+        int error = 0;
+        if (KDevProjectBuilder *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectBuilder>(ptr, this,
+            ptr->name().latin1(), QStringList(), &error))
+          {
+            m_builders.insert(ptr->name(), i);
+          }
+        else
+          {
+            kdDebug(9000) << "error:" << error << endl;
+          }
+      }
+  }
 
-    m_widget = new QWidget(0);
-    new QVBoxLayout(m_widget);
+  m_widget = new QWidget(0);
+  new QVBoxLayout(m_widget);
 
-    QLineEdit *editor = new QLineEdit(m_widget);
-    m_widget->layout()->addWidget(editor);
+  QLineEdit *editor = new QLineEdit(m_widget);
+  m_widget->layout()->addWidget(editor);
 
-    //editor->hide();
+  //editor->hide();
 
-    KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
+  KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
 
-    m_projectManager = new KDevProjectManager(this, m_widget);
-    m_projectManager->setModel(m_projectModel);
-    m_projectManager->setItemDelegate(delegate);
-    m_projectManager->setWhatsThis(i18n("Project overview"));
-    m_widget->layout()->add(m_projectManager);
+  m_projectManager = new KDevProjectManager(this, m_widget);
+  m_projectManager->setModel(m_projectModel);
+  m_projectManager->setItemDelegate(delegate);
+  m_projectManager->setWhatsThis(i18n("Project overview"));
+  m_widget->layout()->add(m_projectManager);
 
 #if 0
     KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
@@ -133,15 +139,14 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
 {
-    if (m_projectManager) {
-        mainWindow()->removeView(m_widget);
-        delete m_widget;
-    }
+  if (m_projectManager) {
+    mainWindow()->removeView(m_widget);
+    delete m_widget;
+  }
 }
 
 void KDevProjectManagerPart::openURL(const KURL &url)
 {
-  kdDebug(9000) << "========> openURL:" << url << endl;
   partController()->editDocument(url);
 }
 
@@ -169,7 +174,7 @@ void KDevProjectManagerPart::openProject(const QString &dirName, const QString &
 {
     m_projectDirectory = dirName;
     m_projectName = projectName;
-
+    
     import(ForceRefresh);
 
     KDevProject::openProject(dirName, projectName);

@@ -177,16 +177,11 @@ KDevCodeItem *KDevCodeModel::item(const QModelIndex &index) const
 
 QModelIndex KDevCodeModel::index(int row, int column, const QModelIndex &parent) const
 {
-  QModelIndex i = KDevItemModel::index(row, column, parent);
-  qDebug() << "index:" << i;
-  return i;
+  return KDevItemModel::index(row, column, parent);
 }
 
 int KDevCodeModel::rowCount(const QModelIndex &parent) const
 {
-  int rc = KDevItemModel::rowCount(parent);
-  KDevCodeItem *i = item(parent);
-  qDebug() << "rowCount:" << rc << "parent:" << parent << "data:" << (i ? i->name() : QString());
-  return rc;
+  return KDevItemModel::rowCount(parent);
 }
 
