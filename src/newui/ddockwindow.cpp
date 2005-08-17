@@ -158,7 +158,7 @@ void DDockWindow::saveSettings()
 
 QWidget *DDockWindow::currentWidget() const
 {
-    return m_widgetStack->visibleWidget();
+    return m_widgetStack->currentWidget();
 }
 
 void DDockWindow::addWidget(const QString &title, QWidget *widget)
@@ -213,11 +213,11 @@ void DDockWindow::raiseWidget(QWidget *widget)
 void DDockWindow::removeWidget(QWidget *widget)
 {
     kdDebug() << k_funcinfo << endl;
-    if (m_widgetStack->id(widget) == -1)
+    if (m_widgetStack->indexOf(widget) == -1)
         return; //not in dock
 
     bool changeVisibility = false;
-    if (m_widgetStack->visibleWidget() == widget)
+    if (m_widgetStack->currentWidget() == widget)
         changeVisibility = true;
 
     Ideal::Button *button = m_buttons[widget];
@@ -247,7 +247,7 @@ void DDockWindow::selectWidget(Ideal::Button *button)
         m_toggledButton->setOn(false);
     m_toggledButton = button;
     setVisible(true);
-    m_widgetStack->raiseWidget(m_widgets[button]);
+    m_widgetStack->setCurrentWidget(m_widgets[button]);
 }
 
 void DDockWindow::selectWidget()

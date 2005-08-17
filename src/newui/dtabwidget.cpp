@@ -41,7 +41,7 @@ DTabWidget::DTabWidget(QWidget *parent, const char *name)
         m_closeButton->setIconSet(SmallIcon("tab_remove"));
         m_closeButton->adjustSize();
         m_closeButton->hide();
-        setCornerWidget(m_closeButton, TopRight);
+        setCornerWidget(m_closeButton, Qt::TopRight);
 
         if (m_closeOnHover)
             setHoverCloseButton(true);
