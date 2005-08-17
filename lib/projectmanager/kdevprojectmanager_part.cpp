@@ -52,6 +52,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 {
     setObjectName(QString::fromUtf8(name));
 
+    m_workspace = 0;
     m_projectModel = new KDevProjectModel(this);
     m_dirty = false;
 
