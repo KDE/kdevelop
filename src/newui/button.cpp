@@ -68,15 +68,8 @@ QString Button::description() const
     return m_description;
 }
 
-void Button::drawButton(QPainter *p)
+QStyleOptionButton Button::styleOption() const
 {
-    QRect r = rect();
-    QSize sh = r.size();
-    if (m_place == Ideal::Left || m_place == Ideal::Right) {
-        sh.setHeight(r.width());
-        sh.setWidth(r.height());
-    }
-
     QStyleOptionButton opt;
     opt.init(this);
 
@@ -94,37 +87,40 @@ void Button::drawButton(QPainter *p)
 
     opt.text = text();
 
+    return opt;
+}
+
+void Button::paintEvent(QPaintEvent *)
+{
+    QRect r = rect();
+    QSize sh = r.size();
+    if (m_place == Ideal::Left || m_place == Ideal::Right) {
+        sh.setHeight(r.width());
+        sh.setWidth(r.height());
+    }
+
     QPixmap pm(sh.width(), sh.height());
     pm.fill(eraseColor());
 
     QStylePainter p2(&pm, this);
-    p2.drawControl(QStyle::CE_PushButton, opt);
+    p2.drawControl(QStyle::CE_PushButton, styleOption());
 
-    /* ### harryF TODO
-    style().drawControl(QStyle::CE_PushButton,&p2,this, QRect(0,0,pm.width(),pm.height()), colorGroup(),flags);
-    style().drawControl(QStyle::CE_PushButtonLabel, &p2, this,
-                        QRect(0,0,pm.width(),pm.height()),
-                        colorGroup(), flags, QStyleOption());
-    */
+    QPainter p(this);
 
     switch (m_place)
     {
         case Ideal::Left:
-                p->rotate(-90);
-                p->drawPixmap(1-pm.width(), 0, pm);
+                p.rotate(-90);
+                p.drawPixmap(1-pm.width(), 0, pm);
                 break;
         case Ideal::Right:
-                p->rotate(90);
-                p->drawPixmap(0, 1-pm.height(), pm);
+                p.rotate(90);
+                p.drawPixmap(0, 1-pm.height(), pm);
                 break;
         default:
-                p->drawPixmap(0, 0, pm);
+                p.drawPixmap(0, 0, pm);
                 break;
     }
-}
-
-void Button::drawButtonLabel(QPainter * /*p*/)
-{
 }
 
 ButtonMode Button::mode()
@@ -172,6 +168,7 @@ QSize Button::sizeHint() const
 QSize Button::sizeHint(const QString &text) const
 {
     constPolish();
+    QStyleOptionButton option = styleOption();
     int w = 0, h = 0;
 
     if ( iconSet() && !iconSet()->isNull() && (m_buttonBar->mode() != Text) ) {
@@ -180,8 +177,9 @@ QSize Button::sizeHint(const QString &text) const
         w += iw;
         h = QMAX( h, ih );
     }
- // ###  if ( isMenuButton() )
- // ### TODO       w += style().pixelMetric(QStyle::PM_MenuButtonIndicator, this);
+    if ( isMenuButton() ) {
+        w += style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &option, this);
+    }
     if ( pixmap() ) {
         QPixmap *pm = (QPixmap *)pixmap();
         w += pm->width();
@@ -199,9 +197,8 @@ QSize Button::sizeHint(const QString &text) const
             h = QMAX(h, sz.height());
     }
 
-// ### TODO    return (style().sizeFromContents(QStyle::CT_ToolButton, this, QSize(w, h)).
-         //   expandedTo(QApplication::globalStrut()));
-    return QSize();
+    return (style()->sizeFromContents(QStyle::CT_ToolButton, &option, QSize(w, h), this).
+            expandedTo(QApplication::globalStrut()));
 }
 
 void Ideal::Button::updateSize()

@@ -25,6 +25,8 @@
 
 #include "comdefs.h"
 
+class QStyleOptionButton;
+
 namespace Ideal {
 
 class ButtonBar;
@@ -63,8 +65,7 @@ public:
 protected:
     ButtonMode mode();
 
-    virtual void drawButton(QPainter *p);
-    virtual void drawButtonLabel(QPainter *p);
+    void paintEvent(QPaintEvent *);
 
 private:
     virtual ~Button();
@@ -75,6 +76,7 @@ private:
     void disableIconSet();
     void enableText();
     void disableText();
+    QStyleOptionButton styleOption() const;
 
     ButtonBar *m_buttonBar;
 

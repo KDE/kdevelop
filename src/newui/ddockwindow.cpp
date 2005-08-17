@@ -29,6 +29,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QBoxLayout>
+#include <qdebug.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -163,7 +164,6 @@ QWidget *DDockWindow::currentWidget() const
 
 void DDockWindow::addWidget(const QString &title, QWidget *widget)
 {
-    kdDebug() << k_funcinfo << endl;
     QPixmap *pm = const_cast<QPixmap*>(widget->icon());
     Ideal::Button *button;
     if (pm != 0)

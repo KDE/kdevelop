@@ -20,6 +20,7 @@
 #include "simplemainwindow.h"
 
 #include <QPixmap>
+#include <qdebug.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -127,6 +128,7 @@ void SimpleMainWindow::embedOutputView(QWidget *view, const QString &title, cons
 {
     toolWindow(DDockWindow::Bottom)->addWidget(title, view);
     m_docks[view] = DDockWindow::Bottom;
+    toolWindow(DDockWindow::Bottom)->show();
 }
 
 void SimpleMainWindow::embedSelectViewRight(QWidget *view, const QString &title, const QString &/*toolTip*/)

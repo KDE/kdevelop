@@ -57,9 +57,7 @@ void KDevStatusBar::activePartChanged(KParts::Part *part)
 
     if (part)
     {
-        qDebug() << "@@@@@@@@@@@@@ GOT PART" << part << part->widget();
         _view = qobject_cast<KTextEditor::View *>(part->widget());
-        qDebug() << "@@@@@@@@@@@@@ GOT VIEW" << _view;
         if (_view) {
             connect( _view, SIGNAL( viewStatusMsg( const QString & ) ), // harryF: ### TODO
                     this, SLOT( setStatus( const QString & ) ) );
