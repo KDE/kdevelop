@@ -22,7 +22,7 @@
 #define _URLUTIL_H_
 
 #include <qstring.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <kurl.h>
 
 /**
@@ -34,9 +34,9 @@ Utility functions to operate on URLs.
 namespace URLUtil
 {
   /**Position of a slash in the URL.*/
-  enum SlashesPosition { 
+  enum SlashesPosition {
       SLASH_PREFIX = 1    /**<URL has slash as a prefix.*/,
-      SLASH_SUFFIX = 2    /**<URL has slash as a suffix.*/ 
+      SLASH_SUFFIX = 2    /**<URL has slash as a suffix.*/
   };
 
   /**
@@ -50,24 +50,24 @@ namespace URLUtil
    */
   QString directory(const QString & pathName);
   /**
-   * @return The relative path between a parent and child URL, or blank if the specified 
+   * @return The relative path between a parent and child URL, or blank if the specified
    * child is not a child of parent.
    * @param parent The parent URL.
    * @param child The child URL.
-   * @param slashPolicy If parent and child are equal then the function returns "/" if 
+   * @param slashPolicy If parent and child are equal then the function returns "/" if
    * slashPolicy contains SLASH_PREFIX and otherwise "".\n"/" is appended to a result
-   * if slashPolicy contains SLASH_SUFFIX.\n"/" is prepended to a result if 
+   * if slashPolicy contains SLASH_SUFFIX.\n"/" is prepended to a result if
    * slashPolicy contains SLASH_PREFIX.
    */
   QString relativePath(const KURL & parent, const KURL & child, uint slashPolicy = SLASH_PREFIX);
   /**
-   * @return The relative path between a parent and child URL, or blank if the specified 
+   * @return The relative path between a parent and child URL, or blank if the specified
    * child is not a child of parent.
    * @param parent The parent URL.
    * @param child The child URL.
-   * @param slashPolicy If parent and child are equal then the function returns "/" if 
+   * @param slashPolicy If parent and child are equal then the function returns "/" if
    * slashPolicy contains SLASH_PREFIX and otherwise "".\n"/" is appended to a result
-   * if slashPolicy contains SLASH_SUFFIX.\n"/" is prepended to a result if 
+   * if slashPolicy contains SLASH_SUFFIX.\n"/" is prepended to a result if
    * slashPolicy contains SLASH_PREFIX.
    */
   QString relativePath(const QString & parent, const QString & child, uint slashPolicy = SLASH_PREFIX);
@@ -117,10 +117,10 @@ namespace URLUtil
   * QString relPathName = extractDirPathRelative( baseUrl, url ); // == "parts/cvs/"
   * QString absPathName = extractDirPathAbsolute( url ); // == "/home/mario/src/kdevelop/parts/cvs/"
   * @endcode
-  * Note that if you pass a file name in @p url (instead of a directory) or the 
+  * Note that if you pass a file name in @p url (instead of a directory) or the
   * @p baseUrl is not contained in @p url then the function will return "" (void string).
   *
-  * @param baseDirUrl Base directory URL.  
+  * @param baseDirUrl Base directory URL.
   * @param url Base directory URL.
   * @return The relative path between @p url and @p baseDirUrl.
   */

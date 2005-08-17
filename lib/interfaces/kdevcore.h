@@ -34,7 +34,6 @@ The interface to the application core and context menu classes.
 */
 
 #include <qstringlist.h>
-#include <q3dict.h>
 #include <qobject.h>
 //Added by qt3to4:
 #include <QMenu>
@@ -61,7 +60,7 @@ info associated to a context menu". Several context menu can be defined,
 each defining different information: because of these context menus being
 used in many modules, they are defined here.
 
-When context menu with a certain "context" associated appears, KDevelop core 
+When context menu with a certain "context" associated appears, KDevelop core
 sends a notification signal and all plugins which receive this signal have
 the ability to add own items into the menu. For example, VCS plugin could
 add "commit" and "update" menu items to the context menu of a file.
@@ -78,7 +77,7 @@ to if you reimplement QWidget::contextMenuEvent method.
 <b>How to fill context menu from a plugin:</b>
 -# Create a @code contextMenu(QPopupMenu *, const Context *) @endcode slot in your plugin class.
 -# Connect KDevCore::contextMenu(QPopupMenu *, const Context *) signal to that slot in
-the constructor of your plugin:\n 
+the constructor of your plugin:\n
 @code
 connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
     this, SLOT(contextMenu(QPopupMenu *, const Context *)));
@@ -106,7 +105,7 @@ public:
     contexts. <strong>We reserve enum values until 1000 (yeah, it is one thousand )
     for kdevelop official context types.</strong>*/
     enum Type
-    { 
+    {
         EditorContext,            /**<Editor context menu.*/
         DocumentationContext,     /**<Documentation browser context menu.*/
         FileContext,              /**<File context menu.*/
@@ -141,7 +140,7 @@ public:
     @param wordstr The current word under the cursor.*/
     EditorContext(const KURL &url, int line, int col,
         const QString &linestr, const QString &wordstr);
-    
+
     /**Destructor.*/
     virtual ~EditorContext();
 
@@ -215,7 +214,7 @@ public:
     /**Builds the file context using a @ref KURL::List
     @param someURLs The list of selected files URLs.*/
     FileContext(const KURL::List &someURLs);
-    
+
     /**Destructor.*/
     virtual ~FileContext();
 
@@ -329,7 +328,7 @@ public:
 
     /**Marks the component as running (or not running). As long as at least one
     component is running, the stop button is enabled. When it is pressed,
-    component get a stopButtonClicked(). This is usable for plugins which 
+    component get a stopButtonClicked(). This is usable for plugins which
     run certain commands and want KDevelop core to be notified of that.
     If core is notified, it can allow the user to stop(interrupt) the command
     manually by means of stop button.

@@ -27,7 +27,7 @@
 #include <qstring.h>
 #include <qwidget.h>
 #include <qmap.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 
 #include <kdevplugin.h>
 
@@ -44,16 +44,16 @@ Used, for example in file views to display VCS related information about files.
 struct VCSFileInfo
 {
     /**State of the file.*/
-    enum FileState { 
-        Unknown        /**<No VCS information about a file is known.*/, 
-        Added          /**<File was added to the repository but not commited.*/, 
-        Uptodate       /**<File was updated or it is already at up to date version.*/, 
-        Modified       /**<File was modified locally.*/, 
-        Conflict       /**<Local version conflicts with the one in a repository.*/, 
-        Sticky         /**<File is sticky.*/, 
-        NeedsPatch     /**<File needs a patch.*/, 
-        NeedsCheckout  /**<File needs to be checkout again.*/, 
-        Directory      /**<This is a directory.*/ 
+    enum FileState {
+        Unknown        /**<No VCS information about a file is known.*/,
+        Added          /**<File was added to the repository but not commited.*/,
+        Uptodate       /**<File was updated or it is already at up to date version.*/,
+        Modified       /**<File was modified locally.*/,
+        Conflict       /**<Local version conflicts with the one in a repository.*/,
+        Sticky         /**<File is sticky.*/,
+        NeedsPatch     /**<File needs a patch.*/,
+        NeedsCheckout  /**<File needs to be checkout again.*/,
+        Directory      /**<This is a directory.*/
     };
 
     /**Constructor.*/
@@ -62,7 +62,7 @@ struct VCSFileInfo
     @param fn The file name (without a path).
     @param workRev The current working revision of a file.
     @param repoRev The last revision of a file in the repository.
-    @param aState The state of a file.*/    
+    @param aState The state of a file.*/
     VCSFileInfo( QString fn, QString workRev, QString repoRev, FileState aState )
         : fileName(fn), workRevision(workRev), repoRevision(repoRev), state(aState) {}
 
@@ -187,9 +187,9 @@ public:
     KDevVCSFileInfoProvider(KDevVersionControl *parent)
         : QObject( parent ), m_owner(parent) {}
 
-    /**Gets the status for local files in the specified directory: 
+    /**Gets the status for local files in the specified directory:
     the info are collected locally so they are necessarily in sync with the repository
-    
+
     This is a <b>synchronous operation</b> (blocking).
     @param dirPath The relative (to project dir) directory path to stat.
     @return Status for all <b>registered</b> files.*/
@@ -197,12 +197,12 @@ public:
 
     /**Starts a request for directory status to the remote repository.
     Requests and answers are asynchronous.
-    
+
     This is an <b>asynchronous operation for requesting data</b>, so
-    for obvious reasons: the caller must connect the statusReady() signal and 
+    for obvious reasons: the caller must connect the statusReady() signal and
     check for the return value of this method.
     @param dirPath The (relative to project directory) directory which status you are asking for.
-    @param callerData The pointer to some data you want the provider will return 
+    @param callerData The pointer to some data you want the provider will return
     to you when it has done.
     @return true if the request has been successfully started, false otherwise.*/
     virtual bool requestStatus( const QString &dirPath, void *callerData ) = 0;
@@ -210,7 +210,7 @@ public:
 signals:
     /**Emitted when the status request to remote repository has finished.
     @param fileInfoMap The status for <b>registered in repository</b> files.
-    @param callerData The pointer to some data you want the provider will return 
+    @param callerData The pointer to some data you want the provider will return
     to you when it has done
     @see requestStatus for to find out when this signal should be used.*/
     void statusReady(const VCSFileInfoMap &fileInfoMap, void *callerData);
