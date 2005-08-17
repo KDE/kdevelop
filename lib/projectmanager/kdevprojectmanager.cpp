@@ -139,6 +139,10 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
         {
           menu.addTitle(i18n("File: %1").arg(file->fileInfo().fileName()));
         }
+      else if (KDevProjectTargetItem *target = item->target())
+        {
+          menu.addTitle(i18n("Target: %1").arg(target->name()));
+        }
 
       ProjectItemContext context(item);
       part()->core()->fillContextMenu(&menu, &context);
