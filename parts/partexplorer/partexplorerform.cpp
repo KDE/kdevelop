@@ -82,11 +82,8 @@ protected:
                        static_cast<QHelpEvent *>(ev)->pos() ) );
             if ( item )
             {
-                QRect r = itemRect( item );
-                if ( r.isValid() ) {
-                    QToolTip::showText( r.center(), item->tipText(), this );
-                    return true;
-                }
+                QToolTip::showText( static_cast<QHelpEvent *>(ev)->globalPos(), item->tipText(), this );
+                return true;
             }
         }
 
