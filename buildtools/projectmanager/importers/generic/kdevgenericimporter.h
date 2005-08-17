@@ -16,21 +16,21 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-#ifndef KDEVCUSTOMIMPORTER_H
-#define KDEVCUSTOMIMPORTER_H
+#ifndef KDEVGENERICIMPORTER_H
+#define KDEVGENERICIMPORTER_H
 
 #include <kdevprojecteditor.h>
 #include <qstringlist.h>
 
 class QFileInfo;
 
-class KDevCustomImporter: public KDevProjectEditor
+class KDevGenericImporter: public KDevProjectEditor
 {
     Q_OBJECT
 public:
-    KDevCustomImporter(QObject *parent = 0, const char *name = 0, 
+    KDevGenericImporter(QObject *parent = 0, const char *name = 0, 
             const QStringList &args = QStringList());
-    virtual ~KDevCustomImporter();
+    virtual ~KDevGenericImporter();
     
 //
 // KDevProjectEditor interface
@@ -64,9 +64,9 @@ private:
 private:
     KDevProject *m_project;
     
-    static const QString &customImporter;
+    static const QString &genericImporter;
     QStringList includes;
     QStringList excludes;
 };
 
-#endif // KDEVCUSTOMIMPORTER_H
+#endif // KDEVGENERICIMPORTER_H

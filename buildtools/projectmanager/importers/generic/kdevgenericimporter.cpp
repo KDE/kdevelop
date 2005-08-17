@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-#include "kdevcustomimporter.h"
+#include "kdevgenericimporter.h"
 
 #include <kdevproject.h>
 #include <domutil.h>
@@ -30,20 +30,20 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-const QString &KDevCustomImporter::customImporter =
-    KGlobal::staticQString("/kdevprojectmanager/importer/custom");
+const QString &KDevGenericImporter::genericImporter =
+    KGlobal::staticQString("/kdevprojectmanager/importer/generic");
 
-K_EXPORT_COMPONENT_FACTORY(libkdevcustomimporter, KGenericFactory<KDevCustomImporter>("kdevcustomimporter"))
+K_EXPORT_COMPONENT_FACTORY(libkdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
 
-KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const QStringList &)
+KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, const QStringList &)
     : KDevProjectEditor(parent, name)
 {
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
     QDomDocument &dom = *project()->projectDom();
-    includes = DomUtil::readListEntry(dom, customImporter, "include");
-    excludes = DomUtil::readListEntry(dom, customImporter, "exclude");
+    includes = DomUtil::readListEntry(dom, genericImporter, "include");
+    excludes = DomUtil::readListEntry(dom, genericImporter, "exclude");
 
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c";   // ### remove me
@@ -51,16 +51,16 @@ KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const 
     excludes << "CVS" << "moc_*.cpp"; // ### remove me
 }
 
-KDevCustomImporter::~KDevCustomImporter()
+KDevGenericImporter::~KDevGenericImporter()
 {
 }
 
-KDevProject *KDevCustomImporter::project() const
+KDevProject *KDevGenericImporter::project() const
 {
     return m_project;
 }
 
-bool KDevCustomImporter::isValid(const QFileInfo &fileInfo) const
+bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
 {
     QString fileName = fileInfo.fileName();
 
@@ -85,7 +85,7 @@ bool KDevCustomImporter::isValid(const QFileInfo &fileInfo) const
     return true;
 }
 
-ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
+ProjectFolderList KDevGenericImporter::parse(ProjectFolderDom item)
 {
     static const QString &dot = KGlobal::staticQString(".");
     static const QString &dotdot = KGlobal::staticQString("..");
@@ -119,7 +119,7 @@ ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
     return folder_list;
 }
 
-ProjectItemDom KDevCustomImporter::import(ProjectModel *model, const QString &fileName)
+ProjectItemDom KDevGenericImporter::import(ProjectModel *model, const QString &fileName)
 {
     QFileInfo fileInfo(fileName);
     if (fileInfo.isDir()) {
@@ -135,72 +135,72 @@ ProjectItemDom KDevCustomImporter::import(ProjectModel *model, const QString &fi
     return ProjectItemDom();
 }
 
-QString KDevCustomImporter::findMakefile(ProjectFolderDom dom) const
+QString KDevGenericImporter::findMakefile(ProjectFolderDom dom) const
 {
     Q_UNUSED(dom);
     return QString::null;
 }
 
-QStringList KDevCustomImporter::findMakefiles(ProjectFolderDom dom) const
+QStringList KDevGenericImporter::findMakefiles(ProjectFolderDom dom) const
 {
     Q_UNUSED(dom);
     return QStringList();
 }
 
-bool KDevCustomImporter::addFolder(ProjectFolderDom // folder
+bool KDevGenericImporter::addFolder(ProjectFolderDom // folder
                                    , ProjectFolderDom // parent
                                    )
 {
     return false;
 }
 
-bool KDevCustomImporter::addTarget(ProjectTargetDom // target
+bool KDevGenericImporter::addTarget(ProjectTargetDom // target
                                    , ProjectFolderDom // parent
                                    )
 {
     return false;
 }
 
-bool KDevCustomImporter::addFile(ProjectFileDom // file
+bool KDevGenericImporter::addFile(ProjectFileDom // file
                                  , ProjectFolderDom // parent
                                  )
 {
     return false;
 }
 
-bool KDevCustomImporter::addFile(ProjectFileDom // file
+bool KDevGenericImporter::addFile(ProjectFileDom // file
                                  , ProjectTargetDom // parent
                                  )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeFolder(ProjectFolderDom // folder
+bool KDevGenericImporter::removeFolder(ProjectFolderDom // folder
                                       , ProjectFolderDom // parent
                                       )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeTarget(ProjectTargetDom // target
+bool KDevGenericImporter::removeTarget(ProjectTargetDom // target
                                       , ProjectFolderDom // parent
                                       )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeFile(ProjectFileDom // file
+bool KDevGenericImporter::removeFile(ProjectFileDom // file
                                     , ProjectFolderDom // parent
                                     )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeFile(ProjectFileDom // file
+bool KDevGenericImporter::removeFile(ProjectFileDom // file
                                     , ProjectTargetDom // parent
                                     )
 {
     return false;
 }
 
-#include "kdevcustomimporter.moc"
+#include "kdevgenericimporter.moc"

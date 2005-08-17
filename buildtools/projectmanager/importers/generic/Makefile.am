@@ -8,19 +8,19 @@ INCLUDES = \
 METASOURCES = AUTO
 
 lib_LTLIBRARIES = \
-    libkdevcustomimporter.la
+    libkdevgenericimporter.la
 
 noinst_HEADERS = \
-    kdevcustomimporter.h
+    kdevgenericimporter.h
     
-libkdevcustomimporter_la_SOURCES = \
-    kdevcustomimporter.cpp
+libkdevgenericimporter_la_SOURCES = \
+    kdevgenericimporter.cpp
 
-kde_services_DATA = kdevcustomimporter.desktop
+kde_services_DATA = kdevgenericimporter.desktop
 
-libkdevcustomimporter_la_LIBADD = \
+libkdevgenericimporter_la_LIBADD = \
     $(top_builddir)/lib/projectmanager/interfaces/libprojectmanager_interfaces.la \
     $(top_builddir)/lib/libkdevelop.la
     
-libkdevcustomimporter_la_LDFLAGS = \
+libkdevgenericimporter_la_LDFLAGS = \
     -module $(all_libraries) $(KDE_PLUGIN)
