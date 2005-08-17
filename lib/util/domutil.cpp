@@ -223,7 +223,7 @@ void DomUtil::writePairListEntry(QDomDocument &doc, const QString &path, const Q
 DomPath DomUtil::resolvPathStringExt(const QString pathstring)
 {
     // parse path
-    unsigned int i;
+    int i;
     QStringList pathParts = QStringList::split('/',pathstring);
     DomPath dompath;
     for (i=0; i<pathParts.count(); i++)
@@ -235,7 +235,7 @@ DomPath DomUtil::resolvPathStringExt(const QString pathstring)
       {
         // handle attributes
         QStringList attrParts = QStringList::split(';',pathElemParts[1]);
-        for (unsigned int j=0; j<attrParts.count(); j++)
+        for (int j=0; j<attrParts.count(); j++)
         {
           QStringList attribSet = QStringList::split('=',attrParts[j]);
           if (attribSet.count()<2)
@@ -264,13 +264,13 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
   QDomElement elem = doc.documentElement();
   QDomNodeList children;
   QDomElement nextElem = elem;
-  for (unsigned int j=0; j<dompath.count(); j++)
+  for (int j=0; j<dompath.count(); j++)
   {
     children = nextElem.childNodes();
     DomPathElement dompathelement= dompath[j];
     bool wrongchild = false;
     int matchCount = 0;
-    for (unsigned int i=0; i<children.count(); i++)
+    for (int i=0; i<children.count(); i++)
     {
       wrongchild = false;
       QDomElement child = children.item(i).toElement();
@@ -278,7 +278,7 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
       tag = dompathelement.tagName;
       if (child.tagName() == dompathelement.tagName)
       {
-        for (unsigned int k=0; k<dompathelement.attribute.count(); k++)
+        for (int k=0; k<dompathelement.attribute.count(); k++)
         {
           DomAttribute domattribute = dompathelement.attribute[k];
           QDomAttr domattr = child.attributeNode(domattribute.name);
@@ -342,7 +342,7 @@ bool DomUtil::removeTextNodes(QDomDocument doc,QString pathExt)
   if (elem.isNull())
     return false;
   QDomNodeList children = elem.childNodes();
-  for (unsigned int i=0;i<children.count();i++)
+  for (int i=0;i<children.count();i++)
     if (children.item(i).isText())
       elem.removeChild(children.item(i));
   return true;

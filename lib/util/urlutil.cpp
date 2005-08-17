@@ -15,8 +15,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include <qstringlist.h>
 
@@ -56,7 +56,7 @@ QString URLUtil::directory(const QString & name) {
 QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slashPolicy) {
   bool slashPrefix = slashPolicy & SLASH_PREFIX;
   bool slashSuffix = slashPolicy & SLASH_SUFFIX;
-  if (parent.equals(child,true))
+  if (parent.cmp(child,true))
     return slashPrefix ? QString("/") : QString("");
 
   if (!parent.isParentOf(child)) return QString();
@@ -84,13 +84,13 @@ QString URLUtil::upDir(const QString & path, bool slashSuffix) {
 KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & child) {
 
   // if already a child of source, then fine
-  if (source.isParentOf(child) || source.equals(child,true)) return child;
+  if (source.isParentOf(child) || source.cmp(child,true)) return child;
 
   // if not a child of dest, return blank URL (error)
-  if (!dest.isParentOf(child) && !dest.equals(child,true)) return KURL();
+  if (!dest.isParentOf(child) && !dest.cmp(child,true)) return KURL();
 
   // if child is same as dest, return source
-  if (dest.equals(child,true)) return source;
+  if (dest.cmp(child,true)) return source;
 
   // calculate
   QString childUrlStr = child.url(-1);
@@ -194,7 +194,7 @@ void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
   }
   kdDebug(9000) << " List has " << urls.count() << " elements." << endl;
 
-  for (size_t i = 0; i<urls.count(); ++i)
+  for (int i = 0; i<urls.count(); ++i)
   {
     KURL url = urls[ i ];
 //    kdDebug(9000) << " * Element = "  << url.path() << endl;
@@ -207,7 +207,7 @@ QStringList URLUtil::toRelativePaths( const QString &baseDir, const KURL::List &
 {
   QStringList paths;
 
-  for (size_t i=0; i<urls.count(); ++i)
+  for (int i=0; i<urls.count(); ++i)
   {
     paths << extractPathNameRelative( baseDir, urls[i] );
   }
@@ -228,7 +228,7 @@ QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fil
   QString resFileName = file.last();
   file.remove(file.last());
 
-  uint i = 0;
+  int i = 0;
   while ( (i < dir.count()) && (i < (file.count())) && (dir[i] == file[i]) )
     i++;
 
@@ -261,11 +261,22 @@ QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fil
 
 ///////////////////////////////////////////////////////////////////////////////
 
-//TODO: remove for KDE4
+// code from qt-3.1.2 version of QDir::canonicalPath()
 QString URLUtil::canonicalPath( const QString & path )
 {
-    QDir dir(path);
-    return dir.canonicalPath();
+    QString r;
+    char cur[PATH_MAX+1];
+    if ( ::getcwd( cur, PATH_MAX ) )
+    {
+        char tmp[PATH_MAX+1];
+        if( ::realpath( QFile::encodeName( path ), tmp ) )
+        {
+            r = QFile::decodeName( tmp );
+        }
+        //always make sure we go back to the current dir
+        ::chdir( cur );
+    }
+    return r;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

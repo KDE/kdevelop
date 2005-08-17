@@ -24,8 +24,8 @@
 #include <klistview.h>
 #else
 #include <q3listview.h>
-#define KListView Q3ListView
-#define KListViewItem Q3ListViewItem
+#define QTreeWidget Q3ListView
+#define QTreeWidgetItem QTreeWidgetItem
 #endif
 
 #include "propertylist.h"
@@ -57,7 +57,7 @@ creation of property widgets from the machine factory.
 @see Machine
 @see PropertyMachineFactory
 */
-class PropertyEditor: public KListView{
+class PropertyEditor: public QTreeWidget{
    Q_OBJECT
 public:
     /**Constructs the property editor.*/
@@ -88,14 +88,14 @@ protected slots:
     void propertyChanged(MultiProperty *property, const QVariant &value);
 
     /**Shows property editor.*/
-    void slotClicked(Q3ListViewItem* item);
+    void slotClicked(QTreeWidgetItem* item);
     void updateEditorSize();
     
     /**Undoes the last change in property editor.*/
     void undo();
     
 protected:
-    void editItem(Q3ListViewItem*, int);
+    void editItem(QTreeWidgetItem*, int);
     void hideEditor();
     void showEditor(PropertyItem *item);
     void placeEditor(PropertyItem *item);
@@ -119,7 +119,7 @@ private:
     QGridLayout *m_currentEditLayout;
     
     bool m_doubleClickForEdit;
-    Q3ListViewItem* m_lastClickedItem;
+    QTreeWidgetItem* m_lastClickedItem;
     
     QPushButton *m_undoButton;
     

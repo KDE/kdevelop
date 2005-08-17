@@ -92,7 +92,7 @@ QString Name::cleanName( const QString & rurl )
 {
     QString temp;
     bool wasSlash = false;
-    for (unsigned int i = 0; i < rurl.length(); ++i)
+    for (int i = 0; i < rurl.length(); ++i)
     {
         if (wasSlash && (rurl[i] == '/'))
             continue;
@@ -197,7 +197,7 @@ Name Name::relativeName( const QString &base, const QString &url )
         resFileName += "/";
     file.remove(file.last());
 
-    uint i = 0;
+    int i = 0;
     while ( (i < dir.count()) && (i < (file.count())) && (dir[i] == file[i]) )
         i++;
 
@@ -366,4 +366,4 @@ void File::setRURL( QString rurl )
     URL::setRURL(rurl, Name::File);
 }
 
-}
+};

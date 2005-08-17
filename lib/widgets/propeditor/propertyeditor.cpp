@@ -43,16 +43,16 @@
 
 namespace PropertyLib{
 
-class PropertyItem: public KListViewItem{
+class PropertyItem: public QTreeWidgetItem{
 public:
     PropertyItem(PropertyEditor *parent, MultiProperty *property)
-        :KListViewItem(parent, property->description()), m_editor(parent), m_property(property),
+        :QTreeWidgetItem(parent, property->description()), m_editor(parent), m_property(property),
         m_changed(false)
     {
     }
 
-    PropertyItem(PropertyEditor *editor, KListViewItem *parent, MultiProperty *property)
-        :KListViewItem(parent, property->description()), m_editor(editor),
+    PropertyItem(PropertyEditor *editor, QTreeWidgetItem *parent, MultiProperty *property)
+        :QTreeWidgetItem(parent, property->description()), m_editor(editor),
         m_property(property), m_changed(false)
     {
     }
@@ -100,12 +100,12 @@ public:
             m_editor->machine(m_property)->propertyEditor->drawViewer(p, icg, r, valueToDraw);
             return;
         }
-        KListViewItem::paintCell(p, cg, column, width, align);
+        QTreeWidgetItem::paintCell(p, cg, column, width, align);
     }
 
     virtual void setup()
     {
-        KListViewItem::setup();
+        QTreeWidgetItem::setup();
         setHeight(static_cast<int>(height()*1.5));
     }
 
@@ -121,15 +121,15 @@ private:
 };
 
 
-class PropertyGroupItem: public KListViewItem{
+class PropertyGroupItem: public QTreeWidgetItem{
 public:
-    PropertyGroupItem(KListView *parent, const QString &name)
-        :KListViewItem(parent)
+    PropertyGroupItem(QTreeWidget *parent, const QString &name)
+        :QTreeWidgetItem(parent)
     {
         init();
     }
-    PropertyGroupItem(KListViewItem *parent, const QString &name)
-        :KListViewItem(parent)
+    PropertyGroupItem(QTreeWidgetItem *parent, const QString &name)
+        :QTreeWidgetItem(parent)
     {
         init();
     }
@@ -144,11 +144,11 @@ public:
             p->setBrush(cg.highlight());
             p->setPen(cg.highlightedText());
         }
-        KListViewItem::paintCell(p, cg, column, width, align);
+        QTreeWidgetItem::paintCell(p, cg, column, width, align);
     }
     virtual void setup()
     {
-        KListViewItem::setup();
+        QTreeWidgetItem::setup();
         setHeight(static_cast<int>(height()*1.4));
     }
 
@@ -159,16 +159,16 @@ private:
     }
 };
 
-class SeparatorItem: public KListViewItem{
+class SeparatorItem: public QTreeWidgetItem{
 public:
-    SeparatorItem(KListView *parent)
-        :KListViewItem(parent)
+    SeparatorItem(QTreeWidget *parent)
+        :QTreeWidgetItem(parent)
     {
         setSelectable(false);
     }
 };
 PropertyEditor::PropertyEditor(QWidget *parent)
-    :KListView(parent)
+    :QTreeWidget(parent)
 {
     setSorting(-1);
 
@@ -182,8 +182,8 @@ PropertyEditor::PropertyEditor(QWidget *parent)
 
     connect(header(), SIGNAL(sizeChange(int, int, int)),
         this, SLOT(updateEditorSize()));
-    connect(this, SIGNAL(currentChanged(Q3ListViewItem*)),
-        this, SLOT(slotClicked(Q3ListViewItem*)));
+    connect(this, SIGNAL(currentChanged(QTreeWidgetItem*)),
+        this, SLOT(slotClicked(QTreeWidgetItem*)));
 
     m_currentEditItem = 0;
     m_doubleClickForEdit = true;
@@ -305,7 +305,7 @@ void PropertyEditor::propertyValueChanged(Property *property)
     else
     {
 //        repaint all items
-        Q3ListViewItemIterator it(this);
+        QTreeWidgetItemIterator it(this);
         while (it.current())
         {
             repaintItem(it.current());
@@ -420,7 +420,7 @@ void PropertyEditor::updateEditorSize()
         placeEditor(m_currentEditItem);
 }
 
-void PropertyEditor::slotClicked(Q3ListViewItem *item)
+void PropertyEditor::slotClicked(QTreeWidgetItem *item)
 {
     if (item == 0)
     {

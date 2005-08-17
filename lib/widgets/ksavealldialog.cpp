@@ -57,7 +57,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
 
-	_listview = new KListView( top );
+	_listview = new QTreeWidget( top );
 	_listview->addColumn( "" );
 	_listview->header()->hide();
 	_listview->setResizeMode( Q3ListView::LastColumn );

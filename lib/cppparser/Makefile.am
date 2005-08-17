@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkdevcppparser.la
 libkdevcppparser_la_LDFLAGS = $(all_libraries)
 libkdevcppparser_la_SOURCES = \
 	ast.cpp      errors.cpp  list.cpp  parser.cpp       treedump.cpp \
-	control.cpp  lexer.cpp   main.cpp  smallobject.cpp  treewalker.cpp
+	control.cpp  lexer.cpp   smallobject.cpp  treewalker.cpp
 
 kdevcppparserincludedir = $(includedir)/kdevelop/cppparser
 kdevcppparserinclude_HEADERS = \
