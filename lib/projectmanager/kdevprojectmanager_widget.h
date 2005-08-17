@@ -99,6 +99,8 @@ public:
     ProjectViewItem(ProjectItemDom dom, ProjectView *parent);
     virtual ~ProjectViewItem();
 
+    virtual void setup();
+
     virtual ProjectView *projectView() const;
 
     inline ProjectItemDom dom() const
@@ -106,7 +108,7 @@ public:
 
     virtual ProjectViewItem *findProjectItem(const QString &path) const;
 
-    void setup();
+    virtual void insertItem(QTreeWidgetItem */*item*/) { /*addChild(item);*/ }
 
     virtual void process(ProjectItemDom dom, ProcessOperation op = Insert);
     virtual void processWorkspace(ProjectWorkspaceDom dom, ProcessOperation op = Insert);
@@ -137,7 +139,7 @@ public:
     inline ProjectModel *projectModel() const
     { return part()->projectModel(); }
 
-    inline QTreeWidget *listView() const
+    inline QTreeWidget *treeWidget() const
     { return m_listView; }
 
     KToolBar *toolBar() const;

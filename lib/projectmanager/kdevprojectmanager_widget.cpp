@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -103,12 +103,12 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
     m_overview = new ProjectOverview(this, splitter);
     m_details = new ProjectDetails(this, splitter);
 
-    connect(m_overview->listView(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
+    connect(m_overview->treeWidget(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
         this, SLOT(updateDetails(QTreeWidgetItem*)));
 
-    connect(m_overview->listView(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
+    connect(m_overview->treeWidget(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
         this, SLOT(updateActions()));
-    connect(m_details->listView(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
+    connect(m_details->treeWidget(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
         this, SLOT(updateActions()));
 }
 
@@ -201,7 +201,7 @@ void KDevProjectManagerWidget::createFolder()
                 overview()->refresh();
                 ProjectViewItem *projectItem = overview()->findProjectItem(item->name());
                 kdDebug(9000) << "==================> projectItem:" << projectItem << " name:" << item->name() << endl;
-                overview()->listView()->setItemSelected(projectItem, true);
+                overview()->treeWidget()->setItemSelected(projectItem, true);
             }
         }
     }
@@ -216,20 +216,18 @@ class ProjectRoot: public ProjectViewItem
 {
 public:
     ProjectRoot(ProjectView *parent)
-        : ProjectViewItem(ProjectItemDom(), parent),
+        : ProjectViewItem(ProjectItemDom(), (ProjectView*) 0),
           m_projectView(parent)
     {
-        int index = m_projectView->listView()->indexOfTopLevelItem(this);
-        m_projectView->listView()->takeTopLevelItem(index);
+        //int index = m_projectView->treeWidget()->indexOfTopLevelItem(this);
+        //m_projectView->treeWidget()->takeTopLevelItem(index);
     }
 
     virtual ProjectView *projectView() const
     { return m_projectView; }
 
     virtual void insertItem(QTreeWidgetItem *item)
-    {
-        m_projectView->listView()->addTopLevelItem(item);
-    }
+    { m_projectView->treeWidget()->addTopLevelItem(item); }
 
 private:
     ProjectView *m_projectView;
@@ -240,6 +238,7 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
       m_managerWidget(m)
 {
     new QVBoxLayout(this);
+    layout()->setMargin(0);
 
     m_toolBar = new KDevToolBar(this);
     layout()->addWidget(m_toolBar);
@@ -252,7 +251,7 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
 
     fake_root = new ProjectRoot(this);
 
-    m_listView->header()->hide();
+    //m_listView->header()->hide();
     m_listView->setColumnCount(1);
     m_listView->setRootIsDecorated(true);
     m_listView->header()->setResizeMode(0, QHeaderView::Stretch);
@@ -268,7 +267,7 @@ ProjectView::~ProjectView()
 
 ProjectViewItem *ProjectView::selectedItem() const
 {
-    QList<QTreeWidgetItem*> items = listView()->selectedItems();
+    QList<QTreeWidgetItem*> items = treeWidget()->selectedItems();
     if (items.isEmpty())
         return 0;
 
@@ -282,7 +281,7 @@ KToolBar *ProjectView::toolBar() const
 
 void ProjectView::refresh()
 {
-    listView()->clear();
+    treeWidget()->clear();
     // ###
 }
 
@@ -313,11 +312,10 @@ ProjectViewItem::ProjectViewItem(ProjectItemDom dom, ProjectViewItem *parent)
 }
 
 ProjectViewItem::ProjectViewItem(ProjectItemDom dom, ProjectView *parent)
-    : QTreeWidgetItem(parent->listView()),
+    : QTreeWidgetItem(parent->treeWidget()),
       m_dom(dom),
       m_projectView(parent)
 {
-    setup();
 }
 
 ProjectViewItem::~ProjectViewItem()
@@ -347,16 +345,19 @@ void ProjectViewItem::process(ProjectItemDom dom, ProcessOperation op)
 
 void ProjectViewItem::processWorkspace(ProjectWorkspaceDom dom, ProcessOperation op)
 {
+    kdDebug(9000) << "=====================================> process workspace:" << dom->name() << endl;
     Q_ASSERT(dom);
     processFolder(dom->toFolder(), op);
 }
 
 void ProjectViewItem::processFolder(ProjectFolderDom dom, ProcessOperation op)
 {
+    kdDebug(9000) << "=====================================> process folder:" << dom->name() << endl;
     Q_ASSERT(dom);
     Q_ASSERT(projectView());
 
     if (ProjectViewItem *item = projectView()->createProjectItem(dom->toItem(), this)) {
+
         ProjectFolderList folder_list = dom->folderList();
         for (ProjectFolderList::Iterator it = folder_list.begin(); it != folder_list.end(); ++it)
             item->processFolder(*it, op);
@@ -373,6 +374,8 @@ void ProjectViewItem::processFolder(ProjectFolderDom dom, ProcessOperation op)
 
 void ProjectViewItem::processTarget(ProjectTargetDom dom, ProcessOperation op)
 {
+    kdDebug(9000) << "=====================================> process target:" << dom->name() << endl;
+
     Q_ASSERT(dom);
 
     if (ProjectViewItem *item = projectView()->createProjectItem(dom->toItem(), this)) {
@@ -401,26 +404,29 @@ ProjectViewItem *ProjectView::createProjectItem(ProjectItemDom dom, ProjectViewI
     Q_ASSERT(dom);
 
     ProjectViewItem *item = new ProjectViewItem(dom, parent);
+    item->setup();
     item->setText(0, dom->shortDescription());
+    parent->insertItem(item);
+
     return item;
 }
 
 void ProjectViewItem::setup()
 {
-    if (dom()) {
-        if (ProjectWorkspaceDom workspace = dom()->toWorkspace())
-            setIcon(0, SmallIcon("window"));
-        else if (ProjectFolderDom folder = dom()->toFolder())
-        {
-            if (dom()->hasAttribute("Icon"))
-                setIcon(0, SmallIcon(dom()->attribute("Icon").toString()));
-            else
-                setIcon(0, SmallIcon("folder"));
-        }
-        else if (ProjectTargetDom target = dom()->toTarget())
-            setIcon(0, SmallIcon("target_kdevelop"));
-        else if (ProjectFileDom file = dom()->toFile())
-            setIcon(0, SmallIcon("document"));
+    if (!dom())
+        return;
+
+    if (ProjectWorkspaceDom workspace = dom()->toWorkspace()) {
+        setIcon(0, SmallIcon("window"));
+    } else if (ProjectFolderDom folder = dom()->toFolder()) {
+        if (dom()->hasAttribute("Icon"))
+            setIcon(0, SmallIcon(dom()->attribute("Icon").toString()));
+        else
+            setIcon(0, SmallIcon("folder"));
+    } else if (ProjectTargetDom target = dom()->toTarget()) {
+        setIcon(0, SmallIcon("target_kdevelop"));
+    } else if (ProjectFileDom file = dom()->toFile()) {
+        setIcon(0, SmallIcon("document"));
     }
 }
 
@@ -458,7 +464,7 @@ ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *par
     connect(part(), SIGNAL(aboutToRemoveProjectItem(ProjectItemDom)),
         this, SLOT(removeItem(ProjectItemDom)));
 
-    connect(listView(), SIGNAL(contextMenu(QTreeWidget *, QTreeWidgetItem *, const QPoint &)),
+    connect(treeWidget(), SIGNAL(contextMenu(QTreeWidget *, QTreeWidgetItem *, const QPoint &)),
         this, SLOT(contextMenu(QTreeWidget *, QTreeWidgetItem *, const QPoint &)));
 }
 
@@ -473,7 +479,7 @@ ProjectViewItem *ProjectOverview::createProjectItem(ProjectItemDom dom, ProjectV
     ProjectViewItem *item = 0;
     if (dom->toFolder()) {
         item = ProjectView::createProjectItem(dom, parent);
-        listView()->setItemExpanded(item, true);
+        treeWidget()->setItemExpanded(item, true);
     }
 
     return item;
@@ -516,30 +522,31 @@ void ProjectOverview::refresh()
     #warning "port me"
 
 #if 0
-    int x = listView()->contentsX();
-    int y = listView()->contentsY();
+    int x = treeWidget()->contentsX();
+    int y = treeWidget()->contentsY();
 #endif
 
     ProjectView::refresh();
 
     ProjectItemList item_list = projectModel()->itemList();
-    for (ProjectItemList::Iterator it = item_list.begin(); it != item_list.end(); ++it)
+    for (ProjectItemList::Iterator it = item_list.begin(); it != item_list.end(); ++it) {
         process(*it, ProjectViewItem::Insert);
+    }
 
     if (!currentText.isEmpty()) {
-        QList<QTreeWidgetItem*> items = listView()->findItems(currentText, Qt::MatchExactly, 0);
+        QList<QTreeWidgetItem*> items = treeWidget()->findItems(currentText, Qt::MatchExactly, 0);
         if (!items.isEmpty())
-            listView()->setItemSelected(items.front(), true);
+            treeWidget()->setItemSelected(items.front(), true);
     } else {
-        listView()->setItemSelected(listView()->topLevelItem(0), true);
+        treeWidget()->setItemSelected(treeWidget()->topLevelItem(0), true);
     }
 
 #if 0
-    listView()->setContentsPos(x, y);
+    treeWidget()->setContentsPos(x, y);
 #endif
 
     if (ProjectViewItem *item = selectedItem())
-        listView()->scrollToItem(item);
+        treeWidget()->scrollToItem(item);
 }
 
 // ---------------------------------------------------------------------------------
@@ -571,7 +578,7 @@ ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parent
 #endif
     }
 
-    connect(listView(), SIGNAL(contextMenu(QTreeWidget *, QTreeWidgetItem *, const QPoint &)),
+    connect(treeWidget(), SIGNAL(contextMenu(QTreeWidget *, QTreeWidgetItem *, const QPoint &)),
         this, SLOT(contextMenu(QTreeWidget *, QTreeWidgetItem *, const QPoint &)));
 }
 
@@ -591,15 +598,15 @@ void ProjectDetails::setCurrentItem(ProjectItemDom dom)
     m_currentItem = dom;
 
     QString currentText;
-    if (QTreeWidgetItem *sel = listView()->currentItem()) {
+    if (QTreeWidgetItem *sel = treeWidget()->currentItem()) {
         currentText = sel->text(0);
     }
 
     #warning "port me"
 
 #if 0
-    int x = listView()->contentsX();
-    int y = listView()->contentsY();
+    int x = treeWidget()->contentsX();
+    int y = treeWidget()->contentsY();
 #endif
 
     ProjectView::refresh();
@@ -613,25 +620,25 @@ void ProjectDetails::setCurrentItem(ProjectItemDom dom)
     }
 
     if (!currentText.isEmpty()) {
-        QList<QTreeWidgetItem*> items = listView()->findItems(currentText, Qt::MatchExactly, 0);
+        QList<QTreeWidgetItem*> items = treeWidget()->findItems(currentText, Qt::MatchExactly, 0);
         if (!items.isEmpty()) {
             QTreeWidgetItem *item = items.front();
-            listView()->setItemSelected(item, true);
+            treeWidget()->setItemSelected(item, true);
             while (item != 0) {
-                listView()->setItemExpanded(item, true);
+                treeWidget()->setItemExpanded(item, true);
                 item = item->parent();
             }
         }
     } else {
-        listView()->setItemSelected(listView()->topLevelItem(0), true);
+        treeWidget()->setItemSelected(treeWidget()->topLevelItem(0), true);
     }
 
 #if 0
-    listView()->setContentsPos(x, y);
+    treeWidget()->setContentsPos(x, y);
 #endif
 
     if (ProjectViewItem *item = selectedItem())
-        listView()->scrollToItem(item);
+        treeWidget()->scrollToItem(item);
 }
 
 void ProjectView::open(ProjectItemDom dom)
