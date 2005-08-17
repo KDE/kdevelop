@@ -132,6 +132,7 @@ void DDockWindow::setVisible(bool v)
             setFixedExtentWidth(size);
         }
     }
+    Q3DockWindow::setVisible(v);
 }
 
 void DDockWindow::loadSettings()
