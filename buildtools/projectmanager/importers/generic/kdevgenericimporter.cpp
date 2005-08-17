@@ -17,6 +17,7 @@
     Boston, MA 02111-1307, USA.
 */
 #include "kdevgenericimporter.h"
+#include <kdevprojectmodel.h>
 
 #include <kdevproject.h>
 #include <domutil.h>
@@ -36,8 +37,10 @@ const QString &KDevGenericImporter::genericImporter =
 K_EXPORT_COMPONENT_FACTORY(libkdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
 
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, const QStringList &)
-    : KDevProjectEditor(parent, name)
+    : KDevProjectEditor(parent)
 {
+    setObjectName(QString::fromUtf8(name));
+
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
@@ -85,119 +88,114 @@ bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
     return true;
 }
 
-ProjectFolderList KDevGenericImporter::parse(ProjectFolderDom item)
+QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *item)
 {
     static const QString &dot = KGlobal::staticQString(".");
     static const QString &dotdot = KGlobal::staticQString("..");
 
     QDir dir(item->name());
 
-    ProjectTargetDom target = item->projectModel()->create<ProjectTargetModel>();
-    target->setName("files");
-    item->addTarget(target);
+    KDevProjectTargetItem *target = new KDevProjectTargetItem("files");
+    item->add(target);
 
-    ProjectFolderList folder_list;
+    QList<KDevProjectFolderItem*> folder_list;
     QFileInfoList entries = dir.entryInfoList();
 
-    for (int i=0; i<entries.count(); ++i) {    
+    for (int i=0; i<entries.count(); ++i) {
         QFileInfo fileInfo = entries.at(i);
 
         if (!isValid(fileInfo)) {
             //kdDebug(9000) << "skip:" << fileInfo.absFilePath() << endl;
         } else if (fileInfo.isDir() && fileInfo.fileName() != dot && fileInfo.fileName() != dotdot) {
-            ProjectFolderDom folder = item->projectModel()->create<ProjectFolderModel>();
-            folder->setName(fileInfo.absFilePath());
-            item->addFolder(folder);
+            KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absFilePath());
+            item->add(folder);
             folder_list.append(folder);
         } else if (fileInfo.isFile()) {
-            ProjectFileDom file = item->projectModel()->create<ProjectFileModel>();
-            file->setName(fileInfo.absFilePath());
-            target->addFile(file);
+            KDevProjectFileItem *file = new KDevProjectFileItem(fileInfo);
+            target->add(file);
         }
     }
 
     return folder_list;
 }
 
-ProjectItemDom KDevGenericImporter::import(ProjectModel *model, const QString &fileName)
+KDevProjectItem *KDevGenericImporter::import(KDevProjectModel *model, const QString &fileName)
 {
     QFileInfo fileInfo(fileName);
     if (fileInfo.isDir()) {
-        ProjectFolderDom folder = model->create<ProjectFolderModel>();
-        folder->setName(fileName);
-        return folder->toItem();
+        KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileName);
+        return folder;
     } else if (fileInfo.isFile()) {
-        ProjectFileDom file = model->create<ProjectFileModel>();
-        file->setName(fileName);
-        return file->toItem();
+        KDevProjectFileItem *file = new KDevProjectFileItem(fileName);
+        return file;
     }
 
-    return ProjectItemDom();
+    return 0;
 }
 
-QString KDevGenericImporter::findMakefile(ProjectFolderDom dom) const
+QString KDevGenericImporter::findMakefile(KDevProjectFolderItem *dom) const
 {
     Q_UNUSED(dom);
     return QString::null;
 }
 
-QStringList KDevGenericImporter::findMakefiles(ProjectFolderDom dom) const
+QStringList KDevGenericImporter::findMakefiles(KDevProjectFolderItem *dom) const
 {
     Q_UNUSED(dom);
     return QStringList();
 }
 
-bool KDevGenericImporter::addFolder(ProjectFolderDom // folder
-                                   , ProjectFolderDom // parent
+bool KDevGenericImporter::addFolder(KDevProjectFolderItem *// folder
+                                   , KDevProjectFolderItem *// parent
                                    )
 {
     return false;
 }
 
-bool KDevGenericImporter::addTarget(ProjectTargetDom // target
-                                   , ProjectFolderDom // parent
+bool KDevGenericImporter::addTarget(KDevProjectTargetItem *// target
+                                   , KDevProjectFolderItem *// parent
                                    )
 {
     return false;
 }
 
-bool KDevGenericImporter::addFile(ProjectFileDom // file
-                                 , ProjectFolderDom // parent
+bool KDevGenericImporter::addFile(KDevProjectFileItem *// file
+                                 , KDevProjectFolderItem *// parent
                                  )
 {
     return false;
 }
 
-bool KDevGenericImporter::addFile(ProjectFileDom // file
-                                 , ProjectTargetDom // parent
+bool KDevGenericImporter::addFile(KDevProjectFileItem *// file
+                                 , KDevProjectTargetItem *// parent
                                  )
 {
     return false;
 }
 
-bool KDevGenericImporter::removeFolder(ProjectFolderDom // folder
-                                      , ProjectFolderDom // parent
+bool KDevGenericImporter::removeFolder(KDevProjectFolderItem *// folder
+                                      , KDevProjectFolderItem *// parent
                                       )
 {
     return false;
 }
 
-bool KDevGenericImporter::removeTarget(ProjectTargetDom // target
-                                      , ProjectFolderDom // parent
+bool KDevGenericImporter::removeTarget(KDevProjectTargetItem *// target
+                                      , KDevProjectFolderItem *// parent
                                       )
 {
     return false;
 }
 
-bool KDevGenericImporter::removeFile(ProjectFileDom // file
-                                    , ProjectFolderDom // parent
+bool KDevGenericImporter::removeFile(KDevProjectFileItem *// file
+                                    , KDevProjectFolderItem *// parent
                                     )
 {
     return false;
 }
 
-bool KDevGenericImporter::removeFile(ProjectFileDom // file
-                                    , ProjectTargetDom // parent
+bool KDevGenericImporter::removeFile(KDevProjectFileItem *// file
+                                    , KDevProjectTargetItem *// parent
                                     )
 {
     return false;

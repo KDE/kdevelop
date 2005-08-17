@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2004,2005 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -28,42 +28,42 @@ class KDevGenericImporter: public KDevProjectEditor
 {
     Q_OBJECT
 public:
-    KDevGenericImporter(QObject *parent = 0, const char *name = 0, 
-            const QStringList &args = QStringList());
+    KDevGenericImporter(QObject *parent = 0, const char *name = 0,
+                        const QStringList &args = QStringList());
     virtual ~KDevGenericImporter();
-    
+
 //
 // KDevProjectEditor interface
 //
-    virtual Features features() const 
+    virtual Features features() const
     { return Features(Folders | Files); }
-    
-    virtual bool addFolder(ProjectFolderDom folder, ProjectFolderDom parent);
-    virtual bool addTarget(ProjectTargetDom target, ProjectFolderDom parent);
-    virtual bool addFile(ProjectFileDom file, ProjectFolderDom parent);
-    virtual bool addFile(ProjectFileDom file, ProjectTargetDom parent);
-    
-    virtual bool removeFolder(ProjectFolderDom folder, ProjectFolderDom parent);
-    virtual bool removeTarget(ProjectTargetDom target, ProjectFolderDom parent);
-    virtual bool removeFile(ProjectFileDom file, ProjectFolderDom parent);
-    virtual bool removeFile(ProjectFileDom file, ProjectTargetDom parent);
+
+    virtual bool addFolder(KDevProjectFolderItem *folder, KDevProjectFolderItem *parent);
+    virtual bool addTarget(KDevProjectTargetItem *target, KDevProjectFolderItem *parent);
+    virtual bool addFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent);
+    virtual bool addFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent);
+
+    virtual bool removeFolder(KDevProjectFolderItem *folder, KDevProjectFolderItem *parent);
+    virtual bool removeTarget(KDevProjectTargetItem *target, KDevProjectFolderItem *parent);
+    virtual bool removeFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent);
+    virtual bool removeFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent);
 
 //
 // KDevProjectImporter interface
 //
     virtual KDevProject *project() const;
-    
-    virtual ProjectFolderList parse(ProjectFolderDom item);    
-    virtual ProjectItemDom import(ProjectModel *model, const QString &fileName);
-    virtual QString findMakefile(ProjectFolderDom dom) const;
-    virtual QStringList findMakefiles(ProjectFolderDom dom) const;
+
+    virtual QList<KDevProjectFolderItem*> parse(KDevProjectFolderItem *item);
+    virtual KDevProjectItem *import(KDevProjectModel *model, const QString &fileName);
+    virtual QString findMakefile(KDevProjectFolderItem *dom) const;
+    virtual QStringList findMakefiles(KDevProjectFolderItem *dom) const;
 
 private:
     bool isValid(const QFileInfo &fileName) const;
-    
+
 private:
     KDevProject *m_project;
-    
+
     static const QString &genericImporter;
     QStringList includes;
     QStringList excludes;

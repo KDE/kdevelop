@@ -50,7 +50,7 @@ KDevAutomakeImporter::~KDevAutomakeImporter()
 QString KDevAutomakeImporter::canonicalize(const QString &str)
 {
     QString res;
-    
+
     for (int i = 0; i < str.length(); ++i)
         res += (str[i].isLetterOrNumber() || str[i] == '@') ? str[i] : QChar('_');
 
@@ -64,7 +64,7 @@ void KDevAutomakeImporter::parseMakefile(const QString &fileName, ProjectItemDom
         kdDebug(9000) << "file:" << fileName << " not found!" << endl;
         return;
     }
-        
+
     QTextStream stream(&f);
 
     QRegExp re("^(#kdevelop:[ \t]*)?([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
@@ -129,7 +129,7 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
             if (it != variables.end())
             {
                 QString data = it.data().toString();
-                
+
                 // Skip continuation lines
                 while (!s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd())
                     s = ins.readLine();
@@ -262,23 +262,25 @@ QStringList KDevAutomakeImporter::findMakefiles(ProjectFolderDom dom) const
 QStringList KDevAutomakeImporter::findMakefiles(ProjectFolderDom dom)
 {
     QStringList files;
-    
+
     if (AutomakeFolderDom automakeFolder = AutomakeFolderModel::from(dom))
         files += automakeFolder->name() + "/Makefile.am";
-    
+
     ProjectFolderList folder_list = dom->folderList();
     for (ProjectFolderList::Iterator it = folder_list.begin(); it != folder_list.end(); ++it)
         files += findMakefiles(*it);
-        
+
     return files;
 }
 
 ProjectItemDom KDevAutomakeImporter::import(ProjectModel *model, const QString &fileName)
 {
+    kdDebug(9000) << "ROBE ========================> import:" << fileName;
+
     QFileInfo fileInfo(fileName);
-    
+
     ProjectItemDom item;
-    
+
     if (fileInfo.isDir()) {
         AutomakeFolderDom folder = model->create<AutomakeFolderModel>();
         folder->setName(fileName);
@@ -288,7 +290,7 @@ ProjectItemDom KDevAutomakeImporter::import(ProjectModel *model, const QString &
         file->setName(fileName);
         item = file->toItem();
     }
-    
+
     return item;
 }
 
@@ -323,13 +325,13 @@ static void removeDir( const QString& dirName )
 
     for (int i=0; i<fileList.count(); ++i) {
         const QFileInfo &fileInfo = fileList.at(i);
-    
+
         if( fileInfo.fileName() == QLatin1String(".") || fileInfo.fileName() == QLatin1String("..") )
             continue;
-    
+
         if( fileInfo.isDir() && !fileInfo.isSymLink() )
             removeDir( fileInfo.absFilePath() );
-    
+
         d.remove( fileInfo.fileName() );
     }
 
@@ -341,13 +343,13 @@ static void removeDir( const QString& dirName )
 ProjectFolderList KDevAutomakeImporter::parse(ProjectFolderDom item)
 {
     Q_ASSERT(item);
-    
+
     ProjectFolderList subproject_list;
-    
+
     headers.clear();
-        
+
     // ### AutomakeFolderDom folder = AutomakeFolderModel::from(item->toFolder());
-        
+
     parseMakefile(item->name() + "/Makefile.am", item->toItem());
 
     QMap<QString, QVariant> env = item->attributes();
@@ -376,7 +378,7 @@ ProjectFolderList KDevAutomakeImporter::parse(ProjectFolderDom item)
 
     headersList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
     headersList.sort();
-    
+
     QStringList::Iterator fileIt = headersList.begin();
     while( fileIt != headersList.end() ){
         QString fname = *fileIt;
@@ -384,11 +386,11 @@ ProjectFolderList KDevAutomakeImporter::parse(ProjectFolderDom item)
 
         if (noinst_HEADERS_item && AutoProjectPrivate::isHeader(fname) && !headers.contains(fname)) {
             AutomakeFileDom fitem = item->projectModel()->create<AutomakeFileModel>();
-            fitem->setName(noinst_HEADERS_item->path + "/" + fname);    
+            fitem->setName(noinst_HEADERS_item->path + "/" + fname);
             noinst_HEADERS_item->addFile(fitem->toFile());
         }
     }
-    
+
     return subproject_list;
 }
 
@@ -396,7 +398,7 @@ void KDevAutomakeImporter::parseKDEDOCS(ProjectItemDom item, const QString &lhs,
 {
     Q_UNUSED(lhs);
     Q_UNUSED(rhs);
-    
+
     // Handle the line KDE_ICON =
     // (actually, no parsing is involved here)
 
@@ -407,7 +409,7 @@ void KDevAutomakeImporter::parseKDEDOCS(ProjectItemDom item, const QString &lhs,
     titem->path = item->name();
     setup(titem, "", prefix, primary);
     item->toFolder()->addTarget(titem->toTarget());
-                    
+
     QDir d( item->name() );
     QStringList l = d.entryList( QDir::Files );
 
@@ -526,7 +528,7 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
                 dict.insert( *it, true );
                 ++it;
             }
-            
+
             QMap<QString, bool>::Iterator dictIt = dict.begin();
             while( dictIt != dict.end() ){
                 QString fname = dictIt.key();
@@ -555,7 +557,7 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
                 break;
             }
         }
-                
+
         AutomakeTargetDom titem = item->projectModel()->create<AutomakeTargetModel>();
         titem->path = item->name();
         setup(titem, "", prefix, primary);
@@ -566,7 +568,7 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
         for ( it3 = l.begin(); it3 != l.end(); ++it3 )
         {
             QString fname = *it3;
-                        
+
             AutomakeFileDom fitem = item->projectModel()->create<AutomakeFileModel>();
             fitem->setName(titem->path + "/" + fname);
             titem->addFile(fitem->toFile());
@@ -581,7 +583,7 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
     {
         QStringList l = QStringList::split( QRegExp( "[ \t\n]" ), rhs );
         QStringList::Iterator it1;
-                    
+
         AutomakeTargetDom titem = item->projectModel()->create<AutomakeTargetModel>();
         titem->path = item->name();
         setup(titem, "", prefix, primary);
@@ -609,7 +611,7 @@ void KDevAutomakeImporter::parsePrefix(ProjectItemDom item, const QString &lhs, 
 ProjectFolderList KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs)
 {
     Q_UNUSED(lhs);
-    
+
     // Parse a line SUBDIRS = bla bla
     QString subdirs = rhs;
 
@@ -668,19 +670,19 @@ ProjectFolderList KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const 
     QStringList l = QStringList::split( QRegExp( "[ \t]" ), subdirs );
     l.sort();
     QStringList::Iterator it;
-    
+
     ProjectFolderList subproject_list;
     for ( it = l.begin(); it != l.end(); ++it )
     {
         if ( *it == "." )
             continue;
-                        
+
         AutomakeFolderDom newitem = item->projectModel()->create<AutomakeFolderModel>();
         newitem->setName(item->name() + "/" + *it);
         item->toFolder()->addFolder(newitem->toFolder());
-        subproject_list.append(newitem->toFolder());                
+        subproject_list.append(newitem->toFolder());
     }
-    
+
     return subproject_list;
 }
 
@@ -689,7 +691,7 @@ AutomakeTargetDom KDevAutomakeImporter::findNoinstHeaders(ProjectFolderDom item)
     Q_ASSERT(item);
 
     AutomakeTargetDom noinst_HEADERS_item;
-    
+
     ProjectTargetList target_list = item->targetList();
     for (ProjectTargetList::Iterator it = target_list.begin(); it != target_list.end(); ++it) {
         AutomakeTargetDom titem = AutomakeTargetModel::from(*it);
@@ -706,7 +708,7 @@ AutomakeTargetDom KDevAutomakeImporter::findNoinstHeaders(ProjectFolderDom item)
         noinst_HEADERS_item = item->projectModel()->create<AutomakeTargetModel>();
         noinst_HEADERS_item->path = item->name();
         setup(noinst_HEADERS_item, "", "noinst", "HEADERS");
-        
+
         item->addTarget(noinst_HEADERS_item->toTarget());
     }
 
@@ -751,7 +753,7 @@ QString KDevAutomakeImporter::nicePrimary( const QString & primary )
         return i18n( "Data" );
     else if ( primary == "JAVA" )
         return i18n( "Java" );
-    
+
     return QString::null;
 }
 
