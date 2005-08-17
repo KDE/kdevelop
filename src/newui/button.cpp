@@ -22,6 +22,8 @@
 #include <qpainter.h>
 #include <qtooltip.h>
 #include <qstyle.h>
+#include <qstyleoption.h>
+#include <qstylepainter.h>
 #include <qapplication.h>
 #include <QPixmap>
 
@@ -70,32 +72,33 @@ void Button::drawButton(QPainter *p)
 {
     QRect r = rect();
     QSize sh = r.size();
-    switch (m_place)
-    {
-        case Ideal::Left:
-        case Ideal::Right:
-            sh.setHeight(r.width());
-            sh.setWidth(r.height());
-            break;
+    if (m_place == Ideal::Left || m_place == Ideal::Right) {
+        sh.setHeight(r.width());
+        sh.setWidth(r.height());
     }
 
-    QStyle::State flags = QStyle::State_None;
+    QStyleOptionButton opt;
+    opt.init(this);
+
     if (isEnabled())
-        flags |= QStyle::State_Enabled;
+        opt.state |= QStyle::State_Enabled;
     if (hasFocus())
-        flags |= QStyle::State_HasFocus;
+        opt.state |= QStyle::State_HasFocus;
     if (isDown())
-        flags |= QStyle::State_DownArrow;
+        opt.state |= QStyle::State_Sunken;
     if (isOn())
-        flags |= QStyle::State_On;
+        opt.state |= QStyle::State_On;
     if (! isFlat() && ! isDown())
-        flags |= QStyle::State_Raised;
-//    if (isDefault())
-// ###harryF        flags |= QStyle::Style_ButtonDefault;
+        opt.state |= QStyle::State_Raised;
+    opt.features = isDefault() ? QStyleOptionButton::DefaultButton : QStyleOptionButton::None;
+
+    opt.text = text();
 
     QPixmap pm(sh.width(), sh.height());
     pm.fill(eraseColor());
-    QPainter p2(&pm);
+
+    QStylePainter p2(&pm, this);
+    p2.drawControl(QStyle::CE_PushButton, opt);
 
     /* ### harryF TODO
     style().drawControl(QStyle::CE_PushButton,&p2,this, QRect(0,0,pm.width(),pm.height()), colorGroup(),flags);
