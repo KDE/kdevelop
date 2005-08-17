@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -33,10 +33,8 @@
 #include <kmainwindow.h>
 
 #include <kparts/part.h>
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/popupmenuinterface.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/selectioninterface.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include <kdevmainwindow.h>
 #include <kdevcore.h>
@@ -50,24 +48,25 @@ K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( data ) )
 using namespace KTextEditor;
 
 QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin(&data, parent, name ? name : "QuickOpenPart" )
+    : KDevPlugin(&data, parent)
 {
+    setObjectName(QString::fromUtf8(name));
     setInstance(QuickOpenFactory::instance());
     setXMLFile("kdevpart_quickopen.rc");
 
-    m_actionQuickOpen = new KAction( i18n("Quick Open File..."), CTRL + ALT + Key_O,
+    m_actionQuickOpen = new KAction( i18n("Quick Open File..."), Qt::CTRL + Qt::ALT + Qt::Key_O,
 				       this, SLOT(slotQuickFileOpen()),
 				       actionCollection(), "quick_open" );
     m_actionQuickOpen->setToolTip(i18n("Quick open file in project"));
     m_actionQuickOpen->setWhatsThis(i18n("<b>Quick open</b><p>Provides a file name input form with completion listbox to quickly open file in a project."));
 
-    m_actionQuickOpenClass = new KAction( i18n("Quick Open Class..."), CTRL + ALT + Key_C,
+    m_actionQuickOpenClass = new KAction( i18n("Quick Open Class..."), Qt::CTRL + Qt::ALT + Qt::Key_C,
 				          this, SLOT(slotQuickOpenClass()),
 				          actionCollection(), "quick_open_class" );
     m_actionQuickOpenClass->setToolTip(i18n("Find class in project"));
     m_actionQuickOpenClass->setWhatsThis(i18n("<b>Find class</b><p>Provides a class name input form with completion listbox to quickly open a file where the class is defined."));
 
-    m_actionFunctionOpen = new KAction( i18n("Quick Open Method..."), CTRL + ALT + Key_M, this, SLOT(slotQuickOpenFunction()), actionCollection(), "quick_open_function" );
+    m_actionFunctionOpen = new KAction( i18n("Quick Open Method..."), Qt::CTRL + Qt::ALT + Qt::Key_M, this, SLOT(slotQuickOpenFunction()), actionCollection(), "quick_open_function" );
     m_actionFunctionOpen->setToolTip(i18n("Quick open function in project"));
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
@@ -95,7 +94,7 @@ void QuickOpenPart::slotQuickFileOpen( )
 
 void QuickOpenPart::slotQuickOpenClass( )
 {
-    QuickOpenClassDialog dlg( this, mainWindow()->main() );    
+    QuickOpenClassDialog dlg( this, mainWindow()->main() );
     dlg.nameEdit->setText(getWordInEditor());
     dlg.exec();
 }
@@ -113,31 +112,32 @@ QString QuickOpenPart::getWordInEditor()
         ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
     if (!ro_part)
         return "";
-    SelectionInterface *selectIface = dynamic_cast<SelectionInterface*>(ro_part);
-    ViewCursorInterface *cursorIface = dynamic_cast<ViewCursorInterface*>(ro_part->widget());
-    EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
+
+    KTextEditor::Document *document = qobject_cast<KTextEditor::Document*>(ro_part);
+    KTextEditor::View *view = qobject_cast<KTextEditor::View*>(ro_part->widget());
+
     QString wordstr;
     bool hasMultilineSelection = false;
-    if (selectIface && selectIface->hasSelection())
+    if (view && view->selection())
     {
-        hasMultilineSelection = ( selectIface->selection().contains('\n') != 0 );
+        hasMultilineSelection = ( view->selectionText().contains('\n') != 0 );
         if (!hasMultilineSelection)
-            wordstr = selectIface->selection();
+            wordstr = view->selectionText();
     }
-    if (cursorIface && editIface)
+    if (view && document)
     {
-        uint line, col;
-        line = col = 0;
-        cursorIface->cursorPositionReal(&line, &col);
-        QString linestr = editIface->textLine(line);
+        KTextEditor::Cursor c = view->cursorPosition();
+        int line = c.line(), col = c.column();
+
+        QString linestr = document->line(line);
         if (wordstr.isEmpty() && !hasMultilineSelection)
         {
-            int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
+            int startPos = qMax(qMin((int)col, (int)linestr.length()-1), 0);
             int endPos = startPos;
-            while (startPos >= 0 && 
+            while (startPos >= 0 &&
                     ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
                 startPos--;
-            while (endPos < (int)linestr.length() && 
+            while (endPos < (int)linestr.length() &&
                     ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
                 endPos++;
             wordstr = (startPos==endPos)? QString() : linestr.mid(startPos+1, endPos-startPos-1);

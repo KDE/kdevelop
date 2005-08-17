@@ -41,7 +41,7 @@ QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent,
     itemListLabel->setText( i18n("Class &list:") );
 
     findAllClasses( m_classList );
-    qHeapSort( m_classList );
+    qSort( m_classList );
 
     m_completion = new KCompletion();
     m_completion->insertItems( m_classList );

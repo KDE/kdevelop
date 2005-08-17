@@ -22,7 +22,7 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
- 
+
 #include <klistbox.h>
 #include <klineedit.h>
 #include <kcompletion.h>
@@ -54,38 +54,38 @@ bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
     if ((watched == nameEdit) && (e->type() == QEvent::KeyPress))
     {
         QKeyEvent *ke = (QKeyEvent*)e;
-        if (ke->key() == Key_Up)
+        if (ke->key() == Qt::Key_Up)
         {
             int i = itemList->currentItem();
             if (--i >= 0)
             {
                 itemList->setCurrentItem(i);
-                nameEdit->blockSignals(true);
+                bool blocked = nameEdit->blockSignals(true);
                 nameEdit->setText(itemList->currentText());
-                nameEdit->blockSignals(false);
+                nameEdit->blockSignals(blocked);
             }
             return true;
-        } else if (ke->key() == Key_Down)
+        } else if (ke->key() == Qt::Key_Down)
         {
             int i = itemList->currentItem();
-            if ( ++i < int(itemList->count()) ) 
+            if ( ++i < int(itemList->count()) )
             {
                 itemList->setCurrentItem(i);
-                nameEdit->blockSignals(true);
+                bool blocked = nameEdit->blockSignals(true);
                 nameEdit->setText(itemList->currentText());
-                nameEdit->blockSignals(false);
+                nameEdit->blockSignals(blocked);
             }
             return true;
-        } else if ((ke->key() == Key_Next) || (ke->key() == Key_Prior))
+        } else if ((ke->key() == Qt::Key_Next) || (ke->key() == Qt::Key_Prior))
         {
             QApplication::sendEvent(itemList, e);
-            nameEdit->blockSignals(true);
+            bool blocked = nameEdit->blockSignals(true);
             nameEdit->setText(itemList->currentText());
-            nameEdit->blockSignals(false);
+            nameEdit->blockSignals(blocked);
         }
     }
 
-    return QWidget::eventFilter(watched, e);    
+    return QWidget::eventFilter(watched, e);
 }
 
 #include "quickopendialog.moc"
