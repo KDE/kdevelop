@@ -121,6 +121,8 @@ KFilterModel::KFilterModel(QAbstractItemModel *model, QObject *parent)
     connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(modelChanged()));
     connect(model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(modelChanged()));
     connect(model, SIGNAL(modelReset()), this, SLOT(modelChanged()));
+
+    d->doFiltering();
 }
 
 KFilterModel::~KFilterModel()
@@ -130,8 +132,10 @@ KFilterModel::~KFilterModel()
 
 QModelIndex KFilterModel::index(int row, int column, const QModelIndex &parent) const
 {
+#if 0
     if (d->filterStr.isEmpty())
         return d->sourceModel->index(row, column, parent);
+#endif
 
     if (column != 0 || d->filteredIdx.isEmpty())
         return QModelIndex();
@@ -167,8 +171,10 @@ QVariant KFilterModel::data(const QModelIndex &index, int role) const
 {
     Q_ASSERT(index.isValid());
 
+#if 0
     if (d->filterStr.isEmpty())
         return d->sourceModel->data(index, role);
+#endif
 
     return d->sourceModel->data(d->filteredIdx.at(index.internalId()).index, role);
 }
