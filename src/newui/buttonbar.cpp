@@ -32,7 +32,7 @@ namespace Ideal {
 
 //ButtonLayout class
 
-ButtonLayout::ButtonLayout(ButtonBar *parent, Qt::Orientation d, int margin, int spacing, const char *name)
+ButtonLayout::ButtonLayout(ButtonBar *parent, Direction d, int margin, int spacing, const char *name)
     :QBoxLayout(parent, d, margin, spacing, name), m_buttonBar(parent)
 {
 }

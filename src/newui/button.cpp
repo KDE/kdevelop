@@ -85,20 +85,20 @@ void Button::drawButton(QPainter *p)
     if (hasFocus())
         flags |= QStyle::State_HasFocus;
     if (isDown())
-        flags |= QStyle::State_Down;
+        flags |= QStyle::State_DownArrow;
     if (isOn())
         flags |= QStyle::State_On;
     if (! isFlat() && ! isDown())
         flags |= QStyle::State_Raised;
-    if (isDefault())
-        flags |= QStyle::Style_ButtonDefault;
+//    if (isDefault())
+// ###harryF        flags |= QStyle::Style_ButtonDefault;
 
     QPixmap pm(sh.width(), sh.height());
     pm.fill(eraseColor());
     QPainter p2(&pm);
-    
+
     style().drawControl(QStyle::CE_PushButton,&p2,this, QRect(0,0,pm.width(),pm.height()), colorGroup(),flags);
-    
+
     style().drawControl(QStyle::CE_PushButtonLabel, &p2, this,
                         QRect(0,0,pm.width(),pm.height()),
                         colorGroup(), flags, QStyleOption());

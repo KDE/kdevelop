@@ -37,10 +37,10 @@ class ButtonBar;
 Overrides minimumSize method to allow shrinking button bar buttons.*/
 class ButtonLayout: public QBoxLayout{
 public:
-    ButtonLayout(ButtonBar *parent, Qt::Orientation d, int margin = 0, int spacing = -1, const char * name = 0);
-        
+    ButtonLayout(ButtonBar *parent, Direction d, int margin = 0, int spacing = -1, const char * name = 0);
+
     virtual QSize minimumSize() const;
-    
+
 private:
     ButtonBar *m_buttonBar;
 };
