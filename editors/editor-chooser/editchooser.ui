@@ -120,7 +120,7 @@ already open files.</string>
     </connection>
 </connections>
 <includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in declaration">kdialog.h</include>
 </includes>
 <slots>
     <slot>slotEditPartChanged(const QString &amp;)</slot>

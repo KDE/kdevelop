@@ -17,7 +17,7 @@ static const KDevPluginInfo data("kdeveditorchooser");
 K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( data ) )
 
 EditorChooserPart::EditorChooserPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(&data, parent, name ? name : "EditorChooserPart")
+  : KDevPlugin(&data, parent)
 {
   setInstance(EditorChooserFactory::instance());
 
