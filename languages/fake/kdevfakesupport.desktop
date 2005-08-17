@@ -69,6 +69,6 @@ GenericName[zh_CN]=Fake 支持
 ServiceTypes=KDevelop/LanguageSupport
 Icon=source_cpp
 X-KDE-Library=libkdevfakesupport
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Language=Fake
 X-KDevelop-Args=Fake
