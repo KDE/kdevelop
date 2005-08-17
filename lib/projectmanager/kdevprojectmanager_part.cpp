@@ -148,8 +148,8 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
     if (m_workspace)
         m_projectModel->removeItem(m_workspace);
 
-    if (m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder())
-        m_projectModel->appendItem(m_workspace, m_projectModel->collection());
+    if ((m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder()))
+        m_projectModel->appendItem(m_workspace);
 
     ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
     connect(job, SIGNAL(result(KIO::Job*)), this, SIGNAL(refresh()));
