@@ -12,7 +12,8 @@ SUBDIRS = fullscreen \
     openwith \
     guibuilder \
     valgrind \
-    partexplorer
+    partexplorer \
+    quickopen
 
 # SUBDIRS = \
 #     abbrev \
