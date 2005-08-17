@@ -378,12 +378,22 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 
     // OK, it's not text and it's not a designer file.. let's see what else we can come up with..
 
+#warning "cleanup"
+
     KParts::Factory *factory = 0;
     QString className;
 
-    QString services[] = { "KParts/ReadWritePart", "KParts/ReadOnlyPart" };
-    QString classnames[] = { "KParts::ReadWritePart", "KParts::ReadOnlyPart" };
-    for (uint i=0; i<2; ++i)
+    QString services[] = {
+      "KDevelop/ReadWritePart", "KDevelop/ReadOnlyPart",
+      "KParts/ReadWritePart", "KParts/ReadOnlyPart"
+    };
+    
+    QString classnames[] = {
+      "KParts::ReadWritePart", "KParts::ReadOnlyPart",
+      "KParts::ReadWritePart", "KParts::ReadOnlyPart"
+    };
+    
+    for (uint i=0; i<4; ++i)
     {
         factory = findPartFactory( MimeType->name(), services[i] );
         if (factory)
@@ -398,7 +408,8 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
     if (factory)
     {
         // create the object of the desired class
-        KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>( factory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, className.latin1() ) );
+        KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>( factory->createPart( TopLevel::getInstance()->main(),
+                0, 0, 0, className.toLatin1() ) );
         if ( part )
         {
             part->openURL( url );

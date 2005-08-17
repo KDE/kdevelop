@@ -1,0 +1,39 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/ReadOnly
+Name=KDevelop ReadOnly Part
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+
+[PropertyDef::X-KDevelop-Scope]
+Type=QString
+
+[PropertyDef::X-KDevelop-Mode]
+Type=QString
+
+[PropertyDef::X-KDevelop-Part-Version]
+Type=QString
+
+[PropertyDef::X-KDevelop-Part-Homepage]
+Type=QString
+
+[PropertyDef::X-KDevelop-Part-License]
+Type=QString
+
+[PropertyDef::X-KDevelop-Part-BugsEmailAddress]
+Type=QString
+
+[PropertyDef::X-KDevelop-Part-Copyright]
+Type=QString
+
+# defines a list of properties which the plugin has
+# a profile will query all plugins for properties and will load only
+# those that have queried properties
+[PropertyDef::X-KDevelop-Properties]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-Args]
+Type=QString
