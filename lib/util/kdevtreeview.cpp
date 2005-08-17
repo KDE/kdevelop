@@ -87,3 +87,5 @@ KDevItem *KDevTreeView::currentItem() const
 
   return 0;
 }
+
+#include "kdevtreeview.moc"

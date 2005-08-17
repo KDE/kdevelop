@@ -154,3 +154,5 @@ bool KDevItemModel::setData(const QModelIndex &index, const QVariant &value, int
   Q_UNUSED(role);
   return false;
 }
+
+#include "kdevitemmodel.moc"
