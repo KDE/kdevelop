@@ -21,7 +21,7 @@
 
 #include "quickopen_part.h"
 #include "quickopen_model.h"
-#include "quickopen_filtermodel.h"
+#include "kfiltermodel.h"
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -93,7 +93,7 @@ void QuickOpenPart::slotQuickOpen( )
     QLineEdit edit(&dlg);
     QTreeView view(&dlg);
     QuickOpenModel model;
-    QuickOpenFilterModel filter(&model);
+    KFilterModel filter(&model);
     connect(&edit, SIGNAL(textChanged(QString)), &filter, SLOT(setFilter(QString)));
     model.addChildModel(&model1, "title1");
     model.addChildModel(&model2, "title2");

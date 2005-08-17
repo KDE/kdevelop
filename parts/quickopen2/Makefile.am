@@ -5,7 +5,7 @@ kde_module_LTLIBRARIES = libkdevquickopen.la
 libkdevquickopen_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevquickopen_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libkdevwidgets.la $(LIB_KHTML)
 
-libkdevquickopen_la_SOURCES = quickopen_part.cpp quickopen_model.cpp quickopen_filtermodel.cpp
+libkdevquickopen_la_SOURCES = quickopen_part.cpp quickopen_model.cpp
 
 METASOURCES = AUTO
 
@@ -14,4 +14,4 @@ service_DATA = kdevquickopen.desktop
 
 rcdir = $(kde_datadir)/kdevquickopen
 rc_DATA = kdevpart_quickopen.rc
-noinst_HEADERS = quickopen_part.h quickopen_model.h quickopen_filtermodel.h
+noinst_HEADERS = quickopen_part.h quickopen_model.h
