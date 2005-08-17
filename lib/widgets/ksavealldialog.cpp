@@ -18,27 +18,39 @@
 */
 
 #include <qlabel.h>
+#include <qtreewidget.h>
+#include <qlistwidget.h>
+#include <qheaderview.h>
 
 #include <klocale.h>
 #include <kpushbutton.h>
-#include <klistbox.h>
-#include <klistview.h>
 #include <kstdguiitem.h>
+
+#include <q3vbox.h>
 
 #include "ksavealldialog.h"
 
 namespace
 {
 
-class CheckURL : public Q3CheckListItem
+class CheckURL : public QTreeWidgetItem
 {
 public:
 	CheckURL( QTreeWidget * lv, KURL const & url )
-		: Q3CheckListItem( lv, url.path(), Q3CheckListItem::CheckBox),
+		: QTreeWidgetItem( lv),
 		_url( url )
-	{}
+	{
+            setText(0, url.path());
+            setFlags(flags() | Qt::ItemIsUserCheckable);
+        }
 
 	KURL const & url() const { return _url; }
+
+        bool isOn() const
+        { return checkState(0) == Qt::Checked; }
+
+        void setOn(bool b)
+        { setCheckState(0, b ? Qt::Checked : Qt::Unchecked); }
 
 private:
     KURL _url;
@@ -56,9 +68,9 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
 
 	_listview = new QTreeWidget( top );
-	_listview->addColumn( "" );
+	_listview->setColumnCount(1);
 	_listview->header()->hide();
-	_listview->setResizeMode( QTreeWidget::LastColumn );
+	_listview->header()->setResizeMode(0, QHeaderView::Stretch);
 
 	setButtonOKText( i18n("Save &Selected"), i18n("Saves all selected files") );
 	setButtonText( User1, i18n("Save &None") );
@@ -71,7 +83,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	{
 		if ( !ignorelist.contains( *it ) )
 		{
-			Q3CheckListItem * x = new CheckURL( _listview, *it );
+			CheckURL* x = new CheckURL( _listview, *it );
 			x->setOn( true );
 		}
 		++it;
@@ -87,11 +99,9 @@ KSaveSelectDialog::~KSaveSelectDialog() {}
 void KSaveSelectDialog::saveNone( )
 {
 	// deselect all
-	CheckURL * item = static_cast<CheckURL*>( _listview->firstChild() );
-	while ( item )
-	{
-		item->setOn( false );
-		item = static_cast<CheckURL*>( item->nextSibling() );
+        for (int i=0; i<_listview->topLevelItemCount(); ++i) {
+	   CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );
+           item->setOn( false );
 	}
 
 	QDialog::accept();
@@ -109,32 +119,29 @@ void KSaveSelectDialog::cancel( )
 
 KURL::List KSaveSelectDialog::filesToSave( )
 {
-	KURL::List filelist;
-	CheckURL const * item = static_cast<CheckURL*>( _listview->firstChild() );
-	while ( item )
-	{
-		if ( item->isOn() )
-		{
-			filelist << item->url();
-		}
-		item = static_cast<CheckURL*>( item->nextSibling() );
-	}
-	return filelist;
+    KURL::List filelist;
+
+    for (int i=0; i<_listview->topLevelItemCount(); ++i) {
+        CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );
+
+        if ( item->isOn() )
+            filelist << item->url();
+    }
+    return filelist;
 }
 
 KURL::List KSaveSelectDialog::filesNotToSave( )
 {
-	KURL::List filelist;
-	CheckURL const * item = static_cast<CheckURL*>( _listview->firstChild() );
-	while ( item )
-	{
-		if ( ! item->isOn() )
-		{
-			filelist << item->url();
-		}
-		item = static_cast<CheckURL*>( item->nextSibling() );
-	}
-	return filelist;
+    KURL::List filelist;
+
+    for (int i=0; i<_listview->topLevelItemCount(); ++i) {
+        CheckURL * item = static_cast<CheckURL*>( _listview->topLevelItem(i) );
+
+        if ( ! item->isOn() )
+            filelist << item->url();
+    }
+
+    return filelist;
 }
 
 
@@ -149,7 +156,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
   QListWidget* lb = new QListWidget( top );
   lb->setMinimumHeight( lb->fontMetrics().height() * 5 );
-  lb->insertStringList( filenames );
+  lb->addItems( filenames );
 
   setButtonOKText( i18n("Save &All"), i18n("Saves all modified files") );
   setButtonText( User1, i18n("Save &None") );

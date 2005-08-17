@@ -6,9 +6,11 @@ lib_LTLIBRARIES = libkdevwidgets.la
 
 kdevwidgetsincludedir = $(includedir)/kdevelop/widgets
 
-libkdevwidgets_la_SOURCES = kdevhtmlpart.cpp processlinemaker.cpp processwidget.cpp 
+libkdevwidgets_la_SOURCES = kdevhtmlpart.cpp processlinemaker.cpp processwidget.cpp \
+    ksavealldialog.cpp
 
-kdevwidgetsinclude_HEADERS = kdevhtmlpart.h processlinemaker.h processwidget.h
+kdevwidgetsinclude_HEADERS = kdevhtmlpart.h processlinemaker.h processwidget.h \
+    ksavealldialog.h
 
 libkdevwidgets_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 libkdevwidgets_la_LDFLAGS = -no-undefined $(all_libraries)
