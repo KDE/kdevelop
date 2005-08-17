@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #include "kdevcustomimporter.h"
 
@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY(libkdevcustomimporter, KGenericFactory<KDevCustomImpo
 KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const QStringList &)
     : KDevProjectEditor(parent, name)
 {
-    m_project = ::qt_cast<KDevProject*>(parent);
+    m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 
     QDomDocument &dom = *project()->projectDom();
@@ -97,23 +97,22 @@ ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
     item->addTarget(target);
 
     ProjectFolderList folder_list;
-    if (const QFileInfoList *entries = dir.entryInfoList()) {
-        QFileInfoListIterator it(*entries);
-        while (const QFileInfo *fileInfo = it.current()) {
-            ++it;
+    QFileInfoList entries = dir.entryInfoList();
 
-            if (!isValid(*fileInfo)) {
-                //kdDebug(9000) << "skip:" << fileInfo->absFilePath() << endl;
-            } else if (fileInfo->isDir() && fileInfo->fileName() != dot && fileInfo->fileName() != dotdot) {
-                ProjectFolderDom folder = item->projectModel()->create<ProjectFolderModel>();
-                folder->setName(fileInfo->absFilePath());
-                item->addFolder(folder);
-                folder_list.append(folder);
-            } else if (fileInfo->isFile()) {
-                ProjectFileDom file = item->projectModel()->create<ProjectFileModel>();
-                file->setName(fileInfo->absFilePath());
-                target->addFile(file);
-            }
+    for (int i=0; i<entries.count(); ++i) {    
+        QFileInfo fileInfo = entries.at(i);
+
+        if (!isValid(fileInfo)) {
+            //kdDebug(9000) << "skip:" << fileInfo.absFilePath() << endl;
+        } else if (fileInfo.isDir() && fileInfo.fileName() != dot && fileInfo.fileName() != dotdot) {
+            ProjectFolderDom folder = item->projectModel()->create<ProjectFolderModel>();
+            folder->setName(fileInfo.absFilePath());
+            item->addFolder(folder);
+            folder_list.append(folder);
+        } else if (fileInfo.isFile()) {
+            ProjectFileDom file = item->projectModel()->create<ProjectFileModel>();
+            file->setName(fileInfo.absFilePath());
+            target->addFile(file);
         }
     }
 
@@ -202,16 +201,6 @@ bool KDevCustomImporter::removeFile(ProjectFileDom // file
                                     )
 {
     return false;
-}
-
-bool KDevCustomImporter::createProjectFile( const QString &folder )
-{
-	return false;
-}
-
-bool KDevCustomImporter::configureFolder( ProjectFolderDom folder)
-{
-	return true;
 }
 
 #include "kdevcustomimporter.moc"
