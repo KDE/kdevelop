@@ -29,8 +29,9 @@ typedef KDevGenericFactory<PartExplorerPlugin> PartExplorerPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( data ) )
 
 PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( &data, parent, name ? name : "PartExplorerPlugin" )
+    : KDevPlugin( &data, parent )
 {
+    setObjectName(name ? name : "PartExplorerPlugin");
     // we need an instance
     setInstance( PartExplorerPluginFactory::instance() );
 

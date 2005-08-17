@@ -16,13 +16,14 @@
 #include <qlayout.h>
 #include <q3whatsthis.h>
 #include <qlabel.h>
+#include <qevent.h>
 
 #include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kcombobox.h>
-#include <kservicetype.h> 
+#include <kservicetype.h>
 
 #include "partexplorerformbase.h"
 #include "partexplorerform.h"
@@ -58,16 +59,6 @@ public:
 
 class ResultList;
 
-class ResultsToolTip: public QToolTip
-{
-public:
-    ResultsToolTip( ResultsList* parent );
-    virtual void maybeTip( const QPoint& p );
-
-private:
-    ResultsList* m_resultsList;
-};
-
 class ResultsList : public KListView
 {
 public:
@@ -75,7 +66,6 @@ public:
         : KListView( parent, "resultslist" )
     {
         this->setShowToolTips( false );
-        new ResultsToolTip( this );
     }
 
     virtual ~ResultsList() {}
@@ -84,24 +74,25 @@ public:
     {
         KListView::clear();
     }
-};
-
-ResultsToolTip::ResultsToolTip( ResultsList* parent )
-    : QToolTip( parent->viewport() ), m_resultsList( parent )
-{
-}
-
-void ResultsToolTip::maybeTip( const QPoint& p )
-{
-    PartExplorer::PropertyItem *item = dynamic_cast<PartExplorer::PropertyItem*>( m_resultsList->itemAt( p ) );
-    if ( item )
+protected:
+    bool event(QEvent *ev)
     {
-        QRect r = m_resultsList->itemRect( item );
-        if ( r.isValid() )
-            tip( r, item->tipText() );
-    }
-}
+        if (ev->type() == QEvent::ToolTip) {
+            PartExplorer::PropertyItem *item = dynamic_cast<PartExplorer::PropertyItem*>( itemAt(
+                       static_cast<QHelpEvent *>(ev)->pos() ) );
+            if ( item )
+            {
+                QRect r = itemRect( item );
+                if ( r.isValid() ) {
+                    QToolTip::showText( r.center(), item->tipText(), this );
+                    return true;
+                }
+            }
+        }
 
+        return KListView::event(ev);
+    }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // class PartExplorerForm
