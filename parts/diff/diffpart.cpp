@@ -35,24 +35,13 @@
 #include "diffdlg.h"
 #include "diffwidget.h"
 
-static KDevPluginInfo *diffPartInfo()
-{
-    static KDevPluginInfo data("kdevdiff");
-    static bool isInit = false;
-    if (isInit)
-        return &data;
-    isInit = true;
-
-    data.addAuthor("Harald Fernengel", I18N_NOOP("Initial author"), "harry@kdevelop.org");
-
-    return &data;
-}
+static const KDevPluginInfo data("kdevtipofday");
 
 typedef KDevGenericFactory<DiffPart> DiffFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( *diffPartInfo() ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( data ) )
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
-    : KDevDiffFrontend(diffPartInfo(), parent), proc(0)
+    : KDevDiffFrontend(&data, parent), proc(0)
 {
   setObjectName(name ? name : "DiffPart");
   setInstance(DiffFactory::instance());
