@@ -61,7 +61,7 @@ public:
 
   /** Reimplemented from KMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest( KMdiChildView * );
-  
+
   KMainWindow *main();
 
   void init();
@@ -69,11 +69,11 @@ public:
   //This is needed because KMdiMainFrame::tabWidgetVisibility() is protected (for
   //whatever reason) and this value is needed in EditorProxy
   KMdi::TabWidgetVisibility getTabWidgetVisibility() { return tabWidgetVisibility(); }
-  
+
   /**Enable the main window to be shown. Main window is created with m_canBeShown
   flag set to false. This sets the flag to true and show() method will be enabled.*/
   void enableShow();
-    
+
 public slots:
 
   void createGUI(KParts::Part *part);
@@ -81,12 +81,12 @@ public slots:
 
   /** Just after the project gets opened */
   void projectOpened();
-  
+
   /** called by the part to set the caption */
   void setCaption( const QString &);
-  
+
   virtual void show();
-  
+
 signals:
   void currentChanged( QWidget* widget );
   void sigCloseWindow( const QWidget* widget );
@@ -99,8 +99,8 @@ private slots:
   void fillWindowMenu();
   void openURL( int );
   void tabMoved(int from, int to);
-  void tabContext(QWidget*,const QPoint &);  
-  void tabContextActivated(int);    
+  void tabContext(QWidget*,const QPoint &);
+  void tabContextActivated(int);
   void configureToolbars();
   void setupWindowMenu();
   void slotNewToolbarConfig();
@@ -114,7 +114,7 @@ private:
 	struct ToolViewData
 	{
 		ToolViewData() {}
-		ToolViewData( KDockWidget::DockPosition pos, QString n, QString t ) 
+		ToolViewData( KDockWidget::DockPosition pos, QString n, QString t )
 			: position(pos), name(n), toolTip(t) {}
 
 		KDockWidget::DockPosition position;
@@ -135,12 +135,12 @@ private:
   void saveSettings();
 
   void moveRelativeTab(int);
-  
+
   KAction *m_raiseEditor;
 
   Q3ValueList< QPair< int, KURL > > m_windowList;
   MainWindowShare*   m_pMainWindowShare;
-  
+
   bool openNewTabAfterCurrent;
   bool showTabIcons;
 

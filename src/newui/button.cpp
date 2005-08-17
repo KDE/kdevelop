@@ -45,7 +45,7 @@ Button::Button(ButtonBar *parent, const QString text, const QIcon &icon,
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     resize(sizeHint());
     fixDimensions(Ideal::Bottom);
-    
+
     QToolTip::add(this, m_realText);
 }
 

@@ -34,7 +34,7 @@ private:
 
   CodeModel *m_classStore;
 
-  
+
 };
 
 

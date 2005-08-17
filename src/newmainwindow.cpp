@@ -112,7 +112,7 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
 	KStdAction::configureToolbars( this, SLOT(configureToolbars()), actionCollection(), "set_configure_toolbars" );
-	
+
 	//@fixme why is this part of KDevMainWindow?
 //    previous_output_view = NULL;
 }

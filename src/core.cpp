@@ -45,16 +45,16 @@ bool Core::queryClose()
   KConfig* config = kapp->config();
   config->setGroup("General Options");
   config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
-  
+
   if ( !PartController::getInstance()->querySaveFiles() )
 	  return false;
-  
+
   if ( !ProjectManager::getInstance()->closeProject( true ) )
       return false;
-  
+
   if ( !PartController::getInstance()->readyToClose() )
       return false;
-  
+
   return true;
 }
 

@@ -265,10 +265,10 @@ void ProjectManager::slotLoadProject( )
 	kapp->restoreOverrideCursor();
     return;
   }
-  
+
   TopLevel::getInstance()->statusBar()->message( i18n("Changing plugin profile...") );
   m_oldProfileName = PluginController::getInstance()->changeProfile(m_info->m_profileName);
-  
+
   TopLevel::getInstance()->statusBar()->message( i18n("Loading project plugins...") );
   loadLocalParts();
 
@@ -611,11 +611,11 @@ QString ProjectManager::profileByAttributes(const QString &language, const QStri
 {
     KConfig config(locate("data", "kdevelop/profiles/projectprofiles"));
     config.setGroup(language);
-    
+
     QStringList profileKeywords = QStringList::split("/", "Empty");
     if (config.hasKey("Keywords"))
         profileKeywords = config.readListEntry("Keywords");
-    
+
     int idx = 0;
     for (QStringList::const_iterator it = profileKeywords.constBegin();
         it != profileKeywords.constEnd(); ++it)
@@ -626,7 +626,7 @@ QString ProjectManager::profileByAttributes(const QString &language, const QStri
             break;
         }
     }
-    
+
     QStringList profiles;
     if (config.hasKey("Profiles"))
     {

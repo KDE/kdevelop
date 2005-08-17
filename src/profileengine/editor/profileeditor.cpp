@@ -48,16 +48,16 @@ public:
         setText(0, profile->genericName());
         setText(1, profile->description());
     }
-    
+
     ProfileItem(KListViewItem *parent, Profile *profile)
         : KListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
         setText(1, profile->description());
     }
-    
+
     Profile *profile() const { return m_profile; }
-    
+
 private:
     Profile *m_profile;
 };
@@ -68,7 +68,7 @@ public:
         : KListViewItem(parent, text), m_derived(derived)
     {
     }
-    
+
     bool isDerived() const { return m_derived; }
 
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int alignment)
@@ -78,7 +78,7 @@ public:
             cgNew.setColor(QColorGroup::Text, KGlobalSettings::inactiveTextColor());
         KListViewItem::paintCell(p, cgNew, column, width, alignment);
     }
-    
+
 private:
     bool m_derived;
 };
@@ -103,14 +103,14 @@ ProfileEditor::ProfileEditor(QWidget *parent, const char *name)
 void ProfileEditor::refresh()
 {
     profilesList->clear();
-    
+
     ProfileItem *item = new ProfileItem(profilesList, engine.rootProfile());
     ProfileListBuilding op;
     engine.walkProfiles<ProfileListBuilding, ProfileItem>(op, item, engine.rootProfile());
-    
+
     profilesList->setSelected(item, true);
     profilesList->setCurrentItem(item);
-    
+
     refreshAvailableList();
     refreshPropertyCombo();
 }
@@ -122,7 +122,7 @@ void ProfileEditor::refreshPropertyCombo()
     for (KTrader::OfferList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         QStringList currProps = (*it)->property("X-KDevelop-Properties").toStringList();
-        for (QStringList::const_iterator p = currProps.constBegin(); 
+        for (QStringList::const_iterator p = currProps.constBegin();
                 p != currProps.constEnd(); ++p)
             if (!props.contains(*p))
                 props.append(*p);
@@ -142,7 +142,7 @@ void ProfileEditor::refreshAvailableList()
     allGlobal->setOpen(true);
     allProject = new KListViewItem(allList, i18n("Project"));
     allProject->setOpen(true);
-    
+
     KTrader::OfferList olist = engine.allOffers(ProfileEngine::Core);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
         new KListViewItem(allCore, (*it)->desktopEntryName(), (*it)->genericName());
@@ -155,7 +155,7 @@ void ProfileEditor::refreshAvailableList()
 }
 
 void ProfileEditor::profileExecuted(Q3ListViewItem *item)
-{    
+{
     if (!item || item->text(0) == "KDevelop")
         removeProfileButton->setEnabled(false);
     else
@@ -170,7 +170,7 @@ void ProfileEditor::fillPropertyList(Profile *profile)
 {
     derivedPropertiesBox->clear();
     ownPropertiesBox->clear();
-    
+
     Profile::EntryList list = profile->list(Profile::Properties);
     for (Profile::EntryList::const_iterator it = list.begin(); it != list.end(); ++it)
     {
@@ -182,7 +182,7 @@ void ProfileEditor::fillPropertyList(Profile *profile)
 }
 
 void ProfileEditor::fillEDLists(Profile *profile)
-{    
+{
     //filling a list of enabled plugins
     enabledList->clear();
     Profile::EntryList list = profile->list(Profile::ExplicitEnable);
@@ -199,7 +199,7 @@ void ProfileEditor::fillEDLists(Profile *profile)
 void ProfileEditor::fillPluginsList(Profile *profile)
 {
     pluginsView->clear();
-    
+
     KListViewItem *core = new KListViewItem(pluginsView, i18n("Core Plugins"));
     core->setOpen(true);
     KListViewItem *global = new KListViewItem(pluginsView, i18n("Global Plugins"));
@@ -212,13 +212,13 @@ void ProfileEditor::fillPluginsList(Profile *profile)
             it != coreOffers.constEnd(); ++it)
         new KListViewItem(core, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
-        
+
     KTrader::OfferList globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
     for (KTrader::OfferList::const_iterator it = globalOffers.constBegin();
             it != globalOffers.constEnd(); ++it)
         new KListViewItem(global, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
-    
+
     KTrader::OfferList projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
     for (KTrader::OfferList::const_iterator it = projectOffers.constBegin();
             it != projectOffers.constEnd(); ++it)
@@ -235,7 +235,7 @@ void ProfileEditor::addProfile()
 {
     if (!profilesList->currentItem())
         return;
-    
+
     KDialogBase dlg(KDialogBase::Plain, i18n("Add Profile"), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
 // ### KDE4-PORTING    dlg.plainPage()->setMargin(0);
     (new QVBoxLayout(dlg.plainPage(), 0, 0))->setAutoAdd(true);
@@ -243,8 +243,8 @@ void ProfileEditor::addProfile()
     prof->nameEdit->setFocus();
     if (dlg.exec() == QDialog::Accepted)
     {
-        Profile *profile = new Profile(currentProfile(), prof->nameEdit->text(), 
-            prof->genericNameEdit->text(), 
+        Profile *profile = new Profile(currentProfile(), prof->nameEdit->text(),
+            prof->genericNameEdit->text(),
             prof->descriptionEdit->text());
         profilesList->currentItem()->setOpen(true);
         new ProfileItem(static_cast<KListViewItem*>(profilesList->currentItem()), profile);
@@ -282,11 +282,11 @@ void ProfileEditor::addProperty()
         (derivedPropertiesBox->findItem(propertyCombo->currentText()) == 0) )
     {
         ownPropertiesBox->insertItem(propertyCombo->currentText());
-        
+
         currentProfile()->addEntry(Profile::Properties, propertyCombo->currentText());
         currentProfile()->save();
     }
-    
+
     fillPluginsList(currentProfile());
 }
 
@@ -294,7 +294,7 @@ void ProfileEditor::removeProperty()
 {
     currentProfile()->removeEntry(Profile::Properties, ownPropertiesBox->currentText());
     currentProfile()->save();
-    
+
     ownPropertiesBox->removeItem(ownPropertiesBox->currentItem());
 
     fillPluginsList(currentProfile());
@@ -328,7 +328,7 @@ void ProfileEditor::addEnabled()
             return;
         text = allList->currentItem()->text(0);
     }
-    
+
     if (enabledList->findItem(text, 0) != 0)
         return;
     if (disabledList->findItem(text, 0) != 0)
@@ -347,7 +347,7 @@ void ProfileEditor::delEnabled()
 {
     if (!enabledList->currentItem())
         return;
-    
+
     EDListItem *item = dynamic_cast<EDListItem*>(enabledList->currentItem());
     if (item && !item->isDerived())
     {
@@ -374,7 +374,7 @@ void ProfileEditor::addDisabled()
             return;
         text = allList->currentItem()->text(0);
     }
-    
+
     if (disabledList->findItem(text, 0) != 0)
         return;
     if (enabledList->findItem(text, 0) != 0)
@@ -393,7 +393,7 @@ void ProfileEditor::delDisabled()
 {
     if (!disabledList->currentItem())
         return;
-    
+
     EDListItem *item = dynamic_cast<EDListItem*>(disabledList->currentItem());
     if (item && !item->isDerived())
     {

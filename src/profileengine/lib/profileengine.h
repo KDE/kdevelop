@@ -55,7 +55,7 @@ public:
     {
         resourceList += profile->resources(m_filter);
     }
-    
+
     KURL::List resourceList;
     QString m_filter;
 };
@@ -95,23 +95,23 @@ public:
     /**Type of the plugin offer. Engine will usually find profiles and return offers
     of selected type.
     @sa KDevPlugin class documentation for more information of plugin types.*/
-    enum OfferType { 
+    enum OfferType {
         Global    /**<Global plugins.*/,
         Project   /**<Project plugins.*/,
         Core      /**<Core plugins.*/
     };
-    
+
     /**@return The list of plugin offers for given profile and type.*/
     KTrader::OfferList offers(const QString &profileName, OfferType offerType);
     /**@return The list of all plugin offers for given type.*/
     KTrader::OfferList allOffers(OfferType offerType);
-    
+
     /**@return The list of URLs to the resources (files) with given @p extension.
     @param profileName A name of a profile to find resources in.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
     KURL::List resources(const QString &profileName, const QString &nameFilter);
-    
+
     /**@return The list of URLs to the resources (files) with given @p extension.
     This list is obtained by a recursive search that process given profile
     and all it's subprofiles.
@@ -119,13 +119,13 @@ public:
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
     KURL::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
-    
+
     /**Adds a resource for the profile. Resource will be copied to the user profile directory
     (like $HOME/.kde/share/apps/kdevelop/profiles/...).
     @param profileName A name of the profile.
     @param url The url to a file to copy as a profile resource.*/
     void addResource(const QString &profileName, const KURL &url);
-    
+
     /**Gets the difference between @p profile1 and @p profile2.
     Difference is calculated as two lists of plugins to be unloaded and loaded
     in order to switch from @p profile1 to @p profile2.
@@ -136,7 +136,7 @@ public:
     @param load Will be filled with a list of plugins to load.
     @note Resulting lists are not cleared. Pass only clean lists in the
     common case.*/
-    void diffProfiles(OfferType offerType, const QString &profile1, const QString &profile2, 
+    void diffProfiles(OfferType offerType, const QString &profile1, const QString &profile2,
         QStringList &unload, KTrader::OfferList &load);
 
     /**@return The root profile. Root profile is always named "KDevelop" and it
@@ -146,10 +146,10 @@ public:
     /**Finds a profile with given name.
     @return The profile found or 0 if it does not exist.*/
     Profile *findProfile(const QString &profileName);
-    
-    /**Walks profiles tree and applies operation @p op to each profile found 
+
+    /**Walks profiles tree and applies operation @p op to each profile found
     in the tree below @p root (@p root profile itself is not processed).
-    
+
     Operation is a class that have operator(Profile *).
     Example of operation class which is used to build a plain list of profiles:
     @code
@@ -159,7 +159,7 @@ public:
         {
             profiles[profile->name()] = profile;
         }
-    
+
         QMap<QString, Profile*> profiles;
     };
     @endcode
@@ -169,10 +169,10 @@ public:
     ProfileListing listing;
     engine.walkProfiles<ProfileListing>(listing, engine.rootProfile());
     @endcode
-    
-    @note @ref ProfileListing and @ref ProfileListingEx operations are already defined in 
+
+    @note @ref ProfileListing and @ref ProfileListingEx operations are already defined in
     profileengine.h header file.
-    
+
     @param op An operation to apply.
     @param root A profile to start walking from. Complete subtree of the @p root is traversed.
     */
@@ -186,14 +186,14 @@ public:
             walkProfiles<Operation>(op, *it);
         }
     }
-    /**Walks profiles tree and applies operation @p op to each profile 
+    /**Walks profiles tree and applies operation @p op to each profile
     found in the tree below @p root (@p root profile itself is not processed)
     but the operation in this case returns a result of type defined by
     "Result" template parameter.
-    
-    When iterating the tree, the result of operation applied to the parent profile 
+
+    When iterating the tree, the result of operation applied to the parent profile
     is passed as @p result parameter to the recursive call for child profiles.
-    
+
     For example, this function can be used to build another hierarcy of profiles
     or other objects connected to profiles.
     Example of operation class which is used to build a listview with items
@@ -207,7 +207,7 @@ public:
             return new ProfileItem(parent, profile);
         }
     };
-    
+
     class ProfileItem: public KListViewItem {
     public:
         ProfileItem(KListView *parent, Profile *profile)
@@ -216,16 +216,16 @@ public:
             setText(0, profile->genericName());
             setText(1, profile->description());
         }
-        
+
         ProfileItem(KListViewItem *parent, Profile *profile)
             : KListViewItem(parent), m_profile(profile)
         {
             setText(0, profile->genericName());
             setText(1, profile->description());
         }
-        
+
         Profile *profile() const { return m_profile; }
-        
+
     private:
         Profile *m_profile;
     };
@@ -238,7 +238,7 @@ public:
     ProfileListBuilding op;
     engine.walkProfiles<ProfileListBuilding, ProfileItem>(op, item, engine.rootProfile());
     @endcode
-    
+
     @param op An operation to apply.
     @param result A result of the operation as it would have been applied to the @p root.
     @param root A profile to start walking from. Complete subtree of the @p root is traversed.
@@ -258,15 +258,15 @@ protected:
     void processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root);
 
     KURL::List resources(Profile *profile, const QString &nameFilter);
-    
+
     /**Gets a complete listing of available profiles and looks for a profile.
     @param listing Profiles listing will be saved here.
     @param profile Will be a pointer to a profile with the name @p profileName or 0
     if no profile with that name is found.
     @param profileName The name of a profile to find.*/
-    void getProfileWithListing(ProfileListing &listing, Profile **profile, 
+    void getProfileWithListing(ProfileListing &listing, Profile **profile,
         const QString &profileName);
-    
+
 private:
     Profile *m_rootProfile;
 };

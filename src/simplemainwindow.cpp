@@ -167,7 +167,7 @@ void SimpleMainWindow::raiseView(QWidget *view)
     //by its wrapper helps here
     if (view->parent() && view->parent()->isA("EditorWrapper"))
     {
-//         kdDebug() << "parent is editor wrapper: " << 
+//         kdDebug() << "parent is editor wrapper: " <<
 //             static_cast<EditorWrapper*>(view->parent()) << endl;
         view = (QWidget*)view->parent();
     }

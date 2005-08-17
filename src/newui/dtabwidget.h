@@ -28,28 +28,28 @@ class DTabWidget: public KTabWidget {
     Q_OBJECT
 public:
     DTabWidget(QWidget *parent=0, const char *name=0);
-    
-    /**@return The close button at the top right corner. 
+
+    /**@return The close button at the top right corner.
     May be 0 if the configuration do not allow close buttons or the tabbar.*/
     QToolButton *closeButton() const;
 
     virtual void insertTab(QWidget *child, const QString &label, int index = -1 );
-    virtual void insertTab(QWidget *child, const QIcon &iconset, 
+    virtual void insertTab(QWidget *child, const QIcon &iconset,
         const QString &label, int index = -1);
-    
+
 protected:
     virtual void loadSettings();
     virtual void saveSettings();
-    
+
 private slots:
     void setFocus(QWidget *w);
 //    void updateHistory(QWidget *w);
-    
+
 private:
     bool m_tabBarShown;
     bool m_closeOnHover;
     bool m_closeButtonShown;
-    
+
     QToolButton *m_closeButton;
 //    QValueStack<QWidget*> *m_history;
 

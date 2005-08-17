@@ -38,24 +38,24 @@ class DDockWindow : public QDockWidget {
     Q_OBJECT
 public:
     enum Position { Bottom, Left, Right };
-    
+
     DDockWindow(QWidget *parent, Position position);
     virtual ~DDockWindow();
-    
+
     virtual void setVisible(bool v);
     bool visible() const { return m_visible; }
     Position position() const { return m_position; }
-    
+
     virtual void addWidget(const QString &title, QWidget *widget);
     virtual void raiseWidget(QWidget *widget);
     /**Removes the widget from dock. Does not delete it.*/
     virtual void removeWidget(QWidget *widget);
-    
+
     virtual void hideWidget(QWidget *widget);
     virtual void showWidget(QWidget *widget);
-    
+
     virtual QWidget *currentWidget() const;
-    
+
     virtual void setMovingEnabled(bool b);
 
 private slots:
@@ -65,10 +65,10 @@ private slots:
 protected:
     virtual void loadSettings();
     virtual void saveSettings();
-    
+
     Ideal::ButtonBar *m_bar;
     QStackedWidget *m_widgetStack;
-    
+
     QMap<Ideal::Button*, QWidget*> m_widgets;
     QMap<QWidget*, Ideal::Button*> m_buttons;
 

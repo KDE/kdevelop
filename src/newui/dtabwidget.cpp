@@ -33,7 +33,7 @@ DTabWidget::DTabWidget(QWidget *parent, const char *name)
     setMargin(0);
 
     loadSettings();
-    
+
     if (!m_tabBarShown)
         tabBar()->hide();
     else {
@@ -42,13 +42,13 @@ DTabWidget::DTabWidget(QWidget *parent, const char *name)
         m_closeButton->adjustSize();
         m_closeButton->hide();
         setCornerWidget(m_closeButton, TopRight);
-        
+
         if (m_closeOnHover)
             setHoverCloseButton(true);
 
         setTabReorderingEnabled(true);
     }
-    
+
     connect(this, SIGNAL(currentChanged(QWidget*)), this, SLOT(setFocus(QWidget*)));
 //    connect(this, SIGNAL(currentChanged(QWidget*)), this, SLOT(updateHistory(QWidget*)));
 }
@@ -88,7 +88,7 @@ void DTabWidget::insertTab(QWidget *child, const QString &label, int index)
     if (index != -1) tabBar()->repaint();
 }
 
-void DTabWidget::insertTab(QWidget *child, const QIcon &iconset, 
+void DTabWidget::insertTab(QWidget *child, const QIcon &iconset,
     const QString &label, int index)
 {
     if (m_closeButton && m_closeButtonShown)

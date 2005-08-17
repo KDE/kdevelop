@@ -33,7 +33,7 @@ private:
 	int state;
 	int progress_bar_size;
 	QString m_string;
-		
+
 };
 
 #endif

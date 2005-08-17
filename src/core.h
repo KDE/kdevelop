@@ -47,7 +47,7 @@ signals:
 protected:
 
   Core();
-  
+
 private:
   static Core *s_instance;
 

@@ -35,12 +35,12 @@ class DockSplitter: public QSplitter {
 public:
     DockSplitter(Qt::Orientation orientation, QWidget *parent = 0, const char *name = 0);
     ~DockSplitter();
-    
+
     void addDock(uint row, uint col, QWidget *dock);
     void removeDock(uint row, uint col, bool alsoDelete = false);
-    
+
     QPair<uint, uint> indexOf(QWidget *dock);
-    
+
     int numRows() const;
     int numCols(int row) const;
 
@@ -48,9 +48,9 @@ protected:
     void appendSplitter();
     void createSplitters(uint index);
     void shiftWidgets(QSplitter *splitter, uint row, uint fromCol);
-    
+
     bool isRowEmpty(int row);
-    
+
 private:
     Qt::Orientation m_orientation;
     Q3ValueList<QSplitter*> m_splitters;

@@ -50,7 +50,7 @@ void DockSplitter::addDock(uint row, uint col, QWidget *dock)
     if (m_docks.count() <= row)
         for (uint i = m_docks.count(); i <= row ; ++i)
             m_docks.append(Q3ValueList<QWidget*>());
-    
+
     if (m_docks[row].count() <= col)
     {
         for (uint i = m_docks[row].count(); i <= col ; ++i)
@@ -61,11 +61,11 @@ void DockSplitter::addDock(uint row, uint col, QWidget *dock)
         m_docks[row][col] = dock;
     else
         m_docks[row].insert(m_docks[row].at(col), dock);
-    
+
     if (m_splitters.count() <= row)
         createSplitters(row);
     QSplitter *splitter = m_splitters[row];
-    
+
     dock->reparent(splitter, QPoint(0,0), true);
     if (col < m_docks[row].count()-1)
         shiftWidgets(splitter, row, col+1);
@@ -88,7 +88,7 @@ void DockSplitter::appendSplitter()
 
 void DockSplitter::createSplitters(uint index)
 {
-    kdDebug() << "DockSplitter::createSplitters index = " << index << " count = " << m_splitters.count() << endl; 
+    kdDebug() << "DockSplitter::createSplitters index = " << index << " count = " << m_splitters.count() << endl;
     for (uint i = m_splitters.count(); i <= index; ++i)
     {
         kdDebug() << "    appendSplitter..." << endl;
@@ -100,10 +100,10 @@ void DockSplitter::removeDock(uint row, uint col, bool alsoDelete)
 {
     if ((row >= m_docks.count()) || (col >= m_docks[row].count()))
         return;
-    
+
     QWidget *w = m_docks[row][col];
     m_docks[row].remove(m_docks[row].at(col));
-    
+
     if (alsoDelete)
     {
         delete w;
@@ -140,7 +140,7 @@ void DockSplitter::shiftWidgets(QSplitter *splitter, uint row, uint fromCol)
 {
     kdDebug() << "shiftWidgets: row=" << row << "  from col=" << fromCol << endl;
     kdDebug() << "row size is: " << m_docks[row].count() << endl;
-    
+
     for (uint i = fromCol; i < m_docks[row].count(); ++i)
     {
         kdDebug() << "move from " << i << " to last" << endl;

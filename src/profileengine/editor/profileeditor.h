@@ -29,7 +29,7 @@ class ProfileEditor: public ProfileEditorBase {
     Q_OBJECT
 public:
     ProfileEditor(QWidget *parent = 0, const char *name = 0);
-    
+
 public slots:
     virtual void removeProperty();
     virtual void addProperty();
@@ -37,7 +37,7 @@ public slots:
     virtual void addProfile();
     virtual void propertyExecuted(Q3ListBoxItem *item);
     virtual void profileExecuted(Q3ListViewItem *item);
-    
+
     virtual void delDisabled();
     virtual void addDisabled();
     virtual void delEnabled();
@@ -49,19 +49,19 @@ protected:
     void refresh();
     void refreshPropertyCombo();
     void refreshAvailableList();
-    
+
     void fillPropertyList(Profile *profile);
     void fillEDLists(Profile *profile);
     void fillPluginsList(Profile *profile);
-    
+
     Profile *currentProfile();
-    
+
 private:
     ProfileEngine engine;
 
     KListViewItem *allCore;
     KListViewItem *allGlobal;
-    KListViewItem *allProject;    
+    KListViewItem *allProject;
 };
 
 #endif

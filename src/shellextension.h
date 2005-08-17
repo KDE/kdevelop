@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef SHELLEXTENSION_H
 #define SHELLEXTENSION_H
@@ -40,16 +40,16 @@ public:
     }
     @endcode*/
     static ShellExtension *getInstance() { return s_instance; }
-    
+
     /**Reimplement to create global settings page in the dialog @p dlg.*/
     virtual void createGlobalSettingsPage(KDialogBase *dlg) = 0;
     /**Reimplement to perform actions when the global settings page in the
     dialog @p dlg is accepted (user clicked "Ok").*/
     virtual void acceptGlobalSettingsPage(KDialogBase *dlg) = 0;
-    
+
     /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;
-    
+
     /**Reimplement to set a default profile for the shell. Default profile
     will be used by a shell if no --profile argument is specified.*/
     virtual QString defaultProfile() = 0;

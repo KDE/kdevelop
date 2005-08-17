@@ -67,11 +67,11 @@ public slots:
 private slots:
   void slotOpenProject();
   void slotProjectOptions();
-  
+
   void slotLoadProject();
 
   void loadLocalParts();
-  
+
 private:
   ProjectManager();
 
@@ -88,7 +88,7 @@ private:
   void unloadLanguageSupport();
 
   QString profileByAttributes(const QString &language, const QStringList &keywords);
-  
+
   ProjectInfo *m_info;
 
   KAction *m_closeProjectAction, *m_projectOptionsAction;
@@ -97,10 +97,10 @@ private:
   static ProjectManager *s_instance;
 
   ProjectSession* m_pProjectSession;
-  
+
   KDevPlugin *m_vcsPlugin;
   QString m_vcsName;
-  
+
   QString m_oldProfileName;
 };
 

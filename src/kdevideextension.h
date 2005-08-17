@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef KDEVIDEEXTENSION_H
 #define KDEVIDEEXTENSION_H
@@ -30,14 +30,14 @@ public:
 
     virtual void createGlobalSettingsPage(KDialogBase *dlg);
     virtual void acceptGlobalSettingsPage(KDialogBase *dlg);
-    
+
     virtual QString xmlFile();
-    
+
     virtual QString defaultProfile();
-    
+
 protected:
     KDevIDEExtension();
-    
+
 private:
     SettingsWidget *gsw;
 };

@@ -33,20 +33,20 @@ Profile::Profile(Profile *parent, const QString &name)
 {
     if (m_parent)
         m_parent->addChildProfile(this);
-    
+
     QString profileConfig = locate("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
-    
+
     config.setGroup("Information");
     m_genericName = config.readEntry("GenericName");
     m_description = config.readEntry("Description");
-    
+
     config.setGroup("Properties");
     m_properties = config.readListEntry("List");
-    
+
     config.setGroup("Enable");
     m_explicitEnable = config.readListEntry("List");
-    
+
     config.setGroup("Disable");
     m_explicitDisable = config.readListEntry("List");
 }
@@ -87,20 +87,20 @@ void Profile::save()
 {
     QString profileConfig = locateLocal("data", "kdevelop/profiles" + dirName() + "/profile.config");
     KConfig config(profileConfig);
-    
+
     config.setGroup("Information");
     config.writeEntry("GenericName", m_genericName);
     config.writeEntry("Description", m_description);
-    
+
     config.setGroup("Properties");
     config.writeEntry("List", m_properties);
-    
+
     config.setGroup("Enable");
     config.writeEntry("List", m_explicitEnable);
-    
+
     config.setGroup("Disable");
     config.writeEntry("List", m_explicitDisable);
-    
+
     config.sync();
 }
 
