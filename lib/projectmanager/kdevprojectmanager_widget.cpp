@@ -114,9 +114,11 @@ void KDevToolBarShell::resizeEvent ( QResizeEvent * )
 
 // ----------------------------------------------------------------------------------
 KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
-    : Q3VBox(0, "kdevprojectmanager widget"),
+    : QWidget(0, "kdevprojectmanager widget"),
       m_part(part)
 {
+    new QVBoxLayout(this);
+
     m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
         part->actionCollection(), "project_reload");
 
@@ -136,6 +138,8 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
         part->actionCollection(), "project_add_folder");
 
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
+    layout()->addWidget(splitter);
+
     m_overview = new ProjectOverview(this, splitter);
     m_details = new ProjectDetails(this, splitter);
 
@@ -146,7 +150,6 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
         this, SLOT(updateActions()));
     connect(m_details->listView(), SIGNAL(selectionChanged(QTreeWidgetItem*)),
         this, SLOT(updateActions()));
-
 }
 
 KDevProjectManagerWidget::~KDevProjectManagerWidget()
@@ -273,10 +276,13 @@ private:
 };
 
 ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
-    : Q3VBox(parentWidget),
+    : QWidget(parentWidget),
       m_managerWidget(m)
 {
+    new QVBoxLayout(this);
+
     m_toolBarShell = new KDevToolBarShell(this);
+    layout()->addWidget(m_toolBarShell);
     m_toolBar = new KDevToolBar(m_toolBarShell);
     m_toolBarShell->setToolBar(m_toolBar);
 
@@ -284,6 +290,8 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
     m_toolBar->setFlat(true);
 
     m_listView = new QTreeWidget(this);
+    layout()->addWidget(m_listView);
+
     fake_root = new ProjectRoot(this);
 
     m_listView->header()->hide();

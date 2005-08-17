@@ -24,8 +24,6 @@
 
 #include <QtGui/QTreeWidget>
 
-#include <q3vbox.h>
-
 class KDevProject;
 class KDevProjectManagerPart;
 class KDevToolBar;
@@ -38,7 +36,7 @@ class ProjectViewItem;
 class ProjectOverview;
 class ProjectDetails;
 
-class KDevProjectManagerWidget: public Q3VBox
+class KDevProjectManagerWidget: public QWidget
 {
     Q_OBJECT
 public:
@@ -124,7 +122,7 @@ private:
     ProjectView *m_projectView;
 };
 
-class ProjectView: public Q3VBox
+class ProjectView: public QWidget
 {
     Q_OBJECT
 public:

@@ -66,7 +66,7 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 		++it;
 	}
 
-	connect( dlg, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );	
+	connect( dlg, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );
 	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );
 }
 
@@ -78,8 +78,8 @@ void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, KIcon::SizeMedium ) ), it.key() );
 		++it;
 	}
-	
-	connect( dlg, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );	
+
+	connect( dlg, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT( slotAboutToShowPage(QWidget*)) );
 	connect( dlg, SIGNAL(destroyed()), this, SLOT(slotConfigWidgetDestroyed()) );
 }
 
@@ -91,7 +91,7 @@ void ConfigWidgetProxy::slotConfigWidgetDestroyed( )
 void ConfigWidgetProxy::slotAboutToShowPage( QWidget * page )
 {
 	if ( !page ) return;
-	
+
 	PageMap::Iterator it = _pageMap.find( page );
 	if ( it != _pageMap.end() )
 	{

@@ -37,7 +37,6 @@
 #include <kparts/componentfactory.h>
 
 #include <qdir.h>
-#include <q3whatsthis.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
 
@@ -91,7 +90,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
     m_widget = new KDevProjectManagerWidget(this);
 
-    Q3WhatsThis::add(m_widget, i18n("Project Manager"));
+    m_widget->setWhatsThis(i18n("Project Manager"));
 
     mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 

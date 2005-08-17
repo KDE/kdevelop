@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <q3vbox.h>
 #include <qlabel.h>
 
 #include <klocale.h>
