@@ -20,14 +20,13 @@
 #ifndef DDOCKWINDOW_H
 #define DDOCKWINDOW_H
 
-#include <q3dockwindow.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QBoxLayout>
+#include <QDockWidget>
+#include <QList>
+#include <QStackedWidget>
 
 class QBoxLayout;
 class QToolButton;
-class Q3WidgetStack;
+class QStackedWidget;
 class KComboBox;
 
 namespace Ideal {
@@ -35,7 +34,7 @@ namespace Ideal {
     class ButtonBar;
 }
 
-class DDockWindow : public Q3DockWindow {
+class DDockWindow : public QDockWidget {
     Q_OBJECT
 public:
     enum Position { Bottom, Left, Right };
@@ -68,7 +67,7 @@ protected:
     virtual void saveSettings();
     
     Ideal::ButtonBar *m_bar;
-    Q3WidgetStack *m_widgetStack;
+    QStackedWidget *m_widgetStack;
     
     QMap<Ideal::Button*, QWidget*> m_widgets;
     QMap<QWidget*, Ideal::Button*> m_buttons;
@@ -76,7 +75,7 @@ protected:
 private:
     Position m_position;
     bool m_visible;
-    QString m_name;    
+    QString m_name;
 
     Ideal::Button *m_toggledButton;
     QBoxLayout *m_internalLayout;

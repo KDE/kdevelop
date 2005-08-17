@@ -68,8 +68,8 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
             m_internalLayout = new QHBoxLayout(boxLayout(), 0);
             m_internalLayout->setDirection(QBoxLayout::RightToLeft);
             break;
-    }    
-    
+    }
+
     KConfig *config = kapp->config();
     config->setGroup("UI");
     int mode = config->readNumEntry("MDIStyle", 3);
@@ -80,15 +80,15 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
         buttonMode = Ideal::Text;
     else if (mode == 3)
         buttonMode = Ideal::IconsAndText;
-        
+
     m_bar = new Ideal::ButtonBar(place, buttonMode, this);
     m_internalLayout->addWidget(m_bar);
-    
-    m_widgetStack = new Q3WidgetStack(this);
+
+    m_widgetStack = new QStackedWidget(this);
     m_internalLayout->addWidget(m_widgetStack);
 
     setVisible(m_visible);
-    
+
     loadSettings();
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Alexander Dymo                                  *
+ *   Copyright (C) 2004-2005 by Alexander Dymo                             *
  *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,9 +19,7 @@
  ***************************************************************************/
 #include "buttonbar.h"
 
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QResizeEvent>
 #include <QBoxLayout>
 
@@ -42,10 +40,10 @@ ButtonLayout::ButtonLayout(ButtonBar *parent, Qt::Orientation d, int margin, int
 QSize ButtonLayout::minimumSize() const
 {
     QSize size = QBoxLayout::minimumSize();
-    
+
     if (!m_buttonBar->autoResize())
         return size;
-    
+
     switch (m_buttonBar->place())
     {
         case Ideal::Left:
@@ -78,10 +76,10 @@ ButtonBar::ButtonBar(Place place, ButtonMode mode, QWidget *parent, const char *
             l = new ButtonLayout(this, QBoxLayout::LeftToRight, 0, 0);
             break;
     }
-    
+
     l->setResizeMode(QLayout::SetMinimumSize);
     setMode(mode);
-    
+
     l->insertStretch(-1);
 }
 
@@ -92,7 +90,7 @@ ButtonBar::~ButtonBar()
 void ButtonBar::addButton(Button *button)
 {
     int buttonCount = m_buttons.count();
-    
+
     button->setMode(m_mode);
     m_buttons.append(button);
     l->insertWidget(buttonCount, button);
@@ -169,14 +167,14 @@ void ButtonBar::resizeEvent(QResizeEvent *ev)
             oldDimension = ev->oldSize().width();
             break;
     }
-    
+
     if (preferredDimension > actualDimension)
         shrink(preferredDimension, actualDimension);
     else if (m_shrinked && (originalDimension() < actualDimension))
         unshrink();
     else if (m_shrinked && actualDimension > oldDimension)
         deshrink(preferredDimension, actualDimension);
-    
+
     QWidget::resizeEvent(ev);
 }
 
@@ -184,40 +182,40 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
-    
+
     m_shrinked = true;
-    
+
     uint textLength = 0;
-    Q3ValueList<uint> texts;
+    QList<uint> texts;
     uint maxLength = 0;
-    for (ButtonList::const_iterator it = m_buttons.constBegin(); it != m_buttons.constEnd(); ++it)
+    foreach (Button *button, m_buttons)
     {
-        uint length = (*it)->text().length();
+        uint length = button->text().length();
         maxLength = length > maxLength ? length : maxLength ;
         texts.append(length);
         textLength += length;
     }
-    
+
     uint newPreferredLength = actualDimension * textLength / preferredDimension;
-        
+
     uint newMaxLength = maxLength;
     uint newTextLength;
     do {
         newMaxLength -= 1;
         newTextLength = 0;
-        for (Q3ValueList<uint>::iterator it = texts.begin(); it != texts.end(); ++it)
+        foreach (uint &length, texts)
         {
-            if (*it > newMaxLength)
-                *it = newMaxLength;
-            newTextLength += *it;
+            if (length > newMaxLength)
+                length = newMaxLength;
+            newTextLength += length;
         }
     } while (newTextLength > newPreferredLength);
 
     int i = 0;
-    for (ButtonList::iterator it = m_buttons.begin(); it != m_buttons.end(); ++it)
+    for (Button *button, m_buttons)
     {
-        (*it)->setText(KStringHandler::rsqueeze((*it)->realText(), texts[i++]));
-        (*it)->updateSize();
+        button->setText(KStringHandler::rsqueeze(button->realText(), texts[i++]));
+        button->updateSize();
     }
 }
 
@@ -225,59 +223,59 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
 {
     if (!preferredDimension)
         return;
-    
+
     m_shrinked = true;
-    
+
     uint textLength = 0;
-    Q3ValueList<uint> texts;
+    QList<uint> texts;
     uint maxLength = 0;
-    for (ButtonList::const_iterator it = m_buttons.constBegin(); it != m_buttons.constEnd(); ++it)
+    for (Button *button = m_buttons)
     {
-        uint length = (*it)->text().length();
+        uint length = button->text().length();
         maxLength = length > maxLength ? length : maxLength ;
         texts.append(length);
         textLength += length;
     }
-    
+
     uint newPreferredLength = actualDimension * textLength / preferredDimension;
-    
+
     if (newPreferredLength <= textLength)
         return;
-    
-    uint newTextLength;    
+
+    uint newTextLength;
     uint prevTextLength = 0;
     do {
         newTextLength = 0;
         int i = 0;
-        for (Q3ValueList<uint>::iterator it = texts.begin(); it != texts.end(); ++it, i++)
+        for (uint &length, texts)
         {
             if (m_buttons[i]->text().contains("..."))
-                (*it)++;
-            newTextLength += *it;
+                length++;
+            newTextLength += length;
         }
         if (newTextLength == prevTextLength)
             break;
         prevTextLength = newTextLength;
     } while (newTextLength < newPreferredLength);
-    
+
     int i = 0;
-    for (ButtonList::iterator it = m_buttons.begin(); it != m_buttons.end(); ++it)
+    for (Button *button = m_buttons)
     {
-        if (texts[i] >= (*it)->realText().length())
-            (*it)->setText((*it)->realText());
+        if (texts[i] >= button->realText().length())
+            button->setText(button->realText());
         else
-            (*it)->setText(KStringHandler::rsqueeze((*it)->realText(), texts[i]));
-        (*it)->updateSize();
+            button->setText(KStringHandler::rsqueeze(button->realText(), texts[i]));
+        button->updateSize();
         ++i;
     }
 }
 
 void ButtonBar::unshrink()
 {
-    for (ButtonList::iterator it = m_buttons.begin(); it != m_buttons.end(); ++it)
+    for (Button *button, m_buttons)
     {
-        (*it)->setText((*it)->realText());
-        (*it)->updateSize();
+        button->setText(button->realText());
+        button->updateSize();
     }
     m_shrinked = false;
 }
@@ -285,10 +283,10 @@ void ButtonBar::unshrink()
 int ButtonBar::originalDimension()
 {
     int size = 0;
-    for (ButtonList::const_iterator it = m_buttons.constBegin(); it != m_buttons.constEnd(); ++it)
+    for (Button *button, m_buttons)
     {
-        size += (*it)->sizeHint((*it)->realText()).width();
-    }    
+        size += button->sizeHint(button->realText()).width();
+    }
     return size;
 }
 

@@ -23,7 +23,6 @@
 #include <qtooltip.h>
 #include <qstyle.h>
 #include <qapplication.h>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kdebug.h>

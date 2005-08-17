@@ -21,10 +21,7 @@
 #define IDEALBUTTONBAR_H
 
 #include <qwidget.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <QBoxLayout>
+#include <QList>
 
 #include "comdefs.h"
 
@@ -94,7 +91,7 @@ private:
     void fixDimensions();
     void setButtonsPlace(Ideal::Place place);
     
-    typedef Q3ValueList<Button*> ButtonList;
+    typedef QList<Button*> ButtonList;
     ButtonList m_buttons;
 
     ButtonMode m_mode;
