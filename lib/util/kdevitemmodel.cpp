@@ -107,7 +107,7 @@ QModelIndex KDevItemModel::parent(const QModelIndex &index) const
   if (KDevItem *kdev_item = item(index))
     {
       if (kdev_item->parent() && kdev_item->parent()->parent())
-        return createIndex(positionOf(kdev_item->parent()), 1, kdev_item->parent());
+        return createIndex(positionOf(kdev_item->parent()), 0, kdev_item->parent());
     }
 
   return QModelIndex();

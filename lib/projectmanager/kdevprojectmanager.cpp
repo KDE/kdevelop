@@ -21,12 +21,16 @@
 #include "kdevprojectmodel.h"
 
 #include <QtGui/QHeaderView>
-#include <QtCore/qdebug.h>
+
+#include <kdebug.h>
+#include <kurl.h>
 
 KDevProjectManager::KDevProjectManager(QWidget *parent)
   : KDevTreeView(parent)
 {
   header()->hide();
+
+  connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)));
 }
 
 KDevProjectManager::~KDevProjectManager()
@@ -90,4 +94,16 @@ KDevProjectTargetItem *KDevProjectManager::currentTargetItem() const
 KDevProjectModel *KDevProjectManager::projectModel() const
 {
   return qobject_cast<KDevProjectModel*>(model());
+}
+
+void KDevProjectManager::slotActivated(const QModelIndex &index)
+{
+  KDevProjectItem *item = projectModel()->item(index);
+  if (item && item->file())
+    {
+      KURL url;
+      url.setPath(item->file()->fileInfo().absoluteFilePath());
+      kdDebug(9000) << "ROBE: ========================== url:" << url << endl;
+      emit activateURL(url);
+    }
 }

@@ -26,6 +26,7 @@ class KDevProjectModel;
 class KDevProjectFolderItem;
 class KDevProjectFileItem;
 class KDevProjectTargetItem;
+class KURL;
 
 class KDevProjectManager: public KDevTreeView
 {
@@ -39,6 +40,12 @@ public:
   KDevProjectFolderItem *currentFolderItem() const;
   KDevProjectFileItem *currentFileItem() const;
   KDevProjectTargetItem *currentTargetItem() const;
+
+signals:
+  void activateURL(const KURL &url);
+
+protected slots:
+  void slotActivated(const QModelIndex &index);
 };
 
 #endif // KDEVPROJECTMANAGER_H

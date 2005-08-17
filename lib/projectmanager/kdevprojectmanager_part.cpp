@@ -25,7 +25,9 @@
 #include "kdevprojecteditor.h"
 #include "importprojectjob.h"
 
+#include <kfiltermodel.h>
 #include <kdevcore.h>
+#include <kdevpartcontroller.h>
 #include <kdevmainwindow.h>
 #include <urlutil.h>
 
@@ -38,9 +40,11 @@
 
 #include <kparts/componentfactory.h>
 
+#include <QtGui/QVBoxLayout>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
+#include <qlineedit.h>
 
 #include <kdevplugininfo.h>
 
@@ -93,10 +97,26 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
         }
     }
 
-    m_widget = new KDevProjectManager(0);
-    m_widget->setModel(m_projectModel);
-    m_widget->setItemDelegate(new KDevProjectManagerDelegate(m_widget));
-    m_widget->setWhatsThis(i18n("Project Manager"));
+    m_widget = new QWidget(0);
+    new QVBoxLayout(m_widget);
+
+    QLineEdit *editor = new QLineEdit(m_widget);
+    m_widget->layout()->addWidget(editor);
+
+    editor->hide();
+
+    m_projectManager = new KDevProjectManager(m_widget);
+    m_widget->layout()->add(m_projectManager);
+
+    //KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
+    //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
+    //m_projectManager->setModel(filterModel);
+
+    m_projectManager->setModel(m_projectModel);
+    m_projectManager->setItemDelegate(new KDevProjectManagerDelegate(m_projectManager));
+    m_projectManager->setWhatsThis(i18n("Project Manager"));
+
+    connect(m_projectManager, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
     mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 
@@ -108,25 +128,31 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
 {
-    if (m_widget) {
+    if (m_projectManager) {
         mainWindow()->removeView(m_widget);
         delete m_widget;
     }
 }
 
+void KDevProjectManagerPart::openURL(const KURL &url)
+{
+  kdDebug(9000) << "========> openURL:" << url << endl;
+  partController()->editDocument(url);
+}
+
 KDevProjectFolderItem *KDevProjectManagerPart::activeFolder()
 {
-    return m_widget->currentFolderItem();
+    return m_projectManager->currentFolderItem();
 }
 
 KDevProjectTargetItem *KDevProjectManagerPart::activeTarget()
 {
-    return m_widget->currentTargetItem();
+    return m_projectManager->currentTargetItem();
 }
 
 KDevProjectFileItem * KDevProjectManagerPart::activeFile()
 {
-    return m_widget->currentFileItem();
+    return m_projectManager->currentFileItem();
 }
 
 void KDevProjectManagerPart::updateProjectTimeout()
@@ -213,7 +239,7 @@ QString KDevProjectManagerPart::runArguments() const
 
 QString KDevProjectManagerPart::activeDirectory() const // ### do we really need it?
 {
-    if (KDevProjectFolderItem *folder = m_widget->currentFolderItem())
+    if (KDevProjectFolderItem *folder = m_projectManager->currentFolderItem())
         return URLUtil::relativePath(projectDirectory(), folder->name());
 
     return QString();

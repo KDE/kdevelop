@@ -29,6 +29,7 @@ class KDevProjectImporter;
 class KDevProjectBuilder;
 class KDevProjectModel;
 class QTimer;
+class KURL;
 
 /*
  Please read the README.dox file for more info about this part
@@ -89,6 +90,9 @@ signals:
     void addedProjectItem(KDevProjectItem *dom);
     void aboutToRemoveProjectItem(KDevProjectItem *dom);
 
+public slots:
+    void openURL(const KURL &url);
+
 private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);
@@ -103,7 +107,8 @@ protected:
 private:
     KDevProjectModel *m_projectModel;
     KDevProjectFolderItem *m_workspace;
-    QPointer<KDevProjectManager> m_widget;
+    QPointer<QWidget> m_widget;
+    KDevProjectManager *m_projectManager;
     QMap<QString, KDevProjectImporter*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;
     QStringList m_cachedFileList;
