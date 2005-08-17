@@ -1,9 +1,9 @@
 INCLUDES = -I$(top_srcdir)/lib \
 	-I$(top_srcdir)/lib/interfaces \
-	-I$(top_srcdir)/lib/language \
-	-I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/interfaces/external \
-	-I$(top_srcdir)/lib/interfaces/extras -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets \
-	-I$(top_srcdir)/src/newui -I$(top_srcdir)/src/profileengine/lib $(KDEVMDI_INCLUDES) \
+	-I$(top_srcdir)/lib/util \
+	-I$(top_srcdir)/lib/widgets \
+	-I$(top_srcdir)/src/newui \
+	-I$(top_srcdir)/src/profileengine/lib \
 	$(all_includes)
 
 KDE_OPTIONS=nofinal
@@ -13,9 +13,9 @@ libkdevshell_la_LDFLAGS = $(all_libraries)
 libkdevshell_la_LIBADD = \
 	$(top_builddir)/src/profileengine/lib/libprofileengine.la \
         $(top_builddir)/lib/libkdevelop.la \
-        $(top_builddir)/lib/language/liblang_interfaces.la \
-	$(top_builddir)/lib/widgets/libkdevwidgets.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la \
-	$(top_builddir)/src/newui/libd.la $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
+	$(top_builddir)/lib/widgets/libkdevwidgets.la \
+	$(top_builddir)/src/newui/libd.la \
+	$(LIB_KHTML) -lktexteditor
 libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
 	partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \

@@ -24,7 +24,7 @@ libkdevinterfaces_la_LDFLAGS = \
 	-no-undefined $(all_libraries)
 libkdevinterfaces_la_LIBADD = \
 	$(top_builddir)/lib/util/libkdevutil.la \
-	-l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) 
+	-l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) \
 	-lktexteditor -lkscript
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
@@ -54,8 +54,6 @@ servicetype_DATA = \
 	kdevelop_part.desktop		 kdevelop_rwpart.desktop
 
 METASOURCES = AUTO
-
-SUBDIRS = extensions extras
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts \
 	kutils kdevutil kdevcatalog kdevprofileslib kdevextensions

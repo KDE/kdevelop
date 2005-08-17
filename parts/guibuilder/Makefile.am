@@ -4,7 +4,6 @@ SUBDIRS = . designer
 
 INCLUDES = \
   -I$(top_srcdir)/lib/interfaces \
-  -I$(top_srcdir)/lib/projectmanager/interfaces \
   -I$(top_srcdir)/lib/util \
   $(all_includes)
 
@@ -12,7 +11,6 @@ kde_module_LTLIBRARIES = libkdevguibuilder.la
 libkdevguibuilder_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevguibuilder_la_LIBADD = \
   $(top_builddir)/lib/libkdevelop.la \
-  $(top_builddir)/lib/projectmanager/interfaces/libprojectmanager_interfaces.la \
   $(LIB_QTDESIGNER_COMPONENTS) $(LIB_QTDESIGNER)
 
 libkdevguibuilder_la_SOURCES = \
