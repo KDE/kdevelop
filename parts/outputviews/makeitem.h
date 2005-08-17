@@ -122,7 +122,7 @@ public:
 	virtual QString text( EOutputLevel );
 };
 
-namespace KTextEditor { class Cursor; class Document; }
+namespace KTextEditor { class View; class Document; }
 
 class ErrorItem : public MakeItem
 {
@@ -130,15 +130,16 @@ public:
 	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, const QString& compiler );
 	virtual ~ErrorItem();
 
-	virtual bool append( const QString& text );
-  virtual int displayMode() const { return DelayedDisplay | Append; }
 	Type type() { return m_isWarning ? Warning : Error; }
+        
+	virtual bool append( const QString& text );
+	virtual int displayMode() const { return DelayedDisplay | Append; }
 	virtual bool visible( EOutputLevel ) { return true; }
 
 	QString fileName;
 	int lineNum;
 	QString m_error;
-	KTextEditor::Cursor* m_cursor;
+	KTextEditor::View* m_cursor;
 	KTextEditor::Document* m_doc;
 	bool m_isWarning;
 	QString m_compiler;

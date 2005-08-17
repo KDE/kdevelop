@@ -16,7 +16,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "ktexteditor/cursorinterface.h"
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 
 MakeItem::MakeItem()
 {
@@ -36,13 +37,13 @@ QString MakeItem::color( bool bright_bg )
 	switch ( type() )
 	{
 	case Error:
-		return bright_bg ? "maroon" : "red";
+		return QLatin1String(bright_bg ? "maroon" : "red");
 	case Warning:
-		return bright_bg ? "#666" : "#999";
+		return QLatin1String(bright_bg ? "#666" : "#999");
 	case Diagnostic:
-		return bright_bg ? "black" : "white";
+		return QLatin1String(bright_bg ? "black" : "white");
 	default:
-		return bright_bg ? "navy" : "blue";
+		return QLatin1String(bright_bg ? "navy" : "blue");
 	}
 }
 
@@ -52,11 +53,11 @@ QString MakeItem::icon()
 	{
 	case Error:
 	case Warning:
-		return "<img src=\"error\"></img><nobr> </nobr>";
+		return QLatin1String("<img src=\"error\"></img><nobr> </nobr>");
 	case Diagnostic:
-		return "<img src=\"warning\"></img><nobr> </nobr>";
+		return QLatin1String("<img src=\"warning\"></img><nobr> </nobr>");
 	default:
-		return "<img src=\"message\"></img><nobr> </nobr>";
+		return QLatin1String("<img src=\"message\"></img><nobr> </nobr>");
 	}
 }
 
@@ -69,14 +70,14 @@ QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
 {
   QString txt = text(level);
 	if (txt.isEmpty())
-		return "<br>";
+		return QLatin1String("<br>");
 	if ( level == eFull )
 	{
 		return txt;
 	}
 	else
 	{
-		return QString("<code>")
+		return QString::fromUtf8("<code>")
         .append( icon() ).append("<font color=\"").append( color( bright_bg) ).append("\">")
         .append( txt ).append("</font></code>").append( br() );
 	}
@@ -106,7 +107,10 @@ ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QStrin
 
 ErrorItem::~ErrorItem()
 {
-	if (m_cursor) m_cursor->setPosition(uint(-2), uint(-2));
+#warning "what?"
+#if 0 // 
+	// if (m_cursor) m_cursor->setCursorPosition(uint(-2), uint(-2));
+#endif
 }
 
 bool ErrorItem::append( const QString& text )

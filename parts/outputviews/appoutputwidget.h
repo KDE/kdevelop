@@ -27,27 +27,29 @@ enum FilterType {
 
 class AppOutputWidget : public ProcessWidget
 {
-    Q_OBJECT
-friend class AppOutputViewPart;
+  Q_OBJECT
+  friend class AppOutputViewPart;
 public:
-    AppOutputWidget(AppOutputViewPart* part);
-    ~AppOutputWidget();
+  AppOutputWidget(AppOutputViewPart* part);
+  virtual ~AppOutputWidget();
 
 public slots:
-	void slotRowSelected(Q3ListBoxItem* row);
-	void insertStdoutLine(const QString &line);
-	void insertStderrLine(const QString &line);
-	void slotContextMenu(Q3ListBoxItem *, const QPoint &);
+  void slotRowSelected(QListWidgetItem* row);
+  void insertStdoutLine(const QString &line);
+  void insertStderrLine(const QString &line);
+
+private slots:
+  void popupContextMenu(const QPoint &pt);
 
 private:
-	virtual void childFinished(bool normal, int status);
+  virtual void childFinished(bool normal, int status);
 
-	QStringList strList;
-	FilterType iFilterType;
-	QString strFilterStr;
-	bool bCS;
+  QStringList strList;
+  FilterType iFilterType;
+  QString strFilterStr;
+  bool bCS;
 
-	AppOutputViewPart* m_part;
+  AppOutputViewPart* m_part;
 };
 
 #endif

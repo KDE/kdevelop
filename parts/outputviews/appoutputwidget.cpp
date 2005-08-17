@@ -15,6 +15,7 @@
 #include "appoutputwidget.h"
 
 #include <qregexp.h>
+#include <qmenu.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -33,12 +34,10 @@
 #include "kdevmainwindow.h"
 
 AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
-    : ProcessWidget(0, "app output widget")
-	, m_part(part)
+    : ProcessWidget(0), m_part(part)
 {
-	connect(this, SIGNAL(executed(Q3ListBoxItem*)), SLOT(slotRowSelected(Q3ListBoxItem*)));
-	connect(this, SIGNAL(rightButtonClicked( Q3ListBoxItem *, const QPoint & )), 
-		SLOT(slotContextMenu( Q3ListBoxItem *, const QPoint & )));
+      setObjectName(QString::fromUtf8("app output widget"));
+	connect(this, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(slotRowSelected(QListWidgetItem*)));
 	KConfig *config = kapp->config();
 	config->setGroup("General Options");
 	setFont(config->readFontEntry("OutputViewFont"));
@@ -55,7 +54,7 @@ void AppOutputWidget::childFinished(bool normal, int status)
 }
 
 
-void AppOutputWidget::slotRowSelected(Q3ListBoxItem* row)
+void AppOutputWidget::slotRowSelected(QListWidgetItem* row)
 {
 	static QRegExp assertMatch("ASSERT: \\\"([^\\\"]+)\\\" in ([^\\( ]+) \\(([\\d]+)\\)");
 	static QRegExp lineInfoMatch("\\[([^:]+):([\\d]+)\\]");
@@ -90,19 +89,21 @@ void AppOutputWidget::insertStderrLine(const QString &line)
 }
 
 
-void AppOutputWidget::slotContextMenu( Q3ListBoxItem *, const QPoint &p )
+void AppOutputWidget::popupContextMenu(const QPoint &pt)
 {
 	//generate the popupmenu first
-	KPopupMenu popup(this, "filter output");
+	QMenu popup(this);
 
-	int idNoFilter = popup.insertItem( i18n("Do Not Filter Output") );
-	popup.setItemChecked(idNoFilter, iFilterType == eNoFilter);
+	QAction *idNoFilter = popup.addAction( i18n("Do Not Filter Output") );
+        idNoFilter->setCheckable(true);
+        idNoFilter->setChecked(iFilterType == eNoFilter);
 
-	int idFilter = popup.insertItem( i18n("Filter Output") );
-	popup.setItemChecked(idFilter, iFilterType == eFilterStr || iFilterType == eFilterRegExp);
+	QAction *idFilter = popup.addAction( i18n("Filter Output") );
+        idFilter->setCheckable(true);
+        idFilter->setChecked(iFilterType == eFilterStr || iFilterType == eFilterRegExp);
 
 	//pop it up
-	int res = popup.exec(p);
+	QAction *res = popup.exec(pt);
 
 	//init the query dialog with current data
 	FilterDlg dlg(this, "filter output settings");
@@ -132,14 +133,18 @@ void AppOutputWidget::slotContextMenu( Q3ListBoxItem *, const QPoint &p )
 		//copy the first item from the listbox
 		//if a programm was started, this contains the issued command
 		QString strFirst=QString();
+#warning "port me"
+#if 0
 		if (count()) {
 			setTopItem(0);
 			strFirst = item(topItem())->text();
 		}
+#endif
+
 		//clear the listbox and write back the issued command
 		clear();
 		if (strFirst != QString())
-			insertItem(new ProcessListBoxItem(strFirst, ProcessListBoxItem::Diagnostic));
+			addItem(new ProcessListBoxItem(strFirst, ProcessListBoxItem::Diagnostic));
 
 		//grep through the QList for items matching the filter...
 		QStringList strListFound;
@@ -154,10 +159,10 @@ void AppOutputWidget::slotContextMenu( Q3ListBoxItem *, const QPoint &p )
 		for ( QStringList::Iterator it = strListFound.begin(); it != strListFound.end(); ++it ) {
 			if ((*it).startsWith("o-")) {
 				(*it).remove(0,2);
-				insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Normal));
+				addItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Normal));
 			} else if ((*it).startsWith("e")) {
 				(*it).remove(0,2);
-				insertItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Error));
+				addItem(new ProcessListBoxItem(*it, ProcessListBoxItem::Error));
 			}
 		}
 	} else if (res == idNoFilter) {

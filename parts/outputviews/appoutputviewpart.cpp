@@ -34,8 +34,9 @@ typedef KDevGenericFactory< AppOutputViewPart > AppViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevappview, AppViewFactory( data ) )
 
 AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevAppFrontend(&data, parent, name ? name : "AppOutputViewPart")
+    : KDevAppFrontend(&data, parent)
 {
+    setObjectName(QString::fromUtf8(name));
     setInstance(AppViewFactory::instance());
 
     m_dcop = new KDevAppFrontendIface(this);

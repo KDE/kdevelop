@@ -17,10 +17,11 @@
 #include "processlinemaker.h"
 #include "makeviewpart.h"
 #include "makeitem.h"
-#include "ktexteditor/document.h"
-#include "ktexteditor/cursorinterface.h"
-#include "ktexteditor/editinterface.h"
 #include "urlutil.h"
+
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/cursor.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,7 +46,7 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <private/qrichtext_p.h>
+#include <private/q3richtext_p.h>
 
 #include <stdlib.h>
 #include <limits.h>
@@ -392,14 +393,14 @@ void MakeWidget::prevError()
 void MakeWidget::contentsMouseReleaseEvent( QMouseEvent* e )
 {
 	Q3TextEdit::contentsMouseReleaseEvent(e);
-	if ( e->button() != LeftButton )
+	if ( e->button() != Qt::LeftButton )
 		return;
 	searchItem(paragraphAt(e->pos()));
 }
 
 void MakeWidget::keyPressEvent(QKeyEvent *e)
 {
-	if (e->key() == Key_Return || e->key() == Key_Enter)
+	if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
 	{
 		int parag, index;
 		getCursorPosition(&parag, &index);
@@ -442,7 +443,7 @@ void MakeWidget::specialCheck( const QString& file, QString& fName ) const
     QRegExp rx("cd \\'(.*)\\'.*");
     if (rx.search(firstLine) != -1)
     {
-        KURL url(rx.cap(1)+"/", file);
+        KURL url(rx.cap(1)+QLatin1String("/") + file);
         if (url.isValid())
         {
             kdDebug(9004) << "MakeWidget::specialCheck thinks that url is: " << url.url()
@@ -510,8 +511,8 @@ void MakeWidget::searchItem(int parag)
 		// open the file
 		kdDebug(9004) << "Opening file: " << guessFileName(item->fileName, parag) << endl;
 		if (item->m_cursor) {
-			uint line, col;
-			item->m_cursor->position(&line, &col);
+			KTextEditor::Cursor c = item->m_cursor->cursorPosition();
+			int line = c.line(), col = c.column();
 			kdDebug() << "Cursor new position: " << col << endl;
 			m_part->partController()->editDocument(KURL( guessFileName(item->fileName, parag) ), line, col);
 		} else {
@@ -698,8 +699,9 @@ void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
 		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->partForURL(KURL( guessFileName(e->fileName, m_paragraphs + 1 ))));
 
 	if (doc) {
-		KTextEditor::EditInterface* edit = dynamic_cast<KTextEditor::EditInterface*>(doc);
-		KTextEditor::CursorInterface* cursor = dynamic_cast<KTextEditor::CursorInterface*>(doc);
+		KTextEditor::Document* edit = doc;
+#if 0  // port me
+		KTextEditor::View* cursor = view;
 		if (cursor) {
 			e->m_cursor = cursor->createCursor();
 			uint col = 0;
@@ -711,6 +713,7 @@ void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
 			e->m_cursor->setPosition(e->lineNum, col);
 			e->m_doc = doc;
 		}
+#endif
 	}
 }
 
@@ -785,7 +788,7 @@ void MakeWidget::refill()
 	clear();
 	m_paragraphToItem.clear();
 	m_paragraphs = 0;
-	for( uint i = 0; i < m_items.size(); i++ )
+	for( int i = 0; i < m_items.size(); i++ )
 	{
 		if ( m_bCompiling && !m_items[i]->visible( m_compilerOutputLevel ) )
 			continue;

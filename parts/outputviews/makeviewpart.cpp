@@ -31,8 +31,9 @@ typedef KDevGenericFactory< MakeViewPart > MakeViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevmakeview, MakeViewFactory( data ) )
 
 MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevMakeFrontend(&data, parent, name)
+    : KDevMakeFrontend(&data, parent)
 {
+    setObjectName(QString::fromUtf8(name));
     setInstance(MakeViewFactory::instance());
 
     setXMLFile("kdevmakeview.rc");
