@@ -1,5 +1,7 @@
 # Here resides the guibuilder part.
 
+SUBDIRS = . designer
+
 INCLUDES = \
   -I$(top_srcdir)/lib/interfaces \
   -I$(top_srcdir)/lib/projectmanager/interfaces \
