@@ -37,7 +37,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QModelIndex parent(const QModelIndex &child) const;
 
-    void addChildModel(QAbstractItemModel *childModel, const QString &title);
+    void addChildModel(QAbstractItemModel *childModel, const QString &title, int visibleColumn = 0);
     QList<QAbstractItemModel *> childModels() const;
     QString modelTitle(QAbstractItemModel *childModel) const;
     bool isTitle(const QModelIndex &index) const;
@@ -65,6 +65,7 @@ private:
         QAbstractItemModel *model;
         int rowCount;
         int rowIndex;
+        int visibleColumn;
     };
     QVector<CModel> cModels;
 

@@ -78,7 +78,7 @@ QVariant QuickOpenModel::data(const QModelIndex &index, int role) const
         return role == Qt::DisplayRole ? QVariant(cm.title) : QVariant();
     }
 
-    return cm.model->data(cm.model->index(childRow, index.column()), role);
+    return cm.model->data(cm.model->index(childRow, cm.visibleColumn), role);
 }
 
 bool QuickOpenModel::isTitle(const QModelIndex &index) const
@@ -92,7 +92,7 @@ QModelIndex QuickOpenModel::parent(const QModelIndex & /*child*/) const
     return QModelIndex();
 }
 
-void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString &title)
+void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString &title, int visibleColumn)
 {
     Q_ASSERT(childModel);
 
@@ -117,6 +117,7 @@ void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString
     cm.rowCount = childCount;
     cm.rowIndex = 0;
     cm.title = title;
+    cm.visibleColumn = visibleColumn;
     if (!cModels.isEmpty()) {
         const CModel &lastCm = cModels.last();
         cm.rowIndex = lastCm.rowIndex + lastCm.rowCount;
@@ -206,7 +207,7 @@ QModelIndex QuickOpenModel::convertChildModelIndex(const QModelIndex &childModel
 {
     int internalId = 0;
     int parentRow = convertChildModelRow(childModelIndex.model(), childModelIndex.row(), &internalId);
-    return createIndex(parentRow, childModelIndex.column(), internalId);
+    return createIndex(parentRow, 0, internalId);
 }
 
 void QuickOpenModel::childModelRowsAboutToBeInserted(const QModelIndex &parent, int first, int last)
@@ -233,7 +234,7 @@ void QuickOpenModel::childModelRowsInserted(const QModelIndex &parent, int /*fir
 
 void QuickOpenModel::childModelDataChanged(const QModelIndex &first, const QModelIndex &last)
 {
-    if (first.parent().isValid() || first.column() != 0)
+    if (first.parent().isValid())
         return;
 
     emit dataChanged(convertChildModelIndex(first), convertChildModelIndex(last));

@@ -42,6 +42,7 @@ public slots:
     void setFilter(const QString &expression);
 
 private slots:
+    void modelChanged();
     void modelDestroyed();
 
 private:

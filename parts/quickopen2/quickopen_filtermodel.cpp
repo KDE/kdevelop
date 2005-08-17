@@ -28,6 +28,10 @@ QuickOpenFilterModel::QuickOpenFilterModel(QuickOpenModel *model, QObject *paren
     Q_ASSERT(model);
 
     connect(sourceModel, SIGNAL(destroyed()), this, SLOT(modelDestroyed()));
+    connect(sourceModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(modelChanged()));
+    connect(sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(modelChanged()));
+    connect(sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(modelChanged()));
+    connect(sourceModel, SIGNAL(modelReset()), this, SLOT(modelChanged()));
     rCount = model->rowCount();
 }
 
@@ -113,6 +117,10 @@ void QuickOpenFilterModel::doFiltering()
     rCount = filteredIdx.count();
 
     reset();
-    // TODO emit signals
+}
+
+void QuickOpenFilterModel::modelChanged()
+{
+    doFiltering();
 }
 
