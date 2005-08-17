@@ -1,6 +1,5 @@
-/* This file is part of KDevelop    
-    Copyright (C) 2005 Tobias Erbsland <te@profzone.ch>
-    Copyright (C) 2002,2003 Roberto Raggi <roberto@kdevelop.org>
+/* This file is part of KDevelop
+    Copyright (C) 2002,2003,2004 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -14,29 +13,31 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
-#include "lookup.h"
+#ifndef TREEDUMP_H
+#define TREEDUMP_H
 
-int Lookup::find( const QString& s )
+#include <string>
+
+class TokenStream;
+class AST;
+
+class TreeDump
 {
-    KeywordMap::const_iterator it = keywords().find( s );
-    if( it == keywords().end() )
-        return -1;
-    return static_cast<int>(it.data());
-}
+public:
+    TreeDump(TokenStream *tokenStream);
 
-const Lookup::KeywordMap& Lookup::keywords()
-{
-    static KeywordMap keywords;
-    
-    if( keywords.isEmpty() )
-    {
-#include "keywords.h"
-    }
-    
-    return keywords;
-}
+    void dumpNode(AST *node);
 
+protected:
+    static std::string textOf(AST *node, TokenStream *tokenStream);
+    static std::string nodeType(int tp);
+
+private:
+    TokenStream *tokenStream;
+};
+
+#endif // TREEDUMP_H

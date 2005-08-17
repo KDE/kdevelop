@@ -17,8 +17,34 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include "errors.h"
+#ifndef SMALLOBJECT_H
+#define SMALLOBJECT_H
 
-Error Errors::InternalError = Error( 1, -1, ("Internal Error") );
-Error Errors::SyntaxError = Error( 2, -1, ("Syntax Error before '%1'") );
-Error Errors::ParseError = Error( 3, -1, ("Parse Error before '%1'") );
+#include "rxx_allocator.h"
+#include <cstring>
+
+class pool
+{
+  rxx_allocator<char> __alloc;
+
+public:
+  inline void *allocate(std::size_t __size);
+
+  // ### deprecated! it doesn't make sens to reallocate memory with a pool
+  inline void *reallocate(void *old, std::size_t oldSize, std::size_t __size);
+};
+
+inline void *pool::allocate(std::size_t __size)
+{
+    return __alloc.allocate(__size);
+}
+
+inline void *pool::reallocate(void *__old, std::size_t __old_size, std::size_t __size)
+{
+    void *alloc = allocate(__size);
+    ::memcpy(alloc, __old, __old_size);
+    return alloc;
+}
+
+
+#endif

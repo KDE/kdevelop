@@ -1,6 +1,5 @@
-/* This file is part of KDevelop    
-    Copyright (C) 2005 Tobias Erbsland <te@profzone.ch>
-    Copyright (C) 2002,2003 Roberto Raggi <roberto@kdevelop.org>
+/* This file is part of KDevelop
+    Copyright (C) 2002,2003,2004 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -14,30 +13,9 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _LOOKUP_H_
-#define _LOOKUP_H_
+#include "smallobject.h"
 
-#include <qstring.h>
-#include <qmap.h>
-
-#include "lexer.h"
-
-/**
-* @short Fast keyword lookup.
-*/
-class Lookup {
-public:
-    typedef QMap<QString,Type> KeywordMap;
-    /**
-    * Find an entry in the table, and return its value
-    */
-    static int find( const QString& s );
-
-    static const KeywordMap& keywords();
-};
-
-#endif

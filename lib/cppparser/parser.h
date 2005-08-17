@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2002,2003 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2002,2003,2004 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,200 +21,207 @@
 #define PARSER_H
 
 #include "ast.h"
+#include "lexer.h"
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <q3valuelist.h>
-#include <q3valuestack.h>
+#include <string>
 
-struct ParserPrivateData;
-
-class Driver;
-class Lexer;
-class Token;
-struct Error;
+class FileSymbol;
+class TokenStream;
+class Error;
+class Control;
 
 class Parser
 {
 public:
-    Parser( Driver* driver, Lexer* lexer );
-    virtual ~Parser();
+    Parser(Control *control);
+    ~Parser();
+
+    TranslationUnitAST *parse(const char *contents, std::size_t size, pool *p);
 
 private:
-    virtual bool reportError( const Error& err );
-    /** @todo remove*/ virtual bool reportError( const QString& msg );
-    /** @todo remove*/ virtual void syntaxError();
+    bool reportError(const Error& err);
+    bool reportError(const std::string& msg);
+    void syntaxError();
 
 public /*rules*/ :
 
-    bool parseTranslationUnit( TranslationUnitAST::Node& node );
+    bool parseTranslationUnit(TranslationUnitAST *&node);
 
-    bool parseDeclaration( DeclarationAST::Node& node );
-    bool parseBlockDeclaration( DeclarationAST::Node& node );
-    bool parseLinkageSpecification( DeclarationAST::Node& node );
-    bool parseLinkageBody( LinkageBodyAST::Node& node );
-    bool parseNamespace( DeclarationAST::Node& node );
-    bool parseNamespaceAliasDefinition( DeclarationAST::Node& node );
-    bool parseUsing( DeclarationAST::Node& node );
-    bool parseUsingDirective( DeclarationAST::Node& node );
-    bool parseTypedef( DeclarationAST::Node& node );
-    bool parseAsmDefinition( DeclarationAST::Node& node );
-    bool parseTemplateDeclaration( DeclarationAST::Node& node );
-    bool parseDeclarationInternal( DeclarationAST::Node& node );
-    
-    bool parseUnqualifiedName( ClassOrNamespaceNameAST::Node& node );
-    bool parseStringLiteral( AST::Node& node );
-    bool parseName( NameAST::Node& node );
-    bool parseOperatorFunctionId( AST::Node& node );
-    bool parseTemplateArgumentList( TemplateArgumentListAST::Node& node, bool reportError=true );
-    bool parseOperator( AST::Node& node );
-    bool parseCvQualify( GroupAST::Node& node );
-    bool parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node );
-    bool parsePtrOperator( AST::Node& node );
-    bool parseTemplateArgument( AST::Node& node );
-    bool parseTypeSpecifier( TypeSpecifierAST::Node& node );
-    bool parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node );
-    bool parseDeclarator( DeclaratorAST::Node& node );
-    bool parseTemplateParameterList( TemplateParameterListAST::Node& node );
-    bool parseTemplateParameter( TemplateParameterAST::Node& node );
-    bool parseStorageClassSpecifier( GroupAST::Node& node );
-    bool parseFunctionSpecifier( GroupAST::Node& node );
-    bool parseInitDeclaratorList( InitDeclaratorListAST::Node& node );
-    bool parseInitDeclarator( InitDeclaratorAST::Node& node );
-    bool parseParameterDeclarationClause( ParameterDeclarationClauseAST::Node& node );
-    bool parseCtorInitializer( AST::Node& node );
-    bool parsePtrToMember( AST::Node& node );
-    bool parseEnumSpecifier( TypeSpecifierAST::Node& node );
-    bool parseClassSpecifier( TypeSpecifierAST::Node& node );
-    bool parseWinDeclSpec( GroupAST::Node& node );
-    bool parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node );
-    bool parseDeclaratorId( NameAST::Node& node );
-    bool parseExceptionSpecification( GroupAST::Node& node );
-    bool parseEnumerator( EnumeratorAST::Node& node );
-    bool parseTypeParameter( TypeParameterAST::Node& node );
-    bool parseParameterDeclaration( ParameterDeclarationAST::Node& node );
-    bool parseTypeId( AST::Node& node );
-    bool parseAbstractDeclarator( DeclaratorAST::Node& node );
-    bool parseParameterDeclarationList( ParameterDeclarationListAST::Node& node );
-    bool parseMemberSpecification( DeclarationAST::Node& node );
-    bool parseAccessSpecifier( AST::Node& node );
-    bool parseTypeIdList( GroupAST::Node& node );
-    bool parseMemInitializerList( AST::Node& node );
-    bool parseMemInitializer( AST::Node& node );
-    bool parseInitializer( AST::Node& node );
-    bool parseBaseClause( BaseClauseAST::Node& node );
-    bool parseBaseSpecifier( BaseSpecifierAST::Node& node );
-    bool parseInitializerClause( AST::Node& node );
-    bool parseMemInitializerId( NameAST::Node& node );
-    bool parseFunctionBody( StatementListAST::Node& node );
+    bool parseDeclaration(DeclarationAST *&node);
+    bool parseBlockDeclaration(DeclarationAST *&node);
+    bool parseLinkageSpecification(DeclarationAST *&node);
+    bool parseLinkageBody(LinkageBodyAST *&node);
+    bool parseNamespace(DeclarationAST *&node);
+    bool parseNamespaceAliasDefinition(DeclarationAST *&node);
+    bool parseUsing(DeclarationAST *&node);
+    bool parseUsingDirective(DeclarationAST *&node);
+    bool parseTypedef(DeclarationAST *&node);
+    bool parseAsmDefinition(DeclarationAST *&node);
+    bool parseTemplateDeclaration(DeclarationAST *&node);
+    bool parseDeclarationInternal(DeclarationAST *&node);
 
-    // expression
-    bool skipExpression( AST::Node& node );
-    bool skipCommaExpression( AST::Node& node );
-    bool skipExpressionStatement( StatementAST::Node& node );
+    bool parseStringLiteral(AST *&node);
+    bool parseUnqualifiedName(ClassOrNamespaceNameAST *&node, bool parseTemplateId = true);
+    bool parseName(NameAST *&node, bool acceptTemplateId = false);
+    bool parseOperatorFunctionId(AST *&node);
+    bool parseTemplateArgumentList(TemplateArgumentListAST *&node, bool reportError = true);
+    bool parseOperator(AST *&node);
+    bool parseCvQualify(AST *&node);
+    bool parseSimpleTypeSpecifier(TypeSpecifierAST *&node, bool onlyIntegral = false);
+    bool parsePtrOperator(AST *&node);
+    bool parseTemplateArgument(AST *&node);
+    bool parseTypeSpecifier(TypeSpecifierAST *&node);
+    bool parseTypeSpecifierOrClassSpec(TypeSpecifierAST *&node);
+    bool parseDeclarator(DeclaratorAST *&node);
+    bool parseTemplateParameterList(TemplateParameterListAST *&node);
+    bool parseTemplateParameter(TemplateParameterAST *&node);
+    bool parseStorageClassSpecifier(AST *&node);
+    bool parseFunctionSpecifier(AST *&node);
+    bool parseInitDeclaratorList(InitDeclaratorListAST *&node);
+    bool parseInitDeclarator(InitDeclaratorAST *&node);
+    bool parseParameterDeclarationClause(ParameterDeclarationClauseAST *&node);
+    bool parseCtorInitializer(AST *&node);
+    bool parsePtrToMember(AST *&node);
+    bool parseEnumSpecifier(TypeSpecifierAST *&node);
+    bool parseClassSpecifier(TypeSpecifierAST *&node);
+    bool parseWinDeclSpec(AST *&node);
+    bool parseElaboratedTypeSpecifier(TypeSpecifierAST *&node);
+    bool parseDeclaratorId(NameAST *&node);
+    bool parseExceptionSpecification(AST *&node);
+    bool parseEnumerator(EnumeratorAST *&node);
+    bool parseTypeParameter(TypeParameterAST *&node);
+    bool parseParameterDeclaration(ParameterDeclarationAST *&node);
+    bool parseTypeId(TypeIdAST *&node);
+    bool parseAbstractDeclarator(DeclaratorAST *&node);
+    bool parseParameterDeclarationList(ParameterDeclarationListAST *&node);
+    bool parseMemberSpecification(DeclarationAST *&node);
+    bool parseAccessSpecifier(AST *&node);
+    bool parseTypeIdList(AST *&node);
+    bool parseMemInitializerList(AST *&node);
+    bool parseMemInitializer(AST *&node);
+    bool parseInitializer(AST *&node);
+    bool parseBaseClause(BaseClauseAST *&node);
+    bool parseBaseSpecifier(BaseSpecifierAST *&node);
+    bool parseInitializerClause(AST *&node);
+    bool parseMemInitializerId(NameAST *&node);
+    bool parseFunctionBody(StatementListAST *&node);
 
-    bool parseExpression( AST::Node& node );
-    bool parsePrimaryExpression( AST::Node& node );
-    bool parsePostfixExpression( AST::Node& node );
-    bool parseUnaryExpression( AST::Node& node );
-    bool parseNewExpression( AST::Node& node );
-    bool parseNewTypeId( AST::Node& node );
-    bool parseNewDeclarator( AST::Node& node );
-    bool parseNewInitializer( AST::Node& node );
-    bool parseDeleteExpression( AST::Node& node );
-    bool parseCastExpression( AST::Node& node );
-    bool parsePmExpression( AST::Node& node );
-    bool parseMultiplicativeExpression( AST::Node& node );
-    bool parseAdditiveExpression( AST::Node& node );
-    bool parseShiftExpression( AST::Node& node );
-    bool parseRelationalExpression( AST::Node& node, bool templArgs=false );
-    bool parseEqualityExpression( AST::Node& node, bool templArgs=false );
-    bool parseAndExpression( AST::Node& node, bool templArgs=false );
-    bool parseExclusiveOrExpression( AST::Node& node, bool templArgs=false );
-    bool parseInclusiveOrExpression( AST::Node& node, bool templArgs=false );
-    bool parseLogicalAndExpression( AST::Node& node, bool templArgs=false );
-    bool parseLogicalOrExpression( AST::Node& node, bool templArgs=false );
-    bool parseConditionalExpression( AST::Node& node );
-    bool parseAssignmentExpression( AST::Node& node );
-    bool parseConstantExpression( AST::Node& node );
-    bool parseCommaExpression( AST::Node& node );
-    bool parseThrowExpression( AST::Node& node );
+    // skip
+    bool skipExpression(AbstractExpressionAST *&node);
+    bool skipCommaExpression(AbstractExpressionAST *&node);
+    bool skipExpressionStatement(StatementAST *&node);
+    bool skipFunctionBody(StatementListAST *&node);
+
+    bool parseExpression(AbstractExpressionAST *&node);
+    bool parsePrimaryExpression(AbstractExpressionAST *&node);
+    bool parsePostfixExpression(AbstractExpressionAST *&node);
+    bool parsePostfixExpressionInternal(AbstractExpressionAST *expr, AbstractExpressionAST *&node);
+    bool parseUnaryExpression(AbstractExpressionAST *&node);
+    bool parseNewExpression(AbstractExpressionAST *&node);
+    bool parseNewTypeId(AbstractExpressionAST *&node);
+    bool parseNewDeclarator(AbstractExpressionAST *&node);
+    bool parseNewInitializer(AbstractExpressionAST *&node);
+    bool parseDeleteExpression(AbstractExpressionAST *&node);
+    bool parseCastExpression(AbstractExpressionAST *&node);
+    bool parsePmExpression(AbstractExpressionAST *&node);
+    bool parseMultiplicativeExpression(AbstractExpressionAST *&node);
+    bool parseAdditiveExpression(AbstractExpressionAST *&node);
+    bool parseShiftExpression(AbstractExpressionAST *&node);
+    bool parseRelationalExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseEqualityExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseAndExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseExclusiveOrExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseInclusiveOrExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseLogicalAndExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseLogicalOrExpression(AbstractExpressionAST *&node, bool templArgs = false);
+    bool parseConditionalExpression(AbstractExpressionAST *&node);
+    bool parseAssignmentExpression(AbstractExpressionAST *&node);
+    bool parseConstantExpression(AbstractExpressionAST *&node);
+    bool parseCommaExpression(AbstractExpressionAST *&node);
+    bool parseThrowExpression(AbstractExpressionAST *&node);
 
     // statement
-    bool parseCondition( ConditionAST::Node& node );
-    bool parseStatement( StatementAST::Node& node );
-    bool parseWhileStatement( StatementAST::Node& node );
-    bool parseDoStatement( StatementAST::Node& node );
-    bool parseForStatement( StatementAST::Node& node );
-    bool parseForEachStatement( StatementAST::Node& node ); // qt4 [erbsland]
-    bool parseCompoundStatement( StatementAST::Node& node );
-    bool parseForInitStatement( StatementAST::Node& node );
-    bool parseIfStatement( StatementAST::Node& node );
-    bool parseSwitchStatement( StatementAST::Node& node );
-    bool parseLabeledStatement( StatementAST::Node& node );
-    bool parseDeclarationStatement( StatementAST::Node& node );
-    bool parseTryBlockStatement( StatementAST::Node& node );
-    
+    bool parseCondition(ConditionAST *&node, bool initRequired = true);
+    bool parseStatement(StatementAST *&node);
+    bool parseWhileStatement(StatementAST *&node);
+    bool parseDoStatement(StatementAST *&node);
+    bool parseForStatement(StatementAST *&node);
+    bool parseCompoundStatement(StatementAST *&node);
+    bool parseForInitStatement(StatementAST *&node);
+    bool parseIfStatement(StatementAST *&node);
+    bool parseSwitchStatement(StatementAST *&node);
+    bool parseLabeledStatement(StatementAST *&node);
+    bool parseDeclarationStatement(StatementAST *&node);
+    bool parseTryBlockStatement(StatementAST *&node);
+    bool parseExpressionStatement(StatementAST *&node);
+    bool parseExpressionOrDeclarationStatement(StatementAST *&node);
+
     // objective c
-    bool parseObjcDef( DeclarationAST::Node& node );
-    bool parseObjcClassDef( DeclarationAST::Node& node );
-    bool parseObjcClassDecl( DeclarationAST::Node& node );
-    bool parseObjcProtocolDecl( DeclarationAST::Node& node );
-    bool parseObjcAliasDecl( DeclarationAST::Node& node );
-    bool parseObjcProtocolDef( DeclarationAST::Node& node );
-    bool parseObjcMethodDef( DeclarationAST::Node& node );
-    
-    bool parseIvarDeclList( AST::Node& node ); 
-    bool parseIvarDecls( AST::Node& node ); 
-    bool parseIvarDecl( AST::Node& node ); 
-    bool parseIvars( AST::Node& node ); 
-    bool parseIvarDeclarator( AST::Node& node );
-    bool parseMethodDecl( AST::Node& node ); 
-    bool parseUnarySelector( AST::Node& node ); 
-    bool parseKeywordSelector( AST::Node& node ); 
-    bool parseSelector( AST::Node& node );
-    bool parseKeywordDecl( AST::Node& node ); 
-    bool parseReceiver( AST::Node& node ); 
-    bool parseObjcMessageExpr( AST::Node& node ); 
-    bool parseMessageArgs( AST::Node& node );
-    bool parseKeywordExpr( AST::Node& node ); 
-    bool parseKeywordArgList( AST::Node& node ); 
-    bool parseKeywordArg( AST::Node& node ); 
-    bool parseReservedWord( AST::Node& node );
-    bool parseMyParms( AST::Node& node ); 
-    bool parseMyParm( AST::Node& node ); 
-    bool parseOptParmList( AST::Node& node ); 
-    bool parseObjcSelectorExpr( AST::Node& node );
-    bool parseSelectorArg( AST::Node& node ); 
-    bool parseKeywordNameList( AST::Node& node ); 
-    bool parseKeywordName( AST::Node& node ); 
-    bool parseObjcEncodeExpr( AST::Node& node );
-    bool parseObjcString( AST::Node& node ); 
-    bool parseProtocolRefs( AST::Node& node ); 
-    bool parseIdentifierList( GroupAST::Node& node ); 
-    bool parseIdentifierColon( AST::Node& node );
-    bool parseObjcProtocolExpr( AST::Node& node ); 
-    bool parseObjcOpenBracketExpr( AST::Node& node ); 
-    bool parseObjcCloseBracket( AST::Node& node );
-  
-    
-    bool skipUntil( int token );
+    bool parseObjcDef(DeclarationAST *&node);
+    bool parseObjcClassDef(DeclarationAST *&node);
+    bool parseObjcClassDecl(DeclarationAST *&node);
+    bool parseObjcProtocolDecl(DeclarationAST *&node);
+    bool parseObjcAliasDecl(DeclarationAST *&node);
+    bool parseObjcProtocolDef(DeclarationAST *&node);
+    bool parseObjcMethodDef(DeclarationAST *&node);
+
+    bool parseIvarDeclList(AST *&node);
+    bool parseIvarDecls(AST *&node);
+    bool parseIvarDecl(AST *&node);
+    bool parseIvars(AST *&node);
+    bool parseIvarDeclarator(AST *&node);
+    bool parseMethodDecl(AST *&node);
+    bool parseUnarySelector(AST *&node);
+    bool parseKeywordSelector(AST *&node);
+    bool parseSelector(AST *&node);
+    bool parseKeywordDecl(AST *&node);
+    bool parseReceiver(AST *&node);
+    bool parseObjcMessageExpr(AST *&node);
+    bool parseMessageArgs(AST *&node);
+    bool parseKeywordExpr(AST *&node);
+    bool parseKeywordArgList(AST *&node);
+    bool parseKeywordArg(AST *&node);
+    bool parseReservedWord(AST *&node);
+    bool parseMyParms(AST *&node);
+    bool parseMyParm(AST *&node);
+    bool parseOptParmList(AST *&node);
+    bool parseObjcSelectorExpr(AST *&node);
+    bool parseSelectorArg(AST *&node);
+    bool parseKeywordNameList(AST *&node);
+    bool parseKeywordName(AST *&node);
+    bool parseObjcEncodeExpr(AST *&node);
+    bool parseObjcString(AST *&node);
+    bool parseProtocolRefs(AST *&node);
+    bool parseIdentifierList(AST *&node);
+    bool parseIdentifierColon(AST *&node);
+    bool parseObjcProtocolExpr(AST *&node);
+    bool parseObjcOpenBracketExpr(AST *&node);
+    bool parseObjcCloseBracket(AST *&node);
+
+    bool skipUntil(int token);
     bool skipUntilDeclaration();
     bool skipUntilStatement();
-    bool skip( int l, int r );
-    QString toString( int start, int end, const QString& sep=" " ) const;
+    bool skip(int l, int r);
+
+    void advance();
+
+// private:
+    TokenStream token_stream;
+    LocationTable location_table;
+    LocationTable line_table;
 
 private:
-    ParserPrivateData* d;
-    Driver* m_driver;
-    Lexer* lex;
+    Control *control;
+    Lexer lexer;
     int m_problems;
     int m_maxProblems;
     bool objcp;
+    pool *m_pool;
+    bool m_no_errors;
 
 private:
-    Parser( const Parser& source );
-    void operator = ( const Parser& source );
+    Parser(const Parser& source);
+    void operator = (const Parser& source);
 };
 
 
