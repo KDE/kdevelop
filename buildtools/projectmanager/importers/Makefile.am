@@ -1,3 +1,4 @@
-METASOURCES = AUTO
-SUBDIRS = automake custom 
+
+SUBDIRS = automake generic
 #### TODO qmake
+
