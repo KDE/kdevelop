@@ -230,7 +230,7 @@ void DDockWindow::removeWidget(QWidget *widget)
     if (changeVisibility)
     {
         m_toggledButton = 0;
-        setVisible(false);
+        setExpanded(false);
     }
 }
 
@@ -246,7 +246,7 @@ void DDockWindow::selectWidget(Ideal::Button *button)
     if (m_toggledButton)
         m_toggledButton->setOn(false);
     m_toggledButton = button;
-    setVisible(true);
+    setExpanded(true);
     m_widgetStack->setCurrentWidget(m_widgets[button]);
 }
 
@@ -265,7 +265,7 @@ void DDockWindow::hideWidget(QWidget *widget)
     }
     widget->hide();
     if (button == m_toggledButton)
-        setVisible(false);
+        setExpanded(false);
 }
 
 void DDockWindow::showWidget(QWidget *widget)
