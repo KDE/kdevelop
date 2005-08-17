@@ -26,7 +26,6 @@
 #include "toplevel.h"
 #include "partcontroller.h"
 #include "core.h"
-#include "newmainwindow.h"
 
 
 #include "editorproxy.h"

@@ -19,7 +19,6 @@
 #include "partcontroller.h"
 #include "core.h"
 #include "projectmanager.h"
-#include "newmainwindow.h"
 
 #include "kdevassistantextension.h"
 
