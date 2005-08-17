@@ -1,4 +1,4 @@
-SOURCES += ../quickopen_model.cpp tst_quickopen_model.cpp
-HEADERS += ../quickopen_model.h
+SOURCES += ../quickopen_model.cpp ../quickopen_filtermodel.cpp tst_quickopen_model.cpp
+HEADERS += ../quickopen_model.h ../quickopen_filtermodel.h
 
-CONFIG += qttest
+CONFIG += qttest debug

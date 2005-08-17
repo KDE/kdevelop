@@ -20,6 +20,8 @@
 
 #include "quickopen_model.h"
 
+
+#include <QtGui/QtGui>
 #include <qdebug.h>
 
 QuickOpenModel::QuickOpenModel(QObject *parent)
@@ -37,11 +39,11 @@ QModelIndex QuickOpenModel::index(int row, int column, const QModelIndex &parent
     int i;
     for (i = 0; i < cModels.count(); ++i) {
         const CModel &cm = cModels.at(i);
-        if (i == cModels.count() - 1 || (cm.rowCount && row > cm.rowIndex))
+        if (row < cm.rowIndex)
             break;
     }
-
-    qDebug() << "requested index for" << row << column << "i is" << i;
+    if (i != 0)
+        --i;
 
     return createIndex(row, column, i);
 }
@@ -64,19 +66,25 @@ int QuickOpenModel::columnCount(const QModelIndex &parent) const
 
 QVariant QuickOpenModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+    Q_ASSERT(index.isValid());
     Q_ASSERT(index.internalId() < cModels.count());
 
 
     const CModel &cm = cModels.at(int(index.internalId()));
     int childRow = index.row() - cm.rowIndex - 1; // row in our child model
-    qDebug() << "wants data for" << index << "childRow is" << childRow;
-    if (childRow == -1)
+    if (childRow == -1) {
+        if (role == Qt::BackgroundColorRole)
+            return QColor(Qt::lightGray);
         return role == Qt::DisplayRole ? QVariant(cm.title) : QVariant();
-    qDebug() << "data: " << cm.model->data(cm.model->index(childRow, index.column()), role);
+    }
 
     return cm.model->data(cm.model->index(childRow, index.column()), role);
+}
+
+bool QuickOpenModel::isTitle(const QModelIndex &index) const
+{
+    Q_ASSERT(index.isValid());
+    return index.row() - cModels.at(int(index.internalId())).rowIndex == 0;
 }
 
 QModelIndex QuickOpenModel::parent(const QModelIndex & /*child*/) const
@@ -105,8 +113,6 @@ void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString
     if (childCount)
         rCount += childCount + 1;
 
-    qDebug() << "Added model with rowCount" << childCount << "rCount is" << rCount << "rowIndex is" << cm.rowIndex;
-    
     // TODO - emit signals
 }
 
@@ -124,7 +130,6 @@ void QuickOpenModel::removeModel(QAbstractItemModel *childModel)
 
 void QuickOpenModel::removeModelPrivate(QObject *childModel)
 {
-    Q_ASSERT(qobject_cast<QAbstractItemModel *>(childModel));
     removeModel(static_cast<QAbstractItemModel *>(childModel));
 }
 
@@ -145,5 +150,14 @@ QList<QAbstractItemModel *> QuickOpenModel::childModels() const
     for (int i = 0; i < cModels.count(); ++i)
         list << cModels.at(i).model;
     return list;
+}
+
+QString QuickOpenModel::modelTitle(QAbstractItemModel *childModel) const
+{
+    for (int i = 0; i < cModels.count(); ++i) {
+        if (cModels.at(i).model == childModel)
+            return cModels.at(i).title;
+    }
+    return QString();
 }
 

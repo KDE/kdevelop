@@ -18,18 +18,17 @@
  *
  */
 
-#include <qabstractitemmodel.h>
-#include <qvector.h>
+#ifndef QUICKOPEN_FILTERMODEL_H
+#define QUICKOPEN_FILTERMODEL_H
 
-#ifndef QUICKOPEN_MODEL_H
-#define QUICKOPEN_MODEL_H
+#include "quickopen_model.h"
 
-class QuickOpenModel: public QAbstractItemModel
+class QuickOpenFilterModel: public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit QuickOpenModel(QObject *parent = 0);
+    explicit QuickOpenFilterModel(QuickOpenModel *model, QObject *parent = 0);
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -37,30 +36,21 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QModelIndex parent(const QModelIndex &child) const;
 
-    void addChildModel(QAbstractItemModel *childModel, const QString &title);
-    QList<QAbstractItemModel *> childModels() const;
-    QString modelTitle(QAbstractItemModel *childModel) const;
-    bool isTitle(const QModelIndex &index) const;
+    inline QString filter() const { return filterStr; }
 
 public slots:
-    void removeModel(QAbstractItemModel *childModel);
+    void setFilter(const QString &expression);
 
 private slots:
-    void removeModelPrivate(QObject *childModel);
+    void modelDestroyed();
 
 private:
-    void refresh();
+    void doFiltering();
 
-    struct CModel
-    {
-        QString title;
-        QAbstractItemModel *model;
-        int rowCount;
-        int rowIndex;
-    };
-    QVector<CModel> cModels;
-
+    QuickOpenModel *sourceModel;
     int rCount;
+    QString filterStr;
+    QVector<QModelIndex> filteredIdx;
 };
 
 #endif

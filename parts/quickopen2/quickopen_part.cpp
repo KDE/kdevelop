@@ -21,6 +21,7 @@
 
 #include "quickopen_part.h"
 #include "quickopen_model.h"
+#include "quickopen_filtermodel.h"
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -89,11 +90,15 @@ void QuickOpenPart::slotQuickOpen( )
 
     QDialog dlg;
     QVBoxLayout layout(&dlg);
+    QLineEdit edit(&dlg);
     QListView view(&dlg);
     QuickOpenModel model;
+    QuickOpenFilterModel filter(&model);
+    connect(&edit, SIGNAL(textChanged(QString)), &filter, SLOT(setFilter(QString)));
     model.addChildModel(&model1, "title1");
     model.addChildModel(&model2, "title2");
-    view.setModel(&model);
+    view.setModel(&filter);
+    layout.addWidget(&edit);
     layout.addWidget(&view);
     dlg.exec();
     //QuickOpenDialog dlg( this, mainWindow()->main() );
