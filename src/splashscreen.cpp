@@ -7,11 +7,13 @@
 #include <qtimer.h>
 #include <qfont.h>
 #include <qpixmap.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-SplashScreen::SplashScreen(const QPixmap& pixmap, Qt::WFlags f) : QSplashScreen(pixmap, f)
+SplashScreen::SplashScreen(const QPixmap& pixmap, Qt::WFlags f)
+    : QSplashScreen(pixmap, f)
 {
     QTimer *timer = new QTimer( this );
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
@@ -34,15 +36,15 @@ void SplashScreen::animate()
 }
 
 
-void SplashScreen::message( const QString &str, int flags, const QColor &color)
+void SplashScreen::showMessage( const QString &str, int flags, const QColor &color)
 {
-    QSplashScreen::message(str,flags,color);
+    QSplashScreen::showMessage(str,flags,color);
     animate();
     m_string = str;
 }
 
 
-void SplashScreen::drawContents (QPainter* painter)
+void SplashScreen::drawContents(QPainter* painter)
 {
     int position;
     QColor base_color (201,229,165); // Base green color
@@ -81,6 +83,5 @@ void SplashScreen::drawContents (QPainter* painter)
     // If message is too long, string is truncated
     if (m_string.length() > 40) {m_string.truncate(39); m_string += "...";}
     painter->drawText (90, 16, m_string, 42);
-
 }
 

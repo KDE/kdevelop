@@ -93,16 +93,15 @@ int main(int argc, char *argv[])
     QPixmap pm;
     pm.load(splashFile);
     splash = new SplashScreen( pm );
+    splash->show();
+    splash->repaint();
   }
 
-  app.processEvents();
-
-  if (splash) splash->message( i18n( "Loading Settings" ) );
+  if (splash) splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
-    splash, SLOT(message(const QString &)));
-  if (splash) splash->show();
+    splash, SLOT(showMessage(const QString &)));
 
   PluginController::getInstance()->loadInitialPlugins();
 
@@ -110,21 +109,9 @@ int main(int argc, char *argv[])
 
   if (splash) splash->message( i18n( "Starting GUI" ) );
 
-#if 0
-//BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now
-  NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
-  if (mw)
-      mw->enableShow();
-//END workaround
-#endif
-
   TopLevel::getInstance()->main()->show();
 
-  if (splash) delete splash;
-
-  for( int i=0; i<args->count(); ++i ){
-      kdDebug(9000) << "------> arg " << args->arg(i) << endl;
-  }
+  delete splash;
 
   bool openProject = false;
   if( args->count() == 0 ){
