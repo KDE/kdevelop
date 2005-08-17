@@ -144,9 +144,6 @@ KDevCodeModel *KDevClassView::codeModel() const
 
 void KDevClassView::slotActivated(const QModelIndex &index)
 {
-  KDevCodeItem *item = codeModel()->item(index);
-
-  Q_ASSERT(0); // ### not implemented yet
 }
 
 void KDevClassView::popupContextMenu(const QPoint &pos)

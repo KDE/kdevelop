@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2004, 2005 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -51,53 +51,46 @@ K_EXPORT_COMPONENT_FACTORY(libkdevclassview, KDevClassViewFactory(data));
 KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QStringList&)
     : KDevPlugin(&data, parent)
 {
-    setObjectName(QString::fromUtf8(name));
+  setObjectName(QString::fromUtf8(name));
 
-    m_workspace = 0;
-    m_codeModel = new KDevCodeModel(this);
+  m_workspace = 0;
+  m_codeModel = new KDevCodeModel(this);
 
-    setInstance(KDevClassViewFactory::instance());
+  setInstance(KDevClassViewFactory::instance());
 
-    m_widget = new QWidget(0);
-    new QVBoxLayout(m_widget);
+  m_widget = new QWidget(0);
+  new QVBoxLayout(m_widget);
 
-    QLineEdit *editor = new QLineEdit(m_widget);
-    m_widget->layout()->addWidget(editor);
+  QLineEdit *editor = new QLineEdit(m_widget);
+  m_widget->layout()->addWidget(editor);
 
-    editor->hide();
+  editor->hide();
 
-    KDevClassViewDelegate *delegate = new KDevClassViewDelegate(this);
+  KDevClassViewDelegate *delegate = new KDevClassViewDelegate(this);
 
-    m_classView = new KDevClassView(this, m_widget);
-    m_classView->setModel(m_codeModel);
-    m_classView->setItemDelegate(delegate);
-    m_classView->setWhatsThis(i18n("Class View"));
-    m_widget->layout()->add(m_classView);
+  m_classView = new KDevClassView(this, m_widget);
+  m_classView->setModel(m_codeModel);
+  m_classView->setItemDelegate(delegate);
+  m_classView->setWhatsThis(i18n("Class View"));
+  m_widget->layout()->add(m_classView);
 
-    //KFilterModel *filterModel = new KFilterModel(m_codeModel, m_codeModel);
-    //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
-    //m_classView->setModel(filterModel);
+  //KFilterModel *filterModel = new KFilterModel(m_codeModel, m_codeModel);
+  //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
+  //m_classView->setModel(filterModel);
 
+  connect(m_classView, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
-    connect(m_classView, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+  mainWindow()->embedSelectViewRight(m_widget, tr("Class View"), tr("Class View"));
 
-    mainWindow()->embedSelectViewRight(m_widget, tr("Class View"), tr("Class View"));
-
-    setXMLFile("kdevclassview.rc");
+  setXMLFile("kdevclassview.rc");
 }
 
 KDevClassViewPart::~KDevClassViewPart()
 {
-    if (m_classView) {
-        mainWindow()->removeView(m_widget);
-        delete m_widget;
-    }
-}
-
-void KDevClassViewPart::openURL(const KURL &url)
-{
-  kdDebug(9000) << "========> openURL:" << url << endl;
-  partController()->editDocument(url);
+  if (m_classView) {
+    mainWindow()->removeView(m_widget);
+    delete m_widget;
+  }
 }
 
 KDevCodeNamespaceItem *KDevClassViewPart::currentNamespaceItem() const

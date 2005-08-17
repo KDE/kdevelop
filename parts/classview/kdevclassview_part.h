@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2004,2005 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -62,9 +62,6 @@ signals:
     void refresh();
     void addedProjectItem(KDevCodeItem *dom);
     void aboutToRemoveProjectItem(KDevCodeItem *dom);
-
-public slots:
-    void openURL(const KURL &url);
 
 private:
     KDevCodeModel *m_codeModel;
