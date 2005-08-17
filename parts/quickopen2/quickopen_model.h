@@ -47,9 +47,17 @@ public slots:
 
 private slots:
     void removeModelPrivate(QObject *childModel);
+    void childModelReset();
+    void childModelRowsAboutToBeInserted(const QModelIndex &parent, int first, int last);
+    void childModelRowsInserted(const QModelIndex &parent, int first, int last);
+    void childModelDataChanged(const QModelIndex &first, const QModelIndex &last);
+    void childModelRowsAboutToBeRemoved(const QModelIndex &parent, int first, int last);
+    void childModelRowsRemoved(const QModelIndex &parent, int first, int last);
 
 private:
     void refresh();
+    QModelIndex convertChildModelIndex(const QModelIndex &childModelIndex) const;
+    int convertChildModelRow(const QAbstractItemModel *model, int row, int *internalId = 0) const;
 
     struct CModel
     {
