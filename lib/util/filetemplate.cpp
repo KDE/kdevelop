@@ -56,7 +56,7 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
 
     QFile f(fileName);
     if (!f.open(QIODevice::ReadOnly))
-        return QString::null;
+        return QString();
     QTextStream stream(&f);
     QString str = stream.read();
 

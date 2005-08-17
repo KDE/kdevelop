@@ -75,7 +75,7 @@ QString URLUtil::relativePath(const QString & parent, const QString & child, uin
 
 QString URLUtil::upDir(const QString & path, bool slashSuffix) {
   int slashPos = path.findRev("/");
-  if (slashPos<1) return QString::null;
+  if (slashPos<1) return QString();
   return path.mid(0,slashPos+ (slashSuffix ? 1 : 0) );
 }
 

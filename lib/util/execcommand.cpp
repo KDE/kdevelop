@@ -27,7 +27,7 @@
 ExecCommand::ExecCommand( const QString& executable, const QStringList& args, 
                           const QString& workingDir, const QStringList& env,
                           QObject* parent):
-	QObject( parent ), out( "" ) /* make sure out is not QString::null since that would mean "error" */
+	QObject( parent ), out( "" ) /* make sure out is not QString() since that would mean "error" */
 
 {
   progressDlg = 0;
@@ -52,7 +52,7 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
     KMessageBox::error( 0, i18n("Could not invoke \"%1\". Please make sure it is installed correctly").arg( executable ),
                         i18n("Error Invoking Command") );
 
-    emit finished( QString::null, QString::null );
+    emit finished( QString(), QString() );
     deleteLater();
 
   } else {
@@ -88,7 +88,7 @@ void ExecCommand::cancelClicked()
   progressDlg = 0;
   proc->kill();
 
-  emit finished( QString::null, QString::null );
+  emit finished( QString(), QString() );
   deleteLater();
 }
 

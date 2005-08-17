@@ -147,7 +147,7 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
                     }
                 }
                 else
-                    s = QString::null;
+                    s = QString();
                 variables.remove(it);
             }
             else
@@ -754,7 +754,7 @@ QString KDevAutomakeImporter::nicePrimary( const QString & primary )
     else if ( primary == "JAVA" )
         return i18n( "Java" );
     
-    return QString::null;
+    return QString();
 }
 
 KDevProject *KDevAutomakeImporter::project() const

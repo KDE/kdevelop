@@ -22,9 +22,9 @@
 #include "kdevprojectmodel.h"
 #include "kdevprojectmanager_part.h"
 
-#include <q3vbox.h>
+#include <QtGui/QTreeWidget>
 
-#include <klistview.h>
+#include <q3vbox.h>
 
 class KDevProject;
 class KDevProjectManagerPart;
@@ -40,7 +40,7 @@ class ProjectDetails;
 
 class KDevProjectManagerWidget: public Q3VBox
 {
-    Q_OBJECT    
+    Q_OBJECT
 public:
     KDevProjectManagerWidget(KDevProjectManagerPart *part);
     virtual ~KDevProjectManagerWidget();
@@ -50,10 +50,10 @@ public:
 
     inline ProjectModel *projectModel() const
     { return part()->projectModel(); }
-    
+
     inline ProjectOverview *overview() const
     { return m_overview; }
-    
+
     inline ProjectDetails *details() const
     { return m_details; }
 
@@ -65,30 +65,30 @@ public slots:
     void reload();
     void buildAll();
     void build();
-    
+
     void createFile();
     void createFolder();
     void createTarget();
 
 protected slots:
-    void updateDetails(Q3ListViewItem *item);
+    void updateDetails(QTreeWidgetItem *item);
     void updateActions();
 
 private:
     KDevProjectManagerPart *m_part;
     ProjectOverview *m_overview;
     ProjectDetails *m_details;
-    
+
     KAction *m_actionReload;
     KAction *m_actionBuild;
     KAction *m_actionBuildAll;
-    
+
     KAction *m_addFile;
     KAction *m_addTarget;
     KAction *m_addFolder;
 };
 
-class ProjectViewItem: public Q3ListViewItem
+class ProjectViewItem: public QTreeWidgetItem
 {
 public:
     enum ProcessOperation
@@ -96,29 +96,28 @@ public:
         Insert,
         Remove
     };
-    
+
 public:
     ProjectViewItem(ProjectItemDom dom, ProjectViewItem *parent);
     ProjectViewItem(ProjectItemDom dom, ProjectView *parent);
     virtual ~ProjectViewItem();
-    
+
     virtual ProjectView *projectView() const;
-    
+
     inline ProjectItemDom dom() const
     { return m_dom; }
-    
+
     virtual ProjectViewItem *findProjectItem(const QString &path) const;
-    
-    virtual void setup();
-    virtual void setOpen(bool opened);
-    
+
+    void setup();
+
     virtual void process(ProjectItemDom dom, ProcessOperation op = Insert);
     virtual void processWorkspace(ProjectWorkspaceDom dom, ProcessOperation op = Insert);
     virtual void processFolder(ProjectFolderDom dom, ProcessOperation op = Insert);
     virtual void processTarget(ProjectTargetDom dom, ProcessOperation op = Insert);
     virtual void processFile(ProjectFileDom dom, ProcessOperation op = Insert);
     virtual void processModel(FileDom dom, ProcessOperation op = Insert);
-            
+
 private:
     ProjectItemDom m_dom;
     QMap<ProjectItemDom, ProjectViewItem*> m_items;
@@ -131,28 +130,28 @@ class ProjectView: public Q3VBox
 public:
     ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget = 0);
     virtual ~ProjectView();
-    
+
     inline KDevProjectManagerWidget *managerWidget() const
     { return m_managerWidget; }
-    
+
     inline KDevProjectManagerPart *part() const
     { return managerWidget()->part(); }
-    
+
     inline ProjectModel *projectModel() const
     { return part()->projectModel(); }
 
-    inline KListView *listView() const
+    inline QTreeWidget *listView() const
     { return m_listView; }
-        
+
     KToolBar *toolBar() const;
-    
+
     virtual ProjectViewItem *selectedItem() const;
-    
+
     virtual ProjectViewItem *createProjectItem(ProjectItemDom dom, ProjectViewItem *parent);
     virtual ProjectViewItem *findProjectItem(const QString &path) const;
-    
+
     virtual void process(ProjectItemDom dom, ProjectViewItem::ProcessOperation op = ProjectViewItem::Insert);
-    
+
 public slots:
     virtual void refresh();
     virtual void insertItem(ProjectItemDom dom);
@@ -161,11 +160,11 @@ public slots:
     virtual void showProperties(ProjectItemDom dom);
 
 private slots:
-    void executed(Q3ListViewItem *item);
-    void showProperties(Q3ListViewItem *item);
-    
-private:    
-    KListView *m_listView;
+    void executed(QTreeWidgetItem *item);
+    void showProperties(QTreeWidgetItem *item);
+
+private:
+    QTreeWidget *m_listView;
     ProjectViewItem *fake_root;
     KDevProjectManagerWidget *m_managerWidget;
     KDevToolBarShell *m_toolBarShell;
@@ -180,14 +179,14 @@ public:
     virtual ~ProjectOverview();
 
     virtual ProjectViewItem *createProjectItem(ProjectItemDom dom, ProjectViewItem *parent);
-    
-public slots:    
+
+public slots:
     virtual void refresh();
     void reload();
     void buildAll();
-    
+
 private slots:
-    void contextMenu(KListView *listView, Q3ListViewItem *item, const QPoint &pt);
+    void contextMenu(QTreeWidget *listView, QTreeWidgetItem *item, const QPoint &pt);
 };
 
 class ProjectDetails: public ProjectView
@@ -196,14 +195,14 @@ class ProjectDetails: public ProjectView
 public:
     ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parentWidget = 0);
     virtual ~ProjectDetails();
-    
+
 public slots:
     void setCurrentItem(ProjectItemDom dom);
     void build();
-    
+
 private slots:
-    void contextMenu(KListView *listView, Q3ListViewItem *item, const QPoint &pt);
-    
+    void contextMenu(QTreeWidget *listView, QTreeWidgetItem *item, const QPoint &pt);
+
 private:
     ProjectItemDom m_currentItem;
 };

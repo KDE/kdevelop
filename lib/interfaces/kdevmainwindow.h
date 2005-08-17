@@ -16,8 +16,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEV_MAINWINDOW_H
 #define KDEV_MAINWINDOW_H
@@ -44,7 +44,7 @@ public:
     @param view The view to embed. Must be a KPart.
     @param title The title of a view.
     @param toolTip The tooltip of a view.*/
-    virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString::null) = 0;
+    virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString()) = 0;
     
     /**Embeds a toolview at the left of the main window.
     @param view The view to embed. Must be a KPart.

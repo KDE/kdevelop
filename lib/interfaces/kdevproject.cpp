@@ -83,7 +83,7 @@ QString KDevProject::relativeProjectFile( const QString & absFileName )
 {
     if( isProjectFile(absFileName) )
 	return d->m_absToRel[ absFileName ];
-    return QString::null;
+    return QString();
 }
 
 void KDevProject::buildFileMap()

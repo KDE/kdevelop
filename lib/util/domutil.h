@@ -54,7 +54,7 @@ public:
     /**
      * Reads a string entry.
      */
-    static QString readEntry(const QDomDocument &doc, const QString &path, const QString &defaultEntry = QString::null);
+    static QString readEntry(const QDomDocument &doc, const QString &path, const QString &defaultEntry = QString());
     /**
      * Reads a number entry.
      */

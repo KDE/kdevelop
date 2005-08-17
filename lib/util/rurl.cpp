@@ -117,20 +117,20 @@ QString Name::extension( bool complete ) const
         else
             return temp.mid(temp.findRev('.')+1);
     }
-    return QString::null;
+    return QString();
 }
 
 QString Name::fileName( ) const
 {
     if (m_type == File)
         return m_rurl.section('/', -1);
-    return QString::null;
+    return QString();
 }
 
 QString Name::directory( ) const
 {
     if ( (m_type == File) && (m_rurl.findRev('/') == -1) )
-        return QString::null;
+        return QString();
     
     return m_rurl.mid(0, m_rurl.findRev('/')+1);
 }

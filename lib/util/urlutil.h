@@ -161,7 +161,7 @@ namespace URLUtil
   * @param urls URLs to dump.
   * @param aMessage Message to be written onto a stdout.
   */
-  void dump( const KURL::List &urls, const QString &aMessage = QString::null );
+  void dump( const KURL::List &urls, const QString &aMessage = QString() );
 
   /**
    * Same as QDir::canonicalPath in later versions of Qt. Earlier versions of Qt

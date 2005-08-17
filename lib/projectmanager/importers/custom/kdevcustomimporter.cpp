@@ -139,7 +139,7 @@ ProjectItemDom KDevCustomImporter::import(ProjectModel *model, const QString &fi
 QString KDevCustomImporter::findMakefile(ProjectFolderDom dom) const
 {
     Q_UNUSED(dom);
-    return QString::null;
+    return QString();
 }
 
 QStringList KDevCustomImporter::findMakefiles(ProjectFolderDom dom) const

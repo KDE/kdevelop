@@ -59,7 +59,7 @@ QString DomUtil::readEntryAux(const QDomDocument &doc, const QString &path)
 {
     QDomElement el = elementByPath(doc, path);
     if (el.isNull())
-        return QString::null;
+        return QString();
     else
         return el.firstChild().toText().data();
 }

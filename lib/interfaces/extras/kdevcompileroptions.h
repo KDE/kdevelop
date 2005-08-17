@@ -82,7 +82,7 @@ public:
      * will be set from the flags argument of this method.
      * After the dialog is accepted, the new settings will
      * be returned as a string. If the dialog was cancelled,
-     * QString::null is returned.
+     * QString() is returned.
      */
     virtual QString exec(QWidget *parent, const QString &flags) = 0;
 };

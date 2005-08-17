@@ -53,7 +53,7 @@ private slots:
     void commandFailed(const QString &command);
     
 private:
-    QString buildCommand(ProjectItemDom dom, const QString &target = QString::null);
+    QString buildCommand(ProjectItemDom dom, const QString &target = QString());
     QString makeEnvironment() const;
     
 private:

@@ -216,7 +216,7 @@ void  Catalog::setEnabled( bool isEnabled )
  
  void  Catalog::close()
 {
-    d->dbName = QString::null;
+    d->dbName = QString();
 
     QMap<QByteArray, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){

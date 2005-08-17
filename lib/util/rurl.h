@@ -41,14 +41,14 @@ public:
     /**Removes "//" from the name.*/
     void cleanRURL();
     
-    /**Returns the extension of a file or QString::null for directories.
+    /**Returns the extension of a file or QString() for directories.
     If complete is true then returns extensions like "tar.gz".
     Else returns "gz".*/
     QString extension(bool complete = true) const;
-    /**Returns the name of the file without the path or QString::null
+    /**Returns the name of the file without the path or QString()
     for directories.*/
     QString fileName() const;
-    /**Returns the name of the directory or QString::null if there are no dirs in path.*/
+    /**Returns the name of the directory or QString() if there are no dirs in path.*/
     QString directory() const;
 
     /**Returns true if the type of RName is file.*/
@@ -177,6 +177,6 @@ private:
     
 };
 
-}
+};
 
 #endif

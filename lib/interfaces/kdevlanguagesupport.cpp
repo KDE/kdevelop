@@ -50,7 +50,7 @@ KMimeType::List KDevLanguageSupport::mimeTypes()
 
 QString KDevLanguageSupport::formatTag( const Tag& /*tag*/ )
 {
-    return QString::null;
+    return QString();
 }
 
 QString KDevLanguageSupport::formatClassName(const QString &name)

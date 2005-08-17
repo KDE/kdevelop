@@ -35,7 +35,7 @@ namespace
 class CheckURL : public Q3CheckListItem
 {
 public:
-	CheckURL( Q3ListView * lv, KURL const & url )
+	CheckURL( QTreeWidget * lv, KURL const & url )
 		: Q3CheckListItem( lv, url.path(), Q3CheckListItem::CheckBox),
 		_url( url )
 	{}
@@ -60,7 +60,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	_listview = new QTreeWidget( top );
 	_listview->addColumn( "" );
 	_listview->header()->hide();
-	_listview->setResizeMode( Q3ListView::LastColumn );
+	_listview->setResizeMode( QTreeWidget::LastColumn );
 
 	setButtonOKText( i18n("Save &Selected"), i18n("Saves all selected files") );
 	setButtonText( User1, i18n("Save &None") );

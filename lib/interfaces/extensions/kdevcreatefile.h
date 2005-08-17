@@ -125,7 +125,7 @@ public:
       :KDevPlugin(info, parent) {}
 
   /**Creates a new file, within or without the project. 
-  Supply as much information as you know. Leave what you don't know as QString::null.
+  Supply as much information as you know. Leave what you don't know as QString().
   The user will be prompted as necessary for the missing information, and the
   file created, and added to the project as necessary.
   @param ext File extension (type).
@@ -134,10 +134,10 @@ public:
   @param subtype The subtype, pass this only if an extension is not enough to find the
   file template.
   @return @ref CreatedFile instance with information about file and file creation process.*/
-  virtual CreatedFile createNewFile(QString ext = QString::null,
-                     QString dir = QString::null,
-                     QString name = QString::null,
-                     QString subtype = QString::null) = 0;
+  virtual CreatedFile createNewFile(QString ext = QString(),
+                     QString dir = QString(),
+                     QString name = QString(),
+                     QString subtype = QString()) = 0;
 
 
 };
