@@ -250,9 +250,10 @@ void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part
     removePart(part);
 }
 
-const Q3ValueList<KDevPlugin*> PluginController::loadedPlugins()
+const QList<KDevPlugin *> PluginController::loadedPlugins()
 {
-	Q3ValueList<KDevPlugin*> plugins;
+	QList<KDevPlugin *> plugins;
+
 	Q3DictIterator<KDevPlugin> itt(m_parts);
 	while( itt.current() )
 	{

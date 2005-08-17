@@ -3,14 +3,7 @@
 
 
 #include <qobject.h>
-#include <q3memarray.h>
 #include <qpointer.h>
-//Added by qt3to4:
-#include <QFocusEvent>
-#include <Q3ValueList>
-#include <Q3PopupMenu>
-
-class Q3PopupMenu;
 
 #include <kparts/part.h>
 #include <kdeversion.h>
@@ -78,10 +71,10 @@ private:
 
   static EditorProxy *s_instance;
 
-  Q3MemArray<int> m_popupIds;
+  QVector<int> m_popupIds;
 
   // This list is used to save line/col information for not yet activated editor views.
-  Q3ValueList< EditorWrapper* > m_editorParts;
+  QList<EditorWrapper *> m_editorParts;
 
   bool m_delayedViewCreationCompatibleUI;
 };

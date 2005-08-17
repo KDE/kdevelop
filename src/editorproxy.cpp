@@ -6,11 +6,7 @@
 #undef protected
 
 #include <qwidget.h>
-#include <q3popupmenu.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QFocusEvent>
 
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -80,12 +76,13 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
     view->setCursorPosition(Cursor(lineNum, col == -1 ? 0 : col));
   else {
     // Save the position for a rainy day (or when the view gets activated and wants its position)
-    for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
-      if ((*it)->document() == part) {
-        (*it)->setLine(lineNum);
-        (*it)->setCol(col);
-        return;
-      }
+    foreach(EditorWrapper *wrapper, m_editorParts) {
+        if (wrapper->document() == part) {
+            wrapper->setLine(lineNum);
+            wrapper->setCol(col);
+            return;
+        }
+    }
 
     // Shouldn't hit this?
     Q_ASSERT(false);
@@ -106,6 +103,8 @@ void EditorProxy::installPopup( KParts::Part * part )
     }
 
     KAction * action = 0;
+
+#if 0 //### harryF
     //If there is a tab for this file, we don't need to plug the closing menu entries here
     NewMainWindow *mw = dynamic_cast<NewMainWindow *>(TopLevel::getInstance());
     if (mw) {
@@ -133,7 +132,9 @@ void EditorProxy::installPopup( KParts::Part * part )
                 break;
         }
     }
-    else {
+    else
+#endif
+    {
         KConfig *config = KGlobal::config();
         config->setGroup("UI");
         bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
@@ -363,9 +364,10 @@ QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 	if (part->widget())
 		return part->widget();
 
-	for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
-		if ((*it)->document() == part)
-			return *it;
+        foreach (EditorWrapper *wrapper, m_editorParts) {
+            if (wrapper->document() == part)
+                return wrapper;
+        }
 
 	return 0L;
 }
@@ -374,9 +376,10 @@ QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
 	if ( !part ) return 0;
 
-	for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
-		if ((*it)->document() == part)
-			return *it;
+        foreach (EditorWrapper *wrapper, m_editorParts) {
+            if (wrapper->document() == part)
+                return wrapper;
+        }
 
 	if (part->widget())
 		return part->widget();

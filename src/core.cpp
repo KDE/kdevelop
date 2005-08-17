@@ -1,7 +1,5 @@
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
-
+#include <qmenu.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -67,7 +65,7 @@ void Core::running(KDevPlugin * which, bool runs)
 }
 
 
-void Core::fillContextMenu(Q3PopupMenu *popup, const Context *context)
+void Core::fillContextMenu(QMenu *popup, const Context *context)
 {
   emit contextMenu(popup, context);
 }

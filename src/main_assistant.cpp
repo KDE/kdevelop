@@ -106,11 +106,15 @@ int main(int argc, char *argv[])
   PluginController::getInstance()->loadInitialPlugins();
 
   if (splash) splash->message( i18n( "Starting GUI" ) );
+
+#if 0
 //BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now
   NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
   if (mw)
       mw->enableShow();
 //END workaround
+#endif
+
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();

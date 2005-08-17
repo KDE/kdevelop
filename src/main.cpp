@@ -110,11 +110,15 @@ int main(int argc, char *argv[])
   Core::getInstance()->doEmitCoreInitialized();
 
   if (splash) splash->message( i18n( "Starting GUI" ) );
+
+#if 0
 //BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now
   NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
   if (mw)
       mw->enableShow();
 //END workaround
+#endif
+
   TopLevel::getInstance()->main()->show();
 
   if (splash) delete splash;
