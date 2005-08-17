@@ -21,9 +21,6 @@
 #include <qradiobutton.h>
 #include <qdir.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
-#include <Q3PtrList>
 
 #include <kaction.h>
 #include <kaboutdata.h>
@@ -67,32 +64,24 @@
 
 #include "shellextension.h"
 
-#ifdef KDE_MAKE_VERSION
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-#  define NEED_CONFIGHACK
-# endif
-#else
-# define NEED_CONFIGHACK
-#endif
-
 using namespace MainWindowUtils;
 
-MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
-  :QObject(pParent, name)
-  ,m_toggleMainToolbar(0L)
-  ,m_toggleBuildToolbar(0L)
-  ,m_toggleViewToolbar(0L)
-  ,m_toggleBrowserToolbar(0L)
-  ,m_toggleStatusbar(0L)
-  ,m_stopProcesses(0L)
+MainWindowShare::MainWindowShare(QObject* pParent)
+  :QObject(pParent)
+  ,m_toggleMainToolbar(0)
+  ,m_toggleBuildToolbar(0)
+  ,m_toggleViewToolbar(0)
+  ,m_toggleBrowserToolbar(0)
+  ,m_toggleStatusbar(0)
+  ,m_stopProcesses(0)
 {
   m_pMainWnd = (KParts::MainWindow*)pParent;
 }
 
 void MainWindowShare::init()
 {
-  connect(Core::getInstance(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-          this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
+  connect(Core::getInstance(), SIGNAL(contextMenu(QMenu *, const Context *)),
+          this, SLOT(contextMenu(QMenu *, const Context *)));
 
   connect( m_pMainWnd->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
         this, SLOT( slotActionStatusText( const QString & ) ) );
@@ -252,36 +241,37 @@ void MainWindowShare::slotActiveProcessChanged( KDevPlugin* plugin, bool active 
   if ( active ) {
     activeProcesses.append( plugin );
   } else {
-    activeProcesses.removeRef( plugin );
+    activeProcesses.removeAll( plugin );
   }
   m_stopProcesses->setEnabled( !activeProcesses.isEmpty() );
 }
 
 void MainWindowShare::slotStopPopupActivated( int id )
 {
-  KDevPlugin* plugin = activeProcesses.at( id );
-  if ( plugin && plugin->info()->genericName() == m_stopProcesses->popupMenu()->text( id ) ) {
-    Core::getInstance()->doEmitStopButtonPressed( plugin );
-    return;
-  } else {
-    // oops... list has changed in the meantime
-    QString str = m_stopProcesses->popupMenu()->text( id );
-    for ( plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
-      if ( plugin->info()->genericName() == str ) {
-  Core::getInstance()->doEmitStopButtonPressed( plugin );
+    KDevPlugin* plugin = activeProcesses.at( id );
+    if ( plugin && plugin->info()->genericName() == m_stopProcesses->popupMenu()->text( id ) ) {
+        Core::getInstance()->doEmitStopButtonPressed( plugin );
         return;
-      }
+    } else {
+        // oops... list has changed in the meantime
+        QString str = m_stopProcesses->popupMenu()->text( id );
+        for (int i = 0; i < activeProcesses.count(); ++i) {
+            plugin = activeProcesses.at(i);
+            if ( plugin->info()->genericName() == str ) {
+                Core::getInstance()->doEmitStopButtonPressed( plugin );
+                return;
+            }
+        }
     }
-  }
 }
 
 void MainWindowShare::slotStopMenuAboutToShow()
 {
-  Q3PopupMenu* popup = m_stopProcesses->popupMenu();
+  QMenu* popup = m_stopProcesses->popupMenu();
   popup->clear();
 
   int i = 0;
-  for ( KDevPlugin* plugin = activeProcesses.first(); plugin; plugin = activeProcesses.next() ) {
+  foreach(KDevPlugin *plugin, activeProcesses) {
     popup->insertItem( plugin->info()->genericName(), i++ );
   }
 }
@@ -350,29 +340,13 @@ void MainWindowShare::slotConfigureEditors()
     // show the modal config dialog for this part if it has a ConfigInterface
     editor->configDialog(m_pMainWnd);
     editor->writeConfig(KGlobal::config());
-
-#ifdef NEED_CONFIGHACK
-    // iterate over other instances of this part type and apply configuration
-    if( const Q3PtrList<KParts::Part> * partlist = partController->parts() )
-    {
-        Q3PtrListIterator<KParts::Part> it( *partlist );
-        while ( KParts::Part* p = it.current() )
-        {
-            if ( KTextEditor::ConfigInterface * ci = dynamic_cast<KTextEditor::ConfigInterface *>( p ) )
-            {
-                ci->readConfig();
-            }
-            ++it;
-        }
-    }
-#endif
 }
 
 void MainWindowShare::slotGUICreated( KParts::Part * part )
 {
 //    kdDebug(9000) << "MainWindowShare::slotGUICreated()" << endl;
 
-    if ( ! part ) return;
+    if ( !part ) return;
 
     KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>(part);
     // disable configuration entry if created part is not an editor
@@ -456,7 +430,7 @@ void MainWindowShare::slotConfigureToolbars()
   dlg.exec();
 }
 
-void MainWindowShare::contextMenu(Q3PopupMenu* popup, const Context *)
+void MainWindowShare::contextMenu(QMenu* popup, const Context *)
 {
   if ( m_pMainWnd->menuBar()->isVisible() )
     return;

@@ -14,7 +14,7 @@ libkdevshell_la_LIBADD = \
 	$(top_builddir)/src/newui/libd.la $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
 libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
-	newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
+	partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
 	projectmanager.cpp projectsession.cpp splashscreen.cpp statusbar.cpp toplevel.cpp \
 	generalinfowidgetbase.ui mimewarningdialog.ui shellextension.cpp simplemainwindow.cpp
 
@@ -43,7 +43,7 @@ rc_assistant_DATA =  kdevassistantui.rc
 shellincludedir = $(includedir)/kdevelop/shell
 shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h\
 	generalinfowidget.h languageselectwidget.h mainwindowshare.h\
-	newmainwindow.h partcontroller.h partselectwidget.h plugincontroller.h\
+	partcontroller.h partselectwidget.h plugincontroller.h\
 	projectmanager.h projectsession.h shellextension.h\
 	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h\
 	mimewarningdialog.h settingswidget.h simplemainwindow.h

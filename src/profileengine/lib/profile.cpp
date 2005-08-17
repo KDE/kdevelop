@@ -133,6 +133,8 @@ void Profile::removeEntry(List type, const QString &value)
 
 QStringList &Profile::listByType(List type)
 {
+    static QStringList dummy;
+
     switch (type) {
         case Properties:
             return m_properties;
@@ -141,6 +143,7 @@ QStringList &Profile::listByType(List type)
         case ExplicitDisable:
             return m_explicitDisable;
     }
+    return dummy;
 }
 
 bool Profile::hasInEntryList(EntryList &list, QString value)
