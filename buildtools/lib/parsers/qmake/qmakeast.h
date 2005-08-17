@@ -23,6 +23,8 @@
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <Q3ValueStack>
+
 
 /**
 @file qmakeast.h
@@ -222,5 +224,20 @@ public:
 };
 
 }
+
+/**
+The stack to store ProjectAST pointers when a new child
+ProjectAST is created and filled with statements.
+
+Parser creates root ProjectAST for a .pro file, pushes it onto the stack and starts
+adding statements. Each statement is added as a child StatementAST to the ProjectAST
+currently on the top in the stack.
+
+When a scope or function scope statement is parsed, the child ProjectAST is created
+and pushed onto the stack. Therefore all statements which belong to the scope
+or function scope are added as childs to their direct parent (scope or function scope).
+*/
+Q_GLOBAL_STATIC(Q3ValueStack<QMake::ProjectAST *>, g_projects)
+
 
 #endif

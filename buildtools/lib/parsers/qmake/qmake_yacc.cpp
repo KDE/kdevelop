@@ -45,6 +45,15 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+/* If NAME_PREFIX is specified substitute the variables and functions
+   names.  */
+#define yyparse qmakeparse
+#define yylex   qmakelex
+#define yyerror qmakeerror
+#define yylval  qmakelval
+#define yychar  qmakechar
+#define yydebug qmakedebug
+#define yynerrs qmakenerrs
 
 
 /* Tokens.  */
@@ -175,25 +184,11 @@ struct Result {
 
 typedef Result YYSTYPE;
 
-void yyerror(const char *str) {
-    printf("%s\n", str);
+void qmakeerror(const char *str) {
+    qWarning("%s\n", str);
 }
 
-int yylex();
-
-/**
-The stack to store ProjectAST pointers when a new child
-ProjectAST is created and filled with statements.
-
-Parser creates root ProjectAST for a .pro file, pushes it onto the stack and starts
-adding statements. Each statement is added as a child StatementAST to the ProjectAST
-currently on the top in the stack.
- 
-When a scope or function scope statement is parsed, the child ProjectAST is created
-and pushed onto the stack. Therefore all statements which belong to the scope
-or function scope are added as childs to their direct parent (scope or function scope).
-*/
-Q3ValueStack<ProjectAST*> projects;
+int qmakelex();
 
 /**
 The current depth of AST node is stored here.
@@ -236,7 +231,7 @@ typedef int YYSTYPE;
 
 
 /* Line 214 of yacc.c.  */
-#line 239 "qmake_yacc.cpp"
+#line 234 "qmake_yacc.cpp"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -417,11 +412,11 @@ static const yysigned_char yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
-       0,   134,   134,   134,   141,   146,   149,   153,   157,   161,
-     165,   171,   181,   183,   184,   187,   191,   194,   195,   196,
-     197,   198,   202,   202,   202,   202,   202,   206,   205,   220,
-     219,   233,   243,   244,   247,   248,   252,   251,   264,   273,
-     278,   286
+       0,   120,   120,   120,   127,   132,   135,   139,   143,   147,
+     151,   157,   167,   169,   170,   173,   177,   180,   181,   182,
+     183,   184,   188,   188,   188,   188,   188,   192,   191,   206,
+     205,   219,   229,   230,   233,   234,   238,   237,   250,   259,
+     264,   272
 };
 #endif
 
@@ -671,10 +666,10 @@ yy_stack_print (bottom, top)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Qt::DockBottom, Qt::DockTop)				\
+# define YY_STACK_PRINT(Bottom, Top)				\
 do {								\
   if (yydebug)							\
-    yy_stack_print ((Qt::DockBottom), (Qt::DockTop));				\
+    yy_stack_print ((Bottom), (Top));				\
 } while (0)
 
 
@@ -714,7 +709,7 @@ int yydebug;
 # define YYDPRINTF(Args)
 # define YYDSYMPRINT(Args)
 # define YYDSYMPRINTF(Title, Token, Value, Location)
-# define YY_STACK_PRINT(Qt::DockBottom, Qt::DockTop)
+# define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
 #endif /* !YYDEBUG */
 
@@ -1154,58 +1149,58 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 134 "qmake.yy"
+#line 120 "qmake.yy"
     {
         ProjectAST *projectAST = new ProjectAST();
-        projects.push(projectAST);
+        g_projects()->push(projectAST);
     ;}
     break;
 
   case 4:
-#line 142 "qmake.yy"
+#line 128 "qmake.yy"
     {
-            projects.top()->addChildAST(yyvsp[0].node);
+            g_projects()->top()->addChildAST(yyvsp[0].node);
             yyvsp[0].node->setDepth(depth);
         ;}
     break;
 
   case 6:
-#line 150 "qmake.yy"
+#line 136 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 7:
-#line 154 "qmake.yy"
+#line 140 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 8:
-#line 158 "qmake.yy"
+#line 144 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 9:
-#line 162 "qmake.yy"
+#line 148 "qmake.yy"
     {
             yyval.node = yyvsp[0].node;
         ;}
     break;
 
   case 10:
-#line 166 "qmake.yy"
+#line 152 "qmake.yy"
     {
             yyval.node = new NewLineAST();
         ;}
     break;
 
   case 11:
-#line 172 "qmake.yy"
+#line 158 "qmake.yy"
     {
             AssignmentAST *node = new AssignmentAST();
             node->scopedID = yyvsp[-2].value;
@@ -1216,86 +1211,86 @@ yyreduce:
     break;
 
   case 12:
-#line 182 "qmake.yy"
+#line 168 "qmake.yy"
     { yyval.value = yyvsp[-2].value + yyvsp[-1].value + yyvsp[0].value; ;}
     break;
 
   case 13:
-#line 183 "qmake.yy"
+#line 169 "qmake.yy"
     { yyval.value = yyvsp[-1].value + yyvsp[0].value; ;}
     break;
 
   case 15:
-#line 188 "qmake.yy"
+#line 174 "qmake.yy"
     {
             yyval.values.append(yyvsp[0].value);
         ;}
     break;
 
   case 16:
-#line 191 "qmake.yy"
+#line 177 "qmake.yy"
     { yyval.values.clear(); ;}
     break;
 
   case 17:
-#line 194 "qmake.yy"
+#line 180 "qmake.yy"
     { yyval.value = yyvsp[-1].value + " \\\n"; ;}
     break;
 
   case 18:
-#line 195 "qmake.yy"
+#line 181 "qmake.yy"
     { yyval.value = yyvsp[-1].value + "\n"; ;}
     break;
 
   case 19:
-#line 196 "qmake.yy"
+#line 182 "qmake.yy"
     { yyval.value = "\\\n"; ;}
     break;
 
   case 21:
-#line 198 "qmake.yy"
+#line 184 "qmake.yy"
     { yyval.value = ""; ;}
     break;
 
   case 27:
-#line 206 "qmake.yy"
+#line 192 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
-            projects.push(projectAST);
-            projects.top()->scopedID = yyvsp[0].value;
+            g_projects()->push(projectAST);
+            g_projects()->top()->scopedID = yyvsp[0].value;
             depth++;
         ;}
     break;
 
   case 28:
-#line 213 "qmake.yy"
+#line 199 "qmake.yy"
     {
-            yyval.node = projects.pop();
+            yyval.node = g_projects()->pop();
             depth--;
         ;}
     break;
 
   case 29:
-#line 220 "qmake.yy"
+#line 206 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
-            projects.push(projectAST);
-            projects.top()->scopedID = yyvsp[-3].value;
-            projects.top()->args = yyvsp[-1].value;
+            g_projects()->push(projectAST);
+            g_projects()->top()->scopedID = yyvsp[-3].value;
+            g_projects()->top()->args = yyvsp[-1].value;
             depth++;
         ;}
     break;
 
   case 30:
-#line 229 "qmake.yy"
+#line 215 "qmake.yy"
     {
-            yyval.node = projects.pop();
+            yyval.node = g_projects()->pop();
             depth--;
         ;}
     break;
 
   case 31:
-#line 234 "qmake.yy"
+#line 220 "qmake.yy"
     {
             FunctionCallAST *node = new FunctionCallAST();
             node->scopedID = yyvsp[-5].value;
@@ -1306,36 +1301,36 @@ yyreduce:
     break;
 
   case 32:
-#line 243 "qmake.yy"
+#line 229 "qmake.yy"
     { yyval.value = yyvsp[0].value; ;}
     break;
 
   case 33:
-#line 244 "qmake.yy"
+#line 230 "qmake.yy"
     { yyval.value = ""; ;}
     break;
 
   case 36:
-#line 252 "qmake.yy"
+#line 238 "qmake.yy"
     {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
-            projects.push(projectAST);
-            projects.top()->scopedID = "else";
-            projects.top()->args = "";
+            g_projects()->push(projectAST);
+            g_projects()->top()->scopedID = "else";
+            g_projects()->top()->args = "";
             depth++;
         ;}
     break;
 
   case 37:
-#line 260 "qmake.yy"
+#line 246 "qmake.yy"
     {
-            yyval.node = projects.pop();
+            yyval.node = g_projects()->pop();
             depth--;
         ;}
     break;
 
   case 38:
-#line 265 "qmake.yy"
+#line 251 "qmake.yy"
     {
             FunctionCallAST *node = new FunctionCallAST();
             node->scopedID = "else";
@@ -1346,14 +1341,14 @@ yyreduce:
     break;
 
   case 39:
-#line 273 "qmake.yy"
+#line 259 "qmake.yy"
     {
             yyval.node = new FunctionCallAST();
         ;}
     break;
 
   case 40:
-#line 279 "qmake.yy"
+#line 265 "qmake.yy"
     {
             CommentAST *node = new CommentAST();
             node->comment = yyvsp[-1].value + "\n";
@@ -1365,7 +1360,7 @@ yyreduce:
     }
 
 /* Line 991 of yacc.c.  */
-#line 1368 "qmake_yacc.cpp"
+#line 1363 "qmake_yacc.cpp"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1575,7 +1570,7 @@ yyreturn:
 }
 
 
-#line 289 "qmake.yy"
+#line 275 "qmake.yy"
 
 
 #include "qmake_lex.cpp"

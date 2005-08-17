@@ -24,27 +24,26 @@
 #include <q3valuestack.h>
 #include <kio/netaccess.h>
 
-extern FILE *yyin, *yyout;
-extern int yyparse();
-extern int yydebug;
+extern FILE *qmakein, *qmakeout;
+extern int qmakeparse();
+extern int qmakedebug;
 
-Q_GLOBAL_STATIC(Q3ValueStack<QMake::ProjectAST *>, g_projects)
-
+//Q_GLOBAL_STATIC(Q3ValueStack<QMake::ProjectAST *>, g_projects)
 
 namespace QMake {
 
 int Driver::parseFile(const char *fileName, ProjectAST **ast)
 {
-    yyin = fopen(fileName, "r");
-    if (yyin == 0)
+    qmakein = fopen(fileName, "r");
+    if (qmakein == 0)
     {
         ast = 0;
         return 1;
     }
-//     yydebug = 1;
-    int ret = yyparse();
-    *ast = projects.top();
-    fclose(yyin);
+//     qmakedebug = 1;
+    int ret = qmakeparse();
+    *ast = g_projects()->top();
+    fclose(qmakein);
     return ret;
 }
 

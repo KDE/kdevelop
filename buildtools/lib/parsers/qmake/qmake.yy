@@ -16,7 +16,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 /**
@@ -32,9 +32,8 @@ SOURCES = foo #regognize me
 @fixme 1 shift/reduce conflict in "line_body" rule
 */
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include "qmakeast.h"
-#include <qregexp.h>
 
 #define YYSTYPE_IS_DECLARED
 
@@ -52,7 +51,7 @@ struct Result {
     AST *node;
     /**Type of semantic value for "multiline_values" grammar rule.
     Each line of multiline value is stored as a string in the list.
-
+    
     For example we have in .pro file:
     @code
     SOURCE = foo1.cpp \
@@ -71,25 +70,11 @@ struct Result {
 
 typedef Result YYSTYPE;
 
-void yyerror(const char *str) {
-    printf("%s\n", str);
+void qmakeerror(const char *str) {
+    qWarning("%s\n", str);
 }
 
-int yylex();
-
-/**
-The stack to store ProjectAST pointers when a new child
-ProjectAST is created and filled with statements.
-
-Parser creates root ProjectAST for a .pro file, pushes it onto the stack and starts
-adding statements. Each statement is added as a child StatementAST to the ProjectAST
-currently on the top in the stack.
-
-When a scope or function scope statement is parsed, the child ProjectAST is created
-and pushed onto the stack. Therefore all statements which belong to the scope
-or function scope are added as childs to their direct parent (scope or function scope).
-*/
-QValueStack<ProjectAST*> projects;
+int qmakelex();
 
 /**
 The current depth of AST node is stored here.
@@ -131,27 +116,27 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 %%
 
-project :
+project : 
     {
         ProjectAST *projectAST = new ProjectAST();
-        projects.push(projectAST);
+        g_projects()->push(projectAST);
     }
     statements
     ;
-
+    
 statements : statements statement
         {
-            projects.top()->addChildAST($<node>2);
+            g_projects()->top()->addChildAST($<node>2);
             $<node>2->setDepth(depth);
         }
     |
     ;
 
-statement : variable_assignment
+statement : variable_assignment 
         {
             $<node>$ = $<node>1;
         }
-    | scope
+    | scope 
         {
             $<node>$ = $<node>1;
         }
@@ -179,7 +164,7 @@ variable_assignment : scoped_identifier operator multiline_values
         }
     ;
 
-scoped_identifier : ID_SIMPLE COLON scoped_identifier
+scoped_identifier : ID_SIMPLE COLON scoped_identifier  
         { $<value>$ = $<value>1 + $<value>2 + $<value>3; }
     | ID_SIMPLE COLON  { $<value>$ = $<value>1 + $<value>2; }
     | ID_SIMPLE
@@ -202,42 +187,33 @@ line_body : ID_LIST CONT         { $<value>$ = $<value>1 + " \\\n"; }
 
 operator : EQ | PLUSEQ | MINUSQE | STAREQ | TILDEEQ
     ;
-
-scope : scoped_identifier
+    
+scope : scoped_identifier 
         {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::Scope);
-            projects.push(projectAST);
-            projects.top()->scopedID = $<value>1;
+            g_projects()->push(projectAST);
+            g_projects()->top()->scopedID = $<value>1;
             depth++;
         }
     scope_body
         {
-            $<node>$ = projects.pop();
+            $<node>$ = g_projects()->pop();
             depth--;
         }
     ;
 
-function_call : scoped_identifier LBRACE function_args RBRACE
+function_call : scoped_identifier LBRACE function_args RBRACE 
         {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
-            projects.push(projectAST);
-            projects.top()->scopedID = $<value>1;
-            projects.top()->args = $<value>3;
+            g_projects()->push(projectAST);
+            g_projects()->top()->scopedID = $<value>1;
+            g_projects()->top()->args = $<value>3;
             depth++;
-
-            //qWarning("%s", $<value>1.ascii());
-            if ($<value>1.contains("include"))
-            {
-                IncludeAST *includeAST = new IncludeAST();
-                includeAST->projectName = $<value>3;
-                projects.top()->addChildAST(includeAST);
-                includeAST->setDepth(depth);
-            }
         }
-    scope_body
+    scope_body 
     else_statement
         {
-            $<node>$ = projects.pop();
+            $<node>$ = g_projects()->pop();
             depth--;
         }
     | scoped_identifier LBRACE function_args RBRACE COLON variable_assignment
@@ -247,27 +223,9 @@ function_call : scoped_identifier LBRACE function_args RBRACE
             node->args = $<value>3;
             node->assignment = static_cast<AssignmentAST*>($<node>6);
             $<node>$ = node;
-
-            if ($<value>1.contains("include"))
-            {
-                IncludeAST *includeAST = new IncludeAST();
-                includeAST->projectName = $<value>3;
-                projects.top()->addChildAST(includeAST);
-                includeAST->setDepth(depth);
-            }
-            if ($<value>6.contains("include"))
-            {
-                QRegExp r("include\\((.*)\\)");
-                r.search($<value>6);
-                IncludeAST *includeAST = new IncludeAST();
-                includeAST->projectName = r.cap(1);
-                projects.top()->addChildAST(includeAST);
-                includeAST->setDepth(depth);
-            }
-
         }
     ;
-
+    
 function_args : ID_ARGS    { $<value>$ = $<value>1; }
     |    { $<value>$ = ""; }
     ;
@@ -275,18 +233,18 @@ function_args : ID_ARGS    { $<value>$ = $<value>1; }
 scope_body : LCURLY statements RCURLY
     |
     ;
-
-else_statement : "else" LCURLY
+    
+else_statement : "else" LCURLY 
         {
             ProjectAST *projectAST = new ProjectAST(ProjectAST::FunctionScope);
-            projects.push(projectAST);
-            projects.top()->scopedID = "else";
-            projects.top()->args = "";
+            g_projects()->push(projectAST);
+            g_projects()->top()->scopedID = "else";
+            g_projects()->top()->args = "";
             depth++;
         }
     statements RCURLY
         {
-            $<node>$ = projects.pop();
+            $<node>$ = g_projects()->pop();
             depth--;
         }
     | "else" COLON variable_assignment
@@ -313,7 +271,7 @@ comment : COMMENT NEWLINE
 
 emptyline : NEWLINE
     ;
-
+    
 %%
 
 #include "qmake_lex.cpp"
