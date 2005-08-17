@@ -24,7 +24,6 @@
 */
 #include <kdebug.h>
 
-#include "kdevdesignerintegration.h"
 #include "kdevlanguagesupport.h"
 
 KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info, QObject *parent)
@@ -34,121 +33,6 @@ KDevLanguageSupport::KDevLanguageSupport(const KDevPluginInfo *info, QObject *pa
 
 KDevLanguageSupport::~KDevLanguageSupport()
 {
-}
-
-KDevLanguageSupport::Features KDevLanguageSupport::features()
-{
-    return Features(0);
-}
-
-KMimeType::List KDevLanguageSupport::mimeTypes()
-{
-    return KMimeType::List();
-}
-
-QString KDevLanguageSupport::formatTag( const Tag& /*tag*/ )
-{
-    return QString();
-}
-
-QString KDevLanguageSupport::formatClassName(const QString &name)
-{
-    return name;
-}
-
-QString KDevLanguageSupport::unformatClassName(const QString &name)
-{
-    return name;
-}
-
-void KDevLanguageSupport::addClass()
-{
-}
-
-void KDevLanguageSupport::addMethod( KDevCodeClassItem */*klass*/ )
-{
-}
-
-void KDevLanguageSupport::implementVirtualMethods( KDevCodeClassItem * /*klass*/ )
-{
-}
-
-void KDevLanguageSupport::addAttribute( KDevCodeClassItem * /*klass*/ )
-{
-}
-
-QStringList KDevLanguageSupport::subclassWidget(const QString& /*formName*/)
-{
-    return QStringList();
-}
-
-QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const QString& /*fileName*/)
-{
-    return QStringList();
-}
-
-QString KDevLanguageSupport::formatModelItem( const KDevCodeItem *item, bool /*shortDescription*/ )
-{
-    return QString();
-}
-
-void KDevLanguageSupport::addFunction( DesignerType type, const QString & formName, Function function )
-{
-//    kdDebug() << "KDevLanguageSupport::addFunction: 1" << endl;
-    KDevDesignerIntegration *designerIntegration = designer(type);
-//    kdDebug() << "KDevLanguageSupport::addFunction: 2" << endl;
-    if (!designerIntegration)
-    {
-//        kdDebug() << "KDevLanguageSupport::addFunction: x" << endl;
-        return;
-    }
-//    kdDebug() << "KDevLanguageSupport::addFunction: 3" << endl;
-    designerIntegration->addFunction(formName, function);
-//    kdDebug() << "KDevLanguageSupport::addFunction: 4" << endl;
-}
-
-void KDevLanguageSupport::editFunction( DesignerType type, const QString & formName, Function oldFunction, Function function )
-{
-    KDevDesignerIntegration *designerIntegration = designer(type);
-    if (!designerIntegration)
-        return;
-    designerIntegration->editFunction(formName, oldFunction, function);
-}
-
-void KDevLanguageSupport::removeFunction( DesignerType type, const QString & formName, Function function )
-{
-    KDevDesignerIntegration *designerIntegration = designer(type);
-    if (!designerIntegration)
-        return;
-    designerIntegration->removeFunction(formName, function);
-}
-
-KDevDesignerIntegration * KDevLanguageSupport::designer( DesignerType // type
-                                                         )
-{
-    return 0;
-}
-
-void KDevLanguageSupport::openFunction( DesignerType type, const QString & formName, const QString & functionName )
-{
-    KDevDesignerIntegration *designerIntegration = designer(type);
-    if (!designerIntegration)
-        return;
-    designerIntegration->openFunction(formName, functionName);
-}
-
-void KDevLanguageSupport::createAccessMethods( KDevCodeClassItem *// theClass
-                                               , KDevCodeVariableItem * // theVariable
-                                               )
-{
-}
-
-void KDevLanguageSupport::openSource( DesignerType type, const QString & formName)
-{
-    KDevDesignerIntegration *designerIntegration = designer(type);
-    if (!designerIntegration)
-        return;
-    designerIntegration->openSource(formName);
 }
 
 #include "kdevlanguagesupport.moc"

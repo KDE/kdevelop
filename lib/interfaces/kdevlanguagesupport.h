@@ -30,21 +30,16 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <kmimetype.h>
-#include <designer.h>
 
 /**
 @file kdevlanguagesupport.h
 Interface to programming language specific features.
 */
 
-class KDevDesignerIntegration;
-
 class Tag;
 class KDevCodeItem;
 class KDevCodeClassItem;
 class KDevCodeVariableItem;
-
-using namespace KInterfaceDesigner;
 
 /**
 KDevelop language support interface - the base class for all programming language support plugins.
@@ -56,9 +51,7 @@ Language support plugin is a good place for:
 - a language parser which fills memory and persistant symbol store
 (see @ref CodeModel and @ref KDevCodeRepository);
 - code wizards specific to a programming language (like new class wizard);
-- GUI designer integration (see @ref KDevLanguageSupport::designer method 
-documentation and @ref KDevDesignerIntegration class documentation;
-- symbol (class, function, etc.) name formatting to a human-readable convention (pretty 
+- symbol (class, function, etc.) name formatting to a human-readable convention (pretty
 formatted name).
 .
 */
@@ -103,136 +96,33 @@ public:
 
     /**@return The feature set of the language. This is e.g. used
     by the class view to decide which organizer items to display and which not.*/
-    virtual Features features();
+    virtual Features features() const = 0;
     
     /**@return A typical mimetype list for the support language, this list 
     should be configurable in the languagesupport dialog.*/
-    virtual KMimeType::List mimeTypes();
+    virtual KMimeType::List mimeTypes() const = 0;
 
     /**Formats a Tag as used by the persistant symbol store to the human-readable convention.
     @param tag Tag to format.*/
-    virtual QString formatTag(const Tag& tag);
+    virtual QString formatTag(const Tag& tag) const = 0;
     
     /**Formats a KDevCodeItem as used by the CodeModel to the human-readable convention.
     @param item Symbol to format.
     @param shortDescription Show short description of a symbol. For example, when
     formatting functions short description could be a function signature without
     the return type and argument default values.*/
-    virtual QString formatModelItem(const KDevCodeItem *item, bool shortDescription=false);
+    virtual QString formatModelItem(const KDevCodeItem *item, bool shortDescription=false) const = 0;
 
     /**Formats a canonicalized class path as used by the symbol store to the 
     human-readable convention. For example, the C++ support part formats the
     string "KParts.Part" into "KParts::Part".
     @param name Class name.*/
-    virtual QString formatClassName(const QString &name);
+    virtual QString formatClassName(const QString &name) const = 0;
     
     /**The opposite of @ref formatClassName. Reverts formatting.
     @param name Class name.*/
-    virtual QString unformatClassName(const QString &name);
+    virtual QString unformatClassName(const QString &name) const = 0;
 
-    /**Opens a "New class" dialog and adds the configured class to the sources.
-    Define NewClass feature if you reimplement this method.*/
-    virtual void addClass();
-    
-    /**Opens an "Add method" dialog and adds the configured method to the sources.
-    Define AddMethod feature if you reimplement this method.
-    @param klass The class DOM to add a method to.*/
-    virtual void addMethod(KDevCodeClassItem * klass);
-    
-    /**Opens an "Implement Virtual Methods" dialog and adds the configured methods 
-    to the sources. Define AddMethod feature if you reimplement this method.
-    @param klass The class DOM to add a virtual method to.*/
-    virtual void implementVirtualMethods(KDevCodeClassItem * klass);
-    
-    /**Opens an "Add attribute" dialog and adds the configured attribute to the sources.
-    Define AddAttribute feature if you reimplement this method.
-    @param klass The class DOM to add an attribute to.*/
-    virtual void addAttribute(KDevCodeClassItem * klass);
-	
-    /**
-     * Opens an "create get/set methods" dialog and adds the configured methods to the sources.
-     * Define CreateAccessMethods feature if you reimplement this method.
-     * @param theClass The class the methods should be added to.
-     * @param theVariable The attribute the access methods should be generated for.
-     */
-    virtual void createAccessMethods(KDevCodeClassItem * theClass, KDevCodeVariableItem * theVariable);
-    
-    /**Opens an "Subclass Widget" dialog for given Qt .ui file (formName)
-    and propmts to implement it's slots.
-    @param formName The name of a form to subclass.
-    @return A list of newly created files.*/
-    virtual QStringList subclassWidget(const QString& formName);
-    
-    /**Opens an "Update Widget" dialog for given Qt .ui file (formName)
-    and prompts to add missing slot implementations
-    in the subclass located in fileName.
-    @param formName The name of a form which is being subclassed.
-    @param fileName The name of a file with a subclass.
-    @return A list of updated files. Can be empty because usually no additional
-    actions are required on updated files.*/
-    virtual QStringList updateWidget(const QString& formName, const QString& fileName);
-
-    /**Reimplement this method if you want to use integrated GUI designer for the language.
-    Implementation could look like (in pseudo code):
-    @code
-    KDevDesignerIntegration *des = 0;
-    switch (type)
-    {
-        case KInterfaceDesigner::QtDesigner:
-            des = getDesignerFromCache(type);
-            if (des == 0)
-            {
-                MyLanguageImplementationWidget *impl = new MyLanguageImplementationWidget(this);
-                des = new QtDesignerMyLanguageIntegration(this, impl);
-                des->loadSettings(*project()->projectDom(), "kdevmylangsupport/designerintegration");
-                saveDesignerToCache(type, des);
-            }
-            break;
-    }
-    return des;
-    @endcode
-    @ref ImplementationWidget and @ref QtDesignerIntegration classes are available
-    from designerintegration support library.
-    @param type The type of the designer to integrate.
-    @return The pointer to designer integration of given type or 0.*/
-    virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
-
-public slots:
-    /**Adds a function requested by a GUI designer. No need to reimplement this slot
-    unless you want to use specific implementation of KDevDesignerIntegration interface.
-    @param type The type of integrated designer.
-    @param formName The name of a GUI form.
-    @param function The function to implement (add).*/
-    void addFunction(DesignerType type, const QString &formName, Function function);
-    
-    /**Removes a function requested by a GUI designer. No need to reimplement this slot
-    unless you want to use specific implementation of KDevDesignerIntegration interface.
-    @param type The type of integrated designer.
-    @param formName The name of a GUI form.
-    @param function The function to remove.*/
-    void removeFunction(DesignerType type, const QString &formName, Function function);
-    
-    /**Edits a function requested by a GUI designer. No need to reimplement this slot
-    unless you want to use specific implementation of KDevDesignerIntegration interface.
-    @param type The type of integrated designer.
-    @param formName The name of a GUI form.
-    @param oldFunction The old function signature before editing.
-    @param function The new function signature after editing.*/
-    void editFunction(DesignerType type, const QString &formName, Function oldFunction, Function function);
-    
-    /**Opens a function requested by a GUI designer. No need to reimplement this slot
-    unless you want to use specific implementation of KDevDesignerIntegration interface.
-    @param type The type of integrated designer.
-    @param formName The name of a GUI form.
-    @param functionName The name of a function to seek in the code for.*/
-    void openFunction(DesignerType type, const QString &formName, const QString &functionName);
-
-    /**Opens a form source requested by a GUI designer. No need to reimplement this slot
-    unless you want to use specific implementation of KDevDesignerIntegration interface.
-    @param type The type of integrated designer.
-    @param formName The name of a GUI form.*/
-    void openSource(DesignerType type, const QString &formName);
-        
 signals:
     /**Emitted when the content of the memory symbol store has been modified.*/
     void updatedSourceInfo();
