@@ -149,7 +149,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
   Q3VBox *top = makeVBoxMainWidget();
 
   (void)new QLabel( i18n("The following files have been modified. Save them?"), top );
-  KListBox* lb = new KListBox( top );
+  QListWidget* lb = new QListWidget( top );
   lb->setMinimumHeight( lb->fontMetrics().height() * 5 );
   lb->insertStringList( filenames );
 

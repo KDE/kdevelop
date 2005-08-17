@@ -23,8 +23,8 @@
 
 namespace PropertyLib{
 
-PropertyWidget::PropertyWidget(MultiProperty *property, QWidget *parent, const char *name)
-    :QWidget(parent, name), m_property(property)
+PropertyWidget::PropertyWidget(MultiProperty *property, QWidget *parent)
+    :QWidget(parent), m_property(property)
 {
 }
 

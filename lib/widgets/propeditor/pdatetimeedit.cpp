@@ -27,7 +27,7 @@
 
 namespace PropertyLib{
 
-PDateTimeEdit::PDateTimeEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+PDateTimeEdit::PDateTimeEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new Q3DateTimeEdit(this);

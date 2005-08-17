@@ -48,7 +48,7 @@ static const KDevPluginInfo data("kdevprojectmanager");
 K_EXPORT_COMPONENT_FACTORY(libkdevprojectmanager, KDevProjectManagerFactory(data));
 
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name, const QStringList&)
-    : KDevProject(&data, parent, name ? name : "KDevProjectManagerPart")
+    : KDevProject(&data, parent)
 {
     m_projectModel = new ProjectModel();
     m_dirty = false;

@@ -101,8 +101,8 @@ FlagListItem::FlagListItem(FlagListBox *parent, const QString &flagstr,
 {}
 
 
-FlagListBox::FlagListBox(QWidget *parent, const char *name)
-    : Q3ListView(parent, name)
+FlagListBox::FlagListBox(QWidget *parent)
+    : Q3ListView(parent)
 {
     setResizeMode(LastColumn);
     header()->hide();

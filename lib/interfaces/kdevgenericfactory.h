@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU Library General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 #include <kgenericfactory.h>
 #include <kaboutdata.h>
@@ -52,7 +52,7 @@ typedef KDevGenericFactory<DummyPlugin> DummyPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(libkdevdummyplugin, DummyPluginFactory( data ) )
 
 DummyPlugin::DummyPlugin(QObject *parent, const char *name, const QStringList & )
-    :KDevPlugin(&data, parent, name)
+    :KDevPlugin(&data, parent)
 {
 }
 @endcode

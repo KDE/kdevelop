@@ -129,7 +129,7 @@ namespace PropertyLib {
     "................................................"};
 
 
-PLineStyleEdit::PLineStyleEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+PLineStyleEdit::PLineStyleEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QComboBox(this);

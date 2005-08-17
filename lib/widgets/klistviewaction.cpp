@@ -39,7 +39,7 @@ KListViewAction::~KListViewAction()
 
 KListViewAction::KListViewAction(KComboView *view, const QString & text, const KShortcut & cut,
     const QObject * receiver, const char * slot, KActionCollection * parent, const char * name ):
-    KWidgetAction(view, text, cut, receiver, slot, parent, name), m_view(view)
+    KWidgetAction(view, text, cut, receiver, slot, parent), m_view(view)
 {
     m_view->setDuplicatesEnabled(false);
     m_view->setInsertionPolicy(KComboView::NoInsertion);
@@ -49,7 +49,7 @@ KListViewAction::KListViewAction(KComboView *view, const QString & text, const K
 
 KListViewAction::KListViewAction( KComboView * view, const QString & text, const KShortcut & cut,
     const QObject * receiver, const char * slot, KActionCollection * parent, const char * name, const bool /*dummy*/ ):
-    KWidgetAction(new ResizableCombo(view), text, cut, receiver, slot, parent, name), m_view(view)
+    KWidgetAction(new ResizableCombo(view), text, cut, receiver, slot, parent), m_view(view)
 {
     m_view->setDuplicatesEnabled(false);
     m_view->setInsertionPolicy(KComboView::NoInsertion);

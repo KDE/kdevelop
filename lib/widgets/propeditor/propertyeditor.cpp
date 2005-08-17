@@ -124,12 +124,12 @@ private:
 class PropertyGroupItem: public KListViewItem{
 public:
     PropertyGroupItem(KListView *parent, const QString &name)
-        :KListViewItem(parent, name)
+        :KListViewItem(parent)
     {
         init();
     }
     PropertyGroupItem(KListViewItem *parent, const QString &name)
-        :KListViewItem(parent, name)
+        :KListViewItem(parent)
     {
         init();
     }
@@ -167,8 +167,8 @@ public:
         setSelectable(false);
     }
 };
-PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
-    :KListView(parent, name)
+PropertyEditor::PropertyEditor(QWidget *parent)
+    :KListView(parent)
 {
     setSorting(-1);
 

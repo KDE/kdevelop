@@ -47,7 +47,7 @@ Q_OBJECT
 Q_PROPERTY( int propertyType READ propertyType WRITE setPropertyType DESIGNABLE true )
 Q_PROPERTY( PropertyType propertyType2 READ propertyType2 WRITE setPropertyType2 DESIGNABLE false )
 public:
-    PropertyWidgetProxy(QWidget *parent = 0, const char *name = 0);
+    PropertyWidgetProxy(QWidget *parent = 0);
     ~PropertyWidgetProxy();
     
     /**Sets the type of a property editor to appear.*/

@@ -26,14 +26,14 @@
 
 namespace PropertyLib{
 
-PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name), m_valueList(list)
+PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent)
+    :PropertyWidget(property, parent), m_valueList(list)
 {
     init(false);
 }
 
-PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, bool rw, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name), m_valueList(list)
+PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, bool rw, QWidget *parent)
+    :PropertyWidget(property, parent), m_valueList(list)
 {
     init(rw);
 }

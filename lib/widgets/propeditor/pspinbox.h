@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PSPINBOX_H
 #define PSPINBOX_H
@@ -32,8 +32,8 @@ namespace PropertyLib{
 class PSpinBox: public PropertyWidget{
     Q_OBJECT
 public:
-    PSpinBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
-    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0, const char *name = 0);
+    PSpinBox(MultiProperty *property, QWidget *parent = 0);
+    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

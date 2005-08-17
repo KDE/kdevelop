@@ -21,7 +21,7 @@
 
 #include "kdevtabwidget.h"
 
-KDevTabWidget::KDevTabWidget(QWidget *parent, const char *name) : QTabWidget(parent,name)
+KDevTabWidget::KDevTabWidget(QWidget *parent) : QTabWidget(parent,name)
 {
   m_pTabBar = new KTabBar(this, "tabbar");
   setTabBar(m_pTabBar);
@@ -29,9 +29,9 @@ KDevTabWidget::KDevTabWidget(QWidget *parent, const char *name) : QTabWidget(par
   connect(m_pTabBar, SIGNAL(closeOthers(QWidget*)), this, SIGNAL(closeOthers(QWidget*)));
 }
 
-KTabBar::KTabBar(QWidget *parent, const char *name) : QTabBar(parent,name)
+KTabBar::KTabBar(QWidget *parent) : QTabBar(parent,name)
 {
-  m_pPopupMenu = new Q3PopupMenu(this);
+  m_pPopupMenu = new QMenu(this);
 
   QPixmap closePixmap = KGlobal::instance()->iconLoader()->loadIcon( "tab_remove", KIcon::Small, 0, KIcon::DefaultState, 0, true ); 
   if (closePixmap.isNull())

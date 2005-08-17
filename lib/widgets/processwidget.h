@@ -20,7 +20,7 @@
 #ifndef _PROCESSWIDGET_H_
 #define _PROCESSWIDGET_H_
 
-#include <klistbox.h>
+#include <QtGui/QListWidget>
 #include <kprocess.h>
 
 /**
@@ -33,17 +33,14 @@ class ProcessLineMaker;
 /**
 Listbox item for process widgets.
 */
-class ProcessListBoxItem : public Q3ListBoxText
+class ProcessListBoxItem : public QListWidgetItem
 {
 public:
     enum Type { Diagnostic, Normal, Error };
     
     ProcessListBoxItem(const QString &s, Type type);
 
-    virtual bool isCustomItem();
-    
 private:
-    virtual void paint(QPainter *p);
     Type t;
 };
 
@@ -52,12 +49,12 @@ private:
  * This class is designed to share code between the
  * grep and application output widgets.
  */
-class ProcessWidget : public KListBox
+class ProcessWidget : public QListWidget
 {
     Q_OBJECT
 
 public:
-    ProcessWidget(QWidget *parent, const char *name=0);
+    ProcessWidget(QWidget *parent);
     ~ProcessWidget();
 
     /**

@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KINTERFACEDESIGNER_FORMEDITOR_H
 #define KINTERFACEDESIGNER_FORMEDITOR_H
@@ -66,7 +66,7 @@ mimetype then it becomes automatically integrated into KDevelop IDE.
 class Designer: public KParts::ReadWritePart{
     Q_OBJECT
 public:
-    Designer(QObject *parent, const char *name);
+    Designer(QObject *parent);
     
     /**Reimplement this to be able to open projects.*/
     virtual void openProject(const QString &projectFile) = 0;

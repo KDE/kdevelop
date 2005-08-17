@@ -15,18 +15,18 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA
- * 02110-1301  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307  USA
  */
 #include "qfloatinput.h"
 
 #include <math.h>
 
 QFloatInput::QFloatInput( int min, int max, float step, int digits,
-                            QWidget *parent, const char *name )
+                            QWidget *parent)
     : QSpinBox( (int) (min*pow(digits,10)),
                 (int) (max*pow(digits,10)),
-                (int) (step*pow(digits,10)), parent, name ),
+                (int) (step*pow(digits,10)), parent ),
       m_digits( digits )
 {
     setValue( (int) (min*pow(digits,10)) );

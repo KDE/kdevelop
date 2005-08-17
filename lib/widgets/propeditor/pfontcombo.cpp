@@ -35,8 +35,8 @@
 
 namespace PropertyLib{
 
-PFontCombo::PFontCombo(MultiProperty *property, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PFontCombo::PFontCombo(MultiProperty *property, QWidget *parent)
+    :PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KFontCombo(this);

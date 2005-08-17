@@ -14,8 +14,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVCREATEFILE_H
 #define KDEVCREATEFILE_H
@@ -122,7 +122,7 @@ public:
   interface. Otherwise the plugin will not be constructed.
   @param name The internal name which identifies the plugin.*/
   KDevCreateFile(const KDevPluginInfo *info, QObject * parent = 0, const char * name = 0)
-      :KDevPlugin(info, parent, name) {}
+      :KDevPlugin(info, parent) {}
 
   /**Creates a new file, within or without the project. 
   Supply as much information as you know. Leave what you don't know as QString::null.

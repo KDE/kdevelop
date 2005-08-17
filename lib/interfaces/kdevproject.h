@@ -19,8 +19,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVPROJECT_H
 #define KDEVPROJECT_H
@@ -58,7 +58,7 @@ public:
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.
     @param name The internal name which identifies the plugin.*/
-    KDevProject(const KDevPluginInfo *info, QObject *parent=0, const char *name=0);
+    KDevProject(const KDevPluginInfo *info, QObject *parent=0);
     /**Destructor.*/
     virtual ~KDevProject();
 
@@ -159,22 +159,6 @@ public:
 
     /**@return The list of files known to the project through symlinks.*/
     virtual QStringList symlinkProjectFiles();
-
-protected:
-
-    /** Default implementation of runDirectory method.
-     *  Uses 'projectPluginName' to obtain configuration from
-     *  project DOM and returns:
-     *
-     *   if /<projectPluginName>/run/directoryradio == executable
-     *        The directory where the executable is.
-     *   if /<projectPluginName>/run/directoryradio == build
-     *        The build directory.
-     *   if /kdevautoproject/run/directoryradio == custom
-     *        The custom directory absolute path.
-     * Derived classes are supposed to explicitly call this implementation
-     */
-    QString defaultRunDirectory(const QString& projectPluginName) const;
     
 private slots:
     void buildFileMap();

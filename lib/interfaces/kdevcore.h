@@ -37,7 +37,7 @@ The interface to the application core and context menu classes.
 #include <q3dict.h>
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3PopupMenu>
+#include <QMenu>
 
 #include <kurl.h>
 
@@ -52,7 +52,7 @@ namespace KParts
 }
 
 class QStatusBar;
-class Q3PopupMenu;
+class QMenu;
 
 /**
 Base class for every context.
@@ -306,7 +306,7 @@ public:
     /**Constructor
     @param parent The QObject that's the parent of this class.
     @param name The name of the class.*/
-    KDevCore(QObject *parent=0, const char *name=0);
+    KDevCore(QObject *parent=0);
 
     /**Destructor.*/
     virtual ~KDevCore();
@@ -321,7 +321,7 @@ public:
     @sa Context for a detailed explanation of context menu initializations and usage.
     @param popup The popup menu to fill.
     @param context The pointer to a Context object of this popup menu.*/
-    virtual void fillContextMenu(Q3PopupMenu *popup, const Context *context) = 0;
+    virtual void fillContextMenu(QMenu *popup, const Context *context) = 0;
 
     /**Closes the current project and open the new one
     @param projectFileName The file name of the project to open.*/
@@ -363,7 +363,7 @@ signals:
     @sa Context for a detailed explanation of context menu initializations and usage.
     @param popupMenu The popup menu to fill.
     @param context The Context of this popup menu.*/
-    void contextMenu(Q3PopupMenu *popupMenu, const Context *context);
+    void contextMenu(QMenu *popupMenu, const Context *context);
 
     /**Expects that a configuration page for use in the
     KDevelop settings dialog is created by the component.

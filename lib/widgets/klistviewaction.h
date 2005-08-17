@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KLISTVIEWACTION_H
 #define KLISTVIEWACTION_H
@@ -37,7 +37,7 @@ Can be used on toolbars. It appears as @ref ResizableCombo.
 class KListViewAction: public KWidgetAction
 {
 public:
-    KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name);
+    KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent);
     KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name, const bool);
 
     ~KListViewAction();

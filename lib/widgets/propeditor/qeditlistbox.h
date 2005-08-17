@@ -136,7 +136,7 @@ public:
       /**
        * Return a pointer to the embedded QListBox.
        */
-      Q3ListBox* listBox() const     { return m_listBox; }
+      QListWidget* listBox() const     { return m_listBox; }
       /**
        * Return a pointer to the embedded QLineEdit.
        */
@@ -238,7 +238,7 @@ public:
       void typedSomething(const QString& text);
 
    private:
-      Q3ListBox *m_listBox;
+      QListWidget *m_listBox;
       QPushButton *servUpButton, *servDownButton;
       QPushButton *servNewButton, *servRemoveButton;
       QLineEdit *m_lineEdit;

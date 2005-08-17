@@ -50,14 +50,14 @@ public:
 
 QEditListBox::QEditListBox(QWidget *parent, const char *name,
 			   bool checkAtEntering, int buttons )
-    :Q3GroupBox(parent, name )
+    :Q3GroupBox(parent )
 {
     init( checkAtEntering, buttons );
 }
 
 QEditListBox::QEditListBox(const QString& title, QWidget *parent,
 			   const char *name, bool checkAtEntering, int buttons)
-    :Q3GroupBox(title, parent, name )
+    :Q3GroupBox(title, parent )
 {
     init( checkAtEntering, buttons );
 }
@@ -65,7 +65,7 @@ QEditListBox::QEditListBox(const QString& title, QWidget *parent,
 QEditListBox::QEditListBox(const QString& title, const CustomEditor& custom,
                            QWidget *parent, const char *name,
                            bool checkAtEntering, int buttons)
-    :Q3GroupBox(title, parent, name )
+    :Q3GroupBox(title, parent )
 {
     m_lineEdit = custom.lineEdit();
     init( checkAtEntering, buttons, custom.representationWidget() );
@@ -112,7 +112,7 @@ void QEditListBox::init( bool checkAtEntering, int buttons,
     else
         m_lineEdit=new QLineEdit(gb);
 
-    m_listBox = new Q3ListBox(gb);
+    m_listBox = new QListWidget(gb);
 
     QWidget *editingWidget = representationWidget ?
                              representationWidget : m_lineEdit;
@@ -208,7 +208,7 @@ void QEditListBox::moveItemUp()
         return;
     }
 
-    Q3ListBoxItem *selItem = m_listBox->item(selIndex);
+    QListWidgetItem *selItem = m_listBox->item(selIndex);
     m_listBox->takeItem(selItem);
     m_listBox->insertItem(selItem, selIndex-1);
     m_listBox->setCurrentItem(selIndex - 1);
@@ -231,7 +231,7 @@ void QEditListBox::moveItemDown()
         return;
     }
 
-    Q3ListBoxItem *selItem = m_listBox->item(selIndex);
+    QListWidgetItem *selItem = m_listBox->item(selIndex);
     m_listBox->takeItem(selItem);
     m_listBox->insertItem(selItem, selIndex+1);
     m_listBox->setCurrentItem(selIndex + 1);

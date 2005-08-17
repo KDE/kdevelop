@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PDUMMYWIDGET_H
 #define PDUMMYWIDGET_H
@@ -41,7 +41,7 @@ class PDummyWidget: public PropertyWidget
 {
     Q_OBJECT
 public:
-    PDummyWidget(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
+    PDummyWidget(MultiProperty *property, QWidget *parent = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

@@ -14,8 +14,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVPLUGIN_H
 #define KDEVPLUGIN_H
@@ -118,7 +118,7 @@ public:
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.
     @param name The internal name which identifies the plugin.*/
-    KDevPlugin(const KDevPluginInfo *info, QObject *parent, const char *name = 0);
+    KDevPlugin(const KDevPluginInfo *info, QObject *parent);
 
     /**Destructs a plugin.*/
     virtual ~KDevPlugin();

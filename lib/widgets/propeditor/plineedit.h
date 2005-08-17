@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PLINEEDIT_H
 #define PLINEEDIT_H
@@ -32,7 +32,7 @@ namespace PropertyLib{
 class PLineEdit: public PropertyWidget{
     Q_OBJECT
 public:
-    PLineEdit(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
+    PLineEdit(MultiProperty *property, QWidget *parent = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

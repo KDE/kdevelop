@@ -147,8 +147,8 @@ static inline bool checkIndex( const char *method, const char * name,
 */
 
 
-QComboView::QComboView( bool rw, QWidget *parent, const char *name )
-    : QWidget( parent, name, Qt::WResizeNoErase )
+QComboView::QComboView( bool rw, QWidget *parent)
+    : QWidget( parent, Qt::WResizeNoErase )
 {
     d = new QComboViewData( this );
     setUpListView();

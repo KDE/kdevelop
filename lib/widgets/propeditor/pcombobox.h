@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PCOMBOBOX_H
 #define PCOMBOBOX_H
@@ -37,9 +37,9 @@ class PComboBox: public PropertyWidget{
     Q_OBJECT
 public:
     /**This constructor is used for read-only selection combo. It provides a value from valueList*/
-    PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent = 0, const char *name = 0);
+    PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent = 0);
     /**This constructor is used for read-write selection combo. It provides a value from valueList*/
-    PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, bool rw, QWidget *parent = 0, const char *name = 0);
+    PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, bool rw, QWidget *parent = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

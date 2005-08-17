@@ -54,8 +54,8 @@ static const char * resize_xpm[] = {
 "    .    ",
 "         "};
 
-ResizableCombo::ResizableCombo(KComboView *view, QWidget *parent, const char *name):
-    QWidget(parent, name), m_sizer(0), m_combo(view)
+ResizableCombo::ResizableCombo(KComboView *view, QWidget *parent):
+    QWidget(parent), m_sizer(0), m_combo(view)
 {
     QHBoxLayout *l = new QHBoxLayout(this);
     view->reparent(this, QPoint(0,0));
@@ -90,7 +90,7 @@ void MyPushButton::mouseMoveEvent( QMouseEvent * e )
 }
 
 MyPushButton::MyPushButton( ResizableCombo * parent, const char * name )
-    :QPushButton(parent, name), m_resizing(false), m_combo(parent)
+    :QPushButton(parent), m_resizing(false), m_combo(parent)
 {
     setFocusPolicy(NoFocus);
     setFlat(true);

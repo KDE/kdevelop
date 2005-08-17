@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVVCSINTEGRATOR_H
 #define KDEVVCSINTEGRATOR_H
@@ -35,7 +35,7 @@ VCS Integration Dialog.
 Usually it is created as:
 @code
 class MyVCSDialog: public QWidget, public VCSDialog {
-    MyVCSDialog(QWidget *parent = 0, const char *name = 0);
+    MyVCSDialog(QWidget *parent = 0);
     virtual void accept() { ... }
     virtual void init(const QString &projectName, const QString &projectLocation) { ... }
     virtual QWidget *self() {
@@ -65,7 +65,7 @@ It can, for example, perform checkout or import operations.
 class KDevVCSIntegrator: public QObject {
     Q_OBJECT
 public:
-    KDevVCSIntegrator(QObject *parent = 0, const char *name = 0);
+    KDevVCSIntegrator(QObject *parent = 0);
 
     /**Reimplement to return a dialog to fetch the project from VCS.*/
     virtual VCSDialog *fetcher(QWidget *parent) = 0;

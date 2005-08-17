@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "kdevdesignerintegration.h"
 #include "kdevdesignerintegrationiface.h"
@@ -24,8 +24,8 @@ public:
   	KDevDesignerIntegrationIface *m_iface;
 };
 
-KDevDesignerIntegration::KDevDesignerIntegration(QObject *parent, const char *name)
- : QObject(parent, name)
+KDevDesignerIntegration::KDevDesignerIntegration(QObject *parent)
+ : QObject(parent)
 {
   dptr = new KDevDesignerIntegrationPrivate();
   

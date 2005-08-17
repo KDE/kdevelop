@@ -27,8 +27,8 @@
 
 namespace PropertyLib{
 
-PSizeEdit::PSizeEdit(MultiProperty *property, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PSizeEdit::PSizeEdit(MultiProperty *property, QWidget *parent)
+    :PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);

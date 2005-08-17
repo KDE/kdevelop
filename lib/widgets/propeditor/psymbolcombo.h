@@ -37,7 +37,7 @@ namespace PropertyLib{
 class PSymbolCombo: public PropertyWidget{
     Q_OBJECT
 public:
-    PSymbolCombo(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
+    PSymbolCombo(MultiProperty *property, QWidget *parent = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

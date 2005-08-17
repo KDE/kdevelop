@@ -39,8 +39,8 @@
 
 namespace PropertyLib{
 
-PStringListEdit::PStringListEdit(MultiProperty *property, QWidget *parent, const char *name)
-     :PropertyWidget(property, parent, name)
+PStringListEdit::PStringListEdit(MultiProperty *property, QWidget *parent)
+     :PropertyWidget(property, parent)
 {
     l = new QHBoxLayout(this);
 

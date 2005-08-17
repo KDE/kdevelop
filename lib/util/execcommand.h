@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef _EXECCOMMAND_H_
@@ -48,7 +48,7 @@ class ExecCommand : public QObject
 public:
     ExecCommand( const QString& executable, const QStringList& args,
 		 const QString& workingDir = QString::null,
-                 const QStringList& env = QStringList(), QObject* parent = 0, const char* name = 0 );
+                 const QStringList& env = QStringList(), QObject* parent = 0);
     ~ExecCommand();
 
 signals:

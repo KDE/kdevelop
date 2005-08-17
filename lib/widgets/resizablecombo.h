@@ -40,7 +40,7 @@ Used to place resizable KComboBox onto toolbars.
 class ResizableCombo: public QWidget{
     Q_OBJECT
 public:
-    ResizableCombo(KComboView *view, QWidget *parent = 0, const char *name = 0);
+    ResizableCombo(KComboView *view, QWidget *parent = 0);
 
 private:
     MyPushButton *m_sizer;

@@ -33,7 +33,7 @@
 namespace PropertyLib{
 
 PUrlEdit::PUrlEdit(Mode mode, MultiProperty* property, QWidget* parent, const char* name)
-    :PropertyWidget(property, parent, name)
+    :PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 #ifndef PURE_QT

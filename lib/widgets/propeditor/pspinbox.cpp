@@ -28,8 +28,8 @@
 
 namespace PropertyLib{
 
-PSpinBox::PSpinBox(MultiProperty *property, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PSpinBox::PSpinBox(MultiProperty *property, QWidget *parent)
+    :PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QSpinBox(INT_MIN, INT_MAX, 1, this);
@@ -39,8 +39,8 @@ PSpinBox::PSpinBox(MultiProperty *property, QWidget *parent, const char *name)
     connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
 }
 
-PSpinBox::PSpinBox(MultiProperty *property, int minValue, int maxValue, int step, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PSpinBox::PSpinBox(MultiProperty *property, int minValue, int maxValue, int step, QWidget *parent)
+    :PropertyWidget(property, parent)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QSpinBox(minValue, maxValue, step, this);

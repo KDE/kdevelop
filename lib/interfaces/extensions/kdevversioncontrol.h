@@ -142,8 +142,8 @@ public:
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.
     @param name The internal name which identifies the plugin.*/
-    KDevVersionControl(const KDevPluginInfo *info, QObject *parent, const char *name )
-        :KDevPlugin(info, parent, name ) {}
+    KDevVersionControl(const KDevPluginInfo *info, QObject *parent)
+        :KDevPlugin(info, parent ) {}
 
     /**Creates a new project in the passed path @p dir. This should instantiate
     VCS infrastructure and import a project into the VCS in that directory.
@@ -184,8 +184,8 @@ public:
     /**Constructor.
     @param parent The parent VCS plugin.
     @param name The name of a provider object.*/
-    KDevVCSFileInfoProvider(KDevVersionControl *parent, const char *name)
-        : QObject( parent, name ), m_owner(parent) {}
+    KDevVCSFileInfoProvider(KDevVersionControl *parent)
+        : QObject( parent ), m_owner(parent) {}
 
     /**Gets the status for local files in the specified directory: 
     the info are collected locally so they are necessarily in sync with the repository

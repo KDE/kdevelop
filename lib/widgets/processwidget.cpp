@@ -30,26 +30,14 @@
 
 
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
-    : Q3ListBoxText(s), t(type)
-{}
-
-
-bool ProcessListBoxItem::isCustomItem()
+    : QListWidgetItem(s), t(type)
 {
-    return false;
-}
-
-
-void ProcessListBoxItem::paint(QPainter *p)
-{
-    p->setPen((t==Error)? Qt::darkRed :
+    setBackgroundColor((t==Error)? Qt::darkRed :
               (t==Diagnostic)? Qt::black : Qt::darkBlue);
-    Q3ListBoxText::paint(p);
 }
 
-
-ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
-    : KListBox(parent, name)
+ProcessWidget::ProcessWidget(QWidget *parent)
+    : QListWidget(parent)
 {
     setFocusPolicy(Qt::NoFocus);
     QPalette pal = palette();
@@ -87,7 +75,7 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
     procLineMaker->blockSignals( false );
 
     clear();
-    insertItem(new ProcessListBoxItem(command, ProcessListBoxItem::Diagnostic));
+    addItem(new ProcessListBoxItem(command, ProcessListBoxItem::Diagnostic));
     childproc->clearArguments();
     if (!dir.isNull()) {
         kdDebug(9000) << "Changing to dir " << dir << endl;
@@ -123,7 +111,7 @@ void ProcessWidget::slotProcessExited(KProcess *)
 
 void ProcessWidget::insertStdoutLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
+    addItem(new ProcessListBoxItem(line.stripWhiteSpace(),
                                       ProcessListBoxItem::Normal));
     maybeScrollToBottom();
 }
@@ -131,7 +119,7 @@ void ProcessWidget::insertStdoutLine(const QString &line)
 
 void ProcessWidget::insertStderrLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
+    addItem(new ProcessListBoxItem(line.stripWhiteSpace(),
                                       ProcessListBoxItem::Error));
     maybeScrollToBottom();
 }
@@ -162,7 +150,7 @@ void ProcessWidget::childFinished(bool normal, int status)
         t = ProcessListBoxItem::Error;
     }
 
-    insertItem(new ProcessListBoxItem(s, t));
+    addItem(new ProcessListBoxItem(s, t));
 }
 
 
@@ -171,7 +159,7 @@ QSize ProcessWidget::minimumSizeHint() const
     // I'm not sure about this, but when I don't use override minimumSizeHint(),
     // the initial size in clearly too small
 
-    return QSize( Q3ListBox::sizeHint().width(),
+    return QSize( QListWidget::sizeHint().width(),
                   (fontMetrics().lineSpacing()+2)*4 );
 }
 
@@ -181,10 +169,14 @@ QSize ProcessWidget::minimumSizeHint() const
 */
 void ProcessWidget::maybeScrollToBottom()
 {
+#warning "port me"
+
+#if 0
     if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) 
     {
         setBottomItem( count() -1 );
     }
+#endif
 }
 
 #include "processwidget.moc"

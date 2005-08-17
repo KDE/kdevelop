@@ -28,8 +28,8 @@
 
 namespace PropertyLib{
 
-PropertyWidgetProxy::PropertyWidgetProxy(QWidget *parent, const char *name)
-    :QWidget(parent, name), mp(0), m_propertyType(Property::Invalid), m_editor(0)
+PropertyWidgetProxy::PropertyWidgetProxy(QWidget *parent)
+    :QWidget(parent), mp(0), m_propertyType(Property::Invalid), m_editor(0)
 {
     p = new Property();
     m_layout = new QHBoxLayout(this, 0, 0);

@@ -61,7 +61,7 @@ class PropertyEditor: public KListView{
    Q_OBJECT
 public:
     /**Constructs the property editor.*/
-    PropertyEditor(QWidget *parent = 0, const char *name = 0);
+    PropertyEditor(QWidget *parent = 0);
     ~PropertyEditor();
     
     /**@return @ref Machine for given property.

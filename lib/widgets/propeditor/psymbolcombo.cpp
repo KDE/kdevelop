@@ -38,8 +38,8 @@
 
 namespace PropertyLib{
 
-PSymbolCombo::PSymbolCombo(MultiProperty *property, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PSymbolCombo::PSymbolCombo(MultiProperty *property, QWidget *parent)
+    :PropertyWidget(property, parent)
 {
     l = new QHBoxLayout(this);
 

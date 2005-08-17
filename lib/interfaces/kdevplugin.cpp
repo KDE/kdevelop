@@ -21,8 +21,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "kdevplugin.h"
 
@@ -54,8 +54,8 @@ struct KDevPlugin::Private
 // class KDevPlugin
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent, const char *name)
-    :QObject(parent, name), d(new Private)
+KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent)
+    :QObject(parent), d(new Private)
 {
     assert(parent->inherits( "KDevApi" ));
     m_api = static_cast<KDevApi *>( parent );

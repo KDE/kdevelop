@@ -22,15 +22,15 @@
 
 #include "kcomboview.h"
 
-KComboView::KComboView( bool rw, int defaultWidth, QWidget* parent, const char* name )
-    :QComboView(rw, parent, name), m_defaultWidth(defaultWidth)
+KComboView::KComboView( bool rw, int defaultWidth, QWidget* parent)
+    :QComboView(rw, parent), m_defaultWidth(defaultWidth)
 {
     if (rw)
     {
         KLineEdit *ed = new KLineEdit(this, "combo edit");
         ed->setCompletionMode(KGlobalSettings::CompletionPopup);
         ed->setCompletionObject(&m_comp);
-        ed->completionBox()->setHScrollBarMode(Q3ListBox::Auto);
+        ed->completionBox()->setHScrollBarMode(QListWidget::Auto);
         setLineEdit(ed);
     }
     setMinimumWidth(defaultWidth);

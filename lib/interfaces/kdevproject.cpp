@@ -18,8 +18,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include <kdebug.h>
@@ -37,8 +37,8 @@ struct KDevProject::Private {
     KDevProjectIface *m_iface;
 };
 
-KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char *name)
-    : KDevPlugin(info, parent, name), d(new KDevProject::Private())
+KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent)
+    : KDevPlugin(info, parent), d(new KDevProject::Private())
 {
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );
@@ -119,31 +119,6 @@ void KDevProject::openProject( const QString & /*dirName*/, const QString & /*pr
 QStringList KDevProject::symlinkProjectFiles( )
 {
     return d->m_symlinkList;
-}
-
-QString KDevProject::defaultRunDirectory(const QString& projectPluginName) const
-{
-    QDomDocument &dom = *projectDom();
-
-    QString directoryRadioString = DomUtil::readEntry(
-        dom, "/" + projectPluginName + "/run/directoryradio");
-    QString DomMainProgram = DomUtil::readEntry(
-        dom, "/" + projectPluginName + "/run/mainprogram");
-
-    if ( directoryRadioString == "build" )
-        return buildDirectory();
-
-    if ( directoryRadioString == "custom" )
-        return DomUtil::readEntry(
-            dom, "/" + projectPluginName + "/run/customdirectory");
-
-    Q_ASSERT( directoryRadioString == "executable" );
-
-    QString executable = buildDirectory() + "/" + DomMainProgram;
-    // Now remove the part after last '/' to get directory.
-    int pos = executable.findRev('/');        
-    return executable.left(pos);
-
 }
 
 void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )

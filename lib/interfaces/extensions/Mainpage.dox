@@ -39,7 +39,7 @@ those should be loaded at a time. This can be accomplished by:
   class KDevMyExtension: public KDevPlugin {
   public:
       KDevMyExtension(const KDevPluginInfo *info, QObject* parent, const char* name)
-          :KDevPlugin(info, parent, name) {}
+          :KDevPlugin(info, parent) {}
       
       virtual void doSomething() = 0;
   };

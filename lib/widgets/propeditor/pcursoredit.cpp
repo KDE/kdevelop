@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "pcursoredit.h"
 
@@ -25,7 +25,7 @@ namespace PropertyLib{
 
 PCursorEdit::PCursorEdit(MultiProperty* property, const QMap<QString, QVariant> &spValues,
     QWidget* parent, const char* name)
-    :PComboBox(property, spValues, parent, name)
+    :PComboBox(property, spValues, parent)
 {
 }
 

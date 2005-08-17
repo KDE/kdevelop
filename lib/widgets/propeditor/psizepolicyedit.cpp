@@ -29,7 +29,7 @@
 namespace PropertyLib{
 
 PSizePolicyEdit::PSizePolicyEdit(MultiProperty* property, const QMap<QString, QVariant> &spValues, QWidget* parent, const char* name)
-    :PropertyWidget(property, parent, name), m_spValues(spValues)
+    :PropertyWidget(property, parent), m_spValues(spValues)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);
