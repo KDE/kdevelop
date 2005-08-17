@@ -93,17 +93,16 @@ QStyleOptionButton Button::styleOption() const
 void Button::paintEvent(QPaintEvent *)
 {
     QRect r = rect();
-    QSize sh = r.size();
-    if (m_place == Ideal::Left || m_place == Ideal::Right) {
-        sh.setHeight(r.width());
-        sh.setWidth(r.height());
-    }
+    if (m_place == Ideal::Left || m_place == Ideal::Right)
+        r.setSize(QSize(r.height(), r.width()));
+    QStyleOptionButton opt = styleOption();
+    opt.rect = r;
 
-    QPixmap pm(sh.width(), sh.height());
+    QPixmap pm(r.width(), r.height());
     pm.fill(eraseColor());
 
     QStylePainter p2(&pm, this);
-    p2.drawControl(QStyle::CE_PushButton, styleOption());
+    p2.drawControl(QStyle::CE_PushButton, opt);
 
     QPainter p(this);
 
