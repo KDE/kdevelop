@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-#include <q3listview.h>
+#include <qtreewidget.h>
 
 #include "codemodel.h"
 
@@ -32,10 +32,10 @@ class KComboView;
 const QString EmptyClasses = i18n("(Classes)");
 const QString EmptyFunctions = i18n("(Functions)");
 
-class NamespaceItem: public Q3ListViewItem{
+class NamespaceItem: public QTreeWidgetItem{
 public:
-    NamespaceItem(ClassViewPart *part, Q3ListView *parent, QString name, NamespaceDom dom);
-    NamespaceItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, NamespaceDom dom);
+    NamespaceItem(ClassViewPart *part, QTreeWidget *parent, QString name, NamespaceDom dom);
+    NamespaceItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, NamespaceDom dom);
     ~NamespaceItem();
     NamespaceDom dom() const;
     virtual void setup();
@@ -44,10 +44,10 @@ private:
     ClassViewPart *m_part;
 };
 
-class ClassItem: public Q3ListViewItem{
+class ClassItem: public QTreeWidgetItem{
 public:
-    ClassItem(ClassViewPart *part, Q3ListView *parent, QString name, ClassDom dom);
-    ClassItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, ClassDom dom);
+    ClassItem(ClassViewPart *part, QTreeWidget *parent, QString name, ClassDom dom);
+    ClassItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, ClassDom dom);
     ~ClassItem();
     ClassDom dom() const;
     virtual void setup();
@@ -56,10 +56,10 @@ private:
     ClassViewPart *m_part;
 };
 
-class FunctionItem: public Q3ListViewItem{
+class FunctionItem: public QTreeWidgetItem{
 public:
-    FunctionItem(ClassViewPart *part, Q3ListView *parent, QString name, FunctionDom dom);
-    FunctionItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, FunctionDom dom);
+    FunctionItem(ClassViewPart *part, QTreeWidget *parent, QString name, FunctionDom dom);
+    FunctionItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, FunctionDom dom);
     ~FunctionItem();
     FunctionDom dom() const;
     virtual void setup();

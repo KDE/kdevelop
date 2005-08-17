@@ -14,7 +14,7 @@
 #ifndef _CLASSTREEBASE_H_
 #define _CLASSTREEBASE_H_
 
-#include <klistview.h>
+#include <qtreewidget.h>
 #include "parseditem.h"
 #include "parsedscopecontainer.h"
 #include "parsedclass.h"
@@ -29,7 +29,7 @@ class ClassTreeItem;
 class KPopupMenu;
 
 
-class ClassTreeBase : public KListView
+class ClassTreeBase : public QTreeWidget
 {
     Q_OBJECT
     
@@ -47,9 +47,9 @@ protected:
     virtual KPopupMenu *createPopup() = 0;
     
 private slots:
-    void slotItemExecuted(Q3ListViewItem*);
-    void slotItemPressed(int button, Q3ListViewItem *item);
-    void slotContextMenuRequested(Q3ListViewItem *item, const QPoint &p);
+    void slotItemExecuted(QTreeWidgetItem*);
+    void slotItemPressed(int button, QTreeWidgetItem *item);
+    void slotContextMenuRequested(QTreeWidgetItem *item, const QPoint &p);
     void slotGotoDeclaration();
     void slotGotoImplementation();
     void slotAddMethod();
@@ -65,21 +65,21 @@ protected:
 };
 
 
-class ClassTreeItem : public Q3ListViewItem, public NotifyClient
+class ClassTreeItem : public QTreeWidgetItem, public NotifyClient
 {
 public:
     ClassTreeItem( ClassTreeBase *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
-        : Q3ListViewItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
+        : QTreeWidgetItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
     {
         init();
     }
     ClassTreeItem( ClassTreeItem *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
-        : Q3ListViewItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
+        : QTreeWidgetItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
     {
         init();
     }
     ClassTreeItem( const ClassTreeItem& other )
-        : Q3ListViewItem( other.parent(), other.nextSibling()), NotifyClient()
+        : QTreeWidgetItem( other.parent(), other.nextSibling()), NotifyClient()
     {
         m_item = other.m_item;
         init();
@@ -116,7 +116,7 @@ public:
     
 protected:
     ClassTreeBase *classTree()
-        { return static_cast<ClassTreeBase*>(listView()); }
+        { return static_cast<ClassTreeBase*>(treeWidget()); }
     ParsedItem *m_item;
 };
 

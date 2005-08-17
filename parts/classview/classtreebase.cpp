@@ -97,7 +97,7 @@ QString ClassTreeItem::scopedText() const
     if (m_item)
         return m_item->path();
 
-    return QString::null;
+    return QString();
 }
 
 
@@ -123,7 +123,7 @@ QString ClassTreeItem::text( int ) const
 {
     if (m_item)
         return m_item->asString();
-    return QString::null;
+    return QString();
 }
 
 
@@ -151,7 +151,7 @@ void ClassTreeScopeItem::init()
 QString ClassTreeScopeItem::text( int col ) const
 {
     if (!m_item)
-        return QString::null;
+        return QString();
     if (m_item->name().isEmpty())
         return i18n("Global");
     return ClassTreeItem::text( col );
@@ -312,7 +312,7 @@ QString ClassTreeMethodItem::text( int ) const
     QString str;
 
     if ( !m_item )
-        return QString::null;
+        return QString();
  
     ParsedMethod* method = static_cast<ParsedMethod*>(m_item);
 
@@ -365,7 +365,7 @@ ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastS
 QString ClassTreeAttrItem::text( int ) const
 {
     if ( !m_item )
-        return QString::null;
+        return QString();
     return m_item->name();
 }
 
@@ -389,7 +389,7 @@ ClassTreeScriptItem::ClassTreeScriptItem(ClassTreeItem *parent, ClassTreeItem *l
 QString ClassTreeScriptItem::text( int ) const
 {
     if ( !m_item )
-        return QString::null;
+        return QString();
     return m_item->name();
 }
 
@@ -437,7 +437,7 @@ void ClassToolTip::maybeTip(const QPoint &p)
 {
     ClassTreeBase *ctw = static_cast<ClassTreeBase*>(parentWidget());
 
-    Q3ListViewItem *item = ctw->itemAt(p);
+    QTreeWidgetItem *item = ctw->itemAt(p);
     QRect r = ctw->itemRect(item);
 
     if (item && r.isValid()) {
@@ -450,25 +450,25 @@ void ClassToolTip::maybeTip(const QPoint &p)
 
 
 ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *name)
-    : KListView(parent, name)
+    : QTreeWidget(parent, name)
 {
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
-    setResizeMode(Q3ListView::LastColumn);
+    setResizeMode(QTreeWidget::LastColumn);
     setSorting(-1);
     header()->hide();
-    addColumn(QString::null);
+    addColumn(QString());
 
     (void) new ClassToolTip(this);
     
-    connect( this, SIGNAL(executed(Q3ListViewItem*)),
-             this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
-    connect( this, SIGNAL(mouseButtonPressed(int, Q3ListViewItem*, const QPoint&, int)),
-             this, SLOT(slotItemPressed(int, Q3ListViewItem*)) );
-    connect( this, SIGNAL(returnPressed( Q3ListViewItem*)), 
-             SLOT( slotItemExecuted(Q3ListViewItem*)) );
-    connect( this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
-             this, SLOT(slotContextMenuRequested(Q3ListViewItem*, const QPoint&)) );
+    connect( this, SIGNAL(executed(QTreeWidgetItem*)),
+             this, SLOT(slotItemExecuted(QTreeWidgetItem*)) );
+    connect( this, SIGNAL(mouseButtonPressed(int, QTreeWidgetItem*, const QPoint&, int)),
+             this, SLOT(slotItemPressed(int, QTreeWidgetItem*)) );
+    connect( this, SIGNAL(returnPressed( QTreeWidgetItem*)), 
+             SLOT( slotItemExecuted(QTreeWidgetItem*)) );
+    connect( this, SIGNAL(contextMenuRequested(QTreeWidgetItem*, const QPoint&, int)),
+             this, SLOT(slotContextMenuRequested(QTreeWidgetItem*, const QPoint&)) );
 
     m_part = part;
 }
@@ -483,11 +483,11 @@ ClassTreeBase::TreeState ClassTreeBase::treeState() const
     TreeState state;
 
     ClassTreeBase *that = const_cast<ClassTreeBase*>(this);
-    Q3ListViewItemIterator it(that);
+    QTreeWidgetItemIterator it(that);
     for (; it.current(); ++it)
         if (it.current()->isOpen()) {
             QStringList path;
-            Q3ListViewItem *item = it.current();
+            QTreeWidgetItem *item = it.current();
             while (item) {
                 path.prepend(item->text(0));
                 item = item->parent();
@@ -503,10 +503,10 @@ void ClassTreeBase::setTreeState(TreeState state)
 {
     TreeStateIterator tsit;
     for (tsit = state.begin(); tsit != state.end(); ++tsit) {
-        Q3ListViewItemIterator it(this);
+        QTreeWidgetItemIterator it(this);
         for (; it.current(); ++it) {
             QStringList path;
-            Q3ListViewItem *item = it.current();
+            QTreeWidgetItem *item = it.current();
             while (item) {
                 path.prepend(item->text(0));
                 item = item->parent();
@@ -522,7 +522,7 @@ void ClassTreeBase::setTreeState(TreeState state)
 
 
   
-void ClassTreeBase::slotItemExecuted( Q3ListViewItem* item )
+void ClassTreeBase::slotItemExecuted( QTreeWidgetItem* item )
 {
     if (!item)
         return;
@@ -550,7 +550,7 @@ void ClassTreeBase::slotItemExecuted( Q3ListViewItem* item )
 }
 
 
-void ClassTreeBase::slotItemPressed(int button, Q3ListViewItem *item)
+void ClassTreeBase::slotItemPressed(int button, QTreeWidgetItem *item)
 {
     if (!item)
         return;
@@ -570,7 +570,7 @@ void ClassTreeBase::slotItemPressed(int button, Q3ListViewItem *item)
     }
 }
 
-void ClassTreeBase::slotContextMenuRequested(Q3ListViewItem *item, const QPoint &p)
+void ClassTreeBase::slotContextMenuRequested(QTreeWidgetItem *item, const QPoint &p)
 {
     contextItem = static_cast<ClassTreeItem*>(item);
     

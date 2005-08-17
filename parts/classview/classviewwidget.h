@@ -22,7 +22,7 @@
 #ifndef __CLASSVIEW_WIDGET_H__
 #define __CLASSVIEW_WIDGET_H__
 
-#include <klistview.h>
+#include <qtreewidget.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
@@ -42,7 +42,7 @@ class FunctionDomBrowserItem;
 class VariableDomBrowserItem;
 class KSelectAction;
 
-class ClassViewWidget : public KListView, public QToolTip
+class ClassViewWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
@@ -71,11 +71,13 @@ private slots:
     void slotAddAttribute();
     void slotOpenDeclaration();
     void slotOpenImplementation();
-	void slotCreateAccessMethods();
+    void slotCreateAccessMethods();
 
 protected:
     void contentsContextMenuEvent( QContextMenuEvent* );
-	void maybeTip( QPoint const & );
+#if 0
+    void maybeTip( QPoint const & );
+#endif
 
 private slots:
     void slotProjectOpened();
@@ -83,7 +85,7 @@ private slots:
     void refresh();
     void insertFile( const QString& fileName );
     void removeFile( const QString& fileName );
-    void slotExecuted( Q3ListViewItem* item );
+    void slotExecuted( QTreeWidgetItem* item );
 
 private:
     ClassViewPart* m_part;
@@ -97,7 +99,7 @@ private:
     KAction* m_actionAddAttribute;
     KAction* m_actionOpenDeclaration;
     KAction* m_actionOpenImplementation;
-	KAction* m_actionCreateAccessMethods;
+    KAction* m_actionCreateAccessMethods;
     friend class ClassViewItem;
     friend class FolderBrowserItem;
     friend class NamespaceDomBrowserItem;
@@ -107,14 +109,14 @@ private:
     friend class VariableDomBrowserItem;
 };
 
-class ClassViewItem: public KListViewItem
+class ClassViewItem: public QTreeWidgetItem
 {
 public:
-    ClassViewItem( Q3ListView* parent, const QString& text=QString::null )
-    	: KListViewItem( parent, text ) {}
-    ClassViewItem( Q3ListViewItem* parent, const QString& text=QString::null )
-    	: KListViewItem( parent, text ) {}
-    
+    ClassViewItem( QTreeWidget* parent, const QString& text=QString() )
+    	: QTreeWidgetItem( parent ) { setText(0, text); }
+    ClassViewItem( QTreeWidgetItem* parent, const QString& text=QString() )
+    	: QTreeWidgetItem( parent) { setText(0, text); }
+
     virtual const CodeModelItem* model() const { return 0; }
 
     virtual bool isFolder() const { return false; }
@@ -131,17 +133,17 @@ public:
     virtual void openDeclaration() {}
     virtual void openImplementation() {}
 
-    ClassViewWidget* listView() { return static_cast<ClassViewWidget*>( KListViewItem::listView() ); }
-    const ClassViewWidget* listView() const { return static_cast<ClassViewWidget*>( KListViewItem::listView() ); }
+    ClassViewWidget* treeWidget() { return static_cast<ClassViewWidget*>( QTreeWidgetItem::treeWidget() ); }
+    const ClassViewWidget* treeWidget() const { return static_cast<ClassViewWidget*>( QTreeWidgetItem::treeWidget() ); }
 };
 
 class FolderBrowserItem: public ClassViewItem
 {
 public:
-    FolderBrowserItem( ClassViewWidget* widget, Q3ListView* parent, const QString& name=QString::null )
-    	: ClassViewItem( parent, name ), m_widget(widget) {}
-    FolderBrowserItem( ClassViewWidget* widget, Q3ListViewItem* parent, const QString& name=QString::null )
-    	: ClassViewItem( parent, name ), m_widget(widget) {}
+    FolderBrowserItem( ClassViewWidget* widget, QTreeWidget* parent, const QString& name=QString() )
+    	: ClassViewItem( parent ), m_widget(widget) { setText(0, name); }
+    FolderBrowserItem( ClassViewWidget* widget, QTreeWidgetItem* parent, const QString& name=QString() )
+    	: ClassViewItem( parent ), m_widget(widget) { setText(0, name); }
 
     virtual bool isFolder() const { return true; }
 
@@ -169,13 +171,13 @@ private:
 class NamespaceDomBrowserItem: public ClassViewItem
 {
 public:
-    NamespaceDomBrowserItem( Q3ListView* parent, NamespaceDom dom )
+    NamespaceDomBrowserItem( QTreeWidget* parent, NamespaceDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    NamespaceDomBrowserItem( Q3ListViewItem* parent, NamespaceDom dom )
+    NamespaceDomBrowserItem( QTreeWidgetItem* parent, NamespaceDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
-    
+
     virtual bool isNamespace() const { return true; }
 
     void setup();
@@ -201,9 +203,9 @@ private:
 class ClassDomBrowserItem: public ClassViewItem
 {
 public:
-    ClassDomBrowserItem( Q3ListView* parent, ClassDom dom )
+    ClassDomBrowserItem( QTreeWidget* parent, ClassDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    ClassDomBrowserItem( Q3ListViewItem* parent, ClassDom dom )
+    ClassDomBrowserItem( QTreeWidgetItem* parent, ClassDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -233,9 +235,9 @@ private:
 class TypeAliasDomBrowserItem: public ClassViewItem
 {
 public:
-    TypeAliasDomBrowserItem( Q3ListView* parent, TypeAliasDom dom )
+    TypeAliasDomBrowserItem( QTreeWidget* parent, TypeAliasDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    TypeAliasDomBrowserItem( Q3ListViewItem* parent, TypeAliasDom dom )
+    TypeAliasDomBrowserItem( QTreeWidgetItem* parent, TypeAliasDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -256,9 +258,9 @@ private:
 class FunctionDomBrowserItem: public ClassViewItem
 {
 public:
-    FunctionDomBrowserItem( Q3ListView* parent, FunctionDom dom )
+    FunctionDomBrowserItem( QTreeWidget* parent, FunctionDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    FunctionDomBrowserItem( Q3ListViewItem* parent, FunctionDom dom )
+    FunctionDomBrowserItem( QTreeWidgetItem* parent, FunctionDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -282,9 +284,9 @@ private:
 class VariableDomBrowserItem: public ClassViewItem
 {
 public:
-    VariableDomBrowserItem( Q3ListView* parent, VariableDom dom )
+    VariableDomBrowserItem( QTreeWidget* parent, VariableDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
-    VariableDomBrowserItem( Q3ListViewItem* parent, VariableDom dom )
+    VariableDomBrowserItem( QTreeWidgetItem* parent, VariableDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
@@ -327,7 +329,7 @@ struct FindOp
        if( args.size() != args2.size() )
            return false;
 
-       for( uint i=0; i<args.size(); ++i ){
+       for( int i=0; i<args.size(); ++i ){
            if( args[i]->type() != args[i]->type() )
 	       return false;
        }

@@ -27,13 +27,13 @@
 #include "viewcombos.h"
 #include "classviewpart.h"
 
-NamespaceItem::NamespaceItem(ClassViewPart *part, Q3ListView *parent, QString name, NamespaceDom dom)
-    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
+NamespaceItem::NamespaceItem(ClassViewPart *part, QTreeWidget *parent, QString name, NamespaceDom dom)
+    :QTreeWidgetItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
-NamespaceItem::NamespaceItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, NamespaceDom dom)
-    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
+NamespaceItem::NamespaceItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, NamespaceDom dom)
+    :QTreeWidgetItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
@@ -48,18 +48,18 @@ NamespaceDom NamespaceItem::dom() const
 
 void NamespaceItem::setup()
 {
-    Q3ListViewItem::setup();
+    QTreeWidgetItem::setup();
     setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, m_part->instance()) );
 }
 
 
-ClassItem::ClassItem(ClassViewPart *part, Q3ListView *parent, QString name, ClassDom dom)
-    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
+ClassItem::ClassItem(ClassViewPart *part, QTreeWidget *parent, QString name, ClassDom dom)
+    :QTreeWidgetItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
-ClassItem::ClassItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, ClassDom dom)
-    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
+ClassItem::ClassItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, ClassDom dom)
+    :QTreeWidgetItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
@@ -74,18 +74,18 @@ ClassDom ClassItem::dom() const
 
 void ClassItem::setup()
 {
-    Q3ListViewItem::setup();
+    QTreeWidgetItem::setup();
     setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, m_part->instance()) );
 }
 
 
-FunctionItem::FunctionItem(ClassViewPart *part, Q3ListView *parent, QString name, FunctionDom dom)
-    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
+FunctionItem::FunctionItem(ClassViewPart *part, QTreeWidget *parent, QString name, FunctionDom dom)
+    :QTreeWidgetItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
-FunctionItem::FunctionItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, FunctionDom dom)
-    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
+FunctionItem::FunctionItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, FunctionDom dom)
+    :QTreeWidgetItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
@@ -100,7 +100,7 @@ FunctionDom FunctionItem::dom() const
 
 void FunctionItem::setup()
 {
-    Q3ListViewItem::setup();
+    QTreeWidgetItem::setup();
     QString iconName;
     if( m_dom->access() == CodeModelItem::Private )
         iconName = "CVprivate_meth";
@@ -118,13 +118,13 @@ void refreshNamespaces(ClassViewPart *part, KComboView *view)
 {
     view->clear();
 
-    NamespaceItem *global_item = new NamespaceItem( part, view->listView(), i18n("(Global Namespace)"), part->codeModel()->globalNamespace() );
+    NamespaceItem *global_item = new NamespaceItem( part, view->treeWidget(), i18n("(Global Namespace)"), part->codeModel()->globalNamespace() );
     view->addItem(global_item);
     global_item->setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, part->instance()) );
     NamespaceList namespaces = part->codeModel()->globalNamespace()->namespaceList();
     for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
     {
-        NamespaceItem *item = new NamespaceItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        NamespaceItem *item = new NamespaceItem(part, view->treeWidget(), part->languageSupport()->formatModelItem(*it), *it);
         view->addItem(item);
         item->setOpen(true);
     }
@@ -148,7 +148,7 @@ void refreshClasses(ClassViewPart *part, KComboView *view, const QString &dom)
     ClassList classes = nsdom->classList();
     for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
     {
-        ClassItem *item = new ClassItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        ClassItem *item = new ClassItem(part, view->treeWidget(), part->languageSupport()->formatModelItem(*it), *it);
         view->addItem(item);
         item->setOpen(true);
     }
@@ -162,7 +162,7 @@ void refreshFunctions(ClassViewPart *part, KComboView *view, const ClassDom & do
     FunctionList functions = dom->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
-        FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it, true), *it);
+        FunctionItem *item = new FunctionItem(part, view->treeWidget(), part->languageSupport()->formatModelItem(*it, true), *it);
         view->addItem(item);
         item->setOpen(true);
     }
@@ -185,7 +185,7 @@ void refreshFunctions(ClassViewPart *part, KComboView *view, const QString & dom
     FunctionList functions = nsdom->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
-        FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it, true), *it);
+        FunctionItem *item = new FunctionItem(part, view->treeWidget(), part->languageSupport()->formatModelItem(*it, true), *it);
         view->addItem(item);
         item->setOpen(true);
     }

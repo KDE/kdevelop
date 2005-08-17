@@ -49,7 +49,8 @@ struct DigraphEdge
 DigraphView::DigraphView(QWidget *parent, const char *name)
     : Q3ScrollView(parent, name, Qt::WNoAutoErase|Qt::WStaticContents|Qt::WResizeNoErase)
 {
-    viewport()->setBackgroundMode(PaletteBase);
+    QPalette p;
+    viewport()->setBackgroundRole(QPalette::Base);
 
     Q3PaintDeviceMetrics m(this);
     xscale = m.logicalDpiX();
@@ -111,7 +112,7 @@ void DigraphView::addRenderedEdge(const QString &/*name1*/, const QString &/*nam
     DigraphEdge *edge = new DigraphEdge;
     edge->points.resize(coords.count()/2);
 
-    for (uint i = 0; i < edge->points.count(); ++i)
+    for (int i = 0; i < edge->points.count(); ++i)
         edge->points[i] = QPoint(toXPixel(coords[2*i]), toYPixel(coords[2*i+1]));
 
     edges.append(edge);
@@ -185,7 +186,7 @@ QStringList DigraphView::splitLine(QString str)
             result << str.left(pos);
             str.remove(0, pos+1);
         }
-        uint i = 0; while (i<str.length() && str[i] == ' ') ++i;
+        int i = 0; while (i<str.length() && str[i] == QLatin1Char(' ')) ++i;
         str.remove(0, i);
     }
 
@@ -213,7 +214,7 @@ void DigraphView::parseDotResults(const QStringList &list)
             if (tokens.count() < 8)
                 continue;
             Q3MemArray<double> coords(tokens.count()-6);
-            for (uint i=0; i != tokens.count()-6; ++i)
+            for (int i=0; i != tokens.count()-6; ++i)
                 coords[i] = tokens[i+4].toDouble();
             addRenderedEdge(tokens[1], tokens[2], coords);
         }
@@ -271,13 +272,13 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
         QRect r((*it1)->x-(*it1)->w/2, (*it1)->y-(*it1)->h/2, (*it1)->w, (*it1)->h);
         if (r.intersects(clipRect)) {
             if (it1.current() == selNode)
-                p->fillRect(r, QBrush(lightGray, SolidPattern));
+                p->fillRect(r, QBrush(Qt::lightGray, Qt::SolidPattern));
             else
                 p->drawRect(r);
-            p->drawText(r, AlignCenter, (*it1)->name);
+            p->drawText(r, Qt::AlignCenter, (*it1)->name);
         }
     }
-    p->setBrush(QBrush(black, SolidPattern));
+    p->setBrush(QBrush(Qt::black, Qt::SolidPattern));
     Q3PtrListIterator<DigraphEdge> it2(edges);
     for (; it2.current(); ++it2) {
         int n = (*it2)->points.count();

@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <q3header.h>
+#include <qheaderview.h>
 #include <qdir.h>
 #include <q3stylesheet.h>
 //Added by qt3to4:
@@ -49,18 +49,15 @@
 // namespace ?!?
 
 ClassViewWidget::ClassViewWidget( ClassViewPart * part )
-    : KListView( 0, "ClassViewWidget" ), QToolTip( viewport() ), m_part( part ), m_projectDirectoryLength( 0 )
+    : QTreeWidget(0), m_part( part ), m_projectDirectoryLength( 0 )
 {
-    addColumn( "" );
+    setColumnCount(1);
     header()->hide();
-    setSorting( 0 );
     setRootIsDecorated( true );
-	setAllColumnsShowFocus( true );
 
     m_projectItem = 0;
 
-    connect( this, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
-    connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
+    connect( this, SIGNAL(itemActivated(QTreeWidgetItem*)), this, SLOT(slotExecuted(QTreeWidgetItem*)) );
     connect( m_part->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( m_part->core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
     connect( m_part->core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
@@ -74,10 +71,10 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     m_actionNewClass = new KAction( i18n("New Class..."), KShortcut(), this, SLOT(slotNewClass()),
 				    m_part->actionCollection(), "classview_new_class" );
     m_actionNewClass->setWhatsThis(i18n("<b>New class</b><p>Calls the <b>New Class</b> wizard."));
-	
+
 	m_actionCreateAccessMethods = new KAction( i18n("Create get/set Methods"), KShortcut(), this, SLOT(slotCreateAccessMethods()), m_part->actionCollection(), "classview_create_access_methods" );
-	
-	
+
+
     m_actionAddMethod = new KAction( i18n("Add Method..."), KShortcut(), this, SLOT(slotAddMethod()),
 				    m_part->actionCollection(), "classview_add_method" );
     m_actionAddMethod->setWhatsThis(i18n("<b>Add method</b><p>Calls the <b>New Method</b> wizard."));
@@ -105,7 +102,7 @@ ClassViewWidget::~ ClassViewWidget( )
     config->sync();
 }
 
-void ClassViewWidget::slotExecuted( Q3ListViewItem* item )
+void ClassViewWidget::slotExecuted( QTreeWidgetItem* item )
 {
     if( ClassViewItem* cbitem = dynamic_cast<ClassViewItem*>( item ) ){
 	if( cbitem->hasImplementation() )
@@ -117,7 +114,7 @@ void ClassViewWidget::slotExecuted( Q3ListViewItem* item )
 
 void ClassViewWidget::clear( )
 {
-    KListView::clear();
+    QTreeWidget::clear();
     removedText.clear();
     m_projectItem = 0;
 }
@@ -129,8 +126,8 @@ void ClassViewWidget::refresh()
 
     clear();
     m_projectItem = new FolderBrowserItem( this, this, m_part->project()->projectName() );
-    m_projectItem->setOpen( true );
-    blockSignals( true );
+    setItemExpanded(m_projectItem, true );
+    bool blocked = blockSignals( true );
 
     FileList fileList = m_part->codeModel()->fileList();
     FileList::Iterator it = fileList.begin();
@@ -139,13 +136,13 @@ void ClassViewWidget::refresh()
 	++it;
     }
 
-    blockSignals( false );
+    blockSignals(blocked);
 }
 
 void ClassViewWidget::slotProjectOpened( )
 {
     m_projectItem = new FolderBrowserItem( this, this, m_part->project()->projectName() );
-    m_projectItem->setOpen( true );
+    setItemExpanded(m_projectItem, true);
 
     m_projectDirectory = URLUtil::canonicalPath( m_part->project()->projectDirectory() );
     if( m_projectDirectory.isEmpty() )
@@ -266,15 +263,15 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
             m_actionAddMethod->plug( &menu );
             sep = true;
         }
-	
+
         if( m_part->langHasFeature(KDevLanguageSupport::AddAttribute) ) {
 	    m_actionAddAttribute->plug( &menu );
             sep = true;
-        }	
+        }
     }
-	
+
 	if (item && item->isVariable()){
-		if( m_part->langHasFeature(KDevLanguageSupport::CreateAccessMethods) ) 
+		if( m_part->langHasFeature(KDevLanguageSupport::CreateAccessMethods) )
 				m_actionCreateAccessMethods->plug( &menu );
 	}
 
@@ -294,7 +291,7 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
     if( viewMode() != oldViewMode )
 	refresh();
 
-    ev->consume();
+    ev->accept();
 }
 
 void ClassViewWidget::setViewMode( int mode )
@@ -339,8 +336,8 @@ void FolderBrowserItem::processFile( FileDom file, QStringList& path, bool remov
 	    return;
 
 	item = new FolderBrowserItem( m_widget, this, current );
-	if( listView()->removedText.contains(current) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(current) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_folders.insert( current, item );
     }
 
@@ -348,8 +345,8 @@ void FolderBrowserItem::processFile( FileDom file, QStringList& path, bool remov
 
     if( remove && item->childCount() == 0 ){
 	m_folders.remove( current );
-	if( item->isOpen() ){
-	    listView()->removedText << current;
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << current;
 	}
 	delete( item );
 	item = 0;
@@ -364,8 +361,8 @@ void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 	    return;
 
 	item = new NamespaceDomBrowserItem( this, ns );
-	if( listView()->removedText.contains(ns->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(ns->name()) )
+	    treeWidget()->setItemExpanded(item, true );
 	m_namespaces.insert( ns->name(), item );
     }
 
@@ -388,8 +385,8 @@ void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 
     if( remove && item->childCount() == 0 ){
 	m_namespaces.remove( ns->name() );
-	if( item->isOpen() ){
-	    listView()->removedText << ns->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << ns->name();
 	}
 	delete( item );
     emit m_widget->removedNamespace(ns->name());
@@ -405,8 +402,8 @@ void FolderBrowserItem::processClass( ClassDom klass, bool remove )
 	    return;
 
 	item = new ClassDomBrowserItem( this, klass );
-	if( listView()->removedText.contains(klass->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(klass->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_classes.insert( klass, item );
     }
 
@@ -426,8 +423,8 @@ void FolderBrowserItem::processClass( ClassDom klass, bool remove )
 
     if( remove && item->childCount() == 0 ){
 	m_classes.remove( klass );
-	if( item->isOpen() ){
-	    listView()->removedText << klass->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << klass->name();
 	}
 	delete( item );
 	item = 0;
@@ -442,15 +439,15 @@ void FolderBrowserItem::processTypeAlias( TypeAliasDom typeAlias, bool remove )
 	    return;
 
 	item = new TypeAliasDomBrowserItem( this, typeAlias );
-	if( listView()->removedText.contains(typeAlias->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(typeAlias->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_typeAliases.insert( typeAlias, item );
     }
 
     if( remove && item->childCount() == 0 ){
 	m_typeAliases.remove( typeAlias );
-	if( item->isOpen() ){
-	    listView()->removedText << typeAlias->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << typeAlias->name();
 	}
 	delete( item );
 	item = 0;
@@ -502,8 +499,8 @@ void NamespaceDomBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 	    return;
 
 	item = new NamespaceDomBrowserItem( this, ns );
-	if( listView()->removedText.contains(ns->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(ns->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_namespaces.insert( ns->name(), item );
     }
 
@@ -526,8 +523,8 @@ void NamespaceDomBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 
     if( remove && item->childCount() == 0 ){
 	m_namespaces.remove( ns->name() );
-	if( item->isOpen() ){
-	    listView()->removedText << ns->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << ns->name();
 	}
 	delete( item );
 	item = 0;
@@ -542,8 +539,8 @@ void NamespaceDomBrowserItem::processClass( ClassDom klass, bool remove )
 	    return;
 
 	item = new ClassDomBrowserItem( this, klass );
-	if( listView()->removedText.contains(klass->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(klass->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_classes.insert( klass, item );
     }
 
@@ -563,8 +560,8 @@ void NamespaceDomBrowserItem::processClass( ClassDom klass, bool remove )
 
     if( remove && item->childCount() == 0 ){
 	m_classes.remove( klass );
-	if( item->isOpen() ){
-	    listView()->removedText << klass->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << klass->name();
 	}
 	delete( item );
 	item = 0;
@@ -579,15 +576,15 @@ void NamespaceDomBrowserItem::processTypeAlias( TypeAliasDom typeAlias, bool rem
 	    return;
 
 	item = new TypeAliasDomBrowserItem( this, typeAlias );
-	if( listView()->removedText.contains(typeAlias->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(typeAlias->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_typeAliases.insert( typeAlias, item );
     }
 
     if( remove && item->childCount() == 0 ){
 	m_typeAliases.remove( typeAlias );
-	if( item->isOpen() ){
-	    listView()->removedText << typeAlias->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << typeAlias->name();
 	}
 	delete( item );
 	item = 0;
@@ -639,8 +636,8 @@ void ClassDomBrowserItem::processClass( ClassDom klass, bool remove )
 	    return;
 
 	item = new ClassDomBrowserItem( this, klass );
-	if( listView()->removedText.contains(klass->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(klass->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_classes.insert( klass, item );
     }
 
@@ -660,8 +657,8 @@ void ClassDomBrowserItem::processClass( ClassDom klass, bool remove )
 
     if( remove && item->childCount() == 0 ){
 	m_classes.remove( klass );
-	if( item->isOpen() ){
-	    listView()->removedText << klass->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << klass->name();
 	}
 	delete( item );
 	item = 0;
@@ -676,15 +673,15 @@ void ClassDomBrowserItem::processTypeAlias( TypeAliasDom typeAlias, bool remove 
 	    return;
 
 	item = new TypeAliasDomBrowserItem( this, typeAlias );
-	if( listView()->removedText.contains(typeAlias->name()) )
-	    item->setOpen( true );
+	if( treeWidget()->removedText.contains(typeAlias->name()) )
+	    treeWidget()->setItemExpanded(item, true);
 	m_typeAliases.insert( typeAlias, item );
     }
 
     if( remove && item->childCount() == 0 ){
 	m_typeAliases.remove( typeAlias );
-	if( item->isOpen() ){
-	    listView()->removedText << typeAlias->name();
+	if( treeWidget()->isItemExpanded(item) ){
+	    treeWidget()->removedText << typeAlias->name();
 	}
 	delete( item );
 	item = 0;
@@ -730,37 +727,36 @@ void ClassDomBrowserItem::processVariable( VariableDom var, bool remove )
 void FolderBrowserItem::setup( )
 {
     ClassViewItem::setup();
-    setPixmap( 0, SmallIcon("folder") );
-    setExpandable( true );
+    setIcon( 0, SmallIcon("folder") );
+
 }
 
 void NamespaceDomBrowserItem::setup( )
 {
     ClassViewItem::setup();
-    setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, listView()->m_part->instance()) );
-    setExpandable( true );
+    setIcon( 0, UserIcon("CVnamespace", KIcon::DefaultState, treeWidget()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
+
+    QString txt = treeWidget()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
 void ClassDomBrowserItem::setup( )
 {
     ClassViewItem::setup();
-    setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, listView()->m_part->instance()) );
-    setExpandable( true );
+    setIcon( 0, UserIcon("CVclass", KIcon::DefaultState, treeWidget()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
+
+    QString txt = treeWidget()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
 void TypeAliasDomBrowserItem::setup( )
 {
     ClassViewItem::setup();
-    setPixmap( 0, UserIcon("CVtypedef", KIcon::DefaultState, listView()->m_part->instance()) );
-    setExpandable( false );
+    setIcon( 0, UserIcon("CVtypedef", KIcon::DefaultState, treeWidget()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
+    QString txt = treeWidget()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
@@ -773,7 +769,7 @@ void FunctionDomBrowserItem::setup( )
 
 	if ( m_dom->isSignal() )
 		methodType = "signal";
-	else if (m_dom->isSlot() ) 
+	else if (m_dom->isSlot() )
 		methodType = "slot";
 	else
 		methodType = "meth";
@@ -785,9 +781,9 @@ void FunctionDomBrowserItem::setup( )
     else
         iconName = "CVpublic_" + methodType;
 
-    setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
+    setIcon( 0, UserIcon(iconName, KIcon::DefaultState, treeWidget()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
+    QString txt = treeWidget()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
@@ -795,13 +791,13 @@ void FunctionDomBrowserItem::openDeclaration()
 {
     int startLine, startColumn;
     m_dom->getStartPosition( &startLine, &startColumn );
-    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
+    treeWidget()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
 void FunctionDomBrowserItem::openImplementation()
 {
     FunctionDefinitionList lst;
-    FileList fileList = listView()->m_part->codeModel()->fileList();
+    FileList fileList = treeWidget()->m_part->codeModel()->fileList();
     CodeModelUtils::findFunctionDefinitions( FindOp(m_dom), fileList, lst );
 
     if( lst.isEmpty() )
@@ -832,7 +828,7 @@ void FunctionDomBrowserItem::openImplementation()
 
     int startLine, startColumn;
     fun->getStartPosition( &startLine, &startColumn );
-    listView()->m_part->partController()->editDocument( KURL(fun->fileName()), startLine );
+    treeWidget()->m_part->partController()->editDocument( KURL(fun->fileName()), startLine );
 }
 
 void VariableDomBrowserItem::setup( )
@@ -846,9 +842,9 @@ void VariableDomBrowserItem::setup( )
     else
         iconName = "CVpublic_var";
 
-    setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
+    setIcon( 0, UserIcon(iconName, KIcon::DefaultState, treeWidget()->m_part->instance()) );
 
-    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
+    QString txt = treeWidget()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
 }
 
@@ -857,7 +853,7 @@ void VariableDomBrowserItem::openDeclaration()
     int startLine, startColumn;
     m_dom->getStartPosition( &startLine, &startColumn );
 
-    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
+    treeWidget()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
 void VariableDomBrowserItem::openImplementation()
@@ -911,7 +907,7 @@ void ClassViewWidget::slotAddMethod( )
 void ClassViewWidget::slotAddAttribute( )
 {
     if ( !selectedItem() ) return;
-    
+
     if( m_part->languageSupport()->features() & KDevLanguageSupport::AddAttribute )
         m_part->languageSupport()->addAttribute( static_cast<ClassDomBrowserItem*>( selectedItem() )->dom() );
 }
@@ -919,14 +915,14 @@ void ClassViewWidget::slotAddAttribute( )
 void ClassViewWidget::slotOpenDeclaration( )
 {
     if ( !selectedItem() ) return;
-    
+
     static_cast<ClassViewItem*>( selectedItem() )->openDeclaration();
 }
 
 void ClassViewWidget::slotOpenImplementation( )
 {
     if ( !selectedItem() ) return;
-    
+
     static_cast<ClassViewItem*>( selectedItem() )->openImplementation();
 }
 
@@ -934,32 +930,33 @@ void ClassDomBrowserItem::openDeclaration( )
 {
     int startLine, startColumn;
     m_dom->getStartPosition( &startLine, &startColumn );
-    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
+    treeWidget()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
 void TypeAliasDomBrowserItem::openDeclaration( )
 {
     int startLine, startColumn;
     m_dom->getStartPosition( &startLine, &startColumn );
-    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
+    treeWidget()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
 }
 
 bool FunctionDomBrowserItem::hasImplementation() const
 {
     FunctionDefinitionList lst;
-    FileList fileList = listView()->m_part->codeModel()->fileList();
+    FileList fileList = treeWidget()->m_part->codeModel()->fileList();
     CodeModelUtils::findFunctionDefinitions( FindOp(m_dom), fileList, lst );
 
     return !lst.isEmpty();
 }
 
+#if 0
 void ClassViewWidget::maybeTip( QPoint const & p )
 {
 	ClassViewItem * item = dynamic_cast<ClassViewItem*>( itemAt( p ) );
 	if ( !item ) return;
-	
+
 	QString tooltip;
-	
+
 	if ( item->isNamespace() )
 	{
 		NamespaceDomBrowserItem * nitem = dynamic_cast<NamespaceDomBrowserItem*>( item );
@@ -973,8 +970,8 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 		ClassDomBrowserItem * citem = dynamic_cast<ClassDomBrowserItem*>( item );
 		if ( citem )
 		{
-			tooltip = citem->dom()->scope().join("::") + "::" 
-				+ citem->dom()->name() + " : " 
+			tooltip = citem->dom()->scope().join("::") + "::"
+				+ citem->dom()->name() + " : "
 				+ citem->dom()->baseClassList().join(", ");
 		}
 	}
@@ -999,17 +996,17 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 				arguments << (*it)->type();
 				++it;
 			}
-			
-			QString strstatic = fitem->dom()->isStatic() ? QString( "[static] " ) : QString::null;
-			QString strsignal = fitem->dom()->isSignal() ? QString( "[signal] " ) : QString::null;
-			QString strslot = fitem->dom()->isSlot() ? QString( "[slot] " ) : QString::null;
-			QString strresult = !fitem->dom()->resultType().isEmpty() ? fitem->dom()->resultType() + " " : QString::null;
-			
-			QString strconstant = fitem->dom()->isConstant() ? QString( " [const]" ) : QString::null;
-			QString strabstract = fitem->dom()->isAbstract() ? QString( " [abstract]" ) : QString::null;
-			
+
+			QString strstatic = fitem->dom()->isStatic() ? QString( "[static] " ) : QString();
+			QString strsignal = fitem->dom()->isSignal() ? QString( "[signal] " ) : QString();
+			QString strslot = fitem->dom()->isSlot() ? QString( "[slot] " ) : QString();
+			QString strresult = !fitem->dom()->resultType().isEmpty() ? fitem->dom()->resultType() + " " : QString();
+
+			QString strconstant = fitem->dom()->isConstant() ? QString( " [const]" ) : QString();
+			QString strabstract = fitem->dom()->isAbstract() ? QString( " [abstract]" ) : QString();
+
 			tooltip = access + strstatic + strsignal + strslot + strresult
-				+ fitem->dom()->scope().join("::") + "::" + fitem->dom()->name() 
+				+ fitem->dom()->scope().join("::") + "::" + fitem->dom()->name()
 				+ "(" + arguments.join(", ") + ")" + strconstant + strabstract;
 		}
 	}
@@ -1026,27 +1023,24 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 			else if ( vitem->dom()->access() == CodeModelItem::Public )
 				access = "[public] ";
 
-			QString strstatic = vitem->dom()->isStatic() ? QString( "[static] " ) : QString::null;
+			QString strstatic = vitem->dom()->isStatic() ? QString( "[static] " ) : QString();
 			tooltip = access + strstatic + vitem->dom()->type() + " " + vitem->dom()->name();
-		}	
+		}
 	}
 	else if ( item->isTypeAlias() )
 	{
 		if( TypeAliasDomBrowserItem * titem = dynamic_cast<TypeAliasDomBrowserItem*>( item ) )
 		{
-			tooltip = QString( "[Type] " ) + titem->dom()->type() + " " + titem->dom()->name();
+			tooltip = QLatin1String( "[Type] " ) + titem->dom()->type() + QLatin1String(" ") + titem->dom()->name();
 		}
 	}
-	
-	kdDebug(0) << tooltip << endl;
-	
-	QRect r = itemRect( item );
 
-	if ( item && r.isValid() && !tooltip.isEmpty() )
+	if ( item && !tooltip.isEmpty() )
 	{
-		tip( r, QString("<qt><pre>") + Q3StyleSheet::escape( tooltip ) + QString("</pre></qt>") );
+		setToolTip(0, QLatin1String("<qt><pre>") + Q3StyleSheet::escape( tooltip ) + QLatin1String("</pre></qt>") );
 	}
 }
+#endif
 
 void ClassViewWidget::slotCreateAccessMethods( )
 {
@@ -1057,7 +1051,7 @@ void ClassViewWidget::slotCreateAccessMethods( )
         VariableDomBrowserItem* item = dynamic_cast<VariableDomBrowserItem*>( selectedItem() );
 		if (item == 0)
 			return;
-		
+
 		m_part->languageSupport()->createAccessMethods(static_cast<ClassModel*>(static_cast<ClassDomBrowserItem*>(item->parent())->dom()),static_cast<VariableModel*>(item->dom()));
 	}
 }

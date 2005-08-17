@@ -25,7 +25,6 @@
 #include <QBoxLayout>
 
 #include "kdevlanguagesupport.h"
-#include "kcomboview.h"
 
 #include "classviewpart.h"
 //#include "classtoolwidget.h"
@@ -36,10 +35,14 @@
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     : QDialog(0, "hierarchy dialog", Qt::WDestructiveClose)
 {
+    #warning "port me"
+
+#if 0
     class_combo = new KComboView(false, 150, this);
 //    class_combo->setMinimumWidth(150);
     namespace_combo = new KComboView(false, 150, this);
 //    namespace_combo->setMinimumWidth(150);
+#endif
 
     QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
 
@@ -56,10 +59,10 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     combo_layout->addWidget(close_button);
     layout->addWidget(splitter);
 
-    connect( namespace_combo, SIGNAL(activated(Q3ListViewItem*)),
-             this, SLOT(slotNamespaceComboChoice(Q3ListViewItem*)) );
-    connect( class_combo, SIGNAL(activated(Q3ListViewItem*)),
-             this, SLOT(slotClassComboChoice(Q3ListViewItem*)) );
+    connect( namespace_combo, SIGNAL(activated(QTreeWidgetItem*)),
+             this, SLOT(slotNamespaceComboChoice(QTreeWidgetItem*)) );
+    connect( class_combo, SIGNAL(activated(QTreeWidgetItem*)),
+             this, SLOT(slotClassComboChoice(QTreeWidgetItem*)) );
     connect( close_button, SIGNAL(clicked()),
              this, SLOT(reject()) );
     connect( digraph, SIGNAL(selected(const QString&)),
@@ -111,7 +114,7 @@ void HierarchyDialog::setLanguageSupport(KDevLanguageSupport *ls)
 }
 
 
-void HierarchyDialog::slotClassComboChoice(Q3ListViewItem * item)
+void HierarchyDialog::slotClassComboChoice(QTreeWidgetItem * item)
 {
     ClassItem *ci = dynamic_cast<ClassItem*>(item);
     if (!ci)
@@ -139,7 +142,7 @@ void HierarchyDialog::classSelected(const QString &/*className*/)
     }*/
 }
 
-void HierarchyDialog::slotNamespaceComboChoice( Q3ListViewItem * item )
+void HierarchyDialog::slotNamespaceComboChoice( QTreeWidgetItem * item )
 {
     NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
     if (!ni)

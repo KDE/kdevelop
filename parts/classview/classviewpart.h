@@ -43,8 +43,8 @@ namespace KTextEditor
 
 
 class ClassViewWidget;
-class KListViewAction;
-class Q3ListViewItem;
+class QTreeWidgetAction;
+class QTreeWidgetItem;
 class KToolBarPopupAction;
 class NamespaceItem;
 class Navigator;
@@ -57,8 +57,10 @@ public:
     virtual ~ClassViewPart();
 
     bool langHasFeature(KDevLanguageSupport::Features feature);
-    
-    KListViewAction *m_functionsnav;
+
+#if 0
+    QTreeWidgetAction *m_functionsnav;
+#endif
     Navigator *navigator;
 
 private slots:

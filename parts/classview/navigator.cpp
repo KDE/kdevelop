@@ -59,19 +59,19 @@ private:
 
 
 
-class FunctionNavItem: public Q3ListViewItem {
+class FunctionNavItem: public QTreeWidgetItem {
 public:
     enum Type { Declaration, Definition };
 
-    FunctionNavItem(ClassViewPart *part, Q3ListView *parent, QString name, Type type)
-        :Q3ListViewItem(parent, name), m_part(part), m_type(type) {}
-    FunctionNavItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, Type type)
-        :Q3ListViewItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(ClassViewPart *part, QTreeWidget *parent, QString name, Type type)
+        :QTreeWidgetItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(ClassViewPart *part, QTreeWidgetItem *parent, QString name, Type type)
+        :QTreeWidgetItem(parent, name), m_part(part), m_type(type) {}
     ~FunctionNavItem() {}
 
     virtual void setup()
     {
-        Q3ListViewItem::setup();
+        QTreeWidgetItem::setup();
         setPixmap( 0, UserIcon("CVpublic_meth", KIcon::DefaultState, m_part->instance()) );
     }
     Type type() { return m_type; }
@@ -96,7 +96,7 @@ Navigator::~Navigator()
 {
 }
 
-void Navigator::selectFunctionNav(Q3ListViewItem *item)
+void Navigator::selectFunctionNav(QTreeWidgetItem *item)
 {
     FunctionNavItem *nav = dynamic_cast<FunctionNavItem*>(item);
     if (!nav)
@@ -235,7 +235,7 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
         if (clear || !m_functionNavDecls[fullName])
         {
             FunctionNavItem *item = new FunctionNavItem(m_part,
-                m_part->m_functionsnav->view()->listView(), fullName,
+                m_part->m_functionsnav->view()->treeWidget(), fullName,
                 FunctionNavItem::Declaration);
             m_functionNavDecls[fullName] = item;
             m_part->m_functionsnav->view()->addItem(item);
@@ -245,10 +245,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
 
     //remove items not in toLeave list
-    QMap<QString, Q3ListViewItem*>::iterator it = m_functionNavDecls.begin();
+    QMap<QString, QTreeWidgetItem*>::iterator it = m_functionNavDecls.begin();
     while ( it != m_functionNavDecls.end() )
     {
-        QMap<QString, Q3ListViewItem*>::iterator it2 = it;
+        QMap<QString, QTreeWidgetItem*>::iterator it2 = it;
         ++it;
         if ( !toLeave.contains( it2.key() ) )
         {
@@ -269,7 +269,7 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
         if (clear || !m_functionNavDefs[fullName])
         {
             FunctionNavItem *item = new FunctionNavItem(m_part,
-                m_part->m_functionsnav->view()->listView(), fullName, FunctionNavItem::Definition);
+                m_part->m_functionsnav->view()->treeWidget(), fullName, FunctionNavItem::Definition);
             m_functionNavDefs[fullName] = item;
             m_part->m_functionsnav->view()->addItem(item);
         }
@@ -286,10 +286,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
 
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
     //remove items not in toLeave list
-    QMap<QString, Q3ListViewItem*>::iterator itt = m_functionNavDefs.begin();
+    QMap<QString, QTreeWidgetItem*>::iterator itt = m_functionNavDefs.begin();
     while ( itt != m_functionNavDefs.end() )
     {
-        QMap<QString, Q3ListViewItem*>::iterator it2 = itt;
+        QMap<QString, QTreeWidgetItem*>::iterator it2 = itt;
         ++itt;
         if ( !toLeave.contains( it2.key() ) )
         {

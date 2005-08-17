@@ -21,7 +21,7 @@ class KDevLanguageSupport;
 class DigraphView;
 class ClassToolWidget;
 class KComboView;
-class Q3ListViewItem;
+class QTreeWidgetItem;
 
 class HierarchyDialog : public QDialog
 {
@@ -33,8 +33,8 @@ public:
 
 private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
-    void slotClassComboChoice(Q3ListViewItem *item);
-    void slotNamespaceComboChoice(Q3ListViewItem *item);
+    void slotClassComboChoice(QTreeWidgetItem *item);
+    void slotNamespaceComboChoice(QTreeWidgetItem *item);
     void classSelected(const QString &className);
 
 private:
@@ -47,8 +47,10 @@ private:
     //like MyClass - MyNamespace.MyClass
     QMap<QString, QString> uclasses;
 
+#if 0
     KComboView *namespace_combo;
     KComboView *class_combo;
+#endif
     DigraphView *digraph;
 //    ClassToolWidget *member_tree;
     ClassViewPart *m_part;

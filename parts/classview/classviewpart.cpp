@@ -30,11 +30,11 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kaction.h>
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevlanguagesupport.h>
-#include <kcomboview.h>
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
 #include <urlutil.h>
@@ -48,26 +48,22 @@
 #include "hierarchydlg.h"
 #include "navigator.h"
 
-#include "klistviewaction.h"
-
 #include <ktexteditor/document.h>
-#include <ktexteditor/editinterface.h>
 #include <ktexteditor/view.h>
-#include <ktexteditor/selectioninterface.h>
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/clipboardinterface.h>
 
 typedef KDevGenericFactory<ClassViewPart> ClassViewFactory;
 static const KDevPluginInfo data("kdevclassview");
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( data ) )
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin(&data, parent, name ? name : "ClassViewPart" ),
+    : KDevPlugin(&data, parent),
     m_activeDocument(0), m_activeView(0), m_activeSelection(0), m_activeEditor(0), m_activeViewCursor(0)
 {
+    setObjectName(QString::fromUtf8(name));
+
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");
-    
+
     navigator = new Navigator(this);
 
     setupActions();
@@ -109,8 +105,10 @@ void ClassViewPart::slotProjectClosed( )
 
 void ClassViewPart::setupActions( )
 {
-    m_functionsnav = new KListViewAction( new KComboView(true, 150, 0, "m_functionsnav_combo"), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
-    connect(m_functionsnav->view(), SIGNAL(activated(Q3ListViewItem*)), navigator, SLOT(selectFunctionNav(Q3ListViewItem*)));
+    #warning "port me"
+#if 0
+    m_functionsnav = new QTreeWidgetAction( new KComboView(true, 150, 0, "m_functionsnav_combo"), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
+    connect(m_functionsnav->view(), SIGNAL(activated(QTreeWidgetItem*)), navigator, SLOT(selectFunctionNav(QTreeWidgetItem*)));
 //    m_functionsnav->view()->setEditable(false);
     connect(m_functionsnav->view(), SIGNAL(focusGranted()), navigator, SLOT(functionNavFocused()));
     connect(m_functionsnav->view(), SIGNAL(focusLost()), navigator, SLOT(functionNavUnFocused()));
@@ -118,13 +116,14 @@ void ClassViewPart::setupActions( )
     m_functionsnav->setWhatsThis(i18n("<b>Function navigator</b><p>Navigates over functions contained in the file."));
 //    m_functionsnav->view()->setCurrentText(NAV_NODEFINITION);
     m_functionsnav->view()->setDefaultText(NAV_NODEFINITION);
-    
+#endif
+
     if (langHasFeature(KDevLanguageSupport::Classes))
     {
         KAction *ac = new KAction(i18n("Class Inheritance Diagram"), "view_tree", 0, this, SLOT(graphicalClassView()), actionCollection(), "inheritance_dia");
         ac->setToolTip(i18n("Class inheritance diagram"));
         ac->setWhatsThis(i18n("<b>Class inheritance diagram</b><p>Displays inheritance relationship between classes in project. "
-                                 "Note, it does not display classes outside inheritance hierarchy."));    
+                                 "Note, it does not display classes outside inheritance hierarchy."));
     }
 }
 
@@ -147,19 +146,16 @@ void ClassViewPart::activePartChanged( KParts::Part * part)
     navigator->stopTimer();
     if (m_activeView)
     {
-        disconnect(m_activeView, SIGNAL(cursorPositionChanged()), 
+        disconnect(m_activeView, SIGNAL(cursorPositionChanged()),
             navigator, SLOT(slotCursorPositionChanged()));
     }
-    
+
     kdDebug() << "ClassViewPart::activePartChanged()" << endl;
 
-    m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
-    m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
-    m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
-    m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
-    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView ) : 0;
+    m_activeDocument = qobject_cast<KTextEditor::Document*>( part );
+    m_activeView = part ? qobject_cast<KTextEditor::View*>( part->widget() ) : 0;
 
-    m_activeFileName = QString::null;
+    m_activeFileName = QString();
 
     if (m_activeDocument)
     {
@@ -168,7 +164,7 @@ void ClassViewPart::activePartChanged( KParts::Part * part)
         navigator->syncFunctionNavDelayed(200);
 /*        if ( languageSupport()->mimeTypes().find(
             KMimeType::findByPath(m_activeFileName)) != languageSupport()->mimeTypes().end() )
-            m_activeFileName = QString::null;*/
+            m_activeFileName = QString();*/
     }
     if( m_activeViewCursor )
     {
