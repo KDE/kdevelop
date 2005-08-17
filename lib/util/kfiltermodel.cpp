@@ -149,7 +149,7 @@ QModelIndex KFilterModel::index(int row, int column, const QModelIndex &parent) 
     if (d->filteredIdx.isEmpty())
         return QModelIndex();
 
-    int idx = 0;
+    int idx = parent.internalId();
     if (parent.isValid()) {
         if (row >= d->filteredIdx.at(parent.internalId()).childCount)
             return QModelIndex();

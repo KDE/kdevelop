@@ -119,7 +119,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_projectManager->setWhatsThis(i18n("Project overview"));
   m_widget->layout()->add(m_projectManager);
 
-#if 0
+#if 1
   KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
   connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
   m_projectManager->setModel(filterModel);
