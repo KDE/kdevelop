@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=KDevelop GUI Builder.
+Name=KDevGuiBuilder
+GenericName=KDevelop GUI Builder
+icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevguibuilder
+X-KDevelop-Version=4
+X-KDevelop-Scope=Global

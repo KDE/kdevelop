@@ -9,7 +9,8 @@ SUBDIRS = fullscreen \
     konsole \
     diff \
     classview \
-    openwith
+    openwith \
+    guibuilder
 
 # SUBDIRS = \
 #     abbrev \
