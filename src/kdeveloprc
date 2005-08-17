@@ -57,8 +57,6 @@ Position=Top
 KDevScripting=false
 
 [UI]
-MDIStyle=3
-MDIMode=4
 TabVisibility=0
 CloseOnHover=false
 CloseOnHoverDelay=false
