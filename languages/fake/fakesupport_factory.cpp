@@ -19,7 +19,7 @@ KInstance *FakeSupportFactory::createInstance()
 	KStandardDirs *dirs = instance->dirs();
 	dirs->addResourceType("newclasstemplates", KStandardDirs::kde_default("data") + "kdevfakesupport/newclass/");
 	dirs->addResourceType("pcs", KStandardDirs::kde_default("data") + "kdevfakesupport/pcs/");
-	
+
 	return instance;
 }
 

@@ -1,5 +1,6 @@
 #include "../quickopen_model.h"
 #include <kdevelop/util/kfiltermodel.h>
+#include <kdevelop/util/kdevitemmodel.h>
 
 #include <QtGui/QtGui>
 #include <QtTest/QtTest>
@@ -11,10 +12,10 @@ private slots:
     void rowCount();
     void data();
     void emptyModel();
-
     void parent();
-
     void testFiltering();
+    void kdevitemmodel();
+    void filterColumns();
 
 private:
     QuickOpenModel *testModel()
@@ -138,6 +139,54 @@ void tst_QuickOpenModel::testFiltering()
     COMPARE(model.parent(model.index(2, 0, parent)), model.index(0, 0));
     COMPARE(model.parent(model.index(3, 0, parent)), model.index(0, 0));
     COMPARE(model.parent(model.index(4, 0, parent)), model.index(0, 0));
+}
+
+void tst_QuickOpenModel::kdevitemmodel()
+{
+    KDevItemCollection *c = new KDevItemCollection("parent1");
+    c->add(new KDevItemCollection("child1"));
+    c->add(new KDevItemCollection("child2"));
+
+    KDevItemModel model;
+    model.appendItem(c);
+
+    QModelIndex parent = model.index(0, 0, QModelIndex());
+    COMPARE(model.data(parent).toString(), QString("parent1"));
+    COMPARE(model.rowCount(parent), 2);
+    COMPARE(model.data(model.index(0, 0, parent)).toString(), QString("child1"));
+    COMPARE(model.rowCount(model.index(0, 0, parent)), 0);
+    COMPARE(model.data(model.index(1, 0, parent)).toString(), QString("child2"));
+    COMPARE(model.rowCount(model.index(1, 0, parent)), 0);
+    COMPARE(model.parent(model.index(0, 0, parent)), parent);
+    COMPARE(model.parent(model.index(1, 0, parent)), parent);
+
+    KFilterModel filter(&model);
+    parent = filter.index(0, 0, QModelIndex());
+    COMPARE(filter.data(parent).toString(), QString("parent1"));
+    COMPARE(filter.rowCount(parent), 2);
+    COMPARE(filter.data(filter.index(0, 0, parent)).toString(), QString("child1"));
+    COMPARE(filter.rowCount(filter.index(0, 0, parent)), 0);
+    COMPARE(filter.data(filter.index(1, 0, parent)).toString(), QString("child2"));
+    COMPARE(filter.parent(filter.index(0, 0, parent)), parent);
+    COMPARE(filter.parent(filter.index(1, 0, parent)), parent);
+}
+
+void tst_QuickOpenModel::filterColumns()
+{
+    QStandardItemModel model;
+
+    model.insertRows(0, 1);
+    model.insertColumns(0, 2);
+    model.setData(model.index(0, 0), "test1");
+    model.setData(model.index(0, 1), "test2");
+    COMPARE(model.data(model.index(0, 0)).toString(), QString("test1"));
+    COMPARE(model.data(model.index(0, 1)).toString(), QString("test2"));
+
+    KFilterModel filter(&model);
+    COMPARE(filter.rowCount(), 1);
+    COMPARE(filter.columnCount(), 2);
+    COMPARE(filter.data(filter.index(0, 0)).toString(), QString("test1"));
+    COMPARE(filter.data(filter.index(0, 1)).toString(), QString("test2"));
 }
 
 QTTEST_MAIN(tst_QuickOpenModel)

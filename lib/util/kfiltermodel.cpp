@@ -146,7 +146,7 @@ QModelIndex KFilterModel::index(int row, int column, const QModelIndex &parent) 
         return d->sourceModel->index(row, column, parent);
 #endif
 
-    if (column != 0 || d->filteredIdx.isEmpty())
+    if (d->filteredIdx.isEmpty())
         return QModelIndex();
 
     int idx = 0;
@@ -196,7 +196,7 @@ QModelIndex KFilterModel::parent(const QModelIndex &child) const
         return QModelIndex();
 
     while (d->filteredIdx.at(--idx).level >= level);
-    return createIndex(d->filteredIdx.at(idx).siblingIdx, child.column(), idx);
+    return createIndex(d->filteredIdx.at(idx).siblingIdx, 0, idx);
 }
 
 void KFilterModel::setFilter(const QString &expression)
