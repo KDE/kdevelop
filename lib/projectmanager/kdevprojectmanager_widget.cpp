@@ -58,22 +58,6 @@ public:
     virtual void setMovingEnabled( bool b );
 };
 
-class KDevToolBarShell: public QFrame
-{
-public:
-    KDevToolBarShell(QWidget *parent);
-    virtual ~KDevToolBarShell();
-
-    void setToolBar(KDevToolBar *tb);
-
-private:
-    KDevToolBar *m_tb;
-
-protected:
-    virtual void resizeEvent ( QResizeEvent * );
-};
-
-
 KDevToolBar::KDevToolBar(QWidget *parent)
     : KToolBar( parent, "KDevToolbar", true )
 {
@@ -87,30 +71,6 @@ void KDevToolBar::setMovingEnabled( bool)
 {
     KToolBar::setMovingEnabled(false);
 }
-
-
-KDevToolBarShell::KDevToolBarShell(QWidget *parent)
-    : QFrame(parent),
-      m_tb(0)
-{}
-
-KDevToolBarShell::~KDevToolBarShell()
-{}
-
-void KDevToolBarShell::setToolBar(KDevToolBar *tb)
-{
-    m_tb=tb;
-}
-
-void KDevToolBarShell::resizeEvent ( QResizeEvent * )
-{
-    if (m_tb)
-    {
-        setMinimumHeight(m_tb->sizeHint().height());
-        m_tb->resize(width(),height());
-    }
-}
-
 
 // ----------------------------------------------------------------------------------
 KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
@@ -281,10 +241,8 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
 {
     new QVBoxLayout(this);
 
-    m_toolBarShell = new KDevToolBarShell(this);
-    layout()->addWidget(m_toolBarShell);
-    m_toolBar = new KDevToolBar(m_toolBarShell);
-    m_toolBarShell->setToolBar(m_toolBar);
+    m_toolBar = new KDevToolBar(this);
+    layout()->addWidget(m_toolBar);
 
     m_toolBar->setMovingEnabled(false);
     m_toolBar->setFlat(true);

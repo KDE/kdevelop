@@ -27,7 +27,6 @@
 class KDevProject;
 class KDevProjectManagerPart;
 class KDevToolBar;
-class KDevToolBarShell;
 class KToolBar;
 
 class ProjectModel;
@@ -165,7 +164,6 @@ private:
     QTreeWidget *m_listView;
     ProjectViewItem *fake_root;
     KDevProjectManagerWidget *m_managerWidget;
-    KDevToolBarShell *m_toolBarShell;
     KDevToolBar *m_toolBar;
 };
 
