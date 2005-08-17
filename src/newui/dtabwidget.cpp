@@ -29,7 +29,7 @@
 DTabWidget::DTabWidget(QWidget *parent, const char *name)
     :KTabWidget(parent, name), m_closeButton(0)
 {
-    setFocusPolicy(NoFocus);
+    setFocusPolicy(Qt::NoFocus);
     setMargin(0);
 
     loadSettings();

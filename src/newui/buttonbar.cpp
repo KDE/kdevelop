@@ -203,8 +203,9 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
     do {
         newMaxLength -= 1;
         newTextLength = 0;
-        foreach (uint &length, texts)
+        for (int i = 0; i < texts.count(); ++i)
         {
+            uint &length = texts[i];
             if (length > newMaxLength)
                 length = newMaxLength;
             newTextLength += length;
@@ -212,7 +213,7 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
     } while (newTextLength > newPreferredLength);
 
     int i = 0;
-    for (Button *button, m_buttons)
+    foreach (Button *button, m_buttons)
     {
         button->setText(KStringHandler::rsqueeze(button->realText(), texts[i++]));
         button->updateSize();
@@ -229,7 +230,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
     uint textLength = 0;
     QList<uint> texts;
     uint maxLength = 0;
-    for (Button *button = m_buttons)
+    foreach (Button *button, m_buttons)
     {
         uint length = button->text().length();
         maxLength = length > maxLength ? length : maxLength ;
@@ -246,10 +247,10 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
     uint prevTextLength = 0;
     do {
         newTextLength = 0;
-        int i = 0;
-        for (uint &length, texts)
+        for (int i = 0; i < texts.count(); ++i)
         {
-            if (m_buttons[i]->text().contains("..."))
+            uint &length = texts[i];
+            if (m_buttons.at(i)->text().contains("..."))
                 length++;
             newTextLength += length;
         }
@@ -259,7 +260,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
     } while (newTextLength < newPreferredLength);
 
     int i = 0;
-    for (Button *button = m_buttons)
+    foreach (Button *button, m_buttons)
     {
         if (texts[i] >= button->realText().length())
             button->setText(button->realText());
@@ -272,7 +273,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
 
 void ButtonBar::unshrink()
 {
-    for (Button *button, m_buttons)
+    foreach (Button *button, m_buttons)
     {
         button->setText(button->realText());
         button->updateSize();
@@ -283,7 +284,7 @@ void ButtonBar::unshrink()
 int ButtonBar::originalDimension()
 {
     int size = 0;
-    for (Button *button, m_buttons)
+    foreach (Button *button, m_buttons)
     {
         size += button->sizeHint(button->realText()).width();
     }

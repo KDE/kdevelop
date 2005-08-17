@@ -20,7 +20,8 @@
 #ifndef DDOCKWINDOW_H
 #define DDOCKWINDOW_H
 
-#include <QDockWidget>
+#include "q3mainwindow.h"
+#include <QMap>
 #include <QList>
 #include <QStackedWidget>
 
@@ -34,7 +35,7 @@ namespace Ideal {
     class ButtonBar;
 }
 
-class DDockWindow : public QDockWidget {
+class DDockWindow : public Q3DockWindow {
     Q_OBJECT
 public:
     enum Position { Bottom, Left, Right };

@@ -97,11 +97,12 @@ void Button::drawButton(QPainter *p)
     pm.fill(eraseColor());
     QPainter p2(&pm);
 
+    /* ### harryF TODO
     style().drawControl(QStyle::CE_PushButton,&p2,this, QRect(0,0,pm.width(),pm.height()), colorGroup(),flags);
-
     style().drawControl(QStyle::CE_PushButtonLabel, &p2, this,
                         QRect(0,0,pm.width(),pm.height()),
                         colorGroup(), flags, QStyleOption());
+    */
 
     switch (m_place)
     {
@@ -119,7 +120,7 @@ void Button::drawButton(QPainter *p)
     }
 }
 
-void Button::drawButtonLabel(QPainter */*p*/)
+void Button::drawButtonLabel(QPainter * /*p*/)
 {
 }
 
@@ -176,8 +177,8 @@ QSize Button::sizeHint(const QString &text) const
         w += iw;
         h = QMAX( h, ih );
     }
-    if ( isMenuButton() )
-        w += style().pixelMetric(QStyle::PM_MenuButtonIndicator, this);
+ // ###  if ( isMenuButton() )
+ // ### TODO       w += style().pixelMetric(QStyle::PM_MenuButtonIndicator, this);
     if ( pixmap() ) {
         QPixmap *pm = (QPixmap *)pixmap();
         w += pm->width();
@@ -195,8 +196,9 @@ QSize Button::sizeHint(const QString &text) const
             h = QMAX(h, sz.height());
     }
 
-    return (style().sizeFromContents(QStyle::CT_ToolButton, this, QSize(w, h)).
-            expandedTo(QApplication::globalStrut()));
+// ### TODO    return (style().sizeFromContents(QStyle::CT_ToolButton, this, QSize(w, h)).
+         //   expandedTo(QApplication::globalStrut()));
+    return QSize();
 }
 
 void Ideal::Button::updateSize()
