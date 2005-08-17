@@ -108,7 +108,7 @@ void DDockWindow::setExpanded(bool v)
     if (m_expanded)
         config->writeEntry("ViewWidth", m_position == DDockWindow::Bottom ? height() : width() );
 
-    v ? m_widgetStack->show() : m_widgetStack->hide();
+    m_widgetStack->setVisible(v);
     m_expanded = v;
 
     m_internalLayout->invalidate();
