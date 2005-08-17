@@ -32,8 +32,9 @@ static const KDevPluginInfo data("kdevgrepview");
 K_EXPORT_COMPONENT_FACTORY(libkdevgrepview, GrepViewFactory(data))
 
 GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( &data, parent, name ? name : "GrepViewPart" )
+    : KDevPlugin( &data, parent )
 {
+    setObjectName(QString::fromUtf8(name));
     setInstance(GrepViewFactory::instance());
 
     setXMLFile("kdevgrepview.rc");
