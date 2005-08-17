@@ -25,11 +25,11 @@
 #ifndef KDEVLANGUAGESUPPORT_H
 #define KDEVLANGUAGESUPPORT_H
 
+#include "kdevplugin.h"
+
 #include <qstring.h>
 #include <qstringlist.h>
 #include <kmimetype.h>
-#include "kdevplugin.h"
-#include "codemodel.h"
 #include <designer.h>
 
 /**
@@ -37,8 +37,12 @@
 Interface to programming language specific features.
 */
 
-class Tag;
 class KDevDesignerIntegration;
+
+class Tag;
+class KDevCodeItem;
+class KDevCodeClassItem;
+class KDevCodeVariableItem;
 
 using namespace KInterfaceDesigner;
 
@@ -109,12 +113,12 @@ public:
     @param tag Tag to format.*/
     virtual QString formatTag(const Tag& tag);
     
-    /**Formats a CodeModelItem as used by the CodeModel to the human-readable convention.
+    /**Formats a KDevCodeItem as used by the CodeModel to the human-readable convention.
     @param item Symbol to format.
     @param shortDescription Show short description of a symbol. For example, when
     formatting functions short description could be a function signature without
     the return type and argument default values.*/
-    virtual QString formatModelItem(const CodeModelItem *item, bool shortDescription=false);
+    virtual QString formatModelItem(const KDevCodeItem *item, bool shortDescription=false);
 
     /**Formats a canonicalized class path as used by the symbol store to the 
     human-readable convention. For example, the C++ support part formats the
@@ -133,25 +137,25 @@ public:
     /**Opens an "Add method" dialog and adds the configured method to the sources.
     Define AddMethod feature if you reimplement this method.
     @param klass The class DOM to add a method to.*/
-    virtual void addMethod(ClassDom klass);
+    virtual void addMethod(KDevCodeClassItem * klass);
     
     /**Opens an "Implement Virtual Methods" dialog and adds the configured methods 
     to the sources. Define AddMethod feature if you reimplement this method.
     @param klass The class DOM to add a virtual method to.*/
-    virtual void implementVirtualMethods(ClassDom klass);
+    virtual void implementVirtualMethods(KDevCodeClassItem * klass);
     
     /**Opens an "Add attribute" dialog and adds the configured attribute to the sources.
     Define AddAttribute feature if you reimplement this method.
     @param klass The class DOM to add an attribute to.*/
-    virtual void addAttribute(ClassDom klass);
+    virtual void addAttribute(KDevCodeClassItem * klass);
 	
-	/**
-	 * Opens an "create get/set methods" dialog and adds the configured methods to the sources.
-	 * Define CreateAccessMethods feature if you reimplement this method.
-	 * @param theClass The class the methods should be added to.
-	 * @param theVariable The attribute the access methods should be generated for.
-	 */
-	virtual void createAccessMethods(ClassDom theClass, VariableDom theVariable);
+    /**
+     * Opens an "create get/set methods" dialog and adds the configured methods to the sources.
+     * Define CreateAccessMethods feature if you reimplement this method.
+     * @param theClass The class the methods should be added to.
+     * @param theVariable The attribute the access methods should be generated for.
+     */
+    virtual void createAccessMethods(KDevCodeClassItem * theClass, KDevCodeVariableItem * theVariable);
     
     /**Opens an "Subclass Widget" dialog for given Qt .ui file (formName)
     and propmts to implement it's slots.

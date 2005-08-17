@@ -22,8 +22,6 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include "codemodel.h"
-
 #include <kdebug.h>
 
 #include "kdevdesignerintegration.h"
@@ -67,15 +65,15 @@ void KDevLanguageSupport::addClass()
 {
 }
 
-void KDevLanguageSupport::addMethod( ClassDom /*klass*/ )
+void KDevLanguageSupport::addMethod( KDevCodeClassItem */*klass*/ )
 {
 }
 
-void KDevLanguageSupport::implementVirtualMethods( ClassDom /*klass*/ )
+void KDevLanguageSupport::implementVirtualMethods( KDevCodeClassItem * /*klass*/ )
 {
 }
 
-void KDevLanguageSupport::addAttribute( ClassDom /*klass*/ )
+void KDevLanguageSupport::addAttribute( KDevCodeClassItem * /*klass*/ )
 {
 }
 
@@ -89,9 +87,9 @@ QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const
     return QStringList();
 }
 
-QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool /*shortDescription*/ )
+QString KDevLanguageSupport::formatModelItem( const KDevCodeItem *item, bool /*shortDescription*/ )
 {
-    return item->name();
+    return QString();
 }
 
 void KDevLanguageSupport::addFunction( DesignerType type, const QString & formName, Function function )
@@ -139,8 +137,8 @@ void KDevLanguageSupport::openFunction( DesignerType type, const QString & formN
     designerIntegration->openFunction(formName, functionName);
 }
 
-void KDevLanguageSupport::createAccessMethods( ClassDom // theClass
-                                               , VariableDom // theVariable
+void KDevLanguageSupport::createAccessMethods( KDevCodeClassItem *// theClass
+                                               , KDevCodeVariableItem * // theVariable
                                                )
 {
 }

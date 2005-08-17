@@ -6,7 +6,6 @@ noinst_LTLIBRARIES = libkdevinterfaces.la
 libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 		kdevlanguagesupport.cpp kdevpartcontroller.cpp kdevapi.cpp KDevCoreIface.skel \
 		kdevmainwindow.cpp KDevPartControllerIface.skel kdevplugin.cpp kdevcoderepository.cpp \
-		codemodel.cpp codemodel_treeparser.cpp codemodel_utils.cpp \
 		kdevdesignerintegration.cpp kdevplugincontroller.cpp kdevplugininfo.cpp KDevCoreIface.cpp \
 		KDevPartControllerIface.cpp \
 		kdevprojectiface.cpp kdevprojectiface.skel kdevdesignerintegrationiface.cpp \
@@ -19,8 +18,7 @@ libkdevinterfaces_la_LIBADD = $(top_builddir)/lib/interfaces/external/libkinterf
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 kdevelopinclude_HEADERS = kdevlanguagesupport.h kdevmainwindow.h \
-	kdevpartcontroller.h kdevplugin.h kdevproject.h kdevcore.h kdevcoderepository.h codemodel.h \
-	codemodel_utils.h codemodel_treeparser.h kdevgenericfactory.h kdevapi.h \
+	kdevpartcontroller.h kdevplugin.h kdevproject.h kdevcore.h kdevcoderepository.h kdevgenericfactory.h kdevapi.h \
 	kdevdesignerintegration.h kdevplugincontroller.h kdevplugininfo.h KDevCoreIface.h \
 	KDevPartControllerIface.h katedocumentmanagerinterface.h
 
