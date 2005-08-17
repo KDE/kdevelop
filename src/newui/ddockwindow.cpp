@@ -132,6 +132,12 @@ void DDockWindow::setExpanded(bool v)
             setFixedExtentWidth(size);
         }
     }
+    /***** Qt 3 to 4 porting hack (harryF) *****/
+    QWidget *topMost = this->window();
+    if (topMost && topMost->layout()) {
+        topMost->layout()->invalidate();
+        topMost->layout()->activate();
+    }
 }
 
 void DDockWindow::loadSettings()
