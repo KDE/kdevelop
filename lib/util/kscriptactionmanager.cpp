@@ -46,7 +46,7 @@ KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *interfa
     {
         KDesktopFile desktop(scriptDesktopFile, true);
         QFileInfo scriptPath(scriptDesktopFile);
-        
+
         m_scriptFile = scriptPath.dirPath(true) + "/" + desktop.readEntry("X-KDE-ScriptName", "");
         m_scriptName = desktop.readName();
         m_scriptType = desktop.readType();
@@ -59,7 +59,7 @@ KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *interfa
             m_timeout = new QTimer(this);
             QString icon = desktop.readIcon();
             m_action->setStatusText(desktop.readComment());
-                if( !icon.isEmpty() ) 
+                if( !icon.isEmpty() )
                     m_action->setIcon(icon);
             m_action->setShortcutConfigurable(true);
             connect( m_timeout, SIGNAL(timeout()), SLOT(cleanup()) );
@@ -107,7 +107,7 @@ void KScriptAction::activate( )
     m_refs++;
 }
 
-void KScriptAction::cleanup() 
+void KScriptAction::cleanup()
 {
     if( m_interface && m_refs == 0)
     {
@@ -123,18 +123,24 @@ void KScriptAction::scriptFinished()
 
 KScriptActionManager::KScriptActionManager(  QObject *parent, KActionCollection * ac ) : QObject(parent), m_ac(ac)
 {
-    m_actions.setAutoDelete(true);
 }
 
 KScriptActionManager::~ KScriptActionManager( )
 {
+    clearActionList();
+}
+
+void KScriptActionManager::clearActionList() const
+{
+    qDeleteAll(m_actions);
     m_actions.clear();
 }
 
-Q3PtrList< KAction > KScriptActionManager::scripts( QObject * interface , const QStringList &dirs) const
+QList<KAction*> KScriptActionManager::scripts( QObject * interface , const QStringList &dirs) const
 {
-    m_actions.clear();
-    Q3PtrList<KAction> actions;
+    clearActionList();
+
+    QList<KAction*> actions;
     QStringList scripts;
 
     scripts += KGlobal::dirs()->findAllResources("data",
@@ -154,13 +160,13 @@ Q3PtrList< KAction > KScriptActionManager::scripts( QObject * interface , const 
 	{
 	  actions.append(script->action());
 	  m_actions.append(script);
-	  connect(script, SIGNAL(error( const QString&)), this, 
+	  connect(script, SIGNAL(error( const QString&)), this,
 	  	SIGNAL(scriptError( const QString&)));
-	  connect(script, SIGNAL(warning( const QString&)), this, 
+	  connect(script, SIGNAL(warning( const QString&)), this,
 	  	SIGNAL(scriptWarning( const QString&)));
 	  connect(script, SIGNAL(output( const QString&)), this,
 	  	SIGNAL(scriptOutput( const QString&)));
-	  connect(script, SIGNAL(progress( int )), this, 
+	  connect(script, SIGNAL(progress( int )), this,
 	  	SIGNAL(scriptProgress(int)));
 	  connect(script, SIGNAL(done( KScriptClientInterface::Result, const QVariant &)),this,
 	  	SIGNAL(scriptDone( KScriptClientInterface::Result, const QVariant &)));

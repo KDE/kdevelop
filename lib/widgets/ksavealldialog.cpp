@@ -19,7 +19,6 @@
 
 #include <q3vbox.h>
 #include <qlabel.h>
-#include <q3header.h>
 
 #include <klocale.h>
 #include <kpushbutton.h>
@@ -67,7 +66,7 @@ KSaveSelectDialog::KSaveSelectDialog( KURL::List const & filelist, KURL::List co
 	setButtonText( Close, KStdGuiItem::cancel().text() );
 	setButtonTip( User1, i18n("Lose all modifications") );
 	setButtonTip( Close, i18n("Cancels the action") );
-	
+
 	KURL::List::ConstIterator it = filelist.begin();
 	while ( it != filelist.end() )
 	{

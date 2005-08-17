@@ -58,8 +58,8 @@ public:
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.
     @param name The internal name which identifies the plugin.*/
-    KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent=0, const char *name=0 )
-        :KDevPlugin(info, parent ? name : "KDevDiffFrontend") {}
+    KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent=0)
+        :KDevPlugin(info, parent) {}
 
     /**Displays the patch.
     @param diff A string which contains a patch in unified format.*/

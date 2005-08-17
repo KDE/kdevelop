@@ -22,7 +22,7 @@
 
 #include <scriptclientinterface.h>
 #include <qobject.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qstringlist.h>
 
 class KAction;
@@ -33,7 +33,7 @@ class QTimer;
 
 /**
 * Connects a KAction to a script runner.
-* 
+*
 * @author ian geiser geiseri@sourcextreme.com
 */
 class KScriptAction : public QObject, public KScriptClientInterface {
@@ -53,7 +53,7 @@ public:
     * Returns the validity of the current script.
      */
     bool isValid() const;
-    
+
 signals:
     // Reimplemented from KScript
     void error ( const QString &msg );
@@ -109,7 +109,7 @@ public:
     * the manager will search in $KDEPATH/data/coolapp/data for all desktop
     * files that are scripts.
      */
-    Q3PtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
+    QList<KAction*> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
 
 signals:
     /**
@@ -134,7 +134,10 @@ signals:
     void scriptDone( KScriptClientInterface::Result result, const QVariant &returned );
 
 private:
-    mutable Q3PtrList<KScriptAction> m_actions;
+    void clearActionList() const;
+
+private:
+    mutable QList<KScriptAction*> m_actions;
     KActionCollection *m_ac;
 };
 #endif

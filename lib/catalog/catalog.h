@@ -20,7 +20,7 @@
 #ifndef CATALOG_H
 #define CATALOG_H
 
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <qpair.h>
 #include <qvariant.h>
 //Added by qt3to4:
@@ -52,7 +52,7 @@ public:
 
     bool isValid() const;
     QString dbName() const;
-    
+
     bool enabled() const;
     void setEnabled( bool en );
 

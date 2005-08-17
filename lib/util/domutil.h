@@ -16,7 +16,7 @@
 #include <qdom.h>
 #include <qpair.h>
 #include <qstringlist.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <qmap.h>
 
 /**

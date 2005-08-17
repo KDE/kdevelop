@@ -44,8 +44,7 @@
 #include <qlayout.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <q3frame.h>
-#include <q3header.h>
+#include <qframe.h>
 #include <qsplitter.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -59,7 +58,7 @@ public:
     virtual void setMovingEnabled( bool b );
 };
 
-class KDevToolBarShell: public Q3Frame
+class KDevToolBarShell: public QFrame
 {
 public:
     KDevToolBarShell(QWidget *parent);
@@ -91,7 +90,7 @@ void KDevToolBar::setMovingEnabled( bool)
 
 
 KDevToolBarShell::KDevToolBarShell(QWidget *parent)
-    : Q3Frame(parent),
+    : QFrame(parent),
       m_tb(0)
 {}
 

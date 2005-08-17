@@ -20,7 +20,7 @@
 #define KDEVCODEREPOSITORY_H
 
 #include <qobject.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 
 /**
 @file kdevcoderepository.h
@@ -36,7 +36,7 @@ Symbols from parsed files can be saved to the persistant symbol store.
 Persistance in this case means that symbol database is never loaded into memory
 and works like a usual database which executes queries.
 
-Code repository consists from @ref Catalog objects that represent separate symbol 
+Code repository consists from @ref Catalog objects that represent separate symbol
 databases. Catalogs can be created/loaded/unloaded dynamically.
 To find a symbol in the repository each catalog should be queried.
 
@@ -53,8 +53,8 @@ public:
     KDevCodeRepository();
     /**Destructor.*/
     virtual ~KDevCodeRepository();
-    
-    /**@return The main catalog. Each catalog can be marked is main 
+
+    /**@return The main catalog. Each catalog can be marked is main
     to provide easy access to it.*/
     Catalog* mainCatalog();
     /**Sets the main catalog.
