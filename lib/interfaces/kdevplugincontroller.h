@@ -20,8 +20,7 @@
 #define KDEVPLUGINCONTROLLER_H
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <QList>
+#include <qlist.h>
 
 #include <kurl.h>
 #include <ktrader.h>
@@ -41,9 +40,9 @@ class KDevPluginController: public QObject
 {
     Q_OBJECT
 public:
-    
+
     /**
-     * Returns a uniquely specified plugin. If it isn't already loaded, it will be. 
+     * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
      * Use with caution! See extension for parameter details.
      */
     virtual KDevPlugin * loadPlugin( const QString & serviceType, const QString & constraint ) = 0;
@@ -58,10 +57,10 @@ public:
     @param list The list of plugin names to unload. plugin name corresponds
     to the "Name" property in plugin .desktop file.*/
     virtual void unloadPlugins(QStringList const &list) = 0;
-    
+
     /**@return The list of currently loaded plugins.*/
     virtual const QList<KDevPlugin*> loadedPlugins() = 0;
-    
+
     /**Queries for the plugin which supports given service type.
     All already loaded plugins will be queried and the first one to support the service type
     will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
@@ -71,7 +70,7 @@ public:
     constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
     @return A KDevelop extension plugin for given service type or 0 if no plugin supports it*/
     virtual KDevPlugin *extension(const QString &serviceType, const QString &constraint = "") = 0;
-    
+
     /**Queries KDevelop services. Version is checked automatically
     by adding proper X-KDevelop-Version=N statement into the query.
     @param serviceType The service type to query, for example "KDevelop/Plugin" or
@@ -80,20 +79,20 @@ public:
     is done automatically.
     @return The list of plugin offers.*/
     static KTrader::OfferList query(const QString &serviceType, const QString &constraint);
-    
+
     /**Queries KDevelop plugins. Works like
     KDevPluginController::query with serviceType set to "KDevelop/Plugin".
     @param constraint A constraint for the service. Do not include plugin version number - it
     is done automatically.
     @return The list of plugin offers.*/
     static KTrader::OfferList queryPlugins(const QString &constraint);
-    
+
     /**Reimplement this function only if your shell supports plugin profiles.
     @return The list of URLs to the profile resources (files) with given @p extension.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
-    for name filters syntax.*/    
+    for name filters syntax.*/
     virtual KURL::List profileResources(const QString &nameFilter);
-    
+
     /**Reimplement this function only if your shell supports plugin profiles.
     @return The list of URLs to the resources (files) with given @p extension.
     This list is obtained by a recursive search that process given profile
@@ -101,12 +100,12 @@ public:
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
     virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
-    
+
 signals:
     /**Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).
     Should work only on shells with plugin profiles support.*/
     void profileChanged();
-    
+
 protected:
     /**Constructor.*/
     KDevPluginController();
