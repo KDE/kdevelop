@@ -55,7 +55,6 @@
 #include "urlutil.h"
 #include "mimewarningdialog.h"
 
-#include "designer.h"
 #include "kdevlanguagesupport.h"
 
 #include "partcontroller.h"
@@ -325,41 +324,6 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
     }
 
     KConfig *config = kapp->config();
-    config->setGroup("General Options");
-    bool embedKDevDesigner = config->readBoolEntry("Embed KDevDesigner", true);
-//    kdDebug(9000) << "    - embed: " << (embedKDevDesigner ? "true" : "false") << endl;
-
-    if ( !m_openNextAsText && embedKDevDesigner && MimeType->is( "application/x-designer" ) )
-    {
-        KParts::ReadOnlyPart *designerPart = qtDesignerPart();
-        if (designerPart)
-        {
-            addHistoryEntry();
-            activatePart(designerPart);
-            designerPart->openURL(url);
-            return;
-        }
-    }
-
-    // we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
-    // make sure we launch designer instead of embedding KUIviewer
-    if (!embedKDevDesigner)
-    {
-        if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
-        {
-            KServiceTypeProfile::OfferList offers = KServiceTypeProfile::offers(MimeType->name(), "Application");
-            for (KServiceTypeProfile::OfferList::const_iterator it = offers.begin(); it != offers.end(); ++it)
-            {
-                KService::Ptr app = (*it).service();
-                if ( app && app->desktopEntryName() == "designer" )
-                {
-                    KRun::run(*app.data(), url);
-                    return;
-                }
-            }
-        }
-    }
-
     config->setGroup("General");
 
     QStringList texttypeslist = config->readListEntry( "TextTypes" );
@@ -596,28 +560,6 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
 
   if (isTextEditor)
     integrateTextEditorPart(static_cast<KTextEditor::Document*>(part));
-
-  KInterfaceDesigner::Designer *designerPart = dynamic_cast<KInterfaceDesigner::Designer *>(part);
-  if (designerPart && API::getInstance()->languageSupport())
-  {
-      kdDebug() << "integrating designer part with language support" << endl;
-      connect(designerPart, SIGNAL(addedFunction(DesignerType, const QString&, Function )),
-          API::getInstance()->languageSupport(),
-          SLOT(addFunction(DesignerType, const QString&, Function )));
-      connect(designerPart, SIGNAL(editedFunction(DesignerType, const QString&, Function, Function )), API::getInstance()->languageSupport(),
-      SLOT(editFunction(DesignerType, const QString&, Function, Function )));
-      connect(designerPart, SIGNAL(removedFunction(DesignerType, const QString&, Function )),
-          API::getInstance()->languageSupport(),
-          SLOT(removeFunction(DesignerType, const QString&, Function )));
-      connect(designerPart, SIGNAL(editFunction(DesignerType, const QString&, const QString& )),
-          API::getInstance()->languageSupport(),
-          SLOT(openFunction(DesignerType, const QString&, const QString& )));
-      connect(designerPart, SIGNAL(editSource(DesignerType, const QString& )),
-          API::getInstance()->languageSupport(),
-          SLOT(openSource(DesignerType, const QString& )));
-      connect(designerPart, SIGNAL(newStatus(const QString &, int)),
-          this, SLOT(slotNewDesignerStatus(const QString &, int)));
-  }
 }
 
 void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
@@ -1537,18 +1479,6 @@ void PartController::slotWaitForFactoryHack( )
             EditorProxy::getInstance()->installPopup( activePart() );
         }
     }
-}
-
-KParts::ReadOnlyPart *PartController::qtDesignerPart()
-{
-    Q3PtrListIterator<KParts::Part> it(*parts());
-    for ( ; it.current(); ++it)
-    {
-        KInterfaceDesigner::Designer *des =  dynamic_cast<KInterfaceDesigner::Designer*>(it.current());
-        if (des && des->designerType() == KInterfaceDesigner::QtDesigner)
-            return des;
-    }
-    return 0;
 }
 
 void PartController::openEmptyTextDocument()

@@ -58,7 +58,6 @@ public:
   void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
   KParts::ReadOnlyPart *partForURL(const KURL &url);
-  KParts::ReadOnlyPart *qtDesignerPart();
   KParts::Part * partForWidget( const QWidget * widget );
 
   void activatePart( KParts::Part * part );

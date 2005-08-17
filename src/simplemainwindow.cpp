@@ -39,7 +39,6 @@
 #include <dtabwidget.h>
 #include <profile.h>
 #include <profileengine.h>
-#include <designer.h>
 
 #include "api.h"
 #include "core.h"
