@@ -35,7 +35,7 @@
 #include "diffdlg.h"
 #include "diffwidget.h"
 
-static const KDevPluginInfo data("kdevtipofday");
+static const KDevPluginInfo data("kdevdiff");
 
 typedef KDevGenericFactory<DiffPart> DiffFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( data ) )
