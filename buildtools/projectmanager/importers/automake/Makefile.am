@@ -1,5 +1,5 @@
 INCLUDES = \
-    -I$(top_srcdir)/buildtools/projectmanager/interfaces \
+    -I$(top_srcdir)/lib/projectmanager/interfaces \
     -I$(top_srcdir)/lib/interfaces \
     -I$(top_srcdir)/lib/project \
     -I$(top_srcdir)/lib/util \
@@ -21,7 +21,7 @@ libkdevautomakeimporter_la_SOURCES = \
 kde_services_DATA =  kdevautomakeimporter.desktop
 
 libkdevautomakeimporter_la_LIBADD = \
-    $(top_builddir)/buildtools/projectmanager/interfaces/libprojectmanager_interfaces.la \
+    $(top_builddir)/lib/projectmanager/interfaces/libprojectmanager_interfaces.la \
     $(top_builddir)/lib/libkdevelop.la
     
 libkdevautomakeimporter_la_LDFLAGS = \

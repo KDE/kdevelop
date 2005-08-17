@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY(libkdevautomakeimporter, KGenericFactory<KDevAutomake
 KDevAutomakeImporter::KDevAutomakeImporter(QObject *parent, const char *name, const QStringList &)
     : KDevProjectImporter(parent, name)
 {
-    m_project = ::qt_cast<KDevProject*>(parent);
+    m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
 }
 
@@ -51,7 +51,7 @@ QString KDevAutomakeImporter::canonicalize(const QString &str)
 {
     QString res;
     
-    for (uint i = 0; i < str.length(); ++i)
+    for (int i = 0; i < str.length(); ++i)
         res += (str[i].isLetterOrNumber() || str[i] == '@') ? str[i] : QChar('_');
 
     return res;
@@ -137,7 +137,7 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
                     QStringList variableList = QStringList::split(' ', data);
                     s = it.key() + " = ";
                     int l = s.length();
-                    for (uint i = 0; i < variableList.count(); i++) {
+                    for (int i = 0; i < variableList.count(); i++) {
                         l += variableList[i].length() + 1;
                         if (l > 80)    {
                             s += "\\\n\t";
@@ -173,7 +173,7 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
         QStringList variableList = QStringList::split(' ', data);
         outs << it2.key() + " =";
         int l = it2.key().length() + 2;
-        for (uint i = 0; i < variableList.count(); i++) {
+        for (int i = 0; i < variableList.count(); i++) {
             l += variableList[i].length() + 1;
             if (l > 80)    {
                 outs << "\\\n\t" << variableList[i];
@@ -319,22 +319,18 @@ static QString cleanWhitespace( const QString &str )
 static void removeDir( const QString& dirName )
 {
     QDir d( dirName );
-    const QFileInfoList* fileList = d.entryInfoList();
-    if( !fileList )
-    return;
+    QFileInfoList fileList = d.entryInfoList();
 
-    QFileInfoListIterator it( *fileList );
-    while( it.current() ){
-        const QFileInfo* fileInfo = it.current();
-        ++it;
+    for (int i=0; i<fileList.count(); ++i) {
+        const QFileInfo &fileInfo = fileList.at(i);
     
-        if( fileInfo->fileName() == "." || fileInfo->fileName() == ".." )
+        if( fileInfo.fileName() == QLatin1String(".") || fileInfo.fileName() == QLatin1String("..") )
             continue;
     
-        if( fileInfo->isDir() && !fileInfo->isSymLink() )
-            removeDir( fileInfo->absFilePath() );
+        if( fileInfo.isDir() && !fileInfo.isSymLink() )
+            removeDir( fileInfo.absFilePath() );
     
-        d.remove( fileInfo->fileName(), false );
+        d.remove( fileInfo.fileName() );
     }
 
     d.rmdir( d.absPath(), true );
@@ -550,9 +546,9 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
     {
         // See if we have already such a group
                 ProjectTargetList target_list = item->toFolder()->targetList();
-        for ( uint i = 0; i < target_list.count(); ++i )
+        for ( int i = 0; i < target_list.count(); ++i )
         {
-            AutomakeTargetDom titem = AutomakeTargetModel::from(*target_list.at(i));
+            AutomakeTargetDom titem = AutomakeTargetModel::from(target_list.at(i));
             if ( primary == titem->primary && prefix == titem->prefix )
             {
                 item->toFolder()->removeTarget(titem->toTarget());
