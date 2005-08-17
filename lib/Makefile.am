@@ -17,9 +17,7 @@ libkdevelop_la_SOURCES = dummy.cpp
 SUBDIRS = \
     util \
     interfaces \
-    language \
     widgets \
-    catalog \
     cppparser \
     projectmanager
 

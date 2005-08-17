@@ -16,10 +16,13 @@ libkdevinterfaces_la_SOURCES = \
 	KDevPartControllerIface.skel	  kdevprojectmodel.cpp
 
 libkdevinterfaces_la_CXXFLAGS = -DNO_KATE_DOCUMENTMANAGER
-libkdevinterfaces_la_LDFLAGS = -no-undefined $(all_libraries)
+libkdevinterfaces_la_LDFLAGS = \
+	$(DB3LDFLAGS) \
+	-no-undefined $(all_libraries)
 libkdevinterfaces_la_LIBADD = \
 	$(top_builddir)/lib/util/libkdevutil.la \
-	$(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) -lktexteditor -lkscript
+	-l$(DB3LIB) $(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) 
+	-lktexteditor -lkscript
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 kdevelopinclude_HEADERS = \
