@@ -6,7 +6,7 @@
 
 #include "simplemainwindow.h"
 
-static KDevMainWindow *TopLevel::s_instance = 0;
+KDevMainWindow *TopLevel::s_instance = 0;
 
 bool TopLevel::isMainWindowValid()
 {
