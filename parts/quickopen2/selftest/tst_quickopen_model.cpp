@@ -1,4 +1,5 @@
 #include "../quickopen_model.h"
+#include <kdevelop/util/kfiltermodel.h>
 
 #include <QtGui/QtGui>
 #include <QtTest/QtTest>
@@ -108,10 +109,9 @@ void tst_QuickOpenModel::emptyModel()
 
 void tst_QuickOpenModel::testFiltering()
 {
-    /*
     QuickOpenModel *source = testModel();
 
-    QuickOpenFilterModel model(source);
+    KFilterModel model(source);
     model.setFilter("model4");
 
     COMPARE(model.rowCount(), 1);
@@ -138,7 +138,6 @@ void tst_QuickOpenModel::testFiltering()
     COMPARE(model.parent(model.index(2, 0, parent)), model.index(0, 0));
     COMPARE(model.parent(model.index(3, 0, parent)), model.index(0, 0));
     COMPARE(model.parent(model.index(4, 0, parent)), model.index(0, 0));
-    */
 }
 
 QTTEST_MAIN(tst_QuickOpenModel)
