@@ -134,7 +134,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
     QString name = (*it)->desktopEntryName();
 
     // Check if it is already loaded or shouldn't be
-    if( m_parts[ name ] != 0 || ignorePlugins.contains( name ) )
+    if( m_parts.value(name) != 0 || ignorePlugins.contains(name) )
       continue;
 
     emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
@@ -142,7 +142,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin )
     {
-        m_parts.insert( name, plugin );
+        m_parts[name] = plugin;
         integratePart( plugin );
     }
   }
@@ -150,12 +150,13 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
 
 void PluginController::unloadPlugins()
 {
-  for( Q3DictIterator<KDevPlugin> it( m_parts ); !it.isEmpty(); )
-  {
-    KDevPlugin* part = it.current();
+  QHash<QString, KDevPlugin *>::iterator it = m_parts.begin();
+  while (it != m_parts.end()) {
+    KDevPlugin* part = it.value();
     removePart( part );
-    m_parts.remove( it.currentKey() );
+    m_parts.remove( it.key() );
     delete part;
+    it = m_parts.erase(it);
   }
 }
 
@@ -166,7 +167,7 @@ void PluginController::unloadProjectPlugins( )
 	{
 		QString name = (*it)->desktopEntryName();
 
-		if ( KDevPlugin * plugin = m_parts[ name ] )
+		if ( KDevPlugin * plugin = m_parts.value(name) )
 		{
 			removeAndForgetPart( name, plugin );
 			delete plugin;
@@ -179,7 +180,7 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 	QStringList::ConstIterator it = unloadParts.begin();
 	while ( it != unloadParts.end() )
 	{
-		KDevPlugin* part = m_parts[ *it ];
+		KDevPlugin* part = m_parts.value(*it);
 		if( part )
 		{
 			removePart( part );
@@ -252,15 +253,7 @@ void PluginController::removeAndForgetPart(const QString &name, KDevPlugin *part
 
 const QList<KDevPlugin *> PluginController::loadedPlugins()
 {
-	QList<KDevPlugin *> plugins;
-
-	Q3DictIterator<KDevPlugin> itt(m_parts);
-	while( itt.current() )
-	{
-		plugins.append( itt.current() );
-		++itt;
-	}
-	return plugins;
+    return m_parts.values();
 }
 
 KDevPlugin * PluginController::extension( const QString & serviceType, const QString & constraint )
@@ -268,7 +261,7 @@ KDevPlugin * PluginController::extension( const QString & serviceType, const QSt
     KTrader::OfferList offers = KDevPluginController::query(serviceType, constraint);
     for (KTrader::OfferList::const_iterator it = offers.constBegin(); it != offers.end(); ++it)
     {
-        KDevPlugin *ext = m_parts[(*it)->desktopEntryName()];
+        KDevPlugin *ext = m_parts.value((*it)->desktopEntryName());
         if (ext) return ext;
     }
     return 0;
@@ -283,7 +276,7 @@ KDevPlugin * PluginController::loadPlugin( const QString & serviceType, const QS
 	QString name = (*it)->desktopEntryName();
 
 	KDevPlugin * plugin = 0;
-	if ( plugin = m_parts[ name ] )
+	if ( plugin = m_parts.value(name) )
 	{
 		return plugin;
 	}

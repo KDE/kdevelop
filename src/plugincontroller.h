@@ -1,8 +1,8 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
-#include <q3dict.h>
 #include <q3valuelist.h>
+#include <qhash.h>
 
 #include <kservice.h>
 
@@ -81,7 +81,7 @@ private:
 	static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
 
-  Q3Dict<KDevPlugin> m_parts;
+  QHash<QString, KDevPlugin *> m_parts;
   QString m_profile;
 
   static PluginController *s_instance;

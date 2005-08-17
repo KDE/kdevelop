@@ -26,8 +26,10 @@
 #include "statusbar.h"
 #include "partcontroller.h"
 
+#include "qdebug.h"
+
 KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
-    : KStatusBar(parent, name), _view(0)
+    : KStatusBar(parent, name), _activePart(0), _view(0)
 {
 	QWidget * w = new QWidget( this );
 	addWidget( w, 1, true );
@@ -53,9 +55,11 @@ void KDevStatusBar::activePartChanged(KParts::Part *part)
 
     _activePart = part;
 
-    if (part && part->widget())
+    if (part)
     {
+        qDebug() << "@@@@@@@@@@@@@ GOT PART" << part << part->widget();
         _view = qobject_cast<KTextEditor::View *>(part->widget());
+        qDebug() << "@@@@@@@@@@@@@ GOT VIEW" << _view;
         if (_view) {
             connect( _view, SIGNAL( viewStatusMsg( const QString & ) ), // harryF: ### TODO
                     this, SLOT( setStatus( const QString & ) ) );

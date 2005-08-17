@@ -8,6 +8,7 @@
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qdebug.h>
 
 #include <kmimetype.h>
 #include <kservice.h>
@@ -551,7 +552,9 @@ KTextEditor::Document *PartController::createEditorPart( bool activate )
         if ( !_editorFactory ) return 0;
     }
 
-    return static_cast<KTextEditor::Document *>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KTextEditor::Document" ) );
+//    KTextEditor::Document *doc = static_cast<KTextEditor::Document *>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KTextEditor::Document" ) );
+    KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KParts::ReadWritePart" ) );
+    return doc;
 }
 
 void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget* widget, bool isTextEditor, bool activate )
