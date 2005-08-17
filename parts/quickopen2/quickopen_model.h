@@ -24,6 +24,8 @@
 #ifndef QUICKOPEN_MODEL_H
 #define QUICKOPEN_MODEL_H
 
+class QuickOpenModel;
+
 class QuickOpenModel: public QAbstractItemModel
 {
     Q_OBJECT
@@ -36,8 +38,9 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QModelIndex parent(const QModelIndex &child) const;
+    bool hasChildren(const QModelIndex &parent) const;
 
-    void addChildModel(QAbstractItemModel *childModel, const QString &title, int visibleColumn = 0);
+    void addChildModel(QAbstractItemModel *childModel, const QString &title);
     QList<QAbstractItemModel *> childModels() const;
     QString modelTitle(QAbstractItemModel *childModel) const;
     bool isTitle(const QModelIndex &index) const;
@@ -55,21 +58,13 @@ private slots:
     void childModelRowsRemoved(const QModelIndex &parent, int first, int last);
 
 private:
-    void refresh();
-    QModelIndex convertChildModelIndex(const QModelIndex &childModelIndex) const;
-    int convertChildModelRow(const QAbstractItemModel *model, int row, int *internalId = 0) const;
-
     struct CModel
     {
         QString title;
         QAbstractItemModel *model;
-        int rowCount;
-        int rowIndex;
-        int visibleColumn;
     };
     QVector<CModel> cModels;
-
-    int rCount;
+    int indexOf(const QAbstractItemModel *model) const;
 };
 
 #endif

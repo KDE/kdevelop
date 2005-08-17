@@ -91,7 +91,7 @@ void QuickOpenPart::slotQuickOpen( )
     QDialog dlg;
     QVBoxLayout layout(&dlg);
     QLineEdit edit(&dlg);
-    QListView view(&dlg);
+    QTreeView view(&dlg);
     QuickOpenModel model;
     QuickOpenFilterModel filter(&model);
     connect(&edit, SIGNAL(textChanged(QString)), &filter, SLOT(setFilter(QString)));

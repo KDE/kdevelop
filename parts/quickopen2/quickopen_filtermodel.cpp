@@ -23,7 +23,7 @@
 #include <qdebug.h>
 
 QuickOpenFilterModel::QuickOpenFilterModel(QuickOpenModel *model, QObject *parent)
-    : QAbstractItemModel(parent), sourceModel(model), rCount(0)
+    : QAbstractItemModel(parent), sourceModel(model)
 {
     Q_ASSERT(model);
 
@@ -32,7 +32,6 @@ QuickOpenFilterModel::QuickOpenFilterModel(QuickOpenModel *model, QObject *paren
     connect(sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(modelChanged()));
     connect(sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(modelChanged()));
     connect(sourceModel, SIGNAL(modelReset()), this, SLOT(modelChanged()));
-    rCount = model->rowCount();
 }
 
 QModelIndex QuickOpenFilterModel::index(int row, int column, const QModelIndex &parent) const
@@ -40,25 +39,30 @@ QModelIndex QuickOpenFilterModel::index(int row, int column, const QModelIndex &
     if (filterStr.isEmpty())
         return sourceModel->index(row, column, parent);
 
-    if (parent.isValid() || row >= rCount || column != 0)
+    if (column != 0 || filteredIdx.isEmpty())
         return QModelIndex();
 
-    return createIndex(row, column);
+    int idx = 0;
+    if (parent.isValid()) {
+        if (row >= filteredIdx.at(parent.internalId()).childCount)
+            return QModelIndex();
+        idx += 1;
+    }
+    idx = nextSiblingIdx(idx, row);
+    if (idx == -1)
+        return QModelIndex();
+    return createIndex(row, column, idx);
 }
 
 int QuickOpenFilterModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return 0;
-
-    return rCount;
+    if (!parent.isValid())
+        return topLevelRowCount;
+    return filteredIdx.at(parent.internalId()).childCount;
 }
 
-int QuickOpenFilterModel::columnCount(const QModelIndex &parent) const
+int QuickOpenFilterModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    if (parent.isValid())
-        return 0;
-
     return 1;
 }
 
@@ -69,18 +73,24 @@ QVariant QuickOpenFilterModel::data(const QModelIndex &index, int role) const
     if (filterStr.isEmpty())
         return sourceModel->data(index, role);
 
-    return sourceModel->data(filteredIdx.at(index.row()), role);
+    return sourceModel->data(filteredIdx.at(index.internalId()).index, role);
 }
 
-QModelIndex QuickOpenFilterModel::parent(const QModelIndex & /*child*/) const
+QModelIndex QuickOpenFilterModel::parent(const QModelIndex &child) const
 {
-    return QModelIndex();
+    int idx = child.internalId();
+    int level = filteredIdx.at(idx).level;
+    if (level == 0)
+        return QModelIndex();
+
+    while (filteredIdx.at(--idx).level >= level);
+    return createIndex(filteredIdx.at(idx).siblingIdx, 0, idx);
 }
 
 void QuickOpenFilterModel::modelDestroyed()
 {
     sourceModel = 0;
-    qFatal("QuickOpenFilterModel: QuickOpenModel destroued before its filter!");
+    qFatal("QuickOpenFilterModel: QuickOpenModel destroued while filter-model was active!");
 }
 
 void QuickOpenFilterModel::setFilter(const QString &expression)
@@ -90,37 +100,63 @@ void QuickOpenFilterModel::setFilter(const QString &expression)
     doFiltering();
 }
 
+int QuickOpenFilterModel::addItems(int level, const QModelIndex &parent)
+{
+    int siblings = 0;
+    for (int i = 0; i < sourceModel->rowCount(parent); ++i) {
+        QModelIndex sourceIdx = sourceModel->index(i, 0, parent);
+        int currentIdx = -1;
+        bool hit = sourceModel->data(sourceIdx).toString().contains(filterStr);
+        if (hit || sourceModel->hasChildren(sourceIdx)) {
+            FilterIdx idx;
+            idx.index = sourceIdx;
+            idx.level = level;
+            idx.siblingIdx = siblings++;
+            filteredIdx.append(idx);
+            currentIdx = filteredIdx.count() - 1;
+        }
+        int childCount = 0;
+        if (sourceModel->hasChildren(sourceIdx))
+            childCount = addItems(level + 1, sourceIdx);
+        if (currentIdx != -1) {
+            if (!childCount && !hit) {
+                filteredIdx.pop_back();
+                --siblings;
+            } else {
+                filteredIdx[currentIdx].childCount = childCount;
+            }
+        }
+    }
+    return siblings;
+}
+
 void QuickOpenFilterModel::doFiltering()
 {
     filteredIdx.clear();
-
-    QModelIndex idx;
-    bool hasHit = false;
-    for (int i = 0; i < sourceModel->rowCount(); ++i) {
-
-        idx = sourceModel->index(i, 0);
-        Q_ASSERT(idx.isValid());
-
-        if (sourceModel->isTitle(idx)) {
-            if (!hasHit && !filteredIdx.isEmpty())
-                filteredIdx.pop_back();
-            hasHit = false;
-            filteredIdx.append(idx);
-        } else if (sourceModel->data(idx).toString().contains(filterStr)) {
-            hasHit = true;
-            filteredIdx.append(idx);
-        }
-    }
-    if (!hasHit && !filteredIdx.isEmpty())
-        filteredIdx.pop_back();
-
-    rCount = filteredIdx.count();
-
+    topLevelRowCount = addItems(0, QModelIndex());
     reset();
 }
 
 void QuickOpenFilterModel::modelChanged()
 {
     doFiltering();
+}
+
+int QuickOpenFilterModel::nextSiblingIdx(int idx, int count) const
+{
+    Q_ASSERT(idx < filteredIdx.count());
+
+    if (!count)
+        return idx;
+
+    int level = filteredIdx.at(idx).level;
+    while (++idx < filteredIdx.count()) {
+        int cLevel = filteredIdx.at(idx).level;
+        if (cLevel < level)
+            return -1;
+        else if (cLevel == level && --count == 0)
+            return idx;
+    }
+    return -1;
 }
 

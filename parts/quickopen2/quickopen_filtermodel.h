@@ -47,11 +47,20 @@ private slots:
 
 private:
     void doFiltering();
+    int nextSiblingIdx(int idx, int count = 1) const;
+    int addItems(int level, const QModelIndex &parent);
 
     QuickOpenModel *sourceModel;
-    int rCount;
     QString filterStr;
-    QVector<QModelIndex> filteredIdx;
+    struct FilterIdx
+    {
+        QModelIndex index;
+        int level;
+        int siblingIdx;
+        int childCount;
+    };
+    QVector<FilterIdx> filteredIdx;
+    int topLevelRowCount;
 };
 
 #endif

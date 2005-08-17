@@ -25,80 +25,98 @@
 #include <qdebug.h>
 
 QuickOpenModel::QuickOpenModel(QObject *parent)
-    : QAbstractItemModel(parent), rCount(0)
+    : QAbstractItemModel(parent)
 {
 
 }
 
 QModelIndex QuickOpenModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (parent.isValid() || row >= rCount || column != 0)
+    if (column != 0)
         return QModelIndex();
 
-    // figure out in which child model the row is so lookups are faster
-    int i;
-    for (i = 0; i < cModels.count(); ++i) {
-        const CModel &cm = cModels.at(i);
-        if (row < cm.rowIndex)
-            break;
+    if (!parent.isValid()) {
+        if (row >= cModels.count() || row < 0)
+            return QModelIndex();
+        return createIndex(row, 0);
+    } else if (parent.model() == this) {
+        return cModels.at(parent.row()).model->index(row, column);
+    } else {
+        return parent.model()->index(row, column, parent);
     }
-    if (i != 0)
-        --i;
-
-    return createIndex(row, column, i);
 }
 
 int QuickOpenModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return 0;
+    if (!parent.isValid())
+        return cModels.count();
+    else if (parent.model() == this)
+        return cModels.at(parent.row()).model->rowCount();
+    else
+        return parent.model()->rowCount(parent);
+}
 
-    return rCount;
+bool QuickOpenModel::hasChildren(const QModelIndex &parent) const
+{
+    if (!parent.isValid())
+        return !cModels.isEmpty();
+    if (parent.model() == this)
+        return cModels.at(parent.row()).model->hasChildren();
+    return parent.model()->hasChildren(parent);
 }
 
 int QuickOpenModel::columnCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return 0;
-
     return 1;
 }
 
 QVariant QuickOpenModel::data(const QModelIndex &index, int role) const
 {
     Q_ASSERT(index.isValid());
-    Q_ASSERT(index.internalId() < cModels.count());
 
-
-    const CModel &cm = cModels.at(int(index.internalId()));
-    int childRow = index.row() - cm.rowIndex - 1; // row in our child model
-    if (childRow == -1) {
-        if (role == Qt::BackgroundColorRole)
-            return QColor(Qt::lightGray);
-        return role == Qt::DisplayRole ? QVariant(cm.title) : QVariant();
+    if (index.model() == this) {
+        return role == Qt::DisplayRole ? QVariant(cModels.at(index.row()).title) : QVariant();
     }
-
-    return cm.model->data(cm.model->index(childRow, cm.visibleColumn), role);
+    return index.model()->data(index, role);
 }
 
 bool QuickOpenModel::isTitle(const QModelIndex &index) const
 {
-    Q_ASSERT(index.isValid());
-    return index.row() - cModels.at(int(index.internalId())).rowIndex == 0;
+    return index.isValid() && index.model() == this;
 }
 
-QModelIndex QuickOpenModel::parent(const QModelIndex & /*child*/) const
+QModelIndex QuickOpenModel::parent(const QModelIndex &child) const
 {
-    return QModelIndex();
+    if (!child.isValid())
+        return QModelIndex();
+
+    if (child.model() == this)
+        return QModelIndex();
+
+    QModelIndex pidx = child.model()->parent(child);
+    if (!pidx.isValid())
+        return index(indexOf(child.model()), 0);
+    return pidx;
 }
 
-void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString &title, int visibleColumn)
+int QuickOpenModel::indexOf(const QAbstractItemModel *model) const
+{
+    for (int i = 0; i < cModels.count(); ++i) {
+        if (cModels.at(i).model == model)
+            return i;
+    }
+    return -1;
+}
+
+void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString &title)
 {
     Q_ASSERT(childModel);
 
-    int childCount = childModel->rowCount();
-    if (childCount)
-        beginInsertRows(QModelIndex(), rCount, rCount + childCount + 1);
+    CModel cm;
+    cm.model = childModel;
+    cm.title = title;
+
+    beginInsertRows(QModelIndex(), cModels.count(), 1);
 
     connect(childModel, SIGNAL(destroyed(QObject*)), this, SLOT(removeModelPrivate(QObject*)));
     connect(childModel, SIGNAL(modelReset()), this, SLOT(childModelReset()));
@@ -112,51 +130,26 @@ void QuickOpenModel::addChildModel(QAbstractItemModel *childModel, const QString
             SLOT(childModelRowsAboutToBeRemoved(QModelIndex,int,int)));
     connect(childModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this,
             SLOT(childModelRowsRemoved(QModelIndex,int,int)));
-    CModel cm;
-    cm.model = childModel;
-    cm.rowCount = childCount;
-    cm.rowIndex = 0;
-    cm.title = title;
-    cm.visibleColumn = visibleColumn;
-    if (!cModels.isEmpty()) {
-        const CModel &lastCm = cModels.last();
-        cm.rowIndex = lastCm.rowIndex + lastCm.rowCount;
-        if (lastCm.rowCount)
-            cm.rowIndex += 1;
-    }
+
     cModels.append(cm);
-    if (childCount) {
-        rCount += childCount + 1;
-        endInsertRows();
-    }
+    endInsertRows();
 }
 
 void QuickOpenModel::removeModel(QAbstractItemModel *childModel)
 {
-    disconnect(childModel, 0, this, 0);
-    removeModelPrivate(childModel);
+   disconnect(childModel, 0, this, 0);
+   removeModelPrivate(childModel);
 }
 
 void QuickOpenModel::removeModelPrivate(QObject *childModel)
 {
     for (int i = 0; i < cModels.count(); ++i) {
         if (cModels.at(i).model == childModel) {
+            beginRemoveRows(QModelIndex(), i, i);
             cModels.remove(i);
+            endRemoveRows();
             break;
         }
-    }
-    refresh();
-    reset();
-}
-
-void QuickOpenModel::refresh()
-{
-    rCount = 0;
-    for (int i = 0; i < cModels.count(); ++i) {
-        cModels[i].rowIndex = rCount;
-        int childCount = cModels.at(i).rowCount;
-        if (childCount)
-            rCount += childCount + 1;
     }
 }
 
@@ -170,98 +163,37 @@ QList<QAbstractItemModel *> QuickOpenModel::childModels() const
 
 QString QuickOpenModel::modelTitle(QAbstractItemModel *childModel) const
 {
-    for (int i = 0; i < cModels.count(); ++i) {
-        if (cModels.at(i).model == childModel)
-            return cModels.at(i).title;
-    }
-    return QString();
+    return cModels.value(indexOf(childModel)).title;
 }
 
 void QuickOpenModel::childModelReset()
 {
-    refresh();
-    reset();
-}
-
-int QuickOpenModel::convertChildModelRow(const QAbstractItemModel *model, int row, int *internalId) const
-{
-    Q_ASSERT(model);
-
-    int rowIndex = 0;
-    int i;
-    for (i = 0; i < cModels.count(); ++i) {
-        const CModel &cm = cModels.at(i);
-        if (cm.model == model) {
-            rowIndex = cm.rowIndex;
-            if (cm.rowCount)
-                rowIndex += 1;
-            break;
-        }
-    }
-    if (internalId)
-        *internalId = i;
-    return row + rowIndex;
-}
-
-QModelIndex QuickOpenModel::convertChildModelIndex(const QModelIndex &childModelIndex) const
-{
-    int internalId = 0;
-    int parentRow = convertChildModelRow(childModelIndex.model(), childModelIndex.row(), &internalId);
-    return createIndex(parentRow, 0, internalId);
+   reset();
 }
 
 void QuickOpenModel::childModelRowsAboutToBeInserted(const QModelIndex &parent, int first, int last)
 {
-    if (parent.isValid())
-        return;
-
-    int internalId = 0;
-    int rowOffset = convertChildModelRow(qobject_cast<const QAbstractItemModel *>(sender()), 0, &internalId);
-    first += rowOffset;
-    last += rowOffset;
-    if (cModels.at(internalId).rowCount == 0)
-        last += 1;
     beginInsertRows(parent, first, last);
 }
 
 void QuickOpenModel::childModelRowsInserted(const QModelIndex &parent, int /*first*/, int /*last*/)
 {
-    if (parent.isValid())
-        return;
-
     endInsertRows();
 }
 
 void QuickOpenModel::childModelDataChanged(const QModelIndex &first, const QModelIndex &last)
 {
-    if (first.parent().isValid())
-        return;
-
-    emit dataChanged(convertChildModelIndex(first), convertChildModelIndex(last));
+    emit dataChanged(first, last);
 }
 
 void QuickOpenModel::childModelRowsAboutToBeRemoved(const QModelIndex &parent, int first, int last)
 {
-    if (parent.isValid())
-        return;
-
-    int internalId = 0;
-    int rowOffset = convertChildModelRow(qobject_cast<const QAbstractItemModel *>(sender()), 0, &internalId);
-    first += rowOffset;
-    last += rowOffset;
-
-    // remove title as well if the child model doesn't have rows left
-    if (last - first == cModels.at(internalId).rowCount)
-        first -= 1;
     beginRemoveRows(parent, first, last);
 }
 
 void QuickOpenModel::childModelRowsRemoved(const QModelIndex &parent, int /*first*/, int /*last*/)
 {
-    if (parent.isValid())
-        return;
-
-    refresh();
     endRemoveRows();
 }
+
 
