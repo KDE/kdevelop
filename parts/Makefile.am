@@ -8,7 +8,8 @@ SUBDIRS = fullscreen \
     outputviews \
     konsole \
     diff \
-    classview
+    classview \
+    openwith
 
 # SUBDIRS = \
 #     abbrev \
