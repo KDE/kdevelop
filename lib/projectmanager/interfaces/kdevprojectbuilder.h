@@ -30,29 +30,29 @@ class KDevProject;
 
 @short KDevProjectBuilder Base class for the Project Builders
 
-Describes a <b>Project Builder</b> to the KDevelop's Project Manager. 
+Describes a <b>Project Builder</b> to the KDevelop's Project Manager.
 */
 class KDevProjectBuilder: public QObject
 {
     Q_OBJECT
 public:
-    KDevProjectBuilder(QObject *parent = 0, const char *name = 0);
+    KDevProjectBuilder(QObject *parent = 0);
     virtual ~KDevProjectBuilder();
-    
-    virtual KDevProject *project() const = 0;
-    
-    virtual bool isExecutable(ProjectItemDom dom) const = 0;
 
-    virtual ProjectItemDom defaultExecutable() const = 0;
-    virtual void setDefaultExecutable(ProjectItemDom dom) = 0;
-    
-    virtual bool configure(ProjectItemDom dom = ProjectItemDom()) = 0;
-    virtual bool build(ProjectItemDom dom = ProjectItemDom()) = 0;
-    virtual bool clean(ProjectItemDom dom = ProjectItemDom()) = 0;
-    virtual bool execute(ProjectItemDom dom = ProjectItemDom()) = 0;
-    
+    virtual KDevProject *project() const = 0;
+
+    virtual bool isExecutable(KDevItem *dom) const = 0;
+
+    virtual KDevItem *defaultExecutable() const = 0;
+    virtual void setDefaultExecutable(KDevItem *dom) = 0;
+
+    virtual bool configure(KDevItem *dom) = 0;
+    virtual bool build(KDevItem *dom) = 0;
+    virtual bool clean(KDevItem *dom) = 0;
+    virtual bool execute(KDevItem *dom) = 0;
+
 signals:
-    void builded(ProjectItemDom dom);
+    void builded(KDevItem *dom);
     void failed();
 };
 

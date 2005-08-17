@@ -21,8 +21,8 @@
 
 #include "kdevprojectmodel.h"
 
-#include <qobject.h>
-#include <qmap.h>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 class KDevProjectEditor;
 class KDevProject;
@@ -40,43 +40,43 @@ class KDevProjectImporter: public QObject
 {
     Q_OBJECT
 public:
-    KDevProjectImporter(QObject *parent = 0, const char *name = 0);
+    KDevProjectImporter(QObject *parent = 0);
     virtual ~KDevProjectImporter();
-    
+
     /** @return The current project. */
     virtual KDevProject *project() const = 0;
-   
+
     /** @return The instance of the editor interface. */
     virtual KDevProjectEditor *editor() const
     { return 0; }
-    
+
     /** This method initialize the model item @arg dom
         @return The list of the sub folders
      */
-    virtual ProjectFolderList parse(ProjectFolderDom dom) = 0;
-    
+    virtual QList<KDevProjectFolderItem*> parse(KDevProjectFolderItem *dom) = 0;
+
     /** This method creates the root item from the file @arg fileName
         @return The created item
      */
-    virtual ProjectItemDom import(ProjectModel *model, const QString &fileName) = 0;
-    
+    virtual KDevItem *import(KDevProjectModel *model, const QString &fileName) = 0;
+
     /** @return The makefile associated to the item model @p dom.
-        @note The makefile list must contains absolute file names 
-      
+        @note The makefile list must contains absolute file names
+
         For instance, for the <b>Automake</b> project you can return
-        
+
         @code
         dom->name() + "/Makefile.am";
         @endcode
       */
-    virtual QString findMakefile(ProjectFolderDom dom) const = 0;
-    
+    virtual QString findMakefile(KDevProjectFolderItem *dom) const = 0;
+
     /** @return The list of the makefiles from the item model @p dom.
         @note The makefile list must contains absolute file names */
-    virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
-    
+    virtual QStringList findMakefiles(KDevProjectFolderItem *dom) const = 0;
+
 signals:
-    void projectItemConfigWidget(ProjectItemDom dom, KDialogBase *dialog);
+    void projectItemConfigWidget(const QList<KDevItem*> &dom, KDialogBase *dialog);
 };
 
 #endif

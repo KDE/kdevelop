@@ -19,7 +19,7 @@
 #ifndef KDEVPROJECTEDITOR_H
 #define KDEVPROJECTEDITOR_H
 
-#include <kdevprojectimporter.h>
+#include "kdevprojectimporter.h"
 
 /**
 @author Roberto Raggi
@@ -33,32 +33,32 @@ public:
         Folders = 0x01,
         Targets = 0x02,
         Files   = 0x04,
-        
+
         None = 0x00,
         All = Folders | Targets | Files
     };
-    
+
 public:
-    KDevProjectEditor(QObject *parent = 0, const char *name = 0);
+    KDevProjectEditor(QObject *parent = 0);
     virtual ~KDevProjectEditor();
-    
+
     virtual KDevProjectEditor *editor() const
     { return const_cast<KDevProjectEditor*>(this); }
-        
+
     bool hasFeature(Features f) const
     { return (features() & f) == f; }
-    
+
     virtual Features features() const = 0;
-    
-    virtual bool addFolder(ProjectFolderDom folder, ProjectFolderDom parent) = 0;
-    virtual bool addTarget(ProjectTargetDom target, ProjectFolderDom parent) = 0;
-    virtual bool addFile(ProjectFileDom file, ProjectFolderDom parent) = 0;
-    virtual bool addFile(ProjectFileDom file, ProjectTargetDom parent) = 0;
-    
-    virtual bool removeFolder(ProjectFolderDom folder, ProjectFolderDom parent) = 0;
-    virtual bool removeTarget(ProjectTargetDom target, ProjectFolderDom parent) = 0;
-    virtual bool removeFile(ProjectFileDom file, ProjectFolderDom parent) = 0;
-    virtual bool removeFile(ProjectFileDom file, ProjectTargetDom parent) = 0;
+
+    virtual bool addFolder(KDevProjectFolderItem *folder, KDevProjectFolderItem *parent) = 0;
+    virtual bool addTarget(KDevProjectTargetItem *target, KDevProjectFolderItem *parent) = 0;
+    virtual bool addFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent) = 0;
+    virtual bool addFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent) = 0;
+
+    virtual bool removeFolder(KDevProjectFolderItem *folder, KDevProjectFolderItem *parent) = 0;
+    virtual bool removeTarget(KDevProjectTargetItem *target, KDevProjectFolderItem *parent) = 0;
+    virtual bool removeFile(KDevProjectFileItem *file, KDevProjectFolderItem *parent) = 0;
+    virtual bool removeFile(KDevProjectFileItem *file, KDevProjectTargetItem *parent) = 0;
 };
 
 #endif

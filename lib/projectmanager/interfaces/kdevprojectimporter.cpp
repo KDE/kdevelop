@@ -18,8 +18,8 @@
 */
 #include "kdevprojectimporter.h"
 
-KDevProjectImporter::KDevProjectImporter(QObject *parent, const char *name)
-    : QObject(parent, name)
+KDevProjectImporter::KDevProjectImporter(QObject *parent)
+    : QObject(parent)
 {
 }
 
