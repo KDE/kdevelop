@@ -15,9 +15,11 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "qmakeast.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace QMake {
 
@@ -25,7 +27,7 @@ namespace QMake {
 
 AST::~AST()
 {
-    for (QValueList<AST*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
+    for (Q3ValueList<AST*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
     {
         AST *node = *it;
         delete node;
@@ -39,7 +41,7 @@ void AST::addChildAST(AST *node)
 
 void AST::writeBack(QString &buffer)
 {
-    for (QValueList<AST*>::const_iterator it = m_children.constBegin();
+    for (Q3ValueList<AST*>::const_iterator it = m_children.constBegin();
         it != m_children.constEnd(); ++it)
     {
         if (*it)
@@ -68,17 +70,7 @@ void ProjectAST::writeBack(QString &buffer)
     AST::writeBack(buffer);
     if (isScope())
         buffer += indentation() + "}";
-
-    bool hasActualStatements = false;
-    for (QValueList<QMake::AST*>::const_iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        if ((*it)->nodeType() != AST::IncludeAST)
-        {
-            hasActualStatements = true;
-            break;
-        }
-    }
-    if (isFunctionScope() && (hasActualStatements))
+    if (isFunctionScope() && (statements.count() > 0))
         buffer += indentation() + "}";
 }
 
@@ -122,11 +114,4 @@ void FunctionCallAST::writeBack(QString &buffer)
         assignment->writeBack(buffer);
 }
 
-//IncludeAST
-
-void IncludeAST::writeBack(QString &/*buffer*/)
-{
 }
-
-}
-

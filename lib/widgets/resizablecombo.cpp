@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "resizablecombo.h"
 
@@ -24,7 +24,10 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 
@@ -60,7 +63,7 @@ ResizableCombo::ResizableCombo(KComboView *view, QWidget *parent, const char *na
 
     m_sizer = new MyPushButton(this);
     m_sizer->setPixmap(QPixmap(resize_xpm));
-    QWhatsThis::add(m_sizer, i18n("Drag this to resize the combobox."));
+    Q3WhatsThis::add(m_sizer, i18n("Drag this to resize the combobox."));
     l->addWidget(m_sizer);
 }
 

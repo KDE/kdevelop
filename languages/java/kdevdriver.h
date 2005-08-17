@@ -8,7 +8,7 @@
 #include <kdeversion.h>
 
 #include "driver.h"
-#include <qprocess.h>
+#include <q3process.h>
 
 #include <cstdlib>
 #include <unistd.h>

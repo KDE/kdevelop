@@ -22,10 +22,10 @@
 #include "sqlsupport_part.h"
 
 // displays a ComboBox on edit to let the user choose the plugin
-class PluginTableItem: public QTableItem
+class PluginTableItem: public Q3TableItem
 {
 public:
-    PluginTableItem( QTable* table, const QString& text = QString::null ): QTableItem( table, QTableItem::OnTyping, text ) {}
+    PluginTableItem( Q3Table* table, const QString& text = QString::null ): Q3TableItem( table, Q3TableItem::OnTyping, text ) {}
 
     virtual QWidget* createEditor() const
     {
@@ -41,15 +41,15 @@ public:
 	if ( w->inherits( "QComboBox" ) )
 	    setText( ( (QComboBox*)w )->currentText() );
 	else
-	    QTableItem::setContentFromEditor( w );
+	    Q3TableItem::setContentFromEditor( w );
     }
 };
 
 // uses a spinbox to let the user choose the port
-class PortTableItem: public QTableItem
+class PortTableItem: public Q3TableItem
 {
 public:
-    PortTableItem( QTable* table, const QString& text = QString::null ): QTableItem( table, QTableItem::OnTyping, text ) {}
+    PortTableItem( Q3Table* table, const QString& text = QString::null ): Q3TableItem( table, Q3TableItem::OnTyping, text ) {}
 
     virtual QWidget* createEditor() const
     {
@@ -65,15 +65,15 @@ public:
 	if ( w->inherits( "QSpinBox" ) )
 	    setText( ( (QSpinBox*)w )->text() );
 	else
-	    QTableItem::setContentFromEditor( w );
+	    Q3TableItem::setContentFromEditor( w );
     }
 };
 
 // uses a spinbox to let the user choose the port
-class PasswordTableItem: public QTableItem
+class PasswordTableItem: public Q3TableItem
 {
 public:
-    PasswordTableItem( QTable* table, const QString& text = QString::null ): QTableItem( table, QTableItem::OnTyping, text ) {}
+    PasswordTableItem( Q3Table* table, const QString& text = QString::null ): Q3TableItem( table, Q3TableItem::OnTyping, text ) {}
 
     virtual QWidget* createEditor() const
     {
@@ -88,18 +88,18 @@ public:
 	    password = ( (KLineEdit*)w )->text();
 	    setText( QString().fill( '*', password.length() ) );
 	} else {
-	    QTableItem::setContentFromEditor( w );
+	    Q3TableItem::setContentFromEditor( w );
 	}
     }
 
     virtual void setText(const QString& bogus)
     {
-        QTableItem::setText(QString().fill('*', bogus.length()));
+        Q3TableItem::setText(QString().fill('*', bogus.length()));
     }
     QString password;
 };
 
-static bool isEmptyRow( QTable* tbl, int row )
+static bool isEmptyRow( Q3Table* tbl, int row )
 {
     for ( int i = 0; i < tbl->numCols(); i++ ) {
 	if ( !tbl->text( row, i ).isEmpty() )
@@ -119,7 +119,7 @@ void SqlConfigWidget::init()
     changed = false;
 }
 
-static void addRow( QTable* dbTable )
+static void addRow( Q3Table* dbTable )
 {
     dbTable->insertRows( dbTable->numRows() );
     dbTable->setItem( dbTable->numRows() - 1, 0, 

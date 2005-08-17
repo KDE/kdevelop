@@ -20,14 +20,18 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3PopupMenu>
+#include <Q3CString>
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
 namespace KParts { class Part; }
 
 class QLabel;
-class QPopupMenu;
+class Q3PopupMenu;
 class KDialogBase;
 class ProcessWidget;
 class ProcessLineMaker;
@@ -57,7 +61,7 @@ public:
 
 private slots:
     void guiClientAdded(KXMLGUIClient*);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
     void toggleBreakpoint();
     void contextWatch();
     void contextRubyInspect();
@@ -89,18 +93,18 @@ private:
 	bool startDebugger();
     void setupController();
 
-    QGuardedPtr<VariableWidget> variableWidget;
-    QGuardedPtr<RDBBreakpointWidget> rdbBreakpointWidget;
-    QGuardedPtr<FramestackWidget> framestackWidget;
-    QGuardedPtr<RDBOutputWidget> rdbOutputWidget;
+    QPointer<VariableWidget> variableWidget;
+    QPointer<RDBBreakpointWidget> rdbBreakpointWidget;
+    QPointer<FramestackWidget> framestackWidget;
+    QPointer<RDBOutputWidget> rdbOutputWidget;
     DbgController *controller;
-    QGuardedPtr<QLabel> statusBarIndicator;
-    QGuardedPtr<DbgToolBar> floatingToolBar;
+    QPointer<QLabel> statusBarIndicator;
+    QPointer<DbgToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
     ProcessLineMaker* rdbLineMaker;
 
     QString m_contextIdent;
-    QCString m_drkonqi;
+    Q3CString m_drkonqi;
 	
     KDevDebugger *m_debugger;
 };

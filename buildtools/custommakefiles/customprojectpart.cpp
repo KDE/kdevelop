@@ -14,14 +14,16 @@
 #include <qapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <qtabwidget.h>
-#include <qvaluestack.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3valuestack.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -67,7 +69,7 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
 
     KAction *action;
 
-    action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
+    action = new KAction( i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
     action->setToolTip(i18n("Build project"));
@@ -106,8 +108,8 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
                             "Environment variables and make arguments can be specified "
                             "in the project settings dialog, <b>Build Options</b> tab."));
 
-    m_targetObjectFilesMenu = new QPopupMenu();
-    m_targetOtherFilesMenu = new QPopupMenu();
+    m_targetObjectFilesMenu = new Q3PopupMenu();
+    m_targetOtherFilesMenu = new Q3PopupMenu();
 
     m_makeEnvironmentsSelector = new KSelectAction( i18n("Make &Environment"),0,
                             actionCollection(), "build_make_environment" );
@@ -130,8 +132,8 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
              this, SLOT(makeEnvironmentsMenuActivated(int)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
              this, SLOT(slotCommandFinished(const QString&)) );
@@ -146,7 +148,7 @@ CustomProjectPart::~CustomProjectPart()
 
 void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
     RunOptionsWidget *w1 = new RunOptionsWidget(*projectDom(), "/kdevcustomproject", buildDirectory(), vbox);
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
@@ -164,7 +166,7 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
-void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
+void CustomProjectPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::FileContext ))
         return;
@@ -288,7 +290,7 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
        m_filelistDir=dirName;
 
     QFile f(m_filelistDir + "/" + projectName + ".filelist");
-    if (f.open(IO_ReadOnly)) {
+    if (f.open(QIODevice::ReadOnly)) {
         QTextStream stream(&f);
         while (!stream.atEnd()) {
             QString s = stream.readLine();
@@ -299,7 +301,7 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
         int r = KMessageBox::questionYesNo(mainWindow()->main(),
                                            i18n("This project does not contain any files yet.\n"
                                                 "Populate it with all C/C++/Java files below "
-                                                "the project directory?"), QString::null, i18n("Populate"), i18n("Do Not Populate"));
+                                                "the project directory?"));
         if (r == KMessageBox::Yes)
             populateProject();
     }
@@ -322,7 +324,7 @@ void CustomProjectPart::populateProject()
 {
     QApplication::setOverrideCursor(Qt::waitCursor);
 
-    QValueStack<QString> s;
+    Q3ValueStack<QString> s;
     int prefixlen = m_projectDirectory.length()+1;
     s.push(m_projectDirectory);
 
@@ -333,7 +335,7 @@ void CustomProjectPart::populateProject()
         const QFileInfoList *dirEntries = dir.entryInfoList();
         if ( dirEntries )
         {
-            QPtrListIterator<QFileInfo> it(*dirEntries);
+            Q3PtrListIterator<QFileInfo> it(*dirEntries);
             for (; it.current(); ++it) {
                 QString fileName = it.current()->fileName();
                 QString path = it.current()->absFilePath();
@@ -379,7 +381,7 @@ void CustomProjectPart::closeProject()
 void CustomProjectPart::saveProject()
 {
     QFile f(m_filelistDir + "/" + m_projectName + ".filelist");
-    if (!f.open(IO_WriteOnly))
+    if (!f.open(QIODevice::WriteOnly))
         return;
 
     QTextStream stream(&f);
@@ -422,7 +424,23 @@ DomUtil::PairList CustomProjectPart::runEnvironmentVars() const
   */
 QString CustomProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevcustomproject");
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevcustomproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevcustomproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevcustomproject/run/customdirectory");
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+
+    return buildDirectory() + "/" + DomMainProgram;
+
 }
 
 
@@ -711,7 +729,7 @@ void CustomProjectPart::updateTargetMenu()
 
     if (ant) {
         QFile f(buildDirectory() + "/build.xml");
-        if (!f.open(IO_ReadOnly)) {
+        if (!f.open(QIODevice::ReadOnly)) {
             kdDebug(9025) << "No build file" << endl;
             return;
         }
@@ -775,7 +793,7 @@ void CustomProjectPart::parseMakefile(const QString& filename)
       absFilename=buildDirectory() + "/"+filename;
 
    QFile f(absFilename);
-   if (!f.open(IO_ReadOnly)) {
+   if (!f.open(QIODevice::ReadOnly)) {
       kdDebug(9025) << "could not open " << absFilename<<endl;
       return;
    }

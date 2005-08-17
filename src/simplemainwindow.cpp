@@ -15,11 +15,16 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "simplemainwindow.h"
 
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -221,15 +226,15 @@ void SimpleMainWindow::createFramework()
 
 void SimpleMainWindow::createActions()
 {
-    m_raiseEditor = new KAction(i18n("Raise &Editor"), ALT+Key_C,
+    m_raiseEditor = new KAction(i18n("Raise &Editor"), Qt::ALT+Qt::Key_C,
         this, SLOT(raiseEditor()), actionCollection(), "raise_editor");
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
     
-    new KAction(i18n("Split &Horizontal"), CTRL+SHIFT+Key_T,
+    new KAction(i18n("Split &Horizontal"), Qt::CTRL+Qt::SHIFT+Qt::Key_T,
         this, SLOT(slotSplitHorizontal()), actionCollection(), "split_h");
 
-    new KAction(i18n("Split &Vertical"), CTRL+SHIFT+Key_L,
+    new KAction(i18n("Split &Vertical"), Qt::CTRL+Qt::SHIFT+Qt::Key_L,
         this, SLOT(slotSplitVertical()), actionCollection(), "split_v");
     
     KStdAction::configureToolbars(this, SLOT(configureToolbars()), 
@@ -347,7 +352,7 @@ void SimpleMainWindow::tabContext(QWidget *w, const QPoint &p)
 
     //Find the document on whose tab the user clicked
     m_currentTabURL = QString::null;
-    QPtrListIterator<KParts::Part> it(*PartController::getInstance()->parts());
+    Q3PtrListIterator<KParts::Part> it(*PartController::getInstance()->parts());
     while (KParts::Part* part = it.current())
     {
         QWidget *top_widget = EditorProxy::getInstance()->topWidgetForPart(part);
@@ -438,13 +443,13 @@ bool SimpleMainWindow::queryExit()
 void SimpleMainWindow::setupWindowMenu()
 {
     // get the xmlgui created one instead
-    m_windowMenu = static_cast<QPopupMenu*>(main()->child("window", "KPopupMenu"));
+    m_windowMenu = static_cast<Q3PopupMenu*>(main()->child("window", "KPopupMenu"));
 
     if (!m_windowMenu)
     {
         kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
 
-        m_windowMenu = new QPopupMenu(main(), "window");
+        m_windowMenu = new Q3PopupMenu(main(), "window");
         menuBar()->insertItem(i18n("&Window"), m_windowMenu);
     }
 
@@ -458,7 +463,7 @@ void SimpleMainWindow::setupWindowMenu()
 
 void SimpleMainWindow::openURL(int w)
 {
-    QValueList<QPair<int, KURL> >::ConstIterator it = m_windowList.begin();
+    Q3ValueList<QPair<int, KURL> >::ConstIterator it = m_windowList.begin();
     while (it != m_windowList.end())
     {
         if ((*it).first == w)
@@ -477,7 +482,7 @@ void SimpleMainWindow::openURL(int w)
 void SimpleMainWindow::fillWindowMenu()
 {
     // clear menu
-    QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+    Q3ValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
     while (it != m_windowList.end())
     {
         m_windowMenu->removeItem( (*it).first );
@@ -545,8 +550,8 @@ void SimpleMainWindow::slotSplitHorizontal()
 
 void SimpleMainWindow::closeTab(QWidget *w)
 {
-    const QPtrList<KParts::Part> *partlist = PartController::getInstance()->parts();
-    QPtrListIterator<KParts::Part> it(*partlist);
+    const Q3PtrList<KParts::Part> *partlist = PartController::getInstance()->parts();
+    Q3PtrListIterator<KParts::Part> it(*partlist);
     while (KParts::Part* part = it.current())
     {
         QWidget *widget = EditorProxy::getInstance()->topWidgetForPart(part);

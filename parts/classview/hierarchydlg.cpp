@@ -17,8 +17,12 @@
 #include <kstdguiitem.h>
 
 #include <qlayout.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 #include "kdevlanguagesupport.h"
 #include "kcomboview.h"
@@ -30,7 +34,7 @@
 
 
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )
-    : QDialog(0, "hierarchy dialog", WDestructiveClose)
+    : QDialog(0, "hierarchy dialog", Qt::WDestructiveClose)
 {
     class_combo = new KComboView(false, 150, this);
 //    class_combo->setMinimumWidth(150);
@@ -39,7 +43,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
 
     QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
 
-    QSplitter *splitter = new QSplitter(Vertical, this);
+    QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     digraph = new DigraphView(splitter, "digraph view");
 //    member_tree = new ClassToolWidget(part, splitter);
 
@@ -52,10 +56,10 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     combo_layout->addWidget(close_button);
     layout->addWidget(splitter);
 
-    connect( namespace_combo, SIGNAL(activated(QListViewItem*)),
-             this, SLOT(slotNamespaceComboChoice(QListViewItem*)) );
-    connect( class_combo, SIGNAL(activated(QListViewItem*)),
-             this, SLOT(slotClassComboChoice(QListViewItem*)) );
+    connect( namespace_combo, SIGNAL(activated(Q3ListViewItem*)),
+             this, SLOT(slotNamespaceComboChoice(Q3ListViewItem*)) );
+    connect( class_combo, SIGNAL(activated(Q3ListViewItem*)),
+             this, SLOT(slotClassComboChoice(Q3ListViewItem*)) );
     connect( close_button, SIGNAL(clicked()),
              this, SLOT(reject()) );
     connect( digraph, SIGNAL(selected(const QString&)),
@@ -107,7 +111,7 @@ void HierarchyDialog::setLanguageSupport(KDevLanguageSupport *ls)
 }
 
 
-void HierarchyDialog::slotClassComboChoice(QListViewItem * item)
+void HierarchyDialog::slotClassComboChoice(Q3ListViewItem * item)
 {
     ClassItem *ci = dynamic_cast<ClassItem*>(item);
     if (!ci)
@@ -135,7 +139,7 @@ void HierarchyDialog::classSelected(const QString &/*className*/)
     }*/
 }
 
-void HierarchyDialog::slotNamespaceComboChoice( QListViewItem * item )
+void HierarchyDialog::slotNamespaceComboChoice( Q3ListViewItem * item )
 {
     NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
     if (!ni)

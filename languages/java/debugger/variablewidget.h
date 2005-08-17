@@ -20,6 +20,8 @@
 
 #include <klistview.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KLineEdit;
 
@@ -69,12 +71,12 @@ public:
     VariableTree( VariableWidget *parent, const char *name=0 );
     virtual ~VariableTree();
 
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
     int activeFlag() const                { return activeFlag_; }
     void setActiveFlag()                  { activeFlag_++; }
 
-    QListViewItem *findRoot(QListViewItem *item) const;
+    Q3ListViewItem *findRoot(Q3ListViewItem *item) const;
     FrameRoot *findFrame(int frameNo) const;
     WatchRoot *findWatch();
 
@@ -87,14 +89,14 @@ signals:
     void toggleWatchpoint(const QString &varName);
     void selectFrame(int frameNo);
     void expandItem(VarItem *item);
-    void expandUserItem(VarItem *item, const QCString &request);
+    void expandUserItem(VarItem *item, const Q3CString &request);
     void setLocalViewState(bool localsOn);
 
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
 
 private slots:
-    void slotContextMenu(KListView *, QListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item);
 
 private:
     int activeFlag_;
@@ -108,7 +110,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class TrimmableItem : public QListViewItem
+class TrimmableItem : public Q3ListViewItem
 {
 public:
     TrimmableItem(VariableTree *parent);
@@ -119,7 +121,7 @@ public:
     virtual void trim();
     virtual QString getName() const         { return QString(text(VarNameCol)); }
     virtual TrimmableItem *findMatch(const QString& match, DataType type) const;
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
     int  rootActiveFlag() const;
     void setActive()                        { activeFlag_ = rootActiveFlag(); }
     bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
@@ -130,8 +132,8 @@ public:
     virtual void updateValue(char */* buf */);
     virtual DataType getDataType() const;
 
-    virtual void setCache(const QCString& value);
-    virtual QCString getCache();
+    virtual void setCache(const Q3CString& value);
+    virtual Q3CString getCache();
     virtual QString key( int column, bool ascending ) const;
 
 private:
@@ -156,8 +158,8 @@ public:
 
     void updateValue(char *data);
 
-    void setCache(const QCString& value);
-    QCString getCache();
+    void setCache(const Q3CString& value);
+    Q3CString getCache();
 
     void setOpen(bool open);
     void setText (int column, const QString& text);
@@ -168,7 +170,7 @@ private:
                     int column, int width, int align );
 
 private:
-    QCString  cache_;
+    Q3CString  cache_;
     DataType  dataType_;
     bool      highlight_;
 };
@@ -185,7 +187,7 @@ public:
 
     void setLocals(char *locals);
     void addLocal(QString name, QString type, QString value);
-    void setParams(const QCString& params);
+    void setParams(const Q3CString& params);
 
     void setOpen(bool open);
 
@@ -197,8 +199,8 @@ public:
 private:
     bool    needLocals_;
     int     frameNo_;
-    QCString params_;
-    QCString locals_;
+    Q3CString params_;
+    Q3CString locals_;
 };
 
 /***************************************************************************/

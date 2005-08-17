@@ -16,7 +16,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qvbox.h>
+#include <q3vbox.h>
 
 K_EXPORT_COMPONENT_FACTORY(libkdevmakebuilder, KGenericFactory<KDevMakeBuilder>("kdevmakebuilder"))
 
@@ -126,7 +126,7 @@ void KDevMakeBuilder::projectConfigWidget(KDialogBase *dlg)
 {
     Q_ASSERT(project());
     
-    QVBox *vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", KIcon::SizeMedium ));
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", KIcon::SizeMedium ));
     MakeOptionsWidget *widget = new MakeOptionsWidget(*project()->projectDom(), builder, vbox);
     connect(dlg, SIGNAL(okClicked()), widget, SLOT(accept()));
 }

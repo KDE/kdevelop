@@ -14,8 +14,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <QDropEvent>
 
 #include <kprogress.h>
 #include <klocale.h>
@@ -34,7 +37,7 @@
 
 #include "addexistingdirectoriesdlg.h"
 
-AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, WFlags fl )
+AddExistingDirectoriesDialog::AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
   : AddExistingDlgBase ( parent, name, modal, fl )
 {
 	setIcon ( SmallIcon ( "fileimport.png" ) );
@@ -189,7 +192,7 @@ void AddExistingDirectoriesDialog::slotOk()
         if (m_spitem->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
         {
             QFile subdirsfile( m_spitem->path + "/subdirs" );
-            if ( subdirsfile.open( IO_WriteOnly | IO_Append ) )
+            if ( subdirsfile.open( QIODevice::WriteOnly | QIODevice::Append ) )
             {
                 QTextStream subdirsstream( &subdirsfile );
                 subdirsstream << name << endl;
@@ -215,7 +218,7 @@ void AddExistingDirectoriesDialog::slotOk()
         newitem->setOpen(true);
 
         // Move to the bottom of the list
-        QListViewItem *lastItem = m_spitem->firstChild();
+        Q3ListViewItem *lastItem = m_spitem->firstChild();
         while (lastItem->nextSibling())
             lastItem = lastItem->nextSibling();
         if (lastItem != newitem)
@@ -228,7 +231,7 @@ void AddExistingDirectoriesDialog::slotOk()
         if (f.exists()) {
             m_widget->getSubprojectView()->parse( newitem );
         } else {
-            if (!f.open(IO_WriteOnly)) {
+            if (!f.open(QIODevice::WriteOnly)) {
 //                KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1.").arg(name));
                 continue;
             }

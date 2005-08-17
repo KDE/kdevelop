@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "problemreporter.h"
@@ -49,24 +49,26 @@
 
 #include <qtimer.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
-#include <qgroupbox.h>
+#include <q3whatsthis.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 
 class ProblemItem: public KListViewItem
 {
 public:
-    ProblemItem( QListView* parent, const QString& level, const QString& problem,
+    ProblemItem( Q3ListView* parent, const QString& level, const QString& problem,
 		 const QString& file, const QString& line, const QString& column  )
 	: KListViewItem( parent, level, problem, file, line, column ) {}
 
-    ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
+    ProblemItem( Q3ListViewItem* parent, const QString& level, const QString& problem,
 		 const QString& file, const QString& line, const QString& column  )
 	: KListViewItem( parent, level, problem, file, line, column ) {}
 
-    int compare( QListViewItem* item, int column, bool ascending ) const {
+    int compare( Q3ListViewItem* item, int column, bool ascending ) const {
 	if( column == 2 || column == 3 ){
 	    int a = text( column ).toInt();
 	    int b = item->text( column ).toInt();
@@ -85,7 +87,7 @@ ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const 
       m_document( 0 ),
       m_markIface( 0 )
 {
-    QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+    Q3WhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
         "It displays TODO entries, FIXME's and errors reported by a language parser. "
         "To add a TODO or FIXME entry, just type<br>"
         "<tt>//@todo my todo</tt><br>"
@@ -110,8 +112,8 @@ ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const 
 
     connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
 
-    connect( this, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotSelected(QListViewItem*)) );
+    connect( this, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(slotSelected(Q3ListViewItem*)) );
 
     configure();
 }
@@ -165,9 +167,9 @@ void ProblemReporter::slotTextChanged()
 
 void ProblemReporter::removeAllProblems( const QString& filename )
 {
-    QListViewItem* current = firstChild();
+    Q3ListViewItem* current = firstChild();
     while( current ){
-	QListViewItem* i = current;
+	Q3ListViewItem* i = current;
 	current = current->nextSibling();
 
 	if( i->text(1) == filename )
@@ -175,8 +177,8 @@ void ProblemReporter::removeAllProblems( const QString& filename )
     }
 
     if( m_document && m_markIface ){
-	QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
-	QPtrListIterator<KTextEditor::Mark> it( marks );
+	Q3PtrList<KTextEditor::Mark> marks = m_markIface->marks();
+	Q3PtrListIterator<KTextEditor::Mark> it( marks );
 	while( it.current() ){
 	    m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
 	    ++it;
@@ -201,7 +203,7 @@ void ProblemReporter::reparse()
     kdDebug(9013) << "---> file added " << m_fileName << endl;
 }
 
-void ProblemReporter::slotSelected( QListViewItem* item )
+void ProblemReporter::slotSelected( Q3ListViewItem* item )
 {
     KURL url( item->text(1) );
     int line = item->text( 2 ).toInt();
@@ -239,7 +241,7 @@ void ProblemReporter::configure()
 
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Java Parsing"));
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Java Parsing"));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
     //FIXME adymo: unused functionality
     w->groupBox3->hide();

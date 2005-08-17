@@ -13,8 +13,8 @@
 *
 *  You should have received a copy of the GNU General Public License
 *  along with this program; see the file COPYING.LIB.  If not, write to
-*  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-*  Boston, MA 02110-1301, USA.
+*  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+*  Boston, MA 02111-1307, USA.
 *
 */
 
@@ -34,14 +34,14 @@
 #include <qfileinfo.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qtextstream.h>
 
 AddAttributeDialog::AddAttributeDialog( CppSupportPart* cppSupport, ClassDom klass,
-                                        QWidget* parent, const char* name, bool modal, WFlags fl )
+                                        QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
 : AddAttributeDialogBase( parent, name, modal, fl ), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
 	access->insertStringList( QStringList() << "Public" << "Protected" << "Private" );
@@ -117,10 +117,10 @@ void AddAttributeDialog::accept()
 	
 	for ( QStringList::iterator it = accessList.begin(); it != accessList.end(); ++it )
 	{
-		QListViewItem* item = attributes->firstChild();
+		Q3ListViewItem* item = attributes->firstChild();
 		while ( item )
 		{
-			QListViewItem * currentItem = item;
+			Q3ListViewItem * currentItem = item;
 			
 			item = item->nextSibling();
 			
@@ -153,10 +153,10 @@ void AddAttributeDialog::accept()
 	QDialog::accept();
 }
 
-QString AddAttributeDialog::variableDeclaration( QListViewItem* item ) const
+QString AddAttributeDialog::variableDeclaration( Q3ListViewItem* item ) const
 {
 	QString str;
-	QTextStream stream( &str, IO_WriteOnly );
+	QTextStream stream( &str, QIODevice::WriteOnly );
 	QString ind;
 	ind.fill( QChar( ' ' ), 4 );
 	
@@ -183,7 +183,7 @@ void AddAttributeDialog::updateGUI()
 	
 	if ( enable )
 	{
-		QListViewItem * item = attributes->selectedItem();
+		Q3ListViewItem * item = attributes->selectedItem();
 		item->setText( 0, access->currentText() );
 		item->setText( 1, storage->currentText() );
 		item->setText( 2, returnType->currentText() );
@@ -193,7 +193,7 @@ void AddAttributeDialog::updateGUI()
 
 void AddAttributeDialog::addAttribute()
 {
-	QListViewItem * item = new QListViewItem( attributes, "Protected", "Normal",
+	Q3ListViewItem * item = new Q3ListViewItem( attributes, "Protected", "Normal",
 	                                          "int", QString( "attribute_%1" ).arg( ++m_count ) );
 	attributes->setCurrentItem( item );
 	attributes->setSelected( item, true );
@@ -206,7 +206,7 @@ void AddAttributeDialog::deleteCurrentAttribute()
 	delete( attributes->currentItem() );
 }
 
-void AddAttributeDialog::currentChanged( QListViewItem* item )
+void AddAttributeDialog::currentChanged( Q3ListViewItem* item )
 {
 	if ( item )
 	{
@@ -228,10 +228,10 @@ QStringList AddAttributeDialog::newAccessList( const QStringList& accessList ) c
 {
 	QStringList newAccessList;
 	
-	QListViewItem* item = attributes->firstChild();
+	Q3ListViewItem* item = attributes->firstChild();
 	while ( item )
 	{
-		QListViewItem * currentItem = item;
+		Q3ListViewItem * currentItem = item;
 		
 		item = item->nextSibling();
 		

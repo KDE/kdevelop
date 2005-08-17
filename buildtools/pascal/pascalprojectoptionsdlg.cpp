@@ -18,6 +18,8 @@
 #include <qcombobox.h>
 #include <qregexp.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "domutil.h"
 #include "kdevcompileroptions.h"
@@ -26,7 +28,7 @@
 #include "pascalproject_part.h"
 #include "pascalprojectoptionsdlg.h"
 
-PascalProjectOptionsDlg::PascalProjectOptionsDlg(PascalProjectPart *part, QWidget* parent, const char* name, WFlags fl)
+PascalProjectOptionsDlg::PascalProjectOptionsDlg(PascalProjectPart *part, QWidget* parent, const char* name, Qt::WFlags fl)
     : PascalProjectOptionsDlgBase(parent,name, fl), m_part(part)
 {
     config_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
@@ -109,7 +111,7 @@ void PascalProjectOptionsDlg::readConfig( QString config )
     if (compiler.isEmpty())
     {
         offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Pascal'");
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = offers.begin(); it != offers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 compiler = (*it)->name();

@@ -13,12 +13,12 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
-#include <qcstring.h>
-#include <qsocket.h>
+#include <q3cstring.h>
+#include <q3socket.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
 
@@ -39,7 +39,7 @@
 #include <kurl.h>
 #include <ksock.h>
 #include <dcopclient.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <subversion-1/svn_sorts.h>
 #include <subversion-1/svn_path.h>
@@ -110,16 +110,16 @@ compare_items_as_paths (const svn_sort__item_t*a, const svn_sort__item_t*b) {
   return svn_path_compare_paths ((const char *)a->key, (const char *)b->key);
 }
 
-kio_svnProtocol::kio_svnProtocol(const QCString &pool_socket, const QCString &app_socket)
+kio_svnProtocol::kio_svnProtocol(const Q3CString &pool_socket, const Q3CString &app_socket)
 	: SlaveBase("kio_svn", pool_socket, app_socket) {
 		kdDebug() << "kio_svnProtocol::kio_svnProtocol()" << endl;
 
 		kdDebug() << "Loading KDED module" << endl;
-		QCString module = "ksvnd";
-		QCString replyType;
+		Q3CString module = "ksvnd";
+		Q3CString replyType;
 		QByteArray replyData;
 		QByteArray params;
-		QDataStream stream(params, IO_WriteOnly);
+		QDataStream stream(params, QIODevice::WriteOnly);
 		stream << module;
 		dcopClient()->call( "kded", "kded", "loadModule(QCString)", params, replyType, replyData);
 		//check answer ?
@@ -182,11 +182,11 @@ kio_svnProtocol::kio_svnProtocol(const QCString &pool_socket, const QCString &ap
 kio_svnProtocol::~kio_svnProtocol(){
 	kdDebug() << "kio_svnProtocol::~kio_svnProtocol()" << endl;
 	kdDebug() << "Unloading KDED module" << endl;
-	QCString module = "ksvnd";
-	QCString replyType;
+	Q3CString module = "ksvnd";
+	Q3CString replyType;
 	QByteArray replyData;
 	QByteArray params;
-	QDataStream stream(params, IO_WriteOnly);
+	QDataStream stream(params, QIODevice::WriteOnly);
 	stream << module;
 	dcopClient()->call( "kded", "kded", "unloadModule(QCString)", params, replyType, replyData);
 
@@ -646,7 +646,7 @@ void kio_svnProtocol::rename(const KURL& src, const KURL& dest, bool /*overwrite
 void kio_svnProtocol::special( const QByteArray& data ) {
 	kdDebug() << "kio_svnProtocol::special" << endl;
 
-	QDataStream stream(data, IO_ReadOnly);
+	QDataStream stream(data, QIODevice::ReadOnly);
 	int tmp;
 
 	stream >> tmp;
@@ -994,7 +994,7 @@ svn_error_t *kio_svnProtocol::clientCertPasswdPrompt(svn_auth_cred_ssl_client_ce
 }
 
 svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char **/*file*/, apr_array_header_t *commit_items, void *baton, apr_pool_t *pool ) {
-	QCString replyType;
+	Q3CString replyType;
 	QByteArray params;
 	QByteArray reply;
 	QString result;
@@ -1036,7 +1036,7 @@ svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char 
 		slist << list;
 	}
 
-	QDataStream stream(params, IO_WriteOnly);
+	QDataStream stream(params, QIODevice::WriteOnly);
 	stream << slist.join("\n");	
 
 	if ( !p->dcopClient()->call( "kded","ksvnd","commitDialog(QString)", params, replyType, reply ) ) {
@@ -1049,7 +1049,7 @@ svn_error_t *kio_svnProtocol::commitLogPrompt( const char **log_msg, const char 
 		return SVN_NO_ERROR;
 	}
 	
-	QDataStream stream2 ( reply, IO_ReadOnly );
+	QDataStream stream2 ( reply, QIODevice::ReadOnly );
 	stream2 >> result;
 	
 	if ( result == QString::null ) { //cancelled
@@ -1069,7 +1069,7 @@ void kio_svnProtocol::notify(void *baton, const char *path, svn_wc_notify_action
 	QByteArray params;
 	kio_svnProtocol *p = ( kio_svnProtocol* )baton;
 
-	QDataStream stream(params, IO_WriteOnly);
+	QDataStream stream(params, QIODevice::WriteOnly);
 	stream << QString::fromUtf8( path ) << action << kind << mime_type << content_state << prop_state << revision;
 
 	if ( !p->dcopClient()->send( "kded","ksvnd","notify(QString,int,int,QString,int,int,long int)", params ) ) {
@@ -1088,7 +1088,7 @@ void kio_svnProtocol::status(void *baton, const char *path, svn_wc_status_t *sta
 	QByteArray params;
 	kio_svnProtocol *p = ( kio_svnProtocol* )baton;
 
-	QDataStream stream(params, IO_WriteOnly);
+	QDataStream stream(params, QIODevice::WriteOnly);
 	stream << QString::fromUtf8( path ) << status->text_status << status->prop_status << status->repos_text_status << status->repos_prop_status;
 
 	if ( !p->dcopClient()->send( "kded","ksvnd","status(QString,int,int,int,int)", params ) ) {

@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 /*
@@ -25,12 +25,17 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QEvent>
+#include <Q3PtrList>
 
 #ifndef NO_KDE2
 #include <netwm_def.h>
 #endif
 
-class QFrame;
+class Q3Frame;
 class KDockContainer;
 
 
@@ -44,7 +49,7 @@ class KDEUI_EXPORT KDockSplitter : public QWidget
 {
   Q_OBJECT
 public:
-  KDockSplitter(QWidget *parent= 0, const char *name= 0, Orientation orient= Vertical, int pos= 50, bool highResolution=false);
+  KDockSplitter(QWidget *parent= 0, const char *name= 0, Qt::Orientation orient= Qt::Vertical, int pos= 50, bool highResolution=false);
   virtual ~KDockSplitter(){};
 
   void activate(QWidget *c0, QWidget *c1 = 0L);
@@ -84,7 +89,7 @@ public:
   void setForcedFixedHeight(KDockWidget *dw,int h);
   void restoreFromForcedFixedSize(KDockWidget *dw);
 
-  Orientation orientation(){return m_orientation;}
+  Qt::Orientation orientation(){return m_orientation;}
 
 protected:
   friend class  KDockContainer;
@@ -100,7 +105,7 @@ private:
   QWidget *child0, *child1;
   Orientation m_orientation;
   bool initialised;
-  QFrame* divider;
+  Q3Frame* divider;
   int xpos, savedXPos;
   bool mOpaqueResize, mKeepSize, mHighResolution;
   int fixedWidth0,fixedWidth1;
@@ -172,7 +177,7 @@ public:
   QWidget *_parent;
   bool transient;
 
-  QGuardedPtr<QWidget> container;
+  QPointer<QWidget> container;
 
   QPoint resizePos;
   bool resizing;
@@ -196,7 +201,7 @@ public:
 
   bool showToDesktopButton;
   bool topLevel;
-  QPtrList<KDockButton_Private> btns;
+  Q3PtrList<KDockButton_Private> btns;
   bool forceCloseButtonHidden;
   QWidget *dummy;
 };

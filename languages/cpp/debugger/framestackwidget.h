@@ -16,7 +16,7 @@
 #ifndef _FRAMESTACKWIDGET_H_
 #define _FRAMESTACKWIDGET_H_
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qstringlist.h>
 
 namespace GDBDebugger
@@ -25,14 +25,14 @@ namespace GDBDebugger
 class FramestackWidget;
 
 
-class ThreadStackItem : public QListViewItem
+class ThreadStackItem : public Q3ListViewItem
 {
 public:
     ThreadStackItem(FramestackWidget *parent, const QString &threadDesc);
     virtual ~ThreadStackItem();
 
     void setOpen(bool open);
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
     int threadNo()
     { return threadNo_; }
@@ -45,7 +45,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class FrameStackItem : public QListViewItem
+class FrameStackItem : public Q3ListViewItem
 {
 public:
     FrameStackItem(FramestackWidget *parent, const QString &frameDesc);
@@ -53,7 +53,7 @@ public:
     virtual ~FrameStackItem();
 
     void setOpen(bool open);
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
     int frameNo()
     { return frameNo_; }
@@ -71,15 +71,15 @@ private:
 /**
  * @author John Birch
  */
-class FramestackWidget : public QListView
+class FramestackWidget : public Q3ListView
 {
     Q_OBJECT
 
 public:
-    FramestackWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
+    FramestackWidget( QWidget *parent=0, const char *name=0, Qt::WFlags f=0 );
     virtual ~FramestackWidget();
 
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
     void clear();
 
     void parseGDBThreadList(char *str);
@@ -97,7 +97,7 @@ public:
 
 public slots:
     void slotSelectFrame(int frameNo, int threadNo);
-    void slotSelectionChanged(QListViewItem *thisItem);
+    void slotSelectionChanged(Q3ListViewItem *thisItem);
 
 signals:
     void produceBacktrace(int threadNo);
@@ -105,7 +105,7 @@ signals:
 
 #if QT_VERSION < 300
 private:
-  QListViewItem* findItemWhichBeginsWith(const QString& text) const;
+  Q3ListViewItem* findItemWhichBeginsWith(const QString& text) const;
 #endif
 
 private:

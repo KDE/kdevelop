@@ -16,11 +16,13 @@
 #ifndef RDBDEBUGGERRDBTABLE_H
 #define RDBDEBUGGERRDBTABLE_H
 
-#include <qtable.h>
+#include <q3table.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 namespace RDBDebugger {
 
-class RDBTable : public QTable
+class RDBTable : public Q3Table
 {
 Q_OBJECT
 public:

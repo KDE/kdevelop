@@ -59,7 +59,7 @@ void AddSubprojectDialog::accept()
         return;
     }
 
-    QListViewItem *childItem = m_subProject->firstChild();
+    Q3ListViewItem *childItem = m_subProject->firstChild();
     while (childItem) {
         if (name == static_cast<SubprojectItem*>(childItem)->subdir) {
             KMessageBox::sorry(this, i18n("A subproject with this name already exists."));
@@ -109,7 +109,7 @@ void AddSubprojectDialog::accept()
     if (m_subProject->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
     {
         QFile subdirsfile( m_subProject->path + "/subdirs" );
-        if ( subdirsfile.open( IO_WriteOnly | IO_Append ) )
+        if ( subdirsfile.open( QIODevice::WriteOnly | QIODevice::Append ) )
         {
             QTextStream subdirsstream( &subdirsfile );
             subdirsstream << name << endl;
@@ -135,7 +135,7 @@ void AddSubprojectDialog::accept()
     newitem->setOpen(true);
 
     // Move to the bottom of the list
-    QListViewItem *lastItem = m_subProject->firstChild();
+    Q3ListViewItem *lastItem = m_subProject->firstChild();
     while (lastItem->nextSibling())
         lastItem = lastItem->nextSibling();
     if (lastItem != newitem)
@@ -147,7 +147,7 @@ void AddSubprojectDialog::accept()
     if (f.exists()) {
         m_subprojectView->parse( newitem );
     } else {
-        if (!f.open(IO_WriteOnly)) {
+        if (!f.open(QIODevice::WriteOnly)) {
             KMessageBox::sorry(this, i18n("Could not create Makefile.am in subdirectory %1.").arg(name));
             return;
         }

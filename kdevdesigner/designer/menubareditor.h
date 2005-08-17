@@ -28,11 +28,25 @@
 #define MENUBAREDITOR_H
 
 #include <qmenubar.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QPixmap>
+#include <QDragLeaveEvent>
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <QEvent>
+#include <QDragMoveEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 class PopupMenuEditor;
 class MenuBarEditor;
-class QActionGroup;
+class Q3ActionGroup;
 
 class MenuBarEditorItem : public QObject
 {
@@ -45,7 +59,7 @@ class MenuBarEditorItem : public QObject
 public:
     MenuBarEditorItem( PopupMenuEditor * menu, MenuBarEditor * bar,
 		       QObject * parent = 0, const char * name = 0);
-    MenuBarEditorItem( QActionGroup * actionGroup, MenuBarEditor * bar,
+    MenuBarEditorItem( Q3ActionGroup * actionGroup, MenuBarEditor * bar,
 		       QObject * parent = 0, const char * name = 0);
     MenuBarEditorItem( MenuBarEditorItem * item,
 		       QObject * parent = 0, const char * name = 0);
@@ -91,7 +105,7 @@ public:
     MenuBarEditorItem * createItem( int index = -1, bool addToCmdStack = TRUE );
     void insertItem( MenuBarEditorItem * item, int index = -1 );
     void insertItem( QString text, PopupMenuEditor * menu, int index = -1 );
-    void insertItem( QString text, QActionGroup * group, int index = -1 );
+    void insertItem( QString text, Q3ActionGroup * group, int index = -1 );
 
     void insertSeparator( int index = -1 );
     
@@ -144,7 +158,7 @@ protected:
     void dropEvent( QDropEvent * e );
     void keyPressEvent( QKeyEvent * e );
     void focusOutEvent( QFocusEvent * e );
-    void resizeEvent( QResizeEvent * e ) { QFrame::resizeEvent( e ); }
+    void resizeEvent( QResizeEvent * e ) { Q3Frame::resizeEvent( e ); }
 
     void resizeInternals();
     
@@ -174,7 +188,7 @@ private:
     FormWindow * formWnd;
     QLineEdit * lineEdit;
     QWidget * dropLine;
-    QPtrList<MenuBarEditorItem> itemList;
+    Q3PtrList<MenuBarEditorItem> itemList;
     MenuBarEditorItem addItem;
     MenuBarEditorItem addSeparator;
     MenuBarEditorItem * draggedItem;

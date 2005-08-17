@@ -24,16 +24,18 @@
 #include <qfileinfo.h>
 #include <qradiobutton.h>
 #include <qregexp.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qrect.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <qcombobox.h>
-#include <qlistview.h>
-#include <qpopupmenu.h>
+#include <q3listview.h>
+#include <q3popupmenu.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <klineedit.h>
@@ -47,7 +49,6 @@
 #include "domutil.h"
 #include "filetemplate.h"
 #include "storeconverter.h"
-#include "qtbuildconfig.h"
 
 #include "classgeneratorconfig.h"
 
@@ -91,7 +92,7 @@ CppNewClassDialog::CppNewClassDialog( CppSupportPart *part, QWidget *parent, con
 	baseclasses_view->setSorting( -1 );
 	constructors_view->setSorting( -1 );
 
-	accessMenu = new QPopupMenu( this );
+	accessMenu = new Q3PopupMenu( this );
 	accessMenu->insertItem( i18n( "Use as Private" ),
 	                        this, SLOT( changeToPrivate() ), 0, 1 );
 	accessMenu->insertItem( i18n( "Use as Protected" ),
@@ -102,7 +103,7 @@ CppNewClassDialog::CppNewClassDialog( CppSupportPart *part, QWidget *parent, con
 	accessMenu->insertItem( i18n( "Unset" ),
 	                        this, SLOT( changeToInherited() ), 0, 5 );
 
-	overMenu = new QPopupMenu( this );
+	overMenu = new Q3PopupMenu( this );
 	overMenu->insertItem( i18n( "Extend Base Class Functionality" ),
 	                      this, SLOT( extendFunctionality() ), 0, 11 );
 	overMenu->insertItem( i18n( "Replace Base Class Method" ),
@@ -113,10 +114,6 @@ CppNewClassDialog::CppNewClassDialog( CppSupportPart *part, QWidget *parent, con
 	compNamespace = namespace_edit->completionObject();
 	setCompletionNamespaceRecursive( m_part->codeModel() ->globalNamespace() );
 	classname_edit->setFocus();
-	
-	// enable/disable qt options for non qt projects
-	childclass_box->setEnabled( m_part->qtBuildConfig()->isUsed() );
-	qobject_box->setEnabled( m_part->qtBuildConfig()->isUsed() );
 }
 
 
@@ -284,39 +281,23 @@ void CppNewClassDialog::baseclassname_changed( const QString &text )
 	if ( ( basename_edit->hasFocus() ) && ( !baseincludeModified ) )
 	{
 		QString header = text;
-		
-		// handle Qt classes in a special way.
-		if( m_part->qtBuildConfig()->isUsed() && header.startsWith( "Q" ) )
+		if ( header.contains( QRegExp( "::" ) ) )
+			header = header.mid( header.findRev( QRegExp( "::" ) ) + 2 );
+		header = header.replace( QRegExp( " *<.*>" ), "" );
+		header += interface_suffix;
+
+		switch ( gen_config->superCase() )
 		{
-			if( m_part->qtBuildConfig()->version() == 3 )
-			{
-				header = header.lower() + ".h";
-			}
-			else if( m_part->qtBuildConfig()->version() == 4 )
-			{
-				// 1:1, e.g QObject is #include <QObject>
-			}
+		case ClassGeneratorConfig::LowerCase:
+			header = header.lower();
+			break;
+		case ClassGeneratorConfig::UpperCase:
+			header = header.upper();
+			break;
+		default:
+			;
 		}
-		else
-		{
-			if ( header.contains( QRegExp( "::" ) ) )
-				header = header.mid( header.findRev( QRegExp( "::" ) ) + 2 );
-			header = header.replace( QRegExp( " *<.*>" ), "" );
-			header += interface_suffix;
-	
-			switch ( gen_config->superCase() )
-			{
-			case ClassGeneratorConfig::LowerCase:
-				header = header.lower();
-				break;
-			case ClassGeneratorConfig::UpperCase:
-				header = header.upper();
-				break;
-			default:
-				;
-			}
-		}
-		
+
 		baseinclude_edit->setText( header );
 	}
 }
@@ -352,9 +333,9 @@ void CppNewClassDialog::implementationChanged()
 
 void CppNewClassDialog::checkObjCInheritance( int val )
 {
-	childclass_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
+	childclass_box->setEnabled( !val );
 	gtk_box->setEnabled( !val );
-	qobject_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
+	qobject_box->setEnabled( !val );
 	namespace_edit->setEnabled( !val );
 	class_tabs->setTabEnabled( tab2, !val );
 	/*    virtual_box->setEnabled(!val);
@@ -372,8 +353,8 @@ void CppNewClassDialog::checkQWidgetInheritance( int val )
 {
 	if ( val )
 	{
-		qobject_box->setEnabled( val && m_part->qtBuildConfig()->isUsed() );
-		qobject_box->setChecked( val && m_part->qtBuildConfig()->isUsed() );
+		qobject_box->setEnabled( val );
+		qobject_box->setChecked( val );
 		objc_box->setEnabled( !val );
 		gtk_box->setEnabled( !val );
 	}
@@ -427,9 +408,9 @@ void CppNewClassDialog::qobject_box_stateChanged( int val )
 void CppNewClassDialog::gtk_box_stateChanged( int val )
 {
 	class_tabs->setTabEnabled( tab2, !val );
-	childclass_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
+	childclass_box->setEnabled( !val );
 	objc_box->setEnabled( !val );
-	qobject_box->setEnabled( !val && m_part->qtBuildConfig()->isUsed() );
+	qobject_box->setEnabled( !val );
 	namespace_edit->setEnabled( !val );
 
 	basename_edit->setEnabled( !val );
@@ -480,7 +461,7 @@ void CppNewClassDialog::addBaseClass()
 	baseincludeModified = false;
 	if ( baseclasses_view->selectedItem() )
 		baseclasses_view->selectedItem() ->setSelected( false );
-	QListViewItem* it = new QListViewItem( baseclasses_view, baseclasses_view->lastItem(),
+	Q3ListViewItem* it = new Q3ListViewItem( baseclasses_view, baseclasses_view->lastItem(),
 	                                       QString::null, "public", QString( "%1" ).arg( scope_box->currentItem() ), QString::null, "false" );
 	setStateOfInheritanceEditors( true );
 	public_button->setChecked( true );
@@ -500,7 +481,7 @@ void CppNewClassDialog::remBaseClass()
 	}
 	if ( baseclasses_view->selectedItem() )
 	{
-		QListViewItem * it = baseclasses_view->selectedItem();
+		Q3ListViewItem * it = baseclasses_view->selectedItem();
 		remClassFromAdv( it->text( 0 ) );
 		baseclasses_view->selectedItem() ->setSelected( false );
 		if ( it->itemBelow() )
@@ -520,7 +501,7 @@ void CppNewClassDialog::remBaseClassOnly()
 {
 	if ( baseclasses_view->selectedItem() )
 	{
-		QListViewItem * it = baseclasses_view->selectedItem();
+		Q3ListViewItem * it = baseclasses_view->selectedItem();
 		baseclasses_view->selectedItem() ->setSelected( false );
 		if ( it->itemBelow() )
 			baseclasses_view->setSelected( it->itemBelow(), true );
@@ -540,7 +521,7 @@ void CppNewClassDialog::remClassFromAdv( QString text )
 		text = text.mid( text.findRev( "::" ) + 2 );
 
 	removeTemplateParams( text );
-	QListViewItem *it = 0;
+	Q3ListViewItem *it = 0;
 	if ( ( it = access_view->findItem( text, 0 ) ) )
 		delete it;
 	if ( ( it = methods_view->findItem( text, 0 ) ) )
@@ -624,7 +605,7 @@ void CppNewClassDialog::currBaseVirtualChanged( int val )
 	}
 }
 
-void CppNewClassDialog::currBaseSelected( QListViewItem *it )
+void CppNewClassDialog::currBaseSelected( Q3ListViewItem *it )
 {
 	if ( it == 0 )
 	{
@@ -670,15 +651,15 @@ void CppNewClassDialog::upbaseclass_button_clicked()
 	}
 	if ( baseclasses_view->selectedItem() )
 	{
-		QListViewItem * it = baseclasses_view->selectedItem();
+		Q3ListViewItem * it = baseclasses_view->selectedItem();
 		if ( it->itemAbove() )
 		{
-			QListViewItem * newit;
+			Q3ListViewItem * newit;
 			if ( it->itemAbove() ->itemAbove() )
-				newit = new QListViewItem( baseclasses_view, it->itemAbove() ->itemAbove(),
+				newit = new Q3ListViewItem( baseclasses_view, it->itemAbove() ->itemAbove(),
 				                           it->text( 0 ), it->text( 1 ), it->text( 2 ), it->text( 3 ), it->text( 4 ) );
 			else
-				newit = new QListViewItem( baseclasses_view, it->text( 0 ), it->text( 1 ),
+				newit = new Q3ListViewItem( baseclasses_view, it->text( 0 ), it->text( 1 ),
 				                           it->text( 2 ), it->text( 3 ), it->text( 4 ) );
 			remBaseClassOnly();
 			baseclasses_view->setSelected( newit, true );
@@ -700,10 +681,10 @@ void CppNewClassDialog::downbaseclass_button_clicked()
 	}
 	if ( baseclasses_view->selectedItem() )
 	{
-		QListViewItem * it = baseclasses_view->selectedItem();
+		Q3ListViewItem * it = baseclasses_view->selectedItem();
 		if ( it->itemBelow() )
 		{
-			QListViewItem * newit = new QListViewItem( baseclasses_view, it->itemBelow(),
+			Q3ListViewItem * newit = new Q3ListViewItem( baseclasses_view, it->itemBelow(),
 			                        it->text( 0 ), it->text( 1 ), it->text( 2 ), it->text( 3 ), it->text( 3 ) );
 			remBaseClassOnly();
 			baseclasses_view->setSelected( newit, true );
@@ -718,9 +699,9 @@ void CppNewClassDialog::downbaseclass_button_clicked()
 
 void CppNewClassDialog::updateConstructorsOrder()
 {
-	QListViewItemIterator it( baseclasses_view );
-	QListViewItem *c_it;
-	QListViewItem *fc_it = 0;
+	Q3ListViewItemIterator it( baseclasses_view );
+	Q3ListViewItem *c_it;
+	Q3ListViewItem *fc_it = 0;
 
 	while ( it.current() )
 	{
@@ -799,7 +780,7 @@ void CppNewClassDialog::reloadAdvancedInheritance( bool clean )
 	clearMethodsList( clean );
 	clearUpgradeList( clean );
 
-	QListViewItemIterator it( baseclasses_view );
+	Q3ListViewItemIterator it( baseclasses_view );
 	while ( it.current() )
 	{
 		if ( ! ( it.current() ->text( 0 ).isEmpty() ) )
@@ -868,12 +849,12 @@ void CppNewClassDialog::parseClass( QString clName, QString inheritance )
 		it->templateAddition = templateAdd;
 		PListViewItem<ClassDom> *over = new PListViewItem<ClassDom>( *classIt, methods_view, ( *classIt ) ->name() );
 		over->templateAddition = templateAdd;
-		QListViewItem *over_methods = new QListViewItem( over, i18n( "Methods" ) );
-		QListViewItem *over_slots = new QListViewItem( over, i18n( "Slots (Qt-specific)" ) );
+		Q3ListViewItem *over_methods = new Q3ListViewItem( over, i18n( "Methods" ) );
+		Q3ListViewItem *over_slots = new Q3ListViewItem( over, i18n( "Slots (Qt-specific)" ) );
 		PListViewItem<ClassDom> *access = new PListViewItem<ClassDom>( *classIt, access_view, ( *classIt ) ->name() );
-		QListViewItem *access_methods = new QListViewItem( access, i18n( "Methods" ) );
-		QListViewItem *access_slots = new QListViewItem( access, i18n( "Slots (Qt-specific)" ) );
-		QListViewItem *access_attrs = new QListViewItem( access, i18n( "Attributes" ) );
+		Q3ListViewItem *access_methods = new Q3ListViewItem( access, i18n( "Methods" ) );
+		Q3ListViewItem *access_slots = new Q3ListViewItem( access, i18n( "Slots (Qt-specific)" ) );
+		Q3ListViewItem *access_attrs = new Q3ListViewItem( access, i18n( "Attributes" ) );
 
 		FunctionList functionList = ( *classIt ) ->functionList();
 		for ( FunctionList::const_iterator methodIt = functionList.begin();
@@ -967,24 +948,24 @@ bool CppNewClassDialog::isConstructor( QString className, const FunctionDom &met
 		return false;
 }
 
-void CppNewClassDialog::addToConstructorsList( QCheckListItem *myClass, FunctionDom method )
+void CppNewClassDialog::addToConstructorsList( Q3CheckListItem *myClass, FunctionDom method )
 {
-	new PCheckListItem<FunctionDom>( method, myClass, m_part->formatModelItem( method.data() ), QCheckListItem::RadioButton );
+	new PCheckListItem<FunctionDom>( method, myClass, m_part->formatModelItem( method.data() ), Q3CheckListItem::RadioButton );
 }
 
-void CppNewClassDialog::addToMethodsList( QListViewItem *parent, FunctionDom method )
+void CppNewClassDialog::addToMethodsList( Q3ListViewItem *parent, FunctionDom method )
 {
-	PCheckListItem<FunctionDom> *it = new PCheckListItem<FunctionDom>( method, parent, m_part->formatModelItem( method.data() ), QCheckListItem::CheckBox );
+	PCheckListItem<FunctionDom> *it = new PCheckListItem<FunctionDom>( method, parent, m_part->formatModelItem( method.data() ), Q3CheckListItem::CheckBox );
 	method->isAbstract() ? it->setText( 1, i18n( "replace" ) ) : it->setText( 1, i18n( "extend" ) );
 }
 
-void CppNewClassDialog::addToUpgradeList( QListViewItem *parent, FunctionDom method, QString modifier )
+void CppNewClassDialog::addToUpgradeList( Q3ListViewItem *parent, FunctionDom method, QString modifier )
 {
 	PListViewItem<FunctionDom> *it = new PListViewItem<FunctionDom>( method, parent, m_part->formatModelItem( method.data() ) );
 	it->setText( 1, modifier );
 }
 
-void CppNewClassDialog::addToUpgradeList( QListViewItem *parent, VariableDom attr, QString modifier )
+void CppNewClassDialog::addToUpgradeList( Q3ListViewItem *parent, VariableDom attr, QString modifier )
 {
 	PListViewItem<VariableDom> *it = new PListViewItem<VariableDom>( attr, parent, m_part->formatModelItem( attr.data() ) );
 	it->setText( 1, modifier );
@@ -1027,12 +1008,12 @@ void CppNewClassDialog::parsePCSClass( QString clName, QString inheritance )
 		it->templateAddition = templateAdd;
 		PListViewItem<ClassDom> *over = new PListViewItem<ClassDom>( *classIt, methods_view, ( *classIt ) ->name() );
 		over->templateAddition = templateAdd;
-		QListViewItem *over_methods = new QListViewItem( over, i18n( "Methods" ) );
-		QListViewItem *over_slots = new QListViewItem( over, i18n( "Slots (Qt-specific)" ) );
+		Q3ListViewItem *over_methods = new Q3ListViewItem( over, i18n( "Methods" ) );
+		Q3ListViewItem *over_slots = new Q3ListViewItem( over, i18n( "Slots (Qt-specific)" ) );
 		PListViewItem<ClassDom> *access = new PListViewItem<ClassDom>( *classIt, access_view, ( *classIt ) ->name() );
-		QListViewItem *access_methods = new QListViewItem( access, i18n( "Methods" ) );
-		QListViewItem *access_slots = new QListViewItem( access, i18n( "Slots (Qt-specific)" ) );
-		QListViewItem *access_attrs = new QListViewItem( access, i18n( "Attributes" ) );
+		Q3ListViewItem *access_methods = new Q3ListViewItem( access, i18n( "Methods" ) );
+		Q3ListViewItem *access_slots = new Q3ListViewItem( access, i18n( "Slots (Qt-specific)" ) );
+		Q3ListViewItem *access_attrs = new Q3ListViewItem( access, i18n( "Attributes" ) );
 
 		FunctionList functionList = ( *classIt ) ->functionList();
 		for ( FunctionList::const_iterator methodIt = functionList.begin();
@@ -1112,7 +1093,7 @@ void CppNewClassDialog::parsePCSClass( QString clName, QString inheritance )
 
 void CppNewClassDialog::clear_selection_button_clicked()
 {
-	QListViewItemIterator it( constructors_view );
+	Q3ListViewItemIterator it( constructors_view );
 	while ( it.current() )
 	{
 		PCheckListItem<FunctionDom> *curr;
@@ -1150,7 +1131,7 @@ void CppNewClassDialog::clearUpgradeList( bool clean )
 		access_view->clear();
 }
 
-void CppNewClassDialog::setAccessForItem( QListViewItem *curr, QString newAccess, bool isPublic )
+void CppNewClassDialog::setAccessForItem( Q3ListViewItem *curr, QString newAccess, bool isPublic )
 {
 	if ( newAccess == "public" )
 		curr->setText( 1, isPublic ? "public" : "protected" );
@@ -1167,11 +1148,11 @@ void CppNewClassDialog::setAccessForItem( QListViewItem *curr, QString newAccess
 
 void CppNewClassDialog::setAccessForBase( QString baseclass, QString newAccess )
 {
-	QListViewItem * base;
+	Q3ListViewItem * base;
 
 	if ( ( base = access_view->findItem( baseclass, 0 ) ) )
 	{
-		QListViewItemIterator it( base );
+		Q3ListViewItemIterator it( base );
 		while ( it.current() )
 		{
 			if ( !it.current() ->text( 1 ).isEmpty() )
@@ -1189,9 +1170,9 @@ void CppNewClassDialog::setAccessForBase( QString baseclass, QString newAccess )
 }
 
 
-void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewItem * item, const QPoint &p, int /*c*/ )
+void CppNewClassDialog::access_view_mouseButtonPressed( int button, Q3ListViewItem * item, const QPoint &p, int /*c*/ )
 {
-	if ( item && ( ( button == LeftButton ) || ( button == RightButton ) ) && ( item->depth() > 1 ) )
+	if ( item && ( ( button == Qt::LeftButton ) || ( button == Qt::RightButton ) ) && ( item->depth() > 1 ) )
 	{
 		accessMenu->setItemEnabled( 1, true );
 		accessMenu->setItemEnabled( 2, true );
@@ -1214,9 +1195,9 @@ void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewIte
 }
 
 
-void CppNewClassDialog::methods_view_mouseButtonPressed( int button , QListViewItem * item, const QPoint&p , int /*c*/ )
+void CppNewClassDialog::methods_view_mouseButtonPressed( int button , Q3ListViewItem * item, const QPoint&p , int /*c*/ )
 {
-	if ( item && ( button == RightButton ) && ( item->depth() > 1 ) && ( ! item->text( 1 ).isEmpty() ) )
+	if ( item && ( button == Qt::RightButton ) && ( item->depth() > 1 ) && ( ! item->text( 1 ).isEmpty() ) )
 	{
 		overMenu->exec( p );
 	}
@@ -1236,7 +1217,7 @@ void CppNewClassDialog::replaceFunctionality()
 
 void CppNewClassDialog::selectall_button_clicked()
 {
-	QListViewItemIterator it( constructors_view );
+	Q3ListViewItemIterator it( constructors_view );
 	while ( it.current() )
 	{
 		PCheckListItem<FunctionDom> *curr;
@@ -1258,7 +1239,7 @@ void CppNewClassDialog::to_constructors_list_clicked()
 	QString base;
 	int unnamed = 1;
 
-	QListViewItemIterator it( constructors_view );
+	Q3ListViewItemIterator it( constructors_view );
 	while ( it.current() )
 	{
 		PCheckListItem<FunctionDom> *curr;
@@ -1416,9 +1397,9 @@ void CppNewClassDialog::ClassGenerator::common_text()
 	gtk = dlg.gtk_box->isChecked();
 
 	if ( ( dlg.baseclasses_view->childCount() == 0 ) && childClass )
-		new QListViewItem( dlg.baseclasses_view, "QWidget", "public" );
+		new Q3ListViewItem( dlg.baseclasses_view, "QWidget", "public" );
 	if ( objc && ( dlg.baseclasses_view->childCount() == 0 ) )
-		new QListViewItem( dlg.baseclasses_view, "NSObject", "public" );
+		new Q3ListViewItem( dlg.baseclasses_view, "NSObject", "public" );
 
 	if ( dlg.documentation_edit->text().isEmpty() && ( !dlg.gen_config->doc_box->isChecked() ) )
 		doc = "";
@@ -1432,12 +1413,8 @@ void CppNewClassDialog::ClassGenerator::common_text()
 				doc.append( "\n\n" );
 		}
 		QString author = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/author" );
-		QString email = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/email" );
-		if( !email.isEmpty() )
-			author += QString( " <%1>" ).arg( email );
-			
 		if ( dlg.gen_config->author_box->isChecked() )
-			doc.append( "\t@author " + author + "\n" );
+			doc.append( "@author " + author + "\n" );
 		doc.append( "*/" );
 	}
 
@@ -1480,7 +1457,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 	advH_private_slots = QString::null;
 	advCpp = QString::null;
 
-	QListViewItemIterator it( dlg.methods_view );
+	Q3ListViewItemIterator it( dlg.methods_view );
 	while ( it.current() )
 	{
 		PCheckListItem<FunctionDom> *curr;
@@ -1512,7 +1489,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 	}
 
 	//advanced access control and upgrading
-	QListViewItemIterator ita( dlg.access_view );
+	Q3ListViewItemIterator ita( dlg.access_view );
 	while ( ita.current() )
 	{
 		PListViewItem<VariableDom> *curr;
@@ -1684,29 +1661,13 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
 	if ( childClass )
 	{
-		if( dlg.m_part->qtBuildConfig()->version() == 3 )
-		{
-			argsH = "QWidget *parent = 0, const char *name = 0";
-			argsCpp = "QWidget *parent, const char *name";
-		}
-		else
-		{
-			argsH = "QWidget *parent = 0";
-			argsCpp = "QWidget *parent";
-		}
+		argsH = "QWidget *parent = 0, const char *name = 0";
+		argsCpp = "QWidget *parent, const char *name";
 	}
 	else if ( qobject )
 	{
-		if( dlg.m_part->qtBuildConfig()->version() == 3 )
-		{
-			argsH = "QObject *parent = 0, const char *name = 0";
-			argsCpp = "QObject *parent, const char *name";
-		}
-		else
-		{
-			argsH = "QObject *parent = 0";
-			argsCpp = "QObject *parent";
-		}
+		argsH = "QObject *parent = 0, const char *name = 0";
+		argsCpp = "QObject *parent, const char *name";
 	}
 	else
 	{
@@ -1716,50 +1677,25 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 	QString baseInitializer;
 
 	if ( childClass && ( dlg.baseclasses_view->childCount() == 0 ) )
-	{
-		if( dlg.m_part->qtBuildConfig()->version() == 3 )
-			baseInitializer = "  : QWidget(parent, name)";
-		else
-			baseInitializer = "  : QWidget(parent)";
-	}
+		baseInitializer = "  : QWidget(parent, name)";
 	else if ( qobject && ( dlg.baseclasses_view->childCount() == 0 ) )
-	{
-		if( dlg.m_part->qtBuildConfig()->version() == 3 )
-			baseInitializer = "  : QObject(parent, name)";
-		else
-			baseInitializer = "  : QObject(parent)";
-	}
+		baseInitializer = "  : QObject(parent, name)";
 	else if ( dlg.baseclasses_view->childCount() != 0 )
 	{
-		QListViewItemIterator it( dlg.baseclasses_view );
+		Q3ListViewItemIterator it( dlg.baseclasses_view );
 		baseInitializer += " : ";
 		while ( it.current() )
 		{
 			if ( !it.current() ->text( 0 ).isEmpty() )
 			{
 				if ( baseInitializer != " : " )
-				{
 					baseInitializer += ", ";
-				}
-				
 				if ( childClass && ( baseInitializer == " : " ) )
-				{
-					if( dlg.m_part->qtBuildConfig()->version() == 3 )
-						baseInitializer += it.current()->text( 0 ) + "(parent, name)";
-					else
-						baseInitializer += it.current()->text( 0 ) + "(parent)";
-				}
+					baseInitializer += it.current() ->text( 0 ) + "(parent, name)";
 				else if ( qobject && ( baseInitializer == " : " ) )
-				{
-					if( dlg.m_part->qtBuildConfig()->version() == 3 )
-						baseInitializer += it.current()->text( 0 ) + "(parent, name)";
-					else
-						baseInitializer += it.current()->text( 0 ) + "(parent)";
-				}
+					baseInitializer += it.current() ->text( 0 ) + "(parent, name)";
 				else
-				{
-					baseInitializer += it.current()->text( 0 ) + "()";
-				}
+					baseInitializer += it.current() ->text( 0 ) + "()";
 			}
 			++it;
 		}
@@ -1814,7 +1750,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 	kdDebug( 9007 ) << "implementationPath = " << implementationPath << endl;
 
 	QFile ifile( implementationPath );
-	if ( !ifile.open( IO_WriteOnly ) )
+	if ( !ifile.open( QIODevice::WriteOnly ) )
 	{
 		KMessageBox::error( &dlg, i18n( "Cannot write to implementation file" ) );
 		return ;
@@ -1901,24 +1837,15 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	headerGuard.replace( QRegExp( "\\." ), "_" );
 	headerGuard.replace( QRegExp( "::" ), "_" );
 	QString includeBaseHeader;
-	if( dlg.m_part->qtBuildConfig()->isUsed() )
+	if ( childClass && ( dlg.baseclasses_view->childCount() == 0 ) )  /// @todo do this only if this is a Qt class
 	{
-		if( childClass && ( dlg.baseclasses_view->childCount() == 0 ) )
-		{
-			if( dlg.m_part->qtBuildConfig()->version() == 3 )
-				includeBaseHeader = "#include <qwidget.h>";
-			else
-				includeBaseHeader = "#include <QWidget>";
-		}
-		else if( qobject && ( dlg.baseclasses_view->childCount() == 0 ) )
-		{
-			if( dlg.m_part->qtBuildConfig()->version() == 3 )
-				includeBaseHeader = "#include <qobject.h>";
-			else
-				includeBaseHeader = "#include <QObject>";
-		}
+		includeBaseHeader = "#include <qwidget.h>";
 	}
-	
+	else if ( qobject && ( dlg.baseclasses_view->childCount() == 0 ) )
+	{
+		includeBaseHeader = "#include <qobject.h>";
+	}
+
 	if ( objc )
 	{
 		if ( dlg.baseclasses_view->firstChild() )
@@ -1931,7 +1858,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	}
 	else
 	{
-		QListViewItemIterator it( dlg.baseclasses_view );
+		Q3ListViewItemIterator it( dlg.baseclasses_view );
 		while ( it.current() )
 		{
 			if ( !it.current() ->text( 0 ).isEmpty() )
@@ -1946,16 +1873,13 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	}
 
 	QString author = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/author" );
-	QString email = DomUtil::readEntry( *dlg.m_part->projectDom(), "/general/email" );
-	if( !email.isEmpty() )
-		author += QString( " <%1>" ).arg( email );
-	
+
 	QString inheritance;
 	if ( dlg.baseclasses_view->childCount() > 0 )
 	{
 		inheritance += " : ";
 
-		QListViewItemIterator it( dlg.baseclasses_view );
+		Q3ListViewItemIterator it( dlg.baseclasses_view );
 		while ( it.current() )
 		{
 			if ( !it.current() ->text( 0 ).isEmpty() )
@@ -2033,7 +1957,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 	}
 
 	QFile hfile( headerPath );
-	if ( !hfile.open( IO_WriteOnly ) )
+	if ( !hfile.open( QIODevice::WriteOnly ) )
 	{
 		KMessageBox::error( &dlg, i18n( "Cannot write to header file" ) );
 		return ;

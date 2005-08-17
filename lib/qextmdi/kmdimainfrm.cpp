@@ -39,9 +39,18 @@
 
 #include <qcursor.h>
 #include <qclipboard.h>
-#include <qobjectlist.h>
-#include <qpopupmenu.h>
+#include <qobject.h>
+#include <q3popupmenu.h>
 #include <qmenubar.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QFocusEvent>
+#include <Q3PtrList>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QResizeEvent>
 
 #include <kmenubar.h>
 #include <kapplication.h>
@@ -60,7 +69,7 @@
 #include <qtextstream.h>
 #include <qstring.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "kmdimainfrm.h"
 #include "kmditaskbar.h"
@@ -131,7 +140,7 @@ public:
 };
 
 //============ constructor ============//
-KMdiMainFrm::KMdiMainFrm(QWidget* parentWidget, const char* name, KMdi::MdiMode mdiMode,WFlags flags)
+KMdiMainFrm::KMdiMainFrm(QWidget* parentWidget, const char* name, KMdi::MdiMode mdiMode,Qt::WFlags flags)
 : KParts::DockMainWindow( parentWidget, name, flags)
    ,m_mdiMode(KMdi::UndefinedMode)
    ,m_pMdi(0L)
@@ -174,12 +183,12 @@ KMdiMainFrm::KMdiMainFrm(QWidget* parentWidget, const char* name, KMdi::MdiMode 
 {
   kdDebug()<<"=== KMdiMainFrm() ==="<<endl;
   // Create the local lists of windows
-  m_pDocumentViews = new QPtrList<KMdiChildView>;
+  m_pDocumentViews = new Q3PtrList<KMdiChildView>;
   m_pDocumentViews->setAutoDelete(false);
   m_pToolViews = new QMap<QWidget*,KMdiToolViewAccessor*>;
 
   // This seems to be needed (re-check it after Qt2.0 comed out)
-  setFocusPolicy(ClickFocus);
+  setFocusPolicy(Qt::ClickFocus);
 
   // create the central widget
   createMdiManager();
@@ -197,20 +206,20 @@ KMdiMainFrm::KMdiMainFrm(QWidget* parentWidget, const char* name, KMdi::MdiMode 
   // Apply options for the MDI manager
   applyOptions();
 
-  m_pTaskBarPopup=new QPopupMenu( this, "taskbar_popup_menu");
-  m_pWindowPopup=new QPopupMenu( this, "window_popup_menu");
+  m_pTaskBarPopup=new Q3PopupMenu( this, "taskbar_popup_menu");
+  m_pWindowPopup=new Q3PopupMenu( this, "window_popup_menu");
 
-  m_pWindowMenu = new QPopupMenu( this, "window_menu");
+  m_pWindowMenu = new Q3PopupMenu( this, "window_menu");
   m_pWindowMenu->setCheckable( true);
   QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 
-  m_pDockMenu = new QPopupMenu( this, "dock_menu");
+  m_pDockMenu = new Q3PopupMenu( this, "dock_menu");
   m_pDockMenu->setCheckable( true);
 
-  m_pMdiModeMenu = new QPopupMenu( this, "mdimode_menu");
+  m_pMdiModeMenu = new Q3PopupMenu( this, "mdimode_menu");
   m_pMdiModeMenu->setCheckable( true);
 
-  m_pPlacingMenu = new QPopupMenu( this, "placing_menu");
+  m_pPlacingMenu = new Q3PopupMenu( this, "placing_menu");
 
   // the MDI view taskbar
   createTaskBar();
@@ -268,12 +277,12 @@ void KMdiMainFrm::setStandardMDIMenuEnabled(bool showModeMenu) {
 KMdiMainFrm::~KMdiMainFrm()
 {
   //save the children first to a list, as removing invalidates our iterator
-  QValueList<KMdiChildView *> children;
+  Q3ValueList<KMdiChildView *> children;
   for(KMdiChildView *w = m_pDocumentViews->first();w;w= m_pDocumentViews->next()){
     children.append(w);
   }
   // safely close the windows so properties are saved...
-  QValueListIterator<KMdiChildView *> childIt;
+  Q3ValueListIterator<KMdiChildView *> childIt;
   for (childIt = children.begin(); childIt != children.end(); ++childIt)
   {
     closeWindow(*childIt, false); // without re-layout taskbar!
@@ -334,7 +343,7 @@ void KMdiMainFrm::createMdiManager()
 //============ createTaskBar ==============//
 void KMdiMainFrm::createTaskBar()
 {
-  m_pTaskBar = new KMdiTaskBar(this,QMainWindow::DockBottom);
+  m_pTaskBar = new KMdiTaskBar(this,Qt::DockBottom);
   m_pTaskBar->installEventFilter( this);
 }
 
@@ -893,7 +902,7 @@ bool KMdiMainFrm::windowExists(KMdiChildView *pWnd, ExistsAs as)
   return false;
 }
 
-QPopupMenu * KMdiMainFrm::windowPopup(KMdiChildView * pWnd,bool bIncludeTaskbarPopup)
+Q3PopupMenu * KMdiMainFrm::windowPopup(KMdiChildView * pWnd,bool bIncludeTaskbarPopup)
 {
   m_pWindowPopup->clear();
   if(bIncludeTaskbarPopup){
@@ -904,7 +913,7 @@ QPopupMenu * KMdiMainFrm::windowPopup(KMdiChildView * pWnd,bool bIncludeTaskbarP
 }
 
 //================ taskBarPopup =================//
-QPopupMenu * KMdiMainFrm::taskBarPopup(KMdiChildView *pWnd,bool /*bIncludeWindowPopup*/)
+Q3PopupMenu * KMdiMainFrm::taskBarPopup(KMdiChildView *pWnd,bool /*bIncludeWindowPopup*/)
 {
   //returns the g_pTaskBarPopup filled according to the KMdiChildView state
   m_pTaskBarPopup->clear();
@@ -1103,9 +1112,9 @@ bool KMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
          *   The WIN button in KDE is the meta button in Qt
          **/
         if (state != ((QKeyEvent *)e)->stateAfter() &&
-            ((modFlags & KKey::CTRL) > 0) == ((state & Qt::ControlButton) > 0 ) &&
-            ((modFlags & KKey::ALT) > 0)  == ((state & Qt::AltButton) > 0)      &&
-            ((modFlags & KKey::WIN) > 0)  == ((state & Qt::MetaButton) > 0) )
+            ((modFlags & KKey::CTRL) > 0) == ((state & Qt::ControlModifier) > 0 ) &&
+            ((modFlags & KKey::ALT) > 0)  == ((state & Qt::AltModifier) > 0)      &&
+            ((modFlags & KKey::WIN) > 0)  == ((state & Qt::MetaModifier) > 0) )
         {
           activeWindow()->updateTimeStamp();
           setSwitching(false);
@@ -1125,11 +1134,11 @@ bool KMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
 void KMdiMainFrm::closeAllViews()
 {
   //save the children first to a list, as removing invalidates our iterator
-  QValueList<KMdiChildView *> children;
+  Q3ValueList<KMdiChildView *> children;
   for(KMdiChildView *w = m_pDocumentViews->first();w;w= m_pDocumentViews->next()){
     children.append(w);
   }
-  QValueListIterator<KMdiChildView *> childIt;
+  Q3ValueListIterator<KMdiChildView *> childIt;
   for (childIt = children.begin(); childIt != children.end(); ++childIt)
   {
     (*childIt)->close();
@@ -1157,7 +1166,7 @@ void KMdiMainFrm::closeActiveView()
 }
 
 /** find the root dockwidgets and store their geometry */
-void KMdiMainFrm::findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList)
+void KMdiMainFrm::findRootDockWidgets(Q3PtrList<KDockWidget>* pRootDockWidgetList, Q3ValueList<QRect>* pPositionList)
 {
   if (!pRootDockWidgetList) return;
   if (!pPositionList) return;
@@ -1191,7 +1200,7 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList
     if (pRootDockW) {
       // if that oldest ancestor is not already in the list, append it
       bool found = false;
-      QPtrListIterator<KDockWidget> it2( *pRootDockWidgetList);
+      Q3PtrListIterator<KDockWidget> it2( *pRootDockWidgetList);
       if (!pRootDockWidgetList->isEmpty()) {
         for ( ; it2.current() && !found; ++it2 ) {
           KDockWidget* pDockW = it2.current();
@@ -1241,8 +1250,8 @@ void KMdiMainFrm::switchToToplevelMode()
 
 
   // 1.) select the dockwidgets to be undocked and store their geometry
-  QPtrList<KDockWidget> rootDockWidgetList;
-  QValueList<QRect> positionList;
+  Q3PtrList<KDockWidget> rootDockWidgetList;
+  Q3ValueList<QRect> positionList;
   if (oldMdiMode!=KMdi::IDEAlMode)
     findRootDockWidgets(&rootDockWidgetList, &positionList);
 
@@ -1259,7 +1268,7 @@ void KMdiMainFrm::switchToToplevelMode()
   //   if (hasMenuBar()) menuBar()->setTopLevelMenu(false);
 
   // 3.) undock all these found oldest ancestors (being KDockWidgets)
-  QPtrListIterator<KDockWidget> it3( rootDockWidgetList);
+  Q3PtrListIterator<KDockWidget> it3( rootDockWidgetList);
   for (; it3.current(); ++it3 ) {
     KDockWidget* pDockW = it3.current();
     pDockW->undock();
@@ -1296,7 +1305,7 @@ void KMdiMainFrm::switchToToplevelMode()
 #warning fixme
 #endif
   // 5. show the child views again
-  QPtrListIterator<KMdiChildView> it( *m_pDocumentViews);
+  Q3PtrListIterator<KMdiChildView> it( *m_pDocumentViews);
   for( it.toFirst(); it.current(); ++it) {
     KMdiChildView* pView = it.current();
 #ifdef Q_WS_X11
@@ -1307,7 +1316,7 @@ void KMdiMainFrm::switchToToplevelMode()
   }
 
   // 6.) reset all memorized positions of the undocked ones and show them again
-  QValueList<QRect>::Iterator it5;
+  Q3ValueList<QRect>::Iterator it5;
   for (it3.toFirst(), it5 = positionList.begin() ; it3.current(), it5 != positionList.end(); ++it3, ++it5 ) {
     KDockWidget* pDockW = it3.current();
     pDockW->setGeometry( (*it5));
@@ -1338,14 +1347,14 @@ void KMdiMainFrm::switchToChildframeMode()
     return;
   }
 
-  QPtrList<KDockWidget> rootDockWidgetList;
+  Q3PtrList<KDockWidget> rootDockWidgetList;
   if (m_mdiMode == KMdi::TabPageMode) {
     // select the dockwidgets to be undocked and store their geometry
-    QValueList<QRect> positionList;
+    Q3ValueList<QRect> positionList;
     findRootDockWidgets(&rootDockWidgetList, &positionList);
 
     // undock all these found oldest ancestors (being KDockWidgets)
-    QPtrListIterator<KDockWidget> it3( rootDockWidgetList);
+    Q3PtrListIterator<KDockWidget> it3( rootDockWidgetList);
     for (; it3.current(); ++it3 ) {
       KDockWidget* pDockW = it3.current();
       pDockW->undock();
@@ -1358,14 +1367,14 @@ void KMdiMainFrm::switchToChildframeMode()
     finishIDEAlMode(false);
 
     // select the dockwidgets to be undocked and store their geometry
-    QValueList<QRect> positionList;
+    Q3ValueList<QRect> positionList;
     findRootDockWidgets(&rootDockWidgetList, &positionList);
 
 
 
     // undock all these found oldest ancestors (being KDockWidgets)
 
-    QPtrListIterator<KDockWidget> it3( rootDockWidgetList);
+    Q3PtrListIterator<KDockWidget> it3( rootDockWidgetList);
     for (; it3.current(); ++it3 ) {
       KDockWidget* pDockW = it3.current();
       pDockW->undock();
@@ -1402,7 +1411,7 @@ void KMdiMainFrm::switchToChildframeMode()
   //return; //debug
   if ( (m_mdiMode == KMdi::TabPageMode) || (m_mdiMode == KMdi::IDEAlMode)) {
     kdDebug(760)<<"switchToChildFrameMode: trying to dock back toolviews"<<endl;
-    QPtrListIterator<KDockWidget> it4( rootDockWidgetList);
+    Q3PtrListIterator<KDockWidget> it4( rootDockWidgetList);
     for (; it4.current(); ++it4 ) {
       KDockWidget* pDockW = it4.current();
       pDockW->dockBack();
@@ -1421,7 +1430,7 @@ void KMdiMainFrm::switchToChildframeMode()
 #ifdef __GNUC__
 #warning fixme
 #endif
-  QPtrListIterator<KMdiChildView> it( *m_pDocumentViews);
+  Q3PtrListIterator<KMdiChildView> it( *m_pDocumentViews);
   for( ; it.current(); ++it) {
     KMdiChildView* pView = it.current();
     if( !pView->isToolView())
@@ -1454,7 +1463,7 @@ void KMdiMainFrm::finishChildframeMode()
   writeDockConfig( curDockState);
 
   // detach all non-tool-views to toplevel
-  QPtrListIterator<KMdiChildView> it( *m_pDocumentViews);
+  Q3PtrListIterator<KMdiChildView> it( *m_pDocumentViews);
   for( ; it.current(); ++it) {
     KMdiChildView* pView = it.current();
     if( pView->isToolView())
@@ -1517,7 +1526,7 @@ void KMdiMainFrm::finishTabPageMode()
     m_pClose->hide();
     QObject::disconnect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
 
-    QPtrListIterator<KMdiChildView> it( *m_pDocumentViews);
+    Q3PtrListIterator<KMdiChildView> it( *m_pDocumentViews);
     for( ; it.current(); ++it) {
       KMdiChildView* pView = it.current();
       if( pView->isToolView())
@@ -1578,7 +1587,7 @@ void KMdiMainFrm::setupTabbedDocumentViewSpace() {
   connect(m_documentTabWidget,SIGNAL(currentChanged(QWidget*)),this,SLOT(slotDocCurrentChanged(QWidget*)));
   m_pDockbaseAreaOfDocumentViews->setWidget(m_documentTabWidget);
   m_documentTabWidget->show();
-  QPtrListIterator<KMdiChildView> it4( *m_pDocumentViews);
+  Q3PtrListIterator<KMdiChildView> it4( *m_pDocumentViews);
   for( ; it4.current(); ++it4) {
     KMdiChildView* pView = it4.current();
     m_documentTabWidget->addTab(pView, pView->icon() ? *(pView->icon()) : QPixmap(),pView->tabCaption());
@@ -1708,7 +1717,7 @@ void KMdiMainFrm::switchToIDEAlMode()
 }
 
 
-void KMdiMainFrm::dockToolViewsIntoContainers(QPtrList<KDockWidget>& widgetsToReparent,KDockWidget *container) {
+void KMdiMainFrm::dockToolViewsIntoContainers(Q3PtrList<KDockWidget>& widgetsToReparent,KDockWidget *container) {
   for ( KDockWidget *dw = widgetsToReparent.first(); dw;
       dw=widgetsToReparent.next()){
     dw->manualDock(container,KDockWidget::DockCenter,20);
@@ -1716,7 +1725,7 @@ void KMdiMainFrm::dockToolViewsIntoContainers(QPtrList<KDockWidget>& widgetsToRe
   }
 }
 
-void KMdiMainFrm::findToolViewsDockedToMain(QPtrList<KDockWidget>* list,KDockWidget::DockPosition dprtmw) {
+void KMdiMainFrm::findToolViewsDockedToMain(Q3PtrList<KDockWidget>* list,KDockWidget::DockPosition dprtmw) {
   KDockWidget *mainDock=getMainDockWidget();
   if (mainDock->parentDockTabGroup()) {
     mainDock=dynamic_cast<KDockWidget*>(mainDock->parentDockTabGroup()->parent());
@@ -1759,10 +1768,10 @@ void KMdiMainFrm::setupToolViewsForIDEALMode()
     w=static_cast<KDockWidget*>(mainDock->parentDockTabGroup()->parent());
   }
 
-  QPtrList<KDockWidget> leftReparentWidgets;
-  QPtrList<KDockWidget> rightReparentWidgets;
-  QPtrList<KDockWidget> bottomReparentWidgets;
-  QPtrList<KDockWidget> topReparentWidgets;
+  Q3PtrList<KDockWidget> leftReparentWidgets;
+  Q3PtrList<KDockWidget> rightReparentWidgets;
+  Q3PtrList<KDockWidget> bottomReparentWidgets;
+  Q3PtrList<KDockWidget> topReparentWidgets;
 
   if (mainDock->parentDockTabGroup()) {
     mainDock=static_cast<KDockWidget*>(mainDock->parentDockTabGroup()->parent());
@@ -1890,7 +1899,7 @@ void KMdiMainFrm::finishIDEAlMode(bool full)
 
     if (!full) return;
 
-    QPtrListIterator<KMdiChildView> it( *m_pDocumentViews);
+    Q3PtrListIterator<KMdiChildView> it( *m_pDocumentViews);
     for( ; it.current(); ++it) {
       KMdiChildView* pView = it.current();
       if( pView->isToolView())
@@ -2409,8 +2418,8 @@ void KMdiMainFrm::fillWindowMenu()
   // for all child frame windows: give an ID to every window and connect them in the end with windowMenuItemActivated()
   int i=100;
   KMdiChildView* pView = 0L;
-  QPtrListIterator<KMdiChildView> it(*m_pDocumentViews);
-  QValueList<QDateTime> timeStamps;
+  Q3PtrListIterator<KMdiChildView> it(*m_pDocumentViews);
+  Q3ValueList<QDateTime> timeStamps;
   for (; it.current(); ++it) {
     pView = it.current();
     QDateTime timeStamp( pView->getTimeStamp() );
@@ -2436,7 +2445,7 @@ void KMdiMainFrm::fillWindowMenu()
     unsigned int windowItemCount = m_pWindowMenu->count() - entryCount;
     bool inserted = false;
     QString tmpString;
-    QValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
+    Q3ValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
     for (indx = 0; indx <= windowItemCount; indx++, ++timeStampIterator) {
       bool putHere = false;
       if ((*timeStampIterator) < timeStamp) {
@@ -2556,7 +2565,7 @@ void KMdiMainFrm::setFrameDecorOfAttachedViews( int frameDecor)
       break;
   }
   setMenuForSDIModeSysButtons( m_pMainMenuBar);
-  QPtrListIterator<KMdiChildView> it( *m_pDocumentViews);
+  Q3PtrListIterator<KMdiChildView> it( *m_pDocumentViews);
   for( ; it.current(); ++it) {
     KMdiChildView* pView = it.current();
     if( pView->isToolView())

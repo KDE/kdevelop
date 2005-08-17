@@ -19,6 +19,8 @@
 #include "variablewidget.h"
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -68,7 +70,7 @@ void JDBParser::parseData(TrimmableItem *parent, char *buf,
             dataType = determineType(buf);
         }
 
-        QCString value = getValue(&buf, requested);
+        Q3CString value = getValue(&buf, requested);
         setItem(parent, varName, dataType, value, requested, params);
     }
 }
@@ -85,7 +87,7 @@ void JDBParser::parseArray(TrimmableItem *parent, char *buf)
                 return;
 
             DataType dataType = determineType(buf);
-            QCString value = getValue(&buf, false);
+            Q3CString value = getValue(&buf, false);
             QString varName = elementRoot.arg(idx);
             setItem(parent, varName, dataType, value, false, false);
 
@@ -106,7 +108,7 @@ QString JDBParser::getName(char **buf)
     char *start = skipNextTokenStart(*buf);
     if (*start) {
         *buf = skipTokenValue(start);
-        return QCString(start, *buf - start + 1);
+        return Q3CString(start, *buf - start + 1);
     } else
         *buf = start;
 
@@ -115,15 +117,15 @@ QString JDBParser::getName(char **buf)
 
 // **************************************************************************
 
-QCString JDBParser::getValue(char **buf, bool requested)
+Q3CString JDBParser::getValue(char **buf, bool requested)
 {
     char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 
     if (*start == '{')
-        return QCString(start+1, *buf - start -1);
+        return Q3CString(start+1, *buf - start -1);
 
-    QCString value(start, *buf - start + 1);
+    Q3CString value(start, *buf - start + 1);
 
     // QT2.x string handling
     // A very bad hack alert!
@@ -154,7 +156,7 @@ TrimmableItem *JDBParser::getItem(TrimmableItem *parent, DataType dataType,
 // **************************************************************************
 
 void JDBParser::setItem(TrimmableItem *parent, const QString &varName,
-                        DataType dataType, const QCString &value,
+                        DataType dataType, const Q3CString &value,
                         bool requested, bool)
 {
     TrimmableItem *item = getItem(parent, dataType, varName, requested);
@@ -187,7 +189,7 @@ void JDBParser::setItem(TrimmableItem *parent, const QString &varName,
         {
             int pos;
             if ((pos = value.find(':', 0)) != -1) {
-                QCString rhs((value.mid(pos+2, value.length()).data()));
+                Q3CString rhs((value.mid(pos+2, value.length()).data()));
                 if (determineType(rhs.data()) != typeValue) {
                     item->setCache(rhs);
                     item->setText(ValueCol, value.left(pos));

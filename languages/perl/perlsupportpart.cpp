@@ -12,7 +12,7 @@
 #include "perlsupportpart.h"
 
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <qregexp.h>
 #include <codemodel.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 #include <kstatusbar.h>
 #include "kdevmainwindow.h"
 
@@ -269,7 +269,7 @@ void PerlSupportPart::initialParse()
         m_parser->initialParse();
 
         //progress bar
-        QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
+        Q3ProgressBar* bar = new Q3ProgressBar( files.count( ), mainWindow( )->statusBar( ) );
         bar->setMinimumWidth( 120 );
         bar->setCenterIndicator( true );
         mainWindow( )->statusBar( )->addWidget( bar );

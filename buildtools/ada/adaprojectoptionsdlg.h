@@ -21,7 +21,7 @@ class AdaProjectOptionsDlg : public AdaProjectOptionsDlgBase
   Q_OBJECT
 
 public:
-    AdaProjectOptionsDlg(AdaProjectPart *part, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    AdaProjectOptionsDlg(AdaProjectPart *part, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~AdaProjectOptionsDlg();
 
 public slots:

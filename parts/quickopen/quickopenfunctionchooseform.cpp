@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -30,7 +30,7 @@
 #include "quickopenfunctionchooseform.h"
 #include "quickopenfunctiondialog.h"
 
-QuickOpenFunctionChooseForm::QuickOpenFunctionChooseForm(QWidget* parent, const char* name, bool modal, WFlags fl)
+QuickOpenFunctionChooseForm::QuickOpenFunctionChooseForm(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 : QuickOpenFunctionChooseFormBase(parent,name, modal,fl)
 {
 	setCaption( i18n("Select One Argument or File of Function %1").arg( name ) );

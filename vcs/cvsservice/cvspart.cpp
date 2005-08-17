@@ -12,8 +12,8 @@
  ***************************************************************************/
 
 #include <qdir.h>
-#include <qpopupmenu.h>
-#include <qwhatsthis.h>
+#include <q3popupmenu.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
 
 #include <kpopupmenu.h>
@@ -122,15 +122,15 @@ void CvsServicePart::init()
     connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
 
     // Context menu
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-        this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+        this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
         this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
         this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 
     m_impl->m_widget->setIcon( UserIcon( "kdev_cvs", KIcon::DefaultState, CvsFactory::instance()) );
-    QWhatsThis::add( m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service.") );
+    Q3WhatsThis::add( m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service.") );
     m_impl->processWidget()->setCaption(i18n("CvsService Output"));
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
     
@@ -276,7 +276,7 @@ void CvsServicePart::createNewProject( const QString &dirName )
 
 void CvsServicePart::projectConfigWidget( KDialogBase *dlg )
 {
-	QVBox *vbox = dlg->addVBoxPage( i18n("CvsService"), i18n("CvsService"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+	Q3VBox *vbox = dlg->addVBoxPage( i18n("CvsService"), i18n("CvsService"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     CvsOptionsWidget *w = new CvsOptionsWidget( (QWidget *)vbox, "cvs config widget" );
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -291,7 +291,7 @@ QWidget* CvsServicePart::newProjectWidget( QWidget *parent )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
+void CvsServicePart::contextMenu( Q3PopupMenu *popup, const Context *context )
 {
     kdDebug(9006) << "contextMenu()" << endl;
     if (context->hasType( Context::FileContext ) ||

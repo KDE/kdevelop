@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVPROJECTMODEL_H
 #define KDEVPROJECTMODEL_H
@@ -24,6 +24,8 @@
 #include <qmap.h>
 #include <qstringlist.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class ProjectModel;
 class ProjectModelItem;
@@ -41,12 +43,12 @@ typedef KSharedPtr<ProjectTargetModel> ProjectTargetDom;
 typedef KSharedPtr<ProjectFolderModel> ProjectFolderDom;
 typedef KSharedPtr<ProjectWorkspaceModel> ProjectWorkspaceDom;
 
-typedef QValueList<ProjectItemDom> ProjectItemList;
-typedef QValueList<ProjectDependenceDom> ProjectDependenceList;
-typedef QValueList<ProjectFileDom> ProjectFileList;
-typedef QValueList<ProjectTargetDom> ProjectTargetList;
-typedef QValueList<ProjectFolderDom> ProjectFolderList;
-typedef QValueList<ProjectWorkspaceDom> ProjectWorkspaceList;
+typedef Q3ValueList<ProjectItemDom> ProjectItemList;
+typedef Q3ValueList<ProjectDependenceDom> ProjectDependenceList;
+typedef Q3ValueList<ProjectFileDom> ProjectFileList;
+typedef Q3ValueList<ProjectTargetDom> ProjectTargetList;
+typedef Q3ValueList<ProjectFolderDom> ProjectFolderList;
+typedef Q3ValueList<ProjectWorkspaceDom> ProjectWorkspaceList;
 
 class ProjectModel
 {
@@ -61,14 +63,14 @@ public:
     }
 
     void wipeout();
-
+    
     inline ProjectItemList itemList() const
     { return m_items.values(); }
-
+    
     ProjectItemDom itemByName(const QString &name) const;
     void addItem(ProjectItemDom dom);
     void removeItem(ProjectItemDom dom);
-
+    
 private:
     QMap<QString, ProjectItemDom> m_items;
 };
@@ -82,9 +84,9 @@ public:
     ProjectDependenceDom toDependence();
     ProjectFileDom toFile();
     ProjectTargetDom toTarget();
-    ProjectFolderDom toFolder();
+    ProjectFolderDom toFolder(); 
     ProjectWorkspaceDom toWorkspace();
-
+        
     virtual bool isDependence() const { return false; }
     virtual bool isFile() const { return false; }
     virtual bool isTarget() const { return false; }
@@ -97,62 +99,62 @@ protected:
 
 public:
     virtual ~ProjectModelItem() {}
-
+    
     virtual QString shortDescription() const;
 
     inline ProjectModel *projectModel() const
     { return m_projectModel; }
-
+        
     inline QString name() const
     { return m_name; }
-
+    
     inline void setName(const QString &name)
     { m_name = name; }
-
+    
     inline bool isDirty() const
     { return m_dirty; }
-
+    
     inline void setDirty(bool dirty)
     { m_dirty = dirty; }
-
+    
 //
 // attributes
 //
     inline QMap<QString, QVariant> attributes() const
     { return m_attributes; }
-
+    
     inline bool hasAttribute(const QString &name) const
     { return m_attributes.contains(name); }
-
+    
     inline QVariant attribute(const QString &name) const
     { return m_attributes.contains(name) ? m_attributes[name] : QVariant(); }
-
+    
     inline void setAttribute(const QString &name, const QVariant &value)
     { m_attributes.insert(name, value); }
-
+    
     inline void removeAttribute(const QString &name)
     { m_attributes.remove(name); }
-
+    
 private:
     ProjectModel *m_projectModel;
     QString m_name;
     bool m_dirty;
     QMap<QString, QVariant> m_attributes;
-
-    friend class ProjectModel;
+    
+    friend class ProjectModel;    
 };
 
 class ProjectDependenceModel: public ProjectModelItem
 {
     typedef ProjectDependenceDom Ptr;
-
+    
 protected:
     ProjectDependenceModel(ProjectModel *projectModel)
         : ProjectModelItem(projectModel) {}
-
+    
 public:
     virtual bool isDependence() const { return true; }
-
+    
 private:
     friend class ProjectModel;
 };
@@ -161,19 +163,19 @@ private:
 class ProjectFileModel: public ProjectModelItem
 {
     typedef ProjectFileDom Ptr;
-
+    
 protected:
     ProjectFileModel(ProjectModel *projectModel)
         : ProjectModelItem(projectModel) {}
-
+       
 public:
     virtual bool isFile() const { return true; }
-
+ 
     virtual QString shortDescription() const;
-
+    
     inline FileDom model(CodeModel *model) const
     { return model->fileByName(name()); }
-
+    
 private:
     friend class ProjectModel;
 };
@@ -181,7 +183,7 @@ private:
 class ProjectTargetModel: public ProjectModelItem
 {
     typedef ProjectTargetDom Ptr;
-
+    
 protected:
     ProjectTargetModel(ProjectModel *projectModel)
         : ProjectModelItem(projectModel) {}
@@ -189,15 +191,14 @@ protected:
 public:
     virtual bool isTarget() const { return true; }
 
-    ProjectFileList fileList() const;
+    ProjectFileList fileList() const; 
     ProjectFileDom fileByName(const QString &name) const;
     void addFile(ProjectFileDom dom);
     void removeFile(ProjectFileDom dom);
-
+        
 private:
     QMap<QString, ProjectFileDom> m_files;
-    QValueList<ProjectFileDom> m_filesList;
-
+    
     friend class ProjectModel;
 };
 
@@ -210,7 +211,7 @@ Special attributes:
 class ProjectFolderModel: public ProjectModelItem
 {
     typedef ProjectFolderDom Ptr;
-
+    
 protected:
     ProjectFolderModel(ProjectModel *projectModel)
         : ProjectModelItem(projectModel) {}
@@ -219,30 +220,27 @@ public:
     virtual bool isFolder() const { return true; }
 
     virtual QString shortDescription() const;
-
-    ProjectFolderList folderList() const;
+    
+    ProjectFolderList folderList() const;    
     ProjectFolderDom folderByName(const QString &name) const;
     void addFolder(ProjectFolderDom dom);
     void removeFolder(ProjectFolderDom dom);
 
-    ProjectFileList fileList() const;
+    ProjectFileList fileList() const;    
     ProjectFileDom fileByName(const QString &name) const;
     void addFile(ProjectFileDom dom);
     void removeFile(ProjectFileDom dom);
-
-    ProjectTargetList targetList() const;
+    
+    ProjectTargetList targetList() const;    
     ProjectTargetDom targetByName(const QString &name) const;
     void addTarget(ProjectTargetDom dom);
     void removeTarget(ProjectTargetDom dom);
-
+        
 private:
     QMap<QString, ProjectFolderDom> m_folders;
-    QValueList<ProjectFolderDom> m_foldersList;
     QMap<QString, ProjectFileDom> m_files;
-    QValueList<ProjectFileDom> m_filesList;
     QMap<QString, ProjectTargetDom> m_targets;
-    QValueList<ProjectTargetDom> m_targetsList;
-
+                
 private:
     friend class ProjectModel;
 };
@@ -250,17 +248,17 @@ private:
 class ProjectWorkspaceModel: public ProjectFolderModel
 {
     typedef ProjectWorkspaceDom Ptr;
-
+    
 protected:
     ProjectWorkspaceModel(ProjectModel *projectModel)
         : ProjectFolderModel(projectModel) {}
-
+        
 public:
     virtual bool isWorkspace() const { return false; }
 
     virtual QString shortDescription() const;
-
-private:
+    
+private:        
     friend class ProjectModel;
 };
 
@@ -278,7 +276,7 @@ inline ProjectFileDom ProjectModelItem::toFile()
 inline ProjectTargetDom ProjectModelItem::toTarget()
 { return isTarget() ? ProjectTargetDom(static_cast<ProjectTargetModel*>(this)) : ProjectTargetDom(0); }
 
-inline ProjectFolderDom ProjectModelItem::toFolder()
+inline ProjectFolderDom ProjectModelItem::toFolder() 
 { return isFolder() ? ProjectFolderDom(static_cast<ProjectFolderModel*>(this)) : ProjectFolderDom(0); }
 
 inline ProjectWorkspaceDom ProjectModelItem::toWorkspace()

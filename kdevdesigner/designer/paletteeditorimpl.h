@@ -36,10 +36,10 @@ class PaletteEditor : public PaletteEditorBase
     Q_OBJECT
 
 public:
-    PaletteEditor( FormWindow *fw, QWidget * parent=0, const char * name=0, bool modal=FALSE, WFlags f=0 );
+    PaletteEditor( FormWindow *fw, QWidget * parent=0, const char * name=0, bool modal=FALSE, Qt::WFlags f=0 );
     ~PaletteEditor();
 
-    static QPalette getPalette( bool *ok, const QPalette &pal, BackgroundMode mode = PaletteBackground,
+    static QPalette getPalette( bool *ok, const QPalette &pal, Qt::BackgroundMode mode = Qt::PaletteBackground,
 				QWidget* parent = 0, const char* name = 0, FormWindow *fw = 0 );
 
 protected slots:
@@ -59,7 +59,7 @@ protected:
 private:
     void setPreviewPalette( const QPalette& );
     void updateStyledButtons();
-    void setupBackgroundMode( BackgroundMode mode ) { backgroundMode = mode; }
+    void setupBackgroundMode( Qt::BackgroundMode mode ) { backgroundMode = mode; }
 
     QPalette pal() const;
     void setPal( const QPalette& );

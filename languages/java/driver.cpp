@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #include "JavaAST.hpp"
@@ -26,6 +26,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 #include <string>
 #include <sstream>
@@ -40,7 +43,7 @@ public:
 	QString source;
 
 	QFile f( fileName );
-	if( f.open(IO_ReadOnly) ){
+	if( f.open(QIODevice::ReadOnly) ){
 	    QTextStream s( &f );
 	    source = s.read();
 	    f.close();
@@ -128,23 +131,23 @@ void Driver::addProblem( const QString & fileName, const Problem & problem )
     findOrInsertProblemList( fileName ).append( problem );
 }
 
-QValueList < Problem >& Driver::findOrInsertProblemList( const QString & fileName )
+Q3ValueList < Problem >& Driver::findOrInsertProblemList( const QString & fileName )
 {
-    QMap<QString, QValueList<Problem> >::Iterator it = m_problems.find( fileName );
+    QMap<QString, Q3ValueList<Problem> >::Iterator it = m_problems.find( fileName );
     if( it != m_problems.end() )
         return it.data();
 
-    QValueList<Problem> l;
+    Q3ValueList<Problem> l;
     m_problems.insert( fileName, l );
     return m_problems[ fileName ];
 }
 
-QValueList < Problem > Driver::problems( const QString & fileName ) const
+Q3ValueList < Problem > Driver::problems( const QString & fileName ) const
 {
-    QMap<QString, QValueList<Problem> >::ConstIterator it = m_problems.find( fileName );
+    QMap<QString, Q3ValueList<Problem> >::ConstIterator it = m_problems.find( fileName );
     if( it != m_problems.end() )
 	return it.data();
-    return QValueList<Problem>();
+    return Q3ValueList<Problem>();
 }
 
 void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force )

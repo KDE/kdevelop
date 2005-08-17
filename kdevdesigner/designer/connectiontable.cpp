@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 ConnectionTable::ConnectionTable( QWidget *parent, const char *name )
-    : QTable( 0, 4, parent, name )
+    : Q3Table( 0, 4, parent, name )
 {
     setSorting( TRUE );
     setShowGrid( FALSE );
@@ -50,7 +50,7 @@ void ConnectionTable::sortColumn( int col, bool ascending, bool )
     horizontalHeader()->setSortIndicator( col, ascending );
     if ( isEditing() )
 	endEdit( currEditRow(), currEditCol(), FALSE, FALSE );
-    QTable::sortColumn( col, ascending, TRUE );
+    Q3Table::sortColumn( col, ascending, TRUE );
     setCurrentCell( 0, 0 );
     emit resorted();
 }

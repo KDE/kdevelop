@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "processwidget.h"
@@ -30,7 +30,7 @@
 
 
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
-    : QListBoxText(s), t(type)
+    : Q3ListBoxText(s), t(type)
 {}
 
 
@@ -44,7 +44,7 @@ void ProcessListBoxItem::paint(QPainter *p)
 {
     p->setPen((t==Error)? Qt::darkRed :
               (t==Diagnostic)? Qt::black : Qt::darkBlue);
-    QListBoxText::paint(p);
+    Q3ListBoxText::paint(p);
 }
 
 
@@ -171,7 +171,7 @@ QSize ProcessWidget::minimumSizeHint() const
     // I'm not sure about this, but when I don't use override minimumSizeHint(),
     // the initial size in clearly too small
 
-    return QSize( QListBox::sizeHint().width(),
+    return QSize( Q3ListBox::sizeHint().width(),
                   (fontMetrics().lineSpacing()+2)*4 );
 }
 

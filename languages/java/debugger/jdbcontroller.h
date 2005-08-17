@@ -20,9 +20,11 @@
 
 #include "dbgcontroller.h"
 #include <qobject.h>
-#include <qptrlist.h>
-#include <qdict.h>
+#include <q3ptrlist.h>
+#include <q3dict.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class KProcess;
@@ -46,7 +48,7 @@ public:
 
     QString value;
     QString name;
-    QPtrList<JDBVarItem> siblings;
+    Q3PtrList<JDBVarItem> siblings;
 
 };
 
@@ -91,8 +93,8 @@ private:
     void actOnProgramPause(const QString &msg);
     void programNoApp(const QString &msg, bool msgBox);
 
-    void setBreakpoint(const QCString &BPSetCmd, int key);
-    void clearBreakpoint(const QCString &BPClearCmd);
+    void setBreakpoint(const Q3CString &BPSetCmd, int key);
+    void clearBreakpoint(const Q3CString &BPClearCmd);
     void modifyBreakpoint(Breakpoint *BP);
 
     void setStateOn(int stateOn)    { state_ |= stateOn; }
@@ -104,7 +106,7 @@ private:
     QString projectDirectory_;
     QString curLine;
     QString curMethod, locals;
-    QDict<JDBVarItem> localData;
+    Q3Dict<JDBVarItem> localData;
     QStringList nameQueue;
     int s_command;
     int stackLineCount, varLineCount;
@@ -132,7 +134,7 @@ public slots:
     void slotLibraries();
 
     void slotExpandItem(VarItem *parent);
-    void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
+    void slotExpandUserItem(VarItem *parent, const Q3CString &userRequest);
     void slotSelectFrame(int frame);
     void slotSetLocalViewState(bool onOff);
 
@@ -174,7 +176,7 @@ private:
     int               jdbOutputLen_;          // amount of data in the output buffer
     char*             jdbOutput_;             // buffer for the output from kprocess
 
-    QPtrList<DbgCommand> cmdList_;
+    Q3PtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
 
     STTY*             tty_;

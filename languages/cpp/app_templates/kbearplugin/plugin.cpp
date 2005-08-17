@@ -2,7 +2,7 @@
 
 //////////////////////////////////////////////////////////////////////
 // Qt specific include files
-#include <qvbox.h>
+#include <q3vbox.h>
 //////////////////////////////////////////////////////////////////////
 // System specific include files
 #include <klocale.h>
@@ -67,7 +67,7 @@ QString KBear%{APPNAME}Plugin::unloadWarning() const
 void KBear%{APPNAME}Plugin::slotConfigWidget( KDialogBase* dlg )
 {
     // If you don't need a config widget just remove this code
-    QVBox* vbox = dlg->addVBoxPage(i18n("%{APPNAME} Settings"), QString::null,
+    Q3VBox* vbox = dlg->addVBoxPage(i18n("%{APPNAME} Settings"), QString::null,
         KGlobal::iconLoader()->loadIcon("kbear%{APPNAMELC}", KIcon::NoGroup, KIcon::SizeMedium) );
     KBear%{APPNAME}ConfigWidget* w = new KBear%{APPNAME}ConfigWidget( vbox, "%{APPNAME}SettingsWidget" );
     connect( dlg, SIGNAL( okClicked() ), w, SLOT( slotSaveSettings() ) );

@@ -29,17 +29,19 @@
 #include "metadatabase.h"
 #include "mainwindow.h"
 
-#include <qlistview.h>
-#include <qtextedit.h>
+#include <q3listview.h>
+#include <q3textedit.h>
 #include <qapplication.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <stdlib.h>
 #include <stdio.h>
 #include <qpainter.h>
 
 #include <klocale.h>
 
-static QTextEdit *debugoutput = 0;
+static Q3TextEdit *debugoutput = 0;
 bool debugToStderr = FALSE;
 
 QtMsgHandler OutputWindow::oldMsgHandler = 0;
@@ -69,12 +71,12 @@ void OutputWindow::shuttingDown()
 
 void OutputWindow::setupError()
 {
-    errorView = new QListView( this, "OutputWindow::errorView" );
+    errorView = new Q3ListView( this, "OutputWindow::errorView" );
     errorView->setSorting( -1 );
-    connect( errorView, SIGNAL( currentChanged( QListViewItem* ) ),
-	     this, SLOT( currentErrorChanged( QListViewItem* ) ) );
-    connect( errorView, SIGNAL( clicked( QListViewItem* ) ),
-	     this, SLOT( currentErrorChanged( QListViewItem* ) ) );
+    connect( errorView, SIGNAL( currentChanged( Q3ListViewItem* ) ),
+	     this, SLOT( currentErrorChanged( Q3ListViewItem* ) ) );
+    connect( errorView, SIGNAL( clicked( Q3ListViewItem* ) ),
+	     this, SLOT( currentErrorChanged( Q3ListViewItem* ) ) );
 
     if ( MetaDataBase::languages().count() > 1 )
 	addTab( errorView, i18n( "Warnings/Errors" ) );
@@ -84,7 +86,7 @@ void OutputWindow::setupError()
     errorView->addColumn( i18n( "Message" ) );
     errorView->addColumn( i18n( "Line" ) );
     errorView->addColumn( i18n( "Location" ) );
-    errorView->setResizeMode( QListView::LastColumn );
+    errorView->setResizeMode( Q3ListView::LastColumn );
     errorView->setColumnWidth( 0, errorView->fontMetrics().width( "WARNING1234" ) );
     errorView->setColumnWidth( 1, errorView->fontMetrics().width( "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOP" ) );
     errorView->setColumnWidth( 2, errorView->fontMetrics().width( "9999999" ) );
@@ -114,7 +116,7 @@ static void debugMessageOutput( QtMsgType type, const char *msg )
 
 void OutputWindow::setupDebug()
 {
-    debugoutput = debugView = new QTextEdit( this, "OutputWindow::debugView" );
+    debugoutput = debugView = new Q3TextEdit( this, "OutputWindow::debugView" );
     //debugView->setReadOnly( TRUE );
     addTab( debugView, "Debug Output" );
 
@@ -122,18 +124,18 @@ void OutputWindow::setupDebug()
 	oldMsgHandler = qInstallMsgHandler( debugMessageOutput );
 }
 
-void OutputWindow::setErrorMessages( const QStringList &errors, const QValueList<uint> &lines,
+void OutputWindow::setErrorMessages( const QStringList &errors, const Q3ValueList<uint> &lines,
 				     bool clear, const QStringList &locations,
 				     const QObjectList &locationObjects )
 {
     if ( clear )
 	errorView->clear();
     QStringList::ConstIterator mit = errors.begin();
-    QValueList<uint>::ConstIterator lit = lines.begin();
+    Q3ValueList<uint>::ConstIterator lit = lines.begin();
     QStringList::ConstIterator it = locations.begin();
     QObjectList objects = (QObjectList)locationObjects;
     QObject *o = objects.first();
-    QListViewItem *after = 0;
+    Q3ListViewItem *after = 0;
     for ( ; lit != lines.end() && mit != errors.end(); ++lit, ++mit, ++it, o = objects.next() )
 	after = new ErrorItem( errorView, after, *mit, *lit, *it, o );
     setCurrentPage( 1 );
@@ -164,7 +166,7 @@ void OutputWindow::showDebugTab()
     showPage( debugView );
 }
 
-void OutputWindow::currentErrorChanged( QListViewItem *i )
+void OutputWindow::currentErrorChanged( Q3ListViewItem *i )
 {
     if ( !i )
 	return;
@@ -175,9 +177,9 @@ void OutputWindow::currentErrorChanged( QListViewItem *i )
 
 
 
-ErrorItem::ErrorItem( QListView *parent, QListViewItem *after, const QString &message, int line,
+ErrorItem::ErrorItem( Q3ListView *parent, Q3ListViewItem *after, const QString &message, int line,
 		      const QString &locationString, QObject *locationObject )
-    : QListViewItem( parent, after )
+    : Q3ListViewItem( parent, after )
 {
     setMultiLinesEnabled( TRUE );
     QString m( message );
@@ -205,5 +207,5 @@ void ErrorItem::paintCell( QPainter *p, const QColorGroup & cg,
 	f.setBold( TRUE );
 	p->setFont( f );
     }
-    QListViewItem::paintCell( p, g, column, width, alignment );
+    Q3ListViewItem::paintCell( p, g, column, width, alignment );
 }

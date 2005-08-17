@@ -1,9 +1,12 @@
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDropEvent>
 %{H_TEMPLATE}
 
 #ifndef _%{APPNAMEUC}KMDI_H
 #define _%{APPNAMEUC}KMDI_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kapplication.h>
 #include <kmdimainfrm.h>
@@ -14,7 +17,7 @@ class KRecentFilesAction;
 
 class kmdikonsole;
 class KMdiChildView;
-class QWidgetStack;
+class Q3WidgetStack;
 class %{APPNAMELC}kmdiView;
 class TextProperties;
 class MiscProperties;
@@ -68,7 +71,7 @@ class %{APPNAMELC}kmdi : public KMdiMainFrm
 		void setupAccel();
 		void setupActions();
 
-		QValueList<%{APPNAMELC}kmdiView*> m_views;
+		Q3ValueList<%{APPNAMELC}kmdiView*> m_views;
 
 		KToggleAction *m_toolbarAction;
 		KToggleAction *m_statusbarAction;

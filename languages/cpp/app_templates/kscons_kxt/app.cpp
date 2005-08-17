@@ -4,10 +4,10 @@
 #include "settings.h"
 #include "prefs.h"
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <kprinter.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 
 #include <kconfigdialog.h>
 #include <kglobal.h>

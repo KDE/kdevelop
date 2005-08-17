@@ -33,10 +33,21 @@
 #include "actiondnd.h"
 
 #include <qwidget.h>
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 #include <qpixmap.h>
-#include <qwidgetlist.h>
+#include <qwidget.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <QCloseEvent>
+#include <Q3PtrList>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QLabel>
+#include <QResizeEvent>
+#include <QContextMenuEvent>
+#include <QMouseEvent>
 
 class QPaintEvent;
 class QMouseEvent;
@@ -124,7 +135,7 @@ public:
     virtual QLabel *sizePreview() const;
     virtual void checkPreviewGeometry( QRect &r );
 
-    virtual QPtrDict<QWidget> *widgets();
+    virtual Q3PtrDict<QWidget> *widgets();
     virtual QWidgetList selectedWidgets() const;
 
     virtual QWidget *designerWidget( QObject *o ) const;
@@ -181,7 +192,7 @@ public:
 
     void setActiveObject( QObject *o );
 
-    QPtrList<QAction> &actionList() { return actions; }
+    Q3PtrList<QAction> &actionList() { return actions; }
     QAction *findAction( const QString &name );
 
     void setProject( Project *pro );
@@ -281,8 +292,8 @@ private:
     QPoint sizePreviewPos;
     QPixmap sizePreviewPixmap;
     MainWindow *mainwindow;
-    QPtrList<WidgetSelection> selections;
-    QPtrDict<WidgetSelection> usedSelections;
+    Q3PtrList<WidgetSelection> selections;
+    Q3PtrDict<WidgetSelection> usedSelections;
     QRect widgetGeom, rubber;
     QPoint oldPressPos, origPressPos;
     CommandHistory commands;
@@ -291,21 +302,21 @@ private:
     QObject *propertyWidget;
     QLabel *sizePreviewLabel;
     QTimer *checkSelectionsTimer;
-    QPtrDict<QWidget> insertedWidgets;
+    Q3PtrDict<QWidget> insertedWidgets;
     bool propShowBlocked;
     QTimer* updatePropertiesTimer, *showPropertiesTimer, *selectionChangedTimer,
     *windowsRepaintWorkaroundTimer;
     QPoint startPos, currentPos;
     QWidget *startWidget, *endWidget;
     QPixmap *buffer;
-    QPtrList<OrderIndicator> orderIndicators;
+    Q3PtrList<OrderIndicator> orderIndicators;
     QWidgetList orderedWidgets;
     QWidgetList stackedWidgets;
     QWidget *mContainer;
     bool pixInline, pixProject;
     QString pixLoader;
     bool toolFixed;
-    QPtrList<QAction> actions;
+    Q3PtrList<QAction> actions;
     Project *proj;
     DesignerFormWindow *iface;
     QWidget* targetContainer;

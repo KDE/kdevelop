@@ -25,9 +25,14 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QFocusEvent>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -45,7 +50,7 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
     m_gdbView(0)
 {
 
-    m_gdbView = new QTextEdit (this, name);
+    m_gdbView = new Q3TextEdit (this, name);
     m_gdbView->setReadOnly(true);
 
     QBoxLayout *userGDBCmdEntry = new QHBoxLayout();

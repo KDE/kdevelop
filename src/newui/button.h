@@ -15,13 +15,13 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef IDEALBUTTON_H
 #define IDEALBUTTON_H
 
 #include <qpushbutton.h>
-#include <qiconset.h>
+#include <qicon.h>
 
 #include "comdefs.h"
 
@@ -38,7 +38,7 @@ A QPushButton derivative with a size of a QToolBar. Button can be rotated
 class Button : public QPushButton {
     Q_OBJECT
 public:
-    Button(ButtonBar *parent, const QString text, const QIconSet &icon = QIconSet(),
+    Button(ButtonBar *parent, const QString text, const QIcon &icon = QIcon(),
         const QString &description = QString::null);
     
     /**Sets the description used as a tooltip.*/
@@ -82,7 +82,7 @@ private:
     Place m_place;
     
     QString m_realText;
-    QIconSet m_realIconSet;
+    QIcon m_realIconSet;
     
 friend class ButtonBar;
 };

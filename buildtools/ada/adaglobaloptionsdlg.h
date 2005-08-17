@@ -22,7 +22,7 @@ class AdaGlobalOptionsDlg : public AdaProjectOptionsDlgBase
     Q_OBJECT
 
 public:
-    AdaGlobalOptionsDlg(AdaProjectPart *part, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    AdaGlobalOptionsDlg(AdaProjectPart *part, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~AdaGlobalOptionsDlg();
 
 public slots:

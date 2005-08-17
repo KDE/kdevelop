@@ -34,9 +34,15 @@
 #include <qcombobox.h>
 #include <qmetaobject.h>
 #include <qcombobox.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qaction.h>
-#include <qdatabrowser.h>
+#include <q3databrowser.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <Q3CString>
+#include <Q3StrList>
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 static const char* const ignore_slots[] = {
     "destroyed()",
@@ -82,8 +88,8 @@ static const char* const ignore_slots[] = {
     0
 };
 
-ConnectionItem::ConnectionItem( QTable *table, FormWindow *fw )
-    : QComboTableItem( table, QStringList(), FALSE ), formWindow( fw ), conn( 0 )
+ConnectionItem::ConnectionItem( Q3Table *table, FormWindow *fw )
+    : Q3ComboTableItem( table, QStringList(), FALSE ), formWindow( fw ), conn( 0 )
 {
     setReplaceable( FALSE );
 }
@@ -157,7 +163,7 @@ void ConnectionItem::paint( QPainter *p, const QColorGroup &cg,
     int x = 0;
 
     if ( currentText()[0] == '<' )
-	p->setPen( QObject::red );
+	p->setPen( Qt::red );
     else if ( selected )
 	p->setPen( cg.highlightedText() );
     else
@@ -190,20 +196,20 @@ static void appendChildActions( QAction *action, QStringList &lst )
 	if ( !::qt_cast<QAction*>(o) )
 	    continue;
 	lst << o->name();
-	if ( o->children() && ::qt_cast<QActionGroup*>(o) )
+	if ( o->children() && ::qt_cast<Q3ActionGroup*>(o) )
 	    appendChildActions( (QAction*)o, lst );
     }
 }
 
-static QStringList flatActions( const QPtrList<QAction> &l )
+static QStringList flatActions( const Q3PtrList<QAction> &l )
 {
     QStringList lst;
 
-    QPtrListIterator<QAction> it( l );
+    Q3PtrListIterator<QAction> it( l );
     while ( it.current() ) {
 	QAction *action = it.current();
 	lst << action->name();
-	if ( action->children() && ::qt_cast<QActionGroup*>(action) )
+	if ( action->children() && ::qt_cast<Q3ActionGroup*>(action) )
 	    appendChildActions( action, lst );
 	++it;
     }
@@ -213,12 +219,12 @@ static QStringList flatActions( const QPtrList<QAction> &l )
 
 // ------------------------------------------------------------------
 
-SenderItem::SenderItem( QTable *table, FormWindow *fw )
+SenderItem::SenderItem( Q3Table *table, FormWindow *fw )
     : ConnectionItem( table, fw )
 {
     QStringList lst;
 
-    QPtrDictIterator<QWidget> it( *formWindow->widgets() );
+    Q3PtrDictIterator<QWidget> it( *formWindow->widgets() );
     while ( it.current() ) {
 	if ( lst.find( it.current()->name() ) != lst.end() ) {
 	    ++it;
@@ -270,12 +276,12 @@ void SenderItem::senderChanged( const QString &sender )
 
 // ------------------------------------------------------------------
 
-ReceiverItem::ReceiverItem( QTable *table, FormWindow *fw )
+ReceiverItem::ReceiverItem( Q3Table *table, FormWindow *fw )
     : ConnectionItem( table, fw )
 {
     QStringList lst;
 
-    QPtrDictIterator<QWidget> it( *formWindow->widgets() );
+    Q3PtrDictIterator<QWidget> it( *formWindow->widgets() );
     while ( it.current() ) {
 	if ( lst.find( it.current()->name() ) != lst.end() ) {
 	    ++it;
@@ -327,7 +333,7 @@ void ReceiverItem::receiverChanged( const QString &receiver )
 
 // ------------------------------------------------------------------
 
-SignalItem::SignalItem( QTable *table, FormWindow *fw )
+SignalItem::SignalItem( Q3Table *table, FormWindow *fw )
     : ConnectionItem( table, fw )
 {
     QStringList lst;
@@ -338,7 +344,7 @@ SignalItem::SignalItem( QTable *table, FormWindow *fw )
 
 void SignalItem::senderChanged( QObject *sender )
 {
-    QStrList sigs = sender->metaObject()->signalNames( TRUE );
+    Q3StrList sigs = sender->metaObject()->signalNames( TRUE );
     sigs.remove( "destroyed()" );
     sigs.remove( "destroyed(QObject*)" );
     sigs.remove( "accessibilityChanged(int)" );
@@ -348,7 +354,7 @@ void SignalItem::senderChanged( QObject *sender )
 
     if ( ::qt_cast<CustomWidget*>(sender) ) {
 	MetaDataBase::CustomWidget *w = ( (CustomWidget*)sender )->customWidget();
-	for ( QValueList<QCString>::Iterator it = w->lstSignals.begin();
+	for ( Q3ValueList<Q3CString>::Iterator it = w->lstSignals.begin();
 	      it != w->lstSignals.end(); ++it )
 	    lst << MetaDataBase::normalizeFunction( *it );
     }
@@ -378,7 +384,7 @@ QWidget *SignalItem::createEditor() const
 
 // ------------------------------------------------------------------
 
-SlotItem::SlotItem( QTable *table, FormWindow *fw )
+SlotItem::SlotItem( Q3Table *table, FormWindow *fw )
     : ConnectionItem( table, fw )
 {
     QStringList lst;
@@ -408,7 +414,7 @@ bool SlotItem::ignoreSlot( const char* slot ) const
 {
 #ifndef QT_NO_SQL
     if ( qstrcmp( slot, "update()" ) == 0 &&
-	 ::qt_cast<QDataBrowser*>(lastReceiver) )
+	 ::qt_cast<Q3DataBrowser*>(lastReceiver) )
 	return FALSE;
 #endif
 
@@ -424,7 +430,7 @@ bool SlotItem::ignoreSlot( const char* slot ) const
 
     if ( qstrcmp( slot, "setFocus()" ) == 0  )
 	if ( lastReceiver->isWidgetType() &&
-	     ( (QWidget*)lastReceiver )->focusPolicy() == QWidget::NoFocus )
+	     ( (QWidget*)lastReceiver )->focusPolicy() == Qt::NoFocus )
 	    return TRUE;
 
     return FALSE;
@@ -461,11 +467,11 @@ void SlotItem::updateSlotList()
 	MetaDataBase::languageInterface( formWindow->project()->language() );
     if ( !iface || iface->supports( LanguageInterface::ConnectionsToCustomSlots ) ) {
 	if ( formWindow->isMainContainer( (QWidget*)lastReceiver ) ) {
-	    QValueList<MetaDataBase::Function> moreSlots = MetaDataBase::slotList( formWindow );
+	    Q3ValueList<MetaDataBase::Function> moreSlots = MetaDataBase::slotList( formWindow );
 	    if ( !moreSlots.isEmpty() ) {
-		for ( QValueList<MetaDataBase::Function>::Iterator it = moreSlots.begin();
+		for ( Q3ValueList<MetaDataBase::Function>::Iterator it = moreSlots.begin();
 		      it != moreSlots.end(); ++it ) {
-		    QCString s = (*it).function;
+		    Q3CString s = (*it).function;
 		    if ( !s.data() )
 			continue;
 		    s = MetaDataBase::normalizeFunction( s );
@@ -480,9 +486,9 @@ void SlotItem::updateSlotList()
 
     if ( ::qt_cast<CustomWidget*>(lastReceiver) ) {
 	MetaDataBase::CustomWidget *w = ( (CustomWidget*)lastReceiver )->customWidget();
-	for ( QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin();
+	for ( Q3ValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin();
 	      it != w->lstSlots.end(); ++it ) {
-	    QCString s = (*it).function;
+	    Q3CString s = (*it).function;
 	    if ( !s.data() )
 		continue;
 	    s = MetaDataBase::normalizeFunction( s );

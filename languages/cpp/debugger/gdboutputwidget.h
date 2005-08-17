@@ -19,10 +19,12 @@
 #define _GDBOUTPUTWIDGET_H_
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class KHistoryCombo;
 
-class QTextEdit;
+class Q3TextEdit;
 class QToolButton;
 
 namespace GDBDebugger
@@ -55,7 +57,7 @@ signals:
 private:
     KHistoryCombo*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
-    QTextEdit*      m_gdbView;
+    Q3TextEdit*      m_gdbView;
 };
 
 }

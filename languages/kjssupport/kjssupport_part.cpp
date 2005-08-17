@@ -12,16 +12,16 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -69,7 +69,7 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
 	setXMLFile("kdevkjssupport.rc");
 
 
-	m_build = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
+	m_build = new KAction( i18n("&Run"), "exec",Qt::Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
 	m_build->setStatusText( i18n("Test the active script.") );
 
 	kdDebug() << "Creating kjssupport Part" << endl;
@@ -81,8 +81,8 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
 	connect( partController(), SIGNAL(savedFile(const QString&)), this, SLOT(savedFile(const QString&)) );
 	connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 		this, SLOT(slotActivePartChanged(KParts::Part *)));
-	connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-		this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+	connect(core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+		this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
 
 
      // Building kjs interpreter.
@@ -202,7 +202,7 @@ void kjsSupportPart::parse()
 
 	if (project())
 	{
-		kapp->setOverrideCursor(waitCursor);
+		kapp->setOverrideCursor(Qt::WaitCursor);
 		QStringList files = project()->allFiles();
 		m_problemReporter->clear();
 
@@ -244,7 +244,7 @@ void kjsSupportPart::parse(const QString &fileName)
 		m_file->setFileName( fileName );
 		
                 QFile f(QFile::encodeName(fileName));
-                if (!f.open(IO_ReadOnly))
+                if (!f.open(QIODevice::ReadOnly))
                         return;
                 QString rawline;
                 QString line;
@@ -416,7 +416,7 @@ void kjsSupportPart::addAttribute(const QString &name, FileDom file, uint lineNo
 	}
 }
 
-void kjsSupportPart::contextMenu(QPopupMenu * popupMenu, const Context *context)
+void kjsSupportPart::contextMenu(Q3PopupMenu * popupMenu, const Context *context)
 {
 	kdDebug() << "1" << endl;
 	if (!context->hasType( Context::FileContext ))

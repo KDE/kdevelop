@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "pstringlistedit.h"
 
@@ -23,6 +23,9 @@
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #ifndef PURE_QT
 #include <keditlistbox.h>
@@ -111,7 +114,7 @@ void PStringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toStringList().join(", "));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toStringList().join(", "));
 }
 
 }

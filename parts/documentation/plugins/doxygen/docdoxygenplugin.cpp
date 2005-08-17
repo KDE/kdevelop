@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docdoxygenplugin.h"
 
@@ -26,6 +26,8 @@
 #include <qfileinfo.h>
 #include <qdialog.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kurl.h>
 #include <kaboutdata.h>
@@ -88,7 +90,7 @@ QString DocDoxygenPlugin::catalogTitle(const QString& url)
     if (fi.extension(false) == "html")
     {
         QFile f(url);
-        if (!f.open(IO_ReadOnly))
+        if (!f.open(QIODevice::ReadOnly))
             return QString::null;
         
         QTextStream ts(&f);
@@ -102,10 +104,10 @@ QString DocDoxygenPlugin::catalogTitle(const QString& url)
     {
         QFile *f = 0;
         QFile f1(fi.dirPath(true) + "/html/index.html");
-        if (f1.open(IO_ReadOnly))
+        if (f1.open(QIODevice::ReadOnly))
             f = &f1;
         QFile f2(fi.dirPath(true) + "/index.html");
-        if (f2.open(IO_ReadOnly))
+        if (f2.open(QIODevice::ReadOnly))
             f = &f2;
         if (f != 0)
         {
@@ -333,7 +335,7 @@ void DocDoxygenPlugin::createBookTOC(DocumentationItem *item, const QString &tag
         return;
     
     QFile f(tagName);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
         return;
@@ -376,7 +378,7 @@ void DocDoxygenPlugin::createBookIndex(const QString &tagfile, IndexBox* index, 
         return;
     
     QFile f(tagName);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
         return;

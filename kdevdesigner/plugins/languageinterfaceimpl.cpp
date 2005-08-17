@@ -27,6 +27,11 @@
 
 #include "languageinterfaceimpl.h"
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3ValueList>
+#include <QTextStream>
+#include <Q3CString>
 #include "../interfaces/designerinterface.h"
 #include <qfile.h>
 //#include "yyreg.h"
@@ -75,10 +80,10 @@ class NormalizeObject : public QObject
 {
 public:
     NormalizeObject() : QObject() {}
-    static QCString normalizeSignalSlot( const char *signalSlot ) { return QObject::normalizeSignalSlot( signalSlot ); }
+    static Q3CString normalizeSignalSlot( const char *signalSlot ) { return QObject::normalizeSignalSlot( signalSlot ); }
 };
 
-void LanguageInterfaceImpl::functions( const QString &code, QValueList<Function> *functionMap ) const
+void LanguageInterfaceImpl::functions( const QString &code, Q3ValueList<Function> *functionMap ) const
 {
 /*    QValueList<CppFunction> l;
     extractCppFunctions( code, &l );
@@ -210,12 +215,12 @@ bool LanguageInterfaceImpl::canConnect( const QString &signal, const QString &sl
 }
 
 void LanguageInterfaceImpl::loadFormCode( const QString &, const QString &filename,
-					       QValueList<Function> &functions,
+					       Q3ValueList<Function> &functions,
 					       QStringList &,
-					       QValueList<Connection> & )
+					       Q3ValueList<Connection> & )
 {
     QFile f( filename );
-    if ( !f.open( IO_ReadOnly ) )
+    if ( !f.open( QIODevice::ReadOnly ) )
 	return;
     QTextStream ts( &f );
     QString code( ts.read() );
@@ -228,9 +233,9 @@ void LanguageInterfaceImpl::preferedExtensions( QMap<QString, QString> &extensio
     extensionMap.insert( "h", "C++ Header File" );
 }
 
-QStrList LanguageInterfaceImpl::signalNames( QObject *obj ) const
+Q3StrList LanguageInterfaceImpl::signalNames( QObject *obj ) const
 {
-    QStrList sigs;
+    Q3StrList sigs;
     sigs = obj->metaObject()->signalNames( TRUE );
     sigs.remove( "destroyed()" );
     return sigs;

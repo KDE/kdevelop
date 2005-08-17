@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -24,6 +24,9 @@
 
 #ifndef PURE_QT
 #include <qdialog.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <kcharselect.h>
 #include <klocale.h>
@@ -122,7 +125,7 @@ void PSymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r
     p->setBrush(cg.background());
     p->setPen(Qt::NoPen);
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QChar(value.toInt()));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, QChar(value.toInt()));
 }
 
 }

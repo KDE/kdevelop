@@ -28,15 +28,17 @@
 #define _KMDILISTITERATOR_H_
 
 #include <kmdiiterator.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
-template<class I> class QPtrList;
-template<class I> class QPtrListIterator;
+template<class I> class Q3PtrList;
+template<class I> class Q3PtrListIterator;
 
 template <class Item>
 class KMdiListIterator : public KMdiIterator<Item*> {
 public:
-   KMdiListIterator(QPtrList<Item>& list) {
-      m_iterator = new QPtrListIterator<Item>(list);
+   KMdiListIterator(Q3PtrList<Item>& list) {
+      m_iterator = new Q3PtrListIterator<Item>(list);
    }
 
    virtual void first() {
@@ -55,7 +57,7 @@ public:
    }
   
 private:
-   QPtrListIterator<Item> *m_iterator;
+   Q3PtrListIterator<Item> *m_iterator;
 };
 
 #endif // _KMDILISTITERATOR_H_

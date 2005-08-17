@@ -14,12 +14,14 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PROFILEENGINE_H
 #define PROFILEENGINE_H
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <ktrader.h>
 
@@ -177,8 +179,8 @@ public:
     template<class Operation>
     void walkProfiles(Operation &op, Profile *root)
     {
-        QValueList<Profile*> children = root->children();
-        for (QValueList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
+        Q3ValueList<Profile*> children = root->children();
+        for (Q3ValueList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
         {
             op(*it);
             walkProfiles<Operation>(op, *it);
@@ -244,8 +246,8 @@ public:
     template<class Operation, class Result>
     void walkProfiles(Operation &op, Result *result, Profile *root)
     {
-        QValueList<Profile*> children = root->children();
-        for (QValueList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
+        Q3ValueList<Profile*> children = root->children();
+        for (Q3ValueList<Profile*>::iterator it = children.begin(); it != children.end(); ++it)
         {
             Result *newResult = op(result, *it);
             walkProfiles<Operation>(op, newResult, *it);

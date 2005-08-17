@@ -2,7 +2,7 @@
 
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kaboutdata.h>
 #include <kaction.h>
@@ -44,24 +44,16 @@ TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList 
 }
 
 
-QString TipOfDayPart::getFilename()
-{
-  KConfig * config = KApplication::kApplication()->config();
-  config->setGroup("Tip of day plugin");
-  return config->readEntry("TipsFile", "kdevtipofday/tips");
-}
-
 void TipOfDayPart::showTip()
 {
-  KTipDialog::showTip(getFilename(), true);
+  KTipDialog::showTip("kdevtipofday/tips", true);
 }
 
 
 void TipOfDayPart::showOnStart()
 {
-  KTipDialog::showTip(getFilename());
+  KTipDialog::showTip("kdevtipofday/tips");
 }
-
 
 
 #include "tipofday_part.moc"

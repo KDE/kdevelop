@@ -20,9 +20,11 @@
 #include <kcompletion.h>
 #include <kfiledialog.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QTextStream>
 #include <iostream>
 #include <qregexp.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
@@ -41,7 +43,7 @@ PHPNewClassDlg::PHPNewClassDlg(const QStringList& baseClassNames,const QString& 
   if(!templateFile.isNull()){
     QFile file(templateFile);
     QTextStream stream(&file);
-    if(file.open(IO_ReadOnly)){ 
+    if(file.open(QIODevice::ReadOnly)){ 
       m_classTemplate->setText(stream.read());
       file.close();
     }
@@ -97,7 +99,7 @@ void PHPNewClassDlg::accept(){
   QFile file(templateFile); 
   QTextStream stream(&file);
   
-  if(file.open(IO_WriteOnly)){
+  if(file.open(QIODevice::WriteOnly)){
     stream << text; // write
     file.close();
   }
@@ -114,7 +116,7 @@ void PHPNewClassDlg::accept(){
   text = text.replace(QRegExp("AUTHOR"),"not implemented");
  
   file.setName(absFileName);
-  if(file.open(IO_WriteOnly)){
+  if(file.open(QIODevice::WriteOnly)){
     stream << text; // write
     file.close();
   }

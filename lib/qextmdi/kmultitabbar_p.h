@@ -18,16 +18,23 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
 #ifndef K_MULTI_TAB_BAR_P_H
 #define K_MULTI_TAB_BAR_P_H
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QEvent>
+#include <Q3PtrList>
+#include <QBoxLayout>
 #include <kmultitabbar.h>
 
-class KMultiTabBarInternal: public QScrollView
+class KMultiTabBarInternal: public Q3ScrollView
 {
         Q_OBJECT
 public:
@@ -38,12 +45,12 @@ public:
         void setPosition(enum KMultiTabBar::KMultiTabBarPosition pos);
         void setStyle(enum KMultiTabBar::KMultiTabBarStyle style);
         void showActiveTabTexts(bool show);
-        QPtrList<KMultiTabBarTab>* tabs(){return &m_tabs;}
+        Q3PtrList<KMultiTabBarTab>* tabs(){return &m_tabs;}
 private:
         friend class KMultiTabBar;
         QWidget *box;
 	QBoxLayout *mainLayout;
-        QPtrList<KMultiTabBarTab> m_tabs;
+        Q3PtrList<KMultiTabBarTab> m_tabs;
         enum KMultiTabBar::KMultiTabBarPosition m_position;
         bool m_showActiveTabTexts;
         enum  KMultiTabBar::KMultiTabBarStyle m_style;

@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "problemreporter.h"
@@ -46,28 +46,33 @@
 
 #include <qtimer.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtabbar.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QGridLayout>
+#include <Q3PtrList>
+#include <QLabel>
+#include <Q3ValueList>
 
 class ProblemItem: public KListViewItem
 {
 public:
-	ProblemItem( QListView* parent, const QString& problem,
+	ProblemItem( Q3ListView* parent, const QString& problem,
 	             const QString& file, const QString& line, const QString& column )
 			: KListViewItem( parent, problem, file, line, column )
 	{}
 
-	ProblemItem( QListViewItem* parent, const QString& problem,
+	ProblemItem( Q3ListViewItem* parent, const QString& problem,
 	             const QString& file, const QString& line, const QString& column )
 			: KListViewItem( parent, problem, file, line, column )
 	{}
 
-	int compare( QListViewItem* item, int column, bool ascending ) const
+	int compare( Q3ListViewItem* item, int column, bool ascending ) const
 	{
 		if ( column == 2 || column == 3 )
 		{
@@ -88,7 +93,7 @@ m_cppSupport( part ),
 m_document( 0 ),
 m_markIface( 0 )
 {
-	QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+	Q3WhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
 	                           "It displays TODO entries, FIXME's and errors reported by a language parser. "
 	                           "To add a TODO or FIXME entry, just type<br>"
 	                           "<tt>//@todo my todo</tt><br>"
@@ -116,7 +121,7 @@ m_markIface( 0 )
 	InitListView(m_currentList);
 	m_currentList->removeColumn(1);
 	
-	m_widgetStack = new QWidgetStack(this);
+	m_widgetStack = new Q3WidgetStack(this);
 	m_widgetStack->addWidget(m_currentList,0);
 	m_widgetStack->addWidget(m_errorList,1);
 	m_widgetStack->addWidget(m_fixmeList,2);
@@ -186,7 +191,7 @@ void ProblemReporter::slotFilter()
 
 void ProblemReporter::filterList(KListView* listview, const QString& level)
 {
-	QListViewItemIterator it( listview );
+	Q3ListViewItemIterator it( listview );
 	while ( it.current() )
 	{
 		if ( it.current()->text(3).contains(m_filterEdit->text(),false))
@@ -212,11 +217,11 @@ void ProblemReporter::InitListView(KListView* listview)
 	listview->addColumn( i18n("Problem") );
 	listview->setAllColumnsShowFocus( TRUE );
 	
-	connect( listview, SIGNAL(executed(QListViewItem*)),
-	         this, SLOT(slotSelected(QListViewItem*)) );
+	connect( listview, SIGNAL(executed(Q3ListViewItem*)),
+	         this, SLOT(slotSelected(Q3ListViewItem*)) );
 	
-	connect( listview, SIGNAL(returnPressed(QListViewItem*)),
-	         this, SLOT(slotSelected(QListViewItem* )) );
+	connect( listview, SIGNAL(returnPressed(Q3ListViewItem*)),
+	         this, SLOT(slotSelected(Q3ListViewItem* )) );
 	
 }
 
@@ -271,7 +276,7 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 
 void ProblemReporter::closedFile(const KURL &fileName)
 {
-	QValueList<Problem> problems = m_cppSupport->backgroundParser()->problems( fileName.path() , true , true);
+	Q3ValueList<Problem> problems = m_cppSupport->backgroundParser()->problems( fileName.path() , true , true);
 }
 
 void ProblemReporter::slotTextChanged()
@@ -282,11 +287,11 @@ void ProblemReporter::slotTextChanged()
 	m_timer->changeInterval( m_delay );
 }
 
-void ProblemReporter::removeAllItems( QListView* listview, const QString& filename )
+void ProblemReporter::removeAllItems( Q3ListView* listview, const QString& filename )
 {
-	QListViewItem* current = listview->firstChild();
+	Q3ListViewItem* current = listview->firstChild();
 	while( current ){
-		QListViewItem* i = current;
+		Q3ListViewItem* i = current;
 		current = current->nextSibling();
 		
 		if( i->text(0) == filename )
@@ -307,8 +312,8 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	
 	if( m_document && m_markIface )
 	{
-		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
-		QPtrListIterator<KTextEditor::Mark> it( marks );
+		Q3PtrList<KTextEditor::Mark> marks = m_markIface->marks();
+		Q3PtrListIterator<KTextEditor::Mark> it( marks );
 		while( it.current() )
 		{
 			m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
@@ -350,19 +355,19 @@ void ProblemReporter::initCurrentList()
 	m_tabBar->setCurrentTab(0);
 }
 
-void ProblemReporter::updateCurrentWith(QListView* listview, const QString& level, const QString& filename)
+void ProblemReporter::updateCurrentWith(Q3ListView* listview, const QString& level, const QString& filename)
 {
-	QListViewItemIterator it(listview);
+	Q3ListViewItemIterator it(listview);
 	while ( it.current() )
 	{
 		if( it.current()->text(0) == filename)
-			new QListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
+			new Q3ListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
 		
 		++it;
 	}
 }
 
-void ProblemReporter::slotSelected( QListViewItem* item )
+void ProblemReporter::slotSelected( Q3ListViewItem* item )
 {
 	bool is_filtered = false;
 	bool is_current = false;
@@ -422,7 +427,7 @@ void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 	
 	if(fileName == m_fileName)
 	{
-		new QListViewItem(m_currentList,levelToString(p.level()),
+		new Q3ListViewItem(m_currentList,levelToString(p.level()),
 		                  QString::number( p.line() + 1 ),
 		                  QString::number( p.column() + 1 ),
 		                  msg);
@@ -440,7 +445,7 @@ void ProblemReporter::configure()
 
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"), 
+	Q3VBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"), i18n("C++ Parsing"), 
 	                               BarIcon( "source_cpp", KIcon::SizeMedium) );
 	ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
 	w->setPart( m_cppSupport );

@@ -37,7 +37,7 @@ QString escape(const QString &str)
 }
 
 
-ReplaceDlgImpl::ReplaceDlgImpl(QWidget* parent, const char* name, bool modal, WFlags fl)
+ReplaceDlgImpl::ReplaceDlgImpl(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
         : ReplaceDlg(parent,name, modal,fl), _regexp_dialog( 0 )
 
 {

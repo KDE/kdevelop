@@ -13,7 +13,7 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qvalidator.h>
 
@@ -144,7 +144,7 @@ void AddTargetDialog::accept()
 	if (primary == "DATA"){
 	    // DATA does not need a name; DATA may already exist.
 	    TargetItem *titem = m_widget->createTargetItem(name, prefix, primary, true);
-	    QPtrListIterator<TargetItem> it( m_subproject->targets );
+	    Q3PtrListIterator<TargetItem> it( m_subproject->targets );
 	    for( ; it.current(); ++it ){
 		if( (*it)->text(0) == titem->text(0) ){
 		    /// \FIXME Add message box here, after string-freeze is over
@@ -190,7 +190,7 @@ void AddTargetDialog::accept()
 	if ( primary == "LIBRARIES" && !name.endsWith(".a") )
 	    name.append ( QString::fromLatin1(".a") );
 
-	QPtrListIterator<TargetItem> it(m_subproject->targets);
+	Q3PtrListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
 			KMessageBox::sorry(this, i18n("A target with this name already exists."));

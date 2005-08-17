@@ -51,7 +51,7 @@ VCSColors &VCSColors::operator=( const VCSColors &others )
 ///////////////////////////////////////////////////////////////////////////////
 
 VCSColorsConfigWidget::VCSColorsConfigWidget(FileViewPart *part, const VCSColors &vcsColors,
-    QWidget* parent, const char* name, WFlags fl)
+    QWidget* parent, const char* name, Qt::WFlags fl)
     : VCSColorsConfigWidgetBase( parent, name, fl ), m_part( part )
 {
     setColors( vcsColors );

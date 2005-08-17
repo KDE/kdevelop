@@ -1,7 +1,9 @@
+//Added by qt3to4:
+#include <QShowEvent>
 %{CPP_TEMPLATE}
 
 #include <qfileinfo.h>
-#include <qframe.h>
+#include <q3frame.h>
 
 #include <kparts/part.h>
 #include <kate/document.h>
@@ -12,7 +14,7 @@
 
 #include "kmdikonsole.h"
 
-kmdikonsole::kmdikonsole(QWidget *parent, const char *name) : QVBox(parent, name)
+kmdikonsole::kmdikonsole(QWidget *parent, const char *name) : Q3VBox(parent, name)
 {
 	m_haskonsole = false;
 	respawn();
@@ -32,7 +34,7 @@ void kmdikonsole::respawn()
 	if (!m_part) return;
 
 	if (m_part->widget()->inherits("QFrame"))
-		((QFrame*)m_part->widget())->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+		((Q3Frame*)m_part->widget())->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
 	m_haskonsole=true;
 	connect( m_part, SIGNAL(destroyed()), this, SLOT(slotDestroyed()) );

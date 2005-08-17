@@ -18,6 +18,8 @@
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 DoxyDoc* TagCreator::m_documentation = new DoxyDoc( QStringList() );
 
@@ -141,8 +143,8 @@ void TagCreator::parseTypedef( TypedefAST* ast )
 		if( typeSpec->name() )
 			typeId = typeSpec->name()->text();
 		
-		QPtrList<InitDeclaratorAST> l( declarators->initDeclaratorList() );
-		QPtrListIterator<InitDeclaratorAST> it( l );
+		Q3PtrList<InitDeclaratorAST> l( declarators->initDeclaratorList() );
+		Q3PtrListIterator<InitDeclaratorAST> it( l );
 		
 		InitDeclaratorAST* initDecl = 0;
 		while( 0 != (initDecl = it.current()) )
@@ -201,9 +203,9 @@ void TagCreator::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 	
 	if( declarators )
 	{
-		QPtrList<InitDeclaratorAST> l = declarators->initDeclaratorList();
+		Q3PtrList<InitDeclaratorAST> l = declarators->initDeclaratorList();
 		
-		QPtrListIterator<InitDeclaratorAST> it( l );
+		Q3PtrListIterator<InitDeclaratorAST> it( l );
 		while( it.current() )
 		{
 			parseMyDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current() );
@@ -233,8 +235,8 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	
 	if ( funSpec )
 	{
-		QPtrList<AST> l = funSpec->nodeList();
-		QPtrListIterator<AST> it( l );
+		Q3PtrList<AST> l = funSpec->nodeList();
+		Q3PtrListIterator<AST> it( l );
 		while ( it.current() )
 		{
 			QString text = it.current() ->text();
@@ -248,8 +250,8 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	
 	if ( storageSpec )
 	{
-		QPtrList<AST> l = storageSpec->nodeList();
-		QPtrListIterator<AST> it( l );
+		Q3PtrList<AST> l = storageSpec->nodeList();
+		Q3PtrListIterator<AST> it( l );
 		while ( it.current() )
 		{
 			QString text = it.current() ->text();
@@ -309,8 +311,8 @@ tag.setAttribute( "description", m_documentation->functionDescription( scopeStr.
 
 void TagCreator::parseLinkageBody( LinkageBodyAST* ast )
 {
-	QPtrList<DeclarationAST> l = ast->declarationList();
-	QPtrListIterator<DeclarationAST> it( l );
+	Q3PtrList<DeclarationAST> l = ast->declarationList();
+	Q3PtrListIterator<DeclarationAST> it( l );
 	while ( it.current() )
 	{
 		parseDeclaration( it.current() );
@@ -399,8 +401,8 @@ void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
 	
 	m_catalog->addItem( tag );
 	
-	QPtrList<EnumeratorAST> l = ast->enumeratorList();
-	QPtrListIterator<EnumeratorAST> it( l );
+	Q3PtrList<EnumeratorAST> l = ast->enumeratorList();
+	Q3PtrListIterator<EnumeratorAST> it( l );
 	while ( it.current() )
 	{
 		QString name = it.current() ->id() ->text();
@@ -458,8 +460,8 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
 	
 	if ( storageSpec )
 	{
-		QPtrList<AST> l = storageSpec->nodeList();
-		QPtrListIterator<AST> it( l );
+		Q3PtrList<AST> l = storageSpec->nodeList();
+		Q3PtrListIterator<AST> it( l );
 		while ( it.current() )
 		{
 			QString text = it.current() ->text();
@@ -496,7 +498,7 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
 
 void TagCreator::parseAccessDeclaration( AccessDeclarationAST * access )
 {
-	QPtrList<AST> l = access->accessList();
+	Q3PtrList<AST> l = access->accessList();
 	
 	m_currentAccess = l.at( 0 )->text();
 	if( m_currentAccess == "signals" )
@@ -517,8 +519,8 @@ void TagCreator::parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageS
 
 	if ( funSpec )
 	{
-		QPtrList<AST> l = funSpec->nodeList();
-		QPtrListIterator<AST> it( l );
+		Q3PtrList<AST> l = funSpec->nodeList();
+		Q3PtrListIterator<AST> it( l );
 		while ( it.current() )
 		{
 			QString text = it.current() ->text();
@@ -532,8 +534,8 @@ void TagCreator::parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageS
 
 	if ( storageSpec )
 	{
-		QPtrList<AST> l = storageSpec->nodeList();
-		QPtrListIterator<AST> it( l );
+		Q3PtrList<AST> l = storageSpec->nodeList();
+		Q3PtrListIterator<AST> it( l );
 		while ( it.current() )
 		{
 			QString text = it.current() ->text();
@@ -597,8 +599,8 @@ void TagCreator::parseFunctionArguments( Tag& tag, DeclaratorAST* declarator )
 	QStringList args;
 	if( clause && clause->parameterDeclarationList() ){
 		ParameterDeclarationListAST* params = clause->parameterDeclarationList();
-		QPtrList<ParameterDeclarationAST> l( params->parameterList() );
-		QPtrListIterator<ParameterDeclarationAST> it( l );
+		Q3PtrList<ParameterDeclarationAST> l( params->parameterList() );
+		Q3PtrListIterator<ParameterDeclarationAST> it( l );
 		
 		while( it.current() ){
 			ParameterDeclarationAST* param = it.current();
@@ -638,8 +640,8 @@ QString TagCreator::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST
 	text += typeSpec->text();
 	text = text.simplifyWhiteSpace();
 	
-	QPtrList<AST> ptrOpList = declarator->ptrOpList();
-	for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it )
+	Q3PtrList<AST> ptrOpList = declarator->ptrOpList();
+	for( Q3PtrListIterator<AST> it(ptrOpList); it.current(); ++it )
 		text += it.current()->text();
 	
 	return text;
@@ -647,8 +649,8 @@ QString TagCreator::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST
 
 void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * baseClause )
 {
-	QPtrList<BaseSpecifierAST> l = baseClause->baseSpecifierList();
-	QPtrListIterator<BaseSpecifierAST> it( l );
+	Q3PtrList<BaseSpecifierAST> l = baseClause->baseSpecifierList();
+	Q3PtrListIterator<BaseSpecifierAST> it( l );
 	while ( it.current() )
 	{
 		BaseSpecifierAST * baseSpecifier = it.current();
@@ -660,8 +662,8 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 		
 		QString baseName;
 		
-		QPtrList<ClassOrNamespaceNameAST> l = baseSpecifier->name() ->classOrNamespaceNameList();
-		QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
+		Q3PtrList<ClassOrNamespaceNameAST> l = baseSpecifier->name() ->classOrNamespaceNameList();
+		Q3PtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
 		while ( nameIt.current() )
 		{
 			if ( nameIt.current() ->name() )
@@ -706,8 +708,8 @@ QString TagCreator::scopeOfDeclarator( DeclaratorAST* d )
 	{
 		if ( d->declaratorId() ->isGlobal() )
 			scope.clear();
-		QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId() ->classOrNamespaceNameList();
-		QPtrListIterator<ClassOrNamespaceNameAST> it( l );
+		Q3PtrList<ClassOrNamespaceNameAST> l = d->declaratorId() ->classOrNamespaceNameList();
+		Q3PtrListIterator<ClassOrNamespaceNameAST> it( l );
 		while ( it.current() )
 		{
 			if ( it.current() ->name() )

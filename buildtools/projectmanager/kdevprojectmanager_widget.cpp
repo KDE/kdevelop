@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #include "kdevprojectmanager_part.h"
 #include "kdevprojectmanager_widget.h"
@@ -38,13 +38,15 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <kmimetype.h>
+
 #include <qlayout.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qframe.h>
-#include <qheader.h>
+#include <q3frame.h>
+#include <q3header.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class KDevToolBar: public KToolBar
 {
@@ -55,7 +57,7 @@ public:
     virtual void setMovingEnabled( bool b );
 };
 
-class KDevToolBarShell: public QFrame
+class KDevToolBarShell: public Q3Frame
 {
 public:
     KDevToolBarShell(QWidget *parent);
@@ -87,7 +89,7 @@ void KDevToolBar::setMovingEnabled( bool)
 
 
 KDevToolBarShell::KDevToolBarShell(QWidget *parent)
-    : QFrame(parent),
+    : Q3Frame(parent),
       m_tb(0)
 {}
 
@@ -111,16 +113,16 @@ void KDevToolBarShell::resizeEvent ( QResizeEvent * )
 
 // ----------------------------------------------------------------------------------
 KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
-    : QVBox(0, "kdevprojectmanager widget"),
+    : Q3VBox(0, "kdevprojectmanager widget"),
       m_part(part)
 {
     m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
         part->actionCollection(), "project_reload");
         
-    m_actionBuildAll = new KAction(i18n("Build All"), SmallIcon("launch"), Key_F8, this, SLOT(buildAll()),
+    m_actionBuildAll = new KAction(i18n("Build All"), SmallIcon("launch"), Qt::Key_F8, this, SLOT(buildAll()),
         part->actionCollection(), "project_buildall");
         
-    m_actionBuild = new KAction(i18n("Build"), SmallIcon("launch"), SHIFT + Key_F8, this, SLOT(build()),
+    m_actionBuild = new KAction(i18n("Build"), SmallIcon("launch"), Qt::SHIFT + Qt::Key_F8, this, SLOT(build()),
         part->actionCollection(), "project_build");
 
     m_addFile = new KAction(i18n("Add File"), SmallIcon("file"), 0, this, SLOT(createFile()),
@@ -131,20 +133,17 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
         
     m_addFolder = new KAction(i18n("Add Folder"), SmallIcon("folder"), 0, this, SLOT(createFolder()),
         part->actionCollection(), "project_add_folder");
-     
-    m_actionConfigure = new KAction(i18n("Configure"), SmallIcon("configure"), 0, this, SLOT(configureFolder()),
-        part->actionCollection(), "project_configure_folder");
-	
+
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     m_overview = new ProjectOverview(this, splitter);
     m_details = new ProjectDetails(this, splitter);
     
-    connect(m_overview->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
-        this, SLOT(updateDetails(QListViewItem*)));        
+    connect(m_overview->listView(), SIGNAL(selectionChanged(Q3ListViewItem*)), 
+        this, SLOT(updateDetails(Q3ListViewItem*)));        
         
-    connect(m_overview->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
+    connect(m_overview->listView(), SIGNAL(selectionChanged(Q3ListViewItem*)), 
         this, SLOT(updateActions()));        
-    connect(m_details->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
+    connect(m_details->listView(), SIGNAL(selectionChanged(Q3ListViewItem*)), 
         this, SLOT(updateActions()));        
 
 }
@@ -163,7 +162,7 @@ void KDevProjectManagerWidget::build()
     m_details->build();
 }
 
-void KDevProjectManagerWidget::updateDetails(QListViewItem *item)
+void KDevProjectManagerWidget::updateDetails(Q3ListViewItem *item)
 {
     kdDebug(9000) << "KDevProjectManagerWidget::updateDetails()" << endl;
     m_details->setCurrentItem(item ? static_cast<ProjectViewItem*>(item)->dom() : ProjectItemDom( 0 ));
@@ -228,7 +227,6 @@ void KDevProjectManagerWidget::createFolder()
         QFileInfo fileInfo(activeFolder()->name() + "/" + name);
         
         if (QDir::current().mkdir(fileInfo.absFilePath())) {
-            editor->createProjectFile( fileInfo.absFilePath() );
             ProjectItemDom item = editor->import(projectModel(), fileInfo.absFilePath());
             
             if (item && item->toFolder()) {                
@@ -247,18 +245,8 @@ void KDevProjectManagerWidget::createFolder()
 
 void KDevProjectManagerWidget::createTarget()
 {
-	KDevProjectEditor *editor = part()->defaultImporter()->editor();
-	QString name = KInputDialog::getText(i18n("Add Target"), i18n("Add target:"));
-	if (!name.isEmpty()) {
-		// Create the target in the AST and then add it to the DOM
-	}
 }
 
-void KDevProjectManagerWidget::configureFolder()
-{
-	KDevProjectEditor *editor = part()->defaultImporter()->editor();
-	editor->configureFolder(activeFolder());
-}
 // ---------------------------------------------------------------------------------
 class ProjectRoot: public ProjectViewItem
 {
@@ -271,7 +259,7 @@ public:
     virtual ProjectView *projectView() const
     { return m_projectView; }
     
-    virtual void insertItem(QListViewItem *item)
+    virtual void insertItem(Q3ListViewItem *item)
     { m_projectView->listView()->insertItem(item); }
     
 private:
@@ -279,7 +267,7 @@ private:
 };
 
 ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
-    : QVBox(parentWidget), 
+    : Q3VBox(parentWidget), 
       m_managerWidget(m)
 {
     m_toolBarShell = new KDevToolBarShell(this);
@@ -294,12 +282,12 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
     
     m_listView->header()->hide();
     m_listView->addColumn(QString::null);
-    m_listView->setRootIsDecorated(QListView::LastColumn);
-    m_listView->setResizeMode(QListView::LastColumn);
+    m_listView->setRootIsDecorated(Q3ListView::LastColumn);
+    m_listView->setResizeMode(Q3ListView::LastColumn);
     m_listView->setSorting(-1);
     
-    connect(m_listView, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));
-    connect(m_listView, SIGNAL(executed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));    
+    connect(m_listView, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(executed(Q3ListViewItem*)));
+    connect(m_listView, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(executed(Q3ListViewItem*)));    
 }
 
 ProjectView::~ProjectView()
@@ -343,14 +331,14 @@ void ProjectView::process(ProjectItemDom dom, ProjectViewItem::ProcessOperation 
 
 // ---------------------------------------------------------------------------------
 ProjectViewItem::ProjectViewItem(ProjectItemDom dom, ProjectViewItem *parent)
-    : QListViewItem(parent),
+    : Q3ListViewItem(parent),
       m_dom(dom),
       m_projectView(parent->projectView())
 {
 }
 
 ProjectViewItem::ProjectViewItem(ProjectItemDom dom, ProjectView *parent)
-    : QListViewItem(parent->listView()),
+    : Q3ListViewItem(parent->listView()),
       m_dom(dom),
       m_projectView(parent)
 {
@@ -443,29 +431,28 @@ ProjectViewItem *ProjectView::createProjectItem(ProjectItemDom dom, ProjectViewI
 
 void ProjectViewItem::setup()
 {
-    QListViewItem::setup();
+    Q3ListViewItem::setup();
     
-    if (dom()) {
-        if (dom()->hasAttribute("Icon"))
-             setPixmap(0, SmallIcon(dom()->attribute("Icon").toString()));
-        else if (ProjectWorkspaceDom workspace = dom()->toWorkspace())
+    if (dom()) {    
+        if (ProjectWorkspaceDom workspace = dom()->toWorkspace())
             setPixmap(0, SmallIcon("window"));
+        else if (ProjectFolderDom folder = dom()->toFolder())
+        {
+            if (dom()->hasAttribute("Icon"))
+                setPixmap(0, SmallIcon(dom()->attribute("Icon").toString()));
+            else
+                setPixmap(0, SmallIcon("folder"));
+        }
         else if (ProjectTargetDom target = dom()->toTarget())
             setPixmap(0, SmallIcon("target_kdevelop"));
-        else if (ProjectFolderDom folder = dom()->toFolder())
-                setPixmap(0, SmallIcon("folder"));
         else if (ProjectFileDom file = dom()->toFile())
-        {
-	        setPixmap(0, KMimeType::pixmapForURL( file->name(), 0, KIcon::Small ) );
-        }
-        else
-                setPixmap(0, SmallIcon("document")); // Use kio's mime type to get file type.
+            setPixmap(0, SmallIcon("document"));
     }
 }
 
 void ProjectViewItem::setOpen(bool opened)
 {
-    QListViewItem::setOpen(opened);
+    Q3ListViewItem::setOpen(opened);
 }
 
 // ---------------------------------------------------------------------------------
@@ -483,7 +470,6 @@ ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *par
         part()->actionCollection()->action("project_buildall")->plug(tb);
         tb->insertSeparator();
         part()->actionCollection()->action("project_reload")->plug(tb);
-        part()->actionCollection()->action("project_configure_folder")->plug(tb);
         
 #if 0 // ###
         tb->insertButton(SmallIcon("folder_new"), -1, true);
@@ -502,8 +488,8 @@ ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *par
     connect(part(), SIGNAL(aboutToRemoveProjectItem(ProjectItemDom)),
         this, SLOT(removeItem(ProjectItemDom)));        
         
-    connect(listView(), SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
-        this, SLOT(contextMenu(KListView *, QListViewItem *, const QPoint &)));
+    connect(listView(), SIGNAL(contextMenu(KListView *, Q3ListViewItem *, const QPoint &)),
+        this, SLOT(contextMenu(KListView *, Q3ListViewItem *, const QPoint &)));
 }
 
 ProjectOverview::~ProjectOverview()
@@ -567,7 +553,7 @@ void ProjectOverview::refresh()
         process(*it, ProjectViewItem::Insert);
         
     if (!currentText.isEmpty()) {
-        if (QListViewItem *item = listView()->findItem(currentText, 0, KListView::ExactMatch))
+        if (Q3ListViewItem *item = listView()->findItem(currentText, 0, KListView::ExactMatch))
             listView()->setSelected(item, true);
     } else {
         listView()->setSelected(listView()->firstChild(), true);
@@ -608,8 +594,8 @@ ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parent
 #endif
     }
 
-    connect(listView(), SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
-        this, SLOT(contextMenu(KListView *, QListViewItem *, const QPoint &)));
+    connect(listView(), SIGNAL(contextMenu(KListView *, Q3ListViewItem *, const QPoint &)),
+        this, SLOT(contextMenu(KListView *, Q3ListViewItem *, const QPoint &)));
 }
 
 ProjectDetails::~ProjectDetails()
@@ -628,7 +614,7 @@ void ProjectDetails::setCurrentItem(ProjectItemDom dom)
     m_currentItem = dom;
     
     QString currentText;
-    if (QListViewItem *sel = listView()->currentItem()) {
+    if (Q3ListViewItem *sel = listView()->currentItem()) {
         currentText = sel->text(0);
     }
 
@@ -646,7 +632,7 @@ void ProjectDetails::setCurrentItem(ProjectItemDom dom)
     }
 
     if (!currentText.isEmpty()) {
-        if (QListViewItem *item = listView()->findItem(currentText, 0, KListView::ExactMatch)) {
+        if (Q3ListViewItem *item = listView()->findItem(currentText, 0, KListView::ExactMatch)) {
             listView()->setSelected(item, true);
             while (item) {
                 item->setOpen(true);
@@ -678,14 +664,14 @@ void ProjectView::showProperties(ProjectItemDom dom)
     // ### implement me ;)
 }
 
-void ProjectView::showProperties(QListViewItem *item)
+void ProjectView::showProperties(Q3ListViewItem *item)
 {
     if (ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item)) {
         showProperties(projectItem->dom());
     }
 }
 
-void ProjectView::executed(QListViewItem *item)
+void ProjectView::executed(Q3ListViewItem *item)
 {
     if (ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item)) {
         open(projectItem->dom());
@@ -713,7 +699,7 @@ ProjectViewItem *ProjectViewItem::findProjectItem(const QString &path) const
     return 0;
 }
 
-void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt)
+void ProjectOverview::contextMenu(KListView *listView, Q3ListViewItem *item, const QPoint &pt)
 {
     Q_UNUSED(listView);
     
@@ -734,8 +720,7 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
             urls.append(folder->name());
             FileContext fileContext(urls);
             part()->core()->fillContextMenu(&menu, &fileContext);
-            part()->defaultImporter()->fillContextMenu( &menu, &fileContext );
-	        
+
             menu.insertItem(i18n("Edit"), 1000);
             
             if (part()->defaultBuilder()) {
@@ -759,47 +744,41 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
     } 
 }
 
-void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt)
+void ProjectDetails::contextMenu(KListView *listView, Q3ListViewItem *item, const QPoint &pt)
 {
     Q_UNUSED(listView);
     
     if (!item)
         return;
-	KPopupMenu menu(this);
-	ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
-	if (ProjectTargetDom target = projectItem->dom()->toTarget()) {
-		
-		menu.insertTitle(i18n("Target: %1").arg(target->shortDescription()));
-		ProjectModelItemContext context(target.data());
-		part()->defaultImporter()->fillContextMenu(&menu, &context);
-	}
-	else if (ProjectFileDom file = projectItem->dom()->toFile()) {
-		menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
-		ProjectModelItemContext context(file.data());
-		part()->core()->fillContextMenu(&menu, &context);
-		KURL::List urls;
-		urls.append(file->name());
-		FileContext fileContext(urls);
-		part()->core()->fillContextMenu(&menu, &fileContext);
-		part()->defaultImporter()->fillContextMenu( &menu, &fileContext );
-    	}
-	
-	if (part()->defaultBuilder()) {
-		menu.insertSeparator();
-		menu.insertItem(i18n("Build"), 1010);
-	}
-
-	if( menu.count() != 0)
-	{
-		switch (menu.exec(pt)) {
-		case 1010: {
-			if (KDevProjectBuilder *builder = part()->defaultBuilder())
-				builder->build(m_currentItem); // ### TODO: compile the target not subproject
-		} break;
-			
-		default: break;
-		} // end switch
-	}
+        
+    ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
+        
+    if (ProjectFileDom file = projectItem->dom()->toFile()) {
+        KPopupMenu menu(this);
+        menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
+                    
+        ProjectModelItemContext context(file.data());
+        part()->core()->fillContextMenu(&menu, &context);
+        
+        KURL::List urls;
+        urls.append(file->name());
+        FileContext fileContext(urls);
+        part()->core()->fillContextMenu(&menu, &fileContext);
+        
+        if (part()->defaultBuilder()) {
+            menu.insertSeparator();
+            menu.insertItem(i18n("Build"), 1010);
+        }
+        
+        switch (menu.exec(pt)) {
+            case 1010: {
+                if (KDevProjectBuilder *builder = part()->defaultBuilder())
+                    builder->build(m_currentItem); // ### TODO: compile the target not subproject
+            } break;
+            
+            default: break;
+        } // end switch
+    }
 }
 
 

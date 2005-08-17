@@ -18,7 +18,11 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3PtrList>
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <klocale.h>
@@ -76,13 +80,13 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
     KAction *action;
-    action = new KAction( i18n("Expand Text"), CTRL + Key_J,
+    action = new KAction( i18n("Expand Text"), Qt::CTRL + Qt::Key_J,
                           this, SLOT(slotExpandText()),
                           actionCollection(), "edit_expandtext" );
     action->setToolTip( i18n("Expand current word") );
     action->setWhatsThis( i18n("<b>Expand current word</b><p>Current word can be completed using the list of similar words in source files.") );
 
-    action = new KAction( i18n("Expand Abbreviation"), CTRL + Key_L,
+    action = new KAction( i18n("Expand Abbreviation"), Qt::CTRL + Qt::Key_L,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
     action->setToolTip( i18n("Expand abbreviation") );
@@ -172,7 +176,7 @@ void AbbrevPart::load()
         QString fn = *it;
 	kdDebug(9028) << "===> load file: " << fn << endl;
         QFile f( fn );
-        if ( f.open(IO_ReadOnly) ) {
+        if ( f.open(QIODevice::ReadOnly) ) {
 		QTextStream stream( &f );
 		m_completionFile += ( stream.read() + QString("\n") );
 		f.close();
@@ -184,7 +188,7 @@ void AbbrevPart::load()
         QString fn = *it;
         kdDebug(9028) << "fn = " << fn << endl;
         QFile f( fn );
-        if ( f.open(IO_ReadOnly) ) {
+        if ( f.open(QIODevice::ReadOnly) ) {
             QDomDocument doc;
             doc.setContent( &f );
             QDomElement root = doc.firstChild().toElement();
@@ -211,7 +215,7 @@ void AbbrevPart::save()
     QDomElement root = doc.createElement( "Templates" );
     doc.appendChild( root );
 
-    QPtrList<CodeTemplate> templates = m_templates.allTemplates();
+    Q3PtrList<CodeTemplate> templates = m_templates.allTemplates();
     CodeTemplate *templ;
     for (templ = templates.first(); templ; templ = templates.next())
     {
@@ -224,7 +228,7 @@ void AbbrevPart::save()
     }
 
     QFile f( fn + "templates" );
-    if( f.open(IO_WriteOnly) ){
+    if( f.open(QIODevice::WriteOnly) ){
         QTextStream stream( &f );
         stream << doc.toString();
         f.close();
@@ -248,7 +252,7 @@ QString AbbrevPart::currentWord() const
 
 void AbbrevPart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Abbreviations"), i18n("Abbreviations"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+	Q3VBox *vbox = dlg->addVBoxPage(i18n("Abbreviations"), i18n("Abbreviations"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     AbbrevConfigWidget *w = new AbbrevConfigWidget(this, vbox, "abbrev config widget");
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
@@ -263,7 +267,7 @@ void AbbrevPart::slotExpandText()
     if (word.isEmpty())
         return;
 
-    QValueList<KTextEditor::CompletionEntry> entries = findAllWords(editIface->text(), word);
+    Q3ValueList<KTextEditor::CompletionEntry> entries = findAllWords(editIface->text(), word);
     if (entries.count() == 0) {
         ; // some statusbar message?
 //    } else if (entries.count() == 1) {
@@ -279,9 +283,9 @@ void AbbrevPart::slotExpandText()
 }
 
 
-QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString &text, const QString &prefix)
+Q3ValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString &text, const QString &prefix)
 {
-    QValueList<KTextEditor::CompletionEntry> entries;
+    Q3ValueList<KTextEditor::CompletionEntry> entries;
 
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
     QWidget *view = partController()->activeWidget();
@@ -402,7 +406,7 @@ void AbbrevPart::insertChars( const QString &chars )
 
     bool foundPipe = false;
     QString str;
-    QTextStream stream( &str, IO_WriteOnly );
+    QTextStream stream( &str, QIODevice::WriteOnly );
     QStringList lines = QStringList::split( "\n", chars );
     QStringList::Iterator it = lines.begin();
     line = currentLine;
@@ -668,7 +672,7 @@ void CodeTemplateList::insert( QString name, QString description, QString code, 
         m_suffixes.append(origSuffixes);
 }
 
-QPtrList< CodeTemplate > CodeTemplateList::allTemplates( ) const
+Q3PtrList< CodeTemplate > CodeTemplateList::allTemplates( ) const
 {
     return allCodeTemplates;
 }

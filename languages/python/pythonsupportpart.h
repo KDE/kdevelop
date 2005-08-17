@@ -14,10 +14,12 @@
 
 
 #include "kdevlanguagesupport.h"
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 class KDialogBase;
 class QStringList;
-class QPopupMenu;
+class Q3PopupMenu;
 class Context;
 
 class PythonSupportPart : public KDevLanguageSupport
@@ -31,7 +33,7 @@ public:
     virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
     
 public slots:
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
     void slotCreateSubclass();
 
 protected:

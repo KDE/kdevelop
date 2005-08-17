@@ -18,16 +18,16 @@
 
 #include "replaceview.h"
 
-class ReplaceItem : public QCheckListItem
+class ReplaceItem : public Q3CheckListItem
 {
 public:
     // the file item
     ReplaceItem( ReplaceView * parent, ReplaceItem * after, QString file ) :
-            QCheckListItem( parent,
+            Q3CheckListItem( parent,
 #if KDE_VERSION > 305
                             after,
 #endif
-                            file, QCheckListItem::CheckBox ),
+                            file, Q3CheckListItem::CheckBox ),
             _file( file ), _string( file ), _line( 0 ), _isfile( true ),
             _lineclicked( false ), _clicked( true )
     {
@@ -37,11 +37,11 @@ public:
 
     // the line item
     ReplaceItem( ReplaceItem * parent, ReplaceItem * after, QString file, QString string, int line ) :
-            QCheckListItem( parent,
+            Q3CheckListItem( parent,
 #if KDE_VERSION > 305
                             after,
 #endif
-                            QString::number( line + 1 ) + ": " + string, QCheckListItem::CheckBox ),
+                            QString::number( line + 1 ) + ": " + string, Q3CheckListItem::CheckBox ),
             _file( file ), _string( string ), _line( line ), _isfile( false ),
             _lineclicked( false ), _clicked( true )
     {
@@ -82,17 +82,17 @@ public:
 
     ReplaceItem * parent() const
     {
-        return static_cast<ReplaceItem*>( QListViewItem::parent() );
+        return static_cast<ReplaceItem*>( Q3ListViewItem::parent() );
     }
 
     ReplaceItem * firstChild() const
     {
-        return static_cast<ReplaceItem*>( QListViewItem::firstChild() );
+        return static_cast<ReplaceItem*>( Q3ListViewItem::firstChild() );
     }
 
     ReplaceItem * nextSibling() const
     {
-        return static_cast<ReplaceItem*>( QListViewItem::nextSibling() );
+        return static_cast<ReplaceItem*>( Q3ListViewItem::nextSibling() );
     }
 
     void activate( int column, QPoint const & localPos );

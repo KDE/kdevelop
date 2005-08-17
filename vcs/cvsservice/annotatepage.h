@@ -15,11 +15,11 @@
 #include "cvsservicedcopIface.h"
 #include <qwidget.h>
 #include <qmap.h>
-#include <qlistview.h>
+#include <q3listview.h>
 
 class CvsJob_stub;
 class CvsService_stub;
-class QTextBrowser;
+class Q3TextBrowser;
 class AnnotateView;
 class QStringList;
 class KLineEdit;

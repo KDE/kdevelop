@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -34,7 +34,7 @@ class QuickOpenFunctionDialog : public QuickOpenDialog
   Q_OBJECT
 
 public:
-  QuickOpenFunctionDialog( QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  QuickOpenFunctionDialog( QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   ~QuickOpenFunctionDialog();
   
   void gotoFile( QString name );
@@ -43,8 +43,8 @@ public:
   QuickOpenPart* part(){ return m_part; };
   
 public slots:
-  virtual void slotExecuted(QListBoxItem*);//itemList executed, returnPressed
-  virtual void executed(QListBoxItem*);	//
+  virtual void slotExecuted(Q3ListBoxItem*);//itemList executed, returnPressed
+  virtual void executed(Q3ListBoxItem*);	//
   virtual void slotReturnPressed();			//buttonOk clicked, nameEdit returnPressed
 
 protected:

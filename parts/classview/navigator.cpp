@@ -17,7 +17,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "navigator.h"
 
@@ -59,19 +59,19 @@ private:
 
 
 
-class FunctionNavItem: public QListViewItem {
+class FunctionNavItem: public Q3ListViewItem {
 public:
     enum Type { Declaration, Definition };
 
-    FunctionNavItem(ClassViewPart *part, QListView *parent, QString name, Type type)
-        :QListViewItem(parent, name), m_part(part), m_type(type) {}
-    FunctionNavItem(ClassViewPart *part, QListViewItem *parent, QString name, Type type)
-        :QListViewItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(ClassViewPart *part, Q3ListView *parent, QString name, Type type)
+        :Q3ListViewItem(parent, name), m_part(part), m_type(type) {}
+    FunctionNavItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, Type type)
+        :Q3ListViewItem(parent, name), m_part(part), m_type(type) {}
     ~FunctionNavItem() {}
 
     virtual void setup()
     {
-        QListViewItem::setup();
+        Q3ListViewItem::setup();
         setPixmap( 0, UserIcon("CVpublic_meth", KIcon::DefaultState, m_part->instance()) );
     }
     Type type() { return m_type; }
@@ -96,7 +96,7 @@ Navigator::~Navigator()
 {
 }
 
-void Navigator::selectFunctionNav(QListViewItem *item)
+void Navigator::selectFunctionNav(Q3ListViewItem *item)
 {
     FunctionNavItem *nav = dynamic_cast<FunctionNavItem*>(item);
     if (!nav)
@@ -245,10 +245,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
 
     //remove items not in toLeave list
-    QMap<QString, QListViewItem*>::iterator it = m_functionNavDecls.begin();
+    QMap<QString, Q3ListViewItem*>::iterator it = m_functionNavDecls.begin();
     while ( it != m_functionNavDecls.end() )
     {
-        QMap<QString, QListViewItem*>::iterator it2 = it;
+        QMap<QString, Q3ListViewItem*>::iterator it2 = it;
         ++it;
         if ( !toLeave.contains( it2.key() ) )
         {
@@ -286,10 +286,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
 
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
     //remove items not in toLeave list
-    QMap<QString, QListViewItem*>::iterator itt = m_functionNavDefs.begin();
+    QMap<QString, Q3ListViewItem*>::iterator itt = m_functionNavDefs.begin();
     while ( itt != m_functionNavDefs.end() )
     {
-        QMap<QString, QListViewItem*>::iterator it2 = itt;
+        QMap<QString, Q3ListViewItem*>::iterator it2 = itt;
         ++itt;
         if ( !toLeave.contains( it2.key() ) )
         {

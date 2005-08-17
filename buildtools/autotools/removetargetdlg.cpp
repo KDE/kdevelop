@@ -18,12 +18,14 @@
 
 #include <qapplication.h>
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qfile.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -77,7 +79,7 @@ RemoveTargetDialog::~RemoveTargetDialog()
 
 void RemoveTargetDialog::init()
 {
-	QPtrList <SubprojectItem> subprojectItems = m_widget->allSubprojectItems();
+	Q3PtrList <SubprojectItem> subprojectItems = m_widget->allSubprojectItems();
 
 	TargetItem* titem = 0;
 

@@ -27,9 +27,13 @@
  * We provide an Implementation of the interface.
  */
 #include <qwidget.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <qpe/taskbarappletinterface.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QPaintEvent>
 
 
 /*

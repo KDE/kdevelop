@@ -19,13 +19,15 @@
 #define KDEVPART_HASKELLSUPPORT_PART_H
 
 #include <qwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include "kdevlanguagesupport.h"
 
 class HaskellSupportWidget; // @todo remove this
 class KDialogBase;
-class QPopupMenu;
+class Q3PopupMenu;
 class Context;
 
 class HaskellSupportPart : public KDevLanguageSupport
@@ -45,7 +47,7 @@ private slots:
   	void savedFile(const KURL &fileName);
   	void configWidget(KDialogBase *dlg);
 	void projectConfigWidget(KDialogBase *dlg);
-  	void contextMenu(QPopupMenu *popup, const Context *context);
+  	void contextMenu(Q3PopupMenu *popup, const Context *context);
 
   	void addedFilesToProject(const QStringList &fileList);
   	void removedFilesFromProject(const QStringList &fileList);
@@ -57,7 +59,7 @@ private:
   	void maybeParse(const QString &fileName);
   	void parse(const QString &fileName);
 
-  	QGuardedPtr<HaskellSupportWidget> m_widget;
+  	QPointer<HaskellSupportWidget> m_widget;
   	bool m_projectClosed;
   	QStringList m_projectFileList;
 };

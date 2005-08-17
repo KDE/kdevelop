@@ -47,24 +47,32 @@
 #include <klocale.h>
 
 #include <qpalette.h>
-#include <qobjectlist.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
+#include <qobject.h>
+#include <q3header.h>
+#include <q3popupmenu.h>
 #include <qtabwidget.h>
-#include <qwizard.h>
-#include <qwidgetstack.h>
+#include <q3wizard.h>
+#include <q3widgetstack.h>
 #include <qtabbar.h>
 #include <qfeatures.h>
 #include <qapplication.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QCloseEvent>
+#include <QPixmap>
 #include "../interfaces/languageinterface.h"
 #include <qworkspace.h>
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qmessagebox.h>
 
 #include <stdlib.h>
 
-QListViewItem *newItem = 0;
+Q3ListViewItem *newItem = 0;
 
 const QPixmap DesignerFormPix = SmallIcon( "designer_form.png" , KDevDesignerPartFactory::instance());
 const QPixmap DesignerLayoutPix = SmallIcon( "designer_layout.png" , KDevDesignerPartFactory::instance());
@@ -73,15 +81,15 @@ const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevD
 
 static QPluginManager<ClassBrowserInterface> *classBrowserInterfaceManager = 0;
 
-HierarchyItem::HierarchyItem( Type type, QListViewItem *parent, QListViewItem *after,
+HierarchyItem::HierarchyItem( Type type, Q3ListViewItem *parent, Q3ListViewItem *after,
 			      const QString &txt1, const QString &txt2, const QString &txt3 )
-    : QListViewItem( parent, after, txt1, txt2, txt3 ), typ( type )
+    : Q3ListViewItem( parent, after, txt1, txt2, txt3 ), typ( type )
 {
 }
 
-HierarchyItem::HierarchyItem( Type type, QListView *parent, QListViewItem *after,
+HierarchyItem::HierarchyItem( Type type, Q3ListView *parent, Q3ListViewItem *after,
 			      const QString &txt1, const QString &txt2, const QString &txt3 )
-    : QListViewItem( parent, after, txt1, txt2, txt3 ), typ( type )
+    : Q3ListViewItem( parent, after, txt1, txt2, txt3 ), typ( type )
 {
 }
 
@@ -100,11 +108,11 @@ void HierarchyItem::paintCell( QPainter *p, const QColorGroup &cg, int column, i
 	    setText( 0, txt + " " + "(Constructor)" );
 	else
 	    setText( 0, txt + " " + "(Destructor)" );
-	QListViewItem::paintCell( p, g, column, width, align );
+	Q3ListViewItem::paintCell( p, g, column, width, align );
 	setText( 0, txt );
 	listView()->setUpdatesEnabled( TRUE );
     } else {
-	QListViewItem::paintCell( p, g, column, width, align );
+	Q3ListViewItem::paintCell( p, g, column, width, align );
     }
     p->save();
     p->setPen( QPen( cg.dark(), 1 ) );
@@ -134,7 +142,7 @@ void HierarchyItem::updateBackColor()
 	return;
     }
 
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     --it;
     if ( it.current() ) {
 	if ( ( ( HierarchyItem*)it.current() )->backColor == *backColor1 )
@@ -160,25 +168,25 @@ void HierarchyItem::okRename( int col )
 {
     if ( newItem == this )
 	newItem = 0;
-    QListViewItem::okRename( col );
+    Q3ListViewItem::okRename( col );
 }
 
 void HierarchyItem::cancelRename( int col )
 {
     if ( newItem == this ) {
 	newItem = 0;
-	QListViewItem::cancelRename( col );
+	Q3ListViewItem::cancelRename( col );
 	delete this;
 	return;
     }
-    QListViewItem::cancelRename( col );
+    Q3ListViewItem::cancelRename( col );
 }
 
 
 
 
 HierarchyList::HierarchyList( QWidget *parent, FormWindow *fw, bool doConnects )
-    : QListView( parent ), formWindow( fw )
+    : Q3ListView( parent ), formWindow( fw )
 {
     init_colors();
 
@@ -199,14 +207,14 @@ HierarchyList::HierarchyList( QWidget *parent, FormWindow *fw, bool doConnects )
     setHScrollBarMode( AlwaysOff );
     setVScrollBarMode( AlwaysOn );
     if ( doConnects ) {
-	connect( this, SIGNAL( clicked( QListViewItem * ) ),
-		 this, SLOT( objectClicked( QListViewItem * ) ) );
-	connect( this, SIGNAL( doubleClicked( QListViewItem * ) ),
-		 this, SLOT( objectDoubleClicked( QListViewItem * ) ) );
-	connect( this, SIGNAL( returnPressed( QListViewItem * ) ),
-		 this, SLOT( objectClicked( QListViewItem * ) ) );
-	connect( this, SIGNAL( contextMenuRequested( QListViewItem *, const QPoint&, int ) ),
-		 this, SLOT( showRMBMenu( QListViewItem *, const QPoint & ) ) );
+	connect( this, SIGNAL( clicked( Q3ListViewItem * ) ),
+		 this, SLOT( objectClicked( Q3ListViewItem * ) ) );
+	connect( this, SIGNAL( doubleClicked( Q3ListViewItem * ) ),
+		 this, SLOT( objectDoubleClicked( Q3ListViewItem * ) ) );
+	connect( this, SIGNAL( returnPressed( Q3ListViewItem * ) ),
+		 this, SLOT( objectClicked( Q3ListViewItem * ) ) );
+	connect( this, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint&, int ) ),
+		 this, SLOT( showRMBMenu( Q3ListViewItem *, const QPoint & ) ) );
     }
     deselect = TRUE;
     setColumnWidthMode( 1, Manual );
@@ -218,13 +226,13 @@ void HierarchyList::keyPressEvent( QKeyEvent *e )
 	deselect = FALSE;
     else
 	deselect = TRUE;
-    QListView::keyPressEvent( e );
+    Q3ListView::keyPressEvent( e );
 }
 
 void HierarchyList::keyReleaseEvent( QKeyEvent *e )
 {
     deselect = TRUE;
-    QListView::keyReleaseEvent( e );
+    Q3ListView::keyReleaseEvent( e );
 }
 
 void HierarchyList::viewportMousePressEvent( QMouseEvent *e )
@@ -233,15 +241,15 @@ void HierarchyList::viewportMousePressEvent( QMouseEvent *e )
 	deselect = FALSE;
     else
 	deselect = TRUE;
-    QListView::viewportMousePressEvent( e );
+    Q3ListView::viewportMousePressEvent( e );
 }
 
 void HierarchyList::viewportMouseReleaseEvent( QMouseEvent *e )
 {
-    QListView::viewportMouseReleaseEvent( e );
+    Q3ListView::viewportMouseReleaseEvent( e );
 }
 
-QObject *HierarchyList::handleObjectClick( QListViewItem *i )
+QObject *HierarchyList::handleObjectClick( Q3ListViewItem *i )
 {
     if ( !i )
 	return 0;
@@ -258,24 +266,24 @@ QObject *HierarchyList::handleObjectClick( QListViewItem *i )
     if ( o->isWidgetType() ) {
 	QWidget *w = (QWidget*)o;
 	if ( !formWindow->widgets()->find( w ) ) {
-	    if ( ::qt_cast<QWidgetStack*>(w->parent()) ) {
+	    if ( ::qt_cast<Q3WidgetStack*>(w->parent()) ) {
 		if (::qt_cast<QTabWidget*>(w->parent()->parent()) ) {
 		    ((QTabWidget*)w->parent()->parent())->showPage( w );
 		    o = (QWidget*)w->parent()->parent();
 		    formWindow->emitUpdateProperties( formWindow->currentWidget() );
-		} else if ( ::qt_cast<QWizard*>(w->parent()->parent()) ) {
+		} else if ( ::qt_cast<Q3Wizard*>(w->parent()->parent()) ) {
 		    ((QDesignerWizard*)w->parent()->parent())->
 			setCurrentPage( ( (QDesignerWizard*)w->parent()->parent() )->pageNum( w ) );
 		    o = (QWidget*)w->parent()->parent();
 		    formWindow->emitUpdateProperties( formWindow->currentWidget() );
 		} else {
-		    ( (QWidgetStack*)w->parent() )->raiseWidget( w );
-		    if ( (QWidgetStack*)w->parent()->isA( "QDesignerWidgetStack" ) )
+		    ( (Q3WidgetStack*)w->parent() )->raiseWidget( w );
+		    if ( (Q3WidgetStack*)w->parent()->isA( "QDesignerWidgetStack" ) )
 			( (QDesignerWidgetStack*)w->parent() )->updateButtons();
 		}
-	    } else if ( ::qt_cast<QMenuBar*>(w) || ::qt_cast<QDockWindow*>(w) ) {
+	    } else if ( ::qt_cast<QMenuBar*>(w) || ::qt_cast<Q3DockWindow*>(w) ) {
 		formWindow->setActiveObject( w );
-	    } else if ( ::qt_cast<QPopupMenu*>(w) ) {
+	    } else if ( ::qt_cast<Q3PopupMenu*>(w) ) {
 		return 0; // ### we could try to find our menu bar and change the currentMenu to our index
 	    } else {
 		return 0;
@@ -293,7 +301,7 @@ QObject *HierarchyList::handleObjectClick( QListViewItem *i )
 }
 
 
-void HierarchyList::objectDoubleClicked( QListViewItem *i )
+void HierarchyList::objectDoubleClicked( Q3ListViewItem *i )
 {
     QObject *o = handleObjectClick( i );
     if ( !o )
@@ -307,7 +315,7 @@ void HierarchyList::objectDoubleClicked( QListViewItem *i )
     }
 }
 
-void HierarchyList::objectClicked( QListViewItem *i )
+void HierarchyList::objectClicked( Q3ListViewItem *i )
 {
     QObject *o = handleObjectClick( i );
     if ( !o )
@@ -318,14 +326,14 @@ void HierarchyList::objectClicked( QListViewItem *i )
     }
 }
 
-QObject *HierarchyList::findObject( QListViewItem *i )
+QObject *HierarchyList::findObject( Q3ListViewItem *i )
 {
     return ( (HierarchyItem*)i )->object();
 }
 
-QListViewItem *HierarchyList::findItem( QObject *o )
+Q3ListViewItem *HierarchyList::findItem( QObject *o )
 {
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     while ( it.current() ) {
 	if ( ( (HierarchyItem*)it.current() )->object() == o )
 	    return it.current();
@@ -343,7 +351,7 @@ QObject *HierarchyList::current() const
 
 void HierarchyList::changeNameOf( QObject *o, const QString &name )
 {
-    QListViewItem *item = findItem( o );
+    Q3ListViewItem *item = findItem( o );
     if ( !item )
 	return;
     item->setText( 0, name );
@@ -355,14 +363,14 @@ void HierarchyList::changeDatabaseOf( QObject *o, const QString &info )
 #ifndef QT_NO_SQL
     if ( !formWindow->isDatabaseAware() )
 	return;
-    QListViewItem *item = findItem( o );
+    Q3ListViewItem *item = findItem( o );
     if ( !item )
 	return;
     item->setText( 2, info );
 #endif
 }
 
-static QPtrList<QWidgetStack> *widgetStacks = 0;
+static Q3PtrList<Q3WidgetStack> *widgetStacks = 0;
 
 void HierarchyList::setup()
 {
@@ -386,30 +394,30 @@ void HierarchyList::setup()
     }
 #endif
     if ( !widgetStacks )
-	widgetStacks = new QPtrList<QWidgetStack>;
+	widgetStacks = new Q3PtrList<Q3WidgetStack>;
     if ( w )
 	insertObject( w, 0 );
     widgetStacks->clear();
 }
 
-void HierarchyList::setOpen( QListViewItem *i, bool b )
+void HierarchyList::setOpen( Q3ListViewItem *i, bool b )
 {
-    QListView::setOpen( i, b );
+    Q3ListView::setOpen( i, b );
 }
 
-void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
+void HierarchyList::insertObject( QObject *o, Q3ListViewItem *parent )
 {
     if ( QString( o->name() ).startsWith( "qt_dead_widget_" ) )
 	return;
     bool fakeMainWindow = FALSE;
-    if ( ::qt_cast<QMainWindow*>(o) ) {
-	QObject *cw = ( (QMainWindow*)o )->centralWidget();
+    if ( ::qt_cast<Q3MainWindow*>(o) ) {
+	QObject *cw = ( (Q3MainWindow*)o )->centralWidget();
 	if ( cw ) {
 	    o = cw;
 	    fakeMainWindow = TRUE;
 	}
     }
-    QListViewItem *item = 0;
+    Q3ListViewItem *item = 0;
     QString className = WidgetFactory::classNameOf( o );
     if ( ::qt_cast<QLayoutWidget*>(o) ) {
 	switch ( WidgetFactory::layoutType( (QWidget*)o ) ) {
@@ -433,11 +441,11 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
 #endif
 
     QString name = o->name();
-    if ( ::qt_cast<QWidgetStack*>(o->parent()) ) {
+    if ( ::qt_cast<Q3WidgetStack*>(o->parent()) ) {
 	if ( ::qt_cast<QTabWidget*>(o->parent()->parent()) )
 	    name = ( (QTabWidget*)o->parent()->parent() )->tabLabel( (QWidget*)o );
-	else if ( ::qt_cast<QWizard*>(o->parent()->parent()) )
-	    name = ( (QWizard*)o->parent()->parent() )->title( (QWidget*)o );
+	else if ( ::qt_cast<Q3Wizard*>(o->parent()->parent()) )
+	    name = ( (Q3Wizard*)o->parent()->parent() )->title( (QWidget*)o );
     }
 
     QToolBox *tb;
@@ -462,7 +470,7 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
     else
 	item->setPixmap( 0, WidgetDatabase::iconSet(
 		    WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( o ) ) ).
-			 pixmap( QIconSet::Small, QIconSet::Normal ) );
+			 pixmap( QIcon::Small, QIcon::Normal ) );
     if ( ::qt_cast<QAction*>(o) )
 	item->setPixmap( 0, ( (QAction*)o )->iconSet().pixmap() );
 
@@ -478,16 +486,16 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
 		 ( (QWidget*)it.current() )->isHidden() )
 		continue;
 	    if ( !formWindow->widgets()->find( (QWidget*)it.current() ) ) {
-		if ( ::qt_cast<QWidgetStack*>(it.current()->parent()) ||
-		     ::qt_cast<QWidgetStack*>(it.current()) ) {
+		if ( ::qt_cast<Q3WidgetStack*>(it.current()->parent()) ||
+		     ::qt_cast<Q3WidgetStack*>(it.current()) ) {
 		    QObject *obj = it.current();
 		    QDesignerTabWidget *tw = ::qt_cast<QDesignerTabWidget*>(it.current()->parent());
 		    QDesignerWizard *dw = ::qt_cast<QDesignerWizard*>(it.current()->parent());
-		    QWidgetStack *stack = 0;
-		    if ( dw || tw || ::qt_cast<QWidgetStack*>(obj) )
-			stack = (QWidgetStack*)obj;
+		    Q3WidgetStack *stack = 0;
+		    if ( dw || tw || ::qt_cast<Q3WidgetStack*>(obj) )
+			stack = (Q3WidgetStack*)obj;
 		    else
-			stack = (QWidgetStack*)obj->parent();
+			stack = (Q3WidgetStack*)obj->parent();
 		    if ( widgetStacks->findRef( stack ) != -1 )
 			continue;
 		    widgetStacks->append( stack );
@@ -506,7 +514,7 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
 		    }
 		    delete l2;
 		} else if ( ::qt_cast<QToolBox*>(it.current()->parent()) ) {
-		    if ( !::qt_cast<QScrollView*>(it.current()) )
+		    if ( !::qt_cast<Q3ScrollView*>(it.current()) )
 			continue;
 		    QToolBox *tb = (QToolBox*)it.current()->parent();
 		    for ( int i = tb->count() - 1; i >= 0; --i )
@@ -529,13 +537,13 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
 	    insertObject( obj, item );
 	delete l;
     } else if ( ::qt_cast<QDesignerToolBar*>(o) || ::qt_cast<PopupMenuEditor*>(o) ) {
-	QPtrList<QAction> actions;
+	Q3PtrList<QAction> actions;
 	if ( ::qt_cast<QDesignerToolBar*>(o) )
 	    actions = ( (QDesignerToolBar*)o )->insertedActions();
 	else
 	    ( (PopupMenuEditor*)o )->insertedActions( actions );
 
-	QPtrListIterator<QAction> it( actions );
+	Q3PtrListIterator<QAction> it( actions );
 	it.toLast();
 	while ( it.current() ) {
 	    QAction *a = it.current();
@@ -576,7 +584,7 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
 
 void HierarchyList::setCurrent( QObject *o )
 {
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     while ( it.current() ) {
 	if ( ( (HierarchyItem*)it.current() )->object() == o ) {
 	    blockSignals( TRUE );
@@ -589,7 +597,7 @@ void HierarchyList::setCurrent( QObject *o )
     }
 }
 
-void HierarchyList::showRMBMenu( QListViewItem *i, const QPoint & p )
+void HierarchyList::showRMBMenu( Q3ListViewItem *i, const QPoint & p )
 {
     if ( !i )
 	return;
@@ -604,7 +612,7 @@ void HierarchyList::showRMBMenu( QListViewItem *i, const QPoint & p )
 
     QWidget *w = (QWidget*)o;
     if ( w->isVisibleTo( formWindow ) ) {
-	if ( !::qt_cast<QTabWidget*>(w) && !::qt_cast<QWizard*>(w) ) {
+	if ( !::qt_cast<QTabWidget*>(w) && !::qt_cast<Q3Wizard*>(w) ) {
 	    if ( !normalMenu )
 		normalMenu = formWindow->mainWindow()->setupNormalHierarchyMenu( this );
 	    normalMenu->popup( p );
@@ -632,8 +640,8 @@ void HierarchyList::addTabPage()
 							tw, "Tab" );
 	formWindow->commandHistory()->addCommand( cmd );
 	cmd->execute();
-    } else if ( ::qt_cast<QWizard*>(w) ) {
-	QWizard *wiz = (QWizard*)formWindow->mainContainer();
+    } else if ( ::qt_cast<Q3Wizard*>(w) ) {
+	Q3Wizard *wiz = (Q3Wizard*)formWindow->mainContainer();
 	AddWizardPageCommand *cmd = new AddWizardPageCommand( i18n( "Add Page to %1" ).
 							      arg( wiz->name() ), formWindow,
 							      wiz, "Page" );
@@ -659,8 +667,8 @@ void HierarchyList::removeTabPage()
 	    formWindow->commandHistory()->addCommand( cmd );
 	    cmd->execute();
 	}
-    } else if ( ::qt_cast<QWizard*>(w) ) {
-	QWizard *wiz = (QWizard*)formWindow->mainContainer();
+    } else if ( ::qt_cast<Q3Wizard*>(w) ) {
+	Q3Wizard *wiz = (Q3Wizard*)formWindow->mainContainer();
 	if ( wiz->currentPage() ) {
 	    QDesignerWizard *dw = (QDesignerWizard*)wiz;
 	    DeleteWizardPageCommand *cmd =
@@ -681,8 +689,8 @@ FormDefinitionView::FormDefinitionView( QWidget *parent, FormWindow *fw )
 {
     header()->hide();
     removeColumn( 1 );
-    connect( this, SIGNAL( itemRenamed( QListViewItem *, int, const QString & ) ),
-	     this, SLOT( renamed( QListViewItem * ) ) );
+    connect( this, SIGNAL( itemRenamed( Q3ListViewItem *, int, const QString & ) ),
+	     this, SLOT( renamed( Q3ListViewItem * ) ) );
     popupOpen = FALSE;
 }
 
@@ -692,10 +700,10 @@ void FormDefinitionView::setup()
 	return;
     if ( !formWindow->project()->isCpp() )
 	return;
-    QListViewItem *i = firstChild();
+    Q3ListViewItem *i = firstChild();
     while ( i ) {
 	if ( i->rtti() == HierarchyItem::DefinitionParent ) {
-	    QListViewItem *a = i;
+	    Q3ListViewItem *a = i;
 	    i = i->nextSibling();
 	    delete a;
 	    continue;
@@ -730,10 +738,10 @@ void FormDefinitionView::setupVariables()
 {
     bool pubOpen, protOpen, privOpen;
     pubOpen = protOpen = privOpen = TRUE;
-    QListViewItem *i = firstChild();
+    Q3ListViewItem *i = firstChild();
     while ( i ) {
 	if ( i->rtti() == HierarchyItem::VarParent ) {
-	    QListViewItem *a = i;
+	    Q3ListViewItem *a = i;
 	    i = i->firstChild();
 	    while ( i ) {
 		if ( i->rtti() == HierarchyItem::VarPublic )
@@ -762,11 +770,11 @@ void FormDefinitionView::setupVariables()
     itemVarPubl = new HierarchyItem( HierarchyItem::VarPublic, itemVar, 0, i18n( "public" ),
 				     QString::null, QString::null );
 
-    QValueList<MetaDataBase::Variable> varList = MetaDataBase::variables( formWindow );
-    QValueList<MetaDataBase::Variable>::Iterator it = --( varList.end() );
+    Q3ValueList<MetaDataBase::Variable> varList = MetaDataBase::variables( formWindow );
+    Q3ValueList<MetaDataBase::Variable>::Iterator it = --( varList.end() );
     if ( !varList.isEmpty() && itemVar ) {
 	for (;;) {
-	    QListViewItem *item = 0;
+	    Q3ListViewItem *item = 0;
 	    if ( (*it).varAccess == "public" )
 		item = new HierarchyItem( HierarchyItem::Variable, itemVarPubl, 0, (*it).varName,
 					  QString::null, QString::null );
@@ -795,11 +803,11 @@ void FormDefinitionView::refresh()
 
     bool fuPub, fuProt, fuPriv, slPub, slProt, slPriv;
     fuPub = fuProt = fuPriv = slPub = slProt = slPriv = TRUE;
-    QListViewItem *i = firstChild();
+    Q3ListViewItem *i = firstChild();
     while ( i ) {
         if ( i->rtti() == HierarchyItem::SlotParent ||
 	     i->rtti() == HierarchyItem::FunctParent ) {
-	    QListViewItem *a = i;
+	    Q3ListViewItem *a = i;
 	    i = i->firstChild();
 	    while ( i ) {
 		switch( i->rtti() ) {
@@ -852,11 +860,11 @@ void FormDefinitionView::refresh()
     itemPublic = new HierarchyItem( HierarchyItem::SlotPublic, itemSlots, 0, i18n( "public" ),
 				    QString::null, QString::null );
 
-    QValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow );
-    QValueList<MetaDataBase::Function>::Iterator it = --( functionList.end() );
+    Q3ValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow );
+    Q3ValueList<MetaDataBase::Function>::Iterator it = --( functionList.end() );
     if ( !functionList.isEmpty() && itemFunct ) {
 	for (;;) {
-	    QListViewItem *item = 0;
+	    Q3ListViewItem *item = 0;
 	    if ( (*it).type == "slot" ) {
 		if ( (*it).access == "protected" )
 		    item = new HierarchyItem( HierarchyItem::Slot, itemProtected, 0, (*it).function,
@@ -901,7 +909,7 @@ void FormDefinitionView::setCurrent( QWidget * )
 {
 }
 
-void FormDefinitionView::objectClicked( QListViewItem *i )
+void FormDefinitionView::objectClicked( Q3ListViewItem *i )
 {
     if ( !i )
 	return;
@@ -947,9 +955,9 @@ static HierarchyItem::Type getChildType( int type )
     return (HierarchyItem::Type)type;
 }
 
-void HierarchyList::insertEntry( QListViewItem *i, const QPixmap &pix, const QString &s )
+void HierarchyList::insertEntry( Q3ListViewItem *i, const QPixmap &pix, const QString &s )
 {
-    QListViewItem *after = i->firstChild();
+    Q3ListViewItem *after = i->firstChild();
     while ( after && after->nextSibling() )
 	after = after->nextSibling();
     HierarchyItem *item = new HierarchyItem( getChildType( i->rtti() ), i, after, s,
@@ -966,7 +974,7 @@ void HierarchyList::insertEntry( QListViewItem *i, const QPixmap &pix, const QSt
 
 void FormDefinitionView::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
-    QListViewItem *i = itemAt( contentsToViewport( e->pos() ) );
+    Q3ListViewItem *i = itemAt( contentsToViewport( e->pos() ) );
     if ( !i )
 	return;
 
@@ -1002,7 +1010,7 @@ void FormDefinitionView::contentsMouseDoubleClickEvent( QMouseEvent *e )
 	case HierarchyItem::VarProtected:
 	case HierarchyItem::VarPrivate: {
 	    VariableDialog varDia( formWindow, this );
-	    QListViewItem *i = selectedItem();
+	    Q3ListViewItem *i = selectedItem();
 	    if ( i )
 		varDia.setCurrentItem( i->text( 0 ) );
 	    varDia.exec();
@@ -1031,7 +1039,7 @@ void FormDefinitionView::execFunctionDialog( const QString &access, const QStrin
     dlg.exec();
 }
 
-void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
+void FormDefinitionView::showRMBMenu( Q3ListViewItem *i, const QPoint &pos )
 {
     if ( !i )
 	return;
@@ -1042,7 +1050,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
     const int PROPS = 4;
     const int GOIMPL = 5;
 
-    QPopupMenu menu;
+    Q3PopupMenu menu;
     bool insertDelete = FALSE;
 
     if ( i->rtti() == HierarchyItem::FunctParent || i->rtti() == HierarchyItem::SlotParent ||
@@ -1087,7 +1095,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
 	case HierarchyItem::VarPrivate:
 	case HierarchyItem::Variable: {
 	    VariableDialog varDia( formWindow, this );
-	    QListViewItem *i = selectedItem();
+	    Q3ListViewItem *i = selectedItem();
 	    if ( i )
 		varDia.setCurrentItem( i->text( 0 ) );
 	    if ( varDia.exec() == QDialog::Accepted )
@@ -1140,7 +1148,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
     } else if ( res == DEL ) {
 	if ( i->rtti() == HierarchyItem::Slot || i->rtti() == HierarchyItem::Function ) {
 
-	    QCString funct( MetaDataBase::normalizeFunction( i->text( 0 ) ).latin1() );
+	    Q3CString funct( MetaDataBase::normalizeFunction( i->text( 0 ) ).latin1() );
 	    Command *cmd = new RemoveFunctionCommand( i18n( "Remove Function" ), formWindow, funct,
 						     QString::null, QString::null, QString::null,
 						     QString::null, formWindow->project()->language() );
@@ -1153,7 +1161,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
 	    formWindow->commandHistory()->addCommand( cmd );
 	    cmd->execute();
 	} else {
-	    QListViewItem *p = i->parent();
+	    Q3ListViewItem *p = i->parent();
 	    delete i;
 	    save( p, 0 );
 	}
@@ -1174,7 +1182,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
     }
 }
 
-void FormDefinitionView::renamed( QListViewItem *i )
+void FormDefinitionView::renamed( Q3ListViewItem *i )
 {
     if ( newItem == i )
 	newItem = 0;
@@ -1184,7 +1192,7 @@ void FormDefinitionView::renamed( QListViewItem *i )
 }
 
 
-void FormDefinitionView::save( QListViewItem *p, QListViewItem *i )
+void FormDefinitionView::save( Q3ListViewItem *p, Q3ListViewItem *i )
 {
     if ( i && i->text( 0 ).isEmpty() ) {
 	delete i;
@@ -1236,8 +1244,8 @@ void FormDefinitionView::addVariable( const QString &varName, const QString &acc
 // ------------------------------------------------------------
 
 HierarchyView::HierarchyView( QWidget *parent )
-    : QTabWidget( parent, 0, WStyle_Customize | WStyle_NormalBorder | WStyle_Title |
-		  WStyle_Tool |WStyle_MinMax | WStyle_SysMenu )
+    : QTabWidget( parent, 0, Qt::WStyle_Customize | Qt::WStyle_NormalBorder | Qt::WStyle_Title |
+		  Qt::WStyle_Tool |Qt::WStyle_MinMax | Qt::WStyle_SysMenu )
 {
     formwindow = 0;
     editor = 0;
@@ -1445,8 +1453,8 @@ void HierarchyView::widgetsRemoved( const QWidgetList & )
 void HierarchyView::namePropertyChanged( QWidget *w, const QVariant & )
 {
     QWidget *w2 = w;
-    if ( ::qt_cast<QMainWindow*>(w) )
-	w2 = ( (QMainWindow*)w )->centralWidget();
+    if ( ::qt_cast<Q3MainWindow*>(w) )
+	w2 = ( (Q3MainWindow*)w )->centralWidget();
     listview->changeNameOf( w2, w->name() );
 }
 
@@ -1465,7 +1473,7 @@ void HierarchyView::tabsChanged( QTabWidget * )
     listview->setup();
 }
 
-void HierarchyView::pagesChanged( QWizard * )
+void HierarchyView::pagesChanged( Q3Wizard * )
 {
     listview->setup();
 }
@@ -1498,7 +1506,7 @@ void HierarchyView::jumpTo( const QString &func, const QString &clss, int type )
 	editor->setFunction( func, clss );
 }
 
-HierarchyView::ClassBrowser::ClassBrowser( QListView *l, ClassBrowserInterface *i )
+HierarchyView::ClassBrowser::ClassBrowser( Q3ListView *l, ClassBrowserInterface *i )
     : lv( l ), iface( i )
 {
 }

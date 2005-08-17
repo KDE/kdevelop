@@ -1,12 +1,13 @@
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qdir.h>
 #include <qdom.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
-#include <qvbox.h>
+#include <q3ptrlist.h>
+#include <q3vbox.h>
 #include <qsize.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 class QDomDocument;
 
@@ -148,11 +149,11 @@ void ProjectManager::slotProjectOptions()
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
-	QVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
+	Q3VBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), BarIcon( "kdevelop", KIcon::SizeMedium ) );
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
-  QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
+  Q3VBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
@@ -203,29 +204,21 @@ void ProjectManager::loadDefaultProject()
   }
 }
 
-bool ProjectManager::loadProject(const KURL &projectURL)
+bool ProjectManager::loadProject(const KURL &url)
 {
-  KURL url = projectURL;
-  
   if (!url.isValid())
     return false;
-
-  if (url.isLocalFile()) 
-  {
-    QDir dir(url.path());
-    url.setPath(dir.canonicalPath());
-  }
 
   // reopen the already opened project?
   if( url.path() == projectFile().path() )
   {
     if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
-        i18n("Are you sure you want to reopen the current project?"), QString::null, i18n("Reopen"), i18n("Do Not Reopen")) == KMessageBox::No)
+        i18n("Are you sure you want to reopen the current project?")) == KMessageBox::No)
       return false;
   }
 
   TopLevel::getInstance()->main()->menuBar()->setEnabled( false );
-  kapp->setOverrideCursor( waitCursor );
+  kapp->setOverrideCursor( Qt::WaitCursor );
 
   if( projectLoaded() && !closeProject() )
   {
@@ -356,7 +349,7 @@ bool ProjectManager::loadProjectFile()
   }
 
   QFile fin(path);
-  if (!fin.open(IO_ReadOnly))
+  if (!fin.open(QIODevice::ReadOnly))
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
@@ -398,7 +391,7 @@ bool ProjectManager::saveProjectFile()
 
   if (m_info->m_projectURL.isLocalFile()) {
     QFile fout(m_info->m_projectURL.path());
-    if( !fout.open(IO_WriteOnly) ) {
+    if( !fout.open(QIODevice::WriteOnly) ) {
       KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
       return false;
     }

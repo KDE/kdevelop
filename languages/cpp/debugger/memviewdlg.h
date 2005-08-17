@@ -19,7 +19,7 @@
 #include <kdialog.h>
 
 class KLineEdit;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 
 namespace GDBDebugger
 {
@@ -47,7 +47,7 @@ private slots:
 
 private:
     KLineEdit *start_, *end_;
-    QMultiLineEdit *output_;
+    Q3MultiLineEdit *output_;
 };
 
 }

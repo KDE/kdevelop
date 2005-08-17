@@ -19,6 +19,9 @@
 #define _DISASSEMBLEWIDGET_H_
 
 #include <keditcl.h>
+//Added by qt3to4:
+#include <QHideEvent>
+#include <QShowEvent>
 
 namespace JAVADebugger
 {

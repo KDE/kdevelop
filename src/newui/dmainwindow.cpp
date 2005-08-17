@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "dmainwindow.h"
 
@@ -25,6 +25,9 @@
 #include <kiconloader.h>
 
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
 
 #include "dtabwidget.h"
 #include "docksplitter.h"
@@ -94,7 +97,7 @@ void DMainWindow::addWidget(DTabWidget *tab, QWidget *widget, const QString &tit
     if (m_showIconsOnTabs)
     {
         const QPixmap *pixmap = widget->icon();
-        const QIconSet &icons = (pixmap && (pixmap->size().height() <= 16)) ? *(pixmap) : SmallIcon("kdevelop");
+        const QIcon &icons = (pixmap && (pixmap->size().height() <= 16)) ? *(pixmap) : SmallIcon("kdevelop");
         tab->insertTab(widget, icons, title, idx);
     }
     else
@@ -212,7 +215,7 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
         m_currentWidget = w;
         emit widgetChanged(w);
     }
-    else if (ev->type() == QEvent::IconChange)
+    else if (ev->type() == QEvent::WindowIconChange)
     {
         if (m_widgetTabs.contains(w))
         {
@@ -220,7 +223,7 @@ bool DMainWindow::eventFilter(QObject *obj, QEvent *ev)
             tab->setTabIconSet(w, w->icon() ? (*(w->icon())) : QPixmap());
         }
     }
-    else if (ev->type() == QEvent::CaptionChange)
+    else if (ev->type() == QEvent::WindowTitleChange)
     {
         kdDebug() << "caption change" << endl;
     }

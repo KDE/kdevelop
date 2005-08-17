@@ -18,10 +18,10 @@
 
 #include <qcheckbox.h>
 #include <qwidget.h>
-#include <qgroupbox.h>
-#include <qheader.h>
-#include <qlistview.h>
-#include <qptrlist.h>
+#include <q3groupbox.h>
+#include <q3header.h>
+#include <q3listview.h>
+#include <q3ptrlist.h>
 #include <qradiobutton.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
@@ -51,7 +51,7 @@ public:
 	AutoProjectWidget* widget;
 	AutoProjectPart* part;
 	QStringList fileList;
-	QPtrList<SubprojectItem> subprojectList;
+	Q3PtrList<SubprojectItem> subprojectList;
 	SubprojectItem* chosenSubproject;
 	TargetItem* chosenTarget;
 	ChooseTargetDlgBase* baseUI;
@@ -82,11 +82,11 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, AutoProjectP
 	setIcon ( SmallIcon ( "target_kdevelop" ) );
 	
 	
-	QPtrListIterator<SubprojectItem> sit(d->subprojectList);
+	Q3PtrListIterator<SubprojectItem> sit(d->subprojectList);
 	for ( ; (*sit); ++sit )
 	{
-		QPtrList<TargetItem> targetList = (*sit)->targets;
-		QPtrListIterator<TargetItem> targetIt(targetList);
+		Q3PtrList<TargetItem> targetList = (*sit)->targets;
+		Q3PtrListIterator<TargetItem> targetIt(targetList);
 
 		// Only insert Subproject which have a "regular" target
 		for ( ; (*targetIt); ++targetIt )
@@ -135,7 +135,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, AutoProjectP
 			fileName = ( *it );
 
 
-		d->baseUI->newFileList->insertItem( new QListViewItem( d->baseUI->newFileList, fileName ) );
+		d->baseUI->newFileList->insertItem( new Q3ListViewItem( d->baseUI->newFileList, fileName ) );
 	}
 	
 	connect ( d->baseUI->subprojectComboBox, SIGNAL ( activated ( const QString& ) ),
@@ -158,7 +158,7 @@ void ChooseTargetDialog::slotSubprojectChanged ( const QString& name )
 	{
 		if ( spitem->subdir == name )
 		{
-			QPtrList <TargetItem> targetList = spitem->targets;
+			Q3PtrList <TargetItem> targetList = spitem->targets;
 			TargetItem* titem = targetList.first();
 
 			d->baseUI->targetComboBox->clear();
@@ -211,7 +211,7 @@ void ChooseTargetDialog::slotTargetChanged( const QString& name )
 	d->baseUI->chosenTargetLabel->setText( ( d->chosenSubproject->path + "/<b>" + name + "</b>" )
 	                                        .mid( d->part->projectDirectory().length() + 1 ) );
 
-	QPtrList <TargetItem> targetList = d->chosenSubproject->targets;
+	Q3PtrList <TargetItem> targetList = d->chosenSubproject->targets;
 	TargetItem* titem = targetList.first();
 
 	for ( ; titem; titem = targetList.next() )

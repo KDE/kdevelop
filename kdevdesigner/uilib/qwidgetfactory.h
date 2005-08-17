@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PopupMenu>
 /**********************************************************************
 ** Copyright (C) 2000 Trolltech AS.  All rights reserved.
 **
@@ -29,10 +32,10 @@
 
 #ifndef QT_H
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 #include <qaction.h>
 #endif // QT_H
@@ -40,10 +43,10 @@
 class QDomDocument;
 class QDomElement;
 class QLayout;
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 class QMenuBar;
-class QTable;
+class Q3Table;
 class QWidget;
 class QWidgetFactoryPrivate;
 class UibStrTable;
@@ -78,22 +81,22 @@ private:
     QPixmap loadPixmap( const QString &name );
     QPixmap loadPixmap( const QDomElement &e );
     QColorGroup loadColorGroup( const QDomElement &e );
-    void createListViewColumn( QListView *lv, const QString& txt,
+    void createListViewColumn( Q3ListView *lv, const QString& txt,
 			       const QPixmap& pix, bool clickable,
 			       bool resizable );
 #ifndef QT_NO_TABLE
-    void createTableColumnOrRow( QTable *table, const QString& txt,
+    void createTableColumnOrRow( Q3Table *table, const QString& txt,
 				 const QPixmap& pix, const QString& field,
 				 bool isRow );
 #endif
     void createColumn( const QDomElement &e, QWidget *widget );
     void loadItem( const QDomElement &e, QPixmap &pix, QString &txt, bool &hasPixmap );
-    void createItem( const QDomElement &e, QWidget *widget, QListViewItem *i = 0 );
+    void createItem( const QDomElement &e, QWidget *widget, Q3ListViewItem *i = 0 );
     void loadChildAction( QObject *parent, const QDomElement &e );
     void loadActions( const QDomElement &e );
     void loadToolBars( const QDomElement &e );
     void loadMenuBar( const QDomElement &e );
-    void loadPopupMenu( QPopupMenu *p, const QDomElement &e );
+    void loadPopupMenu( Q3PopupMenu *p, const QDomElement &e );
     void loadFunctions( const QDomElement &e );
     QAction *findAction( const QString &name );
     void loadExtraSource();
@@ -104,7 +107,7 @@ private:
     void unpackUInt32( QDataStream& in, Q_UINT32& n );
     void unpackByteArray( QDataStream& in, QByteArray& array );
     void unpackCString( const UibStrTable& strings, QDataStream& in,
-			QCString& cstr );
+			Q3CString& cstr );
     void unpackString( const UibStrTable& strings, QDataStream& in,
 		       QString& str );
     void unpackStringSplit( const UibStrTable& strings, QDataStream& in,
@@ -116,13 +119,13 @@ private:
     void inputColumnOrRow( const UibStrTable& strings, QDataStream& in,
 			   QObject *parent, bool isRow );
     void inputItem( const UibStrTable& strings, QDataStream& in,
-		    QObject *parent, QListViewItem *parentItem = 0 );
+		    QObject *parent, Q3ListViewItem *parentItem = 0 );
     void inputMenuItem( QObject **objects, const UibStrTable& strings,
 			QDataStream& in, QMenuBar *menuBar );
     QObject *inputObject( QObject **objects, int& numObjects,
 			  const UibStrTable& strings, QDataStream& in,
 			  QWidget *ancestorWidget, QObject *parent,
-			  QCString className = "" );
+			  Q3CString className = "" );
     QWidget *createFromUiFile( QDomDocument doc, QObject *connector,
 			       QWidget *parent, const char *name );
     QWidget *createFromUibFile( QDataStream& in, QObject *connector,
@@ -159,15 +162,15 @@ private:
 	Q_DUMMY_COMPARISON_OPERATOR( SqlWidgetConnection )
     };
 
-    QValueList<Image> images;
+    Q3ValueList<Image> images;
     QWidget *toplevel;
     QWidgetFactoryPrivate *d;
     QMap<QString, QString> *dbControls;
     QMap<QString, QStringList> dbTables;
     QMap<QWidget*, SqlWidgetConnection> sqlWidgetConnections;
     QMap<QString, QString> buddies;
-    QMap<QTable*, QValueList<Field> > fieldMaps;
-    QPtrList<QAction> actionList;
+    QMap<Q3Table*, Q3ValueList<Field> > fieldMaps;
+    Q3PtrList<QAction> actionList;
     QMap<QString, QString> languageSlots;
     QStringList noDatabaseWidgets;
     bool usePixmapCollection;

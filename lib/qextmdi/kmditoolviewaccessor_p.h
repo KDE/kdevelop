@@ -26,7 +26,7 @@
 
 #include <qwidget.h>
 #include <kdockwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kaction.h>
 
 class KMDI_EXPORT KMdiToolViewAccessorPrivate {
@@ -40,9 +40,9 @@ public:
 		if (!widgetContainer.isNull()) widgetContainer->undock();
 		delete (KDockWidget*)widgetContainer;
 	}
-	QGuardedPtr<KDockWidget> widgetContainer;
+	QPointer<KDockWidget> widgetContainer;
 	QWidget* widget;
-	QGuardedPtr<KAction> action;
+	QPointer<KAction> action;
 };
 
 

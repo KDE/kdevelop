@@ -35,9 +35,9 @@ public:
     void stop();
 
 private slots:
-    void slotItemPressed(int button, QListViewItem *item);
-    void slotReturnPressed(QListViewItem *item);
-    void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotItemPressed(int button, Q3ListViewItem *item);
+    void slotReturnPressed(Q3ListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item, const QPoint &p);
 
     void startTimer();
     void parseXML();

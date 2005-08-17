@@ -15,12 +15,14 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef QMAKEFOLDERMODEL_H
 #define QMAKEFOLDERMODEL_H
 
 #include <kdevprojectmodel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class QMakeFolderModel;
 class QMakeTargetModel;
@@ -30,9 +32,9 @@ typedef KSharedPtr<QMakeFolderModel> QMakeFolderDom;
 typedef KSharedPtr<QMakeTargetModel> QMakeTargetDom;
 typedef KSharedPtr<QMakeFileModel> QMakeFileDom;
 
-typedef QValueList<QMakeFolderDom> QMakeFolderList;
-typedef QValueList<QMakeTargetDom> QMakeTargetList;
-typedef QValueList<QMakeFileDom> QMakeFileList;
+typedef Q3ValueList<QMakeFolderDom> QMakeFolderList;
+typedef Q3ValueList<QMakeTargetDom> QMakeTargetList;
+typedef Q3ValueList<QMakeFileDom> QMakeFileList;
 
 
 namespace QMake {
@@ -52,25 +54,12 @@ public:
     { return QMakeFolderDom(dynamic_cast<QMakeFolderModel*>(dom.data())); }
 
     bool isRoot() const { return m_isRoot; }
-    void setRoot() { m_isRoot = true; }
-
-    QString absPath() const { return m_absPath; }
-    void setAbsPath(const QString &path) { m_absPath = path; }
-
+    void setRoot() { m_isRoot = true; } 
+    
     QMake::ProjectAST *ast;
-
-    QStringList config() const;
-    void setConfig( const QStringList &conf );
-
-    QStringList readAssignment( const QString& scopeid, QString &mode ) const;
-    void writeScopeID( const QString &scopeid, const QString &mode, const QStringList values );
-/**
-* Get the names of all the assignments in the current folder scope
-*/
-    QStringList assignmentNames( ) const;
+    
 private:
     bool m_isRoot;
-    QString m_absPath;
 friend class ProjectModel;
 };
 
@@ -80,7 +69,7 @@ protected:
 
 public:
     typedef QMakeFileDom Ptr;
-
+    
     static QMakeFileDom from(ProjectFileDom dom)
     { return QMakeFileDom(dynamic_cast<QMakeFileModel*>(dom.data())); }
 friend class ProjectModel;
@@ -93,10 +82,10 @@ protected:
 
 public:
     typedef QMakeTargetDom Ptr;
-
+    
     static QMakeTargetDom from(ProjectTargetDom dom)
     { return QMakeTargetDom(dynamic_cast<QMakeTargetModel*>(dom.data())); }
-
+    
     QMake::AssignmentAST *ast;
 friend class ProjectModel;
 };

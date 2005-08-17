@@ -13,9 +13,9 @@
 
 #include <qcombobox.h>
 #include <qfile.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlineedit.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qtextstream.h>
 #include <kdebug.h>
 #include <kicondialog.h>
@@ -45,7 +45,7 @@ AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *sp
     subProject = spitem;
 
     // Fill the combo box with library names in the directory
-    QPtrListIterator<TargetItem> tit(spitem->targets);
+    Q3PtrListIterator<TargetItem> tit(spitem->targets);
     for (; tit.current(); ++tit) {
         if ((*tit)->primary == "LTLIBRARIES")
             library_combo->insertItem(QString((*tit)->name));
@@ -56,7 +56,7 @@ AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *sp
     KServiceType::List::Iterator it;
     for (it = l.begin(); it != l.end(); ++it)
         if (!(*it)->isType(KST_KMimeType))
-            new QListViewItem(availtypes_listview, (*it)->name());
+            new Q3ListViewItem(availtypes_listview, (*it)->name());
 
     setIcon ( SmallIcon ( "servicenew_kdevelop.png" ) );
 }
@@ -70,7 +70,7 @@ void AddServiceDialog::updateProperties()
 {
     QStringList props;
     
-    QListViewItem *item = static_cast<QCheckListItem*>(chosentypes_listview->firstChild());
+    Q3ListViewItem *item = static_cast<Q3CheckListItem*>(chosentypes_listview->firstChild());
     while (item) {
         KServiceType::Ptr type = KServiceType::serviceType(item->text(0));
         if (type) {
@@ -87,7 +87,7 @@ void AddServiceDialog::updateProperties()
     properties_listview->clear();
     QStringList::ConstIterator it;
     for (it = props.begin(); it != props.end(); ++it)
-        new QListViewItem(properties_listview, *it);
+        new Q3ListViewItem(properties_listview, *it);
 }
 
 
@@ -104,17 +104,17 @@ void AddServiceDialog::iconClicked()
 
 void AddServiceDialog::addTypeClicked()
 {
-    QListViewItem *selitem = availtypes_listview->selectedItem();
+    Q3ListViewItem *selitem = availtypes_listview->selectedItem();
     if (!selitem)
         return;
     
-    QListViewItem *olditem = chosentypes_listview->firstChild();
+    Q3ListViewItem *olditem = chosentypes_listview->firstChild();
     while (olditem) {
         if (selitem->text(0) == olditem->text(0))
             return;
         olditem = olditem->nextSibling();
     }
-    new QListViewItem(chosentypes_listview, selitem->text(0));
+    new Q3ListViewItem(chosentypes_listview, selitem->text(0));
 
     updateProperties();
 }
@@ -128,7 +128,7 @@ void AddServiceDialog::removeTypeClicked()
 }
 
 
-void AddServiceDialog::propertyExecuted(QListViewItem *item)
+void AddServiceDialog::propertyExecuted(Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -148,7 +148,7 @@ void AddServiceDialog::accept()
 {
     // Create list of service types
     QStringList serviceTypes;
-    QListViewItem *item = chosentypes_listview->firstChild();
+    Q3ListViewItem *item = chosentypes_listview->firstChild();
     while (item) {
         serviceTypes.append(item->text(0));
         item = item->nextSibling();
@@ -175,7 +175,7 @@ void AddServiceDialog::accept()
         filename_edit->setFocus();
         return;
     }
-    if (!f.open(IO_WriteOnly)) {
+    if (!f.open(QIODevice::WriteOnly)) {
         KMessageBox::sorry(this, i18n("Could not open file for writing."));
         return;
     }

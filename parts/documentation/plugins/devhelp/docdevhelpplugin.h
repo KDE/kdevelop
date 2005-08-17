@@ -15,12 +15,12 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef DOCDEVHELPPLUGIN_H
 #define DOCDEVHELPPLUGIN_H
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qdom.h>
 
 #include <kdevdocumentationplugin.h>
@@ -52,7 +52,7 @@ public:
     virtual ProjectDocumentationPlugin *projectDocumentationPlugin(ProjectDocType type);
         
 protected:
-    void pushToScanStack(QValueStack<QString> &stack, const QString &value);
+    void pushToScanStack(Q3ValueStack<QString> &stack, const QString &value);
     void scanDevHelpDir(const QString &path);
     void addTocSect(DocumentationItem *parent, QDomElement childEl, QString baseUrl, bool book=false);
 };

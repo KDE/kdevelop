@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <Q3ValueList>
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
@@ -15,18 +18,18 @@
 #define _APPWIZARDDIALOG_H_
 
 class AppWizardPart;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 class QRadioButton;
 class KTempFile;
-class QWidgetStack;
-class QVBox;
+class Q3WidgetStack;
+class Q3VBox;
 class KPopupMenu;
 class QHBoxLayout;
 class KArchiveDirectory;
 class KArchiveFile;
 class ProfileSupport;
-#include <qptrlist.h>
-#include <qdict.h>
+#include <q3ptrlist.h>
+#include <q3dict.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qstringlist.h>
@@ -86,9 +89,9 @@ struct ApplicationInfo
 	//QMap<autoKey,QVariant> subValues;
 	PropertyLib::PropertyList *propValues;
 	
-    QValueList<installFile> fileList;
-    QValueList<installArchive> archList;
-    QValueList<installDir> dirList;
+    Q3ValueList<installFile> fileList;
+    Q3ValueList<installArchive> archList;
+    Q3ValueList<installDir> dirList;
     QString customUI;
     QString message;
     QString finishCmd;
@@ -96,10 +99,10 @@ struct ApplicationInfo
     QString sourceArchive;
 
     //! item pointer to the listview
-    QListViewItem *item;
+    Q3ListViewItem *item;
 	
 	//! pointer to favourite icon (NULL if there isn't one)
-	QIconViewItem *favourite;	
+	Q3IconViewItem *favourite;	
 
     ApplicationInfo()
     : item( 0 ), favourite( 0 )
@@ -110,7 +113,7 @@ struct AppWizardFileTemplate
 {
     QString suffix;
     QString style;
-    QMultiLineEdit *edit;
+    Q3MultiLineEdit *edit;
 
     AppWizardFileTemplate()
     : edit( 0 )
@@ -131,19 +134,19 @@ public:
 protected:
     virtual void accept();
 
-	virtual QDict<KDevLicense> licenses();
+	virtual Q3Dict<KDevLicense> licenses();
 	void loadLicenses();
 
 protected slots:
-    virtual void templatesTreeViewClicked(QListViewItem*);
+    virtual void templatesTreeViewClicked(Q3ListViewItem*);
     virtual void textChanged();
     virtual void licenseChanged();
     virtual void destButtonClicked(const QString&);
     virtual void projectNameChanged();
     virtual void projectLocationChanged();
-    virtual void favouritesIconViewClicked( QIconViewItem * );
-	virtual void templatesContextMenu(QListViewItem*, const QPoint&, int);
-	virtual void favouritesContextMenu(QIconViewItem* item, const QPoint& point);
+    virtual void favouritesIconViewClicked( Q3IconViewItem * );
+	virtual void templatesContextMenu(Q3ListViewItem*, const QPoint&, int);
+	virtual void favouritesContextMenu(Q3IconViewItem* item, const QPoint& point);
 	virtual void addTemplateToFavourites();
 	virtual void done(int r);
 	virtual void removeFavourite();
@@ -151,14 +154,14 @@ protected slots:
 	
 private: //methods
 
-    ApplicationInfo *templateForItem(QListViewItem *item);
+    ApplicationInfo *templateForItem(Q3ListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
     void loadVcs();
 	void updateNextButtons();
 
 	void populateFavourites();
-	void addFavourite(QListViewItem* item, QString favouriteName="");
-	ApplicationInfo* findFavouriteInfo(QIconViewItem* item);
+	void addFavourite(Q3ListViewItem* item, QString favouriteName="");
+	ApplicationInfo* findFavouriteInfo(Q3IconViewItem* item);
 	
 	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process );
 	bool copyFile( const installFile& file );
@@ -169,16 +172,16 @@ private: //methods
 	void setPermissions(const KArchiveFile *source, QString dest);
 	void setPermissions(const installFile &file);
 	
-	void checkAndHideItems(QListView *view);
-	bool checkAndHideItems(QListViewItem *item);
+	void checkAndHideItems(Q3ListView *view);
+	bool checkAndHideItems(Q3ListViewItem *item);
 	
 private: //data
 
-    QPtrList<ApplicationInfo> m_appsInfo;
-	QValueList<AppWizardFileTemplate> m_fileTemplates;
+    Q3PtrList<ApplicationInfo> m_appsInfo;
+	Q3ValueList<AppWizardFileTemplate> m_fileTemplates;
     //! Store the category name and the pointer in the treeview
-    QDict<QListViewItem> m_categoryMap;
-	QValueList<QListViewItem*> m_categoryItems;
+    Q3Dict<Q3ListViewItem> m_categoryMap;
+	Q3ValueList<Q3ListViewItem*> m_categoryItems;
     //! A list of currently available version control systems
 //    QDict<KDevVersionControl> m_availVcs;
 	
@@ -186,7 +189,7 @@ private: //data
 	PropertyLib::PropertyEditor *m_customOptions;
     AppWizardPart *m_part;
     QWidget *m_lastPage;
-    QPtrList<KTempFile> m_tempFiles;
+    Q3PtrList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
     VcsForm *m_vcsForm;
@@ -194,8 +197,8 @@ private: //data
 	KPopupMenu* m_favouritesMenu;
 	KPopupMenu* m_templatesMenu;
 	
-	QDict<KDevLicense> m_licenses;
-	QDict<KDevVCSIntegrator> m_integrators;
+	Q3Dict<KDevLicense> m_licenses;
+	Q3Dict<KDevVCSIntegrator> m_integrators;
 	QMap<int, VCSDialog*> m_integratorDialogs;
 	
 	ProfileSupport *m_profileSupport;

@@ -3,8 +3,8 @@
 
 #include <qradiobutton.h>
 #include <qtabwidget.h>
-#include <qmultilineedit.h>
-#include <qbuttongroup.h>
+#include <q3multilineedit.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
 

@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef DRIVER_H
@@ -23,9 +23,11 @@
 #include "JavaAST.hpp"
 
 #include <qpair.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qstringlist.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class JavaLexer;
 class JavaRecognizer;
@@ -109,7 +111,7 @@ public:
     QString currentFileName() const { return m_currentFileName; }
     RefJavaAST takeTranslationUnit( const QString& fileName );
     RefJavaAST translationUnit( const QString& fileName ) const;
-    QValueList<Problem> problems( const QString& fileName ) const;
+    Q3ValueList<Problem> problems( const QString& fileName ) const;
 
     QStringList includePaths() const { return m_includePaths; }
     virtual void addIncludePath( const QString &path );
@@ -121,11 +123,11 @@ protected:
     virtual void setupParser( JavaRecognizer* parser );
 
 private:
-    QValueList<Problem>& findOrInsertProblemList( const QString& fileName );
+    Q3ValueList<Problem>& findOrInsertProblemList( const QString& fileName );
 
 private:
     QString m_currentFileName;
-    QMap< QString, QValueList<Problem> > m_problems;
+    QMap< QString, Q3ValueList<Problem> > m_problems;
     QMap< QString, RefJavaAST > m_parsedUnits;
     QStringList m_includePaths;
     JavaLexer *lexer;

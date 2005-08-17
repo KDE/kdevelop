@@ -14,8 +14,8 @@
 
 	 You should have received a copy of the GNU General Public License
 	 along with this program; see the file COPYING.  If not, write to
-	 the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-	 Boston, MA 02110-1301, USA.
+	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	 Boston, MA 02111-1307, USA.
 	 */
 
 #ifndef __SUBVERSION_CORE_H__
@@ -64,7 +64,7 @@ signals:
 	
 private:
 
-	QGuardedPtr<subversionWidget> m_widget;
+	QPointer<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
 	SVNFileInfoProvider *m_fileInfoProvider;

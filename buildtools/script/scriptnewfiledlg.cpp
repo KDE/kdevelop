@@ -18,6 +18,9 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,8 +49,8 @@ ScriptNewFileDialog::ScriptNewFileDialog(ScriptProjectPart *part,
     usetemplate_box = new QCheckBox(i18n("&Use file template"), this);
     usetemplate_box->setChecked(true);
 
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+    Q3Frame *frame = new Q3Frame(this);
+    frame->setFrameStyle(Q3Frame::HLine | Q3Frame::Sunken);
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
@@ -107,7 +110,7 @@ void ScriptNewFileDialog::accept()
         success = FileTemplate::copy(m_part, extension, destpath);
     } else {
         QFile f(destpath);
-        success = f.open(IO_WriteOnly);
+        success = f.open(QIODevice::WriteOnly);
         if (success)
             f.close();
     }

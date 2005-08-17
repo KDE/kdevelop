@@ -10,12 +10,16 @@
  ***************************************************************************/
 
 #include <qapplication.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qradiobutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qvbuttongroup.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QEvent>
+#include <QBoxLayout>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -94,7 +98,7 @@ public:
 
 private:
     QRadioButton *Odefault, *O0, *O1, *O2;
-    QListView *optBox;
+    Q3ListView *optBox;
 };
 
 
@@ -108,7 +112,7 @@ public:
     void writeFlags(QStringList *str);
 
 private:
-    QListView *hpfBox;
+    Q3ListView *hpfBox;
 };
 
 
@@ -118,7 +122,7 @@ OptimizationTab::OptimizationTab(PgiOptionsPlugin::Type type, QWidget *parent, c
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    QVButtonGroup *group = new QVButtonGroup(i18n("Optimization Level"), this);
+    Q3VButtonGroup *group = new Q3VButtonGroup(i18n("Optimization Level"), this);
     Odefault = new QRadioButton(i18n("Default"), group);
     Odefault->setChecked(true);
     O0 = new QRadioButton(i18n("No optimization"), group);
@@ -126,17 +130,17 @@ OptimizationTab::OptimizationTab(PgiOptionsPlugin::Type type, QWidget *parent, c
     O2 = new QRadioButton(i18n("Level 2"), group);
 
     if (type == PgiOptionsPlugin::PGHPF) {
-        optBox = new QListView(this);
+        optBox = new Q3ListView(this);
         optBox->addColumn(QString::null);
         optBox->header()->hide();
         for (const char * const *p = optimization_flags; *p; ++p) {
-            new QCheckListItem(optBox, *p, QCheckListItem::CheckBox);
+            new Q3CheckListItem(optBox, *p, Q3CheckListItem::CheckBox);
             kdDebug() << (*p) << endl;
         }
     } else
         optBox = 0;
 
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addStretch();
 }
 
@@ -148,11 +152,11 @@ OptimizationTab::~OptimizationTab()
 void OptimizationTab::readFlags(QStringList *list)
 {
     if (optBox) {
-        QListViewItem *item = optBox->firstChild();
+        Q3ListViewItem *item = optBox->firstChild();
         for (; item; item = item->nextSibling()) {
             QStringList::Iterator sli = list->find(item->text(0));
             if (sli != list->end()) {
-                static_cast<QCheckListItem*>(item)->setOn(true);
+                static_cast<Q3CheckListItem*>(item)->setOn(true);
                 list->remove(sli);
             }
         }
@@ -180,9 +184,9 @@ void OptimizationTab::readFlags(QStringList *list)
 void OptimizationTab::writeFlags(QStringList *list)
 {
     if (optBox) {
-        QListViewItem *item = optBox->firstChild();
+        Q3ListViewItem *item = optBox->firstChild();
         for (; item; item = item->nextSibling())
-            if (static_cast<QCheckListItem*>(item)->isOn())
+            if (static_cast<Q3CheckListItem*>(item)->isOn())
                 (*list) << item->text(0);
     }
     
@@ -201,13 +205,13 @@ HpfTab::HpfTab(QWidget *parent, const char *name)
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    hpfBox = new QListView(this);
+    hpfBox = new Q3ListView(this);
     hpfBox->addColumn(QString::null);
     hpfBox->header()->hide();
     for (const char * const *p = hpf_flags; *p; ++p)
-        new QCheckListItem(hpfBox, *p, QCheckListItem::CheckBox);
+        new Q3CheckListItem(hpfBox, *p, Q3CheckListItem::CheckBox);
 
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addStretch();
 }
 
@@ -218,11 +222,11 @@ HpfTab::~HpfTab()
 
 void HpfTab::readFlags(QStringList *list)
 {
-    QListViewItem *item = hpfBox->firstChild();
+    Q3ListViewItem *item = hpfBox->firstChild();
     for (; item; item = item->nextSibling()) {
         QStringList::Iterator sli = list->find(item->text(0));
         if (sli != list->end()) {
-            static_cast<QCheckListItem*>(item)->setOn(true);
+            static_cast<Q3CheckListItem*>(item)->setOn(true);
             list->remove(sli);
         }
     }
@@ -231,9 +235,9 @@ void HpfTab::readFlags(QStringList *list)
 
 void HpfTab::writeFlags(QStringList *list)
 {
-    QListViewItem *item = hpfBox->firstChild();
+    Q3ListViewItem *item = hpfBox->firstChild();
     for (; item; item = item->nextSibling()) {
-        if (static_cast<QCheckListItem*>(item)->isOn())
+        if (static_cast<Q3CheckListItem*>(item)->isOn())
             (*list) << item->text(0);
     }
 }
@@ -243,7 +247,7 @@ PgiOptionsDialog::PgiOptionsDialog(PgiOptionsPlugin::Type type, QWidget *parent,
     : KDialogBase(Tabbed, (type == PgiOptionsPlugin::PGHPF)? i18n("PGHPF Compiler Options") : i18n("PGF77 Compiler Options"),
                   Ok|Cancel, Ok, parent, name, true)
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
 
     //    vbox = addVBoxPage(i18n("General"));
     //    general = new GeneralTab(vbox, "general tab");

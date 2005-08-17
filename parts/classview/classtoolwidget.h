@@ -15,6 +15,9 @@
 #define _CLASSTOOLWIDGET_H_
 
 #include "classtreebase.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 
 class ClassToolWidget : public ClassTreeBase
@@ -25,8 +28,8 @@ public:
     ClassToolWidget(ClassViewPart *part, QWidget *parent=0);
     ~ClassToolWidget();
 
-    void insertClassAndClasses(ParsedClass *parsedClass, QValueList<ParsedClass*> classList);
-    void insertClassAndClasses(ParsedClass *parsedClass, const QPtrList<ParsedParent> &parentList);
+    void insertClassAndClasses(ParsedClass *parsedClass, Q3ValueList<ParsedClass*> classList);
+    void insertClassAndClasses(ParsedClass *parsedClass, const Q3PtrList<ParsedParent> &parentList);
     void insertAllClassMethods(ParsedClass *parsedClass, PIAccess filter);
     void insertAllClassAttributes(ParsedClass *parsedClass, PIAccess filter);
 

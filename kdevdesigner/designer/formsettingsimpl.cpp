@@ -32,7 +32,7 @@
 #include "mainwindow.h"
 #include "project.h"
 
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>

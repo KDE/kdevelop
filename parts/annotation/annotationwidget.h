@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef ANNOTATION_WIDGET_H
@@ -23,6 +23,8 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <klistview.h>
 #include <qtooltip.h>
 #include <qrect.h>
@@ -37,10 +39,10 @@ class annotationWidget: public KListView
 public:  
     annotationWidget(annotationPart *part);
     ~annotationWidget();
-    void AnnotShowPopup(QListViewItem* item, const QPoint &p,int);
+    void AnnotShowPopup(Q3ListViewItem* item, const QPoint &p,int);
 private:
     annotationPart *m_part;
-    QPtrList<annotationItem> m_list;
+    Q3PtrList<annotationItem> m_list;
 };
 
 

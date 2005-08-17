@@ -16,8 +16,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -25,7 +25,7 @@
 #define paragdata_h
 
 #include <private/qrichtext_p.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 #include <qvariant.h>
 
@@ -74,7 +74,7 @@ public:
     virtual ~ParagData();
 
     void clear();
-    QValueList<Symbol> symbolList() const { return m_symbolList; }
+    Q3ValueList<Symbol> symbolList() const { return m_symbolList; }
 
     void add( int, const QChar&, int );
     void join( QTextParagraphData* );
@@ -97,7 +97,7 @@ public:
     int lastLengthForCompletion;
 
 private:
-    QValueList<Symbol> m_symbolList;
+    Q3ValueList<Symbol> m_symbolList;
     int m_level;
     int m_mark;
     bool m_open;

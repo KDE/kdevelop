@@ -31,14 +31,14 @@
 #include "listboxdnd.h"
 #include "listboxrename.h"
 
-#include <qwizard.h>
-#include <qlistbox.h>
+#include <q3wizard.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qinputdialog.h>
 
 #include <klocale.h>
 
-WizardEditor::WizardEditor( QWidget *parent, QWizard *w, FormWindow *fw )
+WizardEditor::WizardEditor( QWidget *parent, Q3Wizard *w, FormWindow *fw )
     : WizardEditorBase( parent, 0 ), formwindow( fw ), wizard( w ), draggedItem( 0 )
 {
     connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
@@ -47,13 +47,13 @@ WizardEditor::WizardEditor( QWidget *parent, QWizard *w, FormWindow *fw )
     // Add drag and drop
     ListBoxDnd *listBoxDnd = new ListBoxDnd( listBox );
     listBoxDnd->setDragMode( ListBoxDnd::Internal | ListBoxDnd::Move );
-    QObject::connect( listBoxDnd, SIGNAL( dropped( QListBoxItem * ) ),
-		      listBoxDnd, SLOT( confirmDrop( QListBoxItem * ) ) );
+    QObject::connect( listBoxDnd, SIGNAL( dropped( Q3ListBoxItem * ) ),
+		      listBoxDnd, SLOT( confirmDrop( Q3ListBoxItem * ) ) );
 
-    QObject::connect( listBoxDnd, SIGNAL( dragged( QListBoxItem * ) ),
-		      this, SLOT( itemDragged( QListBoxItem * ) ) );
-    QObject::connect( listBoxDnd, SIGNAL( dropped( QListBoxItem * ) ),
-		      this, SLOT( itemDropped( QListBoxItem * ) ) );
+    QObject::connect( listBoxDnd, SIGNAL( dragged( Q3ListBoxItem * ) ),
+		      this, SLOT( itemDragged( Q3ListBoxItem * ) ) );
+    QObject::connect( listBoxDnd, SIGNAL( dropped( Q3ListBoxItem * ) ),
+		      this, SLOT( itemDropped( Q3ListBoxItem * ) ) );
 
     // Add in-place rename
     new ListBoxRename( listBox );
@@ -234,13 +234,13 @@ void WizardEditor::updateButtons()
 	buttonRemove->setEnabled( FALSE );
 }
 
-void WizardEditor::itemDragged( QListBoxItem * i )
+void WizardEditor::itemDragged( Q3ListBoxItem * i )
 {
     // Store item index
     draggedItem = listBox->index( i );
 }
 
-void WizardEditor::itemDropped( QListBoxItem * i )
+void WizardEditor::itemDropped( Q3ListBoxItem * i )
 {
     if ( draggedItem < 0 ) return;
     // The reorder the pages acording to the listBox list of items

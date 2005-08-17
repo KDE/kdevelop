@@ -27,7 +27,14 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
 
 class FormWindow;
 class QResizeEvent;
@@ -42,15 +49,15 @@ class FormFile;
 class QCompletionEdit;
 class SourceEditor;
 
-class WorkspaceItem : public QListViewItem
+class WorkspaceItem : public Q3ListViewItem
 {
 public:
     enum Type { ProjectType, FormFileType, FormSourceType, SourceFileType, ObjectType };
 
-    WorkspaceItem( QListView *parent, Project* p );
-    WorkspaceItem( QListViewItem *parent, SourceFile* sf );
-    WorkspaceItem( QListViewItem *parent, FormFile* ff, Type t = FormFileType );
-    WorkspaceItem( QListViewItem *parent, QObject *o, Project *p );
+    WorkspaceItem( Q3ListView *parent, Project* p );
+    WorkspaceItem( Q3ListViewItem *parent, SourceFile* sf );
+    WorkspaceItem( Q3ListViewItem *parent, FormFile* ff, Type t = FormFileType );
+    WorkspaceItem( Q3ListViewItem *parent, QObject *o, Project *p );
 
     void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
 
@@ -84,7 +91,7 @@ private:
     Type t;
 };
 
-class Workspace : public QListView
+class Workspace : public Q3ListView
 {
     Q_OBJECT
 
@@ -113,9 +120,9 @@ protected:
 
 
 private slots:
-    void itemClicked( int, QListViewItem *i, const QPoint& pos  );
-    void itemDoubleClicked( QListViewItem *i );
-    void rmbClicked( QListViewItem *i, const QPoint& pos  );
+    void itemClicked( int, Q3ListViewItem *i, const QPoint& pos  );
+    void itemDoubleClicked( Q3ListViewItem *i );
+    void rmbClicked( Q3ListViewItem *i, const QPoint& pos  );
     void bufferChosen( const QString &buffer );
 
     void projectDestroyed( QObject* );

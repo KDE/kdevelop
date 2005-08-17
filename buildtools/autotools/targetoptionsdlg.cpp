@@ -12,7 +12,7 @@
 #include "targetoptionsdlg.h"
 
 #include <qcheckbox.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -59,7 +59,7 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     for (it = l.begin(); it != l.end(); ++it)
         // Do not list the target itself (a target can not link with itself)
         if ( !fulltargetname.endsWith(*it) )
-            (void) new QCheckListItem(insidelib_listview, *it, QCheckListItem::CheckBox);
+            (void) new Q3CheckListItem(insidelib_listview, *it, Q3CheckListItem::CheckBox);
     readConfig();
 }
 
@@ -102,12 +102,12 @@ void TargetOptionsDialog::readConfig()
     QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr);
 
     bool inlistItem;
-    QListViewItem *lastItem = 0;
+    Q3ListViewItem *lastItem = 0;
     QStringList::Iterator l2it;
-    QCheckListItem *flitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
+    Q3CheckListItem *flitem = static_cast<Q3CheckListItem*>(insidelib_listview->firstChild());
     for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
         inlistItem = false;
-        QCheckListItem *clitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
+        Q3CheckListItem *clitem = static_cast<Q3CheckListItem*>(insidelib_listview->firstChild());
         if (flitem) {
             while (clitem) {
                 if (*l2it == ("$(top_builddir)/" + clitem->text())) {
@@ -116,15 +116,15 @@ void TargetOptionsDialog::readConfig()
                     if (flitem != clitem)
                       clitem->moveItem(flitem);
                     // move the "top of the list" one item down
-                    flitem = static_cast<QCheckListItem*>(flitem->nextSibling());
+                    flitem = static_cast<Q3CheckListItem*>(flitem->nextSibling());
                     inlistItem = true;
                     break;
                 }
-                clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+                clitem = static_cast<Q3CheckListItem*>(clitem->nextSibling());
             }
         }
         if ( inlistItem == false ) {
-            QListViewItem *item = new QListViewItem(outsidelib_listview, *l2it);
+            Q3ListViewItem *item = new Q3ListViewItem(outsidelib_listview, *l2it);
             if (lastItem)
                 item->moveItem(lastItem);
             lastItem = item;
@@ -151,16 +151,16 @@ void TargetOptionsDialog::storeConfig()
     QString new_ldflags = flagslist.join(" ");
 
     QStringList liblist;
-    QCheckListItem *clitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
+    Q3CheckListItem *clitem = static_cast<Q3CheckListItem*>(insidelib_listview->firstChild());
     while (clitem) {
         if( clitem->isOn() )
             liblist.append("$(top_builddir)/" + clitem->text());
-        clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+        clitem = static_cast<Q3CheckListItem*>(clitem->nextSibling());
     }
-    clitem = static_cast<QCheckListItem*>(outsidelib_listview->firstChild());
+    clitem = static_cast<Q3CheckListItem*>(outsidelib_listview->firstChild());
     while (clitem) {
         liblist.append(clitem->text());
-        clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+        clitem = static_cast<Q3CheckListItem*>(clitem->nextSibling());
     }
     QString new_addstr = liblist.join(" ");
 
@@ -214,7 +214,7 @@ void TargetOptionsDialog::insideMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = insidelib_listview->firstChild();
+    Q3ListViewItem *item = insidelib_listview->firstChild();
     while (item->nextSibling() != insidelib_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(insidelib_listview->currentItem());
@@ -244,7 +244,7 @@ void TargetOptionsDialog::outsideMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = outsidelib_listview->firstChild();
+    Q3ListViewItem *item = outsidelib_listview->firstChild();
     while (item->nextSibling() != outsidelib_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsidelib_listview->currentItem());
@@ -269,7 +269,7 @@ void TargetOptionsDialog::outsideAddClicked()
     bool ok;
     QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library:"), "-l", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-l")
-        new QListViewItem(outsidelib_listview, dir);
+        new Q3ListViewItem(outsidelib_listview, dir);
 }
 
 

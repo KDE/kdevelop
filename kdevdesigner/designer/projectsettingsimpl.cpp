@@ -38,12 +38,12 @@
 #include <klocale.h>
 
 #include <qlineedit.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qcheckbox.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qcombobox.h>
-#include <qobjectlist.h>
-#include <qheader.h>
+#include <qobject.h>
+#include <q3header.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 
@@ -54,7 +54,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-ProjectSettings::ProjectSettings( Project *pro, QWidget* parent,  const char* name, bool modal, WFlags fl )
+ProjectSettings::ProjectSettings( Project *pro, QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
     : ProjectSettingsBase( parent, name, modal, fl ), project( pro )
 {
     connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );

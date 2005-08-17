@@ -13,13 +13,15 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
 #include "python_indent.h"
 #include "qeditor.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "paragdata.h"
 #include <kdebug.h>
 
@@ -54,8 +56,8 @@ int PythonIndent::indentForLine( int line )
     
     ParagData* data = (ParagData*) editor()->document()->paragAt( prevLine )->extraData();
     if( data ){
-	QValueList<Symbol> symbolList = data->symbolList();
-	QValueList<Symbol>::Iterator it = symbolList.begin();
+	Q3ValueList<Symbol> symbolList = data->symbolList();
+	Q3ValueList<Symbol>::Iterator it = symbolList.begin();
 	while( it != symbolList.end() ){
 	    const Symbol& sym = *it;
 	    ++it;

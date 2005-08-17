@@ -33,25 +33,27 @@
 #include <qcombobox.h>
 #include <qapplication.h>
 #include <qpushbutton.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpainter.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 /*!
     Class used by PaletteEditor for bold combobox items
 */
 
-class BoldListBoxText : public QListBoxText
+class BoldListBoxText : public Q3ListBoxText
 {
 public:
-    BoldListBoxText( QString text, QListBox* lb = 0 );
+    BoldListBoxText( QString text, Q3ListBox* lb = 0 );
 
 protected:
     virtual void paint( QPainter* );
 };
 
-BoldListBoxText::BoldListBoxText( QString text, QListBox* lb )
-    : QListBoxText( lb )
+BoldListBoxText::BoldListBoxText( QString text, Q3ListBox* lb )
+    : Q3ListBoxText( lb )
 {
     setText( text );
 }
@@ -62,11 +64,11 @@ void BoldListBoxText::paint( QPainter* painter )
     f.setBold( TRUE );
     painter->setFont( f );
 
-    QListBoxText::paint( painter );
+    Q3ListBoxText::paint( painter );
 }
 
 PaletteEditorAdvanced::PaletteEditorAdvanced( FormWindow *fw, QWidget * parent,
-					      const char * name, bool modal, WFlags f )
+					      const char * name, bool modal, Qt::WFlags f )
     : PaletteEditorAdvancedBase( parent, name, modal, f ), formWindow( fw ), selectedPalette(0)
 {
     connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
@@ -548,51 +550,51 @@ QPalette PaletteEditorAdvanced::pal() const
     return editPalette;
 }
 
-void PaletteEditorAdvanced::setupBackgroundMode( BackgroundMode mode )
+void PaletteEditorAdvanced::setupBackgroundMode( Qt::BackgroundMode mode )
 {
     int initRole = 0;
 
     switch( mode ) {
-    case PaletteBackground:
+    case Qt::PaletteBackground:
 	initRole = 0;
 	break;
-    case PaletteForeground:
+    case Qt::PaletteForeground:
 	initRole = 1;
 	break;
-    case PaletteButton:
+    case Qt::PaletteButton:
 	initRole = 2;
 	break;
-    case PaletteBase:
+    case Qt::PaletteBase:
 	initRole = 3;
 	break;
-    case PaletteText:
+    case Qt::PaletteText:
 	initRole = 4;
 	break;
-    case PaletteBrightText:
+    case Qt::PaletteBrightText:
 	initRole = 5;
 	break;
-    case PaletteButtonText:
+    case Qt::PaletteButtonText:
 	initRole = 6;
 	break;
-    case PaletteHighlight:
+    case Qt::PaletteHighlight:
 	initRole = 7;
 	break;
-    case PaletteHighlightedText:
+    case Qt::PaletteHighlightedText:
 	initRole = 8;
 	break;
-    case PaletteLight:
+    case Qt::PaletteLight:
 	initRole = 9;
 	break;
-    case PaletteMidlight:
+    case Qt::PaletteMidlight:
 	initRole = 10;
 	break;
-    case PaletteDark:
+    case Qt::PaletteDark:
 	initRole = 11;
 	break;
-    case PaletteMid:
+    case Qt::PaletteMid:
 	initRole = 12;
 	break;
-    case PaletteShadow:
+    case Qt::PaletteShadow:
 	initRole = 13;
 	break;
     default:
@@ -619,7 +621,7 @@ void PaletteEditorAdvanced::setupBackgroundMode( BackgroundMode mode )
 }
 
 QPalette PaletteEditorAdvanced::getPalette( bool *ok, const QPalette &init,
-					    BackgroundMode mode, QWidget* parent,
+					    Qt::BackgroundMode mode, QWidget* parent,
 					    const char* name, FormWindow *fw )
 {
     PaletteEditorAdvanced* dlg = new PaletteEditorAdvanced( fw, parent, name, TRUE );

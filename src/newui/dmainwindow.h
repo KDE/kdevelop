@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef DMAINWINDOW_H
 #define DMAINWINDOW_H
@@ -23,6 +23,9 @@
 #include <kparts/mainwindow.h>
 
 #include "ddockwindow.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QEvent>
 
 class DTabWidget;
 namespace Ideal {
@@ -78,13 +81,13 @@ protected:
     Ideal::DockSplitter *m_central;
     DTabWidget *m_activeTabWidget;
     
-    QValueList<DTabWidget*> m_tabs;
+    Q3ValueList<DTabWidget*> m_tabs;
     
     bool m_openTabAfterCurrent;
     bool m_showIconsOnTabs;
     bool m_firstRemoved;
     
-    QValueList<QWidget*> m_widgets;
+    Q3ValueList<QWidget*> m_widgets;
     QMap<QWidget*, DTabWidget*> m_widgetTabs;
     QWidget *m_currentWidget;
 

@@ -20,6 +20,8 @@
 
 #include "domutil.h"
 #include "autolistviewitems.h"
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class KAction;
 
@@ -44,18 +46,18 @@ public:
 	}
 
 public slots:
-	void slotSelectionChanged( QListViewItem* item );
+	void slotSelectionChanged( Q3ListViewItem* item );
 
 signals:
-	void selectionChanged( QListViewItem* );
+	void selectionChanged( Q3ListViewItem* );
 
 protected:
 	void initActions ();
 	virtual void focusOutEvent( QFocusEvent *e );
 
 private slots:
-	void slotDetailsExecuted( QListViewItem *item );
-	void slotDetailsContextMenu( KListView *, QListViewItem *item, const QPoint &p );
+	void slotDetailsExecuted( Q3ListViewItem *item );
+	void slotDetailsContextMenu( KListView *, Q3ListViewItem *item, const QPoint &p );
 
 	void slotTargetOptions ();
 	void slotAddNewFile();

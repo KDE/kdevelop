@@ -21,14 +21,14 @@ class ClassGeneratorConfig : public ClassGeneratorConfigBase
 public:
 	enum NameCase { LowerCase, UpperCase, SameAsClassCase, SameAsFileCase };
 
-	ClassGeneratorConfig( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	ClassGeneratorConfig( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 
 	ClassGeneratorConfig( QString v_cppHeaderText, QString v_cppSourceText,
 	                      QString v_objcHeaderText, QString v_objcSourceText,
 	                      QString v_gtkHeaderText, QString v_gtkSourceText,
 	                      NameCase v_fileCase, NameCase v_defCase, NameCase v_superCase,
 	                      bool v_showAuthor, bool v_genDoc, bool v_reformat,
-	                      QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	                      QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 
 	~ClassGeneratorConfig();
 	/*$PUBLIC_FUNCTIONS$*/

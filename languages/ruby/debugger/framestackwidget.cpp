@@ -25,10 +25,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qheader.h>
-#include <qlistbox.h>
+#include <q3header.h>
+#include <q3listbox.h>
 #include <qregexp.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qfileinfo.h>
 
 #include <ctype.h>
@@ -41,8 +41,8 @@
 namespace RDBDebugger
 {
 
-FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
-        : QListView(parent, name, f),
+FramestackWidget::FramestackWidget(QWidget *parent, const char *name, Qt::WFlags f)
+        : Q3ListView(parent, name, f),
         viewedThread_(0)
 {
     setRootIsDecorated(true);
@@ -51,8 +51,8 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
     setSorting(0);
     header()->hide();
 
-    connect( this, SIGNAL(clicked(QListViewItem*)),
-             this, SLOT(slotSelectionChanged(QListViewItem*)) );
+    connect( this, SIGNAL(clicked(Q3ListViewItem*)),
+             this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
 }
 
 
@@ -68,12 +68,12 @@ FramestackWidget::~FramestackWidget()
 void FramestackWidget::clear()
 {
     viewedThread_ = 0;
-    QListView::clear();
+    Q3ListView::clear();
 }
 
 /***************************************************************************/
 
-void FramestackWidget::slotSelectionChanged(QListViewItem * item)
+void FramestackWidget::slotSelectionChanged(Q3ListViewItem * item)
 {
 	if (item == 0) {
 		return;
@@ -169,7 +169,7 @@ void FramestackWidget::parseRDBBacktraceList(char *str)
 
 ThreadStackItem *FramestackWidget::findThread(int threadNo)
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
     while (sibling != 0) {
         ThreadStackItem *thread = (ThreadStackItem*) sibling;
         if (thread->threadNo() == threadNo) {
@@ -192,7 +192,7 @@ FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
 		return 0;     // no matching thread?
 	}
 
-	QListViewItem * frameItem = thread->firstChild();
+	Q3ListViewItem * frameItem = thread->firstChild();
 
     while (frameItem != 0) {
         if (((FrameStackItem *) frameItem)->frameNo() == frameNo) {
@@ -212,7 +212,7 @@ FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(ThreadStackItem *parent, int frameNo, const QString &frameDesc, const QString& frameName)
-        : QListViewItem(parent),
+        : Q3ListViewItem(parent),
         frameNo_(frameNo),
         threadNo_(parent->threadNo()),
 		frameName_(frameName)		
@@ -240,7 +240,7 @@ QString FrameStackItem::key(int /*column*/, bool /*ascending*/) const
 // **************************************************************************
 
 ThreadStackItem::ThreadStackItem(FramestackWidget *parent, int threadNo, const QString &threadDesc)
-        : QListViewItem(parent),
+        : Q3ListViewItem(parent),
         threadNo_(threadNo)
 {
     setText(0, threadDesc);
@@ -260,7 +260,7 @@ void ThreadStackItem::setOpen(bool open)
     if (open)
         ((FramestackWidget*)listView())->slotSelectFrame(1, threadNo());
 
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 }
 
 }

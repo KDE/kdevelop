@@ -29,15 +29,31 @@
 
 #include <qfeatures.h>
 #include <qvariant.h>
-#include <qlistview.h>
-#include <qptrlist.h>
-#include <qguardedptr.h>
+#include <q3listview.h>
+#include <q3ptrlist.h>
+#include <qpointer.h>
 #include <qtabwidget.h>
 #include <qmodules.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <Q3StrList>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDragMoveEvent>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QVBoxLayout>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QCloseEvent>
+#include <QLabel>
 #include "hierarchyview.h"
 #include "metadatabase.h"
 
@@ -47,19 +63,19 @@ class QPainter;
 class QColorGroup;
 class QLineEdit;
 class QPushButton;
-class QHBox;
+class Q3HBox;
 class QSpinBox;
 class QLabel;
-class QFrame;
+class Q3Frame;
 class FormWindow;
 class QCloseEvent;
 class QResizeEvent;
 class PropertyWhatsThis;
-class QDateEdit;
-class QTimeEdit;
-class QDateTimeEdit;
+class Q3DateEdit;
+class Q3TimeEdit;
+class Q3DateTimeEdit;
 
-class PropertyItem : public QListViewItem
+class PropertyItem : public Q3ListViewItem
 {
 public:
     PropertyItem( PropertyList *l, PropertyItem *after, PropertyItem *prop, const QString &propName );
@@ -102,7 +118,7 @@ public:
 
     void updateBackColor();
 
-    void setup() { QListViewItem::setup(); setHeight( QListViewItem::height() + 2 ); }
+    void setup() { Q3ListViewItem::setup(); setHeight( Q3ListViewItem::height() + 2 ); }
 
     virtual QString currentItem() const;
     virtual int currentIntItem() const;
@@ -129,7 +145,7 @@ private:
     bool open, changed;
     PropertyItem *property;
     QString propertyName;
-    QPtrList<PropertyItem> children;
+    Q3PtrList<PropertyItem> children;
     QColor backColor;
     QPushButton *resetButton;
 
@@ -163,8 +179,8 @@ private slots:
 
 private:
     QLineEdit *lined();
-    QGuardedPtr<QLineEdit> lin;
-    QGuardedPtr<QHBox> box;
+    QPointer<QLineEdit> lin;
+    QPointer<Q3HBox> box;
     QPushButton *button;
     bool withComment, hasMultiLines, asciiOnly, accel;
 
@@ -191,7 +207,7 @@ private slots:
 
 private:
     QComboBox *combo();
-    QGuardedPtr<QComboBox> comb;
+    QPointer<QComboBox> comb;
 
 };
 
@@ -215,7 +231,7 @@ private slots:
 
 private:
     QSpinBox *spinBox();
-    QGuardedPtr<QSpinBox> spinBx;
+    QPointer<QSpinBox> spinBx;
     bool signedValue;
 
 };
@@ -240,7 +256,7 @@ private slots:
 
 private:
     QSpinBox *spinBox();
-    QGuardedPtr<QSpinBox> spinBx;
+    QPointer<QSpinBox> spinBx;
 
 };
 
@@ -264,7 +280,7 @@ private slots:
 
 private:
     QLineEdit *lined();
-    QGuardedPtr<QLineEdit> lin;
+    QPointer<QLineEdit> lin;
 };
 
 class PropertyListItem : public QObject,
@@ -295,7 +311,7 @@ private slots:
 
 private:
     QComboBox *combo();
-    QGuardedPtr<QComboBox> comb;
+    QPointer<QComboBox> comb;
     int oldInt;
     bool editable;
     QString oldString;
@@ -325,9 +341,9 @@ private slots:
     void getFont();
 
 private:
-    QGuardedPtr<QLineEdit> lined;
-    QGuardedPtr<QPushButton> button;
-    QGuardedPtr<QHBox> box;
+    QPointer<QLineEdit> lined;
+    QPointer<QPushButton> button;
+    QPointer<Q3HBox> box;
 
 };
 
@@ -355,7 +371,7 @@ public:
 
 private:
     QLineEdit *lined();
-    QGuardedPtr<QLineEdit> lin;
+    QPointer<QLineEdit> lin;
     Type typ;
 
 };
@@ -387,9 +403,9 @@ private slots:
     void getColor();
 
 private:
-    QGuardedPtr<QHBox> box;
-    QGuardedPtr<QFrame> colorPrev;
-    QGuardedPtr<QPushButton> button;
+    QPointer<Q3HBox> box;
+    QPointer<Q3Frame> colorPrev;
+    QPointer<QPushButton> button;
     bool withChildren;
 
 };
@@ -418,8 +434,8 @@ private slots:
     void getPixmap();
 
 private:
-    QGuardedPtr<QHBox> box;
-    QGuardedPtr<QLabel> pixPrev;
+    QPointer<Q3HBox> box;
+    QPointer<QLabel> pixPrev;
     QPushButton *button;
     Type type;
 
@@ -448,7 +464,7 @@ public:
 
 private:
     QLineEdit *lined();
-    QGuardedPtr<QLineEdit> lin;
+    QPointer<QLineEdit> lin;
 
 };
 
@@ -474,9 +490,9 @@ private slots:
     void getPalette();
 
 private:
-    QGuardedPtr<QHBox> box;
-    QGuardedPtr<QLabel> palettePrev;
-    QGuardedPtr<QPushButton> button;
+    QPointer<Q3HBox> box;
+    QPointer<QLabel> palettePrev;
+    QPointer<QPushButton> button;
 
 };
 
@@ -500,7 +516,7 @@ private slots:
 
 private:
     QComboBox *combo();
-    QGuardedPtr<QComboBox> comb;
+    QPointer<QComboBox> comb;
 
 };
 
@@ -527,8 +543,8 @@ private:
     void handleKeyEvent( QKeyEvent *e );
     int translateModifiers( int state );
 
-    QGuardedPtr<QLineEdit> sequence;
-    QGuardedPtr<QHBox> box;
+    QPointer<QLineEdit> sequence;
+    QPointer<Q3HBox> box;
     int k1,k2,k3,k4;
     int num;
     bool mouseEnter;
@@ -554,9 +570,9 @@ public:
     virtual void childValueChanged( PropertyItem *child );
 
 private:
-    QGuardedPtr<QLineEdit> lined;
-    QGuardedPtr<QPushButton> button;
-    QGuardedPtr<QHBox> box;
+    QPointer<QLineEdit> lined;
+    QPointer<QPushButton> button;
+    QPointer<Q3HBox> box;
     bool withField;
 
 };
@@ -572,15 +588,15 @@ struct EnumItem {
     bool selected;
 };
 
-class EnumPopup : public QFrame
+class EnumPopup : public Q3Frame
 {
     Q_OBJECT
 
 public:
-    EnumPopup( QWidget *parent, const char *name, WFlags f=0 );
+    EnumPopup( QWidget *parent, const char *name, Qt::WFlags f=0 );
     ~EnumPopup();
-    void insertEnums( QValueList<EnumItem> lst );
-    QValueList<EnumItem> enumList() const;
+    void insertEnums( Q3ValueList<EnumItem> lst );
+    Q3ValueList<EnumItem> enumList() const;
     void closeWidget();
 
 signals:
@@ -591,8 +607,8 @@ protected:
     void keyPressEvent( QKeyEvent *e );
 
 private:
-    QValueList<EnumItem> itemList;
-    QPtrList<QCheckBox> checkBoxList;
+    Q3ValueList<EnumItem> itemList;
+    Q3PtrList<QCheckBox> checkBoxList;
     QVBoxLayout *popLayout;
 };
 
@@ -604,8 +620,8 @@ public:
     EnumBox( QWidget *parent, const char *name = 0 );
     ~EnumBox() {}
     void setText( const QString &text );
-    void insertEnums( QValueList<EnumItem> lst );
-    QValueList<EnumItem> enumList() const;
+    void insertEnums( Q3ValueList<EnumItem> lst );
+    Q3ValueList<EnumItem> enumList() const;
 
 signals:
     void aboutToShowPopup();
@@ -644,19 +660,19 @@ public:
     void setValue( const QVariant &v );
     QString currentItem() const;
     QString currentItemFromObject() const;
-    void setCurrentValues( QStrList lst );
+    void setCurrentValues( Q3StrList lst );
 
 private slots:
     void setValue();
     void insertEnums();
 
 private:
-    QGuardedPtr<EnumBox> box;
-    QValueList<EnumItem> enumList;
+    QPointer<EnumBox> box;
+    Q3ValueList<EnumItem> enumList;
     QString enumString;
 };
 
-class PropertyList : public QListView
+class PropertyList : public Q3ListView
 {
     Q_OBJECT
 
@@ -665,7 +681,7 @@ public:
 
     virtual void setupProperties();
 
-    virtual void setCurrentItem( QListViewItem *i );
+    virtual void setCurrentItem( Q3ListViewItem *i );
     virtual void valueChanged( PropertyItem *i );
     virtual void refetchData();
     virtual void setPropertyValue( PropertyItem *i );
@@ -685,14 +701,14 @@ public slots:
     void toggleSort();
 
 private slots:
-    void itemPressed( QListViewItem *i, const QPoint &p, int c );
-    void toggleOpen( QListViewItem *i );
+    void itemPressed( Q3ListViewItem *i, const QPoint &p, int c );
+    void toggleOpen( Q3ListViewItem *i );
     bool eventFilter( QObject *o, QEvent *e );
 
 protected:
     void resizeEvent( QResizeEvent *e );
     void paintEmptyArea( QPainter *p, const QRect &r );
-    bool addPropertyItem( PropertyItem *&item, const QCString &name, QVariant::Type t );
+    bool addPropertyItem( PropertyItem *&item, const Q3CString &name, QVariant::Type t );
 
     void viewportDragEnterEvent( QDragEnterEvent * );
     void viewportDragMoveEvent ( QDragMoveEvent * );
@@ -706,7 +722,7 @@ private:
     void setupCusWidgetProperties( MetaDataBase::CustomWidget *cw,
 				   QMap<QString, bool> &unique,
 				   PropertyItem *&item );
-    QString whatsThisText( QListViewItem *i );
+    QString whatsThisText( Q3ListViewItem *i );
 
 private:
     PropertyListItem* pressItem;
@@ -732,12 +748,12 @@ protected:
     void contentsMouseDoubleClickEvent( QMouseEvent *e );
 
 private:
-    void save( QListViewItem *p );
+    void save( Q3ListViewItem *p );
 
 private slots:
-    void objectClicked( QListViewItem *i );
-    void showRMBMenu( QListViewItem *, const QPoint & );
-    void renamed( QListViewItem *i );
+    void objectClicked( Q3ListViewItem *i );
+    void showRMBMenu( Q3ListViewItem *, const QPoint & );
+    void renamed( Q3ListViewItem *i );
 
 private:
     PropertyEditor *editor;
@@ -813,8 +829,8 @@ private slots:
     void setValue();
 
 private:
-    QDateEdit *lined();
-    QGuardedPtr<QDateEdit> lin;
+    Q3DateEdit *lined();
+    QPointer<Q3DateEdit> lin;
 
 };
 
@@ -836,8 +852,8 @@ private slots:
     void setValue();
 
 private:
-    QTimeEdit *lined();
-    QGuardedPtr<QTimeEdit> lin;
+    Q3TimeEdit *lined();
+    QPointer<Q3TimeEdit> lin;
 
 };
 
@@ -859,8 +875,8 @@ private slots:
     void setValue();
 
 private:
-    QDateTimeEdit *lined();
-    QGuardedPtr<QDateTimeEdit> lin;
+    Q3DateTimeEdit *lined();
+    QPointer<Q3DateTimeEdit> lin;
 
 };
 

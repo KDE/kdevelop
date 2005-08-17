@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 
 #include "makeactionfilter.h"
@@ -21,40 +23,12 @@
 //#define DEBUG
 
 MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QString& _tool, const char * regExp, int file )
-	: m_action( _action )
-	, m_expression( regExp )
-        , m_tool( _tool )
-        , m_toolGroup(-1)
-	, m_fileGroup( file )
+	: action( _action )
+	, tool( _tool )
+	, expression( regExp )
+	, fileGroup( file )
 {
 }
-
-MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, int tool, int file, const char * regExp)
-	: m_action( _action )
-	, m_expression( regExp )
-        , m_tool()
-        , m_toolGroup(tool)
-	, m_fileGroup( file )
-{
-}
-
-QString MakeActionFilter::ActionFormat::tool()
-{
-   if (m_toolGroup==-1)
-      return m_tool;
-   return m_expression.cap(m_toolGroup);
-}
-
-QString MakeActionFilter::ActionFormat::file()
-{
-   return m_expression.cap(m_fileGroup);
-}
-
-bool MakeActionFilter::ActionFormat::matches(const QString& line)
-{
-   return ( m_expression.search( line ) != -1 );
-}
-
 
 MakeActionFilter::MakeActionFilter( OutputFilter& next )
 	: OutputFilter( next )
@@ -72,18 +46,19 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
 	static ActionFormat formats[] = {
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)"),
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)"),
-		ActionFormat( i18n("compiling"), 1, 2, "(gcc|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)"),
+		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
+		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
 		ActionFormat( i18n("compiling"), "unknown", "^compiling (.*)", 1 ),
-
-                //moc and uic
-		ActionFormat( i18n("generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
-
+		ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 ),
+		ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
-                //can distcc link too ?
-		ActionFormat( i18n("linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)"),
-
+		ActionFormat( i18n("linking"), "g++", "g\\+\\+\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
+		ActionFormat( i18n("linking"), "gcc", "g\\c\\c\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
@@ -120,12 +95,13 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 	ActionFormat* aFormats = actionFormats();
 	ActionFormat* format = &aFormats[i];
 
-	while ( !format->action().isNull() )
+	while ( !format->action.isNull() )
 	{
 //		kdDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
-		if ( format->matches( line ) )
+		QRegExp& regExp = format->expression;
+		if ( regExp.search( line ) != -1 )
 		{
-                   ActionItem *actionItem = new ActionItem( format->action(), format->file(), format->tool(), line );
+                   ActionItem *actionItem = new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
 	     	   kdDebug( 9004 ) << "Found: " << actionItem->m_action << " " << actionItem->m_file << "(" << actionItem->m_tool << ")" << endl;
 		   return actionItem;
 		}
@@ -157,7 +133,7 @@ struct TestItem
 
 void MakeActionFilter::test()
 {
-	static QValueList<TestItem> testItems = QValueList<TestItem>()
+	static Q3ValueList<TestItem> testItems = Q3ValueList<TestItem>()
 
 	<< TestItem( // simple qmake compile
 		"g++ -c -pipe -Wall -W -O2 -DQT_NO_DEBUG -I/home/john/src/kde/qt-copy/mkspecs/default -I. "
@@ -271,7 +247,7 @@ void MakeActionFilter::test()
 	"compiling", "g++", "quanta_init.cpp")
 	;
 
-	QValueList<TestItem>::const_iterator it = testItems.begin();
+	Q3ValueList<TestItem>::const_iterator it = testItems.begin();
 	for( ; it != testItems.end(); ++it )
 	{
 		ActionItem* actionItem = matchLine( (*it).line );

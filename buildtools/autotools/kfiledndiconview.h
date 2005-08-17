@@ -20,6 +20,11 @@
 
 #include <qwidget.h>
 #include <qtimer.h> 
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <kfileiconview.h>
 #include <kurldrag.h>
 
@@ -103,7 +108,7 @@ protected:
 	 * Creates a @ref QDragObject containing all urls of the selected @ref KFileItem of the view,
 	 * @returns the @ref QDragObject
 	 */
-	virtual QDragObject* dragObject();
+	virtual Q3DragObject* dragObject();
 	
 	/**
 	 *Creates the drag item and starts the drag
@@ -120,7 +125,7 @@ protected:
 	QTimer m_autoOpenTimer;
 	int m_autoOpenTime;
 	bool m_useAutoOpenTimer;
-	QIconViewItem* m_dropItem;
+	Q3IconViewItem* m_dropItem;
 	bool m_dndEnabled;
 };
 #endif 

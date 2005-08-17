@@ -33,7 +33,7 @@ public:
 	                 const QObject* receiver, const char* slot,
 	                 KActionCollection* parent, const char* name );
 
-	AutoToolsAction( const QString& text, const QIconSet& pix, const KShortcut& cut,
+	AutoToolsAction( const QString& text, const QIcon& pix, const KShortcut& cut,
 	                 const QObject* receiver, const char* slot,
 	                 KActionCollection* parent, const char* name );
 
@@ -48,11 +48,11 @@ public:
 	AutoToolsAction( const QString& text, const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
 	AutoToolsAction( const QString& text, const KShortcut& cut,
 	                 const QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
-	AutoToolsAction( const QString& text, const QIconSet& pix, const KShortcut& cut = KShortcut(),
+	AutoToolsAction( const QString& text, const QIcon& pix, const KShortcut& cut = KShortcut(),
 	                 QObject* parent = 0, const char* name = 0 );
 	AutoToolsAction( const QString& text, const QString& pix, const KShortcut& cut = KShortcut(),
 	                 QObject* parent = 0, const char* name = 0 );
-	AutoToolsAction( const QString& text, const QIconSet& pix, const KShortcut& cut,
+	AutoToolsAction( const QString& text, const QIcon& pix, const KShortcut& cut,
 	                 const QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
 	AutoToolsAction( const QString& text, const QString& pix, const KShortcut& cut,
 	                 const QObject* receiver, const char* slot, QObject* parent,

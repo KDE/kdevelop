@@ -13,14 +13,16 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
 
 #include "js_colorizer.h"
 #include "qeditor_part.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "paragdata.h"
 
 #include <qfont.h>
@@ -168,7 +170,7 @@ void JSColorizer::loadDynamicKeywords()
     QDomDocument hlFile( "hlfile" ), curDoc ( "classlist" );
     QFile hlRawFile( hlFileDir + "highlighting.xml" );
     int keywordIndex = 0;
-    if( !hlRawFile.open( IO_ReadOnly ) )
+    if( !hlRawFile.open( QIODevice::ReadOnly ) )
 	return;
     if( !hlFile.setContent( &hlRawFile ) ) {
 	hlRawFile.close();
@@ -185,7 +187,7 @@ void JSColorizer::loadDynamicKeywords()
 	    // kdDebug(9032) << "Loading classes-file: " << (hlFileDir + e.attribute( strFileNameTag )) << endl;
 
 	    QFile clsRawFile( hlFileDir + e.attribute( strFileNameTag ) );
-	    if( clsRawFile.open( IO_ReadOnly ) && curDoc.setContent( &clsRawFile ) ) {
+	    if( clsRawFile.open( QIODevice::ReadOnly ) && curDoc.setContent( &clsRawFile ) ) {
 
 		QDomElement e = curDoc.documentElement();
 		QDomNode n = e.firstChild();
@@ -216,8 +218,8 @@ int JSColorizer::computeLevel( QTextParagraph* parag, int startLevel )
 
     data->setBlockStart( false );
 
-    QValueList<Symbol> symbols = data->symbolList();
-    QValueList<Symbol>::Iterator it = symbols.begin();
+    Q3ValueList<Symbol> symbols = data->symbolList();
+    Q3ValueList<Symbol>::Iterator it = symbols.begin();
     while( it != symbols.end() ){
         Symbol sym = *it++;
         if( sym.ch() == '{' ){

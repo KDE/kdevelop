@@ -11,6 +11,9 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <Q3PtrList>
 #include <klistview.h>
 #include <qtooltip.h>
 #include <qrect.h>
@@ -23,7 +26,7 @@ class KDevProject;
 class SnippetPart;
 class QPushButton;
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 class QPoint;
 class SnippetDlg;
 class SnippetItem;
@@ -46,7 +49,7 @@ class SnippetWidget : public KListView, public QToolTip
 public:
     SnippetWidget(SnippetPart *part);
     ~SnippetWidget();
-    QPtrList<SnippetItem> * getList() { return (&_list); }
+    Q3PtrList<SnippetItem> * getList() { return (&_list); }
     void writeConfig();
     void initConfigOldVersion(KConfig *cfg);
     SnippetConfig *  getSnippetConfig() { return (&_SnippetConfig); }
@@ -68,7 +71,7 @@ private:
                             int & iWidth, int & iBasicHeight, int & iOneHeight);
     QString showSingleVarDialog(QString var, QMap<QString, QString> * mapSave, QRect & dlgSize);
 
-    QPtrList<SnippetItem> _list;
+    Q3PtrList<SnippetItem> _list;
     QMap<QString, QString> _mapSaved;
     KConfig * _cfg;
     SnippetConfig _SnippetConfig;
@@ -81,9 +84,9 @@ public slots:
     void slotAddGroup();
 
 protected slots:
-    void showPopupMenu( QListViewItem * item, const QPoint & p, int );
-    void slotListDblClicked(QListViewItem * item, const QPoint & pos, int c);
-    void slotDropped(QDropEvent *e, QListViewItem *after);
+    void showPopupMenu( Q3ListViewItem * item, const QPoint & p, int );
+    void slotListDblClicked(Q3ListViewItem * item, const QPoint & pos, int c);
+    void slotDropped(QDropEvent *e, Q3ListViewItem *after);
 };
 
 

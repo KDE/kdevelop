@@ -15,7 +15,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qpushbutton.h>
 
 #include <kapplication.h>

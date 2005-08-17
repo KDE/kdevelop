@@ -13,8 +13,8 @@
 *
 *  You should have received a copy of the GNU General Public License
 *  along with this program; see the file COPYING.LIB.  If not, write to
-*  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-*  Boston, MA 02110-1301, USA.
+*  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+*  Boston, MA 02111-1307, USA.
 *
 */
 
@@ -36,14 +36,14 @@
 #include <qfileinfo.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qtextstream.h>
 
 AddMethodDialog::AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
-                                  QWidget* parent, const char* name, bool modal, WFlags fl )
+                                  QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
 : AddMethodDialogBase( parent, name, modal, fl ), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
 	QString fileName = m_klass->fileName();
@@ -181,10 +181,10 @@ void AddMethodDialog::accept()
 	
 	for ( QStringList::iterator it = accessList.begin(); it != accessList.end(); ++it )
 	{
-		QListViewItem* item = methods->firstChild();
+		Q3ListViewItem* item = methods->firstChild();
 		while ( item )
 		{
-			QListViewItem * currentItem = item;
+			Q3ListViewItem * currentItem = item;
 			
 			item = item->nextSibling();
 			
@@ -216,10 +216,10 @@ void AddMethodDialog::accept()
 	m_cppSupport->backgroundParser() ->addFile( m_klass->fileName() );
 	
 	QString str;
-	QListViewItem* item = methods->firstChild();
+	Q3ListViewItem* item = methods->firstChild();
 	while ( item )
 	{
-		QListViewItem * currentItem = item;
+		Q3ListViewItem * currentItem = item;
 		
 		item = item->nextSibling();
 		
@@ -272,7 +272,7 @@ void AddMethodDialog::updateGUI()
 	
 	if ( enable )
 	{
-		QListViewItem * item = methods->selectedItem();
+		Q3ListViewItem * item = methods->selectedItem();
 		item->setText( 0, isInline->isChecked() ? "True" : "False" );
 		item->setText( 1, access->currentText() );
 		item->setText( 2, storage->currentText() );
@@ -290,7 +290,7 @@ void AddMethodDialog::updateGUI()
 
 void AddMethodDialog::addMethod()
 {
-	QListViewItem * item = new QListViewItem( methods, "False", "Public", "Normal",
+	Q3ListViewItem * item = new Q3ListViewItem( methods, "False", "Public", "Normal",
 	                                          "void", QString( "method_%1()" ).arg( ++m_count ),
 	                                          sourceFile->currentText() );
 	methods->setCurrentItem( item );
@@ -305,7 +305,7 @@ void AddMethodDialog::deleteCurrentMethod()
 	updateGUI();
 }
 
-void AddMethodDialog::currentChanged( QListViewItem* item )
+void AddMethodDialog::currentChanged( Q3ListViewItem* item )
 {
 	if ( item )
 	{
@@ -334,10 +334,10 @@ void AddMethodDialog::browseImplementationFile()
 	updateGUI();
 }
 
-QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
+QString AddMethodDialog::functionDeclaration( Q3ListViewItem * item ) const
 {
 	QString str;
-	QTextStream stream( &str, IO_WriteOnly );
+	QTextStream stream( &str, QIODevice::WriteOnly );
 	
 	QString access = item->text( 1 ).lower();
 	
@@ -356,7 +356,7 @@ QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
 	return str;
 }
 
-QString AddMethodDialog::functionDefinition( QListViewItem* item ) const
+QString AddMethodDialog::functionDefinition( Q3ListViewItem* item ) const
 {
 	if ( item->text( 1 ) == "Signals" || item->text( 2 ) == "Pure Virtual" ||
 	     item->text( 2 ) == "Friend" )
@@ -371,7 +371,7 @@ QString AddMethodDialog::functionDefinition( QListViewItem* item ) const
 	fullName += className;
 	
 	QString str;
-	QTextStream stream( &str, IO_WriteOnly );
+	QTextStream stream( &str, QIODevice::WriteOnly );
 	
 	bool isInline = item->text( 0 ) == "True";
 	
@@ -398,10 +398,10 @@ QStringList AddMethodDialog::newAccessList( const QStringList& accessList ) cons
 {
 	QStringList newAccessList;
 	
-	QListViewItem* item = methods->firstChild();
+	Q3ListViewItem* item = methods->firstChild();
 	while ( item )
 	{
-		QListViewItem * currentItem = item;
+		Q3ListViewItem * currentItem = item;
 		
 		item = item->nextSibling();
 		

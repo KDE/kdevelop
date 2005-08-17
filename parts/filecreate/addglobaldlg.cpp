@@ -11,12 +11,15 @@
 #include "addglobaldlg.h"
 
 #include <qvariant.h>
-#include <qheader.h>
-#include <qlistview.h>
+#include <q3header.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 #include <klocale.h>
 
@@ -27,7 +30,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-AddGlobalDlg::AddGlobalDlg( QWidget* parent, const char* name, bool modal, WFlags fl )
+AddGlobalDlg::AddGlobalDlg( QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
     : QDialog( parent, name, modal, fl )
 
 {
@@ -55,16 +58,16 @@ AddGlobalDlg::AddGlobalDlg( QWidget* parent, const char* name, bool modal, WFlag
 
     AddGlobalDlgLayout->addLayout( Layout1, 1, 0 );
 
-    fcglobal_view = new QListView( this, "fcglobal_view" );
+    fcglobal_view = new Q3ListView( this, "fcglobal_view" );
     fcglobal_view->addColumn( i18n( "Type Extension" ) );
     fcglobal_view->addColumn( i18n( "Type Name" ) );
     fcglobal_view->addColumn( i18n( "Template Location" ) );
     fcglobal_view->addColumn( i18n( "Icon" ) );
     fcglobal_view->addColumn( i18n( "Description" ) );
-    fcglobal_view->setResizePolicy( QListView::AutoOne );
+    fcglobal_view->setResizePolicy( Q3ListView::AutoOne );
     fcglobal_view->setAllColumnsShowFocus( TRUE );
     fcglobal_view->setRootIsDecorated( TRUE );
-    fcglobal_view->setResizeMode( QListView::AllColumns );
+    fcglobal_view->setResizeMode( Q3ListView::AllColumns );
 
     AddGlobalDlgLayout->addWidget( fcglobal_view, 0, 0 );
     languageChange();

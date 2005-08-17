@@ -11,14 +11,17 @@
 
 #include <qstring.h>
 #include <qvariant.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistview.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
+#include <q3listview.h>
+#include <q3groupbox.h>
+#include <q3hbox.h>
 #include <qregexp.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -36,16 +39,16 @@
 #include "partselectwidget.h"
 #include "plugincontroller.h"
 
-class ProfileItem: public QListViewItem {
+class ProfileItem: public Q3ListViewItem {
 public:
-    ProfileItem(QListView *parent, Profile *profile)
-        :QListViewItem(parent), m_profile(profile)
+    ProfileItem(Q3ListView *parent, Profile *profile)
+        :Q3ListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
     }
     
-    ProfileItem(QListViewItem *parent, Profile *profile)
-        : QListViewItem(parent), m_profile(profile)
+    ProfileItem(Q3ListViewItem *parent, Profile *profile)
+        : Q3ListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
     }
@@ -56,13 +59,13 @@ private:
     Profile *m_profile;
 };
 
-class PluginItem : public QCheckListItem
+class PluginItem : public Q3CheckListItem
 {
 public:
     // name - "Name", label - "GenericName", info - "Comment"
-    PluginItem( QListView * parent, QString const & name, QString const & label,
+    PluginItem( Q3ListView * parent, QString const & name, QString const & label,
 				QString const & info, QString const url = QString::null )
-        : QCheckListItem( parent, label, QCheckListItem::CheckBox),
+        : Q3CheckListItem( parent, label, Q3CheckListItem::CheckBox),
         _name( name ), _info( info ), _url( url )
     {}
 
@@ -108,22 +111,22 @@ void PartSelectWidget::init()
 */
     QString text( i18n("Plugins to Load for This Project") );
 
-    QGroupBox * groupBox1 = new QGroupBox( text, this );
+    Q3GroupBox * groupBox1 = new Q3GroupBox( text, this );
     groupBox1->setColumnLayout(0, Qt::Vertical );
     groupBox1->layout()->setSpacing( 6 );
     groupBox1->layout()->setMargin( 11 );
     QHBoxLayout * groupBox1Layout = new QHBoxLayout( groupBox1->layout() );
     groupBox1Layout->setAlignment( Qt::AlignTop );
 
-    _pluginList = new QListView( groupBox1 );
-    _pluginList->setResizeMode( QListView::LastColumn );
+    _pluginList = new Q3ListView( groupBox1 );
+    _pluginList->setResizeMode( Q3ListView::LastColumn );
     _pluginList->addColumn("");
     _pluginList->header()->hide();
 
     groupBox1Layout->addWidget( _pluginList );
     layout->addWidget( groupBox1 );
 
-    QGroupBox * groupBox2 = new QGroupBox( i18n("Description"), this );
+    Q3GroupBox * groupBox2 = new Q3GroupBox( i18n("Description"), this );
     groupBox2->setColumnLayout(0, Qt::Vertical );
     groupBox2->layout()->setSpacing( 6 );
     groupBox2->layout()->setMargin( 11 );
@@ -131,7 +134,7 @@ void PartSelectWidget::init()
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
     _pluginDescription = new QLabel( groupBox2 );
-    _pluginDescription->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+    _pluginDescription->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 
     _urlLabel = new KURLLabel( groupBox2 );
 
@@ -140,7 +143,7 @@ void PartSelectWidget::init()
 
     layout->addWidget( groupBox2 );
 	
-	QHBox * hbox = new QHBox( this );
+	Q3HBox * hbox = new Q3HBox( this );
 	hbox->setSpacing( 6 );
 	hbox->setMargin( 6 );
 	QPushButton * setAsDefaultButton = new QPushButton( i18n("Set as Default"), hbox );
@@ -148,7 +151,7 @@ void PartSelectWidget::init()
 	new QLabel( i18n("Set this plugin selection as the default"), hbox );
 	layout->addWidget( hbox );
 
-    connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
+    connect( _pluginList, SIGNAL( selectionChanged( Q3ListViewItem * ) ), this, SLOT( itemSelected( Q3ListViewItem * ) ) );
 	connect( _urlLabel, SIGNAL( leftClickedURL( const QString & ) ), this, SLOT( openURL( const QString & ) ) );
 	connect( setAsDefaultButton, SIGNAL(clicked()), this, SLOT(setAsDefault()) );
 
@@ -187,14 +190,14 @@ void PartSelectWidget::readProjectConfig()
 		item->setOn(!ignoreparts.contains((*it)->desktopEntryName()));
 	}
 
-	QListViewItem * first = _pluginList->firstChild();
+	Q3ListViewItem * first = _pluginList->firstChild();
 	if ( first )
 	{
 		_pluginList->setSelected( first, true );
 	}
 }
 
-void PartSelectWidget::itemSelected( QListViewItem * item )
+void PartSelectWidget::itemSelected( Q3ListViewItem * item )
 {
     if ( ! item ) return;
 
@@ -222,7 +225,7 @@ void PartSelectWidget::saveProjectConfig()
 {
     QStringList ignoreparts;
 
-    QListViewItemIterator it( _pluginList );
+    Q3ListViewItemIterator it( _pluginList );
     while ( it.current() )
     {
         PluginItem * item = static_cast<PluginItem*>( it.current() );
@@ -246,7 +249,7 @@ void PartSelectWidget::accept()
     emit accepted();
 }
 
-void PartSelectWidget::selectProfile(QListViewItem *item)
+void PartSelectWidget::selectProfile(Q3ListViewItem *item)
 {
     ProfileItem *profileItem = dynamic_cast<ProfileItem*>(item);
     if (!profileItem)
@@ -258,7 +261,7 @@ void PartSelectWidget::selectProfile(QListViewItem *item)
 
 class ProfileListBuilding {
 public:
-    QListViewItem * operator() (QListViewItem *parent, Profile *profile)
+    Q3ListViewItem * operator() (Q3ListViewItem *parent, Profile *profile)
     {
         parent->setOpen(true);
         return new ProfileItem(parent, profile);
@@ -274,7 +277,7 @@ void PartSelectWidget::setAsDefault( )
 	if ( profile.isEmpty() ) return;
 	
 	QStringList ignoreparts;
-	QListViewItemIterator it( _pluginList );
+	Q3ListViewItemIterator it( _pluginList );
 	while ( it.current() )
 	{
 		PluginItem * item = static_cast<PluginItem*>( it.current() );

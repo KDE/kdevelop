@@ -15,17 +15,19 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef DDOCKWINDOW_H
 #define DDOCKWINDOW_H
 
-#include <qdockwindow.h>
-#include <qvaluelist.h>
+#include <q3dockwindow.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QBoxLayout>
 
 class QBoxLayout;
 class QToolButton;
-class QWidgetStack;
+class Q3WidgetStack;
 class KComboBox;
 
 namespace Ideal {
@@ -33,7 +35,7 @@ namespace Ideal {
     class ButtonBar;
 }
 
-class DDockWindow : public QDockWindow {
+class DDockWindow : public Q3DockWindow {
     Q_OBJECT
 public:
     enum Position { Bottom, Left, Right };
@@ -66,7 +68,7 @@ protected:
     virtual void saveSettings();
     
     Ideal::ButtonBar *m_bar;
-    QWidgetStack *m_widgetStack;
+    Q3WidgetStack *m_widgetStack;
     
     QMap<Ideal::Button*, QWidget*> m_widgets;
     QMap<QWidget*, Ideal::Button*> m_buttons;

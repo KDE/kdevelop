@@ -31,9 +31,14 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QFocusEvent>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -51,7 +56,7 @@ RDBOutputWidget::RDBOutputWidget( QWidget *parent, const char *name) :
     m_rdbView(0)
 {
 
-    m_rdbView = new QTextEdit (this, name);
+    m_rdbView = new Q3TextEdit (this, name);
     m_rdbView->setReadOnly(true);
 
     QBoxLayout *userRDBCmdEntry = new QHBoxLayout();

@@ -18,26 +18,33 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
 #ifndef _KMultitabbar_h_
 #define _KMultitabbar_h_
 
-#include <qscrollview.h>
-#include <qvbox.h>
-#include <qhbox.h>
+#include <q3scrollview.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QHideEvent>
+#include <QShowEvent>
+#include <Q3Frame>
+#include <Q3PopupMenu>
+#include <QBoxLayout>
 
 #include <kdelibs_export.h>
 
 class QPixmap;
 class QPainter;
-class QFrame;
+class Q3Frame;
 
 class KMultiTabBarPrivate;
 class KMultiTabBarTabPrivate;
@@ -55,7 +62,7 @@ class KUTILS_EXPORT KMultiTabBar: public QWidget
 {
 	Q_OBJECT
 public:
-	enum KMultiTabBarMode{Horizontal, Vertical};
+	enum KMultiTabBarMode{Qt::Horizontal, Qt::Vertical};
 	enum KMultiTabBarPosition{Left, Right, Top, Bottom};
 
 	/**
@@ -78,7 +85,7 @@ public:
 	 * @param popup A popup menu which should be displayed if the button is clicked
 	 * @param not_used_yet will be used for a popup text in the future
 	 */
- 	int appendButton(const QPixmap &pic,int id=-1,QPopupMenu* popup=0,const QString& not_used_yet=QString::null);
+ 	int appendButton(const QPixmap &pic,int id=-1,Q3PopupMenu* popup=0,const QString& not_used_yet=QString::null);
 	/** 
          * remove a button with the given ID
 	 */
@@ -125,11 +132,11 @@ public:
 	/**
 	 * be carefull, don't delete tabs yourself and don't delete the list itself
 	 */
-        QPtrList<KMultiTabBarTab>* tabs();
+        Q3PtrList<KMultiTabBarTab>* tabs();
 	/**
 	 * be carefull, don't delete buttons yourself and don't delete the list itself
 	 */
-	QPtrList<KMultiTabBarButton>* buttons();
+	Q3PtrList<KMultiTabBarButton>* buttons();
 
 	/**
 	 * might vanish, not sure yet
@@ -142,8 +149,8 @@ protected:
 private:
 	class KMultiTabBarInternal *m_internal;
 	QBoxLayout *m_l;
-	QFrame *m_btnTabSep;
-	QPtrList<KMultiTabBarButton> m_buttons;
+	Q3Frame *m_btnTabSep;
+	Q3PtrList<KMultiTabBarButton> m_buttons;
 	KMultiTabBarPosition m_position;
 	KMultiTabBarPrivate *d;
 };
@@ -155,9 +162,9 @@ class KUTILS_EXPORT KMultiTabBarButton: public QPushButton
 {
 	Q_OBJECT
 public:
-	KMultiTabBarButton(const QPixmap& pic,const QString&, QPopupMenu *popup,
+	KMultiTabBarButton(const QPixmap& pic,const QString&, Q3PopupMenu *popup,
 		int id,QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, KMultiTabBar::KMultiTabBarStyle style);
-	KMultiTabBarButton(const QString&, QPopupMenu *popup,
+	KMultiTabBarButton(const QString&, Q3PopupMenu *popup,
 		int id,QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, KMultiTabBar::KMultiTabBarStyle style);
 	virtual  ~KMultiTabBarButton();
 	int id() const;

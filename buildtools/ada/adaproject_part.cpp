@@ -9,9 +9,11 @@
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -52,7 +54,7 @@ AdaProjectPart::AdaProjectPart(QObject *parent, const char *name, const QStringL
     setXMLFile("kdevadaproject.rc");
 
     KAction *action;
-    action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
+    action = new KAction( i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
     action = new KAction( i18n("Execute Program"), "exec", 0,
@@ -115,7 +117,7 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
     loadProjectConfig();
 
     // Put all files from all subdirectories into file list
-    QValueStack<QString> s;
+    Q3ValueStack<QString> s;
     int prefixlen = m_projectDir.length()+1;
     s.push(m_projectDir);
 
@@ -142,7 +144,7 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
 	if( !dirEntries )
 	    break;
 
-        QPtrListIterator<QFileInfo> it(*dirEntries);
+        Q3PtrListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) {
             QString fileName = it.current()->fileName();
             if (fileName == "." || fileName == "..")
@@ -189,7 +191,23 @@ DomUtil::PairList AdaProjectPart::runEnvironmentVars() const
   */
 QString AdaProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevadaproject");
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevadaproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevadaproject/run/customdirectory");
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+
+    return buildDirectory() + "/" + DomMainProgram;
+
 }
 
 
@@ -364,7 +382,7 @@ void AdaProjectPart::changedFile( const QString & fileName )
 
 void AdaProjectPart::projectConfigWidget( KDialogBase * dlg )
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Ada Compiler"));
     AdaProjectOptionsDlg *w = new AdaProjectOptionsDlg(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
@@ -383,7 +401,7 @@ void AdaProjectPart::loadProjectConfig( )
     if (m_compilerExec.isEmpty())
     {
         KTrader::OfferList offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Ada'");
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = offers.begin(); it != offers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 m_compilerExec = (*it)->exec();
@@ -395,7 +413,7 @@ void AdaProjectPart::loadProjectConfig( )
 
 void AdaProjectPart::configWidget( KDialogBase * dlg )
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Ada Compiler"));
     AdaGlobalOptionsDlg *w = new AdaGlobalOptionsDlg(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );

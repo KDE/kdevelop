@@ -27,25 +27,29 @@
 #ifndef LISTBOXDND_H
 #define LISTBOXDND_H
 
-#include <qptrlist.h>
-#include <qlistbox.h>
+#include <q3ptrlist.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include "listdnd.h"
 
-typedef QPtrList<QListBoxItem> ListBoxItemList;
+typedef Q3PtrList<Q3ListBoxItem> ListBoxItemList;
 
 class ListBoxDnd : public ListDnd
 {
     Q_OBJECT
 public:
     // dragModes are enumerated in ListDnd
-    ListBoxDnd( QListBox * eventSource, const char * name = 0 );
+    ListBoxDnd( Q3ListBox * eventSource, const char * name = 0 );
     
 signals:
-    void dropped( QListBoxItem * );
-    void dragged( QListBoxItem * );
+    void dropped( Q3ListBoxItem * );
+    void dragged( Q3ListBoxItem * );
 
 public slots:
-    void confirmDrop( QListBoxItem * );
+    void confirmDrop( Q3ListBoxItem * );
 
 protected:
     virtual bool dropEvent( QDropEvent * event );
@@ -54,7 +58,7 @@ protected:
     virtual bool canDecode( QDragEnterEvent * event );
 
 private:
-    QListBoxItem * itemAt( QPoint pos );
+    Q3ListBoxItem * itemAt( QPoint pos );
     int buildList( ListBoxItemList & list );
     void insertList( ListBoxItemList & list );
     void removeList( ListBoxItemList & list );

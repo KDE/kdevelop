@@ -11,9 +11,9 @@
 
 #include "grepviewpart.h"
 
-#include <qpopupmenu.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3popupmenu.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -42,13 +42,13 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
              this, SLOT(stopButtonClicked(KDevPlugin*)) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
     m_widget = new GrepViewWidget(this);
     m_widget->setIcon(SmallIcon("grep"));
     m_widget->setCaption(i18n("Grep Output"));
-    QWhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
+    Q3WhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
                                    "This window contains the output of a grep "
                                    "command. Clicking on an item in the list "
                                    "will automatically open the corresponding "
@@ -59,7 +59,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
 
     KAction *action;
 
-    action = new KAction(i18n("Find in Fi&les..."), "grep", CTRL+ALT+Key_F,
+    action = new KAction(i18n("Find in Fi&les..."), "grep", Qt::CTRL+Qt::ALT+Qt::Key_F,
                          this, SLOT(slotGrep()),
                          actionCollection(), "edit_grep");
     action->setToolTip( i18n("Search for expressions over several files") );
@@ -102,7 +102,7 @@ void GrepViewPart::projectClosed()
 }
 
 
-void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
+void GrepViewPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     kdDebug(9001) << "context in grepview" << endl;
     if (!context->hasType( Context::EditorContext ))

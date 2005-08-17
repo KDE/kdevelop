@@ -17,7 +17,9 @@
 #define _ABBREVPART_H_
 
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "kdevplugin.h"
 
 #include <ktexteditor/codecompletioninterface.h>
@@ -52,11 +54,11 @@ public:
     void clear();
     QStringList suffixes();
 
-    QPtrList<CodeTemplate> allTemplates() const;
+    Q3PtrList<CodeTemplate> allTemplates() const;
 
 private:
     QMap<QString, QMap<QString, CodeTemplate* > > templates;
-    QPtrList<CodeTemplate> allCodeTemplates;
+    Q3PtrList<CodeTemplate> allCodeTemplates;
     QStringList m_suffixes;
 };
 
@@ -93,7 +95,7 @@ private:
     void load();
     void save();
     QString currentWord() const;
-    QValueList<KTextEditor::CompletionEntry> findAllWords(const QString &text, const QString &prefix);
+    Q3ValueList<KTextEditor::CompletionEntry> findAllWords(const QString &text, const QString &prefix);
     void insertChars( const QString &chars );
 //    QAsciiDict<CodeTemplate> m_templates;
     CodeTemplateList m_templates;

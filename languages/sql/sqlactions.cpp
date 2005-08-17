@@ -11,7 +11,7 @@
 
 #include "sqlactions.h"
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstringlist.h>
 #include <qsqldatabase.h>
 

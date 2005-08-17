@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
@@ -25,7 +25,7 @@
 
 class QTimer;
 class ClassViewPart;
-class QListViewItem;
+class Q3ListViewItem;
 
 #define NAV_NODEFINITION "(no function)"
 
@@ -45,7 +45,7 @@ public:
     QString fullFunctionDeclarationName(FunctionDom fun);
 
 public slots:
-    void selectFunctionNav(QListViewItem *item);
+    void selectFunctionNav(Q3ListViewItem *item);
     void syncFunctionNav();
     void syncFunctionNavDelayed(int delay);
     void functionNavFocused();
@@ -74,8 +74,8 @@ private:
 
     bool m_navNoDefinition;
 
-    QMap<QString, QListViewItem*> m_functionNavDefs;
-    QMap<QString, QListViewItem*> m_functionNavDecls;
+    QMap<QString, Q3ListViewItem*> m_functionNavDefs;
+    QMap<QString, Q3ListViewItem*> m_functionNavDecls;
 };
 
 #endif

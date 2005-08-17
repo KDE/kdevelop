@@ -15,24 +15,26 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docksplitter.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Ideal {
 
-DockSplitter::DockSplitter(Orientation orientation, QWidget *parent, const char *name)
+DockSplitter::DockSplitter(Qt::Orientation orientation, QWidget *parent, const char *name)
     :QSplitter(parent, name), m_orientation(orientation)
 {
     switch (m_orientation)
     {
-        case Horizontal:
-            setOrientation(Vertical);
+        case Qt::Horizontal:
+            setOrientation(Qt::Vertical);
             break;
-        case Vertical:
-            setOrientation(Horizontal);
+        case Qt::Vertical:
+            setOrientation(Qt::Horizontal);
             break;
     }
     setOpaqueResize(true);
@@ -47,7 +49,7 @@ void DockSplitter::addDock(uint row, uint col, QWidget *dock)
 {
     if (m_docks.count() <= row)
         for (uint i = m_docks.count(); i <= row ; ++i)
-            m_docks.append(QValueList<QWidget*>());
+            m_docks.append(Q3ValueList<QWidget*>());
     
     if (m_docks[row].count() <= col)
     {
@@ -73,11 +75,11 @@ void DockSplitter::appendSplitter()
 {
     switch (m_orientation)
     {
-        case Horizontal:
-            m_splitters.append(new QSplitter(Horizontal, this));
+        case Qt::Horizontal:
+            m_splitters.append(new QSplitter(Qt::Horizontal, this));
             break;
-        case Vertical:
-            m_splitters.append(new QSplitter(Vertical, this));
+        case Qt::Vertical:
+            m_splitters.append(new QSplitter(Qt::Vertical, this));
             break;
     }
     m_splitters[m_splitters.size()-1]->setOpaqueResize(true);

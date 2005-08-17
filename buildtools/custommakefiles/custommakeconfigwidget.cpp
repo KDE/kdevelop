@@ -21,8 +21,8 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
-#include <qlistview.h>
-#include <qgroupbox.h>
+#include <q3listview.h>
+#include <q3groupbox.h>
 #include <qvalidator.h>
 #include <kdebug.h>
 #include <klocale.h>

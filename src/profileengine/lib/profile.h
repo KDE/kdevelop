@@ -14,13 +14,15 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PROFILE_H
 #define PROFILE_H
 
 #include <kurl.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
 @short KDevelop profile
@@ -36,7 +38,7 @@ public:
         QString name;
         bool derived;
     };
-    typedef QValueList<Entry> EntryList;
+    typedef Q3ValueList<Entry> EntryList;
     
     /**Lists which are held by a profile.*/
     enum List { 
@@ -49,7 +51,7 @@ public:
     Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description);
     ~Profile();
     
-    QValueList<Profile*> children() const { return m_children; }
+    Q3ValueList<Profile*> children() const { return m_children; }
     Profile *parent() const { return m_parent; }
     
     void save();
@@ -80,7 +82,7 @@ protected:
 
 private:
     Profile *m_parent;
-    QValueList<Profile*> m_children;
+    Q3ValueList<Profile*> m_children;
     
     QString m_name;
     

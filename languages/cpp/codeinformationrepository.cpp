@@ -14,15 +14,17 @@
 
 #include <kdevcoderepository.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /// @todo move in utils.cpp
-static QValueList<KTextEditor::CompletionEntry>
-my_unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
+static Q3ValueList<KTextEditor::CompletionEntry>
+my_unique( const Q3ValueList<KTextEditor::CompletionEntry>& entryList )
 {
 
-	QValueList< KTextEditor::CompletionEntry > l;
+	Q3ValueList< KTextEditor::CompletionEntry > l;
 	QMap<QString, bool> map;
-	QValueList< KTextEditor::CompletionEntry >::ConstIterator it = entryList.begin();
+	Q3ValueList< KTextEditor::CompletionEntry >::ConstIterator it = entryList.begin();
 	while ( it != entryList.end() )
 	{
 		KTextEditor::CompletionEntry e = *it++;
@@ -46,14 +48,14 @@ CodeInformationRepository::CodeInformationRepository( KDevCodeRepository* rep )
 CodeInformationRepository::~CodeInformationRepository()
 {}
 
-QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: QueryArgument> & args )
+Q3ValueList<Tag> CodeInformationRepository::query( const Q3ValueList<Catalog :: QueryArgument> & args )
 {
 	kdDebug( 9007 ) << "CodeInformationRepository::query()" << endl;
 
-	QValueList<Tag> tags;
+	Q3ValueList<Tag> tags;
 
-	QValueList<Catalog*> catalogs = m_rep->registeredCatalogs();
-	QValueList<Catalog*>::Iterator it = catalogs.begin();
+	Q3ValueList<Catalog*> catalogs = m_rep->registeredCatalogs();
+	Q3ValueList<Catalog*>::Iterator it = catalogs.begin();
 	while ( it != catalogs.end() )
 	{
 		Catalog * catalog = *it;
@@ -68,36 +70,36 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
 	return tags;
 }
 
-QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileName )
+Q3ValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileName )
 {
 	kdDebug( 9007 ) << "CodeInformationRepository::getTagsInFile()" << endl;
 
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Catalog::QueryArgument> args;
 	args << Catalog::QueryArgument( "fileName", fileName );
 
-	QValueList<Catalog*> catalogs = m_rep->registeredCatalogs();
-	QValueList<Catalog*>::Iterator it = catalogs.begin();
+	Q3ValueList<Catalog*> catalogs = m_rep->registeredCatalogs();
+	Q3ValueList<Catalog*>::Iterator it = catalogs.begin();
 	while ( it != catalogs.end() )
 	{
 		Catalog * catalog = *it;
 		++it;
 
-		QValueList<Tag> tags = catalog->query( args );
+		Q3ValueList<Tag> tags = catalog->query( args );
 
 		if ( tags.size() )
 			return tags;
 	}
 
-	return QValueList<Tag>();
+	return Q3ValueList<Tag>();
 }
 
-QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope, bool // isInstance
+Q3ValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope, bool // isInstance
                                                          )
 {
 	kdDebug( 9007 ) << "CodeInformationRepository::getTagsInScope()" << endl;
 
-	QValueList<Tag> tags;
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Tag> tags;
+	Q3ValueList<Catalog::QueryArgument> args;
 
 #if 0
 
@@ -133,7 +135,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
 	return tags;
 }
 
-QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope, bool isInstance, bool recompute )
+Q3ValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope, bool isInstance, bool recompute )
 {
 	kdDebug( 9007 ) << "CodeInformationRepository::getEntriesInScope()" << endl;
 
@@ -149,14 +151,14 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 }
 
 
-QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
+Q3ValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
 {
 	kdDebug( 9007 ) << "CodeInformationRepository::getBaseClassList()" << endl;
 
 	if ( className.isEmpty() )
-		return QValueList<Tag>();
+		return Q3ValueList<Tag>();
 
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Catalog::QueryArgument> args;
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class );
 	/*    if( className.length() >= 2 )
 	        args << Catalog::QueryArgument( "prefix", className.left(2) );*/
@@ -164,12 +166,12 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
 	return query( args );
 }
 
-QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStringList & scope )
+Q3ValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStringList & scope )
 {
 	kdDebug( 9007 ) << "CodeInformationRepository::getClassOrNamespaceList()" << endl;
 
-	QValueList<Tag> tags;
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Tag> tags;
+	Q3ValueList<Catalog::QueryArgument> args;
 
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace )
 	<< Catalog::QueryArgument( "scope", scope );
@@ -183,10 +185,10 @@ QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStrin
 	return tags;
 }
 
-QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name, const QStringList & scope )
+Q3ValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name, const QStringList & scope )
 {
-	QValueList<Tag> tags;
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Tag> tags;
+	Q3ValueList<Catalog::QueryArgument> args;
 
 	args.clear();
 	args << Catalog::QueryArgument( "scope", scope );
@@ -305,12 +307,12 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppC
 	return entry;
 }
 
-QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const QValueList<Tag> & tags, CppCodeCompletion::CompletionMode completionMode )
+Q3ValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const Q3ValueList<Tag> & tags, CppCodeCompletion::CompletionMode completionMode )
 {
-	QValueList<KTextEditor :: CompletionEntry> entryList;
+	Q3ValueList<KTextEditor :: CompletionEntry> entryList;
 	QMap<QString, bool> ns;
 
-	QValueList<Tag>::ConstIterator it = tags.begin();
+	Q3ValueList<Tag>::ConstIterator it = tags.begin();
 	while ( it != tags.end() )
 	{
 		Tag tag = *it;

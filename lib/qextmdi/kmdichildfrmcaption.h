@@ -28,6 +28,9 @@
 #define _KMDI_CHILD_FRM_CAPTION_H_
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include "kmdidefines.h"
 

@@ -13,11 +13,13 @@
 
 	 You should have received a copy of the GNU General Public License
 	 along with this program; see the file COPYING.  If not, write to
-	 the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-	 Boston, MA 02110-1301, USA.
+	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	 Boston, MA 02111-1307, USA.
 	 */
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
@@ -32,7 +34,7 @@
 #include "subversionoptionswidgetimpl.h"
 #include "subversionprojectwidget.h"
 #include "urlutil.h"
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kdialogbase.h>
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -82,7 +84,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
 
 	// Context menu
-	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+	connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)), this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 	connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)), this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 	connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
@@ -90,7 +92,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 
 	m_impl->processWidget()->setCaption(i18n( "Subversion Output" ));
 	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
-    QWhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
+    Q3WhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
 }
 
 subversionPart::~subversionPart() {
@@ -137,7 +139,7 @@ void subversionPart::setupActions() {
 	actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in Subversion operations") );
 	actionRemoveFromIgnoreList->setWhatsThis( i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s).") );
 
-	actionResolve = new KAction( i18n("Re&solve Conflicting State"), 0,
+	actionResolve = new KAction( i18n("Re&solve conflicting state"), 0,
 			this, SLOT(slotActionResolve()), actionCollection(), "subversion_resolve" );
 	actionResolve->setToolTip( i18n("Resolve the conflicting state of a file after a merge") );
 	actionResolve->setWhatsThis( i18n("<b>Resolve the conflicting state</b><p>Remove the conflict state that can be set on a file after a merge failed.") );
@@ -150,7 +152,7 @@ QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
 }
 
 void subversionPart::projectConfigWidget( KDialogBase *dlg ) {
-	QVBox *vbox = dlg->addVBoxPage( i18n("Subversion"), i18n("Subversion"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+	Q3VBox *vbox = dlg->addVBoxPage( i18n("Subversion"), i18n("Subversion"), BarIcon( info()->icon(), KIcon::SizeMedium) );
 	subversionOptionsWidgetImpl *w = new subversionOptionsWidgetImpl( (QWidget *)vbox, this, "svn config widget" );
 	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -171,7 +173,7 @@ KDevVCSFileInfoProvider * subversionPart::fileInfoProvider() const {
 	return m_impl->fileInfoProvider();
 }
 
-void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
+void subversionPart::contextMenu( Q3PopupMenu *popup, const Context *context ) {
 // If the current project doesn't support SVN, we don't
 // want to confuse the user with a SVN popup menu.
 if(!project() || !isValidDirectory(project()->projectDirectory()))

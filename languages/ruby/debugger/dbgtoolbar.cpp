@@ -33,12 +33,18 @@
 
 #include <qapplication.h>
 #include <qcursor.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QVBoxLayout>
+#include <QMouseEvent>
 
 // **************************************************************************
 // **************************************************************************
@@ -71,10 +77,10 @@ namespace RDBDebugger
 // the iconify, close, etc buttons from the window title but again I kept running
 // into problems. Instead, I used no decoration and this class. Also this looks
 // similar to the KToolBar floating style.
-class DbgMoveHandle : public QFrame
+class DbgMoveHandle : public Q3Frame
 {
 public:
-    DbgMoveHandle(DbgToolBar *parent=0, const char * name=0, WFlags f=0);
+    DbgMoveHandle(DbgToolBar *parent=0, const char * name=0, Qt::WFlags f=0);
     virtual ~DbgMoveHandle();
 
     virtual void mousePressEvent(QMouseEvent *e);
@@ -89,13 +95,13 @@ private:
 
 // **************************************************************************
 
-DbgMoveHandle::DbgMoveHandle(DbgToolBar *parent, const char * name, WFlags f)
-    : QFrame(parent, name, f),
+DbgMoveHandle::DbgMoveHandle(DbgToolBar *parent, const char * name, Qt::WFlags f)
+    : Q3Frame(parent, name, f),
       toolBar_(parent),
       offset_(QPoint(0,0)),
       moving_(false)
 {
-    setFrameStyle(QFrame::Panel|QFrame::Raised);
+    setFrameStyle(Q3Frame::Panel|Q3Frame::Raised);
     setFixedHeight(12);
 }
 
@@ -109,11 +115,11 @@ DbgMoveHandle::~DbgMoveHandle()
 
 void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
 {
-    QFrame::mousePressEvent(e);
+    Q3Frame::mousePressEvent(e);
     if (moving_)
         return;
 
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
         KPopupMenu *menu = new KPopupMenu(this);
 	menu->insertTitle(i18n("Debug Toolbar"));
         menu->insertItem(i18n("Dock to Panel"),
@@ -124,8 +130,8 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
     } else {
         moving_ = true;
         offset_ = parentWidget()->pos() - e->globalPos();
-        setFrameStyle(QFrame::Panel|QFrame::Sunken);
-        QApplication::setOverrideCursor(QCursor(sizeAllCursor));
+        setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+        QApplication::setOverrideCursor(QCursor(Qt::SizeAllCursor));
         setPalette(QPalette(colorGroup().background()));
         repaint();
     }
@@ -135,10 +141,10 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
 
 void DbgMoveHandle::mouseReleaseEvent(QMouseEvent *e)
 {
-    QFrame::mouseReleaseEvent(e);
+    Q3Frame::mouseReleaseEvent(e);
     moving_ = false;
     offset_ = QPoint(0,0);
-    setFrameStyle(QFrame::Panel|QFrame::Raised);
+    setFrameStyle(Q3Frame::Panel|Q3Frame::Raised);
     QApplication::restoreOverrideCursor();
     setPalette(QPalette(colorGroup().background()));
     repaint();
@@ -148,7 +154,7 @@ void DbgMoveHandle::mouseReleaseEvent(QMouseEvent *e)
 
 void DbgMoveHandle::mouseMoveEvent(QMouseEvent *e)
 {
-    QFrame::mouseMoveEvent(e);
+    Q3Frame::mouseMoveEvent(e);
     if (!moving_)
         return;
 
@@ -232,13 +238,13 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
         return;
 
     switch (e->button()) {
-    case LeftButton:
+    case Qt::LeftButton:
         {
             // Not really a click, but it'll hold for the time being !!!
             emit clicked();
             break;
         }
-    case RightButton:
+    case Qt::RightButton:
         {
             KPopupMenu* menu = new KPopupMenu(this);
 	    menu->insertTitle(i18n("Debug Toolbar"));
@@ -258,7 +264,7 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
 
 DbgToolBar::DbgToolBar(RubyDebuggerPart* part,
                        QWidget* parent, const char* name)
-    : QFrame(0, name),
+    : Q3Frame(0, name),
       part_(part),
       activeWindow_(0),
       winModule_(0),
@@ -285,7 +291,7 @@ DbgToolBar::DbgToolBar(RubyDebuggerPart* part,
     KWin::setType(winId(), NET::Dock);
 
     setFocusPolicy(NoFocus);
-    setFrameStyle( QFrame::Box | QFrame::Plain );
+    setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
     setLineWidth(4);
     setMidLineWidth(0);
 
@@ -324,16 +330,16 @@ DbgToolBar::DbgToolBar(RubyDebuggerPart* part,
     QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
     QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus") );
 
-    QWhatsThis::add( bRun,        i18n("Continue with application execution. May start the application.") );
-    QWhatsThis::add( bInterrupt,  i18n("Interrupt the application execution.") );
-    QWhatsThis::add( bNext,       i18n("Execute one line of code, but run through methods.") );
+    Q3WhatsThis::add( bRun,        i18n("Continue with application execution. May start the application.") );
+    Q3WhatsThis::add( bInterrupt,  i18n("Interrupt the application execution.") );
+    Q3WhatsThis::add( bNext,       i18n("Execute one line of code, but run through methods.") );
 
-    QWhatsThis::add( bStep,       i18n("Execute one line of code, stepping into methods if appropriate.") );
+    Q3WhatsThis::add( bStep,       i18n("Execute one line of code, stepping into methods if appropriate.") );
     
-    QWhatsThis::add( bFinish,     i18n("Execute to end of current stack frame.") );
-    QWhatsThis::add( bRunTo,      i18n("Continues execution until the cursor position is reached.") );
-    QWhatsThis::add( bKDevFocus_, i18n("Set focus on KDevelop.") );
-    QWhatsThis::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus.") );
+    Q3WhatsThis::add( bFinish,     i18n("Execute to end of current stack frame.") );
+    Q3WhatsThis::add( bRunTo,      i18n("Continues execution until the cursor position is reached.") );
+    Q3WhatsThis::add( bKDevFocus_, i18n("Set focus on KDevelop.") );
+    Q3WhatsThis::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus.") );
 
     topLayout->addWidget(moveHandle);
     topLayout->addWidget(bRun);

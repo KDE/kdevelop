@@ -28,8 +28,11 @@
 #define SIZEHANDLE_H
 
 #include <qwidget.h>
-#include <qintdict.h>
-#include <qptrdict.h>
+#include <q3intdict.h>
+#include <q3ptrdict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 class QMouseEvent;
 class FormWindow;
@@ -43,7 +46,7 @@ class SizeHandle : public QWidget
 public:
     enum Direction { LeftTop, Top, RightTop, Right, RightBottom, Bottom, LeftBottom, Left };
 
-    SizeHandle( FormWindow *parent, Direction d, WidgetSelection *s );
+    SizeHandle( FormWindow *parent, Qt::Orientation d, WidgetSelection *s );
     void setWidget( QWidget *w );
     void setActive( bool a );
     void updateCursor();
@@ -74,7 +77,7 @@ private:
 class WidgetSelection
 {
 public:
-    WidgetSelection( FormWindow *parent, QPtrDict<WidgetSelection> *selDict );
+    WidgetSelection( FormWindow *parent, Q3PtrDict<WidgetSelection> *selDict );
 
     void setWidget( QWidget *w, bool updateDict = TRUE );
     bool isUsed() const;
@@ -87,10 +90,10 @@ public:
     QWidget *widget() const;
 
 protected:
-    QIntDict<SizeHandle> handles;
+    Q3IntDict<SizeHandle> handles;
     QWidget *wid;
     FormWindow *formWindow;
-    QPtrDict<WidgetSelection> *selectionDict;
+    Q3PtrDict<WidgetSelection> *selectionDict;
 
 };
 

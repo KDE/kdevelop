@@ -6,7 +6,7 @@
 #include <kparts/part.h>
 #include <kparts/factory.h>
 
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 class QWidget;
 class QPainter;
 class KURL;
@@ -68,7 +68,7 @@ protected slots:
     void fileSaveAs();
 
 private:
-    QMultiLineEdit *m_widget;
+    Q3MultiLineEdit *m_widget;
 };
 
 #endif // _%{APPNAMEUC}PART_H_

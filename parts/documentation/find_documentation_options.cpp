@@ -15,11 +15,11 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "find_documentation_options.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qcheckbox.h>
 
 #include <klistview.h>
@@ -43,7 +43,7 @@ FindDocumentationOptions::~FindDocumentationOptions()
 }
 
 /*$SPECIALIZATION$*/
-bool FindDocumentationOptions::isContents( QCheckListItem * item )
+bool FindDocumentationOptions::isContents( Q3CheckListItem * item )
 {
     if ( item == m_contents_item && m_contents_item->isOn()  )
         return true;
@@ -51,7 +51,7 @@ bool FindDocumentationOptions::isContents( QCheckListItem * item )
         return false;
 }
 
-bool FindDocumentationOptions::isGoogle( QCheckListItem * item )
+bool FindDocumentationOptions::isGoogle( Q3CheckListItem * item )
 {
     if ( item == m_google_item && m_google_item->isOn()  )
         return true;
@@ -59,7 +59,7 @@ bool FindDocumentationOptions::isGoogle( QCheckListItem * item )
         return false;
 }
 
-bool FindDocumentationOptions::isIndex( QCheckListItem * item )
+bool FindDocumentationOptions::isIndex( Q3CheckListItem * item )
 {
     if ( item == m_index_item  && m_index_item->isOn() )
         return true;
@@ -67,7 +67,7 @@ bool FindDocumentationOptions::isIndex( QCheckListItem * item )
         return false;
 }
 
-bool FindDocumentationOptions::isInfo( QCheckListItem * item )
+bool FindDocumentationOptions::isInfo( Q3CheckListItem * item )
 {
     if ( item == m_info_item  && m_info_item->isOn() )
         return true;
@@ -75,7 +75,7 @@ bool FindDocumentationOptions::isInfo( QCheckListItem * item )
         return false;
 }
 
-bool FindDocumentationOptions::isMan( QCheckListItem * item )
+bool FindDocumentationOptions::isMan( Q3CheckListItem * item )
 {
     if ( item == m_man_item && m_man_item->isOn() )
         return true;
@@ -100,7 +100,7 @@ void FindDocumentationOptions::sourceMoveUp()
     if (source_list->currentItem() == source_list->firstChild()) 
         return;
     
-    QListViewItem *item = source_list->firstChild();
+    Q3ListViewItem *item = source_list->firstChild();
     while (item->nextSibling() != source_list->currentItem())
         item = item->nextSibling();
     item->moveItem( source_list->currentItem()); 
@@ -113,7 +113,7 @@ void FindDocumentationOptions::writeOptions()
     
     config->writeEntry("goto_first_match", goto_first_match->isChecked());
     
-    QListViewItemIterator it( source_list );
+    Q3ListViewItemIterator it( source_list );
     int i = 0;
     while ( it.current() ) 
     {
@@ -160,27 +160,27 @@ void FindDocumentationOptions::readOptions()
     {
         if( config->readPropertyEntry( "Manpage" , 0 ) == i)
         {
-            m_man_item  = new QCheckListItem( source_list, i18n("Manual"), QCheckListItem::CheckBox );
+            m_man_item  = new Q3CheckListItem( source_list, i18n("Manual"), Q3CheckListItem::CheckBox );
             m_man_item->setOn(config->readBoolEntry( "ManpageEnabled" , true));
         }
         if( config->readPropertyEntry( "Info" , 1 ) == i)
         {
-            m_info_item = new QCheckListItem( source_list, i18n("Info"), QCheckListItem::CheckBox );
+            m_info_item = new Q3CheckListItem( source_list, i18n("Info"), Q3CheckListItem::CheckBox );
             m_info_item->setOn(config->readBoolEntry( "InfoEnabled" , true));
         }
         if( config->readPropertyEntry( "Index" , 2 ) == i)
         {
-            m_index_item = new QCheckListItem( source_list, i18n("Index"), QCheckListItem::CheckBox );
+            m_index_item = new Q3CheckListItem( source_list, i18n("Index"), Q3CheckListItem::CheckBox );
             m_index_item->setOn(config->readBoolEntry( "IndexEnabled" , true));
         }
         if( config->readPropertyEntry( "Google" , 3 ) == i)
         {
-            m_google_item = new QCheckListItem( source_list, i18n("Google"), QCheckListItem::CheckBox );
+            m_google_item = new Q3CheckListItem( source_list, i18n("Google"), Q3CheckListItem::CheckBox );
             m_google_item->setOn(config->readBoolEntry( "GoogleEnabled" , false)); 
         }
         if( config->readPropertyEntry( "Contents" , 4 ) == i)
         {
-            m_contents_item = new QCheckListItem( source_list, i18n("Contents"), QCheckListItem::CheckBox );
+            m_contents_item = new Q3CheckListItem( source_list, i18n("Contents"), Q3CheckListItem::CheckBox );
             m_contents_item->setOn(config->readBoolEntry( "ContentsEnabled" , false)); 
         }      
     }

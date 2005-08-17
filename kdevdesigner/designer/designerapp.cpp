@@ -57,7 +57,7 @@ DesignerApplication::DesignerApplication( int &argc, char **argv )
     : QApplication( argc, argv )
 {
 #if defined(Q_WS_WIN)
-    if ( winVersion() & Qt::WV_NT_based )
+    if ( winVersion() & QSysInfo::WV_NT_based )
 	DESIGNER_OPENFILE = RegisterWindowMessage((TCHAR*)"QT_DESIGNER_OPEN_FILE");
     else
 	DESIGNER_OPENFILE = RegisterWindowMessageA("QT_DESIGNER_OPEN_FILE");
@@ -140,7 +140,7 @@ bool DesignerApplication::winEventFilter( MSG *msg )
 	if ( fi.lastModified() == lastMod )
 	    return QApplication::winEventFilter( msg );
 	lastMod = fi.lastModified();
-	f.open( IO_ReadOnly );
+	f.open( QIODevice::ReadOnly );
 	QString args;
 	f.readLine( args, f.size() );
 	QStringList lst = QStringList::split( " ", args );

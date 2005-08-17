@@ -19,11 +19,11 @@
 
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -157,7 +157,7 @@ void FortranSupportPart::slotFtnchek()
 
 void FortranSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Ftnchek"), i18n("Ftnchek"), BarIcon("kdevelop", KIcon::SizeMedium));
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Ftnchek"), i18n("Ftnchek"), BarIcon("kdevelop", KIcon::SizeMedium));
     FtnchekConfigWidget *w = new FtnchekConfigWidget(*projectDom(), vbox, "ftnchek config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }

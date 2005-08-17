@@ -4,9 +4,11 @@
 #include <qpe/resource.h>
 
 /* QT */
-#include <qiconset.h>
-#include <qpopupmenu.h>
+#include <qicon.h>
+#include <q3popupmenu.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 
 %{APPNAME}::%{APPNAME}()
@@ -33,7 +35,7 @@ QString %{APPNAME}::text() const
 }
 
 
-QIconSet %{APPNAME}::icon() const
+QIcon %{APPNAME}::icon() const
 {
     QPixmap pix;
     QImage img = Resource::loadImage( "Tux" );
@@ -42,7 +44,7 @@ QIconSet %{APPNAME}::icon() const
     return pix;
 }
 
-QPopupMenu* %{APPNAME}::popup(QWidget*) const
+Q3PopupMenu* %{APPNAME}::popup(QWidget*) const
 {
     /* no subdir */
     return 0;

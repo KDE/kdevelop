@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "dtabwidget.h"
 
@@ -88,7 +88,7 @@ void DTabWidget::insertTab(QWidget *child, const QString &label, int index)
     if (index != -1) tabBar()->repaint();
 }
 
-void DTabWidget::insertTab(QWidget *child, const QIconSet &iconset, 
+void DTabWidget::insertTab(QWidget *child, const QIcon &iconset, 
     const QString &label, int index)
 {
     if (m_closeButton && m_closeButtonShown)

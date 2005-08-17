@@ -73,7 +73,7 @@ void KDevDriver::setup()
 	// it somehow breaks the gcc call in parts/outputviews/makewidget.cpp. :-(
 	// It then has the effect that KProcess will never exit, at least on KDE-3.0
 #endif // KDE_VERSION
-		QProcess proc;
+		Q3Process proc;
 		proc.addArgument( "gcc" );
 		proc.addArgument( "-print-file-name=include" );
 		if ( !proc.start() ) {

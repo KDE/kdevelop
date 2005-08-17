@@ -28,9 +28,9 @@ QListBoxItem* QListBox::selectedItem() const
     return 0;
 }
 */
-QListBoxItem* QListBox_selectedItem( QListBox* cpQListBox )
+Q3ListBoxItem* QListBox_selectedItem( Q3ListBox* cpQListBox )
 {
-	if ( cpQListBox->selectionMode() != QListBox::Single )
+	if ( cpQListBox->selectionMode() != Q3ListBox::Single )
 		return 0;
 	if ( cpQListBox->isSelected( cpQListBox->currentItem() ) )
 		return cpQListBox->item( cpQListBox->currentItem() );
@@ -38,7 +38,7 @@ QListBoxItem* QListBox_selectedItem( QListBox* cpQListBox )
 }
 #endif
 
-SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
+SettingsDialog::SettingsDialog( QWidget* parent, const char* name, Qt::WFlags fl )
 		: SettingsDialogBase( parent, name, fl )
 {
 	// Parse $KDEDIRS first, because it takes precedence over $KDEDIR
@@ -73,7 +73,7 @@ SettingsDialog::~SettingsDialog()
 {}
 
 /*$SPECIALIZATION$*/
-void SettingsDialog::slotSelectionChanged( QListBoxItem* /* item */ )
+void SettingsDialog::slotSelectionChanged( Q3ListBoxItem* /* item */ )
 {
 #if QT_VERSION < 0x030100
 	if ( !QListBox_selectedItem( kdeListBox ) )

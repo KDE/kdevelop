@@ -31,14 +31,14 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <private/qpluginmanager_p.h>
 #include "../interfaces/projectsettingsiface.h"
 #include "sourcefile.h"
 #include "formfile.h"
-#include <qobjectlist.h>
-#include <qptrdict.h>
+#include <qobject.h>
+#include <q3ptrdict.h>
 #include "formfile.h"
 
 class QObjectList;
@@ -144,8 +144,8 @@ public:
     void save( bool onlyProjectFile = FALSE );
 
 #ifndef QT_NO_SQL
-    QPtrList<DatabaseConnection> databaseConnections() const;
-    void setDatabaseConnections( const QPtrList<DatabaseConnection> &lst );
+    Q3PtrList<DatabaseConnection> databaseConnections() const;
+    void setDatabaseConnections( const Q3PtrList<DatabaseConnection> &lst );
     void addDatabaseConnection( DatabaseConnection *conn );
     void removeDatabaseConnection( const QString &conn );
     DatabaseConnection *databaseConnection( const QString &name );
@@ -170,12 +170,12 @@ public:
 
     void setActive( bool b );
 
-    QPtrListIterator<SourceFile> sourceFiles() const { return QPtrListIterator<SourceFile>(sourcefiles); }
+    Q3PtrListIterator<SourceFile> sourceFiles() const { return Q3PtrListIterator<SourceFile>(sourcefiles); }
     void addSourceFile( SourceFile *sf );
     bool removeSourceFile( SourceFile *sf );
     SourceFile* findSourceFile( const QString& filename, SourceFile *ignore = 0 ) const;
 
-    QPtrListIterator<FormFile> formFiles() const { return QPtrListIterator<FormFile>(formfiles); }
+    Q3PtrListIterator<FormFile> formFiles() const { return Q3PtrListIterator<FormFile>(formfiles); }
     void addFormFile( FormFile *ff );
     bool removeFormFile( FormFile *ff );
     FormFile* findFormFile( const QString& filename, FormFile *ignore = 0 ) const;
@@ -249,7 +249,7 @@ private:
     QString desc;
     QString dbFile;
 #ifndef QT_NO_SQL
-    QPtrList<DatabaseConnection> dbConnections;
+    Q3PtrList<DatabaseConnection> dbConnections;
 #endif
     QString lang;
     DesignerProject *iface;
@@ -257,14 +257,14 @@ private:
     QStringList csList;
     QPluginManager<ProjectSettingsInterface> *projectSettingsPluginManager;
     PixmapCollection *pixCollection;
-    QPtrList<SourceFile> sourcefiles;
-    QPtrList<FormFile> formfiles;
+    Q3PtrList<SourceFile> sourcefiles;
+    Q3PtrList<FormFile> formfiles;
     QMap<QString, QString> inclPath, defs, lbs, cfg, sources, headers;
     QString templ;
     bool isDummyProject;
     bool modified;
     QObjectList objs;
-    QPtrDict<FormFile> fakeFormFiles;
+    Q3PtrDict<FormFile> fakeFormFiles;
     QString singleProFileName;
     bool is_cpp;
 

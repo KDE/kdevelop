@@ -30,7 +30,7 @@
 #include "projectsettings.h"
 
 class Project;
-class QListViewItem;
+class Q3ListViewItem;
 class FormWindow;
 class SourceFile;
 
@@ -39,7 +39,7 @@ class ProjectSettings : public ProjectSettingsBase
     Q_OBJECT
 
 public:
-    ProjectSettings( Project *pro, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ProjectSettings( Project *pro, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~ProjectSettings();
 
 protected slots:

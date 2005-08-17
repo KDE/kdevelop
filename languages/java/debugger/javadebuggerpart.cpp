@@ -14,7 +14,9 @@
 #include "javadebuggerpart.h"
 
 #include <qdir.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -64,7 +66,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     variableWidget->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
-    QWhatsThis::add(variableWidget, i18n("Variable tree\n\n"
+    Q3WhatsThis::add(variableWidget, i18n("Variable tree\n\n"
                                          "The variable tree allows you to see "
                                          "the variable values as you step "
                                          "through your program using the internal "
@@ -80,7 +82,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
 
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
-    QWhatsThis::add(breakpointWidget, i18n("Breakpoint list\n\n"
+    Q3WhatsThis::add(breakpointWidget, i18n("Breakpoint list\n\n"
                                            "Displays a list of breakpoints with "
                                            "their current status. Clicking on a "
                                            "breakpoint item with the right mouse button displays "
@@ -92,7 +94,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
-    QWhatsThis::add(framestackWidget, i18n("Frame stack\n\n"
+    Q3WhatsThis::add(framestackWidget, i18n("Frame stack\n\n"
                                            "Often referred to as the \"call stack\", "
                                            "this is a list showing what function is "
                                            "currently active and who called each "
@@ -106,7 +108,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
-    QWhatsThis::add(disassembleWidget, i18n("Machine code display\n\n"
+    Q3WhatsThis::add(disassembleWidget, i18n("Machine code display\n\n"
                                             "A machine code view into your running "
                                             "executable with the current instruction "
                                             "highlighted. You can step instruction by "
@@ -253,8 +255,8 @@ void JavaDebuggerPart::setupController()
     // variableTree -> controller
     connect( variableTree,     SIGNAL(expandItem(VarItem*)),
              controller,       SLOT(slotExpandItem(VarItem*)));
-    connect( variableTree,     SIGNAL(expandUserItem(VarItem*, const QCString&)),
-             controller,       SLOT(slotExpandUserItem(VarItem*, const QCString&)));
+    connect( variableTree,     SIGNAL(expandUserItem(VarItem*, const Q3CString&)),
+             controller,       SLOT(slotExpandUserItem(VarItem*, const Q3CString&)));
     connect( variableTree,     SIGNAL(setLocalViewState(bool)),
              controller,       SLOT(slotSetLocalViewState(bool)));
 

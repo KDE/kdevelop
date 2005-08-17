@@ -11,10 +11,12 @@
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -58,7 +60,7 @@ PascalProjectPart::PascalProjectPart(QObject *parent, const char *name, const QS
     setXMLFile("kdevpascalproject.rc");
 
     KAction *action;
-    action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
+    action = new KAction( i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
     action->setToolTip(i18n("Build project"));
@@ -127,7 +129,7 @@ void PascalProjectPart::openProject(const QString &dirName, const QString &proje
     loadProjectConfig();
 
     // Put all files from all subdirectories into file list
-    QValueStack<QString> s;
+    Q3ValueStack<QString> s;
     int prefixlen = m_projectDir.length()+1;
     s.push(m_projectDir);
 
@@ -149,7 +151,7 @@ void PascalProjectPart::openProject(const QString &dirName, const QString &proje
         dir.setPath(s.pop());
         kdDebug(9033) << "Examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
-        QPtrListIterator<QFileInfo> it(*dirEntries);
+        Q3PtrListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) {
             QString fileName = it.current()->fileName();
             if (fileName == "." || fileName == "..")
@@ -196,7 +198,23 @@ DomUtil::PairList PascalProjectPart::runEnvironmentVars() const
   */
 QString PascalProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevpascalproject");
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevpascalproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevpascalproject/run/customdirectory");
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+
+    return buildDirectory() + "/" + DomMainProgram;
+
 }
 
 
@@ -399,7 +417,7 @@ void PascalProjectPart::changedFile( const QString & fileName )
 
 void PascalProjectPart::projectConfigWidget( KDialogBase * dlg )
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Pascal Compiler"));
     PascalProjectOptionsDlg *w = new PascalProjectOptionsDlg(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
@@ -424,7 +442,7 @@ void PascalProjectPart::loadProjectConfig( )
     if (m_compilerExec.isEmpty())
     {
         KTrader::OfferList offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Pascal'");
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = offers.begin(); it != offers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 m_compilerExec = (*it)->exec();
@@ -436,7 +454,7 @@ void PascalProjectPart::loadProjectConfig( )
 
 void PascalProjectPart::configWidget( KDialogBase * dlg )
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Pascal Compiler"));
     PascalGlobalOptionsDlg *w = new PascalGlobalOptionsDlg(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );

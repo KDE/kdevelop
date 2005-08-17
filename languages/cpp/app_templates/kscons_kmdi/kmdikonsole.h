@@ -1,11 +1,13 @@
+//Added by qt3to4:
+#include <QShowEvent>
 %{H_TEMPLATE}
 
 #ifndef KMDIKONSOLE_H
 #define KMDIKONSOLE_H
 
-#include <qvbox.h>
+#include <q3vbox.h>
 
-class kmdikonsole : public QVBox
+class kmdikonsole : public Q3VBox
 {
 	Q_OBJECT
 

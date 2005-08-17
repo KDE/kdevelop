@@ -15,13 +15,13 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "kdevideextension.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 
 #include <klocale.h>
@@ -52,7 +52,7 @@ void KDevIDEExtension::init()
 void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 {
     KConfig* config = kapp->config();
-    QVBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("General"), i18n("General"), BarIcon("kdevelop", KIcon::SizeMedium) );
     gsw = new SettingsWidget(vbox, "general settings widget");
 
     gsw->projectsURL->setMode((int)KFile::Directory);

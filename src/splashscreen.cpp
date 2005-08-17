@@ -6,11 +6,13 @@
 
 #include <qtimer.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-SplashScreen::SplashScreen(const QPixmap& pixmap, WFlags f) : QSplashScreen(pixmap, f)
+SplashScreen::SplashScreen(const QPixmap& pixmap, Qt::WFlags f) : QSplashScreen(pixmap, f)
 {
 	QTimer *timer = new QTimer( this );
 	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
@@ -47,7 +49,7 @@ void SplashScreen::drawContents (QPainter* painter)
 	QColor base_color (201,229,165); // Base green color
 
 	// Draw background circles
-	painter->setPen(NoPen);
+	painter->setPen(Qt::NoPen);
 	painter->setBrush(QColor(215,234,181));
 	painter->drawEllipse(51,7,9,9);
 	painter->drawEllipse(62,7,9,9);

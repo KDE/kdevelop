@@ -37,6 +37,10 @@
 #include <qmessagebox.h>
 #include <qfile.h>
 #include <qstatusbar.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
+#include <Q3CString>
 #include "propertyeditor.h"
 #include <qworkspace.h>
 #include <stdlib.h>
@@ -184,10 +188,10 @@ bool FormFile::save( bool withMsgBox, bool ignoreModified )
 	    fn += "~";
 #endif
 	    QFile f( pro->makeAbsolute( filename ) );
-	    if ( f.open( IO_ReadOnly ) ) {
+	    if ( f.open( QIODevice::ReadOnly ) ) {
 		QFile f2( fn );
-		if ( f2.open( IO_WriteOnly | IO_Translate ) ) {
-		    QCString data( f.size() );
+		if ( f2.open( QIODevice::WriteOnly | QIODevice::Translate ) ) {
+		    Q3CString data( f.size() );
 		    f.readBlock( data.data(), f.size() );
 		    f2.writeBlock( data );
 		} else {
@@ -207,10 +211,10 @@ bool FormFile::save( bool withMsgBox, bool ignoreModified )
 	    fn += "~";
 #endif
 	    QFile f( pro->makeAbsolute( codeFile() ) );
-	    if ( f.open( IO_ReadOnly ) ) {
+	    if ( f.open( QIODevice::ReadOnly ) ) {
 		QFile f2( fn );
-		if ( f2.open( IO_WriteOnly | IO_Translate) ) {
-		    QCString data( f.size() );
+		if ( f2.open( QIODevice::WriteOnly | QIODevice::Translate) ) {
+		    Q3CString data( f.size() );
 		    f.readBlock( data.data(), f.size() );
 		    f2.writeBlock( data );
 		} else if ( qApp->type() != QApplication::Tty ) {
@@ -526,8 +530,8 @@ void FormFile::createFormCode()
 	return;
     if ( pro->isCpp() )
 	cod = codeComment();
-    QValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow() );
-    for ( QValueList<MetaDataBase::Function>::Iterator it = functionList.begin(); it != functionList.end(); ++it ) {
+    Q3ValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow() );
+    for ( Q3ValueList<MetaDataBase::Function>::Iterator it = functionList.begin(); it != functionList.end(); ++it ) {
 	cod += (!cod.isEmpty() ? "\n\n" : "") +
 	       iface->createFunctionStart( formWindow()->name(), make_func_pretty((*it).function),
 					   (*it).returnType.isEmpty() ?
@@ -547,7 +551,7 @@ void FormFile::load()
 bool FormFile::loadCode()
 {
     QFile f( pro->makeAbsolute( codeFile() ) );
-    if ( !f.open( IO_ReadOnly ) ) {
+    if ( !f.open( QIODevice::ReadOnly ) ) {
 	cod = "";
 	setCodeFileState( FormFile::None );
 	return FALSE;
@@ -578,15 +582,15 @@ void FormFile::parseCode( const QString &txt, bool allowModify )
     LanguageInterface *iface = MetaDataBase::languageInterface( pro->language() );
     if ( !iface )
 	return;
-    QValueList<LanguageInterface::Function> functions;
-    QValueList<MetaDataBase::Function> newFunctions, oldFunctions;
+    Q3ValueList<LanguageInterface::Function> functions;
+    Q3ValueList<MetaDataBase::Function> newFunctions, oldFunctions;
     oldFunctions = MetaDataBase::functionList( formWindow() );
     iface->functions( txt, &functions );
     QMap<QString, QString> funcs;
-    for ( QValueList<LanguageInterface::Function>::Iterator it = functions.begin();
+    for ( Q3ValueList<LanguageInterface::Function>::Iterator it = functions.begin();
 	  it != functions.end(); ++it ) {
 	bool found = FALSE;
-	for ( QValueList<MetaDataBase::Function>::Iterator fit = oldFunctions.begin();
+	for ( Q3ValueList<MetaDataBase::Function>::Iterator fit = oldFunctions.begin();
 	      fit != oldFunctions.end(); ++fit ) {
 	    QString f( (*fit).function );
 	    if ( MetaDataBase::normalizeFunction( f ) ==
@@ -656,7 +660,7 @@ void FormFile::checkTimeStamp()
 					   "Do you want to reload it?" ).arg( timeStamp.fileName() ),
 				       i18n( "&Yes" ), i18n( "&No" ) ) == 0 ) {
 	    QFile f( timeStamp.fileName() );
-	    if ( f.open( IO_ReadOnly ) ) {
+	    if ( f.open( QIODevice::ReadOnly ) ) {
 		QTextStream ts( &f );
 		editor()->editorInterface()->setText( ts.read() );
 		editor()->save();
@@ -690,10 +694,10 @@ void FormFile::addFunctionCode( MetaDataBase::Function function )
     if ( !iface )
 	return;
 
-    QValueList<LanguageInterface::Function> funcs;
+    Q3ValueList<LanguageInterface::Function> funcs;
     iface->functions( cod, &funcs );
     bool hasFunc = FALSE;
-    for ( QValueList<LanguageInterface::Function>::Iterator it = funcs.begin();
+    for ( Q3ValueList<LanguageInterface::Function>::Iterator it = funcs.begin();
 	  it != funcs.end(); ++it ) {
 	if ( MetaDataBase::normalizeFunction( (*it).name ) == MetaDataBase::normalizeFunction( function.function ) ) {
 	    hasFunc = TRUE;
@@ -737,10 +741,10 @@ void FormFile::removeFunctionCode( MetaDataBase::Function function )
     QString sourceCode = code();
     if ( sourceCode.isEmpty() )
 	return;
-    QValueList<LanguageInterface::Function> functions;
+    Q3ValueList<LanguageInterface::Function> functions;
     iface->functions( sourceCode, &functions );
     QString fu = MetaDataBase::normalizeFunction( function.function );
-    for ( QValueList<LanguageInterface::Function>::Iterator fit = functions.begin(); fit != functions.end(); ++fit ) {
+    for ( Q3ValueList<LanguageInterface::Function>::Iterator fit = functions.begin(); fit != functions.end(); ++fit ) {
 	if ( MetaDataBase::normalizeFunction( (*fit).name ) == fu ) {
 	    int line = 0;
 	    int start = 0;
@@ -809,7 +813,7 @@ QString FormFile::formName() const
     if ( !cachedFormName.isNull() )
 	return cachedFormName;
     QFile f( pro->makeAbsolute( filename ) );
-    if ( f.open( IO_ReadOnly ) ) {
+    if ( f.open( QIODevice::ReadOnly ) ) {
 	QTextStream ts( &f );
 	QString line;
 	QString className;

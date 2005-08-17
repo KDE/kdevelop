@@ -12,14 +12,14 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef PROBLEMSREPORTER_H
 #define PROBLEMSREPORTER_H
 
-#include <qlistview.h>
+#include <q3listview.h>
 
 class PascalSupportPart;
 class QTimer;
@@ -36,7 +36,7 @@ namespace KTextEditor{
     class Document;
 }
 
-class ProblemReporter: public QListView{
+class ProblemReporter: public Q3ListView{
     Q_OBJECT
 public:
     ProblemReporter( PascalSupportPart* part, QWidget* parent=0, const char* name=0 );
@@ -61,7 +61,7 @@ private slots:
     void slotPartRemoved( KParts::Part* );
     void slotActivePartChanged( KParts::Part* );
     void slotTextChanged();
-    void slotSelected( QListViewItem* );
+    void slotSelected( Q3ListViewItem* );
 
 private:
     PascalSupportPart* m_pascalSupport;

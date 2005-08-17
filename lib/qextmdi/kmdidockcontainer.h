@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef _KMDI_DOCK_CONTAINER_
@@ -22,6 +22,10 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QEvent>
 #include <kdockwidget.h>
 #include <qmap.h>
 #include <qdom.h>
@@ -30,7 +34,7 @@
 
 #include <qpushbutton.h>
 
-class QWidgetStack;
+class Q3WidgetStack;
 class KMultiTabBar;
 class KDockButton_Private;
 
@@ -135,7 +139,7 @@ class KMDI_EXPORT KMdiDockContainer: public QWidget, public KDockContainer
     void changeOverlapMode();
   private:
     QWidget *m_mainWin;
-    QWidgetStack *m_ws;
+    Q3WidgetStack *m_ws;
     KMultiTabBar *m_tb;
     int mTabCnt;
     int oldtab;

@@ -28,6 +28,8 @@
 #define UIB_H
 
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 const Q_UINT32 UibMagic = 0xb77c61d8;
 
@@ -76,7 +78,7 @@ public:
     inline QByteArray block() const;
 
 private:
-    QCString table;
+    Q3CString table;
     QDataStream out;
     int start;
 };
@@ -127,7 +129,7 @@ inline void UibStrTable::readBlock( QDataStream& in, int size )
 inline QString UibStrTable::asString( int offset ) const
 {
     if ( table[offset] == 0x7f ) {
-	QDataStream in( table, IO_ReadOnly );
+	QDataStream in( table, QIODevice::ReadOnly );
 	in.device()->at( offset + 1 );
 	QString str;
 	in >> str;

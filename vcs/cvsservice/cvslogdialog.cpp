@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qstringlist.h>
@@ -39,7 +39,7 @@ CVSLogDialog::CVSLogDialog( CvsService_stub *cvsService, QWidget *parent, const 
 {
     setWFlags( getWFlags() | WDestructiveClose );
 
-    QVBox *vbox = addVBoxPage( i18n("Log From CVS") );
+    Q3VBox *vbox = addVBoxPage( i18n("Log From CVS") );
     m_cvsLogPage = new CVSLogPage( m_cvsService, vbox );
 
     connect( m_cvsLogPage, SIGNAL(diffRequested(const QString&, const QString&, const QString&)),
@@ -80,7 +80,7 @@ void CVSLogDialog::slotDiffRequested( const QString &pathName, const QString &re
 
     // Create a new CVSDiffPage and start diffing process
     QString diffTitle =  i18n("Diff between %1 and %2").arg( revA ).arg( revB );
-    QVBox *vbox = addVBoxPage( diffTitle );
+    Q3VBox *vbox = addVBoxPage( diffTitle );
     CVSDiffPage *diffPage = new CVSDiffPage( m_cvsService, vbox );
     diffPage->startDiff( pathName, revA, revB );
 }

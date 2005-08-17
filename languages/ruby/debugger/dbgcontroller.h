@@ -23,11 +23,14 @@
 #define _DBGCONTROLLER_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 #include <domutil.h>
 
 class KProcess;
 class QString;
-class QStrList;
+class Q3StrList;
 
 namespace RDBDebugger
 {
@@ -127,7 +130,7 @@ public slots:
 
 
     virtual void slotExpandItem(VarItem *parent,
-                                    const QCString &userRequest)            = 0;
+                                    const Q3CString &userRequest)            = 0;
     virtual void slotSelectFrame(int frame, int thread, 
 	                                const QString& frameName)               = 0;
     virtual void slotFetchGlobals(bool fetch)                               = 0;

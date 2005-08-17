@@ -36,6 +36,11 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QCloseEvent>
 
 #include "kmdichildfrm.h"
 
@@ -173,12 +178,12 @@ public:
    /**
    * Constructor
    */
-   KMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
+   KMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, Qt::WFlags f=0);
    /**
    * Constructor 
    * sets "Unnamed" as default caption
    */
-   KMdiChildView( QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
+   KMdiChildView( QWidget* parentWidget = 0L, const char* name = 0L, Qt::WFlags f=0);
    /**
    * Destructor
    */

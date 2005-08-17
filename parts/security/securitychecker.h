@@ -15,13 +15,15 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef SECURITYCHECKER_H
 #define SECURITYCHECKER_H
 
 #include <qobject.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class SecurityPart;
 class SecurityPattern;
@@ -40,7 +42,7 @@ protected:
     
 private:
     SecurityPart *m_part;
-    QValueList<SecurityPattern*> m_patterns;
+    Q3ValueList<SecurityPattern*> m_patterns;
 };
 
 #endif

@@ -14,6 +14,8 @@
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qfontmetrics.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -40,7 +42,7 @@ KDevStatusBar::KDevStatusBar(QWidget *parent, const char *name)
 
 	_status = new QLabel( this );
 	_status->setMinimumWidth(_status->fontMetrics().width("Line: XXXXX Col: XXX  OVR NORM * "));
-	_status->setAlignment(QWidget::AlignCenter);
+	_status->setAlignment(Qt::AlignCenter);
 	addWidget(_status, 0, true);
 
 	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),

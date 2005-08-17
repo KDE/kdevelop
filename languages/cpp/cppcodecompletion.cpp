@@ -48,7 +48,10 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpair.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <kdevpartcontroller.h>
 #include <kdevmainwindow.h>
@@ -112,7 +115,7 @@ public:
 		m_prev = 0;
 	}
 
-	const QValueList<SimpleVariable>& vars() const
+	const Q3ValueList<SimpleVariable>& vars() const
 	{
 		return m_vars;
 	}
@@ -122,7 +125,7 @@ public:
 		m_vars.append( v );
 	}
 	
-	void add( const QValueList<SimpleVariable>& vars )
+	void add( const Q3ValueList<SimpleVariable>& vars )
 	{
 		m_vars += vars;
 	}
@@ -132,7 +135,7 @@ public:
 		SimpleContext * ctx = this;
 		while ( ctx )
 		{
-			const QValueList<SimpleVariable>& vars = ctx->vars();
+			const Q3ValueList<SimpleVariable>& vars = ctx->vars();
 			for ( int i = vars.count() - 1; i >= 0; --i )
 			{
 				SimpleVariable v = vars[ i ];
@@ -145,7 +148,7 @@ public:
 	}
 
 private:
-	QValueList<SimpleVariable> m_vars;
+	Q3ValueList<SimpleVariable> m_vars;
 	SimpleContext* m_prev;
 };
 
@@ -153,7 +156,7 @@ struct RecoveryPoint
 {
 	int kind;
 	QStringList scope;
-	QValueList<QStringList> imports;
+	Q3ValueList<QStringList> imports;
 
 	int startLine, startColumn;
 	int endLine, endColumn;
@@ -170,7 +173,7 @@ private:
 
 struct CppCodeCompletionData
 {
-	QPtrList<RecoveryPoint> recoveryPoints;
+	Q3PtrList<RecoveryPoint> recoveryPoints;
 	QStringList classNameList;
 
 	CppCodeCompletionData()
@@ -185,7 +188,7 @@ struct CppCodeCompletionData
 
 		QPair<int, int> pt = qMakePair( line, column );
 
-		QPtrListIterator<RecoveryPoint> it( recoveryPoints );
+		Q3PtrListIterator<RecoveryPoint> it( recoveryPoints );
 		RecoveryPoint* recPt = 0;
 
 		while ( it.current() )
@@ -212,8 +215,8 @@ static QString toSimpleName( NameAST* name )
 		return QString::null;
 
 	QString s;
-	QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
-	QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
+	Q3PtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
+	Q3PtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
 	while ( nameIt.current() )
 	{
 		if ( nameIt.current() ->name() )
@@ -234,12 +237,12 @@ bool operator < ( const KTextEditor::CompletionEntry& e1, const KTextEditor::Com
 	return e1.text < e2.text;
 }
 
-static QValueList<KTextEditor::CompletionEntry> unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
+static Q3ValueList<KTextEditor::CompletionEntry> unique( const Q3ValueList<KTextEditor::CompletionEntry>& entryList )
 {
 
-	QValueList< KTextEditor::CompletionEntry > l;
+	Q3ValueList< KTextEditor::CompletionEntry > l;
 	QMap<QString, bool> map;
-	QValueList< KTextEditor::CompletionEntry >::ConstIterator it = entryList.begin();
+	Q3ValueList< KTextEditor::CompletionEntry >::ConstIterator it = entryList.begin();
 	while ( it != entryList.end() )
 	{
 		KTextEditor::CompletionEntry e = *it++;
@@ -317,7 +320,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 
 	if ( part->partController() ->parts() )
 	{
-		QPtrListIterator<KParts::Part> it( *part->partController() ->parts() );
+		Q3PtrListIterator<KParts::Part> it( *part->partController() ->parts() );
 		while ( KParts::Part * part = it.current() )
 		{
 			integratePart( part );
@@ -466,7 +469,7 @@ void CppCodeCompletion::slotTextChanged()
 	     !strCurLine.simplifyWhiteSpace().contains("virtual") &&
 	     m_bCompletionBoxShow )
 	{
-		QValueList<KTextEditor::CompletionEntry> entryList;
+		Q3ValueList<KTextEditor::CompletionEntry> entryList;
 		m_bCompletionBoxShow = true;
 		m_activeCompletion->showCompletionBox( entryList, 0 );
 	}
@@ -732,10 +735,10 @@ QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* 
 	while ( isTypedef && !type.isEmpty() )
 	{
 		// check if the evaluateded type is a typedef
-		QValueList<Catalog::QueryArgument> args;
+		Q3ValueList<Catalog::QueryArgument> args;
 		args << Catalog::QueryArgument( "kind", Tag::Kind_Typedef );
 		args << Catalog::QueryArgument( "name", type.last() );
-		QValueList<Tag> tags = m_repository->query( args );
+		Q3ValueList<Tag> tags = m_repository->query( args );
 		isTypedef = !tags.isEmpty() && !visited.contains( type.last() );
 
 		if ( isTypedef )
@@ -743,7 +746,7 @@ QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* 
 			visited[ type.last() ] = true;
 
 			bool found = false;
-			for ( QValueList<Tag>::Iterator it = tags.begin(); it != tags.end(); ++it )
+			for ( Q3ValueList<Tag>::Iterator it = tags.begin(); it != tags.end(); ++it )
 			{
 				Tag& tag = *it;
 
@@ -1015,13 +1018,13 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 					QStringList nested;
 
-					QPtrList<ClassOrNamespaceNameAST> l;
+					Q3PtrList<ClassOrNamespaceNameAST> l;
 					if ( name )
 					{
 						l = name->classOrNamespaceNameList();
 					}
 					//		    QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
-					QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
+					Q3PtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
 					while ( nameIt.current() )
 					{
 						if ( nameIt.current() ->name() )
@@ -1099,8 +1102,8 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 					BaseClauseAST *baseClause = clazz->baseClause();
 					if ( baseClause )
 					{
-						QPtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
-						QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
+						Q3PtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
+						Q3PtrList<BaseSpecifierAST>::iterator it = baseList.begin();
 	
 						for ( ; it != baseList.end(); ++it )
 							type.append( ( *it )->name()->text() );
@@ -1215,7 +1218,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	if ( !showArguments )
 	{
-		QValueList<KTextEditor::CompletionEntry> entryList;
+		Q3ValueList<KTextEditor::CompletionEntry> entryList;
 
 		if ( type.isEmpty() && expr.isEmpty() )
 		{
@@ -1239,7 +1242,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 		if ( invokedOnDemand )
 		{
 			// find matching words
-			QValueList<KTextEditor::CompletionEntry>::Iterator it;
+			Q3ValueList<KTextEditor::CompletionEntry>::Iterator it;
 			for ( it = entryList.begin(); it != entryList.end(); ++it )
 			{
 				if ( (*it).text.startsWith( word ) )
@@ -1339,7 +1342,7 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 			return type;
 	}
 
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Catalog::QueryArgument> args;
 	QTime t;
 
 	t.start();
@@ -1347,7 +1350,7 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 	/*    if( name.length() >=2 )
 	        args << Catalog::QueryArgument( "prefix", name.left(2) );*/
 	args << Catalog::QueryArgument( "name", name );
-	QValueList<Tag> tags( m_repository->query( args ) );
+	Q3ValueList<Tag> tags( m_repository->query( args ) );
 	kdDebug( 9007 ) << "type of " << name << " in " << scope.join( "::" ) << " takes " << t.elapsed() << endl;
 	type = typeOf( tags, accessOp );
 
@@ -1355,9 +1358,9 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 	{
 		// try with parents
 		t.restart();
-		QValueList<Tag> parents( m_repository->getBaseClassList( scope.join( "::" ) ) );
+		Q3ValueList<Tag> parents( m_repository->getBaseClassList( scope.join( "::" ) ) );
 		kdDebug( 9007 ) << "get parents of " << scope.join( "::" ) << " takes " << t.elapsed() << endl;
-		QValueList<Tag>::Iterator it = parents.begin();
+		Q3ValueList<Tag>::Iterator it = parents.begin();
 		while ( it != parents.end() )
 		{
 			Tag & tag = *it;
@@ -1393,8 +1396,8 @@ QStringList CppCodeCompletion::typeName( const QString& str )
 	{
 		NameAST * name = typeSpec->name();
 
-		QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
-		QPtrListIterator<ClassOrNamespaceNameAST> it( l );
+		Q3PtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
+		Q3PtrListIterator<ClassOrNamespaceNameAST> it( l );
 
 		QString type;
 		while ( it.current() )
@@ -1430,8 +1433,8 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 		{
 			if ( ParameterDeclarationListAST * params = clause->parameterDeclarationList() )
 			{
-				QPtrList<ParameterDeclarationAST> l( params->parameterList() );
-				QPtrListIterator<ParameterDeclarationAST> it( l );
+				Q3PtrList<ParameterDeclarationAST> l( params->parameterList() );
+				Q3PtrListIterator<ParameterDeclarationAST> it( l );
 				while ( it.current() )
 				{
 					ParameterDeclarationAST * param = it.current();
@@ -1440,8 +1443,8 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 					SimpleVariable var;
 					
 					QStringList ptrList;
-					QPtrList<AST> ptrOpList = param->declarator()->ptrOpList();
-					QPtrList<AST>::iterator it = ptrOpList.begin();
+					Q3PtrList<AST> ptrOpList = param->declarator()->ptrOpList();
+					Q3PtrList<AST>::iterator it = ptrOpList.begin();
 					for ( ; it != ptrOpList.end(); ++it )
 					{
 						ptrList.append( ( *it )->text() );
@@ -1506,8 +1509,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementListAST* a
 	if ( !inContextScope( ast, line, col, false, true ) )
 		return;
 	
-	QPtrList<StatementAST> l( ast->statementList() );
-	QPtrListIterator<StatementAST> it( l );
+	Q3PtrList<StatementAST> l( ast->statementList() );
+	Q3PtrListIterator<StatementAST> it( l );
 	while ( it.current() )
 	{
 		StatementAST * stmt = it.current();
@@ -1578,8 +1581,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, CatchStatementListA
 	if ( !inContextScope( ast, line, col, false, true ) )
 		return;
 	
-	QPtrList<CatchStatementAST> l( ast->statementList() );
-	QPtrListIterator<CatchStatementAST> it( l );
+	Q3PtrList<CatchStatementAST> l( ast->statementList() );
+	Q3PtrListIterator<CatchStatementAST> it( l );
 	while ( it.current() )
 	{
 		CatchStatementAST * stmt = it.current();
@@ -1614,8 +1617,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 	if ( !initDeclListAST )
 		return ;
 
-	QPtrList<InitDeclaratorAST> l = initDeclListAST->initDeclaratorList();
-	QPtrListIterator<InitDeclaratorAST> it( l );
+	Q3PtrList<InitDeclaratorAST> l = initDeclListAST->initDeclaratorList();
+	Q3PtrListIterator<InitDeclaratorAST> it( l );
 	while ( it.current() )
 	{
 		DeclaratorAST * d = it.current() ->declarator();
@@ -1626,8 +1629,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 			SimpleVariable var;
 			
 			QStringList ptrList;
-			QPtrList<AST> ptrOpList = d->ptrOpList();
-			QPtrList<AST>::iterator it = ptrOpList.begin();
+			Q3PtrList<AST> ptrOpList = d->ptrOpList();
+			Q3PtrList<AST>::iterator it = ptrOpList.begin();
 			for ( ; it != ptrOpList.end(); ++it )
 			{
 				ptrList.append( ( *it )->text() );
@@ -1654,8 +1657,8 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 	SimpleVariable var;
 	
 	QStringList ptrList;
-	QPtrList<AST> ptrOpList = ast->declarator()->ptrOpList();
-	QPtrList<AST>::iterator it = ptrOpList.begin();
+	Q3PtrList<AST> ptrOpList = ast->declarator()->ptrOpList();
+	Q3PtrList<AST>::iterator it = ptrOpList.begin();
 	for ( ; it != ptrOpList.end(); ++it )
 	{
 		ptrList.append( ( *it )->text() );
@@ -1740,13 +1743,13 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
 class ComputeRecoveryPoints: public TreeParser
 {
 public:
-	ComputeRecoveryPoints( QPtrList<RecoveryPoint>& points )
+	ComputeRecoveryPoints( Q3PtrList<RecoveryPoint>& points )
 			: recoveryPoints( points )
 	{}
 
 	virtual void parseTranslationUnit( TranslationUnitAST* ast )
 	{
-		QValueList<QStringList> dummy;
+		Q3ValueList<QStringList> dummy;
 
 		m_imports.push( dummy );
 		TreeParser::parseTranslationUnit( ast );
@@ -1821,8 +1824,8 @@ public:
 	}
 
 private:
-	QPtrList<RecoveryPoint>& recoveryPoints;
-	QValueStack< QValueList<QStringList> > m_imports;
+	Q3PtrList<RecoveryPoint>& recoveryPoints;
+	Q3ValueStack< Q3ValueList<QStringList> > m_imports;
 	QStringList m_currentScope;
 };
 
@@ -1843,9 +1846,9 @@ void CppCodeCompletion::computeRecoveryPoints( )
 	walker.parseTranslationUnit( unit );
 }
 
-QStringList CppCodeCompletion::typeOf( const QValueList< Tag > & tags, MemberAccessOp accessOp )
+QStringList CppCodeCompletion::typeOf( const Q3ValueList< Tag > & tags, MemberAccessOp accessOp )
 {
-	QValueList<Tag>::ConstIterator it = tags.begin();
+	Q3ValueList<Tag>::ConstIterator it = tags.begin();
 	while ( it != tags.end() )
 	{
 		const Tag & tag = *it;
@@ -1931,7 +1934,7 @@ QStringList CppCodeCompletion::typeOf( const QString & name, const FunctionList 
 	return QStringList();
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type, bool isInstance )
 {
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 	QString key = findClass( type.join( "::" ) );
@@ -1940,8 +1943,8 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	{
 		computeCompletionEntryList( entryList, klass, isInstance );
 	} /*else*/ {
-		QValueList<Catalog::QueryArgument> args;
-		QValueList<Tag> tags;
+		Q3ValueList<Catalog::QueryArgument> args;
+		Q3ValueList<Tag> tags;
 
 		args.clear();
 		args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
@@ -1980,8 +1983,8 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 		            args << Catalog::QueryArgument( "prefix", fullname.left(2) );*/
 		args << Catalog::QueryArgument( "name", fullname );
 
-		QValueList<Tag> parents = m_repository->query( args );
-		QValueList<Tag>::Iterator it = parents.begin();
+		Q3ValueList<Tag> parents = m_repository->query( args );
+		Q3ValueList<Tag>::Iterator it = parents.begin();
 		while ( it != parents.end() )
 		{
 			CppBaseClass<Tag> info( *it );
@@ -1992,9 +1995,9 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, Q3ValueList< Tag > & tags, bool /*isInstance*/ )
 {
-	QValueList<Tag>::Iterator it = tags.begin();
+	Q3ValueList<Tag>::Iterator it = tags.begin();
 	while ( it != tags.end() )
 	{
 		Tag & tag = *it;
@@ -2023,7 +2026,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ClassDom klass, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, ClassDom klass, bool isInstance )
 {
 	computeCompletionEntryList( entryList, klass->functionList(), isInstance );
 	if ( m_completionMode == NormalCompletion )
@@ -2039,7 +2042,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, NamespaceDom scope, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, NamespaceDom scope, bool isInstance )
 {
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
@@ -2058,7 +2061,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const ClassList & lst, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, const ClassList & lst, bool isInstance )
 {
 	CppCodeCompletionConfig * cfg = m_pSupport->codeCompletionConfig();
 
@@ -2080,7 +2083,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const NamespaceList & lst, bool /*isInstance*/ )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, const NamespaceList & lst, bool /*isInstance*/ )
 {
 	NamespaceList::ConstIterator it = lst.begin();
 	while ( it != lst.end() )
@@ -2095,7 +2098,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const FunctionList & methods, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, const FunctionList & methods, bool isInstance )
 {
 	FunctionList::ConstIterator it = methods.begin();
 	while ( it != methods.end() )
@@ -2169,7 +2172,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const VariableList & attributes, bool isInstance )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, const VariableList & attributes, bool isInstance )
 {
 	if ( m_completionMode != NormalCompletion )
 		return ;
@@ -2189,12 +2192,12 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	}
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, SimpleContext * ctx, bool /*isInstance*/ )
+void CppCodeCompletion::computeCompletionEntryList( Q3ValueList< KTextEditor::CompletionEntry > & entryList, SimpleContext * ctx, bool /*isInstance*/ )
 {
 	while ( ctx )
 	{
-		QValueList<SimpleVariable> vars = ctx->vars();
-		QValueList<SimpleVariable>::ConstIterator it = vars.begin();
+		Q3ValueList<SimpleVariable> vars = ctx->vars();
+		Q3ValueList<SimpleVariable>::ConstIterator it = vars.begin();
 		while ( it != vars.end() )
 		{
 			const SimpleVariable & var = *it;
@@ -2218,14 +2221,14 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 		return ;
 	}
 
-	QValueList<Catalog::QueryArgument> args;
+	Q3ValueList<Catalog::QueryArgument> args;
 	args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration );
 	args << Catalog::QueryArgument( "scope", scope );
 	/*    if( name.length() >=2 )
 	        args << Catalog::QueryArgument( "prefix", name.left(2) );    */
 	args << Catalog::QueryArgument( "name", name );
 
-	QValueList<Tag> tags = m_repository->query( args );
+	Q3ValueList<Tag> tags = m_repository->query( args );
 	computeSignatureList( signatureList, name, tags );
 
 	args.clear();
@@ -2236,8 +2239,8 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 
 	args << Catalog::QueryArgument( "name", fullname );
 
-	QValueList<Tag> parents = m_repository->query( args );
-	QValueList<Tag>::Iterator it = parents.begin();
+	Q3ValueList<Tag> parents = m_repository->query( args );
+	Q3ValueList<Tag>::Iterator it = parents.begin();
 	while ( it != parents.end() )
 	{
 		CppBaseClass<Tag> info( *it );
@@ -2298,9 +2301,9 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	}
 }
 
-void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, QValueList< Tag > & tags )
+void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, Q3ValueList< Tag > & tags )
 {
-	QValueList<Tag>::Iterator it = tags.begin();
+	Q3ValueList<Tag>::Iterator it = tags.begin();
 	while ( it != tags.end() )
 	{
 		Tag & tag = *it;
@@ -2419,7 +2422,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
 	{
 
 		QStringList imports;
-		QValueList<QStringList>::Iterator lIt = m_imports.begin();
+		Q3ValueList<QStringList>::Iterator lIt = m_imports.begin();
 		while ( lIt != m_imports.end() )
 		{
 			imports += ( *lIt );

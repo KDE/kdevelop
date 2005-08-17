@@ -19,7 +19,7 @@
 #define HASKELLPROJECT_PART_H
 
 #include <qwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kaction.h>
 
 #include "kdevbuildtool.h"
@@ -97,7 +97,7 @@ private slots:
 
 private:
   	KAction *_buildAction, *_runAction;
-  	QGuardedPtr<HaskellProjectWidget> m_widget;
+  	QPointer<HaskellProjectWidget> m_widget;
 
   	void listOfFiles(QStringList &result, QString path);
   	QString createCmdLine( QString srcFile );

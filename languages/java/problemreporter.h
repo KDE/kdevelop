@@ -12,15 +12,15 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef PROBLEMSREPORTER_H
 #define PROBLEMSREPORTER_H
 
 #include <klistview.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class JavaSupportPart;
 class QTimer;
@@ -55,7 +55,7 @@ private slots:
     void slotPartRemoved( KParts::Part* );
     void slotActivePartChanged( KParts::Part* );
     void slotTextChanged();
-    void slotSelected( QListViewItem* );
+    void slotSelected( Q3ListViewItem* );
 
 private:
     QString levelToString( int level ) const;
@@ -63,7 +63,7 @@ private:
 
 private:
     JavaSupportPart* m_javaSupport;
-    QGuardedPtr<KTextEditor::Document> m_document;
+    QPointer<KTextEditor::Document> m_document;
     KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
     QString m_fileName;

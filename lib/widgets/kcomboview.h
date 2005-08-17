@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KCOMBOVIEW_H
 #define KCOMBOVIEW_H
@@ -39,9 +39,9 @@ class KComboView: public QComboView
 public:
     KComboView( bool rw, int defaultWidth = 100, QWidget* parent=0, const char* name=0 );
 
-    virtual void addItem(QListViewItem *it);
-    virtual void removeItem(QListViewItem *it);
-    virtual void renameItem(QListViewItem *it, const QString &newName);
+    virtual void addItem(Q3ListViewItem *it);
+    virtual void removeItem(Q3ListViewItem *it);
+    virtual void renameItem(Q3ListViewItem *it, const QString &newName);
 
     virtual void setDefaultText(const QString &text);
 

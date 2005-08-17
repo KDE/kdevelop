@@ -27,12 +27,14 @@
 #include "parser.h"
 #include <qobject.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class NormalizeObject : public QObject
 {
 public:
     NormalizeObject() : QObject() {}
-    static QCString normalizeSignalSlot( const char *signalSlot ) { return QObject::normalizeSignalSlot( signalSlot ); }
+    static Q3CString normalizeSignalSlot( const char *signalSlot ) { return QObject::normalizeSignalSlot( signalSlot ); }
 };
 
 QString Parser::cleanArgs( const QString &func )

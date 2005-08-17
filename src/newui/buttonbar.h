@@ -15,13 +15,16 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef IDEALBUTTONBAR_H
 #define IDEALBUTTONBAR_H
 
 #include <qwidget.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QBoxLayout>
 
 #include "comdefs.h"
 
@@ -37,7 +40,7 @@ class ButtonBar;
 Overrides minimumSize method to allow shrinking button bar buttons.*/
 class ButtonLayout: public QBoxLayout{
 public:
-    ButtonLayout(ButtonBar *parent, Direction d, int margin = 0, int spacing = -1, const char * name = 0);
+    ButtonLayout(ButtonBar *parent, Qt::Orientation d, int margin = 0, int spacing = -1, const char * name = 0);
         
     virtual QSize minimumSize() const;
     
@@ -91,7 +94,7 @@ private:
     void fixDimensions();
     void setButtonsPlace(Ideal::Place place);
     
-    typedef QValueList<Button*> ButtonList;
+    typedef Q3ValueList<Button*> ButtonList;
     ButtonList m_buttons;
 
     ButtonMode m_mode;

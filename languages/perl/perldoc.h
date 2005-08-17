@@ -2,13 +2,15 @@
 #define _PERLDOC_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kio/slavebase.h>
 
 
 class PerldocProtocol : public KIO::SlaveBase
 {
 public:
-    PerldocProtocol(const QCString &pool, const QCString &app);
+    PerldocProtocol(const Q3CString &pool, const Q3CString &app);
     virtual ~PerldocProtocol();
 
     virtual void get(const KURL& url);
@@ -19,7 +21,7 @@ public:
 protected:
     void decodeURL(const KURL &url);
     void decodePath(QString path);
-    QCString errorMessage();
+    Q3CString errorMessage();
 };
 
 #endif

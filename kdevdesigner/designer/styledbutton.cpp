@@ -25,6 +25,13 @@
 **********************************************************************/
 
 #include <qvariant.h>  // HP-UX compiler needs this here
+//Added by qt3to4:
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 #include "styledbutton.h"
 #include "formwindow.h"
 #include "pixmapchooser.h"
@@ -35,11 +42,11 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qstyle.h>
 
 StyledButton::StyledButton(QWidget* parent, const char* name)
-    : QButton( parent, name ), pix( 0 ), spix( 0 ), s( 0 ), formWindow( 0 ), mousePressed( FALSE )
+    : Q3Button( parent, name ), pix( 0 ), spix( 0 ), s( 0 ), formWindow( 0 ), mousePressed( FALSE )
 {
     setMinimumSize( minimumSizeHint() );
     setAcceptDrops( TRUE );
@@ -49,8 +56,8 @@ StyledButton::StyledButton(QWidget* parent, const char* name)
     setEditor( ColorEditor );
 }
 
-StyledButton::StyledButton( const QBrush& b, QWidget* parent, const char* name, WFlags f )
-    : QButton( parent, name, f ), spix( 0 ), s( 0 ), formWindow( 0 )
+StyledButton::StyledButton( const QBrush& b, QWidget* parent, const char* name, Qt::WFlags f )
+    : Q3Button( parent, name, f ), spix( 0 ), s( 0 ), formWindow( 0 )
 {
     col = b.color();
     pix = b.pixmap();
@@ -146,19 +153,19 @@ void StyledButton::scalePixmap()
 void StyledButton::resizeEvent( QResizeEvent* e )
 {
     scalePixmap();
-    QButton::resizeEvent( e );
+    Q3Button::resizeEvent( e );
 }
 
 void StyledButton::drawButton( QPainter *paint )
 {
     style().drawPrimitive(QStyle::PE_ButtonBevel, paint, rect(), colorGroup(),
-			  isDown() ? QStyle::Style_Sunken : QStyle::Style_Raised);
+			  isDown() ? QStyle::State_Sunken : QStyle::State_Raised);
     drawButtonLabel(paint);
 
     if (hasFocus())
 	style().drawPrimitive(QStyle::PE_FocusRect, paint,
 			      style().subRect(QStyle::SR_PushButtonFocusRect, this),
-			      colorGroup(), QStyle::Style_Default);
+			      colorGroup(), QStyle::State_None);
 }
 
 void StyledButton::drawButtonLabel( QPainter *paint )
@@ -208,20 +215,20 @@ void StyledButton::onEditor()
 
 void StyledButton::mousePressEvent(QMouseEvent* e)
 {
-    QButton::mousePressEvent(e);
+    Q3Button::mousePressEvent(e);
     mousePressed = TRUE;
     pressPos = e->pos();
 }
 
 void StyledButton::mouseMoveEvent(QMouseEvent* e)
 {
-    QButton::mouseMoveEvent( e );
+    Q3Button::mouseMoveEvent( e );
 #ifndef QT_NO_DRAGANDDROP
     if ( !mousePressed )
 	return;
     if ( ( pressPos - e->pos() ).manhattanLength() > QApplication::startDragDistance() ) {
 	if ( edit == ColorEditor ) {
-	    QColorDrag *drg = new QColorDrag( col, this );
+	    Q3ColorDrag *drg = new Q3ColorDrag( col, this );
 	    QPixmap pix( 25, 25 );
 	    pix.fill( col );
 	    QPainter p( &pix );
@@ -233,7 +240,7 @@ void StyledButton::mouseMoveEvent(QMouseEvent* e)
 	}
 	else if ( edit == PixmapEditor && pix && !pix->isNull() ) {
 	    QImage img = pix->convertToImage();
-	    QImageDrag *drg = new QImageDrag( img, this );
+	    Q3ImageDrag *drg = new Q3ImageDrag( img, this );
 	    if(spix)
 		drg->setPixmap( *spix );
 	    mousePressed = FALSE;
@@ -247,9 +254,9 @@ void StyledButton::mouseMoveEvent(QMouseEvent* e)
 void StyledButton::dragEnterEvent( QDragEnterEvent *e )
 {
     setFocus();
-    if ( edit == ColorEditor && QColorDrag::canDecode( e ) )
+    if ( edit == ColorEditor && Q3ColorDrag::canDecode( e ) )
 	e->accept();
-    else if ( edit == PixmapEditor && QImageDrag::canDecode( e ) )
+    else if ( edit == PixmapEditor && Q3ImageDrag::canDecode( e ) )
 	e->accept();
     else
 	e->ignore();
@@ -263,9 +270,9 @@ void StyledButton::dragLeaveEvent( QDragLeaveEvent * )
 
 void StyledButton::dragMoveEvent( QDragMoveEvent *e )
 {
-    if ( edit == ColorEditor && QColorDrag::canDecode( e ) )
+    if ( edit == ColorEditor && Q3ColorDrag::canDecode( e ) )
 	e->accept();
-    else if ( edit == PixmapEditor && QImageDrag::canDecode( e ) )
+    else if ( edit == PixmapEditor && Q3ImageDrag::canDecode( e ) )
 	e->accept();
     else
 	e->ignore();
@@ -273,16 +280,16 @@ void StyledButton::dragMoveEvent( QDragMoveEvent *e )
 
 void StyledButton::dropEvent( QDropEvent *e )
 {
-    if ( edit == ColorEditor && QColorDrag::canDecode( e ) ) {
+    if ( edit == ColorEditor && Q3ColorDrag::canDecode( e ) ) {
 	QColor color;
-	QColorDrag::decode( e, color );
+	Q3ColorDrag::decode( e, color );
 	setColor(color);
 	emit changed();
 	e->accept();
     }
-    else if ( edit == PixmapEditor && QImageDrag::canDecode( e ) ) {
+    else if ( edit == PixmapEditor && Q3ImageDrag::canDecode( e ) ) {
 	QImage img;
-	QImageDrag::decode( e, img );
+	Q3ImageDrag::decode( e, img );
 	QPixmap pm;
 	pm.convertFromImage(img);
 	setPixmap(pm);

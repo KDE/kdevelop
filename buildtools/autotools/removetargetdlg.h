@@ -19,7 +19,7 @@
 
 #include "removetargetdlgbase.h"
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class AutoProjectWidget;
 class AutoProjectPart;
@@ -44,7 +44,7 @@ private:
 	AutoProjectWidget* m_widget;
 	AutoProjectPart* m_part;
 
-	QPtrList <SubprojectItem> dependentSubprojects;
+	Q3PtrList <SubprojectItem> dependentSubprojects;
 
 protected:
 	void init ();

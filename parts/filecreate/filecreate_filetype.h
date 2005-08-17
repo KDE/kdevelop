@@ -12,7 +12,7 @@
 #define __FILECREATE_FILETYPE_H__
 
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 namespace FileCreate {
 
@@ -42,7 +42,7 @@ public:
   void setSubtypesEnabled(bool enabled = true);
   
   void addSubtype(const FileType * subtype) { m_subtypes.append(subtype); }
-  QPtrList<FileType> subtypes() const { return m_subtypes; }
+  Q3PtrList<FileType> subtypes() const { return m_subtypes; }
   
 private:
   QString m_name;
@@ -54,7 +54,7 @@ private:
 
   bool m_enabled;
   
-  QPtrList<FileType> m_subtypes;
+  Q3PtrList<FileType> m_subtypes;
 
 };
 

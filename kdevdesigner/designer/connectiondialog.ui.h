@@ -9,6 +9,10 @@
 #include "mainwindow.h"
 #include "formwindow.h"
 #include "editfunctionsimpl.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 static const char *valid_connection[] = {
     "16 14 7 1",
@@ -80,9 +84,9 @@ void ConnectionDialog::init()
 	validConnection = new QPixmap( valid_connection );
     }
 
-    QValueList<MetaDataBase::Connection> conns =
+    Q3ValueList<MetaDataBase::Connection> conns =
 	MetaDataBase::connections( MainWindow::self->formWindow() );
-    for ( QValueList<MetaDataBase::Connection>::Iterator it = conns.begin();
+    for ( Q3ValueList<MetaDataBase::Connection>::Iterator it = conns.begin();
 	  it != conns.end(); ++it ) {
 	ConnectionContainer *c = addConnection( (*it).sender, (*it).receiver,
 						(*it).signal, (*it).slot );
@@ -187,10 +191,10 @@ void ConnectionDialog::updateConnectionState( ConnectionContainer *c )
 
 void ConnectionDialog::okClicked()
 {
-    QValueList<MetaDataBase::Connection> oldConnections =
+    Q3ValueList<MetaDataBase::Connection> oldConnections =
 	MetaDataBase::connections( MainWindow::self->formWindow() );
-    QPtrList<Command> newConnectionCmds;
-    QPtrList<Command> oldConnectionCmds;
+    Q3PtrList<Command> newConnectionCmds;
+    Q3PtrList<Command> oldConnectionCmds;
     for ( ConnectionContainer *c = connections.first(); c; c = connections.next() ) {
 	MetaDataBase::Connection conn;
 
@@ -214,9 +218,9 @@ void ConnectionDialog::okClicked()
     }
 
 
-    QValueList<MetaDataBase::Connection> conns =
+    Q3ValueList<MetaDataBase::Connection> conns =
 	MetaDataBase::connections( MainWindow::self->formWindow() );
-    for ( QValueList<MetaDataBase::Connection>::Iterator it = conns.begin();
+    for ( Q3ValueList<MetaDataBase::Connection>::Iterator it = conns.begin();
 	  it != conns.end(); ++it ) {
 	RemoveConnectionCommand *cmd = new RemoveConnectionCommand( i18n( "Remove Signal/Slot "
 									"Connection" ),
@@ -231,7 +235,7 @@ void ConnectionDialog::okClicked()
     MacroCommand *cmd2 = new MacroCommand( i18n( "Remove Signal/Slot Connections" ),
 					   MainWindow::self->formWindow(),
 					   oldConnectionCmds );
-    QPtrList<Command> cmds;
+    Q3PtrList<Command> cmds;
     cmds.append( cmd2 );
     cmds.append( cmd1 );
     MacroCommand *cmd = new MacroCommand( i18n( "Edit Signal/Slot Connections" ),
@@ -297,7 +301,7 @@ void ConnectionDialog::updateEditSlotsButton()
 
 void ConnectionDialog::updateConnectionContainers()
 {
-    QPtrList<ConnectionContainer> newContainers;
+    Q3PtrList<ConnectionContainer> newContainers;
     for ( int i = 0; i < connectionsTable->numRows(); ++i ) {
 	for ( ConnectionContainer *c = connections.first(); c; c = connections.next() ) {
 	    if ( c->senderItem() == connectionsTable->item( i, 0 ) ) {

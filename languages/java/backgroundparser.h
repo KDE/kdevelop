@@ -19,6 +19,8 @@
 #include <qwaitcondition.h>
 #include <qmutex.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 
 class JavaSupportPart;
@@ -32,7 +34,7 @@ public:
     ~Unit() {}
 
     QString fileName;
-    QValueList<Problem> problems;
+    Q3ValueList<Problem> problems;
     RefJavaAST translationUnit;
 
 protected:
@@ -60,7 +62,7 @@ public:
     void removeAllFiles();
 
     RefJavaAST translationUnit( const QString& fileName );
-    QValueList<Problem> problems( const QString& fileName );
+    Q3ValueList<Problem> problems( const QString& fileName );
 
     void close();
 

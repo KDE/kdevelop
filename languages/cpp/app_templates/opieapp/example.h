@@ -10,7 +10,7 @@ public:
     static QString appName() {
         return QString::fromLatin1("%{APPNAMELC}" );
     }
-    %{APPNAME}( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    %{APPNAME}( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~%{APPNAME}();
 
 private slots:

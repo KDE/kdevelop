@@ -2,8 +2,8 @@
 #include "%{APPNAMELC}part.h"
 
 #include <qtimer.h>
-#include <qpopupmenu.h>
-#include <qwhatsthis.h>
+#include <q3popupmenu.h>
+#include <q3whatsthis.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( data ) );
     m_widget->setCaption("widget caption");
     m_widget->setIcon(SmallIcon(info()->icon()));
 
-    QWhatsThis::add(m_widget, i18n("WHAT DOES THIS PART DO?"));
+    Q3WhatsThis::add(m_widget, i18n("WHAT DOES THIS PART DO?"));
     
     // now you decide what should happen to the widget. Take a look at kdevcore.h
     // or at other plugins how to embed it.
@@ -63,8 +63,8 @@ K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( data ) );
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
         this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
 
-    connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-        this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+    connect(core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+        this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
     connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
   
@@ -117,7 +117,7 @@ void %{APPNAME}Part::insertConfigWidget(const KDialogBase *dlg, QWidget *page, u
     }
 }
 
-void %{APPNAME}Part::contextMenu(QPopupMenu *popup, const Context *context)
+void %{APPNAME}Part::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
 // put actions into the context menu here
     if (context->hasType(Context::EditorContext))

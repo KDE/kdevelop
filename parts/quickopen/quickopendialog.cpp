@@ -13,12 +13,15 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
  
 #include <klistbox.h>
 #include <klineedit.h>
@@ -26,7 +29,7 @@
 
 #include "quickopendialog.h"
 
-QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
+QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
     nameEdit->installEventFilter(this);

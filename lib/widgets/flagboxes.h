@@ -14,8 +14,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef _FLAGBOXES_H_
@@ -28,10 +28,10 @@
 Support classes for compiler plugins.
 */
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 
 class QSpinBox;
@@ -46,7 +46,7 @@ class QPushButton;
 class KURLRequester;
 
 /**List item holding a compiler flag.*/
-class FlagListItem : public QCheckListItem
+class FlagListItem : public Q3CheckListItem
 {
 public:
     FlagListItem(FlagListBox *parent, const QString &flagstr,
@@ -65,7 +65,7 @@ private:
 
 
 /**List box item holding a compiler flag.*/
-class FlagListBox : public QListView
+class FlagListBox : public Q3ListView
 {
     Q_OBJECT
 public:
@@ -213,7 +213,7 @@ public:
 
 private:
     void addPathEdit(FlagPathEdit *item);
-    QPtrList<FlagPathEdit> plist;
+    Q3PtrList<FlagPathEdit> plist;
     friend class FlagPathEdit;
 };
 
@@ -230,8 +230,8 @@ public:
 private:
     void addListEdit(FlagListEdit *item);
     void addSpinBox(FlagSpinEdit *item);
-    QPtrList<FlagListEdit> plist;
-    QPtrList<FlagSpinEdit>  slist;
+    Q3PtrList<FlagListEdit> plist;
+    Q3PtrList<FlagSpinEdit>  slist;
     friend class FlagListEdit;
     friend class FlagSpinEdit;
 };
@@ -253,7 +253,7 @@ public:
 
     void addCheckBox(FlagCheckBox *item);
 private:
-    QPtrList<FlagCheckBox> cblist;
+    Q3PtrList<FlagCheckBox> cblist;
 
     QStringList m_multiKeys;
 };
@@ -275,7 +275,7 @@ public:
 
     void addRadioButton(FlagRadioButton *item);
 private:
-    QPtrList<FlagRadioButton> cblist;
+    Q3PtrList<FlagRadioButton> cblist;
 
     QStringList m_multiKeys;
 };

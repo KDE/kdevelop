@@ -1,6 +1,6 @@
 %{CPP_TEMPLATE}
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
 
 #include <kiconloader.h>
@@ -28,7 +28,7 @@ static const KDevPluginInfo data("kdev%{APPNAMELC}");
 	setXMLFile("kdevlang_%{APPNAMELC}.rc");
 
 
-	m_build = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
+	m_build = new KAction( i18n("&Run"), "exec",Qt::Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
 
 	kdDebug() << "Creating %{APPNAMELC} Part" << endl;
 
@@ -134,7 +134,7 @@ void %{APPNAME}Part::parse()
 
 	if (project())
 	{
-		kapp->setOverrideCursor(waitCursor);
+		kapp->setOverrideCursor(Qt::WaitCursor);
 		QStringList files = project()->allFiles();
 		for (QStringList::Iterator it = files.begin(); it != files.end() ;++it)
 		{

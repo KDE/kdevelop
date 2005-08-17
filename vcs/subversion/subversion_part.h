@@ -13,17 +13,17 @@
 
 	 You should have received a copy of the GNU General Public License
 	 along with this program; see the file COPYING.  If not, write to
-	 the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-	 Boston, MA 02110-1301, USA.
+	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	 Boston, MA 02111-1307, USA.
 	 */
 #ifndef __KDEVPART_SUBVERSION_H__
 #define __KDEVPART_SUBVERSION_H__
 
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdevplugin.h>
 #include <kurl.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <kdialogbase.h>
 #include "kdevversioncontrol.h"
 
@@ -56,7 +56,7 @@ signals:
 //		void finishedFetching( QString destinationDir );
 
 private slots:
-		void contextMenu( QPopupMenu *popup, const Context *context );
+		void contextMenu( Q3PopupMenu *popup, const Context *context );
 		void slotActionUpdate();
 		void slotActionRevert();
 		void slotActionCommit();
@@ -74,7 +74,7 @@ private slots:
 		void projectConfigWidget( KDialogBase *dlg );
 
 private:
-		QGuardedPtr<subversionCore> m_impl;
+		QPointer<subversionCore> m_impl;
 		KURL::List m_urls;
 
 		KAction *actionCommit,
@@ -87,7 +87,7 @@ private:
 		*actionRevert,
 		*actionResolve;
 
-		QGuardedPtr<subversionProjectWidget> m_projWidget;
+		QPointer<subversionProjectWidget> m_projWidget;
 		KURL base;
 
 public:

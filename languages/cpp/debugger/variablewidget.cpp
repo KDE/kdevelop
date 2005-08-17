@@ -21,17 +21,19 @@
 #include <kpopupmenu.h>
 #include <klineedit.h>
 #include <kdeversion.h>
-#include <kiconloader.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qcursor.h>
-#include <qwhatsthis.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QFocusEvent>
+#include <QVBoxLayout>
 #include <klocale.h>
 
 #include <qpoint.h>
@@ -70,30 +72,37 @@ namespace GDBDebugger
 {
 
 VariableWidget::VariableWidget(QWidget *parent, const char *name)
-    : QWidget(parent, name), firstShow_(true)
+    : QWidget(parent, name)
 {
-    setIcon(SmallIcon("math_brace"));
-    setCaption(i18n("Variable Tree"));
-
     varTree_ = new VariableTree(this);
+
     
-    watchVarEditor_ = new KHistoryCombo( this, 
+    Q3HBox* expression_entry = new Q3HBox(this);
+    
+    QLabel *label = new QLabel(i18n("E&xpression:"), expression_entry);    
+    label->adjustSize();
+    label->setFixedWidth(label->width());
+    watchVarEditor_ = new KHistoryCombo( expression_entry, 
                                          "var-to-watch editor");
+    label->setBuddy(watchVarEditor_);
 
-    QHBoxLayout* buttons = new QHBoxLayout();
+    Q3HBox* buttons = new Q3HBox(this);
 
-    buttons->addStretch();
+    QSpacerItem* spacer = new QSpacerItem( 5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    buttons->layout()->addItem(spacer);
 
-    QPushButton *evalButton = new QPushButton(i18n("&Evaluate"), this );
-    buttons->addWidget(evalButton);   
+    QPushButton *evalButton = new QPushButton(i18n("&Evaluate"), buttons );
+    evalButton->adjustSize();
+    evalButton->setFixedWidth(evalButton->width());
 
-    QPushButton *addButton = new QPushButton(i18n("&Watch"), this );
-    buttons->addWidget(addButton);
+    QPushButton *addButton = new QPushButton(i18n("&Watch"), buttons );
+    addButton->adjustSize();
+    addButton->setFixedWidth(addButton->width());
 
     QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
     topLayout->addWidget(varTree_, 10);
-    topLayout->addWidget(watchVarEditor_);
-    topLayout->addItem(buttons);
+    topLayout->addWidget(expression_entry);
+    topLayout->addWidget(buttons);
     
 
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
@@ -101,33 +110,6 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 
     connect( watchVarEditor_, SIGNAL(returnPressed()), 
              SLOT(slotEvaluateExpression()) );
-
-    // Setup help items.
-
-    QWhatsThis::add(this, i18n(
-        "<b>Variable tree</b><p>"
-        "The variable tree allows you to see the values of local "
-        "variables and arbitrary expressions."              
-        "<p>Local variables are displayed automatically and are updated "
-        "as you step through your program. "
-        "For each expression you enter, you can either evaluate it once, "
-        "or \"watch\" it (make it auto-updated). Expressions that are not "
-        "auto-updated can be updated manually from the context menu. "
-        "Expressions can be renamed to more descriptive names by clicking "
-        "on the name column."
-        "<p>To change the value of a variable or an expression, "
-        "click on the value."));
-
-    QWhatsThis::add(watchVarEditor_, 
-                    i18n("<b>Expression entry</b>"
-                         "<p>Type in expression to evaluate."));
-
-    QWhatsThis::add(evalButton, 
-                    i18n("Evaluate the expression."));
-
-    QWhatsThis::add(addButton, 
-                    i18n("Evaluate the expression and "
-                         "auto-update the value when stepping."));
 }
 
 // **************************************************************************
@@ -142,21 +124,13 @@ void VariableWidget::clear()
 
 // **************************************************************************
 
-// When the variables view is shown the first time, 
-// set the width of 'variable name' column to half the total
-// width.
-// Ideally, KMDI should emit 'initial size set' signal, but
-// it does not, so we rely on the fact that size is already
-// set when the widget is first shown.
-void VariableWidget::showEvent(QShowEvent *)
+void VariableWidget::setEnabled(bool bEnabled)
 {
-    if (firstShow_)
-    {
-        firstShow_ = false;
-        varTree_->setColumnWidth(0, width()/2);
-    }
+    QWidget::setEnabled(bEnabled);
+    if (bEnabled && parentWidget()) {
+        varTree_->setColumnWidth(0, parentWidget()->width()/2);
+  }
 }
-
 // **************************************************************************
 
 void VariableWidget::slotAddWatchVariable()
@@ -226,17 +200,23 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     setAllColumnsShowFocus(true);
     setColumnWidthMode(0, Manual);
     setSorting(-1);
-    QListView::setSelectionMode(QListView::Single);
+    Q3ListView::setSelectionMode(Q3ListView::Single);
 
     addColumn(i18n("Variable"), 100 );
     addColumn(i18n("Value"), 100 );
     addColumn(i18n("Type"), 100 );
 
-    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             SLOT(slotContextMenu(KListView*, QListViewItem*)) );
-    connect( this, SIGNAL(toggleRadix(QListViewItem*)), SLOT(slotToggleRadix(QListViewItem*)) );
-    connect( this, SIGNAL(itemRenamed( QListViewItem*, int, const QString&)),
-             this, SLOT(slotItemRenamed( QListViewItem*, int, const QString&)));
+    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+             SLOT(slotContextMenu(KListView*, Q3ListViewItem*)) );
+    connect( this, SIGNAL(toggleRadix(Q3ListViewItem*)), SLOT(slotToggleRadix(Q3ListViewItem*)) );
+
+/*
+    work in progress - disabled for now
+
+    // jw
+    connect( this, SIGNAL(doubleClicked(QListViewItem *item, const QPoint &pos, int c)),
+             SLOT(slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c)) );
+*/
 }
 
 // **************************************************************************
@@ -247,7 +227,7 @@ VariableTree::~VariableTree()
 
 // **************************************************************************
 
-void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
+void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -260,22 +240,17 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         popup.insertTitle(item->text(VarNameCol));
         int idRemove = -2;
         int idReevaluate = -2;
-        QListViewItem* root = findRoot(item);
-        if (dynamic_cast<WatchRoot*>(root)) {
-            idRemove = popup.insertItem( 
-                SmallIcon("editdelete"), i18n("Remove Watch Variable") );
-        }
+        Q3ListViewItem* root = findRoot(item);
+        if (dynamic_cast<WatchRoot*>(root))
+            idRemove = popup.insertItem( i18n("Remove Watch Variable") );
         if (root == recentExpressions_) {
-            idReevaluate = popup.insertItem( 
-                SmallIcon("reload"), i18n("Reevaluate Expression") );
-            idRemove = popup.insertItem( 
-                SmallIcon("editdelete"), i18n("Remove Expression") );
+            idRemove = popup.insertItem( i18n("Remove Expression") );
+            idReevaluate = popup.insertItem( i18n("Reevaluate Expression") );
         }
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
         int idToggleRadix = popup.insertItem( i18n("Toggle Hex/Decimal") );
-        int	idCopyToClipboard = popup.insertItem( 
-            SmallIcon("editcopy"), i18n("Copy to Clipboard") );
+        int	idCopyToClipboard = popup.insertItem( i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemove)
@@ -298,7 +273,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         else if (res == idToggleWatch)
         {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
-                emit toggleWatchpoint(item->gdbExpression());
+                emit toggleWatchpoint(item->fullName());
         }
         else if (res == idReevaluate)
         {
@@ -311,11 +286,9 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     else if (item == recentExpressions_)
     {
         KPopupMenu popup(this);
-        popup.insertTitle(i18n("Recent Expressions"));
-        int idRemove = popup.insertItem(
-            SmallIcon("editdelete"), i18n("Remove All"));
-        int idReevaluate = popup.insertItem(
-            SmallIcon("reload"), i18n("Reevaluate All"));
+        popup.insertTitle(i18n("Recent expressions"));
+        int idRemove = popup.insertItem(i18n("Remove all"));
+        int idReevaluate = popup.insertItem(i18n("Reevaluate all"));
         int res = popup.exec(QCursor::pos());
         
         if (res == idRemove)
@@ -325,7 +298,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         }
         else if (res == idReevaluate)
         {
-            for(QListViewItemIterator it(item); *it; ++it)
+            for(Q3ListViewItemIterator it(item); *it; ++it)
             {
                 VarItem* var = dynamic_cast<VarItem*>(*it);                    
                 Q_ASSERT(var && 
@@ -359,9 +332,29 @@ void VariableTree::slotEvaluateExpression(const QString &expression)
     emit expandItem(varItem);
 }
 
+
 // **************************************************************************
 
-QListViewItem *VariableTree::findRoot(QListViewItem *item) const
+// jw
+void VariableTree::slotDoubleClicked(Q3ListViewItem *item, const QPoint &pos, int c)
+{
+    kdDebug(9012) << " ### VariableTree::slotDoubleClicked 1" << endl;
+
+    if (item)
+    {
+        kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
+        TrimmableItem *titem = dynamic_cast<TrimmableItem*>(item);
+        if (titem)
+        {
+            kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
+            titem->handleDoubleClicked(pos, c);
+        }
+    }
+}
+
+// **************************************************************************
+
+Q3ListViewItem *VariableTree::findRoot(Q3ListViewItem *item) const
 {
     while (item->parent())
         item = item->parent();
@@ -373,7 +366,7 @@ QListViewItem *VariableTree::findRoot(QListViewItem *item) const
 
 VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
 
     // frames only exist on th top level so we only need to
     // check the siblings
@@ -392,7 +385,7 @@ VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
 
 WatchRoot *VariableTree::findWatch()
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
 
     while (sibling) {
         if (WatchRoot *watch = dynamic_cast<WatchRoot*> (sibling))
@@ -408,10 +401,10 @@ WatchRoot *VariableTree::findWatch()
 
 void VariableTree::trim()
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
 
         // don't trim the watch root, or 'recent expressions' root.
         if (!(dynamic_cast<WatchRoot*> (child)) 
@@ -432,10 +425,10 @@ void VariableTree::trim()
 void VariableTree::trimExcessFrames()
 {
     viewport()->setUpdatesEnabled(false);
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
         if (VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (child)) {
             if (!frame->matchDetails(0, currentThread_))
                 delete frame;
@@ -448,11 +441,11 @@ void VariableTree::trimExcessFrames()
 
 // **************************************************************************
 
-QListViewItem *VariableTree::lastChild() const
+Q3ListViewItem *VariableTree::lastChild() const
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
     if (child)
-        while (QListViewItem *nextChild = child->nextSibling())
+        while (Q3ListViewItem *nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -478,7 +471,7 @@ void VariableTree::maybeTip(const QPoint &p)
  * it removes the given watch variable an replaces it by another
  * watch that includes a format modifier
  */
-void VariableTree::slotToggleRadix(QListViewItem * item)
+void VariableTree::slotToggleRadix(Q3ListViewItem * item)
 {
   if (item==NULL)  //no item->nothing to do
     return;
@@ -631,27 +624,6 @@ void VariableTree::slotCurrentFrame(int frameNo, int threadNo)
     }
 }
 
-void 
-VariableTree::slotItemRenamed(QListViewItem* item, int col, const QString& text)
-{
-    if (col == ValueCol)
-    {
-        VarItem* v = dynamic_cast<VarItem*>(item);
-        Q_ASSERT(v);
-        if (v)
-        {
-            // Set the value
-            emit setValue(v->gdbExpression(), text);
-            // And immediately reload it from gdb, 
-            // so that it's display format is the one gdb uses,
-            // not the one user has typed. Otherwise, on the next
-            // step, the visible value might change and be highlighted
-            // as changed, which is bogus.
-            emit expandItem(v);
-        }
-    }
-}
-
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -693,7 +665,7 @@ void TrimmableItem::paintCell(QPainter *p, const QColorGroup &cg,
         f.setBold(true);
         p->setFont(f);
     }
-    QListViewItem::paintCell( p, cg, column, width, align );
+    Q3ListViewItem::paintCell( p, cg, column, width, align );
 }
 
 // **************************************************************************
@@ -712,11 +684,11 @@ bool TrimmableItem::isTrimmable() const
 
 // **************************************************************************
 
-QListViewItem *TrimmableItem::lastChild() const
+Q3ListViewItem *TrimmableItem::lastChild() const
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
     if (child)
-        while (QListViewItem *nextChild = child->nextSibling())
+        while (Q3ListViewItem *nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -726,7 +698,7 @@ QListViewItem *TrimmableItem::lastChild() const
 
 TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) const
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
     bool bRenew=false;  //this indicates if the current item needs to be replaced by a new one.
    			//the problem is, that the debugger always replaces already
 			//format-modified local item with non-mofified ones. So with every
@@ -770,10 +742,10 @@ TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) con
 
 void TrimmableItem::trim()
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
         if (TrimmableItem *item = dynamic_cast<TrimmableItem*>(child)) {
             // Never trim a branch if we are waiting on data to arrive.
             if (isTrimmable()) {
@@ -796,17 +768,17 @@ DataType TrimmableItem::getDataType() const
 
 // **************************************************************************
 
-void TrimmableItem::setCache(const QCString&)
+void TrimmableItem::setCache(const Q3CString&)
 {
     Q_ASSERT(false);
 }
 
 // **************************************************************************
 
-QCString TrimmableItem::getCache()
+Q3CString TrimmableItem::getCache()
 {
     Q_ASSERT(false);
-    return QCString();
+    return Q3CString();
 }
 
 // **************************************************************************
@@ -829,14 +801,16 @@ QString TrimmableItem::key (int, bool) const
 
 VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataType)
     : TrimmableItem (parent),
-      name_(varName),
-      cache_(QCString()),
+      cache_(Q3CString()),
       dataType_(dataType),
       highlight_(false)
 {
     setText(VarNameCol, varName);
-    // Allow to change variable name by editing.
-    setRenameEnabled(ValueCol, true);
+
+/*
+    setRenameEnabled(VarTypeCol, true);
+    setRenameEnabled(VarNameCol, true);
+*/
 
     kdDebug(9012) << " ### VarItem::VarItem *CONSTR*" << endl;
     emit ((VariableTree*)listView())->varItemConstructed(this);
@@ -850,37 +824,40 @@ VarItem::~VarItem()
 
 // **************************************************************************
 
-QString VarItem::gdbExpression() const
+QString VarItem::varPath() const
 {
     QString vPath("");
-    for(const VarItem* item = this; 
-        item; 
-        item = dynamic_cast<const VarItem*>(item->parent()))
-    {
-        // Children of array item have array names in them,
-        // e.g. "p[0]", so when visiting parent we don't need to
-        // add parent name. However, when 'gdbExpression' is called
-        // on array itself, we do need the name.
-        if (item->getDataType() == typeArray && item != this)
-            continue;
+    const VarItem *item = this;
 
-        // VP, 2005/07/19: I don't know the reason for this
-        // check. But retaining to avoid breaking anything.
-        if ((item->text(VarNameCol))[0] != '<') {
-            QString itemName = item->name_;
-            if (vPath.isEmpty())
-                vPath = itemName.replace(QRegExp("^static "), "");
-            else
-                vPath = itemName.replace(QRegExp("^static "), "") 
-                    + "." + vPath;
+    // This stops at the root item (FrameRoot or WatchRoot)
+    while ((item = dynamic_cast<const VarItem*> (item->parent()))) {
+        if (item->getDataType() != typeArray) {
+            if ((item->text(VarNameCol))[0] != '<') {
+                QString itemName = item->text(VarNameCol);
+                if (vPath.isEmpty())
+                    vPath = itemName.replace(QRegExp("^static "), "");
+                else
+                    vPath = itemName.replace(QRegExp("^static "), "") + "." + vPath;
+            }
         }
     }
 
-    if (isOpen() && dataType_ == typePointer)
-        // We're currently showing pointed-to value        
-        return "*" + vPath;
-    else
+    return vPath;
+}
+
+// **************************************************************************
+
+QString VarItem::fullName() const
+{
+    QString itemName = getName();
+    QString vPath = varPath();
+    if (itemName[0] == '<')
         return vPath;
+
+    if (vPath.isEmpty())
+        return itemName.replace(QRegExp("^static "), "");
+
+    return varPath() + "." + itemName.replace(QRegExp("^static "), "");
 }
 
 // **************************************************************************
@@ -901,7 +878,7 @@ void VarItem::setText(int column, const QString &data)
             highlight_ = (oldValue != QString(data));
     }
 
-    QListViewItem::setText(column, strData);
+    Q3ListViewItem::setText(column, strData);
     repaint();
 }
 
@@ -931,6 +908,8 @@ void VarItem::updateValue(char *buf)
 
     if (dataType_ == typeUnknown) {
         dataType_ = GDBParser::getGDBParser()->determineType(buf);
+        if (dataType_ == typeArray)
+            buf++;
 
         // Try fixing a format string here by overriding the dataType calculated
         // from this data
@@ -939,7 +918,7 @@ void VarItem::updateValue(char *buf)
             dataType_ = typeValue;
     }
 
-    GDBParser::getGDBParser()->parseValue(this, buf);
+    GDBParser::getGDBParser()->parseData(this, buf, true, false);
     setActive();
 }
 
@@ -963,14 +942,25 @@ void VarItem::updateType(char *buf)
 
 // **************************************************************************
 
-void VarItem::setCache(const QCString &value)
+void VarItem::handleDoubleClicked(const QPoint &/*pos*/, int c)
+{
+    kdDebug(9012) << " ### VarItem::handleDoubleClicked 1" << endl;
+    if (c == VarTypeCol || c == ValueCol)
+    {
+        kdDebug(9012) << " ### VarItem::handleDoubleClicked 2" << endl;
+        static_cast<KListView*>(listView())->rename(this, c);
+    }
+}
+
+// **************************************************************************
+
+void VarItem::setCache(const Q3CString &value)
 {
     cache_ = value;
     setExpandable(true);
     checkForRequests();
     if (isOpen())
         setOpen(true);
-    repaint();
     setActive();
 }
 
@@ -978,16 +968,11 @@ void VarItem::setCache(const QCString &value)
 
 void VarItem::setOpen(bool open)
 {
-    QListViewItem::setOpen(open);
-
     if (open) {
-        // Opening an item can be potentially expensive, so cache value
-        // received from gdb. If we have value already, just parse it,
-        // don't issue another request.
         if (cache_) {
-            QCString value = cache_;
-            cache_ = QCString();
-            GDBParser::getGDBParser()->parseCompositeValue(this, value.data());
+            Q3CString value = cache_;
+            cache_ = Q3CString();
+            GDBParser::getGDBParser()->parseData(this, value.data(), false, false);
             trim();
         } else {
             if (dataType_ == typePointer || dataType_ == typeReference) {
@@ -995,19 +980,14 @@ void VarItem::setOpen(bool open)
                 emit ((VariableTree*)listView())->expandItem(this);
             }
         }
-    } else {
-        // Closing item. For pointer/references, it means we switch from
-        // display the pointer-to value to displaying the pointer itself.
-        if (dataType_ == typePointer || dataType_ == typeReference) {
-            waitingForData();
-            emit ((VariableTree*)listView())->expandItem(this);
-        }
     }
+
+    Q3ListViewItem::setOpen(open);
 }
 
 // **************************************************************************
 
-QCString VarItem::getCache()
+Q3CString VarItem::getCache()
 {
     return cache_;
 }
@@ -1025,17 +1005,15 @@ void VarItem::checkForRequests()
     // Signature for a QT1.44 QString
     if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            gdbExpression().latin1()+QCString(".shd.data"));
+        emit ((VariableTree*)listView())->expandUserItem(this,
+                                                         fullName().latin1()+Q3CString(".shd.data"));
     }
 
     // Signature for a QT1.44 QDir
     if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0) {
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            gdbExpression().latin1()+QCString(".dPath.shd.data"));
+        emit ((VariableTree*)listView())->expandUserItem(this,
+                                                         fullName().latin1()+Q3CString(".dPath.shd.data"));
     }
 
     // Signature for a QT2.x QT3.x QString
@@ -1043,28 +1021,26 @@ void VarItem::checkForRequests()
     // at the moment to leave it here, and it won't cause bad things to happen.
     if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-                               gdbExpression().latin1()));
+        emit ((VariableTree*)listView())->expandUserItem(this,
+                                                         // QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                         Q3CString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+                                                                            fullName().latin1()));
     }
 
     // Signature for a QT2.0.x QT2.1 QCString
     if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0) {
         waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            gdbExpression().latin1()+QCString(".shd.data"));
+        emit ((VariableTree*)listView())->expandUserItem(this,
+                                                         fullName().latin1()+Q3CString(".shd.data"));
     }
 
     // Signature for a QT2.0.x QT2.1 QDir
     if (strncmp(cache_, "dPath = {d = 0x", 15) == 0) {
         waitingForData();
-        ((VariableTree*)listView())->expandUserItem(
-            this,
-            // QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-            QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-                               gdbExpression().latin1()));
+        ((VariableTree*)listView())->expandUserItem(this,
+                                                    // QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                    Q3CString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+                                                                       fullName().latin1()));
   }
 }
 
@@ -1086,10 +1062,10 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 
     if (column == ValueCol && highlight_) {
         QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
-                           cg.dark(), cg.mid(), red, cg.base());
-        QListViewItem::paintCell( p, hl_cg, column, width, align );
+                           cg.dark(), cg.mid(), Qt::red, cg.base());
+        Q3ListViewItem::paintCell( p, hl_cg, column, width, align );
     } else
-        QListViewItem::paintCell( p, cg, column, width, align );
+        Q3ListViewItem::paintCell( p, cg, column, width, align );
 }
 
 // **************************************************************************
@@ -1097,7 +1073,8 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 QString VarItem::tipText() const
 {
     const unsigned int maxTooltipSize = 70;
-    QString tip = text( ValueCol );
+    /// \FIXME Column #1 is "Value": perhaps some kind of const somewhere is better ...
+    QString tip = text( 1 );
 
     if (tip.length() < maxTooltipSize )
 	    return tip;
@@ -1114,8 +1091,8 @@ VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
       needLocals_(true),
       frameNo_(frameNo),
       threadNo_(threadNo),
-      params_(QCString()),
-      locals_(QCString())
+      params_(Q3CString()),
+      locals_(Q3CString())
 {
     setExpandable(true);
 }
@@ -1166,18 +1143,16 @@ void VarFrameRoot::setLocals(const char *locals)
 // state. This
 void VarFrameRoot::setOpen(bool open)
 {
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 
     if (!open)
         return;
 
-    if (!params_.isNull())
-        GDBParser::getGDBParser()->parseCompositeValue(this, params_.data());
-    if (!locals_.isNull())
-        GDBParser::getGDBParser()->parseCompositeValue(this, locals_.data());
+    GDBParser::getGDBParser()->parseData(this, params_.data(), false, true);
+    GDBParser::getGDBParser()->parseData(this, locals_.data(), false, false);
 
-    locals_ = QCString();
-    params_ = QCString();
+    locals_ = Q3CString();
+    params_ = Q3CString();
 }
 
 // **************************************************************************
@@ -1209,7 +1184,7 @@ WatchRoot::~WatchRoot()
 
 void WatchRoot::requestWatchVars()
 {
-    for (QListViewItem *child = firstChild(); child; child = child->nextSibling())
+    for (Q3ListViewItem *child = firstChild(); child; child = child->nextSibling())
         if (VarItem *varItem = dynamic_cast<VarItem*>(child))
             emit ((VariableTree*)listView())->expandItem(varItem);
 }

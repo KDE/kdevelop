@@ -15,9 +15,9 @@
 #ifndef AUTOLISTVIEWITEMS_H
 #define AUTOLISTVIEWITEMS_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
-#include <qlistview.h>
+#include <q3listview.h>
 
 class TargetItem;
 class FileItem;
@@ -26,12 +26,12 @@ class AutoProjectPart;
 /**
 * Base class for all items appearing in ProjectOverview and ProjectDetails.
 */
-class ProjectItem : public QListViewItem
+class ProjectItem : public Q3ListViewItem
 {
 public:
 	enum Type { Subproject, Target, File };
 
-	ProjectItem( Type type, QListView *parent, const QString &text );
+	ProjectItem( Type type, Q3ListView *parent, const QString &text );
 	ProjectItem( Type type, ProjectItem *parent, const QString &text );
 
 	void paintCell( QPainter *p, const QColorGroup &cg,
@@ -62,7 +62,7 @@ private:
 class SubprojectItem : public ProjectItem
 {
 public:
-	SubprojectItem( QListView *parent, const QString &text );
+	SubprojectItem( Q3ListView *parent, const QString &text );
 	SubprojectItem( SubprojectItem *parent, const QString &text );
 
 	/** name of the directory */
@@ -74,7 +74,7 @@ public:
 	/** mapping from variable name to value */
 	QMap<QString, QString> variables;
 	/** list of targets */
-	QPtrList<TargetItem> targets;
+	Q3PtrList<TargetItem> targets;
 
 	QString relativePath();
 
@@ -99,7 +99,7 @@ class TargetItem : public ProjectItem
 public:
 	//enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
 
-	TargetItem( QListView *lv, bool group, const QString &text );
+	TargetItem( Q3ListView *lv, bool group, const QString &text );
 
 	// Target kind - not used currently
 	//TargetKind kind;
@@ -112,7 +112,7 @@ public:
 	//! May be bin, pkglib, noinst, check, sbin, pkgdata, java...
 	QString prefix;
 	//! Content of foo_SOURCES (or java_JAVA) assignment
-	QPtrList<FileItem> sources;
+	Q3PtrList<FileItem> sources;
 	//! Content of foo_LDFLAGS assignment
 	QString ldflags;
 	//! Content of foo_LDADD assignment
@@ -129,7 +129,7 @@ class FileItem : public ProjectItem
 {
 
 public:
-	FileItem( QListView *lv, const QString &text, bool set_is_subst = false );
+	FileItem( Q3ListView *lv, const QString &text, bool set_is_subst = false );
 	void changeSubstitution();
 	void changeMakefileEntry( const QString& );
 

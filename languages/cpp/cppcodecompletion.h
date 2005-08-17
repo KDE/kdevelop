@@ -32,8 +32,10 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qtimer.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class CodeInformationRepository;
 class SimpleContext;
@@ -105,26 +107,26 @@ private:
 	QStringList evaluateExpressionInternal( QStringList& exprList, const QStringList& scope, SimpleContext* ctx = 0 );
 	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );
 
-	QStringList typeOf( const QValueList<Tag>& tags, MemberAccessOp accessOp );
+	QStringList typeOf( const Q3ValueList<Tag>& tags, MemberAccessOp accessOp );
 	QStringList typeOf( const QString& name, ClassDom klass, MemberAccessOp accessOp );
 	QStringList typeOf( const QString& name, NamespaceDom scope, MemberAccessOp accessOp );
 	QStringList typeOf( const QString& name, const FunctionList& methods, MemberAccessOp accessOp );
 
 	/// @todo remove isInstance
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ClassDom klass, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, NamespaceDom scope, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const FunctionList& methods, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst, bool isInstance );
-	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, Q3ValueList<Tag>& tags, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, ClassDom klass, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, NamespaceDom scope, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, const FunctionList& methods, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst, bool isInstance );
+	void computeCompletionEntryList( Q3ValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
 
 	void computeSignatureList( QStringList& signatureList, const QString& name, const QStringList& type );
 	void computeSignatureList( QStringList& signatureList, const QString& name, ClassDom klass );
 	void computeSignatureList( QStringList& signatureList, const QString& name, const FunctionList& methods );
-	void computeSignatureList( QStringList& signatureList, const QString& name, QValueList<Tag>& tags );
+	void computeSignatureList( QStringList& signatureList, const QString& name, Q3ValueList<Tag>& tags );
 
 	SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col );
 	void computeContext( SimpleContext*& ctx, StatementAST* ast, int line, int col );
@@ -147,7 +149,7 @@ private:
 	QString findClass( const QString& className );
 
 private:
-	QGuardedPtr<CppSupportPart> m_pSupport;
+	QPointer<CppSupportPart> m_pSupport;
 	QTimer* m_ccTimer;
 	QString m_activeFileName;
 	KTextEditor::ViewCursorInterface* m_activeCursor;
@@ -170,7 +172,7 @@ private:
 	QRegExp m_cppCodeCommentsRx;
 	QRegExp m_codeCompleteChRx;
 	QRegExp m_codeCompleteCh2Rx;
-	QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
+	Q3ValueList<KTextEditor::CompletionEntry> m_fileEntryList;
 };
 
 #endif 

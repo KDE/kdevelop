@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3PtrList>
 /***************************************************************************
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jsgaarde@tdcspace.dk                                                  *
@@ -47,7 +49,7 @@ class qProjectItem;
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {
 public:
-  ProjectConfigurationDlg(SubqmakeprojectItem * _item,QListView *_prjList,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  ProjectConfigurationDlg(SubqmakeprojectItem * _item,Q3ListView *_prjList,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   ~ProjectConfigurationDlg();
   void UpdateControls();
 
@@ -113,10 +115,10 @@ void updateDependenciesControl();
 
 
 protected:
-  QListView *prjList;
+  Q3ListView *prjList;
   SubqmakeprojectItem *myProjectItem;
-  QPtrList <qProjectItem> getAllProjects();
-  void getAllSubProjects(qProjectItem *item,QPtrList <qProjectItem> *itemList);
+  Q3PtrList <qProjectItem> getAllProjects();
+  void getAllSubProjects(qProjectItem *item,Q3PtrList <qProjectItem> *itemList);
 
 
 };

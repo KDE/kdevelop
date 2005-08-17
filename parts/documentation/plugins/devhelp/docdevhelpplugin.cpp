@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docdevhelpplugin.h"
 
@@ -90,7 +90,7 @@ QString DocDevHelpPlugin::catalogTitle(const QString& url)
         return QString::null;
 
     QFile f(url);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return QString::null;
     
     QDomDocument doc;
@@ -149,7 +149,7 @@ bool DocDevHelpPlugin::needRefreshIndex(DocumentationCatalogItem* item)
 
 void DocDevHelpPlugin::autoSetupPlugin()
 {
-    QValueStack<QString> scanStack;
+    Q3ValueStack<QString> scanStack;
     
     pushToScanStack(scanStack, getenv("DEVHELP_SEARCH_PATH"));
     pushToScanStack(scanStack, QString(getenv("HOME")) + "/.devhelp/books");
@@ -183,7 +183,7 @@ void DocDevHelpPlugin::autoSetupPlugin()
         scanList << dir.path();
 
         const QFileInfoList *dirEntries = dir.entryInfoList();
-        QPtrListIterator<QFileInfo> it(*dirEntries);
+        Q3PtrListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) 
         {
             QString fileName = it.current()->fileName();
@@ -225,7 +225,7 @@ void DocDevHelpPlugin::scanDevHelpDir(const QString &path)
     }
 }
 
-void DocDevHelpPlugin::pushToScanStack(QValueStack<QString> &stack, const QString &value)
+void DocDevHelpPlugin::pushToScanStack(Q3ValueStack<QString> &stack, const QString &value)
 {
     if ( (!value.isEmpty()) && (!stack.contains(value)) )
     {
@@ -243,7 +243,7 @@ void DocDevHelpPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* it
     QFileInfo fi(dhItem->devHelpFile());
 
     QFile f(dhItem->devHelpFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << dhItem->devHelpFile() << endl;
         return;
@@ -285,7 +285,7 @@ void DocDevHelpPlugin::createTOC(DocumentationCatalogItem* item)
     QFileInfo fi(dhItem->devHelpFile());
 
     QFile f(dhItem->devHelpFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << dhItem->devHelpFile() << endl;
         return;
@@ -340,7 +340,7 @@ void DocDevHelpPlugin::setCatalogURL(DocumentationCatalogItem* item)
     QFileInfo fi(dhItem->devHelpFile());
 
     QFile f(dhItem->devHelpFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << dhItem->devHelpFile() << endl;
         return;

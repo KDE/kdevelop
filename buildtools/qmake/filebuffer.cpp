@@ -11,6 +11,8 @@
 
 #include <kdebug.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include "filebuffer.h"
 #include <qmessagebox.h>
 #include <qregexp.h>
@@ -356,7 +358,7 @@ void FileBuffer::getValueNames()
 /**
  * Get all VariableSetModes for a variable.
  */
-void FileBuffer::getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes)
+void FileBuffer::getVariableValueSetModes(const QString &variable,Q3PtrList<FileBuffer::ValueSetMode> &modes)
 //=======================================================================================================
 {
   Caret curPos(0,0);
@@ -453,7 +455,7 @@ void FileBuffer::bufferFile(const QString &fileName)
 {
   m_buffer.clear();
   QFile dataFile(fileName);
-  if (dataFile.open(IO_ReadOnly))
+  if (dataFile.open(QIODevice::ReadOnly))
   {
     QTextStream inStream( &dataFile );
     QString inLine;
@@ -479,7 +481,7 @@ void FileBuffer::saveBuffer(const QString &filename,const QString &qmakeHeader)
   QStringList writeBuffer;
   writeBuffer.append(qmakeHeader);
   writeBuffer += getBufferTextInDepth();
-  if (dataFile.open(IO_WriteOnly))
+  if (dataFile.open(QIODevice::WriteOnly))
   {
     for (unsigned int i=0; i<writeBuffer.count(); ++i)
       if (!writeBuffer[i].simplifyWhiteSpace().isEmpty())

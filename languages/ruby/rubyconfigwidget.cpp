@@ -4,7 +4,7 @@
 
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include <kdebug.h>
 

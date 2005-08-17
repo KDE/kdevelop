@@ -42,7 +42,7 @@ void ConfigureProblemReporter::setPart( CppSupportPart* part )
 	if ( QFile::exists( conf_file_name ) )
 	{
 		QFile f( conf_file_name );
-		if ( f.open( IO_ReadOnly ) )
+		if ( f.open( QIODevice::ReadOnly ) )
 		{
 			QTextStream stream( &f );
 			specialHeader->setText( stream.read() );
@@ -64,7 +64,7 @@ void ConfigureProblemReporter::accept()
 	{
 		QString conf_file_name = m_part->specialHeaderName( true );
 		QFile f( conf_file_name );
-		if ( f.open( IO_WriteOnly ) )
+		if ( f.open( QIODevice::WriteOnly ) )
 		{
 			QTextStream stream( &f );
 			stream << specialHeader->text();

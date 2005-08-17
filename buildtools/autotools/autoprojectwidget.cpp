@@ -20,17 +20,20 @@
 #include <qcheckbox.h>
 #include <qdom.h>
 #include <qfile.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qpainter.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 #include <qregexp.h>
 #include <qsplitter.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -76,7 +79,7 @@ static QString nicePrimary( const QString &primary )
 
 
 AutoProjectWidget::AutoProjectWidget( AutoProjectPart *part, bool kde )
-		: QVBox( 0, "auto project widget" )
+		: Q3VBox( 0, "auto project widget" )
 {
 	m_part = part;
 	m_kdeMode = kde;
@@ -112,8 +115,8 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 
 void AutoProjectWidget::initActions()
 {
-	connect( m_subprojectView, SIGNAL( selectionChanged( QListViewItem* ) ),
-	         this, SLOT( slotOverviewSelectionChanged( QListViewItem* ) ) );
+	connect( m_subprojectView, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
+	         this, SLOT( slotOverviewSelectionChanged( Q3ListViewItem* ) ) );
 }
 
 AutoSubprojectView* AutoProjectWidget::getSubprojectView ()
@@ -157,7 +160,7 @@ QStringList AutoProjectWidget::allSubprojects()
 	int prefixlen = m_part->projectDirectory().length() + 1;
 	QStringList res;
 
-	QListViewItemIterator it( m_subprojectView->listView() );
+	Q3ListViewItemIterator it( m_subprojectView->listView() );
 	for ( ; it.current(); ++it )
 	{
 		// Skip root subproject
@@ -170,11 +173,11 @@ QStringList AutoProjectWidget::allSubprojects()
 	return res;
 }
 
-QPtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
+Q3PtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
 {
-	QPtrList <SubprojectItem> res;
+	Q3PtrList <SubprojectItem> res;
 
-	QListViewItemIterator it ( m_subprojectView->listView() );
+	Q3ListViewItemIterator it ( m_subprojectView->listView() );
 
 	for ( ; it.current(); ++it )
 	{
@@ -194,7 +197,7 @@ SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, b
 	kdDebug(9020) << "Looking for path " << path << endl;
 
 	int prefixLen = m_part->projectDirectory().length() + 1;
-	QListViewItemIterator it( m_subprojectView->listView() );
+	Q3ListViewItemIterator it( m_subprojectView->listView() );
 	for(; it.current(); ++it)
 	{
 		SubprojectItem* spitem = static_cast<SubprojectItem*>(it.current() );
@@ -219,7 +222,7 @@ QString AutoProjectWidget::pathForTarget(const TargetItem *titem) const
 
 	kdDebug(9020) << "Looking for target " << titem->name << endl;
 	int prefixLen = m_part->projectDirectory().length() + 1;
-	QListViewItemIterator it( m_subprojectView->listView() );
+	Q3ListViewItemIterator it( m_subprojectView->listView() );
 	for(; it.current(); ++it)
 	{
 		SubprojectItem* spitem = static_cast<SubprojectItem*>(it.current() );
@@ -240,12 +243,12 @@ QStringList AutoProjectWidget::allLibraries()
 	int prefixlen = m_part->projectDirectory().length() + 1;
 	QStringList res;
 
-	QListViewItemIterator it( m_subprojectView->listView() );
+	Q3ListViewItemIterator it( m_subprojectView->listView() );
 	for ( ; it.current(); ++it )
 	{
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( it.current() );
 		QString path = spitem->path;
-		QPtrListIterator<TargetItem> tit( spitem->targets );
+		Q3PtrListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
 			QString primary = ( *tit ) ->primary;
@@ -263,10 +266,10 @@ QStringList AutoProjectWidget::allLibraries()
 
 QStringList AutoProjectWidget::allFiles()
 {
-	QPtrStack<QListViewItem> s;
+	Q3PtrStack<Q3ListViewItem> s;
 	QMap<QString, bool> dict;
 
-	for ( QListViewItem * item = m_subprojectView->listView()->firstChild(); item;
+	for ( Q3ListViewItem * item = m_subprojectView->listView()->firstChild(); item;
 	      item = item->nextSibling() ? item->nextSibling() : s.pop() )
 	{
 		if ( item->firstChild() )
@@ -275,10 +278,10 @@ QStringList AutoProjectWidget::allFiles()
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( item );
 		// use URLUtil so paths in root project dir are worked out correctly
 		QString relPath = URLUtil::relativePath(m_part->projectDirectory(), spitem->path, URLUtil::SLASH_SUFFIX);
-		QPtrListIterator<TargetItem> tit( spitem->targets );
+		Q3PtrListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
-			QPtrListIterator<FileItem> fit( tit.current() ->sources );
+			Q3PtrListIterator<FileItem> fit( tit.current() ->sources );
 			for ( ; fit.current(); ++fit )
 			{
 
@@ -326,12 +329,12 @@ void AutoProjectWidget::setActiveTarget( const QString &targetPath )
 	m_activeSubproject = 0;
 	m_activeTarget = 0;
 
-	QListViewItemIterator it( m_subprojectView->listView() );
+	Q3ListViewItemIterator it( m_subprojectView->listView() );
 	for ( ; it.current(); ++it )
 	{
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( it.current() );
 		QString path = spitem->path;
-		QPtrListIterator<TargetItem> tit( spitem->targets );
+		Q3PtrListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
 			QString primary = ( *tit ) ->primary;
@@ -437,7 +440,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 			SubprojectItem* spitem = subprojectItemForPath(relativeDir);
 			if (spitem)
 			{
-				QPtrList<TargetItem> titemList = spitem->targets;
+				Q3PtrList<TargetItem> titemList = spitem->targets;
 				if (titemList.count()==1) {
 					addToTarget( URLUtil::filename(*it), spitem, titemList.first() );
 					doneAutomatically.append(*it);
@@ -500,7 +503,7 @@ void AutoProjectWidget::removeFiles( const QStringList &list )
 	Q_UNUSED( list )
 }
 
-void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
+void AutoProjectWidget::slotOverviewSelectionChanged( Q3ListViewItem *item )
 {
 	if ( !item )
 		return;
@@ -511,7 +514,7 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 		// Remove all TargetItems and all of their children from the view
 		kdDebug ( 9020 ) << "m_shownSubproject (before takeItem()): " << m_shownSubproject->subdir << endl;
 
-		QPtrListIterator<TargetItem> it1( m_shownSubproject->targets );
+		Q3PtrListIterator<TargetItem> it1( m_shownSubproject->targets );
 		for ( ; it1.current(); ++it1 )
 		{
 			// After AddTargetDialog, it can happen that an
@@ -536,12 +539,12 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 	kdDebug ( 9020 ) << "m_shownSubproject (after takeItem()):  " << selectedSubproject()->subdir << endl;
 
 	// Insert all TargetItems and all of their children into the view
-	QPtrListIterator<TargetItem> it2( selectedSubproject()->targets );
+	Q3PtrListIterator<TargetItem> it2( selectedSubproject()->targets );
 	for ( ; it2.current(); ++it2 )
 	{
 		kdDebug ( 9020 ) << "insertItem in detail " << ( *it2 )->name << endl;
 		m_detailView->listView()->insertItem( *it2 );
-		QPtrListIterator<FileItem> it3( ( *it2 ) ->sources );
+		Q3PtrListIterator<FileItem> it3( ( *it2 ) ->sources );
 		for ( ; it3.current(); ++it3 )
 			( *it2 )->insertItem( *it3 );
 		QString primary = ( *it2 ) ->primary;

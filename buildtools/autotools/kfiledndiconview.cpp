@@ -17,8 +17,14 @@
 
 //////////////////////////////////////////////////////
 // Qt specific includes
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QPixmap>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 //////////////////////////////////////////////////////
 // KDE specific includes
 #include <kfileitem.h>
@@ -84,7 +90,7 @@ void KFileDnDIconView::contentsDragEnterEvent( QDragEnterEvent *e ) {
 		return;
 	}
 	e->acceptAction();     // Yes
-	QIconViewItem *i = findItem( contentsToViewport( e->pos() ) );
+	Q3IconViewItem *i = findItem( contentsToViewport( e->pos() ) );
 	if ( i && m_useAutoOpenTimer) {  // are we over an item ?
 		m_dropItem = i;  // set new m_dropItem
 		m_autoOpenTimer.start( m_autoOpenTime ); // restart timer
@@ -97,7 +103,7 @@ void KFileDnDIconView::contentsDragMoveEvent( QDragMoveEvent *e ) {
 		return;
 	}
 	e->acceptAction();     // Yes
-	QIconViewItem *i = findItem( contentsToViewport( e->pos() ) );
+	Q3IconViewItem *i = findItem( contentsToViewport( e->pos() ) );
 	if( ! m_useAutoOpenTimer )
 		return;
 	if ( i ) {  // are we over an item ?
@@ -140,7 +146,7 @@ void KFileDnDIconView::startDrag(){
 	dragObject()->dragCopy();   // start the drag
 }
 //-----------------------------------------------
-QDragObject* KFileDnDIconView::dragObject() {
+Q3DragObject* KFileDnDIconView::dragObject() {
 	// create a list of the URL:s that we want to drag
 	KURL::List urls;
 	KFileItemListIterator it( * KFileView::selectedItems() );
@@ -155,7 +161,7 @@ QDragObject* KFileDnDIconView::dragObject() {
 	QPoint hotspot;
 	hotspot.setX( pixmap.width() / 2 );
 	hotspot.setY( pixmap.height() / 2 );
-	QDragObject* myDragObject = KURLDrag::newDrag( urls, widget() );
+	Q3DragObject* myDragObject = KURLDrag::newDrag( urls, widget() );
 	myDragObject->setPixmap( pixmap, hotspot );
 	return myDragObject;
 }

@@ -19,6 +19,8 @@
 #define _BREAKPOINTWIDGET_H_
 
 #include <klistbox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 namespace JAVADebugger
 {
@@ -61,8 +63,8 @@ public slots:
     void slotParseJDBBreakpointSet(char *str, int BPKey);
 
 private slots:
-    void slotExecuted(QListBoxItem *item);
-    void slotContextMenu(QListBoxItem *item);
+    void slotExecuted(Q3ListBoxItem *item);
+    void slotContextMenu(Q3ListBoxItem *item);
 
 signals:
     void publishBPState(Breakpoint *brkpt);

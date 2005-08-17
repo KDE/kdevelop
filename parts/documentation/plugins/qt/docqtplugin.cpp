@@ -15,12 +15,13 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docqtplugin.h"
 
 #include <unistd.h>
 
+#include <qdom.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdialog.h>
@@ -51,7 +52,7 @@ public:
     {
     }
     QString dcfFile() const { return m_dcfFile; }
-
+    
 private:
     QString m_dcfFile;
 };
@@ -62,7 +63,7 @@ K_EXPORT_COMPONENT_FACTORY( libdocqtplugin, DocQtPluginFactory(data) )
 
 DocQtPlugin::DocQtPlugin(QObject* parent, const char* name, const QStringList)
     :DocumentationPlugin(DocQtPluginFactory::instance()->config(), parent, name)
-{
+{   
     setCapabilities(Index | FullTextSearch);
     autoSetup();
 }
@@ -76,11 +77,11 @@ void DocQtPlugin::createTOC(DocumentationCatalogItem *item)
     QtDocumentationCatalogItem *qtItem = dynamic_cast<QtDocumentationCatalogItem *>(item);
     if (!qtItem)
         return;
-
+    
     QFileInfo fi(qtItem->dcfFile());
 
     QFile f(qtItem->dcfFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << qtItem->dcfFile() << endl;
         return;
@@ -163,11 +164,11 @@ void DocQtPlugin::setCatalogURL(DocumentationCatalogItem *item)
     QtDocumentationCatalogItem *qtItem = dynamic_cast<QtDocumentationCatalogItem *>(item);
     if (!qtItem)
         return;
-
+    
     QFileInfo fi(qtItem->dcfFile());
 
     QFile f(qtItem->dcfFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << qtItem->dcfFile() << endl;
         return;
@@ -200,7 +201,7 @@ bool DocQtPlugin::needRefreshIndex(DocumentationCatalogItem *item)
     QtDocumentationCatalogItem *qtItem = dynamic_cast<QtDocumentationCatalogItem *>(item);
     if (!qtItem)
         return false;
-
+    
     QFileInfo fi(qtItem->dcfFile());
     config->setGroup("Index");
     if (fi.lastModified() > config->readDateTimeEntry(qtItem->text(0), new QDateTime()))
@@ -213,16 +214,16 @@ bool DocQtPlugin::needRefreshIndex(DocumentationCatalogItem *item)
         return false;
 }
 
-void DocQtPlugin::createIndex(IndexBox *index, DocumentationCatalogItem *item)
+void DocQtPlugin::createIndex(IndexBox *index, DocumentationCatalogItem *item) 
 {
     QtDocumentationCatalogItem *qtItem = dynamic_cast<QtDocumentationCatalogItem *>(item);
     if (!qtItem)
         return;
-
+    
     QFileInfo fi(qtItem->dcfFile());
 
     QFile f(qtItem->dcfFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << qtItem->dcfFile() << endl;
         return;
@@ -243,52 +244,42 @@ void DocQtPlugin::createIndex(IndexBox *index, DocumentationCatalogItem *item)
     {
         if (childEl.tagName() == "section")
         {
-            createSectionIndex(fi, index, item, childEl);
-        }
-        childEl = childEl.nextSibling().toElement();
-    }
-}
+            //adymo: do not load section to index for Qt reference documentation
+            QString title = childEl.attribute("title");
+            if (fi.fileName() != "qt.dcf")
+            {
+                QString ref = childEl.attribute("ref");
+                
+                IndexItemProto *ii = new IndexItemProto(this, item, index, title, item->text(0));
+                ii->addURL(KURL(fi.dirPath(true) + "/" + ref));
+            }
 
-void DocQtPlugin::createSectionIndex(QFileInfo &fi, IndexBox *index, DocumentationCatalogItem *item,
-                                     QDomElement section)
-{
-    //adymo: do not load section to index for Qt reference documentation
-    QString title = section.attribute("title");
-    if (fi.fileName() != "qt.dcf")
-    {
-        QString ref = section.attribute("ref");
-
-        IndexItemProto *ii = new IndexItemProto(this, item, index, title, item->text(0));
-        ii->addURL(KURL(fi.dirPath(true) + "/" + ref));
-    }
-
-    QDomElement grandChild = section.firstChild().toElement();
-    while(!grandChild.isNull())
-    {
-        if (grandChild.tagName() == "keyword")
-        {
-            QString keyRef = grandChild.attribute("ref");
-            QString keyTitle = grandChild.text();
+            QDomElement grandChild = childEl.firstChild().toElement();
+            while(!grandChild.isNull())
+            {
+                if (grandChild.tagName() == "keyword")
+                {
+                    QString keyRef = grandChild.attribute("ref");
+                    QString keyTitle = grandChild.text();
 
                     //adymo: a little hack to avoid unwanted elements
-            if (keyRef != "qdir-example.html")
-            {
-                IndexItemProto *ii = new IndexItemProto(this, item, index, keyTitle, title);
-                ii->addURL(KURL(fi.dirPath(true) + "/" + keyRef));
+                    if (keyRef != "qdir-example.html")
+                    {
+                        IndexItemProto *ii = new IndexItemProto(this, item, index, keyTitle, title);
+                        ii->addURL(KURL(fi.dirPath(true) + "/" + keyRef));
+                    }
+                }
+                grandChild = grandChild.nextSibling().toElement();
             }
         }
-        if (grandChild.tagName() == "section")
-        {
-            createSectionIndex(fi, index, item, grandChild);
-        }
-        grandChild = grandChild.nextSibling().toElement();
+        childEl = childEl.nextSibling().toElement();
     }
 }
 
 QStringList DocQtPlugin::fullTextSearchLocations()
 {
     QStringList locs;
-
+        
     QMap<QString, QString> entryMap = config->entryMap("Locations");
 
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
@@ -302,7 +293,7 @@ QStringList DocQtPlugin::fullTextSearchLocations()
             locs << fi.dirPath(true);
         }
     }
-
+    
     return locs;
 }
 
@@ -318,9 +309,9 @@ QString DocQtPlugin::catalogTitle(const QString &url)
         return QString::null;
 
     QFile f(url);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return QString::null;
-
+    
     QDomDocument doc;
     if (!doc.setContent(&f) || (doc.doctype().name() != "DCF"))
         return QString::null;

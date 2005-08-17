@@ -14,7 +14,7 @@
 
 #include <qobject.h>
 #include <qregexp.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include "outputfilter.h"
 
 class MakeItem;
@@ -31,22 +31,14 @@ public:
 
 	MakeActionFilter( OutputFilter& );
 
-	class ActionFormat
-        {
-           public:
-                ActionFormat():m_toolGroup(-1) {}
-		ActionFormat( const QString&, const QString&, const char * regExp, int file);
-		ActionFormat( const QString&, int tool, int file, const char * regExp);
-                QString tool();
-                QString file();
-                const QString& action() const     {return m_action;}
-                bool matches(const QString& line);
-           private:
-		QString m_action;
-		QRegExp m_expression;
-		QString m_tool;
-                int m_toolGroup;
-                int m_fileGroup;
+	struct ActionFormat
+	{
+		ActionFormat() {}
+		ActionFormat( const QString&, const QString&, const char *, int );
+		QString action;
+		QString tool;
+		QRegExp expression;
+		int fileGroup;
 	};
 	static ActionFormat* actionFormats();
 

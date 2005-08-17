@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #include "lexer.h"
@@ -25,7 +25,7 @@
 
 #include <qregexp.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #if defined( KDEVELOP_BGPARSER )
 #include <qthread.h>
@@ -54,7 +54,7 @@ using namespace std;
 struct LexerData
 {
     typedef QMap<QString, QString> Scope;
-    typedef QValueList<Scope> StaticChain;
+    typedef Q3ValueList<Scope> StaticChain;
 
     StaticChain staticChain;
 

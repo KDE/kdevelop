@@ -12,7 +12,9 @@
 #ifndef SUBCLASSINGDLG_H
 #define SUBCLASSINGDLG_H
 
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "subclassingdlgbase.h"
 
@@ -20,10 +22,10 @@ class QStringList;
 class QDomDocument;
 class CppSupportPart;
 
-class SlotItem : public QCheckListItem
+class SlotItem : public Q3CheckListItem
 {
 public:
-	SlotItem( QListView *parent, const QString &text,
+	SlotItem( Q3ListView *parent, const QString &text,
 	          const QString &specifier, const QString &Access,
 	          const QString &returnType, bool isFunc,
 	          bool callBaseClass = false );
@@ -43,10 +45,10 @@ class SubclassingDlg : public SubclassingDlgBase
 public:
 	SubclassingDlg( CppSupportPart* cppSupport, const QString &formFile, QStringList &newFileNames,
 	                QWidget* parent = 0, const char* name = 0,
-	                bool modal = FALSE, WFlags fl = 0 );
+	                bool modal = FALSE, Qt::WFlags fl = 0 );
 	SubclassingDlg( CppSupportPart* cppSupport, const QString &formFile, const QString &filename, QStringList &dummy,
 	                QWidget* parent = 0, const char* name = 0,
-	                bool modal = FALSE, WFlags fl = 0 );
+	                bool modal = FALSE, Qt::WFlags fl = 0 );
 	~SubclassingDlg();
 
 private:
@@ -75,8 +77,8 @@ protected:
 	QString m_formPath;
 	QStringList m_parsedMethods;
 	bool m_canBeModal;
-	QValueList<SlotItem*> m_slots;
-	QValueList<SlotItem*> m_functions;
+	Q3ValueList<SlotItem*> m_slots;
+	Q3ValueList<SlotItem*> m_functions;
 	CppSupportPart* m_cppSupport;
 };
 

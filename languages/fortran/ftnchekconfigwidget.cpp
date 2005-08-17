@@ -12,9 +12,9 @@
 #include "ftnchekconfigwidget.h"
 
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
-#include <qheader.h>
-#include <qlistview.h>
+#include <q3buttongroup.h>
+#include <q3header.h>
+#include <q3listview.h>
 #include <qradiobutton.h>
 #include <qtooltip.h>
 #include <klocale.h>
@@ -22,19 +22,19 @@
 #include "domutil.h"
 
 
-class FtnchekItem : public QCheckListItem
+class FtnchekItem : public Q3CheckListItem
 {
 public:
-    FtnchekItem(QListView *parent, const QString &flagstr,
+    FtnchekItem(Q3ListView *parent, const QString &flagstr,
                 const QString &description)
-        : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
+        : Q3CheckListItem(parent, flagstr, Q3CheckListItem::CheckBox),
           flag(flagstr), desc(description)
     {
         setText(1, desc);
     }
 
-    static void readFlagsToListView(QListView *listview, QStringList *list);
-    static void writeFlagsFromListView(QListView *listview, QStringList *list);
+    static void readFlagsToListView(Q3ListView *listview, QStringList *list);
+    static void writeFlagsFromListView(Q3ListView *listview, QStringList *list);
 
 private:
     QString flag;
@@ -43,9 +43,9 @@ private:
 };
 
 
-void FtnchekItem::readFlagsToListView(QListView *listview, QStringList *list)
+void FtnchekItem::readFlagsToListView(Q3ListView *listview, QStringList *list)
 {
-    QListViewItem *item = listview->firstChild();
+    Q3ListViewItem *item = listview->firstChild();
     for (; item; item = item->nextSibling()) {
         FtnchekItem *flitem = static_cast<FtnchekItem*>(item);
         QStringList::Iterator sli = list->find(flitem->flag);
@@ -57,11 +57,11 @@ void FtnchekItem::readFlagsToListView(QListView *listview, QStringList *list)
 }
 
 
-void FtnchekItem::writeFlagsFromListView(QListView *listview, QStringList *list)
+void FtnchekItem::writeFlagsFromListView(Q3ListView *listview, QStringList *list)
 {
     (*list).clear();
 
-    QListViewItem *item = listview->firstChild();
+    Q3ListViewItem *item = listview->firstChild();
     for (; item; item = item->nextSibling()) {
         FtnchekItem *flitem = static_cast<FtnchekItem*>(item);
         if (flitem->isOn())
@@ -79,8 +79,8 @@ public:
 protected:
     void maybeTip(const QPoint &pos)
     {
-        QListView *listview = static_cast<QListView*>(parentWidget());
-        QListViewItem *item = listview->itemAt(pos);
+        Q3ListView *listview = static_cast<Q3ListView*>(parentWidget());
+        Q3ListViewItem *item = listview->itemAt(pos);
         FtnchekItem *flitem = static_cast<FtnchekItem*>(item);
 
         if (item)
@@ -150,22 +150,22 @@ const char *portability_flags[] = {
 FtnchekConfigWidget::FtnchekConfigWidget(QDomDocument &projectDom, QWidget *parent, const char *name)
     : FtnchekConfigWidgetBase(parent, name), dom(projectDom)
 {
-    arguments_group = new QButtonGroup;
+    arguments_group = new Q3ButtonGroup;
     arguments_group->insert(argumentsall_button);
     arguments_group->insert(argumentsonly_button);
-    common_group = new QButtonGroup;
+    common_group = new Q3ButtonGroup;
     common_group->insert(commonall_button);
     common_group->insert(commononly_button);
-    truncation_group = new QButtonGroup;
+    truncation_group = new Q3ButtonGroup;
     truncation_group->insert(truncationall_button);
     truncation_group->insert(truncationonly_button);
-    usage_group = new QButtonGroup;
+    usage_group = new Q3ButtonGroup;
     usage_group->insert(usageall_button);
     usage_group->insert(usageonly_button);
-    f77_group = new QButtonGroup;
+    f77_group = new Q3ButtonGroup;
     f77_group->insert(f77all_button);
     f77_group->insert(f77only_button);
-    portability_group = new QButtonGroup;
+    portability_group = new Q3ButtonGroup;
     portability_group->insert(portabilityall_button);
     portability_group->insert(portabilityonly_button);
 

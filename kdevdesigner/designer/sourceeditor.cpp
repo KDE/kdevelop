@@ -33,6 +33,9 @@
 #include "mainwindow.h"
 #include "../interfaces/languageinterface.h"
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QCloseEvent>
 #include "project.h"
 #include "sourcefile.h"
 #include "hierarchyview.h"
@@ -41,7 +44,7 @@
 #include "kdevdesigner_part.h"
 
 SourceEditor::SourceEditor( QWidget *parent, EditorInterface *iface, LanguageInterface *liface )
-    : QVBox( parent, 0, WDestructiveClose ), iFace( iface ), lIface( liface ), obj( 0 ), pro( 0 )
+    : Q3VBox( parent, 0, Qt::WDestructiveClose ), iFace( iface ), lIface( liface ), obj( 0 ), pro( 0 )
 {
     iFace->addRef();
     lIface->addRef();
@@ -258,7 +261,7 @@ void SourceEditor::saveBreakPoints()
 {
     if ( !obj )
 	return;
-    QValueList<uint> l;
+    Q3ValueList<uint> l;
     iFace->breakPoints( l );
     MetaDataBase::setBreakPoints( obj, l );
 }

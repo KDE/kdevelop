@@ -41,6 +41,8 @@
 //
 
 #include <private/qcom_p.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class QObject;
 
@@ -51,7 +53,7 @@ class QObject;
 
 struct InterpreterInterface : public QUnknownInterface
 {
-    virtual void setBreakPoints( QObject *obj, const QValueList<uint> &lst ) = 0;
+    virtual void setBreakPoints( QObject *obj, const Q3ValueList<uint> &lst ) = 0;
 };
 
 

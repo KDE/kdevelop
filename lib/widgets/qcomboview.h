@@ -1,3 +1,12 @@
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <Q3StrList>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
 /**********************************************************************
 **
 **
@@ -27,12 +36,12 @@
 QComboView class.
 */
 
-class QStrList;
+class Q3StrList;
 class QStringList;
 class QLineEdit;
 class QValidator;
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 class QComboViewData;
 
 /**
@@ -63,9 +72,9 @@ public:
 
     int childCount() const;
 
-    QListViewItem *currentItem() const;
-    virtual void setCurrentItem( QListViewItem * );
-    virtual void setCurrentActiveItem( QListViewItem * );
+    Q3ListViewItem *currentItem() const;
+    virtual void setCurrentItem( Q3ListViewItem * );
+    virtual void setCurrentActiveItem( Q3ListViewItem * );
 
     bool	autoResize()	const;
     virtual void setAutoResize( bool );
@@ -90,8 +99,8 @@ public:
     virtual void setValidator( const QValidator * );
     const QValidator * validator() const;
 
-    virtual void setListView( QListView * );
-    QListView *	listView() const;
+    virtual void setListView( Q3ListView * );
+    Q3ListView *	listView() const;
 
     virtual void setLineEdit( QLineEdit *edit );
     QLineEdit*	lineEdit() const;
@@ -119,8 +128,8 @@ public slots:
     virtual void setEditText( const QString &);
 
 signals:
-    void	activated( QListViewItem * item );
-    void	highlighted( QListViewItem * item );
+    void	activated( Q3ListViewItem * item );
+    void	highlighted( Q3ListViewItem * item );
     void	activated( const QString &);
     void	highlighted( const QString &);
     void	textChanged( const QString &);
@@ -128,11 +137,11 @@ signals:
     void    focusLost();
 
 private slots:
-    void	internalActivate( QListViewItem * );
-    void	internalHighlight( QListViewItem * );
+    void	internalActivate( Q3ListViewItem * );
+    void	internalHighlight( Q3ListViewItem * );
     void	internalClickTimeout();
     void	returnPressed();
-    void checkState(QListViewItem*);
+    void checkState(Q3ListViewItem*);
 
 protected:
     void	paintEvent( QPaintEvent * );
@@ -155,7 +164,7 @@ private:
     void	popDownListView();
     void	reIndex();
     void	currentChanged();
-    QListViewItem *completionIndex( const QString &, QListViewItem * ) const;
+    Q3ListViewItem *completionIndex( const QString &, Q3ListViewItem * ) const;
 
     QComboViewData	*d;
 

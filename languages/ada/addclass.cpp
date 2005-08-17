@@ -4,7 +4,7 @@
 
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qfile.h>
@@ -228,7 +228,7 @@ bool AddClass::generate()
   {
     code += "/**\n";
 
-    QTextStream ts(&m_info.documentation, IO_ReadOnly);
+    QTextStream ts(&m_info.documentation, QIODevice::ReadOnly);
 
     while (!ts.eof())
       code += " * " + ts.readLine() + "\n";
@@ -336,7 +336,7 @@ bool AddClass::generate()
   }
   
   QFile of(m_info.adaFileName());
-  if (!of.open(IO_WriteOnly))
+  if (!of.open(QIODevice::WriteOnly))
   {
     /// @todo message to user
     return false;

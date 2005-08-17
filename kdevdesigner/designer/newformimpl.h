@@ -28,11 +28,13 @@
 #define NEWFORMIMPL_H
 
 #include "newform.h"
-#include <qiconview.h>
+#include <q3iconview.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class Project;
 
-class NewItem : public QIconViewItem
+class NewItem : public Q3IconViewItem
 {
 public:
     enum Type {
@@ -43,8 +45,8 @@ public:
 	SourceTemplateType
     };
 
-    NewItem( QIconView *view, const QString &text )
-	: QIconViewItem( view, text ) {}
+    NewItem( Q3IconView *view, const QString &text )
+	: Q3IconViewItem( view, text ) {}
     virtual void insert( Project *pro ) = 0;
     virtual void setProject( Project * ) {}
 
@@ -53,7 +55,7 @@ public:
 class ProjectItem : public NewItem
 {
 public:
-    ProjectItem( QIconView *view, const QString &text );
+    ProjectItem( Q3IconView *view, const QString &text );
     void insert( Project *pro );
     int rtti() const { return (int)ProjectType; }
 
@@ -75,7 +77,7 @@ public:
 	MainWindow
     };
 
-    FormItem( QIconView *view, const QString &text );
+    FormItem( Q3IconView *view, const QString &text );
     void insert( Project *pro );
     int rtti() const { return (int)Form; }
 
@@ -90,7 +92,7 @@ private:
 class CustomFormItem : public NewItem
 {
 public:
-    CustomFormItem( QIconView *view, const QString &text );
+    CustomFormItem( Q3IconView *view, const QString &text );
     void insert( Project *pro );
     int rtti() const { return (int)CustomForm; }
 
@@ -105,7 +107,7 @@ private:
 class SourceFileItem : public NewItem
 {
 public:
-    SourceFileItem( QIconView *view, const QString &text );
+    SourceFileItem( Q3IconView *view, const QString &text );
     void insert( Project *pro );
     int rtti() const { return (int)SourceFileType; }
 
@@ -124,7 +126,7 @@ private:
 class SourceTemplateItem : public NewItem
 {
 public:
-    SourceTemplateItem( QIconView *view, const QString &text );
+    SourceTemplateItem( Q3IconView *view, const QString &text );
     void insert( Project *pro );
     int rtti() const { return (int)SourceTemplateType; }
 
@@ -145,19 +147,19 @@ class NewForm : public NewFormBase
     Q_OBJECT
 
 public:
-    NewForm( QIconView *templateView, const QString &templatePath );
+    NewForm( Q3IconView *templateView, const QString &templatePath );
     NewForm( QWidget *parent, const QStringList& projects,
 	     const QString& currentProject, const QString &templatePath );
-    void insertTemplates( QIconView*, const QString& );
+    void insertTemplates( Q3IconView*, const QString& );
     void accept();
-    QPtrList<QIconViewItem> allViewItems();
+    Q3PtrList<Q3IconViewItem> allViewItems();
 
 protected slots:
     void projectChanged( const QString &project );
-    void itemChanged( QIconViewItem *item );
+    void itemChanged( Q3IconViewItem *item );
 
 private:
-    QPtrList<QIconViewItem> allItems;
+    Q3PtrList<Q3IconViewItem> allItems;
 
 };
 

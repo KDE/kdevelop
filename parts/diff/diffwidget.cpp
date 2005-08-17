@@ -10,10 +10,14 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-#include <qtextedit.h>
-#include <qpopupmenu.h>
+#include <q3textedit.h>
+#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QVBoxLayout>
+#include <QTextStream>
 
 #include <kconfig.h>
 #include <kapplication.h>
@@ -39,7 +43,7 @@ static const int POPUP_BASE = 130977;
 QStringList KDiffTextEdit::extParts;
 QStringList KDiffTextEdit::extPartsTranslated;
 
-KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): QTextEdit( parent, name )
+KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): Q3TextEdit( parent, name )
 {
   KConfig* config = kapp->config();
   config->setGroup( "Diff" );
@@ -56,16 +60,16 @@ KDiffTextEdit::~KDiffTextEdit()
   config->writeEntry( "Highlight", _highlight );
 }
 
-QPopupMenu* KDiffTextEdit::createPopupMenu()
+Q3PopupMenu* KDiffTextEdit::createPopupMenu()
 {
   return createPopupMenu( QPoint() );
 }
 
-QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
+Q3PopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
 {
-  QPopupMenu* popup = QTextEdit::createPopupMenu( p );
+  Q3PopupMenu* popup = Q3TextEdit::createPopupMenu( p );
   if ( !popup )
-    popup = new QPopupMenu( this );
+    popup = new Q3PopupMenu( this );
 
   int i = 0;
 
@@ -77,7 +81,7 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
     popup->insertSeparator( i );
   connect( popup, SIGNAL(activated(int)), this, SLOT(popupActivated(int)) );
 
-  popup->insertItem( SmallIconSet( "filesaveas" ), i18n( "&Save As..." ), this, SLOT(saveAs()), CTRL + Key_S, POPUP_BASE - 2, 0 );
+  popup->insertItem( SmallIconSet( "filesaveas" ), i18n( "&Save As..." ), this, SLOT(saveAs()), Qt::CTRL + Qt::Key_S, POPUP_BASE - 2, 0 );
   popup->setItemEnabled( POPUP_BASE - 2, length() > 0 );
 
   popup->insertSeparator( 1 );
@@ -96,7 +100,7 @@ void KDiffTextEdit::saveAs()
     return;
 
   QFile f( fName );
-  if ( f.open( IO_WriteOnly ) ) {
+  if ( f.open( QIODevice::WriteOnly ) ) {
     QTextStream stream( &f );
     int pCount = paragraphs();
     for ( int i = 0; i < pCount; ++i )
@@ -174,7 +178,7 @@ void KDiffTextEdit::popupActivated( int id )
   emit externalPartRequested( extParts[ id ] );
 }
 
-DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
+DiffWidget::DiffWidget( QWidget *parent, const char *name, Qt::WFlags f ):
     QWidget( parent, name, f ), tempFile( 0 )
 {
   job = 0;
@@ -182,7 +186,7 @@ DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
 
   te = new KDiffTextEdit( this, "Main Diff Viewer" );
   te->setReadOnly( true );
-  te->setTextFormat( QTextEdit::PlainText );
+  te->setTextFormat( Qt::PlainText );
 //  te->setMinimumSize( 300, 200 );
   connect( te, SIGNAL(externalPartRequested(const QString&)), this, SLOT(loadExtPart(const QString&)) );
 
@@ -310,7 +314,7 @@ void DiffWidget::openURL( const KURL& url )
 
 void DiffWidget::contextMenuEvent( QContextMenuEvent* /* e */ )
 {
-  QPopupMenu* popup = new QPopupMenu( this );
+  Q3PopupMenu* popup = new Q3PopupMenu( this );
 
   if ( !te->isVisible() )
     popup->insertItem( i18n("Display &Raw Output"), this, SLOT(showTextEdit()) );

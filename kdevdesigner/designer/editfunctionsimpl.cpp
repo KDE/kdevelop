@@ -35,17 +35,20 @@
 #include <kiconloader.h>
 #include "kdevdesigner_part.h"
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qmessagebox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
-#include <qheader.h>
+#include <q3groupbox.h>
+#include <q3header.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 
@@ -57,9 +60,9 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
     id = 0;
     functList.clear();
 
-    QValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( fw );
-    for ( QValueList<MetaDataBase::Function>::Iterator it = functionList.begin(); it != functionList.end(); ++it ) {
-	QListViewItem *i = new QListViewItem( functionListView );
+    Q3ValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( fw );
+    for ( Q3ValueList<MetaDataBase::Function>::Iterator it = functionList.begin(); it != functionList.end(); ++it ) {
+	Q3ListViewItem *i = new Q3ListViewItem( functionListView );
 
 	i->setPixmap( 0, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()) );
 	i->setText( 0, (*it).function );
@@ -105,15 +108,15 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
     lastType = "function";
 
     // Enable rename for all QListViewItems
-    QListViewItemIterator lvit = functionListView->firstChild();
+    Q3ListViewItemIterator lvit = functionListView->firstChild();
     for ( ; *lvit; lvit++ )
 	(*lvit)->setRenameEnabled( 0, TRUE );
 
     // Connect listview signal to signal-relay
     QObject::connect( functionListView,
-		      SIGNAL( itemRenamed( QListViewItem*, int, const QString & ) ),
+		      SIGNAL( itemRenamed( Q3ListViewItem*, int, const QString & ) ),
 		      this,
-		      SLOT( emitItemRenamed(QListViewItem*, int, const QString&) ) );
+		      SLOT( emitItemRenamed(Q3ListViewItem*, int, const QString&) ) );
 
     // Connect signal-relay to QLineEdit "functionName"
     QObjectList *l = parent->queryList( "QLineEdit", "functionName" );
@@ -131,14 +134,14 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
 
 void EditFunctions::okClicked()
 {
-    QValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow );
+    Q3ValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow );
     QString n = i18n( "Add/Remove functions of '%1'" ).arg( formWindow->name() );
-    QPtrList<Command> commands;
-    QValueList<MetaDataBase::Function>::Iterator fit;
+    Q3PtrList<Command> commands;
+    Q3ValueList<MetaDataBase::Function>::Iterator fit;
     if ( !functionList.isEmpty() ) {
 	for ( fit = functionList.begin(); fit != functionList.end(); ++fit ) {
 	    bool functionFound = FALSE;
-	    QValueList<FunctItem>::Iterator it = functList.begin();
+	    Q3ValueList<FunctItem>::Iterator it = functList.begin();
 	    for ( ; it != functList.end(); ++it ) {
 		if ( MetaDataBase::normalizeFunction( (*it).oldName ) ==
 		     MetaDataBase::normalizeFunction( (*fit).function ) ) {
@@ -157,11 +160,11 @@ void EditFunctions::okClicked()
     }
 
     bool invalidFunctions = FALSE;
-    QValueList<FunctItem> invalidItems;
+    Q3ValueList<FunctItem> invalidItems;
 
     if ( !functList.isEmpty() ) {
-	QStrList lst;
-	QValueList<FunctItem>::Iterator it = functList.begin();
+	Q3StrList lst;
+	Q3ValueList<FunctItem>::Iterator it = functList.begin();
 	for ( ; it != functList.end(); ++it ) {
 	    MetaDataBase::Function function;
 	    function.function = (*it).newName;
@@ -216,10 +219,10 @@ void EditFunctions::okClicked()
 	if ( QMessageBox::information( this, i18n( "Edit Functions" ),
 				       i18n( "Some syntactically incorrect functions have been defined.\n"
 				       "Remove these functions?" ), i18n( "&Yes" ), i18n( "&No" ) ) == 0 ) {
-	    QValueList<FunctItem>::Iterator it = functList.begin();
+	    Q3ValueList<FunctItem>::Iterator it = functList.begin();
 	    while ( it != functList.end() ) {
 		bool found = FALSE;
-		QValueList<FunctItem>::Iterator vit = invalidItems.begin();
+		Q3ValueList<FunctItem>::Iterator vit = invalidItems.begin();
 		for ( ; vit != invalidItems.end(); ++vit ) {
 		    if ( (*vit).newName == (*it).newName ) {
 			invalidItems.remove( vit );
@@ -230,10 +233,10 @@ void EditFunctions::okClicked()
 		if ( found ) {
 		    int delId = (*it).id;
 		    it = functList.remove( it );
-		    QMap<QListViewItem*, int>::Iterator fit = functionIds.begin();
+		    QMap<Q3ListViewItem*, int>::Iterator fit = functionIds.begin();
 		    while ( fit != functionIds.end() ) {
 			if ( *fit == delId ) {
-			    QListViewItem *litem = fit.key();
+			    Q3ListViewItem *litem = fit.key();
 			    functionIds.remove( fit );
 			    delete litem;
 			    if ( functionListView->currentItem() )
@@ -268,7 +271,7 @@ void EditFunctions::okClicked()
 
 void EditFunctions::functionAdd( const QString &access, const QString &type )
 {
-    QListViewItem *i = new QListViewItem( functionListView );
+    Q3ListViewItem *i = new Q3ListViewItem( functionListView );
     i->setPixmap( 0, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()) );
     i->setRenameEnabled( 0, TRUE );
     i->setText( 1, "void" );
@@ -332,7 +335,7 @@ void EditFunctions::functionRemove()
     functionListView->blockSignals( TRUE );
     removedFunctions << MetaDataBase::normalizeFunction( functionListView->currentItem()->text( 0 ) );
     int delId = functionIds[ functionListView->currentItem() ];
-    QValueList<FunctItem>::Iterator it = functList.begin();
+    Q3ValueList<FunctItem>::Iterator it = functList.begin();
     while ( it != functList.end() ) {
 	if ( (*it).id == delId ) {
 	    functList.remove( it );
@@ -348,7 +351,7 @@ void EditFunctions::functionRemove()
     currentItemChanged( functionListView->currentItem() );
 }
 
-void EditFunctions::currentItemChanged( QListViewItem *i )
+void EditFunctions::currentItemChanged( Q3ListViewItem *i )
 {
     functionName->blockSignals( TRUE );
     functionName->setText( "" );
@@ -451,16 +454,16 @@ void EditFunctions::currentTypeChanged( const QString &type )
     }
 }
 
-void EditFunctions::changeItem( QListViewItem *item, Attribute a, const QString &nV )
+void EditFunctions::changeItem( Q3ListViewItem *item, Attribute a, const QString &nV )
 {
     int itemId;
-    QMap<QListViewItem*, int>::Iterator fit = functionIds.find( item );
+    QMap<Q3ListViewItem*, int>::Iterator fit = functionIds.find( item );
     if ( fit != functionIds.end() )
 	itemId = *fit;
     else
 	return;
 
-    QValueList<FunctItem>::Iterator it = functList.begin();
+    Q3ValueList<FunctItem>::Iterator it = functList.begin();
     for ( ; it != functList.end(); ++it ) {
 	if ( (*it).id == itemId ) {
 	    switch( a ) {
@@ -486,7 +489,7 @@ void EditFunctions::changeItem( QListViewItem *item, Attribute a, const QString 
 
 void EditFunctions::setCurrentFunction( const QString &function )
 {
-    QListViewItemIterator it( functionListView );
+    Q3ListViewItemIterator it( functionListView );
     while ( it.current() ) {
 	if ( MetaDataBase::normalizeFunction( it.current()->text( 0 ) ) == function ) {
 	    functionListView->setCurrentItem( it.current() );
@@ -502,10 +505,10 @@ void EditFunctions::displaySlots( bool justSlots )
 {
     functionIds.clear();
     functionListView->clear();
-    for ( QValueList<FunctItem>::Iterator it = functList.begin(); it != functList.end(); ++it ) {
+    for ( Q3ValueList<FunctItem>::Iterator it = functList.begin(); it != functList.end(); ++it ) {
 	if ( (*it).type == "function" && justSlots )
 	    continue;
-	QListViewItem *i = new QListViewItem( functionListView );
+	Q3ListViewItem *i = new Q3ListViewItem( functionListView );
 	functionIds.insert( i, (*it).id );
 	i->setPixmap( 0, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()) );
 	i->setText( 0, (*it).newName );
@@ -528,7 +531,7 @@ void EditFunctions::displaySlots( bool justSlots )
 	functionListView->setSelected( functionListView->firstChild(), TRUE );
 }
 
-void EditFunctions::emitItemRenamed( QListViewItem *, int, const QString & text )
+void EditFunctions::emitItemRenamed( Q3ListViewItem *, int, const QString & text )
 {
     emit itemRenamed( text ); // Relay signal ( to QLineEdit )
 }

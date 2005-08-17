@@ -27,13 +27,17 @@
 #ifndef LISTVIEWDND_H
 #define LISTVIEWDND_H
 
-#include <qptrlist.h>
-#include <qlistview.h>
+#include <q3ptrlist.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include "listdnd.h"
 
 class QWidget;
-class QListView;
-typedef QPtrList<QListViewItem> ListViewItemList;
+class Q3ListView;
+typedef Q3PtrList<Q3ListViewItem> ListViewItemList;
 
 class ListViewDnd : public ListDnd
 {
@@ -41,13 +45,13 @@ class ListViewDnd : public ListDnd
 public:
     enum DragMode { Flat = 16 }; // see ListDnd::DragMode
 
-    ListViewDnd( QListView * eventSource, const char * name = 0 );
+    ListViewDnd( Q3ListView * eventSource, const char * name = 0 );
 
 signals:
-    void dropped( QListViewItem * );
+    void dropped( Q3ListViewItem * );
 
 public slots:
-    void confirmDrop( QListViewItem * );
+    void confirmDrop( Q3ListViewItem * );
 
 protected:
     virtual bool dropEvent( QDropEvent * event );
@@ -55,8 +59,8 @@ protected:
     virtual void updateLine( const QPoint & pos );
     virtual bool canDecode( QDragEnterEvent * event );
 private:
-    QListViewItem * itemAt( QPoint pos );
-    int dropDepth( QListViewItem * item, QPoint pos );
+    Q3ListViewItem * itemAt( QPoint pos );
+    int dropDepth( Q3ListViewItem * item, QPoint pos );
     int buildFlatList( ListViewItemList & list );
     int buildTreeList( ListViewItemList & list );
     void setVisibleItems( bool b );

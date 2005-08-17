@@ -24,11 +24,13 @@
 **
 **********************************************************************/
 
-#include <qlistview.h>
-#include <qgroupbox.h>
+#include <q3listview.h>
+#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "metadatabase.h"
 #include "formwindow.h"
@@ -44,10 +46,10 @@ VariableDialog::VariableDialog( FormWindow *fw, QWidget *parent )
     : VariableDialogBase( parent ), formWindow( fw )
 {
     varView->setSorting( -1 );
-    QValueList<MetaDataBase::Variable> varLst = MetaDataBase::variables( formWindow );
-    QValueList<MetaDataBase::Variable>::Iterator it = varLst.begin();
+    Q3ValueList<MetaDataBase::Variable> varLst = MetaDataBase::variables( formWindow );
+    Q3ValueList<MetaDataBase::Variable>::Iterator it = varLst.begin();
     for ( ; it != varLst.end(); ++it ) {
-	QListViewItem *i = new QListViewItem( varView );
+	Q3ListViewItem *i = new Q3ListViewItem( varView );
 	i->setText( 0, (*it).varName );
 	i->setText( 1, (*it).varAccess );
     }
@@ -64,16 +66,16 @@ VariableDialog::~VariableDialog()
 
 void VariableDialog::setCurrentItem( QString text )
 {
-    QListViewItem *i = varView->findItem( text, 0 );
+    Q3ListViewItem *i = varView->findItem( text, 0 );
     if ( i )
 	varView->setCurrentItem( i );
 }
 
 void VariableDialog::okClicked()
 {
-    QValueList<MetaDataBase::Variable> lst;
+    Q3ValueList<MetaDataBase::Variable> lst;
 
-    QListViewItemIterator it( varView );
+    Q3ListViewItemIterator it( varView );
     while ( it.current() != 0 ) {
 	MetaDataBase::Variable v;
 	v.varName = it.current()->text( 0 ).simplifyWhiteSpace();
@@ -85,9 +87,9 @@ void VariableDialog::okClicked()
     }
 
     if ( !lst.isEmpty() ) {
-	QValueList<MetaDataBase::Variable> invalidLst;
-	QValueList<MetaDataBase::Variable>::Iterator it1 = lst.begin();
-	QValueList<MetaDataBase::Variable>::Iterator it2;
+	Q3ValueList<MetaDataBase::Variable> invalidLst;
+	Q3ValueList<MetaDataBase::Variable>::Iterator it1 = lst.begin();
+	Q3ValueList<MetaDataBase::Variable>::Iterator it2;
 	for ( ; it1 != lst.end(); ++it1 ) {
 	    it2 = it1;
 	    ++it2;
@@ -127,7 +129,7 @@ void VariableDialog::okClicked()
 
 void VariableDialog::addVariable()
 {
-    QListViewItem *i = new QListViewItem( varView, varView->lastItem() );
+    Q3ListViewItem *i = new Q3ListViewItem( varView, varView->lastItem() );
     i->setText( 0, "int newVariable" );
     i->setText( 1, "protected" );
     varView->setCurrentItem( i );
@@ -138,7 +140,7 @@ void VariableDialog::addVariable()
 
 void VariableDialog::deleteVariable()
 {
-    QListViewItem *i = varView->selectedItem();
+    Q3ListViewItem *i = varView->selectedItem();
     if ( !i )
 	return;
     delete i;
@@ -147,7 +149,7 @@ void VariableDialog::deleteVariable()
 	varView->setSelected( varView->firstChild(), TRUE );
 }
 
-void VariableDialog::currentItemChanged( QListViewItem *i )
+void VariableDialog::currentItemChanged( Q3ListViewItem *i )
 {
     if ( !i ) {
 	varName->clear();

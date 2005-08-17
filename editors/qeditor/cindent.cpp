@@ -24,7 +24,7 @@
 #include "qeditor.h"
 #include "indentconfigpage.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kdialogbase.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -69,13 +69,13 @@ int CIndent::indentForLine( int line )
     for( int i=0; i<=line; ++i )
         code << editor()->text( i );
 
-    return indentForBottomLine( code, QChar::null );
+    return indentForBottomLine( code, QChar::Null );
 }
 
 QWidget* CIndent::createConfigPage( QEditorPart* part, KDialogBase* parentWidget,
                                     const char* widgetName )
 {
-    QVBox* vbox = parentWidget->addVBoxPage( i18n("Indent") );
+    Q3VBox* vbox = parentWidget->addVBoxPage( i18n("Indent") );
 
     IndentConfigPage* page = new IndentConfigPage( vbox, widgetName );
     page->setPart( part );

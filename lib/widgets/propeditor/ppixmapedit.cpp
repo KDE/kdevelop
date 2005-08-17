@@ -17,7 +17,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "ppixmapedit.h"
 
@@ -25,6 +25,12 @@
 #include <qpainter.h>
 #include <qlabel.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QHBoxLayout>
+#include <QResizeEvent>
 
 #ifndef PURE_QT
 #include <klocale.h>
@@ -35,7 +41,7 @@
 #ifndef PURE_QT
 #include <kfiledialog.h>
 #else
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #endif
 #include <qpushbutton.h>
 
@@ -94,7 +100,7 @@ void PPixmapEdit::updateProperty()
         emit propertyChanged(m_property, value());
     }
 #else
-    QString url = QFileDialog::getOpenFileName();
+    QString url = Q3FileDialog::getOpenFileName();
     if (!url.isEmpty())
     {
         m_edit->setPixmap(QPixmap(url));

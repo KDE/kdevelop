@@ -3,12 +3,14 @@
 */
 #include "bashsupport_part.h"
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kapplication.h>
 #include <qregexp.h>
 
@@ -43,7 +45,7 @@ BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStrin
 	setXMLFile("kdevbashsupport.rc");
 
 	KAction *action;
-	action = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
+	action = new KAction( i18n("&Run"), "exec",Qt::Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
     action->setToolTip(i18n("Run"));
     action->setWhatsThis(i18n("<b>Run</b><p>Starts an application."));
 
@@ -121,7 +123,7 @@ void BashSupportPart::parse()
 
 	if (project())
 	{
-		kapp->setOverrideCursor(waitCursor);
+		kapp->setOverrideCursor(Qt::WaitCursor);
 		QStringList files = project()->allFiles();
 		for (QStringList::Iterator it = files.begin(); it != files.end() ;++it)
 		{
@@ -208,7 +210,7 @@ void BashSupportPart::parse(const QString &fileName)
 
 		m_vars.clear();
 		QFile f(QFile::encodeName(fileName));
-		if (!f.open(IO_ReadOnly))
+		if (!f.open(QIODevice::ReadOnly))
 			return;
 		QString rawline;
 		QString line;
@@ -345,11 +347,11 @@ void BashCodeCompletion::setVars(QStringList lst)
 	m_vars = lst;
 }
 
-QValueList<KTextEditor::CompletionEntry> BashCodeCompletion::getVars(const QString &startText)
+Q3ValueList<KTextEditor::CompletionEntry> BashCodeCompletion::getVars(const QString &startText)
 {
 	kdDebug() << "getVars for " << startText << endl;
-	QValueList<KTextEditor::CompletionEntry> varList;
-	QValueList<QString>::ConstIterator it;
+	Q3ValueList<KTextEditor::CompletionEntry> varList;
+	Q3ValueList<QString>::ConstIterator it;
 	for (it = m_vars.begin(); it != m_vars.end(); ++it) {
 		QString var = "$" + (*it);
 		kdDebug() << "Compair " << var << endl;

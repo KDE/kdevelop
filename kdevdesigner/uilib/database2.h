@@ -28,15 +28,18 @@
 #define DATABASE2_H
 
 #include "qfeatures.h"
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3SqlForm>
 
 #ifndef QT_NO_SQL
-#include <qdataview.h>
-#include <qdatabrowser.h>
-#include <qsqlcursor.h>
+#include <q3dataview.h>
+#include <q3databrowser.h>
+#include <q3sqlcursor.h>
 #include <qstring.h>
 
 class QSqlDatabase;
-class QSqlForm;
+class Q3SqlForm;
 
 class DatabaseSupport2
 {
@@ -49,14 +52,14 @@ public:
 
 protected:
     QSqlDatabase* con;
-    QSqlForm* frm;
+    Q3SqlForm* frm;
     QString tbl;
     QMap<QString, QString> dbControls;
     QObject *parent;
 
 };
 
-class QDesignerDataBrowser2 : public QDataBrowser, public DatabaseSupport2
+class QDesignerDataBrowser2 : public Q3DataBrowser, public DatabaseSupport2
 {
     Q_OBJECT
 
@@ -67,7 +70,7 @@ protected:
     bool event( QEvent* e );
 };
 
-class QDesignerDataView2 : public QDataView, public DatabaseSupport2
+class QDesignerDataView2 : public Q3DataView, public DatabaseSupport2
 {
     Q_OBJECT
 

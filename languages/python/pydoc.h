@@ -2,13 +2,15 @@
 #define _PYDOC_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kio/slavebase.h>
 
 
 class PydocProtocol : public KIO::SlaveBase
 {
 public:
-    PydocProtocol(const QCString &pool, const QCString &app);
+    PydocProtocol(const Q3CString &pool, const Q3CString &app);
     virtual ~PydocProtocol();
 
     virtual void get(const KURL& url);
@@ -19,7 +21,7 @@ public:
 protected:
     void decodeURL(const KURL &url);
     void decodePath(QString path);
-    QCString errorMessage();
+    Q3CString errorMessage();
 
 private:
     QString python;

@@ -13,14 +13,16 @@
 
 	 You should have received a copy of the GNU General Public License
 	 along with this program; see the file COPYING.  If not, write to
-	 the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-	 Boston, MA 02110-1301, USA.
+	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	 Boston, MA 02111-1307, USA.
 	 */
 
 #include "subversion_fileinfo.h"
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdevproject.h>
 #include <unistd.h>
 #include <kapplication.h>
@@ -37,7 +39,6 @@
 SVNFileInfoProvider::SVNFileInfoProvider(subversionPart *parent, const char *name)
     : KDevVCSFileInfoProvider( parent, "svnfileinfoprovider" ),
 	m_cachedDirEntries( 0 ) {
-  Q_UNUSED(name);
 	m_part = parent;
 }
 
@@ -57,7 +58,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		m_previousDirPath = dirPath;
 		KURL servURL = "svn+http://fakeserver_this_is_normal_behavior/";
 		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
+		QDataStream s( parms, QIODevice::WriteOnly );
 		int cmd = 9;
 		QString rPath = projectDirectory( );
 		rPath += QDir::separator() + dirPath;
@@ -74,9 +75,9 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		KIO::NetAccess::synchronousRun(job2, m_part->mainWindow()->main(), 0, 0, &ma );
 #endif
 
-		QValueList<QString> keys = ma.keys();
+		Q3ValueList<QString> keys = ma.keys();
 		qHeapSort( keys );
-		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+		Q3ValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 		QString path;
 		int text_status, prop_status, repos_text_status, repos_prop_status;
@@ -124,7 +125,7 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
     }
 
 	QByteArray parms;
-	QDataStream s( parms, IO_WriteOnly );
+	QDataStream s( parms, QIODevice::WriteOnly );
 	int cmd = 9;
 	QString rPath = projectDirectory( );
 	rPath += QDir::separator() + dirPath;
@@ -143,9 +144,9 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 		j->showErrorDialog( m_part->mainWindow()->main() );
 
 	KIO::MetaData ma = j->metaData();
-	QValueList<QString> keys = ma.keys();
+	Q3ValueList<QString> keys = ma.keys();
 	qHeapSort( keys );
-	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+	Q3ValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 	QString path;
 	int text_status, prop_status, repos_text_status, repos_prop_status;

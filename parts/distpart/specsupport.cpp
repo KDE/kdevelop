@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include "specsupport.h"
@@ -33,9 +33,11 @@
 #include <qregexp.h>
 #include <qpushbutton.h>
 //#include <qvbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qtabwidget.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 /// \FIXME This is at least the fifth place in the kdevelop code something like this exists
 QString QRegExp_escape(const QString& str )
@@ -109,7 +111,7 @@ void SpecSupport::slotexportSPECPushButtonPressed() {
     specname += ("/" + m_part->project()->projectName() + ".spec");
     QFile file(specname);
 
-    if(file.open(IO_WriteOnly)) {
+    if(file.open(QIODevice::WriteOnly)) {
         QTextStream stream(&file);
 	stream << generatePackage();
         file.close();
@@ -132,7 +134,7 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
                return;
     QFile file(fileName);
  
-    if(file.open(IO_ReadOnly)) {
+    if(file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
 
         while (!stream.atEnd()) {
@@ -200,7 +202,7 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
 void SpecSupport::parseDotRpmmacros() {
     QFile dotfile(QDir::homeDirPath() + "/.rpmmacros");
 
-    if (!dotfile.open(IO_ReadOnly)) {
+    if (!dotfile.open(QIODevice::ReadOnly)) {
 //        QErrorMessage * msg = new QErrorMessage(this);
 //        msg->message("It seems you don't have a ~/.rpmmacros\nYou may experience problems building packages.\n");
 //        msg->exec();

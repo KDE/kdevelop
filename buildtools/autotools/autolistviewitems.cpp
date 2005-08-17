@@ -27,15 +27,15 @@
 * Class ProjectItem
 */
 
-ProjectItem::ProjectItem( Type type, QListView *parent, const QString &text )
-		: QListViewItem( parent, text ), typ( type )
+ProjectItem::ProjectItem( Type type, Q3ListView *parent, const QString &text )
+		: Q3ListViewItem( parent, text ), typ( type )
 {
 	bld = false;
 }
 
 
 ProjectItem::ProjectItem( Type type, ProjectItem *parent, const QString &text )
-		: QListViewItem( parent, text ), typ( type )
+		: Q3ListViewItem( parent, text ), typ( type )
 {
 	bld = false;
 }
@@ -50,7 +50,7 @@ void ProjectItem::paintCell( QPainter *p, const QColorGroup &cg,
 		font.setBold( true );
 		p->setFont( font );
 	}
-	QListViewItem::paintCell( p, cg, column, width, alignment );
+	Q3ListViewItem::paintCell( p, cg, column, width, alignment );
 }
 
 
@@ -58,7 +58,7 @@ void ProjectItem::paintCell( QPainter *p, const QColorGroup &cg,
 * Class SubprojectItem
 */
 
-SubprojectItem::SubprojectItem( QListView *parent, const QString &text )
+SubprojectItem::SubprojectItem( Q3ListView *parent, const QString &text )
 		: ProjectItem( Subproject, parent, text )
 {
 	init();
@@ -98,7 +98,7 @@ QString SubprojectItem::relativePath()
 * Class TargetItem
 */
 
-TargetItem::TargetItem( QListView *lv, bool group, const QString &text )
+TargetItem::TargetItem( Q3ListView *lv, bool group, const QString &text )
 		: ProjectItem( Target, lv, text )
 {
 	sources.setAutoDelete( true );
@@ -110,7 +110,7 @@ TargetItem::TargetItem( QListView *lv, bool group, const QString &text )
 * Class FileItem
 */
 
-FileItem::FileItem( QListView *lv, const QString &text, bool set_is_subst )
+FileItem::FileItem( Q3ListView *lv, const QString &text, bool set_is_subst )
 		: ProjectItem( File, lv, text ) , is_subst(set_is_subst)
 {
 	if(!is_subst)

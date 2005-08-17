@@ -15,19 +15,21 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "pcolorbutton.h"
 
 #include <qlayout.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 #ifndef PURE_QT
 #include <kcolorbutton.h>
 #else
 #include <qpushbutton.h>
 #include <qpixmap.h>
-#include <qiconset.h>
+#include <qicon.h>
 #endif
 #include <qcolordialog.h>
 

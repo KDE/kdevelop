@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "button.h"
 
@@ -23,6 +23,8 @@
 #include <qtooltip.h>
 #include <qstyle.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -31,7 +33,7 @@
 
 namespace Ideal {
 
-Button::Button(ButtonBar *parent, const QString text, const QIconSet &icon,
+Button::Button(ButtonBar *parent, const QString text, const QIcon &icon,
     const QString &description)
     :QPushButton(icon, text, parent), m_buttonBar(parent), m_description(description),
     m_place(parent->place()), m_realText(text), m_realIconSet(icon)
@@ -39,7 +41,7 @@ Button::Button(ButtonBar *parent, const QString text, const QIconSet &icon,
     hide();
     setFlat(true);
     setToggleButton(true);
-    setFocusPolicy(NoFocus);
+    setFocusPolicy(Qt::NoFocus);
     setDescription(m_description);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     resize(sizeHint());
@@ -78,17 +80,17 @@ void Button::drawButton(QPainter *p)
             break;
     }
 
-    QStyle::SFlags flags = QStyle::Style_Default;
+    QStyle::State flags = QStyle::State_None;
     if (isEnabled())
-        flags |= QStyle::Style_Enabled;
+        flags |= QStyle::State_Enabled;
     if (hasFocus())
-        flags |= QStyle::Style_HasFocus;
+        flags |= QStyle::State_HasFocus;
     if (isDown())
-        flags |= QStyle::Style_Down;
+        flags |= QStyle::State_Down;
     if (isOn())
-        flags |= QStyle::Style_On;
+        flags |= QStyle::State_On;
     if (! isFlat() && ! isDown())
-        flags |= QStyle::Style_Raised;
+        flags |= QStyle::State_Raised;
     if (isDefault())
         flags |= QStyle::Style_ButtonDefault;
 
@@ -170,8 +172,8 @@ QSize Button::sizeHint(const QString &text) const
     int w = 0, h = 0;
 
     if ( iconSet() && !iconSet()->isNull() && (m_buttonBar->mode() != Text) ) {
-        int iw = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal ).width() + 4;
-        int ih = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal ).height();
+        int iw = iconSet()->pixmap( QIcon::Small, QIcon::Normal ).width() + 4;
+        int ih = iconSet()->pixmap( QIcon::Small, QIcon::Normal ).height();
         w += iw;
         h = QMAX( h, ih );
     }
@@ -187,7 +189,7 @@ QSize Button::sizeHint(const QString &text) const
         if ( empty )
             s = QString::fromLatin1("XXXX");
         QFontMetrics fm = fontMetrics();
-        QSize sz = fm.size( ShowPrefix, s );
+        QSize sz = fm.size( Qt::TextShowMnemonic, s );
         if(!empty || !w)
             w += sz.width();
         if(!empty || !h)
@@ -250,7 +252,7 @@ void Button::enableIconSet()
 
 void Button::disableIconSet()
 {
-    setIconSet(QIconSet());
+    setIconSet(QIcon());
 }
 
 void Button::disableText()

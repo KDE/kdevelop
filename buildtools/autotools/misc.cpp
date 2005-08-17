@@ -97,7 +97,7 @@ QString AutoProjectTool::canonicalize( const QString &str )
 void AutoProjectTool::parseMakefileam( const QString &fileName, QMap<QString, QString> *variables )
 {
 	QFile f( fileName );
-	if ( !f.open( IO_ReadOnly ) )
+	if ( !f.open( QIODevice::ReadOnly ) )
 		return ;
 	QTextStream stream( &f );
 
@@ -131,12 +131,12 @@ void AutoProjectTool::parseMakefileam( const QString &fileName, QMap<QString, QS
 void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, QString> variables )
 {
 	QFile fin( fileName );
-	if ( !fin.open( IO_ReadOnly ) )
+	if ( !fin.open( QIODevice::ReadOnly ) )
 		return ;
 	QTextStream ins( &fin );
 
 	QFile fout( fileName + "#" );
-	if ( !fout.open( IO_WriteOnly ) )
+	if ( !fout.open( QIODevice::WriteOnly ) )
 	{
 		fin.close();
 		return ;
@@ -222,12 +222,12 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 void AutoProjectTool::removeFromMakefileam ( const QString &fileName, QMap <QString, QString> variables )
 {
 	QFile fin( fileName );
-	if ( !fin.open( IO_ReadOnly ) )
+	if ( !fin.open( QIODevice::ReadOnly ) )
 		return ;
 	QTextStream ins( &fin );
 
 	QFile fout( fileName + "#" );
-	if ( !fout.open( IO_WriteOnly ) )
+	if ( !fout.open( QIODevice::WriteOnly ) )
 	{
 		fin.close();
 		return ;
@@ -279,7 +279,7 @@ QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 {
 	QFile configurein(configureinpath);
 
-	if ( !configurein.open( IO_ReadOnly ) )
+	if ( !configurein.open( QIODevice::ReadOnly ) )
 	{
 		kdDebug(9020) << k_funcinfo << " - couldn't open file: " << configureinpath << endl;
 		return QStringList();
@@ -322,7 +322,7 @@ void AutoProjectTool::configureinSaveMakefiles(QString configureinpath, QStringL
 	// read configure.in into buffer origfilecontent
 	QFile configurein(configureinpath);
 
-	configurein.open ( IO_ReadOnly );
+	configurein.open ( QIODevice::ReadOnly );
 
 	QTextStream instream( &configurein);
 
@@ -337,7 +337,7 @@ void AutoProjectTool::configureinSaveMakefiles(QString configureinpath, QStringL
 
 
 	// put origfilecontent back into configure.in
-	configurein.open ( IO_WriteOnly );
+	configurein.open ( QIODevice::WriteOnly );
 	QTextStream outstream( &configurein);
 
 	QStringList::iterator it;

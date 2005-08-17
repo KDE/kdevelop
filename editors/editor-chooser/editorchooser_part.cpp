@@ -1,4 +1,4 @@
-#include <qvbox.h>
+#include <q3vbox.h>
 
 
 #include <kiconloader.h>
@@ -32,7 +32,7 @@ EditorChooserPart::~EditorChooserPart()
 
 void EditorChooserPart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Editor"), i18n("Editor"), BarIcon("kate", KIcon::SizeMedium) );
+  Q3VBox *vbox = dlg->addVBoxPage(i18n("Editor"), i18n("Editor"), BarIcon("kate", KIcon::SizeMedium) );
   EditorChooserWidget *w = new EditorChooserWidget(vbox);
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }

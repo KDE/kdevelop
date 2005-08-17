@@ -14,6 +14,10 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
+#include <QGridLayout>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -48,8 +52,8 @@ AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEd
     grid->addWidget(path_label, 1, 0);
     grid->addWidget(path_edit, 1, 1);
 
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+    Q3Frame *frame = new Q3Frame(this);
+    frame->setFrameStyle(Q3Frame::HLine | Q3Frame::Sunken);
     layout->addWidget(frame, 0);
 
     KButtonBox *buttonbox = new KButtonBox(this);

@@ -15,18 +15,18 @@
 #include "trollprojectwidget.h"
 #include "filepropertybase.h"
 
-class QCheckListItem;
-class QListViewItem;
+class Q3CheckListItem;
+class Q3ListViewItem;
 class FilePropertyBase;
 class FileItem;
 class SubqmakeprojectItem;
 class GroupItem;
 
-class ScopeItem : public QCheckListItem
+class ScopeItem : public Q3CheckListItem
 {
   public:
-                  ScopeItem(QCheckListItem *parent,const QString &text,QStringList *excludeList,bool initialMode);
-                  ScopeItem(QListView *parent,const QString &text,QStringList *excludeList,bool initialMode);
+                  ScopeItem(Q3CheckListItem *parent,const QString &text,QStringList *excludeList,bool initialMode);
+                  ScopeItem(Q3ListView *parent,const QString &text,QStringList *excludeList,bool initialMode);
   QString&        getScopeString() {return m_scopeString;}
   void            setScopeString(const QString &scopeString) {m_scopeString = scopeString;}
   void            excludeFromScope(const QString &fileName,bool b);
@@ -43,7 +43,7 @@ class FilePropertyDlg : public FilePropertyBase
   public:
                   FilePropertyDlg(SubqmakeprojectItem *spitem, int grtype,FileItem *fitem,
                                   QStringList &dirtyScopes,QWidget *parent=0,
-                                  const char* name = 0,bool modal = FALSE, WFlags fl = 0);
+                                  const char* name = 0,bool modal = FALSE, Qt::WFlags fl = 0);
 
   private:
   void            createScopeTree(SubqmakeprojectItem *spitem,ScopeItem *sitem=0);

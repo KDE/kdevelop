@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 #ifndef qeditor_view_h
@@ -24,8 +24,11 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/clipboardinterface.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
-class QPopupMenu;
+class Q3PopupMenu;
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
 #if defined(KDE_MAKE_VERSION)
@@ -187,7 +190,7 @@ public:
        Install a Popup Menu. The Popup Menu will be activated on
        a right mouse button press event.
     */
-    virtual void installPopup ( class QPopupMenu *rmb_Menu );
+    virtual void installPopup ( class Q3PopupMenu *rmb_Menu );
 
 // -- CodeCompletionInterface ----------------------------------------------------------------------
     /**
@@ -201,7 +204,7 @@ public:
      * position. if @p casesensitive is @p true, the popup will only contain completions
      * that match the input text regarding case.
      */
-    virtual void showCompletionBox (QValueList<KTextEditor::CompletionEntry> complList,int offset=0, bool casesensitive=true);
+    virtual void showCompletionBox (Q3ValueList<KTextEditor::CompletionEntry> complList,int offset=0, bool casesensitive=true);
 
 signals:
     /**

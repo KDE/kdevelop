@@ -11,6 +11,14 @@
 
 // Pref dialog pointer global now for position saving
 #include <noatun/pref.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QShowEvent>
+#include <QWheelEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QCloseEvent>
 
 class Player;
 class QSlider;

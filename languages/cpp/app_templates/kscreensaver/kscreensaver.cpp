@@ -101,7 +101,7 @@ void %{APPNAME}::blank()
 {
     /// @todo
     //Add your code to render the screen.
-    setBackgroundColor( QColor(black)  );
+    setBackgroundColor( QColor(Qt::black)  );
     //
     erase();
 }

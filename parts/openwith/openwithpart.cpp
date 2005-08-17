@@ -1,6 +1,8 @@
 #include "openwithpart.h"
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include <kpopupmenu.h>
 #include <kdevgenericfactory.h>
@@ -21,8 +23,8 @@ K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KDevGenericFactory<OpenWithPart>(dat
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin(&data, parent, name ? name : "OpenWithPart")
 {
-  connect(core(), SIGNAL(contextMenu(QPopupMenu*,const Context *)),
-	  this, SLOT(fillContextMenu(QPopupMenu*,const Context *)));
+  connect(core(), SIGNAL(contextMenu(Q3PopupMenu*,const Context *)),
+	  this, SLOT(fillContextMenu(Q3PopupMenu*,const Context *)));
 }
 
 
@@ -31,7 +33,7 @@ OpenWithPart::~OpenWithPart()
 }
 
 
-void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
+void OpenWithPart::fillContextMenu(Q3PopupMenu *popup, const Context *context)
 {
   if (!context->hasType( Context::FileContext ))
     return;

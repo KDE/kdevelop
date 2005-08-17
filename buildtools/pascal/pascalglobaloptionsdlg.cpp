@@ -23,7 +23,7 @@
 #include "pascalproject_part.h"
 #include "pascalglobaloptionsdlg.h"
 
-PascalGlobalOptionsDlg::PascalGlobalOptionsDlg(PascalProjectPart *part, QWidget* parent, const char* name, WFlags fl)
+PascalGlobalOptionsDlg::PascalGlobalOptionsDlg(PascalProjectPart *part, QWidget* parent, const char* name, Qt::WFlags fl)
     :PascalProjectOptionsDlgBase(parent,name,fl), m_part(part)
 {
     delete config_label;

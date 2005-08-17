@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qdialog.h>
 
 #include <kdebug.h>
@@ -45,7 +45,7 @@ QString DccOptionsPlugin::exec(QWidget *parent, const QString &flags)
 DccOptionsDialog::DccOptionsDialog( QWidget * parent, const char * name )
     : KDialogBase(Tabbed, i18n("Delphi Compiler Options"), Ok|Cancel, Ok, parent, name, true)
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
 
     vbox = addVBoxPage(i18n("General"));
     general = new GeneralTab(vbox, "general tab");

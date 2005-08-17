@@ -28,14 +28,21 @@
 #define LISTDND_H
 
 #include <qobject.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QDropEvent>
 
 class ListDnd : public QObject
 {
     Q_OBJECT
 public:
     enum DragMode { None = 0, External = 1, Internal = 2, Both = 3, Move = 4, NullDrop = 8 };
-    ListDnd( QScrollView * eventSource, const char * name = 0 );
+    ListDnd( Q3ScrollView * eventSource, const char * name = 0 );
     void setDragMode( int mode );
     int dragMode() const;
     bool eventFilter( QObject *, QEvent * event );
@@ -50,7 +57,7 @@ protected:
     virtual void updateLine( const QPoint & dragPos );
     virtual bool canDecode( QDragEnterEvent * event );
 
-    QScrollView * src;
+    Q3ScrollView * src;
     QWidget * line;
     QPoint mousePressPos;
     QPoint dragPos;

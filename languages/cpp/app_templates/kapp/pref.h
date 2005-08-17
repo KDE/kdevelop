@@ -4,7 +4,7 @@
 #define _%{APPNAMEUC}PREF_H_
 
 #include <kdialogbase.h>
-#include <qframe.h>
+#include <q3frame.h>
 
 class %{APPNAME}PrefPageOne;
 class %{APPNAME}PrefPageTwo;
@@ -20,14 +20,14 @@ private:
     %{APPNAME}PrefPageTwo *m_pageTwo;
 };
 
-class %{APPNAME}PrefPageOne : public QFrame
+class %{APPNAME}PrefPageOne : public Q3Frame
 {
     Q_OBJECT
 public:
     %{APPNAME}PrefPageOne(QWidget *parent = 0);
 };
 
-class %{APPNAME}PrefPageTwo : public QFrame
+class %{APPNAME}PrefPageTwo : public Q3Frame
 {
     Q_OBJECT
 public:

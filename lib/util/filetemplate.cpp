@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "filetemplate.h"
@@ -55,7 +55,7 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
     QDomDocument &dom = *part->projectDom();
 
     QFile f(fileName);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return QString::null;
     QTextStream stream(&f);
     QString str = stream.read();
@@ -88,7 +88,7 @@ bool FileTemplate::copy(KDevPlugin *part, const QString &name,
     QString text = read(part, name, p);
 
     QFile f(dest);
-    if (!f.open(IO_WriteOnly))
+    if (!f.open(QIODevice::WriteOnly))
         return false;
 
     QFileInfo fi(f);

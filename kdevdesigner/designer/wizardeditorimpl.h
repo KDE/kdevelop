@@ -27,10 +27,10 @@
 #ifndef WIZARDEDITORIMPL_H
 #define WIZARDEDITORIMPL_H
 
-class QWizard;
+class Q3Wizard;
 class FormWindow;
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "wizardeditor.h"
 #include "command.h"
@@ -40,7 +40,7 @@ class WizardEditor : public WizardEditorBase
     Q_OBJECT
 
 public:
-    WizardEditor( QWidget *parent, QWizard *wizard, FormWindow *fw );
+    WizardEditor( QWidget *parent, Q3Wizard *wizard, FormWindow *fw );
     ~WizardEditor();
 
 protected slots:
@@ -57,8 +57,8 @@ protected slots:
     void itemHighlighted( int );
     void itemSelected( int );
 
-    void itemDragged( QListBoxItem * );
-    void itemDropped( QListBoxItem * );
+    void itemDragged( Q3ListBoxItem * );
+    void itemDropped( Q3ListBoxItem * );
 
 private:
     void updateButtons();
@@ -66,8 +66,8 @@ private:
 
 private:
     FormWindow *formwindow;
-    QWizard *wizard;
-    QPtrList<Command> commands;
+    Q3Wizard *wizard;
+    Q3PtrList<Command> commands;
     int draggedItem;
 };
 

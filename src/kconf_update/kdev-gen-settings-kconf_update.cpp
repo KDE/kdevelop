@@ -19,9 +19,9 @@
 #include <qtextstream.h>
 #include <qregexp.h>
 
-static QTextStream qcin ( stdin,  IO_ReadOnly );
-static QTextStream qcout( stdout, IO_WriteOnly );
-static QTextStream qcerr( stderr, IO_WriteOnly );
+static QTextStream qcin ( stdin,  QIODevice::ReadOnly );
+static QTextStream qcout( stdout, QIODevice::WriteOnly );
+static QTextStream qcerr( stderr, QIODevice::WriteOnly );
 
 // Group cache. Yes, I know global vars are ugly :)
 bool needFlush = false;

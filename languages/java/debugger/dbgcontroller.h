@@ -19,10 +19,13 @@
 #define _DBGCONTROLLER_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 
 class KProcess;
 class QString;
-class QStrList;
+class Q3StrList;
 
 namespace JAVADebugger
 {
@@ -106,7 +109,7 @@ public slots:
 
     virtual void slotExpandItem(VarItem *parent)                            = 0;
     virtual void slotExpandUserItem(VarItem *parent,
-                                    const QCString &userRequest)            = 0;
+                                    const Q3CString &userRequest)            = 0;
     virtual void slotSelectFrame(int frame)                                 = 0;
     virtual void slotSetLocalViewState(bool onOff)                          = 0;
 

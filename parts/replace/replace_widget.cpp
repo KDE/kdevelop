@@ -36,13 +36,17 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qregexp.h>
 #include <qdialog.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qtextstream.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QFocusEvent>
+#include <QHBoxLayout>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -176,7 +180,7 @@ bool ReplaceWidget::showReplacements()
         else
         {
             QFile file( *it );
-            if ( file.open ( IO_ReadOnly ) )
+            if ( file.open ( QIODevice::ReadOnly ) )
             {
                 QTextStream stream( &file );
                 _listview->showReplacementsForFile( stream, *it );
@@ -217,8 +221,8 @@ bool ReplaceWidget::makeReplacements()
                 {
                     QString ibuffer = ei->text();
                     QString obuffer;
-                    QTextStream istream( &ibuffer, IO_ReadOnly );
-                    QTextStream ostream( &obuffer, IO_WriteOnly );
+                    QTextStream istream( &ibuffer, QIODevice::ReadOnly );
+                    QTextStream ostream( &obuffer, QIODevice::WriteOnly );
 
                     _listview->makeReplacementsForFile( istream, ostream, fileitem );
 
@@ -241,16 +245,16 @@ bool ReplaceWidget::makeReplacements()
                 QFile file( currentfile );
                 QString buffer;
 
-                if ( file.open( IO_ReadOnly ) )
+                if ( file.open( QIODevice::ReadOnly ) )
                 {
                     QTextStream istream( &file );
-                    QTextStream buffer_stream( &buffer, IO_WriteOnly );
+                    QTextStream buffer_stream( &buffer, QIODevice::WriteOnly );
 
                     _listview->makeReplacementsForFile( istream, buffer_stream, fileitem );
 
                     file.close();
 
-                    if ( file.open( IO_WriteOnly ) )
+                    if ( file.open( QIODevice::WriteOnly ) )
                     {
                         QTextStream ostream( &file );
                         ostream << buffer;
@@ -351,10 +355,10 @@ QStringList ReplaceWidget::openProjectFiles()
     QStringList projectfiles = allProjectFiles();
     QStringList openfiles;
 
-    if( const QPtrList<KParts::Part> * partlist = m_part->
+    if( const Q3PtrList<KParts::Part> * partlist = m_part->
             partController()->parts() )
     {
-        QPtrListIterator<KParts::Part> it( *partlist );
+        Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {
             if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
@@ -373,10 +377,10 @@ QStringList ReplaceWidget::openProjectFiles()
 
 KTextEditor::EditInterface * ReplaceWidget::getEditInterfaceForFile( QString const & file )
 {
-    if( const QPtrList<KParts::Part> * partlist = m_part->
+    if( const Q3PtrList<KParts::Part> * partlist = m_part->
             partController()->parts() )
     {
-        QPtrListIterator<KParts::Part> it( *partlist );
+        Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {
             if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )

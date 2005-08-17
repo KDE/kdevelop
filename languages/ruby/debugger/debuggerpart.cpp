@@ -18,9 +18,12 @@
  ***************************************************************************/
 
 #include <qdir.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3CString>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -93,7 +96,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
 //     /*variableWidget*/->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (variableWidget, i18n("<b>Variable tree</b><p>"
                               "The variable tree allows you to see "
                               "the variable values as you step "
@@ -108,7 +111,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
 
     rdbBreakpointWidget = new RDBBreakpointWidget( 0, "rdbBreakpointWidget" );
     rdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (rdbBreakpointWidget, i18n("<b>Breakpoint list</b><p>"
                                 "Displays a list of breakpoints with "
                                 "their current status. Clicking on a "
@@ -121,7 +124,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
     framestackWidget = new FramestackWidget( 0, "rdbFramestackWidget" );
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (framestackWidget, i18n("<b>Frame stack</b><p>"
                                 "Often referred to as the \"call stack\", "
                                 "this is a list showing what method is "
@@ -139,7 +142,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
     rdbOutputWidget->setEnabled(false);
     rdbOutputWidget->setIcon( SmallIcon("inline_image") );
     rdbOutputWidget->setCaption(i18n("RDB Output"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (rdbOutputWidget, i18n("<b>RDB output</b><p>"
                                  "Shows all rdb commands being executed. "
                                  "You can also issue any other rdb command while debugging."));
@@ -159,7 +162,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
     KAction *action;
 
 //    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
-    action = new KAction(i18n("&Start"), "dbgrun", CTRL+SHIFT+Key_F9,
+    action = new KAction(i18n("&Start"), "dbgrun", Qt::CTRL+Qt::SHIFT+Qt::Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
     action->setToolTip( i18n("Start in debugger") );
@@ -242,8 +245,8 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
     connect( debugger(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              rdbBreakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStop(KDevPlugin*)) );
@@ -296,7 +299,7 @@ void RubyDebuggerPart::guiClientAdded( KXMLGUIClient* client )
         stateChanged( QString("stopped") );
 }
 
-void RubyDebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
+void RubyDebuggerPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::EditorContext ))
         return;
@@ -370,8 +373,8 @@ void RubyDebuggerPart::setupController()
              variableTree,          SLOT(slotFrameActive(int, int, const QString&)));
 	
     // variableTree -> controller
-    connect( variableTree,          SIGNAL(expandItem(VarItem*, const QCString&)),
-             controller,            SLOT(slotExpandItem(VarItem*, const QCString&)));
+    connect( variableTree,          SIGNAL(expandItem(VarItem*, const Q3CString&)),
+             controller,            SLOT(slotExpandItem(VarItem*, const Q3CString&)));
     connect( variableTree,          SIGNAL(fetchGlobals(bool)),
              controller,            SLOT(slotFetchGlobals(bool)));
     connect( variableTree,          SIGNAL(addWatchExpression(const QString&, bool)),

@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -37,9 +37,11 @@
 #else
 # include "kde30x_markinterfaceextension.h"
 #endif
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "qeditor_factory.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 class QWidget;
 class QPainter;
@@ -135,7 +137,7 @@ public:
     virtual void addMark (uint line, uint markType);
     virtual void removeMark (uint line, uint markType);
 
-    virtual QPtrList<KTextEditor::Mark> marks ();
+    virtual Q3PtrList<KTextEditor::Mark> marks ();
     virtual void clearMarks ();
 
 signals:
@@ -177,7 +179,7 @@ public:
     /*
      * Accessor to the list of views.
      */
-    virtual QPtrList<KTextEditor::View> views () const;
+    virtual Q3PtrList<KTextEditor::View> views () const;
 
 // -- HighlightingInterface ---------------------------------------------------------------------
 public:
@@ -214,7 +216,7 @@ private:
     int findMode( const QString& );
 
 private:
-    QPtrList<HLMode> m_modes;
+    Q3PtrList<HLMode> m_modes;
     unsigned int m_currentMode;
 
 // -- UndoInterface -----------------------------------------------------------------------------
@@ -316,7 +318,7 @@ public:
     /*
      * Accessor to the list of views.
      */
-    virtual QPtrList<KTextEditor::Cursor> cursors () const;
+    virtual Q3PtrList<KTextEditor::Cursor> cursors () const;
 
 // -- SelectionInterface ----------------------------------------------------------------------
 public:
@@ -373,9 +375,9 @@ protected slots:
 
 private:
     QEditorView* m_currentView;
-    QPtrList<KTextEditor::View> m_views;
-    QPtrList<KTextEditor::Cursor> m_cursors;
-    QPtrList<KTextEditor::Mark> m_marks;
+    Q3PtrList<KTextEditor::View> m_views;
+    Q3PtrList<KTextEditor::Cursor> m_cursors;
+    Q3PtrList<KTextEditor::Mark> m_marks;
     QEditorBrowserExtension* m_extension;
 };
 

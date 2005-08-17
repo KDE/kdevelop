@@ -14,7 +14,11 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3PopupMenu>
+#include <Q3CString>
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
@@ -23,7 +27,7 @@
 namespace KParts { class Part; }
 
 class QLabel;
-class QPopupMenu;
+class Q3PopupMenu;
 class KDialogBase;
 class ProcessWidget;
 class ProcessLineMaker;
@@ -58,9 +62,8 @@ k_dcop:
 private slots:
     void setupDcop();
     void guiClientAdded(KXMLGUIClient*);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
     void toggleBreakpoint();
-    void contextEvaluate();
     void contextWatch();
 //    void projectOpened();
     void projectClosed();
@@ -74,7 +77,6 @@ private slots:
     void slotStop(KDevPlugin* which = 0);
     void slotPause();
     void slotRunToCursor();
-    void slotJumpToCursor();
     void slotStepOver();
     void slotStepOverInstruction();
     void slotStepIntoInstruction();
@@ -87,7 +89,7 @@ private slots:
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
 
-    void slotDCOPApplicationRegistered(const QCString &appId);
+    void slotDCOPApplicationRegistered(const Q3CString &appId);
     void slotCloseDrKonqi();
 
     //! There was an error running the debugger
@@ -101,26 +103,21 @@ private:
     bool startDebugger();
     void setupController();
 
-    QGuardedPtr<VariableWidget> variableWidget;
-    QGuardedPtr<GDBBreakpointWidget> gdbBreakpointWidget;
-    QGuardedPtr<FramestackWidget> framestackWidget;
-    QGuardedPtr<DisassembleWidget> disassembleWidget;
-    QGuardedPtr<GDBOutputWidget> gdbOutputWidget;
+    QPointer<VariableWidget> variableWidget;
+    QPointer<GDBBreakpointWidget> gdbBreakpointWidget;
+    QPointer<FramestackWidget> framestackWidget;
+    QPointer<DisassembleWidget> disassembleWidget;
+    QPointer<GDBOutputWidget> gdbOutputWidget;
     DbgController *controller;
-    QGuardedPtr<QLabel> statusBarIndicator;
-    QGuardedPtr<DbgToolBar> floatingToolBar;
+    QPointer<QLabel> statusBarIndicator;
+    QPointer<DbgToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
     ProcessLineMaker* gdbLineMaker;
 
     QString m_contextIdent;
-    QCString m_drkonqi;
+    Q3CString m_drkonqi;
     
     KDevDebugger *m_debugger;
-    int previousDebuggerState_;
-    // Set to true after each debugger restart
-    // Currently used to auto-show variables view
-    // on the first pause.
-    bool justRestarted_;
 };
 
 }

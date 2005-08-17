@@ -15,20 +15,22 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "pdatetimeedit.h"
 
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qpainter.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 namespace PropertyLib{
 
 PDateTimeEdit::PDateTimeEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QDateTimeEdit(this);
+    m_edit = new Q3DateTimeEdit(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
@@ -45,7 +47,7 @@ void PDateTimeEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& 
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toDateTime().toString(Qt::LocalDate));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toDateTime().toString(Qt::LocalDate));
 }
 
 void PDateTimeEdit::setValue(const QVariant& value, bool emitChange)

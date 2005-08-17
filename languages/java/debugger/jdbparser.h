@@ -19,6 +19,8 @@
 #define _JDBPARSER_H_
 
 #include "variablewidget.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace JAVADebugger
 {
@@ -51,9 +53,9 @@ private:
     char *skipNextTokenStart(char *buf) const;
 
     QString getName(char **buf);
-    QCString getValue(char **buf, bool requested);
+    Q3CString getValue(char **buf, bool requested);
     void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
-                 const QCString &value, bool requested, bool params);
+                 const Q3CString &value, bool requested, bool params);
 };
 
 }

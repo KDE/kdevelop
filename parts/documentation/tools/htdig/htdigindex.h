@@ -16,6 +16,8 @@
 #define _HTDIGINDEX_H_
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QTimer;
 class QLabel;

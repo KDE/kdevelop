@@ -20,19 +20,24 @@
 #include <kdevlanguagesupport.h>
 
 #include <kdialogbase.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qstring.h>
 #include <qwaitcondition.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QLabel>
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 
 class Context;
 class ProblemReporter;
 class BackgroundParser;
 class Catalog;
 class QLabel;
-class QProgressBar;
+class Q3ProgressBar;
 class QStringList;
-class QListViewItem;
+class Q3ListViewItem;
 class KListView;
 class Driver;
 
@@ -59,7 +64,7 @@ public:
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
 
-    const QPtrList<Catalog>& catalogList() { return m_catalogList; }
+    const Q3PtrList<Catalog>& catalogList() { return m_catalogList; }
 
     bool isValidSource( const QString& fileName ) const;
     QStringList fileExtensions( ) const;
@@ -96,7 +101,7 @@ private slots:
     void savedFile(const KURL &fileName);
     void configWidget(KDialogBase *dlg);
     void projectConfigWidget(KDialogBase *dlg);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
     void changedFilesInProject( const QStringList & fileList );
@@ -134,7 +139,7 @@ private:
 
     QString m_contextFileName;
 
-    QGuardedPtr< ProblemReporter > m_problemReporter;
+    QPointer< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
 
     KTextEditor::Document* m_activeDocument;
@@ -150,7 +155,7 @@ private:
     QMap<QString, QDateTime> m_timestamp;
     bool m_valid;
 
-    QPtrList<Catalog> m_catalogList;
+    Q3PtrList<Catalog> m_catalogList;
     Driver* m_driver;
     QString m_projectDirectory;
 

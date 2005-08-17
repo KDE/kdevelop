@@ -15,16 +15,18 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef CONTENTSVIEW_H
 #define CONTENTSVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class FindDocumentation;
 class DocumentationWidget;
-class QListViewItem;
+class Q3ListViewItem;
 class KListView;
 
 class ContentsView : public QWidget
@@ -37,8 +39,8 @@ public:
     KListView *view() const { return m_view; }
 
 protected slots:
-    void itemExecuted(QListViewItem *item, const QPoint &p, int col);
-    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
+    void itemExecuted(Q3ListViewItem *item, const QPoint &p, int col);
+    void itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int c);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

@@ -13,16 +13,19 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
 #include <private/qrichtext_p.h>
 
 #include <kinstance.h>
@@ -177,7 +180,7 @@ bool QEditorPart::openFile()
 {
     // m_file is always local so we can use QFile on it
     QFile file(m_file);
-    if (file.open(IO_ReadOnly) == false)
+    if (file.open(QIODevice::ReadOnly) == false)
         return false;
 
     // our example widget is text-based, so we use QTextStream instead
@@ -212,7 +215,7 @@ bool QEditorPart::saveFile()
 
     // m_file is always local, so we use QFile
     QFile file(m_file);
-    if (file.open(IO_WriteOnly) == false)
+    if (file.open(QIODevice::WriteOnly) == false)
         return false;
 
     // use QTextStream to dump the text to the file
@@ -354,7 +357,7 @@ KTextEditor::View* QEditorPart::createView( QWidget* parentWidget, const char* w
     return m_currentView;
 }
 
-QPtrList<KTextEditor::View> QEditorPart::views() const
+Q3PtrList<KTextEditor::View> QEditorPart::views() const
 {
     return m_views;
 }
@@ -415,7 +418,7 @@ KTextEditor::Cursor* QEditorPart::createCursor( )
     return c;
 }
 
-QPtrList<KTextEditor::Cursor> QEditorPart::cursors() const
+Q3PtrList<KTextEditor::Cursor> QEditorPart::cursors() const
 {
     return m_cursors;
 }
@@ -764,11 +767,11 @@ void QEditorPart::removeMark (uint line, uint markType)
     }
 }
 
-QPtrList<KTextEditor::Mark> QEditorPart::marks ()
+Q3PtrList<KTextEditor::Mark> QEditorPart::marks ()
 {
     //m_marks.clear();
 
-    QPtrList<KTextEditor::Mark> marks;
+    Q3PtrList<KTextEditor::Mark> marks;
     marks.setAutoDelete( true );
 
     QTextDocument* textDoc = m_currentView->editor()->document();

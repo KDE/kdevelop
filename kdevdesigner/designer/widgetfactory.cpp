@@ -25,6 +25,17 @@
 **********************************************************************/
 
 #include <qvariant.h> // HP-UX compiler need this here
+//Added by qt3to4:
+#include <Q3StrList>
+#include <QResizeEvent>
+#include <Q3CString>
+#include <QEvent>
+#include <QDragEnterEvent>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QMouseEvent>
+#include <QHBoxLayout>
+#include <QPaintEvent>
 #include "widgetfactory.h"
 #include <widgetdatabase.h>
 #include "metadatabase.h"
@@ -52,41 +63,41 @@
 #include <qfeatures.h>
 
 #include <qpixmap.h>
-#include <qgroupbox.h>
-#include <qiconview.h>
+#include <q3groupbox.h>
+#include <q3iconview.h>
 #ifndef QT_NO_TABLE
-#include <qtable.h>
+#include <q3table.h>
 #endif
 #ifndef QT_NO_SQL
-#include <qdatatable.h>
+#include <q3datatable.h>
 #endif
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
-#include <qmultilineedit.h>
-#include <qtextedit.h>
+#include <q3multilineedit.h>
+#include <q3textedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qcombobox.h>
 #include <qtabbar.h>
-#include <qlistbox.h>
-#include <qlistview.h>
-#include <qobjectlist.h>
+#include <q3listbox.h>
+#include <q3listview.h>
+#include <qobject.h>
 #include <qlcdnumber.h>
 #include <qslider.h>
 #include <qdial.h>
-#include <qprogressbar.h>
-#include <qtextview.h>
-#include <qtextbrowser.h>
-#include <qframe.h>
+#include <q3progressbar.h>
+#include <q3textview.h>
+#include <q3textbrowser.h>
+#include <q3frame.h>
 #include <qmetaobject.h>
-#include <qwidgetstack.h>
-#include <qwizard.h>
-#include <qvaluelist.h>
+#include <q3widgetstack.h>
+#include <q3wizard.h>
+#include <q3valuelist.h>
 #include <qtimer.h>
 #include <qscrollbar.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qmenubar.h>
 #include <qapplication.h>
 #include <qsplitter.h>
@@ -150,13 +161,13 @@ void QDesignerTabWidget::setPageTitle( const QString& title )
     changeTab( QTabWidget::currentPage(), title );
 }
 
-void QDesignerTabWidget::setPageName( const QCString& name )
+void QDesignerTabWidget::setPageName( const Q3CString& name )
 {
     if ( QTabWidget::currentPage() )
 	QTabWidget::currentPage()->setName( name );
 }
 
-QCString QDesignerTabWidget::pageName() const
+Q3CString QDesignerTabWidget::pageName() const
 {
     if ( !QTabWidget::currentPage() )
 	return 0;
@@ -182,7 +193,7 @@ bool QDesignerTabWidget::eventFilter( QObject *o, QEvent *e )
     case QEvent::MouseMove: {
 	QMouseEvent *me = (QMouseEvent*)e;
 	if ( mousePressed && ( pressPoint - me->pos()).manhattanLength() > QApplication::startDragDistance() ) {
-	    QTextDrag *drg = new QTextDrag( QString::number( (long) this ) , this );
+	    Q3TextDrag *drg = new Q3TextDrag( QString::number( (long) this ) , this );
 	    mousePressed = FALSE;
 	    dragPage = QTabWidget::currentPage();
 	    dragLabel = QTabWidget::tabLabel( dragPage );
@@ -206,9 +217,9 @@ bool QDesignerTabWidget::eventFilter( QObject *o, QEvent *e )
     break;
     case QEvent::DragMove: {
 	QDragEnterEvent *de = (QDragEnterEvent*) e;
-	if ( QTextDrag::canDecode( de ) ) {
+	if ( Q3TextDrag::canDecode( de ) ) {
 	    QString text;
-	    QTextDrag::decode( de, text );
+	    Q3TextDrag::decode( de, text );
 	    if ( text == QString::number( (long)this ) )
 		de->accept();
 	    else
@@ -233,7 +244,7 @@ bool QDesignerTabWidget::eventFilter( QObject *o, QEvent *e )
 
 	if ( ! dropIndicator ) {
 	    dropIndicator = new QWidget( this );
-	    dropIndicator->setBackgroundColor( red );
+	    dropIndicator->setBackgroundColor( Qt::red );
 	}
 
 	QPoint pos;
@@ -248,9 +259,9 @@ bool QDesignerTabWidget::eventFilter( QObject *o, QEvent *e )
     break;
     case QEvent::Drop: {
 	QDragEnterEvent *de = (QDragEnterEvent*) e;
-	if ( QTextDrag::canDecode( de ) ) {
+	if ( Q3TextDrag::canDecode( de ) ) {
 	    QString text;
-	    QTextDrag::decode( de, text );
+	    Q3TextDrag::decode( de, text );
 	    if ( text == QString::number( (long)this ) ) {
 
 		int newIndex = 0;
@@ -291,7 +302,7 @@ bool QDesignerTabWidget::eventFilter( QObject *o, QEvent *e )
 
 
 QDesignerWidgetStack::QDesignerWidgetStack( QWidget *parent, const char *name )
-    : QWidgetStack( parent, name )
+    : Q3WidgetStack( parent, name )
 {
     prev = new QToolButton( Qt::LeftArrow, this, "designer_wizardstack_button" );
     prev->setAutoRaise( TRUE );
@@ -346,14 +357,14 @@ void QDesignerWidgetStack::setCurrentPage( int i )
     updateButtons();
 }
 
-QCString QDesignerWidgetStack::pageName() const
+Q3CString QDesignerWidgetStack::pageName() const
 {
     if ( !visibleWidget() )
 	return 0;
     return visibleWidget()->name();
 }
 
-void QDesignerWidgetStack::setPageName( const QCString& name )
+void QDesignerWidgetStack::setPageName( const Q3CString& name )
 {
     if ( visibleWidget() )
 	visibleWidget()->setName( name );
@@ -439,17 +450,17 @@ void QDesignerWizard::setPageTitle( const QString& title )
     setTitle( currentPage(), title );
 }
 
-void QDesignerWizard::setPageName( const QCString& name )
+void QDesignerWizard::setPageName( const Q3CString& name )
 {
-    if ( QWizard::currentPage() )
-	QWizard::currentPage()->setName( name );
+    if ( Q3Wizard::currentPage() )
+	Q3Wizard::currentPage()->setName( name );
 }
 
-QCString QDesignerWizard::pageName() const
+Q3CString QDesignerWizard::pageName() const
 {
-    if ( !QWizard::currentPage() )
+    if ( !Q3Wizard::currentPage() )
 	return 0;
-    return QWizard::currentPage()->name();
+    return Q3Wizard::currentPage()->name();
 }
 
 int QDesignerWizard::pageNum( QWidget *p )
@@ -463,20 +474,20 @@ int QDesignerWizard::pageNum( QWidget *p )
 
 void QDesignerWizard::addPage( QWidget *p, const QString &t )
 {
-    QWizard::addPage( p, t );
+    Q3Wizard::addPage( p, t );
     if ( removedPages.find( p ) )
 	removedPages.remove( p );
 }
 
 void QDesignerWizard::removePage( QWidget *p )
 {
-    QWizard::removePage( p );
+    Q3Wizard::removePage( p );
     removedPages.insert( p, p );
 }
 
 void QDesignerWizard::insertPage( QWidget *p, const QString &t, int index )
 {
-    QWizard::insertPage( p, t, index );
+    Q3Wizard::insertPage( p, t, index );
     if ( removedPages.find( p ) )
 	removedPages.remove( p );
 }
@@ -498,13 +509,13 @@ QMap< int, QStringList > *changedProperties = 0;
 void WidgetFactory::saveDefaultProperties( QObject *w, int id )
 {
     QMap< QString, QVariant> propMap;
-    QStrList lst = w->metaObject()->propertyNames( TRUE );
+    Q3StrList lst = w->metaObject()->propertyNames( TRUE );
     for ( uint i = 0; i < lst.count(); ++i ) {
 	QVariant var = w->property( lst.at( i ) );
 	if ( !var.isValid() && qstrcmp( "pixmap", lst.at( i ) ) == 0 )
 	    var = QVariant( QPixmap() );
 	else if ( !var.isValid() && qstrcmp( "iconSet", lst.at( i ) ) == 0 )
-	    var = QVariant( QIconSet() );
+	    var = QVariant( QIcon() );
 	propMap.replace( lst.at( i ), var );
     }
     defaultProperties->replace( id, propMap );
@@ -537,8 +548,8 @@ QWidget *WidgetFactory::create( int id, QWidget *parent, const char *name, bool 
     QString str = WidgetDatabase::createWidgetName( id );
     const char *s = str.latin1();
     w = createWidget( n, parent, name ? name : s, init, r, orient );
-    if ( ::qt_cast<QScrollView*>(w) )
-	( (QScrollView*)w )->disableSizeHintCaching();
+    if ( ::qt_cast<Q3ScrollView*>(w) )
+	( (Q3ScrollView*)w )->disableSizeHintCaching();
     if ( !w && WidgetDatabase::isCustomWidget( id ) )
 	w = createCustomWidget( parent, name ? name : s, MetaDataBase::customWidget( id ) );
     if ( !w )
@@ -573,14 +584,14 @@ QLayout *WidgetFactory::createLayout( QWidget *widget, QLayout *layout, LayoutTy
     if ( !layout && ::qt_cast<QTabWidget*>(widget) )
 	widget = ((QTabWidget*)widget)->currentPage();
 
-    if ( !layout && ::qt_cast<QWizard*>(widget) )
-	widget = ((QWizard*)widget)->currentPage();
+    if ( !layout && ::qt_cast<Q3Wizard*>(widget) )
+	widget = ((Q3Wizard*)widget)->currentPage();
 
-    if ( !layout && ::qt_cast<QMainWindow*>(widget) )
-	widget = ((QMainWindow*)widget)->centralWidget();
+    if ( !layout && ::qt_cast<Q3MainWindow*>(widget) )
+	widget = ((Q3MainWindow*)widget)->centralWidget();
 
-    if ( !layout && ::qt_cast<QWidgetStack*>(widget) )
-	widget = ((QWidgetStack*)widget)->visibleWidget();
+    if ( !layout && ::qt_cast<Q3WidgetStack*>(widget) )
+	widget = ((Q3WidgetStack*)widget)->visibleWidget();
 
     if ( !layout && ::qt_cast<QToolBox*>(widget) )
 	widget = ((QToolBox*)widget)->currentItem();
@@ -589,8 +600,8 @@ QLayout *WidgetFactory::createLayout( QWidget *widget, QLayout *layout, LayoutTy
 
     QLayout *l = 0;
     int align = 0;
-    if ( !layout && ::qt_cast<QGroupBox*>(widget) ) {
-	QGroupBox *gb = (QGroupBox*)widget;
+    if ( !layout && ::qt_cast<Q3GroupBox*>(widget) ) {
+	Q3GroupBox *gb = (Q3GroupBox*)widget;
 	gb->setColumnLayout( 0, Qt::Vertical );
 	layout = gb->layout();
 	layout->setMargin( 0 );
@@ -665,12 +676,12 @@ void WidgetFactory::deleteLayout( QWidget *widget )
 
     if ( ::qt_cast<QTabWidget*>(widget) )
 	widget = ((QTabWidget*)widget)->currentPage();
-    if ( ::qt_cast<QWizard*>(widget) )
-	widget = ((QWizard*)widget)->currentPage();
-    if ( ::qt_cast<QMainWindow*>(widget) )
-	widget = ((QMainWindow*)widget)->centralWidget();
-    if ( ::qt_cast<QWidgetStack*>(widget) )
-	widget = ((QWidgetStack*)widget)->visibleWidget();
+    if ( ::qt_cast<Q3Wizard*>(widget) )
+	widget = ((Q3Wizard*)widget)->currentPage();
+    if ( ::qt_cast<Q3MainWindow*>(widget) )
+	widget = ((Q3MainWindow*)widget)->centralWidget();
+    if ( ::qt_cast<Q3WidgetStack*>(widget) )
+	widget = ((Q3WidgetStack*)widget)->visibleWidget();
     if ( ::qt_cast<QToolBox*>(widget) )
 	widget = ((QToolBox*)widget)->currentItem();
     delete widget->layout();
@@ -727,17 +738,17 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	return new QDesignerRadioButton( parent, name );
     } else if ( className == "QGroupBox" ) {
 	if ( init )
-	    return new QGroupBox( QString::fromLatin1( name ), parent, name );
-	return new QGroupBox( parent, name );
+	    return new Q3GroupBox( QString::fromLatin1( name ), parent, name );
+	return new Q3GroupBox( parent, name );
     } else if ( className == "QButtonGroup" ) {
 	if ( init )
-	    return new QButtonGroup( QString::fromLatin1( name ), parent, name );
-	return new QButtonGroup( parent, name );
+	    return new Q3ButtonGroup( QString::fromLatin1( name ), parent, name );
+	return new Q3ButtonGroup( parent, name );
     } else if ( className == "QIconView" ) {
 #if !defined(QT_NO_ICONVIEW)
-	QIconView* iv = new QIconView( parent, name );
+	Q3IconView* iv = new Q3IconView( parent, name );
 	if ( init )
-	    (void) new QIconViewItem( iv, i18n( "New Item" ) );
+	    (void) new Q3IconViewItem( iv, i18n( "New Item" ) );
 	return iv;
 #else
 	return 0;
@@ -745,35 +756,35 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
     } else if ( className == "QTable" ) {
 #if !defined(QT_NO_TABLE)
 	if ( init )
-	    return new QTable( 3, 3, parent, name );
-	return new QTable( parent, name );
+	    return new Q3Table( 3, 3, parent, name );
+	return new Q3Table( parent, name );
 #else
 	return 0;
 #endif
 #ifndef QT_NO_SQL
     } else if ( className == "QDataTable" ) {
-	return new QDataTable( parent, name );
+	return new Q3DataTable( parent, name );
 #endif //QT_NO_SQL
     } else if ( className == "QDateEdit" ) {
-	return new QDateEdit( parent, name );
+	return new Q3DateEdit( parent, name );
     } else if ( className == "QTimeEdit" ) {
-	return new QTimeEdit( parent, name );
+	return new Q3TimeEdit( parent, name );
     } else if ( className == "QDateTimeEdit" ) {
-	return new QDateTimeEdit( parent, name );
+	return new Q3DateTimeEdit( parent, name );
     }
     else if ( className == "QListBox" ) {
-	QListBox* lb = new QListBox( parent, name );
+	Q3ListBox* lb = new Q3ListBox( parent, name );
 	if ( init ) {
 	    lb->insertItem( i18n( "New Item" ) );
 	    lb->setCurrentItem( 0 );
 	}
 	return lb;
     } else if ( className == "QListView" ) {
-	QListView *lv = new QListView( parent, name );
+	Q3ListView *lv = new Q3ListView( parent, name );
 	lv->setSorting( -1 );
 	if ( init ) {
 	    lv->addColumn( i18n( "Column 1" ) );
-	    lv->setCurrentItem( new QListViewItem( lv, i18n( "New Item" ) ) );
+	    lv->setCurrentItem( new Q3ListViewItem( lv, i18n( "New Item" ) ) );
 	}
 	return lv;
     } else if ( className == "QLineEdit" )
@@ -783,9 +794,9 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
     else if ( className == "QSplitter" )
 	return new QSplitter( parent, name );
     else if ( className == "QMultiLineEdit" )
-	return new QMultiLineEdit( parent, name );
+	return new Q3MultiLineEdit( parent, name );
     else if ( className == "QTextEdit" )
-	return new QTextEdit( parent, name );
+	return new Q3TextEdit( parent, name );
     else if ( className == "QLabel"  || className == "TextLabel" ) {
 	QDesignerLabel *l = new QDesignerLabel( parent, name );
 	if ( init ) {
@@ -834,11 +845,11 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
     } else if ( className == "QWidget" ) {
 	if ( parent &&
 	     ( ::qt_cast<FormWindow*>(parent) ||
-	       ::qt_cast<QWizard*>(parent) ||
+	       ::qt_cast<Q3Wizard*>(parent) ||
 	       ::qt_cast<QTabWidget*>(parent) ||
-	       ::qt_cast<QWidgetStack*>(parent) ||
+	       ::qt_cast<Q3WidgetStack*>(parent) ||
 	       ::qt_cast<QToolBox*>(parent) ||
-	       ::qt_cast<QMainWindow*>(parent) ) ) {
+	       ::qt_cast<Q3MainWindow*>(parent) ) ) {
 	    FormWindow *fw = find_formwindow( parent );
 	    if ( fw ) {
 		QDesignerWidget *dw = new QDesignerWidget( fw, parent, name );
@@ -861,7 +872,7 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	    dia->reparent( parent, QPoint( 0, 0 ), TRUE );
 	return dia;
     } else if ( className == "QWizard" ) {
-	QWizard *wiz = new QDesignerWizard( parent, name );
+	Q3Wizard *wiz = new QDesignerWizard( parent, name );
 #if defined(QT_NON_COMMERCIAL)
 	if ( ::qt_cast<MainWindow*>(parent) )
 #else
@@ -892,11 +903,11 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
     } else if ( className == "QLCDNumber" )
 	return new QLCDNumber( parent, name );
     else if ( className == "QProgressBar" )
-	return new QProgressBar( parent, name );
+	return new Q3ProgressBar( parent, name );
     else if ( className == "QTextView" )
-	return new QTextView( parent, name );
+	return new Q3TextView( parent, name );
     else if ( className == "QTextBrowser" )
-	return new QTextBrowser( parent, name );
+	return new Q3TextBrowser( parent, name );
     else if ( className == "QDial" )
 	return new QDial( parent, name );
     else if ( className == "QSlider" ) {
@@ -923,9 +934,9 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	return s;
     } else if ( className == "QFrame" ) {
 	if ( !init )
-	    return new QFrame( parent, name );
-	QFrame *f = new QFrame( parent, name );
-	f->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
+	    return new Q3Frame( parent, name );
+	Q3Frame *f = new Q3Frame( parent, name );
+	f->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Raised );
 	return f;
     } else if ( className == "Line" ) {
 	Line *l = new Line( parent, name );
@@ -941,7 +952,7 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	    l->setOrientation( Qt::Vertical );
 	return l;
     } else if ( className == "QMainWindow" ) {
-	QMainWindow *mw = new QMainWindow( parent, name, 0 );
+	Q3MainWindow *mw = new Q3MainWindow( parent, name, 0 );
 	mw->setDockEnabled( Qt::DockMinimized, FALSE );
 	QDesignerWidget *dw = new QDesignerWidget( (FormWindow*)parent, mw, "central widget" );
 	mw->setDockMenuEnabled( FALSE );
@@ -1012,23 +1023,23 @@ WidgetFactory::LayoutType WidgetFactory::layoutType( QWidget *w, QLayout *&layou
 
     if ( ::qt_cast<QTabWidget*>(w) )
 	w = ((QTabWidget*)w)->currentPage();
-    if ( ::qt_cast<QWizard*>(w) )
-	w = ((QWizard*)w)->currentPage();
-    if ( ::qt_cast<QMainWindow*>(w) )
-	w = ((QMainWindow*)w)->centralWidget();
-    if ( ::qt_cast<QWidgetStack*>(w) )
-	w = ((QWidgetStack*)w)->visibleWidget();
+    if ( ::qt_cast<Q3Wizard*>(w) )
+	w = ((Q3Wizard*)w)->currentPage();
+    if ( ::qt_cast<Q3MainWindow*>(w) )
+	w = ((Q3MainWindow*)w)->centralWidget();
+    if ( ::qt_cast<Q3WidgetStack*>(w) )
+	w = ((Q3WidgetStack*)w)->visibleWidget();
     if ( ::qt_cast<QToolBox*>(w) )
 	w = ((QToolBox*)w)->currentItem();
 
     if ( ::qt_cast<QSplitter*>(w) )
-	return ( (QSplitter*)w )->orientation() == Horizontal ? HBox : VBox;
+	return ( (QSplitter*)w )->orientation() == Qt::Horizontal ? HBox : VBox;
 
     if ( !w || !w->layout() )
 	return NoLayout;
     QLayout *lay = w->layout();
 
-    if ( ::qt_cast<QGroupBox*>(w) ) {
+    if ( ::qt_cast<Q3GroupBox*>(w) ) {
 	QObjectList *l = lay->queryList( "QLayout" );
 	if ( l && l->first() )
 	    lay = (QLayout*)l->first();
@@ -1095,14 +1106,14 @@ QWidget* WidgetFactory::containerOfWidget( QWidget *w )
 	return w;
     if ( ::qt_cast<QTabWidget*>(w) )
 	return ((QTabWidget*)w)->currentPage();
-    if ( ::qt_cast<QWizard*>(w) )
-	return ((QWizard*)w)->currentPage();
-    if ( ::qt_cast<QWidgetStack*>(w) )
-	return ((QWidgetStack*)w)->visibleWidget();
+    if ( ::qt_cast<Q3Wizard*>(w) )
+	return ((Q3Wizard*)w)->currentPage();
+    if ( ::qt_cast<Q3WidgetStack*>(w) )
+	return ((Q3WidgetStack*)w)->visibleWidget();
     if ( ::qt_cast<QToolBox*>(w) )
 	return ((QToolBox*)w)->currentItem();
-    if ( ::qt_cast<QMainWindow*>(w) )
-	return ((QMainWindow*)w)->centralWidget();
+    if ( ::qt_cast<Q3MainWindow*>(w) )
+	return ((Q3MainWindow*)w)->centralWidget();
 #ifdef QT_CONTAINER_CUSTOM_WIDGETS
     if ( !WidgetDatabase::isCustomPluginWidget( WidgetDatabase::idFromClassName( classNameOf( w ) ) ) )
 	return w;
@@ -1133,7 +1144,7 @@ QWidget* WidgetFactory::containerOfWidget( QWidget *w )
 
 QWidget* WidgetFactory::widgetOfContainer( QWidget *w )
 {
-    if ( w && ::qt_cast<QWidgetStack*>(w->parentWidget()) )
+    if ( w && ::qt_cast<Q3WidgetStack*>(w->parentWidget()) )
 	w = w->parentWidget();
     if ( w->parentWidget() && w->parentWidget()->parentWidget() &&
 	 w->parentWidget()->parentWidget()->parentWidget() &&
@@ -1154,7 +1165,7 @@ QWidget* WidgetFactory::widgetOfContainer( QWidget *w )
  */
 
 bool WidgetFactory::lastWasAPassiveInteractor = FALSE;
-QGuardedPtr<QObject> *WidgetFactory::lastPassiveInteractor = new QGuardedPtr<QObject>();
+QPointer<QObject> *WidgetFactory::lastPassiveInteractor = new QPointer<QObject>();
 
 bool WidgetFactory::isPassiveInteractor( QObject* o )
 {
@@ -1169,12 +1180,12 @@ bool WidgetFactory::isPassiveInteractor( QObject* o )
 	return ( lastWasAPassiveInteractor = TRUE );
     else if ( ::qt_cast<QSizeGrip*>(o) )
 	return ( lastWasAPassiveInteractor = TRUE );
-    else if ( ::qt_cast<QButton*>(o) &&
+    else if ( ::qt_cast<Q3Button*>(o) &&
 	      ( ::qt_cast<QTabBar*>(o->parent()) || ::qt_cast<QToolBox*>(o->parent()) ) )
 	return ( lastWasAPassiveInteractor = TRUE );
-    else if ( ::qt_cast<QPushButton*>(o) && ::qt_cast<QWizard*>(o->parent()) )
+    else if ( ::qt_cast<QPushButton*>(o) && ::qt_cast<Q3Wizard*>(o->parent()) )
 	return ( lastWasAPassiveInteractor = TRUE );
-    else if ( ::qt_cast<QMenuBar*>(o) && ::qt_cast<QMainWindow*>(o->parent()) )
+    else if ( ::qt_cast<QMenuBar*>(o) && ::qt_cast<Q3MainWindow*>(o->parent()) )
 	return ( lastWasAPassiveInteractor = TRUE );
 //    else if ( ::qt_cast<QDockWindowHandle*>(o) )
     else if ( o->inherits( "QDockWindowHandle" ) )
@@ -1226,7 +1237,7 @@ const char* WidgetFactory::classNameOf( QObject* o )
 	return "QTabWidget";
     else if ( ::qt_cast<QDesignerWidgetStack*>(o) )
 	return "QWidgetStack";
-    else if ( ::qt_cast<QWidgetStack*>(o) )
+    else if ( ::qt_cast<Q3WidgetStack*>(o) )
 	return "QWeDoNotWantToBreakTabWidget";
     else if ( ::qt_cast<QDesignerDialog*>(o) )
 	return "QDialog";
@@ -1271,24 +1282,24 @@ QString WidgetFactory::defaultSignal( QObject *w )
 {
     if ( ::qt_cast<QRadioButton*>(w) || ::qt_cast<QCheckBox*>(w) )
 	return "toggled";
-    else if ( ::qt_cast<QButton*>(w) || ::qt_cast<QButtonGroup*>(w) )
+    else if ( ::qt_cast<Q3Button*>(w) || ::qt_cast<Q3ButtonGroup*>(w) )
 	return "clicked";
-    else if ( ::qt_cast<QTextBrowser*>(w) )
+    else if ( ::qt_cast<Q3TextBrowser*>(w) )
 	return "linkClicked";
-    else if ( ::qt_cast<QLineEdit*>(w) || ::qt_cast<QTextEdit*>(w) )
+    else if ( ::qt_cast<QLineEdit*>(w) || ::qt_cast<Q3TextEdit*>(w) )
 	return "textChanged";
-    else if ( ::qt_cast<QListView*>(w) || ::qt_cast<QIconView*>(w) ||
-	      ::qt_cast<QListBox*>(w) || ::qt_cast<QTable*>(w) )
+    else if ( ::qt_cast<Q3ListView*>(w) || ::qt_cast<Q3IconView*>(w) ||
+	      ::qt_cast<Q3ListBox*>(w) || ::qt_cast<Q3Table*>(w) )
 	return "selectionChanged";
     else if ( ::qt_cast<QTabWidget*>(w) )
 	return "selected";
     else if ( ::qt_cast<QToolBox*>(w) )
 	return "currentChanged";
-    else if ( ::qt_cast<QWidgetStack*>(w) )
+    else if ( ::qt_cast<Q3WidgetStack*>(w) )
 	return "aboutToShow";
     else if ( ::qt_cast<QSpinBox*>(w) || ::qt_cast<QSlider*>(w) ||
-	      ::qt_cast<QScrollBar*>(w) || ::qt_cast<QDateEdit*>(w) ||
-	      ::qt_cast<QTimeEdit*>(w) || ::qt_cast<QDateTimeEdit*>(w) ||
+	      ::qt_cast<QScrollBar*>(w) || ::qt_cast<Q3DateEdit*>(w) ||
+	      ::qt_cast<Q3TimeEdit*>(w) || ::qt_cast<Q3DateTimeEdit*>(w) ||
 	      ::qt_cast<QDial*>(w) )
 	return "valueChanged";
     else if ( ::qt_cast<QComboBox*>(w) )
@@ -1323,16 +1334,16 @@ void WidgetFactory::initChangedProperties( QObject *o )
 	    MetaDataBase::setPropertyChanged( o, "text", TRUE );
 	}
     }
-    else if ( ::qt_cast<QGroupBox*>(o) )
+    else if ( ::qt_cast<Q3GroupBox*>(o) )
 	MetaDataBase::setPropertyChanged( o, "title", TRUE );
     else if ( o->isA( "QFrame" ) ) {
 	MetaDataBase::setPropertyChanged( o, "frameShadow", TRUE );
 	MetaDataBase::setPropertyChanged( o, "frameShape", TRUE );
-    } else if ( ::qt_cast<QTabWidget*>(o) || ::qt_cast<QWizard*>(o) ) {
+    } else if ( ::qt_cast<QTabWidget*>(o) || ::qt_cast<Q3Wizard*>(o) ) {
 	MetaDataBase::setPropertyChanged( o, "pageTitle", TRUE );
 	MetaDataBase::setPropertyChanged( o, "pageName", TRUE );
 	MetaDataBase::setPropertyChanged( o, "currentPage", TRUE );
-    } else if ( ::qt_cast<QWidgetStack*>(o) ) {
+    } else if ( ::qt_cast<Q3WidgetStack*>(o) ) {
 	MetaDataBase::setPropertyChanged( o, "currentPage", TRUE );
 	MetaDataBase::setPropertyChanged( o, "pageName", TRUE );
     } else if ( ::qt_cast<QToolBox*>(o) ) {
@@ -1343,14 +1354,14 @@ void WidgetFactory::initChangedProperties( QObject *o )
 	MetaDataBase::setPropertyChanged( o, "itemToolTip", TRUE );
 	MetaDataBase::setPropertyChanged( o, "itemBackgroundMode", TRUE );
 #ifndef QT_NO_TABLE
-    } else if ( ::qt_cast<QTable*>(o) ) {
+    } else if ( ::qt_cast<Q3Table*>(o) ) {
 #  ifndef QT_NO_SQL
-        if (!::qt_cast<QDataTable*>(o) )
+        if (!::qt_cast<Q3DataTable*>(o) )
 #  endif
         {
             MetaDataBase::setPropertyChanged( o, "numRows", TRUE );
             MetaDataBase::setPropertyChanged( o, "numCols", TRUE );
-            QTable *t = (QTable*)o;
+            Q3Table *t = (Q3Table*)o;
             for ( int i = 0; i < 3; ++i ) {
                 t->horizontalHeader()->setLabel( i, QString::number( i + 1 ) );
                 t->verticalHeader()->setLabel( i, QString::number( i + 1 ) );
@@ -1382,7 +1393,7 @@ bool WidgetFactory::hasSpecialEditor( int id, QObject *editorWidget )
 	return TRUE;
     if ( className == "QTextEdit" || className == "QMultiLineEdit" )
 	return TRUE;
-    if ( ::qt_cast<QTable*>(editorWidget) != 0 )
+    if ( ::qt_cast<Q3Table*>(editorWidget) != 0 )
 	return TRUE;
 
     return FALSE;
@@ -1394,7 +1405,7 @@ bool WidgetFactory::hasItems( int id, QObject *editorWidget )
 
     if ( className.contains( "ListBox" ) || className.contains( "ListView" ) ||
 	 className.contains( "IconView" )  || className.contains( "ComboBox" ) ||
-	 ::qt_cast<QTable*>(editorWidget) != 0 )
+	 ::qt_cast<Q3Table*>(editorWidget) != 0 )
 	return TRUE;
 
     return FALSE;
@@ -1405,7 +1416,7 @@ void WidgetFactory::editWidget( int id, QWidget *parent, QWidget *editWidget, Fo
     QString className = WidgetDatabase::className( id );
 
     if ( className.contains( "ListBox" ) ) {
-	if ( !::qt_cast<QListBox*>(editWidget) )
+	if ( !::qt_cast<Q3ListBox*>(editWidget) )
 	    return;
 	ListBoxEditor *e = new ListBoxEditor( parent, editWidget, fw );
 	e->exec();
@@ -1425,9 +1436,9 @@ void WidgetFactory::editWidget( int id, QWidget *parent, QWidget *editWidget, Fo
     }
 
     if ( className.contains( "ListView" ) ) {
-	if ( !::qt_cast<QListView*>(editWidget) )
+	if ( !::qt_cast<Q3ListView*>(editWidget) )
 	    return;
-	QListView *lv = (QListView*)editWidget;
+	Q3ListView *lv = (Q3ListView*)editWidget;
 	ListViewEditor *e = new ListViewEditor( parent, lv, fw );
 	e->exec();
 	delete e;
@@ -1435,7 +1446,7 @@ void WidgetFactory::editWidget( int id, QWidget *parent, QWidget *editWidget, Fo
     }
 
     if ( className.contains( "IconView" ) ) {
-	if ( !::qt_cast<QIconView*>(editWidget) )
+	if ( !::qt_cast<Q3IconView*>(editWidget) )
 	    return;
 	IconViewEditor *e = new IconViewEditor( parent, editWidget, fw );
 	e->exec();
@@ -1450,7 +1461,7 @@ void WidgetFactory::editWidget( int id, QWidget *parent, QWidget *editWidget, Fo
 	return;
     }
 #ifndef QT_NO_TABLE
-    if (::qt_cast<QTable*>(editWidget) != 0) {
+    if (::qt_cast<Q3Table*>(editWidget) != 0) {
 	TableEditor *e = new TableEditor( parent, editWidget, fw );
 	e->exec();
 	delete e;
@@ -1480,7 +1491,7 @@ QVariant WidgetFactory::defaultValue( QObject *w, const QString &propName )
 {
     if ( propName == "wordwrap" ) {
 	int v = defaultValue( w, "alignment" ).toInt();
-	return QVariant( ( v & WordBreak ) == WordBreak, 0 );
+	return QVariant( ( v & Qt::TextWordWrap ) == Qt::TextWordWrap, 0 );
     } else if ( propName == "toolTip" || propName == "whatsThis" ) {
 	return QVariant( QString::fromLatin1( "" ) );
     } else if ( w->inherits( "CustomWidget" ) ) {
@@ -1501,22 +1512,22 @@ QString WidgetFactory::defaultCurrentItem( QObject *w, const QString &propName )
     if ( !p ) {
 	int v = defaultValue( w, "alignment" ).toInt();
 	if ( propName == "hAlign" ) {
-	    if ( ( v & AlignAuto ) == AlignAuto )
+	    if ( ( v & Qt::AlignLeft ) == Qt::AlignLeft )
 		return "AlignAuto";
-	    if ( ( v & AlignLeft ) == AlignLeft )
+	    if ( ( v & Qt::AlignLeft ) == Qt::AlignLeft )
 		return "AlignLeft";
-	    if ( ( v & AlignCenter ) == AlignCenter || ( v & AlignHCenter ) == AlignHCenter )
+	    if ( ( v & Qt::AlignCenter ) == Qt::AlignCenter || ( v & Qt::AlignHCenter ) == Qt::AlignHCenter )
 		return "AlignHCenter";
-	    if ( ( v & AlignRight ) == AlignRight )
+	    if ( ( v & Qt::AlignRight ) == Qt::AlignRight )
 		return "AlignRight";
-	    if ( ( v & AlignJustify ) == AlignJustify )
+	    if ( ( v & Qt::AlignJustify ) == Qt::AlignJustify )
 		return "AlignJustify";
 	} else if ( propName == "vAlign" ) {
-	    if ( ( v & AlignTop ) == AlignTop )
+	    if ( ( v & Qt::AlignTop ) == Qt::AlignTop )
 		return "AlignTop";
-	    if ( ( v & AlignCenter ) == AlignCenter || ( v & AlignVCenter ) == AlignVCenter )
+	    if ( ( v & Qt::AlignCenter ) == Qt::AlignCenter || ( v & Qt::AlignVCenter ) == Qt::AlignVCenter )
 		return "AlignVCenter";
-	    if ( ( v & AlignBottom ) == AlignBottom )
+	    if ( ( v & Qt::AlignBottom ) == Qt::AlignBottom )
 		return "AlignBottom";
 	} else if ( propName == "resizeMode" ) {
 	    return "Auto";
@@ -1591,10 +1602,10 @@ QSizePolicy QLayoutWidget::sizePolicy() const
 
 bool QLayoutWidget::event( QEvent *e )
 {
-    if ( e && ( e->type() == QEvent::ChildInserted ||
+    if ( e && ( e->type() == QEvent::ChildAdded ||
 		e->type() == QEvent::ChildRemoved ||
-		e->type() == QEvent::LayoutHint ||
-		e->type() == QEvent::Reparent ) )
+		e->type() == QEvent::LayoutRequest ||
+		e->type() == QEvent::ParentChange ) )
 	updateSizePolicy();
     return QWidget::event( e );
 }
@@ -1728,7 +1739,7 @@ void CustomWidget::paintEvent( QPaintEvent *e )
 	QPainter p( this );
 	p.fillRect( rect(), colorGroup().dark() );
 	p.setPen( colorGroup().light() );
-	p.drawText( 2, 2, width() - 4, height() - 4, Qt::AlignAuto | Qt::AlignTop, cusw->className );
+	p.drawText( 2, 2, width() - 4, height() - 4, Qt::AlignLeft | Qt::AlignTop, cusw->className );
 	p.drawPixmap( ( width() - cusw->pixmap->width() ) / 2,
 		      ( height() - cusw->pixmap->height() ) / 2,
 		      *cusw->pixmap );
@@ -1764,12 +1775,12 @@ void QDesignerToolBox::setItemLabel( const QString &l )
     QToolBox::setItemLabel( currentIndex(), l );
 }
 
-QCString QDesignerToolBox::itemName() const
+Q3CString QDesignerToolBox::itemName() const
 {
     return currentItem() ? currentItem()->name() : 0;
 }
 
-void QDesignerToolBox::setItemName( const QCString &n )
+void QDesignerToolBox::setItemName( const Q3CString &n )
 {
     if (currentItem())
 	currentItem()->setName( n );
@@ -1778,10 +1789,10 @@ void QDesignerToolBox::setItemName( const QCString &n )
 
 Qt::BackgroundMode QDesignerToolBox::itemBackgroundMode() const
 {
-    return (item(0) ? item(0)->backgroundMode() : PaletteBackground);
+    return (item(0) ? item(0)->backgroundMode() : Qt::PaletteBackground);
 }
 
-void QDesignerToolBox::setItemBackgroundMode( BackgroundMode bmode )
+void QDesignerToolBox::setItemBackgroundMode( Qt::BackgroundMode bmode )
 {
     for (int i = 0; i < count(); ++i) {
 	QWidget *w = item(i);

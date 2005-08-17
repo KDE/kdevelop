@@ -10,8 +10,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #include <qfile.h>
@@ -101,7 +101,7 @@ bool Chm::getChunk(QFile& f, uint chunkSize, ChmDirectoryMap& directoryMap) cons
 bool Chm::read(const QString& fileSpec, ChmDirectoryMap& dirMap, QByteArray& contents) const
 {
     QFile f(fileSpec);
-    if (!f.open(IO_ReadOnly)) return false;
+    if (!f.open(QIODevice::ReadOnly)) return false;
 
     // read CHM file header
     char tag[4];

@@ -15,19 +15,21 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "viewer.h"
 
 #include <qdir.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qfiledialog.h>
-#include <qtextedit.h>
+#include <q3listbox.h>
+#include <q3filedialog.h>
+#include <q3textedit.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <autotoolsast.h>
 #include <autotoolsdriver.h>
@@ -40,13 +42,13 @@ Viewer::Viewer(QWidget *parent, const char *name)
     if (QFile::exists(QDir::currentDirPath() + "/" + "qtlist"))
     {
         QFile f(QDir::currentDirPath() + "/" + "qtlist");
-        f.open(IO_ReadOnly);
+        f.open(QIODevice::ReadOnly);
         QTextStream str(&f);
         while (!str.eof())
             files->insertItem(str.readLine());
     }
     ast->setSorting(-1);
-    parentProject.push((QListViewItem*)0);
+    parentProject.push((Q3ListViewItem*)0);
 }
 
 void Viewer::addAll_clicked()
@@ -62,17 +64,17 @@ void Viewer::addAll_clicked()
 
 void Viewer::choose_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(QDir::currentDirPath(), "*.am", this);
+    QString fileName = Q3FileDialog::getOpenFileName(QDir::currentDirPath(), "*.am", this);
     if (!fileName.isEmpty())
         files->insertItem(fileName);
 }
 
-void Viewer::files_currentChanged(QListBoxItem* item)
+void Viewer::files_currentChanged(Q3ListBoxItem* item)
 {
     ast->clear();
     
     QFile f(item->text());
-    f.open(IO_ReadOnly);
+    f.open(QIODevice::ReadOnly);
     QTextStream str(&f);
     source->setText(str.read());
     f.close();
@@ -96,20 +98,20 @@ void Viewer::tabWidget2_selected(const QString& text)
     }
 }
 
-void Viewer::processAST(ProjectAST *projectAST, QListViewItem *globAfter)
+void Viewer::processAST(ProjectAST *projectAST, Q3ListViewItem *globAfter)
 {
-    QListViewItem *projectIt;
+    Q3ListViewItem *projectIt;
     if (!parentProject.top())
-        projectIt = new QListViewItem(ast, "Project");
+        projectIt = new Q3ListViewItem(ast, "Project");
     else
     {
         if ( projectAST->isConditionalScope() || projectAST->isRule() )
-            projectIt = new QListViewItem(parentProject.top(), globAfter, projectAST->scopedID);
+            projectIt = new Q3ListViewItem(parentProject.top(), globAfter, projectAST->scopedID);
     }
     projectIt->setOpen(true);
     
-    QListViewItem *after = 0;
-    for (QValueList<AST*>::const_iterator it = projectAST->statements.constBegin();
+    Q3ListViewItem *after = 0;
+    for (Q3ValueList<AST*>::const_iterator it = projectAST->statements.constBegin();
             it != projectAST->statements.constEnd(); ++it)
     {
         AST *ast = *it;
@@ -118,7 +120,7 @@ void Viewer::processAST(ProjectAST *projectAST, QListViewItem *globAfter)
 	switch (ast->nodeType()) {
 	case AST::AssignmentAST: {
 		AssignmentAST *assignmentAST = static_cast<AssignmentAST*>(ast);
-		QListViewItem *item = new QListViewItem(projectIt, after,
+		Q3ListViewItem *item = new Q3ListViewItem(projectIt, after,
 			assignmentAST->scopedID, assignmentAST->op, assignmentAST->values.join(""));
 		item->setMultiLinesEnabled(true);
 		after = item; }
@@ -127,7 +129,7 @@ void Viewer::processAST(ProjectAST *projectAST, QListViewItem *globAfter)
 	case AST::TargetAST:
 		{
 			AutomakeTargetAST* ata = static_cast<AutomakeTargetAST*>(ast);
-			QListViewItem* item = new QListViewItem(projectIt, after,
+			Q3ListViewItem* item = new Q3ListViewItem(projectIt, after,
 					ata->target, QString::null, ata->deps.join(""));
 			after = item;
 		}
@@ -144,7 +146,7 @@ void Viewer::processAST(ProjectAST *projectAST, QListViewItem *globAfter)
 	case AST::MakefileConditionalAST:
 		{
 			ConditionAST* ata = static_cast<ConditionAST*>(ast);
-			QListViewItem* item = new QListViewItem(projectIt, after,
+			Q3ListViewItem* item = new Q3ListViewItem(projectIt, after,
 					ata->type, ata->conditionName, QString::null );
 			after = item;
 		}

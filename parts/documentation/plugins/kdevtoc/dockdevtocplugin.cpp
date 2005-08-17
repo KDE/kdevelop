@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "dockdevtocplugin.h"
 
@@ -97,7 +97,7 @@ QString DocKDevTOCPlugin::catalogTitle(const QString& url)
         return QString::null;
 
     QFile f(url);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return QString::null;
     
     QDomDocument doc;
@@ -141,7 +141,7 @@ void DocKDevTOCPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* it
     QFileInfo fi(tocItem->tocFile());
 
     QFile f(tocItem->tocFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << tocItem->tocFile() << endl;
         return;
@@ -186,7 +186,7 @@ void DocKDevTOCPlugin::createTOC(DocumentationCatalogItem* item)
     QFileInfo fi(tocItem->tocFile());
 
     QFile f(tocItem->tocFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << tocItem->tocFile() << endl;
         return;
@@ -238,7 +238,7 @@ void DocKDevTOCPlugin::setCatalogURL(DocumentationCatalogItem* item)
     QFileInfo fi(tocItem->tocFile());
 
     QFile f(tocItem->tocFile());
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
     {
         kdDebug(9002) << "Could not read" << tocItem->tocFile() << endl;
         return;

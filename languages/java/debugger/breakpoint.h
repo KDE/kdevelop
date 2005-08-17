@@ -19,7 +19,7 @@
 #define _BREAKPOINT_H_
 
 #include <qstring.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -28,7 +28,7 @@
 namespace JAVADebugger
 {
 
-class Breakpoint : public QListBoxItem
+class Breakpoint : public Q3ListBoxItem
 {
 public:
     Breakpoint(bool temporary=false, bool enabled=true);
@@ -42,8 +42,8 @@ public:
     virtual bool modifyDialog();
     virtual void reset();
 
-    int height(const QListBox *lb) const;
-    int width(const QListBox *lb) const;
+    int height(const Q3ListBox *lb) const;
+    int width(const Q3ListBox *lb) const;
     void paint(QPainter *p);
 
     void setActive(int active, int id);

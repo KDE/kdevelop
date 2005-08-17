@@ -25,6 +25,9 @@
 **********************************************************************/
 
 #include <qvariant.h> // HP-UX compiler needs this here
+//Added by qt3to4:
+#include <QPixmap>
+#include <QImageIO>
 
 #include <kiconloader.h>
 #include <kimageio.h>
@@ -50,14 +53,14 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qiconview.h>
+#include <q3iconview.h>
 
 #if defined(DESIGNER)
 static ImageIconProvider *imageIconProvider = 0;
 #endif
 
 PixmapView::PixmapView( QWidget *parent )
-    : QScrollView( parent )
+    : Q3ScrollView( parent )
 {
     viewport()->setBackgroundMode( PaletteBase );
 }
@@ -75,7 +78,7 @@ void PixmapView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     p->drawPixmap( 0, 0, pixmap );
 }
 
-void PixmapView::previewUrl( const QUrl &u )
+void PixmapView::previewUrl( const Q3Url &u )
 {
     if ( u.isLocalFile() ) {
 	QString path = u.path();
@@ -211,9 +214,9 @@ QPixmap qChoosePixmap( QWidget *parent, FormWindow *fw, const QPixmap &old, QStr
 }
 
 ImageIconProvider::ImageIconProvider( QWidget *parent, const char *name )
-    : QFileIconProvider( parent, name ), imagepm( BarIcon( "designer_image.png", KDevDesignerPartFactory::instance() ) )
+    : Q3FileIconProvider( parent, name ), imagepm( BarIcon( "designer_image.png", KDevDesignerPartFactory::instance() ) )
 {
-    fmts = QImage::inputFormats();
+    fmts = QImageReader::supportedImageFormats();
 }
 
 ImageIconProvider::~ImageIconProvider()
@@ -226,6 +229,6 @@ const QPixmap * ImageIconProvider::pixmap( const QFileInfo &fi )
     if ( fmts.contains( ext ) ) {
 	return &imagepm;
     } else {
-	return QFileIconProvider::pixmap( fi );
+	return Q3FileIconProvider::pixmap( fi );
     }
 }

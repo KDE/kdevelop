@@ -22,6 +22,9 @@
 #include <kcombobox.h>
 #include <qwidget.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3CString>
 
 class KLineEdit;
 
@@ -51,9 +54,10 @@ public:
     VariableTree *varTree() const
     { return varTree_; }
 
-protected: // QWidget overrides
-    void showEvent(QShowEvent *);
-    void focusInEvent(QFocusEvent *e);
+    virtual void setEnabled(bool b);
+
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
 
 public slots:
     void slotAddWatchVariable();
@@ -67,7 +71,6 @@ private:
     friend class VariableTree;
 
     KHistoryCombo *watchVarEditor_;
-    bool firstShow_;
 };
 
 /***************************************************************************/
@@ -84,13 +87,13 @@ public:
     VariableTree( VariableWidget *parent, const char *name=0 );
     virtual ~VariableTree();
 
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
 
     int activeFlag() const                { return activeFlag_; }
     void setActiveFlag()                  { activeFlag_++; }
     void setRadix(int r)                  { iOutRadix=r; }
 
-    QListViewItem *findRoot(QListViewItem *item) const;
+    Q3ListViewItem *findRoot(Q3ListViewItem *item) const;
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
 
@@ -105,7 +108,7 @@ signals:
     void toggleWatchpoint(const QString &varName);
     void selectFrame(int frameNo, int threadNo);
     void expandItem(TrimmableItem *item);
-    void expandUserItem(VarItem *item, const QCString &request);
+    void expandUserItem(VarItem *item, const Q3CString &request);
     void setLocalViewState(bool localsOn);
     // Emitted when *this is interested in args and locals for the
     // current frame.
@@ -115,26 +118,24 @@ signals:
     void varItemConstructed(VarItem *item);
 
     //rgr
-    void toggleRadix(QListViewItem *item);
-
-    // Emitted when we want to change value of 'expression'.
-    void setValue(const QString& expression, const QString& value);
-
+    void toggleRadix(Q3ListViewItem *item);
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
     void slotEvaluateExpression(const QString& expression);
 
     //rgr
-    void slotToggleRadix(QListViewItem *item);
+    void slotToggleRadix(Q3ListViewItem *item);
 
     void slotDbgStatus(const QString &status, int statusFlag);
     void slotParametersReady(const char* data);
     void slotLocalsReady(const char* data);
     void slotCurrentFrame(int frameNo, int threadNo);
-    void slotItemRenamed(QListViewItem* item, int col, const QString& text);
 
 private slots:
-    void slotContextMenu(KListView *, QListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item);
+
+    // jw
+    void slotDoubleClicked(Q3ListViewItem *item, const QPoint &pos, int c);
 
 private: // helper functions
     /** Get (if exists) and create (otherwise) frame root for
@@ -191,7 +192,7 @@ public:
     virtual void trim();
     virtual QString getName() const         { return text(VarNameCol); }
     virtual TrimmableItem *findMatch(const QString& match, DataType type) const;
-    QListViewItem *lastChild() const;
+    Q3ListViewItem *lastChild() const;
     int  rootActiveFlag() const;
     void setActive()                        { activeFlag_ = rootActiveFlag(); }
     bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
@@ -202,9 +203,12 @@ public:
     virtual void updateValue(char */* buf */);
     virtual DataType getDataType() const;
 
-    virtual void setCache(const QCString& value);
-    virtual QCString getCache();
+    virtual void setCache(const Q3CString& value);
+    virtual Q3CString getCache();
     virtual QString key( int column, bool ascending ) const;
+
+    // jw
+    virtual void handleDoubleClicked(const QPoint &, int ) {}
 
 protected:
 
@@ -226,10 +230,9 @@ public:
     VarItem( TrimmableItem *parent, const QString &varName, DataType dataType );
 
     virtual ~VarItem();
-    
-    /// Returns the gdb expression for *this.
-    QString gdbExpression() const;
-        
+
+    QString varPath() const;
+    QString fullName() const;
     DataType getDataType() const;
 
     void updateValue(char *data);
@@ -237,11 +240,14 @@ public:
     // jw
     void updateType(char *data);
 
-    void setCache(const QCString& value);
-    QCString getCache();
+    void setCache(const Q3CString& value);
+    Q3CString getCache();
 
     void setOpen(bool open);
     void setText (int column, const QString& text);
+
+    // jw - overriden from TrimmableItem to handle renaming
+    void handleDoubleClicked(const QPoint &pos, int c);
 
     // Returns the text to be displayed as tooltip (the value)
     QString tipText() const;
@@ -252,15 +258,12 @@ private:
                     int column, int width, int align );
 
 private:
-    // The name of expression can potentially be edited, so
-    // we need to store the original name.
-    QString name_;
-    QCString  cache_;
+    Q3CString  cache_;
     DataType  dataType_;
     bool      highlight_;
 
     // the non-cast type of the variable
-    QCString originalValueType_;
+    Q3CString originalValueType_;
 };
 
 /***************************************************************************/
@@ -289,8 +292,8 @@ private:
     bool    needLocals_;
     int     frameNo_;
     int     threadNo_;
-    QCString params_;
-    QCString locals_;
+    Q3CString params_;
+    Q3CString locals_;
 };
 
 /***************************************************************************/

@@ -11,7 +11,7 @@
 
 #include "filegroupsconfigwidget.h"
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <knotifyclient.h>
 #include <klocale.h>
 
@@ -42,11 +42,11 @@ void FileGroupsConfigWidget::readConfig()
     DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevfileview/groups",
                                                         "group", "name", "pattern");
 
-    QListViewItem *lastItem = 0;
+    Q3ListViewItem *lastItem = 0;
 
     DomUtil::PairList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
-        QListViewItem *newItem = new QListViewItem(listview, (*it).first, (*it).second);
+        Q3ListViewItem *newItem = new Q3ListViewItem(listview, (*it).first, (*it).second);
         if (lastItem)
             newItem->moveItem(lastItem);
         lastItem = newItem;
@@ -58,7 +58,7 @@ void FileGroupsConfigWidget::storeConfig()
 {
     DomUtil::PairList list;
     
-    QListViewItem *item = listview->firstChild();
+    Q3ListViewItem *item = listview->firstChild();
     while (item) {
         list << DomUtil::Pair(item->text(0), item->text(1));
         item = item->nextSibling();
@@ -76,7 +76,7 @@ void FileGroupsConfigWidget::addGroup()
     if (!dlg.exec())
         return;
 
-    (void) new QListViewItem(listview, dlg.title(), dlg.pattern());
+    (void) new Q3ListViewItem(listview, dlg.title(), dlg.pattern());
 }
 
 
@@ -106,7 +106,7 @@ void FileGroupsConfigWidget::moveUp()
         return;
     }
 
-    QListViewItem *item = listview->firstChild();
+    Q3ListViewItem *item = listview->firstChild();
     while (item->nextSibling() != listview->currentItem())
         item = item->nextSibling();
     item->moveItem(listview->currentItem());

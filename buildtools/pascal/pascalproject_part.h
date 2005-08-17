@@ -11,7 +11,7 @@
 #ifndef __KDEVPART_PASCALPROJECT_H__
 #define __KDEVPART_PASCALPROJECT_H__
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include "kdevbuildtool.h"
 
@@ -75,7 +75,7 @@ private slots:
     void configWidget(KDialogBase *dlg);
 
 private:
-    QGuardedPtr<PascalProjectWidget> m_widget;
+    QPointer<PascalProjectWidget> m_widget;
 
     void listOfFiles(QStringList &result, QString path) const;
 

@@ -28,20 +28,30 @@
 #define ACTIONDND_H
 
 #include <qaction.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qmap.h>
 #include <qmenubar.h>
 #include <qpixmap.h>
-#include <qpopupmenu.h>
-#include <qptrlist.h>
-#include <qtoolbar.h>
-#include <qguardedptr.h>
+#include <q3popupmenu.h>
+#include <q3ptrlist.h>
+#include <q3toolbar.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QDragLeaveEvent>
+#include <QPaintEvent>
+#include <QEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QContextMenuEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 #include "../shared/widgetdatabase.h"
 
 //class QDesignerPopupMenu;
 class QDesignerIndicatorWidget;
 class FormWindow;
-class QPopupMenu;
+class Q3PopupMenu;
 
 class QDesignerIndicatorWidget : public QWidget
 {
@@ -55,14 +65,14 @@ public:
 
 };
 
-class ActionDrag : public QStoredDrag
+class ActionDrag : public Q3StoredDrag
 {
     Q_OBJECT
 
 public:
     ActionDrag(const QString &type, QAction *action, QWidget *source);
     ActionDrag(QAction *action, QWidget *source);
-    ActionDrag(QActionGroup *group, QWidget *source);
+    ActionDrag(Q3ActionGroup *group, QWidget *source);
 
     ~ActionDrag();
 
@@ -77,13 +87,13 @@ private:
     static QAction *the_action;
 };
 
-class QDesignerActionGroup : public QActionGroup
+class QDesignerActionGroup : public Q3ActionGroup
 {
     Q_OBJECT
 
 public:
     QDesignerActionGroup( QObject *parent )
-	: QActionGroup( ::qt_cast<QActionGroup*>(parent) ? parent : 0 ), wid( 0 ), idx( -1 ) { init(); }
+	: Q3ActionGroup( ::qt_cast<Q3ActionGroup*>(parent) ? parent : 0 ), wid( 0 ), idx( -1 ) { init(); }
 
     void init();
 
@@ -93,7 +103,7 @@ public:
 
 protected:
 #if !defined(Q_NO_USING_KEYWORD)
-    using QActionGroup::addedTo;
+    using Q3ActionGroup::addedTo;
 #endif
     void addedTo( QWidget *w, QWidget * ) {
 	wid = w;
@@ -101,7 +111,7 @@ protected:
     void addedTo( QWidget *w, QWidget *, QAction *a ) {
 	widgets.insert( a, w );
     }
-    void addedTo( int index, QPopupMenu * ) {
+    void addedTo( int index, Q3PopupMenu * ) {
 	idx = index;
     }
 
@@ -118,9 +128,9 @@ class QDesignerAction : public QAction
 
 public:
     QDesignerAction( QObject *parent )
-	: QAction( ::qt_cast<QActionGroup*>(parent) ? parent : 0 ), wid( 0 ), idx( -1 ), widgetToInsert( 0 ) { init(); }
+	: QAction( ::qt_cast<Q3ActionGroup*>(parent) ? parent : 0 ), wid( 0 ), idx( -1 ), widgetToInsert( 0 ) { init(); }
     QDesignerAction( QWidget *w, QObject *parent )
-	: QAction( ::qt_cast<QActionGroup*>(parent) ? parent : 0 ), wid( 0 ), idx( -1 ), widgetToInsert( w ) { init(); }
+	: QAction( ::qt_cast<Q3ActionGroup*>(parent) ? parent : 0 ), wid( 0 ), idx( -1 ), widgetToInsert( w ) { init(); }
 
     void init();
 
@@ -137,7 +147,7 @@ protected:
     void addedTo( QWidget *w, QWidget * ) {
 	wid = w;
     }
-    void addedTo( int index, QPopupMenu * ) {
+    void addedTo( int index, Q3PopupMenu * ) {
 	idx = index;
     }
 
@@ -153,17 +163,17 @@ class QDesignerToolBarSeparator : public QWidget
     Q_OBJECT
 
 public:
-    QDesignerToolBarSeparator( Orientation, QToolBar *parent, const char* name=0 );
+    QDesignerToolBarSeparator( Qt::Orientation, Q3ToolBar *parent, const char* name=0 );
 
     QSize sizeHint() const;
-    Orientation orientation() const { return orient; }
+    Qt::Orientation orientation() const { return orient; }
 public slots:
-   void setOrientation( Orientation );
+   void setOrientation( Qt::Orientation );
 protected:
     void styleChange( QStyle& );
     void paintEvent( QPaintEvent * );
 private:
-    Orientation orient;
+    Qt::Orientation orient;
 };
 
 
@@ -186,14 +196,14 @@ private:
 };
 
 
-class QDesignerToolBar : public QToolBar
+class QDesignerToolBar : public Q3ToolBar
 {
     Q_OBJECT
 
 public:
-    QDesignerToolBar( QMainWindow *mw );
-    QDesignerToolBar( QMainWindow *mw, Dock dock );
-    QPtrList<QAction> insertedActions() const { return actionList; }
+    QDesignerToolBar( Q3MainWindow *mw );
+    QDesignerToolBar( Q3MainWindow *mw, Qt::ToolBarDock dock );
+    Q3PtrList<QAction> insertedActions() const { return actionList; }
     void addAction( QAction *a );
 
     void clear();
@@ -235,7 +245,7 @@ private:
     QPoint lastIndicatorPos;
     QWidget *insertAnchor;
     bool afterAnchor;
-    QPtrList<QAction> actionList;
+    Q3PtrList<QAction> actionList;
     QMap<QWidget*, QAction*> actionMap;
     QPoint dragStartPos;
     QDesignerIndicatorWidget *indicator;

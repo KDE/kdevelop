@@ -12,20 +12,22 @@
 
   You should have received a copy of the GNU Library General Public License
   along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-  Boston, MA 02110-1301, USA.
+  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+  Boston, MA 02111-1307, USA.
 */
 
 #ifndef PROBLEMSREPORTER_H
 #define PROBLEMSREPORTER_H
 
 #include <klistview.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QGridLayout>
 
 class CppSupportPart;
 class QTimer;
 class QTabBar;
-class QWidgetStack;
+class Q3WidgetStack;
 class QGridLayout;
 class QLineEdit;
 class KDialogBase;
@@ -63,7 +65,7 @@ private slots:
 	void slotPartRemoved( KParts::Part* );
 	void slotActivePartChanged( KParts::Part* );
 	void slotTextChanged();
-	void slotSelected( QListViewItem* );
+	void slotSelected( Q3ListViewItem* );
 	void slotFileParsed( const QString& fileName );
 	void slotTabSelected( int tabindex );
 	void slotFilter();
@@ -73,15 +75,15 @@ private:
 	QString levelToString( int level ) const;
 	int levelToMarkType( int level ) const;
 	void InitListView( KListView* listview );
-	void removeAllItems( QListView* listview, const QString& filename );
+	void removeAllItems( Q3ListView* listview, const QString& filename );
 	void filterList( KListView* listview, const QString& level );
-	void updateCurrentWith( QListView* listview, const QString& level, const QString& filename );
+	void updateCurrentWith( Q3ListView* listview, const QString& level, const QString& filename );
 	void initCurrentList();
 
 private:
 	QGridLayout* m_gridLayout;
 	QTabBar* m_tabBar;
-	QWidgetStack* m_widgetStack;
+	Q3WidgetStack* m_widgetStack;
 	KListView* m_currentList;
 	KListView* m_errorList;
 	KListView* m_fixmeList;
@@ -91,7 +93,7 @@ private:
 	QLineEdit* m_filterEdit;
 
 	CppSupportPart* m_cppSupport;
-	QGuardedPtr<KTextEditor::Document> m_document;
+	QPointer<KTextEditor::Document> m_document;
 	KTextEditor::MarkInterface* m_markIface;
 	QTimer* m_timer;
 	QString m_fileName;

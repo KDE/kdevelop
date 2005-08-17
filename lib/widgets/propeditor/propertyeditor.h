@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PROPERTYEDITOR_H
 #define PROPERTYEDITOR_H
@@ -23,12 +23,14 @@
 #ifndef PURE_QT
 #include <klistview.h>
 #else
-#include <qlistview.h>
-#define KListView QListView
-#define KListViewItem QListViewItem
+#include <q3listview.h>
+#define KListView Q3ListView
+#define KListViewItem Q3ListViewItem
 #endif
 
 #include "propertylist.h"
+//Added by qt3to4:
+#include <QGridLayout>
 
 class QPushButton;
 class QGridLayout;
@@ -86,14 +88,14 @@ protected slots:
     void propertyChanged(MultiProperty *property, const QVariant &value);
 
     /**Shows property editor.*/
-    void slotClicked(QListViewItem* item);
+    void slotClicked(Q3ListViewItem* item);
     void updateEditorSize();
     
     /**Undoes the last change in property editor.*/
     void undo();
     
 protected:
-    void editItem(QListViewItem*, int);
+    void editItem(Q3ListViewItem*, int);
     void hideEditor();
     void showEditor(PropertyItem *item);
     void placeEditor(PropertyItem *item);
@@ -117,7 +119,7 @@ private:
     QGridLayout *m_currentEditLayout;
     
     bool m_doubleClickForEdit;
-    QListViewItem* m_lastClickedItem;
+    Q3ListViewItem* m_lastClickedItem;
     
     QPushButton *m_undoButton;
     

@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDropEvent>
 %{H_TEMPLATE}
 
 #ifndef _%{APPNAMEUC}_H_

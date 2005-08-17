@@ -15,6 +15,8 @@
 #include "catalog.h"
 #include "cppcodecompletion.h"
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <ktexteditor/codecompletioninterface.h>
 
@@ -26,21 +28,21 @@ public:
 	CodeInformationRepository( KDevCodeRepository* rep );
 	virtual ~CodeInformationRepository();
 
-	static QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags,
+	static Q3ValueList<KTextEditor::CompletionEntry> toEntryList( const Q3ValueList<Tag>& tags,
 	        CppCodeCompletion::CompletionMode mode = CppCodeCompletion::NormalCompletion );
 	static KTextEditor::CompletionEntry toEntry( Tag& tag, CppCodeCompletion::CompletionMode mode = CppCodeCompletion::NormalCompletion );
-	QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute = false );
+	Q3ValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute = false );
 
-	QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
-	QValueList<Tag> getTagsInScope( const QStringList& scope, bool isInstance );
-	QValueList<Tag> getTagsInScope( const QString& name, const QStringList& scope );
+	Q3ValueList<Tag> query( const Q3ValueList<Catalog::QueryArgument>& args );
+	Q3ValueList<Tag> getTagsInScope( const QStringList& scope, bool isInstance );
+	Q3ValueList<Tag> getTagsInScope( const QString& name, const QStringList& scope );
 
-	QValueList<Tag> getTagsInFile( const QString& fileName );
-	QValueList<Tag> getBaseClassList( const QString& className );
-	QValueList<Tag> getClassOrNamespaceList( const QStringList& scope );
+	Q3ValueList<Tag> getTagsInFile( const QString& fileName );
+	Q3ValueList<Tag> getBaseClassList( const QString& className );
+	Q3ValueList<Tag> getClassOrNamespaceList( const QStringList& scope );
 
 private:
-	QValueList<KTextEditor::CompletionEntry> m_globalEntries;
+	Q3ValueList<KTextEditor::CompletionEntry> m_globalEntries;
 	KDevCodeRepository* m_rep;
 
 private:

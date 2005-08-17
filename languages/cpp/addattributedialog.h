@@ -13,8 +13,8 @@
 *
 *  You should have received a copy of the GNU General Public License
 *  along with this program; see the file COPYING.LIB.  If not, write to
-*  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-*  Boston, MA 02110-1301, USA.
+*  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+*  Boston, MA 02111-1307, USA.
 *
 */
 
@@ -31,12 +31,12 @@ class AddAttributeDialog : public AddAttributeDialogBase
 	Q_OBJECT
 public:
 	AddAttributeDialog( CppSupportPart* cppSupport, ClassDom klass,
-	                    QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	                    QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 	~AddAttributeDialog();
 
 	virtual void addAttribute();
 	virtual void deleteCurrentAttribute();
-	virtual void currentChanged( QListViewItem* item );
+	virtual void currentChanged( Q3ListViewItem* item );
 	virtual void updateGUI();
 
 protected:
@@ -46,7 +46,7 @@ protected:
 private:
 	QString accessID( VariableDom var ) const;
 	QStringList newAccessList( const QStringList& accessList ) const;
-	QString variableDeclaration( QListViewItem* item ) const;
+	QString variableDeclaration( Q3ListViewItem* item ) const;
 
 private:
 	CppSupportPart* m_cppSupport;

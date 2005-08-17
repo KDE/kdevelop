@@ -10,26 +10,26 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef __chm_h__
 #define __chm_h__
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <kurl.h>
 #include <kio/global.h>
 #include <kio/slavebase.h>
 #include "chmfile.h"
 
-class QCString;
+class Q3CString;
 
 class ChmProtocol : public KIO::SlaveBase
 {
 public:
-    ChmProtocol( const QCString&, const QCString& );
+    ChmProtocol( const Q3CString&, const Q3CString& );
     ~ChmProtocol();
 
     void get( const KURL& );

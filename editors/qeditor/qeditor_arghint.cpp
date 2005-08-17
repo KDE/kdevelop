@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "qeditor_arghint.h"
@@ -21,17 +21,22 @@
 #include "qeditor_part.h"
 
 #include <qlabel.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3Frame>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 
 struct QEditorArgHintData
 {
     QEditorView* editorView;
-    QIntDict<QLabel> labelDict;
+    Q3IntDict<QLabel> labelDict;
     QLayout* layout;
 };
 
@@ -39,9 +44,9 @@ struct QEditorArgHintData
 using namespace std;
 
 QEditorArgHint::QEditorArgHint( QEditorView* parent, const char* name )
-    : QFrame( parent, name, WType_Popup )
+    : Q3Frame( parent, name, Qt::WType_Popup )
 {
-    setBackgroundColor( black );
+    setBackgroundColor( Qt::black );
 
     d = new QEditorArgHintData();
     d->labelDict.setAutoDelete( TRUE );
@@ -51,7 +56,7 @@ QEditorArgHint::QEditorArgHint( QEditorView* parent, const char* name )
 
     m_markCurrentFunction = true;
 
-    setFocusPolicy( StrongFocus );
+    setFocusPolicy( Qt::StrongFocus );
     setFocusProxy( parent );
     
     reset( -1, -1 );
@@ -171,7 +176,7 @@ void QEditorArgHint::setCurrentFunction( int currentFunction )
 
 void QEditorArgHint::show()
 {
-    QFrame::show();
+    Q3Frame::show();
     adjustSize();
 }
 
@@ -179,14 +184,14 @@ bool QEditorArgHint::eventFilter( QObject*, QEvent* e )
 {
     if( isVisible() && e->type() == QEvent::KeyPress ){
         QKeyEvent* ke = static_cast<QKeyEvent*>( e );
-        if( (ke->state() & ControlButton) && ke->key() == Key_Left ){
+        if( (ke->state() & Qt::ControlModifier) && ke->key() == Qt::Key_Left ){
             setCurrentFunction( currentFunction() - 1 );
             ke->accept();
             return TRUE;
-	} else if( ke->key() == Key_Escape ){
+	} else if( ke->key() == Qt::Key_Escape ){
 	    slotDone();
 	    return FALSE;
-        } else if( (ke->state() & ControlButton) && ke->key() == Key_Right ){
+        } else if( (ke->state() & Qt::ControlModifier) && ke->key() == Qt::Key_Right ){
             setCurrentFunction( currentFunction() + 1 );
             ke->accept();
             return TRUE;
@@ -204,7 +209,7 @@ void QEditorArgHint::adjustSize( )
 #endif	
 	);
 
-    QFrame::adjustSize();
+    Q3Frame::adjustSize();
     if( width() > screen.width() )
 	resize( screen.width(), height() );
     

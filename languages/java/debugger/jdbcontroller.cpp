@@ -38,7 +38,9 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qtimer.h>
-#include <qurl.h>
+#include <q3url.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <iostream>
 #include <ctype.h>
@@ -434,7 +436,10 @@ char* JDBController::parseLine(char *buf)
                                           ex.cap(3).toInt(), "");
                     actOnProgramPause(QString("Reached Breakpoint in line ")+ex.cap(3));
 
-                    return  buf + ex.matchedLength();
+                    char *retStr;
+		    QString retQString =  QString( buf + ex.cap(ex.numCaptures()) );
+		    memcpy( retStr, retQString.latin1(), retQString.length() );
+                    return retStr;
                 }
 
             }
@@ -917,7 +922,7 @@ void JDBController::parseLocals()
         queueCmd(new JDBCommand(QString("dump " + varName).latin1(), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
     } else if (!parsedThis) {
         parsedThis = TRUE;
-        queueCmd(new JDBCommand(QCString("dump this"), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
+        queueCmd(new JDBCommand(Q3CString("dump this"), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
 
     } else {
        parsedThis = FALSE;
@@ -1048,14 +1053,14 @@ char *JDBController::parse(char *buf)
 
 // **************************************************************************
 
-void JDBController::setBreakpoint(const QCString &/*BPSetCmd*/, int /*key*/)
+void JDBController::setBreakpoint(const Q3CString &/*BPSetCmd*/, int /*key*/)
 {
 //    queueCmd(new JDBSetBreakpointCommand("", key));
 }
 
 // **************************************************************************
 
-void JDBController::clearBreakpoint(const QCString &/*BPClearCmd*/)
+void JDBController::clearBreakpoint(const Q3CString &/*BPClearCmd*/)
 {
 //    queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
 }
@@ -1289,7 +1294,7 @@ void JDBController::slotExpandItem(VarItem *)
 // This is called when an item needs special processing to show a value.
 // Example = QStrings. We want to display the QString string against the var name
 // so the user doesn't have to open the qstring to find it. Here's where that happens
-void JDBController::slotExpandUserItem(VarItem *, const QCString& )
+void JDBController::slotExpandUserItem(VarItem *, const Q3CString& )
 {
 }
 
@@ -1388,7 +1393,7 @@ void JDBController::varUpdateDone()
     kdDebug() << "VarUpdateDone" << endl;
 
     QString locals = "";
-    QDictIterator<JDBVarItem> it(localData); // iterator for dict
+    Q3DictIterator<JDBVarItem> it(localData); // iterator for dict
     if (!it.toFirst()) { return; }
     // make sure we dont visit nodes more than once
     while (it.current()) {

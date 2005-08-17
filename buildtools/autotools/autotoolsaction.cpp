@@ -15,7 +15,7 @@
 
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -31,7 +31,7 @@ AutoToolsAction::AutoToolsAction( const QString& text, const KShortcut& cut,
 {
 }
 
-AutoToolsAction::AutoToolsAction( const QString& text, const QIconSet& pix, const KShortcut& cut,
+AutoToolsAction::AutoToolsAction( const QString& text, const QIcon& pix, const KShortcut& cut,
                                   const QObject* receiver, const char* slot,
                                   KActionCollection* parent, const char* name )
 : KAction( text, pix, cut, receiver, slot, parent, name )
@@ -65,7 +65,7 @@ AutoToolsAction::AutoToolsAction( const QString& text, const KShortcut& cut,
 {
 }
 
-AutoToolsAction::AutoToolsAction( const QString& text, const QIconSet& pix,
+AutoToolsAction::AutoToolsAction( const QString& text, const QIcon& pix,
                                   const KShortcut& cut, QObject* parent, const char* name )
 : KAction( text, pix, cut, parent, name )
 {
@@ -77,7 +77,7 @@ AutoToolsAction::AutoToolsAction( const QString& text, const QString& pix,
 {
 }
 
-AutoToolsAction::AutoToolsAction( const QString& text, const QIconSet& pix,
+AutoToolsAction::AutoToolsAction( const QString& text, const QIcon& pix,
                                   const KShortcut& cut, const QObject* receiver,
                                   const char* slot, QObject* parent, const char * name )
 : KAction( text, pix, cut, receiver, slot, parent, name )
@@ -123,8 +123,8 @@ int AutoToolsAction::plug( QWidget* w, int index )
 		
 		if ( !whatsThis().isEmpty() )
 		{
-			QWhatsThis::remove( tb );
-			QWhatsThis::add( tb, whatsThisWithIcon() );
+			Q3WhatsThis::remove( tb );
+			Q3WhatsThis::add( tb, whatsThisWithIcon() );
 		}
 		
 		if ( !toolTip().isEmpty() )

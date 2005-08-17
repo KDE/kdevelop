@@ -23,6 +23,8 @@
 #define _RDBCOMMAND_H_
 
 #include "dbgcommand.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace RDBDebugger
 {
@@ -51,11 +53,11 @@ enum RDBCmd
 class RDBCommand : public DbgCommand
 {
 public:
-    RDBCommand(const QCString& command, bool isRunCmd=false, bool isInfoCmd=true);
+    RDBCommand(const Q3CString& command, bool isRunCmd=false, bool isInfoCmd=true);
     virtual ~RDBCommand();
 
 private:
-    static QCString idlePrompt_;
+    static Q3CString idlePrompt_;
 };
 
 /***************************************************************************/
@@ -64,7 +66,7 @@ private:
 class RDBItemCommand : public RDBCommand
 {
 public:
-    RDBItemCommand(VarItem *item, const QCString &command,
+    RDBItemCommand(VarItem *item, const Q3CString &command,
                    bool isRunCmd=false);
     virtual ~RDBItemCommand();
 
@@ -81,7 +83,7 @@ private:
 class RDBSetBreakpointCommand : public RDBCommand
 {
 public:
-    RDBSetBreakpointCommand(const QCString& setCommand, int key);
+    RDBSetBreakpointCommand(const Q3CString& setCommand, int key);
     virtual ~RDBSetBreakpointCommand();
 
     int getKey() const        { return key_; }

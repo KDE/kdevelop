@@ -35,7 +35,13 @@
 #include <kglobalsettings.h>
 
 #include <math.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QFocusEvent>
+#include <QResizeEvent>
+#include <Q3PtrList>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,9 +51,9 @@
 //============ KMdiChildArea ============//
 
 KMdiChildArea::KMdiChildArea(QWidget *parent)
-:QFrame(parent, "kmdi_childarea")
+:Q3Frame(parent, "kmdi_childarea")
 {
-   setFrameStyle(QFrame::Panel|QFrame::Sunken);
+   setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
    m_captionFont = QFont();//F.B.QFont("clean",16);
    QFontMetrics fm(m_captionFont);
    m_captionFontLineSpacing = fm.lineSpacing();
@@ -55,9 +61,9 @@ KMdiChildArea::KMdiChildArea(QWidget *parent)
    m_captionActiveForeColor = KGlobalSettings::activeTextColor();
    m_captionInactiveBackColor = KGlobalSettings::inactiveTitleColor();
    m_captionInactiveForeColor = KGlobalSettings::inactiveTextColor();
-   m_pZ = new QPtrList<KMdiChildFrm>;
+   m_pZ = new Q3PtrList<KMdiChildFrm>;
    m_pZ->setAutoDelete(true);
-   setFocusPolicy(ClickFocus);
+   setFocusPolicy(Qt::ClickFocus);
    m_defaultChildFrmSize = QSize(400,300);
 }
 
@@ -236,7 +242,7 @@ void KMdiChildArea::resizeEvent(QResizeEvent* e)
 void KMdiChildArea::mousePressEvent(QMouseEvent *e)
 {
    //Popup the window menu
-   if(e->button() & RightButton)
+   if(e->button() & Qt::RightButton)
       emit popupWindowMenu( mapToGlobal( e->pos()));
 }
 
@@ -321,7 +327,7 @@ void KMdiChildArea::focusTopChild()
 void KMdiChildArea::cascadeWindows()
 {
    int idx=0;
-   QPtrList<KMdiChildFrm> list(*m_pZ);
+   Q3PtrList<KMdiChildFrm> list(*m_pZ);
    list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();
@@ -340,7 +346,7 @@ void KMdiChildArea::cascadeWindows()
 void KMdiChildArea::cascadeMaximized()
 {
    int idx=0;
-   QPtrList<KMdiChildFrm> list(*m_pZ);
+   Q3PtrList<KMdiChildFrm> list(*m_pZ);
 
    list.setAutoDelete(false);
    while(!list.isEmpty()){
@@ -363,7 +369,7 @@ void KMdiChildArea::cascadeMaximized()
 void KMdiChildArea::expandVertical()
 {
    int idx=0;
-   QPtrList<KMdiChildFrm> list(*m_pZ);
+   Q3PtrList<KMdiChildFrm> list(*m_pZ);
    list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();
@@ -380,7 +386,7 @@ void KMdiChildArea::expandVertical()
 void KMdiChildArea::expandHorizontal()
 {
    int idx=0;
-   QPtrList<KMdiChildFrm> list(*m_pZ);
+   Q3PtrList<KMdiChildFrm> list(*m_pZ);
    list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();

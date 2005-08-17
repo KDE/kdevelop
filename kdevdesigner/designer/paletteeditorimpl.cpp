@@ -36,7 +36,7 @@
 #include <qapplication.h>
 #include <qpushbutton.h>
 
-PaletteEditor::PaletteEditor( FormWindow *fw, QWidget * parent, const char * name, bool modal, WFlags f )
+PaletteEditor::PaletteEditor( FormWindow *fw, QWidget * parent, const char * name, bool modal, Qt::WFlags f )
     : PaletteEditorBase( parent, name, modal, f ), formWindow( fw )
 {
     connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
@@ -280,7 +280,7 @@ QPalette PaletteEditor::pal() const
     return editPalette;
 }
 
-QPalette PaletteEditor::getPalette( bool *ok, const QPalette &init, BackgroundMode mode,
+QPalette PaletteEditor::getPalette( bool *ok, const QPalette &init, Qt::BackgroundMode mode,
 				    QWidget* parent, const char* name, FormWindow *fw )
 {
     PaletteEditor* dlg = new PaletteEditor( fw, parent, name, TRUE );

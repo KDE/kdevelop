@@ -14,7 +14,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "multiproperty.h"
 
@@ -63,7 +63,7 @@ QVariant MultiProperty::value() const
     if (list.count() >= 1)
         value = list.getFirst()->value();
 
-    QPtrListIterator<Property> it(list);
+    Q3PtrListIterator<Property> it(list);
     Property *property;
     while ((property = it.current()) != 0)
     {
@@ -81,7 +81,7 @@ QString MultiProperty::description() const
     if (list.count() >= 1)
         description = list.getFirst()->description();
 
-    QPtrListIterator<Property> it(list);
+    Q3PtrListIterator<Property> it(list);
     Property *property;
     while ((property = it.current()) != 0)
     {
@@ -99,7 +99,7 @@ bool MultiProperty::readOnly() const
     if (list.count() >= 1)
         v = list.getFirst()->readOnly();
 
-    QPtrListIterator<Property> it(list);
+    Q3PtrListIterator<Property> it(list);
     Property *property;
     while ((property = it.current()) != 0)
     {
@@ -117,7 +117,7 @@ bool MultiProperty::visible() const
     if (list.count() >= 1)
         v = list.getFirst()->readOnly();
 
-    QPtrListIterator<Property> it(list);
+    Q3PtrListIterator<Property> it(list);
     Property *property;
     while ((property = it.current()) != 0)
     {

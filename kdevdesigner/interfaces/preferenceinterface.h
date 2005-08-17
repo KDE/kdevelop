@@ -41,8 +41,8 @@
 //
 
 #include <private/qcom_p.h>
-#include <qwidgetlist.h>
-#include <qcstring.h>
+#include <qwidget.h>
+#include <q3cstring.h>
 
 // {5c168ee7-4bee-469f-9995-6afdb04ce5a2}
 #ifndef IID_Preference

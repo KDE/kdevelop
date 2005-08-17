@@ -34,6 +34,8 @@
 #include <qsize.h>
 #include <qfont.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /*!
   \class DomTool domtool.h
@@ -184,7 +186,7 @@ QVariant DomTool::elementToVariant( const QDomElement& e, const QVariant& defVal
 	if ( n.tagName() == "comment" )
 	    comment = n.firstChild().toText().data();
     } else if ( e.tagName() == "cstring" ) {
-	v = QVariant( QCString( e.firstChild().toText().data() ) );
+	v = QVariant( Q3CString( e.firstChild().toText().data() ) );
     } else if ( e.tagName() == "number" ) {
 	bool ok = TRUE;
 	v = QVariant( e.firstChild().toText().data().toInt( &ok ) );

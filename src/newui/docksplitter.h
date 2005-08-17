@@ -15,13 +15,13 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef IDEALDOCKSPLITTER_H
 #define IDEALDOCKSPLITTER_H
 
 #include <qsplitter.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 namespace Ideal {
 
@@ -33,7 +33,7 @@ class DockWidget;
 class DockSplitter: public QSplitter {
     Q_OBJECT
 public:
-    DockSplitter(Orientation orientation, QWidget *parent = 0, const char *name = 0);
+    DockSplitter(Qt::Orientation orientation, QWidget *parent = 0, const char *name = 0);
     ~DockSplitter();
     
     void addDock(uint row, uint col, QWidget *dock);
@@ -52,9 +52,9 @@ protected:
     bool isRowEmpty(int row);
     
 private:
-    Orientation m_orientation;
-    QValueList<QSplitter*> m_splitters;
-    QValueList<QValueList<QWidget*> > m_docks;
+    Qt::Orientation m_orientation;
+    Q3ValueList<QSplitter*> m_splitters;
+    Q3ValueList<Q3ValueList<QWidget*> > m_docks;
 };
 
 }

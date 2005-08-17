@@ -28,6 +28,9 @@
 #include <kcombobox.h>
 #include <qwidget.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3CString>
 #include <kdebug.h>
 
 class KLineEdit;
@@ -133,12 +136,12 @@ public:
 	// (from QToolTip) Display a tooltip when the cursor is over an item
 	virtual void maybeTip(const QPoint &);
 	
-	virtual void setSelected(QListViewItem * item, bool selected);
+	virtual void setSelected(Q3ListViewItem * item, bool selected);
 
 signals:
     void toggleWatchpoint(const QString &varName);
     void selectFrame(int frame, int thread);
-    void expandItem(VarItem *item, const QCString &request);
+    void expandItem(VarItem *item, const Q3CString &request);
     void fetchGlobals(bool fetch);
     void addWatchExpression(const QString& expr, bool execute);
     void removeWatchExpression(int displayId);
@@ -146,10 +149,10 @@ signals:
 public slots:
     void slotAddWatchExpression(const QString& watchVar);
     void slotFrameActive(int frameNo, int threadNo, const QString& frameName);
-    void slotPressed(QListViewItem * item);	
+    void slotPressed(Q3ListViewItem * item);	
 
 private slots:
-    void slotContextMenu(KListView *, QListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item);
 
 private:
     int activationId_;
@@ -238,7 +241,7 @@ private:
 
 private:
 	QString   key_;
-    QCString  cache_;
+    Q3CString  cache_;
     DataType  dataType_;
     bool      highlight_;
 };
@@ -296,7 +299,7 @@ private:
     bool    needsVariables_;
     int     frameNo_;
     int     threadNo_;
-    QCString cache_;
+    Q3CString cache_;
 };
 
 /***************************************************************************/

@@ -16,11 +16,16 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qtooltip.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QVBoxLayout>
+#include <QFocusEvent>
+#include <QDropEvent>
 
 #include <kiconloader.h>
 #include <kurlcombobox.h>
@@ -75,7 +80,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	// widgets and layout
 	QVBoxLayout* lo = new QVBoxLayout(this);
 
-	QHBox *hlow = new QHBox (this);
+	Q3HBox *hlow = new Q3HBox (this);
 	lo->addWidget(hlow);
 
 	home = new QPushButton( hlow );
@@ -109,7 +114,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	lo->addWidget(dir);
 	lo->setStretchFactor(dir, 2);
 
-	QHBox* filterBox = new QHBox(this);
+	Q3HBox* filterBox = new Q3HBox(this);
 	filterIcon = new QLabel(filterBox);
 	filterIcon->setPixmap( BarIcon("filter") );
 	filter = new KHistoryCombo(filterBox, "filter");

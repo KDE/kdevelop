@@ -41,11 +41,13 @@
 #include "kdevdesigner_part.h"
 #include <klocale.h>
 
-#include <qiconview.h>
+#include <q3iconview.h>
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <stdlib.h>
 #include <qcombobox.h>
 #include <qworkspace.h>
@@ -53,7 +55,7 @@
 
 static int forms = 0;
 
-ProjectItem::ProjectItem( QIconView *view, const QString &text )
+ProjectItem::ProjectItem( Q3IconView *view, const QString &text )
     : NewItem( view, text )
 {
 }
@@ -65,7 +67,7 @@ void ProjectItem::insert( Project * )
 
 
 
-FormItem::FormItem( QIconView *view, const QString &text )
+FormItem::FormItem( Q3IconView *view, const QString &text )
     : NewItem( view, text )
 {
 }
@@ -123,7 +125,7 @@ void FormItem::insert( Project *pro )
 
 
 
-CustomFormItem::CustomFormItem( QIconView *view, const QString &text )
+CustomFormItem::CustomFormItem( Q3IconView *view, const QString &text )
     : NewItem( view, text )
 {
 }
@@ -176,7 +178,7 @@ void CustomFormItem::insert( Project *pro )
 
 
 
-SourceFileItem::SourceFileItem( QIconView *view, const QString &text )
+SourceFileItem::SourceFileItem( Q3IconView *view, const QString &text )
     : NewItem( view, text ), visible( TRUE )
 {
 }
@@ -189,7 +191,7 @@ void SourceFileItem::insert( Project *pro )
 
 void SourceFileItem::setProject( Project *pro )
 {
-    QIconView *iv = iconView();
+    Q3IconView *iv = iconView();
     bool v = lang == pro->language();
     if ( !iv || v == visible )
 	return;
@@ -202,7 +204,7 @@ void SourceFileItem::setProject( Project *pro )
 
 
 
-SourceTemplateItem::SourceTemplateItem( QIconView *view, const QString &text )
+SourceTemplateItem::SourceTemplateItem( Q3IconView *view, const QString &text )
     : NewItem( view, text ), visible( TRUE )
 {
 }
@@ -231,7 +233,7 @@ void SourceTemplateItem::insert( Project *pro )
 
 void SourceTemplateItem::setProject( Project *pro )
 {
-    QIconView *iv = iconView();
+    Q3IconView *iv = iconView();
     bool v = !pro->isDummy() && lang == pro->language();
     if ( !iv || v == visible )
 	return;
@@ -242,7 +244,7 @@ void SourceTemplateItem::setProject( Project *pro )
 	iv->insertItem( this );
 }
 
-void NewForm::insertTemplates( QIconView *tView,
+void NewForm::insertTemplates( Q3IconView *tView,
 			       const QString &templatePath )
 {
     QStringList::Iterator it;
@@ -256,7 +258,7 @@ void NewForm::insertTemplates( QIconView *tView,
 	    pi->setDragEnabled( FALSE );
 	}
     }
-    QIconViewItem *cur = 0;
+    Q3IconViewItem *cur = 0;
     FormItem *fi = new FormItem( tView,i18n( "Dialog" ) );
     allItems.append( fi );
     fi->setFormType( FormItem::Dialog );
@@ -297,7 +299,7 @@ void NewForm::insertTemplates( QIconView *tView,
 	}
 	if ( !templPath.isEmpty() ) {
 	    QDir dir( templPath  );
-	    const QFileInfoList *filist = dir.entryInfoList( QDir::DefaultFilter, QDir::DirsFirst | QDir::Name );
+	    const QFileInfoList *filist = dir.entryInfoList( QDir::NoFilter, QDir::DirsFirst | QDir::Name );
 	    if ( filist ) {
 		QFileInfoListIterator it( *filist );
 		QFileInfo *fi;
@@ -358,7 +360,7 @@ void NewForm::insertTemplates( QIconView *tView,
 	adjustSize();
 }
 
-NewForm::NewForm( QIconView *templateView, const QString &templatePath )
+NewForm::NewForm( Q3IconView *templateView, const QString &templatePath )
 {
     insertTemplates( templateView, templatePath );
     projectChanged( i18n( "<No Project>" ) );
@@ -395,20 +397,20 @@ void NewForm::projectChanged( const QString &project )
     Project *pro = MainWindow::self->findProject( project );
     if ( !pro )
 	return;
-    QIconViewItem *i;
+    Q3IconViewItem *i;
     for ( i = allItems.first(); i; i = allItems.next() )
 	( (NewItem*)i )->setProject( pro );
     templateView->setCurrentItem( templateView->firstItem() );
     templateView->arrangeItemsInGrid( TRUE );
 }
 
-void NewForm::itemChanged( QIconViewItem *item )
+void NewForm::itemChanged( Q3IconViewItem *item )
 {
     labelProject->setEnabled( item->rtti() != NewItem::ProjectType );
     projectCombo->setEnabled( item->rtti() != NewItem::ProjectType );
 }
 
-QPtrList<QIconViewItem> NewForm::allViewItems()
+Q3PtrList<Q3IconViewItem> NewForm::allViewItems()
 {
     return allItems;
 }

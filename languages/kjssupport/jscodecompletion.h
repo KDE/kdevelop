@@ -13,6 +13,8 @@
 #define JSCODECOMPLETION_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdevelop/codemodel.h>
 #include <kdevelop/kdevplugin.h>
 #include <kdevelop/kdevlanguagesupport.h>
@@ -34,7 +36,7 @@ class JSCodeCompletion : public QObject
 
 		~JSCodeCompletion();
 		void setActiveEditorPart(KParts::Part* editorPart);
-		QValueList<KTextEditor::CompletionEntry> getVars(const QString& textHint);
+		Q3ValueList<KTextEditor::CompletionEntry> getVars(const QString& textHint);
 
 	public slots:
 		void cursorPositionChanged();

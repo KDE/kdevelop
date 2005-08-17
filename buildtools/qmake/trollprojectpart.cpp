@@ -17,7 +17,7 @@
 
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -66,7 +66,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     m_widget = new TrollProjectWidget(this);
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("QMake Manager"));
-    QWhatsThis::add(m_widget, i18n("<b>QMake manager</b><p>"
+    Q3WhatsThis::add(m_widget, i18n("<b>QMake manager</b><p>"
                                    "The QMake manager project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
                                    ".pro file. The 'details' view in the lower half shows the "
@@ -76,7 +76,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
     KAction *action;
 
-    const QIconSet icon(SmallIcon("compfile"));
+    const QIcon icon(SmallIcon("compfile"));
     action = new KAction( i18n("Compile &File"), "compfile", 0,
                           m_widget, SLOT(slotBuildFile()),
                           actionCollection(),"build_compilefile"  );
@@ -86,7 +86,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
 
-    action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
+    action = new KAction( i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
                           m_widget, SLOT(slotBuildProject()),
                           actionCollection(), "build_build_project" );
     action->setToolTip(i18n("Build project"));
@@ -110,7 +110,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
-    action = new KAction( i18n("Execute Main Program"), "exec", SHIFT+Key_F9,
+    action = new KAction( i18n("Execute Main Program"), "exec", Qt::SHIFT+Qt::Key_F9,
                           this, SLOT(slotBuildAndExecuteProject()),
                           actionCollection(), "build_execute_project" );
     action->setToolTip(i18n("Execute main program"));
@@ -120,7 +120,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
 
 
-    action = new KAction( i18n("&Build Subproject"), "make_kdevelop", Key_F7,
+    action = new KAction( i18n("&Build Subproject"), "make_kdevelop", Qt::Key_F7,
                           m_widget, SLOT(slotBuildTarget()),
                           actionCollection(), "build_build_target" );
     action->setToolTip(i18n("Build subproject"));
@@ -219,7 +219,7 @@ QString TrollProjectPart::makeEnvironment()
 
 void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
     RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject", buildDirectory(), vbox);
 
@@ -441,7 +441,7 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 
     QFileInfo fi(dir + "/Makefile");
     if (!fi.exists()) {
-        int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run qmake first?"), QString::null, i18n("Run qmake"), i18n("Do Not Run"));
+        int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run qmake first?"));
         if (r == KMessageBox::No)
             return;
         startQMakeCommand(dir);

@@ -26,22 +26,24 @@
 
 #include "actiondnd.h"
 #include "actionlistview.h"
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include <klocale.h>
 
 ActionListView::ActionListView( QWidget *parent, const char *name )
-    : QListView( parent, name )
+    : Q3ListView( parent, name )
 {
     setShowSortIndicator( TRUE );
     setResizeMode( LastColumn );
     setRootIsDecorated( TRUE );
-    connect( this, SIGNAL( contextMenuRequested( QListViewItem *, const QPoint &, int ) ),
-	     this, SLOT( rmbMenu( QListViewItem *, const QPoint & ) ) );
+    connect( this, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint &, int ) ),
+	     this, SLOT( rmbMenu( Q3ListViewItem *, const QPoint & ) ) );
 }
 
-ActionItem::ActionItem( QListView *lv, QAction *ac )
-    : QListViewItem( lv ), a( 0 ), g( 0 )
+ActionItem::ActionItem( Q3ListView *lv, QAction *ac )
+    : Q3ListViewItem( lv ), a( 0 ), g( 0 )
 {
     g = ::qt_cast<QDesignerActionGroup*>(ac);
     if ( !g )
@@ -49,8 +51,8 @@ ActionItem::ActionItem( QListView *lv, QAction *ac )
     setDragEnabled( TRUE );
 }
 
-ActionItem::ActionItem( QListViewItem *i, QAction *ac )
-    : QListViewItem( i ), a( 0 ), g( 0 )
+ActionItem::ActionItem( Q3ListViewItem *i, QAction *ac )
+    : Q3ListViewItem( i ), a( 0 ), g( 0 )
 {
     g = ::qt_cast<QDesignerActionGroup*>(ac);
     if ( !g )
@@ -61,19 +63,19 @@ ActionItem::ActionItem( QListViewItem *i, QAction *ac )
 
 void ActionItem::moveToEnd()
 {
-    QListViewItem *i = this;
+    Q3ListViewItem *i = this;
     while ( i->nextSibling() )
 	i = i->nextSibling();
     if ( i != this )
 	moveItem( i );
 }
 
-QDragObject *ActionListView::dragObject()
+Q3DragObject *ActionListView::dragObject()
 {
     ActionItem *i = (ActionItem*)currentItem();
     if ( !i )
 	return 0;
-    QStoredDrag *drag = 0;
+    Q3StoredDrag *drag = 0;
     if ( i->action() ) {
 	drag = new ActionDrag( i->action(), viewport() );
 	drag->setPixmap( i->action()->iconSet().pixmap() );
@@ -84,9 +86,9 @@ QDragObject *ActionListView::dragObject()
     return drag;
 }
 
-void ActionListView::rmbMenu( QListViewItem *i, const QPoint &p )
+void ActionListView::rmbMenu( Q3ListViewItem *i, const QPoint &p )
 {
-    QPopupMenu *popup = new QPopupMenu( this );
+    Q3PopupMenu *popup = new Q3PopupMenu( this );
     popup->insertItem( i18n( "New &Action" ), 0 );
     popup->insertItem( i18n( "New Action &Group" ), 1 );
     popup->insertItem( i18n( "New &Dropdown Action Group" ), 2 );

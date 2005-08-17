@@ -13,17 +13,16 @@
 #define __FILELIST_ITEM_H__
 
 
-#include <qlistview.h>
-#include <qpixmap.h>
+#include <q3listview.h>
 
 #include <kurl.h>
- 
+		 
 #include <kdevpartcontroller.h>
 		 
-class FileListItem : public QListViewItem
+class FileListItem : public Q3ListViewItem
 {
 public:
-	FileListItem( QListView * parent, KURL const & url, DocumentState = Clean );
+	FileListItem( Q3ListView * parent, KURL const & url, DocumentState = Clean );
 	
 	KURL url();
 	
@@ -39,8 +38,7 @@ private:
 	
 	KURL _url;
 	DocumentState _state;
-    QPixmap _icon;
-    
+	
 	static FileListItem * s_activeItem;
 	
 };

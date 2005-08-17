@@ -30,7 +30,7 @@
 #include "variabledialog.h"
 
 class FormWindow;
-class QListView;
+class Q3ListView;
 
 class VariableDialog : public VariableDialogBase
 {
@@ -47,7 +47,7 @@ protected slots:
     void deleteVariable();
     void nameChanged();
     void accessChanged();
-    void currentItemChanged( QListViewItem *i );
+    void currentItemChanged( Q3ListViewItem *i );
 
 private:
     FormWindow *formWindow;

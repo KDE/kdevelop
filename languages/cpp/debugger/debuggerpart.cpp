@@ -12,9 +12,12 @@
  ***************************************************************************/
 
 #include <qdir.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QLabel>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -71,7 +74,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( data ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( &data, parent, name ? name : "DebuggerPart" ),
-    controller(0), justRestarted_(false)
+    controller(0)
 {
     setObjId("DebuggerInterface");
     setInstance(DebuggerFactory::instance());
@@ -87,12 +90,27 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     // Setup widgets and dbgcontroller
     variableWidget = new VariableWidget( 0, "variablewidget");
+//     /*variableWidget*/->setEnabled(false);
+    variableWidget->setIcon(SmallIcon("math_brace"));
+    variableWidget->setCaption(i18n("Variable Tree"));
+    Q3WhatsThis::add
+        (variableWidget, i18n("<b>Variable tree</b><p>"
+                              "The variable tree allows you to see "
+                              "the variable values as you step "
+                              "through your program using the internal "
+                              "debugger. Click the right mouse button on items in "
+                              "this view to get a popup menu.\n"
+                              "To speed up stepping through your code "
+                              "leave the tree items closed and add the "
+                              "variable(s) to the watch section.\n"
+                              "To change a variable value in your "
+                              "running app use a watch variable (&eg; a=5)."));
     mainWindow()->embedSelectView(variableWidget, i18n("Variables"), i18n("Debugger variable-view"));
-
+//    mainWindow()->setViewAvailable(variableWidget, false);
 
     gdbBreakpointWidget = new GDBBreakpointWidget( 0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (gdbBreakpointWidget, i18n("<b>Breakpoint list</b><p>"
                                 "Displays a list of breakpoints with "
                                 "their current status. Clicking on a "
@@ -105,7 +123,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     framestackWidget = new FramestackWidget( 0, "framestackWidget" );
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (framestackWidget, i18n("<b>Frame stack</b><p>"
                                 "Often referred to as the \"call stack\", "
                                 "this is a list showing what function is "
@@ -121,7 +139,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     disassembleWidget = new DisassembleWidget( 0, "disassembleWidget" );
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (disassembleWidget, i18n("<b>Machine code display</b><p>"
                                  "A machine code view into your running "
                                  "executable with the current instruction "
@@ -138,7 +156,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbOutputWidget->setEnabled(false);
     gdbOutputWidget->setIcon( SmallIcon("inline_image") );
     gdbOutputWidget->setCaption(i18n("GDB Output"));
-    QWhatsThis::add
+    Q3WhatsThis::add
         (gdbOutputWidget, i18n("<b>GDB output</b><p>"
                                  "Shows all gdb commands being executed. "
                                  "You can also issue any other gdb command while debugging."));
@@ -164,7 +182,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     KAction *action;
 
 //    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
-    action = new KAction(i18n("&Start"), "dbgrun", CTRL+SHIFT+Key_F9,
+    action = new KAction(i18n("&Start"), "dbgrun", Qt::CTRL+Qt::SHIFT+Qt::Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
     action->setToolTip( i18n("Start in debugger") );
@@ -192,13 +210,6 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "debug_runtocursor");
     action->setToolTip( i18n("Run to cursor") );
     action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached."));
-
-
-    action = new KAction(i18n("Set E&xecution Position to Cursor"), "dbgjumpto", 0,
-                         this, SLOT(slotJumpToCursor()),
-                         actionCollection(), "debug_jumptocursor");
-    action->setToolTip( i18n("Jump to cursor") );
-    action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position."));
 
 
     action = new KAction(i18n("Step &Over"), "dbgnext", 0,
@@ -298,8 +309,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( debugger(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              gdbBreakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStop(KDevPlugin*)) );
@@ -327,15 +338,15 @@ void DebuggerPart::setupDcop()
         if ((*it).find("drkonqi-") == 0)
             slotDCOPApplicationRegistered(*it);
 
-    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QCString&)), SLOT(slotDCOPApplicationRegistered(const QCString&)));
+    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const Q3CString&)), SLOT(slotDCOPApplicationRegistered(const Q3CString&)));
     kapp->dcopClient()->setNotifications(true);
 }
 
-void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
+void DebuggerPart::slotDCOPApplicationRegistered(const Q3CString& appId)
 {
     if (appId.find("drkonqi-") == 0) {
         QByteArray answer;
-        QCString replyType;
+        Q3CString replyType;
 
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
@@ -347,8 +358,8 @@ void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
         kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true);
 #endif
 
-        QDataStream d(answer, IO_ReadOnly);
-        QCString appName;
+        QDataStream d(answer, QIODevice::ReadOnly);
+        Q3CString appName;
         d >> appName;
 
         if (appName.length() && project() && project()->mainProgram().endsWith(appName)) {
@@ -361,7 +372,7 @@ void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
 ASYNC DebuggerPart::slotDebugExternalProcess()
 {
     QByteArray answer;
-    QCString replyType;
+    Q3CString replyType;
 
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
@@ -373,7 +384,7 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
     kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true);
 #endif
 
-    QDataStream d(answer, IO_ReadOnly);
+    QDataStream d(answer, QIODevice::ReadOnly);
     int pid;
     d >> pid;
 
@@ -429,7 +440,7 @@ void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
         stateChanged( QString("stopped") );
 }
 
-void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
+void DebuggerPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::EditorContext ))
         return;
@@ -446,8 +457,7 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (!m_contextIdent.isEmpty())
     {
         QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
-        int id = popup->insertItem( i18n("Evaluate: %1").arg(squeezed), this, SLOT(contextEvaluate()) );
-        int id2 = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
+        int id = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
         popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Adds an expression under the cursor to the Variables/Watch list."));
     }
 }
@@ -475,14 +485,10 @@ void DebuggerPart::contextWatch()
     variableWidget->slotAddWatchVariable(m_contextIdent);
 }
 
-void DebuggerPart::contextEvaluate()
-{
-    variableWidget->slotEvaluateExpression(m_contextIdent);
-}
 
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
+	Q3VBox *vbox = dlg->addVBoxPage(i18n("Debugger"), i18n("Debugger"), BarIcon( info()->icon(), KIcon::SizeMedium) );
     DebuggerConfigWidget *w = new DebuggerConfigWidget(this, vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(finished()), controller, SLOT(configure()) );
@@ -498,18 +504,14 @@ void DebuggerPart::setupController()
     // variableTree -> controller
     connect( variableTree,          SIGNAL(expandItem(TrimmableItem*)),
              controller,            SLOT(slotExpandItem(TrimmableItem*)));
-    connect( variableTree,          SIGNAL(expandUserItem(VarItem*, const QCString&)),
-             controller,            SLOT(slotExpandUserItem(VarItem*, const QCString&)));
+    connect( variableTree,          SIGNAL(expandUserItem(VarItem*, const Q3CString&)),
+             controller,            SLOT(slotExpandUserItem(VarItem*, const Q3CString&)));
     connect( variableTree,          SIGNAL(setLocalViewState(bool)),
              controller,            SLOT(slotSetLocalViewState(bool)));
     connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
              controller,            SLOT(slotVarItemConstructed(VarItem*)));     // jw
     connect( variableTree,          SIGNAL(produceVariablesInfo()),
              controller,            SLOT(slotProduceVariablesInfo()));
-    connect( variableTree,          SIGNAL(setValue(const QString&, 
-                                                    const QString&)),
-             controller,            SLOT(slotSetValue(const QString&, 
-                                                      const QString&)));
 
     // variableTree -> gdbBreakpointWidget
     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
@@ -812,23 +814,7 @@ void DebuggerPart::slotRunToCursor()
     uint line, col;
     cursorIface->cursorPosition(&line, &col);
 
-    controller->slotRunUntil(rwpart->url().path(), ++line);
-}
-
-void DebuggerPart::slotJumpToCursor()
-{
-    KParts::ReadWritePart *rwpart
-            = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    KTextEditor::ViewCursorInterface *cursorIface
-            = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
-
-    if (!rwpart || !rwpart->url().isLocalFile() || !cursorIface)
-        return;
-
-    uint line, col;
-    cursorIface->cursorPositionReal(&line, &col);
-
-    controller->slotJumpTo(rwpart->url().path(), ++line);
+    controller->slotRunUntil(rwpart->url().path(), line);
 }
 
 void DebuggerPart::slotStepOver()
@@ -927,40 +913,11 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
                                            "Restarts the program in the debugger") );
         slotStop();
-        mainWindow()->lowerView(variableWidget);
     }
     else
     {
         stateIndicator = "P";
         stateChanged( QString("paused") );
-        // On the first stop, show the variables view.
-        // We do it on first stop, and not at debugger start, because
-        // a program might just successfully run till completion. If we show
-        // the var views on start and hide on stop, this will look like flicker.
-        // On the other hand, if application is paused, it's very
-        // likely that the user wants to see variables.
-        if (justRestarted_)
-        {
-            justRestarted_ = false;
-            mainWindow()->raiseView(variableWidget);
-        }
-    }
-
-    // As soon as debugger clears 's_appNotStarted' flag, we
-    // set 'justRestarted' variable. 
-    // The other approach would be to set justRestarted in slotRun, slotCore
-    // and slotAttach.
-    // Note that setting this var in startDebugger is not OK, because the 
-    // initial state of debugger is exactly the same as state after pause,
-    // so we'll always show varaibles view.
-    if ((previousDebuggerState_ & s_appNotStarted) &&
-        !(state & s_appNotStarted))
-    {
-        justRestarted_ = true;
-    }
-    if (state & s_appNotStarted)
-    {
-        justRestarted_ = false;
     }
 
     // And now? :-)
@@ -970,8 +927,6 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     statusBarIndicator->setText(stateIndicator);
     if (!msg.isEmpty())
         mainWindow()->statusBar()->message(msg, 3000);
-
-    previousDebuggerState_ = state;
 }
 
 

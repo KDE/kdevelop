@@ -22,25 +22,29 @@
 #include <kdevlanguagesupport.h>
 
 #include <kdialogbase.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qstring.h>
 #include <qwaitcondition.h>
 #include <qdatetime.h>
 #include <qdir.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QLabel>
+#include <Q3PopupMenu>
+#include <QCustomEvent>
 
 class Context;
 class CppCodeCompletion;
 class CppCodeCompletionConfig;
 class CreateGetterSetterConfiguration;
-class QtBuildConfig;
 class ProblemReporter;
 class BackgroundParser;
 class Catalog;
 class QLabel;
-class QProgressBar;
+class Q3ProgressBar;
 class QStringList;
-class QListViewItem;
+class Q3ListViewItem;
 class QTimer;
 class KListView;
 class Driver;
@@ -99,14 +103,8 @@ public:
 	{
 		return m_pCreateGetterSetterConfiguration;
 	}
-	
-	/**
-		Get a pointer to the QtBuildConfig object
-		@return A pointer to the QtBuildConfig object.
-	*/
-	inline QtBuildConfig* qtBuildConfig() const { return m_qtBuildConfig; }
 
-	const QPtrList<Catalog>& catalogList()
+	const Q3PtrList<Catalog>& catalogList()
 	{
 		return m_catalogList;
 	}
@@ -178,7 +176,7 @@ private slots:
 	void savedFile( const KURL &fileName );
 	void configWidget( KDialogBase *dlg );
 	void projectConfigWidget( KDialogBase *dlg );
-	void contextMenu( QPopupMenu *popup, const Context *context );
+	void contextMenu( Q3PopupMenu *popup, const Context *context );
 	void addedFilesToProject( const QStringList &fileList );
 	void removedFilesFromProject( const QStringList &fileList );
 	void changedFilesInProject( const QStringList & fileList );
@@ -272,15 +270,13 @@ private:
 
 	CreateGetterSetterConfiguration* m_pCreateGetterSetterConfiguration;
 	class KAction* m_createGetterSetterAction;
-	
-	QtBuildConfig* m_qtBuildConfig;
 
 	bool withcpp;
 	QString m_contextFileName;
 
 	VariableDom m_curAttribute;
 	ClassDom m_curClass;
-	QGuardedPtr< ProblemReporter > m_problemReporter;
+	QPointer< ProblemReporter > m_problemReporter;
 	BackgroundParser* m_backgroundParser;
 
 	KTextEditor::Document* m_activeDocument;
@@ -298,7 +294,7 @@ private:
 	QMap<QString, QDateTime> m_timestamp;
 	bool m_valid;
 
-	QPtrList<Catalog> m_catalogList;
+	Q3PtrList<Catalog> m_catalogList;
 	Driver* m_driver;
 	QString m_projectDirectory;
 	QStringList m_projectFileList;
@@ -321,7 +317,7 @@ private:
 	struct JobData
 	{
 		QDir dir;
-		QGuardedPtr<QProgressBar> progressBar;
+		QPointer<Q3ProgressBar> progressBar;
 		QStringList::Iterator it;
 		QStringList files;
 		QMap< QString, QPair<uint, uint> > pcs;

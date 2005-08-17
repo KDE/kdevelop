@@ -1,6 +1,8 @@
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qregexp.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -47,7 +49,7 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   m_widget->setIcon( SmallIcon("fork") );
   m_widget->setCaption(i18n("Valgrind Output"));
   
-  QWhatsThis::add( m_widget, i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
+  Q3WhatsThis::add( m_widget, i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
     "use of uninitialized memory<br>"
     "reading/writing memory after it has been free'd<br>"
     "reading/writing off the end of malloc'd blocks<br>"
@@ -91,7 +93,7 @@ void ValgrindPart::loadOutput()
     return;
 
   QFile f( fName );
-  if ( !f.open( IO_ReadOnly ) ) {
+  if ( !f.open( QIODevice::ReadOnly ) ) {
     KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1").arg(fName) );
     return;
   }

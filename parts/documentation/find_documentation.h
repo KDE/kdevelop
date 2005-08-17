@@ -15,18 +15,20 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef FINDDOCUMENTATION_H
 #define FINDDOCUMENTATION_H
 
 #include "find_documentationbase.h"
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class DocumentationWidget;
 class KListViewItem;
 class FindDocumentationOptions;
-class QProcess;
+class Q3Process;
 
 class FindDocumentation : public FindDocumentationBase
 {
@@ -38,8 +40,8 @@ public:
 
 public slots:
     /*$PUBLIC_SLOTS$*/
-    virtual void buttonPressedOnItem( int button, QListViewItem * item, const QPoint & pos, int c );
-    virtual void clickOnItem( QListViewItem * item );
+    virtual void buttonPressedOnItem( int button, Q3ListViewItem * item, const QPoint & pos, int c );
+    virtual void clickOnItem( Q3ListViewItem * item );
     virtual void procInfoReadFromStdout();
     virtual void procManReadFromStdout();
     virtual void searchInInfo();
@@ -59,8 +61,8 @@ protected slots:
   /*$PROTECTED_SLOTS$*/
 
 private:
-    QProcess* proc_man;
-    QProcess* proc_info;
+    Q3Process* proc_man;
+    Q3Process* proc_info;
     KListViewItem* man_item;
     KListViewItem* info_item;
     KListViewItem* index_item;

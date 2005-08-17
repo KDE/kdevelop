@@ -19,6 +19,8 @@
 #define _JDBCOMMAND_H_
 
 #include "dbgcommand.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace JAVADebugger
 {
@@ -79,12 +81,12 @@ enum JDBCmd
 class JDBCommand : public DbgCommand
 {
 public:
-    JDBCommand(const QCString& command, bool isRunCmd=false, bool isInfoCmd=true,
+    JDBCommand(const Q3CString& command, bool isRunCmd=false, bool isInfoCmd=true,
                char prompt=WAIT);
     virtual ~JDBCommand();
 
 private:
-    static QCString idlePrompt_;
+    static Q3CString idlePrompt_;
 };
 
 /***************************************************************************/
@@ -93,7 +95,7 @@ private:
 class JDBItemCommand : public JDBCommand
 {
 public:
-    JDBItemCommand(VarItem *item, const QCString &command,
+    JDBItemCommand(VarItem *item, const Q3CString &command,
                    bool isRunCmd=false, char prompt=DATAREQUEST);
     virtual ~JDBItemCommand();
 
@@ -129,7 +131,7 @@ public:
 class JDBSetBreakpointCommand : public JDBCommand
 {
 public:
-    JDBSetBreakpointCommand(const QCString& setCommand, int key);
+    JDBSetBreakpointCommand(const Q3CString& setCommand, int key);
     virtual ~JDBSetBreakpointCommand();
 
     int getKey() const        { return key_; }

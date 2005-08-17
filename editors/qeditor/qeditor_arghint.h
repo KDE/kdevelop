@@ -12,20 +12,22 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef QEDITOR_ARGHINT_H
 #define QEDITOR_ARGHINT_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QEvent>
 
 class QEditorView;
 class QEditorArgHintData;
 
-class QEditorArgHint: public QFrame
+class QEditorArgHint: public Q3Frame
 {
     Q_OBJECT
 public:

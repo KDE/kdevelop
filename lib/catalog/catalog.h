@@ -13,16 +13,18 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef CATALOG_H
 #define CATALOG_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 #include "tag.h"
@@ -42,7 +44,7 @@ never or rarely changes. System libraries are perfect examples of such code.
 class Catalog
 {
 public:
-    typedef QPair<QCString, QVariant> QueryArgument;
+    typedef QPair<Q3CString, QVariant> QueryArgument;
 
 public:
     Catalog();
@@ -58,15 +60,15 @@ public:
     virtual void close();
     virtual void sync();
 
-    QValueList<QCString> indexList() const;
-    void addIndex( const QCString& name );
+    Q3ValueList<Q3CString> indexList() const;
+    void addIndex( const Q3CString& name );
 
     void addItem( Tag& tag );
 
-    Tag getItemById( const QCString& id );
-    QValueList<Tag> query( const QValueList<QueryArgument>& args );
+    Tag getItemById( const Q3CString& id );
+    Q3ValueList<Tag> query( const Q3ValueList<QueryArgument>& args );
 
-    QCString generateId();
+    Q3CString generateId();
 
 private:
    class _Catalog_Private* d;

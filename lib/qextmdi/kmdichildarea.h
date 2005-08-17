@@ -28,8 +28,11 @@
 #ifndef _KMDI_CHILD_AREA_H_
 #define _KMDI_CHILD_AREA_H_
 
-#include <qframe.h>
-#include <qptrlist.h>
+#include <q3frame.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
 
 #include <kdemacros.h>
 
@@ -51,7 +54,7 @@ class KMdiChildAreaPrivate;
   * and manages the frame widgets of attached MDI views.
   * All actions and stuff concerning only to childframes are handled here.
   */
-class KMDI_EXPORT KMdiChildArea : public QFrame
+class KMDI_EXPORT KMdiChildArea : public Q3Frame
 {
   friend class KMdiChildFrmCaption;
   friend class KMdiChildFrm;
@@ -63,7 +66,7 @@ class KMDI_EXPORT KMdiChildArea : public QFrame
      /**
      * Z Order stack of KMdiChildFrm childframe windows (top=last)
      */
-     QPtrList<KMdiChildFrm> *m_pZ; //Auto delete enabled
+     Q3PtrList<KMdiChildFrm> *m_pZ; //Auto delete enabled
      /**
      * the default size of an newly created childframe
      */

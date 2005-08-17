@@ -10,7 +10,9 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qprocess.h>
+#include <q3process.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <catalog.h>
 #include <kdebug.h>
@@ -49,8 +51,8 @@ public:
 		std::cout << ( m_generateTags ? "generate tags for " : "checking " ) 
 			<< QFile::encodeName( fileName ).data() << std::endl;
 		
-		QValueList<Problem> l = problems( fileName );
-		QValueList<Problem>::Iterator it = l.begin();
+		Q3ValueList<Problem> l = problems( fileName );
+		Q3ValueList<Problem>::Iterator it = l.begin();
 		while ( it != l.end() )
 		{
 			const Problem & p = *it;
@@ -102,7 +104,7 @@ public:
 			addIncludePath( "/include" );
 			addIncludePath( "/usr/include" );
 			addIncludePath( "/ust/local/include" );
-			QProcess proc;
+			Q3Process proc;
 			proc.addArgument( "gcc" );
 			proc.addArgument( "-print-file-name=include" );
 			if ( !proc.start() )

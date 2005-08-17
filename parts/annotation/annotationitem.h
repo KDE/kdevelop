@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef ANNOTATIONITEM_H
 #define ANNOTATIONITEM_H
@@ -26,10 +26,10 @@ class QString;
 /**
 @author KDevelop Authors
 */
-class annotationItem : public QListViewItem
+class annotationItem : public Q3ListViewItem
 {
 public:
-    annotationItem(QListView *parent,QString name, QString text);
+    annotationItem(Q3ListView *parent,QString name, QString text);
     QString getName();
     QString getText();
     void setText(QString text);
@@ -38,7 +38,7 @@ public:
 
     ~annotationItem();
   private:
-    annotationItem(QListViewItem *parent,QString name,QString text);
+    annotationItem(Q3ListViewItem *parent,QString name,QString text);
     QString m_itemName;
     QString m_itemText;
     int m_itemParent;

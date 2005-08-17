@@ -15,9 +15,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qdir.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
@@ -104,7 +106,7 @@ void HaskellSupportPart::projectConfigWidget( KDialogBase *dlg )
 	return;
 }
 
-void HaskellSupportPart::contextMenu( QPopupMenu *popup, const Context *// context
+void HaskellSupportPart::contextMenu( Q3PopupMenu *popup, const Context *// context
                                       )
 {
 	Q_UNUSED( popup );

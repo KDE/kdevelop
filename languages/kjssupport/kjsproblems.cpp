@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "kjsproblems.h"
@@ -23,17 +23,17 @@
 class KJSProblemItem: public KListViewItem
 {
 	public:
-		KJSProblemItem( QListView* parent, const QString& level, const QString& problem,
+		KJSProblemItem( Q3ListView* parent, const QString& level, const QString& problem,
 		             const QString& file, const QString& line, const QString& column  )
 				: KListViewItem( parent, level, problem, file, line, column )
 		{}
 
-		KJSProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
+		KJSProblemItem( Q3ListViewItem* parent, const QString& level, const QString& problem,
 		             const QString& file, const QString& line, const QString& column  )
 				: KListViewItem( parent, level, problem, file, line, column )
 		{}
 
-		int compare( QListViewItem* item, int column, bool ascending ) const
+		int compare( Q3ListViewItem* item, int column, bool ascending ) const
 		{
 			if( column == 2 || column == 3 )
 			{
@@ -70,7 +70,7 @@ void KJSProblems::clearItems()
 
 void KJSProblems::addLine(const QString &file, int lineNo, const QString &message)
 {
-	new QListViewItem( this,  file, QString::number( lineNo ), message);
+	new Q3ListViewItem( this,  file, QString::number( lineNo ), message);
 	setIcon( SmallIcon("error") );
 }
 

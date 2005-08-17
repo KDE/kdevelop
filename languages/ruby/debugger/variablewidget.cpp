@@ -28,14 +28,19 @@
 #include <klineedit.h>
 #include <kdeversion.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QFocusEvent>
+#include <QBoxLayout>
+#include <QVBoxLayout>
 #include <klocale.h>
 
 #include <qpoint.h>
@@ -55,7 +60,7 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     varTree_ = new VariableTree(this);
     QLabel *label = new QLabel(i18n("E&xpression to watch:"), this);
 
-    QHBox *watchEntry = new QHBox( this );
+    Q3HBox *watchEntry = new Q3HBox( this );
     watchVarEditor_ = new KHistoryCombo( watchEntry, "var-to-watch editor");
     label->setBuddy(watchVarEditor_);
 
@@ -140,17 +145,17 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     setAllColumnsShowFocus(true);
     setColumnWidthMode(0, Manual);
     setSorting(VAR_NAME_COLUMN);
-    QListView::setSelectionMode(QListView::Single);
+    Q3ListView::setSelectionMode(Q3ListView::Single);
 
     addColumn(i18n("Variable"), 100 );
     addColumn(i18n("Value"), 100 );
     addColumn(i18n("Type"), 100 );
 
-    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             SLOT(slotContextMenu(KListView*, QListViewItem*)) );
+    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+             SLOT(slotContextMenu(KListView*, Q3ListViewItem*)) );
     
-	connect( this, SIGNAL(pressed(QListViewItem*)),
-             this, SLOT(slotPressed(QListViewItem*)) );
+	connect( this, SIGNAL(pressed(Q3ListViewItem*)),
+             this, SLOT(slotPressed(Q3ListViewItem*)) );
 
 	watchRoot_ = new WatchRoot(this);
 }
@@ -165,9 +170,9 @@ VariableTree::~VariableTree()
 
 void VariableTree::clear()
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
     while (sibling != 0) {
-		QListViewItem * current = sibling;
+		Q3ListViewItem * current = sibling;
 		sibling = sibling->nextSibling();
 		if (current->rtti() != RTTI_WATCH_ROOT) {
 			delete current;
@@ -181,7 +186,7 @@ void VariableTree::clear()
 
 // **************************************************************************
 
-void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
+void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
 {
     if (item == 0)
         return;
@@ -219,20 +224,20 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
 /***************************************************************************/
 
-void VariableTree::setSelected(QListViewItem * item, bool selected)
+void VariableTree::setSelected(Q3ListViewItem * item, bool selected)
 {
 	// Save the last selected VarFrameRoot for slotPressed() to restore
 	if (item->rtti() == RTTI_VAR_FRAME_ROOT && selected) {
 		selectedFrame_ = (VarFrameRoot *) item;
 	}
 	
-	QListView::setSelected(item, selected);
+	Q3ListView::setSelected(item, selected);
 }
 
 /***************************************************************************/
 
 // Makes sure that only VarFrameRoot items can be selected
-void VariableTree::slotPressed(QListViewItem * item)
+void VariableTree::slotPressed(Q3ListViewItem * item)
 {
 	if (item == 0) {
 		return;
@@ -264,10 +269,10 @@ void VariableTree::slotPressed(QListViewItem * item)
 
 void VariableTree::prune()
 {
-	QListViewItem *child = firstChild();
+	Q3ListViewItem *child = firstChild();
 
     while (child != 0) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
 
         // Only prune var frames, not the watch or global root
         if (child->rtti() == RTTI_VAR_FRAME_ROOT) {
@@ -325,7 +330,7 @@ void VariableTree::slotFrameActive(int frameNo, int threadNo, const QString& fra
 
 bool VariableTree::schedule()
 {
-    QListViewItem *	child = firstChild();
+    Q3ListViewItem *	child = firstChild();
 	VarFrameRoot * frame = 0;
 
     while (child != 0) {
@@ -383,7 +388,7 @@ VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
 {
     // frames only exist on the top level so we only need to
     // check the siblings
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
     while (sibling != 0) {
 		if (	sibling->rtti() == RTTI_VAR_FRAME_ROOT
 				&& ((VarFrameRoot*) sibling)->frameNo() == frameNo 
@@ -422,7 +427,7 @@ GlobalRoot *VariableTree::globalRoot()
 // so tell the controller about any already in the tree at start.
 void VariableTree::resetWatchVars()
 {
-	for (QListViewItem *child = watchRoot()->firstChild(); child != 0; child = child->nextSibling()) {
+	for (Q3ListViewItem *child = watchRoot()->firstChild(); child != 0; child = child->nextSibling()) {
 		((WatchVarItem*) child)->setDisplayId(-1);
         emit addWatchExpression(child->text(VAR_NAME_COLUMN), false);
 	}
@@ -486,14 +491,14 @@ void LazyFetchItem::paintCell(QPainter *p, const QColorGroup &cg,
         p->setFont(f);
     }
 	
-    QListViewItem::paintCell( p, cg, column, width, align );
+    Q3ListViewItem::paintCell( p, cg, column, width, align );
 }
 
 // **************************************************************************
 
 VarItem *LazyFetchItem::findItem(const QString &name) const
 {
-	QListViewItem *child = firstChild();
+	Q3ListViewItem *child = firstChild();
 
     // Check the siblings on this branch
     while (child != 0) {
@@ -511,7 +516,7 @@ VarItem *LazyFetchItem::findItem(const QString &name) const
 
 void LazyFetchItem::prune()
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child != 0) {
         LazyFetchItem *item = (LazyFetchItem*) child;
@@ -534,7 +539,7 @@ void LazyFetchItem::prune()
 
 VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataType)
     : LazyFetchItem (parent),
-      cache_(QCString()),
+      cache_(Q3CString()),
       dataType_(dataType),
       highlight_(false)
 {
@@ -637,11 +642,11 @@ void VarItem::setText(int column, const QString &data)
 	setActivationId();
 	
     if (column == VALUE_COLUMN) {
-		QListViewItem::setText(VAR_TYPE_COLUMN, typeFromValue(data));
+		Q3ListViewItem::setText(VAR_TYPE_COLUMN, typeFromValue(data));
 		highlight_ = (!text(VALUE_COLUMN).isEmpty() && text(VALUE_COLUMN) != data);
     }
 
-    QListViewItem::setText(column, data);
+    Q3ListViewItem::setText(column, data);
     repaint();
 }
 
@@ -692,7 +697,7 @@ QString VarItem::typeFromValue(const QString& value)
 
 void VarItem::setOpen(bool open)
 {
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 	
 	Q_ASSERT(	dataType_ == REFERENCE_TYPE 
 				|| dataType_ == ARRAY_TYPE 
@@ -751,7 +756,7 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
         		QColorGroup color_cg(	cg.foreground(), cg.background(), 
 										cg.light(), cg.dark(), cg.mid(), 
 										QColor(color_re.cap(1)), QColor(color_re.cap(1)) );
-        		QListViewItem::paintCell(p, color_cg, column, width, align);
+        		Q3ListViewItem::paintCell(p, color_cg, column, width, align);
 				return;
 			}
 		}
@@ -760,13 +765,13 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 		if (highlight_) {
         	QColorGroup hl_cg(	cg.foreground(), cg.background(), 
 								cg.light(), cg.dark(), cg.mid(), 
-								red, cg.base() );
-        	QListViewItem::paintCell(p, hl_cg, column, width, align);
+								Qt::red, cg.base() );
+        	Q3ListViewItem::paintCell(p, hl_cg, column, width, align);
 			return;
 		}
 	}
 	
-	QListViewItem::paintCell(p, cg, column, width, align);
+	Q3ListViewItem::paintCell(p, cg, column, width, align);
 	return;
 }
 
@@ -831,7 +836,7 @@ void VarFrameRoot::setLocals()
 void VarFrameRoot::setOpen(bool open)
 {
 	bool localsViewChanged = (isOpen() != open);
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 	
     if (localsViewChanged) {
 		((VariableTree*)listView())->selectFrame(frameNo_, threadNo_);
@@ -900,7 +905,7 @@ void GlobalRoot::setGlobals(char * globals)
 void GlobalRoot::setOpen(bool open)
 {
 	bool globalsViewChanged = (isOpen() != open);
-	QListViewItem::setOpen(open);
+	Q3ListViewItem::setOpen(open);
 	
 	if (globalsViewChanged) {
     	((VariableTree*)listView())->setFetchGlobals(isOpen());
@@ -968,7 +973,7 @@ void WatchRoot::setWatchExpression(char * buf, char * expression)
 	QString expr(expression);
 	QRegExp display_re("^(\\d+):\\s([^\n]+)\n");
 	
-    for (	QListViewItem *child = firstChild(); 
+    for (	Q3ListViewItem *child = firstChild(); 
 			child != 0; 
 			child = child->nextSibling() ) 
 	{
@@ -990,7 +995,7 @@ void WatchRoot::setWatchExpression(char * buf, char * expression)
 // expr is the thing = value part of "1: a = 1", id is the display number
 void WatchRoot::updateWatchExpression(int id, const QString& expr)
 {
-    for (	QListViewItem *child = firstChild(); 
+    for (	Q3ListViewItem *child = firstChild(); 
 			child != 0; 
 			child = child->nextSibling() ) 
 	{
@@ -1014,7 +1019,7 @@ void WatchRoot::savePartialProjectSession(QDomElement* el)
 	
     QDomElement watchEl = domDoc.createElement("watchExpressions");
     
-	for (	QListViewItem *child = firstChild(); 
+	for (	Q3ListViewItem *child = firstChild(); 
 			child != 0; 
 			child = child->nextSibling() )
 	{

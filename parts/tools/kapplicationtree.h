@@ -13,14 +13,18 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #ifndef __KDevApplicationTree_h__
 #define __KDevApplicationTree_h__
 
 #include <kurl.h>
 #include <klistview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
+#include <QResizeEvent>
 
 class KURLRequester;
 
@@ -36,7 +40,7 @@ class QStringList;
 /**
  * @internal
  */
-class KDevAppTreeListItem : public QListViewItem
+class KDevAppTreeListItem : public Q3ListViewItem
 {
     bool parsed;
     bool directory;
@@ -52,7 +56,7 @@ protected:
 public:
     KDevAppTreeListItem( KListView* parent, const QString & name, const QPixmap& pixmap,
                       bool parse, bool dir, const QString& p, const QString& c, const QString& dE );
-    KDevAppTreeListItem( QListViewItem* parent, const QString & name, const QPixmap& pixmap,
+    KDevAppTreeListItem( Q3ListViewItem* parent, const QString & name, const QPixmap& pixmap,
                       bool parse, bool dir, const QString& p, const QString& c, const QString& dE );
     bool isDirectory();
 
@@ -89,8 +93,8 @@ protected:
     KDevAppTreeListItem* currentitem;
 
 public slots:
-    void slotItemHighlighted(QListViewItem* i);
-    void slotSelectionChanged(QListViewItem* i);
+    void slotItemHighlighted(Q3ListViewItem* i);
+    void slotSelectionChanged(Q3ListViewItem* i);
 
 signals:
     void selected( const QString& _name, const QString& _exec );

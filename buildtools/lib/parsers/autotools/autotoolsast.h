@@ -18,12 +18,14 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef AUTOTOOLSAST_H
 #define AUTOTOOLSAST_H
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
 @file autotools.h
@@ -92,13 +94,13 @@ public:
 	 * Get the children of this ast
 	 * \return the list of this ast's childre
 	 */
-	QValueList<AST*> children() const;
+	Q3ValueList<AST*> children() const;
 
 
 	
 protected:
 	NodeType m_nodeType;
-	QValueList<AST*> m_children;
+	Q3ValueList<AST*> m_children;
 	
 private:
 	int m_depth;
@@ -159,7 +161,7 @@ public:
 	bool hasElse;
 	
 	/**List of statements.*/
-	QValueList<AutoTools::AST*> statements;
+	Q3ValueList<AutoTools::AST*> statements;
 	
 private:
 	Kind m_kind;

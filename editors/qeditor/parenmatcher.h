@@ -22,7 +22,7 @@
 #define PARENMATCHER_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include "dlldefs.h"
 
 class QTextCursor;
@@ -37,7 +37,7 @@ struct EDITOR_EXPORT Paren
     int pos;
 };
 
-typedef QValueList<Paren> ParenList;
+typedef Q3ValueList<Paren> ParenList;
 
 class EDITOR_EXPORT ParenMatcher
 {

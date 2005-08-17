@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef __DISTPART_WIDGET_H__
 #define __DISTPART_WIDGET_H__
@@ -30,11 +30,11 @@
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <qcombobox.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 
 class KDevProject;
 class DistpartPart;
-class QUrlOperator;
+class Q3UrlOperator;
 class KProcess;
 class QTabWidget;
 class SpecSupport;

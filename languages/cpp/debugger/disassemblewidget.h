@@ -16,7 +16,10 @@
 #ifndef _DISASSEMBLEWIDGET_H_
 #define _DISASSEMBLEWIDGET_H_
 
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <QHideEvent>
+#include <QShowEvent>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -27,7 +30,7 @@ namespace GDBDebugger
 
 class Breakpoint;
 
-class DisassembleWidget : public QTextEdit
+class DisassembleWidget : public Q3TextEdit
 {
     Q_OBJECT
 

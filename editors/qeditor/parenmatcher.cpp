@@ -24,8 +24,10 @@
 #include "paragdata.h"
 
 #include <private/qrichtext_p.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 ParenMatcher::ParenMatcher()
 {
@@ -58,7 +60,7 @@ bool ParenMatcher::checkOpenParen( QTextCursor *cursor )
 {
     if ( !cursor->paragraph()->extraData() )
 	return FALSE;
-    QValueList<Symbol> parenList = ( (ParagData*)cursor->paragraph()->extraData() )->symbolList();
+    Q3ValueList<Symbol> parenList = ( (ParagData*)cursor->paragraph()->extraData() )->symbolList();
 
     Symbol openParen, closedParen;
     QTextParagraph *closedParenParag = cursor->paragraph();
@@ -132,7 +134,7 @@ bool ParenMatcher::checkClosedParen( QTextCursor *cursor )
 {
     if ( !cursor->paragraph()->extraData() )
 	return FALSE;
-    QValueList<Symbol> parenList = ( (ParagData*)cursor->paragraph()->extraData() )->symbolList();
+    Q3ValueList<Symbol> parenList = ( (ParagData*)cursor->paragraph()->extraData() )->symbolList();
 
     Symbol openParen, closedParen;
     QTextParagraph *openParenParag = cursor->paragraph();

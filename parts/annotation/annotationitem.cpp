@@ -15,13 +15,13 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "annotationitem.h"
 #include <qstring.h>
 
-annotationItem::annotationItem(QListView *parent,QString name, QString text)
- : QListViewItem(parent, name)
+annotationItem::annotationItem(Q3ListView *parent,QString name, QString text)
+ : Q3ListViewItem(parent, name)
 {
   m_itemName=name;
   m_itemText=text;
@@ -29,7 +29,7 @@ annotationItem::annotationItem(QListView *parent,QString name, QString text)
   
 }
 
-annotationItem::annotationItem(QListViewItem *parent,QString name,QString text):QListViewItem( parent, name)
+annotationItem::annotationItem(Q3ListViewItem *parent,QString name,QString text):Q3ListViewItem( parent, name)
 {
   m_itemName=name;
   m_itemText=text;

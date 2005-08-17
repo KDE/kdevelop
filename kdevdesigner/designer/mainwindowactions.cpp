@@ -32,8 +32,8 @@
 
 #include <stdlib.h>
 #include <qaction.h>
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
+#include <q3whatsthis.h>
+#include <q3popupmenu.h>
 #include <qmenubar.h>
 #include <qlineedit.h>
 #include <qtooltip.h>
@@ -43,13 +43,20 @@
 #include <qworkspace.h>
 #include <qmessagebox.h>
 #include <qstatusbar.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qclipboard.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qinputdialog.h>
-#include <qdatetimeedit.h>
-#include <qtextedit.h>
+#include <q3datetimeedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QPixmap>
+#include <QTextStream>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3ValueList>
 
 #include "defs.h"
 #include "project.h"
@@ -112,13 +119,13 @@ const QString toolbarHelp = "<p>Toolbars contain a number of buttons to "
 "<br>Click on the toolbar handle to hide the toolbar, "
 "or drag and place the toolbar to a different location.</p>";
 
-static QIconSet createIconSet( const QString &name )
+static QIcon createIconSet( const QString &name )
 {
-    QIconSet ic( BarIcon( "" + name, KDevDesignerPartFactory::instance() ) );
+    QIcon ic( BarIcon( "" + name, KDevDesignerPartFactory::instance() ) );
     QString prefix = "designer_";
     int right = name.length() - prefix.length();
     ic.setPixmap( BarIcon( prefix + "d_" + name.right( right ), KDevDesignerPartFactory::instance() ),
-		  QIconSet::Small, QIconSet::Disabled );
+		  QIcon::Small, QIcon::Disabled );
     return ic;
 }
 
@@ -160,7 +167,7 @@ void MainWindow::setupEditActions()
     connect( actionEditDelete, SIGNAL( activated() ), this, SLOT( editDelete() ) );
     actionEditDelete->setEnabled( FALSE );
 #ifdef Q_WS_MAC
-    QAction *macDelete = new DesignerAction( i18n( "Delete" ), QPixmap(), i18n( "&Delete" ), Key_Backspace, this, 0 );
+    QAction *macDelete = new DesignerAction( i18n( "Delete" ), QPixmap(), i18n( "&Delete" ), Qt::Key_Backspace, this, 0 );
     connect( macDelete, SIGNAL( activated() ), this, SLOT( editDelete() ) );
 #endif
 
@@ -203,7 +210,7 @@ void MainWindow::setupEditActions()
     connect( actionEditConnections, SIGNAL( activated() ), this, SLOT( editConnections() ) );
     connect( this, SIGNAL( hasActiveForm(bool) ), actionEditConnections, SLOT( setEnabled(bool) ) );
 
-    actionEditSource = new DesignerAction( i18n( "Source" ), QIconSet(),
+    actionEditSource = new DesignerAction( i18n( "Source" ), QIcon(),
 					 i18n( "&Source..." ), CTRL + Key_E, this, 0 );
     actionEditSource->setStatusTip( i18n("Opens an editor to edit the form's source code") );
     actionEditSource->setWhatsThis( whatsThisFrom( "Edit|Source" ) );
@@ -239,7 +246,7 @@ void MainWindow::setupEditActions()
     actionEditRaise->addTo( tb );
 #endif
 
-    QPopupMenu *menu = new QPopupMenu( this, "Edit" );
+    Q3PopupMenu *menu = new Q3PopupMenu( this, "Edit" );
     connect( menu, SIGNAL( aboutToShow() ), this, SLOT( updateEditorUndoRedo() ) );
     menubar->insertItem( i18n( "&Edit" ), menu );
     actionEditUndo->addTo( menu );
@@ -274,19 +281,19 @@ void MainWindow::setupSearchActions()
     actionSearchFind->setEnabled( FALSE );
     actionSearchFind->setWhatsThis( whatsThisFrom( "Search|Find" ) );
 
-    actionSearchIncremetal = new DesignerAction( i18n( "Find Incremental" ), QIconSet(),
+    actionSearchIncremetal = new DesignerAction( i18n( "Find Incremental" ), QIcon(),
 					  i18n( "Find &Incremental" ), ALT + Key_I, this, 0 );
     connect( actionSearchIncremetal, SIGNAL( activated() ), this, SLOT( searchIncremetalFindMenu() ) );
     actionSearchIncremetal->setEnabled( FALSE );
     actionSearchIncremetal->setWhatsThis( whatsThisFrom( "Search|Find Incremental" ) );
 
-    actionSearchReplace = new DesignerAction( i18n( "Replace" ), QIconSet(),
+    actionSearchReplace = new DesignerAction( i18n( "Replace" ), QIcon(),
 				    i18n( "&Replace..." ), CTRL + Key_R, this, 0 );
     connect( actionSearchReplace, SIGNAL( activated() ), this, SLOT( searchReplace() ) );
     actionSearchReplace->setEnabled( FALSE );
     actionSearchReplace->setWhatsThis( whatsThisFrom( "Search|Replace" ) );
 
-    actionSearchGotoLine = new DesignerAction( i18n( "Goto Line" ), QIconSet(),
+    actionSearchGotoLine = new DesignerAction( i18n( "Goto Line" ), QIcon(),
 				    i18n( "&Goto Line..." ), ALT + Key_G, this, 0 );
     connect( actionSearchGotoLine, SIGNAL( activated() ), this, SLOT( searchGotoLine() ) );
     actionSearchGotoLine->setEnabled( FALSE );
@@ -299,14 +306,14 @@ void MainWindow::setupSearchActions()
     actionSearchFind->addTo( tb );*/
     incrementalSearch = new QLineEdit( 0 );
     incrementalSearch->hide();
-    QToolTip::add( incrementalSearch, i18n( "Incremental search (Alt+I)" ) );
+    QToolTip::add( incrementalSearch, i18n( "Incremental Search (Alt+I)" ) );
     connect( incrementalSearch, SIGNAL( textChanged( const QString & ) ),
 	     this, SLOT( searchIncremetalFind() ) );
     connect( incrementalSearch, SIGNAL( returnPressed() ),
 	     this, SLOT( searchIncremetalFindNext() ) );
     incrementalSearch->setEnabled( FALSE );
 
-    QPopupMenu *menu = new QPopupMenu( this, "Search" );
+    Q3PopupMenu *menu = new Q3PopupMenu( this, "Search" );
     menubar->insertItem( i18n( "&Search" ), menu );
     actionSearchFind->addTo( menu );
     actionSearchIncremetal->addTo( menu );
@@ -318,7 +325,7 @@ void MainWindow::setupSearchActions()
 void MainWindow::setupLayoutActions()
 {
     if ( !actionGroupTools ) {
-	actionGroupTools = new QActionGroup( this );
+	actionGroupTools = new Q3ActionGroup( this );
 	actionGroupTools->setExclusive( TRUE );
 	connect( actionGroupTools, SIGNAL( selected(QAction*) ), this, SLOT( toolSelected(QAction*) ) );
     }
@@ -392,7 +399,7 @@ void MainWindow::setupLayoutActions()
     QWidget *w;
     commonWidgetsToolBar->setStretchableWidget( ( w = new QWidget( commonWidgetsToolBar ) ) );
     w->setBackgroundMode( commonWidgetsToolBar->backgroundMode() );
-    QWhatsThis::add( layoutToolBar, i18n( "<b>The Layout toolbar</b>%1" ).arg(i18n(toolbarHelp).arg("")) );
+    Q3WhatsThis::add( layoutToolBar, i18n( "<b>The Layout toolbar</b>%1" ).arg(i18n(toolbarHelp).arg("")) );
     actionEditAdjustSize->addTo( layoutToolBar );
     layoutToolBar->addSeparator();
     actionEditHLayout->addTo( layoutToolBar );
@@ -404,7 +411,7 @@ void MainWindow::setupLayoutActions()
     layoutToolBar->addSeparator();
     actionInsertSpacer->addTo( layoutToolBar );
 
-    QPopupMenu *menu = new QPopupMenu( this, "Layout" );
+    Q3PopupMenu *menu = new Q3PopupMenu( this, "Layout" );
     layoutMenu = menu;
     menubar->insertItem( i18n( "&Layout" ), menu, toolsMenuId + 1 );
     actionEditAdjustSize->addTo( menu );
@@ -422,7 +429,7 @@ void MainWindow::setupLayoutActions()
 void MainWindow::setupToolActions()
 {
     if ( !actionGroupTools ) {
-	actionGroupTools = new QActionGroup( this );
+	actionGroupTools = new Q3ActionGroup( this );
 	actionGroupTools->setExclusive( TRUE );
 	connect( actionGroupTools, SIGNAL( selected(QAction*) ),
 		 this, SLOT( toolSelected(QAction*) ) );
@@ -458,19 +465,19 @@ void MainWindow::setupToolActions()
     actionBuddyTool->setStatusTip( i18n( "Sets a buddy to a label" ) );
     actionBuddyTool->setWhatsThis( whatsThisFrom( "Tools|Set Buddy" ) );
 
-    QToolBar *tb = new QToolBar( this, "Tools" );
-    tb->setCloseMode( QDockWindow::Undocked );
+    Q3ToolBar *tb = new Q3ToolBar( this, "Tools" );
+    tb->setCloseMode( Q3DockWindow::Undocked );
     toolsToolBar = tb;
-    QWhatsThis::add( tb, i18n( "<b>The Tools toolbar</b>%1" ).arg(i18n(toolbarHelp).arg("")) );
+    Q3WhatsThis::add( tb, i18n( "<b>The Tools toolbar</b>%1" ).arg(i18n(toolbarHelp).arg("")) );
 
-    addToolBar( tb, i18n( "Tools" ), QMainWindow::DockTop, FALSE );
+    addToolBar( tb, i18n( "Tools" ), Q3MainWindow::DockTop, FALSE );
     actionPointerTool->addTo( tb );
     if ( !singleProjectMode() )
 	actionConnectTool->addTo( tb );
     actionOrderTool->addTo( tb );
     actionBuddyTool->addTo( tb );
 
-    QPopupMenu *mmenu = new QPopupMenu( this, "Tools" );
+    Q3PopupMenu *mmenu = new Q3PopupMenu( this, "Tools" );
     toolsMenu = mmenu;
     toolsMenuId = 100;
     menubar->insertItem( i18n( "&Tools" ), mmenu, toolsMenuId );
@@ -500,26 +507,26 @@ void MainWindow::setupToolActions()
 	if ( !WidgetDatabase::isGroupVisible( grp ) ||
 	     WidgetDatabase::isGroupEmpty( grp ) )
 	    continue;
-	QToolBar *tb = new QToolBar( this, grp.latin1() );
-	tb->setCloseMode( QDockWindow::Undocked );
+	Q3ToolBar *tb = new Q3ToolBar( this, grp.latin1() );
+	tb->setCloseMode( Q3DockWindow::Undocked );
 	widgetToolBars.append( tb );
 	bool plural = grp[(int)grp.length()-1] == 's';
 	if ( plural ) {
-	    QWhatsThis::add( tb, i18n( "<b>The %1</b>%2" ).arg(grp).arg(i18n(toolbarHelp).
+	    Q3WhatsThis::add( tb, i18n( "<b>The %1</b>%2" ).arg(grp).arg(i18n(toolbarHelp).
 				arg( i18n(" Click on a button to insert a single widget, "
 				"or double click to insert multiple %1.") ).arg(grp)) );
 	} else {
-	    QWhatsThis::add( tb, i18n( "<b>The %1 Widgets</b>%2" ).arg(grp).arg(i18n(toolbarHelp).
+	    Q3WhatsThis::add( tb, i18n( "<b>The %1 Widgets</b>%2" ).arg(grp).arg(i18n(toolbarHelp).
 				arg( i18n(" Click on a button to insert a single %1 widget, "
 				"or double click to insert multiple widgets.") ).arg(grp)) );
 	}
 	addToolBar( tb, grp );
 	tb->hide();
-	QPopupMenu *menu = new QPopupMenu( this, grp.latin1() );
+	Q3PopupMenu *menu = new Q3PopupMenu( this, grp.latin1() );
 	mmenu->insertItem( grp, menu );
 
-	QToolBar *tb2 = new QToolBar( grp, 0, toolBox, FALSE, grp.latin1() );
-	tb2->setFrameStyle( QFrame::NoFrame );
+	Q3ToolBar *tb2 = new Q3ToolBar( grp, 0, toolBox, FALSE, grp.latin1() );
+	tb2->setFrameStyle( Q3Frame::NoFrame );
 	tb2->setOrientation( Qt::Vertical );
 	tb2->setBackgroundMode( PaletteBase );
 	toolBox->addItem( tb2, grp );
@@ -574,9 +581,9 @@ void MainWindow::setupToolActions()
     }
 
     if ( !customWidgetToolBar ) {
-	QToolBar *tb = new QToolBar( this, "Custom Widgets" );
-	tb->setCloseMode( QDockWindow::Undocked );
-	QWhatsThis::add( tb, i18n( "<b>The Custom Widgets toolbar</b>%1"
+	Q3ToolBar *tb = new Q3ToolBar( this, "Custom Widgets" );
+	tb->setCloseMode( Q3DockWindow::Undocked );
+	Q3WhatsThis::add( tb, i18n( "<b>The Custom Widgets toolbar</b>%1"
 				 "<p>Click <b>Edit Custom Widgets...</b>"
 				 "in the <b>Tools|Custom</b> menu to "
 				 "add and change custom widgets</p>" ).
@@ -587,17 +594,17 @@ void MainWindow::setupToolActions()
 	tb->hide();
 	widgetToolBars.append( tb );
 	customWidgetToolBar = tb;
-	QPopupMenu *menu = new QPopupMenu( this, "Custom Widgets" );
+	Q3PopupMenu *menu = new Q3PopupMenu( this, "Custom Widgets" );
 	mmenu->insertItem( "Custom", menu );
 	customWidgetMenu = menu;
 	customWidgetToolBar->hide();
 	actionToolsCustomWidget->addTo( customWidgetMenu );
 	customWidgetMenu->insertSeparator();
-	QToolBar *tb2 = new QToolBar( "Custom Widgets", 0,
+	Q3ToolBar *tb2 = new Q3ToolBar( "Custom Widgets", 0,
 				      toolBox, FALSE, "Custom Widgets" );
 	tb2->setBackgroundMode(PaletteBase);
 	tb2->setOrientation( Qt::Vertical );
-	tb2->setFrameStyle( QFrame::NoFrame );
+	tb2->setFrameStyle( Q3Frame::NoFrame );
 	toolBox->addItem( tb2, "Custom Widgets" );
 	customWidgetToolBar2 = tb2;
     }
@@ -613,13 +620,13 @@ void MainWindow::setupToolActions()
 
 void MainWindow::setupFileActions()
 {
-    QToolBar* tb  = new QToolBar( this, "File" );
-    tb->setCloseMode( QDockWindow::Undocked );
+    Q3ToolBar* tb  = new Q3ToolBar( this, "File" );
+    tb->setCloseMode( Q3DockWindow::Undocked );
     projectToolBar = tb;
 
-    QWhatsThis::add( tb, i18n( "<b>The File toolbar</b>%1" ).arg(i18n(toolbarHelp).arg("")) );
+    Q3WhatsThis::add( tb, i18n( "<b>The File toolbar</b>%1" ).arg(i18n(toolbarHelp).arg("")) );
     addToolBar( tb, i18n( "File" ) );
-    fileMenu = new QPopupMenu( this, "File" );
+    fileMenu = new Q3PopupMenu( this, "File" );
     menubar->insertItem( i18n( "&File" ), fileMenu );
 
     DesignerAction *a = 0;
@@ -627,7 +634,7 @@ void MainWindow::setupFileActions()
     if ( !singleProject ) {
 	DesignerAction *a = new DesignerAction( this, 0 );
 	a->setText( i18n( "New" ) );
-	a->setToolTip( i18n( "New dialog or file" ) );
+	a->setToolTip( i18n( "New Dialog or File" ) );
 	a->setMenuText( i18n( "&New..." ) );
 	a->setIconSet( createIconSet("designer_filenew.png") );
 	a->setAccel( CTRL + Key_N );
@@ -638,9 +645,9 @@ void MainWindow::setupFileActions()
 	a->addTo( fileMenu );
 	actionNewFile = a;
     } else {
-	actionGroupNew = new QActionGroup( this, 0, FALSE );
-	QActionGroup* a = actionGroupNew;
-	( (QActionGroup*)a )->setUsesDropDown( TRUE );
+	actionGroupNew = new Q3ActionGroup( this, 0, FALSE );
+	Q3ActionGroup* a = actionGroupNew;
+	( (Q3ActionGroup*)a )->setUsesDropDown( TRUE );
 	a->setText( i18n( "New" ) );
 	a->setMenuText( i18n( "&New..." ) );
 	a->setIconSet( createIconSet("designer_form.png") );
@@ -747,8 +754,8 @@ void MainWindow::setupFileActions()
     if ( !singleProject )
 	fileMenu->insertSeparator();
 
-    recentlyFilesMenu = new QPopupMenu( this );
-    recentlyProjectsMenu = new QPopupMenu( this );
+    recentlyFilesMenu = new Q3PopupMenu( this );
+    recentlyProjectsMenu = new Q3PopupMenu( this );
 
     if ( !singleProject ) {
 	fileMenu->insertItem( i18n( "Recently Opened Files " ), recentlyFilesMenu );
@@ -784,10 +791,10 @@ void MainWindow::setupFileActions()
 
 void MainWindow::setupProjectActions()
 {
-    projectMenu = new QPopupMenu( this, "Project" );
+    projectMenu = new Q3PopupMenu( this, "Project" );
     menubar->insertItem( i18n( "Pr&oject" ), projectMenu );
 
-    QActionGroup *ag = new QActionGroup( this, 0 );
+    Q3ActionGroup *ag = new Q3ActionGroup( this, 0 );
     ag->setText( i18n( "Active Project" ) );
     ag->setMenuText( i18n( "Active Project" ) );
     ag->setExclusive( TRUE );
@@ -850,7 +857,7 @@ void MainWindow::setupProjectActions()
 void MainWindow::setupPreviewActions()
 {
     DesignerAction* a = 0;
-    QPopupMenu *menu = new QPopupMenu( this, "Preview" );
+    Q3PopupMenu *menu = new Q3PopupMenu( this, "Preview" );
     layoutMenu = menu;
     menubar->insertItem( i18n( "&Preview" ), menu, toolsMenuId + 2 );
 
@@ -933,7 +940,7 @@ void MainWindow::setupWindowActions()
   //  }
 
     if ( !windowMenu ) {
-	windowMenu = new QPopupMenu( this, "Window" );
+	windowMenu = new Q3PopupMenu( this, "Window" );
 	menubar->insertItem( i18n( "&Window" ), windowMenu );
 	connect( windowMenu, SIGNAL( aboutToShow() ),
 		 this, SLOT( setupWindowActions() ) );
@@ -1007,7 +1014,7 @@ void MainWindow::setupHelpActions()
     connect( actionHelpRegister, SIGNAL( activated() ), this, SLOT( helpRegister() ) );
 #endif
 
-    actionHelpWhatsThis = new DesignerAction( i18n("What's This?"), QIconSet( whatsthis_image, whatsthis_image ),
+    actionHelpWhatsThis = new DesignerAction( i18n("What's This?"), QIcon( whatsthis_image, whatsthis_image ),
 				       i18n("What's This?"), SHIFT + Key_F1, this, 0 );
     actionHelpWhatsThis->setStatusTip( i18n("\"What's This?\" context sensitive help") );
     actionHelpWhatsThis->setWhatsThis( whatsThisFrom( "Help|What's This?" ) );
@@ -1019,7 +1026,7 @@ void MainWindow::setupHelpActions()
     addToolBar( tb, i18n( "Help" ) );
     actionHelpWhatsThis->addTo( tb );*/
 
-    QPopupMenu *menu = new QPopupMenu( this, "Help" );
+    Q3PopupMenu *menu = new Q3PopupMenu( this, "Help" );
     menubar->insertSeparator();
     menubar->insertItem( i18n( "&Help" ), menu );
     actionHelpContents->addTo( menu );
@@ -1308,7 +1315,7 @@ FormWindow *MainWindow::openFormWindow( const QString &filename, bool validFileN
 	makeNew = TRUE;
     } else {
 	QFile f( filename );
-	f.open( IO_ReadOnly );
+	f.open( QIODevice::ReadOnly );
 	QTextStream ts( &f );
 	makeNew = ts.read().length() < 2;
     }
@@ -1430,7 +1437,7 @@ void MainWindow::fileCreateTemplate()
 	}
     }
 
-    QPtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
+    Q3PtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
     for ( MetaDataBase::CustomWidget *w = lst->first(); w; w = lst->next() ) {
 	if ( w->isContainer )
 	    dia.listClass->insertItem( w->className );
@@ -1464,7 +1471,7 @@ void MainWindow::createNewTemplate()
 	if ( QFile::exists( (*it) + "/templates/" )) {
 	    QString tmpfn = (*it) + "/templates/" + fn + ".ui";
 	    f.setName(tmpfn);
-	    if(f.open(IO_WriteOnly))
+	    if(f.open(QIODevice::WriteOnly))
 		break;
 	}
     }
@@ -1899,7 +1906,7 @@ void MainWindow::editPreferences()
     dia->timeEditAutoSave->setTime( t );
 
     SenderObject *senderObject = new SenderObject( designerInterface() );
-    QValueList<Tab>::Iterator it;
+    Q3ValueList<Tab>::Iterator it;
     for ( it = preferenceTabs.begin(); it != preferenceTabs.end(); ++it ) {
 	Tab t = *it;
 	dia->tabWidget->addTab( t.w, t.title );

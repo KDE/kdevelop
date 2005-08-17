@@ -31,7 +31,7 @@
 
 #include <cstdlib>
 
-SettingsDialog::SettingsDialog( QWidget* parent, const char* name, WFlags fl )
+SettingsDialog::SettingsDialog( QWidget* parent, const char* name, Qt::WFlags fl )
 		: SettingsDialogBase( parent, name, fl )
 {
 	KURLRequester * req = new KURLRequester( this );
@@ -73,12 +73,12 @@ void SettingsDialog::validate()
 
 void SettingsDialog::validateDirectory( const QString & dir )
 {
-	QDir d( dir, QString::null, QDir::DefaultSort, QDir::Dirs );
+	QDir d( dir, QString::null, QDir::NoSort, QDir::Dirs );
 	if ( !d.exists() )
 	{
 		elb->lineEdit() ->setText( dir );
 
-		if ( QListBoxItem * item = elb->listBox() ->findItem( dir, Qt::ExactMatch ) )
+		if ( Q3ListBoxItem * item = elb->listBox() ->findItem( dir, Qt::ExactMatch ) )
 		{
 			elb->listBox() ->removeItem( elb->listBox() ->index( item ) );
 		}

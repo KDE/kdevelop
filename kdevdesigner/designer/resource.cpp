@@ -43,7 +43,7 @@
 #include <domtool.h>
 #include <widgetdatabase.h>
 
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qapplication.h>
 #include <qbuffer.h>
 #include <qcombobox.h>
@@ -51,34 +51,45 @@
 #include <qdom.h>
 #include <qfeatures.h>
 #include <qfile.h>
-#include <qheader.h>
-#include <qiconview.h>
+#include <q3header.h>
+#include <q3iconview.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistbox.h>
-#include <qlistview.h>
+#include <q3listbox.h>
+#include <q3listview.h>
 #include <qmenudata.h>
 #include <qmessagebox.h>
 #include <qmetaobject.h>
 #include <qobject.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qtabbar.h>
 #ifndef QT_NO_TABLE
-#include <qtable.h>
-#include <qdatatable.h>
+#include <q3table.h>
+#include <q3datatable.h>
 #endif
 #include <qtabwidget.h>
 #include <qtabwidget.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qwidget.h>
-#include <qwidgetstack.h>
-#include <qwizard.h>
+#include <q3widgetstack.h>
+#include <q3wizard.h>
 #include <qworkspace.h>
 #include <qworkspace.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3StrList>
+#include <Q3ActionGroup>
+#include <Q3CString>
+#include <QVBoxLayout>
+#include <QBoxLayout>
+#include <Q3ValueList>
+#include <QImageIO>
+#include <QHBoxLayout>
+#include <Q3PtrList>
 #include <private/qucom_p.h>
 
 #include <kiconloader.h>
@@ -130,8 +141,8 @@ static struct {
     { Qt::Key_Up,           QT_TRANSLATE_NOOP( "QAccel", "Up" ) },
     { Qt::Key_Right,        QT_TRANSLATE_NOOP( "QAccel", "Right" ) },
     { Qt::Key_Down,         QT_TRANSLATE_NOOP( "QAccel", "Down" ) },
-    { Qt::Key_Prior,        QT_TRANSLATE_NOOP( "QAccel", "PgUp" ) },
-    { Qt::Key_Next,         QT_TRANSLATE_NOOP( "QAccel", "PgDown" ) },
+    { Qt::Key_PageUp,        QT_TRANSLATE_NOOP( "QAccel", "PgUp" ) },
+    { Qt::Key_PageDown,         QT_TRANSLATE_NOOP( "QAccel", "PgDown" ) },
     { Qt::Key_CapsLock,     QT_TRANSLATE_NOOP( "QAccel", "CapsLock" ) },
     { Qt::Key_NumLock,      QT_TRANSLATE_NOOP( "QAccel", "NumLock" ) },
     { Qt::Key_ScrollLock,   QT_TRANSLATE_NOOP( "QAccel", "ScrollLock" ) },
@@ -153,7 +164,7 @@ static struct {
     { Qt::Key_TrebleDown,   QT_TRANSLATE_NOOP( "QAccel", "Treble Down" ) },
     { Qt::Key_MediaPlay,    QT_TRANSLATE_NOOP( "QAccel", "Media Play" ) },
     { Qt::Key_MediaStop,    QT_TRANSLATE_NOOP( "QAccel", "Media Stop" ) },
-    { Qt::Key_MediaPrev,    QT_TRANSLATE_NOOP( "QAccel", "Media Previous" ) },
+    { Qt::Key_MediaPrevious,    QT_TRANSLATE_NOOP( "QAccel", "Media Previous" ) },
     { Qt::Key_MediaNext,    QT_TRANSLATE_NOOP( "QAccel", "Media Next" ) },
     { Qt::Key_MediaRecord,  QT_TRANSLATE_NOOP( "QAccel", "Media Record" ) },
     { Qt::Key_HomePage,     QT_TRANSLATE_NOOP( "QAccel", "Home" ) },
@@ -183,8 +194,8 @@ static struct {
     // --------------------------------------------------------------
     // More consistent namings
     { Qt::Key_Print,        QT_TRANSLATE_NOOP( "QAccel", "Print Screen" ) },
-    { Qt::Key_Prior,        QT_TRANSLATE_NOOP( "QAccel", "Page Up" ) },
-    { Qt::Key_Next,         QT_TRANSLATE_NOOP( "QAccel", "Page Down" ) },
+    { Qt::Key_PageUp,        QT_TRANSLATE_NOOP( "QAccel", "Page Up" ) },
+    { Qt::Key_PageDown,         QT_TRANSLATE_NOOP( "QAccel", "Page Down" ) },
     { Qt::Key_CapsLock,     QT_TRANSLATE_NOOP( "QAccel", "Caps Lock" ) },
     { Qt::Key_NumLock,      QT_TRANSLATE_NOOP( "QAccel", "Num Lock" ) },
     { Qt::Key_NumLock,      QT_TRANSLATE_NOOP( "QAccel", "Number Lock" ) },
@@ -225,14 +236,14 @@ static QString platformNeutralKeySequence(const QKeySequence &ks)
 	    // represent, but is clearly impossible to trigger...
 	    p = QChar(basekey & 0xffff);
 	} else if ( basekey >= Qt::Key_F1 && basekey <= Qt::Key_F35 ) {
-	    p = QAccel::tr( "F%1" ).arg(basekey - Qt::Key_F1 + 1);
+	    p = Q3Accel::tr( "F%1" ).arg(basekey - Qt::Key_F1 + 1);
 	} else if ( basekey > Qt::Key_Space && basekey <= Qt::Key_AsciiTilde ) {
 	    p.sprintf( "%c", basekey );
 	} else {
 	    int i = 0;
 	    while (keyname[i].name) {
 		if (basekey == keyname[i].key) {
-		    p = QAccel::tr(keyname[i].name);
+		    p = Q3Accel::tr(keyname[i].name);
 		    break;
 		}
 		++i;
@@ -317,7 +328,7 @@ bool Resource::load( FormFile *ff, Project *defProject )
     mainContainerSet = FALSE;
 
     QFile f( ff->absFileName() );
-    f.open( IO_ReadOnly | IO_Translate );
+    f.open( QIODevice::ReadOnly | QIODevice::Translate );
 
     bool b = load( ff, &f, defProject );
     f.close();
@@ -637,7 +648,7 @@ bool Resource::load( FormFile *ff, QIODevice* dev, Project *defProject )
 static bool saveCode( const QString &filename, const QString &code )
 {
     QFile f( filename );
-    if ( f.open(IO_WriteOnly | IO_Translate) ) {
+    if ( f.open(QIODevice::WriteOnly | QIODevice::Translate) ) {
 	QTextStream ts( &f );
 	ts << code;
 	return TRUE;
@@ -676,7 +687,7 @@ bool Resource::save( const QString& filename, bool formCodeOnly )
     currFileName = filename;
 
     QFile f( filename );
-    if ( !f.open( IO_WriteOnly | IO_Translate ) )
+    if ( !f.open( QIODevice::WriteOnly | QIODevice::Translate ) )
 	return FALSE;
     bool b = save( &f );
     f.close();
@@ -703,13 +714,13 @@ bool Resource::save( QIODevice* dev )
     ts << "<!DOCTYPE UI><UI version=\"3.3\" stdsetdef=\"1\">" << endl;
     saveMetaInfoBefore( ts, 0 );
     saveObject( formwindow->mainContainer(), 0, ts, 0 );
-    if ( ::qt_cast<QMainWindow*>(formwindow->mainContainer()) ) {
-	saveMenuBar( (QMainWindow*)formwindow->mainContainer(), ts, 0 );
-	saveToolBars( (QMainWindow*)formwindow->mainContainer(), ts, 0 );
+    if ( ::qt_cast<Q3MainWindow*>(formwindow->mainContainer()) ) {
+	saveMenuBar( (Q3MainWindow*)formwindow->mainContainer(), ts, 0 );
+	saveToolBars( (Q3MainWindow*)formwindow->mainContainer(), ts, 0 );
     }
     if ( !MetaDataBase::customWidgets()->isEmpty() && !usedCustomWidgets.isEmpty() )
 	saveCustomWidgets( ts, 0 );
-    if ( ::qt_cast<QMainWindow*>(formwindow->mainContainer()) )
+    if ( ::qt_cast<Q3MainWindow*>(formwindow->mainContainer()) )
 	saveActions( formwindow->actionList(), ts, 0 );
     if ( !images.isEmpty() )
 	saveImageCollection( ts, 0 );
@@ -882,7 +893,7 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
     if ( ::qt_cast<QTabWidget*>(obj) ) {
 	QTabWidget* tw = (QTabWidget*) obj;
 	QObjectList* tmpl = tw->queryList( "QWidgetStack" );
-	QWidgetStack *ws = (QWidgetStack*)tmpl->first();
+	Q3WidgetStack *ws = (Q3WidgetStack*)tmpl->first();
 	QTabBar *tb = ( (QDesignerTabWidget*)obj )->tabBar();
 	for ( int i = 0; i < tb->count(); ++i ) {
 	    QTab *t = tb->tabAt( i );
@@ -963,8 +974,8 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
 	    --indent;
 	    ts << makeIndent( indent ) << "</widget>" << endl;
 	}
-    } else if ( ::qt_cast<QWizard*>(obj) ) {
-	QWizard* wiz = (QWizard*)obj;
+    } else if ( ::qt_cast<Q3Wizard*>(obj) ) {
+	Q3Wizard* wiz = (Q3Wizard*)obj;
 	for ( int i = 0; i < wiz->pageCount(); ++i ) {
 	    QWidget *w = wiz->page( i );
 	    if ( !w )
@@ -988,8 +999,8 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
 	    --indent;
 	    ts << makeIndent( indent ) << "</widget>" << endl;
 	}
-    } else if ( ::qt_cast<QMainWindow*>(obj) ) {
-	saveChildrenOf( ( (QMainWindow*)obj )->centralWidget(), ts, indent );
+    } else if ( ::qt_cast<Q3MainWindow*>(obj) ) {
+	saveChildrenOf( ( (Q3MainWindow*)obj )->centralWidget(), ts, indent );
     } else {
 	bool saved = FALSE;
 #ifdef QT_CONTAINER_CUSTOM_WIDGETS
@@ -1054,8 +1065,8 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
 			MetaDataBase::CustomWidget *cw = new MetaDataBase::CustomWidget;
 			cw->className = className;
 			cw->includeFile =  WidgetDatabase::includeFile( classID );
-			QStrList lst = w->metaObject()->signalNames( TRUE );
-			for ( QPtrListIterator<char> it(lst); it.current(); ++it )
+			Q3StrList lst = w->metaObject()->signalNames( TRUE );
+			for ( Q3PtrListIterator<char> it(lst); it.current(); ++it )
 			    cw->lstSignals.append(it.current());
 
 			int i;
@@ -1123,51 +1134,51 @@ void Resource::saveObject( QObject *obj, QDesignerGridLayout* grid, QTextStream 
 
 void Resource::saveItems( QObject *obj, QTextStream &ts, int indent )
 {
-    if ( ::qt_cast<QListBox*>(obj) || ::qt_cast<QComboBox*>(obj) ) {
-	QListBox *lb = 0;
-	if ( ::qt_cast<QListBox*>(obj) )
-	    lb = (QListBox*)obj;
+    if ( ::qt_cast<Q3ListBox*>(obj) || ::qt_cast<QComboBox*>(obj) ) {
+	Q3ListBox *lb = 0;
+	if ( ::qt_cast<Q3ListBox*>(obj) )
+	    lb = (Q3ListBox*)obj;
 	else
 	    lb = ( (QComboBox*)obj )->listBox();
 
-	QListBoxItem *i = lb->firstItem();
+	Q3ListBoxItem *i = lb->firstItem();
 	for ( ; i; i = i->next() ) {
 	    ts << makeIndent( indent ) << "<item>" << endl;
 	    indent++;
 	    QStringList text;
 	    text << i->text();
-	    QPtrList<QPixmap> pixmaps;
+	    Q3PtrList<QPixmap> pixmaps;
 	    if ( i->pixmap() )
 		pixmaps.append( i->pixmap() );
 	    saveItem( text, pixmaps, ts, indent );
 	    indent--;
 	    ts << makeIndent( indent ) << "</item>" << endl;
 	}
-    } else if ( ::qt_cast<QIconView*>(obj) ) {
-	QIconView *iv = (QIconView*)obj;
+    } else if ( ::qt_cast<Q3IconView*>(obj) ) {
+	Q3IconView *iv = (Q3IconView*)obj;
 
-	QIconViewItem *i = iv->firstItem();
+	Q3IconViewItem *i = iv->firstItem();
 	for ( ; i; i = i->nextItem() ) {
 	    ts << makeIndent( indent ) << "<item>" << endl;
 	    indent++;
 	    QStringList text;
 	    text << i->text();
-	    QPtrList<QPixmap> pixmaps;
+	    Q3PtrList<QPixmap> pixmaps;
 	    if ( i->pixmap() )
 		pixmaps.append( i->pixmap() );
 	    saveItem( text, pixmaps, ts, indent );
 	    indent--;
 	    ts << makeIndent( indent ) << "</item>" << endl;
 	}
-    } else if ( ::qt_cast<QListView*>(obj) ) {
-	QListView *lv = (QListView*)obj;
+    } else if ( ::qt_cast<Q3ListView*>(obj) ) {
+	Q3ListView *lv = (Q3ListView*)obj;
 	int i;
 	for ( i = 0; i < lv->header()->count(); ++i ) {
 	    ts << makeIndent( indent ) << "<column>" << endl;
 	    indent++;
 	    QStringList l;
 	    l << lv->header()->label( i );
-	    QPtrList<QPixmap> pix;
+	    Q3PtrList<QPixmap> pix;
 	    pix.setAutoDelete( TRUE );
 	    if ( lv->header()->iconSet( i ) )
 		pix.append( new QPixmap( lv->header()->iconSet( i )->pixmap() ) );
@@ -1188,12 +1199,12 @@ void Resource::saveItems( QObject *obj, QTextStream &ts, int indent )
 	saveItem( lv->firstChild(), ts, indent - 1 );
     }
 #if !defined (QT_NO_TABLE)
-    else if ( ::qt_cast<QTable*>(obj) ) {
-	QTable *table = (QTable*)obj;
+    else if ( ::qt_cast<Q3Table*>(obj) ) {
+	Q3Table *table = (Q3Table*)obj;
 	int i;
 	QMap<QString, QString> columnFields = MetaDataBase::columnFields( table );
 #  ifndef QT_NO_SQL
-	bool isDataTable = ::qt_cast<QDataTable*>(table);
+	bool isDataTable = ::qt_cast<Q3DataTable*>(table);
 #  else
         bool isDataTable = false;
 #  endif
@@ -1206,7 +1217,7 @@ void Resource::saveItems( QObject *obj, QTextStream &ts, int indent )
 		indent++;
 		QStringList l;
 		l << table->horizontalHeader()->label( i );
-		QPtrList<QPixmap> pix;
+		Q3PtrList<QPixmap> pix;
 		pix.setAutoDelete( TRUE );
 		if ( table->horizontalHeader()->iconSet( i ) )
 		    pix.append( new QPixmap( table->horizontalHeader()->iconSet( i )->pixmap() ) );
@@ -1230,7 +1241,7 @@ void Resource::saveItems( QObject *obj, QTextStream &ts, int indent )
 		indent++;
 		QStringList l;
 		l << table->verticalHeader()->label( i );
-		QPtrList<QPixmap> pix;
+		Q3PtrList<QPixmap> pix;
 		pix.setAutoDelete( TRUE );
 		if ( table->verticalHeader()->iconSet( i ) )
 		    pix.append( new QPixmap( table->verticalHeader()->iconSet( i )->pixmap() ) );
@@ -1243,14 +1254,14 @@ void Resource::saveItems( QObject *obj, QTextStream &ts, int indent )
 #endif
 }
 
-void Resource::saveItem( QListViewItem *i, QTextStream &ts, int indent )
+void Resource::saveItem( Q3ListViewItem *i, QTextStream &ts, int indent )
 {
-    QListView *lv = i->listView();
+    Q3ListView *lv = i->listView();
     while ( i ) {
 	ts << makeIndent( indent ) << "<item>" << endl;
 	indent++;
 
-	QPtrList<QPixmap> pixmaps;
+	Q3PtrList<QPixmap> pixmaps;
 	QStringList textes;
 	for ( int c = 0; c < lv->columns(); ++c ) {
 	    pixmaps.append( i->pixmap( c ) );
@@ -1315,7 +1326,7 @@ QPixmap Resource::loadPixmap( const QDomElement &e, const QString &/*tagname*/ )
 }
 
 void Resource::saveItem( const QStringList &text,
-			 const QPtrList<QPixmap> &pixmaps, QTextStream &ts,
+			 const Q3PtrList<QPixmap> &pixmaps, QTextStream &ts,
 			 int indent )
 {
     QStringList::ConstIterator it = text.begin();
@@ -1328,7 +1339,7 @@ void Resource::saveItem( const QStringList &text,
     }
 
     for ( int i = 0; i < (int)pixmaps.count(); ++i ) {
-	QPixmap *p = ( (QPtrList<QPixmap>)pixmaps ).at( i );
+	QPixmap *p = ( (Q3PtrList<QPixmap>)pixmaps ).at( i );
 	ts << makeIndent( indent ) << "<property name=\"pixmap\">" << endl;
 	indent++;
 	if ( p )
@@ -1383,7 +1394,7 @@ void Resource::saveChildrenOf( QObject* obj, QTextStream &ts, int indent )
     }
 
     QObject *o = 0;
-    for ( QPtrListIterator<QObject> it ( *l ); ( o = it.current() ); ++it )
+    for ( Q3PtrListIterator<QObject> it ( *l ); ( o = it.current() ); ++it )
 	if ( !QString( o->name() ).startsWith( "qt_dead_widget_" ) )
 	    saveObject( o, grid, ts, indent );
     if ( !closeTag.isEmpty() ) {
@@ -1432,8 +1443,8 @@ void Resource::saveObjectProperties( QObject *w, QTextStream &ts, int indent )
     bool inLayout = w != formwindow->mainContainer() && !copying && w->isWidgetType() && ( (QWidget*)w )->parentWidget() &&
 		    WidgetFactory::layoutType( ( (QWidget*)w )->parentWidget() ) != WidgetFactory::NoLayout;
 
-    QStrList lst = w->metaObject()->propertyNames( !::qt_cast<Spacer*>(w) );
-    for ( QPtrListIterator<char> it( lst ); it.current(); ++it ) {
+    Q3StrList lst = w->metaObject()->propertyNames( !::qt_cast<Spacer*>(w) );
+    for ( Q3PtrListIterator<char> it( lst ); it.current(); ++it ) {
 	if ( changed.find( QString::fromLatin1( it.current() ) ) == changed.end() )
 	    continue;
 	if ( saved.find( QString::fromLatin1( it.current() ) ) != saved.end() )
@@ -1497,7 +1508,7 @@ void Resource::saveObjectProperties( QObject *w, QTextStream &ts, int indent )
 void Resource::saveSetProperty( QObject *w, const QString &name, QVariant::Type, QTextStream &ts, int indent )
 {
     const QMetaProperty *p = w->metaObject()->property( w->metaObject()->findProperty( name, TRUE ), TRUE );
-    QStrList l( p->valueToKeys( w->property( name ).toInt() ) );
+    Q3StrList l( p->valueToKeys( w->property( name ).toInt() ) );
     QString v;
     for ( uint i = 0; i < l.count(); ++i ) {
 	v += l.at( i );
@@ -1647,7 +1658,7 @@ void Resource::saveProperty( QObject *w, const QString &name, const QVariant &va
     case QVariant::Pixmap:
 	savePixmap( value.toPixmap(), ts, indent );
 	break;
-    case QVariant::IconSet:
+    case QCoreVariant::Icon:
 	savePixmap( value.toIconSet().pixmap(), ts, indent, "iconset" );
 	break;
     case QVariant::Image:
@@ -1796,8 +1807,8 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
 	    mainContainerSet = TRUE;
 	}
 	w = (QWidget*)obj;
-	if ( ::qt_cast<QMainWindow*>(w) )
-	    w = ( (QMainWindow*)w )->centralWidget();
+	if ( ::qt_cast<Q3MainWindow*>(w) )
+	    w = ( (Q3MainWindow*)w )->centralWidget();
 	if ( layout ) {
 	    switch ( WidgetFactory::layoutType( layout ) ) {
 	    case WidgetFactory::HBox:
@@ -1822,9 +1833,9 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
 	if ( w && formwindow ) {
 	    if ( !parent ||
 		 ( !::qt_cast<QTabWidget*>(parent) &&
-		   !::qt_cast<QWidgetStack*>(parent) &&
+		   !::qt_cast<Q3WidgetStack*>(parent) &&
 		   !::qt_cast<QToolBox*>(parent) &&
-		   !::qt_cast<QWizard*>(parent)
+		   !::qt_cast<Q3Wizard*>(parent)
 #ifdef QT_CONTAINER_CUSTOM_WIDGETS
                    && !isPlugin
 #endif
@@ -1832,9 +1843,9 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
 		formwindow->insertWidget( w, pasting );
 	    else if ( parent &&
 		      ( ::qt_cast<QTabWidget*>(parent) ||
-			::qt_cast<QWidgetStack*>(parent) ||
+			::qt_cast<Q3WidgetStack*>(parent) ||
 			::qt_cast<QToolBox*>(parent) ||
-			::qt_cast<QWizard*>(parent)
+			::qt_cast<Q3Wizard*>(parent)
 #ifdef QT_CONTAINER_CUSTOM_WIDGETS
                         || isPlugin
 #endif
@@ -1880,15 +1891,15 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
 	    if ( ::qt_cast<QTabWidget*>(parent) ) {
 		if ( attrib == "title" )
 		    ( (QTabWidget*)parent )->insertTab( w, v.toString() );
-	    } else if ( ::qt_cast<QWidgetStack*>(parent) ) {
+	    } else if ( ::qt_cast<Q3WidgetStack*>(parent) ) {
 		if ( attrib == "id" )
 		    ( (QDesignerWidgetStack*)parent )->insertPage( w, v.toInt() );
 	    } else if ( ::qt_cast<QToolBox*>(parent) ) {
 		if ( attrib == "label" )
 		    ( (QToolBox*)parent )->addItem( w, v.toString() );
-	    } else if ( ::qt_cast<QWizard*>(parent) ) {
+	    } else if ( ::qt_cast<Q3Wizard*>(parent) ) {
 		if ( attrib == "title" )
-		    ( (QWizard*)parent )->addPage( w, v.toString() );
+		    ( (Q3Wizard*)parent )->addPage( w, v.toString() );
 #ifdef QT_CONTAINER_CUSTOM_WIDGETS
 	    } else if ( isPlugin ) {
 		if ( attrib == "label" ) {
@@ -1934,8 +1945,8 @@ void Resource::createColumn( const QDomElement &e, QWidget *widget )
     if ( !widget )
 	return;
 
-    if ( ::qt_cast<QListView*>(widget) && e.tagName() == "column" ) {
-	QListView *lv = (QListView*)widget;
+    if ( ::qt_cast<Q3ListView*>(widget) && e.tagName() == "column" ) {
+	Q3ListView *lv = (Q3ListView*)widget;
 	QDomElement n = e.firstChild().toElement();
 	QPixmap pix;
 	bool hasPixmap = FALSE;
@@ -1968,8 +1979,8 @@ void Resource::createColumn( const QDomElement &e, QWidget *widget )
 	    lv->header()->setResizeEnabled( resizable, i );
     }
 #ifndef QT_NO_TABLE
-    else if ( ::qt_cast<QTable*>(widget) ) {
-	QTable *table = (QTable*)widget;
+    else if ( ::qt_cast<Q3Table*>(widget) ) {
+	Q3Table *table = (Q3Table*)widget;
 	bool isRow;
 	if ( ( isRow = e.tagName() == "row" ) )
 	    table->setNumRows( table->numRows() + 1 );
@@ -1999,7 +2010,7 @@ void Resource::createColumn( const QDomElement &e, QWidget *widget )
 	}
 
 	int i = isRow ? table->numRows() - 1 : table->numCols() - 1;
-	QHeader *h = !isRow ? table->horizontalHeader() : table->verticalHeader();
+	Q3Header *h = !isRow ? table->horizontalHeader() : table->verticalHeader();
 	if ( hasPixmap )
 	    h->setLabel( i, pix, txt );
 	else
@@ -2030,49 +2041,49 @@ void Resource::loadItem( const QDomElement &e, QPixmap &pix, QString &txt, bool 
     }
 }
 
-void Resource::createItem( const QDomElement &e, QWidget *widget, QListViewItem *i )
+void Resource::createItem( const QDomElement &e, QWidget *widget, Q3ListViewItem *i )
 {
     if ( !widget || !WidgetFactory::hasItems( WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( widget ) ), widget ) )
 	return;
 
-    if ( ::qt_cast<QListBox*>(widget) || ::qt_cast<QComboBox*>(widget) ) {
+    if ( ::qt_cast<Q3ListBox*>(widget) || ::qt_cast<QComboBox*>(widget) ) {
 	QDomElement n = e.firstChild().toElement();
 	QPixmap pix;
 	bool hasPixmap = FALSE;
 	QString txt;
 	loadItem( n, pix, txt, hasPixmap );
-	QListBox *lb = 0;
-	if ( ::qt_cast<QListBox*>(widget) )
-	    lb = (QListBox*)widget;
+	Q3ListBox *lb = 0;
+	if ( ::qt_cast<Q3ListBox*>(widget) )
+	    lb = (Q3ListBox*)widget;
 	else
 	    lb = ( (QComboBox*)widget)->listBox();
 	if ( hasPixmap ) {
-	    new QListBoxPixmap( lb, pix, txt );
+	    new Q3ListBoxPixmap( lb, pix, txt );
 	} else {
-	    new QListBoxText( lb, txt );
+	    new Q3ListBoxText( lb, txt );
 	}
-    } else if ( ::qt_cast<QIconView*>(widget) ) {
+    } else if ( ::qt_cast<Q3IconView*>(widget) ) {
 	QDomElement n = e.firstChild().toElement();
 	QPixmap pix;
 	bool hasPixmap = FALSE;
 	QString txt;
 	loadItem( n, pix, txt, hasPixmap );
-	QIconView *iv = (QIconView*)widget;
+	Q3IconView *iv = (Q3IconView*)widget;
 	if ( hasPixmap )
-	    new QIconViewItem( iv, txt, pix );
+	    new Q3IconViewItem( iv, txt, pix );
 	else
-	    new QIconViewItem( iv, txt );
-    } else if ( ::qt_cast<QListView*>(widget) ) {
+	    new Q3IconViewItem( iv, txt );
+    } else if ( ::qt_cast<Q3ListView*>(widget) ) {
 	QDomElement n = e.firstChild().toElement();
 	QPixmap pix;
-	QValueList<QPixmap> pixmaps;
+	Q3ValueList<QPixmap> pixmaps;
 	QStringList textes;
-	QListViewItem *item = 0;
-	QListView *lv = (QListView*)widget;
+	Q3ListViewItem *item = 0;
+	Q3ListView *lv = (Q3ListView*)widget;
 	if ( i )
-	    item = new QListViewItem( i, lastItem );
+	    item = new Q3ListViewItem( i, lastItem );
 	else
-	    item = new QListViewItem( lv, lastItem );
+	    item = new Q3ListViewItem( lv, lastItem );
 	while ( !n.isNull() ) {
 	    if ( n.tagName() == "property" ) {
 		QString attrib = n.attribute( "name" );
@@ -2179,7 +2190,7 @@ void Resource::setObjectProperty( QObject* obj, const QString &prop, const QDomE
 	QPixmap pix = loadPixmap( e, "iconset" );
 	if ( pix.isNull() )
 	    return;
-	v = QVariant( QIconSet( pix ) );
+	v = QVariant( QIcon( pix ) );
     } else if ( e.tagName() == "image" ) {
 	v = QVariant( loadFromCollection( v.toString() ) );
     }
@@ -2225,14 +2236,14 @@ void Resource::setObjectProperty( QObject* obj, const QString &prop, const QDomE
     } else if ( e.tagName() == "set" && p && p->isSetType() ) {
 	QString keys( v.toString() );
 	QStringList lst = QStringList::split( '|', keys );
-	QStrList l;
+	Q3StrList l;
 	for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	    l.append( *it );
 	v = QVariant( p->keysToValue( l ) );
     }
 
     if ( prop == "caption" ) {
-	QCString s1 = v.toCString();
+	Q3CString s1 = v.toCString();
 	QString s2 = v.toString();
 	if ( !s2.isEmpty() )
 	    formwindow->setCaption( s2 );
@@ -2297,7 +2308,7 @@ void Resource::setObjectProperty( QObject* obj, const QString &prop, const QDomE
 QString Resource::saveInCollection( const QImage &img )
 {
     QString imgName = "none";
-    QValueList<Image>::Iterator it = images.begin();
+    Q3ValueList<Image>::Iterator it = images.begin();
     for ( ; it != images.end(); ++it ) {
 	if ( img == ( *it ).img ) {
 	    imgName = ( *it ).name;
@@ -2319,7 +2330,7 @@ void Resource::saveImageData( const QImage &img, QTextStream &ts, int indent )
 {
     QByteArray ba;
     QBuffer buf( ba );
-    buf.open( IO_WriteOnly | IO_Translate );
+    buf.open( QIODevice::WriteOnly | QIODevice::Translate );
     QString format;
     bool compress = FALSE;
     if (img.hasAlphaBuffer()) {
@@ -2357,7 +2368,7 @@ void Resource::saveImageCollection( QTextStream &ts, int indent )
     ts << makeIndent( indent ) << "<images>" << endl;
     indent++;
 
-    QValueList<Image>::Iterator it = images.begin();
+    Q3ValueList<Image>::Iterator it = images.begin();
     for ( ; it != images.end(); ++it ) {
 	ts << makeIndent( indent ) << "<image name=\"" << (*it).name << "\">" << endl;
 	indent++;
@@ -2433,7 +2444,7 @@ void Resource::loadImageCollection( const QDomElement &e )
 
 QImage Resource::loadFromCollection( const QString &name )
 {
-    QValueList<Image>::Iterator it = images.begin();
+    Q3ValueList<Image>::Iterator it = images.begin();
     for ( ; it != images.end(); ++it ) {
 	if ( ( *it ).name == name )
 	    return ( *it ).img;
@@ -2443,12 +2454,12 @@ QImage Resource::loadFromCollection( const QString &name )
 
 void Resource::saveConnections( QTextStream &ts, int indent )
 {
-    QValueList<MetaDataBase::Connection> connections = MetaDataBase::connections( formwindow );
+    Q3ValueList<MetaDataBase::Connection> connections = MetaDataBase::connections( formwindow );
     if ( connections.isEmpty() )
 	return;
     ts << makeIndent( indent ) << "<connections>" << endl;
     indent++;
-    QValueList<MetaDataBase::Connection>::Iterator it = connections.begin();
+    Q3ValueList<MetaDataBase::Connection>::Iterator it = connections.begin();
     for ( ; it != connections.end(); ++it ) {
 	MetaDataBase::Connection conn = *it;
 	if ( ( knownNames.findIndex( QString( conn.sender->name() ) ) == -1 &&
@@ -2579,7 +2590,7 @@ void Resource::saveCustomWidgets( QTextStream &ts, int indent )
     ts << makeIndent( indent ) << "<customwidgets>" << endl;
     indent++;
 
-    QPtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
+    Q3PtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
     for ( MetaDataBase::CustomWidget *w = lst->first(); w; w = lst->next() ) {
 	if ( usedCustomWidgets.findIndex( w->className ) == -1 )
 	    continue;
@@ -2606,16 +2617,16 @@ void Resource::saveCustomWidgets( QTextStream &ts, int indent )
 	ts << makeIndent( indent ) << "</sizepolicy>" << endl;
 	ts << makeIndent( indent ) << "<pixmap>" << saveInCollection( w->pixmap->convertToImage() ) << "</pixmap>" << endl;
 	if ( !w->lstSignals.isEmpty() ) {
-	    for ( QValueList<QCString>::Iterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
+	    for ( Q3ValueList<Q3CString>::Iterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
 		ts << makeIndent( indent ) << "<signal>" << entitize( *it ) << "</signal>" << endl;
 	}
 	if ( !w->lstSlots.isEmpty() ) {
-	    for ( QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it )
+	    for ( Q3ValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it )
 		ts << makeIndent( indent ) << "<slot access=\"" << (*it).access << "\" specifier=\""
 		   << (*it).specifier << "\">" << entitize( (*it).function ) << "</slot>" << endl;
 	}
 	if ( !w->lstProperties.isEmpty() ) {
-	    for ( QValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.begin(); it != w->lstProperties.end(); ++it )
+	    for ( Q3ValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.begin(); it != w->lstProperties.end(); ++it )
 		ts << makeIndent( indent ) << "<property type=\"" << (*it).type << "\">" << entitize( (*it).property ) << "</property>" << endl;
 	}
 	indent--;
@@ -2773,7 +2784,7 @@ void Resource::saveMetaInfoAfter( QTextStream &ts, int indent )
 {
     MetaDataBase::MetaInfo info = MetaDataBase::metaInfo( formwindow );
     if ( !langIface || formwindow->project()->isCpp() ) {
-	QValueList<MetaDataBase::Include> includes = MetaDataBase::includes( formwindow );
+	Q3ValueList<MetaDataBase::Include> includes = MetaDataBase::includes( formwindow );
 	QString extensionInclude;
 	bool needExtensionInclude = FALSE;
 	if ( langIface &&
@@ -2786,7 +2797,7 @@ void Resource::saveMetaInfoAfter( QTextStream &ts, int indent )
 	    ts << makeIndent( indent ) << "<includes>" << endl;
 	    indent++;
 
-	    for ( QValueList<MetaDataBase::Include>::Iterator it = includes.begin(); it != includes.end(); ++it ) {
+	    for ( Q3ValueList<MetaDataBase::Include>::Iterator it = includes.begin(); it != includes.end(); ++it ) {
 		ts << makeIndent( indent ) << "<include location=\"" << (*it).location
 		   << "\" impldecl=\"" << (*it).implDecl << "\">" << (*it).header << "</include>" << endl;
 		if ( needExtensionInclude )
@@ -2809,12 +2820,12 @@ void Resource::saveMetaInfoAfter( QTextStream &ts, int indent )
 	    indent--;
 	    ts << makeIndent( indent ) << "</forwards>" << endl;
 	}
-	QValueList<MetaDataBase::Variable> varLst = MetaDataBase::variables( formwindow );
+	Q3ValueList<MetaDataBase::Variable> varLst = MetaDataBase::variables( formwindow );
 	if ( !varLst.isEmpty() ) {
 	    ts << makeIndent( indent ) << "<variables>" << endl;
 	    indent++;
 
-	    QValueList<MetaDataBase::Variable>::Iterator it = varLst.begin();
+	    Q3ValueList<MetaDataBase::Variable>::Iterator it = varLst.begin();
 	    for ( ; it != varLst.end(); ++it ) {
 		ts << makeIndent( indent ) << "<variable";
 		if ( (*it).varAccess != "protected" )
@@ -2835,12 +2846,12 @@ void Resource::saveMetaInfoAfter( QTextStream &ts, int indent )
 	    ts << makeIndent( indent ) << "</signals>" << endl;
 	}
 
-	QValueList<MetaDataBase::Function> slotList = MetaDataBase::slotList( formwindow );
+	Q3ValueList<MetaDataBase::Function> slotList = MetaDataBase::slotList( formwindow );
 	if ( !slotList.isEmpty() ) {
 	    ts << makeIndent( indent ) << "<slots>" << endl;
 	    indent++;
 	    QString lang = formwindow->project()->language();
-	    QValueList<MetaDataBase::Function>::Iterator it = slotList.begin();
+	    Q3ValueList<MetaDataBase::Function>::Iterator it = slotList.begin();
 	    for ( ; it != slotList.end(); ++it ) {
 		MetaDataBase::Function function = *it;
 		ts << makeIndent( indent ) << "<slot";
@@ -2858,12 +2869,12 @@ void Resource::saveMetaInfoAfter( QTextStream &ts, int indent )
 	    ts << makeIndent( indent ) << "</slots>" << endl;
 	}
 
-	QValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formwindow, TRUE );
+	Q3ValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formwindow, TRUE );
 	if ( !functionList.isEmpty() ) {
 	    ts << makeIndent( indent ) << "<functions>" << endl;
 	    indent++;
 	    QString lang = formwindow->project()->language();
-	    QValueList<MetaDataBase::Function>::Iterator it = functionList.begin();
+	    Q3ValueList<MetaDataBase::Function>::Iterator it = functionList.begin();
 	    for ( ; it != functionList.end(); ++it ) {
 		MetaDataBase::Function function = *it;
 		ts << makeIndent( indent ) << "<function";
@@ -2947,7 +2958,7 @@ void Resource::saveChildActions( QAction *a, QTextStream &ts, int indent )
 	if ( !::qt_cast<QAction*>(o) )
 	    continue;
 	QAction *ac = (QAction*)o;
-	bool isGroup = ::qt_cast<QActionGroup*>(ac);
+	bool isGroup = ::qt_cast<Q3ActionGroup*>(ac);
 	if ( isGroup )
 	    ts << makeIndent( indent ) << "<actiongroup>" << endl;
 	else
@@ -2967,16 +2978,16 @@ void Resource::saveChildActions( QAction *a, QTextStream &ts, int indent )
     }
 }
 
-void Resource::saveActions( const QPtrList<QAction> &actions, QTextStream &ts, int indent )
+void Resource::saveActions( const Q3PtrList<QAction> &actions, QTextStream &ts, int indent )
 {
     if ( actions.isEmpty() )
 	return;
     ts << makeIndent( indent ) << "<actions>" << endl;
     indent++;
-    QPtrListIterator<QAction> it( actions );
+    Q3PtrListIterator<QAction> it( actions );
     while ( it.current() ) {
 	QAction *a = it.current();
-	bool isGroup = ::qt_cast<QActionGroup*>(a);
+	bool isGroup = ::qt_cast<Q3ActionGroup*>(a);
 	if ( isGroup )
 	    ts << makeIndent( indent ) << "<actiongroup>" << endl;
 	else
@@ -3062,23 +3073,23 @@ void Resource::loadActions( const QDomElement &e )
     }
 }
 
-void Resource::saveToolBars( QMainWindow *mw, QTextStream &ts, int indent )
+void Resource::saveToolBars( Q3MainWindow *mw, QTextStream &ts, int indent )
 {
     ts << makeIndent( indent ) << "<toolbars>" << endl;
     indent++;
 
-    QPtrList<QToolBar> tbList;
+    Q3PtrList<Q3ToolBar> tbList;
     for ( int i = 0; i <= (int)Qt::DockMinimized; ++i ) {
-	tbList = mw->toolBars( (Qt::Dock)i );
+	tbList = mw->toolBars( (Qt::ToolBarDock)i );
 	if ( tbList.isEmpty() )
 	    continue;
-	for ( QToolBar *tb = tbList.first(); tb; tb = tbList.next() ) {
+	for ( Q3ToolBar *tb = tbList.first(); tb; tb = tbList.next() ) {
 	    if ( tb->isHidden() )
 		continue;
 	    ts << makeIndent( indent ) << "<toolbar dock=\"" << i << "\">" << endl;
 	    indent++;
 	    saveObjectProperties( tb, ts, indent );
-	    QPtrList<QAction> actionList = ( (QDesignerToolBar*)tb )->insertedActions();
+	    Q3PtrList<QAction> actionList = ( (QDesignerToolBar*)tb )->insertedActions();
 	    for ( QAction *a = actionList.first(); a; a = actionList.next() ) {
 		if ( ::qt_cast<QSeparatorAction*>(a) ) {
 		    ts << makeIndent( indent ) << "<separator/>" << endl;
@@ -3109,7 +3120,7 @@ void Resource::saveToolBars( QMainWindow *mw, QTextStream &ts, int indent )
     ts << makeIndent( indent ) << "</toolbars>" << endl;
 }
 
-void Resource::saveMenuBar( QMainWindow *mw, QTextStream &ts, int indent )
+void Resource::saveMenuBar( Q3MainWindow *mw, QTextStream &ts, int indent )
 {
     MenuBarEditor *mb = (MenuBarEditor *)mw->child( 0, "MenuBarEditor" );
     if ( !mb )
@@ -3138,7 +3149,7 @@ void Resource::saveMenuBar( QMainWindow *mw, QTextStream &ts, int indent )
     ts << makeIndent( indent ) << "</menubar>" << endl;
 }
 
-void Resource::savePopupMenu( PopupMenuEditor *pm, QMainWindow *mw, QTextStream &ts, int indent )
+void Resource::savePopupMenu( PopupMenuEditor *pm, Q3MainWindow *mw, QTextStream &ts, int indent )
 {
     for ( PopupMenuEditorItem *i = pm->items()->first(); i; i = pm->items()->next() ) {
 	QAction *a = i->action();
@@ -3166,11 +3177,11 @@ void Resource::savePopupMenu( PopupMenuEditor *pm, QMainWindow *mw, QTextStream 
 void Resource::loadToolBars( const QDomElement &e )
 {
     QDomElement n = e.firstChild().toElement();
-    QMainWindow *mw = ( (QMainWindow*)formwindow->mainContainer() );
+    Q3MainWindow *mw = ( (Q3MainWindow*)formwindow->mainContainer() );
     QDesignerToolBar *tb = 0;
     while ( !n.isNull() ) {
 	if ( n.tagName() == "toolbar" ) {
-	    Qt::Dock dock = (Qt::Dock)n.attribute( "dock" ).toInt();
+	    Qt::ToolBarDock dock = (Qt::ToolBarDock)n.attribute( "dock" ).toInt();
 	    tb = new QDesignerToolBar( mw, dock );
 	    QDomElement n2 = n.firstChild().toElement();
 	    while ( !n2.isNull() ) {
@@ -3203,7 +3214,7 @@ void Resource::loadToolBars( const QDomElement &e )
 void Resource::loadMenuBar( const QDomElement &e )
 {
     QDomElement n = e.firstChild().toElement();
-    QMainWindow *mw = (QMainWindow*)formwindow->mainContainer();
+    Q3MainWindow *mw = (Q3MainWindow*)formwindow->mainContainer();
     MenuBarEditor *mb = new MenuBarEditor( formwindow, mw );
     MetaDataBase::addEntry( mb );
     while ( !n.isNull() ) {
@@ -3271,12 +3282,12 @@ void Resource::loadExtraSource( FormFile *formfile, const QString &currFileName,
     LanguageInterface *iface = langIface;
     if ( hasFunctions || !iface )
 	return;
-    QValueList<LanguageInterface::Function> functions;
+    Q3ValueList<LanguageInterface::Function> functions;
     QStringList forwards;
     QStringList includesImpl;
     QStringList includesDecl;
     QStringList vars;
-    QValueList<LanguageInterface::Connection> connections;
+    Q3ValueList<LanguageInterface::Connection> connections;
 
     iface->loadFormCode( formfile->formName(),
 			 currFileName + iface->formCodeExtension(),
@@ -3286,7 +3297,7 @@ void Resource::loadExtraSource( FormFile *formfile, const QString &currFileName,
 
     QFile f( formfile->project()->makeAbsolute( formfile->codeFile() ) );
     QString code;
-    if ( f.open( IO_ReadOnly ) ) {
+    if ( f.open( QIODevice::ReadOnly ) ) {
 	QTextStream ts( &f );
 	code = ts.read();
     }
@@ -3295,7 +3306,7 @@ void Resource::loadExtraSource( FormFile *formfile, const QString &currFileName,
     if ( !MainWindow::self || !MainWindow::self->currProject()->isCpp() )
 	MetaDataBase::setupConnections( formfile, connections );
 
-    for ( QValueList<LanguageInterface::Function>::Iterator fit = functions.begin();
+    for ( Q3ValueList<LanguageInterface::Function>::Iterator fit = functions.begin();
 	  fit != functions.end(); ++fit ) {
 
 	if ( MetaDataBase::hasFunction( formfile->formWindow() ?

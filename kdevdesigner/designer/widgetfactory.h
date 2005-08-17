@@ -28,26 +28,33 @@
 #define WIDGETFACTORY_H
 
 #include <qvariant.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qstring.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qtabwidget.h>
 #include <qpixmap.h>
 #include <qsize.h>
 #include <qpainter.h>
 #include <qevent.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qlabel.h>
-#include <qwizard.h>
-#include <qptrdict.h>
+#include <q3wizard.h>
+#include <q3ptrdict.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qwidgetstack.h>
-#include <qguardedptr.h>
+#include <q3buttongroup.h>
+#include <q3widgetstack.h>
+#include <qpointer.h>
 #include <qtoolbox.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QShowEvent>
+#include <Q3Frame>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include "metadatabase.h"
 #include "qwidgetfactory.h"
@@ -114,7 +121,7 @@ private:
 				  const QRect *r = 0, Qt::Orientation orient = Qt::Horizontal );
     static QWidget *createCustomWidget( QWidget *parent, const char *name, MetaDataBase::CustomWidget *w );
 
-    static QGuardedPtr<QObject> *lastPassiveInteractor;
+    static QPointer<QObject> *lastPassiveInteractor;
     static bool lastWasAPassiveInteractor;
 };
 
@@ -124,7 +131,7 @@ class QDesignerTabWidget : public QTabWidget
     Q_OBJECT
     Q_PROPERTY( int currentPage READ currentPage WRITE setCurrentPage STORED false DESIGNABLE true )
     Q_PROPERTY( QString pageTitle READ pageTitle WRITE setPageTitle STORED false DESIGNABLE true )
-    Q_PROPERTY( QCString pageName READ pageName WRITE setPageName STORED false DESIGNABLE true )
+    Q_PROPERTY( Q3CString pageName READ pageName WRITE setPageName STORED false DESIGNABLE true )
 public:
     QDesignerTabWidget( QWidget *parent, const char *name );
 
@@ -132,8 +139,8 @@ public:
     void setCurrentPage( int i );
     QString pageTitle() const;
     void setPageTitle( const QString& title );
-    QCString pageName() const;
-    void setPageName( const QCString& name );
+    Q3CString pageName() const;
+    void setPageName( const Q3CString& name );
 
     int count() const;
     QTabBar *tabBar() const { return QTabWidget::tabBar(); }
@@ -148,18 +155,18 @@ private:
      bool mousePressed;
 };
 
-class QDesignerWidgetStack : public QWidgetStack
+class QDesignerWidgetStack : public Q3WidgetStack
 {
     Q_OBJECT
     Q_PROPERTY( int currentPage READ currentPage WRITE setCurrentPage STORED false DESIGNABLE true )
-    Q_PROPERTY( QCString pageName READ pageName WRITE setPageName STORED false DESIGNABLE true )
+    Q_PROPERTY( Q3CString pageName READ pageName WRITE setPageName STORED false DESIGNABLE true )
 public:
     QDesignerWidgetStack( QWidget *parent, const char *name );
 
     int currentPage() const;
     void setCurrentPage( int i );
-    QCString pageName() const;
-    void setPageName( const QCString& name );
+    Q3CString pageName() const;
+    void setPageName( const Q3CString& name );
 
     int count() const;
     QWidget* page( int i ) const;
@@ -172,12 +179,12 @@ public slots:
 
 protected:
     void resizeEvent( QResizeEvent *e ) {
-	QWidgetStack::resizeEvent( e );
+	Q3WidgetStack::resizeEvent( e );
 	updateButtons();
     }
 
     void showEvent( QShowEvent *e ) {
-	QWidgetStack::showEvent( e );
+	Q3WidgetStack::showEvent( e );
 	updateButtons();
     }
 
@@ -186,29 +193,29 @@ private slots:
     void nextPage();
 
 private:
-    QPtrList<QWidget> pages;
+    Q3PtrList<QWidget> pages;
     QToolButton *prev, *next;
 
 };
 
-class QDesignerWizard : public QWizard
+class QDesignerWizard : public Q3Wizard
 {
     Q_OBJECT
     Q_PROPERTY( int currentPage READ currentPageNum WRITE setCurrentPage STORED false DESIGNABLE true )
     Q_PROPERTY( QString pageTitle READ pageTitle WRITE setPageTitle STORED false DESIGNABLE true )
-    Q_PROPERTY( QCString pageName READ pageName WRITE setPageName STORED false DESIGNABLE true )
+    Q_PROPERTY( Q3CString pageName READ pageName WRITE setPageName STORED false DESIGNABLE true )
     Q_OVERRIDE( bool modal READ isModal WRITE setModal )
 
 public:
     QDesignerWizard( QWidget *parent, const char *name ) 
-        : QWizard( parent, name ), modal(FALSE) {}
+        : Q3Wizard( parent, name ), modal(FALSE) {}
 
     int currentPageNum() const;
     void setCurrentPage( int i );
     QString pageTitle() const;
     void setPageTitle( const QString& title );
-    QCString pageName() const;
-    void setPageName( const QCString& name );
+    Q3CString pageName() const;
+    void setPageName( const Q3CString& name );
     int pageNum( QWidget *page );
     void addPage( QWidget *p, const QString & );
     void removePage( QWidget *p );
@@ -228,7 +235,7 @@ private:
 	QWidget *p;
 	QString t;
     };
-    QPtrDict<QWidget> removedPages;
+    Q3PtrDict<QWidget> removedPages;
     bool modal;
 
 };
@@ -283,29 +290,29 @@ protected:
 };
 
 
-class Line : public QFrame
+class Line : public Q3Frame
 {
     Q_OBJECT
 
-    Q_PROPERTY( Orientation orientation READ orientation WRITE setOrientation )
+    Q_PROPERTY( Qt::Orientation orientation READ orientation WRITE setOrientation )
     Q_OVERRIDE( int frameWidth DESIGNABLE false )
     Q_OVERRIDE( Shape frameShape DESIGNABLE false )
     Q_OVERRIDE( QRect frameRect DESIGNABLE false )
     Q_OVERRIDE( QRect contentsRect DESIGNABLE false )
 public:
     Line( QWidget *parent, const char *name )
-	: QFrame( parent, name, WMouseNoMask ) {
+	: Q3Frame( parent, name, Qt::WMouseNoMask ) {
 	    setFrameStyle( HLine | Sunken );
     }
 
-    void setOrientation( Orientation orient ) {
-	if ( orient == Horizontal )
+    void setOrientation( Qt::Orientation orient ) {
+	if ( orient == Qt::Horizontal )
 	    setFrameShape( HLine );
 	else
 	    setFrameShape( VLine );
     }
-    Orientation orientation() const {
-	return frameShape() == HLine ? Horizontal : Vertical;
+    Qt::Orientation orientation() const {
+	return frameShape() == HLine ? Qt::Horizontal : Qt::Vertical;
     }
 };
 
@@ -313,17 +320,17 @@ class QDesignerLabel : public QLabel
 {
     Q_OBJECT
 
-    Q_PROPERTY( QCString buddy READ buddyWidget WRITE setBuddyWidget )
+    Q_PROPERTY( Q3CString buddy READ buddyWidget WRITE setBuddyWidget )
 
 public:
     QDesignerLabel( QWidget *parent = 0, const char *name = 0 )
 	: QLabel( parent, name ) { myBuddy = 0; }
 
-    void setBuddyWidget( const QCString &b ) {
+    void setBuddyWidget( const Q3CString &b ) {
 	myBuddy = b;
 	updateBuddy();
     }
-    QCString buddyWidget() const {
+    Q3CString buddyWidget() const {
 	return myBuddy;
     };
 
@@ -337,7 +344,7 @@ protected:
 private:
     void updateBuddy();
 
-    QCString myBuddy;
+    Q3CString myBuddy;
 
 };
 
@@ -347,7 +354,7 @@ class QDesignerWidget : public QWidget
 
 public:
     QDesignerWidget( FormWindow *fw, QWidget *parent, const char *name )
-	: QWidget( parent, name, WResizeNoErase ), formwindow( fw ) {
+	: QWidget( parent, name, Qt::WResizeNoErase ), formwindow( fw ) {
 	    need_frame = parent && parent->inherits("QDesignerWidgetStack" );
     }
 
@@ -368,7 +375,7 @@ class QDesignerDialog : public QDialog
 
 public:
     QDesignerDialog( FormWindow *fw, QWidget *parent, const char *name )
-	: QDialog( parent, name, FALSE, WResizeNoErase ), formwindow( fw ), modal(FALSE) {}
+	: QDialog( parent, name, FALSE, Qt::WResizeNoErase ), formwindow( fw ), modal(FALSE) {}
 
     bool isModal() const { return modal; }
     void setModal(bool b) { modal = b; }
@@ -395,12 +402,12 @@ public:
 	return parentWidget() && parentWidget()->inherits( "QButtonGroup" );
     }
     int buttonGroupId() const {
-	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (QButtonGroup*)parentWidget() )->id( (QButton*)this ) : -1;
+	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (Q3ButtonGroup*)parentWidget() )->id( (Q3Button*)this ) : -1;
     }
     void setButtonGroupId( int id ) {
 	if ( parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ) {
-	    ( (QButtonGroup*)parentWidget() )->remove( this );
-	    ( (QButtonGroup*)parentWidget() )->insert( this, id );
+	    ( (Q3ButtonGroup*)parentWidget() )->remove( this );
+	    ( (Q3ButtonGroup*)parentWidget() )->insert( this, id );
 	}
     }
 };
@@ -418,12 +425,12 @@ public:
 	return parentWidget() && parentWidget()->inherits( "QButtonGroup" );
     }
     int buttonGroupId() const {
-	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (QButtonGroup*)parentWidget() )->id( (QButton*)this ) : -1;
+	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (Q3ButtonGroup*)parentWidget() )->id( (Q3Button*)this ) : -1;
     }
     void setButtonGroupId( int id ) {
 	if ( parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ) {
-	    ( (QButtonGroup*)parentWidget() )->remove( this );
-	    ( (QButtonGroup*)parentWidget() )->insert( this, id );
+	    ( (Q3ButtonGroup*)parentWidget() )->remove( this );
+	    ( (Q3ButtonGroup*)parentWidget() )->insert( this, id );
 	}
     }
 
@@ -442,12 +449,12 @@ public:
 	return parentWidget() && parentWidget()->inherits( "QButtonGroup" );
     }
     int buttonGroupId() const {
-	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (QButtonGroup*)parentWidget() )->id( (QButton*)this ) : -1;
+	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (Q3ButtonGroup*)parentWidget() )->id( (Q3Button*)this ) : -1;
     }
     void setButtonGroupId( int id ) {
 	if ( parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ) {
-	    ( (QButtonGroup*)parentWidget() )->remove( this );
-	    ( (QButtonGroup*)parentWidget() )->insert( this, id );
+	    ( (Q3ButtonGroup*)parentWidget() )->remove( this );
+	    ( (Q3ButtonGroup*)parentWidget() )->insert( this, id );
 	}
     }
 
@@ -466,12 +473,12 @@ public:
 	return parentWidget() && parentWidget()->inherits( "QButtonGroup" );
     }
     int buttonGroupId() const {
-	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (QButtonGroup*)parentWidget() )->id( (QButton*)this ) : -1;
+	return parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ? ( (Q3ButtonGroup*)parentWidget() )->id( (Q3Button*)this ) : -1;
     }
     void setButtonGroupId( int id ) {
 	if ( parentWidget() && parentWidget()->inherits( "QButtonGroup" ) ) {
-	    ( (QButtonGroup*)parentWidget() )->remove( this );
-	    ( (QButtonGroup*)parentWidget() )->insert( this, id );
+	    ( (Q3ButtonGroup*)parentWidget() )->remove( this );
+	    ( (Q3ButtonGroup*)parentWidget() )->insert( this, id );
 	}
     }
 
@@ -481,18 +488,18 @@ class QDesignerToolBox : public QToolBox
 {
     Q_OBJECT
     Q_PROPERTY( QString itemLabel READ itemLabel WRITE setItemLabel STORED false DESIGNABLE true )
-    Q_PROPERTY( QCString itemName READ itemName WRITE setItemName STORED false DESIGNABLE true )
-    Q_PROPERTY( BackgroundMode itemBackgroundMode READ itemBackgroundMode WRITE setItemBackgroundMode STORED false DESIGNABLE true )
+    Q_PROPERTY( Q3CString itemName READ itemName WRITE setItemName STORED false DESIGNABLE true )
+    Q_PROPERTY( Qt::BackgroundMode itemBackgroundMode READ itemBackgroundMode WRITE setItemBackgroundMode STORED false DESIGNABLE true )
 
 public:
     QDesignerToolBox( QWidget *parent, const char *name );
 
     QString itemLabel() const;
     void setItemLabel( const QString &l );
-    QCString itemName() const;
-    void setItemName( const QCString &n );
-    BackgroundMode itemBackgroundMode() const;
-    void setItemBackgroundMode( BackgroundMode );
+    Q3CString itemName() const;
+    void setItemName( const Q3CString &n );
+    Qt::BackgroundMode itemBackgroundMode() const;
+    void setItemBackgroundMode( Qt::BackgroundMode );
 
 protected:
     void itemInserted( int index );

@@ -37,6 +37,8 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <iostream>
 #include <ctype.h>
@@ -241,7 +243,7 @@ void GDBController::configure()
 
         if (old_outputRadix != config_outputRadix_)
         {
-            queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",
+            queueCmd(new GDBCommand(Q3CString().sprintf("set output-radix %d",
                                 config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
 
             //rgruber: after changing the output radix, the watch- and the
@@ -536,7 +538,7 @@ void GDBController::parseLine(char* buf)
                 {
                     emit unableToSetBPNow(BPNo);
                     queueCmd(new GDBCommand(
-                                        QCString().sprintf("delete %d", BPNo),
+                                        Q3CString().sprintf("delete %d", BPNo),
                                         NOTRUNCMD, NOTINFOCMD));
                     queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD,
                                             NOTINFOCMD, BPLIST));
@@ -586,7 +588,7 @@ void GDBController::parseLine(char* buf)
             int BPNo = atoi(buf+11);
             if (BPNo)
             {
-                queueCmd(new GDBCommand(QCString().sprintf("delete %d",BPNo),
+                queueCmd(new GDBCommand(Q3CString().sprintf("delete %d",BPNo),
                                                 NOTRUNCMD, NOTINFOCMD));
             }
             actOnProgramPause(QString(buf));
@@ -1103,14 +1105,14 @@ char *GDBController::parse(char *buf)
 
 // **************************************************************************
 
-void GDBController::setBreakpoint(const QCString &BPSetCmd, int key)
+void GDBController::setBreakpoint(const Q3CString &BPSetCmd, int key)
 {
     queueCmd(new GDBSetBreakpointCommand(BPSetCmd, key));
 }
 
 // **************************************************************************
 
-void GDBController::clearBreakpoint(const QCString &BPClearCmd)
+void GDBController::clearBreakpoint(const Q3CString &BPClearCmd)
 {
     queueCmd(new GDBCommand(BPClearCmd, NOTRUNCMD, NOTINFOCMD));
     // Note: this is NOT an info command, because gdb doesn't explictly tell
@@ -1127,17 +1129,17 @@ void GDBController::modifyBreakpoint( const Breakpoint& BP )
     if (BP.dbgId()>0)
     {
         if (BP.changedCondition())
-            queueCmd(new GDBCommand(QCString().sprintf("condition %d %s",
+            queueCmd(new GDBCommand(Q3CString().sprintf("condition %d %s",
                             BP.dbgId(), BP.conditional().latin1()),
                             NOTRUNCMD, NOTINFOCMD));
 
         if (BP.changedIgnoreCount())
-            queueCmd(new GDBCommand(QCString().sprintf("ignore %d %d",
+            queueCmd(new GDBCommand(Q3CString().sprintf("ignore %d %d",
                             BP.dbgId(), BP.ignoreCount()),
                             NOTRUNCMD, NOTINFOCMD));
 
         if (BP.changedEnable())
-            queueCmd(new GDBCommand(QCString().sprintf("%s %d",
+            queueCmd(new GDBCommand(Q3CString().sprintf("%s %d",
                             BP.isEnabled() ? "enable" : "disable",
                             BP.dbgId()), NOTRUNCMD, NOTINFOCMD));
 
@@ -1235,7 +1237,7 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
     else
         queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
 
-    queueCmd(new GDBCommand(QCString("tty ")+tty.latin1(), NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand(Q3CString("tty ")+tty.latin1(), NOTRUNCMD, NOTINFOCMD));
 
     // This makes gdb pump a variable out on one line.
     queueCmd(new GDBCommand("set width 0", NOTRUNCMD, NOTINFOCMD));
@@ -1255,8 +1257,6 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
                             NOTINFOCMD));
     queueCmd(new GDBCommand("handle SIG41 pass nostop noprint", NOTRUNCMD,
                             NOTINFOCMD));
-    queueCmd(new GDBCommand("handle SIG42 pass nostop noprint", NOTRUNCMD,
-                            NOTINFOCMD));
     queueCmd(new GDBCommand("handle SIG43 pass nostop noprint", NOTRUNCMD,
                             NOTINFOCMD));
 
@@ -1268,15 +1268,15 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
         queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
     // make sure output radix is always set to users view.
-    queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",  config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand(Q3CString().sprintf("set output-radix %d",  config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
        
     // Change the "Working directory" to the correct one
-    QCString tmp( "cd " + QFile::encodeName( run_directory ));
+    Q3CString tmp( "cd " + QFile::encodeName( run_directory ));
     queueCmd(new GDBCommand(tmp, NOTRUNCMD, NOTINFOCMD));
 
     // Set the run arguments
     if (!run_arguments.isEmpty())
-        queueCmd(new GDBCommand(QCString("set args ") + run_arguments.latin1(), NOTRUNCMD, NOTINFOCMD));
+        queueCmd(new GDBCommand(Q3CString("set args ") + run_arguments.latin1(), NOTRUNCMD, NOTINFOCMD));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -1392,7 +1392,7 @@ void GDBController::slotCoreFile(const QString &coreFile)
     setStateOff(s_silent);
     setStateOn(s_core);
 
-    queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD,
+    queueCmd(new GDBCommand(Q3CString("core ") + coreFile.latin1(), NOTRUNCMD,
                                 NOTINFOCMD, 0));
 
     // We don't know at this point whether this executable is a threaded
@@ -1415,7 +1415,7 @@ void GDBController::slotAttachTo(int pid)
     setStateOff(s_appNotStarted|s_programExited|s_silent);
     setStateOn(s_attached);
     queueCmd(new GDBCommand(
-        QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
+        Q3CString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
 
     // We don't know at this point whether this executable is a threaded
     // program. Msybe the backtrace command will force gdb to tell us by
@@ -1441,8 +1441,8 @@ void GDBController::slotRun()
 
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
-            QCString tty(tty_->getSlave().latin1());
-            QCString options = QCString(" 2>&1 >") + tty + QCString(" <") + tty;
+            Q3CString tty(tty_->getSlave().latin1());
+            Q3CString options = Q3CString(" 2>&1 >") + tty + Q3CString(" <") + tty;
 
             KProcess *proc = new KProcess;
 
@@ -1482,25 +1482,12 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
         return;
 
     if (fileName.isEmpty())
-        queueCmd(new GDBCommand( QCString().sprintf("until %d", lineNum),
+        queueCmd(new GDBCommand( Q3CString().sprintf("until %d", lineNum),
                                 RUNCMD, NOTINFOCMD, 0));
     else
         queueCmd(new GDBCommand(
-                QCString().sprintf("until %s:%d", fileName.latin1(), lineNum),
+                Q3CString().sprintf("until %s:%d", fileName.latin1(), lineNum),
                                 RUNCMD, NOTINFOCMD, 0));
-}
-
-// **************************************************************************
-
-void GDBController::slotJumpTo(const QString &fileName, int lineNum)
-{
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    if (!fileName.isEmpty()) {
-        queueCmd(new GDBCommand(QCString().sprintf("tbreak %s:%d", fileName.latin1(), lineNum), NOTRUNCMD, NOTINFOCMD, 0));
-        queueCmd(new GDBCommand(QCString().sprintf("jump %s:%d", fileName.latin1(), lineNum), RUNCMD, NOTINFOCMD, 0));
-    }
 }
 
 // **************************************************************************
@@ -1650,7 +1637,7 @@ void GDBController::slotDisassemble(const QString &start, const QString &end)
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    QCString cmd = QCString().sprintf("disassemble %s %s", start.latin1(), end.latin1());
+    Q3CString cmd = Q3CString().sprintf("disassemble %s %s", start.latin1(), end.latin1());
     queueCmd(new GDBCommand(cmd, NOTRUNCMD, INFOCMD, DISASSEMBLE));
 }
 
@@ -1661,7 +1648,7 @@ void GDBController::slotMemoryDump(const QString &address, const QString &amount
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    QCString cmd = QCString().sprintf("x/%sb %s", amount.latin1(),
+    Q3CString cmd = Q3CString().sprintf("x/%sb %s", amount.latin1(),
                                                   address.latin1());
     queueCmd(new GDBCommand(cmd, NOTRUNCMD, INFOCMD, MEMDUMP));
 }
@@ -1707,12 +1694,12 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
         if (viewedThread_ != -1)
         {
             if (viewedThread_ != threadNo)
-                queueCmd(new GDBCommand(QCString().sprintf("thread %d",
+                queueCmd(new GDBCommand(Q3CString().sprintf("thread %d",
                                 threadNo), NOTRUNCMD, INFOCMD, SWITCHTHREAD));
         }
     }
 
-    queueCmd(new GDBCommand(QCString().sprintf("frame %d",
+    queueCmd(new GDBCommand(Q3CString().sprintf("frame %d",
                                 frameNo), NOTRUNCMD, INFOCMD, FRAME));
 
     if (needFrames)
@@ -1754,23 +1741,6 @@ void GDBController::slotProduceVariablesInfo()
 
 // **************************************************************************
 
-void GDBController::slotSetValue(const QString& expression, 
-                                 const QString& value)
-{
-    // Need explicit "set var", not just "set" because gdb is
-    // confused on
-    // 
-    //    set B::k=10
-    //
-    queueCmd(new GDBCommand(QString("set var %1=%2").arg(expression).arg(value)
-                            .local8Bit(),
-                            NOTRUNCMD,
-                            INFOCMD,
-                            SETVALUE));
-}
-
-// **************************************************************************
-
 void GDBController::slotVarItemConstructed(VarItem *item)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
@@ -1779,9 +1749,9 @@ void GDBController::slotVarItemConstructed(VarItem *item)
     // jw - name and value come from "info local", for the type we
     // send a "whatis <varName>" here.
     //rgr: remove any format modifier
-    QString strName = item->gdbExpression();
+    QString strName = item->fullName();
     strName.remove( QRegExp("/[xd] ", FALSE) );
-    queueCmd(new GDBItemCommand(item, QCString("whatis ") + strName.latin1(),
+    queueCmd(new GDBItemCommand(item, Q3CString("whatis ") + strName.latin1(),
                                 false, WHATIS));
 }
 
@@ -1797,15 +1767,23 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
     VarItem *varItem;
     if ((varItem = dynamic_cast<VarItem*>(genericItem)))
     {
-        //rgr: we need to do this in order to move the output modifier
-        //     from the middle to the beginning
-        QString strCmd = varItem->gdbExpression();
-        int iFound = strCmd.find( QRegExp("./[xd] ", FALSE) );
-        if (iFound != -1) {
-            strCmd.prepend( strCmd.mid(iFound+1, 3) );
-            strCmd.replace( QRegExp("./[xd] "), "." );
+        switch (varItem->getDataType())
+        {
+        case typePointer:
+            queueCmd(new GDBPointerCommand(varItem));
+            break;
+
+        default:
+             //rgr: we need to do this in order to move the output modifier
+             //     from the middle to the beginning
+             QString strCmd = varItem->fullName();
+             int iFound = strCmd.find( QRegExp("./[xd] ", FALSE) );
+             if (iFound != -1) {
+               strCmd.prepend( strCmd.mid(iFound+1, 3) );
+               strCmd.replace( QRegExp("./[xd] "), "." );
+             }
+             queueCmd(new GDBItemCommand(varItem, Q3CString("print ") + strCmd.latin1()));            break;
         }
-        queueCmd(new GDBItemCommand(varItem, QCString("print ") + strCmd.latin1()));
         return;
     }
 
@@ -1844,7 +1822,7 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
 // This is called when an item needs special processing to show a value.
 // Example = QStrings. We want to display the QString string against the var name
 // so the user doesn't have to open the qstring to find it. Here's where that happens
-void GDBController::slotExpandUserItem(VarItem *item, const QCString &userRequest)
+void GDBController::slotExpandUserItem(VarItem *item, const Q3CString &userRequest)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
@@ -1855,7 +1833,7 @@ void GDBController::slotExpandUserItem(VarItem *item, const QCString &userReques
     if (userRequest.isEmpty())
         return;
 
-    queueCmd(new GDBItemCommand(item, QCString("print ")+userRequest.data(),
+    queueCmd(new GDBItemCommand(item, Q3CString("print ")+userRequest.data(),
                                         false, DATAREQUEST));
 }
 
@@ -1880,14 +1858,14 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
     static bool parsing = false;
 
-    QCString msg(buf, buflen+1);
+    Q3CString msg(buf, buflen+1);
 //    kdDebug(9012) << "msg=<" << msg << ">" << endl;
     msg.replace( QRegExp("\032."), "" );
     emit gdbStdout(msg);
 
     // Copy the data out of the KProcess buffer before it gets overwritten
     // Append to the back of the holding zone.
-    holdingZone_ +=  QCString(buf, buflen+1);
+    holdingZone_ +=  Q3CString(buf, buflen+1);
 
     // Already parsing? then get out quick.
     if (parsing)

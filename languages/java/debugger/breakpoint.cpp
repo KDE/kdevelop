@@ -41,7 +41,7 @@ static int BPKey_ = 0;
 /***************************************************************************/
 
 Breakpoint::Breakpoint(bool temporary, bool enabled)
-    : QListBoxItem (),
+    : Q3ListBoxItem (),
       display_(QString::null),
       s_pending_(true),
       s_actionAdd_(false),
@@ -72,14 +72,14 @@ Breakpoint::~Breakpoint()
 
 /***************************************************************************/
 
-int Breakpoint::height(const QListBox *lb) const
+int Breakpoint::height(const Q3ListBox *lb) const
 {
     return lb->fontMetrics().lineSpacing() + 1 ;
 }
 
 /***************************************************************************/
 
-int Breakpoint::width(const QListBox *lb) const
+int Breakpoint::width(const Q3ListBox *lb) const
 {
     return lb->fontMetrics().width( text() ) + 6;
 }

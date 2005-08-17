@@ -14,8 +14,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -43,6 +43,10 @@
 #include "qeditor_settings.h"
 
 #include "qsourcecolorizer.h"
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <QMouseEvent>
 #include "cpp_colorizer.h"
 #include "java_colorizer.h"
 #include "js_colorizer.h"
@@ -73,7 +77,7 @@
 #include <private/qrichtext_p.h>
 #include <qregexp.h>
 #include <qmap.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -169,9 +173,9 @@ QEditor::~QEditor()
     delete( parenMatcher );
 }
 
-QPopupMenu* QEditor::createPopupMenu( const QPoint& pt )
+Q3PopupMenu* QEditor::createPopupMenu( const QPoint& pt )
 {
-    QPopupMenu* menu = KTextEdit::createPopupMenu( pt );
+    Q3PopupMenu* menu = KTextEdit::createPopupMenu( pt );
     if( m_applicationMenu ){
 	menu->insertSeparator();
 	menu->insertItem( i18n("&Application"), m_applicationMenu );
@@ -215,7 +219,7 @@ void QEditor::keyPressEvent( QKeyEvent* e )
                e->ascii() == ':' || e->ascii() == '#' ){
 	insert( e->text(), FALSE );
 	e->accept();
-    } else if (e->state() == Qt::ControlButton) {
+    } else if (e->state() == Qt::ControlModifier) {
 	bool bRemove = false;
         switch (e->key()) {
         case Qt::Key_Backspace:
@@ -340,12 +344,12 @@ void QEditor::configChanged()
 
     if( QEditorSettings::self()->wordWrap() ){
 	setWordWrap( QEditor::WidgetWidth );
-	setHScrollBarMode( QScrollView::AlwaysOff );
-	setVScrollBarMode( QScrollView::AlwaysOn );
+	setHScrollBarMode( Q3ScrollView::AlwaysOff );
+	setVScrollBarMode( Q3ScrollView::AlwaysOn );
     } else {
 	setWordWrap( QEditor::NoWrap );
-	setHScrollBarMode( QScrollView::AlwaysOn );
-	setVScrollBarMode( QScrollView::AlwaysOn );
+	setHScrollBarMode( Q3ScrollView::AlwaysOn );
+	setVScrollBarMode( Q3ScrollView::AlwaysOn );
     }
 
     refresh();
@@ -604,7 +608,7 @@ bool QEditor::event( QEvent* e )
 
         m_keys.append( k );
     }
-    return QTextEdit::event( e );
+    return Q3TextEdit::event( e );
 }
 
 void QEditor::startMacro()
@@ -620,7 +624,7 @@ void QEditor::stopMacro()
 
 void QEditor::executeMacro()
 {
-    QPtrListIterator<QEditorKey> it( m_keys );
+    Q3PtrListIterator<QEditorKey> it( m_keys );
     while( it.current() ){
         //kdDebug(9032) << "send key" << endl;
         QEditorKey* k = it.current();

@@ -26,20 +26,24 @@
 #include "JavaStoreWalker.hpp"
 #include "JavaAST.hpp"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qdir.h>
 #include <qdom.h>
 #include <qfileinfo.h>
-#include <qguardedptr.h>
-#include <qpopupmenu.h>
-#include <qprogressdialog.h>
+#include <qpointer.h>
+#include <q3popupmenu.h>
+#include <q3progressdialog.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qstatusbar.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 #include <qregexp.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <QCustomEvent>
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <kapplication.h>
@@ -101,8 +105,8 @@ public:
         if( javaSupport()->problemReporter() ){
 	    javaSupport()->problemReporter()->removeAllProblems( fileName );
 
-	    QValueList<Problem> pl = problems( fileName );
-	    QValueList<Problem>::ConstIterator it = pl.begin();
+	    Q3ValueList<Problem> pl = problems( fileName );
+	    Q3ValueList<Problem>::ConstIterator it = pl.begin();
 	    while( it != pl.end() ){
 	        const Problem& p = *it++;
 	        javaSupport()->problemReporter()->reportProblem( fileName, p );
@@ -147,8 +151,8 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const KURL&)),
              this, SLOT(savedFile(const KURL&)) );
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(activePartChanged(KParts::Part*)));
     connect( partController(), SIGNAL(partRemoved(KParts::Part*)),
@@ -194,7 +198,7 @@ JavaSupportPart::~JavaSupportPart()
 
     codeRepository()->setMainCatalog( 0 );
 
-    QPtrListIterator<Catalog> it( m_catalogList );
+    Q3PtrListIterator<Catalog> it( m_catalogList );
     while( Catalog* catalog = it.current() ){
         ++it;
         codeRepository()->unregisterCatalog( catalog );
@@ -218,8 +222,8 @@ void JavaSupportPart::customEvent( QCustomEvent* ev )
 	    m_problemReporter->removeAllProblems( fileName );
 
 	    bool hasErrors = false;
-	    QValueList<Problem> problems = event->problems();
-	    QValueList<Problem>::ConstIterator it = problems.begin();
+	    Q3ValueList<Problem> problems = event->problems();
+	    Q3ValueList<Problem>::ConstIterator it = problems.begin();
 	    while( it != problems.end() ){
 	        const Problem& p = *it++;
 		if( p.level() == Problem::Level_Error )
@@ -341,7 +345,7 @@ void JavaSupportPart::projectClosed( )
     m_projectClosed = true;
 }
 
-void JavaSupportPart::contextMenu(QPopupMenu */*popup*/, const Context *context)
+void JavaSupportPart::contextMenu(Q3PopupMenu */*popup*/, const Context *context)
 {
     m_activeClass = 0;
     m_activeFunction = 0;
@@ -525,7 +529,7 @@ JavaSupportPart::parseProject( )
 
     QStringList files = modifiedFileList();
 
-    QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
+    Q3ProgressBar* bar = new Q3ProgressBar( files.count( ), mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
     bar->setCenterIndicator( true );
     mainWindow( )->statusBar( )->addWidget( bar );
@@ -537,7 +541,7 @@ JavaSupportPart::parseProject( )
     QMap< QString, QPair<uint, Q_LONG> > pcs;
 
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
-    if( f.open(IO_ReadOnly) ){
+    if( f.open(QIODevice::ReadOnly) ){
 	stream.setDevice( &f );
 
 	QString sig;
@@ -713,8 +717,8 @@ KTextEditor::Document * JavaSupportPart::findDocument( const KURL & url )
     if( !partController()->parts() )
         return 0;
 
-    QPtrList<KParts::Part> parts( *partController()->parts() );
-    QPtrListIterator<KParts::Part> it( parts );
+    Q3PtrList<KParts::Part> parts( *partController()->parts() );
+    Q3PtrListIterator<KParts::Part> it( parts );
     while( KParts::Part* part = it.current() ){
         KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
 	if( doc && doc->url() == url )
@@ -737,11 +741,7 @@ void JavaSupportPart::setupCatalog( )
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
-        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KStdGuiItem::remove(), i18n("Keep Them") );
-#else
-        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support"), KGuiItem( i18n( "&Remove" ), "editdelete", i18n( "Remove item(s)" )), i18n("Keep Them") );
-#endif
+        int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("Java Support") );
         if( rtn == KMessageBox::Yes ){
             QStringList::Iterator it = l.begin();
             while( it != l.end() ){
@@ -877,7 +877,7 @@ void JavaSupportPart::saveProjectSourceInfo( )
 	return;
 
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
-    if( !f.open( IO_WriteOnly ) )
+    if( !f.open( QIODevice::WriteOnly ) )
 	return;
 
     QDataStream stream( &f );

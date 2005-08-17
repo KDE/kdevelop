@@ -14,8 +14,8 @@
 #define __KDEVPART_FILECREATE_H__
 
 
-#include <qguardedptr.h>
-#include <qptrlist.h>
+#include <qpointer.h>
+#include <q3ptrlist.h>
 
 #include <qwidget.h>
 #include <kdevplugin.h>
@@ -48,7 +48,7 @@ public:
   /**
    * Returns the list of available file types.
    */
-  QPtrList<FileType> getFileTypes() const { return m_filetypes; }
+  Q3PtrList<FileType> getFileTypes() const { return m_filetypes; }
 
   /**
    * Call this method to create a new file, within or without the project. Supply as
@@ -139,7 +139,7 @@ private:
    * to the file type list. If enable is true, sets them all to
    * enabled=true by default.
    */
-  int readTypes(const QDomDocument & dom, QPtrList<FileType> &m_filetypes, bool enable);
+  int readTypes(const QDomDocument & dom, Q3PtrList<FileType> &m_filetypes, bool enable);
 
   /**
    * Add a file type
@@ -154,7 +154,7 @@ private:
   /**
    * List of file types from which the user can choose
    */
-  QPtrList<FileType> m_filetypes;
+  Q3PtrList<FileType> m_filetypes;
 
   /**
    * List of available chooser widgets
@@ -185,7 +185,7 @@ private:
   ConfigWidgetProxy * _configProxy;
   
   KPopupMenu* m_newPopupMenu;
-  QPtrList<KPopupMenu>* m_subPopups;
+  Q3PtrList<KPopupMenu>* m_subPopups;
 };
 
 

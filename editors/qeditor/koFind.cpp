@@ -14,18 +14,21 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #include <qcheckbox.h>
 #include <qcursor.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QGridLayout>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kcombobox.h>
@@ -72,7 +75,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     topLayout->setSpacing( KDialog::spacingHint() );
     topLayout->setMargin( KDialog::marginHint() );
 
-    m_findGrp = new QGroupBox(0, Qt::Vertical, i18n("Find"), page);
+    m_findGrp = new Q3GroupBox(0, Qt::Vertical, i18n("Find"), page);
     m_findGrp->layout()->setSpacing(KDialog::spacingHint());
     m_findGrp->layout()->setMargin(KDialog::marginHint());
     m_findLayout = new QGridLayout(m_findGrp->layout());
@@ -95,7 +98,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_findLayout->addMultiCellWidget(m_findExtension, 3, 3, 0, 1);
     topLayout->addWidget(m_findGrp);
 
-    m_replaceGrp = new QGroupBox(0, Qt::Vertical, i18n("Replace With"), page);
+    m_replaceGrp = new Q3GroupBox(0, Qt::Vertical, i18n("Replace With"), page);
     m_replaceGrp->layout()->setSpacing(KDialog::spacingHint());
     m_replaceGrp->layout()->setMargin(KDialog::marginHint());
     m_replaceLayout = new QGridLayout(m_replaceGrp->layout());
@@ -118,7 +121,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_replaceLayout->addMultiCellWidget(m_replaceExtension, 3, 3, 0, 1);
     topLayout->addWidget(m_replaceGrp);
 
-    m_optionGrp = new QGroupBox(0, Qt::Vertical, i18n("Options"), page);
+    m_optionGrp = new Q3GroupBox(0, Qt::Vertical, i18n("Options"), page);
     m_optionGrp->layout()->setSpacing(KDialog::spacingHint());
     m_optionGrp->layout()->setMargin(KDialog::marginHint());
     optionsLayout = new QGridLayout(m_optionGrp->layout());
@@ -285,7 +288,7 @@ void KoFindDialog::showPatterns()
     // Populate the popup menu.
     if (!m_patterns)
     {
-        m_patterns = new QPopupMenu(this);
+        m_patterns = new Q3PopupMenu(this);
         for (i = 0; (unsigned)i < sizeof(items) / sizeof(items[0]); i++)
         {
             m_patterns->insertItem(i18n(items[i].description), i, i);
@@ -321,7 +324,7 @@ void KoFindDialog::showPlaceholders()
     // Populate the popup menu.
     if (!m_placeholders)
     {
-        m_placeholders = new QPopupMenu(this);
+        m_placeholders = new Q3PopupMenu(this);
         for (i = 0; (unsigned)i < sizeof(items) / sizeof(items[0]); i++)
         {
             m_placeholders->insertItem(i18n(items[i].description), i, i);
@@ -370,7 +373,7 @@ KoFind::KoFind(const QString &pattern, long options, QWidget *parent) :
         User1 | Close,
         User1,
         false,
-        i18n("Find"))
+        KStdGuiItem::yes())
 {
     setMainWidget( new QLabel( i18n("Find next '%1'").arg(pattern), this ) );
 

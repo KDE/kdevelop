@@ -14,8 +14,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this library; see the file COPYING. If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #include <kapplication.h>
@@ -26,14 +26,16 @@
 
 #include "ksvnd.h"
 #include "commitdlg.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 extern "C" {
-    KDEDModule *create_ksvnd(const QCString &name) {
+    KDEDModule *create_ksvnd(const Q3CString &name) {
        return new KSvnd(name);
     }
 }
 
-KSvnd::KSvnd(const QCString &name)
+KSvnd::KSvnd(const Q3CString &name)
  : KDEDModule(name) {
 }
 
@@ -54,7 +56,7 @@ void KSvnd::notify(const QString& path, int action, int kind, const QString& mim
 	kdDebug() << "KDED/Subversion : notify " << path << " action : " << action << " mime_type : " << mime_type << " content_state : " << content_state << " prop_state : " << prop_state << " revision : " << revision << endl; 
 	QByteArray params;
 
-	QDataStream stream(params, IO_WriteOnly);
+	QDataStream stream(params, QIODevice::WriteOnly);
 	stream << path << action << kind << mime_type << content_state << prop_state << revision;
 
 	kapp->dcopClient()->emitDCOPSignal( "subversionNotify(QString,int,int,QString,int,int,long int)", params );
@@ -65,7 +67,7 @@ void KSvnd::status(const QString& path, int text_status, int prop_status, int re
 			<< repos_text_status << " " << repos_prop_status << endl;
 	QByteArray params;
 
-	QDataStream stream(params, IO_WriteOnly);
+	QDataStream stream(params, QIODevice::WriteOnly);
 	stream << path << text_status << prop_status << repos_text_status << repos_prop_status;
 
 	kapp->dcopClient()->emitDCOPSignal( "subversionStatus(QString,int,int,int,int)", params );

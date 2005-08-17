@@ -15,9 +15,11 @@
 
 #include "projectconfigurationdlg.h"
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <kfiledialog.h>
 #include <knotifyclient.h>
 #include <klineedit.h>
@@ -30,8 +32,8 @@
 
 #include <qdialog.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qlistview.h>
+#include <q3buttongroup.h>
+#include <q3listview.h>
 #include <iostream>
 #include <qregexp.h>
 #include <qvalidator.h>
@@ -100,7 +102,7 @@ KGuiItem remove()
 	return returnItem;
 }
 
-ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QListView *_prjList,QWidget* parent, const char* name, bool modal, WFlags fl)
+ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,Q3ListView *_prjList,QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
 //=================================================
 {
@@ -300,11 +302,11 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     insideItem=(InsideCheckListItem*)insideItem->itemBelow();
   }
 
-  QCheckListItem *outsideItem=(QCheckListItem *)outsideinc_listview->firstChild();
+  Q3CheckListItem *outsideItem=(Q3CheckListItem *)outsideinc_listview->firstChild();
   while(outsideItem)
   {
     myProjectItem->configuration.m_incadd.append(outsideItem->text(0));
-    outsideItem=(QCheckListItem*)outsideItem->itemBelow();
+    outsideItem=(Q3CheckListItem*)outsideItem->itemBelow();
   }
 
   //target.install
@@ -350,16 +352,16 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   }
 
   //outside libs to link
-  outsideItem=(QCheckListItem *)outsidelib_listview->firstChild();
+  outsideItem=(Q3CheckListItem *)outsidelib_listview->firstChild();
   while(outsideItem)
   {
     myProjectItem->configuration.m_libadd.append(outsideItem->text(0));
-    outsideItem=(QCheckListItem*)outsideItem->itemBelow();
+    outsideItem=(Q3CheckListItem*)outsideItem->itemBelow();
   }
 
   //external project dependencies
   myProjectItem->configuration.m_prjdeps.clear();
-  QListViewItem *depItem=extDeps_view->firstChild();
+  Q3ListViewItem *depItem=extDeps_view->firstChild();
   while(depItem)
   {
     myProjectItem->configuration.m_prjdeps.append(depItem->text(0));
@@ -391,7 +393,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   }
 
   //extra lib paths
-  QListViewItem *lvItem=outsidelibdir_listview->firstChild();
+  Q3ListViewItem *lvItem=outsidelibdir_listview->firstChild();
   while(lvItem)
   {
     myProjectItem->configuration.m_librarypath.append(lvItem->text(0));
@@ -417,7 +419,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->configuration.idl_options=idlCmdOptionsEdit->text();
 
   // custom vars
-  QListViewItem *item = customVariables->firstChild();
+  Q3ListViewItem *item = customVariables->firstChild();
   for( ; item; item = item->nextSibling() )
 	myProjectItem->configuration.m_variables[item->text(0)] = item->text(1);
 
@@ -570,9 +572,9 @@ void ProjectConfigurationDlg::UpdateControls()
   	new KListViewItem(customVariables,idx.key(),idx.data());
 }
 
-QPtrList <qProjectItem> ProjectConfigurationDlg::getAllProjects()
+Q3PtrList <qProjectItem> ProjectConfigurationDlg::getAllProjects()
 {
-  QPtrList <qProjectItem> tmpPrjList;
+  Q3PtrList <qProjectItem> tmpPrjList;
   qProjectItem *item=(qProjectItem *)prjList->firstChild();
   while(item)
   {
@@ -583,7 +585,7 @@ QPtrList <qProjectItem> ProjectConfigurationDlg::getAllProjects()
   return(tmpPrjList);
 }
 
-void ProjectConfigurationDlg::getAllSubProjects(qProjectItem *item, QPtrList <qProjectItem> *itemList)
+void ProjectConfigurationDlg::getAllSubProjects(qProjectItem *item, Q3PtrList <qProjectItem> *itemList)
 {
 
   qProjectItem *subItem=(qProjectItem *)item->firstChild();
@@ -604,7 +606,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
 
 
   QStringList incList=myProjectItem->configuration.m_incadd;
-  QPtrList <qProjectItem> itemList=getAllProjects();
+  Q3PtrList <qProjectItem> itemList=getAllProjects();
   qProjectItem *item=itemList.first();
 
 
@@ -646,14 +648,14 @@ void ProjectConfigurationDlg::updateIncludeControl()
   QStringList::Iterator it1=incList.begin();
   for(;it1!=incList.end();++it1)
   {
-      new QListViewItem(outsideinc_listview,outsideinc_listview->lastItem(),(*it1));
+      new Q3ListViewItem(outsideinc_listview,outsideinc_listview->lastItem(),(*it1));
   }
 
 }
 void ProjectConfigurationDlg::updateLibaddControl()
 {
 
-  QPtrList <qProjectItem> itemList=getAllProjects();
+  Q3PtrList <qProjectItem> itemList=getAllProjects();
 
   insidelib_listview->setSorting(-1,false);
   outsidelib_listview->setSorting(-1,false);
@@ -722,13 +724,13 @@ void ProjectConfigurationDlg::updateLibaddControl()
   QStringList::Iterator it1=libList.begin();
   for(;it1!=libList.end();++it1)
   {
-      new QListViewItem(outsidelib_listview,outsidelib_listview->lastItem(),(*it1));
+      new Q3ListViewItem(outsidelib_listview,outsidelib_listview->lastItem(),(*it1));
   }
 }
 
 void ProjectConfigurationDlg::updateDependenciesControl( )
 {
-  QPtrList <qProjectItem> itemList=getAllProjects();
+  Q3PtrList <qProjectItem> itemList=getAllProjects();
 
   intDeps_view->setSorting(-1,false);
   extDeps_view->setSorting(-1,false);
@@ -798,7 +800,7 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
   QStringList::Iterator it1=depsList.begin();
   for(;it1!=depsList.end();++it1)
   {
-      new QListViewItem(extDeps_view,extDeps_view->lastItem(),(*it1));
+      new Q3ListViewItem(extDeps_view,extDeps_view->lastItem(),(*it1));
   }
 }
 
@@ -809,7 +811,7 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
   if(myProjectItem->configuration.m_template==QTMP_SUBDIRS)
   {
 
-      QPtrList <qProjectItem> itemList;
+      Q3PtrList <qProjectItem> itemList;
 
       qProjectItem *item=(qProjectItem *)myProjectItem->firstChild();
       while(item){
@@ -829,7 +831,7 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
         if(item->type()==qProjectItem::Subproject)
         {
           if(item->text(0)==(*it1)){
-            new QListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
+            new Q3ListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
             itemList.take();
             item=itemList.first();
           }
@@ -842,12 +844,13 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
       while(item){
         if(item->type()==qProjectItem::Subproject)
         {
-            new QListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
+            new Q3ListViewItem(buildorder_listview,buildorder_listview->lastItem(),item->text(0));
         }
         item=itemList.next();;
       }
 
   }
+  	else buildOrderTab->setEnabled(false);
 }
 
 void ProjectConfigurationDlg::updateLibDirAddControl()
@@ -856,7 +859,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   //temp strlist
   QStringList libDirList=myProjectItem->configuration.m_librarypath;
 
-  QPtrList <qProjectItem> itemList=getAllProjects();
+  Q3PtrList <qProjectItem> itemList=getAllProjects();
   outsidelibdir_listview->setSorting(-1,false);
 
   qProjectItem *item=itemList.first();
@@ -893,7 +896,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   QStringList::Iterator it1=libDirList.begin();
   for(;it1!=libDirList.end();++it1)
   {
-      new QListViewItem(outsidelibdir_listview,outsidelibdir_listview->lastItem(),(*it1));
+      new Q3ListViewItem(outsidelibdir_listview,outsidelibdir_listview->lastItem(),(*it1));
   }
 
 }
@@ -919,6 +922,7 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
   if (radioLibrary->isChecked())
   {
 //    staticRadio->setChecked(true);
+    TabBuild->setTabEnabled(buildOrderTab, false);
     TabBuild->setTabEnabled(custVarsTab, true);
     TabBuild->setTabEnabled(depTab,true);
     TabBuild->setTabEnabled(libAddTab,true);
@@ -934,6 +938,7 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
 {
   if (radioSubdirs->isChecked())
   {
+    TabBuild->setTabEnabled(buildOrderTab, true);
     TabBuild->setTabEnabled(custVarsTab, true);
     TabBuild->setTabEnabled(depTab,false);
     TabBuild->setTabEnabled(libAddTab,false);
@@ -943,6 +948,7 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
   }
   else
   {
+    TabBuild->setTabEnabled(buildOrderTab, false);
     TabBuild->setTabEnabled(custVarsTab, true);
     TabBuild->setTabEnabled(depTab,true);
     TabBuild->setTabEnabled(libAddTab,true);
@@ -966,7 +972,7 @@ void ProjectConfigurationDlg::buildorderMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = buildorder_listview->firstChild();
+    Q3ListViewItem *item = buildorder_listview->firstChild();
     while (item->nextSibling() != buildorder_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(buildorder_listview->currentItem());
@@ -997,7 +1003,7 @@ void ProjectConfigurationDlg::insideIncMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = insideinc_listview->firstChild();
+    Q3ListViewItem *item = insideinc_listview->firstChild();
     while (item->nextSibling() != insideinc_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(insideinc_listview->currentItem());
@@ -1022,7 +1028,7 @@ void ProjectConfigurationDlg::outsideIncMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = outsideinc_listview->firstChild();
+    Q3ListViewItem *item = outsideinc_listview->firstChild();
     while (item->nextSibling() != outsideinc_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsideinc_listview->currentItem());
@@ -1048,7 +1054,7 @@ void ProjectConfigurationDlg::outsideIncAddClicked()
         return;
     QString dir = dialog.urlRequester()->url();
     if (!dir.isEmpty())
-        new QListViewItem(outsideinc_listview, dir);
+        new Q3ListViewItem(outsideinc_listview, dir);
 }
 
 
@@ -1074,7 +1080,7 @@ void ProjectConfigurationDlg::insideLibMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = insidelib_listview->firstChild();
+    Q3ListViewItem *item = insidelib_listview->firstChild();
     while (item->nextSibling() != insidelib_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(insidelib_listview->currentItem());
@@ -1099,7 +1105,7 @@ void ProjectConfigurationDlg::outsideLibMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = outsidelib_listview->firstChild();
+    Q3ListViewItem *item = outsidelib_listview->firstChild();
     while (item->nextSibling() != outsidelib_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsidelib_listview->currentItem());
@@ -1122,7 +1128,7 @@ void ProjectConfigurationDlg::outsideLibAddClicked()
     bool ok;
     QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library to link:"), "-l", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
-        new QListViewItem(outsidelib_listview, dir);
+        new Q3ListViewItem(outsidelib_listview, dir);
 }
 
 
@@ -1143,7 +1149,7 @@ void ProjectConfigurationDlg::outsideLibDirMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = outsidelibdir_listview->firstChild();
+    Q3ListViewItem *item = outsidelibdir_listview->firstChild();
     while (item->nextSibling() != outsidelibdir_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsidelibdir_listview->currentItem());
@@ -1169,7 +1175,7 @@ void ProjectConfigurationDlg::outsideLibDirAddClicked()
         return;
     QString dir = dialog.urlRequester()->url();
     if (!dir.isEmpty())
-        new QListViewItem(outsidelibdir_listview, dir);
+        new Q3ListViewItem(outsidelibdir_listview, dir);
 }
 
 
@@ -1180,7 +1186,7 @@ void ProjectConfigurationDlg::outsideLibDirRemoveClicked()
 
 void ProjectConfigurationDlg::outsideIncEditClicked()
 {
-    QListViewItem *item=outsideinc_listview->currentItem();
+    Q3ListViewItem *item=outsideinc_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
 
@@ -1196,7 +1202,7 @@ void ProjectConfigurationDlg::outsideIncEditClicked()
 void ProjectConfigurationDlg::outsideLibEditClicked()
 {
     bool ok;
-    QListViewItem *item=outsidelib_listview->currentItem();
+    Q3ListViewItem *item=outsidelib_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
 
@@ -1208,7 +1214,7 @@ void ProjectConfigurationDlg::outsideLibEditClicked()
 
 void ProjectConfigurationDlg::outsideLibDirEditClicked()
 {
-    QListViewItem *item=outsidelibdir_listview->currentItem();
+    Q3ListViewItem *item=outsidelibdir_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
 
@@ -1238,12 +1244,12 @@ void ProjectConfigurationDlg::extAdd_button_clicked( )
         return;
     QString path = dialog.urlRequester()->url();
     if (!path.isEmpty())
-        new QListViewItem(extDeps_view, path);
+        new Q3ListViewItem(extDeps_view, path);
 }
 
 void ProjectConfigurationDlg::extEdit_button_clicked( )
 {
-    QListViewItem *item=extDeps_view->currentItem();
+    Q3ListViewItem *item=extDeps_view->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
 
@@ -1273,7 +1279,7 @@ void ProjectConfigurationDlg::extMoveUp_button_clicked( )
         return;
     }
 
-    QListViewItem *item = extDeps_view->firstChild();
+    Q3ListViewItem *item = extDeps_view->firstChild();
     while (item->nextSibling() != extDeps_view->currentItem())
         item = item->nextSibling();
     item->moveItem(extDeps_view->currentItem());
@@ -1301,7 +1307,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
         return;
     }
 
-    QListViewItem *item = intDeps_view->firstChild();
+    Q3ListViewItem *item = intDeps_view->firstChild();
     while (item->nextSibling() != intDeps_view->currentItem())
         item = item->nextSibling();
     item->moveItem(intDeps_view->currentItem());
@@ -1309,14 +1315,14 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 
  void ProjectConfigurationDlg::addCustomValueClicked()
 {
-  QListViewItem *item = new QListViewItem(customVariables, i18n("Name"),i18n("Value"));
+  Q3ListViewItem *item = new Q3ListViewItem(customVariables, i18n("Name"),i18n("Value"));
   customVariables->setSelected(item,true);
   newCustomVariableActive();
   customVariableName->setEnabled(true);
 }
  void ProjectConfigurationDlg::removeCustomValueClicked()
 {
-  QListViewItem *item = customVariables->currentItem();
+  Q3ListViewItem *item = customVariables->currentItem();
   if( item )
   {
     myProjectItem->configuration.m_variables.remove(item->text(0));
@@ -1326,7 +1332,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 }
  void ProjectConfigurationDlg::editCustomValueClicked()
 {
-  QListViewItem *item = customVariables->currentItem();
+  Q3ListViewItem *item = customVariables->currentItem();
   if(item)
   {
      item->setText(0,customVariableName->text());
@@ -1339,7 +1345,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
  void ProjectConfigurationDlg::upCustomValueClicked()
 {
   // custom vars
-  QListViewItem *item = customVariables->firstChild();
+  Q3ListViewItem *item = customVariables->firstChild();
   if (customVariables->currentItem() == item) {
     KNotifyClient::beep();
     return;
@@ -1360,7 +1366,7 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 
 void ProjectConfigurationDlg::newCustomVariableActive( )
 {
-  QListViewItem *item = customVariables->currentItem();
+  Q3ListViewItem *item = customVariables->currentItem();
   if(item)
   {
 	customVariableName->setText(item->text(0));

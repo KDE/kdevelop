@@ -48,6 +48,23 @@
 #include "project.h"
 #include "projectsettingsimpl.h"
 #include "qwidgetfactory.h"
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
+#include <QShowEvent>
+#include <QEvent>
+#include <QTextStream>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <Q3Frame>
+#include <QDragMoveEvent>
+#include <QContextMenuEvent>
+#include <QKeyEvent>
+#include <Q3PopupMenu>
+#include <QCloseEvent>
+#include <Q3PtrList>
 #include "pixmapcollection.h"
 #include "qcompletionedit.h"
 #include "sourcefile.h"
@@ -85,13 +102,13 @@
 #include <klocale.h>
 
 #include <qinputdialog.h>
-#include <qtoolbar.h>
+#include <q3toolbar.h>
 #include <qfeatures.h>
 #include <qmetaobject.h>
 #include <qaction.h>
 #include <qpixmap.h>
 #include <qworkspace.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qclipboard.h>
 #include <qmessagebox.h>
 #include <qbuffer.h>
@@ -101,19 +118,19 @@
 #include <qstatusbar.h>
 #include <qfile.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
-#include <qwizard.h>
+#include <q3whatsthis.h>
+#include <q3wizard.h>
 #include <qtimer.h>
-#include <qlistbox.h>
-#include <qdockwindow.h>
+#include <q3listbox.h>
+#include <q3dockwindow.h>
 #include <qstylefactory.h>
-#include <qvbox.h>
-#include <qprocess.h>
+#include <q3vbox.h>
+#include <q3process.h>
 #include <qsettings.h>
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qtooltip.h>
 #include <qsizegrip.h>
-#include <qtextview.h>
+#include <q3textview.h>
 #include <qassistantclient.h>
 #include <stdlib.h>
 
@@ -150,7 +167,7 @@ static QString textNoAccel( const QString& text)
 
 
 MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, const QString &plgDir )
-    : QMainWindow( 0, "designer_mainwindow"/*, WType_TopLevel | (single ? 0 : WDestructiveClose) | WGroupLeader*/ ),
+    : Q3MainWindow( 0, "designer_mainwindow"/*, WType_TopLevel | (single ? 0 : WDestructiveClose) | WGroupLeader*/ ),
       grd( 10, 10 ), sGrid( TRUE ), snGrid( TRUE ), restoreConfig( TRUE ), splashScreen( TRUE ),
       fileFilter( i18n( "Qt User-Interface Files (*.ui)" ) ), client( asClient ),
       previewing( FALSE ), databaseAutoEdit( FALSE ), autoSaveEnabled( FALSE ), autoSaveInterval( 1800 ), m_part(part)
@@ -219,8 +236,8 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
     setupEditActions();
     setupProjectActions();
     setupSearchActions();
-    layoutToolBar = new QToolBar( this, "Layout" );
-    layoutToolBar->setCloseMode( QDockWindow::Undocked );
+    layoutToolBar = new Q3ToolBar( this, "Layout" );
+    layoutToolBar->setCloseMode( Q3DockWindow::Undocked );
     addToolBar( layoutToolBar, i18n( "Layout" ) );
     interpreterPluginManager = 0;
     setupToolActions();
@@ -273,7 +290,7 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
     delete w;
     w = WidgetFactory::create( WidgetDatabase::idFromClassName( "QFrame" ), this, 0, FALSE );
     delete w;
-    setAppropriate( (QDockWindow*)actionEditor->parentWidget(), FALSE );
+    setAppropriate( (Q3DockWindow*)actionEditor->parentWidget(), FALSE );
     actionEditor->parentWidget()->hide();
 
     assistant = new QAssistantClient( assistantPath(), this );
@@ -291,7 +308,7 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
 
 MainWindow::~MainWindow()
 {
-    QValueList<Tab>::Iterator tit;
+    Q3ValueList<Tab>::Iterator tit;
     for ( tit = preferenceTabs.begin(); tit != preferenceTabs.end(); ++tit ) {
 	Tab t = *tit;
 	delete t.w;
@@ -330,9 +347,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupMDI()
 {
-    QVBox *vbox = new QVBox( this );
+    Q3VBox *vbox = new Q3VBox( this );
     setCentralWidget( vbox );
-    vbox->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    vbox->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Sunken );
     vbox->setMargin( 1 );
     vbox->setLineWidth( 1 );
     qworkspace = new QWorkspace( vbox );
@@ -351,15 +368,15 @@ void MainWindow::setupMenuBar()
 
 void MainWindow::setupPropertyEditor()
 {
-    QDockWindow *dw = new QDockWindow( QDockWindow::InDock, this );
+    Q3DockWindow *dw = new Q3DockWindow( Q3DockWindow::InDock, this );
     dw->setResizeEnabled( TRUE );
-    dw->setCloseMode( QDockWindow::Always );
+    dw->setCloseMode( Q3DockWindow::Always );
     propertyEditor = new PropertyEditor( dw );
     addToolBar( dw, Qt::DockRight );
     dw->setWidget( propertyEditor );
     dw->setFixedExtentWidth( 250 );
     dw->setCaption( i18n( "Property Editor/Signal Handlers" ) );
-    QWhatsThis::add( propertyEditor,
+    Q3WhatsThis::add( propertyEditor,
 		     i18n("<b>The Property Editor</b>"
 			"<p>You can change the appearance and behavior of the selected widget in the "
 			"property editor.</p>"
@@ -380,9 +397,9 @@ void MainWindow::setupPropertyEditor()
 
 void MainWindow::setupOutputWindow()
 {
-    QDockWindow *dw = new QDockWindow( QDockWindow::InDock, this );
+    Q3DockWindow *dw = new Q3DockWindow( Q3DockWindow::InDock, this );
     dw->setResizeEnabled( TRUE );
-    dw->setCloseMode( QDockWindow::Always );
+    dw->setCloseMode( Q3DockWindow::Always );
     addToolBar( dw, Qt::DockBottom );
     oWindow = new OutputWindow( dw );
     dw->setWidget( oWindow );
@@ -394,16 +411,16 @@ void MainWindow::setupHierarchyView()
 {
     if ( hierarchyView )
 	return;
-    QDockWindow *dw = new QDockWindow( QDockWindow::InDock, this );
+    Q3DockWindow *dw = new Q3DockWindow( Q3DockWindow::InDock, this );
     dw->setResizeEnabled( TRUE );
-    dw->setCloseMode( QDockWindow::Always );
+    dw->setCloseMode( Q3DockWindow::Always );
     hierarchyView = new HierarchyView( dw );
     addToolBar( dw, Qt::DockRight );
     dw->setWidget( hierarchyView );
 
     dw->setCaption( i18n( "Object Explorer" ) );
     dw->setFixedExtentWidth( 250 );
-    QWhatsThis::add( hierarchyView,
+    Q3WhatsThis::add( hierarchyView,
 		     i18n("<b>The Object Explorer</b>"
 			"<p>The Object Explorer provides an overview of the relationships "
 			"between the widgets in a form. You can use the clipboard functions using "
@@ -416,14 +433,14 @@ void MainWindow::setupHierarchyView()
 
 void MainWindow::setupWorkspace()
 {
-    QDockWindow *dw = new QDockWindow( QDockWindow::InDock, this );
+    Q3DockWindow *dw = new Q3DockWindow( Q3DockWindow::InDock, this );
     dw->setResizeEnabled( TRUE );
-    dw->setCloseMode( QDockWindow::Always );
-    QVBox *vbox = new QVBox( dw );
+    dw->setCloseMode( Q3DockWindow::Always );
+    Q3VBox *vbox = new Q3VBox( dw );
     QCompletionEdit *edit = new QCompletionEdit( vbox );
     QToolTip::add( edit, i18n( "Start typing the buffer you want to switch to here (ALT+B)" ) );
-    QAccel *a = new QAccel( this );
-    a->connectItem( a->insertItem( ALT + Key_B ), edit, SLOT( setFocus() ) );
+    Q3Accel *a = new Q3Accel( this );
+    a->connectItem( a->insertItem( Qt::ALT + Qt::Key_B ), edit, SLOT( setFocus() ) );
     wspace = new Workspace( vbox, this );
     wspace->setBufferEdit( edit );
     wspace->setCurrentProject( currentProject );
@@ -431,7 +448,7 @@ void MainWindow::setupWorkspace()
     dw->setWidget( vbox );
 
     dw->setCaption( i18n( "Project Overview" ) );
-    QWhatsThis::add( wspace, i18n("<b>The Project Overview Window</b>"
+    Q3WhatsThis::add( wspace, i18n("<b>The Project Overview Window</b>"
 				"<p>The Project Overview Window displays all the current "
 				"project, including forms and source files.</p>"
 				"<p>Use the search field to rapidly switch between files.</p>"));
@@ -441,15 +458,15 @@ void MainWindow::setupWorkspace()
 
 void MainWindow::setupActionEditor()
 {
-    QDockWindow *dw = new QDockWindow( QDockWindow::OutsideDock, this, 0 );
+    Q3DockWindow *dw = new Q3DockWindow( Q3DockWindow::OutsideDock, this, 0 );
     addDockWindow( dw, Qt::DockTornOff );
     dw->setResizeEnabled( TRUE );
-    dw->setCloseMode( QDockWindow::Always );
+    dw->setCloseMode( Q3DockWindow::Always );
     actionEditor = new ActionEditor( dw );
     dw->setWidget( actionEditor );
     actionEditor->show();
     dw->setCaption( i18n( "Action Editor" ) );
-    QWhatsThis::add( actionEditor, i18n("<b>The Action Editor</b>"
+    Q3WhatsThis::add( actionEditor, i18n("<b>The Action Editor</b>"
 				      "<p>The Action Editor is used to add actions and action groups to "
 				      "a form, and to connect actions to slots. Actions and action "
 				      "groups can be dragged into menus and into toolbars, and may "
@@ -462,9 +479,9 @@ void MainWindow::setupActionEditor()
 
 void MainWindow::setupToolbox()
 {
-    QDockWindow *dw = new QDockWindow( QDockWindow::InDock, this );
+    Q3DockWindow *dw = new Q3DockWindow( Q3DockWindow::InDock, this );
     dw->setResizeEnabled( TRUE );
-    dw->setCloseMode( QDockWindow::Always );
+    dw->setCloseMode( Q3DockWindow::Always );
     addToolBar( dw, Qt::DockLeft );
     toolBox = new QToolBox( dw );
     dw->setWidget( toolBox );
@@ -473,8 +490,8 @@ void MainWindow::setupToolbox()
     dw->show();
     setDockEnabled( dw, Qt::DockTop, FALSE );
     setDockEnabled( dw, Qt::DockBottom, FALSE );
-    commonWidgetsToolBar = new QToolBar( "Common Widgets", 0, toolBox, FALSE, "Common Widgets" );
-    commonWidgetsToolBar->setFrameStyle( QFrame::NoFrame );
+    commonWidgetsToolBar = new Q3ToolBar( "Common Widgets", 0, toolBox, FALSE, "Common Widgets" );
+    commonWidgetsToolBar->setFrameStyle( Q3Frame::NoFrame );
     commonWidgetsToolBar->setOrientation( Qt::Vertical );
     commonWidgetsToolBar->setBackgroundMode(PaletteBase);
     toolBox->addItem( commonWidgetsToolBar, "Common Widgets" );
@@ -482,7 +499,7 @@ void MainWindow::setupToolbox()
 
 void MainWindow::setupRMBMenus()
 {
-    rmbWidgets = new QPopupMenu( this );
+    rmbWidgets = new Q3PopupMenu( this );
     actionEditCut->addTo( rmbWidgets );
     actionEditCopy->addTo( rmbWidgets );
     actionEditPaste->addTo( rmbWidgets );
@@ -505,7 +522,7 @@ void MainWindow::setupRMBMenus()
 	actionEditConnections->addTo( rmbWidgets );
     actionEditSource->addTo( rmbWidgets );
 
-    rmbFormWindow = new QPopupMenu( this );
+    rmbFormWindow = new Q3PopupMenu( this );
     actionEditPaste->addTo( rmbFormWindow );
     actionEditSelectAll->addTo( rmbFormWindow );
     actionEditAccels->addTo( rmbFormWindow );
@@ -580,7 +597,7 @@ QWidget* MainWindow::previewFormInternal( QStyle* style, QPalette* palet )
 	return 0;
 
     QStringList databases;
-    QPtrDictIterator<QWidget> wit( *fw->widgets() );
+    Q3PtrDictIterator<QWidget> wit( *fw->widgets() );
     while ( wit.current() ) {
 	QStringList lst = MetaDataBase::fakeProperty( wit.current(), "database" ).toStringList();
 	if ( !lst.isEmpty() )
@@ -595,16 +612,16 @@ QWidget* MainWindow::previewFormInternal( QStyle* style, QPalette* palet )
     }
     QApplication::setOverrideCursor( WaitCursor );
 
-    QCString s;
+    Q3CString s;
     QBuffer buffer( s );
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     Resource resource( this );
     resource.setWidget( fw );
-    QValueList<Resource::Image> images;
+    Q3ValueList<Resource::Image> images;
     resource.save( &buffer );
 
     buffer.close();
-    buffer.open( IO_ReadOnly );
+    buffer.open( QIODevice::ReadOnly );
 
     QWidget *w = QWidgetFactory::create( &buffer );
     if ( w ) {
@@ -749,7 +766,7 @@ void MainWindow::helpContents()
     if ( propertyDocumentation.isEmpty() ) {
 	QString indexFile = documentationPath() + "/propertyindex";
 	QFile f( indexFile );
-	if ( f.open( IO_ReadOnly ) ) {
+	if ( f.open( QIODevice::ReadOnly ) ) {
 	    QTextStream ts( &f );
 	    while ( !ts.eof() ) {
 		QString s = ts.readLine();
@@ -833,7 +850,7 @@ void MainWindow::helpAboutQt()
 
 #if defined(_WS_WIN_)
 #include <qt_windows.h>
-#include <qprocess.h>
+#include <q3process.h>
 #endif
 
 void MainWindow::helpRegister()
@@ -847,7 +864,7 @@ void MainWindow::helpRegister()
     QString command;
     QString sub( "htmlfile\\shell" );
 #if defined(UNICODE)
-    if ( QApplication::winVersion() & Qt::WV_NT_based ) {
+    if ( QApplication::winVersion() & QSysInfo::WV_NT_based ) {
 	unsigned char data[256];
 	res = RegOpenKeyExW( HKEY_CLASSES_ROOT, NULL, 0, KEY_READ, &key );
 	res = RegOpenKeyExW( key, (TCHAR*)sub.ucs2(), 0, KEY_READ, &subkey );
@@ -874,7 +891,7 @@ void MainWindow::helpRegister()
     res = RegCloseKey( subkey );
     res = RegCloseKey( key );
 
-    QProcess process( command + " www.trolltech.com/products/download/eval/evaluation.html" );
+    Q3Process process( command + " www.trolltech.com/products/download/eval/evaluation.html" );
     if ( !process.start() )
 	QMessageBox::information( this, "Register Qt", "Launching your web browser failed.\n"
 	"To register Qt, point your browser to www.trolltech.com/products/download/eval/evaluation.html" );
@@ -934,7 +951,7 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	   ( ::qt_cast<MenuBarEditor*>(o->parent()) ||
 	     ::qt_cast<PopupMenuEditor*>(o->parent()) ) ) ) {
 
-	if ( e->type() == QEvent::Accel && ::qt_cast<PopupMenuEditor*>(o) ) {
+	if ( e->type() == QEvent::Shortcut && ::qt_cast<PopupMenuEditor*>(o) ) {
 	    return TRUE; // consume accel events
  	} else if ( e->type() == QEvent::MouseButtonPress && ::qt_cast<MenuBarEditor*>(o) ) {
 	    QPoint pos = ((QMouseEvent*)e)->pos();
@@ -948,16 +965,16 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	    if ( m->find( i->action() ) != -1 && !i->isSeparator() )
 		showProperties( i->action() );
 	}
-	return QMainWindow::eventFilter( o, e );
+	return Q3MainWindow::eventFilter( o, e );
     }
 
     if ( !o || !e || !o->isWidgetType() )
-	return QMainWindow::eventFilter( o, e );
+	return Q3MainWindow::eventFilter( o, e );
 
     QWidget *w = 0;
     bool passiveInteractor;
     switch ( e->type() ) {
-    case QEvent::AccelOverride:
+    case QEvent::ShortcutOverride:
 	if ( ( (QKeyEvent*)e )->key() == Key_F1 &&
 	     ( ( (QKeyEvent*)e )->state() & ShiftButton ) != ShiftButton ) {
 	    w = (QWidget*)o;
@@ -973,7 +990,7 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	    }
 	}
 	break;
-    case QEvent::Accel:
+    case QEvent::Shortcut:
 	if ( ( ( (QKeyEvent*)e )->key() == Key_A ||
 	       ( (QKeyEvent*)e )->key() == Key_E ) &&
 	     ( (QKeyEvent*)e )->state() & ControlButton ) {
@@ -1108,7 +1125,7 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	     ::qt_cast<SizeHandle*>(o) ||
 	     ::qt_cast<OrderIndicator*>(o) ) {
 	    if ( ::qt_cast<QToolButton*>(o) && ((QToolButton*)o)->isOn() &&
-		 o->parent() && ::qt_cast<QToolBar*>(o->parent()) && formWindow() )
+		 o->parent() && ::qt_cast<Q3ToolBar*>(o->parent()) && formWindow() )
 		formWindow()->setToolFixed();
 	    break;
 	}
@@ -1189,7 +1206,7 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	    break;
 	if ( ((QShowEvent*)e)->spontaneous() )
 	    break;
-	QApplication::sendPostedEvents( qworkspace, QEvent::ChildInserted );
+	QApplication::sendPostedEvents( qworkspace, QEvent::ChildAdded );
 	showEvent( (QShowEvent*)e );
 	checkTempFiles();
 	return TRUE;
@@ -1225,15 +1242,15 @@ bool MainWindow::eventFilter( QObject *o, QEvent *e )
 	    return TRUE;
 	break;
     default:
-	return QMainWindow::eventFilter( o, e );
+	return Q3MainWindow::eventFilter( o, e );
     }
 
-    return QMainWindow::eventFilter( o, e );
+    return Q3MainWindow::eventFilter( o, e );
 }
 
 QWidget *MainWindow::isAFormWindowChild( QObject *o ) const
 {
-    if ( ::qt_cast<QWizard*>(o->parent()) && !::qt_cast<QPushButton*>(o) )
+    if ( ::qt_cast<Q3Wizard*>(o->parent()) && !::qt_cast<QPushButton*>(o) )
 	return 0;
     while ( o ) {
 	if ( ::qt_cast<FormWindow*>(o) )
@@ -1278,7 +1295,7 @@ void MainWindow::emitProjectSignals()
 void MainWindow::insertFormWindow( FormWindow *fw )
 {
     if ( fw )
-	QWhatsThis::add( fw, i18n( "<b>The Form Window</b>"
+	Q3WhatsThis::add( fw, i18n( "<b>The Form Window</b>"
 			       "<p>Use the various tools to add widgets or to change the layout "
 			       "and behavior of the components in the form. Select one or multiple "
 			       "widgets to move them or lay them out. If a single widget is chosen it can "
@@ -1353,7 +1370,7 @@ bool MainWindow::unregisterClient( FormWindow *w )
     if ( w == lastActiveFormWindow )
 	lastActiveFormWindow = 0;
 
-    QPtrList<SourceEditor> waitingForDelete;
+    Q3PtrList<SourceEditor> waitingForDelete;
     waitingForDelete.setAutoDelete( TRUE );
     for ( SourceEditor *e = sourceEditors.first(); e; e = sourceEditors.next() ) {
 	if ( e->object() == w )
@@ -1384,14 +1401,14 @@ void MainWindow::activeWindowChanged( QWidget *w )
 		formWindow()->clearSelection();
 	}
 	workspace()->activeFormChanged( fw );
-	setAppropriate( (QDockWindow*)actionEditor->parentWidget(),
-			::qt_cast<QMainWindow*>(lastActiveFormWindow->mainContainer()) );
-	if ( appropriate( (QDockWindow*)actionEditor->parentWidget() ) ) {
+	setAppropriate( (Q3DockWindow*)actionEditor->parentWidget(),
+			::qt_cast<Q3MainWindow*>(lastActiveFormWindow->mainContainer()) );
+	if ( appropriate( (Q3DockWindow*)actionEditor->parentWidget() ) ) {
 	    if ( actionEditor->wantToBeShown() )
 		actionEditor->parentWidget()->show();
 	} else {
 	    QWidget *mc = 0;
-	    if ( ofw && (mc = ofw->mainContainer()) && ::qt_cast<QMainWindow*>(mc) )
+	    if ( ofw && (mc = ofw->mainContainer()) && ::qt_cast<Q3MainWindow*>(mc) )
 		actionEditor->setWantToBeShown( !actionEditor->parentWidget()->isHidden() );
 	    actionEditor->parentWidget()->hide();
 	}
@@ -1428,7 +1445,7 @@ void MainWindow::activeWindowChanged( QWidget *w )
 
     if ( ::qt_cast<SourceEditor*>(w) ) {
 	SourceEditor *se = (SourceEditor*)w;
-	QGuardedPtr<FormWindow> fw = se->formWindow();
+	QPointer<FormWindow> fw = se->formWindow();
 	if ( se->formWindow() &&
 	     lastActiveFormWindow != fw ) {
 	    activeWindowChanged( se->formWindow() );
@@ -1518,7 +1535,7 @@ QWorkspace *MainWindow::qWorkspace() const
 
 void MainWindow::popupFormWindowMenu( const QPoint & gp, FormWindow *fw )
 {
-    QValueList<uint> ids;
+    Q3ValueList<uint> ids;
     QMap<QString, int> commands;
 
     setupRMBSpecialCommands( ids, commands, fw );
@@ -1530,13 +1547,13 @@ void MainWindow::popupFormWindowMenu( const QPoint & gp, FormWindow *fw )
     handleRMBProperties( r, commands, fw );
     handleRMBSpecialCommands( r, commands, fw );
 
-    for ( QValueList<uint>::ConstIterator i = ids.begin(); i != ids.end(); ++i )
+    for ( Q3ValueList<uint>::ConstIterator i = ids.begin(); i != ids.end(); ++i )
 	rmbFormWindow->removeItem( *i );
 }
 
 void MainWindow::popupWidgetMenu( const QPoint &gp, FormWindow * /*fw*/, QWidget * w)
 {
-    QValueList<uint> ids;
+    Q3ValueList<uint> ids;
     QMap<QString, int> commands;
 
     setupRMBSpecialCommands( ids, commands, w );
@@ -1548,11 +1565,11 @@ void MainWindow::popupWidgetMenu( const QPoint &gp, FormWindow * /*fw*/, QWidget
     handleRMBProperties( r, commands, w );
     handleRMBSpecialCommands( r, commands, w );
 
-    for ( QValueList<uint>::ConstIterator i = ids.begin(); i != ids.end(); ++i )
+    for ( Q3ValueList<uint>::ConstIterator i = ids.begin(); i != ids.end(); ++i )
 	rmbWidgets->removeItem( *i );
 }
 
-void MainWindow::setupRMBProperties( QValueList<uint> &ids, QMap<QString, int> &props, QWidget *w )
+void MainWindow::setupRMBProperties( Q3ValueList<uint> &ids, QMap<QString, int> &props, QWidget *w )
 {
     const QMetaProperty* text = w->metaObject()->property( w->metaObject()->findProperty( "text", TRUE ), TRUE );
     if ( text && qstrcmp( text->type(), "QString") != 0 )
@@ -1580,7 +1597,7 @@ void MainWindow::setupRMBProperties( QValueList<uint> &ids, QMap<QString, int> &
 	    ids << ( id = rmbWidgets->insertItem( i18n("Choose Pixmap..."), -1, 0) );
 	    props.insert( "pixmap", id );
 	}
-	if ( text && text->designable(w) && !::qt_cast<QTextEdit*>(w) ) {
+	if ( text && text->designable(w) && !::qt_cast<Q3TextEdit*>(w) ) {
 	    ids << ( id = rmbWidgets->insertItem( i18n("Edit Text..."), -1, 0) );
 	    props.insert( "text", id );
 	}
@@ -1611,7 +1628,7 @@ static QWidgetContainerInterfacePrivate *containerWidgetInterface( QWidget *w )
 }
 #endif
 
-void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
+void MainWindow::setupRMBSpecialCommands( Q3ValueList<uint> &ids,
 					  QMap<QString, int> &commands, QWidget *w )
 {
     int id;
@@ -1682,16 +1699,16 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
     }
 }
 
-void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
+void MainWindow::setupRMBSpecialCommands( Q3ValueList<uint> &ids,
 					  QMap<QString, int> &commands, FormWindow *fw )
 {
     int id;
 
-    if ( ::qt_cast<QWizard*>(fw->mainContainer()) ) {
+    if ( ::qt_cast<Q3Wizard*>(fw->mainContainer()) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbFormWindow->insertSeparator( 0 );
 
-	if ( ( (QWizard*)fw->mainContainer() )->pageCount() > 1) {
+	if ( ( (Q3Wizard*)fw->mainContainer() )->pageCount() > 1) {
 	    ids << ( id = rmbFormWindow->insertItem( i18n("Delete Page"), -1, 0 ) );
 	    commands.insert( "remove", id );
 	}
@@ -1705,7 +1722,7 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
 	ids << ( id = rmbFormWindow->insertItem( i18n("Edit Pages..."), -1, 0 ) );
 	commands.insert( "edit", id );
 
-    } else if ( ::qt_cast<QMainWindow*>(fw->mainContainer()) ) {
+    } else if ( ::qt_cast<Q3MainWindow*>(fw->mainContainer()) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbFormWindow->insertSeparator( 0 );
 	ids << ( id = rmbFormWindow->insertItem( i18n( "Add Menu Item" ), -1, 0 ) );
@@ -1728,8 +1745,8 @@ void MainWindow::handleRMBProperties( int id, QMap<QString, int> &props, QWidget
 	bool doWrap = oldDoWrap;
 
 	QString text;
-	if ( ::qt_cast<QTextView*>(w) || ::qt_cast<QLabel*>(w) || ::qt_cast<QButton*>(w) ) {
-	    text = MultiLineEditor::getText( this, w->property( "text" ).toString(), !::qt_cast<QButton*>(w), &doWrap );
+	if ( ::qt_cast<Q3TextView*>(w) || ::qt_cast<QLabel*>(w) || ::qt_cast<Q3Button*>(w) ) {
+	    text = MultiLineEditor::getText( this, w->property( "text" ).toString(), !::qt_cast<Q3Button*>(w), &doWrap );
 	    ok = !text.isNull();
 	} else {
 	    text = QInputDialog::getText( i18n("Text"), i18n( "New text" ),
@@ -1837,7 +1854,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 		cmd->execute();
 	    }
 	}
-    } else if ( ::qt_cast<QWidgetStack*>(w) ) {
+    } else if ( ::qt_cast<Q3WidgetStack*>(w) ) {
 	QDesignerWidgetStack *ws = (QDesignerWidgetStack*)w;
 	if ( id == commands[ "add" ] ) {
 	    AddWidgetStackPageCommand *cmd =
@@ -1938,8 +1955,8 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 
 void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands, FormWindow *fw )
 {
-    if ( ::qt_cast<QWizard*>(fw->mainContainer()) ) {
-	QWizard *wiz = (QWizard*)fw->mainContainer();
+    if ( ::qt_cast<Q3Wizard*>(fw->mainContainer()) ) {
+	Q3Wizard *wiz = (Q3Wizard*)fw->mainContainer();
 	if ( id == commands[ "add" ] ) {
 	    AddWizardPageCommand *cmd =
 		new AddWizardPageCommand( i18n( "Add Page to %1" ).arg( wiz->name() ),
@@ -1976,8 +1993,8 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 		cmd->execute();
 	    }
 	}
-    } else if ( ::qt_cast<QMainWindow*>(fw->mainContainer()) ) {
-	QMainWindow *mw = (QMainWindow*)fw->mainContainer();
+    } else if ( ::qt_cast<Q3MainWindow*>(fw->mainContainer()) ) {
+	Q3MainWindow *mw = (Q3MainWindow*)fw->mainContainer();
 	if ( id == commands[ "add_toolbar" ] ) {
 	    AddToolBarCommand *cmd =
 		new AddToolBarCommand( i18n( "Add Toolbar to '%1'" ).arg( formWindow()->name() ),
@@ -2197,12 +2214,12 @@ void MainWindow::writeConfig()
     if ( singleProjectMode() )
 	mwlKey += "S";
     QString mainWindowLayout;
-    QTextStream ts( &mainWindowLayout, IO_WriteOnly );
+    QTextStream ts( &mainWindowLayout, QIODevice::WriteOnly );
     ts << *this;
     config.writeEntry( keybase + mwlKey, mainWindowLayout );
 
 
-    QPtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
+    Q3PtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
     config.writeEntry( keybase + "CustomWidgets/num", (int)lst->count() );
     int j = 0;
     QDir::home().mkdir( ".designer" );
@@ -2214,15 +2231,15 @@ void MainWindow::writeConfig()
 	l << QString::number( w->sizeHint.width() );
 	l << QString::number( w->sizeHint.height() );
 	l << QString::number( w->lstSignals.count() );
-	for ( QValueList<QCString>::ConstIterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
+	for ( Q3ValueList<Q3CString>::ConstIterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
 	    l << QString( fixArgs( *it ) );
 	l << QString::number( w->lstSlots.count() );
-	for ( QValueList<MetaDataBase::Function>::ConstIterator it2 = w->lstSlots.begin(); it2 != w->lstSlots.end(); ++it2 ) {
+	for ( Q3ValueList<MetaDataBase::Function>::ConstIterator it2 = w->lstSlots.begin(); it2 != w->lstSlots.end(); ++it2 ) {
 	    l << fixArgs( (*it2).function );
 	    l << (*it2).access;
 	}
 	l << QString::number( w->lstProperties.count() );
-	for ( QValueList<MetaDataBase::Property>::ConstIterator it3 = w->lstProperties.begin(); it3 != w->lstProperties.end(); ++it3 ) {
+	for ( Q3ValueList<MetaDataBase::Property>::ConstIterator it3 = w->lstProperties.begin(); it3 != w->lstProperties.end(); ++it3 ) {
 	    l << (*it3).property;
 	    l << (*it3).type;
 	}
@@ -2261,7 +2278,7 @@ void MainWindow::readConfig()
 	if ( !ok ) {
 	    if ( oWindow ) {
 		oWindow->shuttingDown();
-		( (QDockWindow*)oWindow->parent() )->hide();
+		( (Q3DockWindow*)oWindow->parent() )->hide();
 	    }
 	    QPixmap pix;
 	    pix.load( backPixName );
@@ -2413,19 +2430,19 @@ void MainWindow::readConfig()
 	if ( singleProjectMode() )
 	    mwlKey += "S";
 	QString mainWindowLayout = config.readEntry( keybase + mwlKey );
-	QTextStream ts( &mainWindowLayout, IO_ReadOnly );
+	QTextStream ts( &mainWindowLayout, QIODevice::ReadOnly );
 	ts >> *this;
     }
     if ( readPreviousConfig && oWindow ) {
 	oWindow->shuttingDown();
-	( (QDockWindow*)oWindow->parent() )->hide();
+	( (Q3DockWindow*)oWindow->parent() )->hide();
     }
 
     rebuildCustomWidgetGUI();
 
     QStringList l = config.readListEntry( keybase + "ToolBox/CommonWidgets" );
     if ( !l.isEmpty() ) {
-	QPtrList<QAction> lst;
+	Q3PtrList<QAction> lst;
 	commonWidgetsPage.clear();
 	for ( QStringList::ConstIterator it = l.begin(); it != l.end(); ++it ) {
 	    for ( QAction *a = toolActions.first(); a; a = toolActions.next() ) {
@@ -2449,9 +2466,9 @@ HierarchyView *MainWindow::objectHierarchy() const
     return hierarchyView;
 }
 
-QPopupMenu *MainWindow::setupNormalHierarchyMenu( QWidget *parent )
+Q3PopupMenu *MainWindow::setupNormalHierarchyMenu( QWidget *parent )
 {
-    QPopupMenu *menu = new QPopupMenu( parent );
+    Q3PopupMenu *menu = new Q3PopupMenu( parent );
 
     actionEditCut->addTo( menu );
     actionEditCopy->addTo( menu );
@@ -2461,9 +2478,9 @@ QPopupMenu *MainWindow::setupNormalHierarchyMenu( QWidget *parent )
     return menu;
 }
 
-QPopupMenu *MainWindow::setupTabWidgetHierarchyMenu( QWidget *parent, const char *addSlot, const char *removeSlot )
+Q3PopupMenu *MainWindow::setupTabWidgetHierarchyMenu( QWidget *parent, const char *addSlot, const char *removeSlot )
 {
-    QPopupMenu *menu = new QPopupMenu( parent );
+    Q3PopupMenu *menu = new Q3PopupMenu( parent );
 
     menu->insertItem( i18n( "Add Page" ), parent, addSlot );
     menu->insertItem( i18n( "Delete Page" ), parent, removeSlot );
@@ -2570,7 +2587,7 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
 	    QString s = QString( w->name() ) + "_" + defSignal;
 	    LanguageInterface *iface = MetaDataBase::languageInterface( f->project()->language() );
 	    if ( iface ) {
-		QStrList sigs = iface->signalNames( w );
+		Q3StrList sigs = iface->signalNames( w );
 		QString fullSignal;
 		for ( int i = 0; i < (int)sigs.count(); ++i ) {
 		    QString sig = sigs.at( i );
@@ -2630,9 +2647,9 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
 	bool doWrap = oldDoWrap;
 
 	QString text;
-	if ( ::qt_cast<QTextEdit*>(w) || ::qt_cast<QLabel*>(w) || ::qt_cast<QButton*>(w) ) {
+	if ( ::qt_cast<Q3TextEdit*>(w) || ::qt_cast<QLabel*>(w) || ::qt_cast<Q3Button*>(w) ) {
 	    text = MultiLineEditor::getText( this, w->property( "text" ).toString(),
-					     !::qt_cast<QButton*>(w), &doWrap );
+					     !::qt_cast<Q3Button*>(w), &doWrap );
 	    ok = !text.isNull();
 	} else {
 	    text = QInputDialog::getText( i18n("Text"), i18n( "New text" ),
@@ -2688,7 +2705,7 @@ void MainWindow::rebuildCustomWidgetGUI()
     customWidgetToolBar2->clear();
     int count = 0;
 
-    QPtrListIterator<QAction> it( toolActions );
+    Q3PtrListIterator<QAction> it( toolActions );
     QAction *action;
     while ( ( action = it.current() ) ) {
 	++it;
@@ -2696,7 +2713,7 @@ void MainWindow::rebuildCustomWidgetGUI()
 	    delete action;
     }
 
-    QPtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
+    Q3PtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
 
     actionToolsCustomWidget->addTo( customWidgetMenu );
     customWidgetMenu->insertSeparator();
@@ -2932,16 +2949,16 @@ void MainWindow::setupActionManager()
 	QString grp = iface->group( *ait );
 	if ( grp.isEmpty() )
 	    grp = "3rd party actions";
-	QPopupMenu *menu = 0;
-	QToolBar *tb = 0;
+	Q3PopupMenu *menu = 0;
+	Q3ToolBar *tb = 0;
 
-	if ( !( menu = (QPopupMenu*)child( grp.latin1(), "QPopupMenu" ) ) ) {
-	    menu = new QPopupMenu( this, grp.latin1() );
+	if ( !( menu = (Q3PopupMenu*)child( grp.latin1(), "QPopupMenu" ) ) ) {
+	    menu = new Q3PopupMenu( this, grp.latin1() );
 	    menuBar()->insertItem( i18n( grp ), menu );
 	}
-	if ( !( tb = (QToolBar*)child( grp.latin1(), "QToolBar" ) ) ) {
-	    tb = new QToolBar( this, grp.latin1() );
-	    tb->setCloseMode( QDockWindow::Undocked );
+	if ( !( tb = (Q3ToolBar*)child( grp.latin1(), "QToolBar" ) ) ) {
+	    tb = new Q3ToolBar( this, grp.latin1() );
+	    tb->setCloseMode( Q3DockWindow::Undocked );
 	    addToolBar( tb, grp );
 	}
 
@@ -3002,9 +3019,9 @@ void MainWindow::setupRecentlyProjectsMenu()
     }
 }
 
-QPtrList<DesignerProject> MainWindow::projectList() const
+Q3PtrList<DesignerProject> MainWindow::projectList() const
 {
-    QPtrList<DesignerProject> list;
+    Q3PtrList<DesignerProject> list;
     QMapConstIterator<QAction*, Project*> it = projects.begin();
 
     while( it != projects.end() ) {
@@ -3236,7 +3253,7 @@ void MainWindow::updateFunctionList()
 	LanguageInterface *iface = MetaDataBase::languageInterface( currentProject->language() );
 	if ( !iface )
 	    return;
-	QValueList<LanguageInterface::Connection> conns;
+	Q3ValueList<LanguageInterface::Connection> conns;
 	iface->connections( se->text(), &conns );
 	MetaDataBase::setupConnections( se->formWindow(), conns );
 	propertyEditor->eventList()->setup();
@@ -3268,7 +3285,7 @@ void MainWindow::showErrorMessage( QObject *o, int errorLine, const QString &err
 {
     if ( o ) {
 	errorLine--; // ######
-	QValueList<uint> l;
+	Q3ValueList<uint> l;
 	l << ( errorLine + 1 );
 	QStringList l2;
 	l2 << errorMessage;
@@ -3387,7 +3404,7 @@ void MainWindow::showSourceLine( QObject *o, int line, LineMode lm )
     }
 
     if ( ::qt_cast<SourceFile*>(o) ) {
-	for ( QPtrListIterator<SourceFile> sources = currentProject->sourceFiles();
+	for ( Q3PtrListIterator<SourceFile> sources = currentProject->sourceFiles();
 	      sources.current(); ++sources ) {
 	    SourceFile* f = sources.current();
 	    if ( f == o ) {
@@ -3509,7 +3526,7 @@ void MainWindow::breakPointsChanged()
 
     for ( e = sourceEditors.first(); e; e = sourceEditors.next() ) {
 	if ( e->project() == currentProject && e->sourceFile() ) {
-	    QValueList<uint> bps = MetaDataBase::breakPoints( e->sourceFile() );
+	    Q3ValueList<uint> bps = MetaDataBase::breakPoints( e->sourceFile() );
 	    iiface->setBreakPoints( e->object(), bps );
 	}
     }
@@ -3560,7 +3577,7 @@ bool MainWindow::openProjectSettings( Project *pro )
 {
     ProjectSettings dia( pro, this, 0, TRUE );
     SenderObject *senderObject = new SenderObject( designerInterface() );
-    QValueList<Tab>::ConstIterator it;
+    Q3ValueList<Tab>::ConstIterator it;
     for ( it = projectTabs.begin(); it != projectTabs.end(); ++it ) {
 	Tab t = *it;
 	if ( t.title != pro->language() )
@@ -3614,7 +3631,7 @@ QString MainWindow::whatsThisFrom( const QString &key )
 	QString fn( documentationPath() );
 	fn += "/designer-manual-11.html";
 	QFile f( fn );
-	if ( f.open( IO_ReadOnly ) ) {
+	if ( f.open( QIODevice::ReadOnly ) ) {
 	    QTextStream ts( &f );
 	    menuHelpFile = ts.read();
 	}
@@ -3682,9 +3699,9 @@ void MainWindow::showGUIStuff( bool b )
 	return;
     guiStuffVisible = b;
     if ( !b ) {
-	setAppropriate( (QDockWindow*)toolBox->parentWidget(), FALSE );
+	setAppropriate( (Q3DockWindow*)toolBox->parentWidget(), FALSE );
 	toolBox->parentWidget()->hide();
-	for ( QToolBar *tb = widgetToolBars.first(); tb; tb = widgetToolBars.next() ) {
+	for ( Q3ToolBar *tb = widgetToolBars.first(); tb; tb = widgetToolBars.next() ) {
 	    tb->hide();
 	    setAppropriate( tb, FALSE );
 	}
@@ -3706,7 +3723,7 @@ void MainWindow::showGUIStuff( bool b )
 	actionEditConnections->setEnabled( FALSE );
 	actionEditFunctions->setEnabled( FALSE );
 	actionEditAccels->setEnabled( FALSE );
-	( (QDockWindow*)propertyEditor->parentWidget() )->
+	( (Q3DockWindow*)propertyEditor->parentWidget() )->
 	    setCaption( i18n( "Signal Handlers" ) );
 	actionGroupNew->removeFrom( fileMenu );
 	actionGroupNew->removeFrom( projectToolBar );
@@ -3719,9 +3736,9 @@ void MainWindow::showGUIStuff( bool b )
 	actionFileSave->addTo( projectToolBar );
 	actionFileExit->addTo( fileMenu );
     } else {
-	setAppropriate( (QDockWindow*)toolBox->parentWidget(), TRUE );
+	setAppropriate( (Q3DockWindow*)toolBox->parentWidget(), TRUE );
 	toolBox->parentWidget()->show();
-	for ( QToolBar *tb = widgetToolBars.first(); tb; tb = widgetToolBars.next() ) {
+	for ( Q3ToolBar *tb = widgetToolBars.first(); tb; tb = widgetToolBars.next() ) {
 	    setAppropriate( tb, TRUE );
 	    tb->hide();
 	}
@@ -3743,7 +3760,7 @@ void MainWindow::showGUIStuff( bool b )
 	actionEditConnections->setEnabled( TRUE );
 	actionEditFunctions->setEnabled( TRUE );
 	actionEditAccels->setEnabled( TRUE );
-	( (QDockWindow*)propertyEditor->parentWidget() )->
+	( (Q3DockWindow*)propertyEditor->parentWidget() )->
 	    setCaption( i18n( "Property Editor/Signal Handlers" ) );
 	actionFileSave->removeFrom( fileMenu );
 	actionFileSave->removeFrom( projectToolBar );

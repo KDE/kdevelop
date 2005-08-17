@@ -1,7 +1,7 @@
 #include "visualboyadvance_part.h"
 
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
 
 #include <kaction.h>
 #include <kdevgenericfactory.h>
@@ -30,7 +30,7 @@ VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, co
   setXMLFile("kdevpart_visualboyadvance.rc");
   
   KAction *action;
-  action = new KAction( i18n("Execute Program"), "exec",  Key_F9,
+  action = new KAction( i18n("Execute Program"), "exec",  Qt::Key_F9,
 			this, SLOT(slotExecute()),
 			actionCollection(), "build_execute" );
 
@@ -67,7 +67,7 @@ void VisualBoyAdvancePart::slotExecute(){
 }
 
 void VisualBoyAdvancePart::projectConfigWidget(KDialogBase *dlg){
-  QVBox *vbox;
+  Q3VBox *vbox;
   vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
   VBAConfigWidget* w = new VBAConfigWidget(this,vbox);
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );

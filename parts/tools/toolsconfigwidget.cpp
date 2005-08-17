@@ -13,8 +13,12 @@
 
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QDropEvent>
 
 #include <kconfig.h>
 #include <kdeversion.h>
@@ -61,7 +65,7 @@ ToolsConfigWidget::~ToolsConfigWidget()
 {}
 
 
-void ToolsConfigWidget::readGroup(const QString &group, QDict<ToolsConfigEntry> *entryDict)
+void ToolsConfigWidget::readGroup(const QString &group, Q3Dict<ToolsConfigEntry> *entryDict)
 {
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("External Tools");
@@ -83,13 +87,13 @@ void ToolsConfigWidget::readGroup(const QString &group, QDict<ToolsConfigEntry> 
 }
 
 
-void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfigEntry> &entryDict)
+void ToolsConfigWidget::storeGroup(const QString &group, const Q3Dict<ToolsConfigEntry> &entryDict)
 {
     KConfig *config = ToolsFactory::instance()->config();
 
     QStringList list;
 
-    QDictIterator<ToolsConfigEntry> it(entryDict);
+    Q3DictIterator<ToolsConfigEntry> it(entryDict);
     for (; it.current(); ++it) {
         ToolsConfigEntry *entry = it.current();
         list << entry->menutext;
@@ -105,11 +109,11 @@ void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfig
 
 
 
-void ToolsConfigWidget::fillListBox(QListBox *lb, const QDict<ToolsConfigEntry> &entryDict)
+void ToolsConfigWidget::fillListBox(Q3ListBox *lb, const Q3Dict<ToolsConfigEntry> &entryDict)
 {
     lb->clear();
 
-    QDictIterator<ToolsConfigEntry> it(entryDict);
+    Q3DictIterator<ToolsConfigEntry> it(entryDict);
     for (; it.current(); ++it) {
         ToolsConfigEntry *entry = it.current();
         if (entry->isdesktopfile) {
@@ -122,7 +126,7 @@ void ToolsConfigWidget::fillListBox(QListBox *lb, const QDict<ToolsConfigEntry> 
 }
 
 
-bool ToolsConfigWidget::addEntry(ToolsConfigEntry *entry, QDict<ToolsConfigEntry> *entryDict)
+bool ToolsConfigWidget::addEntry(ToolsConfigEntry *entry, Q3Dict<ToolsConfigEntry> *entryDict)
 {
     QString menutext = entry->menutext;
     if (entryDict->find(menutext)) {

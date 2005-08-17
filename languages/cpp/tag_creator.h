@@ -15,6 +15,8 @@
 #include "tree_parser.h"
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class Catalog;
 class Tag;
@@ -75,7 +77,7 @@ private:
 	Catalog* m_catalog;
 	QString m_fileName;
 	QStringList m_currentScope;
-	QValueList<QStringList> m_imports;
+	Q3ValueList<QStringList> m_imports;
 	QString m_currentAccess;
 	bool m_inClass;
 	bool m_inSlots;

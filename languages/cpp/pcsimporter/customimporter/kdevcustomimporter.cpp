@@ -11,7 +11,7 @@
 
 #include "settingsdialog.h"
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qdir.h>
 
 #include <kdebug.h>
@@ -82,7 +82,7 @@ QWidget* KDevCustomImporter::createSettingsPage( QWidget* parent, const char* na
 
 void KDevCustomImporter::processDir( const QString path, QStringList & files )
 {
-	QValueStack<QString> s;
+	Q3ValueStack<QString> s;
 	s.push( path );
 	files += fileList( path );
 
@@ -92,18 +92,18 @@ void KDevCustomImporter::processDir( const QString path, QStringList & files )
 		dir.setPath( s.pop() );
 		kdDebug( 9015 ) << "Examining: " << dir.path() << endl;
 		const QFileInfoList *dirEntries = dir.entryInfoList();
-		QPtrListIterator<QFileInfo> it( *dirEntries );
+		Q3PtrListIterator<QFileInfo> it( *dirEntries );
 		for ( ; dirEntries && it.current(); ++it )
 		{
 			QString fileName = it.current() ->fileName();
 			if ( fileName == "." || fileName == ".." )
 				continue;
+			QString path = it.current() ->absFilePath();
 			if ( it.current() ->isDir() )
 			{
-                                QString tmpPath = it.current() ->absFilePath();
-				kdDebug( 9015 ) << "Pushing: " << tmpPath << endl;
-				s.push( tmpPath );
-				files += fileList( tmpPath );
+				kdDebug( 9015 ) << "Pushing: " << path << endl;
+				s.push( path );
+				files += fileList( path );
 			}
 		}
 	}

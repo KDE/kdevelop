@@ -31,9 +31,11 @@
 #include "hierarchyview.h"
 #include "metadatabase.h"
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class FormWindow;
-class QListViewItem;
+class Q3ListViewItem;
 
 class EditFunctions : public EditFunctionsBase
 {
@@ -53,14 +55,14 @@ signals:
 protected slots:
     void okClicked();
     void functionRemove();
-    void currentItemChanged( QListViewItem * );
+    void currentItemChanged( Q3ListViewItem * );
     void currentTextChanged( const QString &txt );
     void currentSpecifierChanged( const QString &s );
     void currentAccessChanged( const QString &a );
     void currentReturnTypeChanged( const QString &type );
     void currentTypeChanged( const QString &type );
     void displaySlots( bool justSlots );
-    void emitItemRenamed( QListViewItem *, int, const QString & );
+    void emitItemRenamed( Q3ListViewItem *, int, const QString & );
 
 private:
     enum Attribute { Name, Specifier, Access, ReturnType, Type };
@@ -80,13 +82,13 @@ private:
 	Q_DUMMY_COMPARISON_OPERATOR( FunctItem )
     };
 
-    void changeItem( QListViewItem *item, Attribute a, const QString &nV );
+    void changeItem( Q3ListViewItem *item, Attribute a, const QString &nV );
 
     FormWindow *formWindow;
-    QMap<QListViewItem*, int> functionIds;
+    QMap<Q3ListViewItem*, int> functionIds;
     QStringList removedFunctions;
-    QValueList<MetaDataBase::Function> itemList;
-    QValueList<FunctItem> functList;
+    Q3ValueList<MetaDataBase::Function> itemList;
+    Q3ValueList<FunctItem> functList;
     int id;
     QString lastType;
 };

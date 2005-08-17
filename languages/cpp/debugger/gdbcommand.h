@@ -17,6 +17,8 @@
 #define _GDBCOMMAND_H_
 
 #include "dbgcommand.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace GDBDebugger
 {
@@ -69,10 +71,7 @@ enum GDBCmd
 
   WAIT            = '0',
 
-  WHATIS          = 'H',
-
-  SETVALUE        = 'V'
-  
+  WHATIS          = 'H'
 };
 
 #define RUNCMD      (true)
@@ -87,12 +86,12 @@ enum GDBCmd
 class GDBCommand : public DbgCommand
 {
 public:
-    GDBCommand(const QCString& command, bool isRunCmd=false, bool isInfoCmd=true,
+    GDBCommand(const Q3CString& command, bool isRunCmd=false, bool isInfoCmd=true,
                char prompt=WAIT);
     virtual ~GDBCommand();
 
 private:
-    static QCString idlePrompt_;
+    static Q3CString idlePrompt_;
 };
 
 /***************************************************************************/
@@ -101,7 +100,7 @@ private:
 class GDBItemCommand : public GDBCommand
 {
 public:
-    GDBItemCommand(VarItem *item, const QCString &command,
+    GDBItemCommand(VarItem *item, const Q3CString &command,
                    bool isRunCmd=false, char prompt=DATAREQUEST);
     virtual ~GDBItemCommand();
 
@@ -109,6 +108,16 @@ public:
 
 private:
     VarItem *item_;
+};
+
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+class GDBPointerCommand : public GDBItemCommand
+{
+public:
+  GDBPointerCommand(VarItem *item);
+  virtual ~GDBPointerCommand();
 };
 
 /***************************************************************************/
@@ -127,7 +136,7 @@ private:
 class GDBSetBreakpointCommand : public GDBCommand
 {
 public:
-    GDBSetBreakpointCommand(const QCString& setCommand, int key);
+    GDBSetBreakpointCommand(const Q3CString& setCommand, int key);
     virtual ~GDBSetBreakpointCommand();
 
     int getKey() const        { return key_; }

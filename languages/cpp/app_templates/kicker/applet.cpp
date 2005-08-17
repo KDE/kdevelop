@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QResizeEvent>
 %{CPP_TEMPLATE}
 
 #include <qlcdnumber.h>

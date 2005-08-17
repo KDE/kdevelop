@@ -6,6 +6,8 @@
 #include <unistd.h>
 
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kstandarddirs.h>
 #include <kinstance.h>
 #include <kprocess.h>
@@ -16,7 +18,7 @@
 using namespace KIO;
 
 
-PydocProtocol::PydocProtocol(const QCString &pool, const QCString &app)
+PydocProtocol::PydocProtocol(const Q3CString &pool, const Q3CString &app)
     : SlaveBase("pydoc", pool, app), key()
 {
     python = KGlobal::dirs()->findExe("python");
@@ -74,9 +76,9 @@ void PydocProtocol::mimetype(const KURL&)
 }
 
 
-QCString PydocProtocol::errorMessage()
+Q3CString PydocProtocol::errorMessage()
 {
-    return QCString( "<html><body bgcolor=\"#FFFFFF\">" + i18n("Error in pydoc").local8Bit() + "</body></html>" );
+    return Q3CString( "<html><body bgcolor=\"#FFFFFF\">" + i18n("Error in pydoc").local8Bit() + "</body></html>" );
 }
 
 

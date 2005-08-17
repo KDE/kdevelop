@@ -7,9 +7,11 @@
 #define __KDEVPART_RUBYSUPPORT_H__
 
 #include "kdevlanguagesupport.h"
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 class KDialogBase;
-class QPopupMenu;
+class Q3PopupMenu;
 class Context;
 
 class RubySupportPart : public KDevLanguageSupport
@@ -36,7 +38,7 @@ private slots:
     void removedFilesFromProject(const QStringList &fileList);
     void slotRun();
     void slotCreateSubclass();
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
 
     void initialParse();
 

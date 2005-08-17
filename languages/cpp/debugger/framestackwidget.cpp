@@ -18,10 +18,12 @@
 
 #include <klocale.h>
 
-#include <qheader.h>
-#include <qlistbox.h>
+#include <q3header.h>
+#include <q3listbox.h>
 #include <qregexp.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ctype.h>
 
@@ -33,8 +35,8 @@
 namespace GDBDebugger
 {
 
-FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
-        : QListView(parent, name, f),
+FramestackWidget::FramestackWidget(QWidget *parent, const char *name, Qt::WFlags f)
+        : Q3ListView(parent, name, f),
         viewedThread_(0)
 {
     setRootIsDecorated(true);
@@ -43,8 +45,8 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
     addColumn(QString::null);
     header()->hide();
 
-    connect( this, SIGNAL(clicked(QListViewItem*)),
-             this, SLOT(slotSelectionChanged(QListViewItem*)) );
+    connect( this, SIGNAL(clicked(Q3ListViewItem*)),
+             this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
 }
 
 
@@ -55,11 +57,11 @@ FramestackWidget::~FramestackWidget()
 
 /***************************************************************************/
 
-QListViewItem *FramestackWidget::lastChild() const
+Q3ListViewItem *FramestackWidget::lastChild() const
 {
-    QListViewItem* child = firstChild();
+    Q3ListViewItem* child = firstChild();
     if (child)
-        while (QListViewItem* nextChild = child->nextSibling())
+        while (Q3ListViewItem* nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -71,12 +73,12 @@ void FramestackWidget::clear()
 {
     viewedThread_     = 0;
 
-    QListView::clear();
+    Q3ListView::clear();
 }
 
 /***************************************************************************/
 
-void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
+void FramestackWidget::slotSelectionChanged(Q3ListViewItem *thisItem)
 {
     ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (thisItem);
     if (thread)
@@ -220,12 +222,12 @@ QString FramestackWidget::getFrameName(int frameNo, int threadNo)
             {
                 QString frameName("T%1#%2 %3(...)");
                 return frameName.arg(threadNo).arg(frameNo)
-                       .arg(QCString(fnstart, paramStart-fnstart+1));
+                       .arg(Q3CString(fnstart, paramStart-fnstart+1));
             }
 
             QString frameName("#%1 %2(...)");
             return frameName.arg(frameNo).arg(
-                                QCString(fnstart, paramStart-fnstart+1));
+                                Q3CString(fnstart, paramStart-fnstart+1));
         }
     }
     return i18n("No stack");
@@ -235,7 +237,7 @@ QString FramestackWidget::getFrameName(int frameNo, int threadNo)
 
 ThreadStackItem *FramestackWidget::findThread(int threadNo)
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
     while (sibling)
     {
         ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (sibling);
@@ -253,7 +255,7 @@ ThreadStackItem *FramestackWidget::findThread(int threadNo)
 
 FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
 {
-    QListViewItem* frameItem = 0;
+    Q3ListViewItem* frameItem = 0;
 
     if (threadNo != -1)
     {
@@ -280,7 +282,7 @@ FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDesc)
-        : QListViewItem(parent, parent->lastChild()),
+        : Q3ListViewItem(parent, parent->lastChild()),
         frameNo_(-1),
         threadNo_(-1)
 {
@@ -294,7 +296,7 @@ FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDes
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(ThreadStackItem *parent, const QString &frameDesc)
-        : QListViewItem(parent, parent->lastChild()),
+        : Q3ListViewItem(parent, parent->lastChild()),
         frameNo_(-1),
         threadNo_(parent->threadNo())
 {
@@ -312,11 +314,11 @@ FrameStackItem::~FrameStackItem()
 
 // **************************************************************************
 
-QListViewItem *FrameStackItem::lastChild() const
+Q3ListViewItem *FrameStackItem::lastChild() const
 {
-    QListViewItem* child = firstChild();
+    Q3ListViewItem* child = firstChild();
     if (child)
-        while (QListViewItem* nextChild = child->nextSibling())
+        while (Q3ListViewItem* nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -329,7 +331,7 @@ void FrameStackItem::setOpen(bool open)
     if (open)
         ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
 
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 }
 
 // **************************************************************************
@@ -337,7 +339,7 @@ void FrameStackItem::setOpen(bool open)
 // **************************************************************************
 
 ThreadStackItem::ThreadStackItem(FramestackWidget *parent, const QString &threadDesc)
-        : QListViewItem(parent, threadDesc),
+        : Q3ListViewItem(parent, threadDesc),
         threadNo_(-1)
 {
     setText(VarNameCol, threadDesc);
@@ -355,11 +357,11 @@ ThreadStackItem::~ThreadStackItem()
 
 // **************************************************************************
 
-QListViewItem *ThreadStackItem::lastChild() const
+Q3ListViewItem *ThreadStackItem::lastChild() const
 {
-    QListViewItem* child = firstChild();
+    Q3ListViewItem* child = firstChild();
     if (child)
-        while (QListViewItem* nextChild = child->nextSibling())
+        while (Q3ListViewItem* nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -374,7 +376,7 @@ void ThreadStackItem::setOpen(bool open)
     if (open && !firstChild())
         ((FramestackWidget*)listView())->getBacktrace(threadNo());
 
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 }
 
 }

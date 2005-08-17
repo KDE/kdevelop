@@ -35,10 +35,17 @@
 #include <qpen.h>
 #include <qbitmap.h>
 #include <qsplitter.h>
-#include <qvaluevector.h>
-#include <qmainwindow.h>
+#include <q3valuevector.h>
+#include <q3mainwindow.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <Q3ValueList>
+#include <QVBoxLayout>
+#include <QResizeEvent>
 
-bool operator<( const QGuardedPtr<QWidget> &p1, const QGuardedPtr<QWidget> &p2 )
+bool operator<( const QPointer<QWidget> &p1, const QPointer<QWidget> &p2 )
 {
     return p1.operator->() < p2.operator->();
 }
@@ -79,7 +86,7 @@ Layout::Layout( const QWidgetList &wl, QWidget *p, FormWindow *fw, QWidget *lb, 
 void Layout::setup()
 {
     startPoint = QPoint( 32767, 32767 );
-    QValueList<QWidgetList> lists;
+    Q3ValueList<QWidgetList> lists;
     QWidget *lastParent = 0;
     QWidgetList *lastList = 0;
     QWidget *w = 0;
@@ -96,7 +103,7 @@ void Layout::setup()
 	if ( lastParent != w->parentWidget() ) {
 	    lastList = 0;
 	    lastParent = w->parentWidget();
-	    QValueList<QWidgetList>::Iterator it = lists.begin();
+	    Q3ValueList<QWidgetList>::Iterator it = lists.begin();
 	    for ( ; it != lists.end(); ++it ) {
 		if ( ( *it ).first()->parentWidget() == w->parentWidget() )
 		    lastList = &( *it );
@@ -113,7 +120,7 @@ void Layout::setup()
 
     // So, now find the list with the most entries
     lastList = 0;
-    QValueList<QWidgetList>::Iterator it = lists.begin();
+    Q3ValueList<QWidgetList>::Iterator it = lists.begin();
     for ( ; it != lists.end(); ++it ) {
 	if ( !lastList || ( *it ).count() > lastList->count() )
 	    lastList = &( *it );
@@ -207,7 +214,7 @@ void Layout::undoLayout()
 {
     if ( !widgets.count() )
 	return;
-    QMap<QGuardedPtr<QWidget>, QRect>::Iterator it = geometries.begin();
+    QMap<QPointer<QWidget>, QRect>::Iterator it = geometries.begin();
     for ( ; it != geometries.end(); ++it ) {
 	if ( !it.key() )
 	    continue;
@@ -216,7 +223,7 @@ void Layout::undoLayout()
     }
     formWindow->selectWidget( layoutBase, FALSE );
     WidgetFactory::deleteLayout( layoutBase );
-    if ( parent != layoutBase && !::qt_cast<QMainWindow*>(layoutBase) ) {
+    if ( parent != layoutBase && !::qt_cast<Q3MainWindow*>(layoutBase) ) {
 	layoutBase->hide();
 	QString n = layoutBase->name();
 	n.prepend( "qt_dead_widget_" );
@@ -278,7 +285,7 @@ public:
     HorizontalLayoutList( const QWidgetList &l )
 	: QWidgetList( l ) {}
 
-    int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 ) {
+    int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 ) {
 	QWidget *w1 = (QWidget*)item1;
 	QWidget *w2 = (QWidget*)item2;
 	if ( w1->x() == w2->x() )
@@ -342,7 +349,7 @@ public:
     VerticalLayoutList( const QWidgetList &l )
 	: QWidgetList( l ) {}
 
-    int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 ) {
+    int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 ) {
 	QWidget *w1 = (QWidget*)item1;
 	QWidget *w2 = (QWidget*)item2;
 	if ( w1->y() == w2->y() )
@@ -791,8 +798,8 @@ void GridLayout::buildGrid()
     // -----------------------------------------------------------------
 
     // We need a list of both start and stop values for x- & y-axis
-    QValueVector<int> x( widgets.count()*2 );
-    QValueVector<int> y( widgets.count()*2 );
+    Q3ValueVector<int> x( widgets.count()*2 );
+    Q3ValueVector<int> y( widgets.count()*2 );
 
     // Using push_back would look nicer, but operator[] is much faster
     int index  = 0;
@@ -811,7 +818,7 @@ void GridLayout::buildGrid()
 
     // Remove duplicate x enteries (Remove next, if equal to current)
     if ( !x.empty() ) {
-	for (QValueVector<int>::iterator current = x.begin() ;
+	for (Q3ValueVector<int>::iterator current = x.begin() ;
 	     (current != x.end()) && ((current+1) != x.end()) ; )
 	    if ( (*current == *(current+1)) )
 		x.erase(current+1);
@@ -821,7 +828,7 @@ void GridLayout::buildGrid()
 
     // Remove duplicate y enteries (Remove next, if equal to current)
     if ( !y.empty() ) {
-	for (QValueVector<int>::iterator current = y.begin() ;
+	for (Q3ValueVector<int>::iterator current = y.begin() ;
 	     (current != y.end()) && ((current+1) != y.end()) ; )
 	    if ( (*current == *(current+1)) )
 		y.erase(current+1);
@@ -864,8 +871,8 @@ void GridLayout::buildGrid()
 
 
 Spacer::Spacer( QWidget *parent, const char *name )
-    : QWidget( parent, name, WMouseNoMask ),
-      orient( Vertical ), interactive(TRUE), sh( QSize(20,20) )
+    : QWidget( parent, name, Qt::WMouseNoMask ),
+      orient( Qt::Vertical ), interactive(TRUE), sh( QSize(20,20) )
 {
     setSizeType( Expanding );
     setAutoMask( TRUE );

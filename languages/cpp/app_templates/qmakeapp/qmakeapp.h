@@ -1,13 +1,15 @@
+//Added by qt3to4:
+#include <QCloseEvent>
 %{H_TEMPLATE}
 
 #ifndef %{APPNAMEUC}_H
 #define %{APPNAMEUC}_H
 
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 
-class QTextEdit;
+class Q3TextEdit;
 
-class %{APPNAME}: public QMainWindow
+class %{APPNAME}: public Q3MainWindow
 {
     Q_OBJECT
 
@@ -31,7 +33,7 @@ private slots:
 
 private:
     QPrinter *printer;
-    QTextEdit *e;
+    Q3TextEdit *e;
     QString filename;
 };
 

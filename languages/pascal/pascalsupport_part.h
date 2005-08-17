@@ -10,12 +10,14 @@
 #ifndef __KDEVPART_PASCALSUPPORT_H__
 #define __KDEVPART_PASCALSUPPORT_H__
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 #include "kdevlanguagesupport.h"
 
 class PascalSupportWidget;
 class KDialogBase;
-class QPopupMenu;
+class Q3PopupMenu;
 class Context;
 class PascalSupportPartData;
 
@@ -38,7 +40,7 @@ private slots:
     void savedFile(const KURL &fileName);
     void configWidget(KDialogBase *dlg);
     void projectConfigWidget(KDialogBase *dlg);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
 
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
@@ -50,7 +52,7 @@ private:
     void maybeParse(const QString &fileName);
     void parse(const QString &fileName);
 
-    QGuardedPtr<PascalSupportWidget> m_widget;
+    QPointer<PascalSupportWidget> m_widget;
 
     bool m_projectClosed;
     QStringList m_projectFileList;

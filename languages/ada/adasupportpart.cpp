@@ -1,11 +1,13 @@
 
 #include <qfileinfo.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qstringlist.h>
 #include <qtimer.h>
-#include <qvbox.h>
-#include <qprogressbar.h>
-#include <qwhatsthis.h>
+#include <q3vbox.h>
+#include <q3progressbar.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kgenericfactory.h>
 #include <kapplication.h>
@@ -60,7 +62,7 @@ AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QString
 //             d->problemReporter, SLOT (configWidget (KDialogBase*)));
     d->problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( d->problemReporter, i18n("Problems"), i18n("Problem reporter"));
-    QWhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+    Q3WhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
         "It displays errors reported by a language parser."));
 
     setXMLFile ("adasupportpart.rc");
@@ -132,7 +134,7 @@ void AdaSupportPart::initialParse ()
         int n = 0;
         QStringList files = project ()->allFiles ();
 
-        QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
+        Q3ProgressBar* bar = new Q3ProgressBar( files.count( ), mainWindow( )->statusBar( ) );
         bar->setMinimumWidth( 120 );
         bar->setCenterIndicator( true );
         mainWindow( )->statusBar( )->addWidget( bar );
@@ -213,7 +215,7 @@ void AdaSupportPart::parse (const QString &fileName)
     kdDebug () << "AdaSupportPart::parse () -- " << fileName << endl;
 
     std::ifstream stream (QFile::encodeName( fileName ).data());
-    QCString _fn = fileName.utf8 ();
+    Q3CString _fn = fileName.utf8 ();
     std::string fn (_fn.data ());
 
     AdaLexer lexer (stream);
@@ -260,10 +262,10 @@ void AdaSupportPart::parseContents (const QString& contents, const QString& file
 {
     kdDebug () << "AdaSupportPart::parseContents () -- " << fileName << endl;
 
-    QCString _fn = QFile::encodeName (fileName);
+    Q3CString _fn = QFile::encodeName (fileName);
     std::string fn (_fn.data ());
 
-    QCString text = contents.utf8 ();
+    Q3CString text = contents.utf8 ();
     std::istringstream stream ((const char *)text);
 
     AdaLexer lexer (stream);

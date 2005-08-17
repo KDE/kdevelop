@@ -50,6 +50,8 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <iostream>
 #include <ctype.h>
@@ -354,7 +356,7 @@ void RDBController::parseProgramLocation(char *buf)
 {
 	QString buffer(buf);
 	QString line;
-	QTextStream input(&buffer, IO_ReadOnly);
+	QTextStream input(&buffer, QIODevice::ReadOnly);
 	QString sourceFile;
 	int sourceLine = 0;
 	
@@ -638,14 +640,14 @@ void RDBController::parse(char *buf)
 
 // **************************************************************************
 
-void RDBController::setBreakpoint(const QCString &BPSetCmd, int key)
+void RDBController::setBreakpoint(const Q3CString &BPSetCmd, int key)
 {
     queueCmd(new RDBSetBreakpointCommand(BPSetCmd, key));
 }
 
 // **************************************************************************
 
-void RDBController::clearBreakpoint(const QCString &BPClearCmd)
+void RDBController::clearBreakpoint(const Q3CString &BPClearCmd)
 {
     queueCmd(new RDBCommand(BPClearCmd, NOTRUNCMD, NOTINFOCMD));
     // Note: this is NOT an info command, because rdb doesn't explictly tell
@@ -662,7 +664,7 @@ void RDBController::modifyBreakpoint( const Breakpoint& BP )
     if (BP.dbgId() > 0)
     {
         if (BP.changedEnable())
-            queueCmd(new RDBCommand(QCString().sprintf("%s %d",
+            queueCmd(new RDBCommand(Q3CString().sprintf("%s %d",
                             BP.isEnabled() ? "enable" : "disable",
                             BP.dbgId()), NOTRUNCMD, NOTINFOCMD));
 
@@ -858,11 +860,11 @@ void RDBController::slotRunUntil(const QString &fileName, int lineNum)
         return;
 
     if (fileName.isEmpty())
-        queueCmd(new RDBCommand( QCString().sprintf("break %d", lineNum),
+        queueCmd(new RDBCommand( Q3CString().sprintf("break %d", lineNum),
                                 RUNCMD, NOTINFOCMD));
     else
         queueCmd(new RDBCommand(
-                QCString().sprintf("break %s:%d", fileName.latin1(), lineNum),
+                Q3CString().sprintf("break %s:%d", fileName.latin1(), lineNum),
                                 RUNCMD, NOTINFOCMD));
     queueCmd(new RDBCommand("cont", RUNCMD, NOTINFOCMD));
 								
@@ -1017,19 +1019,19 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, const QString& fr
 
 	if (viewedThread_ != threadNo) {
 		// Note that 'thread switch nnn' is a run command
-		queueCmd(new RDBCommand(QCString().sprintf("thread switch %d",
+		queueCmd(new RDBCommand(Q3CString().sprintf("thread switch %d",
                                 threadNo), RUNCMD, INFOCMD));
 		executeCmd();
 		return;
 	}
 		
 	if (frameNo > currentFrame_) {
-    	queueCmd(new RDBCommand(QCString().sprintf("up %d", frameNo - currentFrame_), NOTRUNCMD, INFOCMD));
+    	queueCmd(new RDBCommand(Q3CString().sprintf("up %d", frameNo - currentFrame_), NOTRUNCMD, INFOCMD));
 		if (!stateIsOn(s_fetchLocals)) {
         	queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
 		}
 	} else if (frameNo < currentFrame_) {
-    	queueCmd(new RDBCommand(QCString().sprintf("down %d", currentFrame_ - frameNo), NOTRUNCMD, INFOCMD));
+    	queueCmd(new RDBCommand(Q3CString().sprintf("down %d", currentFrame_ - frameNo), NOTRUNCMD, INFOCMD));
 		if (!stateIsOn(s_fetchLocals)) {
         	queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
 		}
@@ -1074,7 +1076,7 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, const QString& fr
 // **************************************************************************
 
 // This is called when an item needs special processing to show a value.
-void RDBController::slotExpandItem(VarItem *item, const QCString &userRequest)
+void RDBController::slotExpandItem(VarItem *item, const Q3CString &userRequest)
 {
 	if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
@@ -1085,7 +1087,7 @@ void RDBController::slotExpandItem(VarItem *item, const QCString &userRequest)
     if (userRequest.isEmpty())
         return;
 
-    queueCmd(new RDBItemCommand(item, QCString("pp ") + userRequest.data(), false));
+    queueCmd(new RDBItemCommand(item, Q3CString("pp ") + userRequest.data(), false));
 	
 	if (currentCmd_ == 0) {
 		executeCmd();
@@ -1097,7 +1099,7 @@ void RDBController::slotExpandItem(VarItem *item, const QCString &userRequest)
 // This method evaluates text selected with the 'Inspect:' context menu
 void RDBController::slotRubyInspect(const QString &inspectText)
 {
-    queueCmd(new RDBCommand(	QCString().sprintf("p %s", inspectText.latin1()), 
+    queueCmd(new RDBCommand(	Q3CString().sprintf("p %s", inspectText.latin1()), 
 								NOTRUNCMD, 
 								INFOCMD ), true );
 	executeCmd();
@@ -1109,7 +1111,7 @@ void RDBController::slotRubyInspect(const QString &inspectText)
 // Add a new expression to be displayed in the Watch variable tree
 void RDBController::slotAddWatchExpression(const QString& expr, bool execute)
 {
-	queueCmd(new RDBCommand(	QCString().sprintf("display %s", expr.latin1()), 
+	queueCmd(new RDBCommand(	Q3CString().sprintf("display %s", expr.latin1()), 
 								NOTRUNCMD, 
 								NOTINFOCMD ) );
 	if (execute) {
@@ -1122,7 +1124,7 @@ void RDBController::slotAddWatchExpression(const QString& expr, bool execute)
 // Add a new expression to be displayed in the Watch variable tree
 void RDBController::slotRemoveWatchExpression(int displayId)
 {
-    queueCmd(new RDBCommand(	QCString().sprintf("undisplay %d", displayId), 
+    queueCmd(new RDBCommand(	Q3CString().sprintf("undisplay %d", displayId), 
 								NOTRUNCMD, 
 								INFOCMD ) );
 	executeCmd();
@@ -1150,7 +1152,7 @@ void RDBController::slotFetchGlobals(bool fetch)
 // Data from the ruby program's stdout gets processed here.
 void RDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
-    QCString msg(buf, buflen+1);
+    Q3CString msg(buf, buflen+1);
     emit ttyStdout(msg);
 }
 
@@ -1159,7 +1161,7 @@ void RDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 // Data from the ruby program's stderr gets processed here.
 void RDBController::slotDbgStderr(KProcess *, char *buf, int buflen)
 {
-    QCString msg(buf, buflen+1);
+    Q3CString msg(buf, buflen+1);
     emit ttyStderr(msg);
 }
 
@@ -1320,31 +1322,31 @@ void RDBController::slotUserRDBCmd(const QString& cmd)
     QRegExp list_re("^l(ist)?(\\s+\\d+-\\d+)?$");
     
     if ( break_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("break%s", break_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("break%s", break_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( watch_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("watch %s", watch_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("watch %s", watch_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( delete_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("delete%s", delete_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("delete%s", delete_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( display_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("display%s", display_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("display%s", display_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( undisplay_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("undisplay%s", undisplay_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("undisplay%s", undisplay_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( step_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("step%s", step_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("step%s", step_re.cap(2).latin1()), 
 									RUNCMD, 
 									INFOCMD ), true );
     } else if ( next_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("next%s", next_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("next%s", next_re.cap(2).latin1()), 
 									RUNCMD, 
 									INFOCMD ), true );
     } else if ( varlocal_re.search(cmd) >= 0 ) {
@@ -1352,23 +1354,23 @@ void RDBController::slotUserRDBCmd(const QString& cmd)
     } else if ( varglobal_re.search(cmd) >= 0 ) {
         queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
     } else if ( varinstance_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("var instance %s", varinstance_re.cap(3).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("var instance %s", varinstance_re.cap(3).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( varconst_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("var const %s", varconst_re.cap(3).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("var const %s", varconst_re.cap(3).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( methodinstance_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("method instance %s", methodinstance_re.cap(3).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("method instance %s", methodinstance_re.cap(3).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( method_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("method %s", method_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("method %s", method_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if ( list_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("list%s", list_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("list%s", list_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
 	} else if (cmd == "c" || cmd == "cont") {
@@ -1380,11 +1382,11 @@ void RDBController::slotUserRDBCmd(const QString& cmd)
     } else if ( threadcurrent_re.search(cmd) >= 0 ) {
         queueCmd(new RDBCommand("thread current", NOTRUNCMD, INFOCMD), true );
     } else if ( threadswitch_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("thread switch%s", threadswitch_re.cap(4).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("thread switch%s", threadswitch_re.cap(4).latin1()), 
 									RUNCMD, 
 									INFOCMD ), true );
     } else if ( thread_re.search(cmd) >= 0 ) {
-        queueCmd(new RDBCommand(	QCString().sprintf("thread%s", thread_re.cap(2).latin1()), 
+        queueCmd(new RDBCommand(	Q3CString().sprintf("thread%s", thread_re.cap(2).latin1()), 
 									NOTRUNCMD, 
 									INFOCMD ), true );
     } else if (cmd == "frame" || cmd == "f" || cmd == "where" || cmd == "w") {

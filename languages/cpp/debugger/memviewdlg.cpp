@@ -24,8 +24,12 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QBoxLayout>
 
 // **************************************************************************
 //
@@ -55,7 +59,7 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       start_(new KLineEdit(this)),
       end_(new KLineEdit(this)),
-      output_(new QMultiLineEdit(this))
+      output_(new Q3MultiLineEdit(this))
 {
     setCaption(i18n("Memory/Misc Viewer"));
     // Make the top-level layout; a vertical box to contain all widgets

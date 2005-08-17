@@ -25,25 +25,29 @@
 **********************************************************************/
 
 #include "qcompletionedit.h"
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qsizegrip.h>
 #include <qapplication.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3Frame>
 
 QCompletionEdit::QCompletionEdit( QWidget *parent, const char *name )
     : QLineEdit( parent, name ), aAdd( FALSE ), caseSensitive( FALSE )
 {
-    popup = new QVBox( 0, 0, WType_Popup );
-    popup->setFrameStyle( QFrame::Box | QFrame::Plain );
+    popup = new Q3VBox( 0, 0, Qt::WType_Popup );
+    popup->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
     popup->setLineWidth( 1 );
     popup->hide();
 
-    listbox = new QListBox( popup );
-    listbox->setFrameStyle( QFrame::NoFrame );
+    listbox = new Q3ListBox( popup );
+    listbox->setFrameStyle( Q3Frame::NoFrame );
     listbox->setLineWidth( 1 );
     listbox->installEventFilter( this );
-    listbox->setHScrollBarMode( QScrollView::AlwaysOn );
-    listbox->setVScrollBarMode( QScrollView::AlwaysOn );
+    listbox->setHScrollBarMode( Q3ScrollView::AlwaysOn );
+    listbox->setVScrollBarMode( Q3ScrollView::AlwaysOn );
     listbox->setCornerWidget( new QSizeGrip( listbox, "completion sizegrip" ) );
     connect( this, SIGNAL( textChanged( const QString & ) ),
 	     this, SLOT( textDidChange( const QString & ) ) );
@@ -119,8 +123,8 @@ bool QCompletionEdit::eventFilter( QObject *o, QEvent *e )
     if ( o == popup || o == listbox || o == listbox->viewport() ) {
 	if ( e->type() == QEvent::KeyPress ) {
 	    QKeyEvent *ke = (QKeyEvent*)e;
-	    if ( ke->key() == Key_Enter || ke->key() == Key_Return || ke->key() == Key_Tab ) {
-		if ( ke->key() == Key_Tab && listbox->count() > 1 &&
+	    if ( ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Tab ) {
+		if ( ke->key() == Qt::Key_Tab && listbox->count() > 1 &&
 		     listbox->currentItem() < (int)listbox->count() - 1 ) {
 		    listbox->setCurrentItem( listbox->currentItem() + 1 );
 		    return TRUE;
@@ -132,16 +136,16 @@ bool QCompletionEdit::eventFilter( QObject *o, QEvent *e )
 		blockSignals( FALSE );
 		emit chosen( text() );
 		return TRUE;
-	    } else if ( ke->key() == Key_Left || ke->key() == Key_Right ||
-			ke->key() == Key_Up || ke->key() == Key_Down ||
-			ke->key() == Key_Home || ke->key() == Key_End ||
-			ke->key() == Key_Prior || ke->key() == Key_Next ) {
+	    } else if ( ke->key() == Qt::Key_Left || ke->key() == Qt::Key_Right ||
+			ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
+			ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
+			ke->key() == Qt::Key_PageUp || ke->key() == Qt::Key_PageDown ) {
 		return FALSE;
-	    } else if ( ke->key() == Key_Escape ) {
+	    } else if ( ke->key() == Qt::Key_Escape ) {
 		popup->close();
 		setFocus();
-	    } else if ( ke->key() != Key_Shift && ke->key() != Key_Control &&
-			ke->key() != Key_Alt ) {
+	    } else if ( ke->key() != Qt::Key_Shift && ke->key() != Qt::Key_Control &&
+			ke->key() != Qt::Key_Alt ) {
 		updateListBox();
 		if ( listbox->count() == 0 || text().length() == 0 ) {
 		    popup->close();
@@ -162,14 +166,14 @@ bool QCompletionEdit::eventFilter( QObject *o, QEvent *e )
     } else if ( o == this ) {
 	if ( e->type() == QEvent::KeyPress ) {
 	    QKeyEvent *ke = (QKeyEvent*)e;
-	    if ( ke->key() == Key_Up ||
-		 ke->key() == Key_Down ||
-		 ke->key() == Key_Prior ||
-		 ke->key() == Key_Next ||
-		 ke->key() == Key_Return ||
-		 ke->key() == Key_Enter ||
-		 ke->key() == Key_Tab ||
-		 ke->key() ==  Key_Escape ) {
+	    if ( ke->key() == Qt::Key_Up ||
+		 ke->key() == Qt::Key_Down ||
+		 ke->key() == Qt::Key_PageUp ||
+		 ke->key() == Qt::Key_PageDown ||
+		 ke->key() == Qt::Key_Return ||
+		 ke->key() == Qt::Key_Enter ||
+		 ke->key() == Qt::Key_Tab ||
+		 ke->key() ==  Qt::Key_Escape ) {
 		QApplication::sendEvent( listbox, e );
 		return TRUE;
 	    }

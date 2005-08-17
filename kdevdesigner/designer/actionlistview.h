@@ -27,20 +27,20 @@
 #ifndef ACTIONLISTVIEW_H
 #define ACTIONLISTVIEW_H
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include "actiondnd.h"
 
-class ActionItem : public QListViewItem
+class ActionItem : public Q3ListViewItem
 {
 public:
-    ActionItem( QListView *lv, bool group )
-	: QListViewItem( lv ),
+    ActionItem( Q3ListView *lv, bool group )
+	: Q3ListViewItem( lv ),
 	  a( group ? 0 : new QDesignerAction( 0 ) ),
 	  g( group ? new QDesignerActionGroup( 0 ) : 0 ) { setDragEnabled( TRUE ); }
-    ActionItem( QListView *lv, QAction *ac );
-    ActionItem( QListViewItem *i, QAction *ac );
+    ActionItem( Q3ListView *lv, QAction *ac );
+    ActionItem( Q3ListViewItem *i, QAction *ac );
     ActionItem( ActionItem *parent, bool group = FALSE )
-	: QListViewItem( parent ),
+	: Q3ListViewItem( parent ),
 	  a( group ? 0 : new QDesignerAction( parent->actionGroup() ) ),
 	  g( group ? new QDesignerActionGroup( parent->actionGroup() ) : 0 ) { setDragEnabled( TRUE ); moveToEnd(); }
 
@@ -56,7 +56,7 @@ private:
 
 };
 
-class ActionListView : public QListView
+class ActionListView : public Q3ListView
 {
     Q_OBJECT
 
@@ -64,10 +64,10 @@ public:
     ActionListView( QWidget *parent = 0, const char *name = 0 );
 
 protected:
-    QDragObject *dragObject();
+    Q3DragObject *dragObject();
 
 private slots:
-    void rmbMenu( QListViewItem *i, const QPoint &p );
+    void rmbMenu( Q3ListViewItem *i, const QPoint &p );
 
 signals:
     void insertAction();

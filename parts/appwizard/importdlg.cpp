@@ -128,13 +128,13 @@ void ImportDialog::accept()
     importdir.cdUp();
     QFile src(importdir.filePath("importfiles/" + finfo.fileName() + ".kdevelop"));
     kdDebug(9010) << "Import template " << src.name() << endl;
-    if (!src.open(IO_ReadOnly)) {
+    if (!src.open(QIODevice::ReadOnly)) {
         KMessageBox::sorry(this, i18n("Cannot open project template."));
         return;
     }
 
     QFile dest(dir.filePath(projectName + ".kdevelop"));
-    if (!dest.open(IO_WriteOnly)) {
+    if (!dest.open(QIODevice::WriteOnly)) {
         KMessageBox::sorry(this, i18n("Cannot write the project file."));
         return;
     }
@@ -304,7 +304,7 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
     }
 
     QFile af(dirName + "/AUTHORS");
-    if (!af.open(IO_ReadOnly))
+    if (!af.open(QIODevice::ReadOnly))
         return;
     QTextStream astream(&af);
 
@@ -320,7 +320,7 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
     af.close();
 
     QFile cf(dirName + "/configure.in");
-    if (!cf.open(IO_ReadOnly))
+    if (!cf.open(QIODevice::ReadOnly))
         return;
     QTextStream cstream(&cf);
 
@@ -425,7 +425,7 @@ void ImportDialog::createProjectInfrastructure( )
     QDir dir (urlinput_edit->url());
     QStringList files = dir.entryList(cmd.existingPattern);
     if (!files.isEmpty()) {
-        if (KMessageBox::questionYesNo(this, i18n("Project infrastrucure already exists in target directory.\nGenerate new project infrastructure and overwrite old?"), QString::null, i18n("Generate"), i18n("Do Not Generate")) == KMessageBox::No)
+        if (KMessageBox::questionYesNo(this, i18n("Project infrastrucure already exists in target directory.\nGenerate new project infrastructure and overwrite old?")) == KMessageBox::No)
             return;
     }
     

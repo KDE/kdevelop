@@ -13,14 +13,16 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "kdevlicense.h"
 
 #include <qfile.h>
 #include <qdatetime.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 KDevLicense::KDevLicense( const QString& name, const QString& fileName )
 	: m_name( name )
@@ -31,7 +33,7 @@ KDevLicense::KDevLicense( const QString& name, const QString& fileName )
 void KDevLicense::readFile( const QString& fileName )
 {
 	QFile f(fileName);
-	if (!f.open(IO_ReadOnly))
+	if (!f.open(QIODevice::ReadOnly))
 		return;
 	QTextStream stream(&f);
 	QString str;

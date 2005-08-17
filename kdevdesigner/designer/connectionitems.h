@@ -29,7 +29,7 @@
 
 class FormWindow;
 
-#include <qtable.h>
+#include <q3table.h>
 
 class SenderItem;
 class ReceiverItem;
@@ -39,12 +39,12 @@ class ConnectionContainer;
 
 
 class ConnectionItem : public QObject,
-		       public QComboTableItem
+		       public Q3ComboTableItem
 {
     Q_OBJECT
 
 public:
-    ConnectionItem( QTable *table, FormWindow *fw );
+    ConnectionItem( Q3Table *table, FormWindow *fw );
 
     void paint( QPainter *p, const QColorGroup &cg,
 		const QRect &cr, bool selected );
@@ -79,7 +79,7 @@ class SenderItem : public ConnectionItem
     Q_OBJECT
 
 public:
-    SenderItem( QTable *table, FormWindow *fw );
+    SenderItem( Q3Table *table, FormWindow *fw );
     QWidget *createEditor() const;
     void setSenderEx( QObject *sender );
 
@@ -98,7 +98,7 @@ class ReceiverItem : public ConnectionItem
     Q_OBJECT
 
 public:
-    ReceiverItem( QTable *table, FormWindow *fw );
+    ReceiverItem( Q3Table *table, FormWindow *fw );
     QWidget *createEditor() const;
     void setReceiverEx( QObject *receiver );
 
@@ -117,7 +117,7 @@ class SignalItem : public ConnectionItem
     Q_OBJECT
 
 public:
-    SignalItem( QTable *table, FormWindow *fw );
+    SignalItem( Q3Table *table, FormWindow *fw );
 
     void senderChanged( QObject *sender );
     QWidget *createEditor() const;
@@ -134,7 +134,7 @@ class SlotItem : public ConnectionItem
     Q_OBJECT
 
 public:
-    SlotItem( QTable *table, FormWindow *fw );
+    SlotItem( Q3Table *table, FormWindow *fw );
 
     void receiverChanged( QObject *receiver );
     void signalChanged( const QString &signal );

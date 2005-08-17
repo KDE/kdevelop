@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "phperrorview.h"
@@ -49,26 +49,30 @@
 
 #include <qtimer.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtabbar.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QGridLayout>
+#include <Q3PtrList>
 
 class ProblemItem: public KListViewItem
 {
 public:
-    ProblemItem( QListView* parent, const QString& problem,
+    ProblemItem( Q3ListView* parent, const QString& problem,
        const QString& file, const QString& line, const QString& column  )
    : KListViewItem( parent, problem, file, line, column ) {}
 
-    ProblemItem( QListViewItem* parent, const QString& problem,
+    ProblemItem( Q3ListViewItem* parent, const QString& problem,
        const QString& file, const QString& line, const QString& column  )
    : KListViewItem( parent,  problem, file, line, column ) {}
 
-    int compare( QListViewItem* item, int column, bool ascending ) const {
+    int compare( Q3ListViewItem* item, int column, bool ascending ) const {
    if( column == 2 || column == 3 ){
        int a = text( column ).toInt();
        int b = item->text( column ).toInt();
@@ -87,7 +91,7 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
       m_document( 0 ),
       m_markIface( 0 )
 {
-    QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+    Q3WhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
         "It displays TODO entries, FIXME's and errors reported by a language parser. "
         "To add a TODO or FIXME entry, just type<br>"
         "<tt>//@todo my todo</tt><br>"
@@ -113,7 +117,7 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
     InitListView(m_currentList);
     m_currentList->removeColumn(1);
 
-    m_widgetStack = new QWidgetStack(this);
+    m_widgetStack = new Q3WidgetStack(this);
     m_widgetStack->addWidget(m_currentList,0);
     m_widgetStack->addWidget(m_errorList,1);
     m_widgetStack->addWidget(m_fixmeList,2);
@@ -130,7 +134,7 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
     m_tabBar->setTabEnabled(4,false);
 
     m_tabBar->setCurrentTab(0);
-
+    
     m_filterEdit = new QLineEdit(this);
 
     QLabel* m_filterLabel = new QLabel(i18n("Lookup:"),this);
@@ -146,6 +150,8 @@ PHPErrorView::PHPErrorView( PHPSupportPart* part, QWidget* parent, const char* n
     connect( part->partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)) );
     connect( part->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)) );
     connect( part->partController(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)) );
+
+//    configure();
 
     slotActivePartChanged( part->partController()->activePart() );
 }
@@ -168,7 +174,7 @@ void PHPErrorView::slotFilter()
 
 void PHPErrorView::filterList(KListView* listview, const QString& level)
 {
-    QListViewItemIterator it( listview );
+    Q3ListViewItemIterator it( listview );
     while ( it.current() ) {
         if ( it.current()->text(3).contains(m_filterEdit->text(),false))
        new KListViewItem(m_filteredList,level,
@@ -190,11 +196,11 @@ void PHPErrorView::InitListView(KListView* listview)
     listview->addColumn( i18n("Problem") );
     listview->setAllColumnsShowFocus( TRUE );
 
-    connect( listview, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotSelected(QListViewItem*)) );
+    connect( listview, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(slotSelected(Q3ListViewItem*)) );
 
-    connect( listview, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(slotSelected(QListViewItem* )) );
+    connect( listview, SIGNAL(returnPressed(Q3ListViewItem*)),
+             this, SLOT(slotSelected(Q3ListViewItem* )) );
 
 }
 
@@ -204,223 +210,215 @@ PHPErrorView::~PHPErrorView()
 
 void PHPErrorView::slotActivePartChanged( KParts::Part* part )
 {
-   if ( !part ) {
-      m_tabBar->setTabEnabled(0,false);
-      return;
-   }
+    if( !part )
+    {
+        m_tabBar->setTabEnabled(0,false);
+   return;
+    }
 
-   if ( m_document )
-      disconnect( m_document, 0, this, 0 );
+    if( m_document )
+   disconnect( m_document, 0, this, 0 );
 
-   m_document = dynamic_cast<KTextEditor::Document*>( part );
-   m_markIface = 0;
+    m_document = dynamic_cast<KTextEditor::Document*>( part );
+    m_markIface = 0;
 
-   if ( !m_document ) {
-      m_tabBar->setTabEnabled(0,false);
-      return;
-   }
+    if( !m_document )
+     {
+        m_tabBar->setTabEnabled(0,false);
+        return;
+     }
 
-   m_fileName = m_document->url().path();
+    m_fileName = m_document->url().path();
 
-   initCurrentList();
+    initCurrentList();
 
-   m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
 }
 
-void PHPErrorView::removeAllItems( QListView* listview, const QString& filename )
+void PHPErrorView::removeAllItems( Q3ListView* listview, const QString& filename )
 {
-   QListViewItem* current = listview->firstChild();
-   while( current ){
-      QListViewItem* i = current;
-      current = current->nextSibling();
+    Q3ListViewItem* current = listview->firstChild();
+    while( current ){
+   Q3ListViewItem* i = current;
+   current = current->nextSibling();
 
-      if( i->text(0) == filename )
-         delete( i );
-   }
+   if( i->text(0) == filename )
+       delete( i );
+    }
 }
 
 void PHPErrorView::removeAllProblems( const QString& filename )
 {
-   QString relFileName = filename;
-   relFileName.remove(m_phpSupport->project()->projectDirectory());
+  QString relFileName = filename;
+  relFileName.remove(m_phpSupport->project()->projectDirectory());
 
-   kdDebug(9008) << "PHPErrorView::removeAllProblems()" << relFileName << endl;
+    kdDebug(9008) << "PHPErrorView::removeAllProblems()" << relFileName << endl;
 
-   if (filename == m_fileName)
+    if(filename == m_fileName)
       m_currentList->clear();
+      
+  removeAllItems(m_errorList,relFileName);
+  removeAllItems(m_fixmeList,relFileName);
+  removeAllItems(m_todoList,relFileName);
 
-   removeAllItems(m_errorList,relFileName);
-   removeAllItems(m_fixmeList,relFileName);
-   removeAllItems(m_todoList,relFileName);
-
-   if ( m_document && m_markIface ) {
-      QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
-      QPtrListIterator<KTextEditor::Mark> it( marks );
-      while( it.current() ) {
-         m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
-         ++it;
-      }
+    if( m_document && m_markIface ){
+   Q3PtrList<KTextEditor::Mark> marks = m_markIface->marks();
+   Q3PtrListIterator<KTextEditor::Mark> it( marks );
+   while( it.current() ){
+       m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
+       ++it;
    }
+    }
 }
 
 void PHPErrorView::initCurrentList()
 {
-   m_tabBar->setTabEnabled(0,true);
+    m_tabBar->setTabEnabled(0,true);
 
-   QString relFileName = m_fileName;
+    QString relFileName = m_fileName;
 
-   if (m_phpSupport->project())
+    if (m_phpSupport->project())
       relFileName.remove(m_phpSupport->project()->projectDirectory());
 
-   m_currentList->clear();
+    m_currentList->clear();
 
-   updateCurrentWith(m_errorList, i18n("Error"),relFileName);
-   updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
-   updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
+    updateCurrentWith(m_errorList, i18n("Error"),relFileName);
+    updateCurrentWith(m_fixmeList,i18n("Fixme"),relFileName);
+    updateCurrentWith(m_todoList,i18n("Todo"),relFileName);
 }
 
-void PHPErrorView::updateCurrentWith(QListView* listview, const QString& level, const QString& filename)
+void PHPErrorView::updateCurrentWith(Q3ListView* listview, const QString& level, const QString& filename)
 {
-   QListViewItemIterator it(listview);
-   while ( it.current() ) {
-      if ( it.current()->text(0) == filename)
-         new QListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
-      ++it;
-   }
+    Q3ListViewItemIterator it(listview);
+    while ( it.current() ) {
+        if( it.current()->text(0) == filename)
+   new Q3ListViewItem(m_currentList,level,it.current()->text(1),it.current()->text(2),it.current()->text(3));
+        ++it;
+    }
 }
 
-void PHPErrorView::slotSelected( QListViewItem* item )
+void PHPErrorView::slotSelected( Q3ListViewItem* item )
 {
-   bool is_filtered = false;
-   bool is_current = false;
-
-   if (item->listView() == m_filteredList)
+    bool is_filtered = false;
+    bool is_current = false;
+    if(item->listView() == m_filteredList)
       is_filtered = true;
-   else if(item->listView() == m_currentList)
+    else if(item->listView() == m_currentList)
       is_current = true;
 
-   KURL url( is_current ? m_fileName : item->text(0 + is_filtered) );
-   int line = item->text( 1 + is_filtered).toInt();
-   m_phpSupport->partController()->editDocument( url, line-1 );
+
+    KURL url( is_current ? m_fileName : item->text(0 + is_filtered) );
+    int line = item->text( 1 + is_filtered).toInt();
+    // int column = item->text( 3 ).toInt();
+    m_phpSupport->partController()->editDocument( url, line-1 );
 }
 
-void PHPErrorView::reportProblem( int level, const QString& fileName, int line, const QString& text)
+void PHPErrorView::reportProblem( const QString& fileName, int line, int level,  const QString& text)
 {
-   int markType = levelToMarkType( level );
-   if ( markType != -1 && m_document && m_markIface && m_fileName == fileName ) {
+    int markType = levelToMarkType( level );
+    if ( markType != -1 && m_document && m_markIface && m_fileName == fileName ){
       m_markIface->addMark( line, markType );
-   }
+    }
 
-   QString msg = text;
-   msg = msg.replace( QRegExp("\n"), "" );
+    QString msg = text;
+    msg = msg.replace( QRegExp("\n"), "" );
 
-   QString relFileName = fileName;
-   relFileName.remove(m_phpSupport->project()->projectDirectory());
+    QString relFileName = fileName;
+    relFileName.remove(m_phpSupport->project()->projectDirectory());
 
-   KListView* list;
-   switch( level )
-   {
-      case Error:
-      case ErrorNoSuchFunction:
-      case ErrorParse:
-      list = m_errorList;
-      m_tabBar->setCurrentTab(m_tabBar->tab(1));
-      break;
+    KListView* list;
 
-      case Warning:
-      list = m_errorList;
-      break;
+    switch( level )
+    {
+    case Add_Error:
+    case Add_ErrorNoSuchFunction:
+    case Add_ErrorParse:
+   list = m_errorList;
+   m_tabBar->setCurrentTab(m_tabBar->tab(1));
+   break;
+    case Add_Warning:
+   list = m_errorList;
+   break;
+    case Add_Todo:
+   list = m_todoList;
+   break;
+    case Add_Fixme:
+   list = m_fixmeList;
+   break;
+    default:
+        list = NULL;
+    }
 
-      case Todo:
-      list = m_todoList;
-      break;
+    if(list)
+    new ProblemItem( list,
+           relFileName,
+           QString::number( line + 1 ),
+           0,
+           msg );
 
-      case Fixme:
-      list = m_fixmeList;
-      break;
-
-      default:
-      list = NULL;
-      break;
-   }
-
-   if (list) {
-      kdDebug(9018) << "PB " << msg << endl;
-      new ProblemItem( list, relFileName, QString::number( line + 1 ), 0, msg );
-   }
-
-   if (fileName == m_fileName)
-      new QListViewItem(m_currentList, levelToString( level ), QString::number( line + 1 ), 0, msg);
+    if(fileName == m_fileName)
+    new Q3ListViewItem(m_currentList, levelToString( level ),
+           QString::number( line + 1 ),
+           0,
+           msg);
 }
 
 void PHPErrorView::slotPartAdded( KParts::Part* part )
 {
-   KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
+    KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
 
-   if ( !iface )
-      return;
+    if( !iface )
+   return;
 
-   iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
+    iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
 }
 
 void PHPErrorView::slotPartRemoved( KParts::Part* part )
 {
-   kdDebug(9007) << "PHPErrorView::slotPartRemoved()" << endl;
-   if ( part == m_document ){
-      m_document = 0;
-   }
+    kdDebug(9007) << "PHPErrorView::slotPartRemoved()" << endl;
+    if( part == m_document ){
+   m_document = 0;
+    }
 }
 
 QString PHPErrorView::levelToString( int level ) const
 {
-   switch( level )
-   {
-      case ErrorNoSuchFunction:
-      return QString( i18n("Undefined function") );
-
-      case ErrorParse:
-      return QString( i18n("Parse Error") );
-
-      case Error:
-      return QString( i18n("Error") );
-
-      case Warning:
-      return QString( i18n("Warning") );
-
-      case Todo:
-      return QString( i18n("Todo") );
-
-      case Fixme:
-      return QString( i18n("Fixme") );
-
-      default:
-      return QString::null;
+    switch( level )
+    {
+    case Add_ErrorNoSuchFunction:
+   return QString( i18n("Undefined function") );
+    case Add_ErrorParse:
+   return QString( i18n("Parse Error") );
+    case Add_Error:
+   return QString( i18n("Error") );
+    case Add_Warning:
+   return QString( i18n("Warning") );
+    case Add_Todo:
+   return QString( i18n("Todo") );
+    case Add_Fixme:
+   return QString( i18n("Fixme") );
+    default:
+        return QString::null;
     }
-
 }
 
 int PHPErrorView::levelToMarkType( int level ) const
 {
-   switch( level )
-   {
-      case ErrorNoSuchFunction:
-      case ErrorParse:
-      case Error:
-      return KTextEditor::MarkInterface::markType07;
-
-      case Warning:
-      return -1;
-
-      case Todo:
-      return -1;
-
-      case Fixme:
-      return -1;
-
-      default:
-      return -1;
+    switch( level )
+    {
+    case Add_ErrorNoSuchFunction:
+    case Add_ErrorParse:
+    case Add_Error:
+   return KTextEditor::MarkInterface::markType07;
+    case Add_Warning:
+        return -1;
+    case Add_Todo:
+        return -1;
+    case Add_Fixme:
+        return -1;
+    default:
+        return -1;
     }
-
 }
 
 #include "phperrorview.moc"

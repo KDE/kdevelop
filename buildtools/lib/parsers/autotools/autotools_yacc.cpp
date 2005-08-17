@@ -15,8 +15,8 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
 /* As a special exception, when this file is copied by Bison into a
    Bison output file, you may use that output file without restriction.
@@ -134,7 +134,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 /**
@@ -150,7 +150,7 @@ noinst_HEADERS = foo.h #regognize me
 @fixme 1 shift/reduce conflict in "line_body" rule
 */
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include "autotoolsast.h"
 
 #define YYSTYPE_IS_DECLARED
@@ -206,7 +206,7 @@ When a scope or function scope statement is parsed, the child ProjectAST is crea
 and pushed onto the stack. Therefore all statements which belong to the scope
 or function scope are added as childs to their direct parent (scope or function scope).
 */
-QValueStack<ProjectAST*> projects;
+Q3ValueStack<ProjectAST*> projects;
 
 /**
 The current depth of AST node is stored here.
@@ -683,10 +683,10 @@ yy_stack_print (bottom, top)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)				\
+# define YY_STACK_PRINT(Qt::DockBottom, Qt::DockTop)				\
 do {								\
   if (yydebug)							\
-    yy_stack_print ((Bottom), (Top));				\
+    yy_stack_print ((Qt::DockBottom), (Qt::DockTop));				\
 } while (0)
 
 
@@ -726,7 +726,7 @@ int yydebug;
 # define YYDPRINTF(Args)
 # define YYDSYMPRINT(Args)
 # define YYDSYMPRINTF(Title, Token, Value, Location)
-# define YY_STACK_PRINT(Bottom, Top)
+# define YY_STACK_PRINT(Qt::DockBottom, Qt::DockTop)
 # define YY_REDUCE_PRINT(Rule)
 #endif /* !YYDEBUG */
 

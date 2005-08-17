@@ -13,14 +13,14 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEV_DOC_PLUGIN_H
 #define KDEV_DOC_PLUGIN_H
 
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 
 #include <klistbox.h>
@@ -112,10 +112,10 @@ private:
 };
 
 /**Documentation index item.*/
-class IndexItem: public QListBoxText {
+class IndexItem: public Q3ListBoxText {
 public:
     typedef QPair<QString, KURL> URL;
-    typedef QValueList<URL> List;
+    typedef Q3ValueList<URL> List;
 
     IndexItem(IndexBox *listbox, const QString &text);
 
@@ -138,7 +138,7 @@ public:
 //    virtual void refill(QValueList<IndexItemProto*> &items);
 
 private:
-    QMap<QString, QValueList<IndexItemProto*> > items;
+    QMap<QString, Q3ValueList<IndexItemProto*> > items;
     friend class IndexItem;
 
     bool m_dirty;
@@ -150,10 +150,10 @@ class QFontMetrics;
 class DocumentationPlugin;
 
 /**Documentation configuration item.*/
-class ConfigurationItem: public QCheckListItem
+class ConfigurationItem: public Q3CheckListItem
 {
 public:
-    ConfigurationItem(QListView *parent, DocumentationPlugin * plugin, const QString &title, const QString &url,
+    ConfigurationItem(Q3ListView *parent, DocumentationPlugin * plugin, const QString &title, const QString &url,
         bool indexPossible, bool fullTextSearchPossible);
 
     virtual QString title() const { return m_title; }
@@ -165,7 +165,7 @@ public:
     virtual QString origTitle() const {return m_origTitle; }
 
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
-    virtual int width(const QFontMetrics &fm, const QListView *lv, int c) const;
+    virtual int width(const QFontMetrics &fm, const Q3ListView *lv, int c) const;
 
     bool contents() const { return m_contents; }
     void setContents(bool contents) { m_contents = contents; }
@@ -339,11 +339,11 @@ public slots:
 
 protected:
     /**A list of loaded documentation catalogs.*/
-    QValueList<DocumentationCatalogItem*> catalogs;
+    Q3ValueList<DocumentationCatalogItem*> catalogs;
     /**A map of names of loaded documentation catalogs.*/
     QMap<QString, DocumentationCatalogItem*> namedCatalogs;
     /**A map of indices of loaded documentation catalogs.*/
-    QMap<DocumentationCatalogItem*, QValueList<IndexItemProto*> > indexes;
+    QMap<DocumentationCatalogItem*, Q3ValueList<IndexItemProto*> > indexes;
 
     /**Sets capabilities of documentation plugin.*/
     void setCapabilities(int caps) { m_capabilities = caps; }

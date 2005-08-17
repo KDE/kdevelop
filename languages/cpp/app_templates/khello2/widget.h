@@ -10,7 +10,7 @@ class %{APPNAME}Widget : public %{APPNAME}WidgetBase
     Q_OBJECT
 
 public:
-    %{APPNAME}Widget(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    %{APPNAME}Widget(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~%{APPNAME}Widget();
     /*$PUBLIC_FUNCTIONS$*/
 

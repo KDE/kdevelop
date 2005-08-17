@@ -17,8 +17,13 @@
 #include <qregexp.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QTextStream>
+#include <Q3StrList>
+#include <QVBoxLayout>
 
 /** KDE Libs */
 #include <kaction.h>
@@ -115,8 +120,8 @@ AutoSubprojectView::AutoSubprojectView(AutoProjectWidget* widget, AutoProjectPar
 	m_listView->header()->hide();
 	m_listView->addColumn( QString::null );
 	
-	connect( m_listView, SIGNAL( selectionChanged( QListViewItem* ) ),
-	         this, SLOT( slotSelectionChanged( QListViewItem* ) ) );
+	connect( m_listView, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
+	         this, SLOT( slotSelectionChanged( Q3ListViewItem* ) ) );
 	
 	initActions();
 }
@@ -126,7 +131,7 @@ AutoSubprojectView::~AutoSubprojectView()
 {
 }
 
-void AutoSubprojectView::slotSelectionChanged( QListViewItem* item )
+void AutoSubprojectView::slotSelectionChanged( Q3ListViewItem* item )
 {
 	if ( m_listView->selectedItems().count() <= 0 )
 	{
@@ -263,11 +268,11 @@ void AutoSubprojectView::initActions()
 	                               "delete custom build commands which appears in the subproject "
 	                               "context menu.<br></qt>"));
 	
-	connect( m_listView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
-	         this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+	connect( m_listView, SIGNAL( contextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ),
+	         this, SLOT( slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ) );
 }
 
-void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, const QPoint &p )
+void AutoSubprojectView::slotContextMenu( KListView *, Q3ListViewItem *item, const QPoint &p )
 {
 	if ( !item )
 		return ;
@@ -508,7 +513,7 @@ void AutoSubprojectView::slotRemoveSubproject()
     {
         QFile subdirsfile( parent->path + "/subdirs" );
         QStringList topdirs;
-        if ( subdirsfile.open( IO_ReadOnly ) )
+        if ( subdirsfile.open( QIODevice::ReadOnly ) )
         {
             QTextStream subdirsstream( &subdirsfile );
             while (!subdirsstream.atEnd())
@@ -516,7 +521,7 @@ void AutoSubprojectView::slotRemoveSubproject()
             subdirsfile.close();
         }
         topdirs.remove(subdirToRemove);
-        if ( subdirsfile.open( IO_WriteOnly | IO_Truncate ) )
+        if ( subdirsfile.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
         {
             QTextStream subdirsstream( &subdirsfile );
             for (QStringList::const_iterator it = topdirs.begin(); it != topdirs.end(); ++it)
@@ -557,14 +562,14 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 
 #if 0
 
-	QStrList prefixes;
+	Q3StrList prefixes;
 	prefixes.append( "bin" );
 	prefixes.append( "pkglib" );
 	prefixes.append( "pkgdata" );
 	prefixes.append( "noinst" );
 	prefixes.append( "check" );
 	prefixes.append( "sbin" );
-	QStrList primaries;
+	Q3StrList primaries;
 	primaries.append( "PROGRAMS" );
 	primaries.append( "LIBRARIES" );
 	primaries.append( "LTLIBRARIES" );
@@ -756,7 +761,7 @@ void AutoSubprojectView::parseSUBDIRS( SubprojectItem *item,
 	{
 		QStringList dirs;
 		QFile subdirsfile( item->path + "/subdirs" );
-		if ( subdirsfile.open( IO_ReadOnly ) )
+		if ( subdirsfile.open( QIODevice::ReadOnly ) )
 		{
 			QTextStream subdirsstream( &subdirsfile );
 			while ( !subdirsstream.atEnd() )
@@ -859,7 +864,7 @@ void AutoSubprojectView::parseSUBDIRS( SubprojectItem *item,
 		newitem->setOpen( open );
 
 		// Move to the bottom of the list
-		QListViewItem *lastItem = item->firstChild();
+		Q3ListViewItem *lastItem = item->firstChild();
 		while ( lastItem->nextSibling()
 		      )
 			lastItem = lastItem->nextSibling();
@@ -945,7 +950,7 @@ void AutoSubprojectView::slotInstallSuSubproject( )
 TargetItem * AutoSubprojectView::findNoinstHeaders( SubprojectItem *item )
 {
 	TargetItem* noinst_HEADERS_item = 0;
-	QPtrListIterator<TargetItem> itemIt( item->targets );
+	Q3PtrListIterator<TargetItem> itemIt( item->targets );
 	while( itemIt.current() ){
 	    TargetItem* titem = itemIt.current();
 	    ++itemIt;
@@ -999,7 +1004,7 @@ void AutoSubprojectView::slotManageBuildCommands( )
 		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 0, it.key());
 		widget->commandsTable->setText(widget->commandsTable->numRows() - 1, 1,
 			it.data().section(":::", 0, 0));
-		static_cast<QComboTableItem*>(widget->commandsTable->
+		static_cast<Q3ComboTableItem*>(widget->commandsTable->
 			item(widget->commandsTable->numRows() - 1, 2))->
 			setCurrentItem(it.data().section(":::", 1, 1).toInt());
 	}
@@ -1013,7 +1018,7 @@ void AutoSubprojectView::slotManageBuildCommands( )
 		{
 			config->writeEntry(widget->commandsTable->text(i, 0),
 				widget->commandsTable->text(i, 1)+":::"+
-				QString("%1").arg(static_cast<QComboTableItem*>(widget->
+				QString("%1").arg(static_cast<Q3ComboTableItem*>(widget->
 				commandsTable->item(i, 2))->currentItem()));
 		}
 		config->sync();
@@ -1067,7 +1072,7 @@ void AutoSubprojectView::slotCollapseTree()
 	expandCollapseFirst( m_listView->currentItem(), false );
 }
 
-void AutoSubprojectView::expandCollapseFirst( QListViewItem * item, bool expand )
+void AutoSubprojectView::expandCollapseFirst( Q3ListViewItem * item, bool expand )
 {
 	if ( !item ) return;
 	
@@ -1086,7 +1091,7 @@ void AutoSubprojectView::expandCollapseFirst( QListViewItem * item, bool expand 
 	}
 }
 
-void AutoSubprojectView::expandCollapse( QListViewItem * item, bool expand )
+void AutoSubprojectView::expandCollapse( Q3ListViewItem * item, bool expand )
 {
 	if ( !item ) return;
 	

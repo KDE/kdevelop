@@ -1,9 +1,14 @@
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <Q3ValueList>
+#include <QDropEvent>
+#include <Q3PtrList>
 %{CPP_TEMPLATE}
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qdragobject.h>
+#include <q3paintdevicemetrics.h>
+#include <q3dragobject.h>
 #include <qstatusbar.h>
 #include <qtoolbutton.h>
 
@@ -93,7 +98,7 @@
 		but->adjustSize();
 		but->hide();
 		connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
-		tabWidget()->setCornerWidget(but, TopRight);
+		tabWidget()->setCornerWidget(but, Qt::TopRightCorner);
 	}
 #endif
 
@@ -170,8 +175,8 @@ void %{APPNAMELC}kmdi::slotFileNew()
 void %{APPNAMELC}kmdi::openURL(const KURL & url)
 {
 	// check if the url is not already opened first
-	QValueList<%{APPNAMELC}kmdiView*>::iterator it  = m_views.begin();
-	QValueList<%{APPNAMELC}kmdiView*>::iterator end = m_views.end();
+	Q3ValueList<%{APPNAMELC}kmdiView*>::iterator it  = m_views.begin();
+	Q3ValueList<%{APPNAMELC}kmdiView*>::iterator end = m_views.end();
 	for (; it != end; ++it)
 	{
 		%{APPNAMELC}kmdiView *view = *it;
@@ -283,9 +288,9 @@ void %{APPNAMELC}kmdi::optionsConfigureKeys()
 {
 	//KKeyDialog::configure(actionCollection());
 	KKeyDialog dlg( false, this );
-	QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
+	Q3PtrList<KXMLGUIClient> clients = guiFactory()->clients();
 
-	for( QPtrListIterator<KXMLGUIClient> it( clients ); it.current(); ++it )
+	for( Q3PtrListIterator<KXMLGUIClient> it( clients ); it.current(); ++it )
 		dlg.insert ( (*it)->actionCollection(), (*it)->instance()->aboutData()->programName() );
 
 	dlg.configure();
@@ -365,7 +370,7 @@ void %{APPNAMELC}kmdi::dropEvent(QDropEvent *event)
 
 bool %{APPNAMELC}kmdi::queryClose()
 {
-	QValueList<%{APPNAMELC}kmdiView*>::iterator it;
+	Q3ValueList<%{APPNAMELC}kmdiView*>::iterator it;
 
 	// check if we can close all documents
 	for (it = m_views.begin(); it != m_views.end(); ++it)

@@ -15,13 +15,15 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include "addcatalogdlg.h"
 
 #include <qlabel.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <klineedit.h>
 #include <kurlrequester.h>
@@ -31,11 +33,11 @@
 #include "docutils.h"
 #include "kdevdocumentationplugin.h"
 
-AddCatalogDlg::AddCatalogDlg( QValueList<DocumentationPlugin*> const & plugins, 
-	QWidget* parent, const char* name, bool modal, WFlags fl)
+AddCatalogDlg::AddCatalogDlg( Q3ValueList<DocumentationPlugin*> const & plugins, 
+	QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 	:AddCatalogDlgBase(parent,name, modal,fl), m_plugins( plugins )
 {
-	for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
+	for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
 	{
 		docTypeCombo->insertItem( (*it)->pluginName() );
 	}
@@ -82,7 +84,7 @@ void AddCatalogDlg::setURL(const QString &url)
 
 DocumentationPlugin * AddCatalogDlg::plugin( )
 {
-	for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
+	for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it)
 	{
 		if ( docTypeCombo->currentText() == (*it)->pluginName() )
 		{

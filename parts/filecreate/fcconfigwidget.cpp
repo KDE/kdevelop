@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -19,6 +19,9 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
@@ -87,13 +90,13 @@ void FCConfigWidget::accept()
     m_part->m_filetypes.clear();
     m_part->slotProjectOpened();
 
-    for (QValueList<KURL>::iterator it = urlsToEdit.begin(); it != urlsToEdit.end(); ++it )
+    for (Q3ValueList<KURL>::iterator it = urlsToEdit.begin(); it != urlsToEdit.end(); ++it )
     {
         m_part->partController()->editDocument(*it);
     }
 }
 
-void FCConfigWidget::loadGlobalConfig(QListView *view, bool checkmarks)
+void FCConfigWidget::loadGlobalConfig(Q3ListView *view, bool checkmarks)
 {
     QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
     QDomDocument globalDom;
@@ -118,37 +121,37 @@ void FCConfigWidget::loadGlobalConfig(QListView *view, bool checkmarks)
                 QString subtyperef = element.attribute("subtyperef");
                 if (subtyperef.isNull())
                 {
-                    QListViewItem *it = view->findItem(ext, 0);
+                    Q3ListViewItem *it = view->findItem(ext, 0);
                     if (it)
                     {
-                        ((QCheckListItem*)it)->setOn(true);
+                        ((Q3CheckListItem*)it)->setOn(true);
 
-                        QListViewItem *lastChild = it->firstChild();
+                        Q3ListViewItem *lastChild = it->firstChild();
                         while ( lastChild )
                         {
-                            ((QCheckListItem*)lastChild)->setOn(true);
+                            ((Q3CheckListItem*)lastChild)->setOn(true);
                             lastChild = lastChild->nextSibling();
                         }
                     }
                 }
                 else
                 {
-                    QListViewItem *it = view->findItem(subtyperef, 0);
+                    Q3ListViewItem *it = view->findItem(subtyperef, 0);
                     if (it)
-                        ((QCheckListItem*)it)->setOn(true);
+                        ((Q3CheckListItem*)it)->setOn(true);
                 }
             }
         }
     }
 }
 
-void FCConfigWidget::loadProjectConfig(QListView *view)
+void FCConfigWidget::loadProjectConfig(Q3ListView *view)
 {
     m_part->readTypes( *(m_part->projectDom()), m_projectfiletypes, false );
     loadFileTypes(m_projectfiletypes, view, false);
 }
 
-void FCConfigWidget::loadProjectTemplates(QListView *view)
+void FCConfigWidget::loadProjectTemplates(Q3ListView *view)
 {
     QDir templDir( m_part->project()->projectDirectory() + "/templates/" );
     templDir.setFilter( QDir::Files );
@@ -187,7 +190,7 @@ void FCConfigWidget::saveGlobalConfig()
     saveConfiguration(globalDom, fileTypes, true);
 
     QFile config( KGlobal::dirs()->saveLocation("data", "kdevfilecreate/", true) + "template-info.xml" );
-    config.open(IO_WriteOnly | IO_Truncate);
+    config.open(QIODevice::WriteOnly | QIODevice::Truncate);
     QTextStream stream(&config);
     stream << "<?xml version = '1.0'?>";
     stream << globalDom.toString();
@@ -223,11 +226,11 @@ void FCConfigWidget::saveProjectConfig()
     globalTypes = dom.createElement( "useglobaltypes" );
     apPart.appendChild( globalTypes );
 
-    QListViewItemIterator it( fcglobal_view );
+    Q3ListViewItemIterator it( fcglobal_view );
     for( ; it.current( ); ++it ){
         if (!it.current()->parent())
         {
-            QCheckListItem *chit = dynamic_cast<QCheckListItem*>(it.current());
+            Q3CheckListItem *chit = dynamic_cast<Q3CheckListItem*>(it.current());
             if ( !chit ) continue;
             if (chit->isOn())
             {
@@ -237,10 +240,10 @@ void FCConfigWidget::saveProjectConfig()
             }
             else
             {
-                QListViewItem *lastChild = chit->firstChild();
+                Q3ListViewItem *lastChild = chit->firstChild();
                 while ( lastChild )
                 {
-                    QCheckListItem *chsit = dynamic_cast<QCheckListItem*>(lastChild);
+                    Q3CheckListItem *chsit = dynamic_cast<Q3CheckListItem*>(lastChild);
                     if ( (chsit) && (chsit->isOn()))
                     {
                         QDomElement type = dom.createElement( "type" );
@@ -279,7 +282,7 @@ void FCConfigWidget::saveProjectConfig()
         }
     }*/
     //check for new templates and those with location changed
-    QListViewItemIterator it2(fctemplates_view);
+    Q3ListViewItemIterator it2(fctemplates_view);
     while (it2.current())
     {
         if (!it2.current()->text(1).isEmpty())
@@ -297,7 +300,7 @@ void FCConfigWidget::saveProjectConfig()
 
 void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, bool global)
 {
-    QListViewItemIterator it( fc_view );
+    Q3ListViewItemIterator it( fc_view );
     for( ; it.current( ); ++it ){
         if (!it.current()->parent())
         {
@@ -329,7 +332,7 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
             }
 
 
-            QListViewItem *lastChild = it.current()->firstChild();
+            Q3ListViewItem *lastChild = it.current()->firstChild();
             while ( lastChild )
             {
                 QDomElement subtype = dom.createElement( "subtype" );
@@ -373,7 +376,7 @@ void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString des
             d.mkdir(dest);
 
         QFile f(dest + destName);
-        f.open(IO_WriteOnly);
+        f.open(QIODevice::WriteOnly);
         f.close();
     }
     else
@@ -390,7 +393,7 @@ void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString des
     }
 }
 
-void FCConfigWidget::loadFileTypes(QPtrList<FileCreate::FileType> list, QListView *view, bool checkmarks)
+void FCConfigWidget::loadFileTypes(Q3PtrList<FileCreate::FileType> list, Q3ListView *view, bool checkmarks)
 {
     FileType *ft;
 
@@ -399,11 +402,11 @@ void FCConfigWidget::loadFileTypes(QPtrList<FileCreate::FileType> list, QListVie
     {
         if ( (ft = list.at(i)) )
         {
-            QListViewItem *it;
+            Q3ListViewItem *it;
             if (!checkmarks)
-                it = new QListViewItem(view);
+                it = new Q3ListViewItem(view);
             else
-                it = new QCheckListItem(view, "", QCheckListItem::CheckBox);
+                it = new Q3CheckListItem(view, "", Q3CheckListItem::CheckBox);
 
             it->setText(0, ft->ext());
             it->setText(1, ft->name());
@@ -416,11 +419,11 @@ void FCConfigWidget::loadFileTypes(QPtrList<FileCreate::FileType> list, QListVie
             {
                 if ( (sft = ft->subtypes().at(j)) )
                 {
-                    QListViewItem *sit;
+                    Q3ListViewItem *sit;
                     if (!checkmarks)
-                        sit = new QListViewItem(it);
+                        sit = new Q3ListViewItem(it);
                     else
-                        sit = new QCheckListItem(it, "", QCheckListItem::CheckBox);
+                        sit = new Q3CheckListItem(it, "", Q3CheckListItem::CheckBox);
 
                     sit->setText(0, sft->subtypeRef());
                     sit->setText(1, sft->name());
@@ -440,7 +443,7 @@ void FCConfigWidget::removetemplate_button_clicked( )
         KURL removedTemplate;
         removedTemplate.setPath(m_part->project()->projectDirectory() + "/templates/" + fctemplates_view->currentItem()->text(0));
         KIO::NetAccess::del(removedTemplate);
-        QListViewItem *it = fctemplates_view->currentItem();
+        Q3ListViewItem *it = fctemplates_view->currentItem();
         if (it->itemBelow())
         {
             fc_view->setSelected(it->itemBelow(), true);
@@ -457,49 +460,49 @@ void FCConfigWidget::removetemplate_button_clicked( )
 
 void FCConfigWidget::copyToProject_button_clicked()
 {
-    QListViewItem *it = fcglobal_view->currentItem();
+    Q3ListViewItem *it = fcglobal_view->currentItem();
     if (it)
     {
-        QListViewItem *it_copy_parent = 0;
+        Q3ListViewItem *it_copy_parent = 0;
         QString destParent;
         if (it->parent())
         {
-            it_copy_parent = new QListViewItem(fc_view, it->parent()->text(0),
+            it_copy_parent = new Q3ListViewItem(fc_view, it->parent()->text(0),
                 it->parent()->text(1),
                 it->parent()->text(2),
                 it->parent()->text(3),
                 locate("data", "kdevfilecreate/file-templates/"+ it->parent()->text(0)));
             destParent += it->parent()->text(0) + "-";
-            QCheckListItem *chk = dynamic_cast<QCheckListItem*>(it->parent());
+            Q3CheckListItem *chk = dynamic_cast<Q3CheckListItem*>(it->parent());
             if (chk)
                 chk->setOn(false);
         }
-        QListViewItem *it_copy = 0;
+        Q3ListViewItem *it_copy = 0;
         if (it_copy_parent)
-            it_copy = new QListViewItem(it_copy_parent, it->text(0),
+            it_copy = new Q3ListViewItem(it_copy_parent, it->text(0),
                 it->text(1),
                 it->text(2),
                 it->text(3),
                 locate("data", "kdevfilecreate/file-templates/"+destParent + it->text(0)));
         else
-            it_copy = new QListViewItem(fc_view, it->text(0),
+            it_copy = new Q3ListViewItem(fc_view, it->text(0),
                 it->text(1),
                 it->text(2),
                 it->text(3),
                 locate("data", "kdevfilecreate/file-templates/" +destParent+ it->text(0)));
-        QCheckListItem *chk = dynamic_cast<QCheckListItem*>(it);
+        Q3CheckListItem *chk = dynamic_cast<Q3CheckListItem*>(it);
         if (chk)
             chk->setOn(false);
         fc_view->setSelected(it_copy, true);
         fc_view->setCurrentItem(it_copy);
-        QListViewItem * it_child = it->firstChild();
+        Q3ListViewItem * it_child = it->firstChild();
         while( it_child ) {
-            new QListViewItem(it_copy, it_child->text(0),
+            new Q3ListViewItem(it_copy, it_child->text(0),
                 it_child->text(1),
                 it_child->text(2),
                 it_child->text(3),
                 locate("data", "kdevfilecreate/file-templates/"+ it_copy->text(0) + "-" + it_child->text(0)));
-            QCheckListItem *chk_child = dynamic_cast<QCheckListItem*>(it_child);
+            Q3CheckListItem *chk_child = dynamic_cast<Q3CheckListItem*>(it_child);
             if (chk_child)
                 chk_child->setOn(false);
             it_child = it_child->nextSibling();
@@ -512,7 +515,7 @@ void FCConfigWidget::newtype_button_clicked()
     FCTypeEdit *te = new FCTypeEdit();
     if (te->exec() == QDialog::Accepted )
     {
-        QListViewItem *it = new QListViewItem(fc_view, te->typeext_edit->text(),
+        Q3ListViewItem *it = new Q3ListViewItem(fc_view, te->typeext_edit->text(),
             te->typename_edit->text(),
             te->icon_url->icon(),
             te->typedescr_edit->text(),
@@ -530,7 +533,7 @@ void FCConfigWidget::newsubtype_button_clicked()
         FCTypeEdit *te = new FCTypeEdit(this);
         if (te->exec() == QDialog::Accepted )
         {
-            /*QListViewItem *it =*/(void) new QListViewItem(fc_view->currentItem(),
+            /*QListViewItem *it =*/(void) new Q3ListViewItem(fc_view->currentItem(),
                 te->typeext_edit->text(),
                 te->typename_edit->text(),
                 te->icon_url->icon(),
@@ -546,7 +549,7 @@ void FCConfigWidget::remove_button_clicked()
 {
     if (fc_view->currentItem())
     {
-        QListViewItem *it = fc_view->currentItem();
+        Q3ListViewItem *it = fc_view->currentItem();
         if (it->itemBelow())
         {
             fc_view->setSelected(it->itemBelow(), true);
@@ -564,12 +567,12 @@ void FCConfigWidget::remove_button_clicked()
 
 void FCConfigWidget::moveup_button_clicked()
 {
-    QListViewItem *i = fc_view->currentItem();
+    Q3ListViewItem *i = fc_view->currentItem();
     if ( !i )
         return;
 
-    QListViewItemIterator it( i );
-    QListViewItem *parent = i->parent();
+    Q3ListViewItemIterator it( i );
+    Q3ListViewItem *parent = i->parent();
     --it;
     while ( it.current() ) {
         if ( it.current()->parent() == parent )
@@ -579,7 +582,7 @@ void FCConfigWidget::moveup_button_clicked()
 
     if ( !it.current() )
         return;
-    QListViewItem *other = it.current();
+    Q3ListViewItem *other = it.current();
 
     other->moveItem( i );
 }
@@ -587,12 +590,12 @@ void FCConfigWidget::moveup_button_clicked()
 
 void FCConfigWidget::movedown_button_clicked()
 {
-    QListViewItem *i = fc_view->currentItem();
+    Q3ListViewItem *i = fc_view->currentItem();
     if ( !i )
         return;
 
-    QListViewItemIterator it( i );
-    QListViewItem *parent = i->parent();
+    Q3ListViewItemIterator it( i );
+    Q3ListViewItem *parent = i->parent();
     it++;
     while ( it.current() ) {
         if ( it.current()->parent() == parent )
@@ -602,7 +605,7 @@ void FCConfigWidget::movedown_button_clicked()
 
     if ( !it.current() )
         return;
-    QListViewItem *other = it.current();
+    Q3ListViewItem *other = it.current();
 
     i->moveItem( other );
 }
@@ -610,7 +613,7 @@ void FCConfigWidget::movedown_button_clicked()
 
 void FCConfigWidget::edittype_button_clicked()
 {
-    QListViewItem *it = fc_view->currentItem();
+    Q3ListViewItem *it = fc_view->currentItem();
     if ( it )
     {
         FCTypeEdit *te = new FCTypeEdit(this);
@@ -642,7 +645,7 @@ void FCConfigWidget::newtemplate_button_clicked()
     FCTemplateEdit *te = new FCTemplateEdit;
     if (te->exec() == QDialog::Accepted)
     {
-        /*QListViewItem *it =*/(void) new QListViewItem(fctemplates_view, te->templatename_edit->text(),
+        /*QListViewItem *it =*/(void) new Q3ListViewItem(fctemplates_view, te->templatename_edit->text(),
             te->template_url->url().isEmpty() ? QString("create") : te->template_url->url());
     }
 }
@@ -650,7 +653,7 @@ void FCConfigWidget::newtemplate_button_clicked()
 
 void FCConfigWidget::edittemplate_button_clicked()
 {
-    QListViewItem *it;
+    Q3ListViewItem *it;
     if ( (it = fctemplates_view->currentItem()) )
     {
         FCTemplateEdit *te = new FCTemplateEdit;
@@ -688,7 +691,7 @@ void FCConfigWidget::edit_type_content_button_clicked( )
 {
     if (!fc_view->currentItem())
         return;
-    QListViewItem *it = fc_view->currentItem();
+    Q3ListViewItem *it = fc_view->currentItem();
     QString type_name = it->text(0);
     if (it->parent())
         type_name.prepend(it->parent()->text(0) + "-");

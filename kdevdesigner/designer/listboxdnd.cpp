@@ -26,27 +26,33 @@
 
 #include "listboxdnd.h"
 #include <qwidget.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qpainter.h>
-#include <qdragobject.h>
-#include <qvaluelist.h>
+#include <q3dragobject.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 // The Dragobject Declaration ---------------------------------------
-class ListBoxItemDrag : public QStoredDrag
+class ListBoxItemDrag : public Q3StoredDrag
 {
 public:
-    ListBoxItemDrag( ListBoxItemList & items, bool sendPtr = FALSE, QListBox * parent = 0, const char * name = 0 );
+    ListBoxItemDrag( ListBoxItemList & items, bool sendPtr = FALSE, Q3ListBox * parent = 0, const char * name = 0 );
     ~ListBoxItemDrag() {};
     static bool canDecode( QDragMoveEvent * event );
-    static bool decode( QDropEvent * event, QListBox * parent, QListBoxItem * insertPoint );
+    static bool decode( QDropEvent * event, Q3ListBox * parent, Q3ListBoxItem * insertPoint );
     enum ItemType { ListBoxText = 1, ListBoxPixmap = 2 };
 };
 // ------------------------------------------------------------------
 
-ListBoxDnd::ListBoxDnd( QListBox * eventSource, const char * name )
+ListBoxDnd::ListBoxDnd( Q3ListBox * eventSource, const char * name )
     : ListDnd( eventSource, name ) { }
 
-void ListBoxDnd::confirmDrop( QListBoxItem * )
+void ListBoxDnd::confirmDrop( Q3ListBoxItem * )
 {
     dropConfirmed = TRUE;
 }
@@ -62,12 +68,12 @@ bool ListBoxDnd::dropEvent( QDropEvent * event )
 	}
 	
 	QPoint pos = event->pos();
-	QListBoxItem * after = itemAt( pos );
+	Q3ListBoxItem * after = itemAt( pos );
 
-	if ( ListBoxItemDrag::decode( event, (QListBox *) src, after ) ) {
+	if ( ListBoxItemDrag::decode( event, (Q3ListBox *) src, after ) ) {
 	    event->accept();
-	    QListBox * src = (QListBox *) this->src;
-	    QListBoxItem * item = ( after ? after->next() : src->firstItem() );
+	    Q3ListBox * src = (Q3ListBox *) this->src;
+	    Q3ListBoxItem * item = ( after ? after->next() : src->firstItem() );
 	    src->setCurrentItem( item );
 	    emit dropped( item ); // ###FIX: Supports only one item!
 	}
@@ -81,15 +87,15 @@ bool ListBoxDnd::dropEvent( QDropEvent * event )
 
 bool ListBoxDnd::mouseMoveEvent( QMouseEvent * event )
 {
-    if ( event->state() & LeftButton ) {
+    if ( event->state() & Qt::LeftButton ) {
 	if ( ( event->pos() - mousePressPos ).manhattanLength() > 3 ) {
 
 	    ListBoxItemList list;
 	    buildList( list );
-	    ListBoxItemDrag * dragobject = new ListBoxItemDrag( list, (dMode & Internal), (QListBox *) src );
+	    ListBoxItemDrag * dragobject = new ListBoxItemDrag( list, (dMode & Internal), (Q3ListBox *) src );
 
 	    // Emit signal for all dragged items
-	    QListBoxItem * i = list.first();
+	    Q3ListBoxItem * i = list.first();
 	    while ( i ) {
 		emit dragged( i );
 		i = list.next();
@@ -117,10 +123,10 @@ bool ListBoxDnd::mouseMoveEvent( QMouseEvent * event )
 
 int ListBoxDnd::buildList( ListBoxItemList & list )
 {
-    QListBoxItem * i = ((QListBox *)src)->firstItem();
+    Q3ListBoxItem * i = ((Q3ListBox *)src)->firstItem();
     while ( i ) {
 	if ( i->isSelected() ) {
-	    ((QListBox *)src)->setSelected( i, FALSE );
+	    ((Q3ListBox *)src)->setSelected( i, FALSE );
 	    list.append( i );
 	}
 	i = i->next();
@@ -130,40 +136,40 @@ int ListBoxDnd::buildList( ListBoxItemList & list )
 
 void ListBoxDnd::insertList( ListBoxItemList & list )
 {
-    QListBoxItem * i = list.first();
+    Q3ListBoxItem * i = list.first();
     while ( i ) {
-	((QListBox *)src)->insertItem( i, i->prev() );
+	((Q3ListBox *)src)->insertItem( i, i->prev() );
 	i = list.next();
     }
 }
 
 void ListBoxDnd::removeList( ListBoxItemList & list )
 {
-    QListBoxItem * i = list.first();
+    Q3ListBoxItem * i = list.first();
     while ( i ) {
-	((QListBox *)src)->takeItem( i ); // remove item from QListBox
+	((Q3ListBox *)src)->takeItem( i ); // remove item from QListBox
 	i = list.next();
     }
 }
 
 void ListBoxDnd::updateLine( const QPoint & dragPos )
 {
-    QListBox * src = (QListBox *) this->src;
-    QListBoxItem *item = itemAt( dragPos );
+    Q3ListBox * src = (Q3ListBox *) this->src;
+    Q3ListBoxItem *item = itemAt( dragPos );
 
     int ypos = item ? 
 	( src->itemRect( item ).bottom() - ( line->height() / 2 ) ) : 
-	( src->itemRect( ((QListBox *)src)->firstItem() ).top() );
+	( src->itemRect( ((Q3ListBox *)src)->firstItem() ).top() );
 
     line->resize( src->viewport()->width(), line->height() );
     line->move( 0, ypos );
 }
 
-QListBoxItem * ListBoxDnd::itemAt( QPoint pos )
+Q3ListBoxItem * ListBoxDnd::itemAt( QPoint pos )
 {
-    QListBox * src = (QListBox *) this->src;
-    QListBoxItem * result = src->itemAt( pos );
-    QListBoxItem * last = src->item( src->count() - 1 );
+    Q3ListBox * src = (Q3ListBox *) this->src;
+    Q3ListBoxItem * result = src->itemAt( pos );
+    Q3ListBoxItem * last = src->item( src->count() - 1 );
     int i = src->index( result );
 
     if ( result && ( pos.y() < (src->itemRect(result).top() + src->itemHeight(i)/2) ) )
@@ -184,17 +190,17 @@ bool ListBoxDnd::canDecode( QDragEnterEvent * event )
 // The Dragobject Implementation ------------------------------------
 // ------------------------------------------------------------------
 
-ListBoxItemDrag::ListBoxItemDrag( ListBoxItemList & items, bool sendPtr, QListBox * parent, const char * name )
-    : QStoredDrag( "qt/listboxitem", parent, name )
+ListBoxItemDrag::ListBoxItemDrag( ListBoxItemList & items, bool sendPtr, Q3ListBox * parent, const char * name )
+    : Q3StoredDrag( "qt/listboxitem", parent, name )
 {
     // ### FIX!
-    QByteArray data( sizeof( Q_INT32 ) + sizeof( QListBoxItem ) * items.count() );
-    QDataStream stream( data, IO_WriteOnly );
+    QByteArray data( sizeof( Q_INT32 ) + sizeof( Q3ListBoxItem ) * items.count() );
+    QDataStream stream( data, QIODevice::WriteOnly );
 
     stream << items.count();
     stream << (Q_UINT8) sendPtr; // just transfer item pointer; omit data
 
-    QListBoxItem * i = items.first();
+    Q3ListBoxItem * i = items.first();
 
     if ( sendPtr ) {
 	
@@ -238,13 +244,13 @@ bool ListBoxItemDrag::canDecode( QDragMoveEvent * event )
     return event->provides( "qt/listboxitem" );
 }
 
-bool ListBoxItemDrag::decode( QDropEvent * event, QListBox * parent, QListBoxItem * after )
+bool ListBoxItemDrag::decode( QDropEvent * event, Q3ListBox * parent, Q3ListBoxItem * after )
 {
     QByteArray data = event->encodedData( "qt/listboxitem" );
 
     if ( data.size() ) {
 	event->accept();
-	QDataStream stream( data, IO_ReadOnly );
+	QDataStream stream( data, QIODevice::ReadOnly );
 
 	int count = 0;
 	stream >> count;
@@ -252,7 +258,7 @@ bool ListBoxItemDrag::decode( QDropEvent * event, QListBox * parent, QListBoxIte
 	Q_UINT8 recievePtr = 0; // data contains just item pointers; no data
 	stream >> recievePtr;
 
-	QListBoxItem * item = 0;
+	Q3ListBoxItem * item = 0;
 
 	if ( recievePtr ) {
 	    
@@ -260,7 +266,7 @@ bool ListBoxItemDrag::decode( QDropEvent * event, QListBox * parent, QListBoxIte
 
 		Q_ULONG p = 0; //###FIX: demands sizeof(ulong) >= sizeof(void*)
 		stream >> p;
-		item = (QListBoxItem *) p;
+		item = (Q3ListBoxItem *) p;
 		
 		parent->insertItem( item, after );
 		
@@ -288,9 +294,9 @@ bool ListBoxItemDrag::decode( QDropEvent * event, QListBox * parent, QListBoxIte
 		stream >> isSelectable;
 
 		if ( hasPixmap ) {
-		    item = new QListBoxPixmap( parent, pixmap, text, after );
+		    item = new Q3ListBoxPixmap( parent, pixmap, text, after );
 		} else {
-		    item = new QListBoxText( parent, text, after );
+		    item = new Q3ListBoxText( parent, text, after );
 		}
 
 		item->setSelectable( isSelectable );

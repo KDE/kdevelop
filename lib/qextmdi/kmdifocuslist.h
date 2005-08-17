@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KMDI_FOCUS_LIST
 #define KMDI_FOCUS_LIST
@@ -33,7 +33,7 @@ public:
 protected slots:
 	void objectHasBeenDestroyed(QObject*);
 private:
-	QMap<QWidget*,QWidget::FocusPolicy> m_list;
+	QMap<QWidget*,Qt::FocusPolicy> m_list;
 
 };
 

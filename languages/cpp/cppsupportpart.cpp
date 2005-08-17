@@ -37,7 +37,6 @@
 #include "creategettersetterconfiguration.h"
 #include "kdevsourceformatter.h"
 #include "kdevcreatefile.h" 
-#include "qtbuildconfig.h"
 // wizards
 #include "cppnewclassdlg.h"
 #include "subclassingdlg.h"
@@ -46,22 +45,28 @@
 #include "creategettersetterdialog.h" 
 // designer integration
 #include "qtdesignercppintegration.h"
+//Added by qt3to4:
+#include <Q3CString>
+#include <QTextStream>
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <QCustomEvent>
 #include "cppimplementationwidget.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qdir.h>
 #include <qdom.h>
 #include <qfileinfo.h>
-#include <qguardedptr.h>
-#include <qpopupmenu.h>
-#include <qprogressdialog.h>
+#include <qpointer.h>
+#include <q3popupmenu.h>
+#include <q3progressdialog.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qstatusbar.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 #include <qregexp.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <kapplication.h>
@@ -121,8 +126,8 @@ public:
 		{
 			cppSupport() ->problemReporter() ->removeAllProblems( fileName );
 			
-			QValueList<Problem> pl = problems( fileName );
-			QValueList<Problem>::ConstIterator it = pl.begin();
+			Q3ValueList<Problem> pl = problems( fileName );
+			Q3ValueList<Problem>::ConstIterator it = pl.begin();
 			while ( it != pl.end() )
 			{
 				const Problem & p = *it++;
@@ -155,7 +160,6 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
 	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration( this );
 	connect( m_pCompletionConfig, SIGNAL( stored() ), this, SLOT( codeCompletionConfigStored() ) );
-	m_qtBuildConfig = new QtBuildConfig( this, projectDom() );
 	
 	m_driver = new CppDriver( this );
 	m_problemReporter = 0;
@@ -172,8 +176,8 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	connect( core(), SIGNAL( languageChanged() ), this, SLOT( projectOpened() ) );
 	connect( partController(), SIGNAL( savedFile( const KURL& ) ),
 	         this, SLOT( savedFile( const KURL& ) ) );
-	connect( core(), SIGNAL( contextMenu( QPopupMenu *, const Context * ) ),
-	         this, SLOT( contextMenu( QPopupMenu *, const Context * ) ) );
+	connect( core(), SIGNAL( contextMenu( Q3PopupMenu *, const Context * ) ),
+	         this, SLOT( contextMenu( Q3PopupMenu *, const Context * ) ) );
 	connect( partController(), SIGNAL( activePartChanged( KParts::Part* ) ),
 	         this, SLOT( activePartChanged( KParts::Part* ) ) );
 	connect( partController(), SIGNAL( partRemoved( KParts::Part* ) ),
@@ -184,7 +188,7 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	
 	KAction *action;
 	
-	action = new KAction( i18n( "Switch Header/Implementation" ), SHIFT + Key_F12,
+	action = new KAction( i18n( "Switch Header/Implementation" ), Qt::SHIFT + Qt::Key_F12,
 	                      this, SLOT( slotSwitchHeader() ),
 	                      actionCollection(), "edit_switchheader" );
 	action->setToolTip( i18n( "Switch between header and implementation files" ) );
@@ -195,7 +199,7 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	                            "this brings you to the corresponding header file." ) );
 	action->setEnabled( false );
 	
-	action = new KAction( i18n( "Complete Text" ), CTRL + Key_Space,
+	action = new KAction( i18n( "Complete Text" ), Qt::CTRL + Qt::Key_Space,
 	                      this, SLOT( slotCompleteText() ),
 	                      actionCollection(), "edit_complete_text" );
 	action->setToolTip( i18n( "Complete current expression" ) );
@@ -208,7 +212,7 @@ m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 	                                          this, SLOT( slotCreateAccessMethods() ), actionCollection(),
 	                                          "edit_create_getter_setter" );
 	
-	action = new KAction( i18n( "Make Member" ), 0, Key_F2,
+	action = new KAction( i18n( "Make Member" ), 0, Qt::Key_F2,
 	                      this, SLOT( slotMakeMember() ),
 	                      actionCollection(), "edit_make_member" );
 	action->setToolTip( i18n( "Make member" ) );
@@ -255,7 +259,7 @@ CppSupportPart::~CppSupportPart()
 	
 	codeRepository() ->setMainCatalog( 0 );
 	
-	QPtrListIterator<Catalog> it( m_catalogList );
+	Q3PtrListIterator<Catalog> it( m_catalogList );
 	while ( Catalog * catalog = it.current() )
 	{
 		++it;
@@ -292,8 +296,8 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 			m_problemReporter->removeAllProblems( fileName );
 			
 			bool hasErrors = false;
-			QValueList<Problem> problems = event->problems();
-			QValueList<Problem>::ConstIterator it = problems.begin();
+			Q3ValueList<Problem> problems = event->problems();
+			Q3ValueList<Problem>::ConstIterator it = problems.begin();
 			while ( it != problems.end() )
 			{
 				const Problem & p = *it++;
@@ -312,7 +316,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 
 void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
-	QVBox * vbox = 0;
+	Q3VBox * vbox = 0;
 	
 	vbox = dlg->addVBoxPage( i18n( "C++ Specific" ), i18n( "C++ Specific" ),
 	                         BarIcon( info() ->icon(), KIcon::SizeMedium ) );
@@ -322,7 +326,7 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 
 void CppSupportPart::configWidget( KDialogBase *dlg )
 {
-	QVBox * vbox = dlg->addVBoxPage( i18n( "C++ Class Generator" ), i18n( "C++ Class Generator" ),
+	Q3VBox * vbox = dlg->addVBoxPage( i18n( "C++ Class Generator" ), i18n( "C++ Class Generator" ),
 	                                 BarIcon( info() ->icon(), KIcon::SizeMedium ) );
 	ClassGeneratorConfig *w = new ClassGeneratorConfig( vbox, "classgenerator config widget" );
 	connect( dlg, SIGNAL( okClicked() ), w, SLOT( storeConfig() ) );
@@ -437,8 +441,8 @@ void CppSupportPart::projectClosed( )
 	kdDebug( 9007 ) << "projectClosed( )" << endl;
 	
 	QStringList enabledPCSs;
-	QValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
-	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
+	Q3ValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
+	for ( Q3ValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
 	{
 		Catalog* c = *it;
 		if ( c->enabled() )
@@ -483,7 +487,7 @@ QString CppSupportPart::findHeader( const QStringList &list, const QString &head
 }
 
 
-void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
+void CppSupportPart::contextMenu( Q3PopupMenu *popup, const Context *context )
 {
 	m_activeClass = 0;
 	m_activeFunction = 0;
@@ -495,7 +499,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 	{
 		int id;
 		
-		id = popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
+		popup->insertItem( "Switch header/implementation", this, SLOT( slotSwitchHeader() ) );
 		popup->setWhatsThis( id, i18n( "<b>Switch Header/Implementation</b><p>"
 		                               "If you are currently looking at a header file, this "
 		                               "brings you to the corresponding implementation file. "
@@ -551,7 +555,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			
 			if ( !candidate.isEmpty() && codeModel() ->hasFile( candidate ) )
 			{
-				QPopupMenu * m2 = new QPopupMenu( popup );
+				Q3PopupMenu * m2 = new Q3PopupMenu( popup );
 				id = popup->insertItem( i18n( "Go to Declaration" ), m2 );
 				popup->setWhatsThis( id, i18n( "<b>Go to declaration</b><p>Provides a menu to select available function declarations "
 				                               "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file." ) );
@@ -595,7 +599,7 @@ void CppSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
 			//kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
 			if ( codeModel() ->hasFile( candidate1 ) )
 			{
-				QPopupMenu * m = new QPopupMenu( popup );
+				Q3PopupMenu * m = new Q3PopupMenu( popup );
 				id = popup->insertItem( i18n( "Go to Definition" ), m );
 				popup->setWhatsThis( id, i18n( "<b>Go to definition</b><p>Provides a menu to select available function definitions "
 				                               "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file." ) );
@@ -885,7 +889,7 @@ void CppSupportPart::slotSwitchHeader()
 				int startline, column, endLine, endColumn;
 				( *it_decl ) ->getStartPosition( &startline, &column );
 				( *it_decl ) ->getEndPosition( &endLine, &endColumn );
-				if ( (int)currentline >= startline && (int)currentline <= endLine )
+				if ( currentline >= startline && currentline <= endLine )
 				{
 					// found it. can we find a matching defintion?
 					FileDom source = codeModel() ->fileByName( candidate );
@@ -921,7 +925,7 @@ void CppSupportPart::slotSwitchHeader()
 				int startline, column, endLine, endColumn;
 				( *it_def ) ->getStartPosition( &startline, &column );
 				( *it_def ) ->getEndPosition( &endLine, &endColumn );
-				if ( (int)currentline >= startline && (int)currentline <= endLine )
+				if ( currentline >= startline && currentline <= endLine )
 				{
 					// found it. can we find a matching declaration?
 					FileDom source = codeModel() ->fileByName( candidate );
@@ -1048,7 +1052,7 @@ bool CppSupportPart::parseProject( bool force )
 	
 	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
 	
-	if ( !force && !QFile::exists( skip_file_name ) && _jd->file.open( IO_ReadOnly ) )
+	if ( !force && !QFile::exists( skip_file_name ) && _jd->file.open( QIODevice::ReadOnly ) )
 	{
 		_jd->stream.setDevice( &( _jd->file ) );
 		
@@ -1079,7 +1083,7 @@ bool CppSupportPart::parseProject( bool force )
 	_jd->files = reorder( modifiedFileList() );
 	kdDebug( 9007 ) << "CppSupportPart::parseProject 3" << endl;
 	
-	QProgressBar* bar = new QProgressBar( _jd->files.count( ), mainWindow( ) ->statusBar( ) );
+	Q3ProgressBar* bar = new Q3ProgressBar( _jd->files.count( ), mainWindow( ) ->statusBar( ) );
 	bar->setMinimumWidth( 120 );
 	bar->setCenterIndicator( true );
 	mainWindow( ) ->statusBar( ) ->addWidget( bar );
@@ -1258,8 +1262,8 @@ void CppSupportPart::MakeMemberHelper( QString& text, int& atLine, int& atColumn
 			if ( declarator->exceptionSpecification() )
 			{
 				declStr += QString::fromLatin1( " throw( " );
-				QPtrList<AST> l = declarator->exceptionSpecification() ->nodeList();
-				QPtrListIterator<AST> type_it( l );
+				Q3PtrList<AST> l = declarator->exceptionSpecification() ->nodeList();
+				Q3PtrListIterator<AST> type_it( l );
 				while ( type_it.current() )
 				{
 					declStr += type_it.current() ->text();
@@ -1404,8 +1408,8 @@ KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
 	if ( !partController() ->parts() )
 		return 0;
 	
-	QPtrList<KParts::Part> parts( *partController() ->parts() );
-	QPtrListIterator<KParts::Part> it( parts );
+	Q3PtrList<KParts::Part> parts( *partController() ->parts() );
+	Q3PtrListIterator<KParts::Part> it( parts );
 	while ( KParts::Part * part = it.current() )
 	{
 		KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part );
@@ -1443,12 +1447,7 @@ void CppSupportPart::setupCatalog( )
 	if ( pcsList.size() && pcsVersion() < KDEV_DB_VERSION )
 	{
 		QStringList l = pcsList + pcsIdxList;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
-		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ), KStdGuiItem::del(), KStdGuiItem::cancel() );
-#else
-		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ), KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" )), KStdGuiItem::cancel() );
-#endif
-
+		int rtn = KMessageBox::questionYesNoList( 0, i18n( "Persistant class store will be disabled: you have a wrong version of pcs installed.\nRemove old pcs files?" ), l, i18n( "C++ Support" ) );
 		if ( rtn == KMessageBox::Yes )
 		{
 			QStringList::Iterator it = l.begin();
@@ -1630,7 +1629,7 @@ void CppSupportPart::saveProjectSourceInfo()
 		return ;
 	
 	QFile f( project() ->projectDirectory() + "/" + project() ->projectName() + ".pcs" );
-	if ( !f.open( IO_WriteOnly ) )
+	if ( !f.open( QIODevice::WriteOnly ) )
 		return ;
 	
 	createIgnorePCSFile();
@@ -1672,7 +1671,7 @@ void CppSupportPart::saveProjectSourceInfo()
 QString CppSupportPart::extractInterface( const ClassDom& klass )
 {
 	QString txt;
-	QTextStream stream( &txt, IO_WriteOnly );
+	QTextStream stream( &txt, QIODevice::WriteOnly );
 	
 	QString name = klass->name() + "Interface";
 	QString ind;
@@ -1728,7 +1727,7 @@ void CppSupportPart::slotExtractInterface( )
 		QString text = extractInterface( m_activeClass );
 		
 		QFile f( ifaceFileName );
-		if ( f.open( IO_WriteOnly ) )
+		if ( f.open( QIODevice::WriteOnly ) )
 		{
 			QTextStream stream( &f );
 			stream
@@ -1822,9 +1821,9 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 	if ( !QFile::exists( dbName ) )
 		return ;
 	
-	QValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
+	Q3ValueList<Catalog*> catalogs = codeRepository() ->registeredCatalogs();
 	Catalog* c = 0;
-	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
+	for ( Q3ValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
 	{
 		if ( ( *it ) ->dbName() == dbName )
 		{
@@ -1971,11 +1970,11 @@ void CppSupportPart::slotFunctionHint( )
 
 void CppSupportPart::createIgnorePCSFile( )
 {
-	static QCString skip_me( "ignore me\n" );
+	static Q3CString skip_me( "ignore me\n" );
 	
 	QString skip_file_name = project() ->projectDirectory() + "/" + project() ->projectName() + ".ignore_pcs";
 	QFile skip_pcs_file( skip_file_name );
-	if ( skip_pcs_file.open( IO_WriteOnly ) )
+	if ( skip_pcs_file.open( QIODevice::WriteOnly ) )
 	{
 		skip_pcs_file.writeBlock( skip_me );
 		skip_pcs_file.close();
@@ -2115,11 +2114,11 @@ VariableDom CppSupportPart::currentAttribute( ClassDom curClass ) const
 	{
 		int startLine, startCol;
 		( *i ) ->getStartPosition( &startLine, &startCol );
-		if ( startLine < (int)line || ( startLine == (int)line && startCol <= (int)col ) )
+		if ( startLine < line || ( startLine == line && startCol <= col ) )
 		{
 			int endLine, endCol;
 			( *i ) ->getEndPosition( &endLine, &endCol );
-			if ( endLine > (int)line || ( endLine == (int)line && endCol >= (int)col ) )
+			if ( endLine > line || ( endLine == line && endCol >= col ) )
 				return * i;
 		}
 	}

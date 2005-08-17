@@ -5,9 +5,11 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 
-class QPopupMenu;
+class Q3PopupMenu;
 
 
 class KAction;
@@ -76,7 +78,7 @@ private slots:
   void slotTargetMenuActivated(int id);
 
   void projectConfigWidget(KDialogBase *dlg);
-  void contextMenu(QPopupMenu *popup, const Context *context);
+  void contextMenu(Q3PopupMenu *popup, const Context *context);
 
   void optionsAccepted();
 
@@ -101,7 +103,7 @@ private:
 
   KAction *m_buildProjectAction;
 
-  QPopupMenu *m_targetMenu;
+  Q3PopupMenu *m_targetMenu;
 
   AntOptionsWidget *m_antOptionsWidget;
   ClassPathWidget *m_classPathWidget;

@@ -28,7 +28,7 @@
 #include "dbconnection.h"
 #include "project.h"
 #include "asciivalidator.h"
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
@@ -36,7 +36,7 @@
 #include <qsqldatabase.h>
 
 DatabaseConnectionEditor::DatabaseConnectionEditor( DatabaseConnection* connection, QWidget* parent,
-						    const char* name, bool modal, WFlags fl )
+						    const char* name, bool modal, Qt::WFlags fl )
     : DatabaseConnectionEditorBase( parent, name, modal, fl ), conn( connection )
 {
     connectionWidget = new DatabaseConnectionWidget( grp );

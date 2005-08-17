@@ -10,7 +10,9 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 %{APPNAME}Part::%{APPNAME}Part( QWidget *parentWidget, const char *widgetName,
                                   QObject *parent, const char *name )
@@ -20,7 +22,7 @@
     setInstance( %{APPNAME}PartFactory::instance() );
 
     // this should be your custom internal widget
-    m_widget = new QMultiLineEdit( parentWidget, widgetName );
+    m_widget = new Q3MultiLineEdit( parentWidget, widgetName );
 
     // notify the part that this is our internal widget
     setWidget(m_widget);
@@ -82,7 +84,7 @@ bool %{APPNAME}Part::openFile()
 {
     // m_file is always local so we can use QFile on it
     QFile file(m_file);
-    if (file.open(IO_ReadOnly) == false)
+    if (file.open(QIODevice::ReadOnly) == false)
         return false;
 
     // our example widget is text-based, so we use QTextStream instead
@@ -111,7 +113,7 @@ bool %{APPNAME}Part::saveFile()
 
     // m_file is always local, so we use QFile
     QFile file(m_file);
-    if (file.open(IO_WriteOnly) == false)
+    if (file.open(QIODevice::WriteOnly) == false)
         return false;
 
     // use QTextStream to dump the text to the file
@@ -172,7 +174,7 @@ KParts::Part* %{APPNAME}PartFactory::createPartObject( QWidget *parentWidget, co
     %{APPNAME}Part* obj = new %{APPNAME}Part( parentWidget, widgetName, parent, name );
 
     // See if we are to be read-write or not
-    if (QCString(classname) == "KParts::ReadOnlyPart")
+    if (Q3CString(classname) == "KParts::ReadOnlyPart")
         obj->setReadWrite(false);
 
     return obj;

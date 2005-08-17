@@ -35,7 +35,10 @@
 #include <kiconloader.h>
 #include "kdevdesigner_part.h"
 
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <QCloseEvent>
 #include <./private/qrichtext_p.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -48,7 +51,7 @@
 
 ToolBarItem::ToolBarItem( QWidget *parent, QWidget *toolBar,
 			  const QString &label, const QString &tagstr,
-			  const QIconSet &icon, const QKeySequence &key )
+			  const QIcon &icon, const QKeySequence &key )
     : QAction( parent )
 {
     setIconSet( icon );
@@ -70,21 +73,21 @@ void ToolBarItem::wasActivated()
 }
 
 TextEdit::TextEdit( QWidget *parent, const char *name )
-    : QTextEdit( parent, name )
+    : Q3TextEdit( parent, name )
 {
     setTextFormat( Qt::PlainText );
 }
 
 QTextParagraph* TextEdit::paragraph()
 {
-    QTextCursor *tc = new QTextCursor( QTextEdit::document() );
+    QTextCursor *tc = new QTextCursor( Q3TextEdit::document() );
     return tc->paragraph();
 }
 
 
 MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *parent, QWidget *editWidget,
 				  FormWindow *fw, const QString &text )
-    : MultiLineEditorBase( parent, 0, WType_Dialog | WShowModal ), formwindow( fw ), doWrap( FALSE )
+    : MultiLineEditorBase( parent, 0, Qt::WType_Dialog | Qt::WShowModal ), formwindow( fw ), doWrap( FALSE )
 {
     callStatic = call_static;
 
@@ -95,10 +98,10 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
     Layout4->insertWidget( 0, textEdit );
 
     if ( richtextMode ) {
-	QPopupMenu *stylesMenu = new QPopupMenu( this );
+	Q3PopupMenu *stylesMenu = new Q3PopupMenu( this );
 	menuBar->insertItem( i18n( "&Styles" ), stylesMenu );
 
-	basicToolBar = new QToolBar( i18n( "Basics" ), this, DockTop );
+	basicToolBar = new Q3ToolBar( i18n( "Basics" ), this, DockTop );
 
 	ToolBarItem *it = new ToolBarItem( this, basicToolBar, i18n( "Italic" ),
 					   "i", BarIcon( "designer_textitalic.png", KDevDesignerPartFactory::instance() ), CTRL+Key_I );
@@ -126,7 +129,7 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 
 	basicToolBar->addSeparator();
 
-	QPopupMenu *layoutMenu = new QPopupMenu( this );
+	Q3PopupMenu *layoutMenu = new Q3PopupMenu( this );
 	menuBar->insertItem( i18n( "&Layout" ), layoutMenu );
 
 	QAction *brAction = new QAction( this );
@@ -169,10 +172,10 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 		 this, SLOT( insertTags( const QString& )));
 
 
-	QPopupMenu *fontMenu = new QPopupMenu( this );
+	Q3PopupMenu *fontMenu = new Q3PopupMenu( this );
 	menuBar->insertItem( i18n( "&Font" ), fontMenu );
 
-	fontToolBar = new QToolBar( "Fonts", this, DockTop );
+	fontToolBar = new Q3ToolBar( "Fonts", this, DockTop );
 
 	QAction *fontAction = new QAction( this );
 	fontAction->setIconSet( BarIcon( "designer_textfont.png", KDevDesignerPartFactory::instance() ) );
@@ -207,10 +210,10 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 	connect( h3, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	QPopupMenu *optionsMenu = new QPopupMenu( this );
+	Q3PopupMenu *optionsMenu = new Q3PopupMenu( this );
 	menuBar->insertItem( i18n( "O&ptions" ), optionsMenu );
 
-	optionsToolBar = new QToolBar( "Options", this, DockTop );
+	optionsToolBar = new Q3ToolBar( "Options", this, DockTop );
 	wrapAction = new QAction( this );
 	wrapAction->setToggleAction( TRUE );
 	wrapAction->setIconSet( BarIcon( "designer_wordwrap.png", KDevDesignerPartFactory::instance() ) );
@@ -227,8 +230,8 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 	textEdit->document()->setUseFormatCollection( FALSE );
 	textEdit->document()->setPreProcessor( new SyntaxHighlighter_HTML );
 
-	if ( !callStatic && ::qt_cast<QTextEdit*>(editWidget) ) {
-	    mlined = (QTextEdit*)editWidget;
+	if ( !callStatic && ::qt_cast<Q3TextEdit*>(editWidget) ) {
+	    mlined = (Q3TextEdit*)editWidget;
 	    mlined->setReadOnly( TRUE );
 
 	    const QMetaProperty *wordWrap = mlined->metaObject()->property(
@@ -397,9 +400,9 @@ void MultiLineEditor::changeWrapMode( bool b )
 	if ( oldDoWrap )
 	    textEdit->setProperty( "wordWrap", oldWrapMode );
 	else
-	    textEdit->setWordWrap( QTextEdit::WidgetWidth );
+	    textEdit->setWordWrap( Q3TextEdit::WidgetWidth );
     } else {
-	textEdit->setWordWrap( QTextEdit::NoWrap );
+	textEdit->setWordWrap( Q3TextEdit::NoWrap );
     }
 }
 

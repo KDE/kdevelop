@@ -38,9 +38,11 @@
 #endif
 
 #include <qsqldatabase.h>
-#include <qsqlform.h>
-#include <qsqlcursor.h>
+#include <q3sqlform.h>
+#include <q3sqlcursor.h>
 #include <qsqlrecord.h>
+//Added by qt3to4:
+#include <QEvent>
 
 DatabaseSupport::DatabaseSupport()
 {
@@ -60,7 +62,7 @@ void DatabaseSupport::initPreview( const QString &connection, const QString &tab
 	con = QSqlDatabase::database( connection );
     else
 	con = QSqlDatabase::database();
-    frm = new QSqlForm( o, table );
+    frm = new Q3SqlForm( o, table );
     for ( QMap<QString, QString>::Iterator it = dbControls.begin(); it != dbControls.end(); ++it ) {
 	QObject *chld = parent->child( it.key(), "QWidget" );
 	if ( !chld )
@@ -70,19 +72,19 @@ void DatabaseSupport::initPreview( const QString &connection, const QString &tab
 }
 
 QDesignerDataBrowser::QDesignerDataBrowser( QWidget *parent, const char *name )
-    : QDataBrowser( parent, name )
+    : Q3DataBrowser( parent, name )
 {
 }
 
 bool QDesignerDataBrowser::event( QEvent* e )
 {
-    bool b = QDataBrowser::event( e );
+    bool b = Q3DataBrowser::event( e );
 #if defined(DESIGNER)
     if ( MainWindow::self->isPreviewing() ) {
 #endif
 	if ( e->type() == QEvent::Show ) {
 	    if ( con ) {
-		QSqlCursor* cursor = new QSqlCursor( tbl, TRUE, con );
+		Q3SqlCursor* cursor = new Q3SqlCursor( tbl, TRUE, con );
 		setSqlCursor( cursor, TRUE );
 		setForm( frm );
 		refresh();
@@ -97,13 +99,13 @@ bool QDesignerDataBrowser::event( QEvent* e )
 }
 
 QDesignerDataView::QDesignerDataView( QWidget *parent, const char *name )
-    : QDataView( parent, name )
+    : Q3DataView( parent, name )
 {
 }
 
 bool QDesignerDataView::event( QEvent* e )
 {
-    bool b = QDataView::event( e );
+    bool b = Q3DataView::event( e );
 #if defined(DESIGNER)
     if ( MainWindow::self->isPreviewing() ) {
 #endif

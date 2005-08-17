@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
 %{H_TEMPLATE}
 
 #ifndef _PLUGIN_%{APPNAMEUC}_H_
@@ -58,7 +61,7 @@ private:
     void initConfigPage( %{APPNAME}ConfigPage* );
 
 private:
-    QPtrList<class PluginView> m_views;
+    Q3PtrList<class PluginView> m_views;
 };
 
 

@@ -28,8 +28,10 @@
 #define SOURCEEDITOR_H
 
 #include "../interfaces/editorinterface.h"
-#include <qvbox.h>
-#include <qguardedptr.h>
+#include <q3vbox.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 
 class FormWindow;
 class QCloseEvent;
@@ -37,7 +39,7 @@ struct LanguageInterface;
 class Project;
 class SourceFile;
 
-class SourceEditor : public QVBox
+class SourceEditor : public Q3VBox
 {
     Q_OBJECT
 
@@ -96,10 +98,10 @@ protected:
 private:
     EditorInterface *iFace;
     LanguageInterface *lIface;
-    QGuardedPtr<QObject> obj;
+    QPointer<QObject> obj;
     Project *pro;
     QString lang;
-    QGuardedPtr<QWidget> editor;
+    QPointer<QWidget> editor;
 
 };
 

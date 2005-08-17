@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef SECURITYWIDGET_H
 #define SECURITYWIDGET_H
@@ -35,7 +35,7 @@ public:
     void reportProblem(const QString &file, int line, const QString &problem, const QString &suggestion);
     
 public slots:
-    void gotoLine(QListViewItem *item);
+    void gotoLine(Q3ListViewItem *item);
     
 private:
     SecurityPart *m_part;

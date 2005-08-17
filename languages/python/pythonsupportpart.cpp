@@ -20,11 +20,13 @@
 #include <domutil.h>
 
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -55,8 +57,8 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
              this, SLOT(savedFile(const KURL&)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
-  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-        this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+  connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+        this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 
     KAction *action;
 
@@ -90,7 +92,7 @@ PythonSupportPart::~PythonSupportPart()
 {}
 
 
-void PythonSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
+void PythonSupportPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     if (context->hasType(Context::FileContext)){
         const FileContext *fc = static_cast<const FileContext*>(context);
@@ -108,7 +110,7 @@ void PythonSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void PythonSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Python"));
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Python"));
     PythonConfigWidget *w = new PythonConfigWidget(*projectDom(), vbox, "python config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -240,7 +242,7 @@ KMimeType::List PythonSupportPart::mimeTypes( )
 void PythonSupportPart::parse(const QString &fileName)
 {
     QFile f(QFile::encodeName(fileName));
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return;
     QTextStream stream(&f);
 
@@ -252,7 +254,7 @@ void PythonSupportPart::parse(const QString &fileName)
 
     ClassDom lastClass;
     QString rawline;
-    QCString line;
+    Q3CString line;
     int lineNo = 0;
     while (!stream.atEnd()) {
         rawline = stream.readLine();

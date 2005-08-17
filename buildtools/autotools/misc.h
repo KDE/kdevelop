@@ -12,7 +12,7 @@
 #ifndef _MISC_H_
 #define _MISC_H_
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qmap.h>
 #include <qwidget.h>
 

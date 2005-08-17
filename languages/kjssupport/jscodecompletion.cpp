@@ -10,12 +10,14 @@
 //
 //
 #include "jscodecompletion.h"
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kapplication.h>
 #include <qregexp.h>
 
@@ -89,10 +91,10 @@ void JSCodeCompletion::setActiveEditorPart( KParts::Part * part )
 	connect(part->widget(), SIGNAL(completionDone()), this, SLOT(completionBoxHidden()));
 }
 
-QValueList< KTextEditor::CompletionEntry > JSCodeCompletion::getVars( const QString & startText )
+Q3ValueList< KTextEditor::CompletionEntry > JSCodeCompletion::getVars( const QString & startText )
 {
 	kdDebug() << "getVars for " << startText << endl;
-	QValueList<KTextEditor::CompletionEntry> varList;
+	Q3ValueList<KTextEditor::CompletionEntry> varList;
 	/*
 	QValueList<QString>::ConstIterator it;
 	for (it = m_vars.begin(); it != m_vars.end(); ++it)

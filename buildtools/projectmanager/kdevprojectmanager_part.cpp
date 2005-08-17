@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #include "kdevprojectmanager_widget.h"
 #include "kdevprojectmanager_part.h"
@@ -37,7 +37,7 @@
 #include <kparts/componentfactory.h>
 
 #include <qdir.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
 
@@ -45,7 +45,7 @@
 
 typedef KDevGenericFactory<KDevProjectManagerPart> KDevProjectManagerFactory;
 static const KDevPluginInfo data("kdevprojectmanager");
-K_EXPORT_COMPONENT_FACTORY(libkdevprojectmanager, KDevProjectManagerFactory(data))
+K_EXPORT_COMPONENT_FACTORY(libkdevprojectmanager, KDevProjectManagerFactory(data));
 
 KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name, const QStringList&)
     : KDevProject(&data, parent, name ? name : "KDevProjectManagerPart")
@@ -91,7 +91,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     
     m_widget = new KDevProjectManagerWidget(this);
 
-    QWhatsThis::add(m_widget, i18n("Project manager"));
+    Q3WhatsThis::add(m_widget, i18n("Project Manager"));
 
     mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 

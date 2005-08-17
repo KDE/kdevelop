@@ -15,16 +15,19 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef INDEXVIEW_H
 #define INDEXVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QEvent>
 
 class IndexBox;
 class KLineEdit;
-class QListBoxItem;
+class Q3ListBoxItem;
 class DocumentationWidget;
 class FindDocumentation;
 
@@ -44,10 +47,10 @@ public slots:
     void askSearchTerm();
     
 protected slots:
-    void searchInIndex(QListBoxItem *item);
+    void searchInIndex(Q3ListBoxItem *item);
     void showIndex(const QString &term);
 
-    void itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos);
+    void itemMouseButtonPressed(int button, Q3ListBoxItem *item, const QPoint &pos);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

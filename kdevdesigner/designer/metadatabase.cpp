@@ -43,13 +43,18 @@
 #include <qapplication.h>
 #include <qobject.h>
 #include <qlayout.h>
-#include <qptrdict.h>
-#include <qobjectlist.h>
-#include <qstrlist.h>
+#include <q3ptrdict.h>
+#include <qobject.h>
+#include <q3strlist.h>
 #include <qmetaobject.h>
-#include <qwidgetlist.h>
-#include <qmainwindow.h>
+#include <qwidget.h>
+#include <q3mainwindow.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPixmap>
+#include <Q3PtrList>
+#include <Q3ValueList>
 #include <private/qpluginmanager_p.h>
 #include <qdatetime.h>
 #include <qfile.h>
@@ -67,10 +72,10 @@ public:
     QMap<QString, QString> propertyComments;
     int spacing, margin;
     QString resizeMode;
-    QValueList<MetaDataBase::Connection> connections;
-    QValueList<MetaDataBase::Function> functionList;
-    QValueList<MetaDataBase::Include> includes;
-    QValueList<MetaDataBase::Variable> variables;
+    Q3ValueList<MetaDataBase::Connection> connections;
+    Q3ValueList<MetaDataBase::Function> functionList;
+    Q3ValueList<MetaDataBase::Include> includes;
+    Q3ValueList<MetaDataBase::Variable> variables;
     QStringList forwards, sigs;
     QWidgetList tabOrder;
     MetaDataBase::MetaInfo metaInfo;
@@ -78,13 +83,13 @@ public:
     QMap<int, QString> pixmapArguments;
     QMap<int, QString> pixmapKeys;
     QMap<QString, QString> columnFields;
-    QValueList<uint> breakPoints;
+    Q3ValueList<uint> breakPoints;
     QMap<int, QString> breakPointConditions;
     QString exportMacro;
 };
 
-static QPtrDict<MetaDataBaseRecord> *db = 0;
-static QPtrList<MetaDataBase::CustomWidget> *cWidgets = 0;
+static Q3PtrDict<MetaDataBaseRecord> *db = 0;
+static Q3PtrList<MetaDataBase::CustomWidget> *cWidgets = 0;
 static bool doUpdate = TRUE;
 static QStringList langList;
 static QStringList editorLangList;
@@ -106,9 +111,9 @@ MetaDataBase::MetaDataBase()
 inline void setupDataBase()
 {
     if ( !db || !cWidgets ) {
-	db = new QPtrDict<MetaDataBaseRecord>( 1481 );
+	db = new Q3PtrDict<MetaDataBaseRecord>( 1481 );
 	db->setAutoDelete( TRUE );
-	cWidgets = new QPtrList<MetaDataBase::CustomWidget>;
+	cWidgets = new Q3PtrList<MetaDataBase::CustomWidget>;
 	cWidgets->setAutoDelete( TRUE );
     }
 }
@@ -321,8 +326,8 @@ int MetaDataBase::spacing( QObject *o )
     if ( !o )
 	return -1;
     setupDataBase();
-    if ( ::qt_cast<QMainWindow*>(o) )
-	o = ( (QMainWindow*)o )->centralWidget();
+    if ( ::qt_cast<Q3MainWindow*>(o) )
+	o = ( (Q3MainWindow*)o )->centralWidget();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r || !o->isWidgetType() ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
@@ -378,8 +383,8 @@ int MetaDataBase::margin( QObject *o )
     if ( !o )
 	return -1;
     setupDataBase();
-    if ( ::qt_cast<QMainWindow*>(o) )
-	o = ( (QMainWindow*)o )->centralWidget();
+    if ( ::qt_cast<Q3MainWindow*>(o) )
+	o = ( (Q3MainWindow*)o )->centralWidget();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r || !o->isWidgetType() ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
@@ -409,8 +414,8 @@ QString MetaDataBase::resizeMode( QObject *o )
     if ( !o )
 	return QString::null;
     setupDataBase();
-    if ( ::qt_cast<QMainWindow*>(o) )
-	o = ( (QMainWindow*)o )->centralWidget();
+    if ( ::qt_cast<Q3MainWindow*>(o) )
+	o = ( (Q3MainWindow*)o )->centralWidget();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r || !o->isWidgetType() ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
@@ -420,8 +425,8 @@ QString MetaDataBase::resizeMode( QObject *o )
     return r->resizeMode;
 }
 
-void MetaDataBase::addConnection( QObject *o, QObject *sender, const QCString &signal,
-				  QObject *receiver, const QCString &slot, bool addCode )
+void MetaDataBase::addConnection( QObject *o, QObject *sender, const Q3CString &signal,
+				  QObject *receiver, const Q3CString &slot, bool addCode )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -454,8 +459,8 @@ void MetaDataBase::addConnection( QObject *o, QObject *sender, const QCString &s
     }
 }
 
-void MetaDataBase::removeConnection( QObject *o, QObject *sender, const QCString &signal,
-				     QObject *receiver, const QCString &slot )
+void MetaDataBase::removeConnection( QObject *o, QObject *sender, const Q3CString &signal,
+				     QObject *receiver, const Q3CString &slot )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -466,7 +471,7 @@ void MetaDataBase::removeConnection( QObject *o, QObject *sender, const QCString
     }
     if ( !(sender && receiver) )
 	return;
-    for ( QValueList<Connection>::Iterator it = r->connections.begin(); it != r->connections.end(); ++it ) {
+    for ( Q3ValueList<Connection>::Iterator it = r->connections.begin(); it != r->connections.end(); ++it ) {
 	Connection conn = *it;
 	if ( conn.sender == sender &&
 	     conn.signal == signal &&
@@ -484,7 +489,7 @@ void MetaDataBase::removeConnection( QObject *o, QObject *sender, const QCString
     }
 }
 
-void MetaDataBase::setupConnections( QObject *o, const QValueList<LanguageInterface::Connection> &conns )
+void MetaDataBase::setupConnections( QObject *o, const Q3ValueList<LanguageInterface::Connection> &conns )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -501,7 +506,7 @@ void MetaDataBase::setupConnections( QObject *o, const QValueList<LanguageInterf
 
     r->connections.clear();
 
-    for ( QValueList<LanguageInterface::Connection>::ConstIterator cit = conns.begin();
+    for ( Q3ValueList<LanguageInterface::Connection>::ConstIterator cit = conns.begin();
 	  cit != conns.end(); ++cit ) {
 	// #### get the correct sender object out of Bla.Blub.sender
 	QString senderName = (*cit).sender;
@@ -531,8 +536,8 @@ void MetaDataBase::setupConnections( QObject *o, const QValueList<LanguageInterf
     }
 }
 
-bool MetaDataBase::hasConnection( QObject *o, QObject *sender, const QCString &signal,
-				  QObject *receiver, const QCString &slot )
+bool MetaDataBase::hasConnection( QObject *o, QObject *sender, const Q3CString &signal,
+				  QObject *receiver, const Q3CString &slot )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -542,7 +547,7 @@ bool MetaDataBase::hasConnection( QObject *o, QObject *sender, const QCString &s
 	return FALSE;
     }
 
-    for ( QValueList<Connection>::Iterator it = r->connections.begin(); it != r->connections.end(); ++it ) {
+    for ( Q3ValueList<Connection>::Iterator it = r->connections.begin(); it != r->connections.end(); ++it ) {
 	Connection conn = *it;
 	if ( conn.sender == sender &&
 	     conn.signal == signal &&
@@ -554,19 +559,19 @@ bool MetaDataBase::hasConnection( QObject *o, QObject *sender, const QCString &s
 }
 
 
-QValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o )
+Q3ValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<Connection>();
+	return Q3ValueList<Connection>();
     }
     return r->connections;
 }
 
-QValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o, QObject *sender,
+Q3ValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o, QObject *sender,
 								QObject *receiver )
 {
     setupDataBase();
@@ -574,11 +579,11 @@ QValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o, QObj
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<Connection>();
+	return Q3ValueList<Connection>();
     }
-    QValueList<Connection>::Iterator it = r->connections.begin();
-    QValueList<Connection> ret;
-    QValueList<Connection>::Iterator conn;
+    Q3ValueList<Connection>::Iterator it = r->connections.begin();
+    Q3ValueList<Connection> ret;
+    Q3ValueList<Connection>::Iterator conn;
     while ( ( conn = it ) != r->connections.end() ) {
 	++it;
 	if ( (*conn).sender == sender &&
@@ -589,18 +594,18 @@ QValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o, QObj
     return ret;
 }
 
-QValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o, QObject *object )
+Q3ValueList<MetaDataBase::Connection> MetaDataBase::connections( QObject *o, QObject *object )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<Connection>();
+	return Q3ValueList<Connection>();
     }
-    QValueList<Connection>::Iterator it = r->connections.begin();
-    QValueList<Connection> ret;
-    QValueList<Connection>::Iterator conn;
+    Q3ValueList<Connection>::Iterator it = r->connections.begin();
+    Q3ValueList<Connection> ret;
+    Q3ValueList<Connection>::Iterator conn;
     while ( ( conn = it ) != r->connections.end() ) {
 	++it;
 	if ( (*conn).sender == object ||
@@ -622,7 +627,7 @@ void MetaDataBase::doConnections( QObject *o )
 
     QObject *sender = 0, *receiver = 0;
     QObjectList *l = 0;
-    QValueList<Connection>::Iterator it = r->connections.begin();
+    Q3ValueList<Connection>::Iterator it = r->connections.begin();
     for ( ; it != r->connections.end(); ++it ) {
 	Connection conn = *it;
 	if ( qstrcmp( conn.sender->name(), o->name() ) == 0 ) {
@@ -652,8 +657,8 @@ void MetaDataBase::doConnections( QObject *o )
 	QString s2 = "1""%1";
 	s2 = s2.arg( conn.slot );
 
-	QStrList signalList = sender->metaObject()->signalNames( TRUE );
-	QStrList slotList = receiver->metaObject()->slotNames( TRUE );
+	Q3StrList signalList = sender->metaObject()->signalNames( TRUE );
+	Q3StrList slotList = receiver->metaObject()->slotNames( TRUE );
 
 	// avoid warnings
 	if ( signalList.find( conn.signal ) == -1 ||
@@ -664,7 +669,7 @@ void MetaDataBase::doConnections( QObject *o )
     }
 }
 
-bool MetaDataBase::hasSlot( QObject *o, const QCString &slot, bool onlyCustom )
+bool MetaDataBase::hasSlot( QObject *o, const Q3CString &slot, bool onlyCustom )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -675,7 +680,7 @@ bool MetaDataBase::hasSlot( QObject *o, const QCString &slot, bool onlyCustom )
     }
 
     if ( !onlyCustom ) {
-	QStrList slotList = o->metaObject()->slotNames( TRUE );
+	Q3StrList slotList = o->metaObject()->slotNames( TRUE );
 	if ( slotList.find( slot ) != -1 )
 	    return TRUE;
 
@@ -689,8 +694,8 @@ bool MetaDataBase::hasSlot( QObject *o, const QCString &slot, bool onlyCustom )
 	//if ( ::qt_cast<CustomWidget*>(o) ) {
 	if ( o->inherits( "CustomWidget" ) ) {
 	    MetaDataBase::CustomWidget *w = ( (::CustomWidget*)o )->customWidget();
-	    for ( QValueList<Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it ) {
-		QCString s = (*it).function;
+	    for ( Q3ValueList<Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it ) {
+		Q3CString s = (*it).function;
 		if ( !s.data() )
 		    continue;
 		if ( s == slot )
@@ -699,7 +704,7 @@ bool MetaDataBase::hasSlot( QObject *o, const QCString &slot, bool onlyCustom )
 	}
     }
 
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	Function f = *it;
 	if ( normalizeFunction( f.function ) == normalizeFunction( slot ) && f.type == "slot" )
 	    return TRUE;
@@ -708,7 +713,7 @@ bool MetaDataBase::hasSlot( QObject *o, const QCString &slot, bool onlyCustom )
     return FALSE;
 }
 
-bool MetaDataBase::isSlotUsed( QObject *o, const QCString &slot )
+bool MetaDataBase::isSlotUsed( QObject *o, const Q3CString &slot )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -718,8 +723,8 @@ bool MetaDataBase::isSlotUsed( QObject *o, const QCString &slot )
 	return FALSE;
     }
 
-    QValueList<Connection> conns = connections( o );
-    for ( QValueList<Connection>::Iterator it = conns.begin(); it != conns.end(); ++it ) {
+    Q3ValueList<Connection> conns = connections( o );
+    for ( Q3ValueList<Connection>::Iterator it = conns.begin(); it != conns.end(); ++it ) {
 	if ( (*it).slot == slot )
 	return TRUE;
     }
@@ -727,7 +732,7 @@ bool MetaDataBase::isSlotUsed( QObject *o, const QCString &slot )
 }
 
 
-void MetaDataBase::addFunction( QObject *o, const QCString &function, const QString &specifier,
+void MetaDataBase::addFunction( QObject *o, const Q3CString &function, const QString &specifier,
 				const QString &access, const QString &type, const QString &language,
 				const QString &returnType )
 {
@@ -746,14 +751,14 @@ void MetaDataBase::addFunction( QObject *o, const QCString &function, const QStr
     f.type = type;
     f.language = language;
     f.returnType = returnType;
-    QValueList<MetaDataBase::Function>::Iterator it = r->functionList.find( f );
+    Q3ValueList<MetaDataBase::Function>::Iterator it = r->functionList.find( f );
     if ( it != r->functionList.end() )
 	r->functionList.remove( it );
     r->functionList.append( f );
     ( (FormWindow*)o )->formFile()->addFunctionCode( f );
 }
 
-void MetaDataBase::setFunctionList( QObject *o, const QValueList<Function> &functionList )
+void MetaDataBase::setFunctionList( QObject *o, const Q3ValueList<Function> &functionList )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -765,7 +770,7 @@ void MetaDataBase::setFunctionList( QObject *o, const QValueList<Function> &func
     r->functionList = functionList;
 }
 
-void MetaDataBase::removeFunction( QObject *o, const QCString &function, const QString &specifier,
+void MetaDataBase::removeFunction( QObject *o, const Q3CString &function, const QString &specifier,
 				   const QString &access, const QString &type, const QString &language,
 				   const QString &returnType )
 {
@@ -776,7 +781,7 @@ void MetaDataBase::removeFunction( QObject *o, const QCString &function, const Q
 		  o, o->name(), o->className() );
 	return;
     }
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	if ( MetaDataBase::normalizeFunction( (*it).function ) ==
 	     MetaDataBase::normalizeFunction( function ) &&
 	     (*it).specifier == specifier &&
@@ -800,7 +805,7 @@ void MetaDataBase::removeFunction( QObject *o, const QString &function )
 		  o, o->name(), o->className() );
 	return;
     }
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	if ( normalizeFunction( (*it).function ) == normalizeFunction( function ) ) {
 	    ( (FormWindow*)o )->formFile()->removeFunctionCode( *it );
 	    r->functionList.remove( it );
@@ -809,36 +814,36 @@ void MetaDataBase::removeFunction( QObject *o, const QString &function )
     }
 }
 
-QValueList<MetaDataBase::Function> MetaDataBase::functionList( QObject *o, bool onlyFunctions )
+Q3ValueList<MetaDataBase::Function> MetaDataBase::functionList( QObject *o, bool onlyFunctions )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<Function>();
+	return Q3ValueList<Function>();
     }
     if ( !onlyFunctions )
 	return r->functionList;
-    QValueList<Function> fList;
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    Q3ValueList<Function> fList;
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	if ( (*it).type == "function" )
 	    fList.append( *it );
     }
     return fList;
 }
 
-QValueList<MetaDataBase::Function> MetaDataBase::slotList( QObject *o )
+Q3ValueList<MetaDataBase::Function> MetaDataBase::slotList( QObject *o )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<Function>();
+	return Q3ValueList<Function>();
     }
-    QValueList<Function> slotList;
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    Q3ValueList<Function> slotList;
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	if ( (*it).type == "slot" )
 	    slotList.append( *it );
     }
@@ -856,7 +861,7 @@ void MetaDataBase::changeFunction( QObject *o, const QString &function, const QS
 	return;
     }
 
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	Function f = *it;
 	if ( normalizeFunction( f.function ) == normalizeFunction( function ) ) {
 	    (*it).function = newName;
@@ -880,7 +885,7 @@ void MetaDataBase::changeFunctionAttributes( QObject *o, const QString &oldName,
 	return;
     }
 
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	Function f = *it;
 	if ( normalizeFunction( f.function ) == normalizeFunction( oldName ) ) {
 	    (*it).function = newName;
@@ -894,7 +899,7 @@ void MetaDataBase::changeFunctionAttributes( QObject *o, const QString &oldName,
     }
 }
 
-bool MetaDataBase::hasFunction( QObject *o, const QCString &function, bool onlyCustom )
+bool MetaDataBase::hasFunction( QObject *o, const Q3CString &function, bool onlyCustom )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -905,7 +910,7 @@ bool MetaDataBase::hasFunction( QObject *o, const QCString &function, bool onlyC
     }
 
     if ( !onlyCustom ) {
-	QStrList functionList = o->metaObject()->slotNames( TRUE );
+	Q3StrList functionList = o->metaObject()->slotNames( TRUE );
 	if ( functionList.find( function ) != -1 )
 	    return TRUE;
 
@@ -919,8 +924,8 @@ bool MetaDataBase::hasFunction( QObject *o, const QCString &function, bool onlyC
 	//if ( ::qt_cast<CustomWidget*>(o) ) {
 	if ( o->inherits( "CustomWidget" ) ) {
 	    MetaDataBase::CustomWidget *w = ( (::CustomWidget*)o )->customWidget();
-	    for ( QValueList<Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it ) {
-		QCString s = (*it).function;
+	    for ( Q3ValueList<Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it ) {
+		Q3CString s = (*it).function;
 		if ( !s.data() )
 		    continue;
 		if ( s == function )
@@ -929,7 +934,7 @@ bool MetaDataBase::hasFunction( QObject *o, const QCString &function, bool onlyC
 	}
     }
 
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	Function f = *it;
 	if ( normalizeFunction( f.function ) == normalizeFunction( function ) )
 	    return TRUE;
@@ -938,7 +943,7 @@ bool MetaDataBase::hasFunction( QObject *o, const QCString &function, bool onlyC
     return FALSE;
 }
 
-QString MetaDataBase::languageOfFunction( QObject *o, const QCString &function )
+QString MetaDataBase::languageOfFunction( QObject *o, const Q3CString &function )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -949,7 +954,7 @@ QString MetaDataBase::languageOfFunction( QObject *o, const QCString &function )
     }
 
     QString fu = normalizeFunction( function );
-    for ( QValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
+    for ( Q3ValueList<Function>::Iterator it = r->functionList.begin(); it != r->functionList.end(); ++it ) {
 	if ( fu == normalizeFunction( (*it).function ) )
 	    return (*it).language;
     }
@@ -962,15 +967,15 @@ bool MetaDataBase::addCustomWidget( CustomWidget *wid )
 
     for ( CustomWidget *w = cWidgets->first(); w; w = cWidgets->next() ) {
 	if ( *wid == *w ) {
-	    for ( QValueList<QCString>::ConstIterator it = wid->lstSignals.begin(); it != wid->lstSignals.end(); ++it ) {
+	    for ( Q3ValueList<Q3CString>::ConstIterator it = wid->lstSignals.begin(); it != wid->lstSignals.end(); ++it ) {
 		if ( !w->hasSignal( *it ) )
 		    w->lstSignals.append( *it );
 	    }
-	    for ( QValueList<Function>::ConstIterator it2 = wid->lstSlots.begin(); it2 != wid->lstSlots.end(); ++it2 ) {
+	    for ( Q3ValueList<Function>::ConstIterator it2 = wid->lstSlots.begin(); it2 != wid->lstSlots.end(); ++it2 ) {
 		if ( !w->hasSlot( MetaDataBase::normalizeFunction( (*it2).function ).latin1() ) )
 		    w->lstSlots.append( *it2 );
 	    }
-	    for ( QValueList<Property>::ConstIterator it3 = wid->lstProperties.begin(); it3 != wid->lstProperties.end(); ++it3 ) {
+	    for ( Q3ValueList<Property>::ConstIterator it3 = wid->lstProperties.begin(); it3 != wid->lstProperties.end(); ++it3 ) {
 		if ( !w->hasProperty( (*it3).property ) )
 		    w->lstProperties.append( *it3 );
 	    }
@@ -984,7 +989,7 @@ bool MetaDataBase::addCustomWidget( CustomWidget *wid )
     r->name = wid->className;
     r->group = WidgetDatabase::widgetGroup( "Custom" );
     r->toolTip = wid->className;
-    r->icon = new QIconSet( *wid->pixmap, *wid->pixmap );
+    r->icon = new QIcon( *wid->pixmap, *wid->pixmap );
     r->isContainer = wid->isContainer;
     wid->id = WidgetDatabase::addCustomWidget( r );
     cWidgets->append( wid );
@@ -996,7 +1001,7 @@ void MetaDataBase::removeCustomWidget( CustomWidget *w )
     cWidgets->removeRef( w );
 }
 
-QPtrList<MetaDataBase::CustomWidget> *MetaDataBase::customWidgets()
+Q3PtrList<MetaDataBase::CustomWidget> *MetaDataBase::customWidgets()
 {
     setupDataBase();
     return cWidgets;
@@ -1057,7 +1062,7 @@ QWidgetList MetaDataBase::tabOrder( QWidget *w )
     return r->tabOrder;
 }
 
-void MetaDataBase::setIncludes( QObject *o, const QValueList<Include> &incs )
+void MetaDataBase::setIncludes( QObject *o, const Q3ValueList<Include> &incs )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -1070,14 +1075,14 @@ void MetaDataBase::setIncludes( QObject *o, const QValueList<Include> &incs )
     r->includes = incs;
 }
 
-QValueList<MetaDataBase::Include> MetaDataBase::includes( QObject *o )
+Q3ValueList<MetaDataBase::Include> MetaDataBase::includes( QObject *o )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<Include>();
+	return Q3ValueList<Include>();
     }
 
     return r->includes;
@@ -1109,7 +1114,7 @@ QStringList MetaDataBase::forwards( QObject *o )
     return r->forwards;
 }
 
-void MetaDataBase::setVariables( QObject *o, const QValueList<Variable> &vars )
+void MetaDataBase::setVariables( QObject *o, const Q3ValueList<Variable> &vars )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
@@ -1146,7 +1151,7 @@ void MetaDataBase::removeVariable( QObject *o, const QString &name )
 		  o, o->name(), o->className() );
 	return;
     }
-    QValueList<Variable>::Iterator it = r->variables.begin();
+    Q3ValueList<Variable>::Iterator it = r->variables.begin();
     for ( ; it != r->variables.end(); ++it ) {
 	if ( (*it).varName == name ) {
 	    r->variables.remove( it );
@@ -1155,14 +1160,14 @@ void MetaDataBase::removeVariable( QObject *o, const QString &name )
     }
 }
 
-QValueList<MetaDataBase::Variable> MetaDataBase::variables( QObject *o )
+Q3ValueList<MetaDataBase::Variable> MetaDataBase::variables( QObject *o )
 {
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<MetaDataBase::Variable>();
+	return Q3ValueList<MetaDataBase::Variable>();
     }
 
     return r->variables;
@@ -1178,7 +1183,7 @@ bool MetaDataBase::hasVariable( QObject *o, const QString &name )
 	return FALSE;
     }
 
-    QValueList<Variable>::Iterator it = r->variables.begin();
+    Q3ValueList<Variable>::Iterator it = r->variables.begin();
     for ( ; it != r->variables.end(); ++it ) {
 	if ( extractVariableName( name ) == extractVariableName( (*it).varName ) )
 	    return TRUE;
@@ -1352,38 +1357,38 @@ MetaDataBase::CustomWidget &MetaDataBase::CustomWidget::operator=( const CustomW
     return *this;
 }
 
-bool MetaDataBase::CustomWidget::hasSignal( const QCString &signal ) const
+bool MetaDataBase::CustomWidget::hasSignal( const Q3CString &signal ) const
 {
-    QStrList sigList = QWidget::staticMetaObject()->signalNames( TRUE );
+    Q3StrList sigList = QWidget::staticMetaObject()->signalNames( TRUE );
     if ( sigList.find( signal ) != -1 )
 	return TRUE;
-    for ( QValueList<QCString>::ConstIterator it = lstSignals.begin(); it != lstSignals.end(); ++it ) {
+    for ( Q3ValueList<Q3CString>::ConstIterator it = lstSignals.begin(); it != lstSignals.end(); ++it ) {
 	if ( normalizeFunction( *it ) == normalizeFunction( signal ) )
 	    return TRUE;
     }
     return FALSE;
 }
 
-bool MetaDataBase::CustomWidget::hasSlot( const QCString &slot ) const
+bool MetaDataBase::CustomWidget::hasSlot( const Q3CString &slot ) const
 {
-    QStrList slotList = QWidget::staticMetaObject()->slotNames( TRUE );
+    Q3StrList slotList = QWidget::staticMetaObject()->slotNames( TRUE );
     if ( slotList.find( normalizeFunction( slot ) ) != -1 )
 	return TRUE;
 
-    for ( QValueList<MetaDataBase::Function>::ConstIterator it = lstSlots.begin(); it != lstSlots.end(); ++it ) {
+    for ( Q3ValueList<MetaDataBase::Function>::ConstIterator it = lstSlots.begin(); it != lstSlots.end(); ++it ) {
 	if ( normalizeFunction( (*it).function ) == normalizeFunction( slot ) )
 	    return TRUE;
     }
     return FALSE;
 }
 
-bool MetaDataBase::CustomWidget::hasProperty( const QCString &prop ) const
+bool MetaDataBase::CustomWidget::hasProperty( const Q3CString &prop ) const
 {
-    QStrList propList = QWidget::staticMetaObject()->propertyNames( TRUE );
+    Q3StrList propList = QWidget::staticMetaObject()->propertyNames( TRUE );
     if ( propList.find( prop ) != -1 )
 	return TRUE;
 
-    for ( QValueList<MetaDataBase::Property>::ConstIterator it = lstProperties.begin(); it != lstProperties.end(); ++it ) {
+    for ( Q3ValueList<MetaDataBase::Property>::ConstIterator it = lstProperties.begin(); it != lstProperties.end(); ++it ) {
 	if ( (*it).property == prop )
 	    return TRUE;
     }
@@ -1577,11 +1582,11 @@ void MetaDataBase::clear( QObject *o )
 	return;
     setupDataBase();
     db->remove( (void*)o );
-    for ( QPtrDictIterator<QWidget> it( *( (FormWindow*)o )->widgets() ); it.current(); ++it )
+    for ( Q3PtrDictIterator<QWidget> it( *( (FormWindow*)o )->widgets() ); it.current(); ++it )
 	db->remove( (void*)it.current() );
 }
 
-void MetaDataBase::setBreakPoints( QObject *o, const QValueList<uint> &l )
+void MetaDataBase::setBreakPoints( QObject *o, const Q3ValueList<uint> &l )
 {
     if ( !o )
 	return;
@@ -1604,16 +1609,16 @@ void MetaDataBase::setBreakPoints( QObject *o, const QValueList<uint> &l )
     }
 }
 
-QValueList<uint> MetaDataBase::breakPoints( QObject *o )
+Q3ValueList<uint> MetaDataBase::breakPoints( QObject *o )
 {
     if ( !o )
-	return QValueList<uint>();
+	return Q3ValueList<uint>();
     setupDataBase();
     MetaDataBaseRecord *r = db->find( (void*)o );
     if ( !r ) {
 	qWarning( "No entry for %p (%s, %s) found in MetaDataBase",
 		  o, o->name(), o->className() );
-	return QValueList<uint>();
+	return Q3ValueList<uint>();
     }
 
     return r->breakPoints;

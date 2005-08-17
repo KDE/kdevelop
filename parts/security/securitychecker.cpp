@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "securitychecker.h"
 
@@ -27,6 +27,8 @@
 
 #include "securitypart.h"
 #include "securitywidget.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class SecurityPattern {
 public:
@@ -77,7 +79,7 @@ void SecurityChecker::check()
     int lines = m_part->activeEditor()->numLines();
     for (int i = 0; i < lines; ++i)
     {
-        for (QValueList<SecurityPattern*>::iterator it = m_patterns.begin();
+        for (Q3ValueList<SecurityPattern*>::iterator it = m_patterns.begin();
                 it != m_patterns.end(); ++it)
         {
             kdDebug() << "applying pattern for line " << i << ": " << endl;

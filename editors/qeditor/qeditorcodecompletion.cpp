@@ -34,11 +34,16 @@
 #include "qeditor_view.h"
 #include "qeditor.h"
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qsizegrip.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <Q3ValueList>
 #include <private/qrichtext_p.h>
 
 #include <kdebug.h>
@@ -59,11 +64,11 @@ static QColor getColor( const QString &type )
     return Qt::black;
 }
 
-class CompletionItem : public QListBoxItem
+class CompletionItem : public Q3ListBoxItem
 {
 public:
-    CompletionItem( QListBox *lb, const KTextEditor::CompletionEntry& entry )
-	: QListBoxItem( lb ), parag( 0 ), lastState( FALSE ), m_entry( entry )
+    CompletionItem( Q3ListBox *lb, const KTextEditor::CompletionEntry& entry )
+	: Q3ListBoxItem( lb ), parag( 0 ), lastState( FALSE ), m_entry( entry )
         {
             m_entry.type = "";  // #### at the moment cppcodecompletion don't fill type in the right way (robe)
             setText( m_entry.text );
@@ -82,19 +87,19 @@ public:
 	parag->paint( *painter, listBox()->colorGroup() );
     }
 
-    int height( const QListBox * ) const {
+    int height( const Q3ListBox * ) const {
 	if ( !parag )
 	    ( (CompletionItem*)this )->setupParag();
 	return parag->rect().height();
     }
 
-    int width( const QListBox * ) const {
+    int width( const Q3ListBox * ) const {
 	if ( !parag )
 	    ( (CompletionItem*)this )->setupParag();
 	return parag->rect().width() - 2;
     }
 
-    QString text() const { return QListBoxItem::text() + m_entry.postfix; }
+    QString text() const { return Q3ListBoxItem::text() + m_entry.postfix; }
 
 private:
     void setupParag() {
@@ -105,7 +110,7 @@ private:
 	    parag = new QTextParagraph( 0 );
 	    parag->pseudoDocument()->pFormatter = formatter;
 	    parag->insert( 0, " " + m_entry.type + ( m_entry.type.isEmpty() ? " " : "\t" ) + m_entry.prefix + " "+
-			   QListBoxItem::text() + m_entry.postfix );
+			   Q3ListBoxItem::text() + m_entry.postfix );
 	    bool selCol = isSelected() && listBox()->colorGroup().highlightedText() != listBox()->colorGroup().text();
 	    QColor sc = listBox()->colorGroup().highlightedText();
 	    QTextFormat *f1 = parag->formatCollection()->format( listBox()->font(), selCol ? sc : getColor( m_entry.type ) );
@@ -121,16 +126,16 @@ private:
 	    parag->setFormat( 1, m_entry.type.length() + 1, f1 );
             if( m_entry.text.endsWith("(") ){
                 parag->setFormat( m_entry.type.length() + 2,
-                                  m_entry.prefix.length() + 1 + QListBoxItem::text().length() - 1,
+                                  m_entry.prefix.length() + 1 + Q3ListBoxItem::text().length() - 1,
                                   f2 );
             } else {
                 parag->setFormat( m_entry.type.length() + 2,
-                                  m_entry.prefix.length() + 1 + QListBoxItem::text().length(),
+                                  m_entry.prefix.length() + 1 + Q3ListBoxItem::text().length(),
                                   f2 );
             }
 
 	    if ( !m_entry.postfix.isEmpty() )
-		parag->setFormat( m_entry.type.length() + 2 + m_entry.prefix.length() + 1 + QListBoxItem::text().length(),
+		parag->setFormat( m_entry.type.length() + 2 + m_entry.prefix.length() + 1 + Q3ListBoxItem::text().length(),
 				  m_entry.postfix.length(), f3 );
 
 	    f1->removeRef();
@@ -152,15 +157,15 @@ QEditorCodeCompletion::QEditorCodeCompletion( QEditorView* view )
     , m_view( view )
     , m_commentLabel( 0 )
 {
-    m_completionPopup = new QVBox( 0, 0, WType_Popup );
-    m_completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
+    m_completionPopup = new Q3VBox( 0, 0, Qt::WType_Popup );
+    m_completionPopup->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
     m_completionPopup->setLineWidth( 1 );
 
     m_completionListBox = new CCListBox( m_completionPopup );
-    m_completionListBox->setFrameStyle( QFrame::NoFrame );
+    m_completionListBox->setFrameStyle( Q3Frame::NoFrame );
     m_completionListBox->installEventFilter( this );
-    m_completionListBox->setHScrollBarMode( QScrollView::AlwaysOn );
-    m_completionListBox->setVScrollBarMode( QScrollView::AlwaysOn );
+    m_completionListBox->setHScrollBarMode( Q3ScrollView::AlwaysOn );
+    m_completionListBox->setVScrollBarMode( Q3ScrollView::AlwaysOn );
     m_completionListBox->setCornerWidget( new QSizeGrip(m_completionListBox) );
 
     m_completionPopup->installEventFilter( this );
@@ -176,7 +181,7 @@ QEditorCodeCompletion::QEditorCodeCompletion( QEditorView* view )
 }
 
 void QEditorCodeCompletion::showCompletionBox(
-    QValueList<KTextEditor::CompletionEntry> complList, int offset, bool casesensitive )
+    Q3ValueList<KTextEditor::CompletionEntry> complList, int offset, bool casesensitive )
 {
     kdDebug(9032) << "showCompletionBox " << endl;
 
@@ -198,15 +203,15 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
 
     if ( e->type() == QEvent::KeyPress ) {
         QKeyEvent *ke = (QKeyEvent*)e;
-        if( (ke->key() == Key_Left)  || (ke->key() == Key_Right) ||
-            (ke->key() == Key_Up)    || (ke->key() == Key_Down ) ||
-            (ke->key() == Key_Home ) || (ke->key() == Key_End)   ||
-            (ke->key() == Key_Prior) || (ke->key() == Key_Next )) {
+        if( (ke->key() == Qt::Key_Left)  || (ke->key() == Qt::Key_Right) ||
+            (ke->key() == Qt::Key_Up)    || (ke->key() == Qt::Key_Down ) ||
+            (ke->key() == Qt::Key_Home ) || (ke->key() == Qt::Key_End)   ||
+            (ke->key() == Qt::Key_PageUp) || (ke->key() == Qt::Key_PageDown )) {
             QTimer::singleShot(0,this,SLOT(showComment()));
             return false;
         }
-        if( ke->key() == Key_Enter || ke->key() == Key_Return ||
-            (QEditorSettings::self()->completeWordWithSpace() && (ke->key() == Key_Space || ke->key() == Key_Tab)) ) {
+        if( ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return ||
+            (QEditorSettings::self()->completeWordWithSpace() && (ke->key() == Qt::Key_Space || ke->key() == Qt::Key_Tab)) ) {
             CompletionItem* item = static_cast<CompletionItem*>(
                 m_completionListBox->item(m_completionListBox->currentItem()));
 
@@ -225,9 +230,9 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
             m_view->insertText(add);
 
             if( QEditorSettings::self()->completeWordWithSpace() ){
-                if( ke->key() == Key_Space )
+                if( ke->key() == Qt::Key_Space )
                     m_view->insertText( " " );
-                else if( ke->key() == Key_Tab )
+                else if( ke->key() == Qt::Key_Tab )
                     m_view->insertText( "\t" );
             }
 
@@ -240,7 +245,7 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
             return false;
         }
 
-        if( ke->key() == Key_Escape ) {
+        if( ke->key() == Qt::Key_Escape ) {
             abortCompletion();
             m_view->setFocus();
             return false;
@@ -303,7 +308,7 @@ void QEditorCodeCompletion::updateBox( bool newCoordinate )
     kdDebug(9032) << "Text: " << currentComplText << endl;
     kdDebug(9032) << "Count: " << m_complList.count() << endl;
 
-    QValueList<KTextEditor::CompletionEntry>::Iterator it;
+    Q3ValueList<KTextEditor::CompletionEntry>::Iterator it;
     if( m_caseSensitive ) {
         for( it = m_complList.begin(); it != m_complList.end(); ++it ) {
             if( (*it).text.startsWith(currentComplText) ) {

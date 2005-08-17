@@ -36,7 +36,7 @@ static const char commonStrings[] =
     "toolTip\0unnamed\0whatsThis";
 
 UibStrTable::UibStrTable()
-    : out( table, IO_WriteOnly ), start( sizeof(commonStrings) )
+    : out( table, QIODevice::WriteOnly ), start( sizeof(commonStrings) )
 {
     out.writeRawBytes( commonStrings, start );
 }

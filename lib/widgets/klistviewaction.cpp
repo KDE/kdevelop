@@ -13,15 +13,15 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "klistviewaction.h"
 #include "kcomboview.h"
 #include "resizablecombo.h"
 
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
@@ -70,8 +70,8 @@ void KListViewAction::setToolTip( const QString & str )
 
 void KListViewAction::setWhatsThis( const QString & str )
 {
-    QWhatsThis::remove(m_view);
-    QWhatsThis::add(m_view, str);
+    Q3WhatsThis::remove(m_view);
+    Q3WhatsThis::add(m_view, str);
 }
 
 void KListViewAction::loadComboWidth( )

@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -30,6 +30,9 @@
 #include "qeditor_settings.h"
 #include "qeditor_factory.h"
 #include "qeditor.h"
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <Q3ValueList>
 #include "paragdata.h"
 #include "qeditorcodecompletion.h"
 #include "linenumberwidget.h"
@@ -42,7 +45,7 @@
 
 #include <qregexp.h>
 #include <qlayout.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <private/qrichtext_p.h>
 
 #include <kdebug.h>
@@ -305,7 +308,7 @@ void QEditorView::paste( )
     m_editor->paste();
 }
 
-void QEditorView::installPopup( QPopupMenu *rmb_Menu )
+void QEditorView::installPopup( Q3PopupMenu *rmb_Menu )
 {
     m_editor->setApplicationMenu( rmb_Menu );
 }
@@ -317,7 +320,7 @@ void QEditorView::showArgHint(QStringList functionList,
     m_pCodeCompletion->showArgHint( functionList, strWrapping, strDelimiter );
 }
 
-void QEditorView::showCompletionBox(QValueList<KTextEditor::CompletionEntry> complList,
+void QEditorView::showCompletionBox(Q3ValueList<KTextEditor::CompletionEntry> complList,
                                     int offset,
                                     bool casesensitive )
 {
@@ -681,7 +684,7 @@ void QEditorView::setupActions()
     KStdAction::saveAs( doc(), SLOT(fileSaveAs()), actionCollection() );
     KStdAction::save( doc(), SLOT(save()), actionCollection() );
 
-    KAction *action = new KAction( i18n("Reloa&d"), "reload", Key_F5,
+    KAction *action = new KAction( i18n("Reloa&d"), "reload", Qt::Key_F5,
                  doc(), SLOT(fileReload()), actionCollection(), "file_reload" );
     action->setToolTip(i18n("Reload"));
     action->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document from disk."));
@@ -708,7 +711,7 @@ void QEditorView::setupActions()
     action = KStdAction::replace( this, SLOT(doReplace()), actionCollection() );
     action->setWhatsThis(i18n("Looks up a piece of text or regular expression and replace the result with some given text."));
 
-    action = new KAction( i18n("&Indent"), "indent", CTRL + Key_I,
+    action = new KAction( i18n("&Indent"), "indent", Qt::CTRL + Qt::Key_I,
 		 editor(), SLOT(indent()),
                  actionCollection(), "edit_indent" );
     action->setToolTip(i18n("Indent"));
@@ -726,19 +729,19 @@ void QEditorView::setupActions()
     action->setToolTip(i18n("Expand all blocks"));
     action->setWhatsThis(i18n("<b>Expand all blocks</b><p>Expands all blocks in the current document."));
 
-    action = new KAction( i18n("Start Macro"), "start macro", CTRL + Key_ParenLeft,
+    action = new KAction( i18n("Start Macro"), "start macro", Qt::CTRL + Qt::Key_ParenLeft,
 		 editor(), SLOT(startMacro()),
                  actionCollection(), "tools_start_macro" );
     action->setToolTip(i18n("Start macro"));
     action->setWhatsThis(i18n("<b>Start macro</b><p>Starts recording a macro based on the editor input."));
 
-    action = new KAction( i18n("Stop Macro"), "stop macro", CTRL + Key_ParenRight,
+    action = new KAction( i18n("Stop Macro"), "stop macro", Qt::CTRL + Qt::Key_ParenRight,
 		 editor(), SLOT(stopMacro()),
                  actionCollection(), "tools_stop_macro" );
     action->setToolTip(i18n("Stop macro"));
     action->setWhatsThis(i18n("<b>Stop macro</b><p>Stops recording a macro."));
 
-    action = new KAction( i18n("Execute Macro"), "execute macro", CTRL + Key_E,
+    action = new KAction( i18n("Execute Macro"), "execute macro", Qt::CTRL + Qt::Key_E,
 		 editor(), SLOT(executeMacro()),
                  actionCollection(), "tools_execute_macro" );
     action->setToolTip(i18n("Execute macro"));

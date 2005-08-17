@@ -14,8 +14,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #include "kdevautomakeimporter.h"
 #include "automakeprojectmodel.h"
@@ -31,6 +31,8 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3StrList>
 
 K_EXPORT_COMPONENT_FACTORY(libkdevautomakeimporter, KGenericFactory<KDevAutomakeImporter>("kdevautomakeimporter"))
 
@@ -58,7 +60,7 @@ QString KDevAutomakeImporter::canonicalize(const QString &str)
 void KDevAutomakeImporter::parseMakefile(const QString &fileName, ProjectItemDom dom)
 {
     QFile f(fileName);
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(QIODevice::ReadOnly)) {
         kdDebug(9000) << "file:" << fileName << " not found!" << endl;
         return;
     }
@@ -99,12 +101,12 @@ void KDevAutomakeImporter::saveMakefile(const QString &fileName, ProjectItemDom 
 void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environment &env)
 {
     QFile fin(fileName);
-    if (!fin.open(IO_ReadOnly))
+    if (!fin.open(QIODevice::ReadOnly))
         return ;
     QTextStream ins(&fin);
 
     QFile fout(fileName + "#");
-    if (!fout.open(IO_WriteOnly))
+    if (!fout.open(QIODevice::WriteOnly))
     {
         fin.close();
         return ;
@@ -194,12 +196,12 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
 void KDevAutomakeImporter::removeFromMakefile(const QString &fileName, const Environment &env)
 {
     QFile fin(fileName);
-    if (!fin.open(IO_ReadOnly))
+    if (!fin.open(QIODevice::ReadOnly))
         return ;
     QTextStream ins(&fin);
 
     QFile fout(fileName + "#");
-    if (!fout.open(IO_WriteOnly))
+    if (!fout.open(QIODevice::WriteOnly))
     {
         fin.close();
         return ;
@@ -484,14 +486,14 @@ void KDevAutomakeImporter::parsePrimary(ProjectItemDom item, const QString &lhs,
 
 #if 0
 
-    QStrList prefixes;
+    Q3StrList prefixes;
     prefixes.append( "bin" );
     prefixes.append( "pkglib" );
     prefixes.append( "pkgdata" );
     prefixes.append( "noinst" );
     prefixes.append( "check" );
     prefixes.append( "sbin" );
-    QStrList primaries;
+    Q3StrList primaries;
     primaries.append( "PROGRAMS" );
     primaries.append( "LIBRARIES" );
     primaries.append( "LTLIBRARIES" );
@@ -622,7 +624,7 @@ ProjectFolderList KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const 
     {
         QStringList dirs;
         QFile subdirsfile( item->name() + "/subdirs" );
-        if ( subdirsfile.open( IO_ReadOnly ) )
+        if ( subdirsfile.open( QIODevice::ReadOnly ) )
         {
             QTextStream subdirsstream( &subdirsfile );
             while ( !subdirsstream.atEnd() )

@@ -10,8 +10,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef __kchmpart_h__
@@ -25,7 +25,7 @@
 #include <kio/jobclasses.h>
 #include <kdevhtmlpart.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 class KInstance;
 class KAboutData;
@@ -70,7 +70,7 @@ class KChmPart : public KDevHTMLPart
       KInstance *m_instance;
       KParts::BrowserExtension *m_extension;
       KIO::TransferJob *m_job;
-      QCString m_htmlData;
+      Q3CString m_htmlData;
 
    protected slots:
       virtual void slotDuplicate();

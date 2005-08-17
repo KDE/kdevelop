@@ -12,14 +12,19 @@
 
 #include "filecreate_newfile.moc"
 
-#include <qvbox.h>
-#include <qgrid.h>
+#include <q3vbox.h>
+#include <q3grid.h>
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <Q3PtrList>
 #include <kurlrequester.h>
 #include <kcombobox.h>
 #include <klocale.h>
@@ -74,7 +79,7 @@ namespace FileCreate {
         enableButtonOK( !_text.isEmpty() );
     }
 
-  void NewFileChooser::setFileTypes(QPtrList<FileType> filetypes) {
+  void NewFileChooser::setFileTypes(Q3PtrList<FileType> filetypes) {
     for(FileType * filetype = filetypes.first();
 	filetype;
 	filetype=filetypes.next()) {
@@ -84,7 +89,7 @@ namespace FileCreate {
 	if (filetype->subtypes().count()==0)
           addType(filetype);
 
-	QPtrList<FileType> subtypes = filetype->subtypes();
+	Q3PtrList<FileType> subtypes = filetype->subtypes();
 	for(FileType * subtype = subtypes.first();
 	    subtype;
 	    subtype=subtypes.next()) {

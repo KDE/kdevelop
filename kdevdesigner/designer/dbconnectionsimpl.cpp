@@ -25,11 +25,11 @@
 **********************************************************************/
 
 #include "dbconnectionsimpl.h"
-#include <qptrlist.h>
-#include <qgroupbox.h>
+#include <q3ptrlist.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include "project.h"
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
@@ -51,14 +51,14 @@ static bool blockChanges = FALSE;
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-DatabaseConnectionsEditor::DatabaseConnectionsEditor( Project *pro, QWidget* parent,  const char* name, bool modal, WFlags fl )
+DatabaseConnectionsEditor::DatabaseConnectionsEditor( Project *pro, QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
     : DatabaseConnectionBase( parent, name, modal, fl ), project( pro )
 {
     connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
     connectionWidget = new DatabaseConnectionWidget( grp );
     grpLayout->addWidget( connectionWidget, 0, 0 );
 #ifndef QT_NO_SQL
-    QPtrList<DatabaseConnection> lst = project->databaseConnections();
+    Q3PtrList<DatabaseConnection> lst = project->databaseConnections();
     for ( DatabaseConnection *conn = lst.first(); conn; conn = lst.next() )
 	listConnections->insertItem( conn->name() );
     connectionWidget->comboDriver->insertStringList( QSqlDatabase::drivers() );

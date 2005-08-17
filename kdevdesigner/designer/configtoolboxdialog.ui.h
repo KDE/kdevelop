@@ -27,7 +27,7 @@
 #include "mainwindow.h"
 #include "widgetaction.h"
 #include "listviewdnd.h"
-#include <qlistview.h>
+#include <q3listview.h>
 
 void ConfigToolboxDialog::init()
 {
@@ -40,31 +40,31 @@ void ConfigToolboxDialog::init()
     ListViewDnd *commonDnd = new ListViewDnd( listViewCommon );
     commonDnd->setDragMode( ListViewDnd::Both | ListViewDnd::Move | ListViewDnd::Flat );
 
-    QObject::connect( toolsDnd, SIGNAL( dropped( QListViewItem * ) ),
-			commonDnd, SLOT( confirmDrop( QListViewItem * ) ) );
-    QObject::connect( commonDnd, SIGNAL( dropped( QListViewItem * ) ),
-			commonDnd, SLOT( confirmDrop( QListViewItem * ) ) );
+    QObject::connect( toolsDnd, SIGNAL( dropped( Q3ListViewItem * ) ),
+			commonDnd, SLOT( confirmDrop( Q3ListViewItem * ) ) );
+    QObject::connect( commonDnd, SIGNAL( dropped( Q3ListViewItem * ) ),
+			commonDnd, SLOT( confirmDrop( Q3ListViewItem * ) ) );
 
-    QDict<QListViewItem> groups;
+    Q3Dict<Q3ListViewItem> groups;
     QAction *a;
     for ( a = MainWindow::self->toolActions.last();
 	  a;
 	  a = MainWindow::self->toolActions.prev() ) {
 	QString grp = ( (WidgetAction*)a )->group();
-	QListViewItem *parent = groups.find( grp );
+	Q3ListViewItem *parent = groups.find( grp );
 	if ( !parent ) {
-	    parent = new QListViewItem( listViewTools );
+	    parent = new Q3ListViewItem( listViewTools );
 	    parent->setText( 0, grp );
 	    parent->setOpen( TRUE );
 	    groups.insert( grp, parent );
 	}
-	QListViewItem *i = new QListViewItem( parent );
+	Q3ListViewItem *i = new Q3ListViewItem( parent );
 	i->setText( 0, a->text() );
 	i->setPixmap( 0, a->iconSet().pixmap() );
     }
     for ( a = MainWindow::self->commonWidgetsPage.last(); a;
     a = MainWindow::self->commonWidgetsPage.prev() ) {
-	QListViewItem *i = new QListViewItem( listViewCommon );
+	Q3ListViewItem *i = new Q3ListViewItem( listViewCommon );
 	i->setText( 0, a->text() );
 	i->setPixmap( 0, a->iconSet().pixmap() );
     }
@@ -74,12 +74,12 @@ void ConfigToolboxDialog::init()
 
 void ConfigToolboxDialog::addTool()
 {
-    QListView *src = listViewTools;
+    Q3ListView *src = listViewTools;
 
     bool addKids = FALSE;
-    QListViewItem *nextSibling = 0;
-    QListViewItem *nextParent = 0;
-    QListViewItemIterator it = src->firstChild();
+    Q3ListViewItem *nextSibling = 0;
+    Q3ListViewItem *nextParent = 0;
+    Q3ListViewItemIterator it = src->firstChild();
     for ( ; *it; it++ ) {
 	// Hit the nextSibling, turn of child processing
 	if ( (*it) == nextSibling )
@@ -88,7 +88,7 @@ void ConfigToolboxDialog::addTool()
 	if ( (*it)->isSelected() ) {
 	    if ( (*it)->childCount() == 0 ) {
 		// Selected, no children
-		QListViewItem *i = new QListViewItem( listViewCommon, listViewCommon->lastItem() );
+		Q3ListViewItem *i = new Q3ListViewItem( listViewCommon, listViewCommon->lastItem() );
 		i->setText( 0, (*it)->text(0) );
 		i->setPixmap( 0, *((*it)->pixmap(0)) );
 		listViewCommon->setCurrentItem( i );
@@ -107,7 +107,7 @@ void ConfigToolboxDialog::addTool()
 	    }
 	} else if ( ((*it)->childCount() == 0) && addKids ) {
 	    // Leaf node, and we _do_ process children
-	    QListViewItem *i = new QListViewItem( listViewCommon, listViewCommon->lastItem() );
+	    Q3ListViewItem *i = new Q3ListViewItem( listViewCommon, listViewCommon->lastItem() );
 	    i->setText( 0, (*it)->text(0) );
 	    i->setPixmap( 0, *((*it)->pixmap(0)) );
 	    listViewCommon->setCurrentItem( i );
@@ -119,7 +119,7 @@ void ConfigToolboxDialog::addTool()
 
 void ConfigToolboxDialog::removeTool()
 {
-    QListViewItemIterator it = listViewCommon->firstChild();
+    Q3ListViewItemIterator it = listViewCommon->firstChild();
     while ( *it ) {
 	if ( (*it)->isSelected() )
 	    delete (*it);
@@ -131,8 +131,8 @@ void ConfigToolboxDialog::removeTool()
 
 void ConfigToolboxDialog::moveToolUp()
 {
-    QListViewItem *next = 0;
-    QListViewItem *item = listViewCommon->firstChild();
+    Q3ListViewItem *next = 0;
+    Q3ListViewItem *item = listViewCommon->firstChild();
     for ( int i = 0; i < listViewCommon->childCount(); ++i ) {
 	next = item->itemBelow();
 	if ( item->isSelected() && (i > 0) && !item->itemAbove()->isSelected() )
@@ -145,8 +145,8 @@ void ConfigToolboxDialog::moveToolUp()
 void ConfigToolboxDialog::moveToolDown()
 {
     int count = listViewCommon->childCount();
-    QListViewItem *next = 0;
-    QListViewItem *item = listViewCommon->lastItem();
+    Q3ListViewItem *next = 0;
+    Q3ListViewItem *item = listViewCommon->lastItem();
     for ( int i = 0; i < count; ++i ) {
 	next = item->itemAbove();
 	if ( item->isSelected() && (i > 0) && !item->itemBelow()->isSelected() )
@@ -166,10 +166,10 @@ void ConfigToolboxDialog::moveToolDown()
 }
 
 
-void ConfigToolboxDialog::currentToolChanged( QListViewItem *i )
+void ConfigToolboxDialog::currentToolChanged( Q3ListViewItem *i )
 {
     bool canAdd = FALSE;
-    QListViewItemIterator it = listViewTools->firstChild();
+    Q3ListViewItemIterator it = listViewTools->firstChild();
     for ( ; *it; it++ ) {
 	if ( (*it)->isSelected() ) {
 	    canAdd = TRUE;
@@ -180,13 +180,13 @@ void ConfigToolboxDialog::currentToolChanged( QListViewItem *i )
 }
 
 
-void ConfigToolboxDialog::currentCommonToolChanged( QListViewItem *i )
+void ConfigToolboxDialog::currentCommonToolChanged( Q3ListViewItem *i )
 {
     buttonUp->setEnabled( (bool) (i && i->itemAbove()) );
     buttonDown->setEnabled( (bool) (i && i->itemBelow()) );
 
     bool canRemove = FALSE;
-    QListViewItemIterator it = listViewCommon->firstChild();
+    Q3ListViewItemIterator it = listViewCommon->firstChild();
     for ( ; *it; it++ ) {
 	if ( (*it)->isSelected() ) {
 	    canRemove = TRUE;
@@ -200,7 +200,7 @@ void ConfigToolboxDialog::currentCommonToolChanged( QListViewItem *i )
 void ConfigToolboxDialog::ok()
 {
     MainWindow::self->commonWidgetsPage.clear();
-    QListViewItem *item = listViewCommon->firstChild();
+    Q3ListViewItem *item = listViewCommon->firstChild();
     for ( int j = 0; j < listViewCommon->childCount(); item = item->itemBelow(), ++j ) {
         QAction *a = 0;
 	for ( a = MainWindow::self->toolActions.last();

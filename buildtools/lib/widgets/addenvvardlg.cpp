@@ -13,13 +13,17 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
+#include <QGridLayout>
 #include <kbuttonbox.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
@@ -56,8 +60,8 @@ AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     grid->addWidget(value_label, 1, 0);
     grid->addWidget(value_edit, 1, 1);
 
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+    Q3Frame *frame = new Q3Frame(this);
+    frame->setFrameStyle(Q3Frame::HLine | Q3Frame::Sunken);
     layout->addWidget(frame, 0);
 
     KButtonBox *buttonbox = new KButtonBox(this);

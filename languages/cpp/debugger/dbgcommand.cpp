@@ -16,6 +16,8 @@
 #include "dbgcommand.h"
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -24,7 +26,7 @@ namespace GDBDebugger
 {
 
 
-DbgCommand::DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd, char prompt) :
+DbgCommand::DbgCommand(const Q3CString& command, bool isRunCmd, bool isInfoCmd, char prompt) :
   command_(command),
   isRunCmd_(isRunCmd),
   isInfoCmd_(isInfoCmd),

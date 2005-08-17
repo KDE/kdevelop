@@ -16,8 +16,10 @@
 #ifndef _GDBBreakpointWidget_H_
 #define _GDBBreakpointWidget_H_
 
-#include <qhbox.h>
-#include <qpopupmenu.h>
+#include <q3hbox.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class QDomElement;
 class QToolButton;
@@ -33,7 +35,7 @@ class Breakpoint;
 class BreakpointTableRow;
 class GDBTable;
 
-class GDBBreakpointWidget : public QHBox
+class GDBBreakpointWidget : public Q3HBox
 {
     Q_OBJECT
 
@@ -102,7 +104,7 @@ private:
     QToolButton*    m_delete;
     QToolButton*    m_edit;
     QToolButton*    m_removeAll;
-    QPopupMenu*     m_ctxMenu;
+    Q3PopupMenu*     m_ctxMenu;
 };
 
 /***************************************************************************/

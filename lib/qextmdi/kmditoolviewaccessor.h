@@ -26,6 +26,8 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QEvent>
 
 #include <kdockwidget.h>
 

@@ -12,7 +12,7 @@
 #ifndef _REGEXPTESTPART_H_
 #define _REGEXPTESTPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdialogbase.h>
 #include "kdevplugin.h"
 

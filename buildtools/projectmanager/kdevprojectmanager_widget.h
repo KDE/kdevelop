@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #ifndef __KDEVPROJECTMANAGER_WIDGET_H__
 #define __KDEVPROJECTMANAGER_WIDGET_H__
@@ -22,7 +22,7 @@
 #include "kdevprojectmodel.h"
 #include "kdevprojectmanager_part.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <klistview.h>
 
@@ -38,7 +38,7 @@ class ProjectViewItem;
 class ProjectOverview;
 class ProjectDetails;
 
-class KDevProjectManagerWidget: public QVBox
+class KDevProjectManagerWidget: public Q3VBox
 {
     Q_OBJECT    
 public:
@@ -70,9 +70,8 @@ public slots:
     void createFolder();
     void createTarget();
 
-    void configureFolder();
 protected slots:
-    void updateDetails(QListViewItem *item);
+    void updateDetails(Q3ListViewItem *item);
     void updateActions();
 
 private:
@@ -83,18 +82,13 @@ private:
     KAction *m_actionReload;
     KAction *m_actionBuild;
     KAction *m_actionBuildAll;
-    KAction *m_actionConfigure;
     
     KAction *m_addFile;
     KAction *m_addTarget;
     KAction *m_addFolder;
-
-    KAction *m_removeFile;
-    KAction *m_removeTarget;
-    KAction *m_removeFolder;
 };
 
-class ProjectViewItem: public QListViewItem
+class ProjectViewItem: public Q3ListViewItem
 {
 public:
     enum ProcessOperation
@@ -131,7 +125,7 @@ private:
     ProjectView *m_projectView;
 };
 
-class ProjectView: public QVBox
+class ProjectView: public Q3VBox
 {
     Q_OBJECT
 public:
@@ -167,8 +161,8 @@ public slots:
     virtual void showProperties(ProjectItemDom dom);
 
 private slots:
-    void executed(QListViewItem *item);
-    void showProperties(QListViewItem *item);
+    void executed(Q3ListViewItem *item);
+    void showProperties(Q3ListViewItem *item);
     
 private:    
     KListView *m_listView;
@@ -193,7 +187,7 @@ public slots:
     void buildAll();
     
 private slots:
-    void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
+    void contextMenu(KListView *listView, Q3ListViewItem *item, const QPoint &pt);
 };
 
 class ProjectDetails: public ProjectView
@@ -208,7 +202,7 @@ public slots:
     void build();
     
 private slots:
-    void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
+    void contextMenu(KListView *listView, Q3ListViewItem *item, const QPoint &pt);
     
 private:
     ProjectItemDom m_currentItem;

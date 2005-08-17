@@ -7,6 +7,9 @@
 
 // #include "editorproxy.h"
 #include <kdevpartcontroller.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 
 using namespace KTextEditor;
@@ -50,7 +53,7 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
     iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
 
     BPItem bpItem(fileName, lineNum);
-    QValueList<BPItem>::Iterator it = BPList.find(bpItem);
+    Q3ValueList<BPItem>::Iterator it = BPList.find(bpItem);
     if (it != BPList.end())
     {
 //        kdDebug(9012) << "Removing BP=" << fileName << ":" << lineNum << endl;
@@ -77,15 +80,15 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
 
 void Debugger::clearExecutionPoint()
 {
-    QPtrListIterator<KParts::Part> it(*m_partController->parts());
+    Q3PtrListIterator<KParts::Part> it(*m_partController->parts());
     for ( ; it.current(); ++it)
     {
         MarkInterface *iface = dynamic_cast<MarkInterface*>(it.current());
         if (!iface)
             continue;
 
-        QPtrList<Mark> list = iface->marks();
-        QPtrListIterator<Mark> markIt(list);
+        Q3PtrList<Mark> list = iface->marks();
+        Q3PtrListIterator<Mark> markIt(list);
         for( ; markIt.current(); ++markIt )
         {
             Mark* mark = markIt.current();
@@ -133,8 +136,8 @@ void Debugger::marksChanged()
                 return; // Probably means the document is being closed.
 
             KTextEditor::Mark *m;
-            QValueList<BPItem> oldBPList = BPList;
-            QPtrList<KTextEditor::Mark> newMarks = iface->marks();
+            Q3ValueList<BPItem> oldBPList = BPList;
+            Q3PtrList<KTextEditor::Mark> newMarks = iface->marks();
 
             // Compare the oldBPlist to the new list from the editor.
             //

@@ -23,6 +23,8 @@
 #define _RDBPARSER_H_
 
 #include "variablewidget.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace RDBDebugger
 {
@@ -33,7 +35,7 @@ namespace RDBParser
     void parseExpandedVariable(VarItem *parent, char *buf);
     DataType determineType(char *buf);
     void setItem(	LazyFetchItem *parent, const QString &varName, 
-					DataType dataType, const QCString &value );
+					DataType dataType, const Q3CString &value );
 }
 
 }

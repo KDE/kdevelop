@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef DOCGLOBALCONFIGWIDGET_H
 #define DOCGLOBALCONFIGWIDGET_H
@@ -34,7 +34,7 @@ class DocGlobalConfigWidget : public DocGlobalConfigWidgetBase
     Q_OBJECT
 public:
     DocGlobalConfigWidget(DocumentationPart *part, DocumentationWidget *widget,
-        QWidget *parent = 0, const char *name = 0, WFlags fl = 0);
+        QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
     ~DocGlobalConfigWidget();
     /*$PUBLIC_FUNCTIONS$*/
 

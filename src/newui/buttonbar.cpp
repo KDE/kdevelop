@@ -15,11 +15,15 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "buttonbar.h"
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <QBoxLayout>
 
 #include <kdebug.h>
 #include <kstringhandler.h>
@@ -30,7 +34,7 @@ namespace Ideal {
 
 //ButtonLayout class
 
-ButtonLayout::ButtonLayout(ButtonBar *parent, Direction d, int margin, int spacing, const char *name)
+ButtonLayout::ButtonLayout(ButtonBar *parent, Qt::Orientation d, int margin, int spacing, const char *name)
     :QBoxLayout(parent, d, margin, spacing, name), m_buttonBar(parent)
 {
 }
@@ -75,7 +79,7 @@ ButtonBar::ButtonBar(Place place, ButtonMode mode, QWidget *parent, const char *
             break;
     }
     
-    l->setResizeMode(QLayout::Minimum);
+    l->setResizeMode(QLayout::SetMinimumSize);
     setMode(mode);
     
     l->insertStretch(-1);
@@ -184,7 +188,7 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
     m_shrinked = true;
     
     uint textLength = 0;
-    QValueList<uint> texts;
+    Q3ValueList<uint> texts;
     uint maxLength = 0;
     for (ButtonList::const_iterator it = m_buttons.constBegin(); it != m_buttons.constEnd(); ++it)
     {
@@ -201,7 +205,7 @@ void ButtonBar::shrink(int preferredDimension, int actualDimension)
     do {
         newMaxLength -= 1;
         newTextLength = 0;
-        for (QValueList<uint>::iterator it = texts.begin(); it != texts.end(); ++it)
+        for (Q3ValueList<uint>::iterator it = texts.begin(); it != texts.end(); ++it)
         {
             if (*it > newMaxLength)
                 *it = newMaxLength;
@@ -225,7 +229,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
     m_shrinked = true;
     
     uint textLength = 0;
-    QValueList<uint> texts;
+    Q3ValueList<uint> texts;
     uint maxLength = 0;
     for (ButtonList::const_iterator it = m_buttons.constBegin(); it != m_buttons.constEnd(); ++it)
     {
@@ -245,7 +249,7 @@ void ButtonBar::deshrink(int preferredDimension, int actualDimension)
     do {
         newTextLength = 0;
         int i = 0;
-        for (QValueList<uint>::iterator it = texts.begin(); it != texts.end(); ++it, i++)
+        for (Q3ValueList<uint>::iterator it = texts.begin(); it != texts.end(); ++it, i++)
         {
             if (m_buttons[i]->text().contains("..."))
                 (*it)++;

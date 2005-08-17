@@ -38,7 +38,7 @@ class DatabaseConnectionsEditor : public DatabaseConnectionBase
 
 public:
     DatabaseConnectionsEditor( Project *pro, QWidget* parent = 0,
-			       const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+			       const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~DatabaseConnectionsEditor();
 
 protected slots:

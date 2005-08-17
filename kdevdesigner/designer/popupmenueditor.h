@@ -28,8 +28,19 @@
 #define POPUPMENUEDITOR_H
 
 #include <qwidget.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qaction.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QDragLeaveEvent>
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 class PopupMenuEditor;
 class QMenuItem;
@@ -95,7 +106,7 @@ class FormWindow;
 class MainWindow;
 class QLineEdit;
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 class PopupMenuEditor : public QWidget
 {
@@ -114,7 +125,7 @@ public:
 
     void insert( PopupMenuEditorItem * item, int index = -1 );
     void insert( QAction * action, int index = -1 );
-    void insert( QActionGroup * actionGroup, int index = -1 );
+    void insert( Q3ActionGroup * actionGroup, int index = -1 );
     int find( const QAction * action );
     int find( PopupMenuEditor * menu );
     int count();
@@ -126,7 +137,7 @@ public:
     void copy( int index );
     void paste( int index );
 
-    void insertedActions( QPtrList<QAction> & list );
+    void insertedActions( Q3PtrList<QAction> & list );
 
     void show();
     void choosePixmap( int index = -1 );
@@ -136,7 +147,7 @@ public:
     FormWindow * formWindow() { return formWnd; }
     bool isCreatingAccelerator() { return ( currentField == 2 ); }
 
-    QPtrList<PopupMenuEditorItem> * items() { return &itemList; }
+    Q3PtrList<PopupMenuEditorItem> * items() { return &itemList; }
 
     QWidget * parentEditor() { return parentMenu; }
 
@@ -188,7 +199,7 @@ protected:
     
     int snapToItem( int y );
     void dropInPlace( PopupMenuEditorItem * i, int y );
-    void dropInPlace( QActionGroup * g, int y );
+    void dropInPlace( Q3ActionGroup * g, int y );
 
     void safeDec();
     void safeInc();
@@ -207,7 +218,7 @@ private:
     FormWindow * formWnd;
     QLineEdit * lineEdit;
     QWidget * dropLine;
-    QPtrList<PopupMenuEditorItem> itemList;
+    Q3PtrList<PopupMenuEditorItem> itemList;
     PopupMenuEditorItem addItem;
     PopupMenuEditorItem addSeparator;
     QWidget * parentMenu;

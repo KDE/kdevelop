@@ -15,14 +15,14 @@
 *   You should have received a copy of the GNU General Public License     *
 *   along with this program; if not, write to the                         *
 *   Free Software Foundation, Inc.,                                       *
-*   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 #ifndef KScriptAction_H
 #define KScriptAction_H
 
 #include <scriptclientinterface.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class KAction;
 class KActionCollection;
@@ -108,7 +108,7 @@ public:
     * the manager will search in $KDEPATH/data/coolapp/data for all desktop
     * files that are scripts.
      */
-    QPtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
+    Q3PtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
 
 signals:
     /**
@@ -133,7 +133,7 @@ signals:
     void scriptDone( KScriptClientInterface::Result result, const QVariant &returned );
 
 private:
-    mutable QPtrList<KScriptAction> m_actions;
+    mutable Q3PtrList<KScriptAction> m_actions;
     KActionCollection *m_ac;
 };
 #endif

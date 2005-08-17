@@ -19,14 +19,17 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docglobalconfigwidget.h"
 
 #include <qlayout.h>
 #include <qtoolbox.h>
 #include <qcheckbox.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -51,13 +54,13 @@
 #include "docutils.h"
 
 DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
-    DocumentationWidget *widget, QWidget *parent, const char *name, WFlags fl)
+    DocumentationWidget *widget, QWidget *parent, const char *name, Qt::WFlags fl)
     :DocGlobalConfigWidgetBase(parent, name, fl), m_part(part), m_widget(widget)
 {
     m_View = new DocConfigListView( viewHolder );
     viewHolder->addWidget( m_View );
     viewHolder->raiseWidget( m_View );
-    for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+    for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
         it != m_part->m_plugins.constEnd(); ++it)
     {
         (*it)->loadCatalogConfiguration( m_View );
@@ -162,7 +165,7 @@ KListView *DocGlobalConfigWidget::activeView()
 void DocGlobalConfigWidget::accept()
 {
     //write catalog settings
-	for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin(); 
+	for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin(); 
 		it != m_part->m_plugins.constEnd(); ++it)
 	{
 		(*it)->saveCatalogConfiguration( m_View );
@@ -182,10 +185,10 @@ void DocGlobalConfigWidget::accept()
     QString ftsLocationsFile = locateLocal("data", "kdevdocumentation/search/locations.txt");
     QFile f(ftsLocationsFile);
     QStringList locs;
-    if (f.open(IO_ReadWrite | IO_Truncate))
+    if (f.open(QIODevice::ReadWrite | QIODevice::Truncate))
     {
         QTextStream str(&f);
-        for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+        for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
             it != m_part->m_plugins.constEnd(); ++ it)
         {
             QStringList app = (*it)->fullTextSearchLocations();

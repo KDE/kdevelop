@@ -15,12 +15,14 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <klibloader.h>
@@ -37,10 +39,10 @@
 class ServiceComboBox
 {
 public:
-    static void insertStringList(QComboBox *combo, const QValueList<KService::Ptr> &list,
+    static void insertStringList(QComboBox *combo, const Q3ValueList<KService::Ptr> &list,
                                  QStringList *names, QStringList *execs)
     {
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = list.begin(); it != list.end(); ++it) {
             combo->insertItem((*it)->comment());
             (*names) << (*it)->desktopEntryName();
@@ -155,7 +157,7 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
 
     if (ccompiler.isEmpty()) {
         kdDebug(9020) << "No c compiler set" << endl;
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = coffers.begin(); it != coffers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 kdDebug(9020) << "Found default " << (*it)->name() << endl;
@@ -166,7 +168,7 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     }
     if (cxxcompiler.isEmpty()) {
         kdDebug(9020) << "No cxx compiler set" << endl;
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = cxxoffers.begin(); it != cxxoffers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 kdDebug(9020) << "Found default " << (*it)->name() << endl;
@@ -177,7 +179,7 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     }
     if (f77compiler.isEmpty()) {
         kdDebug(9020) << "No c compiler set" << endl;
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = f77offers.begin(); it != f77offers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 kdDebug(9020) << "Found default " << (*it)->name() << endl;
@@ -236,7 +238,7 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
     DomUtil::writeEntry(dom, prefix + "cxxflags", cxxflags_edit->text());
     DomUtil::writeEntry(dom, prefix + "f77flags", f77flags_edit->text());
 
-    if (KMessageBox::questionYesNo(this, i18n("Re-run configure for %1 now?").arg(config), QString::null, i18n("Rerun"), i18n("Do Not Run")) == KMessageBox::Yes)
+    if (KMessageBox::questionYesNo(this, i18n("Re-run configure for %1 now?").arg(config)) == KMessageBox::Yes)
         QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
 
 }

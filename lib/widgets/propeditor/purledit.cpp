@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "purledit.h"
 
@@ -25,8 +25,10 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #endif
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 namespace PropertyLib{
 
@@ -82,9 +84,9 @@ void PUrlEdit::select()
 #ifdef PURE_QT
     QString path = m_url;
     if( m_mode == Directory )
-	m_url = QFileDialog::getExistingDirectory( m_url,this);
+	m_url = Q3FileDialog::getExistingDirectory( m_url,this);
     else
-        m_url = QFileDialog::getOpenFileName(m_url, QString::null, this);
+        m_url = Q3FileDialog::getOpenFileName(m_url, QString::null, this);
     updateProperty(m_url);
     m_edit->setText(m_url);
 #endif

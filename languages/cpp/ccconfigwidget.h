@@ -17,7 +17,7 @@
 
 class CppSupportPart;
 class Catalog;
-class QCheckListItem;
+class Q3CheckListItem;
 
 class CCConfigWidget : public CCConfigWidgetBase
 {
@@ -38,15 +38,11 @@ protected slots:
 private slots:
 	void catalogRegistered( Catalog* c );
 	void catalogUnregistered( Catalog* c );
-	void slotToogleQtUsed();
 
 private:
 	void initGeneralTab();
 	void saveFileTemplatesTab();
 
-	void initQtTab();
-	void saveQtTab();
-    
 	void initCodeCompletionTab();
 	void saveCodeCompletionTab();
 
@@ -55,7 +51,7 @@ private:
 
 private:
 	CppSupportPart* m_pPart;
-	QMap<QCheckListItem*, Catalog*> m_catalogs;
+	QMap<Q3CheckListItem*, Catalog*> m_catalogs;
 };
 
 #endif 

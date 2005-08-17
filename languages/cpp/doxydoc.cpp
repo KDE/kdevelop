@@ -47,7 +47,7 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 			{
 				m_file.close();
 				m_file.setName( ci->path() + filename );
-				if ( !m_file.open( IO_ReadOnly ) )
+				if ( !m_file.open( QIODevice::ReadOnly ) )
 				{
 					m_file.setName( "" );
 					return "";

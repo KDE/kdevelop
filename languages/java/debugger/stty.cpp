@@ -60,7 +60,7 @@
 #include <bsdtty.h>
 #endif
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qsocketnotifier.h>
 #include <qstring.h>
 #include <qfile.h>

@@ -17,14 +17,16 @@
 /** Here resides the Import-existing-files-dialog of the Automake Manager (a KDevelop build tool part) **/
 
 #include <qapplication.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 //#include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 #include <kdebug.h>
 #include <kfileview.h>
@@ -54,7 +56,7 @@
  *  TRUE to construct a modal dialog.
  */
 
-AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, TargetItem* titem, QWidget* parent, const char* name, bool modal, WFlags fl )
+AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, TargetItem* titem, QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
         : AddExistingDlgBase ( parent, name, modal, fl )
 {
 	m_spitem = spitem;
@@ -152,7 +154,7 @@ void AddExistingFilesDialog::importItems()
 	// items already added to the importView
 	KFileItemListIterator importedList ( *importView->items() );
 
-	QListViewItem* child = m_titem->firstChild();
+	Q3ListViewItem* child = m_titem->firstChild();
 
 	QStringList duplicateList;
 

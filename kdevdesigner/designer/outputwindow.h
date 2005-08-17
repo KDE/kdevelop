@@ -29,19 +29,19 @@
 
 #include <qtabwidget.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
-#include <qlistview.h>
+#include <q3valuelist.h>
+#include <q3listview.h>
 
 struct DesignerOutputDock;
-class QTextEdit;
-class QListView;
+class Q3TextEdit;
+class Q3ListView;
 
-class ErrorItem : public QListViewItem
+class ErrorItem : public Q3ListViewItem
 {
 public:
     enum Type { Error, Warning };
 
-    ErrorItem( QListView *parent, QListViewItem *after, const QString &message, int line,
+    ErrorItem( Q3ListView *parent, Q3ListViewItem *after, const QString &message, int line,
 	       const QString &locationString, QObject *locationObject );
 
     void paintCell( QPainter *, const QColorGroup & cg,
@@ -67,7 +67,7 @@ public:
     OutputWindow( QWidget *parent );
     ~OutputWindow();
 
-    void setErrorMessages( const QStringList &errors, const QValueList<uint> &lines,
+    void setErrorMessages( const QStringList &errors, const Q3ValueList<uint> &lines,
 			   bool clear, const QStringList &locations,
 			   const QObjectList &locationObjects );
     void appendDebug( const QString& );
@@ -82,14 +82,14 @@ public:
     static QtMsgHandler oldMsgHandler;
 
 private slots:
-    void currentErrorChanged( QListViewItem *i );
+    void currentErrorChanged( Q3ListViewItem *i );
 
 private:
     void setupError();
     void setupDebug();
 
-    QTextEdit *debugView;
-    QListView *errorView;
+    Q3TextEdit *debugView;
+    Q3ListView *errorView;
 
     DesignerOutputDock *iface;
 

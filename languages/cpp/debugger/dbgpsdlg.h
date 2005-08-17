@@ -17,8 +17,10 @@
 #define _DBGPSDLG_H_
 
 #include <kdialog.h>
+//Added by qt3to4:
+#include <QLabel>
 
-class QListBox;
+class Q3ListBox;
 class KProcess;
 class QLabel;
 
@@ -43,7 +45,7 @@ private slots:
 
 private:
     KProcess* psProc_;
-    QListBox* pids_;
+    Q3ListBox* pids_;
     QLabel*   heading_;
     QString   pidLines_;
     QString   pidCmd_;

@@ -17,11 +17,14 @@
 #define _DBGCONTROLLER_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 #include <domutil.h>
 
 class KProcess;
 class QString;
-class QStrList;
+class Q3StrList;
 
 namespace GDBDebugger
 {
@@ -96,7 +99,6 @@ public slots:
 
     virtual void slotRun()                                                  = 0;
     virtual void slotRunUntil(const QString &fileName, int lineNum)         = 0;
-    virtual void slotJumpTo(const QString &fileName, int lineNum)           = 0;
     virtual void slotStepInto()                                             = 0;
     virtual void slotStepOver()                                             = 0;
     virtual void slotStepIntoIns()                                          = 0;
@@ -113,7 +115,7 @@ public slots:
 
     virtual void slotExpandItem(TrimmableItem *parent)                     = 0;
     virtual void slotExpandUserItem(VarItem *parent,
-                                    const QCString &userRequest)            = 0;
+                                    const Q3CString &userRequest)            = 0;
     virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
     virtual void slotSetLocalViewState(bool onOff)                          = 0;
 

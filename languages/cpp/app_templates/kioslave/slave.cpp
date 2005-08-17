@@ -1,6 +1,6 @@
 
-#include <qcstring.h>
-#include <qsocket.h>
+#include <q3cstring.h>
+#include <q3socket.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
 
@@ -26,7 +26,7 @@
 using namespace KIO;
 
 
-kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol(const QCString &pool_socket, const QCString &app_socket)
+kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol(const Q3CString &pool_socket, const Q3CString &app_socket)
     : SlaveBase("kio_%{APPNAMELC}", pool_socket, app_socket)
 {
     kdDebug() << "kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol()" << endl;
@@ -53,7 +53,7 @@ void kio_%{APPNAMELC}Protocol::get(const KURL& url )
     mimeType("text/plain");
     // Send the data
     QString theData = "This is a test of kio_%{APPNAMELC}";
-    data(QCString(theData.local8Bit()));
+    data(Q3CString(theData.local8Bit()));
     data(QByteArray()); // empty array means we're done sending the data
     finished();
 }

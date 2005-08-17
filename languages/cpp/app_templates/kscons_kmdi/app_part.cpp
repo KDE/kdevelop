@@ -12,7 +12,7 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 
 typedef KParts::GenericFactory<%{APPNAMELC}Part> %{APPNAMELC}PartFactory;
 K_EXPORT_COMPONENT_FACTORY( lib%{APPNAMELC}part, %{APPNAMELC}PartFactory );
@@ -25,7 +25,7 @@ K_EXPORT_COMPONENT_FACTORY( lib%{APPNAMELC}part, %{APPNAMELC}PartFactory );
     setInstance( %{APPNAMELC}PartFactory::instance() );
 
     // this should be your custom internal widget
-    m_widget = new QMultiLineEdit( parentWidget, widgetName );
+    m_widget = new Q3MultiLineEdit( parentWidget, widgetName );
 
     // notify the part that this is our internal widget
     setWidget(m_widget);
@@ -96,7 +96,7 @@ bool %{APPNAMELC}Part::openFile()
 {
     // m_file is always local so we can use QFile on it
     QFile file(m_file);
-    if (file.open(IO_ReadOnly) == false)
+    if (file.open(QIODevice::ReadOnly) == false)
         return false;
 
     // our example widget is text-based, so we use QTextStream instead
@@ -125,7 +125,7 @@ bool %{APPNAMELC}Part::saveFile()
 
     // m_file is always local, so we use QFile
     QFile file(m_file);
-    if (file.open(IO_WriteOnly) == false)
+    if (file.open(QIODevice::WriteOnly) == false)
         return false;
 
     // use QTextStream to dump the text to the file

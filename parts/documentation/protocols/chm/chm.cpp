@@ -10,14 +10,16 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qbitarray.h>
 #include <qfile.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -57,7 +59,7 @@ extern "C"
     }
 }
 
-ChmProtocol::ChmProtocol(const QCString &pool_socket, const QCString &app_socket)
+ChmProtocol::ChmProtocol(const Q3CString &pool_socket, const Q3CString &app_socket)
 : SlaveBase("kio_chm", pool_socket, app_socket)
 {
     kdDebug() << "ChmProtocol::ChmProtocol()" << endl;

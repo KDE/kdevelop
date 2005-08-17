@@ -42,7 +42,7 @@
 
 #include <private/qcom_p.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 class QWidget;
 class QObjectList;
@@ -91,8 +91,8 @@ struct EditorInterface : public QUnknownInterface
     virtual void setModified( bool m ) = 0;
     virtual bool isModified() const = 0;
     virtual int numLines() const = 0;
-    virtual void breakPoints( QValueList<uint> &l ) const = 0;
-    virtual void setBreakPoints( const QValueList<uint> &l ) = 0;
+    virtual void breakPoints( Q3ValueList<uint> &l ) const = 0;
+    virtual void setBreakPoints( const Q3ValueList<uint> &l ) = 0;
     virtual void setMode( Mode m ) = 0;
 
     virtual void onBreakPointChange( QObject *receiver, const char *slot ) = 0;

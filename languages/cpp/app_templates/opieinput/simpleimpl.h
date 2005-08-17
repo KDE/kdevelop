@@ -1,16 +1,18 @@
 #ifndef %{APPNAME}IMPL_H
 #define %{APPNAME}IMPL_H
 
-#include <qhbox.h>
+#include <q3hbox.h>
 
 #include <qpe/inputmethodinterface.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class QPixmap;
 class QCheckBox;
-class %{APPNAME} : public QHBox {
+class %{APPNAME} : public Q3HBox {
 	Q_OBJECT
 public:
-	%{APPNAME}( QWidget *par, WFlags f );
+	%{APPNAME}( QWidget *par, Qt::WFlags f );
 	~%{APPNAME}();
 	void resetState();
 private slots:

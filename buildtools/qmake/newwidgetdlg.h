@@ -21,7 +21,7 @@ class QDomDocument;
 class NewWidgetDlg : public NewWidgetDlgBase
 {
 public:
-                        NewWidgetDlg(QStringList &newFileNames,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+                        NewWidgetDlg(QStringList &newFileNames,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
                         ~NewWidgetDlg();
 
 

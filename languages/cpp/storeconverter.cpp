@@ -10,7 +10,7 @@
 ***************************************************************************/
 #include "storeconverter.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdebug.h>
 
@@ -27,18 +27,18 @@ StoreConverter::StoreConverter(CppSupportPart *part, CodeModel *model)
 
 void StoreConverter::PCSClassToCodeModel(const QString &className, const QStringList &/*classScope*/)
 {
-	QValueList<Catalog*> catalogs = m_part->codeRepository()->registeredCatalogs();
-	for (QValueList<Catalog*>::iterator it = catalogs.begin();
+	Q3ValueList<Catalog*> catalogs = m_part->codeRepository()->registeredCatalogs();
+	for (Q3ValueList<Catalog*>::iterator it = catalogs.begin();
 	     it != catalogs.end(); ++it)
 	{
 		Catalog *catalog = *it;
 		kdDebug() << "looking in catalog: " << catalog->dbName() << endl;
 		
-		QValueList<Catalog::QueryArgument> args;
+		Q3ValueList<Catalog::QueryArgument> args;
 		args << Catalog::QueryArgument( "kind", Tag::Kind_Class );
 		args << Catalog::QueryArgument( "name", className );
-		QValueList<Tag> tags = catalog->query(args);
-		for (QValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it )
+		Q3ValueList<Tag> tags = catalog->query(args);
+		for (Q3ValueList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it )
 		{
 			Tag& tag = *it;
 			kdDebug() << "TAG: " << tag.name() << " in file " << tag.fileName() << endl;
@@ -69,11 +69,11 @@ void StoreConverter::parseClass(Tag &classTag, FileDom file)
 	
 	QStringList scope;
 	scope.append(classTag.name());
-	QValueList<Tag> symbolTags = m_part->codeCompletion()->repository()->
+	Q3ValueList<Tag> symbolTags = m_part->codeCompletion()->repository()->
 		getTagsInScope(scope, false);
 	
 //     kdDebug() << "got tags: " << endl;
-	for (QValueList<Tag>::iterator sit = symbolTags.begin(); sit != symbolTags.end(); ++sit )
+	for (Q3ValueList<Tag>::iterator sit = symbolTags.begin(); sit != symbolTags.end(); ++sit )
 	{
 		Tag &symbol = *sit;
 //         kdDebug() << symbol.name() << endl;
@@ -88,8 +88,8 @@ void StoreConverter::parseClass(Tag &classTag, FileDom file)
 		}
 	}
 	
-	QValueList<Tag> baseClassTags = m_part->codeCompletion()->repository()->getBaseClassList(classTag.name());
-	for (QValueList<Tag>::iterator bit = baseClassTags.begin();
+	Q3ValueList<Tag> baseClassTags = m_part->codeCompletion()->repository()->getBaseClassList(classTag.name());
+	for (Q3ValueList<Tag>::iterator bit = baseClassTags.begin();
 	     bit != baseClassTags.end(); ++bit)
 		klass->addBaseClass((*bit).name());
 	

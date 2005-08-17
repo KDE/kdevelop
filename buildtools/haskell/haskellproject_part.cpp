@@ -18,10 +18,12 @@
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -64,7 +66,7 @@ HaskellProjectPart::HaskellProjectPart(QObject *parent, const char *name, const 
 
  // _widget = new HaskellProjectWidget(this);
 
-  	_buildAction = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
+  	_buildAction = new KAction( i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
     		                      this, SLOT(slotBuild()),
             		              actionCollection(), "build_build" );
 	_runAction = new KAction( i18n("Execute Program"), "exec", 0,
@@ -173,7 +175,22 @@ QString HaskellProjectPart::mainProgram( bool relative ) const
 
 QString HaskellProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevhaskellproject");
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevhaskellproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevhaskellproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevhaskellproject/run/customdirectory");
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+
+    return buildDirectory() + "/" + DomMainProgram;
 }
 
 /** Retuns a QString with the run command line arguments */
@@ -341,7 +358,7 @@ void HaskellProjectPart::changedFile( const QString & fileName )
 
 void HaskellProjectPart::projectConfigWidget( KDialogBase * dlg )
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage( i18n("Haskell Options") );
     HaskellProjectOptionsDlg *optionsDlg = new HaskellProjectOptionsDlg( this, vbox );
 
@@ -378,7 +395,7 @@ void HaskellProjectPart::loadProjectConfig()
 
   	if ( _compilerExec.isEmpty() ) {
 		KTrader::OfferList offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Haskell'");
-    	QValueList<KService::Ptr>::ConstIterator it;
+    	Q3ValueList<KService::Ptr>::ConstIterator it;
     	for (it = offers.begin(); it != offers.end(); ++it) {
       		if ( (*it)->property( "X-KDevelop-Default" ).toBool() ) {
       			_compilerExec = (*it)->exec();

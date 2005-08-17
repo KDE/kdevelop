@@ -25,11 +25,15 @@
 #ifndef __QEditorCodeCompletion_H__
 #define __QEditorCodeCompletion_H__
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
-#include <qvbox.h>
-#include <qlistbox.h>
+#include <q3vbox.h>
+#include <q3listbox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
 
 #include <ktexteditor/codecompletioninterface.h>
 
@@ -41,14 +45,14 @@ class QEditorCodeCompletionCommentLabel : public QLabel
     Q_OBJECT
 public:
     QEditorCodeCompletionCommentLabel( QWidget* parent, const QString& text) : QLabel( parent, "toolTipTip",
-             WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM )
+             Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WX11BypassWM )
     {
         setMargin(1);
         setIndent(0);
         setAutoMask( FALSE );
-        setFrameStyle( QFrame::Plain | QFrame::Box );
+        setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
         setLineWidth( 1 );
-        setAlignment( AlignAuto | AlignTop );
+        setAlignment( Qt::AlignLeft | Qt::AlignTop );
         polish();
         setText(text);
         adjustSize();
@@ -60,9 +64,9 @@ public:
  *Therefor the size is stored statically and provided over sizeHint().
  *@short Codecompletion-Listbox
  */
-class CCListBox : public QListBox{
+class CCListBox : public Q3ListBox{
 public:
-    CCListBox(QWidget* parent = 0, const char* name = 0, WFlags f = 0):QListBox(parent, name, f){
+    CCListBox(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0):Q3ListBox(parent, name, f){
     	resize(m_size);
 	//resize the frame containing the listbox (bad "style" but i don't know a better way)
 	if (parent)
@@ -76,7 +80,7 @@ public:
 protected:
    void resizeEvent(QResizeEvent* rev){
 	m_size = rev->size();
-	QListBox::resizeEvent(rev);
+	Q3ListBox::resizeEvent(rev);
     };
 
 private:
@@ -93,7 +97,7 @@ public:
   void showArgHint(
       QStringList functionList, const QString& strWrapping, const QString& strDelimiter );
   void showCompletionBox(
-      QValueList<KTextEditor::CompletionEntry> entries, int offset = 0, bool casesensitive = true );
+      Q3ValueList<KTextEditor::CompletionEntry> entries, int offset = 0, bool casesensitive = true );
   bool eventFilter( QObject* o, QEvent* e );
 
 public slots:
@@ -114,9 +118,9 @@ private:
 
   QEditorArgHint*    m_pArgHint;
   QEditorView*       m_view;
-  QVBox*          m_completionPopup;
+  Q3VBox*          m_completionPopup;
   CCListBox*      m_completionListBox;
-  QValueList<KTextEditor::CompletionEntry> m_complList;
+  Q3ValueList<KTextEditor::CompletionEntry> m_complList;
   uint            m_lineCursor;
   uint            m_colCursor;
   int             m_offset;

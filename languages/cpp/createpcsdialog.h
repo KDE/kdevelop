@@ -21,14 +21,14 @@ class CreatePCSDialog : public CreatePCSDialogBase
 	Q_OBJECT
 
 public:
-	CreatePCSDialog( CppSupportPart* part, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	CreatePCSDialog( CppSupportPart* part, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 	~CreatePCSDialog();
 	/*$PUBLIC_FUNCTIONS$*/
 
 public slots:
 	/*$PUBLIC_SLOTS$*/
 	virtual void slotSelected( const QString& );
-	virtual void slotSelectionChanged( QListViewItem* );
+	virtual void slotSelectionChanged( Q3ListViewItem* );
 
 protected:
 	/*$PROTECTED_FUNCTIONS$*/

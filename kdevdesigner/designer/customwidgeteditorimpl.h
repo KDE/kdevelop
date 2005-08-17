@@ -31,10 +31,10 @@
 #include "metadatabase.h"
 
 #include <qmap.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 
 class QTimer;
-class QListBoxItem;
+class Q3ListBoxItem;
 class MainWindow;
 
 class CustomWidgetEditor : public CustomWidgetEditorBase
@@ -47,7 +47,7 @@ public:
 protected slots:
     void addWidgetClicked();
     void classNameChanged( const QString & );
-    void currentWidgetChanged( QListBoxItem * );
+    void currentWidgetChanged( Q3ListBoxItem * );
     void deleteWidgetClicked();
     void headerFileChanged( const QString & );
     void heightChanged( int );
@@ -57,7 +57,7 @@ protected slots:
     void chooseHeader();
     void checkWidgetName();
     void closeClicked();
-    void currentSignalChanged( QListBoxItem *i );
+    void currentSignalChanged( Q3ListBoxItem *i );
     void addSignal();
     void removeSignal();
     void signalNameChanged( const QString &s );
@@ -65,12 +65,12 @@ protected slots:
     void slotNameChanged( const QString & );
     void addSlot();
     void removeSlot();
-    void currentSlotChanged( QListViewItem * );
+    void currentSlotChanged( Q3ListViewItem * );
     void propertyTypeChanged( const QString & );
     void propertyNameChanged( const QString & );
     void addProperty();
     void removeProperty();
-    void currentPropertyChanged( QListViewItem * );
+    void currentPropertyChanged( Q3ListViewItem * );
     void saveDescription();
     void loadDescription();
     void horDataChanged( int );
@@ -78,7 +78,7 @@ protected slots:
     void widgetIsContainer( bool );
     
 private:
-    MetaDataBase::CustomWidget *findWidget( QListBoxItem *i );
+    MetaDataBase::CustomWidget *findWidget( Q3ListBoxItem *i );
     void setupDefinition();
     void setupSignals();
     void setupSlots();
@@ -86,10 +86,10 @@ private:
     void updateCustomWidgetSizes();
 
 private:
-    QMap<QListBoxItem*, MetaDataBase::CustomWidget*> customWidgets;
+    QMap<Q3ListBoxItem*, MetaDataBase::CustomWidget*> customWidgets;
     QString oldName;
     QTimer *checkTimer;
-    QListBoxItem *oldItem;
+    Q3ListBoxItem *oldItem;
     MainWindow *mainWindow;
     QObjectList cwLst;
 

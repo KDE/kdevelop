@@ -18,9 +18,11 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "autotoolsast.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace AutoTools {
 
@@ -28,7 +30,7 @@ namespace AutoTools {
 
 AST::~AST()
 {
-	for (QValueList<AST*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
+	for (Q3ValueList<AST*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
 	{
 		AST *node = *it;
 		delete node;
@@ -42,7 +44,7 @@ void AST::addChildAST(AST *node)
 
 void AST::writeBack(QString &buffer)
 {
-	for (QValueList<AST*>::const_iterator it = m_children.constBegin();
+	for (Q3ValueList<AST*>::const_iterator it = m_children.constBegin();
 	     it != m_children.constEnd(); ++it)
 	{
 		if (*it)
@@ -63,7 +65,7 @@ bool AST::hasChildren() const
 	return !m_children.isEmpty();
 }
 
-QValueList<AST*> AST::children() const
+Q3ValueList<AST*> AST::children() const
 {
 	return m_children;
 }

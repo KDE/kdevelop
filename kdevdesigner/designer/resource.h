@@ -30,8 +30,11 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qvariant.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
 #include "actiondnd.h"
 
 #include "metadatabase.h"
@@ -45,8 +48,8 @@ class FormWindow;
 class MainWindow;
 class QDomElement;
 class QDesignerGridLayout;
-class QListViewItem;
-class QMainWindow;
+class Q3ListViewItem;
+class Q3MainWindow;
 struct LanguageInterface;
 class FormFile;
 class Project;
@@ -94,8 +97,8 @@ private:
     void saveProperty( QObject *w, const QString &name, const QVariant &value, QVariant::Type t, QTextStream &ts, int indent );
     void saveProperty( const QVariant &value, QTextStream &ts, int indent );
     void saveItems( QObject *obj, QTextStream &ts, int indent );
-    void saveItem( const QStringList &text, const QPtrList<QPixmap> &pixmaps, QTextStream &ts, int indent );
-    void saveItem( QListViewItem *i, QTextStream &ts, int indent );
+    void saveItem( const QStringList &text, const Q3PtrList<QPixmap> &pixmaps, QTextStream &ts, int indent );
+    void saveItem( Q3ListViewItem *i, QTextStream &ts, int indent );
     void saveConnections( QTextStream &ts, int indent );
     void saveCustomWidgets( QTextStream &ts, int indent );
     void saveTabOrder( QTextStream &ts, int indent );
@@ -105,15 +108,15 @@ private:
     void saveMetaInfoAfter( QTextStream &ts, int indent );
     void saveIncludeHints( QTextStream &ts, int indent );
     void savePixmap( const QPixmap &p, QTextStream &ts, int indent, const QString &tagname = "pixmap" );
-    void saveActions( const QPtrList<QAction> &actions, QTextStream &ts, int indent );
+    void saveActions( const Q3PtrList<QAction> &actions, QTextStream &ts, int indent );
     void saveChildActions( QAction *a, QTextStream &ts, int indent );
-    void saveToolBars( QMainWindow *mw, QTextStream &ts, int indent );
-    void saveMenuBar( QMainWindow *mw, QTextStream &ts, int indent );
-    void savePopupMenu( PopupMenuEditor *pm, QMainWindow *mw, QTextStream &ts, int indent );
+    void saveToolBars( Q3MainWindow *mw, QTextStream &ts, int indent );
+    void saveMenuBar( Q3MainWindow *mw, QTextStream &ts, int indent );
+    void savePopupMenu( PopupMenuEditor *pm, Q3MainWindow *mw, QTextStream &ts, int indent );
 
     QObject *createObject( const QDomElement &e, QWidget *parent, QLayout* layout = 0 );
     QWidget *createSpacer( const QDomElement &e, QWidget *parent, QLayout *layout, Qt::Orientation o );
-    void createItem( const QDomElement &e, QWidget *widget, QListViewItem *i = 0 );
+    void createItem( const QDomElement &e, QWidget *widget, Q3ListViewItem *i = 0 );
     void createColumn( const QDomElement &e, QWidget *widget );
     void setObjectProperty( QObject* widget, const QString &prop, const QDomElement &e);
     QString saveInCollection( const QImage &img );
@@ -136,15 +139,15 @@ private:
     MainWindow *mainwindow;
     FormWindow *formwindow;
     QWidget* toplevel;
-    QValueList<Image> images;
+    Q3ValueList<Image> images;
     bool copying, pasting;
     bool mainContainerSet;
     QStringList knownNames;
     QStringList usedCustomWidgets;
-    QListViewItem *lastItem;
+    Q3ListViewItem *lastItem;
 
-    QValueList<MetaDataBase::Include> metaIncludes;
-    QValueList<MetaDataBase::Variable> metaVariables;
+    Q3ValueList<MetaDataBase::Include> metaIncludes;
+    Q3ValueList<MetaDataBase::Variable> metaVariables;
     QStringList metaForwards;
     QStringList metaSignals;
     MetaDataBase::MetaInfo metaInfo;
@@ -153,7 +156,7 @@ private:
     QMap<QString, QWidget*> widgets;
     QString exportMacro;
     bool hadGeometry;
-    QMap<QString, QValueList<MetaDataBase::Connection> > langConnections;
+    QMap<QString, Q3ValueList<MetaDataBase::Connection> > langConnections;
     QString currFileName;
     LanguageInterface *langIface;
     bool hasFunctions;

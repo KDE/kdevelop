@@ -10,11 +10,20 @@
 #include <noatun/effects.h>
 
 #include <qpushbutton.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qobjectlist.h>
-#include <qobjectdict.h>
+#include <qobject.h>
+#include <q3objectdict.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QShowEvent>
+#include <QWheelEvent>
+#include <QGridLayout>
+#include <QEvent>
+#include <QDropEvent>
+#include <QCloseEvent>
 
 #include <kpopupmenu.h>
 #include <kstatusbar.h>
@@ -74,9 +83,9 @@
     connect(mPopup, SIGNAL(clicked()), SLOT(popup()));
 
 
-    mVolume=new L33tSlider(0,100,10,0, Horizontal, this);
+    mVolume=new L33tSlider(0,100,10,0, Qt::Horizontal, this);
     mVolume->setValue(napp->player()->volume());
-    mSeeker=new L33tSlider(0,1000,10,0, Horizontal, this);
+    mSeeker=new L33tSlider(0,1000,10,0, Qt::Horizontal, this);
 
     mStatusBar=new KStatusBar(this);
 
@@ -124,7 +133,7 @@
     connect(napp->player(), SIGNAL(playlistHidden()), SLOT(playlistHidden()));
 
     // Event Filter for the RMB
-    for (QPtrListIterator<QObject> i(*children()); i.current(); ++i)
+    for (Q3PtrListIterator<QObject> i(*children()); i.current(); ++i)
         (*i)->installEventFilter(this);
 
     setCaption("Noatun");
@@ -169,7 +178,7 @@ void %{APPNAME}UI::dropEvent(QDropEvent *event)
 void %{APPNAME}UI::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
-    if (e->button()!=RightButton) return;
+    if (e->button()!=Qt::RightButton) return;
     NoatunStdAction::ContextMenu::showContextMenu();
 }
 
@@ -268,7 +277,7 @@ void %{APPNAME}UI::changeLoopType(int t)
 bool %{APPNAME}UI::eventFilter(QObject *o, QEvent *e)
 {
     if ((e->type() == QEvent::MouseButtonRelease)
-            && ((static_cast<QMouseEvent*>(e))->button()==RightButton))
+            && ((static_cast<QMouseEvent*>(e))->button()==Qt::RightButton))
     {
         mouseReleaseEvent(static_cast<QMouseEvent*>(e));
         return true;

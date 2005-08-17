@@ -21,6 +21,8 @@
 #define ADDEXISTINGFILESDLG_H
 
 #include <qdialog.h>
+//Added by qt3to4:
+#include <QDropEvent>
 #include <kfile.h>
 
 #include "addexistingdlgbase.h"
@@ -43,7 +45,7 @@ class AddExistingFilesDialog : public AddExistingDlgBase
 public:
 	AddExistingFilesDialog( AutoProjectPart* part, AutoProjectWidget *widget, 
 	                        SubprojectItem* spitem, TargetItem* titem, QWidget* parent = 0,
-	                        const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	                        const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 	~AddExistingFilesDialog();
 
 private:

@@ -13,18 +13,18 @@
 
 	 You should have received a copy of the GNU General Public License
 	 along with this program; see the file COPYING.  If not, write to
-	 the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-	 Boston, MA 02110-1301, USA.
+	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	 Boston, MA 02111-1307, USA.
 	 */
 
 #ifndef __SUBVERSION_WIDGET_H__
 #define __SUBVERSION_WIDGET_H__
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 
 class subversionPart;
 
-class subversionWidget : public QTextEdit
+class subversionWidget : public Q3TextEdit
 {
   Q_OBJECT
     

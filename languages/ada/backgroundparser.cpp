@@ -16,6 +16,8 @@
 #include "AdaAST.hpp"
 #include <kdebug.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <config.h>
 
@@ -36,7 +38,7 @@ BackgroundParser::~BackgroundParser()
 
 void BackgroundParser::run()
 {
-    QCString _fn = QFile::encodeName(m_fileName);
+    Q3CString _fn = QFile::encodeName(m_fileName);
     std::string fn( _fn.data() );
 
     std::istringstream stream( m_source.utf8().data() );

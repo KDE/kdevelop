@@ -13,10 +13,14 @@
 #include <qlabel.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QEvent>
+#include <QBoxLayout>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -105,7 +109,7 @@ GeneralTab::GeneralTab( GccOptionsPlugin::Type type, QWidget *parent, const char
 	layout->setAutoAdd( true );
 	layout->addSpacing( 10 );
 
-	QVButtonGroup *output_group = new QVButtonGroup( i18n( "Output" ), this );
+	Q3VButtonGroup *output_group = new Q3VButtonGroup( i18n( "Output" ), this );
 	new FlagCheckBox( output_group, controller,
 	                  "-fsyntax-only", i18n( "Only check the code for syntax errors, do not produce object code" ) );
 	new FlagCheckBox( output_group, controller,
@@ -113,10 +117,10 @@ GeneralTab::GeneralTab( GccOptionsPlugin::Type type, QWidget *parent, const char
 	new FlagCheckBox( output_group, controller,
 	                  "-save-temps", i18n( "Do not delete intermediate output like assembler files" ) );
 
-	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+	QApplication::sendPostedEvents( this, QEvent::ChildAdded );
 	layout->addSpacing( 10 );
 
-	QVButtonGroup *codegen_group = new QVButtonGroup( i18n( "Code Generation" ), this );
+	Q3VButtonGroup *codegen_group = new Q3VButtonGroup( i18n( "Code Generation" ), this );
 	if ( type != GccOptionsPlugin::GPP )
 	{
 		new FlagCheckBox( codegen_group, controller,
@@ -141,7 +145,7 @@ GeneralTab::GeneralTab( GccOptionsPlugin::Type type, QWidget *parent, const char
 	new FlagCheckBox( codegen_group, controller,
 	                  "-short-double", i18n( "Make 'double' the same as 'float'" ) );
 
-	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+	QApplication::sendPostedEvents( this, QEvent::ChildAdded );
 	layout->addStretch();
 }
 
@@ -170,7 +174,7 @@ OptimizationTab::OptimizationTab( GccOptionsPlugin::Type type, QWidget *parent, 
 	QBoxLayout * layout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 	layout->setAutoAdd( true );
 
-	QVButtonGroup *group = new QVButtonGroup( i18n( "Optimization Level" ), this );
+	Q3VButtonGroup *group = new Q3VButtonGroup( i18n( "Optimization Level" ), this );
 	Odefault = new QRadioButton( i18n( "Default" ), group );
 	Odefault->setChecked( true );
 	O0 = new QRadioButton( i18n( "No optimization" ), group );
@@ -210,7 +214,7 @@ OptimizationTab::OptimizationTab( GccOptionsPlugin::Type type, QWidget *parent, 
 		                  "-fdefault-inline" );
 	}
 
-	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+	QApplication::sendPostedEvents( this, QEvent::ChildAdded );
 	layout->addStretch();
 }
 
@@ -268,7 +272,7 @@ G77Tab::G77Tab( QWidget *parent, const char *name )
 	layout->setAutoAdd( true );
 	layout->addSpacing( 10 );
 
-	QVButtonGroup *dialect_group = new QVButtonGroup( i18n( "Dialect" ), this );
+	Q3VButtonGroup *dialect_group = new Q3VButtonGroup( i18n( "Dialect" ), this );
 	new FlagCheckBox( dialect_group, controller,
 	                  "-ffree-form", i18n( "Interpret source code as Fortran 90 free form" ),
 	                  "-fno-exception" );
@@ -282,10 +286,10 @@ G77Tab::G77Tab( QWidget *parent, const char *name )
 	new FlagCheckBox( dialect_group, controller,
 	                  "-fonetrip", i18n( "DO loops are executed at least once" ) );
 
-	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+	QApplication::sendPostedEvents( this, QEvent::ChildAdded );
 	layout->addSpacing( 10 );
 
-	QVButtonGroup *codegen_group = new QVButtonGroup( i18n( "Code Generation" ), this );
+	Q3VButtonGroup *codegen_group = new Q3VButtonGroup( i18n( "Code Generation" ), this );
 	new FlagCheckBox( codegen_group, controller,
 	                  "-fno-automatic", i18n( "Treat local variables as if SAVE statement had been specified" ) );
 	new FlagCheckBox( codegen_group, controller,
@@ -293,7 +297,7 @@ G77Tab::G77Tab( QWidget *parent, const char *name )
 	new FlagCheckBox( codegen_group, controller,
 	                  "-fbounds-check", i18n( "Generate run-time checks for array subscripts" ) );
 
-	QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+	QApplication::sendPostedEvents( this, QEvent::ChildAdded );
 	layout->addStretch();
 }
 
@@ -567,7 +571,7 @@ void Warnings2Tab::writeFlags( QStringList *list )
 GccOptionsDialog::GccOptionsDialog( GccOptionsPlugin::Type type, QWidget *parent, const char *name )
 		: KDialogBase( Tabbed, GccOptionsPlugin::captionForType( type ), Ok | Cancel, Ok, parent, name, true )
 {
-	QVBox * vbox;
+	Q3VBox * vbox;
 
 	vbox = addVBoxPage( i18n( "General" ) );
 	general = new GeneralTab( type, vbox, "general tab" );

@@ -12,6 +12,8 @@
 
 #include <ktabwidget.h>
 #include <kmdidefines.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class KPopupMenu;
 
@@ -39,7 +41,7 @@ public:
 	 * \sa QTabWidget
 	 * \sa KTabWidget
 	 */
-	virtual void addTab ( QWidget * child, const QIconSet & iconset, const QString & label );
+	virtual void addTab ( QWidget * child, const QIcon & iconset, const QString & label );
 
 	/**
 	 * Add a tab into the tabwidget
@@ -60,7 +62,7 @@ public:
 	 * \sa QTabWidget
 	 * \sa KTabWidget
 	 */
-	virtual void insertTab ( QWidget * child, const QIconSet & iconset, const QString & label, int index = -1 );
+	virtual void insertTab ( QWidget * child, const QIcon & iconset, const QString & label, int index = -1 );
 
 	/**
 	 * Inserts a tab into the tabwidget

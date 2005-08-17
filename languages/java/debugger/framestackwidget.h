@@ -18,13 +18,15 @@
 #ifndef _FRAMESTACKWIDGET_H_
 #define _FRAMESTACKWIDGET_H_
 
-#include <qlistbox.h>
-#include <qstrlist.h>
+#include <q3listbox.h>
+#include <q3strlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace JAVADebugger
 {
 
-class FramestackWidget : public QListBox
+class FramestackWidget : public Q3ListBox
 {
     Q_OBJECT
 
@@ -33,10 +35,10 @@ public:
     virtual ~FramestackWidget();
 
     void parseJDBBacktraceList(char *str);
-    void addItem(QCString s);
+    void addItem(Q3CString s);
     void updateDone();
     void clearList();
-    QCString getFrameParams(int frame);
+    Q3CString getFrameParams(int frame);
     QString getFrameName(int frame);
 
 public slots:
@@ -48,7 +50,7 @@ signals:
 
 private:
     int currentFrame_;
-    QStrList *currentList_;
+    Q3StrList *currentList_;
 };
 
 }

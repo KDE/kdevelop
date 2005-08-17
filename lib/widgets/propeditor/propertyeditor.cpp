@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "propertyeditor.h"
 
@@ -27,12 +27,15 @@
 #include "compat_tools.h"
 #endif
 
-#include <qtable.h>
+#include <q3table.h>
 #include <qlayout.h>
 #include <qpainter.h>
-#include <qptrlist.h>
-#include <qvaluelist.h>
+#include <q3ptrlist.h>
+#include <q3valuelist.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QGridLayout>
 
 #include "property.h"
 #include "multiproperty.h"
@@ -92,7 +95,7 @@ public:
 #ifndef PURE_QT
             icg.setColor(QColorGroup::Background, backgroundColor());
 #else
-            icg.setColor(QColorGroup::Background, white);
+            icg.setColor(QColorGroup::Background, Qt::white);
 #endif
             m_editor->machine(m_property)->propertyEditor->drawViewer(p, icg, r, valueToDraw);
             return;
@@ -172,15 +175,15 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
     addColumn(i18n("Name"));
     addColumn(i18n("Value"));
     setAllColumnsShowFocus(true);
-    setColumnWidthMode(0, QListView::Maximum);
-    setResizeMode(QListView::LastColumn);
+    setColumnWidthMode(0, Q3ListView::Maximum);
+    setResizeMode(Q3ListView::LastColumn);
 
     header()->setClickEnabled(false);
 
     connect(header(), SIGNAL(sizeChange(int, int, int)),
         this, SLOT(updateEditorSize()));
-    connect(this, SIGNAL(currentChanged(QListViewItem*)),
-        this, SLOT(slotClicked(QListViewItem*)));
+    connect(this, SIGNAL(currentChanged(Q3ListViewItem*)),
+        this, SLOT(slotClicked(Q3ListViewItem*)));
 
     m_currentEditItem = 0;
     m_doubleClickForEdit = true;
@@ -215,16 +218,16 @@ void PropertyEditor::populateProperties(PropertyList *list)
         return;
     m_list = list;
     connect(m_list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
-    const QValueList<QPair<QString, QValueList<QString> > >& groups = m_list->propertiesOfGroup();
-    for (QValueList<QPair<QString, QValueList<QString> > >::const_iterator it = groups.begin();
+    const Q3ValueList<QPair<QString, Q3ValueList<QString> > >& groups = m_list->propertiesOfGroup();
+    for (Q3ValueList<QPair<QString, Q3ValueList<QString> > >::const_iterator it = groups.begin();
         it != groups.end(); ++it)
     {
 //        qWarning("PropertyEditor::populateProperties:    adding group %s", (*it).first.ascii());
         PropertyGroupItem *group = 0;
         if ( (!(*it).first.isEmpty()) && ((*it).second.count() > 0) )
             group = new PropertyGroupItem(this, (*it).first);
-        const QValueList<QString> &properties = (*it).second;
-        for (QValueList<QString>::const_iterator it2 = properties.begin(); it2 != properties.end(); ++it2)
+        const Q3ValueList<QString> &properties = (*it).second;
+        for (Q3ValueList<QString>::const_iterator it2 = properties.begin(); it2 != properties.end(); ++it2)
         {
 //            qWarning("PropertyEditor::populateProperties:    adding property %s", (*it2).ascii());
             if (group)
@@ -273,7 +276,7 @@ void PropertyEditor::addChildProperties(PropertyItem *parent)
 //     qWarning("seeking children: count: %d", prop->details.count());
 
     parent->setOpen(true);
-    for (QValueList<ChildProperty>::iterator it = prop->details.begin(); it != prop->details.end(); ++it)
+    for (Q3ValueList<ChildProperty>::iterator it = prop->details.begin(); it != prop->details.end(); ++it)
     {
 //         qWarning("found child %s", (*it).name().ascii());
         new PropertyItem(this, parent, new MultiProperty(&m_detailedList, &(*it)));
@@ -302,7 +305,7 @@ void PropertyEditor::propertyValueChanged(Property *property)
     else
     {
 //        repaint all items
-        QListViewItemIterator it(this);
+        Q3ListViewItemIterator it(this);
         while (it.current())
         {
             repaintItem(it.current());
@@ -417,7 +420,7 @@ void PropertyEditor::updateEditorSize()
         placeEditor(m_currentEditItem);
 }
 
-void PropertyEditor::slotClicked(QListViewItem *item)
+void PropertyEditor::slotClicked(Q3ListViewItem *item)
 {
     if (item == 0)
     {

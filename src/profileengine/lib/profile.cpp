@@ -14,12 +14,14 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "profile.h"
 
 #include <qdir.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -59,7 +61,7 @@ Profile::Profile(Profile *parent, const QString &name, const QString &genericNam
 
 Profile::~Profile()
 {
-    for (QValueList<Profile*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
+    for (Q3ValueList<Profile*>::iterator it = m_children.begin(); it != m_children.end(); ++it)
         delete *it;
 }
 
@@ -139,7 +141,6 @@ QStringList &Profile::listByType(List type)
         case ExplicitDisable:
             return m_explicitDisable;
     }
-//FIXME: What to return here?
 }
 
 bool Profile::hasInEntryList(EntryList &list, QString value)

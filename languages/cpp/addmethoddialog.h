@@ -13,8 +13,8 @@
 *
 *  You should have received a copy of the GNU General Public License
 *  along with this program; see the file COPYING.LIB.  If not, write to
-*  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-*  Boston, MA 02110-1301, USA.
+*  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+*  Boston, MA 02111-1307, USA.
 *
 */
 
@@ -31,12 +31,12 @@ class AddMethodDialog : public AddMethodDialogBase
 	Q_OBJECT
 public:
 	AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
-	                 QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	                 QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 	~AddMethodDialog();
 
 	virtual void addMethod();
 	virtual void deleteCurrentMethod();
-	virtual void currentChanged( QListViewItem* item );
+	virtual void currentChanged( Q3ListViewItem* item );
 	virtual void updateGUI();
 	virtual void browseImplementationFile();
 
@@ -46,8 +46,8 @@ protected:
 
 private:
 	QString accessID( FunctionDom fun ) const;
-	QString functionDeclaration( QListViewItem* item ) const;
-	QString functionDefinition( QListViewItem* item ) const;
+	QString functionDeclaration( Q3ListViewItem* item ) const;
+	QString functionDefinition( Q3ListViewItem* item ) const;
 	QStringList newAccessList( const QStringList& accessList ) const;
 
 private:

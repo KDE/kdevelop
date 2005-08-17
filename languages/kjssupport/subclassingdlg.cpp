@@ -53,11 +53,11 @@
 #define SLOT_HELP SlotItem(m_slotView,"help()","virtual","protected","void",false,true)
 
 
-SlotItem::SlotItem(QListView *parent,const QString &methodName,
+SlotItem::SlotItem(Q3ListView *parent,const QString &methodName,
                    const QString &specifier,
                    const QString &access, const QString &returnType,
                    bool isFunc,bool callBaseClass)
-: QCheckListItem(parent,methodName,QCheckListItem::CheckBox)
+: Q3CheckListItem(parent,methodName,Q3CheckListItem::CheckBox)
 {
   setOn(true);
   m_methodName = methodName;
@@ -94,7 +94,7 @@ void SlotItem::setAllreadyInSubclass()
 
 
 SubclassingDlg::SubclassingDlg(kjsSupportPart* kjsSupport, const QString &formFile,QStringList &newFileNames,
-                               QWidget* parent, const char* name,bool modal, WFlags fl)
+                               QWidget* parent, const char* name,bool modal, Qt::WFlags fl)
 : SubclassingDlgBase(parent,name,modal,fl),
 m_newFileNames(newFileNames), m_kjsSupport( kjsSupport )
 //=================================================
@@ -310,7 +310,7 @@ bool SubclassingDlg::loadBuffer(QString &buffer, const QString& filename)
 {
   // open file and buffer it
   QFile dataFile(filename);
-  if (!dataFile.open(IO_ReadOnly))
+  if (!dataFile.open(QIODevice::ReadOnly))
     return false;
   char *temp = new char[dataFile.size()+1];
   dataFile.readBlock(temp,dataFile.size());
@@ -352,7 +352,7 @@ bool SubclassingDlg::saveBuffer(QString &buffer, const QString& filename)
   // save buffer
 
   QFile dataFile(filename);
-  if (!dataFile.open(IO_WriteOnly | IO_Truncate))
+  if (!dataFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
     return false;
   dataFile.writeBlock((buffer+"\n").ascii(),(buffer+"\n").length());
   dataFile.close();

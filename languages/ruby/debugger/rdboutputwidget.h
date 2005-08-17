@@ -25,10 +25,12 @@
 #define _RDBOUTPUTWIDGET_H_
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class KHistoryCombo;
 
-class QTextEdit;
+class Q3TextEdit;
 class QToolButton;
 
 namespace RDBDebugger
@@ -61,7 +63,7 @@ signals:
 private:
     KHistoryCombo*  m_userRDBCmdEditor;
     QToolButton*    m_Interrupt;
-    QTextEdit*      m_rdbView;
+    Q3TextEdit*      m_rdbView;
 };
 
 }

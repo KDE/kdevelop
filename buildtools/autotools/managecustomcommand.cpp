@@ -14,11 +14,11 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "managecustomcommand.h"
 
-#include <qtable.h>
+#include <q3table.h>
 
 #include <klocale.h>
 
@@ -41,7 +41,7 @@ void ManageCustomCommand::removeButton_clicked()
 void ManageCustomCommand::setRowProperties(int row)
 {
     commandsTable->setItem(row, 2,
-        new QComboTableItem(commandsTable, QStringList::split(",", 
+        new Q3ComboTableItem(commandsTable, QStringList::split(",", 
         i18n("this is a list of items in the combobox",
         "Make target,Make target (as root),Make command,Make command (as root),Command,Command (as root)"))));
 }

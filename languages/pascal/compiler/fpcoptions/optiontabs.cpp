@@ -16,8 +16,13 @@
 #include <qlayout.h>
 #include <qvbuttongroup.h>
 #include <qapplication.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QEvent>
+#include <QBoxLayout>
 
 #include "flagboxes.h"
 
@@ -29,13 +34,13 @@ FeedbackTab::FeedbackTab(QWidget *parent, const char *name)
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    QVButtonGroup *output_group = new QVButtonGroup(i18n("Output"), this);
+    Q3VButtonGroup *output_group = new Q3VButtonGroup(i18n("Output"), this);
     new FlagCheckBox(output_group, controller,
                      "-vr", i18n("Format errors like GCC does"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *verbose_group = new QVButtonGroup(i18n("Verbose"), this);
+    Q3VButtonGroup *verbose_group = new Q3VButtonGroup(i18n("Verbose"), this);
     new FlagCheckBox(verbose_group, controller,
                      "-va", i18n("Write all possible info"));
     new FlagCheckBox(verbose_group, controller,
@@ -53,10 +58,10 @@ FeedbackTab::FeedbackTab(QWidget *parent, const char *name)
     new FlagCheckBox(verbose_group, controller,
                      "-vd", i18n("Write other debugging info"));
 
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *other_group = new QVButtonGroup(i18n("Other Information"), this);
+    Q3VButtonGroup *other_group = new Q3VButtonGroup(i18n("Other Information"), this);
     new FlagCheckBox(other_group, controller,
                      "-vl", i18n("Show line numbers when processing files"));
     new FlagCheckBox(other_group, controller,
@@ -72,7 +77,7 @@ FeedbackTab::FeedbackTab(QWidget *parent, const char *name)
     new FlagCheckBox(other_group, controller,
                      "-vb", i18n("Show all procedure declarations if an overloaded function error occurs"));
 
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     layout->addStretch();
 }
@@ -109,7 +114,7 @@ FilesAndDirectoriesTab::FilesAndDirectoriesTab( QWidget * parent, const char * n
                      "-Fo", i18n("Object file search path (delimited by \":\"):"));
     new FlagPathEdit(this, ":", pathController,
                      "-Fl", i18n("Library search path (delimited by \":\"):"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addStretch();
 }
 
@@ -144,21 +149,21 @@ FilesAndDirectoriesTab2::FilesAndDirectoriesTab2( QWidget * parent, const char *
                      "-FU", i18n("Write units in:"));
     new FlagPathEdit(this, "", pathController,
                      "-o", i18n("Executable name:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(20);
 
     new FlagPathEdit(this, "", pathController,
                      "-e", i18n("Location of as and ld programs:"));
     new FlagPathEdit(this, "", pathController,
                      "-FL", i18n("Dynamic linker executable:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(20);
 
     new FlagPathEdit(this, "", pathController,
                      "-Fr", i18n("Compiler messages file:"), KFile::File);
     new FlagPathEdit(this, "", pathController,
                      "-Fe", i18n("Write compiler messages to file:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     layout->addStretch();
 }
@@ -188,7 +193,7 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    QVButtonGroup *compat_group = new QVButtonGroup(i18n("Pascal Compatibility"), this);
+    Q3VButtonGroup *compat_group = new Q3VButtonGroup(i18n("Pascal Compatibility"), this);
     new FlagCheckBox(compat_group, controller,
                      "-S2", i18n("Switch on Delphi 2 extensions"));
     new FlagCheckBox(compat_group, controller,
@@ -197,20 +202,20 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
                      "-So", i18n("Borland TP 7.0 compatibility mode"));
     new FlagCheckBox(compat_group, controller,
                      "-Sp", i18n("GNU Pascal compatibility mode"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *ccompat_group = new QVButtonGroup(i18n("C/C++ Compatibility"), this);
+    Q3VButtonGroup *ccompat_group = new Q3VButtonGroup(i18n("C/C++ Compatibility"), this);
     new FlagCheckBox(ccompat_group, controller,
                      "-Sc", i18n("Support C style operators *=, +=, /=, -="));
     new FlagCheckBox(ccompat_group, controller,
                      "-Si", i18n("Support C++ style INLINE"));
     new FlagCheckBox(ccompat_group, controller,
                      "-Sm", i18n("Support C style macros"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *lang_group = new QVButtonGroup(i18n("Language"), this);
+    Q3VButtonGroup *lang_group = new Q3VButtonGroup(i18n("Language"), this);
     new FlagCheckBox(lang_group, controller,
                      "-Sg", i18n("Support the label and goto commands"));
     new FlagCheckBox(lang_group, controller,
@@ -219,7 +224,7 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
                      "-Ss", i18n("Require the name of constructors to be init\n and the name of destructors to be done"));
     new FlagCheckBox(lang_group, controller,
                      "-St", i18n("Allow the static keyword in objects"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     layout->addStretch();
 }
@@ -248,7 +253,7 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
 
     QBoxLayout *layout2 = new QHBoxLayout(layout, KDialog::spacingHint());
 
-    QVButtonGroup *info_group = new QVButtonGroup(i18n("Assembler Info"), this);
+    Q3VButtonGroup *info_group = new Q3VButtonGroup(i18n("Assembler Info"), this);
     new FlagCheckBox(info_group, controller,
                      "-a", i18n("Do not delete assembler files"));
     new FlagCheckBox(info_group, controller,
@@ -258,10 +263,10 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
     new FlagCheckBox(info_group, controller,
                      "-at", i18n("List temporary allocations and deallocations"));
     layout2->addWidget(info_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     //layout->addSpacing(10);
 
-    QVButtonGroup *asmkind_group = new QVButtonGroup(i18n("Assembler Reader"), this);
+    Q3VButtonGroup *asmkind_group = new Q3VButtonGroup(i18n("Assembler Reader"), this);
     QRadioButton *m_defaultkind = new QRadioButton(i18n("Use default reader"), asmkind_group);
     m_defaultkind->setChecked(true);
     new FlagRadioButton(asmkind_group, asmController,
@@ -271,11 +276,11 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
     new FlagRadioButton(asmkind_group, asmController,
                         "-Rdirect", i18n("Direct assembler"));
     layout2->addWidget(asmkind_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
 
-    QVButtonGroup *asm_group = new QVButtonGroup(i18n("Assembler Output"), this);
+    Q3VButtonGroup *asm_group = new Q3VButtonGroup(i18n("Assembler Output"), this);
     new FlagCheckBox(asm_group, controller,
                      "-P", i18n("Use pipes instead of files when assembling"));
     QRadioButton *m_default = new QRadioButton(i18n("Use default output"), asm_group);
@@ -299,7 +304,7 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
     new FlagRadioButton(asm_group, asmController,
                         "-Apecoff", i18n("Use pecoff"));
     layout->addWidget(asm_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     layout->addStretch();
 }
@@ -335,7 +340,7 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
 
     QBoxLayout *layout3 = new QVBoxLayout(layout2, KDialog::spacingHint());
 
-    QVButtonGroup *debug_group = new QVButtonGroup(i18n("Debugging"), this);
+    Q3VButtonGroup *debug_group = new Q3VButtonGroup(i18n("Debugging"), this);
     new FlagCheckBox(debug_group, controller,
                      "-g", i18n("Generate information for GDB"), "-!g");
     new FlagCheckBox(debug_group, controller,
@@ -347,19 +352,19 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
     new FlagCheckBox(debug_group, controller,
                      "-gc", i18n("Generate checks for pointers"), "-!gc");
     layout3->addWidget(debug_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout3->addSpacing(10);
 
-    QVButtonGroup *profile_group = new QVButtonGroup(i18n("Profiling"), this);
+    Q3VButtonGroup *profile_group = new Q3VButtonGroup(i18n("Profiling"), this);
     new FlagCheckBox(profile_group, controller,
                      "-pg", i18n("Generate profiler code for gprof"), "-!pg");
     layout3->addWidget(profile_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout3->addSpacing(10);
 
     QBoxLayout *layout4 = new QVBoxLayout(layout2, KDialog::spacingHint());
 
-    QVButtonGroup *optim_group1 = new QVButtonGroup(i18n("General Optimization"), this);
+    Q3VButtonGroup *optim_group1 = new Q3VButtonGroup(i18n("General Optimization"), this);
     m_default = new QRadioButton(i18n("Default"), optim_group1);
     m_default->setChecked(true);
     new FlagRadioButton(optim_group1, optimController,
@@ -367,10 +372,10 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
     optim1 = new FlagRadioButton(optim_group1, optimController,
                         "-OG", i18n("Generate faster code"));
     layout4->addWidget(optim_group1);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout4->addSpacing(10);
 
-    QVButtonGroup *optim_group2 = new QVButtonGroup(i18n("Optimization Levels"), this);
+    Q3VButtonGroup *optim_group2 = new Q3VButtonGroup(i18n("Optimization Levels"), this);
     m_default2 = new QRadioButton(i18n("Default"), optim_group2);
     m_default2->setChecked(true);
     new FlagRadioButton(optim_group2, optimController,
@@ -380,12 +385,12 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
     optim2 = new FlagRadioButton(optim_group2, optimController,
                         "-O3", i18n("Level 3"));
     layout4->addWidget(optim_group2);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout4->addSpacing(10);
 
     QHBoxLayout *layout5 = new QHBoxLayout(layout, KDialog::spacingHint());
 
-    QVButtonGroup *optim_group3 = new QVButtonGroup(i18n("Architecture"), this);
+    Q3VButtonGroup *optim_group3 = new Q3VButtonGroup(i18n("Architecture"), this);
     m_default3 = new QRadioButton(i18n("Default"), optim_group3);
     m_default3->setChecked(true);
     new FlagRadioButton(optim_group3, optimController,
@@ -395,15 +400,15 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
     new FlagRadioButton(optim_group3, optimController,
                      "-Op2", i18n("PentiumPro/PII/Cyrix 6x86/K6"));
     layout5->addWidget(optim_group3);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
-    QVButtonGroup *optim_group4 = new QVButtonGroup(i18n("Another Optimization"), this);
+    Q3VButtonGroup *optim_group4 = new Q3VButtonGroup(i18n("Another Optimization"), this);
     new FlagCheckBox(optim_group4, controller,
                      "-Or", i18n("Use register variables"), "-!Or");
     new FlagCheckBox(optim_group4, controller,
                      "-Ou", i18n("Uncertain optimizations"), "-!Ou");
     layout5->addWidget(optim_group4);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     QHBoxLayout *layout6 = new QHBoxLayout(layout, KDialog::spacingHint());
     QPushButton *release = new QPushButton(i18n("Release"), this);
@@ -461,15 +466,15 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    QVButtonGroup *compile_group = new QVButtonGroup(i18n("Compile Time Checks"), this);
+    Q3VButtonGroup *compile_group = new Q3VButtonGroup(i18n("Compile Time Checks"), this);
     new FlagCheckBox(compile_group, controller,
                      "-Sa", i18n("Include assert statements in compiled code"));
     new FlagCheckBox(compile_group, controller,
                      "-Un", i18n("Do not check the unit name for being the same as the file name"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *run_group = new QVButtonGroup(i18n("Run Time Checks"), this);
+    Q3VButtonGroup *run_group = new Q3VButtonGroup(i18n("Run Time Checks"), this);
     new FlagCheckBox(run_group, controller,
                      "-Cr", i18n("Range checking"));
     new FlagCheckBox(run_group, controller,
@@ -478,21 +483,21 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
                      "-Ci", i18n("Input/Output checking"));
     new FlagCheckBox(run_group, controller,
                      "-Co", i18n("Integer overflow checking"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
     new FlagListEdit(this, ":", listController, "-d", i18n("Conditional defines (delimited by \":\"):"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     new FlagListEdit(this, ":", listController, "-u", i18n("Undefine conditional defines (delimited by \":\"):"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
     new FlagSpinEdit(this, 1024, 67107840, 1, 131072, listController,
                     "-Cs", i18n("Stack size:"));
     new FlagSpinEdit(this, 1024, 67107840, 1, 2097152, listController,
                     "-Ch", i18n("Heap size:"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     layout->addStretch();
 }
@@ -523,7 +528,7 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
 
     QBoxLayout *layout2 = new QHBoxLayout(layout, KDialog::spacingHint());
 
-    QVButtonGroup *link_group = new QVButtonGroup(i18n("Linking Stage"), this);
+    Q3VButtonGroup *link_group = new Q3VButtonGroup(i18n("Linking Stage"), this);
     new FlagCheckBox(link_group, controller,
                      "-CD", i18n("Create dynamic library"));
     new FlagCheckBox(link_group, controller,
@@ -535,9 +540,9 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
     new FlagCheckBox(link_group, controller,
                      "-s",  i18n("Create assembling and linking script"));
     layout2->addWidget(link_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
-    QVButtonGroup *exec_group = new QVButtonGroup(i18n("Executable Generation"), this);
+    Q3VButtonGroup *exec_group = new Q3VButtonGroup(i18n("Executable Generation"), this);
     new FlagCheckBox(exec_group, controller,
                      "-Xs",  i18n("Strip the symbols from the executable"));
     new FlagCheckBox(exec_group, controller,
@@ -549,12 +554,12 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
     new FlagCheckBox(exec_group, controller,
                      "-Xc",  i18n("Link with the C library"));
     layout2->addWidget(exec_group);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
     FlagListEdit *led = new FlagListEdit(this, ":", listController, "-k", i18n("Options passed to the linker (delimited by \":\"):"));
     layout->addWidget(led);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
 
     layout->addStretch();
 }
@@ -594,20 +599,20 @@ MiscTab::MiscTab( QWidget * parent, const char * name )
                      "@", i18n("Compiler configuration file:"), KFile::File);
     new FlagSpinEdit(this, 1, 1000, 1, 50, editController,
                     "-Se", i18n("Stop after the error:"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *browser_group = new QVButtonGroup(i18n("Browser Info"), this);
+    Q3VButtonGroup *browser_group = new Q3VButtonGroup(i18n("Browser Info"), this);
     QRadioButton *m_defaultBrowser = new QRadioButton(i18n("No browser info"), browser_group);
     m_defaultBrowser->setChecked(true);
     new FlagRadioButton(browser_group, radioController,
                      "-b", i18n("Global browser info"));
     new FlagRadioButton(browser_group, radioController,
                      "-bl", i18n("Global and local browser info"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
-    QVButtonGroup *target_group = new QVButtonGroup(i18n("Target OS"), this);
+    Q3VButtonGroup *target_group = new Q3VButtonGroup(i18n("Target OS"), this);
     QRadioButton *m_defaultTarget = new QRadioButton(i18n("Default"), target_group);
     m_defaultTarget->setChecked(true);
     new FlagRadioButton(target_group, radioController,
@@ -624,7 +629,7 @@ MiscTab::MiscTab( QWidget * parent, const char * name )
                      "-TSUNOS", i18n("SunOS/Solaris"));
     new FlagRadioButton(target_group, radioController,
                      "-TBEOS", i18n("BeOS"));
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    QApplication::sendPostedEvents(this, QEvent::ChildAdded);
     layout->addSpacing(10);
 
     layout->addStretch();

@@ -27,17 +27,17 @@
 #ifndef STARTDIALOGIMPL_H
 #define STARTDIALOGIMPL_H
 
-#include <qiconview.h>
-#include <qlistview.h>
+#include <q3iconview.h>
+#include <q3listview.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qmap.h>
 
 #include "newformimpl.h"
 #include "startdialog.h"
 
-class FileDialog : public QFileDialog
+class FileDialog : public Q3FileDialog
 {
     Q_OBJECT
 
@@ -63,7 +63,7 @@ public:
     bool showDialogInFuture() const { return showInFuture; }
 
 protected slots:
-    void recentItemChanged( QIconViewItem *item );
+    void recentItemChanged( Q3IconViewItem *item );
     void clearFileInfo();
     void accept();
     void reject();

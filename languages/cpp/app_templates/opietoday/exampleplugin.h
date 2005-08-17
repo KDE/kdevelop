@@ -2,7 +2,7 @@
 #define %{APPNAME}_PLUGIN_H
 
 #include <qwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include <opie/todayplugininterface.h>
 #include <opie/todayconfigwidget.h>
@@ -28,7 +28,7 @@ public:
     void reinitialize();
 
  private:
-   QGuardedPtr<%{APPNAME}Widget> m_widget;
+   QPointer<%{APPNAME}Widget> m_widget;
 };
 
 #endif

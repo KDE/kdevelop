@@ -22,12 +22,14 @@
 #include "rdbcommand.h"
 #include "breakpoint.h"
 #include "variablewidget.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace RDBDebugger
 {
 
 
-RDBCommand::RDBCommand(const QCString &setCommand, bool isRunCmd, bool isInfoCmd)
+RDBCommand::RDBCommand(const Q3CString &setCommand, bool isRunCmd, bool isInfoCmd)
     : DbgCommand(setCommand, isRunCmd, isInfoCmd)
 {
 //    if (prompt_) {
@@ -48,7 +50,7 @@ RDBCommand::~RDBCommand()
 /***************************************************************************/
 
 RDBItemCommand::RDBItemCommand( VarItem *item,
-                                const QCString &command,
+                                const Q3CString &command,
                                 bool isRunCmd)
     : RDBCommand(command, isRunCmd, true),
       item_(item)
@@ -62,7 +64,7 @@ RDBItemCommand::~RDBItemCommand()
 }
 
 
-RDBSetBreakpointCommand::RDBSetBreakpointCommand(const QCString &command, int key)
+RDBSetBreakpointCommand::RDBSetBreakpointCommand(const Q3CString &command, int key)
     : RDBCommand(command, false, false),
       key_(key)
 {

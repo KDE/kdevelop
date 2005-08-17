@@ -4,11 +4,13 @@
 #include <qsignalmapper.h>
 #include <qpushbutton.h>
 #include <qpe/resource.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "%{APPNAMELC}.h"
 
-%{APPNAME}::%{APPNAME}(QWidget* par, WFlags fl )
-	: QHBox(par, "name", fl )
+%{APPNAME}::%{APPNAME}(QWidget* par, Qt::WFlags fl )
+	: Q3HBox(par, "name", fl )
 {
 	QCheckBox *box1 = new QCheckBox(tr("Alt"),this);
 	connect(box1,SIGNAL(toggled(bool)),

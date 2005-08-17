@@ -13,10 +13,12 @@
 #define _SQLOUTPUTWIDGET_H_
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QSqlError>
 
-class QWidgetStack;
-class QDataTable;
-class QTextEdit;
+class Q3WidgetStack;
+class Q3DataTable;
+class Q3TextEdit;
 class QSqlError;
 
 class SqlOutputWidget : public QWidget
@@ -35,9 +37,9 @@ private:
     void showError( const QString& msg );
     void showSuccess( int rowsAffected );
 
-    QWidgetStack* m_stack;
-    QDataTable* m_table;
-    QTextEdit* m_textEdit;
+    Q3WidgetStack* m_stack;
+    Q3DataTable* m_table;
+    Q3TextEdit* m_textEdit;
 };
 
 #endif

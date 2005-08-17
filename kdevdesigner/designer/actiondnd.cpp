@@ -36,37 +36,48 @@
 #include <qaction.h>
 #include <qapplication.h>
 #include <qbitmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qinputdialog.h>
 #include <qlayout.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qmenudata.h>
 #include <qmessagebox.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QDragLeaveEvent>
+#include <QPaintEvent>
+#include <QEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QContextMenuEvent>
+#include <Q3PopupMenu>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 #include <klocale.h>
 
 QAction *ActionDrag::the_action = 0;
 
 ActionDrag::ActionDrag(QAction *action, QWidget *source)
-: QStoredDrag("application/x-designer-actions", source)
+: Q3StoredDrag("application/x-designer-actions", source)
 {
     Q_ASSERT(the_action == 0);
     the_action = action;
 }
 
-ActionDrag::ActionDrag(QActionGroup *group, QWidget *source)
-: QStoredDrag("application/x-designer-actiongroup", source)
+ActionDrag::ActionDrag(Q3ActionGroup *group, QWidget *source)
+: Q3StoredDrag("application/x-designer-actiongroup", source)
 {
     Q_ASSERT(the_action == 0);
     the_action = group;
 }
 
 ActionDrag::ActionDrag(const QString &type, QAction *action, QWidget *source)
-: QStoredDrag(type, source)
+: Q3StoredDrag(type, source)
 {
     Q_ASSERT(the_action == 0);
     the_action = action;
@@ -105,7 +116,7 @@ bool QDesignerAction::addTo( QWidget *w )
     if ( !widgetToInsert )
 	return QAction::addTo( w );
 
-    if ( ::qt_cast<QPopupMenu*>(w) )
+    if ( ::qt_cast<Q3PopupMenu*>(w) )
 	return FALSE;
 
     widgetToInsert->reparent( w, QPoint( 0, 0 ), FALSE );
@@ -131,19 +142,19 @@ void QDesignerAction::remove()
     widgetToInsert->reparent( 0, QPoint( 0, 0 ), FALSE );
 }
 
-QDesignerToolBarSeparator::QDesignerToolBarSeparator(Orientation o , QToolBar *parent,
+QDesignerToolBarSeparator::QDesignerToolBarSeparator(Qt::Orientation o , Q3ToolBar *parent,
                                      const char* name )
     : QWidget( parent, name )
 {
-    connect( parent, SIGNAL(orientationChanged(Orientation)),
-             this, SLOT(setOrientation(Orientation)) );
+    connect( parent, SIGNAL(orientationChanged(Qt::Orientation)),
+             this, SLOT(setOrientation(Qt::Orientation)) );
     setOrientation( o );
     setBackgroundMode( parent->backgroundMode() );
     setBackgroundOrigin( ParentOrigin );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 }
 
-void QDesignerToolBarSeparator::setOrientation( Orientation o )
+void QDesignerToolBarSeparator::setOrientation( Qt::Orientation o )
 {
     orient = o;
 }
@@ -157,7 +168,7 @@ QSize QDesignerToolBarSeparator::sizeHint() const
 {
     int extent = style().pixelMetric( QStyle::PM_DockWindowSeparatorExtent,
 				      this );
-    if ( orient == Horizontal )
+    if ( orient == Qt::Horizontal )
 	return QSize( extent, 0 );
     else
 	return QSize( 0, extent );
@@ -166,10 +177,10 @@ QSize QDesignerToolBarSeparator::sizeHint() const
 void QDesignerToolBarSeparator::paintEvent( QPaintEvent * )
 {
     QPainter p( this );
-    QStyle::SFlags flags = QStyle::Style_Default;
+    QStyle::State flags = QStyle::State_None;
 
-    if ( orientation() == Horizontal )
-	flags |= QStyle::Style_Horizontal;
+    if ( orientation() == Qt::Horizontal )
+	flags |= QStyle::State_Horizontal;
 
     style().drawPrimitive( QStyle::PE_DockWindowSeparator, &p, rect(),
 			   colorGroup(), flags );
@@ -184,13 +195,13 @@ QSeparatorAction::QSeparatorAction( QObject *parent )
 
 bool QSeparatorAction::addTo( QWidget *w )
 {
-    if ( ::qt_cast<QToolBar*>(w) ) {
-	QToolBar *tb = (QToolBar*)w;
+    if ( ::qt_cast<Q3ToolBar*>(w) ) {
+	Q3ToolBar *tb = (Q3ToolBar*)w;
 	wid = new QDesignerToolBarSeparator( tb->orientation(), tb );
 	return TRUE;
-    } else if ( ::qt_cast<QPopupMenu*>(w) ) {
-	idx = ( (QPopupMenu*)w )->count();
-	( (QPopupMenu*)w )->insertSeparator( idx );
+    } else if ( ::qt_cast<Q3PopupMenu*>(w) ) {
+	idx = ( (Q3PopupMenu*)w )->count();
+	( (Q3PopupMenu*)w )->insertSeparator( idx );
 	return TRUE;
     }
     return FALSE;
@@ -198,11 +209,11 @@ bool QSeparatorAction::addTo( QWidget *w )
 
 bool QSeparatorAction::removeFrom( QWidget *w )
 {
-    if ( ::qt_cast<QToolBar*>(w) ) {
+    if ( ::qt_cast<Q3ToolBar*>(w) ) {
 	delete wid;
 	return TRUE;
-    } else if ( ::qt_cast<QPopupMenu*>(w) ) {
-	( (QPopupMenu*)w )->removeItemAt( idx );
+    } else if ( ::qt_cast<Q3PopupMenu*>(w) ) {
+	( (Q3PopupMenu*)w )->removeItemAt( idx );
 	return TRUE;
     }
     return FALSE;
@@ -215,8 +226,8 @@ QWidget *QSeparatorAction::widget() const
 
 
 
-QDesignerToolBar::QDesignerToolBar( QMainWindow *mw )
-    : QToolBar( mw ), lastIndicatorPos( -1, -1 )
+QDesignerToolBar::QDesignerToolBar( Q3MainWindow *mw )
+    : Q3ToolBar( mw ), lastIndicatorPos( -1, -1 )
 {
     insertAnchor = 0;
     afterAnchor = TRUE;
@@ -228,11 +239,11 @@ QDesignerToolBar::QDesignerToolBar( QMainWindow *mw )
     installEventFilter( this );
     widgetInserting = FALSE;
     findFormWindow();
-    mw->setDockEnabled( DockTornOff, FALSE );
+    mw->setDockEnabled( Qt::DockTornOff, FALSE );
 }
 
-QDesignerToolBar::QDesignerToolBar( QMainWindow *mw, Dock dock )
-    : QToolBar( QString::null, mw, dock), lastIndicatorPos( -1, -1 )
+QDesignerToolBar::QDesignerToolBar( Q3MainWindow *mw, Qt::ToolBarDock dock )
+    : Q3ToolBar( QString::null, mw, dock), lastIndicatorPos( -1, -1 )
 {
     insertAnchor = 0;
     afterAnchor = TRUE;
@@ -243,7 +254,7 @@ QDesignerToolBar::QDesignerToolBar( QMainWindow *mw, Dock dock )
     installEventFilter( this );
     widgetInserting = FALSE;
     findFormWindow();
-    mw->setDockEnabled( DockTornOff, FALSE );
+    mw->setDockEnabled( Qt::DockTornOff, FALSE );
 }
 
 void QDesignerToolBar::findFormWindow()
@@ -261,7 +272,7 @@ void QDesignerToolBar::addAction( QAction *a )
 {
     actionList.append( a );
     connect( a, SIGNAL( destroyed() ), this, SLOT( actionRemoved() ) );
-    if ( ::qt_cast<QActionGroup*>(a) ) {
+    if ( ::qt_cast<Q3ActionGroup*>(a) ) {
 	( (QDesignerActionGroup*)a )->widget()->installEventFilter( this );
 	actionMap.insert( ( (QDesignerActionGroup*)a )->widget(), a );
     } else if ( ::qt_cast<QSeparatorAction*>(a) ) {
@@ -282,16 +293,16 @@ static void fixObject( QObject *&o )
 bool QDesignerToolBar::eventFilter( QObject *o, QEvent *e )
 {
     if ( !o || !e || o->inherits( "QDockWindowHandle" ) || o->inherits( "QDockWindowTitleBar" ) )
-	return QToolBar::eventFilter( o, e );
+	return Q3ToolBar::eventFilter( o, e );
 
     if ( o == this && e->type() == QEvent::MouseButtonPress &&
-	 ( ( QMouseEvent*)e )->button() == LeftButton ) {
+	 ( ( QMouseEvent*)e )->button() == Qt::LeftButton ) {
 	mousePressEvent( (QMouseEvent*)e );
 	return TRUE;
     }
 
     if ( o == this )
-	return QToolBar::eventFilter( o, e );
+	return Q3ToolBar::eventFilter( o, e );
 
     if ( e->type() == QEvent::MouseButtonPress ) {
 	QMouseEvent *ke = (QMouseEvent*)e;
@@ -331,12 +342,12 @@ bool QDesignerToolBar::eventFilter( QObject *o, QEvent *e )
 	    de->accept();
     }
 
-    return QToolBar::eventFilter( o, e );
+    return Q3ToolBar::eventFilter( o, e );
 }
 
 void QDesignerToolBar::paintEvent( QPaintEvent *e )
 {
-    QToolBar::paintEvent( e );
+    Q3ToolBar::paintEvent( e );
     if ( e->rect() != rect() )
 	return;
     lastIndicatorPos = QPoint( -1, -1 );
@@ -345,7 +356,7 @@ void QDesignerToolBar::paintEvent( QPaintEvent *e )
 void QDesignerToolBar::contextMenuEvent( QContextMenuEvent *e )
 {
     e->accept();
-    QPopupMenu menu( 0 );
+    Q3PopupMenu menu( 0 );
     menu.insertItem( i18n( "Delete Toolbar" ), 1 );
     int res = menu.exec( e->globalPos() );
     if ( res != -1 ) {
@@ -388,7 +399,7 @@ void QDesignerToolBar::buttonMouseReleaseEvent( QMouseEvent *e, QObject *w )
 void QDesignerToolBar::buttonContextMenuEvent( QContextMenuEvent *e, QObject *o )
 {
     e->accept();
-    QPopupMenu menu( 0 );
+    Q3PopupMenu menu( 0 );
     const int ID_DELETE = 1;
     const int ID_SEP = 2;
     const int ID_DELTOOLBAR = 3;
@@ -494,9 +505,9 @@ void QDesignerToolBar::buttonMouseMoveEvent( QMouseEvent *e, QObject *o )
     QApplication::sendPostedEvents();
     adjustSize();
 
-    QString type = ::qt_cast<QActionGroup*>(a) ? QString( "application/x-designer-actiongroup" ) :
+    QString type = ::qt_cast<Q3ActionGroup*>(a) ? QString( "application/x-designer-actiongroup" ) :
 	::qt_cast<QSeparatorAction*>(a) ? QString( "application/x-designer-separator" ) : QString( "application/x-designer-actions" );
-    QStoredDrag *drag = new ActionDrag( type, a, this );
+    Q3StoredDrag *drag = new ActionDrag( type, a, this );
     drag->setPixmap( a->iconSet().pixmap() );
     if ( ::qt_cast<QDesignerAction*>(a) ) {
 	if ( formWindow->widgets()->find( ( (QDesignerAction*)a )->widget() ) )
@@ -588,7 +599,7 @@ void QDesignerToolBar::reInsert()
     clear();
     for ( a = actionList.first(); a; a = actionList.next() ) {
 	a->addTo( this );
-	if ( ::qt_cast<QActionGroup*>(a) ) {
+	if ( ::qt_cast<Q3ActionGroup*>(a) ) {
 	    actionMap.insert( ( (QDesignerActionGroup*)a )->widget(), a );
 	    if ( ( (QDesignerActionGroup*)a )->widget() )
 		( (QDesignerActionGroup*)a )->widget()->installEventFilter( this );
@@ -710,7 +721,7 @@ void QDesignerToolBar::clear()
 	if ( ::qt_cast<QDesignerAction*>(a) )
 	    ( (QDesignerAction*)a )->remove();
     }
-    QToolBar::clear();
+    Q3ToolBar::clear();
 }
 
 void QDesignerToolBar::installEventFilters( QWidget *w )

@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
 /***************************************************************************
     begin                : Thu Dec 23 1999
     copyright            : (C) 1999 by John Birch
@@ -27,7 +30,7 @@ class KWinModule;
 #include <ksystemtray.h>
 #include <kwin.h>         // needed for WId :(
 
-#include <qframe.h>
+#include <q3frame.h>
 
 namespace RDBDebugger
 {
@@ -53,7 +56,7 @@ private:
 };
 
 
-class DbgToolBar : public QFrame
+class DbgToolBar : public Q3Frame
 {
     Q_OBJECT
 

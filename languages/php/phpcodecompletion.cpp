@@ -1,7 +1,7 @@
 /*
    Copyright (C) 2005 by Nicolas Escuder <n.escuder@intra-links.com>
    Copyright (C) 2001 by smeier@kdevelop.org
-
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    version 2, License as published by the Free Software Foundation.
@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "phpcodecompletion.h"
@@ -29,6 +29,8 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <iostream>
 
@@ -55,20 +57,20 @@ void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
    QString phpFuncFile = dirs->findResource("data","kdevphpsupport/phpfunctions");
    QRegExp lineReg(":([0-9A-Za-z_]+) ([0-9A-Za-z_]+)\\((.*)\\)");
    FunctionCompletionEntry e;
-
+   
    QFile f(phpFuncFile);
-   if ( f.open(IO_ReadOnly) ) {    // file opened successfully
+   if ( f.open(QIODevice::ReadOnly) ) {    // file opened successfully
       QTextStream t( &f );        // use a text stream
       QString s;
       while ( !t.eof() ) {        // until end of file...
          s = t.readLine();       // line of text excluding '\n'
-         if (lineReg.search(s.local8Bit()) != -1) {
-            e.prefix = lineReg.cap(1);
-            e.text = lineReg.cap(2);
+	      if (lineReg.search(s.local8Bit()) != -1) {
+   	      e.prefix = lineReg.cap(1);
+	         e.text = lineReg.cap(2);
             e.postfix = "(" + QString(lineReg.cap(3)) + ")";
             e.prototype = QString(lineReg.cap(1)) + " " + QString(lineReg.cap(2)) + "(" + QString(lineReg.cap(3)) + ")";
-            m_globalFunctions.append(e);
-         }
+	         m_globalFunctions.append(e);
+	      }
       }
       f.close();
   }
@@ -115,7 +117,7 @@ void PHPCodeCompletion::setActiveEditorPart(KParts::Part *part)
    m_selectionInterface = dynamic_cast<KTextEditor::SelectionInterface*>(part);
    if (!m_selectionInterface) {
       kdDebug(9018) << "editor doesn't support the SelectionInterface" << endl;
-      return;
+	   return;
    }
 
    disconnect(part->widget(), 0, this, 0 ); // to make sure that it is't connected twice
@@ -129,7 +131,7 @@ void PHPCodeCompletion::setActiveEditorPart(KParts::Part *part)
 void PHPCodeCompletion::cursorPositionChanged(){
    uint line, col;
    m_cursorInterface->cursorPositionReal(&line, &col);
-
+  
    kdDebug(9018) << "cursorPositionChanged:" << line << ":" << col  << endl;
 
    m_currentLine = line;
@@ -137,29 +139,34 @@ void PHPCodeCompletion::cursorPositionChanged(){
    if (lineStr.isNull() || lineStr.isEmpty()) {
       return;
    }
-
+     
    if (m_selectionInterface->hasSelection()) {
       kdDebug(9018) << "No CodeCompletion/ArgHinting at the moment, because text is selected" << endl;
       return;
    }
-
+  
    if (m_config->getCodeHinting()) {
       int pos1 = lineStr.findRev("(", col - 1);
       int pos2 = lineStr.findRev(QRegExp("[ \\t=;\\$\\.\\(\\)]"), pos1 - 1);
       int pos3 = lineStr.findRev(")", col);
-
+      
       if (pos1 > pos2 && pos1 != -1 && pos3 < pos1) {
          QString line = lineStr.mid(pos2 + 1, pos1 - pos2 - 1).stripWhiteSpace();
          checkForArgHint(line, col);
       }
-
+      
+      /*
+      if (checkForArgHint(lineStr, col)) {
+         return;
+      }
+      */
    }
 
    if (m_config->getCodeCompletion()) {
       if (m_completionBoxShow == true) {
          return;
       }
-
+      
       int pos = lineStr.findRev(QRegExp("[ \\t=;\\$\\.\\(\\)]"), col - 1);
       QString line = lineStr.mid(pos + 1, col - pos).stripWhiteSpace();
 
@@ -184,7 +191,7 @@ void PHPCodeCompletion::cursorPositionChanged(){
   }
 }
 
-bool PHPCodeCompletion::showCompletionBox(QValueList<KTextEditor::CompletionEntry> list, unsigned long max) {
+bool PHPCodeCompletion::showCompletionBox(Q3ValueList<KTextEditor::CompletionEntry> list, unsigned long max) {
    if (list.count() > 0) {
       if (list.count() == 1) {
          KTextEditor::CompletionEntry e = list.first();
@@ -200,7 +207,7 @@ bool PHPCodeCompletion::showCompletionBox(QValueList<KTextEditor::CompletionEntr
 
 bool PHPCodeCompletion::checkForStaticFunction(QString line, int col) {
    kdDebug(9018)   << "checkForStaticFunction" << endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
 
    if (line.find("::") == -1)
       return false;
@@ -211,15 +218,15 @@ bool PHPCodeCompletion::checkForStaticFunction(QString line, int col) {
    if (Class.search(line) != -1) {
       QString classname = Class.cap(1);
       QString function = Class.cap(2);
-
+      
       ClassList classList = getClassByName(classname);
-
+      
       ClassList::Iterator classIt;
       for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
          ClassDom nClass = *classIt;
          FunctionList funcList = nClass->functionList();
          FunctionList::Iterator funcIt;
-
+         
          for (funcIt = funcList.begin(); funcIt != funcList.end(); ++funcIt) {
             FunctionDom nFunc = *funcIt;
             if ((function.isEmpty() || nFunc->name().startsWith(function, FALSE)) && nFunc->isStatic()) {
@@ -253,7 +260,7 @@ bool PHPCodeCompletion::checkForStaticFunction(QString line, int col) {
 
 bool PHPCodeCompletion::checkForNew(QString line, int col){
    kdDebug(9018)   << "checkForNew" << endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
 
    if (line.find("new ", 0, FALSE) == -1)
       return false;
@@ -263,7 +270,7 @@ bool PHPCodeCompletion::checkForNew(QString line, int col){
 
    if (New.search(line) != -1) {
       list = getClasses( New.cap(1) );
-
+      
       if (New.cap(1).lower() == "ob") {
          KTextEditor::CompletionEntry e;
          e.text = "object";
@@ -283,11 +290,11 @@ bool PHPCodeCompletion::checkForNew(QString line, int col){
 
 bool PHPCodeCompletion::checkForExtends(QString line, int col){
    kdDebug(9018)   << "checkForExtends" << endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
 
    if (line.find("extends", 0, FALSE) == -1)
       return false;
-
+   
    QRegExp extends("[ \t]*extends[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*|)");
    extends.setCaseSensitive(FALSE);
 
@@ -301,7 +308,7 @@ bool PHPCodeCompletion::checkForExtends(QString line, int col){
 
 bool PHPCodeCompletion::checkForVariable(QString line, int col){
    kdDebug(9018)  << "checkForVariable" << endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
    QString args;
 
    if (line.find("->") == -1) {
@@ -313,7 +320,7 @@ bool PHPCodeCompletion::checkForVariable(QString line, int col){
       args = line.mid(pos + 2, line.length() - pos);
       line = line.mid(0, pos);
    }
-
+         
    QStringList vars = QStringList::split("->", line);
    QString classname;
 
@@ -326,14 +333,14 @@ bool PHPCodeCompletion::checkForVariable(QString line, int col){
    }
 
    this->setStatusBar(line, classname);
-
+   
    list = this->getFunctionsAndVars(classname, args);
    return showCompletionBox(list, args.length());
 }
 
 bool PHPCodeCompletion::checkForGlobalFunction(QString line, int col) {
    kdDebug(9018)   << "checkForGlobalFunction(" + line + "," << col << endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
 
    if (line.length() < 3)
       return false;
@@ -342,8 +349,8 @@ bool PHPCodeCompletion::checkForGlobalFunction(QString line, int col) {
    return showCompletionBox(list, line.length());
 }
 
-QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClasses(QString name) {
-   QValueList<KTextEditor::CompletionEntry> list;
+Q3ValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClasses(QString name) {
+   Q3ValueList<KTextEditor::CompletionEntry> list;
    QStringList added;
 
    ClassList classList = m_model->globalNamespace()->classList();
@@ -352,7 +359,7 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClasses(QString n
       ClassDom nClass = *classIt;
       if (name == NULL || name.isEmpty() || nClass->name().startsWith(name, FALSE)) {
          KTextEditor::CompletionEntry e;
-
+     
          QStringList::Iterator it = added.find(nClass->name());
          if (it == added.end()) {
             e.text = nClass->name();
@@ -364,12 +371,12 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getClasses(QString n
    return list;
 }
 
-QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getFunctionsAndVars(QString classname, QString function) {
+Q3ValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getFunctionsAndVars(QString classname, QString function) {
    kdDebug(9018)  << "getFunctionsAndVars " << classname << endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
 
    if (classname.isEmpty()) {
-      QValueList<FunctionCompletionEntry>::Iterator it;
+      Q3ValueList<FunctionCompletionEntry>::Iterator it;
       for( it = m_globalFunctions.begin(); it != m_globalFunctions.end(); ++it ) {
          if((*it).text.startsWith(function, FALSE)){
             KTextEditor::CompletionEntry e;
@@ -407,7 +414,7 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getFunctionsAndVars(
          if (function.isEmpty() || pMethod->name().startsWith(function, FALSE)) {
             KTextEditor::CompletionEntry e;
             ArgumentDom arg = pMethod->argumentList().first();
-
+         
             e.prefix = nClass->name() + " ::";
             e.text = pMethod->name();
             e.postfix = "(" + arg->type() + ")";
@@ -424,7 +431,7 @@ QValueList<KTextEditor::CompletionEntry> PHPCodeCompletion::getFunctionsAndVars(
             e.text = pVar->name();
             e.postfix = "";
             list.append(e);
-         }
+         }  
       }
 
       if (nClass->baseClassList().count() != 0) {
@@ -446,7 +453,7 @@ QStringList PHPCodeCompletion::getArguments(QString classname, QString function)
    QStringList list;
 
    if (classname.isEmpty()) {
-      QValueList<FunctionCompletionEntry>::Iterator it;
+      Q3ValueList<FunctionCompletionEntry>::Iterator it;
       for( it = m_globalFunctions.begin(); it != m_globalFunctions.end(); ++it ) {
          if((*it).text.lower() == function.lower()){
             KTextEditor::CompletionEntry e = (*it);
@@ -461,7 +468,7 @@ QStringList PHPCodeCompletion::getArguments(QString classname, QString function)
             KTextEditor::CompletionEntry e;
             ArgumentDom pArgs;
             QString args = "()";
-
+            
             ArgumentDom pArg = (*methodIt)->argumentList().first();
             if (pArgs)
                args = "(" + pArg->type() +")";
@@ -471,7 +478,7 @@ QStringList PHPCodeCompletion::getArguments(QString classname, QString function)
       }
       return list;
    }
-
+         
    ClassList classList = getClassByName(classname);
    ClassList::Iterator classIt;
    for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
@@ -504,14 +511,17 @@ QStringList PHPCodeCompletion::getArguments(QString classname, QString function)
 
 QString PHPCodeCompletion::getCurrentClassName() {
    kdDebug(9018) << "getCurrentClassName" << endl;
-   QRegExp Class("^[ \t]*(abstract|)[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
-   Class.setCaseSensitive(FALSE);
 
+   Action *action;
    for(int i = m_currentLine; i >= 0; i--){
-      QString line = m_editInterface->textLine(i);
-      if (!line.isNull()) {
-         if (Class.search(line) != -1)
-            return Class.cap(2);
+      QString lineStr = m_editInterface->textLine(i);
+      if (!lineStr.isNull()) {
+         action = PHPFile::ParseClass(lineStr.local8Bit(), 0);
+         if (action != NULL) {
+            QString name = action->name();
+            delete action;
+            return name;
+         }
       }
    }
    return QString::null;
@@ -522,10 +532,10 @@ QString PHPCodeCompletion::getClassName(QString varName, QString classname) {
 
    if (varName.find("$") == 0)
        varName = varName.mid(1);
-
+   
    if (varName.lower() == "this")
        return this->getCurrentClassName();
-
+   
    if (classname.isEmpty()) {
       VariableList attrList = m_model->globalNamespace()->variableList();
       VariableList::Iterator attrIt;
@@ -543,7 +553,7 @@ QString PHPCodeCompletion::getClassName(QString varName, QString classname) {
 
       FunctionList funcList = pClass->functionList();
       FunctionList::Iterator funcIt;
-
+      
       for (funcIt = funcList.begin(); funcIt != funcList.end(); ++funcIt) {
          if (QString((*funcIt)->name().lower() + "(") == varName.lower())
             return (*funcIt)->resultType();
@@ -558,59 +568,39 @@ QString PHPCodeCompletion::getClassName(QString varName, QString classname) {
       }
    }
 
-   kdDebug(9018) << "Need " << classname << " " << varName << endl;
-/*
-   /// @fixme peut devenir recursif voir xbutton.php ligne 204
    QRegExp createmember("\\" + varName + "[ \t]*=[ \t]*(.*)[ \t]*;");
 
    for(int i = m_currentLine; i >= 0; i--){
       QString line = m_editInterface->textLine(i);
       if (!line.isNull() && line.find(varName,0 , FALSE) != -1) {
-
+         
          if (createmember.search(line) != -1) {
             QString right = createmember.cap(1).stripWhiteSpace();
-
+            
             QStringList vars = QStringList::split("->", right);
+
             for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
-                QString objet = *it;
-                ++it;
-                if (it == vars.end())
-                   break;
-
-                QString var = *it;
-
-                if (objet.lower() == "$this")
-                   objet = this->getCurrentClassName();
-
-                classname = getClassName(var, objet);
-
-                NamespaceDom varns = m_model->globalNamespace()->namespaceByName("varsns");
-                QString fromns;
-                if (varns) {
-                     QString name = objet + "::" + var;
-                     kdDebug(9018) << name << endl;
-                     VariableDom nVar = varns->variableByName(name);
-                     fromns = nVar->type();
-
-                }
-                kdDebug(9018) << "Need " << objet << " " << var << " " <<  fromns << " " << vars.size() << endl;
-
+               int pos = QString(*it).find("(");
+               if (pos != -1) {
+                  QString funcname = QString(*it).mid(0, pos + 1);
+                  classname = getClassName(funcname, classname);
+               } else {
+                  classname = getClassName(*it, classname);
+               }
             }
-            kdDebug(9018) << "Dehors" << " " << classname << endl;
-
             return classname;
          }
       }
    }
-   */
+      
    return "";
 }
 
-QValueList<ClassDom> PHPCodeCompletion::getClassByName(QString classname) {
-   QValueList<ClassDom> CList;
+Q3ValueList<ClassDom> PHPCodeCompletion::getClassByName(QString classname) {
+   Q3ValueList<ClassDom> CList;
 
    ClassList classList = m_model->globalNamespace()->classList();
-
+   
    ClassList::Iterator classIt;
    for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
       ClassDom nClass = *classIt;
@@ -622,7 +612,7 @@ QValueList<ClassDom> PHPCodeCompletion::getClassByName(QString classname) {
 
 bool PHPCodeCompletion::checkForArgHint(QString line, int col) {
    kdDebug(9018) << "checkForArgHint" <<  endl;
-   QValueList<KTextEditor::CompletionEntry> list;
+   Q3ValueList<KTextEditor::CompletionEntry> list;
    QStringList argsList;
 
    if (m_argWidgetShow == true)
@@ -651,21 +641,15 @@ bool PHPCodeCompletion::checkForArgHint(QString line, int col) {
 
       QString classname;
       QString function = line.mid(pos1 + 2);
-
+      
       line = line.mid(0, pos1);
-
-kdDebug(9018) << "checkForArgHint 2 " << line <<  endl;
 
       QStringList vars = QStringList::split("->", line);
 
       for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
-kdDebug(9018) << "for " << line <<  endl;
          classname = getClassName(*it, classname);
-kdDebug(9018) << "next " << line <<  endl;
       }
-
-kdDebug(9018) << "checkForArgHint 4 " << line <<  endl;
-
+         
       argsList = getArguments(classname, function);
       if (argsList.count() > 0) {
          m_argWidgetShow = true;
@@ -673,9 +657,7 @@ kdDebug(9018) << "checkForArgHint 4 " << line <<  endl;
          return true;
       }
    }
-
-kdDebug(9018) << "checkForArgHint 0 " << line <<  endl;
-
+   
    argsList = getArguments("", line);
    if (argsList.count() > 0) {
       m_argWidgetShow = true;
@@ -695,6 +677,6 @@ kdDebug(9018) << "checkForArgHint 0 " << line <<  endl;
 
 void PHPCodeCompletion::setStatusBar(QString expr, QString type) {
    m_phpSupport->mainWindow()->statusBar()->message( i18n("Type of %1 is %2").arg(expr).arg(type), 1000 );
-}
+}   
 
 #include "phpcodecompletion.moc"

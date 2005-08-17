@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -39,7 +39,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     m_widget->setIcon( SmallIcon("filefind") );
     m_widget->setCaption(i18n("Replace"));
     
-    QWhatsThis::add
+    Q3WhatsThis::add
         (m_widget, i18n("<b>Replace</b><p>"
                         "This window shows a preview of a string replace "
                         "operation. Uncheck a line to exclude that replacement. "
@@ -52,7 +52,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("Project wide string replacement") );
 
     KAction * action = new KAction(i18n("Find-Select-Replace..."), 0,
-                                   CTRL+SHIFT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
+                                   Qt::CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
     action->setToolTip( i18n("Project wide string replacement") );
     action->setWhatsThis( i18n("<b>Find-Select-Replace</b><p>"
                                "Opens the project wide string replacement dialog. There you "

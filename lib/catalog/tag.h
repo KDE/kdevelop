@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef TAG_H
@@ -22,7 +22,9 @@
 
 #include <qmap.h>
 #include <qvariant.h>
-#include <qshared.h>
+#include <q3shared.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QDataStream;
 
@@ -58,12 +60,12 @@ public:
 
     Tag& operator = ( const Tag& source );
     
-    QCString id() const
+    Q3CString id() const
     {
         return data->id;
     }
 
-    void setId( const QCString& id )
+    void setId( const Q3CString& id )
     {
 	detach();
         data->id = id;
@@ -158,7 +160,7 @@ public:
 	data->endColumn = column;
     }
 
-    bool hasAttribute( const QCString& name ) const
+    bool hasAttribute( const Q3CString& name ) const
     {
 	if( name == "kind" ||
 	    name == "name" ||
@@ -172,7 +174,7 @@ public:
         return data->attributes.contains( name );
     }
 
-    QVariant attribute( const QCString& name ) const
+    QVariant attribute( const Q3CString& name ) const
     {
 	if( name == "id" )
 	    return data->id;
@@ -197,7 +199,7 @@ public:
         return data->attributes[ name ];
     }
 
-    void setAttribute( const QCString& name, const QVariant& value )
+    void setAttribute( const Q3CString& name, const QVariant& value )
     {
 	detach();
 	if( name == "id" )
@@ -230,9 +232,9 @@ private:
     void detach();
     
 private:
-    struct TagData: public QShared
+    struct TagData: public Q3Shared
     {
-	QCString id;
+	Q3CString id;
 	int kind;
 	unsigned long flags;
 	QString name;
@@ -240,7 +242,7 @@ private:
 	QString fileName;
 	int startLine, startColumn;
 	int endLine, endColumn;
-	QMap<QCString, QVariant> attributes;
+	QMap<Q3CString, QVariant> attributes;
     } *data;
 };
 

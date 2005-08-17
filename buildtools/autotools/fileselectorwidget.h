@@ -14,13 +14,17 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QFocusEvent>
+#include <QDropEvent>
 
 #include <klistview.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
 #include <kfile.h>
 #include <kurlcombobox.h>

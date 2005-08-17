@@ -28,21 +28,27 @@
 #define HIRARCHYVIEW_H
 
 #include <qvariant.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qtabwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QCloseEvent>
+#include <QKeyEvent>
+#include <Q3PopupMenu>
+#include <QMouseEvent>
 #include <private/qcom_p.h>
 #include "../interfaces/classbrowserinterface.h"
 
 class FormWindow;
 class QCloseEvent;
-class QPopupMenu;
+class Q3PopupMenu;
 class QKeyEvent;
 class QMouseEvent;
-class QWizard;
+class Q3Wizard;
 class SourceEditor;
 
-class HierarchyItem : public QListViewItem
+class HierarchyItem : public Q3ListViewItem
 {
 public:
     enum Type {
@@ -68,9 +74,9 @@ public:
 	Variable
     };
 
-    HierarchyItem( Type type, QListViewItem *parent, QListViewItem *after,
+    HierarchyItem( Type type, Q3ListViewItem *parent, Q3ListViewItem *after,
 		   const QString &txt1, const QString &txt2, const QString &txt3 );
-    HierarchyItem( Type type, QListView *parent, QListViewItem *after,
+    HierarchyItem( Type type, Q3ListView *parent, Q3ListViewItem *after,
 		   const QString &txt1, const QString &txt2, const QString &txt3 );
 
     void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
@@ -79,7 +85,7 @@ public:
     void setObject( QObject *o );
     QObject *object() const;
 
-    void setText( int col, const QString &txt ) { if ( !txt.isEmpty() ) QListViewItem::setText( col, txt ); }
+    void setText( int col, const QString &txt ) { if ( !txt.isEmpty() ) Q3ListViewItem::setText( col, txt ); }
 
     int rtti() const { return (int)typ; }
 
@@ -95,7 +101,7 @@ private:
 
 };
 
-class HierarchyList : public QListView
+class HierarchyList : public Q3ListView
 {
     Q_OBJECT
 
@@ -104,7 +110,7 @@ public:
 
     virtual void setup();
     virtual void setCurrent( QObject *o );
-    void setOpen( QListViewItem *i, bool b );
+    void setOpen( Q3ListViewItem *i, bool b );
     void changeNameOf( QObject *o, const QString &name );
     void changeDatabaseOf( QObject *o, const QString &info );
     void setFormWindow( FormWindow *fw ) { formWindow = fw; }
@@ -113,10 +119,10 @@ public:
 	setUpdatesEnabled( FALSE );
 	triggerUpdate();
 	setUpdatesEnabled( TRUE );
-	QListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
+	Q3ListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
     }
 
-    void insertEntry( QListViewItem *i, const QPixmap &pix = QPixmap(), const QString &s = QString::null );
+    void insertEntry( Q3ListViewItem *i, const QPixmap &pix = QPixmap(), const QString &s = QString::null );
 
 protected:
     void keyPressEvent( QKeyEvent *e );
@@ -129,20 +135,20 @@ public slots:
     void removeTabPage();
 
 private:
-    void insertObject( QObject *o, QListViewItem *parent );
-    QObject *findObject( QListViewItem *i );
-    QListViewItem *findItem( QObject *o );
+    void insertObject( QObject *o, Q3ListViewItem *parent );
+    QObject *findObject( Q3ListViewItem *i );
+    Q3ListViewItem *findItem( QObject *o );
     QObject *current() const;
-    QObject *handleObjectClick( QListViewItem *i );
+    QObject *handleObjectClick( Q3ListViewItem *i );
 
 private slots:
-    virtual void objectClicked( QListViewItem *i );
-    virtual void objectDoubleClicked( QListViewItem *i );
-    virtual void showRMBMenu( QListViewItem *, const QPoint & );
+    virtual void objectClicked( Q3ListViewItem *i );
+    virtual void objectDoubleClicked( Q3ListViewItem *i );
+    virtual void showRMBMenu( Q3ListViewItem *, const QPoint & );
 
 protected:
     FormWindow *formWindow;
-    QPopupMenu *normalMenu, *tabWidgetMenu;
+    Q3PopupMenu *normalMenu, *tabWidgetMenu;
     bool deselect;
 
 };
@@ -163,14 +169,14 @@ protected:
     void contentsMouseDoubleClickEvent( QMouseEvent *e );
 
 private:
-    void save( QListViewItem *p, QListViewItem *i );
+    void save( Q3ListViewItem *p, Q3ListViewItem *i );
     void execFunctionDialog( const QString &access, const QString &type, bool addFunc );
     void addVariable( const QString &varName, const QString &access );
 
 private slots:
-    void objectClicked( QListViewItem *i );
-    void showRMBMenu( QListViewItem *, const QPoint & );
-    void renamed( QListViewItem *i );
+    void objectClicked( Q3ListViewItem *i );
+    void showRMBMenu( Q3ListViewItem *, const QPoint & );
+    void renamed( Q3ListViewItem *i );
 
 private:
     bool popupOpen;
@@ -203,7 +209,7 @@ public:
     void namePropertyChanged( QWidget *w, const QVariant &old );
     void databasePropertyChanged( QWidget *w, const QStringList& info );
     void tabsChanged( QTabWidget *w );
-    void pagesChanged( QWizard *w );
+    void pagesChanged( Q3Wizard *w );
     void rebuild();
     void closed( FormWindow *fw );
     void updateFormDefinitionView();
@@ -224,9 +230,9 @@ signals:
 private:
     struct ClassBrowser
     {
-	ClassBrowser( QListView * = 0, ClassBrowserInterface * = 0 );
+	ClassBrowser( Q3ListView * = 0, ClassBrowserInterface * = 0 );
 	~ClassBrowser();
-	QListView *lv;
+	Q3ListView *lv;
 	QInterfacePtr<ClassBrowserInterface> iface;
 
 	Q_DUMMY_COMPARISON_OPERATOR( ClassBrowser )
@@ -236,7 +242,7 @@ private:
     FormDefinitionView *fView;
     SourceEditor *editor;
     QMap<QString, ClassBrowser> *classBrowsers;
-    QGuardedPtr<SourceEditor> lastSourceEditor;
+    QPointer<SourceEditor> lastSourceEditor;
 
 };
 

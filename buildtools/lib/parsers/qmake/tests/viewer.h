@@ -15,12 +15,12 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef VIEWER_H
 #define VIEWER_H
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 
 #include "viewerbase.h"
 
@@ -28,21 +28,21 @@ namespace QMake {
 class ProjectAST;
 }
 
-class QListViewItem;
+class Q3ListViewItem;
 
 class Viewer: public ViewerBase {
 Q_OBJECT
 public:
     Viewer(QWidget *parent = 0, const char *name = 0);
-    void processAST(QMake::ProjectAST *projectAST, QListViewItem *globAfter = 0);
+    void processAST(QMake::ProjectAST *projectAST, Q3ListViewItem *globAfter = 0);
 public slots:
     virtual void tabWidget2_selected(const QString&);
-    virtual void files_currentChanged(QListBoxItem*);
+    virtual void files_currentChanged(Q3ListBoxItem*);
     virtual void choose_clicked();
     virtual void addAll_clicked();
 private:
     QMake::ProjectAST *projectAST;
-    friend class ViewerVisitor;
+    Q3ValueStack<Q3ListViewItem *> parentProject;
 };
 
 #endif

@@ -34,9 +34,12 @@
 
 #include <qlineedit.h>
 #include <qlabel.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <klocale.h>
 
@@ -44,7 +47,7 @@ ListBoxEditor::ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *
     : ListBoxEditorBase( parent, 0, TRUE ), formwindow( fw )
 {
     connect( helpButton, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
-    listbox = (QListBox*)editWidget;
+    listbox = (Q3ListBox*)editWidget;
 
     itemText->setText( "" );
     itemText->setEnabled( FALSE );
@@ -52,12 +55,12 @@ ListBoxEditor::ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *
     itemChoosePixmap->setEnabled( FALSE );
     itemDeletePixmap->setEnabled( FALSE );
 
-    QListBoxItem *i = 0;
+    Q3ListBoxItem *i = 0;
     for ( i = listbox->firstItem(); i; i = i->next() ) {
 	if ( i->pixmap() )
-	    (void)new QListBoxPixmap( preview, *i->pixmap(), i->text() );
+	    (void)new Q3ListBoxPixmap( preview, *i->pixmap(), i->text() );
 	else
-	    (void)new QListBoxText( preview, i->text() );
+	    (void)new Q3ListBoxText( preview, i->text() );
     }
 
     if ( preview->firstItem() )
@@ -65,8 +68,8 @@ ListBoxEditor::ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *
 
     ListBoxDnd *editorDnd = new ListBoxDnd( preview );
     editorDnd->setDragMode( ListBoxDnd::Internal | ListBoxDnd::Move );
-    QObject::connect( editorDnd, SIGNAL( dropped( QListBoxItem * ) ),
-		      editorDnd, SLOT( confirmDrop( QListBoxItem * ) ) );
+    QObject::connect( editorDnd, SIGNAL( dropped( Q3ListBoxItem * ) ),
+		      editorDnd, SLOT( confirmDrop( Q3ListBoxItem * ) ) );
 
     ListBoxRename *editorRename = new ListBoxRename( preview );
 
@@ -86,7 +89,7 @@ ListBoxEditor::ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *
 
 void ListBoxEditor::insertNewItem()
 {
-    QListBoxItem *i = new QListBoxText( preview, i18n("New Item") );
+    Q3ListBoxItem *i = new Q3ListBoxText( preview, i18n("New Item") );
     preview->setCurrentItem( i );
     preview->setSelected( i, TRUE );
     itemText->setFocus();
@@ -100,7 +103,7 @@ void ListBoxEditor::deleteCurrentItem()
 	preview->setSelected( preview->currentItem(), TRUE );
 }
 
-void ListBoxEditor::currentItemChanged( QListBoxItem *i )
+void ListBoxEditor::currentItemChanged( Q3ListBoxItem *i )
 {
     itemText->blockSignals( TRUE );
     itemText->setText( "" );
@@ -151,8 +154,8 @@ void ListBoxEditor::cancelClicked()
 
 void ListBoxEditor::applyClicked()
 {
-    QListBoxItem *i = 0;
-    QValueList<PopulateListBoxCommand::Item> items;
+    Q3ListBoxItem *i = 0;
+    Q3ValueList<PopulateListBoxCommand::Item> items;
     for ( i = preview->firstItem(); i; i = i->next() ) {
 	PopulateListBoxCommand::Item item;
 	if ( i->pixmap() )
@@ -191,14 +194,14 @@ void ListBoxEditor::moveItemUp()
     if ( preview->currentItem() < 1 )
 	return;
 
-    QListBoxItem *i = preview->item( preview->currentItem() );
+    Q3ListBoxItem *i = preview->item( preview->currentItem() );
     bool hasPix = (i->pixmap() != 0);
     QPixmap pix;
     if ( hasPix )
 	pix = *i->pixmap();
     QString txt = i->text();
 
-    QListBoxItem *p = i->prev();
+    Q3ListBoxItem *p = i->prev();
     if ( p->pixmap() )
 	preview->changeItem( *p->pixmap(), p->text(), preview->currentItem() );
     else
@@ -215,14 +218,14 @@ void ListBoxEditor::moveItemDown()
     if ( preview->currentItem() == -1 || preview->currentItem() > (int)preview->count() - 2 )
 	return;
 
-    QListBoxItem *i = preview->item( preview->currentItem() );
+    Q3ListBoxItem *i = preview->item( preview->currentItem() );
     bool hasPix = (i->pixmap() != 0);
     QPixmap pix;
     if ( hasPix )
 	pix = *i->pixmap();
     QString txt = i->text();
 
-    QListBoxItem *n = i->next();
+    Q3ListBoxItem *n = i->next();
     if ( n->pixmap() )
 	preview->changeItem( *n->pixmap(), n->text(), preview->currentItem() );
     else
@@ -239,7 +242,7 @@ void ListBoxEditor::deletePixmap()
     if ( preview->currentItem() == -1 )
 	return;
 
-    QListBoxItem *i = preview->item( preview->currentItem() );
+    Q3ListBoxItem *i = preview->item( preview->currentItem() );
     preview->changeItem( i->text(), preview->currentItem() );
     itemDeletePixmap->setEnabled( FALSE );
 }

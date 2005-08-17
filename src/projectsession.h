@@ -19,8 +19,8 @@
 
 #include <qobject.h>
 #include <qdom.h>
-#include <qdict.h>
-#include <qvaluelist.h>
+#include <q3dict.h>
+#include <q3valuelist.h>
 
 class QWidget;
 class KURL;
@@ -41,10 +41,10 @@ public:
   virtual ~ProjectSession();
 
   /** Opens the .kdevses file and saves the project session in XML format to it. */
-  bool saveToFile(const QString& fileName, const QValueList<KDevPlugin*> plugins );
+  bool saveToFile(const QString& fileName, const Q3ValueList<KDevPlugin*> plugins );
   
   /** Opens the .kdevses file and loads the project session from it. */
-  bool restoreFromFile(const QString& fileName, const QValueList<KDevPlugin*> plugins );
+  bool restoreFromFile(const QString& fileName, const Q3ValueList<KDevPlugin*> plugins );
 
 signals:
   void sig_restoreMainWindowProperties(const QDomElement* el);
@@ -81,7 +81,7 @@ private:
       bool activate;
   };
   
-  QValueList<DocumentData> _docDataList;
+  Q3ValueList<DocumentData> _docDataList;
   
 };
 

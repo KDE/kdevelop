@@ -16,6 +16,8 @@
 
 #include <qstring.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 class QTextStream;
 class QWidget;
@@ -36,8 +38,8 @@ public:
     void makeReplacementsForFile( QTextStream & istream, QTextStream & ostream, ReplaceItem const * fileitem );
 
 private slots:
-    void slotMousePressed(int, QListViewItem *, const QPoint &, int);
-    void slotClicked( QListViewItem * );
+    void slotMousePressed(int, Q3ListViewItem *, const QPoint &, int);
+    void slotClicked( Q3ListViewItem * );
 
 private:
     QRegExp _regexp;

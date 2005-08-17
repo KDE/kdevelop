@@ -24,11 +24,13 @@
 #include <qdom.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstringlist.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qregexp.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -76,7 +78,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     m_widget = new AutoProjectWidget(this, m_isKDE);
     m_widget->setIcon(SmallIcon( info()->icon() ));
     m_widget->setCaption(i18n("Automake Manager"));
-    QWhatsThis::add(m_widget, i18n("<b>Automake manager</b><p>"
+    Q3WhatsThis::add(m_widget, i18n("<b>Automake manager</b><p>"
                                    "The project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
                                    "Makefile.am. The 'details' view in the lower half shows the "
@@ -97,7 +99,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     if (!m_isKDE)
         action->setEnabled(false);
 
-    action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
+    action = new KAction( i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
     action->setToolTip(i18n("Build project"));
@@ -106,7 +108,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               "in the project settings dialog, <b>Make Options</b> tab."));
     action->setGroup("autotools");
 
-    action = new KAction( i18n("Build &Active Target"), "make_kdevelop", Key_F7,
+    action = new KAction( i18n("Build &Active Target"), "make_kdevelop", Qt::Key_F7,
                           this, SLOT(slotBuildActiveTarget()),
                           actionCollection(), "build_buildactivetarget" );
     action->setToolTip(i18n("Build active target"));
@@ -202,7 +204,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
-        action = new KAction( i18n("Execute Program"), "exec", SHIFT+Key_F9,
+        action = new KAction( i18n("Execute Program"), "exec", Qt::SHIFT+Qt::Key_F9,
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
         action->setToolTip(i18n("Execute program"));
@@ -337,7 +339,26 @@ DomUtil::PairList AutoProjectPart::runEnvironmentVars() const
   */
 QString AutoProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevautoproject");
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevautoproject/run/customdirectory");
+
+    if ( DomMainProgram.isEmpty() )
+        // No Main Program was specified, return the directory of the active target
+        return buildDirectory() + "/" + activeDirectory();
+
+    // A Main Program was specified, return it's run directory
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+    return buildDirectory() + "/" + DomMainProgram;
 }
 
 
@@ -603,7 +624,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
         {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
                                                "and no configure script for this project.\n"
-                                               "Run automake & friends and configure first?"), QString::null, i18n("Run Them"), i18n("Do Not Run"));
+                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)
                 return QString::null;
             preCommand = makefileCvsCommand();
@@ -614,7 +635,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
         }
         else
         {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"), QString::null, i18n("Run configure"), i18n("Do Not Run"));
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"));
             if (r == KMessageBox::No)
                 return QString::null;
             preCommand = configureCommand() + " && ";
@@ -710,7 +731,7 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
             SubprojectItem *spi = m_widget->subprojectItemForPath( dependency.left(pos) );
             if (spi)
             {
-                QPtrList< TargetItem > tl = spi->targets;
+                Q3PtrList< TargetItem > tl = spi->targets;
                 // Cycle through the list of targets to find the one we're looking for
                 TargetItem *ti = tl.first();
                 do
@@ -1013,7 +1034,7 @@ void AutoProjectPart::slotExecute()
     }
 
     if (appFrontend()->isRunning()) {
-        if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application Already Running"), i18n("&Restart Application"), i18n("Do &Nothing")) == KMessageBox::No)
+        if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application already running"), i18n("&Restart application"), i18n("Do &Nothing")) == KMessageBox::No)
             return;
         connect(appFrontend(), SIGNAL(processExited()), SLOT(slotExecute2()));
         appFrontend()->stopApplication();
@@ -1029,7 +1050,7 @@ void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
 
     bool is_dirty = false;
     QDateTime t = QFileInfo(dir , titem->name ).lastModified();
-    QPtrListIterator<FileItem> it( titem->sources );
+    Q3PtrListIterator<FileItem> it( titem->sources );
     for( ; it.current() ; ++it )
     {
         if( t < QFileInfo(dir , (*it)->name).lastModified())

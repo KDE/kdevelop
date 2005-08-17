@@ -6,6 +6,8 @@
 #include <unistd.h>
 
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -17,7 +19,7 @@
 using namespace KIO;
 
 
-PerldocProtocol::PerldocProtocol(const QCString &pool, const QCString &app)
+PerldocProtocol::PerldocProtocol(const Q3CString &pool, const Q3CString &app)
     : SlaveBase("perldoc", pool, app)
 {}
 
@@ -51,7 +53,7 @@ void PerldocProtocol::get(const KURL& url)
 #endif
         cmd += " | pod2html";
     } else {
-        QCString errstr(i18n("The only existing directories are functions and faq.").local8Bit());
+        Q3CString errstr(i18n("The only existing directories are functions and faq.").local8Bit());
         data(errstr);
         finished();
         return;
@@ -60,7 +62,7 @@ void PerldocProtocol::get(const KURL& url)
     kdDebug() << "Command: " << cmd << endl;
 
     if (plain)
-        data(QCString("<blockquote>"));
+        data(Q3CString("<blockquote>"));
 
     FILE *fd = popen(cmd.local8Bit().data(), "r");
     char buffer[4090];
@@ -80,7 +82,7 @@ void PerldocProtocol::get(const KURL& url)
     pclose(fd);
 
     if (plain)
-        data(QCString("</blockquote>"));
+        data(Q3CString("</blockquote>"));
 
     finished();
 }
@@ -94,9 +96,9 @@ void PerldocProtocol::mimetype(const KURL &url)
 }
 
 
-QCString PerldocProtocol::errorMessage()
+Q3CString PerldocProtocol::errorMessage()
 {
-    return QCString( "<html><body bgcolor=\"#FFFFFF\">" + i18n("Error in perldoc").local8Bit() + "</body></html>" );
+    return Q3CString( "<html><body bgcolor=\"#FFFFFF\">" + i18n("Error in perldoc").local8Bit() + "</body></html>" );
 }
 
 

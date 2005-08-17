@@ -15,13 +15,15 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "pcheckbox.h"
 
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 #ifndef PURE_QT
 #include <klocale.h>
@@ -66,7 +68,7 @@ void PCheckBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
     p->setBrush(cg.background());
     p->setPen(Qt::NoPen);
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toBool() ? i18n("true") : i18n("false"));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toBool() ? i18n("true") : i18n("false"));
 }
 
 }

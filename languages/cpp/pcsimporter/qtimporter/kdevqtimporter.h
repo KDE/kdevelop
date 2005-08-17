@@ -13,7 +13,7 @@
 #define KDEVQTIMPORTER_H
 
 #include <kdevpcsimporter.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class SettingsDialog;
 
@@ -31,7 +31,7 @@ public:
     virtual QWidget* createSettingsPage( QWidget* parent, const char* name=0 );
 
 private:
-    QGuardedPtr<SettingsDialog> m_settings;
+    QPointer<SettingsDialog> m_settings;
 };
 
 #endif

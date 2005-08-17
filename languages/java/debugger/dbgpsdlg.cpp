@@ -25,12 +25,15 @@
 #include <kstdguiitem.h>
 #include <kdeversion.h>
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QBoxLayout>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -49,7 +52,7 @@ namespace JAVADebugger
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       psProc_(0),
-      pids_(new QListBox(this)),
+      pids_(new Q3ListBox(this)),
       heading_(new QLabel(" ", this)),
       pidLines_(QString())
 {
@@ -58,7 +61,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 
     heading_->setFont(KGlobalSettings::fixedFont());
-    heading_->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    heading_->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
     heading_->setMaximumHeight(heading_->sizeHint().height());
     heading_->setMinimumSize(heading_->sizeHint());
     topLayout->addWidget(heading_, 5);

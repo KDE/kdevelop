@@ -13,10 +13,13 @@
 
 #include "doxygenconfigwidget.h"
 
-#include <qscrollview.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3scrollview.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -31,26 +34,26 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
     : QTabWidget(parent, name)
 {
     m_hasChanged = false;
-    m_dependencies = new QDict< QPtrList<IInput> >(257);
+    m_dependencies = new Q3Dict< Q3PtrList<IInput> >(257);
     m_dependencies->setAutoDelete(true);
-    m_inputWidgets = new QDict< IInput >;
-    m_switches = new QDict< QObject >;
+    m_inputWidgets = new Q3Dict< IInput >;
+    m_switches = new Q3Dict< QObject >;
    
-    QPtrListIterator<ConfigOption> options = Config::instance()->iterator();
-    QScrollView *page = 0;
-    QVBox *pagebox = 0;
+    Q3PtrListIterator<ConfigOption> options = Config::instance()->iterator();
+    Q3ScrollView *page = 0;
+    Q3VBox *pagebox = 0;
     ConfigOption *option = 0;
     for (options.toFirst(); (option=options.current()); ++options) {
         switch(option->kind())
             {
             case ConfigOption::O_Info:
-                page = new QScrollView(this, option->name());
-                page->viewport()->setBackgroundMode(PaletteBackground);
-                pagebox = new QVBox(0);
+                page = new Q3ScrollView(this, option->name());
+                page->viewport()->setBackgroundMode(Qt::PaletteBackground);
+                pagebox = new Q3VBox(0);
                 Q_ASSERT(pagebox!=0);
                 page->addChild(pagebox);
                 addTab(page, message(option->name()));
-                QWhatsThis::add(page, option->docs().simplifyWhiteSpace() );
+                Q3WhatsThis::add(page, option->docs().simplifyWhiteSpace() );
                 break;
             case ConfigOption::O_String:
                 {
@@ -67,7 +70,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           *((ConfigString *)option)->valueRef(), // variable 
                           sm                                     // type
                           );
-                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace());
+                    Q3WhatsThis::add(inputString, option->docs().simplifyWhiteSpace());
                     connect(inputString, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(), inputString);
                     addDependency(m_switches, option->dependsOn(), option->name());
@@ -85,7 +88,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                     QStrListIterator sli=((ConfigEnum *)option)->iterator();
                     for (sli.toFirst(); sli.current(); ++sli)
                         inputString->addValue(sli.current());
-                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace());
+                    Q3WhatsThis::add(inputString, option->docs().simplifyWhiteSpace());
                     connect(inputString, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(),inputString);
                     addDependency(m_switches, option->dependsOn(), option->name());
@@ -108,7 +111,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           *((ConfigList *)option)->valueRef(),    // variable
                           lm                                      // type
                           );
-                    QWhatsThis::add(inputStrList, option->docs().simplifyWhiteSpace());
+                    Q3WhatsThis::add(inputStrList, option->docs().simplifyWhiteSpace());
                     connect(inputStrList, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(),inputStrList);
                     addDependency(m_switches, option->dependsOn(), option->name());
@@ -123,7 +126,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           pagebox,                                // widget
                           *((ConfigBool *)option)->valueRef()     // variable
                           );
-                    QWhatsThis::add(inputBool, option->docs().simplifyWhiteSpace());
+                    Q3WhatsThis::add(inputBool, option->docs().simplifyWhiteSpace());
                     connect(inputBool, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(), inputBool);
                     addDependency(m_switches, option->dependsOn(), option->name());
@@ -139,7 +142,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           ((ConfigInt *)option)->minVal(),        // min value
                           ((ConfigInt *)option)->maxVal()         // max value
                           );
-                    QWhatsThis::add(inputInt, option->docs().simplifyWhiteSpace());
+                    Q3WhatsThis::add(inputInt, option->docs().simplifyWhiteSpace());
                     connect(inputInt, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(), inputInt);
                     addDependency(m_switches, option->dependsOn(), option->name());
@@ -150,7 +153,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
             }
     }
     
-    QDictIterator<QObject> di(*m_switches);
+    Q3DictIterator<QObject> di(*m_switches);
     for (; di.current(); ++di) {
         QObject *obj = di.current();
         connect(obj, SIGNAL(toggle(const QString&, bool)), this, SLOT(toggle(const QString&, bool)));
@@ -178,8 +181,8 @@ QSize DoxygenConfigWidget::sizeHint() const
 }
 
 
-void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
-                                        const QCString &dep, const QCString &name)
+void DoxygenConfigWidget::addDependency(Q3Dict<QObject> *switches,
+                                        const Q3CString &dep, const Q3CString &name)
 {
     if (dep.isEmpty())
         return;
@@ -190,9 +193,9 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
     Q_ASSERT(child!=0);
     if (!switches->find(dep))
         switches->insert(dep, parent->qobject());
-    QPtrList<IInput> *list = m_dependencies->find(dep);
+    Q3PtrList<IInput> *list = m_dependencies->find(dep);
     if (!list) {
-        list = new QPtrList<IInput>;
+        list = new Q3PtrList<IInput>;
         m_dependencies->insert(dep, list);
     }
     list->append(child);
@@ -201,7 +204,7 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
 
 void DoxygenConfigWidget::toggle(const QString &name, bool state)
 {
-    QPtrList<IInput> *inputs = m_dependencies->find(name);
+    Q3PtrList<IInput> *inputs = m_dependencies->find(name);
     Q_ASSERT(inputs!=0);
     IInput *input = inputs->first();
     while (input) {
@@ -219,11 +222,11 @@ void DoxygenConfigWidget::changed()
 
 void DoxygenConfigWidget::init()
 {
-    QDictIterator<IInput> di(*m_inputWidgets);
+    Q3DictIterator<IInput> di(*m_inputWidgets);
     for (; di.current(); ++di)
         di.current()->init();
     
-    QDictIterator<QObject> dio(*m_switches);
+    Q3DictIterator<QObject> dio(*m_switches);
     for (; dio.current(); ++dio) {
         QObject *obj = dio.current();
         connect(obj, SIGNAL(toggle(const QString&, bool)), this, SLOT(toggle(const QString&, bool)));
@@ -238,7 +241,7 @@ void DoxygenConfigWidget::loadFile()
     Config::instance()->init();
 
     QFile f(m_fileName);
-    if (f.open(IO_ReadOnly)) {
+    if (f.open(QIODevice::ReadOnly)) {
         QTextStream is(&f);
 
         Config::instance()->parse(QFile::encodeName(m_fileName));
@@ -254,7 +257,7 @@ void DoxygenConfigWidget::loadFile()
 void DoxygenConfigWidget::saveFile()
 {
     QFile f(m_fileName);
-    if (!f.open(IO_WriteOnly)) {
+    if (!f.open(QIODevice::WriteOnly)) {
         KMessageBox::information(0, i18n("Cannot write Doxyfile."));
     } else {
         Config::instance()->writeTemplate(&f, true, false);

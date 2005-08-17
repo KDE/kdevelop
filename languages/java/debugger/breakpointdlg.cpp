@@ -28,6 +28,10 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QBoxLayout>
 #include <klocale.h>
 #include <qpushbutton.h>
 

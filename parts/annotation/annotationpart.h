@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef KDEVANNOTATION_H
@@ -23,9 +23,11 @@
 
 #include <kdevplugin.h>
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
-class QPopupMenu;
+class Q3PopupMenu;
 class KAction;
 class KDialogBase;
 class Context;
@@ -48,7 +50,7 @@ private slots:
     void init();
     
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
     void projectOpened();
     void projectClosed();
     
@@ -62,7 +64,7 @@ private:
     QString m_itemAnnotationName;
     QString m_itemAnnotationFilename;
     
-    QGuardedPtr<annotationWidget> m_widget;
+    QPointer<annotationWidget> m_widget;
     ConfigWidgetProxy *m_configProxy;
 public slots:
     void SlotDoAnnotate();

@@ -13,8 +13,8 @@
 
 	 You should have received a copy of the GNU General Public License
 	 along with this program; see the file COPYING.  If not, write to
-	 the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-	 Boston, MA 02110-1301, USA.
+	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	 Boston, MA 02111-1307, USA.
 	 */
 
 #include <kparts/part.h>
@@ -24,7 +24,7 @@
 #include "subversion_widget.h"
 
 subversionWidget::subversionWidget(subversionPart *part, QWidget *parent, const char* name)
- : QTextEdit(parent, name)
+ : Q3TextEdit(parent, name)
 {
 	m_part = part;
 	setReadOnly( true );

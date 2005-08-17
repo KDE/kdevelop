@@ -15,12 +15,14 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docprojectconfigwidget.h"
 
 #include <qdir.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kurlrequester.h>
@@ -36,7 +38,7 @@
 DocProjectConfigWidget::DocProjectConfigWidget(DocumentationPart *part, QWidget *parent, const char *name)
     :DocProjectConfigWidgetBase(parent, name), m_part(part)
 {
-    for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+    for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
         it != m_part->m_plugins.constEnd(); ++it)
     {
         if ((*it)->hasCapability(DocumentationPlugin::ProjectDocumentation))
@@ -104,7 +106,7 @@ void DocProjectConfigWidget::accept()
             delete m_part->m_userManualPlugin;
             m_part->m_userManualPlugin = 0;
         }
-        for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+        for (Q3ValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
             it != m_part->m_plugins.constEnd(); ++it)
         {
             if ((*it)->hasCapability(DocumentationPlugin::ProjectUserManual))

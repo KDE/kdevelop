@@ -16,11 +16,14 @@
  ***************************************************************************/
 
 #include <qcheckbox.h>
-#include <qvbox.h>
-#include <qbuttongroup.h>
+#include <q3vbox.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qdir.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 
 #include <kaction.h>
 #include <kaboutdata.h>
@@ -88,8 +91,8 @@ MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
 
 void MainWindowShare::init()
 {
-  connect(Core::getInstance(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-          this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+  connect(Core::getInstance(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+          this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
 
   connect( m_pMainWnd->actionCollection(), SIGNAL( actionStatusText( const QString & ) ),
         this, SLOT( slotActionStatusText( const QString & ) ) );
@@ -117,7 +120,7 @@ void MainWindowShare::createActions()
   KAction* action;
 
   m_stopProcesses = new KToolBarPopupAction( i18n( "&Stop" ), "stop",
-                                 Key_Escape, this, SLOT(slotStopButtonPressed()),
+                                 Qt::Key_Escape, this, SLOT(slotStopButtonPressed()),
                                  m_pMainWnd->actionCollection(), "stop_processes" );
   m_stopProcesses->setToolTip(i18n("Stop"));
   m_stopProcesses->setWhatsThis(i18n("<b>Stop</b><p>Stops all running processes (like building process, grep command, etc.). When placed onto a toolbar provides a popup menu to choose a process to stop."));
@@ -164,19 +167,19 @@ void MainWindowShare::createActions()
   m_toggleStatusbar->setToolTip( i18n("Show statusbar") );
   m_toggleStatusbar->setWhatsThis(i18n("<b>Show statusbar</b><p>Hides or shows the statusbar."));
 
-  action = new KAction( i18n("&Next Window"), ALT+Key_Right, this, SIGNAL(gotoNextWindow()),m_pMainWnd->actionCollection(), "view_next_window");
+  action = new KAction( i18n("&Next Window"), Qt::ALT+Qt::Key_Right, this, SIGNAL(gotoNextWindow()),m_pMainWnd->actionCollection(), "view_next_window");
   action->setToolTip( i18n("Next window") );
   action->setWhatsThis(i18n("<b>Next window</b><p>Switches to the next window."));
 
-  action = new KAction( i18n("&Previous Window"), ALT+Key_Left, this, SIGNAL(gotoPreviousWindow()),m_pMainWnd->actionCollection(), "view_previous_window");
+  action = new KAction( i18n("&Previous Window"), Qt::ALT+Qt::Key_Left, this, SIGNAL(gotoPreviousWindow()),m_pMainWnd->actionCollection(), "view_previous_window");
   action->setToolTip( i18n("Previous window") );
   action->setWhatsThis(i18n("<b>Previous window</b><p>Switches to the previous window."));
 
-  action = new KAction( i18n("&Last Accessed Window"), ALT+Key_Up, this, SIGNAL(gotoLastWindow()), m_pMainWnd->actionCollection(), "view_last_window");
+  action = new KAction( i18n("&Last Accessed Window"), Qt::ALT+Qt::Key_Up, this, SIGNAL(gotoLastWindow()), m_pMainWnd->actionCollection(), "view_last_window");
   action->setToolTip( i18n("Last accessed window") );
   action->setWhatsThis(i18n("<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key)."));
 
-  action = new KAction( i18n("&First Accessed Window"), ALT+Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
+  action = new KAction( i18n("&First Accessed Window"), Qt::ALT+Qt::Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
   action->setToolTip( i18n("First accessed window") );
   action->setWhatsThis(i18n("<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)."));
 
@@ -274,7 +277,7 @@ void MainWindowShare::slotStopPopupActivated( int id )
 
 void MainWindowShare::slotStopMenuAboutToShow()
 {
-  QPopupMenu* popup = m_stopProcesses->popupMenu();
+  Q3PopupMenu* popup = m_stopProcesses->popupMenu();
   popup->clear();
 
   int i = 0;
@@ -346,9 +349,9 @@ void MainWindowShare::slotConfigureEditors()
 
 #ifdef NEED_CONFIGHACK
     // iterate over other instances of this part type and apply configuration
-    if( const QPtrList<KParts::Part> * partlist = partController->parts() )
+    if( const Q3PtrList<KParts::Part> * partlist = partController->parts() )
     {
-        QPtrListIterator<KParts::Part> it( *partlist );
+        Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* p = it.current() )
         {
             if ( KTextEditor::ConfigInterface * ci = dynamic_cast<KTextEditor::ConfigInterface *>( p ) )
@@ -412,8 +415,8 @@ void MainWindowShare::slotNewToolbarConfig()
 void MainWindowShare::slotKeyBindings()
 {
   KKeyDialog dlg( false, m_pMainWnd );
-  QPtrList<KXMLGUIClient> clients = m_pMainWnd->guiFactory()->clients();
-  for( QPtrListIterator<KXMLGUIClient> it( clients );
+  Q3PtrList<KXMLGUIClient> clients = m_pMainWnd->guiFactory()->clients();
+  for( Q3PtrListIterator<KXMLGUIClient> it( clients );
        it.current(); ++it ) {
     dlg.insert( (*it)->actionCollection() );
   }
@@ -421,17 +424,17 @@ void MainWindowShare::slotKeyBindings()
   {
   // this is needed for when we have multiple embedded kateparts and change one of them.
   // it also needs to be done to their views, as they too have actioncollections to update
-    if( const QPtrList<KParts::Part> * partlist = PartController::getInstance()->parts() )
+    if( const Q3PtrList<KParts::Part> * partlist = PartController::getInstance()->parts() )
     {
-        QPtrListIterator<KParts::Part> it( *partlist );
+        Q3PtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {
             if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
             {
                 doc->reloadXML();
 
-                QPtrList<KTextEditor::View> const & list = doc->views();
-                QPtrListIterator<KTextEditor::View> itt( list );
+                Q3PtrList<KTextEditor::View> const & list = doc->views();
+                Q3PtrListIterator<KTextEditor::View> itt( list );
                 while( KTextEditor::View * view = itt.current() )
                 {
                     view->reloadXML();
@@ -452,7 +455,7 @@ void MainWindowShare::slotConfigureToolbars()
   dlg.exec();
 }
 
-void MainWindowShare::contextMenu(QPopupMenu* popup, const Context *)
+void MainWindowShare::contextMenu(Q3PopupMenu* popup, const Context *)
 {
   if ( m_pMainWnd->menuBar()->isVisible() )
     return;

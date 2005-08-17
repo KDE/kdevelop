@@ -1,8 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Jens Dagerbo                                    *
  *   jens.dagerbo@swipnet.se                                               *
- *   Copyright (C) 2005 by Jens Herden                                     *
- *   jens@kdewebdev.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qpixmap.h>
 
 #include <kparts/part.h>
@@ -24,7 +22,7 @@
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
 
-#include "projectviewpart.h"
+#include "filelist_part.h"
 #include "filelist_widget.h"
 #include "filelist_item.h"
 
@@ -34,16 +32,16 @@
  * @param part 
  * @return 
  */
-FileListWidget::FileListWidget(ProjectviewPart *part, QWidget *parent)
- : KListView(parent), QToolTip( viewport() ), _part( part )
+FileListWidget::FileListWidget(FileListPart *part)
+ : KListView(0, "filelist widget"), QToolTip( viewport() ), _part( part )
 {
 	addColumn( "" );
 	header()->hide();
 	setRootIsDecorated( false );
-	setResizeMode( QListView::LastColumn );
+	setResizeMode( Q3ListView::LastColumn );
 	setAllColumnsShowFocus( true );
 
-	setSelectionMode( QListView::Extended );
+	setSelectionMode( Q3ListView::Extended );
 
 //	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
 //	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
@@ -51,11 +49,11 @@ FileListWidget::FileListWidget(ProjectviewPart *part, QWidget *parent)
 	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(startRefreshTimer()) );
 	connect( _part->partController(), SIGNAL( activePartChanged(KParts::Part*) ), this, SLOT( activePartChanged(KParts::Part* )) );
 
-	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
-	connect( this, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	connect( this, SIGNAL( executed( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
+	connect( this, SIGNAL( returnPressed( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
 
-	connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
-		this, SLOT( popupMenu(QListViewItem *, const QPoint & , int ) ) );
+	connect( this, SIGNAL( contextMenuRequested ( Q3ListViewItem *, const QPoint & , int ) ),
+		this, SLOT( popupMenu(Q3ListViewItem *, const QPoint & , int ) ) );
 
 	connect( _part->partController(), SIGNAL(documentChangedState(const KURL &, DocumentState)),
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
@@ -129,12 +127,12 @@ FileListItem * FileListWidget::itemForURL( KURL const & url )
 
 void FileListWidget::refreshFileList( )
 {
-// 	kdDebug() << k_funcinfo << endl;
+	kdDebug() << k_funcinfo << endl;
 
 	KListView::clear();
 
 	KURL::List list = _part->partController()->openURLs();
-	QValueListIterator<KURL> it = list.begin();
+	Q3ValueListIterator<KURL> it = list.begin();
 	while ( it != list.end() )
 	{
 		FileListItem * item = new FileListItem( this, *it );
@@ -174,7 +172,7 @@ void FileListWidget::partRemoved()
 }
 */
 
-void FileListWidget::itemClicked( QListViewItem * item )
+void FileListWidget::itemClicked( Q3ListViewItem * item )
 {
 	if ( !item ) return;
 
@@ -210,7 +208,7 @@ void FileListWidget::documentChangedState( const KURL & url, DocumentState state
 	}
 }
 
-void FileListWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
+void FileListWidget::popupMenu( Q3ListViewItem * item, const QPoint & p, int )
 {
 	if ( item )
 	{

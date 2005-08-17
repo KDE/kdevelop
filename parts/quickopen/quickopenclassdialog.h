@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -31,11 +31,11 @@ class QuickOpenClassDialog : public QuickOpenDialog
 {
     Q_OBJECT
 public:
-    QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
+    QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, Qt::WFlags fl = 0 );
     virtual ~QuickOpenClassDialog();
 
 public slots:
-    virtual void slotExecuted( QListBoxItem* );
+    virtual void slotExecuted( Q3ListBoxItem* );
     virtual void slotReturnPressed();
 
 protected:

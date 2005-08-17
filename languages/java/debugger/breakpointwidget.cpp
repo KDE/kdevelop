@@ -18,8 +18,10 @@
 #include "breakpointwidget.h"
 #include "breakpoint.h"
 
-#include <qdict.h>
-#include <qheader.h>
+#include <q3dict.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kpopupmenu.h>
 
@@ -39,10 +41,10 @@ BreakpointWidget::BreakpointWidget(QWidget *parent, const char *name)
     :  KListBox(parent, name),
        activeFlag_(0)
 {
-    connect( this, SIGNAL(rightButtonPressed(QListBoxItem*, const QPoint&)),
-             SLOT(slotContextMenu(QListBoxItem*)) );
-    connect ( this, SIGNAL(executed(QListBoxItem*)),
-              SLOT(slotExecuted(QListBoxItem*)) );
+    connect( this, SIGNAL(rightButtonPressed(Q3ListBoxItem*, const QPoint&)),
+             SLOT(slotContextMenu(Q3ListBoxItem*)) );
+    connect ( this, SIGNAL(executed(Q3ListBoxItem*)),
+              SLOT(slotExecuted(Q3ListBoxItem*)) );
 }
 
 /***************************************************************************/
@@ -196,7 +198,7 @@ void BreakpointWidget::removeAllBreakpoints()
 
 /***************************************************************************/
 
-void BreakpointWidget::slotExecuted(QListBoxItem *item)
+void BreakpointWidget::slotExecuted(Q3ListBoxItem *item)
 {
     if (item) {
         setCurrentItem(item);
@@ -208,14 +210,13 @@ void BreakpointWidget::slotExecuted(QListBoxItem *item)
 
 /***************************************************************************/
 
-void BreakpointWidget::slotContextMenu(QListBoxItem *item)
+void BreakpointWidget::slotContextMenu(Q3ListBoxItem *item)
 {
     if (!item)
         return;
 
     Breakpoint *BP = (Breakpoint*)item;
-    KPopupMenu popup(this);
-    popup.insertTitle(i18n("Breakpoints"));
+    KPopupMenu popup(i18n("Breakpoints"), this);
     int idRemoveBP        = popup.insertItem( i18n("Remove Breakpoint") );
     int idEditBP          = popup.insertItem( i18n("Edit Breakpoint") );
     int idToggleBPEnabled = popup.insertItem( BP->isEnabled()?
@@ -374,7 +375,7 @@ void BreakpointWidget::slotParseJDBBrkptList(char *str)
                 if (strncmp(str, "\tstop only if ", 14) == 0) {
                     char* EOL = strchr(str, '\n');
                     if (EOL)
-                        condition = QCString(str+14, EOL-(str+13));
+                        condition = Q3CString(str+14, EOL-(str+13));
                 }
             }
 

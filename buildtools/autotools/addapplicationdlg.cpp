@@ -14,9 +14,9 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qfile.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlineedit.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qtextstream.h>
 #include <qapplication.h>
 #include <kdebug.h>
@@ -51,7 +51,7 @@ AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, Subproject
     subProject = spitem;
 
     // Fill the combo box with program names in the directory
-    QPtrListIterator<TargetItem> tit(spitem->targets);
+    Q3PtrListIterator<TargetItem> tit(spitem->targets);
     for (; tit.current(); ++tit) {
         if ((*tit)->primary == "PROGRAMS")
             executable_combo->insertItem(QString((*tit)->name));
@@ -61,7 +61,7 @@ AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, Subproject
     KMimeType::List l = KMimeType::allMimeTypes();
     KMimeType::List::Iterator it;
     for (it = l.begin(); it != l.end(); ++it)
-        new QListViewItem(availtypes_listview, (*it)->name());
+        new Q3ListViewItem(availtypes_listview, (*it)->name());
 
     setIcon ( SmallIcon ( "window_new" ) );
 }
@@ -84,17 +84,17 @@ void AddApplicationDialog::iconClicked()
 
 void AddApplicationDialog::addTypeClicked()
 {
-    QListViewItem *selitem = availtypes_listview->selectedItem();
+    Q3ListViewItem *selitem = availtypes_listview->selectedItem();
     if (!selitem)
         return;
 
-    QListViewItem *olditem = chosentypes_listview->firstChild();
+    Q3ListViewItem *olditem = chosentypes_listview->firstChild();
     while (olditem) {
         if (selitem->text(0) == olditem->text(0))
             return;
         olditem = olditem->nextSibling();
     }
-    new QListViewItem(chosentypes_listview, selitem->text(0));
+    new Q3ListViewItem(chosentypes_listview, selitem->text(0));
 }
 
 
@@ -108,7 +108,7 @@ void AddApplicationDialog::accept()
 {
     // Create list of mime types
     QStringList mimeTypes;
-    QListViewItem *item = chosentypes_listview->firstChild();
+    Q3ListViewItem *item = chosentypes_listview->firstChild();
     while (item) {
         mimeTypes.append(item->text(0));
         item = item->nextSibling();
@@ -142,7 +142,7 @@ void AddApplicationDialog::accept()
         filename_edit->setFocus();
         return;
     }
-    if (!f.open(IO_WriteOnly)) {
+    if (!f.open(QIODevice::WriteOnly)) {
         KMessageBox::sorry(this, i18n("Could not open file for writing."));
         return;
     }

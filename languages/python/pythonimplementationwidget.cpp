@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "pythonimplementationwidget.h"
 
@@ -61,7 +61,7 @@ QStringList PythonImplementationWidget::createClassFiles()
     if (!m_part->project()->activeDirectory().isEmpty())
         file_py = m_part->project()->activeDirectory() + "/" + file_py;
     QFile file(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_py));
-    if (!file.open(IO_WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly)) {
         KMessageBox::error(0, i18n("Cannot write to file"));
         return QStringList();
     }

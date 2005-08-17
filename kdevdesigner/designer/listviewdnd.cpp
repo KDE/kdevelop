@@ -26,27 +26,33 @@
 
 #include "listviewdnd.h"
 #include <qwidget.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qpainter.h>
-#include <qdragobject.h>
-#include <qvaluelist.h>
+#include <q3dragobject.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 // The Dragobject Declaration ---------------------------------------
-class ListViewItemDrag : public QStoredDrag
+class ListViewItemDrag : public Q3StoredDrag
 {
 public:
     enum DropRelation { Sibling, Child };
     ListViewItemDrag( ListViewItemList & items, QWidget * parent = 0, const char * name = 0 );
     ~ListViewItemDrag() {};
     static bool canDecode( QDragMoveEvent * event );
-    static bool decode( QDropEvent * event, QListView * parent, QListViewItem * insertPoint, DropRelation dr );
+    static bool decode( QDropEvent * event, Q3ListView * parent, Q3ListViewItem * insertPoint, DropRelation dr );
 };
 // ------------------------------------------------------------------
 
-ListViewDnd::ListViewDnd( QListView * eventSource, const char * name )
+ListViewDnd::ListViewDnd( Q3ListView * eventSource, const char * name )
     : ListDnd( eventSource, name ) { }
 
-void ListViewDnd::confirmDrop( QListViewItem * )
+void ListViewDnd::confirmDrop( Q3ListViewItem * )
 {
     dropConfirmed = TRUE;
 }
@@ -64,7 +70,7 @@ bool ListViewDnd::dropEvent( QDropEvent * event )
 	QPoint pos = event->pos();
 
 	ListViewItemDrag::DropRelation dr = ListViewItemDrag::Sibling;
-	QListViewItem *item = itemAt( pos );
+	Q3ListViewItem *item = itemAt( pos );
 	int dpos = dropDepth( item, pos );
 
 	if ( item ) {
@@ -78,7 +84,7 @@ bool ListViewDnd::dropEvent( QDropEvent * event )
 	    }
 	}
 
-	if ( ListViewItemDrag::decode( event, (QListView *) src, item, dr ) ) {
+	if ( ListViewItemDrag::decode( event, (Q3ListView *) src, item, dr ) ) {
 	    event->accept();
 	    emit dropped( 0 ); // Use ID instead of item?
 	}
@@ -92,7 +98,7 @@ bool ListViewDnd::dropEvent( QDropEvent * event )
 
 bool ListViewDnd::mouseMoveEvent( QMouseEvent * event )
 {
-    if ( event->state() & LeftButton ) {
+    if ( event->state() & Qt::LeftButton ) {
 	if ( ( event->pos() - mousePressPos ).manhattanLength() > 3 ) {
 	    ListViewItemList list;
 
@@ -101,7 +107,7 @@ bool ListViewDnd::mouseMoveEvent( QMouseEvent * event )
 	    else
 		buildTreeList( list );
 
-	    ListViewItemDrag * dragobject = new ListViewItemDrag( list, (QListView *) src );
+	    ListViewItemDrag * dragobject = new ListViewItemDrag( list, (Q3ListView *) src );
 
 	    if ( dMode & Move ) {
 		disabledItems = list;
@@ -132,9 +138,9 @@ bool ListViewDnd::mouseMoveEvent( QMouseEvent * event )
 int ListViewDnd::buildFlatList( ListViewItemList & list )
 {
     bool addKids = FALSE;
-    QListViewItem *nextSibling = 0;
-    QListViewItem *nextParent = 0;
-    QListViewItemIterator it = ((QListView *)src)->firstChild();
+    Q3ListViewItem *nextSibling = 0;
+    Q3ListViewItem *nextParent = 0;
+    Q3ListViewItemIterator it = ((Q3ListView *)src)->firstChild();
     for ( ; *it; it++ ) {
 	// Hit the nextSibling, turn of child processing
 	if ( (*it) == nextSibling )
@@ -166,7 +172,7 @@ int ListViewDnd::buildFlatList( ListViewItemList & list )
 
 int ListViewDnd::buildTreeList( ListViewItemList & list )
 {
-    QListViewItemIterator it = ((QListView *)src)->firstChild();
+    Q3ListViewItemIterator it = ((Q3ListView *)src)->firstChild();
     for ( ; *it; it++ ) {
 	if ( (*it)->isSelected() )
 	    list.append( *it );
@@ -187,8 +193,8 @@ void ListViewDnd::setVisibleItems( bool b )
 
 void ListViewDnd::updateLine( const QPoint & dragPos )
 {
-    QListViewItem * item = itemAt(dragPos);
-    QListView * src = (QListView *) this->src;
+    Q3ListViewItem * item = itemAt(dragPos);
+    Q3ListView * src = (Q3ListView *) this->src;
 
     int ypos = item ? 
 	( src->itemRect( item ).bottom() - ( line->height() / 2 ) ) : 
@@ -199,12 +205,12 @@ void ListViewDnd::updateLine( const QPoint & dragPos )
     line->move( xpos, ypos );
 }
 
-QListViewItem * ListViewDnd::itemAt( QPoint pos )
+Q3ListViewItem * ListViewDnd::itemAt( QPoint pos )
 {
-    QListView * src = (QListView *) this->src;
+    Q3ListView * src = (Q3ListView *) this->src;
     int headerHeight = (int)(src->header()->height());
     pos.ry() -= headerHeight;
-    QListViewItem * result = src->itemAt( pos );
+    Q3ListViewItem * result = src->itemAt( pos );
 
     if ( result && ( pos.ry() < (src->itemPos(result) + result->height()/2) ) )
 	result = result->itemAbove();
@@ -227,14 +233,14 @@ QListViewItem * ListViewDnd::itemAt( QPoint pos )
     return result;
 }
 
-int ListViewDnd::dropDepth( QListViewItem * item, QPoint pos )
+int ListViewDnd::dropDepth( Q3ListViewItem * item, QPoint pos )
 {
     if ( !item || (dMode & Flat) )
 	return 0;
 
     int result     = 0;
     int itemDepth  = item->depth();
-    int indentSize = ((QListView *)src)->treeStepSize();
+    int indentSize = ((Q3ListView *)src)->treeStepSize();
     int itemLeft   = indentSize * itemDepth;
     int childMargin  = indentSize*2;
     if ( pos.x() > itemLeft + childMargin ) {
@@ -256,19 +262,19 @@ bool ListViewDnd::canDecode( QDragEnterEvent * event )
 // The Dragobject Implementation ------------------------------------
 // ------------------------------------------------------------------
 
-QDataStream & operator<< ( QDataStream & stream, const QListViewItem & item );
-QDataStream & operator>> ( QDataStream & stream, QListViewItem & item );
+QDataStream & operator<< ( QDataStream & stream, const Q3ListViewItem & item );
+QDataStream & operator>> ( QDataStream & stream, Q3ListViewItem & item );
 
 ListViewItemDrag::ListViewItemDrag( ListViewItemList & items, QWidget * parent, const char * name )
-    : QStoredDrag( "qt/listviewitem", parent, name )
+    : Q3StoredDrag( "qt/listviewitem", parent, name )
 {
     // ### FIX!
-    QByteArray data( sizeof( Q_INT32 ) + sizeof( QListViewItem ) * items.count() );
-    QDataStream stream( data, IO_WriteOnly );
+    QByteArray data( sizeof( Q_INT32 ) + sizeof( Q3ListViewItem ) * items.count() );
+    QDataStream stream( data, QIODevice::WriteOnly );
 
     stream << items.count();
 
-    QListViewItem *i = items.first();
+    Q3ListViewItem *i = items.first();
     while ( i ) {
         stream << *i;
 	i = items.next();
@@ -282,10 +288,10 @@ bool ListViewItemDrag::canDecode( QDragMoveEvent * event )
     return event->provides( "qt/listviewitem" );
 }
 
-bool ListViewItemDrag::decode( QDropEvent * event, QListView * parent, QListViewItem * insertPoint, DropRelation dr )
+bool ListViewItemDrag::decode( QDropEvent * event, Q3ListView * parent, Q3ListViewItem * insertPoint, DropRelation dr )
 {
     QByteArray data = event->encodedData( "qt/listviewitem" );
-    QListViewItem* itemParent = insertPoint ? insertPoint->parent() : 0;
+    Q3ListViewItem* itemParent = insertPoint ? insertPoint->parent() : 0;
 
     // Change from sibling (default) to child creation
     if ( insertPoint && dr == Child ) {
@@ -295,17 +301,17 @@ bool ListViewItemDrag::decode( QDropEvent * event, QListView * parent, QListView
 
     if ( data.size() ) {
 	event->accept();
-	QDataStream stream( data, IO_ReadOnly );
+	QDataStream stream( data, QIODevice::ReadOnly );
 
 	int count = 0;
 	stream >> count;
 
 	for( int i = 0; i < count; i++ ) {
 	    if ( itemParent ) {
-		insertPoint = new QListViewItem( itemParent, insertPoint );
+		insertPoint = new Q3ListViewItem( itemParent, insertPoint );
 		itemParent->setOpen( TRUE );
 	    } else { // No parent for insertPoint, use QListView
-		insertPoint = new QListViewItem( parent, insertPoint );
+		insertPoint = new Q3ListViewItem( parent, insertPoint );
 	    }
 	    stream >> *insertPoint;
 	}
@@ -315,7 +321,7 @@ bool ListViewItemDrag::decode( QDropEvent * event, QListView * parent, QListView
 }
 
 
-QDataStream & operator<< ( QDataStream & stream, const QListViewItem & item )
+QDataStream & operator<< ( QDataStream & stream, const Q3ListViewItem & item )
 {
     int columns = item.listView()->columns();
     stream << columns;
@@ -354,7 +360,7 @@ QDataStream & operator<< ( QDataStream & stream, const QListViewItem & item )
     stream << item.childCount();
 
     if ( item.childCount() > 0 ) {
-	QListViewItem * child = item.firstChild();
+	Q3ListViewItem * child = item.firstChild();
 	while ( child ) {
 	    stream << ( *child ); // recursive call
 	    child = child->nextSibling();
@@ -364,7 +370,7 @@ QDataStream & operator<< ( QDataStream & stream, const QListViewItem & item )
     return stream;
 }
     
-QDataStream & operator>> ( QDataStream & stream, QListViewItem & item )
+QDataStream & operator>> ( QDataStream & stream, Q3ListViewItem & item )
 {
     Q_INT32 columns;
     stream >> columns;
@@ -419,10 +425,10 @@ QDataStream & operator>> ( QDataStream & stream, QListViewItem & item )
     int childCount;
     stream >> childCount;
 
-    QListViewItem *child = 0;
-    QListViewItem *prevchild = 0;
+    Q3ListViewItem *child = 0;
+    Q3ListViewItem *prevchild = 0;
     for ( i = 0; i < childCount; i++ ) {
-	child = new QListViewItem( &item, prevchild );
+	child = new Q3ListViewItem( &item, prevchild );
 	stream >> ( *child );
 	item.insertItem( child );
 	prevchild = child;

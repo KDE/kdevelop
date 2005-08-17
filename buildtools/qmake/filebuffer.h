@@ -14,8 +14,10 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "caret.h"
 
 class ValuesIgnore
@@ -26,10 +28,10 @@ public:
   QStringList       values_exclude;
 };
 
-typedef QValueList<ValuesIgnore*> ValuesIgnoreList;
+typedef Q3ValueList<ValuesIgnore*> ValuesIgnoreList;
 
 class FileBuffer;
-typedef QValueList<FileBuffer*> FileBufferList;
+typedef Q3ValueList<FileBuffer*> FileBufferList;
 
 class FileBuffer
 {
@@ -76,7 +78,7 @@ public:
                     {setValues(variable,QStringList::split(' ',values),append,valuesPerRow);}
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);
   bool              getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
-  void              getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes);
+  void              getVariableValueSetModes(const QString &variable,Q3PtrList<FileBuffer::ValueSetMode> &modes);
   void              filterOutIgnoreValues(QString& line,QStringList& valuesignore);
   ValuesIgnore*     getValuesIgnore(const QString &variable);
   QStringList       getCustomValueNames() const { return m_customValueNames; }

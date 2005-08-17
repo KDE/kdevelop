@@ -4,7 +4,7 @@
 
 #include "%{APPNAMELC}widget.h"
 
-%{APPNAME}Widget::%{APPNAME}Widget(QWidget* parent, const char* name, WFlags fl)
+%{APPNAME}Widget::%{APPNAME}Widget(QWidget* parent, const char* name, Qt::WFlags fl)
         : %{APPNAME}WidgetBase(parent,name,fl)
 {}
 

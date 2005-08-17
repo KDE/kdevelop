@@ -19,6 +19,8 @@
 #include <qwaitcondition.h>
 #include <qmutex.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 
 class CppSupportPart;
@@ -37,7 +39,7 @@ public:
 	}
 
 	QString fileName;
-	QValueList<Problem> problems;
+	Q3ValueList<Problem> problems;
 	TranslationUnitAST* translationUnit;
 
 protected:
@@ -80,7 +82,7 @@ public:
 	void removeAllFiles();
 
 	TranslationUnitAST* translationUnit( const QString& fileName );
-	QValueList<Problem> problems( const QString& fileName , bool readFromDisk = false, bool forceParse = false );
+	Q3ValueList<Problem> problems( const QString& fileName , bool readFromDisk = false, bool forceParse = false );
 	void updateParserConfiguration();
 
 	void close();

@@ -20,6 +20,9 @@
 #include <kdevmutex.h>
 #else
 #include <qmutex.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 #endif
 
 #include <kparts/part.h>
@@ -37,7 +40,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <qprocess.h>
+#include <q3process.h>
 
 class KDevSourceProvider: public SourceProvider
 {
@@ -60,8 +63,8 @@ public:
 
 	    //kdDebug(9013) << "-------> kapp locked" << endl;
 
-	    QPtrList<KParts::Part> parts( *m_javaSupport->partController()->parts() );
-	    QPtrListIterator<KParts::Part> it( parts );
+	    Q3PtrList<KParts::Part> parts( *m_javaSupport->partController()->parts() );
+	    Q3PtrListIterator<KParts::Part> it( parts );
 	    while( it.current() ){
 		KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
 		++it;
@@ -87,7 +90,7 @@ public:
 
 	QFile f( fileName );
 	QTextStream stream( &f );
-	if( f.open(IO_ReadOnly) ){
+	if( f.open(QIODevice::ReadOnly) ){
 	    QString contents = stream.read();
 	    f.close();
 	    return contents;
@@ -154,7 +157,7 @@ public:
     bool contains( const QString& fileName ) const
     {
 	QMutexLocker locker( &m_mutex );
-	QValueList< QPair<QString, bool> >::ConstIterator it = m_fileList.begin();
+	Q3ValueList< QPair<QString, bool> >::ConstIterator it = m_fileList.begin();
 	while( it != m_fileList.end() ){
 	    if( (*it).first == fileName )
 		return true;
@@ -166,7 +169,7 @@ public:
     void remove( const QString& fileName )
     {
 	QMutexLocker locker( &m_mutex );
-	QValueList< QPair<QString, bool> >::Iterator it = m_fileList.begin();
+	Q3ValueList< QPair<QString, bool> >::Iterator it = m_fileList.begin();
 	while( it != m_fileList.end() ){
 	    if( (*it).first == fileName )
 		m_fileList.remove( it );
@@ -176,7 +179,7 @@ public:
 
 private:
     mutable QMutex m_mutex;
-    QValueList< QPair<QString, bool> > m_fileList;
+    Q3ValueList< QPair<QString, bool> > m_fileList;
 };
 
 BackgroundParser::BackgroundParser( JavaSupportPart* part, QWaitCondition* consumed )
@@ -302,7 +305,7 @@ RefJavaAST BackgroundParser::translationUnit( const QString& fileName )
     return u->translationUnit;
 }
 
-QValueList<Problem> BackgroundParser::problems( const QString& fileName )
+Q3ValueList<Problem> BackgroundParser::problems( const QString& fileName )
 {
     Unit* u = 0;
     if( (u = findUnit(fileName)) == 0 ){
@@ -310,7 +313,7 @@ QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 	u = parseFile( fileName, false );
     }
 
-    return u ? u->problems : QValueList<Problem>();
+    return u ? u->problems : Q3ValueList<Problem>();
 }
 
 void BackgroundParser::close()

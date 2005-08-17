@@ -20,10 +20,10 @@
 
 #include "dbgcontroller.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 class KProcess;
@@ -77,8 +77,8 @@ private:
     void actOnProgramPause(const QString &msg);
     void programNoApp(const QString &msg, bool msgBox);
 
-    void setBreakpoint(const QCString &BPSetCmd, int key);
-    void clearBreakpoint(const QCString &BPClearCmd);
+    void setBreakpoint(const Q3CString &BPSetCmd, int key);
+    void clearBreakpoint(const Q3CString &BPClearCmd);
     void modifyBreakpoint(const Breakpoint&);
 
     void setStateOn(int stateOn)    { state_ |= stateOn; }
@@ -97,7 +97,6 @@ public slots:
 
     void slotRun();
     void slotRunUntil(const QString &filename, int lineNum);
-    void slotJumpTo(const QString &filename, int lineNum);
     void slotStepInto();
     void slotStepOver();
     void slotStepIntoIns();
@@ -114,20 +113,13 @@ public slots:
     void slotLibraries();
 
     void slotExpandItem(TrimmableItem *parent);
-    void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
+    void slotExpandUserItem(VarItem *parent, const Q3CString &userRequest);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
     void slotSetLocalViewState(bool onOff);
     void slotProduceBacktrace(int threadNo);
     /** Produces information about local variables of the current frame
         by means of emitting localsReady and parametersReady signals. */
     void slotProduceVariablesInfo();
-
-    /** Sets the value of specified 'expression' to 'value'. This operation
-        may fail, because gdb does not provide information about writability
-        of an expression.
-    */
-    void slotSetValue(const QString& expression, const QString& value);
-
 
     // jw - type determination requires a var object, so we do it here
     void slotVarItemConstructed(VarItem *item);
@@ -163,9 +155,9 @@ private:
     int               gdbSizeofBuf_;          // size of the output buffer
     int               gdbOutputLen_;          // amount of data in the output buffer
     char*             gdbOutput_;             // buffer for the output from kprocess
-    QCString          holdingZone_;
+    Q3CString          holdingZone_;
 
-    QPtrList<DbgCommand> cmdList_;
+    Q3PtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
 
     STTY*             tty_;
@@ -185,9 +177,9 @@ private:
     bool    config_dbgTerminal_;
     QString config_gdbPath_;
     QString config_dbgShell_;
-    QCString config_configGdbScript_;
-    QCString config_runShellScript_;
-    QCString config_runGdbScript_;
+    Q3CString config_configGdbScript_;
+    Q3CString config_runShellScript_;
+    Q3CString config_runGdbScript_;
     int config_outputRadix_;
 };
 

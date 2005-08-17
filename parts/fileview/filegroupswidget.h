@@ -32,8 +32,8 @@ public slots:
     void removeFiles ( const QStringList& fileList );
 
 private slots:
-    void slotItemExecuted(QListViewItem *item);
-    void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotItemExecuted(Q3ListViewItem *item);
+    void slotContextMenu(KListView *, Q3ListViewItem *item, const QPoint &p);
     void slotToggleShowNonProjectFiles();
     void slotToggleDisplayLocation();
     

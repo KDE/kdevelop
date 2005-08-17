@@ -29,6 +29,9 @@
 #define LANGUAGEINTERFACEIMPL_H
 
 #include "../interfaces/languageinterface.h"
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3ValueList>
 
 class LanguageInterfaceImpl : public LanguageInterface
 {
@@ -40,8 +43,8 @@ public:
 
     QRESULT queryInterface( const QUuid&, QUnknownInterface** );
 
-    void functions( const QString &code, QValueList<Function> *funcs ) const;
-    void connections( const QString &, QValueList<Connection> * ) const {};
+    void functions( const QString &code, Q3ValueList<Function> *funcs ) const;
+    void connections( const QString &, Q3ValueList<Connection> * ) const {};
     QString createFunctionStart( const QString &className, const QString &func,
 				 const QString &returnType, const QString &access );
     QStringList definitions() const;
@@ -57,9 +60,9 @@ public:
     QString projectKeyForExtension( const QString &extension ) const;
     QString cleanSignature( const QString &sig ) { return sig; } // #### implement me
     void loadFormCode( const QString &, const QString &,
-		       QValueList<Function> &,
+		       Q3ValueList<Function> &,
 		       QStringList &,
-		       QValueList<Connection> & );
+		       Q3ValueList<Connection> & );
     QString formCodeExtension() const { return ".h"; }
     bool canConnect( const QString &signal, const QString &slot );
     void compressProject( const QString &, const QString &, bool ) {}
@@ -72,7 +75,7 @@ public:
     void removeConnection( const QString &, const QString &,
 			   const QString &, const QString &,
 			   QString * ) {}
-    QStrList signalNames( QObject *obj ) const;
+    Q3StrList signalNames( QObject *obj ) const;
 
 private:
     QUnknownInterface *parent;

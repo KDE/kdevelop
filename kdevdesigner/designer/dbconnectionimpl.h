@@ -28,6 +28,8 @@
 #define DBCONNECTIONIMPL_H
 
 #include "dbconnectioneditor.h"
+//Added by qt3to4:
+#include <QGridLayout>
 
 class DatabaseConnection;
 class DatabaseConnectionWidget;
@@ -39,7 +41,7 @@ class DatabaseConnectionEditor : public DatabaseConnectionEditorBase
 
 public:
     DatabaseConnectionEditor( DatabaseConnection* connection, QWidget* parent = 0,
-			       const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+			       const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~DatabaseConnectionEditor();
 
 public slots:

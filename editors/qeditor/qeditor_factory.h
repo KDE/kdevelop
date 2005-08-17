@@ -15,8 +15,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef __qeditor_factory_h__
@@ -24,6 +24,8 @@
 
 #include <kparts/factory.h>
 #include <ktrader.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class KInstance;
 class KAboutData;
@@ -39,11 +41,11 @@ public:
 
     static KInstance *instance();
 
-    static const QPtrList<class QEditorPart>& documents();
+    static const Q3PtrList<class QEditorPart>& documents();
     static void registerDocument ( class QEditorPart *doc );
     static void deregisterDocument ( class QEditorPart *doc );
 
-    static const QPtrList<class QEditorView>& views();
+    static const Q3PtrList<class QEditorView>& views();
     static void registerView ( class QEditorView *view );
     static void deregisterView ( class QEditorView *view );
 
@@ -56,8 +58,8 @@ private:
     static unsigned long s_refcnt;
     static QEditorPartFactory *s_self;
 
-    static QPtrList<class QEditorPart> *s_documents;
-    static QPtrList<class QEditorView> *s_views;
+    static Q3PtrList<class QEditorPart> *s_documents;
+    static Q3PtrList<class QEditorView> *s_views;
 
     static KInstance *s_instance;
     static KAboutData *s_about;

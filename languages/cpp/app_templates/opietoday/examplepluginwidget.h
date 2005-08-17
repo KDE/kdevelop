@@ -2,6 +2,8 @@
 #define %{APPNAME}_PLUGIN_WIDGET_H
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 #include <opie/oclickablelabel.h>
 

@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QResizeEvent>
 %{H_TEMPLATE}
 
 #ifndef %{APPNAMEUC}_H

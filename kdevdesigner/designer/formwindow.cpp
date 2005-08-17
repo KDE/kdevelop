@@ -52,7 +52,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qlabel.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qlayout.h>
@@ -61,17 +61,30 @@
 #include <qapplication.h>
 #include <qpalette.h>
 #include <qmessagebox.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qsizegrip.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qmetaobject.h>
 #include <qtooltip.h>
 #include <qfeatures.h>
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qpixmapcache.h>
 #include <qbitmap.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QFocusEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QContextMenuEvent>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QHBoxLayout>
+#include <QCloseEvent>
+#include <QPixmap>
 
 // FormWindow should be able to work to some limited degree
 // (existance, loading) without a MainWindow. Functions which require
@@ -135,7 +148,7 @@ static void flickerfree_update( QWidget *w )
 */
 
 FormWindow::FormWindow( FormFile *f, MainWindow *mw, QWidget *parent, const char *name )
-    : QWidget( parent, name, WDestructiveClose ), mainwindow( mw ),
+    : QWidget( parent, name, Qt::WDestructiveClose ), mainwindow( mw ),
       commands( 100 ), pixInline( TRUE ), pixProject( FALSE )
 {
     ff = f;
@@ -144,7 +157,7 @@ FormWindow::FormWindow( FormFile *f, MainWindow *mw, QWidget *parent, const char
 }
 
 FormWindow::FormWindow( FormFile *f, QWidget *parent, const char *name )
-    : QWidget( parent, name, WDestructiveClose ), mainwindow( 0 ),
+    : QWidget( parent, name, Qt::WDestructiveClose ), mainwindow( 0 ),
       commands( 100 ), pixInline( TRUE )
 {
     ff = f;
@@ -244,7 +257,7 @@ FormWindow::~FormWindow()
 
 void FormWindow::closeEvent( QCloseEvent *e )
 {
-    QGuardedPtr<FormWindow> that = this;
+    QPointer<FormWindow> that = this;
     if ( ff->closeEvent() && ( !that || ( mainwindow && mainwindow->unregisterClient( this ) ) ) )
 	e->accept();
     else
@@ -353,15 +366,15 @@ void FormWindow::insertWidget()
 	return;
 
     bool useSizeHint = !oldRectValid || ( currRect.width() < 2 && currRect.height() < 2 );
-    Orientation orient = Horizontal;
+    Qt::Orientation orient = Qt::Horizontal;
     QString n = WidgetDatabase::className( currTool );
     if (  useSizeHint && ( n == "Spacer" || n == "QSlider" || n == "Line" || n == "QScrollBar" ) ) {
-	QPopupMenu m( mainWindow() );
+	Q3PopupMenu m( mainWindow() );
 	m.insertItem( i18n( "&Horizontal" ) );
 	int ver = m.insertItem( i18n( "&Vertical" ) );
 	int r = m.exec( QCursor::pos() );
 	if ( r == ver )
-	    orient = Vertical;
+	    orient = Qt::Vertical;
     }
 
 
@@ -377,7 +390,7 @@ void FormWindow::insertWidget()
     }
     int id = WidgetDatabase::idFromClassName( WidgetFactory::classNameOf(w) );
     if ( WidgetDatabase::isCustomWidget( id ) ) {
-	QWhatsThis::add( w, i18n("<b>A %1 (custom widget)</b> "
+	Q3WhatsThis::add( w, i18n("<b>A %1 (custom widget)</b> "
 			    "<p>Click <b>Edit Custom Widgets...</b> in the <b>Tools|Custom</b> "
 			    "menu to add and change custom widgets. You can add "
 			    "properties as well as signals and slots to integrate custom widgets into "
@@ -389,7 +402,7 @@ void FormWindow::insertWidget()
 	QString tt = WidgetDatabase::toolTip( id );
 	QString wt = WidgetDatabase::whatsThis( id );
 	if ( !wt.isEmpty() && !tt.isEmpty() )
-	    QWhatsThis::add( w, QString("<b>A %1</b><p>%2</p>").arg( tt ).arg( wt ) );
+	    Q3WhatsThis::add( w, QString("<b>A %1</b><p>%2</p>").arg( tt ).arg( wt ) );
     }
 
     QString s = w->name();
@@ -408,7 +421,7 @@ void FormWindow::insertWidget()
 
     if ( useSizeHint ) {
 	if ( n == "Spacer" ) {
-	    if ( orient == Vertical ) {
+	    if ( orient == Qt::Vertical ) {
 		r.setWidth( 20 );
 		r.setHeight( 40 );
 	    } else {
@@ -447,7 +460,7 @@ void FormWindow::insertWidget()
     if ( !lst.isEmpty() ) {
         QWidget *pw = WidgetFactory::containerOfWidget( w );
         if (pw) {
-            QValueList<QPoint> op, np;
+            Q3ValueList<QPoint> op, np;
             for ( QWidget *i = lst.first(); i; i = lst.next() ) {
                 op.append( i->pos() );
                 QPoint pos = pw->mapFromGlobal( i->mapToGlobal( QPoint( 0, 0 ) ) );
@@ -461,11 +474,11 @@ void FormWindow::insertWidget()
             if ( !toolFixed )
                 mainwindow->resetTool();
             else
-                setCursorToAll( CrossCursor, w );
+                setCursorToAll( Qt::CrossCursor, w );
             
             InsertCommand *cmd = new InsertCommand( i18n( "Insert %1" ).arg( w->name() ), this, w, r );
             
-            QPtrList<Command> commands;
+            Q3PtrList<Command> commands;
             commands.append( mv );
             commands.append( cmd );
             
@@ -477,7 +490,7 @@ void FormWindow::insertWidget()
 	if ( !toolFixed )
 	    mainwindow->resetTool();
 	else
-	    setCursorToAll( CrossCursor, w );
+	    setCursorToAll( Qt::CrossCursor, w );
 
 	InsertCommand *cmd = new InsertCommand( i18n( "Insert %1" ).arg( w->name() ), this, w, r );
 	commandHistory()->addCommand( cmd );
@@ -504,7 +517,7 @@ void FormWindow::insertWidget( QWidget *w, bool checkName )
     MetaDataBase::addEntry( w );
     int id = WidgetDatabase::idFromClassName( WidgetFactory::classNameOf(w) );
     if ( WidgetDatabase::isCustomWidget( id ) ) {
-	QWhatsThis::add( w, i18n("<b>A %1 (custom widget)</b> "
+	Q3WhatsThis::add( w, i18n("<b>A %1 (custom widget)</b> "
 			    "<p>Click <b>Edit Custom Widgets...</b> in the <b>Tools|Custom</b> "
 			    "menu to add and change custom widgets. You can add "
 			    "properties as well as signals and slots to integrate custom widgets into "
@@ -516,7 +529,7 @@ void FormWindow::insertWidget( QWidget *w, bool checkName )
 	QString tt = WidgetDatabase::toolTip( id );
 	QString wt = WidgetDatabase::whatsThis( id );
 	if ( !wt.isEmpty() && !tt.isEmpty() )
-	    QWhatsThis::add( w, QString("<b>A %1</b><p>%2</p>").arg( tt ).arg( wt ) );
+	    Q3WhatsThis::add( w, QString("<b>A %1</b><p>%2</p>").arg( tt ).arg( wt ) );
     }
 
     restoreCursors( w, this );
@@ -544,7 +557,7 @@ void FormWindow::handleContextMenu( QContextMenuEvent *e, QWidget *w )
 		    ( WidgetFactory::layoutType( w->parentWidget()) != WidgetFactory::NoLayout ||
 		      !insertedWidgets.find(w) ) )
 		w = w->parentWidget();
-	    if ( ::qt_cast<QMainWindow*>(mainContainer()) && ((QMainWindow*)mainContainer())->centralWidget() == realWidget ) {
+	    if ( ::qt_cast<Q3MainWindow*>(mainContainer()) && ((Q3MainWindow*)mainContainer())->centralWidget() == realWidget ) {
 		e->accept();
 		mainwindow->popupFormWindowMenu( e->globalPos(), this );
 	    } else {
@@ -571,7 +584,7 @@ void FormWindow::handleMousePress( QMouseEvent *e, QWidget *w )
 	sizePreviewLabel = new QLabel( this );
 	sizePreviewLabel->hide();
 	sizePreviewLabel->setBackgroundColor( QColor( 255, 255, 128 ) );
-	sizePreviewLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
+	sizePreviewLabel->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
     }
 
     switch ( currTool ) {
@@ -977,13 +990,13 @@ void FormWindow::handleMouseRelease( QMouseEvent *e, QWidget *w )
 		bool emitSelChanged = FALSE;
 		for ( QMap<QWidget*, QPoint>::Iterator it = moving.begin(); it != moving.end(); ++it ) {
 		    QWidget *i = it.key();
-		    if ( !emitSelChanged && ::qt_cast<QButton*>(i) ) {
-			if ( ::qt_cast<QButtonGroup*>(i->parentWidget()) || ::qt_cast<QButtonGroup*>(wa) )
+		    if ( !emitSelChanged && ::qt_cast<Q3Button*>(i) ) {
+			if ( ::qt_cast<Q3ButtonGroup*>(i->parentWidget()) || ::qt_cast<Q3ButtonGroup*>(wa) )
 			    emitSelChanged = TRUE;
-			if ( !::qt_cast<QButtonGroup*>(wa) ) {
+			if ( !::qt_cast<Q3ButtonGroup*>(wa) ) {
 			    MetaDataBase::setPropertyChanged( i, "buttonGroupId", FALSE );
-			    if ( ::qt_cast<QButtonGroup*>(i->parentWidget()) )
-				( (QButtonGroup*)i->parentWidget() )->remove( (QButton*)i );
+			    if ( ::qt_cast<Q3ButtonGroup*>(i->parentWidget()) )
+				( (Q3ButtonGroup*)i->parentWidget() )->remove( (Q3Button*)i );
 			}
 		    }
 		    QPoint pos = wa->mapFromGlobal( i->mapToGlobal( QPoint(0,0) ) );
@@ -1003,7 +1016,7 @@ void FormWindow::handleMouseRelease( QMouseEvent *e, QWidget *w )
 
 	make_move_command:
 	    QWidgetList widgets; // collect the widgets and its old and new positions which have been moved
-	    QValueList<QPoint> oldPos, newPos;
+	    Q3ValueList<QPoint> oldPos, newPos;
 	    for ( it = moving.begin(); it != moving.end(); ++it ) {
 		widgets.append( it.key() );
 		oldPos.append( *it );
@@ -1108,35 +1121,35 @@ void FormWindow::handleKeyPress( QKeyEvent *e, QWidget *w )
     if ( e->key() == Key_Left || e->key() == Key_Right ||
 	 e->key() == Key_Up || e->key() == Key_Down ) {
 	QWidgetList widgets;
-	QValueList<QPoint> oldPos, newPos;
+	Q3ValueList<QPoint> oldPos, newPos;
 	for ( WidgetSelection *s = selections.first(); s; s = selections.next() ) {
 	    if ( s->isUsed() ) {
 		int dx = 0, dy = 0;
 		bool control = e->state() & ControlButton;
 
 		switch ( e->key() ) {
-		case Key_Left: {
+		case Qt::Key_Left: {
 		    e->accept();
 		    if ( control )
 			dx = -1;
 		    else
 			dx = -grid().x();
 		} break;
-		case Key_Right: {
+		case Qt::Key_Right: {
 		    e->accept();
 		    if ( control )
 			dx = 1;
 		    else
 			dx = grid().x();
 		} break;
-		case Key_Up: {
+		case Qt::Key_Up: {
 		    e->accept();
 		    if ( control )
 			dy = -1;
 		    else
 			dy = -grid().y();
 		} break;
-		case Key_Down: {
+		case Qt::Key_Down: {
 		    e->accept();
 		    if ( control )
 			dy = 1;
@@ -1194,7 +1207,7 @@ void FormWindow::selectWidget( QObject *o, bool select )
 	return;
     }
 
-    if ( ::qt_cast<QMainWindow*>(mainContainer()) && w == ( (QMainWindow*)mainContainer() )->centralWidget() ) {
+    if ( ::qt_cast<Q3MainWindow*>(mainContainer()) && w == ( (Q3MainWindow*)mainContainer() )->centralWidget() ) {
 	QObject *opw = propertyWidget;
 	propertyWidget = mainContainer();
 	if ( opw->isWidgetType() )
@@ -1238,7 +1251,7 @@ void FormWindow::selectWidget( QObject *o, bool select )
 	    s->setWidget( 0 );
 	QObject *opw = propertyWidget;
 	if ( !usedSelections.isEmpty() )
-	    propertyWidget = QPtrDictIterator<WidgetSelection>( usedSelections ).current()->widget();
+	    propertyWidget = Q3PtrDictIterator<WidgetSelection>( usedSelections ).current()->widget();
 	else
 	    propertyWidget = mainContainer();
 	if ( opw->isWidgetType() )
@@ -1281,7 +1294,7 @@ void FormWindow::repaintSelection( QWidget *w )
 
 void FormWindow::clearSelection( bool changePropertyDisplay )
 {
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it )
 	it.current()->setWidget( 0, FALSE );
 
@@ -1391,7 +1404,7 @@ bool FormWindow::isWidgetSelected( QObject *w )
 
 void FormWindow::moveSelectedWidgets( int dx, int dy )
 {
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it ) {
 	WidgetSelection *s = it.current();
 	QWidget *w = s->widget();
@@ -1426,7 +1439,7 @@ void FormWindow::raiseChildSelections( QWidget *w )
 	return;
     }
 
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it ) {
 	if ( l->findRef( it.current()->widget() ) != -1 )
 	    it.current()->show();
@@ -1454,7 +1467,7 @@ void FormWindow::checkSelectionsForMove( QWidget *w )
     QObjectList *l = w->parentWidget()->queryList( "QWidget", 0, FALSE, FALSE );
     moving.clear();
     if ( l ) {
-	QPtrDictIterator<WidgetSelection> it( usedSelections );
+	Q3PtrDictIterator<WidgetSelection> it( usedSelections );
 	WidgetSelection *sel;
 	while ( ( sel = it.current() ) != 0 ) {
 	    if ( it.current()->widget() == mainContainer() )
@@ -1480,7 +1493,7 @@ void FormWindow::deleteWidgets()
 {
     CHECK_MAINWINDOW;
     QWidgetList widgets;
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it ) {
 	QWidget *tb = 0;
 	if ( !( tb = mainWindow()->isAToolBarChild( it.current()->widget() ) ) )
@@ -1499,7 +1512,7 @@ void FormWindow::deleteWidgets()
 
 void FormWindow::editAdjustSize()
 {
-    QPtrList<Command> commands;
+    Q3PtrList<Command> commands;
     QWidgetList widgets = selectedWidgets();
     if ( widgets.isEmpty() ) {
 	QRect oldr = geometry();
@@ -1538,7 +1551,7 @@ void FormWindow::editAdjustSize()
 QWidgetList FormWindow::selectedWidgets() const
 {
     QWidgetList widgets;
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it )
 	widgets.append( it.current()->widget() );
     return widgets;
@@ -1557,7 +1570,7 @@ QLabel *FormWindow::sizePreview() const
 	( (FormWindow*)this )->sizePreviewLabel = new QLabel( (FormWindow*)this );
 	( (FormWindow*)this )->sizePreviewLabel->hide();
 	( (FormWindow*)this )->sizePreviewLabel->setBackgroundColor( QColor( 255, 255, 128 ) );
-	( (FormWindow*)this )->sizePreviewLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
+	( (FormWindow*)this )->sizePreviewLabel->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
     }
     return sizePreviewLabel;
 }
@@ -1622,7 +1635,7 @@ void FormWindow::windowsRepaintWorkaroundTimerTimeout()
 #endif
 }
 
-QPtrDict<QWidget> *FormWindow::widgets()
+Q3PtrDict<QWidget> *FormWindow::widgets()
 {
     return &insertedWidgets;
 }
@@ -1821,7 +1834,7 @@ void FormWindow::updateUndoInfo()
 bool FormWindow::checkCustomWidgets()
 {
     QStringList missingCustomWidgets;
-    QPtrDictIterator<QWidget> it( insertedWidgets );
+    Q3PtrDictIterator<QWidget> it( insertedWidgets );
     for ( ; it.current(); ++it ) {
 	if ( it.current()->isA( "CustomWidget" ) ) {
 	    QString className = WidgetFactory::classNameOf( it.current() );
@@ -1870,7 +1883,7 @@ QString FormWindow::copy()
 void FormWindow::lowerWidgets()
 {
     QWidgetList widgets;
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it )
 	widgets.append( it.current()->widget() );
 
@@ -1957,7 +1970,7 @@ void FormWindow::checkAccels()
 void FormWindow::raiseWidgets()
 {
     QWidgetList widgets;
-    QPtrDictIterator<WidgetSelection> it( usedSelections );
+    Q3PtrDictIterator<WidgetSelection> it( usedSelections );
     for ( ; it.current(); ++it )
 	widgets.append( it.current()->widget() );
 
@@ -2120,7 +2133,7 @@ void FormWindow::breakLayout( QWidget *w )
     if ( w == this )
 	w = mainContainer();
     w = WidgetFactory::containerOfWidget( w );
-    QPtrList<Command> commands;
+    Q3PtrList<Command> commands;
 
     for (;;) {
 	if ( !w || w == this )
@@ -2165,7 +2178,7 @@ BreakLayoutCommand *FormWindow::breakLayoutCommand( QWidget *w )
 
 int FormWindow::numVisibleWidgets() const
 {
-    QPtrDictIterator<QWidget> it( insertedWidgets );
+    Q3PtrDictIterator<QWidget> it( insertedWidgets );
     int visible = 0;
     for ( ; it.current(); ++it ) {
 	if ( it.current()->isVisibleTo( (FormWindow*)this ) )
@@ -2359,7 +2372,7 @@ bool FormWindow::unify( QObject *w, QString &s, bool changeIt )
     if ( !found ) {
 	QString orig = s;
 	int num  = 1;
-	QPtrDictIterator<QWidget> it( insertedWidgets );
+	Q3PtrDictIterator<QWidget> it( insertedWidgets );
 	for ( ; it.current();) {
 	    if ( it.current() != w &&
 		 qstrcmp( it.current()->name(), s.latin1() ) == 0 ) {
@@ -2373,7 +2386,7 @@ bool FormWindow::unify( QObject *w, QString &s, bool changeIt )
 	    }
 	}
 	if ( !found ) {
-	    QPtrList<QAction> al;
+	    Q3PtrList<QAction> al;
 	    QAction *a = 0;
 	    for ( a = actions.first(); a; a = actions.next() ) {
 		QObjectList *l = a->queryList( "QAction" );
@@ -2393,7 +2406,7 @@ bool FormWindow::unify( QObject *w, QString &s, bool changeIt )
 		}
 	    }
 	}
-	if ( ::qt_cast<QMainWindow*>(mainContainer()) && !found ) {
+	if ( ::qt_cast<Q3MainWindow*>(mainContainer()) && !found ) {
 	    QObjectList *l = mainContainer()->queryList( "PopupMenuEditor" );
 	    for ( QObject *o = l->first(); o; o = l->next() ) {
 		if ( o != w &&
@@ -2407,7 +2420,7 @@ bool FormWindow::unify( QObject *w, QString &s, bool changeIt )
 	    }
 	    delete l;
 	}
-	if ( ::qt_cast<QMainWindow*>(mainContainer()) ) {
+	if ( ::qt_cast<Q3MainWindow*>(mainContainer()) ) {
 	    if ( !found ) {
 		QObjectList *l = mainContainer()->queryList( "QDockWindow", 0, TRUE );
 		for ( QObject *o = l->first(); o; o = l->next() ) {
@@ -2432,7 +2445,7 @@ bool FormWindow::unify( QObject *w, QString &s, bool changeIt )
 
 bool FormWindow::isCustomWidgetUsed( MetaDataBase::CustomWidget *w )
 {
-    QPtrDictIterator<QWidget> it( insertedWidgets );
+    Q3PtrDictIterator<QWidget> it( insertedWidgets );
     for ( ; it.current(); ++it ) {
 	if ( it.current()->isA( "CustomWidget" ) ) {
 	    if ( qstrcmp( WidgetFactory::classNameOf( it.current() ), w->className.utf8() ) == 0 )
@@ -2448,7 +2461,7 @@ bool FormWindow::isDatabaseWidgetUsed() const
 #ifndef QT_NO_SQL
     QStringList dbClasses;
     dbClasses << "QDataTable"; // add more here
-    QPtrDictIterator<QWidget> it( insertedWidgets );
+    Q3PtrDictIterator<QWidget> it( insertedWidgets );
     for ( ; it.current(); ++it ) {
 	QString c( it.current()->className() );
 	if ( dbClasses.contains( c ) > 0 ) {
@@ -2521,7 +2534,7 @@ static bool isChildOf( QWidget *c, QWidget *p )
 
 QWidget *FormWindow::containerAt( const QPoint &pos, QWidget *notParentOf )
 {
-    QPtrDictIterator<QWidget> it( insertedWidgets );
+    Q3PtrDictIterator<QWidget> it( insertedWidgets );
     QWidget *container = 0;
     int depth = -1;
     QWidgetList selected = selectedWidgets();
@@ -2676,7 +2689,7 @@ void FormWindow::killAccels( QObject *top )
     if ( !l )
 	return;
     for ( QObject *o = l->first(); o; o = l->next() )
-	( (QAccel*)o )->setEnabled( FALSE );
+	( (Q3Accel*)o )->setEnabled( FALSE );
     delete l;
 }
 
@@ -2689,9 +2702,9 @@ DesignerFormWindow *FormWindow::iFace()
 
 bool FormWindow::isCentralWidget( QObject *w ) const
 {
-    if ( !::qt_cast<QMainWindow*>(mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(mainContainer()) )
 	return FALSE;
-    return w == ( (QMainWindow*)mainContainer() )->centralWidget();
+    return w == ( (Q3MainWindow*)mainContainer() )->centralWidget();
 }
 
 int FormWindow::layoutDefaultSpacing() const
@@ -2758,7 +2771,7 @@ void FormWindow::setFormFile( FormFile *f )
 
 bool FormWindow::canBeBuddy( const QWidget *w ) const
 {
-    return w->focusPolicy() != QWidget::NoFocus;
+    return w->focusPolicy() != Qt::NoFocus;
 }
 
 bool FormWindow::event( QEvent *e )

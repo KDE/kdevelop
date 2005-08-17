@@ -29,6 +29,11 @@
 
 #include "../interfaces/designerinterface.h"
 #include "project.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 class FormWindow;
 class MainWindow;
@@ -44,7 +49,7 @@ public:
     DesignerProject *currentProject() const;
     DesignerFormWindow *currentForm() const;
     DesignerSourceFile *currentSourceFile() const;
-    QPtrList<DesignerProject> projectList() const;
+    Q3PtrList<DesignerProject> projectList() const;
     void showStatusMessage( const QString &, int ms = 0 ) const;
     DesignerDock *createDock() const;
     DesignerOutputDock *outputDock() const;
@@ -76,7 +81,7 @@ class DesignerProjectImpl: public DesignerProject
 public:
     DesignerProjectImpl( Project *pr );
 
-    QPtrList<DesignerFormWindow> formList() const;
+    Q3PtrList<DesignerFormWindow> formList() const;
     QStringList formNames() const;
     QString formFileName( const QString &form ) const;
     void addForm( DesignerFormWindow * );
@@ -88,7 +93,7 @@ public:
     QString databaseFile() const;
     void setDatabaseFile( const QString & );
     void setupDatabases() const;
-    QPtrList<DesignerDatabase> databaseConnections() const;
+    Q3PtrList<DesignerDatabase> databaseConnections() const;
     void addDatabase( DesignerDatabase * );
     void removeDatabase( DesignerDatabase * );
     void save() const;
@@ -97,7 +102,7 @@ public:
     void setCustomSetting( const QString &key, const QString &value );
     QString customSetting( const QString &key ) const;
     DesignerPixmapCollection *pixmapCollection() const;
-    void breakPoints( QMap<QString, QValueList<uint> > &bps ) const;
+    void breakPoints( QMap<QString, Q3ValueList<uint> > &bps ) const;
     QString breakPointCondition( QObject *o, int line ) const;
     void setBreakPointCondition( QObject *o, int line, const QString &condition );
     void clearAllBreakpoints() const;
@@ -203,13 +208,13 @@ public:
     QWidget *currentWidget() const;
     QWidget *form() const;
     void setCurrentWidget( QWidget * );
-    QPtrList<QAction> actionList() const;
-    QAction *createAction( const QString& text, const QIconSet& icon, const QString& menuText, int accel,
+    Q3PtrList<QAction> actionList() const;
+    QAction *createAction( const QString& text, const QIcon& icon, const QString& menuText, int accel,
 			   QObject* parent, const char* name = 0, bool toggle = FALSE );
     void addAction( QAction * );
     void removeAction( QAction * );
     void preview() const;
-    void addFunction( const QCString &function, const QString& specifier, const QString &access,
+    void addFunction( const Q3CString &function, const QString& specifier, const QString &access,
 		      const QString &type, const QString &language, const QString &returnType );
     void addConnection( QObject *sender, const char *signal, QObject *receiver, const char *slot );
     void setProperty( QObject *o, const char *property, const QVariant &value );
@@ -244,7 +249,7 @@ class DesignerDockImpl: public DesignerDock
 public:
     DesignerDockImpl();
 
-    QDockWindow *dockWindow() const;
+    Q3DockWindow *dockWindow() const;
 };
 
 class DesignerOutputDockImpl: public DesignerOutputDock

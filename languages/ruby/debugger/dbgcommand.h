@@ -23,6 +23,8 @@
 #define DBGCOMMAND_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /**
  * @author John Birch
@@ -34,21 +36,21 @@ namespace RDBDebugger
 class DbgCommand
 {
 public:
-    DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd);
+    DbgCommand(const Q3CString& command, bool isRunCmd, bool isInfoCmd);
     virtual ~DbgCommand() {};
 
-    virtual QCString& cmdToSend()             { sent_ = true;  return cmdBuffer_; }
+    virtual Q3CString& cmdToSend()             { sent_ = true;  return cmdBuffer_; }
     virtual int cmdLength()                   { return cmdBuffer_.length(); }
 
-    QCString rawDbgCommand() const            { return command_; }
+    Q3CString rawDbgCommand() const            { return command_; }
     bool isARunCmd() const                    { return isRunCmd_;}
     bool isAnInfoCmd() const                  { return isInfoCmd_; }
     bool moreToSend() const                   { return !sent_; }
     bool expectReply() const                  { return waitForReply_; }
 
 protected:
-    QCString cmdBuffer_;
-    QCString command_;
+    Q3CString cmdBuffer_;
+    Q3CString command_;
     bool    isRunCmd_;
     bool    isInfoCmd_;
     bool    sent_;

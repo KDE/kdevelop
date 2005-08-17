@@ -4,8 +4,10 @@
 #include <kurl.h>
 
 #include "kdevplugin.h"
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
-class QPopupMenu;
+class Q3PopupMenu;
 class Context;
 
 
@@ -21,7 +23,7 @@ public:
  
 private slots:
 
-  void fillContextMenu(QPopupMenu *popup, const Context *context);
+  void fillContextMenu(Q3PopupMenu *popup, const Context *context);
 
   void openWithService();
   void openWithDialog();

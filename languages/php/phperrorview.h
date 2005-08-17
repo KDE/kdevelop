@@ -13,21 +13,23 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef PHPERRORVIEW_H
 #define PHPERRORVIEW_H
 
 #include <klistview.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QGridLayout>
 #include "phpfile.h"
 
 class PHPSupportPart;
 class QTimer;
 class QTabBar;
-class QWidgetStack;
+class Q3WidgetStack;
 class QGridLayout;
 class QLineEdit;
 class KDialogBase;
@@ -43,62 +45,51 @@ namespace KTextEditor{
     class Document;
 }
 
-
-enum Errors
-{
-   Error = 0,
-   ErrorParse = 1,
-   ErrorNoSuchFunction = 2,
-   Warning = 3,
-   Todo = 4,
-   Fixme = 5,
-};
-
-class PHPErrorView: public QWidget {
-Q_OBJECT
+class PHPErrorView: public QWidget{
+    Q_OBJECT
 public:
-   PHPErrorView( PHPSupportPart* part, QWidget* parent=0, const char* name=0 );
-   virtual ~PHPErrorView();
+    PHPErrorView( PHPSupportPart* part, QWidget* parent=0, const char* name=0 );
+    virtual ~PHPErrorView();
 
-   void removeAllProblems( const QString& filename );
-   void reportProblem( int level,  const QString& fileName, int line, const QString& text);
+    void removeAllProblems( const QString& filename );
+    void reportProblem( const QString& fileName, int line, int level,  const QString& text);
 
 private slots:
-   void slotPartAdded( KParts::Part* );
-   void slotPartRemoved( KParts::Part* );
-   void slotActivePartChanged( KParts::Part* );
-   void slotSelected( QListViewItem* );
-   void slotTabSelected( int tabindex );
-   void slotFilter();
+    void slotPartAdded( KParts::Part* );
+    void slotPartRemoved( KParts::Part* );
+    void slotActivePartChanged( KParts::Part* );
+    void slotSelected( Q3ListViewItem* );
+    void slotTabSelected( int tabindex );
+    void slotFilter();    
 
 private:
-   QString levelToString( int level ) const;
-   int levelToMarkType( int level ) const;
-   void InitListView(KListView* listview);
-   void removeAllItems( QListView* listview, const QString& filename );
-   void filterList(KListView* listview, const QString& level);
-   void updateCurrentWith(QListView* listview, const QString& level, const QString& filename);
-   void initCurrentList();
-
+    QString levelToString( int level ) const;
+    int levelToMarkType( int level ) const;
+    void InitListView(KListView* listview);
+    void removeAllItems( Q3ListView* listview, const QString& filename );
+    void filterList(KListView* listview, const QString& level);  
+    void updateCurrentWith(Q3ListView* listview, const QString& level, const QString& filename);
+    void initCurrentList();
+    
 private:
-   QGridLayout* m_gridLayout;
-   QTabBar* m_tabBar;
-   QWidgetStack* m_widgetStack;
-   KListView* m_currentList;
-   KListView* m_errorList;
-   KListView* m_fixmeList;
-   KListView* m_warningList;
-   KListView* m_todoList;
-   KListView* m_filteredList;
-   QLineEdit* m_filterEdit;
+    QGridLayout* m_gridLayout;
+    QTabBar* m_tabBar;
+    Q3WidgetStack* m_widgetStack;
+    KListView* m_currentList;    
+    KListView* m_errorList;
+    KListView* m_fixmeList;
+    KListView* m_warningList;
+    KListView* m_todoList;
+    KListView* m_filteredList;    
+    QLineEdit* m_filterEdit;
 
-   PHPSupportPart* m_phpSupport;
-   QGuardedPtr<KTextEditor::Document> m_document;
-   KTextEditor::MarkInterface* m_markIface;
-   QTimer* m_timer;
-   QString m_fileName;
-   int m_active;
-   int m_delay;
+    PHPSupportPart* m_phpSupport;
+    QPointer<KTextEditor::Document> m_document;
+    KTextEditor::MarkInterface* m_markIface;
+    QTimer* m_timer;
+    QString m_fileName;
+    int m_active;
+    int m_delay;
 };
 
 #endif

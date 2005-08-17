@@ -15,23 +15,24 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "viewer.h"
 
 #include <qdir.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qfiledialog.h>
-#include <qtextedit.h>
+#include <q3listbox.h>
+#include <q3filedialog.h>
+#include <q3textedit.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qtabwidget.h>
 
 #include <qmakeast.h>
 #include <qmakedriver.h>
-#include <qmakeastvisitor.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace QMake;
 
@@ -41,13 +42,13 @@ Viewer::Viewer(QWidget *parent, const char *name)
     if (QFile::exists(QDir::currentDirPath() + "/" + "qtlist"))
     {
         QFile f(QDir::currentDirPath() + "/" + "qtlist");
-        f.open(IO_ReadOnly);
+        f.open(QIODevice::ReadOnly);
         QTextStream str(&f);
         while (!str.eof())
             files->insertItem(str.readLine());
     }
     ast->setSorting(-1);
-//    parentProject.push((QListViewItem*)0);
+    parentProject.push((Q3ListViewItem*)0);
 }
 
 void Viewer::addAll_clicked()
@@ -63,21 +64,21 @@ void Viewer::addAll_clicked()
 
 void Viewer::choose_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(QDir::currentDirPath(), "*.pro *.pri", this);
+    QString fileName = Q3FileDialog::getOpenFileName(QDir::currentDirPath(), "*.pro *.pri", this);
     if (!fileName.isEmpty())
         files->insertItem(fileName);
 }
 
-void Viewer::files_currentChanged(QListBoxItem* item)
+void Viewer::files_currentChanged(Q3ListBoxItem* item)
 {
     ast->clear();
-
+    
     QFile f(item->text());
-    f.open(IO_ReadOnly);
+    f.open(QIODevice::ReadOnly);
     QTextStream str(&f);
     source->setText(str.read());
     f.close();
-
+    
     int result = QMake::Driver::parseFile(item->text().ascii(), &projectAST);
     if (projectAST && (result == 0))
     {
@@ -97,91 +98,57 @@ void Viewer::tabWidget2_selected(const QString& text)
     }
 }
 
-class ViewerVisitor: public ASTVisitor {
-public:
-    ViewerVisitor(Viewer *v): ASTVisitor()
-    {
-        this->v = v;
-        parentProject.push((QListViewItem*)0);
-    }
-
-    virtual void processProject(ProjectAST *project)
-    {
-        ASTVisitor::processProject(project);
-    }
-
-    virtual void enterRealProject(ProjectAST *project)
-    {
-        QListViewItem *projectIt;
-        if (!parentProject.top())
-        {
-            projectIt = new QListViewItem(v->ast, "Project");
-            projectIt->setOpen(true);
-            parentProject.push(projectIt);
-        }
-
-        ASTVisitor::enterRealProject(project);
-    }
-    virtual void enterScope(ProjectAST *scope)
-    {
-        QListViewItem *projectIt = new QListViewItem(parentProject.top(), scope->scopedID, "scope");
-        parentProject.push(projectIt);
-        ASTVisitor::enterScope(scope);
-    }
-    virtual void leaveScope(ProjectAST *scope)
-    {
-        parentProject.pop();
-    }
-    virtual void enterFunctionScope(ProjectAST *fscope)
-    {
-        QListViewItem *projectIt = new QListViewItem(parentProject.top(),
-            fscope->scopedID + "(" + fscope->args + ")", "function scope");
-        parentProject.push(projectIt);
-        ASTVisitor::enterFunctionScope(fscope);
-    }
-    virtual void leaveFunctionScope(ProjectAST *fscope)
-    {
-        parentProject.pop();
-    }
-    virtual void processAssignment(AssignmentAST *assignment)
-    {
-        QListViewItem *item = new QListViewItem(parentProject.top(),
-                assignment->scopedID, assignment->op, assignment->values.join(""),
-                "assignment");
-        item->setMultiLinesEnabled(true);
-
-        ASTVisitor::processAssignment(assignment);
-    }
-    virtual void processNewLine(NewLineAST *newline)
-    {
-        new QListViewItem(parentProject.top(), "<newline>");
-        ASTVisitor::processNewLine(newline);
-    }
-    virtual void processComment(CommentAST *comment)
-    {
-        new QListViewItem(parentProject.top(), "<comment>");
-        ASTVisitor::processComment(comment);
-    }
-    virtual void processFunctionCall(FunctionCallAST *fcall)
-    {
-        new QListViewItem(parentProject.top(), "<funccall>");
-        ASTVisitor::processFunctionCall(fcall);
-    }
-    virtual void processInclude(IncludeAST *include)
-    {
-        new QListViewItem(parentProject.top(), "<include>", include->projectName);
-        QMake::ASTVisitor::processInclude(include);
-    }
-
-    Viewer *v;
-    QValueStack<QListViewItem *> parentProject;
-};
-
-
-void Viewer::processAST(QMake::ProjectAST *projectAST, QListViewItem *globAfter)
+void Viewer::processAST(QMake::ProjectAST *projectAST, Q3ListViewItem *globAfter)
 {
-    ViewerVisitor visitor(this);
-    visitor.processProject(projectAST);
+    Q3ListViewItem *projectIt;
+    if (!parentProject.top())
+        projectIt = new Q3ListViewItem(ast, "Project");
+    else
+    {
+        if (projectAST->isScope())
+            projectIt = new Q3ListViewItem(parentProject.top(), globAfter, projectAST->scopedID);
+        if (projectAST->isFunctionScope())
+            projectIt = new Q3ListViewItem(parentProject.top(), globAfter, 
+                projectAST->scopedID + "(" + projectAST->args + ")");
+    }
+    projectIt->setOpen(true);
+    
+    Q3ListViewItem *after = 0;
+    for (Q3ValueList<QMake::AST*>::const_iterator it = projectAST->statements.constBegin();
+            it != projectAST->statements.constEnd(); ++it)
+    {
+        AST *ast = *it;
+        if (ast == 0)
+            continue;
+        switch (ast->nodeType()) {
+            case AST::AssignmentAST: {
+                AssignmentAST *assignmentAST = static_cast<QMake::AssignmentAST*>(ast);
+                Q3ListViewItem *item = new Q3ListViewItem(projectIt, after,
+                        assignmentAST->scopedID, assignmentAST->op, assignmentAST->values.join(""));
+                item->setMultiLinesEnabled(true);
+                after = item; }
+                break;
+                
+            case AST::NewLineAST:
+//                 after = new QListViewItem(projectIt, after, "<newline>");
+                break;
+                
+            case AST::CommentAST:
+//                 after = new QListViewItem(projectIt, after, "<comment>");
+                break;
+                
+            case AST::ProjectAST: {
+                ProjectAST *projectAST = static_cast<QMake::ProjectAST*>(ast);
+                parentProject.push(projectIt);
+                processAST(projectAST, after);
+                parentProject.pop(); }
+                break;
+        
+            case AST::FunctionCallAST:
+                after = new Q3ListViewItem(projectIt, after, "<funccall>");
+                break;
+        }
+    }
 }
 
 #include "viewer.moc"

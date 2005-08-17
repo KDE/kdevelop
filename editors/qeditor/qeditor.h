@@ -14,8 +14,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -46,15 +46,20 @@
 #if defined(HAVE_KTEXTEDIT)
 #  include <ktextedit.h>
 #else
-#  include <qtextedit.h>
-#  define KTextEdit QTextEdit
+#  include <q3textedit.h>
+#  define KTextEdit Q3TextEdit
 #endif
 
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3PopupMenu>
+#include <QMouseEvent>
 
 class ParenMatcher;
-class QPopupMenu;
+class Q3PopupMenu;
 class QSourceColorizer;
 class QEditorIndenter;
 class QEditorKey;
@@ -108,8 +113,8 @@ public:
     virtual int level( int ) const;
     virtual void setLevel( int, int );
 
-    virtual void setApplicationMenu( QPopupMenu* menu ) { m_applicationMenu = menu; }
-    virtual QPopupMenu* createPopupMenu( const QPoint& );
+    virtual void setApplicationMenu( Q3PopupMenu* menu ) { m_applicationMenu = menu; }
+    virtual Q3PopupMenu* createPopupMenu( const QPoint& );
     
     virtual void indent();
 
@@ -149,9 +154,9 @@ private:
     int m_currentLine;
     int m_tabStop;
     QString m_electricKeys;
-    QPopupMenu* m_applicationMenu;
+    Q3PopupMenu* m_applicationMenu;
     bool m_recording;
-    QPtrList<QEditorKey> m_keys;
+    Q3PtrList<QEditorKey> m_keys;
 };
 
 #endif

@@ -15,8 +15,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef CODEMODEL_H
 #define CODEMODEL_H
@@ -28,6 +28,8 @@ Code Model - a memory symbol store.
 
 #include <qmap.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <ksharedptr.h>
 
 class CodeModel;
@@ -103,57 +105,57 @@ typedef KSharedPtr<EnumeratorModel> EnumeratorDom;
 The list of code model items.
 This is a type definition: @code typedef QValueList<ItemDom> ItemList; @endcode
 @sa QValueList*/
-typedef QValueList<ItemDom> ItemList;
+typedef Q3ValueList<ItemDom> ItemList;
 /**@class FileList
 The list of code model files.
 This is a type definition: @code typedef QValueList<FileDom> FileList; @endcode
 @sa QValueList*/
-typedef QValueList<FileDom> FileList;
+typedef Q3ValueList<FileDom> FileList;
 /**@class NamespaceList
 The list of code model namespaces.
 This is a type definition: @code typedef QValueList<NamespaceDom> NamespaceList; @endcode
 @sa QValueList*/
-typedef QValueList<NamespaceDom> NamespaceList;
+typedef Q3ValueList<NamespaceDom> NamespaceList;
 /**@class ClassList
 The list of code model classes.
 This is a type definition: @code typedef QValueList<ClassDom> ClassList; @endcode
 @sa QValueList*/
-typedef QValueList<ClassDom> ClassList;
+typedef Q3ValueList<ClassDom> ClassList;
 /**@class FunctionList
 The list of code model functions.
 This is a type definition: @code typedef QValueList<FunctionDom> FunctionList; @endcode
 @sa QValueList*/
-typedef QValueList<FunctionDom> FunctionList;
+typedef Q3ValueList<FunctionDom> FunctionList;
 /**@class FunctionDefinitionList
 The list of code model function definitions.
 This is a type definition: @code typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList; @endcode
 @sa QValueList*/
-typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList;
+typedef Q3ValueList<FunctionDefinitionDom> FunctionDefinitionList;
 /**@class VariableList
 The list of code model variables.
 This is a type definition: @code typedef QValueList<VariableDom> VariableList; @endcode
 @sa QValueList*/
-typedef QValueList<VariableDom> VariableList;
+typedef Q3ValueList<VariableDom> VariableList;
 /**@class ArgumentList
 The list of code model arguments.
 This is a type definition: @code typedef QValueList<ArgumentDom> ArgumentList; @endcode
 @sa QValueList*/
-typedef QValueList<ArgumentDom> ArgumentList;
+typedef Q3ValueList<ArgumentDom> ArgumentList;
 /**@class EnumList
 The list of code model enums.
 This is a type definition: @code typedef QValueList<EnumDom> EnumList; @endcode
 @sa QValueList*/
-typedef QValueList<EnumDom> EnumList;
+typedef Q3ValueList<EnumDom> EnumList;
 /**@class TypeAliasList
 The list of code model type aliases.
 This is a type definition: @code typedef QValueList<TypeAliasDom> TypeAliasList; @endcode
 @sa QValueList*/
-typedef QValueList<TypeAliasDom> TypeAliasList;
+typedef Q3ValueList<TypeAliasDom> TypeAliasList;
 /**@class EnumeratorList
 The list of code model enumerators.
 This is a type definition: @code typedef QValueList<EnumeratorDom> EnumeratorList; @endcode
 @sa QValueList*/
-typedef QValueList<EnumeratorDom> EnumeratorList;
+typedef Q3ValueList<EnumeratorDom> EnumeratorList;
 
 /**Iterates through @p lst and creates sorted list of code model item names.
 Can be used, for example, to get the list of classes in the store:

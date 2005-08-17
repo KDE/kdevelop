@@ -73,7 +73,7 @@ void AddFileDialog::accept()
 		return;
 	}
 
-	QListViewItem *child = target->firstChild();
+	Q3ListViewItem *child = target->firstChild();
 	while (child) {
 		FileItem *item = static_cast<FileItem*>(child);
 		if (name == item->name) {
@@ -105,7 +105,7 @@ void AddFileDialog::accept()
 		}
 
 		QFile f( destpath );
-		if( f.open(IO_WriteOnly) )
+		if( f.open(QIODevice::WriteOnly) )
 		    f.close();
 	}
 

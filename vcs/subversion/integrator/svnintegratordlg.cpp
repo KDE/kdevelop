@@ -17,7 +17,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "svnintegratordlg.h"
 #include <kurl.h>
@@ -53,7 +53,7 @@ void SvnIntegratorDlg::accept()
 
 	if ( importProject->isChecked() ) {
 		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
+		QDataStream s( parms, QIODevice::WriteOnly );
 		int cmd = 5;
 		s << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
 		SimpleJob * job = KIO::special(servURL, parms, true);
@@ -83,7 +83,7 @@ void SvnIntegratorDlg::accept()
 		list << miscURL;
 
 		QByteArray parms;
-		QDataStream s( parms, IO_WriteOnly );
+		QDataStream s( parms, QIODevice::WriteOnly );
 		int cmd = 10; // MKDIR(list)
 		s << cmd << list;
 		SimpleJob *job = KIO::special(servURL, parms, true);
@@ -93,7 +93,7 @@ void SvnIntegratorDlg::accept()
 		NetAccess::synchronousRun(job, 0);
 #endif
 		QByteArray parms2;
-		QDataStream s2( parms2, IO_WriteOnly );
+		QDataStream s2( parms2, QIODevice::WriteOnly );
 		cmd = 5; //IMPORT
 		servURL.setPath(servURL.path()+ "/trunk/");
 		s2 << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
@@ -112,7 +112,7 @@ void SvnIntegratorDlg::accept()
     rmproc->start(KProcess::Block);
         
 	QByteArray parms3;
-	QDataStream s3( parms3, IO_WriteOnly );
+	QDataStream s3( parms3, QIODevice::WriteOnly );
 	int cmd2 = 1; //CHECKOUT
 	int rev = -1;
 	//servURL should be set correctly above

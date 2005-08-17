@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef DESIGNERACTION_H
 #define DESIGNERACTION_H
@@ -30,9 +30,9 @@ public:
             :QAction(parent, name) {}
     DesignerAction ( const QString & menuText, QKeySequence accel, QObject * parent, const char * name = 0 )
             :QAction(menuText, accel, parent, name) {}
-    DesignerAction ( const QIconSet & icon, const QString & menuText, QKeySequence accel, QObject * parent, const char * name = 0 )
+    DesignerAction ( const QIcon & icon, const QString & menuText, QKeySequence accel, QObject * parent, const char * name = 0 )
             :QAction(icon, menuText, accel, parent, name) {}
-    DesignerAction ( const QString & text, const QIconSet & icon, const QString & menuText, QKeySequence accel, QObject * parent, const char * name = 0, bool toggle = FALSE ) 
+    DesignerAction ( const QString & text, const QIcon & icon, const QString & menuText, QKeySequence accel, QObject * parent, const char * name = 0, bool toggle = FALSE ) 
             :QAction(text, icon, menuText, accel, parent, name, toggle) {}
     DesignerAction ( const QString & text, const QString & menuText, QKeySequence accel, QObject * parent, const char * name = 0, bool toggle = FALSE )
             :QAction(text, menuText, accel, parent, name, toggle) {}

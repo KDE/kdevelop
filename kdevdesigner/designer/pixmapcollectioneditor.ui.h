@@ -1,4 +1,7 @@
 #include <klocale.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 /**********************************************************************
 ** Copyright (C) 2001-2002 Trolltech AS.  All rights reserved.
 **
@@ -61,7 +64,7 @@ void PixmapCollectionEditor::addPixmap()
     }
 
     updateView();
-    QIconViewItem *item = viewPixmaps->findItem( lastName );
+    Q3IconViewItem *item = viewPixmaps->findItem( lastName );
     if ( item ) {
 	viewPixmaps->setCurrentItem( item );
 	viewPixmaps->ensureItemVisible( item );
@@ -84,10 +87,10 @@ void PixmapCollectionEditor::updateView()
 
     viewPixmaps->clear();
 
-    QValueList<PixmapCollection::Pixmap> pixmaps = project->pixmapCollection()->pixmaps();
-    for ( QValueList<PixmapCollection::Pixmap>::Iterator it = pixmaps.begin(); it != pixmaps.end(); ++it ) {
+    Q3ValueList<PixmapCollection::Pixmap> pixmaps = project->pixmapCollection()->pixmaps();
+    for ( Q3ValueList<PixmapCollection::Pixmap>::Iterator it = pixmaps.begin(); it != pixmaps.end(); ++it ) {
 	// #### might need to scale down the pixmap
-	QIconViewItem *item = new QIconViewItem( viewPixmaps, (*it).name, scaledPixmap( (*it).pix ) );
+	Q3IconViewItem *item = new Q3IconViewItem( viewPixmaps, (*it).name, scaledPixmap( (*it).pix ) );
 	//item->setRenameEnabled( TRUE ); // this will be a bit harder to implement
 	item->setDragEnabled( FALSE );
 	item->setDropEnabled( FALSE );
@@ -96,7 +99,7 @@ void PixmapCollectionEditor::updateView()
     currentChanged( viewPixmaps->firstItem() );
 }
 
-void PixmapCollectionEditor::currentChanged( QIconViewItem * i )
+void PixmapCollectionEditor::currentChanged( Q3IconViewItem * i )
 {
     buttonOk->setEnabled( !!i );
 }
@@ -110,8 +113,8 @@ void PixmapCollectionEditor::setChooserMode( bool c )
 	buttonCancel->show();
 	buttonOk->setEnabled( FALSE );
 	buttonOk->setDefault( TRUE );
-	connect( viewPixmaps, SIGNAL( doubleClicked( QIconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
-	connect( viewPixmaps, SIGNAL( returnPressed( QIconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
+	connect( viewPixmaps, SIGNAL( doubleClicked( Q3IconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
+	connect( viewPixmaps, SIGNAL( returnPressed( Q3IconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
 	setCaption( i18n( "Choose Image" ) );
     } else {
 	buttonClose->show();
@@ -124,7 +127,7 @@ void PixmapCollectionEditor::setChooserMode( bool c )
 
 void PixmapCollectionEditor::setCurrentItem( const QString & name )
 {
-    QIconViewItem *i = viewPixmaps->findItem( name );
+    Q3IconViewItem *i = viewPixmaps->findItem( name );
     if ( i ) {
 	viewPixmaps->setCurrentItem( i );
 	currentChanged( i );

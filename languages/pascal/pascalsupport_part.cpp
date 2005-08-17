@@ -11,7 +11,10 @@
 
 #include <qdir.h>
 #include <qtimer.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <Q3CString>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -62,15 +65,15 @@ PascalSupportPart::PascalSupportPart(QObject *parent, const char *name, const QS
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const KURL&)),
              this, SLOT(savedFile(const KURL&)) );
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+             this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              this, SLOT(configWidget(KDialogBase*)) );
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
              SLOT( projectConfigWidget( KDialogBase* ) ) );
 
     mainWindow()->embedOutputView( d->problemReporter, i18n("Problems"), i18n("problem reporter") );
-    QWhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+    Q3WhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
         "It displays errors reported by a language parser."));
 }
 
@@ -120,7 +123,7 @@ void PascalSupportPart::projectConfigWidget(KDialogBase *dlg)
     return;
 }
 
-void PascalSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
+void PascalSupportPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
     Q_UNUSED( popup );
     Q_UNUSED( context );
@@ -201,7 +204,7 @@ void PascalSupportPart::parse( const QString & fileName )
     kdDebug(9013) << "PascalSupportPart::parse() -- " << fileName << endl;
 
     std::ifstream stream( QFile::encodeName( fileName ).data() );
-    QCString _fn = fileName.utf8();
+    Q3CString _fn = fileName.utf8();
     std::string fn( _fn.data() );
 
     PascalLexer lexer( stream );

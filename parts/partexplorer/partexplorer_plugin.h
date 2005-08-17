@@ -12,7 +12,7 @@
 #ifndef _PARTEXPLORERPLUGIN_H_
 #define _PARTEXPLORERPLUGIN_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include "kdevplugin.h"
 
@@ -42,7 +42,7 @@ private:
     /**
     * The dialog for user interaction, so the plugin is usable too ;)
     */
-    QGuardedPtr<PartExplorerForm> m_widget;
+    QPointer<PartExplorerForm> m_widget;
 };
 
 #endif // _PARTEXPLORERPLUGIN_H_

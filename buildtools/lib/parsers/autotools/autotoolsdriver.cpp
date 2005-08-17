@@ -18,19 +18,19 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "autotoolsdriver.h"
 #include "autotoolsast.h"
 
 #include <stdio.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <kio/netaccess.h>
 
 extern FILE *yyin, *yyout;
 extern int yyparse();
 //extern int yydebug;
-extern QValueStack<AutoTools::ProjectAST *> projects;
+extern Q3ValueStack<AutoTools::ProjectAST *> projects;
 
 namespace AutoTools {
 

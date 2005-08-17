@@ -15,12 +15,15 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "propertylist.h"
 
 #include "property.h"
 #include "multiproperty.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 namespace PropertyLib{
 
@@ -146,7 +149,7 @@ void PropertyList::removeProperty(const QString &name)
     }
 }
 
-const QValueList<QPair<QString, QValueList<QString> > >& PropertyList::propertiesOfGroup() const
+const Q3ValueList<QPair<QString, Q3ValueList<QString> > >& PropertyList::propertiesOfGroup() const
 {
     return m_propertiesOfGroup;
 }
@@ -165,8 +168,8 @@ void PropertyList::addToGroup(const QString &group, MultiProperty *property)
     if (m_groupOfProperty.contains(property) && (m_groupOfProperty[property] == group))
         return;
 
-    QPair<QString, QValueList<QString> > *groupPair = 0;
-    for(QValueList<QPair<QString, QValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
+    QPair<QString, Q3ValueList<QString> > *groupPair = 0;
+    for(Q3ValueList<QPair<QString, Q3ValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
         it != m_propertiesOfGroup.end(); ++it)
     {
         if ((*it).first == group)
@@ -177,7 +180,7 @@ void PropertyList::addToGroup(const QString &group, MultiProperty *property)
     }
     if (groupPair == 0)
     {
-        groupPair = new QPair<QString, QValueList<QString> >();
+        groupPair = new QPair<QString, Q3ValueList<QString> >();
         groupPair->first = group;
         groupPair->second.append(property->name());
         m_propertiesOfGroup.append(*groupPair);
@@ -196,7 +199,7 @@ void PropertyList::removeFromGroup(MultiProperty *property)
     QString group = m_groupOfProperty[property];
 //    qWarning("removeFromGroup group=%s", group.ascii());
 
-    for(QValueList<QPair<QString, QValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
+    for(Q3ValueList<QPair<QString, Q3ValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
         it != m_propertiesOfGroup.end(); ++it)
     {
 //        qWarning("removeFromGroup checking %s", (*it).first.ascii());
@@ -224,11 +227,11 @@ bool PropertyList::contains( const QString & name )
     return false;
 }
 
-QPtrList<Property> PropertyList::properties(const QString &name)
+Q3PtrList<Property> PropertyList::properties(const QString &name)
 {
     if (m_list.contains(name))
         return m_list[name]->list;
-    return QPtrList<Property>();
+    return Q3PtrList<Property>();
 }
 
 PropertyList::Iterator PropertyList::begin()
@@ -341,7 +344,7 @@ void PropertyBuffer::intersectedValueChanged(Property *property)
     if (mp == *m_list[propertyName])
     {
         Property *prop;
-        QPtrList<Property> props = properties(propertyName);
+        Q3PtrList<Property> props = properties(propertyName);
         for (prop = props.first(); prop; prop = props.next())
             emit propertyValueChanged(prop);
     }

@@ -1,11 +1,11 @@
 #include <qapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
-#include <qvbox.h>
-#include <qtable.h>
+#include <q3popupmenu.h>
+#include <q3vbox.h>
+#include <q3table.h>
 #include <qtextstream.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qdir.h>
 
 
@@ -51,7 +51,7 @@ AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringL
 
   setXMLFile("kdevantproject.rc");
 
-  m_buildProjectAction = new KAction(i18n("&Build Project"), "make_kdevelop", Key_F8,
+  m_buildProjectAction = new KAction(i18n("&Build Project"), "make_kdevelop", Qt::Key_F8,
 		                     this, SLOT(slotBuild()),
 				     actionCollection(), "build_build" );
   m_buildProjectAction->setToolTip(i18n("Build project"));
@@ -66,7 +66,7 @@ AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringL
 
   connect(m_targetMenu, SIGNAL(activated(int)), this, SLOT(slotTargetMenuActivated(int)));
   connect(core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)));
-  connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+  connect(core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)), this, SLOT(contextMenu(Q3PopupMenu *, const Context *)));
 
   m_antOptionsWidget = 0;
 }
@@ -97,7 +97,7 @@ void AntProjectPart::openProject(const QString &dirName, const QString &projectN
   fillMenu();
 
   QFile f(dirName + "/" + projectName + ".filelist");
-  if (f.open(IO_ReadOnly)) 
+  if (f.open(QIODevice::ReadOnly)) 
   {
     QTextStream stream(&f);
     while (!stream.atEnd()) 
@@ -118,7 +118,7 @@ void AntProjectPart::populateProject()
 {
   QApplication::setOverrideCursor(Qt::waitCursor);
 
-  QValueStack<QString> s;
+  Q3ValueStack<QString> s;
   int prefixlen = m_projectDirectory.length()+1;
   s.push(m_projectDirectory);
 
@@ -128,7 +128,7 @@ void AntProjectPart::populateProject()
     dir.setPath(s.pop());
     kdDebug() << "Examining: " << dir.path() << endl;
     const QFileInfoList *dirEntries = dir.entryInfoList();
-    QPtrListIterator<QFileInfo> it(*dirEntries);
+    Q3PtrListIterator<QFileInfo> it(*dirEntries);
     for (; it.current(); ++it) 
     {
       QString fileName = it.current()->fileName();
@@ -164,7 +164,7 @@ void AntProjectPart::closeProject()
   m_antOptions = AntOptions();
   
   QFile f(m_projectDirectory + "/" + m_projectName + ".filelist");
-  if (!f.open(IO_WriteOnly))
+  if (!f.open(QIODevice::WriteOnly))
     return;
 
   QTextStream stream(&f);
@@ -367,7 +367,7 @@ void AntProjectPart::parseBuildXML()
 
   // open build file
   QFile bf(m_projectDirectory + "/" + m_antOptions.m_buildXML);
-  if (!bf.open(IO_ReadOnly))
+  if (!bf.open(QIODevice::ReadOnly))
     return;
 
   // parse build file
@@ -463,7 +463,7 @@ void AntProjectPart::ant(const QString &target)
 
 void AntProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Ant Options"));
+  Q3VBox *vbox = dlg->addVBoxPage(i18n("Ant Options"));
   m_antOptionsWidget = new AntOptionsWidget(vbox);
 
   m_antOptionsWidget->BuildXML->setURL(m_antOptions.m_buildXML);
@@ -488,10 +488,10 @@ void AntProjectPart::projectConfigWidget(KDialogBase *dlg)
   int i=0;
   for (it = m_antOptions.m_properties.begin(); it != m_antOptions.m_properties.end(); ++it)
   {
-    QCheckTableItem *citem = new QCheckTableItem(m_antOptionsWidget->Properties, it.key());
+    Q3CheckTableItem *citem = new Q3CheckTableItem(m_antOptionsWidget->Properties, it.key());
     citem->setChecked(m_antOptions.m_defineProperties[it.key()]);
     m_antOptionsWidget->Properties->setItem(i,0, citem);
-    QTableItem *item = new QTableItem(m_antOptionsWidget->Properties, QTableItem::WhenCurrent, it.data());
+    Q3TableItem *item = new Q3TableItem(m_antOptionsWidget->Properties, Q3TableItem::WhenCurrent, it.data());
     m_antOptionsWidget->Properties->setItem(i,1, item);
     ++i;
   }
@@ -531,7 +531,7 @@ void AntProjectPart::optionsAccepted()
     m_antOptions.m_properties.replace(key, m_antOptionsWidget->Properties->text(i,1));
     kdDebug() << "PROP: " << key << "  = " << m_antOptionsWidget->Properties->text(i,1);
 
-    QCheckTableItem *item =(QCheckTableItem*) m_antOptionsWidget->Properties->item(i,0);
+    Q3CheckTableItem *item =(Q3CheckTableItem*) m_antOptionsWidget->Properties->item(i,0);
     m_antOptions.m_defineProperties.replace(key, item->isChecked());
   }
 
@@ -542,7 +542,7 @@ void AntProjectPart::optionsAccepted()
 }
 
 
-void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
+void AntProjectPart::contextMenu(Q3PopupMenu *popup, const Context *context)
 {
   if (!context->hasType( Context::FileContext ))
     return;

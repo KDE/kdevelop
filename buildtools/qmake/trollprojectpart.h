@@ -16,8 +16,8 @@
 #ifndef _TROLLPROJECTPART_H_
 #define _TROLLPROJECTPART_H_
 
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <q3dict.h>
+#include <qpointer.h>
 #include <qmap.h>
 #include <qdatetime.h>
 
@@ -78,7 +78,7 @@ private:
     bool isValidQtDir( const QString& path ) const;
     QStringList availableQtDirList() const;
 
-    QGuardedPtr<TrollProjectWidget> m_widget;
+    QPointer<TrollProjectWidget> m_widget;
     QString m_qmakeHeader;
     QString m_projectName;
     bool m_tmakeProject;

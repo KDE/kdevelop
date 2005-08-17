@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "problemreporter.h"
@@ -25,6 +25,8 @@
 #include "backgroundparser.h"
 
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kdeversion.h>
 #include <kparts/part.h>
@@ -49,22 +51,22 @@
 
 #include <qtimer.h>
 #include <qregexp.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
 #include <kdialogbase.h>
 
 
-class ProblemItem: public QListViewItem{
+class ProblemItem: public Q3ListViewItem{
 public:
-	ProblemItem( QListView* parent, const QString& level, const QString& problem,
+	ProblemItem( Q3ListView* parent, const QString& level, const QString& problem,
 				 const QString& file, const QString& line, const QString& column  )
-		: QListViewItem( parent, level, problem, file, line, column ) {}
+		: Q3ListViewItem( parent, level, problem, file, line, column ) {}
 
-	ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
+	ProblemItem( Q3ListViewItem* parent, const QString& level, const QString& problem,
 				 const QString& file, const QString& line, const QString& column  )
-		: QListViewItem( parent, level, problem, file, line, column ) {}
+		: Q3ListViewItem( parent, level, problem, file, line, column ) {}
 
-	int compare( QListViewItem* item, int column, bool ascending ) const {
+	int compare( Q3ListViewItem* item, int column, bool ascending ) const {
 		if( column == 3 || column == 4 ){
 			int a = text( column ).toInt();
 			int b = item->text( column ).toInt();
@@ -72,20 +74,20 @@ public:
 				return 0;
 			return( a > b ? -1 : 1 );
 		}
-		return QListViewItem::compare( item, column, ascending );
+		return Q3ListViewItem::compare( item, column, ascending );
 	}
 
 };
 
 ProblemReporter::ProblemReporter( AdaSupportPart* part, QWidget* parent, const char* name )
-    : QListView( parent, name ),
+    : Q3ListView( parent, name ),
       m_adaSupport( part ),
       m_editor( 0 ),
       m_document( 0 ),
 	  m_markIface( 0 ),
       m_bgParser( 0 )
 {
-    QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows errors reported by a language parser."));
+    Q3WhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows errors reported by a language parser."));
 
     addColumn( i18n("Level") );
     addColumn( i18n("Problem") );
@@ -105,10 +107,10 @@ ProblemReporter::ProblemReporter( AdaSupportPart* part, QWidget* parent, const c
 
     connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
 
-    connect( this, SIGNAL(doubleClicked(QListViewItem*)),
-             this, SLOT(slotSelected(QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(slotSelected(QListViewItem*)) );
+    connect( this, SIGNAL(doubleClicked(Q3ListViewItem*)),
+             this, SLOT(slotSelected(Q3ListViewItem*)) );
+    connect( this, SIGNAL(returnPressed(Q3ListViewItem*)),
+             this, SLOT(slotSelected(Q3ListViewItem*)) );
 
     configure();
 }
@@ -170,9 +172,9 @@ void ProblemReporter::reparse()
         m_bgParser = 0;
     }
 
-    QListViewItem* current = firstChild();
+    Q3ListViewItem* current = firstChild();
     while( current ){
-        QListViewItem* i = current;
+        Q3ListViewItem* i = current;
         current = current->nextSibling();
 
         if( i->text(2) == m_filename )
@@ -180,8 +182,8 @@ void ProblemReporter::reparse()
     }
 
 	if( m_markIface ){
-		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
-		QPtrListIterator<KTextEditor::Mark> it( marks );
+		Q3PtrList<KTextEditor::Mark> marks = m_markIface->marks();
+		Q3PtrListIterator<KTextEditor::Mark> it( marks );
 		while( it.current() ){
 			m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
 			++it;
@@ -197,7 +199,7 @@ void ProblemReporter::reparse()
  /**/
 }
 
-void ProblemReporter::slotSelected( QListViewItem* item )
+void ProblemReporter::slotSelected( Q3ListViewItem* item )
 {
     KURL url( item->text(2) );
     int line = item->text( 3 ).toInt();
@@ -237,7 +239,7 @@ void ProblemReporter::reportMessage( QString message,
                                      QString filename,
                                      int line, int column )
 {
-    new QListViewItem( this,
+    new Q3ListViewItem( this,
                        "message",
                        message.replace( QRegExp("\n"), "" ),
                        filename,
@@ -257,7 +259,7 @@ void ProblemReporter::configure()
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
     kdDebug() << "ProblemReporter::configWidget()" << endl;
-    QVBox *vbox = dlg->addVBoxPage(i18n("Ada Parsing"), i18n("Ada Parsing"),  BarIcon( "source", KIcon::SizeMedium ));
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Ada Parsing"), i18n("Ada Parsing"),  BarIcon( "source", KIcon::SizeMedium ));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));

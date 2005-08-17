@@ -15,7 +15,7 @@
 #include <kdebug.h>
 #include <dcopref.h>
 
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 #include <qregexp.h>
 
 #include "editorsdialog.h"
@@ -67,16 +67,11 @@ void EditorsDialog::slotJobExited( bool normalExit, int exitStatus )
 
     static QRegExp re("([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s"
                         "([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s(.*)");
-    static QRegExp subre("([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s"
-                        "([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s([^\\s]+)\\s(.*)");
-	QString lastfilename;
 
     QStringList lines = QStringList::split( "\n", m_output );
     int found = 0;
     for (size_t i=0; i<lines.count(); ++i) {
         QString s = lines[i].simplifyWhiteSpace();
-    	kdDebug(9006) << "editors:---" << s << "---" << endl;
-    	kdDebug(9006) << "       : lastfile was " << lastfilename << endl;
 
         if (re.exactMatch(s)) {
             QString file = re.cap( 1 );
@@ -88,22 +83,8 @@ void EditorsDialog::slotJobExited( bool normalExit, int exitStatus )
             m_textBrowser->append( "<b>"+i18n("Date")+":</b> "+date );
             m_textBrowser->append( "<hr>" );
             found++;
-
-            lastfilename = file;
-        } else {
-	        if (subre.exactMatch(s)) {
-				QString file = lastfilename;
-				QString locker = subre.cap( 1 );
-				QString date = subre.cap(4)+" "+subre.cap(3)+" "+subre.cap(6)+" "+subre.cap(5);
-				
-				m_textBrowser->append( "<b>"+i18n("File")+": <code>"+file+"</code></b>" );
-				m_textBrowser->append( "<b>"+i18n("User")+":</b> "+locker );
-				m_textBrowser->append( "<b>"+i18n("Date")+":</b> "+date );
-				m_textBrowser->append( "<hr>" );
-				found++;
- 			}
-    	}
-	}
+        }
+    }
 
     if (!found)
         m_textBrowser->append(i18n("No files from your query are marked as being edited."));

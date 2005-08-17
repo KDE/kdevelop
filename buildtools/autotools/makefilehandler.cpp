@@ -17,7 +17,7 @@
 #include <qmap.h>
 #include <qregexp.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdebug.h>
 
@@ -26,7 +26,7 @@
 
 #include "makefilehandler.h"
 
-typedef QValueList<AutoTools::AST*> ASTList;
+typedef Q3ValueList<AutoTools::AST*> ASTList;
 
 class MakefileHandler::Private
 {
@@ -81,8 +81,8 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
 
     if ( recursive && ast && ast->hasChildren() )
     {
-        QValueList<AutoTools::AST*> astChildList = ast->children();
-        QValueList<AutoTools::AST*>::iterator it(astChildList.begin()), clEnd(astChildList.end());
+        Q3ValueList<AutoTools::AST*> astChildList = ast->children();
+        Q3ValueList<AutoTools::AST*>::iterator it(astChildList.begin()), clEnd(astChildList.end());
         for ( ; it != clEnd; ++it )
         {
             if ( (*it)->nodeType() == AutoTools::AST::AssignmentAST )

@@ -22,6 +22,8 @@
 #include "dbgcommand.h"
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -30,7 +32,7 @@ namespace RDBDebugger
 {
 
 
-DbgCommand::DbgCommand(const QCString& command, bool isRunCmd, bool isInfoCmd) :
+DbgCommand::DbgCommand(const Q3CString& command, bool isRunCmd, bool isInfoCmd) :
   command_(command),
   isRunCmd_(isRunCmd),
   isInfoCmd_(isInfoCmd),

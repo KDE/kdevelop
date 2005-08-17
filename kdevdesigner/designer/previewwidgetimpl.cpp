@@ -24,7 +24,10 @@
 **
 **********************************************************************/
 
-#include "qobjectlist.h"
+#include "qobject.h"
+//Added by qt3to4:
+#include <QEvent>
+#include <QCloseEvent>
 #include "previewwidgetimpl.h"
 
 PreviewWidget::PreviewWidget( QWidget *parent, const char *name )

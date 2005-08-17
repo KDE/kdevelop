@@ -14,14 +14,16 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
 
 #include "cs_colorizer.h"
 #include "qeditor_part.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "paragdata.h"
 
 #include <qfont.h>
@@ -172,8 +174,8 @@ int CSharpColorizer::computeLevel( QTextParagraph* parag, int startLevel )
 
     data->setBlockStart( false );
 
-    QValueList<Symbol> symbols = data->symbolList();
-    QValueList<Symbol>::Iterator it = symbols.begin();
+    Q3ValueList<Symbol> symbols = data->symbolList();
+    Q3ValueList<Symbol>::Iterator it = symbols.begin();
     while( it != symbols.end() ){
         Symbol sym = *it++;
         if( sym.ch() == '{' ){

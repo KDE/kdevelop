@@ -33,18 +33,26 @@
 #include "kmdichildview.moc"
 
 #include <qdatetime.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QFocusEvent>
+#include <QCloseEvent>
+#include <QChildEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QResizeEvent>
 
 #include "kmdimainfrm.h"
 #include "kmdichildfrm.h"
 #include "kmdidefines.h"
 #include <kdebug.h>
 #include <klocale.h>
-#include <qiconset.h>
+#include <qicon.h>
 
 //============ KMdiChildView ============//
 
-KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, const char* name, WFlags f)
+KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, const char* name, Qt::WFlags f)
 : QWidget(parentWidget, name, f)
   ,m_focusedChildWidget(0L)
   ,m_firstFocusableChildWidget(0L)
@@ -65,7 +73,7 @@ KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, con
    }
    m_sTabCaption = m_szCaption;
 
-   setFocusPolicy(ClickFocus);
+   setFocusPolicy(Qt::ClickFocus);
 
    installEventFilter(this);
 
@@ -76,7 +84,7 @@ KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, con
 
 //============ KMdiChildView ============//
 
-KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
+KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, Qt::WFlags f)
 : QWidget(parentWidget, name, f)
   ,m_focusedChildWidget(0L)
   ,m_firstFocusableChildWidget(0L)
@@ -91,7 +99,7 @@ KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
    m_szCaption = i18n("Unnamed");
    m_sTabCaption = m_szCaption;
 
-   setFocusPolicy(ClickFocus);
+   setFocusPolicy(Qt::ClickFocus);
 
    installEventFilter(this);
 
@@ -366,7 +374,7 @@ void KMdiChildView::youAreDetached()
 
    setTabCaption(m_sTabCaption);
    if(myIconPtr())setIcon(*(myIconPtr()));
-   setFocusPolicy(QWidget::StrongFocus);
+   setFocusPolicy(Qt::StrongFocus);
 
    emit isDetachedNow();
 }
@@ -530,9 +538,9 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
       if(ke->key() == Qt::Key_Tab) {
          //qDebug("ChildView %i::eventFilter - TAB from %s (%s)", this, obj->name(), obj->className());
          QWidget* w = (QWidget*) obj;
-         if((w->focusPolicy() == QWidget::StrongFocus) ||
-            (w->focusPolicy() == QWidget::TabFocus   ) ||
-            (w->focusPolicy() == QWidget::WheelFocus ))
+         if((w->focusPolicy() == Qt::StrongFocus) ||
+            (w->focusPolicy() == Qt::TabFocus   ) ||
+            (w->focusPolicy() == Qt::WheelFocus ))
          {
             //qDebug("  accept TAB as setFocus change");
             if(m_lastFocusableChildWidget != 0) {
@@ -577,9 +585,9 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
             QWidget* widg = (QWidget*)o;
             ++it;
             widg->removeEventFilter(this);
-            if((widg->focusPolicy() == QWidget::StrongFocus) ||
-               (widg->focusPolicy() == QWidget::TabFocus   ) ||
-               (widg->focusPolicy() == QWidget::WheelFocus ))
+            if((widg->focusPolicy() == Qt::StrongFocus) ||
+               (widg->focusPolicy() == Qt::TabFocus   ) ||
+               (widg->focusPolicy() == Qt::WheelFocus ))
             {
                if(m_firstFocusableChildWidget == widg) {
                   m_firstFocusableChildWidget = 0L;   // reset first widget
@@ -592,7 +600,7 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
          delete list;                        // delete the list, not the objects
       }
    }
-   else if (e->type() == QEvent::ChildInserted) {
+   else if (e->type() == QEvent::ChildAdded) {
       // if we got a new child and we are attached to the MDI system we
       // install ourself as event filter for the new child and its children
       // (as we did when we were added to the MDI system).
@@ -611,9 +619,9 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
             ++it;
             widg->installEventFilter(this);
             connect(widg, SIGNAL(destroyed()), this, SLOT(slot_childDestroyed()));
-            if((widg->focusPolicy() == QWidget::StrongFocus) ||
-               (widg->focusPolicy() == QWidget::TabFocus   ) ||
-               (widg->focusPolicy() == QWidget::WheelFocus ))
+            if((widg->focusPolicy() == Qt::StrongFocus) ||
+               (widg->focusPolicy() == Qt::TabFocus   ) ||
+               (widg->focusPolicy() == Qt::WheelFocus ))
             {
                if(m_firstFocusableChildWidget == 0) {
                   m_firstFocusableChildWidget = widg;  // first widge
@@ -627,14 +635,14 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
    }
    else
    {
-       if (e->type()==QEvent::IconChange) {
+       if (e->type()==QEvent::WindowIconChange) {
 //            qDebug("KMDiChildView:: QEvent:IconChange intercepted\n");
           if  (obj==this)
              iconUpdated(this,icon()?(*icon()):QPixmap());
           else if (obj==m_trackChanges)
              setIcon(m_trackChanges->icon()?(*(m_trackChanges->icon())):QPixmap());
        }
-       if (e->type()==QEvent::CaptionChange) {
+       if (e->type()==QEvent::WindowTitleChange) {
           if (obj==this)
              captionUpdated(this,caption());
        }

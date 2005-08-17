@@ -28,21 +28,23 @@
 #define MULTILINEEDITORIMPL_H
 
 #include <qaction.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 #include <private/qrichtext_p.h>
 #include "multilineeditor.h"
 
 class FormWindow;
-class QToolBar;
+class Q3ToolBar;
 class QTextDocument;
 
-class TextEdit : public QTextEdit
+class TextEdit : public Q3TextEdit
 {
     Q_OBJECT
 
 public:
     TextEdit( QWidget *parent = 0, const char *name = 0 );
-    QTextDocument *document() const { return QTextEdit::document(); }
+    QTextDocument *document() const { return Q3TextEdit::document(); }
     QTextParagraph *paragraph();
 
 };
@@ -54,7 +56,7 @@ class ToolBarItem : public QAction
 public:
     ToolBarItem( QWidget *parent, QWidget *toolBar,
                  const QString &label, const QString &tagstr,
-		 const QIconSet &icon, const QKeySequence &key = 0 );
+		 const QIcon &icon, const QKeySequence &key = 0 );
     ~ToolBarItem();
 signals:
     void clicked( const QString &t );
@@ -92,11 +94,11 @@ protected slots:
 private:
     QString getStaticText();
     TextEdit *textEdit;
-    QTextEdit *mlined;
+    Q3TextEdit *mlined;
     FormWindow *formwindow;
-    QToolBar *basicToolBar;
-    QToolBar *fontToolBar;
-    QToolBar *optionsToolBar;
+    Q3ToolBar *basicToolBar;
+    Q3ToolBar *fontToolBar;
+    Q3ToolBar *optionsToolBar;
     QAction *wrapAction;
     int res;
     QString staticText;

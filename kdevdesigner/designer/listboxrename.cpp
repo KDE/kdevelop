@@ -24,21 +24,25 @@
 **
 **********************************************************************/
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlineedit.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 #include "listboxrename.h"
 
-class EditableListBoxItem : public QListBoxItem
+class EditableListBoxItem : public Q3ListBoxItem
 {
 public:
     void setText( const QString & text )
     {
-	QListBoxItem::setText( text );
+	Q3ListBoxItem::setText( text );
     }
 };
 
-ListBoxRename::ListBoxRename( QListBox * eventSource, const char * name )
+ListBoxRename::ListBoxRename( Q3ListBox * eventSource, const char * name )
     : QObject( eventSource, name ),
       clickedItem( 0 ), activity( FALSE )
 {

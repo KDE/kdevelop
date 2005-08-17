@@ -13,15 +13,17 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef QEDITLISTBOX_H
 #define QEDITLISTBOX_H
 
-#include <qgroupbox.h>
-#include <qlistbox.h>
+#include <q3groupbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3StrList>
 
 class QLineEdit;
 class QComboBox;
@@ -42,7 +44,7 @@ class QPushButton;
 
 class QEditListBoxPrivate;
 
-class QEditListBox : public QGroupBox
+class QEditListBox : public Q3GroupBox
 {
    Q_OBJECT
 
@@ -134,7 +136,7 @@ public:
       /**
        * Return a pointer to the embedded QListBox.
        */
-      QListBox* listBox() const     { return m_listBox; }
+      Q3ListBox* listBox() const     { return m_listBox; }
       /**
        * Return a pointer to the embedded QLineEdit.
        */
@@ -167,11 +169,11 @@ public:
       /**
        * See QListBox::insertStringList()
        */
-      void insertStrList(const QStrList* list, int index=-1);
+      void insertStrList(const Q3StrList* list, int index=-1);
       /**
        * See QListBox::insertStrList()
        */
-      void insertStrList(const QStrList& list, int index=-1);
+      void insertStrList(const Q3StrList& list, int index=-1);
       /**
        * See QListBox::insertStrList()
        */
@@ -236,7 +238,7 @@ public:
       void typedSomething(const QString& text);
 
    private:
-      QListBox *m_listBox;
+      Q3ListBox *m_listBox;
       QPushButton *servUpButton, *servDownButton;
       QPushButton *servNewButton, *servRemoveButton;
       QLineEdit *m_lineEdit;

@@ -12,8 +12,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 
@@ -26,7 +26,9 @@
 #include <kdevelop/kdevlanguagesupport.h>
 #include <kdialogbase.h>
 #include <qstringlist.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 namespace KJSEmbed
 {
@@ -34,7 +36,7 @@ class KJSEmbedPart;
 class KJSConsoleWidget;
 };
 
-class QPopupMenu;
+class Q3PopupMenu;
 class KAction;
 class KJSProblems;
 class JSCodeCompletion;
@@ -63,7 +65,7 @@ class kjsSupportPart : public KDevLanguageSupport
 		void removedFilesFromProject(const QStringList &fileList);
 		void parse();
 		void slotActivePartChanged(KParts::Part *part);
-		void contextMenu(QPopupMenu *popupMenu, const Context *context);
+		void contextMenu(Q3PopupMenu *popupMenu, const Context *context);
 		void implementSlots();
 	private:
 		void parse(const QString &fileName);
@@ -75,7 +77,7 @@ class kjsSupportPart : public KDevLanguageSupport
 		KAction *m_build;
 		KJSEmbed::KJSEmbedPart *m_js;
 		KJSProblems *m_problemReporter;
-		QDict<typeProperty> m_typeMap;
+		Q3Dict<typeProperty> m_typeMap;
 		JSCodeCompletion *m_cc;
 		
 		QString m_selectedUI;

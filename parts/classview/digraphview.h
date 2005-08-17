@@ -12,15 +12,18 @@
 #ifndef _DIGRAPHVIEW_H_
 #define _DIGRAPHVIEW_H_
 
-#include <qptrlist.h>
-#include <qscrollview.h>
+#include <q3ptrlist.h>
+#include <q3scrollview.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3MemArray>
 
 class DigraphNode;
 class DigraphEdge;
 
 
-class DigraphView : public QScrollView
+class DigraphView : public Q3ScrollView
 {
     Q_OBJECT
     
@@ -50,15 +53,15 @@ private:
     void addRenderedNode(const QString &name,
                          double x, double y, double w, double h);
     void addRenderedEdge(const QString &name1, const QString &name2,
-                         QMemArray<double> coords);
+                         Q3MemArray<double> coords);
     static QStringList splitLine(QString str);
     void parseDotResults(const QStringList &list);
     
     double xscale, yscale;
     int width, height;
     QStringList inputs;
-    QPtrList<DigraphNode> nodes;
-    QPtrList<DigraphEdge> edges;
+    Q3PtrList<DigraphNode> nodes;
+    Q3PtrList<DigraphEdge> edges;
     DigraphNode *selNode;
 };
 

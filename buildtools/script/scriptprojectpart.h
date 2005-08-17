@@ -12,12 +12,12 @@
 #ifndef _SCRIPTPROJECTPART_H_
 #define _SCRIPTPROJECTPART_H_
 
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <q3dict.h>
+#include <qpointer.h>
 
 #include "kdevbuildtool.h"
 
-class QListViewItem;
+class Q3ListViewItem;
 class QStringList;
 class KDialogBase;
 class ScriptProjectWidget;

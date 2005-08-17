@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "docconfiglistview.h"
 
@@ -32,23 +32,23 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
     addColumn(i18n("Search"));
     addColumn(i18n("Title"));
 //    addColumn(i18n("URL"));
-    setColumnWidthMode(0, QListView::Maximum);
-    setColumnWidthMode(1, QListView::Maximum);
-    setColumnWidthMode(2, QListView::Maximum);
-    setColumnWidthMode(3, QListView::Maximum);
+    setColumnWidthMode(0, Q3ListView::Maximum);
+    setColumnWidthMode(1, Q3ListView::Maximum);
+    setColumnWidthMode(2, Q3ListView::Maximum);
+    setColumnWidthMode(3, Q3ListView::Maximum);
 //    setColumnWidthMode(4, QListView::Maximum);
     setAllColumnsShowFocus(true);
-    setResizeMode( QListView::LastColumn );
+    setResizeMode( Q3ListView::LastColumn );
 
-    connect(this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),
-        this, SLOT(clickedItem(QListViewItem*, const QPoint&, int )));
+    connect(this, SIGNAL(clicked(Q3ListViewItem*, const QPoint&, int)),
+        this, SLOT(clickedItem(Q3ListViewItem*, const QPoint&, int )));
 }
 
 DocConfigListView::~DocConfigListView()
 {
 }
 
-void DocConfigListView::clickedItem(QListViewItem *item, const QPoint &// pnt
+void DocConfigListView::clickedItem(Q3ListViewItem *item, const QPoint &// pnt
                                     , int c)
 {
     if (!item)

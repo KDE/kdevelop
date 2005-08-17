@@ -11,7 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 #include <qcombobox.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kservice.h>
 #include <kdebug.h>
@@ -19,10 +19,10 @@
 #include "service.h"
 
 
-void ServiceComboBox::insertStringList(QComboBox *combo, const QValueList<KService::Ptr> &list,
+void ServiceComboBox::insertStringList(QComboBox *combo, const Q3ValueList<KService::Ptr> &list,
                             QStringList *names, QStringList *execs)
 {
-    QValueList<KService::Ptr>::ConstIterator it;
+    Q3ValueList<KService::Ptr>::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
         combo->insertItem((*it)->comment());
         (*names) << (*it)->desktopEntryName();
@@ -67,7 +67,7 @@ int ServiceComboBox::itemForText(const QString &str, const QStringList &names)
 QString ServiceComboBox::defaultCompiler()
 {
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Pascal'");
-    QValueList<KService::Ptr>::ConstIterator it;
+    Q3ValueList<KService::Ptr>::ConstIterator it;
     for (it = offers.begin(); it != offers.end(); ++it) {
         if ((*it)->property("X-KDevelop-Default").toBool()) {
             return (*it)->name();;

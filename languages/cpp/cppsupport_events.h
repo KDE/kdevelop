@@ -16,7 +16,9 @@
 #include "kdevdeepcopy.h"
 
 #include <qevent.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #if QT_VERSION < 0x030100
 #include <kdevmutex.h>
@@ -32,11 +34,11 @@ enum
 class FileParsedEvent: public QCustomEvent
 {
 public:
-	FileParsedEvent( const QString& fileName, const QValueList<Problem>& problems )
+	FileParsedEvent( const QString& fileName, const Q3ValueList<Problem>& problems )
 			: QCustomEvent( Event_FileParsed ), m_fileName( deepCopy( fileName ) )
 	{
 		// the members are deep copies
-		QValueListConstIterator<Problem> it = problems.begin();
+		Q3ValueListConstIterator<Problem> it = problems.begin();
 		while ( it != problems.end() )
 		{
 			Problem p = *it;
@@ -49,14 +51,14 @@ public:
 	{
 		return m_fileName;
 	}
-	QValueList<Problem> problems() const
+	Q3ValueList<Problem> problems() const
 	{
 		return m_problems;
 	}
 
 private:
 	QString m_fileName;
-	QValueList<Problem> m_problems;
+	Q3ValueList<Problem> m_problems;
 
 private:
 	FileParsedEvent( const FileParsedEvent& source );

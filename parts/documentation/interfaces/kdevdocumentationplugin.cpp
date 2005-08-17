@@ -13,16 +13,18 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "kdevdocumentationplugin.h"
 
 #include <qfile.h>
 #include <qpainter.h>
 #include <qstyle.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -162,15 +164,15 @@ IndexItemProto::~IndexItemProto()
 //class IndexItem
 
 IndexItem::IndexItem(IndexBox *listbox, const QString &text)
-    :QListBoxText(listbox, text), m_listbox(listbox)
+    :Q3ListBoxText(listbox, text), m_listbox(listbox)
 {
 }
 
 IndexItem::List IndexItem::urls() const
 {
     List urlList;
-    QValueList<IndexItemProto*> itemProtos = m_listbox->items[text()];
-    for (QValueList<IndexItemProto*>::const_iterator it = itemProtos.begin();
+    Q3ValueList<IndexItemProto*> itemProtos = m_listbox->items[text()];
+    for (Q3ValueList<IndexItemProto*>::const_iterator it = itemProtos.begin();
         it != itemProtos.end(); ++it)
         urlList.append(qMakePair((*it)->description(), (*it)->url()));
     return urlList;
@@ -181,9 +183,9 @@ IndexItem::List IndexItem::urls() const
 
 //class ConfigurationItem
 
-ConfigurationItem::ConfigurationItem(QListView *parent, DocumentationPlugin * plugin, const QString &title, const QString &url,
+ConfigurationItem::ConfigurationItem(Q3ListView *parent, DocumentationPlugin * plugin, const QString &title, const QString &url,
     bool indexPossible, bool fullTextSearchPossible)
-    :QCheckListItem(parent, "", QCheckListItem::CheckBox), m_title(title), m_url(url),
+    :Q3CheckListItem(parent, "", Q3CheckListItem::CheckBox), m_title(title), m_url(url),
     m_origTitle(title), m_contents(true), m_index(false), m_fullTextSearch(false),
     m_indexPossible(indexPossible), m_fullTextSearchPossible(fullTextSearchPossible),
     m_docPlugin( plugin )
@@ -200,7 +202,7 @@ void ConfigurationItem::paintCell(QPainter *p, const QColorGroup &cg, int column
         if ( !p )
             return;
     
-        QListView *lv = listView();
+        Q3ListView *lv = listView();
         if ( !lv )
             return;
     
@@ -211,14 +213,14 @@ void ConfigurationItem::paintCell(QPainter *p, const QColorGroup &cg, int column
         QFontMetrics fm(lv->fontMetrics());
         int boxsize = lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv);
         int marg = lv->itemMargin();
-        int styleflags = QStyle::Style_Default;
+        int styleflags = QStyle::State_None;
                 
         if (((column == 0) && m_contents) || ((column == 1) && m_index) || ((column == 2) && m_fullTextSearch))
-            styleflags |= QStyle::Style_On;
+            styleflags |= QStyle::State_On;
         else
-            styleflags |= QStyle::Style_Off;
+            styleflags |= QStyle::State_Off;
         if ((column == 0) || ((column == 1) && m_indexPossible) || ((column == 2) && m_fullTextSearchPossible))
-            styleflags |= QStyle::Style_Enabled;
+            styleflags |= QStyle::State_Enabled;
 
         int x = 0;
         int y = 0;
@@ -234,14 +236,14 @@ void ConfigurationItem::paintCell(QPainter *p, const QColorGroup &cg, int column
                
         return;
     }
-    QListViewItem::paintCell(p, cg, column, width, align);
+    Q3ListViewItem::paintCell(p, cg, column, width, align);
 }
 
-int ConfigurationItem::width(const QFontMetrics &fm, const QListView *lv, int c) const
+int ConfigurationItem::width(const QFontMetrics &fm, const Q3ListView *lv, int c) const
 {
     if ((c == 0) || (c == 1) || (c == 2))
         return lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv) + 4;
-    return QListViewItem::width(fm, lv, c);
+    return Q3ListViewItem::width(fm, lv, c);
 }
 
 
@@ -277,7 +279,7 @@ void DocumentationPlugin::autoSetup()
 void DocumentationPlugin::reload()
 {
     clear();
-    for (QValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
+    for (Q3ValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
         it != catalogs.end(); ++it)
     {
         createTOC(*it);
@@ -286,7 +288,7 @@ void DocumentationPlugin::reload()
 
 void DocumentationPlugin::clear()
 {
-    for (QValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
+    for (Q3ValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
         it != catalogs.end(); ++it)
     {
         clearCatalog(*it);
@@ -303,8 +305,8 @@ void DocumentationPlugin::clearCatalog(DocumentationCatalogItem *item)
             namedCatalogs.remove(it);
     }
     //clear indexes for catalog
-    QValueList<IndexItemProto *> idx = indexes[item];
-    for (QValueList<IndexItemProto *>::iterator it = idx.begin(); it != idx.end(); ++it)
+    Q3ValueList<IndexItemProto *> idx = indexes[item];
+    for (Q3ValueList<IndexItemProto *>::iterator it = idx.begin(); it != idx.end(); ++it)
     {
         delete *it;
     }
@@ -319,7 +321,7 @@ void DocumentationPlugin::createIndex(IndexBox *index)
     if (m_indexCreated)
         return;
     
-    for (QValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
+    for (Q3ValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
         it != catalogs.end(); ++it)
     {
         loadIndex(index, *it);
@@ -333,15 +335,15 @@ void DocumentationPlugin::cacheIndex(DocumentationCatalogItem *item)
     
     QString cacheName = locateLocal("data", QString("kdevdocumentation/index/cache_") + item->text(0));
     QFile cacheFile(cacheName);
-    if (!cacheFile.open(IO_WriteOnly))
+    if (!cacheFile.open(QIODevice::WriteOnly))
         return;
     
     QTextStream str(&cacheFile);
     str.setEncoding(QTextStream::Unicode);
     str << CACHE_VERSION << endl;
 
-    QValueList<IndexItemProto*> catalogIndexes = indexes[item];
-    for (QValueList<IndexItemProto*>::const_iterator it = catalogIndexes.constBegin();
+    Q3ValueList<IndexItemProto*> catalogIndexes = indexes[item];
+    for (Q3ValueList<IndexItemProto*>::const_iterator it = catalogIndexes.constBegin();
         it != catalogIndexes.constEnd(); ++it)
     {
         str << (*it)->text() << endl;
@@ -356,7 +358,7 @@ bool DocumentationPlugin::loadCachedIndex(IndexBox *index, DocumentationCatalogI
 {
     QString cacheName = locateLocal("data", QString("kdevdocumentation/index/cache_") + item->text(0));
     QFile cacheFile(cacheName);
-    if (!cacheFile.open(IO_ReadOnly))
+    if (!cacheFile.open(QIODevice::ReadOnly))
         return false;
 
     kdDebug() << "Using cached index for item: " << item->text(0) << endl;
@@ -419,8 +421,8 @@ void DocumentationPlugin::deleteCatalogConfiguration(const ConfigurationItem *co
 void DocumentationPlugin::clearCatalogIndex(DocumentationCatalogItem *item)
 {
     //clear indexes for catalog
-    QValueList<IndexItemProto *> idx = indexes[item];
-    for (QValueList<IndexItemProto *>::iterator it = idx.begin(); it != idx.end(); ++it)
+    Q3ValueList<IndexItemProto *> idx = indexes[item];
+    for (Q3ValueList<IndexItemProto *>::iterator it = idx.begin(); it != idx.end(); ++it)
     {
         delete *it;
     }
@@ -534,7 +536,7 @@ void DocumentationPlugin::saveCatalogConfiguration(KListView *configurationView)
         config->deleteEntry(*it);
     }
     
-    QListViewItemIterator it(configurationView);
+    Q3ListViewItemIterator it(configurationView);
     while (it.current())
     {
         ConfigurationItem *confItem = dynamic_cast<ConfigurationItem*>(it.current());
@@ -625,7 +627,7 @@ void IndexBox::removeIndexItem(IndexItemProto *item)
     if (items[text].count() == 0)
     {
         items.remove(text);
-        QListBoxItem *item = findItem(text, Qt::CaseSensitive | Qt::ExactMatch);
+        Q3ListBoxItem *item = findItem(text, Qt::CaseSensitive | Qt::ExactMatch);
         if (item)
             delete item;
     }
@@ -633,7 +635,7 @@ void IndexBox::removeIndexItem(IndexItemProto *item)
 
 void IndexBox::fill()
 {
-    for (QMap<QString, QValueList<IndexItemProto*> >::const_iterator it = items.begin();
+    for (QMap<QString, Q3ValueList<IndexItemProto*> >::const_iterator it = items.begin();
         it != items.end(); ++it)
     {
         new IndexItem(this, it.key());

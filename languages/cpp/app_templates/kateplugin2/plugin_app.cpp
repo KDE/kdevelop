@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QVBoxLayout>
 %{CPP_TEMPLATE}
 
 #include "plugin_%{APPNAMELC}.h"

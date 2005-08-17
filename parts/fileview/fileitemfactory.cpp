@@ -23,7 +23,7 @@ using namespace filetreeview;
 
 FileTreeWidget* FileTreeViewItem::listView() const
 {
-    return static_cast<FileTreeWidget*>( QListViewItem::listView() );
+    return static_cast<FileTreeWidget*>( Q3ListViewItem::listView() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ void FileTreeViewItem::hideOrShow()
 
 bool FileTreeViewItem::setProjectFile( QString const & path, bool pf )
 {
-    kdDebug( 9017 ) << "FileTreeViewItem::setProjectFile(): " + path << " projectfile: " << pf << endl;
+    kdDebug( 9017 ) << "FileTreeViewItem::setProjectFile(): " + path << endl;
 
     if ( this->path() == path )
     {
@@ -79,13 +79,13 @@ void FileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
         p->setFont( font );
     }
 
-    QListViewItem::paintCell( p, cg, column, width, alignment );
+    Q3ListViewItem::paintCell( p, cg, column, width, alignment );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int FileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) const
+int FileTreeViewItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
 {
     KFileTreeViewItem* rhs = dynamic_cast<KFileTreeViewItem*>( i );
     if (rhs)
@@ -97,7 +97,7 @@ int FileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) const
                 return (ascending) ? -1 : 1;
     }
 
-    return QListViewItem::compare( i, col, ascending );
+    return Q3ListViewItem::compare( i, col, ascending );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

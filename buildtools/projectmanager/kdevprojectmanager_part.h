@@ -13,15 +13,15 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #ifndef __KDEVPART_KDEVPROJECTMANAGER_H__
 #define __KDEVPART_KDEVPROJECTMANAGER_H__
 
 #include "kdevprojectmodel.h"
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdevproject.h>
 
 class KDevProjectManagerWidget;
@@ -103,7 +103,7 @@ protected:
 private:
     ProjectModel *m_projectModel;
     ProjectFolderDom m_workspace;
-    QGuardedPtr<KDevProjectManagerWidget> m_widget;
+    QPointer<KDevProjectManagerWidget> m_widget;
     QMap<QString, KDevProjectImporter*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;
     QStringList m_cachedFileList;

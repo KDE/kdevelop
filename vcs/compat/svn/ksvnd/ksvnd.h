@@ -14,8 +14,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this library; see the file COPYING. If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef KSVND_H
@@ -23,13 +23,15 @@
 
 #include <dcopclient.h>
 #include <kdedmodule.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KSvnd : public KDEDModule
 {
   Q_OBJECT
   K_DCOP
 public:
-  KSvnd(const QCString &);
+  KSvnd(const Q3CString &);
   ~KSvnd();
 
 k_dcop:

@@ -12,7 +12,7 @@
 #ifndef _APPOUTPUTVIEWSPART_H_
 #define _APPOUTPUTVIEWSPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include "kdevappfrontend.h"
 #include "KDevAppFrontendIface.h"
@@ -43,7 +43,7 @@ private slots:
     void slotProcessExited();
 
 private:
-    QGuardedPtr<AppOutputWidget> m_widget;
+    QPointer<AppOutputWidget> m_widget;
     KDevAppFrontendIface *m_dcop;
     friend class AppOutputWidget;
 };

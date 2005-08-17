@@ -32,27 +32,30 @@
 
 #include <qstring.h>
 #include <qrect.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qvariant.h>
 #include <qobject.h>
-#include <qlistview.h>
-#include <qptrlist.h>
+#include <q3listview.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
-#include <qiconset.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPixmap>
 
-class QWizard;
+class Q3Wizard;
 class QTabWidget;
 class Command;
 class QWidget;
 class FormWindow;
 class PropertyEditor;
-class QListBox;
-class QIconView;
-class QTable;
+class Q3ListBox;
+class Q3IconView;
+class Q3Table;
 class QAction;
 class QDesignerToolBar;
-class QMainWindow;
-class QTextEdit;
+class Q3MainWindow;
+class Q3TextEdit;
 struct LanguageInterface;
 class QToolBox;
 
@@ -172,7 +175,7 @@ signals:
     void modificationChanged( bool m );
 
 private:
-    QPtrList<Command> history;
+    Q3PtrList<Command> history;
     int current, steps;
     bool modified;
     int savedAt;
@@ -216,8 +219,8 @@ class MoveCommand : public Command
 public:
     MoveCommand( const QString &n, FormWindow *fw,
 		 const QWidgetList &w,
-		 const QValueList<QPoint> op,
-		 const QValueList<QPoint> np,
+		 const Q3ValueList<QPoint> op,
+		 const Q3ValueList<QPoint> np,
 		 QWidget *opr, QWidget *npr );
     void execute();
     void unexecute();
@@ -227,7 +230,7 @@ public:
 
 private:
     QWidgetList widgets;
-    QValueList<QPoint> oldPos, newPos;
+    Q3ValueList<QPoint> oldPos, newPos;
     QWidget *oldParent, *newParent;
 
 };
@@ -243,7 +246,7 @@ public:
 
 private:
     QWidgetList widgets;
-    QMap< QWidget*, QValueList<MetaDataBase::Connection> > connections;
+    QMap< QWidget*, Q3ValueList<MetaDataBase::Connection> > connections;
 
 };
 
@@ -267,7 +270,7 @@ public:
 private:
     void setProperty( const QVariant &v, const QString &currentItemText, bool select = TRUE );
 
-    QGuardedPtr<QObject> widget;
+    QPointer<QObject> widget;
     PropertyEditor *editor;
     QString propName;
     QVariant oldValue, newValue;
@@ -380,14 +383,14 @@ class MacroCommand : public Command
 {
 public:
     MacroCommand( const QString &n, FormWindow *fw,
-		  const QPtrList<Command> &cmds );
+		  const Q3PtrList<Command> &cmds );
 
     void execute();
     void unexecute();
     Type type() const { return Macro; }
 
 private:
-    QPtrList<Command> commands;
+    Q3PtrList<Command> commands;
 
 };
 
@@ -483,14 +486,14 @@ class AddWizardPageCommand : public Command
 {
 public:
     AddWizardPageCommand( const QString &n, FormWindow *fw,
-			  QWizard *w, const QString &label, int index = -1, bool show = TRUE );
+			  Q3Wizard *w, const QString &label, int index = -1, bool show = TRUE );
 
     void execute();
     void unexecute();
     Type type() const { return AddWizardPage; }
 
 private:
-    QWizard *wizard;
+    Q3Wizard *wizard;
     int index;
     bool show;
     QWidget *page;
@@ -502,14 +505,14 @@ class DeleteWizardPageCommand : public Command
 {
 public:
     DeleteWizardPageCommand( const QString &n, FormWindow *fw,
-			     QWizard *w, int index, bool show = TRUE );
+			     Q3Wizard *w, int index, bool show = TRUE );
 
     void execute();
     void unexecute();
     Type type() const { return DeleteWizardPage; }
 
 private:
-    QWizard *wizard;
+    Q3Wizard *wizard;
     int index;
     bool show;
     QWidget *page;
@@ -521,14 +524,14 @@ class RenameWizardPageCommand : public Command
 {
 public:
     RenameWizardPageCommand( const QString &n, FormWindow *fw,
-			     QWizard *w, int index, const QString& name );
+			     Q3Wizard *w, int index, const QString& name );
 
     void execute();
     void unexecute();
     Type type() const { return RenameWizardPage; }
 
 private:
-    QWizard *wizard;
+    Q3Wizard *wizard;
     int index;
     QWidget *page;
     QString label;
@@ -539,14 +542,14 @@ class SwapWizardPagesCommand : public Command
 {
 public:
     SwapWizardPagesCommand( const QString &n, FormWindow *fw,
-			      QWizard *w, int index1, int index2 );
+			      Q3Wizard *w, int index1, int index2 );
 
     void execute();
     void unexecute();
     Type type() const { return SwapWizardPages; }
 
 private:
-    QWizard *wizard;
+    Q3Wizard *wizard;
     int index1, index2;
 
 };
@@ -555,14 +558,14 @@ class MoveWizardPageCommand : public Command
 {
 public:
     MoveWizardPageCommand( const QString &n, FormWindow *fw,
-			      QWizard *w, int index1, int index2 );
+			      Q3Wizard *w, int index1, int index2 );
 
     void execute();
     void unexecute();
     Type type() const { return MoveWizardPage; }
 
 private:
-    QWizard *wizard;
+    Q3Wizard *wizard;
     int index1, index2;
 
 };
@@ -601,7 +604,7 @@ private:
 class AddFunctionCommand : public Command
 {
 public:
-    AddFunctionCommand( const QString &name, FormWindow *fw, const QCString &f, const QString& spec,
+    AddFunctionCommand( const QString &name, FormWindow *fw, const Q3CString &f, const QString& spec,
 		        const QString &a, const QString &t, const QString &l, const QString &rt );
 
     void execute();
@@ -609,7 +612,7 @@ public:
     Type type() const { return AddFunction; }
 
 private:
-    QCString function;
+    Q3CString function;
     QString specifier;
     QString access;
     QString functionType;
@@ -640,7 +643,7 @@ private:
 class RemoveFunctionCommand : public Command
 {
 public:
-    RemoveFunctionCommand( const QString &name, FormWindow *fw, const QCString &f, const QString& spec,
+    RemoveFunctionCommand( const QString &name, FormWindow *fw, const Q3CString &f, const QString& spec,
 		           const QString &a, const QString &t, const QString &l, const QString &rt );
 
     void execute();
@@ -648,7 +651,7 @@ public:
     Type type() const { return RemoveFunction; }
 
 private:
-    QCString function;
+    Q3CString function;
     QString specifier;
     QString access;
     QString functionType;
@@ -672,13 +675,13 @@ private:
 class SetVariablesCommand : public Command
 {
 public:
-    SetVariablesCommand( const QString &name, FormWindow *fw, QValueList<MetaDataBase::Variable> lst );
+    SetVariablesCommand( const QString &name, FormWindow *fw, Q3ValueList<MetaDataBase::Variable> lst );
     void execute();
     void unexecute();
     Type type() const { return SetVariables; }
 
 private:
-    QValueList<MetaDataBase::Variable> oldList, newList;
+    Q3ValueList<MetaDataBase::Variable> oldList, newList;
 };
 
 class RemoveVariableCommand : public Command
@@ -778,7 +781,7 @@ public:
     };
 
     PopulateListBoxCommand( const QString &n, FormWindow *fw,
-			    QListBox *lb, const QValueList<Item> &items );
+			    Q3ListBox *lb, const Q3ValueList<Item> &items );
     void execute();
     void unexecute();
     Type type() const { return PopulateListBox; }
@@ -786,8 +789,8 @@ public:
     bool operator==( const PopulateListBoxCommand & ) const;
 
 private:
-    QValueList<Item> oldItems, newItems;
-    QListBox *listbox;
+    Q3ValueList<Item> oldItems, newItems;
+    Q3ListBox *listbox;
 
 };
 
@@ -802,7 +805,7 @@ public:
     };
 
     PopulateIconViewCommand( const QString &n, FormWindow *fw,
-			    QIconView *iv, const QValueList<Item> &items );
+			    Q3IconView *iv, const Q3ValueList<Item> &items );
     void execute();
     void unexecute();
     Type type() const { return PopulateIconView; }
@@ -810,8 +813,8 @@ public:
     bool operator==( const PopulateIconViewCommand & ) const;
 
 private:
-    QValueList<Item> oldItems, newItems;
-    QIconView *iconview;
+    Q3ValueList<Item> oldItems, newItems;
+    Q3IconView *iconview;
 
 };
 
@@ -819,17 +822,17 @@ class PopulateListViewCommand : public Command
 {
 public:
     PopulateListViewCommand( const QString &n, FormWindow *fw,
-			     QListView *lv, QListView *from );
+			     Q3ListView *lv, Q3ListView *from );
     void execute();
     void unexecute();
     Type type() const { return PopulateListView; }
-    static void transferItems( QListView *from, QListView *to );
+    static void transferItems( Q3ListView *from, Q3ListView *to );
 
     bool operator==( const PopulateListViewCommand & ) const;
 
 private:
-    QListView *oldItems, *newItems;
-    QListView *listview;
+    Q3ListView *oldItems, *newItems;
+    Q3ListView *listview;
 
 };
 
@@ -837,14 +840,14 @@ class PopulateMultiLineEditCommand : public Command
 {
 public:
     PopulateMultiLineEditCommand( const QString &n, FormWindow *fw,
-				  QTextEdit *mle, const QString &txt );
+				  Q3TextEdit *mle, const QString &txt );
     void execute();
     void unexecute();
     Type type() const { return PopulateMultiLineEdit; }
 
 private:
     QString newText, oldText;
-    QTextEdit *mlined;
+    Q3TextEdit *mlined;
     bool wasChanged;
 
 };
@@ -867,18 +870,18 @@ public:
 	Q_DUMMY_COMPARISON_OPERATOR( Column )
     };
 
-    PopulateTableCommand( const QString &n, FormWindow *fw, QTable *t,
-			  const QValueList<Row> &rows,
-			  const QValueList<Column> &columns );
+    PopulateTableCommand( const QString &n, FormWindow *fw, Q3Table *t,
+			  const Q3ValueList<Row> &rows,
+			  const Q3ValueList<Column> &columns );
 
     void execute();
     void unexecute();
     Type type() const { return PopulateTable; }
 
 private:
-    QValueList<Row> oldRows, newRows;
-    QValueList<Column> oldColumns, newColumns;
-    QTable *table;
+    Q3ValueList<Row> oldRows, newRows;
+    Q3ValueList<Column> oldColumns, newColumns;
+    Q3Table *table;
 
 };
 
@@ -917,7 +920,7 @@ public:
 class AddToolBarCommand : public Command
 {
 public:
-    AddToolBarCommand( const QString &n, FormWindow *fw, QMainWindow *mw );
+    AddToolBarCommand( const QString &n, FormWindow *fw, Q3MainWindow *mw );
 
     void execute();
     void unexecute();
@@ -925,14 +928,14 @@ public:
 
 protected:
     QDesignerToolBar *toolBar;
-    QMainWindow *mainWindow;
+    Q3MainWindow *mainWindow;
 
 };
 
 class RemoveToolBarCommand : public AddToolBarCommand
 {
 public:
-    RemoveToolBarCommand( const QString &n, FormWindow *fw, QMainWindow *mw, QDesignerToolBar *tb )
+    RemoveToolBarCommand( const QString &n, FormWindow *fw, Q3MainWindow *mw, QDesignerToolBar *tb )
 	: AddToolBarCommand( n, fw, mw ) { toolBar = tb; }
 
     void execute() { AddToolBarCommand::unexecute(); }
@@ -1113,7 +1116,7 @@ public:
 			   FormWindow *fw,
 			   QAction *a,
 			   PopupMenuEditor *m,
-			   QIconSet &icons );
+			   QIcon &icons );
     void execute();
     void unexecute();
     Type type() const { return SetActionIcons; }
@@ -1121,8 +1124,8 @@ protected:
     void updateActionEditorItem();
 private:
     PopupMenuEditor *menu;
-    QIconSet newIcons;
-    QIconSet oldIcons;
+    QIcon newIcons;
+    QIcon oldIcons;
 };
 
 class AddMenuCommand : public Command
@@ -1136,7 +1139,7 @@ public:
 
     AddMenuCommand( const QString &n,
 		    FormWindow *fw,
-		    QMainWindow *mw,
+		    Q3MainWindow *mw,
 		    const QString &nm = "Menu" );
 
     void execute();

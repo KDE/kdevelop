@@ -27,9 +27,9 @@
 #ifndef CONNECTIONTABLE_H
 #define CONNECTIONTABLE_H
 
-#include <qtable.h>
+#include <q3table.h>
 
-class ConnectionTable : public QTable
+class ConnectionTable : public Q3Table
 {
     Q_OBJECT
 

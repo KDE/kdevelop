@@ -21,7 +21,7 @@
 #include "adaproject_part.h"
 #include "adaglobaloptionsdlg.h"
 
-AdaGlobalOptionsDlg::AdaGlobalOptionsDlg(AdaProjectPart *part, QWidget* parent, const char* name, WFlags fl)
+AdaGlobalOptionsDlg::AdaGlobalOptionsDlg(AdaProjectPart *part, QWidget* parent, const char* name, Qt::WFlags fl)
     :AdaProjectOptionsDlgBase(parent,name,fl), m_part(part)
 {
     delete config_label;

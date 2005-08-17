@@ -17,8 +17,14 @@
 
 //////////////////////////////////////////////////////
 // Qt specific includes
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QPixmap>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 //////////////////////////////////////////////////////
 // KDE specific includes
 #include <kfileitem.h>
@@ -87,7 +93,7 @@ void KFileDnDDetailView::contentsDragEnterEvent( QDragEnterEvent *e ) {
 		return;
 	}
 	e->acceptAction();
-	QListViewItem *i = itemAt( contentsToViewport( e->pos() ) );
+	Q3ListViewItem *i = itemAt( contentsToViewport( e->pos() ) );
 	if ( i && m_useAutoOpenTimer ) {
 		m_dropItem = i;
 		m_autoOpenTimer.start( m_autoOpenTime );
@@ -103,7 +109,7 @@ void KFileDnDDetailView::contentsDragMoveEvent( QDragMoveEvent *e ) {
 		return;
 	}
 	e->acceptAction();
-	QListViewItem *i = itemAt( contentsToViewport(  e->pos() ) );
+	Q3ListViewItem *i = itemAt( contentsToViewport(  e->pos() ) );
 	if( ! m_useAutoOpenTimer )
 		return;
 	if ( i ) {
@@ -172,7 +178,7 @@ void KFileDnDDetailView::startDrag(){
 	m_dragObject->drag();   // start the drag
 }
 //-----------------------------------------------
-QDragObject* KFileDnDDetailView::dragObject() const {
+Q3DragObject* KFileDnDDetailView::dragObject() const {
 	return m_dragObject;
 }
 //-----------------------------------------------

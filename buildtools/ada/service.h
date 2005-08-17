@@ -12,11 +12,13 @@
 #define SERVICE_H
 
 #include <ktrader.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class ServiceComboBox
 {
 public:
-    static void insertStringList(QComboBox *combo, const QValueList<KService::Ptr> &list,
+    static void insertStringList(QComboBox *combo, const Q3ValueList<KService::Ptr> &list,
                                  QStringList *names, QStringList *execs);
     static QString currentText(QComboBox *combo, const QStringList &names);
     static void setCurrentText(QComboBox *combo, const QString &str, const QStringList &names);

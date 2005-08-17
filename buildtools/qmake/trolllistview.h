@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef TROLLLISTVIEW_H
 #define TROLLLISTVIEW_H
@@ -23,6 +23,8 @@
 #include <klistview.h>
 
 #include "trollprojectwidget.h"
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class TrollListView : public KListView
 {

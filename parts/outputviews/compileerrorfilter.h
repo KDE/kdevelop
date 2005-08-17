@@ -14,7 +14,7 @@
 
 #include <qobject.h>
 #include <qregexp.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include "outputfilter.h"
 
 class MakeItem;

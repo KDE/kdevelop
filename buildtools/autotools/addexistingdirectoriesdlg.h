@@ -20,6 +20,8 @@
 #include "addexistingdlgbase.h"
 
 #include <qdialog.h>
+//Added by qt3to4:
+#include <QDropEvent>
 #include <kfile.h>
 
 #include "misc.h"
@@ -40,7 +42,7 @@ class AddExistingDirectoriesDialog : public AddExistingDlgBase
 public:
 	AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget,
 	                               SubprojectItem* spitem, QWidget* parent = 0, 
-	                               const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	                               const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 	~AddExistingDirectoriesDialog();
 
 private:

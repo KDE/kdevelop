@@ -25,6 +25,9 @@
 **********************************************************************/
 
 #include <qvariant.h>  // HP-UX compiler needs this here
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include "sizehandle.h"
 #include "formwindow.h"
@@ -35,11 +38,11 @@
 #include <qlabel.h>
 #include <klocale.h>
 
-SizeHandle::SizeHandle( FormWindow *parent, Direction d, WidgetSelection *s )
+SizeHandle::SizeHandle( FormWindow *parent, Qt::Orientation d, WidgetSelection *s )
     : QWidget( parent )
 {
     active = TRUE;
-    setBackgroundMode( active ? PaletteText : PaletteDark );
+    setBackgroundMode( active ? Qt::PaletteText : Qt::PaletteDark );
     setFixedSize( 6, 6 );
     widget = 0;
     dir =d ;
@@ -60,25 +63,25 @@ void SizeHandle::updateCursor()
     case LeftTop:
 	setCursor( sizeFDiagCursor );
 	break;
-    case Top:
+    case Qt::DockTop:
 	setCursor( sizeVerCursor );
 	break;
     case RightTop:
 	setCursor( sizeBDiagCursor );
 	break;
-    case Right:
+    case Qt::DockRight:
 	setCursor( sizeHorCursor );
 	break;
     case RightBottom:
 	setCursor( sizeFDiagCursor );
 	break;
-    case Bottom:
+    case Qt::DockBottom:
 	setCursor( sizeVerCursor );
 	break;
     case LeftBottom:
 	setCursor( sizeBDiagCursor );
 	break;
-    case Left:
+    case Qt::DockLeft:
 	setCursor( sizeHorCursor );
 	break;
     }
@@ -87,7 +90,7 @@ void SizeHandle::updateCursor()
 void SizeHandle::setActive( bool a )
 {
     active = a;
-    setBackgroundMode( active ? PaletteText : PaletteDark );
+    setBackgroundMode( active ? Qt::PaletteText : Qt::PaletteDark );
     updateCursor();
 }
 
@@ -101,13 +104,13 @@ void SizeHandle::paintEvent( QPaintEvent * )
     if ( ( (FormWindow*)parentWidget() )->currentWidget() != widget )
 	return;
     QPainter p( this );
-    p.setPen( blue );
+    p.setPen( Qt::blue );
     p.drawRect( 0, 0, width(), height() );
 }
 
 void SizeHandle::mousePressEvent( QMouseEvent *e )
 {
-    if ( !widget || e->button() != LeftButton || !active )
+    if ( !widget || e->button() != Qt::LeftButton || !active )
 	return;
     oldPressPos = e->pos();
     geom = origGeom = QRect( widget->pos(), widget->size() );
@@ -115,7 +118,7 @@ void SizeHandle::mousePressEvent( QMouseEvent *e )
 
 void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 {
-    if ( !widget || ( e->state() & LeftButton ) != LeftButton || !active )
+    if ( !widget || ( e->state() & Qt::LeftButton ) != Qt::LeftButton || !active )
 	return;
     QPoint rp = mapFromGlobal( e->globalPos() );
     QPoint d = oldPressPos - rp;
@@ -138,7 +141,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	int dy = widget->height() - h;
 	trySetGeometry( widget, widget->x() + dx, widget->y() + dy, w, h );
     } break;
-    case Top: {
+    case Qt::DockTop: {
 	if ( checkPos.y() > pr.height() - 2 * height() )
 	    return;
 	int h = geom.height() + d.y();
@@ -159,7 +162,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	w = ( w / formWindow->grid().x() ) * formWindow->grid().x();
 	trySetGeometry( widget, widget->x(), widget->y() + dy, w, h );
     } break;
-    case Right: {
+    case Qt::DockRight: {
 	if ( checkPos.x() < 2 * width() )
 	    return;
 	int w = geom.width() - d.x();
@@ -178,7 +181,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	h = ( h / formWindow->grid().y() ) * formWindow->grid().y();
 	tryResize( widget, w, h );
     } break;
-    case Bottom: {
+    case Qt::DockBottom: {
 	if ( checkPos.y() < 2 * height() )
 	    return;
 	int h = geom.height() - d.y();
@@ -198,7 +201,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	h = ( h / formWindow->grid().y() ) * formWindow->grid().y();
 	trySetGeometry( widget, widget->x() + dx, widget->y(), w, h );
     } break;
-    case Left: {
+    case Qt::DockLeft: {
 	if ( checkPos.x() > pr.width() - 2 * width() )
 	    return;
 	int w = geom.width() + d.x();
@@ -227,7 +230,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 
 void SizeHandle::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( e->button() != LeftButton || !active )
+    if ( e->button() != Qt::LeftButton || !active )
 	return;
 
     formWindow->sizePreview()->hide();
@@ -266,7 +269,7 @@ void SizeHandle::tryResize( QWidget *w, int width, int height )
 
 // ------------------------------------------------------------------------
 
-WidgetSelection::WidgetSelection( FormWindow *parent, QPtrDict<WidgetSelection> *selDict )
+WidgetSelection::WidgetSelection( FormWindow *parent, Q3PtrDict<WidgetSelection> *selDict )
     : selectionDict( selDict )
 {
     formWindow = parent;

@@ -17,7 +17,7 @@
 
 
 
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>

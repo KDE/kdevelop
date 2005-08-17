@@ -17,53 +17,56 @@
 #define _CPPNEWCLASSDLG_H_
 
 #include <qlineedit.h>
-#include <qlistview.h>
-#include <qwidgetstack.h>
+#include <q3listview.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PopupMenu>
 
 #include "codemodel.h"
 #include "cppnewclassdlgbase.h"
 
 class CppSupportPart;
 class KDevProject;
-class QPopupMenu;
+class Q3PopupMenu;
 class KCompletion;
 
 
 template <class T>
-class PCheckListItem: public QCheckListItem
+class PCheckListItem: public Q3CheckListItem
 {
 public:
 
-	PCheckListItem ( T item, QCheckListItem * parent, const QString & text, Type tt = Controller ) :
-			QCheckListItem ( parent, text, tt ), m_item( item )
+	PCheckListItem ( T item, Q3CheckListItem * parent, const QString & text, Type tt = Controller ) :
+			Q3CheckListItem ( parent, text, tt ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QCheckListItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ) :
-			QCheckListItem ( parent, after, text, tt ), m_item( item )
+	PCheckListItem ( T item, Q3CheckListItem * parent, Q3ListViewItem * after, const QString & text, Type tt = Controller ) :
+			Q3CheckListItem ( parent, after, text, tt ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QListViewItem * parent, const QString & text, Type tt = Controller ) :
-			QCheckListItem ( parent, text, tt ), m_item( item )
+	PCheckListItem ( T item, Q3ListViewItem * parent, const QString & text, Type tt = Controller ) :
+			Q3CheckListItem ( parent, text, tt ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ) :
-			QCheckListItem ( parent, after, text, tt ), m_item( item )
+	PCheckListItem ( T item, Q3ListViewItem * parent, Q3ListViewItem * after, const QString & text, Type tt = Controller ) :
+			Q3CheckListItem ( parent, after, text, tt ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QListView * parent, const QString & text, Type tt = Controller ) :
-			QCheckListItem ( parent, text, tt ), m_item( item )
+	PCheckListItem ( T item, Q3ListView * parent, const QString & text, Type tt = Controller ) :
+			Q3CheckListItem ( parent, text, tt ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QListView * parent, QListViewItem * after, const QString & text, Type tt = Controller ) :
-			QCheckListItem ( parent, after, text, tt ), m_item( item )
+	PCheckListItem ( T item, Q3ListView * parent, Q3ListViewItem * after, const QString & text, Type tt = Controller ) :
+			Q3CheckListItem ( parent, after, text, tt ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QListViewItem * parent, const QString & text, const QPixmap & p ) :
-			QCheckListItem ( parent, text, p ), m_item( item )
+	PCheckListItem ( T item, Q3ListViewItem * parent, const QString & text, const QPixmap & p ) :
+			Q3CheckListItem ( parent, text, p ), m_item( item )
 	{}
 
-	PCheckListItem ( T item, QListView * parent, const QString & text, const QPixmap & p ) :
-			QCheckListItem ( parent, text, p ), m_item( item )
+	PCheckListItem ( T item, Q3ListView * parent, const QString & text, const QPixmap & p ) :
+			Q3CheckListItem ( parent, text, p ), m_item( item )
 	{}
 
 	T item()
@@ -78,24 +81,24 @@ private:
 };
 
 template <class T>
-class PListViewItem: public QListViewItem
+class PListViewItem: public Q3ListViewItem
 {
 public:
 
-	PListViewItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text ) :
-			QListViewItem ( parent, after, text ), m_item( item )
+	PListViewItem ( T item, Q3ListViewItem * parent, Q3ListViewItem * after, const QString & text ) :
+			Q3ListViewItem ( parent, after, text ), m_item( item )
 	{}
 
-	PListViewItem ( T item, QListViewItem * parent, const QString & text ) :
-			QListViewItem ( parent, text ), m_item( item )
+	PListViewItem ( T item, Q3ListViewItem * parent, const QString & text ) :
+			Q3ListViewItem ( parent, text ), m_item( item )
 	{}
 
-	PListViewItem ( T item, QListView * parent, const QString & text ) :
-			QListViewItem ( parent, text ), m_item( item )
+	PListViewItem ( T item, Q3ListView * parent, const QString & text ) :
+			Q3ListViewItem ( parent, text ), m_item( item )
 	{}
 
-	PListViewItem ( T item, QListView * parent, QListViewItem * after, const QString & text ) :
-			QListViewItem ( parent, after, text ), m_item( item )
+	PListViewItem ( T item, Q3ListView * parent, Q3ListViewItem * after, const QString & text ) :
+			Q3ListViewItem ( parent, after, text ), m_item( item )
 	{}
 
 	T item()
@@ -135,7 +138,7 @@ protected:
 	virtual void currBaseProtectedSet();
 	virtual void currBasePublicSet();
 	virtual void currBaseVirtualChanged( int val );
-	virtual void currBaseSelected( QListViewItem *it );
+	virtual void currBaseSelected( Q3ListViewItem *it );
 	virtual void scopeboxActivated( int value );
 
 	virtual void checkObjCInheritance( int val );
@@ -147,12 +150,12 @@ protected:
 
 	virtual void newTabSelected( const QString &text );
 	virtual void newTabSelected( QWidget *w );
-	virtual void access_view_mouseButtonPressed( int button, QListViewItem * item, const QPoint &p, int c );
+	virtual void access_view_mouseButtonPressed( int button, Q3ListViewItem * item, const QPoint &p, int c );
 	virtual void changeToPrivate();
 	virtual void changeToProtected();
 	virtual void changeToPublic();
 	virtual void changeToInherited();
-	virtual void methods_view_mouseButtonPressed( int button , QListViewItem * item, const QPoint&p , int c );
+	virtual void methods_view_mouseButtonPressed( int button , Q3ListViewItem * item, const QPoint&p , int c );
 	virtual void extendFunctionality();
 	virtual void replaceFunctionality();
 	virtual void to_constructors_list_clicked();
@@ -164,10 +167,10 @@ protected:
 	void reloadAdvancedInheritance( bool clean = false );
 	void parseClass( QString clName, QString inheritance );
 	void parsePCSClass( QString clName, QString inheritance );
-	void addToConstructorsList( QCheckListItem *myClass, FunctionDom method );
-	void addToMethodsList( QListViewItem *parent, FunctionDom method );
-	void addToUpgradeList( QListViewItem *parent, FunctionDom method, QString modifier );
-	void addToUpgradeList( QListViewItem *parent, VariableDom attr, QString modifier );
+	void addToConstructorsList( Q3CheckListItem *myClass, FunctionDom method );
+	void addToMethodsList( Q3ListViewItem *parent, FunctionDom method );
+	void addToUpgradeList( Q3ListViewItem *parent, FunctionDom method, QString modifier );
+	void addToUpgradeList( Q3ListViewItem *parent, VariableDom attr, QString modifier );
 	void clearConstructorsList( bool clean = false );
 	void clearMethodsList( bool clean = false );
 	void clearUpgradeList( bool clean = false );
@@ -180,8 +183,8 @@ private:
 	bool baseincludeModified;
 	bool implementationModified;
 	QString m_parse;
-	QPopupMenu *accessMenu;
-	QPopupMenu *overMenu;
+	Q3PopupMenu *accessMenu;
+	Q3PopupMenu *overMenu;
 	CppSupportPart *m_part;
 	CodeModel *myModel;
 
@@ -201,7 +204,7 @@ private:
 	void setCompletionNamespaceRecursive( const NamespaceDom & namespaceDom, const QString & namespaceParent = "" );
 	void setStateOfInheritanceEditors( bool state, bool hideList = true );
 	void setAccessForBase( QString baseclass, QString newAccess );
-	void setAccessForItem( QListViewItem *curr, QString newAccess, bool isPublic );
+	void setAccessForItem( Q3ListViewItem *curr, QString newAccess, bool isPublic );
 	void remClassFromAdv( QString text );
 	void checkUpButtonState();
 	void checkDownButtonState();

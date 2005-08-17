@@ -35,23 +35,28 @@
 
 #include <kfiledialog.h>
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qmessagebox.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qmessagebox.h>
 #include <qtimer.h>
 #include <qapplication.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdom.h>
 #include <qtextcodec.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 #include <klocale.h>
 
@@ -88,13 +93,13 @@ CustomWidgetEditor::CustomWidgetEditor( QWidget *parent, MainWindow *mw )
 
 void CustomWidgetEditor::setupDefinition()
 {
-    QPtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
+    Q3PtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
     for ( MetaDataBase::CustomWidget *w = lst->first(); w; w = lst->next() ) {
-	QListBoxItem *i;
+	Q3ListBoxItem *i;
 	if ( w->pixmap )
-	    i = new QListBoxPixmap( boxWidgets, *w->pixmap, w->className );
+	    i = new Q3ListBoxPixmap( boxWidgets, *w->pixmap, w->className );
 	else
-	    i = new QListBoxText( boxWidgets, w->className );
+	    i = new Q3ListBoxText( boxWidgets, w->className );
 	customWidgets.insert( i, w );
     }
 
@@ -113,7 +118,7 @@ void CustomWidgetEditor::setupSignals()
     if ( !w )
 	return;
     listSignals->clear();
-    for ( QValueList<QCString>::Iterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
+    for ( Q3ValueList<Q3CString>::Iterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
 	listSignals->insertItem( QString( *it ) );
     if ( listSignals->firstItem() ) {
 	listSignals->setCurrentItem( listSignals->firstItem() );
@@ -131,8 +136,8 @@ void CustomWidgetEditor::setupSlots()
     if ( !w )
 	return;
     listSlots->clear();
-    for ( QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it )
-	(void)new QListViewItem( listSlots, (*it).function, (*it).access );
+    for ( Q3ValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it )
+	(void)new Q3ListViewItem( listSlots, (*it).function, (*it).access );
 
     if ( listSlots->firstChild() ) {
 	listSlots->setCurrentItem( listSlots->firstChild() );
@@ -150,8 +155,8 @@ void CustomWidgetEditor::setupProperties()
     if ( !w )
 	return;
     listProperties->clear();
-    for ( QValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.begin(); it != w->lstProperties.end(); ++it )
-	(void)new QListViewItem( listProperties, (*it).property, (*it).type );
+    for ( Q3ValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.begin(); it != w->lstProperties.end(); ++it )
+	(void)new Q3ListViewItem( listProperties, (*it).property, (*it).type );
 
     if ( listProperties->firstChild() ) {
 	listProperties->setCurrentItem( listProperties->firstChild() );
@@ -159,7 +164,7 @@ void CustomWidgetEditor::setupProperties()
     }
 }
 
-void CustomWidgetEditor::currentWidgetChanged( QListBoxItem *i )
+void CustomWidgetEditor::currentWidgetChanged( Q3ListBoxItem *i )
 {
     checkTimer->stop();
     checkWidgetName();
@@ -226,7 +231,7 @@ void CustomWidgetEditor::addWidgetClicked()
 	return;
     }
 
-    QListBoxPixmap *i = new QListBoxPixmap( boxWidgets, *w->pixmap, w->className );
+    Q3ListBoxPixmap *i = new Q3ListBoxPixmap( boxWidgets, *w->pixmap, w->className );
     customWidgets.insert( i, w );
 
     boxWidgets->setCurrentItem( i );
@@ -235,7 +240,7 @@ void CustomWidgetEditor::addWidgetClicked()
 
 void CustomWidgetEditor::classNameChanged( const QString &s )
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -246,7 +251,7 @@ void CustomWidgetEditor::classNameChanged( const QString &s )
     boxWidgets->blockSignals( TRUE );
     oldName = w->className;
     w->className = s;
-    QListBoxItem *old = i;
+    Q3ListBoxItem *old = i;
     if ( w->pixmap )
 	boxWidgets->changeItem( *w->pixmap, s, boxWidgets->currentItem() );
     else
@@ -265,7 +270,7 @@ void CustomWidgetEditor::deleteWidgetClicked()
     checkTimer->stop();
     checkWidgetName();
 
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
 
     if ( mainWindow->isCustomWidgetUsed( w ) ) {
@@ -295,7 +300,7 @@ void CustomWidgetEditor::deleteWidgetClicked()
 
 void CustomWidgetEditor::headerFileChanged( const QString &s )
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -305,7 +310,7 @@ void CustomWidgetEditor::headerFileChanged( const QString &s )
 
 void CustomWidgetEditor::heightChanged( int h )
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -316,7 +321,7 @@ void CustomWidgetEditor::heightChanged( int h )
 
 void CustomWidgetEditor::includePolicyChanged( int p )
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -326,7 +331,7 @@ void CustomWidgetEditor::includePolicyChanged( int p )
 
 void CustomWidgetEditor::pixmapChoosen()
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -338,7 +343,7 @@ void CustomWidgetEditor::pixmapChoosen()
     w->pixmap = new QPixmap( pix );
 
     boxWidgets->blockSignals( TRUE );
-    QListBoxItem *old = i;
+    Q3ListBoxItem *old = i;
     boxWidgets->changeItem( *w->pixmap, w->className, boxWidgets->currentItem() );
     i = boxWidgets->item( boxWidgets->currentItem() );
     customWidgets.insert( i, w );
@@ -349,7 +354,7 @@ void CustomWidgetEditor::pixmapChoosen()
 
 void CustomWidgetEditor::widthChanged( int wid )
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -358,12 +363,12 @@ void CustomWidgetEditor::widthChanged( int wid )
     updateCustomWidgetSizes();
 }
 
-MetaDataBase::CustomWidget *CustomWidgetEditor::findWidget( QListBoxItem *i )
+MetaDataBase::CustomWidget *CustomWidgetEditor::findWidget( Q3ListBoxItem *i )
 {
     if ( !i )
 	return 0;
 
-    QMap<QListBoxItem*, MetaDataBase::CustomWidget*>::Iterator it = customWidgets.find( i );
+    QMap<Q3ListBoxItem*, MetaDataBase::CustomWidget*>::Iterator it = customWidgets.find( i );
     if ( it == customWidgets.end() )
 	return 0;
     return *it;
@@ -371,7 +376,7 @@ MetaDataBase::CustomWidget *CustomWidgetEditor::findWidget( QListBoxItem *i )
 
 void CustomWidgetEditor::chooseHeader()
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -385,7 +390,7 @@ void CustomWidgetEditor::chooseHeader()
 
 void CustomWidgetEditor::checkWidgetName()
 {
-    QListBoxItem *i = oldItem ? oldItem : boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = oldItem ? oldItem : boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     oldItem = 0;
     if ( !i || !w )
@@ -415,7 +420,7 @@ void CustomWidgetEditor::closeClicked()
     accept();
 }
 
-void CustomWidgetEditor::currentSignalChanged( QListBoxItem *i )
+void CustomWidgetEditor::currentSignalChanged( Q3ListBoxItem *i )
 {
     editSignal->blockSignals( TRUE );
     editSignal->setText( "" );
@@ -436,7 +441,7 @@ void CustomWidgetEditor::currentSignalChanged( QListBoxItem *i )
 
 void CustomWidgetEditor::addSignal()
 {
-    QListBoxItem *i = new QListBoxText( listSignals, "signal()" );
+    Q3ListBoxItem *i = new Q3ListBoxText( listSignals, "signal()" );
     listSignals->setCurrentItem( i );
     listSignals->setSelected( i, TRUE );
     MetaDataBase::CustomWidget *w = findWidget( boxWidgets->item( boxWidgets->currentItem() ) );
@@ -461,7 +466,7 @@ void CustomWidgetEditor::signalNameChanged( const QString &s )
     if ( !w || listSignals->currentItem() == -1 )
 	return;
 
-    QValueList<QCString>::Iterator it = w->lstSignals.find( listSignals->currentText().latin1() );
+    Q3ValueList<Q3CString>::Iterator it = w->lstSignals.find( listSignals->currentText().latin1() );
     if ( it != w->lstSignals.end() )
 	w->lstSignals.remove( it );
     listSignals->blockSignals( TRUE );
@@ -479,7 +484,7 @@ void CustomWidgetEditor::slotAccessChanged( const QString &s )
     MetaDataBase::Function slot;
     slot.function = listSlots->currentItem()->text( 0 );
     slot.access = listSlots->currentItem()->text( 1 );
-    QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.find( slot );
+    Q3ValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.find( slot );
     if ( it != w->lstSlots.end() )
 	w->lstSlots.remove( it );
     listSlots->currentItem()->setText( 1, s );
@@ -498,7 +503,7 @@ void CustomWidgetEditor::slotNameChanged( const QString &s )
     slot.function = listSlots->currentItem()->text( 0 );
     slot.access = listSlots->currentItem()->text( 1 );
     slot.type = "slot";
-    QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.find( slot );
+    Q3ValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.find( slot );
     if ( it != w->lstSlots.end() )
 	w->lstSlots.remove( it );
     listSlots->currentItem()->setText( 0, s );
@@ -509,7 +514,7 @@ void CustomWidgetEditor::slotNameChanged( const QString &s )
 
 void CustomWidgetEditor::addSlot()
 {
-    QListViewItem *i = new QListViewItem( listSlots, "slot()", "public" );
+    Q3ListViewItem *i = new Q3ListViewItem( listSlots, "slot()", "public" );
     listSlots->setCurrentItem( i );
     listSlots->setSelected( i, TRUE );
     MetaDataBase::CustomWidget *w = findWidget( boxWidgets->item( boxWidgets->currentItem() ) );
@@ -538,7 +543,7 @@ void CustomWidgetEditor::removeSlot()
 	w->lstSlots.remove( slot );
 }
 
-void CustomWidgetEditor::currentSlotChanged( QListViewItem *i )
+void CustomWidgetEditor::currentSlotChanged( Q3ListViewItem *i )
 {
     editSlot->blockSignals( TRUE );
     editSlot->setText( "" );
@@ -574,7 +579,7 @@ void CustomWidgetEditor::propertyTypeChanged( const QString &s )
     MetaDataBase::Property property;
     property.property = listProperties->currentItem()->text( 0 );
     property.type = listProperties->currentItem()->text( 1 );
-    QValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.find( property );
+    Q3ValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.find( property );
     if ( it != w->lstProperties.end() )
 	w->lstProperties.remove( it );
     listProperties->currentItem()->setText( 1, s );
@@ -592,7 +597,7 @@ void CustomWidgetEditor::propertyNameChanged( const QString &s )
     MetaDataBase::Property property;
     property.property = listProperties->currentItem()->text( 0 );
     property.type = listProperties->currentItem()->text( 1 );
-    QValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.find( property );
+    Q3ValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.find( property );
     if ( it != w->lstProperties.end() )
 	w->lstProperties.remove( it );
     listProperties->currentItem()->setText( 0, s );
@@ -603,7 +608,7 @@ void CustomWidgetEditor::propertyNameChanged( const QString &s )
 
 void CustomWidgetEditor::addProperty()
 {
-    QListViewItem *i = new QListViewItem( listProperties, "property", "String" );
+    Q3ListViewItem *i = new Q3ListViewItem( listProperties, "property", "String" );
     listProperties->setCurrentItem( i );
     listProperties->setSelected( i, TRUE );
     MetaDataBase::CustomWidget *w = findWidget( boxWidgets->item( boxWidgets->currentItem() ) );
@@ -631,7 +636,7 @@ void CustomWidgetEditor::removeProperty()
 	w->lstProperties.remove( property );
 }
 
-void CustomWidgetEditor::currentPropertyChanged( QListViewItem *i )
+void CustomWidgetEditor::currentPropertyChanged( Q3ListViewItem *i )
 {
     editProperty->blockSignals( TRUE );
     editProperty->setText( "" );
@@ -688,7 +693,7 @@ void CustomWidgetEditor::saveDescription()
     if ( QFileInfo( fn ).extension() != "cw" )
 	fn += ".cw";
     QFile f( fn );
-    if ( !f.open( IO_WriteOnly ) )
+    if ( !f.open( QIODevice::WriteOnly ) )
 	return;
 
     QTextStream ts( &f );
@@ -700,7 +705,7 @@ void CustomWidgetEditor::saveDescription()
     ts << makeIndent2( indent ) << "<customwidgets>" << endl;
     indent++;
 
-    QPtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
+    Q3PtrList<MetaDataBase::CustomWidget> *lst = MetaDataBase::customWidgets();
     for ( MetaDataBase::CustomWidget *w = lst->first(); w; w = lst->next() ) {
 	ts << makeIndent2( indent ) << "<customwidget>" << endl;
 	indent++;
@@ -727,15 +732,15 @@ void CustomWidgetEditor::saveDescription()
 	indent--;
 	ts << makeIndent2( indent ) << "</pixmap>" << endl;
 	if ( !w->lstSignals.isEmpty() ) {
-	    for ( QValueList<QCString>::Iterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
+	    for ( Q3ValueList<Q3CString>::Iterator it = w->lstSignals.begin(); it != w->lstSignals.end(); ++it )
 		ts << makeIndent2( indent ) << "<signal>" << entitize2( *it ) << "</signal>" << endl;
 	}
 	if ( !w->lstSlots.isEmpty() ) {
-	    for ( QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it )
+	    for ( Q3ValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.begin(); it != w->lstSlots.end(); ++it )
 		ts << makeIndent2( indent ) << "<slot access=\"" << (*it).access << "\">" << entitize2( (*it).function ) << "</slot>" << endl;
 	}
 	if ( !w->lstProperties.isEmpty() ) {
-	    for ( QValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.begin(); it != w->lstProperties.end(); ++it )
+	    for ( Q3ValueList<MetaDataBase::Property>::Iterator it = w->lstProperties.begin(); it != w->lstProperties.end(); ++it )
 		ts << makeIndent2( indent ) << "<property type=\"" << (*it).type << "\">" << entitize2( (*it).property ) << "</property>" << endl;
 	}
 	indent--;
@@ -754,7 +759,7 @@ void CustomWidgetEditor::loadDescription()
 	return;
 
     QFile f( fn );
-    if ( !f.open( IO_ReadOnly ) )
+    if ( !f.open( QIODevice::ReadOnly ) )
 	return;
 
     QDomDocument doc;
@@ -789,7 +794,7 @@ void CustomWidgetEditor::updateCustomWidgetSizes()
 void CustomWidgetEditor::horDataChanged( int a )
 {
     QSizePolicy::SizeType st = int_to_size_type( a );
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -810,7 +815,7 @@ void CustomWidgetEditor::horDataChanged( int a )
 void CustomWidgetEditor::verDataChanged( int a )
 {
     QSizePolicy::SizeType st = int_to_size_type( a );
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;
@@ -830,7 +835,7 @@ void CustomWidgetEditor::verDataChanged( int a )
 
 void CustomWidgetEditor::widgetIsContainer( bool b )
 {
-    QListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
+    Q3ListBoxItem *i = boxWidgets->item( boxWidgets->currentItem() );
     MetaDataBase::CustomWidget *w = findWidget( i );
     if ( !i || !w )
 	return;

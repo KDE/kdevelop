@@ -1,5 +1,7 @@
 #include <qpe/config.h>
 #include <qpe/qcopenvelope_qws.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 #include "%{APPNAMELC}widget.h"
 

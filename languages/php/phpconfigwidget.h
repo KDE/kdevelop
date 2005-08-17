@@ -11,7 +11,7 @@ class PHPConfigWidget : public PHPConfigWidgetBase
     Q_OBJECT
 
 public:
-    PHPConfigWidget( PHPConfigData* data,QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    PHPConfigWidget( PHPConfigData* data,QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~PHPConfigWidget();
 
 public slots:

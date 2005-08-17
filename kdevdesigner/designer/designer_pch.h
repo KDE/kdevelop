@@ -14,16 +14,16 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qdialog.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlistview.h>
+#include <q3listbox.h>
+#include <q3listview.h>
 #include <qmap.h>
 #include <qmessagebox.h>
 #include <qmetaobject.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
@@ -31,7 +31,7 @@
 #include <qstring.h>
 #include <qtooltip.h>
 #include <qvariant.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qwidget.h>
 
 #include "command.h"

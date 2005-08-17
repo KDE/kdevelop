@@ -12,7 +12,7 @@
 
 #include "kdevpcsimporter.h"
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class SettingsDialog;
 
@@ -34,7 +34,7 @@ protected:
     void processDir(const QString path, QStringList &files );
 
 private:
-    QGuardedPtr<SettingsDialog> m_settings;
+    QPointer<SettingsDialog> m_settings;
 };
 
 #endif

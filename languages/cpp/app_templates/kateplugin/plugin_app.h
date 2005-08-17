@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3PtrList>
 %{H_TEMPLATE}
 
 #ifndef _PLUGIN_%{APPNAMEUC}_H_
@@ -43,7 +45,7 @@ class KatePlugin%{APPNAME} : public Kate::Plugin, Kate::PluginViewInterface
     void slotInsertHello();
 
   private:
-    QPtrList<class PluginView> m_views;
+    Q3PtrList<class PluginView> m_views;
 };
 
 #endif // _PLUGIN_%{APPNAMEUC}_H_

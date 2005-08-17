@@ -23,6 +23,9 @@
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QGridLayout>
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -185,7 +188,7 @@ void ProgressDialog::scanDirectories()
     QString ftsLocationsFile = locateLocal("data", "kdevdocumentation/search/locations.txt");
 
     QFile f(ftsLocationsFile);
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return;
     QTextStream str(&f);
 
@@ -228,7 +231,7 @@ bool ProgressDialog::createConfig()
     images = images.left(images.length()-8);
 
     QFile f(indexdir + "/htdig.conf");
-    if (f.open(IO_WriteOnly))
+    if (f.open(QIODevice::WriteOnly))
     {
         QTextStream ts(&f);
 
@@ -275,7 +278,7 @@ void ProgressDialog::startHtdigProcess(bool initial)
 
     // write out file
     QFile f(indexdir+"/files");
-    if (!f.open(IO_WriteOnly)) {
+    if (!f.open(QIODevice::WriteOnly)) {
         kdDebug(9002) << "Could not open `files` for writing" << endl;
         done(1);
         return;

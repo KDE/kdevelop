@@ -28,7 +28,9 @@
 #define LISTBOXRENAME_H
 
 #include <qobject.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QEvent>
 
 class QLineEdit;
 
@@ -36,7 +38,7 @@ class ListBoxRename : public QObject
 {
     Q_OBJECT
 public:
-    ListBoxRename( QListBox * eventSource, const char * name = 0 );
+    ListBoxRename( Q3ListBox * eventSource, const char * name = 0 );
     bool eventFilter( QObject *, QEvent * event );
 
 signals:
@@ -48,8 +50,8 @@ public slots:
     void renameClickedItem();
 
 private:
-    QListBoxItem * clickedItem;
-    QListBox * src;
+    Q3ListBoxItem * clickedItem;
+    Q3ListBox * src;
     QLineEdit * ed;
     bool activity;
 };

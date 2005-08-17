@@ -27,7 +27,7 @@
 #ifndef WIDGETDATABASE_H
 #define WIDGETDATABASE_H
 
-#include <qiconset.h>
+#include <qicon.h>
 #include <qstring.h>
 #include "../interfaces/widgetinterface.h" // up here for GCC 2.7.* compatibility
 #include <private/qpluginmanager_p.h>
@@ -44,7 +44,7 @@ struct WidgetDatabaseRecord
     uint isForm : 1;
     uint isCommon : 1;
     uint isPlugin : 1;
-    QIconSet *icon;
+    QIcon *icon;
     int nameCounter;
 };
 
@@ -58,7 +58,7 @@ public:
     static int count();
     static int startCustom();
 
-    static QIconSet iconSet( int id );
+    static QIcon iconSet( int id );
     static QString className( int id );
     static QString group( int id );
     static QString toolTip( int id );

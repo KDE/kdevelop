@@ -15,12 +15,14 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef SEARCHVIEW_H
 #define SEARCHVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 class DocumentationPart;
 class KLineEdit;
@@ -28,7 +30,7 @@ class KComboBox;
 class KListView;
 class KPushButton;
 class KProcess;
-class QListViewItem;
+class Q3ListViewItem;
 
 class SearchView: public QWidget
 {
@@ -48,9 +50,9 @@ protected slots:
 
     void htsearchStdout(KProcess *, char *buffer, int len);
     void htsearchExited(KProcess *);
-    void executed(QListViewItem *item);
+    void executed(Q3ListViewItem *item);
     
-    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
+    void itemMouseButtonPressed(int button, Q3ListViewItem *item, const QPoint &pos, int c);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

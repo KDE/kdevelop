@@ -15,15 +15,20 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "ddockwindow.h"
 
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qstyle.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -37,7 +42,7 @@
 #include "button.h"
 
 DDockWindow::DDockWindow(QWidget *parent, Position position)
-    :QDockWindow(QDockWindow::InDock, parent), m_position(position), m_visible(false),
+    :Q3DockWindow(Q3DockWindow::InDock, parent), m_position(position), m_visible(false),
     m_toggledButton(0)
 {
     setMovingEnabled(false);
@@ -79,7 +84,7 @@ DDockWindow::DDockWindow(QWidget *parent, Position position)
     m_bar = new Ideal::ButtonBar(place, buttonMode, this);
     m_internalLayout->addWidget(m_bar);
     
-    m_widgetStack = new QWidgetStack(this);
+    m_widgetStack = new Q3WidgetStack(this);
     m_internalLayout->addWidget(m_widgetStack);
 
     setVisible(m_visible);
@@ -275,7 +280,7 @@ void DDockWindow::setMovingEnabled(bool b)
 {
     //some operations on KMainWindow cause moving to be enabled
     //but we always don't want DDockWindow instances to be movable
-    QDockWindow::setMovingEnabled(false);
+    Q3DockWindow::setMovingEnabled(false);
 }
 
 #include "ddockwindow.moc"

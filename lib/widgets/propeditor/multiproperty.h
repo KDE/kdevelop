@@ -14,14 +14,16 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef MULTIPROPERTY_H
 #define MULTIPROPERTY_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "property.h"
 #include "childproperty.h"
@@ -110,10 +112,10 @@ public:
     void undo();
     
     /**The list of child properties.*/
-    QValueList<ChildProperty> details;
+    Q3ValueList<ChildProperty> details;
 
 private:
-    QPtrList<Property> list;
+    Q3PtrList<Property> list;
 
     PropertyList *m_propertyList;
     

@@ -27,13 +27,19 @@
 
 #include <qvbuttongroup.h>
 #include <qfileinfo.h>
-#include <qheader.h>
-#include <qtable.h>
+#include <q3header.h>
+#include <q3table.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QFocusEvent>
+#include <Q3Frame>
+#include <QVBoxLayout>
+#include <Q3PopupMenu>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -65,11 +71,11 @@ static int m_activeFlag = 0;
 /***************************************************************************/
 /***************************************************************************/
 
-class BreakpointTableRow : public QTableItem
+class BreakpointTableRow : public Q3TableItem
 {
 public:
 
-    BreakpointTableRow(QTable* table, EditType editType, Breakpoint* bp);
+    BreakpointTableRow(Q3Table* table, EditType editType, Breakpoint* bp);
     ~BreakpointTableRow();
 
     bool match (Breakpoint* bp) const;
@@ -89,9 +95,9 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-BreakpointTableRow::BreakpointTableRow(QTable* parent, EditType editType,
+BreakpointTableRow::BreakpointTableRow(Q3Table* parent, EditType editType,
                                        Breakpoint* bp) :
-        QTableItem(parent, editType, ""),
+        Q3TableItem(parent, editType, ""),
         m_breakpoint(bp)
 {
     appendEmptyRow();
@@ -129,7 +135,7 @@ void BreakpointTableRow::appendEmptyRow()
 
     table()->setItem(row, Control, this);
 
-    QCheckTableItem* cti = new QCheckTableItem( table(), "");
+    Q3CheckTableItem* cti = new Q3CheckTableItem( table(), "");
     table()->setItem(row, Enable, cti);
 }
 
@@ -139,9 +145,9 @@ void BreakpointTableRow::setRow()
 {
     if ( m_breakpoint )
     {
-        QTableItem *item =  table()->item ( row(), Enable );
+        Q3TableItem *item =  table()->item ( row(), Enable );
         Q_ASSERT(item->rtti() == 2);
-        ((QCheckTableItem*)item)->setChecked(m_breakpoint->isEnabled());
+        ((Q3CheckTableItem*)item)->setChecked(m_breakpoint->isEnabled());
 
         QString status=m_breakpoint->statusDisplay(m_activeFlag);
 
@@ -173,34 +179,34 @@ void BreakpointTableRow::setRow()
 /***************************************************************************/
 
 GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
-    QHBox(parent, name)
+    Q3HBox(parent, name)
 {
-    QFrame* toolbar = new QFrame( this );
+    Q3Frame* toolbar = new Q3Frame( this );
     QVBoxLayout *l = new QVBoxLayout(toolbar, 0, 0);
 
-    toolbar->setFrameStyle( QFrame::ToolBarPanel | QFrame::Plain );
+    toolbar->setFrameStyle( QFrame::StyledPanel | Q3Frame::Plain );
     toolbar->setLineWidth( 0 );
 
     m_add       = new QToolButton( toolbar, "add breakpoint" );
     m_add->setPixmap ( SmallIcon ( "breakpoint_add" ) );
     QToolTip::add ( m_add, i18n ( "Add empty breakpoint" ) + I18N_NOOP(" <Alt+A>"));
-    QWhatsThis::add( m_add, i18n("<b>Add empty breakpoint</b><p>Shows a popup menu that allows you to choose "
+    Q3WhatsThis::add( m_add, i18n("<b>Add empty breakpoint</b><p>Shows a popup menu that allows you to choose "
         "the type of breakpoint, then adds a breakpoint of the selected type to the breakpoints list."));
 
     m_delete    = new QToolButton( toolbar, "delete breakpoint" );
     m_delete->setPixmap ( SmallIcon ( "breakpoint_delete" ) );
     QToolTip::add ( m_delete, i18n ( "Delete selected breakpoint" ) + I18N_NOOP(" <Delete>") );
-    QWhatsThis::add( m_delete, i18n("<b>Delete selected breakpoint</b><p>Deletes the selected breakpoint in the breakpoints list."));
+    Q3WhatsThis::add( m_delete, i18n("<b>Delete selected breakpoint</b><p>Deletes the selected breakpoint in the breakpoints list."));
 
     m_edit      = new QToolButton( toolbar, "edit breakpoint" );
     m_edit->setPixmap ( SmallIcon ( "breakpoint_edit" ) );
     QToolTip::add ( m_edit, i18n ( "Edit selected breakpoint" ) + I18N_NOOP(" <Return>")  );
-    QWhatsThis::add( m_edit, i18n("<b>Edit selected breakpoint</b><p>Allows to edit location, condition and ignore count properties of the selected breakpoint in the breakpoints list."));
+    Q3WhatsThis::add( m_edit, i18n("<b>Edit selected breakpoint</b><p>Allows to edit location, condition and ignore count properties of the selected breakpoint in the breakpoints list."));
 
     m_removeAll      = new QToolButton( toolbar, "Delete all breakppoints" );
     m_removeAll->setPixmap ( SmallIcon ( "breakpoint_delete_all" ) );
     QToolTip::add ( m_removeAll, i18n ( "Remove all breakpoints" ) );
-    QWhatsThis::add( m_removeAll, i18n("<b>Remove all breakpoints</b><p>Removes all breakpoints in the project."));
+    Q3WhatsThis::add( m_removeAll, i18n("<b>Remove all breakpoints</b><p>Removes all breakpoints in the project."));
 
     l->addWidget(m_add);
     l->addWidget(m_edit);
@@ -209,7 +215,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     QSpacerItem* spacer = new QSpacerItem( 5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding );
     l->addItem(spacer);
 
-    QPopupMenu *addMenu = new QPopupMenu( this );
+    Q3PopupMenu *addMenu = new Q3PopupMenu( this );
     addMenu->insertItem( i18n( "File:line" ),   BP_TYPE_FilePos );
     addMenu->insertItem( i18n( "Watchpoint" ),  BP_TYPE_Watchpoint );
     addMenu->insertItem( i18n( "Address" ),     BP_TYPE_Address );
@@ -218,10 +224,10 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     m_add->setPopupDelay(1);
 
     m_table = new GDBTable(0, numCols, this, name);
-    m_table->setSelectionMode(QTable::SingleRow);
+    m_table->setSelectionMode(Q3Table::SingleRow);
     m_table->setShowGrid (false);
     m_table->setLeftMargin(0);
-    m_table->setFocusStyle(QTable::FollowStyle);
+    m_table->setFocusStyle(Q3Table::FollowStyle);
 
     m_table->hideColumn(Control);
     m_table->setColumnReadOnly(Type, true);
@@ -229,7 +235,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     m_table->setColumnReadOnly(Hits, true);
     m_table->setColumnWidth( Enable, 20);
 
-    QHeader *header = m_table->horizontalHeader();
+    Q3Header *header = m_table->horizontalHeader();
 
     header->setLabel( Enable,       "" );
     header->setLabel( Type,         i18n("Type") );
@@ -239,7 +245,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     header->setLabel( IgnoreCount,  i18n("Ignore Count") );
     header->setLabel( Hits,         i18n("Hits") );
 
-    m_ctxMenu = new QPopupMenu( this );
+    m_ctxMenu = new Q3PopupMenu( this );
     m_ctxMenu->insertItem( i18n( "Show" ),    BW_ITEM_Show );
     m_ctxMenu->insertItem( i18n( "Edit" ),    BW_ITEM_Edit );
     m_ctxMenu->insertItem( i18n( "Disable" ), BW_ITEM_Disable );
@@ -371,7 +377,7 @@ BreakpointTableRow* GDBBreakpointWidget::findKey(int BPKey)
 BreakpointTableRow* GDBBreakpointWidget::addBreakpoint(Breakpoint *bp)
 {
     BreakpointTableRow* btr =
-        new BreakpointTableRow( m_table, QTableItem::WhenCurrent, bp );
+        new BreakpointTableRow( m_table, Q3TableItem::WhenCurrent, bp );
     emit publishBPState(*bp);
     return btr;
 }
@@ -539,7 +545,7 @@ void GDBBreakpointWidget::slotParseGDBBrkptList(char *str)
                 {
                     char* EOL = strchr(str, '\n');
                     if (EOL)
-                        condition = QCString(str+14, EOL-(str+13));
+                        condition = Q3CString(str+14, EOL-(str+13));
                 }
             }
 
@@ -658,7 +664,7 @@ void GDBBreakpointWidget::slotAddBlankBreakpoint(int idx)
 
     if (btr)
     {
-        QTableSelection ts;
+        Q3TableSelection ts;
         ts.init(btr->row(), 0);
         ts.expandTo(btr->row(), numCols );
         m_table->addSelection(ts);
@@ -807,7 +813,7 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
 
         case Enable:
         {
-            QCheckTableItem *item = (QCheckTableItem*)m_table->item ( row, Enable );
+            Q3CheckTableItem *item = (Q3CheckTableItem*)m_table->item ( row, Enable );
             if ( item->isChecked() != bp->isEnabled() )
             {
                 bp->setEnabled(item->isChecked());
@@ -888,7 +894,7 @@ void GDBBreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNu
 
     if (btr)
     {
-        QTableSelection ts;
+        Q3TableSelection ts;
         ts.init(btr->row(), 0);
         ts.expandTo(btr->row(), numCols);
         m_table->addSelection(ts);

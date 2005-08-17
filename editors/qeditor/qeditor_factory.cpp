@@ -15,14 +15,17 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 
 #include "qeditor_factory.h"
 #include "qeditor_part.h"
 #include "qeditor_view.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kinstance.h>
@@ -31,15 +34,15 @@
 
 #include <assert.h>
 
-template class QPtrList<QEditorPart>;
-template class QPtrList<QEditorView>;
+template class Q3PtrList<QEditorPart>;
+template class Q3PtrList<QEditorView>;
 
 QEditorPartFactory *QEditorPartFactory::s_self = 0;
 unsigned long int QEditorPartFactory::s_refcnt = 0;
 KInstance *QEditorPartFactory::s_instance = 0;
 KAboutData *QEditorPartFactory::s_about = 0;
-QPtrList<QEditorPart> *QEditorPartFactory::s_documents = 0;
-QPtrList<QEditorView> *QEditorPartFactory::s_views = 0;
+Q3PtrList<QEditorPart> *QEditorPartFactory::s_documents = 0;
+Q3PtrList<QEditorView> *QEditorPartFactory::s_views = 0;
 KTrader::OfferList *QEditorPartFactory::s_plugins = 0;
 
 extern "C"
@@ -132,7 +135,7 @@ KParts::Part *QEditorPartFactory::createPartObject( QWidget *parentWidget, const
 void QEditorPartFactory::registerDocument ( QEditorPart *doc )
 {
     if ( !s_documents )
-        s_documents = new QPtrList<QEditorPart>;
+        s_documents = new Q3PtrList<QEditorPart>;
 
     if ( !s_documents->containsRef( doc ) )
     {
@@ -160,7 +163,7 @@ void QEditorPartFactory::deregisterDocument ( QEditorPart *doc )
 void QEditorPartFactory::registerView ( QEditorView *view )
 {
     if ( !s_views )
-        s_views = new QPtrList<QEditorView>;
+        s_views = new Q3PtrList<QEditorView>;
 
     if ( !s_views->containsRef( view ) )
     {
@@ -188,7 +191,7 @@ void QEditorPartFactory::deregisterView ( QEditorView *view )
 KTrader::OfferList *QEditorPartFactory::plugins ()
 {
   if ( !s_plugins )
-   s_plugins = new QValueList<KService::Ptr> (KTrader::self()->query("KTextEditor/Plugin"));
+   s_plugins = new Q3ValueList<KService::Ptr> (KTrader::self()->query("KTextEditor/Plugin"));
 
   return s_plugins;
 }
@@ -213,12 +216,12 @@ KInstance *QEditorPartFactory::instance()
     return s_instance;
 }
 
-const QPtrList<class QEditorPart>& QEditorPartFactory::documents()
+const Q3PtrList<class QEditorPart>& QEditorPartFactory::documents()
 {
     return *s_documents;
 }
 
-const QPtrList<class QEditorView>& QEditorPartFactory::views()
+const Q3PtrList<class QEditorView>& QEditorPartFactory::views()
 {
     return *s_views;
 }

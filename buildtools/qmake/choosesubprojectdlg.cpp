@@ -14,7 +14,7 @@
 
 #include "choosesubprojectdlg.h"
 
-ChooseSubprojectDlg::ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* parent, const char* name, bool modal, WFlags fl)
+ChooseSubprojectDlg::ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
     : ChooseSubprojectDlgBase(parent,name, modal,fl), m_widget(widget)
 {
     ChooseItem *it = new ChooseItem(m_widget->m_rootSubproject, subprojects_view, m_widget->m_rootSubproject->text(0));
@@ -22,7 +22,7 @@ ChooseSubprojectDlg::ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* pa
     it->setOpen(true);
     fillSubprojectsView(it);
 
-    connect(subprojects_view, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(itemSelected(QListViewItem *)));
+    connect(subprojects_view, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(itemSelected(Q3ListViewItem *)));
     subprojects_view->setSelected(it, true);
 }
 
@@ -44,12 +44,12 @@ void ChooseSubprojectDlg::accept()
     QDialog::accept();
 }
 
-ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, QListViewItem * parent, QString text )
+ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, Q3ListViewItem * parent, QString text )
     :KListViewItem(parent, text), m_spitem(spitem)
 {
 }
 
-ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, QListView * parent, QString text )
+ChooseItem::ChooseItem( SubqmakeprojectItem * spitem, Q3ListView * parent, QString text )
     :KListViewItem(parent, text), m_spitem(spitem)
 {
 }
@@ -64,7 +64,7 @@ void ChooseSubprojectDlg::fillSubprojectsView( ChooseItem *item )
     if (!item->subproject())
         return;
 
-    QListViewItem * sub_spitem = item->subproject()->firstChild();
+    Q3ListViewItem * sub_spitem = item->subproject()->firstChild();
     while( sub_spitem ) {
         SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem *>(sub_spitem);
         if (spitem)
@@ -79,7 +79,7 @@ void ChooseSubprojectDlg::fillSubprojectsView( ChooseItem *item )
     }
 }
 
-void ChooseSubprojectDlg::itemSelected( QListViewItem * it )
+void ChooseSubprojectDlg::itemSelected( Q3ListViewItem * it )
 {
     if (!it)
         return;

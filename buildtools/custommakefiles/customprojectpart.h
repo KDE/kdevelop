@@ -12,16 +12,18 @@
 #ifndef _CUSTOMPROJECTPART_H_
 #define _CUSTOMPROJECTPART_H_
 
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <q3dict.h>
+#include <qpointer.h>
 #include <qmap.h>
 #include <qdatetime.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include <kdevbuildtool.h>
 
-class QListViewItem;
-class QPopupMenu;
+class Q3ListViewItem;
+class Q3PopupMenu;
 class QStringList;
 class KDialogBase;
 class CustomProjectWidget;
@@ -63,7 +65,7 @@ protected:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
-    void contextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(Q3PopupMenu *popup, const Context *context);
     void slotAddToProject();
     void slotRemoveFromProject();
     void slotChooseActiveDirectory();
@@ -91,9 +93,9 @@ private:
     QString m_projectName;
     QString m_filelistDir;
     QStringList m_sourceFiles;
-    QPopupMenu *m_targetMenu;
-    QPopupMenu *m_targetObjectFilesMenu;
-    QPopupMenu *m_targetOtherFilesMenu;
+    Q3PopupMenu *m_targetMenu;
+    Q3PopupMenu *m_targetObjectFilesMenu;
+    Q3PopupMenu *m_targetOtherFilesMenu;
     KSelectAction *m_makeEnvironmentsSelector;
     QStringList m_targets;
     QStringList m_targetsObjectFiles;
@@ -107,7 +109,7 @@ private:
     QString m_buildCommand;
     bool m_lastCompilationFailed;
     QMap<QString, int> m_parsedMakefiles;
-    QValueStack<QString> m_makefilesToParse;
+    Q3ValueStack<QString> m_makefilesToParse;
 };
 
 #endif

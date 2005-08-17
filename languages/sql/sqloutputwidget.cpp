@@ -11,35 +11,39 @@
 
 #include <qsqldatabase.h>
 #include <qsqlerror.h>
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldriver.h>
 #include <qsqlrecord.h>
-#include <qwidgetstack.h>
-#include <qdatatable.h>
-#include <qtextedit.h>
+#include <q3widgetstack.h>
+#include <q3datatable.h>
+#include <q3textedit.h>
 #include <qlayout.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QSqlQuery>
+#include <Q3SqlRecordInfo>
 
 #include <klocale.h>
 
 #include "sqloutputwidget.h"
 
-class QCustomSqlCursor: public QSqlCursor
+class QCustomSqlCursor: public Q3SqlCursor
 {
 public:
     QCustomSqlCursor( const QString & query = QString::null, bool autopopulate = TRUE, QSqlDatabase* db = 0 ) :
-                QSqlCursor( QString::null, autopopulate, db )
+                Q3SqlCursor( QString::null, autopopulate, db )
     {
         exec( query );
         if ( isSelect() && autopopulate ) {
-            QSqlRecordInfo inf = ((QSqlQuery*)this)->driver()->recordInfo( *(QSqlQuery*)this );
-            for ( QSqlRecordInfo::iterator it = inf.begin(); it != inf.end(); ++it ) {
+            Q3SqlRecordInfo inf = ((QSqlQuery*)this)->driver()->recordInfo( *(QSqlQuery*)this );
+            for ( Q3SqlRecordInfo::iterator it = inf.begin(); it != inf.end(); ++it ) {
                 append( *it );
             }
         }
-        setMode( QSqlCursor::ReadOnly );
+        setMode( Q3SqlCursor::ReadOnly );
     }
-    QCustomSqlCursor( const QCustomSqlCursor & other ): QSqlCursor( other ) {}
+    QCustomSqlCursor( const QCustomSqlCursor & other ): Q3SqlCursor( other ) {}
     bool select( const QString & /*filter*/, const QSqlIndex & /*sort*/ = QSqlIndex() )
         { return exec( lastQuery() ); }
     QSqlIndex primaryIndex( bool /*prime*/ = TRUE ) const
@@ -57,11 +61,11 @@ public:
 SqlOutputWidget::SqlOutputWidget ( QWidget* parent, const char* name ) :
     QWidget( parent, name )
 {
-    m_stack = new QWidgetStack( this );
-    m_table = new QDataTable( this );
-    m_textEdit = new QTextEdit( this );
+    m_stack = new Q3WidgetStack( this );
+    m_table = new Q3DataTable( this );
+    m_textEdit = new Q3TextEdit( this );
 
-    m_textEdit->setTextFormat( QTextEdit::RichText );
+    m_textEdit->setTextFormat( Qt::RichText );
     m_textEdit->setReadOnly( true );
     
     m_stack->addWidget( m_textEdit );
@@ -86,12 +90,12 @@ void SqlOutputWidget::showQuery( const QString& connectionName, const QString& q
         return;
     }
 
-    QSqlCursor* cur = new QCustomSqlCursor( query, true, db );
+    Q3SqlCursor* cur = new QCustomSqlCursor( query, true, db );
     if ( !cur->isActive() ) {
         showError( cur->lastError() );
     } else if ( cur->isSelect() ) {
         m_table->setSqlCursor( cur, true, true );
-        m_table->refresh( QDataTable::RefreshAll );
+        m_table->refresh( Q3DataTable::RefreshAll );
         m_stack->raiseWidget( m_table );
     } else {
         showSuccess( cur->numRowsAffected() );
@@ -117,9 +121,9 @@ void SqlOutputWidget::showError( const QSqlError& message )
     m_textEdit->clear();
     m_textEdit->setText( "<p><b>" + i18n("An error occurred:") + 
                          "</b></p>\n<p><i>" + i18n("Driver") + "</i>: " + 
-                         QStyleSheet::escape( message.driverText() ) + 
+                         Q3StyleSheet::escape( message.driverText() ) + 
                          "<br><i>" + i18n("Database") + ":</i>: " +
-                         QStyleSheet::escape( message.databaseText() ) );
+                         Q3StyleSheet::escape( message.databaseText() ) );
     m_stack->raiseWidget( m_textEdit );
 }
 

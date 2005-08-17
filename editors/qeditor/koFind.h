@@ -14,20 +14,24 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef KOFIND_H
 #define KOFIND_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QGridLayout>
+#include <Q3PopupMenu>
 
 class KHistoryCombo;
 class QCheckBox;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
-class QPopupMenu;
+class Q3PopupMenu;
 class QPushButton;
 class QRect;
 class QGridLayout;
@@ -74,7 +78,7 @@ public:
         WholeWordsOnly = 1,     // Match whole words only.
         FromCursor = 2,         // Start from current cursor position.
         SelectedText = 4,       // Only search selected area.
-        CaseSensitive = 8,      // Consider case when matching.
+        Qt::CaseSensitive = 8,      // Consider case when matching.
         FindBackwards = 16,     // Go backwards.
         RegularExpression = 32, // Interpret the pattern as a regular expression.
         // User extensions can use boolean options above this value.
@@ -172,21 +176,21 @@ public:
     KHistoryCombo *m_replace;
 
 private:
-    QGroupBox *m_findGrp;
+    Q3GroupBox *m_findGrp;
     QLabel *m_findLabel;
     QCheckBox *m_regExp;
     QPushButton *m_regExpItem;
     QGridLayout *m_findLayout;
     QWidget *m_findExtension;
 
-    QGroupBox *m_optionGrp;
+    Q3GroupBox *m_optionGrp;
     QCheckBox *m_wholeWordsOnly;
     QCheckBox *m_fromCursor;
     QCheckBox *m_selectedText;
     QCheckBox *m_caseSensitive;
     QCheckBox *m_findBackwards;
 
-    QPopupMenu *m_patterns;
+    Q3PopupMenu *m_patterns;
 
     // Our dirty little secret is that we also implement the "replace" dialog. But we
     // keep that fact hidden from all but our friends.
@@ -204,7 +208,7 @@ private:
     KoFindDialog( QWidget *parent, const char *name, bool forReplace );
     void init( bool forReplace, const QStringList &findStrings, bool hasSelection );
 
-    QGroupBox *m_replaceGrp;
+    Q3GroupBox *m_replaceGrp;
     QLabel *m_replaceLabel;
     QCheckBox* m_backRef;
     QPushButton* m_backRefItem;
@@ -213,7 +217,7 @@ private:
 
     QCheckBox* m_promptOnReplace;
 
-    QPopupMenu *m_placeholders;
+    Q3PopupMenu *m_placeholders;
 
     // Binary compatible extensibility.
     class KoFindDialogPrivate;

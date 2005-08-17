@@ -6,7 +6,7 @@
 #ifndef __KDEVPART_VISUALBOYADVANCE_H__
 #define __KDEVPART_VISUALBOYADVANCE_H__
   
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdevplugin.h>
 #include <kdialogbase.h>
 

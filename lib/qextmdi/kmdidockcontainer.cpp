@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "kmdimainfrm.h"
@@ -23,10 +23,18 @@
 
 #include "kdockwidget_private.h"
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qlayout.h>
 #include <qtimer.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
+#include <QEvent>
+#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QVBoxLayout>
+#include <QMouseEvent>
 #include <kmultitabbar.h>
 #include <kglobalsettings.h>
 
@@ -83,7 +91,7 @@ KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position
     (position==KDockWidget::DockBottom)?KMultiTabBar::Bottom:
     (position==KDockWidget::DockTop)?KMultiTabBar::Top:KMultiTabBar::Right);
 
-  m_ws=new QWidgetStack(this);
+  m_ws=new Q3WidgetStack(this);
 
   m_ws->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 
@@ -445,8 +453,8 @@ void KMdiDockContainer::save(QDomElement& dockEl)
     el=doc.createElement("overlapMode");
     el.appendChild(doc.createTextNode(isOverlapMode() ?"true":"false"));
     dockEl.appendChild(el);
-    QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
-    QPtrListIterator<KMultiTabBarTab> it(*tl);
+    Q3PtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+    Q3PtrListIterator<KMultiTabBarTab> it(*tl);
     QStringList::Iterator it2=itemNames.begin();
     int i=0;
     for (;it.current()!=0;++it,++it2)
@@ -503,8 +511,8 @@ void KMdiDockContainer::load(QDomElement& dockEl)
     }
 
 
-  QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
-  QPtrListIterator<KMultiTabBarTab> it1(*tl);
+  Q3PtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+  Q3PtrListIterator<KMultiTabBarTab> it1(*tl);
   m_ws->hide();
   if (m_vertical)
   parentDockWidget()->setForcedFixedWidth(m_tb->width());
@@ -574,8 +582,8 @@ void KMdiDockContainer::save(KConfig* cfg,const QString& group_or_prefix)
       cfg->writeEntry( "separatorPos", m_separatorPos );
   }
 
-  QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
-  QPtrListIterator<KMultiTabBarTab> it(*tl);
+  Q3PtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+  Q3PtrListIterator<KMultiTabBarTab> it(*tl);
   QStringList::Iterator it2=itemNames.begin();
   int i=0;
   for (;it.current()!=0;++it,++it2)
@@ -637,8 +645,8 @@ void KMdiDockContainer::load(KConfig* cfg,const QString& group_or_prefix)
 
   }
 
-  QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
-  QPtrListIterator<KMultiTabBarTab> it1(*tl);
+  Q3PtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+  Q3PtrListIterator<KMultiTabBarTab> it1(*tl);
   m_ws->hide();
   if (m_vertical)
   parentDockWidget()->setForcedFixedWidth(m_tb->width());
@@ -691,8 +699,8 @@ void KMdiDockContainer::collapseOverlapped()
 {
   if (m_tabSwitching) return;
   if (isOverlapMode()){
-    QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
-          QPtrListIterator<KMultiTabBarTab> it(*tl);
+    Q3PtrList<KMultiTabBarTab>* tl=m_tb->tabs();
+          Q3PtrListIterator<KMultiTabBarTab> it(*tl);
     for(;it.current();++it) {
       if (it.current()->isOn()) {
         kdDebug(760)<<"Lowering TAB"<<endl;
@@ -724,7 +732,7 @@ void KMdiDockContainer::toggle() {
 }
 
 void KMdiDockContainer::prevToolView() {
-    QPtrList<KMultiTabBarTab>* tabs=m_tb->tabs();
+    Q3PtrList<KMultiTabBarTab>* tabs=m_tb->tabs();
     int pos=tabs->findRef(m_tb->tab(oldtab));
     if (pos==-1) return;
     pos--;
@@ -736,7 +744,7 @@ void KMdiDockContainer::prevToolView() {
 }
 
 void KMdiDockContainer::nextToolView() {
-    QPtrList<KMultiTabBarTab>* tabs=m_tb->tabs();
+    Q3PtrList<KMultiTabBarTab>* tabs=m_tb->tabs();
     int pos=tabs->findRef(m_tb->tab(oldtab));
     if (pos==-1) return;
     pos++;

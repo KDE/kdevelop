@@ -16,21 +16,23 @@
 #include "gdbcommand.h"
 #include "breakpoint.h"
 #include "variablewidget.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace GDBDebugger
 {
 
 /***************************************************************************/
 
-QCString GDBCommand::idlePrompt_ = QCString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
+Q3CString GDBCommand::idlePrompt_ = Q3CString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
 
 /***************************************************************************/
 
-GDBCommand::GDBCommand(const QCString &setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt)
+GDBCommand::GDBCommand(const Q3CString &setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt)
     : DbgCommand(setCommand, isRunCmd, isInfoCmd, setPrompt)
 {
     if (prompt_) {
-        cmdBuffer_ = QCString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_) +
+        cmdBuffer_ = Q3CString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_) +
             command_ +
             idlePrompt_;
     }
@@ -47,7 +49,7 @@ GDBCommand::~GDBCommand()
 /***************************************************************************/
 
 GDBItemCommand::GDBItemCommand( VarItem *item,
-                                const QCString &command,
+                                const Q3CString &command,
                                 bool isRunCmd,
                                 char prompt)
     : GDBCommand(command, isRunCmd, true, prompt),
@@ -58,6 +60,24 @@ GDBItemCommand::GDBItemCommand( VarItem *item,
 /***************************************************************************/
 
 GDBItemCommand::~GDBItemCommand()
+{
+}
+
+/***************************************************************************/
+/***************************************************************************/
+/***************************************************************************/
+
+GDBPointerCommand::GDBPointerCommand(VarItem *item)
+    : GDBItemCommand(item,
+                     Q3CString("print *")+Q3CString(item->fullName().latin1()),
+                     false,
+                     DATAREQUEST)
+{
+}
+
+/***************************************************************************/
+
+GDBPointerCommand::~GDBPointerCommand()
 {
 }
 
@@ -81,7 +101,7 @@ GDBItemCommand::~GDBItemCommand()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBSetBreakpointCommand::GDBSetBreakpointCommand(const QCString &command, int key)
+GDBSetBreakpointCommand::GDBSetBreakpointCommand(const Q3CString &command, int key)
     : GDBCommand(command, false, false, SET_BREAKPT),
       key_(key)
 {

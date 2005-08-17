@@ -14,14 +14,16 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "profileeditor.h"
 
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qpalette.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 #include <kpushbutton.h>
@@ -152,7 +154,7 @@ void ProfileEditor::refreshAvailableList()
         new KListViewItem(allProject, (*it)->desktopEntryName(), (*it)->genericName());
 }
 
-void ProfileEditor::profileExecuted(QListViewItem *item)
+void ProfileEditor::profileExecuted(Q3ListViewItem *item)
 {    
     if (!item || item->text(0) == "KDevelop")
         removeProfileButton->setEnabled(false);
@@ -224,7 +226,7 @@ void ProfileEditor::fillPluginsList(Profile *profile)
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 }
 
-void ProfileEditor::propertyExecuted(QListBoxItem *item)
+void ProfileEditor::propertyExecuted(Q3ListBoxItem *item)
 {
     removePropertyButton->setEnabled(item != 0);
 }
@@ -262,7 +264,7 @@ void ProfileEditor::removeProfile()
         Profile *profile = currentProfile();
         if (profile->remove())
         {
-            QListViewItem *item = profilesList->currentItem();
+            Q3ListViewItem *item = profilesList->currentItem();
             profilesList->setCurrentItem(item->parent());
             profile->detachFromParent();
             delete profile;

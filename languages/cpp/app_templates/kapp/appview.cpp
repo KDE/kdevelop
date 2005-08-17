@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QHBoxLayout>
 %{CPP_TEMPLATE}
 
 #include "%{APPNAMELC}view.h"

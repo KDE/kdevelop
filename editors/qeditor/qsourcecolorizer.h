@@ -14,8 +14,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -23,8 +23,8 @@
 #define qsourcecolorizer_h
 
 #include <private/qrichtext_p.h>
-#include <qintdict.h>
-#include <qptrlist.h>
+#include <q3intdict.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qregexp.h>
 #include <qpair.h>
@@ -232,7 +232,7 @@ public:
     void appendChild( HLItem* item ) { m_items.append( item ); }
 
     int checkHL( const QChar* buffer, int pos, int length, int* state, int* next ){
-	QPtrListIterator<HLItem> it( m_items );
+	Q3PtrListIterator<HLItem> it( m_items );
 	
 	while( it.current() ){
 	    HLItem* item = it.current();
@@ -254,7 +254,7 @@ public:
     }
 
 private:
-    QPtrList<HLItem> m_items;
+    Q3PtrList<HLItem> m_items;
 };
 
 class QSourceColorizer: public QTextPreProcessor{
@@ -295,7 +295,7 @@ public:
 protected:
     QEditor* m_editor;
     QMap<int, QPair<QString, QTextFormat*> > m_formats;
-    QPtrList<HLItemCollection> m_items;
+    Q3PtrList<HLItemCollection> m_items;
     QString m_left;
     QString m_right;
 };

@@ -11,9 +11,11 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kstandarddirs.h>
 #include <kconfig.h>
@@ -21,7 +23,7 @@
 #include "cppsupportfactory.h"
 #include "classgeneratorconfig.h"
 
-ClassGeneratorConfig::ClassGeneratorConfig( QWidget* parent, const char* name, WFlags fl )
+ClassGeneratorConfig::ClassGeneratorConfig( QWidget* parent, const char* name, Qt::WFlags fl )
 		: ClassGeneratorConfigBase( parent, name, fl )
 {
 	readConfig();
@@ -34,7 +36,7 @@ ClassGeneratorConfig::ClassGeneratorConfig( QString v_cppHeaderText, QString v_c
         QString v_gtkHeaderText, QString v_gtkSourceText,
         NameCase v_fileCase, NameCase v_defCase, NameCase v_superCase,
         bool v_showAuthor, bool v_genDoc, bool v_reformat,
-        QWidget* parent, const char* name, WFlags fl )
+        QWidget* parent, const char* name, Qt::WFlags fl )
 		: ClassGeneratorConfigBase( parent, name, fl ),
 		cppHeaderText( v_cppHeaderText ), cppSourceText( v_cppSourceText ),
 		objcHeaderText( v_objcHeaderText ), objcSourceText( v_objcSourceText ),
@@ -183,7 +185,7 @@ QString ClassGeneratorConfig::templateText( QString path )
 	if ( f.exists() )
 	{
 		QFile file( path );
-		if ( file.open( IO_ReadOnly ) )
+		if ( file.open( QIODevice::ReadOnly ) )
 		{
 			QTextStream stream( &file );
 			return stream.read();
@@ -225,7 +227,7 @@ void ClassGeneratorConfig::storeConfig()
 void ClassGeneratorConfig::saveTemplateText( QString path, QString content )
 {
 	QFile f( path );
-	if ( f.open( IO_WriteOnly ) )
+	if ( f.open( QIODevice::WriteOnly ) )
 	{
 		QTextStream stream( &f );
 		stream << content;

@@ -12,7 +12,7 @@
 #ifndef __KDEVPART_FULLSCREEN_H__
 #define __KDEVPART_FULLSCREEN_H__
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdevplugin.h>
 
 class KAction;

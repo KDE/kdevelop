@@ -15,7 +15,7 @@
 #include <qdom.h>
 #include "ftnchekconfigwidgetbase.h"
 
-class QButtonGroup;
+class Q3ButtonGroup;
 
 class FtnchekConfigWidget : public FtnchekConfigWidgetBase
 {
@@ -32,9 +32,9 @@ private:
     void readConfig();
     void storeConfig();
 
-    QButtonGroup *arguments_group, *common_group;
-    QButtonGroup *truncation_group, *usage_group;
-    QButtonGroup *f77_group, *portability_group;
+    Q3ButtonGroup *arguments_group, *common_group;
+    Q3ButtonGroup *truncation_group, *usage_group;
+    Q3ButtonGroup *f77_group, *portability_group;
     QDomDocument dom;
 };
 

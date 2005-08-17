@@ -27,11 +27,25 @@
 #include <qaction.h>
 #include <qapplication.h>
 #include <qbitmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qlineedit.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qpainter.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QPixmap>
+#include <QDragLeaveEvent>
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 #include "command.h"
 #include "formwindow.h"
 #include "menubareditor.h"
@@ -43,7 +57,7 @@ extern void find_accel( const QString &txt, QMap<QChar, QWidgetList > &accels, Q
 
 // Drag Object Declaration -------------------------------------------
 
-class MenuBarEditorItemPtrDrag : public QStoredDrag
+class MenuBarEditorItemPtrDrag : public Q3StoredDrag
 {
 public:
     MenuBarEditorItemPtrDrag( MenuBarEditorItem * item,
@@ -59,10 +73,10 @@ public:
 MenuBarEditorItemPtrDrag::MenuBarEditorItemPtrDrag( MenuBarEditorItem * item,
 						    QWidget * parent,
 						    const char * name )
-    : QStoredDrag( "qt/menubareditoritemptr", parent, name )
+    : Q3StoredDrag( "qt/menubareditoritemptr", parent, name )
 {
     QByteArray data( sizeof( Q_LONG ) );
-    QDataStream stream( data, IO_WriteOnly );
+    QDataStream stream( data, QIODevice::WriteOnly );
     stream << ( Q_LONG ) item;
     setEncodedData( data );
 }
@@ -75,7 +89,7 @@ bool MenuBarEditorItemPtrDrag::canDecode( QDragMoveEvent * e )
 bool MenuBarEditorItemPtrDrag::decode( QDropEvent * e, MenuBarEditorItem ** i )
 {
     QByteArray data = e->encodedData( "qt/menubareditoritemptr" );
-    QDataStream stream( data, IO_ReadOnly );
+    QDataStream stream( data, QIODevice::ReadOnly );
 
     if ( !data.size() )
 	return FALSE;
@@ -110,7 +124,7 @@ MenuBarEditorItem::MenuBarEditorItem( PopupMenuEditor * menu, MenuBarEditor * ba
     text = menu->name();
 }
 
-MenuBarEditorItem::MenuBarEditorItem( QActionGroup * actionGroup, MenuBarEditor * bar,
+MenuBarEditorItem::MenuBarEditorItem( Q3ActionGroup * actionGroup, MenuBarEditor * bar,
 				      QObject * parent, const char * name )
     : QObject( parent, name ),
       menuBar( bar ),
@@ -159,7 +173,7 @@ MenuBarEditor::MenuBarEditor( FormWindow * fw, QWidget * parent, const char * na
 
     lineEdit = new QLineEdit( this, "menubar lineedit" );
     lineEdit->hide();
-    lineEdit->setFrameStyle(QFrame::Plain | QFrame::NoFrame);
+    lineEdit->setFrameStyle(Q3Frame::Plain | Q3Frame::NoFrame);
     lineEdit->polish();
     lineEdit->setBackgroundMode(PaletteButton);
     lineEdit->setBackgroundOrigin(ParentOrigin);
@@ -223,7 +237,7 @@ void MenuBarEditor::insertItem( QString text, PopupMenuEditor * menu, int index 
     insertItem( item, index );
 }
 
-void MenuBarEditor::insertItem( QString text, QActionGroup * group, int index )
+void MenuBarEditor::insertItem( QString text, Q3ActionGroup * group, int index )
 {
     MenuBarEditorItem * item = new MenuBarEditorItem( group, this );
     if ( !text.isNull() )
@@ -575,7 +589,7 @@ bool MenuBarEditor::eventFilter( QObject * o, QEvent * e )
 	leaveEditMode();
 	lineEdit->hide();
 	update();
-    } else if ( e->type() == QEvent::LayoutHint ) {
+    } else if ( e->type() == QEvent::LayoutRequest ) {
 	resize( sizeHint() );
      }
     return QMenuBar::eventFilter( o, e );
@@ -647,7 +661,7 @@ void MenuBarEditor::mouseMoveEvent( QMouseEvent * e )
 	    //  we will have two instances of the same pointer
 	    // in the list.
 	    itemList.find( draggedItem );
-	    QLNode * node = itemList.currentNode();
+	    Q3LNode * node = itemList.currentNode();
 	    dropConfirmed = FALSE;
 	    d->dragCopy(); // dragevents and stuff happens
 	    if ( draggedItem ) { // item was not dropped
@@ -727,12 +741,12 @@ void MenuBarEditor::keyPressEvent( QKeyEvent * e )
 
 	case Qt::Key_Left:
 	    e->accept();
-	    navigateLeft( e->state() & Qt::ControlButton );
+	    navigateLeft( e->state() & Qt::ControlModifier );
 	    return;
 
 	case Qt::Key_Right:
 	    e->accept();
-	    navigateRight( e->state() & Qt::ControlButton );
+	    navigateRight( e->state() & Qt::ControlModifier );
 	    return; // no update
 
 	case Qt::Key_Down:
@@ -765,13 +779,13 @@ void MenuBarEditor::keyPressEvent( QKeyEvent * e )
 	    return; // no update
 
 	case Qt::Key_C:
-	    if ( e->state() & Qt::ControlButton && currentIndex < (int)itemList.count() ) {
+	    if ( e->state() & Qt::ControlModifier && currentIndex < (int)itemList.count() ) {
 		copy( currentIndex );
 		break;
 	    }
 
 	case Qt::Key_X:
-	    if ( e->state() & Qt::ControlButton && currentIndex < (int)itemList.count() ) {
+	    if ( e->state() & Qt::ControlModifier && currentIndex < (int)itemList.count() ) {
 		hideItem();
 		cut( currentIndex );
 		showItem();
@@ -779,7 +793,7 @@ void MenuBarEditor::keyPressEvent( QKeyEvent * e )
 	    }
 
 	case Qt::Key_V:
-	    if ( e->state() & Qt::ControlButton ) {
+	    if ( e->state() & Qt::ControlModifier ) {
 		hideItem();
 		paste( currentIndex < (int)itemList.count() ? currentIndex + 1: itemList.count() );
 		showItem();
@@ -865,8 +879,8 @@ void MenuBarEditor::drawItem( QPainter & p,
     if ( i->isSeparator() ) {
 	drawSeparator( p, pos );
     } else {
-	int flags = QPainter::AlignLeft | QPainter::AlignVCenter |
-	    Qt::ShowPrefix | Qt::SingleLine;
+	int flags = Qt::AlignLeft | Qt::AlignVCenter |
+	    Qt::TextShowMnemonic | Qt::TextSingleLine;
 	p.drawText( pos.x() + borderSize(), pos.y(), w - borderSize(), itemHeight,
 		    flags, i->menuText() );
     }

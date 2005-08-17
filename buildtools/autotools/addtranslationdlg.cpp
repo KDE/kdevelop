@@ -14,12 +14,15 @@
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
 #include <kbuttonbox.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -38,15 +41,15 @@ AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *paren
 
     m_part = part;
 
-    QHBox *hbox = new QHBox(this);
+    Q3HBox *hbox = new Q3HBox(this);
     (void) new QLabel(i18n("Language:"), hbox);
     lang_combo = new QComboBox(hbox);
 
     QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->addWidget(hbox);
 
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+    Q3Frame *frame = new Q3Frame(this);
+    frame->setFrameStyle(Q3Frame::HLine | Q3Frame::Sunken);
     layout->addWidget(frame, 0);
 
     KButtonBox *buttonbox = new KButtonBox(this);
@@ -102,7 +105,7 @@ void AddTranslationDialog::accept()
         KMessageBox::information(this, i18n("A translation file for the language %1 exists already."));
         return;
     }
-    f.open(IO_WriteOnly);
+    f.open(QIODevice::WriteOnly);
     f.close();
 
     dir = m_part->buildDirectory() + "/po";

@@ -27,11 +27,13 @@
 #include "sourcefile.h"
 #include <qfile.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "designerappiface.h"
 #include "sourceeditor.h"
 #include "metadatabase.h"
 #include "../interfaces/languageinterface.h"
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qmessagebox.h>
 #include "mainwindow.h"
 #include "workspace.h"
@@ -91,10 +93,10 @@ bool SourceFile::save( bool ignoreModified )
 	fn += "~";
 #endif
 	QFile f( pro->makeAbsolute( filename ) );
-	if ( f.open( IO_ReadOnly ) ) {
+	if ( f.open( QIODevice::ReadOnly ) ) {
 	    QFile f2( fn );
-	    if ( f2.open( IO_WriteOnly | IO_Translate ) ) {
-		QCString data( f.size() );
+	    if ( f2.open( QIODevice::WriteOnly | QIODevice::Translate ) ) {
+		Q3CString data( f.size() );
 		f.readBlock( data.data(), f.size() );
 		f2.writeBlock( data );
 	    }
@@ -102,7 +104,7 @@ bool SourceFile::save( bool ignoreModified )
     }
 
     QFile f( pro->makeAbsolute( filename ) );
-    if ( !f.open( IO_WriteOnly | IO_Translate ) )
+    if ( !f.open( QIODevice::WriteOnly | QIODevice::Translate ) )
 	return saveAs();
 
     QTextStream ts( &f );
@@ -153,7 +155,7 @@ bool SourceFile::saveAs( bool ignoreModified )
 bool SourceFile::load()
 {
     QFile f( pro->makeAbsolute( filename ) );
-    if ( !f.open( IO_ReadOnly ) )
+    if ( !f.open( QIODevice::ReadOnly ) )
 	return FALSE;
     QTextStream ts( &f );
     txt = ts.read();

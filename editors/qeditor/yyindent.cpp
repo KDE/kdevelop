@@ -124,7 +124,7 @@ static QChar firstNonWhiteSpace( const QString& t )
 	    return t[i];
 	i++;
     }
-    return QChar::null;
+    return QChar::Null;
 }
 
 /*
@@ -247,7 +247,7 @@ static inline QChar lastParen( const QString& t )
 	if ( t[i] == QChar('(') || t[i] == QChar(')') )
 	    return t[i];
     }
-    return QChar::null;
+    return QChar::Null;
 }
 
 /*
@@ -1077,7 +1077,7 @@ int indentForBottomLine( const QStringList& program, QChar typedIn )
 static QString fileContents( const QString& fileName )
 {
     QFile f( fileName );
-    if ( !f.open(IO_ReadOnly) ) {
+    if ( !f.open(QIODevice::ReadOnly) ) {
 	qWarning( "yyindent error: Cannot open file '%s' for reading: %s",
 		  fileName.latin1(), strerror(errno) );
 	return QString::null;

@@ -41,8 +41,8 @@
 //
 
 #include <private/qcom_p.h>
-#include <qwidgetlist.h>
-#include <qcstring.h>
+#include <qwidget.h>
+#include <q3cstring.h>
 
 // {d332785d-17fb-4894-84fe-50dbd0ad9512}
 #ifndef IID_ProjectSettings

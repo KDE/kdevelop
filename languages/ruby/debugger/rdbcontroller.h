@@ -29,10 +29,10 @@
 
 #include "dbgcontroller.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qsocketnotifier.h> 
 
@@ -87,8 +87,8 @@ private:
     void actOnProgramPause(const QString &msg);
     void programNoApp(const QString &msg, bool msgBox);
 
-    void setBreakpoint(const QCString &BPSetCmd, int key);
-    void clearBreakpoint(const QCString &BPClearCmd);
+    void setBreakpoint(const Q3CString &BPSetCmd, int key);
+    void clearBreakpoint(const Q3CString &BPClearCmd);
     void modifyBreakpoint(const Breakpoint&);
 
     void setStateOn(int stateOn)    { state_ |= stateOn; }
@@ -116,7 +116,7 @@ public slots:
     void slotBPState( const Breakpoint& );
     void slotClearAllBreakpoints();
 
-    void slotExpandItem(VarItem *parent, const QCString &userRequest);
+    void slotExpandItem(VarItem *parent, const Q3CString &userRequest);
     void slotRubyInspect(const QString &inspectText);
     void slotSelectFrame(int frameNo, int threadNo, const QString& frameName);
     void slotFetchGlobals(bool fetch);
@@ -149,7 +149,7 @@ private:
 	                                         // from the ruby program
     int               stdoutOutputLen_;      // amount of data in the output buffer
     char*             stdoutOutput_;         // buffer for the output from kprocess
-    QCString          holdingZone_;
+    Q3CString          holdingZone_;
     
 	int               rdbSizeofBuf_;         // size of the output buffer from rdb
     int               rdbOutputLen_;         // amount of data in the rdb buffer
@@ -161,7 +161,7 @@ private:
 	int               socket_;               // The socket to read and write to the debuggee
 	QSocketNotifier*  socketNotifier_;
 
-    QPtrList<DbgCommand> cmdList_;
+    Q3PtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
 	QString           currentPrompt_;
 

@@ -28,6 +28,9 @@
 
 #include "kmditoolviewaccessor.h"
 #include "kmditoolviewaccessor_p.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
 
 KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
 : QObject(parent) 
@@ -143,7 +146,7 @@ void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString&
 
 
 bool KMdiToolViewAccessor::eventFilter(QObject *, QEvent *e) {
-	if (e->type()==QEvent::IconChange) {
+	if (e->type()==QEvent::WindowIconChange) {
 		d->widgetContainer->setPixmap(d->widget->icon()?(*d->widget->icon()):QPixmap());
 	}
 	return false;

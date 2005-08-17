@@ -24,7 +24,7 @@ class PascalGlobalOptionsDlg : public PascalProjectOptionsDlgBase
     Q_OBJECT
 
 public:
-    PascalGlobalOptionsDlg(PascalProjectPart *part, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    PascalGlobalOptionsDlg(PascalProjectPart *part, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~PascalGlobalOptionsDlg();
 
 public slots:

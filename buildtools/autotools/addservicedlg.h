@@ -32,7 +32,7 @@ protected:
 	virtual void iconClicked();
 	virtual void addTypeClicked();
 	virtual void removeTypeClicked();
-	virtual void propertyExecuted( QListViewItem *item );
+	virtual void propertyExecuted( Q3ListViewItem *item );
 	virtual void accept();
 
 private:

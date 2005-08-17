@@ -23,6 +23,8 @@
 
 #include "haskellproject_optionsdlgbase.h"
 #include "haskellproject_part.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
   *@author KDevelop Authors
@@ -33,7 +35,7 @@ class HaskellProjectOptionsDlg : public HaskellProjectOptionsDlgBase
    Q_OBJECT
 public:
   	HaskellProjectOptionsDlg( HaskellProjectPart *part, QWidget* parent = 0,
-  				 							    const char* name = 0, WFlags fl = 0 );
+  				 							    const char* name = 0, Qt::WFlags fl = 0 );
 	~HaskellProjectOptionsDlg();
 
 public slots:
@@ -62,7 +64,7 @@ private:
   	void saveConfig(QString config);
   	void readConfig(QString config);
   	QStringList allBuildConfigs();
-  	void insertServicesIntoDlg( const QValueList<KService::Ptr> &list );
+  	void insertServicesIntoDlg( const Q3ValueList<KService::Ptr> &list );
 	void setCurrentCompBoxText( const QString &str, const QStringList &names);    
   	QString currentCompBoxText( const QStringList &names );
 	QString defaultCompiler();

@@ -38,6 +38,8 @@
 #include <qobject.h>
 #include <qrect.h>
 #include <qsizepolicy.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /*
     The .uib file format is the binary counterpart of the .ui file
@@ -134,7 +136,7 @@
     use UibMagic + 1 for version 2, UibMagic + 2 for version 3, etc.
 */
 
-static QCString layoutForTag( const QString& tag )
+static Q3CString layoutForTag( const QString& tag )
 {
     if ( tag == "grid" ) {
 	return "QGridLayout";
@@ -258,7 +260,7 @@ static void packVariant( UibStrTable& strings, QDataStream& out,
     case QVariant::String:
     case QVariant::Pixmap:
     case QVariant::Image:
-    case QVariant::IconSet:
+    case QCoreVariant::Icon:
 	packString( strings, out, value.asString() );
 	break;
     case QVariant::StringList:
@@ -322,7 +324,7 @@ static void outputProperty( QMap<int, QStringList>& buddies, int objectNo,
 			    UibStrTable& strings, QDataStream& out,
 			    QDomElement elem )
 {
-    QCString name = elem.attribute( "name" ).latin1();
+    Q3CString name = elem.attribute( "name" ).latin1();
     QDomElement f = elem.firstChild().toElement();
     QString tag = f.tagName();
     QString comment;
@@ -441,7 +443,7 @@ static void outputGridCell( QDataStream& out, QDomElement elem )
 static int outputObject( QMap<int, QStringList>& buddies,
 			 UibIndexMap& objects, UibStrTable& strings,
 			 QDataStream& out, QDomElement elem,
-			 QCString className = "" );
+			 Q3CString className = "" );
 
 static void outputLayoutWidgetsSubLayout( QMap<int, QStringList>& buddies,
 					  UibIndexMap& objects,
@@ -449,7 +451,7 @@ static void outputLayoutWidgetsSubLayout( QMap<int, QStringList>& buddies,
 					  QDataStream& out, QDomElement elem )
 {
     int subLayoutNo = -1;
-    QCString name;
+    Q3CString name;
     QDomElement nameElem;
 
     QDomElement f = elem.firstChild().toElement();
@@ -486,7 +488,7 @@ static void outputLayoutWidgetsSubLayout( QMap<int, QStringList>& buddies,
 static int outputObject( QMap<int, QStringList>& buddies,
 			 UibIndexMap& objects, UibStrTable& strings,
 			 QDataStream& out, QDomElement elem,
-			 QCString className )
+			 Q3CString className )
 {
     bool isQObject = !className.isEmpty();
 
@@ -618,7 +620,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
     UibStrTable strings;
     UibIndexMap objects;
     int widgetNo = -1;
-    QCString className;
+    Q3CString className;
     Q_INT16 defaultMargin = -32768;
     Q_INT16 defaultSpacing = -32768;
     Q_UINT8 introFlags = 0;
@@ -641,7 +643,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
 	    break;
 	case 'f':
 	    if ( tag == "functions" ) {
-		QDataStream out2( functionsBlock, IO_WriteOnly );
+		QDataStream out2( functionsBlock, QIODevice::WriteOnly );
 		QDomElement f = elem.firstChild().toElement();
 		while ( !f.isNull() ) {
 		    if ( f.tagName() == "function" ) {
@@ -656,7 +658,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
 	    break;
 	case 'i':
 	    if ( tag == "images" ) {
-		QDataStream out2( imagesBlock, IO_WriteOnly );
+		QDataStream out2( imagesBlock, QIODevice::WriteOnly );
 		QDomElement f = elem.firstChild().toElement();
 		while ( !f.isNull() ) {
 		    if ( f.tagName() == "image" ) {
@@ -701,7 +703,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
 	    break;
 	case 's':
 	    if ( tag == "slots" ) {
-		QDataStream out2( slotsBlock, IO_WriteOnly );
+		QDataStream out2( slotsBlock, QIODevice::WriteOnly );
 		QDomElement f = elem.firstChild().toElement();
 		while ( !f.isNull() ) {
 		    if ( f.tagName() == "slot" ) {
@@ -724,10 +726,10 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
 	    break;
 	case 'v':
 	    if ( tag == "variable" ) {
-		QDataStream out2( variablesBlock, IO_WriteOnly | IO_Append );
+		QDataStream out2( variablesBlock, QIODevice::WriteOnly | QIODevice::Append );
 		packString( strings, out2, elem.firstChild().toText().data() );
 	    } else if ( tag == "variables" ) {
-		QDataStream out2( variablesBlock, IO_WriteOnly );
+		QDataStream out2( variablesBlock, QIODevice::WriteOnly );
 		QDomElement f = elem.firstChild().toElement();
 		while ( !f.isNull() ) {
 		    if ( f.tagName() == "variable" )
@@ -745,13 +747,13 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
     }
 
     {
-	QDataStream out2( widgetBlock, IO_WriteOnly );
+	QDataStream out2( widgetBlock, QIODevice::WriteOnly );
 	widgetNo = outputObject( buddies, objects, strings, out2, widgetElem,
 				 "QWidget" );
     }
 
     if ( !tabstopsElem.isNull() ) {
-	QDataStream out2( tabstopsBlock, IO_WriteOnly );
+	QDataStream out2( tabstopsBlock, QIODevice::WriteOnly );
 	QDomElement f = tabstopsElem.firstChild().toElement();
 	while ( !f.isNull() ) {
 	    if ( f.tagName() == "tabstop" ) {
@@ -765,18 +767,18 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
     }
 
     if ( !actionsElem.isNull() ) {
-	QDataStream out2( actionsBlock, IO_WriteOnly );
+	QDataStream out2( actionsBlock, QIODevice::WriteOnly );
 	outputObject( buddies, objects, strings, out2, actionsElem );
     }
 
     if ( !menubarElem.isNull() ) {
-	QDataStream out2( menubarBlock, IO_WriteOnly );
+	QDataStream out2( menubarBlock, QIODevice::WriteOnly );
 	outputObject( buddies, objects, strings, out2, menubarElem,
 		      "QMenuBar" );
     }
 
     if ( !toolbarsElem.isNull() ) {
-	QDataStream out2( toolbarsBlock, IO_WriteOnly );
+	QDataStream out2( toolbarsBlock, QIODevice::WriteOnly );
 	QDomElement f = toolbarsElem.firstChild().toElement();
 	while ( !f.isNull() ) {
 	    if ( f.tagName() == "toolbar" )
@@ -786,7 +788,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
     }
 
     if ( !buddies.isEmpty() ) {
-	QDataStream out2( buddiesBlock, IO_WriteOnly );
+	QDataStream out2( buddiesBlock, QIODevice::WriteOnly );
 	QMap<int, QStringList>::ConstIterator a = buddies.begin();
 	while ( a != buddies.end() ) {
 	    QStringList::ConstIterator b = (*a).begin();
@@ -809,7 +811,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
 	int prevReceiverNo = 0;
 	QString prevSlot = "accept()";
 
-	QDataStream out2( connectionsBlock, IO_WriteOnly );
+	QDataStream out2( connectionsBlock, QIODevice::WriteOnly );
 	QDomElement f = connectionsElem.firstChild().toElement();
 	while ( !f.isNull() ) {
 	    if ( f.tagName() == "connection" ) {
@@ -864,7 +866,7 @@ void convertUiToUib( QDomDocument& doc, QDataStream& out )
     }
 
     {
-	QDataStream out2( introBlock, IO_WriteOnly );
+	QDataStream out2( introBlock, QIODevice::WriteOnly );
 	out2 << introFlags;
 	out2 << defaultMargin;
 	out2 << defaultSpacing;

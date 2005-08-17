@@ -10,11 +10,13 @@
 #ifndef GDBDEBUGGERGDBTABLE_H
 #define GDBDEBUGGERGDBTABLE_H
 
-#include <qtable.h>
+#include <q3table.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 namespace GDBDebugger {
 
-class GDBTable : public QTable
+class GDBTable : public Q3Table
 {
 Q_OBJECT
 public:

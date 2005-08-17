@@ -13,7 +13,7 @@
 #define KDEVQTIMPORTER_H
 
 #include <kdevpcsimporter.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class SettingsDialog;
 
@@ -34,7 +34,7 @@ private:
     QStringList fileList( const QString& path );
 
 private:
-    QGuardedPtr<SettingsDialog> m_settings;
+    QPointer<SettingsDialog> m_settings;
 };
 
 #endif

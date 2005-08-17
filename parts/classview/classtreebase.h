@@ -22,6 +22,8 @@
 #include "parsedattribute.h"
 #include "classviewpart.h"
 #include "parsedscript.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class ClassTreeItem;
 class KPopupMenu;
@@ -36,8 +38,8 @@ public:
     ~ClassTreeBase();
 
 protected:
-    typedef QValueList<QStringList> TreeState;
-    typedef QValueList<QStringList>::Iterator TreeStateIterator;
+    typedef Q3ValueList<QStringList> TreeState;
+    typedef Q3ValueList<QStringList>::Iterator TreeStateIterator;
     TreeState treeState() const;
     void setTreeState(TreeState state);
     
@@ -45,9 +47,9 @@ protected:
     virtual KPopupMenu *createPopup() = 0;
     
 private slots:
-    void slotItemExecuted(QListViewItem*);
-    void slotItemPressed(int button, QListViewItem *item);
-    void slotContextMenuRequested(QListViewItem *item, const QPoint &p);
+    void slotItemExecuted(Q3ListViewItem*);
+    void slotItemPressed(int button, Q3ListViewItem *item);
+    void slotContextMenuRequested(Q3ListViewItem *item, const QPoint &p);
     void slotGotoDeclaration();
     void slotGotoImplementation();
     void slotAddMethod();
@@ -63,21 +65,21 @@ protected:
 };
 
 
-class ClassTreeItem : public QListViewItem, public NotifyClient
+class ClassTreeItem : public Q3ListViewItem, public NotifyClient
 {
 public:
     ClassTreeItem( ClassTreeBase *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
-        : QListViewItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
+        : Q3ListViewItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
     {
         init();
     }
     ClassTreeItem( ClassTreeItem *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
-        : QListViewItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
+        : Q3ListViewItem(parent, lastSibling), NotifyClient(), m_item(parsedItem)
     {
         init();
     }
     ClassTreeItem( const ClassTreeItem& other )
-        : QListViewItem( other.parent(), other.nextSibling()), NotifyClient()
+        : Q3ListViewItem( other.parent(), other.nextSibling()), NotifyClient()
     {
         m_item = other.m_item;
         init();

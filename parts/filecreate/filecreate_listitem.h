@@ -17,14 +17,14 @@
 
 #include "filecreate_filetype.h"
 
-class QSimpleRichText;
+class Q3SimpleRichText;
 
 namespace FileCreate {
 
 class ListItem : public KListViewItem {
 
 public:
-  ListItem(QListView *listview, const FileType *filetype);
+  ListItem(Q3ListView *listview, const FileType *filetype);
   ListItem(ListItem *listitem, const FileType *filetype);
   virtual ~ListItem();
 
@@ -39,7 +39,7 @@ private:
   const FileType *m_filetype;
   int m_iconHeight;
   void init();
-  QSimpleRichText *m_filetypeRenderer;
+  Q3SimpleRichText *m_filetypeRenderer;
 
 };
 

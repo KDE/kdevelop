@@ -22,6 +22,11 @@
 // Qt specific include files
 #include <qwidget.h>
 #include <qtimer.h> 
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 //////////////////////////////////////////////////////////////////////
 // KDE specific include files
 #include <kfiledetailview.h>
@@ -118,7 +123,7 @@ protected:  //Protected Methods
 	/**
 	* @returns the dragObject
 	*/
-	virtual QDragObject* dragObject() const;
+	virtual Q3DragObject* dragObject() const;
 	/**
 	* @returns true if we can decode the drag and support the action
 	*/
@@ -127,7 +132,7 @@ protected:  // Private attributes
 	QTimer m_autoOpenTimer;
 	int m_autoOpenTime;
 	bool m_useAutoOpenTimer;
-	QListViewItem* m_dropItem;
+	Q3ListViewItem* m_dropItem;
 	KURLDrag* m_dragObject;
 	bool m_dndEnabled;
 };

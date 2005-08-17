@@ -7,7 +7,9 @@
 #define __KDEVPART_BASHSUPPORT_H__
 
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kprocess.h>
 #include <kdialogbase.h>
@@ -30,7 +32,7 @@ class BashCodeCompletion : QObject
 		~BashCodeCompletion();
 		void setActiveEditorPart(KParts::Part*);
 		void setVars(QStringList);
-		QValueList<KTextEditor::CompletionEntry> getVars(const QString& textHint);
+		Q3ValueList<KTextEditor::CompletionEntry> getVars(const QString& textHint);
 
 	public slots:
 		void cursorPositionChanged();

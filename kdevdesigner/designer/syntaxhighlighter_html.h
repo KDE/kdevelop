@@ -50,7 +50,7 @@ private:
 
     QTextFormat *lastFormat;
     int lastFormatId;
-    QIntDict<QTextFormat> formats;
+    Q3IntDict<QTextFormat> formats;
 
 };
 

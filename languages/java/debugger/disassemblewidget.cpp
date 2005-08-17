@@ -21,8 +21,11 @@
 #include <keditcl.h>
 #include <kglobalsettings.h>
 
-#include <qdict.h>
-#include <qheader.h>
+#include <q3dict.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <QHideEvent>
+#include <QShowEvent>
 
 #include <stdlib.h>
 

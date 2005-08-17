@@ -18,6 +18,8 @@
 #include "PascalAST.hpp"
 #include <kdebug.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <antlr/ASTFactory.hpp>
 
 BackgroundParser::BackgroundParser( ProblemReporter* reporter,
@@ -37,10 +39,10 @@ void BackgroundParser::run()
 {
     kdDebug() << "11" << endl;
 
-    QCString _fn = QFile::encodeName(m_fileName);
+    Q3CString _fn = QFile::encodeName(m_fileName);
     std::string fn( _fn.data() );
 
-    QCString text = m_source.utf8();
+    Q3CString text = m_source.utf8();
     std::istringstream stream( text.data() );
 
     kdDebug() << "12" << endl;

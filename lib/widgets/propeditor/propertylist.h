@@ -15,15 +15,15 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef PROPERTYLIST_H
 #define PROPERTYLIST_H
 
 #include <qobject.h>
 #include <qmap.h>
-#include <qptrlist.h>
-#include <qvaluelist.h>
+#include <q3ptrlist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 
 namespace PropertyLib{
@@ -110,7 +110,7 @@ public:
     virtual void removeProperty(const QString &name);
     
     /**@return the list of grouped properties.*/
-    virtual const QValueList<QPair<QString, QValueList<QString> > >& propertiesOfGroup() const;
+    virtual const Q3ValueList<QPair<QString, Q3ValueList<QString> > >& propertiesOfGroup() const;
     /**@return the map: property - group name.*/
     virtual const QMap<MultiProperty*, QString>& groupOfProperty() const;
     
@@ -120,7 +120,7 @@ public:
     virtual bool contains(const QString &name);
     
     /**The list of properties with given name.*/
-    QPtrList<Property> properties(const QString &name);
+    Q3PtrList<Property> properties(const QString &name);
     
     Iterator begin();
     Iterator end();
@@ -146,7 +146,7 @@ private:
     
     //groups of properties:
     // list of group name: (list of property names)
-    QValueList<QPair<QString, QValueList<QString> > > m_propertiesOfGroup;
+    Q3ValueList<QPair<QString, Q3ValueList<QString> > > m_propertiesOfGroup;
     // map of property: group
     QMap<MultiProperty*, QString> m_groupOfProperty;
 

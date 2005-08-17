@@ -8,7 +8,7 @@ class MainViewImp : public MainView
   Q_OBJECT
 
 public:
-  MainViewImp(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+  MainViewImp(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
   ~MainViewImp();
 
 public slots:

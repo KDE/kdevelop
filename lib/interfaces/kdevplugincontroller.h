@@ -13,13 +13,15 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVPLUGINCONTROLLER_H
 #define KDEVPLUGINCONTROLLER_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kurl.h>
 #include <ktrader.h>
@@ -58,7 +60,7 @@ public:
     virtual void unloadPlugins(QStringList const &list) = 0;
     
     /**@return The list of currently loaded plugins.*/
-    virtual const QValueList<KDevPlugin*> loadedPlugins() = 0;
+    virtual const Q3ValueList<KDevPlugin*> loadedPlugins() = 0;
     
     /**Queries for the plugin which supports given service type.
     All already loaded plugins will be queried and the first one to support the service type

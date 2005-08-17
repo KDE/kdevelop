@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #ifndef SIMPLEMAINWINDOW_H
 #define SIMPLEMAINWINDOW_H
@@ -24,9 +24,12 @@
 #include <kdevplugin.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
 class KAction;
-class QPopupMenu;
+class Q3PopupMenu;
 class MainWindowShare;
 
 namespace KParts {
@@ -94,8 +97,8 @@ private:
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
-    QPopupMenu *m_windowMenu;
-    QValueList<QPair<int, KURL> > m_windowList;
+    Q3PopupMenu *m_windowMenu;
+    Q3ValueList<QPair<int, KURL> > m_windowList;
 };
 
 #endif

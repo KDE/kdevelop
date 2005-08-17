@@ -14,20 +14,23 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef KOREPLACE_H
 #define KOREPLACE_H
 
 #include "koFind.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3PopupMenu>
 
 class KHistoryCombo;
 class QCheckBox;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
-class QPopupMenu;
+class Q3PopupMenu;
 class QPushButton;
 class QRect;
 

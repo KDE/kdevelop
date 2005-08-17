@@ -25,7 +25,12 @@
 **********************************************************************/
 
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <Q3ValueList>
 #include "designerappiface.h"
 #include "mainwindow.h"
 #include "project.h"
@@ -36,8 +41,8 @@
 #include "outputwindow.h"
 #include "../shared/widgetdatabase.h"
 #include <qvariant.h>
-#include <qlistview.h>
-#include <qtextedit.h>
+#include <q3listview.h>
+#include <q3textedit.h>
 #include <qstatusbar.h>
 #include "pixmapcollection.h"
 #include "hierarchyview.h"
@@ -88,7 +93,7 @@ DesignerSourceFile *DesignerInterfaceImpl::currentSourceFile() const
     return 0;
 }
 
-QPtrList<DesignerProject> DesignerInterfaceImpl::projectList() const
+Q3PtrList<DesignerProject> DesignerInterfaceImpl::projectList() const
 {
     return mainWindow->projectList();
 }
@@ -179,14 +184,14 @@ DesignerProjectImpl::DesignerProjectImpl( Project *pr )
 {
 }
 
-QPtrList<DesignerFormWindow> DesignerProjectImpl::formList() const
+Q3PtrList<DesignerFormWindow> DesignerProjectImpl::formList() const
 {
-    QPtrList<DesignerFormWindow> list;
+    Q3PtrList<DesignerFormWindow> list;
     QObjectList *forms = project->formList();
     if ( !forms )
 	return list;
 
-    QPtrListIterator<QObject> it( *forms );
+    Q3PtrListIterator<QObject> it( *forms );
     while ( it.current() ) {
 	QObject *obj = it.current();
 	++it;
@@ -203,7 +208,7 @@ QPtrList<DesignerFormWindow> DesignerProjectImpl::formList() const
 
 QString DesignerProjectImpl::formFileName( const QString &form ) const
 {
-    for ( QPtrListIterator<FormFile> forms = project->formFiles();
+    for ( Q3PtrListIterator<FormFile> forms = project->formFiles();
 	  forms.current(); ++forms ) {
 	if ( QString( forms.current()->formName() ) == form )
 	    return forms.current()->fileName();
@@ -214,7 +219,7 @@ QString DesignerProjectImpl::formFileName( const QString &form ) const
 QStringList DesignerProjectImpl::formNames() const
 {
     QStringList l;
-    for ( QPtrListIterator<FormFile> forms = project->formFiles();
+    for ( Q3PtrListIterator<FormFile> forms = project->formFiles();
 	  forms.current(); ++forms ) {
 	FormFile* f = forms.current();
 	if ( f->isFake() )
@@ -264,11 +269,11 @@ void DesignerProjectImpl::setupDatabases() const
     MainWindow::self->editDatabaseConnections();
 }
 
-QPtrList<DesignerDatabase> DesignerProjectImpl::databaseConnections() const
+Q3PtrList<DesignerDatabase> DesignerProjectImpl::databaseConnections() const
 {
-    QPtrList<DesignerDatabase> lst;
+    Q3PtrList<DesignerDatabase> lst;
 #ifndef QT_NO_SQL
-    QPtrList<DatabaseConnection> conns = project->databaseConnections();
+    Q3PtrList<DatabaseConnection> conns = project->databaseConnections();
     for ( DatabaseConnection *d = conns.first(); d; d = conns.next() )
 	lst.append( d->iFace() );
 #endif
@@ -324,15 +329,15 @@ DesignerPixmapCollection *DesignerProjectImpl::pixmapCollection() const
     return project->pixmapCollection()->iFace();
 }
 
-void DesignerProjectImpl::breakPoints( QMap<QString, QValueList<uint> > &bps ) const
+void DesignerProjectImpl::breakPoints( QMap<QString, Q3ValueList<uint> > &bps ) const
 {
     MainWindow::self->saveAllBreakPoints();
-    for ( QPtrListIterator<SourceFile> sources = project->sourceFiles();
+    for ( Q3PtrListIterator<SourceFile> sources = project->sourceFiles();
 	  sources.current(); ++sources ) {
 	SourceFile* f = sources.current();
 	bps.insert( project->makeRelative( f->fileName() ) + " <Source-File>", MetaDataBase::breakPoints( f ) );
     }
-    for ( QPtrListIterator<FormFile> forms = project->formFiles();
+    for ( Q3PtrListIterator<FormFile> forms = project->formFiles();
 	  forms.current(); ++forms ) {
 	if ( forms.current()->formWindow() )
 	    bps.insert( QString( forms.current()->formWindow()->name() ) + " <Form>", MetaDataBase::breakPoints( forms.current()->formWindow() ) );
@@ -351,13 +356,13 @@ void DesignerProjectImpl::setBreakPointCondition( QObject *o, int line, const QS
 
 void DesignerProjectImpl::clearAllBreakpoints() const
 {
-    QValueList<uint> empty;
-    for ( QPtrListIterator<SourceFile> sources = project->sourceFiles();
+    Q3ValueList<uint> empty;
+    for ( Q3PtrListIterator<SourceFile> sources = project->sourceFiles();
 	  sources.current(); ++sources ) {
 	SourceFile* f = sources.current();
 	MetaDataBase::setBreakPoints( f, empty );
     }
-    for ( QPtrListIterator<FormFile> forms = project->formFiles();
+    for ( Q3PtrListIterator<FormFile> forms = project->formFiles();
 	  forms.current(); ++forms ) {
 	if ( forms.current()->formWindow() )
 	    MetaDataBase::setBreakPoints( forms.current()->formWindow(), empty );
@@ -711,12 +716,12 @@ void DesignerFormWindowImpl::setCurrentWidget( QWidget * )
 {
 }
 
-QPtrList<QAction> DesignerFormWindowImpl::actionList() const
+Q3PtrList<QAction> DesignerFormWindowImpl::actionList() const
 {
-    return QPtrList<QAction>();
+    return Q3PtrList<QAction>();
 }
 
-QAction *DesignerFormWindowImpl::createAction( const QString& text, const QIconSet& icon, const QString& menuText, int accel,
+QAction *DesignerFormWindowImpl::createAction( const QString& text, const QIcon& icon, const QString& menuText, int accel,
 					       QObject* parent, const char* name, bool toggle )
 {
     QDesignerAction *a = new QDesignerAction( parent );
@@ -758,7 +763,7 @@ void DesignerFormWindowImpl::addConnection( QObject *sender, const char *signal,
     MetaDataBase::addConnection( formWindow, sender, signal, receiver, slot );
 }
 
-void DesignerFormWindowImpl::addFunction( const QCString &function, const QString &specifier,
+void DesignerFormWindowImpl::addFunction( const Q3CString &function, const QString &specifier,
 					  const QString &access, const QString &type,
 					  const QString &language, const QString &returnType )
 {
@@ -804,9 +809,9 @@ void DesignerFormWindowImpl::setColumnFields( QObject *o, const QMap<QString, QS
 
 QStringList DesignerFormWindowImpl::implementationIncludes() const
 {
-    QValueList<MetaDataBase::Include> includes = MetaDataBase::includes( formWindow );
+    Q3ValueList<MetaDataBase::Include> includes = MetaDataBase::includes( formWindow );
     QStringList lst;
-    for ( QValueList<MetaDataBase::Include>::Iterator it = includes.begin(); it != includes.end(); ++it ) {
+    for ( Q3ValueList<MetaDataBase::Include>::Iterator it = includes.begin(); it != includes.end(); ++it ) {
 	MetaDataBase::Include inc = *it;
 	if ( inc.implDecl != "in implementation" )
 	    continue;
@@ -825,9 +830,9 @@ QStringList DesignerFormWindowImpl::implementationIncludes() const
 
 QStringList DesignerFormWindowImpl::declarationIncludes() const
 {
-    QValueList<MetaDataBase::Include> includes = MetaDataBase::includes( formWindow );
+    Q3ValueList<MetaDataBase::Include> includes = MetaDataBase::includes( formWindow );
     QStringList lst;
-    for ( QValueList<MetaDataBase::Include>::Iterator it = includes.begin(); it != includes.end(); ++it ) {
+    for ( Q3ValueList<MetaDataBase::Include>::Iterator it = includes.begin(); it != includes.end(); ++it ) {
 	MetaDataBase::Include inc = *it;
 	if ( inc.implDecl == "in implementation" )
 	    continue;
@@ -846,9 +851,9 @@ QStringList DesignerFormWindowImpl::declarationIncludes() const
 
 void DesignerFormWindowImpl::setImplementationIncludes( const QStringList &lst )
 {
-    QValueList<MetaDataBase::Include> oldIncludes = MetaDataBase::includes( formWindow );
-    QValueList<MetaDataBase::Include> includes;
-    for ( QValueList<MetaDataBase::Include>::Iterator it = oldIncludes.begin(); it != oldIncludes.end(); ++it ) {
+    Q3ValueList<MetaDataBase::Include> oldIncludes = MetaDataBase::includes( formWindow );
+    Q3ValueList<MetaDataBase::Include> includes;
+    for ( Q3ValueList<MetaDataBase::Include>::Iterator it = oldIncludes.begin(); it != oldIncludes.end(); ++it ) {
 	MetaDataBase::Include inc = *it;
 	if ( inc.implDecl == "in implementation" )
 	    continue;
@@ -888,9 +893,9 @@ void DesignerFormWindowImpl::setImplementationIncludes( const QStringList &lst )
 
 void DesignerFormWindowImpl::setDeclarationIncludes( const QStringList &lst )
 {
-    QValueList<MetaDataBase::Include> oldIncludes = MetaDataBase::includes( formWindow );
-    QValueList<MetaDataBase::Include> includes;
-    for ( QValueList<MetaDataBase::Include>::Iterator it = oldIncludes.begin(); it != oldIncludes.end(); ++it ) {
+    Q3ValueList<MetaDataBase::Include> oldIncludes = MetaDataBase::includes( formWindow );
+    Q3ValueList<MetaDataBase::Include> includes;
+    for ( Q3ValueList<MetaDataBase::Include>::Iterator it = oldIncludes.begin(); it != oldIncludes.end(); ++it ) {
 	MetaDataBase::Include inc = *it;
 	if ( inc.implDecl == "in declaration" )
 	    continue;
@@ -957,10 +962,10 @@ void DesignerFormWindowImpl::onModificationChange( QObject *receiver, const char
 
 void DesignerFormWindowImpl::addMenu( const QString &text, const QString &name )
 {
-    if ( !::qt_cast<QMainWindow*>(formWindow->mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(formWindow->mainContainer()) )
 	return;
 
-    QMainWindow *mw = (QMainWindow*)formWindow->mainContainer();
+    Q3MainWindow *mw = (Q3MainWindow*)formWindow->mainContainer();
     PopupMenuEditor *popup = new PopupMenuEditor( formWindow, mw );
     QString n = name;
     formWindow->unify( popup, n, TRUE );
@@ -977,9 +982,9 @@ void DesignerFormWindowImpl::addMenu( const QString &text, const QString &name )
 
 void DesignerFormWindowImpl::addMenuAction( const QString &menu, QAction *a )
 {
-    if ( !::qt_cast<QMainWindow*>(formWindow->mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(formWindow->mainContainer()) )
 	return;
-    QMainWindow *mw = (QMainWindow*)formWindow->mainContainer();
+    Q3MainWindow *mw = (Q3MainWindow*)formWindow->mainContainer();
     if ( !mw->child( 0, "MenuBarEditor" ) )
 	return;
     PopupMenuEditor *popup = (PopupMenuEditor*)mw->child( menu, "PopupMenuEditor" );
@@ -990,9 +995,9 @@ void DesignerFormWindowImpl::addMenuAction( const QString &menu, QAction *a )
 
 void DesignerFormWindowImpl::addMenuSeparator( const QString &menu )
 {
-    if ( !::qt_cast<QMainWindow*>(formWindow->mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(formWindow->mainContainer()) )
 	return;
-    QMainWindow *mw = (QMainWindow*)formWindow->mainContainer();
+    Q3MainWindow *mw = (Q3MainWindow*)formWindow->mainContainer();
     if ( !mw->child( 0, "MenuBarEditor" ) )
 	return;
     PopupMenuEditor *popup = (PopupMenuEditor*)mw->child( menu, "PopupMenuEditor" );
@@ -1004,10 +1009,10 @@ void DesignerFormWindowImpl::addMenuSeparator( const QString &menu )
 
 void DesignerFormWindowImpl::addToolBar( const QString &text, const QString &name )
 {
-    if ( !::qt_cast<QMainWindow*>(formWindow->mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(formWindow->mainContainer()) )
 	return;
-    QMainWindow *mw = (QMainWindow*)formWindow->mainContainer();
-    QToolBar *tb = new QDesignerToolBar( mw );
+    Q3MainWindow *mw = (Q3MainWindow*)formWindow->mainContainer();
+    Q3ToolBar *tb = new QDesignerToolBar( mw );
     QString n = name;
     formWindow->unify( tb, n, TRUE );
     tb->setName( n );
@@ -1016,9 +1021,9 @@ void DesignerFormWindowImpl::addToolBar( const QString &text, const QString &nam
 
 void DesignerFormWindowImpl::addToolBarAction( const QString &tbn, QAction *a )
 {
-    if ( !::qt_cast<QMainWindow*>(formWindow->mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(formWindow->mainContainer()) )
 	return;
-    QMainWindow *mw = (QMainWindow*)formWindow->mainContainer();
+    Q3MainWindow *mw = (Q3MainWindow*)formWindow->mainContainer();
     QDesignerToolBar *tb = (QDesignerToolBar*)mw->child( tbn, "QDesignerToolBar" );
     if ( !tb )
 	return;
@@ -1028,9 +1033,9 @@ void DesignerFormWindowImpl::addToolBarAction( const QString &tbn, QAction *a )
 
 void DesignerFormWindowImpl::addToolBarSeparator( const QString &tbn )
 {
-    if ( !::qt_cast<QMainWindow*>(formWindow->mainContainer()) )
+    if ( !::qt_cast<Q3MainWindow*>(formWindow->mainContainer()) )
 	return;
-    QMainWindow *mw = (QMainWindow*)formWindow->mainContainer();
+    Q3MainWindow *mw = (Q3MainWindow*)formWindow->mainContainer();
     QDesignerToolBar *tb = (QDesignerToolBar*)mw->child( tbn, "QDesignerToolBar" );
     if ( !tb )
 	return;
@@ -1043,7 +1048,7 @@ DesignerDockImpl::DesignerDockImpl()
 {
 }
 
-QDockWindow *DesignerDockImpl::dockWindow() const
+Q3DockWindow *DesignerDockImpl::dockWindow() const
 {
     return 0;
 }
@@ -1073,7 +1078,7 @@ void DesignerOutputDockImpl::appendError( const QString &s, int l )
 {
     QStringList ls;
     ls << s;
-    QValueList<uint> ll;
+    Q3ValueList<uint> ll;
     ll << l;
     outWin->setErrorMessages( ls, ll, FALSE, QStringList(), QObjectList() );
 }

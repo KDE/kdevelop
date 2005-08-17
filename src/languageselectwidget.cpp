@@ -11,13 +11,15 @@
 
 #include <qstring.h>
 #include <qvariant.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistview.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
+#include <q3listview.h>
+#include <q3groupbox.h>
+#include <q3hbox.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -32,13 +34,13 @@
 #include "languageselectwidget.h"
 #include "plugincontroller.h"
 
-class LangPluginItem : public QCheckListItem
+class LangPluginItem : public Q3CheckListItem
 {
 public:
     // name - "Name", label - "GenericName", info - "Comment"
-    LangPluginItem( QListView * parent, QString const & name, QString const & label,
+    LangPluginItem( Q3ListView * parent, QString const & name, QString const & label,
                 QString const & info )
-        : QCheckListItem( parent, label, QCheckListItem::CheckBox),
+        : Q3CheckListItem( parent, label, Q3CheckListItem::CheckBox),
         _name( name ), _info( info )
     {}
 
@@ -62,7 +64,7 @@ void LanguageSelectWidget::init()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    QGroupBox * groupBox1 = new QGroupBox( i18n("Additional Language Support"), this );
+    Q3GroupBox * groupBox1 = new Q3GroupBox( i18n("Additional Language Support"), this );
     groupBox1->setColumnLayout(0, Qt::Vertical );
     groupBox1->layout()->setSpacing( 6 );
     groupBox1->layout()->setMargin( 11 );
@@ -71,8 +73,8 @@ void LanguageSelectWidget::init()
 
     _currentLanguage = new QLabel( "", groupBox1 );
 
-    _pluginList = new QListView( groupBox1 );
-    _pluginList->setResizeMode( QListView::LastColumn );
+    _pluginList = new Q3ListView( groupBox1 );
+    _pluginList->setResizeMode( Q3ListView::LastColumn );
     _pluginList->addColumn("");
     _pluginList->header()->hide();
 
@@ -80,7 +82,7 @@ void LanguageSelectWidget::init()
     groupBox1Layout->addWidget( _pluginList );
     layout->addWidget( groupBox1 );
 
-    QGroupBox * groupBox2 = new QGroupBox( i18n("Description"), this );
+    Q3GroupBox * groupBox2 = new Q3GroupBox( i18n("Description"), this );
     groupBox2->setColumnLayout(0, Qt::Vertical );
     groupBox2->layout()->setSpacing( 6 );
     groupBox2->layout()->setMargin( 11 );
@@ -88,13 +90,13 @@ void LanguageSelectWidget::init()
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
     _pluginDescription = new QLabel( groupBox2 );
-    _pluginDescription->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+    _pluginDescription->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 
     groupBox2Layout->addWidget( _pluginDescription );
 
     layout->addWidget( groupBox2 );
 
-    connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
+    connect( _pluginList, SIGNAL( selectionChanged( Q3ListViewItem * ) ), this, SLOT( itemSelected( Q3ListViewItem * ) ) );
 
     readProjectConfig();
 }
@@ -123,13 +125,13 @@ void LanguageSelectWidget::readProjectConfig()
         item->setOn(languages.contains(la));
     }
 
-    QListViewItem * first = _pluginList->firstChild();
+    Q3ListViewItem * first = _pluginList->firstChild();
     if ( first ) {
         _pluginList->setSelected( first, true );
     }
 }
 
-void LanguageSelectWidget::itemSelected( QListViewItem * item )
+void LanguageSelectWidget::itemSelected( Q3ListViewItem * item )
 {
     if ( !item ) return;
 
@@ -141,7 +143,7 @@ void LanguageSelectWidget::saveProjectConfig()
 {
     QStringList languages;
 
-    QListViewItemIterator it( _pluginList );
+    Q3ListViewItemIterator it( _pluginList );
     while ( it.current() )
     {
         LangPluginItem * item = static_cast<LangPluginItem*>( it.current() );

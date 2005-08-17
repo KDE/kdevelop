@@ -31,12 +31,15 @@
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
-#include <qprogressbar.h>
-#include <qheader.h>
+#include <q3progressbar.h>
+#include <q3header.h>
 #include <qlabel.h>
-#include <qprocess.h>
+#include <q3process.h>
 #include <qregexp.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QHBoxLayout>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -71,8 +74,8 @@ public:
 		/// @todo increment progress
 
 #if 0 /// @todo show problems
-		QValueList<Problem> l = problems( fileName );
-		QValueList<Problem>::Iterator it = l.begin();
+		Q3ValueList<Problem> l = problems( fileName );
+		Q3ValueList<Problem>::Iterator it = l.begin();
 		while ( it != l.end() )
 		{
 			const Problem & p = *it;
@@ -93,7 +96,7 @@ public:
 	// code provided by Reginald Stadlbauer <reggie@trolltech.com>
 	void setup()
 	{
-		QProcess proc;
+		Q3Process proc;
 		proc.addArgument( "gcc" );
 		proc.addArgument( "-print-file-name=include" );
 		if ( !proc.start() )
@@ -153,12 +156,12 @@ private:
 class PCSListViewItem: public KListViewItem
 {
 public:
-	PCSListViewItem( KService::Ptr ptr, KDevPCSImporter* importer, QListViewItem* parent )
+	PCSListViewItem( KService::Ptr ptr, KDevPCSImporter* importer, Q3ListViewItem* parent )
 			: KListViewItem( parent ), m_importer( importer )
 	{
 		init( ptr );
 	}
-	PCSListViewItem( KService::Ptr ptr, KDevPCSImporter* importer, QListView* parent )
+	PCSListViewItem( KService::Ptr ptr, KDevPCSImporter* importer, Q3ListView* parent )
 			: KListViewItem( parent ), m_importer( importer )
 	{
 		init( ptr );
@@ -185,7 +188,7 @@ private:
 	KDevPCSImporter* m_importer;
 };
 
-CreatePCSDialog::CreatePCSDialog( CppSupportPart* part, QWidget* parent, const char* name, bool modal, WFlags fl )
+CreatePCSDialog::CreatePCSDialog( CppSupportPart* part, QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
 		: CreatePCSDialogBase( parent, name, modal, fl ), m_part( part )
 {
 	m_settings = 0;
@@ -224,22 +227,22 @@ CreatePCSDialog::~CreatePCSDialog()
 /*$SPECIALIZATION$*/
 void CreatePCSDialog::back()
 {
-	QWizard::back();
+	Q3Wizard::back();
 }
 
 void CreatePCSDialog::next()
 {
-	QWizard::next();
+	Q3Wizard::next();
 }
 
 void CreatePCSDialog::reject()
 {
-	QWizard::reject();
+	Q3Wizard::reject();
 }
 
 void CreatePCSDialog::accept()
 {
-	QWizard::accept();
+	Q3Wizard::accept();
 }
 
 void CreatePCSDialog::slotSelected( const QString & )
@@ -306,7 +309,7 @@ void CreatePCSDialog::setNextPageEnabled( int enabled )
 	setNextEnabled( currentPage(), enabled );
 }
 
-void CreatePCSDialog::slotSelectionChanged( QListViewItem * item )
+void CreatePCSDialog::slotSelectionChanged( Q3ListViewItem * item )
 {
 	setNextPageEnabled( item != 0 );
 }

@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include "annotationwidget.h"
@@ -28,7 +28,7 @@
 #include <qlayout.h>
 #include <kpushbutton.h>
 #include <klistview.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <kmessagebox.h>
@@ -44,8 +44,8 @@
 #include <qinputdialog.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
-#include <qdragobject.h>
+#include <q3whatsthis.h>
+#include <q3dragobject.h>
 #include <qtimer.h>
 #include <kcombobox.h>
 
@@ -71,8 +71,8 @@ annotationWidget::annotationWidget(annotationPart *part)
   annotationItem* itemRoot=new annotationItem(this,"Root","root");
   m_list.append(itemRoot);
   
-  connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
-	     this, SLOT( AnnotshowPopup(QListViewItem *, const QPoint & , int ) ) );
+  connect( this, SIGNAL( contextMenuRequested ( Q3ListViewItem *, const QPoint & , int ) ),
+	     this, SLOT( AnnotshowPopup(Q3ListViewItem *, const QPoint & , int ) ) );
 }
 
 annotationWidget::~annotationWidget()
@@ -88,7 +88,7 @@ annotationWidget::~annotationWidget()
 /*!
     \fn annotationWidget::AnnotShowPopup(QListViewItem* item, const QPoint &p,int))
  */
-void annotationWidget::AnnotShowPopup(QListViewItem* item, const QPoint &p,int)
+void annotationWidget::AnnotShowPopup(Q3ListViewItem* item, const QPoint &p,int)
 {
   KPopupMenu popup;
 

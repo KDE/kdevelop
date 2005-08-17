@@ -21,6 +21,8 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 perlparser::perlparser(KDevCore* core,CodeModel* model, QString interpreter) {
   m_core = core;
@@ -45,7 +47,7 @@ void perlparser::initialParse() {
 
 void perlparser::parse(const QString &fileName){
   QFile f(fileName);
-  if (!f.open(IO_ReadOnly))
+  if (!f.open(QIODevice::ReadOnly))
       return;
   QTextStream stream(&f);
   QStringList list;

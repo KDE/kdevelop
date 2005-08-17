@@ -17,13 +17,16 @@
 #ifndef _AUTOPROJECTWIDGET_H_
 #define _AUTOPROJECTWIDGET_H_
 
-#include <qdict.h>
-#include <qlistview.h>
+#include <q3dict.h>
+#include <q3listview.h>
 #include <qmap.h>
-#include <qvbox.h>
-#include <qhbox.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3PtrList>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -42,10 +45,10 @@ class QToolButton;
 class QStringList;
 class QFocusEvent;
 class KListViewItem;
-class QListViewItem;
+class Q3ListViewItem;
 class MakefileHandler;
 
-class AutoProjectWidget : public QVBox
+class AutoProjectWidget : public Q3VBox
 {
 	Q_OBJECT
 	friend class RemoveFileDialog;
@@ -64,7 +67,7 @@ public:
 	/**
 	 * A list of all Subproject items in the overview KListView
 	 */
-	QPtrList <SubprojectItem> allSubprojectItems();
+	Q3PtrList <SubprojectItem> allSubprojectItems();
 	/**
 	* A list of the (relative) names of all libraries
 	*/
@@ -199,7 +202,7 @@ public:
 	MakefileHandler* makefileHandler();
 
 public slots:
-	void slotOverviewSelectionChanged( QListViewItem *item );
+	void slotOverviewSelectionChanged( Q3ListViewItem *item );
 
 protected:
 	void initOverview ( QWidget* parent );

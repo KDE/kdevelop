@@ -27,8 +27,10 @@
 #include "filechooser.h"
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 #include <kfiledialog.h>
 

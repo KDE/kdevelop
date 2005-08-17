@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef SUBCLASSESDLG_H
@@ -30,7 +30,7 @@ class SubclassesDlg : public SubclassesDlgBase
   Q_OBJECT
 
 public:
-    SubclassesDlg(QString form, DomUtil::PairList &config, QString projectDir, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    SubclassesDlg(QString form, DomUtil::PairList &config, QString projectDir, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~SubclassesDlg();
   /*$PUBLIC_FUNCTIONS$*/
 
@@ -46,7 +46,7 @@ protected slots:
   virtual void          newRelation();
   virtual void          removeRelation();
   virtual void          changeCurrentURL(const QString &str);
-  virtual void          currentRelationChanged(QListBoxItem *item);
+  virtual void          currentRelationChanged(Q3ListBoxItem *item);
 
 private:
     QString m_form;

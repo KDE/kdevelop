@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -40,6 +40,11 @@
 
 #include "levelwidget.h"
 #include "qeditor.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include "paragdata.h"
 
 #include <private/qrichtext_p.h>
@@ -88,7 +93,7 @@ static QPixmap *minusPixmap = 0;
 
 
 LevelWidget::LevelWidget( QEditor* editor, QWidget* parent, const char* name )
-	: QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
+	: QWidget( parent, name, Qt::WNoAutoErase | Qt::WStaticContents | Qt::WResizeNoErase ),
 	  m_editor( editor )
 {
     if( !plusPixmap ){

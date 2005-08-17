@@ -3,6 +3,9 @@
 #include "domutil.h"
 
 #include "qtdesignerrubyintegration.h"
+//Added by qt3to4:
+#include <Q3CString>
+#include <QTextStream>
 #include "rubyimplementationwidget.h"
 
 #include "kdevcore.h"
@@ -13,10 +16,10 @@
 #include "kdevappfrontend.h"
 #include "kdevplugininfo.h"
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -40,7 +43,7 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   setXMLFile("kdevrubysupport.rc");
 
   KAction *action;
-  action = new KAction( i18n("&Run"), "exec", SHIFT + Key_F9,
+  action = new KAction( i18n("&Run"), "exec", Qt::SHIFT + Qt::Key_F9,
                         this, SLOT(slotRun()),
                         actionCollection(), "build_execute" );
   action->setToolTip(i18n("Run"));
@@ -51,8 +54,8 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-        this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+  connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+        this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
   connect( partController(), SIGNAL(savedFile(const KURL&)),
   	this, SLOT(savedFile(const KURL&)) );
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
@@ -66,7 +69,7 @@ RubySupportPart::~RubySupportPart() {
 
 void RubySupportPart::projectConfigWidget(KDialogBase *dlg) 
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Ruby"), i18n("Ruby"), BarIcon("ruby_config.png", KIcon::SizeMedium, KIcon::DefaultState, RubySupportPart::instance()));
+    Q3VBox *vbox = dlg->addVBoxPage(i18n("Ruby"), i18n("Ruby"), BarIcon("ruby_config.png", KIcon::SizeMedium, KIcon::DefaultState, RubySupportPart::instance()));
     RubyConfigWidget *w = new RubyConfigWidget(*projectDom(), (QWidget *)vbox, "ruby config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -167,7 +170,7 @@ KDevLanguageSupport::Features RubySupportPart::features()
 void RubySupportPart::parse(const QString &fileName)
 {
   QFile f(QFile::encodeName(fileName));
-  if (!f.open(IO_ReadOnly))
+  if (!f.open(QIODevice::ReadOnly))
     return;
   QTextStream stream(&f);
 
@@ -190,7 +193,7 @@ void RubySupportPart::parse(const QString &fileName)
   FunctionDom lastMethod;
   int lastAccess = CodeModelItem::Public;
   QString rawline;
-  QCString line;
+  Q3CString line;
   int lineNo = 0;
 
   while (!stream.atEnd()) {
@@ -559,7 +562,7 @@ void RubySupportPart::projectClosed( )
     }
 }
 
-void RubySupportPart::contextMenu( QPopupMenu * popup, const Context * context )
+void RubySupportPart::contextMenu( Q3PopupMenu * popup, const Context * context )
 {
     if (context->hasType(Context::FileContext)){
         const FileContext *fc = static_cast<const FileContext*>(context);

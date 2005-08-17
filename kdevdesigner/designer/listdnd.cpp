@@ -27,8 +27,15 @@
 #include "listdnd.h"
 #include <qwidget.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QDropEvent>
 
-ListDnd::ListDnd( QScrollView * eventSource, const char * name )
+ListDnd::ListDnd( Q3ScrollView * eventSource, const char * name )
     : QObject( eventSource, name ),
       dragInside( FALSE ), dragDelete( TRUE ), dropConfirmed( FALSE ), dMode( Both )
 {
@@ -37,7 +44,7 @@ ListDnd::ListDnd( QScrollView * eventSource, const char * name )
     src->installEventFilter( this );
     src->viewport()->installEventFilter( this );
 
-    line = new QWidget( src->viewport(), 0, Qt::WStyle_NoBorder | WStyle_StaysOnTop );
+    line = new QWidget( src->viewport(), 0, Qt::WStyle_NoBorder | Qt::WStyle_StaysOnTop );
     line->setBackgroundColor( Qt::black );
     line->resize( src->viewport()->width(), 2 );
     line->hide();
@@ -119,7 +126,7 @@ bool ListDnd::dropEvent( QDropEvent * )
 
 bool ListDnd::mousePressEvent( QMouseEvent * event )
 {
-    if ( event->button() == LeftButton )
+    if ( event->button() == Qt::LeftButton )
 	mousePressPos = event->pos();
     return FALSE;
 }

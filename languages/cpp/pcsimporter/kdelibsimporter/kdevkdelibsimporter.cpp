@@ -16,7 +16,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qlabel.h>
 #include <qdir.h>
 #include <qcombobox.h>
@@ -67,7 +67,7 @@ QStringList KDevKDELibsImporter::fileList()
 	}
 	else if ( scope == 1 )
 	{
-		QValueStack<QString> s;
+		Q3ValueStack<QString> s;
 		s.push( m_settings->kdeDir() );
 		files += fileList( m_settings->kdeDir() );
 
@@ -77,7 +77,7 @@ QStringList KDevKDELibsImporter::fileList()
 			dir.setPath( s.pop() );
 			kdDebug( 9015 ) << "Examining: " << dir.path() << endl;
 			const QFileInfoList *dirEntries = dir.entryInfoList();
-			QPtrListIterator<QFileInfo> it( *dirEntries );
+			Q3PtrListIterator<QFileInfo> it( *dirEntries );
 			for ( ; it.current(); ++it )
 			{
 				QString fileName = it.current() ->fileName();

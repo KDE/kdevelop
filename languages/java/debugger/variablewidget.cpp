@@ -22,13 +22,18 @@
 #include <kpopupmenu.h>
 #include <klineedit.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <Q3CString>
+#include <QBoxLayout>
 #include <klocale.h>
 
 #if defined(DBG_MONITOR)
@@ -112,8 +117,8 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     header()->hide();
     setMultiSelection(false);
 
-    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             SLOT(slotContextMenu(KListView*, QListViewItem*)) );
+    connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+             SLOT(slotContextMenu(KListView*, Q3ListViewItem*)) );
 }
 
 // **************************************************************************
@@ -124,7 +129,7 @@ VariableTree::~VariableTree()
 
 // **************************************************************************
 
-void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
+void VariableTree::slotContextMenu(KListView *, Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -132,8 +137,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     setSelected(item, true);    // Need to select this item.
 
     if (item->parent()) {
-        KPopupMenu popup(this);
-        popup.insertTitle(item->text(VarNameCol));
+        KPopupMenu popup(item->text(VarNameCol), this);
         int idRemoveWatch = -1;
         if (dynamic_cast<WatchRoot*>(findRoot(item)))
             idRemoveWatch = popup.insertItem( i18n("Remove Watch Variable") );
@@ -166,7 +170,7 @@ void VariableTree::setLocalViewState(bool localsOn, int frameNo)
     // When they want to _close_ a frame then we need to check the state of
     // all other frames to determine whether we still need the locals.
     if (!localsOn) {
-        QListViewItem *sibling = firstChild();
+        Q3ListViewItem *sibling = firstChild();
         while (sibling) {
             FrameRoot *frame = dynamic_cast<FrameRoot*> (sibling);
             if (frame && frame->isOpen()) {
@@ -185,7 +189,7 @@ void VariableTree::setLocalViewState(bool localsOn, int frameNo)
 
 // **************************************************************************
 
-QListViewItem *VariableTree::findRoot(QListViewItem *item) const
+Q3ListViewItem *VariableTree::findRoot(Q3ListViewItem *item) const
 {
     while (item->parent())
         item = item->parent();
@@ -197,7 +201,7 @@ QListViewItem *VariableTree::findRoot(QListViewItem *item) const
 
 FrameRoot *VariableTree::findFrame(int frameNo) const
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
 
     // frames only exist on th top level so we only need to
     // check the siblings
@@ -216,7 +220,7 @@ FrameRoot *VariableTree::findFrame(int frameNo) const
 
 WatchRoot *VariableTree::findWatch()
 {
-    QListViewItem *sibling = firstChild();
+    Q3ListViewItem *sibling = firstChild();
 
     while (sibling) {
         if (WatchRoot *watch = dynamic_cast<WatchRoot*> (sibling))
@@ -232,10 +236,10 @@ WatchRoot *VariableTree::findWatch()
 
 void VariableTree::trim()
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
 
         // don't trim the watch root
         if (!(dynamic_cast<WatchRoot*> (child))) {
@@ -254,10 +258,10 @@ void VariableTree::trim()
 
 void VariableTree::trimExcessFrames()
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
         if (FrameRoot *frame = dynamic_cast<FrameRoot*> (child)) {
             if (frame->getFrameNo() != 0)
                 delete frame;
@@ -268,11 +272,11 @@ void VariableTree::trimExcessFrames()
 
 // **************************************************************************
 
-QListViewItem *VariableTree::lastChild() const
+Q3ListViewItem *VariableTree::lastChild() const
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
     if (child)
-        while (QListViewItem *nextChild = child->nextSibling())
+        while (Q3ListViewItem *nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -283,7 +287,7 @@ QListViewItem *VariableTree::lastChild() const
 // **************************************************************************
 
 TrimmableItem::TrimmableItem(VariableTree *parent)
-    : QListViewItem (parent, parent->lastChild()),
+    : Q3ListViewItem (parent, parent->lastChild()),
       activeFlag_(0)
 {
     setActive();
@@ -292,7 +296,7 @@ TrimmableItem::TrimmableItem(VariableTree *parent)
 // **************************************************************************
 
 TrimmableItem::TrimmableItem(TrimmableItem *parent)
-    : QListViewItem (parent, parent->lastChild()),
+    : Q3ListViewItem (parent, parent->lastChild()),
       activeFlag_(0),
       waitingForData_(false)
 {
@@ -321,11 +325,11 @@ bool TrimmableItem::isTrimmable() const
 
 // **************************************************************************
 
-QListViewItem *TrimmableItem::lastChild() const
+Q3ListViewItem *TrimmableItem::lastChild() const
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
     if (child)
-        while (QListViewItem *nextChild = child->nextSibling())
+        while (Q3ListViewItem *nextChild = child->nextSibling())
             child = nextChild;
 
     return child;
@@ -335,7 +339,7 @@ QListViewItem *TrimmableItem::lastChild() const
 
 TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) const
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     // Check the siblings on this branch
     while (child) {
@@ -355,10 +359,10 @@ TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) con
 
 void TrimmableItem::trim()
 {
-    QListViewItem *child = firstChild();
+    Q3ListViewItem *child = firstChild();
 
     while (child) {
-        QListViewItem *nextChild = child->nextSibling();
+        Q3ListViewItem *nextChild = child->nextSibling();
         if (TrimmableItem *item = dynamic_cast<TrimmableItem*>(child)) {
             // Never trim a branch if we are waiting on data to arrive.
             if (isTrimmable()) {
@@ -381,17 +385,17 @@ DataType TrimmableItem::getDataType() const
 
 // **************************************************************************
 
-void TrimmableItem::setCache(const QCString&)
+void TrimmableItem::setCache(const Q3CString&)
 {
     Q_ASSERT(false);
 }
 
 // **************************************************************************
 
-QCString TrimmableItem::getCache()
+Q3CString TrimmableItem::getCache()
 {
     Q_ASSERT(false);
-    return QCString();
+    return Q3CString();
 }
 
 // **************************************************************************
@@ -414,7 +418,7 @@ QString TrimmableItem::key (int, bool) const
 
 VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataType)
     : TrimmableItem (parent),
-      cache_(QCString()),
+      cache_(Q3CString()),
       dataType_(dataType),
       highlight_(false)
 {
@@ -482,7 +486,7 @@ void VarItem::setText(int column, const QString &data)
             highlight_ = (oldValue != QString(data));
     }
 
-    QListViewItem::setText(column, data);
+    Q3ListViewItem::setText(column, data);
     repaint();
 }
 
@@ -520,7 +524,7 @@ void VarItem::updateValue(char *buf)
 
 // **************************************************************************
 
-void VarItem::setCache(const QCString &value)
+void VarItem::setCache(const Q3CString &value)
 {
     cache_ = value;
     setExpandable(true);
@@ -536,8 +540,8 @@ void VarItem::setOpen(bool open)
 {
     if (open) {
         if (cache_) {
-            QCString value = cache_;
-            cache_ = QCString();
+            Q3CString value = cache_;
+            cache_ = Q3CString();
             getParser()->parseData(this, value.data(), false, false);
             trim();
         } else {
@@ -548,12 +552,12 @@ void VarItem::setOpen(bool open)
         }
     }
 
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 }
 
 // **************************************************************************
 
-QCString VarItem::getCache()
+Q3CString VarItem::getCache()
 {
     return cache_;
 }
@@ -568,14 +572,14 @@ void VarItem::checkForRequests()
     if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         fullName().latin1()+QCString(".shd.data"));
+                                                         fullName().latin1()+Q3CString(".shd.data"));
     }
 
     // Signature for a QT1.44 QDir
     if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         fullName().latin1()+QCString(".dPath.shd.data"));
+                                                         fullName().latin1()+Q3CString(".dPath.shd.data"));
     }
 
     // Signature for a QT2.0.x QT2.1 QString
@@ -584,7 +588,7 @@ void VarItem::checkForRequests()
     if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
-                                                    QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                    Q3CString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
                                                                       fullName().latin1()));
     }
 
@@ -592,14 +596,14 @@ void VarItem::checkForRequests()
     if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
-                                                         fullName().latin1()+QCString(".shd.data"));
+                                                         fullName().latin1()+Q3CString(".shd.data"));
     }
 
     // Signature for a QT2.0.x QT2.1 QDir
     if (strncmp(cache_, "dPath = {d = 0x", 15) == 0) {
         waitingForData();
         ((VariableTree*)listView())->expandUserItem(this,
-                                                    QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                    Q3CString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
                                                                        fullName().latin1()));
   }
 }
@@ -622,10 +626,10 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 
     if (column == ValueCol && highlight_) {
         QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
-                           cg.dark(), cg.mid(), red, cg.base());
-        QListViewItem::paintCell( p, hl_cg, column, width, align );
+                           cg.dark(), cg.mid(), Qt::red, cg.base());
+        Q3ListViewItem::paintCell( p, hl_cg, column, width, align );
     } else
-        QListViewItem::paintCell( p, cg, column, width, align );
+        Q3ListViewItem::paintCell( p, cg, column, width, align );
 }
 
 // **************************************************************************
@@ -636,8 +640,8 @@ FrameRoot::FrameRoot(VariableTree *parent, int frameNo)
     : TrimmableItem (parent),
       needLocals_(true),
       frameNo_(frameNo),
-      params_(QCString()),
-      locals_(QCString())
+      params_(Q3CString()),
+      locals_(Q3CString())
 {
     setExpandable(true);
 }
@@ -682,7 +686,7 @@ void FrameRoot::setLocals(char *locals)
 
 // **************************************************************************
 
-void FrameRoot::setParams(const QCString &params)
+void FrameRoot::setParams(const Q3CString &params)
 {
     setActive();
     params_ = params;
@@ -696,7 +700,7 @@ void FrameRoot::setParams(const QCString &params)
 void FrameRoot::setOpen(bool open)
 {
     bool localStateChange = (isOpen() != open);
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 
     if (localStateChange)
         ((VariableTree*)listView())->setLocalViewState(open, frameNo_);
@@ -707,8 +711,8 @@ void FrameRoot::setOpen(bool open)
     getParser()->parseData(this, params_.data(), false, true);
     getParser()->parseData(this, locals_.data(), false, false);
 
-    locals_ = QCString();
-    params_ = QCString();
+    locals_ = Q3CString();
+    params_ = Q3CString();
 }
 
 // **************************************************************************
@@ -733,7 +737,7 @@ WatchRoot::~WatchRoot()
 
 void WatchRoot::requestWatchVars()
 {
-    for (QListViewItem *child = firstChild(); child; child = child->nextSibling())
+    for (Q3ListViewItem *child = firstChild(); child; child = child->nextSibling())
         if (VarItem *varItem = dynamic_cast<VarItem*>(child))
             emit ((VariableTree*)listView())->expandItem(varItem);
 }

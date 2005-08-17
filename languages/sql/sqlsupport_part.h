@@ -1,7 +1,7 @@
 #ifndef __KDEVPART_SQLSUPPORT_H__
 #define __KDEVPART_SQLSUPPORT_H__
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qstringlist.h>
 
 #include <kprocess.h>

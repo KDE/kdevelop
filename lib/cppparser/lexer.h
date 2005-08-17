@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 
 #ifndef LEXER_H
@@ -24,9 +24,11 @@
 
 #include <qstring.h>
 #include <qmap.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qpair.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 enum Type {
     Token_eof = 0,
@@ -288,7 +290,7 @@ private:
 private:
     LexerData* d;
     Driver* m_driver;
-    QPtrVector< Token > m_tokens;
+    Q3PtrVector< Token > m_tokens;
     int m_size;
     int m_index;
     QString m_source;
@@ -304,8 +306,8 @@ private:
     bool m_skipWordsEnabled;
 
     // preprocessor
-    QMemArray<bool> m_skipping;
-    QMemArray<bool> m_trueTest;
+    Q3MemArray<bool> m_skipping;
+    Q3MemArray<bool> m_trueTest;
     int m_ifLevel;
     bool m_preprocessorEnabled;
     bool m_inPreproc;
@@ -755,12 +757,12 @@ inline int Lexer::currentPosition() const
 
 inline QChar Lexer::currentChar() const
 {
-    return m_ptr < m_endPtr ? m_source[m_ptr] : QChar::null;
+    return m_ptr < m_endPtr ? m_source[m_ptr] : QChar::Null;
 }
 
 inline QChar Lexer::peekChar( int n ) const
 {
-    return m_ptr+n < m_endPtr ? m_source[m_ptr + n] : QChar::null;
+    return m_ptr+n < m_endPtr ? m_source[m_ptr + n] : QChar::Null;
 }
 
 inline bool Lexer::eof() const

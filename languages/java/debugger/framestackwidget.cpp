@@ -20,8 +20,10 @@
 
 #include <klocale.h>
 
-#include <qlistbox.h>
-#include <qstrlist.h>
+#include <q3listbox.h>
+#include <q3strlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ctype.h>
 
@@ -34,7 +36,7 @@ namespace JAVADebugger
 {
 
 FramestackWidget::FramestackWidget(QWidget *parent, const char *name)
-    : QListBox(parent, name),
+    : Q3ListBox(parent, name),
       currentFrame_(0),
       currentList_(0)
 {
@@ -77,11 +79,11 @@ void FramestackWidget::slotSelectFrame(int frame)
 void FramestackWidget::clearList() {
     clear();
     delete currentList_;
-    currentList_ = new QStrList(true);      // make deep copies of the data
+    currentList_ = new Q3StrList(true);      // make deep copies of the data
     currentList_->setAutoDelete(true);      // delete items when they are removed
 }
 
-void FramestackWidget::addItem(QCString s) {
+void FramestackWidget::addItem(Q3CString s) {
         currentList_->append(s);            // This copies the string (deepcopies = true above)
 }
 
@@ -98,7 +100,7 @@ void FramestackWidget::updateDone()
 
 /***************************************************************************/
 
-QCString FramestackWidget::getFrameParams(int frame)
+Q3CString FramestackWidget::getFrameParams(int frame)
 {
     if (!currentList_) {
         if (char *frameData = currentList_->at(frame)) {
@@ -111,19 +113,19 @@ QCString FramestackWidget::getFrameParams(int frame)
                             paramStart = paramEnd+1;
                             paramEnd = parser.skipDelim(paramStart, '(', ')');
                             if (!paramEnd)
-                                return QCString();
+                                return Q3CString();
                         }
                     }
 
                     // The parameters are contained _within_ the brackets.
                     if (paramEnd-paramStart > 2)
-                        return QCString (paramStart+1, paramEnd-paramStart-1);
+                        return Q3CString (paramStart+1, paramEnd-paramStart-1);
                 }
             }
         }
     }
 
-    return QCString();
+    return Q3CString();
 }
 
 /***************************************************************************/
@@ -140,7 +142,7 @@ QString FramestackWidget::getFrameName(int frame)
                     fnstart--;
                 }
                 QString frameName(QString().sprintf("#%d %s(...)", frame,
-                                                    QCString(fnstart, paramStart-fnstart+1).data()));
+                                                    Q3CString(fnstart, paramStart-fnstart+1).data()));
                 return frameName;
             }
         }

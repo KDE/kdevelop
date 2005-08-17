@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "indexview.h"
 
@@ -23,6 +23,11 @@
 #include <qevent.h>
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QFocusEvent>
+#include <QHBoxLayout>
+#include <QKeyEvent>
 
 #include <klineedit.h>
 #include <kiconloader.h>
@@ -52,9 +57,9 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
     m_index = new IndexBox(this);
     l->addWidget(m_index);
        
-    connect(m_index, SIGNAL(doubleClicked(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
-    connect(m_index, SIGNAL(mouseButtonPressed(int, QListBoxItem*, const QPoint& )),
-        this, SLOT(itemMouseButtonPressed(int, QListBoxItem*, const QPoint& )));
+    connect(m_index, SIGNAL(doubleClicked(Q3ListBoxItem* )), this, SLOT(searchInIndex(Q3ListBoxItem* )));
+    connect(m_index, SIGNAL(mouseButtonPressed(int, Q3ListBoxItem*, const QPoint& )),
+        this, SLOT(itemMouseButtonPressed(int, Q3ListBoxItem*, const QPoint& )));
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(searchInIndex()));
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(showIndex(const QString&)));
     
@@ -71,7 +76,7 @@ void IndexView::searchInIndex()
         searchInIndex(m_index->item(m_index->currentItem()));
 }
 
-void IndexView::searchInIndex(QListBoxItem *item)
+void IndexView::searchInIndex(Q3ListBoxItem *item)
 {
     kdDebug() << "IndexView::searchInIndex" << endl;
     IndexItem *indexItem = dynamic_cast<IndexItem*>(item);
@@ -94,7 +99,7 @@ void IndexView::searchInIndex(QListBoxItem *item)
 
 void IndexView::showIndex(const QString &term)
 {
-    QListBoxItem *i = m_index->firstItem();
+    Q3ListBoxItem *i = m_index->firstItem();
     QString sl = term.lower();
     while (i)
     {
@@ -126,7 +131,7 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
     if ((watched == m_edit) && (e->type() == QEvent::KeyPress))
     {
         QKeyEvent *ke = (QKeyEvent*)e;
-        if (ke->key() == Key_Up)
+        if (ke->key() == Qt::Key_Up)
         {
             int i = m_index->currentItem();
             if (--i >= 0)
@@ -137,7 +142,7 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
                 m_edit->blockSignals(false);
             }
             return true;
-        } else if (ke->key() == Key_Down)
+        } else if (ke->key() == Qt::Key_Down)
         {
             int i = m_index->currentItem();
             if ( ++i < int(m_index->count()) ) 
@@ -148,7 +153,7 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
                 m_edit->blockSignals(false);
             }
             return true;
-        } else if ((ke->key() == Key_Next) || (ke->key() == Key_Prior))
+        } else if ((ke->key() == Qt::Key_PageDown) || (ke->key() == Qt::Key_PageUp))
         {
             QApplication::sendEvent(m_index, e);
             m_edit->blockSignals(true);
@@ -160,7 +165,7 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
     return QWidget::eventFilter(watched, e);    
 }
 
-void IndexView::itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos)
+void IndexView::itemMouseButtonPressed(int button, Q3ListBoxItem *item, const QPoint &pos)
 {
     if ((button != Qt::RightButton) || (!item))
         return;

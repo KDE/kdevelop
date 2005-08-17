@@ -22,8 +22,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVCORE_H
 #define KDEVCORE_H
@@ -34,8 +34,10 @@ The interface to the application core and context menu classes.
 */
 
 #include <qstringlist.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include <kurl.h>
 
@@ -50,7 +52,7 @@ namespace KParts
 }
 
 class QStatusBar;
-class QPopupMenu;
+class Q3PopupMenu;
 
 /**
 Base class for every context.
@@ -117,7 +119,7 @@ public:
 
     /**@return The type of this Context, so clients can discriminate
     between different file contexts.*/
-    virtual bool hasType(int type) const;
+    bool hasType(int type) const;
 
 protected:
     /**Constructor.*/
@@ -319,14 +321,10 @@ public:
     @sa Context for a detailed explanation of context menu initializations and usage.
     @param popup The popup menu to fill.
     @param context The pointer to a Context object of this popup menu.*/
-    virtual void fillContextMenu(QPopupMenu *popup, const Context *context) = 0;
+    virtual void fillContextMenu(Q3PopupMenu *popup, const Context *context) = 0;
 
-    /**Closes the current project and open the new one. You cannot use the @ref KDevPlugin::project() 
-    * method right after opening a new project, as it will return a null pointer.
-    *You must wait for the eventloop to be reentered, so use a signleshot timer
-    *to do the job needed after the project is opened or connect a slot to the
-    *@ref projectOpened signal.
-    * @param projectFileName The file name of the project to open.*/
+    /**Closes the current project and open the new one
+    @param projectFileName The file name of the project to open.*/
     virtual void openProject(const QString& projectFileName) = 0;
 
     /**Marks the component as running (or not running). As long as at least one
@@ -365,7 +363,7 @@ signals:
     @sa Context for a detailed explanation of context menu initializations and usage.
     @param popupMenu The popup menu to fill.
     @param context The Context of this popup menu.*/
-    void contextMenu(QPopupMenu *popupMenu, const Context *context);
+    void contextMenu(Q3PopupMenu *popupMenu, const Context *context);
 
     /**Expects that a configuration page for use in the
     KDevelop settings dialog is created by the component.

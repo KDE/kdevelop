@@ -42,7 +42,7 @@
 
 #include <private/qcom_p.h>
 #include <qobject.h>
-class QListView;
+class Q3ListView;
 
 // {4ede3c32-ae96-4b7a-9e38-9f1d93592391}
 #ifndef IID_ClassBrowser
@@ -53,7 +53,7 @@ struct ClassBrowserInterface : public QUnknownInterface
 {
     enum Type { Class, Function };
 
-    virtual QListView *createClassBrowser( QWidget *parent ) const = 0;
+    virtual Q3ListView *createClassBrowser( QWidget *parent ) const = 0;
     virtual void update( const QString &code ) const = 0;
     virtual void clear() const = 0;
 

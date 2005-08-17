@@ -24,6 +24,8 @@
 #include <qcombobox.h>
 #include <qregexp.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "domutil.h"
 #include "kdevcompileroptions.h"
@@ -32,7 +34,7 @@
 #include "haskellprojectoptionsdlg.h"
 
 HaskellProjectOptionsDlg::HaskellProjectOptionsDlg( HaskellProjectPart *part, QWidget* parent,
-  				 							   const char* name, WFlags fl )
+  				 							   const char* name, Qt::WFlags fl )
     : HaskellProjectOptionsDlgBase( parent, name, fl ),
       _part( part )          
 {
@@ -124,7 +126,7 @@ void HaskellProjectOptionsDlg::readConfig( QString config )
     if (compiler.isEmpty())
     {
         offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Haskell'");
-        QValueList<KService::Ptr>::ConstIterator it;
+        Q3ValueList<KService::Ptr>::ConstIterator it;
         for (it = offers.begin(); it != offers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
                 compiler = (*it)->name();
@@ -226,9 +228,9 @@ void HaskellProjectOptionsDlg::setDefaultOptions( )
     }
 }
 
-void HaskellProjectOptionsDlg::insertServicesIntoDlg( const QValueList<KService::Ptr> &list )
+void HaskellProjectOptionsDlg::insertServicesIntoDlg( const Q3ValueList<KService::Ptr> &list )
 {
-    QValueList<KService::Ptr>::ConstIterator it;
+    Q3ValueList<KService::Ptr>::ConstIterator it;
     for( it = list.begin(); it != list.end(); ++it ) {
         compiler_box->insertItem( (*it)->comment() );
         _serviceNames << (*it)->name();
@@ -264,7 +266,7 @@ void HaskellProjectOptionsDlg::setCurrentCompBoxText( const QString &str, const 
 QString HaskellProjectOptionsDlg::defaultCompiler()
 {
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Haskell'");
-    QValueList<KService::Ptr>::ConstIterator it;
+    Q3ValueList<KService::Ptr>::ConstIterator it;
     for (it = offers.begin(); it != offers.end(); ++it) {
         if ((*it)->property("X-KDevelop-Default").toBool()) {
             return (*it)->name();;

@@ -14,7 +14,7 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include "kdevplugin.h"
 
 #include <kdevgenericfactory.h>
@@ -65,10 +65,10 @@ private:
     KDevAppFrontend *appFrontend();
     KDevDebugger *debugger();
 
-    QGuardedPtr<VariableWidget> variableWidget;
-    QGuardedPtr<BreakpointWidget> breakpointWidget;
-    QGuardedPtr<FramestackWidget> framestackWidget;
-    QGuardedPtr<DisassembleWidget> disassembleWidget;
+    QPointer<VariableWidget> variableWidget;
+    QPointer<BreakpointWidget> breakpointWidget;
+    QPointer<FramestackWidget> framestackWidget;
+    QPointer<DisassembleWidget> disassembleWidget;
     DbgController *controller;
     //    QGuardedPtr<DbgToolBar> floatingToolBar;
     

@@ -17,10 +17,12 @@
 
 /** Qt */
 #include <qregexp.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qwidget.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
  /** KDE Libs */
 #include <kaction.h>
@@ -68,11 +70,11 @@ AutoDetailsView::AutoDetailsView(AutoProjectWidget* widget, AutoProjectPart* par
 	
 	m_listView->setAllColumnsShowFocus( true );
 	m_listView->setRootIsDecorated( true );
-	m_listView->setResizeMode( QListView::LastColumn );
+	m_listView->setResizeMode( Q3ListView::LastColumn );
 	m_listView->addColumn( QString::null );
 	m_listView->header()->hide();
-	connect( m_listView, SIGNAL( selectionChanged( QListViewItem* ) ),
-	         this, SLOT( slotSelectionChanged( QListViewItem* ) ) );
+	connect( m_listView, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
+	         this, SLOT( slotSelectionChanged( Q3ListViewItem* ) ) );
 }
 
 
@@ -80,7 +82,7 @@ AutoDetailsView::~AutoDetailsView()
 {
 }
 
-void AutoDetailsView::slotSelectionChanged( QListViewItem* item )
+void AutoDetailsView::slotSelectionChanged( Q3ListViewItem* item )
 {
 	if ( m_listView->selectedItems().isEmpty() )
 	{
@@ -228,10 +230,10 @@ void AutoDetailsView::initActions()
 	removeDetailAction->plug( m_button3 );
 	removeDetailAction->setEnabled( false );
 	
-	connect( m_listView, SIGNAL( executed( QListViewItem* ) ),
-	         this, SLOT( slotDetailsExecuted( QListViewItem* ) ) );
-	connect( m_listView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
-	         this, SLOT( slotDetailsContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
+	connect( m_listView, SIGNAL( executed( Q3ListViewItem* ) ),
+	         this, SLOT( slotDetailsExecuted( Q3ListViewItem* ) ) );
+	connect( m_listView, SIGNAL( contextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ),
+	         this, SLOT( slotDetailsContextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ) );
 }
 
 QString AutoDetailsView::getUiFileLink(const QString& relpath, const QString& filename)
@@ -378,7 +380,7 @@ void AutoDetailsView::slotRemoveDetail()
 			return;
 		}
 
-		QListViewItem* sibling = fitem->nextSibling();
+		Q3ListViewItem* sibling = fitem->nextSibling();
 
 		if ( !fitem )
 			return;
@@ -413,7 +415,7 @@ void AutoDetailsView::slotRemoveDetail()
 	if ( pvitem && ( pvitem->type() == ProjectItem::Target ) )
 	{
 		TargetItem* titem = static_cast <TargetItem*> ( m_listView->selectedItem() );
-		QListViewItem* sibling = titem->nextSibling();
+		Q3ListViewItem* sibling = titem->nextSibling();
 
 		if ( !titem )	return;
 
@@ -440,7 +442,7 @@ void AutoDetailsView::slotRemoveDetail()
 }
 
 
-void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, const QPoint &p )
+void AutoDetailsView::slotDetailsContextMenu( KListView *, Q3ListViewItem *item, const QPoint &p )
 {
 	if ( !item )
 		return;
@@ -650,7 +652,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 }
 
 
-void AutoDetailsView::slotDetailsExecuted( QListViewItem *item )
+void AutoDetailsView::slotDetailsExecuted( Q3ListViewItem *item )
 {
 	if ( !item )
 		return ;

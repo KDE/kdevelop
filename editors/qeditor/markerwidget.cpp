@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 
@@ -40,9 +40,15 @@
 
 #include "markerwidget.h"
 #include "qeditor.h"
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include "paragdata.h"
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <private/qrichtext_p.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -51,7 +57,7 @@
 using namespace std;
 
 MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
-    : QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
+    : QWidget( parent, name, Qt::WNoAutoErase | Qt::WStaticContents | Qt::WResizeNoErase ),
       m_editor( editor )
       ,m_clickChangesBPs(true)
       ,m_changeBookmarksAllowed(false)
@@ -128,8 +134,8 @@ void MarkerWidget::resizeEvent( QResizeEvent *e )
 
 void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
 {
-    QPopupMenu m( 0, "editor_breakpointsmenu" );
-    QPopupMenu sub( 0, "editor_breakpointsmenu_sub" );
+    Q3PopupMenu m( 0, "editor_breakpointsmenu" );
+    Q3PopupMenu sub( 0, "editor_breakpointsmenu_sub" );
 
     int toggleBreakpoint = 0;
     int toggleBookmark = 0;

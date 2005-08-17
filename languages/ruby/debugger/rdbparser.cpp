@@ -23,6 +23,8 @@
 #include "variablewidget.h"
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -39,7 +41,7 @@ void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
     static const char *unknown = "?";
 	
 	QString		varName;
-	QCString	value;
+	Q3CString	value;
 	int			pos;
 
     Q_ASSERT(parent);
@@ -99,7 +101,7 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 	DataType	dataType;
 	int			pos;
 	QString		varName;
-	QCString	value;
+	Q3CString	value;
 	QRegExp 	ppref_re("(#<([^:]|::)+:0x[\\da-f]+)([^\\n>]*)(>?)");
     
 	switch (parent->dataType()) {
@@ -279,7 +281,7 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 // **************************************************************************
 
 void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
-                        DataType dataType, const QCString &value)
+                        DataType dataType, const Q3CString &value)
 {
 	VarItem *item = parent->findItem(varName);
     if (item == 0) {

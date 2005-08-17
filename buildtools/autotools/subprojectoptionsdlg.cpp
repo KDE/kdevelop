@@ -12,7 +12,7 @@
 #include "subprojectoptionsdlg.h"
 
 #include <qdom.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -76,11 +76,11 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     prefix_listview->setSorting(-1);
     buildorder_listview->setSorting(-1);
 
-    connect( prefix_listview, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), this, SLOT( editPrefixClicked() ) );
+    connect( prefix_listview, SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int ) ), this, SLOT( editPrefixClicked() ) );
 
     // Insert all subdirectories as possible include directories
     QStringList l = widget->allSubprojects();
-    QCheckListItem *lastItem = 0;
+    Q3CheckListItem *lastItem = 0;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
 	kdDebug(9013) << "----------> subproject = " << (*it) << endl;
@@ -89,7 +89,7 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
 	if( subProjectName.isEmpty() ){
 	    subProjectName = QString::fromLatin1( "." );
 	}
-        QCheckListItem *clitem = new QCheckListItem(insideinc_listview, subProjectName, QCheckListItem::CheckBox);
+        Q3CheckListItem *clitem = new Q3CheckListItem(insideinc_listview, subProjectName, Q3CheckListItem::CheckBox);
         if (lastItem)
             clitem->moveItem(lastItem);
         lastItem = clitem;
@@ -117,19 +117,19 @@ void SubprojectOptionsDialog::readConfig()
     QString includes = subProject->variables["INCLUDES"];
     QStringList includeslist = QStringList::split(QRegExp("[ \t]"), QString(includes));
 
-    QListViewItem *lastItem = 0;
+    Q3ListViewItem *lastItem = 0;
     QStringList::Iterator it;
     for (it = includeslist.begin(); it != includeslist.end(); ++it) {
-        QCheckListItem *clitem = static_cast<QCheckListItem*>(insideinc_listview->firstChild());
+        Q3CheckListItem *clitem = static_cast<Q3CheckListItem*>(insideinc_listview->firstChild());
         while (clitem) {
             if (*it == ("-I$(top_srcdir)/" + clitem->text())) {
                 clitem->setOn(true);
                 break;
             }
-            clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+            clitem = static_cast<Q3CheckListItem*>(clitem->nextSibling());
         }
         if (!clitem) {
-            QListViewItem *item = new QListViewItem(outsideinc_listview, *it);
+            Q3ListViewItem *item = new Q3ListViewItem(outsideinc_listview, *it);
             if (lastItem)
                 item->moveItem(lastItem);
             lastItem = item;
@@ -138,14 +138,14 @@ void SubprojectOptionsDialog::readConfig()
 
     QMap<QString, QString>::ConstIterator it2;
     for (it2 = subProject->prefixes.begin(); it2 != subProject->prefixes.end(); ++it2)
-        new QListViewItem(prefix_listview, it2.key(), it2.data());
+        new Q3ListViewItem(prefix_listview, it2.key(), it2.data());
 
     QString subdirs = subProject->variables["SUBDIRS"];
     kdDebug(9020) << "Subdirs variable: " << subdirs << endl;
     QStringList subdirslist = QStringList::split(QRegExp("[ \t]"), QString(subdirs));
     lastItem = 0;
     for (it = subdirslist.begin(); it != subdirslist.end(); ++it) {
-        QListViewItem *item = new QListViewItem(buildorder_listview, *it);
+        Q3ListViewItem *item = new Q3ListViewItem(buildorder_listview, *it);
         if (lastItem)
             item->moveItem(lastItem);
         lastItem = item;
@@ -186,23 +186,23 @@ void SubprojectOptionsDialog::storeConfig()
     }
 
     QStringList includeslist;
-    QCheckListItem *clitem = static_cast<QCheckListItem*>(insideinc_listview->firstChild());
+    Q3CheckListItem *clitem = static_cast<Q3CheckListItem*>(insideinc_listview->firstChild());
     while (clitem) {
         if (clitem->isOn())
             includeslist.append("-I$(top_srcdir)/" + clitem->text());
-        clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+        clitem = static_cast<Q3CheckListItem*>(clitem->nextSibling());
     }
-    clitem = static_cast<QCheckListItem*>(outsideinc_listview->firstChild());
+    clitem = static_cast<Q3CheckListItem*>(outsideinc_listview->firstChild());
     while (clitem) {
         includeslist.append(clitem->text());
-        clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+        clitem = static_cast<Q3CheckListItem*>(clitem->nextSibling());
     }
     QString includes = includeslist.join(" ");
     subProject->variables["INCLUDES"] = includes;
     replaceMap.insert("INCLUDES", includes);
 
     subProject->prefixes.clear();
-    for (QListViewItem *item = prefix_listview->firstChild();
+    for (Q3ListViewItem *item = prefix_listview->firstChild();
          item; item = item->nextSibling()) {
         QString key = item->text(0);
         QString data = item->text(1);
@@ -212,7 +212,7 @@ void SubprojectOptionsDialog::storeConfig()
     /// \FIXME take removed prefixes into account
 
     QStringList subdirslist;
-    for (QListViewItem *item = buildorder_listview->firstChild();
+    for (Q3ListViewItem *item = buildorder_listview->firstChild();
          item; item = item->nextSibling())
         subdirslist.append(item->text(0));
     QString subdirs = subdirslist.join(" ");
@@ -255,7 +255,7 @@ void SubprojectOptionsDialog::insideMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = insideinc_listview->firstChild();
+    Q3ListViewItem *item = insideinc_listview->firstChild();
     while (item->nextSibling() != insideinc_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(insideinc_listview->currentItem());
@@ -280,7 +280,7 @@ void SubprojectOptionsDialog::outsideMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = outsideinc_listview->firstChild();
+    Q3ListViewItem *item = outsideinc_listview->firstChild();
     while (item->nextSibling() != outsideinc_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(outsideinc_listview->currentItem());
@@ -303,7 +303,7 @@ void SubprojectOptionsDialog::outsideAddClicked()
     bool ok;
     QString dir = KInputDialog::getText(i18n("Add Include Directory"), i18n("Add include directory:"), "-I", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
-        new QListViewItem(outsideinc_listview, dir);
+        new Q3ListViewItem(outsideinc_listview, dir);
 }
 
 
@@ -331,13 +331,13 @@ void SubprojectOptionsDialog::addPrefixClicked()
     if (!dlg.exec() || dlg.name().isEmpty() || dlg.path().isEmpty() )
         return;
 
-    new QListViewItem(prefix_listview, dlg.name(), dlg.path());
+    new Q3ListViewItem(prefix_listview, dlg.name(), dlg.path());
 }
 
 
 void SubprojectOptionsDialog::editPrefixClicked()
 {
-    QListViewItem* lvItem = prefix_listview->currentItem();
+    Q3ListViewItem* lvItem = prefix_listview->currentItem();
     if ( (prefix_listview->childCount()==0) || (lvItem == 0) )
         return;
     AddPrefixDialog dlg(lvItem-> text(0), lvItem-> text(1));
@@ -361,7 +361,7 @@ void SubprojectOptionsDialog::buildorderMoveUpClicked()
         return;
     }
 
-    QListViewItem *item = buildorder_listview->firstChild();
+    Q3ListViewItem *item = buildorder_listview->firstChild();
     while (item->nextSibling() != buildorder_listview->currentItem())
         item = item->nextSibling();
     item->moveItem(buildorder_listview->currentItem());

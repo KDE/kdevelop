@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -43,7 +43,7 @@ QString FpcOptionsPlugin::exec(QWidget *parent, const QString &flags)
 FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
     : KDialogBase(Tabbed, i18n("Free Pascal Compiler Options"), Ok|Cancel, Ok, parent, name, true)
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
 
     vbox = addVBoxPage(i18n("Language"));
     language = new LanguageTab(vbox, "language tab");

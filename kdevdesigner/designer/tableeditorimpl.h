@@ -30,8 +30,8 @@
 #include "tableeditor.h"
 #include <qmap.h>
 
-class QListBoxItem;
-class QTable;
+class Q3ListBoxItem;
+class Q3Table;
 class FormWindow;
 
 class TableEditor : public TableEditorBase
@@ -40,16 +40,16 @@ class TableEditor : public TableEditorBase
 
 public:
     TableEditor( QWidget* parent = 0, QWidget *editWidget = 0, FormWindow *fw = 0,
-		 const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+		 const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~TableEditor();
 
 protected slots:
     void columnDownClicked();
     void columnTextChanged( const QString & );
     void columnUpClicked();
-    void currentColumnChanged( QListBoxItem * );
+    void currentColumnChanged( Q3ListBoxItem * );
     void currentFieldChanged( const QString & );
-    void currentRowChanged( QListBoxItem * );
+    void currentRowChanged( Q3ListBoxItem * );
     void deleteColumnClicked();
     void deleteRowClicked();
     void newColumnClicked();
@@ -72,10 +72,10 @@ private:
     void restoreFieldMap();
 
 private:
-    QTable *editTable;
+    Q3Table *editTable;
     FormWindow *formWindow;
     QMap<int, QString> fieldMap;
-    QMap<QListBoxItem*, QString> tmpFieldMap;
+    QMap<Q3ListBoxItem*, QString> tmpFieldMap;
 
 };
 

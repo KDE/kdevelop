@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 #include <kiconloader.h>
@@ -27,13 +27,13 @@
 #include "viewcombos.h"
 #include "classviewpart.h"
 
-NamespaceItem::NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom)
-    :QListViewItem(parent, name), m_dom(dom), m_part(part)
+NamespaceItem::NamespaceItem(ClassViewPart *part, Q3ListView *parent, QString name, NamespaceDom dom)
+    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
-NamespaceItem::NamespaceItem(ClassViewPart *part, QListViewItem *parent, QString name, NamespaceDom dom)
-    :QListViewItem(parent, name), m_dom(dom), m_part(part)
+NamespaceItem::NamespaceItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, NamespaceDom dom)
+    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
@@ -48,18 +48,18 @@ NamespaceDom NamespaceItem::dom() const
 
 void NamespaceItem::setup()
 {
-    QListViewItem::setup();
+    Q3ListViewItem::setup();
     setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, m_part->instance()) );
 }
 
 
-ClassItem::ClassItem(ClassViewPart *part, QListView *parent, QString name, ClassDom dom)
-    :QListViewItem(parent, name), m_dom(dom), m_part(part)
+ClassItem::ClassItem(ClassViewPart *part, Q3ListView *parent, QString name, ClassDom dom)
+    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
-ClassItem::ClassItem(ClassViewPart *part, QListViewItem *parent, QString name, ClassDom dom)
-    :QListViewItem(parent, name), m_dom(dom), m_part(part)
+ClassItem::ClassItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, ClassDom dom)
+    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
@@ -74,18 +74,18 @@ ClassDom ClassItem::dom() const
 
 void ClassItem::setup()
 {
-    QListViewItem::setup();
+    Q3ListViewItem::setup();
     setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, m_part->instance()) );
 }
 
 
-FunctionItem::FunctionItem(ClassViewPart *part, QListView *parent, QString name, FunctionDom dom)
-    :QListViewItem(parent, name), m_dom(dom), m_part(part)
+FunctionItem::FunctionItem(ClassViewPart *part, Q3ListView *parent, QString name, FunctionDom dom)
+    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
-FunctionItem::FunctionItem(ClassViewPart *part, QListViewItem *parent, QString name, FunctionDom dom)
-    :QListViewItem(parent, name), m_dom(dom), m_part(part)
+FunctionItem::FunctionItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, FunctionDom dom)
+    :Q3ListViewItem(parent, name), m_dom(dom), m_part(part)
 {
 }
 
@@ -100,7 +100,7 @@ FunctionDom FunctionItem::dom() const
 
 void FunctionItem::setup()
 {
-    QListViewItem::setup();
+    Q3ListViewItem::setup();
     QString iconName;
     if( m_dom->access() == CodeModelItem::Private )
         iconName = "CVprivate_meth";

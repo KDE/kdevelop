@@ -9,7 +9,7 @@ OPIE_EXPORT_APP( %{APPNAME}Factory )
  *  Constructs a %{APPNAME} which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'
  */
-%{APPNAME}::%{APPNAME}( QWidget* parent,  const char* name, WFlags fl )
+%{APPNAME}::%{APPNAME}( QWidget* parent,  const char* name, Qt::WFlags fl )
     : %{APPNAME}Base( parent, name, fl )
 {
     connect(quit, SIGNAL(clicked()), this, SLOT(goodBye()));

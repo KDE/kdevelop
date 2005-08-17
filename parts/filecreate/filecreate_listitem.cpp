@@ -15,12 +15,12 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 #include <qpixmap.h>
 
 namespace FileCreate {
 
-  ListItem::ListItem(QListView * listview, const FileType * filetype) :
+  ListItem::ListItem(Q3ListView * listview, const FileType * filetype) :
     KListViewItem(listview), m_filetype(filetype),
     m_filetypeRenderer(NULL)
   {
@@ -43,7 +43,7 @@ namespace FileCreate {
   void ListItem::setup()
   {
     if (m_filetypeRenderer) delete m_filetypeRenderer;
-    m_filetypeRenderer = new QSimpleRichText( text(1), listView()->font() );
+    m_filetypeRenderer = new Q3SimpleRichText( text(1), listView()->font() );
     m_filetypeRenderer->setWidth(listView()->columnWidth(1));
     setHeight(m_filetypeRenderer->height());
     KListViewItem::setup();

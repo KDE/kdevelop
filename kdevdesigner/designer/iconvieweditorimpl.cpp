@@ -31,9 +31,12 @@
 
 #include <qlineedit.h>
 #include <qlabel.h>
-#include <qiconview.h>
+#include <q3iconview.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <klocale.h>
 
@@ -41,7 +44,7 @@ IconViewEditor::IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow
     : IconViewEditorBase( parent, 0, TRUE ), formwindow( fw )
 {
     connect( buttonHelp, SIGNAL( clicked() ), MainWindow::self, SLOT( showDialogHelp() ) );
-    iconview = (QIconView*)editWidget;
+    iconview = (Q3IconView*)editWidget;
 
     itemText->setText( "" );
     itemText->setEnabled( FALSE );
@@ -49,9 +52,9 @@ IconViewEditor::IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow
     itemChoosePixmap->setEnabled( FALSE );
     itemDeletePixmap->setEnabled( FALSE );
 
-    QIconViewItem *i = 0;
+    Q3IconViewItem *i = 0;
     for ( i = iconview->firstItem(); i; i = i->nextItem() ) {
-	(void)new QIconViewItem( preview, i->text(), *i->pixmap()  );
+	(void)new Q3IconViewItem( preview, i->text(), *i->pixmap()  );
     }
 
     if ( preview->firstItem() )
@@ -60,7 +63,7 @@ IconViewEditor::IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow
 
 void IconViewEditor::insertNewItem()
 {
-    QIconViewItem *i = new QIconViewItem( preview, i18n( "New Item" ) );
+    Q3IconViewItem *i = new Q3IconViewItem( preview, i18n( "New Item" ) );
     preview->setCurrentItem( i );
     preview->setSelected( i, TRUE );
     itemText->setFocus();
@@ -74,7 +77,7 @@ void IconViewEditor::deleteCurrentItem()
 	preview->setSelected( preview->currentItem(), TRUE );
 }
 
-void IconViewEditor::currentItemChanged( QIconViewItem *i )
+void IconViewEditor::currentItemChanged( Q3IconViewItem *i )
 {
     itemText->blockSignals( TRUE );
     itemText->setText( "" );
@@ -119,8 +122,8 @@ void IconViewEditor::cancelClicked()
 
 void IconViewEditor::applyClicked()
 {
-    QIconViewItem *i = 0;
-    QValueList<PopulateIconViewCommand::Item> items;
+    Q3IconViewItem *i = 0;
+    Q3ValueList<PopulateIconViewCommand::Item> items;
     for ( i = preview->firstItem(); i; i = i->nextItem() ) {
 	PopulateIconViewCommand::Item item;
 	if ( i->pixmap() )

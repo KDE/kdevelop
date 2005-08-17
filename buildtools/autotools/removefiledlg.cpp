@@ -12,12 +12,15 @@
 #include "removefiledlg.h"
 
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qfile.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -31,9 +34,9 @@
 #include "autoprojectwidget.h"
 #include "autodetailsview.h"
 
-static bool fileListContains(const QPtrList<FileItem> &list, const QString &name)
+static bool fileListContains(const Q3PtrList<FileItem> &list, const QString &name)
 {
-	QPtrListIterator<FileItem> it(list);
+	Q3PtrListIterator<FileItem> it(list);
 	for (; it.current(); ++it)
 		if ((*it)->text(0) == name)
 			return true;
@@ -50,7 +53,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, AutoProjectPart* p
 
 	QStringList targets;
 
-	QPtrListIterator<TargetItem> it(spitem->targets);
+	Q3PtrListIterator<TargetItem> it(spitem->targets);
 	for (; it.current(); ++it)
 		if (fileListContains((*it)->sources, filename))
 			targets.append((*it)->name);
@@ -99,14 +102,14 @@ void RemoveFileDialog::accept()
 	QMap<QString,QString> replaceMap;
 
 	if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
-		QPtrListIterator<TargetItem> it(subProject->targets);
+		Q3PtrListIterator<TargetItem> it(subProject->targets);
 		for (; it.current(); ++it) {
 			if ((*it) != target && fileListContains((*it)->sources, fileName)) {
 				FileItem *fitem = static_cast<FileItem*>((*it)->firstChild());
 				while (fitem) {
 					FileItem *nextitem = static_cast<FileItem*>(fitem->nextSibling());
 					if (fitem->text(0) == fileName) {
-						QListView *lv = fitem->listView();
+						Q3ListView *lv = fitem->listView();
 						lv->setSelected(fitem, false);
 						(*it)->sources.remove(fitem);
 					}
@@ -130,7 +133,7 @@ void RemoveFileDialog::accept()
 	FileItem *fitem = static_cast<FileItem*>(target->firstChild());
 	while (fitem) {
 		if (fitem->text(0) == fileName) {
-			QListView *lv = fitem->listView();
+			Q3ListView *lv = fitem->listView();
 			lv->setSelected(fitem, false);
 			fileItemName = fitem->name;
 			target->sources.remove(fitem);
@@ -159,7 +162,7 @@ void RemoveFileDialog::accept()
 	QDomNode el3 = el2.namedItem("subclassing");
 
 	QDomNode n = el3.firstChild();
-	QValueList<QDomNode> nodesToRemove;
+	Q3ValueList<QDomNode> nodesToRemove;
 	while ( !n.isNull() ) {
 		QDomNamedNodeMap attr = n.attributes();
 		QString fpath = subProject->path + QString("/") + fileItemName;
@@ -169,7 +172,7 @@ void RemoveFileDialog::accept()
 			nodesToRemove.append(n);
 		n = n.nextSibling();
 	}
-	QValueList<QDomNode>::iterator it;
+	Q3ValueList<QDomNode>::iterator it;
 	for ( it = nodesToRemove.begin(); it != nodesToRemove.end(); ++it )
 		el3.removeChild(*it);
 

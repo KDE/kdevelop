@@ -11,8 +11,8 @@
 
 #include <sys/stat.h>
 
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
+#include <q3whatsthis.h>
+#include <q3popupmenu.h>
 
 #include <klocale.h>
 #include <kdevgenericfactory.h>
@@ -51,7 +51,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Diff" ) );
   diffWidget->setCaption( i18n( "Diff Output" ) );
-  QWhatsThis::add(diffWidget, i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
+  Q3WhatsThis::add(diffWidget, i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
     "Can utilize every installed component that is able to show diff output. "
     "For example if you have Kompare installed, Difference Viewer can use its graphical diff view."));
   mainWindow()->embedOutputView( diffWidget, nm, i18n("Output of the diff command") );
@@ -62,8 +62,8 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   action->setToolTip(i18n("Difference viewer"));
   action->setWhatsThis(i18n("<b>Difference viewer</b><p>Shows the contents of a patch file."));
 
-  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-           this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+  connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
+           this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
 }
 
 static bool urlIsEqual(const KURL &a, const KURL &b)
@@ -86,7 +86,7 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc
 {
   if ( !pc )
     return 0;
-  QPtrListIterator<KParts::Part> it(*(pc->parts()));
+  Q3PtrListIterator<KParts::Part> it(*(pc->parts()));
   for ( ; it.current(); ++it)
   {
     KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
@@ -97,7 +97,7 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc
   return 0;
 }
 
-void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
+void DiffPart::contextMenu( Q3PopupMenu* popup, const Context* context )
 {
 	if ( context->hasType( Context::EditorContext ) )
 	{

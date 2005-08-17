@@ -27,14 +27,21 @@
 #ifndef STYLEDBUTTON_H
 #define STYLEDBUTTON_H
 
-#include <qbutton.h>
+#include <q3button.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 class QColor;
 class QBrush;
 class FormWindow;
 
-class StyledButton : public QButton
+class StyledButton : public Q3Button
 {
     Q_OBJECT
 
@@ -49,7 +56,7 @@ public:
     enum EditorType { ColorEditor, PixmapEditor };
 
     StyledButton( QWidget* parent = 0, const char* name = 0 );
-    StyledButton( const QBrush& b, QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
+    StyledButton( const QBrush& b, QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0 );
     ~StyledButton();
 
     void setEditor( EditorType );

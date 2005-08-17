@@ -1,12 +1,15 @@
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDropEvent>
 %{CPP_TEMPLATE}
 
 #include "%{APPNAMELC}.h"
 #include "pref.h"
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <kprinter.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -215,7 +218,7 @@ void %{APPNAME}::filePrint()
         p.begin(m_printer);
 
         // we let our view do the actual printing
-        QPaintDeviceMetrics metrics(m_printer);
+        Q3PaintDeviceMetrics metrics(m_printer);
         m_view->print(&p, metrics.height(), metrics.width());
 
         // and send the result to the printer

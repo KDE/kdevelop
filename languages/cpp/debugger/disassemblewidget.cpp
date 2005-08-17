@@ -22,9 +22,12 @@
 #endif
 #include <kglobalsettings.h>
 
-#include <qdict.h>
-#include <qheader.h>
-#include <qtextedit.h>
+#include <q3dict.h>
+#include <q3header.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <QHideEvent>
+#include <QShowEvent>
 
 #include <stdlib.h>
 
@@ -36,7 +39,7 @@ namespace GDBDebugger
 /***************************************************************************/
 
 DisassembleWidget::DisassembleWidget(QWidget *parent, const char *name)
-        : QTextEdit(parent, name),
+        : Q3TextEdit(parent, name),
         active_(false),
         lower_(0),
         upper_(0),

@@ -1,7 +1,7 @@
 #ifndef __DEBUGGER_H__
 #define __DEBUGGER_H__
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "kdevdebugger.h"
 
@@ -130,7 +130,7 @@ private:
 
     static Debugger *s_instance;
     KDevPartController *m_partController;
-    QValueList<BPItem> BPList;
+    Q3ValueList<BPItem> BPList;
 };
 
 #endif

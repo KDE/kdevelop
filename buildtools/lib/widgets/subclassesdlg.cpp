@@ -13,15 +13,17 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <kurlrequester.h>
 
 #include "subclassesdlg.h"
 #include "subclassesdlg.moc"
-SubclassesDlg::SubclassesDlg(QString form, DomUtil::PairList &config, QString projectDir, QWidget* parent, const char* name, bool modal, WFlags fl)
+SubclassesDlg::SubclassesDlg(QString form, DomUtil::PairList &config, QString projectDir, QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 : SubclassesDlgBase(parent,name, modal,fl), m_form(form), m_config(config), m_projectDir(projectDir)
 {
     subclass_url->setEnabled(false);
@@ -41,7 +43,7 @@ SubclassesDlg::~SubclassesDlg()
 /*$SPECIALIZATION$*/
 void SubclassesDlg::accept()
 {
-    QPtrList<DomUtil::Pair> pairsToRemove;
+    Q3PtrList<DomUtil::Pair> pairsToRemove;
 
     DomUtil::PairList::iterator it;
     for ( it = m_config.begin(); it != m_config.end(); ++it )
@@ -81,7 +83,7 @@ void SubclassesDlg::removeRelation()
 {
     if (subclasses_box->currentItem() > -1)
     {
-        QListBoxItem *item = subclasses_box->item(subclasses_box->currentItem());
+        Q3ListBoxItem *item = subclasses_box->item(subclasses_box->currentItem());
         int itemIdx = subclasses_box->currentItem();
 
         if (item->prev())
@@ -111,7 +113,7 @@ void SubclassesDlg::changeCurrentURL(const QString &str)
     }
 }
 
-void SubclassesDlg::currentRelationChanged( QListBoxItem * item )
+void SubclassesDlg::currentRelationChanged( Q3ListBoxItem * item )
 {
     if (item)
     {

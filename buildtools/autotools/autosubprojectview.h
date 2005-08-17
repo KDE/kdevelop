@@ -17,6 +17,9 @@
 #define AUTOSUBPROJECTVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3ValueList>
 #include "autoprojectviewbase.h"
 
 
@@ -58,7 +61,7 @@ public:
 	TargetItem *findNoinstHeaders( SubprojectItem *item );
 
 signals:
-	void selectionChanged( QListViewItem* );
+	void selectionChanged( Q3ListViewItem* );
 
 protected:
 	void initActions ();
@@ -74,8 +77,8 @@ protected:
 	void parseSUBDIRS( SubprojectItem *item,
 	                   const QString &lhs, const QString &rhs );
 	virtual void focusOutEvent( QFocusEvent *e );
-	void expandCollapse( QListViewItem * item, bool expand );
-	void expandCollapseFirst( QListViewItem * item, bool expand );
+	void expandCollapse( Q3ListViewItem * item, bool expand );
+	void expandCollapseFirst( Q3ListViewItem * item, bool expand );
 
 private:
 	AutoProjectWidget* m_widget;
@@ -101,12 +104,12 @@ private:
 	KAction* collapseAction;
 
 	QStringList m_commandList;
-	QValueList<int> m_commandTypeList;
+	Q3ValueList<int> m_commandTypeList;
 
 private slots:
-	void slotContextMenu( KListView *, QListViewItem *item, const QPoint &p );
+	void slotContextMenu( KListView *, Q3ListViewItem *item, const QPoint &p );
 	//void slotSubprojectExecuted(QListViewItem* item);
-	void slotSelectionChanged( QListViewItem* item );
+	void slotSelectionChanged( Q3ListViewItem* item );
 	void slotAddApplication();
 	void slotSubprojectOptions();
 	void slotAddSubproject();

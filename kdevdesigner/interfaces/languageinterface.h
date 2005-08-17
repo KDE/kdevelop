@@ -41,10 +41,10 @@
 //
 
 #include <private/qcom_p.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 #include <qmap.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 
 // {f208499a-6f69-4883-9219-6e936e55a330}
 #ifndef IID_Language
@@ -89,8 +89,8 @@ struct LanguageInterface : public QUnknownInterface
 	CompressProject
     };
 
-    virtual void functions( const QString &code, QValueList<Function> *funcs ) const = 0;
-    virtual void connections( const QString &code, QValueList<Connection> *connections ) const = 0;
+    virtual void functions( const QString &code, Q3ValueList<Function> *funcs ) const = 0;
+    virtual void connections( const QString &code, Q3ValueList<Connection> *connections ) const = 0;
     virtual QString createFunctionStart( const QString &className, const QString &func,
 					 const QString &returnType, const QString &access ) = 0;
     virtual QString createArguments( const QString &cpp_signature ) = 0;
@@ -106,9 +106,9 @@ struct LanguageInterface : public QUnknownInterface
     virtual void sourceProjectKeys( QStringList &keys ) const = 0;
     virtual QString cleanSignature( const QString &sig ) = 0;
     virtual void loadFormCode( const QString &form, const QString &filename,
-			       QValueList<Function> &functions,
+			       Q3ValueList<Function> &functions,
 			       QStringList &vars,
-			       QValueList<Connection> &connections ) = 0;
+			       Q3ValueList<Connection> &connections ) = 0;
     virtual QString formCodeExtension() const = 0;
 
     virtual bool canConnect( const QString &signal, const QString &slot ) = 0;
@@ -124,7 +124,7 @@ struct LanguageInterface : public QUnknownInterface
     virtual void removeConnection( const QString &sender, const QString &signal,
 				   const QString &receiver, const QString &slot,
 				   QString *code ) = 0;
-    virtual QStrList signalNames( QObject *obj ) const = 0;
+    virtual Q3StrList signalNames( QObject *obj ) const = 0;
 
 };
 

@@ -25,17 +25,20 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qsplitter.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 #include <qtextstream.h>
 #include <qcombobox.h>
-#include <qprocess.h>
+#include <q3process.h>
 #include <qtimer.h>
 #include <qdir.h>
 #include <qregexp.h>
 #include <qinputdialog.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <Q3PtrList>
 #include <kfiledialog.h>
 #include <qtooltip.h>
 #include <kdebug.h>
@@ -75,13 +78,13 @@
  * Class qProjectItem
  */
 
-qProjectItem::qProjectItem(Type type, QListView *parent, const QString &text)
-    : QListViewItem(parent, text), typ(type)
+qProjectItem::qProjectItem(Type type, Q3ListView *parent, const QString &text)
+    : Q3ListViewItem(parent, text), typ(type)
 {}
 
 
 qProjectItem::qProjectItem(Type type, qProjectItem *parent, const QString &text)
-    : QListViewItem(parent, text), typ(type)
+    : Q3ListViewItem(parent, text), typ(type)
 {}
 
 
@@ -91,7 +94,7 @@ qProjectItem::qProjectItem(Type type, qProjectItem *parent, const QString &text)
  * Class SubqmakeprojectItem
  */
 
-SubqmakeprojectItem::SubqmakeprojectItem(QListView *parent, const QString &text, const QString &scopeString)
+SubqmakeprojectItem::SubqmakeprojectItem(Q3ListView *parent, const QString &text, const QString &scopeString)
     : qProjectItem(Subproject, parent, text)
 {
     this->scopeString=scopeString;
@@ -264,7 +267,7 @@ void SubqmakeprojectItem::init()
  * Class GroupItem
  */
 
-GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const QString &scopeString)
+GroupItem::GroupItem(Q3ListView *lv, GroupType type, const QString &text, const QString &scopeString)
     : qProjectItem(Group, lv, text)
 {
     this->scopeString = scopeString;
@@ -364,7 +367,7 @@ void GroupItem::paintCell(QPainter* p, const QColorGroup& c, int column, int wid
  * Class FileItem
  */
 
-FileItem::FileItem(QListView *lv, const QString &text, bool exclude/*=false*/)
+FileItem::FileItem(Q3ListView *lv, const QString &text, bool exclude/*=false*/)
     : qProjectItem(File, lv, text)
 {
     // if excluded is set the file is excluded in the subproject/project.
@@ -375,7 +378,7 @@ FileItem::FileItem(QListView *lv, const QString &text, bool exclude/*=false*/)
 
 
 TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
-    : QVBox(0, "troll project widget")
+    : Q3VBox(0, "troll project widget")
 {
     QSplitter *splitter = new QSplitter(Vertical, this);
 
@@ -383,13 +386,13 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     // PROJECT VIEW //
     //////////////////
 
-    overviewContainer = new QVBox(splitter,"Projects");
+    overviewContainer = new Q3VBox(splitter,"Projects");
     overviewContainer->setMargin ( 2 );
     overviewContainer->setSpacing ( 2 );
 //    overviewContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 //    splitter->setResizeMode(overviewContainer, QSplitter::FollowSizeHint);
 
-    projectTools = new QHBox(overviewContainer,"Project buttons");
+    projectTools = new Q3HBox(overviewContainer,"Project buttons");
     projectTools->setMargin ( 2 );
     projectTools->setSpacing ( 2 );
     // Add subdir
@@ -398,7 +401,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
     addSubdirButton->setEnabled ( true );
     QToolTip::add( addSubdirButton, i18n( "Add subproject" ) );
-    QWhatsThis::add(addSubdirButton, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
+    Q3WhatsThis::add(addSubdirButton, i18n("<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to a currently selected subproject. "
         "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
         "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
     // Create scope
@@ -407,14 +410,14 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
     createScopeButton->setEnabled ( true );
     QToolTip::add( createScopeButton, i18n( "Create scope" ) );
-    QWhatsThis::add(createScopeButton, i18n("<b>Create scope</b><p>Creates QMake scope in the project file in case the subproject is selected or creates nested scope in case the scope is selected."));
+    Q3WhatsThis::add(createScopeButton, i18n("<b>Create scope</b><p>Creates QMake scope in the project file in case the subproject is selected or creates nested scope in case the scope is selected."));
     // build selected file
     buildFileButton = new QToolButton ( projectTools, "Make file button" );
     buildFileButton->setPixmap ( SmallIcon ( "compfile" ) );
     buildFileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildFileButton->sizePolicy().hasHeightForWidth() ) );
     buildFileButton->setEnabled ( true );
     QToolTip::add( buildFileButton, i18n( "Compile file" ) );
-    QWhatsThis::add(buildFileButton, i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
+    Q3WhatsThis::add(buildFileButton, i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
     // build
@@ -423,7 +426,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     buildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildProjectButton->sizePolicy().hasHeightForWidth() ) );
     buildProjectButton->setEnabled ( true );
     QToolTip::add( buildProjectButton, i18n( "Build project" ) );
-    QWhatsThis::add(buildProjectButton, i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
+    Q3WhatsThis::add(buildProjectButton, i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
     // rebuild
@@ -432,7 +435,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     rebuildProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildProjectButton->sizePolicy().hasHeightForWidth() ) );
     rebuildProjectButton->setEnabled ( true );
     QToolTip::add( rebuildProjectButton, i18n( "Rebuild project" ) );
-    QWhatsThis::add(rebuildProjectButton, i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
+    Q3WhatsThis::add(rebuildProjectButton, i18n("<b>Rebuild project</b><p>Runs <b>make clean</b> and then <b>make</b> from the project directory.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
     // run
@@ -441,7 +444,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     executeProjectButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeProjectButton->sizePolicy().hasHeightForWidth() ) );
     executeProjectButton->setEnabled ( true );
     QToolTip::add( executeProjectButton, i18n( "Execute main program" ) );
-    QWhatsThis::add(executeProjectButton, i18n("<b>Execute main program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
+    Q3WhatsThis::add(executeProjectButton, i18n("<b>Execute main program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
     // spacer
     QWidget *spacer = new QWidget(projectTools);
     projectTools->setStretchFactor(spacer, 1);
@@ -451,7 +454,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
     QToolTip::add( projectconfButton, i18n( "Subproject settings" ) );
-    QWhatsThis::add(projectconfButton, i18n("<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog for the currently selected subproject. "
+    Q3WhatsThis::add(projectconfButton, i18n("<b>Subproject settings</b><p>Opens <b>QMake Subproject Configuration</b> dialog for the currently selected subproject. "
         "It provides settings for:<br>subproject type and configuration,<br>include and library paths,<br>lists of dependencies and "
         "external libraries,<br>build order,<br>intermediate files locations,<br>compiler options."));
 
@@ -470,16 +473,16 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // Project tree
     overview = new TrollListView(this, overviewContainer, SubprojectView, "project overview widget");
-    overview->setResizeMode(QListView::LastColumn);
+    overview->setResizeMode(Q3ListView::LastColumn);
     overview->setSorting(-1);
     overview->header()->hide();
     overview->addColumn(QString::null);
 
     // Project tree connections
-    connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
-             this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
-    connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    connect( overview, SIGNAL(selectionChanged(Q3ListViewItem*)),
+             this, SLOT(slotOverviewSelectionChanged(Q3ListViewItem*)) );
+    connect( overview, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+             this, SLOT(slotOverviewContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 
 
     /////////////////
@@ -487,13 +490,13 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     /////////////////
 
     // Details tree
-    detailContainer = new QVBox(splitter,"Details");
+    detailContainer = new Q3VBox(splitter,"Details");
     detailContainer->setMargin ( 2 );
     detailContainer->setSpacing ( 2 );
 //    detailContainer->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     // Details Toolbar
-    fileTools = new QHBox(detailContainer,"Detail buttons");
+    fileTools = new Q3HBox(detailContainer,"Detail buttons");
     fileTools->setMargin ( 2 );
     fileTools->setSpacing ( 2 );
 
@@ -503,7 +506,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
     QToolTip::add( newfileButton, i18n( "Create new file" ) );
-    QWhatsThis::add(newfileButton, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
+    Q3WhatsThis::add(newfileButton, i18n("<b>Create new file</b><p>Creates a new file and adds it to a currently selected group."));
 
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
@@ -511,7 +514,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
     QToolTip::add( addfilesButton, i18n( "Add existing files" ) );
-    QWhatsThis::add(addfilesButton, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
+    Q3WhatsThis::add(addfilesButton, i18n("<b>Add existing files</b><p>Adds existing files to a currently selected group. It is "
             "possible to copy files to a current subproject directory, create symbolic links or "
             "add them with the relative path."));
 
@@ -521,7 +524,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
-    QWhatsThis::add(removefileButton, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
+    Q3WhatsThis::add(removefileButton, i18n("<b>Remove file</b><p>Removes file from a current group. Does not remove file from disk."));
 
     // build
     buildTargetButton = new QToolButton ( fileTools, "Make sp button" );
@@ -529,7 +532,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     buildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildTargetButton->sizePolicy().hasHeightForWidth() ) );
     buildTargetButton->setEnabled ( true );
     QToolTip::add( buildTargetButton, i18n( "Build subproject" ) );
-    QWhatsThis::add(buildTargetButton, i18n("<b>Build subproject</b><p>Runs <b>make</b> from the current subproject directory. "
+    Q3WhatsThis::add(buildTargetButton, i18n("<b>Build subproject</b><p>Runs <b>make</b> from the current subproject directory. "
                               "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
@@ -539,7 +542,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     rebuildTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildTargetButton->sizePolicy().hasHeightForWidth() ) );
     rebuildTargetButton->setEnabled ( true );
     QToolTip::add( rebuildTargetButton, i18n( "Rebuild subproject" ) );
-    QWhatsThis::add(rebuildTargetButton, i18n("<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
+    Q3WhatsThis::add(rebuildTargetButton, i18n("<b>Rebuild subproject</b><p>Runs <b>make clean</b> and then <b>make</b> from the current subproject directory. "
                               "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
@@ -549,7 +552,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     executeTargetButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, executeTargetButton->sizePolicy().hasHeightForWidth() ) );
     executeTargetButton->setEnabled ( true );
     QToolTip::add( executeTargetButton, i18n( "Execute subproject" ) );
-    QWhatsThis::add(executeTargetButton, i18n("<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
+    Q3WhatsThis::add(executeTargetButton, i18n("<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
         "This action is allowed only if a type of the subproject is 'application'. The type of the subproject can be "
         "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)."));
 
@@ -564,12 +567,12 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
     configurefileButton->setEnabled ( true );
     QToolTip::add( configurefileButton, i18n( "Configure file" ) );
-    QWhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows a file to be excluded from specified scopes."));
+    Q3WhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows a file to be excluded from specified scopes."));
 
     // detail tree
     details = new TrollListView(this, detailContainer, DetailsView, "details widget");
     details->setRootIsDecorated(true);
-    details->setResizeMode(QListView::LastColumn);
+    details->setResizeMode(Q3ListView::LastColumn);
     details->setSorting(-1);
     details->header()->hide();
     details->addColumn(QString::null);
@@ -580,12 +583,12 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( configurefileButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureFile () ) );
 
     // Detail tree connections
-    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
-             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
-    connect( details, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotDetailsExecuted(QListViewItem*)) );
-    connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotDetailsContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    connect( details, SIGNAL(selectionChanged(Q3ListViewItem*)),
+             this, SLOT(slotDetailsSelectionChanged(Q3ListViewItem*)) );
+    connect( details, SIGNAL(executed(Q3ListViewItem*)),
+             this, SLOT(slotDetailsExecuted(Q3ListViewItem*)) );
+    connect( details, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
+             this, SLOT(slotDetailsContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
 
     connect ( buildTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildTarget () ) );
     connect ( rebuildTargetButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildTarget () ) );
@@ -642,7 +645,7 @@ QStringList TrollProjectWidget::allSubprojects()
     int prefixlen = projectDirectory().length()+1;
     QStringList res;
 
-    QListViewItemIterator it(overview);
+    Q3ListViewItemIterator it(overview);
     for (; it.current(); ++it) {
         if (it.current() == overview->firstChild())
             continue;
@@ -656,10 +659,10 @@ QStringList TrollProjectWidget::allSubprojects()
 
 QStringList TrollProjectWidget::allFiles()
 {
-    QPtrStack<QListViewItem> s;
+    Q3PtrStack<Q3ListViewItem> s;
     QStringList res;
 
-    for ( QListViewItem *item = overview->firstChild(); item;
+    for ( Q3ListViewItem *item = overview->firstChild(); item;
           item = item->nextSibling()? item->nextSibling() : s.pop() ) {
         if (item->firstChild())
             s.push(item->firstChild());
@@ -667,13 +670,13 @@ QStringList TrollProjectWidget::allFiles()
         SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
         QString path = spitem->path;
 
-        for (QPtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
+        for (Q3PtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
             GroupItem::GroupType type = (*tit)->groupType;
 
             if (type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images ||
             type ==  GroupItem::Lexsources || type ==  GroupItem::Yaccsources || type == GroupItem::Distfiles ||
         type ==  GroupItem::Translations || type ==  GroupItem::IDLs || type ==  GroupItem::InstallObject  ) {
-        for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
+        for (Q3PtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
             QString filePath = path.mid( projectDirectory().length() + 1 );
 
             if( !filePath.isEmpty() && !filePath.endsWith("/") )
@@ -758,7 +761,7 @@ void TrollProjectWidget::setupContext()
     details->setEnabled(hasSourceFiles);
 }
 
-void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
+void TrollProjectWidget::slotOverviewSelectionChanged(Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -820,7 +823,7 @@ void TrollProjectWidget::cleanDetailView(SubqmakeprojectItem *item)
 //      cleanDetailView(*it);
 //      details->takeItem(*it);
 //    }
-    QPtrListIterator<GroupItem> it1(item->groups);
+    Q3PtrListIterator<GroupItem> it1(item->groups);
     for (; it1.current(); ++it1) {
       // After AddTargetDialog, it can happen that an
       // item is not yet in the list view, so better check...
@@ -846,17 +849,17 @@ void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListV
 //      listviewControl->insertItem(*it1);
 //      buildProjectDetailTree(*it1,NULL);
 //    }
-    QPtrListIterator<GroupItem> it2(item->groups);
+    Q3PtrListIterator<GroupItem> it2(item->groups);
     for (; it2.current(); ++it2)
     {
         listviewControl->insertItem(*it2);
         if ((*it2)->groupType==GroupItem::InstallRoot)
         {
-          QPtrListIterator<GroupItem> it3((*it2)->installs);
+          Q3PtrListIterator<GroupItem> it3((*it2)->installs);
           for (; it3.current(); ++it3)
           {
               (*it2)->insertItem(*it3);
-              QPtrListIterator<FileItem> it4((*it3)->files);
+              Q3PtrListIterator<FileItem> it4((*it3)->files);
               for (; it4.current(); ++it4)
                   (*it3)->insertItem(*it4);
               (*it3)->setOpen(true);
@@ -867,7 +870,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListV
         }
         else
         {
-          QPtrListIterator<FileItem> it3((*it2)->files);
+          Q3PtrListIterator<FileItem> it3((*it2)->files);
           for (; it3.current(); ++it3)
               (*it2)->insertItem(*it3);
           (*it2)->setOpen(true);
@@ -885,11 +888,11 @@ void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListV
 //      item->insertItem(*it1);
 //      buildProjectDetailTree(*it1,NULL);
 //    }
-    QPtrListIterator<GroupItem> it2(item->groups);
+    Q3PtrListIterator<GroupItem> it2(item->groups);
     for (; it2.current(); ++it2)
     {
         item->insertItem(*it2);
-        QPtrListIterator<FileItem> it3((*it2)->files);
+        Q3PtrListIterator<FileItem> it3((*it2)->files);
         for (; it3.current(); ++it3)
             (*it2)->insertItem(*it3);
         (*it2)->setOpen(true);
@@ -898,7 +901,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubqmakeprojectItem *item,KListV
   }
 }
 
-void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
+void TrollProjectWidget::slotDetailsExecuted(Q3ListViewItem *item)
 {
     if (!item)
         return;
@@ -1142,7 +1145,7 @@ void TrollProjectWidget::slotRemoveSubproject(SubqmakeprojectItem *spitem)
   }
 }
 
-void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void TrollProjectWidget::slotOverviewContextMenu(KListView *, Q3ListViewItem *item, const QPoint &p)
 {
     if (!item)
         return;
@@ -1432,7 +1435,7 @@ SubqmakeprojectItem* TrollProjectWidget::getScope(SubqmakeprojectItem *baseItem,
     return baseItem;
   // process next step of recursive function
   QString nextScopePart = subScopeParts[i];
-  QPtrListIterator<SubqmakeprojectItem> spit(baseItem->scopes);
+  Q3PtrListIterator<SubqmakeprojectItem> spit(baseItem->scopes);
   for (; spit.current(); ++spit)
   {
     SubqmakeprojectItem *spitem = spit;
@@ -1446,7 +1449,7 @@ SubqmakeprojectItem* TrollProjectWidget::getScope(SubqmakeprojectItem *baseItem,
   return NULL;
 }
 
-void TrollProjectWidget::updateProjectFile(QListViewItem *item)
+void TrollProjectWidget::updateProjectFile(Q3ListViewItem *item)
 {
 
   SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
@@ -1509,7 +1512,7 @@ void TrollProjectWidget::updateInstallObjects(SubqmakeprojectItem* item, FileBuf
 {
   // Install objects
   GroupItem* instroot = getInstallRoot(item);
-  QPtrListIterator<GroupItem> it(instroot->installs);
+  Q3PtrListIterator<GroupItem> it(instroot->installs);
   QStringList instobjects;
 
   for (;it.current();++it)
@@ -1569,7 +1572,7 @@ QString TrollProjectWidget::getHeader()
 
 void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QString &filename)
 {
-  QPtrListIterator<FileItem> it( titem->files );
+  Q3PtrListIterator<FileItem> it( titem->files );
   while ( it.current() != 0 )
   {
      if(it.current()->name == filename) //File already exists in this subproject
@@ -1626,13 +1629,13 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype, 
   FileItem *fitem = createFileItem(filename);
   GroupItem *gitem = 0;
 
-  QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
+  Q3PtrListIterator<GroupItem> it(m_shownSubproject->groups);
   for (; it.current(); ++it)
   {
     if ((*it)->groupType == gtype)
     {
       gitem = *it;
-       QPtrListIterator<FileItem> it( gitem->files );
+       Q3PtrListIterator<FileItem> it( gitem->files );
        while ( it.current() != 0 )
        {
         if(it.current()->name == filename) //File already exists in this subproject
@@ -1759,7 +1762,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate)
         noPathFileName = info.fileName();
 
     GroupItem *gitem = 0;
-    QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
+    Q3PtrListIterator<GroupItem> it(m_shownSubproject->groups);
     for (; it.current(); ++it)
     {
         if ((*it)->groupType == GroupItem::groupTypeForExtension(ext))
@@ -1883,7 +1886,7 @@ void TrollProjectWidget::slotAddFiles()
       case AddFilesDialog::Link:
       {
         // Link selected files to current subproject folder
-        QProcess *proc = new QProcess( this );
+        Q3Process *proc = new Q3Process( this );
         proc->addArgument( "ln" );
         proc->addArgument( "-s" );
         proc->addArgument( files[i] );
@@ -1913,7 +1916,7 @@ void TrollProjectWidget::slotAddFiles()
 
 GroupItem* TrollProjectWidget::getInstallRoot(SubqmakeprojectItem* item)
 {
-  QPtrListIterator<GroupItem> it(item->groups);
+  Q3PtrListIterator<GroupItem> it(item->groups);
   for (;it.current();++it)
   {
     if ((*it)->groupType == GroupItem::InstallRoot)
@@ -1927,7 +1930,7 @@ GroupItem* TrollProjectWidget::getInstallObject(SubqmakeprojectItem* item, const
   GroupItem* instroot = getInstallRoot(item);
   if (!instroot)
     return 0;
-  QPtrListIterator<GroupItem> it(instroot->installs);
+  Q3PtrListIterator<GroupItem> it(instroot->installs);
   for (;it.current();++it)
   {
     if ((*it)->groupType == GroupItem::InstallObject &&
@@ -1995,7 +1998,7 @@ void TrollProjectWidget::slotNewFile()
         if ( ok && !filename.isEmpty() )
         {
             QFile newfile(projectDirectory()+relpath+'/'+filename);
-            if (!newfile.open(IO_WriteOnly))
+            if (!newfile.open(QIODevice::WriteOnly))
             {
             KMessageBox::error(this,i18n("Failed to create new file. "
                                         "Do you have write permission "
@@ -2011,7 +2014,7 @@ void TrollProjectWidget::slotNewFile()
 
 void TrollProjectWidget::slotRemoveFile()
 {
-  QListViewItem *selectedItem = details->currentItem();
+  Q3ListViewItem *selectedItem = details->currentItem();
   if (!selectedItem)
     return;
   qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
@@ -2024,7 +2027,7 @@ void TrollProjectWidget::slotRemoveFile()
 
 void TrollProjectWidget::slotConfigureFile()
 {
-  QListViewItem *selectedItem = details->currentItem();
+  Q3ListViewItem *selectedItem = details->currentItem();
   if (!selectedItem)
     return;
   qProjectItem *pvitem = static_cast<qProjectItem*>(selectedItem);
@@ -2071,7 +2074,7 @@ void TrollProjectWidget::slotConfigureFile()
   }
 }
 
-void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
+void TrollProjectWidget::slotDetailsSelectionChanged(Q3ListViewItem *item)
 {
     if (!item)
     {
@@ -2120,7 +2123,7 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
     }
 }
 
-void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void TrollProjectWidget::slotDetailsContextMenu(KListView *, Q3ListViewItem *item, const QPoint &p)
 {
     if (!item)
         return;
@@ -2254,7 +2257,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             case AddFilesDialog::Link:
                 {
                 // Link selected files to current subproject folder
-                QProcess *proc = new QProcess( this );
+                Q3Process *proc = new Q3Process( this );
                 proc->addArgument( "ln" );
                 proc->addArgument( "-s" );
                 proc->addArgument( files[i] );
@@ -2330,7 +2333,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 if ( ok && !filename.isEmpty() )
                 {
                     QFile newfile(cleanSubprojectPath+'/'+filename);
-                    if (!newfile.open(IO_WriteOnly))
+                    if (!newfile.open(QIODevice::WriteOnly))
                     {
                     KMessageBox::error(this,i18n("Failed to create new file. "
                                                 "Do you have write permission "
@@ -2582,7 +2585,7 @@ void TrollProjectWidget::removeFile(SubqmakeprojectItem *spitem, FileItem *fitem
     QDomDocument &dom = *(m_part->projectDom());
     DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                                             "subclass","sourcefile", "uifile");
-    QPtrList<DomUtil::Pair> pairsToRemove;
+    Q3PtrList<DomUtil::Pair> pairsToRemove;
     DomUtil::PairList::iterator it;
     QString file = QString(spitem->path + "/" + fitem->name).remove(0,projectDirectory().length());
     for ( it = list.begin(); it != list.end(); ++it )
@@ -2938,7 +2941,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
       item->configuration.m_libraryversion = lst[0];
 
     item->configuration.m_inheritconfig = true;
-    QPtrList<FileBuffer::ValueSetMode> configvaluesetmodes;
+    Q3PtrList<FileBuffer::ValueSetMode> configvaluesetmodes;
     item->m_FileBuffer.getVariableValueSetModes("CONFIG",configvaluesetmodes);
 
     FileBuffer::ValueSetMode* ConfigSetMode = NULL;
@@ -3119,7 +3122,7 @@ void TrollProjectWidget::slotBuildFile()
 //    m_part->startMakeCommand(buildDir, target);
 
     kdDebug(9020) << "searching for the subproject" << endl;
-    QPtrList<SubqmakeprojectItem> list = findSubprojectForFile(fi);
+    Q3PtrList<SubqmakeprojectItem> list = findSubprojectForFile(fi);
     kdDebug(9020) << "searching for the subproject: success" << endl;
 
     SubqmakeprojectItem *spitem;
@@ -3314,21 +3317,21 @@ void TrollProjectWidget::createMakefileIfMissing(const QString &dir, Subqmakepro
     fi2.setFile(dir + "/" + item->configuration.m_makefile);
   }
   if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"), QString::null, i18n("Run qmake"), i18n("Do Not Run"));
+      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
       if (r == KMessageBox::No)
           return;
       m_part->startQMakeCommand(dir);
   }
 }
 
-QPtrList<SubqmakeprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
+Q3PtrList<SubqmakeprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
 {
-    QPtrList<SubqmakeprojectItem> list;
+    Q3PtrList<SubqmakeprojectItem> list;
     findSubprojectForFile(list, m_rootSubproject, fi.absFilePath());
     return list;
 }
 
-void TrollProjectWidget::findSubprojectForFile( QPtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath )
+void TrollProjectWidget::findSubprojectForFile( Q3PtrList<SubqmakeprojectItem> &list, SubqmakeprojectItem * item, QString absFilePath )
 {
     QDir d(item->path);
     kdDebug(9020) << "searching withing subproject: " << item->path << endl;
@@ -3349,7 +3352,7 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<SubqmakeprojectItem> &l
             list.append(item);
     }
 
-    QListViewItem * child = item->firstChild();
+    Q3ListViewItem * child = item->firstChild();
     while( child )
     {
         SubqmakeprojectItem *spitem = dynamic_cast<SubqmakeprojectItem*>(child);
@@ -3383,7 +3386,7 @@ void InsideCheckListItem::stateChange( bool state )
 {
     if (listView() == m_config->insidelib_listview)
     {
-        QListViewItemIterator it( m_config->intDeps_view );
+        Q3ListViewItemIterator it( m_config->intDeps_view );
         while ( it.current() ) {
             InsideCheckListItem *chi = dynamic_cast<InsideCheckListItem*>(it.current());
             if (chi)

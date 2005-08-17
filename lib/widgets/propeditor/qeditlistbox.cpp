@@ -14,18 +14,21 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "qeditlistbox.h"
+//Added by qt3to4:
+#include <Q3StrList>
+#include <QGridLayout>
 
 #include "compat_tools.h"
 
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
-#include <qlistbox.h>
-#include <qwhatsthis.h>
+#include <q3groupbox.h>
+#include <q3listbox.h>
+#include <q3whatsthis.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
@@ -47,14 +50,14 @@ public:
 
 QEditListBox::QEditListBox(QWidget *parent, const char *name,
 			   bool checkAtEntering, int buttons )
-    :QGroupBox(parent, name )
+    :Q3GroupBox(parent, name )
 {
     init( checkAtEntering, buttons );
 }
 
 QEditListBox::QEditListBox(const QString& title, QWidget *parent,
 			   const char *name, bool checkAtEntering, int buttons)
-    :QGroupBox(title, parent, name )
+    :Q3GroupBox(title, parent, name )
 {
     init( checkAtEntering, buttons );
 }
@@ -62,7 +65,7 @@ QEditListBox::QEditListBox(const QString& title, QWidget *parent,
 QEditListBox::QEditListBox(const QString& title, const CustomEditor& custom,
                            QWidget *parent, const char *name,
                            bool checkAtEntering, int buttons)
-    :QGroupBox(title, parent, name )
+    :Q3GroupBox(title, parent, name )
 {
     m_lineEdit = custom.lineEdit();
     init( checkAtEntering, buttons, custom.representationWidget() );
@@ -109,7 +112,7 @@ void QEditListBox::init( bool checkAtEntering, int buttons,
     else
         m_lineEdit=new QLineEdit(gb);
 
-    m_listBox = new QListBox(gb);
+    m_listBox = new Q3ListBox(gb);
 
     QWidget *editingWidget = representationWidget ?
                              representationWidget : m_lineEdit;
@@ -205,7 +208,7 @@ void QEditListBox::moveItemUp()
         return;
     }
 
-    QListBoxItem *selItem = m_listBox->item(selIndex);
+    Q3ListBoxItem *selItem = m_listBox->item(selIndex);
     m_listBox->takeItem(selItem);
     m_listBox->insertItem(selItem, selIndex-1);
     m_listBox->setCurrentItem(selIndex - 1);
@@ -228,7 +231,7 @@ void QEditListBox::moveItemDown()
         return;
     }
 
-    QListBoxItem *selItem = m_listBox->item(selIndex);
+    Q3ListBoxItem *selItem = m_listBox->item(selIndex);
     m_listBox->takeItem(selItem);
     m_listBox->insertItem(selItem, selIndex+1);
     m_listBox->setCurrentItem(selIndex + 1);
@@ -355,12 +358,12 @@ void QEditListBox::insertStringList(const QStringList& list, int index)
     m_listBox->insertStringList(list,index);
 }
 
-void QEditListBox::insertStrList(const QStrList* list, int index)
+void QEditListBox::insertStrList(const Q3StrList* list, int index)
 {
     m_listBox->insertStrList(list,index);
 }
 
-void QEditListBox::insertStrList(const QStrList& list, int index)
+void QEditListBox::insertStrList(const Q3StrList& list, int index)
 {
     m_listBox->insertStrList(list,index);
 }

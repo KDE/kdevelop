@@ -11,17 +11,19 @@
 ***************************************************************************/ 
 // qt includes
 #include <qtabwidget.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 #include <qslider.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qcolor.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 // kde includes
 #include <kdevproject.h>
@@ -43,12 +45,9 @@
 #include <kdevmainwindow.h>
 #include <kdevcoderepository.h>
 #include <catalog.h>
-// std includes
-#include <stdlib.h>
 
 #include "cppsupportfactory.h"
 #include "ccconfigwidget.h"
-#include "qtbuildconfig.h"
 #include "cppsupportpart.h"
 #include "cppcodecompletionconfig.h"
 #include "createpcsdialog.h"
@@ -67,7 +66,6 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 	         this, SLOT( catalogUnregistered( Catalog* ) ) );
 
 	initGeneralTab( );
-	initQtTab();
 	initCodeCompletionTab( );
 	initGetterSetterTab( );
 	inputCodeCompletion->setRange( 0, 2000, 100, false );
@@ -95,7 +93,6 @@ CCConfigWidget::~CCConfigWidget( )
 void CCConfigWidget::accept( )
 {
 	saveFileTemplatesTab();
-	saveQtTab();
 	saveCodeCompletionTab();
 	saveGetterSetterTab();
 }
@@ -131,12 +128,12 @@ void CCConfigWidget::initCodeCompletionTab( )
 	m_includeEnums->setChecked( c->includeEnums() );
 	m_includeTypedefs->setChecked( c->includeTypedefs() );
 
-	QValueList<Catalog*> catalogs = m_pPart->codeRepository() ->registeredCatalogs();
-	for ( QValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
+	Q3ValueList<Catalog*> catalogs = m_pPart->codeRepository() ->registeredCatalogs();
+	for ( Q3ValueList<Catalog*>::Iterator it = catalogs.begin(); it != catalogs.end(); ++it )
 	{
 		Catalog* c = *it;
 		QFileInfo dbInfo( c->dbName() );
-		QCheckListItem* item = new QCheckListItem( advancedOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+		Q3CheckListItem* item = new Q3CheckListItem( advancedOptions, dbInfo.baseName(), Q3CheckListItem::CheckBox );
 		item->setOn( c->enabled() );
 
 		m_catalogs[ item ] = c;
@@ -158,7 +155,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
 	c->setIncludeEnums( m_includeEnums->isChecked() );
 	c->setIncludeTypedefs( m_includeTypedefs->isChecked() );
 
-	for ( QMap<QCheckListItem*, Catalog*>::Iterator it = m_catalogs.begin(); it != m_catalogs.end(); ++it )
+	for ( QMap<Q3CheckListItem*, Catalog*>::Iterator it = m_catalogs.begin(); it != m_catalogs.end(); ++it )
 	{
 		it.data() ->setEnabled( it.key() ->isOn() );
 	}
@@ -201,7 +198,7 @@ void CCConfigWidget::slotRemovePCS()
 void CCConfigWidget::catalogRegistered( Catalog * c )
 {
 	QFileInfo dbInfo( c->dbName() );
-	QCheckListItem* item = new QCheckListItem( advancedOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+	Q3CheckListItem* item = new Q3CheckListItem( advancedOptions, dbInfo.baseName(), Q3CheckListItem::CheckBox );
 	item->setOn( c->enabled() );
 
 	m_catalogs[ item ] = c;
@@ -209,11 +206,11 @@ void CCConfigWidget::catalogRegistered( Catalog * c )
 
 void CCConfigWidget::catalogUnregistered( Catalog * c )
 {
-	for ( QMap<QCheckListItem*, Catalog*>::Iterator it = m_catalogs.begin(); it != m_catalogs.end(); ++it )
+	for ( QMap<Q3CheckListItem*, Catalog*>::Iterator it = m_catalogs.begin(); it != m_catalogs.end(); ++it )
 	{
 		if ( it.data() == c )
 		{
-			QCheckListItem * item = it.key();
+			Q3CheckListItem * item = it.key();
 			delete( item );
 			m_catalogs.remove( it );
 			break;
@@ -315,50 +312,6 @@ void CCConfigWidget::saveGetterSetterTab( )
 	config->setPrefixVariable( QStringList::split( ",", m_edtRemovePrefix->text().replace( " ", "" ) ) );
 	config->setParameterName( m_edtParameterName->text() );
 	config->store();
-}
-
-void CCConfigWidget::initQtTab()
-{
-	QtBuildConfig* c = m_pPart->qtBuildConfig();
-
-	m_qtUsed->setChecked( c->isUsed() );
-	if( c->version() == 4 )
-	{
-		m_qtVersion4->setChecked( true );
-	}
-	else
-	{
-		m_qtVersion3->setChecked( true );
-	}
-	
-	m_qtRoot->setURL( c->root() );
-	slotToogleQtUsed();
-}
-
-void CCConfigWidget::saveQtTab()
-{
-	QtBuildConfig* c = m_pPart->qtBuildConfig();
-	
-	c->setUsed( m_qtUsed->isChecked() );
-	if( m_qtVersion4->isChecked() )
-	{
-		c->setVersion( 4 );
-	}
-	else
-	{
-		c->setVersion( 3 );
-	}
-	
-	c->setRoot( m_qtRoot->url() );
-	
-	c->store();
-}
-
-void CCConfigWidget::slotToogleQtUsed()
-{
-	bool enabled = m_qtUsed->isChecked();
-	m_qtVersionBox->setEnabled( enabled );
-	m_qtInstallationBox->setEnabled( enabled );
 }
 
 

@@ -6,21 +6,21 @@
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qapplication.h>
 
 void ListEditor::init()
 {
     listview->header()->hide();
     listview->setSorting( -1 );
-    listview->setDefaultRenameAction( QListView::Accept );
+    listview->setDefaultRenameAction( Q3ListView::Accept );
 }
 
 void ListEditor::setList( const QStringList &l )
 {
-    QListViewItem *i = 0;
+    Q3ListViewItem *i = 0;
     for ( QStringList::ConstIterator it = l.begin(); it != l.end(); ++it ) {
-	i = new QListViewItem( listview, i );
+	i = new Q3ListViewItem( listview, i );
 	i->setText( 0, *it );
 	i->setRenameEnabled( 0, TRUE );
     }
@@ -28,13 +28,13 @@ void ListEditor::setList( const QStringList &l )
 
 void ListEditor::addItem()
 {
-    QListViewItem *i = new QListViewItem( listview, listview->lastItem() );
+    Q3ListViewItem *i = new Q3ListViewItem( listview, listview->lastItem() );
     i->setRenameEnabled( 0, TRUE );
     qApp->processEvents();
     i->startRename( 0 );
 }
 
-void ListEditor::renamed( QListViewItem *i )
+void ListEditor::renamed( Q3ListViewItem *i )
 {
     if ( i && i->text( 0 ).isEmpty() )
 	i->startRename( 0 );
@@ -42,8 +42,8 @@ void ListEditor::renamed( QListViewItem *i )
 
 void ListEditor::removeItems()
 {
-    QListViewItemIterator it( listview );
-    QListViewItem *i = 0;
+    Q3ListViewItemIterator it( listview );
+    Q3ListViewItem *i = 0;
     while ( ( i = it.current() ) ) {
 	++it;
 	if ( i->isSelected() )
@@ -54,8 +54,8 @@ void ListEditor::removeItems()
 QStringList ListEditor::items()
 {
     QStringList l;
-    QListViewItemIterator it( listview );
-    QListViewItem *i = 0;
+    Q3ListViewItemIterator it( listview );
+    Q3ListViewItem *i = 0;
     while ( ( i = it.current() ) ) {
 	++it;
 	if ( !i->text( 0 ).isEmpty() )
@@ -66,7 +66,7 @@ QStringList ListEditor::items()
 
 void ListEditor::renameItem()
 {
-    QListViewItem *i = listview->currentItem();
+    Q3ListViewItem *i = listview->currentItem();
     if ( i )
 	i->startRename( 0 );
 }

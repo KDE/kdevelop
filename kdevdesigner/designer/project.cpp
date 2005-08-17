@@ -34,12 +34,16 @@
 #endif
 #include "resource.h"
 #include <qwidgetfactory.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QEvent>
+#include <Q3ValueList>
 #include "outputwindow.h"
 
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qurl.h>
-#include <qobjectlist.h>
+#include <q3url.h>
+#include <qobject.h>
 #include <qfeatures.h>
 #include <qtextcodec.h>
 #include <qdom.h>
@@ -51,7 +55,7 @@
 #ifndef QT_NO_SQL
 #include <qsqldatabase.h>
 #include <qsqlrecord.h>
-#include <qdatatable.h>
+#include <q3datatable.h>
 #endif
 
 #include <stdlib.h>
@@ -414,7 +418,7 @@ QStringList parse_multiline_part( const QString &contents, const QString &key, i
 void Project::parse()
 {
     QFile f( filename );
-    if ( !f.exists() || !f.open( IO_ReadOnly ) )
+    if ( !f.exists() || !f.open( QIODevice::ReadOnly ) )
 	return;
     QTextStream ts( &f );
     QString contents = ts.read();
@@ -551,8 +555,8 @@ QString Project::makeAbsolute( const QString &f )
     if ( isDummy() )
 	return f;
     QString encodedUrl = QFileInfo( filename ).dirPath( TRUE );
-    QUrl::encode( encodedUrl );
-    QUrl u( encodedUrl, f );
+    Q3Url::encode( encodedUrl );
+    Q3Url u( encodedUrl, f );
     return u.path();
 }
 
@@ -636,7 +640,7 @@ void Project::save( bool onlyProjectFile )
 
     // read the existing file
     bool hasPreviousContents = FALSE;
-    if ( f.open( IO_ReadOnly ) ) {
+    if ( f.open( QIODevice::ReadOnly ) ) {
 	QTextStream ts( &f );
 	original = ts.read();
 	f.close();
@@ -724,7 +728,7 @@ void Project::save( bool onlyProjectFile )
     // forms and interfaces
     if ( !formfiles.isEmpty() ) {
 	contents += "FORMS\t= ";
-	for ( QPtrListIterator<FormFile> fit = formfiles; fit.current(); ++fit ) {
+	for ( Q3PtrListIterator<FormFile> fit = formfiles; fit.current(); ++fit ) {
 	    contents += fit.current()->fileName() +
 		 (fit != formfiles.last() ? " \\\n\t" : "");
 	}
@@ -734,8 +738,8 @@ void Project::save( bool onlyProjectFile )
     // images
      if ( !pixCollection->isEmpty() ) {
 	contents += "IMAGES\t= ";
-	QValueList<PixmapCollection::Pixmap> pixmaps = pixCollection->pixmaps();
-	for ( QValueList<PixmapCollection::Pixmap>::Iterator it = pixmaps.begin();
+	Q3ValueList<PixmapCollection::Pixmap> pixmaps = pixCollection->pixmaps();
+	for ( Q3ValueList<PixmapCollection::Pixmap>::Iterator it = pixmaps.begin();
 	      it != pixmaps.end(); ++it ) {
 		  contents += makeRelative( (*it).absname );
 		  contents += ++it != pixmaps.end() ? " \\\n\t" : "";
@@ -756,7 +760,7 @@ void Project::save( bool onlyProjectFile )
 	    contents += *it + "\t= " + val + "\n";
     }
 
-    if ( !f.open( IO_WriteOnly | IO_Translate ) ) {
+    if ( !f.open( QIODevice::WriteOnly | QIODevice::Translate ) ) {
 	QMessageBox::warning( messageBoxParent(),
 			      "Save Project Failed", "Couldn't write project file " + filename );
 	return;
@@ -779,14 +783,14 @@ void Project::save( bool onlyProjectFile )
 }
 
 #ifndef QT_NO_SQL
-QPtrList<DatabaseConnection> Project::databaseConnections() const
+Q3PtrList<DatabaseConnection> Project::databaseConnections() const
 {
     return dbConnections;
 }
 #endif
 
 #ifndef QT_NO_SQL
-void Project::setDatabaseConnections( const QPtrList<DatabaseConnection> &lst )
+void Project::setDatabaseConnections( const Q3PtrList<DatabaseConnection> &lst )
 {
     dbConnections = lst;
 }
@@ -884,7 +888,7 @@ void Project::saveConnections()
     }
 
     /* .db xml */
-    if ( f.open( IO_WriteOnly | IO_Translate ) ) {
+    if ( f.open( QIODevice::WriteOnly | QIODevice::Translate ) ) {
 	QTextStream ts( &f );
 	ts.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 	ts << "<!DOCTYPE DB><DB version=\"1.0\">" << endl;
@@ -955,7 +959,7 @@ void Project::loadConnections()
 	return;
 
     QFile f( makeAbsolute( dbFile ) );
-    if ( f.open( IO_ReadOnly ) ) {
+    if ( f.open( QIODevice::ReadOnly ) ) {
 	QDomDocument doc;
 	QString errMsg;
 	int errLine;
@@ -1060,7 +1064,7 @@ void Project::closeDatabase( const QString &connection )
 QObjectList *Project::formList( bool resolveFakeObjects ) const
 {
     QObjectList *l = new QObjectList;
-    for ( QPtrListIterator<FormFile> forms(formfiles);   forms.current(); ++forms ) {
+    for ( Q3PtrListIterator<FormFile> forms(formfiles);   forms.current(); ++forms ) {
 	FormFile* f = forms.current();
 	if ( f->formWindow() ) {
 	    if ( resolveFakeObjects && f->formWindow()->isFake() )
@@ -1146,7 +1150,7 @@ void Project::addSourceFile( SourceFile *sf )
 
 SourceFile* Project::findSourceFile( const QString& filename, SourceFile *ignore ) const
 {
-    QPtrListIterator<SourceFile> it(sourcefiles);
+    Q3PtrListIterator<SourceFile> it(sourcefiles);
     while ( it.current() ) {
 	if ( it.current() != ignore && it.current()->fileName() == filename )
 	    return it.current();
@@ -1157,7 +1161,7 @@ SourceFile* Project::findSourceFile( const QString& filename, SourceFile *ignore
 
 FormFile* Project::findFormFile( const QString& filename, FormFile *ignore ) const
 {
-    QPtrListIterator<FormFile> it(formfiles);
+    Q3PtrListIterator<FormFile> it(formfiles);
     while ( it.current() ) {
 	if ( it.current() != ignore && it.current()->fileName() == filename )
 	    return it.current();
@@ -1309,7 +1313,7 @@ void Project::addObject( QObject *o )
 	if ( MainWindow::self )
 	    fw->setMainWindow( MainWindow::self );
 	if ( MainWindow::self ) {
-	    QApplication::sendPostedEvents( MainWindow::self->qWorkspace(), QEvent::ChildInserted );
+	    QApplication::sendPostedEvents( MainWindow::self->qWorkspace(), QEvent::ChildAdded );
 	    connect( fw,
 		     SIGNAL( undoRedoChanged( bool, bool, const QString &, const QString & ) ),
 		     MainWindow::self,
@@ -1357,7 +1361,7 @@ FormFile *Project::fakeFormFileFor( QObject *o ) const
 
 QObject *Project::objectForFakeForm( FormWindow *fw ) const
 {
-    for ( QPtrDictIterator<FormFile> it( fakeFormFiles ); it.current(); ++it ) {
+    for ( Q3PtrDictIterator<FormFile> it( fakeFormFiles ); it.current(); ++it ) {
 	if ( it.current()->formWindow() == fw ||
 	    it.current() == fw->formFile() )
 	    return (QObject*)it.currentKey();
@@ -1367,7 +1371,7 @@ QObject *Project::objectForFakeForm( FormWindow *fw ) const
 
 QObject *Project::objectForFakeFormFile( FormFile *ff ) const
 {
-    for ( QPtrDictIterator<FormFile> it( fakeFormFiles ); it.current(); ++it ) {
+    for ( Q3PtrDictIterator<FormFile> it( fakeFormFiles ); it.current(); ++it ) {
 	if ( it.current() == ff )
 	    return (QObject*)it.currentKey();
     }
@@ -1405,7 +1409,7 @@ void Project::addAndEditFunction( const QString &function, const QString &functi
 {
     for ( SourceFile *f = sourcefiles.first(); f; f = sourcefiles.next() ) {
 	if ( QFileInfo( f->fileName() ).baseName() == "main" ) {
-	    QValueList<LanguageInterface::Function> funcs;
+	    Q3ValueList<LanguageInterface::Function> funcs;
 	    LanguageInterface *iface = MetaDataBase::languageInterface( language() );
 	    if ( !iface )
 		return;
@@ -1416,7 +1420,7 @@ void Project::addAndEditFunction( const QString &function, const QString &functi
 		func = func.left( i );
 
 	    bool found = FALSE;
-	    for ( QValueList<LanguageInterface::Function>::Iterator it = funcs.begin();
+	    for ( Q3ValueList<LanguageInterface::Function>::Iterator it = funcs.begin();
 		  it != funcs.end(); ++it ) {
 		if ( (*it).name.left( (*it).name.find( '(' ) ) == func ) {
 		    found = TRUE;
@@ -1493,7 +1497,7 @@ void Project::designerCreated()
 					 const QString &, const QString & ) ) );
 	fw->reparent( MainWindow::self->qWorkspace(), QPoint( 0, 0 ), FALSE );
 	QApplication::sendPostedEvents( MainWindow::self->qWorkspace(),
-					QEvent::ChildInserted );
+					QEvent::ChildAdded );
 	fw->parentWidget()->setFixedSize( 1, 1 );
 	fw->show();
     }
@@ -1533,7 +1537,7 @@ QString Project::locationOfObject( QObject *o )
     }
 
     if ( ::qt_cast<SourceFile*>(o) ) {
-	for ( QPtrListIterator<SourceFile> sources = sourceFiles();
+	for ( Q3PtrListIterator<SourceFile> sources = sourceFiles();
 	      sources.current(); ++sources ) {
 	    SourceFile* f = sources.current();
 	    if ( f == o )

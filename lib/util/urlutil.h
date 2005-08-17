@@ -14,15 +14,15 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef _URLUTIL_H_
 #define _URLUTIL_H_
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <kurl.h>
 
 /**
@@ -166,9 +166,8 @@ namespace URLUtil
   /**
    * Same as QDir::canonicalPath in later versions of Qt. Earlier versions of Qt
    * had this broken, so it's reproduced here.
-   * Deprecated, use QDir::canonicalPath instead.    
    */
-  QString canonicalPath( const QString & path ) KDE_DEPRECATED; 
+  QString canonicalPath( const QString & path );
 
     /**
      * Performs environment variable expansion on @p variable.

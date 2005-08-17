@@ -8,7 +8,7 @@
 class QWidget;
 class QPainter;
 class KURL;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 
 /**
  * This is a "Part".  It that does all the real work in a KPart
@@ -61,7 +61,7 @@ protected slots:
     void fileSaveAs();
 
 private:
-    QMultiLineEdit *m_widget;
+    Q3MultiLineEdit *m_widget;
 };
 
 class KInstance;

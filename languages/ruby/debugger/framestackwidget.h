@@ -22,7 +22,7 @@
 #ifndef _FRAMESTACKWIDGET_H_
 #define _FRAMESTACKWIDGET_H_
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qstringlist.h>
 
 #include "rdbcontroller.h"
@@ -33,7 +33,7 @@ namespace RDBDebugger
 class FramestackWidget;
 
 
-class ThreadStackItem : public QListViewItem
+class ThreadStackItem : public Q3ListViewItem
 {
 public:
     ThreadStackItem(FramestackWidget *parent, int threadNo, const QString &threadDesc);
@@ -52,7 +52,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class FrameStackItem : public QListViewItem
+class FrameStackItem : public Q3ListViewItem
 {
 public:
     FrameStackItem(ThreadStackItem * parent, int frameNo, const QString & frameDesc, const QString & frameName);
@@ -79,12 +79,12 @@ private:
 /**
  * @author John Birch
  */
-class FramestackWidget : public QListView
+class FramestackWidget : public Q3ListView
 {
     Q_OBJECT
 
 public:
-    FramestackWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
+    FramestackWidget( QWidget *parent=0, const char *name=0, Qt::WFlags f=0 );
     virtual ~FramestackWidget();
 
     void clear();
@@ -100,7 +100,7 @@ public:
 
 public slots:
     void slotSelectFrame(int frameNo, int threadNo);
-    void slotSelectionChanged(QListViewItem *thisItem);
+    void slotSelectionChanged(Q3ListViewItem *thisItem);
 
 signals:
     void selectFrame(int frameNo, int threadNo, const QString& frameName);

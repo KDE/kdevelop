@@ -13,14 +13,14 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVMAKEBUILDER_H
 #define KDEVMAKEBUILDER_H
 
 #include <kdevprojectbuilder.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 
 class KDialogBase;
@@ -59,7 +59,7 @@ private:
 private:
     KDevProject *m_project;
     ProjectItemDom m_defaultExecutable;
-    QValueList< QPair<QString, ProjectItemDom> > m_commands;
+    Q3ValueList< QPair<QString, ProjectItemDom> > m_commands;
     
     static const QString &builder;
     static const QString &makeTool;

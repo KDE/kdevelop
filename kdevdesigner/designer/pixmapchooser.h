@@ -27,15 +27,17 @@
 #ifndef PIXMAPCHOOSER_H
 #define PIXMAPCHOOSER_H
 
-#include <qfiledialog.h>
-#include <qscrollview.h>
+#include <q3filedialog.h>
+#include <q3scrollview.h>
 #include <qpixmap.h>
-#include <qurl.h>
+#include <q3url.h>
+//Added by qt3to4:
+#include <Q3StrList>
 
 class FormWindow;
 
-class PixmapView : public QScrollView,
-		   public QFilePreview
+class PixmapView : public Q3ScrollView,
+		   public Q3FilePreview
 {
     Q_OBJECT
 
@@ -43,14 +45,14 @@ public:
     PixmapView( QWidget *parent );
     void setPixmap( const QPixmap &pix );
     void drawContents( QPainter *p, int, int, int, int );
-    void previewUrl( const QUrl &u );
+    void previewUrl( const Q3Url &u );
 
 private:
     QPixmap pixmap;
 
 };
 
-class ImageIconProvider : public QFileIconProvider
+class ImageIconProvider : public Q3FileIconProvider
 {
     Q_OBJECT
 
@@ -61,7 +63,7 @@ public:
     const QPixmap *pixmap( const QFileInfo &fi );
 
 private:
-    QStrList fmts;
+    Q3StrList fmts;
     QPixmap imagepm;
 
 };

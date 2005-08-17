@@ -23,7 +23,7 @@ class PascalProjectOptionsDlg : public PascalProjectOptionsDlgBase
   Q_OBJECT
 
 public:
-    PascalProjectOptionsDlg(PascalProjectPart *part, QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    PascalProjectOptionsDlg(PascalProjectPart *part, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~PascalProjectOptionsDlg();
 
 public slots:

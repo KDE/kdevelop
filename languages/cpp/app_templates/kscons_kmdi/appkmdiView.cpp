@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <QBoxLayout>
 %{CPP_TEMPLATE}
 
 #include <qpixmap.h>

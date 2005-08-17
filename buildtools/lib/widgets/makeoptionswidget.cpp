@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "makeoptionswidget.h"
@@ -22,8 +22,8 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
-#include <qlistview.h>
-#include <qgroupbox.h>
+#include <q3listview.h>
+#include <q3groupbox.h>
 
 #include "domutil.h"
 #include "environmentvariableswidget.h"

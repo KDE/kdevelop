@@ -14,16 +14,16 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-ScopeItem::ScopeItem(QListView *parent,const QString &text,QStringList *excludeList,bool initialMode)
-: QCheckListItem(parent,text,QCheckListItem::CheckBox)
+ScopeItem::ScopeItem(Q3ListView *parent,const QString &text,QStringList *excludeList,bool initialMode)
+: Q3CheckListItem(parent,text,Q3CheckListItem::CheckBox)
 {
   m_excludeList = excludeList;
   setOn(initialMode);
   m_initialMode = initialMode;
 }
 
-ScopeItem::ScopeItem(QCheckListItem *parent,const QString &text,QStringList *excludeList,bool initialMode)
-: QCheckListItem(parent,text,QCheckListItem::CheckBox)
+ScopeItem::ScopeItem(Q3CheckListItem *parent,const QString &text,QStringList *excludeList,bool initialMode)
+: Q3CheckListItem(parent,text,Q3CheckListItem::CheckBox)
 {
   m_excludeList = excludeList;
   setOn(initialMode);
@@ -48,7 +48,7 @@ void ScopeItem::excludeFromScope(const QString &fileName,bool b)
 }
 
 FilePropertyDlg::FilePropertyDlg(SubqmakeprojectItem *spitem,int grtype, FileItem *fitem, QStringList &dirtyScopes,
-                                 QWidget *parent, const char* name, bool modal, WFlags fl)
+                                 QWidget *parent, const char* name, bool modal, Qt::WFlags fl)
 : FilePropertyBase(parent,name,modal,fl),
 m_dirtyScopes(dirtyScopes)
 {
@@ -67,7 +67,7 @@ m_dirtyScopes(dirtyScopes)
 
 GroupItem* FilePropertyDlg::getInstallRoot(SubqmakeprojectItem* item)
 {
-  QPtrListIterator<GroupItem> it(item->groups);
+  Q3PtrListIterator<GroupItem> it(item->groups);
   for (;it.current();++it)
   {
     if ((*it)->groupType == GroupItem::InstallRoot)
@@ -81,7 +81,7 @@ GroupItem* FilePropertyDlg::getInstallObject(SubqmakeprojectItem* item, const QS
   GroupItem* instroot = getInstallRoot(item);
   if (!instroot)
     return 0;
-  QPtrListIterator<GroupItem> it(instroot->installs);
+  Q3PtrListIterator<GroupItem> it(instroot->installs);
   for (;it.current();++it)
   {
     if ((*it)->groupType == GroupItem::InstallObject &&
@@ -125,7 +125,7 @@ QStringList* FilePropertyDlg::getExcludeList(SubqmakeprojectItem *spitem)
 
 void FilePropertyDlg::createScopeTree(SubqmakeprojectItem *spitem,ScopeItem *sitem)
 {
-  QPtrListIterator<SubqmakeprojectItem> spit(spitem->scopes);
+  Q3PtrListIterator<SubqmakeprojectItem> spit(spitem->scopes);
   for (; spit.current(); ++spit)
   {
     SubqmakeprojectItem *nextSubproject = spit;

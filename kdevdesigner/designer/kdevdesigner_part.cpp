@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #include "kdevdesigner_part.h"
@@ -31,10 +31,12 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qtoolbar.h>
+#include <q3toolbar.h>
 #include <qmenubar.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstatusbar.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "mainwindow.h"
 #include "designeraction.h"
@@ -74,13 +76,13 @@ void KDevDesignerPart::setupDesignerWindow()
     m_widget->statusBar()->hide();
 }
 
-static QIconSet createPartIconSet( const QString &name )
+static QIcon createPartIconSet( const QString &name )
 {
-    QIconSet ic( BarIcon( "" + name, KDevDesignerPartFactory::instance() ) );
+    QIcon ic( BarIcon( "" + name, KDevDesignerPartFactory::instance() ) );
     QString prefix = "designer_";
     int right = name.length() - prefix.length();
     ic.setPixmap( BarIcon( prefix + "d_" + name.right( right ), KDevDesignerPartFactory::instance() ),
-		  QIconSet::Small, QIconSet::Disabled );
+		  QIcon::Small, QIcon::Disabled );
     return ic;
 }
 
@@ -109,11 +111,11 @@ void KDevDesignerPart::setupActions( )
     stateSync(action, m_widget->actionEditCopy);
     action = KStdAction::paste(this, SLOT(editPaste()), actionCollection());
     stateSync(action, m_widget->actionEditPaste);
-    action = new KAction(i18n("&Delete"), Key_Delete, this, SLOT(editDelete()), actionCollection(), "edit_delete");
+    action = new KAction(i18n("&Delete"), Qt::Key_Delete, this, SLOT(editDelete()), actionCollection(), "edit_delete");
     stateSync(action, m_widget->actionEditDelete);
     action = KStdAction::selectAll(this, SLOT(editSelectAll()), actionCollection());
     stateSync(action, m_widget->actionEditSelectAll);
-    action = new KAction(i18n("Chec&k Accelerators"), ALT + Key_R, this, SLOT(editAccels()), actionCollection(), "edit_accels");
+    action = new KAction(i18n("Chec&k Accelerators"), Qt::ALT + Qt::Key_R, this, SLOT(editAccels()), actionCollection(), "edit_accels");
     stateSync(action, m_widget->actionEditAccels);
     action = new KAction(i18n("S&lots..."), createPartIconSet("designer_editslots.png"), 0, this, SLOT(editFunctions()), actionCollection(), "edit_functions");
     stateSync(action, m_widget->actionEditFunctions);
@@ -144,28 +146,28 @@ void KDevDesignerPart::setupActions( )
     new KAction(i18n("Configure Toolbox..."), 0, this, SLOT(toolsConfigureToolbox()), actionCollection(), "tools_toolbox");
     new KAction(i18n("Edit &Custom Widgets..."), 0, this, SLOT(toolsEditCustomWidgets()), actionCollection(), "tools_editcustomwidgets");
 
-    action = new KAction(i18n("Adjust &Size"), createPartIconSet("designer_adjustsize.png"), CTRL + Key_J, this, SLOT(layoutAdjustSize()), actionCollection(), "layout_adjustsize");
+    action = new KAction(i18n("Adjust &Size"), createPartIconSet("designer_adjustsize.png"), Qt::CTRL + Qt::Key_J, this, SLOT(layoutAdjustSize()), actionCollection(), "layout_adjustsize");
     stateSync(action, m_widget->actionEditAdjustSize);
-    action = new KAction(i18n("Lay Out &Horizontally"), createPartIconSet("designer_edithlayout.png"), CTRL + Key_H, this, SLOT(layoutHLayout()), actionCollection(), "layout_h");
+    action = new KAction(i18n("Lay Out &Horizontally"), createPartIconSet("designer_edithlayout.png"), Qt::CTRL + Qt::Key_H, this, SLOT(layoutHLayout()), actionCollection(), "layout_h");
     stateSync(action, m_widget->actionEditHLayout);
-    action = new KAction(i18n("Lay Out &Vertically"), createPartIconSet("designer_editvlayout.png"), CTRL + Key_V, this, SLOT(layoutVLayout()), actionCollection(), "layout_v");
+    action = new KAction(i18n("Lay Out &Vertically"), createPartIconSet("designer_editvlayout.png"), Qt::CTRL + Qt::Key_V, this, SLOT(layoutVLayout()), actionCollection(), "layout_v");
     stateSync(action, m_widget->actionEditVLayout);
-    action = new KAction(i18n("Lay Out in &Grid"), createPartIconSet("designer_editgrid.png"), CTRL + Key_G, this, SLOT(layoutGridLayout()), actionCollection(), "layout_grid");
+    action = new KAction(i18n("Lay Out in &Grid"), createPartIconSet("designer_editgrid.png"), Qt::CTRL + Qt::Key_G, this, SLOT(layoutGridLayout()), actionCollection(), "layout_grid");
     stateSync(action, m_widget->actionEditGridLayout);
     action = new KAction(i18n("Lay Out Horizontally (in S&plitter)"), createPartIconSet("designer_editvlayoutsplit.png"), 0, this, SLOT(layoutSplitHLayout()), actionCollection(), "layout_splith");
     stateSync(action, m_widget->actionEditSplitHorizontal);
     action = new KAction(i18n("Lay Out Vertically (in Sp&litter)"), createPartIconSet("designer_edithlayoutsplit.png"), 0, this, SLOT(layoutSplitVLayout()), actionCollection(), "layout_splitv");
     stateSync(action, m_widget->actionEditSplitVertical);
-    action = new KAction(i18n("&Break Layout"), createPartIconSet("designer_editbreaklayout.png"), CTRL + Key_B, this, SLOT(layoutBreak()), actionCollection(), "layout_break");
+    action = new KAction(i18n("&Break Layout"), createPartIconSet("designer_editbreaklayout.png"), Qt::CTRL + Qt::Key_B, this, SLOT(layoutBreak()), actionCollection(), "layout_break");
     stateSync(action, m_widget->actionEditBreakLayout);
     toggle = new KRadioAction(i18n("Add Spacer"), createPartIconSet("designer_spacer.png"), 0, actionCollection(), "layout_spacer");
     setupToolsAction(toggle, m_widget->actionInsertSpacer);
 
-    action = new KAction(i18n("Preview &Form"), CTRL + Key_T, this, SLOT(windowPreview()), actionCollection(), "window_preview");
+    action = new KAction(i18n("Preview &Form"), Qt::CTRL + Qt::Key_T, this, SLOT(windowPreview()), actionCollection(), "window_preview");
     stateSync(action, m_widget->actionPreview);
-    action = new KAction(i18n("Ne&xt Form"), CTRL + Key_F6, this, SLOT(windowNext()), actionCollection(), "window_next");
+    action = new KAction(i18n("Ne&xt Form"), Qt::CTRL + Qt::Key_F6, this, SLOT(windowNext()), actionCollection(), "window_next");
     stateSync(action, m_widget->actionWindowNext);
-    action = new KAction(i18n("Pre&vious Form"), CTRL + SHIFT + Key_F6, this, SLOT(windowPrev()), actionCollection(), "window_prev");
+    action = new KAction(i18n("Pre&vious Form"), Qt::CTRL + Qt::SHIFT + Qt::Key_F6, this, SLOT(windowPrev()), actionCollection(), "window_prev");
     stateSync(action, m_widget->actionWindowPrevious);
 
     action = KStdAction::preferences(this, SLOT(editPreferences()), actionCollection());
@@ -264,7 +266,7 @@ KParts::Part* KDevDesignerPartFactory::createPartObject( QWidget *parentWidget, 
     KDevDesignerPart* obj = new KDevDesignerPart( parentWidget, widgetName, parent, name, args );
 
     // See if we are to be read-write or not
-    if (QCString(classname) == "KParts::ReadOnlyPart")
+    if (Q3CString(classname) == "KParts::ReadOnlyPart")
         obj->setReadWrite(false);
 
     return obj;
@@ -288,7 +290,7 @@ extern "C"
     {
         return new KDevDesignerPartFactory;
     }
-}
+};
 
 //actions
 

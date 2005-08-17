@@ -4,6 +4,10 @@
 
 #include <qpe/applnk.h> // for AppLnk
 #include <qpe/resource.h> // for Resource loading
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include "%{APPNAMELC}.h"
 

@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "integratordlg.h"
 
@@ -27,6 +27,9 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kdialogbase.h>
@@ -44,7 +47,7 @@ IntegratorDlg::IntegratorDlg(CVSServiceIntegrator *integrator, QWidget *parent, 
     :IntegratorDlgBase(parent, name), m_integrator(integrator)
 {
     QFile cvspass(QDir::homeDirPath() + "/.cvspass");
-    if (cvspass.open(IO_ReadOnly))
+    if (cvspass.open(QIODevice::ReadOnly))
     {
         QTextStream stream(&cvspass);
         while (!stream.atEnd()) 
@@ -92,7 +95,7 @@ void IntegratorDlg::init_clicked()
 
 void IntegratorDlg::login_clicked()
 {
-    QCString appId;
+    Q3CString appId;
     QString error;
 
     if (KApplication::startServiceByDesktopName("cvsservice",

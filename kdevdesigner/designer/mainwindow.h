@@ -40,18 +40,25 @@
 #include "sourceeditor.h"
 
 #include <qaction.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qmap.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3ActionGroup>
+#include <QCloseEvent>
+#include <Q3PtrList>
+#include <QEvent>
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 #include <private/qpluginmanager_p.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 
 class QToolBox;
 class PropertyEditor;
 class QWorkspace;
 class QMenuBar;
 class FormWindow;
-class QPopupMenu;
+class Q3PopupMenu;
 class HierarchyView;
 class QCloseEvent;
 class Workspace;
@@ -69,15 +76,15 @@ class QAssistantClient;
 class DesignerAction;
 
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
-#include <qtoolbar.h>
+#include <q3toolbar.h>
 #else
-class QToolBar;
+class Q3ToolBar;
 #endif
 class Preferences;
 
 class KDevDesignerPart;
 
-class MainWindow : public QMainWindow
+class MainWindow : public Q3MainWindow
 {
     Q_OBJECT
 
@@ -108,8 +115,8 @@ public:
     void popupFormWindowMenu( const QPoint &gp, FormWindow *fw );
     void popupWidgetMenu( const QPoint &gp, FormWindow *fw, QWidget *w );
 
-    QPopupMenu *setupNormalHierarchyMenu( QWidget *parent );
-    QPopupMenu *setupTabWidgetHierarchyMenu( QWidget *parent, const char *addSlot, const char *removeSlot );
+    Q3PopupMenu *setupNormalHierarchyMenu( QWidget *parent );
+    Q3PopupMenu *setupTabWidgetHierarchyMenu( QWidget *parent, const char *addSlot, const char *removeSlot );
 
     FormWindow *openFormWindow( const QString &fn, bool validFileName = TRUE, FormFile *ff = 0 );
     bool isCustomWidgetUsed( MetaDataBase::CustomWidget *w );
@@ -139,7 +146,7 @@ public:
     QStringList sourceTemplates() const;
     SourceTemplateInterface* sourceTemplateInterface( const QString& templ );
     QUnknownInterface* designerInterface() const { return desInterface; }
-    QPtrList<DesignerProject> projectList() const;
+    Q3PtrList<DesignerProject> projectList() const;
     QStringList projectNames() const;
     QStringList projectFileNames() const;
     Project *findProject( const QString &projectName ) const;
@@ -348,11 +355,11 @@ private:
 
     void readConfig();
 
-    void setupRMBProperties( QValueList<uint> &ids, QMap<QString, int> &props, QWidget *w );
+    void setupRMBProperties( Q3ValueList<uint> &ids, QMap<QString, int> &props, QWidget *w );
     void handleRMBProperties( int id, QMap<QString, int> &props, QWidget *w );
-    void setupRMBSpecialCommands( QValueList<uint> &ids, QMap<QString, int> &commands, QWidget *w );
+    void setupRMBSpecialCommands( Q3ValueList<uint> &ids, QMap<QString, int> &commands, QWidget *w );
     void handleRMBSpecialCommands( int id, QMap<QString, int> &commands, QWidget *w );
-    void setupRMBSpecialCommands( QValueList<uint> &ids, QMap<QString, int> &commands, FormWindow *w );
+    void setupRMBSpecialCommands( Q3ValueList<uint> &ids, QMap<QString, int> &commands, FormWindow *w );
     void handleRMBSpecialCommands( int id, QMap<QString, int> &commands, FormWindow *w );
     bool openEditor( QWidget *w, FormWindow *fw );
     void rebuildCustomWidgetGUI();
@@ -384,7 +391,7 @@ private:
     QWidget *lastPressWidget;
     QWorkspace *qworkspace;
     QMenuBar *menubar;
-    QGuardedPtr<FormWindow> lastActiveFormWindow;
+    QPointer<FormWindow> lastActiveFormWindow;
     bool breakLayout, layoutChilds, layoutSelected;
     QPoint grd;
     bool sGrid, snGrid;
@@ -402,7 +409,7 @@ private:
     *actionEditSelectAll, *actionEditBreakLayout, *actionEditFunctions, *actionEditConnections,
     *actionEditLower, *actionEditRaise;
     QAction *actionInsertSpacer;
-    QActionGroup *actionGroupTools, *actionGroupProjects;
+    Q3ActionGroup *actionGroupTools, *actionGroupProjects;
     QAction* actionPointerTool, *actionConnectTool, *actionOrderTool, *actionBuddyTool;
     QAction* actionCurrentTool;
     DesignerAction *actionHelpContents, *actionHelpAbout, *actionHelpAboutQt, *actionHelpWhatsThis;
@@ -419,15 +426,15 @@ private:
     DesignerAction *actionSearchFind, *actionSearchIncremetal, *actionSearchReplace, *actionSearchGotoLine;
     DesignerAction *actionProjectAddFile, *actionEditPixmapCollection, *actionEditDatabaseConnections,
         *actionEditProjectSettings, *actionPreview;
-    QActionGroup *actionGroupNew;
+    Q3ActionGroup *actionGroupNew;
 
-    QPopupMenu *rmbWidgets;
-    QPopupMenu *rmbFormWindow;
-    QPopupMenu *customWidgetMenu, *windowMenu, *fileMenu, *recentlyFilesMenu, *recentlyProjectsMenu;
-    QPopupMenu *toolsMenu, *layoutMenu, *previewMenu;
-    QToolBar *customWidgetToolBar, *layoutToolBar, *projectToolBar, *customWidgetToolBar2, *toolsToolBar;
-    QToolBar *commonWidgetsToolBar;
-    QPtrList<QToolBar> widgetToolBars;
+    Q3PopupMenu *rmbWidgets;
+    Q3PopupMenu *rmbFormWindow;
+    Q3PopupMenu *customWidgetMenu, *windowMenu, *fileMenu, *recentlyFilesMenu, *recentlyProjectsMenu;
+    Q3PopupMenu *toolsMenu, *layoutMenu, *previewMenu;
+    Q3ToolBar *customWidgetToolBar, *layoutToolBar, *projectToolBar, *customWidgetToolBar2, *toolsToolBar;
+    Q3ToolBar *commonWidgetsToolBar;
+    Q3PtrList<Q3ToolBar> widgetToolBars;
 
     Preferences *prefDia;
     QMap<QString,QString> propertyDocumentation;
@@ -442,29 +449,29 @@ private:
     QPluginManager<PreferenceInterface> *preferencePluginManager;
     QPluginManager<ProjectSettingsInterface> *projectSettingsPluginManager;
     QPluginManager<SourceTemplateInterface> *sourceTemplatePluginManager;
-    QPtrList<SourceEditor> sourceEditors;
+    Q3PtrList<SourceEditor> sourceEditors;
     bool previewing;
     QUnknownInterface *desInterface;
     QStringList recentlyFiles;
     QStringList recentlyProjects;
     OutputWindow *oWindow;
-    QValueList<Tab> preferenceTabs;
-    QValueList<Tab> projectTabs;
+    Q3ValueList<Tab> preferenceTabs;
+    Q3ValueList<Tab> projectTabs;
     bool databaseAutoEdit;
     QTimer *updateFunctionsTimer;
     QTimer *autoSaveTimer;
     bool autoSaveEnabled;
     int autoSaveInterval;
     QLineEdit *incrementalSearch;
-    QGuardedPtr<FindDialog> findDialog;
-    QGuardedPtr<ReplaceDialog> replaceDialog;
-    QGuardedPtr<GotoLineDialog> gotoLineDialog;
+    QPointer<FindDialog> findDialog;
+    QPointer<ReplaceDialog> replaceDialog;
+    QPointer<GotoLineDialog> gotoLineDialog;
     Project *eProject;
     bool inDebugMode;
     QObjectList debuggingForms;
     QString lastOpenFilter;
-    QGuardedPtr<QWidget> previewedForm;
-    QPopupMenu *projectMenu;
+    QPointer<QWidget> previewedForm;
+    Q3PopupMenu *projectMenu;
     QString menuHelpFile;
     bool singleProject;
     QToolBox *toolBox;
@@ -481,8 +488,8 @@ private:
 
 public:
     QString lastSaveFilter;
-    QPtrList<QAction> toolActions;
-    QPtrList<QAction> commonWidgetsPage;
+    Q3PtrList<QAction> toolActions;
+    Q3PtrList<QAction> commonWidgetsPage;
 
 friend class KDevDesignerPart;
 };

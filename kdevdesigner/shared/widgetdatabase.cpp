@@ -33,13 +33,15 @@
 #include <kdebug.h>
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QPixmap>
 #define NO_STATIC_COLORS
 #include <globaldefs.h>
-#include <qstrlist.h>
-#include <qdict.h>
+#include <q3strlist.h>
+#include <q3dict.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qcleanuphandler.h>
+#include <q3cleanuphandler.h>
 #include <qfeatures.h>
 
 #include <stdlib.h>
@@ -50,17 +52,17 @@ const int dbsize = 300;
 const int dbcustom = 200;
 const int dbdictsize = 211;
 static WidgetDatabaseRecord* db[ dbsize ];
-static QDict<int> *className2Id = 0;
+static Q3Dict<int> *className2Id = 0;
 static int dbcount  = 0;
 static int dbcustomcount = 200;
-static QStrList *wGroups;
-static QStrList *invisibleGroups;
+static Q3StrList *wGroups;
+static Q3StrList *invisibleGroups;
 static bool whatsThisLoaded = FALSE;
 static QPluginManager<WidgetInterface> *widgetPluginManager = 0;
 static bool plugins_set_up = FALSE;
 static bool was_in_setup = FALSE;
 
-QCleanupHandler<QPluginManager<WidgetInterface> > cleanup_manager;
+Q3CleanupHandler<QPluginManager<WidgetInterface> > cleanup_manager;
 
 WidgetDatabaseRecord::WidgetDatabaseRecord()
 {
@@ -124,11 +126,11 @@ void WidgetDatabase::setupDataBase( int id )
 	return;
 #endif
 
-    wGroups = new QStrList;
-    invisibleGroups = new QStrList;
+    wGroups = new Q3StrList;
+    invisibleGroups = new Q3StrList;
     invisibleGroups->append( "Forms" );
     invisibleGroups->append( "Temp" );
-    className2Id = new QDict<int>( dbdictsize );
+    className2Id = new Q3Dict<int>( dbdictsize );
     className2Id->setAutoDelete( TRUE );
 
     WidgetDatabaseRecord *r = 0;
@@ -593,9 +595,9 @@ void WidgetDatabase::setupPlugins()
 	    continue;
 
 #ifndef UIC
-	QIconSet icon = iface->iconSet( *it );
+	QIcon icon = iface->iconSet( *it );
 	if ( !icon.pixmap().isNull() )
-	    r->icon = new QIconSet( icon );
+	    r->icon = new QIcon( icon );
 #endif
 	QString grp = iface->group( *it );
 	if ( grp.isEmpty() )
@@ -636,24 +638,24 @@ int WidgetDatabase::startCustom()
   Returns the iconset which represents the class registered as \a id.
 */
 
-QIconSet WidgetDatabase::iconSet( int id )
+QIcon WidgetDatabase::iconSet( int id )
 {
     setupDataBase( id );
     WidgetDatabaseRecord *r = at( id );
     if ( !r )
-	return QIconSet();
+	return QIcon();
 #if !defined(UIC) && !defined(RESOURCE)
     if ( !r->icon ) {
 	if ( r->iconSet.isEmpty() )
-	    return QIconSet();
+	    return QIcon();
 	QPixmap pix = BarIcon( r->iconSet, KDevDesignerPartFactory::instance() );
 	if ( pix.isNull() )
 	    pix = QPixmap( r->iconSet );
-	r->icon = new QIconSet( pix );
+	r->icon = new QIcon( pix );
     }
     return *r->icon;
 #else
-    return QIconSet();
+    return QIcon();
 #endif
 }
 
@@ -912,7 +914,7 @@ void WidgetDatabase::loadWhatsThis( const QString &docPath )
 {
     QString whatsthisFile = docPath + "/whatsthis";
     QFile f( whatsthisFile );
-    if ( !f.open( IO_ReadOnly ) )
+    if ( !f.open( QIODevice::ReadOnly ) )
 	return;
     QTextStream ts( &f );
     while ( !ts.atEnd() ) {

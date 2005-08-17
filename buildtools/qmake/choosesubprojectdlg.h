@@ -22,8 +22,8 @@ class TrollProjectWidget;
 class ChooseItem: public KListViewItem
 {
 public:
-    ChooseItem(SubqmakeprojectItem *spitem, QListViewItem *parent, QString text);
-    ChooseItem(SubqmakeprojectItem *spitem, QListView *parent, QString text);
+    ChooseItem(SubqmakeprojectItem *spitem, Q3ListViewItem *parent, QString text);
+    ChooseItem(SubqmakeprojectItem *spitem, Q3ListView *parent, QString text);
 
     SubqmakeprojectItem *subproject();
 
@@ -36,7 +36,7 @@ class ChooseSubprojectDlg : public ChooseSubprojectDlgBase
   Q_OBJECT
 
 public:
-  ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  ChooseSubprojectDlg(TrollProjectWidget *widget, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   ~ChooseSubprojectDlg();
   /*$PUBLIC_FUNCTIONS$*/
 
@@ -52,7 +52,7 @@ protected:
 protected slots:
   /*$PROTECTED_SLOTS$*/
   virtual void          accept();
-  virtual void itemSelected(QListViewItem *it);
+  virtual void itemSelected(Q3ListViewItem *it);
 
 private:
     void fillSubprojectsView(ChooseItem *item);

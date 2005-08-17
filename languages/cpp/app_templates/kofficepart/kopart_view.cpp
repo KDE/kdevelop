@@ -7,7 +7,9 @@
 #include "%{APPNAMELC}_part.h"
 
 #include <qpainter.h>
-#include <qiconset.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <klocale.h>

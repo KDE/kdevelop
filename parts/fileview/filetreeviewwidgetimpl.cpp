@@ -9,7 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <kaction.h>
 #include <klocale.h>
@@ -90,7 +92,7 @@ bool FileTreeViewWidgetImpl::showNonProjectFiles() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeViewWidgetImpl::fillPopupMenu( QPopupMenu *popupMenu, QListViewItem *item ) const
+void FileTreeViewWidgetImpl::fillPopupMenu( Q3PopupMenu *popupMenu, Q3ListViewItem *item ) const
 {
     // Show the "reload tree" menu-item only if it is requested for the root object
     // and we don't have a sync-with-repository operation pending (which otherwise will
@@ -112,8 +114,8 @@ KURL::List FileTreeViewWidgetImpl::selectedPathUrls()
 
 	KURL::List urlList;
 
-	QValueList<QListViewItem*> list = allSelectedItems( fileTree()->firstChild() );
-	QValueList<QListViewItem*>::Iterator it = list.begin();
+	Q3ValueList<Q3ListViewItem*> list = allSelectedItems( fileTree()->firstChild() );
+	Q3ValueList<Q3ListViewItem*>::Iterator it = list.begin();
 	while( it != list.end() )
 	{
 		KURL url;
@@ -127,9 +129,9 @@ KURL::List FileTreeViewWidgetImpl::selectedPathUrls()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QValueList<QListViewItem*> FileTreeViewWidgetImpl::allSelectedItems( QListViewItem * item ) const
+Q3ValueList<Q3ListViewItem*> FileTreeViewWidgetImpl::allSelectedItems( Q3ListViewItem * item ) const
 {
-	QValueList<QListViewItem*> list;
+	Q3ValueList<Q3ListViewItem*> list;
 
 	if ( item )
 	{
@@ -138,7 +140,7 @@ QValueList<QListViewItem*> FileTreeViewWidgetImpl::allSelectedItems( QListViewIt
 			list << item;
 		}
 
-		QListViewItem * it = item->firstChild();
+		Q3ListViewItem * it = item->firstChild();
 		while( it  )
 		{
 			list += allSelectedItems( it );

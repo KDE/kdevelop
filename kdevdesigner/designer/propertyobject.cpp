@@ -26,21 +26,21 @@
 
 #include "propertyobject.h"
 #include "metadatabase.h"
-#include <qptrvector.h>
-#include <qptrlist.h>
+#include <q3ptrvector.h>
+#include <q3ptrlist.h>
 #include <qmetaobject.h>
 #include <qvariant.h>
 
 PropertyObject::PropertyObject( const QWidgetList &objs )
     : QObject(), objects( objs ), mobj( 0 )
 {
-    QPtrVector<QPtrList<QMetaObject> > v;
+    Q3PtrVector<Q3PtrList<QMetaObject> > v;
     v.resize( objects.count() );
     v.setAutoDelete( TRUE );
 
     for ( QObject *o = objects.first(); o; o = objects.next() ) {
 	const QMetaObject *m = o->metaObject();
-	QPtrList<QMetaObject> *mol = new QPtrList<QMetaObject>;
+	Q3PtrList<QMetaObject> *mol = new Q3PtrList<QMetaObject>;
 	while ( m ) {
 	    mol->insert( 0, m );
 	    m = m->superClass();

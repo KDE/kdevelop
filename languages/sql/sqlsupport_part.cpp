@@ -1,4 +1,4 @@
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qsqldatabase.h>
@@ -40,7 +40,7 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
     setXMLFile( "kdevsqlsupport.rc" );
 
     KAction *action;
-    action = new KAction( i18n( "&Run" ), "exec", Key_F9, this, SLOT( slotRun() ), actionCollection(), "build_execute" );
+    action = new KAction( i18n( "&Run" ), "exec", Qt::Key_F9, this, SLOT( slotRun() ), actionCollection(), "build_execute" );
     action->setToolTip(i18n("Run"));
     action->setWhatsThis(i18n("<b>Run</b><p>Executes a SQL script."));
 
@@ -57,7 +57,7 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
 
     m_widget = new SqlOutputWidget();
     mainWindow()->embedOutputView( m_widget, i18n( "SQL" ), i18n( "Output of SQL commands" ) );
-    QWhatsThis::add(m_widget, i18n("<b>Output of SQL commands</b><p>This window shows the output of SQL commands being executed. It can display results of SQL \"select\" commands in a table."));
+    Q3WhatsThis::add(m_widget, i18n("<b>Output of SQL commands</b><p>This window shows the output of SQL commands being executed. It can display results of SQL \"select\" commands in a table."));
 }
 
 
@@ -132,7 +132,7 @@ void SQLSupportPart::loadConfig()
 
 void SQLSupportPart::projectConfigWidget( KDialogBase *dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage( QString( "SQL" ), i18n( "Specify Your Database Connections" ), BarIcon("source", KIcon::SizeMedium) );
+    Q3VBox *vbox = dlg->addVBoxPage( QString( "SQL" ), i18n( "Specify Your Database Connections" ), BarIcon("source", KIcon::SizeMedium) );
     SqlConfigWidget *w = new SqlConfigWidget( (QWidget*)vbox, "SQL config widget" );
     w->setProjectDom( projectDom() );
     w->loadConfig();

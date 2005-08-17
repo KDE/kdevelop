@@ -14,9 +14,9 @@
 #include <qdir.h>
 #include <qregexp.h>
 #include <qstringlist.h>
-#include <qvaluestack.h>
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3valuestack.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -67,7 +67,7 @@ ScriptProjectPart::~ScriptProjectPart()
 
 void ScriptProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Script Project Options"), i18n("Script Project Options"), BarIcon("kdevelop", KIcon::SizeMedium));
     ScriptOptionsWidget *w = new ScriptOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
@@ -129,7 +129,7 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
     QStringList excludepatternList = QStringList::split(",", excludepatterns);
 
     // Put all files from all subdirectories into file list
-    QValueStack<QString> s;
+    Q3ValueStack<QString> s;
     int prefixlen = m_projectDirectory.length()+1;
     s.push(m_projectDirectory);
 
@@ -140,7 +140,7 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
         const QFileInfoList *dirEntries = dir.entryInfoList();
         if ( dirEntries )
         {
-            QPtrListIterator<QFileInfo> it(*dirEntries);
+            Q3PtrListIterator<QFileInfo> it(*dirEntries);
             for (; it.current(); ++it) {
                 QString fileName = it.current()->fileName();
                 if (fileName == "." || fileName == "..")
@@ -207,7 +207,23 @@ DomUtil::PairList ScriptProjectPart::runEnvironmentVars() const
   */
 QString ScriptProjectPart::runDirectory() const
 {
-    return defaultRunDirectory("kdevscriptproject");
+    QDomDocument &dom = *projectDom();
+
+    QString directoryRadioString = DomUtil::readEntry(dom, "/kdevscriptproject/run/directoryradio");
+    QString DomMainProgram = DomUtil::readEntry(dom, "/kdevscriptproject/run/mainprogram");
+
+    if ( directoryRadioString == "build" )
+        return buildDirectory();
+
+    if ( directoryRadioString == "custom" )
+        return DomUtil::readEntry(dom, "/kdevscriptproject/run/customdirectory");
+
+    int pos = DomMainProgram.findRev('/');
+    if (pos != -1)
+        return buildDirectory() + "/" + DomMainProgram.left(pos);
+
+    return buildDirectory() + "/" + DomMainProgram;
+
 }
 
 

@@ -15,6 +15,8 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <codemodel.h>
 
 
@@ -26,7 +28,7 @@ public:
     void parse(const QString &fileName);
 
 private:
-    void process(const QCString &line, const QString &fileName, int lineNum);
+    void process(const Q3CString &line, const QString &fileName, int lineNum);
     CodeModel* m_model;
     FileDom m_file;
     QRegExp functionre, subroutinere;

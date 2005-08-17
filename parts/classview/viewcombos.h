@@ -13,8 +13,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
  *
  */
 #ifndef VIEWCOMBOS_H
@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-#include <qlistview.h>
+#include <q3listview.h>
 
 #include "codemodel.h"
 
@@ -32,10 +32,10 @@ class KComboView;
 const QString EmptyClasses = i18n("(Classes)");
 const QString EmptyFunctions = i18n("(Functions)");
 
-class NamespaceItem: public QListViewItem{
+class NamespaceItem: public Q3ListViewItem{
 public:
-    NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom);
-    NamespaceItem(ClassViewPart *part, QListViewItem *parent, QString name, NamespaceDom dom);
+    NamespaceItem(ClassViewPart *part, Q3ListView *parent, QString name, NamespaceDom dom);
+    NamespaceItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, NamespaceDom dom);
     ~NamespaceItem();
     NamespaceDom dom() const;
     virtual void setup();
@@ -44,10 +44,10 @@ private:
     ClassViewPart *m_part;
 };
 
-class ClassItem: public QListViewItem{
+class ClassItem: public Q3ListViewItem{
 public:
-    ClassItem(ClassViewPart *part, QListView *parent, QString name, ClassDom dom);
-    ClassItem(ClassViewPart *part, QListViewItem *parent, QString name, ClassDom dom);
+    ClassItem(ClassViewPart *part, Q3ListView *parent, QString name, ClassDom dom);
+    ClassItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, ClassDom dom);
     ~ClassItem();
     ClassDom dom() const;
     virtual void setup();
@@ -56,10 +56,10 @@ private:
     ClassViewPart *m_part;
 };
 
-class FunctionItem: public QListViewItem{
+class FunctionItem: public Q3ListViewItem{
 public:
-    FunctionItem(ClassViewPart *part, QListView *parent, QString name, FunctionDom dom);
-    FunctionItem(ClassViewPart *part, QListViewItem *parent, QString name, FunctionDom dom);
+    FunctionItem(ClassViewPart *part, Q3ListView *parent, QString name, FunctionDom dom);
+    FunctionItem(ClassViewPart *part, Q3ListViewItem *parent, QString name, FunctionDom dom);
     ~FunctionItem();
     FunctionDom dom() const;
     virtual void setup();

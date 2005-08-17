@@ -41,7 +41,7 @@ public:
 protected slots:
     void insertNewItem();
     void deleteCurrentItem();
-    void currentItemChanged( QIconViewItem * );
+    void currentItemChanged( Q3IconViewItem * );
     void currentTextChanged( const QString & );
     void okClicked();
     void cancelClicked();
@@ -50,7 +50,7 @@ protected slots:
     void deletePixmap();
 
 private:
-    QIconView *iconview;
+    Q3IconView *iconview;
     FormWindow *formwindow;
     
 };

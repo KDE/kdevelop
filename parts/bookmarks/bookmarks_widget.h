@@ -34,7 +34,7 @@ public:
 	BookmarksWidget( BookmarksPart * );
 	~BookmarksWidget();
 
-	void update( QDict<EditorData> const & );
+	void update( Q3Dict<EditorData> const & );
 	void updateURL( EditorData * );
 	bool removeURL( KURL const & );
 	
@@ -49,8 +49,8 @@ protected:
 	void maybeTip( QPoint const & );
 
 private slots:
-	void itemClicked( QListViewItem * );
-	void popupMenu( QListViewItem * , const QPoint & , int );
+	void itemClicked( Q3ListViewItem * );
+	void popupMenu( Q3ListViewItem * , const QPoint & , int );
 	void collapseAll();
 	void expandAll();
 	void doEmitRemoveBookMark();

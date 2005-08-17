@@ -14,7 +14,7 @@
 #define _COMMITDIALOG_H_
 
 #include <qstringlist.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <klineedit.h>
 #include <klistbox.h>
 #include <kdialogbase.h>
@@ -48,7 +48,7 @@ private slots:
 
 private:
     void setDepotFiles( const QStringList& lst );
-    QTextEdit *edit;
+    Q3TextEdit *edit;
     KLineEdit *clientEdit, *userEdit;
     KListBox  *filesBox;
 };

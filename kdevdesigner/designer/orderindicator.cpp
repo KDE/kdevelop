@@ -25,6 +25,9 @@
 **********************************************************************/
 
 #include <qvariant.h> // HP-UX compiler need this here
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include "orderindicator.h"
 #include "formwindow.h"
@@ -34,7 +37,7 @@
 #include <qapplication.h>
 
 OrderIndicator::OrderIndicator( int i, QWidget* w, FormWindow *fw )
-    : QWidget( fw, "order_indicator", WMouseNoMask ), formWindow( fw )
+    : QWidget( fw, "order_indicator", Qt::WMouseNoMask ), formWindow( fw )
 {
     order = -1;
     widget = w;
@@ -86,21 +89,21 @@ void OrderIndicator::reposition()
 void OrderIndicator::paintEvent( QPaintEvent * )
 {
     QPainter p( this );
-    p.setPen( white );
-    p.setBrush( blue );
+    p.setPen( Qt::white );
+    p.setBrush( Qt::blue );
     p.drawEllipse( rect() );
-    p.drawText( rect(), AlignCenter, QString::number( order ) );
+    p.drawText( rect(), Qt::AlignCenter, QString::number( order ) );
 }
 
 
 void OrderIndicator::updateMask()
 {
     QBitmap bm( size() );
-    bm.fill( color0 );
+    bm.fill( Qt::color0 );
     {
 	QPainter p( &bm, this );
-	p.setPen( color1 );
-	p.setBrush( color1 );
+	p.setPen( Qt::color1 );
+	p.setBrush( Qt::color1 );
 	p.drawEllipse( rect() );
     }
     setMask( bm );

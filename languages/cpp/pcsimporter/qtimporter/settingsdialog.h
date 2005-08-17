@@ -19,7 +19,7 @@ class SettingsDialog : public SettingsDialogBase
   Q_OBJECT
 
 public:
-  SettingsDialog(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+  SettingsDialog(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
   ~SettingsDialog();
   /*$PUBLIC_FUNCTIONS$*/
 
@@ -30,7 +30,7 @@ public:
 
 public slots:
   /*$PUBLIC_SLOTS$*/
-  virtual void          slotSelectionChanged(QListBoxItem*);
+  virtual void          slotSelectionChanged(Q3ListBoxItem*);
 
 protected:
   /*$PROTECTED_FUNCTIONS$*/

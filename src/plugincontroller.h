@@ -1,8 +1,8 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
-#include <qdict.h>
-#include <qvaluelist.h>
+#include <q3dict.h>
+#include <q3valuelist.h>
 
 #include <kservice.h>
 
@@ -55,7 +55,7 @@ public:
   void removePart(KXMLGUIClient* part);
   void removeAndForgetPart(const QString &name, KDevPlugin* part);
 
-  const QValueList<KDevPlugin*> loadedPlugins();
+  const Q3ValueList<KDevPlugin*> loadedPlugins();
   
   ProfileEngine &engine() { return m_engine; }
 
@@ -81,7 +81,7 @@ private:
 	static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
 
-  QDict<KDevPlugin> m_parts;
+  Q3Dict<KDevPlugin> m_parts;
   QString m_profile;
   
   static PluginController *s_instance;

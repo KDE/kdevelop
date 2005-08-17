@@ -18,12 +18,14 @@
 #include "jdbcommand.h"
 #include "breakpoint.h"
 #include "variablewidget.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 
 namespace JAVADebugger
 {
 
-JDBCommand::JDBCommand(const QCString &setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt)
+JDBCommand::JDBCommand(const Q3CString &setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt)
     : DbgCommand(setCommand, isRunCmd, isInfoCmd, setPrompt)
 {
 }
@@ -39,7 +41,7 @@ JDBCommand::~JDBCommand()
 /***************************************************************************/
 
 JDBItemCommand::JDBItemCommand( VarItem *item,
-                                const QCString &command,
+                                const Q3CString &command,
                                 bool isRunCmd,
                                 char prompt)
     : JDBCommand(command, isRunCmd, true, prompt),
@@ -59,7 +61,7 @@ JDBItemCommand::~JDBItemCommand()
 
 JDBPointerCommand::JDBPointerCommand(VarItem *item)
     : JDBItemCommand(item,
-                     QCString("print *")+QCString(item->fullName().latin1()),
+                     Q3CString("print *")+Q3CString(item->fullName().latin1()),
                      false,
                      DATAREQUEST)
 {
@@ -91,7 +93,7 @@ JDBPointerCommand::~JDBPointerCommand()
 /***************************************************************************/
 /***************************************************************************/
 
-JDBSetBreakpointCommand::JDBSetBreakpointCommand(const QCString &command, int key)
+JDBSetBreakpointCommand::JDBSetBreakpointCommand(const Q3CString &command, int key)
     : JDBCommand(command, false, false, SET_BREAKPT),
       key_(key)
 {

@@ -25,7 +25,7 @@
 #define WIDGET_CLASS_NAME   "class"
 #define WIDGET_SLOTS        "slots"
 
-NewWidgetDlg::NewWidgetDlg(QStringList &newFileNames,QWidget* parent, const char* name, bool modal, WFlags fl)
+NewWidgetDlg::NewWidgetDlg(QStringList &newFileNames,QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
 : NewWidgetDlgBase(parent,name,modal,fl),
 m_newFileNames(newFileNames)
 //=================================================

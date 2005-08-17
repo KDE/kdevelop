@@ -1,14 +1,14 @@
 #include <kiconloader.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
-#include <qiconview.h>
+#include <q3ptrlist.h>
+#include <q3iconview.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qtabwidget.h>
 #include <qpoint.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
@@ -16,7 +16,7 @@
 #include <qdatetime.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
-#include <qurl.h>
+#include <q3url.h>
 
 #include "kdevdesigner_part.h"
 
@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 FileDialog::FileDialog( const QString &dir, QWidget *parent )
-    : QFileDialog( dir, QString::null, parent )
+    : Q3FileDialog( dir, QString::null, parent )
 {
 }
 
@@ -47,9 +47,9 @@ StartDialog::StartDialog( QWidget *parent, const QString &templatePath )
 
     connect( buttonHelp, SIGNAL( clicked() ),
 	     MainWindow::self, SLOT( showDialogHelp() ) );
-    connect( recentView, SIGNAL( doubleClicked(QIconViewItem*) ),
+    connect( recentView, SIGNAL( doubleClicked(Q3IconViewItem*) ),
 	     this, SLOT( accept() ) );
-    connect( recentView, SIGNAL( returnPressed(QIconViewItem*) ),
+    connect( recentView, SIGNAL( returnPressed(Q3IconViewItem*) ),
 	     this, SLOT( accept() ) );
     connect( fd, SIGNAL( fileSelected() ), this, SLOT( accept() ) );
 }
@@ -92,7 +92,7 @@ void StartDialog::reject()
     done( Rejected );
 }
 
-void StartDialog::recentItemChanged( QIconViewItem *item )
+void StartDialog::recentItemChanged( Q3IconViewItem *item )
 {
     QString msg( recentFiles[item->index()] );
     QFileInfo f( recentFiles[item->index()] );
@@ -132,11 +132,11 @@ void StartDialog::insertRecentItems( QStringList &files, bool isProject )
     QString iconName = "designer_newform.png";
     if ( isProject )
 	iconName = "designer_project.png";
-    QIconViewItem *item;
+    Q3IconViewItem *item;
     QStringList::iterator it = files.begin();
     for( ; it != files.end(); ++it ) {
 	QFileInfo fi( *it );
-	item = new QIconViewItem( recentView, fi.fileName() );
+	item = new Q3IconViewItem( recentView, fi.fileName() );
 	recentFiles[recentView->index( item )] = *it;
 	item->setPixmap( BarIcon( iconName, KDevDesignerPartFactory::instance() ) );
 	item->setDragEnabled( FALSE );
@@ -146,7 +146,7 @@ void StartDialog::insertRecentItems( QStringList &files, bool isProject )
 void StartDialog::initFileOpen()
 {
     QString encode = QDir::currentDirPath();
-    QUrl::encode( encode );
+    Q3Url::encode( encode );
     fd = new FileDialog( encode, this );
     QPoint point( 0, 0 );
     fd->reparent( tab, point );

@@ -26,30 +26,32 @@
 
 #include "tableeditorimpl.h"
 #ifndef QT_NO_TABLE
-#include <qtable.h>
+#include <q3table.h>
+//Added by qt3to4:
+#include <QPixmap>
 #endif
 #include "formwindow.h"
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qheader.h>
-#include <qlistbox.h>
+#include <q3header.h>
+#include <q3listbox.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include "pixmapchooser.h"
 #include "command.h"
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qtabwidget.h>
-#include <qdatatable.h>
+#include <q3datatable.h>
 #include "project.h"
 #include "metadatabase.h"
 #include "mainwindow.h"
 
 #include <klocale.h>
 
-TableEditor::TableEditor( QWidget* parent,  QWidget *editWidget, FormWindow *fw, const char* name, bool modal, WFlags fl )
+TableEditor::TableEditor( QWidget* parent,  QWidget *editWidget, FormWindow *fw, const char* name, bool modal, Qt::WFlags fl )
     : TableEditorBase( parent, name, modal, fl ),
 #ifndef QT_NO_TABLE
-    editTable( (QTable*)editWidget ),
+    editTable( (Q3Table*)editWidget ),
 #endif
     formWindow( fw )
 {
@@ -59,7 +61,7 @@ TableEditor::TableEditor( QWidget* parent,  QWidget *editWidget, FormWindow *fw,
     labelRowPixmap->setText( "" );
 
 #ifndef QT_NO_SQL
-    if ( !::qt_cast<QDataTable*>(editTable) )
+    if ( !::qt_cast<Q3DataTable*>(editTable) )
 #endif
     {
 	labelFields->hide();
@@ -68,7 +70,7 @@ TableEditor::TableEditor( QWidget* parent,  QWidget *editWidget, FormWindow *fw,
 	labelTableValue->hide();
     }
 #ifndef QT_NO_SQL
-    if ( ::qt_cast<QDataTable*>(editTable) ) {
+    if ( ::qt_cast<Q3DataTable*>(editTable) ) {
 	// ## why does this behave weird?
 	//	TabWidget->removePage( rows_tab );
 	//	rows_tab->hide();
@@ -76,7 +78,7 @@ TableEditor::TableEditor( QWidget* parent,  QWidget *editWidget, FormWindow *fw,
 	TabWidget->setTabEnabled( rows_tab, FALSE );
     }
 
-    if ( formWindow->project() && ::qt_cast<QDataTable*>(editTable) ) {
+    if ( formWindow->project() && ::qt_cast<Q3DataTable*>(editTable) ) {
 	QStringList lst = MetaDataBase::fakeProperty( editTable, "database" ).toStringList();
 	if ( lst.count() == 2 && !lst[ 0 ].isEmpty() && !lst[ 1 ].isEmpty() ) {
 	    QStringList fields;
@@ -105,7 +107,7 @@ void TableEditor::columnDownClicked()
 	return;
     saveFieldMap();
     int index = listColumns->currentItem() + 1;
-    QListBoxItem *i = listColumns->item( listColumns->currentItem() );
+    Q3ListBoxItem *i = listColumns->item( listColumns->currentItem() );
     listColumns->takeItem( i );
     listColumns->insertItem( i, index );
     listColumns->setCurrentItem( i );
@@ -137,7 +139,7 @@ void TableEditor::columnUpClicked()
 	return;
     saveFieldMap();
     int index = listColumns->currentItem() - 1;
-    QListBoxItem *i = listColumns->item( listColumns->currentItem() );
+    Q3ListBoxItem *i = listColumns->item( listColumns->currentItem() );
     listColumns->takeItem( i );
     listColumns->insertItem( i, index );
     listColumns->setCurrentItem( i );
@@ -146,7 +148,7 @@ void TableEditor::columnUpClicked()
     currentColumnChanged( i );
 }
 
-void TableEditor::currentColumnChanged( QListBoxItem *i )
+void TableEditor::currentColumnChanged( Q3ListBoxItem *i )
 {
     if ( !i )
 	return;
@@ -159,7 +161,7 @@ void TableEditor::currentColumnChanged( QListBoxItem *i )
     editColumnText->blockSignals( FALSE );
 
 #ifndef QT_NO_SQL
-    if ( ::qt_cast<QDataTable*>(editTable) ) {
+    if ( ::qt_cast<Q3DataTable*>(editTable) ) {
 	QString s = *fieldMap.find( listColumns->index( i ) );
 	if ( s.isEmpty() )
 	    comboFields->setCurrentItem( 0 );
@@ -184,7 +186,7 @@ void TableEditor::currentFieldChanged( const QString &s )
     editColumnText->blockSignals( FALSE );
 }
 
-void TableEditor::currentRowChanged( QListBoxItem *i )
+void TableEditor::currentRowChanged( Q3ListBoxItem *i )
 {
     if ( !i )
 	return;
@@ -240,11 +242,11 @@ void TableEditor::newColumnClicked()
 	t = QString::number( ++n );
     table->horizontalHeader()->setLabel( table->numCols() - 1, t );
     listColumns->insertItem( t );
-    QListBoxItem *item = listColumns->item( listColumns->count() - 1 );
+    Q3ListBoxItem *item = listColumns->item( listColumns->count() - 1 );
     listColumns->setCurrentItem( item );
     listColumns->setSelected( item, TRUE );
 #ifndef QT_NO_SQL
-    if ( ::qt_cast<QDataTable*>(editTable) ) {
+    if ( ::qt_cast<Q3DataTable*>(editTable) ) {
 	comboFields->setFocus();
     } else
 #endif
@@ -268,7 +270,7 @@ void TableEditor::newRowClicked()
 	t = QString::number( ++n );
     table->verticalHeader()->setLabel( table->numRows() - 1, t );
     listRows->insertItem( t );
-    QListBoxItem *item = listRows->item( listRows->count() - 1 );
+    Q3ListBoxItem *item = listRows->item( listRows->count() - 1 );
     listRows->setCurrentItem( item );
     listRows->setSelected( item, TRUE );
 #endif
@@ -287,7 +289,7 @@ void TableEditor::rowDownClicked()
 	 listRows->count() < 2 )
 	return;
     int index = listRows->currentItem() + 1;
-    QListBoxItem *i = listRows->item( listRows->currentItem() );
+    Q3ListBoxItem *i = listRows->item( listRows->currentItem() );
     listRows->takeItem( i );
     listRows->insertItem( i, index );
     listRows->setCurrentItem( i );
@@ -314,7 +316,7 @@ void TableEditor::rowUpClicked()
 	 listRows->count() < 2 )
 	return;
     int index = listRows->currentItem() - 1;
-    QListBoxItem *i = listRows->item( listRows->currentItem() );
+    Q3ListBoxItem *i = listRows->item( listRows->currentItem() );
     listRows->takeItem( i );
     listRows->insertItem( i, index );
     listRows->setCurrentItem( i );
@@ -323,8 +325,8 @@ void TableEditor::rowUpClicked()
 
 void TableEditor::applyClicked()
 {
-    QValueList<PopulateTableCommand::Row> rows;
-    QValueList<PopulateTableCommand::Column> cols;
+    Q3ValueList<PopulateTableCommand::Row> rows;
+    Q3ValueList<PopulateTableCommand::Column> cols;
 
     int i = 0;
 #ifndef QT_NO_TABLE
@@ -410,7 +412,7 @@ void TableEditor::deleteColPixmapClicked()
 void TableEditor::readFromTable()
 {
 #ifndef QT_NO_TABLE
-    QHeader *cols = editTable->horizontalHeader();
+    Q3Header *cols = editTable->horizontalHeader();
     table->setNumCols( cols->count() );
     QMap<QString, QString> columnFields = MetaDataBase::columnFields( editTable );
     for ( int i = 0; i < cols->count(); ++i ) {
@@ -432,7 +434,7 @@ void TableEditor::readFromTable()
 	listColumns->setSelected( listColumns->firstItem(), TRUE );
     }
 
-    QHeader *rows = editTable->verticalHeader();
+    Q3Header *rows = editTable->verticalHeader();
     table->setNumRows( rows->count() );
     for ( int j = 0; j < rows->count(); ++j ) {
 	if ( editTable->verticalHeader()->iconSet( j ) ) {
@@ -457,7 +459,7 @@ void TableEditor::readColumns()
 {
     int j = 0;
 #ifndef QT_NO_TABLE
-    for ( QListBoxItem *i = listColumns->firstItem(); i; i = i->next(), ++j ) {
+    for ( Q3ListBoxItem *i = listColumns->firstItem(); i; i = i->next(), ++j ) {
 	if ( i->pixmap() )
 	    table->horizontalHeader()->setLabel( j, *i->pixmap(), i->text() );
 	else
@@ -470,7 +472,7 @@ void TableEditor::readRows()
 {
     int j = 0;
 #ifndef QT_NO_TABLE
-    for ( QListBoxItem *i = listRows->firstItem(); i; i = i->next(), ++j ) {
+    for ( Q3ListBoxItem *i = listRows->firstItem(); i; i = i->next(), ++j ) {
 	if ( i->pixmap() )
 	    table->verticalHeader()->setLabel( j, *i->pixmap(), i->text() );
 	else
@@ -489,6 +491,6 @@ void TableEditor::saveFieldMap()
 void TableEditor::restoreFieldMap()
 {
     fieldMap.clear();
-    for ( QMap<QListBoxItem*, QString>::Iterator it = tmpFieldMap.begin(); it != tmpFieldMap.end(); ++it )
+    for ( QMap<Q3ListBoxItem*, QString>::Iterator it = tmpFieldMap.begin(); it != tmpFieldMap.end(); ++it )
 	fieldMap.insert( listColumns->index( it.key() ), *it );
 }

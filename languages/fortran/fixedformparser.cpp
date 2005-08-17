@@ -13,6 +13,8 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdebug.h>
 #include <codemodel.h>
 
@@ -30,9 +32,9 @@ FixedFormParser::FixedFormParser(CodeModel* model)
 }
 
 
-void FixedFormParser::process(const QCString &line, const QString &fileName, int lineNum)
+void FixedFormParser::process(const Q3CString &line, const QString &fileName, int lineNum)
 {
-    QCString simplified;
+    Q3CString simplified;
     int l = line.length();
     for (int i=0; i < l; ++i)
         if (line[i] != ' ')
@@ -61,19 +63,19 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
 void FixedFormParser::parse(const QString &fileName)
 {
     QFile f(QFile::encodeName(fileName));
-    if (!f.open(IO_ReadOnly))
+    if (!f.open(QIODevice::ReadOnly))
         return;
     QTextStream stream(&f);
 
     m_file = m_model->create<FileModel>();
     m_file->setName( fileName );
 
-    QCString line;
+    Q3CString line;
     int lineNum=0, startLineNum=0;
     while (!stream.atEnd()) {
         ++lineNum;
-        QCString str = stream.readLine().local8Bit();
-        if (!str.isEmpty() && QCString("*Cc#!").find(str[0]) != -1)
+        Q3CString str = stream.readLine().local8Bit();
+        if (!str.isEmpty() && Q3CString("*Cc#!").find(str[0]) != -1)
             continue;
         // Continuation line
         if (str.length() > 6 && str.left(5) == "     " && str[5] != ' ') {

@@ -15,13 +15,15 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "prectedit.h"
 
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
 
 namespace PropertyLib{
 
@@ -45,7 +47,7 @@ void PRectEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, c
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 }
 
 void PRectEdit::setValue(const QVariant& value, bool emitChange)

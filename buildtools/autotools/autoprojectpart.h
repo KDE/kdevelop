@@ -15,8 +15,8 @@
 #ifndef _AUTOPROJECTPART_H_
 #define _AUTOPROJECTPART_H_
 
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <q3dict.h>
+#include <qpointer.h>
 #include <qmap.h>
 #include <qdatetime.h>
 #include <qdir.h>
@@ -114,7 +114,7 @@ private slots:
 	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
 
 private:
-	QGuardedPtr<AutoProjectWidget> m_widget;
+	QPointer<AutoProjectWidget> m_widget;
 	QString m_projectName;
 	QString m_projectPath;
 	KSelectAction *buildConfigAction;

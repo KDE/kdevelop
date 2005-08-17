@@ -44,7 +44,7 @@ void KImportIconView::drawContents ( QPainter *p, int cx, int cy, int cw, int ch
 {
     if ( !m_bDropped)
     {
-        QIconView::drawContents ( p, cx, cy, cw, ch );
+        Q3IconView::drawContents ( p, cx, cy, cw, ch );
 
         p->save();
         QFont font ( p->font() );
@@ -75,7 +75,7 @@ void KImportIconView::drawContents ( QPainter *p, int cx, int cy, int cw, int ch
     }
     else
     {
-        QIconView::drawContents ( p, cx, cy, cw, ch );
+        Q3IconView::drawContents ( p, cx, cy, cw, ch );
     }
 }
 
