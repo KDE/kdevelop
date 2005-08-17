@@ -87,7 +87,7 @@ protected:
     bool m_showIconsOnTabs;
     bool m_firstRemoved;
 
-    Q3ValueList<QWidget*> m_widgets;
+    QList<QWidget*> m_widgets;
     QMap<QWidget*, DTabWidget*> m_widgetTabs;
     QWidget *m_currentWidget;
 
