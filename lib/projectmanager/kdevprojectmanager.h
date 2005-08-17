@@ -22,6 +22,7 @@
 
 #include "kdevtreeview.h"
 
+class KDevProjectManagerPart;
 class KDevProjectModel;
 class KDevProjectFolderItem;
 class KDevProjectFileItem;
@@ -32,9 +33,10 @@ class KDevProjectManager: public KDevTreeView
 {
   Q_OBJECT
 public:
-  KDevProjectManager(QWidget *parent);
+  KDevProjectManager(KDevProjectManagerPart *part, QWidget *parent);
   virtual ~KDevProjectManager();
 
+  KDevProjectManagerPart *part() const;
   KDevProjectModel *projectModel() const;
 
   KDevProjectFolderItem *currentFolderItem() const;
@@ -46,6 +48,10 @@ signals:
 
 protected slots:
   void slotActivated(const QModelIndex &index);
+  void popupContextMenu(const QPoint &pos);
+
+private:
+  KDevProjectManagerPart *m_part;
 };
 
 #endif // KDEVPROJECTMANAGER_H

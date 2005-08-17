@@ -105,16 +105,24 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
     editor->hide();
 
-    m_projectManager = new KDevProjectManager(m_widget);
+    KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
+
+    m_projectManager = new KDevProjectManager(this, m_widget);
+    m_projectManager->setModel(m_projectModel);
+    m_projectManager->setItemDelegate(delegate);
+    m_projectManager->setWhatsThis(i18n("Project overview"));
     m_widget->layout()->add(m_projectManager);
+
+    KDevProjectManager *details = new KDevProjectManager(this, m_widget);
+    details->setModel(m_projectModel);
+    details->setItemDelegate(delegate);
+    details->setWhatsThis(i18n("Project details"));
+    m_widget->layout()->add(details);
 
     //KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
     //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
     //m_projectManager->setModel(filterModel);
 
-    m_projectManager->setModel(m_projectModel);
-    m_projectManager->setItemDelegate(new KDevProjectManagerDelegate(m_projectManager));
-    m_projectManager->setWhatsThis(i18n("Project Manager"));
 
     connect(m_projectManager, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 

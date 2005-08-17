@@ -43,7 +43,7 @@ The interface to the application core and context menu classes.
 class KDialogBase;
 class KDevPlugin;
 class CodeModelItem;
-class ProjectModelItem;
+class KDevProjectItem;
 
 namespace KParts
 {
@@ -109,7 +109,7 @@ public:
         EditorContext,            /**<Editor context menu.*/
         DocumentationContext,     /**<Documentation browser context menu.*/
         FileContext,              /**<File context menu.*/
-        ProjectModelItemContext,  /**<Project tree context menu.*/
+        ProjectItemContext,       /**<Project tree context menu.*/
         CodeModelItemContext      /**<Class tree context menu.*/
     };
 
@@ -261,27 +261,27 @@ private:
 /**
 A context for the popup menu in project views.
 */
-class ProjectModelItemContext : public Context
+class ProjectItemContext : public Context
 {
 public:
     /**Builds the context.
     @param item The item to build the context from.*/
-    ProjectModelItemContext(const ProjectModelItem* item);
+    ProjectItemContext(const KDevProjectItem* item);
 
     /**Destructor.*/
-    virtual ~ProjectModelItemContext();
+    virtual ~ProjectItemContext();
 
     virtual int type() const;
 
     /**@return The code model item for the selected item.*/
-    const ProjectModelItem* item() const;
+    const KDevProjectItem* item() const;
 
 private:
     class Private;
     Private *d;
 
-    ProjectModelItemContext( const ProjectModelItemContext &);
-    ProjectModelItemContext &operator=( const ProjectModelItemContext &);
+    ProjectItemContext( const ProjectItemContext &);
+    ProjectItemContext &operator=( const ProjectItemContext &);
 };
 
 

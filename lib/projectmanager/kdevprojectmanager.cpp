@@ -18,23 +18,38 @@
 */
 
 #include "kdevprojectmanager.h"
+#include "kdevprojectmanager_part.h"
 #include "kdevprojectmodel.h"
 
 #include <QtGui/QHeaderView>
 
+#include <kdevcore.h>
+#include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <klocale.h>
 
-KDevProjectManager::KDevProjectManager(QWidget *parent)
-  : KDevTreeView(parent)
+#include <QtCore/qdebug.h>
+
+KDevProjectManager::KDevProjectManager(KDevProjectManagerPart *part, QWidget *parent)
+  : KDevTreeView(parent),
+    m_part(part)
 {
   header()->hide();
 
+  setContextMenuPolicy(Qt::CustomContextMenu);
+
+  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)));
   connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)));
 }
 
 KDevProjectManager::~KDevProjectManager()
 {
+}
+
+KDevProjectManagerPart *KDevProjectManager::part() const
+{
+  return m_part;
 }
 
 KDevProjectFolderItem *KDevProjectManager::currentFolderItem() const
@@ -99,11 +114,35 @@ KDevProjectModel *KDevProjectManager::projectModel() const
 void KDevProjectManager::slotActivated(const QModelIndex &index)
 {
   KDevProjectItem *item = projectModel()->item(index);
+
   if (item && item->file())
     {
       KURL url;
       url.setPath(item->file()->fileInfo().absoluteFilePath());
-      kdDebug(9000) << "ROBE: ========================== url:" << url << endl;
       emit activateURL(url);
+    }
+}
+
+void KDevProjectManager::popupContextMenu(const QPoint &pos)
+{
+  QModelIndex index = indexAt(pos);
+
+  if (KDevProjectItem *item = projectModel()->item(index))
+    {
+      KPopupMenu menu(this);
+
+      if (KDevProjectFolderItem *folder = item->folder())
+        {
+          menu.addTitle(i18n("Folder: %1").arg(folder->directory().dirName()));
+        }
+      else if (KDevProjectFileItem *file = item->file())
+        {
+          menu.addTitle(i18n("File: %1").arg(file->fileInfo().fileName()));
+        }
+
+      ProjectItemContext context(item);
+      part()->core()->fillContextMenu(&menu, &context);
+
+      menu.exec(mapToGlobal(pos));
     }
 }

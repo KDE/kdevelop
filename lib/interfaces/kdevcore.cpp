@@ -248,34 +248,34 @@ const CodeModelItem* CodeModelItemContext::item() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// class ProjectModelItemContext
+// class ProjectItemContext
 ///////////////////////////////////////////////////////////////////////////////
 
-class ProjectModelItemContext::Private
+class ProjectItemContext::Private
 {
 public:
-    Private( const ProjectModelItem* item ) : m_item( item ) {}
+    Private( const KDevProjectItem* item ) : m_item( item ) {}
 
-    const ProjectModelItem* m_item;
+    const KDevProjectItem* m_item;
 };
 
-ProjectModelItemContext::ProjectModelItemContext( const ProjectModelItem* item )
+ProjectItemContext::ProjectItemContext( const KDevProjectItem* item )
     : Context(), d( new Private(item) )
 {
 }
 
-ProjectModelItemContext::~ProjectModelItemContext()
+ProjectItemContext::~ProjectItemContext()
 {
     delete d;
     d = 0;
 }
 
-int ProjectModelItemContext::type() const
+int ProjectItemContext::type() const
 {
-    return Context::ProjectModelItemContext;
+    return Context::ProjectItemContext;
 }
 
-const ProjectModelItem* ProjectModelItemContext::item() const
+const KDevProjectItem* ProjectItemContext::item() const
 {
     return d->m_item;
 }
