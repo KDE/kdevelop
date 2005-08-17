@@ -11,7 +11,8 @@ SUBDIRS = fullscreen \
     classview \
     openwith \
     guibuilder \
-    valgrind
+    valgrind \
+    partexplorer
 
 # SUBDIRS = \
 #     abbrev \

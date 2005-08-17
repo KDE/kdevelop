@@ -6,7 +6,6 @@
 #include <qtimer.h>
 #include <q3vbox.h>
 #include <q3whatsthis.h>
-//Added by qt3to4:
 #include <Q3PtrList>
 
 #include <kaction.h>
@@ -19,9 +18,8 @@
 #include <klocale.h>
 #include <kparts/part.h>
 #include <kprocess.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/selectioninterface.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -41,8 +39,9 @@ static const KDevPluginInfo data("kdevtools");
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( data ) )
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
-	: KDevPlugin( &data, parent, name ? name : "ToolsPart")
+	: KDevPlugin( &data, parent )
 {
+  setObjectName(QString::fromUtf8(name));
   setInstance(ToolsFactory::instance());
 
   setXMLFile("kdevpart_tools.rc");
