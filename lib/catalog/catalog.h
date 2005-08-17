@@ -24,7 +24,7 @@
 #include <qpair.h>
 #include <qvariant.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 
 #include "tag.h"
@@ -44,7 +44,7 @@ never or rarely changes. System libraries are perfect examples of such code.
 class Catalog
 {
 public:
-    typedef QPair<Q3CString, QVariant> QueryArgument;
+    typedef QPair<QByteArray, QVariant> QueryArgument;
 
 public:
     Catalog();
@@ -60,15 +60,15 @@ public:
     virtual void close();
     virtual void sync();
 
-    Q3ValueList<Q3CString> indexList() const;
-    void addIndex( const Q3CString& name );
+    Q3ValueList<QByteArray> indexList() const;
+    void addIndex( const QByteArray& name );
 
     void addItem( Tag& tag );
 
-    Tag getItemById( const Q3CString& id );
+    Tag getItemById( const QByteArray& id );
     Q3ValueList<Tag> query( const Q3ValueList<QueryArgument>& args );
 
-    Q3CString generateId();
+    QByteArray generateId();
 
 private:
    class _Catalog_Private* d;

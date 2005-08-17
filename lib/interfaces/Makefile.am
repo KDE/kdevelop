@@ -8,9 +8,10 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 		kdevmainwindow.cpp KDevPartControllerIface.skel kdevplugin.cpp kdevcoderepository.cpp \
 		codemodel.cpp codemodel_treeparser.cpp codemodel_utils.cpp \
 		kdevdesignerintegration.cpp kdevplugincontroller.cpp kdevplugininfo.cpp KDevCoreIface.cpp \
-		KDevPartControllerIface.cpp katedocumentmanagerinterface.cpp katedocumentmanagerinterface.skel \
-	kdevprojectiface.cpp kdevprojectiface.skel kdevdesignerintegrationiface.cpp \
-	kdevdesignerintegrationiface.skel
+		KDevPartControllerIface.cpp \
+		kdevprojectiface.cpp kdevprojectiface.skel kdevdesignerintegrationiface.cpp \
+		kdevdesignerintegrationiface.skel
+libkdevinterfaces_la_CXXFLAGS = -DNO_KATE_DOCUMENTMANAGER
 libkdevinterfaces_la_LDFLAGS = -no-undefined $(all_libraries)
 libkdevinterfaces_la_LIBADD = $(top_builddir)/lib/interfaces/external/libkinterfacedesigner.la \
 	$(top_builddir)/lib/util/libkdevutil.la \
@@ -32,7 +33,8 @@ METASOURCES = AUTO
 
 SUBDIRS = extensions external extras
 
-DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil designer_integration kdevcatalog kdevprofileslib kdevextensions
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts \
+	kutils kdevutil designer_integration kdevcatalog kdevprofileslib kdevextensions
 DOXYGEN_PROJECTNAME = KDevelop Interfaces Library
 DOXYGEN_DOCDIRPREFIX = kdev
 include ../../Doxyfile.am

@@ -59,7 +59,7 @@ void PFontButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r,
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    QFontInfo fi(value.toFont());
+    QFontInfo fi(qvariant_cast<QFont>(value));
     p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
         fi.family() + (fi.bold() ? i18n(" Bold") : QString("")) +
         (fi.italic() ? i18n(" Italic") : QString("")) +
@@ -69,7 +69,7 @@ void PFontButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r,
 void PFontButton::setValue(const QVariant& value, bool emitChange)
 {
     disconnect(m_edit, SIGNAL(fontSelected(const QFont&)), this, SLOT(updateProperty(const QFont&)));
-    m_edit->setFont(value.toFont());
+    m_edit->setFont(qvariant_cast<QFont>(value));
     connect(m_edit, SIGNAL(fontSelected(const QFont& )), this, SLOT(updateProperty(const QFont& )));
     if (emitChange)
         emit propertyChanged(m_property, value);

@@ -24,7 +24,8 @@
 #include <qvariant.h>
 #include <q3shared.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
+#include <qstringlist.h>
 
 class QDataStream;
 
@@ -60,12 +61,12 @@ public:
 
     Tag& operator = ( const Tag& source );
     
-    Q3CString id() const
+    QByteArray id() const
     {
         return data->id;
     }
 
-    void setId( const Q3CString& id )
+    void setId( const QByteArray& id )
     {
 	detach();
         data->id = id;
@@ -82,12 +83,12 @@ public:
         data->kind = kind;
     }
 
-    unsigned long flags() const
+    quint64 flags() const
     {
         return data->flags;
     }
 
-    void setFlags( unsigned long flags )
+    void setFlags( quint64 flags )
     {
 	detach();
         data->flags = flags;
@@ -160,7 +161,7 @@ public:
 	data->endColumn = column;
     }
 
-    bool hasAttribute( const Q3CString& name ) const
+    bool hasAttribute( const QByteArray& name ) const
     {
 	if( name == "kind" ||
 	    name == "name" ||
@@ -174,7 +175,7 @@ public:
         return data->attributes.contains( name );
     }
 
-    QVariant attribute( const Q3CString& name ) const
+    QVariant attribute( const QByteArray& name ) const
     {
 	if( name == "id" )
 	    return data->id;
@@ -199,7 +200,7 @@ public:
         return data->attributes[ name ];
     }
 
-    void setAttribute( const Q3CString& name, const QVariant& value )
+    void setAttribute( const QByteArray& name, const QVariant& value )
     {
 	detach();
 	if( name == "id" )
@@ -234,15 +235,15 @@ private:
 private:
     struct TagData: public Q3Shared
     {
-	Q3CString id;
+	QByteArray id;
 	int kind;
-	unsigned long flags;
+	quint64 flags;
 	QString name;
 	QStringList scope;
 	QString fileName;
 	int startLine, startColumn;
 	int endLine, endColumn;
-	QMap<Q3CString, QVariant> attributes;
+	QMap<QByteArray, QVariant> attributes;
     } *data;
 };
 

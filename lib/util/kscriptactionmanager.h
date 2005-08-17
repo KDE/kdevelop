@@ -23,6 +23,7 @@
 #include <scriptclientinterface.h>
 #include <qobject.h>
 #include <q3ptrlist.h>
+#include <qstringlist.h>
 
 class KAction;
 class KActionCollection;

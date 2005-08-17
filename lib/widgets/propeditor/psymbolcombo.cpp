@@ -76,7 +76,7 @@ void PSymbolCombo::setValue(const QVariant &value, bool emitChange)
 #endif
     {
         disconnect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
-        m_edit->setText(QChar(value.toInt()));
+        m_edit->setText(QString(QLatin1Char(value.toInt())));
         connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
         if (emitChange)
             emit propertyChanged(m_property, value);
@@ -109,7 +109,7 @@ void PSymbolCombo::selectChar()
 
     if (dia->exec() == QDialog::Accepted)
     {
-        m_edit->setText(select->chr());
+        m_edit->setText(QString(QLatin1String(select->chr()));
     }
     delete dia;
 #endif

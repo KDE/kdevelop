@@ -13,18 +13,23 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include "KDevPartControllerIface.h"
 #include "kdevpartcontroller.h"
+
+#ifndef NO_KATE_DOCUMENTMANAGER
 #include "katedocumentmanagerinterface.h"
+#endif
 
 KDevPartController::KDevPartController(QWidget *parent)
   : KParts::PartManager(parent)
 {
   new KDevPartControllerIface(this);
+#ifndef NO_KATE_DOCUMENTMANAGER
   new KateDocumentManagerInterface(this);
+#endif
 }
 
 #include "kdevpartcontroller.moc"

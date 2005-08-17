@@ -51,7 +51,7 @@ void ProcessListBoxItem::paint(QPainter *p)
 ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
     : KListBox(parent, name)
 {
-    setFocusPolicy(QWidget::NoFocus);
+    setFocusPolicy(Qt::NoFocus);
     QPalette pal = palette();
     pal.setColor(QColorGroup::HighlightedText,
                  pal.color(QPalette::Normal, QColorGroup::Text));

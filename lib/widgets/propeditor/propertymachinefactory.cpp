@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "propertymachinefactory.h"
 
@@ -166,7 +166,7 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             spValues[i18n("Up Arrow")] = Qt::UpArrowCursor;
             spValues[i18n("Cross")] = Qt::CrossCursor;
             spValues[i18n("Waiting")] = Qt::WaitCursor;
-            spValues[i18n("iBeam")] = Qt::IbeamCursor;
+            spValues[i18n("iBeam")] = Qt::ibeamCursor;
             spValues[i18n("Size Vertical")] = Qt::SizeVerCursor;
             spValues[i18n("Size Horizontal")] = Qt::SizeHorCursor;
             spValues[i18n("Size Slash")] = Qt::SizeBDiagCursor;

@@ -6,15 +6,9 @@ lib_LTLIBRARIES = libkdevwidgets.la
 
 kdevwidgetsincludedir = $(includedir)/kdevelop/widgets
 
-libkdevwidgets_la_SOURCES = flagboxes.cpp qcomboview.cpp klistviewaction.cpp \
-	kcomboview.cpp resizablecombo.cpp kdevhtmlpart.cpp processlinemaker.cpp \
-	processwidget.cpp ksavealldialog.cpp
+libkdevwidgets_la_SOURCES = kdevhtmlpart.cpp processlinemaker.cpp processwidget.cpp 
 
-kdevwidgetsinclude_HEADERS = klistviewaction.h qcomboview.h flagboxes.h \
-	ksavealldialog.h resizablecombo.h kcomboview.h kdevhtmlpart.h processlinemaker.h \
-	processwidget.h
-
-SUBDIRS = propeditor
+kdevwidgetsinclude_HEADERS = kdevhtmlpart.h processlinemaker.h processwidget.h
 
 libkdevwidgets_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la
 libkdevwidgets_la_LDFLAGS = -no-undefined $(all_libraries)

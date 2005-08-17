@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU Library General Public     *
  *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "childproperty.h"
 
@@ -89,7 +89,7 @@ void ChildProperty::setValue(const QVariant &value, bool // rememberOldValue
         case SizePolicy:
         {
             qWarning("ChildProperty::setValue for QSizePolicy");
-            QSizePolicy v = m_parent->value().toSizePolicy();
+            QSizePolicy v = qvariant_cast<QSizePolicy>(m_parent->value());
             if (m_childType == SizePolicy_HorData)
                 v.setHorData(QSizePolicy::SizeType(value.toInt()));
             else if (m_childType == SizePolicy_VerData)
@@ -131,13 +131,13 @@ QVariant ChildProperty::value( ) const
                 return m_parent->value().toRect().height();
         case SizePolicy:
             if (m_childType == SizePolicy_HorData)
-                return m_parent->value().toSizePolicy().horData();
+                return qvariant_cast<QSizePolicy>(m_parent->value()).horData();
             else if (m_childType == SizePolicy_VerData)
-                return m_parent->value().toSizePolicy().verData();
+                return qvariant_cast<QSizePolicy>(m_parent->value()).verData();
             else if (m_childType == SizePolicy_HorStretch)
-                return m_parent->value().toSizePolicy().horStretch();
+                return qvariant_cast<QSizePolicy>(m_parent->value()).horStretch();
             else if (m_childType == SizePolicy_VerStretch)
-                return m_parent->value().toSizePolicy().verStretch();
+                return qvariant_cast<QSizePolicy>(m_parent->value()).verStretch();
     }
     return QVariant();
 }

@@ -98,7 +98,7 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
   int idNewWindow = -2;
   if (!url.isEmpty() && (m_options & CanOpenInNewWindow))
   {
-    idNewWindow = popup.insertItem(SmallIcon("window_new"),i18n("Open in New Tab"));
+    idNewWindow = popup.insertItem(QIcon(SmallIcon("window_new")),i18n("Open in New Tab"));
     popup.setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
     needSep = true;
   }
