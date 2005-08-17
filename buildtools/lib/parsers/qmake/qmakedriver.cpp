@@ -30,6 +30,8 @@ extern int qmakedebug;
 
 //Q_GLOBAL_STATIC(Q3ValueStack<QMake::ProjectAST *>, g_projects)
 
+Q3ValueStack<QMake::ProjectAST *> *g_projects();
+
 namespace QMake {
 
 int Driver::parseFile(const char *fileName, ProjectAST **ast)
