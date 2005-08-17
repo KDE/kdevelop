@@ -235,4 +235,9 @@ Qt::ItemFlags KFilterModel::flags(const QModelIndex &index) const
     return d->sourceModel->flags(d->childIdx(index));
 }
 
+QAbstractItemModel *KFilterModel::model() const
+{
+    return d->sourceModel;
+}
+
 #include "kfiltermodel.moc"
