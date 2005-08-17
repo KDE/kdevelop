@@ -13,7 +13,7 @@
 #define _APPOUTPUTWIDGET_H_
 
 #include <qstringlist.h>
-#include <kregexp.h>
+#include <qregexp.h>
 
 #include "processwidget.h"
 
@@ -50,6 +50,8 @@ private:
   bool bCS;
 
   AppOutputViewPart* m_part;
+  QRegExp assertMatch;
+  QRegExp lineInfoMatch;
 };
 
 #endif
