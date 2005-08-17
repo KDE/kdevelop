@@ -95,6 +95,8 @@ public:
   virtual ~KDevCodeModel();
 
   virtual KDevCodeItem *item(const QModelIndex &index) const;
+  virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+  virtual int rowCount(const QModelIndex &parent) const;
 };
 
 #endif // KDEVCODEMODEL_H

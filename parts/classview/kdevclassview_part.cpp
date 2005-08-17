@@ -80,9 +80,17 @@ KDevClassViewPart::KDevClassViewPart(QObject *parent, const char *name, const QS
 
   connect(m_classView, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
-  mainWindow()->embedSelectViewRight(m_widget, tr("Class View"), tr("Class View"));
+  mainWindow()->embedSelectView(m_widget, tr("Class View"), tr("Class View"));
 
   setXMLFile("kdevclassview.rc");
+
+  for (int i=0; i<1000; ++i)
+    {
+      codeModel()->appendItem(new KDevCodeNamespaceItem(QLatin1String("Class_") + QString::number(i)));
+    }
+  //Q_ASSERT(0);
+
+  //codeModel()->refresh();
 }
 
 KDevClassViewPart::~KDevClassViewPart()

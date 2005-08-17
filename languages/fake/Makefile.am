@@ -1,6 +1,7 @@
 
-INCLUDES = -I$(top_srcdir)/languages/lib/interfaces \
+INCLUDES = \
     -I$(top_srcdir)/lib/catalog \
+    -I$(top_srcdir)/lib/language \
     -I$(top_srcdir)/lib/interfaces \
     -I$(top_srcdir)/lib/interfaces/extensions \
     -I$(top_srcdir)/lib/interfaces/external \

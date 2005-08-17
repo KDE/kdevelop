@@ -36,7 +36,7 @@ KDevClassView::KDevClassView(KDevClassViewPart *part, QWidget *parent)
     m_part(part)
 {
   header()->hide();
-
+  
   setContextMenuPolicy(Qt::CustomContextMenu);
 
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)));

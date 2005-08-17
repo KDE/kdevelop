@@ -2,10 +2,16 @@
 #include "fakesupport_part.h"
 #include "fakesupport_factory.h"
 
+#include <kdevcodemodel.h>
+
+#include <QtCore/QMetaObject>
+#include <QtCore/QTimer>
+#include <QtCore/qdebug.h>
+
 FakeLanguageSupport::FakeLanguageSupport(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport(FakeSupportFactory::info(), parent)
+  : KDevLanguageSupport(FakeSupportFactory::info(), parent)
 {
-    setObjectName(QString::fromUtf8(name));
+  setObjectName(QString::fromUtf8(name));
 }
 
 FakeLanguageSupport::~FakeLanguageSupport()
@@ -40,6 +46,10 @@ QString FakeLanguageSupport::formatClassName(const QString &name) const
 QString FakeLanguageSupport::unformatClassName(const QString &name) const
 {
   return QString();
+}
+
+void FakeLanguageSupport::test_codemodel()
+{
 }
 
 #include "fakesupport_part.moc"

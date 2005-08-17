@@ -103,7 +103,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     QLineEdit *editor = new QLineEdit(m_widget);
     m_widget->layout()->addWidget(editor);
 
-    editor->hide();
+    //editor->hide();
 
     KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
 
@@ -113,9 +113,9 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     m_projectManager->setWhatsThis(i18n("Project overview"));
     m_widget->layout()->add(m_projectManager);
 
-    //KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
-    //connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
-    //m_projectManager->setModel(filterModel);
+    KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
+    connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
+    m_projectManager->setModel(filterModel);
 
 
     connect(m_projectManager, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));

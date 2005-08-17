@@ -18,15 +18,7 @@
 */
 
 #include "kdevcodemodel.h"
-
-namespace
-{
-
-struct _CodeModel
-{
-};
-
-} // namespace
+#include <QtCore/qdebug.h>
 
 KDevCodeItem::KDevCodeItem(const QString &name, KDevItemGroup *parent)
   : KDevItemCollection(name, parent)
@@ -183,6 +175,18 @@ KDevCodeItem *KDevCodeModel::item(const QModelIndex &index) const
   return reinterpret_cast<KDevCodeItem*>(KDevItemModel::item(index));
 }
 
+QModelIndex KDevCodeModel::index(int row, int column, const QModelIndex &parent) const
+{
+  QModelIndex i = KDevItemModel::index(row, column, parent);
+  qDebug() << "index:" << i;
+  return i;
+}
 
-
+int KDevCodeModel::rowCount(const QModelIndex &parent) const
+{
+  int rc = KDevItemModel::rowCount(parent);
+  KDevCodeItem *i = item(parent);
+  qDebug() << "rowCount:" << rc << "parent:" << parent << "data:" << (i ? i->name() : QString());
+  return rc;
+}
 
