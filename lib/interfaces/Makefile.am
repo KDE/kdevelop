@@ -3,12 +3,18 @@ INCLUDES = -I$(top_srcdir)/lib/util \
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
-libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
-		kdevlanguagesupport.cpp kdevpartcontroller.cpp kdevapi.cpp KDevCoreIface.skel \
-		kdevmainwindow.cpp KDevPartControllerIface.skel kdevplugin.cpp kdevcoderepository.cpp \
-		kdevplugincontroller.cpp kdevplugininfo.cpp KDevCoreIface.cpp \
-		KDevPartControllerIface.cpp \
-		kdevprojectiface.cpp kdevprojectiface.skel 
+libkdevinterfaces_la_SOURCES = \
+	katedocumentmanagerinterface.cpp  kdevpcsimporter.cpp \
+	kdevapi.cpp			  kdevplugincontroller.cpp \
+	kdevcodemodel.cpp		  kdevplugin.cpp \
+	kdevcoderepository.cpp		  kdevplugininfo.cpp \
+	kdevcore.cpp			  kdevprojectbuilder.cpp \
+	KDevCoreIface.skel		  kdevproject.cpp \
+	kdevlanguagesupport.cpp		  kdevprojecteditor.cpp \
+	kdevmainwindow.cpp		  kdevprojectiface.cpp \
+	kdevpartcontroller.cpp		  kdevprojectimporter.cpp \
+	KDevPartControllerIface.skel	  kdevprojectmodel.cpp
+
 libkdevinterfaces_la_CXXFLAGS = -DNO_KATE_DOCUMENTMANAGER
 libkdevinterfaces_la_LDFLAGS = -no-undefined $(all_libraries)
 libkdevinterfaces_la_LIBADD = \
@@ -16,17 +22,26 @@ libkdevinterfaces_la_LIBADD = \
 	$(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) -lktexteditor -lkscript
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
-kdevelopinclude_HEADERS = kdevlanguagesupport.h kdevmainwindow.h \
-	kdevpartcontroller.h kdevplugin.h kdevproject.h kdevcore.h kdevcoderepository.h kdevgenericfactory.h kdevapi.h \
-	kdevplugincontroller.h kdevplugininfo.h KDevCoreIface.h \
-	KDevPartControllerIface.h katedocumentmanagerinterface.h
+kdevelopinclude_HEADERS = \
+	katedocumentmanagerinterface.h	kdevpcsimporter.h \
+	kdevapi.h			kdevplugincontroller.h \
+	kdevcodemodel.h			kdevplugin.h \
+	kdevcoderepository.h		kdevplugininfo.h \
+	kdevcore.h			kdevprojectbuilder.h \
+	KDevCoreIface.h			kdevprojecteditor.h \
+	kdevgenericfactory.h		kdevproject.h \
+	kdevlanguagesupport.h		kdevprojectiface.h \
+	kdevmainwindow.h		kdevprojectimporter.h \
+	kdevpartcontroller.h		kdevprojectmodel.h \
+	KDevPartControllerIface.h
 
 
 servicetypedir = $(kde_servicetypesdir)
-servicetype_DATA = kdevelopproject.desktop kdeveloplanguagesupport.desktop \
-	kdevelopplugin.desktop \
-        kdevelop_part.desktop \
-        kdevelop_rwpart.desktop
+servicetype_DATA = \
+	kdeveloplanguagesupport.desktop  kdevelopprojectbuilder.desktop \
+	kdevelop_part.desktop		 kdevelopproject.desktop \
+	kdeveloppcsimporter.desktop	 kdevelopprojectimporter.desktop \
+	kdevelopplugin.desktop		 kdevelop_rwpart.desktop
 
 METASOURCES = AUTO
 
