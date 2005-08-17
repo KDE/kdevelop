@@ -27,7 +27,7 @@ libkdevmakeview_la_LIBADD = \
 	$(top_builddir)/lib/libkdevelop.la \
 	$(LIB_KHTML)
 
-libkdevmakeview_la_SOURCES = 
+libkdevmakeview_la_SOURCES = \
 	makeviewpart.cpp makewidget.cpp directorystatusmessagefilter.cpp \
 	outputfilter.cpp compileerrorfilter.cpp \
 	commandcontinuationfilter.cpp makeitem.cpp \

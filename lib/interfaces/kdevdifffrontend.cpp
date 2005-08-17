@@ -20,9 +20,8 @@
 */
 #include "kdevdifffrontend.h"
 
-
 KDevDiffFrontend::KDevDiffFrontend(const KDevPluginInfo *info, QObject *parent)
-    : KDevPlugin(info, parent ? name : "KDevDiffFrontend")
+    : KDevPlugin(info, parent)
 {
 }
 
@@ -31,3 +30,4 @@ KDevDiffFrontend::~KDevDiffFrontend()
 }
 
 #include "kdevdifffrontend.moc"
+

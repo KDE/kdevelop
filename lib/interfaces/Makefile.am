@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/util \
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
 libkdevinterfaces_la_SOURCES = \
-	katedocumentmanagerinterface.cpp  KDevPartControllerIface.skel \
+	KDevPartControllerIface.skel \
 	kdevapi.cpp			  kdevpcsimporter.cpp \
 	kdevappfrontend.cpp		  kdevplugincontroller.cpp \
 	kdevcatalog.cpp			  kdevplugin.cpp \
@@ -18,7 +18,6 @@ libkdevinterfaces_la_SOURCES = \
 	kdevmakefrontend.cpp		  tag.cpp \
 	kdevpartcontroller.cpp
 
-libkdevinterfaces_la_CXXFLAGS = -DNO_KATE_DOCUMENTMANAGER
 libkdevinterfaces_la_LDFLAGS = \
 	$(DB3LDFLAGS) \
 	-no-undefined $(all_libraries)
@@ -29,7 +28,7 @@ libkdevinterfaces_la_LIBADD = \
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 kdevelopinclude_HEADERS = \
-	katedocumentmanagerinterface.h	kdevpartcontroller.h \
+	kdevpartcontroller.h \
 	kdevapi.h			KDevPartControllerIface.h \
 	kdevappfrontend.h		kdevpcsimporter.h \
 	kdevcatalog.h			kdevplugincontroller.h \

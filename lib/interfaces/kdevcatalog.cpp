@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include "catalog.h"
+#include "kdevcatalog.h"
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>

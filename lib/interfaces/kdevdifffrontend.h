@@ -47,7 +47,7 @@ if (df) {
 */
 class KDevDiffFrontend : public KDevPlugin
 {
-
+  Q_OBJECT
 public:
     /**Constructor.
     @param info Important information about the plugin - plugin internal and generic
@@ -58,8 +58,8 @@ public:
     @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
     interface. Otherwise the plugin will not be constructed.
     @param name The internal name which identifies the plugin.*/
-    KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent=0)
-        :KDevPlugin(info, parent) {}
+    KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent = 0);
+    virtual ~KDevDiffFrontend();
 
     /**Displays the patch.
     @param diff A string which contains a patch in unified format.*/
