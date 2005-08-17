@@ -1,7 +1,6 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
-#include <q3valuelist.h>
 #include <qhash.h>
 
 #include <kservice.h>

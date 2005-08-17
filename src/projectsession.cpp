@@ -19,8 +19,6 @@
 #include <q3ptrlist.h>
 #include <qfile.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QTextStream>
 
 #include <kparts/part.h>

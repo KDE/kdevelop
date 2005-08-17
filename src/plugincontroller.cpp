@@ -1,6 +1,4 @@
 #include <qfile.h>
-#include <q3vbox.h>
-#include <q3valuelist.h>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>

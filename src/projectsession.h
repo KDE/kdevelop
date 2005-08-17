@@ -81,7 +81,7 @@ private:
       bool activate;
   };
 
-  Q3ValueList<DocumentData> _docDataList;
+  QList<DocumentData> _docDataList;
 
 };
 
