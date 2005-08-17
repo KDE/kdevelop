@@ -6,7 +6,10 @@
 #include <kdevcore.h>
 #include <kdevmakefrontend.h>
 #include <domutil.h>
+
+#if 0 // ### port me
 #include <makeoptionswidget.h>
+#endif
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -34,7 +37,7 @@ const QString &KDevMakeBuilder::abortOnError =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/abortonerror");
     
 const QString &KDevMakeBuilder::numberOfJobs =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make/numberofjobs");
+    KGlobal::staticQString("/kdevprojectmanager/builder/make/numberofjobsfile:///usr/share/doc/HTML/index.html");
     
 const QString &KDevMakeBuilder::dontAct = 
     KGlobal::staticQString("/kdevprojectmanager/builder/make/dontact");
@@ -45,7 +48,7 @@ const QString &KDevMakeBuilder::environment =
 KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const char *name, const QStringList &)
     : KDevProjectBuilder(parent, name)
 {
-    m_project = ::qt_cast<KDevProject*>(parent);
+    m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
     
     connect(project()->core(), SIGNAL(projectConfigWidget(KDialogBase*)),
@@ -126,9 +129,13 @@ void KDevMakeBuilder::projectConfigWidget(KDialogBase *dlg)
 {
     Q_ASSERT(project());
     
+#warning "port me"
+
+#if 0
     Q3VBox *vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Make Options"), BarIcon( "make", KIcon::SizeMedium ));
     MakeOptionsWidget *widget = new MakeOptionsWidget(*project()->projectDom(), builder, vbox);
     connect(dlg, SIGNAL(okClicked()), widget, SLOT(accept()));
+#endif
 }
 
 void KDevMakeBuilder::commandFinished(const QString &command)
