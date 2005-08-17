@@ -17,6 +17,7 @@
     Boston, MA 02111-1307, USA.
 */
 #include "kdevprojectmanager_part.h"
+#include "kdevprojectmanagerdelegate.h"
 #include "kdevprojectmodel.h"
 #include "kdevprojectmanager.h"
 #include "kdevprojectimporter.h"
@@ -93,7 +94,8 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     }
 
     m_widget = new KDevProjectManager(0);
-
+    m_widget->setModel(m_projectModel);
+    m_widget->setItemDelegate(new KDevProjectManagerDelegate(m_widget));
     m_widget->setWhatsThis(i18n("Project Manager"));
 
     mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
@@ -149,8 +151,12 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
     if (m_workspace)
         m_projectModel->removeItem(m_workspace);
 
-    if ((m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder()))
+    if ((m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder()) != 0)
+      {
         m_projectModel->appendItem(m_workspace);
+      }
+
+    Q_ASSERT(m_workspace != 0);
 
     ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
     connect(job, SIGNAL(result(KIO::Job*)), this, SIGNAL(refresh()));
