@@ -24,29 +24,27 @@
 #include <kdevplugin.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PopupMenu>
 
 class KAction;
-class Q3PopupMenu;
+class KPopupMenu;
 class MainWindowShare;
 
 namespace KParts {
     class ReadOnlyPart;
 }
 
-class SimpleMainWindow: public DMainWindow, public KDevMainWindow {
+class SimpleMainWindow: public DMainWindow, public KDevMainWindow
+{
     Q_OBJECT
 public:
-    SimpleMainWindow(QWidget* parent = 0, const char *name = 0);
+    SimpleMainWindow(QWidget* parent = 0);
     virtual ~SimpleMainWindow();
 
-    virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString::null);
+    virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString());
     virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
     virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
     virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip);
-    
+
     virtual void removeView(QWidget *view);
     virtual void setViewAvailable(QWidget *pView, bool bEnabled);
     virtual void raiseView(QWidget *view);
@@ -54,20 +52,20 @@ public:
 
     virtual void loadSettings();
     virtual void saveSettings();
-    
+
     virtual KMainWindow *main();
-    
+
     void init();
 
 protected:
     virtual bool queryClose();
     virtual bool queryExit();
-    
+
 protected slots:
     virtual void closeTab();
     virtual void closeTab(QWidget *w);
     virtual void tabContext(QWidget *w, const QPoint &p);
-    
+
 private slots:
     void gotoNextWindow();
     void gotoPreviousWindow();
@@ -91,14 +89,14 @@ private:
     void createFramework();
     void createActions();
     void setupWindowMenu();
-    
+
     MainWindowShare *m_mainWindowShare;
-    
+
     KURL m_currentTabURL;
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
-    Q3PopupMenu *m_windowMenu;
-    Q3ValueList<QPair<int, KURL> > m_windowList;
+    KPopupMenu *m_windowMenu;
+    QList<QPair<int, KURL> > m_windowList;
 };
 
 #endif

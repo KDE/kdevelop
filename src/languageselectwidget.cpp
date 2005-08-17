@@ -18,8 +18,7 @@
 #include <q3groupbox.h>
 #include <q3hbox.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
+#include <qvboxlayout.h>
 
 #include <kconfig.h>
 #include <kdebug.h>

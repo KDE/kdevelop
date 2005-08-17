@@ -1,7 +1,6 @@
 #include <qfile.h>
 #include <q3vbox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <q3valuelist.h>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -82,12 +81,12 @@ PluginController::PluginController()
 {
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
-  
+
 /*  m_defaultProfile = QString::fromLatin1( "FullIDE" );
-  m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" + 
-			 KStandardDirs::kde_default( "data" ) + 
+  m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
+			 KStandardDirs::kde_default( "data" ) +
 			 QString::fromLatin1("/kdevelop/profiles/FullIDE");*/
-    
+
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("profile") ){
         m_profile = QString::fromLocal8Bit( args->getOption("profile") );
@@ -99,8 +98,8 @@ PluginController::PluginController()
 
 
 void PluginController::loadInitialPlugins()
-{    
-    loadCorePlugins();    
+{
+    loadCorePlugins();
     loadGlobalPlugins();
 }
 
@@ -141,7 +140,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
     emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
-    if ( plugin ) 
+    if ( plugin )
     {
         m_parts.insert( name, plugin );
         integratePart( plugin );
@@ -166,7 +165,7 @@ void PluginController::unloadProjectPlugins( )
 	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
 	{
 		QString name = (*it)->desktopEntryName();
-	
+
 		if ( KDevPlugin * plugin = m_parts[ name ] )
 		{
 			removeAndForgetPart( name, plugin );
@@ -181,7 +180,7 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 	while ( it != unloadParts.end() )
 	{
 		KDevPlugin* part = m_parts[ *it ];
-		if( part ) 
+		if( part )
 		{
 			removePart( part );
 			m_parts.remove( *it );
@@ -204,7 +203,7 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 QStringList PluginController::argumentsFromService( const KService::Ptr &service )
 {
 	QStringList args;
-	if ( !service ) 
+	if ( !service )
 		// service is a reference to a pointer, so a check whether it is 0 is still required
 		return args;
 	QVariant prop = service->property( "X-KDevelop-Args" );
@@ -281,19 +280,19 @@ KDevPlugin * PluginController::loadPlugin( const QString & serviceType, const QS
 
 	KTrader::OfferList::const_iterator it = offers.constBegin();
 	QString name = (*it)->desktopEntryName();
-	
+
 	KDevPlugin * plugin = 0;
 	if ( plugin = m_parts[ name ] )
 	{
 		return plugin;
 	}
-	
+
 	if ( plugin = loadPlugin( *it ) )
 	{
 		m_parts.insert( name, plugin );
 		integratePart( plugin );
 	}
-	
+
 	return plugin;
 }
 
@@ -325,11 +324,11 @@ QString PluginController::changeProfile(const QString &newProfile)
 
     QString oldProfile = m_profile;
     m_profile = newProfile;
-        
+
     unloadPlugins(unload);
     loadPlugins( coreLoad );
     loadPlugins( globalLoad );
-        
+
     return oldProfile;
 }
 

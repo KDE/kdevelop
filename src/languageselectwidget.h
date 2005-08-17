@@ -15,9 +15,8 @@
 #include <qdialog.h>
 #include <qdom.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QLabel>
 
+class QLabel;
 class Q3ListView;
 
 class LanguageSelectWidget : public QWidget

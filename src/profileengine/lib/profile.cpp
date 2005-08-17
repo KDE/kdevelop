@@ -173,16 +173,13 @@ KURL::List Profile::resources(const QString &nameFilter)
     {
         QString dir = *it;
         dir = dir + "kdevelop/profiles" + dirName();
-        
+
         QDir d(dir);
-        const QFileInfoList *infoList = d.entryInfoList(nameFilter, QDir::Files);
-        if (!infoList)
-            continue;
-        for (QFileInfoList::const_iterator infoIt = infoList->constBegin();
-             infoIt != infoList->constEnd(); ++ infoIt)
-            resources.append((*infoIt)->absFilePath());
+        const QFileInfoList infoList = d.entryInfoList(nameFilter, QDir::Files);
+        for (int i = 0; i < infoList.count(); ++i)
+            resources.append(infoList.at(i).absFilePath());
     }
-    
+
     return KURL::List(resources);
 }
 

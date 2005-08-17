@@ -237,7 +237,7 @@ void ProfileEditor::addProfile()
         return;
     
     KDialogBase dlg(KDialogBase::Plain, i18n("Add Profile"), KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
-    dlg.plainPage()->setMargin(0);
+// ### KDE4-PORTING    dlg.plainPage()->setMargin(0);
     (new QVBoxLayout(dlg.plainPage(), 0, 0))->setAutoAdd(true);
     AddProfileWidget *prof = new AddProfileWidget(dlg.plainPage());
     prof->nameEdit->setFocus();

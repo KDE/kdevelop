@@ -1,3 +1,4 @@
+#include <qatomic.h>
 #include <kapplication.h>
 
 #include "toplevel.h"
@@ -8,7 +9,7 @@
 
 KDevMainWindow *TopLevel::s_instance = 0;
 
-bool TopLevel::mainWindowValid()
+bool TopLevel::isMainWindowValid()
 {
   return s_instance != 0;
 }
@@ -18,7 +19,8 @@ KDevMainWindow *TopLevel::getInstance()
   if (!s_instance)
   {
     SimpleMainWindow *mainWindow = new SimpleMainWindow(0, "SimpleMainWindow");
-    s_instance = mainWindow;
+    if (!q_atomic_test_and_set_ptr(s_instance, 0, mainWindow))
+      delete mainWindow;
     mainWindow->init();
     kapp->setMainWidget(mainWindow);
   }
