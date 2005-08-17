@@ -20,8 +20,9 @@
 #define KDEVMAKEBUILDER_H
 
 #include <kdevprojectbuilder.h>
-#include <q3valuelist.h>
-#include <qpair.h>
+#include <QtCore/QList>
+#include <QtCore/QPair>
+#include <QtCore/QStringList>
 
 class KDialogBase;
 
@@ -34,40 +35,40 @@ class KDevMakeBuilder: public KDevProjectBuilder
 public:
     KDevMakeBuilder(QObject *parent = 0, const char *name = 0, const QStringList &args = QStringList());
     virtual ~KDevMakeBuilder();
-    
-    virtual KDevProject *project() const;
-    
-    virtual bool isExecutable(ProjectItemDom dom) const;
 
-    virtual ProjectItemDom defaultExecutable() const;
-    virtual void setDefaultExecutable(ProjectItemDom dom);
-    
-    virtual bool configure(ProjectItemDom dom = ProjectItemDom());
-    virtual bool build(ProjectItemDom dom = ProjectItemDom());
-    virtual bool clean(ProjectItemDom dom = ProjectItemDom());
-    virtual bool execute(ProjectItemDom dom = ProjectItemDom());
-    
+    virtual KDevProject *project() const;
+
+    virtual bool isExecutable(KDevProjectItem *dom) const;
+
+    virtual KDevProjectItem *defaultExecutable() const;
+    virtual void setDefaultExecutable(KDevProjectItem *dom);
+
+    virtual bool configure(KDevProjectItem *dom);
+    virtual bool build(KDevProjectItem *dom);
+    virtual bool clean(KDevProjectItem *dom);
+    virtual bool execute(KDevProjectItem *dom);
+
 private slots:
     void projectConfigWidget(KDialogBase *dialog);
     void commandFinished(const QString &command);
     void commandFailed(const QString &command);
-    
+
 private:
-    QString buildCommand(ProjectItemDom dom, const QString &target = QString::null);
+    QString buildCommand(KDevProjectItem *dom, const QString &target = QString::null);
     QString makeEnvironment() const;
-    
+
 private:
     KDevProject *m_project;
-    ProjectItemDom m_defaultExecutable;
-    Q3ValueList< QPair<QString, ProjectItemDom> > m_commands;
-    
+    KDevProjectItem *m_defaultExecutable;
+    QList< QPair<QString, KDevProjectItem *> > m_commands;
+
     static const QString &builder;
     static const QString &makeTool;
     static const QString &priority;
     static const QString &abortOnError;
     static const QString &numberOfJobs;
-    static const QString &dontAct; 
-    static const QString &environment; 
+    static const QString &dontAct;
+    static const QString &environment;
 };
 
 #endif // KDEVMAKEBUILDER_H

@@ -1,6 +1,7 @@
 
 #include <config.h>
 #include "kdevmakebuilder.h"
+#include <kdevprojectmodel.h>
 
 #include <kdevproject.h>
 #include <kdevcore.h>
@@ -26,38 +27,40 @@ K_EXPORT_COMPONENT_FACTORY(libkdevmakebuilder, KGenericFactory<KDevMakeBuilder>(
 
 const QString &KDevMakeBuilder::builder =
     KGlobal::staticQString("/kdevprojectmanager/builder");
-    
+
 const QString &KDevMakeBuilder::makeTool =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/makebin");
-    
+
 const QString &KDevMakeBuilder::priority =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/prio");
-    
+
 const QString &KDevMakeBuilder::abortOnError =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/abortonerror");
-    
+
 const QString &KDevMakeBuilder::numberOfJobs =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/numberofjobsfile:///usr/share/doc/HTML/index.html");
-    
-const QString &KDevMakeBuilder::dontAct = 
+
+const QString &KDevMakeBuilder::dontAct =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/dontact");
 
-const QString &KDevMakeBuilder::environment = 
+const QString &KDevMakeBuilder::environment =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/envvars");
-    
+
 KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const char *name, const QStringList &)
-    : KDevProjectBuilder(parent, name)
+    : KDevProjectBuilder(parent)
 {
+    setObjectName(QString::fromUtf8(name));
+
     m_project = qobject_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
-    
+
     connect(project()->core(), SIGNAL(projectConfigWidget(KDialogBase*)),
         this, SLOT(projectConfigWidget(KDialogBase*)));
-        
+
     if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
         connect(make, SIGNAL(commandFinished(const QString &)),
             this, SLOT(commandFinished(const QString &)));
-            
+
         connect(make, SIGNAL(commandFailed(const QString &)),
             this, SLOT(commandFailed(const QString &)));
     }
@@ -72,54 +75,56 @@ KDevProject *KDevMakeBuilder::project() const
     return m_project;
 }
 
-bool KDevMakeBuilder::isExecutable(ProjectItemDom dom) const
+bool KDevMakeBuilder::isExecutable(KDevProjectItem *dom) const
 {
     Q_UNUSED(dom);
     return false;
 }
 
-ProjectItemDom KDevMakeBuilder::defaultExecutable() const
+KDevProjectItem *KDevMakeBuilder::defaultExecutable() const
 {
     return m_defaultExecutable;
 }
 
-void KDevMakeBuilder::setDefaultExecutable(ProjectItemDom dom)
+void KDevMakeBuilder::setDefaultExecutable(KDevProjectItem *dom)
 {
     m_defaultExecutable = dom;
 }
 
-bool KDevMakeBuilder::configure(ProjectItemDom dom)
+bool KDevMakeBuilder::configure(KDevProjectItem *dom)
 {
     Q_UNUSED(dom);
     return false;
 }
-    
-bool KDevMakeBuilder::build(ProjectItemDom dom)
+
+bool KDevMakeBuilder::build(KDevProjectItem *dom)
 {
     if (KDevMakeFrontend *make = project()->extension<KDevMakeFrontend>("KDevelop/MakeFrontend")) {
-        if (ProjectFolderDom folder = dom->toFolder()) {
+        if (KDevProjectFolderItem *folder = dom->folder()) {
             // ### compile the folder
             QString command = buildCommand(dom);
             make->queueCommand(folder->name(), command);
             m_commands.append(qMakePair(command, dom));
             return true;
-        } else if (ProjectTargetDom target = dom->toTarget()) {
+        } else if (KDevProjectTargetItem *target = dom->target()) {
             // ### compile the target
-        } else if (ProjectFileDom file = dom->toFile()) {
+            Q_UNUSED(target);
+        } else if (KDevProjectFileItem *file = dom->file()) {
             // ### compile the file
+            Q_UNUSED(file);
         }
     }
-    
+
     return false;
 }
 
-bool KDevMakeBuilder::clean(ProjectItemDom dom)
+bool KDevMakeBuilder::clean(KDevProjectItem *dom)
 {
     Q_UNUSED(dom);
     return false;
 }
 
-bool KDevMakeBuilder::execute(ProjectItemDom dom)
+bool KDevMakeBuilder::execute(KDevProjectItem *dom)
 {
     Q_UNUSED(dom);
     return false;
@@ -128,7 +133,7 @@ bool KDevMakeBuilder::execute(ProjectItemDom dom)
 void KDevMakeBuilder::projectConfigWidget(KDialogBase *dlg)
 {
     Q_ASSERT(project());
-    
+
 #warning "port me"
 
 #if 0
@@ -141,7 +146,7 @@ void KDevMakeBuilder::projectConfigWidget(KDialogBase *dlg)
 void KDevMakeBuilder::commandFinished(const QString &command)
 {
     if (!m_commands.isEmpty()) {
-        QPair<QString, ProjectItemDom> item = m_commands.first();
+        QPair<QString, KDevProjectItem *> item = m_commands.first();
         if (item.first == command) {
             m_commands.pop_front();
             emit builded(item.second);
@@ -152,15 +157,15 @@ void KDevMakeBuilder::commandFinished(const QString &command)
 void KDevMakeBuilder::commandFailed(const QString &command)
 {
     Q_UNUSED(command);
-    
+
     if (!m_commands.isEmpty()) {
         m_commands.clear();
-        
+
         emit failed();
     }
 }
 
-QString KDevMakeBuilder::buildCommand(ProjectItemDom item, const QString &target)
+QString KDevMakeBuilder::buildCommand(KDevProjectItem *item, const QString &target)
 {
     QDomDocument &dom = *project()->projectDom();
 
@@ -189,10 +194,10 @@ QString KDevMakeBuilder::buildCommand(ProjectItemDom item, const QString &target
     cmdline.prepend(nice);
     cmdline.prepend(makeEnvironment());
 
-    Q_ASSERT(item->toFolder());
+    Q_ASSERT(item->folder());
 
     QString dircmd = "cd ";
-    QString dir = item->toFolder()->name();
+    QString dir = item->folder()->name();
     dircmd += KProcess::quote(dir);
     dircmd += " && ";
 
