@@ -5,7 +5,8 @@
 #### TODO    appwizard
 
 SUBDIRS = quickopen \
-    fullscreen
+    fullscreen \
+    diff
 ##    classview \
 
     
