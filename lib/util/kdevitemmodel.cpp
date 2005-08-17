@@ -29,6 +29,9 @@ void KDevItemModel::appendItem(KDevItem *item, KDevItemCollection *collection)
 {
   QModelIndex parent;
 
+  if (!collection)
+    collection = root();
+
   if (collection->parent())
     parent = indexOf(collection);
 
@@ -64,7 +67,7 @@ QModelIndex KDevItemModel::indexOf(KDevItem *item) const
   Q_ASSERT(item != 0);
 
   if (!item->parent())
-    return createIndex(0, 0, collection());
+    return createIndex(0, 0, root());
 
   return createIndex(positionOf(item), 0, item);
 }
@@ -81,7 +84,7 @@ KDevItem *KDevItemModel::item(const QModelIndex &index) const
   return reinterpret_cast<KDevItem*>(index.internalPointer());
 }
 
-KDevItemCollection *KDevItemModel::collection() const
+KDevItemCollection *KDevItemModel::root() const
 {
   return const_cast<KDevItemCollection*>(&m_collection);
 }
@@ -90,7 +93,7 @@ QModelIndex KDevItemModel::index(int row, int column, const QModelIndex &parent)
 {
   KDevItem *parent_item = item(parent);
   if (!parent_item)
-    parent_item = collection();
+    parent_item = root();
 
   Q_ASSERT(parent_item != 0);
   Q_ASSERT(parent_item->group() != 0);
@@ -114,7 +117,7 @@ int KDevItemModel::rowCount(const QModelIndex &parent) const
 {
   KDevItem *parent_item = item(parent);
   if (!parent_item)
-    parent_item = collection();
+    parent_item = root();
 
   Q_ASSERT(parent_item != 0);
 

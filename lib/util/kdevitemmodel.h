@@ -67,7 +67,7 @@ public:
 class KDevItemCollection: public KDevItemGroup
 {
 public:
-  KDevItemCollection(const QString &name, KDevItemGroup *parent = 0)
+  explicit KDevItemCollection(const QString &name, KDevItemGroup *parent = 0)
     : KDevItemGroup(parent), m_name(name) {}
 
   virtual ~KDevItemCollection() { clear(); }
@@ -107,12 +107,12 @@ class KDevItemModel: public QAbstractItemModel
 {
   Q_OBJECT
 public:
-  KDevItemModel(QObject *parent = 0);
+  explicit KDevItemModel(QObject *parent = 0);
   virtual ~KDevItemModel();
 
-  KDevItemCollection *collection() const;
+  KDevItemCollection *root() const;
 
-  void appendItem(KDevItem *item, KDevItemCollection *collection);
+  void appendItem(KDevItem *item, KDevItemCollection *collection = 0);
   void removeItem(KDevItem *item);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
@@ -124,7 +124,7 @@ public:
   virtual QVariant data(const QModelIndex &index, int role) const;
   virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-  KDevItem *item(const QModelIndex &index) const;
+  virtual KDevItem *item(const QModelIndex &index) const;
   virtual QModelIndex indexOf(KDevItem *item) const;
 
 public slots:
