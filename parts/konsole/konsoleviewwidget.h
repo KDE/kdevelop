@@ -22,6 +22,7 @@
 class KDevProject;
 class KonsoleWidgetPrivate;
 class KonsoleViewPart;
+
 namespace KParts {
   class ReadOnlyPart;
   class Part;
@@ -36,14 +37,15 @@ public:
     KonsoleViewWidget(KonsoleViewPart *part);
     virtual ~KonsoleViewWidget();
 
-    virtual void show();
-
 public slots:
     void setDirectory(const KURL &dirUrl);
 
 private slots:
     void activePartChanged(KParts::Part *activatedPart);
     void partDestroyed();
+
+protected:
+    virtual void showEvent(QShowEvent *event);
 
 private:
     void activate();

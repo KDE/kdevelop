@@ -6,6 +6,7 @@
 
 SUBDIRS = fullscreen \
     outputviews \
+    konsole \
     diff \
     classview
 

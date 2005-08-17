@@ -10,11 +10,13 @@
  ***************************************************************************/
 
 #include <qlayout.h>
+#include <qlabel.h>
 #include <q3frame.h>
 #include <qdir.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
 
+#include <klocale.h>
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
@@ -27,9 +29,12 @@
 
 #include "konsoleviewwidget.h"
 
+#include <QtCore/qdebug.h>
+
 KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
- : QWidget(0, "konsole widget"), part(0), owner( part )
+ : QWidget(0), part(0), owner( part )
 {
+    setObjectName(QString::fromUtf8("konsole widget"));
     connect(part->partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
     vbox = new QVBoxLayout(this);
 }
@@ -38,39 +43,45 @@ KonsoleViewWidget::~KonsoleViewWidget()
 {
 }
 
-void KonsoleViewWidget::show()
+void KonsoleViewWidget::showEvent(QShowEvent *event)
 {
-    activate();
-    QWidget::show();
+  QWidget::showEvent(event);
+  activate();
 }
 
 void KonsoleViewWidget::activate()
 {
     kdDebug(9035) << k_funcinfo << endl;
-    if (part)
+
+    static bool initialized = false;
+          
+    if (initialized)
         return;
 
-    KLibFactory *factory = KLibLoader::self()->factory("libkonsolepart");
-    if (!factory)
-        return;
+    Q_ASSERT(part == 0);
+    initialized = true;
 
-    part = (KParts::ReadOnlyPart *) factory->create(this);
-    if (!part)
-        return;
+    if (KLibFactory *factory = KLibLoader::self()->factory("libkonsolepart"))
+      {
+        if (0 != (part = qobject_cast<KParts::ReadOnlyPart*>(factory->create(this))))
+          {
+            part->widget()->setFocusPolicy(Qt::WheelFocus);
+            setFocusProxy(part->widget());
+            part->widget()->setFocus();
 
-    part->widget()->setFocusPolicy(Qt::WheelFocus);
-    setFocusProxy(part->widget());
-    part->widget()->setFocus();
+            if (Q3Frame *frame = qobject_cast<Q3Frame*>(part->widget()))
+              frame->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
 
-    if (part->widget()->inherits("QFrame"))
-        ((Q3Frame*)part->widget())->setFrameStyle(Q3Frame::Panel|Q3Frame::Sunken);
+            vbox->addWidget(part->widget());
+            part->widget()->show();
 
-    vbox->addWidget(part->widget());
-
-//    this->activePartChanged( owner->partController()->activePart() );
-    part->widget()->show();
-
-    connect(part, SIGNAL(destroyed()), this, SLOT(partDestroyed()));
+            connect(part, SIGNAL(destroyed()), this, SLOT(partDestroyed()));
+          }
+      }
+    else
+      {
+        vbox->addWidget(new QLabel(i18n("Part not available"), this));
+      }
 }
 
 
