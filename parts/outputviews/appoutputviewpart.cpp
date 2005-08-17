@@ -39,8 +39,6 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
     setObjectName(QString::fromUtf8(name));
     setInstance(AppViewFactory::instance());
 
-    m_dcop = new KDevAppFrontendIface(this);
-
     m_widget = new AppOutputWidget(this);
     m_widget->setIcon( SmallIcon("openterm") );
     m_widget->setCaption(i18n("Application Output"));
@@ -60,10 +58,9 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
 AppOutputViewPart::~AppOutputViewPart()
 {
-	if ( m_widget )
-    	mainWindow()->removeView( m_widget );
+    if ( m_widget )
+        mainWindow()->removeView( m_widget );
     delete m_widget;
-    delete m_dcop;
 }
 
 void AppOutputViewPart::slotStopButtonClicked( KDevPlugin* which )

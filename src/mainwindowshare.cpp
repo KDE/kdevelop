@@ -151,7 +151,7 @@ void MainWindowShare::createActions()
   action->setToolTip( i18n( "Configure KDevelop" ) );
   action->setWhatsThis(QString("<b>%1</b><p>%2").arg(i18n( "Configure KDevelop" )).arg(i18n("Lets you customize KDevelop.")));
 
-  m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
+  m_toggleStatusbar = (KToggleAction*) KStdAction::create(KStdAction::ShowToolbar, this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection());
   m_toggleStatusbar->setText(i18n("Show &Statusbar"));
   m_toggleStatusbar->setToolTip( i18n("Show statusbar") );
   m_toggleStatusbar->setWhatsThis(i18n("<b>Show statusbar</b><p>Hides or shows the statusbar."));

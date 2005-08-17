@@ -4,19 +4,15 @@ INCLUDES = -I$(top_srcdir)/lib/util \
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
 libkdevinterfaces_la_SOURCES = \
-	KDevPartControllerIface.skel \
-	kdevapi.cpp			  kdevpcsimporter.cpp \
-	kdevappfrontend.cpp		  kdevplugincontroller.cpp \
-	kdevcatalog.cpp			  kdevplugin.cpp \
-	kdevcodemodel.cpp		  kdevplugininfo.cpp \
-	kdevcoderepository.cpp		  kdevprojectbuilder.cpp \
-	kdevcore.cpp			  kdevproject.cpp \
-	KDevCoreIface.skel		  kdevprojecteditor.cpp \
-	kdevdifffrontend.cpp		  kdevprojectiface.cpp \
-	kdevlanguagesupport.cpp		  kdevprojectimporter.cpp \
-	kdevmainwindow.cpp		  kdevprojectmodel.cpp \
-	kdevmakefrontend.cpp		  tag.cpp \
-	kdevpartcontroller.cpp
+kdevapi.cpp		kdevlanguagesupport.cpp      kdevplugininfo.cpp \
+kdevappfrontend.cpp	kdevmainwindow.cpp	     kdevprojectbuilder.cpp \
+kdevcatalog.cpp		kdevmakefrontend.cpp	     kdevproject.cpp \
+kdevcodemodel.cpp	kdevpartcontroller.cpp	     kdevprojecteditor.cpp \
+kdevcoderepository.cpp	KDevPartControllerIface.cpp  kdevprojectiface.cpp \
+kdevcore.cpp		kdevpcsimporter.cpp	     kdevprojectimporter.cpp \
+KDevCoreIface.cpp	kdevplugincontroller.cpp     kdevprojectmodel.cpp \
+kdevdifffrontend.cpp	kdevplugin.cpp		     tag.cpp \
+KDevPartControllerIface.skel KDevCoreIface.skel kdevprojectiface.skel
 
 libkdevinterfaces_la_LDFLAGS = \
 	$(DB3LDFLAGS) \

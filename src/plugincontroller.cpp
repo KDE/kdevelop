@@ -23,7 +23,6 @@
 #include <kdevmakefrontend.h>
 #include <kdevappfrontend.h>
 #include <kdevdifffrontend.h>
-#include <kdevsourceformatter.h>
 #include <kdevcreatefile.h>
 #include <kdevplugininfo.h>
 #include <kaction.h>

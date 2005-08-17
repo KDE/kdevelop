@@ -15,8 +15,6 @@
 #include <qpointer.h>
 
 #include "kdevappfrontend.h"
-#include "KDevAppFrontendIface.h"
-
 
 class AppOutputWidget;
 
@@ -44,7 +42,6 @@ private slots:
 
 private:
     QPointer<AppOutputWidget> m_widget;
-    KDevAppFrontendIface *m_dcop;
     friend class AppOutputWidget;
 };
 

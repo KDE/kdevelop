@@ -38,8 +38,6 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
 
     setXMLFile("kdevmakeview.rc");
 
-    m_dcop = new KDevMakeFrontendIface(this);
-
     m_widget = new MakeWidget(this);
     m_widget->setIcon( SmallIcon("exec") );
     m_widget->setCaption(i18n("Messages Output"));
@@ -72,7 +70,6 @@ MakeViewPart::~MakeViewPart()
 	if ( m_widget )
 	    mainWindow()->removeView( m_widget );
     delete m_widget;
-    delete m_dcop;
 }
 
 void MakeViewPart::slotStopButtonClicked(KDevPlugin* which)

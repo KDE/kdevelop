@@ -35,8 +35,6 @@ class QDomDocument;
 #include "kdevlanguagesupport.h"
 #include "kdevplugin.h"
 #include "kdevcreatefile.h"
-#include "kdevversioncontrol.h"
-
 
 #include "toplevel.h"
 #include "core.h"

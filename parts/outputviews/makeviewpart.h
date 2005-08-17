@@ -15,8 +15,6 @@
 #include <qpointer.h>
 
 #include "kdevmakefrontend.h"
-#include "KDevMakeFrontendIface.h"
-
 
 class MakeWidget;
 
@@ -27,6 +25,7 @@ class MakeViewPart : public KDevMakeFrontend
 public:
     MakeViewPart( QObject *parent, const char *name, const QStringList & );
     ~MakeViewPart();
+
     virtual QWidget* widget();
     virtual void updateSettingsFromConfig();
 
@@ -39,7 +38,6 @@ protected:
 
 private:
     QPointer<MakeWidget> m_widget;
-    KDevMakeFrontendIface *m_dcop;
     friend class MakeWidget;
 };
 
