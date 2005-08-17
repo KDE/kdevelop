@@ -115,13 +115,13 @@ public:
   void appendItem(KDevItem *item, KDevItemCollection *collection = 0);
   void removeItem(KDevItem *item);
 
-  virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+  virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &index) const;
 
   virtual int rowCount(const QModelIndex &parent) const;
   virtual int columnCount(const QModelIndex &parent) const;
 
-  virtual QVariant data(const QModelIndex &index, int role) const;
+  virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
   virtual KDevItem *item(const QModelIndex &index) const;

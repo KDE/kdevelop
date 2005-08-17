@@ -30,6 +30,7 @@ public:
     int addItems(int level, const QModelIndex &parent);
     void modelDestroyed();
     void modelChanged();
+    QModelIndex childIdx(const QModelIndex &index) const;
 
     KFilterModel *q;
     QAbstractItemModel *sourceModel;
@@ -44,6 +45,14 @@ public:
     QVector<FilterIdx> filteredIdx;
     int topLevelRowCount;
 };
+
+QModelIndex KFilterModelPrivate::childIdx(const QModelIndex &index) const
+{
+    QModelIndex idx = filteredIdx.at(index.internalId()).index;
+    if (index.column() == 0)
+        return idx;
+    return sourceModel->index(idx.row(), index.column(), sourceModel->parent(idx));
+}
 
 void KFilterModelPrivate::modelDestroyed()
 {
@@ -176,7 +185,7 @@ QVariant KFilterModel::data(const QModelIndex &index, int role) const
         return d->sourceModel->data(index, role);
 #endif
 
-    return d->sourceModel->data(d->filteredIdx.at(index.internalId()).index, role);
+    return d->sourceModel->data(d->childIdx(index), role);
 }
 
 QModelIndex KFilterModel::parent(const QModelIndex &child) const
@@ -187,7 +196,7 @@ QModelIndex KFilterModel::parent(const QModelIndex &child) const
         return QModelIndex();
 
     while (d->filteredIdx.at(--idx).level >= level);
-    return createIndex(d->filteredIdx.at(idx).siblingIdx, 0, idx);
+    return createIndex(d->filteredIdx.at(idx).siblingIdx, child.column(), idx);
 }
 
 void KFilterModel::setFilter(const QString &expression)
@@ -214,6 +223,16 @@ bool KFilterModel::matches(const QModelIndex &index) const
 QString KFilterModel::filter() const
 {
     return d->filterStr;
+}
+
+QVariant KFilterModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    return d->sourceModel->headerData(section, orientation, role);
+}
+
+Qt::ItemFlags KFilterModel::flags(const QModelIndex &index) const
+{
+    return d->sourceModel->flags(d->childIdx(index));
 }
 
 #include "kfiltermodel.moc"
