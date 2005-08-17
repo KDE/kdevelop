@@ -45,11 +45,12 @@ public:
     @param pluginName A name of a plugin. Must be the same as the name of a .desktop file
     and the same as the location of plugin resource files.*/
     KDevPluginInfo(const QString &pluginName);
-    
+    ~KDevPluginInfo();
+
     /**Casts KDevPluginInfo to KAboutData. Uses KDevPluginInfo::pluginName as KAboutData::appName,
     KDevPluginInfo::rawGenericName as KAboutData::programName KDevPluginInfo::licenseType as KAboutData::licenseType. Other parameters are ignored.*/
     operator KAboutData*() const;
-    
+
     /**@return A name of a plugin (always untranslated).*/
     QString pluginName() const;
     /**@return A generic name of a plugin (translated). Use this in GUI. Information is taken from .desktop file.*/
@@ -70,7 +71,7 @@ public:
     QString homePageAddress() const;
     /**@return A email address for bugs of a plugin. Information is taken from .desktop file.*/
     QString bugsEmailAddress() const;
-    
+
     /**@param name The name of a property.
     @return Any property value which exists in .desktop file.*/
     QVariant property(const QString &name) const;
@@ -101,11 +102,12 @@ public:
     @param webAddress The person's homepage or a relevant link. Start the address with "http://". "http://some.domain" is correct, "some.domain" is not. Can be 0.*/
     void addCredit(const char *name, const char *task = 0,
         const char *emailAddress = 0, const char *webAddress = 0);
-    
+
 private:
+    Q_DISABLE_COPY(KDevPluginInfo);
     /**Returns the untranslated generic name of a plugin as set in .desktop file.*/
     const char *rawGenericName() const;
-    
+
     class Private;
     Private *d;
 };

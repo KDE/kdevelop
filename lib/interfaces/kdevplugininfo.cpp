@@ -30,20 +30,20 @@
 struct KDevPluginInfo::Private {
     QString m_pluginName;
     QString m_rawGenericName;
-    
+
     QString m_genericName;
     QString m_description;
     QString m_icon;
-    
+
     QString m_version;
     int m_licenseType;
     QString m_copyrightStatement;
     QString m_homePageAddress;
     QString m_bugsEmailAddress;
-    
+
     QList<KAboutPerson> m_authors;
     QList<KAboutPerson> m_credits;
-    
+
     KAboutData *m_data;
 };
 
@@ -52,21 +52,21 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
     :d(new Private())
 {
     d->m_pluginName = pluginName;
-    
+
     KService::Ptr offer = KService::serviceByDesktopName(pluginName);
     if (offer != 0)
     {
         d->m_genericName = offer->genericName();
         d->m_icon = offer->icon();
         d->m_description = offer->comment();
-        
+
         d->m_rawGenericName = offer->untranslatedGenericName();
-        
+
         d->m_version = offer->property("X-KDevelop-Plugin-Version").toString();
         d->m_homePageAddress = offer->property("X-KDevelop-Plugin-Homepage").toString();
         d->m_bugsEmailAddress = offer->property("X-KDevelop-Plugin-BugsEmailAddress").toString();
         d->m_copyrightStatement = offer->property("X-KDevelop-Plugin-Copyright").toString();
-        
+
         QString lic = offer->property("X-KDevelop-Plugin-License").toString();
         if (lic == "GPL")
             d->m_licenseType = KAboutData::License_GPL;
@@ -81,15 +81,19 @@ KDevPluginInfo::KDevPluginInfo(const QString &pluginName)
         else if (lic == "Custom")
             d->m_licenseType = KAboutData::License_Custom;
         else
-            d->m_licenseType = KAboutData::License_Unknown;            
+            d->m_licenseType = KAboutData::License_Unknown;
 
         d->m_data = new KAboutData(d->m_pluginName.ascii(), d->m_rawGenericName.ascii(), "1", 0, d->m_licenseType);
     }
     else
-	kdDebug() << "Unable to load information for plugin: " << pluginName 
+	kdDebug() << "Unable to load information for plugin: " << pluginName
 	    << ". Check if " << pluginName << ".desktop exists." << endl;
 }
 
+KDevPluginInfo::~KDevPluginInfo()
+{
+    delete d;
+}
 
 KDevPluginInfo::operator KAboutData *() const
 {
