@@ -257,7 +257,7 @@ const QList<KDevPlugin *> PluginController::loadedPlugins()
 KDevPlugin * PluginController::extension( const QString & serviceType, const QString & constraint )
 {
     KTrader::OfferList offers = KDevPluginController::query(serviceType, constraint);
-    for (KTrader::OfferList::const_iterator it = offers.constBegin(); it != offers.end(); ++it)
+    for (KTrader::OfferList::const_iterator it = offers.constBegin(); it != offers.constEnd(); ++it)
     {
         KDevPlugin *ext = m_parts.value((*it)->desktopEntryName());
         if (ext) return ext;
