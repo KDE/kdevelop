@@ -20,11 +20,6 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/popupmenuinterface.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/selectioninterface.h>
-#include <ktexteditor/view.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
 #include <kmainwindow.h>
@@ -58,7 +53,7 @@ EditorProxy::EditorProxy()
 	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
 		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
     KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
-    cut.append(KKey(CTRL+Key_Return));
+    cut.append(KKey(Qt::CTRL + Qt::Key_Return));
     ac->setShortcut(cut);
 }
 
@@ -80,9 +75,9 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   if ( lineNum < 0 )
     return;
 
-  ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
-  if (iface)
-    iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
+  View *view = qobject_cast<View *>(part->widget());
+  if (view)
+    view->setCursorPosition(Cursor(lineNum, col == -1 ? 0 : col));
   else {
     // Save the position for a rainy day (or when the view gets activated and wants its position)
     for (Q3ValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
@@ -99,83 +94,77 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
 
 void EditorProxy::installPopup( KParts::Part * part )
 {
+    View *view = qobject_cast<View *>(part->widget());
+    if (!view)
+        return;
 
-	if ( part->inherits("KTextEditor::Document") && part->widget())
-	{
-		PopupMenuInterface *iface = dynamic_cast<PopupMenuInterface*>(part->widget());
-		if (iface)
-		{
-			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
+    QMenu *popup = view->contextMenu();
 
-			Q3PopupMenu * popup = static_cast<Q3PopupMenu*>( part->factory()->container("ktexteditor_popup", view ) );
+    if (!popup) {
+        kdWarning() << k_funcinfo << "Popup not found!" << endl;
+        return;
+    }
 
-			if (!popup)
-			{
-				kdWarning() << k_funcinfo << "Popup not found!" << endl;
-				return;
-			}
+    KAction * action = 0;
+    //If there is a tab for this file, we don't need to plug the closing menu entries here
+    NewMainWindow *mw = dynamic_cast<NewMainWindow *>(TopLevel::getInstance());
+    if (mw) {
+        switch (mw->getTabWidgetVisibility())
+        {
+            case KMdi::AlwaysShowTabs:
+                break;
+            case KMdi::ShowWhenMoreThanOneTab:
+                if(PartController::getInstance()->parts()->count() > 1)
+                    break;
+            case KMdi::NeverShowTabs:
+                // I'm not sure if this is papering over a bug in xmlgui or not, but this test is
+                // needed in order to avoid multiple close actions in the popup menu in some cases
+                action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
+                if ( action && !action->isPlugged( popup ) )
+                {
+                    popup->insertSeparator( 0 );
+                    action->plug( popup, 0 );
+                }
+                action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
+                if ( action && !action->isPlugged( popup ) )
+                    action->plug( popup, 1 );
+                break;
+            default:
+                break;
+        }
+    }
+    else {
+        KConfig *config = KGlobal::config();
+        config->setGroup("UI");
+        bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
+        if (!m_tabBarShown)
+        {
+            action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
+            if ( action && !action->isPlugged( popup ) )
+            {
+                popup->insertSeparator( 0 );
+                action->plug( popup, 0 );
+            }
+            action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
+            if ( action && !action->isPlugged( popup ) )
+                action->plug( popup, 1 );
+        }
+    }
 
-			KAction * action = NULL;
-			//If there is a tab for this file, we don't need to plug the closing menu entries here
-			NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance());
-			if (mw) {
-			switch (mw->getTabWidgetVisibility())
-			{
-			case KMdi::AlwaysShowTabs:
-				break;
-			case KMdi::ShowWhenMoreThanOneTab:
-				if(PartController::getInstance()->parts()->count() > 1)
-					break;
-			case KMdi::NeverShowTabs:
-				// I'm not sure if this is papering over a bug in xmlgui or not, but this test is
-				// needed in order to avoid multiple close actions in the popup menu in some cases
-				action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
-				if ( action && !action->isPlugged( popup ) )
-				{
-					popup->insertSeparator( 0 );
-					action->plug( popup, 0 );
-				}
-				action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-				if ( action && !action->isPlugged( popup ) )
-					action->plug( popup, 1 );
-				break;
-			default:
-				break;
-			}
-			}
-			else {
-				KConfig *config = KGlobal::config();
-				config->setGroup("UI");
-				bool m_tabBarShown = ! config->readNumEntry("TabWidgetVisibility", 0);
-				if (!m_tabBarShown)
-				{
-					action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
-					if ( action && !action->isPlugged( popup ) )
-					{
-						popup->insertSeparator( 0 );
-						action->plug( popup, 0 );
-					}
-					action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-					if ( action && !action->isPlugged( popup ) )
-						action->plug( popup, 1 );
-				}
-			}
+    view->setContextMenu( popup );
 
-			iface->installPopup( popup );
+    connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
 
-			connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
-
-			// ugly hack: mark the "original" items
-			m_popupIds.resize(popup->count());
-			for (uint index=0; index < popup->count(); ++index)
-				m_popupIds[index] = popup->idAt(index);
-		}
-	}
+    // ugly hack: mark the "original" items
+    m_popupIds.resize(popup->count());
+    for (uint index=0; index < popup->count(); ++index)
+        m_popupIds[index] = popup->idAt(index);
 }
 
 void EditorProxy::popupAboutToShow()
 {
-  Q3PopupMenu *popup = (Q3PopupMenu*)sender();
+#if 0 /// ### Qt4-porting
+  QMenu *popup = qobject_cast<QMenu *>(sender());
   if (!popup)
     return;
 
@@ -186,9 +175,6 @@ void EditorProxy::popupAboutToShow()
     if (m_popupIds.contains(id) == 0)
     {
       QMenuItem *item = popup->findItem(id);
-      if (item->popup())
-	delete item->popup();
-      else
           popup->removeItemAt(index);
 //      kdDebug(9000) << "removed id " << id << " at index " << index << endl;
     } else {
@@ -282,7 +268,7 @@ void EditorProxy::showPopup( )
 			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
 		}
 	}
-
+#endif
 }
 
 void EditorProxy::registerEditor(EditorWrapper* wrapper)
@@ -359,9 +345,8 @@ void EditorWrapper::show()
 
   PartController::getInstance()->integrateTextEditorPart(m_doc);
 
-  ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(static_cast<KTextEditor::View*>(m_view));
-  if (iface) {
-    iface->setCursorPositionReal(m_line, m_col == -1 ? 0 : m_col);
+  if (m_view) {
+    m_view->setCursorPosition(Cursor(m_line, m_col == -1 ? 0 : m_col));
 
   } else {
     // Shouldn't get here

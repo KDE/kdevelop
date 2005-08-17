@@ -96,7 +96,8 @@ private:
     QMap<QWidget*, DDockWindow::Position> m_docks;
     KAction *m_raiseEditor;
     KPopupMenu *m_windowMenu;
-    QList<QPair<int, KURL> > m_windowList;
+    typedef QPair<int, KURL> WinInfo;
+    QList<WinInfo> m_windowList;
 };
 
 #endif

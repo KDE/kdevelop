@@ -33,7 +33,6 @@
 #include <kapplication.h>
 #include "domutil.h"
 
-#include <qcomboview.h>
 #include <profileengine.h>
 
 #include "partselectwidget.h"
@@ -46,15 +45,15 @@ public:
     {
         setText(0, profile->genericName());
     }
-    
+
     ProfileItem(Q3ListViewItem *parent, Profile *profile)
         : Q3ListViewItem(parent), m_profile(profile)
     {
         setText(0, profile->genericName());
     }
-    
+
     Profile *profile() const { return m_profile; }
-    
+
 private:
     Profile *m_profile;
 };
@@ -101,7 +100,7 @@ void PartSelectWidget::init()
     _profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
     fillProfilesList();
     _pluginProfile->setCurrentText(PluginController::getInstance()->engine().findProfile(_profile)->genericName());
-    
+
     connect(_pluginProfile, SIGNAL(activated(QListViewItem* )),
         this, SLOT(selectProfile(QListViewItem* )));
     groupBox0Layout->addWidget(_pluginProfile);
@@ -142,7 +141,7 @@ void PartSelectWidget::init()
     groupBox2Layout->addWidget( _urlLabel );
 
     layout->addWidget( groupBox2 );
-	
+
 	Q3HBox * hbox = new Q3HBox( this );
 	hbox->setSpacing( 6 );
 	hbox->setMargin( 6 );
@@ -165,7 +164,7 @@ PartSelectWidget::~PartSelectWidget()
 void PartSelectWidget::readProjectConfig()
 {
 	QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
-	
+
 	KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(
 		PluginController::getInstance()->currentProfile(), ProfileEngine::Project);
 	KTrader::OfferList globalOffers = PluginController::getInstance()->engine().offers(
@@ -271,11 +270,11 @@ public:
 void PartSelectWidget::setAsDefault( )
 {
 	kdDebug() << k_funcinfo << endl;
-	
+
 	QString profile = DomUtil::readEntry(m_projectDom, "general/profile", PluginController::getInstance()->currentProfile());
-	
+
 	if ( profile.isEmpty() ) return;
-	
+
 	QStringList ignoreparts;
 	Q3ListViewItemIterator it( _pluginList );
 	while ( it.current() )
@@ -291,8 +290,8 @@ void PartSelectWidget::setAsDefault( )
 	//@fixme: make this use ProfileEngine instead to store settings
 	KConfig * config = kapp->config();
 	config->setGroup("IgnorePerDefault");
-//	config->writeEntry( profile, ignoreparts );	
-	config->writeEntry( "KDevelop", ignoreparts );	
+//	config->writeEntry( profile, ignoreparts );
+	config->writeEntry( "KDevelop", ignoreparts );
 }
 
 /*

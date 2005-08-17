@@ -193,7 +193,7 @@ void NewMainWindow::init() {
 			but->adjustSize();
 			but->hide();
 			connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
-			tabWidget()->setCornerWidget(but, TopRight);
+			tabWidget()->setCornerWidget(but, Qt::TopRight);
 		}
 		tabWidget()->setTabReorderingEnabled(true);
 		connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
@@ -614,12 +614,12 @@ void NewMainWindow::removeView( QWidget * view )
 
 	kdDebug(9000) << "parentWidget: " << view->parentWidget() << endl;
 
-	if( KMdiChildView * childView = static_cast<KMdiChildView*>(view->parentWidget()->qt_cast("KMdiChildView")) )
+	if (KMdiChildView * childView = qobject_cast<KMdiChildView*>(view->parentWidget()))
 	{
 		(void) view->reparent(0, QPoint(0,0), false );
 		closeWindow( childView );
 	}
-	else if( view->parentWidget()->qt_cast("KDockWidget") )
+	else if (qobject_cast<KDockWidget *>(view->parentWidget()))
 	{
 		rememberToolViewPosition( view->name(), getDockWidgetDockingBorder( view ) );
 		(void) view->reparent(0, QPoint(0,0), false );
@@ -671,7 +671,7 @@ void NewMainWindow::raiseView(QWidget *view)
 
     view->parentWidget()->setFocus();
 
-    if( QPointer<KDockWidget> dockWidget = static_cast<KDockWidget*>(view->parentWidget()->qt_cast("KDockWidget")) ) {
+    if( QPointer<KDockWidget> dockWidget = qobject_cast<KDockWidget*>(view->parentWidget()) ) {
         if( !dockWidget->isVisible() )
             makeDockVisible( dockWidget );
     }

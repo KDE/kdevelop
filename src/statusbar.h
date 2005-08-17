@@ -14,13 +14,10 @@
 
 #include <kstatusbar.h>
 #include <qmap.h>
-//Added by qt3to4:
-#include <QLabel>
 
 class QLabel;
 
-namespace KTextEditor { class ViewStatusMsgInterface; }
-namespace KTextEditor { class ViewCursorInterface; }
+namespace KTextEditor { class View; }
 namespace KParts { class Part; }
 
 /**
@@ -44,10 +41,8 @@ private slots:
 private:
     QLabel *_status;
 
-	KTextEditor::ViewCursorInterface * _cursorIface;
-	KTextEditor::ViewStatusMsgInterface * _viewmsgIface;
-	KParts::Part *_activePart;
-
+    KParts::Part *_activePart;
+    KTextEditor::View *_view;
 };
 
 #endif

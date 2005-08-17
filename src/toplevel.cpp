@@ -18,7 +18,8 @@ KDevMainWindow *TopLevel::getInstance()
 {
   if (!s_instance)
   {
-    SimpleMainWindow *mainWindow = new SimpleMainWindow(0, "SimpleMainWindow");
+    SimpleMainWindow *mainWindow = new SimpleMainWindow(0);
+    mainWindow->setObjectName(QLatin1String("SimpleMainWindow"));
     if (!q_atomic_test_and_set_ptr(s_instance, 0, mainWindow))
       delete mainWindow;
     mainWindow->init();

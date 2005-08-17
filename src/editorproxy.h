@@ -13,9 +13,7 @@
 class Q3PopupMenu;
 
 #include <kparts/part.h>
-#include <ktexteditor/markinterface.h>
 #include <kdeversion.h>
-# include <ktexteditor/markinterfaceextension.h>
 
 #include <q3widgetstack.h>
 
@@ -40,7 +38,7 @@ public slots:
 
 protected:
   virtual void focusInEvent(QFocusEvent *ev);
-  
+
 private:
   QPointer<KTextEditor::Document> m_doc;
   QPointer<KTextEditor::View> m_view;
@@ -60,15 +58,15 @@ public:
   void setLineNumber(KParts::Part *part, int lineNum, int col);
 
   void installPopup(KParts::Part *part);
-  
+
   void registerEditor(EditorWrapper* wrapper);
   void deregisterEditor(EditorWrapper* wrapper);
 
   QWidget * widgetForPart( KParts::Part * part );
   QWidget * topWidgetForPart( KParts::Part * part );
-  
+
   bool isDelayedViewCapable();
-  
+
 private slots:
 
   void popupAboutToShow();
@@ -84,7 +82,7 @@ private:
 
   // This list is used to save line/col information for not yet activated editor views.
   Q3ValueList< EditorWrapper* > m_editorParts;
-  
+
   bool m_delayedViewCreationCompatibleUI;
 };
 

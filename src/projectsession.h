@@ -36,13 +36,13 @@ class ProjectSession : public QObject
 {
   Q_OBJECT
 // methods
-public:  
+public:
   ProjectSession();
   virtual ~ProjectSession();
 
   /** Opens the .kdevses file and saves the project session in XML format to it. */
   bool saveToFile(const QString& fileName, const Q3ValueList<KDevPlugin*> plugins );
-  
+
   /** Opens the .kdevses file and loads the project session from it. */
   bool restoreFromFile(const QString& fileName, const Q3ValueList<KDevPlugin*> plugins );
 
@@ -55,10 +55,10 @@ signals:
 
 private slots:
   /**
-   * This slot loads one document from _docDataList and sets a timer to load the next 
+   * This slot loads one document from _docDataList and sets a timer to load the next
    */
-  void loadDocument();  
-  
+  void loadDocument();
+
 private:
   /** Restores the part of the project session that concerns to the documents (files). */
   void recreateDocs(QDomElement& el);
@@ -71,7 +71,7 @@ private:
 private:
   /** the XML document object controlling the XML tree. */
   QDomDocument domdoc;
-  
+
   struct DocumentData
   {
 	  DocumentData() : line(0) {}
@@ -80,9 +80,9 @@ private:
 	  QString type;
       bool activate;
   };
-  
+
   Q3ValueList<DocumentData> _docDataList;
-  
+
 };
 
 #endif // _PROJECTSESSION_H_

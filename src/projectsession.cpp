@@ -28,8 +28,8 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kinstance.h>
-#include "ktexteditor/viewcursorinterface.h"
 #include "ktexteditor/document.h"
+#include "ktexteditor/view.h"
 
 #include "api.h"
 #include "partcontroller.h"
@@ -292,12 +292,9 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
 		else if ( pReadOnlyPart->inherits("KTextEditor::Document") )
 		{
 			viewEl.setAttribute("Type", "Source");
-			KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(pReadOnlyPart->widget());
-			if (iface) {
-				unsigned int line, col;
-				iface->cursorPosition(&line, &col);
-				viewEl.setAttribute( "line", line );
-			}
+                        KTextEditor::View *view = qobject_cast<KTextEditor::View *>(pReadOnlyPart->widget());
+			if (view)
+				viewEl.setAttribute( "line", view->cursorPosition().line() );
 		}
 		else
 		{
@@ -389,12 +386,12 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
 		KDevPlugin* pPlugin = (*itt);
 		QString pluginName = pPlugin->instance()->instanceName();
 		QDomElement pluginEl = domdoc.createElement(pluginName);
-		
+
 		// now plugin, save what you have!
 		pPlugin->savePartialProjectSession(&pluginEl);
-		
+
 		// if the plugin wrote anything, accept itt for the session, otherwise forget itt
-		if (pluginEl.hasChildNodes() || pluginEl.hasAttributes()) 
+		if (pluginEl.hasChildNodes() || pluginEl.hasAttributes())
 		{
 			pluginListEl.appendChild(pluginEl);
 		}
@@ -405,7 +402,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const Q3ValueL
   QFile f(sessionFileName);
   if ( f.open(QIODevice::WriteOnly) ) {    // file opened successfully
     QTextStream t( &f );        // use a text stream
-    t << domdoc.toCString();
+    t << domdoc.toByteArray();
     f.close();
   }
   initXMLTree();  // clear and initialize the tree again

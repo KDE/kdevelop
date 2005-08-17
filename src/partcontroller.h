@@ -151,7 +151,7 @@ private:
   void doEmitState( KURL const & );
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
-  KTextEditor::Editor * createEditorPart(bool activate);
+  KTextEditor::Document *createEditorPart(bool activate);
 
   void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0, bool isTextEditor=false, bool activate=true );
 

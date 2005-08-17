@@ -434,7 +434,7 @@ bool SimpleMainWindow::queryExit()
 void SimpleMainWindow::setupWindowMenu()
 {
     // get the xmlgui created one instead
-    m_windowMenu = qFindChild<KPopupMenu *>(QLatin1String("window"));
+    m_windowMenu = qFindChild<KPopupMenu *>(main(), QLatin1String("window"));
 
     if (!m_windowMenu)
     {
@@ -454,8 +454,7 @@ void SimpleMainWindow::setupWindowMenu()
 
 void SimpleMainWindow::openURL(int w)
 {
-    foreach(QPair<int, KURL> pair, m_windowList) {
-    {
+    foreach(WinInfo pair, m_windowList) {
         if (pair.first == w) {
             if (!pair.second.isEmpty()) {
                 PartController::getInstance()->editDocument(pair.second);
@@ -468,7 +467,7 @@ void SimpleMainWindow::openURL(int w)
 void SimpleMainWindow::fillWindowMenu()
 {
     // clear menu
-    foreach(QPair<int, KURL> pair, m_windowList) {
+    foreach(WinInfo pair, m_windowList) {
         m_windowMenu->removeItem(pair.first);
     }
 

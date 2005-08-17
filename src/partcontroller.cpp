@@ -46,7 +46,7 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/editor.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -228,14 +228,14 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 {
   editDocumentInternal(inputUrl, lineNum, col);
 }
- 
+
 void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, int col, bool activate )
 {
 	kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << " activate? " << activate << endl;
-	
+
 	KURL url = inputUrl;
-	
-	// is it already open? 
+
+	// is it already open?
 	// (Try this once before verifying the URL, we could be dealing with a file that no longer exists on disc)
 	if ( KParts::Part *existingPart = partForURL( url ) )
 	{
@@ -246,23 +246,23 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	}
 
 	// Make sure the URL exists
-	if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
+	if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) )
 	{
 		bool done = false;
-		
+
 		// Try to find this file in the current project's list instead
-		if ( API::getInstance()->project() ) 
+		if ( API::getInstance()->project() )
 		{
 			if (url.isRelativeURL(url.url())) {
-				KURL relURL(API::getInstance()->project()->projectDirectory(), url.url());
-		
+				KURL relURL = KURL(KURL(API::getInstance()->project()->projectDirectory()), url.url());
+
 				kdDebug() << k_funcinfo << "Looking for file in project dir: " << API::getInstance()->project()->projectDirectory() << " url " << url.url() << " transformed to " << relURL.url() << ": " << done << endl;
 				if (relURL.isValid() && KIO::NetAccess::exists(url, false, 0)) {
 					url = relURL;
 					done = true;
 				}
 				else {
-					KURL relURL(API::getInstance()->project()->buildDirectory(), url.url());
+					KURL relURL = KURL(KURL(API::getInstance()->project()->buildDirectory()), url.url());
 					kdDebug() << k_funcinfo << "Looking for file in build dir: " << API::getInstance()->project()->buildDirectory() << " url " << url.url() << " transformed to " << relURL.url() << ": " << done << endl;
 					if (relURL.isValid() && KIO::NetAccess::exists(url, false, 0)) {
 						url = relURL;
@@ -270,19 +270,19 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 					}
 				}
 			}
-			
+
 			if (!done) {
 				url = findURLInProject(url);
-					
+
 				if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
 					// See if this url is relative to the current project's directory
 					url = API::getInstance()->project()->projectDirectory() + "/" + url.path();
-				
+
 				else
 					done = true;
 			}
 		}
-	
+
 		if ( !done && ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) )) 
 		{
 			// Not found - prompt the user to find it?
@@ -312,11 +312,11 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
 		return;
 	}
-	
+
 	KMimeType::Ptr MimeType = KMimeType::findByURL( url );
-	
+
 	kdDebug(9000) << "mimeType = " << MimeType->name() << endl;
-	
+
 	// is the URL pointing to a directory?
 	if ( MimeType->is( "inode/directory" ) )
 	{
@@ -371,11 +371,11 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	{
 		m_openNextAsText = true;
 	}
-  
+
 	// is this regular text - open in editor
 	if ( m_openNextAsText || MimeType->is( "text/plain" ) || MimeType->is( "text/html" ) || MimeType->is( "application/x-zerosize" ) )
 	{
-		KTextEditor::Editor * editorpart = createEditorPart(activate);
+		KTextEditor::Document *editorpart = createEditorPart(activate);
 
 		if ( editorpart )
 		{
@@ -390,11 +390,11 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 				}
 				m_presetEncoding = QString::null;
 			}
-				
+
 			editorpart->openURL( url );
 
 			QWidget* widget = editorpart->widget();
-		
+
 			if (!widget) {
 				// We're being lazy about creating the view, but kmdi _needs_ a widget to
 				// create a tab for it, so use a QWidgetStack subclass instead
@@ -406,21 +406,21 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			integratePart(editorpart, url, widget, true, activate);
 
 			EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
-			
+
 			m_openNextAsText = false;
-			
+
 			m_openRecentAction->addURL( url );
 			m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
 
 			return;
 		}
 	}
-	
+
 	// OK, it's not text and it's not a designer file.. let's see what else we can come up with..
-	
+
 	KParts::Factory *factory = 0;
 	QString className;
-	
+
 	QString services[] = { "KParts/ReadWritePart", "KParts/ReadOnlyPart" };
 	QString classnames[] = { "KParts::ReadWritePart", "KParts::ReadOnlyPart" };
 	for (uint i=0; i<2; ++i)
@@ -544,23 +544,19 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
   return 0;
 }
 
-KTextEditor::Editor * PartController::createEditorPart( bool activate )
+KTextEditor::Document *PartController::createEditorPart( bool activate )
 {
-	static bool alwaysActivate = true;
-	
 	if ( !_editorFactory )
 	{
 		kapp->config()->setGroup("Editor");
 		QString preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
-		if ( preferred != "kyzispart" ) //if we are not using kyzis => Don't create non-wrapped views for now, avoid two paths (== two chances for bad bugs)
-			alwaysActivate = false;
-		
+
 		_editorFactory = findPartFactory( "text/plain", "KTextEditor/Document", preferred );
-		
-		if ( !_editorFactory ) return 0L;
+
+		if ( !_editorFactory ) return 0;
 	}
-	
-	return static_cast<KTextEditor::Editor*>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, alwaysActivate | activate ? "KTextEditor/Editor" : "KTextEditor::Document" ) );
+
+	return static_cast<KTextEditor::Document *>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KTextEditor::Document" ) );
 }
 
 void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget* widget, bool isTextEditor, bool activate )
@@ -636,33 +632,29 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   // signals are dynamic, if we try to connect to an editorpart that lacks this signal,
   // all we get is a runtime warning. At this point in time we are only really supported
   // by katepart anyway so IMHO this hack is justified. //teatime
-  Q3PtrList<KTextEditor::View> list = doc->views();
-  Q3PtrListIterator<KTextEditor::View> it( list );
-  while ( it.current() )
-  {
-    connect( it, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
-    ++it;
-  }
+  QList<KTextEditor::View *> list = doc->views();
+  foreach(KTextEditor::View *view, list)
+      connect(view, SIGNAL(newStatus()), this, SLOT(slotNewStatus()));
 }
 
 void PartController::slotPartAdded( KParts::Part * part )
 {
 	kdDebug(9000) << k_funcinfo << endl;
-	
+
 	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
 	{
 		updatePartURL( ro_part );
 	}
-	
+
 	updateMenuItems();
 }
 
 void PartController::slotPartRemoved( KParts::Part * part )
 {
 	kdDebug(9000) << k_funcinfo << endl;
-	
+
 	_partURLMap.remove( static_cast<KParts::ReadOnlyPart*>(part) );
-	
+
 	updateMenuItems();
 }
 
@@ -848,24 +840,20 @@ void PartController::reloadFile( const KURL & url )
 				return;
 			}
 		}
-		
-		unsigned int line = 0; unsigned int col = 0;
-		KTextEditor::ViewCursorInterface * iface = dynamic_cast<KTextEditor::ViewCursorInterface*>( part->widget() );
-		if (iface)
-		{
-			iface->cursorPositionReal( &line, &col );
-		}
-				
+
+                KTextEditor::Cursor cursor;
+                KTextEditor::View *view = qobject_cast<KTextEditor::View *>(part->widget());
+		if (view)
+			cursor = view->cursorPosition();
+
 		part->openURL( url );
-		
+
 		_dirtyDocuments.remove( part );
 		emit documentChangedState( url, Clean );
-		
-		if ( iface )
-		{
-			iface->setCursorPositionReal( line, col );
-		}
-	}	
+
+		if (view)
+			view->setCursorPosition(cursor);
+	}
 }
 
 void PartController::revertFiles( const KURL::List & list  )
@@ -1508,16 +1496,15 @@ void PartController::jumpTo( const HistoryEntry & entry )
 PartController::HistoryEntry PartController::createHistoryEntry()
 {
 	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
-	if ( !ro_part ) return HistoryEntry();
+	if (!ro_part)
+            return HistoryEntry();
 
-	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
-	if ( !cursorIface ) return HistoryEntry();
+        KTextEditor::View *view = qobject_cast<KTextEditor::View *>(ro_part->widget());
+	if (!view)
+            return HistoryEntry();
 
-	uint line = 0;
-	uint col = 0;
-	cursorIface->cursorPositionReal( &line, &col );
-	
-	return HistoryEntry( ro_part->url(), line, col );
+        KTextEditor::Cursor cursor = view->cursorPosition();
+	return HistoryEntry( ro_part->url(), cursor.line(), cursor.column() );
 }
 
 // this should be called _before_ a jump is made
@@ -1571,13 +1558,13 @@ KParts::ReadOnlyPart *PartController::qtDesignerPart()
 
 void PartController::openEmptyTextDocument()
 {
-	KTextEditor::Editor * editorpart = createEditorPart(true);
+	KTextEditor::Document *document = createEditorPart(true);
 
-	if ( editorpart )
+	if ( document )
 	{
 		if ( !m_presetEncoding.isNull() )
 		{
-			KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
+			KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject(document);
 			if ( extension )
 			{
 				KParts::URLArgs args;
@@ -1589,19 +1576,19 @@ void PartController::openEmptyTextDocument()
                 
 //		editorpart->openURL( url );
 
-		QWidget* widget = editorpart->widget();
+		QWidget* widget = document->widget();
 	
 		if (!widget) {
 			// We're being lazy about creating the view, but kmdi _needs_ a widget to
 			// create a tab for it, so use a QWidgetStack subclass instead
 			kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
-			widget = new EditorWrapper(static_cast<KTextEditor::Document*>(editorpart), true, TopLevel::getInstance()->main());
+			widget = new EditorWrapper(document, true, TopLevel::getInstance()->main());
 		}
 
 		addHistoryEntry();
-		integratePart(editorpart, KURL(i18n("unnamed")), widget, true, true);
+		integratePart(document, KURL(i18n("unnamed")), widget, true, true);
 
-		EditorProxy::getInstance()->setLineNumber(editorpart, 0, 0);
+		EditorProxy::getInstance()->setLineNumber(document, 0, 0);
 		
 //		m_openRecentAction->addURL( url );
 //		m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );

@@ -44,7 +44,7 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-#include <ktexteditor/configinterface.h>
+#include <ktexteditor/editor.h>
 #include <kparts/partmanager.h>
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -336,16 +336,20 @@ void MainWindowShare::slotConfigureEditors()
     KDevPartController * partController = API::getInstance()->partController();
     KParts::Part * part = partController->activePart();
 
-    KTextEditor::ConfigInterface * conf = dynamic_cast<KTextEditor::ConfigInterface*>( part );
-    if ( ! conf )
+    KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>(part);
+    KTextEditor::Editor *editor = doc ? doc->editor() : 0;
+    if (!editor)
     {
         kdDebug(9000) << "*** No KTextEditor::ConfigInterface for part!" << endl;
         return;
     }
 
+    if (!editor->configDialogSupported())
+        return;
+
     // show the modal config dialog for this part if it has a ConfigInterface
-    conf->configDialog();
-    conf->writeConfig();
+    editor->configDialog(m_pMainWnd);
+    editor->writeConfig(KGlobal::config());
 
 #ifdef NEED_CONFIGHACK
     // iterate over other instances of this part type and apply configuration
@@ -370,8 +374,9 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
 
     if ( ! part ) return;
 
+    KTextEditor::Document *doc = qobject_cast<KTextEditor::Document *>(part);
     // disable configuration entry if created part is not an editor
-    if ( ! dynamic_cast<KTextEditor::ConfigInterface *>( part ) )
+    if (!doc || !doc->editor() || !doc->editor()->configDialogSupported())
     {
         m_configureEditorAction->setEnabled( false );
         return;
@@ -433,13 +438,9 @@ void MainWindowShare::slotKeyBindings()
             {
                 doc->reloadXML();
 
-                Q3PtrList<KTextEditor::View> const & list = doc->views();
-                Q3PtrListIterator<KTextEditor::View> itt( list );
-                while( KTextEditor::View * view = itt.current() )
-                {
+                const QList<KTextEditor::View *> list = doc->views();
+                foreach(KTextEditor::View *view, list)
                     view->reloadXML();
-                    ++itt;
-                }
             }
             ++it;
         }
