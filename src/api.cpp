@@ -1,5 +1,7 @@
+
+#include <kdevcodemodel.h>
+
 #include "core.h"
-#include "codemodel.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "toplevel.h"
@@ -26,7 +28,7 @@ KDevCore *API::core() const
 }
 
 
-CodeModel *API::codeModel() const
+KDevCodeModel *API::codeModel() const
 {
   return m_classStore;
 }
@@ -43,7 +45,7 @@ API *API::getInstance()
 API::API()
   : KDevApi()
 {
-  m_classStore = new CodeModel();
+  m_classStore = new KDevCodeModel();
 }
 
 

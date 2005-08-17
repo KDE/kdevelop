@@ -87,4 +87,14 @@ public:
   virtual KDevCodeVariableItem *variableItem() const { return const_cast<KDevCodeVariableItem*>(this); }
 };
 
+class KDevCodeModel: public KDevItemModel
+{
+  Q_OBJECT
+public:
+  KDevCodeModel(QObject *parent = 0);
+  virtual ~KDevCodeModel();
+
+  virtual KDevCodeItem *item(const QModelIndex &index) const;
+};
+
 #endif // KDEVCODEMODEL_H

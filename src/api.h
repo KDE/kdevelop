@@ -4,9 +4,6 @@
 
 #include "kdevapi.h"
 
-
-class CodeModel;
-
 /**
 API implementation.
 */
@@ -18,7 +15,7 @@ public:
   virtual KDevPartController *partController() const;
   virtual KDevPluginController *pluginController() const;
   virtual KDevCore *core() const;
-  virtual CodeModel *codeModel() const;
+  virtual KDevCodeModel *codeModel() const;
 
   static API *getInstance();
 
@@ -32,7 +29,7 @@ private:
 
   static API *s_instance;
 
-  CodeModel *m_classStore;
+  KDevCodeModel *m_classStore;
 
 
 };

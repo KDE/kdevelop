@@ -14,8 +14,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #ifndef KDEVAPI_H
 #define KDEVAPI_H
@@ -27,7 +27,7 @@ class QDomDocument;
 class KDevCore;
 class KDevProject;
 class KDevLanguageSupport;
-class CodeModel;
+class KDevCodeModel;
 class KDevPartController;
 class KDevMainWindow;
 class KDevCodeRepository;
@@ -68,7 +68,7 @@ public:
     virtual KDevCore *core() const = 0;
 
     /**@return A reference to the memory symbol store.*/
-    virtual CodeModel *codeModel() const = 0;
+    virtual KDevCodeModel *codeModel() const = 0;
 
     /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;

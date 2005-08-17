@@ -169,6 +169,20 @@ KDevCodeVariableItem::~KDevCodeVariableItem()
 {
 }
 
+KDevCodeModel::KDevCodeModel(QObject *parent)
+  : KDevItemModel(parent)
+{
+}
+
+KDevCodeModel::~KDevCodeModel()
+{
+}
+
+KDevCodeItem *KDevCodeModel::item(const QModelIndex &index) const
+{
+  return reinterpret_cast<KDevCodeItem*>(KDevItemModel::item(index));
+}
+
 
 
 

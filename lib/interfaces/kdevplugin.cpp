@@ -86,7 +86,7 @@ KDevProject *KDevPlugin::project() const
     return m_api->project();
 }
 
-CodeModel *KDevPlugin::codeModel() const
+KDevCodeModel *KDevPlugin::codeModel() const
 {
     return m_api->codeModel();
 }

@@ -31,7 +31,7 @@ class KDevLanguageSupport;
 class KDevPartController;
 class KDevMainWindow;
 class KDevCodeRepository;
-class CodeModel;
+class KDevCodeModel;
 class KDevPluginInfo;
 class QDomElement;
 
@@ -141,7 +141,7 @@ public:
     KDevLanguageSupport *languageSupport() const;
         
     /**@return A reference to the memory symbol store.*/
-    CodeModel *codeModel() const;
+    KDevCodeModel *codeModel() const;
 
     /**@return A reference to the DOM tree that represents the project file or 0 if no project is loaded.*/
     QDomDocument *projectDom() const;

@@ -43,7 +43,6 @@ class QDomDocument;
 #include "api.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
-#include "codemodel.h"
 #include "partselectwidget.h"
 #include "languageselectwidget.h"
 #include "generalinfowidget.h"
@@ -323,7 +322,10 @@ bool ProjectManager::closeProject( bool exiting )
   saveProjectFile();
 
   API::getInstance()->setProjectDom(0);
+#warning "port me"
+#if 0
   API::getInstance()->codeModel()->wipeout();
+#endif
 
   delete m_info;
   m_info = 0;

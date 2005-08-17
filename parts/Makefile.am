@@ -4,12 +4,10 @@
 
 #### TODO    appwizard
 
-SUBDIRS = quickopen \
-    fullscreen \
-    diff
-##    classview \
+SUBDIRS = fullscreen \
+    diff \
+    classview
 
-    
 # SUBDIRS = \
 #     abbrev \
 #     astyle \

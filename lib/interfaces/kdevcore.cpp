@@ -215,34 +215,34 @@ QString DocumentationContext::selection() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// class CodeModelItemContext
+// class CodeItemContext
 ///////////////////////////////////////////////////////////////////////////////
 
-class CodeModelItemContext::Private
+class CodeItemContext::Private
 {
 public:
-    Private( const CodeModelItem* item ) : m_item( item ) {}
+    Private( const KDevCodeItem* item ) : m_item( item ) {}
 
-    const CodeModelItem* m_item;
+    const KDevCodeItem* m_item;
 };
 
-CodeModelItemContext::CodeModelItemContext( const CodeModelItem* item )
+CodeItemContext::CodeItemContext( const KDevCodeItem* item )
     : Context(), d( new Private(item) )
 {
 }
 
-CodeModelItemContext::~CodeModelItemContext()
+CodeItemContext::~CodeItemContext()
 {
     delete d;
     d = 0;
 }
 
-int CodeModelItemContext::type() const
+int CodeItemContext::type() const
 {
-    return Context::CodeModelItemContext;
+    return Context::CodeItemContext;
 }
 
-const CodeModelItem* CodeModelItemContext::item() const
+const KDevCodeItem* CodeItemContext::item() const
 {
     return d->m_item;
 }

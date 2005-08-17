@@ -42,7 +42,7 @@ The interface to the application core and context menu classes.
 
 class KDialogBase;
 class KDevPlugin;
-class CodeModelItem;
+class KDevCodeItem;
 class KDevProjectItem;
 
 namespace KParts
@@ -110,7 +110,7 @@ public:
         DocumentationContext,     /**<Documentation browser context menu.*/
         FileContext,              /**<File context menu.*/
         ProjectItemContext,       /**<Project tree context menu.*/
-        CodeModelItemContext      /**<Class tree context menu.*/
+        CodeItemContext           /**<Class tree context menu.*/
     };
 
     /**Implement this in the context so we can provide rtti.*/
@@ -234,28 +234,28 @@ private:
 /**
 A context for the popup menu in class views.
 */
-class CodeModelItemContext: public Context
+class CodeItemContext: public Context
 {
 public:
     /**Builds the context.
     @param item Selected code model item representation. Usually a symbol from the code
     like class, function, etc.*/
-    CodeModelItemContext(const CodeModelItem* item);
+    CodeItemContext(const KDevCodeItem* item);
 
     /**Destructor.*/
-    virtual ~CodeModelItemContext();
+    virtual ~CodeItemContext();
 
     virtual int type() const;
 
     /**@return The code model item for the selected item.*/
-    const CodeModelItem* item() const;
+    const KDevCodeItem* item() const;
 
 private:
     class Private;
     Private *d;
 
-    CodeModelItemContext( const CodeModelItemContext &);
-    CodeModelItemContext &operator=( const CodeModelItemContext &);
+    CodeItemContext( const CodeItemContext &);
+    CodeItemContext &operator=( const CodeItemContext &);
 };
 
 /**
