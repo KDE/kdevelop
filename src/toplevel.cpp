@@ -1,6 +1,4 @@
 #include <kapplication.h>
-#include <kconfig.h>
-
 
 #include "toplevel.h"
 #include "core.h"
@@ -19,25 +17,10 @@ KDevMainWindow *TopLevel::getInstance()
 {
   if (!s_instance)
   {
-
-    KConfig *config = kapp->config();
-
-    config->setGroup("UI");
-    if (config->readBoolEntry("UseSimpleMainWindow", false))
-    {
-        SimpleMainWindow *mainWindow = new SimpleMainWindow(0, "SimpleMainWindow");
-        s_instance = mainWindow;
-        mainWindow->init();
-        kapp->setMainWidget(mainWindow);
-    }
-    else
-    {
-        int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
-        NewMainWindow *mainWindow = new NewMainWindow( 0, "MainWindow", (KMdi::MdiMode)mdimode );
-        s_instance = mainWindow;
-        mainWindow->init();
-        kapp->setMainWidget(mainWindow);
-    }
+    SimpleMainWindow *mainWindow = new SimpleMainWindow(0, "SimpleMainWindow");
+    s_instance = mainWindow;
+    mainWindow->init();
+    kapp->setMainWidget(mainWindow);
   }
 
   return s_instance;
