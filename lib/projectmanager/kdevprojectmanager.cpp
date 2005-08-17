@@ -52,6 +52,11 @@ KDevProjectManagerPart *KDevProjectManager::part() const
   return m_part;
 }
 
+void KDevProjectManager::reset()
+{
+  KDevTreeView::reset();
+}
+
 KDevProjectFolderItem *KDevProjectManager::currentFolderItem() const
 {
   Q_ASSERT(projectModel() != 0);

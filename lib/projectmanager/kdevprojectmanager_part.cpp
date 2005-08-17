@@ -120,29 +120,31 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_widget->layout()->add(m_projectManager);
 
 #if 0
-    KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
-    connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
-    m_projectManager->setModel(filterModel);
+  KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
+  connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
+  m_projectManager->setModel(filterModel);
 #else
-    m_projectManager->setModel(m_projectModel);
+  m_projectManager->setModel(m_projectModel);
 #endif
 
-    connect(m_projectManager, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+  connect(m_projectManager, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
 
-    mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
+  mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 
-    setXMLFile("kdevprojectmanager.rc");
+  setXMLFile("kdevprojectmanager.rc");
 
-    m_updateProjectTimer = new QTimer(this);
-    connect(m_updateProjectTimer, SIGNAL(timeout()), this, SLOT(updateProjectTimeout()));
+  m_updateProjectTimer = new QTimer(this);
+  connect(m_updateProjectTimer, SIGNAL(timeout()), this, SLOT(updateProjectTimeout()));
 }
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
 {
-  if (m_projectManager) {
-    mainWindow()->removeView(m_widget);
-    delete m_widget;
-  }
+  if (m_projectManager)
+    {
+      mainWindow()->removeView(m_widget);
+      delete m_widget;
+      m_widget = 0;
+    }
 }
 
 void KDevProjectManagerPart::openURL(const KURL &url)
@@ -152,59 +154,58 @@ void KDevProjectManagerPart::openURL(const KURL &url)
 
 KDevProjectFolderItem *KDevProjectManagerPart::activeFolder()
 {
-    return m_projectManager->currentFolderItem();
+  return m_projectManager->currentFolderItem();
 }
 
 KDevProjectTargetItem *KDevProjectManagerPart::activeTarget()
 {
-    return m_projectManager->currentTargetItem();
+  return m_projectManager->currentTargetItem();
 }
 
 KDevProjectFileItem * KDevProjectManagerPart::activeFile()
 {
-    return m_projectManager->currentFileItem();
+  return m_projectManager->currentFileItem();
 }
 
 void KDevProjectManagerPart::updateProjectTimeout()
 {
-    import();
+  import();
 }
 
 void KDevProjectManagerPart::openProject(const QString &dirName, const QString &projectName)
 {
-    m_projectDirectory = dirName;
-    m_projectName = projectName;
-    
-    import(ForceRefresh);
+  m_projectDirectory = dirName;
+  m_projectName = projectName;
+  
+  import(ForceRefresh);
 
-    KDevProject::openProject(dirName, projectName);
+  KDevProject::openProject(dirName, projectName);
 }
 
 void KDevProjectManagerPart::import(RefreshPolicy policy)
 {
-    QStringList oldFileList = allFiles();
+  QStringList oldFileList = allFiles();
 
-    if (m_workspace)
-        m_projectModel->removeItem(m_workspace);
+  if (m_workspace)
+    m_projectModel->removeItem(m_workspace);
 
-    if ((m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder()) != 0)
-      {
-        m_projectModel->appendItem(m_workspace);
-      }
+  if (0 != (m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->folder()))
+    {
+      m_projectModel->appendItem(m_workspace);
+    }
 
-    Q_ASSERT(m_workspace != 0);
+  Q_ASSERT(m_workspace != 0);
 
-    ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
-    connect(job, SIGNAL(result(KIO::Job*)), this, SIGNAL(refresh()));
-    job->start();
+  ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
+  connect(job, SIGNAL(result(KIO::Job*)), this, SIGNAL(refresh()));
+  job->start();
 
-    QStringList newFileList = allFiles();
+  QStringList newFileList = allFiles();
 
-    bool hasChanges = computeChanges(oldFileList, newFileList);
+  bool hasChanges = computeChanges(oldFileList, newFileList);
 
-    if ((hasChanges && policy == Refresh) || policy == ForceRefresh)
-        emit refresh();
-
+  if ((hasChanges && policy == Refresh) || policy == ForceRefresh)
+    emit refresh();
 }
 
 void KDevProjectManagerPart::closeProject()
@@ -213,212 +214,217 @@ void KDevProjectManagerPart::closeProject()
 
 KDevProjectManagerPart::Options KDevProjectManagerPart::options() const
 {
-    return (Options)0;
+  return (Options)0;
 }
 
 QString KDevProjectManagerPart::projectDirectory() const
 {
-    return m_projectDirectory;
+  return m_projectDirectory;
 }
 
 QString KDevProjectManagerPart::projectName() const
 {
-    return m_projectName;
+  return m_projectName;
 }
 
 DomUtil::PairList KDevProjectManagerPart::runEnvironmentVars() const
 {
-    return DomUtil::PairList();
+  return DomUtil::PairList();
 }
 
 QString KDevProjectManagerPart::mainProgram(bool relative) const
 {
-    Q_UNUSED(relative);
-    return QString();
+  Q_UNUSED(relative);
+  return QString();
 }
 
 QString KDevProjectManagerPart::runDirectory() const
 {
-    return m_projectDirectory;
+  return m_projectDirectory;
 }
 
 QString KDevProjectManagerPart::runArguments() const
 {
-    return QString();
+  return QString();
 }
 
 QString KDevProjectManagerPart::activeDirectory() const // ### do we really need it?
 {
-    if (KDevProjectFolderItem *folder = m_projectManager->currentFolderItem())
-        return URLUtil::relativePath(projectDirectory(), folder->name());
+  if (KDevProjectFolderItem *folder = m_projectManager->currentFolderItem())
+    return URLUtil::relativePath(projectDirectory(), folder->name());
 
-    return QString();
+  return QString();
 }
 
 QString KDevProjectManagerPart::buildDirectory() const
 {
-    // ### atm we can handle only srcdir == builddir :(
-    return m_projectDirectory;
+  // ### atm we can handle only srcdir == builddir :(
+  return m_projectDirectory;
 }
 
 QStringList KDevProjectManagerPart::allFiles() const
 {
-    if (!m_workspace)
-        return QStringList();
-    else if (!(isDirty() || m_cachedFileList.isEmpty()))
-        return m_cachedFileList;
+  if (!m_workspace)
+    return QStringList();
+  else if (!(isDirty() || m_cachedFileList.isEmpty()))
+    return m_cachedFileList;
 
-    return const_cast<KDevProjectManagerPart*>(this)->allFiles();
+  return const_cast<KDevProjectManagerPart*>(this)->allFiles();
 }
 
 QStringList KDevProjectManagerPart::allFiles()
 {
-    if (!m_workspace)
-        return QStringList();
+  if (!m_workspace)
+    return QStringList();
 
-    KDevProjectItem *dom = m_workspace;
-    m_cachedFileList = fileList(dom);
+  KDevProjectItem *dom = m_workspace;
+  m_cachedFileList = fileList(dom);
 
-    return m_cachedFileList;
+  return m_cachedFileList;
 }
 
 QStringList KDevProjectManagerPart::distFiles() const
 {
-    return allFiles();
+  return allFiles();
 }
 
 KDevProjectImporter *KDevProjectManagerPart::defaultImporter() const
 {
-    QDomDocument &dom = *projectDom();
-    QString kind = DomUtil::readEntry(dom, "/general/importer");
-    Q_ASSERT(!kind.isEmpty());
+  QDomDocument &dom = *projectDom();
+  QString kind = DomUtil::readEntry(dom, "/general/importer");
+  Q_ASSERT(!kind.isEmpty());
 
-    if (m_importers.contains(kind))
-        return m_importers[kind];
+  if (m_importers.contains(kind))
+    return m_importers[kind];
 
-    kdDebug(9000) << "error: no default importer!" << endl;
-    return 0;
+  kdDebug(9000) << "error: no default importer!" << endl;
+  return 0;
 }
 
 KDevProjectBuilder *KDevProjectManagerPart::defaultBuilder() const
 {
-    QDomDocument &dom = *projectDom();
-    QString kind = DomUtil::readEntry(dom, "/general/builder");
-    Q_ASSERT(!kind.isEmpty());
+  QDomDocument &dom = *projectDom();
+  QString kind = DomUtil::readEntry(dom, "/general/builder");
+  Q_ASSERT(!kind.isEmpty());
 
-    if (m_builders.contains(kind))
-        return m_builders[kind];
+  if (m_builders.contains(kind))
+    return m_builders[kind];
 
-    kdDebug(9000) << "error: no default builder!" << endl;
-    return 0;
+  kdDebug(9000) << "error: no default builder!" << endl;
+  return 0;
 }
 
 void KDevProjectManagerPart::addFiles(const QStringList &fileList)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::addFiles:" << fileList << endl;
+  kdDebug(9000) << "KDevProjectManagerPart::addFiles:" << fileList << endl;
 
-    //m_updateProjectTimer->stop();
-    //m_updateProjectTimer->start(0, true);
+  //m_updateProjectTimer->stop();
+  //m_updateProjectTimer->start(0, true);
 }
 
 void KDevProjectManagerPart::addFile(const QString &fileName)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::addFile:" << fileName << endl;
+  kdDebug(9000) << "KDevProjectManagerPart::addFile:" << fileName << endl;
 
-    addFiles(QStringList() << fileName);
+  addFiles(QStringList() << fileName);
 }
 
 void KDevProjectManagerPart::removeFiles(const QStringList &fileList)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::removeFiles" << fileList << endl;
+  kdDebug(9000) << "KDevProjectManagerPart::removeFiles" << fileList << endl;
 
-    //m_updateProjectTimer->stop();
-    //m_updateProjectTimer->start(0, true);
+  //m_updateProjectTimer->stop();
+  //m_updateProjectTimer->start(0, true);
 }
 
 void KDevProjectManagerPart::removeFile(const QString &fileName)
 {
-    kdDebug(9000) << "KDevProjectManagerPart::removeFile" << fileName << endl;
+  kdDebug(9000) << "KDevProjectManagerPart::removeFile" << fileName << endl;
 
-    removeFiles(QStringList() << fileName);
+  removeFiles(QStringList() << fileName);
 }
 
 QStringList KDevProjectManagerPart::fileList(KDevProjectItem *item)
 {
-    QStringList files;
+  QStringList files;
 
-    if (KDevProjectFolderItem *folder = item->folder()) {
-        QList<KDevProjectFolderItem*> folder_list = folder->folderList();
-        for (QList<KDevProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it)
-            files += fileList((*it));
-
-        QList<KDevProjectTargetItem*> target_list = folder->targetList();
-        for (QList<KDevProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it)
-            files += fileList((*it));
-
-        QList<KDevProjectFileItem*> file_list = folder->fileList();
-        for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
-            files += fileList((*it));
-    } else if (KDevProjectTargetItem *target = item->target()) {
-        QList<KDevProjectFileItem*> file_list = target->fileList();
-        for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
-            files += fileList((*it));
-    } else if (KDevProjectFileItem *file = item->file()) {
-        QString fileName = file->name();
-        if (fileName.startsWith(m_projectDirectory))
-            fileName = fileName.mid(m_projectDirectory.length());
-
-        while (!fileName.isEmpty() && fileName.at(0) == '/')
-            fileName = fileName.mid(1);
-
-        files.append(fileName);
+  if (KDevProjectFolderItem *folder = item->folder())
+    {
+      QList<KDevProjectFolderItem*> folder_list = folder->folderList();
+      for (QList<KDevProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it)
+        files += fileList((*it));
+  
+      QList<KDevProjectTargetItem*> target_list = folder->targetList();
+      for (QList<KDevProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it)
+        files += fileList((*it));
+  
+      QList<KDevProjectFileItem*> file_list = folder->fileList();
+      for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
+        files += fileList((*it));
+    }
+  else if (KDevProjectTargetItem *target = item->target())
+    {
+      QList<KDevProjectFileItem*> file_list = target->fileList();
+      for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
+        files += fileList((*it));
+    }
+  else if (KDevProjectFileItem *file = item->file())
+    {
+      QString fileName = file->name();
+      if (fileName.startsWith(m_projectDirectory))
+        fileName = fileName.mid(m_projectDirectory.length());
+  
+      while (!fileName.isEmpty() && fileName.at(0) == '/')
+        fileName = fileName.mid(1);
+  
+      files.append(fileName);
     }
 
-    return files;
+  return files;
 }
 
 void KDevProjectManagerPart::fileDirty(const QString &fileName)
 {
-    Q_UNUSED(fileName);
+  Q_UNUSED(fileName);
 }
 
 void KDevProjectManagerPart::fileDeleted(const QString &fileName)
 {
-    Q_UNUSED(fileName);
+  Q_UNUSED(fileName);
 }
 
 void KDevProjectManagerPart::fileCreated(const QString &fileName)
 {
-    Q_UNUSED(fileName);
+  Q_UNUSED(fileName);
 }
 
 bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, const QStringList &newFileList)
 {
-    QMap<QString, bool> oldFiles, newFiles;
+  QMap<QString, bool> oldFiles, newFiles;
 
-    for (QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it)
-        oldFiles.insert(*it, true);
+  for (QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it)
+    oldFiles.insert(*it, true);
 
-    for (QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it)
-        newFiles.insert(*it, true);
+  for (QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it)
+    newFiles.insert(*it, true);
 
-    // created files: oldFiles - newFiles
-    for (QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it)
-        newFiles.remove(*it);
+  // created files: oldFiles - newFiles
+  for (QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it)
+    newFiles.remove(*it);
 
-    // removed files: newFiles - oldFiles
-    for (QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it)
-        oldFiles.remove(*it);
+  // removed files: newFiles - oldFiles
+  for (QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it)
+    oldFiles.remove(*it);
 
+  if (!newFiles.isEmpty())
+    emit addedFilesToProject(newFiles.keys());
 
-    if (!newFiles.isEmpty())
-        emit addedFilesToProject(newFiles.keys());
+  if (!oldFiles.isEmpty())
+    emit removedFilesFromProject(oldFiles.keys());
 
-    if (!oldFiles.isEmpty())
-        emit removedFilesFromProject(oldFiles.keys());
-
-    m_dirty = !(newFiles.isEmpty() && oldFiles.isEmpty());
-    return m_dirty;
+  m_dirty = !(newFiles.isEmpty() && oldFiles.isEmpty());
+  
+  return m_dirty;
 }
 
 #include "kdevprojectmanager_part.moc"

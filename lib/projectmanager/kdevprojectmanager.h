@@ -43,6 +43,8 @@ public:
   KDevProjectFileItem *currentFileItem() const;
   KDevProjectTargetItem *currentTargetItem() const;
 
+  virtual void reset();
+
 signals:
   void activateURL(const KURL &url);
 
