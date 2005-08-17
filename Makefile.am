@@ -1,4 +1,4 @@
-SUBDIRS = bdb lib parts buildtools src pics doc mimetypes embedded languages
+SUBDIRS = bdb lib parts buildtools src pics doc mimetypes embedded languages editors
 ### TODO languages parts vcs editors 
 
 
