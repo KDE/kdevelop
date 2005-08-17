@@ -28,8 +28,9 @@ static const KDevPluginInfo data("kdevvalgrind");
 K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( data ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin( &data, parent, name ? name : "ValgrindPart" )
+  : KDevPlugin( &data, parent)
 {
+  setObjectName(QString::fromUtf8(name));
   setInstance( ValgrindFactory::instance() );
   setXMLFile( "kdevpart_valgrind.rc" );
 

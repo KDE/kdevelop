@@ -334,7 +334,7 @@
     <tabstop>kcExecutableEdit</tabstop>
 </tabstops>
 <includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in declaration">kdialog.h</include>
 </includes>
 <slots>
     <slot access="private" specifier="non virtual">checkBoxToggled()</slot>

@@ -10,7 +10,8 @@ SUBDIRS = fullscreen \
     diff \
     classview \
     openwith \
-    guibuilder
+    guibuilder \
+    valgrind
 
 # SUBDIRS = \
 #     abbrev \
