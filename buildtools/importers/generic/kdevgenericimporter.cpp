@@ -49,7 +49,7 @@ KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, cons
     excludes = DomUtil::readListEntry(dom, genericImporter, "exclude");
 
     if (includes.isEmpty())
-        includes << "*.h" << "*.cpp" << "*.c";   // ### remove me
+        includes << "*.h" << "*.cpp" << "*.c" << "*.ui";   // ### remove me
 
     excludes << "CVS" << "moc_*.cpp"; // ### remove me
 }
