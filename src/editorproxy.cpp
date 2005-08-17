@@ -252,10 +252,12 @@ void EditorProxy::popupAboutToShow()
   }
   if( lastWasSeparator && popup->count() > 0 )
     popup->removeItem( popup->idAt( popup->count() - 1 ) );
+#endif
 }
 
 void EditorProxy::showPopup( )
 {
+#if 0
 	kdDebug(9000) << k_funcinfo << endl;
 
 	if ( KParts::Part * part = PartController::getInstance()->activePart() )
@@ -269,7 +271,7 @@ void EditorProxy::showPopup( )
 			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
 		}
 	}
-#endif
+#endif // ####TODO
 }
 
 void EditorProxy::registerEditor(EditorWrapper* wrapper)
