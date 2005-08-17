@@ -1,5 +1,4 @@
-SUBDIRS = bdb lib parts buildtools src pics doc mimetypes embedded languages editors
-### TODO languages parts vcs editors 
+SUBDIRS = lib parts buildtools src pics doc mimetypes languages 
 
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
