@@ -43,6 +43,7 @@ private slots:
 private:
     void startApplication(const QString &program);
     QString interpreter();
+    QString shell();
     QString mainProgram();
     QString programArgs();
     QString characterCoding();
@@ -53,6 +54,8 @@ private:
     QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*> m_designers;
     
     QString m_contextFileName;
+    QCString m_savedShell;
+    QCString m_shell;
 
 };
 

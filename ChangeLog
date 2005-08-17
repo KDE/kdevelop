@@ -1,3 +1,9 @@
+2005-08-17  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+* The $SHELL environment variable is set to 'irb' for ruby projects.
+* Added a project option to customise the ruby shell
+* A 'def cd(dir) Dir.chdir dir end' line must be added to your
+  .irbrc file to prevent syntax errors when konsole changes directory
+
 2005-06-28  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
   * Fixed bug in 'run main program' project option where the .ui file was out of 
     sync with the code

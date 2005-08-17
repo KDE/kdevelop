@@ -9,269 +9,486 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>447</height>
+            <height>494</height>
         </rect>
     </property>
-    <grid>
+    <property name="caption">
+        <string>RubyConfigWidgetBase</string>
+    </property>
+    <widget class="QCheckBox">
         <property name="name">
-            <cstring>unnamed</cstring>
+            <cstring>terminalCheckbox</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>216</y>
+                <width>578</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Run applications in &amp;terminal</string>
+        </property>
+        <property name="accel">
+            <string>Alt+T</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Check this if you want your applications to be opened in terminal window.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>enableFloatingToolBarBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>243</y>
+                <width>578</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Enable debugger &amp;floating toolbar</string>
+        </property>
+        <property name="accel">
+            <string>Alt+F</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Check this if you want to control the debugger via a floating toolbar.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>traceIntoRuby</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>297</y>
+                <width>578</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Trace &amp;into Ruby libraries</string>
+        </property>
+        <property name="accel">
+            <string>Alt+I</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Trace through the Ruby code installed under sitedir in the debugger</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>shellEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>145</x>
+                <y>40</y>
+                <width>444</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>mainProgramEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>145</x>
+                <y>70</y>
+                <width>444</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>programArgsEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>145</x>
+                <y>100</y>
+                <width>444</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>runRadioBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>578</width>
+                <height>81</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="title">
+            <string>Run</string>
+        </property>
+        <grid>
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>unnamed</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Ruby interpreter:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>interpreterEdit</cstring>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This is the path (or just name, if in $PATH) to Ruby interpreter. Defaults to "ruby"</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="0" column="1">
-            <property name="name">
-                <cstring>interpreterEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>textLabel1_2_3</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Program &amp;arguments:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>programArgsEdit</cstring>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This is the path (or just name, if in $PATH) to Ruby interpreter. Defaults to "ruby"</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel1_2</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Main program:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>mainProgramEdit</cstring>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This is the path (or just name, if in $PATH) to Ruby interpreter. Defaults to "ruby"</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="2" column="1">
-            <property name="name">
-                <cstring>programArgsEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="1" column="1">
-            <property name="name">
-                <cstring>mainProgramEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QButtonGroup" row="3" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>runRadioBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Run</string>
-            </property>
-            <grid>
+            <widget class="QRadioButton" row="0" column="0">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>mainProgramRadio</cstring>
                 </property>
-				<widget class="QRadioButton" row="0" column="0">
-					<property name="name">
-						<cstring>mainProgramRadio</cstring>
-					</property>
-					<property name="text">
-						<string>Main pr&amp;ogram</string>
-					</property>
-				</widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>selectedWindowRadio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Selected window</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QButtonGroup" row="8" column="0">
-            <property name="name">
-                <cstring>characterCodingRadioBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Character Coding</string>
-            </property>
-            <grid>
+                <property name="text">
+                    <string>Main pr&amp;ogram</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+O</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton" row="1" column="0">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>selectedWindowRadio</cstring>
                 </property>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>asciiOption</cstring>
-                    </property>
-                    <property name="text">
-                        <string>ASCII</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>0</number>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>eucOption</cstring>
-                    </property>
-                    <property name="text">
-                        <string>EUC</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>sjisOption</cstring>
-                    </property>
-                    <property name="text">
-                        <string>S&amp;JIS</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>2</number>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="3" column="0">
-                    <property name="name">
-                        <cstring>utf8Option</cstring>
-                    </property>
-                    <property name="text">
-                        <string>UTF-&amp;8</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>3</number>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                <property name="text">
+                    <string>&amp;Selected window</string>
+                </property>
+            </widget>
+        </grid>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>characterCodingRadioBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>330</y>
+                <width>128</width>
+                <height>140</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="title">
+            <string>Character Coding</string>
+        </property>
+        <widget class="QRadioButton">
             <property name="name">
-                <cstring>terminalCheckbox</cstring>
+                <cstring>asciiOption</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>22</y>
+                    <width>106</width>
+                    <height>21</height>
+                </rect>
             </property>
             <property name="text">
-                <string>Run applications in &amp;terminal</string>
+                <string>ASCII</string>
             </property>
-            <property name="whatsThis" stdset="0">
-                <string>Check this if you want your applications to be opened in terminal window.</string>
+            <property name="buttonGroupId">
+                <number>0</number>
             </property>
         </widget>
-		<widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
-			<property name="name">
-				<cstring>enableFloatingToolBarBox</cstring>
-			</property>
-			<property name="text">
-				<string>Enable debugger &amp;floating toolbar</string>
-			</property>
-			<property name="whatsThis" stdset="0">
-				<string>Check this if you want your applications to be opened in terminal window.</string>
-			</property>
-		</widget>
-		<widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="2">
-			<property name="name">
-				<cstring>showConstants</cstring>
-			</property>
-			<property name="text">
-				<string>Show &amp;constants in the debugger</string>
-			</property>
-			<property name="whatsThis" stdset="0">
-				<string>Check this if you want the debugger to show constants (with many constants this may be slow).</string>
-			</property>
-		</widget>
-		<widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="2">
-			<property name="name">
-				<cstring>traceIntoRuby</cstring>
-			</property>
-			<property name="text">
-				<string>Trace &amp;into Ruby libraries</string>
-			</property>
-			<property name="whatsThis" stdset="0">
-				<string>Trace through the Ruby code installed under sitedir in the debugger</string>
-			</property>
-		</widget>
-        <spacer row="9" column="0">
+        <widget class="QRadioButton">
             <property name="name">
-                <cstring>spacer1</cstring>
+                <cstring>sjisOption</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>76</y>
+                    <width>106</width>
+                    <height>21</height>
+                </rect>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
+            <property name="text">
+                <string>S&amp;JIS</string>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>16</height>
-                </size>
+            <property name="accel">
+                <string>Alt+J</string>
             </property>
-        </spacer>
-    </grid>
+            <property name="buttonGroupId">
+                <number>2</number>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>utf8Option</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>103</y>
+                    <width>106</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>UTF-&amp;8</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>3</number>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>eucOption</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>49</y>
+                    <width>106</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>EUC</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+        </widget>
+    </widget>
+    <spacer>
+        <property name="name">
+            <cstring>spacer1</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>20</width>
+                <height>16</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>60</x>
+                <y>475</y>
+                <width>20</width>
+                <height>16</height>
+            </rect>
+        </property>
+    </spacer>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>interpreterEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>145</x>
+                <y>11</y>
+                <width>444</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>11</y>
+                <width>128</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>&amp;Ruby interpreter:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>interpreterEdit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>This is the path (or just name, if in $PATH) to the Ruby interpreter. Defaults to "ruby"</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1_2_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>69</y>
+                <width>128</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>&amp;Main program:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>programArgsEdit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>This is the name of the main program source file</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1_2_3_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>100</y>
+                <width>128</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>Program &amp;arguments:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>programArgsEdit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>These are the arguments passed to the Ruby interpreter</string>
+        </property>
+    </widget>
+    <spacer>
+        <property name="name">
+            <cstring>spacer3</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>40</width>
+                <height>20</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>50</x>
+                <y>50</y>
+                <width>40</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </spacer>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>40</y>
+                <width>128</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>Ru&amp;by shell:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>mainProgramEdit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>This is the path (or just name, if in $PATH) to the Ruby shell. Defaults to "irb". Add this line to your .irbrc file:
+def cd(dir) Dir.chdir dir end</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>showConstants</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>270</y>
+                <width>578</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Show &amp;constants in the debugger</string>
+        </property>
+        <property name="accel">
+            <string>Alt+C</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Check this if you want the debugger to show constants (with many constants this may be slow).</string>
+        </property>
+    </widget>
 </widget>
 <tabstops>
     <tabstop>interpreterEdit</tabstop>
+    <tabstop>shellEdit</tabstop>
     <tabstop>mainProgramEdit</tabstop>
     <tabstop>programArgsEdit</tabstop>
     <tabstop>mainProgramRadio</tabstop>
     <tabstop>selectedWindowRadio</tabstop>
     <tabstop>terminalCheckbox</tabstop>
-	<tabstop>enableFloatingToolBarBox</tabstop>
-	<tabstop>showConstants</tabstop>
-	<tabstop>traceIntoRuby</tabstop>
+    <tabstop>enableFloatingToolBarBox</tabstop>
+    <tabstop>showConstants</tabstop>
+    <tabstop>traceIntoRuby</tabstop>
     <tabstop>asciiOption</tabstop>
     <tabstop>eucOption</tabstop>
     <tabstop>sjisOption</tabstop>

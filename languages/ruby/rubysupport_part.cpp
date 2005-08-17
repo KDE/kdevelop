@@ -75,6 +75,12 @@ void RubySupportPart::projectOpened()
 {
   kdDebug() << "projectOpened()" << endl;
 
+  // Save the $SHELL environment variable in order to restore it
+  // on project close, and switch to using irb in the terminal
+  m_savedShell.sprintf("SHELL=%s", getenv("SHELL"));
+  m_shell.sprintf("SHELL=%s", shell().latin1());
+  putenv(qstrdup(m_shell.data()));
+
   connect( project(), SIGNAL(addedFilesToProject(const QStringList &)),
   	this, SLOT(addedFilesToProject(const QStringList &)) );
   connect( project(), SIGNAL(removedFilesFromProject(const QStringList &)),
@@ -468,6 +474,12 @@ QString RubySupportPart::interpreter() {
     return prog;
 }
 
+QString RubySupportPart::shell() {
+    QString shell = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/shell");
+    if (shell.isEmpty()) shell = "irb";
+    return shell;
+}
+
 QString RubySupportPart::mainProgram() {
 	QString prog;
 	int runMainProgram = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/runmainprogram");
@@ -551,6 +563,10 @@ KDevDesignerIntegration *RubySupportPart::designer(KInterfaceDesigner::DesignerT
 
 void RubySupportPart::projectClosed( )
 {
+	if (!m_savedShell.isNull()) {
+        putenv(qstrdup(m_savedShell.data()));
+    }
+
     for (QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*>::const_iterator it =  m_designers.begin();
         it != m_designers.end(); ++it)
     {
