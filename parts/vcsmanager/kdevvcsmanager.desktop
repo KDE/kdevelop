@@ -31,7 +31,6 @@ Comment[sl]=Upravitelj sistema za nadzor različic
 Comment[sr]=Менаџер система контроле верзија
 Comment[sr@Latn]=Menadžer sistema kontrole verzija
 Comment[sv]=Hantering av versionskontrollsystem
-Comment[tr]=Sürüm Kontrol Sistemi Yöneticisi
 Comment[xx]=xxVersion Control System Managerxx
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
@@ -45,5 +44,5 @@ X-KDevelop-Args=
 
 X-KDevelop-Scope=Core
 X-KDE-Library=libkdevvcsmanager
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=VCS

@@ -43,7 +43,7 @@ KDevelop plugin interface.
 /**Current KDevelop plugin interface version. Interfaces declare plugin version to make sure
 old source (or binary) incompatible plugins are not loaded. Increase this if 
 it is necessary that old plugins stop working.*/
-#define KDEVELOP_PLUGIN_VERSION 3
+#define KDEVELOP_PLUGIN_VERSION 4
 
 /**
 The base class for all KDevelop plugins.

@@ -17,5 +17,5 @@ GenericName[xx]=xxKDevProjectManagerxx
 Icon=kdevelop
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevprojectmanager
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 

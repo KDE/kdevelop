@@ -4,14 +4,10 @@ Name=KDevSecurity
 Name[sv]=KDevelop säkerhet
 GenericName=Security Checker
 GenericName[da]=Sikkerhedstjekker
-GenericName[et]=Turvalisuse kontroll
 GenericName[sv]=Säkerhetskontroll
-GenericName[tr]=Güvenlik Denetimcisi
 Comment=Code security checker
 Comment[da]=Sikkerhedstjekker af kode
-Comment[et]=Koodi turvalisuse kontroll
 Comment[sv]=Kodsäkerhetskontroll
-Comment[tr]=Kod Güvenlik Denetimcisi
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 
@@ -26,5 +22,5 @@ X-KDevelop-ProgrammingLanguages=
 
 X-KDevelop-Properties=AdditionalTools
 X-KDevelop-Scope=Project
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDE-Library=libkdevsecurity

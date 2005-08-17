@@ -13,4 +13,4 @@ Icon=kdevelop
 ServiceTypes=KDevelop/LanguageSupport
 X-KDevelop-Language=ChangeMe
 X-KDE-Library=libkdev%{APPNAMELC}
-X-KDevelop-Version=3
+X-KDevelop-Version=4

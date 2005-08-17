@@ -29,5 +29,5 @@ GenericName[xx]=xxSubversionxx
 Icon=misc
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevsubversion
-X-KDevelop-Version=3
+X-KDevelop-Version=4
 X-KDevelop-Properties=VCS,SubversionVCS
