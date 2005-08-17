@@ -21,13 +21,13 @@
 
 #include "kdevprojectmodel.h"
 
-#include <qpointer.h>
+#include <QtCore/QPointer>
 #include <kdevproject.h>
 
-class KDevProjectManagerWidget;
+class KDevProjectManager;
 class KDevProjectImporter;
 class KDevProjectBuilder;
-class ProjectModel;
+class KDevProjectModel;
 class QTimer;
 
 /*
@@ -43,27 +43,27 @@ public:
         NoRefresh,
         ForceRefresh
     };
-    
+
 public:
     KDevProjectManagerPart(QObject *parent, const char *name, const QStringList &);
     virtual ~KDevProjectManagerPart();
 
     inline ProjectModel *projectModel() const
-    { return m_projectModel; }  
-    
+    { return m_projectModel; }
+
     inline bool isDirty() const
     { return m_dirty; }
 
-    ProjectFolderDom activeFolder();
-    ProjectTargetDom activeTarget();
-    ProjectFileDom activeFile();
+    KDevProjectFolderItem *activeFolder();
+    KDevProjectTargetItem *activeTarget();
+    KDevProjectFileItem *activeFile();
 
     KDevProjectImporter *defaultImporter() const;
     KDevProjectBuilder *defaultBuilder() const;
-    
+
 //
 // KDevProject interface
-//    
+//
     virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
     virtual Options options() const;
@@ -81,38 +81,38 @@ public:
     virtual void addFile(const QString &fileName);
     virtual void removeFiles (const QStringList &fileList);
     virtual void removeFile(const QString &fileName);
-    
+
     void import(RefreshPolicy policy = Refresh);
 
-signals:    
+signals:
     void refresh();
     void addedProjectItem(ProjectItemDom dom);
     void aboutToRemoveProjectItem(ProjectItemDom dom);
-        
+
 private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);
     void fileDeleted(const QString &fileName);
     void updateProjectTimeout();
-    
+
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
     QStringList fileList(ProjectItemDom item);
     QStringList allFiles();
-    
+
 private:
     ProjectModel *m_projectModel;
-    ProjectFolderDom m_workspace;
+    KDevProjectFolderItem *m_workspace;
     QPointer<KDevProjectManagerWidget> m_widget;
     QMap<QString, KDevProjectImporter*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;
     QStringList m_cachedFileList;
-    
+
     QString m_projectDirectory;
     QString m_projectName;
-    
+
     bool m_dirty;
-    
+
     QTimer *m_updateProjectTimer;
 };
 
