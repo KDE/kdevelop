@@ -18,12 +18,12 @@
 */
 #include "kdevcoderepository.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 struct KDevCodeRepositoryData
 {
     Catalog* mainCatalog;
-    Q3ValueList<Catalog*> catalogs;
+    QList<Catalog*> catalogs;
     
     KDevCodeRepositoryData(): mainCatalog( 0 ) {}
 };
@@ -65,7 +65,7 @@ void KDevCodeRepository::touchCatalog( Catalog * catalog )
     emit catalogChanged( catalog );
 }
 
-Q3ValueList< Catalog * > KDevCodeRepository::registeredCatalogs( )
+QList< Catalog * > KDevCodeRepository::registeredCatalogs( )
 {
     return d->catalogs;
 }

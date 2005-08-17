@@ -110,7 +110,7 @@ public:
     virtual void removeProperty(const QString &name);
     
     /**@return the list of grouped properties.*/
-    virtual const Q3ValueList<QPair<QString, Q3ValueList<QString> > >& propertiesOfGroup() const;
+    virtual const QList<QPair<QString, QList<QString> > >& propertiesOfGroup() const;
     /**@return the map: property - group name.*/
     virtual const QMap<MultiProperty*, QString>& groupOfProperty() const;
     
@@ -146,7 +146,7 @@ private:
     
     //groups of properties:
     // list of group name: (list of property names)
-    Q3ValueList<QPair<QString, Q3ValueList<QString> > > m_propertiesOfGroup;
+    QList<QPair<QString, QList<QString> > > m_propertiesOfGroup;
     // map of property: group
     QMap<MultiProperty*, QString> m_groupOfProperty;
 

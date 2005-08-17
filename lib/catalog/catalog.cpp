@@ -22,7 +22,7 @@
 #include <qfileinfo.h>
 #include <qdatastream.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
 
 #include <krandomsequence.h>
@@ -145,9 +145,9 @@ struct _Catalog_Private
 /*!
     \fn  Catalog::indexList() const
  */
- Q3ValueList<QByteArray>  Catalog::indexList() const
+ QList<QByteArray>  Catalog::indexList() const
 {
-    Q3ValueList<QByteArray> l;
+    QList<QByteArray> l;
     QMap<QByteArray, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){
         l << it.key();
@@ -364,15 +364,15 @@ void  Catalog::setEnabled( bool isEnabled )
     \fn  Catalog::query( const QValueList<QueryArgument>& args )
 */
  
- Q3ValueList<Tag>  Catalog::query( const Q3ValueList<QueryArgument>& args )
+ QList<Tag>  Catalog::query( const QList<QueryArgument>& args )
 {
-    Q3ValueList<Tag> tags;
+    QList<Tag> tags;
 
     DBT key, data;
 
     DBC** cursors = new DBC* [ args.size() + 1 ];
 
-    Q3ValueList< QPair<QByteArray,QVariant> >::ConstIterator it = args.begin();
+    QList< QPair<QByteArray,QVariant> >::ConstIterator it = args.begin();
     int current = 0;
     while( it != args.end() ){
         QByteArray indexName = (*it).first;

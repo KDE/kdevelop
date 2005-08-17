@@ -5,7 +5,7 @@
 
 #include <qdatetime.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QLinkedList>
 
 #include <khtml_part.h>
 
@@ -89,11 +89,12 @@ protected slots:
     void slotPopupActivated( int id );
     void addHistoryEntry();
   
+    QLinkedList<DocumentationHistoryEntry>::Iterator lastElement();
   
 private:
 
-    Q3ValueList< DocumentationHistoryEntry > m_history;
-    Q3ValueList< DocumentationHistoryEntry >::Iterator m_Current;
+    QLinkedList< DocumentationHistoryEntry > m_history;
+    QLinkedList< DocumentationHistoryEntry >::Iterator m_Current;
 
     KToolBarPopupAction* m_backAction;
     KToolBarPopupAction* m_forwardAction;

@@ -23,7 +23,7 @@
 #include <qmap.h>
 #include <qvariant.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include "property.h"
 #include "childproperty.h"
@@ -112,7 +112,7 @@ public:
     void undo();
     
     /**The list of child properties.*/
-    Q3ValueList<ChildProperty> details;
+    QList<ChildProperty> details;
 
 private:
     Q3PtrList<Property> list;

@@ -62,7 +62,7 @@ public:
     void setMainCatalog( Catalog* mainCatalog );
 
     /**@return The list of registered catalogs.*/
-    Q3ValueList<Catalog*> registeredCatalogs();
+    QList<Catalog*> registeredCatalogs();
 
     /**Registers catalog in the repository.
     @param catalog The catalog to register.*/

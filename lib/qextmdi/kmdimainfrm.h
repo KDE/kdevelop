@@ -43,7 +43,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QResizeEvent>
 #include <Q3PopupMenu>
 #include <QCustomEvent>
@@ -427,7 +427,7 @@ public:
    /**
    *
    */
-   void findRootDockWidgets(Q3PtrList<KDockWidget>* pRootDockWidgetList, Q3ValueList<QRect>* pPositionList);
+   void findRootDockWidgets(Q3PtrList<KDockWidget>* pRootDockWidgetList, QList<QRect>* pPositionList);
 
    void setSwitching( const bool switching ) { m_bSwitching = switching; }
    bool switching(void) const { return m_bSwitching; }

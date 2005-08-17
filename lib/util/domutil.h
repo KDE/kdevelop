@@ -33,11 +33,11 @@ struct DomAttribute
 struct DomPathElement
 {
   QString tagName;
-  Q3ValueList<DomAttribute> attribute;
+  QList<DomAttribute> attribute;
   int matchNumber;  // for use when more than one element matches the path
 };
 
-typedef Q3ValueList<DomPathElement> DomPath;
+typedef QList<DomPathElement> DomPath;
 
 /**
  * Utility class for conveniently accessing data in a %DOM tree.
@@ -46,7 +46,7 @@ class DomUtil
 {
 public:
     typedef QPair<QString, QString> Pair;
-    typedef Q3ValueList<Pair> PairList;
+    typedef QList<Pair> PairList;
     /**
      * Remove all child elements from a given element.
      */

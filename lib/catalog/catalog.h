@@ -60,13 +60,13 @@ public:
     virtual void close();
     virtual void sync();
 
-    Q3ValueList<QByteArray> indexList() const;
+    QList<QByteArray> indexList() const;
     void addIndex( const QByteArray& name );
 
     void addItem( Tag& tag );
 
     Tag getItemById( const QByteArray& id );
-    Q3ValueList<Tag> query( const Q3ValueList<QueryArgument>& args );
+    QList<Tag> query( const QList<QueryArgument>& args );
 
     QByteArray generateId();
 

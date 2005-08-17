@@ -22,7 +22,7 @@
 #include "property.h"
 #include "multiproperty.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 
 namespace PropertyLib{
@@ -149,7 +149,7 @@ void PropertyList::removeProperty(const QString &name)
     }
 }
 
-const Q3ValueList<QPair<QString, Q3ValueList<QString> > >& PropertyList::propertiesOfGroup() const
+const QList<QPair<QString, QList<QString> > >& PropertyList::propertiesOfGroup() const
 {
     return m_propertiesOfGroup;
 }
@@ -168,8 +168,8 @@ void PropertyList::addToGroup(const QString &group, MultiProperty *property)
     if (m_groupOfProperty.contains(property) && (m_groupOfProperty[property] == group))
         return;
 
-    QPair<QString, Q3ValueList<QString> > *groupPair = 0;
-    for(Q3ValueList<QPair<QString, Q3ValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
+    QPair<QString, QList<QString> > *groupPair = 0;
+    for(QList<QPair<QString, QList<QString> > >::iterator it = m_propertiesOfGroup.begin();
         it != m_propertiesOfGroup.end(); ++it)
     {
         if ((*it).first == group)
@@ -180,7 +180,7 @@ void PropertyList::addToGroup(const QString &group, MultiProperty *property)
     }
     if (groupPair == 0)
     {
-        groupPair = new QPair<QString, Q3ValueList<QString> >();
+        groupPair = new QPair<QString, QList<QString> >();
         groupPair->first = group;
         groupPair->second.append(property->name());
         m_propertiesOfGroup.append(*groupPair);
@@ -199,7 +199,7 @@ void PropertyList::removeFromGroup(MultiProperty *property)
     QString group = m_groupOfProperty[property];
 //    qWarning("removeFromGroup group=%s", group.ascii());
 
-    for(Q3ValueList<QPair<QString, Q3ValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
+    for(QList<QPair<QString, QList<QString> > >::iterator it = m_propertiesOfGroup.begin();
         it != m_propertiesOfGroup.end(); ++it)
     {
 //        qWarning("removeFromGroup checking %s", (*it).first.ascii());

@@ -218,16 +218,16 @@ void PropertyEditor::populateProperties(PropertyList *list)
         return;
     m_list = list;
     connect(m_list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
-    const Q3ValueList<QPair<QString, Q3ValueList<QString> > >& groups = m_list->propertiesOfGroup();
-    for (Q3ValueList<QPair<QString, Q3ValueList<QString> > >::const_iterator it = groups.begin();
+    const QList<QPair<QString, QList<QString> > >& groups = m_list->propertiesOfGroup();
+    for (QList<QPair<QString, QList<QString> > >::const_iterator it = groups.begin();
         it != groups.end(); ++it)
     {
 //        qWarning("PropertyEditor::populateProperties:    adding group %s", (*it).first.ascii());
         PropertyGroupItem *group = 0;
         if ( (!(*it).first.isEmpty()) && ((*it).second.count() > 0) )
             group = new PropertyGroupItem(this, (*it).first);
-        const Q3ValueList<QString> &properties = (*it).second;
-        for (Q3ValueList<QString>::const_iterator it2 = properties.begin(); it2 != properties.end(); ++it2)
+        const QList<QString> &properties = (*it).second;
+        for (QList<QString>::const_iterator it2 = properties.begin(); it2 != properties.end(); ++it2)
         {
 //            qWarning("PropertyEditor::populateProperties:    adding property %s", (*it2).ascii());
             if (group)
@@ -276,7 +276,7 @@ void PropertyEditor::addChildProperties(PropertyItem *parent)
 //     qWarning("seeking children: count: %d", prop->details.count());
 
     parent->setOpen(true);
-    for (Q3ValueList<ChildProperty>::iterator it = prop->details.begin(); it != prop->details.end(); ++it)
+    for (QList<ChildProperty>::iterator it = prop->details.begin(); it != prop->details.end(); ++it)
     {
 //         qWarning("found child %s", (*it).name().ascii());
         new PropertyItem(this, parent, new MultiProperty(&m_detailedList, &(*it)));

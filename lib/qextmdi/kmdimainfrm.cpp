@@ -277,12 +277,12 @@ void KMdiMainFrm::setStandardMDIMenuEnabled(bool showModeMenu) {
 KMdiMainFrm::~KMdiMainFrm()
 {
   //save the children first to a list, as removing invalidates our iterator
-  Q3ValueList<KMdiChildView *> children;
+  QList<KMdiChildView *> children;
   for(KMdiChildView *w = m_pDocumentViews->first();w;w= m_pDocumentViews->next()){
     children.append(w);
   }
   // safely close the windows so properties are saved...
-  Q3ValueListIterator<KMdiChildView *> childIt;
+  QListIterator<KMdiChildView *> childIt;
   for (childIt = children.begin(); childIt != children.end(); ++childIt)
   {
     closeWindow(*childIt, false); // without re-layout taskbar!
@@ -1134,11 +1134,11 @@ bool KMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
 void KMdiMainFrm::closeAllViews()
 {
   //save the children first to a list, as removing invalidates our iterator
-  Q3ValueList<KMdiChildView *> children;
+  QList<KMdiChildView *> children;
   for(KMdiChildView *w = m_pDocumentViews->first();w;w= m_pDocumentViews->next()){
     children.append(w);
   }
-  Q3ValueListIterator<KMdiChildView *> childIt;
+  QListIterator<KMdiChildView *> childIt;
   for (childIt = children.begin(); childIt != children.end(); ++childIt)
   {
     (*childIt)->close();
@@ -1166,7 +1166,7 @@ void KMdiMainFrm::closeActiveView()
 }
 
 /** find the root dockwidgets and store their geometry */
-void KMdiMainFrm::findRootDockWidgets(Q3PtrList<KDockWidget>* pRootDockWidgetList, Q3ValueList<QRect>* pPositionList)
+void KMdiMainFrm::findRootDockWidgets(Q3PtrList<KDockWidget>* pRootDockWidgetList, QList<QRect>* pPositionList)
 {
   if (!pRootDockWidgetList) return;
   if (!pPositionList) return;
@@ -1251,7 +1251,7 @@ void KMdiMainFrm::switchToToplevelMode()
 
   // 1.) select the dockwidgets to be undocked and store their geometry
   Q3PtrList<KDockWidget> rootDockWidgetList;
-  Q3ValueList<QRect> positionList;
+  QList<QRect> positionList;
   if (oldMdiMode!=KMdi::IDEAlMode)
     findRootDockWidgets(&rootDockWidgetList, &positionList);
 
@@ -1316,7 +1316,7 @@ void KMdiMainFrm::switchToToplevelMode()
   }
 
   // 6.) reset all memorized positions of the undocked ones and show them again
-  Q3ValueList<QRect>::Iterator it5;
+  QList<QRect>::Iterator it5;
   for (it3.toFirst(), it5 = positionList.begin() ; it3.current(), it5 != positionList.end(); ++it3, ++it5 ) {
     KDockWidget* pDockW = it3.current();
     pDockW->setGeometry( (*it5));
@@ -1350,7 +1350,7 @@ void KMdiMainFrm::switchToChildframeMode()
   Q3PtrList<KDockWidget> rootDockWidgetList;
   if (m_mdiMode == KMdi::TabPageMode) {
     // select the dockwidgets to be undocked and store their geometry
-    Q3ValueList<QRect> positionList;
+    QList<QRect> positionList;
     findRootDockWidgets(&rootDockWidgetList, &positionList);
 
     // undock all these found oldest ancestors (being KDockWidgets)
@@ -1367,7 +1367,7 @@ void KMdiMainFrm::switchToChildframeMode()
     finishIDEAlMode(false);
 
     // select the dockwidgets to be undocked and store their geometry
-    Q3ValueList<QRect> positionList;
+    QList<QRect> positionList;
     findRootDockWidgets(&rootDockWidgetList, &positionList);
 
 
@@ -2419,7 +2419,7 @@ void KMdiMainFrm::fillWindowMenu()
   int i=100;
   KMdiChildView* pView = 0L;
   Q3PtrListIterator<KMdiChildView> it(*m_pDocumentViews);
-  Q3ValueList<QDateTime> timeStamps;
+  QList<QDateTime> timeStamps;
   for (; it.current(); ++it) {
     pView = it.current();
     QDateTime timeStamp( pView->getTimeStamp() );
@@ -2445,7 +2445,7 @@ void KMdiMainFrm::fillWindowMenu()
     unsigned int windowItemCount = m_pWindowMenu->count() - entryCount;
     bool inserted = false;
     QString tmpString;
-    Q3ValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
+    QList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
     for (indx = 0; indx <= windowItemCount; indx++, ++timeStampIterator) {
       bool putHere = false;
       if ((*timeStampIterator) < timeStamp) {

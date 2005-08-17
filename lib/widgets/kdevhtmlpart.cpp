@@ -2,7 +2,6 @@
 #include <qclipboard.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <QTextStream>
 
 #include <kaction.h>
@@ -262,7 +261,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
   while( nDollarPos != -1 && nDollarPos+1 < static_cast<int>(path.length())) {
     // there is at least one $
     if( (path)[nDollarPos+1] == '(' ) {
-      uint nEndPos = nDollarPos+1;
+      int nEndPos = nDollarPos+1;
       // the next character is no $
       while ( (nEndPos <= path.length()) && (path[nEndPos]!=')') )
           nEndPos++;
@@ -279,7 +278,7 @@ QString KDevHTMLPart::resolveEnvVarsInURL(const QString& url)
       }
       path.replace( nDollarPos, nEndPos-nDollarPos, result );
     } else if( (path)[nDollarPos+1] != '$' ) {
-      uint nEndPos = nDollarPos+1;
+      int nEndPos = nDollarPos+1;
       // the next character is no $
       QString aVarName;
       if (path[nEndPos]=='{')
@@ -336,11 +335,16 @@ bool KDevHTMLPart::openURL(const KURL &url)
   }
   
   m_backAction->setEnabled( m_Current != m_history.begin() );
-  m_forwardAction->setEnabled( m_Current != m_history.fromLast() );
+  m_forwardAction->setEnabled( m_Current != lastElement() );
   
   return retval;
 }
 
+QLinkedList<DocumentationHistoryEntry>::Iterator KDevHTMLPart::lastElement()
+{
+	return --m_history.end();
+}
+    
 void KDevHTMLPart::openURLRequest(const KURL &url)
 {
 	openURL( url );
@@ -394,7 +398,7 @@ void KDevHTMLPart::slotBack()
 
 void KDevHTMLPart::slotForward()
 {
-	if (  m_Current != m_history.fromLast() )
+	if (  m_Current != lastElement() )
 	{
 		++m_Current;
 		m_restoring = true;
@@ -410,7 +414,7 @@ void KDevHTMLPart::slotBackAboutToShow()
 
 	if ( m_Current == m_history.begin() ) return;
 
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
 	--it;
 	
 	int i = 0;
@@ -433,15 +437,15 @@ void KDevHTMLPart::slotForwardAboutToShow()
 	KPopupMenu *popup = m_forwardAction->popupMenu();
 	popup->clear();
 
-	if ( m_Current == m_history.fromLast() ) return;
+	if ( m_Current == lastElement() ) return;
 
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
 	++it;
 	
 	int i = 0;
 	while( i < 10 )
 	{
-		if ( it == m_history.fromLast() )
+		if ( it == lastElement() )
 		{
 			popup->insertItem( (*it).url.url(), (*it).id );
 			return;
@@ -457,7 +461,7 @@ void KDevHTMLPart::slotPopupActivated( int id )
 {
 	kdDebug(9000) << "id: " << id << endl;
 
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
+	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_history.begin();
 	while( it != m_history.end() )
 	{
 		kdDebug(9000) << "(*it).id: " << (*it).id << endl;
@@ -475,10 +479,10 @@ void KDevHTMLPart::slotPopupActivated( int id )
 
 void KDevHTMLPart::addHistoryEntry()
 {
-	Q3ValueList<DocumentationHistoryEntry>::Iterator it = m_Current;
+	QLinkedList<DocumentationHistoryEntry>::Iterator it = m_Current;
 	
 	// if We're not already the last entry, we truncate the list here before adding an entry
-	if ( it != m_history.end() && it != m_history.fromLast() )
+	if ( it != m_history.end() && it != lastElement() )
 	{
 		m_history.erase( ++it, m_history.end() );
 	}
@@ -489,7 +493,7 @@ void KDevHTMLPart::addHistoryEntry()
 	if ( newEntry.url != (*m_Current).url )
 	{
 		m_history.append( newEntry );
-		m_Current = m_history.fromLast();
+		m_Current = lastElement();
 	}
 }
 
