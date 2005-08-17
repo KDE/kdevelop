@@ -27,7 +27,9 @@
 extern FILE *yyin, *yyout;
 extern int yyparse();
 extern int yydebug;
-extern Q3ValueStack<QMake::ProjectAST *> projects;
+
+Q_GLOBAL_STATIC(Q3ValueStack<QMake::ProjectAST *>, g_projects)
+
 
 namespace QMake {
 
