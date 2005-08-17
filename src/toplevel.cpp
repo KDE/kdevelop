@@ -4,10 +4,9 @@
 #include "toplevel.h"
 #include "core.h"
 
-#include "newmainwindow.h"
 #include "simplemainwindow.h"
 
-KDevMainWindow *TopLevel::s_instance = 0;
+static KDevMainWindow *TopLevel::s_instance = 0;
 
 bool TopLevel::isMainWindowValid()
 {
@@ -20,8 +19,7 @@ KDevMainWindow *TopLevel::getInstance()
   {
     SimpleMainWindow *mainWindow = new SimpleMainWindow(0);
     mainWindow->setObjectName(QLatin1String("SimpleMainWindow"));
-    if (!q_atomic_test_and_set_ptr(s_instance, 0, mainWindow))
-      delete mainWindow;
+    s_instance = mainWindow;
     mainWindow->init();
     kapp->setMainWidget(mainWindow);
   }
