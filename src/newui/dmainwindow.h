@@ -23,9 +23,6 @@
 #include <kparts/mainwindow.h>
 
 #include "ddockwindow.h"
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QEvent>
 
 class DTabWidget;
 namespace Ideal {
@@ -81,7 +78,7 @@ protected:
     Ideal::DockSplitter *m_central;
     DTabWidget *m_activeTabWidget;
 
-    Q3ValueList<DTabWidget*> m_tabs;
+    QList<DTabWidget*> m_tabs;
 
     bool m_openTabAfterCurrent;
     bool m_showIconsOnTabs;

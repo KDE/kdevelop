@@ -80,7 +80,7 @@ void DMainWindow::createToolWindows()
 void DMainWindow::addWidget(QWidget *widget, const QString &title)
 {
 //     invalidateActiveTabWidget();
-    if (m_firstRemoved && m_activeTabWidget == m_tabs.first())
+    if (m_firstRemoved && m_activeTabWidget == m_tabs.at(0))
     {
         m_central->addDock(0, 0, m_activeTabWidget);
         m_firstRemoved = false;
@@ -125,11 +125,11 @@ void DMainWindow::removeWidget(QWidget *widget)
                 if (tab->closeButton())
                     tab->closeButton()->hide();
                 //remove and delete tabwidget if it is not the first one
-                if (tab != m_tabs.first())
+                if (tab != m_tabs.at(0))
                 {
-                    QPair<uint, uint> idx = m_central->indexOf(tab);
-                    m_tabs.remove(tab);
-                    m_activeTabWidget = m_tabs.first();
+                    QPair<int, int> idx = m_central->indexOf(tab);
+                    m_tabs.removeAll(tab);
+                    m_activeTabWidget = m_tabs.at(0);
                     m_central->removeDock(idx.first, idx.second, true);
                 }
                 //only temporarily remove the first tabwidget

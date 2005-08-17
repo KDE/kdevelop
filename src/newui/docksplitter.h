@@ -21,7 +21,7 @@
 #define IDEALDOCKSPLITTER_H
 
 #include <qsplitter.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 
 namespace Ideal {
 
@@ -36,25 +36,25 @@ public:
     DockSplitter(Qt::Orientation orientation, QWidget *parent = 0, const char *name = 0);
     ~DockSplitter();
 
-    void addDock(uint row, uint col, QWidget *dock);
-    void removeDock(uint row, uint col, bool alsoDelete = false);
+    void addDock(int row, int col, QWidget *dock);
+    void removeDock(int row, int col, bool alsoDelete = false);
 
-    QPair<uint, uint> indexOf(QWidget *dock);
+    QPair<int, int> indexOf(QWidget *dock);
 
     int numRows() const;
     int numCols(int row) const;
 
 protected:
     void appendSplitter();
-    void createSplitters(uint index);
-    void shiftWidgets(QSplitter *splitter, uint row, uint fromCol);
+    void createSplitters(int index);
+    void shiftWidgets(QSplitter *splitter, int row, int fromCol);
 
     bool isRowEmpty(int row);
 
 private:
     Qt::Orientation m_orientation;
-    Q3ValueList<QSplitter*> m_splitters;
-    Q3ValueList<Q3ValueList<QWidget*> > m_docks;
+    QList<QSplitter*> m_splitters;
+    QList<QList<QWidget*> > m_docks;
 };
 
 }
