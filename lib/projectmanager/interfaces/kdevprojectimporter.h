@@ -19,13 +19,16 @@
 #ifndef KDEVPROJECTIMPORTER_H
 #define KDEVPROJECTIMPORTER_H
 
-#include "kdevprojectmodel.h"
-
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
 class KDevProjectEditor;
+class KDevProjectModel;
 class KDevProject;
+class KDevProjectItem;
+class KDevProjectFolderItem;
+class KDevProjectTargetItem;
+class KDevProjectFileItem;
 class KDialogBase;
 
 /**
@@ -58,7 +61,7 @@ public:
     /** This method creates the root item from the file @arg fileName
         @return The created item
      */
-    virtual KDevItem *import(KDevProjectModel *model, const QString &fileName) = 0;
+    virtual KDevProjectItem *import(KDevProjectModel *model, const QString &fileName) = 0;
 
     /** @return The makefile associated to the item model @p dom.
         @note The makefile list must contains absolute file names
@@ -76,7 +79,7 @@ public:
     virtual QStringList findMakefiles(KDevProjectFolderItem *dom) const = 0;
 
 signals:
-    void projectItemConfigWidget(const QList<KDevItem*> &dom, KDialogBase *dialog);
+    void projectItemConfigWidget(const QList<KDevProjectItem*> &dom, KDialogBase *dialog);
 };
 
 #endif

@@ -28,23 +28,22 @@ class ImportProjectJob: public KIO::Job
 {
     Q_OBJECT
 protected:
-    ImportProjectJob(ProjectFolderDom folder, KDevProjectImporter *importer);
+    ImportProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer);
     virtual ~ImportProjectJob();
 
-    
 public:
-    static ImportProjectJob *importProjectJob(ProjectFolderDom folder, KDevProjectImporter *importer);
+    static ImportProjectJob *importProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer);
     void start();
-    
+
 protected:
-    void startNextJob(ProjectFolderDom folder);
+    void startNextJob(KDevProjectFolderItem *folder);
     void slotResult(KIO::Job *job);
     void processList();
-    
+
 private:
-    ProjectFolderDom m_folder;
+    KDevProjectFolderItem *m_folder;
     KDevProjectImporter *m_importer;
-    ProjectFolderList m_workingList;
+    QList<KDevProjectFolderItem*> m_workingList;
 };
 
 #endif // IMPORTPROJECTJOB_H

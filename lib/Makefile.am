@@ -21,8 +21,8 @@ SUBDIRS = \
     widgets \
     catalog \
     astyle \
-    projectmanager \
-    cppparser
+    cppparser \
+    projectmanager
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am

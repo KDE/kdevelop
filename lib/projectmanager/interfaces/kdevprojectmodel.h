@@ -29,11 +29,31 @@ class KDevProjectFolderItem;
 class KDevProjectFileItem;
 class KDevProjectTargetItem;
 
-class KDevProjectFolderItem: public KDevItemCollection
+class KDevProjectItem: public KDevItemCollection
+{
+public:
+  KDevProjectItem(const QString &name, KDevItemGroup *parent = 0)
+    : KDevItemCollection(name, parent) {}
+
+  virtual KDevProjectItem *itemAt(int index) const;
+
+  virtual KDevProjectFolderItem *folder() const { return 0; }
+  virtual KDevProjectTargetItem *target() const { return 0; }
+  virtual KDevProjectFileItem *file() const { return 0; }
+
+  QList<KDevProjectFolderItem*> folderList() const;
+  QList<KDevProjectTargetItem*> targetList() const;
+  QList<KDevProjectFileItem*> fileList() const;
+};
+
+class KDevProjectFolderItem: public KDevProjectItem
 {
 public:
   KDevProjectFolderItem(const QDir &dir, KDevItemGroup *parent = 0)
-    : KDevItemCollection(dir.dirName(), parent), m_directory(dir) {}
+    : KDevProjectItem(dir.dirName(), parent), m_directory(dir) {}
+
+  virtual KDevProjectFolderItem *folder() const
+  { return const_cast<KDevProjectFolderItem*>(this); }
 
   QDir directory() const { return m_directory; }
 
@@ -41,20 +61,26 @@ private:
   QDir m_directory;
 };
 
-class KDevProjectTargetItem: public KDevItemCollection
+class KDevProjectTargetItem: public KDevProjectItem
 {
 public:
   KDevProjectTargetItem(const QString &name, KDevItemGroup *parent = 0)
-    : KDevItemCollection(name, parent) {}
+    : KDevProjectItem(name, parent) {}
+
+  virtual KDevProjectTargetItem *target() const
+  { return const_cast<KDevProjectTargetItem*>(this); }
 };
 
-class KDevProjectFileItem: public KDevItemCollection
+class KDevProjectFileItem: public KDevProjectItem
 {
 public:
   KDevProjectFileItem(const QFileInfo &fileInfo, KDevItemGroup *parent = 0)
-    : KDevItemCollection(fileInfo.fileName(), parent), m_fileInfo(fileInfo) {}
+    : KDevProjectItem(fileInfo.fileName(), parent), m_fileInfo(fileInfo) {}
 
   QFileInfo fileInfo() const { return m_fileInfo; }
+
+  virtual KDevProjectFileItem *file() const
+  { return const_cast<KDevProjectFileItem*>(this); }
 
 private:
   QFileInfo m_fileInfo;

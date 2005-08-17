@@ -19,11 +19,10 @@
 #ifndef KDEVPROJECTBUILDER_H
 #define KDEVPROJECTBUILDER_H
 
-#include "kdevprojectmodel.h"
-
 #include <qobject.h>
 
 class KDevProject;
+class KDevProjectItem;
 
 /**
 @author Roberto Raggi
@@ -41,18 +40,18 @@ public:
 
     virtual KDevProject *project() const = 0;
 
-    virtual bool isExecutable(KDevItem *dom) const = 0;
+    virtual bool isExecutable(KDevProjectItem *dom) const = 0;
 
-    virtual KDevItem *defaultExecutable() const = 0;
-    virtual void setDefaultExecutable(KDevItem *dom) = 0;
+    virtual KDevProjectItem *defaultExecutable() const = 0;
+    virtual void setDefaultExecutable(KDevProjectItem *dom) = 0;
 
-    virtual bool configure(KDevItem *dom) = 0;
-    virtual bool build(KDevItem *dom) = 0;
-    virtual bool clean(KDevItem *dom) = 0;
-    virtual bool execute(KDevItem *dom) = 0;
+    virtual bool configure(KDevProjectItem *dom) = 0;
+    virtual bool build(KDevProjectItem *dom) = 0;
+    virtual bool clean(KDevProjectItem *dom) = 0;
+    virtual bool execute(KDevProjectItem *dom) = 0;
 
 signals:
-    void builded(KDevItem *dom);
+    void builded(KDevProjectItem *dom);
     void failed();
 };
 

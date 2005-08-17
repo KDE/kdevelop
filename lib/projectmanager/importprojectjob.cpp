@@ -25,7 +25,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-ImportProjectJob::ImportProjectJob(ProjectFolderDom folder, KDevProjectImporter *importer)
+ImportProjectJob::ImportProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer)
     : KIO::Job(false),
       m_folder(folder),
       m_importer(importer)
@@ -41,12 +41,12 @@ void ImportProjectJob::start()
     startNextJob(m_folder);
 }
 
-ImportProjectJob *ImportProjectJob::importProjectJob(ProjectFolderDom folder, KDevProjectImporter *importer)
+ImportProjectJob *ImportProjectJob::importProjectJob(KDevProjectFolderItem *folder, KDevProjectImporter *importer)
 {
     return new ImportProjectJob(folder, importer);
 }
 
-void ImportProjectJob::startNextJob(ProjectFolderDom dom)
+void ImportProjectJob::startNextJob(KDevProjectFolderItem *dom)
 {
     m_workingList += m_importer->parse(dom);
     processList();
@@ -55,11 +55,11 @@ void ImportProjectJob::startNextJob(ProjectFolderDom dom)
 void ImportProjectJob::processList()
 {
     if (!m_workingList.isEmpty()) {
-        ProjectFolderDom folder = m_workingList.first();
+        KDevProjectFolderItem *folder = m_workingList.first();
         m_workingList.pop_front();
-        
+
         startNextJob(folder);
-    } else 
+    } else
         emitResult();
 }
 

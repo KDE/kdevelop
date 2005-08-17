@@ -19,6 +19,47 @@
 
 #include "kdevprojectmodel.h"
 
+QList<KDevProjectFolderItem*> KDevProjectItem::folderList() const
+{
+  QList<KDevProjectFolderItem*> lst;
+  for (int i=0; i<itemCount(); ++i)
+    {
+      if (KDevProjectFolderItem *item = itemAt(i)->folder())
+        lst.append(item);
+    }
+
+  return lst;
+}
+
+QList<KDevProjectTargetItem*> KDevProjectItem::targetList() const
+{
+  QList<KDevProjectTargetItem*> lst;
+  for (int i=0; i<itemCount(); ++i)
+    {
+      if (KDevProjectTargetItem *item = itemAt(i)->target())
+        lst.append(item);
+    }
+
+  return lst;
+}
+
+QList<KDevProjectFileItem*> KDevProjectItem::fileList() const
+{
+  QList<KDevProjectFileItem*> lst;
+  for (int i=0; i<itemCount(); ++i)
+    {
+      if (KDevProjectFileItem *item = itemAt(i)->file())
+        lst.append(item);
+    }
+
+  return lst;
+}
+
+KDevProjectItem *KDevProjectItem::itemAt(int index) const
+{
+  return dynamic_cast<KDevProjectItem*>(KDevItemCollection::itemAt(index)); // ### no dynamic_cast
+}
+
 KDevProjectModel::KDevProjectModel(QObject *parent)
   : KDevItemModel(parent)
 {

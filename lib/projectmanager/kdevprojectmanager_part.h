@@ -48,7 +48,7 @@ public:
     KDevProjectManagerPart(QObject *parent, const char *name, const QStringList &);
     virtual ~KDevProjectManagerPart();
 
-    inline ProjectModel *projectModel() const
+    inline KDevProjectModel *projectModel() const
     { return m_projectModel; }
 
     inline bool isDirty() const
@@ -86,8 +86,8 @@ public:
 
 signals:
     void refresh();
-    void addedProjectItem(ProjectItemDom dom);
-    void aboutToRemoveProjectItem(ProjectItemDom dom);
+    void addedProjectItem(KDevProjectItem *dom);
+    void aboutToRemoveProjectItem(KDevProjectItem *dom);
 
 private slots:
     void fileDirty(const QString &fileName);
@@ -97,13 +97,13 @@ private slots:
 
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
-    QStringList fileList(ProjectItemDom item);
+    QStringList fileList(KDevProjectItem *item);
     QStringList allFiles();
 
 private:
-    ProjectModel *m_projectModel;
+    KDevProjectModel *m_projectModel;
     KDevProjectFolderItem *m_workspace;
-    QPointer<KDevProjectManagerWidget> m_widget;
+    QPointer<KDevProjectManager> m_widget;
     QMap<QString, KDevProjectImporter*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;
     QStringList m_cachedFileList;
