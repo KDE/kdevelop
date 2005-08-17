@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>C++ bugs (GCC)</title>
-<base href="http://gcc.gnu.org/bugzilla/"/>
-<tocsect1 name="Query" url="query.cgi">
-</tocsect1>
-</kdeveloptoc>

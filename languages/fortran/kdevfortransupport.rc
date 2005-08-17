@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevFortranSupport" version="1">
-<MenuBar>
-  <Menu name="build" >
-    <Action name="project_ftnchek" />
-  </Menu>
-</MenuBar>
-</kpartgui>
-

@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>Python bugs</title>
-<base href="http://sourceforge.net/"/>
-<tocsect1 name="Query" url="tracker/?group_id=5470&amp;atid=105470">
-</tocsect1>
-</kdeveloptoc>

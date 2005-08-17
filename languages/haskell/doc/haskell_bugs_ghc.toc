@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>Haskell bugs (ghc)</title>
-<base href="http://sourceforge.net/"/>
-<tocsect1 name="Query" url="tracker/?group_id=8032&amp;atid=108032">
-</tocsect1>
-</kdeveloptoc>

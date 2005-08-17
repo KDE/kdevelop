@@ -1,6 +1,0 @@
-# KDE Config File
-[General]
-Name=Simple KJSEmbed Script
-Category=Script
-Comment=This generates a simplistic 'Hello world' program in KJSEmbed
-FileTemplates=js,Javascript

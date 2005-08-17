@@ -1,7 +1,0 @@
-<!DOCTYPE kdeveloptoc>
-<kdeveloptoc>
-<title>wxWidgets bugs</title>
-<base href="http://sourceforge.net/"/>
-<tocsect1 name="Query" url="tracker/?group_id=9863&amp;atid=109863">
-</tocsect1>
-</kdeveloptoc>
