@@ -12,7 +12,7 @@
 #include <sys/stat.h>
 
 #include <q3whatsthis.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 
 #include <klocale.h>
 #include <kdevgenericfactory.h>
@@ -22,7 +22,6 @@
 #include <kio/jobclasses.h>
 #include <kio/job.h>
 #include <kparts/part.h>
-#include <ktexteditor/editinterface.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -36,14 +35,26 @@
 #include "diffdlg.h"
 #include "diffwidget.h"
 
-static const KDevPluginInfo data("kdevdiff");
+static KDevPluginInfo *diffPartInfo()
+{
+    static KDevPluginInfo data("kdevdiff");
+    static bool isInit = false;
+    if (isInit)
+        return &data;
+    isInit = true;
+
+    data.addAuthor("Harald Fernengel", I18N_NOOP("Initial author"), "harry@kdevelop.org");
+
+    return &data;
+}
 
 typedef KDevGenericFactory<DiffPart> DiffFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( data ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( *diffPartInfo() ) )
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
-    : KDevDiffFrontend(&data, parent, name ? name : "DiffPart"), proc(0)
+    : KDevDiffFrontend(diffPartInfo(), parent), proc(0)
 {
+  setObjectName(name ? name : "DiffPart");
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
 
@@ -62,8 +73,8 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   action->setToolTip(i18n("Difference viewer"));
   action->setWhatsThis(i18n("<b>Difference viewer</b><p>Shows the contents of a patch file."));
 
-  connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const Context *)),
-           this, SLOT(contextMenu(Q3PopupMenu *, const Context *)) );
+  connect( core(), SIGNAL(contextMenu(QMenu *, const Context *)),
+           this, SLOT(contextMenu(QMenu *, const Context *)) );
 }
 
 static bool urlIsEqual(const KURL &a, const KURL &b)
@@ -90,14 +101,14 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc
   for ( ; it.current(); ++it)
   {
     KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
-    if ( rw_part && dynamic_cast<KTextEditor::EditInterface*>(it.current()) && urlIsEqual(url, rw_part->url()) )
-      return rw_part;
+// TODO    if ( rw_part && dynamic_cast<KTextEditor::EditInterface*>(it.current()) && urlIsEqual(url, rw_part->url()) )
+// TODO      return rw_part;
   }
 
   return 0;
 }
 
-void DiffPart::contextMenu( Q3PopupMenu* popup, const Context* context )
+void DiffPart::contextMenu( QMenu* popup, const Context* context )
 {
 	if ( context->hasType( Context::EditorContext ) )
 	{
@@ -137,12 +148,13 @@ DiffPart::~DiffPart()
 
 void DiffPart::localDiff()
 {
+#if 0
   KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
   if ( !rw_part )
     return;
 
-  KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>(rw_part);
-  if ( !editIface )
+ KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>(rw_part);
+ if ( !editIface )
     return;
   buffer = editIface->text().local8Bit();
   resultBuffer = resultErr = QString();
@@ -170,6 +182,7 @@ void DiffPart::localDiff()
     return;
   }
   proc->writeStdin( buffer.data(), buffer.length() );
+#endif // harryF: TODO
 }
 
 void DiffPart::processExited( KProcess* p )

@@ -10,11 +10,9 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 #include <klocale.h>
- 
+
 #include "diffdlg.h"
 #include "diffwidget.h"
 
