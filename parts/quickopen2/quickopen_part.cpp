@@ -97,6 +97,10 @@ void QuickOpenPart::slotQuickOpen( )
     connect(&edit, SIGNAL(textChanged(QString)), &filter, SLOT(setFilter(QString)));
     model.addChildModel(&model1, "title1");
     model.addChildModel(&model2, "title2");
+
+    if (project())
+        model.addChildModel(new QStringListModel(project()->allFiles(), &model), "Project Files");
+
     view.setModel(&filter);
     layout.addWidget(&edit);
     layout.addWidget(&view);
