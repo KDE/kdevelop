@@ -82,7 +82,7 @@ StdFileTreeWidgetImpl::StdFileTreeWidgetImpl( FileTreeWidget *parent )
 
     setBranchItemFactory( new StdBranchItemFactory );
 
-    parent->addColumn( QString::null );
+    parent->addColumn( QString() );
     header()->hide();
 }
 

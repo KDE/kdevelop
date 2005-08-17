@@ -140,7 +140,7 @@ KDevApplicationTree::KDevApplicationTree( QWidget *parent, const char* name )
     addColumn( i18n("Known Applications") );
     setRootIsDecorated( true );
 
-    addDesktopGroup( QString::null );
+    addDesktopGroup( QString() );
 
     connect( this, SIGNAL( currentChanged(Q3ListViewItem*) ), SLOT( slotItemHighlighted(Q3ListViewItem*) ) );
     connect( this, SIGNAL( selectionChanged(Q3ListViewItem*) ), SLOT( slotSelectionChanged(Q3ListViewItem*) ) );

@@ -52,14 +52,14 @@ public:
 
   /**
    * Call this method to create a new file, within or without the project. Supply as
-   * much information as you know. Leave what you don't know as QString::null.
+   * much information as you know. Leave what you don't know as QString().
    * The user will be prompted as necessary for the missing information, and the
    * file created, and added to the project as necessary.
    */
-  virtual KDevCreateFile::CreatedFile createNewFile(QString ext = QString::null,
-                     QString dir = QString::null,
-                     QString name = QString::null,
-                     QString subtype = QString::null);
+  virtual KDevCreateFile::CreatedFile createNewFile(QString ext = QString(),
+                     QString dir = QString(),
+                     QString name = QString(),
+                     QString subtype = QString());
 
   /**
    * Show file creation friendly side tab, yes or no
@@ -92,13 +92,13 @@ public:
    * Finds the file type object for a given extension and optionally subtype.
    * You can omit the subtype and specify the extension as ext-subtype if you wish.
    */
-  FileType * getType(const QString & ext, const QString subtype = QString::null);
+  FileType * getType(const QString & ext, const QString subtype = QString());
   /**
    * Finds the file type object for a given extension and optionally subtype.
    * You can omit the subtype and specify the extension as ext-subtype if you wish.
    * Returns only enabled type (i.e. used in the project).
    */
-  FileType * getEnabledType(const QString & ext, const QString subtype = QString::null);
+  FileType * getEnabledType(const QString & ext, const QString subtype = QString());
 
 public slots:
 

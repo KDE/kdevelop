@@ -145,7 +145,7 @@ BookmarksWidget::BookmarksWidget(BookmarksPart *part)
 		_part( part )
 
 {
-	addColumn( QString::null );
+	addColumn( QString() );
 	header()->hide();
 	setRootIsDecorated( true );
 	setResizeMode( Q3ListView::LastColumn );

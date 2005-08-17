@@ -63,7 +63,7 @@ TextToolsWidget::TextToolsWidget(TextToolsPart *part, QWidget *parent, const cha
     setResizeMode(Q3ListView::LastColumn);
     setSorting(-1);
     header()->hide();
-    addColumn(QString::null);
+    addColumn(QString());
 
     m_part = part;
 
@@ -165,7 +165,7 @@ void TextToolsWidget::stop()
     disconnect( m_timer );
     m_relevantTags.clear();
     m_emptyTags.clear();
-    m_cachedText = QString::null;
+    m_cachedText = QString();
 }
 
 

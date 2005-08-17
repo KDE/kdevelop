@@ -87,20 +87,20 @@ QString DocDevHelpPlugin::catalogTitle(const QString& url)
 {
     QFileInfo fi(url);
     if (!fi.exists())
-        return QString::null;
+        return QString();
 
     QFile f(url);
     if (!f.open(QIODevice::ReadOnly))
-        return QString::null;
+        return QString();
     
     QDomDocument doc;
     if (!doc.setContent(&f))
-        return QString::null;
+        return QString();
     f.close();
 
     QDomElement docEl = doc.documentElement();
 
-    return docEl.attribute("title", QString::null);
+    return docEl.attribute("title", QString());
 }
 
 QString DocDevHelpPlugin::pluginName() const
@@ -358,7 +358,7 @@ void DocDevHelpPlugin::setCatalogURL(DocumentationCatalogItem* item)
 
     if (item->url().isEmpty())
     {
-        KURL url(fi.dirPath(true) + "/" + docEl.attribute("link", QString::null));
+        KURL url(fi.dirPath(true) + "/" + docEl.attribute("link", QString()));
         item->setURL(url);
     }
 }

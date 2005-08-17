@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "securitypart.h"
 
@@ -79,7 +79,7 @@ void SecurityPart::activePartChanged(KParts::Part *part)
     kdDebug() << "SecurityPart::activePartChanged()" << endl;
 
     m_activeEditor = part;
-    m_activeFileName = QString::null;
+    m_activeFileName = QString();
 
     KTextEditor::Document *m_activeDocument = dynamic_cast<KTextEditor::Document*>(part);
     if (m_activeDocument)

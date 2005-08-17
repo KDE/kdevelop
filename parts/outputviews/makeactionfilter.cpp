@@ -64,7 +64,7 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 		ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
 
-		ActionFormat( QString::null, QString::null, 0, 0 )
+		ActionFormat( QString(), QString(), 0, 0 )
 	};
 
 	return formats;

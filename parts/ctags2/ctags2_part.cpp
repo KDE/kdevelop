@@ -343,7 +343,7 @@ void CTags2Part::slotGoToNext( )
 QString CTags2Part::currentWord( )
 {
 	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
-	if ( !ro_part || !ro_part->widget() ) return QString::null;
+	if ( !ro_part || !ro_part->widget() ) return QString();
 	
 	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
 	KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*>( ro_part );
@@ -355,16 +355,16 @@ QString CTags2Part::currentWord( )
 		line = col = 0;
 		cursorIface->cursorPositionReal(&line, &col);
 		linestr = editIface->textLine(line);
-		int startPos = QMAX( QMIN( (int)col, (int)linestr.length()-1 ), 0 );
+		int startPos = qMax( qMin( (int)col, (int)linestr.length()-1 ), 0 );
 		int endPos = startPos;
 		while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~') )
 			startPos--;
 		while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
 			endPos++;
 			
-		return ( ( startPos == endPos ) ? QString::null : linestr.mid( startPos+1, endPos-startPos-1 ) );
+		return ( ( startPos == endPos ) ? QString() : linestr.mid( startPos+1, endPos-startPos-1 ) );
 	}
-	return QString::null;
+	return QString();
 }
 
 #include "ctags2_part.moc"

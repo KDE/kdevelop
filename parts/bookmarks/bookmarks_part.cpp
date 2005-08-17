@@ -194,7 +194,7 @@ void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 	while ( ! bookmark.isNull() )
 	{
 		QString path = bookmark.attribute( "url" );
-		if ( path != QString::null )
+		if ( path != QString() )
 		{
 			EditorData * data = new EditorData;
 			data->url.setPath( path );
@@ -203,7 +203,7 @@ void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
 			while ( ! mark.isNull() )
 			{
 				QString line = mark.attribute( "line" );
-				if ( line != QString::null )
+				if ( line != QString() )
 				{
 					data->marks.append( qMakePair( line.toInt(), QString() ) );
 				}

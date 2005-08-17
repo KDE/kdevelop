@@ -266,8 +266,8 @@ void FileCreatePart::slotProjectClosed() {
 void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
 
   KDevCreateFile::CreatedFile createdFile = createNewFile(filetype->ext(),
-                                                          QString::null,
-                                                          QString::null,
+                                                          QString(),
+                                                          QString(),
                                                           filetype->subtypeRef());
 
   if (project())

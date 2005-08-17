@@ -2,10 +2,44 @@
 # interfaces in kdevelop/lib/interfaces which are in turn derived
 # from KPart.
 
-SUBDIRS = abbrev appwizard astyle bookmarks classview diff filecreate fileview \
-			fullscreen outputviews grepview valgrind distpart konsole tools regexptest doxygen \
-			fileselector tipofday filter uimode openwith texttools replace partexplorer \
-			quickopen snippet filelist ctags2 documentation scripting vcsmanager security
+#### TODO    appwizard
+
+SUBDIRS = quickopen \
+    fullscreen
+##    classview \
+
+    
+# SUBDIRS = \
+#     abbrev \
+#     astyle \
+#     bookmarks \
+#     diff \
+#     filecreate \
+#     fileview \
+#     outputviews \
+#     grepview \
+#     valgrind \
+#     distpart \
+#     konsole \
+#     tools \
+#     regexptest \
+#     doxygen \
+#     fileselector \
+#     tipofday \
+#     filter \
+#     uimode \
+#     openwith \
+#     texttools \
+#     replace \
+#     partexplorer \
+#     quickopen \
+#     snippet \
+#     filelist \
+#     ctags2 \
+#     documentation \
+#     scripting \
+#     vcsmanager \
+#     security
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am

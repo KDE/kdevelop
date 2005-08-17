@@ -56,7 +56,7 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     urlinput_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
-    importNames = dirs->findAllResources("appimports", QString::null, false, true);
+    importNames = dirs->findAllResources("appimports", QString(), false, true);
     importNames.sort();
 
     QStringList::ConstIterator it;

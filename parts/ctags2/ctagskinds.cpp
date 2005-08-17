@@ -287,19 +287,19 @@ static CTagsKindMapping *findKindMapping(const QString &extension)
 }
 
 
-QString CTagsKinds::findKind( const char * kindChar, const QString &extension )
+QString CTagsKinds::findKind(char kindChar, const QString &extension)
 {
-    if ( kindChar == 0 ) return QString::null;
+    QString res;
 
     CTagsKindMapping *kindMapping = findKindMapping(extension);
     if (kindMapping) {
         CTagsKindMapping *pkm = kindMapping;
         while (pkm->verbose != 0) {
-            if (pkm->abbrev == *kindChar)
+            if (pkm->abbrev == kindChar)
                 return i18n(pkm->verbose);
             ++pkm;
         }
     }
 
-    return QString::null;
+    return QString();
 }

@@ -121,7 +121,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     QString defaultProjectsDir = config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
-    QStringList m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
+    QStringList m_templateNames = dirs->findAllResources("apptemplates", QString(), false, true);
 
     kdDebug(9010) << "Templates: " << endl;
     QStringList categories;
@@ -411,7 +411,7 @@ void AppWizardDialog::licenseChanged()
 		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it)
 		{
 			Q3MultiLineEdit *edit = (*it).edit;
-			edit->setText( QString::null );
+			edit->setText( QString() );
 		}
 	} else {
 		KDevLicense* lic = licenses()[ license_combo->currentText() ];
@@ -1241,7 +1241,7 @@ void AppWizardDialog::loadLicenses()
 	// kdDebug(9010) << "======================== Entering loadLicenses" << endl;
 	KStandardDirs* dirs = KGlobal::dirs();
 	dirs->addResourceType( "licenses", KStandardDirs::kde_default( "data" ) + "kdevelop/licenses/" );
-	QStringList licNames = dirs->findAllResources( "licenses", QString::null, false, true );
+	QStringList licNames = dirs->findAllResources( "licenses", QString(), false, true );
 
 	QStringList::Iterator it;
 	for (it = licNames.begin(); it != licNames.end(); ++it)

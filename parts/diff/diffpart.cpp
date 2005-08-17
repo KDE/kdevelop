@@ -145,7 +145,7 @@ void DiffPart::localDiff()
   if ( !editIface )
     return;
   buffer = editIface->text().local8Bit();
-  resultBuffer = resultErr = QString::null;
+  resultBuffer = resultErr = QString();
 
   delete proc;
   proc = new KProcess();
@@ -183,7 +183,7 @@ void DiffPart::processExited( KProcess* p )
   } else {
     KMessageBox::error( 0, i18n("Diff command failed (%1):\n").arg( p->exitStatus() ) + resultErr );
   }
-  resultBuffer = resultErr = QString::null;
+  resultBuffer = resultErr = QString();
   delete proc;
   proc = 0;
 }
@@ -235,7 +235,7 @@ void DiffPart::showDiff( const QString& diff )
 
 void DiffPart::slotExecDiff()
 {
-  KURL url = KFileDialog::getOpenURL( QString::null, QString::null, 0, i18n("Please Select Patch File") );
+  KURL url = KFileDialog::getOpenURL( QString(), QString(), 0, i18n("Please Select Patch File") );
 
   if ( url.isEmpty() )
     return;

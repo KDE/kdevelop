@@ -69,7 +69,7 @@ QString DocBookmarkOwner::currentURL() const
     if (activePart)
         return activePart->url().url();
     else
-        return QString::null;
+        return QString();
 }
 
 QString DocBookmarkOwner::currentTitle() const
@@ -83,7 +83,7 @@ QString DocBookmarkOwner::currentTitle() const
         return activePart->url().prettyURL();
     }
     else
-        return QString::null;
+        return QString();
 }
 
 class DocBookmarkItem: public DocumentationItem {

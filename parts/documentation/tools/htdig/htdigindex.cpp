@@ -165,7 +165,7 @@ void ProgressDialog::addDir(const QString &dir)
         setFilesScanned(++filesScanned);
     }
 
-    QDir d2(dir, QString::null, QDir::Name|QDir::IgnoreCase, QDir::Dirs);
+    QDir d2(dir, QString(), QDir::Name|QDir::IgnoreCase, QDir::Dirs);
     QStringList dlist = d2.entryList();
 
     for ( it=dlist.begin(); it != dlist.end(); ++it )

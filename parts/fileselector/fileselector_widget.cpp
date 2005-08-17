@@ -221,7 +221,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
     connect( bookmarkHandler, SIGNAL( openURL( const QString& )),
              this, SLOT( setDir( const QString& ) ) );
 
-    waitingUrl = QString::null;
+    waitingUrl = QString();
 
     // whatsthis help
     Q3WhatsThis::add
@@ -370,7 +370,7 @@ void KDevFileSelector::slotFilterChange( const QString & nf )
     if ( empty )
     {
         dir->clearFilter();
-        filter->lineEdit()->setText( QString::null );
+        filter->lineEdit()->setText( QString() );
         QToolTip::add
             ( btnFilter,
                     QString( i18n("Apply last filter (\"%1\")") ).arg( lastFilter ) );
@@ -432,7 +432,7 @@ void KDevFileSelector::btnFilterClick()
 {
     if ( !btnFilter->isOn() )
     {
-        slotFilterChange( QString::null );
+        slotFilterChange( QString() );
     }
     else
     {
@@ -449,7 +449,7 @@ void KDevFileSelector::autoSync()
     if ( isVisible() )
     {
         setActiveDocumentDir();
-        waitingUrl = QString::null;
+        waitingUrl = QString();
     }
     // else set waiting url
     else
@@ -471,13 +471,13 @@ void KDevFileSelector::autoSync( KParts::Part *part )
     KURL u ( doc->url() );
     if ( u.isEmpty() )
     {
-        waitingUrl = QString::null;
+        waitingUrl = QString();
         return;
     }
     if ( isVisible() )
     {
         setDir( u.directory() );
-        waitingUrl = QString::null;
+        waitingUrl = QString();
     }
     else
     {
@@ -516,13 +516,13 @@ void KDevFileSelector::showEvent( QShowEvent * )
     {
         kdDebug()<<"syncing fs on show"<<endl;
         setActiveDocumentDir();
-        waitingUrl = QString::null;
+        waitingUrl = QString();
     }
     // else, if we have a waiting URL set it
     else if ( ! waitingUrl.isEmpty() )
     {
         setDir( waitingUrl );
-        waitingUrl = QString::null;
+        waitingUrl = QString();
     }
 }
 
@@ -540,7 +540,7 @@ bool KDevFileSelector::eventFilter( QObject* o, QEvent *e )
     {
         int add
             = lb->height() < lb->contentsHeight() ? lb->verticalScrollBar()->width() : 0;
-        int w = QMIN( mainwin->main()->width(), lb->contentsWidth() + add );
+        int w = qMin( mainwin->main()->width(), lb->contentsWidth() + add );
         lb->resize( w, lb->height() );
         /// @todo - move the listbox to a suitable place if nessecary
         /// @todo - decide if it is worth caching the size while untill the contents
@@ -562,8 +562,8 @@ class ActionLBItem : public Q3ListBoxPixmap
 public:
     ActionLBItem( Q3ListBox *lb=0,
                   const QPixmap &pm = QPixmap(),
-                  const QString &text=QString::null,
-                  const QString &str=QString::null ) :
+                  const QString &text=QString(),
+                  const QString &str=QString() ) :
             Q3ListBoxPixmap( lb, pm, text ),
             _str(str)
     {}

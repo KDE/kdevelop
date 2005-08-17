@@ -94,15 +94,15 @@ QString DocKDevTOCPlugin::catalogTitle(const QString& url)
 {
     QFileInfo fi(url);
     if (!fi.exists())
-        return QString::null;
+        return QString();
 
     QFile f(url);
     if (!f.open(QIODevice::ReadOnly))
-        return QString::null;
+        return QString();
     
     QDomDocument doc;
     if (!doc.setContent(&f) || (doc.doctype().name() != "kdeveloptoc"))
-        return QString::null;
+        return QString();
     f.close();
 
     QDomElement titleEl = doc.documentElement().namedItem("title").toElement();
@@ -159,7 +159,7 @@ void DocKDevTOCPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* it
     
     QString base;
     if (!baseEl.isNull())
-        base = baseEl.attribute("href", QString::null);
+        base = baseEl.attribute("href", QString());
     
     QDomElement indexEl = docEl.namedItem("index").toElement();
     QDomElement childEl = indexEl.firstChild().toElement();
@@ -204,7 +204,7 @@ void DocKDevTOCPlugin::createTOC(DocumentationCatalogItem* item)
     
     QString base;
     if (!baseEl.isNull())
-        base = baseEl.attribute("href", QString::null);
+        base = baseEl.attribute("href", QString());
     
     QDomElement childEl = docEl.lastChild().toElement();
     addTocSect(tocItem, childEl, base, 1);
@@ -259,8 +259,8 @@ void DocKDevTOCPlugin::setCatalogURL(DocumentationCatalogItem* item)
         if (baseEl.isNull())
             item->setURL(KURL());
         else
-            item->setURL(KURL(constructURL(baseEl.attribute("href", QString::null),
-                baseEl.attribute("url", QString::null))));
+            item->setURL(KURL(constructURL(baseEl.attribute("href", QString()),
+                baseEl.attribute("url", QString()))));
     }
 }
 

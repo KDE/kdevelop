@@ -262,7 +262,7 @@ void ToolsPart::toolsMenuActivated()
     if (isdesktopfile)
         kapp->startServiceByDesktopPath(cmdline);
     else
-        startCommand(cmdline, captured, QString::null);
+        startCommand(cmdline, captured, QString());
 }
 
 

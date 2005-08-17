@@ -127,7 +127,7 @@ QString CopyToPart::relativeProjectPath( QString path )
 		path = path.mid( projectpath.length() );
 		return path;
 	}
-	return QString::null;
+	return QString();
 }
 
 #include "copyto_part.moc"

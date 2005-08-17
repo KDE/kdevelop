@@ -290,7 +290,7 @@ void FCConfigWidget::saveProjectConfig()
             QString dest;
             dest = m_part->project()->projectDirectory() + "/templates/";
             if (it2.current()->text(1) == "create")
-                copyTemplate(QString::null, dest, it2.current()->text(0));
+                copyTemplate(QString(), dest, it2.current()->text(0));
             else
                 copyTemplate(it2.current()->text(1), dest, it2.current()->text(0));
         }
@@ -326,7 +326,7 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
                 else
                     dest = m_part->project()->projectDirectory() + "/templates/";
                 if (it.current()->text(4) == "create")
-                    copyTemplate(QString::null, dest, it.current()->text(0));
+                    copyTemplate(QString(), dest, it.current()->text(0));
                 else
                     copyTemplate(it.current()->text(4), dest, it.current()->text(0));
             }
@@ -353,7 +353,7 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
                     else
                         dest = m_part->project()->projectDirectory() + "/templates/";
                     if (lastChild->text(4) == "create")
-                        copyTemplate(QString::null, dest, it.current()->text(0) + "-" + lastChild->text(0));
+                        copyTemplate(QString(), dest, it.current()->text(0) + "-" + lastChild->text(0));
                     else
                         copyTemplate(lastChild->text(4), dest, it.current()->text(0) + "-" + lastChild->text(0));
                 }
@@ -680,7 +680,7 @@ void FCConfigWidget::edit_template_content_button_clicked( )
             m_part->partController()->editDocument(content);
         else
         {
-            KMessageBox::information(this, i18n("Requested template does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit template content warning");
+            KMessageBox::information(this, i18n("Requested template does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString(), "Edit template content warning");
             fctemplates_view->currentItem()->setPixmap(0, SmallIcon("edit"));
             urlsToEdit.append(content);
         }
@@ -705,9 +705,9 @@ void FCConfigWidget::edit_type_content_button_clicked( )
         else
         {
             if (it->text(4) == "create")
-                KMessageBox::information(this, i18n("Template for the selected file type does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit type template content warning");
+                KMessageBox::information(this, i18n("Template for the selected file type does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString(), "Edit type template content warning");
             else
-                KMessageBox::information(this, i18n("Template for the selected file type has been changed.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit type template content warning");
+                KMessageBox::information(this, i18n("Template for the selected file type has been changed.\nIt will be opened immediately after accepting the configuration dialog."), QString(), "Edit type template content warning");
             fc_view->currentItem()->setPixmap(0, SmallIcon("edit"));
             urlsToEdit.append(content);
         }
@@ -728,9 +728,9 @@ void FCConfigWidget::edit_type_content_button_clicked( )
         else
         {
             if (it->text(4) == "create")
-                KMessageBox::information(this, i18n("Template for the selected file type does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit global type template content warning");
+                KMessageBox::information(this, i18n("Template for the selected file type does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString(), "Edit global type template content warning");
             else
-                KMessageBox::information(this, i18n("Template for the selected file type has been changed.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit global type template content warning");
+                KMessageBox::information(this, i18n("Template for the selected file type has been changed.\nIt will be opened immediately after accepting the configuration dialog."), QString(), "Edit global type template content warning");
             fc_view->currentItem()->setPixmap(0, SmallIcon("edit"));
             urlsToEdit.append(content);
         }

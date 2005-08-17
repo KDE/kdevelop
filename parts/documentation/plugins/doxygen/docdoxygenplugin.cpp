@@ -85,13 +85,13 @@ QString DocDoxygenPlugin::catalogTitle(const QString& url)
 {
     QFileInfo fi(url);
     if (!fi.exists())
-        return QString::null;
+        return QString();
     
     if (fi.extension(false) == "html")
     {
         QFile f(url);
         if (!f.open(QIODevice::ReadOnly))
-            return QString::null;
+            return QString();
         
         QTextStream ts(&f);
         QString contents = ts.read();
@@ -119,7 +119,7 @@ QString DocDoxygenPlugin::catalogTitle(const QString& url)
             return re.cap(1);   
         }
     }
-    return QString::null;
+    return QString();
 }
 
 QString DocDoxygenPlugin::pluginName() const

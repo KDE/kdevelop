@@ -181,8 +181,8 @@ InputInt::~InputInt()
 
 void InputInt::init()
 {
-    m_val = QMAX(m_minVal, m_val);
-    m_val = QMIN(m_maxVal, m_val);
+    m_val = qMax(m_minVal, m_val);
+    m_val = qMin(m_maxVal, m_val);
     sp->setValue(m_val);
 }
 

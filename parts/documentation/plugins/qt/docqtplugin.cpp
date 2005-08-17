@@ -186,7 +186,7 @@ void DocQtPlugin::setCatalogURL(DocumentationCatalogItem *item)
 
     if (item->url().isEmpty())
     {
-        KURL url(fi.dirPath(true) + "/" + docEl.attribute("ref", QString::null));
+        KURL url(fi.dirPath(true) + "/" + docEl.attribute("ref", QString()));
         item->setURL(url);
     }
 }
@@ -306,20 +306,20 @@ QString DocQtPlugin::catalogTitle(const QString &url)
 {
     QFileInfo fi(url);
     if (!fi.exists())
-        return QString::null;
+        return QString();
 
     QFile f(url);
     if (!f.open(QIODevice::ReadOnly))
-        return QString::null;
+        return QString();
     
     QDomDocument doc;
     if (!doc.setContent(&f) || (doc.doctype().name() != "DCF"))
-        return QString::null;
+        return QString();
     f.close();
 
     QDomElement docEl = doc.documentElement();
 
-    return docEl.attribute("title", QString::null);
+    return docEl.attribute("title", QString());
 }
 
 DocumentationCatalogItem *DocQtPlugin::createCatalog(KListView *contents, const QString &title, const QString &url)

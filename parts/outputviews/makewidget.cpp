@@ -414,7 +414,7 @@ QString MakeWidget::directory(int parag) const
 {
 	Q3ValueVector<MakeItem*>::const_iterator it = qFind( m_items.begin(), m_items.end(), m_paragraphToItem[parag] );
 	if ( it == m_items.end() )
-		return QString::null;
+		return QString();
 	// run backwards over directories and figure out where we are
 	while ( it != m_items.begin() ) {
 		--it;
@@ -422,7 +422,7 @@ QString MakeWidget::directory(int parag) const
 		if ( edi )
 			return edi->directory + "/";
 	}
-	return QString::null;
+	return QString();
 }
 
 // hackish function that will return true and put string "file" in "fName" if the file

@@ -124,7 +124,7 @@ QString SpecSupport::getInfo(QString s, QString motif) {
     QRegExp re(motif + "[ \t]*([^ \t].*[^ \t])[ \t]*");
     if (re.exactMatch(s))
         return re.cap(1);
-    return QString::null;
+    return QString();
 }
 
 //    QPushButton* importSPECPushButton;

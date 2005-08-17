@@ -31,7 +31,7 @@ public:
     _key( key ), _pid ( pid ), backtrace( false ), _line( -1 ), _active( false ) {}
 
   ValListViewItem( ValListViewItem* parent, int key, int pid, const QString& message, const QString& filename, int line, bool active ):
-    Q3ListViewItem( parent, QString::number( key ), QString::null, message ),
+    Q3ListViewItem( parent, QString::number( key ), QString(), message ),
     _key( key ), _pid( pid ), backtrace( true ), _filename( filename ), _line( line ), _active( active )
   {
     if ( parent->_pid != _pid && _pid > 0 )

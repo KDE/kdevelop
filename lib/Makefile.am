@@ -14,7 +14,15 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la $(LI
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = util interfaces widgets catalog astyle projectmanager cppparser
+SUBDIRS = \
+    util \
+    interfaces \
+    language \
+    widgets \
+    catalog \
+    astyle \
+    projectmanager \
+    cppparser
 
 DOXYGEN_EMPTY = YES
 include ../Doxyfile.am

@@ -161,17 +161,17 @@ void AbbrevPart::load()
     if (QFileInfo(localTemplatesFile).exists())
         files << localTemplatesFile;
     else
-        files = dirs->findAllResources("codetemplates", QString::null, false, true);
+        files = dirs->findAllResources("codetemplates", QString(), false, true);
 
     QString localSourcesFile = locateLocal("sources", "sources", AbbrevFactory::instance());
     QStringList sourceFiles;
     if (QFileInfo(localSourcesFile).exists())
         sourceFiles << localSourcesFile;
     else
-        sourceFiles = dirs->findAllResources("sources", QString::null, false, true);
+        sourceFiles = dirs->findAllResources("sources", QString(), false, true);
     kdDebug(9028) << "=========> sourceFiles: " << sourceFiles.join(" ") << endl;
 
-    this->m_completionFile = QString::null;
+    this->m_completionFile = QString();
     for( QStringList::Iterator it=sourceFiles.begin(); it!=sourceFiles.end(); ++it ) {
         QString fn = *it;
 	kdDebug(9028) << "===> load file: " << fn << endl;

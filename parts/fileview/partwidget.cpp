@@ -101,7 +101,7 @@ void PartWidget::slotFilterChange( const QString & nf )
     bool empty = f.isEmpty() || f == "*";
     if ( empty )
     {
-        m_filter->lineEdit()->setText( QString::null );
+        m_filter->lineEdit()->setText( QString() );
         QToolTip::add( m_btnFilter, i18n("Apply last filter (\"%1\")").arg( m_lastFilter ) );
     }
     else
@@ -128,7 +128,7 @@ void PartWidget::slotBtnFilterClick()
 {
     if ( !m_btnFilter->isOn() )
     {
-        slotFilterChange( QString::null );
+        slotFilterChange( QString() );
     }
     else
     {

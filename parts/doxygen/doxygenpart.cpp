@@ -478,7 +478,7 @@ void DoxygenPart::slotActivePartChanged( KParts::Part * part )
 	if (doc != 0)
 		m_file = doc->url().path();
 	else
-		m_file = QString::null;
+		m_file = QString();
 	// <-
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>(part);
     m_cursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()) : 0;

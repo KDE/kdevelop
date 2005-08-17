@@ -51,7 +51,7 @@ namespace FileCreate {
 
   void ListItem::setHeight( int height )
   {
-    KListViewItem::setHeight( QMAX(QMAX(height,m_iconHeight), m_filetypeRenderer->height() ) );
+    KListViewItem::setHeight( qMax(qMax(height,m_iconHeight), m_filetypeRenderer->height() ) );
   }
 
   void ListItem::prepareResize() {

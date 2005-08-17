@@ -8,7 +8,7 @@ class ValgrindBacktraceItem
 {
 public:
   enum Type { Unknown, SourceCode, Library };
-  ValgrindBacktraceItem( const QString& rawOutput = QString::null );
+  ValgrindBacktraceItem( const QString& rawOutput = QString() );
   ~ValgrindBacktraceItem();
 
   QString message() const { return _message; }

@@ -57,7 +57,7 @@ private:
 
 
 GrepListBoxItem::GrepListBoxItem(const QString &fileName, const QString &lineNumber, const QString &text, bool showFilename)
-		: ProcessListBoxItem( QString::null, Normal),
+		: ProcessListBoxItem( QString(), Normal),
 		fileName(fileName), lineNumber(lineNumber), text(text.stripWhiteSpace()),
 		show(showFilename)
 {}
@@ -332,7 +332,7 @@ void GrepViewWidget::popupMenu(Q3ListBoxItem*, const QPoint& p)
 
 void GrepViewWidget::slotKeepOutput( )
 {
-	if ( m_lastPattern == QString::null ) return;
+	if ( m_lastPattern == QString() ) return;
 	
 	m_tabWidget->changeTab(m_curOutput, m_lastPattern);
 

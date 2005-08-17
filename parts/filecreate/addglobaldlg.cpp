@@ -96,9 +96,9 @@ void AddGlobalDlg::languageChange()
     buttonHelp->setGuiItem( KStdGuiItem::help() );
     buttonHelp->setAccel( QKeySequence( tr2i18n( "F1" ) ) );
     buttonOk->setGuiItem( KStdGuiItem::ok() );
-    buttonOk->setAccel( QKeySequence( QString::null ) );
+    buttonOk->setAccel( QKeySequence( QString() ) );
     buttonCancel->setGuiItem( KStdGuiItem::cancel() );
-    buttonCancel->setAccel( QKeySequence( QString::null ) );
+    buttonCancel->setAccel( QKeySequence( QString() ) );
     fcglobal_view->header()->setLabel( 0, i18n( "Type extension:" ) );
     fcglobal_view->header()->setLabel( 1, i18n( "Type name:" ) );
     fcglobal_view->header()->setLabel( 2, i18n( "Template location:" ) );

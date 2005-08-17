@@ -131,14 +131,14 @@ void AppOutputWidget::slotContextMenu( Q3ListBoxItem *, const QPoint &p )
 		
 		//copy the first item from the listbox
 		//if a programm was started, this contains the issued command
-		QString strFirst=QString::null;
+		QString strFirst=QString();
 		if (count()) {
 			setTopItem(0);
 			strFirst = item(topItem())->text();
 		}
 		//clear the listbox and write back the issued command
 		clear();
-		if (strFirst != QString::null)
+		if (strFirst != QString())
 			insertItem(new ProcessListBoxItem(strFirst, ProcessListBoxItem::Diagnostic));
 
 		//grep through the QList for items matching the filter...

@@ -88,7 +88,7 @@ void ValgrindPart::projectOpened()
 
 void ValgrindPart::loadOutput()
 {
-  QString fName = KFileDialog::getOpenFileName(QString::null, "*", 0, i18n("Open Valgrind Output"));
+  QString fName = KFileDialog::getOpenFileName(QString(), "*", 0, i18n("Open Valgrind Output"));
   if ( fName.isEmpty() )
     return;
 
@@ -207,9 +207,9 @@ void ValgrindPart::slotStopButtonClicked( KDevPlugin* which )
 void ValgrindPart::clear()
 {
   m_widget->clear();
-  currentMessage = QString::null;
+  currentMessage = QString();
   currentPid = -1;
-  lastPiece = QString::null;
+  lastPiece = QString();
 }
 
 void ValgrindPart::runValgrind( const QString& exec, const QString& params, const QString& valExec, const QString& valParams )
@@ -258,7 +258,7 @@ void ValgrindPart::receivedString( const QString& str )
     lastPiece = lines.back();
     lines.pop_back();
   } else {
-    lastPiece = QString::null;
+    lastPiece = QString();
   }
   appendMessages( lines );
 }
@@ -275,7 +275,7 @@ void ValgrindPart::appendMessages( const QStringList& lines )
 
     if ( valRe.cap( 2 ).isEmpty() ) {
       appendMessage( currentMessage );
-      currentMessage = QString::null;
+      currentMessage = QString();
     } else if ( cPid != currentPid ) {
       appendMessage( currentMessage );
       currentMessage = *it;
@@ -292,8 +292,8 @@ void ValgrindPart::processExited( KProcess* p )
 {
   if ( p == proc ) {
     appendMessage( currentMessage + lastPiece );
-    currentMessage = QString::null;
-    lastPiece = QString::null;
+    currentMessage = QString();
+    lastPiece = QString();
     core()->running( this, false );
     
     if (kcInfo.runKc)
