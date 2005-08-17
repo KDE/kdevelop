@@ -13,7 +13,8 @@ SUBDIRS = fullscreen \
     guibuilder \
     valgrind \
     partexplorer \
-    quickopen
+    quickopen \
+    tipofday
 
 # SUBDIRS = \
 #     abbrev \
