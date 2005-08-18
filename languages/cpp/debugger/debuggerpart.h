@@ -68,6 +68,7 @@ private slots:
     void slotActivePartChanged(KParts::Part*);
 
     void slotRun();
+    void slotRestart();
     void slotExamineCore();
     void slotAttachProcess();
     void slotStopDebugger();

@@ -438,6 +438,12 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     viewedThread_ = -1;
     currentFrame_ = 0;
 
+    // Delete the tty that waits for application output. Without
+    // this, KDevelop will be hanging, eating 100% CPU. Don't know
+    // why and don't understand this TTY stuff either.
+    delete tty_;
+    tty_ = 0;
+
     frameStack_->clear();
 
     if (msgBox)
@@ -1474,6 +1480,18 @@ void GDBController::slotRun()
     }
 }
 
+
+void GDBController::slotRestart()
+{
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    if (stateIsOn(s_appBusy))
+        pauseApp();
+
+    queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));        
+}
+
 // **************************************************************************
 
 void GDBController::slotRunUntil(const QString &fileName, int lineNum)
@@ -2006,7 +2024,7 @@ void GDBController::slotDbgProcessExited(KProcess* process)
       emit debuggerRunError(127);
 
     destroyCmds();
-    state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
+    state_ = s_dbgNotStarted|s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);
 
     emit gdbStdout("(gdb) Process exited\n");

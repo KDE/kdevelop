@@ -6,6 +6,7 @@
   <Action name="debug_run" group="debug"/>
   <Action name="debug_stop" group="debug"/>
   <Action name="debug_pause" group="debug"/>
+  <Action name="debug_restart" group="debug"/>
   <Action name="debug_runtocursor" group="debug"/>
   <Action name="debug_jumptocursor" group="debug"/>
   <Separator group="debug"/>
@@ -27,6 +28,7 @@
 <ToolBar name="debugToolBar">
   <text>Debugger Toolbar</text>
   <Action name="debug_run"/>
+  <Action name="debug_restart"/>
   <Action name="debug_stepover"/>
   <Action name="debug_stepinto"/>
   <Action name="debug_stepout"/>

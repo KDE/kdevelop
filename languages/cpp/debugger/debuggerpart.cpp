@@ -176,6 +176,16 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
 
+    action = new KAction(i18n("&Restart"), "dbgrestart", 0,
+                         this, SLOT(slotRestart()),
+                         actionCollection(), "debug_restart");
+    action->setToolTip( i18n("Restart program") );
+    action->setWhatsThis( i18n("<b>Restarts application</b><p>"
+                               "Restarts applications from the beginning."
+                              ) );
+    action->setEnabled(false);
+
+
     action = new KAction(i18n("Sto&p"), "stop", 0,
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
@@ -782,6 +792,14 @@ void DebuggerPart::slotRun()
     controller->slotRun();
 }
 
+void DebuggerPart::slotRestart()
+{
+    // We could have directly connect KAction to controller->slotRestart()
+    // but controller is created after actions, and I did not want to 
+    // create unconnected action and connect it later, as it would make
+    // it harder to understand the code.
+    controller->slotRestart();
+}
 
 void DebuggerPart::slotExamineCore()
 {
@@ -948,6 +966,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     if (state & s_dbgNotStarted)
     {
         stateIndicator = " ";
+        mainWindow()->lowerView(variableWidget);
     }
     else if (state & s_appBusy)
     {
@@ -964,8 +983,6 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         ac->action("debug_run")->setToolTip( i18n("Restart the program in the debugger") );
         ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
                                            "Restarts the program in the debugger") );
-        slotStop();
-        mainWindow()->lowerView(variableWidget);
     }
     else
     {
@@ -983,6 +1000,11 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
             mainWindow()->raiseView(variableWidget);
         }
     }
+
+    // If program is started, enable the 'restart' comand.
+    actionCollection()->action("debug_restart")->setEnabled(
+        !(state & s_programExited));
+
 
     // As soon as debugger clears 's_appNotStarted' flag, we
     // set 'justRestarted' variable. 
