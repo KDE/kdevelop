@@ -22,6 +22,7 @@ Name[sr@Latn]=Informacije za %{APPNAME}
 Name[sv]=%{APPNAME} information
 Name[ta]=%{APPNAME} தகவல்
 Name[tg]=Маълумот дар бораи %{APPNAME} 
+Name[uk]=Інформація про %{APPNAME}
 Name[xx]=xx%{APPNAME} Infoxx
 Name[zh_CN]=%{APPNAME}的信息
 ServiceTypes=KFilePlugin

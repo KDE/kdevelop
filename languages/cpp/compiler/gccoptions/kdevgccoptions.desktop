@@ -27,6 +27,7 @@ Comment[sr@Latn]=GNU-ov C prevodilac
 Comment[sv]=GNU C-kompilator
 Comment[ta]=GNU Cதொகுப்பி
 Comment[tg]=Талфифгари GNU C 
+Comment[uk]=Кімпілятор GNU C
 Comment[xx]=xxGNU C Compilerxx
 Comment[zh_CN]=GNU C编译器
 Name=GccOptions
