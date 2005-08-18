@@ -559,19 +559,14 @@ VarFrameRoot* VariableTree::demand_frame_root(int frameNo, int threadNo)
 
 void VariableTree::slotParametersReady(const char* data)
 {
-    viewport()->setUpdatesEnabled(false);
-
     // The locals are always attached to the currentFrame
     VarFrameRoot *frame = demand_frame_root(currentFrame_, currentThread_);
     frame->setParams(data);
-
-    viewport()->setUpdatesEnabled(true);
-    viewport()->repaint();
 }
 
 void VariableTree::slotLocalsReady(const char* data)
 {
-    viewport()->setUpdatesEnabled(false);
+    setUpdatesEnabled(false);
 
     VarFrameRoot *frame = demand_frame_root(currentFrame_, currentThread_);
     frame->setLocals(data);
@@ -589,8 +584,8 @@ void VariableTree::slotLocalsReady(const char* data)
     else 
        frame->trim();
 
-    viewport()->setUpdatesEnabled(true);
-    viewport()->repaint();
+    setUpdatesEnabled(true);
+    triggerUpdate();
 }
 
 void VariableTree::slotCurrentFrame(int frameNo, int threadNo)
