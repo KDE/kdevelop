@@ -27,6 +27,7 @@ Comment[da]=Generér et QMake/Qt baseret program (krydsplatform kompatibel)
 Comment[de]=Erstellt eine QMake/Qt basierte Anwendung (Crossplattform kompatibel)
 Comment[es]=Genera una aplicación basada en QMake/Qt (compatible multiplataforma)
 Comment[et]=Rakenduse loomine QMake'i/Qt põhjal (multiplatvormne)
+Comment[eu]=QMake/Qt software-ean oinarritutako aplikazio bat sortzen du (plataforma-gurutzatuekin bateragarria)
 Comment[hu]=Létrehoz egy QMake/Qt-alapú, keresztfordításra is megfelelő alkalmazást
 Comment[it]=Genera un'applicazione basata su QMake/Qt (compatibile multipiattaforma)
 Comment[nl]=Genereert een Qmake/Qt-gebaseerde toepassing (crossplatform compatible)
