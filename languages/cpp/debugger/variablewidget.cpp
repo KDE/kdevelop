@@ -1141,7 +1141,10 @@ VarFrameRoot::~VarFrameRoot()
 void VarFrameRoot::setParams(const char *params)
 {
     setActive();
-    params_ = params;
+    if (strncmp(params, "No arguments", strlen("No arguments")) == 0)
+        params_ = "";
+    else
+        params_ = params;
 }
 
 // **************************************************************************
