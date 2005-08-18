@@ -258,12 +258,25 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     {
         KPopupMenu popup(this);
         popup.insertTitle(item->text(VarNameCol));
+        int idRemember = -2;
         int idRemove = -2;
-        int idReevaluate = -2;
+        int idReevaluate = -2;        
+        int idWatch = -2;
+
         QListViewItem* root = findRoot(item);
+
+        if (root != recentExpressions_)
+        {
+            idRemember = popup.insertItem(
+                SmallIcon("pencil"), i18n("Remember value"));
+        }
+
         if (dynamic_cast<WatchRoot*>(root)) {
             idRemove = popup.insertItem( 
                 SmallIcon("editdelete"), i18n("Remove Watch Variable") );
+        } else if (root != recentExpressions_) {
+            idWatch = popup.insertItem(
+                i18n("Watch variable"));
         }
         if (root == recentExpressions_) {
             idReevaluate = popup.insertItem( 
@@ -278,9 +291,25 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             SmallIcon("editcopy"), i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
-        if (res == idRemove)
+        if (res == idRemember)
+        {
+            if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
+            {
+                ((VariableWidget*)parent())->
+                    slotEvaluateExpression(item->gdbExpression());
+            }
+        } 
+        else if (res == idWatch)
+        {
+            if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
+            {
+                ((VariableWidget*)parent())->
+                    slotAddWatchVariable(item->gdbExpression());
+            }
+        } 
+        else if (res == idRemove)
             delete item;
-        if (res == idToggleRadix)
+        else if (res == idToggleRadix)
             emit toggleRadix(item);
         else if (res == idCopyToClipboard)
         {
