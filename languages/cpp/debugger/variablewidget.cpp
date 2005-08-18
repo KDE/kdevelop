@@ -934,7 +934,24 @@ void VarItem::updateValue(char *buf)
             dataType_ = typeValue;
     }
 
-    GDBParser::getGDBParser()->parseValue(this, buf);
+    // A hack to nicely display QStrings. The content of QString is unicode
+    // for for ASCII only strings we get ascii character mixed with \000.
+    // Remove those \000 now.
+    
+    // This is not very nice, becuse we're doing this unconditionally
+    // and this method can be called twice: first with data that gdb sends
+    // for a variable, and second after we request the string data. In theory
+    // the data sent by gdb might contain \000 that should not be translated.
+    //
+    // What's even worse, ideally we should convert the string data from
+    // gdb into a QString again, handling all other escapes and composing
+    // one QChar from two characters from gdb. But to do that, we *should*
+    // now if the data if generic gdb value, and result of request for string
+    // data. Fixing is is for later.
+    QCString r(buf);
+    r.replace( QRegExp("\\\\000|\\\\0"), "" );
+
+    GDBParser::getGDBParser()->parseValue(this, r.data());
     setActive();
 }
 
@@ -954,6 +971,7 @@ void VarItem::updateType(char *buf)
     originalValueType_ = str.latin1();
 
     setText(VarTypeCol, str);
+    handleSpecialTypes();    
 }
 
 // **************************************************************************
@@ -962,7 +980,7 @@ void VarItem::setCache(const QCString &value)
 {
     cache_ = value;
     setExpandable(true);
-    checkForRequests();
+    handleSpecialTypes();
     if (isOpen())
         setOpen(true);
     repaint();
@@ -983,6 +1001,7 @@ void VarItem::setOpen(bool open)
             QCString value = cache_;
             cache_ = QCString();
             GDBParser::getGDBParser()->parseCompositeValue(this, value.data());
+            handleSpecialTypes();
             trim();
         } else {
             if (dataType_ == typePointer || dataType_ == typeReference) {
@@ -1009,58 +1028,54 @@ QCString VarItem::getCache()
 
 // **************************************************************************
 
-void VarItem::checkForRequests()
+/* This function is called in two cases -- when the type of variable first
+   becomes known.in two cases. First is when the type of variable
+   first becomes known. Second is when value has changed.
+
+   The method looks at the type, and if necessary, issues an additional gdb
+   requests. 
+*/
+void VarItem::handleSpecialTypes()
 {
-    // This shouldn't be needed to keep it from blowing up, but sometimes is.
-    // On the other hand, if it's empty, there is no reason to go on...
-    if ( cache_.isEmpty() ) return;
+    if (originalValueType_.isEmpty())
+        return;
 
-    /// @todo - hardcoded for now - these should get read from config
+    QString type = originalValueType_;
+    if (dataType_ == typeReference)
+    {
+        // Disable the special processing for non-opened
+        // references. Not sure it's the best thing, but
+        // previous code worked like this.
+        if (!isOpen())
+            return;
 
-    // Signature for a QT1.44 QString
-    if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
-        waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            gdbExpression().latin1()+QCString(".shd.data"));
+        static QRegExp strip_reference("(.*)[ ]*&");
+        if (strip_reference.exactMatch(type))
+        {
+            type = strip_reference.cap(1);
+        }
+    }
+    if (dataType_ == typePointer)
+    {
+        if (!isOpen())
+            return;
+
+        static QRegExp strip_pointer("(.*)[ ]*\\*");
+        if (strip_pointer.exactMatch(type))
+        {
+            type = strip_pointer.cap(1);
+        }
     }
 
-    // Signature for a QT1.44 QDir
-    if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0) {
-        waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            gdbExpression().latin1()+QCString(".dPath.shd.data"));
-    }
+    static QRegExp qstring("^(const)?[ ]*QString[ ]*$");
 
-    // Signature for a QT2.x QT3.x QString
-    /// @todo - This handling is not that good - but it works sufficiently well
-    // at the moment to leave it here, and it won't cause bad things to happen.
-    if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
+    if (qstring.exactMatch(type)) {
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(
             this,
             QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
                                gdbExpression().latin1()));
     }
-
-    // Signature for a QT2.0.x QT2.1 QCString
-    if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0) {
-        waitingForData();
-        emit ((VariableTree*)listView())->expandUserItem(
-            this,
-            gdbExpression().latin1()+QCString(".shd.data"));
-    }
-
-    // Signature for a QT2.0.x QT2.1 QDir
-    if (strncmp(cache_, "dPath = {d = 0x", 15) == 0) {
-        waitingForData();
-        ((VariableTree*)listView())->expandUserItem(
-            this,
-            // QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-            QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
-                               gdbExpression().latin1()));
-  }
 }
 
 // **************************************************************************

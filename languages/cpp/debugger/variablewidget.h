@@ -247,7 +247,10 @@ public:
     QString tipText() const;
 
 private:
-    void checkForRequests();
+
+    // Handle types that require special dispay, such as
+    // QString.
+    void handleSpecialTypes();
     void paintCell( QPainter *p, const QColorGroup &cg,
                     int column, int width, int align );
 
