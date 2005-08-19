@@ -61,7 +61,14 @@ protected:
     
     void autoSetupDocs(const QString &defaultDir, const QString &searchDir, 
         const QString &name);
-    
+
+    /**
+     * Returns all the tag files from a directory and its subdirectories.
+     * @param startDir the directory to start with
+     * @param level the depth of the current search
+     * @return a list with the absolute path to the ".tag" files in startDir
+     */
+    QStringList tagFiles(const QString &startDir, int level = 0);    
 };
 
 

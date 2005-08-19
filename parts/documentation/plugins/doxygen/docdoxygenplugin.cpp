@@ -331,40 +331,50 @@ void DocDoxygenPlugin::createBookTOC(DocumentationItem *item, const QString &tag
     //@todo list html files in the directory if tag was not found
     if (!QFile::exists(tagName))
         return;
-    
-    QFile f(tagName);
-    if (!f.open(IO_ReadOnly))
-    {
-        kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
-        return;
-    }
 
-    QDomDocument dom;
-    if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile")
-    {
-        kdDebug(9002) << "No valid tag file" << endl;
-        return;
-    }
-    f.close();
+    QStringList tagFileList;
+    if (tagName.endsWith(".tag"))
+        tagFileList = tagFiles(QFileInfo(tagName).dirPath() + "/");
+    else
+        tagFileList += tagName;
 
-    QDomElement docEl = dom.documentElement();
-
-    QDomElement childEl = docEl.lastChild().toElement();
-    while (!childEl.isNull())
+    QStringList::ConstIterator end = tagFileList.constEnd();
+    for (QStringList::ConstIterator it = tagFileList.constBegin(); it != end; ++it)
     {
-        if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class")
+        QFile f(*it);
+        if (!f.open(IO_ReadOnly))
         {
-            QString classname = childEl.namedItem("name").firstChild().toText().data();
-            QString filename = childEl.namedItem("filename").firstChild().toText().data();
-
-            if (QFile::exists(baseUrl + filename))
-            {
-                DocumentationItem *docItem = new DocumentationItem(DocumentationItem::Document,
-                    item, classname);
-                docItem->setURL(KURL(baseUrl + filename));
-            }
+            kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
+            return;
         }
-        childEl = childEl.previousSibling().toElement();
+    
+        QDomDocument dom;
+        if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile")
+        {
+            kdDebug(9002) << "No valid tag file" << endl;
+            return;
+        }
+        f.close();
+    
+        QDomElement docEl = dom.documentElement();
+    
+        QDomElement childEl = docEl.lastChild().toElement();
+        while (!childEl.isNull())
+        {
+            if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class")
+            {
+                QString classname = childEl.namedItem("name").firstChild().toText().data();
+                QString filename = childEl.namedItem("filename").firstChild().toText().data();
+    
+                if (QFile::exists(baseUrl + filename))
+                {
+                    DocumentationItem *docItem = new DocumentationItem(DocumentationItem::Document,
+                        item, classname);
+                    docItem->setURL(KURL(baseUrl + filename));
+                }
+            }
+            childEl = childEl.previousSibling().toElement();
+        }
     }
 }
 
@@ -442,6 +452,50 @@ ProjectDocumentationPlugin *DocDoxygenPlugin::projectDocumentationPlugin(Project
     if (type == APIDocs)
         return new ProjectDocumentationPlugin(this, type);
     return DocumentationPlugin::projectDocumentationPlugin(type);
+}
+
+QStringList DocDoxygenPlugin::tagFiles(const QString& path, int level)
+{
+  QStringList r;
+  QDir dir(path);
+  if (level > 10) return r;
+  if (!dir.isReadable()) return r;
+  if (!dir.exists()) return r;
+
+  QStringList  dirList;
+  QStringList  fileList;
+  QStringList::Iterator it;
+
+  dir.setFilter ( QDir::Dirs);
+  dirList = dir.entryList();
+
+  dirList.remove(".");
+  dirList.remove("..");
+
+  dir.setFilter(QDir::Files | QDir::Hidden | QDir::System);
+  fileList = dir.entryList();
+  QStringList::Iterator end = dirList.end();
+  for ( it = dirList.begin(); it != end; ++it )
+  {
+    QString name = *it;
+    if (QFileInfo( dir, *it ).isSymLink())
+      continue;
+    r += tagFiles(path + name + "/", level + 1 );
+  }
+
+  QStringList::Iterator fend = fileList.end();
+  for ( it = fileList.begin(); it != fend; ++it )
+  {
+    QString name = *it;
+    QFileInfo fi( dir, *it );
+    if (fi.isSymLink() || !fi.isFile())
+      continue;
+
+    if (QDir::match(QString("*.tag"), name))
+      r += (path+name);
+  }
+
+  return r;
 }
 
 #include "docdoxygenplugin.moc"
