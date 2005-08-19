@@ -1472,7 +1472,25 @@ void GDBController::slotRun()
             // Note: script could contain "run" or "continue"
         }
         else {
-            queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));
+
+            // The program is run locally. Need the make sure it's executable,
+            // just in case.
+            QFileInfo app(application_);
+            if (app.isExecutable())
+            {
+                queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));
+            }
+            else
+            {
+                KMessageBox::error(
+                    0, QString(
+                        i18n("<b>Could not run application '%1'.</b>"
+                             "<p>The application does not have the executable bit set. "
+                             "Try rebuilding the project, or change permissions "
+                             "manually."
+                            )).arg(app.fileName()),
+                    i18n("Could not run application"));
+            }
         }
     }
     else {
