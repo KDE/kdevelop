@@ -1483,12 +1483,12 @@ void GDBController::slotRun()
             else
             {
                 KMessageBox::error(
-                    0, QString(
-                        i18n("<b>Could not run application '%1'.</b>"
-                             "<p>The application does not have the executable bit set. "
-                             "Try rebuilding the project, or change permissions "
-                             "manually."
-                            )).arg(app.fileName()),
+                    0, 
+                    i18n("<b>Could not run application '%1'.</b>"
+                         "<p>The application does not have the executable bit set. "
+                         "Try rebuilding the project, or change permissions "
+                         "manually."
+                        ).arg(app.fileName()),
                     i18n("Could not run application"));
             }
         }
