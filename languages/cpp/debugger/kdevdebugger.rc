@@ -1,12 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDebugger" version="10">
+<kpartgui name="KDevDebugger" version="11">
 <MenuBar>
  <Menu name="debug">
   <text>&amp;Debug</text>
   <Action name="debug_run" group="debug"/>
   <Action name="debug_stop" group="debug"/>
   <Action name="debug_pause" group="debug"/>
-  <Action name="debug_restart" group="debug"/>
   <Action name="debug_runtocursor" group="debug"/>
   <Action name="debug_jumptocursor" group="debug"/>
   <Separator group="debug"/>
@@ -15,6 +14,7 @@
   <Action name="debug_stepinto" group="debug"/>
   <Action name="debug_stepintoinst" group="debug"/>
   <Action name="debug_stepout" group="debug"/>
+  <Action name="debug_restart" group="debug"/>
   <Separator group="debug"/>
   <Action name="debug_toggle_breakpoint" group="debug"/>
   <Action name="debug_disable_breakpoint" group="debug"/>
