@@ -384,25 +384,31 @@ void DocDoxygenPlugin::createBookIndex(const QString &tagfile, IndexBox* index, 
     kdDebug() << tagfile << endl;
     if (!QFile::exists(tagName))
         return;
-    
-    QFile f(tagName);
-    if (!f.open(IO_ReadOnly))
-    {
-        kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
-        return;
-    }
-
-    QDomDocument dom;
-    if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile")
-    {
-        kdDebug(9002) << "No valid tag file" << endl;
-        return;
-    }
-    f.close();
-
-    QDomElement docEl = dom.documentElement();
     QString prefix = baseHtmlUrl.isEmpty() ? KURL(tagfile).directory(false) + "html/" : baseHtmlUrl;
-    createIndexFromTag(dom, index, item, docEl, prefix);
+    
+    QStringList tagFileList = tagFiles(QFileInfo(tagName).dirPath() + "/");
+
+    QStringList::ConstIterator end = tagFileList.constEnd();
+    for (QStringList::ConstIterator it = tagFileList.constBegin(); it != end; ++it)
+    {
+        QFile f(*it);
+        if (!f.open(IO_ReadOnly))
+        {
+            kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
+            return;
+        }
+
+        QDomDocument dom;
+        if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile")
+        {
+            kdDebug(9002) << "No valid tag file" << endl;
+            return;
+        }
+        f.close();
+
+        QDomElement docEl = dom.documentElement();
+        createIndexFromTag(dom, index, item, docEl, prefix);
+  }
 }
 
 void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
