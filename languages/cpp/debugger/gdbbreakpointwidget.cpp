@@ -1132,13 +1132,6 @@ QWidget* BreakpointActionCell::createEditor() const
     return box;
 }
 
-void BreakpointActionCell::setContentFromEditor(QWidget * w)
-{
-//    QLabel* le = (QLabel*)( 
-//        ((QHBox*)w)->child("label") );
-//    setText(le->text());
-}
-
 void BreakpointActionCell::slotEdit()
 {
     QLabel* le = (QLabel*)( 

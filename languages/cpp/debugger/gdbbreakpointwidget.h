@@ -125,10 +125,6 @@ public:
         action dialog.        
     */
     QWidget* createEditor() const;    
-    /** Called by QT when the cell is no longer editable -- i.e. when
-        focus leaves the cell. Copies the data from editor back into cell.
-    */
-    void setContentFromEditor(QWidget * w);
 
 private slots:
 
