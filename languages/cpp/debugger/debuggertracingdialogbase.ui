@@ -1,0 +1,141 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DebuggerTracingDialogBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>DebuggerTracingDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>348</width>
+            <height>409</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Tracing configuration</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>enable</cstring>
+            </property>
+            <property name="text">
+                <string>Enable tracing</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Enable tracing&lt;/b&gt;
+&lt;p&gt;Tracing is a mechanism to automatically print values of the choosed expressions and continue execution when breakpoint is hit. You can think of it as printf debugging that does not require modifying the source.&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="5" column="2">
+            <property name="name">
+                <cstring>cancelButton</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0">
+            <property name="name">
+                <cstring>enableCustomFormat</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>Custom format string</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="5" column="1">
+            <property name="name">
+                <cstring>okButton</cstring>
+            </property>
+            <property name="text">
+                <string>OK</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="5" column="0">
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>40</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLineEdit" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>customFormat</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Custom format string&lt;/b&gt;
+&lt;p&gt;Specify a C-style format string that will be used when printing the choosen expression. For example:
+&lt;p align="center"&gt; &lt;tt&gt;Tracepoint 1: g = %d&lt;/tt&gt;&lt;/p&gt;
+If custom format string is not enabled, names and values of all expressions will be printed, using "%d" as format specifier for all expressions.</string>
+            </property>
+        </widget>
+        <widget class="KEditListBox" row="2" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>expressions</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>expressionsLabel</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>Expressions to print:</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>okButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DebuggerTracingDialogBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DebuggerTracingDialogBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>enableOrDisable()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>keditlistbox.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
+</UI>

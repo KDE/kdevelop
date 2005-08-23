@@ -608,11 +608,38 @@ void GDBController::parseLine(char* buf)
     if (strncmp(buf, "Brea", 4) == 0 ||
         strncmp(buf, "Hard", 4) == 0)
     {
-        // Starts with "Brea" so assume "Breakpoint" and just get a full
-        // breakpoint list. Note that the state is unchanged.
-        // Much later: I forget why I did it like this :-o
-        queueCmd(new GDBCommand("info breakpoints",
-                                        NOTRUNCMD, NOTINFOCMD, BPLIST));
+
+        const Breakpoint* traced = 0;
+        if (strncmp(buf, "Brea", 4) == 0)
+        {
+            char* ptr = buf + strlen("Breakpoint ");
+            int id = atoi(ptr);
+
+            if (tracedBreakpoints_.contains(id))
+            {
+                traced = tracedBreakpoints_[id];
+            }
+        }
+
+        if (traced)
+        {
+            // Prevent showing current file position in UI.
+            setStateOn(s_silent); 
+
+            // Marking this as "NOTINFOCMD". Otherwise, "continue" will
+            // immediately remove "printf" from the queue.
+            queueCmd(new GDBCommand(("printf " + traced->traceRealFormatString()).latin1(),
+                                        NOTRUNCMD, NOTINFOCMD, TRACING_PRINTF));
+            queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+        }
+        else
+        {
+            // Starts with "Brea" so assume "Breakpoint" and just get a full
+            // breakpoint list. Note that the state is unchanged.
+            // Much later: I forget why I did it like this :-o
+            queueCmd(new GDBCommand("info breakpoints",
+                                    NOTRUNCMD, NOTINFOCMD, BPLIST));
+        }
 
 //        kdDebug(9012) << "Parsed (BP) <" << buf << ">" << endl;
         return;
@@ -829,11 +856,20 @@ void GDBController::parseBreakpointSet(char *buf)
 {
     if (GDBSetBreakpointCommand *BPCmd = dynamic_cast<GDBSetBreakpointCommand*>(currentCmd_))
     {
+        const Breakpoint* bp = BPCmd->breakpoint();
+
         // ... except in this case :-) A -1 key tells us that this is
         // a special internal breakpoint, and we shouldn't do anything
         // with it. Currently there are _no_ internal breakpoints.
-        if (BPCmd->getKey() != -1)
-            emit rawGDBBreakpointSet(buf, BPCmd->getKey());
+        if (bp->key() != -1)
+        {            
+            emit rawGDBBreakpointSet(buf, bp->key());
+
+            // Now, gdb id of breakpoint should be set. If it's 
+            // tracepoint, remember it.
+            if (bp->tracingEnabled())
+                tracedBreakpoints_[bp->dbgId()] = bp;
+        }
     }
 }
 
@@ -1010,6 +1046,9 @@ char *GDBController::parseCmdBlock(char *buf)
         case LIBRARIES:
             emit rawGDBLibraries      (buf);
             break;
+        case TRACING_PRINTF:
+            emit tracingOutput        (buf);
+            break;
 //         case DETACH:
 //             setStateOff(s_attached);
 //             break;
@@ -1109,9 +1148,10 @@ char *GDBController::parse(char *buf)
 
 // **************************************************************************
 
-void GDBController::setBreakpoint(const QCString &BPSetCmd, int key)
+void GDBController::setBreakpoint(const QCString &BPSetCmd, 
+                                  const Breakpoint* bp)
 {
-    queueCmd(new GDBSetBreakpointCommand(BPSetCmd, key));
+    queueCmd(new GDBSetBreakpointCommand(BPSetCmd, bp));
 }
 
 // **************************************************************************
@@ -1146,6 +1186,12 @@ void GDBController::modifyBreakpoint( const Breakpoint& BP )
             queueCmd(new GDBCommand(QCString().sprintf("%s %d",
                             BP.isEnabled() ? "enable" : "disable",
                             BP.dbgId()), NOTRUNCMD, NOTINFOCMD));
+
+        if (BP.changedTracing())
+            if (BP.tracingEnabled())
+                tracedBreakpoints_[BP.dbgId()] = &BP;
+            else
+                tracedBreakpoints_.remove(BP.dbgId());
 
         //        BP.setDbgProcessing(true);
         // Note: this is NOT an info command, because gdb doesn't explictly tell
@@ -1625,7 +1671,7 @@ void GDBController::slotBPState( const Breakpoint& BP )
 
     if (BP.isActionAdd())
     {
-        setBreakpoint(BP.dbgSetCommand().latin1(), BP.key());
+        setBreakpoint(BP.dbgSetCommand().latin1(), &BP);
         //        BP.setDbgProcessing(true);
     }
     else
@@ -1634,6 +1680,7 @@ void GDBController::slotBPState( const Breakpoint& BP )
         {
             clearBreakpoint(BP.dbgRemoveCommand().latin1());
             //            BP.setDbgProcessing(true);
+            tracedBreakpoints_.remove(BP.dbgId());
         }
         else
         {

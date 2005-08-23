@@ -51,6 +51,10 @@ Breakpoint::Breakpoint(bool temporary, bool enabled)
       s_changedIgnoreCount_(false),
       s_changedEnable_(false),
       s_hardwareBP_(false),
+      s_changedTracing_(false),
+      s_tracingEnabled_(false),
+      s_traceFormatStringEnabled_(false),
+
       dbgId_(-1),
       hits_(0),
       key_(BPKey_++),
@@ -143,6 +147,50 @@ QString Breakpoint::statusDisplay(int activeFlag) const
     return status;
 }
 
+QString Breakpoint::traceRealFormatString() const
+{
+    QString result;
+
+    if (traceFormatStringEnabled())
+    {
+        result = traceFormatString();
+    }
+    else
+    {
+        result = "Tracepoint";
+        if (const FilePosBreakpoint* fb 
+            = dynamic_cast<const FilePosBreakpoint*>(this))
+        {
+            result += " at " + fb->location() + ": ";
+        }
+        else if (const FunctionBreakpoint* fb
+                 = dynamic_cast<const FunctionBreakpoint*>(this))
+        {
+            result += " at " + location() + ": ";
+        }
+        else
+        {
+            result += " " + QString::number(key()) + ": ";
+        }
+        for(QStringList::const_iterator i = tracedExpressions_.begin(),
+                e = tracedExpressions_.end(); i != e; ++i)
+        {
+            result += " " + *i + " = %d";
+        }
+    }
+
+    // Quote the thing
+    result = "\"" + result + "\\n\"";
+    
+    for(QStringList::const_iterator i = tracedExpressions_.begin(),
+            e = tracedExpressions_.end(); i != e; ++i)
+    {
+        result += ", " + *i;
+    }    
+
+    return result;
+}
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
@@ -199,7 +247,7 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
 
 /***************************************************************************/
 
-QString FilePosBreakpoint::location(bool compact)
+QString FilePosBreakpoint::location(bool compact) const
 {
     if (compact)
         return QFileInfo(fileName_).fileName()+":"+QString::number(lineNo_);

@@ -51,6 +51,8 @@ enum GDBCmd
 
   MEMDUMP         = 'M',
 
+  TRACING_PRINTF  = 'P',
+
   RUN             = 'R',
   REGISTERS       = 'r',
 
@@ -127,13 +129,13 @@ private:
 class GDBSetBreakpointCommand : public GDBCommand
 {
 public:
-    GDBSetBreakpointCommand(const QCString& setCommand, int key);
+    GDBSetBreakpointCommand(const QCString& setCommand, const Breakpoint* bp);
     virtual ~GDBSetBreakpointCommand();
 
-    int getKey() const        { return key_; }
+    const Breakpoint* breakpoint() const        { return bp_; }
 
 private:
-    int key_;
+    const Breakpoint* bp_;
 };
 
 /***************************************************************************/

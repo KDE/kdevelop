@@ -18,6 +18,7 @@
 
 #include <qhbox.h>
 #include <qpopupmenu.h>
+#include <qtable.h>
 
 class QDomElement;
 class QToolButton;
@@ -67,6 +68,8 @@ protected:
     enum BW_ITEMS { BW_ITEM_Show, BW_ITEM_Edit, BW_ITEM_Disable, BW_ITEM_Delete };
     virtual void focusInEvent(QFocusEvent *e);
 
+
+    friend class BreakpointActionCell; // for access to slotNewValue
 private slots:
     void slotRemoveBreakpoint();
     void slotRemoveAllBreakpoints();
@@ -104,6 +107,39 @@ private:
     QToolButton*    m_removeAll;
     QPopupMenu*     m_ctxMenu;
 };
+
+class BreakpointTableRow;
+
+/** Custom table cell class that add "..." button for editing the action. */
+class BreakpointActionCell : public QObject, public QTableItem
+{
+    Q_OBJECT
+public:
+
+    BreakpointActionCell(BreakpointTableRow* row, QTable* table);
+
+    /** Called by Qt when the current cell should become editable.
+        In our case, when the item becomes current. Creates a widget
+        that will be shown in the cell and should be able to edit cell
+        content. In our case -- text plus "..." button that invokes 
+        action dialog.        
+    */
+    QWidget* createEditor() const;    
+    /** Called by QT when the cell is no longer editable -- i.e. when
+        focus leaves the cell. Copies the data from editor back into cell.
+    */
+    void setContentFromEditor(QWidget * w);
+
+private slots:
+
+    /** Called when the "..." button is clicked. */
+    void slotEdit();
+
+private:
+    mutable QWidget* editor_;
+    BreakpointTableRow* row_;
+};
+
 
 /***************************************************************************/
 /***************************************************************************/

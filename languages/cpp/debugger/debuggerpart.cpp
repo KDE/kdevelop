@@ -613,6 +613,12 @@ void DebuggerPart::setupController()
     // controller -> procLineMaker
     connect( controller,            SIGNAL(ttyStdout(const char*)),
              procLineMaker,         SLOT(slotReceivedStdout(const char*)));
+    // The output from tracepoints goes to "application" window, because
+    // we don't have any better alternative, and using yet another window
+    // is undesirable. Besides, this makes tracepoint look even more similar
+    // to printf debugging.
+    connect( controller,            SIGNAL(tracingOutput(const char*)),
+             procLineMaker,         SLOT(slotReceivedStdout(const char*)));
     connect( controller,            SIGNAL(ttyStderr(const char*)),
              procLineMaker,         SLOT(slotReceivedStderr(const char*)));
 

@@ -15,6 +15,7 @@
 
 #include "gdbbreakpointwidget.h"
 #include "gdbtable.h"
+#include "debuggertracingdialog.h"
 
 #include "breakpoint.h"
 #include "domutil.h"
@@ -34,6 +35,9 @@
 #include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -53,11 +57,12 @@ enum Column {
     Location    = 4,
     Condition   = 5,
     IgnoreCount = 6,
-    Hits        = 7
+    Hits        = 7,
+    Tracing     = 8
 };
 
 
-#define numCols 8
+#define numCols 9
 
 static int m_activeFlag = 0;
 
@@ -131,6 +136,9 @@ void BreakpointTableRow::appendEmptyRow()
 
     QCheckTableItem* cti = new QCheckTableItem( table(), "");
     table()->setItem(row, Enable, cti);
+
+    BreakpointActionCell* act = new BreakpointActionCell( this, table() );
+    table()->setItem(row, Tracing, act);
 }
 
 /***************************************************************************/
@@ -238,6 +246,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     header->setLabel( Condition,    i18n("Condition") );
     header->setLabel( IgnoreCount,  i18n("Ignore Count") );
     header->setLabel( Hits,         i18n("Hits") );
+    header->setLabel( Tracing,      i18n("Tracing") );
 
     m_ctxMenu = new QPopupMenu( this );
     m_ctxMenu->insertItem( i18n( "Show" ),    BW_ITEM_Show );
@@ -862,6 +871,19 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
             break;
         }
 
+        case Tracing:
+        {
+            if (bp->changedTracing())
+            {
+                bp->setPending(true);
+                bp->setActionModify(true);
+                changed = true;
+            }
+
+            break;
+        }
+
+
         case Type:
         case Status:
         case Hits:
@@ -926,6 +948,27 @@ void GDBBreakpointWidget::savePartialProjectSession(QDomElement* el)
         breakpointEl.setAttribute("location", bp->location(false));
         breakpointEl.setAttribute("enabled", bp->isEnabled());
         breakpointEl.setAttribute("condition", bp->conditional());
+        breakpointEl.setAttribute("tracingEnabled", 
+                                  QString::number(bp->tracingEnabled()));
+        breakpointEl.setAttribute("traceFormatStringEnabled", 
+                                  QString::number(bp->traceFormatStringEnabled()));        
+        breakpointEl.setAttribute("tracingFormatString",
+                                  bp->traceFormatString());
+
+        QDomElement tracedExpressions = 
+            domDoc.createElement("tracedExpressions");
+
+        QStringList::const_iterator i, e;
+        for(i = bp->tracedExpressions().begin(),
+                e = bp->tracedExpressions().end();
+            i != e; ++i)
+        {
+            QDomElement expr = domDoc.createElement("expression");
+            expr.setAttribute("value", *i);
+            tracedExpressions.appendChild(expr);
+        }
+        
+        breakpointEl.appendChild(tracedExpressions);
 
         breakpointListEl.appendChild(breakpointEl);
     }
@@ -981,6 +1024,31 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
                 bp->setEnabled(breakpointEl.attribute( "enabled", "1").toInt());
                 bp->setConditional(breakpointEl.attribute( "condition", ""));
 
+                bp->setTracingEnabled(
+                    breakpointEl.attribute("tracingEnabled", "0").toInt());
+                bp->setTraceFormatString(
+                    breakpointEl.attribute("tracingFormatString", ""));
+                bp->setTraceFormatStringEnabled(
+                    breakpointEl.attribute("traceFormatStringEnabled", "0")
+                    .toInt());
+
+                QDomNode tracedExpr = 
+                    breakpointEl.namedItem("tracedExpressions");
+
+                if (!tracedExpr.isNull())
+                {
+                    QStringList l;
+
+                    for(QDomNode c = tracedExpr.firstChild(); !c.isNull(); 
+                        c = c.nextSibling())
+                    {
+                        QDomElement el = c.toElement();
+                        l.push_back(el.attribute("value", ""));
+                    }
+                    bp->setTracedExpressions(l);
+                }
+
+
                 // Add the bp if we don't already have it.
                 if (!find(bp))
                     addBreakpoint(bp);
@@ -1018,6 +1086,90 @@ void GDBBreakpointWidget::focusInEvent( QFocusEvent */* e*/ )
     }
     m_table->setFocus();
 }
+
+BreakpointActionCell::
+BreakpointActionCell(BreakpointTableRow* row, QTable* table)
+: QTableItem(table, QTableItem::WhenCurrent), row_(row) 
+{
+    if (row_->breakpoint()->tracingEnabled())
+        setText("Enabled");
+}
+
+
+QWidget* BreakpointActionCell::createEditor() const
+{
+    QHBox* box = new QHBox( table()->viewport() );
+    box->setPaletteBackgroundColor(
+               table()->palette().active().highlight());
+
+    QLabel* l = new QLabel(text(), box, "label");
+    l->setBackgroundMode(Qt::PaletteHighlight);
+    // Sorry for hardcode, but '2' is already hardcoded in
+    // Qt source, in QTableItem::paint. Since I don't want the 
+    // text to jump 2 pixels to the right when editor is activated, 
+    // need to set the same indent for label.
+    l->setIndent(2);
+    QPalette p = l->palette();
+
+    p.setColor(QPalette::Active, QColorGroup::Foreground, 
+               table()->palette().active().highlightedText());
+    p.setColor(QPalette::Inactive, QColorGroup::Foreground, 
+               table()->palette().active().highlightedText());
+
+    l->setPalette(p);
+    
+    QPushButton* b = new QPushButton("...", box);
+    // This is exactly what is done in QDesigner source in the
+    // similar context. Haven't had any success making the good look
+    // with layout, I suppose that sizeHint for button is always larger
+    // than 20.
+    b->setFixedWidth( 20 );
+
+    connect(b, SIGNAL(clicked()), this, SLOT(slotEdit()));
+
+    editor_ = box;
+
+    return box;
+}
+
+void BreakpointActionCell::setContentFromEditor(QWidget * w)
+{
+//    QLabel* le = (QLabel*)( 
+//        ((QHBox*)w)->child("label") );
+//    setText(le->text());
+}
+
+void BreakpointActionCell::slotEdit()
+{
+    QLabel* le = (QLabel*)( 
+        ((QHBox*)editor_)->child("label") );
+
+
+    DebuggerTracingDialog* d = new DebuggerTracingDialog(
+        row_->breakpoint(), table(), "");
+
+    int r = d->exec();
+
+    // Note: change cell text here and explicitly call slotNewValue here.
+    // We want this signal to be emitted when we close the tracing dialog
+    // and not when we select some other cell, as happens in Qt by default.
+    if (r == QDialog::Accepted)
+    {
+        if (d->enable->isChecked()) {
+            le->setText("Enabled");
+            setText("Enabled");
+        }
+        else 
+        {
+            le->setText("");
+            setText("");
+        }
+        ((GDBBreakpointWidget*)(table()->parent()))->slotNewValue(row(), col());
+    }
+
+    delete d;
+}
+
 
 }
 

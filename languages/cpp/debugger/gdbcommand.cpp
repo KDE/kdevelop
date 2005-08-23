@@ -81,9 +81,10 @@ GDBItemCommand::~GDBItemCommand()
 /***************************************************************************/
 /***************************************************************************/
 
-GDBSetBreakpointCommand::GDBSetBreakpointCommand(const QCString &command, int key)
+GDBSetBreakpointCommand::GDBSetBreakpointCommand(const QCString &command, 
+                                                 const Breakpoint* bp)
     : GDBCommand(command, false, false, SET_BREAKPT),
-      key_(key)
+      bp_(bp)
 {
 }
 

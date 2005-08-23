@@ -19,6 +19,7 @@
 #include <klocale.h>
 
 #include <qstring.h>
+#include <qstringlist.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -63,10 +64,11 @@ public:
     int ignoreCount() const                         { return ignoreCount_; }
     void setAddress(const QString &address)         { address_ = address; }
     QString address() const                         { return address_; }
-    void setConditional(const QString &condition)   { s_changedCondition_ =
+    void setConditional(const QString &condition)   { s_changedCondition_ =                                                          
                                                           (condition_ != condition);
                                                       condition_ = condition; }
     QString conditional() const                     { return condition_; }
+
 
     bool changedCondition() const                   { return s_changedCondition_; }
     bool changedIgnoreCount() const                 { return s_changedIgnoreCount_; }
@@ -98,7 +100,32 @@ public:
     virtual BP_TYPES type() const                   { return BP_TYPE_Invalid; }
     virtual QString displayType() const             { return i18n( "Invalid" ); }
 
-    virtual QString location(bool compact=true)     = 0;
+
+    bool tracingEnabled() const                     { return s_tracingEnabled_; }
+    void setTracingEnabled(bool enable)             { s_changedTracing_ |= 
+                                                          (s_tracingEnabled_ != enable);
+                                                      s_tracingEnabled_ = enable; }
+    bool changedTracing() const                     { return s_changedTracing_; }
+    void resetChangedTracing()                      { s_changedTracing_ = false; }
+
+    const QStringList& tracedExpressions() const    { return tracedExpressions_; }
+    void setTracedExpressions(const QStringList& l) { s_changedTracing_ |= 
+                                                          (tracedExpressions_ != l);
+                                                      tracedExpressions_ = l; }
+
+    bool traceFormatStringEnabled() const           { return s_traceFormatStringEnabled_; }
+    void setTraceFormatStringEnabled(bool en)       { s_changedTracing_ |=
+                                                          (s_traceFormatStringEnabled_ != en);
+                                                      s_traceFormatStringEnabled_ = en; }
+
+    const QString& traceFormatString() const        { return traceFormatString_; }
+    void setTraceFormatString(const QString& s)     { s_changedTracing_ |=
+                                                          (traceFormatString_ != s);
+                                                      traceFormatString_ = s; }
+
+    QString traceRealFormatString() const;  
+
+    virtual QString location(bool compact=true) const = 0;
     virtual void setLocation(const QString& )       = 0;
     virtual bool isValid() const                    = 0;
 
@@ -115,6 +142,9 @@ private:
     bool s_changedIgnoreCount_  :1;
     bool s_changedEnable_       :1;
     bool s_hardwareBP_          :1;     // assigned by gdb
+    bool s_changedTracing_      :1;
+    bool s_tracingEnabled_      :1;
+    bool s_traceFormatStringEnabled_ :1;
 
     int dbgId_;                         // assigned by gdb
     int hits_;                          // assigned by gdb
@@ -125,6 +155,9 @@ private:
     int ignoreCount_;
     QString address_;
     QString condition_;
+    QStringList tracedExpressions_;
+    QString traceFormatString_;
+
 //    QString type_;
 };
 
@@ -146,7 +179,7 @@ public:
     QString fileName() const                    { return fileName_; }
     void setLineNum(int lineNum)                { lineNo_ = lineNum; }
     int lineNum() const                         { return lineNo_; }
-    QString location(bool compact=true);
+    QString location(bool compact=true) const;
     void setLocation(const QString& location);
     bool isValid() const                        { return lineNo_>0 && !fileName_.isEmpty(); }
 
@@ -202,7 +235,7 @@ public:
     QString displayType() const                 { return i18n("Watchpoint"); }
     void setVarName(const QString& varName)     { varName_ = varName; }
     QString varName() const                     { return varName_; }
-    QString location(bool)                      { return varName_; }
+    QString location(bool) const                { return varName_; }
     void setLocation(const QString& location)   { varName_ = location; }
     bool isValid() const                        { return !varName_.isEmpty(); }
 
@@ -224,7 +257,7 @@ public:
     QString displayType() const                         { return i18n("Address"); }
     void setBreakAddress(const QString& breakAddress)   { m_breakAddress = breakAddress; }
     QString breakAddress() const                        { return m_breakAddress; }
-    QString location(bool)                              { return m_breakAddress; };
+    QString location(bool) const                        { return m_breakAddress; };
     void setLocation(const QString& location)           { m_breakAddress = location; }
     bool isValid() const                                { return !m_breakAddress.isEmpty(); }
 
@@ -246,7 +279,7 @@ public:
     QString displayType() const                         { return i18n("Method()"); }
     void setfunctionName(const QString& functionName)   { m_functionName = functionName; }
     QString functionName() const                        { return m_functionName; }
-    QString location(bool)                              { return m_functionName; };
+    QString location(bool) const                        { return m_functionName; };
     void setLocation(const QString& location)           { m_functionName = location; }
     bool isValid() const                                { return !m_functionName.isEmpty(); }
 

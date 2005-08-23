@@ -25,6 +25,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qstring.h>
+#include <qmap.h>
 
 class KProcess;
 
@@ -77,7 +78,7 @@ private:
     void actOnProgramPause(const QString &msg);
     void programNoApp(const QString &msg, bool msgBox);
 
-    void setBreakpoint(const QCString &BPSetCmd, int key);
+    void setBreakpoint(const QCString &BPSetCmd, const Breakpoint* bp);
     void clearBreakpoint(const QCString &BPClearCmd);
     void modifyBreakpoint(const Breakpoint&);
 
@@ -155,6 +156,9 @@ signals:
     // and recievers should be prepared to handle it.
     void currentFrame(int frameNo, int threadNo);
 
+    // Emitted when output from yet another passed tracepoint is available.
+    void tracingOutput(const char* buf);
+
 private:
     FramestackWidget* frameStack_;
     VariableTree*     varTree_;
@@ -172,6 +176,10 @@ private:
     STTY*             tty_;
     QString           badCore_;
     QString           application_;
+
+    // Gdb command that should be issued when we stop on breakpoint
+    // with the given gdb breakpoint id.
+    QMap<int, const Breakpoint*> tracedBreakpoints_;
 
     // Some state variables
     int               state_;
