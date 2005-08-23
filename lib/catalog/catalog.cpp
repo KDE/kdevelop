@@ -375,7 +375,7 @@ void  Catalog::setEnabled( bool isEnabled )
         QCString indexName = (*it).first;
 	QVariant value = (*it).second;
 
-        if( d->hasIndex(indexName) ){
+        if( d->hasIndex(indexName) ) {
             DB* dbp = d->index( indexName );
 	    Q_ASSERT( dbp != 0 );
 
@@ -392,42 +392,56 @@ void  Catalog::setEnabled( bool isEnabled )
 
 	    DBC* cursor = 0;
 	    int rtn = dbp->cursor( dbp, 0, &cursor, 0 );
-	    Q_ASSERT( rtn == 0 );
 
-	    rtn = cursor->c_get( cursor, &key, &data, DB_SET );
-	    if( rtn == DB_NOTFOUND ){
-	        // kdDebug() << "!!! not found !!!" << endl;
-		rtn = 0;
-	    }
-	    Q_ASSERT( rtn == 0 );
+            if ( rtn == 0 ) {
 
-	    cursors[ current++ ] = cursor;
+                rtn = cursor->c_get( cursor, &key, &data, DB_SET );
+
+                if ( rtn == 0 ) {
+                    cursors[ current++ ] = cursor;
+                }
+                else if ( rtn != DB_NOTFOUND) {
+                    kdDebug() << "fetching cursor failed: " << db_strerror(rtn) << endl;
+                    cursor->c_close(cursor);
+                }
+            }
+            else {
+                kdDebug() << "creating cursor failed: " << db_strerror(rtn) << endl;
+            }
         }
         ++it;
     }
+
     cursors[ current ] = 0;
 
-    DBC* join_curs = 0;
-    int rtn = d->dbp->join( d->dbp, cursors, &join_curs, 0 );
-    Q_ASSERT( rtn == 0 );
+    if( current > 0) {
 
-    std::memset( &key, 0, sizeof(key) );
-    std::memset( &data, 0, sizeof(data) );
+        DBC* join_curs = 0;
+        int rtn = d->dbp->join( d->dbp, cursors, &join_curs, 0 );
 
-    while( join_curs->c_get(join_curs, &key, &data, 0) == 0 ) {
+        if ( rtn == 0 ) {
 
-        QByteArray a2;
-	{
-	    a2.setRawData( (const char*) data.data, data.size );
-	    QDataStream s( a2, IO_ReadOnly );
-	    Tag tag;
-	    tag.load( s );
-	    a2.resetRawData( (const char*) data.data, data.size );
-	    tags << tag;
-	}
+            std::memset( &key, 0, sizeof(key) );
+            std::memset( &data, 0, sizeof(data) );
+
+            while( join_curs->c_get(join_curs, &key, &data, 0) == 0 ) {
+
+                QByteArray a2;
+                a2.setRawData( (const char*) data.data, data.size );
+                QDataStream s( a2, IO_ReadOnly );
+                Tag tag;
+                tag.load( s );
+                a2.resetRawData( (const char*) data.data, data.size );
+                tags << tag;
+            }
+
+            join_curs->c_close( join_curs );
+        }
+        else {
+            kdDebug() << "joining results failed: " << db_strerror(rtn) << endl;
+        }
     }
 
-    join_curs->c_close( join_curs );
     DBC** c = cursors;
     while( *c != 0 ){
         (*c)->c_close( *c );
