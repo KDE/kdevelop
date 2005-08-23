@@ -1005,6 +1005,17 @@ void GDBBreakpointWidget::slotAddBreakpoint( )
 
 void GDBBreakpointWidget::focusInEvent( QFocusEvent */* e*/ )
 {
+    // Without the following 'if', when we first open the breakpoints
+    // widget, the background is all black. This happens only with
+    //    m_table->setFocusStyle(QTable::FollowStyle);
+    // in constructor, so I suspect Qt bug. But anyway, without
+    // current cell keyboard actions like Enter for edit won't work,
+    // so keyboard focus does not makes much sense.
+    if (m_table->currentRow() == -1 ||
+        m_table->currentColumn() == -1)
+    {
+        m_table->setCurrentCell(0, 0);
+    }
     m_table->setFocus();
 }
 
