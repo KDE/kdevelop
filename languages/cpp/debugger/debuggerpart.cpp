@@ -782,7 +782,7 @@ void DebuggerPart::slotRun()
         appFrontend()->clearView();
         startDebugger();
     }
-    else
+    else if (controller->stateIsOn( s_appNotStarted ) )
     {
         KActionCollection *ac = actionCollection();
         ac->action("debug_run")->setText( i18n("&Continue") );
@@ -793,6 +793,12 @@ void DebuggerPart::slotRun()
             "has been halted by the debugger (i.e. a breakpoint has "
             "been activated or the interrupt was pressed).") );
 
+        mainWindow()->statusBar()->message(i18n("Running program"), 1000);
+
+        appFrontend()->clearView();
+    }
+    else
+    {
         mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
     }
     controller->slotRun();
