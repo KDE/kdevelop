@@ -1,7 +1,6 @@
 # KDE Config File
 [General]
 Name=KFile plugin
-Name[br]=Lugent KFile
 Name[de]=KFile-Plugin
 Name[es]=Plugin para KFile
 Name[et]=KFile'i plugin

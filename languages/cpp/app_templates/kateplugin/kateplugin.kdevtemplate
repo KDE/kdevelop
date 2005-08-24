@@ -1,7 +1,6 @@
 # KDE Config File
 [General]
 Name=Kate plugin
-Name[br]=Lugent Kate
 Name[de]=Kate-Plugin
 Name[es]=Plugin para Kate
 Name[eu]=Kate plugina

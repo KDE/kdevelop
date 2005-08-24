@@ -2,7 +2,6 @@
 Type=Service
 Exec=blubb
 Comment=TMake Project
-Comment[br]=Rektras TMake
 Comment[ca]=Projecte TMake
 Comment[da]=TMake-projekt
 Comment[de]=TMake-Projekt für KDevelop
@@ -39,7 +38,6 @@ Name[sv]=KDevelop Tmake-projekt
 Name[ta]=கெடெவ் டிமேக் பிராஜக்ட்
 Name[tg]=KDevTСохтани лоиҳа
 GenericName=TMake Project
-GenericName[br]=Raktres TMake
 GenericName[ca]=Projecte TMake
 GenericName[da]=TMake-projekt
 GenericName[de]=TMake-Projekt
