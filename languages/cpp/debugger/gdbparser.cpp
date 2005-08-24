@@ -61,7 +61,7 @@ GDBParser::~GDBParser()
 
 // **************************************************************************
 
-void GDBParser::parseValue(TrimmableItem *item, char *buf)
+void GDBParser::parseValue(TrimmableItem *item, const char *buf)
 {
     static const char *unknown = "?";
 
@@ -81,7 +81,7 @@ void GDBParser::parseValue(TrimmableItem *item, char *buf)
     }
 }
 
-void GDBParser::parseCompositeValue(TrimmableItem* parent, char* buf)
+void GDBParser::parseCompositeValue(TrimmableItem* parent, const char* buf)
 {
     Q_ASSERT(parent);
     Q_ASSERT(buf);
@@ -136,7 +136,7 @@ void GDBParser::parseCompositeValue(TrimmableItem* parent, char* buf)
 
 // **************************************************************************
 
-void GDBParser::parseArray(TrimmableItem *parent, char *buf)
+void GDBParser::parseArray(TrimmableItem *parent, const char *buf)
 {
     QString elementRoot = parent->getName() + "[%1]";
     int idx = 0;
@@ -162,9 +162,9 @@ void GDBParser::parseArray(TrimmableItem *parent, char *buf)
 
 // **************************************************************************
 
-QString GDBParser::getName(char **buf)
+QString GDBParser::getName(const char **buf)
 {
-    char *start = skipNextTokenStart(*buf);
+    const char *start = skipNextTokenStart(*buf);
     if (*start) {
         *buf = skipTokenValue(start);
         return QCString(start, *buf - start + 1);
@@ -176,9 +176,9 @@ QString GDBParser::getName(char **buf)
 
 // **************************************************************************
 
-QCString GDBParser::getValue(char **buf)
+QCString GDBParser::getValue(const char **buf)
 {
-    char *start = skipNextTokenStart(*buf);
+    const char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
 
     QCString value(start, *buf - start + 1);
@@ -187,8 +187,8 @@ QCString GDBParser::getValue(char **buf)
 
 QCString GDBParser::undecorateValue(DataType type, const QCString& s)
 {
-    char* start = s.data();
-    char* end = s.data() + s.length();
+    const char* start = s.data();
+    const char* end = s.data() + s.length();
 
     if (*start == '{')
     {
@@ -338,7 +338,7 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
 
 // Given a value that starts with 0xNNNNNN determines if
 // it looks more like pointer, or a string value.
-DataType pointerOrValue(char *buf)
+DataType pointerOrValue(const char *buf)
 {
     while (*buf) {
         if (!isspace(*buf))
@@ -353,7 +353,7 @@ DataType pointerOrValue(char *buf)
 }
 
 
-DataType GDBParser::determineType(char *buf) const
+DataType GDBParser::determineType(const char *buf) const
 {
     if (!buf || !*(buf= skipNextTokenStart(buf)))
         return typeUnknown;
@@ -465,7 +465,7 @@ DataType GDBParser::determineType(char *buf) const
 
 // **************************************************************************
 
-char *GDBParser::skipString(char *buf) const
+const char *GDBParser::skipString(const char *buf) const
 {
     if (buf && *buf == '\"') {
         buf = skipQuotes(buf, *buf);
@@ -489,7 +489,7 @@ char *GDBParser::skipString(char *buf) const
 
 // ***************************************************************************
 
-char *GDBParser::skipQuotes(char *buf, char quotes) const
+const char *GDBParser::skipQuotes(const char *buf, char quotes) const
 {
     if (buf && *buf == quotes) {
         buf++;
@@ -509,7 +509,7 @@ char *GDBParser::skipQuotes(char *buf, char quotes) const
 
 // **************************************************************************
 
-char *GDBParser::skipDelim(char *buf, char open, char close) const
+const char *GDBParser::skipDelim(const char *buf, char open, char close) const
 {
     if (buf && *buf == open) {
         buf++;
@@ -532,13 +532,13 @@ char *GDBParser::skipDelim(char *buf, char open, char close) const
 
 // **************************************************************************
 
-char *GDBParser::skipTokenValue(char *buf) const
+const char *GDBParser::skipTokenValue(const char *buf) const
 {
     if (buf) {
         while (true) {
             buf = skipTokenEnd(buf);
 
-            char *end = buf;
+            const char *end = buf;
             while (*end && isspace(*end) && *end != '\n')
                 end++;
 
@@ -557,7 +557,7 @@ char *GDBParser::skipTokenValue(char *buf) const
 
 // **************************************************************************
 
-char *GDBParser::skipTokenEnd(char *buf) const
+const char *GDBParser::skipTokenEnd(const char *buf) const
 {
     if (buf) {
         switch (*buf) {
@@ -590,7 +590,7 @@ char *GDBParser::skipTokenEnd(char *buf) const
 
 // **************************************************************************
 
-char *GDBParser::skipNextTokenStart(char *buf) const
+const char *GDBParser::skipNextTokenStart(const char *buf) const
 {
     if (buf)
         while (*buf && (isspace(*buf) || *buf == ',' || *buf == '}' || *buf == '='))

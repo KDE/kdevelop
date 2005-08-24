@@ -34,7 +34,7 @@ public:
         "Decorations" are {} around arrays and structures and value
         type that is printed before value itself in some cases.
     */
-    void parseValue(TrimmableItem *item, char *buf);
+    void parseValue(TrimmableItem *item, const char *buf);
 
     /** Parses gdb-provided value 'buf' of a composite type
         (struct/array), and assigns proper values to children
@@ -45,13 +45,13 @@ public:
         The value should contain all the decorations from gdb
         (opening braces of arrays, and so on).
     */
-    void parseCompositeValue(TrimmableItem* parent, char* buf);
+    void parseCompositeValue(TrimmableItem* parent, const char* buf);
 
-    DataType  determineType(char *buf) const;
+    DataType  determineType(const char *buf) const;
 
-    char *skipString(char *buf) const;
-    char *skipQuotes(char *buf, char quote) const;
-    char *skipDelim(char *buf, char open, char close) const;
+    const char *skipString(const char *buf) const;
+    const char *skipQuotes(const char *buf, char quote) const;
+    const char *skipDelim(const char *buf, char open, char close) const;
 
     static GDBParser *getGDBParser();
     static void destroy();
@@ -60,17 +60,17 @@ private:
     TrimmableItem *getItem(TrimmableItem *parent, DataType itemType,
                            const QString &varName, bool requested);
 
-    void parseArray(TrimmableItem *parent, char *buf);
+    void parseArray(TrimmableItem *parent, const char *buf);
 
-    char *skipTokenEnd(char *buf) const;
-    char *skipTokenValue(char *buf) const;
-    char *skipNextTokenStart(char *buf) const;
+    const char *skipTokenEnd(const char *buf) const;
+    const char *skipTokenValue(const char *buf) const;
+    const char *skipNextTokenStart(const char *buf) const;
 
-    QString getName(char **buf);
+    QString getName(const char **buf);
     /** Assuming 'buf' points to a value, return a pointer
         to the position right after the value.
     */
-    QCString getValue(char **buf);
+    QCString getValue(const char **buf);
     QCString GDBParser::undecorateValue(DataType type, const QCString& s);
     void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
                  const QCString &value, bool requested);
