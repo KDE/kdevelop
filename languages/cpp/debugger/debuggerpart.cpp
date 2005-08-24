@@ -165,7 +165,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     KAction *action;
 
 //    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
-    action = new KAction(i18n("&Start"), "dbgrun", CTRL+SHIFT+Key_F9,
+    action = new KAction(i18n("&Start"), "dbgrun", Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
     action->setToolTip( i18n("Start in debugger") );
@@ -212,7 +212,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position."));
 
 
-    action = new KAction(i18n("Step &Over"), "dbgnext", 0,
+    action = new KAction(i18n("Step &Over"), "dbgnext", Key_F10,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
     action->setToolTip( i18n("Step over the next line") );
@@ -230,7 +230,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction."));
 
 
-    action = new KAction(i18n("Step &Into"), "dbgstep", 0,
+    action = new KAction(i18n("Step &Into"), "dbgstep", Key_F11,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
     action->setToolTip( i18n("Step into the next statement") );
@@ -247,7 +247,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction."));
 
 
-    action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
+    action = new KAction(i18n("Step O&ut"), "dbgstepout", Key_F12,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
     action->setToolTip( i18n("Steps out of the current function") );
