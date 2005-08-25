@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KIO slave
+Name[br]=Sklav KIO
 Name[da]=KIO-slave
 Name[de]=Ein/Ausgabe-Modul
 Name[es]=Esclavo KIO

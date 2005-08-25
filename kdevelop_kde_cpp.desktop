@@ -7,6 +7,7 @@ Icon=kdevelop
 DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop: KDE/C++
+Name[br]=KDevelop : KDE/C++
 Name[fr]=KDevelop : KDE / C++
 GenericName=IDE for KDE Development
 GenericName[da]=Integreret udviklingsmiljø til KDE

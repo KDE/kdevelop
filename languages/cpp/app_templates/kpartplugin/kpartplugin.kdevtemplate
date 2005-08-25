@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
+Name[br]=Lugent KHTMLPart
 Name[de]=KHTMLPart-Plugin
 Name[es]=Plugin para KHTMLPart
 Name[eu]=KHTMLPart plugina

@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=QMake Project
+Comment[br]=Raktres QMake
 Comment[ca]=Projecte QMake
 Comment[da]=QMake-projekt
 Comment[de]=QMake-Projekt für KDevelop
@@ -39,6 +40,7 @@ Name[pl]=KDevProjektTroll
 Name[sv]=KDevelop Troll-projekt
 Name[ta]=கெடெவ் டிரால் பிராஜக்ட்
 GenericName=QMake Project
+GenericName[br]=Raktres QMake
 GenericName[ca]=Projecte QMake
 GenericName[da]=QMake-projekt
 GenericName[de]=QMake-Projekt

@@ -10,6 +10,7 @@ Name=%{APPNAME}
 [Desktop Action Setup]
 Exec=%{APPNAMELC}.kss -setup
 Name=Setup...
+Name[br]=Kefluniadur ...
 Name[cy]=Gosod ...
 Name[da]=Opsætning...
 Name[de]=Einrichtung...
@@ -35,6 +36,7 @@ Icon=kscreensaver
 [Desktop Action InWindow]
 Exec=%{APPNAMELC}.kss -window-id %w
 Name=Display in Specified Window
+Name[br]=Diskwel er prenestr spisaet
 Name[cy]=Dangos mewn Ffenestr Benodol
 Name[da]=Vis i specificeret vindue
 Name[de]=Im angegebenen Fenster anzeigen
@@ -60,6 +62,7 @@ NoDisplay=true
 [Desktop Action Root]
 Exec=%{APPNAMELC}.kss -root
 Name=Display in Root Window
+Name[br]=Diskwel er prenestr gwrizienn
 Name[cy]=Dangos mewn Ffenestr Wraidd
 Name[da]=Vis i rod-vindue
 Name[de]=Im Root-Fenster anzeigen

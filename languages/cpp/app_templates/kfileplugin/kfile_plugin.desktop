@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=%{APPNAME} Info
+Name[br]=Titouriñ diwar-benn %{APPNAME}
 Name[ca]=Informació %{APPNAME}
 Name[da]=%{APPNAME} info
 Name[es]=Información de %{APPNAME}

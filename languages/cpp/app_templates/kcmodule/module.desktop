@@ -38,6 +38,7 @@ Comment[tg]=%{APPNAME} - модули kcontrol
 Comment[zh_CN]=%{APPNAME} - 一个 KDE 控制中心模块
 Keywords=%{APPNAME},%{APPNAMELC}
 Name=The %{APPNAME} Applet
+Name[br]=An arloadig %{APPNAME}
 Name[da]=%{APPNAME}-appletten
 Name[de]=Das Miniprogramm %{APPNAME}
 Name[es]=Applet %{APPNAME}

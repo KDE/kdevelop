@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KDE Screen Saver
+Name[br]=Damanter skramm KDE
 Name[da]=KDE pauseskærm
 Name[de]=KDE-Bildschirmschoner
 Name[es]=Salvapantallas para KDE

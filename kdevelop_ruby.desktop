@@ -7,6 +7,7 @@ Icon=kdevelop
 DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop: Ruby
+Name[br]=KDevelop : Ruby
 Name[fr]=KDevelop : Ruby
 GenericName=IDE for Ruby
 GenericName[da]=Integreret udviklingsmiljø til Ruby

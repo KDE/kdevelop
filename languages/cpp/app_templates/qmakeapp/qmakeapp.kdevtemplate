@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application
+Name[br]=Arload
 Name[cy]=Cymhwysiad
 Name[da]=Program
 Name[de]=Anwendung

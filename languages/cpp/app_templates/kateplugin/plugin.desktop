@@ -4,6 +4,7 @@ ServiceTypes=Kate/Plugin
 X-KDE-Library=lib%{APPNAMELC}plugin
 X-Kate-Version=2.2
 Name=My First Kate Plugin
+Name[br]=Ma lugent Kate kentañ
 Name[cy]=F'ategyn cyntaf Kate
 Name[da]=Mit første Kate plugin
 Name[de]=Mein erstes Kate-Plugin
