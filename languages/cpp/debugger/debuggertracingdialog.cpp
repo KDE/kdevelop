@@ -64,7 +64,7 @@ namespace GDBDebugger
                 {
                     if (i+1 < s.length())
                     {
-                        if (s[i] != '%')
+                        if (s[i+1] != '%')
                         {
                             ++percent_count;
                         }
