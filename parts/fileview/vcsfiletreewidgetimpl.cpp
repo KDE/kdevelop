@@ -12,6 +12,7 @@
 #include <qpainter.h>
 #include <qheader.h>
 #include <qpopupmenu.h>
+#include <kxmlguiclient.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>

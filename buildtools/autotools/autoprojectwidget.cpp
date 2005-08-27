@@ -39,6 +39,7 @@
 #include <kregexp.h>
 #include <kurl.h>
 #include <kfile.h>
+#include <kxmlguiclient.h>
 #include <kaction.h>
 
 #include "kdevcore.h"

@@ -22,6 +22,7 @@
 #include <qtooltip.h>
 #include <qregexp.h>
 
+#include <kxmlguiclient.h>
 #include <kiconloader.h>
 #include <kurlcombobox.h>
 #include <kurlcompletion.h>

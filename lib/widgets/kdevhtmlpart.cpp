@@ -2,6 +2,7 @@
 #include <qclipboard.h>
 #include <qapplication.h>
 
+#include <kxmlguiclient.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kstandarddirs.h>

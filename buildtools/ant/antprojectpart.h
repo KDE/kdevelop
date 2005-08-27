@@ -12,6 +12,8 @@ class QPopupMenu;
 
 class KAction;
 class KDialogBase;
+class Context;
+class ClassPathWidget;
 
 
 #include "kdevbuildtool.h"

@@ -25,6 +25,7 @@
 #include <config.h>
 #endif
 
+#include <kxmlguiclient.h>
 #include <kapplication.h>
 #include <kparts/mainwindow.h>
 

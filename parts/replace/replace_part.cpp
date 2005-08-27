@@ -8,6 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "replace_part.h"
 
 #include <qwhatsthis.h>
 
@@ -22,7 +23,6 @@
 #include <kdevmainwindow.h>
 
 #include "replace_widget.h"
-#include "replace_part.h"
 
 static const KDevPluginInfo data("kdevreplace");
 

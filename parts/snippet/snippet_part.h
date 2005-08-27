@@ -17,7 +17,7 @@
 
 class SnippetWidget;
 class KAboutData;
-
+class KDialogBase;
 
 /*
 This is the KDevPlugin for the CodeSnippet feature

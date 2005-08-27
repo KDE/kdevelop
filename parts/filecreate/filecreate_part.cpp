@@ -7,6 +7,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+#include "filecreate_part.h"
 
 #include <qwhatsthis.h>
 #include <qdom.h>
@@ -40,7 +41,6 @@
 
 #include "filecreate_widget2.h"
 #include "filecreate_widget3.h"
-#include "filecreate_part.h"
 #include "filecreate_filetype.h"
 #include "filecreate_filedialog.h"
 #include "filecreate_newfile.h"

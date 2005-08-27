@@ -7,9 +7,9 @@
 #define __KDEVPART_ASTYLE_H__
 
 class KDialogBase;
+#include <kdevsourceformatter.h>
 #include <kaction.h>
 #include <kparts/part.h>
-#include <kdevsourceformatter.h>
 
 class AStyleWidget;
 

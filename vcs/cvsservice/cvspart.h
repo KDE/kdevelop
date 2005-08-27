@@ -16,7 +16,7 @@
 
 #include <qguardedptr.h>
 #include <qcstring.h>
-
+#include <kurl.h>
 #include "kdevversioncontrol.h"
 
 class Context;

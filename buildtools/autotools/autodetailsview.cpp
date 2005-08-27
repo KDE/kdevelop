@@ -23,6 +23,7 @@
 #include <qlayout.h>
 
  /** KDE Libs */
+#include <kxmlguiclient.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>

@@ -23,6 +23,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <kxmlguiclient.h>
 #include <kaction.h>
 #include <kdeversion.h>
 

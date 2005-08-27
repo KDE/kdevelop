@@ -17,6 +17,7 @@
  *  Boston, MA 02111-1307, USA.
  *
  */
+#include "qeditor_part.h"
 
 #include <qvbox.h>
 #include <qfile.h>
@@ -35,7 +36,6 @@
 #include <klocale.h>
 #include <kxmlguifactory.h>
 
-#include "qeditor_part.h"
 #include "qeditor_view.h"
 #include "qeditor_settings.h"
 #include "qeditor_browserextension.h"

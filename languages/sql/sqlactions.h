@@ -13,6 +13,7 @@
 #define _SQLACTION_H_
 
 #include <kdeversion.h>
+#include <kxmlguiclient.h>
 #include <kaction.h>
 
 //only for KDE < 3.1

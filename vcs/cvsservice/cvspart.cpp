@@ -10,6 +10,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "cvspart.h"
 
 #include <qdir.h>
 #include <qpopupmenu.h>
@@ -59,7 +60,6 @@
 #include "cvspartimpl.h"
 #include "cvsdir.h"
 
-#include "cvspart.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Global vars

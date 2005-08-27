@@ -22,6 +22,7 @@
 #include <qdir.h>
 #include <qregexp.h>
 
+#include <kxmlguiclient.h>
 #include <kaction.h>
 #include <kaboutdata.h>
 #include <kstdaction.h>

@@ -11,6 +11,9 @@
 
 #include <qdir.h>
 #include <qwidget.h>
+
+#include "appwizardpart.h"
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -23,7 +26,6 @@
 
 #include "importdlg.h"
 #include "appwizarddlg.h"
-#include "appwizardpart.h"
 #include "appwizardfactory.h"
 #include <kdevmakefrontend.h>
 #include <kdevpartcontroller.h>

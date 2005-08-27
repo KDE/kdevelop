@@ -19,11 +19,12 @@
 #ifndef KLISTVIEWACTION_H
 #define KLISTVIEWACTION_H
 
+#include <kxmlguiclient.h>
 #include <kdeversion.h>
 #include <kaction.h>
 
 class KComboView;
-
+ 
 /**
 @file klistviewaction.h
 Widget action with KComboView.

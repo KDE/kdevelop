@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include <qsplashscreen.h>
 
+#include <kxmlguiclient.h>
 #include "kdevdesigner.h"
 #include <kapplication.h>
 #include <kaboutdata.h>

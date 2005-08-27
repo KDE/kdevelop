@@ -1,3 +1,4 @@
+#include "sqlsupport_part.h"
 #include <qwhatsthis.h>
 #include <qstringlist.h>
 #include <qtimer.h>
@@ -23,7 +24,6 @@
 #include "codemodel.h"
 #include "kdevplugininfo.h"
 
-#include "sqlsupport_part.h"
 #include "sqlconfigwidget.h"
 #include "sqlactions.h"
 #include "sqloutputwidget.h"

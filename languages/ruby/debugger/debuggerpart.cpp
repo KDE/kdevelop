@@ -16,6 +16,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "debuggerpart.h"
 
 #include <qdir.h>
 #include <qvbox.h>
@@ -63,7 +64,6 @@
 #include <kdevplugininfo.h>
 #include <debugger.h>
 
-#include "debuggerpart.h"
 
 namespace RDBDebugger
 {

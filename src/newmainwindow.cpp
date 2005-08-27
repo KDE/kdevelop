@@ -23,6 +23,7 @@
 #include <qtabbar.h>
 #include <qtoolbutton.h>
 
+#include <kxmlguiclient.h>
 #include <kaboutdata.h>
 #include <kdeversion.h>
 #include <kapplication.h>

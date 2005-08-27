@@ -20,6 +20,7 @@
 
 #include "kdevdesigner.h"
 
+#include <kxmlguiclient.h>
 #include <kkeydialog.h>
 #include <kfiledialog.h>
 #include <kconfig.h>

@@ -8,12 +8,14 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "partwidget.h"
 
 #include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qdom.h>
+#include <kxmlguiclient.h>
 #include <kcombobox.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -27,7 +29,6 @@
 
 #include "fileviewpart.h"
 #include "filetreewidget.h"
-#include "partwidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // class PartWidget

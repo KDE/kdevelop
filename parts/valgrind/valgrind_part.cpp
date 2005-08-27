@@ -1,3 +1,5 @@
+#include "valgrind_part.h"
+
 #include <qwhatsthis.h>
 #include <qregexp.h>
 #include <qfile.h>
@@ -17,7 +19,6 @@
 #include "kdevplugininfo.h"
 
 #include "valgrind_widget.h"
-#include "valgrind_part.h"
 #include "valgrind_dialog.h"
 #include "valgrinditem.h"
 

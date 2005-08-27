@@ -5,6 +5,7 @@
  *
  *  Copyright: See COPYING file that comes with this distribution
  */
+#include "snippet_part.h"
 
 #include <qwhatsthis.h>
 
@@ -28,7 +29,6 @@
 #include <kdebug.h>
 
 #include "snippet_widget.h"
-#include "snippet_part.h"
 #include "snippetitem.h"
 #include "snippetsettings.h"
 #include "snippetconfig.h"

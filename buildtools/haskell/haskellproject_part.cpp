@@ -14,6 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "haskellproject_part.h"
 
 #include <qdom.h>
 #include <qfileinfo.h>
@@ -23,6 +24,7 @@
 #include <qvbox.h>
 #include <qlabel.h>
 
+#include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -47,7 +49,6 @@
 #include "kdevcompileroptions.h"
 #include "runoptionswidget.h"
 #include "haskellprojectoptionsdlg.h"
-#include "haskellproject_part.h"
 #include "kdevgenericfactory.h"
 #include <kdevplugininfo.h>
 

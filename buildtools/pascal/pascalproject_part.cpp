@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "pascalproject_part.h"
+
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -41,7 +43,6 @@
 #include "envvartools.h"
 
 #include "pascalproject_widget.h"
-#include "pascalproject_part.h"
 #include "pascalprojectoptionsdlg.h"
 #include "pascalglobaloptionsdlg.h"
 

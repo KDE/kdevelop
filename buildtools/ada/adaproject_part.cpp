@@ -6,6 +6,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
+#include "adaproject_part.h"
+
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -37,7 +39,6 @@
 #include <kdevplugininfo.h>
 
 #include "adaproject_widget.h"
-#include "adaproject_part.h"
 #include "adaprojectoptionsdlg.h"
 #include "adaglobaloptionsdlg.h"
 

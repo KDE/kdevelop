@@ -16,6 +16,7 @@
 	 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 	 Boston, MA 02111-1307, USA.
 	 */
+#include "subversion_part.h"
 
 #include <qwhatsthis.h>
 #include <kiconloader.h>
@@ -27,7 +28,6 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "subversion_core.h"
-#include "subversion_part.h"
 #include "subversion_widget.h"
 #include "subversionoptionswidgetimpl.h"
 #include "subversionprojectwidget.h"

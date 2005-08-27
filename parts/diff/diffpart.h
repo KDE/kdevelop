@@ -18,6 +18,8 @@
 #include "kdevplugin.h"
 #include "kdevdifffrontend.h"
 
+class QPopupMenu;
+class Context;
 class KProcess;
 class DiffWidget;
 class QCString;

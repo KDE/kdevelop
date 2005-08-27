@@ -8,6 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "diffpart.h"
 
 #include <sys/stat.h>
 
@@ -32,7 +33,6 @@
 #include "kdevpartcontroller.h"
 #include "kdevplugininfo.h"
 
-#include "diffpart.h"
 #include "diffdlg.h"
 #include "diffwidget.h"
 

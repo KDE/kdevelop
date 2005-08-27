@@ -1,3 +1,5 @@
+#include "fileselector_part.h"
+
 #include <qwhatsthis.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -25,7 +27,6 @@
 #include <ktip.h>
 
 #include "fileselector_widget.h"
-#include "fileselector_part.h"
 
 typedef KDevGenericFactory<FileSelectorPart> FileSelectorFactory;
 static const KDevPluginInfo data("kdevfileselector");

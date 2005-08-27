@@ -14,6 +14,7 @@
 #ifndef AUTOTOOLSACTION_H
 #define AUTOTOOLSACTION_H
 
+#include <kxmlguiclient.h>
 #include <kaction.h>
 
 class QObject;

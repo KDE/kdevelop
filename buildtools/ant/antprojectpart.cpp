@@ -1,3 +1,5 @@
+#include "antprojectpart.h"
+
 #include <qapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -30,7 +32,6 @@
 #include "classpathwidget.h"
 
 
-#include "antprojectpart.h"
 
 
 typedef KDevGenericFactory<AntProjectPart> AntProjectFactory;

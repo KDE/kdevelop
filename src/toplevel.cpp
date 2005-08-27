@@ -1,3 +1,4 @@
+#include <kxmlguiclient.h>
 #include <kapplication.h>
 #include <kconfig.h>
 

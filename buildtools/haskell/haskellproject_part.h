@@ -20,7 +20,6 @@
 
 #include <qwidget.h>
 #include <qguardedptr.h>
-#include <kaction.h>
 
 #include "kdevbuildtool.h"
 #include "domutil.h"
@@ -37,7 +36,7 @@
   *@author KDevelop Authors
   */
 class HaskellProjectWidget;
-
+class KAction;
 
 class HaskellProjectPart : public KDevBuildTool
 {

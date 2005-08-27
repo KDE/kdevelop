@@ -20,6 +20,7 @@
 #ifndef DMAINWINDOW_H
 #define DMAINWINDOW_H
 
+#include <kxmlguiclient.h>
 #include <kparts/mainwindow.h>
 
 #include "ddockwindow.h"

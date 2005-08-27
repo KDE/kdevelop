@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qpopupmenu.h>
+#include <kxmlguiclient.h>
 #include <kdebug.h>
 #include <kaction.h>
 #include <klocale.h>

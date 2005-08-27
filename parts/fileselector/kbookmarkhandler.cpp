@@ -23,6 +23,7 @@
 
 #include <qtextstream.h>
 
+#include <kxmlguiclient.h>
 #include <kbookmarkimporter.h>
 #include <kpopupmenu.h>
 #include <ksavefile.h>
