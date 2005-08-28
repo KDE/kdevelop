@@ -1,8 +1,0 @@
-/** \class EditorChooserPart
-Chooses the text editor to use in KDevelop from a list of all KTextEditor Class interface compliant editors installed in KDE.
-
-\authors <a href="mailto:hoelzer AT physik.uni-wuerzburg.de">Matthias Hoelzer</a>
-
-\feature Chooses the text editor to use in KDevelop from a list of all KTextEditor Class interface compliant editors installed in KDE.
-
-*/
