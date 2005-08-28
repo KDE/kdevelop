@@ -103,6 +103,7 @@ Comment=A Hello World program was created in %{dest}
 Comment[da]=Et Goddag verden program blev oprettet i %{dest}
 Comment[de]=Ein Hello-World-Programm wurde in %{dest} erstellt.
 Comment[et]="Tere, maailm" programm loodi asukohta %{dest}
+Comment[it]=È stato creato un programma di "Hello World" in %{dest}
 Comment[sv]=Ett Hello World-program skapades i %{dest}
 Comment[tr]=Bir Merhaba Dünya programı %{dest} içinde yaratıldı.
 Comment[zh_CN]=在 %{dest} 中创建了一个 Hello world 程序

@@ -49,4 +49,5 @@ Comment=A simple 'hello world' program in Haskell was created in %{dest}
 Comment[da]=Et simpelt 'goddag verden' program i Haskell blev oprettet i %{dest}
 Comment[de]=Ein einfaches "Hello World"-Programm in Haskell wurde in %{dest} erstellt
 Comment[et]=Lihtne "Tere, maailm" programm Haskellis loodi asukohta %{dest}
+Comment[it]=È stato creato un semplice programma di "Hello World" in Haskell in %{dest}
 Comment[sv]=Ett enkelt 'Hello World'-program i Haskell skapades i %{dest}
