@@ -42,6 +42,7 @@ int Driver::parseFile(const char *fileName, ProjectAST **ast)
 //     yydebug = 1;
     int ret = yyparse();
     *ast = projects.top();
+    (*ast)->setFileName(fileName);
     fclose(yyin);
     return ret;
 }

@@ -121,6 +121,9 @@ public:
     bool isFunctionScope() const { return m_kind == FunctionScope; }
     /**@return true if this node is empty.*/
     bool isEmpty() const { return m_kind == Empty; }
+    
+    void setFileName(const char *fileName) { m_fileName = fileName; }
+    const char *fileName() const { return m_fileName; }
 
     /**Scoped identifier (scope name or function name).*/
     QString scopedID;
@@ -131,6 +134,7 @@ public:
 
 private:
     Kind m_kind;
+    const char *m_fileName;
 
 };
 
