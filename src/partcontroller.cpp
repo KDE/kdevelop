@@ -583,8 +583,8 @@ void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
   // signals are dynamic, if we try to connect to an editorpart that lacks this signal,
   // all we get is a runtime warning. At this point in time we are only really supported
   // by katepart anyway so IMHO this hack is justified. //teatime
-  QList<KTextEditor::View *> list = doc->views();
-  foreach(KTextEditor::View *view, list)
+  QList<KDocument::View *> list = doc->views();
+  foreach(KDocument::View *view, list)
       connect(view, SIGNAL(newStatus()), this, SLOT(slotNewStatus()));
 }
 

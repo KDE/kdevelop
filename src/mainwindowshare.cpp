@@ -412,8 +412,8 @@ void MainWindowShare::slotKeyBindings()
             {
                 doc->reloadXML();
 
-                const QList<KTextEditor::View *> list = doc->views();
-                foreach(KTextEditor::View *view, list)
+                const QList<KDocument::View *> list = doc->views();
+                foreach(KDocument::View *view, list)
                     view->reloadXML();
             }
             ++it;

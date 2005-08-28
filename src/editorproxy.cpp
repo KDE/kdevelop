@@ -333,7 +333,7 @@ void EditorWrapper::show()
     return;
   }
 
-  m_view = m_doc->createView(this);
+  m_view = (KTextEditor::View *) m_doc->createView(this);
 
   addWidget(m_view);
 
