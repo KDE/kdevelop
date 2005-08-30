@@ -1494,7 +1494,7 @@ void GDBController::slotRun()
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
             QCString tty(tty_->getSlave().latin1());
-            QCString options = QCString(" 2>&1 >") + tty + QCString(" <") + tty;
+            QCString options = QCString(">") + tty + QCString("  2>&1 <") + tty;
 
             KProcess *proc = new KProcess;
 
