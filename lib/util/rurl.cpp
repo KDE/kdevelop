@@ -366,4 +366,4 @@ void File::setRURL( QString rurl )
     URL::setRURL(rurl, Name::File);
 }
 
-};
+}

@@ -42,7 +42,7 @@
 
 typedef KDevGenericFactory<scriptingPart> scriptingFactory;
 KDevPluginInfo data("kdevscripting");
-K_EXPORT_COMPONENT_FACTORY( libkdevscripting, scriptingFactory( data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevscripting, scriptingFactory( data ) )
 
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2

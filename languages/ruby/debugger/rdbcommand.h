@@ -36,7 +36,7 @@ enum RDBCmd
   CONSTANTS     = 'C',
   CVARS         = 'V',    
   IVARS         = 'I',    
-  LOCALS        = 'L',
+  LOCALS        = 'L'
 };
 
 #define RUNCMD      (true)
