@@ -1576,7 +1576,10 @@ void GDBController::slotRestart()
         return;
 
     if (stateIsOn(s_appBusy))
+    {
+        setStateOn(s_silent);
         pauseApp();
+    }
 
     queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));        
 }
