@@ -1267,16 +1267,16 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
     if (!shell.isEmpty())
     {
         *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb
-                      + " " + application + " -fullname -nx -quiet";
+                      + " " + application + " -fullname -quiet";
         emit gdbStdout(QString( "/bin/sh -c " + shell + " " + gdb
-                      + " " + application + " -fullname -nx -quiet" ).latin1());
+                      + " " + application + " -fullname -quiet" ).latin1());
     }
     else
     {
         *dbgProcess_ << gdb << application
-                        << "-fullname" << "-nx" << "-quiet";
+                        << "-fullname" << "-quiet";
         emit gdbStdout(QString( gdb + " " + application +
-                        " -fullname -nx -quiet" ).latin1());
+                        " -fullname -quiet" ).latin1());
     }
 
     if (!dbgProcess_->start( KProcess::NotifyOnExit,
