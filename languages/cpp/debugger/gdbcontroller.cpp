@@ -37,6 +37,7 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 #include <qstring.h>
+#include <qdir.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -1253,18 +1254,28 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
 
     application_ = application;
+
+    QString gdb = "gdb";
+    // Prepend path to gdb, if needed. Using QDir,
+    // path can either end with slash, or not.
+    if (!config_gdbPath_.isEmpty())
+    {
+        QDir gdb_path(config_gdbPath_);
+        gdb = gdb_path.filePath("gdb");
+    }
+
     if (!shell.isEmpty())
     {
-        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " +config_gdbPath_
-                      + "gdb " + application + " -fullname -nx -quiet";
-        emit gdbStdout(QString( "/bin/sh -c " + shell + " " +config_gdbPath_
-                      + "gdb " + application + " -fullname -nx -quiet" ).latin1());
+        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb
+                      + " " + application + " -fullname -nx -quiet";
+        emit gdbStdout(QString( "/bin/sh -c " + shell + " " + gdb
+                      + " " + application + " -fullname -nx -quiet" ).latin1());
     }
     else
     {
-        *dbgProcess_ << config_gdbPath_ + "gdb" << application
+        *dbgProcess_ << gdb << application
                         << "-fullname" << "-nx" << "-quiet";
-        emit gdbStdout(QString( config_gdbPath_ + "gdb " + application +
+        emit gdbStdout(QString( gdb + " " + application +
                         " -fullname -nx -quiet" ).latin1());
     }
 
