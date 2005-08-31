@@ -1268,8 +1268,22 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
                         " -fullname -nx -quiet" ).latin1());
     }
 
-    dbgProcess_->start( KProcess::NotifyOnExit,
-                        KProcess::Communication(KProcess::All));
+    if (!dbgProcess_->start( KProcess::NotifyOnExit,
+                             KProcess::Communication(KProcess::All)))
+    {
+        KMessageBox::error(
+            0, 
+            i18n("<b>Could not start debugger.</b>"
+                 "<p>Could not run '%1'. "
+                 "Make sure that the path name is specified correctly."
+                ).arg(dbgProcess_->args()[0]),
+            i18n("Could not start debugger"));
+
+        delete tty_;
+        tty_ = 0;
+
+        return;
+    }
 
     setStateOff(s_dbgNotStarted);
     emit dbgStatus ("", state_);
