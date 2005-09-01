@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=SuperWaba
+Name[xx]=xxSuperWabaxx
 Icon=superwaba.png
 Category=Java
 Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
@@ -12,6 +13,7 @@ Comment[hu]=Egyszerű sablon SuperWaba Java-alkalmazások készítéséhez, WinC
 Comment[it]=Un semplice modello per compilare applicazioni Java SuperWaba basato su WinCE e PalmOS. Ulteriori informazioni possono essere trovate visitando http://www.superwaba.org/
 Comment[sv]=En enkel mall för att bygga SuperWaba Java-baserade program på WinCE och PalmOS. Mer information hittas på http://www.superwaba.org.
 Comment[tr]=WinCE ve PalmOS üstünde SuperWaba tabanlı Java uygulamarı yapmak için basit bir şablon. Daha fazla bilgi http://www.superwaba.org/ adresinde bulunabilir.
+Comment[xx]=xxA simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.orgxx
 FileTemplates=java
 ShowFilesAfterGeneration=%{dest}/%{APPNAME}.java
 Archive=superwaba.tar.gz
@@ -27,6 +29,7 @@ Comment[fr]=Chemin vers votre racine Java
 Comment[hu]=A Java-alapkönyvtár elérési útja
 Comment[it]=Percorso alla radire java
 Comment[sv]=Sökväg till Java-rotkatalog
+Comment[xx]=xxPath to your java rootxx
 Comment[zh_CN]=您的 Java 根路径
 Default=/usr/lib/java
 ValueType=QString
@@ -43,6 +46,7 @@ Comment[hu]=A SuperWaba-alapkönyvtár elérési útja
 Comment[it]=Percorso alla radice SuperWaba
 Comment[sv]=Sökväg till SuperWaba-rotkatalog
 Comment[tr]=SuperWaba kök dizininizin yolu
+Comment[xx]=xxPath to your SuperWaba rootxx
 Comment[zh_CN]=您的 SuperWaba 根路径
 Default=/usr/lib
 ValueType=QString
@@ -85,6 +89,7 @@ Comment[hu]=Az alkalmazás készen áll a lefordításra. A make-célpontok szer
 Comment[it]=L'applicazione è configurata per compilare. Modifica i target di make per personalizzare il file.
 Comment[sv]=Programmet är inställt att byggas. Redigera byggmålen för att anpassa filen.
 Comment[tr]=Uygulamanız derlenmeye hazır. Dosyayı özelleştirmek için make hedeflerini düzenleyin.
+Comment[xx]=xxYour application is setup to build. Edit the make targets to customize the file.xx
 Archive=superwaba.tar.gz
 
 [GNU]

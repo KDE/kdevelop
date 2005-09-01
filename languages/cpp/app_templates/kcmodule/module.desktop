@@ -62,6 +62,7 @@ Name[sr]=%{APPNAME} аплет
 Name[sr@Latn]=%{APPNAME} aplet
 Name[sv]=Miniprogram %{APPNAME}
 Name[tr]=%{APPNAME} Küçük Uygulaması
+Name[xx]=xxThe %{APPNAME} Appletxx
 Name[zh_CN]=%{APPNAME} 小程序
 
 

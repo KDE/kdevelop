@@ -11,6 +11,7 @@ Comment[hu]=DocBook-alapú dokumentációsablonok telepítése.
 Comment[it]=Installa modelli di documentazione docbook.
 Comment[sv]= Installera Docbook-dokumentationsmallar.
 Comment[tr]=Docbook belgelendirme şablonlarını yükle.
+Comment[xx]=xx Install Docbook documentation templates.xx
 Comment[zh_CN]=安装 Docbook 文档模板。
 Default=true
 
