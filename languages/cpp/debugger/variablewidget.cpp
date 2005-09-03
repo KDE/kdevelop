@@ -268,7 +268,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         if (root != recentExpressions_)
         {
             idRemember = popup.insertItem(
-                SmallIcon("pencil"), i18n("Remember value"));
+                SmallIcon("pencil"), i18n("Remember Value"));
         }
 
         if (dynamic_cast<WatchRoot*>(root)) {
@@ -276,7 +276,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
                 SmallIcon("editdelete"), i18n("Remove Watch Variable") );
         } else if (root != recentExpressions_) {
             idWatch = popup.insertItem(
-                i18n("Watch variable"));
+                i18n("Watch Variable"));
         }
         if (root == recentExpressions_) {
             idReevaluate = popup.insertItem( 
