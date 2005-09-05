@@ -6,6 +6,7 @@ Name[de]=GNOME-- Anwendungsgrundgerüst
 Name[et]=GNOME-- rakenduse raamistik
 Name[hu]=GNOME - Alkalmazás-keretrendszer
 Name[it]=GNOME-- Infrastruttura di applicazione
+Name[nl]=GNOME-- Applicationframework
 Name[sv]=GNOME-- programramverk
 Name[tr]=GNOME-- Uygulama Çatısı
 Name[xx]=xxGNOME-- Application frameworkxx
@@ -18,6 +19,7 @@ Comment[de]=Erstellt eine einfache GNOME-Anwendung. Gnomemm, Gtkmm >= 1.2.8 und 
 Comment[et]=Lihtsa GNOME-- rakenduse loomine. Paigaldatud peavad olema Gnomemm, Gtkmm >= 1.2.8 ja < 1.3.0. Glade-faili redigeerimiseks on vajalik glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[hu]=Létrehoz egy egyszerű GNOME--os -alkalmazást. A Gnomemm, a Gtkmm (>= 1.2.8 és < 1.3.0) szükséges hozzá. Glade-fájl szerkesztéséhez a glade-- (http://home.wtal.de/petig/Gtk/) is szükséges.
 Comment[it]=Genera una semplice applicazione GNOME. Gnomemm, Gtkmm >= 1.2.8 e < 1.3.0 dovrebbero essere installati. Si richiede glade per modificare i file di glade -- (http://home.wtal.de/petig/Gtk/).
+Comment[nl]=Genereert een eenvoudige GNOME-- toepassing. Gnomemm, Gtkmm >= 1.2.8 en < 1.3.0 dienen te zijn geïnstalleerd. Voor het bewerken van glade file is glade-- (http://home.wtal.de/petig/Gtk/) nodig.
 Comment[sv]=Skapar ett enkelt GNOME-- program. Gnomemm, Gtkmm >= 1.2.8 och < 1.3.0 måste vara installerat. För att redigera glade-filer krävs glade-- (http://home.wtal.de/petig/Gtk/).
 Comment[tr]=Basit bir GNOME-- uygulaması yaratır. Gnomemm, Gtkmm>=1.28 ve <1.3.0 yüklü olmalıdır. Glade dosyasını düzenlemek için glade-- (http://home.wtal.de/petig/Gtk/) gereklidir.
 Comment[xx]=xxGenerates a simple GNOME-- application. Gnomemm, Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- (http://home.wtal.de/petig/Gtk/) is required.xx
@@ -121,6 +123,7 @@ Comment[de]=Ein GNOME-Anwendungsgerüst wurde in %{dest} erstellt.
 Comment[et]=GNOME-- rakenduse raamistik loodi asukohta %{dest}
 Comment[hu]=Létrejött egy GNOME-s alkalmazás-keretrendszer itt: %{dest}
 Comment[it]=È stato creata una infrastruttura applicativa GNOME in %{dest}
+Comment[nl]=Een GNOME-- applicationframework is aangemaakt in %{dest}
 Comment[sv]=Ett GNOME-- programramverk skapades i %{dest}
 Comment[tr]=Bir GNOME-- uygulama çatısı %{dest} içinde yaratılmıştır.
 Comment[xx]=xxA GNOME-- application framework was created in %{dest}xx
