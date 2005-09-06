@@ -103,6 +103,7 @@ Comment[es]=Una aplicación para Qtopia ha sido creada en %{dest}
 Comment[et]=Qtopia rakendus loodi asukohta %{dest}
 Comment[eu]=Qtopia aplikazio bat sortu da hemen: %{dest}
 Comment[fr]=Une application Qtopia a été créée dans %{dest}
+Comment[ga]=Cruthaíodh feidhmchlár Qtopia i %{dest}
 Comment[hu]=Létrejött egy Qtopia-alkalmazás itt: %{dest}
 Comment[it]=È stata creata un'applicazione Qtopia in %{dest}
 Comment[nl]=Een Qtopia-toepassing is aangemaakt in  %{dest}
