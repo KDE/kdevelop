@@ -37,6 +37,7 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 #include <qstring.h>
+#include <qdir.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -1253,23 +1254,47 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
 
     application_ = application;
+
+    QString gdb = "gdb";
+    // Prepend path to gdb, if needed. Using QDir,
+    // path can either end with slash, or not.
+    if (!config_gdbPath_.isEmpty())
+    {
+        QDir gdb_path(config_gdbPath_);
+        gdb = gdb_path.filePath("gdb");
+    }
+
     if (!shell.isEmpty())
     {
-        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " +config_gdbPath_
-                      + "gdb " + application + " -fullname -nx -quiet";
-        emit gdbStdout(QString( "/bin/sh -c " + shell + " " +config_gdbPath_
-                      + "gdb " + application + " -fullname -nx -quiet" ).latin1());
+        *dbgProcess_ << "/bin/sh" << "-c" << shell + " " + gdb
+                      + " " + application + " -fullname -quiet";
+        emit gdbStdout(QString( "/bin/sh -c " + shell + " " + gdb
+                      + " " + application + " -fullname -quiet" ).latin1());
     }
     else
     {
-        *dbgProcess_ << config_gdbPath_ + "gdb" << application
-                        << "-fullname" << "-nx" << "-quiet";
-        emit gdbStdout(QString( config_gdbPath_ + "gdb " + application +
-                        " -fullname -nx -quiet" ).latin1());
+        *dbgProcess_ << gdb << application
+                        << "-fullname" << "-quiet";
+        emit gdbStdout(QString( gdb + " " + application +
+                        " -fullname -quiet" ).latin1());
     }
 
-    dbgProcess_->start( KProcess::NotifyOnExit,
-                        KProcess::Communication(KProcess::All));
+    if (!dbgProcess_->start( KProcess::NotifyOnExit,
+                             KProcess::Communication(KProcess::All)))
+    {
+        KMessageBox::error(
+            0, 
+            i18n("<b>Could not start debugger.</b>"
+                 "<p>Could not run '%1'. "
+                 "Make sure that the path name is specified correctly."
+                ).arg(dbgProcess_->args()[0]),
+            i18n("Could not start debugger"));
+
+        delete tty_;
+        tty_ = 0;
+
+        return;
+    }
 
     setStateOff(s_dbgNotStarted);
     emit dbgStatus ("", state_);
@@ -1494,7 +1519,7 @@ void GDBController::slotRun()
         if (!config_runShellScript_.isEmpty()) {
             // Special for remote debug...
             QCString tty(tty_->getSlave().latin1());
-            QCString options = QCString(" 2>&1 >") + tty + QCString(" <") + tty;
+            QCString options = QCString(">") + tty + QCString("  2>&1 <") + tty;
 
             KProcess *proc = new KProcess;
 
@@ -1551,7 +1576,10 @@ void GDBController::slotRestart()
         return;
 
     if (stateIsOn(s_appBusy))
+    {
+        setStateOn(s_silent);
         pauseApp();
+    }
 
     queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));        
 }
