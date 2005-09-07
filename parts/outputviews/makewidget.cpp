@@ -515,7 +515,6 @@ void MakeWidget::searchItem(int parag)
 			m_part->partController()->editDocument(KURL( guessFileName(item->fileName, parag) ), item->lineNum);
 		}
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
-		m_part->mainWindow()->lowerView(this);
         m_lastErrorSelected = parag;
 	}
 }
