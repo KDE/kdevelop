@@ -208,7 +208,6 @@ void GDBController::configure()
         bool restart = false;
         if (stateIsOn(s_appBusy))
         {
-            setStateOn(s_silent);
             pauseApp();
             restart = true;
         }
@@ -375,6 +374,8 @@ void GDBController::removeInfoRequests()
 // commands as well.
 void GDBController::pauseApp()
 {
+    setStateOn(s_silent);
+
     int i = cmdList_.count();
     while (i)
     {
@@ -505,7 +506,16 @@ void GDBController::parseLine(char* buf)
             // application is running.
             // And the user does this to stop the program also.
             if (strstr(buf+23, "SIGINT") && stateIsOn(s_silent))
+            {
+                // If this is explicit break into the program, show
+                // the source line
+                if (stateIsOn(s_explicitBreakInto))
+                {
+                    setStateOff(s_silent|s_explicitBreakInto);
+                    actOnProgramPause(QString(buf));                
+                }
                 return;
+            }
 
             // Whenever we have a signal raised then tell the user, but don't
             // end the program as we want to allow the user to look at why the
@@ -1584,7 +1594,6 @@ void GDBController::slotRestart()
 
     if (stateIsOn(s_appBusy))
     {
-        setStateOn(s_silent);
         pauseApp();
     }
 
@@ -1675,6 +1684,7 @@ void GDBController::slotStepOutOff()
 // Only interrupt a running program.
 void GDBController::slotBreakInto()
 {
+    setStateOn(s_explicitBreakInto);
     pauseApp();
 }
 
@@ -1699,7 +1709,6 @@ void GDBController::slotBPState( const Breakpoint& BP )
 
         // When forcing breakpoints to be set/unset, interrupt a running app
         // and change the state.
-        setStateOn(s_silent);
         pauseApp();
         restart = true;
     }
@@ -1746,7 +1755,6 @@ void GDBController::slotClearAllBreakpoints()
 
         // When forcing breakpoints to be set/unset, interrupt a running app
         // and change the state.
-        setStateOn(s_silent);
         pauseApp();
         restart = true;
     }
