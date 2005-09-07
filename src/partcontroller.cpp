@@ -573,43 +573,6 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
       return; // to avoid later crash
   }
 
-  // There's shortcut conflict between Kate and the debugger, resolve
-  // it here. Ideally, the should be some standard mechanism, configurable
-  // by config files.
-  // However, it does not exists and situation here some rare commands
-  // like "Dynamic word wrap" or "Show line numbers" from Kate take
-  // all possible shortcuts, leaving us with IDE that has no shortcuts for
-  // debugger, is very bad.
-  //
-  // We could try to handle this in debugger, but that would require
-  // the debugger to intercept all new KTextEditor::View creations, which is
-  // not possible.
-
-  KTextEditor::View* view = dynamic_cast<KTextEditor::View*>(widget);
-  if (view)
-  {
-    KActionCollection* c = view->actionCollection();
-    // Be extra carefull, in case the part either don't provide those
-    // action, or uses different shortcuts.
-
-    if (KAction* a = c->action("view_folding_markers"))
-    {
-      if (a->shortcut() == KShortcut(Key_F9))
-        a->setShortcut(KShortcut());
-    }
-
-    if (KAction* a = c->action("view_dynamic_word_wrap"))
-    {
-      if (a->shortcut() == KShortcut(Key_F10))
-        a->setShortcut(KShortcut());
-    }
-
-    if (KAction* a = c->action("view_line_numbers"))
-    {
-      if (a->shortcut() == KShortcut(Key_F11))
-        a->setShortcut(KShortcut());
-    }
-  }
       
   TopLevel::getInstance()->embedPartView(widget, url.fileName(), url.url());
 
@@ -661,6 +624,54 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
 
 void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
 {
+  // There's shortcut conflict between Kate and the debugger, resolve
+  // it here. Ideally, the should be some standard mechanism, configurable
+  // by config files.
+  // However, it does not exists and situation here some rare commands
+  // like "Dynamic word wrap" or "Show line numbers" from Kate take
+  // all possible shortcuts, leaving us with IDE that has no shortcuts for
+  // debugger, is very bad.
+  //
+  // We could try to handle this in debugger, but that would require
+  // the debugger to intercept all new KTextEditor::View creations, which is
+  // not possible.
+
+  QWidget* widget = 0;
+  KTextEditor::View* view = 0;
+  if (KTextEditor::Editor* edit = dynamic_cast<KTextEditor::Editor*>(doc))
+  {
+    widget = edit->widget();
+  }
+  if (widget)
+  {
+    view = dynamic_cast<KTextEditor::View*>(widget);
+  }
+  
+  if (view)
+  {
+    KActionCollection* c = view->actionCollection();
+    // Be extra carefull, in case the part either don't provide those
+    // action, or uses different shortcuts.
+
+    if (KAction* a = c->action("view_folding_markers"))
+    {
+      if (a->shortcut() == KShortcut(Key_F9))
+        a->setShortcut(KShortcut());
+    }
+
+    if (KAction* a = c->action("view_dynamic_word_wrap"))
+    {
+      if (a->shortcut() == KShortcut(Key_F10))
+        a->setShortcut(KShortcut());
+    }
+
+    if (KAction* a = c->action("view_line_numbers"))
+    {
+      if (a->shortcut() == KShortcut(Key_F11))
+        a->setShortcut(KShortcut());
+    }
+  }
+
   //EditorProxy::getInstance()->installPopup(doc, contextPopupMenu());
 
   // What's potentially problematic is that this signal isn't officially part of the
