@@ -1458,6 +1458,13 @@ void GDBController::slotStopDebugger()
     delete dbgProcess_;    dbgProcess_ = 0;
     delete tty_;           tty_ = 0;
 
+    // The gdb output buffer might contain start marker of some
+    // previously issued command that crashed gdb (so there's no end marker)
+    // If we don't clear this, then after restart, we'll be trying to search
+    // for the end marker of the command issued in previous gdb session,
+    // and never succeed. 
+    gdbOutputLen_ = 0;
+
     state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
     emit dbgStatus (i18n("Debugger stopped"), state_);
 }
