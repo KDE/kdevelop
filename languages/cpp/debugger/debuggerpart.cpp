@@ -607,8 +607,8 @@ void DebuggerPart::setupController()
              this,                  SLOT(slotStatus(const QString&, int)));
     connect( controller,            SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this,                  SLOT(slotShowStep(const QString&, int)));
-    connect( controller,            SIGNAL(debuggerRunError(int)),
-	     this,                  SLOT(errRunningDebugger(int)));
+    connect( controller,            SIGNAL(debuggerAbnormalExit()),
+	     this,                  SLOT(slotDebuggerAbnormalExit()));
 
     // controller -> procLineMaker
     connect( controller,            SIGNAL(ttyStdout(const char*)),
@@ -758,14 +758,20 @@ void DebuggerPart::slotStopDebugger()
     core()->running(this, false);
 }
 
-void DebuggerPart::errRunningDebugger(int errorCode)
+void DebuggerPart::slotDebuggerAbnormalExit()
 {
-  if (errorCode == 127)
-  {
-    KMessageBox::error(mainWindow()->main(), i18n("GDB could not be found. Please make sure it is installed"
-                                     " and in the path and try again"), i18n("Debugger Not Found"));
-  }
-  slotStopDebugger();
+    mainWindow()->raiseView(gdbOutputWidget);
+
+    KMessageBox::error(
+        mainWindow()->main(), 
+        i18n("<b>GDB exited abnormally</b>"
+             "<p>This is likely a bug in GDB. "
+             "Examine the gdb output window and then stop the debugger"),
+        i18n("GDB exited abnormally"));
+
+    // Note: we don't stop the debugger here, becuse that will hide gdb
+    // window and prevent the user from finding the exact reason of the
+    // problem.
 }
 
 void DebuggerPart::projectClosed()

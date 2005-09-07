@@ -145,7 +145,7 @@ protected slots:
 signals:
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
-    void debuggerRunError(int errorCode);
+    void debuggerAbnormalExit();
     // Emitted whenever parameters info for the current frame is ready.
     void parametersReady(const char* buf);
     // Emitted whenever local vars info for the the current frame is ready.

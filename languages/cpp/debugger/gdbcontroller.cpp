@@ -2113,8 +2113,8 @@ void GDBController::slotDbgWroteStdin(KProcess *)
 
 void GDBController::slotDbgProcessExited(KProcess* process)
 {
-    if ( process->exitStatus() == 127 )
-      emit debuggerRunError(127);
+    if ( !process->normalExit() )
+        emit debuggerAbnormalExit();
 
     destroyCmds();
     state_ = s_dbgNotStarted|s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
