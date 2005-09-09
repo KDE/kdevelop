@@ -127,6 +127,7 @@ Comment[da]=Et Gtk-- programskelet blev oprettet i %{dest}
 Comment[de]=Ein Gtk-Anwendungsgerüst wurde in %{dest} erstellt.
 Comment[es]=Una infraestructura de aplicación Gtk-- ha sido creada en %{dest}
 Comment[et]=Gtk-- rakenduse raamistik loodi asukohta %{dest}
+Comment[eu]=Gtk-- aplikazioen lan-marko bat sortu da hemen: %{dest}
 Comment[hu]=Létrejött egy Gtk-s alkalmazás-keretrendszer itt: %{dest}
 Comment[it]=È stata crata una infrastruttura applicativa Gtk in %{dest}
 Comment[nl]=Een Gtk-- toepassing is aangemaakt in %{dest}
