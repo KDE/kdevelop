@@ -13,7 +13,14 @@
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description></description>
-    <ignoreparts/>
+    <ignoreparts>
+      <part>kdevbookmarks</part>
+      <part>kdevfilegroups</part>
+      <part>kdevfileview</part>
+      <part>kdevsecurity</part>
+      <part>kdevvalgrind</part>
+    </ignoreparts>
+    <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevfileview>
     <groups>
@@ -97,16 +104,12 @@
     <make>
       <envvars>
         <envvar value="/home/manyoso/dev/kde/trunk/KDE/kdelibs4-snapshot-install" name="KDEDIR" />
-        <envvar value="/home/manyoso/.kde4
-" name="KDEHOME" />
-        <envvar value="/tmp/manyoso-kde4
-" name="KDETMP" />
+        <envvar value="/home/manyoso/.kde4" name="KDEHOME" />
+        <envvar value="/tmp/manyoso-kde4" name="KDETMP" />
         <envvar value="/var/tmp/manyoso-kde4" name="KDEVARTMP" />
-        <envvar value="$LD_LIBRARY_PATH:/home/manyoso/dev/kde/trunk/qt-copy/lib
-" name="LD_LIBRARY_PATH" />
+        <envvar value="$LD_LIBRARY_PATH:/home/manyoso/dev/kde/trunk/qt-copy/lib" name="LD_LIBRARY_PATH" />
         <envvar value="/home/manyoso/dev/kde/trunk/qt-copy/bin:/home/manyoso/dev/kde/trunk/KDE/kdelibs4-snapshot-install/bin:/home/manyoso/dev/kde/trunk/kdenonbeta/unsermake:$PATH" name="PATH" />
-        <envvar value="/home/manyoso/dev/kde/trunk/qt-copy
-" name="QTDIR" />
+        <envvar value="/home/manyoso/dev/kde/trunk/qt-copy" name="QTDIR" />
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
@@ -120,19 +123,15 @@
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <mainprogram>src/kdevelop</mainprogram>
-      <programargs></programargs>
+      <programargs>kdevelop4.kdevelop</programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
         <envvar value="/home/manyoso/dev/kde/trunk/KDE/kdelibs4-snapshot-install" name="KDEDIR" />
-        <envvar value="/home/manyoso/.kde4
-" name="KDEHOME" />
-        <envvar value="/tmp/manyoso-kde4
-" name="KDETMP" />
-        <envvar value="/var/tmp/manyoso-kde4
-" name="KDEVARTMP" />
-        <envvar value="$LD_LIBRARY_PATH:/home/manyoso/dev/kde/trunk/qt-copy/lib
-" name="LD_LIBRARY_PATH" />
+        <envvar value="/home/manyoso/.kde4" name="KDEHOME" />
+        <envvar value="/tmp/manyoso-kde4" name="KDETMP" />
+        <envvar value="/var/tmp/manyoso-kde4" name="KDEVARTMP" />
+        <envvar value="$LD_LIBRARY_PATH:/home/manyoso/dev/kde/trunk/qt-copy/lib" name="LD_LIBRARY_PATH" />
         <envvar value="/home/manyoso/dev/kde/trunk/qt-copy/bin:/home/manyoso/dev/kde/trunk/KDE/kdelibs4-snapshot-install/bin:/home/manyoso/dev/kde/trunk/kdenonbeta/unsermake:$PATH" name="PATH" />
         <envvar value="/home/manyoso/dev/kde/trunk/qt-copy" name="QTDIR" />
       </envvars>
@@ -144,31 +143,27 @@
       <default>
         <envvars>
           <envvar value="/home/manyoso/dev/kde/trunk/KDE/kdelibs4-snapshot-install" name="KDEDIR" />
-          <envvar value="/home/manyoso/.kde4
-" name="KDEHOME" />
-          <envvar value="/tmp/manyoso-kde4
-" name="KDETMP" />
-          <envvar value="/var/tmp/manyoso-kde4
-" name="KDEVARTMP" />
-          <envvar value="$LD_LIBRARY_PATH:/home/manyoso/dev/kde/trunk/qt-copy/lib
-" name="LD_LIBRARY_PATH" />
+          <envvar value="/home/manyoso/.kde4" name="KDEHOME" />
+          <envvar value="/tmp/manyoso-kde4" name="KDETMP" />
+          <envvar value="/var/tmp/manyoso-kde4" name="KDEVARTMP" />
+          <envvar value="$LD_LIBRARY_PATH:/home/manyoso/dev/kde/trunk/qt-copy/lib" name="LD_LIBRARY_PATH" />
           <envvar value="/home/manyoso/dev/kde/trunk/qt-copy/bin:/home/manyoso/dev/kde/trunk/KDE/kdelibs4-snapshot-install/bin:/home/manyoso/dev/kde/trunk/kdenonbeta/unsermake:$PATH" name="PATH" />
           <envvar value="/home/manyoso/dev/kde/trunk/qt-copy" name="QTDIR" />
         </envvars>
-        <configargs></configargs>
-        <builddir></builddir>
-        <topsourcedir></topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
+        <configargs/>
+        <builddir/>
+        <topsourcedir/>
+        <cppflags/>
+        <ldflags/>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
-        <cflags></cflags>
-        <cxxflags></cxxflags>
-        <f77flags></f77flags>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags/>
+        <f77flags/>
       </default>
     </configurations>
   </kdevautoproject>
@@ -200,8 +195,8 @@
       <inlineSet>true</inlineSet>
     </creategettersetter>
     <references>
-      <pcs>Qt</pcs>
-      <pcs>KDElibs</pcs>
+      <pcs>Qt4-copy</pcs>
+      <pcs>KDE4Libs</pcs>
     </references>
   </kdevcppsupport>
 </kdevelop>
