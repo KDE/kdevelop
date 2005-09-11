@@ -10,7 +10,7 @@ SUBDIRS = fullscreen \
     diff \
     classview \
     openwith \
-    guibuilder \
+#    guibuilder \
     valgrind \
     partexplorer \
     quickopen \
