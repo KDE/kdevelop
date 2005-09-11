@@ -37,7 +37,7 @@ kdevelopinclude_HEADERS = \
 	kdevgenericfactory.h		kdevprojectimporter.h \
 	kdevlanguagesupport.h		kdevprojectmodel.h \
 	kdevmainwindow.h		tag.h \
-	kdevmakefrontend.h 
+	kdevmakefrontend.h
 
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = \
