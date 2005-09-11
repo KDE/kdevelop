@@ -56,8 +56,8 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
     setXMLFile("kdevpart_quickopen.rc");
 
     m_actionQuickOpen = new KAction( i18n("Quick Open..."), Qt::CTRL + Qt::ALT + Qt::Key_O,
-				       this, SLOT(slotQuickOpen()),
-				       actionCollection(), "quick_open" );
+                       this, SLOT(slotQuickOpen()),
+                       actionCollection(), "quick_open" );
     m_actionQuickOpen->setToolTip(i18n("Quick open locations in project"));
     m_actionQuickOpen->setWhatsThis(i18n("<b>Quick open</b><p>Provides an input form with completion to quickly open files or symbols in a project."));
 
@@ -121,7 +121,7 @@ QString QuickOpenPart::getWordInEditor()
 
     QString wordstr;
     bool hasMultilineSelection = false;
-    if (view && view->selection())
+    if (view && view->hasSelection())
     {
         hasMultilineSelection = ( view->selectionText().contains('\n') != 0 );
         if (!hasMultilineSelection)
