@@ -64,7 +64,6 @@ private:
 private:
     KDevProject *m_project;
 
-    static const QString &genericImporter;
     QStringList includes;
     QStringList excludes;
 };

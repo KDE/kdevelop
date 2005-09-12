@@ -31,9 +31,6 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-const QString &KDevGenericImporter::genericImporter =
-    KGlobal::staticQString("/kdevprojectmanager/importer/generic");
-
 K_EXPORT_COMPONENT_FACTORY(libkdevgenericimporter, KGenericFactory<KDevGenericImporter>("kdevgenericimporter"))
 
 KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, const QStringList &)
@@ -45,8 +42,8 @@ KDevGenericImporter::KDevGenericImporter(QObject *parent, const char *name, cons
     Q_ASSERT(m_project);
 
     QDomDocument &dom = *project()->projectDom();
-    includes = DomUtil::readListEntry(dom, genericImporter, "include");
-    excludes = DomUtil::readListEntry(dom, genericImporter, "exclude");
+    includes = DomUtil::readListEntry(dom, QLatin1String("/kdevprojectmanager/importer/generic"), "include");
+    excludes = DomUtil::readListEntry(dom, QLatin1String("/kdevprojectmanager/importer/generic"), "exclude");
 
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c" << "*.ui";   // ### remove me
@@ -90,9 +87,6 @@ bool KDevGenericImporter::isValid(const QFileInfo &fileInfo) const
 
 QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *item)
 {
-    static const QString &dot = KGlobal::staticQString(".");
-    static const QString &dotdot = KGlobal::staticQString("..");
-
     QDir dir = item->directory();
 
 #if 0 // ### port me
@@ -108,7 +102,8 @@ QList<KDevProjectFolderItem*> KDevGenericImporter::parse(KDevProjectFolderItem *
 
         if (!isValid(fileInfo)) {
             //kdDebug(9000) << "skip:" << fileInfo.absFilePath() << endl;
-        } else if (fileInfo.isDir() && fileInfo.fileName() != dot && fileInfo.fileName() != dotdot) {
+        } else if (fileInfo.isDir() && fileInfo.fileName() != QLatin1String(".")
+                   && fileInfo.fileName() != QLatin1String("..")) {
             KDevProjectFolderItem *folder = new KDevProjectFolderItem(fileInfo.absFilePath());
             item->add(folder);
             folder_list.append(folder);
