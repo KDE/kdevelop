@@ -1,6 +1,6 @@
 #include "../quickopen_model.h"
-#include <kdevelop/util/kfiltermodel.h>
-#include <kdevelop/util/kdevitemmodel.h>
+#include <kfiltermodel.h>
+#include <kdevitemmodel.h>
 
 #include <QtGui/QtGui>
 #include <QtTest/QtTest>
