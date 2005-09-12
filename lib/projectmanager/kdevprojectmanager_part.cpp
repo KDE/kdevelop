@@ -119,7 +119,11 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   m_projectManager->setWhatsThis(i18n("Project overview"));
   m_widget->layout()->add(m_projectManager);
 
-#if 1
+#ifdef __GNUC__
+#  warning "harald fix your KFilterModel!!"
+#endif
+
+#if 0 // ### h
   KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
   connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
   m_projectManager->setModel(filterModel);
@@ -176,7 +180,7 @@ void KDevProjectManagerPart::openProject(const QString &dirName, const QString &
 {
   m_projectDirectory = dirName;
   m_projectName = projectName;
-  
+
   import(ForceRefresh);
 
   KDevProject::openProject(dirName, projectName);
@@ -353,11 +357,11 @@ QStringList KDevProjectManagerPart::fileList(KDevProjectItem *item)
       QList<KDevProjectFolderItem*> folder_list = folder->folderList();
       for (QList<KDevProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it)
         files += fileList((*it));
-  
+
       QList<KDevProjectTargetItem*> target_list = folder->targetList();
       for (QList<KDevProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it)
         files += fileList((*it));
-  
+
       QList<KDevProjectFileItem*> file_list = folder->fileList();
       for (QList<KDevProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it)
         files += fileList((*it));
@@ -373,10 +377,10 @@ QStringList KDevProjectManagerPart::fileList(KDevProjectItem *item)
       QString fileName = file->name();
       if (fileName.startsWith(m_projectDirectory))
         fileName = fileName.mid(m_projectDirectory.length());
-  
+
       while (!fileName.isEmpty() && fileName.at(0) == '/')
         fileName = fileName.mid(1);
-  
+
       files.append(fileName);
     }
 
@@ -423,7 +427,7 @@ bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, cons
     emit removedFilesFromProject(oldFiles.keys());
 
   m_dirty = !(newFiles.isEmpty() && oldFiles.isEmpty());
-  
+
   return m_dirty;
 }
 
