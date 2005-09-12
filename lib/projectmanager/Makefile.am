@@ -11,6 +11,7 @@ libkdevprojectmanager_la_LIBADD = \
 libkdevprojectmanager_la_SOURCES = \
 	kdevprojectmanager_part.cpp \
 	kdevprojectmanager.cpp \
+	kdevprojectfilter.cpp \
 	kdevprojectmanagerdelegate.cpp \
 	importprojectjob.cpp
 

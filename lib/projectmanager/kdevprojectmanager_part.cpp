@@ -23,6 +23,7 @@
 #include "kdevprojectimporter.h"
 #include "kdevprojectbuilder.h"
 #include "kdevprojecteditor.h"
+#include "kdevprojectfilter.h"
 #include "importprojectjob.h"
 
 #include <kfiltermodel.h>
@@ -119,15 +120,15 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
 
   m_projectOverview = new KDevProjectManager(this, m_widget);
-  m_projectOverview->setModel(m_projectModel);
+  m_projectOverview->setModel(new KDevProjectOverviewFilter(m_projectModel, m_projectOverview));
   m_projectOverview->setItemDelegate(delegate);
-  m_projectOverview->setWhatsThis(i18n("Project overview"));
+  m_projectOverview->setWhatsThis(i18n("Project Overview"));
   vbox->add(m_projectOverview);
 
   m_projectDetails = new KDevProjectManager(this, m_widget);
-  m_projectDetails->setModel(m_projectModel);
+  m_projectDetails->setModel(new KDevProjectDetailsFilter(m_projectModel, m_projectDetails));
   m_projectDetails->setItemDelegate(delegate);
-  m_projectDetails->setWhatsThis(i18n("Project overview"));
+  m_projectDetails->setWhatsThis(i18n("Project Details"));
   vbox->add(m_projectDetails);
 
   // ### connect(m_projectOverview, SIGNAL(currentChanged(KDevProjectItem*)), this, SLOT(updateDetails(KDevProjectItem*)));
