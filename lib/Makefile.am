@@ -15,6 +15,7 @@ libkdevelop_la_SOURCES = dummy.cpp
 
 
 SUBDIRS = \
+    weaver \
     util \
     interfaces \
     widgets \
