@@ -155,3 +155,13 @@ void KDevProjectManager::popupContextMenu(const QPoint &pos)
       menu.exec(mapToGlobal(pos));
     }
 }
+
+void KDevProjectManager::slotCurrentChanged(const QModelIndex &index)
+{
+  if (KDevProjectItem *item = projectModel()->item(index))
+    {
+      emit currentChanged(item);
+    }
+}
+
+// kate: indent-width 2;

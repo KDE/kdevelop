@@ -27,6 +27,7 @@ class KDevProjectModel;
 class KDevProjectFolderItem;
 class KDevProjectFileItem;
 class KDevProjectTargetItem;
+class KDevProjectItem;
 class KURL;
 
 class KDevProjectManager: public KDevTreeView
@@ -47,9 +48,11 @@ public:
 
 signals:
   void activateURL(const KURL &url);
+  void currentChanged(KDevProjectItem *item);
 
 protected slots:
   void slotActivated(const QModelIndex &index);
+  void slotCurrentChanged(const QModelIndex &index);
   void popupContextMenu(const QPoint &pos);
 
 private:

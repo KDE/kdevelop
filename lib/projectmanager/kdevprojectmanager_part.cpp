@@ -104,34 +104,37 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
   }
 
   m_widget = new QWidget(0);
-  new QVBoxLayout(m_widget);
-
-  QLineEdit *editor = new QLineEdit(m_widget);
-  m_widget->layout()->addWidget(editor);
-
-  //editor->hide();
-
-  KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
-
-  m_projectManager = new KDevProjectManager(this, m_widget);
-  m_projectManager->setModel(m_projectModel);
-  m_projectManager->setItemDelegate(delegate);
-  m_projectManager->setWhatsThis(i18n("Project overview"));
-  m_widget->layout()->add(m_projectManager);
+  QVBoxLayout *vbox = new QVBoxLayout(m_widget);
 
 #ifdef __GNUC__
 #  warning "harald fix your KFilterModel!!"
 #endif
 
-#if 0 // ### h
-  KFilterModel *filterModel = new KFilterModel(m_projectModel, m_projectModel);
-  connect(editor, SIGNAL(textChanged(QString)), filterModel, SLOT(setFilter(QString)));
-  m_projectManager->setModel(filterModel);
-#else
-  m_projectManager->setModel(m_projectModel);
+#if 0
+  QLineEdit *editor = new QLineEdit(m_widget);
+  vbox->addWidget(editor);
+  editor->hide();
 #endif
 
-  connect(m_projectManager, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+  KDevProjectManagerDelegate *delegate = new KDevProjectManagerDelegate(this);
+
+  m_projectOverview = new KDevProjectManager(this, m_widget);
+  m_projectOverview->setModel(m_projectModel);
+  m_projectOverview->setItemDelegate(delegate);
+  m_projectOverview->setWhatsThis(i18n("Project overview"));
+  vbox->add(m_projectOverview);
+
+  m_projectDetails = new KDevProjectManager(this, m_widget);
+  m_projectDetails->setModel(m_projectModel);
+  m_projectDetails->setItemDelegate(delegate);
+  m_projectDetails->setWhatsThis(i18n("Project overview"));
+  vbox->add(m_projectDetails);
+
+  // ### connect(m_projectOverview, SIGNAL(currentChanged(KDevProjectItem*)), this, SLOT(updateDetails(KDevProjectItem*)));
+  connect(m_projectDetails, SIGNAL(activateURL(KURL)), this, SLOT(openURL(KURL)));
+
+  connect(m_projectOverview->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+          m_projectDetails, SLOT(setRootIndex(QModelIndex)));
 
   mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
 
@@ -143,7 +146,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
 {
-  if (m_projectManager)
+  if (m_projectOverview)
     {
       mainWindow()->removeView(m_widget);
       delete m_widget;
@@ -158,17 +161,17 @@ void KDevProjectManagerPart::openURL(const KURL &url)
 
 KDevProjectFolderItem *KDevProjectManagerPart::activeFolder()
 {
-  return m_projectManager->currentFolderItem();
+  return m_projectOverview->currentFolderItem();
 }
 
 KDevProjectTargetItem *KDevProjectManagerPart::activeTarget()
 {
-  return m_projectManager->currentTargetItem();
+  return m_projectOverview->currentTargetItem();
 }
 
 KDevProjectFileItem * KDevProjectManagerPart::activeFile()
 {
-  return m_projectManager->currentFileItem();
+  return m_projectOverview->currentFileItem();
 }
 
 void KDevProjectManagerPart::updateProjectTimeout()
@@ -254,7 +257,7 @@ QString KDevProjectManagerPart::runArguments() const
 
 QString KDevProjectManagerPart::activeDirectory() const // ### do we really need it?
 {
-  if (KDevProjectFolderItem *folder = m_projectManager->currentFolderItem())
+  if (KDevProjectFolderItem *folder = m_projectOverview->currentFolderItem())
     return URLUtil::relativePath(projectDirectory(), folder->name());
 
   return QString();
@@ -431,4 +434,10 @@ bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, cons
   return m_dirty;
 }
 
+void KDevProjectManagerPart::updateDetails(KDevProjectItem *)
+{
+}
+
 #include "kdevprojectmanager_part.moc"
+
+// kate: indent-width 2;

@@ -92,6 +92,7 @@ signals:
 
 public slots:
     void openURL(const KURL &url);
+    void updateDetails(KDevProjectItem *item);
 
 private slots:
     void fileDirty(const QString &fileName);
@@ -108,7 +109,8 @@ private:
     KDevProjectModel *m_projectModel;
     KDevProjectFolderItem *m_workspace;
     QPointer<QWidget> m_widget;
-    KDevProjectManager *m_projectManager;
+    KDevProjectManager *m_projectOverview;
+    KDevProjectManager *m_projectDetails;
     QMap<QString, KDevProjectImporter*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;
     QStringList m_cachedFileList;
