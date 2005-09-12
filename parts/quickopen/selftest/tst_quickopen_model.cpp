@@ -145,7 +145,9 @@ void tst_QuickOpenModel::kdevitemmodel()
 {
     KDevItemCollection *c = new KDevItemCollection("parent1");
     c->add(new KDevItemCollection("child1"));
-    c->add(new KDevItemCollection("child2"));
+    KDevItemCollection *c2 = new KDevItemCollection("child2");
+    c->add(c2);
+    c2->add(new KDevItemCollection("child21"));
 
     KDevItemModel model;
     model.appendItem(c);
@@ -156,7 +158,7 @@ void tst_QuickOpenModel::kdevitemmodel()
     COMPARE(model.data(model.index(0, 0, parent)).toString(), QString("child1"));
     COMPARE(model.rowCount(model.index(0, 0, parent)), 0);
     COMPARE(model.data(model.index(1, 0, parent)).toString(), QString("child2"));
-    COMPARE(model.rowCount(model.index(1, 0, parent)), 0);
+    COMPARE(model.rowCount(model.index(1, 0, parent)), 1);
     COMPARE(model.parent(model.index(0, 0, parent)), parent);
     COMPARE(model.parent(model.index(1, 0, parent)), parent);
 
@@ -167,8 +169,13 @@ void tst_QuickOpenModel::kdevitemmodel()
     COMPARE(filter.data(filter.index(0, 0, parent)).toString(), QString("child1"));
     COMPARE(filter.rowCount(filter.index(0, 0, parent)), 0);
     COMPARE(filter.data(filter.index(1, 0, parent)).toString(), QString("child2"));
+    COMPARE(filter.rowCount(filter.index(1, 0, parent)), 1);
     COMPARE(filter.parent(filter.index(0, 0, parent)), parent);
     COMPARE(filter.parent(filter.index(1, 0, parent)), parent);
+    QModelIndex m21 = filter.index(0, 0, filter.index(1, 0, parent));
+    COMPARE(filter.data(m21).toString(), QString("child21"));
+    COMPARE(filter.parent(m21), filter.index(1, 0, parent));
+    COMPARE(filter.rowCount(m21), 0);
 }
 
 void tst_QuickOpenModel::filterColumns()
