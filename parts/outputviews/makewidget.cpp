@@ -38,7 +38,6 @@
 #include <qapplication.h>
 #include <qdir.h>
 #include <qimage.h>
-#include <q3stylesheet.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
 #include <qclipboard.h>
@@ -46,7 +45,6 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <private/q3richtext_p.h>
 
 #include <stdlib.h>
 #include <limits.h>
@@ -174,7 +172,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	{*/
 		setTextFormat( Qt::RichText );
 //	}
-	
+
 	if ( m_bLineWrapping )
 		setWordWrap(WidgetWidth);
 	setWrapPolicy(Anywhere);
@@ -321,8 +319,8 @@ void MakeWidget::copy()
 	for(int i = parafrom; i<=parato; i++)
 	   selection += text(i) + "\n";
 
-   	   
-	if(m_compilerOutputLevel == eShort || 
+
+	if(m_compilerOutputLevel == eShort ||
 	   m_compilerOutputLevel == eVeryShort )
 	{
 	   QRegExp regexp("<.*>");
@@ -334,14 +332,14 @@ void MakeWidget::copy()
 	  selection.remove(0, indexfrom);
 	  int removeend = text(parato).length() - indexto;
 
-	  selection.remove((selection.length()-1) -  removeend, removeend);	   
-	}		
-	   
+	  selection.remove((selection.length()-1) -  removeend, removeend);
+	}
+
 	selection.replace("&lt;","<");
 	selection.replace("&gt;",">");
 	selection.replace("&quot;","\"");
-	selection.replace("&amp;","&");	
-	   
+	selection.replace("&amp;","&");
+
 	kapp->clipboard()->setText(selection, QClipboard::Clipboard);
 }
 
@@ -612,7 +610,7 @@ void MakeWidget::displayPendingItem()
   // We call displayPendingItem once in insertItem
   // and the appends are handled directly in
   // appendToLastLine
-  if (!m_items.empty() 
+  if (!m_items.empty()
       && m_items.last() == m_pendingItem) return;
 
   m_items.push_back(m_pendingItem);
@@ -698,9 +696,13 @@ void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
 	if (!doc)
 		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->partForURL(KURL( guessFileName(e->fileName, m_paragraphs + 1 ))));
 
+#ifdef __GNUC__
+#  warning "MakeWidget::createCursor() -- port me"
+#endif
+
+#if 0  // port me
 	if (doc) {
 		KTextEditor::Document* edit = doc;
-#if 0  // port me
 		KTextEditor::View* cursor = view;
 		if (cursor) {
 			e->m_cursor = cursor->createCursor();
@@ -713,8 +715,8 @@ void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
 			e->m_cursor->setPosition(e->lineNum, col);
 			e->m_doc = doc;
 		}
-#endif
 	}
+#endif
 }
 
 void MakeWidget::slotDocumentClosed(QObject* doc)
@@ -835,6 +837,11 @@ void MakeWidget::updateSettingsFromConfig()
 
 bool MakeWidget::scanErrorForward( int parag )
 {
+#ifdef __GNUC__
+#  warning "MakeWidget::scanErrorForward() -- port me"
+#endif
+
+#if 0
 	for ( int it = parag + 1;
 	      it < (int)m_items.count();
 	      ++it )
@@ -850,11 +857,17 @@ bool MakeWidget::scanErrorForward( int parag )
 		searchItem( it );
 		return true;
 	}
+#endif
     return false;
 }
 
 bool MakeWidget::scanErrorBackward( int parag )
 {
+#ifdef __GNUC__
+#  warning "MakeWidget::scanErrorBackward() -- port me"
+#endif
+
+#if 0
 	for ( int it = parag - 1; it >= 0; --it)
 	{
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
@@ -869,6 +882,7 @@ bool MakeWidget::scanErrorBackward( int parag )
 		return true;
 	}
 	return false;
+#endif
 }
 
 #include "makewidget.moc"
