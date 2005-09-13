@@ -104,6 +104,7 @@ void KDevDocumentViewPart::loadFile( const KURL &url )
     {
         KDevMimeTypeItem * mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
         m_documentModel->appendItem( mimeItem );
+        m_documentView->expand( m_documentModel->indexOf( mimeItem ) );
         m_documentModel->appendItem( new KDevFileItem( url ), mimeItem );
         return ;
     }
