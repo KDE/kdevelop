@@ -400,7 +400,7 @@ bool ProjectManager::saveProjectFile()
     API::getInstance()->projectDom()->save(stream, 2);
     fout.close();
   } else {
-    KTempFile fout(QString::fromLatin1("kdevelop3"));
+    KTempFile fout(QLatin1String("kdevelop3"));
     fout.setAutoDelete(true);
     if (fout.status() != 0) {
       KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
@@ -515,7 +515,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   }
 
   KTrader::OfferList languageSupportOffers =
-    KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
+    KTrader::self()->query(QLatin1String("KDevelop/LanguageSupport"),
                            QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == %2").arg(lang).arg(KDEVELOP_PLUGIN_VERSION));
 
   if (languageSupportOffers.isEmpty()) {

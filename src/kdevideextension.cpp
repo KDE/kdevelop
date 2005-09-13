@@ -70,7 +70,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
 
     config->setGroup("TerminalEmulator");
     gsw->terminalButtonGroup->setButton( config->readNumEntry( "UseKDESetting", 0 ) );
-    gsw->terminalEdit->setText( config->readEntry( "TerminalApplication", QString::fromLatin1("konsole") ) );
+    gsw->terminalEdit->setText( config->readEntry( "TerminalApplication", QLatin1String("konsole") ) );
 }
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)

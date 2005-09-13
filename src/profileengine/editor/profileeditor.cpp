@@ -117,7 +117,7 @@ void ProfileEditor::refresh()
 
 void ProfileEditor::refreshPropertyCombo()
 {
-    KTrader::OfferList list = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"));
+    KTrader::OfferList list = KTrader::self()->query(QLatin1String("KDevelop/Plugin"));
     QStringList props;
     for (KTrader::OfferList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {

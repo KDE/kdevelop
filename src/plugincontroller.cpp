@@ -79,10 +79,10 @@ PluginController::PluginController()
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
 
-/*  m_defaultProfile = QString::fromLatin1( "FullIDE" );
+/*  m_defaultProfile = QLatin1String( "FullIDE" );
   m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" +
 			 KStandardDirs::kde_default( "data" ) +
-			 QString::fromLatin1("/kdevelop/profiles/FullIDE");*/
+			 QLatin1String("/kdevelop/profiles/FullIDE");*/
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("profile") ){
