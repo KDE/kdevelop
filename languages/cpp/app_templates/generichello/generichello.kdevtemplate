@@ -3,6 +3,7 @@
 Name=C++ program (shell script build system)
 Name[da]=C++ program (skalscript byggesystem)
 Name[de]=C++-Programm (Shell-Skript basiertes Erstellungssystem)
+Name[es]=Programa en C++ (con sistema de construcción basado en guión de comandos)
 Name[et]=C++ programm (shelliskripti ehitussüsteem)
 Name[hu]=C++-program (parancssoros fordítási szkripttel)
 Name[it]=Programma C++ (sistema di compilazione con script di shell)
@@ -17,6 +18,7 @@ Category=C++/Generic
 Comment=Generates a simple Hello world program in C++
 Comment[da]=Genererer et simpelt Goddag verden program in C++
 Comment[de]=Erstellt ein einfaches Hello-World-Programm in C++
+Comment[es]=Genera un sencillo programa «Hola mundo» en C++
 Comment[et]=Lihtsa "Tere, maailm" programmi loomine C++-s
 Comment[fr]=Génère un simple programme « Hello world » en C++
 Comment[hu]=Létrehoz egy egyszerű Hello world programot C++-ban
