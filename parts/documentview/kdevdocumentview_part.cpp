@@ -93,7 +93,6 @@ void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
 void KDevDocumentViewPart::saveFile( const KURL &url )
 {
     kdDebug() << k_funcinfo << endl;
-    m_documentModel->appendItem( new KDevDocumentItem( url.fileName().toLatin1() ) );
 }
 
 void KDevDocumentViewPart::loadFile( const KURL &url )
@@ -116,13 +115,11 @@ void KDevDocumentViewPart::loadFile( const KURL &url )
 void KDevDocumentViewPart::closeFile( const KURL &url )
 {
     kdDebug() << k_funcinfo << endl;
-    m_documentModel->appendItem( new KDevDocumentItem( url.fileName().toLatin1() ) );
 }
 
 void KDevDocumentViewPart::dirtyFile( const KURL &url )
 {
     kdDebug() << k_funcinfo << endl;
-    m_documentModel->appendItem( new KDevDocumentItem( url.fileName().toLatin1() ) );
 }
 
 void KDevDocumentViewPart::filePressed( const QModelIndex & index )
