@@ -19,9 +19,12 @@
 
 #include "kdevitemmodel.h"
 
+#include <QtCore/QVector>
+
 KDevItemModel::KDevItemModel(QObject *parent)
   : QAbstractItemModel(parent),
-    m_collection(QString::fromUtf8("<root>"), 0)
+    m_collection(QString::fromUtf8("<root>"), 0),
+    m_sortingEnabled(true)
 {
 }
 
@@ -158,4 +161,45 @@ bool KDevItemModel::setData(const QModelIndex &index, const QVariant &value, int
   return false;
 }
 
+void KDevItemModel::sort(int column, Qt::SortOrder order)
+{
+  Q_UNUSED(column);
+  if (!m_sortingEnabled)
+    return;
+  sortItems(&m_collection, order);
+  emit layoutChanged();
+}
+
+void KDevItemModel::sortItems(KDevItem *rootItem, Qt::SortOrder order)
+{
+  KDevItemCollection *collection = dynamic_cast<KDevItemCollection*>( rootItem );
+  if (!collection)
+    return;
+
+  // store the original order of indexes
+  QVector< QPair<KDevItem*, int> > sorting(collection->items().count());
+  for (int i = 0; i < sorting.count(); ++i)
+  {
+    sorting[i].first = collection->items().at(i);
+    sorting[i].second = i;
+  }
+
+  // do the sorting
+  LessThan compare = (order == Qt::AscendingOrder ? &itemLessThan : &itemGreaterThan);
+  qSort(sorting.begin(), sorting.end(), compare);
+
+  // update the persistent indexes for the top level
+  for (int r = 0; r < sorting.count(); ++r)
+  {
+    KDevItem *item = sorting.at(r).first;
+    sortItems(item, order);
+    collection->replace(r, item);
+    QModelIndex from = createIndex(sorting.at(r).second, 0, item);
+    QModelIndex to = createIndex(r, 0, item);
+    changePersistentIndex(from, to);
+  }
+}
+
 #include "kdevitemmodel.moc"
+
+// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

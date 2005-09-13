@@ -22,10 +22,14 @@
 
 #include <QtCore/QAbstractItemModel>
 #include <QtGui/QIcon>
+#include <QtCore/QPair>
 
 class KDevItem;
 class KDevItemGroup;
 class KDevItemCollection;
+class KDevItemModel;
+
+typedef bool(*LessThan) (const QPair<KDevItem*, int>&, const QPair<KDevItem*, int>&);
 
 class KDevItem
 {
@@ -45,6 +49,16 @@ public:
   virtual QIcon icon() const = 0;
   virtual QString toolTip() const = 0;
   virtual QString whatsThis() const = 0;
+
+  virtual bool operator<(const KDevItem &other) const
+  {
+    return name() < other.name();
+  }
+
+  virtual bool operator>(const KDevItem &other) const
+  {
+    return name() > other.name();
+  }
 
 private:
   KDevItemGroup *m_parent;
@@ -78,6 +92,7 @@ public:
   virtual QIcon icon() const { return QIcon(); }
   virtual QString toolTip() const { return QString(); }
   virtual QString whatsThis() const { return QString(); }
+  virtual const QList<KDevItem *> &items() const { return m_items; };
 
   virtual int itemCount() const { return m_items.count(); }
   virtual int indexOf(KDevItem *item) const { return m_items.indexOf(item); }
@@ -98,6 +113,13 @@ public:
 
   void remove(int index) { m_items.removeAt(index); }
 
+  virtual void replace(int index, KDevItem *item)
+  {
+    Q_ASSERT(index >= 0);
+    Q_ASSERT(index < m_items.count());
+    m_items.replace(index, item);
+  }
+
 private:
   QString m_name;
   QList<KDevItem *> m_items;
@@ -106,6 +128,7 @@ private:
 class KDevItemModel: public QAbstractItemModel
 {
   Q_OBJECT
+  Q_PROPERTY(bool sortingEnabled READ isSortingEnabled WRITE setSortingEnabled)
 public:
   explicit KDevItemModel(QObject *parent = 0);
   virtual ~KDevItemModel();
@@ -127,14 +150,34 @@ public:
   virtual KDevItem *item(const QModelIndex &index) const;
   virtual QModelIndex indexOf(KDevItem *item) const;
 
+  bool isSortingEnabled() const { return m_sortingEnabled; }
+  virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
 public slots:
   void refresh();
+  void setSortingEnabled( bool sortingEnabled ) { m_sortingEnabled = sortingEnabled; }
 
 protected:
   int positionOf(KDevItem *item) const;
+  virtual void sortItems( KDevItem *rootItem, Qt::SortOrder order = Qt::AscendingOrder );
+
+  static bool itemLessThan(const QPair<KDevItem*, int> &left,
+                           const QPair<KDevItem*, int> &right)
+  {
+    return * (left.first) < *(right.first);
+  }
+
+  static bool itemGreaterThan(const QPair<KDevItem*, int> &left,
+                              const QPair<KDevItem*, int> &right)
+  {
+    return * (left.first) > *(right.first);
+  }
 
 private:
   KDevItemCollection m_collection;
+  bool m_sortingEnabled;
 };
 
 #endif // KDEVITEMMODEL_H
+
+// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
