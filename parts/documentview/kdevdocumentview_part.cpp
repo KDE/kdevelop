@@ -98,19 +98,19 @@ void KDevDocumentViewPart::saveFile( const KURL &/*url*/ )
 void KDevDocumentViewPart::loadFile( const KURL &url )
 {
     QString mimeType = KMimeType::findByURL( url ) ->comment();
-    kdDebug() << mimeType << endl;
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
     if ( !mimeItem )
     {
-        KDevMimeTypeItem * mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
+        mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
         m_documentModel->appendItem( mimeItem );
         m_documentView->expand( m_documentModel->indexOf( mimeItem ) );
-        m_documentModel->appendItem( new KDevFileItem( url ), mimeItem );
-        return ;
     }
 
     if ( !mimeItem->file( url ) )
+    {
         m_documentModel->appendItem( new KDevFileItem( url ), mimeItem );
+        m_documentModel->sort( 0, Qt::Ascending );
+    }
 }
 
 void KDevDocumentViewPart::closeFile( const KURL &/*url*/ )
