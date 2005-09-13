@@ -5,6 +5,7 @@
 #### TODO    appwizard
 
 SUBDIRS = fullscreen \
+    documentview \
     outputviews \
     konsole \
     diff \

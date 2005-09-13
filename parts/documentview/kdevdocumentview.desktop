@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin displays a graphical view of all documents currently loaded and separates them by mimetype.
+Name=KDevDocumentView
+GenericName=Document View
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevdocumentview
+X-KDevelop-Version=4
+X-KDevelop-Scope=Global
+X-KDevelop-Properties=GlobalFileManagement
