@@ -101,7 +101,7 @@ public:
         data->fileName = fileName;
     }
 
-    QString path( const QString& sep = QString::fromLatin1("::") ) const
+    QString path( const QString& sep = QLatin1String("::") ) const
     {
         QString s = scope().join( sep );
         if( s.isNull() )

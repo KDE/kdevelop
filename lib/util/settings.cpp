@@ -22,12 +22,12 @@ QString Settings::terminalEmulatorName( KConfig & config )
 		
 	if ( useKDESetting )
 	{
-		KConfigGroup confGroup( KGlobal::config(), QString::fromLatin1("General") );
-		terminal = confGroup.readEntry("TerminalApplication", QString::fromLatin1("konsole"));
+		KConfigGroup confGroup( KGlobal::config(), QLatin1String("General") );
+		terminal = confGroup.readEntry("TerminalApplication", QLatin1String("konsole"));
 	}
 	else
 	{
-		terminal = config.readEntry( "TerminalApplication", QString::fromLatin1("konsole"));
+		terminal = config.readEntry( "TerminalApplication", QLatin1String("konsole"));
 	}
 	return terminal;
 }
