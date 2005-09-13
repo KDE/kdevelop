@@ -87,3 +87,5 @@ private:
 };
 
 #endif // __MAINWINDOWSHARE_H__
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

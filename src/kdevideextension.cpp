@@ -107,3 +107,5 @@ QString KDevIDEExtension::defaultProfile()
 {
     return "IDE";
 }
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

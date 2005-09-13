@@ -445,4 +445,5 @@ void MainWindowShare::slotActivePartChanged( KParts::Part * part )
 }
 
 #include "mainwindowshare.moc"
-//kate: space-indent on; indent-width 4;
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

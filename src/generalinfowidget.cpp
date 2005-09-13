@@ -155,3 +155,5 @@ QString makeRelativePath(const QString& fromPath, const QString& toPath)
 
     return relative;
 }
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

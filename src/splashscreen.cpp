@@ -85,3 +85,4 @@ void SplashScreen::drawContents(QPainter* painter)
     painter->drawText (90, 16, m_string, 42);
 }
 
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on

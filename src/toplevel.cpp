@@ -32,3 +32,5 @@ void TopLevel::invalidateInstance(KDevMainWindow *instance)
   if ( s_instance == instance )
     s_instance = 0;
 }
+
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
