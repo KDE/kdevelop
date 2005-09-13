@@ -387,12 +387,12 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
       "KDevelop/ReadWritePart", "KDevelop/ReadOnlyPart",
       "KParts/ReadWritePart", "KParts/ReadOnlyPart"
     };
-    
+
     QString classnames[] = {
       "KParts::ReadWritePart", "KParts::ReadOnlyPart",
       "KParts::ReadWritePart", "KParts::ReadOnlyPart"
     };
-    
+
     for (uint i=0; i<4; ++i)
     {
         factory = findPartFactory( MimeType->name(), services[i] );
@@ -550,12 +550,10 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if ( !ro_part ) return;
 
-  emit loadedFile( ro_part->url() );
-
   if ( ro_part->url().isLocalFile() )
-  {
-    emit loadedFile(ro_part->url().path());
-  }
+    emit loadedFile( ro_part->url().path() );
+  else
+    emit loadedFile( ro_part->url() );
 
   connect( part, SIGNAL(modifiedOnDisc(Kate::Document*, bool, unsigned char)), this, SLOT(slotDocumentDirty(Kate::Document*, bool, unsigned char)) );
 
