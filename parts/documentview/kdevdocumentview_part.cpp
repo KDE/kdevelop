@@ -90,7 +90,7 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 void KDevDocumentViewPart::import( RefreshPolicy /*policy*/ )
 {}
 
-void KDevDocumentViewPart::saveFile( const KURL &url )
+void KDevDocumentViewPart::saveFile( const KURL &/*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
@@ -112,12 +112,12 @@ void KDevDocumentViewPart::loadFile( const KURL &url )
         m_documentModel->appendItem( new KDevFileItem( url ), mimeItem );
 }
 
-void KDevDocumentViewPart::closeFile( const KURL &url )
+void KDevDocumentViewPart::closeFile( const KURL &/*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
 
-void KDevDocumentViewPart::dirtyFile( const KURL &url )
+void KDevDocumentViewPart::dirtyFile( const KURL &/*url*/ )
 {
     kdDebug() << k_funcinfo << endl;
 }
