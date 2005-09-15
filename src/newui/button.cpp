@@ -87,16 +87,22 @@ QStyleOptionButton Button::styleOption() const
 
     opt.text = text();
 
+    opt.icon = m_realIconSet;
+    opt.iconSize = QSize(16,16);
+
+    QRect r = rect();
+    if (m_place == Ideal::Left || m_place == Ideal::Right)
+        r.setSize(QSize(r.height(), r.width()));
+
+    opt.rect = r;
+
     return opt;
 }
 
 void Button::paintEvent(QPaintEvent *)
 {
-    QRect r = rect();
-    if (m_place == Ideal::Left || m_place == Ideal::Right)
-        r.setSize(QSize(r.height(), r.width()));
     QStyleOptionButton opt = styleOption();
-    opt.rect = r;
+    QRect r = opt.rect;
 
     QPixmap pm(r.width(), r.height());
     pm.fill(eraseColor());
