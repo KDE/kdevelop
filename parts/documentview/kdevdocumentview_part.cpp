@@ -54,20 +54,16 @@ KDevDocumentViewPart::KDevDocumentViewPart( QObject *parent, const char *name, c
 
     setInstance( KDevDocumentViewFactory::instance() );
 
-    m_widget = new QWidget( 0 );
-    new QVBoxLayout( m_widget );
-    m_widget->setIcon( SmallIcon( "kmultiple" ) );
-    m_widget->setCaption( i18n( "Documents" ) );
+    m_documentView = new KDevDocumentView( this, 0 );
+    m_documentView->setIcon( SmallIcon( "kmultiple" ) );
+    m_documentView->setCaption( i18n( "Documents" ) );
 
-    m_documentView = new KDevDocumentView( this, m_widget );
     KDevDocumentViewDelegate *delegate = new KDevDocumentViewDelegate( m_documentView, this );
     m_documentView->setModel( m_documentModel );
     m_documentView->setItemDelegate( delegate );
     m_documentView->setWhatsThis( i18n( "Document View" ) );
-    m_widget->layout() ->add
-    ( m_documentView );
 
-    mainWindow() ->embedSelectView( m_widget, i18n( "Documents" ), i18n( "Documents" ) );
+    mainWindow() ->embedSelectView( m_documentView, i18n( "Documents" ), i18n( "Documents" ) );
 
     connect( m_documentView, SIGNAL( pressed( QModelIndex ) ), this, SLOT( filePressed( QModelIndex ) ) );
     connect( partController(), SIGNAL( savedFile( const KURL & ) ), this, SLOT( saveFile( const KURL & ) ) );
@@ -84,8 +80,8 @@ KDevDocumentViewPart::~KDevDocumentViewPart()
 {
     if ( m_documentView )
     {
-        mainWindow() ->removeView( m_widget );
-        delete m_widget;
+        mainWindow() ->removeView( m_documentView );
+        delete m_documentView;
     }
 }
 

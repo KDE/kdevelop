@@ -61,7 +61,6 @@ private:
     KDevDocumentModel *m_documentModel;
     KDevDocumentItem *m_documentItem;
     KDevDocumentView *m_documentView;
-    QPointer<QWidget> m_widget;
 };
 
 #endif
