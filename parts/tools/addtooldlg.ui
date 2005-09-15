@@ -241,6 +241,5 @@ executed.&lt;/p&gt;</string>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kdevapplicationtree.h</includehint>
 </includehints>
 </UI>
